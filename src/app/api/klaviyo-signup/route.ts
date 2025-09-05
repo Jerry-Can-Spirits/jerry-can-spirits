@@ -47,7 +47,7 @@ export async function POST(request: NextRequest) {
       body: JSON.stringify(profilePayload)
     })
 
-    let profileId: string
+    let profileId: string | undefined
 
     if (profileResponse.ok) {
       const profileData = await profileResponse.json()
