@@ -1,14 +1,10 @@
+'use client'
+
 import type { Metadata } from 'next'
 import Link from 'next/link'
 
-export const metadata: Metadata = {
-  title: "Contact Us | Jerry Can Spirits - Get in Touch",
-  description: "Get in touch with Jerry Can Spirits for inquiries, partnerships, or just to say hello. Contact us via email or our contact form.",
-  robots: {
-    index: true,
-    follow: true,
-  },
-}
+// Note: metadata export removed as client components cannot export metadata
+// This metadata should be moved to a layout.tsx or handled differently
 
 const contactMethods = [
   {
