@@ -1,26 +1,275 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+  @theme {
+    /* Jerry Can Brand Colors */
+    --color-jerry-green-50: #f5f7f3;
+    --color-jerry-green-100: #e8ede2;
+    --color-jerry-green-200: #d1dbc5;
+    --color-jerry-green-300: #b0c399;
+    --color-jerry-green-400: #8ba76b;
+    --color-jerry-green-500: #6b8947;
+    --color-jerry-green-600: #526a35;
+    --color-jerry-green-700: #42542a;
+    --color-jerry-green-800: #384724;
+    --color-jerry-green-900: #2a3421;
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+    /* Parchment/Cream colors */
+    --color-parchment-50: #fefdfb;
+    --color-parchment-100: #fefbf5;
+    --color-parchment-200: #fdf7eb;
+    --color-parchment-300: #fbf2d9;
+    --color-parchment-400: #f8ecc4;
+    --color-parchment-500: #f5e6b3;
+    --color-parchment-600: #f1da8f;
+    --color-parchment-700: #e8c954;
+    --color-parchment-800: #d4b429;
+    --color-parchment-900: #b59616;
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    /* Industrial/Metal colors */
+    --color-metal-50: #f8f9fa;
+    --color-metal-100: #e9ecef;
+    --color-metal-200: #dee2e6;
+    --color-metal-300: #ced4da;
+    --color-metal-400: #adb5bd;
+    --color-metal-500: #6c757d;
+    --color-metal-600: #495057;
+    --color-metal-700: #343a40;
+    --color-metal-800: #212529;
+    --color-metal-900: #0d1117;
+
+    /* Gold/Brass Expedition colors */
+    --color-gold-50: #fefcf0;
+    --color-gold-100: #fef7d3;
+    --color-gold-200: #fdeca5;
+    --color-gold-300: #fcd96d;
+    --color-gold-400: #fab932;
+    --color-gold-500: #f59e0b;
+    --color-gold-600: #d97706;
+    --color-gold-700: #b45309;
+    --color-gold-800: #92400e;
+    --color-gold-900: #78350f;
+
+    /* Typography */
+    --font-sans: var(--font-inter), 'Inter', system-ui, -apple-system, sans-serif;
+    --font-serif: var(--font-playfair), 'Playfair Display', Georgia, serif;
+    --font-mono: var(--font-jetbrains), 'JetBrains Mono', Consolas, monospace;
+
+    /* Primary brand colors */
+    --color-primary: var(--color-jerry-green-800);
+    --color-secondary: var(--color-parchment-600);
+    --color-accent: var(--color-metal-600);
+
+    /* Background and text */
+    --color-background: var(--color-parchment-50);
+    --color-foreground: var(--color-metal-900);
   }
-}
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
-}
+  /* Base styles */
+  * {
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Premium typography */
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-serif);
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--color-primary);
+  }
+
+  /* Override heading colors for legal pages with white text */
+  .text-white h1, .text-white h2, .text-white h3, .text-white h4, .text-white h5, .text-white h6,
+  h1.text-white, h2.text-white, h3.text-white, h4.text-white, h5.text-white, h6.text-white {
+    color: white !important;
+  }
+
+  /* Override heading colors for legal pages with gold text */
+  .text-gold-300 h1, .text-gold-300 h2, .text-gold-300 h3, .text-gold-300 h4, .text-gold-300 h5, .text-gold-300 h6,
+  h1.text-gold-300, h2.text-gold-300, h3.text-gold-300, h4.text-gold-300, h5.text-gold-300, h6.text-gold-300 {
+    color: var(--color-gold-300) !important;
+  }
+
+  /* Smooth transitions */
+  * {
+    transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
+  }
+
+  /* Premium button base styles */
+  .btn-primary {
+    background: var(--color-primary);
+    color: var(--color-parchment-50);
+    border: 2px solid var(--color-primary);
+    padding: 0.75rem 1.5rem;
+    font-weight: 600;
+    border-radius: 0.5rem;
+    transition: all 0.3s ease;
+  }
+
+  .btn-primary:hover {
+    background: var(--color-jerry-green-900);
+    border-color: var(--color-jerry-green-900);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(42, 52, 33, 0.3);
+  }
+
+  /* Custom height for payment icons */
+  .h-15 {
+    height: 3.75rem; /* 60px */
+  }
+
+  /* Master Cartography Background */
+  .cartography-background {
+    position: relative;
+    background: 
+      /* Subtle compass rose pattern */
+      radial-gradient(circle at 25% 25%, rgba(245, 158, 11, 0.08) 1px, transparent 1px),
+      radial-gradient(circle at 75% 75%, rgba(245, 158, 11, 0.08) 1px, transparent 1px),
+      /* Vintage grid lines */
+      linear-gradient(90deg, rgba(245, 158, 11, 0.06) 1px, transparent 1px),
+      linear-gradient(0deg, rgba(245, 158, 11, 0.06) 1px, transparent 1px),
+      /* Map coordinate markings */
+      repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 20px,
+        rgba(245, 158, 11, 0.03) 20px,
+        rgba(245, 158, 11, 0.03) 21px
+      ),
+      /* Base jerry green background */
+      var(--color-jerry-green-900);
+    background-size: 
+      200px 200px,
+      150px 150px,
+      20px 20px,
+      20px 20px,
+      40px 40px,
+      100% 100%;
+    background-position:
+      0 0,
+      100px 100px,
+      0 0,
+      0 0,
+      0 0,
+      0 0;
+  }
+
+  .cartography-background::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+      /* Vintage aged paper texture */
+      radial-gradient(ellipse at top left, rgba(245, 158, 11, 0.08) 0%, transparent 50%),
+      radial-gradient(ellipse at bottom right, rgba(245, 158, 11, 0.04) 0%, transparent 50%),
+      /* Subtle expedition route lines */
+      linear-gradient(35deg, transparent 45%, rgba(245, 158, 11, 0.03) 47%, rgba(245, 158, 11, 0.03) 53%, transparent 55%),
+      linear-gradient(145deg, transparent 45%, rgba(245, 158, 11, 0.03) 47%, rgba(245, 158, 11, 0.03) 53%, transparent 55%);
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  .cartography-background::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+      /* Subtle compass points at strategic locations */
+      radial-gradient(circle at 10% 20%, rgba(245, 158, 11, 0.06) 2px, transparent 3px),
+      radial-gradient(circle at 90% 80%, rgba(245, 158, 11, 0.06) 2px, transparent 3px),
+      radial-gradient(circle at 20% 90%, rgba(245, 158, 11, 0.06) 2px, transparent 3px),
+      radial-gradient(circle at 80% 10%, rgba(245, 158, 11, 0.06) 2px, transparent 3px);
+    background-size: 100px 100px, 120px 120px, 140px 140px, 160px 160px;
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  /* Age Gate Specific Cartography Background - More Prominent */
+  .age-gate-cartography {
+    position: relative;
+    background: 
+      /* Enhanced compass rose pattern */
+      radial-gradient(circle at 25% 25%, rgba(245, 158, 11, 0.12) 2px, transparent 2px),
+      radial-gradient(circle at 75% 75%, rgba(245, 158, 11, 0.12) 2px, transparent 2px),
+      /* More visible grid lines */
+      linear-gradient(90deg, rgba(245, 158, 11, 0.08) 1px, transparent 1px),
+      linear-gradient(0deg, rgba(245, 158, 11, 0.08) 1px, transparent 1px),
+      /* Larger map coordinate markings */
+      repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 50px,
+        rgba(245, 158, 11, 0.05) 50px,
+        rgba(245, 158, 11, 0.05) 52px
+      ),
+      /* Base jerry green background */
+      var(--color-jerry-green-900);
+    background-size: 
+      300px 300px,
+      250px 250px,
+      50px 50px,
+      50px 50px,
+      100px 100px,
+      100% 100%;
+    background-position:
+      0 0,
+      150px 150px,
+      0 0,
+      0 0,
+      0 0,
+      0 0;
+  }
+
+  .age-gate-cartography::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+      /* Enhanced vintage aged paper texture */
+      radial-gradient(ellipse at top left, rgba(245, 158, 11, 0.10) 0%, transparent 50%),
+      radial-gradient(ellipse at bottom right, rgba(245, 158, 11, 0.06) 0%, transparent 50%),
+      /* More visible expedition route lines */
+      linear-gradient(35deg, transparent 45%, rgba(245, 158, 11, 0.05) 47%, rgba(245, 158, 11, 0.05) 53%, transparent 55%),
+      linear-gradient(145deg, transparent 45%, rgba(245, 158, 11, 0.05) 47%, rgba(245, 158, 11, 0.05) 53%, transparent 55%);
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  .age-gate-cartography::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+      /* Enhanced compass points */
+      radial-gradient(circle at 15% 25%, rgba(245, 158, 11, 0.08) 3px, transparent 4px),
+      radial-gradient(circle at 85% 75%, rgba(245, 158, 11, 0.08) 3px, transparent 4px),
+      radial-gradient(circle at 25% 85%, rgba(245, 158, 11, 0.08) 3px, transparent 4px),
+      radial-gradient(circle at 75% 15%, rgba(245, 158, 11, 0.08) 3px, transparent 4px);
+    background-size: 150px 150px, 180px 180px, 200px 200px, 220px 220px;
+    pointer-events: none;
+    z-index: -1;
+  }
