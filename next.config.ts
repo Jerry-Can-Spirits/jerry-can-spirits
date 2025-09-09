@@ -15,7 +15,7 @@ const nextConfig: NextConfig = {
     webpackBuildWorker: false,
   },
   
-  // Webpack optimizations to reduce cache size
+  // Webpack optimizations to reduce cache size and improve chunk splitting
   webpack: (config, { dev, isServer }) => {
     // Disable webpack cache in production to prevent large cache files
     if (!dev) {
@@ -23,18 +23,49 @@ const nextConfig: NextConfig = {
     }
     
     if (!dev && !isServer) {
-      // Reduce bundle size in production
+      // Advanced bundle splitting for better performance
       config.optimization.splitChunks = {
         chunks: 'all',
-        maxSize: 244000, // Keep chunks under 244KB
+        maxSize: 200000, // Smaller chunks for better caching
+        minSize: 20000,
         cacheGroups: {
           default: false,
           vendors: false,
+          
+          // Separate Sanity CMS bundle (largest dependency)
+          sanity: {
+            test: /[\\/]node_modules[\\/](@sanity|sanity|next-sanity)[\\/]/,
+            name: 'sanity',
+            chunks: 'all',
+            priority: 30,
+            maxSize: 200000,
+          },
+          
+          // React and related libraries
+          react: {
+            test: /[\\/]node_modules[\\/](react|react-dom|scheduler)[\\/]/,
+            name: 'react',
+            chunks: 'all',
+            priority: 20,
+            maxSize: 200000,
+          },
+          
+          // Styled components
+          styled: {
+            test: /[\\/]node_modules[\\/](styled-components)[\\/]/,
+            name: 'styled',
+            chunks: 'all',
+            priority: 15,
+            maxSize: 200000,
+          },
+          
+          // Other vendor libraries
           vendor: {
+            test: /[\\/]node_modules[\\/]/,
             name: 'vendor',
             chunks: 'all',
-            test: /node_modules/,
-            maxSize: 244000,
+            priority: 10,
+            maxSize: 200000,
           },
         },
       };

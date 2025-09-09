@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import { client } from '@/sanity/client'
 import { ingredientsQuery } from '@/sanity/queries'
 import { urlFor } from '@/sanity/lib/image'
@@ -134,9 +135,11 @@ export default async function IngredientsPage() {
                           <div className="lg:col-span-1">
                             <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-8 border border-gold-500/20 h-64 flex items-center justify-center group hover:shadow-2xl transition-all duration-300 transform hover:scale-105">
                               {ingredient.image ? (
-                                <img
+                                <Image
                                   src={urlFor(ingredient.image).url()}
                                   alt={ingredient.name}
+                                  width={300}
+                                  height={200}
                                   className="w-full h-full object-cover rounded-lg"
                                 />
                               ) : (

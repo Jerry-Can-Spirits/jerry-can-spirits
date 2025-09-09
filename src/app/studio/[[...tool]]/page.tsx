@@ -7,10 +7,15 @@
  * https://github.com/sanity-io/next-sanity
  */
 
-import { NextStudio } from 'next-sanity/studio'
-import config from '../../../../sanity.config'
+import dynamic from 'next/dynamic'
 
-export const dynamic = 'force-static'
+// Dynamically import Sanity Studio to reduce main bundle size
+const NextStudio = dynamic(() => import('next-sanity/studio').then(mod => ({ default: mod.NextStudio })), {
+  ssr: false,
+  loading: () => <div className="flex items-center justify-center h-screen text-gray-600">Loading Studio...</div>
+})
+
+export const dynamic = 'force-dynamic'
 
 export { metadata, viewport } from 'next-sanity/studio'
 
@@ -24,6 +29,8 @@ export function generateStaticParams() {
   ]
 }
 
-export default function StudioPage() {
+export default async function StudioPage() {
+  // Dynamically import config only when studio is accessed
+  const { default: config } = await import('../../../../sanity.config')
   return <NextStudio config={config} />
 }
