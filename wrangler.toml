@@ -1,8 +1,9 @@
 name = "jerry-can-spirits-nextjs"
 compatibility_date = "2024-01-01"
+pages_build_output_dir = ".next"
 
 [build]
 command = "npm run build"
 
-# No upload config needed for Cloudflare Pages with Next.js
-# Cloudflare will automatically handle the deployment
+# Cloudflare Pages configuration for Next.js
+# The pages_build_output_dir points to Next.js build output
