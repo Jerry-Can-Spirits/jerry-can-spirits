@@ -1,73 +1,83 @@
 import Link from 'next/link'
+import { client } from '@/sanity/client'
+import { equipmentQuery } from '@/sanity/queries'
+import { urlFor } from '@/sanity/lib/image'
 
 // Types for equipment data
 interface Equipment {
-  id: string
+  _id: string
   name: string
+  slug: { current: string }
   category: 'shaking' | 'straining' | 'measuring' | 'glassware' | 'tools' | 'garnish'
   description: string
   usage: string
+  essential: boolean
   specifications?: {
     material?: string
     capacity?: string
     dimensions?: string
   }
-  essential: boolean
   tips: string[]
+  image?: { asset: { url: string } }
+  featured: boolean
 }
 
-// Sample data - will be replaced with CMS data later
-const equipmentCategories = {
+interface CategoryInfo {
+  title: string
+  description: string
+  equipment: Equipment[]
+}
+
+const categoryConfig = {
   shaking: {
     title: 'Shaking & Mixing',
-    description: 'Essential tools for combining and chilling ingredients',
-    equipment: [
-      {
-        id: 'boston-shaker',
-        name: 'Boston Shaker',
-        category: 'shaking' as const,
-        description: 'The professional standard for cocktail shaking. Two-piece design with mixing glass and metal tin provides superior temperature control and capacity.',
-        usage: 'Perfect for cocktails that need vigorous mixing and aeration. Essential for drinks with citrus, egg whites, or cream.',
-        specifications: {
-          material: 'Stainless steel tin with tempered glass',
-          capacity: '28oz tin, 16oz glass',
-          dimensions: '4.5" diameter, 6" height'
-        },
-        essential: true,
-        tips: [
-          'Always place the tin at an angle when separating to break the seal',
-          'Fill the glass 1/3 with ice, add ingredients, then cover with tin',
-          'Shake for 10-15 seconds with vigor - you should hear the ice dancing',
-          'The metal tin will frost when properly chilled'
-        ]
-      }
-    ]
+    description: 'Essential tools for combining and chilling ingredients'
   },
   straining: {
     title: 'Straining',
-    description: 'Achieving perfect clarity and consistency',
-    equipment: []
+    description: 'Achieving perfect clarity and consistency'
   },
   measuring: {
     title: 'Measuring',
-    description: 'Precision for consistent results',
-    equipment: []
+    description: 'Precision for consistent results'
   },
   glassware: {
     title: 'Glassware',
-    description: 'The perfect vessel for every cocktail',
-    equipment: []
+    description: 'The perfect vessel for every cocktail'
   },
   tools: {
     title: 'Bar Tools',
-    description: 'Essential implements for the modern bar',
-    equipment: []
+    description: 'Essential implements for the modern bar'
   },
   garnish: {
     title: 'Garnish Tools',
-    description: 'Finishing touches and presentation',
-    equipment: []
+    description: 'Finishing touches and presentation'
   }
+}
+
+async function getEquipment(): Promise<Equipment[]> {
+  return await client.fetch(equipmentQuery)
+}
+
+function groupEquipmentByCategory(equipment: Equipment[]): Record<string, CategoryInfo> {
+  const grouped: Record<string, CategoryInfo> = {}
+  
+  // Initialize all categories
+  Object.entries(categoryConfig).forEach(([key, config]) => {
+    grouped[key] = {
+      ...config,
+      equipment: []
+    }
+  })
+  
+  // Group equipment by category
+  equipment.forEach(item => {
+    if (grouped[item.category]) {
+      grouped[item.category].equipment.push(item)
+    }
+  })
+  
+  return grouped
 }
 
 export default async function EquipmentPage() {
@@ -120,30 +130,38 @@ export default async function EquipmentPage() {
               {category.equipment.length > 0 ? (
                 <div className="grid gap-8">
                   {category.equipment.map((item) => (
-                    <div key={item.id} className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20 relative overflow-hidden">
+                    <div key={item._id} className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20 relative overflow-hidden">
                       <div className="absolute inset-0 bg-gradient-to-br from-amber-100/5 to-amber-200/10 opacity-50"></div>
                       <div className="relative z-10">
                         <div className="grid lg:grid-cols-3 gap-8">
                           
-                          {/* Blueprint Image Placeholder */}
+                          {/* Image */}
                           <div className="lg:col-span-1">
                             <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-8 border border-gold-500/20 h-80 flex items-center justify-center group hover:shadow-2xl transition-all duration-300 transform hover:scale-105">
-                              <div className="text-center">
-                                <div className="w-20 h-20 bg-gold-400/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                                  <svg className="w-10 h-10 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                                  </svg>
-                                </div>
-                                <h4 className="text-lg font-serif font-bold text-white mb-2">Technical Schematic</h4>
-                                <p className="text-parchment-300 text-sm mb-4">
-                                  Blueprint illustration: {item.name}
-                                </p>
-                                {item.essential && (
-                                  <div className="inline-block px-3 py-1 bg-gold-500/20 rounded-full border border-gold-500/40">
-                                    <span className="text-gold-300 text-xs font-semibold uppercase tracking-wider">Essential</span>
+                              {item.image ? (
+                                <img
+                                  src={urlFor(item.image).url()}
+                                  alt={item.name}
+                                  className="w-full h-full object-cover rounded-lg"
+                                />
+                              ) : (
+                                <div className="text-center">
+                                  <div className="w-20 h-20 bg-gold-400/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                                    <svg className="w-10 h-10 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                    </svg>
                                   </div>
-                                )}
-                              </div>
+                                  <h4 className="text-lg font-serif font-bold text-white mb-2">Technical Schematic</h4>
+                                  <p className="text-parchment-300 text-sm mb-4">
+                                    [Blueprint illustration: {item.name}]
+                                  </p>
+                                  {item.essential && (
+                                    <div className="inline-block px-3 py-1 bg-gold-500/20 rounded-full border border-gold-500/40">
+                                      <span className="text-gold-300 text-xs font-semibold uppercase tracking-wider">Essential</span>
+                                    </div>
+                                  )}
+                                </div>
+                              )}
                             </div>
                           </div>
 

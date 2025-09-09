@@ -34,7 +34,7 @@ interface SanityCocktail {
   variants?: CocktailVariant[]
   category?: string
   featured?: boolean
-  image?: any
+  image?: { asset: { url: string } }
 }
 
 export default function CocktailsPage() {

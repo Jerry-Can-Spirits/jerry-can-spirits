@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { client } from '@/sanity/client'
 import { ingredientsQuery } from '@/sanity/queries'
-import { urlForImage } from '@/sanity/lib/image'
+import { urlFor } from '@/sanity/lib/image'
 
 // Types for ingredient data
 interface Ingredient {
@@ -17,7 +17,7 @@ interface Ingredient {
     premium?: string
   }
   storage?: string
-  image?: any
+  image?: { asset: { url: string } }
   featured: boolean
 }
 
@@ -135,7 +135,7 @@ export default async function IngredientsPage() {
                             <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-8 border border-gold-500/20 h-64 flex items-center justify-center group hover:shadow-2xl transition-all duration-300 transform hover:scale-105">
                               {ingredient.image ? (
                                 <img
-                                  src={urlForImage(ingredient.image)}
+                                  src={urlFor(ingredient.image).url()}
                                   alt={ingredient.name}
                                   className="w-full h-full object-cover rounded-lg"
                                 />
