@@ -9,10 +9,20 @@
 
 import dynamicImport from 'next/dynamic'
 
-// Dynamically import Sanity Studio to reduce main bundle size
-const NextStudio = dynamicImport(() => import('next-sanity/studio').then(mod => ({ default: mod.NextStudio })), {
-  loading: () => <div className="flex items-center justify-center h-screen text-gray-600">Loading Studio...</div>
-})
+// Dynamically import the Studio component - this keeps it isolated
+const NextStudio = dynamicImport(
+  () => import('next-sanity/studio').then(mod => mod.NextStudio),
+  { 
+    loading: () => (
+      <div className="flex items-center justify-center h-screen bg-gray-900">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
+          <div className="text-gray-300 text-lg">Loading Sanity Studio...</div>
+        </div>
+      </div>
+    )
+  }
+)
 
 export const dynamic = 'force-dynamic'
 
@@ -30,6 +40,6 @@ export function generateStaticParams() {
 
 export default async function StudioPage() {
   // Dynamically import config only when studio is accessed
-  const { default: config } = await import('../../../../sanity.config')
+  const { default: config } = await import('./studio-config')
   return <NextStudio config={config} />
 }

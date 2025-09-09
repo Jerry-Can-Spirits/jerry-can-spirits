@@ -13,6 +13,7 @@ const nextConfig: NextConfig = {
   // Disable webpack build cache to prevent large cache files in production
   experimental: {
     webpackBuildWorker: false,
+    optimizePackageImports: ['sanity', '@sanity/vision'],
   },
   
   // Webpack optimizations to reduce cache size and improve chunk splitting
