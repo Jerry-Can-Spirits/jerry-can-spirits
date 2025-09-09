@@ -1,7 +1,5 @@
 'use client'
 
-import type { Metadata } from 'next'
-import Link from 'next/link'
 
 // Note: metadata export removed as client components cannot export metadata
 // This metadata should be moved to a layout.tsx or handled differently

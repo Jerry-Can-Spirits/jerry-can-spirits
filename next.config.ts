@@ -1,6 +1,9 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // Configure for Cloudflare Pages (full-stack mode)
+  trailingSlash: true,
+  
   // Optimize images for better performance
   images: {
     domains: ['cdn.sanity.io'],

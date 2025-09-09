@@ -5,7 +5,7 @@ const KLAVIYO_PRIVATE_KEY = process.env.KLAVIYO_PRIVATE_KEY
 
 export async function POST(request: NextRequest) {
   try {
-    const { firstName, email, interests, listId, apiKey } = await request.json()
+    const { firstName, email, interests, listId } = await request.json()
 
     if (!firstName || !email) {
       return NextResponse.json(
