@@ -10,13 +10,18 @@ const nextConfig: NextConfig = {
     formats: ['image/webp', 'image/avif'],
   },
   
-  // Enable build caching for better performance
+  // Disable webpack build cache to prevent large cache files in production
   experimental: {
-    webpackBuildWorker: true,
+    webpackBuildWorker: false,
   },
   
   // Webpack optimizations to reduce cache size
   webpack: (config, { dev, isServer }) => {
+    // Disable webpack cache in production to prevent large cache files
+    if (!dev) {
+      config.cache = false;
+    }
+    
     if (!dev && !isServer) {
       // Reduce bundle size in production
       config.optimization.splitChunks = {

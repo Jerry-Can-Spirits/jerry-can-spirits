@@ -18,6 +18,9 @@
 /out/
 /cache/
 
+# webpack cache (prevent large cache files in deployment)
+.next/cache/
+
 # production
 /build
 
