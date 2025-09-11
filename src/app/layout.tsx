@@ -6,6 +6,8 @@ import Footer from "@/components/Footer";
 import PromoBanner from "@/components/PromoBanner";
 import CartographicBackground from "@/components/CartographicBackground";
 import ClientWrapper from "@/components/ClientWrapper";
+import GoogleAnalytics from "@/components/GoogleAnalytics";
+import ConsentBanner from "@/components/ConsentBanner";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -87,6 +89,7 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${playfair.variable} ${jetbrains.variable} antialiased min-h-screen bg-jerry-green-900 text-foreground`}
       >
+        <GoogleAnalytics />
         <ClientWrapper>
           {/* Unified Cartographic Background */}
           <CartographicBackground opacity={0.75} showCoordinates={true} showCompass={true} className="fixed inset-0 z-0" />
@@ -109,6 +112,9 @@ export default function RootLayout({
             
             <Footer />
           </div>
+          
+          {/* Consent Banner */}
+          <ConsentBanner />
         </ClientWrapper>
       </body>
     </html>

@@ -60,6 +60,8 @@ export default defineType({
       of: [
         {
           type: 'object',
+          name: 'ingredient',
+          title: 'Ingredient',
           fields: [
             defineField({
               name: 'name',
@@ -78,17 +80,23 @@ export default defineType({
               title: 'Description',
               type: 'string'
             })
-          ]
+          ],
+          preview: {
+            select: {
+              title: 'name',
+              subtitle: 'amount'
+            }
+          }
         }
       ],
-      validation: Rule => Rule.required().min(1)
+      validation: Rule => Rule.required().min(1).max(15)
     }),
     defineField({
       name: 'instructions',
       title: 'Instructions',
       type: 'array',
       of: [{type: 'string'}],
-      validation: Rule => Rule.required().min(1)
+      validation: Rule => Rule.required().min(1).max(10)
     }),
     defineField({
       name: 'note',
@@ -103,6 +111,8 @@ export default defineType({
       of: [
         {
           type: 'object',
+          name: 'variant',
+          title: 'Variant',
           fields: [
             defineField({
               name: 'name',
@@ -124,6 +134,8 @@ export default defineType({
               of: [
                 {
                   type: 'object',
+                  name: 'variantIngredient',
+                  title: 'Ingredient',
                   fields: [
                     defineField({
                       name: 'name',
@@ -137,26 +149,39 @@ export default defineType({
                       type: 'string',
                       validation: Rule => Rule.required()
                     })
-                  ]
+                  ],
+                  preview: {
+                    select: {
+                      title: 'name',
+                      subtitle: 'amount'
+                    }
+                  }
                 }
               ],
-              validation: Rule => Rule.required().min(1)
+              validation: Rule => Rule.required().min(1).max(10)
             }),
             defineField({
               name: 'instructions',
               title: 'Instructions',
               type: 'array',
               of: [{type: 'string'}],
-              validation: Rule => Rule.required().min(1)
+              validation: Rule => Rule.required().min(1).max(8)
             }),
             defineField({
               name: 'note',
               title: 'Special Note',
               type: 'string'
             })
-          ]
+          ],
+          preview: {
+            select: {
+              title: 'name',
+              subtitle: 'description'
+            }
+          }
         }
-      ]
+      ],
+      validation: Rule => Rule.max(5)
     }),
     defineField({
       name: 'category',
