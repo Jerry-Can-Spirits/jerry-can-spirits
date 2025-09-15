@@ -7,7 +7,7 @@ const GA_MEASUREMENT_ID = 'G-6VJL06YBW2';
 export default function GoogleAnalytics() {
   return (
     <>
-      <Script id="google-consent-init" strategy="beforeInteractive">
+      <Script id="google-consent-init" strategy="afterInteractive">
         {`
           window.dataLayer = window.dataLayer || [];
           function gtag(){dataLayer.push(arguments);}

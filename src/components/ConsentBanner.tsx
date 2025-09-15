@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 
 declare global {
   interface Window {
-    gtag: (command: string, targetId: string, config?: any) => void;
+    gtag: (command: string, targetId: string, config?: Record<string, string | boolean>) => void;
   }
 }
 
@@ -25,7 +25,7 @@ export default function ConsentBanner() {
     }
 
     // Add global function to recall banner (for testing/management)
-    (window as any).showCookieBanner = () => {
+    (window as typeof window & { showCookieBanner?: () => void }).showCookieBanner = () => {
       localStorage.removeItem('cookieConsent');
       setShowBanner(true);
     };
