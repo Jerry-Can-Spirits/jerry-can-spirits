@@ -34,9 +34,16 @@ export default function ClientWrapper({ children }: ClientWrapperProps) {
     }
   }, [pathname, isLegalPage, router]);
 
-  // Show loading or nothing while checking verification status
+  // Show loading while checking verification status
   if (isLoading) {
-    return null;
+    return (
+      <div className="fixed inset-0 bg-jerry-green-900 flex items-center justify-center z-50">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gold-500 mx-auto mb-4"></div>
+          <div className="text-gold-300 text-lg">Loading...</div>
+        </div>
+      </div>
+    );
   }
 
   return (

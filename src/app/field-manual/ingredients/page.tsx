@@ -38,7 +38,7 @@ const categoryConfig = {
     description: 'Essential modifiers and flavor enhancers'
   },
   bitters: {
-    title: 'Bitters',
+    title: 'Bitters & Aperitifs',
     description: 'The bartender\'s spice rack'
   },
   fresh: {
@@ -140,7 +140,7 @@ export default async function IngredientsPage() {
                                   alt={ingredient.name}
                                   width={300}
                                   height={200}
-                                  className="w-full h-full object-cover rounded-lg"
+                                  className="w-full h-full object-contain rounded-lg"
                                 />
                               ) : (
                                 <div className="text-center">

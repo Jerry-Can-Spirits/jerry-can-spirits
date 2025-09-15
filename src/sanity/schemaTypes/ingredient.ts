@@ -85,7 +85,13 @@ export default defineType({
       title: 'Blueprint Image',
       type: 'image',
       options: {
-        hotspot: true,
+        storeOriginalFilename: true,
+      },
+      preview: {
+        select: {
+          imageUrl: 'asset.url',
+          title: 'asset.originalFilename',
+        }
       }
     }),
     defineField({
@@ -100,6 +106,14 @@ export default defineType({
       title: 'name',
       subtitle: 'category',
       media: 'image'
+    },
+    prepare(selection) {
+      const { title, subtitle, media } = selection
+      return {
+        title,
+        subtitle: subtitle ? subtitle.charAt(0).toUpperCase() + subtitle.slice(1) : '',
+        media
+      }
     }
   }
 })

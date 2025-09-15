@@ -145,7 +145,7 @@ export default async function EquipmentPage() {
                                   alt={item.name}
                                   width={300}
                                   height={200}
-                                  className="w-full h-full object-cover rounded-lg"
+                                  className="w-full h-full object-contain rounded-lg"
                                 />
                               ) : (
                                 <div className="text-center">
