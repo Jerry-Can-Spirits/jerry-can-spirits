@@ -105,39 +105,37 @@ export async function POST(request: NextRequest) {
     // Subscribe to list if listId provided
     if (listId && profileId) {
       const subscriptionPayload = {
-        data: [
-          {
-            type: 'profile-subscription-bulk-create-job',
-            attributes: {
-              profiles: {
-                data: [
-                  {
-                    type: 'profile',
-                    id: profileId,
-                    attributes: {
-                      email,
-                      subscriptions: {
-                        email: {
-                          marketing: {
-                            consent: 'SUBSCRIBED'
-                          }
+        data: {
+          type: 'profile-subscription-bulk-create-job',
+          attributes: {
+            profiles: {
+              data: [
+                {
+                  type: 'profile',
+                  id: profileId,
+                  attributes: {
+                    email,
+                    subscriptions: {
+                      email: {
+                        marketing: {
+                          consent: 'SUBSCRIBED'
                         }
                       }
                     }
                   }
-                ]
-              }
-            },
-            relationships: {
-              list: {
-                data: {
-                  type: 'list',
-                  id: listId
                 }
+              ]
+            }
+          },
+          relationships: {
+            list: {
+              data: {
+                type: 'list',
+                id: listId
               }
             }
           }
-        ]
+        }
       }
 
       const subscriptionResponse = await fetch(

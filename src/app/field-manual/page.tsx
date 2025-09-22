@@ -45,12 +45,12 @@ export default function FieldManualHome() {
       </section>
 
       {/* Navigation Cards */}
-      <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-        <div className="grid lg:grid-cols-3 gap-8">
+      <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="grid lg:grid-cols-3 gap-8 lg:items-stretch">
           
           {/* Cocktails Section */}
-          <Link href="/field-manual/cocktails" className="group">
-            <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20 hover:border-gold-400/40 transition-all duration-300 transform hover:scale-105 hover:shadow-2xl relative overflow-hidden">
+          <Link href="/field-manual/cocktails" className="group h-full">
+            <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20 hover:border-gold-400/40 transition-all duration-300 transform hover:scale-105 hover:shadow-2xl relative overflow-hidden h-full flex flex-col">
               {/* Parchment texture */}
               <div className="absolute inset-0 bg-gradient-to-br from-amber-100/5 to-amber-200/10 opacity-50"></div>
               
@@ -72,18 +72,15 @@ export default function FieldManualHome() {
                   From timeless Dark & Stormy to innovative expedition-inspired creations.
                 </p>
                 
-                <div className="space-y-2 text-sm">
-                  <div className="flex items-center justify-between text-parchment-300">
-                    <span>• Classic recipes with Jerry Can twists</span>
-                    <span className="text-gold-400">Novice → Trailblazer</span>
+                <div className="space-y-2 text-sm text-center">
+                  <div className="text-parchment-300">
+                    • Classic recipes with Jerry Can twists
                   </div>
-                  <div className="flex items-center justify-between text-parchment-300">
-                    <span>• Step-by-step techniques</span>
-                    <span className="text-gold-400">8-12 Cocktails</span>
+                  <div className="text-parchment-300">
+                    • Step-by-step techniques
                   </div>
-                  <div className="flex items-center justify-between text-parchment-300">
-                    <span>• Variations & riffs</span>
-                    <span className="text-gold-400">20+ Total</span>
+                  <div className="text-parchment-300">
+                    • Variations & riffs
                   </div>
                 </div>
               </div>
@@ -91,8 +88,8 @@ export default function FieldManualHome() {
           </Link>
 
           {/* Ingredients Section */}
-          <Link href="/field-manual/ingredients" className="group">
-            <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20 hover:border-gold-400/40 transition-all duration-300 transform hover:scale-105 hover:shadow-2xl relative overflow-hidden">
+          <Link href="/field-manual/ingredients" className="group h-full">
+            <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20 hover:border-gold-400/40 transition-all duration-300 transform hover:scale-105 hover:shadow-2xl relative overflow-hidden h-full flex flex-col">
               {/* Parchment texture */}
               <div className="absolute inset-0 bg-gradient-to-br from-amber-100/5 to-amber-200/10 opacity-50"></div>
               
@@ -110,22 +107,20 @@ export default function FieldManualHome() {
                 </div>
                 
                 <p className="text-parchment-300 text-center mb-6 leading-relaxed">
-                  Discover premium ingredients that elevate every cocktail. From recommended spirits and bitters 
+                  Discover premium ingredients that elevate every cocktail. From recommended spirits and bitters
                   to fresh garnishes and preparation techniques.
                 </p>
-                
-                <div className="space-y-2 text-sm">
-                  <div className="flex items-center justify-between text-parchment-300">
-                    <span>• Spirits & liqueurs</span>
-                    <span className="text-gold-400">Premium Focus</span>
+
+                <br />
+                <div className="space-y-2 text-sm text-center">
+                  <div className="text-parchment-300">
+                    • Spirits & liqueurs
                   </div>
-                  <div className="flex items-center justify-between text-parchment-300">
-                    <span>• Fresh ingredients & bitters</span>
-                    <span className="text-gold-400">Storage Tips</span>
+                  <div className="text-parchment-300">
+                    • Fresh ingredients & bitters
                   </div>
-                  <div className="flex items-center justify-between text-parchment-300">
-                    <span>• Brand partnerships</span>
-                    <span className="text-gold-400">Quality Tiers</span>
+                  <div className="text-parchment-300">
+                    • Brand partnerships
                   </div>
                 </div>
               </div>
@@ -133,8 +128,8 @@ export default function FieldManualHome() {
           </Link>
 
           {/* Equipment Section */}
-          <Link href="/field-manual/equipment" className="group">
-            <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20 hover:border-gold-400/40 transition-all duration-300 transform hover:scale-105 hover:shadow-2xl relative overflow-hidden">
+          <Link href="/field-manual/equipment" className="group h-full">
+            <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20 hover:border-gold-400/40 transition-all duration-300 transform hover:scale-105 hover:shadow-2xl relative overflow-hidden h-full flex flex-col">
               {/* Parchment texture */}
               <div className="absolute inset-0 bg-gradient-to-br from-amber-100/5 to-amber-200/10 opacity-50"></div>
               
@@ -152,22 +147,20 @@ export default function FieldManualHome() {
                 </div>
                 
                 <p className="text-parchment-300 text-center mb-6 leading-relaxed">
-                  Complete barware guide from essential tools to professional-grade equipment. 
+                  Complete barware guide from essential tools to professional-grade equipment.
                   Technical specifications and usage guides for the modern home bar.
                 </p>
-                
-                <div className="space-y-2 text-sm">
-                  <div className="flex items-center justify-between text-parchment-300">
-                    <span>• Shaking & mixing tools</span>
-                    <span className="text-gold-400">Blueprint Style</span>
+
+                <br />
+                <div className="space-y-2 text-sm text-center">
+                  <div className="text-parchment-300">
+                    • Shaking & mixing tools
                   </div>
-                  <div className="flex items-center justify-between text-parchment-300">
-                    <span>• Measuring & straining</span>
-                    <span className="text-gold-400">Technical Specs</span>
+                  <div className="text-parchment-300">
+                    • Measuring & straining
                   </div>
-                  <div className="flex items-center justify-between text-parchment-300">
-                    <span>• Glassware collection</span>
-                    <span className="text-gold-400">Complete Setup</span>
+                  <div className="text-parchment-300">
+                    • Glassware collection
                   </div>
                 </div>
               </div>

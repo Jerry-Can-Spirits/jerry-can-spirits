@@ -14,9 +14,8 @@ interface KlaviyoSignupProps {
   apiKey?: string
 }
 
-export default function KlaviyoSignup({ 
-  listId = 'YOUR_LIST_ID', 
-  apiKey = 'T8pKVn' 
+export default function KlaviyoSignup({
+  listId = 'T4uXSb'
 }: KlaviyoSignupProps) {
   const [formData, setFormData] = useState<FormData>({
     firstName: '',
@@ -73,8 +72,7 @@ export default function KlaviyoSignup({
         },
         body: JSON.stringify({
           ...formData,
-          listId,
-          apiKey
+          listId
         })
       })
 
