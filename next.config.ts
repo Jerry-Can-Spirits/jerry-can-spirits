@@ -3,10 +3,19 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   // Configure for Cloudflare Pages (full-stack mode)
   trailingSlash: true,
+
+  // Enable build caching
+  cacheHandler: undefined, // Use default caching
+  cacheMaxMemorySize: 50 * 1024 * 1024, // 50 MB
   
   // Optimize images for better performance
   images: {
-    domains: ['cdn.sanity.io'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'cdn.sanity.io',
+      },
+    ],
     formats: ['image/webp', 'image/avif'],
   },
   
