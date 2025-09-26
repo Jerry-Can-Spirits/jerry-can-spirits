@@ -271,7 +271,7 @@ export default function Header() {
               {/* Social Links */}
               <div className="hidden lg:flex items-center space-x-3">
                 <a
-                  href="https://www.facebook.com/profile.php?id=61579347508647"
+                  href="https://www.facebook.com/jerrycanspirits"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-parchment-100 hover:text-parchment-50 transition-all duration-200 hover:scale-110"

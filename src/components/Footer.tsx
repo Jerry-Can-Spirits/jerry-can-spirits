@@ -41,6 +41,7 @@ export default function Footer() {
       { name: 'Terms of Service', href: '/terms-of-service' },
       { name: 'Shipping & Returns', href: '/shipping-returns' },
       { name: 'Accessibility', href: '/accessibility' },
+      { name: 'Armed Forces Covenant', href: '/armed-forces-covenant' },
     ]
   }
 
@@ -108,42 +109,41 @@ export default function Footer() {
 
       <div className="relative">
         {/* Main Footer Content */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 items-start">
+        <div className="max-w-none mx-auto px-8 sm:px-12 lg:px-16 xl:px-20 py-16">
+          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-7 gap-8 lg:gap-16 xl:gap-20 items-start max-w-screen-2xl mx-auto">
             
-            {/* Left Column - Quick Links & Responsible Drinking */}
-            <div className="space-y-8">
-              {/* Quick Links */}
+            {/* Column 1 - Quick Links */}
+            <div className="space-y-6">
               <div>
-                <div className="md:hidden">
+                <div className="lg:hidden">
                   <button
                     onClick={() => toggleSection('quickLinks')}
                     className="flex items-center justify-between w-full text-left font-serif text-xl font-bold mb-4 text-parchment-100 border-b border-jerry-green-700 pb-2"
                     style={{ color: '#fefbf5' }}
                   >
                     Quick Links
-                    <ChevronDownIcon 
+                    <ChevronDownIcon
                       className={`w-5 h-5 transition-transform duration-200 ${
                         openSections.includes('quickLinks') ? 'rotate-180' : ''
-                      }`} 
+                      }`}
                     />
                   </button>
                 </div>
-                
-                <div className="hidden md:block">
+
+                <div className="hidden lg:block">
                   <h3 className="font-serif text-xl font-bold mb-4 text-parchment-100 border-b border-jerry-green-700 pb-2" style={{ color: '#fefbf5' }}>
                     Quick Links
                   </h3>
                 </div>
 
-                <div className={`space-y-2 ${
-                  openSections.includes('quickLinks') || 'hidden md:block'
+                <div className={`space-y-3 ${
+                  openSections.includes('quickLinks') || 'hidden lg:block'
                 }`}>
                   {footerSections.quickLinks.map((link) => (
                     <Link
                       key={link.name}
                       href={link.href}
-                      className="block text-parchment-200 hover:text-parchment-50 transition-all duration-200 hover:scale-105 hover:translate-x-1"
+                      className="block text-base text-parchment-200 hover:text-parchment-50 transition-all duration-200 hover:scale-105 hover:translate-x-1"
                       onClick={() => trackFooterClick('Quick Link', link.name)}
                     >
                       {link.name}
@@ -151,20 +151,22 @@ export default function Footer() {
                   ))}
                 </div>
               </div>
+            </div>
 
-              {/* Responsible Drinking */}
-              <div className="border-t border-jerry-green-700 pt-8">
+            {/* Column 2 - Responsible Drinking */}
+            <div className="space-y-6">
+              <div>
                 <h3 className="font-serif text-xl font-bold mb-4 text-parchment-100 border-b border-jerry-green-700 pb-2" style={{ color: '#fefbf5' }}>
                   Drink Responsibly
                 </h3>
-                <div className="space-y-3 text-sm text-parchment-300">
-                  <p>🔞 Must be 18+ to purchase alcohol</p>
-                  <p>⚠️ Please drink responsibly</p>
-                  <p>🍼 Avoid alcohol if pregnant</p>
+                <div className="space-y-3 text-base text-parchment-300">
+                  <p>Must be 18+ to purchase alcohol</p>
+                  <p>Please drink responsibly</p>
+                  <p>Avoid alcohol if pregnant</p>
                   <p>
-                    <a 
-                      href="https://www.drinkaware.co.uk" 
-                      target="_blank" 
+                    <a
+                      href="https://www.drinkaware.co.uk"
+                      target="_blank"
                       rel="noopener noreferrer"
                       className="text-jerry-green-400 hover:text-jerry-green-300 underline transition-colors duration-200"
                       onClick={() => trackFooterClick('External Link', 'Drinkaware')}
@@ -176,41 +178,57 @@ export default function Footer() {
               </div>
             </div>
 
-            {/* Center Column - Logo & Mission */}
-            <div className="text-center space-y-8">
+            {/* Column 3 - Service Community Support */}
+            <div className="space-y-6">
+              <div>
+                <h3 className="font-serif text-xl font-bold mb-4 text-parchment-100 border-b border-jerry-green-700 pb-2" style={{ color: '#fefbf5' }}>
+                  Service Community
+                </h3>
+                <div className="space-y-3 text-base text-parchment-300">
+                  <p>Proud signatories of the Armed Forces Covenant - we stand alongside serving personnel, veterans, their families, and our blue light services.</p>
+                  <p>Our commitment is to ensure fairness, respect, and equal opportunity for all who serve, recognising their dedication and the vital role they play in our communities.</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Column 4 - Logo & Social */}
+            <div className="text-center space-y-1">
               {/* Logo */}
               <div className="flex justify-center">
-                <Link 
-                  href="/" 
+                <Link
+                  href="/"
                   className="block group transition-transform duration-300 hover:scale-105"
                   onClick={() => trackFooterClick('Logo', 'Home')}
                 >
                   <Image
                     src="/images/logo-etch.webp"
                     alt="Jerry Can Spirits - Premium British Rum"
-                    width={200}
-                    height={280}
-                    className="h-32 w-auto opacity-90 group-hover:opacity-100 transition-opacity duration-300"
+                    width={300}
+                    height={420}
+                    className="h-48 w-auto opacity-90 group-hover:opacity-100 transition-opacity duration-300"
                     priority
                   />
                 </Link>
               </div>
 
               {/* Mission Statement */}
-              <div className="max-w-xs mx-auto">
-                <p className="text-parchment-200 text-sm leading-relaxed italic font-serif">
-                  "Premium spirits engineered for adventure. Swift & Sure, Expedition Ready."
+              <div className="max-w-sm mx-auto">
+                <p className="text-parchment-200 text-sm leading-relaxed font-serif text-center">
+                  <span className="font-bold text-parchment-100">Jerry Can Spirits:</span> Premium British rum. Engineered for reliability. Crafted for adventure.
+                </p>
+                <p className="text-parchment-200 text-sm leading-relaxed italic font-serif text-center mt-2">
+                  Your essential provision for the journey ahead.
+                </p>
+                <p className="text-parchment-300 text-sm leading-relaxed font-serif text-center mt-3">
+                  Follow our journey and check out more at
                 </p>
               </div>
 
               {/* Social Media */}
-              <div className="space-y-4">
-                <h3 className="font-serif text-xl font-bold text-parchment-100 border-b border-jerry-green-700 pb-2" style={{ color: '#fefbf5' }}>
-                  Follow the Expedition
-                </h3>
+              <div className="space-y-3">
                 <div className="flex justify-center space-x-6">
                   <a
-                    href="https://www.facebook.com/profile.php?id=61579347508647"
+                    href="https://www.facebook.com/jerrycanspirits"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-parchment-200 hover:text-jerry-green-400 transition-all duration-200 hover:scale-110"
@@ -234,45 +252,44 @@ export default function Footer() {
                     </svg>
                   </a>
                 </div>
-                <p className="text-xs text-parchment-400 mt-2">
+                <p className="text-sm text-parchment-400">
                   #JerryCanSpirits
                 </p>
               </div>
             </div>
 
-            {/* Right Column - Legal & Payment */}
-            <div className="space-y-8">
-              {/* Legal Links */}
+            {/* Column 5 - Legal & Policies */}
+            <div className="space-y-6">
               <div>
-                <div className="md:hidden">
+                <div className="lg:hidden">
                   <button
                     onClick={() => toggleSection('legal')}
                     className="flex items-center justify-between w-full text-left font-serif text-xl font-bold mb-4 text-parchment-100 border-b border-jerry-green-700 pb-2"
                     style={{ color: '#fefbf5' }}
                   >
                     Legal & Policies
-                    <ChevronDownIcon 
+                    <ChevronDownIcon
                       className={`w-5 h-5 transition-transform duration-200 ${
                         openSections.includes('legal') ? 'rotate-180' : ''
-                      }`} 
+                      }`}
                     />
                   </button>
                 </div>
-                
-                <div className="hidden md:block">
+
+                <div className="hidden lg:block">
                   <h3 className="font-serif text-xl font-bold mb-4 text-parchment-100 border-b border-jerry-green-700 pb-2" style={{ color: '#fefbf5' }}>
                     Legal & Policies
                   </h3>
                 </div>
 
-                <div className={`space-y-2 ${
-                  openSections.includes('legal') || 'hidden md:block'
+                <div className={`space-y-3 ${
+                  openSections.includes('legal') || 'hidden lg:block'
                 }`}>
                   {footerSections.legal.map((link) => (
                     <Link
                       key={link.name}
                       href={link.href}
-                      className="block text-parchment-200 hover:text-parchment-50 transition-all duration-200 hover:scale-105 hover:translate-x-1"
+                      className="block text-base text-parchment-200 hover:text-parchment-50 transition-all duration-200 hover:scale-105 hover:translate-x-1"
                       onClick={() => trackFooterClick('Legal Link', link.name)}
                     >
                       {link.name}
@@ -280,39 +297,41 @@ export default function Footer() {
                   ))}
                 </div>
               </div>
+            </div>
 
-              {/* Payment Methods */}
-              <div className="border-t border-jerry-green-700 pt-8">
+            {/* Column 6 - Secure Payment */}
+            <div className="space-y-6">
+              <div>
                 <h3 className="font-serif text-xl font-bold mb-4 text-parchment-100 border-b border-jerry-green-700 pb-2" style={{ color: '#fefbf5' }}>
                   Secure Payment
                 </h3>
-                <div className="grid grid-cols-4 gap-2 mb-4">
+                <div className="grid grid-cols-2 gap-2 mb-4">
                   {paymentMethods.map((method) => (
                     <div
                       key={method.name}
-                      className="bg-parchment-50 rounded-md p-2 flex items-center justify-center hover:bg-parchment-100 transition-colors duration-200 shadow-sm h-12"
+                      className="bg-parchment-50 rounded-md p-2 flex items-center justify-center hover:bg-parchment-100 transition-colors duration-200 shadow-sm h-10"
                       title={method.name}
                     >
                       {isClient ? (
                         <Image
                           src={method.src}
                           alt={method.alt}
-                          width={80}
-                          height={48}
-                          className={`${method.className} object-contain`}
+                          width={60}
+                          height={36}
+                          className="object-contain max-h-6"
                         />
                       ) : (
-                        <div className="w-12 h-8 bg-parchment-200 rounded animate-pulse" />
+                        <div className="w-10 h-6 bg-parchment-200 rounded animate-pulse" />
                       )}
                     </div>
                   ))}
                 </div>
-                
+
                 {/* Security Badges */}
-                <div className="space-y-2 text-xs text-parchment-400">
+                <div className="space-y-2 text-sm text-parchment-400">
                   <div className="flex items-center space-x-2">
                     <span className="text-green-400">🔒</span>
-                    <span>SSL Encrypted Checkout</span>
+                    <span>SSL Encrypted</span>
                   </div>
                   <div className="flex items-center space-x-2">
                     <span className="text-blue-400">🛡️</span>
@@ -325,12 +344,44 @@ export default function Footer() {
                 </div>
               </div>
             </div>
+
+            {/* Column 7 - Contact Us */}
+            <div className="space-y-6">
+              <div>
+                <h3 className="font-serif text-xl font-bold mb-4 text-parchment-100 border-b border-jerry-green-700 pb-2" style={{ color: '#fefbf5' }}>
+                  Contact Us
+                </h3>
+                <div className="space-y-3 text-base text-parchment-300">
+                  <div>
+                    <p className="text-gold-300 font-semibold mb-1">General Enquiries</p>
+                    <a
+                      href="mailto:hello@jerrycanspirits.co.uk"
+                      className="text-jerry-green-400 hover:text-jerry-green-300 underline transition-colors duration-200"
+                      onClick={() => trackFooterClick('Contact', 'Email')}
+                    >
+                      hello@jerrycanspirits.co.uk
+                    </a>
+                  </div>
+                  <div>
+                    <p className="text-gold-300 font-semibold mb-1">More Contact Options</p>
+                    <Link
+                      href="/contact"
+                      className="text-jerry-green-400 hover:text-jerry-green-300 underline transition-colors duration-200"
+                      onClick={() => trackFooterClick('Contact', 'Contact Page')}
+                    >
+                      Press, Partnerships & More
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
         {/* Bottom Bar */}
         <div className="border-t border-jerry-green-700 bg-jerry-green-950/50">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          <div className="max-w-none mx-auto px-8 sm:px-12 lg:px-16 xl:px-20 py-6">
+            <div className="max-w-screen-2xl mx-auto">
             <div className="flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0">
               
               {/* Copyright */}
@@ -343,15 +394,16 @@ export default function Footer() {
               <div className="text-sm text-parchment-400 text-center md:text-right">
                 <p>🇬🇧 Proudly British • 🌍 Shipping Nationwide</p>
                 <p className="mt-1">
-                  <a 
-                    href="mailto:hello@jerrycanspirits.com" 
+                  <a
+                    href="mailto:hello@jerrycanspirits.co.uk"
                     className="text-jerry-green-400 hover:text-jerry-green-300 transition-colors duration-200"
                     onClick={() => trackFooterClick('Contact', 'Email')}
                   >
-                    hello@jerrycanspirits.com
+                    hello@jerrycanspirits.co.uk
                   </a>
                 </p>
               </div>
+            </div>
             </div>
           </div>
         </div>

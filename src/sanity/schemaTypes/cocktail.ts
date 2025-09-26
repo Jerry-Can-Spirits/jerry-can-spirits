@@ -128,6 +128,19 @@ export default defineType({
               validation: Rule => Rule.required()
             }),
             defineField({
+              name: 'difficulty',
+              title: 'Difficulty Level',
+              type: 'string',
+              options: {
+                list: [
+                  {title: 'Novice', value: 'novice'},
+                  {title: 'Wayfinder', value: 'wayfinder'},
+                  {title: 'Trailblazer', value: 'trailblazer'}
+                ]
+              },
+              validation: Rule => Rule.required()
+            }),
+            defineField({
               name: 'ingredients',
               title: 'Ingredients',
               type: 'array',
@@ -176,7 +189,14 @@ export default defineType({
           preview: {
             select: {
               title: 'name',
-              subtitle: 'description'
+              subtitle: 'description',
+              difficulty: 'difficulty'
+            },
+            prepare({title, subtitle, difficulty}) {
+              return {
+                title: title,
+                subtitle: `${difficulty?.charAt(0).toUpperCase() + difficulty?.slice(1)} - ${subtitle}`
+              }
             }
           }
         }

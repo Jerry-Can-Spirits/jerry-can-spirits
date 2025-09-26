@@ -144,7 +144,7 @@ export default function Contact() {
                   </svg>
                 </a>
                 <a
-                  href="https://www.facebook.com/profile.php?id=61579347508647"
+                  href="https://www.facebook.com/jerrycanspirits"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-12 h-12 bg-jerry-green-700/60 rounded-full flex items-center justify-center text-parchment-200 hover:text-gold-300 hover:bg-jerry-green-600/60 transition-all duration-200 hover:scale-110"
