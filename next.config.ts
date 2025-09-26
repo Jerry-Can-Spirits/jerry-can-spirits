@@ -4,6 +4,51 @@ const nextConfig: NextConfig = {
   // Configure for Cloudflare Pages (full-stack mode)
   trailingSlash: true,
 
+  // Security headers
+  headers: async () => {
+    return [
+      {
+        source: '/(.*)',
+        headers: [
+          {
+            key: 'Content-Security-Policy',
+            value: [
+              "default-src 'self'",
+              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://static.klaviyo.com https://a.klaviyo.com",
+              "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+              "font-src 'self' https://fonts.gstatic.com",
+              "img-src 'self' data: https: blob:",
+              "media-src 'self' https:",
+              "connect-src 'self' https://www.google-analytics.com https://a.klaviyo.com https://cdn.sanity.io https://*.sanity.io wss:",
+              "frame-src 'self' https://www.youtube.com https://www.vimeo.com",
+              "object-src 'none'",
+              "base-uri 'self'",
+              "form-action 'self' https://manage.kmail-lists.com",
+              "frame-ancestors 'none'",
+              "upgrade-insecure-requests"
+            ].join('; ')
+          },
+          {
+            key: 'X-Frame-Options',
+            value: 'DENY'
+          },
+          {
+            key: 'X-Content-Type-Options',
+            value: 'nosniff'
+          },
+          {
+            key: 'Referrer-Policy',
+            value: 'strict-origin-when-cross-origin'
+          },
+          {
+            key: 'Permissions-Policy',
+            value: 'camera=(), microphone=(), geolocation=()'
+          }
+        ]
+      }
+    ]
+  },
+
   // Enable build caching
   cacheHandler: undefined, // Use default caching
   cacheMaxMemorySize: 50 * 1024 * 1024, // 50 MB
