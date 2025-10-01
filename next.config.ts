@@ -7,19 +7,43 @@ const nextConfig: NextConfig = {
   // Security headers
   headers: async () => {
     return [
+      // Less restrictive CSP for Sanity Studio
       {
-        source: '/(.*)',
+        source: '/studio/:path*',
         headers: [
           {
             key: 'Content-Security-Policy',
             value: [
               "default-src 'self'",
-              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://static.klaviyo.com https://a.klaviyo.com",
+              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https: data:",
+              "style-src 'self' 'unsafe-inline' https: data:",
+              "font-src 'self' https: data:",
+              "img-src 'self' data: https: blob:",
+              "media-src 'self' https: data:",
+              "connect-src 'self' https: wss: ws:",
+              "frame-src 'self' https:",
+              "object-src 'none'",
+              "base-uri 'self'",
+              "form-action 'self' https:",
+              "frame-ancestors 'none'"
+            ].join('; ')
+          }
+        ]
+      },
+      // Stricter CSP for all other routes
+      {
+        source: '/((?!studio).*)',
+        headers: [
+          {
+            key: 'Content-Security-Policy',
+            value: [
+              "default-src 'self'",
+              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://static.klaviyo.com https://a.klaviyo.com https://tagmanager.google.com",
               "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
               "font-src 'self' https://fonts.gstatic.com",
               "img-src 'self' data: https: blob:",
               "media-src 'self' https:",
-              "connect-src 'self' https://www.google-analytics.com https://a.klaviyo.com https://cdn.sanity.io https://*.sanity.io wss:",
+              "connect-src 'self' http://localhost:* https://www.google-analytics.com https://www.googletagmanager.com https://analytics.google.com https://a.klaviyo.com https://cdn.sanity.io https://*.sanity.io wss: ws:",
               "frame-src 'self' https://www.youtube.com https://www.vimeo.com",
               "object-src 'none'",
               "base-uri 'self'",
