@@ -16,6 +16,7 @@ interface CocktailIngredient {
 interface CocktailVariant {
   name: string
   description: string
+  difficulty: 'novice' | 'wayfinder' | 'trailblazer'
   ingredients: CocktailIngredient[]
   instructions: string[]
   note?: string
