@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Image from 'next/image'
 
 export const metadata: Metadata = {
   title: "Our Ethos | Jerry Can Spirits - Values, Craftsmanship & Commitment",
@@ -23,25 +24,22 @@ export default function Ethos() {
               </span>
             </div>
             
-            {/* Compass & Copper Visual Placeholder */}
-            <div className="relative w-full max-w-2xl mx-auto h-64 bg-jerry-green-800/40 backdrop-blur-sm rounded-lg border border-gold-500/20 mb-8 flex items-center justify-center">
-              <div className="text-center">
-                <div className="text-gold-300 mb-2">
-                  <svg className="w-16 h-16 mx-auto" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                  </svg>
-                </div>
-                <p className="text-parchment-300 text-sm">
-                  [Hero Image: Vintage compass pointing toward copper pot still with expedition maps]
-                </p>
-              </div>
+            {/* Compass & Copper Visual */}
+            <div className="relative w-full max-w-3xl mx-auto mb-8">
+              <Image
+                src="/images/hero/Compass_Still.webp"
+                alt="Vintage compass and copper pot still - tradition meets adventure"
+                width={1200}
+                height={600}
+                className="rounded-lg"
+              />
             </div>
           </div>
 
           <h1 className="text-4xl sm:text-6xl font-serif font-bold text-white mb-6">
-            Forged by Purpose,
+            Built by Experience,
             <br />
-            <span className="text-gold-300">Crafted by Tradition</span>
+            <span className="text-gold-300">Crafted for Adventure</span>
           </h1>
           
           <p className="text-xl text-parchment-300 max-w-3xl mx-auto leading-relaxed mb-8">
@@ -60,88 +58,63 @@ export default function Ethos() {
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        {/* Section 1: The Foundation (Values Bridge) */}
+        {/* Section 1: Our Values */}
         <section className="py-20">
           <div className="text-center mb-16">
             <h2 className="text-3xl sm:text-4xl font-serif font-bold text-white mb-6">
-              The Foundation
+              Our Values
             </h2>
             <p className="text-xl text-parchment-300 max-w-3xl mx-auto">
-              Our values were forged in service and refined through passion. 
-              From military precision to artisan excellence.
+              These principles guide everything we create - learned through experience, proven through adventure.
             </p>
           </div>
 
-          {/* Values Bridge Grid */}
-          <div className="grid md:grid-cols-2 gap-8 mb-16">
-            {/* Military Values */}
-            <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-8 border border-gold-500/20">
-              <h3 className="text-2xl font-serif font-bold text-white mb-6 pb-2 border-b border-gold-500/20">
-                Military Foundation
-              </h3>
-              <div className="space-y-4">
-                {[
-                  { value: "Courage", description: "Taking bold steps into uncharted territory" },
-                  { value: "Discipline", description: "Unwavering commitment to our craft" },
-                  { value: "Respect", description: "Honoring tradition while embracing innovation" },
-                  { value: "Integrity", description: "Transparency in every process and promise" },
-                  { value: "Loyalty", description: "To our customers, partners, and principles" },
-                  { value: "Selfless Commitment", description: "Putting quality before profit" }
-                ].map((item, index) => (
-                  <div key={index} className="group cursor-pointer">
-                    <div className="flex items-center space-x-3 p-3 rounded-lg transition-all duration-300 group-hover:bg-jerry-green-800/60">
-                      <div className="w-2 h-2 bg-gold-400 rounded-full"></div>
-                      <div>
-                        <p className="text-gold-300 font-semibold">{item.value}</p>
-                        <p className="text-parchment-300 text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                          {item.description}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                ))}
+          {/* Unified Values Grid */}
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+            {[
+              {
+                value: "Reliability",
+                description: "Always there when you need it. From expedition gear to evening drinks, you can count on it."
+              },
+              {
+                value: "Function Over Form",
+                description: "Beauty that serves purpose. Every detail engineered to perform."
+              },
+              {
+                value: "Adventure Spirit",
+                description: "For modern explorers pushing boundaries - whether across continents or just past comfort zones."
+              },
+              {
+                value: "Precision",
+                description: "Getting it right the first time. No shortcuts, no compromises."
+              },
+              {
+                value: "Authenticity",
+                description: "Honest about our craft, transparent about our process, genuine in our commitments."
+              },
+              {
+                value: "Earned, Not Given",
+                description: "Quality that proves itself. The drink at the end of the journey you've actually taken."
+              }
+            ].map((item, index) => (
+              <div key={index} className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20 hover:border-gold-400/40 transition-all duration-300 group">
+                <div className="mb-4">
+                  <h3 className="text-xl font-serif font-bold text-gold-300 mb-3">{item.value}</h3>
+                  <p className="text-parchment-300 leading-relaxed">{item.description}</p>
+                </div>
               </div>
-            </div>
-
-            {/* Jerry Can Values */}
-            <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-8 border border-gold-500/20">
-              <h3 className="text-2xl font-serif font-bold text-white mb-6 pb-2 border-b border-gold-500/20">
-                Jerry Can Spirits
-              </h3>
-              <div className="space-y-4">
-                {[
-                  { value: "Adventure", description: "Every bottle tells a story of exploration" },
-                  { value: "Quality", description: "No compromise on ingredients or process" },
-                  { value: "Innovation", description: "Pushing boundaries while respecting tradition" },
-                  { value: "Sustainability", description: "Local sourcing to reduce our footprint" },
-                  { value: "Authenticity", description: "Genuine craft, honest communication" },
-                  { value: "Excellence", description: "Continuous improvement in every aspect" }
-                ].map((item, index) => (
-                  <div key={index} className="group cursor-pointer">
-                    <div className="flex items-center space-x-3 p-3 rounded-lg transition-all duration-300 group-hover:bg-jerry-green-800/60">
-                      <div className="w-2 h-2 bg-gold-400 rounded-full"></div>
-                      <div>
-                        <p className="text-gold-300 font-semibold">{item.value}</p>
-                        <p className="text-parchment-300 text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                          {item.description}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
+            ))}
           </div>
 
-          {/* Narrative Bridge */}
+          {/* Philosophy Quote */}
           <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-8 border border-gold-500/20 text-center">
             <p className="text-xl text-white leading-relaxed">
-              "These values didn't change when I left service—they evolved. The same precision that guided missions 
-              now guides our sourcing. The loyalty once sworn to country now extends to our craft and customers. 
-              Every decision, every partnership, every bottle reflects these core principles."
+              "Service taught me what reliable means. Adventure is where I prove it. The same standards
+              I learned to demand from equipment that matters - I now demand from every bottle we craft. Function over flash.
+              Quality that performs. That's not negotiable."
             </p>
             <div className="mt-6 text-gold-300 text-sm font-semibold uppercase tracking-wider">
-              — The Jerry Can Philosophy
+              - The Jerry Can Philosophy
             </div>
           </div>
         </section>
@@ -174,7 +147,7 @@ export default function Ethos() {
                     Sourcing: UK First Philosophy
                   </h3>
                   <p className="text-parchment-300 mb-6">
-                    We prioritize British ingredients wherever possible—from English grains to Scottish botanicals. 
+                    We prioritize British ingredients wherever possible - from English grains to Scottish botanicals. 
                     When tradition demands Caribbean elements, we source ethically from trusted partners who share our values.
                   </p>
                   
@@ -211,29 +184,30 @@ export default function Ethos() {
                 </div>
                 <div className="flex-1 bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-8 border border-gold-500/20 group-hover:border-gold-400/40 transition-all duration-300">
                   <h3 className="text-2xl font-serif font-bold text-white mb-4">
-                    Selection: Partner Distilleries
+                    Selection: Expert Partners in Welsh Craft
                   </h3>
                   <p className="text-parchment-300 mb-6">
-                    We don't just choose any distillery—we seek craftspeople who share our passion for traditional methods. 
-                    Copper pot stills, time-honored techniques, and an unwavering commitment to quality.
+                    We partnered with Spirit of Wales Distillery - craftspeople who share our passion for innovation rooted in tradition.
+                    Their cutting-edge approach to copper distillation creates the foundation for our exceptional rums, combining modern
+                    engineering with time-tested principles.
                   </p>
-                  
+
                   {/* Hover Detail */}
                   <div className="opacity-0 group-hover:opacity-100 transition-all duration-300 transform group-hover:translate-y-0 translate-y-4">
                     <div className="bg-jerry-green-800/60 rounded-lg p-6 mt-4">
-                      <h4 className="text-gold-300 font-semibold mb-3">Our Criteria</h4>
-                      <div className="grid md:grid-cols-3 gap-4 text-sm text-parchment-300">
+                      <h4 className="text-gold-300 font-semibold mb-3">The Spirit of Wales Approach</h4>
+                      <div className="text-sm text-parchment-300 space-y-4">
                         <div>
-                          <strong className="text-gold-300">Traditional Copper Stills</strong>
-                          <p>Hand-hammered copper for superior flavor development</p>
+                          <strong className="text-gold-300">Copper-Lined Innovation</strong>
+                          <p>Extended vapour contact with copper creates multiple ester chambers, building complex flavours and a remarkably smooth finish</p>
                         </div>
                         <div>
-                          <strong className="text-gold-300">Master Distillers</strong>
-                          <p>Generations of knowledge and proven expertise</p>
+                          <strong className="text-gold-300">Master Craftsmanship</strong>
+                          <p>Expert distillers with proven knowledge in spirit development and flavour profiling</p>
                         </div>
                         <div>
-                          <strong className="text-gold-300">Quality Standards</strong>
-                          <p>Uncompromising commitment to excellence</p>
+                          <strong className="text-gold-300">Engineering Excellence</strong>
+                          <p>Their advanced copper-lined stills feature multiple vapour chambers - keeping the spirit in vapour form among the copper for maximum contact time. This extended interaction builds complex esters and flavours while creating an exceptionally smooth, soft finish. It's the perfect marriage of engineering innovation and traditional copper distillation principles.</p>
                         </div>
                       </div>
                     </div>
@@ -274,7 +248,7 @@ export default function Ethos() {
                           <ul className="text-sm text-parchment-300 space-y-1">
                             <li>• Scientific monitoring</li>
                             <li>• Consistent quality control</li>
-                            <li>• Innovation in flavor</li>
+                            <li>• Innovation in flavour</li>
                             <li>• Sustainable practices</li>
                           </ul>
                         </div>
@@ -294,7 +268,7 @@ export default function Ethos() {
                     Aging: Time, Patience & Selection
                   </h3>
                   <p className="text-parchment-300 mb-6">
-                    Great spirits cannot be rushed. We carefully select our casks—from charred American oak to sherry-seasoned European barrels—
+                    Great spirits cannot be rushed. We carefully select our casks - from charred American oak to sherry-seasoned European barrels -
                     and allow time to work its magic. Each barrel is monitored, tasted, and nurtured to perfection.
                   </p>
                   

@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Image from 'next/image'
 
 export const metadata: Metadata = {
   title: "Our Story | Jerry Can Spirits - Engineered for Adventure",
@@ -64,11 +65,10 @@ export default function OurStory() {
         <section className="py-20">
           <div className="text-center mb-16">
             <h2 className="text-3xl sm:text-4xl font-serif font-bold text-white mb-6">
-              The Team
+              Forged by Experience
             </h2>
             <p className="text-xl text-parchment-300 max-w-3xl mx-auto">
-              Forged through service with the Royal Corps of Signals, engineered by experience, 
-              and driven by a mission to create rum with purpose and integrity.
+              Shaped by service, driven by adventure, and committed to engineering rum with purpose and integrity for modern explorers.
             </p>
           </div>
 
@@ -77,17 +77,16 @@ export default function OurStory() {
             <div className="space-y-6">
               <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-8 border border-gold-500/20">
                 <h3 className="text-2xl font-serif font-bold text-white mb-4">
-                  Shaped by Service
+                  From Service to Adventure
                 </h3>
                 <p className="text-parchment-300 leading-relaxed mb-4">
-                  We all served within the Royal Corps of Signals, with hundreds of deployments around the world 
-                  engineering each of us into something different. From remote outposts to bustling bases, from training 
-                  exercises to operational tours. These experiences taught us the value of absolute reliability, 
-                  military precision, and never compromising on quality.
+                  Service with the Royal Corps of Signals took us everywhere - from Arctic deployments to desert outposts.
+                  We learned what equipment you can trust when everything depends on it. Not the flashiest kit. The most reliable.
                 </p>
                 <p className="text-parchment-300 leading-relaxed">
-                  The military didn't just bring us together. It gave us a shared understanding that functional 
-                  design and unwavering reliability aren't just ideals, they're non-negotiables.
+                  We're civilians now. Different careers, different paths, but the same shared understanding: functional
+                  design and unwavering reliability aren't just ideals - they're non-negotiables. Whether you're crossing
+                  continents or conquering Tuesday, that's the standard that matters.
                 </p>
               </div>
             </div>
@@ -108,19 +107,19 @@ export default function OurStory() {
               <div className="space-y-3">
                 <div className="flex items-center space-x-3">
                   <div className="w-2 h-2 bg-gold-400 rounded-full flex-shrink-0"></div>
-                  <p className="text-parchment-300 text-sm">Royal Corps of Signals engineering</p>
+                  <p className="text-parchment-300 text-sm">Service taught us what reliable means</p>
                 </div>
                 <div className="flex items-center space-x-3">
                   <div className="w-2 h-2 bg-gold-400 rounded-full flex-shrink-0"></div>
-                  <p className="text-parchment-300 text-sm">Hundreds of global deployments</p>
+                  <p className="text-parchment-300 text-sm">Adventure is where we prove it</p>
                 </div>
                 <div className="flex items-center space-x-3">
                   <div className="w-2 h-2 bg-gold-400 rounded-full flex-shrink-0"></div>
-                  <p className="text-parchment-300 text-sm">United by purpose & integrity</p>
+                  <p className="text-parchment-300 text-sm">Function over form, always</p>
                 </div>
                 <div className="flex items-center space-x-3">
                   <div className="w-2 h-2 bg-gold-400 rounded-full flex-shrink-0"></div>
-                  <p className="text-parchment-300 text-sm">Commitment to functional excellence</p>
+                  <p className="text-parchment-300 text-sm">Engineering perfection for modern explorers</p>
                 </div>
               </div>
             </div>
@@ -293,8 +292,7 @@ export default function OurStory() {
               <div className="text-center mb-6">
                 <div className="w-16 h-16 bg-gold-400/20 rounded-full flex items-center justify-center mx-auto mb-4">
                   <svg className="w-8 h-8 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z" />
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3a4 4 0 118 0v4M8 7h8" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
                   </svg>
                 </div>
                 <h3 className="text-xl font-serif font-bold text-white mb-4">The Reality</h3>
@@ -340,7 +338,7 @@ export default function OurStory() {
                 </li>
                 <li className="flex items-start space-x-2">
                   <span className="text-green-400 mt-1">•</span>
-                  <span>Military precision applied to business</span>
+                  <span>Expedition-grade standards applied to business</span>
                 </li>
                 <li className="flex items-start space-x-2">
                   <span className="text-green-400 mt-1">•</span>
@@ -432,20 +430,33 @@ export default function OurStory() {
                   </div>
                 </div>
               </div>
+
+              <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20 mt-8">
+                <h4 className="text-xl font-serif font-bold text-white mb-4">
+                  Still Essential, Still Unchanged
+                </h4>
+                <p className="text-parchment-300 leading-relaxed mb-4">
+                  Designed in 1937. Still NATO standard today. Still the choice of overlanders crossing the Sahara,
+                  sailors navigating the Atlantic, aid workers in the remotest regions. 88 years without a redesign
+                  because when you engineer something perfectly, you don't need version 2.0.
+                </p>
+                <p className="text-gold-300 font-semibold">
+                  That's the philosophy behind every bottle we craft.
+                </p>
+              </div>
             </div>
 
             <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-8 border border-gold-500/20">
               <div className="text-center mb-8">
-                <div className="w-32 h-32 bg-gold-400/20 rounded-lg flex items-center justify-center mx-auto mb-6">
-                  <svg className="w-16 h-16 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7c0 2.21-3.582 4-8 4s-8-1.79-8-4z" />
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4" />
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M4 3c0 2.21 3.582 4 8 4s8-1.79 8-4" />
-                  </svg>
+                <div className="mx-auto mb-6 max-w-md">
+                  <Image
+                    src="/images/JerryCan_OakTree.webp"
+                    alt="Jerry Can beside oak tree - engineered for adventure"
+                    width={512}
+                    height={512}
+                    className="rounded-lg"
+                  />
                 </div>
-                <p className="text-parchment-300 text-sm mb-6">
-                  [Vintage Jerry Can illustration or actual military Jerry Can photo]
-                </p>
               </div>
               
               <blockquote className="text-center">
