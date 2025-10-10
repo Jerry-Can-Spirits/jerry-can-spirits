@@ -170,10 +170,22 @@ export default function Header() {
                   {item.href ? (
                     <Link
                       href={item.href}
-                      className={`flex items-center space-x-1 text-parchment-100 hover:text-parchment-50 px-3 py-2 text-sm font-semibold uppercase tracking-wide transition-all duration-200 hover:scale-105 relative ${
+                      className={`flex items-center space-x-1 text-parchment-100 hover:text-parchment-50 px-3 py-2 text-sm font-semibold uppercase tracking-wide transition-all duration-200 hover:scale-105 relative focus:outline-none focus:ring-2 focus:ring-gold-400 rounded ${
                         activeDropdown === item.name ? 'text-parchment-50' : ''
                       }`}
                       onClick={() => trackMenuClick(item.name)}
+                      onKeyDown={(e) => {
+                        if (item.dropdown && (e.key === 'ArrowDown' || (e.shiftKey && e.key === 'Tab' === false))) {
+                          e.preventDefault()
+                          setActiveDropdown(item.name)
+                        }
+                        if (e.key === 'Escape') {
+                          setActiveDropdown(null)
+                        }
+                      }}
+                      onFocus={() => item.dropdown && setActiveDropdown(item.name)}
+                      aria-expanded={item.dropdown ? activeDropdown === item.name : undefined}
+                      aria-haspopup={item.dropdown ? "true" : undefined}
                     >
                       <span className="relative">
                         {item.name}
@@ -184,10 +196,22 @@ export default function Header() {
                       )}
                     </Link>
                   ) : (
-                    <span
-                      className={`flex items-center space-x-1 text-parchment-100 hover:text-parchment-50 px-3 py-2 text-sm font-semibold uppercase tracking-wide transition-all duration-200 cursor-default relative ${
+                    <button
+                      className={`flex items-center space-x-1 text-parchment-100 hover:text-parchment-50 px-3 py-2 text-sm font-semibold uppercase tracking-wide transition-all duration-200 cursor-pointer relative focus:outline-none focus:ring-2 focus:ring-gold-400 rounded ${
                         activeDropdown === item.name ? 'text-parchment-50' : ''
                       }`}
+                      onClick={() => setActiveDropdown(activeDropdown === item.name ? null : item.name)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          e.preventDefault()
+                          setActiveDropdown(activeDropdown === item.name ? null : item.name)
+                        }
+                        if (e.key === 'Escape') {
+                          setActiveDropdown(null)
+                        }
+                      }}
+                      aria-expanded={activeDropdown === item.name}
+                      aria-haspopup="true"
                     >
                       <span className="relative">
                         {item.name}
@@ -196,7 +220,7 @@ export default function Header() {
                       {item.dropdown && (
                         <ChevronDownIcon className="w-4 h-4 transition-transform duration-200 group-hover:rotate-180" />
                       )}
-                    </span>
+                    </button>
                   )}
 
                   {/* Dropdown Menu */}
