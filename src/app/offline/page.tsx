@@ -1,6 +1,14 @@
-'use client'
-
 import Link from 'next/link'
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Offline | Jerry Can Spirits',
+  description: 'You are currently offline. Check your connection and try again.',
+  robots: {
+    index: false,
+    follow: false,
+  },
+}
 
 export default function OfflinePage() {
   return (
