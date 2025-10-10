@@ -8,6 +8,7 @@ import CartographicBackground from "@/components/CartographicBackground";
 import ClientWrapper from "@/components/ClientWrapper";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
 import ConsentBanner from "@/components/ConsentBanner";
+import ServiceWorkerRegistration from "@/components/ServiceWorkerRegistration";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -28,7 +29,7 @@ const jetbrains = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://jerrycanspirits.com'),
+  metadataBase: new URL('https://jerrycanspirits.co.uk'),
   title: "Jerry Can Spirits | Premium British Rum - Swift & Sure, Expedition Ready",
   description: "Premium spirits engineered for adventure. Crafted with British precision and Caribbean soul for those who venture beyond the ordinary. Discover our expedition-ready rum collection.",
   keywords: "premium rum, British spirits, expedition rum, adventure spirits, Caribbean rum, craft spirits",
@@ -47,7 +48,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_GB",
-    url: "https://jerrycanspirits.com",
+    url: "https://jerrycanspirits.co.uk",
     siteName: "Jerry Can Spirits",
     title: "Jerry Can Spirits | Premium British Rum",
     description: "Premium spirits engineered for adventure. Swift & Sure, Expedition Ready.",
@@ -86,10 +87,18 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="scroll-smooth">
+      <head>
+        <link rel="manifest" href="/manifest.json" />
+        <meta name="theme-color" content="#f59e0b" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <meta name="apple-mobile-web-app-title" content="Jerry Can Spirits" />
+      </head>
       <body
         className={`${inter.variable} ${playfair.variable} ${jetbrains.variable} antialiased min-h-screen bg-jerry-green-900 text-foreground`}
       >
         <GoogleAnalytics />
+        <ServiceWorkerRegistration />
 
         {/* Skip to Content Link - Accessibility */}
         <a
