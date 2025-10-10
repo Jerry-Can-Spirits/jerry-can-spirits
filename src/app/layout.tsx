@@ -28,7 +28,7 @@ const jetbrains = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://jerrycanspirits.com'),
+  metadataBase: new URL('https://jerrycanspirits.co.uk'),
   title: "Jerry Can Spirits | Premium British Rum - Swift & Sure, Expedition Ready",
   description: "Premium spirits engineered for adventure. Crafted with British precision and Caribbean soul for those who venture beyond the ordinary. Discover our expedition-ready rum collection.",
   keywords: "premium rum, British spirits, expedition rum, adventure spirits, Caribbean rum, craft spirits",
@@ -47,7 +47,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_GB",
-    url: "https://jerrycanspirits.com",
+    url: "https://jerrycanspirits.co.uk",
     siteName: "Jerry Can Spirits",
     title: "Jerry Can Spirits | Premium British Rum",
     description: "Premium spirits engineered for adventure. Swift & Sure, Expedition Ready.",
