@@ -10,8 +10,8 @@ export default function Home() {
       "@context": "https://schema.org",
       "@type": "Organization",
       "name": "Jerry Can Spirits",
-      "url": "https://jerrycanspirits.com",
-      "logo": "https://jerrycanspirits.com/images/Logo.webp",
+      "url": "https://jerrycanspirits.co.uk",
+      "logo": "https://jerrycanspirits.co.uk/images/Logo.webp",
       "description": "Premium spirits engineered for adventure. Crafted with British precision and Caribbean soul for those who venture beyond the ordinary.",
       "foundingDate": "2025",
       "founders": [
@@ -39,7 +39,7 @@ export default function Home() {
       "@context": "https://schema.org",
       "@type": "WebSite",
       "name": "Jerry Can Spirits",
-      "url": "https://jerrycanspirits.com",
+      "url": "https://jerrycanspirits.co.uk",
       "description": "Premium British rum - Swift & Sure, Expedition Ready",
       "publisher": {
         "@type": "Organization",
@@ -51,7 +51,7 @@ export default function Home() {
       "@context": "https://schema.org",
       "@type": "Brand",
       "name": "Jerry Can Spirits",
-      "logo": "https://jerrycanspirits.com/images/Logo.webp",
+      "logo": "https://jerrycanspirits.co.uk/images/Logo.webp",
       "slogan": "Swift & Sure, Expedition Ready",
       "description": "Premium spirits engineered for adventure"
     }
