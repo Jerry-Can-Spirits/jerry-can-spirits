@@ -90,23 +90,32 @@ export default function RootLayout({
         className={`${inter.variable} ${playfair.variable} ${jetbrains.variable} antialiased min-h-screen bg-jerry-green-900 text-foreground`}
       >
         <GoogleAnalytics />
+
+        {/* Skip to Content Link - Accessibility */}
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-gold-500 focus:text-jerry-green-900 focus:font-semibold focus:rounded-lg focus:shadow-lg focus:outline-none focus:ring-2 focus:ring-gold-300"
+        >
+          Skip to main content
+        </a>
+
         <ClientWrapper>
           {/* Unified Cartographic Background */}
           <CartographicBackground opacity={0.75} showCoordinates={true} showCompass={true} className="fixed inset-0 z-0" />
-          
+
           {/* Promo Banner - Only show when there's an active promotion */}
           <div className="relative z-10">
-            <PromoBanner 
+            <PromoBanner
               message="🚀 Pre-launch: Be the first to know when Expedition Spiced launches!"
               ctaText="Notify Me"
               ctaLink="/notify"
               isVisible={true}
             />
-            
+
             <Header />
-            
+
             {/* Main content with proper spacing for fixed header */}
-            <main className="pt-20">
+            <main id="main-content" className="pt-20">
               {children}
             </main>
             
