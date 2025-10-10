@@ -43,13 +43,12 @@ const nextConfig: NextConfig = {
               "font-src 'self' https://fonts.gstatic.com",
               "img-src 'self' data: https: blob:",
               "media-src 'self' https:",
-              "connect-src 'self' http://localhost:* https://www.google-analytics.com https://www.googletagmanager.com https://analytics.google.com https://a.klaviyo.com https://cdn.sanity.io https://*.sanity.io wss: ws:",
+              "connect-src 'self' http://localhost:* https://www.google-analytics.com https://www.googletagmanager.com https://analytics.google.com https://region1.google-analytics.com https://a.klaviyo.com https://cdn.sanity.io https://*.sanity.io wss: ws:",
               "frame-src 'self' https://www.youtube.com https://www.vimeo.com",
               "object-src 'none'",
               "base-uri 'self'",
               "form-action 'self' https://manage.kmail-lists.com",
-              "frame-ancestors 'none'",
-              "upgrade-insecure-requests"
+              "frame-ancestors 'none'"
             ].join('; ')
           },
           {
