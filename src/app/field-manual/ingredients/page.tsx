@@ -1,8 +1,18 @@
+import type { Metadata } from 'next'
 import Link from 'next/link'
 import Image from 'next/image'
 import { client } from '@/sanity/client'
 import { ingredientsQuery } from '@/sanity/queries'
 import { urlFor } from '@/sanity/lib/image'
+
+export const metadata: Metadata = {
+  title: "Premium Ingredients Guide | Jerry Can Spirits - Quality Cocktail Components",
+  description: "Build your adventure bar with quality ingredients. Expert guide to spirits, liqueurs, bitters, and fresh components for premium rum cocktails.",
+  openGraph: {
+    title: "Premium Ingredients Guide | Jerry Can Spirits - Quality Cocktail Components",
+    description: "Build your adventure bar with quality ingredients. Expert guide to spirits, liqueurs, bitters, and fresh components for premium rum cocktails.",
+  },
+}
 
 // Types for ingredient data
 interface Ingredient {

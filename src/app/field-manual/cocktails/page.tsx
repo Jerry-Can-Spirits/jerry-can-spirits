@@ -1,10 +1,20 @@
 'use client'
 
+import type { Metadata } from 'next'
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { client } from '@/sanity/client'
 import { cocktailsQuery } from '@/sanity/queries'
+
+export const metadata: Metadata = {
+  title: "Cocktail Recipes | Jerry Can Spirits - Classic & Signature Rum Cocktails",
+  description: "Master classic rum cocktails and discover signature Jerry Can Spirits recipes. From novice to trailblazer, explore premium British rum cocktails with step-by-step guides.",
+  openGraph: {
+    title: "Cocktail Recipes | Jerry Can Spirits - Classic & Signature Rum Cocktails",
+    description: "Master classic rum cocktails and discover signature Jerry Can Spirits recipes. From novice to trailblazer, explore premium British rum cocktails with step-by-step guides.",
+  },
+}
 
 // Types for cocktail data from Sanity
 interface CocktailIngredient {

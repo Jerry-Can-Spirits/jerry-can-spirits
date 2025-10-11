@@ -1,8 +1,18 @@
+import type { Metadata } from 'next'
 import Link from 'next/link'
 import Image from 'next/image'
 import { client } from '@/sanity/client'
 import { equipmentQuery } from '@/sanity/queries'
 import { urlFor } from '@/sanity/lib/image'
+
+export const metadata: Metadata = {
+  title: "Bar Equipment Guide | Jerry Can Spirits - Essential Cocktail Tools",
+  description: "Professional bartending equipment for home explorers. Discover essential barware, glassware, and tools to craft exceptional rum cocktails at home.",
+  openGraph: {
+    title: "Bar Equipment Guide | Jerry Can Spirits - Essential Cocktail Tools",
+    description: "Professional bartending equipment for home explorers. Discover essential barware, glassware, and tools to craft exceptional rum cocktails at home.",
+  },
+}
 
 // Types for equipment data
 interface Equipment {

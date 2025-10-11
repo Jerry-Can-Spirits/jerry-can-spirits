@@ -280,7 +280,7 @@ export default function KlaviyoSignup({
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mt-16 pt-16 border-t border-jerry-green-700">
             <div className="text-center">
               <div className="w-16 h-16 bg-gradient-to-br from-gold-500 to-gold-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Image src="/images/lightning.svg" alt="Lightning" width={32} height={32} className="w-8 h-8" />
+                <Image src="/images/lightning.svg" alt="Early Access to Premium British Rum" width={32} height={32} className="w-8 h-8" />
               </div>
               <h3 className="text-lg font-serif font-bold mb-2" style={{color: '#fefbf5'}}>Early Access</h3>
               <p className="text-sm text-parchment-300">Be first to purchase limited batches before public release</p>
@@ -288,7 +288,7 @@ export default function KlaviyoSignup({
 
             <div className="text-center">
               <div className="w-16 h-16 bg-gradient-to-br from-gold-500 to-gold-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Image src="/images/cocktail.svg" alt="Cocktail" width={32} height={32} className="w-8 h-8" />
+                <Image src="/images/cocktail.svg" alt="Exclusive Rum Cocktail Recipes" width={32} height={32} className="w-8 h-8" />
               </div>
               <h3 className="text-lg font-serif font-bold mb-2" style={{color: '#fefbf5'}}>Exclusive Recipes</h3>
               <p className="text-sm text-parchment-300">Expedition cocktails and mixing guides from our master distillers</p>
@@ -296,7 +296,7 @@ export default function KlaviyoSignup({
 
             <div className="text-center">
               <div className="w-16 h-16 bg-gradient-to-br from-gold-500 to-gold-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Image src="/images/gbp.svg" alt="GBP" width={32} height={32} className="w-8 h-8" />
+                <Image src="/images/gbp.svg" alt="Member Discounts and Special Offers" width={32} height={32} className="w-8 h-8" />
               </div>
               <h3 className="text-lg font-serif font-bold mb-2" style={{color: '#fefbf5'}}>Member Discounts</h3>
               <p className="text-sm text-parchment-300">Special pricing on products and expedition merchandise</p>
