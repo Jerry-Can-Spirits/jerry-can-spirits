@@ -7,6 +7,7 @@ interface FormData {
   firstName: string
   email: string
   interests: string[]
+  website: string // Honeypot field
 }
 
 interface KlaviyoSignupProps {
@@ -20,7 +21,8 @@ export default function KlaviyoSignup({
   const [formData, setFormData] = useState<FormData>({
     firstName: '',
     email: '',
-    interests: []
+    interests: [],
+    website: '' // Honeypot
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle')
@@ -80,7 +82,7 @@ export default function KlaviyoSignup({
         setSubmitStatus('success')
         // Reset form after success
         setTimeout(() => {
-          setFormData({ firstName: '', email: '', interests: [] })
+          setFormData({ firstName: '', email: '', interests: [], website: '' })
           setSubmitStatus('idle')
         }, 5000)
       } else {
@@ -171,6 +173,18 @@ export default function KlaviyoSignup({
           <div className="max-w-4xl mx-auto">
             <form onSubmit={handleSubmit} className="space-y-6">
               
+              {/* Honeypot field - hidden from users */}
+              <input
+                type="text"
+                name="website"
+                value={formData.website}
+                onChange={(e) => setFormData(prev => ({ ...prev, website: e.target.value }))}
+                style={{ position: 'absolute', left: '-9999px' }}
+                tabIndex={-1}
+                autoComplete="off"
+                aria-hidden="true"
+              />
+
               {/* Name and Email Fields */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
