@@ -119,16 +119,7 @@ export default function Contact() {
           </div>
 
           {/* Additional Info */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-20">
-            <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
-              <h2 className="text-2xl font-serif font-bold text-parchment-50 mb-4">Visit Us</h2>
-              <div className="space-y-2 text-parchment-200">
-                <p className="font-semibold">Jerry Can Spirits Ltd</p>
-                <p>United Kingdom</p>
-                <p className="text-sm text-parchment-400 italic">Specific address coming soon</p>
-              </div>
-            </div>
-
+          <div className="max-w-2xl mx-auto mb-20">
             <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
               <h2 className="text-2xl font-serif font-bold text-parchment-50 mb-4">Follow Us</h2>
               <div className="flex space-x-4 mb-4">
