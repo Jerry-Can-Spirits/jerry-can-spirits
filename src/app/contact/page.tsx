@@ -1,8 +1,44 @@
 'use client'
 
+import { useState, useEffect } from 'react'
 
 // Note: metadata export removed as client components cannot export metadata
 // This metadata should be moved to a layout.tsx or handled differently
+
+// All available hashtags for rotation
+const allHashtags = [
+  '#JerryCanSpirits',
+  '#JoinTheExpedition',
+  '#CraftRum',
+  '#BritishRum',
+  '#VeteranOwned',
+  '#PremiumRum',
+  '#CheersToAdventure',
+  '#RumCocktails',
+  '#SupportVeterans',
+  '#VeteranBusiness',
+  '#RumLovers',
+  '#SipResponsibly',
+  '#ProudlyBritish',
+  '#SupportBritish',
+  '#JerryCanRum',
+]
+
+// Function to get random hashtags - always includes core brand hashtags
+const getRandomHashtags = (count = 5) => {
+  // Core hashtags that should always appear
+  const coreHashtags = ['#JerryCanSpirits', '#JoinTheExpedition', '#VeteranOwned']
+
+  // Get remaining hashtags excluding core ones
+  const otherHashtags = allHashtags.filter(tag => !coreHashtags.includes(tag))
+
+  // Shuffle and pick random ones
+  const shuffled = [...otherHashtags].sort(() => Math.random() - 0.5)
+  const randomPicks = shuffled.slice(0, count - coreHashtags.length)
+
+  // Combine core hashtags with random picks
+  return [...coreHashtags, ...randomPicks].join(' ')
+}
 
 const contactMethods = [
   {
@@ -29,6 +65,13 @@ const contactMethods = [
 ]
 
 export default function Contact() {
+  const [hashtags, setHashtags] = useState('')
+
+  // Set hashtags on component mount (client-side only)
+  useEffect(() => {
+    setHashtags(getRandomHashtags(5))
+  }, [])
+
   const scrollToSignup = () => {
     const signupElement = document.getElementById('newsletter-signup')
     if (signupElement) {
@@ -120,9 +163,9 @@ export default function Contact() {
 
           {/* Additional Info */}
           <div className="max-w-2xl mx-auto mb-20">
-            <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
+            <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20 text-center">
               <h2 className="text-2xl font-serif font-bold text-parchment-50 mb-4">Follow Us</h2>
-              <div className="flex space-x-4 mb-4">
+              <div className="flex justify-center space-x-4 mb-4">
                 <a
                   href="https://www.instagram.com/jerrycanspirits"
                   target="_blank"
@@ -146,7 +189,9 @@ export default function Contact() {
                   </svg>
                 </a>
               </div>
-              <p className="text-parchment-400 text-sm">#JerryCanSpirits</p>
+              <p className="text-parchment-400 text-sm">
+                {hashtags || '#JerryCanSpirits #JoinTheExpedition #VeteranOwned'}
+              </p>
             </div>
           </div>
         </div>
