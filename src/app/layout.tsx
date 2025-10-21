@@ -45,6 +45,9 @@ export const metadata: Metadata = {
       { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
     ],
   },
+  alternates: {
+    canonical: "https://jerrycanspirits.co.uk",
+  },
   openGraph: {
     type: "website",
     locale: "en_GB",
@@ -54,10 +57,10 @@ export const metadata: Metadata = {
     description: "Premium spirits engineered for adventure. Swift & Sure, Expedition Ready.",
     images: [
       {
-        url: "/images/Logo.webp",
+        url: "/images/og-image.jpg",
         width: 1200,
         height: 630,
-        alt: "Jerry Can Spirits Logo",
+        alt: "Jerry Can Spirits - Premium British Rum for Adventurers",
       },
     ],
   },
@@ -65,7 +68,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Jerry Can Spirits | Premium British Rum",
     description: "Premium spirits engineered for adventure. Swift & Sure, Expedition Ready.",
-    images: ["/images/Logo.webp"],
+    images: ["/images/og-image.jpg"],
   },
   robots: {
     index: true,

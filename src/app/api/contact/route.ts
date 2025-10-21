@@ -12,13 +12,46 @@ interface ContactFormData {
   orderNumber?: string
   issueType?: string
   priority?: string
+  // Honeypot field - should always be empty
+  website?: string
 }
+
+// Simple in-memory rate limiting (production should use Redis/Upstash)
+const submissionTimestamps = new Map<string, number[]>()
+const RATE_LIMIT_WINDOW = 60 * 1000 // 1 minute
+const MAX_REQUESTS = 3 // Max 3 requests per minute per IP
 
 export async function POST(request: NextRequest) {
   try {
     const formData: ContactFormData = await request.json()
 
-    const { name, email, subject, message, formType, orderNumber, issueType, priority } = formData
+    const { name, email, subject, message, formType, orderNumber, issueType, priority, website } = formData
+
+    // Honeypot check - if 'website' field is filled, it's likely a bot
+    if (website && website.trim() !== '') {
+      console.log('Honeypot triggered - potential bot submission blocked')
+      // Return success to avoid revealing the honeypot
+      return NextResponse.json({
+        success: true,
+        message: 'Your message has been received.'
+      })
+    }
+
+    // Rate limiting check
+    const ip = request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown'
+    const now = Date.now()
+    const timestamps = submissionTimestamps.get(ip) || []
+    const recentTimestamps = timestamps.filter(t => now - t < RATE_LIMIT_WINDOW)
+
+    if (recentTimestamps.length >= MAX_REQUESTS) {
+      return NextResponse.json(
+        { error: 'Too many requests. Please try again later.' },
+        { status: 429 }
+      )
+    }
+
+    recentTimestamps.push(now)
+    submissionTimestamps.set(ip, recentTimestamps)
 
     if (!name || !email || !subject || !message) {
       return NextResponse.json(

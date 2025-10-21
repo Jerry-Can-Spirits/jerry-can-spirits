@@ -1,6 +1,16 @@
 import HeroSection from "@/components/HeroSection";
 import KlaviyoSignup from "@/components/KlaviyoSignup";
 import StructuredData from "@/components/StructuredData";
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: "Jerry Can Spirits | Premium British Rum - Swift & Sure, Expedition Ready",
+  description: "Premium British rum crafted for adventurers. Small-batch spirits with Caribbean soul and British precision. Join the waitlist for exclusive early access to expedition-ready rum.",
+  openGraph: {
+    title: "Jerry Can Spirits | Premium British Rum",
+    description: "Premium British rum crafted for adventurers. Swift & Sure, Expedition Ready.",
+  },
+}
 
 export default function Home() {
   // Structured data for SEO
