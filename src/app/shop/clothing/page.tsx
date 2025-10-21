@@ -63,7 +63,7 @@ export default function ClothingPage() {
         {/* CTAs */}
         <div className="flex flex-col sm:flex-row gap-4 justify-center pt-8">
           <Link
-            href="/#signup"
+            href="/#newsletter-signup"
             className="px-8 py-3 bg-gold-500 text-jerry-green-900 font-semibold rounded-lg hover:bg-gold-400 transition-colors"
           >
             Get Notified at Launch

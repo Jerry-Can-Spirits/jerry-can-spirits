@@ -188,6 +188,28 @@ export default function Footer() {
                 <div className="space-y-3 text-base text-parchment-300">
                   <p>Proud signatories of the Armed Forces Covenant - we stand alongside serving personnel, veterans, their families, and our blue light services.</p>
                   <p>Our commitment is to ensure fairness, respect, and equal opportunity for all who serve, recognising their dedication and the vital role they play in our communities.</p>
+
+                  {/* AFC Logo Badge */}
+                  <div className="pt-4">
+                    <Link
+                      href="/armed-forces-covenant"
+                      className="block bg-white rounded-lg p-3 hover:shadow-lg transition-all duration-200 hover:scale-105"
+                      onClick={() => trackFooterClick('AFC Logo', 'Armed Forces Covenant Page')}
+                      aria-label="View our Armed Forces Covenant commitment"
+                    >
+                      {isClient ? (
+                        <Image
+                          src="/images/AFC_POSITIVE_RGB.png"
+                          alt="Armed Forces Covenant Supporter"
+                          width={150}
+                          height={100}
+                          className="w-full h-auto"
+                        />
+                      ) : (
+                        <div className="w-full h-20 bg-parchment-200 rounded animate-pulse" />
+                      )}
+                    </Link>
+                  </div>
                 </div>
               </div>
             </div>
