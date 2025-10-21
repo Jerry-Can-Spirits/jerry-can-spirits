@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Image from 'next/image'
 
 export const metadata: Metadata = {
   title: "Armed Forces Covenant | Jerry Can Spirits - Supporting Our Military Community",
@@ -32,6 +33,20 @@ export default function ArmedForcesCovenant() {
           <p className="text-parchment-300 text-sm">
             Last updated: {lastUpdated}
           </p>
+        </div>
+
+        {/* AFC Banner */}
+        <div className="mb-12 flex justify-center">
+          <div className="bg-white rounded-lg p-6 shadow-lg max-w-2xl w-full">
+            <Image
+              src="/images/AFC_Banner__PNG_.png"
+              alt="Armed Forces Covenant - We proudly support those who serve"
+              width={800}
+              height={200}
+              className="w-full h-auto"
+              priority
+            />
+          </div>
         </div>
 
         {/* Content */}

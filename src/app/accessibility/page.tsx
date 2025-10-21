@@ -113,17 +113,16 @@ export default function Accessibility() {
                   <li>Skip navigation links for keyboard users</li>
                   <li>Consistent navigation across all pages</li>
                   <li>Clear page titles and meta descriptions</li>
-                  <li>Breadcrumb navigation where appropriate</li>
                 </ul>
 
                 <h3 className="text-xl font-serif font-semibold text-white mt-6 mb-3">
                   Visual Design
                 </h3>
                 <ul className="list-disc list-inside text-white space-y-2 mb-6">
-                  <li>High contrast color scheme for readability</li>
+                  <li>High contrast colour scheme for readability</li>
                   <li>Scalable text that can be enlarged up to 200%</li>
                   <li>Alternative text for all informative images</li>
-                  <li>Color is not the sole means of conveying information</li>
+                  <li>Colour is not the sole means of conveying information</li>
                   <li>Readable fonts and appropriate font sizes</li>
                 </ul>
 
@@ -190,11 +189,12 @@ export default function Accessibility() {
                 Assistive Technology Compatibility
               </h2>
               <p className="text-white mb-4">
-                Our website has been tested with the following assistive technologies:
+                Our website is designed to be compatible with common assistive technologies and browsers.
+                We are currently conducting comprehensive testing with:
               </p>
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
-                  <h3 className="text-lg font-semibold text-gold-300 mb-3">Screen Readers</h3>
+                  <h3 className="text-lg font-semibold text-gold-300 mb-3">Screen Readers (Testing in Progress)</h3>
                   <ul className="list-disc list-inside text-white space-y-1 text-sm">
                     <li>NVDA (Windows)</li>
                     <li>JAWS (Windows)</li>
@@ -211,6 +211,12 @@ export default function Accessibility() {
                     <li>Zoom functionality up to 200%</li>
                   </ul>
                 </div>
+              </div>
+              <div className="mt-4 p-4 bg-jerry-green-800/40 border-l-4 border-gold-500">
+                <p className="text-white text-sm">
+                  <strong className="text-gold-300">Note:</strong> We are actively testing with real users and assistive technology.
+                  If you experience any accessibility issues, please report them to help us improve.
+                </p>
               </div>
             </section>
 

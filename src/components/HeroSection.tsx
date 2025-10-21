@@ -160,7 +160,7 @@ export default function HeroSection() {
               <div className="flex items-center gap-2 text-gold-300">
                 <Image
                   src="/images/hero/premium-quality.png"
-                  alt="Premium Quality"
+                  alt="Premium Quality British Rum Badge"
                   width={20}
                   height={20}
                   className="w-5 h-5"
@@ -171,7 +171,7 @@ export default function HeroSection() {
               <div className="flex items-center gap-2 text-gold-300">
                 <Image
                   src="/images/hero/padlock.svg"
-                  alt="Secure Shipping"
+                  alt="Secure and Tracked Delivery"
                   width={20}
                   height={20}
                   className="w-5 h-5"
@@ -182,7 +182,7 @@ export default function HeroSection() {
               <div className="flex items-center gap-2 text-gold-300">
                 <Image
                   src="/images/hero/union-flag.png"
-                  alt="Made in the UK"
+                  alt="Proudly Made in the United Kingdom"
                   width={20}
                   height={20}
                   className="w-5 h-5"
@@ -199,7 +199,7 @@ export default function HeroSection() {
               <div className="aspect-[4/5] flex items-center justify-center p-8">
                 <Image
                   src="/images/hero/hero-spiced.webp"
-                  alt="Jerry Can Spirits - Expedition Ready Dark Rum Reserve"
+                  alt="Jerry Can Spirits Premium British Dark Rum Reserve - Expedition Ready Bottle"
                   width={400}
                   height={500}
                   className="w-full h-full object-contain"

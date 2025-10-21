@@ -3,9 +3,39 @@ import { NextRequest, NextResponse } from 'next/server'
 const KLAVIYO_API_BASE = 'https://a.klaviyo.com/api'
 const KLAVIYO_PRIVATE_KEY = process.env.KLAVIYO_PRIVATE_KEY
 
+// Simple in-memory rate limiting
+const submissionTimestamps = new Map<string, number[]>()
+const RATE_LIMIT_WINDOW = 60 * 1000 // 1 minute
+const MAX_REQUESTS = 5 // Max 5 signups per minute per IP
+
 export async function POST(request: NextRequest) {
   try {
-    const { firstName, email, interests, listId } = await request.json()
+    const { firstName, email, interests, listId, website } = await request.json()
+
+    // Honeypot check
+    if (website && website.trim() !== '') {
+      console.log('Honeypot triggered - potential bot signup blocked')
+      return NextResponse.json({
+        success: true,
+        message: 'Thank you for signing up!'
+      })
+    }
+
+    // Rate limiting
+    const ip = request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown'
+    const now = Date.now()
+    const timestamps = submissionTimestamps.get(ip) || []
+    const recentTimestamps = timestamps.filter(t => now - t < RATE_LIMIT_WINDOW)
+
+    if (recentTimestamps.length >= MAX_REQUESTS) {
+      return NextResponse.json(
+        { error: 'Too many requests. Please try again later.' },
+        { status: 429 }
+      )
+    }
+
+    recentTimestamps.push(now)
+    submissionTimestamps.set(ip, recentTimestamps)
 
     if (!firstName || !email) {
       return NextResponse.json(
