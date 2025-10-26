@@ -20,11 +20,11 @@ const faqs = [
   },
   {
     question: "When will Jerry Can Spirits rum be available for purchase?",
-    answer: "We're currently finalizing our first batch for launch. Join our mailing list to get early access notifications and be first in line when we launch."
+    answer: "We're currently finalising our first batch for launch. Join our mailing list to get early access notifications and be first in line when we launch."
   },
   {
     question: "What type of rum do you produce?",
-    answer: "We specialize in premium dark rum reserves with expedition-ready character. Our rums are perfect for both classic cocktails and sipping neat."
+    answer: "We specialise in premium spiced rum with expedition-ready character. Our rums are perfect for both classic cocktails and sipping neat."
   },
   {
     question: "Do you ship internationally?",
@@ -32,11 +32,11 @@ const faqs = [
   },
   {
     question: "What cocktails work best with Jerry Can Spirits rum?",
-    answer: "Our rum is versatile and works beautifully in classic cocktails like Dark & Stormy, Old Fashioned, Mai Tai, and Rum Punch. Check our Field Manual for exclusive expedition cocktail recipes."
+    answer: "Our rum is versatile and works beautifully in classic cocktails, Old Fashioned, Mai Tai, and Rum Punch. Check our Field Manual for exclusive expedition cocktail recipes."
   },
   {
     question: "What is the alcohol content (ABV) of your rum?",
-    answer: "Our expedition-ready rum is crafted at navy strength and standard proof options. Specific ABV details will be shared closer to launch. Join our mailing list for product specifications."
+    answer: "Our expedition-ready rum is crafted at 40% ABV. Join our mailing list for product specifications."
   },
   {
     question: "Are your products suitable for vegans?",
@@ -44,7 +44,7 @@ const faqs = [
   },
   {
     question: "Can I visit your distillery?",
-    answer: "Distillery tour information will be available after launch. Sign up for our mailing list to be notified when tours become available."
+    answer: "Jerry Can Spirits contracts the Spirit of Wales Distillery to create our products. Spirit of Wales offer tours, see their website for further information."
   },
   {
     question: "Do you offer corporate gifts or bulk orders?",

@@ -33,6 +33,7 @@ export default function Footer() {
       { name: 'Shop', href: '/shop' },
       { name: 'Field Manual', href: '/field-manual' },
       { name: 'Our Story', href: '/about/story' },
+      { name: 'Friends & Partners', href: '/friends' },
       { name: 'FAQ', href: '/faq' },
       { name: 'Contact', href: '/contact' },
     ],

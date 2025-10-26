@@ -52,6 +52,7 @@ export default function Header() {
       dropdown: [
         { name: 'Our Story', href: '/about/story', description: 'Brand heritage & mission' },
         { name: 'Ethos', href: '/ethos', description: 'Values & craftsmanship' },
+        { name: 'Friends & Partners', href: '/friends', description: 'Our trusted collaborators' },
         { name: 'FAQ', href: '/faq', description: 'Common questions answered' },
       ]
     },
