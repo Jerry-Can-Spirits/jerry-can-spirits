@@ -602,8 +602,8 @@ export default function OurStory() {
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <a 
-                href="/#signup"
+              <a
+                href="/#newsletter-signup"
                 className="inline-flex items-center space-x-2 bg-jerry-green-800 hover:bg-jerry-green-900 text-parchment-50 px-8 py-4 rounded-lg font-semibold border-2 border-jerry-green-800 hover:border-jerry-green-700 transition-all duration-300 transform hover:scale-105"
               >
                 <span>Join the Expedition</span>
