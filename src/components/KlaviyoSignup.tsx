@@ -152,7 +152,7 @@ export default function KlaviyoSignup({
                 </svg>
                 <h3 className="text-2xl font-serif font-bold text-green-300">You're In!</h3>
               </div>
-              <p className="text-green-200">Welcome to the expedition. Check your email for exclusive content coming your way.</p>
+              <p className="text-green-200">Welcome to the expedition. Check your email (and junk folder) for exclusive content coming your way.</p>
             </div>
           )}
 

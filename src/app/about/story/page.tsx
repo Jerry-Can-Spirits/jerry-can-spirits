@@ -463,7 +463,7 @@ export default function OurStory() {
                 <p className="text-lg text-white italic leading-relaxed mb-6">
                   "Every bottle we craft carries this promise: when you reach for Jerry Can Spirits, 
                   you're reaching for something you can depend on. Quality you can trust. 
-                  Flavor that delivers."
+                  Flavour that delivers."
                 </p>
                 <div className="text-gold-300 text-sm font-semibold uppercase tracking-wider">
                   Our Commitment to You

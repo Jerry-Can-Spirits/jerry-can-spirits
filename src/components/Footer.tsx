@@ -55,19 +55,13 @@ export default function Footer() {
       alt: 'Visa',
       className: 'h-15 w-auto' // Perfect size for Visa
     },
-    { 
-      name: 'Mastercard', 
+    {
+      name: 'Mastercard',
       src: '/images/payment-methods/mastercard.svg',
       alt: 'Mastercard',
       className: 'h-15 w-auto' // Perfect size for Mastercard
     },
-    { 
-      name: 'American Express', 
-      src: '/images/payment-methods/amex.svg',
-      alt: 'American Express',
-      className: 'h-12 w-auto' // Keep current size for Amex - looks good
-    },
-    { 
+    {
       name: 'PayPal', 
       src: '/images/payment-methods/paypal.svg',
       alt: 'PayPal',
