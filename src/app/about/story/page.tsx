@@ -23,18 +23,16 @@ export default function OurStory() {
               </span>
             </div>
             
-            {/* Story Hero Visual Placeholder */}
-            <div className="relative w-full max-w-2xl mx-auto h-64 bg-jerry-green-800/40 backdrop-blur-sm rounded-lg border border-gold-500/20 mb-8 flex items-center justify-center">
-              <div className="text-center">
-                <div className="text-gold-300 mb-2">
-                  <svg className="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                  </svg>
-                </div>
-                <p className="text-parchment-300 text-sm">
-                  [Hero Image: Team photo or vintage expedition map with personal touches]
-                </p>
-              </div>
+            {/* Story Hero Image */}
+            <div className="relative w-full max-w-2xl mx-auto h-64 sm:h-80 md:h-96 rounded-lg overflow-hidden border border-gold-500/20 mb-8 shadow-2xl">
+              <Image
+                src="/images/hero/Trail_Hero.webp"
+                alt="Jerry Can Spirits - Adventure and Expedition Ready Rum"
+                fill
+                className="object-cover"
+                priority
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-jerry-green-900/60 to-transparent" />
             </div>
           </div>
 
