@@ -155,21 +155,35 @@ export default function Footer() {
                 <h3 className="font-serif text-xl font-bold mb-4 text-parchment-100 border-b border-jerry-green-700 pb-2" style={{ color: '#fefbf5' }}>
                   Drink Responsibly
                 </h3>
-                <div className="space-y-3 text-base text-parchment-300">
+                <div className="space-y-4 text-base text-parchment-300">
                   <p>Must be 18+ to purchase alcohol</p>
                   <p>Please drink responsibly</p>
                   <p>Avoid alcohol if pregnant</p>
-                  <p>
+
+                  {/* Drinkaware Logo */}
+                  <div className="-ml-2 -mr-10">
                     <a
                       href="https://www.drinkaware.co.uk"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-jerry-green-400 hover:text-jerry-green-300 underline transition-colors duration-200"
-                      onClick={() => trackFooterClick('External Link', 'Drinkaware')}
+                      className="inline-block hover:opacity-80 transition-opacity duration-200"
+                      onClick={() => trackFooterClick('Drinkaware Logo', 'Drinkaware Website')}
+                      aria-label="Visit Drinkaware for responsible drinking information"
                     >
-                      Visit Drinkaware.co.uk
+                      {isClient ? (
+                        <Image
+                          src="/images/Drinkaware_BDA_logo_Reversed_RGB.png"
+                          alt="Be Drinkaware"
+                          width={216}
+                          height={86}
+                          className="w-auto h-[4.5rem]"
+                          quality={100}
+                        />
+                      ) : (
+                        <div className="w-44 h-[4.5rem] bg-parchment-200/20 rounded animate-pulse" />
+                      )}
                     </a>
-                  </p>
+                  </div>
                 </div>
               </div>
             </div>
