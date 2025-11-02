@@ -15,8 +15,7 @@ interface ContactFormData {
   orderNumber?: string
   issueType?: string
   priority?: string
-  // Honeypot field - should always be empty
-  website?: string
+  website?: string // honeypot
 }
 
 // Simple in-memory rate limiting (best-effort only on Edge)
@@ -76,21 +75,21 @@ export async function POST(request: Request) {
     }
     switch (formType) {
       case 'media':
-        eventName = 'Media Inquiry'
         ;(properties as any).inquiry_type = 'media'
+        eventName = 'Media Inquiry'
         break
       case 'complaints':
-        eventName = 'Customer Complaint'
         ;(properties as any).inquiry_type = 'complaint'
         if (orderNumber) (properties as any).order_number = orderNumber
         if (issueType) (properties as any).issue_type = issueType
         if (priority) (properties as any).priority = priority
+        eventName = 'Customer Complaint'
         break
       default:
         ;(properties as any).inquiry_type = 'general'
     }
 
-    // Create or update profile in Klaviyo
+    // Create or update profile
     const profilePayload = {
       data: {
         type: 'profile',
