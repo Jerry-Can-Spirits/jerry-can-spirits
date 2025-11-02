@@ -1,8 +1,7 @@
 'use client'
 
 import { NextStudio } from 'next-sanity/studio'
-import type { WorkspaceOptions } from 'sanity'
 
-export function StudioClient({ config }: { config: WorkspaceOptions }) {
+export function StudioClient({ config }: { config: any }) {
   return <NextStudio config={config} />
 }
