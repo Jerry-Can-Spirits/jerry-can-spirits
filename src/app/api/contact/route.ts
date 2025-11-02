@@ -18,6 +18,18 @@ interface ContactFormData {
   website?: string // honeypot
 }
 
+interface EventProperties {
+  subject: string
+  message: string
+  form_type: string
+  submission_date: string
+  source: string
+  inquiry_type?: string
+  order_number?: string
+  issue_type?: string
+  priority?: string
+}
+
 // Simple in-memory rate limiting (best-effort only on Edge)
 const submissionTimestamps = new Map<string, number[]>()
 const RATE_LIMIT_WINDOW = 60 * 1000 // 1 minute
@@ -66,7 +78,7 @@ export async function POST(request: Request) {
 
     // Build event details
     let eventName = 'Contact Form Submission'
-    const properties: Record<string, unknown> = {
+    const properties: EventProperties = {
       subject,
       message,
       form_type: formType,
@@ -75,18 +87,18 @@ export async function POST(request: Request) {
     }
     switch (formType) {
       case 'media':
-        ;(properties as any).inquiry_type = 'media'
+        properties.inquiry_type = 'media'
         eventName = 'Media Inquiry'
         break
       case 'complaints':
-        ;(properties as any).inquiry_type = 'complaint'
-        if (orderNumber) (properties as any).order_number = orderNumber
-        if (issueType) (properties as any).issue_type = issueType
-        if (priority) (properties as any).priority = priority
+        properties.inquiry_type = 'complaint'
+        if (orderNumber) properties.order_number = orderNumber
+        if (issueType) properties.issue_type = issueType
+        if (priority) properties.priority = priority
         eventName = 'Customer Complaint'
         break
       default:
-        ;(properties as any).inquiry_type = 'general'
+        properties.inquiry_type = 'general'
     }
 
     // Create or update profile
