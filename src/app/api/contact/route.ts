@@ -1,4 +1,3 @@
-// app/api/contact/route.ts
 import { NextResponse } from 'next/server'
 import { getRequestContext } from '@cloudflare/next-on-pages'
 
@@ -15,18 +14,16 @@ interface ContactFormData {
   orderNumber?: string
   issueType?: string
   priority?: string
-  // Honeypot field - should always be empty
-  website?: string
+  website?: string // honeypot
 }
 
-// Simple in-memory rate limiting (best-effort only on Edge)
+// Simple in-memory rate limiting (best-effort on Edge)
 const submissionTimestamps = new Map<string, number[]>()
 const RATE_LIMIT_WINDOW = 60 * 1000 // 1 minute
 const MAX_REQUESTS = 3 // Max 3 requests/min per IP
 
 export async function POST(request: Request) {
   try {
-    // Read Workers env vars from the Edge context
     const { env } = getRequestContext()
     const KLAVIYO_PRIVATE_KEY = env.KLAVIYO_PRIVATE_KEY as string | undefined
 
@@ -39,19 +36,17 @@ export async function POST(request: Request) {
 
     const { name, email, subject, message, formType, orderNumber, issueType, priority, website } = formData
 
-    // Honeypot check
+    // Honeypot
     if (website && website.trim() !== '') {
-      // Silently accept to avoid tipping off bots
       return NextResponse.json({ success: true, message: 'Your message has been received.' })
     }
 
-    // Rate limiting (best-effort in-memory)
+    // Rate limit
     const fwd = request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown'
     const ip = fwd.split(',')[0].trim()
     const now = Date.now()
     const timestamps = submissionTimestamps.get(ip) || []
     const recent = timestamps.filter(t => now - t < RATE_LIMIT_WINDOW)
-
     if (recent.length >= MAX_REQUESTS) {
       return NextResponse.json({ error: 'Too many requests. Please try again later.' }, { status: 429 })
     }
@@ -65,7 +60,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Klaviyo API key not configured' }, { status: 500 })
     }
 
-    // Build event details
+    // Event details
     let eventName = 'Contact Form Submission'
     const properties: Record<string, unknown> = {
       subject,
@@ -76,21 +71,21 @@ export async function POST(request: Request) {
     }
     switch (formType) {
       case 'media':
-        eventName = 'Media Inquiry'
         ;(properties as any).inquiry_type = 'media'
+        eventName = 'Media Inquiry'
         break
       case 'complaints':
-        eventName = 'Customer Complaint'
         ;(properties as any).inquiry_type = 'complaint'
         if (orderNumber) (properties as any).order_number = orderNumber
         if (issueType) (properties as any).issue_type = issueType
         if (priority) (properties as any).priority = priority
+        eventName = 'Customer Complaint'
         break
       default:
         ;(properties as any).inquiry_type = 'general'
     }
 
-    // Create or update profile in Klaviyo
+    // Create or update profile
     const profilePayload = {
       data: {
         type: 'profile',
@@ -126,16 +121,14 @@ export async function POST(request: Request) {
       const profileData = await profileResponse.json()
       profileId = profileData.data?.id
     } else if (profileResponse.status === 409) {
-      // Already exists: look up by email
       const filter = encodeURIComponent(`equals(email,"${email}")`)
-      const profileSearchResponse = await fetch(`${KLAVIYO_API_BASE}/profiles/?filter=${filter}`, {
+      const findRes = await fetch(`${KLAVIYO_API_BASE}/profiles/?filter=${filter}`, {
         headers: commonHeaders as Record<string, string>,
       })
-      if (profileSearchResponse.ok) {
-        const searchData = await profileSearchResponse.json()
-        if (searchData.data && searchData.data.length > 0) {
-          profileId = searchData.data[0].id
-          // Patch properties
+      if (findRes.ok) {
+        const data = await findRes.json()
+        if (data.data?.length) {
+          profileId = data.data[0].id
           await fetch(`${KLAVIYO_API_BASE}/profiles/${profileId}/`, {
             method: 'PATCH',
             headers: commonHeaders,
@@ -160,7 +153,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Failed to create profile' }, { status: 500 })
     }
 
-    // Track contact form event (best-effort)
+    // Track event (best-effort)
     const eventPayload = {
       data: {
         type: 'event',
@@ -181,26 +174,14 @@ export async function POST(request: Request) {
       },
     }
 
-    const eventResponse = await fetch(`${KLAVIYO_API_BASE}/events/`, {
+    const eventRes = await fetch(`${KLAVIYO_API_BASE}/events/`, {
       method: 'POST',
       headers: commonHeaders,
       body: JSON.stringify(eventPayload),
     })
-
-    if (!eventResponse.ok) {
-      const errorText = await eventResponse.text()
-      console.error('Klaviyo event tracking failed:', errorText)
-      // Non-blocking
+    if (!eventRes.ok) {
+      console.error('Klaviyo event tracking failed:', await eventRes.text())
     }
-
-    // Log (non-sensitive)
-    console.log('Contact form submission received:', {
-      name,
-      email,
-      subject,
-      formType,
-      timestamp: new Date().toISOString(),
-    })
 
     return NextResponse.json({
       success: true,
