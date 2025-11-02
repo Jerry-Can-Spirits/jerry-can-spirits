@@ -1,3 +1,4 @@
+// app/api/contact/route.ts
 import { NextResponse } from 'next/server'
 import { getRequestContext } from '@cloudflare/next-on-pages'
 
@@ -17,13 +18,14 @@ interface ContactFormData {
   website?: string // honeypot
 }
 
-// Simple in-memory rate limiting (best-effort on Edge)
+// Simple in-memory rate limiting (best-effort only on Edge)
 const submissionTimestamps = new Map<string, number[]>()
 const RATE_LIMIT_WINDOW = 60 * 1000 // 1 minute
 const MAX_REQUESTS = 3 // Max 3 requests/min per IP
 
 export async function POST(request: Request) {
   try {
+    // Read Workers env vars from the Edge context
     const { env } = getRequestContext()
     const KLAVIYO_PRIVATE_KEY = env.KLAVIYO_PRIVATE_KEY as string | undefined
 
@@ -36,17 +38,19 @@ export async function POST(request: Request) {
 
     const { name, email, subject, message, formType, orderNumber, issueType, priority, website } = formData
 
-    // Honeypot
+    // Honeypot check
     if (website && website.trim() !== '') {
+      // Silently accept to avoid tipping off bots
       return NextResponse.json({ success: true, message: 'Your message has been received.' })
     }
 
-    // Rate limit
+    // Rate limiting (best-effort in-memory)
     const fwd = request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown'
     const ip = fwd.split(',')[0].trim()
     const now = Date.now()
     const timestamps = submissionTimestamps.get(ip) || []
     const recent = timestamps.filter(t => now - t < RATE_LIMIT_WINDOW)
+
     if (recent.length >= MAX_REQUESTS) {
       return NextResponse.json({ error: 'Too many requests. Please try again later.' }, { status: 429 })
     }
@@ -60,7 +64,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Klaviyo API key not configured' }, { status: 500 })
     }
 
-    // Event details
+    // Build event details
     let eventName = 'Contact Form Submission'
     const properties: Record<string, unknown> = {
       subject,
@@ -121,14 +125,16 @@ export async function POST(request: Request) {
       const profileData = await profileResponse.json()
       profileId = profileData.data?.id
     } else if (profileResponse.status === 409) {
+      // Already exists: look up by email
       const filter = encodeURIComponent(`equals(email,"${email}")`)
-      const findRes = await fetch(`${KLAVIYO_API_BASE}/profiles/?filter=${filter}`, {
+      const profileSearchResponse = await fetch(`${KLAVIYO_API_BASE}/profiles/?filter=${filter}`, {
         headers: commonHeaders as Record<string, string>,
       })
-      if (findRes.ok) {
-        const data = await findRes.json()
-        if (data.data?.length) {
-          profileId = data.data[0].id
+      if (profileSearchResponse.ok) {
+        const searchData = await profileSearchResponse.json()
+        if (searchData.data && searchData.data.length > 0) {
+          profileId = searchData.data[0].id
+          // Patch properties
           await fetch(`${KLAVIYO_API_BASE}/profiles/${profileId}/`, {
             method: 'PATCH',
             headers: commonHeaders,
@@ -153,7 +159,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Failed to create profile' }, { status: 500 })
     }
 
-    // Track event (best-effort)
+    // Track contact form event (best-effort)
     const eventPayload = {
       data: {
         type: 'event',
@@ -174,14 +180,26 @@ export async function POST(request: Request) {
       },
     }
 
-    const eventRes = await fetch(`${KLAVIYO_API_BASE}/events/`, {
+    const eventResponse = await fetch(`${KLAVIYO_API_BASE}/events/`, {
       method: 'POST',
       headers: commonHeaders,
       body: JSON.stringify(eventPayload),
     })
-    if (!eventRes.ok) {
-      console.error('Klaviyo event tracking failed:', await eventRes.text())
+
+    if (!eventResponse.ok) {
+      const errorText = await eventResponse.text()
+      console.error('Klaviyo event tracking failed:', errorText)
+      // Non-blocking
     }
+
+    // Log (non-sensitive)
+    console.log('Contact form submission received:', {
+      name,
+      email,
+      subject,
+      formType,
+      timestamp: new Date().toISOString(),
+    })
 
     return NextResponse.json({
       success: true,
