@@ -6,7 +6,7 @@
     "dev": "next dev --turbopack",
     "dev:legacy": "next dev",
     "dev:turbo": "next dev --turbopack",
-    "build": "next build --turbopack",
+    "build": "next build",
     "build:turbo": "next build --turbopack",
     "start": "next start",
     "lint": "eslint"
