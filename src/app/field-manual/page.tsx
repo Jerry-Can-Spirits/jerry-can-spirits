@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
@@ -23,21 +24,16 @@ export default function FieldManualHome() {
               </span>
             </div>
             
-            {/* Manual Cover Visual */}
-            <div className="relative w-full max-w-2xl mx-auto h-80 bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-lg border border-gold-500/20 mb-8 flex items-center justify-center overflow-hidden">
-              {/* Parchment texture overlay */}
-              <div className="absolute inset-0 bg-gradient-to-br from-amber-100/5 to-amber-200/10 opacity-50"></div>
-              <div className="text-center relative z-10">
-                <div className="text-gold-300 mb-4">
-                  <svg className="w-20 h-20 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                  </svg>
-                </div>
-                <h2 className="text-2xl font-serif font-bold text-white mb-2">Cocktail Masterclass</h2>
-                <p className="text-parchment-300 text-sm">
-                  An adventurer's guide to exceptional drinks
-                </p>
-              </div>
+            {/* Hero Image */}
+            <div className="relative w-full max-w-4xl mx-auto h-64 sm:h-80 md:h-96 rounded-lg overflow-hidden border border-gold-500/20 mb-8 shadow-2xl">
+              <Image
+                src="/images/hero/Cocktail_Hero.webp"
+                alt="Jerry Can Spirits Field Manual - Cocktail Guide"
+                fill
+                className="object-cover"
+                priority
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-jerry-green-900/60 to-transparent" />
             </div>
           </div>
 

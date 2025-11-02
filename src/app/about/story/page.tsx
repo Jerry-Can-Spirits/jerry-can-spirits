@@ -78,12 +78,12 @@ export default function OurStory() {
                   From Service to Adventure
                 </h3>
                 <p className="text-parchment-300 leading-relaxed mb-4">
-                  Service with the Royal Corps of Signals took us everywhere - from Arctic deployments to desert outposts.
+                  Service with the Royal Corps of Signals took us everywhere, from Arctic deployments to desert outposts.
                   We learned what equipment you can trust when everything depends on it. Not the flashiest kit. The most reliable.
                 </p>
                 <p className="text-parchment-300 leading-relaxed">
-                  We're civilians now. Different careers, different paths, but the same shared understanding: functional
-                  design and unwavering reliability aren't just ideals - they're non-negotiables. Whether you're crossing
+                  We're civilians now. Different careers, different paths, but the same shared understanding. Functional
+                  design and unwavering reliability aren't just ideals, they're non-negotiables. Whether you're crossing
                   continents or conquering Tuesday, that's the standard that matters.
                 </p>
               </div>
@@ -91,15 +91,14 @@ export default function OurStory() {
 
             {/* Visual Element */}
             <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-8 border border-gold-500/20">
-              <div className="text-center mb-6">
-                <div className="w-20 h-20 bg-gold-400/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <svg className="w-10 h-10 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17.982 18.725A7.488 7.488 0 0012 15.75a7.488 7.488 0 00-5.982 2.975m11.963 0a9 9 0 10-11.963 0m11.963 0A8.966 8.966 0 0112 21a8.966 8.966 0 01-5.982-2.275M15 9.75a3 3 0 11-6 0 3 3 0 016 0z" />
-                  </svg>
-                </div>
-                <p className="text-parchment-300 text-sm mb-6">
-                  [Team Photo Placeholder - Royal Corps of Signals veterans turned rum entrepreneurs]
-                </p>
+              <div className="relative w-full h-64 sm:h-80 rounded-lg overflow-hidden border border-gold-500/20 mb-6">
+                <Image
+                  src="/images/hero/Our_Story_Hero.webp"
+                  alt="Jerry Can Spirits Founder - Royal Corps of Signals Veteran"
+                  fill
+                  className="object-contain"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-jerry-green-900/40 to-transparent" />
               </div>
               
               <div className="space-y-3">

@@ -26,6 +26,15 @@ const partners = [
     logo: "/images/partners/spirit-of-wales.webp",
     featured: true,
   },
+  {
+    name: "Harlequin Print Group",
+    location: "Pontyclun, South Wales",
+    description: "Established in 1997, Harlequin Print Group has grown to become a leading producer of high quality retail cartons. Our packaging partner provides market-leading material across retail packaging, digital print, signage and graphic design, ensuring our products are presented with the quality they deserve.",
+    website: "https://harlequinprintgroup.co.uk/",
+    speciality: "Retail Packaging & Print",
+    logo: "/images/partners/Harlequin Logo.webp",
+    featured: true,
+  },
   // TODO: Add more partners as you build relationships
   // Example structure:
   // {
