@@ -1,0 +1,8 @@
+name = "jerry-can-spirits"
+compatibility_date = "2025-11-02"
+
+pages_build_output_dir = ".vercel/output/static"
+
+# Cloudflare Pages configuration
+[env.production]
+vars = { NODE_ENV = "production" }
