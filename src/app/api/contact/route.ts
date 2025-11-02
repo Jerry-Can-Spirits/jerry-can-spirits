@@ -66,7 +66,7 @@ export async function POST(request: Request) {
 
     // Build event details
     let eventName = 'Contact Form Submission'
-    const properties: Record<string, unknown> = {
+    const properties: EventProperties = {
       subject,
       message,
       form_type: formType,
@@ -86,7 +86,7 @@ export async function POST(request: Request) {
         eventName = 'Customer Complaint'
         break
       default:
-        ;(properties as any).inquiry_type = 'general'
+        properties.inquiry_type = 'general'
     }
 
     // Create or update profile
