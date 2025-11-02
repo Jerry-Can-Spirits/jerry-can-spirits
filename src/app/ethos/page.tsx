@@ -126,8 +126,8 @@ export default function Ethos() {
               The Journey
             </h2>
             <p className="text-xl text-parchment-300 max-w-3xl mx-auto">
-              From source to spirit, every step of our process honors tradition 
-              while embracing innovation. This is how we craft extraordinary rum.
+              From source to spirit, every step of our process honours tradition
+              while embracing innovation. This is how we craft extraordinary spirits.
             </p>
           </div>
 
@@ -147,20 +147,20 @@ export default function Ethos() {
                     Sourcing: UK First Philosophy
                   </h3>
                   <p className="text-parchment-300 mb-6">
-                    We prioritize British ingredients wherever possible - from English grains to Scottish botanicals. 
-                    When tradition demands Caribbean elements, we source ethically from trusted partners who share our values.
+                    We prioritise British ingredients wherever possible, from botanicals to water sources.
+                    When tradition demands specific elements, we source ethically from trusted partners who share our values.
                   </p>
-                  
+
                   {/* Hover Detail */}
                   <div className="opacity-0 group-hover:opacity-100 transition-all duration-300 transform group-hover:translate-y-0 translate-y-4">
                     <div className="grid md:grid-cols-2 gap-4 mt-4">
                       <div className="bg-jerry-green-800/60 rounded-lg p-4">
                         <h4 className="text-gold-300 font-semibold mb-2">UK Sourced</h4>
                         <ul className="text-sm text-parchment-300 space-y-1">
-                          <li>• Premium English wheat</li>
-                          <li>• Scottish highland water</li>
-                          <li>• Local botanicals & spices</li>
-                          <li>• British oak for aging</li>
+                          <li>• Quality botanicals</li>
+                          <li>• Pure water sources</li>
+                          <li>• Local spices & herbs</li>
+                          <li>• British oak for ageing</li>
                         </ul>
                       </div>
                       <div className="bg-jerry-green-800/60 rounded-lg p-4">
@@ -187,8 +187,8 @@ export default function Ethos() {
                     Selection: Expert Partners in Welsh Craft
                   </h3>
                   <p className="text-parchment-300 mb-6">
-                    We partnered with Spirit of Wales Distillery - craftspeople who share our passion for innovation rooted in tradition.
-                    Their cutting-edge approach to copper distillation creates the foundation for our exceptional rums, combining modern
+                    We partnered with Spirit of Wales Distillery, craftspeople who share our passion for innovation rooted in tradition.
+                    Their cutting-edge approach to copper distillation creates the foundation for our exceptional spirits, combining modern
                     engineering with time-tested principles.
                   </p>
 
@@ -207,7 +207,7 @@ export default function Ethos() {
                         </div>
                         <div>
                           <strong className="text-gold-300">Engineering Excellence</strong>
-                          <p>Their advanced copper-lined stills feature multiple vapour chambers - keeping the spirit in vapour form among the copper for maximum contact time. This extended interaction builds complex esters and flavours while creating an exceptionally smooth, soft finish. It's the perfect marriage of engineering innovation and traditional copper distillation principles.</p>
+                          <p>Their advanced copper-lined stills feature multiple vapour chambers, keeping the spirit in vapour form among the copper for maximum contact time. This extended interaction builds complex esters and flavours while creating an exceptionally smooth, soft finish. It's the perfect marriage of engineering innovation and traditional copper distillation principles.</p>
                         </div>
                       </div>
                     </div>
@@ -225,31 +225,31 @@ export default function Ethos() {
                     Crafting: Tradition Meets Innovation
                   </h3>
                   <p className="text-parchment-300 mb-6">
-                    Like the finest blacksmiths and glassblowers, we believe handcraft produces superior results. 
-                    Traditional copper pot distillation, precise temperature control, and careful cut selection create our signature profiles.
+                    Like the finest blacksmiths and glassblowers, we believe handcraft produces superior results.
+                    Advanced copper-lined distillation, precise temperature control, and careful cut selection create our signature profiles.
                   </p>
                   
                   {/* Hover Detail */}
                   <div className="opacity-0 group-hover:opacity-100 transition-all duration-300 transform group-hover:translate-y-0 translate-y-4">
                     <div className="bg-jerry-green-800/60 rounded-lg p-6 mt-4">
-                      <h4 className="text-gold-300 font-semibold mb-3">Traditional Meets Modern</h4>
+                      <h4 className="text-gold-300 font-semibold mb-3">The Craft</h4>
                       <div className="grid md:grid-cols-2 gap-6">
                         <div>
-                          <h5 className="text-gold-300 font-semibold mb-2">Traditional Methods</h5>
+                          <h5 className="text-gold-300 font-semibold mb-2">Traditional Foundation</h5>
                           <ul className="text-sm text-parchment-300 space-y-1">
                             <li>• Copper pot distillation</li>
-                            <li>• Manual temperature control</li>
-                            <li>• Artisan cut selection</li>
-                            <li>• Time-honored recipes</li>
+                            <li>• Careful cut selection</li>
+                            <li>• Time-tested methods</li>
+                            <li>• Artisan attention to detail</li>
                           </ul>
                         </div>
                         <div>
-                          <h5 className="text-gold-300 font-semibold mb-2">Modern Precision</h5>
+                          <h5 className="text-gold-300 font-semibold mb-2">Modern Standards</h5>
                           <ul className="text-sm text-parchment-300 space-y-1">
-                            <li>• Scientific monitoring</li>
-                            <li>• Consistent quality control</li>
-                            <li>• Innovation in flavour</li>
-                            <li>• Sustainable practices</li>
+                            <li>• Rigorous quality control</li>
+                            <li>• Precise monitoring</li>
+                            <li>• Consistent results</li>
+                            <li>• Innovation in balance</li>
                           </ul>
                         </div>
                       </div>
@@ -305,7 +305,7 @@ export default function Ethos() {
               The Commitment
             </h2>
             <p className="text-xl text-parchment-300 max-w-3xl mx-auto">
-              Our promises extend beyond great rum. We're committed to sustainability, 
+              Our promises extend beyond great spirits. We're committed to sustainability,
               supporting local communities, and preserving traditional craftsmanship for future generations.
             </p>
           </div>
@@ -374,7 +374,7 @@ export default function Ethos() {
                   <div className="w-2 h-2 bg-gold-400 rounded-full mt-2 flex-shrink-0"></div>
                   <div>
                     <p className="font-semibold text-gold-300">Traditional Craft</p>
-                    <p className="text-sm">Preserving time-honored techniques in modern applications</p>
+                    <p className="text-sm">Preserving time-honoured techniques in modern applications</p>
                   </div>
                 </div>
                 <div className="flex items-start space-x-3">
@@ -396,19 +396,31 @@ export default function Ethos() {
               Join the Expedition
             </h2>
             <p className="text-xl text-parchment-300 mb-8 max-w-2xl mx-auto">
-              Be part of our journey as we craft the future of premium British rum. 
+              Be part of our journey as we craft the future of premium British spirits.
               From source to spirit, discover what makes Jerry Can Spirits extraordinary.
             </p>
-            
-            <a 
-              href="/#signup"
-              className="inline-flex items-center space-x-2 bg-jerry-green-800 hover:bg-jerry-green-900 text-parchment-50 px-8 py-4 rounded-lg font-semibold border-2 border-jerry-green-800 hover:border-jerry-green-700 transition-all duration-300 transform hover:scale-105"
-            >
-              <span>Join Our Newsletter</span>
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-              </svg>
-            </a>
+
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <a
+                href="/#newsletter-signup"
+                className="inline-flex items-center justify-center space-x-2 bg-gold-500 hover:bg-gold-400 text-jerry-green-900 px-8 py-4 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105"
+              >
+                <span>Join Our Newsletter</span>
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
+              </a>
+
+              <a
+                href="/friends"
+                className="inline-flex items-center justify-center space-x-2 bg-jerry-green-800 hover:bg-jerry-green-700 text-parchment-50 px-8 py-4 rounded-lg font-semibold border-2 border-gold-500/30 hover:border-gold-500/60 transition-all duration-300 transform hover:scale-105"
+              >
+                <span>Meet Our Partners</span>
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
+              </a>
+            </div>
           </div>
         </section>
 

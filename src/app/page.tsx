@@ -2,6 +2,7 @@ import HeroSection from "@/components/HeroSection";
 import KlaviyoSignup from "@/components/KlaviyoSignup";
 import InstagramFeed from "@/components/InstagramFeed";
 import StructuredData from "@/components/StructuredData";
+import ScrollToHash from "@/components/ScrollToHash";
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
@@ -70,6 +71,7 @@ export default function Home() {
 
   return (
     <>
+      <ScrollToHash />
       <StructuredData data={structuredData} />
       <div>
         <HeroSection />

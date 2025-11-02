@@ -26,6 +26,15 @@ const partners = [
     logo: "/images/partners/spirit-of-wales.webp",
     featured: true,
   },
+  {
+    name: "Harlequin Print Group",
+    location: "Pontyclun, South Wales",
+    description: "Established in 1997, Harlequin Print Group has grown to become a leading producer of high quality retail cartons. Our packaging partner provides market-leading material across retail packaging, digital print, signage and graphic design, ensuring our products are presented with the quality they deserve.",
+    website: "https://harlequinprintgroup.co.uk/",
+    speciality: "Retail Packaging & Print",
+    logo: "/images/partners/Harlequin Logo.webp",
+    featured: true,
+  },
   // TODO: Add more partners as you build relationships
   // Example structure:
   // {
@@ -230,7 +239,7 @@ export default function FriendsPage() {
           </div>
 
           {/* Partnership Benefits Section */}
-          <div className="mt-16 grid md:grid-cols-3 gap-6">
+          <div className="mt-16 grid md:grid-cols-3 gap-6 mb-16">
             <div className="text-center p-6 bg-jerry-green-800/10 border border-gold-500/20 rounded-lg">
               <div className="text-4xl mb-3">🤝</div>
               <h4 className="text-lg font-semibold text-gold-400 mb-2">
@@ -258,6 +267,25 @@ export default function FriendsPage() {
                 Showcasing excellence across the industry
               </p>
             </div>
+          </div>
+
+          {/* Next Step CTA */}
+          <div className="text-center p-12 bg-jerry-green-800/20 border border-gold-500/20 rounded-lg">
+            <h3 className="text-2xl font-playfair font-bold text-gold-500 mb-4">
+              Got Questions?
+            </h3>
+            <p className="text-gray-300 mb-6 max-w-2xl mx-auto">
+              Learn more about Jerry Can Spirits, our products, and how we work in our FAQ section
+            </p>
+            <Link
+              href="/faq"
+              className="inline-flex items-center justify-center space-x-2 bg-gold-500 hover:bg-gold-400 text-jerry-green-900 px-8 py-4 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105"
+            >
+              <span>View FAQs</span>
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+              </svg>
+            </Link>
           </div>
         </div>
       </main>

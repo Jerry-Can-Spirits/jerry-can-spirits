@@ -128,7 +128,7 @@ export default function ShippingReturns() {
                 <ol className="list-decimal list-inside text-white space-y-2">
                   <li>Contact us within 14 days of delivery</li>
                   <li>Provide order number and reason for return</li>
-                  <li>Await return authorization and prepaid shipping label</li>
+                  <li>Await return authorisation and prepaid shipping label</li>
                   <li>Return items in original, unopened condition</li>
                   <li>Refunds processed within 5-7 business days after receipt</li>
                 </ol>

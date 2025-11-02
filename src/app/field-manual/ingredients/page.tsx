@@ -45,7 +45,7 @@ const categoryConfig = {
   },
   liqueurs: {
     title: 'Liqueurs', 
-    description: 'Essential modifiers and flavor enhancers'
+    description: 'Essential modifiers and flavour enhancers'
   },
   bitters: {
     title: 'Bitters & Aperitifs',
