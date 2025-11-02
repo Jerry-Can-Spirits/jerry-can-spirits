@@ -182,15 +182,15 @@ export default function CocktailsPage() {
       <main className="min-h-screen py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <h1 className="text-3xl font-serif font-bold text-white mb-4">No Cocktails Yet</h1>
+            <h1 className="text-3xl font-serif font-bold text-white mb-4">Coming Soon</h1>
             <p className="text-parchment-300 mb-8">
-              Add your first cocktail in the Sanity Studio to get started.
+              Our signature cocktail recipes are being crafted. Check back soon for expertly designed drinks featuring our premium rum.
             </p>
-            <Link 
-              href="/studio"
+            <Link
+              href="/field-manual"
               className="inline-flex items-center px-6 py-3 bg-gold-500 hover:bg-gold-400 text-jerry-green-900 font-semibold rounded-lg transition-colors"
             >
-              Open Sanity Studio
+              Back to Field Manual
             </Link>
           </div>
         </div>
@@ -401,19 +401,6 @@ export default function CocktailsPage() {
                     </div>
                     ))
                   )}
-                </div>
-
-                <div className="mt-8 p-4 bg-jerry-green-800/30 rounded-lg border border-gold-500/20">
-                  <h3 className="font-serif font-bold text-gold-300 mb-2">Add More Cocktails</h3>
-                  <p className="text-parchment-300 text-sm mb-3">
-                    Create new cocktails in your Sanity Studio
-                  </p>
-                  <Link 
-                    href="/studio"
-                    className="text-xs text-gold-400 hover:text-gold-300 underline transition-colors"
-                  >
-                    Open Studio →
-                  </Link>
                 </div>
               </div>
             </div>
