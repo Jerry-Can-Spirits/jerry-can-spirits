@@ -337,23 +337,23 @@ export default function Footer() {
                 <h3 className="font-serif text-xl font-bold mb-4 text-parchment-100 border-b border-jerry-green-700 pb-2" style={{ color: '#fefbf5' }}>
                   Secure Payment
                 </h3>
-                <div className="grid grid-cols-2 gap-2 mb-4">
+                <div className="grid grid-cols-2 gap-3 mb-4">
                   {paymentMethods.map((method) => (
                     <div
                       key={method.name}
-                      className="bg-parchment-50 rounded-md p-2 flex items-center justify-center hover:bg-parchment-100 transition-colors duration-200 shadow-sm h-10"
+                      className="bg-parchment-50 rounded-md p-3 flex items-center justify-center hover:bg-parchment-100 transition-colors duration-200 shadow-sm h-14"
                       title={method.name}
                     >
                       {isClient ? (
                         <Image
                           src={method.src}
                           alt={method.alt}
-                          width={60}
-                          height={36}
-                          className="object-contain max-h-6"
+                          width={80}
+                          height={48}
+                          className="object-contain max-h-10 w-auto"
                         />
                       ) : (
-                        <div className="w-10 h-6 bg-parchment-200 rounded animate-pulse" />
+                        <div className="w-16 h-10 bg-parchment-200 rounded animate-pulse" />
                       )}
                     </div>
                   ))}

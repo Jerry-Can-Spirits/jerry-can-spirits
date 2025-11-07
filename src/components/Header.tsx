@@ -67,20 +67,36 @@ export default function Header() {
     },
   ]
 
-  // Scroll behavior
+  // Scroll behavior with improved smoothness
   useEffect(() => {
+    let ticking = false
+
     const handleScroll = () => {
-      const currentScrollY = window.scrollY
-      setIsScrolled(currentScrollY > 20)
-      
-      // Hide on scroll down, show on scroll up
-      if (currentScrollY > lastScrollY && currentScrollY > 100) {
-        setShowHeader(false)
-      } else {
-        setShowHeader(true)
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const currentScrollY = window.scrollY
+          setIsScrolled(currentScrollY > 20)
+
+          // Improved hide/show logic with better threshold
+          const scrollDifference = Math.abs(currentScrollY - lastScrollY)
+
+          // Only trigger if scroll difference is significant (reduces jitter)
+          if (scrollDifference > 5) {
+            if (currentScrollY > lastScrollY && currentScrollY > 150) {
+              // Scrolling down - hide header
+              setShowHeader(false)
+            } else if (currentScrollY < lastScrollY) {
+              // Scrolling up - show header
+              setShowHeader(true)
+            }
+
+            setLastScrollY(currentScrollY)
+          }
+
+          ticking = false
+        })
+        ticking = true
       }
-      
-      setLastScrollY(currentScrollY)
     }
 
     window.addEventListener('scroll', handleScroll, { passive: true })
@@ -123,8 +139,8 @@ export default function Header() {
         />
       </div>
 
-      <header 
-        className={`fixed top-0 w-full z-50 transition-all duration-500 ease-in-out ${
+      <header
+        className={`fixed top-0 w-full z-50 transition-transform duration-300 ease-out ${
           showHeader ? 'translate-y-0' : '-translate-y-full'
         }`}
       >
