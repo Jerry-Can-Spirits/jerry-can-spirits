@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import KlaviyoSignup from '@/components/KlaviyoSignup'
 
 // Note: metadata export removed as client components cannot export metadata
 // This metadata should be moved to a layout.tsx or handled differently
@@ -225,6 +226,9 @@ export default function Contact() {
           </button>
         </div>
       </section>
+
+      {/* Newsletter Signup Section */}
+      <KlaviyoSignup />
     </main>
   )
 }

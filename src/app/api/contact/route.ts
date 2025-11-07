@@ -35,6 +35,31 @@ const submissionTimestamps = new Map<string, number[]>()
 const RATE_LIMIT_WINDOW = 60 * 1000 // 1 minute
 const MAX_REQUESTS = 3 // Max 3 requests/min per IP
 
+// Email validation function
+function isValidEmail(email: string): boolean {
+  // RFC 5322 compliant email validation regex
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+
+  // Additional checks for common invalid patterns
+  if (!emailRegex.test(email)) return false
+  if (email.length > 254) return false // Max email length per RFC
+
+  const [localPart, domain] = email.split('@')
+  if (!localPart || !domain) return false
+  if (localPart.length > 64) return false // Max local part length
+
+  // Check for invalid characters
+  if (email.includes('..')) return false // No consecutive dots
+  if (email.startsWith('.') || email.endsWith('.')) return false
+
+  // Check domain has valid TLD
+  const domainParts = domain.split('.')
+  if (domainParts.length < 2) return false
+  if (domainParts[domainParts.length - 1].length < 2) return false
+
+  return true
+}
+
 export async function POST(request: Request) {
   try {
     // Read Workers env vars from the Edge context
@@ -72,6 +97,12 @@ export async function POST(request: Request) {
     if (!name || !email || !subject || !message) {
       return NextResponse.json({ error: 'Name, email, subject, and message are required' }, { status: 400 })
     }
+
+    // Validate email format
+    if (!isValidEmail(email)) {
+      return NextResponse.json({ error: 'Please enter a valid email address' }, { status: 400 })
+    }
+
     if (!KLAVIYO_PRIVATE_KEY) {
       return NextResponse.json({ error: 'Klaviyo API key not configured' }, { status: 500 })
     }

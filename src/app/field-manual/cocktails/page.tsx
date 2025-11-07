@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { client } from '@/sanity/client'
@@ -54,6 +54,26 @@ export default function CocktailsPage() {
   const [selectedCategory, setSelectedCategory] = useState<string>('all')
   const [selectedDifficulty, setSelectedDifficulty] = useState<string>('all')
   const [searchQuery, setSearchQuery] = useState<string>('')
+
+  // Refs for navigation
+  const recipeRef = useRef<HTMLDivElement>(null)
+  const cocktailListRef = useRef<HTMLDivElement>(null)
+
+  // Helper function to scroll to recipe on mobile
+  const scrollToRecipe = () => {
+    if (window.innerWidth < 1024 && recipeRef.current) {
+      setTimeout(() => {
+        recipeRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      }, 100)
+    }
+  }
+
+  // Helper function to scroll to cocktail list
+  const scrollToCocktailList = () => {
+    if (cocktailListRef.current) {
+      cocktailListRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }
+  }
 
   // Fetch cocktails from Sanity
   useEffect(() => {
@@ -316,8 +336,8 @@ export default function CocktailsPage() {
         <div className="grid lg:grid-cols-3 gap-8">
           
           {/* Cocktail List */}
-          <div className="lg:col-span-1">
-            <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20 sticky top-24">
+          <div className="lg:col-span-1" ref={cocktailListRef}>
+            <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20 lg:sticky lg:top-24">
               <div className="absolute inset-0 bg-gradient-to-br from-amber-100/5 to-amber-200/10 opacity-50 rounded-xl"></div>
               <div className="relative z-10">
                 <h2 className="text-2xl font-serif font-bold text-white mb-6">Cocktail Collection</h2>
@@ -338,6 +358,7 @@ export default function CocktailsPage() {
                           onClick={() => {
                             setSelectedCocktail(cocktail)
                             setActiveVariant(-1)
+                            scrollToRecipe()
                           }}
                         >
                           <div className="flex items-center justify-between mb-2">
@@ -377,6 +398,7 @@ export default function CocktailsPage() {
                           setSelectedCocktail(cocktail)
                           setActiveVariant(-1)
                         }
+                        scrollToRecipe()
                       }}
                     >
                       <div className="flex items-center justify-between mb-2">
@@ -407,8 +429,21 @@ export default function CocktailsPage() {
           </div>
 
           {/* Recipe Display */}
-          <div className="lg:col-span-2 space-y-8">
-            
+          <div className="lg:col-span-2 space-y-8" ref={recipeRef}>
+
+            {/* Mobile Quick Navigation Button */}
+            <div className="lg:hidden sticky top-20 z-20 -mt-4 mb-4">
+              <button
+                onClick={scrollToCocktailList}
+                className="w-full bg-gradient-to-r from-gold-600 to-gold-500 hover:from-gold-500 hover:to-gold-400 text-jerry-green-900 px-6 py-3 rounded-lg font-semibold uppercase tracking-wide transition-all duration-300 shadow-lg hover:shadow-xl flex items-center justify-center gap-2"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+                Choose Another Cocktail
+              </button>
+            </div>
+
             {/* Cocktail Header */}
             <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20 relative overflow-hidden">
               <div className="absolute inset-0 bg-gradient-to-br from-amber-100/5 to-amber-200/10 opacity-50"></div>
@@ -449,10 +484,18 @@ export default function CocktailsPage() {
                     <h3 className="text-lg font-serif font-bold text-gold-300 mb-3">Variations</h3>
                     <div className="flex flex-wrap gap-2">
                       <button
-                        onClick={() => setActiveVariant(-1)}
+                        onClick={() => {
+                          setActiveVariant(-1)
+                          // Scroll to top of recipe when changing variants on mobile
+                          if (window.innerWidth < 1024 && recipeRef.current) {
+                            setTimeout(() => {
+                              recipeRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+                            }, 50)
+                          }
+                        }}
                         className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-300 ${
-                          activeVariant === -1 
-                            ? 'bg-gold-500/20 text-gold-300 border border-gold-500/40' 
+                          activeVariant === -1
+                            ? 'bg-gold-500/20 text-gold-300 border border-gold-500/40'
                             : 'bg-jerry-green-800/40 text-parchment-300 border border-gold-500/20 hover:bg-jerry-green-800/60'
                         }`}
                       >
@@ -461,10 +504,18 @@ export default function CocktailsPage() {
                       {selectedCocktail.variants.map((variant, index) => (
                         <button
                           key={index}
-                          onClick={() => setActiveVariant(index)}
+                          onClick={() => {
+                            setActiveVariant(index)
+                            // Scroll to top of recipe when changing variants on mobile
+                            if (window.innerWidth < 1024 && recipeRef.current) {
+                              setTimeout(() => {
+                                recipeRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+                              }, 50)
+                            }
+                          }}
                           className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-300 ${
-                            activeVariant === index 
-                              ? 'bg-gold-500/20 text-gold-300 border border-gold-500/40' 
+                            activeVariant === index
+                              ? 'bg-gold-500/20 text-gold-300 border border-gold-500/40'
                               : 'bg-jerry-green-800/40 text-parchment-300 border border-gold-500/20 hover:bg-jerry-green-800/60'
                           }`}
                         >
