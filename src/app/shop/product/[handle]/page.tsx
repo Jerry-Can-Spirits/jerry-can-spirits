@@ -9,10 +9,11 @@ import type { Metadata } from 'next'
 export async function generateMetadata({
   params
 }: {
-  params: { handle: string }
+  params: Promise<{ handle: string }>
 }): Promise<Metadata> {
+  const { handle } = await params
   try {
-    const product = await getProduct(params.handle)
+    const product = await getProduct(handle)
 
     if (!product) {
       return {
@@ -53,12 +54,13 @@ function formatPrice(amount: string, currencyCode: string): string {
 export default async function ProductPage({
   params
 }: {
-  params: { handle: string }
+  params: Promise<{ handle: string }>
 }) {
+  const { handle } = await params
   let product: ShopifyProduct | null = null
 
   try {
-    product = await getProduct(params.handle)
+    product = await getProduct(handle)
   } catch (error) {
     console.error('Error fetching product:', error)
     notFound()
