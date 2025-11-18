@@ -1,8 +1,8 @@
 import HeroSection from "@/components/HeroSection";
-import KlaviyoSignup from "@/components/KlaviyoSignup";
 import InstagramFeed from "@/components/InstagramFeed";
 import StructuredData from "@/components/StructuredData";
 import ScrollToHash from "@/components/ScrollToHash";
+import KlaviyoEmbeddedForm from "@/components/KlaviyoEmbeddedForm";
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
@@ -75,7 +75,7 @@ export default function Home() {
       <StructuredData data={structuredData} />
       <div>
         <HeroSection />
-        <KlaviyoSignup />
+        <KlaviyoEmbeddedForm />
 
         {/* Instagram Feed Section */}
         <section className="py-16 bg-jerry-green-900/30">

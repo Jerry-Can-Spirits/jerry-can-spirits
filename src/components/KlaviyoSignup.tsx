@@ -16,7 +16,7 @@ interface KlaviyoSignupProps {
 }
 
 export default function KlaviyoSignup({
-  listId = 'T4uXSb'
+  listId = 'S8TnNz'
 }: KlaviyoSignupProps) {
   const [formData, setFormData] = useState<FormData>({
     firstName: '',
