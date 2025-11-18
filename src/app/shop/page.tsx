@@ -40,20 +40,29 @@ export default function ShopPage() {
           </p>
         </div>
 
-        {/* Coming Soon Categories */}
+        {/* Shop Categories */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-8">
-          <div className="p-6 bg-jerry-green-800/20 rounded-lg border border-gold-500/20 hover:border-gold-500/40 transition-colors">
-            <h3 className="font-semibold text-gold-500 mb-2">Premium Rum</h3>
+          <Link
+            href="/shop/drinks"
+            className="p-6 bg-jerry-green-800/20 rounded-lg border border-gold-500/20 hover:border-gold-500/40 hover:bg-jerry-green-800/30 transition-all cursor-pointer group"
+          >
+            <h3 className="font-semibold text-gold-500 mb-2 group-hover:text-gold-400 transition-colors">Premium Rum</h3>
             <p className="text-sm text-gray-400">British crafted spirits for discerning adventurers</p>
-          </div>
-          <div className="p-6 bg-jerry-green-800/20 rounded-lg border border-gold-500/20 hover:border-gold-500/40 transition-colors">
-            <h3 className="font-semibold text-gold-500 mb-2">Bar Hardware</h3>
+          </Link>
+          <Link
+            href="/shop/hardware"
+            className="p-6 bg-jerry-green-800/20 rounded-lg border border-gold-500/20 hover:border-gold-500/40 hover:bg-jerry-green-800/30 transition-all cursor-pointer group"
+          >
+            <h3 className="font-semibold text-gold-500 mb-2 group-hover:text-gold-400 transition-colors">Bar Hardware</h3>
             <p className="text-sm text-gray-400">Professional tools for the home mixologist</p>
-          </div>
-          <div className="p-6 bg-jerry-green-800/20 rounded-lg border border-gold-500/20 hover:border-gold-500/40 transition-colors">
-            <h3 className="font-semibold text-gold-500 mb-2">Expedition Gear</h3>
+          </Link>
+          <Link
+            href="/shop/clothing"
+            className="p-6 bg-jerry-green-800/20 rounded-lg border border-gold-500/20 hover:border-gold-500/40 hover:bg-jerry-green-800/30 transition-all cursor-pointer group"
+          >
+            <h3 className="font-semibold text-gold-500 mb-2 group-hover:text-gold-400 transition-colors">Expedition Gear</h3>
             <p className="text-sm text-gray-400">Adventure-ready apparel and accessories</p>
-          </div>
+          </Link>
         </div>
 
         {/* CTAs */}

@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import Link from 'next/link'
 
 // Note: metadata export removed as client components cannot export metadata
 // This metadata should be moved to a layout.tsx or handled differently
@@ -72,12 +73,6 @@ export default function Contact() {
     setHashtags(getRandomHashtags(5))
   }, [])
 
-  const scrollToSignup = () => {
-    const signupElement = document.getElementById('newsletter-signup')
-    if (signupElement) {
-      signupElement.scrollIntoView({ behavior: 'smooth' })
-    }
-  }
 
   return (
     <main className="min-h-screen">
@@ -209,20 +204,20 @@ export default function Contact() {
           <p className="text-xl text-parchment-200 mb-8 max-w-2xl mx-auto leading-relaxed">
             Join our expedition for exclusive updates and early access to new releases
           </p>
-          <button
-            onClick={scrollToSignup}
+          <Link
+            href="/#newsletter-signup"
             className="group bg-gradient-to-r from-gold-600 to-gold-500 hover:from-gold-500 hover:to-gold-400 text-jerry-green-900 px-8 py-4 rounded-lg font-semibold uppercase tracking-wide transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 flex items-center justify-center gap-2 mx-auto"
           >
             Become an Insider
-            <svg 
-              className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" 
-              fill="none" 
-              stroke="currentColor" 
+            <svg
+              className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300"
+              fill="none"
+              stroke="currentColor"
               viewBox="0 0 24 24"
             >
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
             </svg>
-          </button>
+          </Link>
         </div>
       </section>
     </main>
