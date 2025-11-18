@@ -5,6 +5,9 @@ import { getProduct, type ShopifyProduct } from '@/lib/shopify'
 import AddToCartButton from '@/components/AddToCartButton'
 import type { Metadata } from 'next'
 
+// Configure for Cloudflare Pages Edge Runtime
+export const runtime = 'edge'
+
 // Generate metadata for SEO
 export async function generateMetadata({
   params
