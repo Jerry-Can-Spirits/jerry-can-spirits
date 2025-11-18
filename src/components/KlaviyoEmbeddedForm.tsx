@@ -2,11 +2,18 @@
 
 import { useEffect } from 'react'
 
+// Extend Window interface to include Klaviyo's _learnq property
+declare global {
+  interface Window {
+    _learnq?: unknown[]
+  }
+}
+
 export default function KlaviyoEmbeddedForm() {
   useEffect(() => {
     // Give Klaviyo script time to load
     const checkKlaviyo = setInterval(() => {
-      if (typeof window !== 'undefined' && (window as any)._learnq) {
+      if (typeof window !== 'undefined' && window._learnq) {
         console.log('Klaviyo loaded successfully')
         clearInterval(checkKlaviyo)
       }
