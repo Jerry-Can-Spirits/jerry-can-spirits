@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import { useNewsletterSignup } from '@/hooks/useNewsletterSignup'
 
 // Note: metadata export removed as client components cannot export metadata
 // This metadata should be moved to a layout.tsx or handled differently
@@ -67,6 +68,7 @@ const contactMethods = [
 
 export default function Contact() {
   const [hashtags, setHashtags] = useState('')
+  const { hasSignedUp, isLoading } = useNewsletterSignup()
 
   // Set hashtags on component mount (client-side only)
   useEffect(() => {
@@ -192,34 +194,36 @@ export default function Contact() {
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="relative py-20 overflow-hidden">
-        {/* Subtle background overlay */}
-        <div className="absolute inset-0 bg-gradient-to-r from-jerry-green-800/20 to-jerry-green-700/20"></div>
-        
-        <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl sm:text-4xl font-serif font-bold text-parchment-50 mb-6">
-            Stay Connected
-          </h2>
-          <p className="text-xl text-parchment-200 mb-8 max-w-2xl mx-auto leading-relaxed">
-            Join our expedition for exclusive updates and early access to new releases
-          </p>
-          <Link
-            href="/#newsletter-signup"
-            className="group bg-gradient-to-r from-gold-600 to-gold-500 hover:from-gold-500 hover:to-gold-400 text-jerry-green-900 px-8 py-4 rounded-lg font-semibold uppercase tracking-wide transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 flex items-center justify-center gap-2 mx-auto"
-          >
-            Become an Insider
-            <svg
-              className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
+      {/* CTA Section - Only show if user hasn't signed up for newsletter */}
+      {!isLoading && !hasSignedUp && (
+        <section className="relative py-20 overflow-hidden">
+          {/* Subtle background overlay */}
+          <div className="absolute inset-0 bg-gradient-to-r from-jerry-green-800/20 to-jerry-green-700/20"></div>
+
+          <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 className="text-3xl sm:text-4xl font-serif font-bold text-parchment-50 mb-6">
+              Stay Connected
+            </h2>
+            <p className="text-xl text-parchment-200 mb-8 max-w-2xl mx-auto leading-relaxed">
+              Join our expedition for exclusive updates and early access to new releases
+            </p>
+            <Link
+              href="/#newsletter-signup"
+              className="group bg-gradient-to-r from-gold-600 to-gold-500 hover:from-gold-500 hover:to-gold-400 text-jerry-green-900 px-8 py-4 rounded-lg font-semibold uppercase tracking-wide transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 flex items-center justify-center gap-2 mx-auto"
             >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-            </svg>
-          </Link>
-        </div>
-      </section>
+              Become an Insider
+              <svg
+                className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+              </svg>
+            </Link>
+          </div>
+        </section>
+      )}
     </main>
   )
 }
