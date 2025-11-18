@@ -32,12 +32,15 @@ export function middleware(request: NextRequest) {
     // Stricter CSP for all other routes
     csp = [
       "default-src 'self'",
-      "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://static.klaviyo.com https://a.klaviyo.com https://tagmanager.google.com",
-      "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+      "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://*.klaviyo.com https://tagmanager.google.com blob:",
+      "script-src-elem 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com https://*.klaviyo.com https://tagmanager.google.com",
+      "worker-src 'self' blob:",
+      "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://*.klaviyo.com",
+      "style-src-elem 'self' 'unsafe-inline' https://fonts.googleapis.com https://*.klaviyo.com",
       "font-src 'self' https://fonts.gstatic.com",
       "img-src 'self' data: https: blob:",
       "media-src 'self' https:",
-      "connect-src 'self' http://localhost:* https://www.google-analytics.com https://www.googletagmanager.com https://analytics.google.com https://region1.google-analytics.com https://a.klaviyo.com https://cdn.sanity.io https://*.sanity.io https://*.ingest.sentry.io wss: ws:",
+      "connect-src 'self' http://localhost:* https://www.google-analytics.com https://www.googletagmanager.com https://analytics.google.com https://region1.google-analytics.com https://*.klaviyo.com https://cdn.sanity.io https://*.sanity.io https://*.ingest.sentry.io wss: ws:",
       "frame-src 'self' https://www.youtube.com https://www.vimeo.com",
       "object-src 'none'",
       "base-uri 'self'",
