@@ -220,9 +220,6 @@ export default function Contact() {
           </Link>
         </div>
       </section>
-
-      {/* Newsletter Signup Section */}
-      <KlaviyoSignup />
     </main>
   )
 }

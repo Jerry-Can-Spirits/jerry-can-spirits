@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { ChevronDownIcon, MagnifyingGlassIcon, ShoppingCartIcon, Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
+import { useCart } from '@/contexts/CartContext'
 
 interface DropdownItem {
   name: string
@@ -24,7 +25,7 @@ export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null)
   const [isSearchOpen, setIsSearchOpen] = useState(false)
-  const [cartCount] = useState(0) // Will connect to Shopify later
+  const { itemCount, openCart } = useCart()
 
   // Navigation structure
   const navigation: NavigationItem[] = [
@@ -297,18 +298,21 @@ export default function Header() {
               </div>
 
               {/* Cart */}
-              <Link
-                href="/cart"
+              <button
+                onClick={() => {
+                  trackCTAClick('Cart')
+                  openCart()
+                }}
                 className="relative text-parchment-100 hover:text-parchment-50 p-2 transition-all duration-200 hover:scale-110"
-                onClick={() => trackCTAClick('Cart')}
+                aria-label="Open cart"
               >
                 <ShoppingCartIcon className="w-5 h-5" />
-                {cartCount > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-jerry-green-400 text-jerry-green-900 text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold">
-                    {cartCount}
+                {itemCount > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-gold-500 text-jerry-green-900 text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold">
+                    {itemCount}
                   </span>
                 )}
-              </Link>
+              </button>
 
               {/* Social Links */}
               <div className="hidden lg:flex items-center space-x-3">
