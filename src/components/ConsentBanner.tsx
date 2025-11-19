@@ -11,7 +11,7 @@ declare global {
 }
 
 export default function ConsentBanner() {
-  const { hasConsented, isLoading, preferences, acceptAll, acceptNecessaryOnly, savePreferences } = useCookieConsent();
+  const { hasConsented, isLoading, preferences, savePreferences } = useCookieConsent();
   const [showDetails, setShowDetails] = useState(false);
   const [localPreferences, setLocalPreferences] = useState({
     necessary: true,
