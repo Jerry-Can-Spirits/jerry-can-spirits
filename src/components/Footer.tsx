@@ -40,6 +40,7 @@ export default function Footer() {
     legal: [
       { name: 'Privacy Policy', href: '/privacy-policy' },
       { name: 'Cookie Policy', href: '/cookie-policy' },
+      { name: 'Cookie Preferences', href: '/cookie-preferences' },
       { name: 'Terms of Service', href: '/terms-of-service' },
       { name: 'Shipping & Returns', href: '/shipping-returns' },
       { name: 'Accessibility', href: '/accessibility' },
