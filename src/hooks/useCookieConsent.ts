@@ -8,8 +8,29 @@ export interface CookiePreferences {
   marketing: boolean
 }
 
-const COOKIE_CONSENT_KEY = 'jcs_cookie_consent'
-const COOKIE_PREFERENCES_KEY = 'jcs_cookie_preferences'
+// Use __Host- prefix for enhanced security on HTTPS
+// Falls back to standard names on HTTP (localhost development)
+const getSecureCookieName = (baseName: string): string => {
+  if (typeof window !== 'undefined' && window.location.protocol === 'https:') {
+    return `__Host-${baseName}`
+  }
+  return baseName
+}
+
+const COOKIE_CONSENT_KEY = getSecureCookieName('jcs_cookie_consent')
+const COOKIE_PREFERENCES_KEY = getSecureCookieName('jcs_cookie_preferences')
+
+// Cookie attributes for security
+// Note: HttpOnly cannot be set from client-side JavaScript for security reasons
+// Max-Age is set to 1 year (31536000 seconds)
+const getCookieAttributes = (): string => {
+  const isSecure = typeof window !== 'undefined' && window.location.protocol === 'https:'
+  const maxAge = 31536000 // 1 year in seconds
+
+  return isSecure
+    ? `path=/; SameSite=Strict; Secure; Max-Age=${maxAge}`
+    : `path=/; SameSite=Lax; Max-Age=${maxAge}`
+}
 
 /**
  * Hook to manage GDPR cookie consent and preferences
@@ -72,16 +93,15 @@ export function useCookieConsent() {
   }
 
   const savePreferences = (prefs: CookiePreferences) => {
-    const expires = new Date()
-    expires.setFullYear(expires.getFullYear() + 1) // 1 year expiry
+    const cookieAttributes = getCookieAttributes()
 
     // Save consent flag
-    document.cookie = `${COOKIE_CONSENT_KEY}=true; expires=${expires.toUTCString()}; path=/; SameSite=Lax`
+    document.cookie = `${COOKIE_CONSENT_KEY}=true; ${cookieAttributes}`
 
     // Save preferences
     document.cookie = `${COOKIE_PREFERENCES_KEY}=${encodeURIComponent(
       JSON.stringify(prefs)
-    )}; expires=${expires.toUTCString()}; path=/; SameSite=Lax`
+    )}; ${cookieAttributes}`
 
     setPreferences(prefs)
     setHasConsented(true)
@@ -89,9 +109,9 @@ export function useCookieConsent() {
     // Clean up cookies based on preferences
     if (!prefs.analytics) {
       // Remove Google Analytics cookies if analytics disabled
-      document.cookie = '_ga=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;'
-      document.cookie = '_gid=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;'
-      document.cookie = '_gat=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;'
+      document.cookie = '_ga=; path=/; Max-Age=0'
+      document.cookie = '_gid=; path=/; Max-Age=0'
+      document.cookie = '_gat=; path=/; Max-Age=0'
     }
 
     if (!prefs.marketing) {
@@ -101,8 +121,8 @@ export function useCookieConsent() {
   }
 
   const resetConsent = () => {
-    document.cookie = `${COOKIE_CONSENT_KEY}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`
-    document.cookie = `${COOKIE_PREFERENCES_KEY}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`
+    document.cookie = `${COOKIE_CONSENT_KEY}=; path=/; Max-Age=0`
+    document.cookie = `${COOKIE_PREFERENCES_KEY}=; path=/; Max-Age=0`
     setHasConsented(false)
     setPreferences({
       necessary: true,
