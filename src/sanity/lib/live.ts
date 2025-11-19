@@ -1,13 +1,15 @@
-// Querying with "sanityFetch" will keep content automatically updated
-// Before using it, import and render "<SanityLive />" in your layout, see
-// https://github.com/sanity-io/next-sanity#live-content-api for more information.
-import { defineLive } from "next-sanity";
+// Live content API for Sanity
+// Note: defineLive was removed in next-sanity 11.x
+// For live previews in next-sanity 11.x+, use @sanity/preview-kit
+// See: https://github.com/sanity-io/next-sanity#live-content-api
+
 import { client } from './client'
 
-export const { sanityFetch, SanityLive } = defineLive({ 
-  client: client.withConfig({ 
-    // Live content is currently only available on the experimental API
-    // https://www.sanity.io/docs/api-versioning
-    apiVersion: 'vX' 
-  }) 
-});
+// Placeholder exports for future live content implementation
+// When implementing live previews, migrate to @sanity/preview-kit
+export const sanityFetch = async (query: string, params = {}) => {
+  return client.fetch(query, params)
+}
+
+// Placeholder component - not currently used
+export const SanityLive = () => null
