@@ -14,6 +14,10 @@ export const metadata: Metadata = {
   description: 'British crafted premium rum. Small-batch spirits for adventurers and rum enthusiasts.',
 }
 
+// Configure for Edge Runtime and dynamic rendering
+export const runtime = 'edge'
+export const dynamic = 'force-dynamic'
+
 // Helper to format price with currency symbol
 function formatPrice(amount: string, currencyCode: string): string {
   const price = parseFloat(amount)

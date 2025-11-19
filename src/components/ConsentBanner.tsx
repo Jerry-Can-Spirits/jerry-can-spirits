@@ -1,6 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
+import { useCookieConsent } from '@/hooks/useCookieConsent';
 
 declare global {
   interface Window {
@@ -9,78 +11,56 @@ declare global {
 }
 
 export default function ConsentBanner() {
-  const [showBanner, setShowBanner] = useState(false);
+  const { hasConsented, isLoading, preferences, savePreferences } = useCookieConsent();
   const [showDetails, setShowDetails] = useState(false);
-  const [preferences, setPreferences] = useState({
+  const [localPreferences, setLocalPreferences] = useState({
+    necessary: true,
     analytics: false,
-    advertising: false,
-    personalization: false
+    marketing: false,
   });
 
+  // Sync local preferences with saved preferences when they change
   useEffect(() => {
-    // Check if consent has already been given
-    const consent = localStorage.getItem('cookieConsent');
-    if (!consent) {
-      setShowBanner(true);
-    }
+    setLocalPreferences(preferences);
+  }, [preferences]);
 
-    // Add global function to recall banner (for testing/management)
-    (window as typeof window & { showCookieBanner?: () => void }).showCookieBanner = () => {
-      localStorage.removeItem('cookieConsent');
-      setShowBanner(true);
-    };
-  }, []);
+  // Don't show banner if user has already consented or while loading
+  if (isLoading || hasConsented) {
+    return null;
+  }
 
-  const updateConsent = (consent: {
-    analytics: boolean;
-    advertising: boolean;
-    personalization: boolean;
-  }) => {
+  const updateConsent = (analytics: boolean, marketing: boolean) => {
     if (typeof window !== 'undefined' && window.gtag) {
       window.gtag('consent', 'update', {
-        'analytics_storage': consent.analytics ? 'granted' : 'denied',
-        'ad_storage': consent.advertising ? 'granted' : 'denied',
-        'ad_user_data': consent.advertising ? 'granted' : 'denied',
-        'ad_personalization': consent.personalization ? 'granted' : 'denied',
+        'analytics_storage': analytics ? 'granted' : 'denied',
+        'ad_storage': marketing ? 'granted' : 'denied',
+        'ad_user_data': marketing ? 'granted' : 'denied',
+        'ad_personalization': marketing ? 'granted' : 'denied',
       });
     }
 
-    // Store consent choices
-    localStorage.setItem('cookieConsent', JSON.stringify({
-      analytics: consent.analytics,
-      advertising: consent.advertising,
-      personalization: consent.personalization,
-      timestamp: Date.now()
-    }));
-
-    setShowBanner(false);
-  };
-
-  const acceptAll = () => {
-    updateConsent({
-      analytics: true,
-      advertising: true,
-      personalization: true
+    savePreferences({
+      necessary: true,
+      analytics,
+      marketing,
     });
   };
 
-  const rejectAll = () => {
-    updateConsent({
-      analytics: false,
-      advertising: false,
-      personalization: false
-    });
+  const handleAcceptAll = () => {
+    updateConsent(true, true);
   };
 
-  const acceptEssential = () => {
-    updateConsent({
-      analytics: true,
-      advertising: false,
-      personalization: false
-    });
+  const handleRejectAll = () => {
+    updateConsent(false, false);
   };
 
-  if (!showBanner) return null;
+  const handleAcceptEssential = () => {
+    updateConsent(true, false);
+  };
+
+  const handleSaveCustom = () => {
+    updateConsent(localPreferences.analytics, localPreferences.marketing);
+  };
 
   return (
     <div className="fixed bottom-0 left-0 right-0 bg-jerry-green-800 border-t border-jerry-gold-500/20 p-4 z-50 shadow-lg">
@@ -92,8 +72,14 @@ export default function ConsentBanner() {
                 Cookie Consent
               </h3>
               <p className="text-white text-sm">
-                We use cookies to improve your experience on our site, analyze traffic, and for marketing purposes. 
-                You can manage your preferences below.
+                We use cookies to improve your experience on our site, analyze traffic, and for marketing purposes.{' '}
+                <Link href="/cookie-preferences" className="text-jerry-gold-300 hover:text-jerry-gold-200 underline">
+                  Manage your preferences
+                </Link>
+                {' '}or read our{' '}
+                <Link href="/cookie-policy" className="text-jerry-gold-300 hover:text-jerry-gold-200 underline">
+                  Cookie Policy
+                </Link>.
               </p>
             </div>
             <div className="flex flex-col sm:flex-row gap-2 min-w-fit">
@@ -101,22 +87,22 @@ export default function ConsentBanner() {
                 onClick={() => setShowDetails(true)}
                 className="px-4 py-2 text-white border border-jerry-gold-500/50 rounded hover:bg-jerry-gold-500/20 hover:border-jerry-gold-400 hover:scale-105 transition-all text-sm shadow-md"
               >
-                Manage Preferences
+                Customize
               </button>
               <button
-                onClick={rejectAll}
+                onClick={handleRejectAll}
                 className="px-4 py-2 text-white border border-jerry-gold-500/50 rounded hover:bg-jerry-gold-500/20 hover:border-jerry-gold-400 hover:scale-105 transition-all text-sm shadow-md"
               >
                 Reject All
               </button>
               <button
-                onClick={acceptEssential}
+                onClick={handleAcceptEssential}
                 className="px-4 py-2 bg-jerry-gold-600 text-white rounded hover:bg-jerry-gold-500 hover:scale-105 transition-all text-sm font-medium shadow-lg"
               >
-                Accept Essential
+                Necessary Only
               </button>
               <button
-                onClick={acceptAll}
+                onClick={handleAcceptAll}
                 className="px-4 py-2 bg-jerry-gold-500 text-white rounded hover:bg-jerry-gold-400 hover:scale-105 transition-all text-sm font-medium shadow-lg"
               >
                 Accept All
@@ -154,50 +140,32 @@ export default function ConsentBanner() {
                   <p className="text-white text-xs">Help us understand how visitors interact with our website</p>
                 </div>
                 <label className="relative inline-flex items-center cursor-pointer">
-                  <input 
-                    type="checkbox" 
-                    className="sr-only" 
-                    checked={preferences.analytics}
-                    onChange={(e) => setPreferences(prev => ({ ...prev, analytics: e.target.checked }))}
+                  <input
+                    type="checkbox"
+                    className="sr-only"
+                    checked={localPreferences.analytics}
+                    onChange={(e) => setLocalPreferences(prev => ({ ...prev, analytics: e.target.checked }))}
                   />
-                  <div className={`w-11 h-6 rounded-full relative transition-all duration-300 hover:scale-105 ${preferences.analytics ? 'bg-yellow-500' : 'bg-slate-500'}`}>
-                    <div className={`w-5 h-5 bg-white rounded-full absolute top-[2px] transition-all duration-300 ${preferences.analytics ? 'left-[22px]' : 'left-[2px]'}`}></div>
+                  <div className={`w-11 h-6 rounded-full relative transition-all duration-300 hover:scale-105 ${localPreferences.analytics ? 'bg-yellow-500' : 'bg-slate-500'}`}>
+                    <div className={`w-5 h-5 bg-white rounded-full absolute top-[2px] transition-all duration-300 ${localPreferences.analytics ? 'left-[22px]' : 'left-[2px]'}`}></div>
                   </div>
                 </label>
               </div>
               
               <div className="flex items-center justify-between p-3 bg-jerry-green-700/30 rounded">
                 <div>
-                  <h4 className="text-white font-medium">Advertising Cookies</h4>
-                  <p className="text-white text-xs">Used to deliver relevant ads and measure campaign effectiveness</p>
+                  <h4 className="text-white font-medium">Marketing Cookies</h4>
+                  <p className="text-white text-xs">Used for email marketing, advertising, and promotional campaigns</p>
                 </div>
                 <label className="relative inline-flex items-center cursor-pointer">
-                  <input 
-                    type="checkbox" 
-                    className="sr-only" 
-                    checked={preferences.advertising}
-                    onChange={(e) => setPreferences(prev => ({ ...prev, advertising: e.target.checked }))}
+                  <input
+                    type="checkbox"
+                    className="sr-only"
+                    checked={localPreferences.marketing}
+                    onChange={(e) => setLocalPreferences(prev => ({ ...prev, marketing: e.target.checked }))}
                   />
-                  <div className={`w-11 h-6 rounded-full relative transition-all duration-300 hover:scale-105 ${preferences.advertising ? 'bg-yellow-500' : 'bg-slate-500'}`}>
-                    <div className={`w-5 h-5 bg-white rounded-full absolute top-[2px] transition-all duration-300 ${preferences.advertising ? 'left-[22px]' : 'left-[2px]'}`}></div>
-                  </div>
-                </label>
-              </div>
-              
-              <div className="flex items-center justify-between p-3 bg-jerry-green-700/30 rounded">
-                <div>
-                  <h4 className="text-white font-medium">Personalisation Cookies</h4>
-                  <p className="text-white text-xs">Used to remember your preferences and provide personalised content</p>
-                </div>
-                <label className="relative inline-flex items-center cursor-pointer">
-                  <input 
-                    type="checkbox" 
-                    className="sr-only" 
-                    checked={preferences.personalization}
-                    onChange={(e) => setPreferences(prev => ({ ...prev, personalization: e.target.checked }))}
-                  />
-                  <div className={`w-11 h-6 rounded-full relative transition-all duration-300 hover:scale-105 ${preferences.personalization ? 'bg-yellow-500' : 'bg-slate-500'}`}>
-                    <div className={`w-5 h-5 bg-white rounded-full absolute top-[2px] transition-all duration-300 ${preferences.personalization ? 'left-[22px]' : 'left-[2px]'}`}></div>
+                  <div className={`w-11 h-6 rounded-full relative transition-all duration-300 hover:scale-105 ${localPreferences.marketing ? 'bg-yellow-500' : 'bg-slate-500'}`}>
+                    <div className={`w-5 h-5 bg-white rounded-full absolute top-[2px] transition-all duration-300 ${localPreferences.marketing ? 'left-[22px]' : 'left-[2px]'}`}></div>
                   </div>
                 </label>
               </div>
@@ -205,23 +173,19 @@ export default function ConsentBanner() {
             
             <div className="flex justify-end gap-2 pt-2">
               <button
-                onClick={rejectAll}
+                onClick={handleRejectAll}
                 className="px-4 py-2 text-white border border-jerry-gold-500/50 rounded hover:bg-jerry-gold-500/20 hover:border-jerry-gold-400 transition-all text-sm"
               >
                 Reject All
               </button>
               <button
-                onClick={() => updateConsent({
-                  analytics: preferences.analytics,
-                  advertising: preferences.advertising,
-                  personalization: preferences.personalization
-                })}
+                onClick={handleSaveCustom}
                 className="px-4 py-2 bg-jerry-gold-600 text-white rounded hover:bg-jerry-gold-500 hover:scale-105 transition-all text-sm font-medium shadow-lg"
               >
                 Save Preferences
               </button>
               <button
-                onClick={acceptAll}
+                onClick={handleAcceptAll}
                 className="px-4 py-2 bg-jerry-gold-500 text-white rounded hover:bg-jerry-gold-400 hover:scale-105 transition-all text-sm font-medium shadow-lg"
               >
                 Accept All

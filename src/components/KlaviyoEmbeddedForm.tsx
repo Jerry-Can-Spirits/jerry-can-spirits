@@ -19,7 +19,25 @@ export default function KlaviyoEmbeddedForm() {
       }
     }, 100)
 
-    return () => clearInterval(checkKlaviyo)
+    // Listen for Klaviyo form submission success
+    const handleFormSubmit = (event: Event) => {
+      const customEvent = event as CustomEvent
+      if (customEvent.detail?.formId === 'S8TnNz') {
+        // Set cookie for 1 year when form is successfully submitted
+        const expires = new Date()
+        expires.setFullYear(expires.getFullYear() + 1)
+        document.cookie = `jcs_newsletter_signup=true; expires=${expires.toUTCString()}; path=/; SameSite=Lax`
+        console.log('Newsletter signup cookie set')
+      }
+    }
+
+    // Klaviyo fires this event on successful form submission
+    window.addEventListener('klaviyoForms:submit', handleFormSubmit)
+
+    return () => {
+      clearInterval(checkKlaviyo)
+      window.removeEventListener('klaviyoForms:submit', handleFormSubmit)
+    }
   }, [])
 
   return (
