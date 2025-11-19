@@ -5,84 +5,8 @@ const nextConfig: NextConfig = {
   // Configure for Cloudflare Pages (full-stack mode)
   trailingSlash: true,
 
-  // Security headers
-  headers: async () => {
-    return [
-      // Less restrictive CSP for Sanity Studio
-      {
-        source: '/studio/:path*',
-        headers: [
-          {
-            key: 'Content-Security-Policy',
-            value: [
-              "default-src 'self'",
-              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https: data:",
-              "style-src 'self' 'unsafe-inline' https: data:",
-              "font-src 'self' https: data:",
-              "img-src 'self' data: https: blob:",
-              "media-src 'self' https: data:",
-              "connect-src 'self' https: wss: ws:",
-              "frame-src 'self' https:",
-              "object-src 'none'",
-              "base-uri 'self'",
-              "form-action 'self' https:",
-              "frame-ancestors 'none'"
-            ].join('; ')
-          }
-        ]
-      },
-      // Stricter CSP for all other routes
-      {
-        source: '/((?!studio).*)',
-        headers: [
-          {
-            key: 'Content-Security-Policy',
-            value: [
-              "default-src 'self'",
-              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://*.klaviyo.com https://tagmanager.google.com blob:",
-              "script-src-elem 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com https://*.klaviyo.com https://tagmanager.google.com",
-              "worker-src 'self' blob:",
-              "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://*.klaviyo.com",
-              "style-src-elem 'self' 'unsafe-inline' https://fonts.googleapis.com https://*.klaviyo.com",
-              "font-src 'self' https://fonts.gstatic.com",
-              "img-src 'self' data: https: blob:",
-              "media-src 'self' https:",
-              "connect-src 'self' http://localhost:* https://www.google-analytics.com https://www.googletagmanager.com https://analytics.google.com https://region1.google-analytics.com https://*.klaviyo.com https://cdn.sanity.io https://*.sanity.io https://*.ingest.sentry.io wss: ws:",
-              "frame-src 'self' https://www.youtube.com https://www.vimeo.com",
-              "object-src 'none'",
-              "base-uri 'self'",
-              "form-action 'self' https://manage.kmail-lists.com",
-              "frame-ancestors 'none'"
-            ].join('; ')
-          },
-          {
-            key: 'X-Frame-Options',
-            value: 'DENY'
-          },
-          {
-            key: 'X-Content-Type-Options',
-            value: 'nosniff'
-          },
-          {
-            key: 'Referrer-Policy',
-            value: 'strict-origin-when-cross-origin'
-          },
-          {
-            key: 'Permissions-Policy',
-            value: 'camera=(), microphone=(), geolocation=(), payment=(), usb=(), magnetometer=(), gyroscope=(), accelerometer=()'
-          },
-          {
-            key: 'X-XSS-Protection',
-            value: '1; mode=block'
-          },
-          {
-            key: 'X-DNS-Prefetch-Control',
-            value: 'on'
-          }
-        ]
-      }
-    ]
-  },
+  // Security headers are now managed in middleware.ts for better control
+  // This ensures consistent CSP application and prevents header conflicts
 
   // Enable build caching
   cacheHandler: undefined, // Use default caching
