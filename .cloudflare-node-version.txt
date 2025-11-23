@@ -1,0 +1,23 @@
+CLOUDFLARE PAGES NODE.JS VERSION FIX
+=====================================
+
+Issue: Cloudflare Pages is using Node.js 20.19.2 instead of Node.js 22
+
+Fix Instructions:
+1. Go to Cloudflare Dashboard: https://dash.cloudflare.com
+2. Select your account → Pages → jerry-can-spirits project
+3. Go to Settings → Environment variables
+4. Add a new environment variable:
+   - Variable name: NODE_VERSION
+   - Value: 22.11.0
+   - Environment: Production (and Preview if desired)
+5. Click "Save"
+6. Redeploy your site
+
+Alternative:
+- The .nvmrc and .node-version files should work, but Cloudflare sometimes needs the explicit environment variable.
+
+Why this matters:
+- Node.js 20 is in maintenance mode and approaching end-of-life
+- Your package.json requires Node >= 22.0.0
+- Node 22 has better performance and security
