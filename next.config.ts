@@ -103,7 +103,7 @@ export default withSentryConfig(nextConfig, {
   // For all available options, see:
   // https://github.com/getsentry/sentry-webpack-plugin#options
 
-  org: "jerry-can-spirits",
+  org: "jerry-can-spirits-ltd",
   project: "jerry-can-spirits",
 
   // Only print logs for uploading source maps in CI
