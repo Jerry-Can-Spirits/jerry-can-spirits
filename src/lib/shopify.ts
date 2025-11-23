@@ -39,6 +39,7 @@ export interface ShopifyProduct {
   priceRange: ShopifyPriceRange;
   images: ShopifyImage[];
   variants?: ShopifyProductVariant[];
+  tags?: string[];
 }
 
 export interface ShopifyCollection {
@@ -183,6 +184,7 @@ export async function getProductsByCollection(collectionHandle: string): Promise
               title
               handle
               description
+              tags
               priceRange {
                 minVariantPrice {
                   amount

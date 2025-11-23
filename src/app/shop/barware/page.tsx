@@ -27,6 +27,39 @@ function formatPrice(amount: string, currencyCode: string): string {
   return `${symbol}${price.toFixed(2)}`
 }
 
+// Category icons mapping
+const categoryIcons: Record<string, string> = {
+  'Glassware': '🍷',
+  'Bar Tools': '🛠️',
+  'Accessories': '✨',
+  'Cocktail Shakers': '🍸',
+  'Measuring Tools': '📏',
+}
+
+// Helper to group products by tags
+function groupProductsByTag(products: ShopifyProduct[]): Record<string, ShopifyProduct[]> {
+  const grouped: Record<string, ShopifyProduct[]> = {}
+
+  products.forEach(product => {
+    if (product.tags && product.tags.length > 0) {
+      product.tags.forEach(tag => {
+        if (!grouped[tag]) {
+          grouped[tag] = []
+        }
+        grouped[tag].push(product)
+      })
+    } else {
+      // Products without tags go into "Other"
+      if (!grouped['Other']) {
+        grouped['Other'] = []
+      }
+      grouped['Other'].push(product)
+    }
+  })
+
+  return grouped
+}
+
 export default async function BarwarePage() {
   let products: ShopifyProduct[] = []
   let error: string | null = null
@@ -125,6 +158,25 @@ export default async function BarwarePage() {
     )
   }
 
+  // Group products by tag
+  const groupedProducts = groupProductsByTag(products)
+
+  // Sort categories: predefined order first, then alphabetically
+  const categoryOrder = ['Glassware', 'Bar Tools', 'Cocktail Shakers', 'Measuring Tools', 'Accessories']
+  const sortedCategories = Object.keys(groupedProducts).sort((a, b) => {
+    const aIndex = categoryOrder.indexOf(a)
+    const bIndex = categoryOrder.indexOf(b)
+
+    // If both are in predefined order, sort by that order
+    if (aIndex !== -1 && bIndex !== -1) return aIndex - bIndex
+    // If only a is in predefined order, it comes first
+    if (aIndex !== -1) return -1
+    // If only b is in predefined order, it comes first
+    if (bIndex !== -1) return 1
+    // Otherwise sort alphabetically
+    return a.localeCompare(b)
+  })
+
   // Success state - products loaded from Shopify
   return (
     <main className="min-h-screen py-20">
@@ -166,10 +218,22 @@ export default async function BarwarePage() {
         </div>
       </section>
 
-      {/* Products Grid */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-          {products.map((product: ShopifyProduct) => (
+      {/* Products by Category */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
+        {sortedCategories.map((category) => (
+          <div key={category}>
+            {/* Category Header */}
+            <div className="mb-8">
+              <h2 className="text-3xl font-serif font-bold text-white flex items-center gap-3">
+                <span className="text-4xl">{categoryIcons[category] || '📦'}</span>
+                {category}
+              </h2>
+              <div className="mt-2 h-1 w-24 bg-gradient-to-r from-gold-500 to-transparent rounded-full"></div>
+            </div>
+
+            {/* Products Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+              {groupedProducts[category].map((product: ShopifyProduct) => (
             <Link
               key={product.id}
               href={`/shop/product/${product.handle}`}
@@ -230,8 +294,10 @@ export default async function BarwarePage() {
                 </div>
               </div>
             </Link>
-          ))}
-        </div>
+              ))}
+            </div>
+          </div>
+        ))}
       </section>
 
       {/* CTA Section */}
