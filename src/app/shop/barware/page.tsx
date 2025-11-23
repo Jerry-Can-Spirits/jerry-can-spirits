@@ -4,7 +4,7 @@ import { getProductsByCollection, type ShopifyProduct } from '@/lib/shopify'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Bar Hardware & Barware | Jerry Can Spirits',
+  title: 'Barware | Jerry Can Spirits',
   description: 'Professional bar tools and equipment for home mixologists. Premium barware and cocktail accessories.',
 }
 
@@ -27,7 +27,7 @@ function formatPrice(amount: string, currencyCode: string): string {
   return `${symbol}${price.toFixed(2)}`
 }
 
-export default async function HardwarePage() {
+export default async function BarwarePage() {
   let products: ShopifyProduct[] = []
   let error: string | null = null
 
@@ -133,7 +133,7 @@ export default async function HardwarePage() {
         <nav className="text-sm text-parchment-400">
           <Link href="/shop" className="hover:text-gold-300 transition-colors">Shop</Link>
           <span className="mx-2">→</span>
-          <span className="text-gold-300">Bar Hardware</span>
+          <span className="text-gold-300">Barware</span>
         </nav>
       </div>
 
@@ -147,7 +147,7 @@ export default async function HardwarePage() {
           </div>
 
           <h1 className="text-4xl sm:text-6xl font-serif font-bold text-white mb-6">
-            Bar Hardware
+            Barware
             <br />
             <span className="text-gold-300">Tools for the Trade</span>
           </h1>

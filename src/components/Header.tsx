@@ -35,7 +35,7 @@ export default function Header() {
       href: '/shop',
       dropdown: [
         { name: 'Drinks', href: '/shop/drinks', description: 'Premium rum collection' },
-        { name: 'Hardware', href: '/shop/hardware', description: 'Expedition gear' },
+        { name: 'Barware', href: '/shop/barware', description: 'Bar tools & equipment' },
         { name: 'Clothing', href: '/shop/clothing', description: 'Adventure apparel' },
       ]
     },
