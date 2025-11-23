@@ -1,81 +1,256 @@
 import Link from 'next/link'
+import Image from 'next/image'
+import { getProductsByCollection, type ShopifyProduct } from '@/lib/shopify'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Bar Hardware - Coming Soon | Jerry Can Spirits',
-  description: 'Professional bar tools and equipment for home mixologists. Premium barware launching soon.',
+  title: 'Bar Hardware & Barware | Jerry Can Spirits',
+  description: 'Professional bar tools and equipment for home mixologists. Premium barware and cocktail accessories.',
 }
 
-export default function HardwarePage() {
-  return (
-    <main className="min-h-screen flex items-center justify-center px-4 py-16">
-      <div className="max-w-2xl w-full text-center space-y-8">
-        {/* Tools Icon */}
-        <div className="flex justify-center">
-          <div className="w-24 h-24 rounded-full bg-jerry-green-800/20 flex items-center justify-center">
-            <svg
-              className="w-12 h-12 text-gold-500"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
+// Configure for Edge Runtime and dynamic rendering
+export const runtime = 'edge'
+export const dynamic = 'force-dynamic'
+
+// Helper to format price with currency symbol
+function formatPrice(amount: string, currencyCode: string): string {
+  const price = parseFloat(amount)
+
+  // Currency symbols
+  const symbols: Record<string, string> = {
+    GBP: '£',
+    USD: '$',
+    EUR: '€',
+  }
+
+  const symbol = symbols[currencyCode] || currencyCode
+  return `${symbol}${price.toFixed(2)}`
+}
+
+export default async function HardwarePage() {
+  let products: ShopifyProduct[] = []
+  let error: string | null = null
+
+  try {
+    // Fetch products from the 'barware' collection in Shopify
+    products = await getProductsByCollection('barware')
+  } catch (e) {
+    error = e instanceof Error ? e.message : 'Unknown error occurred'
+    console.error('Shopify fetch error:', e)
+  }
+
+  // Error state
+  if (error) {
+    return (
+      <main className="min-h-screen py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-2xl mx-auto text-center space-y-6">
+            <div className="inline-block px-4 py-2 bg-red-800/60 backdrop-blur-sm rounded-full border border-red-500/30 mb-6">
+              <span className="text-red-300 text-sm font-semibold uppercase tracking-widest">
+                Connection Error
+              </span>
+            </div>
+
+            <h1 className="text-4xl sm:text-5xl font-serif font-bold text-white mb-6">
+              Shopify Connection Failed
+            </h1>
+
+            <div className="bg-red-900/20 border border-red-500/30 rounded-lg p-6 text-left">
+              <p className="text-red-300 font-mono text-sm mb-4">
+                Error: {error}
+              </p>
+
+              <div className="space-y-2 text-parchment-300 text-sm">
+                <p className="font-semibold text-gold-300">Troubleshooting steps:</p>
+                <ol className="list-decimal list-inside space-y-1 ml-2">
+                  <li>Check your .env.local file has the correct Shopify credentials</li>
+                  <li>Verify you have a collection with handle "barware" in Shopify</li>
+                  <li>Ensure the collection is published to your Storefront sales channel</li>
+                </ol>
+              </div>
+            </div>
+
+            <Link
+              href="/shop"
+              className="inline-block px-8 py-3 bg-gold-500 text-jerry-green-900 font-semibold rounded-lg hover:bg-gold-400 transition-colors"
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z"
-              />
-            </svg>
+              Back to Shop
+            </Link>
           </div>
         </div>
+      </main>
+    )
+  }
 
-        {/* Heading */}
-        <div className="space-y-4">
-          <h1 className="text-4xl md:text-5xl font-playfair font-bold text-gold-500">
-            Bar Hardware Coming Soon
+  // Empty state - no products found
+  if (products.length === 0) {
+    return (
+      <main className="min-h-screen py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-2xl mx-auto text-center space-y-6">
+            <div className="inline-block px-4 py-2 bg-jerry-green-800/60 backdrop-blur-sm rounded-full border border-gold-500/30 mb-6">
+              <span className="text-gold-300 text-sm font-semibold uppercase tracking-widest">
+                Shopify Connected ✓
+              </span>
+            </div>
+
+            <h1 className="text-4xl sm:text-5xl font-serif font-bold text-white mb-6">
+              Barware Coming Soon
+            </h1>
+
+            <p className="text-xl text-parchment-200">
+              The Shopify connection is working, but no products were found in the "barware" collection.
+            </p>
+
+            <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20 text-left">
+              <p className="text-parchment-300 text-sm mb-4">
+                Make sure you have:
+              </p>
+              <ul className="list-disc list-inside space-y-1 text-parchment-300 text-sm ml-2">
+                <li>Created a collection in Shopify with the handle "barware"</li>
+                <li>Added your barware products to that collection</li>
+                <li>Published the collection to your Storefront sales channel</li>
+              </ul>
+            </div>
+
+            <Link
+              href="/shop"
+              className="inline-block px-8 py-3 bg-gold-500 text-jerry-green-900 font-semibold rounded-lg hover:bg-gold-400 transition-colors"
+            >
+              Back to Shop
+            </Link>
+          </div>
+        </div>
+      </main>
+    )
+  }
+
+  // Success state - products loaded from Shopify
+  return (
+    <main className="min-h-screen py-20">
+      {/* Breadcrumb */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
+        <nav className="text-sm text-parchment-400">
+          <Link href="/shop" className="hover:text-gold-300 transition-colors">Shop</Link>
+          <span className="mx-2">→</span>
+          <span className="text-gold-300">Bar Hardware</span>
+        </nav>
+      </div>
+
+      {/* Page Header */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
+        <div className="text-center mb-12">
+          <div className="inline-block px-4 py-2 bg-jerry-green-800/60 backdrop-blur-sm rounded-full border border-gold-500/30 mb-6">
+            <span className="text-gold-300 text-sm font-semibold uppercase tracking-widest">
+              Premium Barware
+            </span>
+          </div>
+
+          <h1 className="text-4xl sm:text-6xl font-serif font-bold text-white mb-6">
+            Bar Hardware
+            <br />
+            <span className="text-gold-300">Tools for the Trade</span>
           </h1>
-          <p className="text-xl text-gray-300 max-w-xl mx-auto">
-            Professional-grade bar tools for the home mixologist. Precision equipment to help you
-            craft the perfect cocktail every time.
+
+          <p className="text-xl text-parchment-300 max-w-3xl mx-auto leading-relaxed">
+            Professional-grade bar tools and equipment for the home mixologist. Precision instruments to help you craft the perfect cocktail every time.
           </p>
-        </div>
 
-        {/* Features */}
-        <div className="space-y-3 pt-4 text-left max-w-md mx-auto">
-          <div className="flex items-start gap-3">
-            <span className="text-gold-500 mt-1">✓</span>
-            <p className="text-gray-300">Precision jiggers and measuring tools</p>
-          </div>
-          <div className="flex items-start gap-3">
-            <span className="text-gold-500 mt-1">✓</span>
-            <p className="text-gray-300">Professional shakers and strainers</p>
-          </div>
-          <div className="flex items-start gap-3">
-            <span className="text-gold-500 mt-1">✓</span>
-            <p className="text-gray-300">Quality glassware for every occasion</p>
-          </div>
-          <div className="flex items-start gap-3">
-            <span className="text-gold-500 mt-1">✓</span>
-            <p className="text-gray-300">Essential bar accessories and gadgets</p>
+          {/* Shopify Connection Success Indicator */}
+          <div className="mt-6 inline-flex items-center gap-2 px-4 py-2 bg-green-800/20 border border-green-500/30 rounded-lg">
+            <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
+            <span className="text-green-300 text-sm font-medium">
+              {products.length} {products.length === 1 ? 'product' : 'products'} loaded from Shopify
+            </span>
           </div>
         </div>
+      </section>
 
-        {/* CTAs */}
-        <div className="flex flex-col sm:flex-row gap-4 justify-center pt-8">
-          <Link
-            href="/#newsletter-signup"
-            className="px-8 py-3 bg-gold-500 text-jerry-green-900 font-semibold rounded-lg hover:bg-gold-400 transition-colors"
-          >
-            Join the Waitlist
-          </Link>
+      {/* Products Grid */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+          {products.map((product: ShopifyProduct) => (
+            <Link
+              key={product.id}
+              href={`/shop/product/${product.handle}`}
+              className="group bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl border border-gold-500/20 overflow-hidden hover:border-gold-400/40 transition-all duration-300 hover:scale-105"
+            >
+              {/* Product Image */}
+              <div className="relative aspect-square bg-jerry-green-800/20">
+                {product.images && product.images.length > 0 ? (
+                  <Image
+                    src={product.images[0].url}
+                    alt={product.images[0].altText || product.title}
+                    fill
+                    className="object-cover group-hover:scale-110 transition-transform duration-500"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+                  />
+                ) : (
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <svg
+                      className="w-16 h-16 text-gold-500/30"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z"
+                      />
+                    </svg>
+                  </div>
+                )}
+              </div>
+
+              {/* Product Details */}
+              <div className="p-6 space-y-3">
+                <h2 className="text-xl font-serif font-bold text-white group-hover:text-gold-300 transition-colors">
+                  {product.title}
+                </h2>
+
+                {product.description && (
+                  <p className="text-parchment-300 text-sm line-clamp-2">
+                    {product.description}
+                  </p>
+                )}
+
+                <div className="flex items-center justify-between pt-2">
+                  <p className="text-2xl font-serif font-bold text-gold-400">
+                    {formatPrice(
+                      product.priceRange.minVariantPrice.amount,
+                      product.priceRange.minVariantPrice.currencyCode
+                    )}
+                  </p>
+
+                  <span className="text-gold-300 text-sm font-semibold group-hover:translate-x-1 transition-transform">
+                    View →
+                  </span>
+                </div>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-20">
+        <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-12 border border-gold-500/20 text-center">
+          <h2 className="text-3xl font-serif font-bold text-white mb-4">
+            Master Your Craft
+          </h2>
+          <p className="text-parchment-300 mb-6 max-w-2xl mx-auto">
+            Explore our Field Manual for cocktail techniques, equipment guides, and expert tips.
+          </p>
           <Link
             href="/field-manual/equipment"
-            className="px-8 py-3 border-2 border-gold-500 text-gold-500 font-semibold rounded-lg hover:bg-gold-500/10 transition-colors"
+            className="inline-block px-8 py-3 bg-gold-500 text-jerry-green-900 font-semibold rounded-lg hover:bg-gold-400 transition-colors"
           >
             Equipment Guide
           </Link>
         </div>
-      </div>
+      </section>
     </main>
   )
 }
