@@ -1,0 +1,117 @@
+OPENNEXT ADAPTER MIGRATION PLAN
+=================================
+
+Current Status: Using @cloudflare/next-on-pages v1.13.16 (DEPRECATED)
+
+Deprecation Message:
+"Please use the OpenNext adapter instead: https://opennext.js.org/cloudflare"
+
+WHY MIGRATE:
+============
+1. @cloudflare/next-on-pages is no longer maintained
+2. Won't receive security updates or bug fixes
+3. May not support future Next.js versions
+4. OpenNext is the officially recommended replacement
+
+WHAT IS OPENNEXT:
+=================
+OpenNext is an open-source Next.js adapter that:
+- Converts Next.js apps to run on serverless platforms
+- Supports multiple platforms (Cloudflare, AWS, Netlify)
+- Actively maintained by the community
+- Better support for Next.js App Router features
+
+MIGRATION COMPLEXITY: MEDIUM
+=============================
+
+What Changes:
+- Build command changes
+- Deploy process changes
+- Configuration file structure
+- May need to adjust Edge Runtime settings
+
+What Stays the Same:
+- Your Next.js code (no changes needed!)
+- Environment variables
+- Shopify/Sanity integrations
+- All your routes and pages
+
+MIGRATION STEPS (When Ready):
+==============================
+
+1. Research Phase (DO NOW):
+   - Read docs: https://opennext.js.org/cloudflare
+   - Review examples: https://github.com/opennextjs/opennextjs-cloudflare
+   - Check compatibility with Next.js 15
+
+2. Preparation:
+   - Create a backup branch
+   - Test current build process locally
+   - Document current environment variables
+
+3. Implementation:
+   - Uninstall: npm uninstall @cloudflare/next-on-pages
+   - Install: npm install --save-dev @opennextjs/cloudflare
+   - Update package.json build scripts
+   - Update wrangler.toml (may need to create it)
+   - Configure OpenNext specific settings
+
+4. Testing:
+   - Test local builds
+   - Test preview deployments
+   - Verify Edge Runtime routes work (/shop/drinks, /shop/barware, /shop/product/[handle])
+   - Test middleware (CSP headers, etc.)
+   - Verify Shopify integration
+   - Check Sanity Studio
+
+5. Deployment:
+   - Deploy to preview environment
+   - Full functionality testing
+   - Deploy to production
+
+ESTIMATED TIMELINE:
+===================
+- Research: 1-2 hours
+- Implementation: 2-4 hours
+- Testing: 2-3 hours
+- Total: 5-9 hours
+
+RISKS:
+======
+- Build process may need adjustments
+- Edge Runtime compatibility issues
+- Potential downtime during migration
+- Learning curve for new tooling
+
+BENEFITS:
+=========
+✅ Active maintenance and updates
+✅ Better Next.js 15 compatibility
+✅ Community support
+✅ Fixes cookie vulnerability (@cloudflare/next-on-pages has deprecated cookie dep)
+✅ Future-proof your deployment
+
+URGENCY: LOW TO MEDIUM
+======================
+Current tool still works, but should migrate within 3-6 months.
+
+RECOMMENDATION:
+===============
+1. Keep using @cloudflare/next-on-pages for now (it works)
+2. Plan migration for Q1 2026 or when you have dedicated time
+3. Monitor OpenNext releases for stability
+4. Migrate BEFORE upgrading to Next.js 16 (when it releases)
+
+RESOURCES:
+==========
+- Docs: https://opennext.js.org/cloudflare
+- GitHub: https://github.com/opennextjs/opennextjs-cloudflare
+- Discord: https://discord.gg/opennext (for migration help)
+- Migration guide: https://opennext.js.org/cloudflare/get-started
+
+ALTERNATIVE:
+============
+If OpenNext proves difficult, consider:
+- Vercel (native Next.js hosting, easiest but costs more)
+- AWS with OpenNext AWS adapter
+- Netlify with their Next.js adapter

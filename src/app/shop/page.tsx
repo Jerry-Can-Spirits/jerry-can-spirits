@@ -50,10 +50,10 @@ export default function ShopPage() {
             <p className="text-sm text-gray-400">British crafted spirits for discerning adventurers</p>
           </Link>
           <Link
-            href="/shop/hardware"
+            href="/shop/barware"
             className="p-6 bg-jerry-green-800/20 rounded-lg border border-gold-500/20 hover:border-gold-500/40 hover:bg-jerry-green-800/30 transition-all cursor-pointer group"
           >
-            <h3 className="font-semibold text-gold-500 mb-2 group-hover:text-gold-400 transition-colors">Bar Hardware</h3>
+            <h3 className="font-semibold text-gold-500 mb-2 group-hover:text-gold-400 transition-colors">Barware</h3>
             <p className="text-sm text-gray-400">Professional tools for the home mixologist</p>
           </Link>
           <Link

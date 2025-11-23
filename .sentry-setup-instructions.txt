@@ -1,0 +1,71 @@
+SENTRY AUTH TOKEN SETUP
+========================
+
+Issue: Sentry source maps aren't being uploaded during builds (warnings in build log)
+
+Why this matters:
+- Without source maps, error stack traces in Sentry will show minified code
+- Makes debugging production errors much harder
+- You're already paying the build time cost without getting the benefit
+
+How to Fix:
+============
+
+Step 1: Get Your Sentry Auth Token
+-----------------------------------
+IMPORTANT: You need an ORGANIZATION token (not a personal token)!
+
+1. Go to: https://sentry.io/settings/jerry-can-spirits/auth-tokens/
+   (Organization Settings → Developer Settings → Auth Tokens)
+
+2. Click "Create New Token"
+
+3. Configure the token:
+   - Name: "Cloudflare Pages Build"
+   - Scopes: org:ci (automatically selected - this is the ONLY scope for org tokens)
+     - Includes: Source Map Upload + Release Creation
+
+4. Click "Create Token"
+
+5. Copy the generated token immediately (you'll only see it once!)
+
+Note: Organization tokens are simpler than personal tokens:
+- Only one scope: org:ci (auto-selected)
+- Perfect for CI/CD pipelines
+- Won't break if team members change
+
+Step 2: Add to Local Development (.env.local)
+----------------------------------------------
+Add this line to your .env.local file:
+
+SENTRY_AUTH_TOKEN=your-token-here
+
+Step 3: Add to Cloudflare Pages
+--------------------------------
+1. Go to Cloudflare Dashboard: https://dash.cloudflare.com
+2. Pages → jerry-can-spirits → Settings → Environment variables
+3. Add variable:
+   - Name: SENTRY_AUTH_TOKEN
+   - Value: [paste your token]
+   - Environment: Production (and Preview if you want)
+4. Save and redeploy
+
+Step 4: Verify
+--------------
+After the next build, you should see in the build logs:
+✅ "Uploading source maps to Sentry" (instead of warnings)
+
+Alternative: Disable Sentry Source Maps
+========================================
+If you don't want to use Sentry source maps, you can disable the warnings by:
+
+1. Editing next.config.ts
+2. In the withSentryConfig call, add:
+   silent: true,  // This already exists, just keep it
+
+   Or remove Sentry entirely if not using error tracking.
+
+Current Status:
+- Sentry DSN is configured ✓
+- Error tracking IS working ✓
+- Source maps NOT uploading ✗ (needs auth token)
