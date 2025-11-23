@@ -13,14 +13,26 @@ How to Fix:
 
 Step 1: Get Your Sentry Auth Token
 -----------------------------------
-1. Go to: https://sentry.io/settings/jerry-can-spirits/developer-settings/
+IMPORTANT: You need an ORGANIZATION token (not a personal token)!
+
+1. Go to: https://sentry.io/settings/jerry-can-spirits/auth-tokens/
+   (Organization Settings → Developer Settings → Auth Tokens)
+
 2. Click "Create New Token"
-3. Name it: "Cloudflare Pages Build"
-4. Select scopes:
-   - project:read
-   - project:releases
-   - org:read
-5. Copy the generated token (you'll only see it once!)
+
+3. Configure the token:
+   - Name: "Cloudflare Pages Build"
+   - Scopes: org:ci (automatically selected - this is the ONLY scope for org tokens)
+     - Includes: Source Map Upload + Release Creation
+
+4. Click "Create Token"
+
+5. Copy the generated token immediately (you'll only see it once!)
+
+Note: Organization tokens are simpler than personal tokens:
+- Only one scope: org:ci (auto-selected)
+- Perfect for CI/CD pipelines
+- Won't break if team members change
 
 Step 2: Add to Local Development (.env.local)
 ----------------------------------------------
