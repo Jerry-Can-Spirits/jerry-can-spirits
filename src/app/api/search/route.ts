@@ -13,6 +13,15 @@ interface SearchResult {
   category?: string
 }
 
+interface SanityCocktail {
+  _id: string
+  name: string
+  slug: { current: string }
+  description: string
+  category?: string
+  image?: string
+}
+
 // Static searchable pages
 const searchablePages: SearchResult[] = [
   { type: 'page', title: 'Our Story', description: 'Learn about Jerry Can Spirits journey', url: '/about/story', category: 'About' },
@@ -92,7 +101,7 @@ export async function GET(request: NextRequest) {
         searchTerm: `*${query}*`
       })
 
-      const cocktailMatches = cocktails.map((cocktail: any) => ({
+      const cocktailMatches = cocktails.map((cocktail: SanityCocktail) => ({
         type: 'recipe' as const,
         title: cocktail.name,
         description: cocktail.description,
