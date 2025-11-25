@@ -25,7 +25,7 @@ export default function FieldManualHome() {
             </div>
             
             {/* Hero Image */}
-            <div className="relative w-full max-w-4xl mx-auto h-64 sm:h-80 md:h-96 rounded-lg overflow-hidden border border-gold-500/20 mb-8 shadow-2xl">
+            <div className="relative w-full max-w-4xl mx-auto h-48 sm:h-64 md:h-80 lg:h-96 rounded-lg overflow-hidden border border-gold-500/20 mb-8 shadow-2xl">
               <Image
                 src="/images/hero/Cocktail_Hero.webp"
                 alt="Jerry Can Spirits Field Manual - Cocktail Guide"
@@ -52,7 +52,7 @@ export default function FieldManualHome() {
 
       {/* Navigation Cards */}
       <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid lg:grid-cols-3 gap-8 lg:items-stretch">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8 lg:items-stretch">
           
           {/* Cocktails Section */}
           <Link href="/field-manual/cocktails" className="group h-full">

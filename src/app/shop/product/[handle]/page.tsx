@@ -1,8 +1,8 @@
 import Link from 'next/link'
-import Image from 'next/image'
 import { notFound } from 'next/navigation'
 import { getProduct, type ShopifyProduct } from '@/lib/shopify'
 import AddToCartButton from '@/components/AddToCartButton'
+import ProductImageGallery from '@/components/ProductImageGallery'
 import type { Metadata } from 'next'
 
 // Configure for Cloudflare Pages Edge Runtime
@@ -79,7 +79,6 @@ export default async function ProductPage({
   console.log('✅ Available for sale:', product.variants?.[0]?.availableForSale)
   console.log('📊 Quantity available:', product.variants?.[0]?.quantityAvailable)
 
-  const mainImage = product.images[0]
   const price = formatPrice(
     product.priceRange.minVariantPrice.amount,
     product.priceRange.minVariantPrice.currencyCode
@@ -106,58 +105,9 @@ export default async function ProductPage({
 
       {/* Product Details */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-          {/* Product Image */}
-          <div className="space-y-4">
-            {mainImage ? (
-              <div className="relative aspect-square bg-jerry-green-800/20 rounded-xl overflow-hidden border border-gold-500/20">
-                <Image
-                  src={mainImage.url}
-                  alt={mainImage.altText || product.title}
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 768px) 100vw, 50vw"
-                  priority
-                />
-              </div>
-            ) : (
-              <div className="aspect-square bg-jerry-green-800/20 rounded-xl flex items-center justify-center border border-gold-500/20">
-                <svg
-                  className="w-24 h-24 text-gold-500/30"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
-                  />
-                </svg>
-              </div>
-            )}
-
-            {/* Thumbnail images if there are multiple */}
-            {product.images && product.images.length > 1 && (
-              <div className="grid grid-cols-4 gap-4">
-                {product.images.slice(1, 5).map((image, index) => (
-                  <div
-                    key={index}
-                    className="relative aspect-square bg-jerry-green-800/20 rounded-lg overflow-hidden border border-gold-500/20 cursor-pointer hover:border-gold-400/40 transition-colors"
-                  >
-                    <Image
-                      src={image.url}
-                      alt={image.altText || `${product.title} - Image ${index + 2}`}
-                      fill
-                      className="object-cover"
-                      sizes="(max-width: 768px) 25vw, 12.5vw"
-                    />
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
+          {/* Product Image Gallery */}
+          <ProductImageGallery images={product.images} productTitle={product.title} />
 
           {/* Product Info */}
           <div className="space-y-6">

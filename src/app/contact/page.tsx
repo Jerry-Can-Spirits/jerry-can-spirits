@@ -97,7 +97,7 @@ export default function Contact() {
           </div>
 
           {/* Contact Methods */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mb-20">
             {contactMethods.map((method) => (
               <div
                 key={method.label}
@@ -167,7 +167,7 @@ export default function Contact() {
                   href="https://www.instagram.com/jerrycanspirits"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-12 h-12 bg-jerry-green-700/60 rounded-full flex items-center justify-center text-parchment-200 hover:text-gold-300 hover:bg-jerry-green-600/60 transition-all duration-200 hover:scale-110"
+                  className="w-14 h-14 sm:w-12 sm:h-12 bg-jerry-green-700/60 rounded-full flex items-center justify-center text-parchment-200 hover:text-gold-300 hover:bg-jerry-green-600/60 transition-all duration-200 hover:scale-110"
                   aria-label="Instagram"
                 >
                   <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
@@ -178,7 +178,7 @@ export default function Contact() {
                   href="https://www.facebook.com/jerrycanspirits"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-12 h-12 bg-jerry-green-700/60 rounded-full flex items-center justify-center text-parchment-200 hover:text-gold-300 hover:bg-jerry-green-600/60 transition-all duration-200 hover:scale-110"
+                  className="w-14 h-14 sm:w-12 sm:h-12 bg-jerry-green-700/60 rounded-full flex items-center justify-center text-parchment-200 hover:text-gold-300 hover:bg-jerry-green-600/60 transition-all duration-200 hover:scale-110"
                   aria-label="Facebook"
                 >
                   <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">

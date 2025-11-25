@@ -4,6 +4,8 @@ import Image from 'next/image'
 import { client } from '@/sanity/client'
 import { ingredientsQuery } from '@/sanity/queries'
 import { urlFor } from '@/sanity/lib/image'
+import BackToTop from '@/components/BackToTop'
+import SectionFilter from '@/components/SectionFilter'
 
 export const metadata: Metadata = {
   title: "Premium Ingredients Guide | Jerry Can Spirits - Quality Cocktail Components",
@@ -90,6 +92,16 @@ export default async function IngredientsPage() {
   const ingredients = await getIngredients()
   const ingredientCategories = groupIngredientsByCategory(ingredients)
 
+  // Create sections array for the filter
+  const sections = Object.entries(ingredientCategories)
+    .filter(([, category]) => category.ingredients.length > 0)
+    .map(([key, category]) => ({
+      id: key,
+      title: category.title,
+      description: category.description,
+      count: category.ingredients.length
+    }))
+
   return (
     <main className="min-h-screen py-20">
       {/* Breadcrumb */}
@@ -102,8 +114,8 @@ export default async function IngredientsPage() {
       </div>
 
       {/* Hero Section */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
-        <div className="text-center mb-12">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12 sm:mb-16">
+        <div className="text-center mb-8 sm:mb-12">
           <div className="inline-block px-4 py-2 bg-jerry-green-800/60 backdrop-blur-sm rounded-full border border-gold-500/30 mb-6">
             <span className="text-gold-300 text-sm font-semibold uppercase tracking-widest">
               Premium Ingredients
@@ -123,27 +135,30 @@ export default async function IngredientsPage() {
         </div>
       </section>
 
+      {/* Section Filter */}
+      {sections.length > 0 && <SectionFilter sections={sections} />}
+
       {/* Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="space-y-16">
+        <div className="space-y-12 sm:space-y-16">
           {Object.entries(ingredientCategories).map(([categoryKey, category]) => (
-            <section key={categoryKey}>
+            <section key={categoryKey} id={categoryKey}>
               <div className="mb-8">
                 <h2 className="text-3xl font-serif font-bold text-white mb-4">{category.title}</h2>
                 <p className="text-parchment-300 text-lg">{category.description}</p>
               </div>
 
               {category.ingredients.length > 0 ? (
-                <div className="grid gap-8">
+                <div className="grid gap-6 sm:gap-8">
                   {category.ingredients.map((ingredient) => (
-                    <div key={ingredient._id} className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20 relative overflow-hidden">
+                    <div key={ingredient._id} className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-4 sm:p-6 lg:p-8 border border-gold-500/20 relative overflow-hidden">
                       <div className="absolute inset-0 bg-gradient-to-br from-amber-100/5 to-amber-200/10 opacity-50"></div>
                       <div className="relative z-10">
-                        <div className="grid lg:grid-cols-3 gap-8">
-                          
+                        <div className="grid lg:grid-cols-3 gap-6 sm:gap-8">
+
                           {/* Image */}
                           <div className="lg:col-span-1">
-                            <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-8 border border-gold-500/20 h-64 flex items-center justify-center group hover:shadow-2xl transition-all duration-300 transform hover:scale-105">
+                            <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-4 sm:p-6 lg:p-8 border border-gold-500/20 h-48 sm:h-56 lg:h-64 flex items-center justify-center group hover:shadow-2xl transition-all duration-300 transform hover:scale-105">
                               {ingredient.image ? (
                                 <Image
                                   src={urlFor(ingredient.image).url()}
@@ -168,7 +183,7 @@ export default async function IngredientsPage() {
                           </div>
 
                           {/* Content */}
-                          <div className="lg:col-span-2 space-y-6">
+                          <div className="lg:col-span-2 space-y-4 sm:space-y-6">
                             <div>
                               <h3 className="text-2xl font-serif font-bold text-white mb-3">{ingredient.name}</h3>
                               <p className="text-parchment-300 leading-relaxed">{ingredient.description}</p>
@@ -244,6 +259,9 @@ export default async function IngredientsPage() {
           ))}
         </div>
       </div>
+
+      {/* Back to Top Button */}
+      <BackToTop />
     </main>
   )
 }

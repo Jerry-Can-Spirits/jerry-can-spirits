@@ -179,7 +179,7 @@ export default async function DrinksPageTest() {
 
       {/* Products Grid */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
           {products.map((product: ShopifyProduct) => (
             <Link
               key={product.id}
@@ -187,19 +187,19 @@ export default async function DrinksPageTest() {
               className="group bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl border border-gold-500/20 overflow-hidden hover:border-gold-400/40 transition-all duration-300 hover:scale-105"
             >
               {/* Product Image */}
-              <div className="relative aspect-square bg-jerry-green-800/20">
+              <div className="relative aspect-square sm:aspect-[4/3] lg:aspect-square bg-jerry-green-800/20">
                 {product.images && product.images.length > 0 ? (
                   <Image
                     src={product.images[0].url}
                     alt={product.images[0].altText || product.title}
                     fill
                     className="object-cover group-hover:scale-110 transition-transform duration-500"
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+                    sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, (max-width: 1200px) 33vw, 25vw"
                   />
                 ) : (
                   <div className="absolute inset-0 flex items-center justify-center">
                     <svg
-                      className="w-16 h-16 text-gold-500/30"
+                      className="w-12 h-12 sm:w-16 sm:h-16 text-gold-500/30"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -216,26 +216,26 @@ export default async function DrinksPageTest() {
               </div>
 
               {/* Product Details */}
-              <div className="p-6 space-y-3">
-                <h2 className="text-xl font-serif font-bold text-white group-hover:text-gold-300 transition-colors">
+              <div className="p-3 sm:p-4 lg:p-6 space-y-2 sm:space-y-3">
+                <h2 className="text-base sm:text-lg lg:text-xl font-serif font-bold text-white group-hover:text-gold-300 transition-colors line-clamp-2">
                   {product.title}
                 </h2>
 
                 {product.description && (
-                  <p className="text-parchment-300 text-sm line-clamp-2">
+                  <p className="text-parchment-300 text-xs sm:text-sm line-clamp-2 hidden sm:block">
                     {product.description}
                   </p>
                 )}
 
-                <div className="flex items-center justify-between pt-2">
-                  <p className="text-2xl font-serif font-bold text-gold-400">
+                <div className="flex items-center justify-between pt-1 sm:pt-2">
+                  <p className="text-lg sm:text-xl lg:text-2xl font-serif font-bold text-gold-400">
                     {formatPrice(
                       product.priceRange.minVariantPrice.amount,
                       product.priceRange.minVariantPrice.currencyCode
                     )}
                   </p>
 
-                  <span className="text-gold-300 text-sm font-semibold group-hover:translate-x-1 transition-transform">
+                  <span className="text-gold-300 text-xs sm:text-sm font-semibold group-hover:translate-x-1 transition-transform">
                     View →
                   </span>
                 </div>
