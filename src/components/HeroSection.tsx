@@ -56,7 +56,7 @@ export default function HeroSection() {
 
       <div className="relative w-full px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
         <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center min-h-[80vh]">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center min-h-[70vh] sm:min-h-[80vh]">
           {/* Content */}
           <div className="text-center lg:text-left order-2 lg:order-1">
             {/* Overline Badge */}
@@ -84,22 +84,22 @@ export default function HeroSection() {
               <div className="text-gold-300 text-sm font-semibold uppercase tracking-widest mb-4 text-center">
                 Launching April 2026
               </div>
-              <div className="grid grid-cols-4 gap-4 text-center">
-                <div className="bg-jerry-green-700/60 rounded-lg p-3 border border-gold-500/20">
-                  <div className="text-2xl font-bold text-gold-300">{timeToLaunch.days}</div>
-                  <div className="text-xs text-parchment-400 uppercase">Days</div>
+              <div className="grid grid-cols-4 gap-2 sm:gap-4 text-center">
+                <div className="bg-jerry-green-700/60 rounded-lg p-2 sm:p-3 border border-gold-500/20">
+                  <div className="text-lg sm:text-2xl font-bold text-gold-300">{timeToLaunch.days}</div>
+                  <div className="text-[10px] sm:text-xs text-parchment-400 uppercase">Days</div>
                 </div>
-                <div className="bg-jerry-green-700/60 rounded-lg p-3 border border-gold-500/20">
-                  <div className="text-2xl font-bold text-gold-300">{timeToLaunch.hours}</div>
-                  <div className="text-xs text-parchment-400 uppercase">Hours</div>
+                <div className="bg-jerry-green-700/60 rounded-lg p-2 sm:p-3 border border-gold-500/20">
+                  <div className="text-lg sm:text-2xl font-bold text-gold-300">{timeToLaunch.hours}</div>
+                  <div className="text-[10px] sm:text-xs text-parchment-400 uppercase">Hours</div>
                 </div>
-                <div className="bg-jerry-green-700/60 rounded-lg p-3 border border-gold-500/20">
-                  <div className="text-2xl font-bold text-gold-300">{timeToLaunch.minutes}</div>
-                  <div className="text-xs text-parchment-400 uppercase">Minutes</div>
+                <div className="bg-jerry-green-700/60 rounded-lg p-2 sm:p-3 border border-gold-500/20">
+                  <div className="text-lg sm:text-2xl font-bold text-gold-300">{timeToLaunch.minutes}</div>
+                  <div className="text-[10px] sm:text-xs text-parchment-400 uppercase">Mins</div>
                 </div>
-                <div className="bg-jerry-green-700/60 rounded-lg p-3 border border-gold-500/20">
-                  <div className="text-2xl font-bold text-gold-300">{timeToLaunch.seconds}</div>
-                  <div className="text-xs text-parchment-400 uppercase">Seconds</div>
+                <div className="bg-jerry-green-700/60 rounded-lg p-2 sm:p-3 border border-gold-500/20">
+                  <div className="text-lg sm:text-2xl font-bold text-gold-300">{timeToLaunch.seconds}</div>
+                  <div className="text-[10px] sm:text-xs text-parchment-400 uppercase">Secs</div>
                 </div>
               </div>
             </div>
@@ -161,31 +161,31 @@ export default function HeroSection() {
                 <Image
                   src="/images/hero/premium-quality.png"
                   alt="Premium Quality British Rum Badge"
-                  width={20}
-                  height={20}
-                  className="w-5 h-5"
+                  width={24}
+                  height={24}
+                  className="w-6 h-6 sm:w-5 sm:h-5"
                 />
                 <span className="text-sm font-medium">Premium Quality</span>
               </div>
-              
+
               <div className="flex items-center gap-2 text-gold-300">
                 <Image
                   src="/images/hero/padlock.svg"
                   alt="Secure and Tracked Delivery"
-                  width={20}
-                  height={20}
-                  className="w-5 h-5"
+                  width={24}
+                  height={24}
+                  className="w-6 h-6 sm:w-5 sm:h-5"
                 />
                 <span className="text-sm font-medium">Secure Shipping</span>
               </div>
-              
+
               <div className="flex items-center gap-2 text-gold-300">
                 <Image
                   src="/images/hero/union-flag.png"
                   alt="Proudly Made in the United Kingdom"
-                  width={20}
-                  height={20}
-                  className="w-5 h-5"
+                  width={24}
+                  height={24}
+                  className="w-6 h-6 sm:w-5 sm:h-5"
                 />
                 <span className="text-sm font-medium">Made in the UK</span>
               </div>

@@ -5,6 +5,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { client } from '@/sanity/client'
 import { cocktailsQuery } from '@/sanity/queries'
+import BackToTop from '@/components/BackToTop'
 
 // Types for cocktail data from Sanity
 interface CocktailIngredient {
@@ -600,6 +601,9 @@ export default function CocktailsPage() {
           </div>
         </div>
       </div>
+
+      {/* Back to Top Button */}
+      <BackToTop />
     </main>
   )
 }

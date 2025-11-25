@@ -22,7 +22,7 @@
     "@heroicons/react": "^2.2.0",
     "@sanity/image-url": "^1.2.0",
     "@sanity/vision": "^4.14.2",
-    "@sentry/nextjs": "^10.24.0",
+    "@sentry/nextjs": "^10.27.0",
     "@shopify/storefront-api-client": "^1.0.9",
     "@swc/helpers": "^0.5.17",
     "clsx": "^2.1.1",

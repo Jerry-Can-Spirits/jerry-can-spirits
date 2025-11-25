@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import Image from 'next/image'
+import BackToTop from '@/components/BackToTop'
 
 export const metadata: Metadata = {
   title: "Our Story | Jerry Can Spirits - Engineered for Adventure",
@@ -24,7 +25,7 @@ export default function OurStory() {
             </div>
             
             {/* Story Hero Image */}
-            <div className="relative w-full max-w-2xl mx-auto h-64 sm:h-80 md:h-96 rounded-lg overflow-hidden border border-gold-500/20 mb-8 shadow-2xl">
+            <div className="relative w-full max-w-2xl mx-auto h-48 sm:h-64 md:h-80 lg:h-96 rounded-lg overflow-hidden border border-gold-500/20 mb-8 shadow-2xl">
               <Image
                 src="/images/hero/Trail_Hero.webp"
                 alt="Jerry Can Spirits - Adventure and Expedition Ready Rum"
@@ -70,7 +71,7 @@ export default function OurStory() {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-12 items-center mb-16">
+          <div className="grid md:grid-cols-2 gap-8 sm:gap-12 items-center mb-12 sm:mb-16">
             {/* Story Content */}
             <div className="space-y-6">
               <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-8 border border-gold-500/20">
@@ -90,8 +91,8 @@ export default function OurStory() {
             </div>
 
             {/* Visual Element */}
-            <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-8 border border-gold-500/20">
-              <div className="relative w-full h-64 sm:h-80 rounded-lg overflow-hidden border border-gold-500/20 mb-6">
+            <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 sm:p-8 border border-gold-500/20">
+              <div className="relative w-full h-48 sm:h-64 lg:h-80 rounded-lg overflow-hidden border border-gold-500/20 mb-6">
                 <Image
                   src="/images/hero/Our_Story_Hero.webp"
                   alt="Jerry Can Spirits Founder - Royal Corps of Signals Veteran"
@@ -179,8 +180,8 @@ export default function OurStory() {
             </p>
           </div>
 
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
-            <div className="space-y-8">
+          <div className="grid lg:grid-cols-2 gap-8 sm:gap-12 lg:gap-16 items-center">
+            <div className="space-y-6 sm:space-y-8">
               <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20">
                 <h3 className="text-xl font-serif font-bold text-white mb-3">
                   The Catalyst
@@ -378,9 +379,9 @@ export default function OurStory() {
             </p>
           </div>
 
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
+          <div className="grid lg:grid-cols-2 gap-8 sm:gap-12 lg:gap-16 items-center">
             <div>
-              <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-8 border border-gold-500/20 mb-8">
+              <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 sm:p-8 border border-gold-500/20 mb-8">
                 <h3 className="text-2xl font-serif font-bold text-white mb-4">
                   Why "Jerry Can"?
                 </h3>
@@ -627,6 +628,9 @@ export default function OurStory() {
         </section>
 
       </div>
+
+      {/* Back to Top Button */}
+      <BackToTop />
     </main>
   )
 }
