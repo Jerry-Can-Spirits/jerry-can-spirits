@@ -5,8 +5,63 @@ const nextConfig: NextConfig = {
   // Configure for Cloudflare Pages (full-stack mode)
   trailingSlash: true,
 
-  // Security headers are now managed in middleware.ts for better control
-  // This ensures consistent CSP application and prevents header conflicts
+  // Security headers configured here for Cloudflare Pages compatibility
+  // Middleware headers don't work reliably on Cloudflare Pages Edge Runtime
+  async headers() {
+    return [
+      {
+        source: '/(.*)',
+        headers: [
+          {
+            key: 'Content-Security-Policy',
+            value: [
+              "default-src 'self'",
+              "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://cdn.sanity.io https://js.sentry-cdn.com https://*.sentry.io",
+              "style-src 'self' 'unsafe-inline'",
+              "img-src 'self' data: blob: https: http:",
+              "font-src 'self' data:",
+              "connect-src 'self' https://cdn.sanity.io https://*.sanity.io https://*.shopify.com https://*.sentry.io wss://*.sanity.io",
+              "media-src 'self' https: data:",
+              "object-src 'none'",
+              "frame-src 'self' https://cdn.sanity.io https://*.sanity.io",
+              "base-uri 'self'",
+              "form-action 'self'",
+              "frame-ancestors 'self'",
+              "upgrade-insecure-requests",
+            ].join('; '),
+          },
+          {
+            key: 'X-DNS-Prefetch-Control',
+            value: 'on',
+          },
+          {
+            key: 'Strict-Transport-Security',
+            value: 'max-age=31536000; includeSubDomains; preload',
+          },
+          {
+            key: 'X-Frame-Options',
+            value: 'SAMEORIGIN',
+          },
+          {
+            key: 'X-Content-Type-Options',
+            value: 'nosniff',
+          },
+          {
+            key: 'X-XSS-Protection',
+            value: '1; mode=block',
+          },
+          {
+            key: 'Referrer-Policy',
+            value: 'strict-origin-when-cross-origin',
+          },
+          {
+            key: 'Permissions-Policy',
+            value: 'camera=(), microphone=(), geolocation=(), interest-cohort=()',
+          },
+        ],
+      },
+    ]
+  },
 
   // Enable build caching
   cacheHandler: undefined, // Use default caching
