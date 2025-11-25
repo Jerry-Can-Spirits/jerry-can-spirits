@@ -69,7 +69,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
     return () => window.removeEventListener('keydown', handleKeyDown)
   }, [isOpen, onClose])
 
-  // Search function
+  // Search function - searches both static content and API (Shopify + Sanity)
   useEffect(() => {
     if (!query.trim()) {
       setResults([])
@@ -78,19 +78,40 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
 
     setIsLoading(true)
 
-    // Simulate async search with debounce
-    const timeoutId = setTimeout(() => {
+    // Debounce the search
+    const timeoutId = setTimeout(async () => {
       const searchQuery = query.toLowerCase()
-      const filtered = searchableContent.filter(item => {
+
+      // Search static pages
+      const staticResults = searchableContent.filter(item => {
         const titleMatch = item.title.toLowerCase().includes(searchQuery)
         const descMatch = item.description?.toLowerCase().includes(searchQuery)
         const categoryMatch = item.category?.toLowerCase().includes(searchQuery)
         return titleMatch || descMatch || categoryMatch
       })
 
-      setResults(filtered.slice(0, 8)) // Limit to 8 results
-      setIsLoading(false)
-    }, 200)
+      // Search API for products and cocktails
+      try {
+        const response = await fetch(`/api/search?q=${encodeURIComponent(query)}`)
+        const data = await response.json()
+        const apiResults = data.results || []
+
+        // Combine results, prioritizing static pages, then products, then cocktails
+        const combined = [
+          ...staticResults,
+          ...apiResults.filter((r: SearchResult) => r.type === 'product'),
+          ...apiResults.filter((r: SearchResult) => r.type === 'recipe'),
+        ]
+
+        setResults(combined.slice(0, 12))
+      } catch (error) {
+        console.error('Search error:', error)
+        // Fallback to just static results if API fails
+        setResults(staticResults.slice(0, 12))
+      } finally {
+        setIsLoading(false)
+      }
+    }, 300)
 
     return () => clearTimeout(timeoutId)
   }, [query])

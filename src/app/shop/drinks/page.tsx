@@ -1,9 +1,3 @@
-/**
- * TEST PAGE for Shopify Integration
- * This is a test version to verify the Shopify connection works
- * Once verified, this will replace the current drinks page
- */
-
 import Link from 'next/link'
 import Image from 'next/image'
 import { getProductsByCollection, type ShopifyProduct } from '@/lib/shopify'
@@ -187,13 +181,13 @@ export default async function DrinksPageTest() {
               className="group bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl border border-gold-500/20 overflow-hidden hover:border-gold-400/40 transition-all duration-300 hover:scale-105"
             >
               {/* Product Image */}
-              <div className="relative aspect-square sm:aspect-[4/3] lg:aspect-square bg-jerry-green-800/20">
+              <div className="relative aspect-square sm:aspect-[4/3] lg:aspect-square bg-jerry-green-800/20 flex items-center justify-center p-4">
                 {product.images && product.images.length > 0 ? (
                   <Image
                     src={product.images[0].url}
                     alt={product.images[0].altText || product.title}
                     fill
-                    className="object-cover group-hover:scale-110 transition-transform duration-500"
+                    className="object-contain group-hover:scale-110 transition-transform duration-500"
                     sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, (max-width: 1200px) 33vw, 25vw"
                   />
                 ) : (
@@ -220,12 +214,6 @@ export default async function DrinksPageTest() {
                 <h2 className="text-base sm:text-lg lg:text-xl font-serif font-bold text-white group-hover:text-gold-300 transition-colors line-clamp-2">
                   {product.title}
                 </h2>
-
-                {product.description && (
-                  <p className="text-parchment-300 text-xs sm:text-sm line-clamp-2 hidden sm:block">
-                    {product.description}
-                  </p>
-                )}
 
                 <div className="flex items-center justify-between pt-1 sm:pt-2">
                   <p className="text-lg sm:text-xl lg:text-2xl font-serif font-bold text-gold-400">

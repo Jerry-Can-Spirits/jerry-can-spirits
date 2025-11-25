@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 }
 
 export default function ShippingReturns() {
-  const lastUpdated = '4 September 2025'
+  const lastUpdated = '25 November 2025'
 
   return (
     <main className="min-h-screen py-20">
@@ -181,7 +181,7 @@ export default function ShippingReturns() {
                     </a>
                   </p>
                   <p className="text-white">
-                    <strong className="text-gold-300">Contact Form:</strong>{' '}
+                    <strong className="text-gold-300">Contact:</strong>{' '}
                     <a href="/contact" className="text-gold-300 hover:text-gold-200 underline">
                       jerrycanspirits.com/contact
                     </a>
