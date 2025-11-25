@@ -5,6 +5,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { ChevronDownIcon, MagnifyingGlassIcon, ShoppingCartIcon, Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 import { useCart } from '@/contexts/CartContext'
+import SearchModal from './SearchModal'
 
 interface DropdownItem {
   name: string
@@ -24,7 +25,7 @@ export default function Header() {
   const [showHeader, setShowHeader] = useState(true)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null)
-  const [isSearchOpen, setIsSearchOpen] = useState(false)
+  const [isSearchModalOpen, setIsSearchModalOpen] = useState(false)
   const { itemCount, openCart } = useCart()
 
   // Navigation structure
@@ -276,26 +277,14 @@ export default function Header() {
             <div className="flex items-center space-x-4">
               
               {/* Search */}
-              <div className="relative">
-                <button
-                  onClick={() => setIsSearchOpen(!isSearchOpen)}
-                  className="text-parchment-100 hover:text-parchment-50 p-2 transition-all duration-200 hover:scale-110"
-                  aria-label="Search"
-                >
-                  <MagnifyingGlassIcon className="w-5 h-5" />
-                </button>
-                
-                {isSearchOpen && (
-                  <div className="absolute right-0 top-full mt-2 w-80 bg-jerry-green-800/95 backdrop-blur-lg rounded-lg shadow-2xl border border-jerry-green-600/20 p-4">
-                    <input
-                      type="search"
-                      placeholder="Search products, recipes..."
-                      className="w-full px-4 py-2 bg-jerry-green-700 text-parchment-100 rounded-md border border-jerry-green-600 focus:border-jerry-green-400 focus:outline-none"
-                      autoFocus
-                    />
-                  </div>
-                )}
-              </div>
+              <button
+                onClick={() => setIsSearchModalOpen(true)}
+                className="text-parchment-100 hover:text-parchment-50 p-2 transition-all duration-200 hover:scale-110"
+                aria-label="Search"
+                title="Search (⌘K)"
+              >
+                <MagnifyingGlassIcon className="w-5 h-5" />
+              </button>
 
               {/* Cart */}
               <button
@@ -434,6 +423,9 @@ export default function Header() {
           100% { transform: translate(-60px, -60px); }
         }
       `}</style>
+
+      {/* Search Modal */}
+      <SearchModal isOpen={isSearchModalOpen} onClose={() => setIsSearchModalOpen(false)} />
     </>
   )
 }
