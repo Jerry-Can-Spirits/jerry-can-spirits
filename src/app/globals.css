@@ -61,6 +61,16 @@
     height: 3.75rem; /* 60px */
   }
 
+  /* Hide scrollbar while keeping functionality */
+  .scrollbar-hide {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;  /* Chrome, Safari and Opera */
+  }
+
   /* Master Cartography Background */
   .cartography-background {
     position: relative;

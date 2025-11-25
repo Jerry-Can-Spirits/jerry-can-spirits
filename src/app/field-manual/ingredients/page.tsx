@@ -5,6 +5,7 @@ import { client } from '@/sanity/client'
 import { ingredientsQuery } from '@/sanity/queries'
 import { urlFor } from '@/sanity/lib/image'
 import BackToTop from '@/components/BackToTop'
+import SectionFilter from '@/components/SectionFilter'
 
 export const metadata: Metadata = {
   title: "Premium Ingredients Guide | Jerry Can Spirits - Quality Cocktail Components",
@@ -91,6 +92,16 @@ export default async function IngredientsPage() {
   const ingredients = await getIngredients()
   const ingredientCategories = groupIngredientsByCategory(ingredients)
 
+  // Create sections array for the filter
+  const sections = Object.entries(ingredientCategories)
+    .filter(([, category]) => category.ingredients.length > 0)
+    .map(([key, category]) => ({
+      id: key,
+      title: category.title,
+      description: category.description,
+      count: category.ingredients.length
+    }))
+
   return (
     <main className="min-h-screen py-20">
       {/* Breadcrumb */}
@@ -124,11 +135,14 @@ export default async function IngredientsPage() {
         </div>
       </section>
 
+      {/* Section Filter */}
+      {sections.length > 0 && <SectionFilter sections={sections} />}
+
       {/* Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="space-y-12 sm:space-y-16">
           {Object.entries(ingredientCategories).map(([categoryKey, category]) => (
-            <section key={categoryKey}>
+            <section key={categoryKey} id={categoryKey}>
               <div className="mb-8">
                 <h2 className="text-3xl font-serif font-bold text-white mb-4">{category.title}</h2>
                 <p className="text-parchment-300 text-lg">{category.description}</p>
