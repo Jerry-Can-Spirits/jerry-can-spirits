@@ -81,6 +81,8 @@ export default function AgeGate({ onVerified }: AgeGateProps) {
               height={80}
               className="mx-auto mb-8 w-auto h-auto"
               priority
+              quality={85}
+              sizes="(max-width: 768px) 150px, 200px"
             />
           </div>
 
@@ -96,10 +98,11 @@ export default function AgeGate({ onVerified }: AgeGateProps) {
 
           {/* Region selector */}
           <div className="space-y-4">
-            <label className="block text-gold-300 font-medium text-lg">
+            <label htmlFor="region-selector" className="block text-gold-300 font-medium text-lg">
               Select Your Region
             </label>
             <select
+              id="region-selector"
               value={selectedRegion.code}
               onChange={(e) => {
                 const region = regions.find(r => r.code === e.target.value);
@@ -162,7 +165,8 @@ export default function AgeGate({ onVerified }: AgeGateProps) {
           fill
           className="object-cover object-center"
           priority
-          sizes="50vw"
+          quality={80}
+          sizes="(max-width: 768px) 100vw, 50vw"
         />
       </div>
 

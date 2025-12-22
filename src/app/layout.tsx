@@ -102,7 +102,7 @@ export default function RootLayout({
           {/* Skip to Content Link - Accessibility */}
           <a
             href="#main-content"
-            className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-gold-500 focus:text-jerry-green-900 focus:font-semibold focus:rounded-lg focus:shadow-lg focus:outline-none focus:ring-2 focus:ring-gold-300"
+            className="absolute -top-full left-0 z-[9999] px-4 py-2 bg-gold-500 text-jerry-green-900 font-semibold rounded-lg shadow-lg focus:top-4 focus:left-4 focus:outline-none focus:ring-2 focus:ring-gold-300 transition-all"
           >
             Skip to main content
           </a>
