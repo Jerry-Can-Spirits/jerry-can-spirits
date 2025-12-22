@@ -40,7 +40,7 @@ export function middleware(request: NextRequest) {
       "font-src 'self' https://fonts.gstatic.com",
       "img-src 'self' data: https: blob:",
       "media-src 'self' https:",
-      "connect-src 'self' http://localhost:* https://www.google-analytics.com https://www.googletagmanager.com https://analytics.google.com https://region1.google-analytics.com https://*.klaviyo.com https://cdn.sanity.io https://*.sanity.io https://*.ingest.sentry.io https://cloudflareinsights.com wss: ws:",
+      "connect-src 'self' http://localhost:* https://www.google-analytics.com https://www.googletagmanager.com https://analytics.google.com https://region1.google-analytics.com https://*.klaviyo.com https://*.shopify.com https://cdn.sanity.io https://*.sanity.io https://*.ingest.sentry.io https://cloudflareinsights.com wss: ws:",
       "frame-src 'self' https://www.youtube.com https://www.vimeo.com",
       "object-src 'none'",
       "base-uri 'self'",
