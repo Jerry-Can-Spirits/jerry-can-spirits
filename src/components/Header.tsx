@@ -168,7 +168,7 @@ export default function Header() {
                 <div className="relative">
                   <Image
                     src="/images/Logo.webp"
-                    alt="Jerry Can Spirits"
+                    alt="Jerry Can Spirits®"
                     width={160}
                     height={60}
                     className="h-12 w-auto transition-transform duration-200 group-hover:scale-105"

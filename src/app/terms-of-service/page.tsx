@@ -1,8 +1,8 @@
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: "Terms of Service | Jerry Can Spirits - Terms & Conditions",
-  description: "Jerry Can Spirits Terms of Service and conditions of use. Legal terms governing the use of our website and purchase of our premium spirits.",
+  title: "Terms of Service | Jerry Can Spirits® - Terms & Conditions",
+  description: "Jerry Can Spirits® Terms of Service and conditions of use. Legal terms governing the use of our website and purchase of our premium spirits.",
   robots: {
     index: true,
     follow: true,
@@ -39,20 +39,23 @@ export default function TermsOfService() {
                 1. Acceptance of Terms
               </h2>
               <p className="text-white mb-4 leading-relaxed">
-                By accessing and using the Jerry Can Spirits website ("the Site"), you accept and agree to be bound by the terms and provision of this agreement. If you do not agree to abide by the above, please do not use this service.
+                By accessing and using the Jerry Can Spirits® website ("the Site"), you accept and agree to be bound by the terms and provision of this agreement. If you do not agree to abide by the above, please do not use this service.
               </p>
             </section>
 
             <section className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20">
               <h2 className="text-2xl font-serif font-bold text-white mb-4 pb-2 border-b border-gold-500/20">
-                2. About Jerry Can Spirits
+                2. About Jerry Can Spirits®
               </h2>
               <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20">
                 <p className="text-white mb-2">
-                  <strong className="text-gold-300">Company:</strong> Jerry Can Spirits Ltd
+                  <strong className="text-gold-300">Company:</strong> Jerry Can Spirits® Ltd
                 </p>
                 <p className="text-white mb-2">
                   <strong className="text-gold-300">Registration:</strong> England and Wales
+                </p>
+                <p className="text-white mb-2">
+                  <strong className="text-gold-300">Trademark:</strong> UK00004263767 (Classes 33, 35)
                 </p>
                 <p className="text-white">
                   <strong className="text-gold-300">Contact:</strong>{' '}
@@ -149,15 +152,28 @@ export default function TermsOfService() {
                 6. Intellectual Property Rights
               </h2>
               <p className="text-white mb-4">
-                The Jerry Can Spirits website and its content, features, and functionality are owned by Jerry Can Spirits Ltd and protected by international copyright, trademark, and other intellectual property laws.
+                The Jerry Can Spirits® website and its content, features, and functionality are owned by Jerry Can Spirits® Ltd and protected by international copyright, trademark, and other intellectual property laws.
               </p>
+              <div className="bg-gold-900/20 backdrop-blur-sm rounded-lg p-6 border border-gold-500/30 mb-4">
+                <h3 className="text-lg font-semibold text-gold-300 mb-3">Trademark Notice</h3>
+                <p className="text-white mb-2">
+                  Jerry Can Spirits® is a registered trademark (UK00004263767) of Jerry Can Spirits Ltd for:
+                </p>
+                <ul className="list-disc list-inside text-white space-y-1 ml-4 mb-3">
+                  <li><strong>Class 33:</strong> Spirits, alcoholic beverages, rum, and related products</li>
+                  <li><strong>Class 35:</strong> Retail and wholesale services in relation to alcoholic beverages</li>
+                </ul>
+                <p className="text-white text-sm">
+                  All trademarks, logos, and service marks displayed on this website are our property or the property of other third parties. You are not permitted to use these marks without our prior written consent or the consent of such third party.
+                </p>
+              </div>
               <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20">
                 <h3 className="text-lg font-semibold text-gold-300 mb-3">You may not:</h3>
                 <ul className="list-disc list-inside text-white space-y-1">
                   <li>Reproduce, distribute, or create derivative works</li>
-                  <li>Use our trademarks without written permission</li>
+                  <li>Use our registered trademarks without written permission</li>
                   <li>Reverse engineer or attempt to extract source code</li>
-                  <li>Remove or alter copyright notices</li>
+                  <li>Remove or alter copyright or trademark notices</li>
                 </ul>
               </div>
             </section>
@@ -180,7 +196,7 @@ export default function TermsOfService() {
                 8. Limitation of Liability
               </h2>
               <p className="text-white mb-4">
-                To the maximum extent permitted by law, Jerry Can Spirits Ltd shall not be liable for any direct, indirect, incidental, special, or consequential damages resulting from:
+                To the maximum extent permitted by law, Jerry Can Spirits® Ltd shall not be liable for any direct, indirect, incidental, special, or consequential damages resulting from:
               </p>
               <ul className="list-disc list-inside text-white space-y-2 mb-4">
                 <li>Use or inability to use our website or products</li>
@@ -197,7 +213,7 @@ export default function TermsOfService() {
                 9. Indemnification
               </h2>
               <p className="text-white mb-4">
-                You agree to defend, indemnify, and hold harmless Jerry Can Spirits Ltd from and against any claims, damages, obligations, losses, liabilities, costs, and expenses arising from your use of the website or violation of these terms.
+                You agree to defend, indemnify, and hold harmless Jerry Can Spirits® Ltd from and against any claims, damages, obligations, losses, liabilities, costs, and expenses arising from your use of the website or violation of these terms.
               </p>
             </section>
 
@@ -249,7 +265,7 @@ export default function TermsOfService() {
                   </p>
                   <p className="text-white">
                     <strong className="text-gold-300">Address:</strong><br />
-                    Jerry Can Spirits Ltd<br />
+                    Jerry Can Spirits® Ltd<br />
                     United Kingdom
                   </p>
                 </div>
