@@ -199,7 +199,7 @@ export default function HeroSection() {
               <div className="aspect-[4/5] flex items-center justify-center p-8">
                 <Image
                   src="/images/hero/hero-spiced.webp"
-                  alt="Jerry Can Spirits Premium British Dark Rum Reserve - Expedition Ready Bottle"
+                  alt="Jerry Can Spirits® Premium British Dark Rum Reserve - Expedition Ready Bottle"
                   width={400}
                   height={500}
                   className="w-full h-full object-contain"

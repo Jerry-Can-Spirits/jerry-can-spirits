@@ -1,10 +1,27 @@
 import { MetadataRoute } from 'next'
+import { getProducts, type ShopifyProduct } from '@/lib/shopify'
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = 'https://jerrycanspirits.co.uk'
 
   // Get current date for lastModified
   const currentDate = new Date()
+
+  // Fetch all products from Shopify
+  let products: ShopifyProduct[] = []
+  try {
+    products = await getProducts()
+  } catch (error) {
+    console.error('Error fetching products for sitemap:', error)
+  }
+
+  // Generate product URLs dynamically
+  const productUrls: MetadataRoute.Sitemap = products.map((product) => ({
+    url: `${baseUrl}/shop/product/${product.handle}`,
+    lastModified: currentDate,
+    changeFrequency: 'weekly' as const,
+    priority: 0.8,
+  }))
 
   // Define all static routes with priorities and change frequencies
   const routes: MetadataRoute.Sitemap = [
@@ -128,7 +145,26 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'monthly',
       priority: 0.6,
     },
+    // Shop pages
+    {
+      url: `${baseUrl}/shop`,
+      lastModified: currentDate,
+      changeFrequency: 'daily',
+      priority: 0.9,
+    },
+    {
+      url: `${baseUrl}/shop/drinks`,
+      lastModified: currentDate,
+      changeFrequency: 'daily',
+      priority: 0.9,
+    },
+    {
+      url: `${baseUrl}/shop/barware`,
+      lastModified: currentDate,
+      changeFrequency: 'weekly',
+      priority: 0.8,
+    },
   ]
 
-  return routes
+  return [...routes, ...productUrls]
 }

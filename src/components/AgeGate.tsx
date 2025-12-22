@@ -76,7 +76,7 @@ export default function AgeGate({ onVerified }: AgeGateProps) {
           <div className="text-center">
             <Image
               src="/images/Logo.webp"
-              alt="Jerry Can Spirits"
+              alt="Jerry Can Spirits®"
               width={200}
               height={80}
               className="mx-auto mb-8 w-auto h-auto"
@@ -158,7 +158,7 @@ export default function AgeGate({ onVerified }: AgeGateProps) {
         <div className="absolute inset-0 bg-gradient-to-l from-transparent via-jerry-green-900/20 to-jerry-green-900/60 z-10"></div>
         <Image
           src="/images/hero/hero-spiced.webp"
-          alt="Jerry Can Spirits Bottle"
+          alt="Jerry Can Spirits® Bottle"
           fill
           className="object-cover object-center"
           priority
