@@ -20,7 +20,7 @@ const nextConfig: NextConfig = {
               "style-src 'self' 'unsafe-inline'",
               "img-src 'self' data: blob: https: http:",
               "font-src 'self' data:",
-              "connect-src 'self' https://cdn.sanity.io https://*.sanity.io https://*.shopify.com https://*.sentry.io wss://*.sanity.io",
+              "connect-src 'self' https://cdn.sanity.io https://*.sanity.io https://*.shopify.com https://*.sentry.io https://www.google-analytics.com https://www.googletagmanager.com https://analytics.google.com wss://*.sanity.io",
               "media-src 'self' https: data:",
               "object-src 'none'",
               "frame-src 'self' https://cdn.sanity.io https://*.sanity.io",
