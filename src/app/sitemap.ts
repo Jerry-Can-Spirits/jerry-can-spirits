@@ -1,5 +1,5 @@
 import { MetadataRoute } from 'next'
-import { getProducts } from '@/lib/shopify'
+import { getProducts, type ShopifyProduct } from '@/lib/shopify'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = 'https://jerrycanspirits.co.uk'
@@ -8,7 +8,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const currentDate = new Date()
 
   // Fetch all products from Shopify
-  let products = []
+  let products: ShopifyProduct[] = []
   try {
     products = await getProducts()
   } catch (error) {
