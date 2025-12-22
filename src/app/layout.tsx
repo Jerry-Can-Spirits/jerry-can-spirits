@@ -32,10 +32,10 @@ const jetbrains = JetBrains_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://jerrycanspirits.co.uk'),
-  title: "Jerry Can Spirits | Premium British Rum - Swift & Sure, Expedition Ready",
+  title: "Jerry Can Spirits® | Premium British Rum - Swift & Sure, Expedition Ready",
   description: "Premium spirits engineered for adventure. Crafted with British precision and Caribbean soul for those who venture beyond the ordinary. Discover our expedition-ready rum collection.",
   keywords: "premium rum, British spirits, expedition rum, adventure spirits, Caribbean rum, craft spirits",
-  authors: [{ name: "Jerry Can Spirits" }],
+  authors: [{ name: "Jerry Can Spirits®" }],
   icons: {
     icon: [
       { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
@@ -54,21 +54,21 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_GB",
     url: "https://jerrycanspirits.co.uk",
-    siteName: "Jerry Can Spirits",
-    title: "Jerry Can Spirits | Premium British Rum",
+    siteName: "Jerry Can Spirits®",
+    title: "Jerry Can Spirits® | Premium British Rum",
     description: "Premium spirits engineered for adventure. Swift & Sure, Expedition Ready.",
     images: [
       {
         url: "/images/og-image.jpg",
         width: 1200,
         height: 630,
-        alt: "Jerry Can Spirits - Premium British Rum for Adventurers",
+        alt: "Jerry Can Spirits® - Premium British Rum for Adventurers",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Jerry Can Spirits | Premium British Rum",
+    title: "Jerry Can Spirits® | Premium British Rum",
     description: "Premium spirits engineered for adventure. Swift & Sure, Expedition Ready.",
     images: ["/images/og-image.jpg"],
   },
@@ -98,7 +98,9 @@ export default function RootLayout({
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-        <meta name="apple-mobile-web-app-title" content="Jerry Can Spirits" />
+        <meta name="apple-mobile-web-app-title" content="Jerry Can Spirits®" />
+        <link rel="preconnect" href="https://www.googletagmanager.com" />
+        <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
         <script async type="text/javascript" src="https://static.klaviyo.com/onsite/js/klaviyo.js?company_id=UavTvg"></script>
       </head>
       <body
