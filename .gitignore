@@ -44,6 +44,9 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
+# Build artifacts
+tsconfig.tsbuildinfo
+
 # Sentry
 .sentryclirc
 sentry.properties
