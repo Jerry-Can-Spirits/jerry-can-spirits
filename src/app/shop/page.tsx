@@ -4,6 +4,9 @@ import type { Metadata } from 'next'
 export const metadata: Metadata = {
   title: 'Shop - Coming Soon | Jerry Can Spirits',
   description: 'Premium British rum and adventure gear launching soon. Join our mailing list for exclusive early access and launch updates.',
+  alternates: {
+    canonical: 'https://jerrycanspirits.co.uk/shop',
+  },
 }
 
 export default function ShopPage() {

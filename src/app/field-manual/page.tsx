@@ -5,6 +5,9 @@ import type { Metadata } from 'next'
 export const metadata: Metadata = {
   title: "Field Manual | Jerry Can Spirits - Cocktail Recipes, Equipment & Ingredients",
   description: "Your essential guide to rum cocktails, bar equipment, and premium ingredients. Learn mixology techniques, explore classic recipes, and master the art of adventure-ready drinks.",
+  alternates: {
+    canonical: 'https://jerrycanspirits.co.uk/field-manual',
+  },
   openGraph: {
     title: "Field Manual | Jerry Can Spirits",
     description: "Your essential guide to rum cocktails and mixology",

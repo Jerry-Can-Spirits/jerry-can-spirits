@@ -3,6 +3,9 @@ import type { Metadata } from 'next'
 export const metadata: Metadata = {
   title: "Privacy Policy | Jerry Can Spirits - GDPR Compliant Data Protection",
   description: "Learn how Jerry Can Spirits collects, uses, and protects your personal data. GDPR compliant privacy policy covering cookies, marketing, and your data rights.",
+  alternates: {
+    canonical: 'https://jerrycanspirits.co.uk/privacy-policy',
+  },
   robots: {
     index: true,
     follow: true,

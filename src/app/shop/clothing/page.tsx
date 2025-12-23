@@ -4,6 +4,9 @@ import type { Metadata } from 'next'
 export const metadata: Metadata = {
   title: 'Expedition Gear - Coming Soon | Jerry Can Spirits',
   description: 'Adventure-ready apparel and branded merchandise launching soon. Jerry Can Spirits clothing and accessories.',
+  alternates: {
+    canonical: 'https://jerrycanspirits.co.uk/shop/clothing',
+  },
 }
 
 export default function ClothingPage() {

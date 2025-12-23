@@ -10,6 +10,9 @@ import SectionFilter from '@/components/SectionFilter'
 export const metadata: Metadata = {
   title: "Bar Equipment Guide | Jerry Can Spirits - Essential Cocktail Tools",
   description: "Professional bartending equipment for home explorers. Discover essential barware, glassware, and tools to craft exceptional rum cocktails at home.",
+  alternates: {
+    canonical: 'https://jerrycanspirits.co.uk/field-manual/equipment',
+  },
   openGraph: {
     title: "Bar Equipment Guide | Jerry Can Spirits - Essential Cocktail Tools",
     description: "Professional bartending equipment for home explorers. Discover essential barware, glassware, and tools to craft exceptional rum cocktails at home.",

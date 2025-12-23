@@ -6,6 +6,9 @@ import type { Metadata } from 'next'
 export const metadata: Metadata = {
   title: 'Barware | Jerry Can Spirits',
   description: 'Professional bar tools and equipment for home mixologists. Premium barware and cocktail accessories.',
+  alternates: {
+    canonical: 'https://jerrycanspirits.co.uk/shop/barware',
+  },
 }
 
 // Configure for Edge Runtime and dynamic rendering

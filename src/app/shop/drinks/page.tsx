@@ -6,6 +6,9 @@ import type { Metadata } from 'next'
 export const metadata: Metadata = {
   title: 'Premium Rum Collection | Jerry Can Spirits',
   description: 'British crafted premium rum. Small-batch spirits for adventurers and rum enthusiasts.',
+  alternates: {
+    canonical: 'https://jerrycanspirits.co.uk/shop/drinks',
+  },
 }
 
 // Configure for Edge Runtime and dynamic rendering

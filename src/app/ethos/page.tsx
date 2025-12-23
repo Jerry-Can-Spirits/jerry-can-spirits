@@ -5,6 +5,9 @@ import BackToTop from '@/components/BackToTop'
 export const metadata: Metadata = {
   title: "Our Ethos | Jerry Can Spirits - Values, Craftsmanship & Commitment",
   description: "Discover the values and craftsmanship philosophy behind Jerry Can Spirits. From military precision to traditional distilling methods, explore our commitment to adventure, quality, and innovation.",
+  alternates: {
+    canonical: 'https://jerrycanspirits.co.uk/ethos',
+  },
   robots: {
     index: true,
     follow: true,

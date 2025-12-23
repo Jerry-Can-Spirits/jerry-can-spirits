@@ -3,6 +3,9 @@ import type { Metadata } from 'next'
 export const metadata: Metadata = {
   title: "Shipping & Returns | Jerry Can Spirits - Delivery Information",
   description: "Jerry Can Spirits shipping information, delivery details, and returns policy for UK orders. Age verification required for all alcohol deliveries.",
+  alternates: {
+    canonical: 'https://jerrycanspirits.co.uk/shipping-returns',
+  },
   robots: {
     index: true,
     follow: true,

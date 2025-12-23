@@ -11,6 +11,7 @@ import ConsentBanner from "@/components/ConsentBanner";
 import ServiceWorkerRegistration from "@/components/ServiceWorkerRegistration";
 import { CartProvider } from "@/contexts/CartContext";
 import CartDrawer from "@/components/CartDrawer";
+import { OrganizationSchema, WebsiteSchema } from "@/components/StructuredData";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -97,6 +98,8 @@ export default function RootLayout({
       >
         <GoogleAnalytics />
         <ServiceWorkerRegistration />
+        <OrganizationSchema />
+        <WebsiteSchema />
 
         <CartProvider>
           {/* Skip to Content Link - Accessibility */}

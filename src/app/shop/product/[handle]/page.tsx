@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation'
 import { getProduct, type ShopifyProduct } from '@/lib/shopify'
 import AddToCartButton from '@/components/AddToCartButton'
 import ProductImageGallery from '@/components/ProductImageGallery'
+import StructuredData from '@/components/StructuredData'
 import type { Metadata } from 'next'
 
 // Configure for Cloudflare Pages Edge Runtime
@@ -27,6 +28,9 @@ export async function generateMetadata({
     return {
       title: `${product.title} | Jerry Can Spirits`,
       description: product.description.slice(0, 155),
+      alternates: {
+        canonical: `https://jerrycanspirits.co.uk/shop/product/${handle}`,
+      },
       openGraph: {
         title: product.title,
         description: product.description.slice(0, 155),
@@ -86,8 +90,32 @@ export default async function ProductPage({
 
   const firstVariant = product.variants?.[0]
 
+  // Product structured data
+  const productSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: product.title,
+    description: product.description,
+    image: product.images.length > 0 ? product.images[0].url : undefined,
+    brand: {
+      '@type': 'Brand',
+      name: 'Jerry Can Spirits',
+    },
+    offers: {
+      '@type': 'Offer',
+      price: product.priceRange.minVariantPrice.amount,
+      priceCurrency: product.priceRange.minVariantPrice.currencyCode,
+      availability: firstVariant?.availableForSale
+        ? 'https://schema.org/InStock'
+        : 'https://schema.org/OutOfStock',
+      url: `https://jerrycanspirits.co.uk/shop/product/${handle}`,
+    },
+  }
+
   return (
     <main className="min-h-screen py-20">
+      <StructuredData data={productSchema} id="product-schema" />
+
       {/* Breadcrumb */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
         <nav className="text-sm text-parchment-400 flex items-center gap-2">
