@@ -167,6 +167,7 @@ export default function AgeGate({ onVerified }: AgeGateProps) {
           priority
           quality={80}
           sizes="(max-width: 768px) 100vw, 50vw"
+          fetchPriority="high"
         />
       </div>
 
