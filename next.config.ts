@@ -17,24 +17,25 @@ const nextConfig: NextConfig = {
   // Middleware headers don't work reliably on Cloudflare Pages Edge Runtime
   async headers() {
     return [
+      // Security headers for Sanity Studio (less restrictive CSP needed)
       {
-        source: '/(.*)',
+        source: '/studio/:path*',
         headers: [
           {
             key: 'Content-Security-Policy',
             value: [
               "default-src 'self'",
-              "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://cdn.sanity.io https://js.sentry-cdn.com https://*.sentry.io",
-              "style-src 'self' 'unsafe-inline'",
-              "img-src 'self' data: blob: https: http:",
-              "font-src 'self' data:",
-              "connect-src 'self' https://cdn.sanity.io https://*.sanity.io https://*.shopify.com https://*.myshopify.com https://*.sentry.io https://www.google-analytics.com https://www.googletagmanager.com https://analytics.google.com wss://*.sanity.io",
+              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https: data:",
+              "style-src 'self' 'unsafe-inline' https: data:",
+              "font-src 'self' https: data:",
+              "img-src 'self' data: https: blob:",
               "media-src 'self' https: data:",
+              "connect-src 'self' https: wss: ws:",
+              "frame-src 'self' https:",
               "object-src 'none'",
-              "frame-src 'self' https://cdn.sanity.io https://*.sanity.io",
               "base-uri 'self'",
-              "form-action 'self'",
-              "frame-ancestors 'self'",
+              "form-action 'self' https:",
+              "frame-ancestors 'none'",
               "upgrade-insecure-requests",
             ].join('; '),
           },
@@ -48,7 +49,7 @@ const nextConfig: NextConfig = {
           },
           {
             key: 'X-Frame-Options',
-            value: 'SAMEORIGIN',
+            value: 'DENY',
           },
           {
             key: 'X-Content-Type-Options',
@@ -64,7 +65,62 @@ const nextConfig: NextConfig = {
           },
           {
             key: 'Permissions-Policy',
-            value: 'camera=(), microphone=(), geolocation=(), interest-cohort=()',
+            value: 'camera=(), microphone=(), geolocation=(), payment=(), usb=(), magnetometer=(), gyroscope=(), accelerometer=()',
+          },
+        ],
+      },
+      // Security headers for all other routes (stricter CSP)
+      {
+        source: '/:path*',
+        headers: [
+          {
+            key: 'Content-Security-Policy',
+            value: [
+              "default-src 'self'",
+              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://tagmanager.google.com https://static.cloudflareinsights.com https://*.klaviyo.com https://js.sentry-cdn.com https://*.sentry.io blob:",
+              "script-src-elem 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com https://tagmanager.google.com https://static.cloudflareinsights.com https://*.klaviyo.com",
+              "worker-src 'self' blob:",
+              "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://*.klaviyo.com",
+              "style-src-elem 'self' 'unsafe-inline' https://fonts.googleapis.com https://*.klaviyo.com",
+              "font-src 'self' https://fonts.gstatic.com data:",
+              "img-src 'self' data: https: blob:",
+              "media-src 'self' https:",
+              "connect-src 'self' https://www.google-analytics.com https://www.googletagmanager.com https://analytics.google.com https://region1.google-analytics.com https://*.klaviyo.com https://*.shopify.com https://*.myshopify.com https://cdn.sanity.io https://*.sanity.io https://*.ingest.sentry.io https://*.sentry.io https://cloudflareinsights.com wss: ws:",
+              "frame-src 'self' https://www.youtube.com https://www.vimeo.com https://cdn.sanity.io https://*.sanity.io",
+              "object-src 'none'",
+              "base-uri 'self'",
+              "form-action 'self' https://manage.kmail-lists.com",
+              "frame-ancestors 'none'",
+              "upgrade-insecure-requests",
+            ].join('; '),
+          },
+          {
+            key: 'X-DNS-Prefetch-Control',
+            value: 'on',
+          },
+          {
+            key: 'Strict-Transport-Security',
+            value: 'max-age=31536000; includeSubDomains; preload',
+          },
+          {
+            key: 'X-Frame-Options',
+            value: 'DENY',
+          },
+          {
+            key: 'X-Content-Type-Options',
+            value: 'nosniff',
+          },
+          {
+            key: 'X-XSS-Protection',
+            value: '1; mode=block',
+          },
+          {
+            key: 'Referrer-Policy',
+            value: 'strict-origin-when-cross-origin',
+          },
+          {
+            key: 'Permissions-Policy',
+            value: 'camera=(), microphone=(), geolocation=(), payment=(), usb=(), magnetometer=(), gyroscope=(), accelerometer=()',
           },
         ],
       },
