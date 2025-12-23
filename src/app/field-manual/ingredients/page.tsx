@@ -10,6 +10,9 @@ import SectionFilter from '@/components/SectionFilter'
 export const metadata: Metadata = {
   title: "Premium Ingredients Guide | Jerry Can Spirits - Quality Cocktail Components",
   description: "Build your adventure bar with quality ingredients. Expert guide to spirits, liqueurs, bitters, and fresh components for premium rum cocktails.",
+  alternates: {
+    canonical: 'https://jerrycanspirits.co.uk/field-manual/ingredients',
+  },
   openGraph: {
     title: "Premium Ingredients Guide | Jerry Can Spirits - Quality Cocktail Components",
     description: "Build your adventure bar with quality ingredients. Expert guide to spirits, liqueurs, bitters, and fresh components for premium rum cocktails.",

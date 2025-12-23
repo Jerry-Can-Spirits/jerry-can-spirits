@@ -5,6 +5,9 @@ import BackToTop from '@/components/BackToTop'
 export const metadata: Metadata = {
   title: "Our Story | Jerry Can Spirits - Engineered for Adventure",
   description: "Discover how Jerry Can Spirits was born from a desire to create rum with purpose and integrity. From Royal Corps of Signals service to engineering small-batch rums for modern explorers.",
+  alternates: {
+    canonical: 'https://jerrycanspirits.co.uk/about/story',
+  },
   robots: {
     index: true,
     follow: true,

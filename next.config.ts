@@ -5,6 +5,14 @@ const nextConfig: NextConfig = {
   // Configure for Cloudflare Pages (full-stack mode)
   trailingSlash: true,
 
+  // Target modern browsers to remove unnecessary polyfills
+  compiler: {
+    // Remove console logs in production
+    removeConsole: process.env.NODE_ENV === 'production' ? {
+      exclude: ['error', 'warn'],
+    } : false,
+  },
+
   // Security headers configured here for Cloudflare Pages compatibility
   // Middleware headers don't work reliably on Cloudflare Pages Edge Runtime
   async headers() {
