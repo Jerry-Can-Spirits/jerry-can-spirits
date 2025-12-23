@@ -6,6 +6,7 @@ This directory contains all project documentation organized by category.
 
 ### Setup & Configuration
 - [Cloudflare Setup](./CLOUDFLARE_SETUP.md) - Deployment and hosting configuration
+- [Cloudflare Security Audit](./CLOUDFLARE_SECURITY_AUDIT.md) - Comprehensive security hardening guide (CIA Triad)
 - [Klaviyo Setup Guide](./KLAVIYO_SETUP_GUIDE.md) - Email marketing integration
 - [Instagram Oembed Setup](./INSTAGRAM_OEMBED_SETUP.md) - Social media integration
 - [Shopify Integration Plan](./SHOPIFY_INTEGRATION_PLAN.md) - E-commerce setup
