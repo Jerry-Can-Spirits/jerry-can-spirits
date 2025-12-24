@@ -39,7 +39,7 @@ export async function generateMetadata({
         title: `${product.title} | Jerry Can Spirits`,
         description,
         images: product.images.length > 0 ? [product.images[0].url] : [],
-        type: 'product',
+        type: 'website',
         siteName: 'Jerry Can Spirits',
       },
       twitter: {
