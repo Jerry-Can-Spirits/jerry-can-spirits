@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { getProduct, type ShopifyProduct } from '@/lib/shopify'
+import Image from 'next/image'
+import { getProduct, getProductsByCollection, type ShopifyProduct } from '@/lib/shopify'
 import AddToCartButton from '@/components/AddToCartButton'
 import ProductImageGallery from '@/components/ProductImageGallery'
 import StructuredData from '@/components/StructuredData'
@@ -25,15 +26,26 @@ export async function generateMetadata({
       }
     }
 
+    const description = product.description.slice(0, 155) || `Premium British spirits from Jerry Can Spirits. Veteran-owned spirits crafted with military precision. ${product.title} - engineered for reliability, designed for adventure.`
+
     return {
-      title: `${product.title} | Jerry Can Spirits`,
-      description: product.description.slice(0, 155),
+      title: `${product.title} | Veteran-Owned Premium British Spirits | Jerry Can Spirits`,
+      description,
+      keywords: `${product.title}, British spirits, veteran owned, premium spirits, military heritage, Jerry Can Spirits, expedition spirits, small batch, craft spirits`,
       alternates: {
         canonical: `https://jerrycanspirits.co.uk/shop/product/${handle}`,
       },
       openGraph: {
-        title: product.title,
-        description: product.description.slice(0, 155),
+        title: `${product.title} | Jerry Can Spirits`,
+        description,
+        images: product.images.length > 0 ? [product.images[0].url] : [],
+        type: 'website',
+        siteName: 'Jerry Can Spirits',
+      },
+      twitter: {
+        card: 'summary_large_image',
+        title: `${product.title} | Jerry Can Spirits`,
+        description,
         images: product.images.length > 0 ? [product.images[0].url] : [],
       },
     }
@@ -65,9 +77,17 @@ export default async function ProductPage({
 }) {
   const { handle } = await params
   let product: ShopifyProduct | null = null
+  let relatedProducts: ShopifyProduct[] = []
 
   try {
     product = await getProduct(handle)
+
+    // Fetch related products from drinks collection
+    const allDrinksProducts = await getProductsByCollection('drinks')
+    // Filter out current product and limit to 4
+    relatedProducts = allDrinksProducts
+      .filter(p => p.handle !== handle)
+      .slice(0, 4)
   } catch (error) {
     console.error('Error fetching product:', error)
     notFound()
@@ -96,11 +116,16 @@ export default async function ProductPage({
     '@type': 'Product',
     name: product.title,
     description: product.description,
-    image: product.images.length > 0 ? product.images[0].url : undefined,
+    image: product.images.map(img => img.url),
+    sku: handle,
     brand: {
-      '@type': 'Brand',
+      '@type': 'Organization',
       name: 'Jerry Can Spirits',
+      url: 'https://jerrycanspirits.co.uk',
+      logo: 'https://jerrycanspirits.co.uk/images/Logo.webp',
+      description: 'Veteran-owned premium British spirits with authentic military heritage',
     },
+    category: 'Alcoholic Beverages > Spirits',
     offers: {
       '@type': 'Offer',
       price: product.priceRange.minVariantPrice.amount,
@@ -109,6 +134,22 @@ export default async function ProductPage({
         ? 'https://schema.org/InStock'
         : 'https://schema.org/OutOfStock',
       url: `https://jerrycanspirits.co.uk/shop/product/${handle}`,
+      priceValidUntil: new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString().split('T')[0],
+      seller: {
+        '@type': 'Organization',
+        name: 'Jerry Can Spirits',
+        url: 'https://jerrycanspirits.co.uk',
+      },
+    },
+    manufacturer: {
+      '@type': 'Organization',
+      name: 'Jerry Can Spirits',
+      address: {
+        '@type': 'PostalAddress',
+        addressLocality: 'Blackpool',
+        addressRegion: 'Lancashire',
+        addressCountry: 'GB',
+      },
     },
   }
 
@@ -207,8 +248,14 @@ export default async function ProductPage({
 
             {/* Product Features/Highlights */}
             <div className="pt-6 border-t border-gold-500/20">
-              <h3 className="text-lg font-semibold text-gold-300 mb-4">Product Details</h3>
+              <h3 className="text-lg font-semibold text-gold-300 mb-4">Why Choose Jerry Can Spirits</h3>
               <ul className="space-y-2 text-parchment-300">
+                <li className="flex items-start gap-3">
+                  <svg className="w-5 h-5 text-gold-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                  </svg>
+                  <span>Veteran-owned with authentic military heritage</span>
+                </li>
                 <li className="flex items-start gap-3">
                   <svg className="w-5 h-5 text-gold-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
@@ -219,13 +266,19 @@ export default async function ProductPage({
                   <svg className="w-5 h-5 text-gold-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                   </svg>
-                  <span>Small-batch production</span>
+                  <span>Small-batch production for exceptional quality</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <svg className="w-5 h-5 text-gold-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                   </svg>
-                  <span>Premium quality ingredients</span>
+                  <span>Premium ingredients engineered for reliability</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <svg className="w-5 h-5 text-gold-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                  </svg>
+                  <span>Armed Forces Covenant signatory</span>
                 </li>
               </ul>
             </div>
@@ -245,6 +298,53 @@ export default async function ProductPage({
           </div>
         </div>
       </section>
+
+      {/* Related Products Section */}
+      {relatedProducts.length > 0 && (
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-16">
+          <h2 className="text-3xl font-serif font-bold text-white mb-8">You Might Also Like</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {relatedProducts.map((relatedProduct) => (
+              <Link
+                key={relatedProduct.id}
+                href={`/shop/product/${relatedProduct.handle}`}
+                className="group bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl border border-gold-500/20 hover:border-gold-400/40 transition-all duration-300 overflow-hidden"
+              >
+                {/* Product Image */}
+                {relatedProduct.images.length > 0 && (
+                  <div className="relative aspect-square bg-jerry-green-800/20 overflow-hidden">
+                    <Image
+                      src={relatedProduct.images[0].url}
+                      alt={relatedProduct.images[0].altText || relatedProduct.title}
+                      fill
+                      className="object-cover group-hover:scale-110 transition-transform duration-300"
+                    />
+                  </div>
+                )}
+
+                {/* Product Info */}
+                <div className="p-4">
+                  <h3 className="text-lg font-serif font-bold text-white mb-2 group-hover:text-gold-300 transition-colors">
+                    {relatedProduct.title}
+                  </h3>
+                  <p className="text-xl font-serif font-bold text-gold-400">
+                    {formatPrice(
+                      relatedProduct.priceRange.minVariantPrice.amount,
+                      relatedProduct.priceRange.minVariantPrice.currencyCode
+                    )}
+                  </p>
+                  <div className="mt-4 flex items-center gap-2 text-gold-300 text-sm">
+                    <span>View Details</span>
+                    <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
     </main>
   )
 }
