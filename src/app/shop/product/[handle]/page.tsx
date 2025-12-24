@@ -304,7 +304,7 @@ export default async function ProductPage({
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-16">
         <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
           <h2 className="text-3xl font-serif font-bold text-white mb-2">Customer Reviews</h2>
-          <p className="text-parchment-300 mb-8">See what our customers are saying about our premium British spirits</p>
+          <p className="text-parchment-300 mb-8">See what our customers are saying about {product.title}</p>
           <TrustpilotWidget
             templateId="54ad5defc6454f065c28af8b"
             sku={handle}
