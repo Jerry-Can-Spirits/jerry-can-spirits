@@ -1,5 +1,7 @@
 import { MetadataRoute } from 'next'
 import { getProducts, type ShopifyProduct } from '@/lib/shopify'
+import { client } from '@/sanity/client'
+import { cocktailsQuery } from '@/sanity/queries'
 
 // Ensure sitemap works on Cloudflare Pages Edge Runtime
 export const runtime = 'edge'
@@ -25,6 +27,22 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     lastModified: currentDate,
     changeFrequency: 'weekly' as const,
     priority: 0.8,
+  }))
+
+  // Fetch all cocktails from Sanity
+  let cocktails: Array<{ slug: { current: string } }> = []
+  try {
+    cocktails = await client.fetch(cocktailsQuery)
+  } catch (error) {
+    console.error('Error fetching cocktails for sitemap:', error)
+  }
+
+  // Generate cocktail URLs dynamically
+  const cocktailUrls: MetadataRoute.Sitemap = cocktails.map((cocktail) => ({
+    url: `${baseUrl}/cocktails/${cocktail.slug.current}`,
+    lastModified: currentDate,
+    changeFrequency: 'weekly' as const,
+    priority: 0.7,
   }))
 
   // Define all static routes with priorities and change frequencies
@@ -170,5 +188,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
   ]
 
-  return [...routes, ...productUrls]
+  return [...routes, ...productUrls, ...cocktailUrls]
 }
