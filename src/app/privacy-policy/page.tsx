@@ -128,6 +128,7 @@ export default function PrivacyPolicy() {
                 <li><strong className="text-gold-300">Necessary Cookies:</strong> Essential for website functionality, age verification</li>
                 <li><strong className="text-gold-300">Analytics Cookies:</strong> Google Analytics for usage statistics (requires consent)</li>
                 <li><strong className="text-gold-300">Marketing Cookies:</strong> Klaviyo for email marketing tracking (requires consent)</li>
+                <li><strong className="text-gold-300">Third-Party Cookies:</strong> Trustpilot for customer reviews and trust ratings (requires consent)</li>
               </ul>
 
               <h3 className="text-xl font-serif font-semibold text-white mt-6 mb-3">
@@ -151,6 +152,7 @@ export default function PrivacyPolicy() {
                 <li><strong className="text-gold-300">Klaviyo:</strong> Email marketing platform (USA) - adequate protection via Standard Contractual Clauses</li>
                 <li><strong className="text-gold-300">Google Analytics:</strong> Website analytics (Ireland/USA) - Google Ads Data Processing Terms</li>
                 <li><strong className="text-gold-300">Vercel:</strong> Website hosting (USA) - GDPR-compliant hosting with adequate safeguards</li>
+                <li><strong className="text-gold-300">Trustpilot:</strong> Customer review and ratings platform (Denmark/USA) - GDPR-compliant with Standard Contractual Clauses and Privacy Shield certification</li>
               </ul>
 
               <h3 className="text-xl font-serif font-semibold text-white mt-6 mb-3">

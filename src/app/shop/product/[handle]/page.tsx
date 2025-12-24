@@ -5,6 +5,7 @@ import { getProduct, getProductsByCollection, type ShopifyProduct } from '@/lib/
 import AddToCartButton from '@/components/AddToCartButton'
 import ProductImageGallery from '@/components/ProductImageGallery'
 import StructuredData from '@/components/StructuredData'
+import TrustpilotWidget from '@/components/TrustpilotWidget'
 import type { Metadata } from 'next'
 
 // Configure for Cloudflare Pages Edge Runtime
@@ -296,6 +297,21 @@ export default async function ProductPage({
               </Link>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* Customer Reviews Section */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-16">
+        <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
+          <h2 className="text-3xl font-serif font-bold text-white mb-2">Customer Reviews</h2>
+          <p className="text-parchment-300 mb-8">See what our customers are saying about our premium British spirits</p>
+          <TrustpilotWidget
+            templateId="54ad5defc6454f065c28af8b"
+            sku={handle}
+            name={product.title}
+            height="500px"
+            theme="dark"
+          />
         </div>
       </section>
 
