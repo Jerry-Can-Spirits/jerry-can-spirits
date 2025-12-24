@@ -2,6 +2,8 @@ Contact: mailto:hello@jerrycanspirits.co.uk
 Expires: 2026-12-31T23:59:59.000Z
 Preferred-Languages: en
 Canonical: https://jerrycanspirits.co.uk/.well-known/security.txt
+Policy: https://jerrycanspirits.co.uk/security-policy
+Hiring: https://jerrycanspirits.co.uk/careers
 
 # Security Policy
 # If you discover a security vulnerability, please report it to us via email.
