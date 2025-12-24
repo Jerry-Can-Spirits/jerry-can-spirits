@@ -42,9 +42,9 @@ interface SanityCocktail {
 }
 
 interface PageProps {
-  params: {
+  params: Promise<{
     slug: string
-  }
+  }>
 }
 
 // Generate static params for all cocktails
@@ -58,7 +58,8 @@ export async function generateStaticParams() {
 
 // Generate metadata for each cocktail
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const cocktail = await client.fetch<SanityCocktail>(cocktailBySlugQuery, { slug: params.slug })
+  const { slug } = await params
+  const cocktail = await client.fetch<SanityCocktail>(cocktailBySlugQuery, { slug })
 
   if (!cocktail) {
     return {
@@ -88,7 +89,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 }
 
 export default async function CocktailPage({ params }: PageProps) {
-  const cocktail = await client.fetch<SanityCocktail>(cocktailBySlugQuery, { slug: params.slug })
+  const { slug } = await params
+  const cocktail = await client.fetch<SanityCocktail>(cocktailBySlugQuery, { slug })
 
   if (!cocktail) {
     notFound()
