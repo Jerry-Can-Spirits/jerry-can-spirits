@@ -108,8 +108,8 @@ export default function Home() {
             </div>
             <div className="max-w-5xl mx-auto">
               <TrustpilotWidget
-                templateId="5419b6a8b0d04a076446a9ad"
-                height="500px"
+                templateId="53aa8912dec7e10d38f59f36"
+                height="350px"
                 theme="dark"
               />
             </div>
