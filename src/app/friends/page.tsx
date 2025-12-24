@@ -32,20 +32,18 @@ const partners = [
     description: "Established in 1997, Harlequin Print Group has grown to become a leading producer of high quality retail cartons. Our packaging partner provides market-leading material across retail packaging, digital print, signage and graphic design, ensuring our products are presented with the quality they deserve.",
     website: "https://harlequinprintgroup.co.uk/",
     speciality: "Retail Packaging & Print",
-    logo: "/images/partners/Harlequin Logo.webp",
+    logo: "/images/partners/Harlequin_Logo.webp",
     featured: true,
   },
-  // TODO: Add more partners as you build relationships
-  // Example structure:
-  // {
-  //   name: "Example Distillery",
-  //   location: "City, Region",
-  //   description: "What makes them special and why you're partnering",
-  //   website: "https://example.com",
-  //   speciality: "Their main products",
-  //   logo: "/images/partners/example.png",
-  //   featured: false,
-  // },
+  {
+    name: "The Engraved Gift Workshop",
+    location: "Chatburn, Lancashire",
+    description: "Our barware partner, crafting the premium glasses and accessories that complement our spirits. Established in 2005 with a passion for natural products and personalisation, they create unique, elegant products that recipients truly want to use. Based in Lancashire, they source only the highest standard glassware and materials, bringing expertise in engraving and customisation. 'Etching Memories Into Exceptional Products'.",
+    website: "https://the-engraved-gift-workshop.co.uk/",
+    speciality: "Barware, Glassware & Engraving",
+    logo: "/images/partners/The_Engraved_Gift_Workshop-logo.webp",
+    featured: true,
+  },
 ]
 
 export default function FriendsPage() {

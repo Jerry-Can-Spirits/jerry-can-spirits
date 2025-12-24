@@ -36,6 +36,7 @@ export default function Footer() {
       { name: 'Friends & Partners', href: '/friends' },
       { name: 'FAQ', href: '/faq' },
       { name: 'Contact', href: '/contact' },
+      { name: 'Careers', href: '/careers' },
     ],
     legal: [
       { name: 'Privacy Policy', href: '/privacy-policy' },
@@ -44,6 +45,7 @@ export default function Footer() {
       { name: 'Terms of Service', href: '/terms-of-service' },
       { name: 'Shipping & Returns', href: '/shipping-returns' },
       { name: 'Accessibility', href: '/accessibility' },
+      { name: 'Security Policy', href: '/security-policy' },
       { name: 'Armed Forces Covenant', href: '/armed-forces-covenant' },
     ]
   }
@@ -199,8 +201,9 @@ export default function Footer() {
                   <p>Proud signatories of the Armed Forces Covenant - we stand alongside serving personnel, veterans, their families, and our blue light services.</p>
                   <p>Our commitment is to ensure fairness, respect, and equal opportunity for all who serve, recognising their dedication and the vital role they play in our communities.</p>
 
-                  {/* AFC Logo Badge */}
-                  <div className="pt-4">
+                  {/* Badges Grid */}
+                  <div className="pt-4 grid grid-cols-2 gap-3">
+                    {/* AFC Logo Badge */}
                     <Link
                       href="/armed-forces-covenant"
                       className="block bg-white rounded-lg p-3 hover:shadow-lg transition-all duration-200 hover:scale-105"
@@ -211,6 +214,26 @@ export default function Footer() {
                         <Image
                           src="/images/AFC_POSITIVE_RGB.png"
                           alt="Armed Forces Covenant Supporter"
+                          width={150}
+                          height={100}
+                          className="w-full h-auto"
+                        />
+                      ) : (
+                        <div className="w-full h-20 bg-parchment-200 rounded animate-pulse" />
+                      )}
+                    </Link>
+
+                    {/* Veteran Owned Badge */}
+                    <Link
+                      href="/about/story"
+                      className="block bg-white rounded-lg p-3 hover:shadow-lg transition-all duration-200 hover:scale-105 flex items-center justify-center"
+                      onClick={() => trackFooterClick('Veteran Owned Badge', 'Our Story Page')}
+                      aria-label="Learn about our veteran-owned heritage"
+                    >
+                      {isClient ? (
+                        <Image
+                          src="/images/Veteran Owned Badge.webp"
+                          alt="Veteran-Owned Business - Royal Corps of Signals"
                           width={150}
                           height={100}
                           className="w-full h-auto"

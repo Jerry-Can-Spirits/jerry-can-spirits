@@ -4,8 +4,8 @@ import { getProductsByCollection, type ShopifyProduct } from '@/lib/shopify'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Premium Rum Collection | Jerry Can Spirits',
-  description: 'British crafted premium rum. Small-batch spirits for adventurers and rum enthusiasts.',
+  title: 'British Military Heritage Rum | Veteran-Owned Premium Spirits Collection | Jerry Can Spirits',
+  description: 'Veteran-owned British rum collection. Small-batch premium spirits crafted with military precision by Royal Corps of Signals veterans. Sustainably sourced, expedition-tested. Shop our authentic military heritage rum range.',
   alternates: {
     canonical: 'https://jerrycanspirits.co.uk/shop/drinks',
   },
