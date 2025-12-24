@@ -3,8 +3,8 @@ import Image from 'next/image'
 import BackToTop from '@/components/BackToTop'
 
 export const metadata: Metadata = {
-  title: "Our Story | Jerry Can Spirits - Engineered for Adventure",
-  description: "Discover how Jerry Can Spirits was born from a desire to create rum with purpose and integrity. From Royal Corps of Signals service to engineering small-batch rums for modern explorers.",
+  title: "Our Story | Veteran-Owned British Rum - From Royal Corps of Signals to Premium Spirits",
+  description: "Veteran-owned British rum brand founded by Royal Corps of Signals veterans with 12 years military service. From Arctic deployments to crafting premium small-batch rum engineered for reliability. Our authentic military heritage story.",
   alternates: {
     canonical: 'https://jerrycanspirits.co.uk/about/story',
   },
@@ -31,7 +31,7 @@ export default function OurStory() {
             <div className="relative w-full max-w-2xl mx-auto h-48 sm:h-64 md:h-80 lg:h-96 rounded-lg overflow-hidden border border-gold-500/20 mb-8 shadow-2xl">
               <Image
                 src="/images/hero/Trail_Hero.webp"
-                alt="Jerry Can Spirits - Adventure and Expedition Ready Rum"
+                alt="Jerry Can Spirits - Veteran-owned British rum with military heritage, engineered for reliability"
                 fill
                 className="object-cover"
                 priority
@@ -452,7 +452,7 @@ export default function OurStory() {
                 <div className="mx-auto mb-6 max-w-md">
                   <Image
                     src="/images/JerryCan_OakTree.webp"
-                    alt="Jerry Can beside oak tree - engineered for adventure"
+                    alt="Jerry Can beside oak tree - engineered for reliability, military heritage design"
                     width={512}
                     height={512}
                     className="rounded-lg"

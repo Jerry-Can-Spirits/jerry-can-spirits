@@ -33,9 +33,9 @@ const jetbrains = JetBrains_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://jerrycanspirits.co.uk'),
-  title: "Jerry Can Spirits® | Premium British Rum - Swift & Sure, Expedition Ready",
-  description: "Premium spirits engineered for adventure. Crafted with British precision and Caribbean soul for those who venture beyond the ordinary. Discover our expedition-ready rum collection.",
-  keywords: "premium rum, British spirits, expedition rum, adventure spirits, Caribbean rum, craft spirits",
+  title: "Jerry Can Spirits® | Veteran-Owned Premium British Rum - Engineered for Reliability, Designed for Adventure",
+  description: "Veteran-owned premium British rum with authentic military heritage. Founded by Royal Corps of Signals veterans. Small-batch spirits engineered for reliability, designed for adventure. Expedition Ready.",
+  keywords: "veteran-owned rum, British spirits, military heritage rum, premium rum, Royal Corps of Signals, expedition rum, small-batch spirits, craft rum, British rum, sustainable spirits",
   authors: [{ name: "Jerry Can Spirits®" }],
   alternates: {
     canonical: "https://jerrycanspirits.co.uk",
@@ -45,21 +45,21 @@ export const metadata: Metadata = {
     locale: "en_GB",
     url: "https://jerrycanspirits.co.uk",
     siteName: "Jerry Can Spirits®",
-    title: "Jerry Can Spirits® | Premium British Rum",
-    description: "Premium spirits engineered for adventure. Swift & Sure, Expedition Ready.",
+    title: "Jerry Can Spirits® | Veteran-Owned Premium British Rum",
+    description: "Veteran-owned British rum. Engineered for reliability, designed for adventure. Expedition Ready.",
     images: [
       {
         url: "/images/og-image.jpg",
         width: 1200,
         height: 630,
-        alt: "Jerry Can Spirits® - Premium British Rum for Adventurers",
+        alt: "Jerry Can Spirits® - Veteran-Owned Premium British Rum with Military Heritage",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Jerry Can Spirits® | Premium British Rum",
-    description: "Premium spirits engineered for adventure. Swift & Sure, Expedition Ready.",
+    title: "Jerry Can Spirits® | Veteran-Owned Premium British Rum",
+    description: "Veteran-owned British rum. Engineered for reliability, designed for adventure. Expedition Ready.",
     images: ["/images/og-image.jpg"],
   },
   robots: {

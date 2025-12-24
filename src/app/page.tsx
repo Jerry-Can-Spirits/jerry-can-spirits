@@ -6,11 +6,11 @@ import KlaviyoEmbeddedForm from "@/components/KlaviyoEmbeddedForm";
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: "Jerry Can Spirits | Premium British Rum - Swift & Sure, Expedition Ready",
-  description: "Premium British rum crafted for adventurers. Small-batch spirits with Caribbean soul and British precision. Join the waitlist for exclusive early access to expedition-ready rum.",
+  title: "Jerry Can Spirits | Veteran-Owned Premium British Rum - Engineered for Reliability, Designed for Adventure",
+  description: "Veteran-owned premium British rum with authentic military heritage. Founded by Royal Corps of Signals veterans. Small-batch spirits engineered for reliability, designed for adventure. Expedition Ready.",
   openGraph: {
-    title: "Jerry Can Spirits | Premium British Rum",
-    description: "Premium British rum crafted for adventurers. Swift & Sure, Expedition Ready.",
+    title: "Jerry Can Spirits | Veteran-Owned Premium British Rum",
+    description: "Veteran-owned British rum. Engineered for reliability, designed for adventure. Expedition Ready.",
   },
 }
 
@@ -24,16 +24,26 @@ export default function Home() {
       "name": "Jerry Can Spirits",
       "url": "https://jerrycanspirits.co.uk",
       "logo": "https://jerrycanspirits.co.uk/images/Logo.webp",
-      "description": "Premium spirits engineered for adventure. Crafted with British precision and Caribbean soul for those who venture beyond the ordinary.",
+      "description": "Veteran-owned premium British rum with authentic military heritage. Founded by Royal Corps of Signals veterans. Small-batch spirits engineered for reliability, designed for adventure.",
       "foundingDate": "2025",
       "founders": [
         {
           "@type": "Person",
-          "name": "Jerry Can Spirits Founders"
+          "name": "Jerry Can Spirits Founder",
+          "alumniOf": {
+            "@type": "Organization",
+            "name": "Royal Corps of Signals"
+          },
+          "hasOccupation": {
+            "@type": "Occupation",
+            "name": "British Armed Forces Veteran"
+          }
         }
       ],
       "address": {
         "@type": "PostalAddress",
+        "addressLocality": "Blackpool",
+        "addressRegion": "Lancashire",
         "addressCountry": "GB"
       },
       "sameAs": [
@@ -44,7 +54,9 @@ export default function Home() {
         "@type": "ContactPoint",
         "contactType": "Customer Service",
         "email": "hello@jerrycanspirits.co.uk"
-      }
+      },
+      "knowsAbout": ["Premium Rum", "British Spirits", "Military Heritage", "Veteran-Owned Business", "Small-Batch Distilling"],
+      "award": "Armed Forces Covenant Signatory"
     },
     // Website schema
     {
@@ -52,7 +64,7 @@ export default function Home() {
       "@type": "WebSite",
       "name": "Jerry Can Spirits",
       "url": "https://jerrycanspirits.co.uk",
-      "description": "Premium British rum - Swift & Sure, Expedition Ready",
+      "description": "Veteran-owned premium British rum - Engineered for reliability, designed for adventure. Expedition Ready.",
       "publisher": {
         "@type": "Organization",
         "name": "Jerry Can Spirits"
@@ -64,8 +76,8 @@ export default function Home() {
       "@type": "Brand",
       "name": "Jerry Can Spirits",
       "logo": "https://jerrycanspirits.co.uk/images/Logo.webp",
-      "slogan": "Swift & Sure, Expedition Ready",
-      "description": "Premium spirits engineered for adventure"
+      "slogan": "Engineered for reliability, designed for adventure",
+      "description": "Veteran-owned premium British rum with authentic military heritage"
     }
   ];
 

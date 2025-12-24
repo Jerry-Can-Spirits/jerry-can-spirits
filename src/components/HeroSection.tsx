@@ -155,40 +155,11 @@ export default function HeroSection() {
               </button>
             </div>
 
-            {/* Trust Indicators */}
-            <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-6 pt-8 border-t border-jerry-green-700">
-              <div className="flex items-center gap-2 text-gold-300">
-                <Image
-                  src="/images/hero/premium-quality.png"
-                  alt="Premium Quality British Rum Badge"
-                  width={24}
-                  height={24}
-                  className="w-6 h-6 sm:w-5 sm:h-5"
-                />
-                <span className="text-sm font-medium">Premium Quality</span>
-              </div>
-
-              <div className="flex items-center gap-2 text-gold-300">
-                <Image
-                  src="/images/hero/padlock.svg"
-                  alt="Secure and Tracked Delivery"
-                  width={24}
-                  height={24}
-                  className="w-6 h-6 sm:w-5 sm:h-5"
-                />
-                <span className="text-sm font-medium">Secure Shipping</span>
-              </div>
-
-              <div className="flex items-center gap-2 text-gold-300">
-                <Image
-                  src="/images/hero/union-flag.png"
-                  alt="Proudly Made in the United Kingdom"
-                  width={24}
-                  height={24}
-                  className="w-6 h-6 sm:w-5 sm:h-5"
-                />
-                <span className="text-sm font-medium">Made in the UK</span>
-              </div>
+            {/* Trust Indicators - Text Only */}
+            <div className="pt-8 border-t border-jerry-green-700">
+              <p className="text-gold-300 text-sm font-medium text-center lg:text-left">
+                Premium Quality • Secure Shipping • Made in the UK • Veteran Owned
+              </p>
             </div>
           </div>
 

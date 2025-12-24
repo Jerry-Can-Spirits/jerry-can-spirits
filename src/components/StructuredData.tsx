@@ -26,12 +26,16 @@ export function OrganizationSchema() {
     legalName: 'Jerry Can Spirits Ltd',
     url: 'https://jerrycanspirits.co.uk',
     logo: 'https://jerrycanspirits.co.uk/images/Logo.webp',
-    description: 'Premium British rum. Engineered for reliability. Crafted for adventure.',
+    description: 'Veteran-owned premium British rum with authentic military heritage. Founded by Royal Corps of Signals veterans. Engineered for reliability, designed for adventure.',
     email: 'hello@jerrycanspirits.co.uk',
     address: {
       '@type': 'PostalAddress',
+      addressLocality: 'Blackpool',
+      addressRegion: 'Lancashire',
       addressCountry: 'GB',
     },
+    knowsAbout: ['Premium Rum', 'British Spirits', 'Military Heritage', 'Veteran-Owned Business', 'Small-Batch Distilling'],
+    award: 'Armed Forces Covenant Signatory',
   }
 
   return <StructuredData data={schema} id="organization-schema" />
