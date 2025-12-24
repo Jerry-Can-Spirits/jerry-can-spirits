@@ -111,6 +111,7 @@ export default function Home() {
                 templateId="53aa8912dec7e10d38f59f36"
                 height="350px"
                 theme="dark"
+                stars=""
               />
             </div>
           </div>

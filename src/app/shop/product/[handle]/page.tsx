@@ -311,6 +311,7 @@ export default async function ProductPage({
             name={product.title}
             height="500px"
             theme="dark"
+            stars=""
           />
         </div>
       </section>

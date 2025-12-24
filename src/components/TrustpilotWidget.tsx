@@ -20,7 +20,7 @@ export default function TrustpilotWidget({
   height = '400px',
   width = '100%',
   theme = 'dark',
-  stars = '4,5',
+  stars = '',
   locale = 'en-GB',
   sku,
   name,
@@ -45,19 +45,28 @@ export default function TrustpilotWidget({
     }
   }, [templateId, businessUnitId, sku, name])
 
+  // Build data attributes object, excluding stars if empty
+  const dataAttributes: Record<string, string | undefined> = {
+    'data-locale': locale,
+    'data-template-id': templateId,
+    'data-businessunit-id': businessUnitId,
+    'data-style-height': height,
+    'data-style-width': width,
+    'data-theme': theme,
+    'data-sku': sku,
+    'data-name': name,
+  }
+
+  // Only include stars attribute if it has a value
+  if (stars) {
+    dataAttributes['data-stars'] = stars
+  }
+
   return (
     <div
       ref={ref}
       className="trustpilot-widget"
-      data-locale={locale}
-      data-template-id={templateId}
-      data-businessunit-id={businessUnitId}
-      data-style-height={height}
-      data-style-width={width}
-      data-theme={theme}
-      data-stars={stars}
-      data-sku={sku}
-      data-name={name}
+      {...dataAttributes}
     >
       <a
         href="https://uk.trustpilot.com/review/jerrycanspirits.co.uk"
