@@ -123,7 +123,9 @@ export default function NotifyPage() {
         {/* Features Grid */}
         <div className="grid md:grid-cols-3 gap-6 mt-12">
           <div className="text-center p-6 bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl border border-gold-500/20">
-            <div className="text-3xl mb-3">🎁</div>
+            <svg className="w-10 h-10 mx-auto mb-3 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7" />
+            </svg>
             <h3 className="text-lg font-serif font-bold text-white mb-2">Early Access</h3>
             <p className="text-parchment-300 text-sm">
               Be among the first to try our spirits when we launch
@@ -131,7 +133,9 @@ export default function NotifyPage() {
           </div>
 
           <div className="text-center p-6 bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl border border-gold-500/20">
-            <div className="text-3xl mb-3">💰</div>
+            <svg className="w-10 h-10 mx-auto mb-3 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
             <h3 className="text-lg font-serif font-bold text-white mb-2">Special Offers</h3>
             <p className="text-parchment-300 text-sm">
               Exclusive discounts and limited edition releases
@@ -139,7 +143,9 @@ export default function NotifyPage() {
           </div>
 
           <div className="text-center p-6 bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl border border-gold-500/20">
-            <div className="text-3xl mb-3">📰</div>
+            <svg className="w-10 h-10 mx-auto mb-3 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
+            </svg>
             <h3 className="text-lg font-serif font-bold text-white mb-2">Updates</h3>
             <p className="text-parchment-300 text-sm">
               Stay informed about our journey and product launches

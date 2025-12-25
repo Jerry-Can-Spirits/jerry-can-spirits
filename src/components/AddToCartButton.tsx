@@ -13,7 +13,7 @@ export default function AddToCartButton({ variantId, productTitle }: AddToCartBu
   const [quantity, setQuantity] = useState(1)
 
   const handleAddToCart = async () => {
-    console.log('🎯 Adding to cart:', { variantId, quantity, productTitle })
+    console.log('Adding to cart:', { variantId, quantity, productTitle })
     await addToCart(variantId, quantity)
   }
 

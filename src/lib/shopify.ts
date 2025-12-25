@@ -299,7 +299,7 @@ export async function getProduct(handle: string): Promise<ShopifyProduct | null>
     }
 
     // Debug log to see what Storefront API returns
-    console.log('🔍 Storefront API Product Data:', JSON.stringify(data.product, null, 2));
+    console.log('Storefront API Product Data:', JSON.stringify(data.product, null, 2));
 
     return {
       ...data.product,
@@ -366,35 +366,35 @@ export async function createCart(): Promise<Cart> {
   try {
     const response = await client.request(query);
 
-    console.log('🔍 Full Shopify Response:', JSON.stringify(response, null, 2));
+    console.log('Full Shopify Response:', JSON.stringify(response, null, 2));
 
     const { data, errors } = response;
 
     if (errors && Object.keys(errors).length > 0) {
-      console.error('❌ GraphQL Errors:', JSON.stringify(errors, null, 2));
+      console.error('GraphQL Errors:', JSON.stringify(errors, null, 2));
       throw new Error(`Shopify API Error: ${JSON.stringify(errors)}`);
     }
 
     if (!data?.cartCreate?.cart) {
-      console.error('❌ No cart created. Response:', data);
+      console.error('No cart created. Response:', data);
       throw new Error('Failed to create cart - no cart returned');
     }
 
-    console.log('✅ Cart created successfully:', data.cartCreate.cart.id);
+    console.log('Cart created successfully:', data.cartCreate.cart.id);
 
     return {
       ...data.cartCreate.cart,
       lines: data.cartCreate.cart.lines.edges.map((edge: CartLineEdge) => edge.node),
     };
   } catch (error) {
-    console.error('💥 Error creating cart:', error);
+    console.error('Error creating cart:', error);
     throw error;
   }
 }
 
 // Add item to cart
 export async function addToCart(cartId: string, variantId: string, quantity: number = 1): Promise<Cart> {
-  console.log('🛒 Adding to cart:', { cartId, variantId, quantity });
+  console.log('Adding to cart:', { cartId, variantId, quantity });
 
   const query = `
     mutation AddToCart($cartId: ID!, $lines: [CartLineInput!]!) {
@@ -456,15 +456,15 @@ export async function addToCart(cartId: string, variantId: string, quantity: num
   try {
     const { data, errors } = await client.request(query, { variables });
 
-    console.log('📦 Cart API Response:', { data, errors });
+    console.log('Cart API Response:', { data, errors });
 
     if (errors) {
-      console.error('❌ GraphQL Errors:', errors);
+      console.error('GraphQL Errors:', errors);
       throw new Error('Failed to add to cart');
     }
 
     if (!data?.cartLinesAdd?.cart) {
-      console.error('❌ No cart data returned');
+      console.error('No cart data returned');
       throw new Error('No cart data returned from Shopify');
     }
 
@@ -473,7 +473,7 @@ export async function addToCart(cartId: string, variantId: string, quantity: num
       lines: data.cartLinesAdd.cart.lines.edges.map((edge: CartLineEdge) => edge.node),
     };
   } catch (error) {
-    console.error('💥 Error adding to cart:', error);
+    console.error('Error adding to cart:', error);
     throw error;
   }
 }

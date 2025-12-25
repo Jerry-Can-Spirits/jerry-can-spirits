@@ -193,9 +193,11 @@ export default function KlaviyoSignup({
                   </label>
                   <input
                     type="text"
+                    name="firstName"
                     value={formData.firstName}
                     onChange={(e) => setFormData(prev => ({ ...prev, firstName: e.target.value }))}
                     required
+                    autoComplete="given-name"
                     className="w-full px-4 py-3 bg-jerry-green-800/60 backdrop-blur-sm text-parchment-100 rounded-lg border border-gold-500/30 focus:border-gold-400 focus:outline-none transition-colors duration-200 placeholder-parchment-400"
                     placeholder="Your first name"
                     disabled={isSubmitting}
@@ -207,9 +209,11 @@ export default function KlaviyoSignup({
                   </label>
                   <input
                     type="email"
+                    name="email"
                     value={formData.email}
                     onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
                     required
+                    autoComplete="email"
                     className="w-full px-4 py-3 bg-jerry-green-800/60 backdrop-blur-sm text-parchment-100 rounded-lg border border-gold-500/30 focus:border-gold-400 focus:outline-none transition-colors duration-200 placeholder-parchment-400"
                     placeholder="your@email.com"
                     disabled={isSubmitting}

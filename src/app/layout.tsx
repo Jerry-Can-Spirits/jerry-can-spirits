@@ -117,7 +117,7 @@ export default function RootLayout({
           {/* Promo Banner - Only show when there's an active promotion */}
           <div className="relative z-10">
             <PromoBanner
-              message="🚀 Pre-launch: Be the first to know when Expedition Spiced launches!"
+              message="Pre-launch: Be the first to know when Expedition Spiced launches!"
               ctaText="Notify Me"
               ctaLink="/notify"
               isVisible={true}

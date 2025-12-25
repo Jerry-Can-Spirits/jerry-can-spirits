@@ -175,7 +175,9 @@ export default function AgeGate({ onVerified }: AgeGateProps) {
       {showRejectionMessage && (
         <div className="absolute inset-0 bg-jerry-green-900/95 flex items-center justify-center z-20">
           <div className="bg-jerry-green-800 border-2 border-gold-400 rounded-lg p-8 max-w-md mx-4 text-center">
-            <div className="text-6xl mb-4">🧭</div>
+            <svg className="w-16 h-16 mx-auto mb-4 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
+            </svg>
             <h3 className="text-2xl font-serif font-bold text-gold-300 mb-4">
               Every Great Expedition Has Its Time
             </h3>

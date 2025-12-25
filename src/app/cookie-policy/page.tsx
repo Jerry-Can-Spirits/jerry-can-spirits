@@ -140,6 +140,17 @@ export default function CookiePolicy() {
                     </a>
                   </p>
                 </div>
+
+                <div className="border-l-4 border-gold-500 pl-6 py-2">
+                  <h4 className="text-lg font-semibold text-gold-300 mb-2">Trustpilot (Reviews & Marketing)</h4>
+                  <p className="text-white">
+                    Customer review platform used to collect and display verified product reviews.{' '}
+                    <a href="https://legal.trustpilot.com/for-reviewers/end-user-privacy-terms" target="_blank" rel="noopener noreferrer"
+                       className="text-gold-300 hover:text-gold-200 underline">
+                      View Trustpilot's Privacy Policy
+                    </a>
+                  </p>
+                </div>
               </div>
             </section>
 
