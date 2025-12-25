@@ -8,17 +8,23 @@ interface InstagramFeedProps {
 }
 
 /**
- * Instagram Feed using oEmbed API
+ * Instagram Feed using Instagram's oEmbed API
  *
- * SETUP:
- * 1. Add Instagram post URLs to the postUrls array
- * 2. No API tokens or authentication needed!
- * 3. Works with public Instagram posts only
+ * SETUP (super simple!):
+ * 1. Create a post on your Instagram account (@jerrycanspirits)
+ * 2. Click the three dots (...) on the post and select "Copy link"
+ * 3. Add the URL to the postUrls array
+ * 4. That's it! No API tokens or Meta app setup needed.
+ *
+ * How to get Instagram post URLs:
+ * - Mobile: Post → ... menu → "Copy link"
+ * - Desktop: Click post → Copy URL from browser
+ * - Format: https://www.instagram.com/p/POST_ID/
  *
  * Example:
  * <InstagramFeed postUrls={[
- *   'https://www.instagram.com/p/POST_ID_1/',
- *   'https://www.instagram.com/p/POST_ID_2/',
+ *   'https://www.instagram.com/p/C1A2B3C4D5/',
+ *   'https://www.instagram.com/p/D5E6F7G8H9/',
  * ]} />
  */
 export default function InstagramFeed({
@@ -39,7 +45,7 @@ export default function InstagramFeed({
       try {
         const postsToFetch = postUrls.slice(0, limit)
         const embedPromises = postsToFetch.map(url =>
-          fetch(`https://graph.facebook.com/v18.0/instagram_oembed?url=${encodeURIComponent(url)}&access_token=${process.env.NEXT_PUBLIC_INSTAGRAM_ACCESS_TOKEN || ''}`)
+          fetch(`https://api.instagram.com/oembed/?url=${encodeURIComponent(url)}&hidecaption=true&maxwidth=500`)
             .then(res => res.json())
             .then(data => data.html)
             .catch(() => null)
