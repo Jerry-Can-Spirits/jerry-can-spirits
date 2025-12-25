@@ -179,7 +179,7 @@ export default function Footer() {
                           alt="Be Drinkaware"
                           width={216}
                           height={86}
-                          className="w-auto h-[4.5rem]"
+                          className="h-[4.5rem] w-auto object-contain"
                           quality={100}
                         />
                       ) : (
@@ -361,7 +361,7 @@ export default function Footer() {
                 <h3 className="font-serif text-xl font-bold mb-4 text-parchment-100 border-b border-jerry-green-700 pb-2" style={{ color: '#fefbf5' }}>
                   Secure Payment
                 </h3>
-                <div className="grid grid-cols-2 gap-3 mb-4">
+                <div className="grid grid-cols-2 gap-3">
                   {paymentMethods.map((method) => (
                     <div
                       key={method.name}
@@ -381,22 +381,6 @@ export default function Footer() {
                       )}
                     </div>
                   ))}
-                </div>
-
-                {/* Security Badges */}
-                <div className="space-y-2 text-sm text-parchment-400">
-                  <div className="flex items-center space-x-2">
-                    <span className="text-green-400">🔒</span>
-                    <span>SSL Encrypted</span>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <span className="text-blue-400">🛡️</span>
-                    <span>GDPR Compliant</span>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <span className="text-yellow-400">⭐</span>
-                    <span>Shopify Secure</span>
-                  </div>
                 </div>
               </div>
             </div>
@@ -448,7 +432,7 @@ export default function Footer() {
 
               {/* Additional Info */}
               <div className="text-sm text-parchment-400 text-center md:text-right">
-                <p>🇬🇧 Proudly British • 🌍 Shipping Nationwide</p>
+                <p>Proudly British • Shipping Nationwide</p>
                 <p className="mt-1">
                   <a
                     href="mailto:hello@jerrycanspirits.co.uk"
