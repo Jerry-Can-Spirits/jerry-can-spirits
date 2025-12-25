@@ -40,6 +40,9 @@ export interface ShopifyProduct {
   images: ShopifyImage[];
   variants?: ShopifyProductVariant[];
   tags?: string[];
+  productType?: string;
+  vendor?: string;
+  availableForSale?: boolean;
 }
 
 export interface ShopifyCollection {
@@ -243,6 +246,10 @@ export async function getProduct(handle: string): Promise<ShopifyProduct | null>
         handle
         description
         descriptionHtml
+        productType
+        vendor
+        tags
+        availableForSale
         priceRange {
           minVariantPrice {
             amount
@@ -694,6 +701,135 @@ export async function applyDiscount(cartId: string, discountCodes: string[]): Pr
     console.error('Error applying discount:', error);
     throw error;
   }
+}
+
+// Get smart product recommendations based on current product
+export async function getSmartRecommendations(
+  currentProduct: ShopifyProduct,
+  limit: number = 4
+): Promise<ShopifyProduct[]> {
+  const currentPrice = parseFloat(currentProduct.priceRange.minVariantPrice.amount)
+
+  // Determine primary collection from tags or productType
+  const getPrimaryCollection = (product: ShopifyProduct): string | null => {
+    const tags = product.tags || []
+    const productType = product.productType?.toLowerCase() || ''
+
+    // Check tags first
+    if (tags.some(tag => tag.toLowerCase().includes('drink') || tag.toLowerCase().includes('spirit') || tag.toLowerCase().includes('rum'))) {
+      return 'drinks'
+    }
+    if (tags.some(tag => tag.toLowerCase().includes('barware') || tag.toLowerCase().includes('glass'))) {
+      return 'barware'
+    }
+    if (tags.some(tag => tag.toLowerCase().includes('clothing') || tag.toLowerCase().includes('apparel'))) {
+      return 'clothing'
+    }
+
+    // Fallback to productType
+    if (productType.includes('spirit') || productType.includes('drink') || productType.includes('rum')) {
+      return 'drinks'
+    }
+    if (productType.includes('barware') || productType.includes('glass')) {
+      return 'barware'
+    }
+    if (productType.includes('clothing') || productType.includes('apparel')) {
+      return 'clothing'
+    }
+
+    return null
+  }
+
+  const primaryCollection = getPrimaryCollection(currentProduct)
+
+  // Cross-sell rules: what to recommend if not enough in same collection
+  const getCrossSellCollections = (collection: string | null): string[] => {
+    switch (collection) {
+      case 'drinks':
+        return ['barware', 'clothing'] // Spirits buyers might want glasses
+      case 'barware':
+        return ['drinks', 'clothing'] // Barware buyers might want spirits
+      case 'clothing':
+        return ['drinks', 'barware'] // Clothing buyers might want anything
+      default:
+        return ['drinks', 'barware', 'clothing']
+    }
+  }
+
+  const crossSellCollections = getCrossSellCollections(primaryCollection)
+
+  // Fetch products from all relevant collections
+  let allProducts: ShopifyProduct[] = []
+
+  // Fetch primary collection first
+  if (primaryCollection) {
+    try {
+      const primaryProducts = await getProductsByCollection(primaryCollection)
+      allProducts = [...primaryProducts]
+    } catch (error) {
+      console.error(`Error fetching ${primaryCollection} collection:`, error)
+    }
+  }
+
+  // If we don't have enough products, fetch from cross-sell collections
+  if (allProducts.length < limit + 1) { // +1 to account for filtering out current product
+    for (const collection of crossSellCollections) {
+      try {
+        const crossSellProducts = await getProductsByCollection(collection)
+        allProducts = [...allProducts, ...crossSellProducts]
+      } catch (error) {
+        console.error(`Error fetching ${collection} collection:`, error)
+      }
+
+      // Stop fetching if we have enough
+      if (allProducts.length >= limit * 2) break
+    }
+  }
+
+  // Filter out current product and duplicates
+  const uniqueProducts = Array.from(
+    new Map(allProducts.map(p => [p.id, p])).values()
+  ).filter(p => p.handle !== currentProduct.handle)
+
+  // Score and sort products
+  const scoredProducts = uniqueProducts.map(product => {
+    let score = 0
+    const productPrice = parseFloat(product.priceRange.minVariantPrice.amount)
+    const productCollection = getPrimaryCollection(product)
+
+    // Same collection gets priority
+    if (productCollection === primaryCollection) {
+      score += 100
+    }
+
+    // Cross-sell bonus (spirits + barware = great combo)
+    if (
+      (primaryCollection === 'drinks' && productCollection === 'barware') ||
+      (primaryCollection === 'barware' && productCollection === 'drinks')
+    ) {
+      score += 50
+    }
+
+    // Available products get priority
+    if (product.availableForSale) {
+      score += 30
+    }
+
+    // Price similarity bonus (within 50% range)
+    const priceDiff = Math.abs(productPrice - currentPrice)
+    const priceRatio = priceDiff / currentPrice
+    if (priceRatio < 0.5) {
+      score += 20 * (1 - priceRatio) // Closer price = higher score
+    }
+
+    return { product, score }
+  })
+
+  // Sort by score and take top results
+  return scoredProducts
+    .sort((a, b) => b.score - a.score)
+    .slice(0, limit)
+    .map(item => item.product)
 }
 
 // Get cart by ID

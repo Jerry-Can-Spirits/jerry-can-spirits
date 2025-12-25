@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import Image from 'next/image'
-import { getProduct, getProductsByCollection, type ShopifyProduct } from '@/lib/shopify'
+import { getProduct, getSmartRecommendations, type ShopifyProduct } from '@/lib/shopify'
 import AddToCartButton from '@/components/AddToCartButton'
 import ProductImageGallery from '@/components/ProductImageGallery'
 import StructuredData from '@/components/StructuredData'
@@ -83,12 +83,11 @@ export default async function ProductPage({
   try {
     product = await getProduct(handle)
 
-    // Fetch related products from drinks collection
-    const allDrinksProducts = await getProductsByCollection('drinks')
-    // Filter out current product and limit to 4
-    relatedProducts = allDrinksProducts
-      .filter(p => p.handle !== handle)
-      .slice(0, 4)
+    // Get smart product recommendations
+    // - Prioritizes same collection (drinks → drinks, barware → barware)
+    // - Intelligent cross-sell (spirits → glasses, etc.)
+    // - Scores by: collection match, availability, price similarity
+    relatedProducts = await getSmartRecommendations(product, 4)
   } catch (error) {
     console.error('Error fetching product:', error)
     notFound()
