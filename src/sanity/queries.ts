@@ -48,6 +48,34 @@ export const ingredientsQuery = `*[_type == "ingredient"] | order(category asc, 
   featured
 }`
 
+export const ingredientBySlugQuery = `*[_type == "ingredient" && slug.current == $slug][0] {
+  _id,
+  name,
+  slug,
+  category,
+  description,
+  usage,
+  topTips,
+  recommendedBrands,
+  storage,
+  image,
+  featured,
+  flavorProfile,
+  abv,
+  origin,
+  productionMethod,
+  substitutions,
+  pairsWellWith,
+  seasonality,
+  priceRange,
+  shelfLife,
+  videoUrl,
+  history,
+  professionalTip,
+  "relatedCocktails": relatedCocktails[]->{ _id, name, slug },
+  "relatedIngredients": relatedIngredients[]->{ _id, name, slug }
+}`
+
 export const equipmentQuery = `*[_type == "equipment"] | order(category asc, name asc) {
   _id,
   name,
@@ -60,4 +88,29 @@ export const equipmentQuery = `*[_type == "equipment"] | order(category asc, nam
   tips,
   image,
   featured
+}`
+
+export const equipmentBySlugQuery = `*[_type == "equipment" && slug.current == $slug][0] {
+  _id,
+  name,
+  slug,
+  category,
+  description,
+  usage,
+  essential,
+  specifications,
+  tips,
+  image,
+  featured,
+  priceRange,
+  whatToLookFor,
+  commonMistakes,
+  careInstructions,
+  lifespan,
+  budgetAlternative,
+  premiumOption,
+  history,
+  professionalTip,
+  videoUrl,
+  "relatedCocktails": relatedCocktails[]->{ _id, name, slug }
 }`

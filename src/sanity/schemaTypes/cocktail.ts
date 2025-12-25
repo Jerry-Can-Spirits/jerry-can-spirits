@@ -60,7 +60,8 @@ export default defineType({
       of: [
         {
           type: 'object',
-          name: 'ingredient',
+          // FIXED: Renamed from 'ingredient' to 'cocktailIngredient' to avoid conflict with global ingredient type
+          name: 'cocktailIngredient',
           title: 'Ingredient',
           fields: [
             defineField({

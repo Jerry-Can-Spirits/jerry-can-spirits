@@ -1,3 +1,6 @@
+'use client'
+
+import { useState, useEffect } from 'react'
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -5,19 +8,6 @@ import { client } from '@/sanity/client'
 import { ingredientsQuery } from '@/sanity/queries'
 import { urlFor } from '@/sanity/lib/image'
 import BackToTop from '@/components/BackToTop'
-import SectionFilter from '@/components/SectionFilter'
-
-export const metadata: Metadata = {
-  title: "Premium Ingredients Guide | Jerry Can Spirits - Quality Cocktail Components",
-  description: "Build your adventure bar with quality ingredients. Expert guide to spirits, liqueurs, bitters, and fresh components for premium rum cocktails.",
-  alternates: {
-    canonical: 'https://jerrycanspirits.co.uk/field-manual/ingredients',
-  },
-  openGraph: {
-    title: "Premium Ingredients Guide | Jerry Can Spirits - Quality Cocktail Components",
-    description: "Build your adventure bar with quality ingredients. Expert guide to spirits, liqueurs, bitters, and fresh components for premium rum cocktails.",
-  },
-}
 
 // Types for ingredient data
 interface Ingredient {
@@ -37,19 +27,13 @@ interface Ingredient {
   featured: boolean
 }
 
-interface CategoryInfo {
-  title: string
-  description: string
-  ingredients: Ingredient[]
-}
-
 const categoryConfig = {
   spirits: {
     title: 'Spirits',
     description: 'The foundation of great cocktails'
   },
   liqueurs: {
-    title: 'Liqueurs', 
+    title: 'Liqueurs',
     description: 'Essential modifiers and flavour enhancers'
   },
   bitters: {
@@ -66,44 +50,83 @@ const categoryConfig = {
   }
 }
 
-async function getIngredients(): Promise<Ingredient[]> {
-  return await client.fetch(ingredientsQuery)
-}
+export default function IngredientsPage() {
+  const [ingredients, setIngredients] = useState<Ingredient[]>([])
+  const [loading, setLoading] = useState(true)
+  const [selectedCategory, setSelectedCategory] = useState<string>('all')
+  const [searchQuery, setSearchQuery] = useState<string>('')
 
-function groupIngredientsByCategory(ingredients: Ingredient[]): Record<string, CategoryInfo> {
-  const grouped: Record<string, CategoryInfo> = {}
-  
-  // Initialize all categories
-  Object.entries(categoryConfig).forEach(([key, config]) => {
-    grouped[key] = {
-      ...config,
-      ingredients: []
+  // Fetch ingredients from Sanity
+  useEffect(() => {
+    const fetchIngredients = async () => {
+      try {
+        const data = await client.fetch(ingredientsQuery)
+        setIngredients(data)
+      } catch (error) {
+        console.error('Error fetching ingredients:', error)
+      } finally {
+        setLoading(false)
+      }
     }
-  })
-  
-  // Group ingredients by category
-  ingredients.forEach(ingredient => {
-    if (grouped[ingredient.category]) {
-      grouped[ingredient.category].ingredients.push(ingredient)
-    }
-  })
-  
-  return grouped
-}
 
-export default async function IngredientsPage() {
-  const ingredients = await getIngredients()
-  const ingredientCategories = groupIngredientsByCategory(ingredients)
+    fetchIngredients()
+  }, [])
 
-  // Create sections array for the filter
-  const sections = Object.entries(ingredientCategories)
-    .filter(([, category]) => category.ingredients.length > 0)
-    .map(([key, category]) => ({
-      id: key,
-      title: category.title,
-      description: category.description,
-      count: category.ingredients.length
-    }))
+  // Filter ingredients
+  const filteredIngredients = ingredients.filter(item => {
+    const matchesCategory = selectedCategory === 'all' || item.category === selectedCategory
+    const matchesSearch = !searchQuery ||
+      item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item.description.toLowerCase().includes(searchQuery.toLowerCase())
+
+    return matchesCategory && matchesSearch
+  })
+
+  // Get featured ingredients
+  const featuredIngredients = filteredIngredients.filter(i => i.featured)
+
+  // Categories for filter tabs
+  const categories = [
+    { value: 'all', label: 'All Ingredients' },
+    { value: 'spirits', label: 'Spirits' },
+    { value: 'liqueurs', label: 'Liqueurs' },
+    { value: 'bitters', label: 'Bitters & Aperitifs' },
+    { value: 'fresh', label: 'Fresh Ingredients' },
+    { value: 'garnishes', label: 'Garnishes' }
+  ]
+
+  if (loading) {
+    return (
+      <main className="min-h-screen py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-center h-64">
+            <div className="text-gold-300 text-lg">Loading ingredients from Field Manual...</div>
+          </div>
+        </div>
+      </main>
+    )
+  }
+
+  if (ingredients.length === 0) {
+    return (
+      <main className="min-h-screen py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center">
+            <h1 className="text-3xl font-serif font-bold text-white mb-4">Coming Soon</h1>
+            <p className="text-parchment-300 mb-8">
+              Our ingredients guide is being crafted. Check back soon for expert recommendations on quality cocktail components.
+            </p>
+            <Link
+              href="/field-manual"
+              className="inline-flex items-center px-6 py-3 bg-gold-500 hover:bg-gold-400 text-jerry-green-900 font-semibold rounded-lg transition-colors"
+            >
+              Back to Field Manual
+            </Link>
+          </div>
+        </div>
+      </main>
+    )
+  }
 
   return (
     <main className="min-h-screen py-20">
@@ -117,151 +140,188 @@ export default async function IngredientsPage() {
       </div>
 
       {/* Hero Section */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12 sm:mb-16">
-        <div className="text-center mb-8 sm:mb-12">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
+        <div className="text-center mb-12">
           <div className="inline-block px-4 py-2 bg-jerry-green-800/60 backdrop-blur-sm rounded-full border border-gold-500/30 mb-6">
             <span className="text-gold-300 text-sm font-semibold uppercase tracking-widest">
               Premium Ingredients
             </span>
           </div>
-          
+
           <h1 className="text-4xl sm:text-6xl font-serif font-bold text-white mb-6">
             Quality Components
             <br />
             <span className="text-gold-300">Exceptional Results</span>
           </h1>
-          
+
           <p className="text-xl text-parchment-300 max-w-3xl mx-auto leading-relaxed">
-            Every great cocktail starts with quality ingredients. Discover our carefully curated selection 
+            Every great cocktail starts with quality ingredients. Discover our carefully curated selection
             of spirits, mixers, and fresh components that elevate your home bar.
           </p>
         </div>
       </section>
 
-      {/* Section Filter */}
-      {sections.length > 0 && <SectionFilter sections={sections} />}
+      {/* Filters Section */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
+        <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+          <div className="space-y-6">
+            {/* Search Bar */}
+            <div className="relative">
+              <input
+                type="text"
+                placeholder="Search ingredients..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full px-4 py-3 pl-12 bg-jerry-green-800/40 border border-gold-500/20 rounded-lg text-white placeholder-parchment-400 focus:outline-none focus:border-gold-400/40 transition-colors"
+              />
+              <svg className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+            </div>
 
-      {/* Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="space-y-12 sm:space-y-16">
-          {Object.entries(ingredientCategories).map(([categoryKey, category]) => (
-            <section key={categoryKey} id={categoryKey}>
-              <div className="mb-8">
-                <h2 className="text-3xl font-serif font-bold text-white mb-4">{category.title}</h2>
-                <p className="text-parchment-300 text-lg">{category.description}</p>
+            {/* Category Filter Tabs */}
+            <div>
+              <h3 className="text-sm font-semibold text-gold-300 mb-3 uppercase tracking-wider">Category</h3>
+              <div className="flex flex-wrap gap-2">
+                {categories.map((category) => (
+                  <button
+                    key={category.value}
+                    onClick={() => setSelectedCategory(category.value)}
+                    className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-300 ${
+                      selectedCategory === category.value
+                        ? 'bg-gold-500/20 text-gold-300 border border-gold-500/40'
+                        : 'bg-jerry-green-800/40 text-parchment-300 border border-gold-500/20 hover:bg-jerry-green-800/60'
+                    }`}
+                  >
+                    {category.label}
+                  </button>
+                ))}
               </div>
+            </div>
 
-              {category.ingredients.length > 0 ? (
-                <div className="grid gap-6 sm:gap-8">
-                  {category.ingredients.map((ingredient) => (
-                    <div key={ingredient._id} className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-4 sm:p-6 lg:p-8 border border-gold-500/20 relative overflow-hidden">
-                      <div className="absolute inset-0 bg-gradient-to-br from-amber-100/5 to-amber-200/10 opacity-50"></div>
-                      <div className="relative z-10">
-                        <div className="grid lg:grid-cols-3 gap-6 sm:gap-8">
+            {/* Results count */}
+            <div className="text-parchment-300 text-sm">
+              Showing <span className="text-gold-300 font-semibold">{filteredIngredients.length}</span> {filteredIngredients.length === 1 ? 'ingredient' : 'ingredients'}
+            </div>
+          </div>
+        </div>
+      </section>
 
-                          {/* Image */}
-                          <div className="lg:col-span-1">
-                            <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-4 sm:p-6 lg:p-8 border border-gold-500/20 h-48 sm:h-56 lg:h-64 flex items-center justify-center group hover:shadow-2xl transition-all duration-300 transform hover:scale-105">
-                              {ingredient.image ? (
-                                <Image
-                                  src={urlFor(ingredient.image).url()}
-                                  alt={ingredient.name}
-                                  width={300}
-                                  height={200}
-                                  className="w-full h-full object-contain rounded-lg"
-                                />
-                              ) : (
-                                <div className="text-center">
-                                  <div className="w-16 h-16 bg-gold-400/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                                    <svg className="w-8 h-8 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                    </svg>
-                                  </div>
-                                  <p className="text-parchment-300 text-sm">
-                                    [Blueprint illustration: {ingredient.name}]
-                                  </p>
-                                </div>
-                              )}
-                            </div>
-                          </div>
-
-                          {/* Content */}
-                          <div className="lg:col-span-2 space-y-4 sm:space-y-6">
-                            <div>
-                              <h3 className="text-2xl font-serif font-bold text-white mb-3">{ingredient.name}</h3>
-                              <p className="text-parchment-300 leading-relaxed">{ingredient.description}</p>
-                            </div>
-
-                            <div>
-                              <h4 className="text-lg font-serif font-bold text-gold-300 mb-2">Usage</h4>
-                              <p className="text-parchment-300">{ingredient.usage}</p>
-                            </div>
-
-                            <div>
-                              <h4 className="text-lg font-serif font-bold text-gold-300 mb-3">Top Tips</h4>
-                              <ul className="space-y-2">
-                                {ingredient.topTips.map((tip, index) => (
-                                  <li key={index} className="flex items-start space-x-3">
-                                    <div className="w-2 h-2 bg-gold-400 rounded-full mt-2 flex-shrink-0"></div>
-                                    <span className="text-parchment-300">{tip}</span>
-                                  </li>
-                                ))}
-                              </ul>
-                            </div>
-
-                            {'recommendedBrands' in ingredient && ingredient.recommendedBrands && (
-                              <div>
-                                <h4 className="text-lg font-serif font-bold text-gold-300 mb-3">Recommended Brands</h4>
-                                <div className="grid md:grid-cols-2 gap-4">
-                                  <div className="p-4 bg-jerry-green-800/30 rounded-lg border border-gold-500/20">
-                                    <p className="text-green-400 font-semibold mb-1">Budget Choice</p>
-                                    <p className="text-parchment-300">{ingredient.recommendedBrands.budget}</p>
-                                  </div>
-                                  <div className="p-4 bg-jerry-green-800/30 rounded-lg border border-gold-500/20">
-                                    <p className="text-gold-400 font-semibold mb-1">Premium Choice</p>
-                                    <p className="text-parchment-300">{ingredient.recommendedBrands.premium}</p>
-                                  </div>
-                                </div>
-                              </div>
-                            )}
-
-                            {'storage' in ingredient && ingredient.storage && (
-                              <div className="p-4 bg-jerry-green-800/40 rounded-lg border border-gold-500/20">
-                                <div className="flex items-start space-x-3">
-                                  <svg className="w-5 h-5 text-gold-400 flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                  </svg>
-                                  <div>
-                                    <h5 className="text-gold-300 font-semibold mb-1">Storage & Handling</h5>
-                                    <p className="text-parchment-300 text-sm">{ingredient.storage}</p>
-                                  </div>
-                                </div>
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                      </div>
+      {/* Featured Ingredients */}
+      {featuredIngredients.length > 0 && (
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
+          <h2 className="text-3xl font-serif font-bold text-gold-400 mb-6 flex items-center gap-2">
+            <span className="text-gold-400">★</span>
+            Essential Ingredients
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {featuredIngredients.map((item) => (
+              <Link
+                key={item._id}
+                href={`/field-manual/ingredients/${item.slug.current}`}
+                className="group bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl border border-gold-500/30 overflow-hidden hover:border-gold-400/60 transition-all duration-300 hover:scale-105 hover:shadow-xl"
+              >
+                {/* Image */}
+                {item.image && (
+                  <div className="relative aspect-[4/3] bg-jerry-green-800/20">
+                    <Image
+                      src={urlFor(item.image).url()}
+                      alt={item.name}
+                      fill
+                      className="object-cover group-hover:scale-110 transition-transform duration-500"
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                    />
+                    <div className="absolute top-3 right-3 px-2 py-1 bg-gold-500/90 backdrop-blur-sm rounded-full">
+                      <span className="text-jerry-green-900 text-xs font-bold">★ Featured</span>
                     </div>
-                  ))}
-                </div>
-              ) : (
-                <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20 relative overflow-hidden text-center">
-                  <div className="absolute inset-0 bg-gradient-to-br from-amber-100/5 to-amber-200/10 opacity-50"></div>
-                  <div className="relative z-10">
-                    <div className="w-16 h-16 bg-gold-400/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                      <svg className="w-8 h-8 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                      </svg>
-                    </div>
-                    <h3 className="text-xl font-serif font-bold text-white mb-2">Coming Soon</h3>
-                    <p className="text-parchment-300">We're carefully curating ingredients for this category.</p>
+                  </div>
+                )}
+
+                {/* Content */}
+                <div className="p-6 space-y-3">
+                  <h3 className="text-xl font-serif font-bold text-white group-hover:text-gold-300 transition-colors">
+                    {item.name}
+                  </h3>
+
+                  <p className="text-parchment-300 text-sm leading-relaxed line-clamp-3">
+                    {item.description}
+                  </p>
+
+                  <div className="flex items-center gap-2 text-gold-300 text-sm font-semibold pt-2">
+                    <span>Learn More</span>
+                    <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
                   </div>
                 </div>
-              )}
-            </section>
-          ))}
-        </div>
-      </div>
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* All Ingredients Grid */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 className="text-3xl font-serif font-bold text-white mb-6">
+          {selectedCategory === 'all' ? 'All Ingredients' : categories.find(c => c.value === selectedCategory)?.label}
+        </h2>
+
+        {filteredIngredients.length === 0 ? (
+          <div className="text-center py-16 bg-jerry-green-800/20 rounded-xl border border-gold-500/20">
+            <p className="text-parchment-400 text-lg">No ingredients match your filters</p>
+            <button
+              onClick={() => {
+                setSelectedCategory('all')
+                setSearchQuery('')
+              }}
+              className="mt-4 px-6 py-3 bg-gold-500/20 border border-gold-500/40 text-gold-300 rounded-lg hover:bg-gold-500/30 transition-colors"
+            >
+              Clear Filters
+            </button>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {filteredIngredients.map((item) => (
+              <Link
+                key={item._id}
+                href={`/field-manual/ingredients/${item.slug.current}`}
+                className="group bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl border border-gold-500/20 overflow-hidden hover:border-gold-400/40 transition-all duration-300 hover:scale-105"
+              >
+                {/* Image */}
+                {item.image && (
+                  <div className="relative aspect-[4/3] bg-jerry-green-800/20">
+                    <Image
+                      src={urlFor(item.image).url()}
+                      alt={item.name}
+                      fill
+                      className="object-cover group-hover:scale-110 transition-transform duration-500"
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                    />
+                  </div>
+                )}
+
+                {/* Content */}
+                <div className="p-6 space-y-3">
+                  <h3 className="text-xl font-serif font-bold text-white group-hover:text-gold-300 transition-colors">
+                    {item.name}
+                  </h3>
+
+                  <p className="text-parchment-300 text-sm leading-relaxed line-clamp-3">
+                    {item.description}
+                  </p>
+
+                  <div className="flex items-center gap-2 text-gold-300 text-sm font-semibold pt-2">
+                    <span>Learn More</span>
+                    <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        )}
+      </section>
 
       {/* Back to Top Button */}
       <BackToTop />

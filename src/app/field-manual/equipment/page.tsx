@@ -1,3 +1,6 @@
+'use client'
+
+import { useState, useEffect } from 'react'
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -5,19 +8,6 @@ import { client } from '@/sanity/client'
 import { equipmentQuery } from '@/sanity/queries'
 import { urlFor } from '@/sanity/lib/image'
 import BackToTop from '@/components/BackToTop'
-import SectionFilter from '@/components/SectionFilter'
-
-export const metadata: Metadata = {
-  title: "Bar Equipment Guide | Jerry Can Spirits - Essential Cocktail Tools",
-  description: "Professional bartending equipment for home explorers. Discover essential barware, glassware, and tools to craft exceptional rum cocktails at home.",
-  alternates: {
-    canonical: 'https://jerrycanspirits.co.uk/field-manual/equipment',
-  },
-  openGraph: {
-    title: "Bar Equipment Guide | Jerry Can Spirits - Essential Cocktail Tools",
-    description: "Professional bartending equipment for home explorers. Discover essential barware, glassware, and tools to craft exceptional rum cocktails at home.",
-  },
-}
 
 // Types for equipment data
 interface Equipment {
@@ -36,12 +26,6 @@ interface Equipment {
   tips: string[]
   image?: { asset: { url: string } }
   featured: boolean
-}
-
-interface CategoryInfo {
-  title: string
-  description: string
-  equipment: Equipment[]
 }
 
 const categoryConfig = {
@@ -71,44 +55,84 @@ const categoryConfig = {
   }
 }
 
-async function getEquipment(): Promise<Equipment[]> {
-  return await client.fetch(equipmentQuery)
-}
+export default function EquipmentPage() {
+  const [equipment, setEquipment] = useState<Equipment[]>([])
+  const [loading, setLoading] = useState(true)
+  const [selectedCategory, setSelectedCategory] = useState<string>('all')
+  const [searchQuery, setSearchQuery] = useState<string>('')
 
-function groupEquipmentByCategory(equipment: Equipment[]): Record<string, CategoryInfo> {
-  const grouped: Record<string, CategoryInfo> = {}
-  
-  // Initialize all categories
-  Object.entries(categoryConfig).forEach(([key, config]) => {
-    grouped[key] = {
-      ...config,
-      equipment: []
+  // Fetch equipment from Sanity
+  useEffect(() => {
+    const fetchEquipment = async () => {
+      try {
+        const data = await client.fetch(equipmentQuery)
+        setEquipment(data)
+      } catch (error) {
+        console.error('Error fetching equipment:', error)
+      } finally {
+        setLoading(false)
+      }
     }
-  })
-  
-  // Group equipment by category
-  equipment.forEach(item => {
-    if (grouped[item.category]) {
-      grouped[item.category].equipment.push(item)
-    }
-  })
-  
-  return grouped
-}
 
-export default async function EquipmentPage() {
-  const equipment = await getEquipment()
-  const equipmentCategories = groupEquipmentByCategory(equipment)
+    fetchEquipment()
+  }, [])
 
-  // Create sections array for the filter
-  const sections = Object.entries(equipmentCategories)
-    .filter(([, category]) => category.equipment.length > 0)
-    .map(([key, category]) => ({
-      id: key,
-      title: category.title,
-      description: category.description,
-      count: category.equipment.length
-    }))
+  // Filter equipment
+  const filteredEquipment = equipment.filter(item => {
+    const matchesCategory = selectedCategory === 'all' || item.category === selectedCategory
+    const matchesSearch = !searchQuery ||
+      item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item.description.toLowerCase().includes(searchQuery.toLowerCase())
+
+    return matchesCategory && matchesSearch
+  })
+
+  // Get featured equipment
+  const featuredEquipment = filteredEquipment.filter(e => e.featured)
+
+  // Categories for filter tabs
+  const categories = [
+    { value: 'all', label: 'All Equipment' },
+    { value: 'shaking', label: 'Shaking & Mixing' },
+    { value: 'straining', label: 'Straining' },
+    { value: 'measuring', label: 'Measuring' },
+    { value: 'glassware', label: 'Glassware' },
+    { value: 'tools', label: 'Bar Tools' },
+    { value: 'garnish', label: 'Garnish Tools' }
+  ]
+
+  if (loading) {
+    return (
+      <main className="min-h-screen py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-center h-64">
+            <div className="text-gold-300 text-lg">Loading equipment from Field Manual...</div>
+          </div>
+        </div>
+      </main>
+    )
+  }
+
+  if (equipment.length === 0) {
+    return (
+      <main className="min-h-screen py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center">
+            <h1 className="text-3xl font-serif font-bold text-white mb-4">Coming Soon</h1>
+            <p className="text-parchment-300 mb-8">
+              Our equipment guide is being crafted. Check back soon for expert recommendations on essential bar tools.
+            </p>
+            <Link
+              href="/field-manual"
+              className="inline-flex items-center px-6 py-3 bg-gold-500 hover:bg-gold-400 text-jerry-green-900 font-semibold rounded-lg transition-colors"
+            >
+              Back to Field Manual
+            </Link>
+          </div>
+        </div>
+      </main>
+    )
+  }
 
   return (
     <main className="min-h-screen py-20">
@@ -122,158 +146,197 @@ export default async function EquipmentPage() {
       </div>
 
       {/* Hero Section */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12 sm:mb-16">
-        <div className="text-center mb-8 sm:mb-12">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
+        <div className="text-center mb-12">
           <div className="inline-block px-4 py-2 bg-jerry-green-800/60 backdrop-blur-sm rounded-full border border-gold-500/30 mb-6">
             <span className="text-gold-300 text-sm font-semibold uppercase tracking-widest">
               Essential Barware
             </span>
           </div>
-          
+
           <h1 className="text-4xl sm:text-6xl font-serif font-bold text-white mb-6">
             Tools of the Trade
             <br />
             <span className="text-gold-300">Engineered for Excellence</span>
           </h1>
-          
+
           <p className="text-xl text-parchment-300 max-w-3xl mx-auto leading-relaxed">
-            Professional-grade equipment doesn't require professional budgets. Discover the essential tools 
+            Professional-grade equipment doesn't require professional budgets. Discover the essential tools
             that transform good ingredients into exceptional cocktails.
           </p>
         </div>
       </section>
 
-      {/* Section Filter */}
-      {sections.length > 0 && <SectionFilter sections={sections} />}
+      {/* Filters Section */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
+        <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+          <div className="space-y-6">
+            {/* Search Bar */}
+            <div className="relative">
+              <input
+                type="text"
+                placeholder="Search equipment..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full px-4 py-3 pl-12 bg-jerry-green-800/40 border border-gold-500/20 rounded-lg text-white placeholder-parchment-400 focus:outline-none focus:border-gold-400/40 transition-colors"
+              />
+              <svg className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+            </div>
 
-      {/* Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="space-y-12 sm:space-y-16">
-          {Object.entries(equipmentCategories).map(([categoryKey, category]) => (
-            <section key={categoryKey} id={categoryKey}>
-              <div className="mb-8">
-                <h2 className="text-3xl font-serif font-bold text-white mb-4">{category.title}</h2>
-                <p className="text-parchment-300 text-lg">{category.description}</p>
+            {/* Category Filter Tabs */}
+            <div>
+              <h3 className="text-sm font-semibold text-gold-300 mb-3 uppercase tracking-wider">Category</h3>
+              <div className="flex flex-wrap gap-2">
+                {categories.map((category) => (
+                  <button
+                    key={category.value}
+                    onClick={() => setSelectedCategory(category.value)}
+                    className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-300 ${
+                      selectedCategory === category.value
+                        ? 'bg-gold-500/20 text-gold-300 border border-gold-500/40'
+                        : 'bg-jerry-green-800/40 text-parchment-300 border border-gold-500/20 hover:bg-jerry-green-800/60'
+                    }`}
+                  >
+                    {category.label}
+                  </button>
+                ))}
               </div>
+            </div>
 
-              {category.equipment.length > 0 ? (
-                <div className="grid gap-6 sm:gap-8">
-                  {category.equipment.map((item) => (
-                    <div key={item._id} className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-4 sm:p-6 lg:p-8 border border-gold-500/20 relative overflow-hidden">
-                      <div className="absolute inset-0 bg-gradient-to-br from-amber-100/5 to-amber-200/10 opacity-50"></div>
-                      <div className="relative z-10">
-                        <div className="grid lg:grid-cols-3 gap-6 sm:gap-8">
+            {/* Results count */}
+            <div className="text-parchment-300 text-sm">
+              Showing <span className="text-gold-300 font-semibold">{filteredEquipment.length}</span> {filteredEquipment.length === 1 ? 'item' : 'items'}
+            </div>
+          </div>
+        </div>
+      </section>
 
-                          {/* Image */}
-                          <div className="lg:col-span-1">
-                            <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-4 sm:p-6 lg:p-8 border border-gold-500/20 h-64 sm:h-72 lg:h-80 flex items-center justify-center group hover:shadow-2xl transition-all duration-300 transform hover:scale-105">
-                              {item.image ? (
-                                <Image
-                                  src={urlFor(item.image).url()}
-                                  alt={item.name}
-                                  width={300}
-                                  height={200}
-                                  className="w-full h-full object-contain rounded-lg"
-                                />
-                              ) : (
-                                <div className="text-center">
-                                  <div className="w-20 h-20 bg-gold-400/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                                    <svg className="w-10 h-10 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                                    </svg>
-                                  </div>
-                                  <h4 className="text-lg font-serif font-bold text-white mb-2">Technical Schematic</h4>
-                                  <p className="text-parchment-300 text-sm mb-4">
-                                    [Blueprint illustration: {item.name}]
-                                  </p>
-                                  {item.essential && (
-                                    <div className="inline-block px-3 py-1 bg-gold-500/20 rounded-full border border-gold-500/40">
-                                      <span className="text-gold-300 text-xs font-semibold uppercase tracking-wider">Essential</span>
-                                    </div>
-                                  )}
-                                </div>
-                              )}
-                            </div>
-                          </div>
-
-                          {/* Content */}
-                          <div className="lg:col-span-2 space-y-4 sm:space-y-6">
-                            <div>
-                              <div className="flex items-center justify-between mb-3">
-                                <h3 className="text-2xl font-serif font-bold text-white">{item.name}</h3>
-                                {item.essential && (
-                                  <span className="text-gold-400 text-sm font-semibold">Essential</span>
-                                )}
-                              </div>
-                              <p className="text-parchment-300 leading-relaxed">{item.description}</p>
-                            </div>
-
-                            <div>
-                              <h4 className="text-lg font-serif font-bold text-gold-300 mb-2">Usage</h4>
-                              <p className="text-parchment-300">{item.usage}</p>
-                            </div>
-
-                            {item.specifications && (
-                              <div>
-                                <h4 className="text-lg font-serif font-bold text-gold-300 mb-3">Specifications</h4>
-                                <div className="grid md:grid-cols-3 gap-4">
-                                  {item.specifications.material && (
-                                    <div className="p-4 bg-jerry-green-800/30 rounded-lg border border-gold-500/20">
-                                      <p className="text-gold-400 font-semibold mb-1">Material</p>
-                                      <p className="text-parchment-300 text-sm">{item.specifications.material}</p>
-                                    </div>
-                                  )}
-                                  {item.specifications.capacity && (
-                                    <div className="p-4 bg-jerry-green-800/30 rounded-lg border border-gold-500/20">
-                                      <p className="text-gold-400 font-semibold mb-1">Capacity</p>
-                                      <p className="text-parchment-300 text-sm">{item.specifications.capacity}</p>
-                                    </div>
-                                  )}
-                                  {item.specifications.dimensions && (
-                                    <div className="p-4 bg-jerry-green-800/30 rounded-lg border border-gold-500/20">
-                                      <p className="text-gold-400 font-semibold mb-1">Dimensions</p>
-                                      <p className="text-parchment-300 text-sm">{item.specifications.dimensions}</p>
-                                    </div>
-                                  )}
-                                </div>
-                              </div>
-                            )}
-
-                            <div>
-                              <h4 className="text-lg font-serif font-bold text-gold-300 mb-3">Professional Tips</h4>
-                              <ul className="space-y-2">
-                                {item.tips.map((tip, index) => (
-                                  <li key={index} className="flex items-start space-x-3">
-                                    <div className="w-2 h-2 bg-gold-400 rounded-full mt-2 flex-shrink-0"></div>
-                                    <span className="text-parchment-300">{tip}</span>
-                                  </li>
-                                ))}
-                              </ul>
-                            </div>
-                          </div>
-                        </div>
+      {/* Featured Equipment */}
+      {featuredEquipment.length > 0 && (
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
+          <h2 className="text-3xl font-serif font-bold text-gold-400 mb-6 flex items-center gap-2">
+            <span className="text-gold-400">★</span>
+            Essential Equipment
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {featuredEquipment.map((item) => (
+              <Link
+                key={item._id}
+                href={`/field-manual/equipment/${item.slug.current}`}
+                className="group bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl border border-gold-500/30 overflow-hidden hover:border-gold-400/60 transition-all duration-300 hover:scale-105 hover:shadow-xl"
+              >
+                {/* Image */}
+                {item.image && (
+                  <div className="relative aspect-[4/3] bg-jerry-green-800/20">
+                    <Image
+                      src={urlFor(item.image).url()}
+                      alt={item.name}
+                      fill
+                      className="object-cover group-hover:scale-110 transition-transform duration-500"
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                    />
+                    {item.essential && (
+                      <div className="absolute top-3 right-3 px-2 py-1 bg-gold-500/90 backdrop-blur-sm rounded-full">
+                        <span className="text-jerry-green-900 text-xs font-bold">★ Essential</span>
                       </div>
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20 relative overflow-hidden text-center">
-                  <div className="absolute inset-0 bg-gradient-to-br from-amber-100/5 to-amber-200/10 opacity-50"></div>
-                  <div className="relative z-10">
-                    <div className="w-16 h-16 bg-gold-400/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                      <svg className="w-8 h-8 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                      </svg>
-                    </div>
-                    <h3 className="text-xl font-serif font-bold text-white mb-2">Coming Soon</h3>
-                    <p className="text-parchment-300">We're curating essential equipment for this category.</p>
+                    )}
+                  </div>
+                )}
+
+                {/* Content */}
+                <div className="p-6 space-y-3">
+                  <h3 className="text-xl font-serif font-bold text-white group-hover:text-gold-300 transition-colors">
+                    {item.name}
+                  </h3>
+
+                  <p className="text-parchment-300 text-sm leading-relaxed line-clamp-3">
+                    {item.description}
+                  </p>
+
+                  <div className="flex items-center gap-2 text-gold-300 text-sm font-semibold pt-2">
+                    <span>Learn More</span>
+                    <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
                   </div>
                 </div>
-              )}
-            </section>
-          ))}
-        </div>
-      </div>
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* All Equipment Grid */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 className="text-3xl font-serif font-bold text-white mb-6">
+          {selectedCategory === 'all' ? 'All Equipment' : categories.find(c => c.value === selectedCategory)?.label}
+        </h2>
+
+        {filteredEquipment.length === 0 ? (
+          <div className="text-center py-16 bg-jerry-green-800/20 rounded-xl border border-gold-500/20">
+            <p className="text-parchment-400 text-lg">No equipment matches your filters</p>
+            <button
+              onClick={() => {
+                setSelectedCategory('all')
+                setSearchQuery('')
+              }}
+              className="mt-4 px-6 py-3 bg-gold-500/20 border border-gold-500/40 text-gold-300 rounded-lg hover:bg-gold-500/30 transition-colors"
+            >
+              Clear Filters
+            </button>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {filteredEquipment.map((item) => (
+              <Link
+                key={item._id}
+                href={`/field-manual/equipment/${item.slug.current}`}
+                className="group bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl border border-gold-500/20 overflow-hidden hover:border-gold-400/40 transition-all duration-300 hover:scale-105"
+              >
+                {/* Image */}
+                {item.image && (
+                  <div className="relative aspect-[4/3] bg-jerry-green-800/20">
+                    <Image
+                      src={urlFor(item.image).url()}
+                      alt={item.name}
+                      fill
+                      className="object-cover group-hover:scale-110 transition-transform duration-500"
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                    />
+                  </div>
+                )}
+
+                {/* Content */}
+                <div className="p-6 space-y-3">
+                  <div className="flex items-start justify-between gap-2">
+                    <h3 className="text-xl font-serif font-bold text-white group-hover:text-gold-300 transition-colors">
+                      {item.name}
+                    </h3>
+                    {item.essential && (
+                      <span className="px-2 py-1 rounded-full border border-gold-400/40 bg-gold-400/10 text-gold-400 text-xs font-semibold whitespace-nowrap">
+                        Essential
+                      </span>
+                    )}
+                  </div>
+
+                  <p className="text-parchment-300 text-sm leading-relaxed line-clamp-3">
+                    {item.description}
+                  </p>
+
+                  <div className="flex items-center gap-2 text-gold-300 text-sm font-semibold pt-2">
+                    <span>Learn More</span>
+                    <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        )}
+      </section>
 
       {/* Back to Top Button */}
       <BackToTop />
