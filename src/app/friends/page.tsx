@@ -239,7 +239,6 @@ export default function FriendsPage() {
           {/* Partnership Benefits Section */}
           <div className="mt-16 grid md:grid-cols-3 gap-6 mb-16">
             <div className="text-center p-6 bg-jerry-green-800/10 border border-gold-500/20 rounded-lg">
-              <div className="text-4xl mb-3">🤝</div>
               <h4 className="text-lg font-semibold text-gold-400 mb-2">
                 Community Growth
               </h4>
@@ -248,7 +247,6 @@ export default function FriendsPage() {
               </p>
             </div>
             <div className="text-center p-6 bg-jerry-green-800/10 border border-gold-500/20 rounded-lg">
-              <div className="text-4xl mb-3">📈</div>
               <h4 className="text-lg font-semibold text-gold-400 mb-2">
                 Shared Success
               </h4>
@@ -257,7 +255,6 @@ export default function FriendsPage() {
               </p>
             </div>
             <div className="text-center p-6 bg-jerry-green-800/10 border border-gold-500/20 rounded-lg">
-              <div className="text-4xl mb-3">⭐</div>
               <h4 className="text-lg font-semibold text-gold-400 mb-2">
                 Quality Recognition
               </h4>

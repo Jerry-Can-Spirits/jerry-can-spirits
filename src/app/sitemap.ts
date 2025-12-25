@@ -1,7 +1,7 @@
 import { MetadataRoute } from 'next'
 import { getProducts, type ShopifyProduct } from '@/lib/shopify'
 import { client } from '@/sanity/client'
-import { cocktailsQuery } from '@/sanity/queries'
+import { cocktailsQuery, equipmentQuery, ingredientsQuery } from '@/sanity/queries'
 
 // Ensure sitemap works on Cloudflare Pages Edge Runtime
 export const runtime = 'edge'
@@ -43,6 +43,38 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     lastModified: currentDate,
     changeFrequency: 'weekly' as const,
     priority: 0.7,
+  }))
+
+  // Fetch all equipment from Sanity
+  let equipment: Array<{ slug: { current: string } }> = []
+  try {
+    equipment = await client.fetch(equipmentQuery)
+  } catch (error) {
+    console.error('Error fetching equipment for sitemap:', error)
+  }
+
+  // Generate equipment URLs dynamically
+  const equipmentUrls: MetadataRoute.Sitemap = equipment.map((item) => ({
+    url: `${baseUrl}/field-manual/equipment/${item.slug.current}`,
+    lastModified: currentDate,
+    changeFrequency: 'monthly' as const,
+    priority: 0.6,
+  }))
+
+  // Fetch all ingredients from Sanity
+  let ingredients: Array<{ slug: { current: string } }> = []
+  try {
+    ingredients = await client.fetch(ingredientsQuery)
+  } catch (error) {
+    console.error('Error fetching ingredients for sitemap:', error)
+  }
+
+  // Generate ingredient URLs dynamically
+  const ingredientUrls: MetadataRoute.Sitemap = ingredients.map((item) => ({
+    url: `${baseUrl}/field-manual/ingredients/${item.slug.current}`,
+    lastModified: currentDate,
+    changeFrequency: 'monthly' as const,
+    priority: 0.6,
   }))
 
   // Define all static routes with priorities and change frequencies
@@ -167,6 +199,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'monthly',
       priority: 0.6,
     },
+    // Notify page
+    {
+      url: `${baseUrl}/notify`,
+      lastModified: currentDate,
+      changeFrequency: 'monthly',
+      priority: 0.5,
+    },
     // Shop pages
     {
       url: `${baseUrl}/shop`,
@@ -188,5 +227,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
   ]
 
-  return [...routes, ...productUrls, ...cocktailUrls]
+  return [...routes, ...productUrls, ...cocktailUrls, ...equipmentUrls, ...ingredientUrls]
 }

@@ -81,7 +81,7 @@ export default function AgeGate({ onVerified }: AgeGateProps) {
               height={80}
               className="mx-auto mb-8 w-auto h-auto"
               priority
-              quality={85}
+              quality={80}
               sizes="(max-width: 768px) 150px, 200px"
             />
           </div>
@@ -157,7 +157,7 @@ export default function AgeGate({ onVerified }: AgeGateProps) {
       </div>
 
       {/* Right side - Product image */}
-      <div className="flex-1 relative overflow-hidden z-10">
+      <div className="flex-1 relative overflow-hidden z-10" style={{ minHeight: '100vh' }}>
         <div className="absolute inset-0 bg-gradient-to-l from-transparent via-jerry-green-900/20 to-jerry-green-900/60 z-10"></div>
         <Image
           src="/images/hero/hero-spiced.webp"
@@ -165,7 +165,7 @@ export default function AgeGate({ onVerified }: AgeGateProps) {
           fill
           className="object-cover object-center"
           priority
-          quality={80}
+          quality={75}
           sizes="(max-width: 768px) 100vw, 50vw"
           fetchPriority="high"
         />
@@ -175,7 +175,6 @@ export default function AgeGate({ onVerified }: AgeGateProps) {
       {showRejectionMessage && (
         <div className="absolute inset-0 bg-jerry-green-900/95 flex items-center justify-center z-20">
           <div className="bg-jerry-green-800 border-2 border-gold-400 rounded-lg p-8 max-w-md mx-4 text-center">
-            <div className="text-6xl mb-4">🧭</div>
             <h3 className="text-2xl font-serif font-bold text-gold-300 mb-4">
               Every Great Expedition Has Its Time
             </h3>

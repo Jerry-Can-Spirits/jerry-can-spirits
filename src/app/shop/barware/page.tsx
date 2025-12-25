@@ -30,14 +30,7 @@ function formatPrice(amount: string, currencyCode: string): string {
   return `${symbol}${price.toFixed(2)}`
 }
 
-// Category icons mapping
-const categoryIcons: Record<string, string> = {
-  'Glassware': '🍷',
-  'Bar Tools': '🛠️',
-  'Accessories': '✨',
-  'Cocktail Shakers': '🍸',
-  'Measuring Tools': '📏',
-}
+// Category icons mapping - removed emojis for premium brand consistency
 
 // Helper to group products by tags
 function groupProductsByTag(products: ShopifyProduct[]): Record<string, ShopifyProduct[]> {
@@ -227,8 +220,7 @@ export default async function BarwarePage() {
           <div key={category}>
             {/* Category Header */}
             <div className="mb-8">
-              <h2 className="text-3xl font-serif font-bold text-white flex items-center gap-3">
-                <span className="text-4xl">{categoryIcons[category] || '📦'}</span>
+              <h2 className="text-3xl font-serif font-bold text-white">
                 {category}
               </h2>
               <div className="mt-2 h-1 w-24 bg-gradient-to-r from-gold-500 to-transparent rounded-full"></div>

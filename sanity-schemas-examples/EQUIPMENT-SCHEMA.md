@@ -1,27 +1,33 @@
-import {defineField, defineType} from 'sanity'
+# Equipment Schema - Enhanced Fields for Sanity CMS
 
-export default defineType({
+Add these fields to your existing `equipment` schema in Sanity Studio.
+
+## Complete Enhanced Equipment Schema
+
+```javascript
+export default {
   name: 'equipment',
-  title: 'Equipment',
+  title: 'Bar Equipment',
   type: 'document',
   fields: [
-    defineField({
+    // EXISTING FIELDS (keep these)
+    {
       name: 'name',
       title: 'Name',
       type: 'string',
       validation: Rule => Rule.required()
-    }),
-    defineField({
+    },
+    {
       name: 'slug',
       title: 'Slug',
       type: 'slug',
       options: {
         source: 'name',
-        maxLength: 96,
+        maxLength: 96
       },
       validation: Rule => Rule.required()
-    }),
-    defineField({
+    },
+    {
       name: 'category',
       title: 'Category',
       type: 'string',
@@ -36,168 +42,169 @@ export default defineType({
         ]
       },
       validation: Rule => Rule.required()
-    }),
-    defineField({
+    },
+    {
       name: 'description',
       title: 'Description',
       type: 'text',
       rows: 3,
       validation: Rule => Rule.required()
-    }),
-    defineField({
-      name: 'usage',
-      title: 'Usage',
-      type: 'text',
-      rows: 2,
-      validation: Rule => Rule.required()
-    }),
-    defineField({
+    },
+    {
+      name: 'image',
+      title: 'Image',
+      type: 'image',
+      options: {
+        hotspot: true
+      }
+    },
+    {
       name: 'essential',
-      title: 'Essential Item',
+      title: 'Essential Equipment',
+      description: 'Mark as essential for every home bar',
       type: 'boolean',
       initialValue: false
-    }),
-    defineField({
+    },
+    {
+      name: 'featured',
+      title: 'Featured',
+      description: 'Show in featured section',
+      type: 'boolean',
+      initialValue: false
+    },
+    {
       name: 'specifications',
       title: 'Specifications',
       type: 'object',
       fields: [
-        defineField({
+        {
           name: 'material',
           title: 'Material',
           type: 'string',
           description: 'e.g., "Stainless Steel", "Glass", "Copper"'
-        }),
-        defineField({
+        },
+        {
           name: 'capacity',
           title: 'Capacity',
           type: 'string',
           description: 'e.g., "500ml", "2 cups"'
-        }),
-        defineField({
+        },
+        {
           name: 'dimensions',
           title: 'Dimensions',
           type: 'string',
           description: 'e.g., "25cm x 10cm"'
-        })
+        }
       ]
-    }),
-    defineField({
+    },
+    {
+      name: 'usage',
+      title: 'Usage',
+      description: 'How and when to use this equipment',
+      type: 'text',
+      rows: 4,
+      validation: Rule => Rule.required()
+    },
+    {
       name: 'tips',
       title: 'Professional Tips',
       type: 'array',
       of: [{type: 'string'}],
-      description: 'Practical tips for using this equipment',
-      validation: Rule => Rule.required().min(1)
-    }),
-    defineField({
-      name: 'image',
-      title: 'Technical Schematic',
-      type: 'image',
-      options: {
-        hotspot: true,
-      }
-    }),
-    defineField({
-      name: 'featured',
-      title: 'Featured Equipment',
-      type: 'boolean',
-      initialValue: false
-    }),
+      description: 'Practical tips for using this equipment'
+    },
 
-    // ENHANCED FIELDS FOR RICH CONTENT
+    // NEW ENHANCED FIELDS - ADD THESE BELOW
 
     // Buying Guide Section
-    defineField({
+    {
       name: 'priceRange',
       title: 'Price Range',
       type: 'object',
-      description: 'Expected price range for this equipment',
       fields: [
-        defineField({
+        {
           name: 'budget',
           title: 'Budget Option (£)',
           type: 'number',
           description: 'Typical budget price in GBP'
-        }),
-        defineField({
+        },
+        {
           name: 'premium',
           title: 'Premium Option (£)',
           type: 'number',
           description: 'Typical premium price in GBP'
-        })
+        }
       ]
-    }),
-    defineField({
+    },
+    {
       name: 'whatToLookFor',
       title: 'What to Look For',
       type: 'array',
       of: [{type: 'string'}],
       description: 'Key features to look for when buying'
-    }),
-    defineField({
+    },
+    {
       name: 'commonMistakes',
       title: 'Common Mistakes to Avoid',
       type: 'array',
       of: [{type: 'string'}],
       description: 'Mistakes people make when buying or using this'
-    }),
+    },
 
     // Alternatives
-    defineField({
+    {
       name: 'budgetAlternative',
       title: 'Budget Alternative',
       type: 'string',
       description: 'Cheaper alternative or workaround (e.g., "Mason jar with lid")'
-    }),
-    defineField({
+    },
+    {
       name: 'premiumOption',
       title: 'Premium Option',
       type: 'string',
       description: 'Recommended premium brand/model'
-    }),
+    },
 
     // Care & Maintenance
-    defineField({
+    {
       name: 'careInstructions',
       title: 'Care Instructions',
       type: 'text',
       rows: 3,
       description: 'How to clean and maintain this equipment'
-    }),
-    defineField({
+    },
+    {
       name: 'lifespan',
       title: 'Expected Lifespan',
       type: 'string',
       description: 'e.g., "5-10 years with proper care"'
-    }),
+    },
 
     // Context & History
-    defineField({
+    {
       name: 'history',
       title: 'History & Context',
       type: 'text',
       rows: 4,
       description: 'Origin story, historical context, why it matters'
-    }),
-    defineField({
+    },
+    {
       name: 'professionalTip',
       title: 'Pro Tip Callout',
       type: 'text',
       rows: 2,
       description: 'A standout expert insight (displayed prominently)'
-    }),
+    },
 
     // Video Content
-    defineField({
+    {
       name: 'videoUrl',
       title: 'YouTube Video URL',
       type: 'url',
       description: 'Full YouTube URL (e.g., https://www.youtube.com/watch?v=VIDEO_ID)'
-    }),
+    },
 
     // Related Content
-    defineField({
+    {
       name: 'relatedCocktails',
       title: 'Related Cocktails',
       type: 'array',
@@ -208,8 +215,9 @@ export default defineType({
         }
       ],
       description: 'Cocktails that use this equipment'
-    })
+    }
   ],
+
   preview: {
     select: {
       title: 'name',
@@ -221,9 +229,39 @@ export default defineType({
       const {title, subtitle, media, essential} = selection
       return {
         title: essential ? `⭐ ${title}` : title,
-        subtitle,
-        media
+        subtitle: subtitle,
+        media: media
       }
     }
   }
-})
+}
+```
+
+## Quick Migration Checklist
+
+When adding these fields to your existing schema:
+
+1. ✅ Keep all existing fields intact
+2. ✅ Add new fields at the end
+3. ✅ All new fields are optional (no validation required)
+4. ✅ Fields only display when they have data
+5. ✅ Start with essential equipment first, add others gradually
+
+## Recommended Field Priority
+
+**High Priority** (Add these first):
+- `videoUrl` - For your YouTube content!
+- `professionalTip` - Quick value-add
+- `history` - Great for storytelling
+- `priceRange` - Helps users budget
+
+**Medium Priority**:
+- `whatToLookFor`
+- `commonMistakes`
+- `careInstructions`
+- `relatedCocktails`
+
+**Low Priority** (Nice to have):
+- `budgetAlternative`
+- `premiumOption`
+- `lifespan`

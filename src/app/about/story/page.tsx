@@ -300,23 +300,14 @@ export default function OurStory() {
               </div>
               
               <div className="space-y-3">
-                <p className="text-parchment-300 text-sm text-center italic">
-                  "This isn't some massive corporation with staggering teams behind it. This is us in our 
+                <p className="text-parchment-300 text-sm text-center italic mb-4">
+                  "This isn't some massive corporation with staggering teams behind it. This is us in our
                   home offices, building something special."
                 </p>
                 <div className="pt-4 space-y-2">
-                  <div className="flex items-center space-x-2 text-gold-300 text-sm">
-                    <span>📋</span>
-                    <span>Learning regulations daily</span>
-                  </div>
-                  <div className="flex items-center space-x-2 text-gold-300 text-sm">
-                    <span>💻</span>
-                    <span>Home office headquarters</span>
-                  </div>
-                  <div className="flex items-center space-x-2 text-gold-300 text-sm">
-                    <span>🎯</span>
-                    <span>Quality over everything</span>
-                  </div>
+                  <p className="text-gold-300 text-sm">• Learning regulations daily</p>
+                  <p className="text-gold-300 text-sm">• Home office headquarters</p>
+                  <p className="text-gold-300 text-sm">• Quality over everything</p>
                 </div>
               </div>
             </div>

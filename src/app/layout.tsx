@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, Playfair_Display, JetBrains_Mono } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -91,7 +92,8 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-title" content="Jerry Can Spirits®" />
         <link rel="preconnect" href="https://www.googletagmanager.com" />
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
-        <script async type="text/javascript" src="https://static.klaviyo.com/onsite/js/klaviyo.js?company_id=UavTvg"></script>
+        <link rel="preconnect" href="https://static.klaviyo.com" />
+        <link rel="dns-prefetch" href="https://static.klaviyo.com" />
       </head>
       <body
         className={`${inter.variable} ${playfair.variable} ${jetbrains.variable} antialiased min-h-screen bg-jerry-green-900 text-foreground`}
@@ -100,6 +102,10 @@ export default function RootLayout({
         <ServiceWorkerRegistration />
         <OrganizationSchema />
         <WebsiteSchema />
+        <Script
+          src="https://static.klaviyo.com/onsite/js/klaviyo.js?company_id=UavTvg"
+          strategy="lazyOnload"
+        />
 
         <CartProvider>
           {/* Skip to Content Link - Accessibility */}
@@ -117,7 +123,7 @@ export default function RootLayout({
           {/* Promo Banner - Only show when there's an active promotion */}
           <div className="relative z-10">
             <PromoBanner
-              message="🚀 Pre-launch: Be the first to know when Expedition Spiced launches!"
+              message="Pre-launch: Be the first to know when Expedition Spiced launches!"
               ctaText="Notify Me"
               ctaLink="/notify"
               isVisible={true}

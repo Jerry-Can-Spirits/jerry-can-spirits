@@ -123,7 +123,6 @@ export default function NotifyPage() {
         {/* Features Grid */}
         <div className="grid md:grid-cols-3 gap-6 mt-12">
           <div className="text-center p-6 bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl border border-gold-500/20">
-            <div className="text-3xl mb-3">🎁</div>
             <h3 className="text-lg font-serif font-bold text-white mb-2">Early Access</h3>
             <p className="text-parchment-300 text-sm">
               Be among the first to try our spirits when we launch
@@ -131,7 +130,6 @@ export default function NotifyPage() {
           </div>
 
           <div className="text-center p-6 bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl border border-gold-500/20">
-            <div className="text-3xl mb-3">💰</div>
             <h3 className="text-lg font-serif font-bold text-white mb-2">Special Offers</h3>
             <p className="text-parchment-300 text-sm">
               Exclusive discounts and limited edition releases
@@ -139,7 +137,6 @@ export default function NotifyPage() {
           </div>
 
           <div className="text-center p-6 bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl border border-gold-500/20">
-            <div className="text-3xl mb-3">📰</div>
             <h3 className="text-lg font-serif font-bold text-white mb-2">Updates</h3>
             <p className="text-parchment-300 text-sm">
               Stay informed about our journey and product launches

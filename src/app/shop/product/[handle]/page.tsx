@@ -98,10 +98,10 @@ export default async function ProductPage({
   }
 
   // Debug: Log product variant info
-  console.log('📦 Product variants:', product.variants)
-  console.log('🔑 First variant ID:', product.variants?.[0]?.id)
-  console.log('✅ Available for sale:', product.variants?.[0]?.availableForSale)
-  console.log('📊 Quantity available:', product.variants?.[0]?.quantityAvailable)
+  console.log('Product variants:', product.variants)
+  console.log('First variant ID:', product.variants?.[0]?.id)
+  console.log('Available for sale:', product.variants?.[0]?.availableForSale)
+  console.log('Quantity available:', product.variants?.[0]?.quantityAvailable)
 
   const price = formatPrice(
     product.priceRange.minVariantPrice.amount,
