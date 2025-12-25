@@ -14,45 +14,80 @@ export const metadata: Metadata = {
 }
 
 const faqs = [
+  // Product Information
   {
     question: "What makes Jerry Can Spirits rum unique?",
     answer: "Our rum combines British precision with Caribbean soul. We craft small-batch, expedition-ready spirits with a focus on adventure and quality. Each bottle is designed for those who venture beyond the ordinary."
-  },
-  {
-    question: "When will Jerry Can Spirits rum be available for purchase?",
-    answer: "We're currently finalising our first batch for launch. Join our mailing list to get early access notifications and be first in line when we launch."
   },
   {
     question: "What type of rum do you produce?",
     answer: "We specialise in premium spiced rum with expedition-ready character. Our rums are perfect for both classic cocktails and sipping neat."
   },
   {
-    question: "Do you ship internationally?",
-    answer: "We're launching in the UK first. International shipping plans will be announced to our mailing list subscribers. Sign up to stay informed about expansion to your region."
-  },
-  {
-    question: "What cocktails work best with Jerry Can Spirits rum?",
-    answer: "Our rum is versatile and works beautifully in classic cocktails, Old Fashioned, Mai Tai, and Rum Punch. Check our Field Manual for exclusive expedition cocktail recipes."
-  },
-  {
     question: "What is the alcohol content (ABV) of your rum?",
-    answer: "Our expedition-ready rum is crafted at 40% ABV. Join our mailing list for product specifications."
+    answer: "Our expedition-ready rum is crafted at 40% ABV - the perfect balance for versatility in cocktails and sipping neat."
   },
   {
     question: "Are your products suitable for vegans?",
     answer: "Yes! Our rum is crafted using traditional methods with no animal products in the production process, making it suitable for vegans and vegetarians."
   },
   {
-    question: "Can I visit your distillery?",
-    answer: "Jerry Can Spirits contracts the Spirit of Wales Distillery to create our products. Spirit of Wales offer tours, see their website for further information."
+    question: "How should I store my Jerry Can Spirits rum?",
+    answer: "Store your rum upright in a cool, dark place away from direct sunlight and temperature fluctuations. Once opened, it will maintain quality for several years. No refrigeration needed."
+  },
+
+  // Ordering & Shipping
+  {
+    question: "How long does shipping take?",
+    answer: "UK orders are typically dispatched within 1-2 business days and arrive within 3-5 business days via Royal Mail. You'll receive tracking information once your order ships."
   },
   {
-    question: "Do you offer corporate gifts or bulk orders?",
-    answer: "We'll be offering corporate gifting and bulk order options. For inquiries, please contact us at hello@jerrycanspirits.co.uk."
+    question: "Do you ship internationally?",
+    answer: "We're currently focused on UK delivery. International shipping plans will be announced to our mailing list subscribers. Sign up to stay informed about expansion to your region."
   },
+  {
+    question: "What are your shipping costs?",
+    answer: "UK standard shipping is calculated at checkout based on your order. We offer free UK shipping on orders over a certain value - check our shop for current promotions."
+  },
+  {
+    question: "How do you verify age for alcohol purchases?",
+    answer: "You must be 18+ to purchase. Our delivery partners verify age at the door - valid photo ID is required. If no one 18+ is available to receive the order, it will not be delivered."
+  },
+
+  // Returns & Customer Service
+  {
+    question: "What is your returns policy?",
+    answer: "Unopened bottles can be returned within 14 days of delivery for a refund. Due to alcohol licensing laws, we cannot accept returns of opened bottles unless faulty. Contact hello@jerrycanspirits.co.uk to initiate a return."
+  },
+  {
+    question: "What if my bottle arrives damaged?",
+    answer: "We take great care in packaging, but if your bottle arrives damaged, please contact us at hello@jerrycanspirits.co.uk within 48 hours with photos. We'll arrange a replacement or refund immediately."
+  },
+
+  // Cocktails & Recipes
+  {
+    question: "What cocktails work best with Jerry Can Spirits rum?",
+    answer: "Our rum is versatile and works beautifully in classic cocktails like Old Fashioned, Mai Tai, and Rum Punch. Check our Field Manual for exclusive expedition cocktail recipes."
+  },
+
+  // Reviews & Community
+  {
+    question: "How can I leave a review?",
+    answer: "We use Trustpilot for verified reviews. After your purchase, you'll receive an email invitation to review your experience. Your honest feedback helps fellow adventurers and helps us improve."
+  },
+
+  // Company & Brand
   {
     question: "What is your connection to the Armed Forces?",
     answer: "Jerry Can Spirits was founded by a former Royal Corps of Signals serviceman. We're proud supporters of the Armed Forces Covenant and donate a portion of profits to military charities."
+  },
+  {
+    question: "Can I visit your distillery?",
+    answer: "Jerry Can Spirits contracts the Spirit of Wales Distillery to create our products. Spirit of Wales offer tours - see their website for further information."
+  },
+  {
+    question: "Do you offer corporate gifts or bulk orders?",
+    answer: "Yes! We offer corporate gifting and bulk order options. For custom orders, branded packaging, or volume discounts, contact us at hello@jerrycanspirits.co.uk."
   },
 ]
 

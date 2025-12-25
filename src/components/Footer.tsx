@@ -232,7 +232,7 @@ export default function Footer() {
                     >
                       {isClient ? (
                         <Image
-                          src="/images/Veteran Owned Badge.webp"
+                          src="/images/Veteran_Owned_Badge.webp"
                           alt="Veteran-Owned Business - Royal Corps of Signals"
                           width={150}
                           height={100}
