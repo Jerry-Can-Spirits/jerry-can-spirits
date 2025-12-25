@@ -83,6 +83,10 @@ export default async function ProductPage({
   try {
     product = await getProduct(handle)
 
+    if (!product) {
+      notFound()
+    }
+
     // Get smart product recommendations
     // - Prioritizes same collection (drinks → drinks, barware → barware)
     // - Intelligent cross-sell (spirits → glasses, etc.)
@@ -90,10 +94,6 @@ export default async function ProductPage({
     relatedProducts = await getSmartRecommendations(product, 4)
   } catch (error) {
     console.error('Error fetching product:', error)
-    notFound()
-  }
-
-  if (!product) {
     notFound()
   }
 
