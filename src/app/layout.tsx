@@ -47,9 +47,6 @@ export const metadata: Metadata = {
   description: "Veteran-owned premium British rum with authentic military heritage. Founded by Royal Corps of Signals veterans. Small-batch spirits engineered for reliability, designed for adventure. Expedition Ready.",
   keywords: "veteran-owned rum, British spirits, military heritage rum, premium rum, Royal Corps of Signals, expedition rum, small-batch spirits, craft rum, British rum, sustainable spirits",
   authors: [{ name: "Jerry Can Spirits®" }],
-  alternates: {
-    canonical: "https://jerrycanspirits.co.uk",
-  },
   openGraph: {
     type: "website",
     locale: "en_GB",
