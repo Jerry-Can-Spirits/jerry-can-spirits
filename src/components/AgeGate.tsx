@@ -73,17 +73,17 @@ export default function AgeGate({ onVerified }: AgeGateProps) {
       <div className="flex-1 flex items-center justify-center p-8 relative z-10">
         <div className="max-w-md w-full space-y-8">
           {/* Logo */}
-          <div className="text-center" style={{ minHeight: '104px' }}>
-            <div style={{ width: '200px', height: '80px', margin: '0 auto 2rem' }}>
+          <div className="text-center" style={{ minHeight: '168px' }}>
+            <div style={{ width: '150px', height: '150px', margin: '0 auto 2rem' }}>
               <Image
                 src="/images/Logo.webp"
                 alt="Jerry Can Spirits®"
-                width={200}
-                height={80}
+                width={150}
+                height={150}
                 className="w-full h-full"
                 priority
                 quality={70}
-                sizes="(max-width: 768px) 150px, 200px"
+                sizes="(max-width: 768px) 112px, 150px"
               />
             </div>
           </div>

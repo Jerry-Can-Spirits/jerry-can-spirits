@@ -13,6 +13,12 @@ const nextConfig: NextConfig = {
     } : false,
   },
 
+  // SWC compiler options for modern browsers (removes polyfills)
+  swcMinify: true,
+
+  // Target modern browsers - disables legacy transforms
+  transpilePackages: [],
+
   // Security headers configured here for Cloudflare Pages compatibility
   // Middleware headers don't work reliably on Cloudflare Pages Edge Runtime
   async headers() {
@@ -161,7 +167,7 @@ const nextConfig: NextConfig = {
     if (!dev) {
       config.cache = false;
     }
-    
+
     if (!dev && !isServer) {
       // Advanced bundle splitting for better performance
       config.optimization.splitChunks = {
