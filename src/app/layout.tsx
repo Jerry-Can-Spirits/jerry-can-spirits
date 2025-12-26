@@ -10,6 +10,7 @@ import ClientWrapper from "@/components/ClientWrapper";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
 import ConsentBanner from "@/components/ConsentBanner";
 import ServiceWorkerRegistration from "@/components/ServiceWorkerRegistration";
+import InstallPrompt from "@/components/InstallPrompt";
 import { CartProvider } from "@/contexts/CartContext";
 import CartDrawer from "@/components/CartDrawer";
 import { OrganizationSchema, WebsiteSchema } from "@/components/StructuredData";
@@ -115,6 +116,7 @@ export default function RootLayout({
       >
         <GoogleAnalytics />
         <ServiceWorkerRegistration />
+        <InstallPrompt />
         <OrganizationSchema />
         <WebsiteSchema />
         <Script
