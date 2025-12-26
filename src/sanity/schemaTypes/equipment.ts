@@ -75,10 +75,10 @@ export default defineType({
           description: 'e.g., "500ml", "2 cups"'
         }),
         defineField({
-          name: 'dimensions',
-          title: 'Dimensions',
+          name: 'details',
+          title: 'Details',
           type: 'string',
-          description: 'e.g., "25cm x 10cm"'
+          description: 'e.g., "25cm x 10cm", "Boston or Cobbler style", "Standard or Double"'
         })
       ]
     }),

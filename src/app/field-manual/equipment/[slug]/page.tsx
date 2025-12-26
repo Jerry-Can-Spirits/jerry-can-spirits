@@ -19,7 +19,7 @@ interface Equipment {
   specifications?: {
     material?: string
     capacity?: string
-    dimensions?: string
+    details?: string
   }
   tips: string[]
   image?: { asset: { url: string } }
@@ -64,6 +64,9 @@ function getYouTubeVideoId(url: string): string | null {
 async function getEquipment(slug: string): Promise<Equipment | null> {
   return await client.fetch(equipmentBySlugQuery, { slug })
 }
+
+// Enable ISR - revalidate every 60 seconds
+export const revalidate = 60
 
 async function getAllEquipment(): Promise<Equipment[]> {
   return await client.fetch(equipmentQuery)
@@ -273,7 +276,7 @@ export default async function EquipmentDetailPage({ params }: { params: Promise<
             )}
 
             {/* Specifications */}
-            {equipment.specifications && (equipment.specifications.material || equipment.specifications.capacity || equipment.specifications.dimensions) && (
+            {equipment.specifications && (equipment.specifications.material || equipment.specifications.capacity || equipment.specifications.details) && (
               <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
                 <h2 className="text-2xl font-serif font-bold text-gold-300 mb-4">Specifications</h2>
                 <div className="grid md:grid-cols-3 gap-4">
@@ -289,10 +292,10 @@ export default async function EquipmentDetailPage({ params }: { params: Promise<
                       <p className="text-parchment-300 text-sm">{equipment.specifications.capacity}</p>
                     </div>
                   )}
-                  {equipment.specifications.dimensions && (
+                  {equipment.specifications.details && (
                     <div className="p-4 bg-jerry-green-800/30 rounded-lg border border-gold-500/20">
-                      <p className="text-gold-400 font-semibold mb-1">Dimensions</p>
-                      <p className="text-parchment-300 text-sm">{equipment.specifications.dimensions}</p>
+                      <p className="text-gold-400 font-semibold mb-1">Details</p>
+                      <p className="text-parchment-300 text-sm">{equipment.specifications.details}</p>
                     </div>
                   )}
                 </div>
