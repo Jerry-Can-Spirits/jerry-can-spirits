@@ -18,18 +18,27 @@ const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
   display: "swap",
+  preload: true,
+  fallback: ['system-ui', 'arial'],
+  adjustFontFallback: true,
 });
 
 const playfair = Playfair_Display({
   variable: "--font-playfair",
   subsets: ["latin"],
   display: "swap",
+  preload: true,
+  fallback: ['Georgia', 'serif'],
+  adjustFontFallback: true,
 });
 
 const jetbrains = JetBrains_Mono({
   variable: "--font-jetbrains",
   subsets: ["latin"],
   display: "swap",
+  preload: false,
+  fallback: ['Courier New', 'monospace'],
+  adjustFontFallback: true,
 });
 
 export const metadata: Metadata = {
@@ -94,6 +103,15 @@ export default function RootLayout({
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
         <link rel="preconnect" href="https://static.klaviyo.com" />
         <link rel="dns-prefetch" href="https://static.klaviyo.com" />
+        {/* Preload critical LCP image */}
+        <link
+          rel="preload"
+          as="image"
+          href="/_next/image/?url=%2Fimages%2Fhero%2Fhero-spiced.webp&w=750&q=65"
+          imageSrcSet="/_next/image/?url=%2Fimages%2Fhero%2Fhero-spiced.webp&w=640&q=65 640w, /_next/image/?url=%2Fimages%2Fhero%2Fhero-spiced.webp&w=750&q=65 750w"
+          imageSizes="(max-width: 768px) 100vw, 50vw"
+          fetchPriority="high"
+        />
       </head>
       <body
         className={`${inter.variable} ${playfair.variable} ${jetbrains.variable} antialiased min-h-screen bg-jerry-green-900 text-foreground`}
@@ -111,7 +129,7 @@ export default function RootLayout({
           {/* Skip to Content Link - Accessibility */}
           <a
             href="#main-content"
-            className="fixed top-4 left-4 z-[9999] px-4 py-2 bg-gold-500 text-jerry-green-900 font-semibold rounded-lg shadow-lg outline-none ring-2 ring-gold-300 -translate-y-[200%] focus:translate-y-0 transition-transform duration-200"
+            className="sr-only focus:not-sr-only fixed top-4 left-4 z-[9999] px-4 py-2 bg-gold-500 text-jerry-green-900 font-semibold rounded-lg shadow-lg focus:outline-none focus:ring-2 focus:ring-gold-300 transition-all duration-200"
           >
             Skip to main content
           </a>

@@ -73,17 +73,19 @@ export default function AgeGate({ onVerified }: AgeGateProps) {
       <div className="flex-1 flex items-center justify-center p-8 relative z-10">
         <div className="max-w-md w-full space-y-8">
           {/* Logo */}
-          <div className="text-center">
-            <Image
-              src="/images/Logo.webp"
-              alt="Jerry Can Spirits®"
-              width={200}
-              height={80}
-              className="mx-auto mb-8 w-auto h-auto"
-              priority
-              quality={80}
-              sizes="(max-width: 768px) 150px, 200px"
-            />
+          <div className="text-center" style={{ minHeight: '104px' }}>
+            <div style={{ width: '200px', height: '80px', margin: '0 auto 2rem' }}>
+              <Image
+                src="/images/Logo.webp"
+                alt="Jerry Can Spirits®"
+                width={200}
+                height={80}
+                className="w-full h-full"
+                priority
+                quality={70}
+                sizes="(max-width: 768px) 150px, 200px"
+              />
+            </div>
           </div>
 
           {/* Main question */}
@@ -165,7 +167,7 @@ export default function AgeGate({ onVerified }: AgeGateProps) {
           fill
           className="object-cover object-center"
           priority
-          quality={75}
+          quality={65}
           sizes="(max-width: 768px) 100vw, 50vw"
           fetchPriority="high"
         />
