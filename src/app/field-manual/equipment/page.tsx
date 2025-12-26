@@ -21,7 +21,7 @@ interface Equipment {
   specifications?: {
     material?: string
     capacity?: string
-    dimensions?: string
+    details?: string
   }
   tips: string[]
   image?: { asset: { url: string } }

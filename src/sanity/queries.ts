@@ -84,7 +84,11 @@ export const equipmentQuery = `*[_type == "equipment"] | order(category asc, nam
   description,
   usage,
   essential,
-  specifications,
+  specifications {
+    material,
+    capacity,
+    details
+  },
   tips,
   image,
   featured
@@ -98,11 +102,18 @@ export const equipmentBySlugQuery = `*[_type == "equipment" && slug.current == $
   description,
   usage,
   essential,
-  specifications,
+  specifications {
+    material,
+    capacity,
+    details
+  },
   tips,
   image,
   featured,
-  priceRange,
+  priceRange {
+    budget,
+    premium
+  },
   whatToLookFor,
   commonMistakes,
   careInstructions,
