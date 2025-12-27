@@ -31,7 +31,11 @@ interface SanityCocktail {
   difficulty: 'novice' | 'wayfinder' | 'trailblazer'
   ingredients: CocktailIngredient[]
   instructions: string[]
-  glassware: string
+  glassware: {
+    _id: string
+    name: string
+    slug: { current: string }
+  }
   garnish: string
   note?: string
   variants?: CocktailVariant[]

@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Image from 'next/image'
+import Link from 'next/link'
 
 // Types for cocktail data
 interface CocktailIngredient {
@@ -27,7 +28,11 @@ interface SanityCocktail {
   difficulty: 'novice' | 'wayfinder' | 'trailblazer'
   ingredients: CocktailIngredient[]
   instructions: string[]
-  glassware: string
+  glassware: {
+    _id: string
+    name: string
+    slug: { current: string }
+  }
   garnish: string
   note?: string
   variants?: CocktailVariant[]
@@ -143,7 +148,19 @@ export default function CocktailRecipeDisplay({ cocktail }: Props) {
           {/* Recipe Details */}
           <div className="grid md:grid-cols-2 gap-6">
             <div>
-              <p className="text-parchment-300"><strong className="text-gold-300">Glassware:</strong> {cocktail?.glassware}</p>
+              <p className="text-parchment-300">
+                <strong className="text-gold-300">Glassware:</strong>{' '}
+                {cocktail?.glassware ? (
+                  <Link
+                    href={`/field-manual/equipment/${cocktail.glassware.slug.current}`}
+                    className="text-blue-400 hover:text-blue-300 underline transition-colors"
+                  >
+                    {cocktail.glassware.name}
+                  </Link>
+                ) : (
+                  'Not specified'
+                )}
+              </p>
               <p className="text-parchment-300"><strong className="text-gold-300">Garnish:</strong> {cocktail?.garnish}</p>
             </div>
           </div>
