@@ -26,6 +26,8 @@ interface Equipment {
   tips: string[]
   image?: { asset: { url: string } }
   featured: boolean
+  careInstructions?: string[] | string
+  lifespan?: string[] | string
 }
 
 const categoryConfig = {

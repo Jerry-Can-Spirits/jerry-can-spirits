@@ -31,8 +31,8 @@ interface Equipment {
   }
   whatToLookFor?: string[]
   commonMistakes?: string[]
-  careInstructions?: string
-  lifespan?: string
+  careInstructions?: string[] | string  // Support both old (string) and new (array) format
+  lifespan?: string[] | string  // Support both old (string) and new (array) format
   budgetAlternative?: string
   premiumOption?: string
   history?: string
@@ -366,14 +366,38 @@ export default async function EquipmentDetailPage({ params }: { params: Promise<
                 <div className="space-y-4">
                   {equipment.careInstructions && (
                     <div>
-                      <h3 className="text-gold-400 font-semibold mb-2">Care Instructions</h3>
-                      <p className="text-parchment-300 leading-relaxed">{equipment.careInstructions}</p>
+                      <h3 className="text-gold-400 font-semibold mb-3">Care Instructions</h3>
+                      {Array.isArray(equipment.careInstructions) ? (
+                        <ul className="space-y-3">
+                          {equipment.careInstructions.map((instruction, index) => (
+                            <li key={index} className="flex items-start gap-3">
+                              <svg className="w-5 h-5 text-blue-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                              </svg>
+                              <span className="text-parchment-300 leading-relaxed">{instruction}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      ) : (
+                        <p className="text-parchment-300 leading-relaxed">{equipment.careInstructions}</p>
+                      )}
                     </div>
                   )}
                   {equipment.lifespan && (
                     <div className="p-4 bg-jerry-green-800/30 rounded-lg border border-gold-500/20">
-                      <p className="text-gold-400 font-semibold mb-1">Expected Lifespan</p>
-                      <p className="text-parchment-300">{equipment.lifespan}</p>
+                      <p className="text-gold-400 font-semibold mb-3">Expected Lifespan</p>
+                      {Array.isArray(equipment.lifespan) ? (
+                        <ul className="space-y-2">
+                          {equipment.lifespan.map((span, index) => (
+                            <li key={index} className="flex items-start gap-2">
+                              <span className="text-gold-400 mt-1">•</span>
+                              <span className="text-parchment-300">{span}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      ) : (
+                        <p className="text-parchment-300">{equipment.lifespan}</p>
+                      )}
                     </div>
                   )}
                 </div>

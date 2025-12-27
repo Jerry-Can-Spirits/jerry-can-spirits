@@ -44,7 +44,11 @@ export default defineType({
     defineField({
       name: 'glassware',
       title: 'Glassware',
-      type: 'string',
+      type: 'reference',
+      to: [{type: 'equipment'}],
+      options: {
+        filter: 'category == "glassware"'
+      },
       validation: Rule => Rule.required()
     }),
     defineField({

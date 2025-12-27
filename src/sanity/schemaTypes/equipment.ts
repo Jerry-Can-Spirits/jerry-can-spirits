@@ -161,15 +161,16 @@ export default defineType({
     defineField({
       name: 'careInstructions',
       title: 'Care Instructions',
-      type: 'text',
-      rows: 3,
-      description: 'How to clean and maintain this equipment'
+      type: 'array',
+      of: [{type: 'string'}],
+      description: 'Step-by-step care instructions (add each as a separate item)'
     }),
     defineField({
       name: 'lifespan',
       title: 'Expected Lifespan',
-      type: 'string',
-      description: 'e.g., "5-10 years with proper care"'
+      type: 'array',
+      of: [{type: 'string'}],
+      description: 'List different quality levels, e.g., "Budget: 2-3 years", "Premium: 10-15 years"'
     }),
 
     // Context & History
