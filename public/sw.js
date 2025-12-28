@@ -1,4 +1,4 @@
-const CACHE_NAME = 'jerry-can-spirits-v4';
+const CACHE_NAME = 'jerry-can-spirits-v5';
 const OFFLINE_URL = '/offline';
 
 // URLs to cache for offline access (Field Manual)
@@ -64,7 +64,7 @@ self.addEventListener('fetch', (event) => {
       fetch(request)
         .then((response) => {
           // Cache successful navigation responses
-          if (response.ok && shouldCacheOffline(request.url)) {
+          if (response.ok) {
             const responseClone = response.clone();
             caches.open(CACHE_NAME).then((cache) => {
               cache.put(request, responseClone);
@@ -73,28 +73,37 @@ self.addEventListener('fetch', (event) => {
           return response;
         })
         .catch(async () => {
-          // Offline: try cache, then offline page
+          // Offline: try cache first
           const cachedResponse = await caches.match(request);
           if (cachedResponse) {
             return cachedResponse;
           }
 
+          // Try to match without query params (for dynamic routes)
+          const urlWithoutParams = new URL(request.url);
+          urlWithoutParams.search = '';
+          const cachedWithoutParams = await caches.match(urlWithoutParams.toString());
+          if (cachedWithoutParams) {
+            return cachedWithoutParams;
+          }
+
+          // Try offline page
           const offlineResponse = await caches.match(OFFLINE_URL);
           if (offlineResponse) {
             return offlineResponse;
           }
 
-          // Inline fallback HTML
+          // Inline fallback HTML with better mobile support
           return new Response(
             `<!DOCTYPE html>
             <html lang="en">
               <head>
                 <meta charset="utf-8">
-                <meta name="viewport" content="width=device-width, initial-scale=1">
+                <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
                 <title>Offline | Jerry Can Spirits</title>
                 <style>
+                  * { box-sizing: border-box; margin: 0; padding: 0; }
                   body {
-                    margin: 0;
                     font-family: system-ui, -apple-system, sans-serif;
                     background: #1a442e;
                     color: #fff;
@@ -105,8 +114,8 @@ self.addEventListener('fetch', (event) => {
                     text-align: center;
                     padding: 20px;
                   }
-                  h1 { color: #f59e0b; margin-bottom: 1rem; }
-                  p { max-width: 400px; margin: 0 auto 1rem; }
+                  h1 { color: #f59e0b; margin-bottom: 1rem; font-size: clamp(1.5rem, 5vw, 2.5rem); }
+                  p { max-width: 400px; margin: 0 auto 1.5rem; line-height: 1.6; }
                   button {
                     background: #f59e0b;
                     color: #1a442e;
@@ -116,21 +125,28 @@ self.addEventListener('fetch', (event) => {
                     font-weight: 600;
                     border-radius: 8px;
                     cursor: pointer;
-                    margin-top: 1rem;
+                    margin: 0.5rem;
+                    min-width: 140px;
                   }
+                  button:active { transform: scale(0.95); }
                 </style>
               </head>
               <body>
                 <div>
                   <h1>📡 Off the Grid</h1>
-                  <p>You're currently offline. Your cached cocktail recipes are available in the Field Manual.</p>
-                  <button onclick="window.location.href='/field-manual'">View Cached Recipes</button>
-                  <button onclick="window.location.reload()">Retry Connection</button>
+                  <p>You're currently offline. Some cached content may be available.</p>
+                  <div>
+                    <button onclick="window.location.href='/field-manual'">Field Manual</button>
+                    <button onclick="window.location.reload()">Retry</button>
+                  </div>
                 </div>
               </body>
             </html>`,
             {
-              headers: { 'Content-Type': 'text/html' }
+              headers: {
+                'Content-Type': 'text/html',
+                'Cache-Control': 'no-cache'
+              }
             }
           );
         })

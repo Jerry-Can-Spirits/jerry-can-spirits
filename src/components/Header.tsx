@@ -79,20 +79,23 @@ export default function Header() {
           const currentScrollY = window.scrollY
           setIsScrolled(currentScrollY > 20)
 
-          // Improved hide/show logic with better threshold
-          const scrollDifference = Math.abs(currentScrollY - lastScrollY)
+          // Don't hide header when mobile menu is open
+          if (!isMobileMenuOpen) {
+            // Improved hide/show logic with better threshold
+            const scrollDifference = Math.abs(currentScrollY - lastScrollY)
 
-          // Only trigger if scroll difference is significant (reduces jitter)
-          if (scrollDifference > 5) {
-            if (currentScrollY > lastScrollY && currentScrollY > 150) {
-              // Scrolling down - hide header
-              setShowHeader(false)
-            } else if (currentScrollY < lastScrollY) {
-              // Scrolling up - show header
-              setShowHeader(true)
+            // Only trigger if scroll difference is significant (reduces jitter)
+            if (scrollDifference > 5) {
+              if (currentScrollY > lastScrollY && currentScrollY > 150) {
+                // Scrolling down - hide header
+                setShowHeader(false)
+              } else if (currentScrollY < lastScrollY) {
+                // Scrolling up - show header
+                setShowHeader(true)
+              }
+
+              setLastScrollY(currentScrollY)
             }
-
-            setLastScrollY(currentScrollY)
           }
 
           ticking = false
@@ -103,7 +106,7 @@ export default function Header() {
 
     window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
-  }, [lastScrollY])
+  }, [lastScrollY, isMobileMenuOpen])
 
   // Close mobile menu on resize
   useEffect(() => {
@@ -357,9 +360,9 @@ export default function Header() {
         </nav>
 
         {/* Mobile Menu */}
-        <div className={`md:hidden transition-all duration-300 overflow-hidden ${
+        <div className={`md:hidden transition-all duration-300 ${
           isMobileMenuOpen ? 'max-h-screen opacity-100' : 'max-h-0 opacity-0'
-        }`}>
+        }`} style={{ overflowY: isMobileMenuOpen ? 'auto' : 'hidden', maxHeight: isMobileMenuOpen ? 'calc(100vh - 5rem)' : '0' }}>
           <div className="bg-jerry-green-800/95 backdrop-blur-lg border-t border-jerry-green-600/20 px-4 py-6 space-y-4">
             {navigation.map((item) => (
               <div key={item.name}>
