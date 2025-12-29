@@ -287,11 +287,11 @@ export default function CartDrawer() {
                   href={cart.checkoutUrl}
                   onClick={() => {
                     // Track checkout initiation with Facebook Pixel
-                    if (typeof window !== 'undefined' && (window as Window & { fbq?: Function }).fbq) {
-                      (window as Window & { fbq: Function }).fbq('track', 'InitiateCheckout', {
-                        content_ids: cart.lines.map(line => line.merchandise.product.id),
+                    if (typeof window !== 'undefined' && (window as Window & { fbq?: (...args: unknown[]) => void }).fbq) {
+                      (window as Window & { fbq: (...args: unknown[]) => void }).fbq('track', 'InitiateCheckout', {
+                        content_ids: cart.lines.map(line => line.merchandise.id),
                         contents: cart.lines.map(line => ({
-                          id: line.merchandise.product.id,
+                          id: line.merchandise.id,
                           quantity: line.quantity
                         })),
                         value: parseFloat(cart.cost.totalAmount.amount),

@@ -19,8 +19,8 @@ export default function ProductPageTracking({
 }: ProductPageTrackingProps) {
   useEffect(() => {
     // Track Facebook Pixel ViewContent event
-    if (typeof window !== 'undefined' && (window as Window & { fbq?: Function }).fbq) {
-      (window as Window & { fbq: Function }).fbq('track', 'ViewContent', {
+    if (typeof window !== 'undefined' && (window as Window & { fbq?: (...args: unknown[]) => void }).fbq) {
+      (window as Window & { fbq: (...args: unknown[]) => void }).fbq('track', 'ViewContent', {
         content_name: productName,
         content_ids: [productId],
         content_type: 'product',

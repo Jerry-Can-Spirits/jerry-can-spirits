@@ -25,8 +25,8 @@ export default function AddToCartButton({
     console.log('Adding to cart:', { variantId, quantity, productTitle })
 
     // Track Facebook Pixel AddToCart event
-    if (typeof window !== 'undefined' && (window as Window & { fbq?: Function }).fbq) {
-      (window as Window & { fbq: Function }).fbq('track', 'AddToCart', {
+    if (typeof window !== 'undefined' && (window as Window & { fbq?: (...args: unknown[]) => void }).fbq) {
+      (window as Window & { fbq: (...args: unknown[]) => void }).fbq('track', 'AddToCart', {
         content_name: productTitle,
         content_ids: productId ? [productId] : [variantId],
         content_type: 'product',

@@ -72,27 +72,29 @@ export async function GET(request: NextRequest) {
     })
     results.push(...pageMatches)
 
-    // Search Shopify products
-    try {
-      const products = await getProducts()
-      const productMatches = products
-        .filter(product => {
-          const titleMatch = product.title.toLowerCase().includes(searchQuery)
-          const descMatch = product.description.toLowerCase().includes(searchQuery)
-          const tagMatch = product.tags?.some(tag => tag.toLowerCase().includes(searchQuery))
-          return titleMatch || descMatch || tagMatch
-        })
-        .map(product => ({
-          type: 'product' as const,
-          title: product.title,
-          description: product.description.substring(0, 100) + (product.description.length > 100 ? '...' : ''),
-          url: `/shop/product/${product.handle}`,
-          image: product.images[0]?.url,
-          category: 'Shop',
-        }))
-      results.push(...productMatches)
-    } catch (error) {
-      console.error('Error searching Shopify products:', error)
+    // Search Shopify products (skip if credentials not configured)
+    if (process.env.NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN && process.env.NEXT_PUBLIC_SHOPIFY_STOREFRONT_ACCESS_TOKEN) {
+      try {
+        const products = await getProducts()
+        const productMatches = products
+          .filter(product => {
+            const titleMatch = product.title.toLowerCase().includes(searchQuery)
+            const descMatch = product.description.toLowerCase().includes(searchQuery)
+            const tagMatch = product.tags?.some(tag => tag.toLowerCase().includes(searchQuery))
+            return titleMatch || descMatch || tagMatch
+          })
+          .map(product => ({
+            type: 'product' as const,
+            title: product.title,
+            description: product.description.substring(0, 100) + (product.description.length > 100 ? '...' : ''),
+            url: `/shop/product/${product.handle}`,
+            image: product.images[0]?.url,
+            category: 'Shop',
+          }))
+        results.push(...productMatches)
+      } catch (error) {
+        console.error('Error searching Shopify products:', error)
+      }
     }
 
     // Search Sanity cocktails
