@@ -8,6 +8,7 @@ import PromoBanner from "@/components/PromoBanner";
 import CartographicBackground from "@/components/CartographicBackground";
 import ClientWrapper from "@/components/ClientWrapper";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
+import FacebookPixel from "@/components/FacebookPixel";
 import ConsentBanner from "@/components/ConsentBanner";
 import ServiceWorkerRegistration from "@/components/ServiceWorkerRegistration";
 import InstallPrompt from "@/components/InstallPrompt";
@@ -115,6 +116,7 @@ export default function RootLayout({
         className={`${inter.variable} ${playfair.variable} ${jetbrains.variable} antialiased min-h-screen bg-jerry-green-900 text-foreground`}
       >
         <GoogleAnalytics />
+        <FacebookPixel />
         <ServiceWorkerRegistration />
         <InstallPrompt />
         <OrganizationSchema />

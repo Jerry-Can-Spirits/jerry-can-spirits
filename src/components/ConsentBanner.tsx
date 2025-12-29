@@ -155,7 +155,7 @@ export default function ConsentBanner() {
               <div className="flex items-center justify-between p-3 bg-jerry-green-700/30 rounded">
                 <div>
                   <h4 className="text-white font-medium">Marketing Cookies</h4>
-                  <p className="text-white text-xs">Used for email marketing (Klaviyo), customer reviews (Trustpilot), and promotional campaigns</p>
+                  <p className="text-white text-xs">Used for social media advertising (Facebook Pixel), email marketing (Klaviyo), customer reviews (Trustpilot), and promotional campaigns</p>
                 </div>
                 <label className="relative inline-flex items-center cursor-pointer">
                   <input

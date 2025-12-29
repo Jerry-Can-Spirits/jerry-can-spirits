@@ -280,13 +280,39 @@ export default function CartDrawer() {
                 </span>
               </div>
 
-              {/* Checkout Button */}
-              <a
-                href={cart.checkoutUrl}
-                className="block w-full px-6 py-4 bg-gold-500 text-jerry-green-900 text-center font-bold rounded-lg hover:bg-gold-400 transition-colors"
-              >
-                Proceed to Checkout
-              </a>
+              {/* Checkout Buttons */}
+              <div className="space-y-3">
+                {/* Main Checkout Button */}
+                <a
+                  href={cart.checkoutUrl}
+                  onClick={() => {
+                    // Track checkout initiation with Facebook Pixel
+                    if (typeof window !== 'undefined' && (window as Window & { fbq?: Function }).fbq) {
+                      (window as Window & { fbq: Function }).fbq('track', 'InitiateCheckout', {
+                        content_ids: cart.lines.map(line => line.merchandise.product.id),
+                        contents: cart.lines.map(line => ({
+                          id: line.merchandise.product.id,
+                          quantity: line.quantity
+                        })),
+                        value: parseFloat(cart.cost.totalAmount.amount),
+                        currency: cart.cost.totalAmount.currencyCode,
+                        num_items: cart.lines.reduce((sum, line) => sum + line.quantity, 0)
+                      });
+                    }
+                  }}
+                  className="block w-full px-6 py-4 bg-gold-500 text-jerry-green-900 text-center font-bold rounded-lg hover:bg-gold-400 transition-colors"
+                >
+                  Proceed to Checkout
+                </a>
+
+                {/* Shop Pay Notice */}
+                <div className="flex items-center justify-center gap-2 text-xs text-parchment-300">
+                  <svg className="w-4 h-4 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                  </svg>
+                  <span>Shop Pay available for faster checkout</span>
+                </div>
+              </div>
 
               <Link
                 href="/shop/drinks"
