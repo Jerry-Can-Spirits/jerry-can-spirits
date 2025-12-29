@@ -7,7 +7,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 
 interface SearchResult {
-  type: 'product' | 'page' | 'recipe'
+  type: 'product' | 'page' | 'recipe' | 'equipment' | 'ingredient'
   title: string
   description?: string
   url: string
@@ -96,14 +96,16 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
         const data = await response.json()
         const apiResults = data.results || []
 
-        // Combine results, prioritizing static pages, then products, then cocktails
+        // Combine results, prioritizing static pages, then products, then content types
         const combined = [
           ...staticResults,
           ...apiResults.filter((r: SearchResult) => r.type === 'product'),
           ...apiResults.filter((r: SearchResult) => r.type === 'recipe'),
+          ...apiResults.filter((r: SearchResult) => r.type === 'equipment'),
+          ...apiResults.filter((r: SearchResult) => r.type === 'ingredient'),
         ]
 
-        setResults(combined.slice(0, 12))
+        setResults(combined.slice(0, 15))
       } catch (error) {
         console.error('Search error:', error)
         // Fallback to just static results if API fails
@@ -157,7 +159,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                     type="text"
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
-                    placeholder="Search products, pages, recipes..."
+                    placeholder="Search products, cocktails, equipment, ingredients..."
                     className="w-full pl-12 pr-12 py-4 bg-transparent text-parchment-50 text-lg placeholder:text-parchment-400 focus:outline-none"
                   />
                   <button
@@ -226,7 +228,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                       <MagnifyingGlassIcon className="w-12 h-12 text-gold-300/30 mx-auto mb-4" />
                       <p className="text-parchment-300 mb-2">No results found for "{query}"</p>
                       <p className="text-sm text-parchment-400">
-                        Try searching for products, recipes, or pages
+                        Try searching for products, cocktails, equipment, or ingredients
                       </p>
                     </div>
                   ) : (
@@ -234,7 +236,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                       <MagnifyingGlassIcon className="w-12 h-12 text-gold-300/30 mx-auto mb-4" />
                       <p className="text-parchment-300 mb-2">Start typing to search</p>
                       <p className="text-sm text-parchment-400">
-                        Search for products, cocktail recipes, or pages
+                        Search for products, cocktails, equipment, ingredients, or pages
                       </p>
                     </div>
                   )}
