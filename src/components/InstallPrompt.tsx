@@ -20,7 +20,7 @@ export default function InstallPrompt() {
     }
 
     // Detect iOS device
-    const isIOSDevice = /iPad|iPhone|iPod/.test(navigator.userAgent) && !(window as any).MSStream
+    const isIOSDevice = /iPad|iPhone|iPod/.test(navigator.userAgent) && !('MSStream' in window)
     setIsIOS(isIOSDevice)
 
     // Check if user previously dismissed
