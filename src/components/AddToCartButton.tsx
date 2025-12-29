@@ -6,14 +6,35 @@ import { useCart } from '@/contexts/CartContext'
 interface AddToCartButtonProps {
   variantId: string
   productTitle: string
+  productId?: string
+  price?: number
+  currency?: string
 }
 
-export default function AddToCartButton({ variantId, productTitle }: AddToCartButtonProps) {
+export default function AddToCartButton({
+  variantId,
+  productTitle,
+  productId,
+  price,
+  currency = 'GBP'
+}: AddToCartButtonProps) {
   const { addToCart, isLoading } = useCart()
   const [quantity, setQuantity] = useState(1)
 
   const handleAddToCart = async () => {
     console.log('Adding to cart:', { variantId, quantity, productTitle })
+
+    // Track Facebook Pixel AddToCart event
+    if (typeof window !== 'undefined' && (window as Window & { fbq?: (...args: unknown[]) => void }).fbq) {
+      (window as Window & { fbq: (...args: unknown[]) => void }).fbq('track', 'AddToCart', {
+        content_name: productTitle,
+        content_ids: productId ? [productId] : [variantId],
+        content_type: 'product',
+        value: price ? price * quantity : undefined,
+        currency: currency,
+      });
+    }
+
     await addToCart(variantId, quantity)
   }
 

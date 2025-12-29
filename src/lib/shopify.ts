@@ -1,11 +1,26 @@
 import { createStorefrontApiClient } from '@shopify/storefront-api-client';
 
-// Initialize Shopify Storefront API client
-const client = createStorefrontApiClient({
-  storeDomain: process.env.NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN!,
-  apiVersion: '2025-01',
-  publicAccessToken: process.env.NEXT_PUBLIC_SHOPIFY_STOREFRONT_ACCESS_TOKEN!,
-});
+// Lazy initialization of Shopify Storefront API client
+// This prevents build-time errors when env vars aren't available
+let client: ReturnType<typeof createStorefrontApiClient> | null = null;
+
+function getClient() {
+  if (!client) {
+    const storeDomain = process.env.NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN;
+    const accessToken = process.env.NEXT_PUBLIC_SHOPIFY_STOREFRONT_ACCESS_TOKEN;
+
+    if (!storeDomain || !accessToken) {
+      throw new Error('Shopify credentials not configured. Please set NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN and NEXT_PUBLIC_SHOPIFY_STOREFRONT_ACCESS_TOKEN');
+    }
+
+    client = createStorefrontApiClient({
+      storeDomain,
+      apiVersion: '2025-01',
+      publicAccessToken: accessToken,
+    });
+  }
+  return client;
+}
 
 // TypeScript interfaces for Shopify data
 export interface ShopifyImage {
@@ -156,7 +171,7 @@ export async function getProducts(): Promise<ShopifyProduct[]> {
   `;
 
   try {
-    const { data, errors } = await client.request(query);
+    const { data, errors } = await getClient().request(query);
 
     if (errors) {
       console.error('GraphQL Errors:', errors);
@@ -214,7 +229,7 @@ export async function getProductsByCollection(collectionHandle: string): Promise
   };
 
   try {
-    const { data, errors } = await client.request(query, { variables });
+    const { data, errors } = await getClient().request(query, { variables });
 
     if (errors) {
       console.error('GraphQL Errors:', errors);
@@ -287,7 +302,7 @@ export async function getProduct(handle: string): Promise<ShopifyProduct | null>
   };
 
   try {
-    const { data, errors } = await client.request(query, { variables });
+    const { data, errors } = await getClient().request(query, { variables });
 
     if (errors) {
       console.error('GraphQL Errors:', errors);
@@ -364,7 +379,7 @@ export async function createCart(): Promise<Cart> {
   `;
 
   try {
-    const response = await client.request(query);
+    const response = await getClient().request(query);
 
     console.log('Full Shopify Response:', JSON.stringify(response, null, 2));
 
@@ -454,7 +469,7 @@ export async function addToCart(cartId: string, variantId: string, quantity: num
   };
 
   try {
-    const { data, errors } = await client.request(query, { variables });
+    const { data, errors } = await getClient().request(query, { variables });
 
     console.log('Cart API Response:', { data, errors });
 
@@ -538,7 +553,7 @@ export async function updateCartLine(cartId: string, lineId: string, quantity: n
   };
 
   try {
-    const { data, errors } = await client.request(query, { variables });
+    const { data, errors } = await getClient().request(query, { variables });
 
     if (errors) {
       console.error('GraphQL Errors:', errors);
@@ -610,7 +625,7 @@ export async function removeFromCart(cartId: string, lineIds: string[]): Promise
   };
 
   try {
-    const { data, errors } = await client.request(query, { variables });
+    const { data, errors } = await getClient().request(query, { variables });
 
     if (errors) {
       console.error('GraphQL Errors:', errors);
@@ -686,7 +701,7 @@ export async function applyDiscount(cartId: string, discountCodes: string[]): Pr
   };
 
   try {
-    const { data, errors } = await client.request(query, { variables });
+    const { data, errors } = await getClient().request(query, { variables });
 
     if (errors) {
       console.error('GraphQL Errors:', errors);
@@ -888,7 +903,7 @@ export async function getCart(cartId: string): Promise<Cart | null> {
   };
 
   try {
-    const { data, errors } = await client.request(query, { variables });
+    const { data, errors } = await getClient().request(query, { variables });
 
     if (errors) {
       console.error('GraphQL Errors:', errors);
