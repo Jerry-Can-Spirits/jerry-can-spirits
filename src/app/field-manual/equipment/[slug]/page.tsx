@@ -216,15 +216,12 @@ export default async function EquipmentDetailPage({ params }: { params: Promise<
                   <div className="space-y-4">
                     {equipment.careInstructions && (
                       <div>
-                        <h3 className="text-gold-400 font-semibold mb-3">Care Instructions</h3>
+                        <h3 className="text-gold-400 font-semibold mb-4">Care Instructions</h3>
                         {Array.isArray(equipment.careInstructions) ? (
-                          <ul className="space-y-3">
+                          <ul className="space-y-4">
                             {equipment.careInstructions.map((instruction, index) => (
-                              <li key={index} className="flex items-start gap-3">
-                                <svg className="w-5 h-5 text-blue-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                </svg>
-                                <span className="text-parchment-300 leading-relaxed">{instruction}</span>
+                              <li key={index} className="pl-4 border-l-2 border-gold-500/30">
+                                <span className="text-parchment-300 leading-relaxed block">{instruction}</span>
                               </li>
                             ))}
                           </ul>
@@ -358,13 +355,10 @@ export default async function EquipmentDetailPage({ params }: { params: Promise<
             {equipment.whatToLookFor && equipment.whatToLookFor.length > 0 && (
               <div className="order-7 lg:order-none bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
                 <h2 className="text-2xl font-serif font-bold text-gold-300 mb-4">What to Look For</h2>
-                <ul className="space-y-3">
+                <ul className="space-y-4">
                   {equipment.whatToLookFor.map((item, index) => (
-                    <li key={index} className="flex items-start gap-3">
-                      <svg className="w-5 h-5 text-green-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                      </svg>
-                      <span className="text-parchment-300 leading-relaxed">{item}</span>
+                    <li key={index} className="pl-4 border-l-2 border-gold-500/30">
+                      <span className="text-parchment-300 leading-relaxed block">{item}</span>
                     </li>
                   ))}
                 </ul>
@@ -375,13 +369,10 @@ export default async function EquipmentDetailPage({ params }: { params: Promise<
             {equipment.commonMistakes && equipment.commonMistakes.length > 0 && (
               <div className="order-8 lg:order-none bg-gradient-to-br from-red-500/10 to-red-600/5 backdrop-blur-sm rounded-xl p-6 border border-red-500/20">
                 <h2 className="text-2xl font-serif font-bold text-red-400 mb-4">Common Mistakes to Avoid</h2>
-                <ul className="space-y-3">
+                <ul className="space-y-4">
                   {equipment.commonMistakes.map((mistake, index) => (
-                    <li key={index} className="flex items-start gap-3">
-                      <svg className="w-5 h-5 text-red-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                      </svg>
-                      <span className="text-parchment-300 leading-relaxed">{mistake}</span>
+                    <li key={index} className="pl-4 border-l-2 border-red-500/40">
+                      <span className="text-parchment-300 leading-relaxed block">{mistake}</span>
                     </li>
                   ))}
                 </ul>

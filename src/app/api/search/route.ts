@@ -5,7 +5,7 @@ import { client } from '@/sanity/lib/client'
 export const runtime = 'edge'
 
 interface SearchResult {
-  type: 'product' | 'page' | 'recipe'
+  type: 'product' | 'page' | 'recipe' | 'equipment' | 'ingredient'
   title: string
   description?: string
   url: string
@@ -18,6 +18,26 @@ interface SanityCocktail {
   name: string
   slug: { current: string }
   description: string
+  category?: string
+  image?: string
+}
+
+interface SanityEquipment {
+  _id: string
+  name: string
+  slug: { current: string }
+  description: string
+  usage: string
+  category?: string
+  image?: string
+}
+
+interface SanityIngredient {
+  _id: string
+  name: string
+  slug: { current: string }
+  description: string
+  usage: string
   category?: string
   image?: string
 }
@@ -37,7 +57,7 @@ const searchablePages: SearchResult[] = [
   { type: 'page', title: 'Clothing', description: 'Adventure apparel', url: '/shop/clothing', category: 'Shop' },
 ]
 
-// Cocktails query for Sanity
+// Sanity search queries
 const cocktailsSearchQuery = `*[_type == "cocktail" && (
   name match $searchTerm ||
   description match $searchTerm ||
@@ -47,6 +67,36 @@ const cocktailsSearchQuery = `*[_type == "cocktail" && (
   name,
   slug,
   description,
+  category,
+  "image": image.asset->url
+}`
+
+const equipmentSearchQuery = `*[_type == "equipment" && (
+  name match $searchTerm ||
+  description match $searchTerm ||
+  usage match $searchTerm ||
+  category match $searchTerm
+)] | order(_createdAt desc) [0...10] {
+  _id,
+  name,
+  slug,
+  description,
+  usage,
+  category,
+  "image": image.asset->url
+}`
+
+const ingredientsSearchQuery = `*[_type == "ingredient" && (
+  name match $searchTerm ||
+  description match $searchTerm ||
+  usage match $searchTerm ||
+  category match $searchTerm
+)] | order(_createdAt desc) [0...10] {
+  _id,
+  name,
+  slug,
+  description,
+  usage,
   category,
   "image": image.asset->url
 }`
@@ -107,13 +157,51 @@ export async function GET(request: NextRequest) {
         type: 'recipe' as const,
         title: cocktail.name,
         description: cocktail.description,
-        url: `/field-manual/cocktails#${cocktail.slug.current}`,
+        url: `/cocktails/${cocktail.slug.current}`,
         image: cocktail.image,
         category: cocktail.category || 'Cocktails',
       }))
       results.push(...cocktailMatches)
     } catch (error) {
       console.error('Error searching Sanity cocktails:', error)
+    }
+
+    // Search Sanity equipment
+    try {
+      const equipment = await client.fetch(equipmentSearchQuery, {
+        searchTerm: `*${query}*`
+      })
+
+      const equipmentMatches = equipment.map((item: SanityEquipment) => ({
+        type: 'equipment' as const,
+        title: item.name,
+        description: item.description,
+        url: `/field-manual/equipment/${item.slug.current}`,
+        image: item.image,
+        category: item.category || 'Equipment',
+      }))
+      results.push(...equipmentMatches)
+    } catch (error) {
+      console.error('Error searching Sanity equipment:', error)
+    }
+
+    // Search Sanity ingredients
+    try {
+      const ingredients = await client.fetch(ingredientsSearchQuery, {
+        searchTerm: `*${query}*`
+      })
+
+      const ingredientMatches = ingredients.map((item: SanityIngredient) => ({
+        type: 'ingredient' as const,
+        title: item.name,
+        description: item.description,
+        url: `/field-manual/ingredients/${item.slug.current}`,
+        image: item.image,
+        category: item.category || 'Ingredients',
+      }))
+      results.push(...ingredientMatches)
+    } catch (error) {
+      console.error('Error searching Sanity ingredients:', error)
     }
 
     // Limit total results and return
