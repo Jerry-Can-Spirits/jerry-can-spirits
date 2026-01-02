@@ -7,8 +7,6 @@ import Footer from "@/components/Footer";
 import PromoBanner from "@/components/PromoBanner";
 import CartographicBackground from "@/components/CartographicBackground";
 import ClientWrapper from "@/components/ClientWrapper";
-import GoogleAnalytics from "@/components/GoogleAnalytics";
-import FacebookPixel from "@/components/FacebookPixel";
 import ConsentBanner from "@/components/ConsentBanner";
 import ServiceWorkerRegistration from "@/components/ServiceWorkerRegistration";
 import InstallPrompt from "@/components/InstallPrompt";
@@ -99,8 +97,6 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         <meta name="apple-mobile-web-app-title" content="Jerry Can Spirits®" />
         <meta name="facebook-domain-verification" content="2rv5ogxoockin4xfzl2ioxkn4rbpxu" />
-        <link rel="preconnect" href="https://www.googletagmanager.com" />
-        <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
         <link rel="preconnect" href="https://static.klaviyo.com" />
         <link rel="dns-prefetch" href="https://static.klaviyo.com" />
         {/* Preload critical LCP image */}
@@ -116,8 +112,6 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${playfair.variable} ${jetbrains.variable} antialiased min-h-screen bg-jerry-green-900 text-foreground`}
       >
-        <GoogleAnalytics />
-        <FacebookPixel />
         <ServiceWorkerRegistration />
         <InstallPrompt />
         <OrganizationSchema />

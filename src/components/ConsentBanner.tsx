@@ -6,7 +6,12 @@ import { useCookieConsent } from '@/hooks/useCookieConsent';
 
 declare global {
   interface Window {
-    gtag: (command: string, targetId: string, config?: Record<string, string | boolean>) => void;
+    zaraz?: {
+      consent: {
+        setAll: (granted: boolean) => void;
+        set: (purpose: string, granted: boolean) => void;
+      };
+    };
   }
 }
 
@@ -30,13 +35,11 @@ export default function ConsentBanner() {
   }
 
   const updateConsent = (analytics: boolean, marketing: boolean) => {
-    if (typeof window !== 'undefined' && window.gtag) {
-      window.gtag('consent', 'update', {
-        'analytics_storage': analytics ? 'granted' : 'denied',
-        'ad_storage': marketing ? 'granted' : 'denied',
-        'ad_user_data': marketing ? 'granted' : 'denied',
-        'ad_personalization': marketing ? 'granted' : 'denied',
-      });
+    // Update Zaraz consent
+    if (typeof window !== 'undefined' && window.zaraz?.consent) {
+      window.zaraz.consent.set('analytics', analytics);
+      window.zaraz.consent.set('marketing', marketing);
+      window.zaraz.consent.set('functional', true); // Always grant functional
     }
 
     savePreferences({
