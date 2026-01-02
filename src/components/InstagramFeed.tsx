@@ -1,17 +1,6 @@
 'use client'
 
-// Declare custom Instagram post element for Cloudflare Zaraz
-declare global {
-  // eslint-disable-next-line @typescript-eslint/no-namespace
-  namespace JSX {
-    interface IntrinsicElements {
-      'instagram-post': {
-        'post-url': string;
-        captions?: string;
-      };
-    }
-  }
-}
+import { useEffect } from 'react'
 
 interface InstagramFeedProps {
   postUrls?: string[]
@@ -19,14 +8,24 @@ interface InstagramFeedProps {
   limit?: number
 }
 
+declare global {
+  interface Window {
+    instgrm?: {
+      Embeds: {
+        process: () => void
+      }
+    }
+  }
+}
+
 /**
- * Instagram Feed using Cloudflare Zaraz Instagram Embed
+ * Instagram Feed using native Instagram embeds
  *
  * SETUP:
  * 1. Create a post on your Instagram account (@jerrycanspirits)
  * 2. Click the three dots (...) on the post and select "Copy link"
  * 3. Add the URL to the postUrls array in page.tsx
- * 4. Zaraz handles the embedding automatically!
+ * 4. Instagram's embed script handles the rest!
  *
  * How to get Instagram post URLs:
  * - Mobile: Post → ... menu → "Copy link"
@@ -46,6 +45,28 @@ export default function InstagramFeed({
   showCaptions = true,
   limit = 6
 }: InstagramFeedProps) {
+  // Load Instagram embed script and process embeds
+  useEffect(() => {
+    if (postUrls.length === 0) return
+
+    // Load Instagram embed script if not already loaded
+    if (!window.instgrm) {
+      const script = document.createElement('script')
+      script.async = true
+      script.src = '//www.instagram.com/embed.js'
+      document.body.appendChild(script)
+
+      script.onload = () => {
+        if (window.instgrm?.Embeds) {
+          window.instgrm.Embeds.process()
+        }
+      }
+    } else {
+      // Script already loaded, just process embeds
+      window.instgrm.Embeds.process()
+    }
+  }, [postUrls])
+
   // No posts configured - show CTA
   if (postUrls.length === 0) {
     return (
@@ -68,23 +89,65 @@ export default function InstagramFeed({
     )
   }
 
-  // Display Instagram posts using Zaraz custom elements
+  // Extract post ID from Instagram URL
+  const getPostId = (url: string) => {
+    const match = url.match(/\/p\/([A-Za-z0-9_-]+)/)
+    return match ? match[1] : null
+  }
+
+  // Display Instagram posts using native embed format
   const postsToShow = postUrls.slice(0, limit)
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {postsToShow.map((url, index) => (
-        <div
-          key={index}
-          className="bg-jerry-green-800/10 rounded-lg overflow-hidden border border-gold-500/20 hover:border-gold-500/40 transition-all"
-        >
-          {/* @ts-expect-error - Zaraz custom element not recognized by TypeScript */}
-          <instagram-post
-            post-url={url}
-            captions={showCaptions ? "true" : "false"}
-          />
-        </div>
-      ))}
+      {postsToShow.map((url, index) => {
+        const postId = getPostId(url)
+        if (!postId) return null
+
+        const embedUrl = `https://www.instagram.com/p/${postId}/embed${showCaptions ? '/captioned' : ''}`
+
+        return (
+          <div
+            key={index}
+            className="bg-jerry-green-800/10 rounded-lg overflow-hidden border border-gold-500/20 hover:border-gold-500/40 transition-all"
+          >
+            <blockquote
+              className="instagram-media"
+              data-instgrm-permalink={url}
+              data-instgrm-version="14"
+              style={{
+                background: '#FFF',
+                border: 0,
+                borderRadius: '3px',
+                boxShadow: '0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15)',
+                margin: '1px',
+                maxWidth: '540px',
+                minWidth: '326px',
+                padding: 0,
+                width: 'calc(100% - 2px)'
+              }}
+            >
+              <div style={{ padding: '16px' }}>
+                <a
+                  href={url}
+                  style={{
+                    background: '#FFFFFF',
+                    lineHeight: 0,
+                    padding: 0,
+                    textAlign: 'center',
+                    textDecoration: 'none',
+                    width: '100%'
+                  }}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  View this post on Instagram
+                </a>
+              </div>
+            </blockquote>
+          </div>
+        )
+      })}
     </div>
   )
 }
