@@ -141,16 +141,13 @@ export default function Home() {
             </div>
             <InstagramFeed
               postUrls={[
-                // TO ADD POSTS:
+                'https://www.instagram.com/p/DS940WfjDZV/',
+                // TO ADD MORE POSTS:
                 // 1. Post something on Instagram (@jerrycanspirits)
                 // 2. Click the three dots on the post → "Copy link"
-                // 3. Paste the URL here:
-                // 'https://www.instagram.com/p/YOUR_POST_ID/',
-
-                // Example URLs (replace with your actual posts):
-                // 'https://www.instagram.com/p/C1A2B3C4D5/',
-                // 'https://www.instagram.com/p/D5E6F7G8H9/',
+                // 3. Paste the URL here
               ]}
+              showCaptions={true}
               limit={6}
             />
           </div>

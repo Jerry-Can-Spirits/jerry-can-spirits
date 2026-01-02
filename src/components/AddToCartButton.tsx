@@ -24,9 +24,9 @@ export default function AddToCartButton({
   const handleAddToCart = async () => {
     console.log('Adding to cart:', { variantId, quantity, productTitle })
 
-    // Track Facebook Pixel AddToCart event
-    if (typeof window !== 'undefined' && (window as Window & { fbq?: (...args: unknown[]) => void }).fbq) {
-      (window as Window & { fbq: (...args: unknown[]) => void }).fbq('track', 'AddToCart', {
+    // Track AddToCart event via Zaraz (which forwards to Facebook Pixel)
+    if (typeof window !== 'undefined' && window.zaraz?.track) {
+      window.zaraz.track('AddToCart', {
         content_name: productTitle,
         content_ids: productId ? [productId] : [variantId],
         content_type: 'product',

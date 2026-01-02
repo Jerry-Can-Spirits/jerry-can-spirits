@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Inter, Playfair_Display, JetBrains_Mono } from "next/font/google";
-import Script from "next/script";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -116,10 +115,7 @@ export default function RootLayout({
         <InstallPrompt />
         <OrganizationSchema />
         <WebsiteSchema />
-        <Script
-          src="https://static.klaviyo.com/onsite/js/klaviyo.js?company_id=UavTvg"
-          strategy="lazyOnload"
-        />
+        {/* Klaviyo now loaded via Cloudflare Zaraz - see Zaraz Custom HTML setup */}
 
         <CartProvider>
           {/* Skip to Content Link - Accessibility */}
@@ -132,7 +128,7 @@ export default function RootLayout({
 
           <ClientWrapper>
           {/* Unified Cartographic Background */}
-          <CartographicBackground opacity={0.75} showCoordinates={true} showCompass={true} className="fixed inset-0 z-0" />
+          <CartographicBackground opacity={0.75} showCoordinates={true} showCompass={true} className="fixed inset-0 z-0 pointer-events-none" />
 
           {/* Promo Banner - Only show when there's an active promotion */}
           <div className="relative z-10">

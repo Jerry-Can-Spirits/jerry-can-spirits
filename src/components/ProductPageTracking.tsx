@@ -18,9 +18,9 @@ export default function ProductPageTracking({
   category,
 }: ProductPageTrackingProps) {
   useEffect(() => {
-    // Track Facebook Pixel ViewContent event
-    if (typeof window !== 'undefined' && (window as Window & { fbq?: (...args: unknown[]) => void }).fbq) {
-      (window as Window & { fbq: (...args: unknown[]) => void }).fbq('track', 'ViewContent', {
+    // Track ViewContent event via Zaraz
+    if (typeof window !== 'undefined' && window.zaraz?.track) {
+      window.zaraz.track('ViewContent', {
         content_name: productName,
         content_ids: [productId],
         content_type: 'product',

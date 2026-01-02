@@ -28,21 +28,18 @@ export default function TrustpilotWidget({
   const ref = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    // Load Trustpilot script if not already loaded
-    if (typeof window !== 'undefined' && !window.Trustpilot) {
-      const script = document.createElement('script')
-      script.src = '//widget.trustpilot.com/bootstrap/v5/tp.widget.bootstrap.min.js'
-      script.async = true
-      script.onload = () => {
-        if (window.Trustpilot) {
-          window.Trustpilot.loadFromElement(ref.current, true)
-        }
+    // Trustpilot script is loaded via Cloudflare Zaraz
+    // Wait for Trustpilot to be available and then load the widget
+    const loadWidget = () => {
+      if (window.Trustpilot && ref.current) {
+        window.Trustpilot.loadFromElement(ref.current, true)
+      } else if (typeof window !== 'undefined' && !window.Trustpilot) {
+        // If Trustpilot isn't loaded yet, try again in 100ms
+        setTimeout(loadWidget, 100)
       }
-      document.head.appendChild(script)
-    } else if (window.Trustpilot && ref.current) {
-      // Reload widget if Trustpilot is already loaded
-      window.Trustpilot.loadFromElement(ref.current, true)
     }
+
+    loadWidget()
   }, [templateId, businessUnitId, sku, name])
 
   // Build data attributes object, excluding stars if empty

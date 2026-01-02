@@ -1,20 +1,19 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-
 interface InstagramFeedProps {
   postUrls?: string[]
+  showCaptions?: boolean
   limit?: number
 }
 
 /**
- * Instagram Feed using Instagram's oEmbed API
+ * Instagram Feed using Cloudflare Zaraz Instagram Embed
  *
- * SETUP (super simple!):
+ * SETUP:
  * 1. Create a post on your Instagram account (@jerrycanspirits)
  * 2. Click the three dots (...) on the post and select "Copy link"
- * 3. Add the URL to the postUrls array
- * 4. That's it! No API tokens or Meta app setup needed.
+ * 3. Add the URL to the postUrls array in page.tsx
+ * 4. Zaraz handles the embedding automatically!
  *
  * How to get Instagram post URLs:
  * - Mobile: Post → ... menu → "Copy link"
@@ -22,64 +21,20 @@ interface InstagramFeedProps {
  * - Format: https://www.instagram.com/p/POST_ID/
  *
  * Example:
- * <InstagramFeed postUrls={[
- *   'https://www.instagram.com/p/C1A2B3C4D5/',
- *   'https://www.instagram.com/p/D5E6F7G8H9/',
- * ]} />
+ * <InstagramFeed
+ *   postUrls={[
+ *     'https://www.instagram.com/p/DS940WfjDZV/',
+ *   ]}
+ *   showCaptions={true}
+ * />
  */
 export default function InstagramFeed({
   postUrls = [],
+  showCaptions = true,
   limit = 6
 }: InstagramFeedProps) {
-  const [embedHtml, setEmbedHtml] = useState<string[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
-
-  useEffect(() => {
-    if (postUrls.length === 0) {
-      setLoading(false)
-      return
-    }
-
-    const fetchEmbeds = async () => {
-      try {
-        const postsToFetch = postUrls.slice(0, limit)
-        const embedPromises = postsToFetch.map(url =>
-          fetch(`https://api.instagram.com/oembed/?url=${encodeURIComponent(url)}&hidecaption=true&maxwidth=500`)
-            .then(res => res.json())
-            .then(data => data.html)
-            .catch(() => null)
-        )
-
-        const embeds = await Promise.all(embedPromises)
-        setEmbedHtml(embeds.filter(Boolean))
-      } catch (err) {
-        console.error('Error fetching Instagram embeds:', err)
-        setError('Unable to load Instagram posts')
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    fetchEmbeds()
-  }, [postUrls, limit])
-
-  // Loading state
-  if (loading) {
-    return (
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {[...Array(Math.min(limit, postUrls.length || 3))].map((_, i) => (
-          <div
-            key={i}
-            className="aspect-square bg-jerry-green-800/20 animate-pulse rounded-lg"
-          />
-        ))}
-      </div>
-    )
-  }
-
   // No posts configured - show CTA
-  if (postUrls.length === 0 || embedHtml.length === 0) {
+  if (postUrls.length === 0) {
     return (
       <div className="text-center py-12">
         <p className="text-gray-300 mb-6 text-lg">
@@ -100,33 +55,32 @@ export default function InstagramFeed({
     )
   }
 
-  // Error state
-  if (error) {
-    return (
-      <div className="text-center py-12">
-        <p className="text-gray-400 mb-4">{error}</p>
-        <a
-          href="https://instagram.com/jerrycanspirits"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-gold-500 hover:text-gold-400 underline"
-        >
-          View on Instagram
-        </a>
-      </div>
-    )
-  }
+  // Display Instagram posts using Zaraz custom elements
+  const postsToShow = postUrls.slice(0, limit)
 
-  // Display embeds
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {embedHtml.map((html, index) => (
+      {postsToShow.map((url, index) => (
         <div
           key={index}
           className="bg-jerry-green-800/10 rounded-lg overflow-hidden border border-gold-500/20 hover:border-gold-500/40 transition-all"
-          dangerouslySetInnerHTML={{ __html: html }}
-        />
+        >
+          <instagram-post
+            post-url={url}
+            captions={showCaptions ? "true" : "false"}
+          />
+        </div>
       ))}
     </div>
   )
+}
+
+// Declare the custom element for TypeScript
+declare module 'react' {
+  interface IntrinsicElements {
+    'instagram-post': {
+      'post-url': string;
+      captions: string;
+    };
+  }
 }

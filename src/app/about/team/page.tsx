@@ -33,9 +33,9 @@ const teamMembers = [
     quote: 'Passion and craft over corporate conformity.',
   },
   {
-    name: 'Co-Founder', // Placeholder
+    name: 'Rhys Williams',
     role: 'Co-Founder & Operations',
-    slug: 'team-member', // Placeholder
+    slug: 'rhys-williams',
     service: 'Royal Signals',
     rank: 'TBC',
     specialty: 'Business Strategy',
@@ -63,7 +63,7 @@ export default function TeamPage() {
             Meet the Team
           </h1>
           <p className="text-xl text-parchment-300 max-w-3xl mx-auto leading-relaxed">
-            From military service to master distillers. The veteran founders bringing precision,
+            From military service to craft spirits. The veteran founders bringing precision,
             passion, and adventure to every bottle of Jerry Can Spirits.
           </p>
         </div>

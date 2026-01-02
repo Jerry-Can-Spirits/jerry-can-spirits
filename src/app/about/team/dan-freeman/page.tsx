@@ -129,7 +129,7 @@ export default function DanFreemanPage() {
                 Dan Freeman
               </h1>
               <p className="text-xl text-gold-400 font-semibold">
-                Former Royal Signals Corporal · Master Distiller · Veteran Entrepreneur
+                Former Royal Signals Corporal · Veteran Entrepreneur
               </p>
             </div>
 
