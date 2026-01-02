@@ -1,5 +1,18 @@
 'use client'
 
+// Declare custom Instagram post element for Cloudflare Zaraz
+declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
+  namespace JSX {
+    interface IntrinsicElements {
+      'instagram-post': {
+        'post-url': string;
+        captions?: string;
+      };
+    }
+  }
+}
+
 interface InstagramFeedProps {
   postUrls?: string[]
   showCaptions?: boolean
@@ -65,6 +78,7 @@ export default function InstagramFeed({
           key={index}
           className="bg-jerry-green-800/10 rounded-lg overflow-hidden border border-gold-500/20 hover:border-gold-500/40 transition-all"
         >
+          {/* @ts-expect-error - Zaraz custom element not recognized by TypeScript */}
           <instagram-post
             post-url={url}
             captions={showCaptions ? "true" : "false"}
@@ -73,14 +87,4 @@ export default function InstagramFeed({
       ))}
     </div>
   )
-}
-
-// Declare the custom element for TypeScript
-declare module 'react' {
-  interface IntrinsicElements {
-    'instagram-post': {
-      'post-url': string;
-      captions: string;
-    };
-  }
 }

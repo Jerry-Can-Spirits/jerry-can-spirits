@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import type { Metadata } from 'next'
 import Link from 'next/link'
 import Image from 'next/image'
 import { client } from '@/sanity/client'
@@ -28,33 +27,6 @@ interface Equipment {
   featured: boolean
   careInstructions?: string[] | string
   lifespan?: string[] | string
-}
-
-const categoryConfig = {
-  shaking: {
-    title: 'Shaking & Mixing',
-    description: 'Essential tools for combining and chilling ingredients'
-  },
-  straining: {
-    title: 'Straining',
-    description: 'Achieving perfect clarity and consistency'
-  },
-  measuring: {
-    title: 'Measuring',
-    description: 'Precision for consistent results'
-  },
-  glassware: {
-    title: 'Glassware',
-    description: 'The perfect vessel for every cocktail'
-  },
-  tools: {
-    title: 'Bar Tools',
-    description: 'Essential implements for the modern bar'
-  },
-  garnish: {
-    title: 'Garnish Tools',
-    description: 'Finishing touches and presentation'
-  }
 }
 
 export default function EquipmentPage() {
