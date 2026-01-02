@@ -98,15 +98,6 @@ export default function RootLayout({
         <meta name="facebook-domain-verification" content="2rv5ogxoockin4xfzl2ioxkn4rbpxu" />
         <link rel="preconnect" href="https://static.klaviyo.com" />
         <link rel="dns-prefetch" href="https://static.klaviyo.com" />
-        {/* Preload critical LCP image */}
-        <link
-          rel="preload"
-          as="image"
-          href="/_next/image/?url=%2Fimages%2Fhero%2Fhero-spiced.webp&w=750&q=65"
-          imageSrcSet="/_next/image/?url=%2Fimages%2Fhero%2Fhero-spiced.webp&w=640&q=65 640w, /_next/image/?url=%2Fimages%2Fhero%2Fhero-spiced.webp&w=750&q=65 750w"
-          imageSizes="(max-width: 768px) 100vw, 50vw"
-          fetchPriority="high"
-        />
       </head>
       <body
         className={`${inter.variable} ${playfair.variable} ${jetbrains.variable} antialiased min-h-screen bg-jerry-green-900 text-foreground`}

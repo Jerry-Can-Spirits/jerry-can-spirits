@@ -89,7 +89,7 @@ const nextConfig: NextConfig = {
               "img-src 'self' data: https: blob:",
               "media-src 'self' https:",
               "connect-src 'self' https://www.google-analytics.com https://www.googletagmanager.com https://analytics.google.com https://region1.google-analytics.com https://*.klaviyo.com https://*.shopify.com https://*.myshopify.com https://cdn.sanity.io https://*.sanity.io https://*.ingest.sentry.io https://*.sentry.io https://cloudflareinsights.com https://*.trustpilot.com https://www.facebook.com https://*.facebook.com https://*.facebook.net wss: ws:",
-              "frame-src 'self' https://www.youtube.com https://www.vimeo.com https://cdn.sanity.io https://*.sanity.io https://*.trustpilot.com",
+              "frame-src 'self' https://www.youtube.com https://www.vimeo.com https://cdn.sanity.io https://*.sanity.io https://*.trustpilot.com https://www.instagram.com https://*.instagram.com https://*.cdninstagram.com about: data:",
               "object-src 'none'",
               "base-uri 'self'",
               "form-action 'self' https://manage.kmail-lists.com",
