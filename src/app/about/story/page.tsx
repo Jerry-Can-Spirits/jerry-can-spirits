@@ -34,6 +34,7 @@ export default function OurStory() {
                 alt="Jerry Can Spirits - Veteran-owned British rum with military heritage, engineered for reliability"
                 fill
                 className="object-cover"
+                sizes="(max-width: 768px) 100vw, 672px"
                 priority
               />
               <div className="absolute inset-0 bg-gradient-to-t from-jerry-green-900/60 to-transparent" />
@@ -101,6 +102,7 @@ export default function OurStory() {
                   alt="Jerry Can Spirits Founder - Royal Corps of Signals Veteran"
                   fill
                   className="object-contain"
+                  sizes="(max-width: 768px) 100vw, 50vw"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-jerry-green-900/40 to-transparent" />
               </div>
@@ -447,6 +449,7 @@ export default function OurStory() {
                     width={512}
                     height={512}
                     className="rounded-lg"
+                    sizes="(max-width: 640px) 100vw, 512px"
                   />
                 </div>
               </div>

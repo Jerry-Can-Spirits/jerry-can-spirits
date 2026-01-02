@@ -180,6 +180,7 @@ export default function Footer() {
                           width={216}
                           height={86}
                           className="h-[4.5rem] w-auto object-contain"
+                          sizes="216px"
                           quality={100}
                         />
                       ) : (
@@ -217,6 +218,7 @@ export default function Footer() {
                           width={150}
                           height={100}
                           className="w-full h-auto"
+                          sizes="(max-width: 768px) 150px, 150px"
                         />
                       ) : (
                         <div className="w-full h-20 bg-parchment-200 rounded animate-pulse" />
@@ -237,6 +239,7 @@ export default function Footer() {
                           width={150}
                           height={100}
                           className="w-full h-auto"
+                          sizes="(max-width: 768px) 150px, 150px"
                         />
                       ) : (
                         <div className="w-full h-20 bg-parchment-200 rounded animate-pulse" />
@@ -262,6 +265,7 @@ export default function Footer() {
                     width={300}
                     height={420}
                     className="h-48 w-auto opacity-90 group-hover:opacity-100 transition-opacity duration-300"
+                    sizes="(max-width: 640px) 200px, 300px"
                     priority
                   />
                 </Link>
@@ -375,6 +379,7 @@ export default function Footer() {
                           width={80}
                           height={48}
                           className="object-contain max-h-10 w-auto"
+                          sizes="80px"
                         />
                       ) : (
                         <div className="w-16 h-10 bg-parchment-200 rounded animate-pulse" />
