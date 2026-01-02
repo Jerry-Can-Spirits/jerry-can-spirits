@@ -194,6 +194,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                                 width={64}
                                 height={64}
                                 className="object-cover w-full h-full"
+                                sizes="64px"
                               />
                             </div>
                           )}

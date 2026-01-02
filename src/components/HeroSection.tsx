@@ -174,6 +174,7 @@ export default function HeroSection() {
                   width={400}
                   height={500}
                   className="w-full h-full object-contain"
+                  sizes="(max-width: 768px) 100vw, 50vw"
                   priority
                 />
               </div>

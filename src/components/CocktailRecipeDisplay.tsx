@@ -84,6 +84,7 @@ export default function CocktailRecipeDisplay({ cocktail }: Props) {
                 width={800}
                 height={400}
                 className="rounded-lg w-full object-cover"
+                sizes="(max-width: 768px) 100vw, 800px"
                 priority
               />
             </div>

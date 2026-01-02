@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import type { Metadata } from 'next'
 import Link from 'next/link'
 import Image from 'next/image'
 import { client } from '@/sanity/client'
@@ -25,29 +24,6 @@ interface Ingredient {
   storage?: string
   image?: { asset: { url: string } }
   featured: boolean
-}
-
-const categoryConfig = {
-  spirits: {
-    title: 'Spirits',
-    description: 'The foundation of great cocktails'
-  },
-  liqueurs: {
-    title: 'Liqueurs',
-    description: 'Essential modifiers and flavour enhancers'
-  },
-  bitters: {
-    title: 'Bitters & Aperitifs',
-    description: 'The bartender\'s spice rack'
-  },
-  fresh: {
-    title: 'Fresh Ingredients',
-    description: 'Quality starts with fresh components'
-  },
-  garnishes: {
-    title: 'Garnishes',
-    description: 'The finishing touch that matters'
-  }
 }
 
 export default function IngredientsPage() {

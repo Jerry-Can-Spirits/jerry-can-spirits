@@ -286,9 +286,9 @@ export default function CartDrawer() {
                 <a
                   href={cart.checkoutUrl}
                   onClick={() => {
-                    // Track checkout initiation with Facebook Pixel
-                    if (typeof window !== 'undefined' && (window as Window & { fbq?: (...args: unknown[]) => void }).fbq) {
-                      (window as Window & { fbq: (...args: unknown[]) => void }).fbq('track', 'InitiateCheckout', {
+                    // Track checkout initiation via Zaraz
+                    if (typeof window !== 'undefined' && window.zaraz?.track) {
+                      window.zaraz.track('InitiateCheckout', {
                         content_ids: cart.lines.map(line => line.merchandise.id),
                         contents: cart.lines.map(line => ({
                           id: line.merchandise.id,

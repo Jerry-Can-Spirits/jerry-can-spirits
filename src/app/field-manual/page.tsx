@@ -34,6 +34,7 @@ export default function FieldManualHome() {
                 alt="Jerry Can Spirits Field Manual - Cocktail Guide"
                 fill
                 className="object-cover"
+                sizes="(max-width: 768px) 100vw, 896px"
                 priority
               />
               <div className="absolute inset-0 bg-gradient-to-t from-jerry-green-900/60 to-transparent" />

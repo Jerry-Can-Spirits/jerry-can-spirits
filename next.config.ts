@@ -13,9 +13,6 @@ const nextConfig: NextConfig = {
     } : false,
   },
 
-  // SWC compiler options for modern browsers (removes polyfills)
-  swcMinify: true,
-
   // Target modern browsers - disables legacy transforms
   transpilePackages: [],
 

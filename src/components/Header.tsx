@@ -176,6 +176,7 @@ export default function Header() {
                     width={160}
                     height={60}
                     className="h-12 w-auto transition-transform duration-200 group-hover:scale-105"
+                    sizes="160px"
                     priority
                   />
                 </div>

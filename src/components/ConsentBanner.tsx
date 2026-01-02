@@ -9,8 +9,9 @@ declare global {
     zaraz?: {
       consent: {
         setAll: (granted: boolean) => void;
-        set: (purpose: string, granted: boolean) => void;
+        set: (purposes: Record<string, boolean>) => void;
       };
+      track: (eventName: string, data?: Record<string, unknown>) => void;
     };
   }
 }
@@ -35,11 +36,13 @@ export default function ConsentBanner() {
   }
 
   const updateConsent = (analytics: boolean, marketing: boolean) => {
-    // Update Zaraz consent
+    // Update Zaraz consent - requires object with all purposes
     if (typeof window !== 'undefined' && window.zaraz?.consent) {
-      window.zaraz.consent.set('analytics', analytics);
-      window.zaraz.consent.set('marketing', marketing);
-      window.zaraz.consent.set('functional', true); // Always grant functional
+      window.zaraz.consent.set({
+        analytics: analytics,
+        marketing: marketing,
+        functional: true, // Always grant functional
+      });
     }
 
     savePreferences({
