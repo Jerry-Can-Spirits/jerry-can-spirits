@@ -249,7 +249,61 @@ export default function TermsOfService() {
 
             <section className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20">
               <h2 className="text-2xl font-serif font-bold text-white mb-4 pb-2 border-b border-gold-500/20">
-                13. Contact Information
+                13. Competitions and Promotions
+              </h2>
+
+              <div className="space-y-4 text-white leading-relaxed">
+                <p>
+                  From time to time, Jerry Can Spirits® may run competitions, prize draws, or promotional events (&quot;Promotions&quot;) via our website or social media platforms.
+                </p>
+
+                <div>
+                  <h3 className="text-lg font-semibold text-gold-300 mb-2">Eligibility</h3>
+                  <ul className="list-disc list-inside space-y-1 text-parchment-200 ml-4">
+                    <li>Open to UK residents aged 18 or over only</li>
+                    <li>Employees of Jerry Can Spirits® and their immediate families are not eligible</li>
+                    <li>Entry is free and no purchase is necessary unless otherwise stated</li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h3 className="text-lg font-semibold text-gold-300 mb-2">Entry and Winner Selection</h3>
+                  <p className="text-parchment-200 mb-2">
+                    Entry methods, prize details, and entry periods will be specified for each Promotion. Winners will be selected at random or as otherwise stated, and notified via the platform on which they entered or by email within 7 days of the draw date.
+                  </p>
+                  <p className="text-parchment-200">
+                    Winners must respond within 28 days or the prize will be forfeited and a replacement winner selected.
+                  </p>
+                </div>
+
+                <div>
+                  <h3 className="text-lg font-semibold text-gold-300 mb-2">General Conditions</h3>
+                  <ul className="list-disc list-inside space-y-1 text-parchment-200 ml-4">
+                    <li>Prizes are non-transferable and no cash alternative is available</li>
+                    <li>The Promoter reserves the right to verify eligibility and request proof of age</li>
+                    <li>The Promoter&apos;s decision is final and no correspondence will be entered into</li>
+                    <li>The Promoter reserves the right to cancel or amend Promotions at any time</li>
+                  </ul>
+                </div>
+
+                <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-4 border border-gold-500/20">
+                  <p className="text-sm text-parchment-300">
+                    <strong className="text-gold-300">Platform Disclaimer:</strong> Promotions run via social media platforms are in no way sponsored, endorsed, administered by, or associated with Meta, Instagram, Facebook, Twitter/X, or any other social media platform. By entering, you release these platforms from any liability.
+                  </p>
+                </div>
+
+                <p className="text-parchment-200">
+                  <strong className="text-gold-300">Promoter:</strong> Jerry Can Spirits® Ltd, England and Wales. Contact:{' '}
+                  <a href="mailto:legal@jerrycanspirits.co.uk" className="text-gold-300 hover:text-gold-200 underline">
+                    legal@jerrycanspirits.co.uk
+                  </a>
+                </p>
+              </div>
+            </section>
+
+            <section className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20">
+              <h2 className="text-2xl font-serif font-bold text-white mb-4 pb-2 border-b border-gold-500/20">
+                14. Contact Information
               </h2>
               <p className="text-white mb-4">
                 If you have any questions about these Terms of Service, please contact us:
