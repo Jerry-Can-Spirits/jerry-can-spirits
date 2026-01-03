@@ -6,20 +6,6 @@ interface InstagramFeedProps {
   limit?: number
 }
 
-// TypeScript declaration for Zaraz's custom Instagram element
-// eslint-disable-next-line @typescript-eslint/no-namespace
-declare global {
-  // eslint-disable-next-line @typescript-eslint/no-namespace
-  namespace JSX {
-    interface IntrinsicElements {
-      'instagram-post': {
-        'post-url': string
-        captions?: string
-      }
-    }
-  }
-}
-
 /**
  * Instagram Feed using Cloudflare Zaraz server-side embeds
  *

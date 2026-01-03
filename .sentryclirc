@@ -1,0 +1,6 @@
+[auth]
+token=${SENTRY_AUTH_TOKEN}
+
+[defaults]
+org=jerry-can-spirits-ltd
+project=javascript-nextjs
