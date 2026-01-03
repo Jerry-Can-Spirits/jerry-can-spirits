@@ -141,7 +141,8 @@ export default function Home() {
             </div>
             <InstagramFeed
               postUrls={[
-                'https://www.instagram.com/p/DS940WfjDZV/',
+                'https://www.instagram.com/p/DQkRgIpDCOe/',  // Testing alternative post
+                // 'https://www.instagram.com/p/DS940WfjDZV/',  // Original post (disabled for testing)
                 // TO ADD MORE POSTS:
                 // 1. Post something on Instagram (@jerrycanspirits)
                 // 2. Click the three dots on the post → "Copy link"
