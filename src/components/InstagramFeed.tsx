@@ -7,7 +7,9 @@ interface InstagramFeedProps {
 }
 
 // TypeScript declaration for Zaraz's custom Instagram element
+// eslint-disable-next-line @typescript-eslint/no-namespace
 declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace JSX {
     interface IntrinsicElements {
       'instagram-post': {
