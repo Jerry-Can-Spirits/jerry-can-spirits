@@ -12,6 +12,7 @@ declare global {
         set: (purposes: Record<string, boolean>) => void;
       };
       track: (eventName: string, data?: Record<string, unknown>) => void;
+      debug: (key: string) => void;
     };
   }
 }
