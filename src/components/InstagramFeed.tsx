@@ -39,8 +39,8 @@ export default function InstagramFeed({
 }: InstagramFeedProps) {
   // Enable Zaraz debug mode to diagnose Instagram embed issues
   useEffect(() => {
-    if (typeof window !== 'undefined' && (window as any).zaraz?.debug) {
-      (window as any).zaraz.debug('d5btat6im79s73bkbkp0')
+    if (typeof window !== 'undefined' && window.zaraz?.debug) {
+      window.zaraz.debug('d5btat6im79s73bkbkp0')
       console.log('[InstagramFeed] Zaraz debug mode enabled - check console for Zaraz logs')
       console.log('[InstagramFeed] Rendering posts:', postUrls)
     }
