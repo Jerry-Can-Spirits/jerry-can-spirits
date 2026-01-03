@@ -13,6 +13,11 @@ interface CocktailIngredient {
   name: string
   amount: string
   description?: string
+  ingredientRef?: {
+    _id: string
+    name: string
+    slug: { current: string }
+  }
 }
 
 interface CocktailVariant {

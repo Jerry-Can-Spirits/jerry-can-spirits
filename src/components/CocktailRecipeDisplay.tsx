@@ -9,6 +9,11 @@ interface CocktailIngredient {
   name: string
   amount: string
   description?: string
+  ingredientRef?: {
+    _id: string
+    name: string
+    slug: { current: string }
+  }
 }
 
 interface CocktailVariant {
@@ -180,7 +185,17 @@ export default function CocktailRecipeDisplay({ cocktail }: Props) {
                 <div className="w-2 h-2 bg-gold-400 rounded-full mt-2 flex-shrink-0"></div>
                 <div className="flex-grow">
                   <div className="flex items-center justify-between mb-1">
-                    <span className="font-semibold text-white">{ingredient.name}</span>
+                    {ingredient.ingredientRef ? (
+                      <Link
+                        href={`/field-manual/ingredients/${ingredient.ingredientRef.slug.current}`}
+                        className="font-semibold text-blue-400 hover:text-blue-300 underline decoration-dotted underline-offset-2 transition-colors"
+                        title={`Learn more about ${ingredient.name}`}
+                      >
+                        {ingredient.name}
+                      </Link>
+                    ) : (
+                      <span className="font-semibold text-white">{ingredient.name}</span>
+                    )}
                     <span className="text-gold-300 font-semibold">{ingredient.amount}</span>
                   </div>
                   {ingredient.description && (
