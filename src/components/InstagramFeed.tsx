@@ -1,7 +1,5 @@
 'use client'
 
-import { useEffect } from 'react'
-
 interface InstagramFeedProps {
   postUrls?: string[]
   showCaptions?: boolean
@@ -37,14 +35,6 @@ export default function InstagramFeed({
   showCaptions = true,
   limit = 6
 }: InstagramFeedProps) {
-  // Enable Zaraz debug mode to diagnose Instagram embed issues
-  useEffect(() => {
-    if (typeof window !== 'undefined' && window.zaraz?.debug) {
-      window.zaraz.debug('d5btat6im79s73bkbkp0')
-      console.log('[InstagramFeed] Zaraz debug mode enabled - check console for Zaraz logs')
-      console.log('[InstagramFeed] Rendering posts:', postUrls)
-    }
-  }, [postUrls])
 
   // No posts configured - show CTA
   if (postUrls.length === 0) {
