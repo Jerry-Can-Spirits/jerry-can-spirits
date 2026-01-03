@@ -151,7 +151,7 @@ export default function PrivacyPolicy() {
               <ul className="list-disc list-inside text-white space-y-2 mb-6">
                 <li><strong className="text-gold-300">Klaviyo:</strong> Email marketing platform (USA) - adequate protection via Standard Contractual Clauses</li>
                 <li><strong className="text-gold-300">Google Analytics:</strong> Website analytics (Ireland/USA) - Google Ads Data Processing Terms</li>
-                <li><strong className="text-gold-300">Vercel:</strong> Website hosting (USA) - GDPR-compliant hosting with adequate safeguards</li>
+                <li><strong className="text-gold-300">Cloudflare:</strong> Website hosting and CDN (Global network) - GDPR-compliant with Data Processing Addendum</li>
                 <li><strong className="text-gold-300">Trustpilot:</strong> Customer review and ratings platform (Denmark/USA) - GDPR-compliant with Standard Contractual Clauses and Privacy Shield certification</li>
               </ul>
 
