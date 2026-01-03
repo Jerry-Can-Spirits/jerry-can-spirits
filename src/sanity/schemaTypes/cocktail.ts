@@ -75,6 +75,13 @@ export default defineType({
               validation: Rule => Rule.required()
             }),
             defineField({
+              name: 'ingredientRef',
+              title: 'Link to Ingredient Guide',
+              type: 'reference',
+              to: [{type: 'ingredient'}],
+              description: 'Optional: Link this ingredient to the Field Manual ingredient guide'
+            }),
+            defineField({
               name: 'amount',
               title: 'Amount',
               type: 'string',
@@ -160,6 +167,13 @@ export default defineType({
                       title: 'Ingredient Name',
                       type: 'string',
                       validation: Rule => Rule.required()
+                    }),
+                    defineField({
+                      name: 'ingredientRef',
+                      title: 'Link to Ingredient Guide',
+                      type: 'reference',
+                      to: [{type: 'ingredient'}],
+                      description: 'Optional: Link this ingredient to the Field Manual ingredient guide'
                     }),
                     defineField({
                       name: 'amount',
