@@ -45,6 +45,8 @@ interface SanityIngredient {
 // Static searchable pages
 const searchablePages: SearchResult[] = [
   { type: 'page', title: 'Our Story', description: 'Learn about Jerry Can Spirits journey', url: '/about/story', category: 'About' },
+  { type: 'page', title: 'Team', description: 'Meet the Jerry Can Spirits team', url: '/about/team', category: 'About' },
+  { type: 'page', title: 'Dan Freeman', description: 'Director & Founder - Royal Engineer, distiller, and spirits enthusiast', url: '/about/team/dan-freeman', category: 'Team' },
   { type: 'page', title: 'Ethos', description: 'Our values and craftsmanship', url: '/ethos', category: 'About' },
   { type: 'page', title: 'Field Manual', description: 'Cocktail recipes and guides', url: '/field-manual', category: 'Resources' },
   { type: 'page', title: 'Cocktails', description: 'Master classic rum cocktails', url: '/field-manual/cocktails', category: 'Field Manual' },
