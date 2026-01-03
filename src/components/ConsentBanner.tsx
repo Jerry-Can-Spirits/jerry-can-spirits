@@ -36,13 +36,24 @@ export default function ConsentBanner() {
   }
 
   const updateConsent = (analytics: boolean, marketing: boolean) => {
-    // Update Zaraz consent - requires object with all purposes
+    // Update Zaraz consent
     if (typeof window !== 'undefined' && window.zaraz?.consent) {
-      window.zaraz.consent.set({
-        analytics: analytics,
-        marketing: marketing,
-        functional: true, // Always grant functional
-      });
+      try {
+        // Try setting specific purposes first (requires Zaraz purposes to be configured in dashboard)
+        window.zaraz.consent.set({
+          analytics: analytics,
+          marketing: marketing,
+          functional: true, // Always grant functional
+        });
+      } catch (error) {
+        // Fallback: If purposes aren't configured in Zaraz dashboard, use setAll
+        console.warn('Zaraz consent purposes not configured. Using setAll fallback.', error);
+        if (analytics || marketing) {
+          window.zaraz.consent.setAll(true);
+        } else {
+          window.zaraz.consent.setAll(false);
+        }
+      }
     }
 
     savePreferences({

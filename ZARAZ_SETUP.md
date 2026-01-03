@@ -97,10 +97,32 @@ Zaraz loads third-party scripts from Cloudflare's edge network, improving:
 
 ## Consent Configuration
 
-All marketing tools (Klaviyo, Trustpilot, Facebook Pixel) should:
-1. Only load when user accepts marketing cookies
-2. Respect cookie preferences from ConsentBanner.tsx
-3. Update via `window.zaraz.consent.set()` API
+**CRITICAL**: You must configure consent purposes in the Zaraz dashboard FIRST before the consent API will work.
+
+### Step 1: Configure Consent Purposes in Zaraz Dashboard
+
+1. Go to Cloudflare Dashboard → Zaraz → Settings → Privacy
+2. Click "Add purpose"
+3. Add these three purposes:
+   - **Purpose ID**: `analytics`
+     - **Display Name**: Analytics
+     - **Description**: Website analytics and performance tracking
+   - **Purpose ID**: `marketing`
+     - **Display Name**: Marketing
+     - **Description**: Marketing, advertising, and promotional content
+   - **Purpose ID**: `functional`
+     - **Display Name**: Functional
+     - **Description**: Essential functionality (always granted)
+
+### Step 2: Assign Tools to Purposes
+
+After creating purposes, assign each tool:
+
+1. **Google Analytics 4** → Purpose: `analytics`
+2. **Facebook Pixel** → Purpose: `marketing`
+3. **Klaviyo** (when configured) → Purpose: `marketing`
+4. **Trustpilot** (when configured) → Purpose: `marketing`
+5. **Instagram Embed** → Purpose: `functional` (always allowed)
 
 ### Consent API Usage
 
@@ -112,6 +134,8 @@ window.zaraz.consent.set({
   functional: true,     // Always granted
 });
 ```
+
+**Fallback**: If purposes aren't configured, the code will automatically fallback to `zaraz.consent.setAll()` to prevent errors.
 
 **Functional cookies** (always active):
 - Cart functionality
@@ -175,9 +199,42 @@ After configuring Klaviyo and Trustpilot in Zaraz:
 ## Support & Troubleshooting
 
 ### Instagram Embeds Not Showing
-1. Verify Instagram tool is enabled in Zaraz
-2. Check post URLs are public
-3. Ensure CSP allows `https://www.instagram.com`
+
+**Critical Steps to Fix:**
+
+1. **Enable Instagram Tool in Zaraz**:
+   - Go to Cloudflare Dashboard → Zaraz → Tools Settings
+   - Click "Add tool"
+   - Search for "Instagram"
+   - Add the Instagram Managed Component
+   - Set Trigger: "All pages" or "Pageview"
+   - Assign to Purpose: `functional` (so it always loads)
+   - Save and publish changes
+
+2. **Verify the Tool is Active**:
+   - In Zaraz Dashboard, check that Instagram tool shows "Active"
+   - May take a few minutes to propagate to edge network
+
+3. **Check Post URLs**:
+   - Must be public Instagram posts
+   - Format: `https://www.instagram.com/p/POST_ID/`
+   - Test the URL in incognito mode - if it shows "Something went wrong", the post has privacy restrictions
+
+4. **CSP Configuration**:
+   - Already configured in `public/_headers` and `next.config.ts`
+   - Allows: `https://www.instagram.com`, `https://*.instagram.com`, `https://*.cdninstagram.com`
+
+5. **Debug in Browser**:
+   - Open DevTools Console
+   - Look for `<instagram-post>` elements in the DOM
+   - Check if Zaraz is transforming them to actual embeds
+   - If elements remain as `<instagram-post>` without content, Zaraz isn't processing them
+   - Verify `window.zaraz` exists in console
+
+6. **Common Issues**:
+   - **Post privacy**: Even public accounts can have individual posts with embedding disabled
+   - **Zaraz not loaded**: Check Network tab for Zaraz scripts
+   - **Tool not configured**: Instagram tool must be added in dashboard, not just enabled as a feature
 
 ### Klaviyo Forms Not Working
 1. Check marketing consent is granted
