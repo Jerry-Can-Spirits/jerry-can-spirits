@@ -104,8 +104,6 @@ export default function InstagramFeed({
         const postId = getPostId(url)
         if (!postId) return null
 
-        const embedUrl = `https://www.instagram.com/p/${postId}/embed${showCaptions ? '/captioned' : ''}`
-
         return (
           <div
             key={index}
