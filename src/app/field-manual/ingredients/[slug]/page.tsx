@@ -139,10 +139,28 @@ export default async function IngredientDetailPage({ params }: { params: Promise
 
       {/* Hero Section - 2 Column Layout */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
+
+        {/* Header - Mobile Only (Desktop version is inside right column) */}
+        <div className="mb-8 lg:hidden">
+          <div className="inline-block px-4 py-2 bg-jerry-green-800/60 backdrop-blur-sm rounded-full border border-gold-500/30 mb-4">
+            <span className="text-gold-300 text-sm font-semibold uppercase tracking-widest">
+              {categoryConfig[ingredient.category]}
+            </span>
+          </div>
+
+          <h1 className="text-4xl sm:text-5xl font-serif font-bold text-white mb-6">
+            {ingredient.name}
+          </h1>
+
+          <p className="text-xl text-parchment-300 leading-relaxed">
+            {ingredient.description}
+          </p>
+        </div>
+
         <div className="grid lg:grid-cols-2 gap-8 items-start">
 
           {/* LEFT COLUMN - Sticky sidebar with key info */}
-          <div className="order-2 lg:order-1">
+          <div className="order-1 lg:order-1">
             <div className="lg:sticky lg:top-24 space-y-6">
 
               {/* Main Image */}
@@ -253,29 +271,29 @@ export default async function IngredientDetailPage({ params }: { params: Promise
                   <h2 className="text-xl font-serif font-bold text-gold-300 mb-4">Recommended Brands</h2>
                   <div className="space-y-4">
                     {ingredient.recommendedBrands.budget && (
-                      <div className="p-4 bg-jerry-green-800/30 rounded-lg border border-gold-500/20">
+                      <div className="p-3 bg-jerry-green-800/30 rounded-lg border border-gold-500/20">
                         {ingredient.budgetImage && (
-                          <div className="relative aspect-[3/4] bg-transparent rounded-lg overflow-hidden mb-4">
+                          <div className="relative h-24 bg-transparent rounded-lg overflow-hidden mb-3">
                             <Image
                               src={urlFor(ingredient.budgetImage).url()}
                               alt={`${ingredient.recommendedBrands.budget} - Budget Choice`}
                               fill
-                              className="object-contain mix-blend-multiply p-2"
-                              sizes="(max-width: 1024px) 100vw, 45vw"
+                              className="object-contain mix-blend-multiply p-1"
+                              sizes="150px"
                             />
                           </div>
                         )}
-                        <p className="text-green-400 font-semibold mb-1 text-sm">Budget Choice</p>
-                        <p className="text-parchment-300 mb-3">{ingredient.recommendedBrands.budget}</p>
+                        <p className="text-green-400 font-semibold mb-1 text-xs">Budget Choice</p>
+                        <p className="text-parchment-300 mb-2 text-sm">{ingredient.recommendedBrands.budget}</p>
                         {ingredient.recommendedBrands.budgetLink && (
                           <a
                             href={ingredient.recommendedBrands.budgetLink}
                             target="_blank"
                             rel="noopener noreferrer sponsored"
-                            className="inline-flex items-center gap-2 px-4 py-2 bg-green-500/20 border border-green-500/40 text-green-300 rounded-lg hover:bg-green-500/30 transition-all text-sm font-semibold w-full justify-center"
+                            className="inline-flex items-center gap-1 px-3 py-1.5 bg-green-500/20 border border-green-500/40 text-green-300 rounded-lg hover:bg-green-500/30 transition-all text-xs font-semibold w-full justify-center"
                           >
-                            Buy from Master of Malt
-                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            Buy Now
+                            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                             </svg>
                           </a>
@@ -283,29 +301,29 @@ export default async function IngredientDetailPage({ params }: { params: Promise
                       </div>
                     )}
                     {ingredient.recommendedBrands.premium && (
-                      <div className="p-4 bg-jerry-green-800/30 rounded-lg border border-gold-500/20">
+                      <div className="p-3 bg-jerry-green-800/30 rounded-lg border border-gold-500/20">
                         {ingredient.premiumImage && (
-                          <div className="relative aspect-[3/4] bg-transparent rounded-lg overflow-hidden mb-4">
+                          <div className="relative h-24 bg-transparent rounded-lg overflow-hidden mb-3">
                             <Image
                               src={urlFor(ingredient.premiumImage).url()}
                               alt={`${ingredient.recommendedBrands.premium} - Premium Choice`}
                               fill
-                              className="object-contain mix-blend-multiply p-2"
-                              sizes="(max-width: 1024px) 100vw, 45vw"
+                              className="object-contain mix-blend-multiply p-1"
+                              sizes="150px"
                             />
                           </div>
                         )}
-                        <p className="text-gold-400 font-semibold mb-1 text-sm">Premium Choice</p>
-                        <p className="text-parchment-300 mb-3">{ingredient.recommendedBrands.premium}</p>
+                        <p className="text-gold-400 font-semibold mb-1 text-xs">Premium Choice</p>
+                        <p className="text-parchment-300 mb-2 text-sm">{ingredient.recommendedBrands.premium}</p>
                         {ingredient.recommendedBrands.premiumLink && (
                           <a
                             href={ingredient.recommendedBrands.premiumLink}
                             target="_blank"
                             rel="noopener noreferrer sponsored"
-                            className="inline-flex items-center gap-2 px-4 py-2 bg-gold-500/20 border border-gold-500/40 text-gold-300 rounded-lg hover:bg-gold-500/30 transition-all text-sm font-semibold w-full justify-center"
+                            className="inline-flex items-center gap-1 px-3 py-1.5 bg-gold-500/20 border border-gold-500/40 text-gold-300 rounded-lg hover:bg-gold-500/30 transition-all text-xs font-semibold w-full justify-center"
                           >
-                            Buy from Master of Malt
-                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            Buy Now
+                            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                             </svg>
                           </a>
@@ -368,10 +386,10 @@ export default async function IngredientDetailPage({ params }: { params: Promise
           </div>
 
           {/* RIGHT COLUMN - Main content */}
-          <div className="order-1 lg:order-2 space-y-8">
+          <div className="order-2 lg:order-2 space-y-8">
 
-            {/* Header */}
-            <div>
+            {/* Header - Desktop Only (Mobile version is above grid) */}
+            <div className="hidden lg:block">
               <div className="inline-block px-4 py-2 bg-jerry-green-800/60 backdrop-blur-sm rounded-full border border-gold-500/30 mb-4">
                 <span className="text-gold-300 text-sm font-semibold uppercase tracking-widest">
                   {categoryConfig[ingredient.category]}

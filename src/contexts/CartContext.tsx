@@ -64,24 +64,33 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   }, [])
 
   const addToCart = useCallback(async (variantId: string, quantity: number = 1) => {
+    console.log('[CartContext] Starting addToCart:', { variantId, quantity })
     setIsLoading(true)
     try {
       let currentCart = cart
 
       // Create cart if it doesn't exist
       if (!currentCart) {
+        console.log('[CartContext] No cart exists, creating new cart...')
         currentCart = await createCart()
         localStorage.setItem('shopify_cart_id', currentCart.id)
+        console.log('[CartContext] New cart created:', currentCart.id)
       }
 
       // Add item to cart
+      console.log('[CartContext] Adding item to cart:', currentCart.id)
       const updatedCart = await shopifyAddToCart(currentCart.id, variantId, quantity)
+      console.log('[CartContext] Cart updated successfully:', {
+        cartId: updatedCart.id,
+        lineCount: updatedCart.lines.length,
+        totalItems: updatedCart.lines.reduce((sum, line) => sum + line.quantity, 0)
+      })
       setCart(updatedCart)
 
       // Open cart drawer to show item was added
       setIsCartOpen(true)
     } catch (error) {
-      console.error('Error adding to cart:', error)
+      console.error('[CartContext] Error adding to cart:', error)
       alert('Failed to add item to cart. Please try again.')
     } finally {
       setIsLoading(false)
