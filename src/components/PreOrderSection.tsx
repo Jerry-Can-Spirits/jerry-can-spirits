@@ -1,14 +1,9 @@
 'use client'
 
-import { useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 
 export default function PreOrderSection() {
-  const [bottlesSold] = useState(127) // Update this dynamically from Shopify
-  const totalBottles = 500
-  const percentageSold = (bottlesSold / totalBottles) * 100
-
   return (
     <section className="py-16 bg-jerry-green-900/50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -51,31 +46,10 @@ export default function PreOrderSection() {
               Secure Your Place in History
             </h2>
 
-            <p className="text-xl text-parchment-300 mb-6 leading-relaxed">
+            <p className="text-xl text-parchment-300 mb-8 leading-relaxed">
               Be among the first 500 adventurers to receive a numbered First Batch Edition bottle.
               Pre-order now and lock in exclusive early supporter pricing.
             </p>
-
-            {/* Progress Bar */}
-            <div className="mb-8">
-              <div className="flex justify-between items-center mb-3">
-                <span className="text-parchment-200 font-semibold">
-                  {bottlesSold} of {totalBottles} bottles reserved
-                </span>
-                <span className="text-gold-300 font-semibold">
-                  {Math.round(percentageSold)}% claimed
-                </span>
-              </div>
-              <div className="w-full h-3 bg-jerry-green-800/60 rounded-full overflow-hidden border border-gold-500/20">
-                <div
-                  className="h-full bg-gradient-to-r from-gold-600 to-gold-400 transition-all duration-500"
-                  style={{ width: `${percentageSold}%` }}
-                />
-              </div>
-              <p className="text-parchment-400 text-sm mt-2">
-                Only {totalBottles - bottlesSold} bottles remaining
-              </p>
-            </div>
 
             {/* Benefits List */}
             <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20 mb-8">
@@ -117,7 +91,7 @@ export default function PreOrderSection() {
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-4">
               <Link
-                href="/shop"
+                href="/shop/product/jerry-can-spirits-expedition-spiced-rum"
                 className="group bg-gradient-to-r from-gold-600 to-gold-500 hover:from-gold-500 hover:to-gold-400 text-jerry-green-900 px-8 py-4 rounded-lg font-semibold uppercase tracking-wide transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 flex items-center justify-center gap-2"
               >
                 Pre-Order Now - £35
