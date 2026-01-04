@@ -179,12 +179,13 @@ export default defineType({
           name: 'strength',
           title: 'Flavour Strength',
           type: 'string',
+          description: 'Light: Minimal impact | Light-Medium: Balanced presence | Medium-Bold: Strong character | Very Bold: Intense, use sparingly',
           options: {
             list: [
-              {title: 'Light', value: 'light'},
-              {title: 'Light to Medium', value: 'light-medium'},
-              {title: 'Medium to Bold', value: 'medium-bold'},
-              {title: 'Very Bold', value: 'very-bold'}
+              {title: 'Light — Minimal flavour impact, supports other ingredients', value: 'light'},
+              {title: 'Light to Medium — Noticeable but balanced flavour presence', value: 'light-medium'},
+              {title: 'Medium to Bold — Strong character that shapes the drink', value: 'medium-bold'},
+              {title: 'Very Bold — Intense, dominant flavour used sparingly', value: 'very-bold'}
             ]
           }
         })

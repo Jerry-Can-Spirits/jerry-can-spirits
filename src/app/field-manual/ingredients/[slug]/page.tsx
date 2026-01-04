@@ -137,21 +137,24 @@ export default async function IngredientDetailPage({ params }: { params: Promise
         </nav>
       </div>
 
-      {/* Hero Section */}
+      {/* Hero Section - 2 Column Layout */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
-        <div className="grid lg:grid-cols-2 gap-12 items-start">
-          {/* Image */}
+        <div className="grid lg:grid-cols-2 gap-8 items-start">
+
+          {/* LEFT COLUMN - Sticky sidebar with key info */}
           <div className="order-2 lg:order-1">
-            <div className="sticky top-24 space-y-6">
-              <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
+            <div className="lg:sticky lg:top-24 space-y-6">
+
+              {/* Main Image */}
+              <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
                 {ingredient.image ? (
-                  <div className="relative aspect-square bg-jerry-green-800/20 rounded-lg overflow-hidden">
+                  <div className="relative aspect-square bg-transparent rounded-lg overflow-hidden">
                     <Image
                       src={urlFor(ingredient.image).url()}
                       alt={ingredient.name}
                       fill
-                      className="object-cover"
-                      sizes="(max-width: 1024px) 100vw, 50vw"
+                      className="object-contain mix-blend-multiply p-4"
+                      sizes="(max-width: 1024px) 100vw, 45vw"
                       priority
                     />
                   </div>
@@ -169,19 +172,19 @@ export default async function IngredientDetailPage({ params }: { params: Promise
                 )}
 
                 {ingredient.featured && (
-                  <div className="mt-6 p-4 bg-gold-500/10 border border-gold-500/30 rounded-lg">
-                    <div className="flex items-center gap-3">
-                      <span className="text-2xl">★</span>
+                  <div className="mt-4 p-3 bg-gold-500/10 border border-gold-500/30 rounded-lg">
+                    <div className="flex items-center gap-2">
+                      <span className="text-xl">★</span>
                       <div>
-                        <h3 className="text-gold-300 font-semibold">Essential Ingredient</h3>
-                        <p className="text-parchment-300 text-sm">A staple for any well-stocked bar</p>
+                        <h3 className="text-gold-300 font-semibold text-sm">Essential Ingredient</h3>
+                        <p className="text-parchment-300 text-xs">A staple for any well-stocked bar</p>
                       </div>
                     </div>
                   </div>
                 )}
               </div>
 
-              {/* Product Details */}
+              {/* Quick Facts */}
               {(ingredient.abv || ingredient.origin || ingredient.flavorProfile?.strength) && (
                 <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
                   <h3 className="text-lg font-serif font-bold text-gold-300 mb-4">Quick Facts</h3>
@@ -200,8 +203,8 @@ export default async function IngredientDetailPage({ params }: { params: Promise
                     )}
                     {ingredient.flavorProfile?.strength && (
                       <div className="flex justify-between items-center">
-                        <span className="text-parchment-300">Strength</span>
-                        <span className="text-gold-400 font-semibold">{ingredient.flavorProfile.strength}</span>
+                        <span className="text-parchment-300">Flavour Strength</span>
+                        <span className="text-gold-400 font-semibold capitalize">{ingredient.flavorProfile.strength.replace('-', ' ')}</span>
                       </div>
                     )}
                     {ingredient.seasonality && (
@@ -214,7 +217,115 @@ export default async function IngredientDetailPage({ params }: { params: Promise
                 </div>
               )}
 
-              {/* Price Range */}
+              {/* Flavour Profile */}
+              {ingredient.flavorProfile && (ingredient.flavorProfile.primary || ingredient.flavorProfile.tasting) && (
+                <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+                  <h2 className="text-xl font-serif font-bold text-gold-300 mb-4">Flavour Profile</h2>
+                  <div className="space-y-4">
+                    {ingredient.flavorProfile.primary && ingredient.flavorProfile.primary.length > 0 && (
+                      <div>
+                        <h3 className="text-gold-400 font-semibold mb-3 text-sm">Primary Flavours</h3>
+                        <div className="flex flex-wrap gap-2">
+                          {ingredient.flavorProfile.primary.map((flavor, index) => (
+                            <span
+                              key={index}
+                              className="px-3 py-1 bg-gold-500/20 border border-gold-500/40 text-gold-300 rounded-full text-sm font-semibold"
+                            >
+                              {flavor}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                    {ingredient.flavorProfile.tasting && (
+                      <div>
+                        <h3 className="text-gold-400 font-semibold mb-2 text-sm">Tasting Notes</h3>
+                        <p className="text-parchment-300 leading-relaxed text-sm">{ingredient.flavorProfile.tasting}</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {/* Recommended Brands */}
+              {ingredient.recommendedBrands && (ingredient.recommendedBrands.budget || ingredient.recommendedBrands.premium) && (
+                <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+                  <h2 className="text-xl font-serif font-bold text-gold-300 mb-4">Recommended Brands</h2>
+                  <div className="space-y-4">
+                    {ingredient.recommendedBrands.budget && (
+                      <div className="p-4 bg-jerry-green-800/30 rounded-lg border border-gold-500/20">
+                        {ingredient.budgetImage && (
+                          <div className="relative aspect-[3/4] bg-transparent rounded-lg overflow-hidden mb-4">
+                            <Image
+                              src={urlFor(ingredient.budgetImage).url()}
+                              alt={`${ingredient.recommendedBrands.budget} - Budget Choice`}
+                              fill
+                              className="object-contain mix-blend-multiply p-2"
+                              sizes="(max-width: 1024px) 100vw, 45vw"
+                            />
+                          </div>
+                        )}
+                        <p className="text-green-400 font-semibold mb-1 text-sm">Budget Choice</p>
+                        <p className="text-parchment-300 mb-3">{ingredient.recommendedBrands.budget}</p>
+                        {ingredient.recommendedBrands.budgetLink && (
+                          <a
+                            href={ingredient.recommendedBrands.budgetLink}
+                            target="_blank"
+                            rel="noopener noreferrer sponsored"
+                            className="inline-flex items-center gap-2 px-4 py-2 bg-green-500/20 border border-green-500/40 text-green-300 rounded-lg hover:bg-green-500/30 transition-all text-sm font-semibold w-full justify-center"
+                          >
+                            Buy from Master of Malt
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                            </svg>
+                          </a>
+                        )}
+                      </div>
+                    )}
+                    {ingredient.recommendedBrands.premium && (
+                      <div className="p-4 bg-jerry-green-800/30 rounded-lg border border-gold-500/20">
+                        {ingredient.premiumImage && (
+                          <div className="relative aspect-[3/4] bg-transparent rounded-lg overflow-hidden mb-4">
+                            <Image
+                              src={urlFor(ingredient.premiumImage).url()}
+                              alt={`${ingredient.recommendedBrands.premium} - Premium Choice`}
+                              fill
+                              className="object-contain mix-blend-multiply p-2"
+                              sizes="(max-width: 1024px) 100vw, 45vw"
+                            />
+                          </div>
+                        )}
+                        <p className="text-gold-400 font-semibold mb-1 text-sm">Premium Choice</p>
+                        <p className="text-parchment-300 mb-3">{ingredient.recommendedBrands.premium}</p>
+                        {ingredient.recommendedBrands.premiumLink && (
+                          <a
+                            href={ingredient.recommendedBrands.premiumLink}
+                            target="_blank"
+                            rel="noopener noreferrer sponsored"
+                            className="inline-flex items-center gap-2 px-4 py-2 bg-gold-500/20 border border-gold-500/40 text-gold-300 rounded-lg hover:bg-gold-500/30 transition-all text-sm font-semibold w-full justify-center"
+                          >
+                            Buy from Master of Malt
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                            </svg>
+                          </a>
+                        )}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Affiliate Disclosure */}
+                  {(ingredient.recommendedBrands.budgetLink || ingredient.recommendedBrands.premiumLink) && (
+                    <div className="mt-4 pt-4 border-t border-gold-500/20">
+                      <p className="text-parchment-400 text-xs leading-relaxed">
+                        <strong className="text-gold-300">Affiliate Disclosure:</strong> Jerry Can Spirits participates in the Master of Malt affiliate programme. If you purchase through these links, we may earn a small commission at no extra cost to you. This helps support our content and allows us to continue creating free cocktail recipes and guides. We only recommend products we genuinely believe in.
+                      </p>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Price Guide */}
               {ingredient.priceRange && (
                 <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
                   <h3 className="text-lg font-serif font-bold text-gold-300 mb-4">Price Guide</h3>
@@ -230,11 +341,35 @@ export default async function IngredientDetailPage({ params }: { params: Promise
                   </div>
                 </div>
               )}
+
+              {/* Storage & Handling */}
+              {(ingredient.storage || ingredient.shelfLife) && (
+                <div className="p-6 bg-jerry-green-800/40 rounded-xl border border-gold-500/20">
+                  <div className="flex items-start gap-3">
+                    <svg className="w-5 h-5 text-gold-400 flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <div className="flex-1 space-y-3">
+                      <h3 className="text-gold-300 font-semibold">Storage & Handling</h3>
+                      {ingredient.storage && (
+                        <p className="text-parchment-300 leading-relaxed text-sm">{ingredient.storage}</p>
+                      )}
+                      {ingredient.shelfLife && (
+                        <div className="p-3 bg-jerry-green-800/30 rounded-lg border border-gold-500/20">
+                          <p className="text-gold-400 font-semibold text-xs mb-1">Shelf Life</p>
+                          <p className="text-parchment-300 text-xs">{ingredient.shelfLife}</p>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
 
-          {/* Content */}
+          {/* RIGHT COLUMN - Main content */}
           <div className="order-1 lg:order-2 space-y-8">
+
             {/* Header */}
             <div>
               <div className="inline-block px-4 py-2 bg-jerry-green-800/60 backdrop-blur-sm rounded-full border border-gold-500/30 mb-4">
@@ -251,6 +386,46 @@ export default async function IngredientDetailPage({ params }: { params: Promise
                 {ingredient.description}
               </p>
             </div>
+
+            {/* Professional Tip Callout */}
+            {ingredient.professionalTip && (
+              <div className="bg-gradient-to-br from-gold-500/10 to-gold-600/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/30">
+                <div className="flex items-start gap-4">
+                  <div className="w-10 h-10 bg-gold-500/20 rounded-full flex items-center justify-center flex-shrink-0">
+                    <svg className="w-5 h-5 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 className="text-gold-300 font-serif font-bold text-lg mb-2">Pro Tip</h3>
+                    <p className="text-parchment-300 leading-relaxed">{ingredient.professionalTip}</p>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Usage */}
+            <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+              <h2 className="text-2xl font-serif font-bold text-gold-300 mb-4">Usage</h2>
+              <p className="text-parchment-300 leading-relaxed">{ingredient.usage}</p>
+            </div>
+
+            {/* Top Tips */}
+            {ingredient.topTips && ingredient.topTips.length > 0 && (
+              <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+                <h2 className="text-2xl font-serif font-bold text-gold-300 mb-4">Top Tips</h2>
+                <ul className="space-y-4">
+                  {ingredient.topTips.map((tip, index) => (
+                    <li key={index} className="flex items-start gap-3">
+                      <div className="w-6 h-6 bg-gold-400/20 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <div className="w-2 h-2 bg-gold-400 rounded-full"></div>
+                      </div>
+                      <span className="text-parchment-300 leading-relaxed">{tip}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
 
             {/* Video Tutorial */}
             {videoId && (
@@ -272,75 +447,6 @@ export default async function IngredientDetailPage({ params }: { params: Promise
                 </div>
               </div>
             )}
-
-            {/* Professional Tip Callout */}
-            {ingredient.professionalTip && (
-              <div className="bg-gradient-to-br from-gold-500/10 to-gold-600/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/30">
-                <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 bg-gold-500/20 rounded-full flex items-center justify-center flex-shrink-0">
-                    <svg className="w-5 h-5 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-                    </svg>
-                  </div>
-                  <div>
-                    <h3 className="text-gold-300 font-serif font-bold text-lg mb-2">Pro Tip</h3>
-                    <p className="text-parchment-300 leading-relaxed">{ingredient.professionalTip}</p>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* Flavor Profile */}
-            {ingredient.flavorProfile && (ingredient.flavorProfile.primary || ingredient.flavorProfile.tasting) && (
-              <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
-                <h2 className="text-2xl font-serif font-bold text-gold-300 mb-4">Flavor Profile</h2>
-                <div className="space-y-4">
-                  {ingredient.flavorProfile.primary && ingredient.flavorProfile.primary.length > 0 && (
-                    <div>
-                      <h3 className="text-gold-400 font-semibold mb-3">Primary Flavors</h3>
-                      <div className="flex flex-wrap gap-2">
-                        {ingredient.flavorProfile.primary.map((flavor, index) => (
-                          <span
-                            key={index}
-                            className="px-3 py-1 bg-gold-500/20 border border-gold-500/40 text-gold-300 rounded-full text-sm font-semibold"
-                          >
-                            {flavor}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                  {ingredient.flavorProfile.tasting && (
-                    <div>
-                      <h3 className="text-gold-400 font-semibold mb-2">Tasting Notes</h3>
-                      <p className="text-parchment-300 leading-relaxed">{ingredient.flavorProfile.tasting}</p>
-                    </div>
-                  )}
-                </div>
-              </div>
-            )}
-
-            {/* History/Context */}
-            {ingredient.history && (
-              <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
-                <h2 className="text-2xl font-serif font-bold text-gold-300 mb-4">History & Context</h2>
-                <p className="text-parchment-300 leading-relaxed">{ingredient.history}</p>
-              </div>
-            )}
-
-            {/* Production Method */}
-            {ingredient.productionMethod && (
-              <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
-                <h2 className="text-2xl font-serif font-bold text-gold-300 mb-4">Production Method</h2>
-                <p className="text-parchment-300 leading-relaxed">{ingredient.productionMethod}</p>
-              </div>
-            )}
-
-            {/* Usage */}
-            <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
-              <h2 className="text-2xl font-serif font-bold text-gold-300 mb-4">Usage</h2>
-              <p className="text-parchment-300 leading-relaxed">{ingredient.usage}</p>
-            </div>
 
             {/* Pairs Well With */}
             {ingredient.pairsWellWith && ingredient.pairsWellWith.length > 0 && (
@@ -376,121 +482,19 @@ export default async function IngredientDetailPage({ params }: { params: Promise
               </div>
             )}
 
-            {/* Top Tips */}
-            {ingredient.topTips && ingredient.topTips.length > 0 && (
+            {/* History/Context */}
+            {ingredient.history && (
               <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
-                <h2 className="text-2xl font-serif font-bold text-gold-300 mb-4">Top Tips</h2>
-                <ul className="space-y-4">
-                  {ingredient.topTips.map((tip, index) => (
-                    <li key={index} className="flex items-start gap-3">
-                      <div className="w-6 h-6 bg-gold-400/20 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                        <div className="w-2 h-2 bg-gold-400 rounded-full"></div>
-                      </div>
-                      <span className="text-parchment-300 leading-relaxed">{tip}</span>
-                    </li>
-                  ))}
-                </ul>
+                <h2 className="text-2xl font-serif font-bold text-gold-300 mb-4">History & Context</h2>
+                <p className="text-parchment-300 leading-relaxed">{ingredient.history}</p>
               </div>
             )}
 
-            {/* Recommended Brands */}
-            {ingredient.recommendedBrands && (ingredient.recommendedBrands.budget || ingredient.recommendedBrands.premium) && (
+            {/* Production Method */}
+            {ingredient.productionMethod && (
               <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
-                <h2 className="text-2xl font-serif font-bold text-gold-300 mb-4">Recommended Brands</h2>
-                <div className="grid md:grid-cols-2 gap-4">
-                  {ingredient.recommendedBrands.budget && (
-                    <div className="p-4 bg-jerry-green-800/30 rounded-lg border border-gold-500/20">
-                      {ingredient.budgetImage && (
-                        <div className="relative aspect-square bg-jerry-green-800/20 rounded-lg overflow-hidden mb-4">
-                          <Image
-                            src={urlFor(ingredient.budgetImage).url()}
-                            alt={`${ingredient.recommendedBrands.budget} - Budget Choice`}
-                            fill
-                            className="object-cover"
-                            sizes="(max-width: 768px) 100vw, 50vw"
-                          />
-                        </div>
-                      )}
-                      <p className="text-green-400 font-semibold mb-2">Budget Choice</p>
-                      <p className="text-parchment-300 mb-3">{ingredient.recommendedBrands.budget}</p>
-                      {ingredient.recommendedBrands.budgetLink && (
-                        <a
-                          href={ingredient.recommendedBrands.budgetLink}
-                          target="_blank"
-                          rel="noopener noreferrer sponsored"
-                          className="inline-flex items-center gap-2 px-4 py-2 bg-green-500/20 border border-green-500/40 text-green-300 rounded-lg hover:bg-green-500/30 transition-all text-sm font-semibold"
-                        >
-                          Buy from Master of Malt
-                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                          </svg>
-                        </a>
-                      )}
-                    </div>
-                  )}
-                  {ingredient.recommendedBrands.premium && (
-                    <div className="p-4 bg-jerry-green-800/30 rounded-lg border border-gold-500/20">
-                      {ingredient.premiumImage && (
-                        <div className="relative aspect-square bg-jerry-green-800/20 rounded-lg overflow-hidden mb-4">
-                          <Image
-                            src={urlFor(ingredient.premiumImage).url()}
-                            alt={`${ingredient.recommendedBrands.premium} - Premium Choice`}
-                            fill
-                            className="object-cover"
-                            sizes="(max-width: 768px) 100vw, 50vw"
-                          />
-                        </div>
-                      )}
-                      <p className="text-gold-400 font-semibold mb-2">Premium Choice</p>
-                      <p className="text-parchment-300 mb-3">{ingredient.recommendedBrands.premium}</p>
-                      {ingredient.recommendedBrands.premiumLink && (
-                        <a
-                          href={ingredient.recommendedBrands.premiumLink}
-                          target="_blank"
-                          rel="noopener noreferrer sponsored"
-                          className="inline-flex items-center gap-2 px-4 py-2 bg-gold-500/20 border border-gold-500/40 text-gold-300 rounded-lg hover:bg-gold-500/30 transition-all text-sm font-semibold"
-                        >
-                          Buy from Master of Malt
-                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                          </svg>
-                        </a>
-                      )}
-                    </div>
-                  )}
-                </div>
-
-                {/* Affiliate Disclosure */}
-                {(ingredient.recommendedBrands.budgetLink || ingredient.recommendedBrands.premiumLink) && (
-                  <div className="mt-6 pt-6 border-t border-gold-500/20">
-                    <p className="text-parchment-400 text-xs leading-relaxed">
-                      <strong className="text-gold-300">Affiliate Disclosure:</strong> Jerry Can Spirits participates in the Master of Malt affiliate programme. If you purchase through these links, we may earn a small commission at no extra cost to you. This helps support our content and allows us to continue creating free cocktail recipes and guides. We only recommend products we genuinely believe in.
-                    </p>
-                  </div>
-                )}
-              </div>
-            )}
-
-            {/* Storage & Handling */}
-            {(ingredient.storage || ingredient.shelfLife) && (
-              <div className="p-6 bg-jerry-green-800/40 rounded-xl border border-gold-500/20">
-                <div className="flex items-start gap-4">
-                  <svg className="w-6 h-6 text-gold-400 flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                  <div className="flex-1 space-y-3">
-                    <h3 className="text-gold-300 font-semibold text-lg">Storage & Handling</h3>
-                    {ingredient.storage && (
-                      <p className="text-parchment-300 leading-relaxed">{ingredient.storage}</p>
-                    )}
-                    {ingredient.shelfLife && (
-                      <div className="p-3 bg-jerry-green-800/30 rounded-lg border border-gold-500/20">
-                        <p className="text-gold-400 font-semibold text-sm mb-1">Shelf Life</p>
-                        <p className="text-parchment-300 text-sm">{ingredient.shelfLife}</p>
-                      </div>
-                    )}
-                  </div>
-                </div>
+                <h2 className="text-2xl font-serif font-bold text-gold-300 mb-4">Production Method</h2>
+                <p className="text-parchment-300 leading-relaxed">{ingredient.productionMethod}</p>
               </div>
             )}
 
