@@ -139,10 +139,28 @@ export default async function IngredientDetailPage({ params }: { params: Promise
 
       {/* Hero Section - 2 Column Layout */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
+
+        {/* Header - Mobile Only (Desktop version is inside right column) */}
+        <div className="mb-8 lg:hidden">
+          <div className="inline-block px-4 py-2 bg-jerry-green-800/60 backdrop-blur-sm rounded-full border border-gold-500/30 mb-4">
+            <span className="text-gold-300 text-sm font-semibold uppercase tracking-widest">
+              {categoryConfig[ingredient.category]}
+            </span>
+          </div>
+
+          <h1 className="text-4xl sm:text-5xl font-serif font-bold text-white mb-6">
+            {ingredient.name}
+          </h1>
+
+          <p className="text-xl text-parchment-300 leading-relaxed">
+            {ingredient.description}
+          </p>
+        </div>
+
         <div className="grid lg:grid-cols-2 gap-8 items-start">
 
           {/* LEFT COLUMN - Sticky sidebar with key info */}
-          <div className="order-2 lg:order-1">
+          <div className="order-1 lg:order-1">
             <div className="lg:sticky lg:top-24 space-y-6">
 
               {/* Main Image */}
@@ -368,10 +386,10 @@ export default async function IngredientDetailPage({ params }: { params: Promise
           </div>
 
           {/* RIGHT COLUMN - Main content */}
-          <div className="order-1 lg:order-2 space-y-8">
+          <div className="order-2 lg:order-2 space-y-8">
 
-            {/* Header */}
-            <div>
+            {/* Header - Desktop Only (Mobile version is above grid) */}
+            <div className="hidden lg:block">
               <div className="inline-block px-4 py-2 bg-jerry-green-800/60 backdrop-blur-sm rounded-full border border-gold-500/30 mb-4">
                 <span className="text-gold-300 text-sm font-semibold uppercase tracking-widest">
                   {categoryConfig[ingredient.category]}
