@@ -91,6 +91,8 @@ export const ingredientBySlugQuery = `*[_type == "ingredient" && slug.current ==
   recommendedBrands,
   storage,
   image,
+  budgetImage,
+  premiumImage,
   featured,
   flavorProfile,
   abv,
