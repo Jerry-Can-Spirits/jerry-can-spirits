@@ -127,7 +127,7 @@ export default function RootLayout({
               message="Pre-launch: Be the first to know when Expedition Spiced launches!"
               ctaText="Notify Me"
               ctaLink="/notify"
-              isVisible={true}
+              isVisible={false}
             />
 
             <Header />
