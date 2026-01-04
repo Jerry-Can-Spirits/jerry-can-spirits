@@ -1,8 +1,11 @@
 import HeroSection from "@/components/HeroSection";
-import InstagramFeed from "@/components/InstagramFeed";
 import StructuredData from "@/components/StructuredData";
 import ScrollToHash from "@/components/ScrollToHash";
+import PreOrderSection from "@/components/PreOrderSection";
 import KlaviyoEmbeddedForm from "@/components/KlaviyoEmbeddedForm";
+import FounderStorySnippet from "@/components/FounderStorySnippet";
+import FieldManualPreview from "@/components/FieldManualPreview";
+import WhyJerryCan from "@/components/WhyJerryCan";
 import TrustpilotWidget from "@/components/TrustpilotWidget";
 import type { Metadata } from 'next'
 
@@ -91,7 +94,21 @@ export default function Home() {
       <StructuredData data={structuredData} />
       <div>
         <HeroSection />
+
+        {/* Pre-Order Section - Primary CTA */}
+        <PreOrderSection />
+
+        {/* Email Signup - Secondary CTA */}
         <KlaviyoEmbeddedForm />
+
+        {/* Why Jerry Can - Value Proposition */}
+        <WhyJerryCan />
+
+        {/* Founder Story Snippet */}
+        <FounderStorySnippet />
+
+        {/* Field Manual Preview */}
+        <FieldManualPreview />
 
         {/* Trustpilot Reviews Section - Hidden until April 2026 launch */}
         {/* CSP is configured for Trustpilot, will activate automatically at launch */}
@@ -122,37 +139,6 @@ export default function Home() {
             </div>
           </section>
         )}
-
-        {/* Instagram Feed Section */}
-        <section className="py-16 bg-jerry-green-900/30">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-12">
-              <div className="inline-block px-4 py-2 bg-jerry-green-800/60 backdrop-blur-sm rounded-full border border-gold-500/30 mb-6">
-                <span className="text-gold-300 text-sm font-semibold uppercase tracking-widest">
-                  Join the Adventure
-                </span>
-              </div>
-              <h2 className="text-3xl md:text-4xl font-playfair font-bold text-gold-500 mb-4">
-                Follow Our Journey
-              </h2>
-              <p className="text-gray-300 text-lg max-w-2xl mx-auto">
-                See what our community is up to on Instagram
-              </p>
-            </div>
-            <InstagramFeed
-              postUrls={[
-                'https://www.instagram.com/p/DQkRgIpDCOe/',  // Testing alternative post
-                // 'https://www.instagram.com/p/DS940WfjDZV/',  // Original post (disabled for testing)
-                // TO ADD MORE POSTS:
-                // 1. Post something on Instagram (@jerrycanspirits)
-                // 2. Click the three dots on the post → "Copy link"
-                // 3. Paste the URL here
-              ]}
-              showCaptions={true}
-              limit={6}
-            />
-          </div>
-        </section>
       </div>
     </>
   );

@@ -1,7 +1,5 @@
 'use client'
 
-import { useEffect } from 'react'
-
 interface InstagramFeedProps {
   postUrls?: string[]
   showCaptions?: boolean
