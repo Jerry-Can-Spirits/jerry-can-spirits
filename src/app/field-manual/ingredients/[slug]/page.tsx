@@ -62,7 +62,7 @@ interface Ingredient {
 const categoryConfig = {
   spirits: 'Spirits',
   liqueurs: 'Liqueurs',
-  bitters: 'Bitters & Aperitifs',
+  bitters: 'Bitters',
   mixers: 'Mixers',
   fresh: 'Fresh Ingredients',
   garnishes: 'Garnishes'

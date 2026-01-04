@@ -11,7 +11,7 @@ interface Ingredient {
   _id: string
   name: string
   slug: { current: string }
-  category: 'spirits' | 'liqueurs' | 'bitters' | 'fresh' | 'garnishes'
+  category: 'spirits' | 'liqueurs' | 'bitters' | 'mixers' | 'fresh' | 'garnishes'
   description: string
   usage: string
   topTips: string[]
@@ -50,7 +50,8 @@ export default function IngredientsClient({ ingredients }: IngredientsClientProp
     { value: 'all', label: 'All Ingredients' },
     { value: 'spirits', label: 'Spirits' },
     { value: 'liqueurs', label: 'Liqueurs' },
-    { value: 'bitters', label: 'Bitters & Aperitifs' },
+    { value: 'bitters', label: 'Bitters' },
+    { value: 'mixers', label: 'Mixers' },
     { value: 'fresh', label: 'Fresh Ingredients' },
     { value: 'garnishes', label: 'Garnishes' }
   ]
@@ -171,12 +172,12 @@ export default function IngredientsClient({ ingredients }: IngredientsClientProp
               >
                 {/* Image */}
                 {item.image && (
-                  <div className="relative aspect-[4/3] bg-jerry-green-800/20">
+                  <div className="relative aspect-[4/3] bg-transparent">
                     <Image
                       src={urlFor(item.image).url()}
                       alt={item.name}
                       fill
-                      className="object-cover group-hover:scale-110 transition-transform duration-500"
+                      className="object-contain mix-blend-multiply p-4"
                       sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                     />
                     <div className="absolute top-3 right-3 px-2 py-1 bg-gold-500/90 backdrop-blur-sm rounded-full">
@@ -237,12 +238,12 @@ export default function IngredientsClient({ ingredients }: IngredientsClientProp
               >
                 {/* Image */}
                 {item.image && (
-                  <div className="relative aspect-[4/3] bg-jerry-green-800/20">
+                  <div className="relative aspect-[4/3] bg-transparent">
                     <Image
                       src={urlFor(item.image).url()}
                       alt={item.name}
                       fill
-                      className="object-cover group-hover:scale-110 transition-transform duration-500"
+                      className="object-contain mix-blend-multiply p-4"
                       sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                     />
                   </div>
