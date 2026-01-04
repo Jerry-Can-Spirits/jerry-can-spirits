@@ -1,9 +1,41 @@
 'use client'
 
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
+import { getProduct } from '@/lib/shopify'
 
 export default function PreOrderSection() {
+  const [bottlesSold, setBottlesSold] = useState<number | null>(null)
+  const [loading, setLoading] = useState(true)
+  const totalBottles = 500
+  const productHandle = 'jerry-can-spirits-expedition-spiced-rum'
+
+  useEffect(() => {
+    async function fetchInventory() {
+      try {
+        const product = await getProduct(productHandle)
+        if (product?.variants?.[0]?.quantityAvailable !== undefined) {
+          // Calculate bottles sold: total - available
+          const available = product.variants[0].quantityAvailable
+          const sold = totalBottles - available
+          setBottlesSold(sold)
+        }
+      } catch (error) {
+        console.error('Error fetching inventory:', error)
+        // Don't show progress bar if we can't get real data
+        setBottlesSold(null)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchInventory()
+  }, [])
+
+  const percentageSold = bottlesSold !== null ? (bottlesSold / totalBottles) * 100 : 0
+  const showProgressBar = !loading && bottlesSold !== null
+
   return (
     <section className="py-16 bg-jerry-green-900/50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -46,10 +78,33 @@ export default function PreOrderSection() {
               Secure Your Place in History
             </h2>
 
-            <p className="text-xl text-parchment-300 mb-8 leading-relaxed">
+            <p className="text-xl text-parchment-300 mb-6 leading-relaxed">
               Be among the first 500 adventurers to receive a numbered First Batch Edition bottle.
               Pre-order now and lock in exclusive early supporter pricing.
             </p>
+
+            {/* Progress Bar - Only show if we have real inventory data */}
+            {showProgressBar && (
+              <div className="mb-8">
+                <div className="flex justify-between items-center mb-3">
+                  <span className="text-parchment-200 font-semibold">
+                    {bottlesSold} of {totalBottles} bottles reserved
+                  </span>
+                  <span className="text-gold-300 font-semibold">
+                    {Math.round(percentageSold)}% claimed
+                  </span>
+                </div>
+                <div className="w-full h-3 bg-jerry-green-800/60 rounded-full overflow-hidden border border-gold-500/20">
+                  <div
+                    className="h-full bg-gradient-to-r from-gold-600 to-gold-400 transition-all duration-500"
+                    style={{ width: `${percentageSold}%` }}
+                  />
+                </div>
+                <p className="text-parchment-400 text-sm mt-2">
+                  Only {totalBottles - bottlesSold} bottles remaining
+                </p>
+              </div>
+            )}
 
             {/* Benefits List */}
             <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20 mb-8">
