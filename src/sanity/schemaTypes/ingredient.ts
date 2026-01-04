@@ -30,6 +30,7 @@ export default defineType({
           {title: 'Spirits', value: 'spirits'},
           {title: 'Liqueurs', value: 'liqueurs'},
           {title: 'Bitters', value: 'bitters'},
+          {title: 'Mixers', value: 'mixers'},
           {title: 'Fresh Ingredients', value: 'fresh'},
           {title: 'Garnishes', value: 'garnishes'}
         ]
@@ -67,13 +68,25 @@ export default defineType({
           name: 'budget',
           title: 'Budget Choice',
           type: 'string',
-          description: 'Recommended budget brand'
+          description: 'Recommended budget brand name'
+        }),
+        defineField({
+          name: 'budgetLink',
+          title: 'Budget Choice Link',
+          type: 'url',
+          description: 'Master of Malt affiliate link for budget option'
         }),
         defineField({
           name: 'premium',
           title: 'Premium Choice',
           type: 'string',
-          description: 'Recommended premium brand'
+          description: 'Recommended premium brand name'
+        }),
+        defineField({
+          name: 'premiumLink',
+          title: 'Premium Choice Link',
+          type: 'url',
+          description: 'Master of Malt affiliate link for premium option'
         })
       ]
     }),
@@ -92,6 +105,39 @@ export default defineType({
         storeOriginalFilename: true,
         hotspot: true
       },
+      description: 'Main product image (or budget option if using separate images)',
+      preview: {
+        select: {
+          imageUrl: 'asset.url',
+          title: 'asset.originalFilename',
+        }
+      }
+    }),
+    defineField({
+      name: 'budgetImage',
+      title: 'Budget Option Image',
+      type: 'image',
+      options: {
+        storeOriginalFilename: true,
+        hotspot: true
+      },
+      description: 'Image for budget brand recommendation (optional - leave empty to use main image)',
+      preview: {
+        select: {
+          imageUrl: 'asset.url',
+          title: 'asset.originalFilename',
+        }
+      }
+    }),
+    defineField({
+      name: 'premiumImage',
+      title: 'Premium Option Image',
+      type: 'image',
+      options: {
+        storeOriginalFilename: true,
+        hotspot: true
+      },
+      description: 'Image for premium brand recommendation (optional - leave empty to use main image)',
       preview: {
         select: {
           imageUrl: 'asset.url',
@@ -108,16 +154,16 @@ export default defineType({
 
     // ENHANCED FIELDS FOR RICH CONTENT
 
-    // Flavor Profile
+    // Flavour Profile
     defineField({
       name: 'flavorProfile',
-      title: 'Flavor Profile',
+      title: 'Flavour Profile',
       type: 'object',
-      description: 'Detailed flavor information',
+      description: 'Detailed flavour information',
       fields: [
         defineField({
           name: 'primary',
-          title: 'Primary Flavors',
+          title: 'Primary Flavours',
           type: 'array',
           of: [{type: 'string'}],
           description: 'e.g., "vanilla", "caramel", "spice", "citrus"'
@@ -127,14 +173,19 @@ export default defineType({
           title: 'Tasting Notes',
           type: 'text',
           rows: 3,
-          description: 'Detailed flavor description'
+          description: 'Detailed flavour description'
         }),
         defineField({
           name: 'strength',
-          title: 'Flavor Strength',
+          title: 'Flavour Strength',
           type: 'string',
           options: {
-            list: ['Subtle', 'Medium', 'Strong', 'Very Strong']
+            list: [
+              {title: 'Light', value: 'light'},
+              {title: 'Light to Medium', value: 'light-medium'},
+              {title: 'Medium to Bold', value: 'medium-bold'},
+              {title: 'Very Bold', value: 'very-bold'}
+            ]
           }
         })
       ]

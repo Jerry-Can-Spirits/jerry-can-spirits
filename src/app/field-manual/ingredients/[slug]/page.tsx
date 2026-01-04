@@ -12,16 +12,20 @@ interface Ingredient {
   _id: string
   name: string
   slug: { current: string }
-  category: 'spirits' | 'liqueurs' | 'bitters' | 'fresh' | 'garnishes'
+  category: 'spirits' | 'liqueurs' | 'bitters' | 'mixers' | 'fresh' | 'garnishes'
   description: string
   usage: string
   topTips: string[]
   recommendedBrands?: {
     budget?: string
+    budgetLink?: string
     premium?: string
+    premiumLink?: string
   }
   storage?: string
   image?: { asset: { url: string } }
+  budgetImage?: { asset: { url: string } }
+  premiumImage?: { asset: { url: string } }
   featured: boolean
   // Enhanced fields
   flavorProfile?: {
@@ -59,6 +63,7 @@ const categoryConfig = {
   spirits: 'Spirits',
   liqueurs: 'Liqueurs',
   bitters: 'Bitters & Aperitifs',
+  mixers: 'Mixers',
   fresh: 'Fresh Ingredients',
   garnishes: 'Garnishes'
 }
@@ -395,17 +400,74 @@ export default async function IngredientDetailPage({ params }: { params: Promise
                 <div className="grid md:grid-cols-2 gap-4">
                   {ingredient.recommendedBrands.budget && (
                     <div className="p-4 bg-jerry-green-800/30 rounded-lg border border-gold-500/20">
+                      {ingredient.budgetImage && (
+                        <div className="relative aspect-square bg-jerry-green-800/20 rounded-lg overflow-hidden mb-4">
+                          <Image
+                            src={urlFor(ingredient.budgetImage).url()}
+                            alt={`${ingredient.recommendedBrands.budget} - Budget Choice`}
+                            fill
+                            className="object-cover"
+                            sizes="(max-width: 768px) 100vw, 50vw"
+                          />
+                        </div>
+                      )}
                       <p className="text-green-400 font-semibold mb-2">Budget Choice</p>
-                      <p className="text-parchment-300">{ingredient.recommendedBrands.budget}</p>
+                      <p className="text-parchment-300 mb-3">{ingredient.recommendedBrands.budget}</p>
+                      {ingredient.recommendedBrands.budgetLink && (
+                        <a
+                          href={ingredient.recommendedBrands.budgetLink}
+                          target="_blank"
+                          rel="noopener noreferrer sponsored"
+                          className="inline-flex items-center gap-2 px-4 py-2 bg-green-500/20 border border-green-500/40 text-green-300 rounded-lg hover:bg-green-500/30 transition-all text-sm font-semibold"
+                        >
+                          Buy from Master of Malt
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                          </svg>
+                        </a>
+                      )}
                     </div>
                   )}
                   {ingredient.recommendedBrands.premium && (
                     <div className="p-4 bg-jerry-green-800/30 rounded-lg border border-gold-500/20">
+                      {ingredient.premiumImage && (
+                        <div className="relative aspect-square bg-jerry-green-800/20 rounded-lg overflow-hidden mb-4">
+                          <Image
+                            src={urlFor(ingredient.premiumImage).url()}
+                            alt={`${ingredient.recommendedBrands.premium} - Premium Choice`}
+                            fill
+                            className="object-cover"
+                            sizes="(max-width: 768px) 100vw, 50vw"
+                          />
+                        </div>
+                      )}
                       <p className="text-gold-400 font-semibold mb-2">Premium Choice</p>
-                      <p className="text-parchment-300">{ingredient.recommendedBrands.premium}</p>
+                      <p className="text-parchment-300 mb-3">{ingredient.recommendedBrands.premium}</p>
+                      {ingredient.recommendedBrands.premiumLink && (
+                        <a
+                          href={ingredient.recommendedBrands.premiumLink}
+                          target="_blank"
+                          rel="noopener noreferrer sponsored"
+                          className="inline-flex items-center gap-2 px-4 py-2 bg-gold-500/20 border border-gold-500/40 text-gold-300 rounded-lg hover:bg-gold-500/30 transition-all text-sm font-semibold"
+                        >
+                          Buy from Master of Malt
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                          </svg>
+                        </a>
+                      )}
                     </div>
                   )}
                 </div>
+
+                {/* Affiliate Disclosure */}
+                {(ingredient.recommendedBrands.budgetLink || ingredient.recommendedBrands.premiumLink) && (
+                  <div className="mt-6 pt-6 border-t border-gold-500/20">
+                    <p className="text-parchment-400 text-xs leading-relaxed">
+                      <strong className="text-gold-300">Affiliate Disclosure:</strong> Jerry Can Spirits participates in the Master of Malt affiliate programme. If you purchase through these links, we may earn a small commission at no extra cost to you. This helps support our content and allows us to continue creating free cocktail recipes and guides. We only recommend products we genuinely believe in.
+                    </p>
+                  </div>
+                )}
               </div>
             )}
 
