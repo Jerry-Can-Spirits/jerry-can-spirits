@@ -23,11 +23,11 @@ export default function FounderStorySnippet() {
               </p>
 
               <p>
-                The name itself pays homage to the iconic jerry can—a symbol of preparedness, durability, and expedition readiness. Just as the jerry can was engineered to survive the harshest conditions, our rum is crafted for those who venture beyond the ordinary.
+                The name itself pays homage to the iconic jerry can - a symbol of preparedness, durability, and expedition readiness. Just as the jerry can was engineered to survive the harshest conditions, our rum is crafted for those who venture beyond the ordinary.
               </p>
 
               <p>
-                We're not just making rum; we're building a legacy. A legacy that honors our service, supports the veteran community through the Armed Forces Covenant, and creates premium spirits that stand the test of any adventure.
+                We're not just making rum; we're building a legacy. A legacy that honours our service, supports the veteran community through the Armed Forces Covenant, and creates premium spirits that stand the test of any adventure.
               </p>
             </div>
 
