@@ -89,13 +89,17 @@ export default function CocktailsClient({ cocktails }: CocktailsClientProps) {
   // Get featured cocktails
   const featuredCocktails = filteredCocktails.filter(c => c.featured)
 
-  // Categories for filter tabs
+  // Categories for filter tabs (Base Spirits)
   const categories = [
     { value: 'all', label: 'All Cocktails' },
     { value: 'spiced-rum', label: 'Spiced Rum' },
     { value: 'white-rum', label: 'White Rum' },
     { value: 'dark-rum', label: 'Dark Rum' },
-    { value: 'aged-rum', label: 'Aged Rum' }
+    { value: 'overproof-rum', label: 'Overproof Rum' },
+    { value: 'vodka', label: 'Vodka' },
+    { value: 'gin', label: 'Gin' },
+    { value: 'tequila', label: 'Tequila' },
+    { value: 'whiskey', label: 'Whiskey' }
   ]
 
   const difficulties = [

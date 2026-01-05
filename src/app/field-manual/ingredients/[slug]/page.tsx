@@ -114,6 +114,9 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   }
 }
 
+// Revalidate every 60 seconds to show new content from Sanity
+export const revalidate = 60
+
 export default async function IngredientDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
   const ingredient = await getIngredient(slug)
@@ -157,14 +160,14 @@ export default async function IngredientDetailPage({ params }: { params: Promise
           </p>
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-8 items-start">
+        <div className="flex flex-col lg:grid lg:grid-cols-2 gap-8 items-start">
 
           {/* LEFT COLUMN - Sticky sidebar with key info */}
-          <div className="order-1 lg:order-1">
-            <div className="lg:sticky lg:top-24 space-y-6">
+          <div className="flex flex-col gap-6 order-1 lg:order-1">
+            <div className="contents lg:block lg:sticky lg:top-24 lg:space-y-6">
 
               {/* Main Image */}
-              <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+              <div className="order-1 bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
                 {ingredient.image ? (
                   <div className="relative aspect-square bg-transparent rounded-lg overflow-hidden">
                     <Image
@@ -204,7 +207,7 @@ export default async function IngredientDetailPage({ params }: { params: Promise
 
               {/* Quick Facts */}
               {(ingredient.abv || ingredient.origin || ingredient.flavorProfile?.strength) && (
-                <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+                <div className="order-2 bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
                   <h3 className="text-lg font-serif font-bold text-gold-300 mb-4">Quick Facts</h3>
                   <div className="space-y-3">
                     {ingredient.abv && (
@@ -237,7 +240,7 @@ export default async function IngredientDetailPage({ params }: { params: Promise
 
               {/* Flavour Profile */}
               {ingredient.flavorProfile && (ingredient.flavorProfile.primary || ingredient.flavorProfile.tasting) && (
-                <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+                <div className="order-4 bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
                   <h2 className="text-xl font-serif font-bold text-gold-300 mb-4">Flavour Profile</h2>
                   <div className="space-y-4">
                     {ingredient.flavorProfile.primary && ingredient.flavorProfile.primary.length > 0 && (
@@ -267,67 +270,81 @@ export default async function IngredientDetailPage({ params }: { params: Promise
 
               {/* Recommended Brands */}
               {ingredient.recommendedBrands && (ingredient.recommendedBrands.budget || ingredient.recommendedBrands.premium) && (
-                <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+                <div className="order-12 bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
                   <h2 className="text-xl font-serif font-bold text-gold-300 mb-4">Recommended Brands</h2>
                   <div className="space-y-4">
                     {ingredient.recommendedBrands.budget && (
                       <div className="p-3 bg-jerry-green-800/30 rounded-lg border border-gold-500/20">
-                        {ingredient.budgetImage && (
-                          <div className="relative h-24 bg-transparent rounded-lg overflow-hidden mb-3">
-                            <Image
-                              src={urlFor(ingredient.budgetImage).url()}
-                              alt={`${ingredient.recommendedBrands.budget} - Budget Choice`}
-                              fill
-                              className="object-contain mix-blend-multiply p-1"
-                              sizes="150px"
-                            />
+                        <div className="flex gap-3 items-start">
+                          {/* Text Content - Left */}
+                          <div className="flex-1 min-w-0">
+                            <p className="text-green-400 font-semibold mb-1 text-xs">Budget Choice</p>
+                            <p className="text-parchment-300 mb-3 text-sm">{ingredient.recommendedBrands.budget}</p>
+                            {ingredient.recommendedBrands.budgetLink && (
+                              <a
+                                href={ingredient.recommendedBrands.budgetLink}
+                                target="_blank"
+                                rel="noopener noreferrer sponsored"
+                                className="inline-flex items-center gap-1 px-3 py-1.5 bg-green-500/20 border border-green-500/40 text-green-300 rounded-lg hover:bg-green-500/30 transition-all text-xs font-semibold"
+                              >
+                                Buy Now
+                                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                                </svg>
+                              </a>
+                            )}
                           </div>
-                        )}
-                        <p className="text-green-400 font-semibold mb-1 text-xs">Budget Choice</p>
-                        <p className="text-parchment-300 mb-2 text-sm">{ingredient.recommendedBrands.budget}</p>
-                        {ingredient.recommendedBrands.budgetLink && (
-                          <a
-                            href={ingredient.recommendedBrands.budgetLink}
-                            target="_blank"
-                            rel="noopener noreferrer sponsored"
-                            className="inline-flex items-center gap-1 px-3 py-1.5 bg-green-500/20 border border-green-500/40 text-green-300 rounded-lg hover:bg-green-500/30 transition-all text-xs font-semibold w-full justify-center"
-                          >
-                            Buy Now
-                            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                            </svg>
-                          </a>
-                        )}
+
+                          {/* Image - Right Aligned */}
+                          {ingredient.budgetImage && (
+                            <div className="relative w-20 h-20 flex-shrink-0 bg-transparent rounded-lg overflow-hidden">
+                              <Image
+                                src={urlFor(ingredient.budgetImage).url()}
+                                alt={`${ingredient.recommendedBrands.budget} - Budget Choice`}
+                                fill
+                                className="object-contain mix-blend-multiply p-1"
+                                sizes="80px"
+                              />
+                            </div>
+                          )}
+                        </div>
                       </div>
                     )}
                     {ingredient.recommendedBrands.premium && (
                       <div className="p-3 bg-jerry-green-800/30 rounded-lg border border-gold-500/20">
-                        {ingredient.premiumImage && (
-                          <div className="relative h-24 bg-transparent rounded-lg overflow-hidden mb-3">
-                            <Image
-                              src={urlFor(ingredient.premiumImage).url()}
-                              alt={`${ingredient.recommendedBrands.premium} - Premium Choice`}
-                              fill
-                              className="object-contain mix-blend-multiply p-1"
-                              sizes="150px"
-                            />
+                        <div className="flex gap-3 items-start">
+                          {/* Text Content - Left */}
+                          <div className="flex-1 min-w-0">
+                            <p className="text-gold-400 font-semibold mb-1 text-xs">Premium Choice</p>
+                            <p className="text-parchment-300 mb-3 text-sm">{ingredient.recommendedBrands.premium}</p>
+                            {ingredient.recommendedBrands.premiumLink && (
+                              <a
+                                href={ingredient.recommendedBrands.premiumLink}
+                                target="_blank"
+                                rel="noopener noreferrer sponsored"
+                                className="inline-flex items-center gap-1 px-3 py-1.5 bg-gold-500/20 border border-gold-500/40 text-gold-300 rounded-lg hover:bg-gold-500/30 transition-all text-xs font-semibold"
+                              >
+                                Buy Now
+                                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                                </svg>
+                              </a>
+                            )}
                           </div>
-                        )}
-                        <p className="text-gold-400 font-semibold mb-1 text-xs">Premium Choice</p>
-                        <p className="text-parchment-300 mb-2 text-sm">{ingredient.recommendedBrands.premium}</p>
-                        {ingredient.recommendedBrands.premiumLink && (
-                          <a
-                            href={ingredient.recommendedBrands.premiumLink}
-                            target="_blank"
-                            rel="noopener noreferrer sponsored"
-                            className="inline-flex items-center gap-1 px-3 py-1.5 bg-gold-500/20 border border-gold-500/40 text-gold-300 rounded-lg hover:bg-gold-500/30 transition-all text-xs font-semibold w-full justify-center"
-                          >
-                            Buy Now
-                            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                            </svg>
-                          </a>
-                        )}
+
+                          {/* Image - Right Aligned */}
+                          {ingredient.premiumImage && (
+                            <div className="relative w-20 h-20 flex-shrink-0 bg-transparent rounded-lg overflow-hidden">
+                              <Image
+                                src={urlFor(ingredient.premiumImage).url()}
+                                alt={`${ingredient.recommendedBrands.premium} - Premium Choice`}
+                                fill
+                                className="object-contain mix-blend-multiply p-1"
+                                sizes="80px"
+                              />
+                            </div>
+                          )}
+                        </div>
                       </div>
                     )}
                   </div>
@@ -345,7 +362,7 @@ export default async function IngredientDetailPage({ params }: { params: Promise
 
               {/* Price Guide */}
               {ingredient.priceRange && (
-                <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+                <div className="order-13 bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
                   <h3 className="text-lg font-serif font-bold text-gold-300 mb-4">Price Guide</h3>
                   <div className="space-y-3">
                     <div className="flex justify-between items-center">
@@ -362,7 +379,7 @@ export default async function IngredientDetailPage({ params }: { params: Promise
 
               {/* Storage & Handling */}
               {(ingredient.storage || ingredient.shelfLife) && (
-                <div className="p-6 bg-jerry-green-800/40 rounded-xl border border-gold-500/20">
+                <div className="order-14 p-6 bg-jerry-green-800/40 rounded-xl border border-gold-500/20">
                   <div className="flex items-start gap-3">
                     <svg className="w-5 h-5 text-gold-400 flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -407,7 +424,7 @@ export default async function IngredientDetailPage({ params }: { params: Promise
 
             {/* Professional Tip Callout */}
             {ingredient.professionalTip && (
-              <div className="bg-gradient-to-br from-gold-500/10 to-gold-600/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/30">
+              <div className="order-3 bg-gradient-to-br from-gold-500/10 to-gold-600/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/30">
                 <div className="flex items-start gap-4">
                   <div className="w-10 h-10 bg-gold-500/20 rounded-full flex items-center justify-center flex-shrink-0">
                     <svg className="w-5 h-5 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -423,14 +440,14 @@ export default async function IngredientDetailPage({ params }: { params: Promise
             )}
 
             {/* Usage */}
-            <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+            <div className="order-5 bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
               <h2 className="text-2xl font-serif font-bold text-gold-300 mb-4">Usage</h2>
               <p className="text-parchment-300 leading-relaxed">{ingredient.usage}</p>
             </div>
 
             {/* Top Tips */}
             {ingredient.topTips && ingredient.topTips.length > 0 && (
-              <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+              <div className="order-6 bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
                 <h2 className="text-2xl font-serif font-bold text-gold-300 mb-4">Top Tips</h2>
                 <ul className="space-y-4">
                   {ingredient.topTips.map((tip, index) => (
@@ -447,7 +464,7 @@ export default async function IngredientDetailPage({ params }: { params: Promise
 
             {/* Video Tutorial */}
             {videoId && (
-              <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+              <div className="order-9 bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
                 <h2 className="text-2xl font-serif font-bold text-gold-300 mb-4 flex items-center gap-2">
                   <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
@@ -468,7 +485,7 @@ export default async function IngredientDetailPage({ params }: { params: Promise
 
             {/* Pairs Well With */}
             {ingredient.pairsWellWith && ingredient.pairsWellWith.length > 0 && (
-              <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+              <div className="order-7 bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
                 <h2 className="text-2xl font-serif font-bold text-gold-300 mb-4">Pairs Well With</h2>
                 <div className="flex flex-wrap gap-2">
                   {ingredient.pairsWellWith.map((pairing, index) => (
@@ -485,7 +502,7 @@ export default async function IngredientDetailPage({ params }: { params: Promise
 
             {/* Substitutions */}
             {ingredient.substitutions && ingredient.substitutions.length > 0 && (
-              <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+              <div className="order-8 bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
                 <h2 className="text-2xl font-serif font-bold text-gold-300 mb-4">Possible Substitutions</h2>
                 <ul className="space-y-3">
                   {ingredient.substitutions.map((sub, index) => (
@@ -500,25 +517,25 @@ export default async function IngredientDetailPage({ params }: { params: Promise
               </div>
             )}
 
-            {/* History/Context */}
-            {ingredient.history && (
-              <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
-                <h2 className="text-2xl font-serif font-bold text-gold-300 mb-4">History & Context</h2>
-                <p className="text-parchment-300 leading-relaxed">{ingredient.history}</p>
-              </div>
-            )}
-
             {/* Production Method */}
             {ingredient.productionMethod && (
-              <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+              <div className="order-10 bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
                 <h2 className="text-2xl font-serif font-bold text-gold-300 mb-4">Production Method</h2>
                 <p className="text-parchment-300 leading-relaxed">{ingredient.productionMethod}</p>
               </div>
             )}
 
+            {/* History/Context */}
+            {ingredient.history && (
+              <div className="order-11 bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+                <h2 className="text-2xl font-serif font-bold text-gold-300 mb-4">History & Context</h2>
+                <p className="text-parchment-300 leading-relaxed">{ingredient.history}</p>
+              </div>
+            )}
+
             {/* Related Cocktails */}
             {ingredient.relatedCocktails && ingredient.relatedCocktails.length > 0 && (
-              <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+              <div className="order-15 bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
                 <h2 className="text-2xl font-serif font-bold text-gold-300 mb-4">Featured In These Cocktails</h2>
                 <div className="grid sm:grid-cols-2 gap-3">
                   {ingredient.relatedCocktails.map((cocktail) => (
@@ -539,7 +556,7 @@ export default async function IngredientDetailPage({ params }: { params: Promise
 
             {/* Related Ingredients */}
             {ingredient.relatedIngredients && ingredient.relatedIngredients.length > 0 && (
-              <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+              <div className="order-16 bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
                 <h2 className="text-2xl font-serif font-bold text-gold-300 mb-4">Often Used With</h2>
                 <div className="grid sm:grid-cols-2 gap-3">
                   {ingredient.relatedIngredients.map((related) => (
