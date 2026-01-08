@@ -52,6 +52,37 @@ export default function ArmedForcesCovenant() {
           </div>
         </div>
 
+        {/* ERS Bronze Award Recognition */}
+        <div className="mb-12">
+          <div className="bg-gradient-to-br from-gold-500/10 to-gold-600/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/30">
+            <div className="flex flex-col md:flex-row gap-6 items-center">
+              <div className="flex-shrink-0">
+                <div className="bg-white rounded-lg p-4 shadow-lg">
+                  <Image
+                    src="/images/ERS_Bronze_Banner.webp"
+                    alt="Defence Employer Recognition Scheme Bronze Award"
+                    width={300}
+                    height={100}
+                    className="w-full h-auto max-w-xs"
+                    priority
+                  />
+                </div>
+              </div>
+              <div className="flex-1">
+                <h2 className="text-2xl font-serif font-bold text-gold-300 mb-4">
+                  Bronze Award Recognition
+                </h2>
+                <p className="text-white leading-relaxed mb-4">
+                  We are proud to have been awarded <strong>Bronze</strong> status in the Ministry of Defence's <strong>Employer Recognition Scheme (ERS)</strong>. This award recognises our commitment to supporting the Armed Forces community through our business practices, employment policies, and community engagement.
+                </p>
+                <p className="text-parchment-200 leading-relaxed text-sm">
+                  The ERS Bronze Award acknowledges employers who pledge their support to the Armed Forces community and demonstrate this through specific practices. While we're at the beginning of our journey, this recognition affirms our genuine commitment to upholding the principles of the Armed Forces Covenant as we grow.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* Content */}
         <div className="max-w-none">
           <div className="space-y-8">

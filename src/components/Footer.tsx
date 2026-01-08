@@ -203,43 +203,66 @@ export default function Footer() {
                   <p>Our commitment is to ensure fairness, respect, and equal opportunity for all who serve, recognising their dedication and the vital role they play in our communities.</p>
 
                   {/* Badges Grid */}
-                  <div className="pt-4 grid grid-cols-2 gap-3">
-                    {/* AFC Logo Badge */}
+                  <div className="pt-4 space-y-3">
+                    <div className="grid grid-cols-2 gap-3">
+                      {/* AFC Logo Badge */}
+                      <Link
+                        href="/armed-forces-covenant"
+                        className="block bg-white rounded-lg p-3 hover:shadow-lg transition-all duration-200 hover:scale-105"
+                        onClick={() => trackFooterClick('AFC Logo', 'Armed Forces Covenant Page')}
+                        aria-label="View our Armed Forces Covenant commitment"
+                      >
+                        {isClient ? (
+                          <Image
+                            src="/images/AFC_POSITIVE_RGB.png"
+                            alt="Armed Forces Covenant Supporter"
+                            width={150}
+                            height={100}
+                            className="w-full h-auto"
+                            sizes="(max-width: 768px) 150px, 150px"
+                          />
+                        ) : (
+                          <div className="w-full h-20 bg-parchment-200 rounded animate-pulse" />
+                        )}
+                      </Link>
+
+                      {/* Veteran Owned Badge */}
+                      <Link
+                        href="/about/story"
+                        className="block bg-white rounded-lg p-3 hover:shadow-lg transition-all duration-200 hover:scale-105 flex items-center justify-center"
+                        onClick={() => trackFooterClick('Veteran Owned Badge', 'Our Story Page')}
+                        aria-label="Learn about our veteran-owned heritage"
+                      >
+                        {isClient ? (
+                          <Image
+                            src="/images/Veteran_Owned_Badge.webp"
+                            alt="Veteran-Owned Business - Royal Corps of Signals"
+                            width={150}
+                            height={100}
+                            className="w-full h-auto"
+                            sizes="(max-width: 768px) 150px, 150px"
+                          />
+                        ) : (
+                          <div className="w-full h-20 bg-parchment-200 rounded animate-pulse" />
+                        )}
+                      </Link>
+                    </div>
+
+                    {/* ERS Bronze Award Badge - Full Width */}
                     <Link
                       href="/armed-forces-covenant"
                       className="block bg-white rounded-lg p-3 hover:shadow-lg transition-all duration-200 hover:scale-105"
-                      onClick={() => trackFooterClick('AFC Logo', 'Armed Forces Covenant Page')}
-                      aria-label="View our Armed Forces Covenant commitment"
+                      onClick={() => trackFooterClick('ERS Bronze Badge', 'Armed Forces Covenant Page')}
+                      aria-label="Armed Forces Covenant Employer Recognition Scheme Bronze Award"
                     >
                       {isClient ? (
                         <Image
-                          src="/images/AFC_POSITIVE_RGB.png"
-                          alt="Armed Forces Covenant Supporter"
-                          width={150}
+                          src="/images/ERS_Bronze_Banner.webp"
+                          alt="Defence Employer Recognition Scheme Bronze Award"
+                          width={300}
                           height={100}
                           className="w-full h-auto"
-                          sizes="(max-width: 768px) 150px, 150px"
-                        />
-                      ) : (
-                        <div className="w-full h-20 bg-parchment-200 rounded animate-pulse" />
-                      )}
-                    </Link>
-
-                    {/* Veteran Owned Badge */}
-                    <Link
-                      href="/about/story"
-                      className="block bg-white rounded-lg p-3 hover:shadow-lg transition-all duration-200 hover:scale-105 flex items-center justify-center"
-                      onClick={() => trackFooterClick('Veteran Owned Badge', 'Our Story Page')}
-                      aria-label="Learn about our veteran-owned heritage"
-                    >
-                      {isClient ? (
-                        <Image
-                          src="/images/Veteran_Owned_Badge.webp"
-                          alt="Veteran-Owned Business - Royal Corps of Signals"
-                          width={150}
-                          height={100}
-                          className="w-full h-auto"
-                          sizes="(max-width: 768px) 150px, 150px"
+                          sizes="(max-width: 768px) 300px, 300px"
                         />
                       ) : (
                         <div className="w-full h-20 bg-parchment-200 rounded animate-pulse" />
