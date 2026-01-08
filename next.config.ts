@@ -130,6 +130,17 @@ const nextConfig: NextConfig = {
     ]
   },
 
+  // Redirects for URL structure changes
+  async redirects() {
+    return [
+      {
+        source: '/cocktails/:slug*',
+        destination: '/field-manual/cocktails/:slug*',
+        permanent: true, // 301 redirect for SEO
+      },
+    ]
+  },
+
   // Enable build caching for faster rebuilds
   cacheMaxMemorySize: 50 * 1024 * 1024, // 50 MB
   
