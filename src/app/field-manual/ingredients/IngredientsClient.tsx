@@ -11,7 +11,7 @@ interface Ingredient {
   _id: string
   name: string
   slug: { current: string }
-  category: 'spirits' | 'liqueurs' | 'bitters' | 'mixers' | 'fresh' | 'garnishes'
+  category: 'spirits' | 'liqueurs' | 'wine' | 'bitters' | 'mixers' | 'fresh' | 'garnishes'
   description: string
   usage: string
   topTips: string[]
@@ -50,6 +50,7 @@ export default function IngredientsClient({ ingredients }: IngredientsClientProp
     { value: 'all', label: 'All Ingredients' },
     { value: 'spirits', label: 'Spirits' },
     { value: 'liqueurs', label: 'Liqueurs' },
+    { value: 'wine', label: 'Wine & Fortified Wine' },
     { value: 'bitters', label: 'Bitters' },
     { value: 'mixers', label: 'Mixers' },
     { value: 'fresh', label: 'Fresh Ingredients' },
