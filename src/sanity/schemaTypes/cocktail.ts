@@ -231,11 +231,17 @@ export default defineType({
           {title: 'Spiced Rum', value: 'spiced-rum'},
           {title: 'White Rum', value: 'white-rum'},
           {title: 'Dark Rum', value: 'dark-rum'},
+          {title: 'Aged Rum', value: 'aged-rum'},
           {title: 'Overproof Rum', value: 'overproof-rum'},
           {title: 'Vodka', value: 'vodka'},
           {title: 'Gin', value: 'gin'},
           {title: 'Tequila', value: 'tequila'},
-          {title: 'Whiskey', value: 'whiskey'}
+          {title: 'Whiskey', value: 'whiskey'},
+          {title: 'Prosecco', value: 'prosecco'},
+          {title: 'Liqueur', value: 'liqueur'},
+          {title: 'Bitters', value: 'bitters'},
+          {title: 'Fortified Wine', value: 'fortified-wine'},
+          {title: 'Non-Alcoholic', value: 'non-alcoholic'}
         ]
       },
       initialValue: 'spiced-rum',
