@@ -6,6 +6,7 @@ import { client } from '@/sanity/client'
 import { ingredientBySlugQuery, ingredientsQuery } from '@/sanity/queries'
 import { urlFor } from '@/sanity/lib/image'
 import BackToTop from '@/components/BackToTop'
+import EnlargeableProductImage from '@/components/EnlargeableProductImage'
 
 // Types for ingredient data
 interface Ingredient {
@@ -297,15 +298,11 @@ export default async function IngredientDetailPage({ params }: { params: Promise
 
                           {/* Image - Right Aligned */}
                           {ingredient.budgetImage && (
-                            <div className="relative w-20 h-20 flex-shrink-0 bg-transparent rounded-lg overflow-hidden">
-                              <Image
-                                src={urlFor(ingredient.budgetImage).url()}
-                                alt={`${ingredient.recommendedBrands.budget} - Budget Choice`}
-                                fill
-                                className="object-contain mix-blend-multiply p-1"
-                                sizes="80px"
-                              />
-                            </div>
+                            <EnlargeableProductImage
+                              src={urlFor(ingredient.budgetImage).url()}
+                              alt={`${ingredient.recommendedBrands.budget} - Budget Choice`}
+                              productName={ingredient.recommendedBrands.budget || 'Budget Choice'}
+                            />
                           )}
                         </div>
                       </div>
@@ -334,15 +331,11 @@ export default async function IngredientDetailPage({ params }: { params: Promise
 
                           {/* Image - Right Aligned */}
                           {ingredient.premiumImage && (
-                            <div className="relative w-20 h-20 flex-shrink-0 bg-transparent rounded-lg overflow-hidden">
-                              <Image
-                                src={urlFor(ingredient.premiumImage).url()}
-                                alt={`${ingredient.recommendedBrands.premium} - Premium Choice`}
-                                fill
-                                className="object-contain mix-blend-multiply p-1"
-                                sizes="80px"
-                              />
-                            </div>
+                            <EnlargeableProductImage
+                              src={urlFor(ingredient.premiumImage).url()}
+                              alt={`${ingredient.recommendedBrands.premium} - Premium Choice`}
+                              productName={ingredient.recommendedBrands.premium || 'Premium Choice'}
+                            />
                           )}
                         </div>
                       </div>
