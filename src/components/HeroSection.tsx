@@ -67,7 +67,7 @@ export default function HeroSection() {
             </div>
 
             {/* Headline */}
-            <div className="text-4xl sm:text-5xl lg:text-6xl font-serif font-bold text-parchment-50 mb-6 leading-tight" role="heading" aria-level="1">
+            <div className="text-4xl sm:text-5xl lg:text-6xl font-serif font-bold text-parchment-50 mb-6 leading-tight" role="heading" aria-level={1}>
               <span className="relative" style={{ color: '#fefbf5' }}>
                 Expedition Ready
                 <span className="absolute -bottom-2 left-0 w-full h-1 bg-gradient-to-r from-gold-500 to-gold-300 rounded-full"></span>

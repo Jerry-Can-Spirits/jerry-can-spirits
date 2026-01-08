@@ -59,7 +59,7 @@ export default async function DrinksPageTest() {
               </span>
             </div>
 
-            <div className="text-4xl sm:text-5xl font-serif font-bold text-white mb-6" role="heading" aria-level="2">
+            <div className="text-4xl sm:text-5xl font-serif font-bold text-white mb-6" role="heading" aria-level={2}>
               Shopify Connection Failed
             </div>
 
@@ -106,7 +106,7 @@ export default async function DrinksPageTest() {
               </span>
             </div>
 
-            <div className="text-4xl sm:text-5xl font-serif font-bold text-white mb-6" role="heading" aria-level="2">
+            <div className="text-4xl sm:text-5xl font-serif font-bold text-white mb-6" role="heading" aria-level={2}>
               No Products Found
             </div>
 
@@ -161,7 +161,7 @@ export default async function DrinksPageTest() {
             </span>
           </div>
 
-          <div className="text-4xl sm:text-6xl font-serif font-bold text-white mb-6" role="heading" aria-level="2">
+          <div className="text-4xl sm:text-6xl font-serif font-bold text-white mb-6" role="heading" aria-level={2}>
             Expedition Spirits
             <br />
             <span className="text-gold-300">Crafted for Adventure</span>
