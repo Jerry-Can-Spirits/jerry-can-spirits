@@ -7,7 +7,7 @@ export default function WhyJerryCan() {
         </svg>
       ),
       title: 'Premium Quality',
-      description: 'Small-batch production using carefully selected Caribbean rums and British precision. Every bottle meets military-grade standards for consistency and excellence.'
+      description: 'Handcrafted small-batch rum using premium Caribbean molasses and British copper-pot distillation. Experience rich, complex flavours with velvety vanilla, warm spice notes, and a smooth finish that rivals the finest spirits.'
     },
     {
       icon: (
@@ -15,8 +15,8 @@ export default function WhyJerryCan() {
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
         </svg>
       ),
-      title: 'Military Heritage',
-      description: 'Founded by Royal Corps of Signals veterans. We bring the discipline, precision, and brotherhood of military service to every aspect of our craft.'
+      title: 'Adventure Heritage',
+      description: 'Founded by Royal Corps of Signals veterans who served across Arctic to desert deployments. We channel expedition-tested reliability and precision craftsmanship into every bottle - spirits built for the bold.'
     },
     {
       icon: (
@@ -25,7 +25,7 @@ export default function WhyJerryCan() {
         </svg>
       ),
       title: 'Expedition Ready',
-      description: 'Engineered for adventure. Whether you\'re toasting at base camp or celebrating at home, our spirits are built to go wherever the journey takes you.'
+      description: 'Versatile craft spirits perfect for bold cocktails or sipping neat. Whether you\'re mixing a Storm and Spice at your home bar or sharing stories around the campfire, our rum delivers exceptional flavour anywhere adventure calls.'
     }
   ]
 

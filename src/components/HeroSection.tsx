@@ -76,7 +76,7 @@ export default function HeroSection() {
 
             {/* Description */}
             <p className="text-xl text-parchment-200 mb-8 leading-relaxed max-w-xl mx-auto lg:mx-0">
-              Premium spirits engineered for adventure. Crafted with British precision and Caribbean soul for those who venture beyond the ordinary.
+              Discover premium British craft rum engineered for modern explorers. Our veteran-owned small-batch spirits blend traditional Caribbean soul with precision British distilling - bold flavour crafted for those who venture beyond the ordinary.
             </p>
 
             {/* Launch Countdown */}

@@ -168,7 +168,7 @@ export default async function DrinksPageTest() {
           </div>
 
           <p className="text-xl text-parchment-300 max-w-3xl mx-auto leading-relaxed">
-            British crafted small-batch rum, engineered for reliability and crafted for those who seek adventure in every sip.
+            Explore our handcrafted British rum collection - premium small-batch spirits engineered for modern explorers. Rich flavours, exceptional quality, and adventure in every bottle.
           </p>
 
           {/* Shopify Connection Success Indicator */}
@@ -248,34 +248,34 @@ export default async function DrinksPageTest() {
         <div className="grid lg:grid-cols-2 gap-12 mb-16">
           <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
             <h2 className="text-3xl font-serif font-bold text-white mb-6">
-              Veteran-Owned British Rum
+              Premium British Craft Rum Collection
             </h2>
             <div className="space-y-4 text-parchment-200 leading-relaxed">
               <p>
-                Jerry Can Spirits is a veteran-owned British rum brand founded by former Royal Corps of Signals servicemen with over 12 years of military experience. Our premium small-batch rum collection embodies the same principles we learned during our military service: precision, reliability, and uncompromising quality standards.
+                Discover handcrafted small-batch rum that captures the essence of British spirits excellence. Our veteran-owned brand channels 12+ years of Royal Corps of Signals expedition experience into every bottle - delivering premium craft rum with uncompromising flavour profiles and expedition-tested reliability.
               </p>
               <p>
-                Every bottle of our British rum is engineered for reliability and designed for adventure. We partner with Spirit of Wales Distillery, utilizing their cutting-edge copper-lined distillation process to create exceptional spirits that combine traditional craftsmanship with modern innovation.
+                Experience complex, layered flavours that tell a story with every sip. Our spiced rum reveals rich notes of velvety vanilla dancing with warm caramel, complemented by aromatic cinnamon and subtle oak undertones. The finish is exceptionally smooth and lingering - a testament to our partnership with Spirit of Wales Distillery's innovative copper-pot distillation methods.
               </p>
               <p>
-                Our spiced rum is crafted using sustainable ingredients sourced primarily from the UK, with ethically-sourced Caribbean molasses forming the foundation. Each batch undergoes careful quality control to ensure consistency and excellence in every bottle.
+                Versatility meets quality: perfect for crafting bold cocktails like our signature Storm and Spice, equally rewarding when savored neat or on the rocks. Sustainably produced with British-first ingredient sourcing and ethically-selected Caribbean molasses, every pour represents our commitment to exceptional craft spirits.
               </p>
             </div>
           </div>
 
           <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
             <h2 className="text-3xl font-serif font-bold text-white mb-6">
-              Premium Spirits for Modern Explorers
+              Craft Spirits Built for Adventure
             </h2>
             <div className="space-y-4 text-parchment-200 leading-relaxed">
               <p>
-                Our rum collection is designed for the modern explorer - those who value function over flash and seek adventure in every aspect of life. Whether you're mixing classic cocktails, exploring new flavor profiles, or enjoying a perfectly crafted spirit neat, Jerry Can Spirits delivers expedition-ready quality.
+                Jerry Can Spirits is engineered for the modern explorer - those who demand authenticity, seek bold flavours, and value quality that performs. Our premium British rum elevates any occasion: from crafting sophisticated cocktails at your home bar to sharing memorable toasts around the campfire. Expedition-ready versatility meets uncompromising craft quality.
               </p>
               <p>
-                We're proud signatories of the Armed Forces Covenant, demonstrating our commitment to supporting the veteran community. A portion of every bottle sold goes toward initiatives that help former service members transition to civilian life and pursue their entrepreneurial dreams.
+                As proud Armed Forces Covenant signatories, we're creating more than exceptional spirits - we're building opportunities. Our veteran heritage drives our standards: precision in every batch, reliability in every bottle, and unwavering commitment to excellence. Try our craft rum and discover what expedition-tested quality truly means.
               </p>
               <p>
-                From our small-batch production methods to our focus on British ingredients and sustainable practices, every decision we make prioritizes quality, authenticity, and environmental responsibility. This isn't mass-produced rum - this is craft spirits engineered with military precision and a passion for excellence.
+                Choose small-batch rum that makes a difference. From sustainable British ingredient sourcing to ethical Caribbean molasses selection, we prioritize environmental responsibility without compromising flavour. This isn't mass-produced spirits - this is handcrafted British rum created with passion, purpose, and a relentless pursuit of perfection.
               </p>
             </div>
           </div>
@@ -328,16 +328,16 @@ export default async function DrinksPageTest() {
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-20">
         <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-12 border border-gold-500/20 text-center">
           <h2 className="text-3xl font-serif font-bold text-white mb-4">
-            Join the Expedition
+            Start Your Adventure Today
           </h2>
           <p className="text-parchment-300 mb-6 max-w-2xl mx-auto">
-            Sign up for exclusive access to limited releases, expedition updates, and cocktail recipes featuring our premium British rum.
+            Join the ranks of discerning spirits enthusiasts. Get exclusive early access to our limited first batch, expert cocktail recipes, and expedition updates from the Jerry Can Spirits crew. Experience premium British craft rum engineered for those who venture beyond the ordinary.
           </p>
           <Link
             href="/#newsletter-signup"
             className="inline-block px-8 py-3 bg-gold-500 text-jerry-green-900 font-semibold rounded-lg hover:bg-gold-400 transition-colors"
           >
-            Get Early Access
+            Get Exclusive Early Access
           </Link>
         </div>
       </section>

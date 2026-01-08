@@ -47,8 +47,7 @@ export default function Ethos() {
           </h1>
           
           <p className="text-xl text-parchment-300 max-w-3xl mx-auto leading-relaxed mb-8">
-            From the discipline of military service to the artistry of traditional distilling, 
-            every bottle carries our commitment to excellence, adventure, and authentic craftsmanship.
+            Expedition-tested precision meets master craft distilling. Our veteran-owned British spirits brand transforms premium ingredients into exceptional small-batch rum - handcrafted spirits that embody adventure, sustainability, and uncompromising quality with every pour.
           </p>
 
           <div className="inline-flex items-center space-x-2 text-gold-300">
@@ -155,9 +154,9 @@ export default function Ethos() {
                     When tradition demands specific elements, we source ethically from trusted partners who share our values.
                   </p>
 
-                  {/* Hover Detail */}
-                  <div className="opacity-0 group-hover:opacity-100 transition-all duration-300 transform group-hover:translate-y-0 translate-y-4">
-                    <div className="grid md:grid-cols-2 gap-4 mt-4">
+                  {/* Details - Always Visible */}
+                  <div className="mt-6">
+                    <div className="grid md:grid-cols-2 gap-4">
                       <div className="bg-jerry-green-800/60 rounded-lg p-4">
                         <h4 className="text-gold-300 font-semibold mb-2">UK Sourced</h4>
                         <ul className="text-sm text-parchment-300 space-y-1">
@@ -196,9 +195,9 @@ export default function Ethos() {
                     engineering with time-tested principles.
                   </p>
 
-                  {/* Hover Detail */}
-                  <div className="opacity-0 group-hover:opacity-100 transition-all duration-300 transform group-hover:translate-y-0 translate-y-4">
-                    <div className="bg-jerry-green-800/60 rounded-lg p-6 mt-4">
+                  {/* Details - Always Visible */}
+                  <div className="mt-6">
+                    <div className="bg-jerry-green-800/60 rounded-lg p-6">
                       <h4 className="text-gold-300 font-semibold mb-3">The Spirit of Wales Approach</h4>
                       <div className="text-sm text-parchment-300 space-y-4">
                         <div>
@@ -233,9 +232,9 @@ export default function Ethos() {
                     Advanced copper-lined distillation, precise temperature control, and careful cut selection create our signature profiles.
                   </p>
                   
-                  {/* Hover Detail */}
-                  <div className="opacity-0 group-hover:opacity-100 transition-all duration-300 transform group-hover:translate-y-0 translate-y-4">
-                    <div className="bg-jerry-green-800/60 rounded-lg p-6 mt-4">
+                  {/* Details - Always Visible */}
+                  <div className="mt-6">
+                    <div className="bg-jerry-green-800/60 rounded-lg p-6">
                       <h4 className="text-gold-300 font-semibold mb-3">The Craft</h4>
                       <div className="grid md:grid-cols-2 gap-6">
                         <div>
@@ -276,9 +275,9 @@ export default function Ethos() {
                     and allow time to work its magic. Each barrel is monitored, tasted, and nurtured to perfection.
                   </p>
                   
-                  {/* Hover Detail */}
-                  <div className="opacity-0 group-hover:opacity-100 transition-all duration-300 transform group-hover:translate-y-0 translate-y-4">
-                    <div className="bg-jerry-green-800/60 rounded-lg p-6 mt-4">
+                  {/* Details - Always Visible */}
+                  <div className="mt-6">
+                    <div className="bg-jerry-green-800/60 rounded-lg p-6">
                       <h4 className="text-gold-300 font-semibold mb-3">Barrel Selection</h4>
                       <div className="grid md:grid-cols-3 gap-4 text-sm text-parchment-300">
                         <div>

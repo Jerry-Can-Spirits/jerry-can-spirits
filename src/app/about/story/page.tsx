@@ -48,9 +48,7 @@ export default function OurStory() {
           </h1>
           
           <p className="text-xl text-parchment-300 max-w-3xl mx-auto leading-relaxed mb-8">
-            The jerry can wasn't designed for beauty. It was engineered for absolute reliability. 
-            We believe rum deserves the same respect. This is the story of modern explorers 
-            who value function, character, and a damn good drink.
+            The jerry can wasn't designed for beauty - it was engineered for absolute reliability in the harshest conditions. Premium British craft rum deserves the same respect. Discover how Royal Corps of Signals veterans transformed expedition-tested values into exceptional small-batch spirits for those who value function, bold flavour, and authentic adventure.
           </p>
 
           <div className="inline-flex items-center space-x-2 text-gold-300">
@@ -592,8 +590,8 @@ export default function OurStory() {
               Be Part of Our Story
             </h2>
             <p className="text-xl text-parchment-300 mb-8 max-w-3xl mx-auto">
-              We're just getting started. Join the expedition as we meticulously craft
-              <a href="/" className="text-gold-300 hover:text-gold-400 underline decoration-gold-500/40 hover:decoration-gold-400 transition-colors"> small-batch rums</a> for the modern explorer: those who value function, character, and a damn good drink.
+              This is just the beginning of our adventure. Join the expedition as we meticulously craft
+              <a href="/" className="text-gold-300 hover:text-gold-400 underline decoration-gold-500/40 hover:decoration-gold-400 transition-colors"> premium British craft rum</a> for modern explorers who demand exceptional flavour, uncompromising quality, and spirits built for adventure. Experience the difference veteran-owned dedication makes with every pour.
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">

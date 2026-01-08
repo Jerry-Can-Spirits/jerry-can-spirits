@@ -115,34 +115,34 @@ export default function Home() {
             <div className="grid lg:grid-cols-2 gap-12">
               <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
                 <h2 className="text-3xl font-serif font-bold text-white mb-6">
-                  Premium British Rum Crafted by Veterans
+                  Premium British Craft Rum for Modern Explorers
                 </h2>
                 <div className="space-y-4 text-parchment-200 leading-relaxed">
                   <p>
-                    Jerry Can Spirits is a veteran-owned British rum distillery founded by former Royal Corps of Signals servicemen who served over 12 years in the British Armed Forces. We bring military precision, unwavering quality standards, and a passion for adventure to every bottle we craft.
+                    Discover Jerry Can Spirits - a veteran-owned British spirits brand where expedition-tested precision meets artisan craft. Founded by former Royal Corps of Signals servicemen, we partner with master distillers to transform premium Caribbean molasses into extraordinary small-batch rum that captures the spirit of adventure in every sip.
                   </p>
                   <p>
-                    Our premium small-batch rum is engineered with the same reliability we demanded from equipment in service. From Arctic deployments to desert outposts, we learned what you can truly depend on. Now we apply those exacting standards to creating exceptional British spirits for the modern explorer.
+                    Our handcrafted rum delivers rich, complex flavours: indulge in velvety vanilla intertwined with warm caramel, complemented by exotic spice notes and a lingering smooth finish. Each batch is distilled using traditional copper-pot methods at Spirit of Wales Distillery, where extended copper contact develops the deep, sophisticated character that defines premium craft spirits.
                   </p>
                   <p>
-                    We partner with Spirit of Wales Distillery, utilizing advanced copper-lined distillation technology that creates multiple ester chambers for complex flavor development and an exceptionally smooth finish. This marriage of traditional craftsmanship and innovative engineering produces rum that stands apart from mass-produced alternatives.
+                    Perfect for crafting bold cocktails or savoring neat, our British rum is engineered for versatility. Whether you're mixing signature serves at home or toasting memorable moments with friends, Jerry Can Spirits delivers expedition-ready quality that never compromises on flavour.
                   </p>
                 </div>
               </div>
 
               <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
                 <h2 className="text-3xl font-serif font-bold text-white mb-6">
-                  Sustainable British Spirits with Military Heritage
+                  Sustainable Craft Spirits with Purpose
                 </h2>
                 <div className="space-y-4 text-parchment-200 leading-relaxed">
                   <p>
-                    Our commitment to sustainability reflects our respect for the environments we've operated in during military service. We prioritize UK-sourced ingredients wherever possible, reducing our carbon footprint while supporting British suppliers. Our ethically-sourced Caribbean molasses and sustainable production practices ensure we're building a brand that respects both tradition and the future.
+                    Experience the difference sustainable sourcing makes. We champion British ingredients first - from locally-sourced botanicals to pure Welsh water - reducing our environmental impact while supporting UK producers. Combined with premium ethically-sourced Caribbean molasses, every bottle represents our commitment to responsible craft spirits that respect both tradition and our planet's future.
                   </p>
                   <p>
-                    As proud signatories of the Armed Forces Covenant, we actively support the veteran community through our business operations and partnerships. Every bottle sold helps us give back to the community that shaped our values and work ethic. We're committed to creating opportunities for veterans transitioning to civilian careers and supporting military charities.
+                    As proud Armed Forces Covenant signatories, we're building more than premium spirits - we're creating opportunities. Our veteran heritage informs everything: precision in process, reliability in quality, and unwavering standards. Try our craft rum and taste the dedication that comes from founders who understand what truly dependable means.
                   </p>
                   <p>
-                    The jerry can wasn't designed for beauty - it was engineered for absolute reliability. That same philosophy guides our rum production. Function over form. Purpose over pretense. Quality that performs when it matters most. This is premium British rum for those who venture beyond the ordinary.
+                    The jerry can wasn't designed for beauty - it was engineered for absolute reliability in the harshest conditions. We apply that same expedition-tested philosophy to every batch. When you choose Jerry Can Spirits, you're choosing British craft rum built for adventure, engineered for flavour, and designed to perform wherever your journey takes you.
                   </p>
                 </div>
               </div>
