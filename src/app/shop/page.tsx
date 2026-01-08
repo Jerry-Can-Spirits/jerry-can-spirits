@@ -38,7 +38,7 @@ export default function ShopPage() {
             Adventure Awaits
           </h1>
           <p className="text-xl text-gray-300 max-w-xl mx-auto">
-            Our expedition shop is preparing for deployment. Premium British rum, professional barware,
+            Our expedition shop is preparing for deployment. <Link href="/" className="text-gold-500 hover:text-gold-400 underline decoration-gold-500/40 hover:decoration-gold-400 transition-colors">Premium British rum from Jerry Can Spirits</Link>, professional barware,
             and adventure-ready gear will be available soon.
           </p>
         </div>

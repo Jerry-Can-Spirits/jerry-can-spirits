@@ -4,7 +4,7 @@ import { getProductsByCollection, type ShopifyProduct } from '@/lib/shopify'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'British Military Heritage Rum | Veteran-Owned Premium Spirits Collection | Jerry Can Spirits',
+  title: 'Premium British Rum Collection | Jerry Can Spirits',
   description: 'Veteran-owned British rum collection. Small-batch premium spirits crafted with military precision by Royal Corps of Signals veterans. Sustainably sourced, expedition-tested. Shop our authentic military heritage rum range.',
   alternates: {
     canonical: 'https://jerrycanspirits.co.uk/shop/drinks',
@@ -49,6 +49,8 @@ export default async function DrinksPageTest() {
   if (error) {
     return (
       <main className="min-h-screen py-20">
+        {/* SEO H1 - Server-rendered for crawlers */}
+        <h1 className="sr-only">Premium British Rum Collection - Veteran-Owned Spirits | Jerry Can Spirits</h1>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-2xl mx-auto text-center space-y-6">
             <div className="inline-block px-4 py-2 bg-red-800/60 backdrop-blur-sm rounded-full border border-red-500/30 mb-6">
@@ -57,9 +59,9 @@ export default async function DrinksPageTest() {
               </span>
             </div>
 
-            <h1 className="text-4xl sm:text-5xl font-serif font-bold text-white mb-6">
+            <div className="text-4xl sm:text-5xl font-serif font-bold text-white mb-6" role="heading" aria-level={2}>
               Shopify Connection Failed
-            </h1>
+            </div>
 
             <div className="bg-red-900/20 border border-red-500/30 rounded-lg p-6 text-left">
               <p className="text-red-300 font-mono text-sm mb-4">
@@ -94,6 +96,8 @@ export default async function DrinksPageTest() {
   if (products.length === 0) {
     return (
       <main className="min-h-screen py-20">
+        {/* SEO H1 - Server-rendered for crawlers */}
+        <h1 className="sr-only">Premium British Rum Collection - Veteran-Owned Spirits | Jerry Can Spirits</h1>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-2xl mx-auto text-center space-y-6">
             <div className="inline-block px-4 py-2 bg-jerry-green-800/60 backdrop-blur-sm rounded-full border border-gold-500/30 mb-6">
@@ -102,9 +106,9 @@ export default async function DrinksPageTest() {
               </span>
             </div>
 
-            <h1 className="text-4xl sm:text-5xl font-serif font-bold text-white mb-6">
+            <div className="text-4xl sm:text-5xl font-serif font-bold text-white mb-6" role="heading" aria-level={2}>
               No Products Found
-            </h1>
+            </div>
 
             <p className="text-xl text-parchment-200">
               The Shopify connection is working, but no products were found in the "drinks" collection.
@@ -136,6 +140,9 @@ export default async function DrinksPageTest() {
   // Success state - products loaded from Shopify
   return (
     <main className="min-h-screen py-20">
+      {/* SEO H1 - Server-rendered for crawlers */}
+      <h1 className="sr-only">Premium British Rum Collection - Veteran-Owned Spirits | Jerry Can Spirits</h1>
+
       {/* Breadcrumb */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
         <nav className="text-sm text-parchment-400">
@@ -154,14 +161,14 @@ export default async function DrinksPageTest() {
             </span>
           </div>
 
-          <h1 className="text-4xl sm:text-6xl font-serif font-bold text-white mb-6">
+          <div className="text-4xl sm:text-6xl font-serif font-bold text-white mb-6" role="heading" aria-level={2}>
             Expedition Spirits
             <br />
             <span className="text-gold-300">Crafted for Adventure</span>
-          </h1>
+          </div>
 
           <p className="text-xl text-parchment-300 max-w-3xl mx-auto leading-relaxed">
-            British crafted small-batch rum, engineered for reliability and crafted for those who seek adventure in every sip.
+            Explore our handcrafted British rum collection - premium small-batch spirits engineered for modern explorers. Rich flavours, exceptional quality, and adventure in every bottle.
           </p>
 
           {/* Shopify Connection Success Indicator */}
@@ -236,20 +243,101 @@ export default async function DrinksPageTest() {
         </div>
       </section>
 
+      {/* About Our Rum Collection - SEO Content Section */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-20">
+        <div className="grid lg:grid-cols-2 gap-12 mb-16">
+          <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
+            <h2 className="text-3xl font-serif font-bold text-white mb-6">
+              Premium British Craft Rum Collection
+            </h2>
+            <div className="space-y-4 text-parchment-200 leading-relaxed">
+              <p>
+                Discover handcrafted small-batch rum that captures the essence of British spirits excellence. Our veteran-owned brand channels 12+ years of Royal Corps of Signals expedition experience into every bottle - delivering premium craft rum with uncompromising flavour profiles and expedition-tested reliability.
+              </p>
+              <p>
+                Experience complex, layered flavours that tell a story with every sip. Our spiced rum reveals rich notes of velvety vanilla dancing with warm caramel, complemented by aromatic cinnamon and subtle oak undertones. The finish is exceptionally smooth and lingering - a testament to our partnership with Spirit of Wales Distillery's innovative copper-pot distillation methods.
+              </p>
+              <p>
+                Versatility meets quality: perfect for crafting bold cocktails like our signature Storm and Spice, equally rewarding when savored neat or on the rocks. Sustainably produced with British-first ingredient sourcing and ethically-selected Caribbean molasses, every pour represents our commitment to exceptional craft spirits.
+              </p>
+            </div>
+          </div>
+
+          <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
+            <h2 className="text-3xl font-serif font-bold text-white mb-6">
+              Craft Spirits Built for Adventure
+            </h2>
+            <div className="space-y-4 text-parchment-200 leading-relaxed">
+              <p>
+                Jerry Can Spirits is engineered for the modern explorer - those who demand authenticity, seek bold flavours, and value quality that performs. Our premium British rum elevates any occasion: from crafting sophisticated cocktails at your home bar to sharing memorable toasts around the campfire. Expedition-ready versatility meets uncompromising craft quality.
+              </p>
+              <p>
+                As proud Armed Forces Covenant signatories, we're creating more than exceptional spirits - we're building opportunities. Our veteran heritage drives our standards: precision in every batch, reliability in every bottle, and unwavering commitment to excellence. Try our craft rum and discover what expedition-tested quality truly means.
+              </p>
+              <p>
+                Choose small-batch rum that makes a difference. From sustainable British ingredient sourcing to ethical Caribbean molasses selection, we prioritize environmental responsibility without compromising flavour. This isn't mass-produced spirits - this is handcrafted British rum created with passion, purpose, and a relentless pursuit of perfection.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Why Choose Our Rum */}
+        <div className="bg-gradient-to-br from-gold-500/10 to-gold-600/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20 mb-16">
+          <h3 className="text-2xl font-serif font-bold text-gold-300 mb-6 text-center">
+            Why Choose Jerry Can Spirits Premium Rum
+          </h3>
+          <div className="grid md:grid-cols-3 gap-6">
+            <div className="text-center">
+              <div className="w-16 h-16 bg-gold-400/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg className="w-8 h-8 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
+                </svg>
+              </div>
+              <h4 className="text-lg font-semibold text-white mb-2">Military Precision</h4>
+              <p className="text-parchment-300 text-sm">
+                Every batch crafted with the exacting standards learned through 12+ years of Royal Corps of Signals service. Quality you can trust, reliability you can count on.
+              </p>
+            </div>
+            <div className="text-center">
+              <div className="w-16 h-16 bg-gold-400/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg className="w-8 h-8 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064" />
+                </svg>
+              </div>
+              <h4 className="text-lg font-semibold text-white mb-2">Sustainable British Spirits</h4>
+              <p className="text-parchment-300 text-sm">
+                UK-first ingredient sourcing reduces our carbon footprint. Ethical partnerships with sustainable suppliers. British botanicals, Welsh distillation, and environmental responsibility.
+              </p>
+            </div>
+            <div className="text-center">
+              <div className="w-16 h-16 bg-gold-400/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg className="w-8 h-8 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <h4 className="text-lg font-semibold text-white mb-2">Supporting Veterans</h4>
+              <p className="text-parchment-300 text-sm">
+                Armed Forces Covenant signatories supporting veteran entrepreneurs. Every purchase helps former service members pursue their dreams and build successful civilian careers.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* CTA Section */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-20">
         <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-12 border border-gold-500/20 text-center">
           <h2 className="text-3xl font-serif font-bold text-white mb-4">
-            Join the Expedition
+            Start Your Adventure Today
           </h2>
           <p className="text-parchment-300 mb-6 max-w-2xl mx-auto">
-            Sign up for exclusive access to limited releases, expedition updates, and cocktail recipes.
+            Join the ranks of discerning spirits enthusiasts. Get exclusive early access to our limited first batch, expert cocktail recipes, and expedition updates from the Jerry Can Spirits crew. Experience premium British craft rum engineered for those who venture beyond the ordinary.
           </p>
           <Link
             href="/#newsletter-signup"
             className="inline-block px-8 py-3 bg-gold-500 text-jerry-green-900 font-semibold rounded-lg hover:bg-gold-400 transition-colors"
           >
-            Get Early Access
+            Get Exclusive Early Access
           </Link>
         </div>
       </section>

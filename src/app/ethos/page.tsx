@@ -47,8 +47,7 @@ export default function Ethos() {
           </h1>
           
           <p className="text-xl text-parchment-300 max-w-3xl mx-auto leading-relaxed mb-8">
-            From the discipline of military service to the artistry of traditional distilling, 
-            every bottle carries our commitment to excellence, adventure, and authentic craftsmanship.
+            Expedition-tested precision meets master craft distilling. Our veteran-owned British spirits brand transforms premium ingredients into exceptional small-batch rum - handcrafted spirits that embody adventure, sustainability, and uncompromising quality with every pour.
           </p>
 
           <div className="inline-flex items-center space-x-2 text-gold-300">
@@ -155,9 +154,9 @@ export default function Ethos() {
                     When tradition demands specific elements, we source ethically from trusted partners who share our values.
                   </p>
 
-                  {/* Hover Detail */}
-                  <div className="opacity-0 group-hover:opacity-100 transition-all duration-300 transform group-hover:translate-y-0 translate-y-4">
-                    <div className="grid md:grid-cols-2 gap-4 mt-4">
+                  {/* Details - Always Visible */}
+                  <div className="mt-6">
+                    <div className="grid md:grid-cols-2 gap-4">
                       <div className="bg-jerry-green-800/60 rounded-lg p-4">
                         <h4 className="text-gold-300 font-semibold mb-2">UK Sourced</h4>
                         <ul className="text-sm text-parchment-300 space-y-1">
@@ -196,9 +195,9 @@ export default function Ethos() {
                     engineering with time-tested principles.
                   </p>
 
-                  {/* Hover Detail */}
-                  <div className="opacity-0 group-hover:opacity-100 transition-all duration-300 transform group-hover:translate-y-0 translate-y-4">
-                    <div className="bg-jerry-green-800/60 rounded-lg p-6 mt-4">
+                  {/* Details - Always Visible */}
+                  <div className="mt-6">
+                    <div className="bg-jerry-green-800/60 rounded-lg p-6">
                       <h4 className="text-gold-300 font-semibold mb-3">The Spirit of Wales Approach</h4>
                       <div className="text-sm text-parchment-300 space-y-4">
                         <div>
@@ -233,9 +232,9 @@ export default function Ethos() {
                     Advanced copper-lined distillation, precise temperature control, and careful cut selection create our signature profiles.
                   </p>
                   
-                  {/* Hover Detail */}
-                  <div className="opacity-0 group-hover:opacity-100 transition-all duration-300 transform group-hover:translate-y-0 translate-y-4">
-                    <div className="bg-jerry-green-800/60 rounded-lg p-6 mt-4">
+                  {/* Details - Always Visible */}
+                  <div className="mt-6">
+                    <div className="bg-jerry-green-800/60 rounded-lg p-6">
                       <h4 className="text-gold-300 font-semibold mb-3">The Craft</h4>
                       <div className="grid md:grid-cols-2 gap-6">
                         <div>
@@ -276,9 +275,9 @@ export default function Ethos() {
                     and allow time to work its magic. Each barrel is monitored, tasted, and nurtured to perfection.
                   </p>
                   
-                  {/* Hover Detail */}
-                  <div className="opacity-0 group-hover:opacity-100 transition-all duration-300 transform group-hover:translate-y-0 translate-y-4">
-                    <div className="bg-jerry-green-800/60 rounded-lg p-6 mt-4">
+                  {/* Details - Always Visible */}
+                  <div className="mt-6">
+                    <div className="bg-jerry-green-800/60 rounded-lg p-6">
                       <h4 className="text-gold-300 font-semibold mb-3">Barrel Selection</h4>
                       <div className="grid md:grid-cols-3 gap-4 text-sm text-parchment-300">
                         <div>
@@ -401,25 +400,25 @@ export default function Ethos() {
             </h2>
             <p className="text-xl text-parchment-300 mb-8 max-w-2xl mx-auto">
               Be part of our journey as we craft the future of premium British spirits.
-              From source to spirit, discover what makes Jerry Can Spirits extraordinary.
+              From source to spirit, discover what makes <a href="/" className="text-gold-300 hover:text-gold-400 underline decoration-gold-500/40 hover:decoration-gold-400 transition-colors">Jerry Can Spirits</a> extraordinary.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a
-                href="/#newsletter-signup"
+                href="/shop/drinks"
                 className="inline-flex items-center justify-center space-x-2 bg-gold-500 hover:bg-gold-400 text-jerry-green-900 px-8 py-4 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105"
               >
-                <span>Join Our Newsletter</span>
+                <span>Explore Our Rum</span>
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                 </svg>
               </a>
 
               <a
-                href="/friends"
+                href="/#newsletter-signup"
                 className="inline-flex items-center justify-center space-x-2 bg-jerry-green-800 hover:bg-jerry-green-700 text-parchment-50 px-8 py-4 rounded-lg font-semibold border-2 border-gold-500/30 hover:border-gold-500/60 transition-all duration-300 transform hover:scale-105"
               >
-                <span>Meet Our Partners</span>
+                <span>Join Our Newsletter</span>
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                 </svg>

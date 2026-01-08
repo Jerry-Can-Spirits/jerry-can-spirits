@@ -29,6 +29,7 @@ export default defineType({
         list: [
           {title: 'Spirits', value: 'spirits'},
           {title: 'Liqueurs', value: 'liqueurs'},
+          {title: 'Wine & Fortified Wine', value: 'wine'},
           {title: 'Bitters', value: 'bitters'},
           {title: 'Mixers', value: 'mixers'},
           {title: 'Fresh Ingredients', value: 'fresh'},
