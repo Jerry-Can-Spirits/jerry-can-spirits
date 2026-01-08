@@ -401,25 +401,25 @@ export default function Ethos() {
             </h2>
             <p className="text-xl text-parchment-300 mb-8 max-w-2xl mx-auto">
               Be part of our journey as we craft the future of premium British spirits.
-              From source to spirit, discover what makes Jerry Can Spirits extraordinary.
+              From source to spirit, discover what makes <a href="/" className="text-gold-300 hover:text-gold-400 underline decoration-gold-500/40 hover:decoration-gold-400 transition-colors">Jerry Can Spirits</a> extraordinary.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a
-                href="/#newsletter-signup"
+                href="/shop/drinks"
                 className="inline-flex items-center justify-center space-x-2 bg-gold-500 hover:bg-gold-400 text-jerry-green-900 px-8 py-4 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105"
               >
-                <span>Join Our Newsletter</span>
+                <span>Explore Our Rum</span>
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                 </svg>
               </a>
 
               <a
-                href="/friends"
+                href="/#newsletter-signup"
                 className="inline-flex items-center justify-center space-x-2 bg-jerry-green-800 hover:bg-jerry-green-700 text-parchment-50 px-8 py-4 rounded-lg font-semibold border-2 border-gold-500/30 hover:border-gold-500/60 transition-all duration-300 transform hover:scale-105"
               >
-                <span>Meet Our Partners</span>
+                <span>Join Our Newsletter</span>
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                 </svg>

@@ -592,26 +592,26 @@ export default function OurStory() {
               Be Part of Our Story
             </h2>
             <p className="text-xl text-parchment-300 mb-8 max-w-3xl mx-auto">
-              We're just getting started. Join the expedition as we meticulously craft 
-              small-batch rums for the modern explorer: those who value function, character, and a damn good drink.
+              We're just getting started. Join the expedition as we meticulously craft
+              <a href="/" className="text-gold-300 hover:text-gold-400 underline decoration-gold-500/40 hover:decoration-gold-400 transition-colors"> small-batch rums</a> for the modern explorer: those who value function, character, and a damn good drink.
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+              <a
+                href="/shop/drinks"
+                className="inline-flex items-center space-x-2 bg-gold-500 hover:bg-gold-400 text-jerry-green-900 px-8 py-4 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105"
+              >
+                <span>Shop Our Rum</span>
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
+              </a>
+
               <a
                 href="/#newsletter-signup"
                 className="inline-flex items-center space-x-2 bg-jerry-green-800 hover:bg-jerry-green-900 text-parchment-50 px-8 py-4 rounded-lg font-semibold border-2 border-jerry-green-800 hover:border-jerry-green-700 transition-all duration-300 transform hover:scale-105"
               >
                 <span>Join the Expedition</span>
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                </svg>
-              </a>
-              
-              <a 
-                href="/ethos"
-                className="inline-flex items-center space-x-2 bg-transparent hover:bg-jerry-green-800/40 text-gold-300 hover:text-parchment-50 px-8 py-4 rounded-lg font-semibold border-2 border-gold-500/40 hover:border-gold-400 transition-all duration-300"
-              >
-                <span>Discover Our Ethos</span>
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                 </svg>

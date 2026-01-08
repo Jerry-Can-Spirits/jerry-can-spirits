@@ -10,7 +10,7 @@ import TrustpilotWidget from "@/components/TrustpilotWidget";
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: "Jerry Can Spirits | Veteran-Owned Premium British Rum - Engineered for Reliability, Designed for Adventure",
+  title: "Jerry Can Spirits | Veteran-Owned Premium British Rum",
   description: "Veteran-owned premium British rum with authentic military heritage. Founded by Royal Corps of Signals veterans. Small-batch spirits engineered for reliability, designed for adventure. Expedition Ready.",
   alternates: {
     canonical: "https://jerrycanspirits.co.uk",
@@ -92,6 +92,8 @@ export default function Home() {
     <>
       <ScrollToHash />
       <StructuredData data={structuredData} />
+      {/* SEO H1 - Server-rendered for crawlers */}
+      <h1 className="sr-only">Jerry Can Spirits - Veteran-Owned Premium British Rum | Engineered for Reliability, Designed for Adventure</h1>
       <div>
         <HeroSection />
 
@@ -106,6 +108,67 @@ export default function Home() {
 
         {/* Founder Story Snippet */}
         <FounderStorySnippet />
+
+        {/* SEO-Rich Content Section - Veteran-Owned British Rum */}
+        <section className="py-16 bg-jerry-green-900/50">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="grid lg:grid-cols-2 gap-12">
+              <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
+                <h2 className="text-3xl font-serif font-bold text-white mb-6">
+                  Premium British Rum Crafted by Veterans
+                </h2>
+                <div className="space-y-4 text-parchment-200 leading-relaxed">
+                  <p>
+                    Jerry Can Spirits is a veteran-owned British rum distillery founded by former Royal Corps of Signals servicemen who served over 12 years in the British Armed Forces. We bring military precision, unwavering quality standards, and a passion for adventure to every bottle we craft.
+                  </p>
+                  <p>
+                    Our premium small-batch rum is engineered with the same reliability we demanded from equipment in service. From Arctic deployments to desert outposts, we learned what you can truly depend on. Now we apply those exacting standards to creating exceptional British spirits for the modern explorer.
+                  </p>
+                  <p>
+                    We partner with Spirit of Wales Distillery, utilizing advanced copper-lined distillation technology that creates multiple ester chambers for complex flavor development and an exceptionally smooth finish. This marriage of traditional craftsmanship and innovative engineering produces rum that stands apart from mass-produced alternatives.
+                  </p>
+                </div>
+              </div>
+
+              <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
+                <h2 className="text-3xl font-serif font-bold text-white mb-6">
+                  Sustainable British Spirits with Military Heritage
+                </h2>
+                <div className="space-y-4 text-parchment-200 leading-relaxed">
+                  <p>
+                    Our commitment to sustainability reflects our respect for the environments we've operated in during military service. We prioritize UK-sourced ingredients wherever possible, reducing our carbon footprint while supporting British suppliers. Our ethically-sourced Caribbean molasses and sustainable production practices ensure we're building a brand that respects both tradition and the future.
+                  </p>
+                  <p>
+                    As proud signatories of the Armed Forces Covenant, we actively support the veteran community through our business operations and partnerships. Every bottle sold helps us give back to the community that shaped our values and work ethic. We're committed to creating opportunities for veterans transitioning to civilian careers and supporting military charities.
+                  </p>
+                  <p>
+                    The jerry can wasn't designed for beauty - it was engineered for absolute reliability. That same philosophy guides our rum production. Function over form. Purpose over pretense. Quality that performs when it matters most. This is premium British rum for those who venture beyond the ordinary.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Key Features Grid */}
+            <div className="mt-12 grid md:grid-cols-4 gap-6">
+              <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20 text-center">
+                <h3 className="text-lg font-serif font-bold text-gold-300 mb-2">12+ Years Service</h3>
+                <p className="text-parchment-300 text-sm">Royal Corps of Signals veterans bringing military precision to craft spirits</p>
+              </div>
+              <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20 text-center">
+                <h3 className="text-lg font-serif font-bold text-gold-300 mb-2">UK First Philosophy</h3>
+                <p className="text-parchment-300 text-sm">British ingredients, Welsh distillation, sustainable local sourcing</p>
+              </div>
+              <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20 text-center">
+                <h3 className="text-lg font-serif font-bold text-gold-300 mb-2">Small Batch Quality</h3>
+                <p className="text-parchment-300 text-sm">Copper-lined distillation creating complex flavors and smooth finish</p>
+              </div>
+              <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20 text-center">
+                <h3 className="text-lg font-serif font-bold text-gold-300 mb-2">Forces Covenant</h3>
+                <p className="text-parchment-300 text-sm">Supporting veterans and military charities with every bottle sold</p>
+              </div>
+            </div>
+          </div>
+        </section>
 
         {/* Field Manual Preview */}
         <FieldManualPreview />

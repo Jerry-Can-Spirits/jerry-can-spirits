@@ -163,7 +163,7 @@ export default function CocktailsClient({ cocktails }: CocktailsClientProps) {
           </h1>
 
           <p className="text-xl text-parchment-300 max-w-3xl mx-auto leading-relaxed">
-            Each cocktail is carefully crafted to showcase our rum's unique character.
+            Each cocktail is carefully crafted to showcase <Link href="/shop/drinks" className="text-gold-300 hover:text-gold-400 underline decoration-gold-500/40 hover:decoration-gold-400 transition-colors">our premium rum's</Link> unique character.
             Start with the classics, then explore our signature variations designed for the modern explorer.
           </p>
         </div>

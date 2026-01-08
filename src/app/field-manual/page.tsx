@@ -48,8 +48,8 @@ export default function FieldManualHome() {
           </h1>
           
           <p className="text-xl text-parchment-300 max-w-3xl mx-auto leading-relaxed mb-8">
-            Master the craft with our field manual. Discover spiced rum cocktails, premium ingredients, 
-            and essential barware. Like a vintage expedition guide, but for creating world-class drinks.
+            Master the craft with our field manual. Discover spiced rum cocktails featuring <a href="/shop/drinks" className="text-gold-300 hover:text-gold-400 underline decoration-gold-500/40 hover:decoration-gold-400 transition-colors">Jerry Can Spirits premium rum</a>, explore premium ingredients,
+            and learn about essential barware. Like a vintage expedition guide, but for creating world-class drinks. Visit our <a href="/" className="text-gold-300 hover:text-gold-400 underline decoration-gold-500/40 hover:decoration-gold-400 transition-colors">homepage</a> to learn more about our veteran-owned British spirits.
           </p>
         </div>
       </section>

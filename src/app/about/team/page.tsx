@@ -144,7 +144,7 @@ export default function TeamPage() {
               <h3 className="text-2xl font-serif font-bold text-gold-300 mb-3">Our Mission</h3>
               <p className="text-parchment-200 leading-relaxed">
                 We believe we're in a time when passion, craft, and individuality are taking over ahead of massive
-                faceless corporations. Jerry Can Spirits is built on the foundation of supporting and elevating those
+                faceless corporations. <Link href="/" className="text-gold-300 hover:text-gold-400 underline decoration-gold-500/40 hover:decoration-gold-400 transition-colors">Jerry Can Spirits</Link> is built on the foundation of supporting and elevating those
                 around us, working tirelessly to see small-batch and craft spirits flourish. Every bottle is a testament
                 to precision, adventure, and the uncompromising standards learned through military service.
               </p>
