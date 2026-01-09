@@ -1,11 +1,16 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import Image from 'next/image'
 import { ChevronDownIcon, MagnifyingGlassIcon, ShoppingCartIcon, Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 import { useCart } from '@/contexts/CartContext'
-import SearchModal from './SearchModal'
+
+// Lazy load SearchModal (only needed when user clicks search)
+const SearchModal = dynamic(() => import('./SearchModal'), {
+  ssr: false,
+});
 
 interface DropdownItem {
   name: string
