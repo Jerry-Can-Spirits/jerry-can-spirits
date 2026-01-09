@@ -1,5 +1,21 @@
 // GROQ queries for fetching data from Sanity
 
+// Sitemap query - only fetches slug for URL generation
+export const cocktailsSitemapQuery = `*[_type == "cocktail"] { slug }`
+
+// Optimized listing query - only fetches fields needed for preview cards
+export const cocktailsListQuery = `*[_type == "cocktail"] | order(_createdAt desc) {
+  _id,
+  name,
+  slug,
+  description,
+  difficulty,
+  category,
+  featured,
+  "image": image.asset->url
+}`
+
+// Full query - fetches all fields for detail pages
 export const cocktailsQuery = `*[_type == "cocktail"] | order(_createdAt desc) {
   _id,
   name,
@@ -66,6 +82,21 @@ export const cocktailBySlugQuery = `*[_type == "cocktail" && slug.current == $sl
   "image": image.asset->url
 }`
 
+// Sitemap query - only fetches slug for URL generation
+export const ingredientsSitemapQuery = `*[_type == "ingredient"] { slug }`
+
+// Optimized listing query - only fetches fields needed for preview cards
+export const ingredientsListQuery = `*[_type == "ingredient"] | order(category asc, name asc) {
+  _id,
+  name,
+  slug,
+  category,
+  description,
+  image,
+  featured
+}`
+
+// Full query - fetches all fields for listing pages with more detail
 export const ingredientsQuery = `*[_type == "ingredient"] | order(category asc, name asc) {
   _id,
   name,
@@ -110,6 +141,22 @@ export const ingredientBySlugQuery = `*[_type == "ingredient" && slug.current ==
   "relatedIngredients": relatedIngredients[]->{ _id, name, slug }
 }`
 
+// Sitemap query - only fetches slug for URL generation
+export const equipmentSitemapQuery = `*[_type == "equipment"] { slug }`
+
+// Optimized listing query - only fetches fields needed for preview cards
+export const equipmentListQuery = `*[_type == "equipment"] | order(category asc, name asc) {
+  _id,
+  name,
+  slug,
+  category,
+  description,
+  essential,
+  image,
+  featured
+}`
+
+// Full query - fetches all fields for listing pages with more detail
 export const equipmentQuery = `*[_type == "equipment"] | order(category asc, name asc) {
   _id,
   name,

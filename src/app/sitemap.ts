@@ -1,7 +1,11 @@
 import { MetadataRoute } from 'next'
 import { getProducts, type ShopifyProduct } from '@/lib/shopify'
 import { client } from '@/sanity/client'
-import { cocktailsQuery, equipmentQuery, ingredientsQuery } from '@/sanity/queries'
+import {
+  cocktailsSitemapQuery,
+  equipmentSitemapQuery,
+  ingredientsSitemapQuery
+} from '@/sanity/queries'
 
 // Ensure sitemap works on Cloudflare Pages Edge Runtime
 export const runtime = 'edge'
@@ -29,10 +33,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.8,
   }))
 
-  // Fetch all cocktails from Sanity
+  // Fetch all cocktails from Sanity (optimized - only slug field)
   let cocktails: Array<{ slug: { current: string } }> = []
   try {
-    cocktails = await client.fetch(cocktailsQuery)
+    cocktails = await client.fetch(cocktailsSitemapQuery)
   } catch (error) {
     console.error('Error fetching cocktails for sitemap:', error)
   }
@@ -45,10 +49,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.7,
   }))
 
-  // Fetch all equipment from Sanity
+  // Fetch all equipment from Sanity (optimized - only slug field)
   let equipment: Array<{ slug: { current: string } }> = []
   try {
-    equipment = await client.fetch(equipmentQuery)
+    equipment = await client.fetch(equipmentSitemapQuery)
   } catch (error) {
     console.error('Error fetching equipment for sitemap:', error)
   }
@@ -61,10 +65,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.6,
   }))
 
-  // Fetch all ingredients from Sanity
+  // Fetch all ingredients from Sanity (optimized - only slug field)
   let ingredients: Array<{ slug: { current: string } }> = []
   try {
-    ingredients = await client.fetch(ingredientsQuery)
+    ingredients = await client.fetch(ingredientsSitemapQuery)
   } catch (error) {
     console.error('Error fetching ingredients for sitemap:', error)
   }
