@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { client } from '@/sanity/client'
-import { cocktailsQuery } from '@/sanity/queries'
+import { cocktailsListQuery } from '@/sanity/queries'
 
 interface CocktailPreview {
   _id: string
@@ -13,21 +13,16 @@ interface CocktailPreview {
   featured?: boolean
 }
 
-async function getFeaturedCocktails() {
-  const cocktails = await client.fetch<CocktailPreview[]>(cocktailsQuery)
-  // Get 3 featured cocktails, or first 3 if no featured ones
-  const featured = cocktails.filter(c => c.featured).slice(0, 3)
-  return featured.length >= 3 ? featured : cocktails.slice(0, 3)
-}
-
-async function getTotalCocktailCount() {
-  const cocktails = await client.fetch<CocktailPreview[]>(cocktailsQuery)
-  return cocktails.length
-}
-
 export default async function FieldManualPreview() {
-  const cocktails = await getFeaturedCocktails()
-  const totalCount = await getTotalCocktailCount()
+  // Single fetch - much more efficient than separate fetches for featured and count
+  const allCocktails = await client.fetch<CocktailPreview[]>(cocktailsListQuery)
+
+  // Get 3 featured cocktails, or first 3 if no featured ones
+  const featured = allCocktails.filter(c => c.featured).slice(0, 3)
+  const cocktails = featured.length >= 3 ? featured : allCocktails.slice(0, 3)
+
+  // Get total count from the same fetch
+  const totalCount = allCocktails.length
 
   // Round down to nearest 10 for marketing copy
   const roundedCount = Math.floor(totalCount / 10) * 10
