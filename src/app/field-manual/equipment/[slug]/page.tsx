@@ -65,9 +65,6 @@ async function getEquipment(slug: string): Promise<Equipment | null> {
   return await client.fetch(equipmentBySlugQuery, { slug })
 }
 
-// Enable ISR - revalidate every 60 seconds
-export const revalidate = 60
-
 async function getAllEquipment(): Promise<Equipment[]> {
   return await client.fetch(equipmentQuery)
 }
