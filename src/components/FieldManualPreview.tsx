@@ -20,8 +20,17 @@ async function getFeaturedCocktails() {
   return featured.length >= 3 ? featured : cocktails.slice(0, 3)
 }
 
+async function getTotalCocktailCount() {
+  const cocktails = await client.fetch<CocktailPreview[]>(cocktailsQuery)
+  return cocktails.length
+}
+
 export default async function FieldManualPreview() {
   const cocktails = await getFeaturedCocktails()
+  const totalCount = await getTotalCocktailCount()
+
+  // Round down to nearest 10 for marketing copy
+  const roundedCount = Math.floor(totalCount / 10) * 10
 
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty.toLowerCase()) {
@@ -126,7 +135,7 @@ export default async function FieldManualPreview() {
             </svg>
           </Link>
           <p className="text-parchment-400 text-sm mt-4">
-            Over 14 expertly crafted cocktail recipes with detailed guides
+            Over {roundedCount} expertly crafted cocktail recipes with detailed guides
           </p>
         </div>
       </div>
