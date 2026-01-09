@@ -31,7 +31,7 @@ const nextConfig: NextConfig = {
               "script-src 'self' 'unsafe-inline' 'unsafe-eval' https: data:",
               "style-src 'self' 'unsafe-inline' https: data:",
               "font-src 'self' https: data:",
-              "img-src 'self' data: https: blob:",
+              "img-src 'self' data: https: https://imagedelivery.net blob:",
               "media-src 'self' https: data:",
               "connect-src 'self' https: wss: ws:",
               "frame-src 'self' https:",
@@ -86,7 +86,7 @@ const nextConfig: NextConfig = {
               "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://*.klaviyo.com https://*.trustpilot.com",
               "style-src-elem 'self' 'unsafe-inline' https://fonts.googleapis.com https://*.klaviyo.com https://*.trustpilot.com",
               "font-src 'self' https://fonts.gstatic.com https://*.trustpilot.com data:",
-              "img-src 'self' data: https: blob:",
+              "img-src 'self' data: https: https://imagedelivery.net blob:",
               "media-src 'self' https:",
               "connect-src 'self' https://www.google-analytics.com https://www.googletagmanager.com https://analytics.google.com https://region1.google-analytics.com https://*.klaviyo.com https://*.shopify.com https://*.myshopify.com https://cdn.sanity.io https://*.sanity.io https://*.ingest.sentry.io https://*.sentry.io https://cloudflareinsights.com https://*.trustpilot.com https://www.facebook.com https://*.facebook.com https://*.facebook.net wss: ws:",
               "frame-src 'self' https://www.youtube.com https://www.vimeo.com https://cdn.sanity.io https://*.sanity.io https://*.trustpilot.com https://www.instagram.com https://*.instagram.com https://*.cdninstagram.com about: data:",
@@ -144,8 +144,10 @@ const nextConfig: NextConfig = {
   // Enable build caching for faster rebuilds
   cacheMaxMemorySize: 50 * 1024 * 1024, // 50 MB
   
-  // Optimize images for better performance
+  // Optimize images for better performance with Cloudflare Images CDN
   images: {
+    loader: 'custom',
+    loaderFile: './src/lib/cloudflareImageLoader.ts',
     remotePatterns: [
       {
         protocol: 'https',
@@ -154,6 +156,10 @@ const nextConfig: NextConfig = {
       {
         protocol: 'https',
         hostname: 'cdn.shopify.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'imagedelivery.net', // Cloudflare Images CDN
       },
     ],
     formats: ['image/webp', 'image/avif'],
