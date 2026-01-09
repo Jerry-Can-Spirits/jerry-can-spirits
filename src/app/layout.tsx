@@ -12,6 +12,7 @@ import InstallPrompt from "@/components/InstallPrompt";
 import { CartProvider } from "@/contexts/CartContext";
 import CartDrawer from "@/components/CartDrawer";
 import { OrganizationSchema, WebsiteSchema } from "@/components/StructuredData";
+import FacebookPixel from "@/components/FacebookPixel";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -96,8 +97,21 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         <meta name="apple-mobile-web-app-title" content="Jerry Can Spirits®" />
         <meta name="facebook-domain-verification" content="2rv5ogxoockin4xfzl2ioxkn4rbpxu" />
-        <link rel="preconnect" href="https://static.klaviyo.com" />
+
+        {/* Critical Third-Party Connections - Preconnect for faster loading */}
+        <link rel="preconnect" href="https://cdn.sanity.io" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://cdn.shopify.com" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://imagedelivery.net" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+
+        {/* Non-Critical Third-Party Connections - DNS Prefetch only */}
         <link rel="dns-prefetch" href="https://static.klaviyo.com" />
+        <link rel="dns-prefetch" href="https://connect.facebook.net" />
+        <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+        <link rel="dns-prefetch" href="https://www.google-analytics.com" />
+        <link rel="dns-prefetch" href="https://widget.trustpilot.com" />
+        <link rel="dns-prefetch" href="https://cloudflareinsights.com" />
       </head>
       <body
         className={`${inter.variable} ${playfair.variable} ${jetbrains.variable} antialiased min-h-screen bg-jerry-green-900 text-foreground`}
@@ -106,6 +120,7 @@ export default function RootLayout({
         <InstallPrompt />
         <OrganizationSchema />
         <WebsiteSchema />
+        <FacebookPixel />
         {/* Klaviyo now loaded via Cloudflare Zaraz - see Zaraz Custom HTML setup */}
 
         <CartProvider>

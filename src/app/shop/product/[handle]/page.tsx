@@ -1,3 +1,4 @@
+import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import Image from 'next/image'
@@ -5,9 +6,15 @@ import { getProduct, getSmartRecommendations, type ShopifyProduct } from '@/lib/
 import AddToCartButton from '@/components/AddToCartButton'
 import ProductImageGallery from '@/components/ProductImageGallery'
 import StructuredData from '@/components/StructuredData'
-import TrustpilotWidget from '@/components/TrustpilotWidget'
 import ProductPageTracking from '@/components/ProductPageTracking'
 import type { Metadata } from 'next'
+
+// Lazy load TrustpilotWidget (below the fold)
+const TrustpilotWidget = dynamic(() => import('@/components/TrustpilotWidget'), {
+  loading: () => (
+    <div className="h-[400px] bg-jerry-green-800/50 rounded-lg animate-pulse" />
+  ),
+});
 
 // Configure for Cloudflare Pages Edge Runtime
 export const runtime = 'edge'

@@ -1,3 +1,4 @@
+import dynamic from 'next/dynamic';
 import HeroSection from "@/components/HeroSection";
 import StructuredData from "@/components/StructuredData";
 import ScrollToHash from "@/components/ScrollToHash";
@@ -6,8 +7,14 @@ import KlaviyoEmbeddedForm from "@/components/KlaviyoEmbeddedForm";
 import FounderStorySnippet from "@/components/FounderStorySnippet";
 import FieldManualPreview from "@/components/FieldManualPreview";
 import WhyJerryCan from "@/components/WhyJerryCan";
-import TrustpilotWidget from "@/components/TrustpilotWidget";
 import type { Metadata } from 'next'
+
+// Lazy load TrustpilotWidget (below the fold)
+const TrustpilotWidget = dynamic(() => import('@/components/TrustpilotWidget'), {
+  loading: () => (
+    <div className="h-[150px] bg-jerry-green-800/50 rounded-lg animate-pulse" />
+  ),
+});
 
 export const metadata: Metadata = {
   title: "Jerry Can Spirits | Veteran-Owned Premium British Rum",
