@@ -65,9 +65,6 @@ export async function generateStaticParams() {
   }))
 }
 
-// Enable ISR - revalidate every 60 seconds
-export const revalidate = 60
-
 // Generate metadata for each cocktail
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params

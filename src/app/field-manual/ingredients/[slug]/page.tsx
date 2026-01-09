@@ -115,9 +115,6 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   }
 }
 
-// Revalidate every 60 seconds to show new content from Sanity
-export const revalidate = 60
-
 export default async function IngredientDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
   const ingredient = await getIngredient(slug)
