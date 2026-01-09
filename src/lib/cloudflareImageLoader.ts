@@ -11,7 +11,7 @@
  * - Fallback to original source for external images
  */
 
-import imageMapping from '../../scripts/image-mapping.json'
+import imageMapping from './image-mapping.json'
 
 interface ImageLoaderProps {
   src: string
