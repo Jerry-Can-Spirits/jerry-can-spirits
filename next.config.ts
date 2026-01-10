@@ -89,7 +89,7 @@ const nextConfig: NextConfig = {
               "font-src 'self' https://fonts.gstatic.com https://*.trustpilot.com data:",
               "img-src 'self' data: https: https://imagedelivery.net blob:",
               "media-src 'self' https:",
-              "connect-src 'self' https://www.google-analytics.com https://www.googletagmanager.com https://analytics.google.com https://region1.google-analytics.com https://*.klaviyo.com https://*.shopify.com https://*.myshopify.com https://cdn.sanity.io https://*.sanity.io https://*.ingest.sentry.io https://*.sentry.io https://cloudflareinsights.com https://*.trustpilot.com https://www.facebook.com https://*.facebook.com https://*.facebook.net wss: ws:",
+              "connect-src 'self' https://www.google-analytics.com https://www.googletagmanager.com https://analytics.google.com https://region1.google-analytics.com https://www.google.com https://*.doubleclick.net https://*.klaviyo.com https://*.shopify.com https://*.myshopify.com https://cdn.sanity.io https://*.sanity.io https://*.ingest.sentry.io https://*.sentry.io https://cloudflareinsights.com https://*.trustpilot.com https://www.facebook.com https://*.facebook.com https://*.facebook.net wss: ws:",
               "frame-src 'self' https://www.youtube.com https://www.vimeo.com https://cdn.sanity.io https://*.sanity.io https://*.trustpilot.com https://www.instagram.com https://*.instagram.com https://*.cdninstagram.com about: data:",
               "object-src 'none'",
               "base-uri 'self'",
@@ -188,49 +188,32 @@ const nextConfig: NextConfig = {
     }
 
     if (!dev && !isServer) {
-      // Advanced bundle splitting for better performance
+      // Simplified bundle splitting for Cloudflare Pages compatibility
+      // Temporarily disabled aggressive chunk splitting to resolve RSC payload errors
       config.optimization.splitChunks = {
         chunks: 'all',
-        maxSize: 200000, // Smaller chunks for better caching
-        minSize: 20000,
         cacheGroups: {
-          default: false,
-          vendors: false,
-          
           // Separate Sanity CMS bundle (largest dependency)
           sanity: {
             test: /[\\/]node_modules[\\/](@sanity|sanity|next-sanity)[\\/]/,
             name: 'sanity',
             chunks: 'all',
             priority: 30,
-            maxSize: 200000,
           },
-          
+
           // React and related libraries
           react: {
             test: /[\\/]node_modules[\\/](react|react-dom|scheduler)[\\/]/,
             name: 'react',
             chunks: 'all',
             priority: 20,
-            maxSize: 200000,
           },
-          
-          // Styled components
-          styled: {
-            test: /[\\/]node_modules[\\/](styled-components)[\\/]/,
-            name: 'styled',
-            chunks: 'all',
-            priority: 15,
-            maxSize: 200000,
-          },
-          
-          // Other vendor libraries
-          vendor: {
+
+          // Default vendor bundle
+          defaultVendors: {
             test: /[\\/]node_modules[\\/]/,
-            name: 'vendor',
-            chunks: 'all',
-            priority: 10,
-            maxSize: 200000,
+            priority: -10,
+            reuseExistingChunk: true,
           },
         },
       };
