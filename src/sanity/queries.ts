@@ -206,3 +206,29 @@ export const equipmentBySlugQuery = `*[_type == "equipment" && slug.current == $
   videoUrl,
   "relatedCocktails": relatedCocktails[]->{ _id, name, slug }
 }`
+
+// Product query - matches by slug or shopifyHandle for flexible matching
+export const productByHandleQuery = `*[_type == "product" && (slug.current == $slug || shopifyHandle == $handle)][0] {
+  _id,
+  name,
+  slug,
+  shopifyHandle,
+  tastingNotes {
+    aroma,
+    palate,
+    finish
+  },
+  process,
+  flavorProfile {
+    primary,
+    strength
+  },
+  servingSuggestions,
+  pairsWith,
+  professionalTip,
+  history,
+  "image": image.asset->url,
+  featured,
+  videoUrl,
+  "relatedCocktails": relatedCocktails[]->{ _id, name, slug }
+}`

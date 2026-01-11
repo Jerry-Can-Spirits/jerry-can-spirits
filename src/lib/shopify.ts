@@ -37,6 +37,13 @@ export interface ShopifyPriceRange {
   minVariantPrice: ShopifyMoney;
 }
 
+export interface ShopifyMetafield {
+  namespace: string;
+  key: string;
+  value: string;
+  type: string;
+}
+
 export interface ShopifyProductVariant {
   id: string;
   title: string;
@@ -58,6 +65,7 @@ export interface ShopifyProduct {
   productType?: string;
   vendor?: string;
   availableForSale?: boolean;
+  metafields?: ShopifyMetafield[];
 }
 
 export interface ShopifyCollection {
@@ -293,6 +301,22 @@ export async function getProduct(handle: string): Promise<ShopifyProduct | null>
             }
           }
         }
+        metafields(identifiers: [
+          {namespace: "specifications", key: "age_statement"},
+          {namespace: "specifications", key: "rum_type"},
+          {namespace: "specifications", key: "distillation_method"},
+          {namespace: "specifications", key: "abv"},
+          {namespace: "specifications", key: "origin"},
+          {namespace: "specifications", key: "region"},
+          {namespace: "specifications", key: "colour"},
+          {namespace: "specifications", key: "awards"},
+          {namespace: "legal", key: "duty_statement"}
+        ]) {
+          namespace
+          key
+          value
+          type
+        }
       }
     }
   `;
@@ -320,6 +344,7 @@ export async function getProduct(handle: string): Promise<ShopifyProduct | null>
       ...data.product,
       images: data.product.images.edges.map((edge: ImageEdge) => edge.node),
       variants: data.product.variants.edges.map((edge: VariantEdge) => edge.node),
+      metafields: data.product.metafields || [],
     };
   } catch (error) {
     console.error('Error fetching product:', error);
