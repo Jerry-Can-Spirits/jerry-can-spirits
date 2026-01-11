@@ -58,9 +58,11 @@ export default function cloudflareImageLoader({
 
     if (!mappedImage) {
       // Fallback to original path if not in mapping
-      // This allows development to continue even if migration isn't complete
+      // In development, serve from localhost
       if (process.env.NODE_ENV === 'development') {
         console.warn(`[Cloudflare Image Loader] Image not found in mapping: ${src}`)
+        // Return absolute URL for dev server
+        return `http://localhost:3000${src}`
       }
       return src
     }
@@ -68,14 +70,22 @@ export default function cloudflareImageLoader({
     // Verify account hash is configured
     if (!CLOUDFLARE_ACCOUNT_HASH) {
       console.error('[Cloudflare Image Loader] NEXT_PUBLIC_CLOUDFLARE_ACCOUNT_HASH not configured')
+      // Return absolute URL for dev server
+      if (process.env.NODE_ENV === 'development') {
+        return `http://localhost:3000${src}`
+      }
       return src
     }
 
-    // Build Cloudflare Images URL with transformations
-    // Format: https://imagedelivery.net/<ACCOUNT_HASH>/<IMAGE_ID>/w=<width>,q=<quality>,f=auto
-    return `https://imagedelivery.net/${CLOUDFLARE_ACCOUNT_HASH}/${mappedImage.cloudflareId}/w=${width},q=${quality},f=auto`
+    // Use the pre-configured variant from the mapping
+    // Cloudflare Images requires using predefined variants, not flexible transformations
+    // The cloudflareUrl already includes the correct variant (public, avatar, etc.)
+    return mappedImage.cloudflareUrl
   }
 
-  // Fallback for any other paths
+  // Fallback for any other paths - return absolute URL in dev
+  if (process.env.NODE_ENV === 'development' && !src.startsWith('http')) {
+    return `http://localhost:3000${src}`
+  }
   return src
 }
