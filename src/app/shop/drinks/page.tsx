@@ -49,8 +49,6 @@ export default async function DrinksPageTest() {
   if (error) {
     return (
       <main className="min-h-screen py-20">
-        {/* SEO H1 - Server-rendered for crawlers */}
-        <h1 className="sr-only">Premium British Rum Collection - Veteran-Owned Spirits | Jerry Can Spirits</h1>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-2xl mx-auto text-center space-y-6">
             <div className="inline-block px-4 py-2 bg-red-800/60 backdrop-blur-sm rounded-full border border-red-500/30 mb-6">
@@ -59,9 +57,9 @@ export default async function DrinksPageTest() {
               </span>
             </div>
 
-            <div className="text-4xl sm:text-5xl font-serif font-bold text-white mb-6" role="heading" aria-level={2}>
-              Shopify Connection Failed
-            </div>
+            <h1 className="text-4xl sm:text-5xl font-serif font-bold text-white mb-6">
+              Premium British Rum Collection - Shopify Connection Failed
+            </h1>
 
             <div className="bg-red-900/20 border border-red-500/30 rounded-lg p-6 text-left">
               <p className="text-red-300 font-mono text-sm mb-4">
@@ -96,8 +94,6 @@ export default async function DrinksPageTest() {
   if (products.length === 0) {
     return (
       <main className="min-h-screen py-20">
-        {/* SEO H1 - Server-rendered for crawlers */}
-        <h1 className="sr-only">Premium British Rum Collection - Veteran-Owned Spirits | Jerry Can Spirits</h1>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-2xl mx-auto text-center space-y-6">
             <div className="inline-block px-4 py-2 bg-jerry-green-800/60 backdrop-blur-sm rounded-full border border-gold-500/30 mb-6">
@@ -106,9 +102,9 @@ export default async function DrinksPageTest() {
               </span>
             </div>
 
-            <div className="text-4xl sm:text-5xl font-serif font-bold text-white mb-6" role="heading" aria-level={2}>
-              No Products Found
-            </div>
+            <h1 className="text-4xl sm:text-5xl font-serif font-bold text-white mb-6">
+              Premium British Rum Collection - No Products Available Yet
+            </h1>
 
             <p className="text-xl text-parchment-200">
               The Shopify connection is working, but no products were found in the "drinks" collection.
@@ -140,9 +136,6 @@ export default async function DrinksPageTest() {
   // Success state - products loaded from Shopify
   return (
     <main className="min-h-screen py-20">
-      {/* SEO H1 - Server-rendered for crawlers */}
-      <h1 className="sr-only">Premium British Rum Collection - Veteran-Owned Spirits | Jerry Can Spirits</h1>
-
       {/* Breadcrumb */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
         <nav className="text-sm text-parchment-400">
@@ -161,11 +154,11 @@ export default async function DrinksPageTest() {
             </span>
           </div>
 
-          <div className="text-4xl sm:text-6xl font-serif font-bold text-white mb-6" role="heading" aria-level={2}>
-            Expedition Spirits
+          <h1 className="text-4xl sm:text-6xl font-serif font-bold text-white mb-6">
+            Premium British Rum Collection
             <br />
-            <span className="text-gold-300">Crafted for Adventure</span>
-          </div>
+            <span className="text-gold-300">Veteran-Owned Expedition Spirits</span>
+          </h1>
 
           <p className="text-xl text-parchment-300 max-w-3xl mx-auto leading-relaxed">
             Explore our handcrafted British rum collection - premium small-batch spirits engineered for modern explorers. Rich flavours, exceptional quality, and adventure in every bottle.

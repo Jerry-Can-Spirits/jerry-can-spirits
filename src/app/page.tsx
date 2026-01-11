@@ -99,8 +99,6 @@ export default function Home() {
     <>
       <ScrollToHash />
       <StructuredData data={structuredData} />
-      {/* SEO H1 - Server-rendered for crawlers */}
-      <h1 className="sr-only">Jerry Can Spirits - Veteran-Owned Premium British Rum | Engineered for Reliability, Designed for Adventure</h1>
       <div>
         <HeroSection />
 
