@@ -2,7 +2,7 @@ import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import Image from 'next/image'
-import { getProduct, getSmartRecommendations, type ShopifyProduct } from '@/lib/shopify'
+import { getProduct, getSmartRecommendations, type ShopifyProduct, type ShopifyMetafield } from '@/lib/shopify'
 import AddToCartButton from '@/components/AddToCartButton'
 import ProductImageGallery from '@/components/ProductImageGallery'
 import StructuredData from '@/components/StructuredData'
@@ -14,6 +14,32 @@ import DutyPaidStatement from '@/components/DutyPaidStatement'
 import { client } from '@/sanity/lib/client'
 import { productByHandleQuery } from '@/sanity/queries'
 import type { Metadata } from 'next'
+
+// Sanity product data type
+interface SanityProduct {
+  _id: string
+  name: string
+  slug: { current: string }
+  shopifyHandle: string
+  tastingNotes?: {
+    aroma: string
+    palate: string
+    finish: string
+  }
+  process?: string
+  flavorProfile?: {
+    primary: string[]
+    strength: string
+  }
+  servingSuggestions?: string[]
+  pairsWith?: string[]
+  professionalTip?: string
+  history?: string
+  image?: string
+  featured?: boolean
+  videoUrl?: string
+  relatedCocktails?: Array<{ _id: string; name: string; slug: { current: string } }>
+}
 
 // Lazy load TrustpilotWidget (below the fold)
 const TrustpilotWidget = dynamic(() => import('@/components/TrustpilotWidget'), {
@@ -93,7 +119,7 @@ export default async function ProductPage({
   const { handle } = await params
   let product: ShopifyProduct | null = null
   let relatedProducts: ShopifyProduct[] = []
-  let sanityProduct: any = null
+  let sanityProduct: SanityProduct | null = null
 
   try {
     // Fetch Shopify product and Sanity product data in parallel
@@ -376,10 +402,10 @@ export default async function ProductPage({
           )}
 
           {/* Duty Paid Statement */}
-          {product.metafields && product.metafields.some((m: any) => m.namespace === 'legal' && m.key === 'duty_statement') && (
+          {product.metafields && product.metafields.some((m: ShopifyMetafield) => m.namespace === 'legal' && m.key === 'duty_statement') && (
             <DutyPaidStatement
               statement={
-                product.metafields.find((m: any) => m.namespace === 'legal' && m.key === 'duty_statement')?.value || ''
+                product.metafields.find((m: ShopifyMetafield) => m.namespace === 'legal' && m.key === 'duty_statement')?.value || ''
               }
             />
           )}
