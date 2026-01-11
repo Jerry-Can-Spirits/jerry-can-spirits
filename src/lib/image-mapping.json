@@ -214,5 +214,11 @@
     "cloudflareUrl": "https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/images-hero-padlock-svg/public",
     "filename": "padlock.svg",
     "uploadedAt": "2026-01-09T16:16:48.938Z"
+  },
+  "/images/team/Dan_Headshot.jpg": {
+    "cloudflareId": "Dan_Headshot",
+    "cloudflareUrl": "https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/Dan_Headshot/avatar",
+    "filename": "Dan_Headshot.jpg",
+    "uploadedAt": "2026-01-11T14:00:00.000Z"
   }
 }

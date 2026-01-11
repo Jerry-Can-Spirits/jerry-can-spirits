@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import Image from 'next/image'
 import CartographicBackground from '@/components/CartographicBackground'
 
 export const metadata: Metadata = {
@@ -31,6 +32,7 @@ const teamMembers = [
     rank: 'Corporal',
     specialty: 'Operations & Product Development',
     quote: 'Passion and craft over corporate conformity.',
+    image: '/images/team/Dan_Headshot.jpg',
   },
   {
     name: 'Rhys Williams',
@@ -40,6 +42,7 @@ const teamMembers = [
     rank: 'TBC',
     specialty: 'Business Strategy',
     quote: 'Coming soon...',
+    image: null,
   },
 ]
 
@@ -76,17 +79,32 @@ export default function TeamPage() {
               href={`/about/team/${member.slug}`}
               className="group bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20 hover:border-gold-500/40 transition-all hover:transform hover:-translate-y-1"
             >
-              {/* Placeholder Photo */}
+              {/* Photo */}
               <div className="mb-6 relative">
-                <div className="aspect-square bg-gradient-to-br from-jerry-green-700/50 to-jerry-green-900/50 rounded-lg flex items-center justify-center border border-gold-500/20">
-                  <svg className="w-24 h-24 text-gold-500/30" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
-                  </svg>
-                </div>
-                {/* Photo Coming Soon Badge */}
-                <div className="absolute top-2 right-2 px-3 py-1 bg-gold-500/90 backdrop-blur-sm rounded-full">
-                  <span className="text-jerry-green-900 text-xs font-semibold">Photo Coming Soon</span>
-                </div>
+                {member.image ? (
+                  <div className="aspect-square relative rounded-lg overflow-hidden border border-gold-500/20">
+                    <Image
+                      src={member.image}
+                      alt={`${member.name} - ${member.role}`}
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 768px) 100vw, 50vw"
+                      priority
+                    />
+                  </div>
+                ) : (
+                  <>
+                    <div className="aspect-square bg-gradient-to-br from-jerry-green-700/50 to-jerry-green-900/50 rounded-lg flex items-center justify-center border border-gold-500/20">
+                      <svg className="w-24 h-24 text-gold-500/30" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
+                      </svg>
+                    </div>
+                    {/* Photo Coming Soon Badge */}
+                    <div className="absolute top-2 right-2 px-3 py-1 bg-gold-500/90 backdrop-blur-sm rounded-full">
+                      <span className="text-jerry-green-900 text-xs font-semibold">Photo Coming Soon</span>
+                    </div>
+                  </>
+                )}
               </div>
 
               {/* Name & Role */}
