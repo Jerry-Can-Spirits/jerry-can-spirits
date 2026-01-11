@@ -6,6 +6,9 @@ const nextConfig: NextConfig = {
   // Configure for Cloudflare Pages (full-stack mode)
   trailingSlash: true,
 
+  // Ensure minification is enabled (default in production, but explicit for clarity)
+  productionBrowserSourceMaps: false, // Disable source maps to reduce bundle size
+
   // Target modern browsers to remove unnecessary polyfills
   compiler: {
     // Remove console logs in production

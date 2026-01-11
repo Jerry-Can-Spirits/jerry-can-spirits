@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import Image from 'next/image'
 import CartographicBackground from '@/components/CartographicBackground'
 
 export const metadata: Metadata = {
@@ -46,16 +47,16 @@ export default function DanFreemanPage() {
           {/* Left Column - Photo & Quick Info */}
           <div className="lg:col-span-1">
             <div className="lg:sticky lg:top-24 space-y-6">
-              {/* Photo Placeholder */}
-              <div className="relative">
-                <div className="aspect-square bg-gradient-to-br from-jerry-green-700/50 to-jerry-green-900/50 rounded-xl flex items-center justify-center border border-gold-500/20">
-                  <svg className="w-32 h-32 text-gold-500/30" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
-                  </svg>
-                </div>
-                <div className="absolute top-4 right-4 px-3 py-1 bg-gold-500/90 backdrop-blur-sm rounded-full">
-                  <span className="text-jerry-green-900 text-xs font-semibold">Photo Coming Soon</span>
-                </div>
+              {/* Photo */}
+              <div className="relative aspect-square rounded-xl overflow-hidden border border-gold-500/20">
+                <Image
+                  src="/images/team/Dan_Headshot.jpg"
+                  alt="Dan Freeman - Founder & Director of Jerry Can Spirits"
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 1024px) 100vw, 33vw"
+                  priority
+                />
               </div>
 
               {/* Quick Facts */}
