@@ -92,7 +92,7 @@ const nextConfig: NextConfig = {
               "font-src 'self' https://fonts.gstatic.com https://*.trustpilot.com data:",
               "img-src 'self' data: https: https://imagedelivery.net blob:",
               "media-src 'self' https:",
-              "connect-src 'self' https://www.google-analytics.com https://www.googletagmanager.com https://analytics.google.com https://region1.google-analytics.com https://www.google.com https://*.doubleclick.net https://*.klaviyo.com https://*.shopify.com https://*.myshopify.com https://cdn.sanity.io https://*.sanity.io https://*.ingest.sentry.io https://*.sentry.io https://cloudflareinsights.com https://*.trustpilot.com https://www.facebook.com https://*.facebook.com https://*.facebook.net wss: ws:",
+              "connect-src 'self' https://www.google-analytics.com https://www.googletagmanager.com https://analytics.google.com https://region1.google-analytics.com https://www.google.com https://*.doubleclick.net https://*.klaviyo.com https://*.shopify.com https://*.myshopify.com https://shop.jerrycanspirits.co.uk https://cdn.sanity.io https://*.sanity.io https://*.ingest.sentry.io https://*.sentry.io https://cloudflareinsights.com https://*.trustpilot.com https://www.facebook.com https://*.facebook.com https://*.facebook.net wss: ws:",
               "frame-src 'self' https://www.youtube.com https://www.vimeo.com https://cdn.sanity.io https://*.sanity.io https://*.trustpilot.com https://www.instagram.com https://*.instagram.com https://*.cdninstagram.com about: data:",
               "object-src 'none'",
               "base-uri 'self'",
