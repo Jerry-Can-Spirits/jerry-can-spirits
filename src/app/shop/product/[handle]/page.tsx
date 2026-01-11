@@ -7,6 +7,12 @@ import AddToCartButton from '@/components/AddToCartButton'
 import ProductImageGallery from '@/components/ProductImageGallery'
 import StructuredData from '@/components/StructuredData'
 import ProductPageTracking from '@/components/ProductPageTracking'
+import ProductSpecifications from '@/components/ProductSpecifications'
+import TastingNotes from '@/components/TastingNotes'
+import ProductProcess from '@/components/ProductProcess'
+import DutyPaidStatement from '@/components/DutyPaidStatement'
+import { client } from '@/sanity/lib/client'
+import { productByHandleQuery } from '@/sanity/queries'
 import type { Metadata } from 'next'
 
 // Lazy load TrustpilotWidget (below the fold)
@@ -87,9 +93,20 @@ export default async function ProductPage({
   const { handle } = await params
   let product: ShopifyProduct | null = null
   let relatedProducts: ShopifyProduct[] = []
+  let sanityProduct: any = null
 
   try {
-    product = await getProduct(handle)
+    // Fetch Shopify product and Sanity product data in parallel
+    // Sanity slug is typically the handle without the brand prefix
+    const slug = handle.replace('jerry-can-spirits-', '')
+
+    const [shopifyProduct, sanityData] = await Promise.all([
+      getProduct(handle),
+      client.fetch(productByHandleQuery, { slug, handle }).catch(() => null)
+    ])
+
+    product = shopifyProduct
+    sanityProduct = sanityData
 
     if (!product) {
       notFound()
@@ -332,6 +349,42 @@ export default async function ProductPage({
           </div>
         </div>
       </section>
+
+      {/* Product Details & Tasting Notes */}
+      {(product.metafields || sanityProduct) && (
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-16 space-y-8">
+          {/* Product Specifications */}
+          {product.metafields && product.metafields.length > 0 && (
+            <ProductSpecifications
+              metafields={product.metafields}
+              productHandle={handle}
+            />
+          )}
+
+          {/* Tasting Notes */}
+          {sanityProduct?.tastingNotes && (
+            <TastingNotes
+              tastingNotes={sanityProduct.tastingNotes}
+              flavorProfile={sanityProduct.flavorProfile}
+              professionalTip={sanityProduct.professionalTip}
+            />
+          )}
+
+          {/* Production Process */}
+          {sanityProduct?.process && (
+            <ProductProcess process={sanityProduct.process} />
+          )}
+
+          {/* Duty Paid Statement */}
+          {product.metafields && product.metafields.some((m: any) => m.namespace === 'legal' && m.key === 'duty_statement') && (
+            <DutyPaidStatement
+              statement={
+                product.metafields.find((m: any) => m.namespace === 'legal' && m.key === 'duty_statement')?.value || ''
+              }
+            />
+          )}
+        </section>
+      )}
 
       {/* Customer Reviews Section */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-16">
