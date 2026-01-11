@@ -12,9 +12,9 @@ export default function HeroSection() {
     seconds: 0,
   })
 
-  // Countdown to April 2026 launch
+  // Countdown to April 6th, 2026 launch
   useEffect(() => {
-    const launchDate = new Date('2026-04-01T00:00:00').getTime()
+    const launchDate = new Date('2026-04-06T00:00:00').getTime()
 
     const timer = setInterval(() => {
       const now = new Date().getTime()
