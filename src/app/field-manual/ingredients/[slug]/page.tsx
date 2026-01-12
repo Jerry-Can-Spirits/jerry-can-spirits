@@ -20,8 +20,16 @@ interface Ingredient {
   recommendedBrands?: {
     budget?: string
     budgetLink?: string
+    budgetNutrition?: {
+      calories: number
+      unit: string
+    }
     premium?: string
     premiumLink?: string
+    premiumNutrition?: {
+      calories: number
+      unit: string
+    }
   }
   storage?: string
   image?: { asset: { url: string } }
@@ -277,7 +285,14 @@ export default async function IngredientDetailPage({ params }: { params: Promise
                           {/* Text Content - Left */}
                           <div className="flex-1 min-w-0">
                             <p className="text-green-400 font-semibold mb-1 text-xs">Budget Choice</p>
-                            <p className="text-parchment-300 mb-3 text-sm">{ingredient.recommendedBrands.budget}</p>
+                            <p className="text-parchment-300 mb-2 text-sm">{ingredient.recommendedBrands.budget}</p>
+                            {ingredient.recommendedBrands.budgetNutrition && (
+                              <div className="mb-3 p-2 bg-jerry-green-800/40 rounded border border-gold-500/10">
+                                <p className="text-parchment-400 text-xs">
+                                  <span className="text-gold-400 font-semibold">{ingredient.recommendedBrands.budgetNutrition.calories} kcal</span> {ingredient.recommendedBrands.budgetNutrition.unit}
+                                </p>
+                              </div>
+                            )}
                             {ingredient.recommendedBrands.budgetLink && (
                               <a
                                 href={ingredient.recommendedBrands.budgetLink}
@@ -310,7 +325,14 @@ export default async function IngredientDetailPage({ params }: { params: Promise
                           {/* Text Content - Left */}
                           <div className="flex-1 min-w-0">
                             <p className="text-gold-400 font-semibold mb-1 text-xs">Premium Choice</p>
-                            <p className="text-parchment-300 mb-3 text-sm">{ingredient.recommendedBrands.premium}</p>
+                            <p className="text-parchment-300 mb-2 text-sm">{ingredient.recommendedBrands.premium}</p>
+                            {ingredient.recommendedBrands.premiumNutrition && (
+                              <div className="mb-3 p-2 bg-jerry-green-800/40 rounded border border-gold-500/10">
+                                <p className="text-parchment-400 text-xs">
+                                  <span className="text-gold-400 font-semibold">{ingredient.recommendedBrands.premiumNutrition.calories} kcal</span> {ingredient.recommendedBrands.premiumNutrition.unit}
+                                </p>
+                              </div>
+                            )}
                             {ingredient.recommendedBrands.premiumLink && (
                               <a
                                 href={ingredient.recommendedBrands.premiumLink}
