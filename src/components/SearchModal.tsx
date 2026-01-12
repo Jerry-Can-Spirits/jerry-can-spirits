@@ -243,8 +243,8 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                   )}
                 </div>
 
-                {/* Footer */}
-                <div className="border-t border-gold-500/20 p-3 flex items-center justify-between text-xs text-parchment-400">
+                {/* Footer - Keyboard shortcuts (hidden on mobile) */}
+                <div className="hidden md:flex border-t border-gold-500/20 p-3 items-center justify-between text-xs text-parchment-400">
                   <div className="flex items-center gap-4">
                     <span className="flex items-center gap-1">
                       <kbd className="px-2 py-1 bg-jerry-green-700/60 rounded border border-gold-500/20">↵</kbd>
