@@ -31,6 +31,18 @@ export default function ConsentBanner() {
     setLocalPreferences(preferences);
   }, [preferences]);
 
+  // Initialize Zaraz consent on page load based on saved preferences
+  useEffect(() => {
+    if (!isLoading && hasConsented && typeof window !== 'undefined' && window.zaraz?.consent) {
+      // Set Zaraz consent based on saved preferences
+      window.zaraz.consent.set({
+        HYWH: preferences.analytics,
+        Hhik: preferences.marketing,
+        XwpD: true, // functional cookies always granted
+      });
+    }
+  }, [isLoading, hasConsented, preferences]);
+
   // Don't show banner if user has already consented or while loading
   if (isLoading || hasConsented) {
     return null;
