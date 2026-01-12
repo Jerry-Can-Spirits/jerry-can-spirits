@@ -401,10 +401,10 @@ export default async function ProductPage({
           )}
 
           {/* Duty Paid Statement */}
-          {product.metafields && product.metafields.some((m: ShopifyMetafield) => m.namespace === 'legal' && m.key === 'duty_statement') && (
+          {product.metafields && product.metafields.filter(m => m !== null).some((m: ShopifyMetafield) => m.namespace === 'legal' && m.key === 'duty_statement') && (
             <DutyPaidStatement
               statement={
-                product.metafields.find((m: ShopifyMetafield) => m.namespace === 'legal' && m.key === 'duty_statement')?.value || ''
+                product.metafields.filter(m => m !== null).find((m: ShopifyMetafield) => m.namespace === 'legal' && m.key === 'duty_statement')?.value || ''
               }
             />
           )}
