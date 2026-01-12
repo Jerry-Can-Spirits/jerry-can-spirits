@@ -48,6 +48,7 @@ export interface ShopifyProductVariant {
   id: string;
   title: string;
   price: ShopifyMoney;
+  compareAtPrice?: ShopifyMoney | null;
   availableForSale: boolean;
   quantityAvailable?: number;
 }
@@ -293,6 +294,10 @@ export async function getProduct(handle: string): Promise<ShopifyProduct | null>
               id
               title
               price {
+                amount
+                currencyCode
+              }
+              compareAtPrice {
                 amount
                 currencyCode
               }
