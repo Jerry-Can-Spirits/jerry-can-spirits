@@ -220,5 +220,11 @@
     "cloudflareUrl": "https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/a2b48816-149e-496b-cf13-f00b264e8900/public",
     "filename": "Dan_Headshot.jpg",
     "uploadedAt": "2026-01-11T14:00:00.000Z"
+  },
+  "/images/partners/fever-tree.webp": {
+    "cloudflareId": "aa81cee1-2611-46ce-41b7-b918e1188c00",
+    "cloudflareUrl": "https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/aa81cee1-2611-46ce-41b7-b918e1188c00/public",
+    "filename": "fever-tree.webp",
+    "uploadedAt": "2026-01-12T00:00:00.000Z"
   }
 }

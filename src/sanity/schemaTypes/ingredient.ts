@@ -78,6 +78,36 @@ export default defineType({
           description: 'Master of Malt affiliate link for budget option'
         }),
         defineField({
+          name: 'budgetNutrition',
+          title: 'Budget Choice - Nutrition',
+          type: 'object',
+          description: 'Nutritional information for budget brand',
+          fields: [
+            defineField({
+              name: 'calories',
+              title: 'Calories (kcal)',
+              type: 'number',
+              description: 'Energy content in kilocalories'
+            }),
+            defineField({
+              name: 'unit',
+              title: 'Per Unit',
+              type: 'string',
+              options: {
+                list: [
+                  {title: 'per 100ml', value: 'per 100ml'},
+                  {title: 'per 100g', value: 'per 100g'},
+                  {title: 'per piece', value: 'per piece'},
+                  {title: 'per serving', value: 'per serving'},
+                  {title: 'per shot (25ml)', value: 'per shot (25ml)'},
+                  {title: 'per dash', value: 'per dash'}
+                ]
+              },
+              description: 'Unit of measurement for the calorie value'
+            })
+          ]
+        }),
+        defineField({
           name: 'premium',
           title: 'Premium Choice',
           type: 'string',
@@ -88,6 +118,36 @@ export default defineType({
           title: 'Premium Choice Link',
           type: 'url',
           description: 'Master of Malt affiliate link for premium option'
+        }),
+        defineField({
+          name: 'premiumNutrition',
+          title: 'Premium Choice - Nutrition',
+          type: 'object',
+          description: 'Nutritional information for premium brand',
+          fields: [
+            defineField({
+              name: 'calories',
+              title: 'Calories (kcal)',
+              type: 'number',
+              description: 'Energy content in kilocalories'
+            }),
+            defineField({
+              name: 'unit',
+              title: 'Per Unit',
+              type: 'string',
+              options: {
+                list: [
+                  {title: 'per 100ml', value: 'per 100ml'},
+                  {title: 'per 100g', value: 'per 100g'},
+                  {title: 'per piece', value: 'per piece'},
+                  {title: 'per serving', value: 'per serving'},
+                  {title: 'per shot (25ml)', value: 'per shot (25ml)'},
+                  {title: 'per dash', value: 'per dash'}
+                ]
+              },
+              description: 'Unit of measurement for the calorie value'
+            })
+          ]
         })
       ]
     }),

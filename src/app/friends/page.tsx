@@ -44,6 +44,15 @@ const partners = [
     logo: "/images/partners/The_Engraved_Gift_Workshop-logo.webp",
     featured: true,
   },
+  {
+    name: "Fever-Tree",
+    location: "London, United Kingdom",
+    description: "The world's leading premium mixer brand, partnering with Jerry Can Spirits to create the perfect serve. Founded in 2004 with a mission to provide the best-tasting, naturally-sourced mixers, Fever-Tree sources the finest ingredients from around the world. From their iconic Indian Tonic Water to their expanding range of premium mixers, Fever-Tree shares our commitment to quality and craftsmanship, ensuring every cocktail reaches its full potential.",
+    website: "https://fever-tree.com/en-gb",
+    speciality: "Premium Mixers & Tonics",
+    logo: "/images/partners/fever-tree.webp",
+    featured: true,
+  },
 ]
 
 export default function FriendsPage() {
