@@ -383,7 +383,6 @@ export default async function ProductPage({
           {product.metafields && product.metafields.length > 0 && (
             <ProductSpecifications
               metafields={product.metafields}
-              productHandle={handle}
             />
           )}
 
