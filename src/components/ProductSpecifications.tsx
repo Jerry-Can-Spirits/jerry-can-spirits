@@ -9,8 +9,10 @@ function parseMetafields(metafields: ShopifyMetafield[]) {
   const specs: Record<string, string> = {}
 
   metafields.forEach((field) => {
-    const key = `${field.namespace}.${field.key}`
-    specs[key] = field.value
+    if (field && field.namespace && field.key) {
+      const key = `${field.namespace}.${field.key}`
+      specs[key] = field.value
+    }
   })
 
   return specs
