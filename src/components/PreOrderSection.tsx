@@ -7,6 +7,7 @@ import { getProduct } from '@/lib/shopify'
 
 export default function PreOrderSection() {
   const [bottlesSold, setBottlesSold] = useState<number | null>(null)
+  const [pricing, setPricing] = useState<{ price: string; compareAtPrice: string | null }>({ price: '35', compareAtPrice: '45' })
   const [loading, setLoading] = useState(true)
   const totalBottles = 700
   const productHandle = 'jerry-can-spirits-expedition-spiced-rum'
@@ -15,11 +16,21 @@ export default function PreOrderSection() {
     async function fetchInventory() {
       try {
         const product = await getProduct(productHandle)
-        if (product?.variants?.[0]?.quantityAvailable !== undefined) {
+        if (product?.variants?.[0]) {
+          const variant = product.variants[0]
+
           // Calculate bottles sold: total - available
-          const available = product.variants[0].quantityAvailable
-          const sold = totalBottles - available
-          setBottlesSold(sold)
+          if (variant.quantityAvailable !== undefined) {
+            const available = variant.quantityAvailable
+            const sold = totalBottles - available
+            setBottlesSold(sold)
+          }
+
+          // Set pricing from product data
+          setPricing({
+            price: parseFloat(variant.price.amount).toFixed(0),
+            compareAtPrice: variant.compareAtPrice ? parseFloat(variant.compareAtPrice.amount).toFixed(0) : null
+          })
         }
       } catch (error) {
         console.error('Error fetching inventory:', error)
@@ -35,6 +46,7 @@ export default function PreOrderSection() {
 
   const percentageSold = bottlesSold !== null ? (bottlesSold / totalBottles) * 100 : 0
   const showProgressBar = !loading && bottlesSold !== null
+  const discount = pricing.compareAtPrice ? parseInt(pricing.compareAtPrice) - parseInt(pricing.price) : 10
 
   return (
     <section className="py-16 bg-jerry-green-900/50">
@@ -120,7 +132,7 @@ export default function PreOrderSection() {
                   <svg className="w-5 h-5 text-gold-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                   </svg>
-                  <span className="text-parchment-200">Save £5 as an early supporter (£35 vs £40)</span>
+                  <span className="text-parchment-200">Save £{discount} as an early supporter (£{pricing.price} vs £{pricing.compareAtPrice} RRP)</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <svg className="w-5 h-5 text-gold-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -143,7 +155,12 @@ export default function PreOrderSection() {
                 href="/shop/product/jerry-can-spirits-expedition-spiced-rum"
                 className="group bg-gradient-to-r from-gold-600 to-gold-500 hover:from-gold-500 hover:to-gold-400 text-jerry-green-900 px-8 py-4 rounded-lg font-semibold uppercase tracking-wide transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 flex items-center justify-center gap-2"
               >
-                Pre-Order Now - £35
+                <span className="flex flex-col sm:flex-row sm:items-baseline sm:gap-2">
+                  <span>Pre-Order Now - £{pricing.price}</span>
+                  {pricing.compareAtPrice && (
+                    <span className="text-xs sm:text-sm line-through opacity-75">£{pricing.compareAtPrice}</span>
+                  )}
+                </span>
                 <svg
                   className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300"
                   fill="none"
