@@ -380,14 +380,11 @@ export default async function ProductPage({
       {(product.metafields || sanityProduct) && (
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-16 space-y-8">
           {/* Product Specifications */}
-          {/* TEMPORARILY DISABLED FOR DEBUGGING
           {product.metafields && product.metafields.length > 0 && (
             <ProductSpecifications
               metafields={product.metafields}
-              productHandle={handle}
             />
           )}
-          */}
 
           {/* Tasting Notes */}
           {sanityProduct?.tastingNotes && (

@@ -1,9 +1,7 @@
 import { ShopifyMetafield } from '@/lib/shopify'
-import ProductQRCode from './ProductQRCode'
 
 interface ProductSpecificationsProps {
   metafields?: ShopifyMetafield[]
-  productHandle: string
 }
 
 // Helper function to parse metafields into a structured object
@@ -25,7 +23,6 @@ function getSpec(specs: Record<string, string>, namespace: string, key: string):
 
 export default function ProductSpecifications({
   metafields = [],
-  productHandle,
 }: ProductSpecificationsProps) {
   if (metafields.length === 0) {
     return null
@@ -43,18 +40,14 @@ export default function ProductSpecifications({
   const colour = getSpec(specs, 'specifications', 'colour')
   const awards = getSpec(specs, 'specifications', 'awards')
 
-  // QR code URL with anchor to details section
-  const qrCodeUrl = `https://jerrycanspirits.co.uk/shop/product/${productHandle}#details`
-
   return (
     <section id="details" className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 sm:p-8 border border-gold-500/20">
       <h2 className="text-2xl sm:text-3xl font-serif font-bold text-gold-300 mb-6">
         Product Specifications
       </h2>
 
-      <div className="grid lg:grid-cols-[1fr,auto] gap-8 items-start">
-        {/* Specifications Grid */}
-        <div className="grid sm:grid-cols-2 gap-4">
+      {/* Specifications Grid */}
+      <div className="grid sm:grid-cols-2 gap-4">
           {ageStatement && (
             <div className="bg-jerry-green-800/40 rounded-lg p-4 border border-gold-500/10">
               <dt className="text-sm font-semibold text-gold-400 uppercase tracking-wide mb-1">
@@ -126,12 +119,6 @@ export default function ProductSpecifications({
               <dd className="text-parchment-100 font-medium whitespace-pre-line">{awards}</dd>
             </div>
           )}
-        </div>
-
-        {/* QR Code */}
-        <div className="flex justify-center lg:justify-end">
-          <ProductQRCode url={qrCodeUrl} />
-        </div>
       </div>
     </section>
   )
