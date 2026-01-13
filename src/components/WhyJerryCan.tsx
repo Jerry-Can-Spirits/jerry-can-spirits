@@ -77,7 +77,7 @@ export default function WhyJerryCan() {
         {/* Supporting Badges */}
         <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-6">
           <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20 text-center">
-            <div className="text-3xl font-bold text-gold-300 mb-2">500</div>
+            <div className="text-3xl font-bold text-gold-300 mb-2">700</div>
             <div className="text-parchment-400 text-sm uppercase tracking-wide">Limited First Batch</div>
           </div>
 

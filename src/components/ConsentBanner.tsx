@@ -103,7 +103,7 @@ export default function ConsentBanner() {
                 Cookie Consent
               </h3>
               <p className="text-white text-sm">
-                We use cookies to improve your experience on our site, analyze traffic, and for marketing purposes.{' '}
+                We use cookies to improve your experience on our site, analyse traffic, and for marketing purposes.{' '}
                 <Link href="/cookie-preferences" className="text-jerry-gold-300 hover:text-jerry-gold-200 underline">
                   Manage your preferences
                 </Link>
