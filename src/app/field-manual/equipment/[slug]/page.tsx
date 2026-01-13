@@ -69,6 +69,10 @@ async function getAllEquipment(): Promise<Equipment[]> {
   return await client.fetch(equipmentQuery)
 }
 
+// Cloudflare Pages requires explicit static config for SSG routes
+export const dynamicParams = false
+export const revalidate = false // Fully static, no ISR
+
 export async function generateStaticParams() {
   const equipment = await getAllEquipment()
   return equipment.map((item) => ({

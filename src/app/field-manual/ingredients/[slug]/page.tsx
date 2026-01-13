@@ -92,6 +92,10 @@ async function getAllIngredients(): Promise<Ingredient[]> {
   return await client.fetch(ingredientsQuery)
 }
 
+// Cloudflare Pages requires explicit static config for SSG routes
+export const dynamicParams = false
+export const revalidate = false // Fully static, no ISR
+
 export async function generateStaticParams() {
   const ingredients = await getAllIngredients()
   return ingredients.map((item) => ({

@@ -56,6 +56,10 @@ interface PageProps {
   }>
 }
 
+// Cloudflare Pages requires explicit static config for SSG routes
+export const dynamicParams = false
+export const revalidate = false // Fully static, no ISR
+
 // Generate static params for all cocktails
 export async function generateStaticParams() {
   const cocktails = await client.fetch<SanityCocktail[]>(cocktailsQuery)

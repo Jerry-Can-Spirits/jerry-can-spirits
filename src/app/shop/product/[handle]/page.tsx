@@ -48,6 +48,10 @@ const TrustpilotWidget = dynamic(() => import('@/components/TrustpilotWidget'), 
   ),
 });
 
+// Cloudflare Pages requires explicit static config for SSG routes
+export const dynamicParams = false
+export const revalidate = false // Fully static, no ISR
+
 // Generate static params for all products at build time
 export async function generateStaticParams() {
   try {

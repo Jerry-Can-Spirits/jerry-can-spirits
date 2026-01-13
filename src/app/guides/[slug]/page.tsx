@@ -75,6 +75,10 @@ interface Guide {
   estimatedWordCount?: number
 }
 
+//Cloudflare Pages requires explicit static config for SSG routes
+export const dynamicParams = false
+export const revalidate = false // Fully static, no ISR
+
 async function getGuide(slug: string): Promise<Guide | null> {
   return await client.fetch(guideBySlugQuery, { slug })
 }
