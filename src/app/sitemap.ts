@@ -4,7 +4,8 @@ import { client } from '@/sanity/client'
 import {
   cocktailsSitemapQuery,
   equipmentSitemapQuery,
-  ingredientsSitemapQuery
+  ingredientsSitemapQuery,
+  guidesSitemapQuery
 } from '@/sanity/queries'
 
 // Ensure sitemap works on Cloudflare Pages Edge Runtime
@@ -81,6 +82,22 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.6,
   }))
 
+  // Fetch all guides from Sanity (optimized - only slug field)
+  let guides: Array<{ slug: { current: string } }> = []
+  try {
+    guides = await client.fetch(guidesSitemapQuery)
+  } catch (error) {
+    console.error('Error fetching guides for sitemap:', error)
+  }
+
+  // Generate guide URLs dynamically (HIGH PRIORITY for SEO)
+  const guideUrls: MetadataRoute.Sitemap = guides.map((item) => ({
+    url: `${baseUrl}/guides/${item.slug.current}`,
+    lastModified: currentDate,
+    changeFrequency: 'weekly' as const,
+    priority: 0.9, // High priority for SEO-focused content
+  }))
+
   // Define all static routes with priorities and change frequencies
   const routes: MetadataRoute.Sitemap = [
     {
@@ -144,6 +161,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: currentDate,
       changeFrequency: 'monthly',
       priority: 0.7,
+    },
+    // Guides pages
+    {
+      url: `${baseUrl}/guides`,
+      lastModified: currentDate,
+      changeFrequency: 'weekly',
+      priority: 0.9,
     },
     // Contact pages
     {
@@ -249,5 +273,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
   ]
 
-  return [...routes, ...productUrls, ...cocktailUrls, ...equipmentUrls, ...ingredientUrls]
+  return [...routes, ...productUrls, ...cocktailUrls, ...equipmentUrls, ...ingredientUrls, ...guideUrls]
 }
