@@ -54,7 +54,6 @@ export default function Header() {
         { name: 'Ingredients', href: '/field-manual/ingredients', description: 'Quality spirits guide' },
       ]
     },
-    { name: 'Guides', href: '/guides' },
     {
       name: 'About',
       dropdown: [
