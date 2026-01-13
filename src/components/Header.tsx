@@ -54,6 +54,7 @@ export default function Header() {
         { name: 'Ingredients', href: '/field-manual/ingredients', description: 'Quality spirits guide' },
       ]
     },
+    { name: 'Guides', href: '/guides', description: 'Educational guides on spiced rum & UK craft spirits' },
     {
       name: 'About',
       dropdown: [

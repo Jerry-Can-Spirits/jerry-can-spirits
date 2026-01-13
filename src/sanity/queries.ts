@@ -232,3 +232,75 @@ export const productByHandleQuery = `*[_type == "product" && (slug.current == $s
   videoUrl,
   "relatedCocktails": relatedCocktails[]->{ _id, name, slug }
 }`
+
+// Sitemap query - only fetches slug for URL generation
+export const guidesSitemapQuery = `*[_type == "guide"] { slug }`
+
+// Optimized listing query - only fetches fields needed for preview cards
+export const guidesListQuery = `*[_type == "guide"] | order(publishedAt desc, _createdAt desc) {
+  _id,
+  title,
+  slug,
+  excerpt,
+  category,
+  featured,
+  isPillar,
+  publishedAt,
+  "heroImage": heroImage.asset->url
+}`
+
+// Full query for guide detail pages
+export const guideBySlugQuery = `*[_type == "guide" && slug.current == $slug][0] {
+  _id,
+  title,
+  slug,
+  excerpt,
+  metaTitle,
+  metaDescription,
+  keywords,
+  category,
+  featured,
+  isPillar,
+  author,
+  publishedAt,
+  updatedAt,
+  introduction,
+  sections[] {
+    heading,
+    content,
+    subsections[] {
+      subheading,
+      content
+    }
+  },
+  faqs[] {
+    question,
+    answer
+  },
+  comparisonTables[] {
+    caption,
+    headers,
+    rows[] {
+      cells
+    }
+  },
+  featuredDistilleries[] {
+    name,
+    location,
+    description,
+    website,
+    speciality
+  },
+  "relatedGuides": relatedGuides[]->{ _id, title, slug, excerpt, category },
+  "relatedCocktails": relatedCocktails[]->{ _id, name, slug },
+  relatedProducts[] {
+    shopifyHandle,
+    contextNote
+  },
+  "heroImage": heroImage.asset->url,
+  callToAction {
+    text,
+    url
+  },
+  estimatedWordCount
+}`
