@@ -89,22 +89,21 @@ export default function CocktailsClient({ cocktails }: CocktailsClientProps) {
   // Get featured cocktails
   const featuredCocktails = filteredCocktails.filter(c => c.featured)
 
-  // Categories for filter tabs (Base Spirits & Special Categories)
+  // Categories for filter tabs (Base Spirits & Cocktail Families)
   const categories = [
     { value: 'all', label: 'All Cocktails' },
     { value: 'spiced-rum', label: 'Spiced Rum' },
     { value: 'white-rum', label: 'White Rum' },
-    { value: 'dark-rum', label: 'Dark Rum' },
     { value: 'aged-rum', label: 'Aged Rum' },
+    { value: 'dark-rum', label: 'Dark Rum' },
     { value: 'overproof-rum', label: 'Overproof Rum' },
     { value: 'vodka', label: 'Vodka' },
     { value: 'gin', label: 'Gin' },
     { value: 'tequila', label: 'Tequila' },
     { value: 'whiskey', label: 'Whiskey' },
-    { value: 'prosecco', label: 'Prosecco' },
-    { value: 'liqueur', label: 'Liqueur' },
-    { value: 'bitters', label: 'Bitters' },
-    { value: 'fortified-wine', label: 'Fortified Wine' },
+    { value: 'aromatised-wine', label: 'Aromatised Wine' },
+    { value: 'champagne', label: 'Champagne' },
+    { value: 'liqueur-based', label: 'Liqueur-Based' },
     { value: 'non-alcoholic', label: 'Non-Alcoholic' }
   ]
 

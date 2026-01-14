@@ -224,28 +224,27 @@ export default defineType({
     }),
     defineField({
       name: 'category',
-      title: 'Base Spirit',
+      title: 'Base Spirit / Cocktail Family',
       type: 'string',
       options: {
         list: [
           {title: 'Spiced Rum', value: 'spiced-rum'},
           {title: 'White Rum', value: 'white-rum'},
-          {title: 'Dark Rum', value: 'dark-rum'},
           {title: 'Aged Rum', value: 'aged-rum'},
+          {title: 'Dark Rum', value: 'dark-rum'},
           {title: 'Overproof Rum', value: 'overproof-rum'},
           {title: 'Vodka', value: 'vodka'},
           {title: 'Gin', value: 'gin'},
           {title: 'Tequila', value: 'tequila'},
           {title: 'Whiskey', value: 'whiskey'},
-          {title: 'Prosecco', value: 'prosecco'},
-          {title: 'Liqueur', value: 'liqueur'},
-          {title: 'Bitters', value: 'bitters'},
-          {title: 'Fortified Wine', value: 'fortified-wine'},
+          {title: 'Aromatised Wine', value: 'aromatised-wine'},
+          {title: 'Champagne', value: 'champagne'},
+          {title: 'Liqueur-Based', value: 'liqueur-based'},
           {title: 'Non-Alcoholic', value: 'non-alcoholic'}
         ]
       },
       initialValue: 'spiced-rum',
-      description: 'The primary/base spirit of the cocktail'
+      description: 'The primary/base spirit or cocktail family'
     }),
     defineField({
       name: 'featured',
