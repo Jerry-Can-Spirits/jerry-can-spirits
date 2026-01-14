@@ -217,7 +217,7 @@ export default async function GuidePage({ params }: PageProps) {
             </span>
             {guide.isPillar && (
               <span className="px-3 py-1 bg-gold-500/20 border border-gold-500/40 text-gold-300 rounded-full text-sm font-semibold">
-                Pillar Guide
+                Complete Guide
               </span>
             )}
             {guide.estimatedWordCount && (
