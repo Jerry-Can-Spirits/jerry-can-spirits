@@ -43,8 +43,30 @@ interface SanityCocktail {
   note?: string
   variants?: CocktailVariant[]
   category?: string
+  tags?: string[]
   featured?: boolean
   image?: string
+}
+
+// Tag display labels (convert values to readable format)
+const tagLabels: Record<string, string> = {
+  'high-abv': 'High-ABV',
+  'low-abv': 'Low-ABV',
+  'sessionable': 'Sessionable',
+  'multi-spirit': 'Multi-Spirit',
+  'spirit-forward': 'Spirit-Forward',
+  'long-drink': 'Long Drink',
+  'party': 'Party',
+  'after-dinner': 'After-Dinner',
+  'aperitif': 'Aperitif',
+  'digestif': 'Digestif',
+  'celebratory': 'Celebratory',
+  'late-night': 'Late Night',
+  'built': 'Built',
+  'shaken': 'Shaken',
+  'stirred': 'Stirred',
+  'batchable': 'Batchable',
+  'shot': 'Shot'
 }
 
 interface CocktailsClientProps {
@@ -288,6 +310,25 @@ export default function CocktailsClient({ cocktails }: CocktailsClientProps) {
                     {cocktail.description}
                   </p>
 
+                  {/* Tags */}
+                  {cocktail.tags && cocktail.tags.length > 0 && (
+                    <div className="flex flex-wrap gap-1">
+                      {cocktail.tags.slice(0, 3).map((tag) => (
+                        <span
+                          key={tag}
+                          className="px-2 py-0.5 bg-jerry-green-800/60 border border-gold-500/20 text-parchment-300 rounded text-xs"
+                        >
+                          {tagLabels[tag] || tag}
+                        </span>
+                      ))}
+                      {cocktail.tags.length > 3 && (
+                        <span className="px-2 py-0.5 text-parchment-400 text-xs">
+                          +{cocktail.tags.length - 3}
+                        </span>
+                      )}
+                    </div>
+                  )}
+
                   {cocktail.variants && cocktail.variants.length > 0 && (
                     <p className="text-gold-400 text-xs">
                       {cocktail.variants.length + 1} variations
@@ -362,6 +403,25 @@ export default function CocktailsClient({ cocktails }: CocktailsClientProps) {
                   <p className="text-parchment-300 text-sm leading-relaxed line-clamp-3">
                     {cocktail.description}
                   </p>
+
+                  {/* Tags */}
+                  {cocktail.tags && cocktail.tags.length > 0 && (
+                    <div className="flex flex-wrap gap-1">
+                      {cocktail.tags.slice(0, 3).map((tag) => (
+                        <span
+                          key={tag}
+                          className="px-2 py-0.5 bg-jerry-green-800/60 border border-gold-500/20 text-parchment-300 rounded text-xs"
+                        >
+                          {tagLabels[tag] || tag}
+                        </span>
+                      ))}
+                      {cocktail.tags.length > 3 && (
+                        <span className="px-2 py-0.5 text-parchment-400 text-xs">
+                          +{cocktail.tags.length - 3}
+                        </span>
+                      )}
+                    </div>
+                  )}
 
                   {cocktail.variants && cocktail.variants.length > 0 && (
                     <p className="text-gold-400 text-xs">

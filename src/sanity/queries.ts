@@ -11,6 +11,7 @@ export const cocktailsListQuery = `*[_type == "cocktail"] | order(_createdAt des
   description,
   difficulty,
   category,
+  tags,
   featured,
   "image": image.asset->url
 }`
@@ -45,6 +46,7 @@ export const cocktailsQuery = `*[_type == "cocktail"] | order(_createdAt desc) {
     note
   },
   category,
+  tags,
   featured,
   "image": image.asset->url
 }`
@@ -78,6 +80,7 @@ export const cocktailBySlugQuery = `*[_type == "cocktail" && slug.current == $sl
     note
   },
   category,
+  tags,
   featured,
   "image": image.asset->url
 }`

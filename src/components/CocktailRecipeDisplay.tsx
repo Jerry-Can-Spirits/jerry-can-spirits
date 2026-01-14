@@ -42,8 +42,30 @@ interface SanityCocktail {
   note?: string
   variants?: CocktailVariant[]
   category?: string
+  tags?: string[]
   featured?: boolean
   image?: string
+}
+
+// Tag display labels (convert values to readable format)
+const tagLabels: Record<string, string> = {
+  'high-abv': 'High-ABV',
+  'low-abv': 'Low-ABV',
+  'sessionable': 'Sessionable',
+  'multi-spirit': 'Multi-Spirit',
+  'spirit-forward': 'Spirit-Forward',
+  'long-drink': 'Long Drink',
+  'party': 'Party',
+  'after-dinner': 'After-Dinner',
+  'aperitif': 'Aperitif',
+  'digestif': 'Digestif',
+  'celebratory': 'Celebratory',
+  'late-night': 'Late Night',
+  'built': 'Built',
+  'shaken': 'Shaken',
+  'stirred': 'Stirred',
+  'batchable': 'Batchable',
+  'shot': 'Shot'
 }
 
 interface Props {
@@ -113,6 +135,20 @@ export default function CocktailRecipeDisplay({ cocktail }: Props) {
               <p className="text-parchment-300 text-lg leading-relaxed">
                 {currentRecipe.description}
               </p>
+
+              {/* Tags */}
+              {cocktail.tags && cocktail.tags.length > 0 && (
+                <div className="flex flex-wrap gap-2 mt-4">
+                  {cocktail.tags.map((tag) => (
+                    <span
+                      key={tag}
+                      className="px-3 py-1 bg-jerry-green-800/60 border border-gold-500/30 text-parchment-200 rounded-full text-sm"
+                    >
+                      {tagLabels[tag] || tag}
+                    </span>
+                  ))}
+                </div>
+              )}
             </div>
             <span className={`px-3 py-1 rounded-full border text-sm font-semibold whitespace-nowrap ml-4 ${getDifficultyColor(cocktail?.difficulty || '')}`}>
               {getDifficultyLabel(cocktail?.difficulty || '')}
