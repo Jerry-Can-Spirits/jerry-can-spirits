@@ -247,6 +247,37 @@ export default defineType({
       description: 'The primary/base spirit or cocktail family'
     }),
     defineField({
+      name: 'tags',
+      title: 'Tags',
+      type: 'array',
+      of: [{type: 'string'}],
+      options: {
+        list: [
+          // Strength & Structure
+          {title: 'High-ABV', value: 'high-abv'},
+          {title: 'Low-ABV', value: 'low-abv'},
+          {title: 'Sessionable', value: 'sessionable'},
+          {title: 'Multi-Spirit', value: 'multi-spirit'},
+          {title: 'Spirit-Forward', value: 'spirit-forward'},
+          {title: 'Long Drink', value: 'long-drink'},
+          // Occasion / Intent
+          {title: 'Party', value: 'party'},
+          {title: 'After-Dinner', value: 'after-dinner'},
+          {title: 'Aperitif', value: 'aperitif'},
+          {title: 'Celebratory', value: 'celebratory'},
+          {title: 'Late Night', value: 'late-night'},
+          // Preparation / Service
+          {title: 'Built', value: 'built'},
+          {title: 'Shaken', value: 'shaken'},
+          {title: 'Stirred', value: 'stirred'},
+          {title: 'Batchable', value: 'batchable'},
+          {title: 'Shot', value: 'shot'}
+        ],
+        layout: 'grid'
+      },
+      description: 'Select multiple tags to help categorise this cocktail'
+    }),
+    defineField({
       name: 'featured',
       title: 'Featured Cocktail',
       type: 'boolean',

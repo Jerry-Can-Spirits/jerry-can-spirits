@@ -3,7 +3,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { notFound } from 'next/navigation'
 import { client } from '@/sanity/client'
-import { equipmentBySlugQuery, equipmentQuery } from '@/sanity/queries'
+import { equipmentBySlugQuery } from '@/sanity/queries'
 import { urlFor } from '@/sanity/lib/image'
 import BackToTop from '@/components/BackToTop'
 
@@ -65,19 +65,8 @@ async function getEquipment(slug: string): Promise<Equipment | null> {
   return await client.fetch(equipmentBySlugQuery, { slug })
 }
 
-async function getAllEquipment(): Promise<Equipment[]> {
-  return await client.fetch(equipmentQuery)
-}
-
 // Cloudflare Pages edge runtime for dynamic routes
 export const runtime = 'edge'
-
-export async function generateStaticParams() {
-  const equipment = await getAllEquipment()
-  return equipment.map((item) => ({
-    slug: item.slug.current,
-  }))
-}
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params
