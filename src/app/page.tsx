@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   title: "Jerry Can Spirits | Veteran-Owned Premium British Rum",
   description: "Veteran-owned premium British rum with authentic military heritage. Founded by Royal Corps of Signals veterans. Small-batch spirits engineered for reliability, designed for adventure. Expedition Ready.",
   alternates: {
-    canonical: "https://jerrycanspirits.co.uk",
+    canonical: "https://jerrycanspirits.co.uk/",
   },
   openGraph: {
     title: "Jerry Can Spirits | Veteran-Owned Premium British Rum",

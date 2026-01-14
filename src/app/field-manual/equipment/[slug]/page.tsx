@@ -82,7 +82,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     title: `${equipment.name} Guide | Jerry Can Spirits Bar Equipment`,
     description: equipment.description,
     alternates: {
-      canonical: `https://jerrycanspirits.co.uk/field-manual/equipment/${slug}`,
+      canonical: `https://jerrycanspirits.co.uk/field-manual/equipment/${slug}/`,
     },
     openGraph: {
       title: `${equipment.name} Guide | Jerry Can Spirits`,

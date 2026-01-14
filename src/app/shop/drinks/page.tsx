@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   title: 'Premium British Rum Collection | Jerry Can Spirits',
   description: 'Veteran-owned British rum collection. Small-batch premium spirits crafted with military precision by Royal Corps of Signals veterans. Sustainably sourced, expedition-tested. Shop our authentic military heritage rum range.',
   alternates: {
-    canonical: 'https://jerrycanspirits.co.uk/shop/drinks',
+    canonical: 'https://jerrycanspirits.co.uk/shop/drinks/',
   },
 }
 

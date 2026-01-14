@@ -4,7 +4,7 @@ export const metadata: Metadata = {
   title: "Security Policy | Jerry Can Spirits® - Vulnerability Disclosure",
   description: "Jerry Can Spirits® security vulnerability disclosure policy. How to report security issues and our commitment to protecting your data.",
   alternates: {
-    canonical: 'https://jerrycanspirits.co.uk/security-policy',
+    canonical: 'https://jerrycanspirits.co.uk/security-policy/',
   },
   robots: {
     index: true,

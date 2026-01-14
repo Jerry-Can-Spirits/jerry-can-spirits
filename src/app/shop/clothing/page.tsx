@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   title: 'Expedition Gear | Veteran-Owned Apparel & Accessories | Jerry Can Spirits',
   description: 'Adventure-ready apparel and branded merchandise from Jerry Can Spirits. Quality expedition gear engineered for reliability, designed for adventure.',
   alternates: {
-    canonical: 'https://jerrycanspirits.co.uk/shop/clothing',
+    canonical: 'https://jerrycanspirits.co.uk/shop/clothing/',
   },
 }
 

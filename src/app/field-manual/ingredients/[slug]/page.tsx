@@ -105,7 +105,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     title: `${ingredient.name} Guide | Jerry Can Spirits Ingredients`,
     description: ingredient.description,
     alternates: {
-      canonical: `https://jerrycanspirits.co.uk/field-manual/ingredients/${slug}`,
+      canonical: `https://jerrycanspirits.co.uk/field-manual/ingredients/${slug}/`,
     },
     openGraph: {
       title: `${ingredient.name} Guide | Jerry Can Spirits`,

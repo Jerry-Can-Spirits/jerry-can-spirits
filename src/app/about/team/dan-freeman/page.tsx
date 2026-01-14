@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   title: 'Dan Freeman - Founder & Director | Jerry Can Spirits®',
   description: 'Meet Dan Freeman, founder of Jerry Can Spirits. Former Royal Signals Corporal with 12 years of service, now crafting premium spirits with military precision.',
   alternates: {
-    canonical: 'https://jerrycanspirits.co.uk/about/team/dan-freeman',
+    canonical: 'https://jerrycanspirits.co.uk/about/team/dan-freeman/',
   },
   openGraph: {
     title: 'Dan Freeman - Founder & Director | Jerry Can Spirits®',

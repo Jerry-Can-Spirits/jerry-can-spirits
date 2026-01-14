@@ -16,6 +16,8 @@ export default function robots(): MetadataRoute.Robots {
           '/studio/',        // Block Sanity CMS admin
           '/api/',           // Block API routes
           '/_next/data/',    // Block Next.js data fetching routes
+          '/auth',           // Block old auth pages
+          '/auth.html',      // Block old auth pages
         ],
       },
       // Special rules for AI crawlers (be nice to AI indexing for discoverability)

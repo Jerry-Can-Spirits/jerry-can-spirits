@@ -4,7 +4,7 @@ export const metadata: Metadata = {
   title: "Terms of Service | Jerry Can Spirits® - Terms & Conditions",
   description: "Jerry Can Spirits® Terms of Service and conditions of use. Legal terms governing the use of our website and purchase of our premium spirits.",
   alternates: {
-    canonical: 'https://jerrycanspirits.co.uk/terms-of-service',
+    canonical: 'https://jerrycanspirits.co.uk/terms-of-service/',
   },
   robots: {
     index: true,
