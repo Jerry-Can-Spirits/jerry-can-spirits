@@ -152,7 +152,7 @@ export default function CocktailsClient({ cocktails }: CocktailsClientProps) {
           <div className="text-center">
             <h1 className="text-3xl font-serif font-bold text-white mb-4">Coming Soon</h1>
             <p className="text-parchment-300 mb-8">
-              Our signature cocktail recipes are being crafted. Check back soon for expertly designed drinks featuring our premium rum.
+              Our signature cocktail recipes are being crafted. Check back soon for expertly designed drinks and classic recipes.
             </p>
             <Link
               href="/field-manual"
@@ -193,7 +193,7 @@ export default function CocktailsClient({ cocktails }: CocktailsClientProps) {
           </h1>
 
           <p className="text-xl text-parchment-300 max-w-3xl mx-auto leading-relaxed">
-            Each cocktail is carefully crafted to showcase <Link href="/shop/drinks" className="text-gold-300 hover:text-gold-400 underline decoration-gold-500/40 hover:decoration-gold-400 transition-colors">our premium rum's</Link> unique character.
+            Each cocktail is carefully crafted to highlight quality spirits and balanced flavours.
             Start with the classics, then explore our signature variations designed for the modern explorer.
           </p>
         </div>

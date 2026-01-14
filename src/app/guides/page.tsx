@@ -115,7 +115,7 @@ export default async function GuidesPage() {
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-jerry-green-900/80 to-transparent" />
                     <div className="absolute top-4 left-4 px-3 py-1 bg-gold-500/90 backdrop-blur-sm rounded-full">
-                      <span className="text-jerry-green-900 text-xs font-bold">Pillar Guide</span>
+                      <span className="text-jerry-green-900 text-xs font-bold">Complete Guide</span>
                     </div>
                   </div>
                 )}

@@ -32,6 +32,7 @@ export default function Footer() {
       { name: 'Home', href: '/' },
       { name: 'Shop', href: '/shop' },
       { name: 'Field Manual', href: '/field-manual' },
+      { name: 'Guides', href: '/guides' },
       { name: 'Our Story', href: '/about/story' },
       { name: 'Friends & Partners', href: '/friends' },
       { name: 'FAQ', href: '/faq' },
