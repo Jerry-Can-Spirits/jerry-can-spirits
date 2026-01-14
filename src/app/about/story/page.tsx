@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   title: "Our Story | Veteran-Owned British Rum - From Royal Corps of Signals to Premium Spirits",
   description: "Veteran-owned British rum brand founded by Royal Corps of Signals veterans with 12 years military service. From Arctic deployments to crafting premium small-batch rum engineered for reliability. Our authentic military heritage story.",
   alternates: {
-    canonical: 'https://jerrycanspirits.co.uk/about/story',
+    canonical: 'https://jerrycanspirits.co.uk/about/story/',
   },
   robots: {
     index: true,

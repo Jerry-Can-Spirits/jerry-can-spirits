@@ -122,7 +122,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     description: guide.metaDescription || guide.excerpt,
     keywords: guide.keywords?.join(', '),
     alternates: {
-      canonical: `https://jerrycanspirits.co.uk/guides/${guide.slug.current}`,
+      canonical: `https://jerrycanspirits.co.uk/guides/${guide.slug.current}/`,
     },
     openGraph: {
       title: guide.metaTitle || guide.title,

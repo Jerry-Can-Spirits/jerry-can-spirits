@@ -26,9 +26,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     console.error('Error fetching products for sitemap:', error)
   }
 
-  // Generate product URLs dynamically
+  // Generate product URLs dynamically (with trailing slash to match trailingSlash config)
   const productUrls: MetadataRoute.Sitemap = products.map((product) => ({
-    url: `${baseUrl}/shop/product/${product.handle}`,
+    url: `${baseUrl}/shop/product/${product.handle}/`,
     lastModified: currentDate,
     changeFrequency: 'weekly' as const,
     priority: 0.8,
@@ -42,9 +42,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     console.error('Error fetching cocktails for sitemap:', error)
   }
 
-  // Generate cocktail URLs dynamically
+  // Generate cocktail URLs dynamically (with trailing slash)
   const cocktailUrls: MetadataRoute.Sitemap = cocktails.map((cocktail) => ({
-    url: `${baseUrl}/cocktails/${cocktail.slug.current}`,
+    url: `${baseUrl}/cocktails/${cocktail.slug.current}/`,
     lastModified: currentDate,
     changeFrequency: 'weekly' as const,
     priority: 0.7,
@@ -58,9 +58,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     console.error('Error fetching equipment for sitemap:', error)
   }
 
-  // Generate equipment URLs dynamically
+  // Generate equipment URLs dynamically (with trailing slash)
   const equipmentUrls: MetadataRoute.Sitemap = equipment.map((item) => ({
-    url: `${baseUrl}/field-manual/equipment/${item.slug.current}`,
+    url: `${baseUrl}/field-manual/equipment/${item.slug.current}/`,
     lastModified: currentDate,
     changeFrequency: 'monthly' as const,
     priority: 0.6,
@@ -74,9 +74,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     console.error('Error fetching ingredients for sitemap:', error)
   }
 
-  // Generate ingredient URLs dynamically
+  // Generate ingredient URLs dynamically (with trailing slash)
   const ingredientUrls: MetadataRoute.Sitemap = ingredients.map((item) => ({
-    url: `${baseUrl}/field-manual/ingredients/${item.slug.current}`,
+    url: `${baseUrl}/field-manual/ingredients/${item.slug.current}/`,
     lastModified: currentDate,
     changeFrequency: 'monthly' as const,
     priority: 0.6,
@@ -90,183 +90,184 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     console.error('Error fetching guides for sitemap:', error)
   }
 
-  // Generate guide URLs dynamically (HIGH PRIORITY for SEO)
+  // Generate guide URLs dynamically (HIGH PRIORITY for SEO, with trailing slash)
   const guideUrls: MetadataRoute.Sitemap = guides.map((item) => ({
-    url: `${baseUrl}/guides/${item.slug.current}`,
+    url: `${baseUrl}/guides/${item.slug.current}/`,
     lastModified: currentDate,
     changeFrequency: 'weekly' as const,
     priority: 0.9, // High priority for SEO-focused content
   }))
 
   // Define all static routes with priorities and change frequencies
+  // All URLs include trailing slash to match trailingSlash: true config
   const routes: MetadataRoute.Sitemap = [
     {
-      url: baseUrl,
+      url: `${baseUrl}/`,
       lastModified: currentDate,
       changeFrequency: 'weekly',
       priority: 1.0,
     },
     // About pages
     {
-      url: `${baseUrl}/about/story`,
+      url: `${baseUrl}/about/story/`,
       lastModified: currentDate,
       changeFrequency: 'monthly',
       priority: 0.8,
     },
     {
-      url: `${baseUrl}/about/team`,
+      url: `${baseUrl}/about/team/`,
       lastModified: currentDate,
       changeFrequency: 'monthly',
       priority: 0.8,
     },
     {
-      url: `${baseUrl}/about/team/dan-freeman`,
+      url: `${baseUrl}/about/team/dan-freeman/`,
       lastModified: currentDate,
       changeFrequency: 'monthly',
       priority: 0.7,
     },
     {
-      url: `${baseUrl}/about/team/rhys-williams`,
+      url: `${baseUrl}/about/team/rhys-williams/`,
       lastModified: currentDate,
       changeFrequency: 'monthly',
       priority: 0.7,
     },
     {
-      url: `${baseUrl}/ethos`,
+      url: `${baseUrl}/ethos/`,
       lastModified: currentDate,
       changeFrequency: 'monthly',
       priority: 0.8,
     },
     // Field Manual pages
     {
-      url: `${baseUrl}/field-manual`,
+      url: `${baseUrl}/field-manual/`,
       lastModified: currentDate,
       changeFrequency: 'weekly',
       priority: 0.9,
     },
     {
-      url: `${baseUrl}/field-manual/cocktails`,
+      url: `${baseUrl}/field-manual/cocktails/`,
       lastModified: currentDate,
       changeFrequency: 'weekly',
       priority: 0.8,
     },
     {
-      url: `${baseUrl}/field-manual/equipment`,
+      url: `${baseUrl}/field-manual/equipment/`,
       lastModified: currentDate,
       changeFrequency: 'monthly',
       priority: 0.7,
     },
     {
-      url: `${baseUrl}/field-manual/ingredients`,
+      url: `${baseUrl}/field-manual/ingredients/`,
       lastModified: currentDate,
       changeFrequency: 'monthly',
       priority: 0.7,
     },
     // Guides pages
     {
-      url: `${baseUrl}/guides`,
+      url: `${baseUrl}/guides/`,
       lastModified: currentDate,
       changeFrequency: 'weekly',
       priority: 0.9,
     },
     // Contact pages
     {
-      url: `${baseUrl}/contact`,
+      url: `${baseUrl}/contact/`,
       lastModified: currentDate,
       changeFrequency: 'monthly',
       priority: 0.6,
     },
     {
-      url: `${baseUrl}/contact/enquiries`,
+      url: `${baseUrl}/contact/enquiries/`,
       lastModified: currentDate,
       changeFrequency: 'monthly',
       priority: 0.5,
     },
     {
-      url: `${baseUrl}/contact/media`,
+      url: `${baseUrl}/contact/media/`,
       lastModified: currentDate,
       changeFrequency: 'monthly',
       priority: 0.5,
     },
     {
-      url: `${baseUrl}/contact/complaints`,
+      url: `${baseUrl}/contact/complaints/`,
       lastModified: currentDate,
       changeFrequency: 'monthly',
       priority: 0.5,
     },
     // Legal & Policy pages
     {
-      url: `${baseUrl}/privacy-policy`,
+      url: `${baseUrl}/privacy-policy/`,
       lastModified: currentDate,
       changeFrequency: 'yearly',
       priority: 0.3,
     },
     {
-      url: `${baseUrl}/terms-of-service`,
+      url: `${baseUrl}/terms-of-service/`,
       lastModified: currentDate,
       changeFrequency: 'yearly',
       priority: 0.3,
     },
     {
-      url: `${baseUrl}/cookie-policy`,
+      url: `${baseUrl}/cookie-policy/`,
       lastModified: currentDate,
       changeFrequency: 'yearly',
       priority: 0.3,
     },
     {
-      url: `${baseUrl}/shipping-returns`,
+      url: `${baseUrl}/shipping-returns/`,
       lastModified: currentDate,
       changeFrequency: 'monthly',
       priority: 0.4,
     },
     {
-      url: `${baseUrl}/accessibility`,
+      url: `${baseUrl}/accessibility/`,
       lastModified: currentDate,
       changeFrequency: 'yearly',
       priority: 0.3,
     },
     {
-      url: `${baseUrl}/armed-forces-covenant`,
+      url: `${baseUrl}/armed-forces-covenant/`,
       lastModified: currentDate,
       changeFrequency: 'yearly',
       priority: 0.4,
     },
     // FAQ page
     {
-      url: `${baseUrl}/faq`,
+      url: `${baseUrl}/faq/`,
       lastModified: currentDate,
       changeFrequency: 'monthly',
       priority: 0.7,
     },
     // Friends & Partners page
     {
-      url: `${baseUrl}/friends`,
+      url: `${baseUrl}/friends/`,
       lastModified: currentDate,
       changeFrequency: 'monthly',
       priority: 0.6,
     },
     // Notify page
     {
-      url: `${baseUrl}/notify`,
+      url: `${baseUrl}/notify/`,
       lastModified: currentDate,
       changeFrequency: 'monthly',
       priority: 0.5,
     },
     // Shop pages
     {
-      url: `${baseUrl}/shop`,
+      url: `${baseUrl}/shop/`,
       lastModified: currentDate,
       changeFrequency: 'daily',
       priority: 0.9,
     },
     {
-      url: `${baseUrl}/shop/drinks`,
+      url: `${baseUrl}/shop/drinks/`,
       lastModified: currentDate,
       changeFrequency: 'daily',
       priority: 0.9,
     },
     {
-      url: `${baseUrl}/shop/barware`,
+      url: `${baseUrl}/shop/barware/`,
       lastModified: currentDate,
       changeFrequency: 'weekly',
       priority: 0.8,

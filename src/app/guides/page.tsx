@@ -25,7 +25,7 @@ export const metadata: Metadata = {
   title: 'Spirits Guides & Education | Jerry Can Spirits',
   description: 'Expert guides on cocktail techniques, rum education, and spirits knowledge. Learn from our comprehensive collection of bartending resources.',
   alternates: {
-    canonical: 'https://jerrycanspirits.co.uk/guides',
+    canonical: 'https://jerrycanspirits.co.uk/guides/',
   },
 }
 

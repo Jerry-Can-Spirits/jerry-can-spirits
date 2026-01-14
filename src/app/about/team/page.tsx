@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   title: 'Meet the Team | Jerry Can Spirits® - Veteran-Owned Craft Distillery',
   description: 'Meet the veteran founders behind Jerry Can Spirits. Former Royal Signals soldiers bringing military precision and passion to premium craft spirits.',
   alternates: {
-    canonical: 'https://jerrycanspirits.co.uk/about/team',
+    canonical: 'https://jerrycanspirits.co.uk/about/team/',
   },
   openGraph: {
     title: 'Meet the Team | Jerry Can Spirits®',

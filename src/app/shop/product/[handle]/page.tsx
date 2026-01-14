@@ -74,7 +74,7 @@ export async function generateMetadata({
       description,
       keywords: `${product.title}, British spirits, veteran owned, premium spirits, military heritage, Jerry Can Spirits, expedition spirits, small batch, craft spirits`,
       alternates: {
-        canonical: `https://jerrycanspirits.co.uk/shop/product/${handle}`,
+        canonical: `https://jerrycanspirits.co.uk/shop/product/${handle}/`,
       },
       openGraph: {
         title: `${product.title} | Jerry Can Spirits`,

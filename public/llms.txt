@@ -26,6 +26,14 @@ A comprehensive cocktail education platform featuring:
 - Barware and equipment guides
 - Expert tips and techniques
 
+### Guides (In-Depth Educational Articles)
+Long-form educational content organised into pillar guides and supporting articles:
+- Cocktail Techniques (shaking, stirring, balance, methods)
+- Spirits Education (terminology, glossaries, beginner resources)
+- Rum Guides (types, regions, tasting, history)
+- UK Craft Spirits (distilleries, producers, trends)
+- Buying Guides (equipment recommendations, brand comparisons)
+
 ### Military Heritage
 - Founded by British Armed Forces veterans
 - Royal Corps of Signals heritage
@@ -58,6 +66,10 @@ Expert ingredient guides covering spirits, liqueurs, bitters, mixers, and fresh 
 https://jerrycanspirits.co.uk/field-manual/equipment
 Barware and tool recommendations with budget and premium options.
 
+### Guides
+https://jerrycanspirits.co.uk/guides
+In-depth educational articles covering cocktail techniques, spirits education, and buying guides. Features comprehensive pillar guides and focused supporting articles.
+
 ### About
 https://jerrycanspirits.co.uk/about/story
 Our founder story and veteran heritage.
@@ -84,7 +96,7 @@ We participate in the Master of Malt affiliate programme for ingredient recommen
 
 ## Launch Status
 
-- Current: Pre-order phase (January 2025)
+- Current: Pre-order phase (January 2026)
 - Planned Launch: April 2026
 - Location: Blackpool, Lancashire, United Kingdom
 

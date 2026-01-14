@@ -5,7 +5,7 @@ export const metadata: Metadata = {
   title: "FAQ | Jerry Can Spirits - Frequently Asked Questions About Premium British Rum",
   description: "Common questions about Jerry Can Spirits premium British rum, shipping, ingredients, cocktail recipes, and our adventure-ready spirits. Get answers about our expedition rum.",
   alternates: {
-    canonical: "https://jerrycanspirits.co.uk/faq",
+    canonical: "https://jerrycanspirits.co.uk/faq/",
   },
   openGraph: {
     title: "FAQ | Jerry Can Spirits",

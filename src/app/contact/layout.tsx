@@ -4,7 +4,7 @@ export const metadata: Metadata = {
   title: "Contact Us | Jerry Can Spirits - Get in Touch",
   description: "Get in touch with Jerry Can Spirits for inquiries, partnerships, or just to say hello. Contact us via email or our contact form.",
   alternates: {
-    canonical: "https://jerrycanspirits.co.uk/contact",
+    canonical: "https://jerrycanspirits.co.uk/contact/",
   },
   robots: {
     index: true,

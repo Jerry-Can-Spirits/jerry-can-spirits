@@ -4,7 +4,7 @@ export const metadata: Metadata = {
   title: "Careers | Jerry Can Spirits® - Join Our Team",
   description: "Explore career opportunities at Jerry Can Spirits®. Learn about our company culture and future hiring plans.",
   alternates: {
-    canonical: 'https://jerrycanspirits.co.uk/careers',
+    canonical: 'https://jerrycanspirits.co.uk/careers/',
   },
   robots: {
     index: true,
