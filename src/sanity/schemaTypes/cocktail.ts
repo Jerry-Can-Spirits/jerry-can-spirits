@@ -236,7 +236,10 @@ export default defineType({
           {title: 'Vodka', value: 'vodka'},
           {title: 'Gin', value: 'gin'},
           {title: 'Tequila', value: 'tequila'},
+          {title: 'Mezcal', value: 'mezcal'},
           {title: 'Whiskey', value: 'whiskey'},
+          {title: 'Brandy', value: 'brandy'},
+          {title: 'Cachaça', value: 'cachaca'},
           {title: 'Aromatised Wine', value: 'aromatised-wine'},
           {title: 'Champagne', value: 'champagne'},
           {title: 'Liqueur-Based', value: 'liqueur-based'},
@@ -264,6 +267,7 @@ export default defineType({
           {title: 'Party', value: 'party'},
           {title: 'After-Dinner', value: 'after-dinner'},
           {title: 'Aperitif', value: 'aperitif'},
+          {title: 'Digestif', value: 'digestif'},
           {title: 'Celebratory', value: 'celebratory'},
           {title: 'Late Night', value: 'late-night'},
           // Preparation / Service
