@@ -224,28 +224,58 @@ export default defineType({
     }),
     defineField({
       name: 'category',
-      title: 'Base Spirit',
+      title: 'Base Spirit / Cocktail Family',
       type: 'string',
       options: {
         list: [
           {title: 'Spiced Rum', value: 'spiced-rum'},
           {title: 'White Rum', value: 'white-rum'},
-          {title: 'Dark Rum', value: 'dark-rum'},
           {title: 'Aged Rum', value: 'aged-rum'},
+          {title: 'Dark Rum', value: 'dark-rum'},
           {title: 'Overproof Rum', value: 'overproof-rum'},
           {title: 'Vodka', value: 'vodka'},
           {title: 'Gin', value: 'gin'},
           {title: 'Tequila', value: 'tequila'},
           {title: 'Whiskey', value: 'whiskey'},
-          {title: 'Prosecco', value: 'prosecco'},
-          {title: 'Liqueur', value: 'liqueur'},
-          {title: 'Bitters', value: 'bitters'},
-          {title: 'Fortified Wine', value: 'fortified-wine'},
+          {title: 'Aromatised Wine', value: 'aromatised-wine'},
+          {title: 'Champagne', value: 'champagne'},
+          {title: 'Liqueur-Based', value: 'liqueur-based'},
           {title: 'Non-Alcoholic', value: 'non-alcoholic'}
         ]
       },
       initialValue: 'spiced-rum',
-      description: 'The primary/base spirit of the cocktail'
+      description: 'The primary/base spirit or cocktail family'
+    }),
+    defineField({
+      name: 'tags',
+      title: 'Tags',
+      type: 'array',
+      of: [{type: 'string'}],
+      options: {
+        list: [
+          // Strength & Structure
+          {title: 'High-ABV', value: 'high-abv'},
+          {title: 'Low-ABV', value: 'low-abv'},
+          {title: 'Sessionable', value: 'sessionable'},
+          {title: 'Multi-Spirit', value: 'multi-spirit'},
+          {title: 'Spirit-Forward', value: 'spirit-forward'},
+          {title: 'Long Drink', value: 'long-drink'},
+          // Occasion / Intent
+          {title: 'Party', value: 'party'},
+          {title: 'After-Dinner', value: 'after-dinner'},
+          {title: 'Aperitif', value: 'aperitif'},
+          {title: 'Celebratory', value: 'celebratory'},
+          {title: 'Late Night', value: 'late-night'},
+          // Preparation / Service
+          {title: 'Built', value: 'built'},
+          {title: 'Shaken', value: 'shaken'},
+          {title: 'Stirred', value: 'stirred'},
+          {title: 'Batchable', value: 'batchable'},
+          {title: 'Shot', value: 'shot'}
+        ],
+        layout: 'grid'
+      },
+      description: 'Select multiple tags to help categorise this cocktail'
     }),
     defineField({
       name: 'featured',

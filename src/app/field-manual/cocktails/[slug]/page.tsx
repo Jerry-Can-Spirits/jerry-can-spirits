@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { client } from '@/sanity/client'
-import { cocktailBySlugQuery, cocktailsQuery } from '@/sanity/queries'
+import { cocktailBySlugQuery } from '@/sanity/queries'
 import BackToTop from '@/components/BackToTop'
 import StructuredData from '@/components/StructuredData'
 import CocktailRecipeDisplay from '@/components/CocktailRecipeDisplay'
@@ -56,18 +56,8 @@ interface PageProps {
   }>
 }
 
-// Cloudflare Pages requires explicit static config for SSG routes
-export const dynamicParams = false
-export const revalidate = false // Fully static, no ISR
-
-// Generate static params for all cocktails
-export async function generateStaticParams() {
-  const cocktails = await client.fetch<SanityCocktail[]>(cocktailsQuery)
-
-  return cocktails.map((cocktail) => ({
-    slug: cocktail.slug.current,
-  }))
-}
+// Cloudflare Pages edge runtime for dynamic routes
+export const runtime = 'edge'
 
 // Generate metadata for each cocktail
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {

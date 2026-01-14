@@ -2,7 +2,7 @@ import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import Image from 'next/image'
-import { getProduct, getProductsByCollection, getSmartRecommendations, type ShopifyProduct, type ShopifyMetafield } from '@/lib/shopify'
+import { getProduct, getSmartRecommendations, type ShopifyProduct, type ShopifyMetafield } from '@/lib/shopify'
 import AddToCartButton from '@/components/AddToCartButton'
 import ProductImageGallery from '@/components/ProductImageGallery'
 import StructuredData from '@/components/StructuredData'
@@ -48,22 +48,8 @@ const TrustpilotWidget = dynamic(() => import('@/components/TrustpilotWidget'), 
   ),
 });
 
-// Cloudflare Pages requires explicit static config for SSG routes
-export const dynamicParams = false
-export const revalidate = false // Fully static, no ISR
-
-// Generate static params for all products at build time
-export async function generateStaticParams() {
-  try {
-    const products = await getProductsByCollection('drinks')
-    return products.map((product) => ({
-      handle: product.handle,
-    }))
-  } catch (error) {
-    console.error('Error generating static params:', error)
-    return []
-  }
-}
+// Cloudflare Pages edge runtime for dynamic routes
+export const runtime = 'edge'
 
 // Generate metadata for SEO
 export async function generateMetadata({
