@@ -75,9 +75,14 @@ export default function CocktailsClient({ cocktails }: CocktailsClientProps) {
     }
   }
 
+  // Rum subtypes for "All Rum" filter
+  const rumCategories = ['spiced-rum', 'white-rum', 'aged-rum', 'dark-rum', 'overproof-rum']
+
   // Filter cocktails
   const filteredCocktails = cocktails.filter(cocktail => {
-    const matchesCategory = selectedCategory === 'all' || cocktail.category === selectedCategory
+    const matchesCategory = selectedCategory === 'all' ||
+      (selectedCategory === 'all-rum' && rumCategories.includes(cocktail.category || '')) ||
+      cocktail.category === selectedCategory
     const matchesDifficulty = selectedDifficulty === 'all' || cocktail.difficulty === selectedDifficulty
     const matchesSearch = !searchQuery ||
       cocktail.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -92,6 +97,7 @@ export default function CocktailsClient({ cocktails }: CocktailsClientProps) {
   // Categories for filter tabs (Base Spirits & Cocktail Families)
   const categories = [
     { value: 'all', label: 'All Cocktails' },
+    { value: 'all-rum', label: 'All Rum' },
     { value: 'spiced-rum', label: 'Spiced Rum' },
     { value: 'white-rum', label: 'White Rum' },
     { value: 'aged-rum', label: 'Aged Rum' },
