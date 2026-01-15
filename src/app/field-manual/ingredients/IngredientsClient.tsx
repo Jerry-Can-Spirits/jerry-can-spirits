@@ -11,7 +11,7 @@ interface Ingredient {
   _id: string
   name: string
   slug: { current: string }
-  category: 'spirits' | 'liqueurs' | 'creme-liqueurs' | 'anise-herbal' | 'aromatics' | 'wine' | 'champagne' | 'bitters' | 'mixers' | 'fresh' | 'garnishes'
+  category: 'spirits' | 'liqueurs' | 'creme-liqueurs' | 'anise-herbal' | 'aromatics' | 'wine' | 'fortified' | 'bitters' | 'mixers' | 'fresh' | 'garnishes'
   description: string
   usage: string
   topTips: string[]
@@ -53,8 +53,8 @@ export default function IngredientsClient({ ingredients }: IngredientsClientProp
     { value: 'creme-liqueurs', label: 'Crème Liqueurs' },
     { value: 'anise-herbal', label: 'Anise & Herbal Liqueurs' },
     { value: 'aromatics', label: 'Aromatics & Essences' },
-    { value: 'wine', label: 'Wine & Fortified Wine' },
-    { value: 'champagne', label: 'Champagne' },
+    { value: 'wine', label: 'Wine & Champagne' },
+    { value: 'fortified', label: 'Fortified Wine' },
     { value: 'bitters', label: 'Bitters' },
     { value: 'mixers', label: 'Mixers' },
     { value: 'fresh', label: 'Fresh Ingredients' },

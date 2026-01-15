@@ -107,6 +107,14 @@ const categoryLabels: Record<string, string> = {
   'industry-insights': 'Industry Insights'
 }
 
+// Convert heading to URL-friendly slug for anchor links
+function slugify(text: string): string {
+  return text
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)/g, '')
+}
+
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params
   const guide = await client.fetch<Guide>(guideBySlugQuery, { slug })
@@ -272,7 +280,7 @@ export default async function GuidePage({ params }: PageProps) {
                 {guide.sections.map((section, index) => (
                   <li key={index}>
                     <a
-                      href={`#section-${index}`}
+                      href={`#${slugify(section.heading)}`}
                       className="text-parchment-300 hover:text-gold-300 transition-colors flex items-center gap-2"
                     >
                       <span className="text-gold-500/60">{index + 1}.</span>
@@ -300,7 +308,7 @@ export default async function GuidePage({ params }: PageProps) {
         <article className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="space-y-12">
             {guide.sections?.map((section, index) => (
-              <section key={index} id={`section-${index}`} className="scroll-mt-24">
+              <section key={index} id={slugify(section.heading)} className="scroll-mt-24">
                 <h2 className="text-3xl font-serif font-bold text-white mb-6">
                   {section.heading}
                 </h2>

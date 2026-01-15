@@ -13,7 +13,7 @@ interface Ingredient {
   _id: string
   name: string
   slug: { current: string }
-  category: 'spirits' | 'liqueurs' | 'creme-liqueurs' | 'anise-herbal' | 'aromatics' | 'wine' | 'champagne' | 'bitters' | 'mixers' | 'fresh' | 'garnishes'
+  category: 'spirits' | 'liqueurs' | 'creme-liqueurs' | 'anise-herbal' | 'aromatics' | 'wine' | 'fortified' | 'bitters' | 'mixers' | 'fresh' | 'garnishes'
   description: string
   usage: string
   topTips: string[]
@@ -74,8 +74,8 @@ const categoryConfig: Record<string, string> = {
   'creme-liqueurs': 'Crème Liqueurs',
   'anise-herbal': 'Anise & Herbal Liqueurs',
   aromatics: 'Aromatics & Essences',
-  wine: 'Wine & Fortified Wine',
-  champagne: 'Champagne',
+  wine: 'Wine & Champagne',
+  fortified: 'Fortified Wine',
   bitters: 'Bitters',
   mixers: 'Mixers',
   fresh: 'Fresh Ingredients',
