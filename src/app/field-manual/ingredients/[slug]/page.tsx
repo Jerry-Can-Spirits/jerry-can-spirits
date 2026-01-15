@@ -491,23 +491,6 @@ export default async function IngredientDetailPage({ params }: { params: Promise
               </div>
             )}
 
-            {/* Pairs Well With */}
-            {ingredient.pairsWellWith && ingredient.pairsWellWith.length > 0 && (
-              <div className="order-7 bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
-                <h2 className="text-2xl font-serif font-bold text-gold-300 mb-4">Pairs Well With</h2>
-                <div className="flex flex-wrap gap-2">
-                  {ingredient.pairsWellWith.map((pairing, index) => (
-                    <span
-                      key={index}
-                      className="px-3 py-1 bg-jerry-green-800/30 border border-gold-500/20 text-parchment-300 rounded-lg text-sm"
-                    >
-                      {pairing}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            )}
-
             {/* Substitutions */}
             {ingredient.substitutions && ingredient.substitutions.length > 0 && (
               <div className="order-8 bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
