@@ -13,7 +13,7 @@ interface Ingredient {
   _id: string
   name: string
   slug: { current: string }
-  category: 'spirits' | 'liqueurs' | 'bitters' | 'mixers' | 'fresh' | 'garnishes'
+  category: 'spirits' | 'liqueurs' | 'creme-liqueurs' | 'anise-herbal' | 'aromatics' | 'wine' | 'champagne' | 'bitters' | 'mixers' | 'fresh' | 'garnishes'
   description: string
   usage: string
   topTips: string[]
@@ -68,9 +68,14 @@ interface Ingredient {
   }>
 }
 
-const categoryConfig = {
+const categoryConfig: Record<string, string> = {
   spirits: 'Spirits',
   liqueurs: 'Liqueurs',
+  'creme-liqueurs': 'Crème Liqueurs',
+  'anise-herbal': 'Anise & Herbal Liqueurs',
+  aromatics: 'Aromatics & Essences',
+  wine: 'Wine & Fortified Wine',
+  champagne: 'Champagne',
   bitters: 'Bitters',
   mixers: 'Mixers',
   fresh: 'Fresh Ingredients',
@@ -278,11 +283,19 @@ export default async function IngredientDetailPage({ params }: { params: Promise
                           <div className="flex-1 min-w-0">
                             <p className="text-green-400 font-semibold mb-1 text-xs">Budget Choice</p>
                             <p className="text-parchment-300 mb-2 text-sm">{ingredient.recommendedBrands.budget}</p>
-                            {ingredient.recommendedBrands.budgetNutrition && (
-                              <div className="mb-3 p-2 bg-jerry-green-800/40 rounded border border-gold-500/10">
-                                <p className="text-parchment-400 text-xs">
-                                  <span className="text-gold-400 font-semibold">{ingredient.recommendedBrands.budgetNutrition.calories} kcal</span> {ingredient.recommendedBrands.budgetNutrition.unit}
-                                </p>
+                            {/* Price & Calories Info */}
+                            {(ingredient.priceRange?.budget || ingredient.recommendedBrands.budgetNutrition) && (
+                              <div className="mb-3 flex flex-wrap gap-2">
+                                {ingredient.priceRange?.budget && (
+                                  <span className="inline-flex items-center px-2 py-1 bg-green-500/20 border border-green-500/30 rounded text-green-400 text-xs font-semibold">
+                                    ~£{ingredient.priceRange.budget}
+                                  </span>
+                                )}
+                                {ingredient.recommendedBrands.budgetNutrition && (
+                                  <span className="inline-flex items-center px-2 py-1 bg-jerry-green-800/40 border border-gold-500/10 rounded text-parchment-400 text-xs">
+                                    <span className="text-gold-400 font-semibold">{ingredient.recommendedBrands.budgetNutrition.calories} kcal</span>&nbsp;{ingredient.recommendedBrands.budgetNutrition.unit}
+                                  </span>
+                                )}
                               </div>
                             )}
                             {ingredient.recommendedBrands.budgetLink && (
@@ -318,11 +331,19 @@ export default async function IngredientDetailPage({ params }: { params: Promise
                           <div className="flex-1 min-w-0">
                             <p className="text-gold-400 font-semibold mb-1 text-xs">Premium Choice</p>
                             <p className="text-parchment-300 mb-2 text-sm">{ingredient.recommendedBrands.premium}</p>
-                            {ingredient.recommendedBrands.premiumNutrition && (
-                              <div className="mb-3 p-2 bg-jerry-green-800/40 rounded border border-gold-500/10">
-                                <p className="text-parchment-400 text-xs">
-                                  <span className="text-gold-400 font-semibold">{ingredient.recommendedBrands.premiumNutrition.calories} kcal</span> {ingredient.recommendedBrands.premiumNutrition.unit}
-                                </p>
+                            {/* Price & Calories Info */}
+                            {(ingredient.priceRange?.premium || ingredient.recommendedBrands.premiumNutrition) && (
+                              <div className="mb-3 flex flex-wrap gap-2">
+                                {ingredient.priceRange?.premium && (
+                                  <span className="inline-flex items-center px-2 py-1 bg-gold-500/20 border border-gold-500/30 rounded text-gold-400 text-xs font-semibold">
+                                    ~£{ingredient.priceRange.premium}
+                                  </span>
+                                )}
+                                {ingredient.recommendedBrands.premiumNutrition && (
+                                  <span className="inline-flex items-center px-2 py-1 bg-jerry-green-800/40 border border-gold-500/10 rounded text-parchment-400 text-xs">
+                                    <span className="text-gold-400 font-semibold">{ingredient.recommendedBrands.premiumNutrition.calories} kcal</span>&nbsp;{ingredient.recommendedBrands.premiumNutrition.unit}
+                                  </span>
+                                )}
                               </div>
                             )}
                             {ingredient.recommendedBrands.premiumLink && (
@@ -361,23 +382,6 @@ export default async function IngredientDetailPage({ params }: { params: Promise
                       </p>
                     </div>
                   )}
-                </div>
-              )}
-
-              {/* Price Guide */}
-              {ingredient.priceRange && (
-                <div className="order-13 bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
-                  <h3 className="text-lg font-serif font-bold text-gold-300 mb-4">Price Guide</h3>
-                  <div className="space-y-3">
-                    <div className="flex justify-between items-center">
-                      <span className="text-parchment-300">Budget Option</span>
-                      <span className="text-green-400 font-semibold">£{ingredient.priceRange.budget}</span>
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <span className="text-parchment-300">Premium Option</span>
-                      <span className="text-gold-400 font-semibold">£{ingredient.priceRange.premium}</span>
-                    </div>
-                  </div>
                 </div>
               )}
 
