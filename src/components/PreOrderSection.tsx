@@ -19,11 +19,18 @@ export default function PreOrderSection() {
         if (product?.variants?.[0]) {
           const variant = product.variants[0]
 
-          // Calculate bottles sold: total - available
-          if (variant.quantityAvailable !== undefined) {
+          // Get bottles sold from metafield (more reliable than inventory calculation)
+          const preorderSoldMeta = product.metafields?.find(
+            (m: { namespace: string; key: string; value: string } | null) =>
+              m?.namespace === 'custom' && m?.key === 'preorder_sold'
+          )
+          if (preorderSoldMeta?.value) {
+            setBottlesSold(parseInt(preorderSoldMeta.value, 10))
+          } else if (variant.quantityAvailable !== undefined) {
+            // Fallback to inventory calculation if metafield not set
             const available = variant.quantityAvailable
             const sold = totalBottles - available
-            setBottlesSold(sold)
+            setBottlesSold(Math.max(0, sold))
           }
 
           // Set pricing from product data
