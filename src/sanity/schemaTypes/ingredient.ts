@@ -29,6 +29,9 @@ export default defineType({
         list: [
           {title: 'Spirits', value: 'spirits'},
           {title: 'Liqueurs', value: 'liqueurs'},
+          {title: 'Crème Liqueurs', value: 'creme-liqueurs'},
+          {title: 'Anise & Herbal Liqueurs', value: 'anise-herbal'},
+          {title: 'Aromatics & Essences', value: 'aromatics'},
           {title: 'Wine & Fortified Wine', value: 'wine'},
           {title: 'Champagne', value: 'champagne'},
           {title: 'Bitters', value: 'bitters'},

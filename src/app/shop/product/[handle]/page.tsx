@@ -51,6 +51,24 @@ const TrustpilotWidget = dynamic(() => import('@/components/TrustpilotWidget'), 
 // Cloudflare Pages edge runtime for dynamic routes
 export const runtime = 'edge'
 
+// Map Shopify productType to breadcrumb category
+function getCategoryFromProductType(productType?: string): { label: string; href: string; trackingCategory: string } {
+  const type = (productType || '').toLowerCase()
+
+  if (type.includes('spirit') || type.includes('rum') || type.includes('alcohol') || type.includes('drink')) {
+    return { label: 'Drinks', href: '/shop/drinks/', trackingCategory: 'Spirits' }
+  }
+  if (type.includes('barware') || type.includes('glass') || type.includes('bar')) {
+    return { label: 'Barware', href: '/shop/barware/', trackingCategory: 'Barware' }
+  }
+  if (type.includes('cloth') || type.includes('apparel') || type.includes('merch')) {
+    return { label: 'Clothing', href: '/shop/clothing/', trackingCategory: 'Clothing' }
+  }
+
+  // Default fallback
+  return { label: 'Products', href: '/shop/', trackingCategory: 'Products' }
+}
+
 // Generate metadata for SEO
 export async function generateMetadata({
   params
@@ -204,6 +222,9 @@ export default async function ProductPage({
     },
   }
 
+  // Get category based on product type
+  const category = getCategoryFromProductType(product.productType)
+
   return (
     <main className="min-h-screen py-20">
       <StructuredData data={productSchema} id="product-schema" />
@@ -212,18 +233,18 @@ export default async function ProductPage({
         productName={product.title}
         price={product.priceRange.minVariantPrice.amount}
         currency={product.priceRange.minVariantPrice.currencyCode}
-        category="Spirits"
+        category={category.trackingCategory}
       />
 
       {/* Breadcrumb */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
         <nav className="text-sm text-parchment-400 flex items-center gap-2">
-          <Link href="/shop" className="hover:text-gold-300 transition-colors">
+          <Link href="/shop/" className="hover:text-gold-300 transition-colors">
             Shop
           </Link>
           <span>→</span>
-          <Link href="/shop/drinks" className="hover:text-gold-300 transition-colors">
-            Drinks
+          <Link href={category.href} className="hover:text-gold-300 transition-colors">
+            {category.label}
           </Link>
           <span>→</span>
           <span className="text-gold-300">{product.title}</span>
@@ -363,13 +384,13 @@ export default async function ProductPage({
             {/* Back to Shop Link */}
             <div className="pt-6">
               <Link
-                href="/shop/drinks"
+                href={category.href}
                 className="inline-flex items-center gap-2 text-gold-300 hover:text-gold-400 transition-colors"
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
                 </svg>
-                Back to Drinks
+                Back to {category.label}
               </Link>
             </div>
           </div>
