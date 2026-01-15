@@ -294,6 +294,53 @@ export default defineType({
       options: {
         hotspot: true,
       }
+    }),
+    defineField({
+      name: 'relatedGuides',
+      title: 'Related Technique Guides',
+      type: 'array',
+      description: 'Link to guides that explain techniques used in this cocktail',
+      of: [
+        {
+          type: 'object',
+          name: 'guideLink',
+          title: 'Guide Link',
+          fields: [
+            defineField({
+              name: 'guide',
+              title: 'Guide',
+              type: 'reference',
+              to: [{type: 'guide'}],
+              validation: Rule => Rule.required()
+            }),
+            defineField({
+              name: 'sectionAnchor',
+              title: 'Section Anchor (Optional)',
+              type: 'string',
+              description: 'Section heading to link to (e.g., "Muddling Basics"). Leave empty to link to full guide.'
+            }),
+            defineField({
+              name: 'linkText',
+              title: 'Link Text Override',
+              type: 'string',
+              description: 'Custom link text (e.g., "Learn how to muddle"). If empty, uses guide title.'
+            })
+          ],
+          preview: {
+            select: {
+              guideTitle: 'guide.title',
+              sectionAnchor: 'sectionAnchor',
+              linkText: 'linkText'
+            },
+            prepare({guideTitle, sectionAnchor, linkText}) {
+              return {
+                title: linkText || guideTitle || 'Guide Link',
+                subtitle: sectionAnchor ? `→ ${sectionAnchor}` : 'Full guide'
+              }
+            }
+          }
+        }
+      ]
     })
   ],
   preview: {

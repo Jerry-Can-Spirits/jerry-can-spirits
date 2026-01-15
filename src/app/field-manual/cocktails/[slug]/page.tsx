@@ -29,6 +29,16 @@ interface CocktailVariant {
   note?: string
 }
 
+interface RelatedGuide {
+  guide: {
+    _id: string
+    title: string
+    slug: { current: string }
+  }
+  sectionAnchor?: string
+  linkText?: string
+}
+
 interface SanityCocktail {
   _id: string
   name: string
@@ -48,6 +58,7 @@ interface SanityCocktail {
   category?: string
   featured?: boolean
   image?: string
+  relatedGuides?: RelatedGuide[]
 }
 
 interface PageProps {
@@ -58,6 +69,14 @@ interface PageProps {
 
 // Cloudflare Pages edge runtime for dynamic routes
 export const runtime = 'edge'
+
+// Convert heading to URL-friendly slug for anchor links
+function slugify(text: string): string {
+  return text
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)/g, '')
+}
 
 // Generate metadata for each cocktail
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
@@ -179,6 +198,48 @@ export default async function CocktailPage({ params }: PageProps) {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Recipe Display Component (Client-side for interactivity) */}
           <CocktailRecipeDisplay cocktail={cocktail} />
+
+          {/* Related Technique Guides */}
+          {cocktail.relatedGuides && cocktail.relatedGuides.length > 0 && (
+            <div className="mt-8 bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+              <h3 className="text-xl font-serif font-bold text-gold-300 mb-4 flex items-center gap-2">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                </svg>
+                Master the Techniques
+              </h3>
+              <div className="space-y-3">
+                {cocktail.relatedGuides.map((item, index) => {
+                  const guideUrl = item.sectionAnchor
+                    ? `/guides/${item.guide.slug.current}/#${slugify(item.sectionAnchor)}`
+                    : `/guides/${item.guide.slug.current}/`
+                  const displayText = item.linkText || (item.sectionAnchor ? `Learn: ${item.sectionAnchor}` : item.guide.title)
+
+                  return (
+                    <Link
+                      key={index}
+                      href={guideUrl}
+                      className="flex items-center gap-3 p-3 bg-jerry-green-800/30 rounded-lg border border-gold-500/20 hover:bg-jerry-green-800/50 hover:border-gold-400/40 transition-all group"
+                    >
+                      <svg className="w-5 h-5 text-gold-400 group-hover:scale-110 transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                      </svg>
+                      <div className="flex-1 min-w-0">
+                        <span className="text-parchment-300 group-hover:text-gold-300 transition-colors font-semibold">
+                          {displayText}
+                        </span>
+                        {item.sectionAnchor && (
+                          <span className="text-parchment-500 text-sm ml-2">
+                            in {item.guide.title}
+                          </span>
+                        )}
+                      </div>
+                    </Link>
+                  )
+                })}
+              </div>
+            </div>
+          )}
 
           {/* Share & Explore CTA */}
           <div className="mt-8 bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20 text-center">
