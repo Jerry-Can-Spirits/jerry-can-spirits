@@ -256,29 +256,32 @@ export default defineType({
       of: [{type: 'string'}],
       options: {
         list: [
-          // Strength & Structure
+          // Strength / Style
           {title: 'High-ABV', value: 'high-abv'},
           {title: 'Low-ABV', value: 'low-abv'},
           {title: 'Sessionable', value: 'sessionable'},
-          {title: 'Multi-Spirit', value: 'multi-spirit'},
           {title: 'Spirit-Forward', value: 'spirit-forward'},
+          {title: 'Multi-Spirit', value: 'multi-spirit'},
+          // Format / Serve
           {title: 'Long Drink', value: 'long-drink'},
-          // Occasion / Intent
-          {title: 'Party', value: 'party'},
-          {title: 'After-Dinner', value: 'after-dinner'},
-          {title: 'Aperitif', value: 'aperitif'},
-          {title: 'Digestif', value: 'digestif'},
-          {title: 'Celebratory', value: 'celebratory'},
-          {title: 'Late Night', value: 'late-night'},
-          // Preparation / Service
           {title: 'Built', value: 'built'},
           {title: 'Shaken', value: 'shaken'},
           {title: 'Stirred', value: 'stirred'},
           {title: 'Batchable', value: 'batchable'},
           {title: 'Shot', value: 'shot'},
-          // Style
           {title: 'Hot', value: 'hot'},
-          {title: 'Tiki', value: 'tiki'}
+          {title: 'Frozen', value: 'frozen'},
+          // Context / Occasion
+          {title: 'Party', value: 'party'},
+          {title: 'Brunch', value: 'brunch'},
+          {title: 'Aperitif', value: 'aperitif'},
+          {title: 'After-Dinner', value: 'after-dinner'},
+          {title: 'Digestif', value: 'digestif'},
+          {title: 'Celebratory', value: 'celebratory'},
+          {title: 'Late Night', value: 'late-night'},
+          {title: 'Tiki', value: 'tiki'},
+          // Flavour
+          {title: 'Bitter', value: 'bitter'}
         ],
         layout: 'grid'
       },
