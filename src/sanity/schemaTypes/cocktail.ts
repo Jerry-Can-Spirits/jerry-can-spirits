@@ -275,7 +275,10 @@ export default defineType({
           {title: 'Shaken', value: 'shaken'},
           {title: 'Stirred', value: 'stirred'},
           {title: 'Batchable', value: 'batchable'},
-          {title: 'Shot', value: 'shot'}
+          {title: 'Shot', value: 'shot'},
+          // Style
+          {title: 'Hot', value: 'hot'},
+          {title: 'Tiki', value: 'tiki'}
         ],
         layout: 'grid'
       },
