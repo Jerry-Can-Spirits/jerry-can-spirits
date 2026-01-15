@@ -287,13 +287,6 @@ export default defineType({
       description: 'What can be used instead if not available'
     }),
     defineField({
-      name: 'pairsWellWith',
-      title: 'Pairs Well With',
-      type: 'array',
-      of: [{type: 'string'}],
-      description: 'Complementary ingredients, flavors, or foods'
-    }),
-    defineField({
       name: 'seasonality',
       title: 'Seasonality',
       type: 'string',

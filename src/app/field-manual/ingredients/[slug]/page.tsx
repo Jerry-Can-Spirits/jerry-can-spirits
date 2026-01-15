@@ -46,7 +46,6 @@ interface Ingredient {
   origin?: string
   productionMethod?: string
   substitutions?: string[]
-  pairsWellWith?: string[]
   seasonality?: string
   priceRange?: {
     budget: number
