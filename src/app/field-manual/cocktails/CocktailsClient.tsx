@@ -57,17 +57,25 @@ const tagLabels: Record<string, string> = {
   'spirit-forward': 'Spirit-Forward',
   'long-drink': 'Long Drink',
   'party': 'Party',
+  'brunch': 'Brunch',
   'after-dinner': 'After-Dinner',
   'aperitif': 'Aperitif',
   'digestif': 'Digestif',
   'celebratory': 'Celebratory',
   'late-night': 'Late Night',
+  'tiki': 'Tiki',
   'built': 'Built',
   'shaken': 'Shaken',
   'stirred': 'Stirred',
   'batchable': 'Batchable',
-  'shot': 'Shot'
+  'shot': 'Shot',
+  'hot': 'Hot',
+  'frozen': 'Frozen',
+  'bitter': 'Bitter'
 }
+
+// Pagination settings
+const ITEMS_PER_PAGE = 16
 
 interface CocktailsClientProps {
   cocktails: SanityCocktail[]
@@ -78,6 +86,7 @@ export default function CocktailsClient({ cocktails }: CocktailsClientProps) {
   const [selectedCategory, setSelectedCategory] = useState<string>('all')
   const [selectedDifficulty, setSelectedDifficulty] = useState<string>('all')
   const [searchQuery, setSearchQuery] = useState<string>('')
+  const [visibleCount, setVisibleCount] = useState<number>(ITEMS_PER_PAGE)
 
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty.toLowerCase()) {
@@ -115,6 +124,30 @@ export default function CocktailsClient({ cocktails }: CocktailsClientProps) {
 
   // Get featured cocktails
   const featuredCocktails = filteredCocktails.filter(c => c.featured)
+
+  // Paginated cocktails for display
+  const visibleCocktails = filteredCocktails.slice(0, visibleCount)
+  const hasMoreCocktails = visibleCount < filteredCocktails.length
+
+  // Reset pagination when filters change
+  const handleCategoryChange = (category: string) => {
+    setSelectedCategory(category)
+    setVisibleCount(ITEMS_PER_PAGE)
+  }
+
+  const handleDifficultyChange = (difficulty: string) => {
+    setSelectedDifficulty(difficulty)
+    setVisibleCount(ITEMS_PER_PAGE)
+  }
+
+  const handleSearchChange = (query: string) => {
+    setSearchQuery(query)
+    setVisibleCount(ITEMS_PER_PAGE)
+  }
+
+  const handleShowMore = () => {
+    setVisibleCount(prev => prev + ITEMS_PER_PAGE)
+  }
 
   // Categories for filter tabs (Base Spirits & Cocktail Families)
   const categories = [
@@ -209,7 +242,7 @@ export default function CocktailsClient({ cocktails }: CocktailsClientProps) {
                 type="text"
                 placeholder="Search cocktails..."
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                onChange={(e) => handleSearchChange(e.target.value)}
                 className="w-full px-4 py-3 pl-12 bg-jerry-green-800/40 border border-gold-500/20 rounded-lg text-white placeholder-parchment-400 focus:outline-none focus:border-gold-400/40 transition-colors"
               />
               <svg className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -224,7 +257,7 @@ export default function CocktailsClient({ cocktails }: CocktailsClientProps) {
                 {categories.map((category) => (
                   <button
                     key={category.value}
-                    onClick={() => setSelectedCategory(category.value)}
+                    onClick={() => handleCategoryChange(category.value)}
                     className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-300 ${
                       selectedCategory === category.value
                         ? 'bg-gold-500/20 text-gold-300 border border-gold-500/40'
@@ -244,7 +277,7 @@ export default function CocktailsClient({ cocktails }: CocktailsClientProps) {
                 {difficulties.map((difficulty) => (
                   <button
                     key={difficulty.value}
-                    onClick={() => setSelectedDifficulty(difficulty.value)}
+                    onClick={() => handleDifficultyChange(difficulty.value)}
                     className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-300 ${
                       selectedDifficulty === difficulty.value
                         ? 'bg-gold-500/20 text-gold-300 border border-gold-500/40'
@@ -259,7 +292,7 @@ export default function CocktailsClient({ cocktails }: CocktailsClientProps) {
 
             {/* Results count */}
             <div className="text-parchment-300 text-sm">
-              Showing <span className="text-gold-300 font-semibold">{filteredCocktails.length}</span> {filteredCocktails.length === 1 ? 'cocktail' : 'cocktails'}
+              Showing <span className="text-gold-300 font-semibold">{Math.min(visibleCount, filteredCocktails.length)}</span> of <span className="text-gold-300 font-semibold">{filteredCocktails.length}</span> {filteredCocktails.length === 1 ? 'cocktail' : 'cocktails'}
             </div>
           </div>
         </div>
@@ -362,6 +395,7 @@ export default function CocktailsClient({ cocktails }: CocktailsClientProps) {
                 setSelectedCategory('all')
                 setSelectedDifficulty('all')
                 setSearchQuery('')
+                setVisibleCount(ITEMS_PER_PAGE)
               }}
               className="mt-4 px-6 py-3 bg-gold-500/20 border border-gold-500/40 text-gold-300 rounded-lg hover:bg-gold-500/30 transition-colors"
             >
@@ -370,7 +404,7 @@ export default function CocktailsClient({ cocktails }: CocktailsClientProps) {
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {filteredCocktails.map((cocktail) => (
+            {visibleCocktails.map((cocktail) => (
               <Link
                 key={cocktail._id}
                 href={`/cocktails/${cocktail.slug.current}`}
@@ -438,6 +472,24 @@ export default function CocktailsClient({ cocktails }: CocktailsClientProps) {
                 </div>
               </Link>
             ))}
+          </div>
+        )}
+
+        {/* Show More Button */}
+        {hasMoreCocktails && filteredCocktails.length > 0 && (
+          <div className="mt-10 text-center">
+            <button
+              onClick={handleShowMore}
+              className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-gold-500/20 to-gold-600/20 border border-gold-500/40 text-gold-300 rounded-xl hover:from-gold-500/30 hover:to-gold-600/30 hover:border-gold-400/60 transition-all duration-300 font-semibold"
+            >
+              <span>Show More Cocktails</span>
+              <span className="text-parchment-400 text-sm">
+                ({filteredCocktails.length - visibleCount} remaining)
+              </span>
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
           </div>
         )}
       </section>

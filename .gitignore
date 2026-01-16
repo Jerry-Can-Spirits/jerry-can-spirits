@@ -50,3 +50,7 @@ tsconfig.tsbuildinfo
 # Sentry
 .sentryclirc
 sentry.properties
+
+# Playwright
+test-results/
+playwright-report/

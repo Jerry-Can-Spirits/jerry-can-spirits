@@ -15,7 +15,10 @@
     "pages:deploy": "npm run pages:build && wrangler pages deploy .vercel/output/static",
     "pages:dev": "npx @cloudflare/next-on-pages --watch",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "test:e2e:report": "playwright show-report"
   },
   "dependencies": {
     "@headlessui/react": "^2.2.9",
@@ -40,6 +43,7 @@
     "@eslint/eslintrc": "^3",
     "@next/bundle-analyzer": "^16.1.1",
     "@next/eslint-plugin-next": "^15.5.9",
+    "@playwright/test": "^1.57.0",
     "@tailwindcss/typography": "^0.5.16",
     "@types/node": "^20.19.28",
     "@types/qrcode.react": "^1.0.5",
