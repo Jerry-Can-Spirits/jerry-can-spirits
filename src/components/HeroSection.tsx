@@ -33,14 +33,6 @@ export default function HeroSection() {
     return () => clearInterval(timer)
   }, [])
 
-  const scrollToSignup = () => {
-    // This will scroll to the Klaviyo signup component when built
-    const signupElement = document.getElementById('newsletter-signup')
-    if (signupElement) {
-      signupElement.scrollIntoView({ behavior: 'smooth' })
-    }
-  }
-
   return (
     <section className="relative overflow-hidden min-h-screen">
 
@@ -84,7 +76,7 @@ export default function HeroSection() {
             {/* Launch Countdown */}
             <div className="mb-8 p-6 bg-jerry-green-800/40 backdrop-blur-sm rounded-xl border border-gold-500/20">
               <div className="text-gold-300 text-sm font-semibold uppercase tracking-widest mb-4 text-center">
-                Launching April 2026
+                Ships April 2026 — Pre-order Now Open
               </div>
               <div className="grid grid-cols-4 gap-2 sm:gap-4 text-center">
                 <div className="bg-jerry-green-700/60 rounded-lg p-2 sm:p-3 border border-gold-500/20">
@@ -108,30 +100,30 @@ export default function HeroSection() {
 
             {/* CTA Buttons - Desktop */}
             <div className="hidden sm:flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-8">
-              <button
-                onClick={scrollToSignup}
+              <Link
+                href="/shop/product/jerry-can-spirits-expedition-spiced-rum"
                 className="group bg-gradient-to-r from-gold-600 to-gold-500 hover:from-gold-500 hover:to-gold-400 text-jerry-green-900 px-8 py-4 rounded-lg font-semibold uppercase tracking-wide transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 flex items-center justify-center gap-2"
               >
-                Notify Me
-                <svg 
-                  className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" 
-                  fill="none" 
-                  stroke="currentColor" 
+                Pre-order Now
+                <svg
+                  className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300"
+                  fill="none"
+                  stroke="currentColor"
                   viewBox="0 0 24 24"
                 >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-5 5-5-5h5v-5h5v5z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 12h14M12 5l7 7-7 7" />
                 </svg>
-              </button>
-              
+              </Link>
+
               <Link
                 href="/about/story"
                 className="group border-2 border-gold-500 text-gold-300 hover:text-jerry-green-900 hover:bg-gold-500 px-8 py-4 rounded-lg font-semibold uppercase tracking-wide transition-all duration-300 flex items-center justify-center gap-2"
               >
                 Our Story
-                <svg 
-                  className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" 
-                  fill="none" 
-                  stroke="currentColor" 
+                <svg
+                  className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300"
+                  fill="none"
+                  stroke="currentColor"
                   viewBox="0 0 24 24"
                 >
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 12h14M12 5l7 7-7 7" />
@@ -141,20 +133,20 @@ export default function HeroSection() {
 
             {/* CTA Buttons - Mobile (Single Button) */}
             <div className="sm:hidden mb-8">
-              <button
-                onClick={scrollToSignup}
+              <Link
+                href="/shop/product/jerry-can-spirits-expedition-spiced-rum"
                 className="w-full group bg-gradient-to-r from-gold-600 to-gold-500 hover:from-gold-500 hover:to-gold-400 text-jerry-green-900 px-8 py-4 rounded-lg font-semibold uppercase tracking-wide transition-all duration-300 shadow-lg hover:shadow-xl flex items-center justify-center gap-2"
               >
-                Notify Me
-                <svg 
-                  className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" 
-                  fill="none" 
-                  stroke="currentColor" 
+                Pre-order Now
+                <svg
+                  className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300"
+                  fill="none"
+                  stroke="currentColor"
                   viewBox="0 0 24 24"
                 >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-5 5-5-5h5v-5h5v5z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 12h14M12 5l7 7-7 7" />
                 </svg>
-              </button>
+              </Link>
             </div>
 
             {/* Trust Indicators - Text Only */}
@@ -183,7 +175,7 @@ export default function HeroSection() {
               
               {/* Floating Badges */}
               <div className="absolute top-6 left-6 bg-gradient-to-r from-gold-600 to-gold-500 text-jerry-green-900 px-4 py-2 rounded-full text-sm font-semibold uppercase tracking-wide shadow-lg">
-                Coming Soon
+                Pre-order Now
               </div>
               
               <div className="absolute bottom-6 right-6 bg-jerry-green-700/80 backdrop-blur-sm text-gold-300 px-4 py-2 rounded-full text-sm font-semibold uppercase tracking-wide border border-gold-500/30 shadow-lg">

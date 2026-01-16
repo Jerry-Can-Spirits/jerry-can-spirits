@@ -13,6 +13,7 @@ import { CartProvider } from "@/contexts/CartContext";
 import CartDrawer from "@/components/CartDrawer";
 import { OrganizationSchema, WebsiteSchema } from "@/components/StructuredData";
 import FacebookPixel from "@/components/FacebookPixel";
+import AnnouncementBar from "@/components/AnnouncementBar";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -144,6 +145,9 @@ export default function RootLayout({
               ctaLink="/notify"
               isVisible={false}
             />
+
+            {/* Announcement Bar - Pre-order promotion */}
+            <AnnouncementBar />
 
             <Header />
 

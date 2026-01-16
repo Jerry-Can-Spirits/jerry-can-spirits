@@ -194,11 +194,47 @@ export default function PreOrderSection() {
               </Link>
             </div>
 
-            {/* Trust Badge */}
-            <div className="mt-6 pt-6 border-t border-gold-500/20">
-              <p className="text-parchment-300 text-sm text-center sm:text-left">
-                <span className="text-gold-300 font-semibold">100% Secure</span> • Free UK Delivery • Money-Back Guarantee
-              </p>
+            {/* Enhanced Trust & Social Proof */}
+            <div className="mt-6 pt-6 border-t border-gold-500/20 space-y-4">
+              {/* Trust Badges */}
+              <div className="flex flex-wrap items-center justify-center sm:justify-start gap-4">
+                <div className="flex items-center gap-2 text-parchment-300 text-sm">
+                  <svg className="w-5 h-5 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                  </svg>
+                  <span>Secure Checkout</span>
+                </div>
+                <div className="flex items-center gap-2 text-parchment-300 text-sm">
+                  <svg className="w-5 h-5 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9" />
+                  </svg>
+                  <span>UK Veteran-Owned</span>
+                </div>
+                <div className="flex items-center gap-2 text-parchment-300 text-sm">
+                  <svg className="w-5 h-5 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+                  </svg>
+                  <span>Small-Batch Craft</span>
+                </div>
+              </div>
+
+              {/* Social Proof Stats */}
+              <div className="bg-jerry-green-800/30 rounded-lg p-4 border border-gold-500/10">
+                <div className="grid grid-cols-3 gap-4 text-center">
+                  <div>
+                    <div className="text-gold-300 font-bold text-lg">700</div>
+                    <div className="text-parchment-400 text-xs uppercase tracking-wide">Bottles Only</div>
+                  </div>
+                  <div>
+                    <div className="text-gold-300 font-bold text-lg">1st</div>
+                    <div className="text-parchment-400 text-xs uppercase tracking-wide">Batch Edition</div>
+                  </div>
+                  <div>
+                    <div className="text-gold-300 font-bold text-lg">UK</div>
+                    <div className="text-parchment-400 text-xs uppercase tracking-wide">Veteran-Owned</div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
