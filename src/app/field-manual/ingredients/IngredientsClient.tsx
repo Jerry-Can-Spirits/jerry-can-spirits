@@ -28,9 +28,13 @@ interface IngredientsClientProps {
   ingredients: Ingredient[]
 }
 
+// Pagination settings
+const ITEMS_PER_PAGE = 16
+
 export default function IngredientsClient({ ingredients }: IngredientsClientProps) {
   const [selectedCategory, setSelectedCategory] = useState<string>('all')
   const [searchQuery, setSearchQuery] = useState<string>('')
+  const [visibleCount, setVisibleCount] = useState<number>(ITEMS_PER_PAGE)
 
   // Filter ingredients
   const filteredIngredients = ingredients.filter(item => {
@@ -44,6 +48,25 @@ export default function IngredientsClient({ ingredients }: IngredientsClientProp
 
   // Get featured ingredients
   const featuredIngredients = filteredIngredients.filter(i => i.featured)
+
+  // Paginated ingredients for display
+  const visibleIngredients = filteredIngredients.slice(0, visibleCount)
+  const hasMoreIngredients = visibleCount < filteredIngredients.length
+
+  // Reset pagination when filters change
+  const handleCategoryChange = (category: string) => {
+    setSelectedCategory(category)
+    setVisibleCount(ITEMS_PER_PAGE)
+  }
+
+  const handleSearchChange = (query: string) => {
+    setSearchQuery(query)
+    setVisibleCount(ITEMS_PER_PAGE)
+  }
+
+  const handleShowMore = () => {
+    setVisibleCount(prev => prev + ITEMS_PER_PAGE)
+  }
 
   // Categories for filter tabs
   const categories = [
@@ -125,7 +148,7 @@ export default function IngredientsClient({ ingredients }: IngredientsClientProp
                 type="text"
                 placeholder="Search ingredients..."
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                onChange={(e) => handleSearchChange(e.target.value)}
                 className="w-full px-4 py-3 pl-12 bg-jerry-green-800/40 border border-gold-500/20 rounded-lg text-white placeholder-parchment-400 focus:outline-none focus:border-gold-400/40 transition-colors"
               />
               <svg className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -140,7 +163,7 @@ export default function IngredientsClient({ ingredients }: IngredientsClientProp
                 {categories.map((category) => (
                   <button
                     key={category.value}
-                    onClick={() => setSelectedCategory(category.value)}
+                    onClick={() => handleCategoryChange(category.value)}
                     className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-300 ${
                       selectedCategory === category.value
                         ? 'bg-gold-500/20 text-gold-300 border border-gold-500/40'
@@ -155,7 +178,7 @@ export default function IngredientsClient({ ingredients }: IngredientsClientProp
 
             {/* Results count */}
             <div className="text-parchment-300 text-sm">
-              Showing <span className="text-gold-300 font-semibold">{filteredIngredients.length}</span> {filteredIngredients.length === 1 ? 'ingredient' : 'ingredients'}
+              Showing <span className="text-gold-300 font-semibold">{Math.min(visibleCount, filteredIngredients.length)}</span> of <span className="text-gold-300 font-semibold">{filteredIngredients.length}</span> {filteredIngredients.length === 1 ? 'ingredient' : 'ingredients'}
             </div>
           </div>
         </div>
@@ -227,6 +250,7 @@ export default function IngredientsClient({ ingredients }: IngredientsClientProp
               onClick={() => {
                 setSelectedCategory('all')
                 setSearchQuery('')
+                setVisibleCount(ITEMS_PER_PAGE)
               }}
               className="mt-4 px-6 py-3 bg-gold-500/20 border border-gold-500/40 text-gold-300 rounded-lg hover:bg-gold-500/30 transition-colors"
             >
@@ -235,7 +259,7 @@ export default function IngredientsClient({ ingredients }: IngredientsClientProp
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {filteredIngredients.map((item) => (
+            {visibleIngredients.map((item) => (
               <Link
                 key={item._id}
                 href={`/field-manual/ingredients/${item.slug.current}`}
@@ -273,6 +297,24 @@ export default function IngredientsClient({ ingredients }: IngredientsClientProp
                 </div>
               </Link>
             ))}
+          </div>
+        )}
+
+        {/* Show More Button */}
+        {hasMoreIngredients && filteredIngredients.length > 0 && (
+          <div className="mt-10 text-center">
+            <button
+              onClick={handleShowMore}
+              className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-gold-500/20 to-gold-600/20 border border-gold-500/40 text-gold-300 rounded-xl hover:from-gold-500/30 hover:to-gold-600/30 hover:border-gold-400/60 transition-all duration-300 font-semibold"
+            >
+              <span>Show More Ingredients</span>
+              <span className="text-parchment-400 text-sm">
+                ({filteredIngredients.length - visibleCount} remaining)
+              </span>
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
           </div>
         )}
       </section>
