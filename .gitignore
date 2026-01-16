@@ -54,3 +54,4 @@ sentry.properties
 # Playwright
 test-results/
 playwright-report/
+audit-results.json
