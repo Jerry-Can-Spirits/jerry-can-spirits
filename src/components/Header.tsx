@@ -152,7 +152,8 @@ export default function Header() {
       </div>
 
       <header
-        className={`fixed top-0 w-full z-50 transition-transform duration-300 ease-out ${
+        style={{ top: 'var(--announcement-height, 0px)' }}
+        className={`fixed w-full z-50 transition-all duration-300 ease-out ${
           showHeader ? 'translate-y-0' : '-translate-y-full'
         }`}
       >
