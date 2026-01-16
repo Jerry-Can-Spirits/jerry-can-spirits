@@ -14,11 +14,8 @@ export const metadata: Metadata = {
 }
 
 export default function ArmedForcesCovenant() {
-  const lastUpdated = new Date().toLocaleDateString('en-GB', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
-  })
+  const establishedDate = '16 September 2025'
+  const lastUpdated = '16 September 2025'
 
   return (
     <main className="min-h-screen py-20">
@@ -279,7 +276,7 @@ export default function ArmedForcesCovenant() {
         <div className="mt-12 p-8 bg-jerry-green-800/40 backdrop-blur-sm rounded-xl border border-gold-500/20 text-center">
           <p className="text-parchment-300 text-sm">
             <strong className="text-gold-300">
-              This Armed Forces Covenant was established on {lastUpdated} and represents our unwavering commitment to supporting the military community.
+              This Armed Forces Covenant was established on {establishedDate} and represents our unwavering commitment to supporting the military community.
             </strong>
           </p>
         </div>
