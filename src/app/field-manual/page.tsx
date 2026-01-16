@@ -1,6 +1,13 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import type { Metadata } from 'next'
+import { client } from '@/sanity/client'
+import { fieldManualCountsQuery } from '@/sanity/queries'
+
+// Round down to nearest 10
+function roundDownToTen(n: number): number {
+  return Math.floor(n / 10) * 10
+}
 
 export const metadata: Metadata = {
   title: "Field Manual | Jerry Can Spirits - Cocktail Recipes, Equipment & Ingredients",
@@ -14,7 +21,10 @@ export const metadata: Metadata = {
   },
 }
 
-export default function FieldManualHome() {
+export default async function FieldManualHome() {
+  // Fetch live counts from Sanity
+  const counts = await client.fetch<{ cocktails: number; ingredients: number; equipment: number }>(fieldManualCountsQuery)
+
   return (
     <main className="min-h-screen py-20">
       {/* Hero Section */}
@@ -50,6 +60,55 @@ export default function FieldManualHome() {
           <p className="text-xl text-parchment-300 max-w-3xl mx-auto leading-relaxed mb-8">
             Master the art of craft cocktails with our comprehensive field manual. Discover expertly-crafted rum cocktail recipes showcasing <a href="/shop/drinks" className="text-gold-300 hover:text-gold-400 underline decoration-gold-500/40 hover:decoration-gold-400 transition-colors">Jerry Can Spirits premium British rum</a>, explore premium spirits and ingredients, and learn professional bartending techniques. From classic cocktails to bold innovations, our expedition-tested guide helps you create exceptional drinks at home. Visit our <a href="/" className="text-gold-300 hover:text-gold-400 underline decoration-gold-500/40 hover:decoration-gold-400 transition-colors">homepage</a> to discover our veteran-owned craft spirits brand.
           </p>
+        </div>
+      </section>
+
+      {/* Stats Banner */}
+      <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 -mt-8 mb-8 relative z-10">
+        <div className="bg-gradient-to-r from-jerry-green-800/80 via-jerry-green-700/80 to-jerry-green-800/80 backdrop-blur-sm rounded-xl border border-gold-500/30 py-6 px-8">
+          <div className="grid grid-cols-3 divide-x divide-gold-500/30">
+            <div className="text-center px-4">
+              <div className="text-3xl sm:text-4xl font-serif font-bold text-gold-300">
+                {roundDownToTen(counts.cocktails)}+
+              </div>
+              <div className="text-parchment-300 text-sm sm:text-base mt-1">Cocktail Recipes</div>
+            </div>
+            <div className="text-center px-4">
+              <div className="text-3xl sm:text-4xl font-serif font-bold text-gold-300">
+                {roundDownToTen(counts.ingredients)}+
+              </div>
+              <div className="text-parchment-300 text-sm sm:text-base mt-1">Ingredients</div>
+            </div>
+            <div className="text-center px-4">
+              <div className="text-3xl sm:text-4xl font-serif font-bold text-gold-300">
+                {roundDownToTen(counts.equipment)}+
+              </div>
+              <div className="text-parchment-300 text-sm sm:text-base mt-1">Equipment Guides</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Philosophy Section */}
+      <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
+        <div className="text-center">
+          <h2 className="text-2xl sm:text-3xl font-serif font-bold text-white mb-6">
+            Great Drinks, <span className="text-gold-300">Without the Gatekeeping</span>
+          </h2>
+          <div className="space-y-4 text-parchment-300 leading-relaxed">
+            <p>
+              You don't need a cocktail certification or a wall of obscure spirits to make exceptional drinks at home.
+              The Field Manual strips away the pretence and unnecessary jargon that makes mixology feel inaccessible.
+            </p>
+            <p>
+              Every recipe is written in plain English with clear measurements. We tell you what actually matters —
+              and what's just noise. Whether you're making your first Dark & Stormy or experimenting with house-made
+              syrups, this guide meets you where you are.
+            </p>
+            <p className="text-gold-300 font-medium">
+              Good technique, quality ingredients, and a willingness to experiment. That's all you need.
+            </p>
+          </div>
         </div>
       </section>
 

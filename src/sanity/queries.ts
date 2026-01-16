@@ -311,3 +311,10 @@ export const guideBySlugQuery = `*[_type == "guide" && slug.current == $slug][0]
   },
   estimatedWordCount
 }`
+
+// Count queries for Field Manual stats
+export const fieldManualCountsQuery = `{
+  "cocktails": count(*[_type == "cocktail"]),
+  "ingredients": count(*[_type == "ingredient"]),
+  "equipment": count(*[_type == "equipment"])
+}`
