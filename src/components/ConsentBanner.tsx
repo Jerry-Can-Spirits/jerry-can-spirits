@@ -118,7 +118,7 @@ export default function ConsentBanner() {
                 onClick={() => setShowDetails(true)}
                 className="px-4 py-2 text-white border border-jerry-gold-500/50 rounded hover:bg-jerry-gold-500/20 hover:border-jerry-gold-400 hover:scale-105 transition-all text-sm shadow-md"
               >
-                Customize
+                Customise
               </button>
               <button
                 onClick={handleRejectAll}
