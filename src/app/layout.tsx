@@ -151,8 +151,8 @@ export default function RootLayout({
 
             <Header />
 
-            {/* Main content with proper spacing for fixed header */}
-            <main id="main-content" className="pt-20">
+            {/* Main content with proper spacing for fixed header + announcement bar */}
+            <main id="main-content" className="pt-20" style={{ paddingTop: 'calc(5rem + var(--announcement-height, 0px))' }}>
               {children}
             </main>
             

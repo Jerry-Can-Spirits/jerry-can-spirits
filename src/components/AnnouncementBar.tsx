@@ -4,16 +4,30 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 
 export default function AnnouncementBar() {
-  const [isVisible, setIsVisible] = useState(true)
   const [dismissed, setDismissed] = useState(false)
+  const [mounted, setMounted] = useState(false)
 
   // Check if user has dismissed the bar in this session
   useEffect(() => {
+    setMounted(true)
     const wasDismissed = sessionStorage.getItem('announcement-dismissed')
     if (wasDismissed) {
       setDismissed(true)
     }
   }, [])
+
+  // Set CSS variable for header offset
+  useEffect(() => {
+    if (mounted) {
+      document.documentElement.style.setProperty(
+        '--announcement-height',
+        dismissed ? '0px' : '40px'
+      )
+    }
+    return () => {
+      document.documentElement.style.setProperty('--announcement-height', '0px')
+    }
+  }, [dismissed, mounted])
 
   const handleDismiss = () => {
     setDismissed(true)
@@ -24,9 +38,7 @@ export default function AnnouncementBar() {
 
   return (
     <div
-      className={`bg-gradient-to-r from-gold-600 via-gold-500 to-gold-600 text-jerry-green-900 transition-all duration-300 ${
-        isVisible ? 'translate-y-0' : '-translate-y-full'
-      }`}
+      className="fixed top-0 left-0 right-0 z-[60] bg-gradient-to-r from-gold-600 via-gold-500 to-gold-600 text-jerry-green-900 transition-all duration-300"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between py-2.5 text-sm">
