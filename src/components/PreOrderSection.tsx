@@ -5,55 +5,76 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { getProduct } from '@/lib/shopify'
 
+interface ProductPricing {
+  price: string
+  compareAtPrice: string | null
+}
+
 export default function PreOrderSection() {
   const [bottlesSold, setBottlesSold] = useState<number | null>(null)
-  const [pricing, setPricing] = useState<{ price: string; compareAtPrice: string | null }>({ price: '35', compareAtPrice: '45' })
+  const [bottlePricing, setBottlePricing] = useState<ProductPricing>({ price: '35', compareAtPrice: '45' })
+  const [giftSetPricing, setGiftSetPricing] = useState<ProductPricing>({ price: '55', compareAtPrice: '65' })
   const [loading, setLoading] = useState(true)
   const totalBottles = 700
-  const productHandle = 'jerry-can-spirits-expedition-spiced-rum'
+
+  // Product handles
+  const bottleHandle = 'jerry-can-spirits-expedition-spiced-rum'
+  const giftSetHandle = 'jerry-can-spirits-premium-gift-pack'
 
   useEffect(() => {
-    async function fetchInventory() {
+    async function fetchProducts() {
       try {
-        const product = await getProduct(productHandle)
-        if (product?.variants?.[0]) {
-          const variant = product.variants[0]
+        // Fetch both products in parallel
+        const [bottleProduct, giftSetProduct] = await Promise.all([
+          getProduct(bottleHandle),
+          getProduct(giftSetHandle)
+        ])
+
+        // Process bottle data
+        if (bottleProduct?.variants?.[0]) {
+          const variant = bottleProduct.variants[0]
 
           // Get bottles sold from metafield (more reliable than inventory calculation)
-          const preorderSoldMeta = product.metafields?.find(
+          const preorderSoldMeta = bottleProduct.metafields?.find(
             (m: { namespace: string; key: string; value: string } | null) =>
               m?.namespace === 'custom' && m?.key === 'preorder_sold'
           )
           if (preorderSoldMeta?.value) {
             setBottlesSold(parseInt(preorderSoldMeta.value, 10))
           } else if (variant.quantityAvailable !== undefined) {
-            // Fallback to inventory calculation if metafield not set
             const available = variant.quantityAvailable
             const sold = totalBottles - available
             setBottlesSold(Math.max(0, sold))
           }
 
-          // Set pricing from product data
-          setPricing({
+          setBottlePricing({
+            price: parseFloat(variant.price.amount).toFixed(0),
+            compareAtPrice: variant.compareAtPrice ? parseFloat(variant.compareAtPrice.amount).toFixed(0) : null
+          })
+        }
+
+        // Process gift set data
+        if (giftSetProduct?.variants?.[0]) {
+          const variant = giftSetProduct.variants[0]
+          setGiftSetPricing({
             price: parseFloat(variant.price.amount).toFixed(0),
             compareAtPrice: variant.compareAtPrice ? parseFloat(variant.compareAtPrice.amount).toFixed(0) : null
           })
         }
       } catch (error) {
-        console.error('Error fetching inventory:', error)
-        // Don't show progress bar if we can't get real data
+        console.error('Error fetching products:', error)
         setBottlesSold(null)
       } finally {
         setLoading(false)
       }
     }
 
-    fetchInventory()
+    fetchProducts()
   }, [])
 
   const percentageSold = bottlesSold !== null ? (bottlesSold / totalBottles) * 100 : 0
   const showProgressBar = !loading && bottlesSold !== null
-  const discount = pricing.compareAtPrice ? parseInt(pricing.compareAtPrice) - parseInt(pricing.price) : 10
+  const bottleDiscount = bottlePricing.compareAtPrice ? parseInt(bottlePricing.compareAtPrice) - parseInt(bottlePricing.price) : 10
 
   return (
     <section className="py-16 bg-jerry-green-900/50">
@@ -139,7 +160,7 @@ export default function PreOrderSection() {
                   <svg className="w-5 h-5 text-gold-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                   </svg>
-                  <span className="text-parchment-200">Save £{discount} as an early supporter (£{pricing.price} vs £{pricing.compareAtPrice} RRP)</span>
+                  <span className="text-parchment-200">Save £{bottleDiscount} as an early supporter (£{bottlePricing.price} vs £{bottlePricing.compareAtPrice} RRP)</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <svg className="w-5 h-5 text-gold-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -157,40 +178,59 @@ export default function PreOrderSection() {
             </div>
 
             {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4">
+            <div className="flex flex-col gap-4">
+              {/* Standard Bottle */}
               <Link
-                href="/shop/product/jerry-can-spirits-expedition-spiced-rum"
-                className="group bg-gradient-to-r from-gold-600 to-gold-500 hover:from-gold-500 hover:to-gold-400 text-jerry-green-900 px-8 py-4 rounded-lg font-semibold uppercase tracking-wide transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 flex items-center justify-center gap-2"
+                href={`/shop/product/${bottleHandle}`}
+                className="group bg-gradient-to-r from-gold-600 to-gold-500 hover:from-gold-500 hover:to-gold-400 text-jerry-green-900 px-6 py-4 rounded-lg font-semibold transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-[1.02] flex items-center justify-between"
               >
-                <span className="flex flex-col sm:flex-row sm:items-baseline sm:gap-2">
-                  <span>Pre-Order Now - £{pricing.price}</span>
-                  {pricing.compareAtPrice && (
-                    <span className="text-xs sm:text-sm line-through opacity-75">£{pricing.compareAtPrice}</span>
-                  )}
-                </span>
-                <svg
-                  className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 12h14M12 5l7 7-7 7" />
-                </svg>
+                <div className="flex flex-col">
+                  <span className="text-xs uppercase tracking-wider opacity-75">Standard Bottle</span>
+                  <span className="text-lg">Expedition Spiced Rum</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="text-right">
+                    <span className="text-xl font-bold">£{bottlePricing.price}</span>
+                    {bottlePricing.compareAtPrice && (
+                      <span className="text-sm line-through opacity-60 ml-2">£{bottlePricing.compareAtPrice}</span>
+                    )}
+                  </div>
+                  <svg
+                    className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 12h14M12 5l7 7-7 7" />
+                  </svg>
+                </div>
               </Link>
 
+              {/* Premium Gift Pack */}
               <Link
-                href="/about/story"
-                className="group border-2 border-gold-500 text-gold-300 hover:text-jerry-green-900 hover:bg-gold-500 px-8 py-4 rounded-lg font-semibold uppercase tracking-wide transition-all duration-300 flex items-center justify-center gap-2"
+                href={`/shop/product/${giftSetHandle}`}
+                className="group bg-gradient-to-r from-jerry-green-700 to-jerry-green-800 hover:from-jerry-green-600 hover:to-jerry-green-700 text-white px-6 py-4 rounded-lg font-semibold transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-[1.02] flex items-center justify-between border border-gold-500/30"
               >
-                Learn Our Story
-                <svg
-                  className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 12h14M12 5l7 7-7 7" />
-                </svg>
+                <div className="flex flex-col">
+                  <span className="text-xs uppercase tracking-wider text-gold-300">Premium Gift Pack</span>
+                  <span className="text-lg">Bottle + Barware Set</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="text-right">
+                    <span className="text-xl font-bold text-gold-300">£{giftSetPricing.price}</span>
+                    {giftSetPricing.compareAtPrice && (
+                      <span className="text-sm line-through opacity-60 text-parchment-400 ml-2">£{giftSetPricing.compareAtPrice}</span>
+                    )}
+                  </div>
+                  <svg
+                    className="w-5 h-5 text-gold-300 group-hover:translate-x-1 transition-transform duration-300"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 12h14M12 5l7 7-7 7" />
+                  </svg>
+                </div>
               </Link>
             </div>
 
