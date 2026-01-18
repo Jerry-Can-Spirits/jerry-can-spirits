@@ -14,20 +14,23 @@ export default function PreOrderSection() {
   const [bottlesSold, setBottlesSold] = useState<number | null>(null)
   const [bottlePricing, setBottlePricing] = useState<ProductPricing>({ price: '35', compareAtPrice: '45' })
   const [giftSetPricing, setGiftSetPricing] = useState<ProductPricing>({ price: '55', compareAtPrice: '65' })
+  const [tradePackPricing, setTradePackPricing] = useState<ProductPricing>({ price: '180', compareAtPrice: '210' })
   const [loading, setLoading] = useState(true)
   const totalBottles = 700
 
   // Product handles
   const bottleHandle = 'jerry-can-spirits-expedition-spiced-rum'
   const giftSetHandle = 'jerry-can-spirits-premium-gift-pack'
+  const tradePackHandle = 'jerry-can-spirits-expedition-pack-spiced-rum-6-bottles'
 
   useEffect(() => {
     async function fetchProducts() {
       try {
-        // Fetch both products in parallel
-        const [bottleProduct, giftSetProduct] = await Promise.all([
+        // Fetch all products in parallel
+        const [bottleProduct, giftSetProduct, tradePackProduct] = await Promise.all([
           getProduct(bottleHandle),
-          getProduct(giftSetHandle)
+          getProduct(giftSetHandle),
+          getProduct(tradePackHandle)
         ])
 
         // Process bottle data
@@ -57,6 +60,15 @@ export default function PreOrderSection() {
         if (giftSetProduct?.variants?.[0]) {
           const variant = giftSetProduct.variants[0]
           setGiftSetPricing({
+            price: parseFloat(variant.price.amount).toFixed(0),
+            compareAtPrice: variant.compareAtPrice ? parseFloat(variant.compareAtPrice.amount).toFixed(0) : null
+          })
+        }
+
+        // Process trade pack data
+        if (tradePackProduct?.variants?.[0]) {
+          const variant = tradePackProduct.variants[0]
+          setTradePackPricing({
             price: parseFloat(variant.price.amount).toFixed(0),
             compareAtPrice: variant.compareAtPrice ? parseFloat(variant.compareAtPrice.amount).toFixed(0) : null
           })
@@ -220,6 +232,33 @@ export default function PreOrderSection() {
                     <span className="text-xl font-bold text-gold-300">£{giftSetPricing.price}</span>
                     {giftSetPricing.compareAtPrice && (
                       <span className="text-sm line-through opacity-60 text-parchment-400 ml-2">£{giftSetPricing.compareAtPrice}</span>
+                    )}
+                  </div>
+                  <svg
+                    className="w-5 h-5 text-gold-300 group-hover:translate-x-1 transition-transform duration-300"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 12h14M12 5l7 7-7 7" />
+                  </svg>
+                </div>
+              </Link>
+
+              {/* Trade Pack - 6 Bottles */}
+              <Link
+                href={`/shop/product/${tradePackHandle}`}
+                className="group bg-gradient-to-r from-jerry-green-700 to-jerry-green-800 hover:from-jerry-green-600 hover:to-jerry-green-700 text-white px-6 py-4 rounded-lg font-semibold transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-[1.02] flex items-center justify-between border border-gold-500/30"
+              >
+                <div className="flex flex-col">
+                  <span className="text-xs uppercase tracking-wider text-gold-300">Trade Pack</span>
+                  <span className="text-lg">6 Bottles - Best Value</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="text-right">
+                    <span className="text-xl font-bold text-gold-300">£{tradePackPricing.price}</span>
+                    {tradePackPricing.compareAtPrice && (
+                      <span className="text-sm line-through opacity-60 text-parchment-400 ml-2">£{tradePackPricing.compareAtPrice}</span>
                     )}
                   </div>
                   <svg
