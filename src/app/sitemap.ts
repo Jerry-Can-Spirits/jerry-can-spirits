@@ -44,7 +44,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   // Generate cocktail URLs dynamically (with trailing slash)
   const cocktailUrls: MetadataRoute.Sitemap = cocktails.map((cocktail) => ({
-    url: `${baseUrl}/cocktails/${cocktail.slug.current}/`,
+    url: `${baseUrl}/field-manual/cocktails/${cocktail.slug.current}/`,
     lastModified: currentDate,
     changeFrequency: 'weekly' as const,
     priority: 0.7,
