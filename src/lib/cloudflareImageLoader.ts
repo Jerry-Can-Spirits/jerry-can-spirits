@@ -44,9 +44,12 @@ const CLOUDFLARE_ACCOUNT_HASH = process.env.NEXT_PUBLIC_CLOUDFLARE_ACCOUNT_HASH 
  */
 export default function cloudflareImageLoader({
   src,
-  width,
-  quality = 75,
+  width: _width,
+  quality: _quality = 75,
 }: ImageLoaderProps): string {
+  // Note: width and quality are unused because Cloudflare Images uses predefined variants
+  void _width
+  void _quality
   // Handle external images (Sanity, Shopify) - pass through unchanged
   if (src.startsWith('http://') || src.startsWith('https://')) {
     return src
