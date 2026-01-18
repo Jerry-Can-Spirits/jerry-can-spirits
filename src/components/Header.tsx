@@ -187,7 +187,7 @@ export default function Header() {
               >
                 <div className="relative">
                   <Image
-                    src="/images/Logo.webp"
+                    src="https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/images-logo-webp/public"
                     alt="Jerry Can Spirits®"
                     width={160}
                     height={60}

@@ -27,6 +27,15 @@ export default function KlaviyoSignup({
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle')
   const [isVisible, setIsVisible] = useState(false)
+  const [hasSignedUp, setHasSignedUp] = useState(false)
+
+  // Check if user has already signed up
+  useEffect(() => {
+    const signedUp = localStorage.getItem('jcs_newsletter_signup')
+    if (signedUp === 'true') {
+      setHasSignedUp(true)
+    }
+  }, [])
 
   // Animation on scroll into view
   useEffect(() => {
@@ -67,7 +76,7 @@ export default function KlaviyoSignup({
 
     try {
       // Klaviyo API integration
-      const response = await fetch('/api/klaviyo-signup', {
+      const response = await fetch('/api/klaviyo-signup/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -80,11 +89,9 @@ export default function KlaviyoSignup({
 
       if (response.ok) {
         setSubmitStatus('success')
-        // Reset form after success
-        setTimeout(() => {
-          setFormData({ firstName: '', email: '', interests: [], website: '' })
-          setSubmitStatus('idle')
-        }, 5000)
+        // Mark as signed up permanently
+        localStorage.setItem('jcs_newsletter_signup', 'true')
+        setHasSignedUp(true)
       } else {
         setSubmitStatus('error')
         setTimeout(() => setSubmitStatus('idle'), 5000)
@@ -143,34 +150,45 @@ export default function KlaviyoSignup({
 
           </div>
 
-          {/* Success State */}
-          {submitStatus === 'success' && (
-            <div className="mb-8 p-6 bg-green-800/60 backdrop-blur-sm border border-green-600/30 rounded-xl text-center">
-              <div className="flex items-center justify-center gap-3 mb-3">
-                <svg className="w-8 h-8 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          {/* Already Signed Up - Thank You Message */}
+          {hasSignedUp ? (
+            <div className="max-w-2xl mx-auto text-center">
+              <div className="p-8 bg-jerry-green-800/40 backdrop-blur-sm border border-gold-500/30 rounded-xl">
+                <svg className="w-16 h-16 text-gold-400 mx-auto mb-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
-                <h3 className="text-2xl font-serif font-bold text-green-300">You're In!</h3>
+                <h3 className="text-2xl font-serif font-bold text-white mb-4">You're Part of the Expedition</h3>
+                <p className="text-parchment-300 mb-6">
+                  Thanks for joining. Keep an eye on your inbox for exclusive updates, recipes, and early access to new releases.
+                </p>
+                <a
+                  href="/shop"
+                  className="inline-flex items-center gap-2 bg-gradient-to-r from-gold-600 to-gold-500 hover:from-gold-500 hover:to-gold-400 text-jerry-green-900 px-8 py-3 rounded-lg font-semibold uppercase tracking-wide transition-all duration-300 shadow-lg hover:shadow-xl"
+                >
+                  Browse the Shop
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                  </svg>
+                </a>
               </div>
-              <p className="text-green-200">Welcome to the expedition. Check your email (and junk folder) for exclusive content coming your way.</p>
             </div>
-          )}
+          ) : (
+            <>
+              {/* Error State */}
+              {submitStatus === 'error' && (
+                <div className="mb-8 p-6 bg-red-800/60 backdrop-blur-sm border border-red-600/30 rounded-xl text-center max-w-4xl mx-auto">
+                  <div className="flex items-center justify-center gap-3 mb-3">
+                    <svg className="w-8 h-8 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16c-.77.833.192 2.5 1.732 2.5z" />
+                    </svg>
+                    <h3 className="text-2xl font-serif font-bold text-red-300">Something Went Wrong</h3>
+                  </div>
+                  <p className="text-red-200">Please try again or contact us directly.</p>
+                </div>
+              )}
 
-          {/* Error State */}
-          {submitStatus === 'error' && (
-            <div className="mb-8 p-6 bg-red-800/60 backdrop-blur-sm border border-red-600/30 rounded-xl text-center">
-              <div className="flex items-center justify-center gap-3 mb-3">
-                <svg className="w-8 h-8 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16c-.77.833.192 2.5 1.732 2.5z" />
-                </svg>
-                <h3 className="text-2xl font-serif font-bold text-red-300">Something Went Wrong</h3>
-              </div>
-              <p className="text-red-200">Please try again or contact us directly.</p>
-            </div>
-          )}
-
-          {/* Signup Form */}
-          <div className="max-w-4xl mx-auto">
+              {/* Signup Form */}
+              <div className="max-w-4xl mx-auto">
             <form onSubmit={handleSubmit} className="space-y-6">
               
               {/* Honeypot field - hidden from users */}
@@ -320,6 +338,8 @@ export default function KlaviyoSignup({
               <p className="text-sm text-parchment-300">Special pricing on products and expedition merchandise</p>
             </div>
           </div>
+            </>
+          )}
         </div>
         </div>
       </div>
