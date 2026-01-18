@@ -54,7 +54,16 @@ export default function Header() {
         { name: 'Ingredients', href: '/field-manual/ingredients', description: 'Quality spirits guide' },
       ]
     },
-    { name: 'Guides', href: '/guides' },
+    {
+      name: 'Guides',
+      href: '/guides',
+      dropdown: [
+        { name: 'Rum Guides', href: '/guides?category=rum-guides', description: 'Complete rum education' },
+        { name: 'Cocktail Guides', href: '/guides?category=cocktail-techniques', description: 'Techniques & tutorials' },
+        { name: 'Spirits Education', href: '/guides?category=spirits-education', description: 'Knowledge & insights' },
+        { name: 'Browse All Guides', href: '/guides', description: 'View the full collection' },
+      ]
+    },
     {
       name: 'About',
       dropdown: [
