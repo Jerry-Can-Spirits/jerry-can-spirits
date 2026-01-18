@@ -76,7 +76,7 @@ export default function AgeGate({ onVerified }: AgeGateProps) {
           <div className="text-center" style={{ minHeight: '168px' }}>
             <div style={{ width: '150px', height: '150px', margin: '0 auto 2rem' }}>
               <Image
-                src="/images/Logo.webp"
+                src="https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/images-logo-webp/public"
                 alt="Jerry Can Spirits®"
                 width={150}
                 height={150}
