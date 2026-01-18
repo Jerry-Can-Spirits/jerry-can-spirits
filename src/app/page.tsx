@@ -3,7 +3,7 @@ import HeroSection from "@/components/HeroSection";
 import StructuredData from "@/components/StructuredData";
 import ScrollToHash from "@/components/ScrollToHash";
 import PreOrderSection from "@/components/PreOrderSection";
-import KlaviyoSignup from "@/components/KlaviyoSignup";
+import KlaviyoEmbed from "@/components/KlaviyoEmbed";
 import FounderStorySnippet from "@/components/FounderStorySnippet";
 import FieldManualPreview from "@/components/FieldManualPreview";
 import WhyJerryCan from "@/components/WhyJerryCan";
@@ -106,7 +106,7 @@ export default function Home() {
         <PreOrderSection />
 
         {/* Email Signup - Secondary CTA */}
-        <KlaviyoSignup />
+        <KlaviyoEmbed />
 
         {/* Why Jerry Can - Value Proposition */}
         <WhyJerryCan />
