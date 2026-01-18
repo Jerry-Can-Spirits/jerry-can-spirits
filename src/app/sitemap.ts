@@ -246,13 +246,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'monthly',
       priority: 0.6,
     },
-    // Notify page
-    {
-      url: `${baseUrl}/notify/`,
-      lastModified: currentDate,
-      changeFrequency: 'monthly',
-      priority: 0.5,
-    },
     // Shop pages
     {
       url: `${baseUrl}/shop/`,

@@ -107,12 +107,20 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
 
         {/* Non-Critical Third-Party Connections - DNS Prefetch only */}
-        <link rel="dns-prefetch" href="https://static.klaviyo.com" />
+        <link rel="preconnect" href="https://static.klaviyo.com" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://connect.facebook.net" />
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
         <link rel="dns-prefetch" href="https://www.google-analytics.com" />
         <link rel="dns-prefetch" href="https://widget.trustpilot.com" />
         <link rel="dns-prefetch" href="https://cloudflareinsights.com" />
+
+        {/* Klaviyo Onsite.js - Required for embedded forms */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `!function(){if(!window.klaviyo){window._klOnsite=window._klOnsite||[];try{window.klaviyo=new Proxy({},{get:function(n,i){return"push"===i?function(){var n;(n=window._klOnsite).push.apply(n,arguments)}:function(){for(var n=arguments.length,o=new Array(n),w=0;w<n;w++)o[w]=arguments[w];var t="function"==typeof o[o.length-1]?o.pop():void 0,e=new Promise((function(n){window._klOnsite.push([i].concat(o,[function(i){t&&t(i),n(i)}]))}));return e}}})}catch(n){window.klaviyo=window.klaviyo||[],window.klaviyo.push=function(){var n;(n=window._klOnsite).push.apply(n,arguments)}}}}();window.klaviyo.push(['account','UavTvg']);`
+          }}
+        />
+        <script async src="https://static.klaviyo.com/onsite/js/klaviyo.js?company_id=UavTvg"></script>
       </head>
       <body
         className={`${inter.variable} ${playfair.variable} ${jetbrains.variable} antialiased min-h-screen bg-jerry-green-900 text-foreground`}
@@ -122,7 +130,6 @@ export default function RootLayout({
         <OrganizationSchema />
         <WebsiteSchema />
         <FacebookPixel />
-        {/* Klaviyo now loaded via Cloudflare Zaraz - see Zaraz Custom HTML setup */}
 
         <CartProvider>
           {/* Skip to Content Link - Accessibility */}
@@ -142,7 +149,7 @@ export default function RootLayout({
             <PromoBanner
               message="Pre-launch: Be the first to know when Expedition Spiced launches!"
               ctaText="Notify Me"
-              ctaLink="/notify"
+              ctaLink="/#newsletter-signup"
               isVisible={false}
             />
 
