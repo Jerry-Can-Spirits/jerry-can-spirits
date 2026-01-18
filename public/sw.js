@@ -1,4 +1,4 @@
-const CACHE_NAME = 'jerry-can-spirits-v5';
+const CACHE_NAME = 'jerry-can-spirits-v6';
 const OFFLINE_URL = '/offline';
 
 // URLs to cache for offline access (Field Manual)
