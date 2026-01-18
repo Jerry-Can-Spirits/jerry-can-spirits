@@ -3,7 +3,10 @@
 import { useState } from 'react'
 import Link from 'next/link'
 
+const KLAVIYO_LIST_ID = 'T4uXSb' // Website Signups list
+
 export default function NotifyPage() {
+  const [firstName, setFirstName] = useState('')
   const [email, setEmail] = useState('')
   const [loading, setLoading] = useState(false)
   const [status, setStatus] = useState<'idle' | 'success' | 'error'>('idle')
@@ -21,7 +24,7 @@ export default function NotifyPage() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({ firstName, email, listId: KLAVIYO_LIST_ID }),
       })
 
       const data = await response.json()
@@ -29,6 +32,7 @@ export default function NotifyPage() {
       if (response.ok) {
         setStatus('success')
         setMessage(data.message || 'Thanks for signing up! We\'ll notify you when we launch.')
+        setFirstName('')
         setEmail('')
       } else {
         setStatus('error')
@@ -75,25 +79,36 @@ export default function NotifyPage() {
             </p>
 
             {/* Form */}
-            <form onSubmit={handleSubmit} className="max-w-md mx-auto mb-6">
-              <div className="flex flex-col sm:flex-row gap-3">
+            <form onSubmit={handleSubmit} className="max-w-lg mx-auto mb-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
+                <input
+                  type="text"
+                  value={firstName}
+                  onChange={(e) => setFirstName(e.target.value)}
+                  placeholder="First name"
+                  required
+                  disabled={loading}
+                  autoComplete="given-name"
+                  className="px-4 py-3 bg-jerry-green-800/40 border border-gold-500/20 rounded-lg text-white placeholder-parchment-400 focus:outline-none focus:border-gold-400/40 transition-colors disabled:opacity-50"
+                />
                 <input
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Enter your email"
+                  placeholder="Email address"
                   required
                   disabled={loading}
-                  className="flex-1 px-4 py-3 bg-jerry-green-800/40 border border-gold-500/20 rounded-lg text-white placeholder-parchment-400 focus:outline-none focus:border-gold-400/40 transition-colors disabled:opacity-50"
+                  autoComplete="email"
+                  className="px-4 py-3 bg-jerry-green-800/40 border border-gold-500/20 rounded-lg text-white placeholder-parchment-400 focus:outline-none focus:border-gold-400/40 transition-colors disabled:opacity-50"
                 />
-                <button
-                  type="submit"
-                  disabled={loading}
-                  className="px-8 py-3 bg-gold-500 hover:bg-gold-400 text-jerry-green-900 font-semibold rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  {loading ? 'Subscribing...' : 'Notify Me'}
-                </button>
               </div>
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full px-8 py-3 bg-gold-500 hover:bg-gold-400 text-jerry-green-900 font-semibold rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {loading ? 'Subscribing...' : 'Notify Me'}
+              </button>
             </form>
 
             {/* Status Messages */}
