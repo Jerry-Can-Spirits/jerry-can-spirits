@@ -67,7 +67,7 @@ export default function KlaviyoSignup({
 
     try {
       // Klaviyo API integration
-      const response = await fetch('/api/klaviyo-signup', {
+      const response = await fetch('/api/klaviyo-signup/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
