@@ -1,8 +1,21 @@
 'use client'
 
 import { useState } from 'react'
+import { useNewsletterSignup } from '@/hooks/useNewsletterSignup'
+
+// Cookie helper - matches the pattern used in useCookieConsent
+const setSignupCookie = () => {
+  const isSecure = typeof window !== 'undefined' && window.location.protocol === 'https:'
+  const maxAge = 31536000 // 1 year
+  const attributes = isSecure
+    ? `path=/; SameSite=Strict; Secure; Max-Age=${maxAge}`
+    : `path=/; SameSite=Lax; Max-Age=${maxAge}`
+
+  document.cookie = `jcs_newsletter_signup=true; ${attributes}`
+}
 
 export default function EmailSignup() {
+  const { hasSignedUp, isLoading: checkingSignup } = useNewsletterSignup()
   const [email, setEmail] = useState('')
   const [firstName, setFirstName] = useState('')
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
@@ -39,12 +52,23 @@ export default function EmailSignup() {
         setStatus('success')
         setEmail('')
         setFirstName('')
+        setSignupCookie() // Remember they signed up
       } else {
         setStatus('error')
       }
     } catch {
       setStatus('error')
     }
+  }
+
+  // Don't show form while checking signup status
+  if (checkingSignup) {
+    return null
+  }
+
+  // User has already signed up - don't show the form
+  if (hasSignedUp && status !== 'success') {
+    return null
   }
 
   if (status === 'success') {
