@@ -5,7 +5,7 @@ import { client } from '@/sanity/lib/client'
 export const runtime = 'edge'
 
 interface SearchResult {
-  type: 'product' | 'page' | 'recipe' | 'equipment' | 'ingredient'
+  type: 'product' | 'page' | 'recipe' | 'equipment' | 'ingredient' | 'guide'
   title: string
   description?: string
   url: string
@@ -42,6 +42,15 @@ interface SanityIngredient {
   image?: string
 }
 
+interface SanityGuide {
+  _id: string
+  title: string
+  slug: { current: string }
+  excerpt: string
+  category?: string
+  image?: string
+}
+
 // Static searchable pages
 const searchablePages: SearchResult[] = [
   { type: 'page', title: 'Our Story', description: 'Learn about Jerry Can Spirits journey', url: '/about/story', category: 'About' },
@@ -49,6 +58,7 @@ const searchablePages: SearchResult[] = [
   { type: 'page', title: 'Dan Freeman', description: 'Director & Founder - Royal Engineer, distiller, and spirits enthusiast', url: '/about/team/dan-freeman', category: 'Team' },
   { type: 'page', title: 'Ethos', description: 'Our values and craftsmanship', url: '/ethos', category: 'About' },
   { type: 'page', title: 'Field Manual', description: 'Cocktail recipes and guides', url: '/field-manual', category: 'Resources' },
+  { type: 'page', title: 'Guides', description: 'Expert spirits guides and tutorials', url: '/guides', category: 'Resources' },
   { type: 'page', title: 'Cocktails', description: 'Master classic rum cocktails', url: '/field-manual/cocktails', category: 'Field Manual' },
   { type: 'page', title: 'Equipment', description: 'Essential bar tools and glassware', url: '/field-manual/equipment', category: 'Field Manual' },
   { type: 'page', title: 'Ingredients', description: 'Premium spirits and components', url: '/field-manual/ingredients', category: 'Field Manual' },
@@ -101,6 +111,20 @@ const ingredientsSearchQuery = `*[_type == "ingredient" && (
   usage,
   category,
   "image": image.asset->url
+}`
+
+const guidesSearchQuery = `*[_type == "guide" && (
+  title match $searchTerm ||
+  excerpt match $searchTerm ||
+  introduction match $searchTerm ||
+  category match $searchTerm
+)] | order(publishedAt desc) [0...10] {
+  _id,
+  title,
+  slug,
+  excerpt,
+  category,
+  "image": heroImage.asset->url
 }`
 
 export async function GET(request: NextRequest) {
@@ -204,6 +228,25 @@ export async function GET(request: NextRequest) {
       results.push(...ingredientMatches)
     } catch (error) {
       console.error('Error searching Sanity ingredients:', error)
+    }
+
+    // Search Sanity guides
+    try {
+      const guides = await client.fetch(guidesSearchQuery, {
+        searchTerm: `*${query}*`
+      })
+
+      const guideMatches = guides.map((item: SanityGuide) => ({
+        type: 'guide' as const,
+        title: item.title,
+        description: item.excerpt,
+        url: `/guides/${item.slug.current}`,
+        image: item.image,
+        category: item.category ? item.category.split('-').map((word: string) => word.charAt(0).toUpperCase() + word.slice(1)).join(' ') : 'Guides',
+      }))
+      results.push(...guideMatches)
+    } catch (error) {
+      console.error('Error searching Sanity guides:', error)
     }
 
     // Limit total results and return

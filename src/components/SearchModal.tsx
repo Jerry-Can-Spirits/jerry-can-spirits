@@ -7,7 +7,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 
 interface SearchResult {
-  type: 'product' | 'page' | 'recipe' | 'equipment' | 'ingredient'
+  type: 'product' | 'page' | 'recipe' | 'equipment' | 'ingredient' | 'guide'
   title: string
   description?: string
   url: string
@@ -26,6 +26,7 @@ const searchableContent: SearchResult[] = [
   { type: 'page', title: 'Our Story', description: 'Learn about Jerry Can Spirits journey', url: '/about/story', category: 'About' },
   { type: 'page', title: 'Ethos', description: 'Our values and craftsmanship', url: '/ethos', category: 'About' },
   { type: 'page', title: 'Field Manual', description: 'Cocktail recipes and guides', url: '/field-manual', category: 'Resources' },
+  { type: 'page', title: 'Guides', description: 'Expert spirits guides and tutorials', url: '/guides', category: 'Resources' },
   { type: 'page', title: 'Cocktails', description: 'Master classic rum cocktails', url: '/field-manual/cocktails', category: 'Field Manual' },
   { type: 'page', title: 'Equipment', description: 'Essential bar tools and glassware', url: '/field-manual/equipment', category: 'Field Manual' },
   { type: 'page', title: 'Ingredients', description: 'Premium spirits and components', url: '/field-manual/ingredients', category: 'Field Manual' },
@@ -96,10 +97,11 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
         const data = await response.json()
         const apiResults = data.results || []
 
-        // Combine results, prioritizing static pages, then products, then content types
+        // Combine results, prioritizing static pages, then products, then guides, then content types
         const combined = [
           ...staticResults,
           ...apiResults.filter((r: SearchResult) => r.type === 'product'),
+          ...apiResults.filter((r: SearchResult) => r.type === 'guide'),
           ...apiResults.filter((r: SearchResult) => r.type === 'recipe'),
           ...apiResults.filter((r: SearchResult) => r.type === 'equipment'),
           ...apiResults.filter((r: SearchResult) => r.type === 'ingredient'),
@@ -159,7 +161,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                     type="text"
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
-                    placeholder="Search products, cocktails, equipment, ingredients..."
+                    placeholder="Search products, guides, cocktails, equipment..."
                     className="w-full pl-12 pr-12 py-4 bg-transparent text-parchment-50 text-lg placeholder:text-parchment-400 focus:outline-none"
                   />
                   <button
@@ -229,7 +231,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                       <MagnifyingGlassIcon className="w-12 h-12 text-gold-300/30 mx-auto mb-4" />
                       <p className="text-parchment-300 mb-2">No results found for "{query}"</p>
                       <p className="text-sm text-parchment-400">
-                        Try searching for products, cocktails, equipment, or ingredients
+                        Try searching for products, guides, cocktails, or equipment
                       </p>
                     </div>
                   ) : (
@@ -237,7 +239,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                       <MagnifyingGlassIcon className="w-12 h-12 text-gold-300/30 mx-auto mb-4" />
                       <p className="text-parchment-300 mb-2">Start typing to search</p>
                       <p className="text-sm text-parchment-400">
-                        Search for products, cocktails, equipment, ingredients, or pages
+                        Search for products, guides, cocktails, equipment, or pages
                       </p>
                     </div>
                   )}
