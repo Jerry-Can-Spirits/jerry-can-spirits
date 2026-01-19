@@ -1,9 +1,23 @@
 'use client'
 
 import { useState } from 'react'
+import { useNewsletterSignup } from '@/hooks/useNewsletterSignup'
+
+// Cookie helper - matches the pattern used in useCookieConsent
+const setSignupCookie = () => {
+  const isSecure = typeof window !== 'undefined' && window.location.protocol === 'https:'
+  const maxAge = 31536000 // 1 year
+  const attributes = isSecure
+    ? `path=/; SameSite=Strict; Secure; Max-Age=${maxAge}`
+    : `path=/; SameSite=Lax; Max-Age=${maxAge}`
+
+  document.cookie = `jcs_newsletter_signup=true; ${attributes}`
+}
 
 export default function EmailSignup() {
+  const { hasSignedUp, isLoading: checkingSignup } = useNewsletterSignup()
   const [email, setEmail] = useState('')
+  const [firstName, setFirstName] = useState('')
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -13,15 +27,23 @@ export default function EmailSignup() {
     setStatus('loading')
 
     try {
+      const params: Record<string, string> = {
+        'g': 'T4uXSb',
+        'email': email,
+      }
+
+      // Add first name if provided
+      if (firstName.trim()) {
+        params['$fields'] = '$first_name'
+        params['$first_name'] = firstName.trim()
+      }
+
       const response = await fetch('https://manage.kmail-lists.com/ajax/subscriptions/subscribe', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
         },
-        body: new URLSearchParams({
-          'g': 'T4uXSb',
-          'email': email,
-        })
+        body: new URLSearchParams(params)
       })
 
       const data = await response.json()
@@ -29,12 +51,24 @@ export default function EmailSignup() {
       if (data.success || response.ok) {
         setStatus('success')
         setEmail('')
+        setFirstName('')
+        setSignupCookie() // Remember they signed up
       } else {
         setStatus('error')
       }
     } catch {
       setStatus('error')
     }
+  }
+
+  // Don't show form while checking signup status
+  if (checkingSignup) {
+    return null
+  }
+
+  // User has already signed up - don't show the form
+  if (hasSignedUp && status !== 'success') {
+    return null
   }
 
   if (status === 'success') {
@@ -71,19 +105,28 @@ export default function EmailSignup() {
             Sign up for exclusive updates, early access, and a welcome discount.
           </p>
 
-          <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="Enter your email"
-              required
-              className="flex-1 px-4 py-3 bg-jerry-green-900/60 border border-gold-500/30 rounded-lg text-white placeholder-parchment-400 focus:outline-none focus:ring-2 focus:ring-gold-500/50 focus:border-gold-500"
-            />
+          <form onSubmit={handleSubmit} className="max-w-md mx-auto">
+            <div className="flex flex-col sm:flex-row gap-4 mb-4">
+              <input
+                type="text"
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+                placeholder="First name"
+                className="sm:w-1/3 px-4 py-3 bg-jerry-green-900/60 border border-gold-500/30 rounded-lg text-white placeholder-parchment-400 focus:outline-none focus:ring-2 focus:ring-gold-500/50 focus:border-gold-500"
+              />
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Email address"
+                required
+                className="flex-1 px-4 py-3 bg-jerry-green-900/60 border border-gold-500/30 rounded-lg text-white placeholder-parchment-400 focus:outline-none focus:ring-2 focus:ring-gold-500/50 focus:border-gold-500"
+              />
+            </div>
             <button
               type="submit"
               disabled={status === 'loading'}
-              className="px-6 py-3 bg-gold-500 hover:bg-gold-400 disabled:bg-gold-600 disabled:cursor-wait text-jerry-green-900 font-bold rounded-lg transition-colors duration-200 whitespace-nowrap"
+              className="w-full px-6 py-3 bg-gold-500 hover:bg-gold-400 disabled:bg-gold-600 disabled:cursor-wait text-jerry-green-900 font-bold rounded-lg transition-colors duration-200"
             >
               {status === 'loading' ? 'Joining...' : 'Get My Discount'}
             </button>
