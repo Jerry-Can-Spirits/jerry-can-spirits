@@ -281,7 +281,10 @@ export default defineType({
           {title: 'Late Night', value: 'late-night'},
           {title: 'Tiki', value: 'tiki'},
           // Flavour
-          {title: 'Bitter', value: 'bitter'}
+          {title: 'Bitter', value: 'bitter'},
+          // Special
+          {title: 'Caffeinated', value: 'caffeinated'},
+          {title: 'Classic', value: 'classic'}
         ],
         layout: 'grid'
       },
