@@ -179,31 +179,80 @@ export default async function ProductPage({
 
   const firstVariant = product.variants?.[0]
 
-  // Product structured data
+  // Get category based on product type (moved up for schema use)
+  const category = getCategoryFromProductType(product.productType)
+
+  // Get ABV and volume from metafields if available
+  const abvMetafield = product.metafields?.find(m => m?.namespace === 'custom' && m?.key === 'abv')
+  const volumeMetafield = product.metafields?.find(m => m?.namespace === 'custom' && m?.key === 'volume')
+  const abv = abvMetafield?.value || '40'
+  const volume = volumeMetafield?.value || '700ml'
+
+  // Determine if this is a spirit/alcohol product
+  const isSpirit = category.trackingCategory === 'Spirits'
+
+  // Product structured data - Enhanced for rich snippets
   const productSchema = {
     '@context': 'https://schema.org',
     '@type': 'Product',
+    '@id': `https://jerrycanspirits.co.uk/shop/product/${handle}/#product`,
     name: product.title,
     description: product.description,
     image: product.images.map(img => img.url),
-    sku: handle,
+    sku: firstVariant?.sku || handle,
+    mpn: firstVariant?.sku || handle,
     brand: {
-      '@type': 'Organization',
+      '@type': 'Brand',
       name: 'Jerry Can Spirits',
       url: 'https://jerrycanspirits.co.uk',
       logo: 'https://jerrycanspirits.co.uk/images/Logo.webp',
-      description: 'Veteran-owned premium British spirits with authentic military heritage',
     },
-    category: 'Alcoholic Beverages > Spirits',
+    category: isSpirit ? 'Food & Beverages > Beverages > Alcoholic Beverages > Spirits > Rum' : 'Home & Garden > Kitchen & Dining > Barware',
+    countryOfOrigin: {
+      '@type': 'Country',
+      name: 'United Kingdom',
+    },
     offers: {
       '@type': 'Offer',
+      '@id': `https://jerrycanspirits.co.uk/shop/product/${handle}/#offer`,
       price: product.priceRange.minVariantPrice.amount,
       priceCurrency: product.priceRange.minVariantPrice.currencyCode,
       availability: firstVariant?.availableForSale
         ? 'https://schema.org/InStock'
-        : 'https://schema.org/OutOfStock',
-      url: `https://jerrycanspirits.co.uk/shop/product/${handle}`,
+        : 'https://schema.org/PreOrder',
+      itemCondition: 'https://schema.org/NewCondition',
+      url: `https://jerrycanspirits.co.uk/shop/product/${handle}/`,
       priceValidUntil: new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString().split('T')[0],
+      shippingDetails: {
+        '@type': 'OfferShippingDetails',
+        shippingDestination: {
+          '@type': 'DefinedRegion',
+          addressCountry: 'GB',
+        },
+        deliveryTime: {
+          '@type': 'ShippingDeliveryTime',
+          handlingTime: {
+            '@type': 'QuantitativeValue',
+            minValue: 1,
+            maxValue: 3,
+            unitCode: 'DAY',
+          },
+          transitTime: {
+            '@type': 'QuantitativeValue',
+            minValue: 1,
+            maxValue: 5,
+            unitCode: 'DAY',
+          },
+        },
+      },
+      hasMerchantReturnPolicy: {
+        '@type': 'MerchantReturnPolicy',
+        returnPolicyCategory: 'https://schema.org/MerchantReturnFiniteReturnWindow',
+        merchantReturnDays: 14,
+        returnMethod: 'https://schema.org/ReturnByMail',
+        returnFees: 'https://schema.org/FreeReturn',
+        applicableCountry: 'GB',
+      },
       seller: {
         '@type': 'Organization',
         name: 'Jerry Can Spirits',
@@ -212,7 +261,8 @@ export default async function ProductPage({
     },
     manufacturer: {
       '@type': 'Organization',
-      name: 'Jerry Can Spirits',
+      name: 'Jerry Can Spirits Ltd',
+      url: 'https://jerrycanspirits.co.uk',
       address: {
         '@type': 'PostalAddress',
         addressLocality: 'Blackpool',
@@ -220,14 +270,63 @@ export default async function ProductPage({
         addressCountry: 'GB',
       },
     },
+    // Additional properties for spirits
+    ...(isSpirit && {
+      additionalProperty: [
+        {
+          '@type': 'PropertyValue',
+          name: 'Alcohol by Volume (ABV)',
+          value: `${abv}%`,
+        },
+        {
+          '@type': 'PropertyValue',
+          name: 'Volume',
+          value: volume,
+        },
+        {
+          '@type': 'PropertyValue',
+          name: 'Spirit Type',
+          value: 'Spiced Rum',
+        },
+        {
+          '@type': 'PropertyValue',
+          name: 'Production Method',
+          value: 'Small Batch',
+        },
+      ],
+    }),
   }
 
-  // Get category based on product type
-  const category = getCategoryFromProductType(product.productType)
+  // Breadcrumb structured data
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Shop',
+        item: 'https://jerrycanspirits.co.uk/shop/',
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: category.label,
+        item: `https://jerrycanspirits.co.uk${category.href}`,
+      },
+      {
+        '@type': 'ListItem',
+        position: 3,
+        name: product.title,
+        item: `https://jerrycanspirits.co.uk/shop/product/${handle}/`,
+      },
+    ],
+  }
 
   return (
     <main className="min-h-screen py-20">
       <StructuredData data={productSchema} id="product-schema" />
+      <StructuredData data={breadcrumbSchema} id="breadcrumb-schema" />
       <ProductPageTracking
         productId={product.id}
         productName={product.title}
