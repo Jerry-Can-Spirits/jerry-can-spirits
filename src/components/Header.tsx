@@ -61,6 +61,7 @@ export default function Header() {
         { name: 'Rum Guides', href: '/guides?category=rum-guides', description: 'Complete rum education' },
         { name: 'Cocktail Guides', href: '/guides?category=cocktail-techniques', description: 'Techniques & tutorials' },
         { name: 'Spirits Education', href: '/guides?category=spirits-education', description: 'Knowledge & insights' },
+        { name: 'Seasonal & Occasions', href: '/guides?category=seasonal-occasions', description: 'Holiday & event drinks' },
         { name: 'Browse All Guides', href: '/guides', description: 'View the full collection' },
       ]
     },

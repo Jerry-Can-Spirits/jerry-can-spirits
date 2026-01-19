@@ -68,7 +68,8 @@ export default defineType({
           {title: 'Cocktail Techniques', value: 'cocktail-techniques'},
           {title: 'Buying Guides', value: 'buying-guides'},
           {title: 'UK Craft Spirits', value: 'uk-craft-spirits'},
-          {title: 'Industry Insights', value: 'industry-insights'}
+          {title: 'Industry Insights', value: 'industry-insights'},
+          {title: 'Seasonal & Occasions', value: 'seasonal-occasions'}
         ]
       },
       validation: Rule => Rule.required()
