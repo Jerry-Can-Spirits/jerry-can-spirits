@@ -1,4 +1,3 @@
-import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import Image from 'next/image'
@@ -40,13 +39,6 @@ interface SanityProduct {
   videoUrl?: string
   relatedCocktails?: Array<{ _id: string; name: string; slug: { current: string } }>
 }
-
-// Lazy load TrustpilotWidget (below the fold)
-const TrustpilotWidget = dynamic(() => import('@/components/TrustpilotWidget'), {
-  loading: () => (
-    <div className="h-[400px] bg-jerry-green-800/50 rounded-lg animate-pulse" />
-  ),
-});
 
 // Cloudflare Pages edge runtime for dynamic routes
 export const runtime = 'edge'
@@ -199,8 +191,8 @@ export default async function ProductPage({
     name: product.title,
     description: product.description,
     image: product.images.map(img => img.url),
-    sku: firstVariant?.sku || handle,
-    mpn: firstVariant?.sku || handle,
+    sku: handle,
+    mpn: handle,
     brand: {
       '@type': 'Brand',
       name: 'Jerry Can Spirits',
