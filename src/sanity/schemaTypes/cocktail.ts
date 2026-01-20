@@ -243,6 +243,8 @@ export default defineType({
           {title: 'Aromatised Wine', value: 'aromatised-wine'},
           {title: 'Champagne', value: 'champagne'},
           {title: 'Liqueur-Based', value: 'liqueur-based'},
+          {title: 'Spritz', value: 'spritz'},
+          {title: 'Bitters', value: 'bitters'},
           {title: 'Non-Alcoholic', value: 'non-alcoholic'}
         ]
       },
