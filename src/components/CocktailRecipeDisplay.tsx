@@ -105,9 +105,9 @@ export default function CocktailRecipeDisplay({ cocktail }: Props) {
     : cocktail
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 sm:space-y-8">
       {/* Cocktail Header */}
-      <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20 relative overflow-hidden">
+      <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-4 sm:p-6 md:p-8 border border-gold-500/20 relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-amber-100/5 to-amber-200/10 opacity-50"></div>
         <div className="relative z-10">
           {cocktail?.image && (
@@ -223,14 +223,14 @@ export default function CocktailRecipeDisplay({ cocktail }: Props) {
       </div>
 
       {/* Ingredients */}
-      <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20 relative overflow-hidden">
+      <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-4 sm:p-6 md:p-8 border border-gold-500/20 relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-amber-100/5 to-amber-200/10 opacity-50"></div>
         <div className="relative z-10">
-          <h2 className="text-2xl font-serif font-bold text-white mb-6">Ingredients</h2>
+          <h2 className="text-2xl font-serif font-bold text-white mb-4 sm:mb-6">Ingredients</h2>
 
-          <div className="space-y-4">
+          <div className="space-y-3 sm:space-y-4">
             {currentRecipe.ingredients?.map((ingredient, index) => (
-              <div key={index} className="flex items-start space-x-4 p-4 bg-jerry-green-800/30 rounded-lg border border-gold-500/20">
+              <div key={index} className="flex items-start space-x-3 sm:space-x-4 p-3 sm:p-4 bg-jerry-green-800/30 rounded-lg border border-gold-500/20">
                 <div className="w-2 h-2 bg-gold-400 rounded-full mt-2 flex-shrink-0"></div>
                 <div className="flex-grow">
                   <div className="flex items-center justify-between mb-1">
@@ -258,24 +258,24 @@ export default function CocktailRecipeDisplay({ cocktail }: Props) {
       </div>
 
       {/* Instructions */}
-      <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20 relative overflow-hidden">
+      <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-4 sm:p-6 md:p-8 border border-gold-500/20 relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-amber-100/5 to-amber-200/10 opacity-50"></div>
         <div className="relative z-10">
-          <h2 className="text-2xl font-serif font-bold text-white mb-6">Instructions</h2>
+          <h2 className="text-2xl font-serif font-bold text-white mb-4 sm:mb-6">Instructions</h2>
 
-          <div className="space-y-4">
+          <div className="space-y-3 sm:space-y-4">
             {currentRecipe.instructions?.map((instruction, index) => (
-              <div key={index} className="flex items-start space-x-4">
-                <div className="w-8 h-8 bg-gold-400/20 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                  <span className="text-gold-400 font-bold text-sm">{index + 1}</span>
+              <div key={index} className="flex items-start space-x-3 sm:space-x-4">
+                <div className="w-7 h-7 sm:w-8 sm:h-8 bg-gold-400/20 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 sm:mt-1">
+                  <span className="text-gold-400 font-bold text-xs sm:text-sm">{index + 1}</span>
                 </div>
-                <p className="text-parchment-300 leading-relaxed pt-1">{instruction}</p>
+                <p className="text-parchment-300 leading-relaxed pt-0.5 sm:pt-1">{instruction}</p>
               </div>
             ))}
           </div>
 
           {(currentRecipe.note || (activeVariant >= 0 && cocktail?.variants?.[activeVariant]?.note)) && (
-            <div className="mt-8 p-6 bg-jerry-green-800/40 rounded-lg border border-gold-500/20">
+            <div className="mt-6 sm:mt-8 p-4 sm:p-6 bg-jerry-green-800/40 rounded-lg border border-gold-500/20">
               <div className="flex items-start space-x-3">
                 <svg className="w-6 h-6 text-gold-400 flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
