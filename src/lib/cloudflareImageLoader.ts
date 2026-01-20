@@ -40,17 +40,24 @@ const CLOUDFLARE_ACCOUNT_HASH = process.env.NEXT_PUBLIC_CLOUDFLARE_ACCOUNT_HASH 
  * This loader intercepts all Next.js Image component requests and transforms
  * local /images/* paths to optimized Cloudflare Images URLs.
  *
- * External images (Sanity, Shopify) are passed through unchanged.
+ * Sanity CDN images get width/quality/format params added automatically.
+ * Other external images (Shopify, etc.) are passed through unchanged.
  */
 export default function cloudflareImageLoader({
   src,
-  width: _width,
-  quality: _quality = 75,
+  width,
+  quality = 75,
 }: ImageLoaderProps): string {
-  // Note: width and quality are unused because Cloudflare Images uses predefined variants
-  void _width
-  void _quality
-  // Handle external images (Sanity, Shopify) - pass through unchanged
+  // Handle Sanity CDN images - add width and quality parameters
+  if (src.includes('cdn.sanity.io')) {
+    const url = new URL(src)
+    url.searchParams.set('w', width.toString())
+    url.searchParams.set('q', quality.toString())
+    url.searchParams.set('auto', 'format') // Auto-select best format (WebP/AVIF)
+    return url.toString()
+  }
+
+  // Handle other external images (Shopify, etc.) - pass through unchanged
   if (src.startsWith('http://') || src.startsWith('https://')) {
     return src
   }
