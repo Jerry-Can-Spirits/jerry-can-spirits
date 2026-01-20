@@ -56,16 +56,23 @@ const tagLabels: Record<string, string> = {
   'spirit-forward': 'Spirit-Forward',
   'long-drink': 'Long Drink',
   'party': 'Party',
+  'brunch': 'Brunch',
   'after-dinner': 'After-Dinner',
   'aperitif': 'Aperitif',
   'digestif': 'Digestif',
   'celebratory': 'Celebratory',
   'late-night': 'Late Night',
+  'tiki': 'Tiki',
   'built': 'Built',
   'shaken': 'Shaken',
   'stirred': 'Stirred',
   'batchable': 'Batchable',
-  'shot': 'Shot'
+  'shot': 'Shot',
+  'hot': 'Hot',
+  'frozen': 'Frozen',
+  'bitter': 'Bitter',
+  'caffeinated': 'Caffeinated',
+  'classic': 'Classic'
 }
 
 interface Props {
@@ -116,43 +123,49 @@ export default function CocktailRecipeDisplay({ cocktail }: Props) {
               />
             </div>
           )}
-          <div className="flex items-start justify-between mb-6">
-            <div>
-              <h1 className="text-4xl font-serif font-bold text-white mb-2">
-                {activeVariant >= 0 ? currentRecipe.name : cocktail?.name}
-              </h1>
-              {activeVariant >= 0 && (
-                <p className="text-gold-300 text-sm font-semibold mb-2">
-                  Based on {cocktail?.name}
-                </p>
-              )}
-              {cocktail.featured && (
-                <div className="inline-flex items-center gap-2 px-3 py-1 bg-gold-500/20 border border-gold-500/40 rounded-full mb-4">
-                  <span className="text-gold-400">★</span>
-                  <span className="text-gold-300 text-sm font-semibold">Signature Cocktail</span>
-                </div>
-              )}
-              <p className="text-parchment-300 text-lg leading-relaxed">
-                {currentRecipe.description}
-              </p>
-
-              {/* Tags */}
-              {cocktail.tags && cocktail.tags.length > 0 && (
-                <div className="flex flex-wrap gap-2 mt-4">
-                  {cocktail.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="px-3 py-1 bg-jerry-green-800/60 border border-gold-500/30 text-parchment-200 rounded-full text-sm"
-                    >
-                      {tagLabels[tag] || tag}
-                    </span>
-                  ))}
-                </div>
-              )}
+          <div className="mb-6">
+            {/* Title row with difficulty badge */}
+            <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 sm:gap-4 mb-4">
+              <div>
+                <h1 className="text-4xl font-serif font-bold text-white mb-2">
+                  {activeVariant >= 0 ? currentRecipe.name : cocktail?.name}
+                </h1>
+                {activeVariant >= 0 && (
+                  <p className="text-gold-300 text-sm font-semibold">
+                    Based on {cocktail?.name}
+                  </p>
+                )}
+              </div>
+              <span className={`self-start px-3 py-1 rounded-full border text-sm font-semibold whitespace-nowrap ${getDifficultyColor(cocktail?.difficulty || '')}`}>
+                {getDifficultyLabel(cocktail?.difficulty || '')}
+              </span>
             </div>
-            <span className={`px-3 py-1 rounded-full border text-sm font-semibold whitespace-nowrap ml-4 ${getDifficultyColor(cocktail?.difficulty || '')}`}>
-              {getDifficultyLabel(cocktail?.difficulty || '')}
-            </span>
+
+            {cocktail.featured && (
+              <div className="inline-flex items-center gap-2 px-3 py-1 bg-gold-500/20 border border-gold-500/40 rounded-full mb-4">
+                <span className="text-gold-400">★</span>
+                <span className="text-gold-300 text-sm font-semibold">Signature Cocktail</span>
+              </div>
+            )}
+
+            {/* Description - full width on mobile */}
+            <p className="text-parchment-300 text-lg leading-relaxed">
+              {currentRecipe.description}
+            </p>
+
+            {/* Tags - full width on mobile for better spacing */}
+            {cocktail.tags && cocktail.tags.length > 0 && (
+              <div className="flex flex-wrap gap-2 mt-4">
+                {cocktail.tags.map((tag) => (
+                  <span
+                    key={tag}
+                    className="px-3 py-1 bg-jerry-green-800/60 border border-gold-500/30 text-parchment-200 rounded-full text-sm"
+                  >
+                    {tagLabels[tag] || tag}
+                  </span>
+                ))}
+              </div>
+            )}
           </div>
 
           {/* Variant Selector */}
