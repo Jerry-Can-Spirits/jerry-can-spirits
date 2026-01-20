@@ -15,6 +15,9 @@ const setSignupCookie = () => {
 }
 
 export default function EmailSignup() {
+  // Temporarily hidden - using penetration pricing instead of discount codes
+  return null
+
   const { hasSignedUp, isLoading: checkingSignup } = useNewsletterSignup()
   const [email, setEmail] = useState('')
   const [firstName, setFirstName] = useState('')
