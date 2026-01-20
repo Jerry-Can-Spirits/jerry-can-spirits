@@ -235,7 +235,7 @@ export default function Header() {
                         <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-jerry-green-400 transition-all duration-200 group-hover:w-full"></span>
                       </span>
                       {item.dropdown && (
-                        <ChevronDownIcon className="w-4 h-4 transition-transform duration-200 group-hover:rotate-180" />
+                        <ChevronDownIcon className="w-3.5 h-3.5 flex-shrink-0 transition-transform duration-200 group-hover:rotate-180" />
                       )}
                     </Link>
                   ) : (
@@ -261,7 +261,7 @@ export default function Header() {
                         <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-jerry-green-400 transition-all duration-200 group-hover:w-full"></span>
                       </span>
                       {item.dropdown && (
-                        <ChevronDownIcon className="w-4 h-4 transition-transform duration-200 group-hover:rotate-180" />
+                        <ChevronDownIcon className="w-3.5 h-3.5 flex-shrink-0 transition-transform duration-200 group-hover:rotate-180" />
                       )}
                     </button>
                   )}
