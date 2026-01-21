@@ -161,17 +161,16 @@ export default function Ethos() {
                         <h4 className="text-gold-300 font-semibold mb-2">UK Sourced</h4>
                         <ul className="text-sm text-parchment-300 space-y-1">
                           <li>• Quality botanicals</li>
-                          <li>• Pure water sources</li>
+                          <li>• Pure Welsh water</li>
                           <li>• Local spices & herbs</li>
-                          <li>• British oak for ageing</li>
+                          <li>• British oak</li>
                         </ul>
                       </div>
                       <div className="bg-jerry-green-800/60 rounded-lg p-4">
                         <h4 className="text-gold-300 font-semibold mb-2">Ethical Partners</h4>
                         <ul className="text-sm text-parchment-300 space-y-1">
-                          <li>• Caribbean molasses</li>
+                          <li>• Caribbean & Welsh rum blends</li>
                           <li>• Exotic spices & fruits</li>
-                          <li>• Traditional yeast strains</li>
                           <li>• Sustainable practices</li>
                         </ul>
                       </div>
@@ -240,7 +239,7 @@ export default function Ethos() {
                         <div>
                           <h5 className="text-gold-300 font-semibold mb-2">Traditional Foundation</h5>
                           <ul className="text-sm text-parchment-300 space-y-1">
-                            <li>• Copper pot distillation</li>
+                            <li>• Pot distilled</li>
                             <li>• Careful cut selection</li>
                             <li>• Time-tested methods</li>
                             <li>• Artisan attention to detail</li>
@@ -261,24 +260,24 @@ export default function Ethos() {
                 </div>
               </div>
 
-              {/* Aging */}
+              {/* Aging - Future Products */}
               <div className="relative flex items-start space-x-8 group">
                 <div className="flex-shrink-0 w-16 h-16 bg-jerry-green-800 rounded-full border-4 border-gold-400 flex items-center justify-center z-10">
                   <span className="text-gold-300 font-bold text-xl">4</span>
                 </div>
                 <div className="flex-1 bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-8 border border-gold-500/20 group-hover:border-gold-400/40 transition-all duration-300">
                   <h3 className="text-2xl font-serif font-bold text-white mb-4">
-                    Aging: Time, Patience & Selection
+                    The Future: Barrel-Aged Expressions
                   </h3>
                   <p className="text-parchment-300 mb-6">
-                    Great spirits cannot be rushed. We carefully select our casks - from charred American oak to sherry-seasoned European barrels -
-                    and allow time to work its magic. Each barrel is monitored, tasted, and nurtured to perfection.
+                    Great spirits cannot be rushed. For future releases, we're exploring barrel aging with carefully selected casks - from charred American oak to sherry-seasoned European barrels.
+                    These aged expressions will allow time to work its magic, with each barrel monitored, tasted, and nurtured to perfection.
                   </p>
-                  
+
                   {/* Details - Always Visible */}
                   <div className="mt-6">
                     <div className="bg-jerry-green-800/60 rounded-lg p-6">
-                      <h4 className="text-gold-300 font-semibold mb-3">Barrel Selection</h4>
+                      <h4 className="text-gold-300 font-semibold mb-3">Planned Barrel Selection</h4>
                       <div className="grid md:grid-cols-3 gap-4 text-sm text-parchment-300">
                         <div>
                           <strong className="text-gold-300">American Oak</strong>

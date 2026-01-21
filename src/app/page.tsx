@@ -127,7 +127,7 @@ export default function Home() {
                     Discover Jerry Can Spirits - a veteran-owned British spirits brand where expedition-tested precision meets artisan craft. Founded by former Royal Corps of Signals servicemen, we partner with master distillers to transform premium Caribbean molasses into extraordinary small-batch rum that captures the spirit of adventure in every sip.
                   </p>
                   <p>
-                    Our handcrafted rum delivers rich, complex flavours: indulge in velvety vanilla intertwined with warm caramel, complemented by exotic spice notes and a lingering smooth finish. Each batch is distilled using traditional copper-pot methods at Spirit of Wales Distillery, where extended copper contact develops the deep, sophisticated character that defines premium craft spirits.
+                    Our handcrafted rum delivers rich, complex flavours: indulge in velvety vanilla intertwined with warm caramel, complemented by exotic spice notes and a lingering smooth finish. Each batch is pot distilled at Spirit of Wales Distillery using copper-lined stills, where extended copper contact develops the deep, sophisticated character that defines premium craft spirits.
                   </p>
                   <p>
                     Perfect for crafting bold cocktails or savoring neat, our British rum is engineered for versatility. Whether you're mixing signature serves at home or toasting memorable moments with friends, Jerry Can Spirits delivers expedition-ready quality that never compromises on flavour.
