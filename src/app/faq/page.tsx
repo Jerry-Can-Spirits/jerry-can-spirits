@@ -2,13 +2,13 @@ import type { Metadata } from 'next'
 import StructuredData from '@/components/StructuredData'
 
 export const metadata: Metadata = {
-  title: "FAQ | Jerry Can Spirits - Frequently Asked Questions About Premium British Rum",
+  title: "Frequently Asked Questions",
   description: "Common questions about Jerry Can Spirits premium British rum, shipping, ingredients, cocktail recipes, and our adventure-ready spirits. Get answers about our expedition rum.",
   alternates: {
     canonical: "https://jerrycanspirits.co.uk/faq/",
   },
   openGraph: {
-    title: "FAQ | Jerry Can Spirits",
+    title: "Frequently Asked Questions | Jerry Can Spirits®",
     description: "Get answers to common questions about our premium British rum",
   },
 }

@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: "Contact Us | Jerry Can Spirits - Get in Touch",
+  title: "Contact Us",
   description: "Get in touch with Jerry Can Spirits for inquiries, partnerships, or just to say hello. Contact us via email or our contact form.",
   alternates: {
     canonical: "https://jerrycanspirits.co.uk/contact/",

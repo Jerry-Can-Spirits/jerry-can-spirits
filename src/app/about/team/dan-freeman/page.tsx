@@ -4,7 +4,7 @@ import Image from 'next/image'
 import CartographicBackground from '@/components/CartographicBackground'
 
 export const metadata: Metadata = {
-  title: 'Dan Freeman - Founder & Director | Jerry Can Spirits®',
+  title: 'Dan Freeman - Founder & Director',
   description: 'Meet Dan Freeman, founder of Jerry Can Spirits. Former Royal Signals Corporal with 12 years of service, now crafting premium spirits with military precision.',
   alternates: {
     canonical: 'https://jerrycanspirits.co.uk/about/team/dan-freeman/',

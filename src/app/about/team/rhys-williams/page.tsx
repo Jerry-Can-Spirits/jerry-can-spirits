@@ -4,16 +4,16 @@ import Link from 'next/link'
 import CartographicBackground from '@/components/CartographicBackground'
 
 export const metadata: Metadata = {
-  title: 'Rhys Williams - Co-Founder & Director | Jerry Can Spirits',
+  title: 'Rhys Williams - Co-Founder & Director',
   description: 'Meet Rhys Williams, co-founder of Jerry Can Spirits. Royal Signals veteran bringing military precision to premium British rum.',
   alternates: {
     canonical: 'https://jerrycanspirits.co.uk/about/team/rhys-williams/',
   },
   openGraph: {
-    title: 'Rhys Williams - Co-Founder & Director | Jerry Can Spirits',
+    title: 'Rhys Williams - Co-Founder & Director | Jerry Can Spirits®',
     description: 'Royal Signals veteran bringing military precision to premium British rum.',
     url: 'https://jerrycanspirits.co.uk/about/team/rhys-williams',
-    siteName: 'Jerry Can Spirits',
+    siteName: 'Jerry Can Spirits®',
     locale: 'en_GB',
     type: 'profile',
   },

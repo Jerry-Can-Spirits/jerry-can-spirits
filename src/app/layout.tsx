@@ -44,17 +44,17 @@ const jetbrains = JetBrains_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://jerrycanspirits.co.uk'),
-  title: "Jerry Can Spirits® | Veteran-Owned Premium British Rum - Engineered for Reliability, Designed for Adventure",
+  title: {
+    template: '%s | Jerry Can Spirits®',
+    default: 'Jerry Can Spirits® | Veteran-Owned Premium British Rum',
+  },
   description: "Veteran-owned premium British rum with authentic military heritage. Founded by Royal Corps of Signals veterans. Small-batch spirits engineered for reliability, designed for adventure. Expedition Ready.",
   keywords: "veteran-owned rum, British spirits, military heritage rum, premium rum, Royal Corps of Signals, expedition rum, small-batch spirits, craft rum, British rum, sustainable spirits",
   authors: [{ name: "Jerry Can Spirits®" }],
   openGraph: {
     type: "website",
     locale: "en_GB",
-    url: "https://jerrycanspirits.co.uk",
     siteName: "Jerry Can Spirits®",
-    title: "Jerry Can Spirits® | Veteran-Owned Premium British Rum",
-    description: "Veteran-owned British rum. Engineered for reliability, designed for adventure. Expedition Ready.",
     images: [
       {
         url: "/images/og-image.jpg",
@@ -66,8 +66,6 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Jerry Can Spirits® | Veteran-Owned Premium British Rum",
-    description: "Veteran-owned British rum. Engineered for reliability, designed for adventure. Expedition Ready.",
     images: ["/images/og-image.jpg"],
   },
   robots: {

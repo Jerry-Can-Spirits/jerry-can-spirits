@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: "Accessibility Statement | Jerry Can Spirits - Web Accessibility Commitment",
+  title: "Accessibility Statement",
   description: "Jerry Can Spirits accessibility statement and commitment to providing an inclusive web experience for all users, including those with disabilities.",
   alternates: {
     canonical: 'https://jerrycanspirits.co.uk/accessibility/',

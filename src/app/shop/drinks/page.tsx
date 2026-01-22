@@ -4,10 +4,14 @@ import { getProductsByCollection, type ShopifyProduct } from '@/lib/shopify'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Premium British Rum Collection | Jerry Can Spirits',
-  description: 'Veteran-owned British rum collection. Small-batch premium spirits crafted with military precision by Royal Corps of Signals veterans. Sustainably sourced, expedition-tested. Shop our authentic military heritage rum range.',
+  title: 'Premium British Rum Collection',
+  description: 'Veteran-owned British rum collection. Small-batch premium spirits crafted with military precision by Royal Corps of Signals veterans. Sustainably sourced, expedition-tested.',
   alternates: {
     canonical: 'https://jerrycanspirits.co.uk/shop/drinks/',
+  },
+  openGraph: {
+    title: 'Premium British Rum Collection | Jerry Can Spirits®',
+    description: 'Veteran-owned British rum collection. Small-batch premium spirits crafted with military precision.',
   },
 }
 

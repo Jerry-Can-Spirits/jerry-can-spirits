@@ -4,10 +4,14 @@ import { getProductsByCollection, type ShopifyProduct } from '@/lib/shopify'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Barware | Jerry Can Spirits',
+  title: 'Professional Barware & Cocktail Tools',
   description: 'Professional bar tools and equipment for home mixologists. Premium barware and cocktail accessories.',
   alternates: {
     canonical: 'https://jerrycanspirits.co.uk/shop/barware/',
+  },
+  openGraph: {
+    title: 'Professional Barware & Cocktail Tools | Jerry Can Spirits®',
+    description: 'Professional bar tools and equipment for home mixologists. Premium barware and cocktail accessories.',
   },
 }
 

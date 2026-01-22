@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 
 export const metadata: Metadata = {
-  title: 'Sitemap | Jerry Can Spirits - Navigate Our Site',
+  title: 'Sitemap',
   description: 'Complete sitemap of Jerry Can Spirits website. Find all pages including products, field manual, about us, and contact information.',
   alternates: {
     canonical: 'https://jerrycanspirits.co.uk/sitemap-page/',

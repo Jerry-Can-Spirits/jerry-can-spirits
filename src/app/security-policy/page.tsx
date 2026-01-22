@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: "Security Policy | Jerry Can Spirits® - Vulnerability Disclosure",
+  title: "Security Policy",
   description: "Jerry Can Spirits® security vulnerability disclosure policy. How to report security issues and our commitment to protecting your data.",
   alternates: {
     canonical: 'https://jerrycanspirits.co.uk/security-policy/',

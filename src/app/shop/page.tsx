@@ -2,10 +2,14 @@ import Link from 'next/link'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Shop - Coming Soon | Jerry Can Spirits',
+  title: 'Shop - Coming Soon',
   description: 'Premium British rum and adventure gear launching soon. Join our mailing list for exclusive early access and launch updates.',
   alternates: {
     canonical: 'https://jerrycanspirits.co.uk/shop/',
+  },
+  openGraph: {
+    title: 'Shop - Coming Soon | Jerry Can Spirits®',
+    description: 'Premium British rum and adventure gear launching soon. Join our mailing list for exclusive early access and launch updates.',
   },
 }
 
