@@ -112,19 +112,55 @@ export default function CocktailsClient({ cocktails }: CocktailsClientProps) {
   // Rum subtypes for "All Rum" filter
   const rumSpirits = ['spiced-rum', 'white-rum', 'aged-rum', 'dark-rum', 'overproof-rum']
 
-  // Filter cocktails
-  const filteredCocktails = cocktails.filter(cocktail => {
-    const matchesFamily = selectedFamily === 'all' || cocktail.family === selectedFamily
-    const matchesSpirit = selectedSpirit === 'all' ||
-      (selectedSpirit === 'all-rum' && rumSpirits.includes(cocktail.baseSpirit || '')) ||
-      cocktail.baseSpirit === selectedSpirit
-    const matchesDifficulty = selectedDifficulty === 'all' || cocktail.difficulty === selectedDifficulty
-    const matchesSearch = !searchQuery ||
+  // Helper to check spirit match
+  const matchesSpiritFilter = (spirit: string | undefined, filter: string) => {
+    if (filter === 'all') return true
+    if (filter === 'all-rum') return rumSpirits.includes(spirit || '')
+    return spirit === filter
+  }
+
+  // Bi-directional faceted filtering - each filter affects all others
+  // Step 1: Filter by search only (base pool)
+  const searchFilteredCocktails = cocktails.filter(cocktail => {
+    return !searchQuery ||
       cocktail.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       cocktail.description.toLowerCase().includes(searchQuery.toLowerCase())
-
-    return matchesFamily && matchesSpirit && matchesDifficulty && matchesSearch
   })
+
+  // Step 2: Apply all filters for final results
+  const filteredCocktails = searchFilteredCocktails.filter(cocktail => {
+    const matchesFamily = selectedFamily === 'all' || cocktail.family === selectedFamily
+    const matchesSpirit = matchesSpiritFilter(cocktail.baseSpirit, selectedSpirit)
+    const matchesDifficulty = selectedDifficulty === 'all' || cocktail.difficulty === selectedDifficulty
+    return matchesFamily && matchesSpirit && matchesDifficulty
+  })
+
+  // Bi-directional available options - each considers OTHER filters but not itself
+  // Available families = families in cocktails matching spirit + difficulty + search
+  const cocktailsForFamilyOptions = searchFilteredCocktails.filter(cocktail => {
+    const matchesSpirit = matchesSpiritFilter(cocktail.baseSpirit, selectedSpirit)
+    const matchesDifficulty = selectedDifficulty === 'all' || cocktail.difficulty === selectedDifficulty
+    return matchesSpirit && matchesDifficulty
+  })
+  const availableFamilies = new Set(cocktailsForFamilyOptions.map(c => c.family).filter(Boolean))
+
+  // Available spirits = spirits in cocktails matching family + difficulty + search
+  const cocktailsForSpiritOptions = searchFilteredCocktails.filter(cocktail => {
+    const matchesFamily = selectedFamily === 'all' || cocktail.family === selectedFamily
+    const matchesDifficulty = selectedDifficulty === 'all' || cocktail.difficulty === selectedDifficulty
+    return matchesFamily && matchesDifficulty
+  })
+  const availableSpirits = new Set(cocktailsForSpiritOptions.map(c => c.baseSpirit).filter(Boolean))
+  // Check if any rum types are available for "All Rum" option
+  const hasAnyRum = rumSpirits.some(rum => availableSpirits.has(rum))
+
+  // Available difficulties = difficulties in cocktails matching family + spirit + search
+  const cocktailsForDifficultyOptions = searchFilteredCocktails.filter(cocktail => {
+    const matchesFamily = selectedFamily === 'all' || cocktail.family === selectedFamily
+    const matchesSpirit = matchesSpiritFilter(cocktail.baseSpirit, selectedSpirit)
+    return matchesFamily && matchesSpirit
+  })
+  const availableDifficulties = new Set(cocktailsForDifficultyOptions.map(c => c.difficulty).filter(Boolean))
 
   // Get featured cocktails
   const featuredCocktails = filteredCocktails.filter(c => c.featured)
@@ -133,7 +169,7 @@ export default function CocktailsClient({ cocktails }: CocktailsClientProps) {
   const visibleCocktails = filteredCocktails.slice(0, visibleCount)
   const hasMoreCocktails = visibleCount < filteredCocktails.length
 
-  // Reset pagination when filters change
+  // Reset pagination when filters change (bi-directional - no auto-reset of other filters)
   const handleFamilyChange = (family: string) => {
     setSelectedFamily(family)
     setVisibleCount(ITEMS_PER_PAGE)
@@ -294,7 +330,9 @@ export default function CocktailsClient({ cocktails }: CocktailsClientProps) {
             <div>
               <h3 className="text-sm font-semibold text-gold-300 mb-3 uppercase tracking-wider">Cocktail Family</h3>
               <div className="flex flex-wrap gap-2">
-                {families.map((family) => (
+                {families
+                  .filter(family => family.value === 'all' || availableFamilies.has(family.value))
+                  .map((family) => (
                   <button
                     key={family.value}
                     onClick={() => handleFamilyChange(family.value)}
@@ -314,7 +352,13 @@ export default function CocktailsClient({ cocktails }: CocktailsClientProps) {
             <div>
               <h3 className="text-sm font-semibold text-gold-300 mb-3 uppercase tracking-wider">Base Spirit</h3>
               <div className="flex flex-wrap gap-2">
-                {spirits.map((spirit) => (
+                {spirits
+                  .filter(spirit => {
+                    if (spirit.value === 'all') return true
+                    if (spirit.value === 'all-rum') return hasAnyRum
+                    return availableSpirits.has(spirit.value)
+                  })
+                  .map((spirit) => (
                   <button
                     key={spirit.value}
                     onClick={() => handleSpiritChange(spirit.value)}
@@ -334,7 +378,9 @@ export default function CocktailsClient({ cocktails }: CocktailsClientProps) {
             <div>
               <h3 className="text-sm font-semibold text-gold-300 mb-3 uppercase tracking-wider">Difficulty Level</h3>
               <div className="flex flex-wrap gap-2">
-                {difficulties.map((difficulty) => (
+                {difficulties
+                  .filter(difficulty => difficulty.value === 'all' || availableDifficulties.has(difficulty.value as 'novice' | 'wayfinder' | 'trailblazer'))
+                  .map((difficulty) => (
                   <button
                     key={difficulty.value}
                     onClick={() => handleDifficultyChange(difficulty.value)}
@@ -363,7 +409,7 @@ export default function CocktailsClient({ cocktails }: CocktailsClientProps) {
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
           <h2 className="text-3xl font-serif font-bold text-gold-400 mb-6 flex items-center gap-2">
             <span className="text-gold-400">★</span>
-            Signature Cocktails
+            Featured Cocktails
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {featuredCocktails.map((cocktail) => (
@@ -384,7 +430,7 @@ export default function CocktailsClient({ cocktails }: CocktailsClientProps) {
                       sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                     />
                     <div className="absolute top-3 right-3 px-2 py-1 bg-gold-500/90 backdrop-blur-sm rounded-full">
-                      <span className="text-jerry-green-900 text-xs font-bold">★ Signature</span>
+                      <span className="text-jerry-green-900 text-xs font-bold">★ Featured</span>
                     </div>
                   </div>
                 )}
