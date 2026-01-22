@@ -34,20 +34,22 @@ export default function PreOrderSection() {
         ])
 
         // Process bottle data
+        let singleBottlesSold = 0
+        let tradePacksSold = 0
+
         if (bottleProduct?.variants?.[0]) {
           const variant = bottleProduct.variants[0]
 
-          // Get bottles sold from metafield (more reliable than inventory calculation)
+          // Get single bottles sold from metafield
           const preorderSoldMeta = bottleProduct.metafields?.find(
             (m: { namespace: string; key: string; value: string } | null) =>
               m?.namespace === 'custom' && m?.key === 'preorder_sold'
           )
           if (preorderSoldMeta?.value) {
-            setBottlesSold(parseInt(preorderSoldMeta.value, 10))
+            singleBottlesSold = parseInt(preorderSoldMeta.value, 10)
           } else if (variant.quantityAvailable !== undefined) {
             const available = variant.quantityAvailable
-            const sold = totalBottles - available
-            setBottlesSold(Math.max(0, sold))
+            singleBottlesSold = Math.max(0, totalBottles - available)
           }
 
           setBottlePricing({
@@ -55,6 +57,21 @@ export default function PreOrderSection() {
             compareAtPrice: variant.compareAtPrice ? parseFloat(variant.compareAtPrice.amount).toFixed(0) : null
           })
         }
+
+        // Get trade packs sold from metafield and multiply by 6
+        if (tradePackProduct?.metafields) {
+          const tradePackSoldMeta = tradePackProduct.metafields.find(
+            (m: { namespace: string; key: string; value: string } | null) =>
+              m?.namespace === 'custom' && m?.key === 'preorder_sold'
+          )
+          if (tradePackSoldMeta?.value) {
+            tradePacksSold = parseInt(tradePackSoldMeta.value, 10)
+          }
+        }
+
+        // Calculate total bottles: single bottles + (trade packs × 6)
+        const totalSold = singleBottlesSold + (tradePacksSold * 6)
+        setBottlesSold(totalSold)
 
         // Process gift set data
         if (giftSetProduct?.variants?.[0]) {
