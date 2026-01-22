@@ -6,6 +6,7 @@ import BackToTop from '@/components/BackToTop'
 import StructuredData from '@/components/StructuredData'
 import CocktailRecipeDisplay from '@/components/CocktailRecipeDisplay'
 import ShareButton from '@/components/ShareButton'
+import StarRating from '@/components/StarRating'
 import { notFound } from 'next/navigation'
 
 // Types for cocktail data
@@ -241,11 +242,17 @@ export default async function CocktailPage({ params }: PageProps) {
             </div>
           )}
 
-          {/* Share & Explore CTA */}
+          {/* Rating & Share CTA */}
           <div className="mt-6 sm:mt-8 bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-4 sm:p-6 md:p-8 border border-gold-500/20 text-center">
             <h3 className="text-2xl font-serif font-bold text-white mb-4">
               Enjoyed This Recipe?
             </h3>
+
+            {/* Star Rating */}
+            <div className="mb-6 flex justify-center">
+              <StarRating slug={cocktail.slug.current} />
+            </div>
+
             <p className="text-parchment-300 mb-6">
               Explore our full collection of cocktails and discover your next favorite
             </p>
