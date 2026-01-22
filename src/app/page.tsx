@@ -5,6 +5,7 @@ import ScrollToHash from "@/components/ScrollToHash";
 import PreOrderSection from "@/components/PreOrderSection";
 import EmailSignup from "@/components/EmailSignup";
 import FounderStorySnippet from "@/components/FounderStorySnippet";
+import SupportingOurForces from "@/components/SupportingOurForces";
 import FieldManualPreview from "@/components/FieldManualPreview";
 import WhyJerryCan from "@/components/WhyJerryCan";
 import type { Metadata } from 'next'
@@ -115,6 +116,9 @@ export default function Home() {
 
         {/* Founder Story Snippet */}
         <FounderStorySnippet />
+
+        {/* Supporting Our Forces - Armed Forces Commitments */}
+        <SupportingOurForces />
 
         {/* SEO-Rich Content Section - Veteran-Owned British Rum */}
         <section className="py-16 bg-jerry-green-900/50">
