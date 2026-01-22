@@ -223,33 +223,76 @@ export default defineType({
       validation: Rule => Rule.max(5)
     }),
     defineField({
-      name: 'category',
-      title: 'Base Spirit / Cocktail Family',
+      name: 'family',
+      title: 'Cocktail Family',
       type: 'string',
       options: {
         list: [
+          // Signature - Jerry Can proprietary cocktails
+          {title: 'Signature', value: 'signature'},
+          // Classic families from Savoy & Jerry Thomas
+          {title: 'Sours', value: 'sours'},
+          {title: 'Old Fashioneds', value: 'old-fashioneds'},
+          {title: 'Highballs', value: 'highballs'},
+          {title: 'Fizzes', value: 'fizzes'},
+          {title: 'Collins', value: 'collins'},
+          {title: 'Tiki', value: 'tiki'},
+          {title: 'Slings', value: 'slings'},
+          {title: 'Punches', value: 'punches'},
+          {title: 'Cobblers', value: 'cobblers'},
+          {title: 'Juleps', value: 'juleps'},
+          {title: 'Smashes', value: 'smashes'},
+          {title: 'Flips', value: 'flips'},
+          {title: 'Toddies', value: 'toddies'},
+          {title: 'Swizzles', value: 'swizzles'},
+          {title: 'Spritz', value: 'spritz'},
+          {title: 'Martinis', value: 'martinis'},
+          {title: 'Manhattans', value: 'manhattans'},
+          {title: 'Shots & Shooters', value: 'shots-shooters'},
+          {title: 'Mocktails', value: 'mocktails'},
+          {title: 'Other', value: 'other'}
+        ]
+      },
+      validation: Rule => Rule.required(),
+      description: 'The cocktail family/style category'
+    }),
+    defineField({
+      name: 'baseSpirit',
+      title: 'Base Spirit',
+      type: 'string',
+      options: {
+        list: [
+          // Rum varieties
           {title: 'Spiced Rum', value: 'spiced-rum'},
           {title: 'White Rum', value: 'white-rum'},
           {title: 'Aged Rum', value: 'aged-rum'},
           {title: 'Dark Rum', value: 'dark-rum'},
           {title: 'Overproof Rum', value: 'overproof-rum'},
+          // Other spirits
           {title: 'Vodka', value: 'vodka'},
           {title: 'Gin', value: 'gin'},
           {title: 'Tequila', value: 'tequila'},
           {title: 'Mezcal', value: 'mezcal'},
-          {title: 'Whiskey', value: 'whiskey'},
+          {title: 'Bourbon', value: 'bourbon'},
+          {title: 'Rye Whiskey', value: 'rye-whiskey'},
+          {title: 'Scotch', value: 'scotch'},
+          {title: 'Irish Whiskey', value: 'irish-whiskey'},
           {title: 'Brandy', value: 'brandy'},
+          {title: 'Cognac', value: 'cognac'},
           {title: 'Cachaça', value: 'cachaca'},
-          {title: 'Aromatised Wine', value: 'aromatised-wine'},
+          {title: 'Pisco', value: 'pisco'},
+          // Wine-based
+          {title: 'Vermouth', value: 'vermouth'},
+          {title: 'Sherry', value: 'sherry'},
           {title: 'Champagne', value: 'champagne'},
-          {title: 'Liqueur-Based', value: 'liqueur-based'},
-          {title: 'Spritz', value: 'spritz'},
-          {title: 'Bitters', value: 'bitters'},
+          // Other
+          {title: 'Liqueur', value: 'liqueur'},
+          {title: 'Multiple Spirits', value: 'multiple'},
           {title: 'Non-Alcoholic', value: 'non-alcoholic'}
         ]
       },
       initialValue: 'spiced-rum',
-      description: 'The primary/base spirit or cocktail family'
+      description: 'The primary spirit in this cocktail'
     }),
     defineField({
       name: 'tags',

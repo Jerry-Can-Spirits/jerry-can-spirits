@@ -10,6 +10,8 @@ export const cocktailsListQuery = `*[_type == "cocktail"] | order(_createdAt des
   slug,
   description,
   difficulty,
+  family,
+  baseSpirit,
   category,
   tags,
   featured,
@@ -45,6 +47,8 @@ export const cocktailsQuery = `*[_type == "cocktail"] | order(_createdAt desc) {
     instructions,
     note
   },
+  family,
+  baseSpirit,
   category,
   tags,
   featured,
@@ -79,6 +83,8 @@ export const cocktailBySlugQuery = `*[_type == "cocktail" && slug.current == $sl
     instructions,
     note
   },
+  family,
+  baseSpirit,
   category,
   tags,
   featured,
