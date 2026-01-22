@@ -35,7 +35,7 @@ function getFingerprint(request: Request): string {
   return Math.abs(hash).toString(36)
 }
 
-// GET - Retrieve rating for a cocktail
+// GET - Retrieve rating for a cocktail or all cocktails
 export async function GET(request: Request) {
   try {
     const { env } = getRequestContext()
@@ -43,7 +43,36 @@ export async function GET(request: Request) {
 
     const url = new URL(request.url)
     const slug = url.searchParams.get('slug')
+    const all = url.searchParams.get('all')
 
+    // Bulk fetch all ratings
+    if (all === 'true') {
+      if (!kv) {
+        return NextResponse.json({ ratings: {} })
+      }
+
+      // List all cocktail rating keys
+      const list = await kv.list({ prefix: 'cocktail:' })
+      const ratings: Record<string, { count: number; average: number }> = {}
+
+      // Fetch all rating data in parallel
+      const fetchPromises = list.keys.map(async (key) => {
+        const data = await kv.get<RatingData>(key.name, 'json')
+        if (data) {
+          const cocktailSlug = key.name.replace('cocktail:', '')
+          ratings[cocktailSlug] = {
+            count: data.count,
+            average: data.average
+          }
+        }
+      })
+
+      await Promise.all(fetchPromises)
+
+      return NextResponse.json({ ratings })
+    }
+
+    // Single cocktail rating fetch
     if (!slug) {
       return NextResponse.json({ error: 'Cocktail slug is required' }, { status: 400 })
     }
