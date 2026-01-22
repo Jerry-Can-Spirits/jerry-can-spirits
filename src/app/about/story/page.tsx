@@ -4,7 +4,7 @@ import BackToTop from '@/components/BackToTop'
 
 export const metadata: Metadata = {
   title: "Our Story - From Military Service to Premium Spirits",
-  description: "Veteran-owned British rum brand founded by Royal Corps of Signals veterans with 12 years military service. From Arctic deployments to crafting premium small-batch rum engineered for reliability. Our authentic military heritage story.",
+  description: "Veteran-owned British rum founded by Royal Signals veterans. From Arctic deployments to premium small-batch spirits - our authentic military heritage story.",
   alternates: {
     canonical: 'https://jerrycanspirits.co.uk/about/story/',
   },
