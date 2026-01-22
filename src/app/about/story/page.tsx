@@ -3,10 +3,14 @@ import Image from 'next/image'
 import BackToTop from '@/components/BackToTop'
 
 export const metadata: Metadata = {
-  title: "Our Story | Veteran-Owned British Rum - From Royal Corps of Signals to Premium Spirits",
+  title: "Our Story - From Military Service to Premium Spirits",
   description: "Veteran-owned British rum brand founded by Royal Corps of Signals veterans with 12 years military service. From Arctic deployments to crafting premium small-batch rum engineered for reliability. Our authentic military heritage story.",
   alternates: {
     canonical: 'https://jerrycanspirits.co.uk/about/story/',
+  },
+  openGraph: {
+    title: "Our Story | Jerry Can Spirits®",
+    description: "From Royal Corps of Signals to premium British rum - discover our authentic military heritage story.",
   },
   robots: {
     index: true,

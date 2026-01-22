@@ -121,19 +121,19 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   if (!guide) {
     return {
-      title: 'Guide Not Found | Jerry Can Spirits',
+      title: 'Guide Not Found',
     }
   }
 
   return {
-    title: guide.metaTitle || `${guide.title} | Jerry Can Spirits`,
+    title: guide.metaTitle || guide.title,
     description: guide.metaDescription || guide.excerpt,
     keywords: guide.keywords?.join(', '),
     alternates: {
       canonical: `https://jerrycanspirits.co.uk/guides/${guide.slug.current}/`,
     },
     openGraph: {
-      title: guide.metaTitle || guide.title,
+      title: `${guide.metaTitle || guide.title} | Jerry Can Spirits®`,
       description: guide.metaDescription || guide.excerpt,
       images: guide.heroImage ? [guide.heroImage] : [],
       type: 'article',

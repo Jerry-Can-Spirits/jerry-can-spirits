@@ -85,25 +85,25 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   if (!cocktail) {
     return {
-      title: 'Cocktail Not Found | Jerry Can Spirits',
+      title: 'Cocktail Not Found',
     }
   }
 
   return {
-    title: `${cocktail.name} Recipe | Veteran-Owned British Rum Cocktails | Jerry Can Spirits`,
+    title: `${cocktail.name} Recipe`,
     description: `${cocktail.description} Learn how to make this ${cocktail.difficulty} level rum cocktail with our step-by-step recipe. ${cocktail.variants ? `Includes ${cocktail.variants.length} variations.` : ''}`,
     alternates: {
       canonical: `https://jerrycanspirits.co.uk/field-manual/cocktails/${cocktail.slug.current}/`,
     },
     openGraph: {
-      title: `${cocktail.name} Recipe | Jerry Can Spirits`,
+      title: `${cocktail.name} Recipe | Jerry Can Spirits®`,
       description: cocktail.description,
       images: cocktail.image ? [cocktail.image] : [],
       type: 'article',
     },
     twitter: {
       card: 'summary_large_image',
-      title: `${cocktail.name} Recipe | Jerry Can Spirits`,
+      title: `${cocktail.name} Recipe | Jerry Can Spirits®`,
       description: cocktail.description,
       images: cocktail.image ? [cocktail.image] : [],
     },

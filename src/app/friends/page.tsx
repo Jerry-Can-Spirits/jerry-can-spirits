@@ -4,13 +4,13 @@ import Image from 'next/image'
 import StructuredData from '@/components/StructuredData'
 
 export const metadata: Metadata = {
-  title: "Friends of Jerry Can Spirits | Our Partners & Collaborators",
+  title: "Friends & Partners",
   description: "Meet the distilleries, suppliers, and partners who help make Jerry Can Spirits possible. We're building a community of excellence to help rum become the UK's number one spirit.",
   alternates: {
     canonical: "https://jerrycanspirits.co.uk/friends/",
   },
   openGraph: {
-    title: "Friends of Jerry Can Spirits",
+    title: "Friends & Partners | Jerry Can Spirits®",
     description: "Our trusted partners, from distilleries to suppliers, who help craft exceptional spirits",
   },
 }

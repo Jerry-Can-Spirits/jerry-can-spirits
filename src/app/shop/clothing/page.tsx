@@ -4,10 +4,14 @@ import { getProductsByCollection, type ShopifyProduct } from '@/lib/shopify'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Expedition Gear | Veteran-Owned Apparel & Accessories | Jerry Can Spirits',
+  title: 'Expedition Gear & Apparel',
   description: 'Adventure-ready apparel and branded merchandise from Jerry Can Spirits. Quality expedition gear engineered for reliability, designed for adventure.',
   alternates: {
     canonical: 'https://jerrycanspirits.co.uk/shop/clothing/',
+  },
+  openGraph: {
+    title: 'Expedition Gear & Apparel | Jerry Can Spirits®',
+    description: 'Adventure-ready apparel and branded merchandise. Quality expedition gear engineered for reliability.',
   },
 }
 

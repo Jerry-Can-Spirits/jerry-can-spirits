@@ -73,36 +73,36 @@ export async function generateMetadata({
 
     if (!product) {
       return {
-        title: 'Product Not Found | Jerry Can Spirits',
+        title: 'Product Not Found',
       }
     }
 
     const description = product.description.slice(0, 155) || `Premium British spirits from Jerry Can Spirits. Veteran-owned spirits crafted with military precision. ${product.title} - engineered for reliability, designed for adventure.`
 
     return {
-      title: `${product.title} | Veteran-Owned Premium British Spirits | Jerry Can Spirits`,
+      title: `${product.title} - Premium British Spirits`,
       description,
       keywords: `${product.title}, British spirits, veteran owned, premium spirits, military heritage, Jerry Can Spirits, expedition spirits, small batch, craft spirits`,
       alternates: {
         canonical: `https://jerrycanspirits.co.uk/shop/product/${handle}/`,
       },
       openGraph: {
-        title: `${product.title} | Jerry Can Spirits`,
+        title: `${product.title} | Jerry Can Spirits®`,
         description,
         images: product.images.length > 0 ? [product.images[0].url] : [],
         type: 'website',
-        siteName: 'Jerry Can Spirits',
+        siteName: 'Jerry Can Spirits®',
       },
       twitter: {
         card: 'summary_large_image',
-        title: `${product.title} | Jerry Can Spirits`,
+        title: `${product.title} | Jerry Can Spirits®`,
         description,
         images: product.images.length > 0 ? [product.images[0].url] : [],
       },
     }
   } catch {
     return {
-      title: 'Product Not Found | Jerry Can Spirits',
+      title: 'Product Not Found',
     }
   }
 }

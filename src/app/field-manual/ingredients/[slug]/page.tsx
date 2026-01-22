@@ -101,18 +101,18 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
   if (!ingredient) {
     return {
-      title: 'Ingredient Not Found | Jerry Can Spirits',
+      title: 'Ingredient Not Found',
     }
   }
 
   return {
-    title: `${ingredient.name} Guide | Jerry Can Spirits Ingredients`,
+    title: `${ingredient.name} Guide`,
     description: ingredient.description,
     alternates: {
       canonical: `https://jerrycanspirits.co.uk/field-manual/ingredients/${slug}/`,
     },
     openGraph: {
-      title: `${ingredient.name} Guide | Jerry Can Spirits`,
+      title: `${ingredient.name} Guide | Jerry Can Spirits®`,
       description: ingredient.description,
       images: ingredient.image ? [{ url: urlFor(ingredient.image).url() }] : [],
     },

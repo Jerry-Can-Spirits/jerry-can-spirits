@@ -74,18 +74,18 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
   if (!equipment) {
     return {
-      title: 'Equipment Not Found | Jerry Can Spirits',
+      title: 'Equipment Not Found',
     }
   }
 
   return {
-    title: `${equipment.name} Guide | Jerry Can Spirits Bar Equipment`,
+    title: `${equipment.name} Guide`,
     description: equipment.description,
     alternates: {
       canonical: `https://jerrycanspirits.co.uk/field-manual/equipment/${slug}/`,
     },
     openGraph: {
-      title: `${equipment.name} Guide | Jerry Can Spirits`,
+      title: `${equipment.name} Guide | Jerry Can Spirits®`,
       description: equipment.description,
       images: equipment.image ? [{ url: urlFor(equipment.image).url() }] : [],
     },
