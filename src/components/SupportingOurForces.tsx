@@ -85,7 +85,7 @@ export default function SupportingOurForces() {
           <div className="flex flex-wrap items-center justify-center gap-6">
             <div className="bg-white rounded-lg p-3 shadow-lg">
               <Image
-                src="/images/AFC_Logo.png"
+                src="/images/AFC_POSITIVE_RGB.png"
                 alt="Armed Forces Covenant Signatory"
                 width={120}
                 height={60}
@@ -103,7 +103,7 @@ export default function SupportingOurForces() {
             </div>
             <div className="bg-white rounded-lg p-3 shadow-lg">
               <Image
-                src="/images/BVO.webp"
+                src="/images/British-Veteran-Owned-Logo-Standard.png"
                 alt="British Veteran Owned"
                 width={120}
                 height={60}
