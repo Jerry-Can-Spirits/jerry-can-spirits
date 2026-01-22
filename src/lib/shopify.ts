@@ -316,7 +316,7 @@ export async function getProduct(handle: string): Promise<ShopifyProduct | null>
           {namespace: "specifications", key: "colour"},
           {namespace: "specifications", key: "awards"},
           {namespace: "legal", key: "duty_statement"},
-          {namespace: "custom", key: "preorder_sold"}
+          {namespace: "custom", key: "pre_order_sold"}
         ]) {
           namespace
           key
