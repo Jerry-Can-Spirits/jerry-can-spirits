@@ -1,9 +1,14 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import BackToTop from '@/components/BackToTop'
+
+// Ratings type
+interface RatingsMap {
+  [slug: string]: { count: number; average: number }
+}
 
 // Types for cocktail data from Sanity
 interface CocktailIngredient {
@@ -90,6 +95,27 @@ export default function CocktailsClient({ cocktails }: CocktailsClientProps) {
   const [selectedDifficulty, setSelectedDifficulty] = useState<string>('all')
   const [searchQuery, setSearchQuery] = useState<string>('')
   const [visibleCount, setVisibleCount] = useState<number>(ITEMS_PER_PAGE)
+  const [sortBy, setSortBy] = useState<string>('default')
+  const [ratings, setRatings] = useState<RatingsMap>({})
+  const [ratingsLoaded, setRatingsLoaded] = useState<boolean>(false)
+
+  // Fetch all ratings on mount
+  useEffect(() => {
+    async function fetchRatings() {
+      try {
+        const response = await fetch('/api/ratings?all=true')
+        if (response.ok) {
+          const data = await response.json()
+          setRatings(data.ratings || {})
+        }
+      } catch (error) {
+        console.error('Failed to fetch ratings:', error)
+      } finally {
+        setRatingsLoaded(true)
+      }
+    }
+    fetchRatings()
+  }, [])
 
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty.toLowerCase()) {
@@ -165,9 +191,54 @@ export default function CocktailsClient({ cocktails }: CocktailsClientProps) {
   // Get featured cocktails
   const featuredCocktails = filteredCocktails.filter(c => c.featured)
 
+  // Sort cocktails based on selected sort option
+  const sortedCocktails = [...filteredCocktails].sort((a, b) => {
+    if (sortBy === 'top-rated') {
+      const ratingA = ratings[a.slug.current]?.average || 0
+      const ratingB = ratings[b.slug.current]?.average || 0
+      const countA = ratings[a.slug.current]?.count || 0
+      const countB = ratings[b.slug.current]?.count || 0
+      // Sort by average rating first, then by count as tiebreaker
+      if (ratingB !== ratingA) return ratingB - ratingA
+      return countB - countA
+    }
+    // Default: alphabetical
+    return a.name.localeCompare(b.name)
+  })
+
   // Paginated cocktails for display
-  const visibleCocktails = filteredCocktails.slice(0, visibleCount)
-  const hasMoreCocktails = visibleCount < filteredCocktails.length
+  const visibleCocktails = sortedCocktails.slice(0, visibleCount)
+  const hasMoreCocktails = visibleCount < sortedCocktails.length
+
+  // Helper to render star rating display
+  const renderStars = (average: number, count: number) => {
+    if (count === 0) return null
+    const fullStars = Math.floor(average)
+    const hasHalfStar = average - fullStars >= 0.5
+    return (
+      <div className="flex items-center gap-1">
+        <div className="flex">
+          {[1, 2, 3, 4, 5].map((star) => (
+            <svg
+              key={star}
+              className={`w-3.5 h-3.5 ${
+                star <= fullStars
+                  ? 'text-gold-400'
+                  : star === fullStars + 1 && hasHalfStar
+                    ? 'text-gold-400/50'
+                    : 'text-jerry-green-600'
+              }`}
+              fill="currentColor"
+              viewBox="0 0 20 20"
+            >
+              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+            </svg>
+          ))}
+        </div>
+        <span className="text-xs text-parchment-400">({count})</span>
+      </div>
+    )
+  }
 
   // Reset pagination when filters change (bi-directional - no auto-reset of other filters)
   const handleFamilyChange = (family: string) => {
@@ -187,6 +258,11 @@ export default function CocktailsClient({ cocktails }: CocktailsClientProps) {
 
   const handleSearchChange = (query: string) => {
     setSearchQuery(query)
+    setVisibleCount(ITEMS_PER_PAGE)
+  }
+
+  const handleSortChange = (sort: string) => {
+    setSortBy(sort)
     setVisibleCount(ITEMS_PER_PAGE)
   }
 
@@ -396,9 +472,42 @@ export default function CocktailsClient({ cocktails }: CocktailsClientProps) {
               </div>
             </div>
 
-            {/* Results count */}
-            <div className="text-parchment-300 text-sm">
-              Showing <span className="text-gold-300 font-semibold">{Math.min(visibleCount, filteredCocktails.length)}</span> of <span className="text-gold-300 font-semibold">{filteredCocktails.length}</span> {filteredCocktails.length === 1 ? 'cocktail' : 'cocktails'}
+            {/* Results count and Sort */}
+            <div className="flex flex-wrap items-center justify-between gap-4">
+              <div className="text-parchment-300 text-sm">
+                Showing <span className="text-gold-300 font-semibold">{Math.min(visibleCount, sortedCocktails.length)}</span> of <span className="text-gold-300 font-semibold">{sortedCocktails.length}</span> {sortedCocktails.length === 1 ? 'cocktail' : 'cocktails'}
+              </div>
+
+              {/* Sort Options */}
+              <div className="flex items-center gap-3">
+                <span className="text-sm text-parchment-400">Sort:</span>
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => handleSortChange('default')}
+                    className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all duration-300 ${
+                      sortBy === 'default'
+                        ? 'bg-gold-500/20 text-gold-300 border border-gold-500/40'
+                        : 'bg-jerry-green-800/40 text-parchment-300 border border-gold-500/20 hover:bg-jerry-green-800/60'
+                    }`}
+                  >
+                    A-Z
+                  </button>
+                  <button
+                    onClick={() => handleSortChange('top-rated')}
+                    disabled={!ratingsLoaded}
+                    className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all duration-300 flex items-center gap-1.5 ${
+                      sortBy === 'top-rated'
+                        ? 'bg-gold-500/20 text-gold-300 border border-gold-500/40'
+                        : 'bg-jerry-green-800/40 text-parchment-300 border border-gold-500/20 hover:bg-jerry-green-800/60'
+                    } ${!ratingsLoaded ? 'opacity-50 cursor-wait' : ''}`}
+                  >
+                    <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                    </svg>
+                    Top Rated
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -469,11 +578,18 @@ export default function CocktailsClient({ cocktails }: CocktailsClientProps) {
                     </div>
                   )}
 
-                  {cocktail.variants && cocktail.variants.length > 0 && (
-                    <p className="text-gold-400 text-xs">
-                      {cocktail.variants.length + 1} variations
-                    </p>
-                  )}
+                  {/* Rating and variations row */}
+                  <div className="flex items-center justify-between">
+                    {ratings[cocktail.slug.current] && renderStars(
+                      ratings[cocktail.slug.current].average,
+                      ratings[cocktail.slug.current].count
+                    )}
+                    {cocktail.variants && cocktail.variants.length > 0 && (
+                      <p className="text-gold-400 text-xs">
+                        {cocktail.variants.length + 1} variations
+                      </p>
+                    )}
+                  </div>
 
                   <div className="flex items-center gap-2 text-gold-300 text-sm font-semibold pt-2">
                     <span>View Full Recipe</span>
@@ -570,11 +686,18 @@ export default function CocktailsClient({ cocktails }: CocktailsClientProps) {
                     </div>
                   )}
 
-                  {cocktail.variants && cocktail.variants.length > 0 && (
-                    <p className="text-gold-400 text-xs">
-                      {cocktail.variants.length + 1} variations
-                    </p>
-                  )}
+                  {/* Rating and variations row */}
+                  <div className="flex items-center justify-between">
+                    {ratings[cocktail.slug.current] && renderStars(
+                      ratings[cocktail.slug.current].average,
+                      ratings[cocktail.slug.current].count
+                    )}
+                    {cocktail.variants && cocktail.variants.length > 0 && (
+                      <p className="text-gold-400 text-xs">
+                        {cocktail.variants.length + 1} variations
+                      </p>
+                    )}
+                  </div>
 
                   <div className="flex items-center gap-2 text-gold-300 text-sm font-semibold pt-2">
                     <span>View Full Recipe</span>
@@ -589,7 +712,7 @@ export default function CocktailsClient({ cocktails }: CocktailsClientProps) {
         )}
 
         {/* Show More Button */}
-        {hasMoreCocktails && filteredCocktails.length > 0 && (
+        {hasMoreCocktails && sortedCocktails.length > 0 && (
           <div className="mt-10 text-center">
             <button
               onClick={handleShowMore}
@@ -597,7 +720,7 @@ export default function CocktailsClient({ cocktails }: CocktailsClientProps) {
             >
               <span>Show More Cocktails</span>
               <span className="text-parchment-400 text-sm">
-                ({filteredCocktails.length - visibleCount} remaining)
+                ({sortedCocktails.length - visibleCount} remaining)
               </span>
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
