@@ -43,7 +43,7 @@ export default function PreOrderSection() {
           // Get single bottles sold from metafield
           const preorderSoldMeta = bottleProduct.metafields?.find(
             (m: { namespace: string; key: string; value: string } | null) =>
-              m?.namespace === 'custom' && m?.key === 'preorder_sold'
+              m?.namespace === 'custom' && m?.key === 'pre_order_sold'
           )
           if (preorderSoldMeta?.value) {
             singleBottlesSold = parseInt(preorderSoldMeta.value, 10)
@@ -62,7 +62,7 @@ export default function PreOrderSection() {
         if (tradePackProduct?.metafields) {
           const tradePackSoldMeta = tradePackProduct.metafields.find(
             (m: { namespace: string; key: string; value: string } | null) =>
-              m?.namespace === 'custom' && m?.key === 'preorder_sold'
+              m?.namespace === 'custom' && m?.key === 'pre_order_sold'
           )
           if (tradePackSoldMeta?.value) {
             tradePacksSold = parseInt(tradePackSoldMeta.value, 10)

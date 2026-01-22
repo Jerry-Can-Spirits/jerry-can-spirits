@@ -13,6 +13,9 @@
     overflow-x: hidden;
     /* Better mobile scrolling */
     -webkit-overflow-scrolling: touch;
+    /* Prevent text size adjustment on orientation change */
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
   }
 
   body {
