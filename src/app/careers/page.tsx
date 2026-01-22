@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: "Careers - Join Our Team",
-  description: "Explore career opportunities at Jerry Can Spirits®. Learn about our company culture and future hiring plans.",
+  description: "Explore career opportunities at Jerry Can Spirits®. Learn about our veteran-owned company culture, values, and future hiring plans for expedition-ready team members.",
   alternates: {
     canonical: 'https://jerrycanspirits.co.uk/careers/',
   },
