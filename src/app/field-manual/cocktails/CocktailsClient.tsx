@@ -42,7 +42,9 @@ interface SanityCocktail {
   garnish: string
   note?: string
   variants?: CocktailVariant[]
-  category?: string
+  family?: string
+  baseSpirit?: string
+  category?: string // Legacy field
   tags?: string[]
   featured?: boolean
   image?: string
@@ -83,7 +85,8 @@ interface CocktailsClientProps {
 
 export default function CocktailsClient({ cocktails }: CocktailsClientProps) {
   // Filter states
-  const [selectedCategory, setSelectedCategory] = useState<string>('all')
+  const [selectedFamily, setSelectedFamily] = useState<string>('all')
+  const [selectedSpirit, setSelectedSpirit] = useState<string>('all')
   const [selectedDifficulty, setSelectedDifficulty] = useState<string>('all')
   const [searchQuery, setSearchQuery] = useState<string>('')
   const [visibleCount, setVisibleCount] = useState<number>(ITEMS_PER_PAGE)
@@ -107,19 +110,20 @@ export default function CocktailsClient({ cocktails }: CocktailsClientProps) {
   }
 
   // Rum subtypes for "All Rum" filter
-  const rumCategories = ['spiced-rum', 'white-rum', 'aged-rum', 'dark-rum', 'overproof-rum']
+  const rumSpirits = ['spiced-rum', 'white-rum', 'aged-rum', 'dark-rum', 'overproof-rum']
 
   // Filter cocktails
   const filteredCocktails = cocktails.filter(cocktail => {
-    const matchesCategory = selectedCategory === 'all' ||
-      (selectedCategory === 'all-rum' && rumCategories.includes(cocktail.category || '')) ||
-      cocktail.category === selectedCategory
+    const matchesFamily = selectedFamily === 'all' || cocktail.family === selectedFamily
+    const matchesSpirit = selectedSpirit === 'all' ||
+      (selectedSpirit === 'all-rum' && rumSpirits.includes(cocktail.baseSpirit || '')) ||
+      cocktail.baseSpirit === selectedSpirit
     const matchesDifficulty = selectedDifficulty === 'all' || cocktail.difficulty === selectedDifficulty
     const matchesSearch = !searchQuery ||
       cocktail.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       cocktail.description.toLowerCase().includes(searchQuery.toLowerCase())
 
-    return matchesCategory && matchesDifficulty && matchesSearch
+    return matchesFamily && matchesSpirit && matchesDifficulty && matchesSearch
   })
 
   // Get featured cocktails
@@ -130,8 +134,13 @@ export default function CocktailsClient({ cocktails }: CocktailsClientProps) {
   const hasMoreCocktails = visibleCount < filteredCocktails.length
 
   // Reset pagination when filters change
-  const handleCategoryChange = (category: string) => {
-    setSelectedCategory(category)
+  const handleFamilyChange = (family: string) => {
+    setSelectedFamily(family)
+    setVisibleCount(ITEMS_PER_PAGE)
+  }
+
+  const handleSpiritChange = (spirit: string) => {
+    setSelectedSpirit(spirit)
     setVisibleCount(ITEMS_PER_PAGE)
   }
 
@@ -149,25 +158,56 @@ export default function CocktailsClient({ cocktails }: CocktailsClientProps) {
     setVisibleCount(prev => prev + ITEMS_PER_PAGE)
   }
 
-  // Categories for filter tabs (Base Spirits & Cocktail Families)
-  const categories = [
-    { value: 'all', label: 'All Cocktails' },
+  // Cocktail families for filter tabs
+  const families = [
+    { value: 'all', label: 'All Families' },
+    { value: 'signature', label: 'Signature' },
+    { value: 'sours', label: 'Sours' },
+    { value: 'old-fashioneds', label: 'Old Fashioneds' },
+    { value: 'highballs', label: 'Highballs' },
+    { value: 'mules', label: 'Mules' },
+    { value: 'fizzes', label: 'Fizzes' },
+    { value: 'collins', label: 'Collins' },
+    { value: 'tiki', label: 'Tiki' },
+    { value: 'slings', label: 'Slings' },
+    { value: 'punches', label: 'Punches' },
+    { value: 'cobblers', label: 'Cobblers' },
+    { value: 'juleps', label: 'Juleps' },
+    { value: 'smashes', label: 'Smashes' },
+    { value: 'flips', label: 'Flips' },
+    { value: 'toddies', label: 'Toddies' },
+    { value: 'swizzles', label: 'Swizzles' },
+    { value: 'spritz', label: 'Spritz' },
+    { value: 'negronis', label: 'Negronis' },
+    { value: 'martinis', label: 'Martinis' },
+    { value: 'manhattans', label: 'Manhattans' },
+    { value: 'shots-shooters', label: 'Shots & Shooters' },
+    { value: 'mocktails', label: 'Mocktails' },
+    { value: 'other', label: 'Other' }
+  ]
+
+  // Base spirits for filter tabs
+  const spirits = [
+    { value: 'all', label: 'All Spirits' },
     { value: 'all-rum', label: 'All Rum' },
     { value: 'spiced-rum', label: 'Spiced Rum' },
     { value: 'white-rum', label: 'White Rum' },
     { value: 'aged-rum', label: 'Aged Rum' },
     { value: 'dark-rum', label: 'Dark Rum' },
-    { value: 'overproof-rum', label: 'Overproof Rum' },
-    { value: 'vodka', label: 'Vodka' },
     { value: 'gin', label: 'Gin' },
+    { value: 'vodka', label: 'Vodka' },
+    { value: 'bourbon', label: 'Bourbon' },
+    { value: 'rye-whiskey', label: 'Rye Whiskey' },
+    { value: 'scotch', label: 'Scotch' },
     { value: 'tequila', label: 'Tequila' },
-    { value: 'mezcal', label: 'Mezcal' },
-    { value: 'whiskey', label: 'Whiskey' },
     { value: 'brandy', label: 'Brandy' },
+    { value: 'cognac', label: 'Cognac' },
     { value: 'cachaca', label: 'Cachaça' },
-    { value: 'aromatised-wine', label: 'Aromatised Wine' },
+    { value: 'sherry', label: 'Sherry' },
+    { value: 'vermouth', label: 'Vermouth' },
     { value: 'champagne', label: 'Champagne' },
-    { value: 'liqueur-based', label: 'Liqueur-Based' },
+    { value: 'liqueur', label: 'Liqueur' },
+    { value: 'multiple', label: 'Multiple Spirits' },
     { value: 'non-alcoholic', label: 'Non-Alcoholic' }
   ]
 
@@ -250,21 +290,41 @@ export default function CocktailsClient({ cocktails }: CocktailsClientProps) {
               </svg>
             </div>
 
-            {/* Category Filter Tabs */}
+            {/* Cocktail Family Filter Tabs */}
             <div>
-              <h3 className="text-sm font-semibold text-gold-300 mb-3 uppercase tracking-wider">Spirit Type</h3>
+              <h3 className="text-sm font-semibold text-gold-300 mb-3 uppercase tracking-wider">Cocktail Family</h3>
               <div className="flex flex-wrap gap-2">
-                {categories.map((category) => (
+                {families.map((family) => (
                   <button
-                    key={category.value}
-                    onClick={() => handleCategoryChange(category.value)}
+                    key={family.value}
+                    onClick={() => handleFamilyChange(family.value)}
                     className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-300 ${
-                      selectedCategory === category.value
+                      selectedFamily === family.value
                         ? 'bg-gold-500/20 text-gold-300 border border-gold-500/40'
                         : 'bg-jerry-green-800/40 text-parchment-300 border border-gold-500/20 hover:bg-jerry-green-800/60'
                     }`}
                   >
-                    {category.label}
+                    {family.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Base Spirit Filter Tabs */}
+            <div>
+              <h3 className="text-sm font-semibold text-gold-300 mb-3 uppercase tracking-wider">Base Spirit</h3>
+              <div className="flex flex-wrap gap-2">
+                {spirits.map((spirit) => (
+                  <button
+                    key={spirit.value}
+                    onClick={() => handleSpiritChange(spirit.value)}
+                    className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-300 ${
+                      selectedSpirit === spirit.value
+                        ? 'bg-gold-500/20 text-gold-300 border border-gold-500/40'
+                        : 'bg-jerry-green-800/40 text-parchment-300 border border-gold-500/20 hover:bg-jerry-green-800/60'
+                    }`}
+                  >
+                    {spirit.label}
                   </button>
                 ))}
               </div>
@@ -385,7 +445,11 @@ export default function CocktailsClient({ cocktails }: CocktailsClientProps) {
       {/* All Cocktails Grid */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <h2 className="text-3xl font-serif font-bold text-white mb-6">
-          {selectedCategory === 'all' ? 'All Cocktails' : categories.find(c => c.value === selectedCategory)?.label}
+          {selectedFamily === 'all' && selectedSpirit === 'all'
+            ? 'All Cocktails'
+            : selectedFamily !== 'all'
+              ? families.find(f => f.value === selectedFamily)?.label
+              : spirits.find(s => s.value === selectedSpirit)?.label}
         </h2>
 
         {filteredCocktails.length === 0 ? (
@@ -393,7 +457,8 @@ export default function CocktailsClient({ cocktails }: CocktailsClientProps) {
             <p className="text-parchment-400 text-lg">No cocktails match your filters</p>
             <button
               onClick={() => {
-                setSelectedCategory('all')
+                setSelectedFamily('all')
+                setSelectedSpirit('all')
                 setSelectedDifficulty('all')
                 setSearchQuery('')
                 setVisibleCount(ITEMS_PER_PAGE)
