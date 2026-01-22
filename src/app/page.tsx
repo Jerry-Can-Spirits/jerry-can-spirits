@@ -18,7 +18,7 @@ const TrustpilotWidget = dynamic(() => import('@/components/TrustpilotWidget'), 
 
 export const metadata: Metadata = {
   title: "Jerry Can Spirits | Veteran-Owned Premium British Rum",
-  description: "Veteran-owned premium British rum with authentic military heritage. Founded by Royal Corps of Signals veterans. Small-batch spirits engineered for reliability, designed for adventure. Expedition Ready.",
+  description: "Veteran-owned British rum by Royal Signals veterans. Premium small-batch craft spirits engineered for reliability, designed for adventure.",
   alternates: {
     canonical: "https://jerrycanspirits.co.uk/",
   },
