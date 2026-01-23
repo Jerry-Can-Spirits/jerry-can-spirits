@@ -165,7 +165,7 @@ export default function Footer() {
                   <p>Avoid alcohol if pregnant</p>
 
                   {/* Drinkaware Logo */}
-                  <div className="-ml-2 -mr-10">
+                  <div className="mt-2">
                     <a
                       href="https://www.drinkaware.co.uk"
                       target="_blank"
@@ -178,15 +178,15 @@ export default function Footer() {
                         <Image
                           src="https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/5b2f3381-b097-44fc-0277-d0088f1c3d00/public"
                           alt="Be Drinkaware"
-                          width={216}
-                          height={86}
-                          className="h-[4.5rem] w-auto object-contain"
-                          sizes="216px"
+                          width={180}
+                          height={72}
+                          className="h-16 w-auto object-contain max-w-full"
+                          sizes="180px"
                           quality={100}
                           unoptimized
                         />
                       ) : (
-                        <div className="w-44 h-[4.5rem] bg-parchment-200/20 rounded animate-pulse" />
+                        <div className="w-36 h-16 bg-parchment-200/20 rounded animate-pulse" />
                       )}
                     </a>
                   </div>

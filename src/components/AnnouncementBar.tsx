@@ -23,7 +23,7 @@ export default function AnnouncementBar() {
         const isMobile = window.innerWidth < 640
         document.documentElement.style.setProperty(
           '--announcement-height',
-          dismissed ? '0px' : isMobile ? '48px' : '40px'
+          dismissed ? '0px' : isMobile ? '52px' : '40px'
         )
       }
       updateHeight()
@@ -47,7 +47,7 @@ export default function AnnouncementBar() {
       className="fixed top-0 left-0 right-0 z-[60] bg-gradient-to-r from-gold-600 via-gold-500 to-gold-600 text-jerry-green-900 transition-all duration-300"
     >
       <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between py-3 sm:py-2.5 text-sm min-h-[48px] sm:min-h-[40px]">
+        <div className="flex items-center justify-between py-3 sm:py-2.5 text-sm min-h-[52px] sm:min-h-[40px]">
           <div className="flex-1 text-center pr-2">
             <Link
               href="/shop/product/jerry-can-spirits-expedition-spiced-rum"
