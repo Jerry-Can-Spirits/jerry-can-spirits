@@ -52,7 +52,7 @@ bar setup guide
 
 ### Category
 ```
-techniques
+buying-guides
 ```
 
 ### Featured Guide

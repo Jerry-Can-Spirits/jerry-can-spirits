@@ -60,21 +60,36 @@ export default function AgeGate({ onVerified }: AgeGateProps) {
   if (!isVisible) return null;
 
   return (
-    <div className="fixed inset-0 z-[9999] bg-jerry-green-900 flex overflow-hidden" style={{ height: '100vh', width: '100vw' }}>
+    <div className="fixed inset-0 z-[9999] bg-jerry-green-900 overflow-hidden" style={{ height: '100vh', width: '100vw' }}>
       {/* Real Cartographic Background */}
-      <CartographicBackground 
-        opacity={0.8} 
-        showCoordinates={true} 
-        showCompass={true} 
-        className="absolute inset-0 z-0" 
+      <CartographicBackground
+        opacity={0.8}
+        showCoordinates={true}
+        showCompass={true}
+        className="absolute inset-0 z-0"
       />
 
-      {/* Left side - Age verification form */}
-      <div className="flex-1 flex items-center justify-center p-8 relative z-10">
-        <div className="max-w-md w-full space-y-8">
+      {/* Background image - visible on larger screens */}
+      <div className="hidden md:block absolute inset-0 z-[1]">
+        <div className="absolute inset-0 bg-gradient-to-r from-jerry-green-900 via-jerry-green-900/80 to-transparent z-10"></div>
+        <Image
+          src="/images/hero/hero-spiced.webp"
+          alt=""
+          fill
+          className="object-cover object-right"
+          priority
+          quality={65}
+          sizes="100vw"
+          fetchPriority="high"
+        />
+      </div>
+
+      {/* Centered content - full screen */}
+      <div className="relative z-10 flex items-center justify-center min-h-screen p-6 sm:p-8">
+        <div className="max-w-md w-full space-y-6 sm:space-y-8">
           {/* Logo */}
-          <div className="text-center" style={{ minHeight: '168px' }}>
-            <div style={{ width: '150px', height: '150px', margin: '0 auto 2rem' }}>
+          <div className="text-center">
+            <div className="w-28 h-28 sm:w-36 sm:h-36 mx-auto mb-6 sm:mb-8">
               <Image
                 src="https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/images-logo-webp/public"
                 alt="Jerry Can Spirits®"
@@ -89,16 +104,18 @@ export default function AgeGate({ onVerified }: AgeGateProps) {
 
           {/* Main question */}
           <div className="text-center">
-            <h1 className="text-3xl font-serif font-bold text-gold-300 mb-8">
-              ARE YOU OF LEGAL<br />
-              DRINKING AGE?
+            <h1 className="text-2xl sm:text-3xl font-serif font-bold text-gold-300 mb-6 sm:mb-8">
+              WELCOME, EXPLORER
             </h1>
+            <p className="text-gold-400 text-base sm:text-lg mb-2">
+              Please confirm you are of legal drinking age in your region.
+            </p>
           </div>
 
           {/* Region selector */}
-          <div className="space-y-4">
-            <label htmlFor="region-selector" className="block text-gold-300 font-medium text-lg">
-              Select Your Region
+          <div className="space-y-3">
+            <label htmlFor="region-selector" className="block text-gold-300 font-medium text-base sm:text-lg">
+              Your Region
             </label>
             <select
               id="region-selector"
@@ -107,42 +124,36 @@ export default function AgeGate({ onVerified }: AgeGateProps) {
                 const region = regions.find(r => r.code === e.target.value);
                 if (region) setSelectedRegion(region);
               }}
-              className="w-full p-4 bg-jerry-green-800 border-2 border-gold-400 rounded-lg text-gold-300 font-medium text-lg focus:outline-none focus:border-gold-300 focus:ring-2 focus:ring-gold-300/20"
+              className="w-full p-3 sm:p-4 bg-jerry-green-800 border-2 border-gold-400 rounded-lg text-gold-300 font-medium text-base sm:text-lg focus:outline-none focus:border-gold-300 focus:ring-2 focus:ring-gold-300/20"
             >
               {regions.map((region) => (
                 <option key={region.code} value={region.code} className="bg-jerry-green-800">
-                  {region.name}
+                  {region.name} ({region.minAge}+)
                 </option>
               ))}
             </select>
-            <p className="text-gold-400 text-sm">
-              Legal drinking age: {selectedRegion.minAge}+ years
-            </p>
           </div>
 
           {/* Age verification buttons */}
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 gap-3 sm:gap-4">
             <button
               onClick={() => handleAgeVerification(true)}
-              className="bg-gold-500 hover:bg-gold-400 text-jerry-green-900 font-bold py-4 px-6 rounded-lg transition-all duration-200 transform hover:scale-105 hover:shadow-lg text-lg"
+              className="bg-gold-500 hover:bg-gold-400 text-jerry-green-900 font-bold py-3 sm:py-4 px-4 sm:px-6 rounded-lg transition-all duration-200 transform hover:scale-105 hover:shadow-lg text-base sm:text-lg"
             >
-              I Am {selectedRegion.minAge}+
+              Yes, Enter
             </button>
             <button
               onClick={() => handleAgeVerification(false)}
-              className="bg-metal-600 hover:bg-metal-500 text-white font-bold py-4 px-6 rounded-lg transition-all duration-200 transform hover:scale-105 hover:shadow-lg text-lg"
+              className="bg-metal-600 hover:bg-metal-500 text-white font-bold py-3 sm:py-4 px-4 sm:px-6 rounded-lg transition-all duration-200 transform hover:scale-105 hover:shadow-lg text-base sm:text-lg"
             >
-              Nope
+              No, Exit
             </button>
           </div>
 
           {/* Legal disclaimer */}
-          <div className="text-center space-y-4">
-            <p className="text-gold-400 text-sm leading-relaxed">
-              You must be of legal drinking age to enter this website.
-            </p>
-            <p className="text-gold-400 text-sm leading-relaxed">
-              This website uses cookies. By entering this site, I agree to the{' '}
+          <div className="text-center pt-2">
+            <p className="text-gold-400 text-xs sm:text-sm leading-relaxed">
+              By entering, you accept our{' '}
               <a href="/terms-of-service" className="underline hover:text-gold-300 transition-colors">
                 Terms of Service
               </a>{' '}
@@ -153,21 +164,6 @@ export default function AgeGate({ onVerified }: AgeGateProps) {
             </p>
           </div>
         </div>
-      </div>
-
-      {/* Right side - Product image */}
-      <div className="flex-1 relative overflow-hidden z-10" style={{ minHeight: '100vh' }}>
-        <div className="absolute inset-0 bg-gradient-to-l from-transparent via-jerry-green-900/20 to-jerry-green-900/60 z-10"></div>
-        <Image
-          src="/images/hero/hero-spiced.webp"
-          alt="Jerry Can Spirits® Bottle"
-          fill
-          className="object-cover object-center"
-          priority
-          quality={65}
-          sizes="(max-width: 768px) 100vw, 50vw"
-          fetchPriority="high"
-        />
       </div>
 
       {/* Branded Rejection Message Modal */}
