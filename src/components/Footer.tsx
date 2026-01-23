@@ -176,13 +176,14 @@ export default function Footer() {
                     >
                       {isClient ? (
                         <Image
-                          src="/images/Drinkaware_BDA_logo_Reversed_RGB.png"
+                          src="https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/5b2f3381-b097-44fc-0277-d0088f1c3d00/public"
                           alt="Be Drinkaware"
                           width={216}
                           height={86}
                           className="h-[4.5rem] w-auto object-contain"
                           sizes="216px"
                           quality={100}
+                          unoptimized
                         />
                       ) : (
                         <div className="w-44 h-[4.5rem] bg-parchment-200/20 rounded animate-pulse" />
