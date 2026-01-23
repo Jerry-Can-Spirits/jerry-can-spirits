@@ -265,6 +265,7 @@ export const guidesListQuery = `*[_type == "guide"] | order(publishedAt desc, _c
 // Full query for guide detail pages
 export const guideBySlugQuery = `*[_type == "guide" && slug.current == $slug][0] {
   _id,
+  _createdAt,
   title,
   slug,
   excerpt,
@@ -323,4 +324,26 @@ export const fieldManualCountsQuery = `{
   "cocktails": count(*[_type == "cocktail"]),
   "ingredients": count(*[_type == "ingredient"]),
   "equipment": count(*[_type == "equipment"])
+}`
+
+// Adjacent guides query for prev/next navigation
+export const adjacentGuidesQuery = `{
+  "prev": *[_type == "guide" && (
+    publishedAt < $currentDate ||
+    (publishedAt == $currentDate && _createdAt < $currentCreatedAt)
+  )] | order(publishedAt desc, _createdAt desc)[0] {
+    _id,
+    title,
+    slug,
+    category
+  },
+  "next": *[_type == "guide" && (
+    publishedAt > $currentDate ||
+    (publishedAt == $currentDate && _createdAt > $currentCreatedAt)
+  )] | order(publishedAt asc, _createdAt asc)[0] {
+    _id,
+    title,
+    slug,
+    category
+  }
 }`
