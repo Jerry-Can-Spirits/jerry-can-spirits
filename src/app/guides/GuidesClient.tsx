@@ -28,7 +28,8 @@ const categoryLabels: Record<string, string> = {
   'cocktail-techniques': 'Cocktail Techniques',
   'buying-guides': 'Buying Guides',
   'uk-craft-spirits': 'UK Craft Spirits',
-  'industry-insights': 'Industry Insights'
+  'industry-insights': 'Industry Insights',
+  'seasonal-occasions': 'Seasonal & Occasions'
 }
 
 const ITEMS_PER_PAGE = 12
