@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import { Inter, Playfair_Display, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
@@ -6,7 +7,8 @@ import Footer from "@/components/Footer";
 import PromoBanner from "@/components/PromoBanner";
 import CartographicBackground from "@/components/CartographicBackground";
 import ClientWrapper from "@/components/ClientWrapper";
-import ConsentBanner from "@/components/ConsentBanner";
+// ConsentBanner replaced by Cookiebot CMP
+// import ConsentBanner from "@/components/ConsentBanner";
 import ServiceWorkerRegistration from "@/components/ServiceWorkerRegistration";
 import InstallPrompt from "@/components/InstallPrompt";
 import { CartProvider } from "@/contexts/CartContext";
@@ -88,6 +90,15 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth">
       <head>
+        {/* Cookiebot Consent Management - must be first script */}
+        <Script
+          id="Cookiebot"
+          src="https://consent.cookiebot.com/uc.js"
+          data-cbid="ac4fd2fb-f5c7-435e-a8fb-2fe80936e682"
+          data-blockingmode="auto"
+          strategy="beforeInteractive"
+        />
+
         <link rel="manifest" href="/manifest.json" />
         <meta name="theme-color" content="#f59e0b" />
         <meta name="mobile-web-app-capable" content="yes" />
@@ -170,8 +181,7 @@ export default function RootLayout({
             <Footer />
           </div>
           
-          {/* Consent Banner */}
-          <ConsentBanner />
+          {/* Consent now handled by Cookiebot CMP */}
         </ClientWrapper>
 
         {/* Cart Drawer */}
