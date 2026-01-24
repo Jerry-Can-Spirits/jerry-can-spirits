@@ -462,7 +462,7 @@ Explore Our Spirit Collection
 
 **CTA URL:**
 ```
-/shop
+TWe
 ```
 
 ---

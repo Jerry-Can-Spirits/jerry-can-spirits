@@ -118,6 +118,13 @@ export default function RootLayout({
           }}
         />
         <script async src="https://static.klaviyo.com/onsite/js/UavTvg/klaviyo.js"></script>
+
+        {/* Google AdSense */}
+        <script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5758288828569326"
+          crossOrigin="anonymous"
+        />
       </head>
       <body
         className={`${inter.variable} ${playfair.variable} ${jetbrains.variable} antialiased min-h-screen bg-jerry-green-900 text-foreground`}

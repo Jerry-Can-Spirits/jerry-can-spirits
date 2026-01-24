@@ -5,40 +5,55 @@ export default function robots(): MetadataRoute.Robots {
 
   return {
     rules: [
+      // Default rules for all crawlers
       {
         userAgent: '*',
-        allow: [
-          '/',
-          '/_next/static/',  // Allow static assets (CSS, JS bundles) - CRITICAL for SEO
-          '/_next/image/',   // Allow Next.js optimized images
-        ],
-        disallow: [
-          '/studio/',        // Block Sanity CMS admin
-          '/api/',           // Block API routes
-          '/_next/data/',    // Block Next.js data fetching routes
-          '/auth',           // Block old auth pages
-          '/auth.html',      // Block old auth pages
-        ],
-      },
-      // Special rules for AI crawlers (be nice to AI indexing for discoverability)
-      {
-        userAgent: ['GPTBot', 'ChatGPT-User', 'CCBot', 'anthropic-ai', 'Claude-Web', 'PerplexityBot', 'Amazonbot'],
-        allow: [
-          '/',
-          '/about/',
-          '/ethos/',
-          '/field-manual/',
-          '/guides/',
-          '/shop/',
-          '/faq/',
-          '/_next/static/',  // Allow static assets
-          '/_next/image/',   // Allow images
-        ],
+        allow: '/',
         disallow: [
           '/studio/',
           '/api/',
-          '/_next/data/',
         ],
+      },
+      // Explicit rules for Google
+      {
+        userAgent: 'Googlebot',
+        allow: '/',
+        disallow: [
+          '/studio/',
+          '/api/',
+        ],
+      },
+      // Explicit rules for Bing
+      {
+        userAgent: 'Bingbot',
+        allow: '/',
+        disallow: [
+          '/studio/',
+          '/api/',
+        ],
+      },
+      // Explicit rules for Bing's other crawlers
+      {
+        userAgent: ['msnbot', 'BingPreview'],
+        allow: '/',
+        disallow: [
+          '/studio/',
+          '/api/',
+        ],
+      },
+      // AI crawlers
+      {
+        userAgent: ['GPTBot', 'ChatGPT-User', 'CCBot', 'anthropic-ai', 'Claude-Web', 'PerplexityBot', 'Amazonbot'],
+        allow: '/',
+        disallow: [
+          '/studio/',
+          '/api/',
+        ],
+      },
+      // Google AdSense crawler
+      {
+        userAgent: 'Mediapartners-Google',
+        allow: '/',
       },
     ],
     sitemap: `${baseUrl}/sitemap.xml`,
