@@ -76,7 +76,7 @@ export default function HeroSection() {
             {/* Launch Countdown */}
             <div className="mb-8 p-6 bg-jerry-green-800/40 backdrop-blur-sm rounded-xl border border-gold-500/20">
               <div className="text-gold-300 text-sm font-semibold uppercase tracking-widest mb-4 text-center">
-                Ships April 2026 — Pre-order Now Open
+                April 2026 — Pre-order Now
               </div>
               <div className="grid grid-cols-4 gap-2 sm:gap-4 text-center">
                 <div className="bg-jerry-green-700/60 rounded-lg p-2 sm:p-3 border border-gold-500/20">
