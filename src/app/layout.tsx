@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import { Inter, Playfair_Display, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
@@ -90,12 +91,12 @@ export default function RootLayout({
     <html lang="en" className="scroll-smooth">
       <head>
         {/* Cookiebot Consent Management - must be first script */}
-        <script
+        <Script
           id="Cookiebot"
           src="https://consent.cookiebot.com/uc.js"
           data-cbid="ac4fd2fb-f5c7-435e-a8fb-2fe80936e682"
           data-blockingmode="auto"
-          type="text/javascript"
+          strategy="beforeInteractive"
         />
 
         <link rel="manifest" href="/manifest.json" />
