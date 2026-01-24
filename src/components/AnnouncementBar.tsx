@@ -53,16 +53,14 @@ export default function AnnouncementBar() {
               href="/shop/product/jerry-can-spirits-expedition-spiced-rum"
               className="inline-flex items-center gap-1 sm:gap-2 hover:underline font-medium"
             >
-              <span className="hidden sm:inline">🥃</span>
               <span className="text-xs sm:text-sm">
                 <span className="font-semibold">Pre-order Expedition Spiced Rum</span>
                 <span className="hidden sm:inline"> — Limited to 700 bottles</span>
                 <span className="mx-1 sm:mx-2">|</span>
-                <span className="hidden sm:inline">Ships April 2026</span>
-                <span className="sm:hidden">April 2026</span>
+                <span>April 2026</span>
               </span>
-              <span className="hidden xs:inline-flex items-center gap-1 font-semibold underline underline-offset-2 text-xs sm:text-sm whitespace-nowrap">
-                Pre-order
+              <span className="inline-flex items-center gap-1 font-semibold underline underline-offset-2 text-xs sm:text-sm whitespace-nowrap">
+                Pre-order Now
                 <svg className="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                 </svg>
