@@ -8,9 +8,17 @@ interface ClientWrapperProps {
   children: React.ReactNode;
 }
 
+// Check if the request is from a known bot (set by middleware)
+function checkIsBot(): boolean {
+  if (typeof document === 'undefined') return false;
+  // Check for bot cookie set by middleware
+  return document.cookie.includes('isBot=true');
+}
+
 export default function ClientWrapper({ children }: ClientWrapperProps) {
   const [isAgeVerified, setIsAgeVerified] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [isBot, setIsBot] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
 
@@ -25,11 +33,15 @@ export default function ClientWrapper({ children }: ClientWrapperProps) {
   // Check localStorage on mount and handle navigation protection
   useEffect(() => {
     const verified = localStorage.getItem('ageVerified') === 'true';
+    const botDetected = checkIsBot();
+
     setIsAgeVerified(verified);
+    setIsBot(botDetected);
     setIsLoading(false);
-    
+
     // If user is not verified and trying to access a non-legal page, redirect to home
-    if (!verified && !isLegalPage && pathname !== '/') {
+    // But allow bots through for SEO purposes
+    if (!verified && !botDetected && !isLegalPage && pathname !== '/') {
       router.push('/');
     }
   }, [pathname, isLegalPage, router]);
@@ -46,12 +58,15 @@ export default function ClientWrapper({ children }: ClientWrapperProps) {
     );
   }
 
+  // Bypass age gate for: verified users, legal pages, or known bots
+  const shouldShowContent = isAgeVerified || isLegalPage || isBot;
+
   return (
     <>
-      {!isAgeVerified && !isLegalPage && (
+      {!shouldShowContent && (
         <AgeGate onVerified={handleAgeVerification} />
       )}
-      {(isAgeVerified || isLegalPage) && children}
+      {shouldShowContent && children}
     </>
   );
 }
