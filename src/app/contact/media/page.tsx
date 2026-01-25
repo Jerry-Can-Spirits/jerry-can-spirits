@@ -8,7 +8,7 @@ export default function MediaContact() {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    organization: '',
+    organisation: '',
     subject: '',
     message: ''
   })
@@ -30,7 +30,7 @@ export default function MediaContact() {
           name: formData.name,
           email: formData.email,
           subject: formData.subject,
-          message: `Organization: ${formData.organization}\n\n${formData.message}`,
+          message: `Organisation: ${formData.organisation}\n\n${formData.message}`,
           formType: 'media'
         }),
       })
@@ -40,7 +40,7 @@ export default function MediaContact() {
         setFormData({
           name: '',
           email: '',
-          organization: '',
+          organisation: '',
           subject: '',
           message: ''
         })
@@ -106,15 +106,15 @@ export default function MediaContact() {
   ]
 
   // Boilerplate text options
-  const boilerplateShort = `Jerry Can Spirits® is a British veteran-owned spirits company creating premium craft rum engineered for adventure. Founded by Royal Corps of Signals veterans, we bring military precision to exceptional small-batch spirits.`
+  const boilerplateShort = `Jerry Can Spirits® is a British veteran-owned spirits company specialising in premium craft rum built for adventure. Founded by Royal Corps of Signals veterans, we bring a bit of military precision to what we do – and our spirits are all the better for it.`
 
-  const boilerplateMedium = `Jerry Can Spirits® is a British veteran-owned spirits company creating premium craft rum engineered for adventure. Founded by Royal Corps of Signals veterans, we bring military precision to exceptional small-batch spirits. Like the iconic jerry can – designed in 1937 and still NATO standard today – our spirits are built for reliability and function over form. We craft rum with purpose and integrity for modern explorers who value authentic character and uncompromising quality.`
+  const boilerplateMedium = `Jerry Can Spirits® is a British veteran-owned spirits company specialising in premium craft rum built for adventure. Founded by lads from the Royal Corps of Signals who spent years in some of the harshest environments imaginable, we bring military precision to everything we do. Our name comes from the classic jerry can – a rather brilliant bit of kit first designed in 1937 and still NATO standard today. Like the jerry can, our spirits are built for the job in hand, not just looking fancy. We focus on the important stuff: getting it right every time.`
 
-  const boilerplateFull = `Jerry Can Spirits® is a British veteran-owned spirits company creating premium craft rum engineered for adventure. Founded by Royal Corps of Signals veterans who served in some of the world's most challenging environments, we bring military precision and expedition-tested values to exceptional small-batch spirits.
+  const boilerplateFull = `Jerry Can Spirits® is a British veteran-owned spirits company specialising in what we think is the best darn premium craft rum around – spirits that really can keep up with the demands of adventure. Founded by lads from the Royal Corps of Signals who spent years in some of the harshest environments imaginable, we bring a bit of that military precision to what we do – and our spirits are all the better for it.
 
-Our name pays homage to the iconic jerry can – a piece of engineering brilliance designed in 1937 that remains NATO standard today. Like the jerry can, our spirits are built for absolute reliability: function over form, purpose over pretense. We don't chase trends or cut corners. We engineer rum with the same dedication we brought to everything else.
+Our name comes from the classic jerry can – a rather brilliant bit of kit first designed in 1937 and still NATO standard today – and that's exactly what we aim to build our spirits to be: built for the job in hand and not just looking fancy. When it comes to making rum, we don't mess around. We focus on the important stuff – like getting it right every time, rather than chasing what's currently in vogue.
 
-Based in the United Kingdom, Jerry Can Spirits® is committed to crafting authentic premium spirits for modern explorers. Whether you're crossing continents or conquering Tuesday, our rum delivers bold flavour, consistent quality, and the kind of character you can depend on. This is rum, engineered for adventure.`
+Based in the UK, Jerry Can Spirits® is on a mission to make premium spirits for everyone, in whatever context. Whether you're trekking across continents or just trying to get through Monday, our rum packs a punch, delivers solid quality, and has the kind of character you can actually rely on. So whether you're a seasoned explorer or not, you can depend on our rum to deliver.`
 
   return (
     <main className="min-h-screen">
@@ -224,9 +224,9 @@ Based in the United Kingdom, Jerry Can Spirits® is committed to crafting authen
                 <svg className="w-5 h-5 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
                 </svg>
-                Color Palette
+                Colour Palette
               </h3>
-              <p className="text-parchment-300 text-sm mb-6">Click any color to copy its hex code to clipboard.</p>
+              <p className="text-parchment-300 text-sm mb-6">Click any colour to copy its hex code to clipboard.</p>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                 {/* Jerry Green */}
@@ -366,13 +366,13 @@ Based in the United Kingdom, Jerry Can Spirits® is committed to crafting authen
                     <p className="text-gold-300 font-medium mb-4">Founder & Director</p>
                     <div className="space-y-3 text-parchment-200 text-sm leading-relaxed">
                       <p>
-                        Dan Freeman is the founder of Jerry Can Spirits®, a premium British rum brand built on military values of reliability, precision, and purpose. A veteran of the Royal Corps of Signals, Dan served in challenging environments worldwide before transitioning to civilian life.
+                        Dan Freeman is the founder of Jerry Can Spirits®, a premium British rum brand with a strong military heritage. Dan is a veteran of the Royal Corps of Signals, and after his time in service he moved on to civilian life with an idea brewing.
                       </p>
                       <p>
-                        Drawing on his military experience, Dan founded Jerry Can Spirits® with a simple mission: to create rum engineered for adventure – spirits that deliver consistent quality and bold character without compromise. The company name honours the iconic jerry can, a piece of engineering brilliance that exemplifies the &quot;function over form&quot; philosophy at the heart of the brand.
+                        Drawing on those experiences, Dan set up Jerry Can Spirits® with a simple goal: make rum for the adventurous sort – no-nonsense spirits that deliver quality and taste without making any concessions. The company name is a nod to the famous jerry can – an absolute piece of kit design that shows just the kind of practical, don&apos;t-bother-with-the-frills ethos that Jerry Can Spirits® is all about.
                       </p>
                       <p>
-                        Based in the United Kingdom, Dan leads Jerry Can Spirits® with the same dedication and attention to detail he brought to military service, proving that small teams with big dreams and uncompromising standards can build something exceptional.
+                        Based here in the UK, Dan is at the helm using the same level of dedication and focus he had when he was serving – real proof that with a small, tight team who are really passionate about what they do and with a real commitment to quality, anything&apos;s possible.
                       </p>
                     </div>
                   </div>
@@ -411,7 +411,7 @@ Based in the United Kingdom, Jerry Can Spirits® is committed to crafting authen
                 <div className="flex-grow text-center md:text-left">
                   <h3 className="text-xl font-serif font-bold text-parchment-50 mb-2">Brand Guidelines</h3>
                   <p className="text-parchment-300 text-sm mb-4">
-                    Complete brand guidelines including logo usage, trademark requirements, color specifications, and typography standards.
+                    Complete brand guidelines including logo usage, trademark requirements, colour specifications, and typography standards.
                   </p>
                   <a
                     href="mailto:press@jerrycanspirits.co.uk?subject=Brand Guidelines PDF Request"
@@ -522,14 +522,14 @@ Based in the United Kingdom, Jerry Can Spirits® is committed to crafting authen
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <label htmlFor="organization" className="block text-sm font-medium text-parchment-200 mb-2">
-                      Organization
+                    <label htmlFor="organisation" className="block text-sm font-medium text-parchment-200 mb-2">
+                      Organisation
                     </label>
                     <input
                       type="text"
-                      id="organization"
-                      name="organization"
-                      value={formData.organization}
+                      id="organisation"
+                      name="organisation"
+                      value={formData.organisation}
                       onChange={handleChange}
                       className="w-full px-4 py-3 bg-jerry-green-700/50 border border-gold-500/30 rounded-lg text-parchment-50 placeholder-parchment-400 focus:border-gold-400 focus:ring-2 focus:ring-gold-400/20 focus:outline-none transition-colors duration-200"
                       placeholder="Publication, blog, or company"
