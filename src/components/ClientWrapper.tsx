@@ -8,11 +8,27 @@ interface ClientWrapperProps {
   children: React.ReactNode;
 }
 
-// Check if the request is from a known bot (set by middleware)
+// Known bot user agents - check client-side as fallback
+const BOT_PATTERNS = [
+  'googlebot', 'bingbot', 'slurp', 'duckduckbot', 'baiduspider', 'yandexbot',
+  'facebot', 'ia_archiver', 'semrushbot', 'ahrefsbot', 'mj12bot', 'dotbot',
+  'rogerbot', 'screaming frog', 'sitebulb', 'deepcrawl', 'oncrawl', 'seobilitybot',
+  'serpstatbot', 'dataforseo', 'surfer', 'twitterbot', 'linkedinbot', 'pinterestbot',
+  'whatsapp', 'telegrambot', 'w3c_validator', 'lighthouse', 'pagespeed', 'gtmetrix',
+  'mediapartners-google', 'adsbot-google', 'apis-google', 'google-inspectiontool',
+  'chrome-lighthouse', 'headlesschrome', 'phantomjs', 'prerender', 'crawl', 'spider', 'bot'
+];
+
+// Check if the request is from a known bot
 function checkIsBot(): boolean {
-  if (typeof document === 'undefined') return false;
+  if (typeof window === 'undefined') return false;
+
   // Check for bot cookie set by middleware
-  return document.cookie.includes('isBot=true');
+  if (document.cookie.includes('isBot=true')) return true;
+
+  // Fallback: check user agent client-side
+  const ua = navigator.userAgent.toLowerCase();
+  return BOT_PATTERNS.some(pattern => ua.includes(pattern));
 }
 
 export default function ClientWrapper({ children }: ClientWrapperProps) {
@@ -35,13 +51,17 @@ export default function ClientWrapper({ children }: ClientWrapperProps) {
     const verified = localStorage.getItem('ageVerified') === 'true';
     const botDetected = checkIsBot();
 
+    // Allow bypass via URL parameter for SEO audits (e.g., ?seo_audit=true)
+    const urlParams = new URLSearchParams(window.location.search);
+    const auditBypass = urlParams.get('seo_audit') === 'true';
+
     setIsAgeVerified(verified);
-    setIsBot(botDetected);
+    setIsBot(botDetected || auditBypass);
     setIsLoading(false);
 
     // If user is not verified and trying to access a non-legal page, redirect to home
     // But allow bots through for SEO purposes
-    if (!verified && !botDetected && !isLegalPage && pathname !== '/') {
+    if (!verified && !botDetected && !auditBypass && !isLegalPage && pathname !== '/') {
       router.push('/');
     }
   }, [pathname, isLegalPage, router]);
