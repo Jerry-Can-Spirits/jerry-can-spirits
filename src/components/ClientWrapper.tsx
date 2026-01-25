@@ -79,14 +79,16 @@ export default function ClientWrapper({ children }: ClientWrapperProps) {
   }
 
   // Bypass age gate for: verified users, legal pages, or known bots
-  const shouldShowContent = isAgeVerified || isLegalPage || isBot;
+  const shouldBypassGate = isAgeVerified || isLegalPage || isBot;
 
   return (
     <>
-      {!shouldShowContent && (
+      {/* Age gate overlays on top - content always renders underneath for SEO */}
+      {!shouldBypassGate && (
         <AgeGate onVerified={handleAgeVerification} />
       )}
-      {shouldShowContent && children}
+      {/* Always render children - crawlers see the content in DOM */}
+      {children}
     </>
   );
 }
