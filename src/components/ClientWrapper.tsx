@@ -51,13 +51,17 @@ export default function ClientWrapper({ children }: ClientWrapperProps) {
     const verified = localStorage.getItem('ageVerified') === 'true';
     const botDetected = checkIsBot();
 
+    // Allow bypass via URL parameter for SEO audits (e.g., ?seo_audit=true)
+    const urlParams = new URLSearchParams(window.location.search);
+    const auditBypass = urlParams.get('seo_audit') === 'true';
+
     setIsAgeVerified(verified);
-    setIsBot(botDetected);
+    setIsBot(botDetected || auditBypass);
     setIsLoading(false);
 
     // If user is not verified and trying to access a non-legal page, redirect to home
     // But allow bots through for SEO purposes
-    if (!verified && !botDetected && !isLegalPage && pathname !== '/') {
+    if (!verified && !botDetected && !auditBypass && !isLegalPage && pathname !== '/') {
       router.push('/');
     }
   }, [pathname, isLegalPage, router]);
