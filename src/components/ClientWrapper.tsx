@@ -56,6 +56,13 @@ export default function ClientWrapper({ children }: ClientWrapperProps) {
     const urlParams = new URLSearchParams(window.location.search);
     const auditBypass = urlParams.get('seo_audit') === 'true';
 
+    // Preserve affiliate tracking parameters (dt_id for Shopify Collabs)
+    const dtId = urlParams.get('dt_id');
+    if (dtId) {
+      // Store affiliate tracking ID for the session
+      sessionStorage.setItem('affiliate_dt_id', dtId);
+    }
+
     setIsAgeVerified(verified);
     setIsBot(botDetected || auditBypass);
     setIsLoading(false);
@@ -63,7 +70,9 @@ export default function ClientWrapper({ children }: ClientWrapperProps) {
     // If user is not verified and trying to access a non-legal page, redirect to home
     // But allow bots through for SEO purposes
     if (!verified && !botDetected && !auditBypass && !isLegalPage && pathname !== '/') {
-      router.push('/');
+      // Preserve query parameters when redirecting (important for affiliate tracking)
+      const queryString = window.location.search;
+      router.push('/' + queryString);
     }
   }, [pathname, isLegalPage, router]);
 
