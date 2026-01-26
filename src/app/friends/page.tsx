@@ -5,13 +5,13 @@ import StructuredData from '@/components/StructuredData'
 
 export const metadata: Metadata = {
   title: "Friends & Partners",
-  description: "Meet the distilleries, suppliers, and partners who help make Jerry Can Spirits possible. We're building a community of excellence to help rum become the UK's number one spirit.",
+  description: "Meet the distilleries, suppliers, and partners who help make Jerry Can Spirits possible. Quality spirits need quality partnerships.",
   alternates: {
     canonical: "https://jerrycanspirits.co.uk/friends/",
   },
   openGraph: {
     title: "Friends & Partners | Jerry Can Spirits®",
-    description: "Our trusted partners, from distilleries to suppliers, who help craft exceptional spirits",
+    description: "Our trusted partners, from distilleries to suppliers, who help us make rum we're proud of",
   },
 }
 
@@ -81,10 +81,9 @@ export default function FriendsPage() {
               Friends of Jerry Can Spirits
             </h1>
             <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
-              We believe in the power of community. These are the exceptional partners -
-              from distilleries and craft producers to suppliers and collaborators - who
-              help make Jerry Can Spirits possible. Together, we're on a mission to make
-              rum the UK's number one spirit.
+              Good rum doesn&apos;t happen in isolation. These are the partners – distilleries,
+              suppliers, and collaborators – who help make Jerry Can Spirits what it is.
+              We&apos;re grateful to work with people who share our commitment to quality.
             </p>
           </div>
 
@@ -92,19 +91,16 @@ export default function FriendsPage() {
           <div className="mb-20 max-w-4xl mx-auto">
             <div className="bg-jerry-green-800/20 border border-gold-500/30 rounded-lg p-8">
               <h2 className="text-2xl font-playfair font-bold text-gold-400 mb-4">
-                Our Mission
+                Why Partnerships Matter
               </h2>
               <p className="text-gray-300 leading-relaxed mb-4">
-                Quality spirits are only possible through quality partnerships. From the
-                distilleries who craft our rum to the suppliers who provide our packaging,
-                every partner plays a vital role. By supporting each other through genuine
-                collaboration, we're not just building our own brands – we're elevating
-                the entire craft spirits industry.
+                We&apos;re a small team, so we rely on good partners to make this work. From
+                Spirit of Wales who help with our distilling to Harlequin who sort our
+                packaging – every partner contributes something we couldn&apos;t do alone.
               </p>
               <p className="text-gray-300 leading-relaxed">
-                Every partnership strengthens our collective voice and helps quality products
-                gain the recognition they deserve. Whether you're a distillery, supplier, or
-                collaborator who shares our values, <Link href="/contact" className="text-gold-500 hover:text-gold-400 underline">get in touch</Link>.
+                If you&apos;re a supplier, distillery, or business that might want to work with
+                us, we&apos;d love to hear from you. <Link href="/contact" className="text-gold-500 hover:text-gold-400 underline">Get in touch</Link>.
               </p>
             </div>
           </div>
