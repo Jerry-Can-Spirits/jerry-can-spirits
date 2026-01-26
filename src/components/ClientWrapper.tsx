@@ -13,7 +13,7 @@ const BOT_PATTERNS = [
   'googlebot', 'bingbot', 'slurp', 'duckduckbot', 'baiduspider', 'yandexbot',
   'facebot', 'ia_archiver', 'semrushbot', 'ahrefsbot', 'mj12bot', 'dotbot',
   'rogerbot', 'screaming frog', 'sitebulb', 'deepcrawl', 'oncrawl', 'seobilitybot',
-  'serpstatbot', 'dataforseo', 'surfer', 'twitterbot', 'linkedinbot', 'pinterestbot',
+  'serpstatbot', 'dataforseo', 'surfer bot', 'surfer', 'twitterbot', 'linkedinbot', 'pinterestbot',
   'whatsapp', 'telegrambot', 'w3c_validator', 'lighthouse', 'pagespeed', 'gtmetrix',
   'mediapartners-google', 'adsbot-google', 'apis-google', 'google-inspectiontool',
   'chrome-lighthouse', 'headlesschrome', 'phantomjs', 'prerender', 'crawl', 'spider', 'bot'

@@ -27,7 +27,8 @@ const BOT_USER_AGENTS = [
   'seobilitybot',
   'serpstatbot',
   'dataforseo',
-  'surfer',          // SurferSEO
+  'surfer bot',      // SurferSEO Site Audit (exact User-Agent)
+  'surfer',          // SurferSEO fallback
 
   // Social media
   'twitterbot',
