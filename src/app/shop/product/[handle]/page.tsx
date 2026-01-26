@@ -10,6 +10,9 @@ import ProductSpecifications from '@/components/ProductSpecifications'
 import TastingNotes from '@/components/TastingNotes'
 import ProductProcess from '@/components/ProductProcess'
 import DutyPaidStatement from '@/components/DutyPaidStatement'
+import ProductFAQ from '@/components/ProductFAQ'
+import WhatsIncluded from '@/components/WhatsIncluded'
+import DietaryInfo from '@/components/DietaryInfo'
 import { client } from '@/sanity/lib/client'
 import { productByHandleQuery } from '@/sanity/queries'
 import type { Metadata } from 'next'
@@ -38,6 +41,22 @@ interface SanityProduct {
   featured?: boolean
   videoUrl?: string
   relatedCocktails?: Array<{ _id: string; name: string; slug: { current: string } }>
+  whatsIncluded?: Array<{
+    item: string
+    description?: string
+    quantity?: number
+  }>
+  dietary?: {
+    vegan?: boolean
+    vegetarian?: boolean
+    glutenFree?: boolean
+    allergens?: string
+    additionalInfo?: string
+  }
+  faqs?: Array<{
+    question: string
+    answer: string
+  }>
 }
 
 // Cloudflare Pages edge runtime for dynamic routes
@@ -437,37 +456,31 @@ export default async function ProductPage({
 
             {/* Product Features/Highlights */}
             <div className="pt-6 border-t border-gold-500/20">
-              <h3 className="text-lg font-semibold text-gold-300 mb-4">Why Choose Jerry Can Spirits</h3>
+              <h3 className="text-lg font-semibold text-gold-300 mb-4">What You're Getting</h3>
               <ul className="space-y-2 text-parchment-300">
                 <li className="flex items-start gap-3">
                   <svg className="w-5 h-5 text-gold-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                   </svg>
-                  <span>Veteran-owned with authentic military heritage</span>
+                  <span>Made by veterans who actually drink what they make</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <svg className="w-5 h-5 text-gold-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                   </svg>
-                  <span>Crafted in Britain</span>
+                  <span>Distilled at Spirit of Wales - proper craft, not factory production</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <svg className="w-5 h-5 text-gold-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                   </svg>
-                  <span>Small-batch production for exceptional quality</span>
+                  <span>Only 700 bottles per batch - once they're gone, they're gone</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <svg className="w-5 h-5 text-gold-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                   </svg>
-                  <span>Premium ingredients engineered for reliability</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <svg className="w-5 h-5 text-gold-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                  </svg>
-                  <span>Armed Forces Covenant signatory</span>
+                  <span>Part of every sale goes to forces charities - that's a promise</span>
                 </li>
               </ul>
             </div>
@@ -519,6 +532,21 @@ export default async function ProductPage({
                 product.metafields.filter(m => m !== null).find((m: ShopifyMetafield) => m.namespace === 'legal' && m.key === 'duty_statement')?.value || ''
               }
             />
+          )}
+
+          {/* What's Included (for gift packs/bundles) */}
+          {sanityProduct?.whatsIncluded && sanityProduct.whatsIncluded.length > 0 && (
+            <WhatsIncluded items={sanityProduct.whatsIncluded} />
+          )}
+
+          {/* Dietary Information */}
+          {sanityProduct?.dietary && (
+            <DietaryInfo dietary={sanityProduct.dietary} />
+          )}
+
+          {/* Product FAQs */}
+          {sanityProduct?.faqs && sanityProduct.faqs.length > 0 && (
+            <ProductFAQ faqs={sanityProduct.faqs} productName={product.title} />
           )}
         </section>
       )}

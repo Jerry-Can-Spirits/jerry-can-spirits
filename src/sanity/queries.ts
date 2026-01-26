@@ -243,7 +243,23 @@ export const productByHandleQuery = `*[_type == "product" && (slug.current == $s
   "image": image.asset->url,
   featured,
   videoUrl,
-  "relatedCocktails": relatedCocktails[]->{ _id, name, slug }
+  "relatedCocktails": relatedCocktails[]->{ _id, name, slug },
+  whatsIncluded[] {
+    item,
+    description,
+    quantity
+  },
+  dietary {
+    vegan,
+    vegetarian,
+    glutenFree,
+    allergens,
+    additionalInfo
+  },
+  faqs[] {
+    question,
+    answer
+  }
 }`
 
 // Sitemap query - only fetches slug for URL generation
