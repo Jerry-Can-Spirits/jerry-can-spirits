@@ -5,13 +5,13 @@ import CartographicBackground from '@/components/CartographicBackground'
 
 export const metadata: Metadata = {
   title: 'Meet the Team',
-  description: 'Meet the veteran founders behind Jerry Can Spirits. Former Royal Signals soldiers bringing military precision and passion to premium craft spirits.',
+  description: 'Meet Dan and Rhys, the Royal Signals veterans behind Jerry Can Spirits. Two mates who decided to stop talking about making rum and actually have a go.',
   alternates: {
     canonical: 'https://jerrycanspirits.co.uk/about/team/',
   },
   openGraph: {
     title: 'Meet the Team | Jerry Can Spirits®',
-    description: 'Meet the veteran founders behind Jerry Can Spirits. Former Royal Signals soldiers bringing military precision to craft spirits.',
+    description: 'Meet Dan and Rhys, the Royal Signals veterans behind Jerry Can Spirits. Two mates who decided to stop talking about making rum and actually have a go.',
     url: 'https://jerrycanspirits.co.uk/about/team',
     siteName: 'Jerry Can Spirits®',
     locale: 'en_GB',
@@ -66,8 +66,8 @@ export default function TeamPage() {
             Meet the Team
           </h1>
           <p className="text-xl text-parchment-300 max-w-3xl mx-auto leading-relaxed">
-            From military service to craft spirits. The veteran founders bringing precision,
-            passion, and adventure to every bottle of Jerry Can Spirits.
+            We both served in the Royal Signals before deciding to have a crack at making rum.
+            Read more about <Link href="/about/story" className="text-gold-300 hover:text-gold-400 underline">how we got here</Link>.
           </p>
         </div>
 
@@ -159,12 +159,11 @@ export default function TeamPage() {
               </div>
             </div>
             <div>
-              <h3 className="text-2xl font-serif font-bold text-gold-300 mb-3">Our Mission</h3>
+              <h3 className="text-2xl font-serif font-bold text-gold-300 mb-3">What We&apos;re About</h3>
               <p className="text-parchment-200 leading-relaxed">
-                We believe we're in a time when passion, craft, and individuality are taking over ahead of massive
-                faceless corporations. <Link href="/" className="text-gold-300 hover:text-gold-400 underline decoration-gold-500/40 hover:decoration-gold-400 transition-colors">Jerry Can Spirits</Link> is built on the foundation of supporting and elevating those
-                around us, working tirelessly to see small-batch and craft spirits flourish. Every bottle is a testament
-                to precision, adventure, and the uncompromising standards learned through military service.
+                We reckon there&apos;s room for smaller brands that actually care about what they make. We&apos;re not trying
+                to compete with the big corporations – we&apos;re just trying to make rum we&apos;re proud of and build something
+                real along the way. Check out our <Link href="/shop/drinks" className="text-gold-300 hover:text-gold-400 underline decoration-gold-500/40 hover:decoration-gold-400 transition-colors">Expedition Spiced Rum</Link> to see what we&apos;ve been working on.
               </p>
             </div>
           </div>

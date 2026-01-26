@@ -5,13 +5,13 @@ import CartographicBackground from '@/components/CartographicBackground'
 
 export const metadata: Metadata = {
   title: 'Rhys Williams - Co-Founder & Director',
-  description: 'Meet Rhys Williams, co-founder of Jerry Can Spirits. Royal Signals veteran bringing military precision to premium British rum.',
+  description: 'Meet Rhys Williams, co-founder of Jerry Can Spirits. Royal Signals veteran who decided to help make rum with his mate Dan.',
   alternates: {
     canonical: 'https://jerrycanspirits.co.uk/about/team/rhys-williams/',
   },
   openGraph: {
     title: 'Rhys Williams - Co-Founder & Director | Jerry Can Spirits®',
-    description: 'Royal Signals veteran bringing military precision to premium British rum.',
+    description: 'Royal Signals veteran who decided to help make rum with his mate Dan.',
     url: 'https://jerrycanspirits.co.uk/about/team/rhys-williams',
     siteName: 'Jerry Can Spirits®',
     locale: 'en_GB',
@@ -116,7 +116,7 @@ export default function RhysWilliamsPage() {
                   Military Service
                 </h2>
                 <p className="text-parchment-200 leading-relaxed">
-                  Rhys served in the Royal Corps of Signals alongside Dan, where they developed the shared vision that would eventually become Jerry Can Spirits. His military background brings invaluable experience to the team.
+                  Rhys served in the Royal Signals alongside Dan. They&apos;ve known each other for years and the idea of making rum together was one of those things that kept coming up whenever they got together.
                 </p>
                 <p className="text-parchment-300 italic mt-4 text-sm">
                   Full biography coming soon.
@@ -132,7 +132,7 @@ export default function RhysWilliamsPage() {
                   The Journey to Jerry Can Spirits
                 </h2>
                 <p className="text-parchment-200 leading-relaxed">
-                  As co-founder, Rhys plays a vital role in bringing Jerry Can Spirits to life. The idea of creating premium rum emerged from countless conversations during their time serving together, and Rhys brings his unique skills and perspective to every aspect of the business.
+                  When Dan finally decided to stop just talking about making rum and actually do it, Rhys was an obvious choice to bring on board. They&apos;d been chatting about it for years – it made sense to do it together.
                 </p>
                 <p className="text-parchment-300 italic mt-4 text-sm">
                   More details coming soon.
@@ -149,7 +149,7 @@ export default function RhysWilliamsPage() {
                   Role at Jerry Can Spirits
                 </h2>
                 <p className="text-parchment-200 leading-relaxed">
-                  As Co-Founder and Director, Rhys works alongside Dan to ensure Jerry Can Spirits delivers on its promise of premium quality and military precision in every bottle.
+                  As Co-Founder and Director, Rhys works alongside Dan on the business side of things. More details on his specific role coming soon.
                 </p>
                 <p className="text-parchment-300 italic mt-4 text-sm">
                   Full role details coming soon.
@@ -169,7 +169,7 @@ export default function RhysWilliamsPage() {
                       Full Biography Coming Soon
                     </p>
                     <p className="text-parchment-300">
-                      We're currently putting together Rhys's complete story. Check back soon to learn more about his journey from the Royal Signals to co-founding Jerry Can Spirits.
+                      We&apos;re still putting together Rhys&apos;s full bio. Check back soon, or read more about <Link href="/about/story" className="text-gold-300 hover:text-gold-400 underline">how we got started</Link>.
                     </p>
                   </div>
                 </div>
