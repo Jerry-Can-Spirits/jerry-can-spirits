@@ -81,7 +81,7 @@ export default function RhysWilliamsPage() {
                   </div>
                   <div>
                     <p className="text-gold-400 font-semibold mb-1">Favourite Spirit</p>
-                    <p className="text-parchment-200">Details coming soon</p>
+                    <p className="text-parchment-200">Spiced Rum</p>
                   </div>
                 </div>
               </div>
