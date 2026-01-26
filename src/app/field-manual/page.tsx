@@ -10,14 +10,14 @@ function roundDownToTen(n: number): number {
 }
 
 export const metadata: Metadata = {
-  title: "Field Manual - Cocktails, Equipment & Ingredients",
-  description: "Your essential guide to rum cocktails, bar equipment, and premium ingredients. Learn mixology techniques, explore classic recipes, and master the art of adventure-ready drinks.",
+  title: "Field Manual - Cocktail Recipes, Bar Equipment & Ingredients",
+  description: "Free cocktail recipes, bar equipment guides, and ingredient breakdowns. No jargon, no gatekeeping - just clear instructions for making great drinks at home.",
   alternates: {
     canonical: 'https://jerrycanspirits.co.uk/field-manual/',
   },
   openGraph: {
     title: "Field Manual | Jerry Can Spirits®",
-    description: "Your essential guide to rum cocktails and mixology",
+    description: "Free cocktail recipes and bar guides. No jargon, no gatekeeping - just clear instructions for making great drinks at home.",
   },
 }
 
@@ -58,7 +58,7 @@ export default async function FieldManualHome() {
           </h1>
           
           <p className="text-xl text-parchment-300 max-w-3xl mx-auto leading-relaxed mb-8">
-            Master the art of craft cocktails with our comprehensive field manual. Discover expertly-crafted rum cocktail recipes showcasing <a href="/shop/drinks" className="text-gold-300 hover:text-gold-400 underline decoration-gold-500/40 hover:decoration-gold-400 transition-colors">Jerry Can Spirits premium British rum</a>, explore premium spirits and ingredients, and learn professional bartending techniques. From classic cocktails to bold innovations, our expedition-tested guide helps you create exceptional drinks at home. Visit our <a href="/" className="text-gold-300 hover:text-gold-400 underline decoration-gold-500/40 hover:decoration-gold-400 transition-colors">homepage</a> to discover our veteran-owned craft spirits brand.
+            Everything you need to make proper cocktails at home. Recipes that actually work, equipment recommendations that won't bankrupt you, and ingredient guides written in plain English. We built this because most cocktail resources are either gatekeeping nonsense or trying to sell you something. This one's free - we just want you to make great drinks.
           </p>
         </div>
       </section>
@@ -131,24 +131,23 @@ export default async function FieldManualHome() {
                   </div>
                   <h3 className="text-2xl font-serif font-bold text-white mb-2">Cocktails</h3>
                   <div className="text-gold-300 text-sm font-semibold uppercase tracking-wider mb-4">
-                    Spiced Rum Masterpieces
+                    Recipes That Work
                   </div>
                 </div>
-                
+
                 <p className="text-parchment-300 text-center mb-6 leading-relaxed">
-                  Master classic cocktails and adventurous variations using our engineered spiced rum. 
-                  From timeless Dark & Stormy to innovative expedition-inspired creations.
+                  Classic cocktails, modern twists, and everything in between. Each recipe tested, measured properly, and written so you can actually make it at home.
                 </p>
-                
+
                 <div className="space-y-2 text-sm text-center">
                   <div className="text-parchment-300">
-                    • Classic recipes with Jerry Can twists
+                    • Clear measurements & methods
                   </div>
                   <div className="text-parchment-300">
-                    • Step-by-step techniques
+                    • Difficulty ratings
                   </div>
                   <div className="text-parchment-300">
-                    • Variations & riffs
+                    • Variations for what you have
                   </div>
                 </div>
               </div>
@@ -170,25 +169,23 @@ export default async function FieldManualHome() {
                   </div>
                   <h3 className="text-2xl font-serif font-bold text-white mb-2">Ingredients</h3>
                   <div className="text-gold-300 text-sm font-semibold uppercase tracking-wider mb-4">
-                    Quality Components
+                    What Goes In
                   </div>
                 </div>
-                
+
                 <p className="text-parchment-300 text-center mb-6 leading-relaxed">
-                  Discover premium ingredients that elevate every cocktail. From recommended spirits and bitters
-                  to fresh garnishes and preparation techniques.
+                  Spirits, mixers, bitters, syrups, and garnishes explained. What they are, when to use them, and what to buy at different price points.
                 </p>
 
-                <br />
                 <div className="space-y-2 text-sm text-center">
                   <div className="text-parchment-300">
-                    • Spirits & liqueurs
+                    • Budget & premium options
                   </div>
                   <div className="text-parchment-300">
-                    • Fresh ingredients & bitters
+                    • Substitutions that work
                   </div>
                   <div className="text-parchment-300">
-                    • Brand partnerships
+                    • Storage & shelf life
                   </div>
                 </div>
               </div>
@@ -210,25 +207,23 @@ export default async function FieldManualHome() {
                   </div>
                   <h3 className="text-2xl font-serif font-bold text-white mb-2">Equipment</h3>
                   <div className="text-gold-300 text-sm font-semibold uppercase tracking-wider mb-4">
-                    Essential Barware
+                    Tools of the Trade
                   </div>
                 </div>
-                
+
                 <p className="text-parchment-300 text-center mb-6 leading-relaxed">
-                  Complete barware guide from essential tools to professional-grade equipment.
-                  Technical specifications and usage guides for the modern home bar.
+                  What you actually need vs what's nice to have. Honest equipment reviews, what to look for, and where you can save money without sacrificing results.
                 </p>
 
-                <br />
                 <div className="space-y-2 text-sm text-center">
                   <div className="text-parchment-300">
-                    • Shaking & mixing tools
+                    • Essential starter kit
                   </div>
                   <div className="text-parchment-300">
-                    • Measuring & straining
+                    • Upgrade recommendations
                   </div>
                   <div className="text-parchment-300">
-                    • Glassware collection
+                    • Glassware guide
                   </div>
                 </div>
               </div>
@@ -242,16 +237,116 @@ export default async function FieldManualHome() {
             <div className="absolute inset-0 bg-gradient-to-br from-amber-100/5 to-amber-200/10 opacity-50"></div>
             <div className="relative z-10">
               <h2 className="text-2xl font-serif font-bold text-white mb-4">
-                Master the Craft
+                Start Anywhere
               </h2>
               <p className="text-parchment-300 mb-6 max-w-2xl mx-auto">
-                Each section builds upon the last, creating a comprehensive cocktail education. 
-                Start with our signature spiced rum cocktails, then explore the ingredients and tools 
-                that make them exceptional.
+                Pick a cocktail that sounds good and work backwards. Need a specific ingredient? We'll tell you what it is. Missing a tool? We'll suggest alternatives. The Field Manual is built to help wherever you're starting from.
               </p>
-              <div className="text-gold-300 text-sm font-semibold uppercase tracking-wider">
-                Adventure Begins with Knowledge
-              </div>
+              <Link href="/field-manual/cocktails" className="inline-block px-6 py-3 bg-gold-500 text-jerry-green-900 font-semibold rounded-lg hover:bg-gold-400 transition-colors">
+                Browse Cocktails
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ Section */}
+      <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        {/* FAQ Schema */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "FAQPage",
+              "mainEntity": [
+                {
+                  "@type": "Question",
+                  "name": "Is the Field Manual free?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Yes, completely free. All recipes, equipment guides, and ingredient information are available without signing up or paying anything. We built it to help people make better drinks - selling rum is our business, not selling content."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "Do I need to buy Jerry Can rum to use the recipes?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "No. While we'd love you to try our rum, every recipe works with any quality spirit in that category. We include notes on what to look for in substitutes when relevant. The Field Manual is useful whether you buy from us or not."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "What equipment do I need to start making cocktails?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "At minimum: a jigger (or measuring cup), something to stir with, and glasses. A shaker helps but isn't essential for many drinks. Our equipment section has a starter kit guide that covers what to buy first and what can wait."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "How are cocktail difficulty ratings determined?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Based on technique required and ingredient accessibility. Novice means minimal technique and common ingredients - anyone can make these. Wayfinder involves shaking, straining, or a specialty ingredient or two. Trailblazer includes advanced techniques or multiple specialty ingredients."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "Can I suggest a cocktail or ingredient to add?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Yes - we're always expanding the Field Manual. Get in touch through our contact page with suggestions. We prioritise recipes that work well at home with accessible ingredients."
+                  }
+                }
+              ]
+            })
+          }}
+        />
+
+        <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
+          <h2 className="text-3xl font-serif font-bold text-white mb-2">
+            Questions About the Field Manual
+          </h2>
+          <p className="text-parchment-400 mb-8">
+            What people usually want to know
+          </p>
+
+          <div className="space-y-6">
+            <div className="border-b border-gold-500/10 pb-6">
+              <h3 className="text-lg font-semibold text-gold-300 mb-3">Is the Field Manual free?</h3>
+              <p className="text-parchment-200 leading-relaxed">
+                Yes, completely free. All recipes, equipment guides, and ingredient information are available without signing up or paying anything. We built it to help people make better drinks - selling rum is our business, not selling content.
+              </p>
+            </div>
+
+            <div className="border-b border-gold-500/10 pb-6">
+              <h3 className="text-lg font-semibold text-gold-300 mb-3">Do I need to buy Jerry Can rum to use the recipes?</h3>
+              <p className="text-parchment-200 leading-relaxed">
+                No. While we'd love you to try <Link href="/shop/drinks" className="text-gold-400 hover:text-gold-300 underline">our rum</Link>, every recipe works with any quality spirit in that category. We include notes on what to look for in substitutes when relevant. The Field Manual is useful whether you buy from us or not.
+              </p>
+            </div>
+
+            <div className="border-b border-gold-500/10 pb-6">
+              <h3 className="text-lg font-semibold text-gold-300 mb-3">What equipment do I need to start making cocktails?</h3>
+              <p className="text-parchment-200 leading-relaxed">
+                At minimum: a jigger (or measuring cup), something to stir with, and glasses. A shaker helps but isn't essential for many drinks. Our <Link href="/field-manual/equipment" className="text-gold-400 hover:text-gold-300 underline">equipment section</Link> has a starter kit guide that covers what to buy first and what can wait.
+              </p>
+            </div>
+
+            <div className="border-b border-gold-500/10 pb-6">
+              <h3 className="text-lg font-semibold text-gold-300 mb-3">How are cocktail difficulty ratings determined?</h3>
+              <p className="text-parchment-200 leading-relaxed">
+                Based on technique required and ingredient accessibility. <strong className="text-gold-400">Novice</strong> means minimal technique and common ingredients - anyone can make these. <strong className="text-gold-400">Wayfinder</strong> involves shaking, straining, or a specialty ingredient or two. <strong className="text-gold-400">Trailblazer</strong> includes advanced techniques or multiple specialty ingredients.
+              </p>
+            </div>
+
+            <div>
+              <h3 className="text-lg font-semibold text-gold-300 mb-3">Can I suggest a cocktail or ingredient to add?</h3>
+              <p className="text-parchment-200 leading-relaxed">
+                Yes - we're always expanding the Field Manual. <Link href="/contact" className="text-gold-400 hover:text-gold-300 underline">Get in touch</Link> with suggestions. We prioritise recipes that work well at home with accessible ingredients.
+              </p>
             </div>
           </div>
         </div>
