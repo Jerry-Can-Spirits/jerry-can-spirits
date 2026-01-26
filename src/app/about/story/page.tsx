@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
 import BackToTop from '@/components/BackToTop'
+import Breadcrumbs from '@/components/Breadcrumbs'
 
 export const metadata: Metadata = {
   title: "Our Story - From Military Service to Premium Spirits",
@@ -22,6 +23,15 @@ export const metadata: Metadata = {
 export default function OurStory() {
   return (
     <main className="min-h-screen py-20">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
+        <Breadcrumbs
+          items={[
+            { label: 'About', href: '/about/story' },
+            { label: 'Our Story' },
+          ]}
+        />
+      </div>
+
       {/* Hero Section */}
       <section className="relative min-h-[80vh] flex items-center justify-center overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">

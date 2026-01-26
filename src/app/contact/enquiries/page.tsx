@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Breadcrumbs from '@/components/Breadcrumbs'
 
 export default function GeneralEnquiries() {
   const [formData, setFormData] = useState({
@@ -61,6 +62,16 @@ export default function GeneralEnquiries() {
 
   return (
     <main className="min-h-screen">
+      {/* Breadcrumb */}
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
+        <Breadcrumbs
+          items={[
+            { label: 'Contact', href: '/contact' },
+            { label: 'General Enquiries' },
+          ]}
+        />
+      </div>
+
       {/* Page Hero */}
       <section className="relative py-20 lg:py-32 overflow-hidden">
         <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">

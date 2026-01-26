@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useNewsletterSignup } from '@/hooks/useNewsletterSignup'
+import Breadcrumbs from '@/components/Breadcrumbs'
 
 // Note: metadata export removed as client components cannot export metadata
 // This metadata should be moved to a layout.tsx or handled differently
@@ -78,6 +79,15 @@ export default function Contact() {
 
   return (
     <main className="min-h-screen">
+      {/* Breadcrumb */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
+        <Breadcrumbs
+          items={[
+            { label: 'Contact' },
+          ]}
+        />
+      </div>
+
       {/* Page Hero */}
       <section className="relative py-20 lg:py-32 overflow-hidden">
         {/* Header Content */}

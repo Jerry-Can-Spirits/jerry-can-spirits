@@ -3,6 +3,7 @@ import Image from 'next/image'
 import type { Metadata } from 'next'
 import { client } from '@/sanity/client'
 import { fieldManualCountsQuery } from '@/sanity/queries'
+import Breadcrumbs from '@/components/Breadcrumbs'
 
 // Round down to nearest 10
 function roundDownToTen(n: number): number {
@@ -27,6 +28,15 @@ export default async function FieldManualHome() {
 
   return (
     <main className="min-h-screen py-20">
+      {/* Breadcrumb */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
+        <Breadcrumbs
+          items={[
+            { label: 'Field Manual' },
+          ]}
+        />
+      </div>
+
       {/* Hero Section */}
       <section className="relative min-h-[80vh] flex items-center justify-center overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">

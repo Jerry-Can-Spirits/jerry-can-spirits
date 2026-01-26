@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import Image from 'next/image'
 import { ColorSwatch, DownloadCard, BoilerplateText, ImageGallery } from '@/components/media'
+import Breadcrumbs from '@/components/Breadcrumbs'
 
 export default function MediaContact() {
   const [formData, setFormData] = useState({
@@ -118,6 +119,16 @@ Based in the UK, Jerry Can Spirits® is a small operation run by two mates who c
 
   return (
     <main className="min-h-screen">
+      {/* Breadcrumb */}
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
+        <Breadcrumbs
+          items={[
+            { label: 'Contact', href: '/contact' },
+            { label: 'Media' },
+          ]}
+        />
+      </div>
+
       {/* Page Hero */}
       <section className="relative py-20 lg:py-32 overflow-hidden">
         <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">

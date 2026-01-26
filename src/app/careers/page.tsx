@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Breadcrumbs from '@/components/Breadcrumbs'
 
 export const metadata: Metadata = {
   title: "Careers - Join Our Team",
@@ -16,6 +17,15 @@ export default function Careers() {
   return (
     <main className="min-h-screen py-20">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Breadcrumb */}
+        <div className="mb-8">
+          <Breadcrumbs
+            items={[
+              { label: 'Careers' },
+            ]}
+          />
+        </div>
+
         {/* Header */}
         <div className="text-center mb-12 pb-8 border-b border-gold-500/30">
           <div className="inline-block px-4 py-2 bg-jerry-green-800/60 backdrop-blur-sm rounded-full border border-gold-500/30 mb-6">

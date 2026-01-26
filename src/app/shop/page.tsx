@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import type { Metadata } from 'next'
+import Breadcrumbs from '@/components/Breadcrumbs'
 
 export const metadata: Metadata = {
   title: 'Shop - Coming Soon',
@@ -15,8 +16,16 @@ export const metadata: Metadata = {
 
 export default function ShopPage() {
   return (
-    <main className="min-h-screen flex items-center justify-center px-4 py-16">
-      <div className="max-w-2xl w-full text-center space-y-8">
+    <main className="min-h-screen px-4 py-16">
+      <div className="max-w-7xl mx-auto mb-8">
+        <Breadcrumbs
+          items={[
+            { label: 'Shop' },
+          ]}
+        />
+      </div>
+
+      <div className="max-w-2xl w-full text-center space-y-8 mx-auto">
         {/* Icon/Compass */}
         <div className="flex justify-center">
           <div className="w-24 h-24 rounded-full bg-jerry-green-800/20 flex items-center justify-center">

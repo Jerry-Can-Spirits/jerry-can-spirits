@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { client } from '@/sanity/client'
 import { equipmentListQuery } from '@/sanity/queries'
 import EquipmentClient from './EquipmentClient'
+import Breadcrumbs from '@/components/Breadcrumbs'
 
 export const metadata: Metadata = {
   title: 'Bar Equipment Guide',
@@ -22,5 +23,17 @@ export default async function EquipmentPage() {
   const equipment = await client.fetch(equipmentListQuery)
 
   // Pass data to Client Component for interactive UI
-  return <EquipmentClient equipment={equipment} />
+  return (
+    <>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 mb-8">
+        <Breadcrumbs
+          items={[
+            { label: 'Field Manual', href: '/field-manual' },
+            { label: 'Equipment' },
+          ]}
+        />
+      </div>
+      <EquipmentClient equipment={equipment} />
+    </>
+  )
 }

@@ -2,6 +2,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { getProductsByCollection, type ShopifyProduct } from '@/lib/shopify'
 import type { Metadata } from 'next'
+import Breadcrumbs from '@/components/Breadcrumbs'
 
 export const metadata: Metadata = {
   title: 'Expedition Gear & Apparel',
@@ -96,11 +97,12 @@ export default async function ClothingPage() {
           <div className="max-w-2xl mx-auto text-center space-y-6">
             {/* Breadcrumb */}
             <div className="mb-8">
-              <nav className="text-sm text-parchment-400">
-                <Link href="/shop" className="hover:text-gold-300 transition-colors">Shop</Link>
-                <span className="mx-2">→</span>
-                <span className="text-gold-300">Expedition Gear</span>
-              </nav>
+              <Breadcrumbs
+                items={[
+                  { label: 'Shop', href: '/shop' },
+                  { label: 'Expedition Gear' },
+                ]}
+              />
             </div>
 
             <div className="inline-block px-4 py-2 bg-jerry-green-800/60 backdrop-blur-sm rounded-full border border-gold-500/30 mb-6">
@@ -178,11 +180,12 @@ export default async function ClothingPage() {
     <main className="min-h-screen py-20">
       {/* Breadcrumb */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
-        <nav className="text-sm text-parchment-400">
-          <Link href="/shop" className="hover:text-gold-300 transition-colors">Shop</Link>
-          <span className="mx-2">→</span>
-          <span className="text-gold-300">Expedition Gear</span>
-        </nav>
+        <Breadcrumbs
+          items={[
+            { label: 'Shop', href: '/shop' },
+            { label: 'Expedition Gear' },
+          ]}
+        />
       </div>
 
       {/* Page Header */}

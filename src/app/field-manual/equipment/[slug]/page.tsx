@@ -6,6 +6,7 @@ import { client } from '@/sanity/client'
 import { equipmentBySlugQuery } from '@/sanity/queries'
 import { urlFor } from '@/sanity/lib/image'
 import BackToTop from '@/components/BackToTop'
+import Breadcrumbs from '@/components/Breadcrumbs'
 
 // Types for equipment data
 interface Equipment {
@@ -106,13 +107,13 @@ export default async function EquipmentDetailPage({ params }: { params: Promise<
     <main className="min-h-screen py-20">
       {/* Breadcrumb */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
-        <nav className="text-sm text-parchment-400">
-          <Link href="/field-manual" className="hover:text-gold-300 transition-colors">Field Manual</Link>
-          <span className="mx-2">→</span>
-          <Link href="/field-manual/equipment" className="hover:text-gold-300 transition-colors">Equipment</Link>
-          <span className="mx-2">→</span>
-          <span className="text-gold-300">{equipment.name}</span>
-        </nav>
+        <Breadcrumbs
+          items={[
+            { label: 'Field Manual', href: '/field-manual' },
+            { label: 'Equipment', href: '/field-manual/equipment' },
+            { label: equipment.name },
+          ]}
+        />
       </div>
 
       {/* Hero Section */}

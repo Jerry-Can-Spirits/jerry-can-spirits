@@ -7,6 +7,7 @@ import StructuredData from '@/components/StructuredData'
 import CocktailRecipeDisplay from '@/components/CocktailRecipeDisplay'
 import ShareButton from '@/components/ShareButton'
 import StarRating from '@/components/StarRating'
+import Breadcrumbs from '@/components/Breadcrumbs'
 import { notFound } from 'next/navigation'
 
 // Types for cocktail data
@@ -166,13 +167,13 @@ export default async function CocktailPage({ params }: PageProps) {
       <main className="min-h-screen py-20">
         {/* Breadcrumb */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
-          <nav className="text-sm text-parchment-400" aria-label="Breadcrumb">
-            <Link href="/field-manual" className="hover:text-gold-300 transition-colors">Field Manual</Link>
-            <span className="mx-2">→</span>
-            <Link href="/field-manual/cocktails" className="hover:text-gold-300 transition-colors">Cocktails</Link>
-            <span className="mx-2">→</span>
-            <span className="text-gold-300">{cocktail.name}</span>
-          </nav>
+          <Breadcrumbs
+            items={[
+              { label: 'Field Manual', href: '/field-manual' },
+              { label: 'Cocktails', href: '/field-manual/cocktails' },
+              { label: cocktail.name },
+            ]}
+          />
         </div>
 
         {/* Back to Collection Button + Share */}

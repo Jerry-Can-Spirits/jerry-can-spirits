@@ -2,6 +2,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { getProductsByCollection, type ShopifyProduct } from '@/lib/shopify'
 import type { Metadata } from 'next'
+import Breadcrumbs from '@/components/Breadcrumbs'
 
 export const metadata: Metadata = {
   title: 'Professional Barware & Cocktail Tools',
@@ -182,11 +183,12 @@ export default async function BarwarePage() {
     <main className="min-h-screen py-20">
       {/* Breadcrumb */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
-        <nav className="text-sm text-parchment-400">
-          <Link href="/shop" className="hover:text-gold-300 transition-colors">Shop</Link>
-          <span className="mx-2">→</span>
-          <span className="text-gold-300">Barware</span>
-        </nav>
+        <Breadcrumbs
+          items={[
+            { label: 'Shop', href: '/shop' },
+            { label: 'Barware' },
+          ]}
+        />
       </div>
 
       {/* Page Header */}

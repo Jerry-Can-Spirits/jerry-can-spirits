@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import Image from 'next/image'
 import CartographicBackground from '@/components/CartographicBackground'
+import Breadcrumbs from '@/components/Breadcrumbs'
 
 export const metadata: Metadata = {
   title: 'Dan Freeman - Founder & Director',
@@ -32,6 +33,15 @@ export default function DanFreemanPage() {
       </div>
 
       <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        <Breadcrumbs
+          items={[
+            { label: 'About', href: '/about/story' },
+            { label: 'Team', href: '/about/team' },
+            { label: 'Dan Freeman' },
+          ]}
+          className="mb-8"
+        />
+
         {/* Back Button */}
         <Link
           href="/about/team"

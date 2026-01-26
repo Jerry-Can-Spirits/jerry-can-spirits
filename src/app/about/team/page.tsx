@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import Image from 'next/image'
 import CartographicBackground from '@/components/CartographicBackground'
+import Breadcrumbs from '@/components/Breadcrumbs'
 
 export const metadata: Metadata = {
   title: 'Meet the Team',
@@ -55,6 +56,14 @@ export default function TeamPage() {
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <Breadcrumbs
+          items={[
+            { label: 'About', href: '/about/story' },
+            { label: 'Team' },
+          ]}
+          className="mb-8"
+        />
+
         {/* Header */}
         <div className="text-center mb-16">
           <div className="inline-block px-4 py-2 bg-jerry-green-800/60 backdrop-blur-sm rounded-full border border-gold-500/30 mb-6">
