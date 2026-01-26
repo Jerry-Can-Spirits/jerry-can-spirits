@@ -3,7 +3,7 @@
 import { useCart } from '@/contexts/CartContext'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 // Helper to format price
 function formatPrice(amount: string, currencyCode: string): string {
@@ -29,6 +29,26 @@ export default function CartDrawer() {
   } = useCart()
 
   const [discountCode, setDiscountCode] = useState('')
+  const [affiliateId, setAffiliateId] = useState<string | null>(null)
+
+  // Retrieve affiliate tracking ID from sessionStorage (set by ClientWrapper)
+  useEffect(() => {
+    const dtId = sessionStorage.getItem('affiliate_dt_id')
+    if (dtId) {
+      setAffiliateId(dtId)
+    }
+  }, [])
+
+  // Build checkout URL with affiliate tracking if present
+  const getCheckoutUrl = () => {
+    if (!cart?.checkoutUrl) return '#'
+    if (!affiliateId) return cart.checkoutUrl
+
+    // Append dt_id parameter for Shopify Collabs tracking
+    const url = new URL(cart.checkoutUrl)
+    url.searchParams.set('dt_id', affiliateId)
+    return url.toString()
+  }
 
   const handleApplyDiscount = async () => {
     if (!discountCode.trim()) return
@@ -284,7 +304,7 @@ export default function CartDrawer() {
               <div className="space-y-3">
                 {/* Main Checkout Button */}
                 <a
-                  href={cart.checkoutUrl}
+                  href={getCheckoutUrl()}
                   onClick={() => {
                     // Track checkout initiation via Zaraz
                     if (typeof window !== 'undefined' && window.zaraz?.track) {
