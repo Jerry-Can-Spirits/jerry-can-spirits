@@ -8,6 +8,7 @@ import FounderStorySnippet from "@/components/FounderStorySnippet";
 import SupportingOurForces from "@/components/SupportingOurForces";
 import FieldManualPreview from "@/components/FieldManualPreview";
 import WhyJerryCan from "@/components/WhyJerryCan";
+import HomepageFAQ from "@/components/HomepageFAQ";
 import type { Metadata } from 'next'
 
 // Lazy load TrustpilotWidget (below the fold)
@@ -114,6 +115,9 @@ export default function Home() {
         {/* Why Jerry Can - Value Proposition */}
         <WhyJerryCan />
 
+        {/* FAQ Section with Schema Markup */}
+        <HomepageFAQ />
+
         {/* Founder Story Snippet */}
         <FounderStorySnippet />
 
@@ -126,34 +130,34 @@ export default function Home() {
             <div className="grid lg:grid-cols-2 gap-12">
               <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
                 <h2 className="text-3xl font-serif font-bold text-white mb-6">
-                  Premium British Craft Rum for Modern Explorers
+                  Why We Started Making Rum
                 </h2>
                 <div className="space-y-4 text-parchment-200 leading-relaxed">
                   <p>
-                    Discover Jerry Can Spirits - a veteran-owned British spirits brand where expedition-tested precision meets artisan craft. Founded by former Royal Corps of Signals servicemen, we partner with master distillers to transform premium Caribbean molasses into extraordinary small-batch rum that captures the spirit of adventure in every sip.
+                    We didn't set out to start a rum company. After 12 years in the Royal Corps of Signals, what we wanted was simple: a proper drink to share with mates - something with character, made by people who give a damn. When we couldn't find it, we decided to make it ourselves.
                   </p>
                   <p>
-                    Our handcrafted rum delivers rich, complex flavours: indulge in velvety vanilla intertwined with warm caramel, complemented by exotic spice notes and a lingering smooth finish. Each batch is pot distilled at Spirit of Wales Distillery using copper-lined stills, where extended copper contact develops the deep, sophisticated character that defines premium craft spirits.
+                    Working with Spirit of Wales Distillery, we blend Caribbean rum with Welsh brewery molasses and put it through their pot stills. The result? Vanilla and caramel upfront, warm spice through the middle, and a finish smooth enough to sip neat - but bold enough to hold its own in a cocktail.
                   </p>
                   <p>
-                    Perfect for crafting bold cocktails or savoring neat, our British rum is engineered for versatility. Whether you're mixing signature serves at home or toasting memorable moments with friends, Jerry Can Spirits delivers expedition-ready quality that never compromises on flavour.
+                    Whether you're mixing drinks at home or just unwinding after a long week, this is rum that doesn't let you down. We built it that way on purpose.
                   </p>
                 </div>
               </div>
 
               <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
                 <h2 className="text-3xl font-serif font-bold text-white mb-6">
-                  Sustainable Craft Spirits with Purpose
+                  Craft Spirits with Purpose
                 </h2>
                 <div className="space-y-4 text-parchment-200 leading-relaxed">
                   <p>
-                    Experience the difference sustainable sourcing makes. We champion British ingredients first - from locally-sourced botanicals to pure Welsh water - reducing our environmental impact while supporting UK producers. Combined with premium ethically-sourced Caribbean molasses, every bottle represents our commitment to responsible craft spirits that respect both tradition and our planet's future.
+                    We work with what's close to home where we can. Our rum is distilled in Wales using Welsh water, and the molasses comes partly from a local brewery's beer production - good ingredients that would otherwise go to waste. It's not about slapping 'eco-friendly' on the label. It's just how we think things should be done.
                   </p>
                   <p>
-                    As proud Armed Forces Covenant signatories, we're building more than premium spirits - we're creating opportunities. Our veteran heritage informs everything: precision in process, reliability in quality, and unwavering standards. Try our craft rum and taste the dedication that comes from founders who understand what truly dependable means.
+                    We signed the Armed Forces Covenant because supporting veterans isn't a marketing angle for us - it's personal. A portion of every sale goes to forces charities. We guarantee job interviews for veterans. It's baked into how we run the company, not bolted on afterwards.
                   </p>
                   <p>
-                    The jerry can wasn't designed for beauty - it was engineered for absolute reliability in the harshest conditions. We apply that same expedition-tested philosophy to every batch. When you choose Jerry Can Spirits, you're choosing British craft rum built for adventure, engineered for flavour, and designed to perform wherever your journey takes you.
+                    There's a reason we named ourselves after the jerry can. It wasn't designed to look good on a shelf. It was designed to work - in the desert, in the Arctic, wherever it was needed. That's the standard we hold ourselves to. Rum that does what it's supposed to do, every single time.
                   </p>
                 </div>
               </div>

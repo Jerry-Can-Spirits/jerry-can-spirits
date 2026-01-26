@@ -4,14 +4,14 @@ import { getProductsByCollection, type ShopifyProduct } from '@/lib/shopify'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Premium British Rum Collection',
-  description: 'Veteran-owned British rum collection. Small-batch premium spirits crafted with military precision by Royal Corps of Signals veterans. Sustainably sourced, expedition-tested.',
+  title: 'British Spiced Rum | Small-Batch Craft Rum',
+  description: 'Small-batch British spiced rum from veteran-owned Jerry Can Spirits. 700 bottles per batch, pot-distilled at Spirit of Wales. Rich vanilla, warm spices, smooth finish.',
   alternates: {
     canonical: 'https://jerrycanspirits.co.uk/shop/drinks/',
   },
   openGraph: {
-    title: 'Premium British Rum Collection | Jerry Can Spirits®',
-    description: 'Veteran-owned British rum collection. Small-batch premium spirits crafted with military precision.',
+    title: 'British Spiced Rum | Jerry Can Spirits®',
+    description: 'Small-batch British spiced rum from veteran-owned Jerry Can Spirits. 700 bottles per batch, pot-distilled at Spirit of Wales.',
   },
 }
 
@@ -159,13 +159,13 @@ export default async function DrinksPageTest() {
           </div>
 
           <h1 className="text-4xl sm:text-6xl font-serif font-bold text-white mb-6">
-            Premium British Rum Collection
+            Our Rum
             <br />
-            <span className="text-gold-300">Veteran-Owned Expedition Spirits</span>
+            <span className="text-gold-300">Small-Batch British Spirits</span>
           </h1>
 
           <p className="text-xl text-parchment-300 max-w-3xl mx-auto leading-relaxed">
-            Explore our handcrafted British rum collection - premium small-batch spirits engineered for modern explorers. Rich flavours, exceptional quality, and adventure in every bottle.
+            We make one thing and we make it properly. Expedition Spiced Rum - pot-distilled at Spirit of Wales, 700 bottles per batch, gone when they're gone.
           </p>
 
           {/* Shopify Connection Success Indicator */}
@@ -245,43 +245,43 @@ export default async function DrinksPageTest() {
         <div className="grid lg:grid-cols-2 gap-12 mb-16">
           <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
             <h2 className="text-3xl font-serif font-bold text-white mb-6">
-              Premium British Craft Rum Collection
+              What's in the Bottle
             </h2>
             <div className="space-y-4 text-parchment-200 leading-relaxed">
               <p>
-                Discover handcrafted small-batch rum that captures the essence of British spirits excellence. Our veteran-owned brand channels 12+ years of Royal Corps of Signals expedition experience into every bottle - delivering premium craft rum with uncompromising flavour profiles and expedition-tested reliability.
+                Expedition Spiced Rum starts with Caribbean white rum and Welsh brewery molasses. We blend these at Spirit of Wales Distillery in Newport, pot-distilling in small batches of just 700 bottles.
               </p>
               <p>
-                Experience complex, layered flavours that tell a story with every sip. Our spiced rum reveals rich notes of velvety vanilla dancing with warm caramel, complemented by aromatic cinnamon and subtle oak undertones. The finish is exceptionally smooth and lingering - a testament to our partnership with Spirit of Wales Distillery's innovative copper-pot distillation methods.
+                The flavour profile opens with vanilla and caramel, moves into warm cinnamon and nutmeg through the middle, and finishes smooth with subtle oak. It's designed to drink neat, work in cocktails, and hold its own over ice.
               </p>
               <p>
-                Versatility meets quality: perfect for crafting bold cocktails like our signature Storm and Spice, equally rewarding when savored neat or on the rocks. Sustainably produced with British-first ingredient sourcing and ethically-selected Caribbean molasses, every pour represents our commitment to exceptional craft spirits.
+                We're not trying to be everything to everyone. This is spiced rum made by people who actually drink it - after 12 years of military service, we know what a proper drink should taste like at the end of a long day.
               </p>
             </div>
           </div>
 
           <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
             <h2 className="text-3xl font-serif font-bold text-white mb-6">
-              Craft Spirits Built for Adventure
+              The Story Behind It
             </h2>
             <div className="space-y-4 text-parchment-200 leading-relaxed">
               <p>
-                Jerry Can Spirits is engineered for the modern explorer - those who demand authenticity, seek bold flavours, and value quality that performs. Our premium British rum elevates any occasion: from crafting sophisticated cocktails at your home bar to sharing memorable toasts around the campfire. Expedition-ready versatility meets uncompromising craft quality.
+                Jerry Can Spirits started because we couldn't find what we wanted on the shelf. After deployments where a decent drink meant everything, we came home to rum that tasted like it was made by accountants, not people who'd actually want to drink it.
               </p>
               <p>
-                As proud Armed Forces Covenant signatories, we're creating more than exceptional spirits - we're building opportunities. Our veteran heritage drives our standards: precision in every batch, reliability in every bottle, and unwavering commitment to excellence. Try our craft rum and discover what expedition-tested quality truly means.
+                So we made our own. Royal Corps of Signals veterans, Armed Forces Covenant signatories, and genuinely obsessed with getting this right. Every batch gets the same attention we'd give to mission-critical kit.
               </p>
               <p>
-                Choose small-batch rum that makes a difference. From sustainable British ingredient sourcing to ethical Caribbean molasses selection, we prioritize environmental responsibility without compromising flavour. This isn't mass-produced spirits - this is handcrafted British rum created with passion, purpose, and a relentless pursuit of perfection.
+                Part of every sale goes to forces charities. Not because it's good marketing - because these are our mates and it's the right thing to do. If you're buying from us, you're supporting the veteran community whether you meant to or not.
               </p>
             </div>
           </div>
         </div>
 
-        {/* Why Choose Our Rum */}
+        {/* What You're Getting */}
         <div className="bg-gradient-to-br from-gold-500/10 to-gold-600/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20 mb-16">
           <h3 className="text-2xl font-serif font-bold text-gold-300 mb-6 text-center">
-            Why Choose Jerry Can Spirits Premium Rum
+            What You're Actually Getting
           </h3>
           <div className="grid md:grid-cols-3 gap-6">
             <div className="text-center">
@@ -290,31 +290,148 @@ export default async function DrinksPageTest() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
                 </svg>
               </div>
-              <h4 className="text-lg font-semibold text-white mb-2">Military Precision</h4>
+              <h4 className="text-lg font-semibold text-white mb-2">Veteran-Made</h4>
               <p className="text-parchment-300 text-sm">
-                Every batch crafted with the exacting standards learned through 12+ years of Royal Corps of Signals service. Quality you can trust, reliability you can count on.
+                Built by Royal Corps of Signals veterans who spent 12 years learning that "good enough" isn't. Same standards we applied to kit that had to work, now applied to rum.
               </p>
             </div>
             <div className="text-center">
               <div className="w-16 h-16 bg-gold-400/20 rounded-full flex items-center justify-center mx-auto mb-4">
                 <svg className="w-8 h-8 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
                 </svg>
               </div>
-              <h4 className="text-lg font-semibold text-white mb-2">Sustainable British Spirits</h4>
+              <h4 className="text-lg font-semibold text-white mb-2">Properly Small-Batch</h4>
               <p className="text-parchment-300 text-sm">
-                UK-first ingredient sourcing reduces our carbon footprint. Ethical partnerships with sustainable suppliers. British botanicals, Welsh distillation, and environmental responsibility.
+                700 bottles per batch. Not a marketing number - that's genuinely what our pot still at Spirit of Wales produces. When a batch is gone, it's gone.
               </p>
             </div>
             <div className="text-center">
               <div className="w-16 h-16 bg-gold-400/20 rounded-full flex items-center justify-center mx-auto mb-4">
                 <svg className="w-8 h-8 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                 </svg>
               </div>
-              <h4 className="text-lg font-semibold text-white mb-2">Supporting Veterans</h4>
+              <h4 className="text-lg font-semibold text-white mb-2">Gives Back</h4>
               <p className="text-parchment-300 text-sm">
-                Armed Forces Covenant signatories supporting veteran entrepreneurs. Every purchase helps former service members pursue their dreams and build successful civilian careers.
+                Part of every sale supports forces charities. Armed Forces Covenant signatories. When you buy from us, you're supporting the veteran community - that's a promise.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ Section */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-20">
+        {/* FAQ Schema */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "FAQPage",
+              "mainEntity": [
+                {
+                  "@type": "Question",
+                  "name": "What is spiced rum?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Spiced rum is rum that's been infused with spices and flavourings - typically vanilla, cinnamon, nutmeg, and caramel. Unlike flavoured rums which can taste artificial, good spiced rum balances these additions so they complement rather than mask the base spirit. Our Expedition Spiced Rum uses Caribbean white rum as the base, pot-distilled with Welsh brewery molasses for depth."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "How should I drink spiced rum?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "However you like it, honestly. Expedition Spiced Rum is designed to work three ways: neat (to taste the full flavour profile), over ice (opens up as it dilutes slightly), or in cocktails (holds its character against mixers). Classic pairings include ginger beer for a Dark 'n' Stormy, cola for simplicity, or apple juice for something different. Check our Field Manual for cocktail recipes."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "What does 'small-batch' actually mean?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "For us, it means exactly 700 bottles per batch. That's the capacity of our pot still at Spirit of Wales Distillery in Newport. It's not a marketing term - it's a physical limitation. When a batch sells out, that specific run is gone. We can make more, but each batch has subtle variations based on the distillation."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "Is Jerry Can Spirits rum vegan?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Yes. Our Expedition Spiced Rum contains no animal products. The base is Caribbean white rum, we add Welsh brewery molasses, and the spice blend is entirely plant-based. No honey, no animal-derived filtering agents, no animal products in production."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "Where is Jerry Can Spirits rum made?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "We blend and distil at Spirit of Wales Distillery in Newport, Wales. The base white rum comes from the Caribbean, and we source molasses from a Welsh brewery's production. The distillation, blending, spicing, and bottling all happen in Wales. We're a British rum brand making British rum."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "How does buying from Jerry Can Spirits support veterans?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "We're veteran-owned (Royal Corps of Signals, 12 years service) and Armed Forces Covenant signatories. Part of every sale goes to forces charities - not because it's good marketing but because these are our community. When you buy from us, you're directly supporting veteran entrepreneurs and forces welfare."
+                  }
+                }
+              ]
+            })
+          }}
+        />
+
+        <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
+          <h2 className="text-3xl font-serif font-bold text-white mb-2">
+            Common Questions
+          </h2>
+          <p className="text-parchment-400 mb-8">
+            Straight answers about our rum
+          </p>
+
+          <div className="space-y-6">
+            <div className="border-b border-gold-500/10 pb-6">
+              <h3 className="text-lg font-semibold text-gold-300 mb-3">What is spiced rum?</h3>
+              <p className="text-parchment-200 leading-relaxed">
+                Spiced rum is rum that's been infused with spices and flavourings - typically vanilla, cinnamon, nutmeg, and caramel. Unlike flavoured rums which can taste artificial, good spiced rum balances these additions so they complement rather than mask the base spirit. Our Expedition Spiced Rum uses Caribbean white rum as the base, pot-distilled with Welsh brewery molasses for depth.
+              </p>
+            </div>
+
+            <div className="border-b border-gold-500/10 pb-6">
+              <h3 className="text-lg font-semibold text-gold-300 mb-3">How should I drink spiced rum?</h3>
+              <p className="text-parchment-200 leading-relaxed">
+                However you like it, honestly. Expedition Spiced Rum is designed to work three ways: neat (to taste the full flavour profile), over ice (opens up as it dilutes slightly), or in cocktails (holds its character against mixers). Classic pairings include ginger beer for a Dark 'n' Stormy, cola for simplicity, or apple juice for something different. Check our <Link href="/field-manual/cocktails" className="text-gold-400 hover:text-gold-300 underline">Field Manual</Link> for cocktail recipes.
+              </p>
+            </div>
+
+            <div className="border-b border-gold-500/10 pb-6">
+              <h3 className="text-lg font-semibold text-gold-300 mb-3">What does 'small-batch' actually mean?</h3>
+              <p className="text-parchment-200 leading-relaxed">
+                For us, it means exactly 700 bottles per batch. That's the capacity of our pot still at Spirit of Wales Distillery in Newport. It's not a marketing term - it's a physical limitation. When a batch sells out, that specific run is gone. We can make more, but each batch has subtle variations based on the distillation.
+              </p>
+            </div>
+
+            <div className="border-b border-gold-500/10 pb-6">
+              <h3 className="text-lg font-semibold text-gold-300 mb-3">Is Jerry Can Spirits rum vegan?</h3>
+              <p className="text-parchment-200 leading-relaxed">
+                Yes. Our Expedition Spiced Rum contains no animal products. The base is Caribbean white rum, we add Welsh brewery molasses, and the spice blend is entirely plant-based. No honey, no animal-derived filtering agents, no animal products in production.
+              </p>
+            </div>
+
+            <div className="border-b border-gold-500/10 pb-6">
+              <h3 className="text-lg font-semibold text-gold-300 mb-3">Where is Jerry Can Spirits rum made?</h3>
+              <p className="text-parchment-200 leading-relaxed">
+                We blend and distil at Spirit of Wales Distillery in Newport, Wales. The base white rum comes from the Caribbean, and we source molasses from a Welsh brewery's production. The distillation, blending, spicing, and bottling all happen in Wales. We're a British rum brand making British rum.
+              </p>
+            </div>
+
+            <div>
+              <h3 className="text-lg font-semibold text-gold-300 mb-3">How does buying from Jerry Can Spirits support veterans?</h3>
+              <p className="text-parchment-200 leading-relaxed">
+                We're veteran-owned (Royal Corps of Signals, 12 years service) and Armed Forces Covenant signatories. Part of every sale goes to forces charities - not because it's good marketing but because these are our community. When you buy from us, you're directly supporting veteran entrepreneurs and forces welfare.
               </p>
             </div>
           </div>
@@ -325,16 +442,16 @@ export default async function DrinksPageTest() {
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-20">
         <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-12 border border-gold-500/20 text-center">
           <h2 className="text-3xl font-serif font-bold text-white mb-4">
-            Start Your Adventure Today
+            Try It Yourself
           </h2>
           <p className="text-parchment-300 mb-6 max-w-2xl mx-auto">
-            Join the ranks of discerning spirits enthusiasts. Get exclusive early access to our limited first batch, expert cocktail recipes, and expedition updates from the Jerry Can Spirits crew. Experience premium British craft rum engineered for those who venture beyond the ordinary.
+            Join our mailing list for batch release updates, cocktail recipes from the Field Manual, and the occasional story from the road. No spam - just rum news when there's rum news.
           </p>
           <Link
             href="/#newsletter-signup"
             className="inline-block px-8 py-3 bg-gold-500 text-jerry-green-900 font-semibold rounded-lg hover:bg-gold-400 transition-colors"
           >
-            Get Exclusive Early Access
+            Join the List
           </Link>
         </div>
       </section>

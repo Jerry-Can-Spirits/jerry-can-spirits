@@ -187,6 +187,125 @@ export default defineType({
       title: 'YouTube Video URL',
       type: 'url',
       description: 'Product video, tasting notes video, or behind-the-scenes production'
+    }),
+
+    // What's Included (for gift packs, bundles)
+    defineField({
+      name: 'whatsIncluded',
+      title: "What's Included",
+      type: 'array',
+      of: [
+        {
+          type: 'object',
+          fields: [
+            defineField({
+              name: 'item',
+              title: 'Item Name',
+              type: 'string',
+              validation: Rule => Rule.required()
+            }),
+            defineField({
+              name: 'description',
+              title: 'Description',
+              type: 'string',
+              description: 'Brief description of the item'
+            }),
+            defineField({
+              name: 'quantity',
+              title: 'Quantity',
+              type: 'number',
+              initialValue: 1
+            })
+          ],
+          preview: {
+            select: {
+              title: 'item',
+              quantity: 'quantity'
+            },
+            prepare({ title, quantity }) {
+              return {
+                title: quantity > 1 ? `${quantity}x ${title}` : title
+              }
+            }
+          }
+        }
+      ],
+      description: 'List what comes in the box (especially for gift packs and bundles)'
+    }),
+
+    // Dietary & Allergen Information
+    defineField({
+      name: 'dietary',
+      title: 'Dietary Information',
+      type: 'object',
+      fields: [
+        defineField({
+          name: 'vegan',
+          title: 'Suitable for Vegans',
+          type: 'boolean',
+          initialValue: true
+        }),
+        defineField({
+          name: 'vegetarian',
+          title: 'Suitable for Vegetarians',
+          type: 'boolean',
+          initialValue: true
+        }),
+        defineField({
+          name: 'glutenFree',
+          title: 'Gluten-Free',
+          type: 'boolean',
+          initialValue: true,
+          description: 'Rum is naturally gluten-free as it is distilled from sugarcane'
+        }),
+        defineField({
+          name: 'allergens',
+          title: 'Allergen Information',
+          type: 'string',
+          description: 'Any allergen warnings (leave blank if none)'
+        }),
+        defineField({
+          name: 'additionalInfo',
+          title: 'Additional Dietary Notes',
+          type: 'text',
+          rows: 2,
+          description: 'Any other dietary information customers should know'
+        })
+      ],
+      description: 'Dietary and allergen information for the product'
+    }),
+
+    // Product FAQs
+    defineField({
+      name: 'faqs',
+      title: 'Product FAQs',
+      type: 'array',
+      of: [
+        {
+          type: 'object',
+          fields: [
+            defineField({
+              name: 'question',
+              title: 'Question',
+              type: 'string',
+              validation: Rule => Rule.required()
+            }),
+            defineField({
+              name: 'answer',
+              title: 'Answer',
+              type: 'text',
+              rows: 4,
+              validation: Rule => Rule.required()
+            })
+          ],
+          preview: {
+            select: {
+              title: 'question'
+            }
+          }
+        }
+      ],
+      description: 'Frequently asked questions specific to this product'
     })
   ],
   preview: {
