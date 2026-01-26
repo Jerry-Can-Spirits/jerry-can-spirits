@@ -7,6 +7,10 @@ const BOT_USER_AGENTS = [
   // Search engines
   'googlebot',
   'bingbot',
+  'msnbot',          // Microsoft/Bing legacy
+  'bingpreview',     // Bing link preview
+  'adidxbot',        // Bing ads
+  'microsoftpreview', // Microsoft previews
   'slurp',           // Yahoo
   'duckduckbot',
   'baiduspider',

@@ -1,6 +1,8 @@
 import type { Metadata } from 'next'
 import Image from 'next/image'
+import Link from 'next/link'
 import BackToTop from '@/components/BackToTop'
+import Breadcrumbs from '@/components/Breadcrumbs'
 
 export const metadata: Metadata = {
   title: "Our Story - From Military Service to Premium Spirits",
@@ -21,6 +23,15 @@ export const metadata: Metadata = {
 export default function OurStory() {
   return (
     <main className="min-h-screen py-20">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
+        <Breadcrumbs
+          items={[
+            { label: 'About', href: '/about/story' },
+            { label: 'Our Story' },
+          ]}
+        />
+      </div>
+
       {/* Hero Section */}
       <section className="relative min-h-[80vh] flex items-center justify-center overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
@@ -559,6 +570,123 @@ export default function OurStory() {
           </div>
         </section>
 
+        {/* FAQ Section with Schema */}
+        <section className="py-20">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl sm:text-4xl font-serif font-bold text-white mb-6">
+              Frequently Asked Questions
+            </h2>
+            <p className="text-xl text-parchment-300 max-w-3xl mx-auto">
+              Common questions about Jerry Can Spirits and our story.
+            </p>
+          </div>
+
+          <div className="space-y-4 max-w-4xl mx-auto">
+            <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20">
+              <h3 className="text-lg font-semibold text-white mb-3">Who owns Jerry Can Spirits?</h3>
+              <p className="text-parchment-300">
+                Jerry Can Spirits is run by Dan and Rhys, who both served in the Royal Corps of Signals. We&apos;re self-funded and doing everything ourselves – learning as we go, making mistakes, and figuring it out along the way.
+              </p>
+            </div>
+
+            <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20">
+              <h3 className="text-lg font-semibold text-white mb-3">Is Jerry Can Spirits veteran owned?</h3>
+              <p className="text-parchment-300">
+                Yes, we&apos;re British veteran owned. We both served in the Royal Corps of Signals before getting into spirits. The military taught us to appreciate kit that just works – nothing flashy, just reliable. That mindset stuck with us.
+              </p>
+            </div>
+
+            <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20">
+              <h3 className="text-lg font-semibold text-white mb-3">Where is Jerry Can Spirits based?</h3>
+              <p className="text-parchment-300">
+                We&apos;re based in the UK. It&apos;s a home-office operation – nothing glamorous, just us working away. Our <Link href="/shop/product/expedition-spiced-rum" className="text-gold-300 hover:text-gold-400 underline">Expedition Spiced Rum</Link> is made with Caribbean rum and molasses from a Welsh brewery, blended right here in Britain.
+              </p>
+            </div>
+
+            <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20">
+              <h3 className="text-lg font-semibold text-white mb-3">What does the Jerry Can name mean?</h3>
+              <p className="text-parchment-300">
+                The jerry can is the ultimate &quot;function over form&quot; design – invented in 1937 and still used today because it just works. No frills, no nonsense. That&apos;s the approach we take with our rum. We&apos;re not trying to be flashy, we&apos;re trying to make something that&apos;s genuinely good.
+              </p>
+            </div>
+
+            <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20">
+              <h3 className="text-lg font-semibold text-white mb-3">When was Jerry Can Spirits founded?</h3>
+              <p className="text-parchment-300">
+                We launched in 2025, though the idea had been kicking around for years. It started as one of those &quot;we should make our own rum&quot; conversations that kept coming up whenever we got together. Eventually we stopped just talking about it and actually had a go.
+              </p>
+            </div>
+
+            <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20">
+              <h3 className="text-lg font-semibold text-white mb-3">What makes Jerry Can Spirits different from other rum brands?</h3>
+              <p className="text-parchment-300">
+                Honestly? We&apos;re small and we&apos;re learning as we go. We don&apos;t have a big team or marketing department – it&apos;s just us, figuring out regulations, building relationships one at a time, and trying to make something we&apos;re proud of. When you&apos;re funding everything yourself, you care about every detail because you have to.
+              </p>
+            </div>
+          </div>
+
+          {/* FAQ Schema Markup */}
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify({
+                "@context": "https://schema.org",
+                "@type": "FAQPage",
+                "mainEntity": [
+                  {
+                    "@type": "Question",
+                    "name": "Who owns Jerry Can Spirits?",
+                    "acceptedAnswer": {
+                      "@type": "Answer",
+                      "text": "Jerry Can Spirits is run by Dan and Rhys, who both served in the Royal Corps of Signals. We're self-funded and doing everything ourselves – learning as we go, making mistakes, and figuring it out along the way."
+                    }
+                  },
+                  {
+                    "@type": "Question",
+                    "name": "Is Jerry Can Spirits veteran owned?",
+                    "acceptedAnswer": {
+                      "@type": "Answer",
+                      "text": "Yes, we're British veteran owned. We both served in the Royal Corps of Signals before getting into spirits. The military taught us to appreciate kit that just works – nothing flashy, just reliable. That mindset stuck with us."
+                    }
+                  },
+                  {
+                    "@type": "Question",
+                    "name": "Where is Jerry Can Spirits based?",
+                    "acceptedAnswer": {
+                      "@type": "Answer",
+                      "text": "We're based in the UK. It's a home-office operation – nothing glamorous, just us working away. Our Expedition Spiced Rum is made with Caribbean rum and molasses from a Welsh brewery, blended right here in Britain."
+                    }
+                  },
+                  {
+                    "@type": "Question",
+                    "name": "What does the Jerry Can name mean?",
+                    "acceptedAnswer": {
+                      "@type": "Answer",
+                      "text": "The jerry can is the ultimate \"function over form\" design – invented in 1937 and still used today because it just works. No frills, no nonsense. That's the approach we take with our rum."
+                    }
+                  },
+                  {
+                    "@type": "Question",
+                    "name": "When was Jerry Can Spirits founded?",
+                    "acceptedAnswer": {
+                      "@type": "Answer",
+                      "text": "We launched in 2025, though the idea had been kicking around for years. It started as one of those \"we should make our own rum\" conversations that kept coming up whenever we got together. Eventually we stopped just talking about it and actually had a go."
+                    }
+                  },
+                  {
+                    "@type": "Question",
+                    "name": "What makes Jerry Can Spirits different from other rum brands?",
+                    "acceptedAnswer": {
+                      "@type": "Answer",
+                      "text": "We're small and we're learning as we go. We don't have a big team or marketing department – it's just us, figuring out regulations, building relationships one at a time, and trying to make something we're proud of."
+                    }
+                  }
+                ]
+              })
+            }}
+          />
+        </section>
+
         {/* CTA Section */}
         <section className="py-20 text-center">
           <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-12 border border-gold-500/20">
@@ -570,7 +698,7 @@ export default function OurStory() {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <a
+              <Link
                 href="/shop/drinks"
                 className="inline-flex items-center space-x-2 bg-gold-500 hover:bg-gold-400 text-jerry-green-900 px-8 py-4 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105"
               >
@@ -578,9 +706,9 @@ export default function OurStory() {
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                 </svg>
-              </a>
+              </Link>
 
-              <a
+              <Link
                 href="/#newsletter-signup"
                 className="inline-flex items-center space-x-2 bg-jerry-green-800 hover:bg-jerry-green-900 text-parchment-50 px-8 py-4 rounded-lg font-semibold border-2 border-jerry-green-800 hover:border-jerry-green-700 transition-all duration-300 transform hover:scale-105"
               >
@@ -588,7 +716,7 @@ export default function OurStory() {
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                 </svg>
-              </a>
+              </Link>
             </div>
 
             <div className="mt-8 text-gold-300 text-sm">

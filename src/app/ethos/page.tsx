@@ -1,10 +1,12 @@
 import type { Metadata } from 'next'
 import Image from 'next/image'
+import Link from 'next/link'
 import BackToTop from '@/components/BackToTop'
+import Breadcrumbs from '@/components/Breadcrumbs'
 
 export const metadata: Metadata = {
   title: "Our Ethos - Values & Craftsmanship",
-  description: "Discover the values and craftsmanship philosophy behind Jerry Can Spirits. From military precision to traditional distilling methods, explore our commitment to adventure, quality, and innovation.",
+  description: "The values behind Jerry Can Spirits. We believe in making rum we're proud of – function over form, quality without shortcuts, and actually caring about what goes in the bottle.",
   alternates: {
     canonical: 'https://jerrycanspirits.co.uk/ethos/',
   },
@@ -17,6 +19,14 @@ export const metadata: Metadata = {
 export default function Ethos() {
   return (
     <main className="min-h-screen py-20">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
+        <Breadcrumbs
+          items={[
+            { label: 'Our Ethos' },
+          ]}
+        />
+      </div>
+
       {/* Hero Section - Compass & Copper */}
       <section className="relative min-h-[80vh] flex items-center justify-center overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
@@ -32,7 +42,7 @@ export default function Ethos() {
             <div className="relative w-full max-w-3xl mx-auto mb-8">
               <Image
                 src="/images/hero/Compass_Still.webp"
-                alt="Vintage compass and copper pot still - tradition meets adventure"
+                alt="Vintage compass and pot still - tradition meets adventure"
                 width={1200}
                 height={600}
                 className="rounded-lg"
@@ -47,7 +57,7 @@ export default function Ethos() {
           </h1>
           
           <p className="text-xl text-parchment-300 max-w-3xl mx-auto leading-relaxed mb-8">
-            Expedition-tested precision meets master craft distilling. Our veteran-owned British spirits brand transforms premium ingredients into exceptional small-batch rum - handcrafted spirits that embody adventure, sustainability, and uncompromising quality with every pour.
+            We&apos;re not trying to reinvent rum – we just want to make it properly. Good ingredients, honest processes, and no cutting corners. That&apos;s the approach we take to everything we do.
           </p>
 
           <div className="inline-flex items-center space-x-2 text-gold-300">
@@ -68,7 +78,7 @@ export default function Ethos() {
               Our Values
             </h2>
             <p className="text-xl text-parchment-300 max-w-3xl mx-auto">
-              These principles guide everything we create - learned through experience, proven through adventure.
+              The things that matter to us when we&apos;re making rum.
             </p>
           </div>
 
@@ -112,9 +122,8 @@ export default function Ethos() {
           {/* Philosophy Quote */}
           <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-8 border border-gold-500/20 text-center">
             <p className="text-xl text-white leading-relaxed">
-              "Service taught me what reliable means. Adventure is where I prove it. The same standards
-              I learned to demand from equipment that matters - I now demand from every bottle we craft. Function over flash.
-              Quality that performs. That's not negotiable."
+              &quot;In the military you learn to appreciate kit that just works – nothing fancy, just reliable.
+              That&apos;s what we&apos;re going for with our rum. Function over flash. Quality that actually delivers.&quot;
             </p>
             <div className="mt-6 text-gold-300 text-sm font-semibold uppercase tracking-wider">
               - The Jerry Can Philosophy
@@ -167,11 +176,11 @@ export default function Ethos() {
                         </ul>
                       </div>
                       <div className="bg-jerry-green-800/60 rounded-lg p-4">
-                        <h4 className="text-gold-300 font-semibold mb-2">Ethical Partners</h4>
+                        <h4 className="text-gold-300 font-semibold mb-2">From Further Afield</h4>
                         <ul className="text-sm text-parchment-300 space-y-1">
-                          <li>• Caribbean & Welsh rum blends</li>
-                          <li>• Exotic spices & fruits</li>
-                          <li>• Sustainable practices</li>
+                          <li>• Caribbean rum base</li>
+                          <li>• Welsh brewery molasses</li>
+                          <li>• Quality spices & botanicals</li>
                         </ul>
                       </div>
                     </div>
@@ -304,16 +313,15 @@ export default function Ethos() {
         <section className="py-20">
           <div className="text-center mb-16">
             <h2 className="text-3xl sm:text-4xl font-serif font-bold text-white mb-6">
-              The Commitment
+              What We&apos;re Working Towards
             </h2>
             <p className="text-xl text-parchment-300 max-w-3xl mx-auto">
-              Our promises extend beyond great spirits. We're committed to sustainability,
-              supporting local communities, and preserving traditional craftsmanship for future generations.
+              We&apos;re still learning and figuring things out. These are the things we&apos;re trying to get right.
             </p>
           </div>
 
           <div className="grid md:grid-cols-2 gap-12">
-            {/* Sustainability */}
+            {/* UK Focus */}
             <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-8 border border-gold-500/20">
               <div className="text-center mb-6">
                 <div className="w-16 h-16 bg-gold-400/20 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -322,30 +330,30 @@ export default function Ethos() {
                   </svg>
                 </div>
                 <h3 className="text-2xl font-serif font-bold text-white mb-4">
-                  Sustainability First
+                  UK-First Where Possible
                 </h3>
               </div>
-              
+
               <div className="space-y-4 text-parchment-300">
                 <div className="flex items-start space-x-3">
                   <div className="w-2 h-2 bg-gold-400 rounded-full mt-2 flex-shrink-0"></div>
                   <div>
-                    <p className="font-semibold text-gold-300">Local Sourcing Priority</p>
-                    <p className="text-sm">Reducing carbon footprint through UK-first ingredient strategy</p>
+                    <p className="font-semibold text-gold-300">Local Sourcing</p>
+                    <p className="text-sm">We try to source from the UK when we can – it makes sense for a British brand</p>
                   </div>
                 </div>
                 <div className="flex items-start space-x-3">
                   <div className="w-2 h-2 bg-gold-400 rounded-full mt-2 flex-shrink-0"></div>
                   <div>
-                    <p className="font-semibold text-gold-300">Ethical Partnerships</p>
-                    <p className="text-sm">Supporting sustainable practices across our supply chain</p>
+                    <p className="font-semibold text-gold-300">Welsh Partnership</p>
+                    <p className="text-sm">Working with Spirit of Wales Distillery for our blending and production</p>
                   </div>
                 </div>
                 <div className="flex items-start space-x-3">
                   <div className="w-2 h-2 bg-gold-400 rounded-full mt-2 flex-shrink-0"></div>
                   <div>
-                    <p className="font-semibold text-gold-300">Waste Reduction</p>
-                    <p className="text-sm">Minimizing environmental impact through efficient processes</p>
+                    <p className="font-semibold text-gold-300">Caribbean Rum</p>
+                    <p className="text-sm">Some things have to come from elsewhere – we use quality Caribbean rum as our base</p>
                   </div>
                 </div>
               </div>
@@ -363,27 +371,27 @@ export default function Ethos() {
                   Quality Over Quantity
                 </h3>
               </div>
-              
+
               <div className="space-y-4 text-parchment-300">
                 <div className="flex items-start space-x-3">
                   <div className="w-2 h-2 bg-gold-400 rounded-full mt-2 flex-shrink-0"></div>
                   <div>
-                    <p className="font-semibold text-gold-300">No Compromises</p>
-                    <p className="text-sm">Every ingredient, process, and decision prioritizes excellence</p>
+                    <p className="font-semibold text-gold-300">No Shortcuts</p>
+                    <p className="text-sm">We&apos;d rather make less rum that&apos;s actually good than more that&apos;s mediocre</p>
                   </div>
                 </div>
                 <div className="flex items-start space-x-3">
                   <div className="w-2 h-2 bg-gold-400 rounded-full mt-2 flex-shrink-0"></div>
                   <div>
-                    <p className="font-semibold text-gold-300">Traditional Craft</p>
-                    <p className="text-sm">Preserving time-honoured techniques in modern applications</p>
+                    <p className="font-semibold text-gold-300">Learning As We Go</p>
+                    <p className="text-sm">We&apos;re still perfecting our craft – each batch teaches us something new</p>
                   </div>
                 </div>
                 <div className="flex items-start space-x-3">
                   <div className="w-2 h-2 bg-gold-400 rounded-full mt-2 flex-shrink-0"></div>
                   <div>
-                    <p className="font-semibold text-gold-300">Continuous Improvement</p>
-                    <p className="text-sm">Learning, evolving, and perfecting with every batch</p>
+                    <p className="font-semibold text-gold-300">Small Batch</p>
+                    <p className="text-sm">Keeping things small means we can actually pay attention to what we&apos;re making</p>
                   </div>
                 </div>
               </div>
@@ -395,33 +403,32 @@ export default function Ethos() {
         <section className="py-20 text-center">
           <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-12 border border-gold-500/20">
             <h2 className="text-3xl sm:text-4xl font-serif font-bold text-white mb-6">
-              Join the Expedition
+              Try the Rum
             </h2>
             <p className="text-xl text-parchment-300 mb-8 max-w-2xl mx-auto">
-              Be part of our journey as we craft the future of premium British spirits.
-              From source to spirit, discover what makes <a href="/" className="text-gold-300 hover:text-gold-400 underline decoration-gold-500/40 hover:decoration-gold-400 transition-colors">Jerry Can Spirits</a> extraordinary.
+              Enough about us – the proof is in the bottle. Check out our <Link href="/shop/product/expedition-spiced-rum" className="text-gold-300 hover:text-gold-400 underline decoration-gold-500/40 hover:decoration-gold-400 transition-colors">Expedition Spiced Rum</Link> and see what you think.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <a
+              <Link
                 href="/shop/drinks"
                 className="inline-flex items-center justify-center space-x-2 bg-gold-500 hover:bg-gold-400 text-jerry-green-900 px-8 py-4 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105"
               >
-                <span>Explore Our Rum</span>
+                <span>Shop Our Rum</span>
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                 </svg>
-              </a>
+              </Link>
 
-              <a
-                href="/#newsletter-signup"
+              <Link
+                href="/about/story"
                 className="inline-flex items-center justify-center space-x-2 bg-jerry-green-800 hover:bg-jerry-green-700 text-parchment-50 px-8 py-4 rounded-lg font-semibold border-2 border-gold-500/30 hover:border-gold-500/60 transition-all duration-300 transform hover:scale-105"
               >
-                <span>Join Our Newsletter</span>
+                <span>Read Our Story</span>
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                 </svg>
-              </a>
+              </Link>
             </div>
           </div>
         </section>

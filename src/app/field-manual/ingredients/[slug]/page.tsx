@@ -6,6 +6,7 @@ import { client } from '@/sanity/client'
 import { ingredientBySlugQuery } from '@/sanity/queries'
 import { urlFor } from '@/sanity/lib/image'
 import BackToTop from '@/components/BackToTop'
+import Breadcrumbs from '@/components/Breadcrumbs'
 import EnlargeableProductImage from '@/components/EnlargeableProductImage'
 
 // Types for ingredient data
@@ -133,13 +134,13 @@ export default async function IngredientDetailPage({ params }: { params: Promise
     <main className="min-h-screen py-20">
       {/* Breadcrumb */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
-        <nav className="text-sm text-parchment-400">
-          <Link href="/field-manual" className="hover:text-gold-300 transition-colors">Field Manual</Link>
-          <span className="mx-2">→</span>
-          <Link href="/field-manual/ingredients" className="hover:text-gold-300 transition-colors">Ingredients</Link>
-          <span className="mx-2">→</span>
-          <span className="text-gold-300">{ingredient.name}</span>
-        </nav>
+        <Breadcrumbs
+          items={[
+            { label: 'Field Manual', href: '/field-manual' },
+            { label: 'Ingredients', href: '/field-manual/ingredients' },
+            { label: ingredient.name },
+          ]}
+        />
       </div>
 
       {/* Hero Section - 2 Column Layout */}

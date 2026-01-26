@@ -1,8 +1,9 @@
 import type { Metadata } from 'next'
+import Breadcrumbs from '@/components/Breadcrumbs'
 
 export const metadata: Metadata = {
   title: "Careers - Join Our Team",
-  description: "Explore career opportunities at Jerry Can Spirits®. Learn about our veteran-owned company culture, values, and future hiring plans for expedition-ready team members.",
+  description: "Career opportunities at Jerry Can Spirits®. We're not hiring right now, but if you're interested in joining a small veteran-owned spirits company, we'd like to hear from you.",
   alternates: {
     canonical: 'https://jerrycanspirits.co.uk/careers/',
   },
@@ -16,6 +17,15 @@ export default function Careers() {
   return (
     <main className="min-h-screen py-20">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Breadcrumb */}
+        <div className="mb-8">
+          <Breadcrumbs
+            items={[
+              { label: 'Careers' },
+            ]}
+          />
+        </div>
+
         {/* Header */}
         <div className="text-center mb-12 pb-8 border-b border-gold-500/30">
           <div className="inline-block px-4 py-2 bg-jerry-green-800/60 backdrop-blur-sm rounded-full border border-gold-500/30 mb-6">
@@ -59,15 +69,15 @@ export default function Careers() {
                 About Jerry Can Spirits®
               </h2>
               <p className="text-white mb-4 leading-relaxed">
-                Jerry Can Spirits® is a British spirits company dedicated to crafting premium rum that embodies the spirit of adventure and exploration. Our products are inspired by military heritage and engineered for those who value quality and authenticity.
+                Jerry Can Spirits® is a small British spirits company founded by Royal Signals veterans. We&apos;re focused on making quality spirits and building something we&apos;re proud of – no shortcuts, no compromises.
               </p>
               <div className="bg-gold-900/20 backdrop-blur-sm rounded-lg p-6 border border-gold-500/30">
-                <h3 className="text-lg font-semibold text-gold-300 mb-3">Our Values</h3>
+                <h3 className="text-lg font-semibold text-gold-300 mb-3">What We Care About</h3>
                 <ul className="list-disc list-inside text-white space-y-2">
-                  <li><strong className="text-gold-300">Excellence:</strong> Uncompromising commitment to quality in everything we do</li>
-                  <li><strong className="text-gold-300">Heritage:</strong> Respect for tradition while embracing innovation</li>
-                  <li><strong className="text-gold-300">Adventure:</strong> Bold spirit and readiness to explore new horizons</li>
-                  <li><strong className="text-gold-300">Integrity:</strong> Honest, transparent business practices</li>
+                  <li><strong className="text-gold-300">Quality:</strong> Getting it right matters more than getting it fast</li>
+                  <li><strong className="text-gold-300">Honesty:</strong> Straight-talking, no corporate waffle</li>
+                  <li><strong className="text-gold-300">Learning:</strong> We&apos;re still figuring things out and that&apos;s fine</li>
+                  <li><strong className="text-gold-300">Teamwork:</strong> We look after the people we work with</li>
                 </ul>
               </div>
             </section>

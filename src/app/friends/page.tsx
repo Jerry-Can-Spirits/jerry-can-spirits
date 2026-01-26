@@ -2,16 +2,17 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import Image from 'next/image'
 import StructuredData from '@/components/StructuredData'
+import Breadcrumbs from '@/components/Breadcrumbs'
 
 export const metadata: Metadata = {
   title: "Friends & Partners",
-  description: "Meet the distilleries, suppliers, and partners who help make Jerry Can Spirits possible. We're building a community of excellence to help rum become the UK's number one spirit.",
+  description: "Meet the distilleries, suppliers, and partners who help make Jerry Can Spirits possible. Quality spirits need quality partnerships.",
   alternates: {
     canonical: "https://jerrycanspirits.co.uk/friends/",
   },
   openGraph: {
     title: "Friends & Partners | Jerry Can Spirits®",
-    description: "Our trusted partners, from distilleries to suppliers, who help craft exceptional spirits",
+    description: "Our trusted partners, from distilleries to suppliers, who help us make rum we're proud of",
   },
 }
 
@@ -70,6 +71,15 @@ export default function FriendsPage() {
       <StructuredData data={organizationSchema} />
       <main className="min-h-screen py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Breadcrumb */}
+          <div className="mb-8">
+            <Breadcrumbs
+              items={[
+                { label: 'Friends & Partners' },
+              ]}
+            />
+          </div>
+
           {/* Header */}
           <div className="text-center mb-16">
             <div className="inline-block px-4 py-2 bg-jerry-green-800/60 backdrop-blur-sm rounded-full border border-gold-500/30 mb-6">
@@ -81,10 +91,9 @@ export default function FriendsPage() {
               Friends of Jerry Can Spirits
             </h1>
             <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
-              We believe in the power of community. These are the exceptional partners -
-              from distilleries and craft producers to suppliers and collaborators - who
-              help make Jerry Can Spirits possible. Together, we're on a mission to make
-              rum the UK's number one spirit.
+              Good rum doesn&apos;t happen in isolation. These are the partners – distilleries,
+              suppliers, and collaborators – who help make Jerry Can Spirits what it is.
+              We&apos;re grateful to work with people who share our commitment to quality.
             </p>
           </div>
 
@@ -92,19 +101,16 @@ export default function FriendsPage() {
           <div className="mb-20 max-w-4xl mx-auto">
             <div className="bg-jerry-green-800/20 border border-gold-500/30 rounded-lg p-8">
               <h2 className="text-2xl font-playfair font-bold text-gold-400 mb-4">
-                Our Mission
+                Why Partnerships Matter
               </h2>
               <p className="text-gray-300 leading-relaxed mb-4">
-                Quality spirits are only possible through quality partnerships. From the
-                distilleries who craft our rum to the suppliers who provide our packaging,
-                every partner plays a vital role. By supporting each other through genuine
-                collaboration, we're not just building our own brands – we're elevating
-                the entire craft spirits industry.
+                We&apos;re a small team, so we rely on good partners to make this work. From
+                Spirit of Wales who help with our distilling to Harlequin who sort our
+                packaging – every partner contributes something we couldn&apos;t do alone.
               </p>
               <p className="text-gray-300 leading-relaxed">
-                Every partnership strengthens our collective voice and helps quality products
-                gain the recognition they deserve. Whether you're a distillery, supplier, or
-                collaborator who shares our values, <Link href="/contact" className="text-gold-500 hover:text-gold-400 underline">get in touch</Link>.
+                If you&apos;re a supplier, distillery, or business that might want to work with
+                us, we&apos;d love to hear from you. <Link href="/contact" className="text-gold-500 hover:text-gold-400 underline">Get in touch</Link>.
               </p>
             </div>
           </div>
@@ -273,19 +279,106 @@ export default function FriendsPage() {
             </div>
           </div>
 
+          {/* FAQ Section */}
+          <div className="mb-16">
+            {/* FAQ Schema */}
+            <script
+              type="application/ld+json"
+              dangerouslySetInnerHTML={{
+                __html: JSON.stringify({
+                  "@context": "https://schema.org",
+                  "@type": "FAQPage",
+                  "mainEntity": [
+                    {
+                      "@type": "Question",
+                      "name": "How can I become a Jerry Can Spirits partner?",
+                      "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Get in touch via our contact page or email partnerships@jerrycanspirits.co.uk. We're interested in working with distilleries, suppliers, and businesses that share our commitment to quality. We'll have a chat about what we're both looking for and see if there's a fit."
+                      }
+                    },
+                    {
+                      "@type": "Question",
+                      "name": "What kind of partners is Jerry Can Spirits looking for?",
+                      "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "We work with a range of partners - from distilleries who help with production to packaging suppliers, barware manufacturers, and premium mixer brands. We're always interested in hearing from businesses that share our values: quality over shortcuts, and honest straight-talking over corporate waffle."
+                      }
+                    },
+                    {
+                      "@type": "Question",
+                      "name": "Does Jerry Can Spirits support veteran-owned businesses?",
+                      "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Being veteran-owned ourselves, we're naturally keen to support other veteran businesses where we can. If you're a veteran running a business that might complement what we do, we'd particularly like to hear from you."
+                      }
+                    },
+                    {
+                      "@type": "Question",
+                      "name": "Can I stock Jerry Can Spirits products in my shop or bar?",
+                      "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "We're always interested in talking to retailers, bars, and restaurants about stocking our products. Contact us at partnerships@jerrycanspirits.co.uk with details about your venue and what you're looking for. We're happy to discuss wholesale arrangements and support for your venue."
+                      }
+                    }
+                  ]
+                })
+              }}
+            />
+
+            <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
+              <h2 className="text-3xl font-playfair font-bold text-gold-500 mb-2 text-center">
+                Partnership Questions
+              </h2>
+              <p className="text-gray-400 mb-8 text-center">
+                Common questions about working with us
+              </p>
+
+              <div className="space-y-6 max-w-3xl mx-auto">
+                <div className="border-b border-gold-500/10 pb-6">
+                  <h3 className="text-lg font-semibold text-gold-300 mb-3">How can I become a Jerry Can Spirits partner?</h3>
+                  <p className="text-gray-300 leading-relaxed">
+                    Get in touch via our <Link href="/contact" className="text-gold-400 hover:text-gold-300 underline">contact page</Link> or email <a href="mailto:partnerships@jerrycanspirits.co.uk" className="text-gold-400 hover:text-gold-300 underline">partnerships@jerrycanspirits.co.uk</a>. We&apos;re interested in working with distilleries, suppliers, and businesses that share our commitment to quality. We&apos;ll have a chat about what we&apos;re both looking for and see if there&apos;s a fit.
+                  </p>
+                </div>
+
+                <div className="border-b border-gold-500/10 pb-6">
+                  <h3 className="text-lg font-semibold text-gold-300 mb-3">What kind of partners is Jerry Can Spirits looking for?</h3>
+                  <p className="text-gray-300 leading-relaxed">
+                    We work with a range of partners – from distilleries who help with production to packaging suppliers, barware manufacturers, and premium mixer brands. We&apos;re always interested in hearing from businesses that share our values: quality over shortcuts, and honest straight-talking over corporate waffle.
+                  </p>
+                </div>
+
+                <div className="border-b border-gold-500/10 pb-6">
+                  <h3 className="text-lg font-semibold text-gold-300 mb-3">Does Jerry Can Spirits support veteran-owned businesses?</h3>
+                  <p className="text-gray-300 leading-relaxed">
+                    Being veteran-owned ourselves, we&apos;re naturally keen to support other veteran businesses where we can. If you&apos;re a veteran running a business that might complement what we do, we&apos;d particularly like to hear from you.
+                  </p>
+                </div>
+
+                <div>
+                  <h3 className="text-lg font-semibold text-gold-300 mb-3">Can I stock Jerry Can Spirits products in my shop or bar?</h3>
+                  <p className="text-gray-300 leading-relaxed">
+                    We&apos;re always interested in talking to retailers, bars, and restaurants about stocking our products. Contact us at <a href="mailto:partnerships@jerrycanspirits.co.uk" className="text-gold-400 hover:text-gold-300 underline">partnerships@jerrycanspirits.co.uk</a> with details about your venue and what you&apos;re looking for. We&apos;re happy to discuss wholesale arrangements and support for your venue.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
           {/* Next Step CTA */}
           <div className="text-center p-12 bg-jerry-green-800/20 border border-gold-500/20 rounded-lg">
             <h3 className="text-2xl font-playfair font-bold text-gold-500 mb-4">
-              Got Questions?
+              More Questions?
             </h3>
             <p className="text-gray-300 mb-6 max-w-2xl mx-auto">
-              Learn more about Jerry Can Spirits, our products, and how we work in our FAQ section
+              Learn more about Jerry Can Spirits, our products, and how we work in our general FAQ section
             </p>
             <Link
               href="/faq"
               className="inline-flex items-center justify-center space-x-2 bg-gold-500 hover:bg-gold-400 text-jerry-green-900 px-8 py-4 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105"
             >
-              <span>View FAQs</span>
+              <span>View All FAQs</span>
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
               </svg>

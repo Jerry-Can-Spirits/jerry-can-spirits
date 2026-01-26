@@ -2,16 +2,17 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import Image from 'next/image'
 import CartographicBackground from '@/components/CartographicBackground'
+import Breadcrumbs from '@/components/Breadcrumbs'
 
 export const metadata: Metadata = {
   title: 'Dan Freeman - Founder & Director',
-  description: 'Meet Dan Freeman, founder of Jerry Can Spirits. Former Royal Signals Corporal with 12 years of service, now crafting premium spirits with military precision.',
+  description: 'Meet Dan Freeman, founder of Jerry Can Spirits. Former Royal Signals Corporal with 12 years of service who decided to have a go at making rum.',
   alternates: {
     canonical: 'https://jerrycanspirits.co.uk/about/team/dan-freeman/',
   },
   openGraph: {
     title: 'Dan Freeman - Founder & Director | Jerry Can Spirits®',
-    description: 'Former Royal Signals Corporal with 12 years of service, now crafting premium spirits with military precision.',
+    description: 'Former Royal Signals Corporal with 12 years of service who decided to have a go at making rum.',
     url: 'https://jerrycanspirits.co.uk/about/team/dan-freeman',
     siteName: 'Jerry Can Spirits®',
     locale: 'en_GB',
@@ -32,6 +33,15 @@ export default function DanFreemanPage() {
       </div>
 
       <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        <Breadcrumbs
+          items={[
+            { label: 'About', href: '/about/story' },
+            { label: 'Team', href: '/about/team' },
+            { label: 'Dan Freeman' },
+          ]}
+          className="mb-8"
+        />
+
         {/* Back Button */}
         <Link
           href="/about/team"
@@ -130,7 +140,7 @@ export default function DanFreemanPage() {
                 Dan Freeman
               </h1>
               <p className="text-xl text-gold-400 font-semibold">
-                Former Royal Signals Corporal · Veteran Entrepreneur
+                Former Royal Signals Corporal
               </p>
             </div>
 
@@ -145,7 +155,7 @@ export default function DanFreemanPage() {
                   Military Service
                 </h2>
                 <p className="text-parchment-200 leading-relaxed">
-                  Former Royal Signals Corporal with 12 years of service from 2012 to 2024, Dan's military career took him from communications operations to information systems engineering, with deployments spanning the Falklands, Afghanistan, and Estonia, alongside exercises across Europe and the United States.
+                  Dan served in the Royal Signals for 12 years (2012-2024), working in communications and information systems. He deployed to the Falklands, Afghanistan, and Estonia, with exercises across Europe and the US. Nothing heroic – just the usual soldiering.
                 </p>
               </div>
 
@@ -158,10 +168,10 @@ export default function DanFreemanPage() {
                   The Journey to Jerry Can Spirits
                 </h2>
                 <p className="text-parchment-200 leading-relaxed mb-4">
-                  The idea of creating a premium rum had been a recurring conversation during late nights with fellow servicemen, but it was Dan who pulled the trigger in July 2025, transforming years of talk into reality. With over 100 different rums sampled and a deep passion for spirits and cocktail craft, Dan brings both expertise and obsession to every bottle.
+                  The idea of making rum had been coming up for years – one of those conversations that kept happening whenever we got together. In July 2025, Dan decided to stop just talking about it and actually have a go. Having tried well over 100 different rums and genuinely loving the stuff, it felt like the right time.
                 </p>
                 <p className="text-parchment-200 leading-relaxed">
-                  Now holding an Essentials in Distilling qualification from the Chartered Institute of Brewers and Distillers (where he serves as an associate member), a personal alcohol licence, and having secured AWRS approval through HMRC, Dan has built Jerry Can Spirits from the ground up.
+                  Since then, it&apos;s been a lot of learning – getting the Essentials in Distilling qualification from the Chartered Institute of Brewers and Distillers, sorting out the personal alcohol licence, navigating HMRC for AWRS approval. The usual stuff you have to figure out when you&apos;re starting from scratch.
                 </p>
               </div>
 
@@ -175,10 +185,10 @@ export default function DanFreemanPage() {
                   Role at Jerry Can Spirits
                 </h2>
                 <p className="text-parchment-200 leading-relaxed mb-4">
-                  Following military service, Dan dedicated himself full-time to every facet of the business—operations, finance, legal compliance, web design, SEO, and product development.
+                  Since leaving the forces, Dan&apos;s been doing a bit of everything – operations, finance, legal compliance, building the website, SEO, product development. When you&apos;re a small outfit, you end up wearing a lot of hats.
                 </p>
                 <p className="text-parchment-200 leading-relaxed">
-                  His military-honed skills in attention to detail, operational planning, and logistics management translate directly into the precision and quality that define Jerry Can Spirits. Whether he's perfecting a spiced rum or crafting a flawlessly balanced Zombie cocktail, Dan's approach is unwavering: passion and craft over corporate conformity.
+                  The military taught him to pay attention to details and plan things properly, which comes in handy when you&apos;re trying to build something from nothing. His approach is pretty simple: make something you&apos;re proud of, and don&apos;t cut corners.
                 </p>
               </div>
 

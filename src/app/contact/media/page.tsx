@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import Image from 'next/image'
 import { ColorSwatch, DownloadCard, BoilerplateText, ImageGallery } from '@/components/media'
+import Breadcrumbs from '@/components/Breadcrumbs'
 
 export default function MediaContact() {
   const [formData, setFormData] = useState({
@@ -106,18 +107,28 @@ export default function MediaContact() {
   ]
 
   // Boilerplate text options
-  const boilerplateShort = `Jerry Can Spirits® is a British veteran-owned spirits company specialising in premium craft rum built for adventure. Founded by Royal Corps of Signals veterans, we bring a bit of military precision to what we do – and our spirits are all the better for it.`
+  const boilerplateShort = `Jerry Can Spirits® is a British veteran-owned spirits company making premium craft rum. Founded by Royal Corps of Signals veterans, we focus on quality over flash – making rum we're genuinely proud of.`
 
-  const boilerplateMedium = `Jerry Can Spirits® is a British veteran-owned spirits company specialising in premium craft rum built for adventure. Founded by lads from the Royal Corps of Signals who spent years in some of the harshest environments imaginable, we bring military precision to everything we do. Our name comes from the classic jerry can – a rather brilliant bit of kit first designed in 1937 and still NATO standard today. Like the jerry can, our spirits are built for the job in hand, not just looking fancy. We focus on the important stuff: getting it right every time.`
+  const boilerplateMedium = `Jerry Can Spirits® is a British veteran-owned spirits company making premium craft rum. Founded by veterans of the Royal Corps of Signals who decided to stop talking about making rum and actually have a go, we take a no-nonsense approach to what we do. Our name comes from the classic jerry can – designed in 1937 and still used today because it just works. Like the jerry can, we're focused on function over form: making rum that's genuinely good, not just fancy-looking.`
 
-  const boilerplateFull = `Jerry Can Spirits® is a British veteran-owned spirits company specialising in what we think is the best damn premium craft rum around – spirits that really can keep up with the demands of adventure. Founded by lads from the Royal Corps of Signals who spent years in some of the harshest environments imaginable, we bring a bit of that military precision to what we do – and our spirits are all the better for it.
+  const boilerplateFull = `Jerry Can Spirits® is a British veteran-owned spirits company making premium craft rum. Founded by Dan and Rhys, veterans of the Royal Corps of Signals who spent years talking about making their own rum before finally having a go, we take a straightforward approach to what we do.
 
-Our name comes from the classic jerry can – a rather brilliant bit of kit first designed in 1937 and still NATO standard today – and that's exactly what we aim to build our spirits to be: built for the job in hand and not just looking fancy. When it comes to making rum, we don't mess around. We focus on the important stuff – like getting it right every time, rather than chasing what's currently in vogue.
+Our name comes from the classic jerry can – designed in 1937 and still NATO standard today because it just works. That's the approach we take: function over form, quality without shortcuts. We're not trying to reinvent rum or chase trends. We just want to make something we're proud of and that people actually enjoy drinking.
 
-Based in the UK, Jerry Can Spirits® is on a mission to make premium spirits for everyone, in whatever context. Whether you're trekking across continents or just trying to get through Monday, our rum packs a punch, delivers solid quality, and has the kind of character you can actually rely on. So whether you're a seasoned explorer or not, you can depend on our rum to deliver.`
+Based in the UK, Jerry Can Spirits® is a small operation run by two mates who care about getting it right. Whether you're an outdoors type or just fancy a decent drink, our Expedition Spiced Rum delivers honest quality and proper flavour. We're still learning and growing, but we're committed to making rum that's worth your time.`
 
   return (
     <main className="min-h-screen">
+      {/* Breadcrumb */}
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
+        <Breadcrumbs
+          items={[
+            { label: 'Contact', href: '/contact' },
+            { label: 'Media' },
+          ]}
+        />
+      </div>
+
       {/* Page Hero */}
       <section className="relative py-20 lg:py-32 overflow-hidden">
         <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -464,7 +475,7 @@ Based in the UK, Jerry Can Spirits® is on a mission to make premium spirits for
               <div className="text-center">
                 <div className="bg-jerry-green-700/40 rounded-lg p-6 border border-gold-500/20">
                   <p className="text-parchment-200 mb-4">
-                    Jerry Can Spirits® is currently in pre-launch phase. Stay tuned for upcoming announcements, product launches, and company news.
+                    We&apos;re a new brand, so press releases and news will be added here as we grow. Follow us on social media for the latest updates.
                   </p>
                   <p className="text-parchment-300 text-sm">
                     Media professionals can subscribe to our press updates by contacting{' '}
