@@ -76,6 +76,42 @@ export default function Home() {
       "knowsAbout": ["Premium Rum", "British Spirits", "Military Heritage", "Veteran-Owned Business", "Small-Batch Distilling"],
       "award": "Armed Forces Covenant Signatory"
     },
+    // LocalBusiness schema for local SEO
+    {
+      "@context": "https://schema.org",
+      "@type": "LocalBusiness",
+      "@id": "https://jerrycanspirits.co.uk/#business",
+      "name": "Jerry Can Spirits",
+      "image": "https://jerrycanspirits.co.uk/images/Logo.webp",
+      "url": "https://jerrycanspirits.co.uk",
+      "telephone": "",
+      "email": "hello@jerrycanspirits.co.uk",
+      "priceRange": "££",
+      "description": "Veteran-owned British spirits company producing premium craft rum. Founded by Royal Corps of Signals veterans.",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "",
+        "addressLocality": "Blackpool",
+        "addressRegion": "Lancashire",
+        "postalCode": "",
+        "addressCountry": "GB"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 53.8175,
+        "longitude": -3.0357
+      },
+      "sameAs": [
+        "https://www.facebook.com/JerryCanSpirits",
+        "https://www.instagram.com/jerrycanspirits"
+      ],
+      "currenciesAccepted": "GBP",
+      "paymentAccepted": "Credit Card, Debit Card, PayPal",
+      "areaServed": {
+        "@type": "Country",
+        "name": "United Kingdom"
+      }
+    },
     // Website schema
     {
       "@context": "https://schema.org",
@@ -96,6 +132,35 @@ export default function Home() {
       "logo": "https://jerrycanspirits.co.uk/images/Logo.webp",
       "slogan": "Engineered for reliability, designed for adventure",
       "description": "Veteran-owned premium British rum with authentic military heritage"
+    },
+    // Event schema for product launch
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "name": "Jerry Can Spirits Expedition Spiced Rum Launch",
+      "description": "Official launch of Jerry Can Spirits Expedition Spiced Rum - premium veteran-owned British craft rum. Pre-orders ship first.",
+      "startDate": "2026-04-06",
+      "endDate": "2026-04-06",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "eventAttendanceMode": "https://schema.org/OnlineEventAttendanceMode",
+      "location": {
+        "@type": "VirtualLocation",
+        "url": "https://jerrycanspirits.co.uk"
+      },
+      "image": "https://jerrycanspirits.co.uk/images/hero/hero-spiced.webp",
+      "organizer": {
+        "@type": "Organization",
+        "name": "Jerry Can Spirits",
+        "url": "https://jerrycanspirits.co.uk"
+      },
+      "offers": {
+        "@type": "Offer",
+        "url": "https://jerrycanspirits.co.uk/shop/drinks",
+        "price": "35",
+        "priceCurrency": "GBP",
+        "availability": "https://schema.org/PreOrder",
+        "validFrom": "2025-07-01"
+      }
     }
   ];
 

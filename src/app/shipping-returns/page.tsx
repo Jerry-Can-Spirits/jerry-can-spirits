@@ -1,4 +1,6 @@
 import type { Metadata } from 'next'
+import Link from 'next/link'
+import Breadcrumbs from '@/components/Breadcrumbs'
 
 export const metadata: Metadata = {
   title: "Shipping & Returns",
@@ -15,9 +17,80 @@ export const metadata: Metadata = {
 export default function ShippingReturns() {
   const lastUpdated = '25 November 2025'
 
+  // FAQ Schema for SEO
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "How much does shipping cost for Jerry Can Spirits?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Standard shipping costs £5.00. Orders over £100 qualify for free shipping. We currently ship throughout the United Kingdom."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Do you ship internationally?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "We currently only ship within the United Kingdom. We're working on expanding our delivery network - join our mailing list to be notified when we ship to your country."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Why do I need to show ID for alcohol delivery?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "UK law requires age verification for all alcohol deliveries. The recipient must be 18 or older and present valid photo ID to the courier. If no one is available to verify age, the package will be returned."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I return alcohol products?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Due to UK licensing regulations, we can only accept returns for products damaged during shipping, incorrect items sent in error, or manufacturing defects. Change of mind returns are not accepted for alcohol products. Contact us within 14 days of delivery with photos of any issues."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How long do refunds take?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Once we receive your returned items, refunds are processed within 5-7 business days. Credit/debit cards take 3-5 business days, PayPal takes 1-2 business days, and bank transfers take 5-7 business days to appear."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What happens if my package is damaged or lost?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Contact us immediately at support@jerrycanspirits.co.uk with your order number and photos of any damage. We'll arrange a replacement or full refund for damaged or lost shipments."
+        }
+      }
+    ]
+  }
+
   return (
     <main className="min-h-screen py-20">
+      {/* FAQ Schema */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
+
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Breadcrumb */}
+        <div className="mb-8">
+          <Breadcrumbs
+            items={[
+              { label: 'Shipping & Returns' },
+            ]}
+          />
+        </div>
+
         {/* Header */}
         <div className="text-center mb-12 pb-8 border-b border-gold-500/30">
           <div className="inline-block px-4 py-2 bg-jerry-green-800/60 backdrop-blur-sm rounded-full border border-gold-500/30 mb-6">
@@ -51,9 +124,8 @@ export default function ShippingReturns() {
               </h3>
               <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20">
                 <ul className="list-disc list-inside text-white space-y-2">
-                  <li><strong className="text-gold-300">Standard Shipping</strong> (5-7 business days): £5.95</li>
-                  <li><strong className="text-gold-300">Express Shipping</strong> (2-3 business days): £12.95</li>
-                  <li><strong className="text-gold-300">Free shipping</strong> on orders over £75</li>
+                  <li><strong className="text-gold-300">Standard Shipping</strong>: £5.00</li>
+                  <li><strong className="text-gold-300">Free shipping</strong> on orders over £100</li>
                 </ul>
               </div>
             </section>
@@ -199,6 +271,62 @@ export default function ShippingReturns() {
           </div>
         </div>
 
+        {/* FAQ Section */}
+        <div className="mt-12">
+          <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
+            <h2 className="text-3xl font-serif font-bold text-white mb-2 text-center">
+              Frequently Asked Questions
+            </h2>
+            <p className="text-parchment-400 mb-8 text-center">
+              Quick answers about shipping and returns
+            </p>
+
+            <div className="space-y-6 max-w-3xl mx-auto">
+              <div className="border-b border-gold-500/10 pb-6">
+                <h3 className="text-lg font-semibold text-gold-300 mb-3">How much does shipping cost?</h3>
+                <p className="text-parchment-200 leading-relaxed">
+                  Standard shipping costs £5.00. Orders over £100 qualify for free shipping. We currently ship throughout the United Kingdom.
+                </p>
+              </div>
+
+              <div className="border-b border-gold-500/10 pb-6">
+                <h3 className="text-lg font-semibold text-gold-300 mb-3">Do you ship internationally?</h3>
+                <p className="text-parchment-200 leading-relaxed">
+                  We currently only ship within the United Kingdom. We&apos;re working on expanding our delivery network – <Link href="/#newsletter-signup" className="text-gold-400 hover:text-gold-300 underline">join our mailing list</Link> to be notified when we ship to your country.
+                </p>
+              </div>
+
+              <div className="border-b border-gold-500/10 pb-6">
+                <h3 className="text-lg font-semibold text-gold-300 mb-3">Why do I need to show ID for alcohol delivery?</h3>
+                <p className="text-parchment-200 leading-relaxed">
+                  UK law requires age verification for all alcohol deliveries. The recipient must be 18 or older and present valid photo ID to the courier. If no one is available to verify age, the package will be returned.
+                </p>
+              </div>
+
+              <div className="border-b border-gold-500/10 pb-6">
+                <h3 className="text-lg font-semibold text-gold-300 mb-3">Can I return alcohol products?</h3>
+                <p className="text-parchment-200 leading-relaxed">
+                  Due to UK licensing regulations, we can only accept returns for products damaged during shipping, incorrect items sent in error, or manufacturing defects. Change of mind returns are not accepted for alcohol products. Contact us within 14 days of delivery with photos of any issues.
+                </p>
+              </div>
+
+              <div className="border-b border-gold-500/10 pb-6">
+                <h3 className="text-lg font-semibold text-gold-300 mb-3">How long do refunds take?</h3>
+                <p className="text-parchment-200 leading-relaxed">
+                  Once we receive your returned items, refunds are processed within 5-7 business days. Credit/debit cards take 3-5 business days, PayPal takes 1-2 business days, and bank transfers take 5-7 business days to appear.
+                </p>
+              </div>
+
+              <div>
+                <h3 className="text-lg font-semibold text-gold-300 mb-3">What happens if my package is damaged or lost?</h3>
+                <p className="text-parchment-200 leading-relaxed">
+                  Contact us immediately at <a href="mailto:support@jerrycanspirits.co.uk" className="text-gold-400 hover:text-gold-300 underline">support@jerrycanspirits.co.uk</a> with your order number and photos of any damage. We&apos;ll arrange a replacement or full refund for damaged or lost shipments.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* Footer */}
         <div className="mt-12 p-8 bg-jerry-green-800/40 backdrop-blur-sm rounded-xl border border-gold-500/20 text-center">
           <p className="text-parchment-300 text-sm mb-4">
@@ -207,7 +335,7 @@ export default function ShippingReturns() {
             </strong>
           </p>
           <p className="text-parchment-400 text-xs">
-            This policy is subject to review and will be updated by our legal team as required. 
+            This policy is subject to review and will be updated by our legal team as required.
             Current terms are provisional and may change.
           </p>
         </div>
