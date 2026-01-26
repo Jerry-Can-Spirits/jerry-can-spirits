@@ -75,7 +75,7 @@ export default function AgeGate({ onVerified }: AgeGateProps) {
         <div className="absolute inset-0 bg-gradient-to-r from-jerry-green-900 via-jerry-green-900/80 to-transparent z-10"></div>
         <Image
           src="/images/hero/hero-spiced.webp"
-          alt=""
+          alt="Jerry Can Spirits Expedition Spiced Rum bottle"
           fill
           className="object-cover object-right"
           priority

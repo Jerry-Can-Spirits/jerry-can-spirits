@@ -65,7 +65,7 @@ export default function Home() {
         "addressCountry": "GB"
       },
       "sameAs": [
-        "https://www.facebook.com/JerryCanSpirits",
+        "https://www.facebook.com/jerrycanspirits",
         "https://www.instagram.com/jerrycanspirits"
       ],
       "contactPoint": {
@@ -102,7 +102,7 @@ export default function Home() {
         "longitude": -3.0357
       },
       "sameAs": [
-        "https://www.facebook.com/JerryCanSpirits",
+        "https://www.facebook.com/jerrycanspirits",
         "https://www.instagram.com/jerrycanspirits"
       ],
       "currenciesAccepted": "GBP",
