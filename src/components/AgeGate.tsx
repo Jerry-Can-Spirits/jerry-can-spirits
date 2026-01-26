@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import CartographicBackground from './CartographicBackground';
 
 const regions = [
@@ -154,13 +155,13 @@ export default function AgeGate({ onVerified }: AgeGateProps) {
           <div className="text-center pt-2">
             <p className="text-gold-400 text-xs sm:text-sm leading-relaxed">
               By entering, you accept our{' '}
-              <a href="/terms-of-service" className="underline hover:text-gold-300 transition-colors">
+              <Link href="/terms-of-service/" className="underline hover:text-gold-300 transition-colors">
                 Terms of Service
-              </a>{' '}
+              </Link>{' '}
               and{' '}
-              <a href="/privacy-policy" className="underline hover:text-gold-300 transition-colors">
+              <Link href="/privacy-policy/" className="underline hover:text-gold-300 transition-colors">
                 Privacy Policy
-              </a>.
+              </Link>.
             </p>
           </div>
         </div>
