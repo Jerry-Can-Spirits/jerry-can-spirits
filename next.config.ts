@@ -126,6 +126,12 @@ const nextConfig: NextConfig = {
         destination: '/field-manual/cocktails/:slug*',
         permanent: true, // 301 redirect for SEO
       },
+      // Affiliate/Creator collab vanity URLs (Shopify Collabs)
+      {
+        source: '/PatSmithComedy',
+        destination: '/shop/drinks?dt_id=PatSmithComedy',
+        permanent: false, // 302 redirect - don't cache affiliate links
+      },
     ]
   },
 
