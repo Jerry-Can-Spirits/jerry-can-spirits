@@ -43,8 +43,9 @@ export default function ClientWrapper({ children }: ClientWrapperProps) {
   };
 
   // Legal pages that should be accessible without age verification
+  // Use startsWith to handle both with and without trailing slashes
   const legalPages = ['/terms-of-service', '/privacy-policy', '/cookie-policy'];
-  const isLegalPage = legalPages.includes(pathname);
+  const isLegalPage = legalPages.some(page => pathname.startsWith(page));
 
   // Check localStorage on mount and handle navigation protection
   useEffect(() => {

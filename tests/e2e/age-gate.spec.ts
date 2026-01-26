@@ -127,6 +127,58 @@ test.describe('Age Gate Functionality', () => {
     const isVisible = await exitButton.isVisible({ timeout: 5000 }).catch(() => false)
     expect(isVisible).toBe(true)
   })
+
+  test('can click Terms of Service link from age gate', async ({ page }) => {
+    await page.goto('/')
+    await dismissCookiebot(page)
+
+    // Verify age gate is showing
+    const ageButton = page.getByRole('button', { name: AGE_GATE_CONFIRM_PATTERN })
+    await expect(ageButton).toBeVisible({ timeout: 5000 })
+
+    // Click the Terms of Service link in the age gate (first link, not footer)
+    const tosLink = page.getByRole('link', { name: /Terms of Service/i }).first()
+    await tosLink.click()
+    await page.waitForTimeout(1000)
+
+    // Should navigate to terms page and show content (no age gate blocking)
+    expect(page.url()).toContain('/terms-of-service')
+
+    // Age gate should NOT be showing on legal pages
+    const welcomeHeading = page.getByRole('heading', { name: /WELCOME, EXPLORER/i })
+    const isStillVisible = await welcomeHeading.isVisible({ timeout: 1000 }).catch(() => false)
+    expect(isStillVisible).toBe(false)
+
+    // Main content should be visible
+    const main = page.locator('main')
+    await expect(main).toBeVisible({ timeout: 5000 })
+  })
+
+  test('can click Privacy Policy link from age gate', async ({ page }) => {
+    await page.goto('/')
+    await dismissCookiebot(page)
+
+    // Verify age gate is showing
+    const ageButton = page.getByRole('button', { name: AGE_GATE_CONFIRM_PATTERN })
+    await expect(ageButton).toBeVisible({ timeout: 5000 })
+
+    // Click the Privacy Policy link in the age gate (first link, not footer)
+    const privacyLink = page.getByRole('link', { name: /Privacy Policy/i }).first()
+    await privacyLink.click()
+    await page.waitForTimeout(1000)
+
+    // Should navigate to privacy page and show content (no age gate blocking)
+    expect(page.url()).toContain('/privacy-policy')
+
+    // Age gate should NOT be showing on legal pages
+    const welcomeHeading = page.getByRole('heading', { name: /WELCOME, EXPLORER/i })
+    const isStillVisible = await welcomeHeading.isVisible({ timeout: 1000 }).catch(() => false)
+    expect(isStillVisible).toBe(false)
+
+    // Main content should be visible
+    const main = page.locator('main')
+    await expect(main).toBeVisible({ timeout: 5000 })
+  })
 })
 
 test.describe('Age Gate on Protected Pages', () => {
