@@ -30,12 +30,12 @@ export default function OurStory() {
                 Our Story
               </span>
             </div>
-            
+
             {/* Story Hero Image */}
             <div className="relative w-full max-w-2xl mx-auto h-48 sm:h-64 md:h-80 lg:h-96 rounded-lg overflow-hidden border border-gold-500/20 mb-8 shadow-2xl">
               <Image
                 src="/images/hero/Trail_Hero.webp"
-                alt="Jerry Can Spirits - Veteran-owned British rum with military heritage, engineered for reliability"
+                alt="Jerry Can Spirits - Veteran-owned British rum with military heritage"
                 fill
                 className="object-cover"
                 sizes="(max-width: 768px) 100vw, 672px"
@@ -46,13 +46,13 @@ export default function OurStory() {
           </div>
 
           <h1 className="text-4xl sm:text-6xl font-serif font-bold text-white mb-6">
-            Engineered for Purpose
+            Forged by the Fire
             <br />
-            <span className="text-gold-300">Built for Adventure</span>
+            <span className="text-gold-300">of Experience</span>
           </h1>
-          
+
           <p className="text-xl text-parchment-300 max-w-3xl mx-auto leading-relaxed mb-8">
-            The jerry can wasn't designed for beauty - it was engineered for absolute reliability in the harshest conditions. Premium British craft rum deserves the same respect. Discover how Royal Corps of Signals veterans transformed expedition-tested values into exceptional small-batch spirits for those who value function, bold flavour, and authentic adventure.
+            Shaped by years of service, driven by a desire for adventure – and a determination to craft rum without compromise. Rum that&apos;s engineered with purpose, made with integrity, for people who live life on their own terms.
           </p>
 
           <div className="inline-flex items-center space-x-2 text-gold-300">
@@ -65,15 +65,15 @@ export default function OurStory() {
       </section>
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        
-        {/* Section 1: The Team */}
+
+        {/* Section 1: From the Trenches to Adventure */}
         <section className="py-20">
           <div className="text-center mb-16">
             <h2 className="text-3xl sm:text-4xl font-serif font-bold text-white mb-6">
-              Forged by Experience
+              From the Trenches to the Adventure
             </h2>
             <p className="text-xl text-parchment-300 max-w-3xl mx-auto">
-              Shaped by service, driven by adventure, and committed to engineering rum with purpose and integrity for modern explorers.
+              Service with the Royal Corps of Signals took us to places where your equipment really gets put to the test.
             </p>
           </div>
 
@@ -82,16 +82,13 @@ export default function OurStory() {
             <div className="space-y-6">
               <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-8 border border-gold-500/20">
                 <h3 className="text-2xl font-serif font-bold text-white mb-4">
-                  From Service to Adventure
+                  Lessons from Service
                 </h3>
                 <p className="text-parchment-300 leading-relaxed mb-4">
-                  Service with the Royal Corps of Signals took us everywhere, from Arctic deployments to desert outposts.
-                  We learned what equipment you can trust when everything depends on it. Not the flashiest kit. The most reliable.
+                  I served with the Royal Corps of Signals. Deployments to the Arctic and desert outposts – places where your equipment really gets put to the test. We learned to put our faith in gear that gets the job done, not in the likes of flashy new kit. The most reliable stuff is the unflashy stuff.
                 </p>
                 <p className="text-parchment-300 leading-relaxed">
-                  We're civilians now. Different careers, different paths, but the same shared understanding. Functional
-                  design and unwavering reliability aren't just ideals, they're non-negotiables. Whether you're crossing
-                  continents or conquering Tuesday, that's the standard that matters.
+                  Life after the military was different for all of us. We all went on to do our own thing, but we retained that same basic understanding. A piece of kit that works, a design that&apos;s functional, a product that&apos;s reliable – these are non-negotiables. Whether you&apos;re on some grand expedition or just getting through a tough Tuesday, that&apos;s what matters.
                 </p>
               </div>
             </div>
@@ -101,89 +98,86 @@ export default function OurStory() {
               <div className="relative w-full h-48 sm:h-64 lg:h-80 rounded-lg overflow-hidden border border-gold-500/20 mb-6">
                 <Image
                   src="/images/hero/Our_Story_Hero.webp"
-                  alt="Jerry Can Spirits Founder - Royal Corps of Signals Veteran"
+                  alt="Jerry Can Spirits - Military heritage"
                   fill
                   className="object-contain"
                   sizes="(max-width: 768px) 100vw, 50vw"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-jerry-green-900/40 to-transparent" />
               </div>
-              
+
               <div className="space-y-3">
                 <div className="flex items-center space-x-3">
                   <div className="w-2 h-2 bg-gold-400 rounded-full flex-shrink-0"></div>
-                  <p className="text-parchment-300 text-sm">Service taught us what reliable means</p>
+                  <p className="text-parchment-300 text-sm">We learned what reliable means with service</p>
                 </div>
                 <div className="flex items-center space-x-3">
                   <div className="w-2 h-2 bg-gold-400 rounded-full flex-shrink-0"></div>
-                  <p className="text-parchment-300 text-sm">Adventure is where we prove it</p>
+                  <p className="text-parchment-300 text-sm">That&apos;s tested in the fire of adventure</p>
                 </div>
                 <div className="flex items-center space-x-3">
                   <div className="w-2 h-2 bg-gold-400 rounded-full flex-shrink-0"></div>
-                  <p className="text-parchment-300 text-sm">Function over form, always</p>
+                  <p className="text-parchment-300 text-sm">Function over form, always, is our way</p>
                 </div>
                 <div className="flex items-center space-x-3">
                   <div className="w-2 h-2 bg-gold-400 rounded-full flex-shrink-0"></div>
-                  <p className="text-parchment-300 text-sm">Engineering perfection for modern explorers</p>
+                  <p className="text-parchment-300 text-sm">Engineering perfection for the modern explorer</p>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* The Recurring Conversation */}
+          {/* The Idea That Wouldn't Die */}
           <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-12 border border-gold-500/20">
             <div className="text-center mb-8">
               <h3 className="text-2xl font-serif font-bold text-white mb-4">
-                "We should engineer our own rum..."
+                The Idea That Wouldn&apos;t Die
               </h3>
               <p className="text-parchment-300 text-lg italic">
-                - Every meet-up, every conversation, every shared understanding of what rum could be
+                &quot;Let&apos;s make our own rum...&quot;
               </p>
             </div>
-            
+
             <div className="max-w-4xl mx-auto">
               <p className="text-white text-lg leading-relaxed text-center mb-8">
-                It started as an idea, evolved into a mission, then became our calling. 
-                No matter where we were or what we were discussing, the conversation would always 
-                drift back to the same place: "What if we engineered rum with the same precision 
-                we brought to everything else? What if we left the pirates and palm trees behind?"
+                That was the phrase that kept coming up, over and over, every time we got together to chat. Every shared experience, every conversation, every passing minute. There was this nagging feeling that someone ought to have a go at engineering rum, with the same kind of precision we brought to everything else. That we could leave the pirates and palm trees behind and craft something that was truly worth drinking.
               </p>
-              
+
               <div className="grid md:grid-cols-3 gap-6 mt-8">
                 <div className="text-center">
                   <div className="w-12 h-12 bg-gold-400/20 rounded-full flex items-center justify-center mx-auto mb-3">
                     <span className="text-gold-400 text-xl font-bold">1</span>
                   </div>
-                  <p className="text-gold-300 font-semibold mb-2">The Vision</p>
-                  <p className="text-parchment-300 text-sm">Engineering rum with purpose and integrity</p>
+                  <p className="text-gold-300 font-semibold mb-2">What We&apos;re All About</p>
+                  <p className="text-parchment-300 text-sm">Designing rum with purpose and integrity to begin with</p>
                 </div>
                 <div className="text-center">
                   <div className="w-12 h-12 bg-gold-400/20 rounded-full flex items-center justify-center mx-auto mb-3">
                     <span className="text-gold-400 text-xl font-bold">2</span>
                   </div>
-                  <p className="text-gold-300 font-semibold mb-2">The Mission</p>
-                  <p className="text-parchment-300 text-sm">Creating spirits for the modern explorer</p>
+                  <p className="text-gold-300 font-semibold mb-2">Our Mission in Life</p>
+                  <p className="text-parchment-300 text-sm">Crafting spirits that are right for the modern explorer</p>
                 </div>
                 <div className="text-center">
                   <div className="w-12 h-12 bg-gold-400/20 rounded-full flex items-center justify-center mx-auto mb-3">
                     <span className="text-gold-400 text-xl font-bold">3</span>
                   </div>
-                  <p className="text-gold-300 font-semibold mb-2">The Commitment</p>
-                  <p className="text-parchment-300 text-sm">"This is rum, engineered for adventure"</p>
+                  <p className="text-gold-300 font-semibold mb-2">Our Slogan</p>
+                  <p className="text-parchment-300 text-sm">&quot;This is rum, for people who live the adventurous life&quot;</p>
                 </div>
               </div>
             </div>
           </div>
         </section>
 
-        {/* Section 2: From Talk to Action */}
+        {/* Section 2: Turning Dreams into Reality */}
         <section className="py-20">
           <div className="text-center mb-16">
             <h2 className="text-3xl sm:text-4xl font-serif font-bold text-white mb-6">
-              From Vision to Engineering
+              Turning Dreams into Reality
             </h2>
             <p className="text-xl text-parchment-300 max-w-3xl mx-auto">
-              The moment we stopped dreaming and started building something with purpose and integrity.
+              The point at which we stopped just dreaming about this and started actually doing it – with a bit of purpose to boot.
             </p>
           </div>
 
@@ -191,34 +185,28 @@ export default function OurStory() {
             <div className="space-y-6 sm:space-y-8">
               <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20">
                 <h3 className="text-xl font-serif font-bold text-white mb-3">
-                  The Catalyst
+                  When Talk Turns to Action
                 </h3>
                 <p className="text-parchment-300">
-                  There wasn't one dramatic moment, just the gradual realisation that we'd been 
-                  talking about this for years. If we really believed in it, if we really thought 
-                  we could do it better, then why were we still just talking?
+                  We&apos;d been talking about this for years, all of us. Then one day, it just clicked. If we really believed we could do something better, why were we still just talking about it? There wasn&apos;t a single eureka moment – just a growing realisation that we needed to stop jawing and get on with it.
                 </p>
               </div>
 
               <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20">
                 <h3 className="text-xl font-serif font-bold text-white mb-3">
-                  The Reality Check
+                  Facing the Music
                 </h3>
                 <p className="text-parchment-300">
-                  We knew it wouldn't be easy. Most of the team had already left military service 
-                  for different careers, different paths. But that shared vision, that persistent 
-                  idea. It wouldn't let us go.
+                  We knew it wouldn&apos;t be easy. We all had other lives, different careers. But that shared vision, that idea that just wouldn&apos;t quit. It kept us going.
                 </p>
               </div>
 
               <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20">
                 <h3 className="text-xl font-serif font-bold text-white mb-3">
-                  The Commitment
+                  Taking the Leap
                 </h3>
                 <p className="text-parchment-300">
-                  "Right, let's pull the trigger." Not the most elegant business plan, 
-                  but sometimes the best decisions are the simplest ones. We were going 
-                  to make rum. Properly. Together.
+                  &quot;Right, let&apos;s bloody well do it.&quot; Not some grand business plan – just a simple decision to take a chance and see where it takes us. We were going to make rum – the right way. Together.
                 </p>
               </div>
             </div>
@@ -234,34 +222,32 @@ export default function OurStory() {
                   The Leap
                 </h3>
               </div>
-              
+
               <blockquote className="text-center">
                 <p className="text-lg text-parchment-300 italic leading-relaxed mb-4">
-                  "The biggest risk is not taking any risk... In a world that's changing quickly, 
-                  the only strategy that is guaranteed to fail is not taking risks."
+                  &quot;The biggest risk is maybe not taking any risks... in a world where things are changing fast, if the only strategy that is bound to fail is dusting off the old playbook and sticking with it, then taking risks is the only thing that makes any sense.&quot;
                 </p>
                 <p className="text-gold-300 text-sm">
-                  The mindset that finally got us moving
+                  The mindset that finally gave us a nudge in the right direction
                 </p>
               </blockquote>
             </div>
           </div>
         </section>
 
-        {/* Section 3: Building Something Different */}
+        {/* Section 3: Building Something from Scratch */}
         <section className="py-20">
           <div className="text-center mb-16">
             <h2 className="text-3xl sm:text-4xl font-serif font-bold text-white mb-6">
-              Building Something Different
+              Building Something from Scratch
             </h2>
             <p className="text-xl text-parchment-300 max-w-3xl mx-auto">
-              The reality of bootstrap entrepreneurship: one person in a home office, 
-              learning the ropes, building something special.
+              The gritty reality of bootstrapping a business yourself: stuck in a home office, learning as you go, and somehow building something you can be proud of.
             </p>
           </div>
 
           <div className="grid md:grid-cols-3 gap-8 mb-16">
-            {/* The Challenges */}
+            {/* The Hard Bits */}
             <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20">
               <div className="text-center mb-6">
                 <div className="w-16 h-16 bg-red-400/20 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -269,30 +255,30 @@ export default function OurStory() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                 </div>
-                <h3 className="text-xl font-serif font-bold text-white mb-4">The Challenges</h3>
+                <h3 className="text-xl font-serif font-bold text-white mb-4">The Hard Bits</h3>
               </div>
-              
+
               <ul className="space-y-3 text-parchment-300 text-sm">
                 <li className="flex items-start space-x-2">
                   <span className="text-red-400 mt-1">•</span>
-                  <span>Funding entirely from our own pockets</span>
+                  <span>Funding entirely out of our own pockets – no safety net, no way out</span>
                 </li>
                 <li className="flex items-start space-x-2">
                   <span className="text-red-400 mt-1">•</span>
-                  <span>Learning complex regulations from scratch</span>
+                  <span>Figuring out complex regulations on the fly – trial and error all the way</span>
                 </li>
                 <li className="flex items-start space-x-2">
                   <span className="text-red-400 mt-1">•</span>
-                  <span>Setting up business infrastructure solo</span>
+                  <span>Building a whole business from the ground up, solo</span>
                 </li>
                 <li className="flex items-start space-x-2">
                   <span className="text-red-400 mt-1">•</span>
-                  <span>Finding reliable partners and suppliers</span>
+                  <span>Finding reliable suppliers and partners when nobody knows who you are</span>
                 </li>
               </ul>
             </div>
 
-            {/* The Reality */}
+            {/* The Reality Check */}
             <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20">
               <div className="text-center mb-6">
                 <div className="w-16 h-16 bg-gold-400/20 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -300,23 +286,22 @@ export default function OurStory() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
                   </svg>
                 </div>
-                <h3 className="text-xl font-serif font-bold text-white mb-4">The Reality</h3>
+                <h3 className="text-xl font-serif font-bold text-white mb-4">The Reality Check</h3>
               </div>
-              
+
               <div className="space-y-3">
                 <p className="text-parchment-300 text-sm text-center italic mb-4">
-                  "This isn't some massive corporation with staggering teams behind it. This is us in our
-                  home offices, building something special."
+                  &quot;This isn&apos;t some corporation with a team the size of a small army behind it. This is just us, in our home office, trying to build something real.&quot;
                 </p>
                 <div className="pt-4 space-y-2">
-                  <p className="text-gold-300 text-sm">• Learning regulations daily</p>
-                  <p className="text-gold-300 text-sm">• Home office headquarters</p>
-                  <p className="text-gold-300 text-sm">• Quality over everything</p>
+                  <p className="text-gold-300 text-sm">• Learning the regulations on a daily basis – and loving the challenge</p>
+                  <p className="text-gold-300 text-sm">• Our home office is the real HQ – it&apos;s where the magic happens</p>
+                  <p className="text-gold-300 text-sm">• Quality is the one thing we can&apos;t compromise on</p>
                 </div>
               </div>
             </div>
 
-            {/* The Learning */}
+            {/* The School of Hard Knocks */}
             <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20">
               <div className="text-center mb-6">
                 <div className="w-16 h-16 bg-green-400/20 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -324,44 +309,40 @@ export default function OurStory() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                   </svg>
                 </div>
-                <h3 className="text-xl font-serif font-bold text-white mb-4">The Learning</h3>
+                <h3 className="text-xl font-serif font-bold text-white mb-4">The School of Hard Knocks</h3>
               </div>
-              
+
               <ul className="space-y-3 text-parchment-300 text-sm">
                 <li className="flex items-start space-x-2">
                   <span className="text-green-400 mt-1">•</span>
-                  <span>Every obstacle is a learning opportunity</span>
+                  <span>Every obstacle is a chance to learn something new</span>
                 </li>
                 <li className="flex items-start space-x-2">
                   <span className="text-green-400 mt-1">•</span>
-                  <span>Expedition-grade standards applied to business</span>
+                  <span>Expedition-grade standards for our business – no cutting corners</span>
                 </li>
                 <li className="flex items-start space-x-2">
                   <span className="text-green-400 mt-1">•</span>
-                  <span>Building relationships one conversation at a time</span>
+                  <span>Building relationships one conversation at a time – they&apos;re everything</span>
                 </li>
                 <li className="flex items-start space-x-2">
                   <span className="text-green-400 mt-1">•</span>
-                  <span>Quality doesn't require corporate budgets</span>
+                  <span>Quality doesn&apos;t need a big budget to deliver</span>
                 </li>
               </ul>
             </div>
           </div>
 
-          {/* Personal Touch */}
+          {/* David vs the Goliaths */}
           <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20 text-center">
             <h3 className="text-2xl font-serif font-bold text-white mb-6">
-              David vs. Goliath
+              David vs the Goliaths
             </h3>
             <p className="text-lg text-parchment-300 leading-relaxed max-w-4xl mx-auto mb-6">
-              We're not trying to compete with the marketing budgets of multinational corporations. 
-              We're competing with authenticity, with care, with the kind of attention to detail 
-              that only comes when every bottle matters personally. When you're funding it yourself, 
-              when you're learning every regulation, when you're building every relationship, you don't 
-              cut corners. You can't afford to.
+              We&apos;re not trying to compete with the marketing budgets of massive corporations with teams of marketing gurus. We&apos;re competing on authenticity, on care, on the kind of attention to detail that only comes when you genuinely care about every single thing you do. When you&apos;re living off your own savings, when you&apos;re figuring out regulations as you go, when you&apos;re building every single relationship from scratch, you simply can&apos;t afford to cut corners.
             </p>
             <div className="text-gold-300 text-sm font-semibold uppercase tracking-wider">
-              Small Team. Big Dreams. No Compromises.
+              Small Team. Big Dreams. No Compromise. Because We Can&apos;t Afford to.
             </div>
           </div>
         </section>
@@ -373,7 +354,7 @@ export default function OurStory() {
               The Jerry Can Promise
             </h2>
             <p className="text-xl text-parchment-300 max-w-3xl mx-auto">
-              More than a name, it's our commitment to reliability when you need it most.
+              It&apos;s not just a name, it&apos;s our personal guarantee that we&apos;ll be there when you need us most.
             </p>
           </div>
 
@@ -381,17 +362,13 @@ export default function OurStory() {
             <div>
               <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 sm:p-8 border border-gold-500/20 mb-8">
                 <h3 className="text-2xl font-serif font-bold text-white mb-4">
-                  Why "Jerry Can"?
+                  How Did &quot;Jerry Can&quot; Come About?
                 </h3>
                 <p className="text-parchment-300 leading-relaxed mb-4">
-                  The jerry can wasn't designed for beauty. It was engineered for absolute reliability. 
-                  As a team born of service, we understood this principle intimately. Function over form. 
-                  Purpose over pretense.
+                  The jerry can wasn&apos;t designed to win awards for looks – it was engineered to be reliable. As a team born of the service industry, we totally get that. Function over form, purpose over pretence.
                 </p>
                 <p className="text-parchment-300 leading-relaxed">
-                  Jerry Can Spirits embodies this same philosophy. When you need a drink that delivers 
-                  character and quality without compromise, we're engineered to be there. 
-                  This is rum with purpose and integrity.
+                  Jerry Can Spirits is built on the same principles. When you need a drink that delivers on character and quality without compromise, that&apos;s exactly what we&apos;re engineered to do. We&apos;re rum with purpose, with integrity.
                 </p>
               </div>
 
@@ -401,43 +378,41 @@ export default function OurStory() {
                     <span className="text-gold-400 font-bold">R</span>
                   </div>
                   <div>
-                    <p className="text-gold-300 font-semibold">Reliability</p>
-                    <p className="text-parchment-300 text-sm">Always there when you need it</p>
+                    <p className="text-gold-300 font-semibold">Reliable</p>
+                    <p className="text-parchment-300 text-sm">We&apos;ll be there when you need us</p>
                   </div>
                 </div>
-                
+
                 <div className="flex items-center space-x-4 p-4 bg-jerry-green-800/40 backdrop-blur-sm rounded-lg border border-gold-500/20">
                   <div className="w-8 h-8 bg-gold-400/20 rounded-full flex items-center justify-center flex-shrink-0">
                     <span className="text-gold-400 font-bold">D</span>
                   </div>
                   <div>
-                    <p className="text-gold-300 font-semibold">Dependability</p>
+                    <p className="text-gold-300 font-semibold">Dependable</p>
                     <p className="text-parchment-300 text-sm">Built to last, designed to perform</p>
                   </div>
                 </div>
-                
+
                 <div className="flex items-center space-x-4 p-4 bg-jerry-green-800/40 backdrop-blur-sm rounded-lg border border-gold-500/20">
                   <div className="w-8 h-8 bg-gold-400/20 rounded-full flex items-center justify-center flex-shrink-0">
                     <span className="text-gold-400 font-bold">P</span>
                   </div>
                   <div>
                     <p className="text-gold-300 font-semibold">Purpose</p>
-                    <p className="text-parchment-300 text-sm">Everything we make serves a purpose</p>
+                    <p className="text-parchment-300 text-sm">Every single thing we make has a purpose – and we&apos;re proud of it</p>
                   </div>
                 </div>
               </div>
 
               <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20 mt-8">
                 <h4 className="text-xl font-serif font-bold text-white mb-4">
-                  Still Essential, Still Unchanged
+                  Still Good, Still Unchanged
                 </h4>
                 <p className="text-parchment-300 leading-relaxed mb-4">
-                  Designed in 1937. Still NATO standard today. Still the choice of overlanders crossing the Sahara,
-                  sailors navigating the Atlantic, aid workers in the remotest regions. 88 years without a redesign
-                  because when you engineer something perfectly, you don't need version 2.0.
+                  Designed in 1937. Still up to NATO standards today. Still the go-to choice for overlanders trekking across the Sahara, sailors navigating the Atlantic, and aid workers in some of the most remote areas of the world. 88 years without a redesign and we&apos;re not done yet – when you get it right, you don&apos;t need a new version.
                 </p>
                 <p className="text-gold-300 font-semibold">
-                  That's the philosophy behind every bottle we craft.
+                  That&apos;s the philosophy behind every single bottle we craft.
                 </p>
               </div>
             </div>
@@ -447,7 +422,7 @@ export default function OurStory() {
                 <div className="mx-auto mb-6 max-w-md">
                   <Image
                     src="/images/JerryCan_OakTree.webp"
-                    alt="Jerry Can beside oak tree - engineered for reliability, military heritage design"
+                    alt="Jerry Can beside oak tree - engineered for reliability"
                     width={512}
                     height={512}
                     className="rounded-lg"
@@ -455,12 +430,10 @@ export default function OurStory() {
                   />
                 </div>
               </div>
-              
+
               <blockquote className="text-center">
                 <p className="text-lg text-white italic leading-relaxed mb-6">
-                  "Every bottle we craft carries this promise: when you reach for Jerry Can Spirits, 
-                  you're reaching for something you can depend on. Quality you can trust. 
-                  Flavour that delivers."
+                  &quot;Every bottle we craft carries this promise: when you reach for Jerry Can Spirits, you&apos;re reaching for something you can depend on. A quality that you can trust. A flavour that delivers.&quot;
                 </p>
                 <div className="text-gold-300 text-sm font-semibold uppercase tracking-wider">
                   Our Commitment to You
@@ -477,7 +450,7 @@ export default function OurStory() {
               The Vision
             </h2>
             <p className="text-xl text-parchment-300 max-w-3xl mx-auto">
-              Where we're heading: from home office dreams to becoming one of the premier spirits brands in the UK.
+              Where we&apos;re headed: from small home office dreams to becoming one of the UK&apos;s top spirits brands.
             </p>
           </div>
 
@@ -486,55 +459,54 @@ export default function OurStory() {
             <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
               <div className="text-center mb-8">
                 <h3 className="text-2xl font-serif font-bold text-white mb-4">
-                  Where We Are Now
+                  Where We Are Currently
                 </h3>
                 <p className="text-parchment-300">
-                  Still refining our first product, still learning, still building. 
-                  We're not making money yet, but we're making progress.
+                  Still tweaking our inaugural rum, still learning, still building. We&apos;re not yet turning a profit, but we&apos;re getting there.
                 </p>
               </div>
-              
+
               <div className="grid md:grid-cols-2 gap-8">
                 <div>
                   <h4 className="text-lg font-serif font-bold text-gold-300 mb-4">Current Focus</h4>
                   <ul className="space-y-2 text-parchment-300">
                     <li className="flex items-center space-x-2">
                       <span className="w-2 h-2 bg-gold-400 rounded-full"></span>
-                      <span>Perfecting our inaugural rum</span>
+                      <span>Perfecting our first rum – it&apos;s a work in progress</span>
                     </li>
                     <li className="flex items-center space-x-2">
                       <span className="w-2 h-2 bg-gold-400 rounded-full"></span>
-                      <span>Building quality partnerships</span>
+                      <span>Building quality relationships – they&apos;re everything</span>
                     </li>
                     <li className="flex items-center space-x-2">
                       <span className="w-2 h-2 bg-gold-400 rounded-full"></span>
-                      <span>Establishing brand foundations</span>
+                      <span>Setting up the foundations for our brand – this is hard work</span>
                     </li>
                     <li className="flex items-center space-x-2">
                       <span className="w-2 h-2 bg-gold-400 rounded-full"></span>
-                      <span>Learning every day</span>
+                      <span>Learning every day – this is a business, after all</span>
                     </li>
                   </ul>
                 </div>
-                
+
                 <div>
-                  <h4 className="text-lg font-serif font-bold text-gold-300 mb-4">What We Know</h4>
+                  <h4 className="text-lg font-serif font-bold text-gold-300 mb-4">What We Know So Far</h4>
                   <ul className="space-y-2 text-parchment-300">
                     <li className="flex items-center space-x-2">
                       <span className="w-2 h-2 bg-green-400 rounded-full"></span>
-                      <span>Quality can't be compromised</span>
+                      <span>Quality can&apos;t be compromised</span>
                     </li>
                     <li className="flex items-center space-x-2">
                       <span className="w-2 h-2 bg-green-400 rounded-full"></span>
-                      <span>Relationships matter more than budgets</span>
+                      <span>Relationships are everything – they&apos;re worth more than any budget</span>
                     </li>
                     <li className="flex items-center space-x-2">
                       <span className="w-2 h-2 bg-green-400 rounded-full"></span>
-                      <span>Authenticity resonates</span>
+                      <span>Authenticity has a way of resonating with people</span>
                     </li>
                     <li className="flex items-center space-x-2">
                       <span className="w-2 h-2 bg-green-400 rounded-full"></span>
-                      <span>We're just getting started</span>
+                      <span>We&apos;re just getting started – and we&apos;re excited</span>
                     </li>
                   </ul>
                 </div>
@@ -549,10 +521,10 @@ export default function OurStory() {
                 </div>
                 <h4 className="text-lg font-serif font-bold text-white mb-3">5-Year Vision</h4>
                 <ul className="space-y-2 text-parchment-300 text-sm text-left">
-                  <li>• Premier UK spirits brand</li>
-                  <li>• Range of exceptional rums</li>
-                  <li>• Established retail presence</li>
-                  <li>• Strong customer community</li>
+                  <li>• Be one of the top spirits brands in the UK</li>
+                  <li>• Have a range of world class rums on the market</li>
+                  <li>• Have a strong retail presence – we want to be seen in the right places</li>
+                  <li>• Have a loyal customer community – people who love what we do</li>
                 </ul>
               </div>
 
@@ -562,10 +534,10 @@ export default function OurStory() {
                 </div>
                 <h4 className="text-lg font-serif font-bold text-white mb-3">10-Year Dream</h4>
                 <ul className="space-y-2 text-parchment-300 text-sm text-left">
-                  <li>• Our own distillery</li>
-                  <li>• Full spirits portfolio</li>
-                  <li>• International recognition</li>
-                  <li>• Sustainable operations</li>
+                  <li>• Own our own distillery – this is the ultimate goal</li>
+                  <li>• Have a full range of spirits on offer – we want to be a one-stop shop</li>
+                  <li>• Be known internationally – we want to be part of the big league</li>
+                  <li>• Be sustainable – we don&apos;t want to be a burden on the environment</li>
                 </ul>
               </div>
 
@@ -577,10 +549,10 @@ export default function OurStory() {
                 </div>
                 <h4 className="text-lg font-serif font-bold text-white mb-3">The Legacy</h4>
                 <ul className="space-y-2 text-parchment-300 text-sm text-left">
-                  <li>• Proved small can beat big</li>
-                  <li>• Quality over everything</li>
-                  <li>• Authentic brand story</li>
-                  <li>• Team dreams realised</li>
+                  <li>• We proved that small can beat big</li>
+                  <li>• Quality is always the top priority</li>
+                  <li>• We&apos;ve got a real story to tell – one that people will listen to</li>
+                  <li>• We&apos;ve got our own team who&apos;s made this all possible</li>
                 </ul>
               </div>
             </div>
@@ -594,10 +566,9 @@ export default function OurStory() {
               Be Part of Our Story
             </h2>
             <p className="text-xl text-parchment-300 mb-8 max-w-3xl mx-auto">
-              This is just the beginning of our adventure. Join the expedition as we meticulously craft
-              <a href="/" className="text-gold-300 hover:text-gold-400 underline decoration-gold-500/40 hover:decoration-gold-400 transition-colors"> premium British craft rum</a> for modern explorers who demand exceptional flavour, uncompromising quality, and spirits built for adventure. Experience the difference veteran-owned dedication makes with every pour.
+              We&apos;re just getting started on an epic journey. Come be a part of the adventure as we meticulously craft high-end, premium British craft rum for folks who expect top shelf flavour, uncompromising quality and spirits that are built for the road (or the road less travelled). We think having a team of veterans behind the scenes makes all the difference when you pour yourself a glass.
             </p>
-            
+
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
               <a
                 href="/shop/drinks"
@@ -619,7 +590,7 @@ export default function OurStory() {
                 </svg>
               </a>
             </div>
-            
+
             <div className="mt-8 text-gold-300 text-sm">
               <p>Follow our journey from home office to distillery</p>
             </div>
