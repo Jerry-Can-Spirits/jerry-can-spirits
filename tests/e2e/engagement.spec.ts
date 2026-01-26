@@ -2,8 +2,8 @@ import { test, expect, Page } from '@playwright/test'
 
 // Helper to dismiss age gate and cookie consent
 async function dismissOverlays(page: Page) {
-  // Handle age gate - click "I Am 18+" button
-  const ageGateButton = page.getByRole('button', { name: /I Am 18\+/i })
+  // Handle age gate - click "Yes, Enter" button (region-based age verification)
+  const ageGateButton = page.getByRole('button', { name: /Yes,?\s*Enter/i })
   if (await ageGateButton.isVisible({ timeout: 3000 }).catch(() => false)) {
     await ageGateButton.click()
     await page.waitForTimeout(500)

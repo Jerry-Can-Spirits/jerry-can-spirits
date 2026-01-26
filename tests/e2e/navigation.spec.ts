@@ -2,7 +2,7 @@ import { test, expect, Page } from '@playwright/test'
 
 // Helper to dismiss age gate
 async function dismissAgeGate(page: Page) {
-  const ageGateButton = page.getByRole('button', { name: /I Am 18\+/i })
+  const ageGateButton = page.getByRole('button', { name: /Yes,?\s*Enter/i })
   if (await ageGateButton.isVisible({ timeout: 3000 }).catch(() => false)) {
     await ageGateButton.click()
     await page.waitForTimeout(500)
