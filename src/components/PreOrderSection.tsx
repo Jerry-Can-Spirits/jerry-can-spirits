@@ -105,6 +105,13 @@ export default function PreOrderSection() {
   const showProgressBar = !loading && bottlesSold !== null
   const bottleDiscount = bottlePricing.compareAtPrice ? parseInt(bottlePricing.compareAtPrice) - parseInt(bottlePricing.price) : 10
 
+  // PMO compliance: Calculate unit prices (price per litre)
+  const bottleVolumeLitres = 0.7 // 700ml
+  const tradePackVolumeLitres = 6 * 0.7 // 6 × 700ml = 4.2L
+  const bottleUnitPrice = (parseFloat(bottlePricing.price) / bottleVolumeLitres).toFixed(2)
+  const tradePackUnitPrice = (parseFloat(tradePackPricing.price) / tradePackVolumeLitres).toFixed(2)
+  const tradePackPerBottle = (parseFloat(tradePackPricing.price) / 6).toFixed(2)
+
   return (
     <section className="py-16 bg-jerry-green-900/50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -219,10 +226,13 @@ export default function PreOrderSection() {
                 </div>
                 <div className="flex items-center gap-3">
                   <div className="text-right">
-                    <span className="text-xl font-bold">£{bottlePricing.price}</span>
-                    {bottlePricing.compareAtPrice && (
-                      <span className="text-sm line-through opacity-60 ml-2">£{bottlePricing.compareAtPrice}</span>
-                    )}
+                    <div>
+                      <span className="text-xl font-bold">£{bottlePricing.price}</span>
+                      {bottlePricing.compareAtPrice && (
+                        <span className="text-sm line-through opacity-60 ml-2">£{bottlePricing.compareAtPrice}</span>
+                      )}
+                    </div>
+                    <span className="text-xs opacity-75">(£{bottleUnitPrice}/litre)</span>
                   </div>
                   <svg
                     className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300"
@@ -270,13 +280,17 @@ export default function PreOrderSection() {
                 <div className="flex flex-col">
                   <span className="text-xs uppercase tracking-wider text-gold-300">Trade Pack</span>
                   <span className="text-lg">6 Bottles - Best Value</span>
+                  <span className="text-xs text-parchment-400">(£{tradePackPerBottle}/bottle)</span>
                 </div>
                 <div className="flex items-center gap-3">
                   <div className="text-right">
-                    <span className="text-xl font-bold text-gold-300">£{tradePackPricing.price}</span>
-                    {tradePackPricing.compareAtPrice && (
-                      <span className="text-sm line-through opacity-60 text-parchment-400 ml-2">£{tradePackPricing.compareAtPrice}</span>
-                    )}
+                    <div>
+                      <span className="text-xl font-bold text-gold-300">£{tradePackPricing.price}</span>
+                      {tradePackPricing.compareAtPrice && (
+                        <span className="text-sm line-through opacity-60 text-parchment-400 ml-2">£{tradePackPricing.compareAtPrice}</span>
+                      )}
+                    </div>
+                    <span className="text-xs text-parchment-400">(£{tradePackUnitPrice}/litre)</span>
                   </div>
                   <svg
                     className="w-5 h-5 text-gold-300 group-hover:translate-x-1 transition-transform duration-300"
