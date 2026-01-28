@@ -140,6 +140,34 @@ function formatPrice(amount: string, currencyCode: string): string {
   return `${symbol}${price.toFixed(2)}`
 }
 
+// Helper to calculate and format unit price (price per litre) for PMO compliance
+function calculateUnitPrice(priceAmount: string, volumeStr: string, currencyCode: string): string | null {
+  const price = parseFloat(priceAmount)
+
+  // Parse volume string (e.g., "700ml", "70cl", "1L", "1 litre")
+  const volumeLower = volumeStr.toLowerCase().replace(/\s/g, '')
+  let volumeInLitres: number | null = null
+
+  if (volumeLower.includes('ml')) {
+    const ml = parseFloat(volumeLower.replace('ml', ''))
+    if (!isNaN(ml)) volumeInLitres = ml / 1000
+  } else if (volumeLower.includes('cl')) {
+    const cl = parseFloat(volumeLower.replace('cl', ''))
+    if (!isNaN(cl)) volumeInLitres = cl / 100
+  } else if (volumeLower.includes('litre') || volumeLower.includes('liter') || volumeLower.endsWith('l')) {
+    const l = parseFloat(volumeLower.replace(/litre|liter|l/g, ''))
+    if (!isNaN(l)) volumeInLitres = l
+  }
+
+  if (!volumeInLitres || volumeInLitres <= 0) return null
+
+  const pricePerLitre = price / volumeInLitres
+  const symbols: Record<string, string> = { GBP: '£', USD: '$', EUR: '€' }
+  const symbol = symbols[currencyCode] || currencyCode
+
+  return `${symbol}${pricePerLitre.toFixed(2)}/litre`
+}
+
 export default async function ProductPage({
   params
 }: {
@@ -201,6 +229,13 @@ export default async function ProductPage({
 
   // Determine if this is a spirit/alcohol product
   const isSpirit = category.trackingCategory === 'Spirits'
+
+  // Calculate unit price for PMO compliance (spirits/drinks only)
+  const unitPrice = isSpirit ? calculateUnitPrice(
+    product.priceRange.minVariantPrice.amount,
+    volume,
+    product.priceRange.minVariantPrice.currencyCode
+  ) : null
 
   // Product structured data - Enhanced for rich snippets
   const productSchema = {
@@ -373,9 +408,16 @@ export default async function ProductPage({
               <h1 className="text-4xl sm:text-5xl font-serif font-bold text-white mb-4">
                 {product.title}
               </h1>
-              <p className="text-4xl font-serif font-bold text-gold-400">
-                {price}
-              </p>
+              <div>
+                <p className="text-4xl font-serif font-bold text-gold-400">
+                  {price}
+                </p>
+                {unitPrice && (
+                  <p className="text-sm text-parchment-400 mt-1">
+                    ({unitPrice})
+                  </p>
+                )}
+              </div>
             </div>
 
             {/* Description */}
