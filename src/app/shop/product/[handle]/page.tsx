@@ -224,14 +224,29 @@ export default async function ProductPage({
   // Get ABV and volume from metafields if available
   const abvMetafield = product.metafields?.find(m => m?.namespace === 'custom' && m?.key === 'abv')
   const volumeMetafield = product.metafields?.find(m => m?.namespace === 'custom' && m?.key === 'volume')
+  const packSizeMetafield = product.metafields?.find(m => m?.namespace === 'custom' && m?.key === 'pack_size')
   const abv = abvMetafield?.value || '40'
-  const volume = volumeMetafield?.value || '700ml'
+  const volumePerBottle = volumeMetafield?.value || '700ml'
+
+  // Determine pack size (for multi-packs like 6-bottle packs)
+  let packSize = 1
+  if (packSizeMetafield?.value) {
+    packSize = parseInt(packSizeMetafield.value, 10) || 1
+  } else if (handle.includes('6-bottles') || product.title.toLowerCase().includes('6 bottles')) {
+    packSize = 6
+  }
+
+  // Calculate total volume for multi-packs
+  const volume = packSize > 1 ? `${parseFloat(volumePerBottle) * packSize}ml` : volumePerBottle
 
   // Determine if this is a spirit/alcohol product
   const isSpirit = category.trackingCategory === 'Spirits'
 
-  // Calculate unit price for PMO compliance (spirits/drinks only)
-  const unitPrice = isSpirit ? calculateUnitPrice(
+  // Detect if this is a mixed bundle (gift pack with barware) - no unit pricing for bundles
+  const isBundle = handle.includes('gift') || product.title.toLowerCase().includes('gift')
+
+  // Calculate unit price for PMO compliance (spirits/drinks only, not bundles)
+  const unitPrice = (isSpirit && !isBundle) ? calculateUnitPrice(
     product.priceRange.minVariantPrice.amount,
     volume,
     product.priceRange.minVariantPrice.currencyCode
