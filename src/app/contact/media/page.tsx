@@ -106,6 +106,41 @@ export default function MediaContact() {
     { label: 'Heritage', value: 'Royal Corps of Signals' },
   ]
 
+  // Brand values
+  const brandValues = [
+    {
+      name: 'Reliability',
+      description: 'Like our namesake, we deliver consistently. We do what we say we\'ll do. Our colleagues, customers, and partners can count on us.'
+    },
+    {
+      name: 'Authenticity',
+      description: 'We\'re genuine. No pretence, no marketing fluff. Two mates who care about making good rum.'
+    },
+    {
+      name: 'Quality',
+      description: 'Function over form. We focus on making something genuinely good, not just fancy-looking.'
+    },
+    {
+      name: 'Community',
+      description: 'We support the armed forces community that shaped us. 5% of profits go to military charities.'
+    },
+  ]
+
+  // Logo specifications
+  const logoSpecs = [
+    { application: 'Print', minWidth: '20mm' },
+    { application: 'Digital', minWidth: '100px' },
+    { application: 'Favicon / Icon', minWidth: '16px' },
+  ]
+
+  // Tone of voice characteristics
+  const voiceCharacteristics = [
+    { name: 'Genuine', description: 'We speak honestly and directly. No marketing fluff or corporate speak. We say what we mean.' },
+    { name: 'Warm', description: 'We\'re friendly and approachable, not cold or exclusive. We talk to customers like mates, not prospects.' },
+    { name: 'Confident', description: 'We\'re proud of what we make, without being arrogant. We let quality speak for itself.' },
+    { name: 'Down-to-Earth', description: 'We don\'t take ourselves too seriously. We can have a laugh while still caring deeply about what we do.' },
+  ]
+
   // Boilerplate text options
   const boilerplateShort = `Jerry Can Spirits® is a British veteran-owned spirits company making premium craft rum. Founded by Royal Corps of Signals veterans, we focus on quality over flash – making rum we're genuinely proud of.`
 
@@ -116,6 +151,8 @@ export default function MediaContact() {
 Our name comes from the classic jerry can – designed in 1937 and still NATO standard today because it just works. That's the approach we take: function over form, quality without shortcuts. We're not trying to reinvent rum or chase trends. We just want to make something we're proud of and that people actually enjoy drinking.
 
 Based in the UK, Jerry Can Spirits® is a small operation run by two mates who care about getting it right. Whether you're an outdoors type or just fancy a decent drink, our Expedition Spiced Rum delivers honest quality and proper flavour. We're still learning and growing, but we're committed to making rum that's worth your time.`
+
+  const socialResponsibilityStatement = `Jerry Can Spirits commits 5% of annual net profits to armed forces charities supporting veteran welfare, mental health services, and military families. This isn't marketing — it's who we are.`
 
   return (
     <main className="min-h-screen">
@@ -148,11 +185,75 @@ Based in the UK, Jerry Can Spirits® is a small operation run by two mates who c
 
           {/* Quick Links */}
           <div className="flex flex-wrap justify-center gap-4 mb-16">
+            <a href="#our-brand" className="px-4 py-2 bg-jerry-green-800/60 hover:bg-jerry-green-700/60 text-parchment-200 rounded-lg text-sm font-medium transition-colors">Our Brand</a>
             <a href="#brand-assets" className="px-4 py-2 bg-jerry-green-800/60 hover:bg-jerry-green-700/60 text-parchment-200 rounded-lg text-sm font-medium transition-colors">Brand Assets</a>
+            <a href="#tone-of-voice" className="px-4 py-2 bg-jerry-green-800/60 hover:bg-jerry-green-700/60 text-parchment-200 rounded-lg text-sm font-medium transition-colors">Tone of Voice</a>
             <a href="#company-info" className="px-4 py-2 bg-jerry-green-800/60 hover:bg-jerry-green-700/60 text-parchment-200 rounded-lg text-sm font-medium transition-colors">Company Info</a>
             <a href="#press-contacts" className="px-4 py-2 bg-jerry-green-800/60 hover:bg-jerry-green-700/60 text-parchment-200 rounded-lg text-sm font-medium transition-colors">Press Contacts</a>
             <a href="#inquiry-form" className="px-4 py-2 bg-jerry-green-800/60 hover:bg-jerry-green-700/60 text-parchment-200 rounded-lg text-sm font-medium transition-colors">Media Inquiry</a>
           </div>
+
+          {/* ==================== OUR BRAND SECTION ==================== */}
+          <section id="our-brand" className="mb-20 scroll-mt-24">
+            <h2 className="text-3xl font-serif font-bold text-parchment-50 text-center mb-4">
+              Our Brand
+            </h2>
+            <p className="text-parchment-300 text-center mb-12 max-w-2xl mx-auto">
+              The essence of Jerry Can Spirits® — our story, values, and what drives us.
+            </p>
+
+            {/* Tagline */}
+            <div className="text-center mb-12">
+              <p className="text-2xl md:text-3xl font-serif text-gold-300 italic">
+                &ldquo;Engineered for Reliability • Designed for Adventure&rdquo;
+              </p>
+              <p className="text-parchment-400 text-sm mt-2">Our Tagline</p>
+            </div>
+
+            {/* Brand Essence */}
+            <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20 mb-12 text-center">
+              <h3 className="text-xl font-serif font-bold text-parchment-50 mb-4">Brand Essence</h3>
+              <p className="text-xl text-parchment-200 leading-relaxed max-w-3xl mx-auto">
+                The jerry can wasn&apos;t designed for beauty. It was engineered for absolute reliability. We believe rum deserves the same respect.
+              </p>
+            </div>
+
+            {/* Brand Story */}
+            <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20 mb-12">
+              <h3 className="text-xl font-serif font-bold text-parchment-50 mb-4 flex items-center gap-2">
+                <svg className="w-5 h-5 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                </svg>
+                Brand Story
+              </h3>
+              <div className="text-parchment-200 leading-relaxed space-y-4">
+                <p>
+                  Jerry Can Spirits® is a British veteran-owned spirits company making premium craft rum. Founded by Dan and Rhys, veterans of the Royal Corps of Signals who spent years talking about making their own rum before finally having a go, we take a straightforward approach to what we do.
+                </p>
+                <p>
+                  Our name comes from the classic jerry can — designed in 1937 and still NATO standard today because it just works. That&apos;s the approach we take: function over form, quality without shortcuts.
+                </p>
+              </div>
+            </div>
+
+            {/* Brand Values */}
+            <div className="mb-12">
+              <h3 className="text-xl font-serif font-bold text-parchment-50 mb-6 flex items-center gap-2">
+                <svg className="w-5 h-5 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
+                </svg>
+                Brand Values
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {brandValues.map((value) => (
+                  <div key={value.name} className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+                    <h4 className="text-gold-300 font-semibold text-lg mb-2">{value.name}</h4>
+                    <p className="text-parchment-200 text-sm leading-relaxed">{value.description}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
 
           {/* ==================== BRAND ASSETS SECTION ==================== */}
           <section id="brand-assets" className="mb-20 scroll-mt-24">
@@ -227,6 +328,58 @@ Based in the UK, Jerry Can Spirits® is a small operation run by two mates who c
               <p className="text-parchment-400 text-sm mt-4 text-center">
                 Need additional formats (SVG, PNG, EPS)? Contact <a href="mailto:press@jerrycanspirits.co.uk" className="text-gold-300 hover:text-gold-200 underline">press@jerrycanspirits.co.uk</a>
               </p>
+
+              {/* Logo Specifications */}
+              <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+                  <h4 className="text-parchment-50 font-semibold mb-4">Minimum Sizes</h4>
+                  <div className="space-y-3">
+                    {logoSpecs.map((spec) => (
+                      <div key={spec.application} className="flex justify-between items-center text-sm">
+                        <span className="text-parchment-300">{spec.application}</span>
+                        <span className="text-gold-300 font-mono">{spec.minWidth}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+                  <h4 className="text-parchment-50 font-semibold mb-4">Clear Space</h4>
+                  <p className="text-parchment-300 text-sm leading-relaxed">
+                    Maintain clear space around the logo equal to the height of the &apos;J&apos; in &apos;Jerry&apos; on all sides. This ensures the logo remains prominent and uncluttered.
+                  </p>
+                </div>
+              </div>
+
+              {/* Logo Misuse */}
+              <div className="mt-6 bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+                <h4 className="text-parchment-50 font-semibold mb-4">Logo Misuse — Never:</h4>
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-3 text-sm text-parchment-300">
+                  <div className="flex items-start gap-2">
+                    <span className="text-red-400">✕</span>
+                    <span>Stretch, distort, or rotate</span>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <span className="text-red-400">✕</span>
+                    <span>Change the logo colours</span>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <span className="text-red-400">✕</span>
+                    <span>Add effects or shadows</span>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <span className="text-red-400">✕</span>
+                    <span>Place on busy backgrounds</span>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <span className="text-red-400">✕</span>
+                    <span>Recreate or modify</span>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <span className="text-red-400">✕</span>
+                    <span>Use outdated versions</span>
+                  </div>
+                </div>
+              </div>
             </div>
 
             {/* Color Palette */}
@@ -306,6 +459,123 @@ Based in the UK, Jerry Can Spirits® is a small operation run by two mates who c
             </div>
           </section>
 
+          {/* ==================== TONE OF VOICE SECTION ==================== */}
+          <section id="tone-of-voice" className="mb-20 scroll-mt-24">
+            <h2 className="text-3xl font-serif font-bold text-parchment-50 text-center mb-4">
+              Tone of Voice
+            </h2>
+            <p className="text-parchment-300 text-center mb-12 max-w-2xl mx-auto">
+              How we speak is as important as how we look. Our tone reflects our brand personality in every piece of communication.
+            </p>
+
+            {/* Voice Characteristics */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
+              {voiceCharacteristics.map((char) => (
+                <div key={char.name} className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+                  <h4 className="text-gold-300 font-semibold text-lg mb-2">{char.name}</h4>
+                  <p className="text-parchment-200 text-sm leading-relaxed">{char.description}</p>
+                </div>
+              ))}
+            </div>
+
+            {/* Writing Guidelines */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+                <h4 className="text-parchment-50 font-semibold mb-4 flex items-center gap-2">
+                  <span className="text-green-400">✓</span> Do
+                </h4>
+                <ul className="space-y-2 text-parchment-200 text-sm">
+                  <li>• Use plain English — avoid jargon</li>
+                  <li>• Be conversational but professional</li>
+                  <li>• Get to the point — respect people&apos;s time</li>
+                  <li>• Use active voice where possible</li>
+                  <li>• Include personality — we&apos;re humans, not robots</li>
+                </ul>
+              </div>
+              <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+                <h4 className="text-parchment-50 font-semibold mb-4 flex items-center gap-2">
+                  <span className="text-red-400">✕</span> Don&apos;t
+                </h4>
+                <ul className="space-y-2 text-parchment-200 text-sm">
+                  <li>• Use corporate buzzwords or clichés</li>
+                  <li>• Be preachy or self-important</li>
+                  <li>• Over-promise or exaggerate</li>
+                  <li>• Use overly formal or stiff language</li>
+                  <li>• Make claims we can&apos;t back up</li>
+                </ul>
+              </div>
+            </div>
+
+            {/* Example */}
+            <div className="mt-8 bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+              <h4 className="text-parchment-50 font-semibold mb-4">Example</h4>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <p className="text-parchment-400 text-xs uppercase tracking-wider mb-2">Instead of:</p>
+                  <p className="text-parchment-300 text-sm italic">&ldquo;Our premium craft spirits are meticulously crafted using only the finest ingredients, delivering an unparalleled drinking experience.&rdquo;</p>
+                </div>
+                <div>
+                  <p className="text-gold-300 text-xs uppercase tracking-wider mb-2">Write:</p>
+                  <p className="text-parchment-100 text-sm">&ldquo;We make rum we&apos;re genuinely proud of. No shortcuts, no gimmicks — just proper flavour.&rdquo;</p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* ==================== PHOTOGRAPHY GUIDELINES SECTION ==================== */}
+          <section id="photography" className="mb-20 scroll-mt-24">
+            <h2 className="text-3xl font-serif font-bold text-parchment-50 text-center mb-4">
+              Photography Guidelines
+            </h2>
+            <p className="text-parchment-300 text-center mb-12 max-w-2xl mx-auto">
+              Photography is a powerful tool for conveying our brand personality. All imagery should feel authentic, warm, and true to our values.
+            </p>
+
+            {/* Photography Style */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+              <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+                <h4 className="text-gold-300 font-semibold text-lg mb-2">Authentic & Natural</h4>
+                <p className="text-parchment-200 text-sm leading-relaxed">Photography should feel genuine and unforced. We prefer natural light and documentary-style imagery over heavily staged or artificial shots.</p>
+              </div>
+              <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+                <h4 className="text-gold-300 font-semibold text-lg mb-2">Warm & Inviting</h4>
+                <p className="text-parchment-200 text-sm leading-relaxed">Images should have warmth — both in colour temperature and mood. Cold, clinical imagery doesn&apos;t represent our brand.</p>
+              </div>
+              <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+                <h4 className="text-gold-300 font-semibold text-lg mb-2">Quality Without Pretension</h4>
+                <p className="text-parchment-200 text-sm leading-relaxed">Our imagery should convey quality and craftsmanship without feeling pretentious or exclusive. We&apos;re premium but approachable.</p>
+              </div>
+            </div>
+
+            {/* Photography Do's and Don'ts */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+                <h4 className="text-parchment-50 font-semibold mb-4 flex items-center gap-2">
+                  <span className="text-green-400">✓</span> Do
+                </h4>
+                <ul className="space-y-2 text-parchment-200 text-sm">
+                  <li>• Use natural lighting where possible</li>
+                  <li>• Show products in authentic contexts</li>
+                  <li>• Use consistent colour grading across image sets</li>
+                  <li>• Feature real people in genuine moments</li>
+                  <li>• Include outdoor and adventure-themed imagery</li>
+                </ul>
+              </div>
+              <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+                <h4 className="text-parchment-50 font-semibold mb-4 flex items-center gap-2">
+                  <span className="text-red-400">✕</span> Don&apos;t
+                </h4>
+                <ul className="space-y-2 text-parchment-200 text-sm">
+                  <li>• Use generic stock photography</li>
+                  <li>• Over-edit or apply heavy filters</li>
+                  <li>• Use artificial or clinical lighting</li>
+                  <li>• Feature overly posed or fake-looking scenarios</li>
+                  <li>• Use imagery that contradicts responsible drinking</li>
+                </ul>
+              </div>
+            </div>
+          </section>
+
           {/* ==================== PRODUCT IMAGES SECTION ==================== */}
           <section id="product-images" className="mb-20 scroll-mt-24">
             <h2 className="text-3xl font-serif font-bold text-parchment-50 text-center mb-4">
@@ -338,6 +608,7 @@ Based in the UK, Jerry Can Spirits® is a small operation run by two mates who c
                 <BoilerplateText title="Short Bio" wordCount={35} text={boilerplateShort} />
                 <BoilerplateText title="Medium Bio" wordCount={75} text={boilerplateMedium} />
                 <BoilerplateText title="Full Description" wordCount={175} text={boilerplateFull} />
+                <BoilerplateText title="Social Responsibility Statement" wordCount={30} text={socialResponsibilityStatement} />
               </div>
             </div>
 
@@ -652,7 +923,7 @@ Based in the UK, Jerry Can Spirits® is a small operation run by two mates who c
             <h2 className="text-2xl font-serif font-bold text-parchment-50 mb-6 text-center">
               Media Guidelines
             </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
                 <h3 className="text-lg font-serif font-bold text-parchment-50 mb-3">
                   Brand Usage
@@ -664,7 +935,7 @@ Based in the UK, Jerry Can Spirits® is a small operation run by two mates who c
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-gold-400 mt-0.5">•</span>
-                    Maintain brand colors and typography
+                    Maintain brand colours and typography
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-gold-400 mt-0.5">•</span>
@@ -704,6 +975,33 @@ Based in the UK, Jerry Can Spirits® is a small operation run by two mates who c
                   <li className="flex items-start gap-2">
                     <span className="text-gold-400 mt-0.5">•</span>
                     Contact us for approval on major pieces
+                  </li>
+                </ul>
+              </div>
+              <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+                <h3 className="text-lg font-serif font-bold text-parchment-50 mb-3">
+                  Legal Requirements
+                </h3>
+                <ul className="space-y-2 text-parchment-200 text-sm">
+                  <li className="flex items-start gap-2">
+                    <span className="text-gold-400 mt-0.5">•</span>
+                    Include responsible drinking messaging
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-gold-400 mt-0.5">•</span>
+                    Use correct trademark notation (®)
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-gold-400 mt-0.5">•</span>
+                    Comply with ASA &amp; Portman Group guidelines
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-gold-400 mt-0.5">•</span>
+                    Never depict individuals under 25 in advertising
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-gold-400 mt-0.5">•</span>
+                    Never promote excessive consumption
                   </li>
                 </ul>
               </div>
