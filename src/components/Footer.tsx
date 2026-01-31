@@ -34,6 +34,8 @@ export default function Footer() {
       { name: 'Field Manual', href: '/field-manual' },
       { name: 'Guides', href: '/guides' },
       { name: 'Our Story', href: '/about/story' },
+      { name: 'Ingredients', href: '/ingredients' },
+      { name: 'Sustainability', href: '/sustainability' },
       { name: 'Friends & Partners', href: '/friends' },
       { name: 'FAQ', href: '/faq' },
       { name: 'Contact', href: '/contact' },

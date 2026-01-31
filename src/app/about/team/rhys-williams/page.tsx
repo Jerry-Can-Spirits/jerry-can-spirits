@@ -6,13 +6,13 @@ import Breadcrumbs from '@/components/Breadcrumbs'
 
 export const metadata: Metadata = {
   title: 'Rhys Williams - Co-Founder & Director',
-  description: 'Meet Rhys Williams, co-founder of Jerry Can Spirits. Royal Signals veteran who decided to help make rum with his mate Dan.',
+  description: 'Meet Rhys Williams, co-founder of Jerry Can Spirits. Royal Signals veteran, Formula One telecommunications specialist, and passionate rum maker.',
   alternates: {
     canonical: 'https://jerrycanspirits.co.uk/about/team/rhys-williams/',
   },
   openGraph: {
     title: 'Rhys Williams - Co-Founder & Director | Jerry Can Spirits®',
-    description: 'Royal Signals veteran who decided to help make rum with his mate Dan.',
+    description: 'Royal Signals veteran, Formula One telecommunications specialist, and co-founder of Jerry Can Spirits.',
     url: 'https://jerrycanspirits.co.uk/about/team/rhys-williams',
     siteName: 'Jerry Can Spirits®',
     locale: 'en_GB',
@@ -82,12 +82,11 @@ export default function RhysWilliamsPage() {
                   </div>
                   <div>
                     <p className="text-gold-400 font-semibold mb-1">Service</p>
-                    <p className="text-parchment-200">Royal Signals</p>
-                    {/* TODO: Update service years when bio received */}
+                    <p className="text-parchment-200">Royal Signals (2011–2016)</p>
                   </div>
                   <div>
-                    <p className="text-gold-400 font-semibold mb-1">Rank</p>
-                    <p className="text-parchment-200">Details coming soon</p>
+                    <p className="text-gold-400 font-semibold mb-1">Trade</p>
+                    <p className="text-parchment-200">Installation Technician</p>
                   </div>
                   <div>
                     <p className="text-gold-400 font-semibold mb-1">Favourite Spirit</p>
@@ -111,7 +110,7 @@ export default function RhysWilliamsPage() {
                 Rhys Williams
               </h1>
               <p className="text-xl text-gold-400 font-semibold">
-                Royal Signals Veteran · Co-Founder
+                Royal Signals Veteran · Formula One · Live Events
               </p>
             </div>
 
@@ -126,63 +125,73 @@ export default function RhysWilliamsPage() {
                   Military Service
                 </h2>
                 <p className="text-parchment-200 leading-relaxed">
-                  Rhys served in the Royal Signals alongside Dan. They&apos;ve known each other for years and the idea of making rum together was one of those things that kept coming up whenever they got together.
-                </p>
-                <p className="text-parchment-300 italic mt-4 text-sm">
-                  Full biography coming soon.
+                  I began my career in the British Army, serving with the Royal Signals as an Installation Technician from 2011 to 2016. During that time, I developed a deep understanding of critical communications, infrastructure deployment, and working under pressure in demanding environments.
                 </p>
               </div>
 
-              {/* The Journey */}
+              {/* Post-Military Career */}
               <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
                 <h2 className="text-2xl font-serif font-bold text-white mb-4 flex items-center gap-2">
                   <svg className="w-6 h-6 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                   </svg>
-                  The Journey to Jerry Can Spirits
+                  Chasing Adventure
                 </h2>
-                <p className="text-parchment-200 leading-relaxed">
-                  When Dan finally decided to stop just talking about making rum and actually do it, Rhys was an obvious choice to bring on board. They&apos;d been chatting about it for years – it made sense to do it together.
+                <p className="text-parchment-200 leading-relaxed mb-4">
+                  Driven by a desire to travel and chase adventure, I transitioned into motorsport, working in onboard communications for Formula One. This role took me around the world, operating at the sharp end of high-performance, time-critical telecommunications where failure simply isn&apos;t an option.
                 </p>
-                <p className="text-parchment-300 italic mt-4 text-sm">
-                  More details coming soon.
+                <p className="text-parchment-200 leading-relaxed">
+                  Today, I manage telecommunications at large-scale live events, including festivals and major sporting occasions, overseeing complex temporary networks that keep events connected, safe, and operational.
                 </p>
               </div>
 
-              {/* Role */}
+              {/* Passion for Spirits */}
+              <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+                <h2 className="text-2xl font-serif font-bold text-white mb-4 flex items-center gap-2">
+                  <svg className="w-6 h-6 text-gold-400" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clipRule="evenodd" />
+                  </svg>
+                  A Passion for Making Alcohol
+                </h2>
+                <p className="text-parchment-200 leading-relaxed mb-4">
+                  Alongside my technical career, I&apos;ve always had a passion for making alcohol. What started as home-brewed beer and cider as a teenager evolved into a long-standing love for spiced rum — its history, flavour, and character.
+                </p>
+                <p className="text-parchment-200 leading-relaxed">
+                  That passion has now become a business.
+                </p>
+              </div>
+
+              {/* Jerry Can Spirits */}
               <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
                 <h2 className="text-2xl font-serif font-bold text-white mb-4 flex items-center gap-2">
                   <svg className="w-6 h-6 text-gold-400" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M6 6V5a3 3 0 013-3h2a3 3 0 013 3v1h2a2 2 0 012 2v3.57A22.952 22.952 0 0110 13a22.95 22.95 0 01-8-1.43V8a2 2 0 012-2h2zm2-1a1 1 0 011-1h2a1 1 0 011 1v1H8V5zm1 5a1 1 0 011-1h.01a1 1 0 110 2H10a1 1 0 01-1-1z" clipRule="evenodd" />
                     <path d="M2 13.692V16a2 2 0 002 2h12a2 2 0 002-2v-2.308A24.974 24.974 0 0110 15c-2.796 0-5.487-.46-8-1.308z" />
                   </svg>
-                  Role at Jerry Can Spirits
+                  Jerry Can Spirits
                 </h2>
                 <p className="text-parchment-200 leading-relaxed">
-                  As Co-Founder and Director, Rhys works alongside Dan on the business side of things. More details on his specific role coming soon.
-                </p>
-                <p className="text-parchment-300 italic mt-4 text-sm">
-                  Full role details coming soon.
+                  I&apos;m the co-founder of Jerry Can Spirits, combining engineering discipline, creativity, and a rebellious streak to build bold, distinctive rum with real character.
                 </p>
               </div>
 
-              {/* Coming Soon Notice */}
-              <div className="bg-gradient-to-br from-gold-500/10 to-gold-600/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
-                <div className="flex items-start gap-4">
-                  <div className="flex-shrink-0">
-                    <svg className="w-8 h-8 text-gold-400" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
-                    </svg>
-                  </div>
-                  <div className="flex-1">
-                    <p className="text-xl text-parchment-100 leading-relaxed mb-2">
-                      Full Biography Coming Soon
-                    </p>
-                    <p className="text-parchment-300">
-                      We&apos;re still putting together Rhys&apos;s full bio. Check back soon, or read more about <Link href="/about/story" className="text-gold-300 hover:text-gold-400 underline">how we got started</Link>.
-                    </p>
-                  </div>
-                </div>
+              {/* CTA */}
+              <div className="flex flex-wrap gap-4 pt-4">
+                <Link
+                  href="/about/story"
+                  className="inline-flex items-center gap-2 bg-gold-500 hover:bg-gold-400 text-jerry-green-900 px-6 py-3 rounded-lg font-semibold transition-all duration-300 hover:scale-105"
+                >
+                  <span>Read Our Story</span>
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                  </svg>
+                </Link>
+                <Link
+                  href="/about/team/dan-freeman"
+                  className="inline-flex items-center gap-2 bg-jerry-green-800 hover:bg-jerry-green-700 text-parchment-50 px-6 py-3 rounded-lg font-semibold border-2 border-gold-500/30 hover:border-gold-500/60 transition-all duration-300"
+                >
+                  <span>Meet Dan</span>
+                </Link>
               </div>
             </div>
           </div>
