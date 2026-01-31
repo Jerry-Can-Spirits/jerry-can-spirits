@@ -289,10 +289,10 @@ export default function Footer() {
                   <Image
                     src="/images/logo-etch.webp"
                     alt="Jerry Can Spirits® - Premium British Rum"
-                    width={300}
-                    height={420}
+                    width={512}
+                    height={768}
                     className="h-48 w-auto opacity-90 group-hover:opacity-100 transition-opacity duration-300"
-                    sizes="(max-width: 640px) 200px, 300px"
+                    sizes="128px"
                     priority
                   />
                 </Link>
