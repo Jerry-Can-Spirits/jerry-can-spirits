@@ -394,7 +394,7 @@ export default async function EquipmentDetailPage({ params }: { params: Promise<
                   {equipment.relatedCocktails.map((cocktail) => (
                     <Link
                       key={cocktail._id}
-                      href={`/cocktails/${cocktail.slug.current}`}
+                      href={`/field-manual/cocktails/${cocktail.slug.current}`}
                       className="flex items-center gap-3 p-3 bg-jerry-green-800/30 rounded-lg border border-gold-500/20 hover:bg-jerry-green-800/50 hover:border-gold-400/40 transition-all group"
                     >
                       <svg className="w-5 h-5 text-gold-400 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
