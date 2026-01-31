@@ -246,6 +246,19 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'monthly',
       priority: 0.6,
     },
+    // Sustainability & Ingredients pages
+    {
+      url: `${baseUrl}/sustainability/`,
+      lastModified: currentDate,
+      changeFrequency: 'monthly',
+      priority: 0.6,
+    },
+    {
+      url: `${baseUrl}/ingredients/`,
+      lastModified: currentDate,
+      changeFrequency: 'monthly',
+      priority: 0.6,
+    },
     // Shop pages
     {
       url: `${baseUrl}/shop/`,
