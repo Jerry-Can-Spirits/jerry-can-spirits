@@ -650,6 +650,27 @@ export default async function ProductPage({
             <DietaryInfo dietary={sanityProduct.dietary} />
           )}
 
+          {/* Full Ingredients Link - Spirits only */}
+          {isSpirit && (
+            <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="text-xl font-serif font-bold text-white mb-1">Full Ingredients</h3>
+                  <p className="text-parchment-300 text-sm">View the complete ingredient list, allergen info, and sourcing details.</p>
+                </div>
+                <Link
+                  href="/ingredients"
+                  className="inline-flex items-center gap-2 bg-jerry-green-800 hover:bg-jerry-green-700 text-parchment-50 px-5 py-2.5 rounded-lg font-semibold border border-gold-500/30 hover:border-gold-500/60 transition-all duration-300 whitespace-nowrap"
+                >
+                  <span>View Ingredients</span>
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </Link>
+              </div>
+            </div>
+          )}
+
           {/* Product FAQs */}
           {sanityProduct?.faqs && sanityProduct.faqs.length > 0 && (
             <ProductFAQ faqs={sanityProduct.faqs} productName={product.title} />

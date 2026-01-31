@@ -71,6 +71,7 @@ export default function Header() {
         { name: 'Our Story', href: '/about/story', description: 'Brand heritage & mission' },
         { name: 'Meet the Team', href: '/about/team', description: 'The veterans behind the brand' },
         { name: 'Ethos', href: '/ethos', description: 'Values & craftsmanship' },
+        { name: 'Sustainability', href: '/sustainability', description: 'Recycling & local sourcing' },
         { name: 'Friends & Partners', href: '/friends', description: 'Our trusted collaborators' },
         { name: 'FAQ', href: '/faq', description: 'Common questions answered' },
       ]
