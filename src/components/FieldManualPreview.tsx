@@ -71,7 +71,7 @@ export default async function FieldManualPreview() {
           {cocktails.map((cocktail) => (
             <Link
               key={cocktail._id}
-              href={`/cocktails/${cocktail.slug.current}`}
+              href={`/field-manual/cocktails/${cocktail.slug.current}`}
               className="group bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl border border-gold-500/20 overflow-hidden hover:border-gold-400/40 transition-all duration-300 hover:scale-105"
             >
               {/* Image */}
