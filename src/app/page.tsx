@@ -60,8 +60,10 @@ export default function Home() {
       ],
       "address": {
         "@type": "PostalAddress",
-        "addressLocality": "Blackpool",
-        "addressRegion": "Lancashire",
+        "streetAddress": "167-169 Great Portland Street",
+        "addressLocality": "London",
+        "addressRegion": "Greater London",
+        "postalCode": "W1W 5PA",
         "addressCountry": "GB"
       },
       "sameAs": [
@@ -71,6 +73,7 @@ export default function Home() {
       "contactPoint": {
         "@type": "ContactPoint",
         "contactType": "Customer Service",
+        "telephone": "+44 7521 220541",
         "email": "hello@jerrycanspirits.co.uk"
       },
       "knowsAbout": ["Premium Rum", "British Spirits", "Military Heritage", "Veteran-Owned Business", "Small-Batch Distilling"],
@@ -84,22 +87,22 @@ export default function Home() {
       "name": "Jerry Can Spirits",
       "image": "https://jerrycanspirits.co.uk/images/Logo.webp",
       "url": "https://jerrycanspirits.co.uk",
-      "telephone": "",
+      "telephone": "+44 7521 220541",
       "email": "hello@jerrycanspirits.co.uk",
       "priceRange": "££",
       "description": "Veteran-owned British spirits company producing premium craft rum. Founded by Royal Corps of Signals veterans.",
       "address": {
         "@type": "PostalAddress",
-        "streetAddress": "",
-        "addressLocality": "Blackpool",
-        "addressRegion": "Lancashire",
-        "postalCode": "",
+        "streetAddress": "167-169 Great Portland Street",
+        "addressLocality": "London",
+        "addressRegion": "Greater London",
+        "postalCode": "W1W 5PA",
         "addressCountry": "GB"
       },
       "geo": {
         "@type": "GeoCoordinates",
-        "latitude": 53.8175,
-        "longitude": -3.0357
+        "latitude": 51.5197,
+        "longitude": -0.1437
       },
       "sameAs": [
         "https://www.facebook.com/jerrycanspirits",
