@@ -3,6 +3,7 @@ import Image from 'next/image'
 import { getProductsByCollection, type ShopifyProduct } from '@/lib/shopify'
 import type { Metadata } from 'next'
 import Breadcrumbs from '@/components/Breadcrumbs'
+import StructuredData from '@/components/StructuredData'
 
 export const metadata: Metadata = {
   title: 'British Spiced Rum | Small-Batch Craft Rum',
@@ -13,6 +14,10 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'British Spiced Rum | Jerry Can Spirits®',
     description: 'Small-batch British spiced rum from veteran-owned Jerry Can Spirits. 700 bottles per batch, pot-distilled at Spirit of Wales.',
+    url: 'https://jerrycanspirits.co.uk/shop/drinks/',
+    siteName: 'Jerry Can Spirits®',
+    locale: 'en_GB',
+    type: 'website',
   },
 }
 
@@ -138,9 +143,36 @@ export default async function DrinksPageTest() {
     )
   }
 
+  // Build ItemList schema for product collection
+  const itemListSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: 'Jerry Can Spirits Rum Collection',
+    description: 'Small-batch British spiced rum from veteran-owned Jerry Can Spirits.',
+    url: 'https://jerrycanspirits.co.uk/shop/drinks/',
+    numberOfItems: products.length,
+    itemListElement: products.map((product, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      item: {
+        '@type': 'Product',
+        name: product.title,
+        url: `https://jerrycanspirits.co.uk/shop/product/${product.handle}/`,
+        image: product.images?.[0]?.url || '',
+        offers: {
+          '@type': 'Offer',
+          price: product.priceRange.minVariantPrice.amount,
+          priceCurrency: product.priceRange.minVariantPrice.currencyCode,
+          availability: 'https://schema.org/InStock',
+        },
+      },
+    })),
+  }
+
   // Success state - products loaded from Shopify
   return (
     <main className="min-h-screen py-20">
+      <StructuredData data={itemListSchema} id="drinks-itemlist-schema" />
       {/* Breadcrumb */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
         <Breadcrumbs

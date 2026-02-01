@@ -1,4 +1,25 @@
 import type { Metadata } from 'next'
+import StructuredData from '@/components/StructuredData'
+
+// WebPage schema for security policy
+const webPageSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebPage',
+  name: 'Security Policy',
+  description: 'Jerry Can Spirits® security vulnerability disclosure policy. How to report security issues and our commitment to protecting your data.',
+  url: 'https://jerrycanspirits.co.uk/security-policy/',
+  publisher: {
+    '@type': 'Organization',
+    name: 'Jerry Can Spirits',
+    url: 'https://jerrycanspirits.co.uk',
+  },
+  inLanguage: 'en-GB',
+  isPartOf: {
+    '@type': 'WebSite',
+    name: 'Jerry Can Spirits',
+    url: 'https://jerrycanspirits.co.uk',
+  },
+}
 
 export const metadata: Metadata = {
   title: "Security Policy",
@@ -16,7 +37,9 @@ export default function SecurityPolicy() {
   const lastUpdated = '23 December 2025'
 
   return (
-    <main className="min-h-screen py-20">
+    <>
+      <StructuredData data={webPageSchema} id="security-policy-webpage-schema" />
+      <main className="min-h-screen py-20">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-12 pb-8 border-b border-gold-500/30">
@@ -284,5 +307,6 @@ export default function SecurityPolicy() {
         </div>
       </div>
     </main>
+    </>
   )
 }

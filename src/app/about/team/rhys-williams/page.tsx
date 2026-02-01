@@ -3,6 +3,27 @@ import Link from 'next/link'
 // import Image from 'next/image' // Uncomment when photo is available
 import CartographicBackground from '@/components/CartographicBackground'
 import Breadcrumbs from '@/components/Breadcrumbs'
+import StructuredData from '@/components/StructuredData'
+
+// Person schema for co-founder profile
+const personSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: 'Rhys Williams',
+  jobTitle: 'Co-Founder & Director',
+  url: 'https://jerrycanspirits.co.uk/about/team/rhys-williams/',
+  description: 'Royal Signals veteran, Formula One telecommunications specialist, and co-founder of Jerry Can Spirits.',
+  worksFor: {
+    '@type': 'Organization',
+    name: 'Jerry Can Spirits',
+    url: 'https://jerrycanspirits.co.uk',
+  },
+  alumniOf: {
+    '@type': 'Organization',
+    name: 'Royal Corps of Signals, British Army',
+  },
+  knowsAbout: ['Rum', 'Telecommunications', 'Formula One', 'Live Events', 'Military Service'],
+}
 
 export const metadata: Metadata = {
   title: 'Rhys Williams - Co-Founder & Director',
@@ -27,6 +48,7 @@ export const metadata: Metadata = {
 export default function RhysWilliamsPage() {
   return (
     <main className="relative min-h-screen py-20">
+      <StructuredData data={personSchema} id="rhys-williams-person-schema" />
       {/* Cartographic Background */}
       <div className="fixed inset-0 z-0">
         <CartographicBackground opacity={0.15} showCoordinates={true} showCompass={true} />

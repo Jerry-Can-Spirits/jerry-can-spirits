@@ -1,4 +1,25 @@
 import type { Metadata } from 'next'
+import StructuredData from '@/components/StructuredData'
+
+// WebPage schema for accessibility statement
+const webPageSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebPage',
+  name: 'Accessibility Statement',
+  description: 'Jerry Can Spirits accessibility statement and commitment to providing an inclusive web experience for all users, including those with disabilities.',
+  url: 'https://jerrycanspirits.co.uk/accessibility/',
+  publisher: {
+    '@type': 'Organization',
+    name: 'Jerry Can Spirits',
+    url: 'https://jerrycanspirits.co.uk',
+  },
+  inLanguage: 'en-GB',
+  isPartOf: {
+    '@type': 'WebSite',
+    name: 'Jerry Can Spirits',
+    url: 'https://jerrycanspirits.co.uk',
+  },
+}
 
 export const metadata: Metadata = {
   title: "Accessibility Statement",
@@ -16,7 +37,9 @@ export default function Accessibility() {
   const lastUpdated = '4 September 2025'
 
   return (
-    <main className="min-h-screen py-20">
+    <>
+      <StructuredData data={webPageSchema} id="accessibility-webpage-schema" />
+      <main className="min-h-screen py-20">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-12 pb-8 border-b border-gold-500/30">
@@ -294,5 +317,6 @@ export default function Accessibility() {
         </div>
       </div>
     </main>
+    </>
   )
 }

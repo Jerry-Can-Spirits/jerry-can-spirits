@@ -260,6 +260,110 @@ export default async function FieldManualHome() {
         </div>
       </section>
 
+      {/* Difficulty Comparison Table */}
+      <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
+          <h2 className="text-2xl sm:text-3xl font-serif font-bold text-white mb-2 text-center">
+            Cocktail Difficulty Levels
+          </h2>
+          <p className="text-parchment-400 mb-8 text-center">
+            Every recipe is rated so you know what you&apos;re getting into
+          </p>
+
+          {/* Desktop Table */}
+          <div className="hidden md:block overflow-x-auto">
+            <table className="w-full text-left">
+              <thead>
+                <tr className="border-b border-gold-500/30">
+                  <th className="py-4 px-4 text-gold-300 font-semibold">Level</th>
+                  <th className="py-4 px-4 text-gold-300 font-semibold">Technique</th>
+                  <th className="py-4 px-4 text-gold-300 font-semibold">Ingredients</th>
+                  <th className="py-4 px-4 text-gold-300 font-semibold">Examples</th>
+                </tr>
+              </thead>
+              <tbody className="text-parchment-200">
+                <tr className="border-b border-gold-500/10">
+                  <td className="py-4 px-4">
+                    <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-500/20 text-green-300 border border-green-500/30">
+                      Novice
+                    </span>
+                  </td>
+                  <td className="py-4 px-4">Pour, stir, build in glass</td>
+                  <td className="py-4 px-4">Common spirits, basic mixers</td>
+                  <td className="py-4 px-4">Rum & Coke, Dark &apos;n&apos; Stormy, Mojito</td>
+                </tr>
+                <tr className="border-b border-gold-500/10">
+                  <td className="py-4 px-4">
+                    <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-yellow-500/20 text-yellow-300 border border-yellow-500/30">
+                      Wayfinder
+                    </span>
+                  </td>
+                  <td className="py-4 px-4">Shaking, straining, muddling</td>
+                  <td className="py-4 px-4">1-2 specialty ingredients</td>
+                  <td className="py-4 px-4">Daiquiri, Mai Tai, Piña Colada</td>
+                </tr>
+                <tr>
+                  <td className="py-4 px-4">
+                    <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-red-500/20 text-red-300 border border-red-500/30">
+                      Trailblazer
+                    </span>
+                  </td>
+                  <td className="py-4 px-4">Layering, flaming, infusions</td>
+                  <td className="py-4 px-4">Multiple specialty items</td>
+                  <td className="py-4 px-4">Zombie, Painkiller, Hurricane</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          {/* Mobile Cards */}
+          <div className="md:hidden space-y-4">
+            <div className="bg-jerry-green-800/40 rounded-lg p-4 border border-green-500/20">
+              <div className="flex items-center justify-between mb-3">
+                <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-500/20 text-green-300 border border-green-500/30">
+                  Novice
+                </span>
+              </div>
+              <div className="space-y-2 text-sm">
+                <p><span className="text-gold-400">Technique:</span> <span className="text-parchment-200">Pour, stir, build in glass</span></p>
+                <p><span className="text-gold-400">Ingredients:</span> <span className="text-parchment-200">Common spirits, basic mixers</span></p>
+                <p><span className="text-gold-400">Examples:</span> <span className="text-parchment-200">Rum & Coke, Dark &apos;n&apos; Stormy, Mojito</span></p>
+              </div>
+            </div>
+
+            <div className="bg-jerry-green-800/40 rounded-lg p-4 border border-yellow-500/20">
+              <div className="flex items-center justify-between mb-3">
+                <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-yellow-500/20 text-yellow-300 border border-yellow-500/30">
+                  Wayfinder
+                </span>
+              </div>
+              <div className="space-y-2 text-sm">
+                <p><span className="text-gold-400">Technique:</span> <span className="text-parchment-200">Shaking, straining, muddling</span></p>
+                <p><span className="text-gold-400">Ingredients:</span> <span className="text-parchment-200">1-2 specialty ingredients</span></p>
+                <p><span className="text-gold-400">Examples:</span> <span className="text-parchment-200">Daiquiri, Mai Tai, Piña Colada</span></p>
+              </div>
+            </div>
+
+            <div className="bg-jerry-green-800/40 rounded-lg p-4 border border-red-500/20">
+              <div className="flex items-center justify-between mb-3">
+                <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-red-500/20 text-red-300 border border-red-500/30">
+                  Trailblazer
+                </span>
+              </div>
+              <div className="space-y-2 text-sm">
+                <p><span className="text-gold-400">Technique:</span> <span className="text-parchment-200">Layering, flaming, infusions</span></p>
+                <p><span className="text-gold-400">Ingredients:</span> <span className="text-parchment-200">Multiple specialty items</span></p>
+                <p><span className="text-gold-400">Examples:</span> <span className="text-parchment-200">Zombie, Painkiller, Hurricane</span></p>
+              </div>
+            </div>
+          </div>
+
+          <p className="text-parchment-400 text-sm text-center mt-6">
+            Start with Novice recipes and work your way up as you get comfortable with the basics.
+          </p>
+        </div>
+      </section>
+
       {/* FAQ Section */}
       <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         {/* FAQ Schema */}

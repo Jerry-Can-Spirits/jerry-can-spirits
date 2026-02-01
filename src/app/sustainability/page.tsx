@@ -2,6 +2,55 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import BackToTop from '@/components/BackToTop'
 import Breadcrumbs from '@/components/Breadcrumbs'
+import StructuredData from '@/components/StructuredData'
+
+// FAQ Schema for rich snippets
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: 'How do I recycle a Jerry Can Spirits bottle?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'The glass bottle can be recycled in your household glass recycling bin or at a local bottle bank - just give it a quick rinse first. The cap is made from natural wood with a micro agglomerate cork seal - the cork can be composted, and the wooden top can go in garden waste or be repurposed.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'What is the Jerry Can Spirits bottle cap made of?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Our cap is made from natural wood with a micro agglomerate cork seal. Both are natural, renewable materials. The cork can be composted, and the wooden top can go in your garden waste or be repurposed.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Do I need to remove the label before recycling the bottle?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'No, you don\'t need to remove the label before recycling. Modern recycling facilities handle label removal during processing.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Where is Jerry Can Spirits rum made?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Our rum is distilled at Spirit of Wales Distillery in Newport, Gwent. We use Welsh water and source molasses from local Welsh breweries, reducing waste and supporting local producers.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Does Jerry Can Spirits have a bottle refill programme?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'We\'re currently exploring a bottle return and refill scheme for future batches. We\'re also working on minimising packaging and understanding our carbon footprint as we grow.',
+      },
+    },
+  ],
+}
 
 export const metadata: Metadata = {
   title: "Sustainability & Recycling",
@@ -26,6 +75,7 @@ export const metadata: Metadata = {
 export default function Sustainability() {
   return (
     <main className="min-h-screen py-20">
+      <StructuredData data={faqSchema} id="sustainability-faq-schema" />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
         <Breadcrumbs
           items={[
@@ -124,7 +174,7 @@ export default function Sustainability() {
                 </div>
                 <div className="bg-jerry-green-800/60 rounded-lg p-4">
                   <h3 className="text-gold-300 font-semibold mb-2">UK Distillation</h3>
-                  <p className="text-sm">Distilled at Spirit of Wales Distillery in Gwent.</p>
+                  <p className="text-sm">Distilled at Spirit of Wales Distillery in Newport, Gwent.</p>
                 </div>
                 <div className="bg-jerry-green-800/60 rounded-lg p-4">
                   <h3 className="text-gold-300 font-semibold mb-2">Caribbean Rum Base</h3>

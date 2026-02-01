@@ -3,6 +3,37 @@ import Image from 'next/image'
 import Link from 'next/link'
 import BackToTop from '@/components/BackToTop'
 import Breadcrumbs from '@/components/Breadcrumbs'
+import StructuredData from '@/components/StructuredData'
+
+// Article schema for the story page
+const articleSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: 'Our Story - From Military Service to Premium Spirits',
+  description: 'Veteran-owned British rum founded by Royal Signals veterans. From Arctic deployments to premium small-batch spirits.',
+  url: 'https://jerrycanspirits.co.uk/about/story/',
+  image: 'https://jerrycanspirits.co.uk/images/hero/Trail_Hero.webp',
+  author: {
+    '@type': 'Organization',
+    name: 'Jerry Can Spirits',
+    url: 'https://jerrycanspirits.co.uk',
+  },
+  publisher: {
+    '@type': 'Organization',
+    name: 'Jerry Can Spirits',
+    url: 'https://jerrycanspirits.co.uk',
+    logo: {
+      '@type': 'ImageObject',
+      url: 'https://jerrycanspirits.co.uk/images/Logo.webp',
+    },
+  },
+  datePublished: '2024-01-01',
+  dateModified: '2025-01-01',
+  mainEntityOfPage: {
+    '@type': 'WebPage',
+    '@id': 'https://jerrycanspirits.co.uk/about/story/',
+  },
+}
 
 export const metadata: Metadata = {
   title: "Our Story - From Military Service to Premium Spirits",
@@ -23,6 +54,7 @@ export const metadata: Metadata = {
 export default function OurStory() {
   return (
     <main className="min-h-screen py-20">
+      <StructuredData data={articleSchema} id="story-article-schema" />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
         <Breadcrumbs
           items={[
