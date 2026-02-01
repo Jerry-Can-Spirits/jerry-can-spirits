@@ -82,7 +82,8 @@ export default function RhysWilliamsPage() {
                   </div>
                   <div>
                     <p className="text-gold-400 font-semibold mb-1">Service</p>
-                    <p className="text-parchment-200">Royal Signals (2011–2016)</p>
+                    <p className="text-parchment-200">Royal Signals</p>
+                    <p className="text-parchment-300 text-xs">2011 – 2016 (5 years)</p>
                   </div>
                   <div>
                     <p className="text-gold-400 font-semibold mb-1">Trade</p>
@@ -91,6 +92,10 @@ export default function RhysWilliamsPage() {
                   <div>
                     <p className="text-gold-400 font-semibold mb-1">Favourite Spirit</p>
                     <p className="text-parchment-200">Spiced Rum</p>
+                  </div>
+                  <div>
+                    <p className="text-gold-400 font-semibold mb-1">Signature Cocktail</p>
+                    <p className="text-parchment-200">Mojito</p>
                   </div>
                 </div>
               </div>
