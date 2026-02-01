@@ -21,20 +21,12 @@ export const metadata: Metadata = {
   },
 }
 
-// Cocktail type for ItemList schema
-interface CocktailListItem {
-  _id: string
-  name: string
-  slug: { current: string }
-  description?: string
-  image?: string
-}
-
 // This is now a Server Component - data fetching happens server-side
 export default async function CocktailsPage() {
   // Fetch cocktails server-side using optimized list query
   // Only fetches fields needed for preview cards (not full ingredients/instructions)
-  const cocktails: CocktailListItem[] = await client.fetch(cocktailsListQuery)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const cocktails: any[] = await client.fetch(cocktailsListQuery)
 
   // Build ItemList schema for recipe collection
   const itemListSchema = {

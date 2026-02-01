@@ -1,4 +1,25 @@
 import type { Metadata } from 'next'
+import StructuredData from '@/components/StructuredData'
+
+// WebPage schema for terms of service
+const webPageSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebPage',
+  name: 'Terms of Service',
+  description: 'Jerry Can Spirits® Terms of Service and conditions of use. Legal terms governing the use of our website and purchase of our premium spirits.',
+  url: 'https://jerrycanspirits.co.uk/terms-of-service/',
+  publisher: {
+    '@type': 'Organization',
+    name: 'Jerry Can Spirits',
+    url: 'https://jerrycanspirits.co.uk',
+  },
+  inLanguage: 'en-GB',
+  isPartOf: {
+    '@type': 'WebSite',
+    name: 'Jerry Can Spirits',
+    url: 'https://jerrycanspirits.co.uk',
+  },
+}
 
 export const metadata: Metadata = {
   title: "Terms of Service",
@@ -16,7 +37,9 @@ export default function TermsOfService() {
   const lastUpdated = '4 September 2025'
 
   return (
-    <main className="min-h-screen py-20">
+    <>
+      <StructuredData data={webPageSchema} id="terms-of-service-webpage-schema" />
+      <main className="min-h-screen py-20">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-12 pb-8 border-b border-gold-500/30">
@@ -346,5 +369,6 @@ export default function TermsOfService() {
         </div>
       </div>
     </main>
+    </>
   )
 }

@@ -1,4 +1,25 @@
 import type { Metadata } from 'next'
+import StructuredData from '@/components/StructuredData'
+
+// WebPage schema for cookie policy
+const webPageSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebPage',
+  name: 'Cookie Policy',
+  description: 'Learn about how Jerry Can Spirits uses cookies to enhance your browsing experience and protect your privacy. Manage your cookie preferences.',
+  url: 'https://jerrycanspirits.co.uk/cookie-policy/',
+  publisher: {
+    '@type': 'Organization',
+    name: 'Jerry Can Spirits',
+    url: 'https://jerrycanspirits.co.uk',
+  },
+  inLanguage: 'en-GB',
+  isPartOf: {
+    '@type': 'WebSite',
+    name: 'Jerry Can Spirits',
+    url: 'https://jerrycanspirits.co.uk',
+  },
+}
 
 export const metadata: Metadata = {
   title: "Cookie Policy",
@@ -16,7 +37,9 @@ export default function CookiePolicy() {
   const lastUpdated = '4 September 2025'
 
   return (
-    <main className="min-h-screen py-20">
+    <>
+      <StructuredData data={webPageSchema} id="cookie-policy-webpage-schema" />
+      <main className="min-h-screen py-20">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-12 pb-8 border-b border-gold-500/30">
@@ -293,5 +316,6 @@ export default function CookiePolicy() {
         </div>
       </div>
     </main>
+    </>
   )
 }

@@ -3,6 +3,28 @@ import Link from 'next/link'
 import Image from 'next/image'
 import CartographicBackground from '@/components/CartographicBackground'
 import Breadcrumbs from '@/components/Breadcrumbs'
+import StructuredData from '@/components/StructuredData'
+
+// Person schema for founder profile
+const personSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: 'Dan Freeman',
+  jobTitle: 'Founder & Director',
+  url: 'https://jerrycanspirits.co.uk/about/team/dan-freeman/',
+  image: 'https://jerrycanspirits.co.uk/images/team/Dan_Headshot.jpg',
+  description: 'Former Royal Signals Corporal with 12 years of service, founder of Jerry Can Spirits.',
+  worksFor: {
+    '@type': 'Organization',
+    name: 'Jerry Can Spirits',
+    url: 'https://jerrycanspirits.co.uk',
+  },
+  alumniOf: {
+    '@type': 'Organization',
+    name: 'Royal Corps of Signals, British Army',
+  },
+  knowsAbout: ['Rum', 'Distillation', 'Spirits', 'Military Service'],
+}
 
 export const metadata: Metadata = {
   title: 'Dan Freeman - Founder & Director',
@@ -27,6 +49,7 @@ export const metadata: Metadata = {
 export default function DanFreemanPage() {
   return (
     <main className="relative min-h-screen py-20">
+      <StructuredData data={personSchema} id="dan-freeman-person-schema" />
       {/* Cartographic Background */}
       <div className="fixed inset-0 z-0">
         <CartographicBackground opacity={0.15} showCoordinates={true} showCompass={true} />

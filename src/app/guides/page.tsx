@@ -23,19 +23,11 @@ export const metadata: Metadata = {
   },
 }
 
-// Guide type for ItemList schema
-interface GuideListItem {
-  _id: string
-  title: string
-  slug: { current: string }
-  excerpt?: string
-  heroImage?: string
-}
-
 // This is a Server Component - data fetching happens server-side
 export default async function GuidesPage() {
   // Fetch guides server-side using optimized list query
-  const guides: GuideListItem[] = await client.fetch(guidesListQuery)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const guides: any[] = await client.fetch(guidesListQuery)
 
   // Build ItemList schema for article collection
   const itemListSchema = {
