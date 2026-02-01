@@ -12,7 +12,11 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: 'Cocktail Ingredients Guide | Jerry Can Spirits®',
-    description: 'Comprehensive guide to cocktail ingredients for perfect drinks.',
+    description: 'Comprehensive guide to cocktail ingredients. Learn about spirits, liqueurs, mixers, bitters, and garnishes to elevate your home bar.',
+    url: 'https://jerrycanspirits.co.uk/field-manual/ingredients/',
+    siteName: 'Jerry Can Spirits®',
+    locale: 'en_GB',
+    type: 'website',
   },
 }
 

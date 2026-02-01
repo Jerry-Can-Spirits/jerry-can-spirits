@@ -1,12 +1,21 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import Breadcrumbs from '@/components/Breadcrumbs'
+import StructuredData from '@/components/StructuredData'
 
 export const metadata: Metadata = {
   title: "Shipping & Returns",
   description: "Jerry Can Spirits shipping information, delivery details, and returns policy for UK orders. Age verification required for all alcohol deliveries.",
   alternates: {
     canonical: 'https://jerrycanspirits.co.uk/shipping-returns/',
+  },
+  openGraph: {
+    title: 'Shipping & Returns | Jerry Can Spirits®',
+    description: 'Shipping information, delivery details, and returns policy for UK orders. Age verification required for all alcohol deliveries.',
+    url: 'https://jerrycanspirits.co.uk/shipping-returns/',
+    siteName: 'Jerry Can Spirits®',
+    locale: 'en_GB',
+    type: 'website',
   },
   robots: {
     index: true,
@@ -75,11 +84,7 @@ export default function ShippingReturns() {
 
   return (
     <main className="min-h-screen py-20">
-      {/* FAQ Schema */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
-      />
+      <StructuredData data={faqSchema} id="shipping-faq-schema" />
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Breadcrumb */}

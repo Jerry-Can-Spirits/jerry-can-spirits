@@ -3,6 +3,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import BackToTop from '@/components/BackToTop'
 import Breadcrumbs from '@/components/Breadcrumbs'
+import StructuredData from '@/components/StructuredData'
 
 export const metadata: Metadata = {
   title: "Our Ethos - Values & Craftsmanship",
@@ -10,15 +11,72 @@ export const metadata: Metadata = {
   alternates: {
     canonical: 'https://jerrycanspirits.co.uk/ethos/',
   },
+  openGraph: {
+    title: 'Our Ethos - Values & Craftsmanship | Jerry Can Spirits®',
+    description: 'The values behind Jerry Can Spirits. Function over form, quality without shortcuts, and actually caring about what goes in the bottle.',
+    url: 'https://jerrycanspirits.co.uk/ethos/',
+    siteName: 'Jerry Can Spirits®',
+    locale: 'en_GB',
+    type: 'website',
+  },
   robots: {
     index: true,
     follow: true,
   },
 }
 
+// FAQ Schema for rich snippets
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: 'What values does Jerry Can Spirits stand for?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Our core values are reliability (always there when you need it), function over form (beauty that serves purpose), adventure spirit (for modern explorers), precision (getting it right the first time), authenticity (honest about our craft), and "earned, not given" (quality that proves itself).',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Where is Jerry Can Spirits rum made?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Our rum is distilled at Spirit of Wales Distillery in Newport, Gwent. We use their advanced copper-lined stills combined with Caribbean rum base and pure Welsh water to create our signature spirits.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Why do you use Caribbean rum in a British brand?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'While we prioritise UK sourcing wherever possible (Welsh water, local botanicals, British oak), quality rum base traditionally comes from the Caribbean where rum-making expertise originates. We use Caribbean rum as our foundation because some things simply cannot be replicated.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'What makes your distillation process different?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'We partner with Spirit of Wales Distillery who use innovative copper-lined stills with multiple vapour chambers. This extended copper contact keeps the spirit in vapour form longer, building complex esters and flavours while creating an exceptionally smooth, soft finish.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Is Jerry Can Spirits a small batch rum?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Yes. We deliberately keep production small so we can actually pay attention to what we\'re making. We\'d rather make less rum that\'s actually good than more that\'s mediocre. No shortcuts, no compromises.',
+      },
+    },
+  ],
+}
+
 export default function Ethos() {
   return (
     <main className="min-h-screen py-20">
+      <StructuredData data={faqSchema} id="ethos-faq-schema" />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
         <Breadcrumbs
           items={[

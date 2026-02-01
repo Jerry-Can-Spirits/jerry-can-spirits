@@ -2,6 +2,55 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import BackToTop from '@/components/BackToTop'
 import Breadcrumbs from '@/components/Breadcrumbs'
+import StructuredData from '@/components/StructuredData'
+
+// FAQ Schema for rich snippets
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: 'Is Expedition Spiced Rum gluten-free?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Yes, Expedition Spiced Rum is gluten-free. It contains no major allergens and is also dairy-free, nut-free, and vegan-friendly.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Is Expedition Spiced Rum vegan?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Yes, Expedition Spiced Rum is vegan-friendly. We use no animal products in our rum or during the production process.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'What is Expedition Spiced Rum made from?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Expedition Spiced Rum is made from Caribbean rum base, Welsh brewery molasses, pure Welsh water, and carefully selected spices and botanicals. It\'s distilled at Spirit of Wales Distillery in Newport, Gwent.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'What does Expedition Spiced Rum taste like?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'On the nose, you\'ll get vanilla and caramel upfront with warm spice notes. The palate is rich and smooth with warm spice through the middle. The finish is smooth enough to sip neat, yet bold enough for cocktails.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'What is the alcohol content of Expedition Spiced Rum?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Expedition Spiced Rum is 40% alcohol by volume (ABV), bottled in 700ml bottles.',
+      },
+    },
+  ],
+}
 
 export const metadata: Metadata = {
   title: "Ingredients - Expedition Spiced Rum",
@@ -26,6 +75,7 @@ export const metadata: Metadata = {
 export default function ExpeditionSpicedRumIngredients() {
   return (
     <main className="min-h-screen py-20">
+      <StructuredData data={faqSchema} id="ingredients-faq-schema" />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
         <Breadcrumbs
           items={[

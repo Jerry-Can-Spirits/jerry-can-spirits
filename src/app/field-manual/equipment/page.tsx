@@ -12,7 +12,11 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: 'Bar Equipment Guide | Jerry Can Spirits®',
-    description: 'Essential bar tools and equipment for crafting perfect cocktails.',
+    description: 'Essential bar tools and equipment for crafting perfect cocktails at home. From shakers to strainers to glassware.',
+    url: 'https://jerrycanspirits.co.uk/field-manual/equipment/',
+    siteName: 'Jerry Can Spirits®',
+    locale: 'en_GB',
+    type: 'website',
   },
 }
 
