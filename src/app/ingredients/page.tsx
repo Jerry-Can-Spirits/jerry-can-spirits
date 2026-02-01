@@ -186,21 +186,28 @@ export default function Ingredients() {
             <div className="grid sm:grid-cols-3 gap-6">
               <div className="text-center">
                 <div className="w-16 h-16 bg-gold-400/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <span className="text-2xl">👃</span>
+                  <svg className="w-8 h-8 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 4a2 2 0 0 0 2 2a2 2 0 0 0 -2 2a2 2 0 0 0 -2 -2a2 2 0 0 0 2 -2" />
+                  </svg>
                 </div>
                 <h3 className="text-gold-300 font-semibold mb-2">Nose</h3>
                 <p className="text-parchment-300 text-sm">Vanilla and caramel upfront, with warm spice notes</p>
               </div>
               <div className="text-center">
                 <div className="w-16 h-16 bg-gold-400/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <span className="text-2xl">👅</span>
+                  <svg className="w-8 h-8 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                  </svg>
                 </div>
                 <h3 className="text-gold-300 font-semibold mb-2">Palate</h3>
                 <p className="text-parchment-300 text-sm">Rich and smooth, warm spice through the middle</p>
               </div>
               <div className="text-center">
                 <div className="w-16 h-16 bg-gold-400/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <span className="text-2xl">✨</span>
+                  <svg className="w-8 h-8 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+                  </svg>
                 </div>
                 <h3 className="text-gold-300 font-semibold mb-2">Finish</h3>
                 <p className="text-parchment-300 text-sm">Smooth enough to sip neat, bold enough for cocktails</p>
