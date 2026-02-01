@@ -4,10 +4,18 @@ import BackToTop from '@/components/BackToTop'
 import Breadcrumbs from '@/components/Breadcrumbs'
 
 export const metadata: Metadata = {
-  title: "Ingredients - Expedition Spiced Rum",
-  description: "What goes into Jerry Can Spirits Expedition Spiced Rum. Caribbean rum base, Welsh water, local brewery molasses, and carefully selected spices.",
+  title: "Product Ingredients",
+  description: "View the full ingredients, allergen information, and tasting notes for all Jerry Can Spirits products.",
   alternates: {
     canonical: 'https://jerrycanspirits.co.uk/ingredients/',
+  },
+  openGraph: {
+    title: 'Product Ingredients | Jerry Can Spirits®',
+    description: 'View the full ingredients, allergen information, and tasting notes for all Jerry Can Spirits products.',
+    url: 'https://jerrycanspirits.co.uk/ingredients/',
+    siteName: 'Jerry Can Spirits®',
+    locale: 'en_GB',
+    type: 'website',
   },
   robots: {
     index: true,
@@ -15,7 +23,18 @@ export const metadata: Metadata = {
   },
 }
 
-export default function Ingredients() {
+const products = [
+  {
+    name: 'Expedition Spiced Rum',
+    slug: 'expedition-spiced-rum',
+    description: 'Our flagship spiced rum. Caribbean rum base, Welsh water, local brewery molasses, and carefully selected spices.',
+    bottle: '700ml',
+    alcohol: '40%',
+  },
+  // Add more products here as they launch
+]
+
+export default function IngredientsIndex() {
   return (
     <main className="min-h-screen py-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
@@ -31,188 +50,73 @@ export default function Ingredients() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div className="inline-block px-4 py-2 bg-jerry-green-800/60 backdrop-blur-sm rounded-full border border-gold-500/30 mb-6">
             <span className="text-gold-300 text-sm font-semibold uppercase tracking-widest">
-              What&apos;s In The Bottle
+              Full Transparency
             </span>
           </div>
 
           <h1 className="text-4xl sm:text-5xl font-serif font-bold text-white mb-6">
-            Expedition Spiced Rum
+            Product
             <br />
             <span className="text-gold-300">Ingredients</span>
           </h1>
 
           <p className="text-xl text-parchment-300 max-w-3xl mx-auto leading-relaxed">
-            No secrets, no gimmicks. Here&apos;s exactly what goes into our rum.
+            No secrets, no gimmicks. Select a product to see exactly what goes into each bottle.
           </p>
         </div>
       </section>
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
 
-        {/* Product Info */}
+        {/* Products Grid */}
         <section className="py-12">
-          <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
-            <div className="grid sm:grid-cols-3 gap-6 text-center mb-8">
-              <div>
-                <p className="text-gold-300 text-sm font-semibold uppercase tracking-wider mb-1">Volume</p>
-                <p className="text-2xl font-serif text-white">70cl</p>
-              </div>
-              <div>
-                <p className="text-gold-300 text-sm font-semibold uppercase tracking-wider mb-1">ABV</p>
-                <p className="text-2xl font-serif text-white">40%</p>
-              </div>
-              <div>
-                <p className="text-gold-300 text-sm font-semibold uppercase tracking-wider mb-1">Origin</p>
-                <p className="text-2xl font-serif text-white">Wales, UK</p>
-              </div>
-            </div>
+          <div className="space-y-6">
+            {products.map((product) => (
+              <Link
+                key={product.slug}
+                href={`/ingredients/${product.slug}`}
+                className="block bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20 hover:border-gold-500/40 transition-all duration-300 group"
+              >
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                  <div className="flex-1">
+                    <h2 className="text-2xl font-serif font-bold text-white mb-2 group-hover:text-gold-300 transition-colors">
+                      {product.name}
+                    </h2>
+                    <p className="text-parchment-300 mb-4">
+                      {product.description}
+                    </p>
+                    <div className="flex gap-4 text-sm">
+                      <span className="text-gold-400">{product.bottle}</span>
+                      <span className="text-parchment-400">•</span>
+                      <span className="text-gold-400">{product.alcohol}</span>
+                    </div>
+                  </div>
+                  <div className="flex-shrink-0">
+                    <span className="inline-flex items-center gap-2 text-gold-300 group-hover:text-gold-400 transition-colors">
+                      <span>View Ingredients</span>
+                      <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                      </svg>
+                    </span>
+                  </div>
+                </div>
+              </Link>
+            ))}
           </div>
         </section>
 
-        {/* Ingredients List */}
+        {/* Info Section */}
         <section className="py-12">
           <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
-            <h2 className="text-2xl sm:text-3xl font-serif font-bold text-white mb-6">
-              Ingredients
+            <h2 className="text-2xl font-serif font-bold text-white mb-4">
+              Why We Share This
             </h2>
-
-            <div className="space-y-6 text-parchment-300">
-              {/* Base Spirit */}
-              <div className="border-b border-gold-500/20 pb-6">
-                <h3 className="text-lg font-semibold text-gold-300 mb-3">Base Spirit</h3>
-                <ul className="space-y-2">
-                  <li className="flex items-start space-x-3">
-                    <div className="w-2 h-2 bg-gold-400 rounded-full mt-2 flex-shrink-0"></div>
-                    <span>Caribbean Rum</span>
-                  </li>
-                  <li className="flex items-start space-x-3">
-                    <div className="w-2 h-2 bg-gold-400 rounded-full mt-2 flex-shrink-0"></div>
-                    <span>Welsh Brewery Molasses</span>
-                  </li>
-                </ul>
-              </div>
-
-              {/* Spices & Botanicals */}
-              <div className="border-b border-gold-500/20 pb-6">
-                <h3 className="text-lg font-semibold text-gold-300 mb-3">Spices &amp; Botanicals</h3>
-                <p className="text-parchment-400 italic mb-4">Full ingredient list coming soon.</p>
-                {/* Placeholder for actual ingredients - uncomment and populate when ready
-                <ul className="grid sm:grid-cols-2 gap-2">
-                  <li className="flex items-start space-x-3">
-                    <div className="w-2 h-2 bg-gold-400 rounded-full mt-2 flex-shrink-0"></div>
-                    <span>Vanilla</span>
-                  </li>
-                  <li className="flex items-start space-x-3">
-                    <div className="w-2 h-2 bg-gold-400 rounded-full mt-2 flex-shrink-0"></div>
-                    <span>Cinnamon</span>
-                  </li>
-                  <li className="flex items-start space-x-3">
-                    <div className="w-2 h-2 bg-gold-400 rounded-full mt-2 flex-shrink-0"></div>
-                    <span>Nutmeg</span>
-                  </li>
-                  <li className="flex items-start space-x-3">
-                    <div className="w-2 h-2 bg-gold-400 rounded-full mt-2 flex-shrink-0"></div>
-                    <span>Clove</span>
-                  </li>
-                </ul>
-                */}
-              </div>
-
-              {/* Water */}
-              <div>
-                <h3 className="text-lg font-semibold text-gold-300 mb-3">Water</h3>
-                <ul className="space-y-2">
-                  <li className="flex items-start space-x-3">
-                    <div className="w-2 h-2 bg-gold-400 rounded-full mt-2 flex-shrink-0"></div>
-                    <span>Pure Welsh Water</span>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Allergen Info */}
-        <section className="py-12">
-          <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
-            <h2 className="text-2xl sm:text-3xl font-serif font-bold text-white mb-6">
-              Allergen Information
-            </h2>
-
-            <div className="text-parchment-300">
-              <p className="mb-4">
-                Our Expedition Spiced Rum contains no major allergens. It is:
-              </p>
-              <ul className="grid sm:grid-cols-2 gap-2">
-                <li className="flex items-center space-x-3">
-                  <svg className="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
-                  <span>Gluten-free</span>
-                </li>
-                <li className="flex items-center space-x-3">
-                  <svg className="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
-                  <span>Dairy-free</span>
-                </li>
-                <li className="flex items-center space-x-3">
-                  <svg className="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
-                  <span>Nut-free</span>
-                </li>
-                <li className="flex items-center space-x-3">
-                  <svg className="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
-                  <span>Vegan-friendly</span>
-                </li>
-              </ul>
-              <p className="mt-6 text-sm text-parchment-400">
-                If you have specific dietary concerns, please <Link href="/contact" className="text-gold-300 hover:text-gold-400 underline">contact us</Link> before purchasing.
-              </p>
-            </div>
-          </div>
-        </section>
-
-        {/* Tasting Notes */}
-        <section className="py-12">
-          <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
-            <h2 className="text-2xl sm:text-3xl font-serif font-bold text-white mb-6">
-              Tasting Notes
-            </h2>
-
-            <div className="grid sm:grid-cols-3 gap-6">
-              <div className="text-center">
-                <div className="w-16 h-16 bg-gold-400/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <svg className="w-8 h-8 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 4a2 2 0 0 0 2 2a2 2 0 0 0 -2 2a2 2 0 0 0 -2 -2a2 2 0 0 0 2 -2" />
-                  </svg>
-                </div>
-                <h3 className="text-gold-300 font-semibold mb-2">Nose</h3>
-                <p className="text-parchment-300 text-sm">Vanilla and caramel upfront, with warm spice notes</p>
-              </div>
-              <div className="text-center">
-                <div className="w-16 h-16 bg-gold-400/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <svg className="w-8 h-8 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                  </svg>
-                </div>
-                <h3 className="text-gold-300 font-semibold mb-2">Palate</h3>
-                <p className="text-parchment-300 text-sm">Rich and smooth, warm spice through the middle</p>
-              </div>
-              <div className="text-center">
-                <div className="w-16 h-16 bg-gold-400/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <svg className="w-8 h-8 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
-                  </svg>
-                </div>
-                <h3 className="text-gold-300 font-semibold mb-2">Finish</h3>
-                <p className="text-parchment-300 text-sm">Smooth enough to sip neat, bold enough for cocktails</p>
-              </div>
-            </div>
+            <p className="text-parchment-300 mb-4">
+              We believe you should know exactly what you&apos;re drinking. Each product page includes the full ingredient list, allergen information, and tasting notes.
+            </p>
+            <p className="text-parchment-400 text-sm">
+              Questions about ingredients? <Link href="/contact" className="text-gold-300 hover:text-gold-400 underline">Get in touch</Link>.
+            </p>
           </div>
         </section>
 
@@ -220,10 +124,10 @@ export default function Ingredients() {
         <section className="py-12 text-center">
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
-              href="/shop/product/expedition-spiced-rum"
+              href="/shop"
               className="inline-flex items-center justify-center space-x-2 bg-gold-500 hover:bg-gold-400 text-jerry-green-900 px-8 py-4 rounded-lg font-semibold transition-all duration-300"
             >
-              <span>Order a Bottle</span>
+              <span>Shop All Products</span>
             </Link>
             <Link
               href="/sustainability"

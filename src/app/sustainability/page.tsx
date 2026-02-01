@@ -9,6 +9,14 @@ export const metadata: Metadata = {
   alternates: {
     canonical: 'https://jerrycanspirits.co.uk/sustainability/',
   },
+  openGraph: {
+    title: 'Sustainability & Recycling | Jerry Can Spirits®',
+    description: 'How Jerry Can Spirits approaches sustainability. Local sourcing, recycling guidance, and our commitment to reducing environmental impact.',
+    url: 'https://jerrycanspirits.co.uk/sustainability/',
+    siteName: 'Jerry Can Spirits®',
+    locale: 'en_GB',
+    type: 'website',
+  },
   robots: {
     index: true,
     follow: true,
