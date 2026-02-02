@@ -510,10 +510,11 @@ export default function Footer() {
             <div className="max-w-screen-2xl mx-auto">
             <div className="flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0">
               
-              {/* Copyright */}
+              {/* Copyright & Company Info */}
               <div className="text-sm text-parchment-400">
                 <p>© {isClient ? new Date().getFullYear() : '2024'} Jerry Can Spirits® Ltd. All rights reserved.</p>
                 <p className="mt-1">Jerry Can Spirits® is a registered trademark (UK00004263767)</p>
+                <p className="mt-1">Company No. 16618770 | VAT: GB 499 6389 03 | AWRS: XFAW 000 0012 3072</p>
               </div>
 
               {/* Additional Info */}
