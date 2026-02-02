@@ -38,7 +38,7 @@ const faqSchema = {
       name: 'What does Expedition Spiced Rum taste like?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'On the nose, you\'ll get vanilla and caramel upfront with warm spice notes. The palate is rich and smooth with warm spice through the middle. The finish is smooth enough to sip neat, yet bold enough for cocktails.',
+        text: 'On the nose, warm waves of Madagascan vanilla rise first, followed by Ceylon cinnamon and toasted bourbon oak, with orange peel, clove and allspice. The palate is silky and naturally sweet from agave syrup, with ginger heat, cassia bark, and baking spices. The finish is long, warming, and gently dry with oak tannins, vanilla, and a flicker of ginger.',
       },
     },
     {
@@ -302,28 +302,33 @@ export default function ExpeditionSpicedRumIngredients() {
               Tasting Notes
             </h2>
 
-            <div className="space-y-4">
-              <div className="flex items-start space-x-3">
-                <div className="w-2 h-2 bg-gold-400 rounded-full mt-2 flex-shrink-0"></div>
-                <div>
-                  <span className="text-gold-300 font-semibold">Nose:</span>
-                  <span className="text-parchment-300 ml-2">Vanilla and caramel upfront, with warm spice notes</span>
-                </div>
+            <div className="space-y-6">
+              <div>
+                <h3 className="text-gold-300 font-semibold text-lg mb-2">Nose</h3>
+                <p className="text-parchment-300 leading-relaxed">
+                  Warm waves of Madagascan vanilla rise first, rich and creamy, followed by elegant Ceylon cinnamon and notes of toasted bourbon oak. A lift of orange peel brightens the aroma, while clove and allspice bring depth and warmth.
+                </p>
               </div>
-              <div className="flex items-start space-x-3">
-                <div className="w-2 h-2 bg-gold-400 rounded-full mt-2 flex-shrink-0"></div>
-                <div>
-                  <span className="text-gold-300 font-semibold">Palate:</span>
-                  <span className="text-parchment-300 ml-2">Rich and smooth, warm spice through the middle</span>
-                </div>
+              <div>
+                <h3 className="text-gold-300 font-semibold text-lg mb-2">Palate</h3>
+                <p className="text-parchment-300 leading-relaxed">
+                  Silky and naturally sweet upfront, thanks to agave syrup, moving into a complex heart of ginger heat, cassia bark, and layered baking spices. The citrus notes reappear mid-palate, balancing the richness with a subtle, zesty edge.
+                </p>
               </div>
-              <div className="flex items-start space-x-3">
-                <div className="w-2 h-2 bg-gold-400 rounded-full mt-2 flex-shrink-0"></div>
-                <div>
-                  <span className="text-gold-300 font-semibold">Finish:</span>
-                  <span className="text-parchment-300 ml-2">Smooth enough to sip neat, bold enough for cocktails</span>
-                </div>
+              <div>
+                <h3 className="text-gold-300 font-semibold text-lg mb-2">Finish</h3>
+                <p className="text-parchment-300 leading-relaxed">
+                  Long, warming, and gently dry. Oak tannins linger alongside vanilla, winter spice, and a final flicker of ginger. Clean, refined, and crafted for sipping.
+                </p>
               </div>
+            </div>
+
+            {/* Character Summary */}
+            <div className="mt-8 pt-6 border-t border-gold-500/20">
+              <h3 className="text-gold-300 font-semibold text-lg mb-2">Character</h3>
+              <p className="text-parchment-300 leading-relaxed italic">
+                A modern, naturally sweetened spiced rum with bright citrus top notes, creamy vanilla depth, and a bourbon-barrel backbone — smooth enough to sip neat, bold enough for standout cocktails.
+              </p>
             </div>
           </div>
         </section>
