@@ -38,7 +38,7 @@ const faqSchema = {
       name: 'What does Expedition Spiced Rum taste like?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'On the nose, you\'ll get vanilla and caramel upfront with warm spice notes. The palate is rich and smooth with warm spice through the middle. The finish is smooth enough to sip neat, yet bold enough for cocktails.',
+        text: 'On the nose, warm waves of Madagascan vanilla rise first, followed by Ceylon cinnamon and toasted bourbon oak, with orange peel, clove and allspice. The palate is silky and naturally sweet from agave syrup, with ginger heat, cassia bark, and baking spices. The finish is long, warming, and gently dry with oak tannins, vanilla, and a flicker of ginger.',
       },
     },
     {
@@ -47,6 +47,22 @@ const faqSchema = {
       acceptedAnswer: {
         '@type': 'Answer',
         text: 'Expedition Spiced Rum is 40% alcohol by volume (ABV), bottled in 700ml bottles.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'How many calories are in Expedition Spiced Rum?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Expedition Spiced Rum contains approximately 1,846 kcal per 700ml bottle. A single measure (25ml) contains 66 kcal, and a double (50ml) contains 132 kcal.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'What spices are in Expedition Spiced Rum?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Expedition Spiced Rum is made with Madagascan vanilla pods, Ceylon cinnamon, allspice, cloves, orange peel, cassia bark, ginger, and agave syrup. It is matured with bourbon barrel chips for added depth.',
       },
     },
   ],
@@ -111,18 +127,38 @@ export default function ExpeditionSpicedRumIngredients() {
         {/* Product Info */}
         <section className="py-12">
           <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
-            <div className="grid sm:grid-cols-3 gap-6 text-center mb-8">
+            <div className="grid sm:grid-cols-4 gap-6 text-center mb-8">
               <div>
                 <p className="text-gold-300 text-sm font-semibold uppercase tracking-wider mb-1">Bottle</p>
                 <p className="text-2xl font-serif text-white">700ml</p>
               </div>
               <div>
                 <p className="text-gold-300 text-sm font-semibold uppercase tracking-wider mb-1">Alcohol</p>
-                <p className="text-2xl font-serif text-white">40%</p>
+                <p className="text-2xl font-serif text-white">40% ABV</p>
+              </div>
+              <div>
+                <p className="text-gold-300 text-sm font-semibold uppercase tracking-wider mb-1">Energy</p>
+                <p className="text-2xl font-serif text-white">1,846 kcal</p>
+                <p className="text-parchment-400 text-xs mt-1">per 700ml bottle</p>
               </div>
               <div>
                 <p className="text-gold-300 text-sm font-semibold uppercase tracking-wider mb-1">Origin</p>
                 <p className="text-2xl font-serif text-white">Wales, UK</p>
+              </div>
+            </div>
+
+            {/* Per Serve Info */}
+            <div className="border-t border-gold-500/20 pt-6">
+              <h3 className="text-lg font-semibold text-gold-300 mb-4 text-center">Energy Per Serve</h3>
+              <div className="grid grid-cols-2 gap-4 max-w-md mx-auto">
+                <div className="bg-jerry-green-900/50 rounded-lg p-4 text-center">
+                  <p className="text-parchment-400 text-sm mb-1">Single (25ml)</p>
+                  <p className="text-xl font-serif text-white">66 kcal</p>
+                </div>
+                <div className="bg-jerry-green-900/50 rounded-lg p-4 text-center">
+                  <p className="text-parchment-400 text-sm mb-1">Double (50ml)</p>
+                  <p className="text-xl font-serif text-white">132 kcal</p>
+                </div>
               </div>
             </div>
           </div>
@@ -154,27 +190,51 @@ export default function ExpeditionSpicedRumIngredients() {
               {/* Spices & Botanicals */}
               <div className="border-b border-gold-500/20 pb-6">
                 <h3 className="text-lg font-semibold text-gold-300 mb-3">Spices &amp; Botanicals</h3>
-                <p className="text-parchment-400 italic mb-4">Full ingredient list coming soon.</p>
-                {/* Placeholder for actual ingredients - uncomment and populate when ready
                 <ul className="grid sm:grid-cols-2 gap-2">
                   <li className="flex items-start space-x-3">
                     <div className="w-2 h-2 bg-gold-400 rounded-full mt-2 flex-shrink-0"></div>
-                    <span>Vanilla</span>
+                    <span>Madagascan Vanilla Pods</span>
                   </li>
                   <li className="flex items-start space-x-3">
                     <div className="w-2 h-2 bg-gold-400 rounded-full mt-2 flex-shrink-0"></div>
-                    <span>Cinnamon</span>
+                    <span>Ceylon Cinnamon</span>
                   </li>
                   <li className="flex items-start space-x-3">
                     <div className="w-2 h-2 bg-gold-400 rounded-full mt-2 flex-shrink-0"></div>
-                    <span>Nutmeg</span>
+                    <span>Allspice</span>
                   </li>
                   <li className="flex items-start space-x-3">
                     <div className="w-2 h-2 bg-gold-400 rounded-full mt-2 flex-shrink-0"></div>
-                    <span>Clove</span>
+                    <span>Cloves</span>
+                  </li>
+                  <li className="flex items-start space-x-3">
+                    <div className="w-2 h-2 bg-gold-400 rounded-full mt-2 flex-shrink-0"></div>
+                    <span>Orange Peel</span>
+                  </li>
+                  <li className="flex items-start space-x-3">
+                    <div className="w-2 h-2 bg-gold-400 rounded-full mt-2 flex-shrink-0"></div>
+                    <span>Cassia Bark</span>
+                  </li>
+                  <li className="flex items-start space-x-3">
+                    <div className="w-2 h-2 bg-gold-400 rounded-full mt-2 flex-shrink-0"></div>
+                    <span>Ginger</span>
+                  </li>
+                  <li className="flex items-start space-x-3">
+                    <div className="w-2 h-2 bg-gold-400 rounded-full mt-2 flex-shrink-0"></div>
+                    <span>Agave Syrup</span>
                   </li>
                 </ul>
-                */}
+              </div>
+
+              {/* Maturation */}
+              <div className="border-b border-gold-500/20 pb-6">
+                <h3 className="text-lg font-semibold text-gold-300 mb-3">Maturation</h3>
+                <ul className="space-y-2">
+                  <li className="flex items-start space-x-3">
+                    <div className="w-2 h-2 bg-gold-400 rounded-full mt-2 flex-shrink-0"></div>
+                    <span>Bourbon Barrel Chips</span>
+                  </li>
+                </ul>
               </div>
 
               {/* Water */}
@@ -242,28 +302,33 @@ export default function ExpeditionSpicedRumIngredients() {
               Tasting Notes
             </h2>
 
-            <div className="space-y-4">
-              <div className="flex items-start space-x-3">
-                <div className="w-2 h-2 bg-gold-400 rounded-full mt-2 flex-shrink-0"></div>
-                <div>
-                  <span className="text-gold-300 font-semibold">Nose:</span>
-                  <span className="text-parchment-300 ml-2">Vanilla and caramel upfront, with warm spice notes</span>
-                </div>
+            <div className="space-y-6">
+              <div>
+                <h3 className="text-gold-300 font-semibold text-lg mb-2">Nose</h3>
+                <p className="text-parchment-300 leading-relaxed">
+                  Warm waves of Madagascan vanilla rise first, rich and creamy, followed by elegant Ceylon cinnamon and notes of toasted bourbon oak. A lift of orange peel brightens the aroma, while clove and allspice bring depth and warmth.
+                </p>
               </div>
-              <div className="flex items-start space-x-3">
-                <div className="w-2 h-2 bg-gold-400 rounded-full mt-2 flex-shrink-0"></div>
-                <div>
-                  <span className="text-gold-300 font-semibold">Palate:</span>
-                  <span className="text-parchment-300 ml-2">Rich and smooth, warm spice through the middle</span>
-                </div>
+              <div>
+                <h3 className="text-gold-300 font-semibold text-lg mb-2">Palate</h3>
+                <p className="text-parchment-300 leading-relaxed">
+                  Silky and naturally sweet upfront, thanks to agave syrup, moving into a complex heart of ginger heat, cassia bark, and layered baking spices. The citrus notes reappear mid-palate, balancing the richness with a subtle, zesty edge.
+                </p>
               </div>
-              <div className="flex items-start space-x-3">
-                <div className="w-2 h-2 bg-gold-400 rounded-full mt-2 flex-shrink-0"></div>
-                <div>
-                  <span className="text-gold-300 font-semibold">Finish:</span>
-                  <span className="text-parchment-300 ml-2">Smooth enough to sip neat, bold enough for cocktails</span>
-                </div>
+              <div>
+                <h3 className="text-gold-300 font-semibold text-lg mb-2">Finish</h3>
+                <p className="text-parchment-300 leading-relaxed">
+                  Long, warming, and gently dry. Oak tannins linger alongside vanilla, winter spice, and a final flicker of ginger. Clean, refined, and crafted for sipping.
+                </p>
               </div>
+            </div>
+
+            {/* Character Summary */}
+            <div className="mt-8 pt-6 border-t border-gold-500/20">
+              <h3 className="text-gold-300 font-semibold text-lg mb-2">Character</h3>
+              <p className="text-parchment-300 leading-relaxed italic">
+                A modern, naturally sweetened spiced rum with bright citrus top notes, creamy vanilla depth, and a bourbon-barrel backbone — smooth enough to sip neat, bold enough for standout cocktails.
+              </p>
             </div>
           </div>
         </section>
