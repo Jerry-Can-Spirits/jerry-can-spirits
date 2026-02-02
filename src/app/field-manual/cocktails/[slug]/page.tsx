@@ -243,6 +243,25 @@ export default async function CocktailPage({ params }: PageProps) {
             </div>
           )}
 
+          {/* Get the Rum CTA */}
+          <div className="mt-6 sm:mt-8 bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-4 sm:p-6 border border-gold-500/20">
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+              <div>
+                <h3 className="text-xl font-serif font-bold text-white mb-1">Need the Rum?</h3>
+                <p className="text-parchment-300 text-sm">Pick up a bottle of Expedition Spiced Rum to make this cocktail.</p>
+              </div>
+              <Link
+                href="/shop/product/jerry-can-spirits-expedition-spiced-rum"
+                className="inline-flex items-center gap-2 bg-gold-500 hover:bg-gold-400 text-jerry-green-900 px-5 py-2.5 rounded-lg font-semibold transition-all duration-300 whitespace-nowrap"
+              >
+                <span>Shop Now</span>
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </Link>
+            </div>
+          </div>
+
           {/* Rating & Share CTA */}
           <div className="mt-6 sm:mt-8 bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-4 sm:p-6 md:p-8 border border-gold-500/20 text-center">
             <h3 className="text-2xl font-serif font-bold text-white mb-4">

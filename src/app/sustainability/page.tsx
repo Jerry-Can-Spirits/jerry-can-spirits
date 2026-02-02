@@ -160,7 +160,7 @@ export default function Sustainability() {
                 We work with what&apos;s close to home where we can. Our rum is distilled in Wales using Welsh water, and the molasses comes partly from a local brewery&apos;s beer production — good ingredients that would otherwise go to waste.
               </p>
               <p>
-                It&apos;s not about slapping &quot;eco-friendly&quot; on the label. It&apos;s just how we think things should be done.
+                It&apos;s not about slapping &quot;eco-friendly&quot; on the label. It&apos;s just how we think things should be done — read more about <Link href="/about/story" className="text-gold-300 hover:text-gold-400 underline">our story</Link> and the values that shape how we work.
               </p>
 
               <div className="grid sm:grid-cols-2 gap-4 mt-6">
