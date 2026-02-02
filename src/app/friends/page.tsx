@@ -232,8 +232,9 @@ export default function FriendsPage() {
             </h3>
             <p className="text-gray-300 mb-8 max-w-2xl mx-auto leading-relaxed">
               Are you a small batch distillery or craft spirit producer who shares our
-              passion for quality and community? Let's support each other and elevate
-              the craft spirits movement together.
+              passion for quality and community? We&apos;re currently working with content creators
+              and always looking for partners who share our values—get in touch to explore
+              how we could work together.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
@@ -294,7 +295,7 @@ export default function FriendsPage() {
                       "name": "How can I become a Jerry Can Spirits partner?",
                       "acceptedAnswer": {
                         "@type": "Answer",
-                        "text": "Get in touch via our contact page or email partnerships@jerrycanspirits.co.uk. We're interested in working with distilleries, suppliers, and businesses that share our commitment to quality. We'll have a chat about what we're both looking for and see if there's a fit."
+                        "text": "Get in touch via our contact page or email partnerships@jerrycanspirits.co.uk. Our approach to partnerships is shaped by the founders' military service and values, ensuring we work with those who share our dedication and integrity. We're interested in working with distilleries, suppliers, and businesses that share our commitment to quality. We'll have a chat about what we're both looking for and see if there's a fit."
                       }
                     },
                     {
@@ -310,7 +311,7 @@ export default function FriendsPage() {
                       "name": "Does Jerry Can Spirits support veteran-owned businesses?",
                       "acceptedAnswer": {
                         "@type": "Answer",
-                        "text": "Being veteran-owned ourselves, we're naturally keen to support other veteran businesses where we can. If you're a veteran running a business that might complement what we do, we'd particularly like to hear from you."
+                        "text": "Being veteran-owned ourselves, we're naturally keen to support other veteran businesses where we can. We also value and support reservists as part of our commitment to the armed forces community. If you're a veteran running a business that might complement what we do, we'd particularly like to hear from you."
                       }
                     },
                     {
@@ -338,7 +339,7 @@ export default function FriendsPage() {
                 <div className="border-b border-gold-500/10 pb-6">
                   <h3 className="text-lg font-semibold text-gold-300 mb-3">How can I become a Jerry Can Spirits partner?</h3>
                   <p className="text-gray-300 leading-relaxed">
-                    Get in touch via our <Link href="/contact" className="text-gold-400 hover:text-gold-300 underline">contact page</Link> or email <a href="mailto:partnerships@jerrycanspirits.co.uk" className="text-gold-400 hover:text-gold-300 underline">partnerships@jerrycanspirits.co.uk</a>. We&apos;re interested in working with distilleries, suppliers, and businesses that share our commitment to quality. We&apos;ll have a chat about what we&apos;re both looking for and see if there&apos;s a fit.
+                    Get in touch via our <Link href="/contact" className="text-gold-400 hover:text-gold-300 underline">contact page</Link> or email <a href="mailto:partnerships@jerrycanspirits.co.uk" className="text-gold-400 hover:text-gold-300 underline">partnerships@jerrycanspirits.co.uk</a>. Our approach to partnerships is shaped by the founders&apos; military service and values, ensuring we work with those who share our dedication and integrity. We&apos;re interested in working with distilleries, suppliers, and businesses that share our commitment to quality. We&apos;ll have a chat about what we&apos;re both looking for and see if there&apos;s a fit.
                   </p>
                 </div>
 
@@ -352,7 +353,7 @@ export default function FriendsPage() {
                 <div className="border-b border-gold-500/10 pb-6">
                   <h3 className="text-lg font-semibold text-gold-300 mb-3">Does Jerry Can Spirits support veteran-owned businesses?</h3>
                   <p className="text-gray-300 leading-relaxed">
-                    Being veteran-owned ourselves, we&apos;re naturally keen to support other veteran businesses where we can. If you&apos;re a veteran running a business that might complement what we do, we&apos;d particularly like to hear from you.
+                    Being veteran-owned ourselves, we&apos;re naturally keen to support other veteran businesses where we can. We also value and support reservists as part of our commitment to the armed forces community. If you&apos;re a veteran running a business that might complement what we do, we&apos;d particularly like to hear from you.
                   </p>
                 </div>
 

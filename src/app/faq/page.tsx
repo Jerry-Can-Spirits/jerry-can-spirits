@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Link from 'next/link'
 import StructuredData from '@/components/StructuredData'
 
 export const metadata: Metadata = {
@@ -67,7 +68,8 @@ const faqs = [
   // Cocktails & Recipes
   {
     question: "What cocktails work best with Jerry Can Spirits rum?",
-    answer: "Our rum is versatile and works beautifully in classic cocktails like Old Fashioned, Mai Tai, and Rum Punch. Check our Field Manual for exclusive expedition cocktail recipes."
+    answer: "Our rum is versatile and works beautifully in classic cocktails like Old Fashioned, Mai Tai, and Rum Punch. Check our Field Manual for exclusive expedition cocktail recipes.",
+    hasRichAnswer: true,
   },
 
   // Reviews & Community
@@ -79,7 +81,8 @@ const faqs = [
   // Company & Brand
   {
     question: "What is your connection to the Armed Forces?",
-    answer: "Jerry Can Spirits was founded by a former Royal Corps of Signals serviceman. We're proud supporters of the Armed Forces Covenant and donate a portion of profits to military charities."
+    answer: "Jerry Can Spirits was founded by a former Royal Corps of Signals serviceman. We're proud supporters of the Armed Forces Covenant and donate a portion of profits to military charities.",
+    hasRichAnswer: true,
   },
   {
     question: "Can I visit your distillery?",
@@ -137,7 +140,13 @@ export default function FAQPage() {
                   {faq.question}
                 </h2>
                 <p className="text-gray-300 leading-relaxed">
-                  {faq.answer}
+                  {faq.question === "What cocktails work best with Jerry Can Spirits rum?" ? (
+                    <>Our rum is versatile and works beautifully in classic cocktails like Old Fashioned, Mai Tai, and Rum Punch. Check our <Link href="/field-manual/cocktails" className="text-gold-300 hover:text-gold-400 underline">Field Manual</Link> for exclusive expedition cocktail recipes.</>
+                  ) : faq.question === "What is your connection to the Armed Forces?" ? (
+                    <>Jerry Can Spirits was <Link href="/about/team/dan-freeman" className="text-gold-300 hover:text-gold-400 underline">founded by a former Royal Corps of Signals serviceman</Link>. We&apos;re proud supporters of the <Link href="/armed-forces-covenant" className="text-gold-300 hover:text-gold-400 underline">Armed Forces Covenant</Link> and donate a portion of profits to military charities.</>
+                  ) : (
+                    faq.answer
+                  )}
                 </p>
               </div>
             ))}
