@@ -286,7 +286,7 @@ export default async function DrinksPageTest() {
                 Expedition Spiced Rum starts with Caribbean white rum and Welsh brewery molasses. We blend these at Spirit of Wales Distillery in Newport, pot-distilling in small batches of just 700 bottles.
               </p>
               <p>
-                The flavour profile opens with vanilla and caramel, moves into warm cinnamon and nutmeg through the middle, and finishes smooth with subtle oak. It's designed to drink neat, work in cocktails, and hold its own over ice.
+                The flavour profile opens with Madagascan vanilla and Ceylon cinnamon, moves into warming ginger and cassia through the middle, and finishes smooth with bourbon oak and a hint of citrus. It's designed to drink neat, work in cocktails, and hold its own over ice.
               </p>
               <p>
                 We're not trying to be everything to everyone. This is spiced rum made by people who actually drink it - after 12 years of military service, we know what a proper drink should taste like at the end of a long day.
@@ -370,7 +370,7 @@ export default async function DrinksPageTest() {
                   "name": "What is spiced rum?",
                   "acceptedAnswer": {
                     "@type": "Answer",
-                    "text": "Spiced rum is rum that's been infused with spices and flavourings - typically vanilla, cinnamon, nutmeg, and caramel. Unlike flavoured rums which can taste artificial, good spiced rum balances these additions so they complement rather than mask the base spirit. Our Expedition Spiced Rum uses Caribbean white rum as the base, pot-distilled with Welsh brewery molasses for depth."
+                    "text": "Spiced rum is rum infused with real spices and botanicals. Our Expedition Spiced Rum uses Madagascan vanilla, Ceylon cinnamon, ginger, orange peel, cloves, and cassia bark — steeped slowly in Caribbean rum and sweetened naturally with agave. Unlike artificial-tasting rums, we use real ingredients to create depth and complexity."
                   }
                 },
                 {
@@ -430,7 +430,7 @@ export default async function DrinksPageTest() {
             <div className="border-b border-gold-500/10 pb-6">
               <h3 className="text-lg font-semibold text-gold-300 mb-3">What is spiced rum?</h3>
               <p className="text-parchment-200 leading-relaxed">
-                Spiced rum is rum that's been infused with spices and flavourings - typically vanilla, cinnamon, nutmeg, and caramel. Unlike flavoured rums which can taste artificial, good spiced rum balances these additions so they complement rather than mask the base spirit. Our Expedition Spiced Rum uses Caribbean white rum as the base, pot-distilled with Welsh brewery molasses for depth.
+                Spiced rum is rum infused with real spices and botanicals. Our Expedition Spiced Rum uses Madagascan vanilla, Ceylon cinnamon, ginger, orange peel, cloves, and cassia bark — steeped slowly in Caribbean rum and sweetened naturally with agave. Unlike artificial-tasting rums, we use real ingredients to create depth and complexity.
               </p>
             </div>
 
