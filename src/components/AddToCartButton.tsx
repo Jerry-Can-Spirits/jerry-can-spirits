@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { useCart } from '@/contexts/CartContext'
+import { trackAddToCart } from '@/components/GoogleTag'
 
 interface AddToCartButtonProps {
   variantId: string
@@ -33,6 +34,16 @@ export default function AddToCartButton({
         value: price ? price * quantity : undefined,
         currency: currency,
       });
+    }
+
+    // Track AddToCart event for Google Ads
+    if (price) {
+      trackAddToCart(
+        productId || variantId,
+        productTitle,
+        price * quantity,
+        currency
+      );
     }
 
     await addToCart(variantId, quantity)

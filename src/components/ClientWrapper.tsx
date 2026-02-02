@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import AgeGate from './AgeGate';
 
 interface ClientWrapperProps {
@@ -36,7 +36,6 @@ export default function ClientWrapper({ children }: ClientWrapperProps) {
   const [isLoading, setIsLoading] = useState(true);
   const [isBot, setIsBot] = useState(false);
   const pathname = usePathname();
-  const router = useRouter();
 
   const handleAgeVerification = () => {
     setIsAgeVerified(true);
@@ -67,14 +66,11 @@ export default function ClientWrapper({ children }: ClientWrapperProps) {
     setIsBot(botDetected || auditBypass);
     setIsLoading(false);
 
-    // If user is not verified and trying to access a non-legal page, redirect to home
-    // But allow bots through for SEO purposes
-    if (!verified && !botDetected && !auditBypass && !isLegalPage && pathname !== '/') {
-      // Preserve query parameters when redirecting (important for affiliate tracking)
-      const queryString = window.location.search;
-      router.push('/' + queryString);
-    }
-  }, [pathname, isLegalPage, router]);
+    // Note: We no longer redirect unverified users to home.
+    // The age gate overlay covers the content for regular users,
+    // while content always renders underneath for SEO (Googlebot sees full content).
+    // The previous redirect was causing Google to report "Page with redirect" for all pages.
+  }, [pathname, isLegalPage]);
 
   // Show loading while checking verification status
   if (isLoading) {

@@ -16,6 +16,7 @@ import CartDrawer from "@/components/CartDrawer";
 import { OrganizationSchema, WebsiteSchema } from "@/components/StructuredData";
 import FacebookPixel from "@/components/FacebookPixel";
 import AnnouncementBar from "@/components/AnnouncementBar";
+import GoogleTag from "@/components/GoogleTag";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -90,13 +91,6 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth">
       <head>
-        {/* Zaraz stub - prevents Cookiebot conflict with Cloudflare Zaraz */}
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `window.zaraz=window.zaraz||{q:[],consent:{set:function(){},setAll:function(){},getAll:function(){return{}}}};`
-          }}
-        />
-
         {/* Cookiebot Consent Management - must be first script */}
         <Script
           id="Cookiebot"
@@ -152,6 +146,7 @@ export default function RootLayout({
         <OrganizationSchema />
         <WebsiteSchema />
         <FacebookPixel />
+        <GoogleTag />
 
         <CartProvider>
           {/* Skip to Content Link - Accessibility */}
