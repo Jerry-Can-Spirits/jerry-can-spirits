@@ -15,31 +15,6 @@ import Script from 'next/script';
 export default function GoogleTag() {
   return (
     <>
-      {/* Google Consent Mode v2 Defaults - MUST load before gtag.js */}
-      {/* Cookiebot will update these values when user gives consent */}
-      <Script
-        id="google-consent-defaults"
-        strategy="beforeInteractive"
-        dangerouslySetInnerHTML={{
-          __html: `
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag("consent", "default", {
-              ad_personalization: "denied",
-              ad_storage: "denied",
-              ad_user_data: "denied",
-              analytics_storage: "denied",
-              functionality_storage: "denied",
-              personalization_storage: "denied",
-              security_storage: "granted",
-              wait_for_update: 500,
-            });
-            gtag("set", "ads_data_redaction", true);
-            gtag("set", "url_passthrough", false);
-          `,
-        }}
-      />
-
       {/* Google tag (gtag.js) */}
       <Script
         src="https://www.googletagmanager.com/gtag/js?id=AW-17823586670"
