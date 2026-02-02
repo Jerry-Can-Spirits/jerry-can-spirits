@@ -30,7 +30,7 @@ const faqSchema = {
       name: 'What is Expedition Spiced Rum made from?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Expedition Spiced Rum is made from Caribbean rum base, Welsh brewery molasses, pure Welsh water, and carefully selected spices and botanicals. It\'s distilled at Spirit of Wales Distillery in Newport, Gwent.',
+        text: 'Expedition Spiced Rum is made with Caribbean rum, Madagascan vanilla pods, Ceylon cinnamon, ginger, orange peel, cloves, allspice, cassia bark, and agave syrup for natural sweetness. It\'s rested on bourbon barrel chips and blended at Spirit of Wales Distillery in Newport, South Wales.',
       },
     },
     {
@@ -70,13 +70,13 @@ const faqSchema = {
 
 export const metadata: Metadata = {
   title: "Ingredients - Expedition Spiced Rum",
-  description: "What goes into Jerry Can Spirits Expedition Spiced Rum. Caribbean rum base, Welsh water, local brewery molasses, and carefully selected spices.",
+  description: "What goes into Jerry Can Spirits Expedition Spiced Rum. Madagascan vanilla, Ceylon cinnamon, ginger, orange peel, cloves, cassia, and agave — steeped in Caribbean rum.",
   alternates: {
     canonical: 'https://jerrycanspirits.co.uk/ingredients/expedition-spiced-rum/',
   },
   openGraph: {
     title: 'Expedition Spiced Rum Ingredients | Jerry Can Spirits®',
-    description: 'What goes into Jerry Can Spirits Expedition Spiced Rum. Caribbean rum base, Welsh water, local brewery molasses, and carefully selected spices.',
+    description: 'What goes into Jerry Can Spirits Expedition Spiced Rum. Madagascan vanilla, Ceylon cinnamon, ginger, orange peel, cloves, cassia, and agave — steeped in Caribbean rum.',
     url: 'https://jerrycanspirits.co.uk/ingredients/expedition-spiced-rum/',
     siteName: 'Jerry Can Spirits®',
     locale: 'en_GB',

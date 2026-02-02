@@ -7,13 +7,13 @@ import StructuredData from '@/components/StructuredData'
 
 export const metadata: Metadata = {
   title: "Our Ethos - Values & Craftsmanship",
-  description: "The values behind Jerry Can Spirits. We believe in making rum we're proud of – function over form, quality without shortcuts, and actually caring about what goes in the bottle.",
+  description: "The values behind Jerry Can Spirits premium spiced rum. Small batch craft rum made with Madagascan vanilla, Ceylon cinnamon, and real botanicals. Veteran-owned, Welsh-distilled.",
   alternates: {
     canonical: 'https://jerrycanspirits.co.uk/ethos/',
   },
   openGraph: {
     title: 'Our Ethos - Values & Craftsmanship | Jerry Can Spirits®',
-    description: 'The values behind Jerry Can Spirits. Function over form, quality without shortcuts, and actually caring about what goes in the bottle.',
+    description: 'The values behind Jerry Can Spirits premium spiced rum. Small batch craft rum made with real botanicals, Welsh-distilled, veteran-owned.',
     url: 'https://jerrycanspirits.co.uk/ethos/',
     siteName: 'Jerry Can Spirits®',
     locale: 'en_GB',
@@ -115,7 +115,7 @@ export default function Ethos() {
           </h1>
           
           <p className="text-xl text-parchment-300 max-w-3xl mx-auto leading-relaxed mb-8">
-            We&apos;re not trying to reinvent rum – we just want to make it properly. Good ingredients, honest processes, and no cutting corners. That&apos;s the approach we take to everything we do.
+            We&apos;re not trying to reinvent spiced rum – we just want to make it properly. Real botanicals, honest processes, and no cutting corners. Each bottle of our small batch rum is the result of genuine care about what goes in it.
           </p>
 
           <div className="inline-flex items-center space-x-2 text-gold-300">
@@ -227,18 +227,19 @@ export default function Ethos() {
                       <div className="bg-jerry-green-800/60 rounded-lg p-4">
                         <h4 className="text-gold-300 font-semibold mb-2">UK Sourced</h4>
                         <ul className="text-sm text-parchment-300 space-y-1">
-                          <li>• Quality botanicals</li>
                           <li>• Pure Welsh water</li>
-                          <li>• Local spices & herbs</li>
-                          <li>• British oak</li>
+                          <li>• Welsh brewery molasses</li>
+                          <li>• Bourbon barrel chips</li>
+                          <li>• Agave syrup</li>
                         </ul>
                       </div>
                       <div className="bg-jerry-green-800/60 rounded-lg p-4">
-                        <h4 className="text-gold-300 font-semibold mb-2">From Further Afield</h4>
+                        <h4 className="text-gold-300 font-semibold mb-2">Premium Botanicals</h4>
                         <ul className="text-sm text-parchment-300 space-y-1">
+                          <li>• Madagascan vanilla pods</li>
+                          <li>• Ceylon cinnamon</li>
+                          <li>• Orange peel, ginger, cloves</li>
                           <li>• Caribbean rum base</li>
-                          <li>• Welsh brewery molasses</li>
-                          <li>• Quality spices & botanicals</li>
                         </ul>
                       </div>
                     </div>
@@ -256,9 +257,9 @@ export default function Ethos() {
                     Selection: Expert Partners in Welsh Craft
                   </h3>
                   <p className="text-parchment-300 mb-6">
-                    We partnered with Spirit of Wales Distillery, craftspeople who share our passion for innovation rooted in tradition.
+                    We partnered with <strong className="text-gold-300">Spirit of Wales Distillery in Newport, South Wales</strong> — craftspeople who share our passion for innovation rooted in tradition.
                     Their cutting-edge approach to copper distillation creates the foundation for our exceptional spirits, combining modern
-                    engineering with time-tested principles.
+                    techniques with time-tested principles.
                   </p>
 
                   {/* Details - Always Visible */}
@@ -294,8 +295,9 @@ export default function Ethos() {
                     Crafting: Tradition Meets Innovation
                   </h3>
                   <p className="text-parchment-300 mb-6">
-                    Like the finest blacksmiths and glassblowers, we believe handcraft produces superior results.
-                    Advanced copper-lined distillation, precise temperature control, and careful cut selection create our signature profiles.
+                    We steep real botanicals — Madagascan vanilla, Ceylon cinnamon, ginger, orange peel, and warming spices — slowly in Caribbean rum, allowing each ingredient time to impart its true character.
+                    Agave syrup adds natural sweetness, and bourbon barrel chips layer in soft oak and warmth. See our{' '}
+                    <Link href="/ingredients/expedition-spiced-rum" className="text-gold-300 hover:text-gold-400 underline">full ingredients list</Link>.
                   </p>
                   
                   {/* Details - Always Visible */}
@@ -371,10 +373,10 @@ export default function Ethos() {
         <section className="py-20">
           <div className="text-center mb-16">
             <h2 className="text-3xl sm:text-4xl font-serif font-bold text-white mb-6">
-              What We&apos;re Working Towards
+              Our Commitments
             </h2>
             <p className="text-xl text-parchment-300 max-w-3xl mx-auto">
-              We&apos;re still learning and figuring things out. These are the things we&apos;re trying to get right.
+              The principles that guide how we make our spiced rum. No compromises.
             </p>
           </div>
 
@@ -441,8 +443,8 @@ export default function Ethos() {
                 <div className="flex items-start space-x-3">
                   <div className="w-2 h-2 bg-gold-400 rounded-full mt-2 flex-shrink-0"></div>
                   <div>
-                    <p className="font-semibold text-gold-300">Learning As We Go</p>
-                    <p className="text-sm">We&apos;re still perfecting our craft – each batch teaches us something new</p>
+                    <p className="font-semibold text-gold-300">Continuous Improvement</p>
+                    <p className="text-sm">Every batch is an opportunity to refine our craft and push for better</p>
                   </div>
                 </div>
                 <div className="flex items-start space-x-3">
