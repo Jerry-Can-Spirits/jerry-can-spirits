@@ -91,7 +91,30 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth">
       <head>
-        {/* Cookiebot Consent Management - must be first script */}
+        {/* Google Consent Mode v2 Defaults - MUST load before any Google tags */}
+        {/* Cookiebot will update these values when user gives consent */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag("consent", "default", {
+                ad_personalization: "denied",
+                ad_storage: "denied",
+                ad_user_data: "denied",
+                analytics_storage: "denied",
+                functionality_storage: "denied",
+                personalization_storage: "denied",
+                security_storage: "granted",
+                wait_for_update: 500,
+              });
+              gtag("set", "ads_data_redaction", true);
+              gtag("set", "url_passthrough", false);
+            `,
+          }}
+        />
+
+        {/* Cookiebot Consent Management - must be first CMP script */}
         <Script
           id="Cookiebot"
           src="https://consent.cookiebot.com/uc.js"
