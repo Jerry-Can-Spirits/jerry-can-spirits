@@ -17,6 +17,7 @@ import { OrganizationSchema, WebsiteSchema } from "@/components/StructuredData";
 import FacebookPixel from "@/components/FacebookPixel";
 import AnnouncementBar from "@/components/AnnouncementBar";
 import GoogleTag from "@/components/GoogleTag";
+import TikTokPixel from "@/components/TikTokPixel";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -170,6 +171,7 @@ export default function RootLayout({
         <WebsiteSchema />
         <FacebookPixel />
         <GoogleTag />
+        <TikTokPixel />
 
         <CartProvider>
           {/* Skip to Content Link - Accessibility */}
