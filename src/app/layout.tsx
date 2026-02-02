@@ -16,6 +16,7 @@ import CartDrawer from "@/components/CartDrawer";
 import { OrganizationSchema, WebsiteSchema } from "@/components/StructuredData";
 import FacebookPixel from "@/components/FacebookPixel";
 import AnnouncementBar from "@/components/AnnouncementBar";
+import GoogleTag from "@/components/GoogleTag";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -145,6 +146,7 @@ export default function RootLayout({
         <OrganizationSchema />
         <WebsiteSchema />
         <FacebookPixel />
+        <GoogleTag />
 
         <CartProvider>
           {/* Skip to Content Link - Accessibility */}
