@@ -157,6 +157,7 @@ export default async function DrinksPageTest() {
       item: {
         '@type': 'Product',
         name: product.title,
+        description: product.description || `Premium British rum from Jerry Can Spirits.`,
         url: `https://jerrycanspirits.co.uk/shop/product/${product.handle}/`,
         image: product.images?.[0]?.url || '',
         offers: {
@@ -164,6 +165,42 @@ export default async function DrinksPageTest() {
           price: product.priceRange.minVariantPrice.amount,
           priceCurrency: product.priceRange.minVariantPrice.currencyCode,
           availability: 'https://schema.org/InStock',
+          priceValidUntil: new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString().split('T')[0],
+          shippingDetails: {
+            '@type': 'OfferShippingDetails',
+            shippingDestination: {
+              '@type': 'DefinedRegion',
+              addressCountry: 'GB',
+            },
+            shippingRate: {
+              '@type': 'MonetaryAmount',
+              value: '5.00',
+              currency: 'GBP',
+            },
+            deliveryTime: {
+              '@type': 'ShippingDeliveryTime',
+              handlingTime: {
+                '@type': 'QuantitativeValue',
+                minValue: 2,
+                maxValue: 3,
+                unitCode: 'DAY',
+              },
+              transitTime: {
+                '@type': 'QuantitativeValue',
+                minValue: 2,
+                maxValue: 5,
+                unitCode: 'DAY',
+              },
+            },
+          },
+          hasMerchantReturnPolicy: {
+            '@type': 'MerchantReturnPolicy',
+            returnPolicyCategory: 'https://schema.org/MerchantReturnFiniteReturnWindow',
+            merchantReturnDays: 14,
+            returnMethod: 'https://schema.org/ReturnByMail',
+            returnFees: 'https://schema.org/FreeReturn',
+            applicableCountry: 'GB',
+          },
         },
       },
     })),

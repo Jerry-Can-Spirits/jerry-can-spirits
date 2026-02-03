@@ -4,7 +4,7 @@ import Link from 'next/link'
 const faqs = [
   {
     question: "What does spiced rum taste like?",
-    answer: "Expect vanilla and caramel hitting you first, followed by warm spices like cinnamon and nutmeg through the middle. Our rum finishes smooth - none of that harsh burn you get from cheaper bottles. It's sweet enough to sip neat, but has enough backbone to stand up in cocktails without getting lost."
+    answer: "Madagascan vanilla hits you first, rich and sweet, then Ceylon cinnamon and ginger warm through the middle with hints of orange peel. The finish is smooth with cassia and clove undertones - none of that harsh burn you get from cheaper bottles. It's sweet enough to sip neat, but has enough backbone to stand up in cocktails without getting lost."
   },
   {
     question: "Is spiced rum good for beginners?",
@@ -12,7 +12,7 @@ const faqs = [
   },
   {
     question: "What's the difference between spiced rum and dark rum?",
-    answer: "Dark rum gets its colour and flavour from aging in barrels - you'll taste molasses, oak, and dried fruit. Spiced rum like ours is infused with spices after distillation, giving you those vanilla, cinnamon, and caramel notes upfront. Dark rum is typically sipped; spiced rum is more versatile for mixing."
+    answer: "Dark rum gets its colour and flavour from aging in barrels - you'll taste molasses, oak, and dried fruit. Spiced rum like ours is infused with botanicals after distillation, giving you Madagascan vanilla, Ceylon cinnamon, and warming ginger upfront. Dark rum is typically sipped; spiced rum is more versatile for mixing."
   },
   {
     question: "How should I drink spiced rum?",

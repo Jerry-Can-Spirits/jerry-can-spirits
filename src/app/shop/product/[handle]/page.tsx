@@ -316,13 +316,13 @@ export default async function ProductPage({
           '@type': 'ShippingDeliveryTime',
           handlingTime: {
             '@type': 'QuantitativeValue',
-            minValue: 1,
+            minValue: 2,
             maxValue: 3,
             unitCode: 'DAY',
           },
           transitTime: {
             '@type': 'QuantitativeValue',
-            minValue: 1,
+            minValue: 2,
             maxValue: 5,
             unitCode: 'DAY',
           },

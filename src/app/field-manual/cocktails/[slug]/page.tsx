@@ -136,7 +136,8 @@ export default async function CocktailPage({ params }: PageProps) {
       "position": index + 1,
       "name": `Step ${index + 1}`,
       "text": instruction,
-      "url": `https://jerrycanspirits.co.uk/field-manual/cocktails/${slug}/#step-${index + 1}`
+      "url": `https://jerrycanspirits.co.uk/field-manual/cocktails/${slug}/#step-${index + 1}`,
+      "image": cocktail.image || "https://jerrycanspirits.co.uk/images/Logo.webp"
     })) || [],
     "author": {
       "@type": "Organization",
