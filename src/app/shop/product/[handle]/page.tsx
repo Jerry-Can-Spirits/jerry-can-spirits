@@ -307,6 +307,11 @@ export default async function ProductPage({
           '@type': 'DefinedRegion',
           addressCountry: 'GB',
         },
+        shippingRate: {
+          '@type': 'MonetaryAmount',
+          value: '5.00',
+          currency: 'GBP',
+        },
         deliveryTime: {
           '@type': 'ShippingDeliveryTime',
           handlingTime: {
