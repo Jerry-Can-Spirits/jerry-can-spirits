@@ -134,7 +134,10 @@ export default async function CocktailPage({ params }: PageProps) {
     "recipeInstructions": cocktail.instructions?.map((instruction, index) => ({
       "@type": "HowToStep",
       "position": index + 1,
-      "text": instruction
+      "name": `Step ${index + 1}`,
+      "text": instruction,
+      "url": `https://jerrycanspirits.co.uk/field-manual/cocktails/${slug}/#step-${index + 1}`,
+      "image": cocktail.image || "https://jerrycanspirits.co.uk/images/Logo.webp"
     })) || [],
     "author": {
       "@type": "Organization",
