@@ -152,7 +152,7 @@ Our name comes from the classic jerry can – designed in 1937 and still NATO st
 
 Based in the UK, Jerry Can Spirits® is a small operation run by two mates who care about getting it right. Whether you're an outdoors type or just fancy a decent drink, our Expedition Spiced Rum delivers honest quality and proper flavour. We're still learning and growing, but we're committed to making rum that's worth your time.`
 
-  const socialResponsibilityStatement = `Jerry Can Spirits commits 5% of annual net profits to armed forces charities supporting veteran welfare, mental health services, and military families. This isn't marketing — it's who we are.`
+  const socialResponsibilityStatement = `Jerry Can Spirits commits 5% of annual net profits to armed forces charities supporting veteran welfare, mental health services, and military families. This isn't marketing. It's who we are.`
 
   return (
     <main className="min-h-screen">
@@ -199,7 +199,7 @@ Based in the UK, Jerry Can Spirits® is a small operation run by two mates who c
               Our Brand
             </h2>
             <p className="text-parchment-300 text-center mb-12 max-w-2xl mx-auto">
-              The essence of Jerry Can Spirits® — our story, values, and what drives us.
+              The essence of Jerry Can Spirits®: our story, values, and what drives us.
             </p>
 
             {/* Tagline */}
@@ -231,7 +231,7 @@ Based in the UK, Jerry Can Spirits® is a small operation run by two mates who c
                   Jerry Can Spirits® is a British veteran-owned spirits company making premium craft rum. Founded by Dan and Rhys, veterans of the Royal Corps of Signals who spent years talking about making their own rum before finally having a go, we take a straightforward approach to what we do.
                 </p>
                 <p>
-                  Our name comes from the classic jerry can — designed in 1937 and still NATO standard today because it just works. That&apos;s the approach we take: function over form, quality without shortcuts.
+                  Our name comes from the classic jerry can, designed in 1937 and still NATO standard today because it just works. That&apos;s the approach we take: function over form, quality without shortcuts.
                 </p>
               </div>
             </div>
@@ -352,7 +352,7 @@ Based in the UK, Jerry Can Spirits® is a small operation run by two mates who c
 
               {/* Logo Misuse */}
               <div className="mt-6 bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
-                <h4 className="text-parchment-50 font-semibold mb-4">Logo Misuse — Never:</h4>
+                <h4 className="text-parchment-50 font-semibold mb-4">Logo Misuse. Never:</h4>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-3 text-sm text-parchment-300">
                   <div className="flex items-start gap-2">
                     <span className="text-red-400">✕</span>
@@ -485,11 +485,11 @@ Based in the UK, Jerry Can Spirits® is a small operation run by two mates who c
                   <span className="text-green-400">✓</span> Do
                 </h4>
                 <ul className="space-y-2 text-parchment-200 text-sm">
-                  <li>• Use plain English — avoid jargon</li>
+                  <li>• Use plain English, avoid jargon</li>
                   <li>• Be conversational but professional</li>
-                  <li>• Get to the point — respect people&apos;s time</li>
+                  <li>• Get to the point, respect people&apos;s time</li>
                   <li>• Use active voice where possible</li>
-                  <li>• Include personality — we&apos;re humans, not robots</li>
+                  <li>• Include personality, we&apos;re humans, not robots</li>
                 </ul>
               </div>
               <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
@@ -516,7 +516,7 @@ Based in the UK, Jerry Can Spirits® is a small operation run by two mates who c
                 </div>
                 <div>
                   <p className="text-gold-300 text-xs uppercase tracking-wider mb-2">Write:</p>
-                  <p className="text-parchment-100 text-sm">&ldquo;We make rum we&apos;re genuinely proud of. No shortcuts, no gimmicks — just proper flavour.&rdquo;</p>
+                  <p className="text-parchment-100 text-sm">&ldquo;We make rum we&apos;re genuinely proud of. No shortcuts, no gimmicks. Just proper flavour.&rdquo;</p>
                 </div>
               </div>
             </div>
@@ -539,7 +539,7 @@ Based in the UK, Jerry Can Spirits® is a small operation run by two mates who c
               </div>
               <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
                 <h4 className="text-gold-300 font-semibold text-lg mb-2">Warm & Inviting</h4>
-                <p className="text-parchment-200 text-sm leading-relaxed">Images should have warmth — both in colour temperature and mood. Cold, clinical imagery doesn&apos;t represent our brand.</p>
+                <p className="text-parchment-200 text-sm leading-relaxed">Images should have warmth, both in colour temperature and mood. Cold, clinical imagery doesn&apos;t represent our brand.</p>
               </div>
               <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
                 <h4 className="text-gold-300 font-semibold text-lg mb-2">Quality Without Pretension</h4>

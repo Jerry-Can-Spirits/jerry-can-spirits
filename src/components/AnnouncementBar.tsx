@@ -55,15 +55,12 @@ export default function AnnouncementBar() {
             >
               <span className="text-xs sm:text-sm">
                 <span className="font-semibold">Pre-order Expedition Spiced Rum</span>
-                <span className="hidden sm:inline"> — Limited to 700 bottles</span>
+                <span className="hidden sm:inline">. Limited to 700 bottles</span>
                 <span className="mx-1 sm:mx-2">|</span>
                 <span>April 2026</span>
               </span>
-              <span className="inline-flex items-center gap-1 font-semibold underline underline-offset-2 text-xs sm:text-sm whitespace-nowrap">
+              <span className="font-semibold underline underline-offset-2 text-xs sm:text-sm whitespace-nowrap">
                 Pre-order Now
-                <svg className="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                </svg>
               </span>
             </Link>
           </div>

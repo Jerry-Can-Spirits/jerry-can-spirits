@@ -96,12 +96,9 @@ export default function HomepageFAQ() {
               {faq.link && (
                 <Link
                   href={faq.link.href}
-                  className="inline-flex items-center gap-2 mt-4 text-gold-400 hover:text-gold-300 transition-colors text-sm font-medium"
+                  className="inline-block mt-4 text-gold-400 hover:text-gold-300 transition-colors text-sm font-medium underline underline-offset-2"
                 >
                   {faq.link.text}
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                  </svg>
                 </Link>
               )}
             </div>
@@ -146,12 +143,9 @@ export default function HomepageFAQ() {
           </p>
           <Link
             href="/faq/"
-            className="inline-flex items-center gap-2 px-6 py-3 bg-gold-500/20 border border-gold-500/40 text-gold-300 rounded-lg hover:bg-gold-500/30 transition-all duration-300 font-semibold"
+            className="inline-flex items-center px-6 py-3 bg-gold-500/20 border border-gold-500/40 text-gold-300 rounded-lg hover:bg-gold-500/30 transition-all duration-300 font-semibold"
           >
             View Full FAQ
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-            </svg>
           </Link>
         </div>
       </div>

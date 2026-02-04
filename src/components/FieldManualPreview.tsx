@@ -102,11 +102,8 @@ export default async function FieldManualPreview() {
                   {cocktail.description}
                 </p>
 
-                <div className="flex items-center gap-2 text-gold-300 text-sm font-semibold pt-2">
-                  <span>View Recipe</span>
-                  <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                  </svg>
+                <div className="text-gold-300 text-sm font-semibold pt-2">
+                  View Recipe
                 </div>
               </div>
             </Link>
@@ -117,17 +114,9 @@ export default async function FieldManualPreview() {
         <div className="text-center">
           <Link
             href="/field-manual"
-            className="group inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-gold-600 to-gold-500 hover:from-gold-500 hover:to-gold-400 text-jerry-green-900 rounded-lg font-semibold uppercase tracking-wide transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105"
+            className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-gold-600 to-gold-500 hover:from-gold-500 hover:to-gold-400 text-jerry-green-900 rounded-lg font-semibold uppercase tracking-wide transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105"
           >
             Explore Full Field Manual
-            <svg
-              className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 12h14M12 5l7 7-7 7" />
-            </svg>
           </Link>
           <p className="text-parchment-400 text-sm mt-4">
             Over {roundedCount} expertly crafted cocktail recipes with detailed guides

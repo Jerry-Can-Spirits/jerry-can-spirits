@@ -337,13 +337,13 @@ export default async function DrinksPageTest() {
             </h2>
             <div className="space-y-4 text-parchment-200 leading-relaxed">
               <p>
-                Jerry Can Spirits started because we couldn't find what we wanted on the shelf. After deployments where a decent drink meant everything, we came home to rum that tasted like it was made by accountants, not people who'd actually want to drink it.
+                Jerry Can Spirits started because we couldn't find what we wanted on the shelf. After deployments where a proper drink meant everything, we came home to rum that tasted like it was made by accountants, not people who'd actually want to drink it.
               </p>
               <p>
                 So we made our own. Royal Corps of Signals veterans, Armed Forces Covenant signatories, and genuinely obsessed with getting this right. Every batch gets the same attention we'd give to mission-critical kit.
               </p>
               <p>
-                Part of every sale goes to forces charities. Not because it's good marketing - because these are our mates and it's the right thing to do. If you're buying from us, you're supporting the veteran community whether you meant to or not.
+                Part of every sale goes to forces charities. Because these are our mates and it's the right thing to do. If you're buying from us, you're supporting the veteran community whether you meant to or not.
               </p>
             </div>
           </div>
@@ -407,7 +407,7 @@ export default async function DrinksPageTest() {
                   "name": "What is spiced rum?",
                   "acceptedAnswer": {
                     "@type": "Answer",
-                    "text": "Spiced rum is rum infused with real spices and botanicals. Our Expedition Spiced Rum uses Madagascan vanilla, Ceylon cinnamon, ginger, orange peel, cloves, and cassia bark — steeped slowly in Caribbean rum and sweetened naturally with agave. Unlike artificial-tasting rums, we use real ingredients to create depth and complexity."
+                    "text": "Spiced rum is rum infused with real spices and botanicals. Our Expedition Spiced Rum uses Madagascan vanilla, Ceylon cinnamon, ginger, orange peel, cloves, and cassia bark, steeped slowly in Caribbean rum and sweetened naturally with agave. Unlike artificial-tasting rums, we use real ingredients to create depth and complexity."
                   }
                 },
                 {
@@ -467,7 +467,7 @@ export default async function DrinksPageTest() {
             <div className="border-b border-gold-500/10 pb-6">
               <h3 className="text-lg font-semibold text-gold-300 mb-3">What is spiced rum?</h3>
               <p className="text-parchment-200 leading-relaxed">
-                Spiced rum is rum infused with real spices and botanicals. Our Expedition Spiced Rum uses Madagascan vanilla, Ceylon cinnamon, ginger, orange peel, cloves, and cassia bark — steeped slowly in Caribbean rum and sweetened naturally with agave. Unlike artificial-tasting rums, we use real ingredients to create depth and complexity.
+                Spiced rum is rum infused with real spices and botanicals. Our Expedition Spiced Rum uses Madagascan vanilla, Ceylon cinnamon, ginger, orange peel, cloves, and cassia bark, steeped slowly in Caribbean rum and sweetened naturally with agave. Unlike artificial-tasting rums, we use real ingredients to create depth and complexity.
               </p>
             </div>
 

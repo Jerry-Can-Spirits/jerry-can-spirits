@@ -500,7 +500,7 @@ export default async function ProductPage({
                 <div className="space-y-4">
                   <button
                     disabled
-                    className="w-full px-8 py-4 bg-gray-500/50 text-gray-300 font-bold rounded-lg cursor-not-allowed"
+                    className="w-full px-8 py-4 bg-jerry-green-800/30 text-parchment-400 font-bold rounded-lg cursor-not-allowed"
                   >
                     Currently Unavailable
                   </button>

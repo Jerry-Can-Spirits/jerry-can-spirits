@@ -151,12 +151,11 @@ export default function PreOrderSection() {
             </div>
 
             <h2 className="text-3xl md:text-4xl font-serif font-bold text-white mb-6">
-              Secure Your Place in History
+              First Batch. Numbered Bottles. Limited to 700.
             </h2>
 
             <p className="text-xl text-parchment-300 mb-6 leading-relaxed">
-              Be among the first 700 adventurers to receive a numbered First Batch Edition bottle.
-              Pre-order now and lock in exclusive early supporter pricing.
+              We're only making 700 bottles in our first batch. Each one numbered. Pre-order now and you'll be first to receive when we ship in April.
             </p>
 
             {/* Progress Bar - Only show if we have real inventory data */}
@@ -185,30 +184,22 @@ export default function PreOrderSection() {
             {/* Benefits List */}
             <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20 mb-8">
               <h3 className="text-gold-300 font-semibold mb-4">Pre-Order Benefits:</h3>
-              <ul className="space-y-3">
+              <ul className="space-y-3 text-parchment-200">
                 <li className="flex items-start gap-3">
-                  <svg className="w-5 h-5 text-gold-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
-                  <span className="text-parchment-200">Individually numbered First Batch Edition bottle</span>
+                  <span className="text-gold-400 flex-shrink-0">•</span>
+                  <span>Individually numbered First Batch Edition bottle</span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <svg className="w-5 h-5 text-gold-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
-                  <span className="text-parchment-200">Save £{bottleDiscount} as an early supporter (£{bottlePricing.price} vs £{bottlePricing.compareAtPrice} RRP)</span>
+                  <span className="text-gold-400 flex-shrink-0">•</span>
+                  <span>Save £{bottleDiscount} as an early supporter (£{bottlePricing.price} vs £{bottlePricing.compareAtPrice} RRP)</span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <svg className="w-5 h-5 text-gold-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
-                  <span className="text-parchment-200">Priority shipping - first to receive in April 2026</span>
+                  <span className="text-gold-400 flex-shrink-0">•</span>
+                  <span>Priority shipping - first to receive in April 2026</span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <svg className="w-5 h-5 text-gold-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
-                  <span className="text-parchment-200">Exclusive access to limited releases & events</span>
+                  <span className="text-gold-400 flex-shrink-0">•</span>
+                  <span>Exclusive access to limited releases & events</span>
                 </li>
               </ul>
             </div>
@@ -224,24 +215,14 @@ export default function PreOrderSection() {
                   <span className="text-xs uppercase tracking-wider opacity-75">Standard Bottle</span>
                   <span className="text-lg">Expedition Spiced Rum</span>
                 </div>
-                <div className="flex items-center gap-3">
-                  <div className="text-right">
-                    <div>
-                      <span className="text-xl font-bold">£{bottlePricing.price}</span>
-                      {bottlePricing.compareAtPrice && (
-                        <span className="text-sm line-through opacity-60 ml-2">£{bottlePricing.compareAtPrice}</span>
-                      )}
-                    </div>
-                    <span className="text-xs opacity-75">(£{bottleUnitPrice}/litre)</span>
+                <div className="text-right">
+                  <div>
+                    <span className="text-xl font-bold">£{bottlePricing.price}</span>
+                    {bottlePricing.compareAtPrice && (
+                      <span className="text-sm line-through opacity-60 ml-2">£{bottlePricing.compareAtPrice}</span>
+                    )}
                   </div>
-                  <svg
-                    className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 12h14M12 5l7 7-7 7" />
-                  </svg>
+                  <span className="text-xs opacity-75">(£{bottleUnitPrice}/litre)</span>
                 </div>
               </Link>
 
@@ -254,21 +235,11 @@ export default function PreOrderSection() {
                   <span className="text-xs uppercase tracking-wider text-gold-300">Premium Gift Pack</span>
                   <span className="text-lg">Bottle + Barware Set</span>
                 </div>
-                <div className="flex items-center gap-3">
-                  <div className="text-right">
-                    <span className="text-xl font-bold text-gold-300">£{giftSetPricing.price}</span>
-                    {giftSetPricing.compareAtPrice && (
-                      <span className="text-sm line-through opacity-60 text-parchment-400 ml-2">£{giftSetPricing.compareAtPrice}</span>
-                    )}
-                  </div>
-                  <svg
-                    className="w-5 h-5 text-gold-300 group-hover:translate-x-1 transition-transform duration-300"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 12h14M12 5l7 7-7 7" />
-                  </svg>
+                <div className="text-right">
+                  <span className="text-xl font-bold text-gold-300">£{giftSetPricing.price}</span>
+                  {giftSetPricing.compareAtPrice && (
+                    <span className="text-sm line-through opacity-60 text-parchment-400 ml-2">£{giftSetPricing.compareAtPrice}</span>
+                  )}
                 </div>
               </Link>
 
@@ -282,24 +253,14 @@ export default function PreOrderSection() {
                   <span className="text-lg">6 Bottles - Best Value</span>
                   <span className="text-xs text-parchment-400">(£{tradePackPerBottle}/bottle)</span>
                 </div>
-                <div className="flex items-center gap-3">
-                  <div className="text-right">
-                    <div>
-                      <span className="text-xl font-bold text-gold-300">£{tradePackPricing.price}</span>
-                      {tradePackPricing.compareAtPrice && (
-                        <span className="text-sm line-through opacity-60 text-parchment-400 ml-2">£{tradePackPricing.compareAtPrice}</span>
-                      )}
-                    </div>
-                    <span className="text-xs text-parchment-400">(£{tradePackUnitPrice}/litre)</span>
+                <div className="text-right">
+                  <div>
+                    <span className="text-xl font-bold text-gold-300">£{tradePackPricing.price}</span>
+                    {tradePackPricing.compareAtPrice && (
+                      <span className="text-sm line-through opacity-60 text-parchment-400 ml-2">£{tradePackPricing.compareAtPrice}</span>
+                    )}
                   </div>
-                  <svg
-                    className="w-5 h-5 text-gold-300 group-hover:translate-x-1 transition-transform duration-300"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 12h14M12 5l7 7-7 7" />
-                  </svg>
+                  <span className="text-xs text-parchment-400">(£{tradePackUnitPrice}/litre)</span>
                 </div>
               </Link>
             </div>
@@ -307,25 +268,12 @@ export default function PreOrderSection() {
             {/* Enhanced Trust & Social Proof */}
             <div className="mt-6 pt-6 border-t border-gold-500/20 space-y-4">
               {/* Trust Badges */}
-              <div className="flex flex-wrap items-center justify-center sm:justify-start gap-4">
-                <div className="flex items-center gap-2 text-parchment-300 text-sm">
-                  <svg className="w-5 h-5 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                  </svg>
-                  <span>Secure Checkout</span>
-                </div>
-                <div className="flex items-center gap-2 text-parchment-300 text-sm">
-                  <svg className="w-5 h-5 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9" />
-                  </svg>
-                  <span>UK Veteran-Owned</span>
-                </div>
-                <div className="flex items-center gap-2 text-parchment-300 text-sm">
-                  <svg className="w-5 h-5 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
-                  </svg>
-                  <span>Small-Batch Craft</span>
-                </div>
+              <div className="flex flex-wrap items-center justify-center sm:justify-start gap-4 text-parchment-300 text-sm">
+                <span>Secure Checkout</span>
+                <span className="text-gold-500/40">•</span>
+                <span>UK Veteran-Owned</span>
+                <span className="text-gold-500/40">•</span>
+                <span>Small-Batch Craft</span>
               </div>
 
               {/* Social Proof Stats */}

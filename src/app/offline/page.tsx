@@ -29,7 +29,7 @@ export default function OfflinePage() {
           <h1 className="text-4xl font-playfair font-bold text-gold-500">
             Off the Grid
           </h1>
-          <p className="text-lg text-gray-300">
+          <p className="text-lg text-parchment-200">
             Looks like you've ventured beyond the map. Check your connection and try again.
           </p>
         </div>
@@ -52,7 +52,7 @@ export default function OfflinePage() {
         </div>
 
         {/* Additional Info */}
-        <p className="text-sm text-gray-400 pt-4">
+        <p className="text-sm text-parchment-300 pt-4">
           Some cached pages may still be available while offline
         </p>
       </div>

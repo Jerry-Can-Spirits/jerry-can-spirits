@@ -270,7 +270,7 @@ export default function Home() {
                 <h2 className="text-3xl md:text-4xl font-playfair font-bold text-gold-500 mb-4">
                   Trusted by Adventurers
                 </h2>
-                <p className="text-gray-300 text-lg max-w-2xl mx-auto">
+                <p className="text-parchment-200 text-lg max-w-2xl mx-auto">
                   See what our customers are saying about Jerry Can Spirits
                 </p>
               </div>

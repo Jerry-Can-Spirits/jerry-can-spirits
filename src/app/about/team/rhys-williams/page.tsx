@@ -181,7 +181,7 @@ export default function RhysWilliamsPage() {
                   A Passion for Making Alcohol
                 </h2>
                 <p className="text-parchment-200 leading-relaxed mb-4">
-                  Alongside my technical career, I&apos;ve always had a passion for making alcohol. What started as home-brewed beer and cider as a teenager evolved into a long-standing love for spiced rum — its history, flavour, and character.
+                  Alongside my technical career, I&apos;ve always had a passion for making alcohol. What started as home-brewed beer and cider as a teenager evolved into a long-standing love for spiced rum, its history, flavour, and character.
                 </p>
                 <p className="text-parchment-200 leading-relaxed">
                   That passion has now become a business.

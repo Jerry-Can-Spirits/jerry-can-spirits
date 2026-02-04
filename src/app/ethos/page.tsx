@@ -122,7 +122,7 @@ export default function Ethos() {
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
             </svg>
-            <span className="text-sm font-semibold uppercase tracking-wider">Discover Our Journey</span>
+            <span className="text-sm font-semibold uppercase tracking-wider">Our Journey</span>
           </div>
         </div>
       </section>
@@ -257,7 +257,7 @@ export default function Ethos() {
                     Selection: Expert Partners in Welsh Craft
                   </h3>
                   <p className="text-parchment-300 mb-6">
-                    We partnered with <strong className="text-gold-300">Spirit of Wales Distillery in Newport, South Wales</strong> — craftspeople who share our passion for innovation rooted in tradition.
+                    We partnered with <strong className="text-gold-300">Spirit of Wales Distillery in Newport, South Wales</strong>, craftspeople who share our passion for innovation rooted in tradition.
                     Their cutting-edge approach to copper distillation creates the foundation for our exceptional spirits, combining modern
                     techniques with time-tested principles.
                   </p>
@@ -295,7 +295,7 @@ export default function Ethos() {
                     Crafting: Tradition Meets Innovation
                   </h3>
                   <p className="text-parchment-300 mb-6">
-                    We steep real botanicals — Madagascan vanilla, Ceylon cinnamon, ginger, orange peel, and warming spices — slowly in Caribbean rum, allowing each ingredient time to impart its true character.
+                    We steep real botanicals (Madagascan vanilla, Ceylon cinnamon, ginger, orange peel, and warming spices) slowly in Caribbean rum, allowing each ingredient time to impart its true character.
                     Agave syrup adds natural sweetness, and bourbon barrel chips layer in soft oak and warmth. See our{' '}
                     <Link href="/ingredients/expedition-spiced-rum" className="text-gold-300 hover:text-gold-400 underline">full ingredients list</Link>.
                   </p>

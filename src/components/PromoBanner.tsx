@@ -43,18 +43,7 @@ export default function PromoBanner({
 
   return (
     <div className="relative bg-gradient-to-r from-jerry-green-600 to-jerry-green-500 text-parchment-50 py-3 px-4 shadow-lg animate-in slide-in-from-top duration-500">
-      {/* Animated background pattern */}
-      <div className="absolute inset-0 opacity-10">
-        <div 
-          className="absolute inset-0 bg-repeat"
-          style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Cpath d='M20 20c0-5.5-4.5-10-10-10s-10 4.5-10 10 4.5 10 10 10 10-4.5 10-10zm10 0c0-5.5-4.5-10-10-10s-10 4.5-10 10 4.5 10 10 10 10-4.5 10-10z'/%3E%3C/g%3E%3C/svg%3E")`,
-            animation: 'promo-drift 20s linear infinite',
-          }}
-        />
-      </div>
-
-      <div className="relative max-w-7xl mx-auto flex items-center justify-between">
+      <div className="max-w-7xl mx-auto flex items-center justify-between">
         <div className="flex items-center justify-center flex-1 text-center">
           <p className="text-sm font-semibold tracking-wide">
             {message}
@@ -67,9 +56,6 @@ export default function PromoBanner({
               onClick={() => trackPromoClick('CTA')}
             >
               {ctaText}
-              <svg className="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 12h14M12 5l7 7-7 7" />
-              </svg>
             </a>
           )}
         </div>
@@ -83,12 +69,6 @@ export default function PromoBanner({
         </button>
       </div>
 
-      <style jsx>{`
-        @keyframes promo-drift {
-          0% { transform: translateX(0); }
-          100% { transform: translateX(-40px); }
-        }
-      `}</style>
     </div>
   )
 }

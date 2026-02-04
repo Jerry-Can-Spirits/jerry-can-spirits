@@ -90,7 +90,7 @@ export default function FriendsPage() {
             <h1 className="text-4xl md:text-6xl font-playfair font-bold text-gold-500 mb-6">
               Friends of Jerry Can Spirits
             </h1>
-            <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-xl text-parchment-200 max-w-3xl mx-auto leading-relaxed">
               Good rum doesn&apos;t happen in isolation. These are the partners – distilleries,
               suppliers, and collaborators – who help make Jerry Can Spirits what it is.
               We&apos;re grateful to work with people who share our commitment to quality.
@@ -103,12 +103,12 @@ export default function FriendsPage() {
               <h2 className="text-2xl font-playfair font-bold text-gold-400 mb-4">
                 Why Partnerships Matter
               </h2>
-              <p className="text-gray-300 leading-relaxed mb-4">
+              <p className="text-parchment-200 leading-relaxed mb-4">
                 We&apos;re a small team, so we rely on good partners to make this work. From
                 Spirit of Wales who help with our distilling to Harlequin who sort our
                 packaging – every partner contributes something we couldn&apos;t do alone.
               </p>
-              <p className="text-gray-300 leading-relaxed">
+              <p className="text-parchment-200 leading-relaxed">
                 If you&apos;re a supplier, distillery, or business that might want to work with
                 us, we&apos;d love to hear from you. <Link href="/contact" className="text-gold-500 hover:text-gold-400 underline">Get in touch</Link>.
               </p>
@@ -165,7 +165,7 @@ export default function FriendsPage() {
                               Visit Website
                             </a>
                           </div>
-                          <p className="text-gray-300 leading-relaxed">
+                          <p className="text-parchment-200 leading-relaxed">
                             {partner.description}
                           </p>
                         </div>
@@ -208,7 +208,7 @@ export default function FriendsPage() {
                       <p className="text-gold-500/80 text-sm mb-3">
                         {partner.location}
                       </p>
-                      <p className="text-gray-300 text-sm mb-4 leading-relaxed line-clamp-3">
+                      <p className="text-parchment-200 text-sm mb-4 leading-relaxed line-clamp-3">
                         {partner.description}
                       </p>
                       <a
@@ -230,10 +230,10 @@ export default function FriendsPage() {
             <h3 className="text-3xl font-playfair font-bold text-gold-500 mb-4">
               Become a Friend of Jerry Can Spirits
             </h3>
-            <p className="text-gray-300 mb-8 max-w-2xl mx-auto leading-relaxed">
+            <p className="text-parchment-200 mb-8 max-w-2xl mx-auto leading-relaxed">
               Are you a small batch distillery or craft spirit producer who shares our
               passion for quality and community? We&apos;re currently working with content creators
-              and always looking for partners who share our values—get in touch to explore
+              and always looking for partners who share our values. Get in touch to explore
               how we could work together.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -258,7 +258,7 @@ export default function FriendsPage() {
               <h4 className="text-lg font-semibold text-gold-400 mb-2">
                 Community Growth
               </h4>
-              <p className="text-gray-400 text-sm">
+              <p className="text-parchment-300 text-sm">
                 Expand reach through collaboration and mutual support
               </p>
             </div>
@@ -266,7 +266,7 @@ export default function FriendsPage() {
               <h4 className="text-lg font-semibold text-gold-400 mb-2">
                 Shared Success
               </h4>
-              <p className="text-gray-400 text-sm">
+              <p className="text-parchment-300 text-sm">
                 Rising tide lifts all boats in craft spirits
               </p>
             </div>
@@ -274,7 +274,7 @@ export default function FriendsPage() {
               <h4 className="text-lg font-semibold text-gold-400 mb-2">
                 Quality Recognition
               </h4>
-              <p className="text-gray-400 text-sm">
+              <p className="text-parchment-300 text-sm">
                 Showcasing excellence across the industry
               </p>
             </div>
@@ -331,35 +331,35 @@ export default function FriendsPage() {
               <h2 className="text-3xl font-playfair font-bold text-gold-500 mb-2 text-center">
                 Partnership Questions
               </h2>
-              <p className="text-gray-400 mb-8 text-center">
+              <p className="text-parchment-300 mb-8 text-center">
                 Common questions about working with us
               </p>
 
               <div className="space-y-6 max-w-3xl mx-auto">
                 <div className="border-b border-gold-500/10 pb-6">
                   <h3 className="text-lg font-semibold text-gold-300 mb-3">How can I become a Jerry Can Spirits partner?</h3>
-                  <p className="text-gray-300 leading-relaxed">
+                  <p className="text-parchment-200 leading-relaxed">
                     Get in touch via our <Link href="/contact" className="text-gold-400 hover:text-gold-300 underline">contact page</Link> or email <a href="mailto:partnerships@jerrycanspirits.co.uk" className="text-gold-400 hover:text-gold-300 underline">partnerships@jerrycanspirits.co.uk</a>. Our approach to partnerships is shaped by the founders&apos; military service and values, ensuring we work with those who share our dedication and integrity. We&apos;re interested in working with distilleries, suppliers, and businesses that share our commitment to quality. We&apos;ll have a chat about what we&apos;re both looking for and see if there&apos;s a fit.
                   </p>
                 </div>
 
                 <div className="border-b border-gold-500/10 pb-6">
                   <h3 className="text-lg font-semibold text-gold-300 mb-3">What kind of partners is Jerry Can Spirits looking for?</h3>
-                  <p className="text-gray-300 leading-relaxed">
+                  <p className="text-parchment-200 leading-relaxed">
                     We work with a range of partners – from distilleries who help with production to packaging suppliers, barware manufacturers, and premium mixer brands. We&apos;re always interested in hearing from businesses that share our values: quality over shortcuts, and honest straight-talking over corporate waffle.
                   </p>
                 </div>
 
                 <div className="border-b border-gold-500/10 pb-6">
                   <h3 className="text-lg font-semibold text-gold-300 mb-3">Does Jerry Can Spirits support veteran-owned businesses?</h3>
-                  <p className="text-gray-300 leading-relaxed">
+                  <p className="text-parchment-200 leading-relaxed">
                     Being veteran-owned ourselves, we&apos;re naturally keen to support other veteran businesses where we can. We also value and support reservists as part of our commitment to the armed forces community. If you&apos;re a veteran running a business that might complement what we do, we&apos;d particularly like to hear from you.
                   </p>
                 </div>
 
                 <div>
                   <h3 className="text-lg font-semibold text-gold-300 mb-3">Can I stock Jerry Can Spirits products in my shop or bar?</h3>
-                  <p className="text-gray-300 leading-relaxed">
+                  <p className="text-parchment-200 leading-relaxed">
                     We&apos;re always interested in talking to retailers, bars, and restaurants about stocking our products. Contact us at <a href="mailto:partnerships@jerrycanspirits.co.uk" className="text-gold-400 hover:text-gold-300 underline">partnerships@jerrycanspirits.co.uk</a> with details about your venue and what you&apos;re looking for. We&apos;re happy to discuss wholesale arrangements and support for your venue.
                   </p>
                 </div>
@@ -372,7 +372,7 @@ export default function FriendsPage() {
             <h3 className="text-2xl font-playfair font-bold text-gold-500 mb-4">
               More Questions?
             </h3>
-            <p className="text-gray-300 mb-6 max-w-2xl mx-auto">
+            <p className="text-parchment-200 mb-6 max-w-2xl mx-auto">
               Learn more about Jerry Can Spirits, our products, and how we work in our general FAQ section
             </p>
             <Link

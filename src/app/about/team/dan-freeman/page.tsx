@@ -142,7 +142,7 @@ export default function DanFreemanPage() {
                   <div>
                     <p className="text-gold-300 font-semibold text-sm mb-1">Did You Know?</p>
                     <p className="text-parchment-300 text-sm">
-                      Since leaving the forces, Dan hasn't shaved his beard once—and has no intention of starting now.
+                      Since leaving the forces, Dan hasn't shaved his beard once and has no intention of starting now.
                     </p>
                   </div>
                 </div>
@@ -225,7 +225,7 @@ export default function DanFreemanPage() {
                   </div>
                   <blockquote className="flex-1">
                     <p className="text-xl text-parchment-100 italic leading-relaxed mb-4">
-                      "Jerry Can Spirits matters to me because we're in a time when passion, craft, and individuality are taking over ahead of massive faceless corporations. I believe in supporting and elevating those around me, and I'll work tirelessly to see small-batch and craft spirits flourish."
+                      "Jerry Can Spirits matters to me because we're in a time when passion, craft, and individuality are taking over ahead of massive faceless corporations. I believe in backing good people and helping them succeed, and I'll work tirelessly to see small-batch and craft spirits flourish."
                     </p>
                     <cite className="text-gold-400 font-semibold not-italic">— Dan Freeman</cite>
                   </blockquote>

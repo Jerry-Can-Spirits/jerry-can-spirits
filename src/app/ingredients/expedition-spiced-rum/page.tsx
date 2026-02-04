@@ -70,13 +70,13 @@ const faqSchema = {
 
 export const metadata: Metadata = {
   title: "Ingredients - Expedition Spiced Rum",
-  description: "What goes into Jerry Can Spirits Expedition Spiced Rum. Madagascan vanilla, Ceylon cinnamon, ginger, orange peel, cloves, cassia, and agave — steeped in Caribbean rum.",
+  description: "What goes into Jerry Can Spirits Expedition Spiced Rum. Madagascan vanilla, Ceylon cinnamon, ginger, orange peel, cloves, cassia, and agave, steeped in Caribbean rum.",
   alternates: {
     canonical: 'https://jerrycanspirits.co.uk/ingredients/expedition-spiced-rum/',
   },
   openGraph: {
     title: 'Expedition Spiced Rum Ingredients | Jerry Can Spirits®',
-    description: 'What goes into Jerry Can Spirits Expedition Spiced Rum. Madagascan vanilla, Ceylon cinnamon, ginger, orange peel, cloves, cassia, and agave — steeped in Caribbean rum.',
+    description: 'What goes into Jerry Can Spirits Expedition Spiced Rum. Madagascan vanilla, Ceylon cinnamon, ginger, orange peel, cloves, cassia, and agave, steeped in Caribbean rum.',
     url: 'https://jerrycanspirits.co.uk/ingredients/expedition-spiced-rum/',
     siteName: 'Jerry Can Spirits®',
     locale: 'en_GB',
@@ -327,7 +327,7 @@ export default function ExpeditionSpicedRumIngredients() {
             <div className="mt-8 pt-6 border-t border-gold-500/20">
               <h3 className="text-gold-300 font-semibold text-lg mb-2">Character</h3>
               <p className="text-parchment-300 leading-relaxed italic">
-                A modern, naturally sweetened spiced rum with bright citrus top notes, creamy vanilla depth, and a bourbon-barrel backbone — smooth enough to sip neat, bold enough for standout cocktails.
+                A modern, naturally sweetened spiced rum with bright citrus top notes, creamy vanilla depth, and a bourbon-barrel backbone. Smooth enough to sip neat, bold enough for standout cocktails.
               </p>
             </div>
           </div>
