@@ -124,7 +124,7 @@ export default function FAQPage() {
             <h1 className="text-4xl md:text-5xl font-playfair font-bold text-gold-500 mb-6">
               Got Questions?
             </h1>
-            <p className="text-xl text-gray-300 max-w-2xl mx-auto">
+            <p className="text-xl text-parchment-200 max-w-2xl mx-auto">
               Everything you need to know about Jerry Can Spirits premium British rum and our expedition-ready approach to crafting spirits.
             </p>
           </div>
@@ -139,7 +139,7 @@ export default function FAQPage() {
                 <h2 className="text-xl font-semibold text-gold-400 mb-3">
                   {faq.question}
                 </h2>
-                <p className="text-gray-300 leading-relaxed">
+                <p className="text-parchment-200 leading-relaxed">
                   {faq.question === "What cocktails work best with Jerry Can Spirits rum?" ? (
                     <>Our rum is versatile and works beautifully in classic cocktails like Old Fashioned, Mai Tai, and Rum Punch. Check our <Link href="/field-manual/cocktails" className="text-gold-300 hover:text-gold-400 underline">Field Manual</Link> for exclusive expedition cocktail recipes.</>
                   ) : faq.question === "What is your connection to the Armed Forces?" ? (
@@ -157,7 +157,7 @@ export default function FAQPage() {
             <h3 className="text-2xl font-playfair font-bold text-gold-500 mb-4">
               Still Have Questions?
             </h3>
-            <p className="text-gray-300 mb-6">
+            <p className="text-parchment-200 mb-6">
               We're here to help. Reach out to our team for any additional questions about our premium British rum.
             </p>
             <a

@@ -108,10 +108,10 @@ export default async function FieldManualHome() {
           <div className="space-y-4 text-parchment-300 leading-relaxed">
             <p>
               You don't need a cocktail certification or a shelf full of obscure spirits to make exceptional drinks at home.
-              The Field Manual cuts through the pretence and unnecessary jargon that can make mixology feel out of reach.
+              The Field Manual cuts through the jargon and gatekeeping that can make mixology feel out of reach.
             </p>
             <p>
-              Every recipe is written in plain English with clear measurements. We focus on what genuinely matters —
+              Every recipe is written in plain English with clear measurements. We focus on what genuinely matters
               and filter out the noise. Whether you're mixing your first Cuba Libre or experimenting with house-made
               syrups, this guide meets you exactly where you are.
             </p>

@@ -12,9 +12,9 @@ export default function DietaryInfo({ dietary }: DietaryInfoProps) {
   if (!dietary) return null
 
   const badges = [
-    { key: 'vegan', label: 'Vegan', icon: '🌱', active: dietary.vegan },
-    { key: 'vegetarian', label: 'Vegetarian', icon: '🥬', active: dietary.vegetarian },
-    { key: 'glutenFree', label: 'Gluten-Free', icon: '🌾', active: dietary.glutenFree },
+    { key: 'vegan', label: 'Vegan', active: dietary.vegan },
+    { key: 'vegetarian', label: 'Vegetarian', active: dietary.vegetarian },
+    { key: 'glutenFree', label: 'Gluten-Free', active: dietary.glutenFree },
   ].filter(badge => badge.active)
 
   // Don't render if no badges and no allergen info
@@ -24,10 +24,7 @@ export default function DietaryInfo({ dietary }: DietaryInfoProps) {
 
   return (
     <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
-      <h3 className="text-lg font-semibold text-gold-300 mb-4 flex items-center gap-2">
-        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-        </svg>
+      <h3 className="text-lg font-semibold text-gold-300 mb-4">
         Dietary Information
       </h3>
 
@@ -37,9 +34,8 @@ export default function DietaryInfo({ dietary }: DietaryInfoProps) {
           {badges.map(badge => (
             <div
               key={badge.key}
-              className="inline-flex items-center gap-2 px-3 py-2 bg-jerry-green-800/40 rounded-lg border border-gold-500/20"
+              className="inline-flex items-center px-3 py-2 bg-jerry-green-800/40 rounded-lg border border-gold-500/20"
             >
-              <span className="text-lg">{badge.icon}</span>
               <span className="text-parchment-200 text-sm font-medium">{badge.label}</span>
             </div>
           ))}

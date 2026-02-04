@@ -5,13 +5,13 @@ import Breadcrumbs from '@/components/Breadcrumbs'
 
 export const metadata: Metadata = {
   title: "Product Ingredients",
-  description: "Full ingredient lists for Jerry Can Spirits rum. See what goes into our Expedition Spiced Rum — Madagascan vanilla, Ceylon cinnamon, ginger, orange peel, and more.",
+  description: "Full ingredient lists for Jerry Can Spirits rum. See what goes into our Expedition Spiced Rum: Madagascan vanilla, Ceylon cinnamon, ginger, orange peel, and more.",
   alternates: {
     canonical: 'https://jerrycanspirits.co.uk/ingredients/',
   },
   openGraph: {
     title: 'Product Ingredients | Jerry Can Spirits®',
-    description: 'Full ingredient lists for Jerry Can Spirits rum. See what goes into our Expedition Spiced Rum — Madagascan vanilla, Ceylon cinnamon, ginger, orange peel, and more.',
+    description: 'Full ingredient lists for Jerry Can Spirits rum. See what goes into our Expedition Spiced Rum: Madagascan vanilla, Ceylon cinnamon, ginger, orange peel, and more.',
     url: 'https://jerrycanspirits.co.uk/ingredients/',
     siteName: 'Jerry Can Spirits®',
     locale: 'en_GB',

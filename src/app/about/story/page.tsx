@@ -43,7 +43,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: "Our Story | Jerry Can Spirits®",
-    description: "From Royal Corps of Signals to premium British rum - discover our authentic military heritage story.",
+    description: "From Royal Corps of Signals to premium British rum. Our authentic military heritage story.",
   },
   robots: {
     index: true,
@@ -206,7 +206,7 @@ export default function OurStory() {
                     <span className="text-gold-400 text-xl font-bold">3</span>
                   </div>
                   <p className="text-gold-300 font-semibold mb-2">Our Slogan</p>
-                  <p className="text-parchment-300 text-sm">&quot;This is rum, for people who live the adventurous life&quot;</p>
+                  <p className="text-parchment-300 text-sm">&quot;Rum for people who actually do things&quot;</p>
                 </div>
               </div>
             </div>
@@ -726,7 +726,7 @@ export default function OurStory() {
               Be Part of Our Story
             </h2>
             <p className="text-xl text-parchment-300 mb-8 max-w-3xl mx-auto">
-              We&apos;re just getting started on an epic journey. Come be a part of the adventure as we meticulously craft high-end, premium British craft rum for folks who expect top shelf flavour, uncompromising quality and spirits that are built for the road (or the road less travelled). We think having a team of veterans behind the scenes makes all the difference when you pour yourself a glass.
+              We&apos;re just getting started. Join us as we build genuinely good rum for people who expect quality and don&apos;t accept shortcuts. Having veterans behind the scenes means every bottle is made to a standard we&apos;d stake our name on.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">

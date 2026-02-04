@@ -50,7 +50,7 @@ export default function ShopPage() {
           <h1 className="text-4xl md:text-5xl font-playfair font-bold text-gold-500">
             Adventure Awaits
           </h1>
-          <p className="text-xl text-gray-300 max-w-xl mx-auto">
+          <p className="text-xl text-parchment-200 max-w-xl mx-auto">
             Our expedition shop is preparing for deployment. <Link href="/" className="text-gold-500 hover:text-gold-400 underline decoration-gold-500/40 hover:decoration-gold-400 transition-colors">Premium British rum from Jerry Can Spirits</Link>, professional barware,
             and adventure-ready gear will be available soon.
           </p>
@@ -63,21 +63,21 @@ export default function ShopPage() {
             className="p-6 bg-jerry-green-800/20 rounded-lg border border-gold-500/20 hover:border-gold-500/40 hover:bg-jerry-green-800/30 transition-all cursor-pointer group"
           >
             <h3 className="font-semibold text-gold-500 mb-2 group-hover:text-gold-400 transition-colors">Premium Rum</h3>
-            <p className="text-sm text-gray-400">British crafted spirits for discerning adventurers</p>
+            <p className="text-sm text-parchment-300">British crafted spirits for discerning adventurers</p>
           </Link>
           <Link
             href="/shop/barware"
             className="p-6 bg-jerry-green-800/20 rounded-lg border border-gold-500/20 hover:border-gold-500/40 hover:bg-jerry-green-800/30 transition-all cursor-pointer group"
           >
             <h3 className="font-semibold text-gold-500 mb-2 group-hover:text-gold-400 transition-colors">Barware</h3>
-            <p className="text-sm text-gray-400">Professional tools for the home mixologist</p>
+            <p className="text-sm text-parchment-300">Professional tools for the home mixologist</p>
           </Link>
           <Link
             href="/shop/clothing"
             className="p-6 bg-jerry-green-800/20 rounded-lg border border-gold-500/20 hover:border-gold-500/40 hover:bg-jerry-green-800/30 transition-all cursor-pointer group"
           >
             <h3 className="font-semibold text-gold-500 mb-2 group-hover:text-gold-400 transition-colors">Expedition Gear</h3>
-            <p className="text-sm text-gray-400">Adventure-ready apparel and accessories</p>
+            <p className="text-sm text-parchment-300">Adventure-ready apparel and accessories</p>
           </Link>
         </div>
 

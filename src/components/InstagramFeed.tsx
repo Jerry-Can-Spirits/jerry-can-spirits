@@ -40,7 +40,7 @@ export default function InstagramFeed({
   if (postUrls.length === 0) {
     return (
       <div className="text-center py-12">
-        <p className="text-gray-300 mb-6 text-lg">
+        <p className="text-parchment-200 mb-6 text-lg">
           Follow us on Instagram for the latest updates and adventures
         </p>
         <a

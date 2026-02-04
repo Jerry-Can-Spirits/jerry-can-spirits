@@ -1,31 +1,16 @@
 export default function WhyJerryCan() {
   const pillars = [
     {
-      icon: (
-        <svg className="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-        </svg>
-      ),
       title: 'Premium Quality',
-      description: 'Handcrafted small-batch rum using premium Caribbean molasses and British copper-pot distillation. Experience rich, complex flavours with velvety vanilla, warm spice notes, and a smooth finish that rivals the finest spirits.'
+      description: 'We blend Caribbean rum with Welsh brewery molasses and run it through copper pot stills at Spirit of Wales Distillery. Vanilla and caramel upfront, warm spice through the middle, smooth enough to sip neat but bold enough for cocktails.'
     },
     {
-      icon: (
-        <svg className="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-        </svg>
-      ),
-      title: 'Adventure Heritage',
-      description: 'Founded by Royal Corps of Signals veterans who served across Arctic to desert deployments. We channel expedition-tested reliability and precision craftsmanship into every bottle - spirits built for the bold.'
+      title: 'Veteran Heritage',
+      description: 'We spent 12 years in the Royal Corps of Signals. We know what reliability means. Every bottle reflects that standard. No corners cut, no compromises made.'
     },
     {
-      icon: (
-        <svg className="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-        </svg>
-      ),
       title: 'Expedition Ready',
-      description: 'Versatile craft spirits perfect for bold cocktails or sipping neat. Whether you\'re mixing a Storm and Spice at your home bar or sharing stories around the campfire, our rum delivers exceptional flavour anywhere adventure calls.'
+      description: 'Whether you\'re mixing drinks at home or sharing a bottle with mates after a long week, this rum won\'t let you down. We built it that way on purpose.'
     }
   ]
 
@@ -41,11 +26,11 @@ export default function WhyJerryCan() {
           </div>
 
           <h2 className="text-3xl md:text-4xl font-serif font-bold text-white mb-4">
-            Why Choose Jerry Can Spirits?
+            Why Jerry Can?
           </h2>
 
           <p className="text-xl text-parchment-300 max-w-3xl mx-auto leading-relaxed">
-            More than premium rum—it's a commitment to excellence, heritage, and adventure.
+            Named after a piece of kit that was designed to work, not to look good on a shelf. That's our standard.
           </p>
         </div>
 
@@ -56,11 +41,6 @@ export default function WhyJerryCan() {
               key={index}
               className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20 hover:border-gold-400/40 transition-all duration-300 group hover:scale-105"
             >
-              {/* Icon */}
-              <div className="w-16 h-16 bg-gold-400/20 rounded-full flex items-center justify-center mb-6 text-gold-400 group-hover:bg-gold-400/30 transition-colors duration-300">
-                {pillar.icon}
-              </div>
-
               {/* Title */}
               <h3 className="text-2xl font-serif font-bold text-white mb-4">
                 {pillar.title}

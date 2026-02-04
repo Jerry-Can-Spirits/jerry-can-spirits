@@ -131,7 +131,7 @@ export default function Sustainability() {
                 </div>
                 <div>
                   <h3 className="text-lg font-semibold text-gold-300 mb-2">The Cap</h3>
-                  <p>Our cap is made from natural wood with a micro agglomerate cork seal — both natural, renewable materials. The cork can be composted, and the wooden top can go in your garden waste or be repurposed.</p>
+                  <p>Our cap is made from natural wood with a micro agglomerate cork seal, both natural and renewable materials. The cork can be composted, and the wooden top can go in your garden waste or be repurposed.</p>
                 </div>
               </div>
 
@@ -141,7 +141,7 @@ export default function Sustainability() {
                 </div>
                 <div>
                   <h3 className="text-lg font-semibold text-gold-300 mb-2">The Label</h3>
-                  <p>You don&apos;t need to remove the label before recycling — modern recycling facilities handle this during processing.</p>
+                  <p>You don&apos;t need to remove the label before recycling. Modern recycling facilities handle this during processing.</p>
                 </div>
               </div>
             </div>
@@ -157,10 +157,10 @@ export default function Sustainability() {
 
             <div className="space-y-4 text-parchment-300">
               <p>
-                We work with what&apos;s close to home where we can. Our rum is distilled in Wales using Welsh water, and the molasses comes partly from a local brewery&apos;s beer production — good ingredients that would otherwise go to waste.
+                We work with what&apos;s close to home where we can. Our rum is distilled in Wales using Welsh water, and the molasses comes partly from a local brewery&apos;s beer production. Good ingredients that would otherwise go to waste.
               </p>
               <p>
-                It&apos;s not about slapping &quot;eco-friendly&quot; on the label. It&apos;s just how we think things should be done — read more about <Link href="/about/story" className="text-gold-300 hover:text-gold-400 underline">our story</Link> and the values that shape how we work.
+                It&apos;s not about slapping &quot;eco-friendly&quot; on the label. It&apos;s just how we think things should be done. Read more about <Link href="/about/story" className="text-gold-300 hover:text-gold-400 underline">our story</Link> and the values that shape how we work.
               </p>
 
               <div className="grid sm:grid-cols-2 gap-4 mt-6">
@@ -170,7 +170,7 @@ export default function Sustainability() {
                 </div>
                 <div className="bg-jerry-green-800/60 rounded-lg p-4">
                   <h3 className="text-gold-300 font-semibold mb-2">Brewery Molasses</h3>
-                  <p className="text-sm">Sourced from local Welsh brewery production — reducing waste.</p>
+                  <p className="text-sm">Sourced from local Welsh brewery production, reducing waste.</p>
                 </div>
                 <div className="bg-jerry-green-800/60 rounded-lg p-4">
                   <h3 className="text-gold-300 font-semibold mb-2">UK Distillation</h3>
@@ -178,7 +178,7 @@ export default function Sustainability() {
                 </div>
                 <div className="bg-jerry-green-800/60 rounded-lg p-4">
                   <h3 className="text-gold-300 font-semibold mb-2">Caribbean Rum Base</h3>
-                  <p className="text-sm">Some things have to travel — we use quality Caribbean rum as our foundation.</p>
+                  <p className="text-sm">Some things have to travel. We use quality Caribbean rum as our foundation.</p>
                 </div>
               </div>
             </div>

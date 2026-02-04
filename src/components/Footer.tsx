@@ -95,19 +95,15 @@ export default function Footer() {
 
   return (
     <footer className="relative bg-jerry-green-900 text-parchment-100 overflow-hidden">
-      {/* Background Pattern - Adventure/Expedition Theme */}
+      {/* Subtle Background Pattern */}
       <div className="absolute inset-0 opacity-5">
-        <div 
+        <div
           className="absolute inset-0 bg-repeat"
           style={{
             backgroundImage: `url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23f5e6b3' fill-opacity='0.08'%3E%3Cpath d='M40 40c0-11 9-20 20-20s20 9 20 20-9 20-20 20-20-9-20-20zm0-40c0-11 9-20 20-20s20 9 20 20-9 20-20 20-20-9-20-20zm-40 40c0-11 9-20 20-20s20 9 20 20-9 20-20 20-20-9-20-20zm0-40c0-11 9-20 20-20s20 9 20 20-9 20-20 20-20-9-20-20z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-            animation: 'compass-drift 120s linear infinite',
           }}
         />
       </div>
-
-      {/* Glass Effect Background */}
-      <div className="absolute inset-0 bg-jerry-green-900/90 backdrop-blur-sm" />
 
       <div className="relative">
         {/* Main Footer Content */}
@@ -535,14 +531,6 @@ export default function Footer() {
           </div>
         </div>
       </div>
-
-      {/* CSS Animation for Background Pattern */}
-      <style jsx>{`
-        @keyframes compass-drift {
-          0% { transform: translate(0, 0) rotate(0deg); }
-          100% { transform: translate(-80px, -80px) rotate(360deg); }
-        }
-      `}</style>
     </footer>
   )
 }
