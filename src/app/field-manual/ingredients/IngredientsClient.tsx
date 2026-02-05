@@ -146,6 +146,8 @@ export default function IngredientsClient({ ingredients }: IngredientsClientProp
             <div className="relative">
               <input
                 type="text"
+                id="ingredient-search"
+                name="ingredient-search"
                 placeholder="Search ingredients..."
                 value={searchQuery}
                 onChange={(e) => handleSearchChange(e.target.value)}

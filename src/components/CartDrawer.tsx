@@ -253,6 +253,8 @@ export default function CartDrawer() {
                 <div className="flex gap-2">
                   <input
                     type="text"
+                    id="discount-code"
+                    name="discount-code"
                     value={discountCode}
                     onChange={(e) => setDiscountCode(e.target.value)}
                     placeholder="Discount code"

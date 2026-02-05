@@ -107,9 +107,11 @@ export default function CookiePreferencesPage() {
                 </div>
               </div>
               <div className="ml-4">
-                <label className="relative inline-flex items-center cursor-pointer">
+                <label htmlFor="pref-analytics" className="relative inline-flex items-center cursor-pointer">
                   <input
                     type="checkbox"
+                    id="pref-analytics"
+                    name="pref-analytics"
                     checked={localPreferences.analytics}
                     onChange={(e) =>
                       setLocalPreferences({ ...localPreferences, analytics: e.target.checked })
@@ -138,9 +140,11 @@ export default function CookiePreferencesPage() {
                 </div>
               </div>
               <div className="ml-4">
-                <label className="relative inline-flex items-center cursor-pointer">
+                <label htmlFor="pref-marketing" className="relative inline-flex items-center cursor-pointer">
                   <input
                     type="checkbox"
+                    id="pref-marketing"
+                    name="pref-marketing"
                     checked={localPreferences.marketing}
                     onChange={(e) =>
                       setLocalPreferences({ ...localPreferences, marketing: e.target.checked })

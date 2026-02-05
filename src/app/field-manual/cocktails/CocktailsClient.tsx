@@ -392,6 +392,8 @@ export default function CocktailsClient({ cocktails }: CocktailsClientProps) {
             <div className="relative">
               <input
                 type="text"
+                id="cocktail-search"
+                name="cocktail-search"
                 placeholder="Search cocktails..."
                 value={searchQuery}
                 onChange={(e) => handleSearchChange(e.target.value)}

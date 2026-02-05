@@ -141,6 +141,8 @@ export default function GuidesClient({ guides }: GuidesClientProps) {
             <div className="relative">
               <input
                 type="text"
+                id="guide-search"
+                name="guide-search"
                 placeholder="Search guides..."
                 value={searchQuery}
                 onChange={(e) => handleSearchChange(e.target.value)}

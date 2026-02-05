@@ -81,6 +81,7 @@ export default function AddToCartButton({
           <input
             type="number"
             id="quantity"
+            name="quantity"
             min="1"
             value={quantity}
             onChange={(e) => setQuantity(Math.max(1, parseInt(e.target.value) || 1))}
