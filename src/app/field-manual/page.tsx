@@ -127,7 +127,7 @@ export default async function FieldManualHome() {
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8 lg:items-stretch">
           
           {/* Cocktails Section */}
-          <Link href="/field-manual/cocktails" className="group h-full">
+          <Link href="/field-manual/cocktails/" className="group h-full">
             <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20 hover:border-gold-400/40 transition-all duration-300 transform hover:scale-105 hover:shadow-2xl relative overflow-hidden h-full flex flex-col">
               {/* Parchment texture */}
               <div className="absolute inset-0 bg-gradient-to-br from-amber-100/5 to-amber-200/10 opacity-50"></div>
@@ -165,7 +165,7 @@ export default async function FieldManualHome() {
           </Link>
 
           {/* Ingredients Section */}
-          <Link href="/field-manual/ingredients" className="group h-full">
+          <Link href="/field-manual/ingredients/" className="group h-full">
             <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20 hover:border-gold-400/40 transition-all duration-300 transform hover:scale-105 hover:shadow-2xl relative overflow-hidden h-full flex flex-col">
               {/* Parchment texture */}
               <div className="absolute inset-0 bg-gradient-to-br from-amber-100/5 to-amber-200/10 opacity-50"></div>
@@ -203,7 +203,7 @@ export default async function FieldManualHome() {
           </Link>
 
           {/* Equipment Section */}
-          <Link href="/field-manual/equipment" className="group h-full">
+          <Link href="/field-manual/equipment/" className="group h-full">
             <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20 hover:border-gold-400/40 transition-all duration-300 transform hover:scale-105 hover:shadow-2xl relative overflow-hidden h-full flex flex-col">
               {/* Parchment texture */}
               <div className="absolute inset-0 bg-gradient-to-br from-amber-100/5 to-amber-200/10 opacity-50"></div>
@@ -252,7 +252,7 @@ export default async function FieldManualHome() {
               <p className="text-parchment-300 mb-6 max-w-2xl mx-auto">
                 Pick a cocktail that sounds good and work backwards. Need a specific ingredient? We'll tell you what it is. Missing a tool? We'll suggest alternatives. The Field Manual is built to help wherever you're starting from.
               </p>
-              <Link href="/field-manual/cocktails" className="inline-block px-6 py-3 bg-gold-500 text-jerry-green-900 font-semibold rounded-lg hover:bg-gold-400 transition-colors">
+              <Link href="/field-manual/cocktails/" className="inline-block px-6 py-3 bg-gold-500 text-jerry-green-900 font-semibold rounded-lg hover:bg-gold-400 transition-colors">
                 Browse Cocktails
               </Link>
             </div>
@@ -290,7 +290,7 @@ export default async function FieldManualHome() {
                   </td>
                   <td className="py-4 px-4">Pour, stir, build in glass</td>
                   <td className="py-4 px-4">Common spirits, basic mixers</td>
-                  <td className="py-4 px-4">Rum & Coke, Dark &apos;n&apos; Stormy, Mojito</td>
+                  <td className="py-4 px-4">Rum & Coke, Storm and Spice, Mojito</td>
                 </tr>
                 <tr className="border-b border-gold-500/10">
                   <td className="py-4 px-4">
@@ -327,7 +327,7 @@ export default async function FieldManualHome() {
               <div className="space-y-2 text-sm">
                 <p><span className="text-gold-400">Technique:</span> <span className="text-parchment-200">Pour, stir, build in glass</span></p>
                 <p><span className="text-gold-400">Ingredients:</span> <span className="text-parchment-200">Common spirits, basic mixers</span></p>
-                <p><span className="text-gold-400">Examples:</span> <span className="text-parchment-200">Rum & Coke, Dark &apos;n&apos; Stormy, Mojito</span></p>
+                <p><span className="text-gold-400">Examples:</span> <span className="text-parchment-200">Rum & Coke, Storm and Spice, Mojito</span></p>
               </div>
             </div>
 
@@ -438,14 +438,14 @@ export default async function FieldManualHome() {
             <div className="border-b border-gold-500/10 pb-6">
               <h3 className="text-lg font-semibold text-gold-300 mb-3">Do I need to buy Jerry Can rum to use the recipes?</h3>
               <p className="text-parchment-200 leading-relaxed">
-                No. While we'd love you to try <Link href="/shop/drinks" className="text-gold-400 hover:text-gold-300 underline">our rum</Link>, every recipe works with any quality spirit in that category. We include notes on what to look for in substitutes when relevant. The Field Manual is useful whether you buy from us or not.
+                No. While we'd love you to try <Link href="/shop/drinks/" className="text-gold-400 hover:text-gold-300 underline">our rum</Link>, every recipe works with any quality spirit in that category. We include notes on what to look for in substitutes when relevant. The Field Manual is useful whether you buy from us or not.
               </p>
             </div>
 
             <div className="border-b border-gold-500/10 pb-6">
               <h3 className="text-lg font-semibold text-gold-300 mb-3">What equipment do I need to start making cocktails?</h3>
               <p className="text-parchment-200 leading-relaxed">
-                At minimum: a jigger (or measuring cup), something to stir with, and glasses. A shaker helps but isn't essential for many drinks. Our <Link href="/field-manual/equipment" className="text-gold-400 hover:text-gold-300 underline">equipment section</Link> has a starter kit guide that covers what to buy first and what can wait.
+                At minimum: a jigger (or measuring cup), something to stir with, and glasses. A shaker helps but isn't essential for many drinks. Our <Link href="/field-manual/equipment/" className="text-gold-400 hover:text-gold-300 underline">equipment section</Link> has a starter kit guide that covers what to buy first and what can wait.
               </p>
             </div>
 
@@ -459,7 +459,7 @@ export default async function FieldManualHome() {
             <div>
               <h3 className="text-lg font-semibold text-gold-300 mb-3">Can I suggest a cocktail or ingredient to add?</h3>
               <p className="text-parchment-200 leading-relaxed">
-                Yes - we're always expanding the Field Manual. <Link href="/contact" className="text-gold-400 hover:text-gold-300 underline">Get in touch</Link> with suggestions. We prioritise recipes that work well at home with accessible ingredients.
+                Yes - we're always expanding the Field Manual. <Link href="/contact/" className="text-gold-400 hover:text-gold-300 underline">Get in touch</Link> with suggestions. We prioritise recipes that work well at home with accessible ingredients.
               </p>
             </div>
           </div>

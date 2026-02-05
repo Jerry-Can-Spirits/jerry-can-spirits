@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -26,12 +26,15 @@ interface NavigationItem {
 
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false)
-  const [lastScrollY, setLastScrollY] = useState(0)
   const [showHeader, setShowHeader] = useState(true)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null)
   const [isSearchModalOpen, setIsSearchModalOpen] = useState(false)
   const { itemCount, openCart } = useCart()
+
+  // Use refs for scroll tracking to avoid re-renders
+  const lastScrollY = useRef(0)
+  const ticking = useRef(false)
 
   // Navigation structure
   const navigation: NavigationItem[] = [
@@ -87,44 +90,47 @@ export default function Header() {
     },
   ]
 
-  // Scroll behavior with improved smoothness
+  // Scroll behavior with improved smoothness - optimised to reduce re-renders
   useEffect(() => {
-    let ticking = false
-
     const handleScroll = () => {
-      if (!ticking) {
-        window.requestAnimationFrame(() => {
-          const currentScrollY = window.scrollY
-          setIsScrolled(currentScrollY > 20)
+      if (ticking.current) return
 
-          // Don't hide header when mobile menu is open
-          if (!isMobileMenuOpen) {
-            // Improved hide/show logic with better threshold
-            const scrollDifference = Math.abs(currentScrollY - lastScrollY)
+      ticking.current = true
+      window.requestAnimationFrame(() => {
+        const currentScrollY = window.scrollY
+        const wasScrolled = isScrolled
+        const wasShowingHeader = showHeader
+        const prevScrollY = lastScrollY.current
 
-            // Only trigger if scroll difference is significant (reduces jitter)
-            if (scrollDifference > 5) {
-              if (currentScrollY > lastScrollY && currentScrollY > 150) {
-                // Scrolling down - hide header
-                setShowHeader(false)
-              } else if (currentScrollY < lastScrollY) {
-                // Scrolling up - show header
-                setShowHeader(true)
-              }
+        // Batch state updates - only update if values actually changed
+        const shouldBeScrolled = currentScrollY > 20
+        const scrollDifference = Math.abs(currentScrollY - prevScrollY)
 
-              setLastScrollY(currentScrollY)
-            }
+        let newShowHeader = wasShowingHeader
+        if (!isMobileMenuOpen && scrollDifference > 5) {
+          if (currentScrollY > prevScrollY && currentScrollY > 150) {
+            newShowHeader = false
+          } else if (currentScrollY < prevScrollY) {
+            newShowHeader = true
           }
+          lastScrollY.current = currentScrollY
+        }
 
-          ticking = false
-        })
-        ticking = true
-      }
+        // Only trigger re-renders if values actually changed
+        if (shouldBeScrolled !== wasScrolled) {
+          setIsScrolled(shouldBeScrolled)
+        }
+        if (newShowHeader !== wasShowingHeader) {
+          setShowHeader(newShowHeader)
+        }
+
+        ticking.current = false
+      })
     }
 
     window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
-  }, [lastScrollY, isMobileMenuOpen])
+  }, [isMobileMenuOpen, isScrolled, showHeader])
 
   // Close mobile menu on resize
   useEffect(() => {

@@ -219,7 +219,7 @@ export default async function GuidePage({ params }: PageProps) {
         {/* Breadcrumb */}
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
           <nav className="text-sm text-parchment-400" aria-label="Breadcrumb">
-            <Link href="/guides" className="hover:text-gold-300 transition-colors">Guides</Link>
+            <Link href="/guides/" className="hover:text-gold-300 transition-colors">Guides</Link>
             <span className="mx-2">→</span>
             <span className="text-gold-300">{guide.title}</span>
           </nav>
@@ -629,7 +629,7 @@ export default async function GuidePage({ params }: PageProps) {
           {/* Back to Guides */}
           <div className="mt-6 text-center">
             <Link
-              href="/guides"
+              href="/guides/"
               className="inline-flex items-center gap-2 px-6 py-3 text-gold-300 hover:text-gold-400 transition-colors"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -289,7 +289,7 @@ export default function ExpeditionSpicedRumIngredients() {
                 </li>
               </ul>
               <p className="mt-6 text-sm text-parchment-400">
-                If you have specific dietary concerns, please <Link href="/contact" className="text-gold-300 hover:text-gold-400 underline">contact us</Link> before purchasing.
+                If you have specific dietary concerns, please <Link href="/contact/" className="text-gold-300 hover:text-gold-400 underline">contact us</Link> before purchasing.
               </p>
             </div>
           </div>
@@ -337,13 +337,13 @@ export default function ExpeditionSpicedRumIngredients() {
         <section className="py-12 text-center">
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
-              href="/shop/product/expedition-spiced-rum"
+              href="/shop/product/expedition-spiced-rum/"
               className="inline-flex items-center justify-center space-x-2 bg-gold-500 hover:bg-gold-400 text-jerry-green-900 px-8 py-4 rounded-lg font-semibold transition-all duration-300"
             >
               <span>Order a Bottle</span>
             </Link>
             <Link
-              href="/sustainability"
+              href="/sustainability/"
               className="inline-flex items-center justify-center space-x-2 bg-jerry-green-800 hover:bg-jerry-green-700 text-parchment-50 px-8 py-4 rounded-lg font-semibold border-2 border-gold-500/30 hover:border-gold-500/60 transition-all duration-300"
             >
               <span>Sustainability</span>

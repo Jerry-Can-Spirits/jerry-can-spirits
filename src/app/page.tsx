@@ -202,7 +202,7 @@ export default function Home() {
                 </h2>
                 <div className="space-y-4 text-parchment-200 leading-relaxed">
                   <p>
-                    We didn't set out to start a rum company. After 12 years in the Royal Corps of Signals, what we wanted was simple: a proper drink to share with mates - something with character, made by people who give a damn. When we couldn't find it, we decided to make it ourselves.
+                    We didn't set out to start a rum company. Between us, we served 17 years in the Royal Corps of Signals. What we wanted was simple: a proper drink to share with mates - something with character, made by people who give a damn. When we couldn't find it, we decided to make it ourselves.
                   </p>
                   <p>
                     Working with Spirit of Wales Distillery, we blend Caribbean rum with Welsh brewery molasses and put it through their pot stills. The result? Vanilla and caramel upfront, warm spice through the middle, and a finish smooth enough to sip neat - but bold enough to hold its own in a cocktail.

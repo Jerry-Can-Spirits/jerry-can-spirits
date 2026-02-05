@@ -270,7 +270,7 @@ export default function Accessibility() {
                   </p>
                   <p className="text-white">
                     <strong className="text-gold-300">Alternative Contact:</strong>{' '}
-                    <a href="/contact" className="text-gold-300 hover:text-gold-200 underline">Contact Form</a>
+                    <a href="/contact/" className="text-gold-300 hover:text-gold-200 underline">Contact Form</a>
                   </p>
                 </div>
               </div>

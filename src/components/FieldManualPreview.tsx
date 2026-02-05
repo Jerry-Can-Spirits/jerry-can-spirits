@@ -113,7 +113,7 @@ export default async function FieldManualPreview() {
         {/* CTA to Full Field Manual */}
         <div className="text-center">
           <Link
-            href="/field-manual"
+            href="/field-manual/"
             className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-gold-600 to-gold-500 hover:from-gold-500 hover:to-gold-400 text-jerry-green-900 rounded-lg font-semibold uppercase tracking-wide transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105"
           >
             Explore Full Field Manual

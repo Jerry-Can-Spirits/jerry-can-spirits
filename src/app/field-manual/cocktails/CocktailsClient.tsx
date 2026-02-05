@@ -340,7 +340,7 @@ export default function CocktailsClient({ cocktails }: CocktailsClientProps) {
               Our signature cocktail recipes are being crafted. Check back soon for expertly designed drinks and classic recipes.
             </p>
             <Link
-              href="/field-manual"
+              href="/field-manual/"
               className="inline-flex items-center px-6 py-3 bg-gold-500 hover:bg-gold-400 text-jerry-green-900 font-semibold rounded-lg transition-colors"
             >
               Back to Field Manual
@@ -356,7 +356,7 @@ export default function CocktailsClient({ cocktails }: CocktailsClientProps) {
       {/* Breadcrumb */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
         <nav className="text-sm text-parchment-400">
-          <Link href="/field-manual" className="hover:text-gold-300 transition-colors">Field Manual</Link>
+          <Link href="/field-manual/" className="hover:text-gold-300 transition-colors">Field Manual</Link>
           <span className="mx-2">→</span>
           <span className="text-gold-300">Cocktails</span>
         </nav>

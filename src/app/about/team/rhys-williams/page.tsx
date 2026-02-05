@@ -66,7 +66,7 @@ export default function RhysWilliamsPage() {
 
         {/* Back Button */}
         <Link
-          href="/about/team"
+          href="/about/team/"
           className="inline-flex items-center gap-2 text-gold-300 hover:text-gold-400 transition-colors mb-8 group"
         >
           <svg className="w-5 h-5 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -205,7 +205,7 @@ export default function RhysWilliamsPage() {
               {/* CTA */}
               <div className="flex flex-wrap gap-4 pt-4">
                 <Link
-                  href="/about/story"
+                  href="/about/story/"
                   className="inline-flex items-center gap-2 bg-gold-500 hover:bg-gold-400 text-jerry-green-900 px-6 py-3 rounded-lg font-semibold transition-all duration-300 hover:scale-105"
                 >
                   <span>Read Our Story</span>
@@ -214,7 +214,7 @@ export default function RhysWilliamsPage() {
                   </svg>
                 </Link>
                 <Link
-                  href="/about/team/dan-freeman"
+                  href="/about/team/dan-freeman/"
                   className="inline-flex items-center gap-2 bg-jerry-green-800 hover:bg-jerry-green-700 text-parchment-50 px-6 py-3 rounded-lg font-semibold border-2 border-gold-500/30 hover:border-gold-500/60 transition-all duration-300"
                 >
                   <span>Meet Dan</span>

@@ -16,7 +16,7 @@ const faqs = [
   },
   {
     question: "How should I drink spiced rum?",
-    answer: "However you fancy, really. Neat or over ice works well if you want to taste what we've made. For mixing, it's brilliant with ginger beer (a Dark 'n' Stormy), cola, or in a proper rum punch. Check out our Field Manual for cocktail recipes that show off what spiced rum can do.",
+    answer: "However you fancy, really. Neat or over ice works well if you want to taste what we've made. For mixing, it's brilliant with ginger beer (our Storm and Spice), cola, or in a proper rum punch. Check out our Field Manual for cocktail recipes that show off what spiced rum can do.",
     link: { href: "/field-manual/", text: "Browse cocktail recipes" }
   },
   {

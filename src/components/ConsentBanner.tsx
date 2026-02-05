@@ -104,11 +104,11 @@ export default function ConsentBanner() {
               </h3>
               <p className="text-white text-sm">
                 We use cookies to improve your experience on our site, analyse traffic, and for marketing purposes.{' '}
-                <Link href="/cookie-preferences" className="text-jerry-gold-300 hover:text-jerry-gold-200 underline">
+                <Link href="/cookie-preferences/" className="text-jerry-gold-300 hover:text-jerry-gold-200 underline">
                   Manage your preferences
                 </Link>
                 {' '}or read our{' '}
-                <Link href="/cookie-policy" className="text-jerry-gold-300 hover:text-jerry-gold-200 underline">
+                <Link href="/cookie-policy/" className="text-jerry-gold-300 hover:text-jerry-gold-200 underline">
                   Cookie Policy
                 </Link>.
               </p>

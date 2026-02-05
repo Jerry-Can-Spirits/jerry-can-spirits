@@ -265,7 +265,7 @@ export default function SecurityPolicy() {
                   </p>
                   <p className="text-white">
                     <strong className="text-gold-300">General Contact:</strong>{' '}
-                    <a href="/contact" className="text-gold-300 hover:text-gold-200 underline">Contact Form</a>
+                    <a href="/contact/" className="text-gold-300 hover:text-gold-200 underline">Contact Form</a>
                   </p>
                   <p className="text-white">
                     <strong className="text-gold-300">Company:</strong> Jerry Can Spirits® Ltd, United Kingdom
@@ -280,13 +280,13 @@ export default function SecurityPolicy() {
               </h2>
               <div className="space-y-2">
                 <p className="text-white">
-                  • <a href="/privacy-policy" className="text-gold-300 hover:text-gold-200 underline">Privacy Policy</a> - How we handle your personal data
+                  • <a href="/privacy-policy/" className="text-gold-300 hover:text-gold-200 underline">Privacy Policy</a> - How we handle your personal data
                 </p>
                 <p className="text-white">
-                  • <a href="/cookie-policy" className="text-gold-300 hover:text-gold-200 underline">Cookie Policy</a> - Our use of cookies and tracking
+                  • <a href="/cookie-policy/" className="text-gold-300 hover:text-gold-200 underline">Cookie Policy</a> - Our use of cookies and tracking
                 </p>
                 <p className="text-white">
-                  • <a href="/terms-of-service" className="text-gold-300 hover:text-gold-200 underline">Terms of Service</a> - Terms governing use of our website
+                  • <a href="/terms-of-service/" className="text-gold-300 hover:text-gold-200 underline">Terms of Service</a> - Terms governing use of our website
                 </p>
               </div>
             </section>

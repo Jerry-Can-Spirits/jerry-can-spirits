@@ -110,7 +110,7 @@ export default function FriendsPage() {
               </p>
               <p className="text-parchment-200 leading-relaxed">
                 If you&apos;re a supplier, distillery, or business that might want to work with
-                us, we&apos;d love to hear from you. <Link href="/contact" className="text-gold-500 hover:text-gold-400 underline">Get in touch</Link>.
+                us, we&apos;d love to hear from you. <Link href="/contact/" className="text-gold-500 hover:text-gold-400 underline">Get in touch</Link>.
               </p>
             </div>
           </div>
@@ -238,7 +238,7 @@ export default function FriendsPage() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
-                href="/contact"
+                href="/contact/"
                 className="inline-block px-8 py-3 bg-gold-500 text-jerry-green-900 font-semibold rounded-lg hover:bg-gold-400 transition-colors"
               >
                 Get In Touch
@@ -339,7 +339,7 @@ export default function FriendsPage() {
                 <div className="border-b border-gold-500/10 pb-6">
                   <h3 className="text-lg font-semibold text-gold-300 mb-3">How can I become a Jerry Can Spirits partner?</h3>
                   <p className="text-parchment-200 leading-relaxed">
-                    Get in touch via our <Link href="/contact" className="text-gold-400 hover:text-gold-300 underline">contact page</Link> or email <a href="mailto:partnerships@jerrycanspirits.co.uk" className="text-gold-400 hover:text-gold-300 underline">partnerships@jerrycanspirits.co.uk</a>. Our approach to partnerships is shaped by the founders&apos; military service and values, ensuring we work with those who share our dedication and integrity. We&apos;re interested in working with distilleries, suppliers, and businesses that share our commitment to quality. We&apos;ll have a chat about what we&apos;re both looking for and see if there&apos;s a fit.
+                    Get in touch via our <Link href="/contact/" className="text-gold-400 hover:text-gold-300 underline">contact page</Link> or email <a href="mailto:partnerships@jerrycanspirits.co.uk" className="text-gold-400 hover:text-gold-300 underline">partnerships@jerrycanspirits.co.uk</a>. Our approach to partnerships is shaped by the founders&apos; military service and values, ensuring we work with those who share our dedication and integrity. We&apos;re interested in working with distilleries, suppliers, and businesses that share our commitment to quality. We&apos;ll have a chat about what we&apos;re both looking for and see if there&apos;s a fit.
                   </p>
                 </div>
 
@@ -376,7 +376,7 @@ export default function FriendsPage() {
               Learn more about Jerry Can Spirits, our products, and how we work in our general FAQ section
             </p>
             <Link
-              href="/faq"
+              href="/faq/"
               className="inline-flex items-center justify-center space-x-2 bg-gold-500 hover:bg-gold-400 text-jerry-green-900 px-8 py-4 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105"
             >
               <span>View All FAQs</span>

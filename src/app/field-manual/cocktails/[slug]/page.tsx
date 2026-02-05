@@ -183,7 +183,7 @@ export default async function CocktailPage({ params }: PageProps) {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <Link
-              href="/field-manual/cocktails"
+              href="/field-manual/cocktails/"
               className="inline-flex items-center gap-2 px-6 py-3 bg-jerry-green-800/40 border border-gold-500/20 text-gold-300 rounded-lg hover:bg-jerry-green-800/60 hover:border-gold-400/40 transition-all duration-300"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -254,7 +254,7 @@ export default async function CocktailPage({ params }: PageProps) {
                 <p className="text-parchment-300 text-sm">Pick up a bottle of Expedition Spiced Rum to make this cocktail.</p>
               </div>
               <Link
-                href="/shop/product/jerry-can-spirits-expedition-spiced-rum"
+                href="/shop/product/jerry-can-spirits-expedition-spiced-rum/"
                 className="inline-flex items-center gap-2 bg-gold-500 hover:bg-gold-400 text-jerry-green-900 px-5 py-2.5 rounded-lg font-semibold transition-all duration-300 whitespace-nowrap"
               >
                 <span>Shop Now</span>
@@ -280,7 +280,7 @@ export default async function CocktailPage({ params }: PageProps) {
               Explore our full collection of cocktails and discover your next favorite
             </p>
             <Link
-              href="/field-manual/cocktails"
+              href="/field-manual/cocktails/"
               className="inline-flex items-center gap-2 px-8 py-4 bg-gold-500 hover:bg-gold-400 text-jerry-green-900 font-semibold rounded-lg transition-all duration-300 transform hover:scale-105"
             >
               <span>Browse All Cocktails</span>

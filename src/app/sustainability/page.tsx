@@ -160,7 +160,7 @@ export default function Sustainability() {
                 We work with what&apos;s close to home where we can. Our rum is distilled in Wales using Welsh water, and the molasses comes partly from a local brewery&apos;s beer production. Good ingredients that would otherwise go to waste.
               </p>
               <p>
-                It&apos;s not about slapping &quot;eco-friendly&quot; on the label. It&apos;s just how we think things should be done. Read more about <Link href="/about/story" className="text-gold-300 hover:text-gold-400 underline">our story</Link> and the values that shape how we work.
+                It&apos;s not about slapping &quot;eco-friendly&quot; on the label. It&apos;s just how we think things should be done. Read more about <Link href="/about/story/" className="text-gold-300 hover:text-gold-400 underline">our story</Link> and the values that shape how we work.
               </p>
 
               <div className="grid sm:grid-cols-2 gap-4 mt-6">
@@ -226,13 +226,13 @@ export default function Sustainability() {
         <section className="py-12 text-center">
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
-              href="/ethos"
+              href="/ethos/"
               className="inline-flex items-center justify-center space-x-2 bg-jerry-green-800 hover:bg-jerry-green-700 text-parchment-50 px-8 py-4 rounded-lg font-semibold border-2 border-gold-500/30 hover:border-gold-500/60 transition-all duration-300"
             >
               <span>Our Ethos</span>
             </Link>
             <Link
-              href="/ingredients"
+              href="/ingredients/"
               className="inline-flex items-center justify-center space-x-2 bg-gold-500 hover:bg-gold-400 text-jerry-green-900 px-8 py-4 rounded-lg font-semibold transition-all duration-300"
             >
               <span>View Ingredients</span>

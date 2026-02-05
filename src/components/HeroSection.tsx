@@ -70,7 +70,7 @@ export default function HeroSection() {
 
             {/* Description */}
             <p className="text-xl text-parchment-200 mb-8 leading-relaxed max-w-xl mx-auto lg:mx-0">
-              After 12 years in the Royal Signals, we wanted a proper drink to share with mates. Something with character, made by people who give a damn. We couldn't find it. So we made it ourselves.
+              Between us, we served 17 years in the Royal Signals. We wanted a proper drink to share with mates. Something with character, made by people who give a damn. We couldn't find it. So we made it ourselves.
             </p>
 
             {/* Launch Countdown */}
@@ -101,14 +101,14 @@ export default function HeroSection() {
             {/* CTA Buttons - Desktop */}
             <div className="hidden sm:flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-8">
               <Link
-                href="/shop/product/jerry-can-spirits-expedition-spiced-rum"
+                href="/shop/product/jerry-can-spirits-expedition-spiced-rum/"
                 className="bg-gradient-to-r from-gold-600 to-gold-500 hover:from-gold-500 hover:to-gold-400 text-jerry-green-900 px-8 py-4 rounded-lg font-semibold uppercase tracking-wide transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 flex items-center justify-center"
               >
                 Pre-order Now
               </Link>
 
               <Link
-                href="/about/story"
+                href="/about/story/"
                 className="border-2 border-gold-500 text-gold-300 hover:text-jerry-green-900 hover:bg-gold-500 px-8 py-4 rounded-lg font-semibold uppercase tracking-wide transition-all duration-300 flex items-center justify-center"
               >
                 Our Story
@@ -118,7 +118,7 @@ export default function HeroSection() {
             {/* CTA Buttons - Mobile (Single Button) */}
             <div className="sm:hidden mb-8">
               <Link
-                href="/shop/product/jerry-can-spirits-expedition-spiced-rum"
+                href="/shop/product/jerry-can-spirits-expedition-spiced-rum/"
                 className="w-full bg-gradient-to-r from-gold-600 to-gold-500 hover:from-gold-500 hover:to-gold-400 text-jerry-green-900 px-8 py-4 rounded-lg font-semibold uppercase tracking-wide transition-all duration-300 shadow-lg hover:shadow-xl flex items-center justify-center"
               >
                 Pre-order Now

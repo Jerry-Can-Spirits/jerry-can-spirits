@@ -115,7 +115,7 @@ export default function IngredientsIndex() {
               We believe you should know exactly what you&apos;re drinking. Each product page includes the full ingredient list, allergen information, and tasting notes.
             </p>
             <p className="text-parchment-400 text-sm">
-              Questions about ingredients? <Link href="/contact" className="text-gold-300 hover:text-gold-400 underline">Get in touch</Link>.
+              Questions about ingredients? <Link href="/contact/" className="text-gold-300 hover:text-gold-400 underline">Get in touch</Link>.
             </p>
           </div>
         </section>
@@ -124,13 +124,13 @@ export default function IngredientsIndex() {
         <section className="py-12 text-center">
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
-              href="/shop"
+              href="/shop/"
               className="inline-flex items-center justify-center space-x-2 bg-gold-500 hover:bg-gold-400 text-jerry-green-900 px-8 py-4 rounded-lg font-semibold transition-all duration-300"
             >
               <span>Shop All Products</span>
             </Link>
             <Link
-              href="/sustainability"
+              href="/sustainability/"
               className="inline-flex items-center justify-center space-x-2 bg-jerry-green-800 hover:bg-jerry-green-700 text-parchment-50 px-8 py-4 rounded-lg font-semibold border-2 border-gold-500/30 hover:border-gold-500/60 transition-all duration-300"
             >
               <span>Sustainability</span>

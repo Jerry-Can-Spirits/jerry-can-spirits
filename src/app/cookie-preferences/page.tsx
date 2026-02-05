@@ -180,13 +180,13 @@ export default function CookiePreferencesPage() {
           </p>
           <div className="flex flex-wrap gap-4">
             <Link
-              href="/cookie-policy"
+              href="/cookie-policy/"
               className="text-gold-300 hover:text-gold-200 underline text-sm transition-colors"
             >
               Cookie Policy
             </Link>
             <Link
-              href="/privacy-policy"
+              href="/privacy-policy/"
               className="text-gold-300 hover:text-gold-200 underline text-sm transition-colors"
             >
               Privacy Policy

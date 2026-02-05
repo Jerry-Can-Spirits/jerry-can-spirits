@@ -297,7 +297,7 @@ export default function Ethos() {
                   <p className="text-parchment-300 mb-6">
                     We steep real botanicals (Madagascan vanilla, Ceylon cinnamon, ginger, orange peel, and warming spices) slowly in Caribbean rum, allowing each ingredient time to impart its true character.
                     Agave syrup adds natural sweetness, and bourbon barrel chips layer in soft oak and warmth. See our{' '}
-                    <Link href="/ingredients/expedition-spiced-rum" className="text-gold-300 hover:text-gold-400 underline">full ingredients list</Link>.
+                    <Link href="/ingredients/expedition-spiced-rum/" className="text-gold-300 hover:text-gold-400 underline">full ingredients list</Link>.
                   </p>
                   
                   {/* Details - Always Visible */}
@@ -466,12 +466,12 @@ export default function Ethos() {
               Try the Rum
             </h2>
             <p className="text-xl text-parchment-300 mb-8 max-w-2xl mx-auto">
-              Enough about us – the proof is in the bottle. Check out our <Link href="/shop/product/expedition-spiced-rum" className="text-gold-300 hover:text-gold-400 underline decoration-gold-500/40 hover:decoration-gold-400 transition-colors">Expedition Spiced Rum</Link> and see what you think.
+              Enough about us – the proof is in the bottle. Check out our <Link href="/shop/product/expedition-spiced-rum/" className="text-gold-300 hover:text-gold-400 underline decoration-gold-500/40 hover:decoration-gold-400 transition-colors">Expedition Spiced Rum</Link> and see what you think.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
-                href="/shop/drinks"
+                href="/shop/drinks/"
                 className="inline-flex items-center justify-center space-x-2 bg-gold-500 hover:bg-gold-400 text-jerry-green-900 px-8 py-4 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105"
               >
                 <span>Shop Our Rum</span>
@@ -481,7 +481,7 @@ export default function Ethos() {
               </Link>
 
               <Link
-                href="/about/story"
+                href="/about/story/"
                 className="inline-flex items-center justify-center space-x-2 bg-jerry-green-800 hover:bg-jerry-green-700 text-parchment-50 px-8 py-4 rounded-lg font-semibold border-2 border-gold-500/30 hover:border-gold-500/60 transition-all duration-300 transform hover:scale-105"
               >
                 <span>Read Our Story</span>

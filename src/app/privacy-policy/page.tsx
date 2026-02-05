@@ -159,7 +159,7 @@ export default function PrivacyPolicy() {
               </h3>
               <p className="text-white">
                 You can manage your cookie preferences through our cookie banner or by using the "Cookie Preferences" button in the website footer. You can also control cookies through your browser settings. For detailed information, see our{' '}
-                <a href="/cookie-policy" className="text-gold-300 hover:text-gold-200 underline">Cookie Policy</a>.
+                <a href="/cookie-policy/" className="text-gold-300 hover:text-gold-200 underline">Cookie Policy</a>.
               </p>
             </section>
 
@@ -284,7 +284,7 @@ export default function PrivacyPolicy() {
               <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20 mb-6">
                 <ul className="list-disc list-inside text-white space-y-2">
                   <li>Email: <a href="mailto:privacy@jerrycanspirits.co.uk" className="text-gold-300 hover:text-gold-200 underline">privacy@jerrycanspirits.co.uk</a></li>
-                  <li>Contact Form: <a href="/contact" className="text-gold-300 hover:text-gold-200 underline">jerrycanspirits.co.uk/contact</a></li>
+                  <li>Contact Form: <a href="/contact/" className="text-gold-300 hover:text-gold-200 underline">jerrycanspirits.co.uk/contact</a></li>
                 </ul>
               </div>
 

@@ -122,19 +122,32 @@ const nextConfig: NextConfig = {
     ]
   },
 
-  // Redirects for URL structure changes
+  // Redirects for URL structure changes and removed content
   async redirects() {
     return [
+      // Old /cocktails/* URLs redirect to field-manual
       {
         source: '/cocktails/:slug*',
         destination: '/field-manual/cocktails/:slug*',
-        permanent: true, // 301 redirect for SEO
+        permanent: true,
+      },
+      // Old /notify page (removed - redirect to homepage)
+      {
+        source: '/notify',
+        destination: '/#newsletter-signup',
+        permanent: true,
+      },
+      // Removed products redirect to category pages
+      {
+        source: '/shop/product/club-ice-tumbler-26cl',
+        destination: '/shop/barware/',
+        permanent: true,
       },
       // Affiliate/Creator collab vanity URLs (Shopify Collabs)
       {
         source: '/PatSmithComedy',
         destination: '/shop/drinks?dt_id=PatSmithComedy',
-        permanent: false, // 302 redirect - don't cache affiliate links
+        permanent: false,
       },
     ]
   },

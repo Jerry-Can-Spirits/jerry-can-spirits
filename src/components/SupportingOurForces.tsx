@@ -118,7 +118,7 @@ export default function SupportingOurForces() {
               Read our full Armed Forces Covenant pledges
             </p>
             <Link
-              href="/armed-forces-covenant"
+              href="/armed-forces-covenant/"
               className="inline-block px-6 py-3 bg-gold-500 hover:bg-gold-400 text-jerry-green-900 font-semibold rounded-lg transition-all duration-300 transform hover:scale-105"
             >
               View Our Commitment
