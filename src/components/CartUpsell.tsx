@@ -115,86 +115,110 @@ export default function CartUpsell() {
     return variants.length > 1 && variants.some(v => v.title !== 'Default Title')
   }
 
+  // Get current image for a product (variant image if available, else product image)
+  const getCurrentImage = (product: ShopifyProduct, variants: ShopifyProductVariant[]) => {
+    const selectedVariantId = selectedVariants[product.id]
+    const selectedVariant = variants.find(v => v.id === selectedVariantId)
+
+    // Use variant image if available, otherwise fall back to product image
+    if (selectedVariant?.image) {
+      return selectedVariant.image
+    }
+    return product.images?.[0] || null
+  }
+
   return (
     <div className="py-4 border-t border-gold-500/20">
       <h3 className="text-sm font-semibold text-gold-300 mb-3 uppercase tracking-wide">
         Complete Your Order
       </h3>
 
-      <div className="flex gap-3 overflow-x-auto pb-2 -mx-2 px-2 scrollbar-hide">
-        {availableUpsells.map(({ product, availableVariants }) => (
-          <div
-            key={product.id}
-            className="flex-shrink-0 w-[140px] bg-jerry-green-800/30 rounded-lg border border-gold-500/20 overflow-hidden"
-          >
-            {/* Product Image */}
-            <div className="relative aspect-square bg-jerry-green-800/20">
-              {product.images?.[0] ? (
-                <Image
-                  src={product.images[0].url}
-                  alt={product.images[0].altText || product.title}
-                  fill
-                  className="object-contain p-2"
-                  sizes="140px"
-                />
-              ) : (
-                <div className="w-full h-full flex items-center justify-center">
-                  <svg
-                    className="w-8 h-8 text-gold-500/30"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
+      {/* 2x2 Grid Layout */}
+      <div className="grid grid-cols-2 gap-3">
+        {availableUpsells.map(({ product, availableVariants }) => {
+          const currentImage = getCurrentImage(product, availableVariants)
+
+          return (
+            <div
+              key={product.id}
+              className="bg-jerry-green-800/30 rounded-lg border border-gold-500/20 overflow-hidden"
+            >
+              {/* Product Image - updates based on selected variant */}
+              <div className="relative aspect-square bg-jerry-green-800/20">
+                {currentImage ? (
+                  <Image
+                    src={currentImage.url}
+                    alt={currentImage.altText || product.title}
+                    fill
+                    className="object-contain p-2"
+                    sizes="(max-width: 480px) 45vw, 200px"
+                  />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center">
+                    <svg
+                      className="w-8 h-8 text-gold-500/30"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
+                      />
+                    </svg>
+                  </div>
+                )}
+              </div>
+
+              {/* Product Info */}
+              <div className="p-2 space-y-2">
+                <h4 className="text-xs font-medium text-white line-clamp-2 leading-tight">
+                  {product.title}
+                </h4>
+
+                {/* Variant Dropdown - only show if multiple variants */}
+                {hasMultipleVariants(availableVariants) && (
+                  <select
+                    id={`variant-${product.id}`}
+                    name={`variant-${product.id}`}
+                    value={selectedVariants[product.id] || ''}
+                    onChange={(e) => handleVariantChange(product.id, e.target.value)}
+                    className="w-full px-2 py-1.5 text-xs bg-jerry-green-900 border border-gold-500/30 rounded text-white cursor-pointer focus:outline-none focus:border-gold-400 focus:ring-1 focus:ring-gold-400/50"
+                    style={{ colorScheme: 'dark' }}
                   >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
-                    />
-                  </svg>
+                    {availableVariants.map((variant) => (
+                      <option
+                        key={variant.id}
+                        value={variant.id}
+                        className="bg-jerry-green-900 text-white py-1"
+                      >
+                        {variant.title}
+                      </option>
+                    ))}
+                  </select>
+                )}
+
+                <div className="flex items-center justify-between">
+                  <span className="text-sm font-semibold text-gold-400">
+                    {formatPrice(
+                      product.priceRange.minVariantPrice.amount,
+                      product.priceRange.minVariantPrice.currencyCode
+                    )}
+                  </span>
+                  <button
+                    onClick={() => handleAddToCart(product.id)}
+                    disabled={isLoading || addingProductId === product.id}
+                    className="px-2 py-1 bg-gold-500 hover:bg-gold-400 text-jerry-green-900 text-xs font-semibold rounded transition-colors disabled:opacity-50"
+                  >
+                    {addingProductId === product.id ? '...' : 'Add'}
+                  </button>
                 </div>
-              )}
-            </div>
-
-            {/* Product Info */}
-            <div className="p-2 space-y-2">
-              <h4 className="text-xs font-medium text-white line-clamp-2 leading-tight">
-                {product.title}
-              </h4>
-
-              {/* Variant Dropdown - only show if multiple variants */}
-              {hasMultipleVariants(availableVariants) && (
-                <select
-                  value={selectedVariants[product.id] || ''}
-                  onChange={(e) => handleVariantChange(product.id, e.target.value)}
-                  className="w-full px-2 py-1 text-xs bg-jerry-green-800/50 border border-gold-500/20 rounded text-white focus:outline-none focus:border-gold-400"
-                >
-                  {availableVariants.map((variant) => (
-                    <option key={variant.id} value={variant.id}>
-                      {variant.title}
-                    </option>
-                  ))}
-                </select>
-              )}
-
-              <div className="flex items-center justify-between">
-                <span className="text-sm font-semibold text-gold-400">
-                  {formatPrice(
-                    product.priceRange.minVariantPrice.amount,
-                    product.priceRange.minVariantPrice.currencyCode
-                  )}
-                </span>
-                <button
-                  onClick={() => handleAddToCart(product.id)}
-                  disabled={isLoading || addingProductId === product.id}
-                  className="px-2 py-1 bg-gold-500 hover:bg-gold-400 text-jerry-green-900 text-xs font-semibold rounded transition-colors disabled:opacity-50"
-                >
-                  {addingProductId === product.id ? '...' : 'Add'}
-                </button>
               </div>
             </div>
-          </div>
-        ))}
+          )
+        })}
       </div>
     </div>
   )
