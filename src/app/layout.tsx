@@ -1,12 +1,18 @@
 import type { Metadata } from "next";
 import Script from "next/script";
+import dynamic from "next/dynamic";
 import { Inter, Playfair_Display, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import PromoBanner from "@/components/PromoBanner";
-import CartographicBackground from "@/components/CartographicBackground";
 import ClientWrapper from "@/components/ClientWrapper";
+
+// Lazy load CartographicBackground for code splitting
+const CartographicBackground = dynamic(
+  () => import("@/components/CartographicBackground"),
+  { loading: () => null }
+);
 // ConsentBanner replaced by Cookiebot CMP
 // import ConsentBanner from "@/components/ConsentBanner";
 import ServiceWorkerRegistration from "@/components/ServiceWorkerRegistration";
@@ -107,7 +113,6 @@ export default function RootLayout({
                 functionality_storage: "denied",
                 personalization_storage: "denied",
                 security_storage: "granted",
-                wait_for_update: 500,
               });
               gtag("set", "ads_data_redaction", true);
               gtag("set", "url_passthrough", false);
@@ -115,13 +120,14 @@ export default function RootLayout({
           }}
         />
 
-        {/* Cookiebot Consent Management - must be first CMP script */}
+        {/* Cookiebot Consent Management - loads after page interactive for better LCP */}
+        {/* Tracking is already blocked by default consent settings above */}
         <Script
           id="Cookiebot"
           src="https://consent.cookiebot.com/uc.js"
           data-cbid="ac4fd2fb-f5c7-435e-a8fb-2fe80936e682"
           data-blockingmode="auto"
-          strategy="beforeInteractive"
+          strategy="afterInteractive"
         />
 
         <link rel="manifest" href="/manifest.json" />

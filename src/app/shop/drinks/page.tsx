@@ -415,7 +415,7 @@ export default async function DrinksPageTest() {
                   "name": "How should I drink spiced rum?",
                   "acceptedAnswer": {
                     "@type": "Answer",
-                    "text": "However you like it, honestly. Expedition Spiced Rum is designed to work three ways: neat (to taste the full flavour profile), over ice (opens up as it dilutes slightly), or in cocktails (holds its character against mixers). Classic pairings include ginger beer for a Dark 'n' Stormy, cola for simplicity, or apple juice for something different. Check our Field Manual for cocktail recipes."
+                    "text": "However you like it, honestly. Expedition Spiced Rum is designed to work three ways: neat (to taste the full flavour profile), over ice (opens up as it dilutes slightly), or in cocktails (holds its character against mixers). Classic pairings include ginger beer for a Storm and Spice, cola for simplicity, or apple juice for something different. Check our Field Manual for cocktail recipes."
                   }
                 },
                 {
@@ -474,7 +474,7 @@ export default async function DrinksPageTest() {
             <div className="border-b border-gold-500/10 pb-6">
               <h3 className="text-lg font-semibold text-gold-300 mb-3">How should I drink spiced rum?</h3>
               <p className="text-parchment-200 leading-relaxed">
-                However you like it, honestly. Expedition Spiced Rum is designed to work three ways: neat (to taste the full flavour profile), over ice (opens up as it dilutes slightly), or in cocktails (holds its character against mixers). Classic pairings include ginger beer for a Dark 'n' Stormy, cola for simplicity, or apple juice for something different. Check our <Link href="/field-manual/cocktails" className="text-gold-400 hover:text-gold-300 underline">Field Manual</Link> for cocktail recipes.
+                However you like it, honestly. Expedition Spiced Rum is designed to work three ways: neat (to taste the full flavour profile), over ice (opens up as it dilutes slightly), or in cocktails (holds its character against mixers). Classic pairings include ginger beer for a Storm and Spice, cola for simplicity, or apple juice for something different. Check our <Link href="/field-manual/cocktails" className="text-gold-400 hover:text-gold-300 underline">Field Manual</Link> for cocktail recipes.
               </p>
             </div>
 

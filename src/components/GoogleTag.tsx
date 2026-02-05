@@ -18,11 +18,11 @@ export default function GoogleTag() {
       {/* Google tag (gtag.js) */}
       <Script
         src="https://www.googletagmanager.com/gtag/js?id=AW-17823586670"
-        strategy="afterInteractive"
+        strategy="lazyOnload"
       />
       <Script
         id="google-tag-config"
-        strategy="afterInteractive"
+        strategy="lazyOnload"
         dangerouslySetInnerHTML={{
           __html: `
             window.dataLayer = window.dataLayer || [];

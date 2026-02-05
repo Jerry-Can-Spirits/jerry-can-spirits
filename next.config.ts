@@ -122,19 +122,69 @@ const nextConfig: NextConfig = {
     ]
   },
 
-  // Redirects for URL structure changes
+  // Redirects for URL structure changes and removed content
   async redirects() {
     return [
+      // Old /cocktails/* URLs redirect to field-manual
       {
         source: '/cocktails/:slug*',
         destination: '/field-manual/cocktails/:slug*',
-        permanent: true, // 301 redirect for SEO
+        permanent: true,
+      },
+      // Old /notify page (removed - redirect to homepage)
+      {
+        source: '/notify',
+        destination: '/#newsletter-signup',
+        permanent: true,
+      },
+      // Removed products redirect to category pages
+      {
+        source: '/shop/product/club-ice-tumbler-26cl',
+        destination: '/shop/barware/',
+        permanent: true,
+      },
+      // Non-existent field-manual content redirects to parent pages
+      {
+        source: '/field-manual/ingredients/aged-rum',
+        destination: '/field-manual/ingredients/',
+        permanent: true,
+      },
+      {
+        source: '/field-manual/equipment/punch-cup',
+        destination: '/field-manual/equipment/',
+        permanent: true,
+      },
+      {
+        source: '/field-manual/equipment/irish-coffee-mug',
+        destination: '/field-manual/equipment/',
+        permanent: true,
+      },
+      // Cocktails that don't exist in CMS redirect to cocktails index
+      {
+        source: '/field-manual/cocktails/negroni',
+        destination: '/field-manual/cocktails/',
+        permanent: true,
+      },
+      {
+        source: '/field-manual/cocktails/martini-gin',
+        destination: '/field-manual/cocktails/',
+        permanent: true,
+      },
+      {
+        source: '/field-manual/cocktails/spiced-rum-punch',
+        destination: '/field-manual/cocktails/',
+        permanent: true,
+      },
+      {
+        source: '/field-manual/cocktails/hot-buttered-rum',
+        destination: '/field-manual/cocktails/',
+        permanent: true,
       },
       // Affiliate/Creator collab vanity URLs (Shopify Collabs)
       {
         source: '/PatSmithComedy',
         destination: '/shop/drinks?dt_id=PatSmithComedy',
-        permanent: false, // 302 redirect - don't cache affiliate links
+        permanent: false,
       },
     ]
   },

@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useMemo } from 'react'
 
 interface Coordinate {
   lat: string
@@ -54,45 +54,36 @@ export default function CartographicBackground({
     return decimal;
   };
 
-  // Military deployment and expedition coordinate easter eggs - well-spaced for visibility
-  const storyCoordinatesRaw: Array<{lat: string; lng: string; name: string; description: string}> = [
-    // UK brand story locations
-    { lat: "53°49'N", lng: "3°03'W", name: "", description: "Blackpool Tower" },
-    { lat: "52°30'N", lng: "3°18'W", name: "", description: "Newtown Wales" },
-    
-    // Well-spaced international locations - no overlaps
-    { lat: "18°44'N", lng: "70°10'W", name: "", description: "Caribbean" },
-    { lat: "50°00'N", lng: "8°00'E", name: "", description: "Germany" },
-    { lat: "46°00'N", lng: "2°00'E", name: "", description: "France" },
-    { lat: "65°00'N", lng: "15°00'E", name: "", description: "Norway" },
-    { lat: "32°00'N", lng: "100°00'W", name: "", description: "Texas" },
-    { lat: "37°00'N", lng: "120°00'W", name: "", description: "California" },
-    { lat: "34°00'N", lng: "69°00'E", name: "", description: "Afghanistan" },
-    { lat: "52°00'S", lng: "59°00'W", name: "", description: "Falkland Islands" },
-    { lat: "64°00'N", lng: "22°00'W", name: "", description: "Iceland" },
-    { lat: "72°00'N", lng: "25°00'W", name: "", description: "Greenland" },
-    { lat: "36°00'N", lng: "78°00'W", name: "", description: "North Carolina" },
-    { lat: "25°00'N", lng: "55°00'E", name: "", description: "Dubai" },
-    { lat: "35°30'N", lng: "139°30'E", name: "", description: "Tokyo" },
-    { lat: "1°00'N", lng: "104°00'E", name: "", description: "Singapore" },
-    { lat: "34°00'S", lng: "151°00'E", name: "", description: "Sydney" }
-  ];
+  // Memoize coordinate calculations to avoid recalculating on every render
+  const storyCoordinates = useMemo<Coordinate[]>(() => {
+    // Military deployment and expedition coordinate easter eggs
+    const rawCoords = [
+      { lat: "53°49'N", lng: "3°03'W", name: "", description: "Blackpool Tower" },
+      { lat: "52°30'N", lng: "3°18'W", name: "", description: "Newtown Wales" },
+      { lat: "18°44'N", lng: "70°10'W", name: "", description: "Caribbean" },
+      { lat: "50°00'N", lng: "8°00'E", name: "", description: "Germany" },
+      { lat: "46°00'N", lng: "2°00'E", name: "", description: "France" },
+      { lat: "65°00'N", lng: "15°00'E", name: "", description: "Norway" },
+      { lat: "32°00'N", lng: "100°00'W", name: "", description: "Texas" },
+      { lat: "37°00'N", lng: "120°00'W", name: "", description: "California" },
+      { lat: "34°00'N", lng: "69°00'E", name: "", description: "Afghanistan" },
+      { lat: "52°00'S", lng: "59°00'W", name: "", description: "Falkland Islands" },
+      { lat: "64°00'N", lng: "22°00'W", name: "", description: "Iceland" },
+      { lat: "72°00'N", lng: "25°00'W", name: "", description: "Greenland" },
+      { lat: "36°00'N", lng: "78°00'W", name: "", description: "North Carolina" },
+      { lat: "25°00'N", lng: "55°00'E", name: "", description: "Dubai" },
+      { lat: "35°30'N", lng: "139°30'E", name: "", description: "Tokyo" },
+      { lat: "1°00'N", lng: "104°00'E", name: "", description: "Singapore" },
+      { lat: "34°00'S", lng: "151°00'E", name: "", description: "Sydney" }
+    ];
 
-  // Convert all coordinates to geographically accurate positions
-  const storyCoordinates: Coordinate[] = storyCoordinatesRaw.map(coord => {
-    const lat = parseCoordinate(coord.lat);
-    const lng = parseCoordinate(coord.lng);
-    const { x, y } = latLngToXY(lat, lng);
-    
-    return {
-      lat: coord.lat,
-      lng: coord.lng,
-      name: coord.name,
-      description: coord.description,
-      x: x,
-      y: y
-    };
-  });
+    return rawCoords.map(coord => {
+      const lat = parseCoordinate(coord.lat);
+      const lng = parseCoordinate(coord.lng);
+      const { x, y } = latLngToXY(lat, lng);
+      return { ...coord, x, y };
+    });
+  }, []);
 
   if (!mounted) return null
 

@@ -290,7 +290,7 @@ export default async function FieldManualHome() {
                   </td>
                   <td className="py-4 px-4">Pour, stir, build in glass</td>
                   <td className="py-4 px-4">Common spirits, basic mixers</td>
-                  <td className="py-4 px-4">Rum & Coke, Dark &apos;n&apos; Stormy, Mojito</td>
+                  <td className="py-4 px-4">Rum & Coke, Storm and Spice, Mojito</td>
                 </tr>
                 <tr className="border-b border-gold-500/10">
                   <td className="py-4 px-4">
@@ -327,7 +327,7 @@ export default async function FieldManualHome() {
               <div className="space-y-2 text-sm">
                 <p><span className="text-gold-400">Technique:</span> <span className="text-parchment-200">Pour, stir, build in glass</span></p>
                 <p><span className="text-gold-400">Ingredients:</span> <span className="text-parchment-200">Common spirits, basic mixers</span></p>
-                <p><span className="text-gold-400">Examples:</span> <span className="text-parchment-200">Rum & Coke, Dark &apos;n&apos; Stormy, Mojito</span></p>
+                <p><span className="text-gold-400">Examples:</span> <span className="text-parchment-200">Rum & Coke, Storm and Spice, Mojito</span></p>
               </div>
             </div>
 
