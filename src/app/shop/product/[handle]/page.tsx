@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation'
 import Image from 'next/image'
 import { getProduct, getSmartRecommendations, type ShopifyProduct, type ShopifyMetafield } from '@/lib/shopify'
 import AddToCartButton from '@/components/AddToCartButton'
+import ProductVariantSelector from '@/components/ProductVariantSelector'
 import ProductImageGallery from '@/components/ProductImageGallery'
 import StructuredData from '@/components/StructuredData'
 import ProductPageTracking from '@/components/ProductPageTracking'
@@ -466,36 +467,30 @@ export default async function ProductPage({
               </div>
             )}
 
-            {/* Variants */}
-            {product.variants && product.variants.length > 1 && (
-              <div className="space-y-3">
-                <h3 className="text-lg font-semibold text-gold-300">Options:</h3>
-                <div className="space-y-2">
-                  {product.variants.map((variant) => (
-                    <div
-                      key={variant.id}
-                      className="flex justify-between items-center p-3 bg-jerry-green-800/20 rounded-lg border border-gold-500/20"
-                    >
-                      <span className="text-parchment-200">{variant.title}</span>
-                      <span className="font-semibold text-gold-400">
-                        {formatPrice(variant.price.amount, variant.price.currencyCode)}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Add to Cart */}
+            {/* Variant Selector & Add to Cart */}
             <div className="pt-6">
-              {firstVariant && firstVariant.availableForSale ? (
-                <AddToCartButton
-                  variantId={firstVariant.id}
-                  productTitle={product.title}
-                  productId={product.id}
-                  price={parseFloat(product.priceRange.minVariantPrice.amount)}
-                  currency={product.priceRange.minVariantPrice.currencyCode}
-                />
+              {product.variants && product.variants.length > 0 ? (
+                product.variants.some(v => v.availableForSale) ? (
+                  <ProductVariantSelector
+                    variants={product.variants}
+                    productTitle={product.title}
+                    productId={product.id}
+                    productImages={product.images}
+                    currencyCode={product.priceRange.minVariantPrice.currencyCode}
+                  />
+                ) : (
+                  <div className="space-y-4">
+                    <button
+                      disabled
+                      className="w-full px-8 py-4 bg-jerry-green-800/30 text-parchment-400 font-bold rounded-lg cursor-not-allowed"
+                    >
+                      Currently Unavailable
+                    </button>
+                    <p className="text-sm text-red-400 text-center">
+                      This product is not available for purchase at the moment.
+                    </p>
+                  </div>
+                )
               ) : (
                 <div className="space-y-4">
                   <button
@@ -504,15 +499,6 @@ export default async function ProductPage({
                   >
                     Currently Unavailable
                   </button>
-                  <p className="text-sm text-red-400 text-center">
-                    This product is not available for purchase at the moment.
-                    {firstVariant && (
-                      <span className="block mt-2 text-xs font-mono bg-red-900/20 p-2 rounded">
-                        Debug: availableForSale={String(firstVariant.availableForSale)},
-                        quantityAvailable={firstVariant.quantityAvailable ?? 'null'}
-                      </span>
-                    )}
-                  </p>
                 </div>
               )}
 
