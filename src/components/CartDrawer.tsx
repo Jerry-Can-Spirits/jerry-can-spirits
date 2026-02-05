@@ -4,6 +4,7 @@ import { useCart } from '@/contexts/CartContext'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useState, useEffect } from 'react'
+import CartUpsell from './CartUpsell'
 
 // Helper to format price
 function formatPrice(amount: string, currencyCode: string): string {
@@ -241,6 +242,9 @@ export default function CartDrawer() {
                     </div>
                   </div>
                 ))}
+
+                {/* Cross-sell Products */}
+                <CartUpsell />
               </div>
             )}
           </div>
