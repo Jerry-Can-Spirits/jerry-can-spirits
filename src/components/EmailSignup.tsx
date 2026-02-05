@@ -112,6 +112,9 @@ export default function EmailSignup() {
             <div className="flex flex-col sm:flex-row gap-4 mb-4">
               <input
                 type="text"
+                id="newsletter-firstname"
+                name="newsletter-firstname"
+                autoComplete="given-name"
                 value={firstName}
                 onChange={(e) => setFirstName(e.target.value)}
                 placeholder="First name"
@@ -119,6 +122,9 @@ export default function EmailSignup() {
               />
               <input
                 type="email"
+                id="newsletter-email"
+                name="newsletter-email"
+                autoComplete="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Email address"

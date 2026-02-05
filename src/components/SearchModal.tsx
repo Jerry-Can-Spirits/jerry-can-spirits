@@ -176,6 +176,8 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                   <input
                     ref={inputRef}
                     type="text"
+                    id="site-search"
+                    name="site-search"
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
                     placeholder="Search products, guides, cocktails, equipment..."

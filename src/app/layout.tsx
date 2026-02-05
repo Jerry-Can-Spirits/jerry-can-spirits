@@ -116,6 +116,16 @@ export default function RootLayout({
               });
               gtag("set", "ads_data_redaction", true);
               gtag("set", "url_passthrough", false);
+
+              // Initialize Zaraz stub to prevent Cookiebot conflicts
+              // Cloudflare Zaraz is injected at edge - this ensures data structures exist
+              window.zaraz = window.zaraz || {};
+              window.zaraz.q = window.zaraz.q || [];
+              window.zaraz.consent = window.zaraz.consent || {
+                set: function(){},
+                setAll: function(){},
+                get: function(){ return undefined; }
+              };
             `,
           }}
         />

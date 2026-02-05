@@ -144,6 +144,8 @@ export default function EquipmentClient({ equipment }: EquipmentClientProps) {
             <div className="relative">
               <input
                 type="text"
+                id="equipment-search"
+                name="equipment-search"
                 placeholder="Search equipment..."
                 value={searchQuery}
                 onChange={(e) => handleSearchChange(e.target.value)}

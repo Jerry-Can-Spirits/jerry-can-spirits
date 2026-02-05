@@ -170,9 +170,11 @@ export default function ConsentBanner() {
                   <h4 className="text-white font-medium">Analytics Cookies</h4>
                   <p className="text-white text-xs">Help us understand how visitors interact with our website</p>
                 </div>
-                <label className="relative inline-flex items-center cursor-pointer">
+                <label htmlFor="consent-analytics" className="relative inline-flex items-center cursor-pointer">
                   <input
                     type="checkbox"
+                    id="consent-analytics"
+                    name="consent-analytics"
                     className="sr-only"
                     checked={localPreferences.analytics}
                     onChange={(e) => setLocalPreferences(prev => ({ ...prev, analytics: e.target.checked }))}
@@ -188,9 +190,11 @@ export default function ConsentBanner() {
                   <h4 className="text-white font-medium">Marketing Cookies</h4>
                   <p className="text-white text-xs">Used for social media advertising (Facebook Pixel), email marketing (Klaviyo), customer reviews (Trustpilot), and promotional campaigns</p>
                 </div>
-                <label className="relative inline-flex items-center cursor-pointer">
+                <label htmlFor="consent-marketing" className="relative inline-flex items-center cursor-pointer">
                   <input
                     type="checkbox"
+                    id="consent-marketing"
+                    name="consent-marketing"
                     className="sr-only"
                     checked={localPreferences.marketing}
                     onChange={(e) => setLocalPreferences(prev => ({ ...prev, marketing: e.target.checked }))}
