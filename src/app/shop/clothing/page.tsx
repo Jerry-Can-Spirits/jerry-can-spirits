@@ -78,7 +78,7 @@ export default async function ClothingPage() {
             </div>
 
             <Link
-              href="/shop"
+              href="/shop/"
               className="inline-block px-8 py-3 bg-gold-500 text-jerry-green-900 font-semibold rounded-lg hover:bg-gold-400 transition-colors"
             >
               Back to Shop

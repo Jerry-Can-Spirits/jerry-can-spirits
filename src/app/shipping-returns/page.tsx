@@ -262,7 +262,7 @@ export default function ShippingReturns() {
                   </p>
                   <p className="text-white">
                     <strong className="text-gold-300">Contact:</strong>{' '}
-                    <a href="/contact" className="text-gold-300 hover:text-gold-200 underline">
+                    <a href="/contact/" className="text-gold-300 hover:text-gold-200 underline">
                       jerrycanspirits.co.uk/contact
                     </a>
                   </p>

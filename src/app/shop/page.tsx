@@ -59,21 +59,21 @@ export default function ShopPage() {
         {/* Shop Categories */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-8">
           <Link
-            href="/shop/drinks"
+            href="/shop/drinks/"
             className="p-6 bg-jerry-green-800/20 rounded-lg border border-gold-500/20 hover:border-gold-500/40 hover:bg-jerry-green-800/30 transition-all cursor-pointer group"
           >
             <h3 className="font-semibold text-gold-500 mb-2 group-hover:text-gold-400 transition-colors">Premium Rum</h3>
             <p className="text-sm text-parchment-300">British crafted spirits for discerning adventurers</p>
           </Link>
           <Link
-            href="/shop/barware"
+            href="/shop/barware/"
             className="p-6 bg-jerry-green-800/20 rounded-lg border border-gold-500/20 hover:border-gold-500/40 hover:bg-jerry-green-800/30 transition-all cursor-pointer group"
           >
             <h3 className="font-semibold text-gold-500 mb-2 group-hover:text-gold-400 transition-colors">Barware</h3>
             <p className="text-sm text-parchment-300">Professional tools for the home mixologist</p>
           </Link>
           <Link
-            href="/shop/clothing"
+            href="/shop/clothing/"
             className="p-6 bg-jerry-green-800/20 rounded-lg border border-gold-500/20 hover:border-gold-500/40 hover:bg-jerry-green-800/30 transition-all cursor-pointer group"
           >
             <h3 className="font-semibold text-gold-500 mb-2 group-hover:text-gold-400 transition-colors">Expedition Gear</h3>
@@ -90,7 +90,7 @@ export default function ShopPage() {
             Join the Waitlist
           </Link>
           <Link
-            href="/field-manual"
+            href="/field-manual/"
             className="px-8 py-3 border-2 border-gold-500 text-gold-500 font-semibold rounded-lg hover:bg-gold-500/10 transition-colors"
           >
             Explore Field Manual

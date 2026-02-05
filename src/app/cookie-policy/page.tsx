@@ -292,7 +292,7 @@ export default function CookiePolicy() {
                   </p>
                   <p className="text-white">
                     <strong className="text-gold-300">Website:</strong>{' '}
-                    <a href="/contact" className="text-gold-300 hover:text-gold-200 underline">Contact Form</a>
+                    <a href="/contact/" className="text-gold-300 hover:text-gold-200 underline">Contact Form</a>
                   </p>
                   <p className="text-white">
                     <strong className="text-gold-300">Address:</strong><br />

@@ -207,7 +207,7 @@ export default function Footer() {
                     <div className="grid grid-cols-2 gap-3">
                       {/* AFC Logo Badge */}
                       <Link
-                        href="/armed-forces-covenant"
+                        href="/armed-forces-covenant/"
                         className="block bg-white rounded-lg p-3 hover:shadow-lg transition-all duration-200 hover:scale-105"
                         onClick={() => trackFooterClick('AFC Logo', 'Armed Forces Covenant Page')}
                         aria-label="View our Armed Forces Covenant commitment"
@@ -252,7 +252,7 @@ export default function Footer() {
 
                     {/* ERS Bronze Award Badge - Full Width */}
                     <Link
-                      href="/armed-forces-covenant"
+                      href="/armed-forces-covenant/"
                       className="block bg-white rounded-lg p-3 hover:shadow-lg transition-all duration-200 hover:scale-105"
                       onClick={() => trackFooterClick('ERS Bronze Badge', 'Armed Forces Covenant Page')}
                       aria-label="Armed Forces Covenant Employer Recognition Scheme Bronze Award"
@@ -487,7 +487,7 @@ export default function Footer() {
                   <div>
                     <p className="text-gold-300 font-semibold mb-1">More Contact Options</p>
                     <Link
-                      href="/contact"
+                      href="/contact/"
                       className="text-jerry-green-400 hover:text-jerry-green-300 underline transition-colors duration-200"
                       onClick={() => trackFooterClick('Contact', 'Contact Page')}
                     >

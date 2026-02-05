@@ -410,7 +410,7 @@ export default async function EquipmentDetailPage({ params }: { params: Promise<
             {/* Back to Equipment - Mobile Order 14 */}
             <div className="order-[14] lg:order-none pt-6">
               <Link
-                href="/field-manual/equipment"
+                href="/field-manual/equipment/"
                 className="inline-flex items-center gap-2 px-6 py-3 bg-gold-500/20 border border-gold-500/40 text-gold-300 rounded-lg hover:bg-gold-500/30 transition-colors font-semibold"
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

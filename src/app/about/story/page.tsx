@@ -382,7 +382,7 @@ export default function OurStory() {
               David vs the Goliaths
             </h3>
             <p className="text-lg text-parchment-300 leading-relaxed max-w-4xl mx-auto mb-6">
-              We&apos;re not trying to compete with the marketing budgets of massive corporations with teams of marketing gurus. We&apos;re competing on authenticity, on care, on the kind of attention to detail that only comes when you genuinely care about every single thing you do. When you&apos;re living off your own savings, when you&apos;re figuring out regulations as you go, when you&apos;re building every single relationship from scratch, you simply can&apos;t afford to cut corners. Read more about <Link href="/ethos" className="text-gold-300 hover:text-gold-400 underline">our values</Link>.
+              We&apos;re not trying to compete with the marketing budgets of massive corporations with teams of marketing gurus. We&apos;re competing on authenticity, on care, on the kind of attention to detail that only comes when you genuinely care about every single thing you do. When you&apos;re living off your own savings, when you&apos;re figuring out regulations as you go, when you&apos;re building every single relationship from scratch, you simply can&apos;t afford to cut corners. Read more about <Link href="/ethos/" className="text-gold-300 hover:text-gold-400 underline">our values</Link>.
             </p>
             <div className="text-gold-300 text-sm font-semibold uppercase tracking-wider">
               Small Team. Big Dreams. No Compromise. Because We Can&apos;t Afford to.
@@ -617,21 +617,21 @@ export default function OurStory() {
             <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20">
               <h3 className="text-lg font-semibold text-white mb-3">Who owns Jerry Can Spirits?</h3>
               <p className="text-parchment-300">
-                Jerry Can Spirits is run by <Link href="/about/team/dan-freeman" className="text-gold-300 hover:text-gold-400 underline">Dan</Link> and <Link href="/about/team/rhys-williams" className="text-gold-300 hover:text-gold-400 underline">Rhys</Link>, who both served in the Royal Corps of Signals. We&apos;re self-funded and doing everything ourselves – learning as we go, making mistakes, and figuring it out along the way.
+                Jerry Can Spirits is run by <Link href="/about/team/dan-freeman/" className="text-gold-300 hover:text-gold-400 underline">Dan</Link> and <Link href="/about/team/rhys-williams/" className="text-gold-300 hover:text-gold-400 underline">Rhys</Link>, who both served in the Royal Corps of Signals. We&apos;re self-funded and doing everything ourselves – learning as we go, making mistakes, and figuring it out along the way.
               </p>
             </div>
 
             <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20">
               <h3 className="text-lg font-semibold text-white mb-3">Is Jerry Can Spirits veteran owned?</h3>
               <p className="text-parchment-300">
-                Yes, we&apos;re British veteran owned. We both served in the Royal Corps of Signals before getting into spirits. The military taught us to appreciate kit that just works – nothing flashy, just reliable. That mindset stuck with us. Meet <Link href="/about/team" className="text-gold-300 hover:text-gold-400 underline">the team</Link>.
+                Yes, we&apos;re British veteran owned. We both served in the Royal Corps of Signals before getting into spirits. The military taught us to appreciate kit that just works – nothing flashy, just reliable. That mindset stuck with us. Meet <Link href="/about/team/" className="text-gold-300 hover:text-gold-400 underline">the team</Link>.
               </p>
             </div>
 
             <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20">
               <h3 className="text-lg font-semibold text-white mb-3">Where is Jerry Can Spirits based?</h3>
               <p className="text-parchment-300">
-                We&apos;re based in the UK. It&apos;s a home-office operation – nothing glamorous, just us working away. Our <Link href="/shop/product/expedition-spiced-rum" className="text-gold-300 hover:text-gold-400 underline">Expedition Spiced Rum</Link> is made with Caribbean rum and molasses from a Welsh brewery, blended right here in Britain.
+                We&apos;re based in the UK. It&apos;s a home-office operation – nothing glamorous, just us working away. Our <Link href="/shop/product/expedition-spiced-rum/" className="text-gold-300 hover:text-gold-400 underline">Expedition Spiced Rum</Link> is made with Caribbean rum and molasses from a Welsh brewery, blended right here in Britain.
               </p>
             </div>
 
@@ -731,7 +731,7 @@ export default function OurStory() {
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
               <Link
-                href="/shop/drinks"
+                href="/shop/drinks/"
                 className="inline-flex items-center space-x-2 bg-gold-500 hover:bg-gold-400 text-jerry-green-900 px-8 py-4 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105"
               >
                 <span>Shop Our Rum</span>

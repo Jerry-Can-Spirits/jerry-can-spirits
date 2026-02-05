@@ -49,7 +49,7 @@ export default function Navigation() {
           {/* CTA Button - Desktop */}
           <div className="hidden md:block">
             <Link
-              href="/shop"
+              href="/shop/"
               className="bg-jerry-green-500 hover:bg-jerry-green-400 text-parchment-50 px-6 py-2 rounded-md text-sm font-semibold uppercase tracking-wide transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-105"
             >
               Shop Now
@@ -108,7 +108,7 @@ export default function Navigation() {
             ))}
             <div className="px-3 py-2">
               <Link
-                href="/shop"
+                href="/shop/"
                 className="bg-jerry-green-500 hover:bg-jerry-green-400 text-parchment-50 block w-full text-center px-6 py-2 rounded-md text-sm font-semibold uppercase tracking-wide transition-all duration-200"
                 onClick={() => setIsOpen(false)}
               >

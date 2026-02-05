@@ -144,7 +144,7 @@ export default function SitemapPage() {
         <div className="mt-12 p-6 bg-jerry-green-800/40 backdrop-blur-sm rounded-xl border border-gold-500/20 text-center">
           <p className="text-parchment-300 text-sm">
             Need help finding something?{' '}
-            <Link href="/contact" className="text-gold-300 hover:text-gold-200 underline">
+            <Link href="/contact/" className="text-gold-300 hover:text-gold-200 underline">
               Contact us
             </Link>{' '}
             and we'll be happy to assist.

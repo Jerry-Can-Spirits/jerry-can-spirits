@@ -89,7 +89,7 @@ export default async function DrinksPageTest() {
             </div>
 
             <Link
-              href="/shop"
+              href="/shop/"
               className="inline-block px-8 py-3 bg-gold-500 text-jerry-green-900 font-semibold rounded-lg hover:bg-gold-400 transition-colors"
             >
               Back to Shop
@@ -132,7 +132,7 @@ export default async function DrinksPageTest() {
             </div>
 
             <Link
-              href="/shop"
+              href="/shop/"
               className="inline-block px-8 py-3 bg-gold-500 text-jerry-green-900 font-semibold rounded-lg hover:bg-gold-400 transition-colors"
             >
               Back to Shop
@@ -326,7 +326,7 @@ export default async function DrinksPageTest() {
                 The flavour profile opens with Madagascan vanilla and Ceylon cinnamon, moves into warming ginger and cassia through the middle, and finishes smooth with bourbon oak and a hint of citrus. It's designed to drink neat, work in cocktails, and hold its own over ice.
               </p>
               <p>
-                We're not trying to be everything to everyone. This is spiced rum made by people who actually drink it - after 12 years of military service, we know what a proper drink should taste like at the end of a long day.
+                We're not trying to be everything to everyone. This is spiced rum made by people who actually drink it - with 17 years of military service between us, we know what a proper drink should taste like at the end of a long day.
               </p>
             </div>
           </div>
@@ -363,7 +363,7 @@ export default async function DrinksPageTest() {
               </div>
               <h4 className="text-lg font-semibold text-white mb-2">Veteran-Made</h4>
               <p className="text-parchment-300 text-sm">
-                Built by Royal Corps of Signals veterans who spent 12 years learning that "good enough" isn't. Same standards we applied to kit that had to work, now applied to rum.
+                Built by Royal Corps of Signals veterans who spent 17 years between them learning that "good enough" isn't. Same standards we applied to kit that had to work, now applied to rum.
               </p>
             </div>
             <div className="text-center">
@@ -447,7 +447,7 @@ export default async function DrinksPageTest() {
                   "name": "How does buying from Jerry Can Spirits support veterans?",
                   "acceptedAnswer": {
                     "@type": "Answer",
-                    "text": "We're veteran-owned (Royal Corps of Signals, 12 years service) and Armed Forces Covenant signatories. Part of every sale goes to forces charities - not because it's good marketing but because these are our community. When you buy from us, you're directly supporting veteran entrepreneurs and forces welfare."
+                    "text": "We're veteran-owned (Royal Corps of Signals, 17 years' combined service) and Armed Forces Covenant signatories. Part of every sale goes to forces charities - not because it's good marketing but because these are our community. When you buy from us, you're directly supporting veteran entrepreneurs and forces welfare."
                   }
                 }
               ]
@@ -474,7 +474,7 @@ export default async function DrinksPageTest() {
             <div className="border-b border-gold-500/10 pb-6">
               <h3 className="text-lg font-semibold text-gold-300 mb-3">How should I drink spiced rum?</h3>
               <p className="text-parchment-200 leading-relaxed">
-                However you like it, honestly. Expedition Spiced Rum is designed to work three ways: neat (to taste the full flavour profile), over ice (opens up as it dilutes slightly), or in cocktails (holds its character against mixers). Classic pairings include ginger beer for a Storm and Spice, cola for simplicity, or apple juice for something different. Check our <Link href="/field-manual/cocktails" className="text-gold-400 hover:text-gold-300 underline">Field Manual</Link> for cocktail recipes.
+                However you like it, honestly. Expedition Spiced Rum is designed to work three ways: neat (to taste the full flavour profile), over ice (opens up as it dilutes slightly), or in cocktails (holds its character against mixers). Classic pairings include ginger beer for a Storm and Spice, cola for simplicity, or apple juice for something different. Check our <Link href="/field-manual/cocktails/" className="text-gold-400 hover:text-gold-300 underline">Field Manual</Link> for cocktail recipes.
               </p>
             </div>
 
@@ -502,7 +502,7 @@ export default async function DrinksPageTest() {
             <div>
               <h3 className="text-lg font-semibold text-gold-300 mb-3">How does buying from Jerry Can Spirits support veterans?</h3>
               <p className="text-parchment-200 leading-relaxed">
-                We're veteran-owned (Royal Corps of Signals, 12 years service) and Armed Forces Covenant signatories. Part of every sale goes to forces charities - not because it's good marketing but because these are our community. When you buy from us, you're directly supporting veteran entrepreneurs and forces welfare.
+                We're veteran-owned (Royal Corps of Signals, 17 years' combined service) and Armed Forces Covenant signatories. Part of every sale goes to forces charities - not because it's good marketing but because these are our community. When you buy from us, you're directly supporting veteran entrepreneurs and forces welfare.
               </p>
             </div>
           </div>

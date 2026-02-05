@@ -19,7 +19,7 @@ export default function FounderStorySnippet() {
 
             <div className="space-y-4 text-parchment-200 text-lg leading-relaxed">
               <p>
-                After 12 years in the Royal Corps of Signals, we wanted a proper drink to share with mates. Something with character, made by people who give a damn. We couldn't find it. So we made it ourselves.
+                Between us, we served 17 years in the Royal Corps of Signals. We wanted a proper drink to share with mates. Something with character, made by people who give a damn. We couldn't find it. So we made it ourselves.
               </p>
 
               <p>
@@ -33,7 +33,7 @@ export default function FounderStorySnippet() {
 
             <div className="mt-8">
               <Link
-                href="/about/story"
+                href="/about/story/"
                 className="inline-flex items-center px-8 py-4 bg-gold-500/20 border border-gold-500/40 text-gold-300 rounded-lg hover:bg-gold-500/30 transition-all duration-300 font-semibold"
               >
                 Read the Full Story

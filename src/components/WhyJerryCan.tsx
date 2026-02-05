@@ -6,7 +6,7 @@ export default function WhyJerryCan() {
     },
     {
       title: 'Veteran Heritage',
-      description: 'We spent 12 years in the Royal Corps of Signals. We know what reliability means. Every bottle reflects that standard. No corners cut, no compromises made.'
+      description: 'Between us, we served 17 years in the Royal Corps of Signals. We know what reliability means. Every bottle reflects that standard. No corners cut, no compromises made.'
     },
     {
       title: 'Expedition Ready',

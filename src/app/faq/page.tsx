@@ -141,9 +141,9 @@ export default function FAQPage() {
                 </h2>
                 <p className="text-parchment-200 leading-relaxed">
                   {faq.question === "What cocktails work best with Jerry Can Spirits rum?" ? (
-                    <>Our rum is versatile and works beautifully in classic cocktails like Old Fashioned, Mai Tai, and Rum Punch. Check our <Link href="/field-manual/cocktails" className="text-gold-300 hover:text-gold-400 underline">Field Manual</Link> for exclusive expedition cocktail recipes.</>
+                    <>Our rum is versatile and works beautifully in classic cocktails like Old Fashioned, Mai Tai, and Rum Punch. Check our <Link href="/field-manual/cocktails/" className="text-gold-300 hover:text-gold-400 underline">Field Manual</Link> for exclusive expedition cocktail recipes.</>
                   ) : faq.question === "What is your connection to the Armed Forces?" ? (
-                    <>Jerry Can Spirits was <Link href="/about/team/dan-freeman" className="text-gold-300 hover:text-gold-400 underline">founded by a former Royal Corps of Signals serviceman</Link>. We&apos;re proud supporters of the <Link href="/armed-forces-covenant" className="text-gold-300 hover:text-gold-400 underline">Armed Forces Covenant</Link> and donate a portion of profits to military charities.</>
+                    <>Jerry Can Spirits was <Link href="/about/team/dan-freeman/" className="text-gold-300 hover:text-gold-400 underline">founded by a former Royal Corps of Signals serviceman</Link>. We&apos;re proud supporters of the <Link href="/armed-forces-covenant/" className="text-gold-300 hover:text-gold-400 underline">Armed Forces Covenant</Link> and donate a portion of profits to military charities.</>
                   ) : (
                     faq.answer
                   )}
@@ -161,7 +161,7 @@ export default function FAQPage() {
               We're here to help. Reach out to our team for any additional questions about our premium British rum.
             </p>
             <a
-              href="/contact"
+              href="/contact/"
               className="inline-block px-8 py-3 bg-gold-500 text-jerry-green-900 font-semibold rounded-lg hover:bg-gold-400 transition-colors"
             >
               Contact Us

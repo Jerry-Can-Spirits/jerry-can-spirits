@@ -169,7 +169,7 @@ export default function TermsOfService() {
               </h3>
               <p className="text-white mb-4">
                 Delivery times are estimates and not guaranteed. Risk of loss and title pass to you upon delivery. 
-                See our <a href="/shipping-returns" className="text-gold-300 hover:text-gold-200 underline">Shipping & Returns</a> policy for full details.
+                See our <a href="/shipping-returns/" className="text-gold-300 hover:text-gold-200 underline">Shipping & Returns</a> policy for full details.
               </p>
             </section>
 
@@ -210,9 +210,9 @@ export default function TermsOfService() {
               </h2>
               <p className="text-white mb-4">
                 Your privacy is important to us. Please review our{' '}
-                <a href="/privacy-policy" className="text-gold-300 hover:text-gold-200 underline">Privacy Policy</a>{' '}
+                <a href="/privacy-policy/" className="text-gold-300 hover:text-gold-200 underline">Privacy Policy</a>{' '}
                 and{' '}
-                <a href="/cookie-policy" className="text-gold-300 hover:text-gold-200 underline">Cookie Policy</a>{' '}
+                <a href="/cookie-policy/" className="text-gold-300 hover:text-gold-200 underline">Cookie Policy</a>{' '}
                 which also govern your use of the Site.
               </p>
             </section>
@@ -341,7 +341,7 @@ export default function TermsOfService() {
                   </p>
                   <p className="text-white">
                     <strong className="text-gold-300">Website:</strong>{' '}
-                    <a href="/contact" className="text-gold-300 hover:text-gold-200 underline">Contact Form</a>
+                    <a href="/contact/" className="text-gold-300 hover:text-gold-200 underline">Contact Form</a>
                   </p>
                   <p className="text-white">
                     <strong className="text-gold-300">Address:</strong><br />

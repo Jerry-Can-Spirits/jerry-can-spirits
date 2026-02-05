@@ -67,7 +67,7 @@ export default function DanFreemanPage() {
 
         {/* Back Button */}
         <Link
-          href="/about/team"
+          href="/about/team/"
           className="inline-flex items-center gap-2 text-gold-300 hover:text-gold-400 transition-colors mb-8 group"
         >
           <svg className="w-5 h-5 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -191,10 +191,10 @@ export default function DanFreemanPage() {
                   The Journey to Jerry Can Spirits
                 </h2>
                 <p className="text-parchment-200 leading-relaxed mb-4">
-                  The idea of making rum had been coming up for years – one of those conversations that kept happening whenever Dan and <Link href="/about/team/rhys-williams" className="text-gold-300 hover:text-gold-400 underline">Rhys</Link> got together. In July 2025, Dan decided to stop just talking about it and actually have a go. Having tried well over 100 different rums and genuinely loving the stuff, it felt like the right time to create <Link href="/shop/product/jerry-can-spirits-expedition-spiced-rum" className="text-gold-300 hover:text-gold-400 underline">something worth drinking</Link>.
+                  The idea of making rum had been coming up for years – one of those conversations that kept happening whenever Dan and <Link href="/about/team/rhys-williams/" className="text-gold-300 hover:text-gold-400 underline">Rhys</Link> got together. In July 2025, Dan decided to stop just talking about it and actually have a go. Having tried well over 100 different rums and genuinely loving the stuff, it felt like the right time to create <Link href="/shop/product/jerry-can-spirits-expedition-spiced-rum/" className="text-gold-300 hover:text-gold-400 underline">something worth drinking</Link>.
                 </p>
                 <p className="text-parchment-200 leading-relaxed">
-                  Since then, it&apos;s been a lot of learning – getting the Essentials in Distilling qualification from the Chartered Institute of Brewers and Distillers, sorting out the personal alcohol licence, navigating HMRC for AWRS approval. The usual stuff you have to figure out when you&apos;re starting from scratch. Read more about <Link href="/about/story" className="text-gold-300 hover:text-gold-400 underline">how we got here</Link>.
+                  Since then, it&apos;s been a lot of learning – getting the Essentials in Distilling qualification from the Chartered Institute of Brewers and Distillers, sorting out the personal alcohol licence, navigating HMRC for AWRS approval. The usual stuff you have to figure out when you&apos;re starting from scratch. Read more about <Link href="/about/story/" className="text-gold-300 hover:text-gold-400 underline">how we got here</Link>.
                 </p>
               </div>
 

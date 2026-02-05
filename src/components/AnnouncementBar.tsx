@@ -50,7 +50,7 @@ export default function AnnouncementBar() {
         <div className="flex items-center justify-between py-3 sm:py-2.5 text-sm min-h-[52px] sm:min-h-[40px]">
           <div className="flex-1 text-center pr-2">
             <Link
-              href="/shop/product/jerry-can-spirits-expedition-spiced-rum"
+              href="/shop/product/jerry-can-spirits-expedition-spiced-rum/"
               className="inline-flex items-center gap-1 sm:gap-2 hover:underline font-medium"
             >
               <span className="text-xs sm:text-sm">

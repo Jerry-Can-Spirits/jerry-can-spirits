@@ -702,7 +702,7 @@ export default async function ProductPage({
                   <p className="text-parchment-300 text-sm">Classic cocktails and exclusive recipes from the Field Manual.</p>
                 </div>
                 <Link
-                  href="/field-manual/cocktails"
+                  href="/field-manual/cocktails/"
                   className="inline-flex items-center gap-2 bg-jerry-green-800 hover:bg-jerry-green-700 text-parchment-50 px-5 py-2.5 rounded-lg font-semibold border border-gold-500/30 hover:border-gold-500/60 transition-all duration-300 whitespace-nowrap"
                 >
                   <span>View Recipes</span>
