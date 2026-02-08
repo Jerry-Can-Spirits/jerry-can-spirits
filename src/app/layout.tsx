@@ -24,6 +24,7 @@ import FacebookPixel from "@/components/FacebookPixel";
 import AnnouncementBar from "@/components/AnnouncementBar";
 import GoogleTag from "@/components/GoogleTag";
 import TikTokPixel from "@/components/TikTokPixel";
+import KlaviyoScript from "@/components/KlaviyoScript";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -163,13 +164,7 @@ export default function RootLayout({
         <link rel="dns-prefetch" href="https://widget.trustpilot.com" />
         <link rel="dns-prefetch" href="https://cloudflareinsights.com" />
 
-        {/* Klaviyo Onsite.js - Required for embedded forms */}
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `!function(){if(!window.klaviyo){window._klOnsite=window._klOnsite||[];try{window.klaviyo=new Proxy({},{get:function(n,i){return"push"===i?function(){var n;(n=window._klOnsite).push.apply(n,arguments)}:function(){for(var n=arguments.length,o=new Array(n),w=0;w<n;w++)o[w]=arguments[w];var t="function"==typeof o[o.length-1]?o.pop():void 0,e=new Promise((function(n){window._klOnsite.push([i].concat(o,[function(i){t&&t(i),n(i)}]))}));return e}}})}catch(n){window.klaviyo=window.klaviyo||[],window.klaviyo.push=function(){var n;(n=window._klOnsite).push.apply(n,arguments)}}}}();window.klaviyo.push(['account','UavTvg']);`
-          }}
-        />
-        <script async src="https://static.klaviyo.com/onsite/js/UavTvg/klaviyo.js"></script>
+        {/* Klaviyo is now loaded via KlaviyoScript component with consent */}
 
         {/* Google AdSense */}
         <script
@@ -188,6 +183,7 @@ export default function RootLayout({
         <FacebookPixel />
         <GoogleTag />
         <TikTokPixel />
+        <KlaviyoScript />
 
         <CartProvider>
           {/* Skip to Content Link - Accessibility */}
