@@ -2,14 +2,7 @@
 
 import { useEffect, useRef } from 'react'
 
-declare global {
-  interface Window {
-    _klOnsite?: Array<unknown>
-    klaviyo?: {
-      push: (args: unknown[]) => void
-    }
-  }
-}
+// Window interface for Klaviyo is declared in KlaviyoScript.tsx
 
 export default function KlaviyoEmbed() {
   const formRef = useRef<HTMLDivElement>(null)

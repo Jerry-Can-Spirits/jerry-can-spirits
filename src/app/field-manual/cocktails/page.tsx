@@ -29,6 +29,9 @@ export default async function CocktailsPage() {
   const cocktails: any[] = await client.fetch(cocktailsListQuery)
 
   // Build ItemList schema for recipe collection
+  // Note: Using URL references instead of inline Recipe objects to avoid
+  // incomplete Recipe validation errors in Google Search Console.
+  // Full Recipe schema is provided on each individual cocktail page.
   const itemListSchema = {
     '@context': 'https://schema.org',
     '@type': 'ItemList',
@@ -39,13 +42,8 @@ export default async function CocktailsPage() {
     itemListElement: cocktails.map((cocktail, index) => ({
       '@type': 'ListItem',
       position: index + 1,
-      item: {
-        '@type': 'Recipe',
-        name: cocktail.name,
-        url: `https://jerrycanspirits.co.uk/field-manual/cocktails/${cocktail.slug.current}/`,
-        description: cocktail.description || `${cocktail.name} cocktail recipe`,
-        image: cocktail.image || '',
-      },
+      name: cocktail.name,
+      url: `https://jerrycanspirits.co.uk/field-manual/cocktails/${cocktail.slug.current}/`,
     })),
   }
 
