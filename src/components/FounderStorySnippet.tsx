@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 
 export default function FounderStorySnippet() {
   return (
@@ -44,12 +45,15 @@ export default function FounderStorySnippet() {
           {/* Right Column - Image */}
           <div className="relative">
             <div className="relative bg-gradient-to-br from-jerry-green-800 to-jerry-green-900 rounded-2xl overflow-hidden shadow-2xl border border-gold-500/20 p-8">
-              {/* Placeholder for founder photo - replace with actual image */}
-              <div className="aspect-square bg-jerry-green-700/40 rounded-xl flex items-center justify-center">
-                <div className="text-center">
-                  <p className="text-parchment-300">Founder photo coming soon</p>
-                  <p className="text-parchment-400 text-sm mt-2">Royal Corps of Signals Veterans</p>
-                </div>
+              {/* Founders Photo - Dan & Rhys */}
+              <div className="aspect-square relative rounded-xl overflow-hidden">
+                <Image
+                  src="https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/be2ac9ab-2168-45cc-1aee-c9b04567b300/public"
+                  alt="Dan Freeman and Rhys Williams - Co-founders of Jerry Can Spirits, Royal Corps of Signals veterans"
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                />
               </div>
 
               {/* Armed Forces Covenant Badge */}

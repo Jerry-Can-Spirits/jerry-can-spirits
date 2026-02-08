@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-// import Image from 'next/image' // Uncomment when photo is available
+import Image from 'next/image'
 import CartographicBackground from '@/components/CartographicBackground'
 import Breadcrumbs from '@/components/Breadcrumbs'
 import StructuredData from '@/components/StructuredData'
@@ -79,17 +79,16 @@ export default function RhysWilliamsPage() {
           {/* Left Column - Photo & Quick Info */}
           <div className="lg:col-span-1">
             <div className="lg:sticky lg:top-24 space-y-6">
-              {/* Photo Placeholder */}
-              <div className="relative aspect-square rounded-xl overflow-hidden border border-gold-500/20 bg-jerry-green-800/60">
-                {/* TODO: Replace with actual photo when available */}
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="text-center">
-                    <svg className="w-24 h-24 text-gold-500/30 mx-auto mb-4" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
-                    </svg>
-                    <p className="text-gold-500/50 text-sm">Photo Coming Soon</p>
-                  </div>
-                </div>
+              {/* Profile Photo */}
+              <div className="relative aspect-square rounded-xl overflow-hidden border border-gold-500/20">
+                <Image
+                  src="https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/bcacb452-4f56-4676-b4c8-ac6afa7c1e00/public"
+                  alt="Rhys Williams - Co-Founder & Director of Jerry Can Spirits"
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 1024px) 100vw, 33vw"
+                  priority
+                />
               </div>
 
               {/* Quick Facts */}

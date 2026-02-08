@@ -39,11 +39,11 @@ const teamMembers = [
     name: 'Rhys Williams',
     role: 'Co-Founder & Operations',
     slug: 'rhys-williams',
-    service: 'Royal Signals',
-    rank: 'TBC',
+    service: 'Royal Signals, 2011-2016',
+    rank: 'Installation Technician',
     specialty: 'Business Strategy',
-    quote: 'Coming soon...',
-    image: null,
+    quote: 'That passion has now become a business.',
+    image: 'https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/bcacb452-4f56-4676-b4c8-ac6afa7c1e00/public',
   },
 ]
 
