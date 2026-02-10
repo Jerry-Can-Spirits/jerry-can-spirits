@@ -21,7 +21,7 @@ const communityPartners = [
   {
     name: "Worcester RFC Mixed Ability",
     location: "Worcester, United Kingdom",
-    description: "We sponsor Man of the Match for Worcester RFC's Mixed Ability Men's team for the 2024/25 season. Mixed Ability rugby breaks down barriers, welcoming players of all abilities to train and play together. It's grassroots sport at its best: inclusive, community-driven, and built on the idea that everyone deserves a place on the pitch. We've also supported Danny Hughes, one of our investors and a fellow veteran, on the team's tour of Belgium.",
+    description: "We sponsor Man of the Match for Worcester RFC's Mixed Ability Men's team for the 2025/26 season. Mixed Ability rugby breaks down barriers, welcoming players of all abilities to train and play together. It's grassroots sport at its best: inclusive, community-driven, and built on the idea that everyone deserves a place on the pitch. We've also supported Danny Hughes, one of our investors and a fellow veteran, on the team's tour of Belgium.",
     website: "https://worcesterrfc.rfu.club/teams/worcester-rfc-mixed-ability-men/470363/profile",
     instagram: "https://www.instagram.com/worcesterrfcma",
     facebook: "https://www.facebook.com/WorcesterRFCMA",
@@ -152,7 +152,7 @@ export default function FriendsPage() {
         "@type": "Organization",
         "name": "Jerry Can Spirits",
         "url": "https://jerrycanspirits.co.uk",
-        "description": "Veteran-owned British rum company. Man of the Match sponsor for the 2024/25 season."
+        "description": "Veteran-owned British rum company. Man of the Match sponsor for the 2025/26 season."
       }
     }
   ]
