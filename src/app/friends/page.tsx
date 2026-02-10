@@ -16,6 +16,20 @@ export const metadata: Metadata = {
   },
 }
 
+// Community partners - Grassroots sponsorships and community support
+const communityPartners = [
+  {
+    name: "Worcester RFC Mixed Ability",
+    location: "Worcester, United Kingdom",
+    description: "We sponsor Man of the Match for Worcester RFC's Mixed Ability Men's team for the 2024/25 season. Mixed Ability rugby breaks down barriers, welcoming players of all abilities to train and play together. It's grassroots sport at its best: inclusive, community-driven, and built on the idea that everyone deserves a place on the pitch. We've also supported Danny Hughes, one of our investors and a fellow veteran, on the team's tour of Belgium.",
+    website: "https://worcesterrfc.rfu.club/teams/worcester-rfc-mixed-ability-men/470363/profile",
+    instagram: "https://www.instagram.com/worcesterrfcma",
+    facebook: "https://www.facebook.com/WorcesterRFCMA",
+    speciality: "Mixed Ability Rugby",
+    logo: "https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/040727be-1e59-4528-ebc5-c0472f589300/public",
+  },
+]
+
 // Partner data - Add your partners here
 const partners = [
   {
@@ -57,18 +71,95 @@ const partners = [
 ]
 
 export default function FriendsPage() {
-  // Organization schema for SEO
-  const organizationSchema = {
-    "@context": "https://schema.org",
-    "@type": "CollectionPage",
-    "name": "Friends of Jerry Can Spirits",
-    "description": "Partner distilleries and craft spirit producers",
-    "url": "https://jerrycanspirits.co.uk/friends",
-  }
+  // Structured data for SEO
+  const structuredData = [
+    // CollectionPage schema
+    {
+      "@context": "https://schema.org",
+      "@type": "CollectionPage",
+      "name": "Friends & Partners | Jerry Can Spirits",
+      "description": "Meet the distilleries, suppliers, and community organisations who help make Jerry Can Spirits possible. Quality spirits need quality partnerships.",
+      "url": "https://jerrycanspirits.co.uk/friends/",
+      "mainEntity": {
+        "@type": "ItemList",
+        "name": "Jerry Can Spirits Partners",
+        "numberOfItems": partners.length + communityPartners.length,
+        "itemListElement": [
+          ...partners.map((partner, index) => ({
+            "@type": "ListItem",
+            "position": index + 1,
+            "item": {
+              "@type": "Organization",
+              "name": partner.name,
+              "url": partner.website,
+              "description": partner.description,
+            }
+          })),
+          ...communityPartners.map((partner, index) => ({
+            "@type": "ListItem",
+            "position": partners.length + index + 1,
+            "item": {
+              "@type": "SportsOrganization",
+              "name": partner.name,
+              "url": partner.website,
+              "description": partner.description,
+            }
+          })),
+        ]
+      }
+    },
+    // BreadcrumbList schema
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://jerrycanspirits.co.uk/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Friends & Partners"
+        }
+      ]
+    },
+    // SportsOrganization schema for Worcester RFC MA with sponsorship
+    {
+      "@context": "https://schema.org",
+      "@type": "SportsOrganization",
+      "name": "Worcester RFC Mixed Ability",
+      "description": "Worcester RFC's Mixed Ability Men's rugby team. Mixed Ability rugby breaks down barriers, welcoming players of all abilities to train and play together.",
+      "sport": "Rugby Union",
+      "url": "https://worcesterrfc.rfu.club/teams/worcester-rfc-mixed-ability-men/470363/profile",
+      "sameAs": [
+        "https://www.instagram.com/worcesterrfcma",
+        "https://www.facebook.com/WorcesterRFCMA"
+      ],
+      "location": {
+        "@type": "Place",
+        "name": "Worcester Rugby Football Club",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Worcester",
+          "addressCountry": "GB",
+          "postalCode": "WR3 8ZF"
+        }
+      },
+      "sponsor": {
+        "@type": "Organization",
+        "name": "Jerry Can Spirits",
+        "url": "https://jerrycanspirits.co.uk",
+        "description": "Veteran-owned British rum company. Man of the Match sponsor for the 2024/25 season."
+      }
+    }
+  ]
 
   return (
     <>
-      <StructuredData data={organizationSchema} />
+      <StructuredData data={structuredData} />
       <main className="min-h-screen py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Breadcrumb */}
@@ -172,6 +263,97 @@ export default function FriendsPage() {
                       </div>
                     </div>
                   ))}
+              </div>
+            </div>
+          )}
+
+          {/* Community & Grassroots */}
+          {communityPartners.length > 0 && (
+            <div className="mb-16">
+              <h2 className="text-3xl font-playfair font-bold text-gold-500 mb-4 text-center">
+                Community & Grassroots
+              </h2>
+              <p className="text-parchment-300 text-center max-w-2xl mx-auto mb-8">
+                Beyond our trade partners, we support grassroots organisations and community initiatives.
+                As a veteran-owned business, backing local clubs and charitable causes is part of who we are.
+              </p>
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {communityPartners.map((partner, index) => (
+                  <div
+                    key={index}
+                    className="bg-jerry-green-800/20 border border-gold-500/20 rounded-lg p-6 hover:border-gold-500/40 transition-all"
+                  >
+                    {/* Logo */}
+                    <div className="flex items-center justify-center bg-white rounded-lg p-4 mb-4 border border-gold-500/20 h-32">
+                      <div className="relative w-full h-full">
+                        <Image
+                          src={partner.logo}
+                          alt={`${partner.name} logo`}
+                          fill
+                          className="object-contain"
+                        />
+                      </div>
+                    </div>
+
+                    <h3 className="text-xl font-playfair font-bold text-gold-400 mb-1">
+                      {partner.name}
+                    </h3>
+                    <p className="text-gold-500/80 text-sm mb-1">
+                      {partner.location}
+                    </p>
+                    <p className="text-gold-500/80 text-sm mb-3">
+                      {partner.speciality}
+                    </p>
+                    <p className="text-parchment-200 text-sm mb-4 leading-relaxed">
+                      {partner.description}
+                    </p>
+
+                    {/* Links */}
+                    <div className="flex flex-wrap gap-2">
+                      {partner.website && (
+                        <a
+                          href={partner.website}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1 px-3 py-1.5 bg-gold-500/20 text-gold-400 text-sm font-medium rounded-lg hover:bg-gold-500/30 border border-gold-500/30 transition-colors"
+                        >
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                          </svg>
+                          Website
+                        </a>
+                      )}
+                      {partner.facebook && (
+                        <a
+                          href={partner.facebook}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1 px-3 py-1.5 bg-jerry-green-800/40 text-parchment-300 text-sm font-medium rounded-lg hover:bg-jerry-green-800/60 border border-gold-500/20 transition-colors"
+                          aria-label={`${partner.name} on Facebook`}
+                        >
+                          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                          </svg>
+                          Facebook
+                        </a>
+                      )}
+                      {partner.instagram && (
+                        <a
+                          href={partner.instagram}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1 px-3 py-1.5 bg-jerry-green-800/40 text-parchment-300 text-sm font-medium rounded-lg hover:bg-jerry-green-800/60 border border-gold-500/20 transition-colors"
+                          aria-label={`${partner.name} on Instagram`}
+                        >
+                          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.067.06 1.407.06 4.123v.08c0 2.643-.012 2.987-.06 4.043-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.067.048-1.407.06-4.123.06h-.08c-2.643 0-2.987-.012-4.043-.06-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.047-1.024-.06-1.379-.06-3.808v-.63c0-2.43.013-2.784.06-3.808.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 015.45 2.525c.636-.247 1.363-.416 2.427-.465C8.901 2.013 9.256 2 11.685 2h.63zm-.081 1.802h-.468c-2.456 0-2.784.011-3.807.058-.975.045-1.504.207-1.857.344-.467.182-.8.398-1.15.748-.35.35-.566.683-.748 1.15-.137.353-.3.882-.344 1.857-.047 1.023-.058 1.351-.058 3.807v.468c0 2.456.011 2.784.058 3.807.045.975.207 1.504.344 1.857.182.466.399.8.748 1.15.35.35.683.566 1.15.748.353.137.882.3 1.857.344 1.054.048 1.37.058 4.041.058h.08c2.597 0 2.917-.01 3.96-.058.976-.045 1.505-.207 1.858-.344.466-.182.8-.398 1.15-.748.35-.35.566-.683.748-1.15.137-.353.3-.882.344-1.857.048-1.055.058-1.37.058-4.041v-.08c0-2.597-.01-2.917-.058-3.96-.045-.976-.207-1.505-.344-1.858a3.097 3.097 0 00-.748-1.15 3.098 3.098 0 00-1.15-.748c-.353-.137-.882-.3-1.857-.344-1.023-.047-1.351-.058-3.807-.058zM12 6.865a5.135 5.135 0 110 10.27 5.135 5.135 0 010-10.27zm0 1.802a3.333 3.333 0 100 6.666 3.333 3.333 0 000-6.666zm5.338-3.205a1.2 1.2 0 110 2.4 1.2 1.2 0 010-2.4z"/>
+                          </svg>
+                          Instagram
+                        </a>
+                      )}
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
           )}
