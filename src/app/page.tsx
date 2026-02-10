@@ -243,7 +243,7 @@ export default function Home() {
               </div>
               <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20 text-center">
                 <h3 className="text-lg font-serif font-bold text-gold-300 mb-2">Small Batch Quality</h3>
-                <p className="text-parchment-300 text-sm">Copper-lined distillation creating complex flavors and smooth finish</p>
+                <p className="text-parchment-300 text-sm">Copper-lined distillation creating complex flavours and smooth finish</p>
               </div>
               <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20 text-center">
                 <h3 className="text-lg font-serif font-bold text-gold-300 mb-2">Forces Covenant</h3>
