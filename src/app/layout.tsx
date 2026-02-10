@@ -13,8 +13,6 @@ const CartographicBackground = dynamic(
   () => import("@/components/CartographicBackground"),
   { loading: () => null }
 );
-// ConsentBanner replaced by Cookiebot CMP
-// import ConsentBanner from "@/components/ConsentBanner";
 import ServiceWorkerRegistration from "@/components/ServiceWorkerRegistration";
 import InstallPrompt from "@/components/InstallPrompt";
 import { CartProvider } from "@/contexts/CartContext";
