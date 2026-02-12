@@ -6,14 +6,14 @@ import Breadcrumbs from '@/components/Breadcrumbs'
 import StructuredData from '@/components/StructuredData'
 
 export const metadata: Metadata = {
-  title: 'Professional Barware & Cocktail Tools',
-  description: 'Professional bar tools and equipment for home mixologists. Premium barware, cocktail accessories, and glassware for crafting perfect serves.',
+  title: 'Cocktail Shaker Sets, Barware & Bar Tools',
+  description: 'Premium cocktail shaker sets, bar tools, and glassware for home mixologists. Everything you need to craft perfect rum cocktails at home.',
   alternates: {
     canonical: 'https://jerrycanspirits.co.uk/shop/barware/',
   },
   openGraph: {
-    title: 'Professional Barware & Cocktail Tools | Jerry Can Spirits®',
-    description: 'Professional bar tools and equipment for home mixologists. Premium barware and cocktail accessories.',
+    title: 'Cocktail Shaker Sets, Barware & Bar Tools | Jerry Can Spirits®',
+    description: 'Premium cocktail shaker sets, bar tools, and glassware for home mixologists. Everything you need to craft perfect rum cocktails at home.',
     url: 'https://jerrycanspirits.co.uk/shop/barware/',
     siteName: 'Jerry Can Spirits®',
     locale: 'en_GB',
