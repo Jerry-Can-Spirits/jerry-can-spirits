@@ -69,7 +69,7 @@ const faqSchema = {
 }
 
 export const metadata: Metadata = {
-  title: "Ingredients - Expedition Spiced Rum",
+  title: "Expedition Spiced Rum Ingredients - What's Inside Our Rum",
   description: "What goes into Jerry Can Spirits Expedition Spiced Rum. Madagascan vanilla, Ceylon cinnamon, ginger, orange peel, cloves, cassia, and agave, steeped in Caribbean rum.",
   alternates: {
     canonical: 'https://jerrycanspirits.co.uk/ingredients/expedition-spiced-rum/',
