@@ -22,8 +22,13 @@ export default function Footer() {
   }
 
   const trackFooterClick = (action: string, item: string) => {
-    // GA4 tracking for footer engagement
-    console.log('Footer clicked:', action, item)
+    if (typeof window !== 'undefined' && typeof window.gtag === 'function') {
+      window.gtag('event', 'navigation_click', {
+        menu_item: item,
+        navigation_type: 'footer',
+        link_category: action,
+      })
+    }
   }
 
   // Footer link sections

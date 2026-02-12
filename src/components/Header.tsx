@@ -144,15 +144,23 @@ export default function Header() {
     return () => window.removeEventListener('resize', handleResize)
   }, [])
 
-  // Analytics tracking functions
+  // GA4 navigation tracking
   const trackMenuClick = (itemName: string) => {
-    // GA4 tracking - will implement later
-    console.log('Menu clicked:', itemName)
+    if (typeof window !== 'undefined' && typeof window.gtag === 'function') {
+      window.gtag('event', 'navigation_click', {
+        menu_item: itemName,
+        navigation_type: 'header',
+      })
+    }
   }
 
   const trackCTAClick = (action: string) => {
-    // GA4 tracking for lead generation
-    console.log('CTA clicked:', action)
+    if (typeof window !== 'undefined' && typeof window.gtag === 'function') {
+      window.gtag('event', 'cta_click', {
+        cta_action: action,
+        cta_location: 'header',
+      })
+    }
   }
 
   return (
