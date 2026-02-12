@@ -35,8 +35,12 @@ export default function PromoBanner({
   }
 
   const trackPromoClick = (action: string) => {
-    // GA4 tracking for promo engagement
-    console.log('Promo banner clicked:', action)
+    if (typeof window !== 'undefined' && typeof window.gtag === 'function') {
+      window.gtag('event', 'promo_click', {
+        promo_action: action,
+        promo_message: message,
+      })
+    }
   }
 
   if (!isOpen) return null

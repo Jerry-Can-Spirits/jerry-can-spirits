@@ -1,6 +1,44 @@
 # Security headers configured in next.config.ts - this file serves as backup for static files
 # NOTE: For SSR/dynamic routes, Next.js headers() in next.config.ts takes precedence
 
+# =============================================================================
+# CACHE CONTROL HEADERS
+# =============================================================================
+
+# Next.js hashed static assets (JS, CSS chunks) - immutable, cache 1 year
+/_next/static/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Fonts (Google Fonts self-hosted by Next.js) - cache 1 year
+/_next/static/media/*.woff2
+  Cache-Control: public, max-age=31536000, immutable
+
+# Static public assets (favicons, icons, manifest) - cache 1 week, revalidate
+/*.png
+  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
+/*.ico
+  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
+/manifest.json
+  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
+
+# Service worker - always revalidate (must stay fresh for updates)
+/sw.js
+  Cache-Control: public, max-age=0, must-revalidate
+
+# Static text files
+/robots.txt
+  Cache-Control: public, max-age=86400, stale-while-revalidate=43200
+/llms.txt
+  Cache-Control: public, max-age=86400, stale-while-revalidate=43200
+/ads.txt
+  Cache-Control: public, max-age=86400, stale-while-revalidate=43200
+/sitemap.xml
+  Cache-Control: public, max-age=3600, stale-while-revalidate=1800
+
+# =============================================================================
+# SECURITY HEADERS
+# =============================================================================
+
 # Less restrictive CSP for Sanity Studio
 /studio/*
   Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https: data:; style-src 'self' 'unsafe-inline' https: data:; font-src 'self' https: data:; img-src 'self' data: https: blob:; media-src 'self' https: data:; connect-src 'self' https: wss: ws:; frame-src 'self' https:; object-src 'none'; base-uri 'self'; form-action 'self' https:; frame-ancestors 'none'; upgrade-insecure-requests

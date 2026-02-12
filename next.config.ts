@@ -20,10 +20,30 @@ const nextConfig: NextConfig = {
   // Target modern browsers - disables legacy transforms
   transpilePackages: [],
 
-  // Security headers configured here for Cloudflare Pages compatibility
+  // Cache and security headers configured here for Cloudflare Pages compatibility
   // Middleware headers don't work reliably on Cloudflare Pages Edge Runtime
   async headers() {
     return [
+      // Cache headers for Next.js hashed static assets (immutable)
+      {
+        source: '/_next/static/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+      // Cache headers for images served through Next.js
+      {
+        source: '/_next/image/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=86400, stale-while-revalidate=43200',
+          },
+        ],
+      },
       // Security headers for Sanity Studio (less restrictive CSP needed)
       {
         source: '/studio/:path*',
@@ -176,7 +196,7 @@ const nextConfig: NextConfig = {
     formats: ['image/webp', 'image/avif'],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
-    minimumCacheTTL: 60,
+    minimumCacheTTL: 86400, // 24 hours - images rarely change
   },
   
   // Disable webpack build cache to prevent large cache files in production
