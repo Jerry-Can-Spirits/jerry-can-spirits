@@ -239,6 +239,7 @@ Based in the UK, Jerry Can Spirits® is a small operation run by two mates who c
                   Our name comes from the classic jerry can, designed in 1937 and still NATO standard today because it just works. That&apos;s the approach we take: function over form, quality without shortcuts.
                 </p>
               </div>
+              <a href="/about/story/" className="inline-block mt-4 text-gold-300 hover:text-gold-200 text-sm font-medium underline transition-colors">Read our full story</a>
             </div>
 
             {/* Brand Values */}
@@ -256,6 +257,10 @@ Based in the UK, Jerry Can Spirits® is a small operation run by two mates who c
                     <p className="text-parchment-200 text-sm leading-relaxed">{value.description}</p>
                   </div>
                 ))}
+              </div>
+              <div className="mt-4 flex gap-4">
+                <a href="/ethos/" className="text-gold-300 hover:text-gold-200 text-sm font-medium underline transition-colors">Our ethos</a>
+                <a href="/sustainability/" className="text-gold-300 hover:text-gold-200 text-sm font-medium underline transition-colors">Sustainability</a>
               </div>
             </div>
           </section>
@@ -280,11 +285,15 @@ Based in the UK, Jerry Can Spirits® is a small operation run by two mates who c
                     { label: 'Volume', value: '700ml' },
                     { label: 'RRP', value: '£45.00' },
                     { label: 'Base Spirit', value: 'Caribbean rum' },
-                    { label: 'Produced At', value: 'Spirit of Wales Distillery, Newport, South Wales' },
+                    { label: 'Produced At', value: 'Spirit of Wales Distillery, Newport, South Wales', href: '/friends/' },
                   ].map((item) => (
                     <div key={item.label} className="flex justify-between items-baseline border-b border-gold-500/10 pb-2">
                       <span className="text-parchment-400 text-sm">{item.label}</span>
-                      <span className="text-parchment-50 font-medium text-sm">{item.value}</span>
+                      {'href' in item && item.href ? (
+                        <a href={item.href} className="text-gold-300 hover:text-gold-200 font-medium text-sm underline transition-colors">{item.value}</a>
+                      ) : (
+                        <span className="text-parchment-50 font-medium text-sm">{item.value}</span>
+                      )}
                     </div>
                   ))}
                 </div>
@@ -854,34 +863,31 @@ Based in the UK, Jerry Can Spirits® is a small operation run by two mates who c
               Recognition and commitments that reflect our values.
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              {[
-                {
-                  title: 'Armed Forces Covenant',
-                  description: 'Signatory to the Armed Forces Covenant, pledging support for the armed forces community, veterans, and their families.',
-                  icon: '🤝',
-                },
-                {
-                  title: 'ERS Bronze Award',
-                  description: 'Employer Recognition Scheme Bronze Award from the Ministry of Defence for our commitment to supporting the armed forces community.',
-                  icon: '🏅',
-                },
-                {
-                  title: 'British Veteran Owned',
-                  description: 'Certified British Veteran Owned business, verified and recognised for our military heritage and veteran leadership.',
-                  icon: '🇬🇧',
-                },
-                {
-                  title: 'Worcester RFC MA Sponsor',
-                  description: 'Official Match Afternoon sponsor for Worcester RFC during the 2025/26 season, supporting grassroots community rugby.',
-                  icon: '🏉',
-                },
-              ].map((award) => (
-                <div key={award.title} className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
-                  <div className="text-3xl mb-3">{award.icon}</div>
-                  <h3 className="text-lg font-serif font-bold text-parchment-50 mb-2">{award.title}</h3>
-                  <p className="text-parchment-200 text-sm leading-relaxed">{award.description}</p>
-                </div>
-              ))}
+              <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+                <h3 className="text-lg font-serif font-bold text-gold-300 mb-2">Armed Forces Covenant</h3>
+                <p className="text-parchment-200 text-sm leading-relaxed mb-3">
+                  Signatory to the Armed Forces Covenant, pledging support for the armed forces community, veterans, and their families.
+                </p>
+                <a href="/armed-forces-covenant/" className="text-gold-300 hover:text-gold-200 text-xs font-medium underline transition-colors">Read our commitment</a>
+              </div>
+              <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+                <h3 className="text-lg font-serif font-bold text-gold-300 mb-2">ERS Bronze Award</h3>
+                <p className="text-parchment-200 text-sm leading-relaxed">
+                  Employer Recognition Scheme Bronze Award from the Ministry of Defence for our commitment to supporting the armed forces community.
+                </p>
+              </div>
+              <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+                <h3 className="text-lg font-serif font-bold text-gold-300 mb-2">British Veteran Owned</h3>
+                <p className="text-parchment-200 text-sm leading-relaxed">
+                  Certified British Veteran Owned business, verified and recognised for our military heritage and veteran leadership.
+                </p>
+              </div>
+              <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+                <h3 className="text-lg font-serif font-bold text-gold-300 mb-2">Worcester RFC MA Sponsor</h3>
+                <p className="text-parchment-200 text-sm leading-relaxed">
+                  Official Match Afternoon sponsor for Worcester RFC during the 2025/26 season, supporting grassroots community rugby.
+                </p>
+              </div>
             </div>
           </section>
 
