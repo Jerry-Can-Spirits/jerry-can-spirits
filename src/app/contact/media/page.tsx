@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import Image from 'next/image'
-import { ColorSwatch, DownloadCard, BoilerplateText, ImageGallery } from '@/components/media'
+import { ColorSwatch, DownloadCard, BoilerplateText, ImageGallery, SocialPresence } from '@/components/media'
 import Breadcrumbs from '@/components/Breadcrumbs'
 
 export default function MediaContact() {
@@ -186,11 +186,16 @@ Based in the UK, Jerry Can Spirits® is a small operation run by two mates who c
           {/* Quick Links */}
           <div className="flex flex-wrap justify-center gap-4 mb-16">
             <a href="#our-brand" className="px-4 py-2 bg-jerry-green-800/60 hover:bg-jerry-green-700/60 text-parchment-200 rounded-lg text-sm font-medium transition-colors">Our Brand</a>
+            <a href="#product-spec" className="px-4 py-2 bg-jerry-green-800/60 hover:bg-jerry-green-700/60 text-parchment-200 rounded-lg text-sm font-medium transition-colors">Product Spec</a>
             <a href="#brand-assets" className="px-4 py-2 bg-jerry-green-800/60 hover:bg-jerry-green-700/60 text-parchment-200 rounded-lg text-sm font-medium transition-colors">Brand Assets</a>
-            <a href="#tone-of-voice" className="px-4 py-2 bg-jerry-green-800/60 hover:bg-jerry-green-700/60 text-parchment-200 rounded-lg text-sm font-medium transition-colors">Tone of Voice</a>
+            <a href="#founders" className="px-4 py-2 bg-jerry-green-800/60 hover:bg-jerry-green-700/60 text-parchment-200 rounded-lg text-sm font-medium transition-colors">Co-Founders</a>
+            <a href="#awards" className="px-4 py-2 bg-jerry-green-800/60 hover:bg-jerry-green-700/60 text-parchment-200 rounded-lg text-sm font-medium transition-colors">Awards</a>
+            <a href="#milestones" className="px-4 py-2 bg-jerry-green-800/60 hover:bg-jerry-green-700/60 text-parchment-200 rounded-lg text-sm font-medium transition-colors">Milestones</a>
+            <a href="#social-media" className="px-4 py-2 bg-jerry-green-800/60 hover:bg-jerry-green-700/60 text-parchment-200 rounded-lg text-sm font-medium transition-colors">Social Media</a>
             <a href="#company-info" className="px-4 py-2 bg-jerry-green-800/60 hover:bg-jerry-green-700/60 text-parchment-200 rounded-lg text-sm font-medium transition-colors">Company Info</a>
             <a href="#press-contacts" className="px-4 py-2 bg-jerry-green-800/60 hover:bg-jerry-green-700/60 text-parchment-200 rounded-lg text-sm font-medium transition-colors">Press Contacts</a>
             <a href="#inquiry-form" className="px-4 py-2 bg-jerry-green-800/60 hover:bg-jerry-green-700/60 text-parchment-200 rounded-lg text-sm font-medium transition-colors">Media Inquiry</a>
+            <a href="/contact/media/kit/" className="px-4 py-2 bg-gold-500 hover:bg-gold-400 text-jerry-green-900 rounded-lg text-sm font-semibold transition-colors">Download Media Kit</a>
           </div>
 
           {/* ==================== OUR BRAND SECTION ==================== */}
@@ -251,6 +256,102 @@ Based in the UK, Jerry Can Spirits® is a small operation run by two mates who c
                     <p className="text-parchment-200 text-sm leading-relaxed">{value.description}</p>
                   </div>
                 ))}
+              </div>
+            </div>
+          </section>
+
+          {/* ==================== PRODUCT FACT SHEET ==================== */}
+          <section id="product-spec" className="mb-20 scroll-mt-24">
+            <h2 className="text-3xl font-serif font-bold text-parchment-50 text-center mb-4">
+              Product Fact Sheet
+            </h2>
+            <p className="text-parchment-300 text-center mb-12 max-w-2xl mx-auto">
+              Key product details for Expedition Spiced Rum.
+            </p>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+              {/* Specs */}
+              <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 md:p-8 border border-gold-500/20">
+                <h3 className="text-xl font-serif font-bold text-parchment-50 mb-6">Product Specifications</h3>
+                <div className="space-y-4">
+                  {[
+                    { label: 'Product', value: 'Expedition Spiced Rum' },
+                    { label: 'ABV', value: '40%' },
+                    { label: 'Volume', value: '700ml' },
+                    { label: 'RRP', value: '£45.00' },
+                    { label: 'Base Spirit', value: 'Caribbean rum' },
+                    { label: 'Produced At', value: 'Spirit of Wales Distillery, Newport, South Wales' },
+                  ].map((item) => (
+                    <div key={item.label} className="flex justify-between items-baseline border-b border-gold-500/10 pb-2">
+                      <span className="text-parchment-400 text-sm">{item.label}</span>
+                      <span className="text-parchment-50 font-medium text-sm">{item.value}</span>
+                    </div>
+                  ))}
+                </div>
+
+                <h4 className="text-gold-300 font-semibold mt-6 mb-3">Key Ingredients</h4>
+                <div className="flex flex-wrap gap-2">
+                  {[
+                    'Madagascan Vanilla Pods', 'Ceylon Cinnamon', 'Ginger', 'Orange Peel',
+                    'Cloves', 'Allspice', 'Cassia Bark', 'Agave Syrup', 'Glucose Syrup', 'Bourbon Barrel Chips'
+                  ].map((ingredient) => (
+                    <span key={ingredient} className="px-2.5 py-1 bg-jerry-green-700/60 text-parchment-200 text-xs rounded-full border border-gold-500/20">
+                      {ingredient}
+                    </span>
+                  ))}
+                </div>
+
+                <h4 className="text-gold-300 font-semibold mt-6 mb-3">Dietary Information</h4>
+                <div className="flex flex-wrap gap-3">
+                  {['Gluten-free', 'Vegan', 'Dairy-free', 'Nut-free'].map((badge) => (
+                    <span key={badge} className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-green-600/20 text-green-300 text-xs font-medium rounded-full border border-green-500/30">
+                      <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                      {badge}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              {/* Tasting Notes */}
+              <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 md:p-8 border border-gold-500/20">
+                <h3 className="text-xl font-serif font-bold text-parchment-50 mb-6">Tasting Notes</h3>
+                <div className="space-y-6">
+                  <div>
+                    <h4 className="text-gold-300 font-semibold mb-2">Nose</h4>
+                    <p className="text-parchment-200 text-sm leading-relaxed">
+                      Warm Madagascan vanilla leads with a rich, creamy softness, followed by Ceylon cinnamon and toasted bourbon oak, lifted by bright orange peel with clove and allspice in the background.
+                    </p>
+                  </div>
+                  <div>
+                    <h4 className="text-gold-300 font-semibold mb-2">Palate</h4>
+                    <p className="text-parchment-200 text-sm leading-relaxed">
+                      Silky and naturally sweet on entry thanks to agave, with ginger heat and cassia bark developing into layered baking spices.
+                    </p>
+                  </div>
+                  <div>
+                    <h4 className="text-gold-300 font-semibold mb-2">Finish</h4>
+                    <p className="text-parchment-200 text-sm leading-relaxed">
+                      Long, warming, and elegantly dry with oak tannins, vanilla, and a flicker of ginger.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="mt-8 flex flex-wrap gap-3">
+                  <a href="/ingredients/expedition-spiced-rum/" className="inline-flex items-center gap-2 px-4 py-2 bg-jerry-green-700/60 hover:bg-gold-500 text-parchment-200 hover:text-jerry-green-900 text-sm font-semibold rounded-lg transition-all duration-200">
+                    Full Ingredients
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </a>
+                  <a href="/shop/" className="inline-flex items-center gap-2 px-4 py-2 bg-jerry-green-700/60 hover:bg-gold-500 text-parchment-200 hover:text-jerry-green-900 text-sm font-semibold rounded-lg transition-all duration-200">
+                    Shop
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </a>
+                </div>
               </div>
             </div>
           </section>
@@ -612,30 +713,43 @@ Based in the UK, Jerry Can Spirits® is a small operation run by two mates who c
               </div>
             </div>
 
-            {/* Founder Section */}
-            <div className="mb-12">
+            {/* Co-Founders Section */}
+            <div id="founders" className="mb-12 scroll-mt-24">
               <h3 className="text-xl font-serif font-bold text-parchment-50 mb-6 flex items-center gap-2">
                 <svg className="w-5 h-5 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                 </svg>
-                Founder
+                Co-Founders
               </h3>
-              <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 md:p-8 border border-gold-500/20">
-                <div className="flex flex-col md:flex-row gap-8">
-                  <div className="flex-shrink-0">
-                    <div className="relative w-40 h-40 mx-auto md:mx-0 rounded-xl overflow-hidden border-2 border-gold-500/30">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {/* Dan */}
+                <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 md:p-8 border border-gold-500/20">
+                  <div className="flex flex-col items-center text-center gap-4">
+                    <div className="relative w-40 h-40 rounded-xl overflow-hidden border-2 border-gold-500/30">
                       <Image
                         src="/images/team/Dan_Headshot.jpg"
-                        alt="Dan Freeman - Founder, Jerry Can Spirits®"
+                        alt="Dan Freeman - Co-Founder & Director, Jerry Can Spirits®"
                         fill
                         className="object-cover"
                         sizes="160px"
                       />
                     </div>
+                    <div>
+                      <h4 className="text-2xl font-serif font-bold text-parchment-50 mb-1">Dan Freeman</h4>
+                      <p className="text-gold-300 font-medium mb-4">Co-Founder & Director</p>
+                    </div>
+                    <div className="space-y-3 text-parchment-200 text-sm leading-relaxed text-left">
+                      <p>
+                        Dan is a veteran of the Royal Corps of Signals. After his time in service he moved into civilian life with an idea brewing — make rum for the adventurous sort. No-nonsense spirits that deliver quality and taste without making any concessions.
+                      </p>
+                      <p>
+                        Based in the UK, Dan is at the helm using the same level of dedication and focus he had when serving — real proof that with a small, passionate team and a commitment to quality, anything&apos;s possible.
+                      </p>
+                    </div>
                     <a
                       href="/images/team/Dan_Headshot.jpg"
                       download="Dan_Freeman_Headshot.jpg"
-                      className="mt-4 inline-flex items-center gap-1.5 px-3 py-1.5 bg-jerry-green-700/60 hover:bg-gold-500 text-parchment-200 hover:text-jerry-green-900 text-xs font-semibold rounded transition-all duration-200 w-full justify-center"
+                      className="mt-2 inline-flex items-center gap-1.5 px-3 py-1.5 bg-jerry-green-700/60 hover:bg-gold-500 text-parchment-200 hover:text-jerry-green-900 text-xs font-semibold rounded transition-all duration-200"
                     >
                       <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
@@ -643,20 +757,42 @@ Based in the UK, Jerry Can Spirits® is a small operation run by two mates who c
                       Download Headshot
                     </a>
                   </div>
-                  <div className="flex-grow">
-                    <h4 className="text-2xl font-serif font-bold text-parchment-50 mb-1">Dan Freeman</h4>
-                    <p className="text-gold-300 font-medium mb-4">Founder & Director</p>
-                    <div className="space-y-3 text-parchment-200 text-sm leading-relaxed">
+                </div>
+
+                {/* Rhys */}
+                <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 md:p-8 border border-gold-500/20">
+                  <div className="flex flex-col items-center text-center gap-4">
+                    <div className="relative w-40 h-40 rounded-xl overflow-hidden border-2 border-gold-500/30">
+                      <Image
+                        src="https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/bcacb452-4f56-4676-b4c8-ac6afa7c1e00/public"
+                        alt="Rhys - Co-Founder & Director, Jerry Can Spirits®"
+                        fill
+                        className="object-cover"
+                        sizes="160px"
+                      />
+                    </div>
+                    <div>
+                      <h4 className="text-2xl font-serif font-bold text-parchment-50 mb-1">Rhys</h4>
+                      <p className="text-gold-300 font-medium mb-4">Co-Founder & Director</p>
+                    </div>
+                    <div className="space-y-3 text-parchment-200 text-sm leading-relaxed text-left">
                       <p>
-                        Dan Freeman is the founder of Jerry Can Spirits®, a premium British rum brand with a strong military heritage. Dan is a veteran of the Royal Corps of Signals, and after his time in service he moved on to civilian life with an idea brewing.
+                        Rhys is a veteran of the Royal Corps of Signals (2011–2016). After leaving the military, he moved into Formula 1 onboard communications and live events telecoms — high-pressure environments where reliability and precision matter.
                       </p>
                       <p>
-                        Drawing on those experiences, Dan set up Jerry Can Spirits® with a simple goal: make rum for the adventurous sort – no-nonsense spirits that deliver quality and taste without making any concessions. The company name is a nod to the famous jerry can – an absolute piece of kit design that shows just the kind of practical, don&apos;t-bother-with-the-frills ethos that Jerry Can Spirits® is all about.
-                      </p>
-                      <p>
-                        Based here in the UK, Dan is at the helm using the same level of dedication and focus he had when he was serving – real proof that with a small, tight team who are really passionate about what they do and with a real commitment to quality, anything&apos;s possible.
+                        With a lifelong passion for making alcohol and an engineer&apos;s mindset, Rhys brings hands-on expertise to Jerry Can Spirits&apos; recipe development and production process.
                       </p>
                     </div>
+                    <a
+                      href="https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/bcacb452-4f56-4676-b4c8-ac6afa7c1e00/public"
+                      download="Rhys_Headshot.jpg"
+                      className="mt-2 inline-flex items-center gap-1.5 px-3 py-1.5 bg-jerry-green-700/60 hover:bg-gold-500 text-parchment-200 hover:text-jerry-green-900 text-xs font-semibold rounded transition-all duration-200"
+                    >
+                      <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                      </svg>
+                      Download Headshot
+                    </a>
                   </div>
                 </div>
               </div>
@@ -709,6 +845,106 @@ Based in the UK, Jerry Can Spirits® is a small operation run by two mates who c
             </div>
           </section>
 
+          {/* ==================== AWARDS & ACCREDITATIONS ==================== */}
+          <section id="awards" className="mb-20 scroll-mt-24">
+            <h2 className="text-3xl font-serif font-bold text-parchment-50 text-center mb-4">
+              Awards & Accreditations
+            </h2>
+            <p className="text-parchment-300 text-center mb-12 max-w-2xl mx-auto">
+              Recognition and commitments that reflect our values.
+            </p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              {[
+                {
+                  title: 'Armed Forces Covenant',
+                  description: 'Signatory to the Armed Forces Covenant, pledging support for the armed forces community, veterans, and their families.',
+                  icon: '🤝',
+                },
+                {
+                  title: 'ERS Bronze Award',
+                  description: 'Employer Recognition Scheme Bronze Award from the Ministry of Defence for our commitment to supporting the armed forces community.',
+                  icon: '🏅',
+                },
+                {
+                  title: 'British Veteran Owned',
+                  description: 'Certified British Veteran Owned business, verified and recognised for our military heritage and veteran leadership.',
+                  icon: '🇬🇧',
+                },
+                {
+                  title: 'Worcester RFC MA Sponsor',
+                  description: 'Official Match Afternoon sponsor for Worcester RFC during the 2025/26 season, supporting grassroots community rugby.',
+                  icon: '🏉',
+                },
+              ].map((award) => (
+                <div key={award.title} className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+                  <div className="text-3xl mb-3">{award.icon}</div>
+                  <h3 className="text-lg font-serif font-bold text-parchment-50 mb-2">{award.title}</h3>
+                  <p className="text-parchment-200 text-sm leading-relaxed">{award.description}</p>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          {/* ==================== BRAND MILESTONES ==================== */}
+          <section id="milestones" className="mb-20 scroll-mt-24">
+            <h2 className="text-3xl font-serif font-bold text-parchment-50 text-center mb-4">
+              Brand Milestones
+            </h2>
+            <p className="text-parchment-300 text-center mb-12 max-w-2xl mx-auto">
+              Key moments in the Jerry Can Spirits journey.
+            </p>
+            <div className="max-w-2xl mx-auto">
+              <div className="relative border-l-2 border-gold-500/30 ml-4">
+                {[
+                  { date: '31 July 2025', event: 'Jerry Can Spirits founded on Black Tot Day — the anniversary of the Royal Navy\'s last daily rum ration.' },
+                  { date: 'Q3 2025', event: 'Recipe development begins with Spirit of Wales Distillery in Newport, South Wales.' },
+                  { date: '2025/26 Season', event: 'Worcester RFC Match Afternoon sponsorship begins.' },
+                  { date: '6 April 2026', event: 'Expedition Spiced Rum official launch.' },
+                ].map((milestone, index) => (
+                  <div key={index} className="relative pl-8 pb-10 last:pb-0">
+                    <div className="absolute -left-[9px] top-1 w-4 h-4 bg-gold-500 rounded-full border-2 border-jerry-green-900" />
+                    <p className="text-gold-300 text-sm font-semibold mb-1">{milestone.date}</p>
+                    <p className="text-parchment-200 text-sm leading-relaxed">{milestone.event}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+
+          {/* ==================== TARGET AUDIENCE ==================== */}
+          <section id="audience" className="mb-20 scroll-mt-24">
+            <h2 className="text-3xl font-serif font-bold text-parchment-50 text-center mb-4">
+              Target Audience & Pre-Launch Stats
+            </h2>
+            <p className="text-parchment-300 text-center mb-12 max-w-2xl mx-auto">
+              Who we&apos;re building for and early traction.
+            </p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 md:p-8 border border-gold-500/20">
+                <h3 className="text-lg font-serif font-bold text-parchment-50 mb-3">Target Audience</h3>
+                <p className="text-parchment-200 text-sm leading-relaxed">
+                  Adventurous adults (25–45) who appreciate quality spirits without pretension — outdoor enthusiasts, military community, cocktail explorers, and those who value authentic British craft.
+                </p>
+              </div>
+              <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 md:p-8 border border-gold-500/20 flex flex-col items-center justify-center text-center">
+                <p className="text-4xl font-serif font-bold text-gold-300 mb-2">60+</p>
+                <p className="text-parchment-200 text-sm">Pre-orders before launch</p>
+                <p className="text-parchment-400 text-xs mt-2">A growing community of rum enthusiasts</p>
+              </div>
+            </div>
+          </section>
+
+          {/* ==================== SOCIAL MEDIA PRESENCE ==================== */}
+          <section id="social-media" className="mb-20 scroll-mt-24">
+            <h2 className="text-3xl font-serif font-bold text-parchment-50 text-center mb-4">
+              Social Media Presence
+            </h2>
+            <p className="text-parchment-300 text-center mb-12 max-w-2xl mx-auto">
+              Find us across social media. We&apos;re @jerrycanspirits everywhere.
+            </p>
+            <SocialPresence />
+          </section>
+
           {/* ==================== PRESS CONTACTS SECTION ==================== */}
           <section id="press-contacts" className="mb-20 scroll-mt-24">
             <h2 className="text-3xl font-serif font-bold text-parchment-50 text-center mb-12">
@@ -736,6 +972,25 @@ Based in the UK, Jerry Can Spirits® is a small operation run by two mates who c
               ))}
             </div>
           </section>
+
+          {/* Media Kit CTA */}
+          <div className="mb-20 text-center">
+            <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20 inline-block">
+              <h3 className="text-xl font-serif font-bold text-parchment-50 mb-3">Need a quick overview?</h3>
+              <p className="text-parchment-300 text-sm mb-4 max-w-md">
+                Download our media kit one-pager with brand overview, product specs, and co-founder bios — ready to print or save as PDF.
+              </p>
+              <a
+                href="/contact/media/kit/"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-gold-500 hover:bg-gold-400 text-jerry-green-900 font-semibold rounded-lg transition-colors"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                Download Media Kit
+              </a>
+            </div>
+          </div>
 
           {/* ==================== LATEST NEWS SECTION ==================== */}
           <section className="mb-20">
