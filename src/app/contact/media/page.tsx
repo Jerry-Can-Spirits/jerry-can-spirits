@@ -239,6 +239,7 @@ Based in the UK, Jerry Can Spirits® is a small operation run by two mates who c
                   Our name comes from the classic jerry can, designed in 1937 and still NATO standard today because it just works. That&apos;s the approach we take: function over form, quality without shortcuts.
                 </p>
               </div>
+              <a href="/about/story/" className="inline-block mt-4 text-gold-300 hover:text-gold-200 text-sm font-medium underline transition-colors">Read our full story</a>
             </div>
 
             {/* Brand Values */}
@@ -256,6 +257,110 @@ Based in the UK, Jerry Can Spirits® is a small operation run by two mates who c
                     <p className="text-parchment-200 text-sm leading-relaxed">{value.description}</p>
                   </div>
                 ))}
+              </div>
+              <div className="mt-4 flex gap-4">
+                <a href="/ethos/" className="text-gold-300 hover:text-gold-200 text-sm font-medium underline transition-colors">Our ethos</a>
+                <a href="/sustainability/" className="text-gold-300 hover:text-gold-200 text-sm font-medium underline transition-colors">Sustainability</a>
+              </div>
+            </div>
+          </section>
+
+          {/* ==================== PRODUCT FACT SHEET ==================== */}
+          <section id="product-spec" className="mb-20 scroll-mt-24">
+            <h2 className="text-3xl font-serif font-bold text-parchment-50 text-center mb-4">
+              Product Fact Sheet
+            </h2>
+            <p className="text-parchment-300 text-center mb-12 max-w-2xl mx-auto">
+              Key product details for Expedition Spiced Rum.
+            </p>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+              {/* Specs */}
+              <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 md:p-8 border border-gold-500/20">
+                <h3 className="text-xl font-serif font-bold text-parchment-50 mb-6">Product Specifications</h3>
+                <div className="space-y-4">
+                  {[
+                    { label: 'Product', value: 'Expedition Spiced Rum' },
+                    { label: 'ABV', value: '40%' },
+                    { label: 'Volume', value: '700ml' },
+                    { label: 'RRP', value: '£45.00' },
+                    { label: 'Base Spirit', value: 'Caribbean rum' },
+                    { label: 'Produced At', value: 'Spirit of Wales Distillery, Newport, South Wales', href: '/friends/' },
+                  ].map((item) => (
+                    <div key={item.label} className="flex justify-between items-baseline border-b border-gold-500/10 pb-2">
+                      <span className="text-parchment-400 text-sm">{item.label}</span>
+                      {'href' in item && item.href ? (
+                        <a href={item.href} className="text-gold-300 hover:text-gold-200 font-medium text-sm underline transition-colors">{item.value}</a>
+                      ) : (
+                        <span className="text-parchment-50 font-medium text-sm">{item.value}</span>
+                      )}
+                    </div>
+                  ))}
+                </div>
+
+                <h4 className="text-gold-300 font-semibold mt-6 mb-3">Key Ingredients</h4>
+                <div className="flex flex-wrap gap-2">
+                  {[
+                    'Madagascan Vanilla Pods', 'Ceylon Cinnamon', 'Ginger', 'Orange Peel',
+                    'Cloves', 'Allspice', 'Cassia Bark', 'Agave Syrup', 'Glucose Syrup', 'Bourbon Barrel Chips'
+                  ].map((ingredient) => (
+                    <span key={ingredient} className="px-2.5 py-1 bg-jerry-green-700/60 text-parchment-200 text-xs rounded-full border border-gold-500/20">
+                      {ingredient}
+                    </span>
+                  ))}
+                </div>
+
+                <h4 className="text-gold-300 font-semibold mt-6 mb-3">Dietary Information</h4>
+                <div className="flex flex-wrap gap-3">
+                  {['Gluten-free', 'Vegan', 'Dairy-free', 'Nut-free'].map((badge) => (
+                    <span key={badge} className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-green-600/20 text-green-300 text-xs font-medium rounded-full border border-green-500/30">
+                      <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                      {badge}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              {/* Tasting Notes */}
+              <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 md:p-8 border border-gold-500/20">
+                <h3 className="text-xl font-serif font-bold text-parchment-50 mb-6">Tasting Notes</h3>
+                <div className="space-y-6">
+                  <div>
+                    <h4 className="text-gold-300 font-semibold mb-2">Nose</h4>
+                    <p className="text-parchment-200 text-sm leading-relaxed">
+                      Warm Madagascan vanilla leads with a rich, creamy softness, followed by Ceylon cinnamon and toasted bourbon oak, lifted by bright orange peel with clove and allspice in the background.
+                    </p>
+                  </div>
+                  <div>
+                    <h4 className="text-gold-300 font-semibold mb-2">Palate</h4>
+                    <p className="text-parchment-200 text-sm leading-relaxed">
+                      Silky and naturally sweet on entry thanks to agave, with ginger heat and cassia bark developing into layered baking spices.
+                    </p>
+                  </div>
+                  <div>
+                    <h4 className="text-gold-300 font-semibold mb-2">Finish</h4>
+                    <p className="text-parchment-200 text-sm leading-relaxed">
+                      Long, warming, and elegantly dry with oak tannins, vanilla, and a flicker of ginger.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="mt-8 flex flex-wrap gap-3">
+                  <a href="/ingredients/expedition-spiced-rum/" className="inline-flex items-center gap-2 px-4 py-2 bg-jerry-green-700/60 hover:bg-gold-500 text-parchment-200 hover:text-jerry-green-900 text-sm font-semibold rounded-lg transition-all duration-200">
+                    Full Ingredients
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </a>
+                  <a href="/shop/" className="inline-flex items-center gap-2 px-4 py-2 bg-jerry-green-700/60 hover:bg-gold-500 text-parchment-200 hover:text-jerry-green-900 text-sm font-semibold rounded-lg transition-all duration-200">
+                    Shop
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </a>
+                </div>
               </div>
             </div>
           </section>
@@ -854,34 +959,31 @@ Based in the UK, Jerry Can Spirits® is a small operation run by two mates who c
               Recognition and commitments that reflect our values.
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              {[
-                {
-                  title: 'Armed Forces Covenant',
-                  description: 'Signatory to the Armed Forces Covenant, pledging support for the armed forces community, veterans, and their families.',
-                  icon: '🤝',
-                },
-                {
-                  title: 'ERS Bronze Award',
-                  description: 'Employer Recognition Scheme Bronze Award from the Ministry of Defence for our commitment to supporting the armed forces community.',
-                  icon: '🏅',
-                },
-                {
-                  title: 'British Veteran Owned',
-                  description: 'Certified British Veteran Owned business, verified and recognised for our military heritage and veteran leadership.',
-                  icon: '🇬🇧',
-                },
-                {
-                  title: 'Worcester RFC MA Sponsor',
-                  description: 'Official Match Afternoon sponsor for Worcester RFC during the 2025/26 season, supporting grassroots community rugby.',
-                  icon: '🏉',
-                },
-              ].map((award) => (
-                <div key={award.title} className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
-                  <div className="text-3xl mb-3">{award.icon}</div>
-                  <h3 className="text-lg font-serif font-bold text-parchment-50 mb-2">{award.title}</h3>
-                  <p className="text-parchment-200 text-sm leading-relaxed">{award.description}</p>
-                </div>
-              ))}
+              <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+                <h3 className="text-lg font-serif font-bold text-gold-300 mb-2">Armed Forces Covenant</h3>
+                <p className="text-parchment-200 text-sm leading-relaxed mb-3">
+                  Signatory to the Armed Forces Covenant, pledging support for the armed forces community, veterans, and their families.
+                </p>
+                <a href="/armed-forces-covenant/" className="text-gold-300 hover:text-gold-200 text-xs font-medium underline transition-colors">Read our commitment</a>
+              </div>
+              <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+                <h3 className="text-lg font-serif font-bold text-gold-300 mb-2">ERS Bronze Award</h3>
+                <p className="text-parchment-200 text-sm leading-relaxed">
+                  Employer Recognition Scheme Bronze Award from the Ministry of Defence for our commitment to supporting the armed forces community.
+                </p>
+              </div>
+              <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+                <h3 className="text-lg font-serif font-bold text-gold-300 mb-2">British Veteran Owned</h3>
+                <p className="text-parchment-200 text-sm leading-relaxed">
+                  Certified British Veteran Owned business, verified and recognised for our military heritage and veteran leadership.
+                </p>
+              </div>
+              <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+                <h3 className="text-lg font-serif font-bold text-gold-300 mb-2">Worcester RFC MA Sponsor</h3>
+                <p className="text-parchment-200 text-sm leading-relaxed">
+                  Official Match Afternoon sponsor for Worcester RFC during the 2025/26 season, supporting grassroots community rugby.
+                </p>
+              </div>
             </div>
           </section>
 
