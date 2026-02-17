@@ -30,5 +30,9 @@ declare global {
     KLAVIYO_PRIVATE_KEY: string
     // Cloudflare KV namespace for cocktail ratings
     COCKTAIL_RATINGS: KVNamespace
+    // Meta Graph API for social stats
+    META_ACCESS_TOKEN?: string
+    META_FB_PAGE_ID?: string
+    META_IG_ACCOUNT_ID?: string
   }
 }
