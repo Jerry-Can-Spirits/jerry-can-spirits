@@ -25,7 +25,7 @@
     "@heroicons/react": "^2.2.0",
     "@sanity/image-url": "^1.2.0",
     "@sanity/vision": "^4.22.0",
-    "@sentry/nextjs": "^10.38.0",
+    "@sentry/nextjs": "^10.39.0",
     "@shopify/storefront-api-client": "^1.0.9",
     "@swc/helpers": "^0.5.18",
     "clsx": "^2.1.1",
@@ -36,7 +36,7 @@
     "react-dom": "19.2.4",
     "sanity": "^4.22.0",
     "styled-components": "^6.3.9",
-    "tailwind-merge": "^3.4.0"
+    "tailwind-merge": "^3.4.1"
   },
   "devDependencies": {
     "@cloudflare/next-on-pages": "^1.13.16",
