@@ -3,6 +3,7 @@ import Link from 'next/link'
 import BackToTop from '@/components/BackToTop'
 import Breadcrumbs from '@/components/Breadcrumbs'
 import StructuredData from '@/components/StructuredData'
+import ScrollReveal from '@/components/ScrollReveal'
 
 // FAQ Schema for rich snippets
 const faqSchema = {
@@ -115,6 +116,7 @@ export default function Sustainability() {
             </h2>
 
             <div className="space-y-6 text-parchment-300">
+              <ScrollReveal delay={0}>
               <div className="flex items-start space-x-4">
                 <div className="w-10 h-10 bg-gold-400/20 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
                   <span className="text-gold-400 font-bold">1</span>
@@ -124,7 +126,9 @@ export default function Sustainability() {
                   <p>Our bottles are made from standard glass and can be recycled in your household glass recycling bin or at a local bottle bank. Give it a quick rinse first.</p>
                 </div>
               </div>
+              </ScrollReveal>
 
+              <ScrollReveal delay={1}>
               <div className="flex items-start space-x-4">
                 <div className="w-10 h-10 bg-gold-400/20 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
                   <span className="text-gold-400 font-bold">2</span>
@@ -134,7 +138,9 @@ export default function Sustainability() {
                   <p>Our cap is made from natural wood with a micro agglomerate cork seal, both natural and renewable materials. The cork can be composted, and the wooden top can go in your garden waste or be repurposed.</p>
                 </div>
               </div>
+              </ScrollReveal>
 
+              <ScrollReveal delay={2}>
               <div className="flex items-start space-x-4">
                 <div className="w-10 h-10 bg-gold-400/20 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
                   <span className="text-gold-400 font-bold">3</span>
@@ -144,6 +150,7 @@ export default function Sustainability() {
                   <p>You don&apos;t need to remove the label before recycling. Modern recycling facilities handle this during processing.</p>
                 </div>
               </div>
+              </ScrollReveal>
             </div>
           </div>
         </section>
@@ -164,22 +171,30 @@ export default function Sustainability() {
               </p>
 
               <div className="grid sm:grid-cols-2 gap-4 mt-6">
+                <ScrollReveal delay={0}>
                 <div className="bg-jerry-green-800/60 rounded-lg p-4">
                   <h3 className="text-gold-300 font-semibold mb-2">Welsh Water</h3>
                   <p className="text-sm">Pure water from Wales, used in our distillation process.</p>
                 </div>
+                </ScrollReveal>
+                <ScrollReveal delay={1}>
                 <div className="bg-jerry-green-800/60 rounded-lg p-4">
                   <h3 className="text-gold-300 font-semibold mb-2">Brewery Molasses</h3>
                   <p className="text-sm">Sourced from local Welsh brewery production, reducing waste.</p>
                 </div>
+                </ScrollReveal>
+                <ScrollReveal delay={0}>
                 <div className="bg-jerry-green-800/60 rounded-lg p-4">
                   <h3 className="text-gold-300 font-semibold mb-2">UK Distillation</h3>
                   <p className="text-sm">Distilled at Spirit of Wales Distillery in Newport, Gwent.</p>
                 </div>
+                </ScrollReveal>
+                <ScrollReveal delay={1}>
                 <div className="bg-jerry-green-800/60 rounded-lg p-4">
                   <h3 className="text-gold-300 font-semibold mb-2">Caribbean Rum Base</h3>
                   <p className="text-sm">Some things have to travel. We use quality Caribbean rum as our foundation.</p>
                 </div>
+                </ScrollReveal>
               </div>
             </div>
           </div>

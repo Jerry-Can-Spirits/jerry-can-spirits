@@ -4,6 +4,7 @@ import type { Metadata } from 'next'
 import { client } from '@/sanity/client'
 import { fieldManualCountsQuery } from '@/sanity/queries'
 import Breadcrumbs from '@/components/Breadcrumbs'
+import ScrollReveal from '@/components/ScrollReveal'
 
 // Round down to nearest 10
 function roundDownToTen(n: number): number {
@@ -74,6 +75,7 @@ export default async function FieldManualHome() {
       </section>
 
       {/* Stats Banner */}
+      <ScrollReveal>
       <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 -mt-8 mb-8 relative z-10">
         <div className="bg-gradient-to-r from-jerry-green-800/80 via-jerry-green-700/80 to-jerry-green-800/80 backdrop-blur-sm rounded-xl border border-gold-500/30 py-6 px-8">
           <div className="grid grid-cols-3 divide-x divide-gold-500/30">
@@ -98,6 +100,7 @@ export default async function FieldManualHome() {
           </div>
         </div>
       </section>
+      </ScrollReveal>
 
       {/* Philosophy Section */}
       <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
@@ -127,6 +130,7 @@ export default async function FieldManualHome() {
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8 lg:items-stretch">
           
           {/* Cocktails Section */}
+          <ScrollReveal delay={0}>
           <Link href="/field-manual/cocktails/" className="group h-full">
             <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20 hover:border-gold-400/40 transition-all duration-300 transform hover:scale-105 hover:shadow-2xl relative overflow-hidden h-full flex flex-col">
               {/* Parchment texture */}
@@ -164,7 +168,10 @@ export default async function FieldManualHome() {
             </div>
           </Link>
 
+          </ScrollReveal>
+
           {/* Ingredients Section */}
+          <ScrollReveal delay={1}>
           <Link href="/field-manual/ingredients/" className="group h-full">
             <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20 hover:border-gold-400/40 transition-all duration-300 transform hover:scale-105 hover:shadow-2xl relative overflow-hidden h-full flex flex-col">
               {/* Parchment texture */}
@@ -202,7 +209,10 @@ export default async function FieldManualHome() {
             </div>
           </Link>
 
+          </ScrollReveal>
+
           {/* Equipment Section */}
+          <ScrollReveal delay={2}>
           <Link href="/field-manual/equipment/" className="group h-full">
             <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20 hover:border-gold-400/40 transition-all duration-300 transform hover:scale-105 hover:shadow-2xl relative overflow-hidden h-full flex flex-col">
               {/* Parchment texture */}
@@ -239,6 +249,7 @@ export default async function FieldManualHome() {
               </div>
             </div>
           </Link>
+          </ScrollReveal>
         </div>
 
         {/* Call to Action */}
@@ -261,6 +272,7 @@ export default async function FieldManualHome() {
       </section>
 
       {/* Difficulty Comparison Table */}
+      <ScrollReveal>
       <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
           <h2 className="text-2xl sm:text-3xl font-serif font-bold text-white mb-2 text-center">
@@ -363,6 +375,7 @@ export default async function FieldManualHome() {
           </p>
         </div>
       </section>
+      </ScrollReveal>
 
       {/* FAQ Section */}
       <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">

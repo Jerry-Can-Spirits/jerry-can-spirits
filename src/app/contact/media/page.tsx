@@ -4,6 +4,7 @@ import { useState } from 'react'
 import Image from 'next/image'
 import { ColorSwatch, DownloadCard, BoilerplateText, ImageGallery, SocialPresence } from '@/components/media'
 import Breadcrumbs from '@/components/Breadcrumbs'
+import ScrollReveal from '@/components/ScrollReveal'
 
 export default function MediaContact() {
   const [formData, setFormData] = useState({
@@ -251,11 +252,13 @@ Based in the UK, Jerry Can Spirits® is a small operation run by two mates who c
                 Brand Values
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {brandValues.map((value) => (
-                  <div key={value.name} className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+                {brandValues.map((value, index) => (
+                  <ScrollReveal key={value.name} delay={(index % 2) as 0 | 1}>
+                  <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20 h-full">
                     <h4 className="text-gold-300 font-semibold text-lg mb-2">{value.name}</h4>
                     <p className="text-parchment-200 text-sm leading-relaxed">{value.description}</p>
                   </div>
+                  </ScrollReveal>
                 ))}
               </div>
               <div className="mt-4 flex gap-4">
@@ -963,31 +966,39 @@ Based in the UK, Jerry Can Spirits® is a small operation run by two mates who c
               Recognition and commitments that reflect our values.
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+              <ScrollReveal delay={0}>
+              <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20 h-full">
                 <h3 className="text-lg font-serif font-bold text-gold-300 mb-2">Armed Forces Covenant</h3>
                 <p className="text-parchment-200 text-sm leading-relaxed mb-3">
                   Signatory to the Armed Forces Covenant, pledging support for the armed forces community, veterans, and their families.
                 </p>
                 <a href="/armed-forces-covenant/" className="text-gold-300 hover:text-gold-200 text-xs font-medium underline transition-colors">Read our commitment</a>
               </div>
-              <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+              </ScrollReveal>
+              <ScrollReveal delay={1}>
+              <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20 h-full">
                 <h3 className="text-lg font-serif font-bold text-gold-300 mb-2">ERS Bronze Award</h3>
                 <p className="text-parchment-200 text-sm leading-relaxed">
                   Employer Recognition Scheme Bronze Award from the Ministry of Defence for our commitment to supporting the armed forces community.
                 </p>
               </div>
-              <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+              </ScrollReveal>
+              <ScrollReveal delay={0}>
+              <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20 h-full">
                 <h3 className="text-lg font-serif font-bold text-gold-300 mb-2">British Veteran Owned</h3>
                 <p className="text-parchment-200 text-sm leading-relaxed">
                   Certified British Veteran Owned business, verified and recognised for our military heritage and veteran leadership.
                 </p>
               </div>
-              <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+              </ScrollReveal>
+              <ScrollReveal delay={1}>
+              <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20 h-full">
                 <h3 className="text-lg font-serif font-bold text-gold-300 mb-2">Worcester RFC MA Sponsor</h3>
                 <p className="text-parchment-200 text-sm leading-relaxed">
                   Official Match Afternoon sponsor for Worcester RFC during the 2025/26 season, supporting grassroots community rugby.
                 </p>
               </div>
+              </ScrollReveal>
             </div>
           </section>
 
@@ -1007,11 +1018,13 @@ Based in the UK, Jerry Can Spirits® is a small operation run by two mates who c
                   { date: '2025/26 Season', event: 'Worcester RFC Match Afternoon sponsorship begins.' },
                   { date: '6 April 2026', event: 'Expedition Spiced Rum official launch.' },
                 ].map((milestone, index) => (
-                  <div key={index} className="relative pl-8 pb-10 last:pb-0">
+                  <ScrollReveal key={index} delay={(index % 3) as 0 | 1 | 2}>
+                  <div className="relative pl-8 pb-10 last:pb-0">
                     <div className="absolute -left-[9px] top-1 w-4 h-4 bg-gold-500 rounded-full border-2 border-jerry-green-900" />
                     <p className="text-gold-300 text-sm font-semibold mb-1">{milestone.date}</p>
                     <p className="text-parchment-200 text-sm leading-relaxed">{milestone.event}</p>
                   </div>
+                  </ScrollReveal>
                 ))}
               </div>
             </div>
@@ -1285,7 +1298,8 @@ Based in the UK, Jerry Can Spirits® is a small operation run by two mates who c
               Media Guidelines
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+              <ScrollReveal delay={0}>
+              <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20 h-full">
                 <h3 className="text-lg font-serif font-bold text-parchment-50 mb-3">
                   Brand Usage
                 </h3>
@@ -1312,7 +1326,9 @@ Based in the UK, Jerry Can Spirits® is a small operation run by two mates who c
                   </li>
                 </ul>
               </div>
-              <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+              </ScrollReveal>
+              <ScrollReveal delay={1}>
+              <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20 h-full">
                 <h3 className="text-lg font-serif font-bold text-parchment-50 mb-3">
                   Content Standards
                 </h3>
@@ -1339,7 +1355,9 @@ Based in the UK, Jerry Can Spirits® is a small operation run by two mates who c
                   </li>
                 </ul>
               </div>
-              <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+              </ScrollReveal>
+              <ScrollReveal delay={2}>
+              <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20 h-full">
                 <h3 className="text-lg font-serif font-bold text-parchment-50 mb-3">
                   Legal Requirements
                 </h3>
@@ -1366,6 +1384,7 @@ Based in the UK, Jerry Can Spirits® is a small operation run by two mates who c
                   </li>
                 </ul>
               </div>
+              </ScrollReveal>
             </div>
           </section>
         </div>

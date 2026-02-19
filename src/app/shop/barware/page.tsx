@@ -4,6 +4,7 @@ import { getProductsByCollection, type ShopifyProduct } from '@/lib/shopify'
 import type { Metadata } from 'next'
 import Breadcrumbs from '@/components/Breadcrumbs'
 import StructuredData from '@/components/StructuredData'
+import ScrollReveal from '@/components/ScrollReveal'
 
 export const metadata: Metadata = {
   title: 'Cocktail Shaker Sets, Barware & Bar Tools',
@@ -303,11 +304,11 @@ export default async function BarwarePage() {
 
             {/* Products Grid */}
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
-              {groupedProducts[category].map((product: ShopifyProduct) => (
+              {groupedProducts[category].map((product: ShopifyProduct, index: number) => (
+            <ScrollReveal key={product.id} delay={(index % 4) as 0 | 1 | 2 | 3}>
             <Link
-              key={product.id}
               href={`/shop/product/${product.handle}`}
-              className="group bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl border border-gold-500/20 overflow-hidden hover:border-gold-400/40 transition-all duration-300 hover:scale-105"
+              className="group bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl border border-gold-500/20 overflow-hidden hover:border-gold-400/40 transition-all duration-300 hover:scale-105 block"
             >
               {/* Product Image */}
               <div className="relative aspect-square sm:aspect-[4/3] lg:aspect-square bg-jerry-green-800/20 flex items-center justify-center p-4">
@@ -358,6 +359,7 @@ export default async function BarwarePage() {
                 </div>
               </div>
             </Link>
+            </ScrollReveal>
               ))}
             </div>
           </div>
@@ -366,6 +368,7 @@ export default async function BarwarePage() {
 
       {/* What You're Getting */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-20">
+        <ScrollReveal>
         <div className="bg-gradient-to-br from-gold-500/10 to-gold-600/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
           <h3 className="text-2xl font-serif font-bold text-gold-300 mb-6 text-center">
             What You're Actually Getting
@@ -406,6 +409,7 @@ export default async function BarwarePage() {
             </div>
           </div>
         </div>
+        </ScrollReveal>
       </section>
 
       {/* CTA Section */}

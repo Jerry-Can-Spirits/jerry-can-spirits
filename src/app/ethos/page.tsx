@@ -4,6 +4,7 @@ import Link from 'next/link'
 import BackToTop from '@/components/BackToTop'
 import Breadcrumbs from '@/components/Breadcrumbs'
 import StructuredData from '@/components/StructuredData'
+import ScrollReveal from '@/components/ScrollReveal'
 
 export const metadata: Metadata = {
   title: "Our Ethos - Values & Craftsmanship",
@@ -168,16 +169,19 @@ export default function Ethos() {
                 description: "Quality that proves itself. The drink at the end of the journey you've actually taken."
               }
             ].map((item, index) => (
-              <div key={index} className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20 hover:border-gold-400/40 transition-all duration-300 group">
-                <div className="mb-4">
-                  <h3 className="text-xl font-serif font-bold text-gold-300 mb-3">{item.value}</h3>
-                  <p className="text-parchment-300 leading-relaxed">{item.description}</p>
+              <ScrollReveal key={index} delay={(index % 3) as 0 | 1 | 2}>
+                <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20 hover:border-gold-400/40 transition-all duration-300 group h-full">
+                  <div className="mb-4">
+                    <h3 className="text-xl font-serif font-bold text-gold-300 mb-3">{item.value}</h3>
+                    <p className="text-parchment-300 leading-relaxed">{item.description}</p>
+                  </div>
                 </div>
-              </div>
+              </ScrollReveal>
             ))}
           </div>
 
           {/* Philosophy Quote */}
+          <ScrollReveal>
           <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-8 border border-gold-500/20 text-center">
             <p className="text-xl text-white leading-relaxed">
               &quot;In the military you learn to appreciate kit that just works – nothing fancy, just reliable.
@@ -187,6 +191,7 @@ export default function Ethos() {
               - The Jerry Can Philosophy
             </div>
           </div>
+          </ScrollReveal>
         </section>
 
         {/* Section 2: The Journey (Process Timeline) */}
@@ -208,6 +213,7 @@ export default function Ethos() {
             
             <div className="space-y-12">
               {/* Sourcing */}
+              <ScrollReveal direction="left">
               <div className="relative flex items-start space-x-8 group">
                 <div className="flex-shrink-0 w-16 h-16 bg-jerry-green-800 rounded-full border-4 border-gold-400 flex items-center justify-center z-10">
                   <span className="text-gold-300 font-bold text-xl">1</span>
@@ -247,7 +253,10 @@ export default function Ethos() {
                 </div>
               </div>
 
+              </ScrollReveal>
+
               {/* Selection */}
+              <ScrollReveal direction="right">
               <div className="relative flex items-start space-x-8 group">
                 <div className="flex-shrink-0 w-16 h-16 bg-jerry-green-800 rounded-full border-4 border-gold-400 flex items-center justify-center z-10">
                   <span className="text-gold-300 font-bold text-xl">2</span>
@@ -285,7 +294,10 @@ export default function Ethos() {
                 </div>
               </div>
 
+              </ScrollReveal>
+
               {/* Crafting */}
+              <ScrollReveal direction="left">
               <div className="relative flex items-start space-x-8 group">
                 <div className="flex-shrink-0 w-16 h-16 bg-jerry-green-800 rounded-full border-4 border-gold-400 flex items-center justify-center z-10">
                   <span className="text-gold-300 font-bold text-xl">3</span>
@@ -329,7 +341,10 @@ export default function Ethos() {
                 </div>
               </div>
 
+              </ScrollReveal>
+
               {/* Aging - Future Products */}
+              <ScrollReveal direction="right">
               <div className="relative flex items-start space-x-8 group">
                 <div className="flex-shrink-0 w-16 h-16 bg-jerry-green-800 rounded-full border-4 border-gold-400 flex items-center justify-center z-10">
                   <span className="text-gold-300 font-bold text-xl">4</span>
@@ -365,6 +380,7 @@ export default function Ethos() {
                   </div>
                 </div>
               </div>
+            </ScrollReveal>
             </div>
           </div>
         </section>
@@ -382,7 +398,8 @@ export default function Ethos() {
 
           <div className="grid md:grid-cols-2 gap-12">
             {/* UK Focus */}
-            <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-8 border border-gold-500/20">
+            <ScrollReveal>
+            <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-8 border border-gold-500/20 h-full">
               <div className="text-center mb-6">
                 <div className="w-16 h-16 bg-gold-400/20 rounded-full flex items-center justify-center mx-auto mb-4">
                   <svg className="w-8 h-8 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -419,8 +436,11 @@ export default function Ethos() {
               </div>
             </div>
 
+            </ScrollReveal>
+
             {/* Quality */}
-            <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-8 border border-gold-500/20">
+            <ScrollReveal delay={1}>
+            <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-8 border border-gold-500/20 h-full">
               <div className="text-center mb-6">
                 <div className="w-16 h-16 bg-gold-400/20 rounded-full flex items-center justify-center mx-auto mb-4">
                   <svg className="w-8 h-8 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -456,6 +476,7 @@ export default function Ethos() {
                 </div>
               </div>
             </div>
+            </ScrollReveal>
           </div>
         </section>
 
