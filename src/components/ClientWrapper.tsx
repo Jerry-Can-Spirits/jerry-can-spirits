@@ -53,11 +53,15 @@ export default function ClientWrapper({ children }: ClientWrapperProps) {
 
   // Handle backward-compat (migrate localStorage to cookie) and affiliate tracking
   useEffect(() => {
-    const verifiedViaStorage = localStorage.getItem('ageVerified') === 'true';
-    if (verifiedViaStorage && !isAgeVerified) {
-      // Migrate: set cookie for future visits, update state
-      document.cookie = 'ageVerified=true; path=/; max-age=31536000; SameSite=Strict; Secure';
-      setIsAgeVerified(true);
+    try {
+      const verifiedViaStorage = localStorage.getItem('ageVerified') === 'true';
+      if (verifiedViaStorage && !isAgeVerified) {
+        // Migrate: set cookie for future visits, update state
+        document.cookie = 'ageVerified=true; path=/; max-age=31536000; SameSite=Strict; Secure';
+        setIsAgeVerified(true);
+      }
+    } catch {
+      // Storage may be blocked by browser tracking prevention
     }
 
     const botDetected = checkIsBot();
@@ -66,9 +70,13 @@ export default function ClientWrapper({ children }: ClientWrapperProps) {
     if ((botDetected || auditBypass) && !isBot) setIsBot(true);
 
     // Preserve affiliate tracking parameters (dt_id for Shopify Collabs)
-    const dtId = urlParams.get('dt_id');
-    if (dtId) {
-      sessionStorage.setItem('affiliate_dt_id', dtId);
+    try {
+      const dtId = urlParams.get('dt_id');
+      if (dtId) {
+        sessionStorage.setItem('affiliate_dt_id', dtId);
+      }
+    } catch {
+      // Session storage may be blocked
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
