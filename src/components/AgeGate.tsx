@@ -50,6 +50,7 @@ export default function AgeGate({ onVerified }: AgeGateProps) {
     if (isOfAge) {
       localStorage.setItem('ageVerified', 'true');
       localStorage.setItem('selectedRegion', JSON.stringify(selectedRegion));
+      document.cookie = 'ageVerified=true; path=/; max-age=31536000; SameSite=Strict; Secure';
       setIsVisible(false);
       onVerified();
     } else {

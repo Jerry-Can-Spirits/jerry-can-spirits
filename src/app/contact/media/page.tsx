@@ -385,11 +385,15 @@ Based in the UK, Jerry Can Spirits® is a small operation run by two mates who c
                     { label: 'Volume', value: '700ml' },
                     { label: 'RRP', value: '£45.00' },
                     { label: 'Base Spirit', value: 'Caribbean rum' },
-                    { label: 'Produced At', value: 'Spirit of Wales Distillery, Newport, South Wales' },
+                    { label: 'Produced At', value: 'Spirit of Wales Distillery, Newport, South Wales', href: '/friends/' },
                   ].map((item) => (
                     <div key={item.label} className="flex justify-between items-baseline border-b border-gold-500/10 pb-2">
                       <span className="text-parchment-400 text-sm">{item.label}</span>
-                      <span className="text-parchment-50 font-medium text-sm">{item.value}</span>
+                      {'href' in item && item.href ? (
+                        <a href={item.href} className="text-gold-300 hover:text-gold-200 font-medium text-sm underline transition-colors">{item.value}</a>
+                      ) : (
+                        <span className="text-parchment-50 font-medium text-sm">{item.value}</span>
+                      )}
                     </div>
                   ))}
                 </div>
