@@ -3,6 +3,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import StructuredData from '@/components/StructuredData'
 import Breadcrumbs from '@/components/Breadcrumbs'
+import ScrollReveal from '@/components/ScrollReveal'
 
 export const metadata: Metadata = {
   title: "Friends & Partners",
@@ -216,8 +217,8 @@ export default function FriendsPage() {
                 {partners
                   .filter(partner => partner.featured)
                   .map((partner, index) => (
+                    <ScrollReveal key={index}>
                     <div
-                      key={index}
                       className="bg-jerry-green-800/20 border border-gold-500/30 rounded-lg p-8 hover:border-gold-500/50 transition-all"
                     >
                       <div className="grid md:grid-cols-[200px_1fr] gap-6">
@@ -262,6 +263,7 @@ export default function FriendsPage() {
                         </div>
                       </div>
                     </div>
+                    </ScrollReveal>
                   ))}
               </div>
             </div>
@@ -436,30 +438,36 @@ export default function FriendsPage() {
 
           {/* Partnership Benefits Section */}
           <div className="mt-16 grid md:grid-cols-3 gap-6 mb-16">
-            <div className="text-center p-6 bg-jerry-green-800/10 border border-gold-500/20 rounded-lg">
-              <h4 className="text-lg font-semibold text-gold-400 mb-2">
-                Community Growth
-              </h4>
-              <p className="text-parchment-300 text-sm">
-                Expand reach through collaboration and mutual support
-              </p>
-            </div>
-            <div className="text-center p-6 bg-jerry-green-800/10 border border-gold-500/20 rounded-lg">
-              <h4 className="text-lg font-semibold text-gold-400 mb-2">
-                Shared Success
-              </h4>
-              <p className="text-parchment-300 text-sm">
-                Rising tide lifts all boats in craft spirits
-              </p>
-            </div>
-            <div className="text-center p-6 bg-jerry-green-800/10 border border-gold-500/20 rounded-lg">
-              <h4 className="text-lg font-semibold text-gold-400 mb-2">
-                Quality Recognition
-              </h4>
-              <p className="text-parchment-300 text-sm">
-                Showcasing excellence across the industry
-              </p>
-            </div>
+            <ScrollReveal delay={0}>
+              <div className="text-center p-6 bg-jerry-green-800/10 border border-gold-500/20 rounded-lg h-full">
+                <h4 className="text-lg font-semibold text-gold-400 mb-2">
+                  Community Growth
+                </h4>
+                <p className="text-parchment-300 text-sm">
+                  Expand reach through collaboration and mutual support
+                </p>
+              </div>
+            </ScrollReveal>
+            <ScrollReveal delay={1}>
+              <div className="text-center p-6 bg-jerry-green-800/10 border border-gold-500/20 rounded-lg h-full">
+                <h4 className="text-lg font-semibold text-gold-400 mb-2">
+                  Shared Success
+                </h4>
+                <p className="text-parchment-300 text-sm">
+                  Rising tide lifts all boats in craft spirits
+                </p>
+              </div>
+            </ScrollReveal>
+            <ScrollReveal delay={2}>
+              <div className="text-center p-6 bg-jerry-green-800/10 border border-gold-500/20 rounded-lg h-full">
+                <h4 className="text-lg font-semibold text-gold-400 mb-2">
+                  Quality Recognition
+                </h4>
+                <p className="text-parchment-300 text-sm">
+                  Showcasing excellence across the industry
+                </p>
+              </div>
+            </ScrollReveal>
           </div>
 
           {/* FAQ Section */}

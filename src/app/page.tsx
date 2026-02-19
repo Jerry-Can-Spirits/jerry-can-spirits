@@ -9,6 +9,8 @@ import SupportingOurForces from "@/components/SupportingOurForces";
 import FieldManualPreview from "@/components/FieldManualPreview";
 import WhyJerryCan from "@/components/WhyJerryCan";
 import HomepageFAQ from "@/components/HomepageFAQ";
+import ScrollReveal from "@/components/ScrollReveal";
+import TickerStrip from "@/components/TickerStrip";
 import type { Metadata } from 'next'
 
 // Lazy load TrustpilotWidget (below the fold)
@@ -175,27 +177,44 @@ export default function Home() {
         <HeroSection />
 
         {/* Pre-Order Section - Primary CTA */}
-        <PreOrderSection />
+        <ScrollReveal>
+          <PreOrderSection />
+        </ScrollReveal>
 
         {/* Email Signup */}
-        <EmailSignup />
+        <ScrollReveal delay={1}>
+          <EmailSignup />
+        </ScrollReveal>
 
         {/* Why Jerry Can - Value Proposition */}
-        <WhyJerryCan />
+        <ScrollReveal>
+          <WhyJerryCan />
+        </ScrollReveal>
 
         {/* FAQ Section with Schema Markup */}
         <HomepageFAQ />
 
         {/* Founder Story Snippet */}
-        <FounderStorySnippet />
+        <ScrollReveal>
+          <FounderStorySnippet />
+        </ScrollReveal>
 
         {/* Supporting Our Forces - Armed Forces Commitments */}
-        <SupportingOurForces />
+        <ScrollReveal>
+          <SupportingOurForces />
+        </ScrollReveal>
+
+        {/* Social Proof Ticker */}
+        <TickerStrip
+          items={["12+ Years Service", "UK First Philosophy", "Small Batch Quality", "Forces Covenant", "Veteran Owned", "Welsh Distilled"]}
+          className="py-4 bg-jerry-green-900/80 border-y border-gold-500/20"
+        />
 
         {/* SEO-Rich Content Section - Veteran-Owned British Rum */}
         <section className="py-16 bg-jerry-green-900/50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid lg:grid-cols-2 gap-12">
+              <ScrollReveal>
               <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
                 <h2 className="text-3xl font-serif font-bold text-white mb-6">
                   Why We Started Making Rum
@@ -212,7 +231,9 @@ export default function Home() {
                   </p>
                 </div>
               </div>
+              </ScrollReveal>
 
+              <ScrollReveal delay={1}>
               <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
                 <h2 className="text-3xl font-serif font-bold text-white mb-6">
                   Craft Spirits with Purpose
@@ -229,32 +250,43 @@ export default function Home() {
                   </p>
                 </div>
               </div>
+              </ScrollReveal>
             </div>
 
             {/* Key Features Grid */}
             <div className="mt-12 grid md:grid-cols-4 gap-6">
-              <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20 text-center">
-                <h3 className="text-lg font-serif font-bold text-gold-300 mb-2">12+ Years Service</h3>
-                <p className="text-parchment-300 text-sm">Royal Corps of Signals veterans bringing military precision to craft spirits</p>
-              </div>
-              <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20 text-center">
-                <h3 className="text-lg font-serif font-bold text-gold-300 mb-2">UK First Philosophy</h3>
-                <p className="text-parchment-300 text-sm">British ingredients, Welsh distillation, sustainable local sourcing</p>
-              </div>
-              <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20 text-center">
-                <h3 className="text-lg font-serif font-bold text-gold-300 mb-2">Small Batch Quality</h3>
-                <p className="text-parchment-300 text-sm">Copper-lined distillation creating complex flavours and smooth finish</p>
-              </div>
-              <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20 text-center">
-                <h3 className="text-lg font-serif font-bold text-gold-300 mb-2">Forces Covenant</h3>
-                <p className="text-parchment-300 text-sm">Supporting veterans and military charities with every bottle sold</p>
-              </div>
+              <ScrollReveal delay={0}>
+                <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20 text-center">
+                  <h3 className="text-lg font-serif font-bold text-gold-300 mb-2">12+ Years Service</h3>
+                  <p className="text-parchment-300 text-sm">Royal Corps of Signals veterans bringing military precision to craft spirits</p>
+                </div>
+              </ScrollReveal>
+              <ScrollReveal delay={1}>
+                <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20 text-center">
+                  <h3 className="text-lg font-serif font-bold text-gold-300 mb-2">UK First Philosophy</h3>
+                  <p className="text-parchment-300 text-sm">British ingredients, Welsh distillation, sustainable local sourcing</p>
+                </div>
+              </ScrollReveal>
+              <ScrollReveal delay={2}>
+                <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20 text-center">
+                  <h3 className="text-lg font-serif font-bold text-gold-300 mb-2">Small Batch Quality</h3>
+                  <p className="text-parchment-300 text-sm">Copper-lined distillation creating complex flavours and smooth finish</p>
+                </div>
+              </ScrollReveal>
+              <ScrollReveal delay={3}>
+                <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20 text-center">
+                  <h3 className="text-lg font-serif font-bold text-gold-300 mb-2">Forces Covenant</h3>
+                  <p className="text-parchment-300 text-sm">Supporting veterans and military charities with every bottle sold</p>
+                </div>
+              </ScrollReveal>
             </div>
           </div>
         </section>
 
         {/* Field Manual Preview */}
-        <FieldManualPreview />
+        <ScrollReveal>
+          <FieldManualPreview />
+        </ScrollReveal>
 
         {/* Trustpilot Reviews Section - Hidden until April 2026 launch */}
         {/* CSP is configured for Trustpilot, will activate automatically at launch */}
