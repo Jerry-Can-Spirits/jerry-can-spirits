@@ -218,11 +218,13 @@ export default function RootLayout({
         {/* Cart Drawer */}
         <CartDrawer />
 
-        {/* Google AdSense - lazy loaded to avoid competing with LCP */}
-        <Script
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5758288828569326"
-          strategy="lazyOnload"
-          crossOrigin="anonymous"
+        {/* Google AdSense - lazy loaded via requestIdleCallback to avoid competing with LCP.
+            Uses dangerouslySetInnerHTML instead of next/script to avoid data-nscript attribute
+            which AdSense rejects. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){var c=function(){var s=document.createElement('script');s.src='https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5758288828569326';s.crossOrigin='anonymous';s.async=true;document.body.appendChild(s)};if('requestIdleCallback' in window){requestIdleCallback(c)}else{setTimeout(c,3000)}})();`,
+          }}
         />
         </CartProvider>
       </body>
