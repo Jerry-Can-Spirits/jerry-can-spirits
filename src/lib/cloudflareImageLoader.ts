@@ -89,7 +89,8 @@ export default function cloudflareImageLoader({
 
     // Use Cloudflare flexible variants for responsive srcset generation
     // Requires "Flexible variants" enabled in Cloudflare dashboard → Images → Variants
-    const baseUrl = mappedImage.cloudflareUrl.replace('/public', '')
+    // Strip the existing variant name (e.g. /public, /avatar) from the URL
+    const baseUrl = mappedImage.cloudflareUrl.replace(/\/[^/]+$/, '')
     return `${baseUrl}/w=${width},q=${quality}`
   }
 

@@ -352,6 +352,13 @@ export default defineType({
       }
     }),
     defineField({
+      name: 'videoUrl',
+      title: 'Video URL',
+      type: 'url',
+      description: 'YouTube or other video URL for this cocktail recipe. Improves Google Recipe rich result eligibility.',
+      validation: Rule => Rule.uri({ scheme: ['https'] })
+    }),
+    defineField({
       name: 'relatedGuides',
       title: 'Related Technique Guides',
       type: 'array',

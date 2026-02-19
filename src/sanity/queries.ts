@@ -57,6 +57,7 @@ export const cocktailsQuery = `*[_type == "cocktail"] | order(_createdAt desc) {
 
 export const cocktailBySlugQuery = `*[_type == "cocktail" && slug.current == $slug][0] {
   _id,
+  _createdAt,
   name,
   slug,
   description,
@@ -89,6 +90,7 @@ export const cocktailBySlugQuery = `*[_type == "cocktail" && slug.current == $sl
   tags,
   featured,
   "image": image.asset->url,
+  videoUrl,
   relatedGuides[] {
     "guide": guide->{ _id, title, slug },
     sectionAnchor,
