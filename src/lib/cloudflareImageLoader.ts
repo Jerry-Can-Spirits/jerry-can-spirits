@@ -87,10 +87,11 @@ export default function cloudflareImageLoader({
       return src
     }
 
-    // Use the pre-configured variant from the mapping
-    // Cloudflare Images requires using predefined variants, not flexible transformations
-    // The cloudflareUrl already includes the correct variant (public, avatar, etc.)
-    return mappedImage.cloudflareUrl
+    // Use Cloudflare flexible variants for responsive srcset generation
+    // Requires "Flexible variants" enabled in Cloudflare dashboard → Images → Variants
+    // Strip the existing variant name (e.g. /public, /avatar) from the URL
+    const baseUrl = mappedImage.cloudflareUrl.replace(/\/[^/]+$/, '')
+    return `${baseUrl}/w=${width},q=${quality}`
   }
 
   // Fallback for any other paths - return absolute URL in dev

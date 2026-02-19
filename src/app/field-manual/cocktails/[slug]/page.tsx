@@ -43,6 +43,7 @@ interface RelatedGuide {
 
 interface SanityCocktail {
   _id: string
+  _createdAt: string
   name: string
   slug: { current: string }
   description: string
@@ -57,9 +58,13 @@ interface SanityCocktail {
   garnish: string
   note?: string
   variants?: CocktailVariant[]
+  family?: string
+  baseSpirit?: string
   category?: string
+  tags?: string[]
   featured?: boolean
   image?: string
+  videoUrl?: string
   relatedGuides?: RelatedGuide[]
 }
 
@@ -120,16 +125,65 @@ export default async function CocktailPage({ params }: PageProps) {
     notFound()
   }
 
+  // Fetch real ratings from Cloudflare KV
+  let aggregateRating: Record<string, unknown> | undefined
+  try {
+    const ratingsRes = await fetch(
+      `https://jerrycanspirits.co.uk/api/ratings?slug=${cocktail.slug.current}`,
+      { next: { revalidate: 3600 } }
+    )
+    if (ratingsRes.ok) {
+      const ratingsData = await ratingsRes.json() as { count: number; average: number }
+      if (ratingsData.count >= 1) {
+        aggregateRating = {
+          "@type": "AggregateRating",
+          "ratingValue": ratingsData.average.toString(),
+          "ratingCount": ratingsData.count.toString(),
+          "bestRating": "5",
+          "worstRating": "1"
+        }
+      }
+    }
+  } catch {
+    // Ratings unavailable — omit aggregateRating rather than show fake data
+  }
+
+  // Map difficulty to prep time
+  const prepTimeMap = { novice: 'PT3M', wayfinder: 'PT5M', trailblazer: 'PT10M' }
+  const prepTime = prepTimeMap[cocktail.difficulty] || 'PT5M'
+
+  // Derive cookingMethod from tags
+  const methodTags = ['shaken', 'stirred', 'built', 'frozen', 'hot']
+  const cookingMethod = cocktail.tags
+    ?.filter(tag => methodTags.includes(tag))
+    .map(tag => tag.charAt(0).toUpperCase() + tag.slice(1))
+
+  // Build keywords from actual data
+  const keywordParts = [
+    cocktail.name,
+    'rum cocktail',
+    cocktail.family?.replace(/-/g, ' '),
+    cocktail.baseSpirit?.replace(/-/g, ' '),
+    ...(cocktail.tags?.map(t => t.replace(/-/g, ' ')) || []),
+    'British rum',
+  ].filter(Boolean)
+  const keywords = [...new Set(keywordParts)].join(', ')
+
+  // Format family for recipeCategory (e.g. "old-fashioneds" → "Old Fashioneds")
+  const recipeCategory = cocktail.family
+    ? cocktail.family.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')
+    : 'Cocktail'
+
   // Recipe Schema for SEO (Google Rich Snippets)
-  const recipeSchema = {
+  const recipeSchema: Record<string, unknown> = {
     "@context": "https://schema.org",
     "@type": "Recipe",
     "name": cocktail.name,
     "description": cocktail.description,
     "image": cocktail.image || "https://jerrycanspirits.co.uk/images/Logo.webp",
-    "recipeCategory": cocktail.category || "Cocktail",
+    "recipeCategory": recipeCategory,
     "recipeCuisine": "British",
-    "keywords": `${cocktail.name}, rum cocktail, ${cocktail.category}, ${cocktail.difficulty} cocktail, British rum, veteran-owned spirits`,
+    "keywords": keywords,
     "recipeIngredient": cocktail.ingredients?.map(i => `${i.amount} ${i.name}`) || [],
     "recipeInstructions": cocktail.instructions?.map((instruction, index) => ({
       "@type": "HowToStep",
@@ -152,16 +206,21 @@ export default async function CocktailPage({ params }: PageProps) {
         "url": "https://jerrycanspirits.co.uk/images/Logo.webp"
       }
     },
-    "datePublished": new Date().toISOString(),
-    "prepTime": "PT5M",
-    "totalTime": "PT5M",
+    "datePublished": cocktail._createdAt,
+    "prepTime": prepTime,
+    "totalTime": prepTime,
     "recipeYield": "1 cocktail",
     "suitableForDiet": "https://schema.org/AlcoholicBeverage",
-    "aggregateRating": cocktail.featured ? {
-      "@type": "AggregateRating",
-      "ratingValue": "5",
-      "ratingCount": "1"
-    } : undefined
+    ...(aggregateRating && { aggregateRating }),
+    ...(cookingMethod && cookingMethod.length > 0 && { cookingMethod: cookingMethod.join(', ') }),
+    ...(cocktail.videoUrl && {
+      video: {
+        "@type": "VideoObject",
+        "name": `How to make ${cocktail.name}`,
+        "description": cocktail.description,
+        "contentUrl": cocktail.videoUrl,
+      }
+    }),
   }
 
   return (
