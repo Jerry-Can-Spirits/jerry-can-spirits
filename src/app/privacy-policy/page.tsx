@@ -34,10 +34,10 @@ export const metadata: Metadata = {
 }
 
 export default function PrivacyPolicy() {
-  const lastUpdated = new Date().toLocaleDateString('en-GB', { 
-    year: 'numeric', 
-    month: 'long', 
-    day: 'numeric' 
+  const lastUpdated = new Date('2025-09-04').toLocaleDateString('en-GB', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
   })
 
   return (
