@@ -32,14 +32,8 @@ function checkIsBot(): boolean {
 }
 
 export default function ClientWrapper({ children }: ClientWrapperProps) {
-  const [isAgeVerified, setIsAgeVerified] = useState<boolean>(() => {
-    if (typeof document === 'undefined') return false;
-    return document.cookie.includes('ageVerified=true');
-  });
-  const [isBot, setIsBot] = useState<boolean>(() => {
-    if (typeof document === 'undefined') return false;
-    return document.cookie.includes('isBot=true');
-  });
+  const [isAgeVerified, setIsAgeVerified] = useState(false);
+  const [isBot, setIsBot] = useState(false);
   const pathname = usePathname();
 
   const handleAgeVerification = () => {
@@ -51,13 +45,16 @@ export default function ClientWrapper({ children }: ClientWrapperProps) {
   const legalPages = ['/terms-of-service', '/privacy-policy', '/cookie-policy'];
   const isLegalPage = legalPages.some(page => pathname.startsWith(page));
 
-  // Handle backward-compat (migrate localStorage to cookie) and affiliate tracking
+  // Check verification status via cookie and localStorage
   useEffect(() => {
     try {
+      const verifiedViaCookie = document.cookie.includes('ageVerified=true');
       const verifiedViaStorage = localStorage.getItem('ageVerified') === 'true';
-      if (verifiedViaStorage && !isAgeVerified) {
-        // Migrate: set cookie for future visits, update state
-        document.cookie = 'ageVerified=true; path=/; max-age=31536000; SameSite=Strict; Secure';
+      if ((verifiedViaCookie || verifiedViaStorage) && !isAgeVerified) {
+        // Ensure cookie exists for future visits
+        if (!verifiedViaCookie) {
+          document.cookie = 'ageVerified=true; path=/; max-age=31536000; SameSite=Strict; Secure';
+        }
         setIsAgeVerified(true);
       }
     } catch {
