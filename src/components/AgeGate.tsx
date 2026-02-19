@@ -48,8 +48,13 @@ export default function AgeGate({ onVerified }: AgeGateProps) {
 
   const handleAgeVerification = (isOfAge: boolean) => {
     if (isOfAge) {
-      localStorage.setItem('ageVerified', 'true');
-      localStorage.setItem('selectedRegion', JSON.stringify(selectedRegion));
+      try {
+        localStorage.setItem('ageVerified', 'true');
+        localStorage.setItem('selectedRegion', JSON.stringify(selectedRegion));
+        document.cookie = 'ageVerified=true; path=/; max-age=31536000; SameSite=Strict; Secure';
+      } catch {
+        // Storage may be blocked by browser tracking prevention — proceed anyway
+      }
       setIsVisible(false);
       onVerified();
     } else {

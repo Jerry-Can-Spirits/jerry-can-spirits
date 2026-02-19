@@ -32,9 +32,14 @@ function checkIsBot(): boolean {
 }
 
 export default function ClientWrapper({ children }: ClientWrapperProps) {
-  const [isAgeVerified, setIsAgeVerified] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-  const [isBot, setIsBot] = useState(false);
+  const [isAgeVerified, setIsAgeVerified] = useState<boolean>(() => {
+    if (typeof document === 'undefined') return false;
+    return document.cookie.includes('ageVerified=true');
+  });
+  const [isBot, setIsBot] = useState<boolean>(() => {
+    if (typeof document === 'undefined') return false;
+    return document.cookie.includes('isBot=true');
+  });
   const pathname = usePathname();
 
   const handleAgeVerification = () => {
@@ -46,43 +51,35 @@ export default function ClientWrapper({ children }: ClientWrapperProps) {
   const legalPages = ['/terms-of-service', '/privacy-policy', '/cookie-policy'];
   const isLegalPage = legalPages.some(page => pathname.startsWith(page));
 
-  // Check localStorage on mount and handle navigation protection
+  // Handle backward-compat (migrate localStorage to cookie) and affiliate tracking
   useEffect(() => {
-    const verified = localStorage.getItem('ageVerified') === 'true';
-    const botDetected = checkIsBot();
-
-    // Allow bypass via URL parameter for SEO audits (e.g., ?seo_audit=true)
-    const urlParams = new URLSearchParams(window.location.search);
-    const auditBypass = urlParams.get('seo_audit') === 'true';
-
-    // Preserve affiliate tracking parameters (dt_id for Shopify Collabs)
-    const dtId = urlParams.get('dt_id');
-    if (dtId) {
-      // Store affiliate tracking ID for the session
-      sessionStorage.setItem('affiliate_dt_id', dtId);
+    try {
+      const verifiedViaStorage = localStorage.getItem('ageVerified') === 'true';
+      if (verifiedViaStorage && !isAgeVerified) {
+        // Migrate: set cookie for future visits, update state
+        document.cookie = 'ageVerified=true; path=/; max-age=31536000; SameSite=Strict; Secure';
+        setIsAgeVerified(true);
+      }
+    } catch {
+      // Storage may be blocked by browser tracking prevention
     }
 
-    setIsAgeVerified(verified);
-    setIsBot(botDetected || auditBypass);
-    setIsLoading(false);
+    const botDetected = checkIsBot();
+    const urlParams = new URLSearchParams(window.location.search);
+    const auditBypass = urlParams.get('seo_audit') === 'true';
+    if ((botDetected || auditBypass) && !isBot) setIsBot(true);
 
-    // Note: We no longer redirect unverified users to home.
-    // The age gate overlay covers the content for regular users,
-    // while content always renders underneath for SEO (Googlebot sees full content).
-    // The previous redirect was causing Google to report "Page with redirect" for all pages.
-  }, [pathname, isLegalPage]);
-
-  // Show loading while checking verification status
-  if (isLoading) {
-    return (
-      <div className="fixed inset-0 bg-jerry-green-900 flex items-center justify-center z-50">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gold-500 mx-auto mb-4"></div>
-          <div className="text-gold-300 text-lg">Loading...</div>
-        </div>
-      </div>
-    );
-  }
+    // Preserve affiliate tracking parameters (dt_id for Shopify Collabs)
+    try {
+      const dtId = urlParams.get('dt_id');
+      if (dtId) {
+        sessionStorage.setItem('affiliate_dt_id', dtId);
+      }
+    } catch {
+      // Session storage may be blocked
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pathname]);
 
   // Bypass age gate for: verified users, legal pages, or known bots
   const shouldBypassGate = isAgeVerified || isLegalPage || isBot;

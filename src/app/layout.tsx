@@ -154,9 +154,6 @@ export default function RootLayout({
         <link rel="preconnect" href="https://cdn.sanity.io" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://cdn.shopify.com" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://imagedelivery.net" crossOrigin="anonymous" />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-
         {/* Non-Critical Third-Party Connections - DNS Prefetch only */}
         <link rel="preconnect" href="https://static.klaviyo.com" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://connect.facebook.net" />
@@ -167,12 +164,6 @@ export default function RootLayout({
 
         {/* Klaviyo is now loaded via KlaviyoScript component with consent */}
 
-        {/* Google AdSense */}
-        <script
-          async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5758288828569326"
-          crossOrigin="anonymous"
-        />
       </head>
       <body
         className={`${inter.variable} ${playfair.variable} ${jetbrains.variable} antialiased min-h-screen bg-jerry-green-900 text-foreground`}
@@ -226,6 +217,15 @@ export default function RootLayout({
 
         {/* Cart Drawer */}
         <CartDrawer />
+
+        {/* Google AdSense - lazy loaded via requestIdleCallback to avoid competing with LCP.
+            Uses dangerouslySetInnerHTML instead of next/script to avoid data-nscript attribute
+            which AdSense rejects. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){var c=function(){var s=document.createElement('script');s.src='https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5758288828569326';s.crossOrigin='anonymous';s.async=true;document.body.appendChild(s)};if('requestIdleCallback' in window){requestIdleCallback(c)}else{setTimeout(c,3000)}})();`,
+          }}
+        />
         </CartProvider>
       </body>
     </html>
