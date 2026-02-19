@@ -1,4 +1,8 @@
 # Cloudflare Pages configuration
+# NOTE: Do NOT add pages_build_output_dir here — it causes Cloudflare to use
+# this file as the config source instead of dashboard settings, which breaks
+# environment variable inheritance. The dashboard config handles env vars and
+# build settings; this file is only used as a reference for KV namespace bindings.
 name = "jerry-can-spirits"
 compatibility_date = "2024-01-01"
 compatibility_flags = ["nodejs_compat"]
