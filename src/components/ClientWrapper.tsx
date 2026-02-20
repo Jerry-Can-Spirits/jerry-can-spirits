@@ -32,14 +32,9 @@ function checkIsBot(): boolean {
 }
 
 export default function ClientWrapper({ children }: ClientWrapperProps) {
-  const [isAgeVerified, setIsAgeVerified] = useState<boolean>(() => {
-    if (typeof document === 'undefined') return false;
-    return document.cookie.includes('ageVerified=true');
-  });
-  const [isBot, setIsBot] = useState<boolean>(() => {
-    if (typeof document === 'undefined') return false;
-    return document.cookie.includes('isBot=true');
-  });
+  const [isReady, setIsReady] = useState(false);
+  const [isAgeVerified, setIsAgeVerified] = useState(false);
+  const [isBot, setIsBot] = useState(false);
   const pathname = usePathname();
 
   const handleAgeVerification = () => {
@@ -51,13 +46,16 @@ export default function ClientWrapper({ children }: ClientWrapperProps) {
   const legalPages = ['/terms-of-service', '/privacy-policy', '/cookie-policy'];
   const isLegalPage = legalPages.some(page => pathname.startsWith(page));
 
-  // Handle backward-compat (migrate localStorage to cookie) and affiliate tracking
+  // Check verification status via cookie and localStorage
   useEffect(() => {
     try {
+      const verifiedViaCookie = document.cookie.includes('ageVerified=true');
       const verifiedViaStorage = localStorage.getItem('ageVerified') === 'true';
-      if (verifiedViaStorage && !isAgeVerified) {
-        // Migrate: set cookie for future visits, update state
-        document.cookie = 'ageVerified=true; path=/; max-age=31536000; SameSite=Strict; Secure';
+      if (verifiedViaCookie || verifiedViaStorage) {
+        // Ensure cookie exists for future visits
+        if (!verifiedViaCookie) {
+          document.cookie = 'ageVerified=true; path=/; max-age=31536000; SameSite=Strict; Secure';
+        }
         setIsAgeVerified(true);
       }
     } catch {
@@ -67,7 +65,7 @@ export default function ClientWrapper({ children }: ClientWrapperProps) {
     const botDetected = checkIsBot();
     const urlParams = new URLSearchParams(window.location.search);
     const auditBypass = urlParams.get('seo_audit') === 'true';
-    if ((botDetected || auditBypass) && !isBot) setIsBot(true);
+    if (botDetected || auditBypass) setIsBot(true);
 
     // Preserve affiliate tracking parameters (dt_id for Shopify Collabs)
     try {
@@ -78,7 +76,8 @@ export default function ClientWrapper({ children }: ClientWrapperProps) {
     } catch {
       // Session storage may be blocked
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+
+    setIsReady(true);
   }, [pathname]);
 
   // Bypass age gate for: verified users, legal pages, or known bots
@@ -86,8 +85,8 @@ export default function ClientWrapper({ children }: ClientWrapperProps) {
 
   return (
     <>
-      {/* Age gate overlays on top - content always renders underneath for SEO */}
-      {!shouldBypassGate && (
+      {/* Only show age gate after client-side check completes to prevent flash */}
+      {isReady && !shouldBypassGate && (
         <AgeGate onVerified={handleAgeVerification} />
       )}
       {/* Always render children - crawlers see the content in DOM */}

@@ -4,6 +4,7 @@ import { useState } from 'react'
 import Image from 'next/image'
 import { ColorSwatch, DownloadCard, BoilerplateText, ImageGallery, SocialPresence } from '@/components/media'
 import Breadcrumbs from '@/components/Breadcrumbs'
+import ScrollReveal from '@/components/ScrollReveal'
 
 export default function MediaContact() {
   const [formData, setFormData] = useState({
@@ -251,16 +252,118 @@ Based in the UK, Jerry Can Spirits® is a small operation run by two mates who c
                 Brand Values
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {brandValues.map((value) => (
-                  <div key={value.name} className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+                {brandValues.map((value, index) => (
+                  <ScrollReveal key={value.name} delay={(index % 2) as 0 | 1}>
+                  <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20 h-full">
                     <h4 className="text-gold-300 font-semibold text-lg mb-2">{value.name}</h4>
                     <p className="text-parchment-200 text-sm leading-relaxed">{value.description}</p>
                   </div>
+                  </ScrollReveal>
                 ))}
               </div>
               <div className="mt-4 flex gap-4">
                 <a href="/ethos/" className="text-gold-300 hover:text-gold-200 text-sm font-medium underline transition-colors">Our ethos</a>
                 <a href="/sustainability/" className="text-gold-300 hover:text-gold-200 text-sm font-medium underline transition-colors">Sustainability</a>
+              </div>
+            </div>
+          </section>
+
+          {/* ==================== PRODUCT FACT SHEET ==================== */}
+          <section id="product-spec" className="mb-20 scroll-mt-24">
+            <h2 className="text-3xl font-serif font-bold text-parchment-50 text-center mb-4">
+              Product Fact Sheet
+            </h2>
+            <p className="text-parchment-300 text-center mb-12 max-w-2xl mx-auto">
+              Key product details for Expedition Spiced Rum.
+            </p>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+              {/* Specs */}
+              <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 md:p-8 border border-gold-500/20">
+                <h3 className="text-xl font-serif font-bold text-parchment-50 mb-6">Product Specifications</h3>
+                <div className="space-y-4">
+                  {[
+                    { label: 'Product', value: 'Expedition Spiced Rum' },
+                    { label: 'ABV', value: '40%' },
+                    { label: 'Volume', value: '700ml' },
+                    { label: 'RRP', value: '£45.00' },
+                    { label: 'Base Spirit', value: 'Caribbean rum' },
+                    { label: 'Produced At', value: 'Spirit of Wales Distillery, Newport, South Wales', href: '/friends/' },
+                  ].map((item) => (
+                    <div key={item.label} className="flex justify-between items-baseline border-b border-gold-500/10 pb-2">
+                      <span className="text-parchment-400 text-sm">{item.label}</span>
+                      {'href' in item && item.href ? (
+                        <a href={item.href} className="text-gold-300 hover:text-gold-200 font-medium text-sm underline transition-colors">{item.value}</a>
+                      ) : (
+                        <span className="text-parchment-50 font-medium text-sm">{item.value}</span>
+                      )}
+                    </div>
+                  ))}
+                </div>
+
+                <h4 className="text-gold-300 font-semibold mt-6 mb-3">Key Ingredients</h4>
+                <div className="flex flex-wrap gap-2">
+                  {[
+                    'Madagascan Vanilla Pods', 'Ceylon Cinnamon', 'Ginger', 'Orange Peel',
+                    'Cloves', 'Allspice', 'Cassia Bark', 'Agave Syrup', 'Glucose Syrup', 'Bourbon Barrel Chips'
+                  ].map((ingredient) => (
+                    <span key={ingredient} className="px-2.5 py-1 bg-jerry-green-700/60 text-parchment-200 text-xs rounded-full border border-gold-500/20">
+                      {ingredient}
+                    </span>
+                  ))}
+                </div>
+
+                <h4 className="text-gold-300 font-semibold mt-6 mb-3">Dietary Information</h4>
+                <div className="flex flex-wrap gap-3">
+                  {['Gluten-free', 'Vegan', 'Dairy-free', 'Nut-free'].map((badge) => (
+                    <span key={badge} className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-green-600/20 text-green-300 text-xs font-medium rounded-full border border-green-500/30">
+                      <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                      {badge}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              {/* Tasting Notes */}
+              <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 md:p-8 border border-gold-500/20">
+                <h3 className="text-xl font-serif font-bold text-parchment-50 mb-6">Tasting Notes</h3>
+                <div className="space-y-6">
+                  <div>
+                    <h4 className="text-gold-300 font-semibold mb-2">Nose</h4>
+                    <p className="text-parchment-200 text-sm leading-relaxed">
+                      Warm Madagascan vanilla leads with a rich, creamy softness, followed by Ceylon cinnamon and toasted bourbon oak, lifted by bright orange peel with clove and allspice in the background.
+                    </p>
+                  </div>
+                  <div>
+                    <h4 className="text-gold-300 font-semibold mb-2">Palate</h4>
+                    <p className="text-parchment-200 text-sm leading-relaxed">
+                      Silky and naturally sweet on entry thanks to agave, with ginger heat and cassia bark developing into layered baking spices.
+                    </p>
+                  </div>
+                  <div>
+                    <h4 className="text-gold-300 font-semibold mb-2">Finish</h4>
+                    <p className="text-parchment-200 text-sm leading-relaxed">
+                      Long, warming, and elegantly dry with oak tannins, vanilla, and a flicker of ginger.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="mt-8 flex flex-wrap gap-3">
+                  <a href="/ingredients/expedition-spiced-rum/" className="inline-flex items-center gap-2 px-4 py-2 bg-jerry-green-700/60 hover:bg-gold-500 text-parchment-200 hover:text-jerry-green-900 text-sm font-semibold rounded-lg transition-all duration-200">
+                    Full Ingredients
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </a>
+                  <a href="/shop/" className="inline-flex items-center gap-2 px-4 py-2 bg-jerry-green-700/60 hover:bg-gold-500 text-parchment-200 hover:text-jerry-green-900 text-sm font-semibold rounded-lg transition-all duration-200">
+                    Shop
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </a>
+                </div>
               </div>
             </div>
           </section>
@@ -863,31 +966,39 @@ Based in the UK, Jerry Can Spirits® is a small operation run by two mates who c
               Recognition and commitments that reflect our values.
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+              <ScrollReveal delay={0}>
+              <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20 h-full">
                 <h3 className="text-lg font-serif font-bold text-gold-300 mb-2">Armed Forces Covenant</h3>
                 <p className="text-parchment-200 text-sm leading-relaxed mb-3">
                   Signatory to the Armed Forces Covenant, pledging support for the armed forces community, veterans, and their families.
                 </p>
                 <a href="/armed-forces-covenant/" className="text-gold-300 hover:text-gold-200 text-xs font-medium underline transition-colors">Read our commitment</a>
               </div>
-              <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+              </ScrollReveal>
+              <ScrollReveal delay={1}>
+              <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20 h-full">
                 <h3 className="text-lg font-serif font-bold text-gold-300 mb-2">ERS Bronze Award</h3>
                 <p className="text-parchment-200 text-sm leading-relaxed">
                   Employer Recognition Scheme Bronze Award from the Ministry of Defence for our commitment to supporting the armed forces community.
                 </p>
               </div>
-              <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+              </ScrollReveal>
+              <ScrollReveal delay={0}>
+              <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20 h-full">
                 <h3 className="text-lg font-serif font-bold text-gold-300 mb-2">British Veteran Owned</h3>
                 <p className="text-parchment-200 text-sm leading-relaxed">
                   Certified British Veteran Owned business, verified and recognised for our military heritage and veteran leadership.
                 </p>
               </div>
-              <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+              </ScrollReveal>
+              <ScrollReveal delay={1}>
+              <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20 h-full">
                 <h3 className="text-lg font-serif font-bold text-gold-300 mb-2">Worcester RFC MA Sponsor</h3>
                 <p className="text-parchment-200 text-sm leading-relaxed">
                   Official Match Afternoon sponsor for Worcester RFC during the 2025/26 season, supporting grassroots community rugby.
                 </p>
               </div>
+              </ScrollReveal>
             </div>
           </section>
 
@@ -907,11 +1018,13 @@ Based in the UK, Jerry Can Spirits® is a small operation run by two mates who c
                   { date: '2025/26 Season', event: 'Worcester RFC Match Afternoon sponsorship begins.' },
                   { date: '6 April 2026', event: 'Expedition Spiced Rum official launch.' },
                 ].map((milestone, index) => (
-                  <div key={index} className="relative pl-8 pb-10 last:pb-0">
+                  <ScrollReveal key={index} delay={(index % 3) as 0 | 1 | 2}>
+                  <div className="relative pl-8 pb-10 last:pb-0">
                     <div className="absolute -left-[9px] top-1 w-4 h-4 bg-gold-500 rounded-full border-2 border-jerry-green-900" />
                     <p className="text-gold-300 text-sm font-semibold mb-1">{milestone.date}</p>
                     <p className="text-parchment-200 text-sm leading-relaxed">{milestone.event}</p>
                   </div>
+                  </ScrollReveal>
                 ))}
               </div>
             </div>
@@ -1185,7 +1298,8 @@ Based in the UK, Jerry Can Spirits® is a small operation run by two mates who c
               Media Guidelines
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+              <ScrollReveal delay={0}>
+              <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20 h-full">
                 <h3 className="text-lg font-serif font-bold text-parchment-50 mb-3">
                   Brand Usage
                 </h3>
@@ -1212,7 +1326,9 @@ Based in the UK, Jerry Can Spirits® is a small operation run by two mates who c
                   </li>
                 </ul>
               </div>
-              <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+              </ScrollReveal>
+              <ScrollReveal delay={1}>
+              <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20 h-full">
                 <h3 className="text-lg font-serif font-bold text-parchment-50 mb-3">
                   Content Standards
                 </h3>
@@ -1239,7 +1355,9 @@ Based in the UK, Jerry Can Spirits® is a small operation run by two mates who c
                   </li>
                 </ul>
               </div>
-              <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+              </ScrollReveal>
+              <ScrollReveal delay={2}>
+              <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20 h-full">
                 <h3 className="text-lg font-serif font-bold text-parchment-50 mb-3">
                   Legal Requirements
                 </h3>
@@ -1266,6 +1384,7 @@ Based in the UK, Jerry Can Spirits® is a small operation run by two mates who c
                   </li>
                 </ul>
               </div>
+              </ScrollReveal>
             </div>
           </section>
         </div>

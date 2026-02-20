@@ -1,0 +1,97 @@
+/* ===========================================
+   Scroll Reveal Animations
+   =========================================== */
+
+/* Base reveal - fade up */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.reveal[data-revealed="true"] {
+  opacity: 1;
+  transform: none;
+}
+
+/* Direction variants */
+.reveal-left {
+  opacity: 0;
+  transform: translateX(-24px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.reveal-right {
+  opacity: 0;
+  transform: translateX(24px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.reveal-left[data-revealed="true"],
+.reveal-right[data-revealed="true"] {
+  opacity: 1;
+  transform: none;
+}
+
+/* Staggered delays */
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+.reveal-delay-4 { transition-delay: 0.4s; }
+
+/* Grid child staggered delays (for dynamic grids) */
+.reveal-stagger > .reveal:nth-child(1) { transition-delay: 0s; }
+.reveal-stagger > .reveal:nth-child(2) { transition-delay: 0.1s; }
+.reveal-stagger > .reveal:nth-child(3) { transition-delay: 0.2s; }
+.reveal-stagger > .reveal:nth-child(4) { transition-delay: 0.3s; }
+.reveal-stagger > .reveal:nth-child(n+5) { transition-delay: 0.4s; }
+
+/* ===========================================
+   Ticker Strip (Infinite Marquee)
+   =========================================== */
+
+@keyframes ticker {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+.ticker-strip {
+  overflow: hidden;
+}
+
+.ticker-strip__track {
+  display: flex;
+  width: max-content;
+  animation: ticker 30s linear infinite;
+}
+
+.ticker-strip:hover .ticker-strip__track,
+.ticker-strip:focus-within .ticker-strip__track {
+  animation-play-state: paused;
+}
+
+/* ===========================================
+   Accessibility: Reduced Motion
+   =========================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal,
+  .reveal-left,
+  .reveal-right {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .reveal-delay-1,
+  .reveal-delay-2,
+  .reveal-delay-3,
+  .reveal-delay-4,
+  .reveal-stagger > .reveal {
+    transition-delay: 0s;
+  }
+
+  .ticker-strip__track {
+    animation: none;
+  }
+}
