@@ -111,7 +111,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
       // Search API for products and cocktails
       try {
         const response = await fetch(`/api/search?q=${encodeURIComponent(query)}`)
-        const data = await response.json()
+        const data = await response.json() as { results?: SearchResult[] }
         const apiResults = data.results || []
 
         // Combine results, prioritizing static pages, then products, then guides, then content types

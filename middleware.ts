@@ -80,6 +80,25 @@ export function middleware(request: NextRequest) {
     })
   }
 
+  // Geo-detection via Cloudflare Workers cf object
+  // Sets country code for age gate auto-selection and shipping banner
+  const cf = (request as NextRequest & { cf?: { country?: string } }).cf
+  const country = cf?.country || request.headers.get('cf-ipcountry')
+
+  if (country) {
+    // Cookie for client components (age gate auto-select)
+    if (!request.cookies.get('detectedCountry')) {
+      response.cookies.set('detectedCountry', country, {
+        httpOnly: false,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'strict',
+        maxAge: 60 * 60 * 24, // 24 hours
+      })
+    }
+    // Header for server components and shipping banner
+    response.headers.set('x-visitor-country', country)
+  }
+
   return response
 }
 

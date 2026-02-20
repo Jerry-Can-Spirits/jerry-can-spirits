@@ -6,6 +6,7 @@ import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import PromoBanner from "@/components/PromoBanner";
+import ShippingBanner from "@/components/ShippingBanner";
 import ClientWrapper from "@/components/ClientWrapper";
 
 // Lazy load CartographicBackground for code splitting
@@ -209,6 +210,7 @@ export default function RootLayout({
               {children}
             </main>
             
+            <ShippingBanner />
             <Footer />
           </div>
           
