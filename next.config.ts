@@ -282,7 +282,13 @@ export default withSentryConfig(analyzedConfig, {
   // Upload a larger set of source maps for prettier stack traces (increases build time)
   widenClientFileUpload: true,
 
-  // Tunnel route disabled on Cloudflare Pages (causes 403 errors)
+  // Disable source map upload in Cloudflare Workers Builds (OOM with 2GB limit)
+  // Source maps are still uploaded when building locally (npm run deploy)
+  sourcemaps: {
+    disable: process.env.CF_PAGES === '1' || process.env.WORKERS_CI === '1',
+  },
+
+  // Tunnel route disabled on Cloudflare Workers (causes 403 errors)
   // Sentry will send directly to sentry.io instead
   // tunnelRoute: "/monitoring",
 });
