@@ -47,51 +47,7 @@ const nextConfig: NextConfig = {
           },
         ],
       },
-      // Security headers for Sanity Studio (less restrictive CSP needed)
-      {
-        source: '/studio/:path*',
-        headers: [
-          {
-            key: 'Content-Security-Policy',
-            value: [
-              "default-src 'self'",
-              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https: data:",
-              "style-src 'self' 'unsafe-inline' https: data:",
-              "font-src 'self' https: data:",
-              "img-src 'self' data: https: https://imagedelivery.net blob:",
-              "media-src 'self' https: data:",
-              "connect-src 'self' https: wss: ws:",
-              "frame-src 'self' https:",
-              "object-src 'none'",
-              "base-uri 'self'",
-              "form-action 'self' https:",
-              "frame-ancestors 'none'",
-              "upgrade-insecure-requests",
-            ].join('; '),
-          },
-          {
-            key: 'X-DNS-Prefetch-Control',
-            value: 'on',
-          },
-          {
-            key: 'Strict-Transport-Security',
-            value: 'max-age=31536000; includeSubDomains; preload',
-          },
-          {
-            key: 'X-Content-Type-Options',
-            value: 'nosniff',
-          },
-          {
-            key: 'Referrer-Policy',
-            value: 'strict-origin-when-cross-origin',
-          },
-          {
-            key: 'Permissions-Policy',
-            value: 'camera=(), microphone=(), geolocation=(), payment=(), usb=(), magnetometer=(), gyroscope=(), accelerometer=()',
-          },
-        ],
-      },
-      // Security headers for all other routes (stricter CSP)
+      // Security headers for all routes (stricter CSP)
       {
         source: '/:path*',
         headers: [
@@ -135,6 +91,34 @@ const nextConfig: NextConfig = {
           {
             key: 'Permissions-Policy',
             value: 'camera=(), microphone=(), geolocation=(), payment=(), usb=(), magnetometer=(), gyroscope=(), accelerometer=()',
+          },
+          {
+            key: 'Cross-Origin-Opener-Policy',
+            value: 'same-origin',
+          },
+        ],
+      },
+      // Security headers for Sanity Studio (permissive CSP — must come AFTER /:path* to override it)
+      {
+        source: '/studio/:path*',
+        headers: [
+          {
+            key: 'Content-Security-Policy',
+            value: [
+              "default-src 'self'",
+              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https: data:",
+              "style-src 'self' 'unsafe-inline' https: data:",
+              "font-src 'self' https: data:",
+              "img-src 'self' data: https: https://imagedelivery.net blob:",
+              "media-src 'self' https: data:",
+              "connect-src 'self' https: wss: ws:",
+              "frame-src 'self' https:",
+              "object-src 'none'",
+              "base-uri 'self'",
+              "form-action 'self' https:",
+              "frame-ancestors 'none'",
+              "upgrade-insecure-requests",
+            ].join('; '),
           },
           {
             key: 'Cross-Origin-Opener-Policy',

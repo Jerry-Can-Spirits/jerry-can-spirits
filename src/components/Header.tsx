@@ -209,7 +209,6 @@ export default function Header() {
                     className="h-12 w-auto transition-transform duration-200 group-hover:scale-105"
                     sizes="160px"
                     priority
-                    unoptimized
                   />
                 </div>
               </Link>

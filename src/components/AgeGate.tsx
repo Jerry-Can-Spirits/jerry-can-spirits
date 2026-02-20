@@ -103,7 +103,6 @@ export default function AgeGate({ onVerified }: AgeGateProps) {
                 height={150}
                 className="w-full h-full"
                 priority
-                unoptimized
               />
             </div>
           </div>
