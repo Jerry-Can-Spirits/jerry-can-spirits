@@ -60,8 +60,6 @@ interface SanityProduct {
 }
 
 // Cloudflare Pages edge runtime for dynamic routes
-export const runtime = 'edge'
-
 // Map Shopify productType to breadcrumb category
 function getCategoryFromProductType(productType?: string): { label: string; href: string; trackingCategory: string } {
   const type = (productType || '').toLowerCase()

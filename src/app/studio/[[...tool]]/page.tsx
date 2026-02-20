@@ -3,7 +3,6 @@
  * Sanity Studio route (catch-all).
  * Uses a client wrapper so there is no next/dynamic with ssr:false in a Server Component.
  */
-export const runtime = 'edge'
 export const dynamic = 'force-dynamic'
 
 export { metadata, viewport } from 'next-sanity/studio'

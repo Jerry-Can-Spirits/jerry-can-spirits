@@ -94,8 +94,6 @@ async function getIngredient(slug: string): Promise<Ingredient | null> {
 }
 
 // Cloudflare Pages edge runtime for dynamic routes
-export const runtime = 'edge'
-
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params
   const ingredient = await getIngredient(slug)

@@ -1,9 +1,12 @@
 import type { NextConfig } from "next";
 import { withSentryConfig } from "@sentry/nextjs";
 import withBundleAnalyzer from "@next/bundle-analyzer";
+import { initOpenNextCloudflareForDev } from "@opennextjs/cloudflare";
+
+initOpenNextCloudflareForDev();
 
 const nextConfig: NextConfig = {
-  // Configure for Cloudflare Pages (full-stack mode)
+  // Configure for Cloudflare Workers via OpenNext
   trailingSlash: true,
 
   // Ensure minification is enabled (default in production, but explicit for clarity)

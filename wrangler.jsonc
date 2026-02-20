@@ -1,0 +1,24 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "main": ".open-next/worker.js",
+  "name": "jerry-can-spirits-prod",
+  "compatibility_date": "2025-05-05",
+  "compatibility_flags": ["nodejs_compat"],
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS"
+  },
+  "services": [
+    {
+      "binding": "WORKER_SELF_REFERENCE",
+      "service": "jerry-can-spirits-prod"
+    }
+  ],
+  "kv_namespaces": [
+    {
+      "binding": "COCKTAIL_RATINGS",
+      "id": "3498c4961e59446cbc703b8ed19852c0",
+      "preview_id": "3498c4961e59446cbc703b8ed19852c0"
+    }
+  ]
+}
