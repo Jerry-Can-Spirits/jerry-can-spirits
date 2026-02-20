@@ -8,29 +8,24 @@ This document tracks deprecated packages, security vulnerabilities, and migratio
 
 ## Deprecated Packages
 
-### 1. @cloudflare/next-on-pages (v1.13.16)
+### 1. @cloudflare/next-on-pages → @opennextjs/cloudflare
 
-**Status:** ⚠️ Deprecated
-**Severity:** Medium (Dev Dependency)
-**Current Version:** 1.13.16
-**Recommendation:** Migrate to OpenNext adapter
+**Status:** ✅ Resolved — Migrated
+**Severity:** N/A (No longer in project)
+**Current Version:** N/A (replaced by @opennextjs/cloudflare)
+**Resolution:** Migrated to OpenNext adapter for Cloudflare Workers
 
 #### Details
-- **Deprecation Message:** "Please use the OpenNext adapter instead: https://opennext.js.org/cloudflare"
-- **Impact:** Development and build process only
-- **Production Impact:** None (build output is static)
-
-#### Migration Plan
-- **Timeline:** Post-launch (Q1 2026)
-- **Effort:** High (requires rebuild of deployment pipeline)
-- **Priority:** Low (current version is stable and working)
-- **Blocker:** OpenNext adapter is relatively new; waiting for maturity
+- **Migration Date:** February 2026
+- **Replacement:** `@opennextjs/cloudflare` (dev dependency)
+- **Impact:** Build and deployment pipeline updated
+- **Production Impact:** Now deploys to Cloudflare Workers instead of Pages
 
 #### Action Items
-- [ ] Monitor OpenNext adapter progress and stability
-- [ ] Test OpenNext in development environment
-- [ ] Schedule migration when OpenNext reaches stable v2.0
-- [ ] Update deployment documentation
+- [x] Migrated to @opennextjs/cloudflare
+- [x] Updated deployment pipeline (wrangler.jsonc, open-next.config.ts)
+- [x] Updated deployment documentation
+- [x] Removed @cloudflare/next-on-pages
 
 ---
 
@@ -97,8 +92,7 @@ This document tracks deprecated packages, security vulnerabilities, and migratio
 All production dependencies are free of known vulnerabilities that affect runtime.
 
 #### Development Dependencies: ✅ RESOLVED
-- **esbuild** (moderate) - Development build tool only (via @cloudflare/next-on-pages)
-- **cookie** (low) - Build tool only (via @cloudflare/next-on-pages)
+- **esbuild** and **cookie** vulnerabilities eliminated by removing @cloudflare/next-on-pages
 - **Removed Vercel CLI** - Eliminated path-to-regexp (high) and undici (moderate) vulnerabilities
 
 ### Mitigation Strategy
@@ -115,22 +109,21 @@ All production dependencies are free of known vulnerabilities that affect runtim
    - Security headers implemented (CSP, HSTS, etc.)
 
 3. **Remaining Development-Only Vulnerabilities:**
-   - esbuild and cookie vulnerabilities exist only in @cloudflare/next-on-pages (build tool)
+   - esbuild and cookie vulnerabilities resolved by migrating to @opennextjs/cloudflare
    - No production runtime impact
-   - Will be resolved when Cloudflare updates the package
 
 ---
 
 ## Node.js Version
 
 **Status:** ✅ UPDATED
-**Current Cloudflare Build:** Node.js v20.19.2 (LTS Maintenance)
-**Target Version:** Node.js v22.x (Active LTS)
+**Current Version:** Node.js v22.13.0 (Active LTS)
+**Configured in:** `.node-version`
 
 ### Actions Taken
 - ✅ Added `.nvmrc` with version 22
-- ✅ Added `.node-version` with version 22
-- ✅ Cloudflare Pages will use Node.js 22.x on next deployment
+- ✅ Added `.node-version` with version 22.13.0
+- ✅ Cloudflare Workers deployment uses Node.js 22.x
 
 ---
 
@@ -160,12 +153,10 @@ All production dependencies are free of known vulnerabilities that affect runtim
 ### Post-Launch Roadmap
 
 **Q1 2026:**
-- Evaluate OpenNext adapter maturity
-- Plan Sanity CMS v3 upgrade if breaking changes acceptable
-- Consider Vercel CLI alternatives if vulnerabilities persist
+- ✅ Migrated to OpenNext (@opennextjs/cloudflare) on Cloudflare Workers
+- Plan Sanity CMS upgrade if breaking changes acceptable
 
 **Q2 2026:**
-- Execute OpenNext migration if stable
 - Update all dependencies to latest stable versions
 
 ---

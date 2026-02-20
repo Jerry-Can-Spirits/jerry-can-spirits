@@ -5,8 +5,6 @@ This directory contains all project documentation organized by category.
 ## Quick Links
 
 ### Setup & Configuration
-- [Cloudflare Setup](./CLOUDFLARE_SETUP.md) - Deployment and hosting configuration
-- [Cloudflare Security Audit](./CLOUDFLARE_SECURITY_AUDIT.md) - Comprehensive security hardening guide (CIA Triad)
 - [Klaviyo Setup Guide](./KLAVIYO_SETUP_GUIDE.md) - Email marketing integration
 - [Instagram Oembed Setup](./INSTAGRAM_OEMBED_SETUP.md) - Social media integration
 - [Shopify Integration Plan](./SHOPIFY_INTEGRATION_PLAN.md) - E-commerce setup
@@ -25,33 +23,11 @@ This directory contains all project documentation organized by category.
 
 ### Launch & Maintenance
 - [Launch Critical Actions](./LAUNCH_CRITICAL_ACTIONS.md) - Pre-launch checklist
-- [What's New](./WHATS_NEW.md) - Recent changes and updates
 - [Mobile UX Audit Report](./MOBILE_UX_AUDIT_REPORT.md) - Mobile usability improvements
 
-## Documentation Structure
-
-```
-docs/
-├── README.md (this file)
-├── Setup & Configuration
-│   ├── CLOUDFLARE_SETUP.md
-│   ├── KLAVIYO_SETUP_GUIDE.md
-│   ├── INSTAGRAM_OEMBED_SETUP.md
-│   └── SHOPIFY_INTEGRATION_PLAN.md
-├── Development
-│   ├── COMPONENT_USAGE_EXAMPLES.md
-│   ├── CONTRIBUTING.md
-│   └── DEPENDENCIES_STATUS.md
-├── Brand & Design
-│   └── BRAND_GUIDELINES.md
-├── SEO & Marketing
-│   ├── SEO_SETUP.md
-│   └── SEO_CHECKLIST.md
-└── Launch & Maintenance
-    ├── LAUNCH_CRITICAL_ACTIONS.md
-    ├── MOBILE_UX_AUDIT_REPORT.md
-    └── WHATS_NEW.md
-```
+### Reference
+- [Published Guides](./guides-published/) - Field Manual guide content (23 published guides)
+- [Sanity Schemas](./sanity-schemas/) - Schema reference documentation
 
 ## Contributing to Documentation
 
