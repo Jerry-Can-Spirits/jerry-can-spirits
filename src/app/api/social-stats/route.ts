@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server'
-import { getRequestContext } from '@cloudflare/next-on-pages'
+import { getCloudflareContext } from '@opennextjs/cloudflare'
 
-export const runtime = 'edge'
 export const dynamic = 'force-dynamic'
 
 interface SocialStats {
@@ -15,7 +14,7 @@ const CACHE_TTL_SECONDS = 3600 // 1 hour
 
 export async function GET() {
   try {
-    const { env } = getRequestContext()
+    const { env } = await getCloudflareContext()
     const kv = env.COCKTAIL_RATINGS as KVNamespace | undefined
 
     // Try KV cache first

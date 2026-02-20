@@ -75,8 +75,6 @@ interface PageProps {
 }
 
 // Cloudflare Pages edge runtime for dynamic routes
-export const runtime = 'edge'
-
 // Convert heading to URL-friendly slug for anchor links
 function slugify(text: string): string {
   return text
