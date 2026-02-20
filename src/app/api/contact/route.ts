@@ -1,8 +1,6 @@
 // app/api/contact/route.ts
 import { NextResponse } from 'next/server'
-import { getRequestContext } from '@cloudflare/next-on-pages'
-
-export const runtime = 'edge'
+import { getCloudflareContext } from '@opennextjs/cloudflare'
 
 const KLAVIYO_API_BASE = 'https://a.klaviyo.com/api'
 
@@ -62,8 +60,8 @@ function isValidEmail(email: string): boolean {
 
 export async function POST(request: Request) {
   try {
-    // Read Workers env vars from the Edge context
-    const { env } = getRequestContext()
+    // Read Workers env vars from Cloudflare context
+    const { env } = await getCloudflareContext()
     const KLAVIYO_PRIVATE_KEY = env.KLAVIYO_PRIVATE_KEY as string | undefined
 
     let formData: ContactFormData

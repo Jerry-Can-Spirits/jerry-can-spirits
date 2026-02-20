@@ -111,8 +111,6 @@ interface PageProps {
 }
 
 // Cloudflare Pages edge runtime
-export const runtime = 'edge'
-
 const categoryLabels: Record<string, string> = {
   'spirits-education': 'Spirits Education',
   'rum-guides': 'Rum Guides',

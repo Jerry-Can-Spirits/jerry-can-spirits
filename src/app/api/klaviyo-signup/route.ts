@@ -1,8 +1,7 @@
 // app/api/klaviyo-signup/route.ts
 import { NextResponse } from 'next/server'
-import { getRequestContext } from '@cloudflare/next-on-pages'
+import { getCloudflareContext } from '@opennextjs/cloudflare'
 
-export const runtime = 'edge'
 export const dynamic = 'force-dynamic' // ensure no static optimization
 
 const KLAVIYO_API_BASE = 'https://a.klaviyo.com/api'
@@ -22,7 +21,7 @@ interface SignupBody {
 
 export async function POST(request: Request) {
   try {
-    const { env } = getRequestContext()
+    const { env } = await getCloudflareContext()
     const KLAVIYO_PRIVATE_KEY = env.KLAVIYO_PRIVATE_KEY as string | undefined
 
     let body: SignupBody

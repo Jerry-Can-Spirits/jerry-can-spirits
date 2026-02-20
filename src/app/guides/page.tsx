@@ -4,8 +4,7 @@ import { guidesListQuery } from '@/sanity/queries'
 import GuidesClient from './GuidesClient'
 import StructuredData from '@/components/StructuredData'
 
-// Cloudflare Pages edge runtime
-export const runtime = 'edge'
+export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'Spirits Guides & Education',

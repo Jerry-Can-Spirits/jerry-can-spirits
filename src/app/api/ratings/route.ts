@@ -1,8 +1,7 @@
 // app/api/ratings/route.ts
 import { NextResponse } from 'next/server'
-import { getRequestContext } from '@cloudflare/next-on-pages'
+import { getCloudflareContext } from '@opennextjs/cloudflare'
 
-export const runtime = 'edge'
 export const dynamic = 'force-dynamic'
 
 interface RatingData {
@@ -38,7 +37,7 @@ function getFingerprint(request: Request): string {
 // GET - Retrieve rating for a cocktail or all cocktails
 export async function GET(request: Request) {
   try {
-    const { env } = getRequestContext()
+    const { env } = await getCloudflareContext()
     const kv = env.COCKTAIL_RATINGS as KVNamespace | undefined
 
     const url = new URL(request.url)
@@ -110,7 +109,7 @@ export async function GET(request: Request) {
 // POST - Submit a rating
 export async function POST(request: Request) {
   try {
-    const { env } = getRequestContext()
+    const { env } = await getCloudflareContext()
     const kv = env.COCKTAIL_RATINGS as KVNamespace | undefined
 
     if (!kv) {

@@ -17,7 +17,6 @@ export const metadata: Metadata = {
 }
 
 // Configure for Edge Runtime and dynamic rendering
-export const runtime = 'edge'
 export const dynamic = 'force-dynamic'
 
 // Helper to format price with currency symbol

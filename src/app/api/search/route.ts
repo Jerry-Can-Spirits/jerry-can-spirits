@@ -2,8 +2,6 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getProducts } from '@/lib/shopify'
 import { client } from '@/sanity/lib/client'
 
-export const runtime = 'edge'
-
 interface SearchResult {
   type: 'product' | 'page' | 'recipe' | 'equipment' | 'ingredient' | 'guide'
   title: string
