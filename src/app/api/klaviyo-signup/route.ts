@@ -92,7 +92,7 @@ export async function POST(request: Request) {
     })
 
     if (profileResponse.ok) {
-      const profileData = await profileResponse.json()
+      const profileData = await profileResponse.json() as { data?: { id?: string } }
       profileId = profileData.data?.id
     } else if (profileResponse.status === 409) {
       // Profile exists—look up ID and patch properties
@@ -101,7 +101,7 @@ export async function POST(request: Request) {
         headers: commonHeaders as Record<string, string>,
       })
       if (searchRes.ok) {
-        const data = await searchRes.json()
+        const data = await searchRes.json() as { data?: { id?: string }[] }
         if (data.data && data.data.length > 0) {
           profileId = data.data[0].id
           await fetch(`${KLAVIYO_API_BASE}/profiles/${profileId}/`, {

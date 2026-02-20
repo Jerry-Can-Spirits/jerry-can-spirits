@@ -22,8 +22,19 @@ interface AgeGateProps {
   onVerified: () => void;
 }
 
+/** Read the detected country code from the cookie set by middleware (cf.country). */
+function getDetectedCountry(): string | null {
+  if (typeof document === 'undefined') return null;
+  const match = document.cookie.match(/(?:^|;\s*)detectedCountry=([A-Z]{2})/);
+  return match ? match[1] : null;
+}
+
 export default function AgeGate({ onVerified }: AgeGateProps) {
-  const [selectedRegion, setSelectedRegion] = useState(regions[0]);
+  const detectedCode = getDetectedCountry();
+  const defaultRegion =
+    regions.find((r) => r.code === detectedCode) || regions[0];
+
+  const [selectedRegion, setSelectedRegion] = useState(defaultRegion);
   const [isVisible, setIsVisible] = useState(true);
   const [showRejectionMessage, setShowRejectionMessage] = useState(false);
 

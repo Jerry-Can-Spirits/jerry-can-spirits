@@ -105,7 +105,7 @@ export default function CocktailsClient({ cocktails }: CocktailsClientProps) {
       try {
         const response = await fetch('/api/ratings?all=true')
         if (response.ok) {
-          const data = await response.json()
+          const data = await response.json() as { ratings?: RatingsMap }
           setRatings(data.ratings || {})
         }
       } catch (error) {
