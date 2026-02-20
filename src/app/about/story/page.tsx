@@ -4,6 +4,7 @@ import Link from 'next/link'
 import BackToTop from '@/components/BackToTop'
 import Breadcrumbs from '@/components/Breadcrumbs'
 import StructuredData from '@/components/StructuredData'
+import ScrollReveal from '@/components/ScrollReveal'
 
 // Article schema for the story page
 const articleSchema = {
@@ -187,27 +188,33 @@ export default function OurStory() {
               </p>
 
               <div className="grid md:grid-cols-3 gap-6 mt-8">
-                <div className="text-center">
-                  <div className="w-12 h-12 bg-gold-400/20 rounded-full flex items-center justify-center mx-auto mb-3">
-                    <span className="text-gold-400 text-xl font-bold">1</span>
+                <ScrollReveal delay={0}>
+                  <div className="text-center">
+                    <div className="w-12 h-12 bg-gold-400/20 rounded-full flex items-center justify-center mx-auto mb-3">
+                      <span className="text-gold-400 text-xl font-bold">1</span>
+                    </div>
+                    <p className="text-gold-300 font-semibold mb-2">What We&apos;re All About</p>
+                    <p className="text-parchment-300 text-sm">Designing rum with purpose and integrity to begin with</p>
                   </div>
-                  <p className="text-gold-300 font-semibold mb-2">What We&apos;re All About</p>
-                  <p className="text-parchment-300 text-sm">Designing rum with purpose and integrity to begin with</p>
-                </div>
-                <div className="text-center">
-                  <div className="w-12 h-12 bg-gold-400/20 rounded-full flex items-center justify-center mx-auto mb-3">
-                    <span className="text-gold-400 text-xl font-bold">2</span>
+                </ScrollReveal>
+                <ScrollReveal delay={1}>
+                  <div className="text-center">
+                    <div className="w-12 h-12 bg-gold-400/20 rounded-full flex items-center justify-center mx-auto mb-3">
+                      <span className="text-gold-400 text-xl font-bold">2</span>
+                    </div>
+                    <p className="text-gold-300 font-semibold mb-2">Our Mission in Life</p>
+                    <p className="text-parchment-300 text-sm">Crafting spirits that are right for the modern explorer</p>
                   </div>
-                  <p className="text-gold-300 font-semibold mb-2">Our Mission in Life</p>
-                  <p className="text-parchment-300 text-sm">Crafting spirits that are right for the modern explorer</p>
-                </div>
-                <div className="text-center">
-                  <div className="w-12 h-12 bg-gold-400/20 rounded-full flex items-center justify-center mx-auto mb-3">
-                    <span className="text-gold-400 text-xl font-bold">3</span>
+                </ScrollReveal>
+                <ScrollReveal delay={2}>
+                  <div className="text-center">
+                    <div className="w-12 h-12 bg-gold-400/20 rounded-full flex items-center justify-center mx-auto mb-3">
+                      <span className="text-gold-400 text-xl font-bold">3</span>
+                    </div>
+                    <p className="text-gold-300 font-semibold mb-2">Our Slogan</p>
+                    <p className="text-parchment-300 text-sm">&quot;Rum for people who actually do things&quot;</p>
                   </div>
-                  <p className="text-gold-300 font-semibold mb-2">Our Slogan</p>
-                  <p className="text-parchment-300 text-sm">&quot;Rum for people who actually do things&quot;</p>
-                </div>
+                </ScrollReveal>
               </div>
             </div>
           </div>
@@ -291,7 +298,8 @@ export default function OurStory() {
 
           <div className="grid md:grid-cols-3 gap-8 mb-16">
             {/* The Hard Bits */}
-            <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20">
+            <ScrollReveal delay={0}>
+            <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20 h-full">
               <div className="text-center mb-6">
                 <div className="w-16 h-16 bg-red-400/20 rounded-full flex items-center justify-center mx-auto mb-4">
                   <svg className="w-8 h-8 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -321,8 +329,11 @@ export default function OurStory() {
               </ul>
             </div>
 
+            </ScrollReveal>
+
             {/* The Reality Check */}
-            <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20">
+            <ScrollReveal delay={1}>
+            <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20 h-full">
               <div className="text-center mb-6">
                 <div className="w-16 h-16 bg-gold-400/20 rounded-full flex items-center justify-center mx-auto mb-4">
                   <svg className="w-8 h-8 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -344,8 +355,11 @@ export default function OurStory() {
               </div>
             </div>
 
+            </ScrollReveal>
+
             {/* The School of Hard Knocks */}
-            <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20">
+            <ScrollReveal delay={2}>
+            <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20 h-full">
               <div className="text-center mb-6">
                 <div className="w-16 h-16 bg-green-400/20 rounded-full flex items-center justify-center mx-auto mb-4">
                   <svg className="w-8 h-8 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -374,9 +388,11 @@ export default function OurStory() {
                 </li>
               </ul>
             </div>
+            </ScrollReveal>
           </div>
 
           {/* David vs the Goliaths */}
+          <ScrollReveal>
           <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20 text-center">
             <h3 className="text-2xl font-serif font-bold text-white mb-6">
               David vs the Goliaths
@@ -388,6 +404,7 @@ export default function OurStory() {
               Small Team. Big Dreams. No Compromise. Because We Can&apos;t Afford to.
             </div>
           </div>
+          </ScrollReveal>
         </section>
 
         {/* Section 4: The Jerry Can Promise */}
@@ -558,7 +575,8 @@ export default function OurStory() {
 
             {/* Future Vision */}
             <div className="grid lg:grid-cols-3 gap-8">
-              <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20 text-center">
+              <ScrollReveal delay={0}>
+              <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20 text-center h-full">
                 <div className="w-16 h-16 bg-gold-400/20 rounded-full flex items-center justify-center mx-auto mb-4">
                   <span className="text-gold-400 text-xl font-bold">5Y</span>
                 </div>
@@ -571,7 +589,9 @@ export default function OurStory() {
                 </ul>
               </div>
 
-              <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20 text-center">
+              </ScrollReveal>
+              <ScrollReveal delay={1}>
+              <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20 text-center h-full">
                 <div className="w-16 h-16 bg-gold-400/20 rounded-full flex items-center justify-center mx-auto mb-4">
                   <span className="text-gold-400 text-xl font-bold">10Y</span>
                 </div>
@@ -584,7 +604,9 @@ export default function OurStory() {
                 </ul>
               </div>
 
-              <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20 text-center">
+              </ScrollReveal>
+              <ScrollReveal delay={2}>
+              <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20 text-center h-full">
                 <div className="w-16 h-16 bg-gold-400/20 rounded-full flex items-center justify-center mx-auto mb-4">
                   <svg className="w-8 h-8 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
@@ -598,6 +620,7 @@ export default function OurStory() {
                   <li>• We&apos;ve got our own team who&apos;s made this all possible</li>
                 </ul>
               </div>
+              </ScrollReveal>
             </div>
           </div>
         </section>
@@ -614,6 +637,7 @@ export default function OurStory() {
           </div>
 
           <div className="space-y-4 max-w-4xl mx-auto">
+            <ScrollReveal>
             <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20">
               <h3 className="text-lg font-semibold text-white mb-3">Who owns Jerry Can Spirits?</h3>
               <p className="text-parchment-300">
@@ -621,6 +645,8 @@ export default function OurStory() {
               </p>
             </div>
 
+            </ScrollReveal>
+            <ScrollReveal delay={1}>
             <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20">
               <h3 className="text-lg font-semibold text-white mb-3">Is Jerry Can Spirits veteran owned?</h3>
               <p className="text-parchment-300">
@@ -628,6 +654,8 @@ export default function OurStory() {
               </p>
             </div>
 
+            </ScrollReveal>
+            <ScrollReveal delay={2}>
             <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20">
               <h3 className="text-lg font-semibold text-white mb-3">Where is Jerry Can Spirits based?</h3>
               <p className="text-parchment-300">
@@ -635,6 +663,8 @@ export default function OurStory() {
               </p>
             </div>
 
+            </ScrollReveal>
+            <ScrollReveal>
             <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20">
               <h3 className="text-lg font-semibold text-white mb-3">What does the Jerry Can name mean?</h3>
               <p className="text-parchment-300">
@@ -642,6 +672,8 @@ export default function OurStory() {
               </p>
             </div>
 
+            </ScrollReveal>
+            <ScrollReveal delay={1}>
             <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20">
               <h3 className="text-lg font-semibold text-white mb-3">When was Jerry Can Spirits founded?</h3>
               <p className="text-parchment-300">
@@ -649,12 +681,15 @@ export default function OurStory() {
               </p>
             </div>
 
+            </ScrollReveal>
+            <ScrollReveal delay={2}>
             <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20">
               <h3 className="text-lg font-semibold text-white mb-3">What makes Jerry Can Spirits different from other rum brands?</h3>
               <p className="text-parchment-300">
                 Honestly? We&apos;re small and we&apos;re learning as we go. We don&apos;t have a big team or marketing department – it&apos;s just us, figuring out regulations, building relationships one at a time, and trying to make something we&apos;re proud of. When you&apos;re funding everything yourself, you care about every detail because you have to.
               </p>
             </div>
+            </ScrollReveal>
           </div>
 
           {/* FAQ Schema Markup */}

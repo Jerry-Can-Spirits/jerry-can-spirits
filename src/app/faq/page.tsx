@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import StructuredData from '@/components/StructuredData'
+import ScrollReveal from '@/components/ScrollReveal'
 
 export const metadata: Metadata = {
   title: "Frequently Asked Questions",
@@ -132,8 +133,8 @@ export default function FAQPage() {
           {/* FAQ List */}
           <div className="space-y-6">
             {faqs.map((faq, index) => (
+              <ScrollReveal key={index} delay={(index % 3) as 0 | 1 | 2}>
               <div
-                key={index}
                 className="bg-jerry-green-800/20 border border-gold-500/20 rounded-lg p-6 hover:border-gold-500/40 transition-colors"
               >
                 <h2 className="text-xl font-semibold text-gold-400 mb-3">
@@ -149,6 +150,7 @@ export default function FAQPage() {
                   )}
                 </p>
               </div>
+              </ScrollReveal>
             ))}
           </div>
 
