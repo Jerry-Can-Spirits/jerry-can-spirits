@@ -186,7 +186,6 @@ export default function Footer() {
                           className="h-16 w-auto object-contain max-w-full"
                           sizes="180px"
                           quality={100}
-                          unoptimized
                         />
                       ) : (
                         <div className="w-36 h-16 bg-parchment-200/20 rounded animate-pulse" />

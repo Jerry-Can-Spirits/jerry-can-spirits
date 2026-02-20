@@ -81,12 +81,12 @@ export default function DanFreemanPage() {
           <div className="lg:col-span-1">
             <div className="lg:sticky lg:top-24 space-y-6">
               {/* Photo */}
-              <div className="relative aspect-square rounded-xl overflow-hidden border border-gold-500/20">
+              <div className="relative aspect-[3/4] rounded-xl overflow-hidden border border-gold-500/20">
                 <Image
                   src="/images/team/Dan_Headshot.jpg"
                   alt="Dan Freeman - Founder & Director of Jerry Can Spirits"
                   fill
-                  className="object-cover"
+                  className="object-cover object-top"
                   sizes="(max-width: 1024px) 100vw, 33vw"
                   priority
                 />

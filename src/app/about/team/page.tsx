@@ -91,19 +91,19 @@ export default function TeamPage() {
               {/* Photo */}
               <div className="mb-6 relative">
                 {member.image ? (
-                  <div className="aspect-square relative rounded-lg overflow-hidden border border-gold-500/20">
+                  <div className="aspect-[3/4] relative rounded-lg overflow-hidden border border-gold-500/20">
                     <Image
                       src={member.image}
                       alt={`${member.name} - ${member.role}`}
                       fill
-                      className="object-cover"
+                      className="object-cover object-top"
                       sizes="(max-width: 768px) 100vw, 50vw"
                       priority
                     />
                   </div>
                 ) : (
                   <>
-                    <div className="aspect-square bg-gradient-to-br from-jerry-green-700/50 to-jerry-green-900/50 rounded-lg flex items-center justify-center border border-gold-500/20">
+                    <div className="aspect-[3/4] bg-gradient-to-br from-jerry-green-700/50 to-jerry-green-900/50 rounded-lg flex items-center justify-center border border-gold-500/20">
                       <svg className="w-24 h-24 text-gold-500/30" fill="currentColor" viewBox="0 0 20 20">
                         <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
                       </svg>
