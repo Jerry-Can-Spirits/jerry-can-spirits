@@ -22,25 +22,31 @@ interface AgeGateProps {
   onVerified: () => void;
 }
 
-/** Read the detected country code from the cookie set by middleware (cf.country). */
-function getDetectedCountry(): string | null {
-  if (typeof document === 'undefined') return null;
-  const match = document.cookie.match(/(?:^|;\s*)detectedCountry=([A-Z]{2})/);
-  return match ? match[1] : null;
-}
-
 export default function AgeGate({ onVerified }: AgeGateProps) {
-  const detectedCode = getDetectedCountry();
-  const defaultRegion =
-    regions.find((r) => r.code === detectedCode) || regions[0];
-
-  const [selectedRegion, setSelectedRegion] = useState(defaultRegion);
+  const [selectedRegion, setSelectedRegion] = useState(regions[0]);
   const [isVisible, setIsVisible] = useState(true);
   const [showRejectionMessage, setShowRejectionMessage] = useState(false);
 
   useEffect(() => {
     // Prevent body scrolling when age gate is visible
     document.body.style.overflow = 'hidden';
+
+    // Auto-detect region via cookie or geo API
+    const match = document.cookie.match(/(?:^|;\s*)detectedCountry=([A-Z]{2})/);
+    if (match) {
+      const detected = regions.find((r) => r.code === match[1]);
+      if (detected) setSelectedRegion(detected);
+    } else {
+      fetch('/api/geo')
+        .then((res) => res.json() as Promise<{ country: string | null }>)
+        .then(({ country }) => {
+          if (country) {
+            const detected = regions.find((r) => r.code === country);
+            if (detected) setSelectedRegion(detected);
+          }
+        })
+        .catch(() => { /* fallback to default */ });
+    }
 
     return () => {
       // Clean up: restore body scrolling

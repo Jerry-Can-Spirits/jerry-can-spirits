@@ -54,16 +54,23 @@ export default function ShippingBanner() {
   const [dismissed, setDismissed] = useState(false)
 
   useEffect(() => {
-    // Read country from cookie set by middleware
-    const match = document.cookie.match(/(?:^|;\s*)detectedCountry=([A-Z]{2})/)
-    const country = match ? match[1] : null
-    const msg = getShippingMessage(country)
-    setMessage(msg)
-
-    // Check dismissal
     if (sessionStorage.getItem('shipping-banner-dismissed')) {
       setDismissed(true)
+      return
     }
+
+    // Check cookie first (set by /api/geo on previous visit)
+    const match = document.cookie.match(/(?:^|;\s*)detectedCountry=([A-Z]{2})/)
+    if (match) {
+      setMessage(getShippingMessage(match[1]))
+      return
+    }
+
+    // No cookie yet — fetch from geo API (sets cookie for next time)
+    fetch('/api/geo')
+      .then((res) => res.json() as Promise<{ country: string | null }>)
+      .then(({ country }) => setMessage(getShippingMessage(country)))
+      .catch(() => { /* silently fail */ })
   }, [])
 
   if (!message || dismissed) return null

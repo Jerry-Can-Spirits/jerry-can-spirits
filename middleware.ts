@@ -80,27 +80,6 @@ export function middleware(request: NextRequest) {
     })
   }
 
-  // Geo-detection via Cloudflare Workers
-  // OpenNext maps cf.country → x-open-next-country → x-vercel-ip-country
-  const country =
-    request.headers.get('x-vercel-ip-country') ||
-    request.headers.get('x-open-next-country') ||
-    request.headers.get('cf-ipcountry')
-
-  if (country) {
-    // Cookie for client components (age gate auto-select)
-    if (!request.cookies.get('detectedCountry')) {
-      response.cookies.set('detectedCountry', country, {
-        httpOnly: false,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'strict',
-        maxAge: 60 * 60 * 24, // 24 hours
-      })
-    }
-    // Header for server components and shipping banner
-    response.headers.set('x-visitor-country', country)
-  }
-
   return response
 }
 
