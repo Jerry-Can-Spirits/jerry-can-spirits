@@ -80,10 +80,12 @@ export function middleware(request: NextRequest) {
     })
   }
 
-  // Geo-detection via Cloudflare Workers cf object
-  // Sets country code for age gate auto-selection and shipping banner
-  const cf = (request as NextRequest & { cf?: { country?: string } }).cf
-  const country = cf?.country || request.headers.get('cf-ipcountry')
+  // Geo-detection via Cloudflare Workers
+  // OpenNext maps cf.country → x-open-next-country → x-vercel-ip-country
+  const country =
+    request.headers.get('x-vercel-ip-country') ||
+    request.headers.get('x-open-next-country') ||
+    request.headers.get('cf-ipcountry')
 
   if (country) {
     // Cookie for client components (age gate auto-select)
