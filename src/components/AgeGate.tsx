@@ -42,6 +42,23 @@ export default function AgeGate({ onVerified }: AgeGateProps) {
     // Prevent body scrolling when age gate is visible
     document.body.style.overflow = 'hidden';
 
+    // Auto-detect region via cookie or geo API
+    const match = document.cookie.match(/(?:^|;\s*)detectedCountry=([A-Z]{2})/);
+    if (match) {
+      const detected = regions.find((r) => r.code === match[1]);
+      if (detected) setSelectedRegion(detected);
+    } else {
+      fetch('/api/geo')
+        .then((res) => res.json() as Promise<{ country: string | null }>)
+        .then(({ country }) => {
+          if (country) {
+            const detected = regions.find((r) => r.code === country);
+            if (detected) setSelectedRegion(detected);
+          }
+        })
+        .catch(() => { /* fallback to default */ });
+    }
+
     return () => {
       // Clean up: restore body scrolling
       document.body.style.overflow = 'unset';
