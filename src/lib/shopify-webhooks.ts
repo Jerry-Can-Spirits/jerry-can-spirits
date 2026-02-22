@@ -61,6 +61,13 @@ export async function incrementPreOrderSold(
   quantity: number,
   adminToken: string,
 ): Promise<void> {
+  // Validate productId is a positive integer to prevent SSRF
+  const safeProductId = Math.floor(Math.abs(productId));
+  if (!Number.isFinite(safeProductId) || safeProductId === 0) {
+    console.error(`[webhook] Invalid product ID: ${productId}`);
+    return;
+  }
+
   const baseUrl = `https://${SHOP_DOMAIN}/admin/api/${API_VERSION}`;
   const headers = {
     'X-Shopify-Access-Token': adminToken,
@@ -69,12 +76,12 @@ export async function incrementPreOrderSold(
 
   // Read current metafields for this product
   const metafieldsRes = await fetch(
-    `${baseUrl}/products/${productId}/metafields.json?namespace=custom&key=pre_order_sold`,
+    `${baseUrl}/products/${safeProductId}/metafields.json?namespace=custom&key=pre_order_sold`,
     { headers },
   );
 
   if (!metafieldsRes.ok) {
-    console.error(`[webhook] Failed to read metafields for product ${productId}: ${metafieldsRes.status}`);
+    console.error(`[webhook] Failed to read metafields for product ${safeProductId}: ${metafieldsRes.status}`);
     return;
   }
 
@@ -88,7 +95,8 @@ export async function incrementPreOrderSold(
 
   if (existing) {
     // Update existing metafield
-    const updateRes = await fetch(`${baseUrl}/metafields/${existing.id}.json`, {
+    const safeMetafieldId = Math.floor(Math.abs(existing.id));
+    const updateRes = await fetch(`${baseUrl}/metafields/${safeMetafieldId}.json`, {
       method: 'PUT',
       headers,
       body: JSON.stringify({
@@ -101,7 +109,7 @@ export async function incrementPreOrderSold(
     }
   } else {
     // Create new metafield
-    const createRes = await fetch(`${baseUrl}/products/${productId}/metafields.json`, {
+    const createRes = await fetch(`${baseUrl}/products/${safeProductId}/metafields.json`, {
       method: 'POST',
       headers,
       body: JSON.stringify({
@@ -114,12 +122,12 @@ export async function incrementPreOrderSold(
       }),
     });
     if (!createRes.ok) {
-      console.error(`[webhook] Failed to create metafield for product ${productId}: ${createRes.status}`);
+      console.error(`[webhook] Failed to create metafield for product ${safeProductId}: ${createRes.status}`);
       return;
     }
   }
 
-  console.log(`[webhook] Updated pre_order_sold for product ${productId}: ${currentValue} → ${newValue}`);
+  console.log(`[webhook] Updated pre_order_sold for product ${safeProductId}: ${currentValue} → ${newValue}`);
 }
 
 // ── HMAC-SHA256 Verification (Web Crypto) ───────────────────────────
