@@ -1,5 +1,28 @@
 import type { Batch, BatchStats } from '@/lib/d1'
 
+function TastingNotesDisplay({ notes }: { notes: string }) {
+  const sections = notes.match(/(Nose|Palate|Finish):\s*([^]*?)(?=(?:Nose|Palate|Finish):|$)/g)
+
+  if (!sections || sections.length === 0) {
+    return <p className="text-parchment-300 leading-relaxed">{notes}</p>
+  }
+
+  return (
+    <div className="space-y-4">
+      {sections.map((section) => {
+        const match = section.match(/^(Nose|Palate|Finish):\s*(.+)/)
+        if (!match) return null
+        return (
+          <div key={match[1]}>
+            <h3 className="text-gold-300 font-semibold mb-1">{match[1]}</h3>
+            <p className="text-parchment-300 leading-relaxed">{match[2].trim()}</p>
+          </div>
+        )
+      })}
+    </div>
+  )
+}
+
 interface BatchDetailsProps {
   batch: Batch
   stats: BatchStats | null
@@ -59,7 +82,7 @@ export default function BatchDetails({ batch, stats }: BatchDetailsProps) {
       {batch.tasting_notes && (
         <div className="bg-jerry-green-800/60 backdrop-blur-sm border border-gold-500/20 rounded-xl p-6">
           <h2 className="text-2xl font-serif font-bold text-white mb-4">Tasting Notes</h2>
-          <p className="text-parchment-300 leading-relaxed">{batch.tasting_notes}</p>
+          <TastingNotesDisplay notes={batch.tasting_notes} />
         </div>
       )}
 

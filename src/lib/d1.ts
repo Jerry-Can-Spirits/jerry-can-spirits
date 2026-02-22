@@ -153,7 +153,7 @@ export async function getBatchStats(db: D1Database, batchId: string): Promise<Ba
     : 0;
 
   return {
-    total_bottles: counts?.total ?? batch.bottle_count ?? 0,
+    total_bottles: (counts?.total || 0) > 0 ? counts!.total : (batch.bottle_count ?? 0),
     available: counts?.available ?? 0,
     sold: counts?.sold ?? 0,
     days_aged: daysAged,

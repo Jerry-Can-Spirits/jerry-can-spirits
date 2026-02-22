@@ -12,6 +12,29 @@ interface PageProps {
   params: Promise<{ batchNumber: string; bottleId: string }>
 }
 
+function TastingNotesDisplay({ notes }: { notes: string }) {
+  const sections = notes.match(/(Nose|Palate|Finish):\s*([^]*?)(?=(?:Nose|Palate|Finish):|$)/g)
+
+  if (!sections || sections.length === 0) {
+    return <p className="text-parchment-300 leading-relaxed">{notes}</p>
+  }
+
+  return (
+    <div className="space-y-4">
+      {sections.map((section) => {
+        const match = section.match(/^(Nose|Palate|Finish):\s*(.+)/)
+        if (!match) return null
+        return (
+          <div key={match[1]}>
+            <h3 className="text-gold-300 font-semibold mb-1">{match[1]}</h3>
+            <p className="text-parchment-300 leading-relaxed">{match[2].trim()}</p>
+          </div>
+        )
+      })}
+    </div>
+  )
+}
+
 const validLabelTypes = new Set<LabelType>(['standard', 'premium', 'founder'])
 const labelMaxBottles: Record<LabelType, number> = {
   standard: 700,
@@ -96,14 +119,14 @@ export default async function BottleDetailPage({ params }: PageProps) {
         {batch.tasting_notes && (
           <div className="mt-8 bg-jerry-green-800/60 backdrop-blur-sm border border-gold-500/20 rounded-xl p-6">
             <h2 className="text-xl font-serif font-bold text-white mb-3">Tasting Notes</h2>
-            <p className="text-parchment-300 leading-relaxed">{batch.tasting_notes}</p>
+            <TastingNotesDisplay notes={batch.tasting_notes} />
           </div>
         )}
 
         {/* Provenance note */}
         <div className="mt-6 bg-jerry-green-800/40 border border-gold-500/10 rounded-xl p-6 text-center">
           <p className="text-parchment-400 text-sm">
-            This bottle is from {batch.name}. Every bottle carries the same exceptional liquid — crafted at
+            This bottle is from {batch.name}. Every bottle carries the same exceptional liquid, crafted at
             Spirit of Wales Distillery, Newport, South Wales.
           </p>
         </div>
