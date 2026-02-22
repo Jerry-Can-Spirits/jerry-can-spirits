@@ -57,8 +57,8 @@ export default function BatchCard({ batch, stats }: BatchCardProps) {
           <p className="text-parchment-500 text-xs uppercase tracking-wider">ABV</p>
         </div>
         <div>
-          <p className="text-gold-400 text-2xl font-bold">{stats?.days_aged ?? '—'}</p>
-          <p className="text-parchment-500 text-xs uppercase tracking-wider">Days Aged</p>
+          <p className="text-gold-400 text-2xl font-bold">{stats ? (stats.days_aged > 0 ? stats.days_aged : 'Unaged') : '—'}</p>
+          <p className="text-parchment-500 text-xs uppercase tracking-wider">{stats?.days_aged ? 'Days Aged' : 'Ageing'}</p>
         </div>
       </div>
     </Link>

@@ -37,12 +37,12 @@ INSERT OR IGNORE INTO batches (id, name, cask_type, distillation_date, bottling_
 VALUES (
   'batch-001',
   'Batch 001 — Expedition Spiced Rum',
-  'Ex-Bourbon American Oak',
-  '2025-06-15',
+  NULL,
+  NULL,
   '2026-03-01',
-  700,
+  840,
   40.0,
   'bottled',
-  'Warm vanilla and caramel on the nose, with notes of cinnamon, nutmeg, and a hint of citrus zest. Smooth on the palate with a gentle spice finish.',
-  'Our first batch. Every bottle carries the spirit of two veterans who decided to trade signals for spirits. This is where the expedition begins.'
+  'Nose: Warm Madagascan vanilla leads with a rich, creamy softness. Ceylon cinnamon and toasted bourbon oak add warmth and structure, lifted by bright orange peel. Clove and allspice sit in the background, adding depth and subtle spice complexity. Palate: Silky and naturally sweet on entry thanks to agave. Ginger heat and cassia bark develop into layered baking spices, while subtle citrus returns mid-palate to balance the richness with a gentle zesty edge. Finish: Long, warming, and elegantly dry. Oak tannins linger alongside vanilla, winter spice, and a final flicker of ginger. Clean, refined, and crafted for sipping.',
+  'Our first batch. Two Royal Signals veterans who decided to trade comms for spirits. Every bottle carries 700ml of the same liquid we spent months getting right — no shortcuts, no compromises. This is where the expedition begins.'
 );

@@ -118,8 +118,8 @@ export default async function BatchDetailPage({ params }: PageProps) {
                 </div>
               )}
               <div className="flex items-baseline gap-2">
-                <span className="text-gold-400 text-2xl font-bold">{stats.days_aged}</span>
-                <span className="text-parchment-500 text-sm">days aged</span>
+                <span className="text-gold-400 text-2xl font-bold">{stats.days_aged > 0 ? stats.days_aged : 'Unaged'}</span>
+                {stats.days_aged > 0 && <span className="text-parchment-500 text-sm">days aged</span>}
               </div>
             </div>
           )}
@@ -196,7 +196,7 @@ export default async function BatchDetailPage({ params }: PageProps) {
             Get Your Own Bottle
           </h2>
           <p className="text-parchment-300 mb-6 max-w-lg mx-auto">
-            Expedition Spiced Rum — crafted by veterans, aged in American oak, and ready for adventure.
+            Expedition Spiced Rum — crafted by veterans, blended with real botanicals, and ready for adventure.
           </p>
           <Link
             href="/shop/"

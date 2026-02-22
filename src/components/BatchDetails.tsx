@@ -47,8 +47,8 @@ export default function BatchDetails({ batch, stats }: BatchDetailsProps) {
                 <dd className="text-white font-medium mt-1">{stats.total_bottles}</dd>
               </div>
               <div>
-                <dt className="text-parchment-500 text-sm uppercase tracking-wider">Days Aged</dt>
-                <dd className="text-white font-medium mt-1">{stats.days_aged}</dd>
+                <dt className="text-parchment-500 text-sm uppercase tracking-wider">Ageing</dt>
+                <dd className="text-white font-medium mt-1">{stats.days_aged > 0 ? `${stats.days_aged} days` : 'Unaged'}</dd>
               </div>
             </>
           )}

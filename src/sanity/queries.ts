@@ -337,8 +337,8 @@ export const guideBySlugQuery = `*[_type == "guide" && slug.current == $slug][0]
   estimatedWordCount
 }`
 
-// Featured cocktails for batch pages (4 featured cocktails)
-export const featuredCocktailsQuery = `*[_type == "cocktail" && featured == true][0...4] | order(_createdAt desc) {
+// Featured cocktails for batch pages (4 rum cocktails, preferring featured)
+export const featuredCocktailsQuery = `*[_type == "cocktail" && baseSpirit == "rum"] | order(featured desc, _createdAt desc)[0...4] {
   _id,
   name,
   slug,
