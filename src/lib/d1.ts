@@ -24,10 +24,13 @@ export interface Batch {
   created_at: string;
 }
 
+export type LabelType = 'standard' | 'premium' | 'founder';
+
 export interface Bottle {
   id: string;
   batch_id: string;
   bottle_number: number;
+  label_type: LabelType;
   gtin: string | null;
   status: string;
   sold_at: string | null;
@@ -72,6 +75,25 @@ export async function getBottle(
   const bottle = await db
     .prepare('SELECT * FROM bottles WHERE batch_id = ? AND bottle_number = ?')
     .bind(batchId, bottleNumber)
+    .first<Bottle>();
+
+  if (!bottle) return null;
+
+  const batch = await getBatch(db, bottle.batch_id);
+  if (!batch) return null;
+
+  return { ...bottle, batch };
+}
+
+export async function getBottleByLabel(
+  db: D1Database,
+  batchId: string,
+  labelType: LabelType,
+  bottleNumber: number,
+): Promise<BottleWithBatch | null> {
+  const bottle = await db
+    .prepare('SELECT * FROM bottles WHERE batch_id = ? AND label_type = ? AND bottle_number = ?')
+    .bind(batchId, labelType, bottleNumber)
     .first<Bottle>();
 
   if (!bottle) return null;
