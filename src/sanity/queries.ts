@@ -337,6 +337,16 @@ export const guideBySlugQuery = `*[_type == "guide" && slug.current == $slug][0]
   estimatedWordCount
 }`
 
+// Featured cocktails for batch pages (4 featured cocktails)
+export const featuredCocktailsQuery = `*[_type == "cocktail" && featured == true][0...4] | order(_createdAt desc) {
+  _id,
+  name,
+  slug,
+  description,
+  difficulty,
+  "image": image.asset->url
+}`
+
 // Count queries for Field Manual stats
 export const fieldManualCountsQuery = `{
   "cocktails": count(*[_type == "cocktail"]),

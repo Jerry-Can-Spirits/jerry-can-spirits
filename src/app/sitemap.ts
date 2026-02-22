@@ -7,6 +7,7 @@ import {
   ingredientsSitemapQuery,
   guidesSitemapQuery
 } from '@/sanity/queries'
+import { getD1, getAllBatches } from '@/lib/d1'
 
 // Ensure sitemap works on Cloudflare Pages Edge Runtime
 export const dynamic = 'force-dynamic'
@@ -96,6 +97,21 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     changeFrequency: 'weekly' as const,
     priority: 0.9, // High priority for SEO-focused content
   }))
+
+  // Fetch all batches from D1
+  let batchUrls: MetadataRoute.Sitemap = []
+  try {
+    const db = await getD1()
+    const batches = await getAllBatches(db)
+    batchUrls = batches.map((batch) => ({
+      url: `${baseUrl}/batch/${batch.id.replace('batch-', '')}/`,
+      lastModified: currentDate,
+      changeFrequency: 'monthly' as const,
+      priority: 0.6,
+    }))
+  } catch (error) {
+    console.error('Error fetching batches for sitemap:', error)
+  }
 
   // Define all static routes with priorities and change frequencies
   // All URLs include trailing slash to match trailingSlash: true config
@@ -264,6 +280,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'monthly',
       priority: 0.6,
     },
+    // Batch pages
+    {
+      url: `${baseUrl}/batch/`,
+      lastModified: currentDate,
+      changeFrequency: 'monthly',
+      priority: 0.6,
+    },
     // Shop pages
     {
       url: `${baseUrl}/shop/`,
@@ -285,5 +308,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
   ]
 
-  return [...routes, ...productUrls, ...cocktailUrls, ...equipmentUrls, ...ingredientUrls, ...guideUrls]
+  return [...routes, ...productUrls, ...cocktailUrls, ...equipmentUrls, ...ingredientUrls, ...guideUrls, ...batchUrls]
 }
