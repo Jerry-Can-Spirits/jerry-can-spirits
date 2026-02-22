@@ -12,7 +12,7 @@ interface ShippingMessage {
 
 const SHIPPING_MESSAGES: Record<string, ShippingMessage> = {
   GB: {
-    text: 'Free UK shipping on orders over £50',
+    text: 'Free UK shipping on orders over £100',
     detail: 'All prices include UK duty and VAT.',
   },
   US: {
