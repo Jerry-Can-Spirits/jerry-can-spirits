@@ -48,6 +48,7 @@ export default function Header() {
         { name: 'Clothing', href: '/shop/clothing', description: 'Adventure apparel' },
       ]
     },
+    { name: 'Reviews', href: '/reviews' },
     {
       name: 'Field Manual',
       href: '/field-manual',

@@ -42,6 +42,7 @@ export default function Footer() {
       { name: 'Ingredients', href: '/ingredients' },
       { name: 'Sustainability', href: '/sustainability' },
       { name: 'Friends & Partners', href: '/friends' },
+      { name: 'Reviews', href: '/reviews' },
       { name: 'FAQ', href: '/faq' },
       { name: 'Contact', href: '/contact' },
       { name: 'Careers', href: '/careers' },
@@ -134,9 +135,9 @@ export default function Footer() {
                 </div>
 
                 <div className="hidden lg:block">
-                  <h3 className="font-serif text-xl font-bold mb-4 text-parchment-100 border-b border-jerry-green-700 pb-2" style={{ color: '#fefbf5' }}>
+                  <p className="font-serif text-xl font-bold mb-4 text-parchment-100 border-b border-jerry-green-700 pb-2" style={{ color: '#fefbf5' }}>
                     Quick Links
-                  </h3>
+                  </p>
                 </div>
 
                 <div className={`space-y-3 ${
@@ -159,9 +160,9 @@ export default function Footer() {
             {/* Column 2 - Responsible Drinking */}
             <div className="space-y-6">
               <div>
-                <h3 className="font-serif text-xl font-bold mb-4 text-parchment-100 border-b border-jerry-green-700 pb-2" style={{ color: '#fefbf5' }}>
+                <p className="font-serif text-xl font-bold mb-4 text-parchment-100 border-b border-jerry-green-700 pb-2" style={{ color: '#fefbf5' }}>
                   Drink Responsibly
-                </h3>
+                </p>
                 <div className="space-y-4 text-base text-parchment-300">
                   <p>Must be 18+ to purchase alcohol</p>
                   <p>Please drink responsibly</p>
@@ -199,9 +200,9 @@ export default function Footer() {
             {/* Column 3 - Service Community Support */}
             <div className="space-y-6">
               <div>
-                <h3 className="font-serif text-xl font-bold mb-4 text-parchment-100 border-b border-jerry-green-700 pb-2" style={{ color: '#fefbf5' }}>
+                <p className="font-serif text-xl font-bold mb-4 text-parchment-100 border-b border-jerry-green-700 pb-2" style={{ color: '#fefbf5' }}>
                   Service Community
-                </h3>
+                </p>
                 <div className="space-y-3 text-base text-parchment-300">
                   <p>Proud signatories of the Armed Forces Covenant - we stand alongside serving personnel, veterans, their families, and our blue light services.</p>
                   <p>Our commitment is to ensure fairness, respect, and equal opportunity for all who serve, recognising their dedication and the vital role they play in our communities.</p>
@@ -418,9 +419,9 @@ export default function Footer() {
                 </div>
 
                 <div className="hidden lg:block">
-                  <h3 className="font-serif text-xl font-bold mb-4 text-parchment-100 border-b border-jerry-green-700 pb-2" style={{ color: '#fefbf5' }}>
+                  <p className="font-serif text-xl font-bold mb-4 text-parchment-100 border-b border-jerry-green-700 pb-2" style={{ color: '#fefbf5' }}>
                     Legal & Policies
-                  </h3>
+                  </p>
                 </div>
 
                 <div className={`space-y-3 ${
@@ -443,9 +444,9 @@ export default function Footer() {
             {/* Column 6 - Secure Payment */}
             <div className="space-y-6">
               <div>
-                <h3 className="font-serif text-xl font-bold mb-4 text-parchment-100 border-b border-jerry-green-700 pb-2" style={{ color: '#fefbf5' }}>
+                <p className="font-serif text-xl font-bold mb-4 text-parchment-100 border-b border-jerry-green-700 pb-2" style={{ color: '#fefbf5' }}>
                   Secure Payment
-                </h3>
+                </p>
                 <div className="grid grid-cols-2 gap-3">
                   {paymentMethods.map((method) => (
                     <div
@@ -474,9 +475,9 @@ export default function Footer() {
             {/* Column 7 - Contact Us */}
             <div className="space-y-6">
               <div>
-                <h3 className="font-serif text-xl font-bold mb-4 text-parchment-100 border-b border-jerry-green-700 pb-2" style={{ color: '#fefbf5' }}>
+                <p className="font-serif text-xl font-bold mb-4 text-parchment-100 border-b border-jerry-green-700 pb-2" style={{ color: '#fefbf5' }}>
                   Contact Us
-                </h3>
+                </p>
                 <div className="space-y-3 text-base text-parchment-300">
                   <div>
                     <p className="text-gold-300 font-semibold mb-1">General Enquiries</p>

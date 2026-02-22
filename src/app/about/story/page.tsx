@@ -11,7 +11,7 @@ const articleSchema = {
   '@context': 'https://schema.org',
   '@type': 'Article',
   headline: 'Our Story - How Two Veterans Built a British Rum Brand',
-  description: 'The story behind Jerry Can Spirits — veteran-owned military rum founded by Royal Signals veterans. From Arctic deployments to premium small-batch spiced rum crafted in Wales.',
+  description: 'Jerry Can Spirits — veteran-owned military rum by Royal Signals veterans. From Arctic deployments to premium small-batch spiced rum in Wales.',
   url: 'https://jerrycanspirits.co.uk/about/story/',
   image: 'https://jerrycanspirits.co.uk/images/hero/Trail_Hero.webp',
   author: {
@@ -37,14 +37,14 @@ const articleSchema = {
 }
 
 export const metadata: Metadata = {
-  title: "Our Story - How Two Veterans Built a British Rum Brand",
-  description: "The story behind Jerry Can Spirits — veteran-owned military rum founded by Royal Signals veterans. From Arctic deployments to premium small-batch spiced rum crafted in Wales.",
+  title: "Our Story - Two Veterans Building a Rum Brand",
+  description: "Jerry Can Spirits — veteran-owned military rum by Royal Signals veterans. From Arctic deployments to premium small-batch spiced rum in Wales.",
   alternates: {
     canonical: 'https://jerrycanspirits.co.uk/about/story/',
   },
   openGraph: {
     title: "Our Story | Jerry Can Spirits®",
-    description: "The story behind Jerry Can Spirits — veteran-owned military rum founded by Royal Signals veterans. From Arctic deployments to premium small-batch spiced rum crafted in Wales.",
+    description: "Jerry Can Spirits — veteran-owned military rum by Royal Signals veterans. From Arctic deployments to premium small-batch spiced rum in Wales.",
   },
   robots: {
     index: true,

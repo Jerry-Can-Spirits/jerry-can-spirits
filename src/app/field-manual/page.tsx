@@ -12,14 +12,14 @@ function roundDownToTen(n: number): number {
 }
 
 export const metadata: Metadata = {
-  title: "Field Manual - Cocktail Recipes, Bar Equipment & Ingredients",
-  description: "Free cocktail recipes for rum, gin, whisky, and more. Bar equipment guides and ingredient breakdowns. No jargon, no gatekeeping - just clear instructions for great drinks at home.",
+  title: "Field Manual - Cocktail Recipes & Bar Guides",
+  description: "Free cocktail recipes for rum, gin, whisky and more. Bar equipment guides and ingredient breakdowns. No jargon, just great drinks.",
   alternates: {
     canonical: 'https://jerrycanspirits.co.uk/field-manual/',
   },
   openGraph: {
     title: "Field Manual | Jerry Can Spirits®",
-    description: "Free cocktail recipes for rum, gin, whisky, and more. Bar equipment guides and ingredient breakdowns. No jargon, no gatekeeping - just clear instructions for great drinks at home.",
+    description: "Free cocktail recipes for rum, gin, whisky and more. Bar equipment guides and ingredient breakdowns. No jargon, just great drinks.",
   },
 }
 
