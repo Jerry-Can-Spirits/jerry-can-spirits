@@ -34,6 +34,36 @@ function timeAgo(timestamp: number): string {
   return `${hours} hour${hours === 1 ? '' : 's'} ago`
 }
 
+// Temporary: purge bogus test entries from KV
+export async function DELETE() {
+  try {
+    const { env } = await getCloudflareContext()
+    const kv = env.SITE_OPS
+    const list = await kv.list({ prefix: 'order:recent:' })
+    let deleted = 0
+
+    for (const key of list.keys) {
+      const data = await kv.get<{ titles: string[] }>(key.name, 'json')
+      if (!data) continue
+
+      const hasBogus = data.titles.some(
+        (t) =>
+          !t.toLowerCase().includes('jerry can') &&
+          !t.toLowerCase().includes('expedition')
+      )
+      if (hasBogus) {
+        await kv.delete(key.name)
+        deleted++
+      }
+    }
+
+    return NextResponse.json({ deleted })
+  } catch (error) {
+    console.error('Failed to purge orders:', error)
+    return NextResponse.json({ error: 'Failed' }, { status: 500 })
+  }
+}
+
 export async function GET() {
   try {
     const { env } = await getCloudflareContext()
@@ -54,7 +84,7 @@ export async function GET() {
       return tsB - tsA
     })
 
-    // Find the most recent order that contains a Jerry Can Spirits product
+    // Find the most recent genuine order (all titles must be JCS products)
     for (const key of sorted) {
       const data = await kv.get<{ titles: string[]; country: string; timestamp: number }>(
         key.name,
@@ -62,17 +92,18 @@ export async function GET() {
       )
       if (!data) continue
 
-      const ourTitle = data.titles.find((t) =>
+      const allOurs = data.titles.every((t) =>
         t.toLowerCase().includes('jerry can') ||
         t.toLowerCase().includes('expedition')
       )
-      if (!ourTitle) continue
+      if (!allOurs) continue
 
+      const title = data.titles[0]
       const region = countryNames[data.country] || 'somewhere nearby'
       const ago = timeAgo(data.timestamp)
 
       return NextResponse.json(
-        { title: ourTitle, region, timeAgo: ago },
+        { title, region, timeAgo: ago },
         { headers: { 'Cache-Control': 'public, max-age=60' } }
       )
     }
