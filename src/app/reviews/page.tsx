@@ -6,7 +6,7 @@ import ScrollReveal from '@/components/ScrollReveal'
 
 const TrustpilotWidget = dynamic(() => import('@/components/TrustpilotWidget'), {
   loading: () => (
-    <div className="h-[240px] bg-jerry-green-800/50 rounded-lg animate-pulse" />
+    <div className="h-[52px] bg-jerry-green-800/50 rounded-lg animate-pulse" />
   ),
 })
 
@@ -56,12 +56,13 @@ export default function ReviewsPage() {
                 View all on Trustpilot
               </a>
             </div>
-            {/* Carousel widget - auto-rotates reviews */}
+            {/* Review Collector widget */}
             <TrustpilotWidget
-              templateId="539ad60defb9600b94d7df2c"
-              height="240px"
+              templateId="56278e9abfbbba0bdcd568bc"
+              height="52px"
               theme="dark"
               stars="1,2,3,4,5"
+              token="9323db11-b776-4e7e-b956-0b8762a3cf63"
             />
           </div>
         </ScrollReveal>

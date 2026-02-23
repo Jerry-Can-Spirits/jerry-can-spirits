@@ -3,7 +3,7 @@ import Image from 'next/image'
 
 export const metadata: Metadata = {
   title: "Armed Forces Covenant | Jerry Can Spirits",
-  description: "Jerry Can Spirits' commitment to the Armed Forces Covenant. Our pledge to support serving personnel, veterans, reservists, and their families through employment, commercial support, and community engagement.",
+  description: "Jerry Can Spirits is a veteran-owned military rum brand committed to the Armed Forces Covenant, supporting serving personnel, veterans, and military families.",
   alternates: {
     canonical: 'https://jerrycanspirits.co.uk/armed-forces-covenant/',
   },

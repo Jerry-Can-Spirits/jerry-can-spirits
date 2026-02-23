@@ -59,6 +59,14 @@ const faqSchema = {
     },
     {
       '@type': 'Question',
+      name: 'What is rum spiced with?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Spiced rum is made by infusing rum with spices and botanicals. Our Expedition Spiced Rum uses Madagascan vanilla pods, Ceylon cinnamon, allspice, cloves, orange peel, cassia bark, and ginger. We sweeten naturally with agave and glucose syrup, then rest on bourbon barrel chips for added depth. Every brand uses different spice blends — ours focuses on real ingredients with no artificial flavourings.',
+      },
+    },
+    {
+      '@type': 'Question',
       name: 'What spices are in Expedition Spiced Rum?',
       acceptedAnswer: {
         '@type': 'Answer',
@@ -69,14 +77,14 @@ const faqSchema = {
 }
 
 export const metadata: Metadata = {
-  title: "Expedition Spiced Rum Ingredients - What's Inside Our Rum",
-  description: "What goes into Jerry Can Spirits Expedition Spiced Rum. Madagascan vanilla, Ceylon cinnamon, ginger, orange peel, cloves, cassia, and agave, steeped in Caribbean rum.",
+  title: "What Is Rum Spiced With? Expedition Spiced Rum Ingredients",
+  description: "What is rum spiced with? Our Expedition Spiced Rum uses Madagascan vanilla, Ceylon cinnamon, ginger, orange peel, cloves, cassia bark, and agave in Caribbean rum.",
   alternates: {
     canonical: 'https://jerrycanspirits.co.uk/ingredients/expedition-spiced-rum/',
   },
   openGraph: {
-    title: 'Expedition Spiced Rum Ingredients | Jerry Can Spirits®',
-    description: 'What goes into Jerry Can Spirits Expedition Spiced Rum. Madagascan vanilla, Ceylon cinnamon, ginger, orange peel, cloves, cassia, and agave, steeped in Caribbean rum.',
+    title: 'What Is Rum Spiced With? Expedition Spiced Rum Ingredients | Jerry Can Spirits®',
+    description: 'What is rum spiced with? Our Expedition Spiced Rum uses Madagascan vanilla, Ceylon cinnamon, ginger, orange peel, cloves, cassia bark, and agave in Caribbean rum.',
     url: 'https://jerrycanspirits.co.uk/ingredients/expedition-spiced-rum/',
     siteName: 'Jerry Can Spirits®',
     locale: 'en_GB',
@@ -106,7 +114,7 @@ export default function ExpeditionSpicedRumIngredients() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div className="inline-block px-4 py-2 bg-jerry-green-800/60 backdrop-blur-sm rounded-full border border-gold-500/30 mb-6">
             <span className="text-gold-300 text-sm font-semibold uppercase tracking-widest">
-              What&apos;s In The Bottle
+              What Is Rum Spiced With?
             </span>
           </div>
 
@@ -117,7 +125,7 @@ export default function ExpeditionSpicedRumIngredients() {
           </h1>
 
           <p className="text-xl text-parchment-300 max-w-3xl mx-auto leading-relaxed">
-            No secrets. No gimmicks. Just honest ingredients and bold flavour.
+            No secrets. No gimmicks. Here&apos;s exactly what our spiced rum is made with — every spice, every ingredient, every detail.
           </p>
         </div>
       </section>
@@ -169,7 +177,7 @@ export default function ExpeditionSpicedRumIngredients() {
         <section className="py-12">
           <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
             <h2 className="text-2xl sm:text-3xl font-serif font-bold text-white mb-6">
-              Ingredients
+              What Our Rum Is Spiced With
             </h2>
 
             <div className="space-y-6 text-parchment-300">
