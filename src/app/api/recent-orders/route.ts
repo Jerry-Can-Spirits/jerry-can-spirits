@@ -34,7 +34,10 @@ function timeAgo(timestamp: number): string {
   return `${hours} hour${hours === 1 ? '' : 's'} ago`
 }
 
-export async function GET() {
+export async function GET(request: Request) {
+  const url = new URL(request.url)
+  const debug = url.searchParams.get('debug')
+
   try {
     const { env } = await getCloudflareContext()
     const kv = env.SITE_OPS
@@ -53,6 +56,19 @@ export async function GET() {
       const tsB = parseInt(b.name.split(':')[2])
       return tsB - tsA
     })
+
+    // Temporary debug mode: return all raw KV entries
+    if (debug === 'raw') {
+      const entries = await Promise.all(
+        sorted.map(async (key) => ({
+          key: key.name,
+          value: await kv.get(key.name, 'json'),
+        }))
+      )
+      return NextResponse.json(entries, {
+        headers: { 'Cache-Control': 'no-store' },
+      })
+    }
 
     const mostRecent = sorted[0]
     const data = await kv.get<{ titles: string[]; country: string; timestamp: number }>(
