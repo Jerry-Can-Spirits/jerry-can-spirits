@@ -96,7 +96,7 @@ export default function OurStory() {
           </h1>
 
           <p className="text-xl text-parchment-300 max-w-3xl mx-auto leading-relaxed mb-8">
-            Shaped by years of service, driven by a desire for adventure – and a determination to craft rum without compromise. Rum that&apos;s engineered with purpose, made with integrity, for people who live life on their own terms.
+            Shaped by years of military service, driven by a desire for adventure – and a determination to craft rum without compromise. A veteran-owned rum brand engineered with purpose, made with integrity, for people who live life on their own terms.
           </p>
 
           <div className="inline-flex items-center space-x-2 text-gold-300">
@@ -117,7 +117,7 @@ export default function OurStory() {
               From the Trenches to the Adventure
             </h2>
             <p className="text-xl text-parchment-300 max-w-3xl mx-auto">
-              Service with the Royal Corps of Signals took us to places where your equipment really gets put to the test.
+              Service with the Royal Corps of Signals took us to places where your equipment really gets put to the test. That military background shapes everything about how we make rum.
             </p>
           </div>
 

@@ -161,6 +161,7 @@ export default function RootLayout({
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
         <link rel="dns-prefetch" href="https://www.google-analytics.com" />
         <link rel="dns-prefetch" href="https://widget.trustpilot.com" />
+        <script type="text/javascript" src="//widget.trustpilot.com/bootstrap/v5/tp.widget.bootstrap.min.js" async />
         <link rel="dns-prefetch" href="https://cloudflareinsights.com" />
 
         {/* Klaviyo is now loaded via KlaviyoScript component with consent */}

@@ -10,31 +10,31 @@ interface TrustpilotWidgetProps {
   theme?: 'light' | 'dark'
   stars?: string
   locale?: string
+  token?: string
   sku?: string
   name?: string
 }
 
 export default function TrustpilotWidget({
   templateId,
-  businessUnitId = '68fb4a6f189deab684654fd3',
+  businessUnitId = '68fb4a6f43f3e1eb09b5e0ea',
   height = '400px',
   width = '100%',
   theme = 'dark',
   stars = '',
   locale = 'en-GB',
+  token,
   sku,
   name,
 }: TrustpilotWidgetProps) {
   const ref = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    // Trustpilot script is loaded via Cloudflare Zaraz
-    // Wait for Trustpilot to be available and then load the widget
+    // Wait for Trustpilot bootstrap script to be available
     const loadWidget = () => {
       if (window.Trustpilot && ref.current) {
         window.Trustpilot.loadFromElement(ref.current, true)
       } else if (typeof window !== 'undefined' && !window.Trustpilot) {
-        // If Trustpilot isn't loaded yet, try again in 100ms
         setTimeout(loadWidget, 100)
       }
     }
@@ -42,7 +42,7 @@ export default function TrustpilotWidget({
     loadWidget()
   }, [templateId, businessUnitId, sku, name])
 
-  // Build data attributes object, excluding stars if empty
+  // Build data attributes object
   const dataAttributes: Record<string, string | undefined> = {
     'data-locale': locale,
     'data-template-id': templateId,
@@ -52,6 +52,7 @@ export default function TrustpilotWidget({
     'data-theme': theme,
     'data-sku': sku,
     'data-name': name,
+    'data-token': token,
   }
 
   // Only include stars attribute if it has a value

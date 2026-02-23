@@ -44,7 +44,7 @@ export default function Home() {
       "name": "Jerry Can Spirits",
       "url": "https://jerrycanspirits.co.uk",
       "logo": "https://jerrycanspirits.co.uk/images/Logo.webp",
-      "description": "Veteran-owned premium British rum with authentic military heritage. Founded by Royal Corps of Signals veterans. Small-batch spirits engineered for reliability, designed for adventure.",
+      "description": "Veteran-owned premium British spiced rum with authentic military heritage. Founded by Royal Corps of Signals veterans. Small-batch craft spirits engineered for reliability, designed for adventure.",
       "foundingDate": "2025",
       "founders": [
         {
@@ -78,7 +78,7 @@ export default function Home() {
         "telephone": "+44 7521 220541",
         "email": "hello@jerrycanspirits.co.uk"
       },
-      "knowsAbout": ["Premium Rum", "British Spirits", "Military Heritage", "Veteran-Owned Business", "Small-Batch Distilling"],
+      "knowsAbout": ["Premium Spiced Rum", "British Spirits", "Military Heritage", "Veteran-Owned Business", "Small-Batch Distilling", "Military Rum"],
       "award": "Armed Forces Covenant Signatory"
     },
     // LocalBusiness schema for local SEO
@@ -92,7 +92,7 @@ export default function Home() {
       "telephone": "+44 7521 220541",
       "email": "hello@jerrycanspirits.co.uk",
       "priceRange": "££",
-      "description": "Veteran-owned British spirits company producing premium craft rum. Founded by Royal Corps of Signals veterans.",
+      "description": "Veteran-owned British spirits company producing premium spiced rum. Founded by Royal Corps of Signals veterans. Military rum crafted with purpose.",
       "address": {
         "@type": "PostalAddress",
         "streetAddress": "167-169 Great Portland Street",

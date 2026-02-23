@@ -24,7 +24,7 @@ export default function HeroSection() {
             {/* Overline Badge */}
             <div className="inline-block px-4 py-2 bg-jerry-green-800 rounded-full border border-gold-500/30 mb-8 shadow-lg">
               <span className="text-gold-300 text-sm font-semibold uppercase tracking-widest">
-                Premium British Rum
+                Premium British Spiced Rum
               </span>
             </div>
 
