@@ -3,31 +3,27 @@
 import { useEffect, useState } from 'react'
 
 interface OrderData {
-  title: string
-  region: string
-  timeAgo: string
+  bottleCount: number
 }
 
 export default function SocialProofToast() {
-  const [order, setOrder] = useState<OrderData | null>(null)
+  const [data, setData] = useState<OrderData | null>(null)
   const [visible, setVisible] = useState(false)
   const [dismissing, setDismissing] = useState(false)
 
   useEffect(() => {
-    // Only show once per session
     if (sessionStorage.getItem('social_proof_seen')) return
 
     const timer = setTimeout(async () => {
       try {
         const res = await fetch('/api/recent-orders', { cache: 'no-cache' })
-        const data: OrderData | null = await res.json()
-        if (!data) return
+        const json: OrderData | null = await res.json()
+        if (!json) return
 
-        setOrder(data)
+        setData(json)
         setVisible(true)
         sessionStorage.setItem('social_proof_seen', 'true')
 
-        // Auto-dismiss after 6 seconds
         setTimeout(() => dismiss(), 6000)
       } catch {
         // Silently fail — not critical
@@ -43,7 +39,10 @@ export default function SocialProofToast() {
     setTimeout(() => setVisible(false), 300)
   }
 
-  if (!visible || !order) return null
+  if (!visible || !data) return null
+
+  const bottles = data.bottleCount
+  const label = bottles === 1 ? 'bottle' : 'bottles'
 
   return (
     <div
@@ -54,13 +53,11 @@ export default function SocialProofToast() {
       }`}
     >
       <div className="flex items-start gap-3">
-        {/* Gold dot indicator */}
         <span className="mt-1 h-2 w-2 flex-shrink-0 rounded-full bg-gold-500" aria-hidden="true" />
 
         <p className="flex-1 text-sm text-parchment-100">
-          Someone in {order.region} just ordered{' '}
-          <span className="font-semibold text-gold-400">{order.title}</span>
-          <span className="ml-1 text-parchment-300">— {order.timeAgo}</span>
+          <span className="font-semibold text-gold-400">{bottles} {label}</span> of Expedition
+          Spiced Rum ordered in the last 24 hours
         </p>
 
         <button

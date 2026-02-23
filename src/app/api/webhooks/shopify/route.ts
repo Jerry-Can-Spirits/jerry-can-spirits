@@ -17,18 +17,20 @@ async function handleOrderCreated(
   kv: KVNamespace,
   adminToken: string | undefined,
 ) {
-  // Only store titles that are genuine Jerry Can Spirits products
-  const jcsTitles = order.line_items
-    .map((li) => li.title)
-    .filter((t) =>
-      t.toLowerCase().includes('jerry can') ||
-      t.toLowerCase().includes('expedition')
-    );
+  // Only store genuine Jerry Can Spirits products with quantities
+  const jcsItems = order.line_items
+    .filter((li) =>
+      li.title.toLowerCase().includes('jerry can') ||
+      li.title.toLowerCase().includes('expedition')
+    )
+    .map((li) => ({ title: li.title, quantity: li.quantity }));
 
-  if (jcsTitles.length === 0) {
+  if (jcsItems.length === 0) {
     console.warn(`[webhook] orders/create #${order.order_number} skipped — no JCS products`);
     return;
   }
+
+  const bottleCount = jcsItems.reduce((sum, item) => sum + item.quantity, 0);
 
   const country =
     order.shipping_address?.country_code ||
@@ -40,7 +42,7 @@ async function handleOrderCreated(
   // Anonymised order data for social proof feed
   await kv.put(
     `order:recent:${timestamp}`,
-    JSON.stringify({ titles: jcsTitles, country, timestamp }),
+    JSON.stringify({ titles: jcsItems.map((i) => i.title), bottleCount, country, timestamp }),
     { expirationTtl: 60 * 60 * 24 }, // 24 hours
   );
 
