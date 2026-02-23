@@ -59,3 +59,9 @@ sentry.properties
 test-results/
 playwright-report/
 audit-results.json
+
+# Wrangler
+.wrangler/
+
+# Windows/editor artifacts
+nul

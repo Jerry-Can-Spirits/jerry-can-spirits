@@ -18,6 +18,9 @@ interface CloudflareEnv {
   SHOPIFY_ADMIN_API_TOKEN: string;
   SHOPIFY_WEBHOOK_SECRET: string;
 
+  // Secrets — Sentry (source map uploads)
+  SENTRY_AUTH_TOKEN: string;
+
   // Worker bindings
   ASSETS: Fetcher;
   WORKER_SELF_REFERENCE: Fetcher;
