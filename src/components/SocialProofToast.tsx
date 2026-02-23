@@ -19,7 +19,7 @@ export default function SocialProofToast() {
 
     const timer = setTimeout(async () => {
       try {
-        const res = await fetch('/api/recent-orders')
+        const res = await fetch('/api/recent-orders', { cache: 'no-cache' })
         const data: OrderData | null = await res.json()
         if (!data) return
 
@@ -57,10 +57,10 @@ export default function SocialProofToast() {
         {/* Gold dot indicator */}
         <span className="mt-1 h-2 w-2 flex-shrink-0 rounded-full bg-gold-500" aria-hidden="true" />
 
-        <p className="flex-1 text-sm text-parchment">
+        <p className="flex-1 text-sm text-parchment-100">
           Someone in {order.region} just ordered{' '}
-          <span className="font-semibold text-gold-500">{order.title}</span>
-          <span className="ml-1 text-parchment/60">— {order.timeAgo}</span>
+          <span className="font-semibold text-gold-400">{order.title}</span>
+          <span className="ml-1 text-parchment-300">— {order.timeAgo}</span>
         </p>
 
         <button
