@@ -6,7 +6,7 @@ import ScrollReveal from '@/components/ScrollReveal'
 
 const TrustpilotWidget = dynamic(() => import('@/components/TrustpilotWidget'), {
   loading: () => (
-    <div className="h-[400px] bg-jerry-green-800/50 rounded-lg animate-pulse" />
+    <div className="h-[240px] bg-jerry-green-800/50 rounded-lg animate-pulse" />
   ),
 })
 
@@ -43,8 +43,8 @@ export default function ReviewsPage() {
       <section className="max-w-5xl mx-auto px-6 pb-12">
         <ScrollReveal>
           <div className="bg-jerry-green-800/40 border border-gold-500/20 rounded-xl p-8">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="font-serif text-2xl font-bold text-parchment-50">
+            <div className="text-center mb-6">
+              <h2 className="font-serif text-2xl font-bold text-parchment-50 mb-2">
                 Trustpilot Reviews
               </h2>
               <a
@@ -56,10 +56,12 @@ export default function ReviewsPage() {
                 View all on Trustpilot
               </a>
             </div>
+            {/* Carousel widget - auto-rotates reviews */}
             <TrustpilotWidget
-              templateId="56278e9abfbbba0bdcd568bc"
-              height="500px"
+              templateId="539ad60defb9600b94d7df2c"
+              height="240px"
               theme="dark"
+              stars="1,2,3,4,5"
             />
           </div>
         </ScrollReveal>
@@ -69,8 +71,8 @@ export default function ReviewsPage() {
       <section className="max-w-5xl mx-auto px-6 pb-12">
         <ScrollReveal>
           <div className="bg-jerry-green-800/40 border border-gold-500/20 rounded-xl p-8">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="font-serif text-2xl font-bold text-parchment-50">
+            <div className="text-center mb-6">
+              <h2 className="font-serif text-2xl font-bold text-parchment-50 mb-2">
                 Google Reviews
               </h2>
               <a
@@ -82,7 +84,7 @@ export default function ReviewsPage() {
                 View on Google
               </a>
             </div>
-            <div className="text-center py-12">
+            <div className="text-center py-8">
               <div className="inline-flex items-center gap-2 mb-4">
                 <svg className="w-8 h-8 text-gold-400" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" />
