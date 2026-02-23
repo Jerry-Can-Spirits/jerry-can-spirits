@@ -25,6 +25,13 @@ async function handleOrderCreated(
   const titles = order.line_items.map((li) => li.title);
   const timestamp = new Date(order.created_at).getTime();
 
+  // Log raw address data for debugging country resolution
+  console.log(`[webhook] orders/create #${order.order_number} address debug:`, JSON.stringify({
+    shipping: order.shipping_address,
+    billing: order.billing_address,
+    resolved_country: country,
+  }));
+
   // Anonymised order data for future social proof feed
   await kv.put(
     `order:recent:${timestamp}`,
