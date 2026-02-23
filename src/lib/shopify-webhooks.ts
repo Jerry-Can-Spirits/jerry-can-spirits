@@ -29,10 +29,12 @@ export interface ShopifyOrder {
   }[];
   shipping_address?: {
     country_code: string;
-  };
+    country: string;
+  } | null;
   billing_address?: {
     country_code: string;
-  };
+    country: string;
+  } | null;
 }
 
 export interface ShopifyProduct {
