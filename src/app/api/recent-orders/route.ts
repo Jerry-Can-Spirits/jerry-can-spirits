@@ -34,10 +34,7 @@ function timeAgo(timestamp: number): string {
   return `${hours} hour${hours === 1 ? '' : 's'} ago`
 }
 
-export async function GET(request: Request) {
-  const url = new URL(request.url)
-  const debug = url.searchParams.get('debug')
-
+export async function GET() {
   try {
     const { env } = await getCloudflareContext()
     const kv = env.SITE_OPS
@@ -57,39 +54,32 @@ export async function GET(request: Request) {
       return tsB - tsA
     })
 
-    // Temporary debug mode: return all raw KV entries
-    if (debug === 'raw') {
-      const entries = await Promise.all(
-        sorted.map(async (key) => ({
-          key: key.name,
-          value: await kv.get(key.name, 'json'),
-        }))
+    // Find the most recent order that contains a Jerry Can Spirits product
+    for (const key of sorted) {
+      const data = await kv.get<{ titles: string[]; country: string; timestamp: number }>(
+        key.name,
+        'json'
       )
-      return NextResponse.json(entries, {
-        headers: { 'Cache-Control': 'no-store' },
-      })
+      if (!data) continue
+
+      const ourTitle = data.titles.find((t) =>
+        t.toLowerCase().includes('jerry can') ||
+        t.toLowerCase().includes('expedition')
+      )
+      if (!ourTitle) continue
+
+      const region = countryNames[data.country] || 'somewhere nearby'
+      const ago = timeAgo(data.timestamp)
+
+      return NextResponse.json(
+        { title: ourTitle, region, timeAgo: ago },
+        { headers: { 'Cache-Control': 'public, max-age=60' } }
+      )
     }
 
-    const mostRecent = sorted[0]
-    const data = await kv.get<{ titles: string[]; country: string; timestamp: number }>(
-      mostRecent.name,
-      'json'
-    )
-
-    if (!data) {
-      return NextResponse.json(null, {
-        headers: { 'Cache-Control': 'public, max-age=60' },
-      })
-    }
-
-    const title = data.titles[0] || 'Expedition Spiced Rum'
-    const region = countryNames[data.country] || 'somewhere nearby'
-    const ago = timeAgo(data.timestamp)
-
-    return NextResponse.json(
-      { title, region, timeAgo: ago },
-      { headers: { 'Cache-Control': 'public, max-age=60' } }
-    )
+    return NextResponse.json(null, {
+      headers: { 'Cache-Control': 'public, max-age=60' },
+    })
   } catch (error) {
     console.error('Failed to fetch recent orders:', error)
     return NextResponse.json(null, { status: 200 })
