@@ -659,7 +659,7 @@ export default function OurStory() {
             <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20">
               <h3 className="text-lg font-semibold text-white mb-3">Where is Jerry Can Spirits based?</h3>
               <p className="text-parchment-300">
-                We&apos;re based in the UK. It&apos;s a home-office operation – nothing glamorous, just us working away. Our <Link href="/shop/product/expedition-spiced-rum/" className="text-gold-300 hover:text-gold-400 underline">Expedition Spiced Rum</Link> is made with Caribbean rum and molasses from a Welsh brewery, blended right here in Britain.
+                We&apos;re based in the UK. It&apos;s a home-office operation – nothing glamorous, just us working away. Our <Link href="/shop/product/expedition-spiced-rum/" className="text-gold-300 hover:text-gold-400 underline">Expedition Spiced Rum</Link> is made with Caribbean rum and molasses from a Welsh brewery, blended at <Link href="/friends/" className="text-gold-300 hover:text-gold-400 underline">Spirit of Wales Distillery</Link> right here in Britain.
               </p>
             </div>
 
@@ -776,10 +776,10 @@ export default function OurStory() {
               </Link>
 
               <Link
-                href="/#newsletter-signup"
+                href="/sustainability/"
                 className="inline-flex items-center space-x-2 bg-jerry-green-800 hover:bg-jerry-green-900 text-parchment-50 px-8 py-4 rounded-lg font-semibold border-2 border-jerry-green-800 hover:border-jerry-green-700 transition-all duration-300 transform hover:scale-105"
               >
-                <span>Join the Expedition</span>
+                <span>Our Sustainability</span>
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                 </svg>

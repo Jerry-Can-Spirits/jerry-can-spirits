@@ -266,7 +266,7 @@ export default function Ethos() {
                     Selection: Expert Partners in Welsh Craft
                   </h3>
                   <p className="text-parchment-300 mb-6">
-                    We partnered with <strong className="text-gold-300">Spirit of Wales Distillery in Newport, South Wales</strong>, craftspeople who share our passion for innovation rooted in tradition.
+                    We partnered with <Link href="/friends/" className="text-gold-300 hover:text-gold-400 underline"><strong>Spirit of Wales Distillery in Newport, South Wales</strong></Link>, craftspeople who share our passion for innovation rooted in tradition.
                     Their cutting-edge approach to copper distillation creates the foundation for our exceptional spirits, combining modern
                     techniques with time-tested principles.
                   </p>
@@ -423,7 +423,7 @@ export default function Ethos() {
                   <div className="w-2 h-2 bg-gold-400 rounded-full mt-2 flex-shrink-0"></div>
                   <div>
                     <p className="font-semibold text-gold-300">Welsh Partnership</p>
-                    <p className="text-sm">Working with Spirit of Wales Distillery for our blending and production</p>
+                    <p className="text-sm">Working with <Link href="/friends/" className="text-gold-300 hover:text-gold-400 underline">Spirit of Wales Distillery</Link> for our blending and production</p>
                   </div>
                 </div>
                 <div className="flex items-start space-x-3">

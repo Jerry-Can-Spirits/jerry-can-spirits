@@ -11,6 +11,7 @@ import WhyJerryCan from "@/components/WhyJerryCan";
 import HomepageFAQ from "@/components/HomepageFAQ";
 import ScrollReveal from "@/components/ScrollReveal";
 import TickerStrip from "@/components/TickerStrip";
+import Link from 'next/link'
 import type { Metadata } from 'next'
 
 // Lazy load TrustpilotWidget (below the fold)
@@ -224,7 +225,7 @@ export default function Home() {
                     We didn't set out to start a rum company. Between us, we served 17 years in the Royal Corps of Signals. What we wanted was simple: a proper drink to share with mates - something with character, made by people who give a damn. When we couldn't find it, we decided to make it ourselves.
                   </p>
                   <p>
-                    Working with Spirit of Wales Distillery, we blend Caribbean rum with Welsh brewery molasses and put it through their pot stills. The result? Vanilla and caramel upfront, warm spice through the middle, and a finish smooth enough to sip neat - but bold enough to hold its own in a cocktail.
+                    Working with <Link href="/friends/" className="text-gold-300 hover:text-gold-400 underline">Spirit of Wales Distillery</Link>, we blend Caribbean rum with Welsh brewery molasses and put it through their pot stills. The result? Vanilla and caramel upfront, warm spice through the middle, and a finish smooth enough to sip neat - but bold enough to hold its own in a cocktail.
                   </p>
                   <p>
                     Whether you're mixing drinks at home or just unwinding after a long week, this is rum that doesn't let you down. We built it that way on purpose.
