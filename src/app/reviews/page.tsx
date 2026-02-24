@@ -4,6 +4,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import Breadcrumbs from '@/components/Breadcrumbs'
 import ScrollReveal from '@/components/ScrollReveal'
+import StructuredData from '@/components/StructuredData'
 
 const CF_IMG = 'https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ'
 
@@ -14,20 +15,44 @@ const TrustpilotWidget = dynamic(() => import('@/components/TrustpilotWidget'), 
 })
 
 export const metadata: Metadata = {
-  title: "Jerry Can Spirits Reviews",
-  description: "Read reviews of Jerry Can Spirits premium British spiced rum. See what customers say about our veteran-owned, small-batch craft rum.",
+  title: "Jerry Can Spirits Reviews | Trustpilot, Google & Yell",
+  description: "Read customer reviews of Jerry Can Spirits premium British spiced rum on Trustpilot, Google and Yell. See what people say about our veteran-owned, small-batch craft rum.",
   alternates: {
     canonical: 'https://jerrycanspirits.co.uk/reviews/',
   },
   openGraph: {
-    title: "Jerry Can Spirits Reviews",
-    description: "Read reviews of Jerry Can Spirits premium British spiced rum. See what customers say about our veteran-owned, small-batch craft rum.",
+    title: "Jerry Can Spirits Reviews | Trustpilot, Google & Yell",
+    description: "Read customer reviews of Jerry Can Spirits premium British spiced rum on Trustpilot, Google and Yell. See what people say about our veteran-owned, small-batch craft rum.",
   },
 }
 
 export default function ReviewsPage() {
   return (
     <main className="bg-jerry-green-900 text-parchment-100 min-h-screen">
+      <StructuredData
+        id="reviews-page-schema"
+        data={{
+          '@context': 'https://schema.org',
+          '@type': 'WebPage',
+          name: 'Jerry Can Spirits Reviews',
+          description: 'Customer reviews of Jerry Can Spirits premium British spiced rum on Trustpilot, Google and Yell.',
+          url: 'https://jerrycanspirits.co.uk/reviews/',
+          isPartOf: {
+            '@type': 'WebSite',
+            name: 'Jerry Can Spirits',
+            url: 'https://jerrycanspirits.co.uk',
+          },
+          about: {
+            '@type': 'Organization',
+            name: 'Jerry Can Spirits',
+            url: 'https://jerrycanspirits.co.uk',
+            sameAs: [
+              'https://uk.trustpilot.com/review/jerrycanspirits.co.uk',
+              'https://www.yell.com/biz/jerry-can-spirits-ltd-london-11012967/',
+            ],
+          },
+        }}
+      />
       <Breadcrumbs items={[{ label: 'Reviews' }]} />
 
       {/* Hero Section */}
@@ -47,16 +72,19 @@ export default function ReviewsPage() {
         <ScrollReveal>
           <div className="bg-jerry-green-800/40 border border-gold-500/20 rounded-xl p-8">
             <div className="text-center mb-6">
-              <Image
-                src={`${CF_IMG}/004c8ba7-42d4-48c8-c82c-fe715eb9cc00/public`}
-                alt="Trustpilot"
-                width={160}
-                height={40}
-                className="mx-auto mb-3"
-              />
-              <h2 className="font-serif text-2xl font-bold text-parchment-50 mb-2">
-                Trustpilot Reviews
-              </h2>
+              <a
+                href="https://uk.trustpilot.com/review/jerrycanspirits.co.uk"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Image
+                  src={`${CF_IMG}/004c8ba7-42d4-48c8-c82c-fe715eb9cc00/public`}
+                  alt="Trustpilot"
+                  width={160}
+                  height={40}
+                  className="mx-auto mb-3 hover:opacity-80 transition-opacity"
+                />
+              </a>
               <a
                 href="https://uk.trustpilot.com/review/jerrycanspirits.co.uk"
                 target="_blank"
@@ -83,16 +111,19 @@ export default function ReviewsPage() {
         <ScrollReveal>
           <div className="bg-jerry-green-800/40 border border-gold-500/20 rounded-xl p-8">
             <div className="text-center mb-6">
-              <Image
-                src={`${CF_IMG}/a5cccbf5-1d09-43d6-4449-5218da645400/public`}
-                alt="Google Reviews"
-                width={140}
-                height={35}
-                className="mx-auto mb-3"
-              />
-              <h2 className="font-serif text-2xl font-bold text-parchment-50 mb-2">
-                Google Reviews
-              </h2>
+              <a
+                href="https://g.page/r/CdkZacM6VKi-EAE"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Image
+                  src={`${CF_IMG}/a5cccbf5-1d09-43d6-4449-5218da645400/public`}
+                  alt="Google Reviews"
+                  width={140}
+                  height={35}
+                  className="mx-auto mb-3 hover:opacity-80 transition-opacity"
+                />
+              </a>
               <a
                 href="https://g.page/r/CdkZacM6VKi-EAE"
                 target="_blank"
@@ -102,10 +133,7 @@ export default function ReviewsPage() {
                 View on Google
               </a>
             </div>
-            <div className="text-center py-8">
-              <p className="text-parchment-400 mb-6">
-                We launch in April 2026 — Google reviews coming soon.
-              </p>
+            <div className="text-center py-6">
               <a
                 href="https://g.page/r/CdkZacM6VKi-EAI/review"
                 target="_blank"
@@ -127,16 +155,19 @@ export default function ReviewsPage() {
         <ScrollReveal>
           <div className="bg-jerry-green-800/40 border border-gold-500/20 rounded-xl p-8">
             <div className="text-center mb-6">
-              <Image
-                src={`${CF_IMG}/9fb15cc3-4b8a-483b-f77b-b73002d59700/public`}
-                alt="Yell"
-                width={120}
-                height={35}
-                className="mx-auto mb-3"
-              />
-              <h2 className="font-serif text-2xl font-bold text-parchment-50 mb-2">
-                Yell Reviews
-              </h2>
+              <a
+                href="https://www.yell.com/biz/jerry-can-spirits-ltd-london-11012967/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Image
+                  src={`${CF_IMG}/9fb15cc3-4b8a-483b-f77b-b73002d59700/public`}
+                  alt="Yell"
+                  width={120}
+                  height={35}
+                  className="mx-auto mb-3 hover:opacity-80 transition-opacity"
+                />
+              </a>
               <a
                 href="https://www.yell.com/biz/jerry-can-spirits-ltd-london-11012967/"
                 target="_blank"
@@ -146,10 +177,7 @@ export default function ReviewsPage() {
                 View on Yell
               </a>
             </div>
-            <div className="text-center py-8">
-              <p className="text-parchment-400 mb-6">
-                We launch in April 2026 — Yell reviews coming soon.
-              </p>
+            <div className="text-center py-6">
               <a
                 href="https://www.yell.com/biz/jerry-can-spirits-ltd-london-11012967/#reviews"
                 target="_blank"
@@ -215,13 +243,20 @@ export default function ReviewsPage() {
         </ScrollReveal>
       </section>
 
-      {/* Back to Shop */}
-      <section className="max-w-4xl mx-auto px-6 pb-16 text-center">
+      {/* Internal Links */}
+      <section className="max-w-4xl mx-auto px-6 pb-16 text-center flex items-center justify-center gap-6">
         <Link
           href="/shop/"
           className="text-gold-300 hover:text-gold-400 transition-colors underline"
         >
           Browse our collection
+        </Link>
+        <span className="text-gold-500/30">|</span>
+        <Link
+          href="/about/story/"
+          className="text-gold-300 hover:text-gold-400 transition-colors underline"
+        >
+          Our story
         </Link>
       </section>
     </main>
