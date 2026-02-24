@@ -13,6 +13,9 @@ const UPSELL_PRODUCT_HANDLES = [
   'jerry-can-spirits-stainless-steel-freezable-stones',
 ]
 
+const PAGE_SIZE = 4
+const FETCH_LIMIT = 12
+
 // Helper to format price
 function formatPrice(amount: string, currencyCode: string): string {
   const price = parseFloat(amount)
@@ -35,8 +38,8 @@ export default function CartUpsell() {
   const [upsellProducts, setUpsellProducts] = useState<UpsellProduct[]>([])
   const [loadingProducts, setLoadingProducts] = useState(true)
   const [addingProductId, setAddingProductId] = useState<string | null>(null)
-  // Track selected variant for each product (keyed by product id)
   const [selectedVariants, setSelectedVariants] = useState<Record<string, string>>({})
+  const [page, setPage] = useState(0)
 
   // Get handles of products already in cart
   const cartProductHandles = cart?.lines.map(line => line.merchandise.product.handle) || []
@@ -50,13 +53,14 @@ export default function CartUpsell() {
   useEffect(() => {
     async function fetchUpsellProducts() {
       setLoadingProducts(true)
+      setPage(0)
 
       // Determine which handles to fetch recommendations for
       let recommendedHandles: string[] = UPSELL_PRODUCT_HANDLES
 
       if (handlesKey) {
         try {
-          const res = await fetch(`/api/cart-recommendations/?handles=${encodeURIComponent(handlesKey)}`)
+          const res = await fetch(`/api/cart-recommendations/?handles=${encodeURIComponent(handlesKey)}&limit=${FETCH_LIMIT}`)
           if (res.ok) {
             const data: { products: ShopifyProduct[] } = await res.json()
             if (data.products && data.products.length > 0) {
@@ -86,7 +90,6 @@ export default function CartUpsell() {
               product,
               availableVariants
             })
-            // Default to first available variant
             initialSelections[product.id] = availableVariants[0].id
           }
         }
@@ -105,6 +108,18 @@ export default function CartUpsell() {
     ({ product }) => !cartProductHandles.includes(product.handle)
   )
 
+  // Paginate: show PAGE_SIZE at a time, wrap around
+  const totalPages = Math.ceil(availableUpsells.length / PAGE_SIZE)
+  const currentPage = totalPages > 0 ? page % totalPages : 0
+  const visibleUpsells = availableUpsells.slice(
+    currentPage * PAGE_SIZE,
+    currentPage * PAGE_SIZE + PAGE_SIZE
+  )
+
+  const handleReroll = () => {
+    setPage(prev => prev + 1)
+  }
+
   const handleAddToCart = async (productId: string) => {
     const variantId = selectedVariants[productId]
     if (!variantId) return
@@ -121,7 +136,6 @@ export default function CartUpsell() {
     setSelectedVariants(prev => ({ ...prev, [productId]: variantId }))
   }
 
-  // Don't render if loading or no products available
   if (loadingProducts) {
     return (
       <div className="py-4 border-t border-gold-500/20">
@@ -134,17 +148,14 @@ export default function CartUpsell() {
     return null
   }
 
-  // Check if product has multiple meaningful variants (not just "Default Title")
   const hasMultipleVariants = (variants: ShopifyProductVariant[]) => {
     return variants.length > 1 && variants.some(v => v.title !== 'Default Title')
   }
 
-  // Get current image for a product (variant image if available, else product image)
   const getCurrentImage = (product: ShopifyProduct, variants: ShopifyProductVariant[]) => {
     const selectedVariantId = selectedVariants[product.id]
     const selectedVariant = variants.find(v => v.id === selectedVariantId)
 
-    // Use variant image if available, otherwise fall back to product image
     if (selectedVariant?.image) {
       return selectedVariant.image
     }
@@ -153,13 +164,36 @@ export default function CartUpsell() {
 
   return (
     <div className="py-4 border-t border-gold-500/20">
-      <h3 className="text-sm font-semibold text-gold-300 mb-3 uppercase tracking-wide">
-        Complete Your Order
-      </h3>
+      <div className="flex items-center justify-between mb-3">
+        <h3 className="text-sm font-semibold text-gold-300 uppercase tracking-wide">
+          Complete Your Order
+        </h3>
+        {totalPages > 1 && (
+          <button
+            onClick={handleReroll}
+            className="flex items-center gap-1.5 text-xs text-parchment-300 hover:text-gold-300 transition-colors"
+          >
+            <svg
+              className="w-3.5 h-3.5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+              />
+            </svg>
+            Show more
+          </button>
+        )}
+      </div>
 
       {/* 2x2 Grid Layout */}
       <div className="grid grid-cols-2 gap-3">
-        {availableUpsells.map(({ product, availableVariants }) => {
+        {visibleUpsells.map(({ product, availableVariants }) => {
           const currentImage = getCurrentImage(product, availableVariants)
 
           return (

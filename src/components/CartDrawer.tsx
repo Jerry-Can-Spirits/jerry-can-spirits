@@ -317,7 +317,7 @@ export default function CartDrawer() {
 
           {/* Footer - Discount & Checkout */}
           {cart && cart.lines.length > 0 && (
-            <div className="border-t border-gold-500/20 p-6 space-y-4">
+            <div className="border-t border-gold-500/20 p-6 space-y-4 overflow-y-auto max-h-[60vh]">
               {/* Discount Code */}
               <div>
                 <div className="flex gap-2">

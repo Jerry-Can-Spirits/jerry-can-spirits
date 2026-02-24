@@ -15,7 +15,9 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const products = await getCartRecommendations(handles, 4)
+    const limitParam = request.nextUrl.searchParams.get('limit')
+    const limit = Math.min(Math.max(parseInt(limitParam || '4', 10) || 4, 1), 20)
+    const products = await getCartRecommendations(handles, limit)
 
     return NextResponse.json(
       { products },
