@@ -8,6 +8,8 @@ import StructuredData from '@/components/StructuredData'
 
 const CF_IMG = 'https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ'
 
+const CF_IMG = 'https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ'
+
 const TrustpilotWidget = dynamic(() => import('@/components/TrustpilotWidget'), {
   loading: () => (
     <div className="h-[52px] bg-jerry-green-800/50 rounded-lg animate-pulse" />
