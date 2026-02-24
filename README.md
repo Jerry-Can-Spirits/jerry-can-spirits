@@ -7,16 +7,15 @@ A premium spirits brand website built with Next.js, Sanity CMS, and Shopify inte
 - **Framework**: Next.js 15 (App Router)
 - **CMS**: Sanity.io
 - **E-commerce**: Shopify Storefront API
-- **Styling**: Tailwind CSS + Styled Components
-- **Hosting**: Cloudflare Pages
-- **Analytics**: Google Analytics, Sentry
+- **Styling**: Tailwind CSS
+- **Hosting**: Cloudflare Workers (via [OpenNext](https://opennext.js.org/cloudflare))
+- **Analytics**: Google Analytics 4, Sentry
 - **Email**: Klaviyo
 
 ## Documentation
 
 Comprehensive project documentation is available in the [`/docs`](./docs) directory:
 
-- [Setup & Configuration](./docs#setup--configuration) - Cloudflare, Klaviyo, Shopify, Instagram
 - [Development](./docs#development) - Components, contributing, dependencies
 - [Brand Guidelines](./docs/BRAND_GUIDELINES.md) - Visual identity and brand voice
 - [SEO & Marketing](./docs#seo--marketing) - SEO setup and checklists
@@ -26,8 +25,8 @@ Comprehensive project documentation is available in the [`/docs`](./docs) direct
 
 ### Prerequisites
 
-- Node.js 18.17 or later
-- npm, yarn, or pnpm
+- Node.js 22.13.0 (see `.node-version`)
+- npm
 
 ### Installation
 
@@ -49,7 +48,9 @@ Open [http://localhost:3000](http://localhost:3000) to view the site.
 
 - `npm run dev` - Start development server
 - `npm run build` - Build for production
-- `npm start` - Start production server
+- `npm run preview` - Build and preview with OpenNext locally
+- `npm run deploy` - Build and deploy to Cloudflare Workers
+- `npm run cf-typegen` - Generate Cloudflare environment types
 - `npm run lint` - Run ESLint
 
 ## Project Structure
@@ -62,12 +63,15 @@ Open [http://localhost:3000](http://localhost:3000) to view the site.
 │   └── styles/       # Global styles
 ├── public/           # Static assets
 ├── docs/             # Project documentation
-└── sanity/           # Sanity CMS configuration
+├── sanity/           # Sanity CMS configuration
+├── wrangler.jsonc    # Cloudflare Workers configuration
+├── open-next.config.ts  # OpenNext adapter configuration
+└── cloudflare-env.d.ts  # Cloudflare environment types
 ```
 
 ## Deployment
 
-The site is deployed on Cloudflare Pages. See [Cloudflare Setup](./docs/CLOUDFLARE_SETUP.md) for deployment instructions.
+The site is deployed on Cloudflare Workers via OpenNext. Run `npm run deploy` to build and deploy, or `npm run preview` to test locally.
 
 ## Contributing
 

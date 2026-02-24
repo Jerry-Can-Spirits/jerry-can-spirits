@@ -49,7 +49,7 @@ export default function EmailSignup() {
         body: new URLSearchParams(params)
       })
 
-      const data = await response.json()
+      const data = await response.json() as { success?: boolean; error?: string }
 
       if (data.success || response.ok) {
         setStatus('success')

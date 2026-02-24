@@ -11,7 +11,7 @@ const articleSchema = {
   '@context': 'https://schema.org',
   '@type': 'Article',
   headline: 'Our Story - How Two Veterans Built a British Rum Brand',
-  description: 'The story behind Jerry Can Spirits — veteran-owned military rum founded by Royal Signals veterans. From Arctic deployments to premium small-batch spiced rum crafted in Wales.',
+  description: 'Jerry Can Spirits — veteran-owned military rum by Royal Signals veterans. From Arctic deployments to premium small-batch spiced rum in Wales.',
   url: 'https://jerrycanspirits.co.uk/about/story/',
   image: 'https://jerrycanspirits.co.uk/images/hero/Trail_Hero.webp',
   author: {
@@ -37,14 +37,14 @@ const articleSchema = {
 }
 
 export const metadata: Metadata = {
-  title: "Our Story - How Two Veterans Built a British Rum Brand",
-  description: "The story behind Jerry Can Spirits — veteran-owned military rum founded by Royal Signals veterans. From Arctic deployments to premium small-batch spiced rum crafted in Wales.",
+  title: "Our Story - Two Veterans Building a Rum Brand",
+  description: "Jerry Can Spirits — veteran-owned military rum by Royal Signals veterans. From Arctic deployments to premium small-batch spiced rum in Wales.",
   alternates: {
     canonical: 'https://jerrycanspirits.co.uk/about/story/',
   },
   openGraph: {
     title: "Our Story | Jerry Can Spirits®",
-    description: "The story behind Jerry Can Spirits — veteran-owned military rum founded by Royal Signals veterans. From Arctic deployments to premium small-batch spiced rum crafted in Wales.",
+    description: "Jerry Can Spirits — veteran-owned military rum by Royal Signals veterans. From Arctic deployments to premium small-batch spiced rum in Wales.",
   },
   robots: {
     index: true,
@@ -96,7 +96,7 @@ export default function OurStory() {
           </h1>
 
           <p className="text-xl text-parchment-300 max-w-3xl mx-auto leading-relaxed mb-8">
-            Shaped by years of service, driven by a desire for adventure – and a determination to craft rum without compromise. Rum that&apos;s engineered with purpose, made with integrity, for people who live life on their own terms.
+            Shaped by years of military service, driven by a desire for adventure – and a determination to craft rum without compromise. A veteran-owned rum brand engineered with purpose, made with integrity, for people who live life on their own terms.
           </p>
 
           <div className="inline-flex items-center space-x-2 text-gold-300">
@@ -117,7 +117,7 @@ export default function OurStory() {
               From the Trenches to the Adventure
             </h2>
             <p className="text-xl text-parchment-300 max-w-3xl mx-auto">
-              Service with the Royal Corps of Signals took us to places where your equipment really gets put to the test.
+              Service with the Royal Corps of Signals took us to places where your equipment really gets put to the test. That military background shapes everything about how we make rum.
             </p>
           </div>
 

@@ -163,7 +163,7 @@ export async function POST(request: Request) {
     })
 
     if (profileResponse.ok) {
-      const profileData = await profileResponse.json()
+      const profileData = await profileResponse.json() as { data?: { id?: string } }
       profileId = profileData.data?.id
     } else if (profileResponse.status === 409) {
       // Already exists: look up by email
@@ -172,7 +172,7 @@ export async function POST(request: Request) {
         headers: commonHeaders as Record<string, string>,
       })
       if (profileSearchResponse.ok) {
-        const searchData = await profileSearchResponse.json()
+        const searchData = await profileSearchResponse.json() as { data?: { id?: string }[] }
         if (searchData.data && searchData.data.length > 0) {
           profileId = searchData.data[0].id
           // Patch properties

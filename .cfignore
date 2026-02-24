@@ -15,7 +15,8 @@ public/
 package.json
 package-lock.json
 next.config.ts
-tailwind.config.ts
+tailwind.config.js
 tsconfig.json
-postcss.config.mjs
+postcss.config.js
 README.md
+.open-next/

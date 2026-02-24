@@ -25,7 +25,7 @@ export default function SocialPresence() {
   useEffect(() => {
     fetch('/api/social-stats/')
       .then((res) => res.json())
-      .then((data: SocialStats) => setStats(data))
+      .then((data) => setStats(data as SocialStats))
       .catch(() => {
         // Silently fail — cards will show "Follow us"
       })

@@ -6,6 +6,7 @@ import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import PromoBanner from "@/components/PromoBanner";
+import ShippingBanner from "@/components/ShippingBanner";
 import ClientWrapper from "@/components/ClientWrapper";
 
 // Lazy load CartographicBackground for code splitting
@@ -17,6 +18,7 @@ import ServiceWorkerRegistration from "@/components/ServiceWorkerRegistration";
 import InstallPrompt from "@/components/InstallPrompt";
 import { CartProvider } from "@/contexts/CartContext";
 import CartDrawer from "@/components/CartDrawer";
+import SocialProofToast from "@/components/SocialProofToast";
 import { OrganizationSchema, WebsiteSchema } from "@/components/StructuredData";
 import FacebookPixel from "@/components/FacebookPixel";
 import AnnouncementBar from "@/components/AnnouncementBar";
@@ -160,6 +162,7 @@ export default function RootLayout({
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
         <link rel="dns-prefetch" href="https://www.google-analytics.com" />
         <link rel="dns-prefetch" href="https://widget.trustpilot.com" />
+        <script type="text/javascript" src="//widget.trustpilot.com/bootstrap/v5/tp.widget.bootstrap.min.js" async />
         <link rel="dns-prefetch" href="https://cloudflareinsights.com" />
 
         {/* Klaviyo is now loaded via KlaviyoScript component with consent */}
@@ -209,6 +212,7 @@ export default function RootLayout({
               {children}
             </main>
             
+            <ShippingBanner />
             <Footer />
           </div>
           
@@ -217,6 +221,9 @@ export default function RootLayout({
 
         {/* Cart Drawer */}
         <CartDrawer />
+
+        {/* Social Proof Toast */}
+        <SocialProofToast />
 
         {/* Google AdSense - lazy loaded via requestIdleCallback to avoid competing with LCP.
             Uses dangerouslySetInnerHTML instead of next/script to avoid data-nscript attribute

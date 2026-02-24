@@ -1,24 +1,41 @@
 {
-  "$schema": "node_modules/wrangler/config-schema.json",
-  "main": ".open-next/worker.js",
-  "name": "jerry-can-spirits-prod",
-  "compatibility_date": "2025-05-05",
-  "compatibility_flags": ["nodejs_compat"],
-  "assets": {
-    "directory": ".open-next/assets",
-    "binding": "ASSETS"
-  },
-  "services": [
-    {
-      "binding": "WORKER_SELF_REFERENCE",
-      "service": "jerry-can-spirits-prod"
-    }
-  ],
-  "kv_namespaces": [
-    {
-      "binding": "COCKTAIL_RATINGS",
-      "id": "3498c4961e59446cbc703b8ed19852c0",
-      "preview_id": "3498c4961e59446cbc703b8ed19852c0"
-    }
-  ]
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"main": ".open-next/worker.js",
+	"name": "jerry-can-spirits-prod",
+	"compatibility_date": "2025-05-05",
+	"compatibility_flags": [
+		"nodejs_compat"
+	],
+	"assets": {
+		"directory": ".open-next/assets",
+		"binding": "ASSETS"
+	},
+	"services": [
+		{
+			"binding": "WORKER_SELF_REFERENCE",
+			"service": "jerry-can-spirits-prod"
+		}
+	],
+	"kv_namespaces": [
+		{
+			"binding": "COCKTAIL_RATINGS",
+			"id": "3498c4961e59446cbc703b8ed19852c0",
+			"preview_id": "3498c4961e59446cbc703b8ed19852c0"
+		},
+		{
+			// SITE_OPS: feature flags, age verification cache, visitor tracking
+			"binding": "SITE_OPS",
+			"id": "83fc738dbd204f17b809fb3edcd74a62",
+			"preview_id": "83fc738dbd204f17b809fb3edcd74a62"
+		}
+	],
+	"d1_databases": [
+		{
+			// D1: batch data, bottle tracking, batch followers
+			// Create with: wrangler d1 create jerry-can-spirits-db
+			"binding": "DB",
+			"database_name": "jerry-can-spirits-db",
+			"database_id": "35c6ef4c-fab0-4666-9065-052b84ecdb9a"
+		}
+	]
 }
