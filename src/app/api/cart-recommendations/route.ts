@@ -1,8 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getCartRecommendations } from '@/lib/shopify'
 
-export const runtime = 'edge'
-
 export async function GET(request: NextRequest) {
   const handlesParam = request.nextUrl.searchParams.get('handles')
 
