@@ -4,8 +4,6 @@ import Image from 'next/image'
 import Link from 'next/link'
 import Breadcrumbs from '@/components/Breadcrumbs'
 import ScrollReveal from '@/components/ScrollReveal'
-import StructuredData from '@/components/StructuredData'
-
 const CF_IMG = 'https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ'
 
 const CF_IMG = 'https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ'
@@ -31,9 +29,9 @@ export const metadata: Metadata = {
 export default function ReviewsPage() {
   return (
     <main className="bg-jerry-green-900 text-parchment-100 min-h-screen">
-      <StructuredData
-        id="reviews-page-schema"
-        data={{
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify({
           '@context': 'https://schema.org',
           '@type': 'WebPage',
           name: 'Jerry Can Spirits Reviews',
@@ -53,7 +51,7 @@ export default function ReviewsPage() {
               'https://www.yell.com/biz/jerry-can-spirits-ltd-london-11012967/',
             ],
           },
-        }}
+        }) }}
       />
       <Breadcrumbs items={[{ label: 'Reviews' }]} />
 
