@@ -1,11 +1,11 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import Image from 'next/image'
 import { useCart } from '@/contexts/CartContext'
 import { getProduct, type ShopifyProduct, type ShopifyProductVariant } from '@/lib/shopify'
 
-// Hardcoded cross-sell products - lower-cost barware items to encourage add-ons
+// Fallback handles if the API returns empty or fails
 const UPSELL_PRODUCT_HANDLES = [
   'natural-slate-coaster-variants',
   'stainless-steel-jigger-variants',
@@ -41,15 +41,39 @@ export default function CartUpsell() {
   // Get handles of products already in cart
   const cartProductHandles = cart?.lines.map(line => line.merchandise.product.handle) || []
 
+  // Memoised key: only changes when the set of product handles changes, not on quantity updates
+  const handlesKey = useMemo(() => {
+    const handles = cart?.lines.map(line => line.merchandise.product.handle) || []
+    return [...handles].sort().join(',')
+  }, [cart?.lines])
+
   useEffect(() => {
     async function fetchUpsellProducts() {
       setLoadingProducts(true)
+
+      // Determine which handles to fetch recommendations for
+      let recommendedHandles: string[] = UPSELL_PRODUCT_HANDLES
+
+      if (handlesKey) {
+        try {
+          const res = await fetch(`/api/cart-recommendations/?handles=${encodeURIComponent(handlesKey)}`)
+          if (res.ok) {
+            const data: { products: ShopifyProduct[] } = await res.json()
+            if (data.products && data.products.length > 0) {
+              recommendedHandles = data.products.map(p => p.handle)
+            }
+          }
+        } catch {
+          // Fall back to hardcoded handles
+        }
+      }
+
       const products: UpsellProduct[] = []
       const initialSelections: Record<string, string> = {}
 
-      // Fetch all upsell products in parallel
+      // Fetch full product data for variants/images
       const results = await Promise.allSettled(
-        UPSELL_PRODUCT_HANDLES.map(handle => getProduct(handle))
+        recommendedHandles.map(handle => getProduct(handle))
       )
 
       results.forEach((result) => {
@@ -74,7 +98,7 @@ export default function CartUpsell() {
     }
 
     fetchUpsellProducts()
-  }, [])
+  }, [handlesKey])
 
   // Filter out products already in cart
   const availableUpsells = upsellProducts.filter(
