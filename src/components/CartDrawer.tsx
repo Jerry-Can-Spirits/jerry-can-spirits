@@ -3,7 +3,7 @@
 import { useCart } from '@/contexts/CartContext'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import CartUpsell from './CartUpsell'
 
 // Helper to format price
@@ -26,11 +26,77 @@ export default function CartDrawer() {
     updateQuantity,
     removeItem,
     applyDiscountCode,
+    updateAttributes,
     isLoading,
   } = useCart()
 
   const [discountCode, setDiscountCode] = useState('')
   const [affiliateId, setAffiliateId] = useState<string | null>(null)
+
+  // Gift state
+  const [isGift, setIsGift] = useState(false)
+  const [giftMessage, setGiftMessage] = useState('')
+  const [giftRecipient, setGiftRecipient] = useState('')
+  const debounceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  // Hydrate gift state from cart attributes on load
+  useEffect(() => {
+    if (!cart?.attributes) return
+    const attrs = cart.attributes
+    const giftAttr = attrs.find(a => a.key === '_gift')
+    const msgAttr = attrs.find(a => a.key === '_gift_message')
+    const recipientAttr = attrs.find(a => a.key === '_gift_recipient')
+
+    if (giftAttr?.value === 'true') {
+      setIsGift(true)
+      setGiftMessage(msgAttr?.value || '')
+      setGiftRecipient(recipientAttr?.value || '')
+    }
+  }, [cart?.attributes])
+
+  // Debounced sync of gift attributes to Shopify
+  const syncGiftAttributes = useCallback((gift: boolean, message: string, recipient: string) => {
+    if (debounceTimerRef.current) {
+      clearTimeout(debounceTimerRef.current)
+    }
+    debounceTimerRef.current = setTimeout(() => {
+      updateAttributes([
+        { key: '_gift', value: gift ? 'true' : '' },
+        { key: '_gift_message', value: gift ? message : '' },
+        { key: '_gift_recipient', value: gift ? recipient : '' },
+      ])
+    }, 800)
+  }, [updateAttributes])
+
+  // Flush pending debounce immediately (called before checkout)
+  const flushGiftAttributes = useCallback(() => {
+    if (debounceTimerRef.current) {
+      clearTimeout(debounceTimerRef.current)
+      debounceTimerRef.current = null
+    }
+    return updateAttributes([
+      { key: '_gift', value: isGift ? 'true' : '' },
+      { key: '_gift_message', value: isGift ? giftMessage : '' },
+      { key: '_gift_recipient', value: isGift ? giftRecipient : '' },
+    ])
+  }, [updateAttributes, isGift, giftMessage, giftRecipient])
+
+  const handleGiftToggle = () => {
+    const newVal = !isGift
+    setIsGift(newVal)
+    syncGiftAttributes(newVal, giftMessage, giftRecipient)
+  }
+
+  const handleGiftMessageChange = (value: string) => {
+    if (value.length > 200) return
+    setGiftMessage(value)
+    syncGiftAttributes(isGift, value, giftRecipient)
+  }
+
+  const handleGiftRecipientChange = (value: string) => {
+    setGiftRecipient(value)
+    syncGiftAttributes(isGift, giftMessage, value)
+  }
 
   // Retrieve affiliate tracking ID from sessionStorage (set by ClientWrapper)
   useEffect(() => {
@@ -295,6 +361,69 @@ export default function CartDrawer() {
                 )}
               </div>
 
+              {/* Gift Toggle */}
+              <div className="space-y-3">
+                <button
+                  type="button"
+                  onClick={handleGiftToggle}
+                  className="flex items-center gap-3 w-full group"
+                >
+                  {/* Gift icon */}
+                  <svg
+                    className={`w-5 h-5 transition-colors ${isGift ? 'text-gold-400' : 'text-parchment-400 group-hover:text-parchment-300'}`}
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7" />
+                  </svg>
+                  <span className={`text-sm font-medium transition-colors ${isGift ? 'text-gold-300' : 'text-parchment-300 group-hover:text-parchment-200'}`}>
+                    This is a gift
+                  </span>
+                  {/* Pill toggle */}
+                  <div className={`ml-auto w-10 h-5 rounded-full transition-colors relative ${isGift ? 'bg-gold-500' : 'bg-jerry-green-800/50 border border-gold-500/20'}`}>
+                    <div className={`absolute top-0.5 w-4 h-4 rounded-full transition-all ${isGift ? 'right-0.5 bg-jerry-green-900' : 'left-0.5 bg-parchment-400'}`} />
+                  </div>
+                </button>
+
+                {/* Gift fields (revealed when toggled) */}
+                {isGift && (
+                  <div className="space-y-3 animate-in slide-in-from-top-2 duration-200">
+                    <div>
+                      <label htmlFor="gift-recipient" className="block text-xs text-parchment-400 mb-1">
+                        Recipient name (optional)
+                      </label>
+                      <input
+                        type="text"
+                        id="gift-recipient"
+                        name="gift-recipient"
+                        value={giftRecipient}
+                        onChange={(e) => handleGiftRecipientChange(e.target.value)}
+                        placeholder="Who is this for?"
+                        className="w-full px-4 py-2 bg-jerry-green-800/50 border border-gold-500/20 rounded-lg text-white placeholder-parchment-400 focus:outline-none focus:border-gold-400 text-sm"
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="gift-message" className="block text-xs text-parchment-400 mb-1">
+                        Gift message
+                      </label>
+                      <textarea
+                        id="gift-message"
+                        name="gift-message"
+                        value={giftMessage}
+                        onChange={(e) => handleGiftMessageChange(e.target.value)}
+                        placeholder="Add a personal message..."
+                        rows={3}
+                        className="w-full px-4 py-2 bg-jerry-green-800/50 border border-gold-500/20 rounded-lg text-white placeholder-parchment-400 focus:outline-none focus:border-gold-400 text-sm resize-none"
+                      />
+                      <p className="text-xs text-parchment-500 text-right mt-1">
+                        {giftMessage.length}/200
+                      </p>
+                    </div>
+                  </div>
+                )}
+              </div>
+
               {/* Total */}
               <div className="flex justify-between items-center text-lg font-semibold pt-4 border-t border-gold-500/20">
                 <span className="text-parchment-200">Total</span>
@@ -311,7 +440,14 @@ export default function CartDrawer() {
                 {/* Main Checkout Button */}
                 <a
                   href={getCheckoutUrl()}
-                  onClick={() => {
+                  onClick={(e) => {
+                    // Flush any pending gift attribute updates before checkout
+                    if (isGift && debounceTimerRef.current) {
+                      e.preventDefault()
+                      flushGiftAttributes().then(() => {
+                        window.location.href = getCheckoutUrl()
+                      })
+                    }
                     // Track checkout initiation via Zaraz
                     if (typeof window !== 'undefined' && window.zaraz?.track) {
                       window.zaraz.track('InitiateCheckout', {

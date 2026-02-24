@@ -7,8 +7,10 @@ import {
   updateCartLine,
   removeFromCart as shopifyRemoveFromCart,
   applyDiscount as shopifyApplyDiscount,
+  updateCartAttributes as shopifyUpdateCartAttributes,
   getCart,
   type Cart,
+  type CartAttribute,
 } from '@/lib/shopify'
 
 interface CartContextType {
@@ -21,6 +23,7 @@ interface CartContextType {
   updateQuantity: (lineId: string, quantity: number) => Promise<void>
   removeItem: (lineId: string) => Promise<void>
   applyDiscountCode: (code: string) => Promise<void>
+  updateAttributes: (attributes: CartAttribute[]) => Promise<void>
   itemCount: number
 }
 
@@ -153,6 +156,17 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     }
   }, [cart])
 
+  const updateAttributes = useCallback(async (attributes: CartAttribute[]) => {
+    if (!cart) return
+
+    try {
+      const updatedCart = await shopifyUpdateCartAttributes(cart.id, attributes)
+      setCart(updatedCart)
+    } catch (error) {
+      console.error('Error updating cart attributes:', error)
+    }
+  }, [cart])
+
   // Calculate total item count
   const itemCount = cart?.lines.reduce((total, line) => total + line.quantity, 0) || 0
 
@@ -166,6 +180,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     updateQuantity,
     removeItem,
     applyDiscountCode,
+    updateAttributes,
     itemCount,
   }
 

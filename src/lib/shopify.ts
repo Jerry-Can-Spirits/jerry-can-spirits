@@ -114,6 +114,11 @@ export interface CartLine {
   };
 }
 
+export interface CartAttribute {
+  key: string;
+  value: string;
+}
+
 export interface Cart {
   id: string;
   checkoutUrl: string;
@@ -126,6 +131,7 @@ export interface Cart {
     code: string;
     applicable: boolean;
   }>;
+  attributes?: CartAttribute[];
 }
 
 // GraphQL cart response types
@@ -373,6 +379,10 @@ export async function createCart(): Promise<Cart> {
         cart {
           id
           checkoutUrl
+          attributes {
+            key
+            value
+          }
           lines(first: 10) {
             edges {
               node {
@@ -453,6 +463,10 @@ export async function addToCart(cartId: string, variantId: string, quantity: num
         cart {
           id
           checkoutUrl
+          attributes {
+            key
+            value
+          }
           lines(first: 50) {
             edges {
               node {
@@ -537,6 +551,10 @@ export async function updateCartLine(cartId: string, lineId: string, quantity: n
         cart {
           id
           checkoutUrl
+          attributes {
+            key
+            value
+          }
           lines(first: 50) {
             edges {
               node {
@@ -614,6 +632,10 @@ export async function removeFromCart(cartId: string, lineIds: string[]): Promise
         cart {
           id
           checkoutUrl
+          attributes {
+            key
+            value
+          }
           lines(first: 50) {
             edges {
               node {
@@ -686,6 +708,10 @@ export async function applyDiscount(cartId: string, discountCodes: string[]): Pr
         cart {
           id
           checkoutUrl
+          attributes {
+            key
+            value
+          }
           lines(first: 50) {
             edges {
               node {
@@ -754,6 +780,36 @@ export async function applyDiscount(cartId: string, discountCodes: string[]): Pr
   }
 }
 
+// Determine primary collection category from tags or productType
+export function detectProductCategory(product: ShopifyProduct): string | null {
+  const tags = product.tags || []
+  const productType = product.productType?.toLowerCase() || ''
+
+  // Check tags first
+  if (tags.some(tag => tag.toLowerCase().includes('drink') || tag.toLowerCase().includes('spirit') || tag.toLowerCase().includes('rum'))) {
+    return 'drinks'
+  }
+  if (tags.some(tag => tag.toLowerCase().includes('barware') || tag.toLowerCase().includes('glass'))) {
+    return 'barware'
+  }
+  if (tags.some(tag => tag.toLowerCase().includes('clothing') || tag.toLowerCase().includes('apparel'))) {
+    return 'clothing'
+  }
+
+  // Fallback to productType
+  if (productType.includes('spirit') || productType.includes('drink') || productType.includes('rum')) {
+    return 'drinks'
+  }
+  if (productType.includes('barware') || productType.includes('glass')) {
+    return 'barware'
+  }
+  if (productType.includes('clothing') || productType.includes('apparel')) {
+    return 'clothing'
+  }
+
+  return null
+}
+
 // Get smart product recommendations based on current product
 export async function getSmartRecommendations(
   currentProduct: ShopifyProduct,
@@ -761,37 +817,7 @@ export async function getSmartRecommendations(
 ): Promise<ShopifyProduct[]> {
   const currentPrice = parseFloat(currentProduct.priceRange.minVariantPrice.amount)
 
-  // Determine primary collection from tags or productType
-  const getPrimaryCollection = (product: ShopifyProduct): string | null => {
-    const tags = product.tags || []
-    const productType = product.productType?.toLowerCase() || ''
-
-    // Check tags first
-    if (tags.some(tag => tag.toLowerCase().includes('drink') || tag.toLowerCase().includes('spirit') || tag.toLowerCase().includes('rum'))) {
-      return 'drinks'
-    }
-    if (tags.some(tag => tag.toLowerCase().includes('barware') || tag.toLowerCase().includes('glass'))) {
-      return 'barware'
-    }
-    if (tags.some(tag => tag.toLowerCase().includes('clothing') || tag.toLowerCase().includes('apparel'))) {
-      return 'clothing'
-    }
-
-    // Fallback to productType
-    if (productType.includes('spirit') || productType.includes('drink') || productType.includes('rum')) {
-      return 'drinks'
-    }
-    if (productType.includes('barware') || productType.includes('glass')) {
-      return 'barware'
-    }
-    if (productType.includes('clothing') || productType.includes('apparel')) {
-      return 'clothing'
-    }
-
-    return null
-  }
-
-  const primaryCollection = getPrimaryCollection(currentProduct)
+  const primaryCollection = detectProductCategory(currentProduct)
 
   // Cross-sell rules: what to recommend if not enough in same collection
   const getCrossSellCollections = (collection: string | null): string[] => {
@@ -846,7 +872,7 @@ export async function getSmartRecommendations(
   const scoredProducts = uniqueProducts.map(product => {
     let score = 0
     const productPrice = parseFloat(product.priceRange.minVariantPrice.amount)
-    const productCollection = getPrimaryCollection(product)
+    const productCollection = detectProductCategory(product)
 
     // Same collection gets priority
     if (productCollection === primaryCollection) {
@@ -890,6 +916,10 @@ export async function getCart(cartId: string): Promise<Cart | null> {
       cart(id: $cartId) {
         id
         checkoutUrl
+        attributes {
+          key
+          value
+        }
         lines(first: 50) {
           edges {
             node {
@@ -958,4 +988,153 @@ export async function getCart(cartId: string): Promise<Cart | null> {
     console.error('Error getting cart:', error);
     throw error;
   }
+}
+
+// Update cart attributes (used for gift message, recipient, etc.)
+export async function updateCartAttributes(
+  cartId: string,
+  attributes: CartAttribute[]
+): Promise<Cart> {
+  const query = `
+    mutation UpdateCartAttributes($cartId: ID!, $attributes: [AttributeInput!]!) {
+      cartAttributesUpdate(cartId: $cartId, attributes: $attributes) {
+        cart {
+          id
+          checkoutUrl
+          attributes {
+            key
+            value
+          }
+          lines(first: 50) {
+            edges {
+              node {
+                id
+                quantity
+                merchandise {
+                  ... on ProductVariant {
+                    id
+                    title
+                    product {
+                      title
+                      handle
+                    }
+                    image {
+                      url
+                      altText
+                    }
+                    price {
+                      amount
+                      currencyCode
+                    }
+                  }
+                }
+              }
+            }
+          }
+          cost {
+            totalAmount {
+              amount
+              currencyCode
+            }
+            subtotalAmount {
+              amount
+              currencyCode
+            }
+          }
+          discountCodes {
+            code
+            applicable
+          }
+        }
+      }
+    }
+  `;
+
+  const variables = {
+    cartId,
+    attributes,
+  };
+
+  try {
+    const { data, errors } = await getClient().request(query, { variables });
+
+    if (errors) {
+      console.error('GraphQL Errors:', errors);
+      throw new Error('Failed to update cart attributes');
+    }
+
+    return {
+      ...data.cartAttributesUpdate.cart,
+      lines: data.cartAttributesUpdate.cart.lines.edges.map((edge: CartLineEdge) => edge.node),
+    };
+  } catch (error) {
+    console.error('Error updating cart attributes:', error);
+    throw error;
+  }
+}
+
+// Get cart-based product recommendations (for upsell in cart drawer)
+export async function getCartRecommendations(
+  cartHandles: string[],
+  limit: number = 4
+): Promise<ShopifyProduct[]> {
+  // Fetch all products from all 3 collections in parallel
+  const [drinks, barware, clothing] = await Promise.all([
+    getProductsByCollection('drinks').catch(() => []),
+    getProductsByCollection('barware').catch(() => []),
+    getProductsByCollection('clothing').catch(() => []),
+  ]);
+
+  // Deduplicate and exclude items already in cart
+  const allProducts = Array.from(
+    new Map([...drinks, ...barware, ...clothing].map(p => [p.id, p])).values()
+  ).filter(p => !cartHandles.includes(p.handle));
+
+  // Determine which categories are already in cart
+  const cartCategories = new Set<string>();
+  for (const product of [...drinks, ...barware, ...clothing]) {
+    if (cartHandles.includes(product.handle)) {
+      const cat = detectProductCategory(product);
+      if (cat) cartCategories.add(cat);
+    }
+  }
+
+  // Score products
+  const scored = allProducts.map(product => {
+    let score = 0;
+    const category = detectProductCategory(product);
+    const price = parseFloat(product.priceRange.minVariantPrice.amount);
+
+    // Cross-sell: category not already in cart
+    if (category && !cartCategories.has(category)) {
+      score += 100;
+    }
+
+    // Spirits <-> barware combo bonus
+    if (
+      (cartCategories.has('drinks') && category === 'barware') ||
+      (cartCategories.has('barware') && category === 'drinks')
+    ) {
+      score += 50;
+    }
+
+    // Available for sale
+    if (product.availableForSale) {
+      score += 30;
+    }
+
+    // Impulse buy price brackets
+    if (price < 20) {
+      score += 20;
+    } else if (price < 40) {
+      score += 10;
+    }
+
+    return { product, score };
+  });
+
+  return scored
+    .sort((a, b) => b.score - a.score)
+    .slice(0, limit)
+    .map(item => item.product);
 }
