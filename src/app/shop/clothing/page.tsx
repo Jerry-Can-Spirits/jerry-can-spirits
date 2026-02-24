@@ -174,9 +174,45 @@ export default async function ClothingPage() {
     )
   }
 
+  // Structured data for product listing
+  const clothingSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: 'Jerry Can Spirits Expedition Gear & Apparel',
+    description: 'Adventure-ready apparel and branded merchandise from Jerry Can Spirits. Quality expedition gear engineered for reliability.',
+    url: 'https://jerrycanspirits.co.uk/shop/clothing/',
+    numberOfItems: products.length,
+    itemListElement: products.map((product: ShopifyProduct, index: number) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      item: {
+        '@type': 'Product',
+        name: product.title,
+        description: product.description,
+        url: `https://jerrycanspirits.co.uk/shop/product/${product.handle}`,
+        image: product.images?.[0]?.url,
+        brand: {
+          '@type': 'Brand',
+          name: 'Jerry Can Spirits',
+        },
+        offers: {
+          '@type': 'Offer',
+          price: product.priceRange.minVariantPrice.amount,
+          priceCurrency: product.priceRange.minVariantPrice.currencyCode,
+          availability: 'https://schema.org/InStock',
+          url: `https://jerrycanspirits.co.uk/shop/product/${product.handle}`,
+        },
+      },
+    })),
+  }
+
   // Success state - products loaded from Shopify
   return (
     <main className="min-h-screen py-20">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(clothingSchema) }}
+      />
       {/* Breadcrumb */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
         <Breadcrumbs

@@ -13,12 +13,45 @@ export const metadata: Metadata = {
   },
 }
 
+const articleSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: 'Armed Forces Covenant - Jerry Can Spirits',
+  description: 'Jerry Can Spirits is a veteran-owned military rum brand committed to the Armed Forces Covenant, supporting serving personnel, veterans, and military families.',
+  url: 'https://jerrycanspirits.co.uk/armed-forces-covenant/',
+  image: 'https://jerrycanspirits.co.uk/images/AFC_Banner__PNG_.png',
+  author: {
+    '@type': 'Organization',
+    name: 'Jerry Can Spirits',
+    url: 'https://jerrycanspirits.co.uk',
+  },
+  publisher: {
+    '@type': 'Organization',
+    name: 'Jerry Can Spirits',
+    url: 'https://jerrycanspirits.co.uk',
+    logo: {
+      '@type': 'ImageObject',
+      url: 'https://jerrycanspirits.co.uk/images/Logo.webp',
+    },
+  },
+  datePublished: '2025-09-16',
+  dateModified: '2025-09-16',
+  mainEntityOfPage: {
+    '@type': 'WebPage',
+    '@id': 'https://jerrycanspirits.co.uk/armed-forces-covenant/',
+  },
+}
+
 export default function ArmedForcesCovenant() {
   const establishedDate = '16 September 2025'
   const lastUpdated = '16 September 2025'
 
   return (
     <main className="min-h-screen py-20">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
+      />
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-12 pb-8 border-b border-gold-500/30">

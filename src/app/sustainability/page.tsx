@@ -186,7 +186,7 @@ export default function Sustainability() {
                 <ScrollReveal delay={0}>
                 <div className="bg-jerry-green-800/60 rounded-lg p-4">
                   <h3 className="text-gold-300 font-semibold mb-2">UK Distillation</h3>
-                  <p className="text-sm">Distilled at Spirit of Wales Distillery in Newport, Gwent.</p>
+                  <p className="text-sm">Distilled at <Link href="/friends/" className="text-gold-300 hover:text-gold-400 underline">Spirit of Wales Distillery</Link> in Newport, Gwent.</p>
                 </div>
                 </ScrollReveal>
                 <ScrollReveal delay={1}>
