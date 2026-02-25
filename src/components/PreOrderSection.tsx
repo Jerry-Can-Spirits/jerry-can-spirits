@@ -183,7 +183,7 @@ export default function PreOrderSection() {
 
             {/* Benefits List */}
             <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20 mb-8">
-              <h3 className="text-gold-300 font-semibold mb-4">Pre-Order Benefits:</h3>
+              <h3 className="text-gold-300 font-semibold mb-4">What You Get:</h3>
               <ul className="space-y-3 text-parchment-200">
                 <li className="flex items-start gap-3">
                   <span className="text-gold-400 flex-shrink-0">•</span>
@@ -191,7 +191,7 @@ export default function PreOrderSection() {
                 </li>
                 <li className="flex items-start gap-3">
                   <span className="text-gold-400 flex-shrink-0">•</span>
-                  <span>Save £{bottleDiscount} as an early supporter (£{bottlePricing.price} vs £{bottlePricing.compareAtPrice} RRP)</span>
+                  <span>First Batch supporter price of £{bottlePricing.price}. Ships April 2026.</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <span className="text-gold-400 flex-shrink-0">•</span>
@@ -250,7 +250,7 @@ export default function PreOrderSection() {
               >
                 <div className="flex flex-col">
                   <span className="text-xs uppercase tracking-wider text-gold-300">Trade Pack</span>
-                  <span className="text-lg">6 Bottles - Best Value</span>
+                  <span className="text-lg">6 Bottles - Trade Pack</span>
                   <span className="text-xs text-parchment-400">(£{tradePackPerBottle}/bottle)</span>
                 </div>
                 <div className="text-right">

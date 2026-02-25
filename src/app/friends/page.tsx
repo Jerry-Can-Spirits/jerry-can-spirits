@@ -454,7 +454,7 @@ export default function FriendsPage() {
                   Shared Success
                 </h4>
                 <p className="text-parchment-300 text-sm">
-                  Rising tide lifts all boats in craft spirits
+                  A small community. Better when we support each other.
                 </p>
               </div>
             </ScrollReveal>

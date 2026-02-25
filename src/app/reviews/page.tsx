@@ -201,7 +201,7 @@ export default function ReviewsPage() {
               Tried Our Rum?
             </h2>
             <p className="text-parchment-300 mb-6 max-w-lg mx-auto">
-              Your honest feedback helps fellow adventurers discover Jerry Can Spirits. Leave a review on the platform of your choice.
+              Your honest feedback helps other customers find us. Leave a review on the platform of your choice.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <a

@@ -382,7 +382,7 @@ export default function ExpeditionSpicedRumIngredients() {
               <p className="text-parchment-300 leading-relaxed italic">
                 A modern, naturally sweetened spiced rum with bright citrus highs, creamy vanilla depth, and a bourbon&#8209;barrel backbone.
                 <br />
-                Smooth enough to sip neat. Bold enough to transform cocktails.
+                Smooth enough to sip neat. Capable enough to stand up in cocktails.
               </p>
             </div>
           </div>
@@ -399,7 +399,7 @@ export default function ExpeditionSpicedRumIngredients() {
               <br />
               Every flavour is real.
               <br />
-              Every bottle is crafted with integrity.
+              Every bottle is made with the same care as the one before it.
             </p>
           </div>
         </section>
@@ -411,7 +411,7 @@ export default function ExpeditionSpicedRumIngredients() {
               Try It in a Cocktail
             </h2>
             <p className="text-parchment-300 leading-relaxed max-w-2xl mx-auto mb-6">
-              Now you know what goes into it, see what you can make with it. Our Field Manual has cocktail recipes designed to bring out the best in Expedition Spiced Rum.
+              Now you know what goes into it, see what you can make with it. Our Field Manual has cocktail recipes built around what this rum actually does well.
             </p>
             <Link
               href="/field-manual/cocktails/"

@@ -237,7 +237,7 @@ export default function Home() {
               <ScrollReveal delay={1}>
               <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
                 <h2 className="text-3xl font-serif font-bold text-white mb-6">
-                  Craft Spirits with Purpose
+                  Why We Do It This Way
                 </h2>
                 <div className="space-y-4 text-parchment-200 leading-relaxed">
                   <p>
@@ -259,19 +259,19 @@ export default function Home() {
               <ScrollReveal delay={0}>
                 <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20 text-center">
                   <h3 className="text-lg font-serif font-bold text-gold-300 mb-2">12+ Years Service</h3>
-                  <p className="text-parchment-300 text-sm">Royal Corps of Signals veterans bringing military precision to craft spirits</p>
+                  <p className="text-parchment-300 text-sm">Royal Corps of Signals veterans who built their rum the same way they approached everything else. Carefully, without shortcuts.</p>
                 </div>
               </ScrollReveal>
               <ScrollReveal delay={1}>
                 <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20 text-center">
                   <h3 className="text-lg font-serif font-bold text-gold-300 mb-2">UK First Philosophy</h3>
-                  <p className="text-parchment-300 text-sm">British ingredients, Welsh distillation, sustainable local sourcing</p>
+                  <p className="text-parchment-300 text-sm">Welsh distillery, Welsh brewery molasses, real botanicals</p>
                 </div>
               </ScrollReveal>
               <ScrollReveal delay={2}>
                 <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20 text-center">
-                  <h3 className="text-lg font-serif font-bold text-gold-300 mb-2">Small Batch Quality</h3>
-                  <p className="text-parchment-300 text-sm">Copper-lined distillation creating complex flavours and smooth finish</p>
+                  <h3 className="text-lg font-serif font-bold text-gold-300 mb-2">Small Batch. Properly Made.</h3>
+                  <p className="text-parchment-300 text-sm">Pot stilled at Spirit of Wales Distillery, Newport. Extended copper contact. Every batch small enough to pay attention to.</p>
                 </div>
               </ScrollReveal>
               <ScrollReveal delay={3}>
@@ -301,10 +301,10 @@ export default function Home() {
                   </span>
                 </div>
                 <h2 className="text-3xl md:text-4xl font-playfair font-bold text-gold-500 mb-4">
-                  Trusted by Adventurers
+                  Field Reports
                 </h2>
                 <p className="text-parchment-200 text-lg max-w-2xl mx-auto">
-                  See what our customers are saying about Jerry Can Spirits
+                  We&apos;ll let the bottles do the talking.
                 </p>
               </div>
               <div className="max-w-5xl mx-auto">

@@ -7,13 +7,13 @@ import StructuredData from '@/components/StructuredData'
 import ScrollReveal from '@/components/ScrollReveal'
 
 export const metadata: Metadata = {
-  title: "Our Ethos - Values & Craftsmanship",
+  title: "Our Ethos - How We Make Rum",
   description: "The values behind Jerry Can Spirits premium spiced rum. Small batch craft rum made with Madagascan vanilla, Ceylon cinnamon, and real botanicals. Veteran-owned, Welsh-distilled.",
   alternates: {
     canonical: 'https://jerrycanspirits.co.uk/ethos/',
   },
   openGraph: {
-    title: 'Our Ethos - Values & Craftsmanship | Jerry Can Spirits®',
+    title: 'Our Ethos - How We Make Rum | Jerry Can Spirits®',
     description: 'The values behind Jerry Can Spirits premium spiced rum. Small batch craft rum made with real botanicals, Welsh-distilled, veteran-owned.',
     url: 'https://jerrycanspirits.co.uk/ethos/',
     siteName: 'Jerry Can Spirits®',
@@ -36,7 +36,7 @@ const faqSchema = {
       name: 'What values does Jerry Can Spirits stand for?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Our core values are reliability (always there when you need it), function over form (beauty that serves purpose), adventure spirit (for modern explorers), precision (getting it right the first time), authenticity (honest about our craft), and "earned, not given" (quality that proves itself).',
+        text: 'Our core values are reliability (always there when you need it), function over form (beauty that serves purpose), standards (getting it right, not just good enough), precision (no shortcuts, no compromises), authenticity (honest about our craft), and "earned, not given" (quality that proves itself).',
       },
     },
     {
@@ -101,7 +101,7 @@ export default function Ethos() {
             <div className="relative w-full max-w-3xl mx-auto mb-8">
               <Image
                 src="/images/hero/Compass_Still.webp"
-                alt="Vintage compass and pot still - tradition meets adventure"
+                alt="A compass and copper pot still representing the distillation process at Spirit of Wales Distillery, Newport"
                 width={1200}
                 height={600}
                 className="rounded-lg"
@@ -110,9 +110,9 @@ export default function Ethos() {
           </div>
 
           <h1 className="text-4xl sm:text-6xl font-serif font-bold text-white mb-6">
-            Built by Experience,
+            Built by Experience.
             <br />
-            <span className="text-gold-300">Crafted for Adventure</span>
+            <span className="text-gold-300">Made Without Shortcuts.</span>
           </h1>
           
           <p className="text-xl text-parchment-300 max-w-3xl mx-auto leading-relaxed mb-8">
@@ -153,8 +153,8 @@ export default function Ethos() {
                 description: "Beauty that serves purpose. Every detail engineered to perform."
               },
               {
-                value: "Adventure Spirit",
-                description: "For modern explorers pushing boundaries - whether across continents or just past comfort zones."
+                value: "Standards",
+                description: "We hold ourselves to one standard: get it right. Not good enough. Right. That applies to every ingredient, every batch, every bottle."
               },
               {
                 value: "Precision",
@@ -201,8 +201,7 @@ export default function Ethos() {
               The Journey
             </h2>
             <p className="text-xl text-parchment-300 max-w-3xl mx-auto">
-              From source to spirit, every step of our process honours tradition
-              while embracing innovation. This is how we craft extraordinary spirits.
+              From the Caribbean rum base to the Welsh distillery to the bottle. Every step is deliberate. Nothing is in there by accident.
             </p>
           </div>
 
@@ -263,12 +262,10 @@ export default function Ethos() {
                 </div>
                 <div className="flex-1 bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-8 border border-gold-500/20 group-hover:border-gold-400/40 transition-all duration-300">
                   <h3 className="text-2xl font-serif font-bold text-white mb-4">
-                    Selection: Expert Partners in Welsh Craft
+                    Selection: Working With the Right Distillery
                   </h3>
                   <p className="text-parchment-300 mb-6">
-                    We partnered with <Link href="/friends/" className="text-gold-300 hover:text-gold-400 underline"><strong>Spirit of Wales Distillery in Newport, South Wales</strong></Link>, craftspeople who share our passion for innovation rooted in tradition.
-                    Their cutting-edge approach to copper distillation creates the foundation for our exceptional spirits, combining modern
-                    techniques with time-tested principles.
+                    We partnered with <Link href="/friends/" className="text-gold-300 hover:text-gold-400 underline"><strong>Spirit of Wales Distillery in Newport, South Wales</strong></Link>, craftspeople who take the same approach to distillation that we take to everything else. Their copper pot stills are the right tool for the job. Extended vapour contact. Proper copper interaction. No shortcuts.
                   </p>
 
                   {/* Details - Always Visible */}
@@ -286,7 +283,7 @@ export default function Ethos() {
                         </div>
                         <div>
                           <strong className="text-gold-300">Engineering Excellence</strong>
-                          <p>Their advanced copper-lined stills feature multiple vapour chambers, keeping the spirit in vapour form among the copper for maximum contact time. This extended interaction builds complex esters and flavours while creating an exceptionally smooth, soft finish. It's the perfect marriage of engineering innovation and traditional copper distillation principles.</p>
+                          <p>The copper does the work it has been doing for centuries. Spirit of Wales have built a still that lets it do more of it. Multiple vapour chambers, maximum contact time, complex esters, smooth finish.</p>
                         </div>
                       </div>
                     </div>
@@ -304,7 +301,7 @@ export default function Ethos() {
                 </div>
                 <div className="flex-1 bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-8 border border-gold-500/20 group-hover:border-gold-400/40 transition-all duration-300">
                   <h3 className="text-2xl font-serif font-bold text-white mb-4">
-                    Crafting: Tradition Meets Innovation
+                    Crafting: How We Actually Make It
                   </h3>
                   <p className="text-parchment-300 mb-6">
                     We steep real botanicals (Madagascan vanilla, Ceylon cinnamon, ginger, orange peel, and warming spices) slowly in Caribbean rum, allowing each ingredient time to impart its true character.
@@ -332,7 +329,7 @@ export default function Ethos() {
                             <li>• Rigorous quality control</li>
                             <li>• Precise monitoring</li>
                             <li>• Consistent results</li>
-                            <li>• Innovation in balance</li>
+                            <li>• Careful adjustment between batches</li>
                           </ul>
                         </div>
                       </div>
@@ -355,7 +352,7 @@ export default function Ethos() {
                   </h3>
                   <p className="text-parchment-300 mb-6">
                     Great spirits cannot be rushed. For future releases, we're exploring barrel aging with carefully selected casks - from charred American oak to sherry-seasoned European barrels.
-                    These aged expressions will allow time to work its magic, with each barrel monitored, tasted, and nurtured to perfection.
+                    These aged expressions will take time. Each barrel will be monitored and tasted. We won&apos;t rush it.
                   </p>
 
                   {/* Details - Always Visible */}

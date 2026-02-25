@@ -111,10 +111,10 @@ export async function generateMetadata({
       }
     }
 
-    const description = product.description.slice(0, 155) || `Premium British spirits from Jerry Can Spirits. Veteran-owned spirits crafted with military precision. ${product.title} - engineered for reliability, designed for adventure.`
+    const description = product.description.slice(0, 155) || `${product.title} by Jerry Can Spirits. Veteran-owned British spiced rum made with real botanicals, no artificial flavouring. Pot stilled at Spirit of Wales Distillery, Newport.`
 
     return {
-      title: `${product.title} - Premium British Spirits`,
+      title: `${product.title} | Jerry Can Spirits`,
       description,
       keywords: `${product.title}, British spirits, veteran owned, premium spirits, military heritage, Jerry Can Spirits, expedition spirits, small batch, craft spirits`,
       alternates: {
@@ -577,7 +577,7 @@ export default async function ProductPage({
                       <svg className="w-5 h-5 text-gold-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                         <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                       </svg>
-                      <span>Wear the brand you believe in - not just a logo, a statement</span>
+                      <span>Wear the brand you believe in. Made by people who do this for real.</span>
                     </li>
                     <li className="flex items-start gap-3">
                       <svg className="w-5 h-5 text-gold-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
@@ -708,7 +708,7 @@ export default async function ProductPage({
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-16">
         <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
           <h2 className="text-3xl font-serif font-bold text-white mb-2">Customer Reviews</h2>
-          <p className="text-parchment-300 mb-8">Be among the first to share your experience</p>
+          <p className="text-parchment-300 mb-8">What people think</p>
 
           {/* Placeholder for reviews - will show Trustpilot widget once reviews are available */}
           <div className="text-center py-12">
@@ -717,7 +717,7 @@ export default async function ProductPage({
             </svg>
             <h3 className="text-xl font-serif font-bold text-gold-300 mb-2">Reviews Coming Soon</h3>
             <p className="text-parchment-300 max-w-md mx-auto">
-              As a brand new product, we're collecting our first customer reviews. Check back soon to see what others think of {product.title}.
+              We only launched in April 2026. Reviews are just coming in. Come back soon.
             </p>
           </div>
 
@@ -737,7 +737,7 @@ export default async function ProductPage({
       {/* Related Products Section */}
       {relatedProducts.length > 0 && (
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-16">
-          <h2 className="text-3xl font-serif font-bold text-white mb-8">You Might Also Like</h2>
+          <h2 className="text-3xl font-serif font-bold text-white mb-8">Worth Looking At</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {relatedProducts.map((relatedProduct) => (
               <Link
@@ -769,7 +769,7 @@ export default async function ProductPage({
                     )}
                   </p>
                   <div className="mt-4 flex items-center gap-2 text-gold-300 text-sm">
-                    <span>View Details</span>
+                    <span>See the Rum</span>
                     <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                     </svg>

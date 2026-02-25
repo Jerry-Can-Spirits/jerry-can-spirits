@@ -161,10 +161,10 @@ export default function RhysWilliamsPage() {
                   <svg className="w-6 h-6 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                   </svg>
-                  Chasing Adventure
+                  Life After the Army
                 </h2>
                 <p className="text-parchment-200 leading-relaxed mb-4">
-                  Driven by a desire to travel and chase adventure, I transitioned into motorsport, working in onboard communications for Formula One. This role took me around the world, operating at the sharp end of high-performance, time-critical telecommunications where failure simply isn&apos;t an option.
+                  After leaving, I transitioned into motorsport, working in onboard communications for Formula One. This role took me around the world, operating at the sharp end of high-performance, time-critical telecommunications where failure simply isn&apos;t an option.
                 </p>
                 <p className="text-parchment-200 leading-relaxed">
                   Today, I manage telecommunications at large-scale live events, including festivals and major sporting occasions, overseeing complex temporary networks that keep events connected, safe, and operational.
