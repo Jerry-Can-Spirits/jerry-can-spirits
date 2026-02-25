@@ -63,9 +63,9 @@ export default async function FieldManualHome() {
           </div>
 
           <h1 className="text-4xl sm:text-6xl font-serif font-bold text-white mb-6">
-            The Adventurer's Guide
+            The Cocktail Guide
             <br />
-            <span className="text-gold-300">to Exceptional Cocktails</span>
+            <span className="text-gold-300">From First Pour to Proper Drink</span>
           </h1>
           
           <p className="text-xl text-parchment-300 max-w-3xl mx-auto leading-relaxed mb-8">
