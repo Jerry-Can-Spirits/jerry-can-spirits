@@ -90,13 +90,13 @@ export default function OurStory() {
           </div>
 
           <h1 className="text-4xl sm:text-6xl font-serif font-bold text-white mb-6">
-            Forged by the Fire
+            Two Veterans. One Decision.
             <br />
-            <span className="text-gold-300">of Experience</span>
+            <span className="text-gold-300">No Shortcuts.</span>
           </h1>
 
           <p className="text-xl text-parchment-300 max-w-3xl mx-auto leading-relaxed mb-8">
-            Shaped by years of military service, driven by a desire for adventure – and a determination to craft rum without compromise. A veteran-owned rum brand engineered with purpose, made with integrity, for people who live life on their own terms.
+            We served. We got out. We wanted a proper drink and couldn&apos;t find one. So we made it ourselves. No grand plan. Just a decision to get on with it.
           </p>
 
           <div className="inline-flex items-center space-x-2 text-gold-300">
@@ -114,7 +114,7 @@ export default function OurStory() {
         <section className="py-20">
           <div className="text-center mb-16">
             <h2 className="text-3xl sm:text-4xl font-serif font-bold text-white mb-6">
-              From the Trenches to the Adventure
+              What Service Taught Us
             </h2>
             <p className="text-xl text-parchment-300 max-w-3xl mx-auto">
               Service with the Royal Corps of Signals took us to places where your equipment really gets put to the test. That military background shapes everything about how we make rum.
@@ -157,7 +157,7 @@ export default function OurStory() {
                 </div>
                 <div className="flex items-center space-x-3">
                   <div className="w-2 h-2 bg-gold-400 rounded-full flex-shrink-0"></div>
-                  <p className="text-parchment-300 text-sm">That&apos;s tested in the fire of adventure</p>
+                  <p className="text-parchment-300 text-sm">That&apos;s tested in the field, under pressure</p>
                 </div>
                 <div className="flex items-center space-x-3">
                   <div className="w-2 h-2 bg-gold-400 rounded-full flex-shrink-0"></div>
@@ -165,7 +165,7 @@ export default function OurStory() {
                 </div>
                 <div className="flex items-center space-x-3">
                   <div className="w-2 h-2 bg-gold-400 rounded-full flex-shrink-0"></div>
-                  <p className="text-parchment-300 text-sm">Engineering perfection for the modern explorer</p>
+                  <p className="text-parchment-300 text-sm">Getting the details right, every time</p>
                 </div>
               </div>
             </div>
@@ -202,8 +202,8 @@ export default function OurStory() {
                     <div className="w-12 h-12 bg-gold-400/20 rounded-full flex items-center justify-center mx-auto mb-3">
                       <span className="text-gold-400 text-xl font-bold">2</span>
                     </div>
-                    <p className="text-gold-300 font-semibold mb-2">Our Mission in Life</p>
-                    <p className="text-parchment-300 text-sm">Crafting spirits that are right for the modern explorer</p>
+                    <p className="text-gold-300 font-semibold mb-2">What We&apos;re Making</p>
+                    <p className="text-parchment-300 text-sm">Rum that does what it&apos;s supposed to. Made properly. Worth drinking.</p>
                   </div>
                 </ScrollReveal>
                 <ScrollReveal delay={2}>
@@ -212,7 +212,7 @@ export default function OurStory() {
                       <span className="text-gold-400 text-xl font-bold">3</span>
                     </div>
                     <p className="text-gold-300 font-semibold mb-2">Our Slogan</p>
-                    <p className="text-parchment-300 text-sm">&quot;Rum for people who actually do things&quot;</p>
+                    <p className="text-parchment-300 text-sm">&quot;Rum that earns its place on the shelf&quot;</p>
                   </div>
                 </ScrollReveal>
               </div>
@@ -224,7 +224,7 @@ export default function OurStory() {
         <section className="py-20">
           <div className="text-center mb-16">
             <h2 className="text-3xl sm:text-4xl font-serif font-bold text-white mb-6">
-              Turning Dreams into Reality
+              When We Stopped Talking and Started
             </h2>
             <p className="text-xl text-parchment-300 max-w-3xl mx-auto">
               The point at which we stopped just dreaming about this and started actually doing it – with a bit of purpose to boot.
@@ -349,7 +349,7 @@ export default function OurStory() {
                 </p>
                 <div className="pt-4 space-y-2">
                   <p className="text-gold-300 text-sm">• Learning the regulations on a daily basis – and loving the challenge</p>
-                  <p className="text-gold-300 text-sm">• Our home office is the real HQ – it&apos;s where the magic happens</p>
+                  <p className="text-gold-300 text-sm">• Our home office is the real HQ. That&apos;s just how it is.</p>
                   <p className="text-gold-300 text-sm">• Quality is the one thing we can&apos;t compromise on</p>
                 </div>
               </div>
@@ -376,7 +376,7 @@ export default function OurStory() {
                 </li>
                 <li className="flex items-start space-x-2">
                   <span className="text-green-400 mt-1">•</span>
-                  <span>Expedition-grade standards for our business – no cutting corners</span>
+                  <span>The same standards in the business as in the bottle. No cutting corners.</span>
                 </li>
                 <li className="flex items-start space-x-2">
                   <span className="text-green-400 mt-1">•</span>
@@ -401,7 +401,7 @@ export default function OurStory() {
               We&apos;re not trying to compete with the marketing budgets of massive corporations with teams of marketing gurus. We&apos;re competing on authenticity, on care, on the kind of attention to detail that only comes when you genuinely care about every single thing you do. When you&apos;re living off your own savings, when you&apos;re figuring out regulations as you go, when you&apos;re building every single relationship from scratch, you simply can&apos;t afford to cut corners. Read more about <Link href="/ethos/" className="text-gold-300 hover:text-gold-400 underline">our values</Link>.
             </p>
             <div className="text-gold-300 text-sm font-semibold uppercase tracking-wider">
-              Small Team. Big Dreams. No Compromise. Because We Can&apos;t Afford to.
+              Small team. No safety net. No compromise. Because we can&apos;t afford to.
             </div>
           </div>
           </ScrollReveal>
@@ -414,7 +414,7 @@ export default function OurStory() {
               The Jerry Can Promise
             </h2>
             <p className="text-xl text-parchment-300 max-w-3xl mx-auto">
-              It&apos;s not just a name, it&apos;s our personal guarantee that we&apos;ll be there when you need us most.
+              It&apos;s not just a name. It&apos;s the standard we hold ourselves to.
             </p>
           </div>
 
@@ -510,7 +510,7 @@ export default function OurStory() {
               The Vision
             </h2>
             <p className="text-xl text-parchment-300 max-w-3xl mx-auto">
-              Where we&apos;re headed: from small home office dreams to becoming one of the UK&apos;s top spirits brands.
+              Where we&apos;re headed. Honest about where we are now. Clear about where we want to go.
             </p>
           </div>
 
@@ -582,7 +582,7 @@ export default function OurStory() {
                 </div>
                 <h4 className="text-lg font-serif font-bold text-white mb-3">5-Year Vision</h4>
                 <ul className="space-y-2 text-parchment-300 text-sm text-left">
-                  <li>• Be one of the top spirits brands in the UK</li>
+                  <li>• Build a rum worth talking about, without help from a marketing department</li>
                   <li>• Have a range of world class rums on the market</li>
                   <li>• Have a strong retail presence – we want to be seen in the right places</li>
                   <li>• Have a loyal customer community – people who love what we do</li>
@@ -598,9 +598,9 @@ export default function OurStory() {
                 <h4 className="text-lg font-serif font-bold text-white mb-3">10-Year Dream</h4>
                 <ul className="space-y-2 text-parchment-300 text-sm text-left">
                   <li>• Own our own distillery – this is the ultimate goal</li>
-                  <li>• Have a full range of spirits on offer – we want to be a one-stop shop</li>
-                  <li>• Be known internationally – we want to be part of the big league</li>
-                  <li>• Be sustainable – we don&apos;t want to be a burden on the environment</li>
+                  <li>• Have a full range of spirits on offer, each one made the same way as the first</li>
+                  <li>• Be known internationally. For the right reasons.</li>
+                  <li>• Source responsibly. Use what&apos;s close to home where we can. Don&apos;t add to problems we can avoid.</li>
                 </ul>
               </div>
 

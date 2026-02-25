@@ -35,7 +35,7 @@ export default function HeroSection() {
                 <span className="absolute -bottom-2 left-0 w-full h-1 bg-gradient-to-r from-gold-500 to-gold-300 rounded-full"></span>
               </span>
               <br />
-              <span className="text-gold-300 text-3xl sm:text-4xl lg:text-5xl block mt-4">Expedition Ready</span>
+              <span className="text-gold-300 text-3xl sm:text-4xl lg:text-5xl block mt-4">Built Without Compromise</span>
             </h1>
 
             {/* Description */}
@@ -57,7 +57,7 @@ export default function HeroSection() {
                 href="/shop/product/jerry-can-spirits-expedition-spiced-rum/"
                 className="bg-gradient-to-r from-gold-600 to-gold-500 hover:from-gold-500 hover:to-gold-400 text-jerry-green-900 px-8 py-4 rounded-lg font-semibold uppercase tracking-wide transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 flex items-center justify-center"
               >
-                Pre-order Now
+                Reserve Your Bottle
               </Link>
 
               <Link
@@ -74,14 +74,14 @@ export default function HeroSection() {
                 href="/shop/product/jerry-can-spirits-expedition-spiced-rum/"
                 className="w-full bg-gradient-to-r from-gold-600 to-gold-500 hover:from-gold-500 hover:to-gold-400 text-jerry-green-900 px-8 py-4 rounded-lg font-semibold uppercase tracking-wide transition-all duration-300 shadow-lg hover:shadow-xl flex items-center justify-center"
               >
-                Pre-order Now
+                Reserve Your Bottle
               </Link>
             </div>
 
             {/* Trust Indicators - Text Only */}
             <div className="pt-8 border-t border-jerry-green-700">
               <p className="text-gold-300 text-sm font-medium text-center lg:text-left">
-                Premium Quality • Secure Shipping • Made in the UK • Veteran Owned
+                Real Ingredients. No Artificial Flavouring. Veteran Owned. Distilled in Wales.
               </p>
             </div>
           </div>
@@ -93,7 +93,7 @@ export default function HeroSection() {
               <div className="aspect-[4/5] flex items-center justify-center p-8">
                 <Image
                   src="/images/hero/hero-spiced.webp"
-                  alt="Jerry Can Spirits® Premium British Dark Rum Reserve - Expedition Ready Bottle"
+                  alt="Jerry Can Spirits Expedition Spiced Rum, 700ml, premium British spiced rum"
                   width={400}
                   height={500}
                   className="w-full h-full object-contain"
@@ -104,7 +104,7 @@ export default function HeroSection() {
 
               {/* Floating Badges */}
               <div className="absolute top-6 left-6 bg-gradient-to-r from-gold-600 to-gold-500 text-jerry-green-900 px-4 py-2 rounded-full text-sm font-semibold uppercase tracking-wide shadow-lg">
-                Pre-order Now
+                Numbered. Limited to 700.
               </div>
 
               <div className="absolute bottom-6 right-6 bg-jerry-green-700/80 backdrop-blur-sm text-gold-300 px-4 py-2 rounded-full text-sm font-semibold uppercase tracking-wide border border-gold-500/30 shadow-lg">
