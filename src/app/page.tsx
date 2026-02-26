@@ -23,15 +23,15 @@ const TrustpilotWidget = dynamic(() => import('@/components/TrustpilotWidget'), 
 
 export const metadata: Metadata = {
   title: {
-    absolute: "Jerry Can Spirits | Veteran-Owned Premium British Rum",
+    absolute: "Jerry Can Spirits | British Spiced Rum",
   },
-  description: "Veteran-owned premium spiced rum by Royal Signals veterans. Small-batch craft spirits with Madagascan vanilla and Ceylon cinnamon.",
+  description: "Two Royal Signals veterans, one spiced rum. Real botanicals, pot-distilled in Wales. No artificial flavouring. No shortcuts. Pre-order now for April 2026.",
   alternates: {
     canonical: "https://jerrycanspirits.co.uk/",
   },
   openGraph: {
-    title: "Jerry Can Spirits | Veteran-Owned Premium British Rum",
-    description: "Veteran-owned premium spiced rum by Royal Signals veterans. Small-batch craft spirits with Madagascan vanilla and Ceylon cinnamon.",
+    title: "Jerry Can Spirits | British Spiced Rum",
+    description: "Two Royal Signals veterans, one spiced rum. Real botanicals, pot-distilled in Wales. No artificial flavouring. No shortcuts. Pre-order now for April 2026.",
   },
 }
 
