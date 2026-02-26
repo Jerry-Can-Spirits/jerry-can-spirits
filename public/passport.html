@@ -1,0 +1,387 @@
+<div id="jcs-acc">
+  <style>
+    #jcs-acc *{box-sizing:border-box}
+    #jcs-acc{font-family:sans-serif;background:#1a2e1a;border-radius:10px;color:#f5e6c8;width:100%;overflow:hidden}
+    .acc-top{display:flex;align-items:center;gap:12px;padding:14px 16px;background:#0f1f0f;border-bottom:1px solid #b8960c20}
+    .acc-bottle{width:80px;height:160px;background:#243324;border:1px dashed #b8960c30;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+    .acc-bottle-ph{font-size:9px;color:#8a9a8a;text-align:center;line-height:1.4}
+    .acc-prod{flex:1;min-width:0}
+    .acc-prod-name{font-size:16px;font-weight:700;color:#fff;line-height:1.3;margin-bottom:4px}
+    .acc-prod-sub{font-size:11px;color:#8a9a8a;line-height:1.6}
+    .acc-prod-batch{display:inline-block;background:#b8960c20;border:1px solid #b8960c40;border-radius:20px;padding:2px 8px;font-size:9px;text-transform:uppercase;letter-spacing:1.5px;color:#b8960c;font-weight:700;margin-top:6px}
+    .acc-hdr{background:#0f1f0f;padding:10px 16px;font-size:9px;text-transform:uppercase;letter-spacing:2px;color:#b8960c;font-weight:700;border-bottom:1px solid #b8960c20;border-top:1px solid #b8960c10}
+    #jcs-acc details{border-bottom:1px solid #b8960c20}
+    #jcs-acc details:last-of-type{border-bottom:none}
+    #jcs-acc summary{display:flex;justify-content:space-between;align-items:center;padding:13px 16px;cursor:pointer;list-style:none;outline:none}
+    #jcs-acc summary::-webkit-details-marker{display:none}
+    #jcs-acc summary::after{content:'+';color:#b8960c;font-size:20px;font-weight:300;line-height:1;flex-shrink:0}
+    #jcs-acc details[open]>summary::after{content:'−'}
+    .s-title{font-size:11px;font-weight:700;color:#f5e6c8;text-transform:uppercase;letter-spacing:1px}
+    .d-body{padding:0 16px 14px}
+    .d-row{display:flex;gap:8px;padding:6px 0;border-bottom:1px solid #b8960c10;align-items:flex-start}
+    .d-row:last-child{border-bottom:none}
+    .d-lbl{font-size:9px;text-transform:uppercase;letter-spacing:1px;color:#b8960c;width:72px;flex-shrink:0;padding-top:2px}
+    .d-val{font-size:11px;color:#f5e6c8;line-height:1.4;flex:1;min-width:0}
+    .d-tags{display:flex;flex-wrap:wrap;gap:3px}
+    .d-tag{background:#243324;border:1px solid #b8960c40;border-radius:12px;padding:2px 6px;font-size:9px;color:#c8b898}
+    .d-nut{width:100%;border-collapse:collapse;margin-top:2px}
+    .d-nut tr th{font-size:8px;text-transform:uppercase;letter-spacing:1px;color:#b8960c;padding:3px 0;border-bottom:1px solid #b8960c30;text-align:left}
+    .d-nut tr th:last-child,.d-nut tr td:last-child{text-align:right}
+    .d-nut tr td{padding:3px 0;color:#f5e6c8;border-bottom:1px solid #b8960c10;font-size:10px}
+    .d-nut .sub td:first-child{padding-left:8px;color:#8a9a8a;font-size:9px}
+    .d-note{font-size:8px;color:#8a9a8a;margin-top:4px}
+    .d-sc{display:flex;flex-direction:column}
+    .d-sc-row{display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #b8960c10;font-size:10px}
+    .d-sc-row:last-child{border-bottom:none}
+    .d-sc-name{color:#f5e6c8;font-weight:600}
+    .d-sc-role{color:#8a9a8a}
+    .d-carbon{background:#243324;border:1px solid #b8960c20;border-radius:6px;padding:8px;font-size:10px;color:#c8b898;line-height:1.5}
+    .d-link{color:#b8960c;text-decoration:underline;font-size:10px}
+    .d-units{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:12px}
+    .d-unit{background:#243324;border-radius:6px;padding:8px;text-align:center}
+    .d-unit-v{font-size:15px;font-weight:700;color:#b8960c}
+    .d-unit-k{font-size:9px;color:#8a9a8a;margin-top:2px;line-height:1.3}
+    .d-cmo{background:#b8960c12;border:1px solid #b8960c25;border-radius:6px;padding:10px;margin-bottom:10px}
+    .d-cmo-title{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#b8960c;margin-bottom:4px}
+    .d-cmo-body{font-size:10px;color:#f5e6c8;line-height:1.6}
+    .d-warn-row{display:flex;gap:8px;padding:6px 0;border-bottom:1px solid #b8960c10;align-items:flex-start}
+    .d-warn-row:last-child{border-bottom:none}
+    .d-warn-icon{color:#b8960c;flex-shrink:0;font-size:11px;padding-top:1px}
+    .d-warn-text{font-size:10px;color:#c8b898;line-height:1.4;flex:1}
+    .d-about-logo{display:block;height:48px;width:auto;margin:0 auto 12px}
+    .d-about-text{font-size:11px;color:#c8b898;line-height:1.6;text-align:center;margin-bottom:10px}
+    .d-about-link{display:inline-block;font-size:11px;color:#b8960c;text-decoration:underline}
+    .d-resp{text-align:center;padding-top:4px}
+    .d-resp-title{font-size:12px;font-weight:700;color:#f5e6c8;margin-bottom:6px}
+    .d-resp-msg{font-size:10px;color:#8a9a8a;line-height:1.8;margin-bottom:12px}
+    .d-da-wrap{background:#fff;border-radius:8px;padding:8px 16px;display:inline-block;margin-bottom:14px}
+    .d-help{display:flex;flex-direction:column;margin-top:8px}
+    .d-help-row{display:flex;justify-content:space-between;font-size:10px;padding:6px 0;border-bottom:1px solid #b8960c10;align-items:center}
+    .d-help-row:last-child{border-bottom:none}
+    .d-help-name{color:#f5e6c8;font-weight:600}
+    .d-help-val{color:#b8960c;text-decoration:none}
+
+    /* BVO badge */
+    .d-bvo{display:flex;align-items:center;gap:10px;background:#243324;border:1px solid #b8960c20;border-radius:6px;padding:10px;margin-top:14px;text-align:left}
+    .d-bvo img{height:40px;width:auto;flex-shrink:0}
+    .d-bvo-text{font-size:10px;color:#c8b898;line-height:1.5}
+
+    /* Video */
+    .d-video-wrap{position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:6px;background:#0f1f0f;margin-bottom:10px}
+    .d-video-wrap iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:none;border-radius:6px}
+    .d-video-note{font-size:10px;color:#8a9a8a;text-align:center;line-height:1.5}
+
+    /* Ways to Drink It */
+    .d-serve-img{width:100%;border-radius:6px;display:block;margin-bottom:10px}
+    .d-serve-desc{font-size:11px;color:#c8b898;line-height:1.6;text-align:center}
+
+    /* Recipes — nested accordions */
+    .d-recipes{display:flex;flex-direction:column;gap:8px}
+    .d-recipe{background:#243324;border:1px solid #b8960c20;border-radius:6px;overflow:hidden;border-bottom:none!important}
+    #jcs-acc .d-recipe summary{padding:10px 12px;cursor:pointer;list-style:none;outline:none;display:flex;justify-content:space-between;align-items:center;gap:8px}
+    #jcs-acc .d-recipe summary::-webkit-details-marker{display:none}
+    #jcs-acc .d-recipe summary::after{content:'+';color:#b8960c;font-size:16px;font-weight:300;line-height:1;flex-shrink:0}
+    #jcs-acc .d-recipe[open]>summary::after{content:'−'}
+    .d-recipe-hd{display:flex;flex-direction:column;min-width:0}
+    .d-recipe-name{font-size:11px;font-weight:700;color:#f5e6c8;line-height:1.3}
+    .d-recipe-sub{font-size:9px;color:#8a9a8a;margin-top:2px}
+    .d-recipe-body{padding:0 12px 12px}
+    .d-recipe-sec{font-size:8px;text-transform:uppercase;letter-spacing:1px;color:#b8960c;font-weight:700;margin:8px 0 4px}
+    .d-recipe-ing{display:flex;gap:8px;padding:3px 0;border-bottom:1px solid #b8960c10;font-size:10px;color:#c8b898}
+    .d-recipe-ing:last-child{border-bottom:none}
+    .d-recipe-qty{color:#b8960c;font-weight:700;min-width:56px;flex-shrink:0}
+    .d-recipe-steps{list-style:none;padding:0;margin:0}
+    .d-recipe-steps li{display:flex;gap:8px;font-size:10px;color:#c8b898;padding:4px 0;border-bottom:1px solid #b8960c10;line-height:1.4}
+    .d-recipe-steps li:last-child{border-bottom:none}
+    .d-recipe-step-n{color:#b8960c;font-weight:700;flex-shrink:0;min-width:16px}
+
+    /* Share Your Serve */
+    .d-share-intro{font-size:11px;color:#c8b898;line-height:1.6;margin-bottom:14px}
+    .d-share-btns{display:flex;flex-direction:column;gap:8px}
+    .d-share-btn{display:flex;align-items:center;justify-content:center;gap:8px;padding:12px 16px;border-radius:6px;font-size:12px;font-weight:700;text-decoration:none;letter-spacing:0.3px}
+    .d-share-wa{background:#25D366;color:#fff}
+    .d-share-ig{background:linear-gradient(135deg,#833ab4 0%,#fd1d1d 50%,#fcb045 100%);color:#fff}
+    .d-share-tag{font-size:9px;color:#8a9a8a;text-align:center;margin-top:10px}
+
+    /* Order Another Bottle */
+    .d-order-body{padding:16px}
+    .d-order-intro{font-size:11px;color:#c8b898;line-height:1.6;margin-bottom:14px;text-align:center}
+    .d-order-btn{display:block;background:#b8960c;color:#0f1f0f;font-size:13px;font-weight:700;text-decoration:none;padding:13px 24px;border-radius:6px;letter-spacing:0.5px;text-align:center;margin-bottom:8px}
+    .d-order-sub{font-size:9px;color:#8a9a8a;text-align:center}
+  </style>
+
+  <!-- BOTTLE + PRODUCT NAME STRIP -->
+  <div class="acc-top">
+    <div class="acc-bottle">
+      <span class="acc-bottle-ph">Bottle<br>image<br>here</span>
+    </div>
+    <div class="acc-prod">
+      <div class="acc-prod-name">Expedition Spiced Rum</div>
+      <div class="acc-prod-sub">
+        40% Vol · 700ml<br>
+        Distilled in Wales<br>
+        Bottled March 09 2026
+      </div>
+      <div class="acc-prod-batch">Batch 001</div>
+    </div>
+  </div>
+
+  <!-- ABOUT US -->
+  <details open>
+    <summary><span class="s-title">About Us</span></summary>
+    <div class="d-body" style="text-align:center;padding-top:12px">
+      <img src="https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/images-logo-webp/public" alt="Jerry Can Spirits" class="d-about-logo">
+      <p class="d-about-text">Jerry Can Spirits is a small veteran-owned British spirits company. Founded by two Royal Signals veterans with 17+ years combined service. One product. Properly made. No shortcuts.</p>
+      <a href="https://jerrycanspirits.co.uk/" class="d-about-link" target="_blank">jerrycanspirits.co.uk →</a>
+      <div class="d-bvo">
+        <img src="https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/images-british-veteran-owned-logo-standard-png/public" alt="British Veteran Owned">
+        <span class="d-bvo-text">Proud members of British Veteran Owned — a community of businesses founded by veterans across the UK.</span>
+      </div>
+    </div>
+  </details>
+
+  <!-- FROM THE FOUNDERS -->
+  <details>
+    <summary><span class="s-title">From the Founders</span></summary>
+    <div class="d-body" style="padding-top:12px">
+      <div class="d-video-wrap">
+        <iframe
+          src="https://customer-7866xc5tdtzv0y40.cloudflarestream.com/48d297e7baaa4210f294bfe25fea6398/iframe"
+          allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture"
+          allowfullscreen>
+        </iframe>
+      </div>
+      <p class="d-video-note">A personal thank you from Dan &amp; Rhys. You bought the first batch — that means everything to us.</p>
+    </div>
+  </details>
+
+  <!-- PRODUCT PASSPORT HEADER -->
+  <div class="acc-hdr">Product Passport</div>
+
+  <!-- INGREDIENTS -->
+  <details>
+    <summary><span class="s-title">Ingredients</span></summary>
+    <div class="d-body">
+      <div class="d-row"><div class="d-lbl">Base</div><div class="d-val">Caribbean rum + Welsh brewery molasses</div></div>
+      <div class="d-row"><div class="d-lbl">Botanicals</div><div class="d-val"><div class="d-tags"><span class="d-tag">Madagascan vanilla</span><span class="d-tag">Ceylon cinnamon</span><span class="d-tag">Cassia</span><span class="d-tag">Ginger</span><span class="d-tag">Clove</span><span class="d-tag">Allspice</span><span class="d-tag">Orange peel</span></div></div></div>
+      <div class="d-row"><div class="d-lbl">Sweeteners</div><div class="d-val"><div class="d-tags"><span class="d-tag">Agave syrup</span><span class="d-tag">Glucose syrup</span></div></div></div>
+      <div class="d-row"><div class="d-lbl">Oak</div><div class="d-val">Bourbon barrel chips</div></div>
+      <div class="d-row"><div class="d-lbl">Additives</div><div class="d-val">No artificial flavouring</div></div>
+    </div>
+  </details>
+
+  <!-- NUTRITION FACTS -->
+  <details>
+    <summary><span class="s-title">Nutrition Facts</span></summary>
+    <div class="d-body">
+      <table class="d-nut">
+        <tr><th></th><th>Per 25ml</th><th>Per 100ml</th></tr>
+        <tr><td>Energy</td><td>66 kcal / 275 kJ</td><td>263 kcal / 1100 kJ</td></tr>
+        <tr><td>Fat</td><td>0g</td><td>0g</td></tr>
+        <tr class="sub"><td>of which saturates</td><td>0g</td><td>0g</td></tr>
+        <tr><td>Carbohydrate</td><td>2.6g</td><td>10.3g</td></tr>
+        <tr class="sub"><td>of which sugars</td><td>2.6g</td><td>10.3g</td></tr>
+        <tr><td>Protein</td><td>0g</td><td>0g</td></tr>
+        <tr><td>Salt</td><td>&lt;0.01g</td><td>&lt;0.01g</td></tr>
+      </table>
+      <div class="d-note">Values per label. Lab analysis in progress for full batch verification.</div>
+    </div>
+  </details>
+
+  <!-- HOW WE MAKE IT -->
+  <details>
+    <summary><span class="s-title">How We Make It</span></summary>
+    <div class="d-body">
+      <div class="d-row"><div class="d-lbl">Distillery</div><div class="d-val">Spirit of Wales, Newport, South Wales</div></div>
+      <div class="d-row"><div class="d-lbl">Method</div><div class="d-val">Pot distilled. Extended copper contact.</div></div>
+      <div class="d-row"><div class="d-lbl">Batch Size</div><div class="d-val">700 bottles per batch</div></div>
+      <div class="d-row"><div class="d-lbl">Spec</div><div class="d-val">40% ABV / 700ml</div></div>
+      <div class="d-row"><div class="d-lbl">Founders</div><div class="d-val">Dan Freeman &amp; Rhys Williams — Royal Signals veterans, 12+ years combined service</div></div>
+    </div>
+  </details>
+
+  <!-- OUR PARTNERS -->
+  <details>
+    <summary><span class="s-title">Our Partners</span></summary>
+    <div class="d-body">
+      <div class="d-sc">
+        <div class="d-sc-row"><span class="d-sc-name">Spirit of Wales Distillery</span><span class="d-sc-role">Distillation · Newport, South Wales</span></div>
+        <div class="d-sc-row"><span class="d-sc-name">Croxsons</span><span class="d-sc-role">Glass bottles</span></div>
+        <div class="d-sc-row"><span class="d-sc-name">Label Apeel</span><span class="d-sc-role">Labels</span></div>
+      </div>
+    </div>
+  </details>
+
+  <!-- OUR COMMITMENTS -->
+  <details>
+    <summary><span class="s-title">Our Commitments</span></summary>
+    <div class="d-body">
+      <div class="d-row"><div class="d-lbl">Molasses</div><div class="d-val">Welsh brewery by-product — waste diverted from landfill</div></div>
+      <div class="d-row"><div class="d-lbl">Water</div><div class="d-val">Welsh throughout</div></div>
+      <div class="d-row"><div class="d-lbl">Packaging</div><div class="d-val">Glass. Fully recyclable. <a href="https://jerrycanspirits.co.uk/sustainability/" class="d-link">Full recycling guide →</a></div></div>
+      <div class="d-row"><div class="d-lbl">Veterans</div><div class="d-val">AFC signatory. Portion of every sale to forces charities. Guaranteed interviews for veterans.</div></div>
+      <div class="d-row"><div class="d-lbl">Carbon</div><div class="d-val">
+        <div class="d-carbon">We're a new company and we're working through this properly. We're mapping our Scope 1, 2 and 3 emissions across distillation, packaging and logistics. We'll publish the real figure per bottle once the analysis is complete — no estimates, no greenwashing.</div>
+      </div></div>
+    </div>
+  </details>
+
+  <!-- ALCOHOL & YOUR HEALTH -->
+  <details>
+    <summary><span class="s-title">Alcohol &amp; Your Health</span></summary>
+    <div class="d-body">
+      <div class="d-units">
+        <div class="d-unit"><div class="d-unit-v">1</div><div class="d-unit-k">unit per 25ml</div></div>
+        <div class="d-unit"><div class="d-unit-v">2</div><div class="d-unit-k">units per 50ml</div></div>
+        <div class="d-unit"><div class="d-unit-v">28</div><div class="d-unit-k">units per bottle</div></div>
+      </div>
+      <div class="d-cmo">
+        <div class="d-cmo-title">Chief Medical Officers' Guideline</div>
+        <div class="d-cmo-body">No more than 14 units per week. Spread your drinking over 3 or more days. If you regularly drink as much as 14 units a week, it's best to spread this evenly rather than drinking it all in one or two sessions.</div>
+      </div>
+      <div class="d-warn-row"><div class="d-warn-icon">▲</div><div class="d-warn-text"><strong style="color:#f5e6c8">Pregnancy:</strong> No safe level of alcohol during pregnancy. Avoid alcohol if pregnant or trying to conceive.</div></div>
+      <div class="d-warn-row"><div class="d-warn-icon">▲</div><div class="d-warn-text"><strong style="color:#f5e6c8">Driving:</strong> Never drink and drive. Alcohol affects judgement and reaction time even in small amounts.</div></div>
+      <div class="d-warn-row"><div class="d-warn-icon">▲</div><div class="d-warn-text"><strong style="color:#f5e6c8">Medication:</strong> Alcohol can interact with medicines. Check with your GP or pharmacist if unsure.</div></div>
+      <a href="https://www.drinkaware.co.uk" class="d-link" target="_blank" style="display:inline-block;margin-top:8px">More information at drinkaware.co.uk →</a>
+    </div>
+  </details>
+
+  <!-- DRINK RESPONSIBLY -->
+  <details>
+    <summary><span class="s-title">Drink Responsibly</span></summary>
+    <div class="d-body">
+      <div class="d-resp">
+        <div class="d-resp-title">Drink Responsibly</div>
+        <div class="d-resp-msg">
+          Must be 18+ to purchase alcohol<br>
+          Please drink responsibly<br>
+          Avoid alcohol if pregnant
+        </div>
+        <div class="d-da-wrap">
+          <img src="https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/5b2f3381-b097-44fc-0277-d0088f1c3d00/public" alt="Be Drinkaware" style="height:36px;width:auto;display:block">
+        </div>
+        <div class="d-help">
+          <div class="d-help-row"><span class="d-help-name">Drinkaware</span><a href="https://www.drinkaware.co.uk" class="d-help-val" target="_blank">drinkaware.co.uk</a></div>
+          <div class="d-help-row"><span class="d-help-name">Drinkline</span><a href="tel:03001231110" class="d-help-val">0300 123 1110</a></div>
+          <div class="d-help-row"><span class="d-help-name">Alcoholics Anonymous</span><a href="tel:08009177650" class="d-help-val">0800 917 7650</a></div>
+          <div class="d-help-row"><span class="d-help-name">NHS Alcohol Advice</span><a href="https://www.nhs.uk/live-well/alcohol-advice/" class="d-help-val" target="_blank">nhs.uk</a></div>
+        </div>
+      </div>
+    </div>
+  </details>
+
+  <!-- WAYS TO DRINK IT -->
+  <details>
+    <summary><span class="s-title">Ways to Drink It</span></summary>
+    <div class="d-body" style="padding-top:12px">
+      <img src="https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/57501adb-ccf8-450c-d042-40680a4d5400/public" alt="Ways to enjoy Expedition Spiced Rum" class="d-serve-img">
+      <p class="d-serve-desc">Neat. On the rocks. In a cocktail. Expedition Spiced Rum is built to hold up in all of them. No wrong answers.</p>
+    </div>
+  </details>
+
+  <!-- EASY RECIPES -->
+  <details>
+    <summary><span class="s-title">Easy Recipes</span></summary>
+    <div class="d-body" style="padding-top:12px">
+      <div class="d-recipes">
+
+        <!-- Storm & Spice -->
+        <details class="d-recipe">
+          <summary>
+            <div class="d-recipe-hd">
+              <div class="d-recipe-name">Storm &amp; Spice</div>
+              <div class="d-recipe-sub">Our take on a Dark &amp; Stormy · 2 mins</div>
+            </div>
+          </summary>
+          <div class="d-recipe-body">
+            <div class="d-recipe-sec">Ingredients</div>
+            <div class="d-recipe-ing"><span class="d-recipe-qty">50ml</span><span>Expedition Spiced Rum</span></div>
+            <div class="d-recipe-ing"><span class="d-recipe-qty">150ml</span><span>Premium ginger beer</span></div>
+            <div class="d-recipe-ing"><span class="d-recipe-qty">½</span><span>Lime, squeezed</span></div>
+            <div class="d-recipe-ing"><span class="d-recipe-qty">To serve</span><span>Ice, lime wedge</span></div>
+            <div class="d-recipe-sec">Method</div>
+            <ol class="d-recipe-steps">
+              <li><span class="d-recipe-step-n">1.</span>Fill a highball glass to the top with ice.</li>
+              <li><span class="d-recipe-step-n">2.</span>Pour in the ginger beer and squeeze over the lime.</li>
+              <li><span class="d-recipe-step-n">3.</span>Float the rum on top — pour slowly over the back of a spoon to keep it sitting proud.</li>
+              <li><span class="d-recipe-step-n">4.</span>Garnish with a lime wedge and serve without stirring.</li>
+            </ol>
+          </div>
+        </details>
+
+        <!-- Jerry Can Julep -->
+        <details class="d-recipe">
+          <summary>
+            <div class="d-recipe-hd">
+              <div class="d-recipe-name">Jerry Can Julep</div>
+              <div class="d-recipe-sub">Our take on a Mint Julep · 4 mins</div>
+            </div>
+          </summary>
+          <div class="d-recipe-body">
+            <div class="d-recipe-sec">Ingredients</div>
+            <div class="d-recipe-ing"><span class="d-recipe-qty">50ml</span><span>Expedition Spiced Rum</span></div>
+            <div class="d-recipe-ing"><span class="d-recipe-qty">15ml</span><span>Sugar syrup</span></div>
+            <div class="d-recipe-ing"><span class="d-recipe-qty">10–12</span><span>Fresh mint leaves</span></div>
+            <div class="d-recipe-ing"><span class="d-recipe-qty">To serve</span><span>Crushed ice, mint sprig</span></div>
+            <div class="d-recipe-sec">Method</div>
+            <ol class="d-recipe-steps">
+              <li><span class="d-recipe-step-n">1.</span>Lightly muddle the mint with sugar syrup — bruise it, don't shred it.</li>
+              <li><span class="d-recipe-step-n">2.</span>Pack a julep cup or highball tightly with crushed ice.</li>
+              <li><span class="d-recipe-step-n">3.</span>Pour the rum over the ice.</li>
+              <li><span class="d-recipe-step-n">4.</span>Stir until the outside of the glass frosts.</li>
+              <li><span class="d-recipe-step-n">5.</span>Top with more crushed ice and garnish with a mint sprig.</li>
+            </ol>
+          </div>
+        </details>
+
+        <!-- Spiced Rum Old Fashioned -->
+        <details class="d-recipe">
+          <summary>
+            <div class="d-recipe-hd">
+              <div class="d-recipe-name">Spiced Rum Old Fashioned</div>
+              <div class="d-recipe-sub">A proper stirred-down serve · 5 mins</div>
+            </div>
+          </summary>
+          <div class="d-recipe-body">
+            <div class="d-recipe-sec">Ingredients</div>
+            <div class="d-recipe-ing"><span class="d-recipe-qty">50ml</span><span>Expedition Spiced Rum</span></div>
+            <div class="d-recipe-ing"><span class="d-recipe-qty">1 tsp</span><span>Demerara sugar or sugar syrup</span></div>
+            <div class="d-recipe-ing"><span class="d-recipe-qty">2 dashes</span><span>Angostura bitters</span></div>
+            <div class="d-recipe-ing"><span class="d-recipe-qty">To serve</span><span>Large ice cube, orange peel</span></div>
+            <div class="d-recipe-sec">Method</div>
+            <ol class="d-recipe-steps">
+              <li><span class="d-recipe-step-n">1.</span>Add the sugar and bitters to a rocks glass.</li>
+              <li><span class="d-recipe-step-n">2.</span>Add a splash of water and stir until the sugar dissolves.</li>
+              <li><span class="d-recipe-step-n">3.</span>Place a large ice cube in the glass and pour in the rum.</li>
+              <li><span class="d-recipe-step-n">4.</span>Stir for 30 seconds until properly chilled.</li>
+              <li><span class="d-recipe-step-n">5.</span>Express the orange peel over the glass, rub it around the rim and drop it in.</li>
+            </ol>
+          </div>
+        </details>
+
+      </div>
+    </div>
+  </details>
+
+  <!-- SHARE YOUR SERVE -->
+  <details>
+    <summary><span class="s-title">Share Your Serve</span></summary>
+    <div class="d-body" style="padding-top:12px">
+      <p class="d-share-intro">Made something great? Tag us. The best serves get shared — and we're watching.</p>
+      <div class="d-share-btns">
+        <a href="https://www.instagram.com/jerrycanspirits/" class="d-share-btn d-share-ig" target="_blank">Find us on Instagram</a>
+        <a href="https://wa.me/?text=Just+opened+my+first+bottle+of+Expedition+Spiced+Rum.+Veteran-made%2C+distilled+in+Wales.+Worth+every+penny+%E2%86%92+jerrycanspirits.co.uk" class="d-share-btn d-share-wa" target="_blank">Share on WhatsApp</a>
+      </div>
+      <p class="d-share-tag">Tag <strong style="color:#b8960c">@jerrycanspirits</strong> · use <strong style="color:#b8960c">#JerryCanSpirits</strong></p>
+    </div>
+  </details>
+
+  <!-- ORDER ANOTHER BOTTLE -->
+  <div class="acc-hdr">Ready for Another?</div>
+  <div class="d-order-body">
+    <p class="d-order-intro">700 bottles per batch. When they're gone, they're gone. If you've enjoyed it — don't wait.</p>
+    <a href="https://jerrycanspirits.co.uk/shop/drinks/" class="d-order-btn" target="_blank">Order Expedition Spiced Rum →</a>
+    <p class="d-order-sub">Ships from Wales · Secure checkout</p>
+  </div>
+
+</div>

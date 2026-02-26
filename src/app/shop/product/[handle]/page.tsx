@@ -111,7 +111,7 @@ export async function generateMetadata({
       }
     }
 
-    const description = product.description.slice(0, 155) || `${product.title} by Jerry Can Spirits. Veteran-owned British spiced rum made with real botanicals, no artificial flavouring. Pot stilled at Spirit of Wales Distillery, Newport.`
+    const description = product.description.slice(0, 155) || `Madagascan vanilla, Ceylon cinnamon, ginger, cassia, clove, orange peel, agave, bourbon oak. Pot-distilled in Wales. 40% ABV. 700 bottles per batch.`
 
     return {
       title: `${product.title} | Jerry Can Spirits`,
