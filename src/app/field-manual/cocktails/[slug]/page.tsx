@@ -47,6 +47,8 @@ interface SanityCocktail {
   name: string
   slug: { current: string }
   description: string
+  metaTitle?: string
+  metaDescription?: string
   difficulty: 'novice' | 'wayfinder' | 'trailblazer'
   ingredients: CocktailIngredient[]
   instructions: string[]
@@ -94,22 +96,32 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     }
   }
 
+  const baseSpirit = cocktail.baseSpirit
+    ? cocktail.baseSpirit.replace(/-/g, ' ')
+    : 'cocktail'
+  const spiritLabel = baseSpirit === 'cocktail' ? 'cocktail' : `${baseSpirit} cocktail`
+  const variantNote = cocktail.variants?.length ? ` Includes ${cocktail.variants.length} variations.` : ''
+  const fallbackDescription = `${cocktail.description.slice(0, 110).trimEnd()}. A ${spiritLabel} recipe with step-by-step instructions from Jerry Can Spirits.${variantNote}`
+
+  const metaTitle = cocktail.metaTitle || `${cocktail.name} Recipe`
+  const metaDescription = cocktail.metaDescription || fallbackDescription
+
   return {
-    title: `${cocktail.name} Recipe`,
-    description: `${cocktail.description} Learn how to make this ${cocktail.difficulty} level rum cocktail with our step-by-step recipe. ${cocktail.variants ? `Includes ${cocktail.variants.length} variations.` : ''}`,
+    title: metaTitle,
+    description: metaDescription,
     alternates: {
       canonical: `https://jerrycanspirits.co.uk/field-manual/cocktails/${cocktail.slug.current}/`,
     },
     openGraph: {
-      title: `${cocktail.name} Recipe | Jerry Can Spirits®`,
-      description: cocktail.description,
+      title: `${metaTitle} | Jerry Can Spirits®`,
+      description: metaDescription,
       images: cocktail.image ? [cocktail.image] : [],
       type: 'article',
     },
     twitter: {
       card: 'summary_large_image',
-      title: `${cocktail.name} Recipe | Jerry Can Spirits®`,
-      description: cocktail.description,
+      title: `${metaTitle} | Jerry Can Spirits®`,
+      description: metaDescription,
       images: cocktail.image ? [cocktail.image] : [],
     },
   }

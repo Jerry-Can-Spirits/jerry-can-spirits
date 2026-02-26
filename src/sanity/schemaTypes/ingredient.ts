@@ -50,6 +50,21 @@ export default defineType({
       validation: Rule => Rule.required()
     }),
     defineField({
+      name: 'metaTitle',
+      title: 'Meta Title',
+      type: 'string',
+      description: 'SEO title tag (55–60 characters). Leave empty to use "[Name] Guide" automatically.',
+      validation: Rule => Rule.max(60)
+    }),
+    defineField({
+      name: 'metaDescription',
+      title: 'Meta Description',
+      type: 'text',
+      rows: 2,
+      description: 'SEO meta description (150–160 characters). Leave empty to auto-generate from description.',
+      validation: Rule => Rule.max(160)
+    }),
+    defineField({
       name: 'usage',
       title: 'Usage',
       type: 'text',

@@ -16,6 +16,8 @@ interface Ingredient {
   slug: { current: string }
   category: 'spirits' | 'liqueurs' | 'creme-liqueurs' | 'anise-herbal' | 'aromatics' | 'wine' | 'fortified' | 'bitters' | 'mixers' | 'fresh' | 'garnishes'
   description: string
+  metaTitle?: string
+  metaDescription?: string
   usage: string
   topTips: string[]
   recommendedBrands?: {
@@ -105,8 +107,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   }
 
   return {
-    title: `${ingredient.name} Guide`,
-    description: ingredient.description,
+    title: ingredient.metaTitle || `${ingredient.name} Guide`,
+    description: ingredient.metaDescription || ingredient.description.slice(0, 160),
     alternates: {
       canonical: `https://jerrycanspirits.co.uk/field-manual/ingredients/${slug}/`,
     },
