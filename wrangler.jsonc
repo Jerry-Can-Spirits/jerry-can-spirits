@@ -1,6 +1,6 @@
 {
 	"$schema": "node_modules/wrangler/config-schema.json",
-	"main": ".open-next/worker-cached.mjs",
+	"main": "./cloudflare-worker-entry.mjs",
 	"name": "jerry-can-spirits-prod",
 	"compatibility_date": "2025-05-05",
 	"compatibility_flags": [
