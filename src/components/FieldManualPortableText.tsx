@@ -1,5 +1,5 @@
 import { PortableText } from 'next-sanity'
-import type { PortableTextComponents } from 'next-sanity'
+import type { PortableTextBlock, PortableTextComponents } from 'next-sanity'
 
 const components: PortableTextComponents = {
   block: {
@@ -64,5 +64,5 @@ interface FieldManualPortableTextProps {
 }
 
 export default function FieldManualPortableText({ value }: FieldManualPortableTextProps) {
-  return <PortableText value={value} components={components} />
+  return <PortableText value={value as unknown as PortableTextBlock[]} components={components} />
 }
