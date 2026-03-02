@@ -70,6 +70,7 @@ interface SanityCocktail {
   videoUrl?: string
   relatedGuides?: RelatedGuide[]
   longDescription?: Record<string, unknown>[]
+  keywords?: string[]
 }
 
 interface PageProps {
@@ -178,6 +179,7 @@ export default async function CocktailPage({ params }: PageProps) {
     cocktail.baseSpirit?.replace(/-/g, ' '),
     ...(cocktail.tags?.map(t => t.replace(/-/g, ' ')) || []),
     'British rum',
+    ...(cocktail.keywords || []),
   ].filter(Boolean)
   const keywords = [...new Set(keywordParts)].join(', ')
 

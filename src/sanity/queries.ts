@@ -63,6 +63,7 @@ export const cocktailBySlugQuery = `*[_type == "cocktail" && slug.current == $sl
   description,
   metaTitle,
   metaDescription,
+  keywords,
   longDescription,
   difficulty,
   "glassware": glassware->{ _id, name, slug },
