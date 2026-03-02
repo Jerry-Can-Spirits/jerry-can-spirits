@@ -5,6 +5,7 @@ import { cocktailBySlugQuery } from '@/sanity/queries'
 import BackToTop from '@/components/BackToTop'
 import StructuredData from '@/components/StructuredData'
 import CocktailRecipeDisplay from '@/components/CocktailRecipeDisplay'
+import FieldManualPortableText from '@/components/FieldManualPortableText'
 import ShareButton from '@/components/ShareButton'
 import StarRating from '@/components/StarRating'
 import Breadcrumbs from '@/components/Breadcrumbs'
@@ -68,6 +69,7 @@ interface SanityCocktail {
   image?: string
   videoUrl?: string
   relatedGuides?: RelatedGuide[]
+  longDescription?: Record<string, unknown>[]
 }
 
 interface PageProps {
@@ -272,6 +274,13 @@ export default async function CocktailPage({ params }: PageProps) {
         <div className="max-w-4xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8">
           {/* Recipe Display Component (Client-side for interactivity) */}
           <CocktailRecipeDisplay cocktail={cocktail} />
+
+          {/* Long Description - Rich editorial content from Sanity */}
+          {cocktail.longDescription && cocktail.longDescription.length > 0 && (
+            <div className="mt-6 sm:mt-8 bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-4 sm:p-6 md:p-8 border border-gold-500/20">
+              <FieldManualPortableText value={cocktail.longDescription} />
+            </div>
+          )}
 
           {/* Related Technique Guides */}
           {cocktail.relatedGuides && cocktail.relatedGuides.length > 0 && (

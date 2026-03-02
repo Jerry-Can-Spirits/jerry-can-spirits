@@ -45,6 +45,7 @@ interface SanityCocktail {
   tags?: string[]
   featured?: boolean
   image?: string
+  longDescription?: Record<string, unknown>[]
 }
 
 // Tag display labels (convert values to readable format)
