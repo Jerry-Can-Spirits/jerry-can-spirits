@@ -174,7 +174,7 @@ export default async function CocktailPage({ params }: PageProps) {
   // Build keywords from actual data
   const keywordParts = [
     cocktail.name,
-    'rum cocktail',
+    cocktail.baseSpirit?.includes('rum') ? 'rum cocktail' : null,
     cocktail.family?.replace(/-/g, ' '),
     cocktail.baseSpirit?.replace(/-/g, ' '),
     ...(cocktail.keywords || []),
