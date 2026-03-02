@@ -325,7 +325,7 @@ export default async function CocktailPage({ params }: PageProps) {
           )}
 
           {/* Get the Rum CTA - only shown for Spiced Rum cocktails */}
-          {cocktail.baseSpirit === 'Spiced Rum' && <div className="mt-6 sm:mt-8 bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-4 sm:p-6 border border-gold-500/20">
+          {cocktail.baseSpirit === 'spiced-rum' && <div className="mt-6 sm:mt-8 bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-4 sm:p-6 border border-gold-500/20">
             <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
               <div>
                 <h3 className="text-xl font-serif font-bold text-white mb-1">Need the Rum?</h3>
