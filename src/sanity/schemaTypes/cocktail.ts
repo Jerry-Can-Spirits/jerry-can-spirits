@@ -29,6 +29,47 @@ export default defineType({
       validation: Rule => Rule.required()
     }),
     defineField({
+      name: 'longDescription',
+      title: 'Long Description',
+      type: 'array',
+      of: [{type: 'block'}],
+      description: 'Rich editorial body — supports headings, bold, lists and inline links'
+    }),
+    defineField({
+      name: 'metaTitle',
+      title: 'Meta Title',
+      type: 'string',
+      description: 'SEO title tag (55–60 characters). Leave empty to use "[Name] Recipe" automatically.',
+      validation: Rule => Rule.max(60)
+    }),
+    defineField({
+      name: 'metaDescription',
+      title: 'Meta Description',
+      type: 'text',
+      rows: 2,
+      description: 'SEO meta description (150–160 characters). Leave empty to auto-generate from description.',
+      validation: Rule => Rule.max(160)
+    }),
+    defineField({
+      name: 'keywords',
+      title: 'Keywords',
+      type: 'array',
+      of: [{type: 'string'}],
+      description: 'Synonyms and search terms for this cocktail (e.g., "rum sour", "citrus cocktail", "easy summer drink")'
+    }),
+    defineField({
+      name: 'servings',
+      title: 'Servings',
+      type: 'string',
+      description: 'Number of servings for Google Recipe structured data (e.g., "1 cocktail", "8–10 as punch")'
+    }),
+    defineField({
+      name: 'prepTime',
+      title: 'Prep Time',
+      type: 'string',
+      description: 'Prep time in ISO 8601 format for Google Recipe structured data (e.g., "PT5M" = 5 min, "PT10M" = 10 min)'
+    }),
+    defineField({
       name: 'difficulty',
       title: 'Difficulty Level',
       type: 'string',
@@ -115,6 +156,12 @@ export default defineType({
       title: 'Expert Tip',
       type: 'text',
       rows: 2
+    }),
+    defineField({
+      name: 'author',
+      title: 'Author',
+      type: 'string',
+      description: 'Who wrote or verified this content (e.g., "Dan Freeman", "Jerry Can Spirits Team")'
     }),
     defineField({
       name: 'variants',
@@ -297,6 +344,13 @@ export default defineType({
       description: 'The primary spirit in this cocktail'
     }),
     defineField({
+      name: 'featuredSpirit',
+      title: 'Featured Spirit',
+      type: 'reference',
+      to: [{type: 'ingredient'}],
+      description: 'Link to a specific ingredient guide for the featured spirit in this cocktail'
+    }),
+    defineField({
       name: 'tags',
       title: 'Tags',
       type: 'array',
@@ -336,6 +390,13 @@ export default defineType({
         layout: 'grid'
       },
       description: 'Select multiple tags to help categorise this cocktail'
+    }),
+    defineField({
+      name: 'flavorProfile',
+      title: 'Flavour Profile',
+      type: 'array',
+      of: [{type: 'string'}],
+      description: 'Key flavour notes for this cocktail (e.g., "citrus", "smoky", "sweet", "tropical", "herbal")'
     }),
     defineField({
       name: 'featured',
@@ -404,6 +465,18 @@ export default defineType({
           }
         }
       ]
+    }),
+    defineField({
+      name: 'relatedCocktails',
+      title: 'Related Cocktails',
+      type: 'array',
+      of: [
+        {
+          type: 'reference',
+          to: [{type: 'cocktail'}]
+        }
+      ],
+      description: 'Similar or complementary cocktails to show alongside this one'
     })
   ],
   preview: {

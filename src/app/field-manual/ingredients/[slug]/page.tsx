@@ -8,6 +8,7 @@ import { urlFor } from '@/sanity/lib/image'
 import BackToTop from '@/components/BackToTop'
 import Breadcrumbs from '@/components/Breadcrumbs'
 import EnlargeableProductImage from '@/components/EnlargeableProductImage'
+import FieldManualPortableText from '@/components/FieldManualPortableText'
 
 // Types for ingredient data
 interface Ingredient {
@@ -16,6 +17,8 @@ interface Ingredient {
   slug: { current: string }
   category: 'spirits' | 'liqueurs' | 'creme-liqueurs' | 'anise-herbal' | 'aromatics' | 'wine' | 'fortified' | 'bitters' | 'mixers' | 'fresh' | 'garnishes'
   description: string
+  metaTitle?: string
+  metaDescription?: string
   usage: string
   topTips: string[]
   recommendedBrands?: {
@@ -66,6 +69,7 @@ interface Ingredient {
     name: string
     slug: { current: string }
   }>
+  longDescription?: Record<string, unknown>[]
 }
 
 const categoryConfig: Record<string, string> = {
@@ -105,8 +109,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   }
 
   return {
-    title: `${ingredient.name} Guide`,
-    description: ingredient.description,
+    title: ingredient.metaTitle || `${ingredient.name} Guide`,
+    description: ingredient.metaDescription || ingredient.description.slice(0, 160),
     alternates: {
       canonical: `https://jerrycanspirits.co.uk/field-manual/ingredients/${slug}/`,
     },
@@ -427,6 +431,13 @@ export default async function IngredientDetailPage({ params }: { params: Promise
                 {ingredient.description}
               </p>
             </div>
+
+            {/* Long Description - Rich editorial content from Sanity */}
+            {ingredient.longDescription && ingredient.longDescription.length > 0 && (
+              <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+                <FieldManualPortableText value={ingredient.longDescription} />
+              </div>
+            )}
 
             {/* Professional Tip Callout */}
             {ingredient.professionalTip && (

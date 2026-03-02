@@ -1,16 +1,16 @@
 export default function WhyJerryCan() {
   const pillars = [
     {
-      title: 'Premium Quality',
-      description: 'We blend Caribbean rum with Welsh brewery molasses and run it through copper pot stills at Spirit of Wales Distillery. Vanilla and caramel upfront, warm spice through the middle, smooth enough to sip neat but bold enough for cocktails.'
+      title: 'Real Ingredients',
+      description: 'Madagascan vanilla, Ceylon cinnamon, ginger, orange peel, cloves, cassia, agave. Pot stilled with Welsh brewery molasses. No artificial flavouring. That is what goes in. Nothing else.'
     },
     {
       title: 'Veteran Heritage',
       description: 'Between us, we served 17 years in the Royal Corps of Signals. We know what reliability means. Every bottle reflects that standard. No corners cut, no compromises made.'
     },
     {
-      title: 'Expedition Ready',
-      description: 'Whether you\'re mixing drinks at home or sharing a bottle with mates after a long week, this rum won\'t let you down. We built it that way on purpose.'
+      title: 'Built to Deliver',
+      description: 'Whether you drink it neat or mix it, this rum holds up. We built it that way on purpose.'
     }
   ]
 
@@ -21,7 +21,7 @@ export default function WhyJerryCan() {
         <div className="text-center mb-16">
           <div className="inline-block px-4 py-2 bg-jerry-green-800/60 backdrop-blur-sm rounded-full border border-gold-500/30 mb-6">
             <span className="text-gold-300 text-sm font-semibold uppercase tracking-widest">
-              What Sets Us Apart
+              The Standard We Work To
             </span>
           </div>
 

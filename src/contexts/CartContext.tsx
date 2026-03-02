@@ -78,6 +78,22 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         currentCart = await createCart()
         localStorage.setItem('shopify_cart_id', currentCart.id)
         console.log('[CartContext] New cart created:', currentCart.id)
+
+        // Auto-apply referral code if present in localStorage
+        const referralCode = localStorage.getItem('jcs_referral_code')
+        if (referralCode) {
+          try {
+            // Apply as discount
+            currentCart = await shopifyApplyDiscount(currentCart.id, [referralCode])
+            // Set as cart attribute so webhook can detect it
+            currentCart = await shopifyUpdateCartAttributes(currentCart.id, [
+              { key: '_referral_code', value: referralCode },
+            ])
+            console.log('[CartContext] Referral code applied:', referralCode)
+          } catch (err) {
+            console.warn('[CartContext] Failed to apply referral code:', err)
+          }
+        }
       }
 
       // Add item to cart

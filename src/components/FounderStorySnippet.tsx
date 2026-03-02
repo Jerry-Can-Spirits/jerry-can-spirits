@@ -37,7 +37,7 @@ export default function FounderStorySnippet() {
                 href="/about/story/"
                 className="inline-flex items-center px-8 py-4 bg-gold-500/20 border border-gold-500/40 text-gold-300 rounded-lg hover:bg-gold-500/30 transition-all duration-300 font-semibold"
               >
-                Read the Full Story
+                How We Got Here
               </Link>
             </div>
           </div>

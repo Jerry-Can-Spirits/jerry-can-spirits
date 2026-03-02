@@ -7,6 +7,7 @@ import {
   type ShopifyOrder,
   type ShopifyProduct,
 } from '@/lib/shopify-webhooks';
+import { createDiscountCode } from '@/lib/shopify-admin';
 
 export const dynamic = 'force-dynamic';
 
@@ -82,6 +83,82 @@ async function handleProductUpdated(product: ShopifyProduct, kv: KVNamespace) {
   console.log(`[webhook] products/update "${product.handle}"`);
 }
 
+// ── Referral Conversion ─────────────────────────────────────────────
+
+interface ReferralRow {
+  id: number;
+  referrer_email: string;
+  referrer_code: string;
+}
+
+async function handleReferralConversion(
+  order: ShopifyOrder,
+  db: D1Database,
+  kv: KVNamespace,
+  adminToken: string,
+) {
+  // Check if order used a referral code (via cart attributes or discount codes)
+  const referralAttr = order.note_attributes?.find(
+    (attr) => attr.name === '_referral_code',
+  );
+  const referralCode = referralAttr?.value;
+
+  if (!referralCode) return;
+
+  // Look up the referral in D1
+  const referral = await db
+    .prepare('SELECT id, referrer_email, referrer_code FROM referrals WHERE referrer_code = ?')
+    .bind(referralCode)
+    .first<ReferralRow>();
+
+  if (!referral) {
+    console.warn(`[webhook] Referral code "${referralCode}" not found in D1`);
+    return;
+  }
+
+  // Create a reward discount code for the referrer (£5 off their next order)
+  const rewardCode = `JCS-REWARD-${referral.referrer_code.split('-').pop()}-${Date.now().toString(16).slice(-4).toUpperCase()}`;
+
+  try {
+    await createDiscountCode(rewardCode, adminToken);
+  } catch (error) {
+    console.error(`[webhook] Failed to create reward discount for referrer: ${error}`);
+    return;
+  }
+
+  // Record the conversion in D1
+  await db
+    .prepare(
+      `INSERT INTO referral_conversions (referral_id, referee_email, order_id, reward_discount_code, status)
+       VALUES (?, ?, ?, ?, 'completed')`,
+    )
+    .bind(referral.id, order.email || '', String(order.id), rewardCode)
+    .run();
+
+  // Increment the referral counters
+  await db
+    .prepare(
+      'UPDATE referrals SET total_referrals = total_referrals + 1, total_rewards_earned = total_rewards_earned + 1 WHERE id = ?',
+    )
+    .bind(referral.id)
+    .run();
+
+  // Store the reward code in KV so we can later notify the referrer
+  await kv.put(
+    `referral:reward:${referral.referrer_email}:${Date.now()}`,
+    JSON.stringify({
+      reward_code: rewardCode,
+      referee_order: order.order_number,
+      created_at: new Date().toISOString(),
+    }),
+    { expirationTtl: 60 * 60 * 24 * 90 }, // 90 days
+  );
+
+  console.log(
+    `[webhook] Referral conversion: order #${order.order_number} used code ${referralCode}, reward ${rewardCode} created for ${referral.referrer_email}`,
+  );
+}
+
 // ── Route ───────────────────────────────────────────────────────────
 
 export async function POST(request: Request) {
@@ -125,10 +202,15 @@ export async function POST(request: Request) {
 
     // Route to handler
     const adminToken = env.SHOPIFY_ADMIN_API_TOKEN as string | undefined;
+    const db = env.DB;
 
     switch (topic) {
       case SHOPIFY_WEBHOOK_TOPICS.ORDERS_CREATE:
         await handleOrderCreated(payload as ShopifyOrder, kv, adminToken);
+        // Check for referral conversion
+        if (adminToken) {
+          await handleReferralConversion(payload as ShopifyOrder, db, kv, adminToken);
+        }
         break;
       case SHOPIFY_WEBHOOK_TOPICS.ORDERS_FULFILLED:
         await handleOrderFulfilled(payload as ShopifyOrder, kv);

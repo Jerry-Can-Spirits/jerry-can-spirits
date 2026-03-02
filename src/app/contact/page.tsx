@@ -215,7 +215,7 @@ export default function Contact() {
               Stay Connected
             </h2>
             <p className="text-xl text-parchment-200 mb-8 max-w-2xl mx-auto leading-relaxed">
-              Join our expedition for exclusive updates and early access to new releases
+              Sign up for batch release updates and early access to new releases
             </p>
             <Link
               href="/#newsletter-signup"

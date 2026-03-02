@@ -7,6 +7,7 @@ import { equipmentBySlugQuery } from '@/sanity/queries'
 import { urlFor } from '@/sanity/lib/image'
 import BackToTop from '@/components/BackToTop'
 import Breadcrumbs from '@/components/Breadcrumbs'
+import FieldManualPortableText from '@/components/FieldManualPortableText'
 
 // Types for equipment data
 interface Equipment {
@@ -36,6 +37,9 @@ interface Equipment {
   lifespan?: string[] | string  // Support both old (string) and new (array) format
   budgetAlternative?: string
   premiumOption?: string
+  metaTitle?: string
+  metaDescription?: string
+  longDescription?: Record<string, unknown>[]
   history?: string
   professionalTip?: string
   videoUrl?: string
@@ -78,8 +82,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   }
 
   return {
-    title: `${equipment.name} Guide`,
-    description: equipment.description,
+    title: equipment.metaTitle || `${equipment.name} Guide`,
+    description: equipment.metaDescription || equipment.description,
     alternates: {
       canonical: `https://jerrycanspirits.co.uk/field-manual/equipment/${slug}/`,
     },
@@ -259,6 +263,13 @@ export default async function EquipmentDetailPage({ params }: { params: Promise<
                 {equipment.description}
               </p>
             </div>
+
+            {/* Long Description - Rich editorial content from Sanity */}
+            {equipment.longDescription && equipment.longDescription.length > 0 && (
+              <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+                <FieldManualPortableText value={equipment.longDescription} />
+              </div>
+            )}
 
             {/* Video Tutorial */}
             {videoId && (

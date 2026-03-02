@@ -34,10 +34,10 @@ export default function Careers() {
             </span>
           </div>
           <h1 className="text-4xl sm:text-5xl font-serif font-bold text-white mb-4">
-            Join Our Mission
+            Work With Us
           </h1>
           <p className="text-parchment-300 text-lg">
-            Building the future of premium British spirits
+            A small team making rum we're proud of
           </p>
         </div>
 
@@ -56,10 +56,10 @@ export default function Careers() {
                   Not Currently Hiring
                 </h2>
                 <p className="text-white text-lg leading-relaxed mb-6">
-                  We're not actively recruiting at this time as we focus on building our brand and establishing our presence in the premium spirits market.
+                  We're not actively recruiting at this time. We're a small outfit still finding our feet, and we want to get the rum right before we start growing the team.
                 </p>
                 <p className="text-parchment-300 leading-relaxed">
-                  However, we're always interested in hearing from passionate individuals who share our vision for creating exceptional British rum.
+                  However, if you think you could contribute something, we'd like to hear from you.
                 </p>
               </div>
             </section>

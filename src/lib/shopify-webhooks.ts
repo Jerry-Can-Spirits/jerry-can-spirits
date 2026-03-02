@@ -21,11 +21,21 @@ export interface ShopifyOrder {
   id: number;
   order_number: number;
   created_at: string;
+  email?: string;
   fulfillment_status: string | null;
   line_items: {
     title: string;
     quantity: number;
     product_id: number;
+  }[];
+  note_attributes?: {
+    name: string;
+    value: string;
+  }[];
+  discount_codes?: {
+    code: string;
+    amount: string;
+    type: string;
   }[];
   shipping_address?: {
     country_code: string;

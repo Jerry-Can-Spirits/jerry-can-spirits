@@ -5,7 +5,7 @@ import ScrollReveal from '@/components/ScrollReveal'
 
 export const metadata: Metadata = {
   title: "Frequently Asked Questions",
-  description: "Common questions about Jerry Can Spirits premium British rum, shipping, ingredients, cocktail recipes, and our adventure-ready spirits. Get answers about our expedition rum.",
+  description: "Common questions about Jerry Can Spirits premium British rum, shipping, ingredients, and cocktail recipes.",
   alternates: {
     canonical: "https://jerrycanspirits.co.uk/faq/",
   },
@@ -19,15 +19,15 @@ const faqs = [
   // Product Information
   {
     question: "What makes Jerry Can Spirits rum unique?",
-    answer: "Our rum combines British precision with Caribbean soul. We craft small-batch, expedition-ready spirits with a focus on adventure and quality. Each bottle is designed for those who venture beyond the ordinary."
+    answer: "We make one spiced rum. It's pot-distilled at Spirit of Wales in Newport, 700 bottles per batch, using real botanicals and no artificial flavouring. What makes it different is that we actually give a damn about what goes in it."
   },
   {
     question: "What type of rum do you produce?",
-    answer: "We specialise in premium spiced rum with expedition-ready character. Our rums are perfect for both classic cocktails and sipping neat."
+    answer: "We make one product: Expedition Spiced Rum. A spiced rum, 40% ABV, pot-distilled in Wales with real botanicals. Works neat, over ice, or in cocktails."
   },
   {
     question: "What is the alcohol content (ABV) of your rum?",
-    answer: "Our expedition-ready rum is crafted at 40% ABV - the perfect balance for versatility in cocktails and sipping neat."
+    answer: "Our Expedition Spiced Rum is 40% ABV. Enough strength to hold its character in cocktails, smooth enough to drink neat. That was the target, and we hit it."
   },
   {
     question: "Are your products suitable for vegans?",
@@ -69,14 +69,14 @@ const faqs = [
   // Cocktails & Recipes
   {
     question: "What cocktails work best with Jerry Can Spirits rum?",
-    answer: "Our rum is versatile and works beautifully in classic cocktails like Old Fashioned, Mai Tai, and Rum Punch. Check our Field Manual for exclusive expedition cocktail recipes.",
+    answer: "Our rum is versatile and works beautifully in classic cocktails like Old Fashioned, Mai Tai, and Rum Punch. Check our Field Manual for cocktail recipes.",
     hasRichAnswer: true,
   },
 
   // Reviews & Community
   {
     question: "How can I leave a review?",
-    answer: "We use Trustpilot for verified reviews. After your purchase, you'll receive an email invitation to review your experience. Your honest feedback helps fellow adventurers and helps us improve."
+    answer: "You can leave a review on Trustpilot, Google, or Yell. After your purchase, you'll receive a Trustpilot invitation by email. Your honest feedback helps other customers and helps us improve."
   },
 
   // Company & Brand
@@ -126,7 +126,7 @@ export default function FAQPage() {
               Got Questions?
             </h1>
             <p className="text-xl text-parchment-200 max-w-2xl mx-auto">
-              Everything you need to know about Jerry Can Spirits premium British rum and our expedition-ready approach to crafting spirits.
+              Everything you need to know about Jerry Can Spirits premium British rum, how we make it, and how to buy it.
             </p>
           </div>
 
@@ -142,7 +142,7 @@ export default function FAQPage() {
                 </h2>
                 <p className="text-parchment-200 leading-relaxed">
                   {faq.question === "What cocktails work best with Jerry Can Spirits rum?" ? (
-                    <>Our rum is versatile and works beautifully in classic cocktails like Old Fashioned, Mai Tai, and Rum Punch. Check our <Link href="/field-manual/cocktails/" className="text-gold-300 hover:text-gold-400 underline">Field Manual</Link> for exclusive expedition cocktail recipes.</>
+                    <>Our rum is versatile and works beautifully in classic cocktails like Old Fashioned, Mai Tai, and Rum Punch. Check our <Link href="/field-manual/cocktails/" className="text-gold-300 hover:text-gold-400 underline">Field Manual</Link> for cocktail recipes.</>
                   ) : faq.question === "What is your connection to the Armed Forces?" ? (
                     <>Jerry Can Spirits was <Link href="/about/team/dan-freeman/" className="text-gold-300 hover:text-gold-400 underline">founded by a former Royal Corps of Signals serviceman</Link>. We&apos;re proud supporters of the <Link href="/armed-forces-covenant/" className="text-gold-300 hover:text-gold-400 underline">Armed Forces Covenant</Link> and donate a portion of profits to military charities.</>
                   ) : (

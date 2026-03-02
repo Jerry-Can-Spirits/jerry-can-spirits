@@ -4,13 +4,13 @@ import Breadcrumbs from '@/components/Breadcrumbs'
 
 export const metadata: Metadata = {
   title: 'Shop - Coming Soon',
-  description: 'Premium British rum and adventure gear launching soon. Join our mailing list for exclusive early access and launch updates.',
+  description: 'Premium British rum and barware launching soon. Sign up for early access and launch updates.',
   alternates: {
     canonical: 'https://jerrycanspirits.co.uk/shop/',
   },
   openGraph: {
     title: 'Shop - Coming Soon | Jerry Can Spirits®',
-    description: 'Premium British rum and adventure gear launching soon. Join our mailing list for exclusive early access and launch updates.',
+    description: 'Premium British rum and barware launching soon. Sign up for early access and launch updates.',
   },
 }
 
@@ -48,11 +48,10 @@ export default function ShopPage() {
         {/* Heading */}
         <div className="space-y-4">
           <h1 className="text-4xl md:text-5xl font-playfair font-bold text-gold-500">
-            Adventure Awaits
+            Open in April 2026
           </h1>
           <p className="text-xl text-parchment-200 max-w-xl mx-auto">
-            Our expedition shop is preparing for deployment. <Link href="/" className="text-gold-500 hover:text-gold-400 underline decoration-gold-500/40 hover:decoration-gold-400 transition-colors">Premium British rum from Jerry Can Spirits</Link>, professional barware,
-            and adventure-ready gear will be available soon.
+            <Link href="/" className="text-gold-500 hover:text-gold-400 underline decoration-gold-500/40 hover:decoration-gold-400 transition-colors">Jerry Can Spirits</Link> launches in April 2026. The rum, barware, and clothing will be available to buy then.
           </p>
         </div>
 
@@ -63,21 +62,21 @@ export default function ShopPage() {
             className="p-6 bg-jerry-green-800/20 rounded-lg border border-gold-500/20 hover:border-gold-500/40 hover:bg-jerry-green-800/30 transition-all cursor-pointer group"
           >
             <h3 className="font-semibold text-gold-500 mb-2 group-hover:text-gold-400 transition-colors">Premium Rum</h3>
-            <p className="text-sm text-parchment-300">British crafted spirits for discerning adventurers</p>
+            <p className="text-sm text-parchment-300">Expedition Spiced Rum, 700ml. Pre-order now.</p>
           </Link>
           <Link
             href="/shop/barware/"
             className="p-6 bg-jerry-green-800/20 rounded-lg border border-gold-500/20 hover:border-gold-500/40 hover:bg-jerry-green-800/30 transition-all cursor-pointer group"
           >
             <h3 className="font-semibold text-gold-500 mb-2 group-hover:text-gold-400 transition-colors">Barware</h3>
-            <p className="text-sm text-parchment-300">Professional tools for the home mixologist</p>
+            <p className="text-sm text-parchment-300">Shakers, jiggers, and bar tools</p>
           </Link>
           <Link
             href="/shop/clothing/"
             className="p-6 bg-jerry-green-800/20 rounded-lg border border-gold-500/20 hover:border-gold-500/40 hover:bg-jerry-green-800/30 transition-all cursor-pointer group"
           >
-            <h3 className="font-semibold text-gold-500 mb-2 group-hover:text-gold-400 transition-colors">Expedition Gear</h3>
-            <p className="text-sm text-parchment-300">Adventure-ready apparel and accessories</p>
+            <h3 className="font-semibold text-gold-500 mb-2 group-hover:text-gold-400 transition-colors">Clothing</h3>
+            <p className="text-sm text-parchment-300">Jerry Can Spirits branded clothing and accessories</p>
           </Link>
         </div>
 
@@ -87,7 +86,7 @@ export default function ShopPage() {
             href="/#newsletter-signup"
             className="px-8 py-3 bg-gold-500 text-jerry-green-900 font-semibold rounded-lg hover:bg-gold-400 transition-colors"
           >
-            Join the Waitlist
+            Get Launch Updates
           </Link>
           <Link
             href="/field-manual/"

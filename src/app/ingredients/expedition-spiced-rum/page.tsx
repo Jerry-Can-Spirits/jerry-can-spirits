@@ -96,10 +96,43 @@ export const metadata: Metadata = {
   },
 }
 
+const articleSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: 'What Is Rum Spiced With? Expedition Spiced Rum Ingredients',
+  description: 'What is rum spiced with? Our Expedition Spiced Rum uses Madagascan vanilla, Ceylon cinnamon, ginger, orange peel, cloves, cassia bark, and agave in Caribbean rum.',
+  url: 'https://jerrycanspirits.co.uk/ingredients/expedition-spiced-rum/',
+  image: 'https://jerrycanspirits.co.uk/images/Logo.webp',
+  author: {
+    '@type': 'Organization',
+    name: 'Jerry Can Spirits',
+    url: 'https://jerrycanspirits.co.uk',
+  },
+  publisher: {
+    '@type': 'Organization',
+    name: 'Jerry Can Spirits',
+    url: 'https://jerrycanspirits.co.uk',
+    logo: {
+      '@type': 'ImageObject',
+      url: 'https://jerrycanspirits.co.uk/images/Logo.webp',
+    },
+  },
+  datePublished: '2025-01-01',
+  dateModified: '2026-02-01',
+  mainEntityOfPage: {
+    '@type': 'WebPage',
+    '@id': 'https://jerrycanspirits.co.uk/ingredients/expedition-spiced-rum/',
+  },
+}
+
 export default function ExpeditionSpicedRumIngredients() {
   return (
     <main className="min-h-screen py-20">
       <StructuredData data={faqSchema} id="ingredients-faq-schema" />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
+      />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
         <Breadcrumbs
           items={[
@@ -349,7 +382,7 @@ export default function ExpeditionSpicedRumIngredients() {
               <p className="text-parchment-300 leading-relaxed italic">
                 A modern, naturally sweetened spiced rum with bright citrus highs, creamy vanilla depth, and a bourbon&#8209;barrel backbone.
                 <br />
-                Smooth enough to sip neat. Bold enough to transform cocktails.
+                Smooth enough to sip neat. Capable enough to stand up in cocktails.
               </p>
             </div>
           </div>
@@ -366,8 +399,29 @@ export default function ExpeditionSpicedRumIngredients() {
               <br />
               Every flavour is real.
               <br />
-              Every bottle is crafted with integrity.
+              Every bottle is made with the same care as the one before it.
             </p>
+          </div>
+        </section>
+
+        {/* Try It in a Cocktail */}
+        <section className="py-12">
+          <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20 text-center">
+            <h2 className="text-2xl sm:text-3xl font-serif font-bold text-white mb-4">
+              Try It in a Cocktail
+            </h2>
+            <p className="text-parchment-300 leading-relaxed max-w-2xl mx-auto mb-6">
+              Now you know what goes into it, see what you can make with it. Our Field Manual has cocktail recipes built around what this rum actually does well.
+            </p>
+            <Link
+              href="/field-manual/cocktails/"
+              className="inline-flex items-center justify-center space-x-2 bg-gold-500 hover:bg-gold-400 text-jerry-green-900 px-8 py-4 rounded-lg font-semibold transition-all duration-300"
+            >
+              <span>Browse Cocktail Recipes</span>
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+              </svg>
+            </Link>
           </div>
         </section>
 

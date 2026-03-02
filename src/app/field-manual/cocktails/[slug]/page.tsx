@@ -5,6 +5,7 @@ import { cocktailBySlugQuery } from '@/sanity/queries'
 import BackToTop from '@/components/BackToTop'
 import StructuredData from '@/components/StructuredData'
 import CocktailRecipeDisplay from '@/components/CocktailRecipeDisplay'
+import FieldManualPortableText from '@/components/FieldManualPortableText'
 import ShareButton from '@/components/ShareButton'
 import StarRating from '@/components/StarRating'
 import Breadcrumbs from '@/components/Breadcrumbs'
@@ -47,6 +48,8 @@ interface SanityCocktail {
   name: string
   slug: { current: string }
   description: string
+  metaTitle?: string
+  metaDescription?: string
   difficulty: 'novice' | 'wayfinder' | 'trailblazer'
   ingredients: CocktailIngredient[]
   instructions: string[]
@@ -66,6 +69,8 @@ interface SanityCocktail {
   image?: string
   videoUrl?: string
   relatedGuides?: RelatedGuide[]
+  longDescription?: Record<string, unknown>[]
+  keywords?: string[]
 }
 
 interface PageProps {
@@ -94,22 +99,32 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     }
   }
 
+  const baseSpirit = cocktail.baseSpirit
+    ? cocktail.baseSpirit.replace(/-/g, ' ')
+    : 'cocktail'
+  const spiritLabel = baseSpirit === 'cocktail' ? 'cocktail' : `${baseSpirit} cocktail`
+  const variantNote = cocktail.variants?.length ? ` Includes ${cocktail.variants.length} variations.` : ''
+  const fallbackDescription = `${cocktail.description.slice(0, 110).trimEnd()}. A ${spiritLabel} recipe with step-by-step instructions from Jerry Can Spirits.${variantNote}`
+
+  const metaTitle = cocktail.metaTitle || `${cocktail.name} Recipe`
+  const metaDescription = cocktail.metaDescription || fallbackDescription
+
   return {
-    title: `${cocktail.name} Recipe`,
-    description: `${cocktail.description} Learn how to make this ${cocktail.difficulty} level rum cocktail with our step-by-step recipe. ${cocktail.variants ? `Includes ${cocktail.variants.length} variations.` : ''}`,
+    title: metaTitle,
+    description: metaDescription,
     alternates: {
       canonical: `https://jerrycanspirits.co.uk/field-manual/cocktails/${cocktail.slug.current}/`,
     },
     openGraph: {
-      title: `${cocktail.name} Recipe | Jerry Can Spirits®`,
-      description: cocktail.description,
+      title: `${metaTitle} | Jerry Can Spirits®`,
+      description: metaDescription,
       images: cocktail.image ? [cocktail.image] : [],
       type: 'article',
     },
     twitter: {
       card: 'summary_large_image',
-      title: `${cocktail.name} Recipe | Jerry Can Spirits®`,
-      description: cocktail.description,
+      title: `${metaTitle} | Jerry Can Spirits®`,
+      description: metaDescription,
       images: cocktail.image ? [cocktail.image] : [],
     },
   }
@@ -164,6 +179,7 @@ export default async function CocktailPage({ params }: PageProps) {
     cocktail.baseSpirit?.replace(/-/g, ' '),
     ...(cocktail.tags?.map(t => t.replace(/-/g, ' ')) || []),
     'British rum',
+    ...(cocktail.keywords || []),
   ].filter(Boolean)
   const keywords = [...new Set(keywordParts)].join(', ')
 
@@ -261,6 +277,13 @@ export default async function CocktailPage({ params }: PageProps) {
           {/* Recipe Display Component (Client-side for interactivity) */}
           <CocktailRecipeDisplay cocktail={cocktail} />
 
+          {/* Long Description - Rich editorial content from Sanity */}
+          {cocktail.longDescription && cocktail.longDescription.length > 0 && (
+            <div className="mt-6 sm:mt-8 bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-4 sm:p-6 md:p-8 border border-gold-500/20">
+              <FieldManualPortableText value={cocktail.longDescription} />
+            </div>
+          )}
+
           {/* Related Technique Guides */}
           {cocktail.relatedGuides && cocktail.relatedGuides.length > 0 && (
             <div className="mt-6 sm:mt-8 bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-4 sm:p-6 border border-gold-500/20">
@@ -303,8 +326,8 @@ export default async function CocktailPage({ params }: PageProps) {
             </div>
           )}
 
-          {/* Get the Rum CTA */}
-          <div className="mt-6 sm:mt-8 bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-4 sm:p-6 border border-gold-500/20">
+          {/* Get the Rum CTA - only shown for Spiced Rum cocktails */}
+          {cocktail.baseSpirit === 'spiced-rum' && <div className="mt-6 sm:mt-8 bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-4 sm:p-6 border border-gold-500/20">
             <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
               <div>
                 <h3 className="text-xl font-serif font-bold text-white mb-1">Need the Rum?</h3>
@@ -320,7 +343,7 @@ export default async function CocktailPage({ params }: PageProps) {
                 </svg>
               </Link>
             </div>
-          </div>
+          </div>}
 
           {/* Rating & Share CTA */}
           <div className="mt-6 sm:mt-8 bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-4 sm:p-6 md:p-8 border border-gold-500/20 text-center">

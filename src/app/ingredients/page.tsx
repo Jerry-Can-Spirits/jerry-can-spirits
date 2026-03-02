@@ -105,6 +105,27 @@ export default function IngredientsIndex() {
           </div>
         </section>
 
+        {/* See These Ingredients in Action */}
+        <section className="py-12">
+          <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20 text-center">
+            <h2 className="text-2xl font-serif font-bold text-white mb-4">
+              See These Ingredients in Action
+            </h2>
+            <p className="text-parchment-300 mb-6">
+              Curious how these flavours come together in a glass? Browse our cocktail recipes and see what you can make.
+            </p>
+            <Link
+              href="/field-manual/cocktails/"
+              className="inline-flex items-center justify-center space-x-2 text-gold-300 hover:text-gold-400 underline font-semibold transition-colors"
+            >
+              <span>Explore Cocktail Recipes</span>
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+              </svg>
+            </Link>
+          </div>
+        </section>
+
         {/* Info Section */}
         <section className="py-12">
           <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">

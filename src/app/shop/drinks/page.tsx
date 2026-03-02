@@ -344,7 +344,7 @@ export default async function DrinksPageTest() {
                 Jerry Can Spirits started because we couldn't find what we wanted on the shelf. After deployments where a proper drink meant everything, we came home to rum that tasted like it was made by accountants, not people who'd actually want to drink it.
               </p>
               <p>
-                So we made our own. Royal Corps of Signals veterans, Armed Forces Covenant signatories, and genuinely obsessed with getting this right. Every batch gets the same attention we'd give to mission-critical kit.
+                So we made our own. Royal Corps of Signals veterans, Armed Forces Covenant signatories, and genuinely obsessed with getting this right. Every batch gets the same attention we'd give to anything that has to work.
               </p>
               <p>
                 Part of every sale goes to forces charities. Because these are our mates and it's the right thing to do. If you're buying from us, you're supporting the veteran community whether you meant to or not.

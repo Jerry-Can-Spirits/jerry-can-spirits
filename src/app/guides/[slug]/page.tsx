@@ -337,7 +337,7 @@ export default async function GuidePage({ params }: PageProps) {
           {guide.sections && (
             <GuideSections
               sections={guide.sections}
-              initialVisibleCount={5}
+              initialVisibleCount={guide.sections.length}
             />
           )}
 
