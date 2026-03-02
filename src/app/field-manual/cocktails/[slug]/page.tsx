@@ -177,8 +177,6 @@ export default async function CocktailPage({ params }: PageProps) {
     'rum cocktail',
     cocktail.family?.replace(/-/g, ' '),
     cocktail.baseSpirit?.replace(/-/g, ' '),
-    ...(cocktail.tags?.map(t => t.replace(/-/g, ' ')) || []),
-    'British rum',
     ...(cocktail.keywords || []),
   ].filter(Boolean)
   const keywords = [...new Set(keywordParts)].join(', ')
