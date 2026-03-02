@@ -8,6 +8,7 @@ import { urlFor } from '@/sanity/lib/image'
 import BackToTop from '@/components/BackToTop'
 import Breadcrumbs from '@/components/Breadcrumbs'
 import EnlargeableProductImage from '@/components/EnlargeableProductImage'
+import FieldManualPortableText from '@/components/FieldManualPortableText'
 
 // Types for ingredient data
 interface Ingredient {
@@ -68,6 +69,7 @@ interface Ingredient {
     name: string
     slug: { current: string }
   }>
+  longDescription?: Record<string, unknown>[]
 }
 
 const categoryConfig: Record<string, string> = {
@@ -429,6 +431,13 @@ export default async function IngredientDetailPage({ params }: { params: Promise
                 {ingredient.description}
               </p>
             </div>
+
+            {/* Long Description - Rich editorial content from Sanity */}
+            {ingredient.longDescription && ingredient.longDescription.length > 0 && (
+              <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+                <FieldManualPortableText value={ingredient.longDescription} />
+              </div>
+            )}
 
             {/* Professional Tip Callout */}
             {ingredient.professionalTip && (
