@@ -50,6 +50,13 @@ export default defineType({
       validation: Rule => Rule.required()
     }),
     defineField({
+      name: 'longDescription',
+      title: 'Long Description',
+      type: 'array',
+      of: [{type: 'block'}],
+      description: 'Rich editorial body — supports headings, bold, lists and inline links'
+    }),
+    defineField({
       name: 'metaTitle',
       title: 'Meta Title',
       type: 'string',
@@ -63,6 +70,13 @@ export default defineType({
       rows: 2,
       description: 'SEO meta description (150–160 characters). Leave empty to auto-generate from description.',
       validation: Rule => Rule.max(160)
+    }),
+    defineField({
+      name: 'keywords',
+      title: 'Keywords',
+      type: 'array',
+      of: [{type: 'string'}],
+      description: 'Synonyms, brand names and related terms to enrich search (e.g., "white rum", "light rum", "rhum blanc")'
     }),
     defineField({
       name: 'usage',
@@ -351,6 +365,12 @@ export default defineType({
       rows: 2,
       description: 'A standout expert insight (displayed prominently)'
     }),
+    defineField({
+      name: 'author',
+      title: 'Author',
+      type: 'string',
+      description: 'Who wrote or verified this content (e.g., "Dan Freeman", "Jerry Can Spirits Team")'
+    }),
 
     // Video Content
     defineField({
@@ -384,6 +404,18 @@ export default defineType({
         }
       ],
       description: 'Ingredients often used together with this one'
+    }),
+    defineField({
+      name: 'relatedEquipment',
+      title: 'Related Equipment',
+      type: 'array',
+      of: [
+        {
+          type: 'reference',
+          to: [{type: 'equipment'}]
+        }
+      ],
+      description: 'Equipment used when working with this ingredient'
     })
   ],
   preview: {

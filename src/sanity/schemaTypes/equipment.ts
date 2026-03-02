@@ -45,6 +45,35 @@ export default defineType({
       validation: Rule => Rule.required()
     }),
     defineField({
+      name: 'longDescription',
+      title: 'Long Description',
+      type: 'array',
+      of: [{type: 'block'}],
+      description: 'Rich editorial body — supports headings, bold, lists and inline links'
+    }),
+    defineField({
+      name: 'metaTitle',
+      title: 'Meta Title',
+      type: 'string',
+      description: 'SEO title tag (55–60 characters). Leave empty to use "[Name] Guide" automatically.',
+      validation: Rule => Rule.max(60)
+    }),
+    defineField({
+      name: 'metaDescription',
+      title: 'Meta Description',
+      type: 'text',
+      rows: 2,
+      description: 'SEO meta description (150–160 characters). Leave empty to auto-generate from description.',
+      validation: Rule => Rule.max(160)
+    }),
+    defineField({
+      name: 'keywords',
+      title: 'Keywords',
+      type: 'array',
+      of: [{type: 'string'}],
+      description: 'Synonyms and related terms to enrich search (e.g., "cocktail shaker", "boston shaker", "cobbler shaker")'
+    }),
+    defineField({
       name: 'usage',
       title: 'Usage',
       type: 'text',
@@ -151,10 +180,36 @@ export default defineType({
       description: 'Cheaper alternative or workaround (e.g., "Mason jar with lid")'
     }),
     defineField({
+      name: 'budgetLink',
+      title: 'Budget Alternative Link',
+      type: 'url',
+      description: 'Affiliate or product link for the budget alternative'
+    }),
+    defineField({
+      name: 'budgetImage',
+      title: 'Budget Alternative Image',
+      type: 'image',
+      options: {hotspot: true},
+      description: 'Image for the budget alternative (optional)'
+    }),
+    defineField({
       name: 'premiumOption',
       title: 'Premium Option',
       type: 'string',
       description: 'Recommended premium brand/model'
+    }),
+    defineField({
+      name: 'premiumLink',
+      title: 'Premium Option Link',
+      type: 'url',
+      description: 'Affiliate or product link for the premium option'
+    }),
+    defineField({
+      name: 'premiumImage',
+      title: 'Premium Option Image',
+      type: 'image',
+      options: {hotspot: true},
+      description: 'Image for the premium option (optional)'
     }),
 
     // Care & Maintenance
@@ -188,6 +243,12 @@ export default defineType({
       rows: 2,
       description: 'A standout expert insight (displayed prominently)'
     }),
+    defineField({
+      name: 'author',
+      title: 'Author',
+      type: 'string',
+      description: 'Who wrote or verified this content (e.g., "Dan Freeman", "Jerry Can Spirits Team")'
+    }),
 
     // Video Content
     defineField({
@@ -209,6 +270,30 @@ export default defineType({
         }
       ],
       description: 'Cocktails that use this equipment'
+    }),
+    defineField({
+      name: 'relatedEquipment',
+      title: 'Related Equipment',
+      type: 'array',
+      of: [
+        {
+          type: 'reference',
+          to: [{type: 'equipment'}]
+        }
+      ],
+      description: 'Similar or complementary equipment items'
+    }),
+    defineField({
+      name: 'relatedIngredients',
+      title: 'Related Ingredients',
+      type: 'array',
+      of: [
+        {
+          type: 'reference',
+          to: [{type: 'ingredient'}]
+        }
+      ],
+      description: 'Ingredients commonly used with this equipment'
     })
   ],
   preview: {
