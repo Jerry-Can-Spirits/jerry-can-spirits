@@ -25,6 +25,7 @@ import AnnouncementBar from "@/components/AnnouncementBar";
 import GoogleTag from "@/components/GoogleTag";
 import TikTokPixel from "@/components/TikTokPixel";
 import KlaviyoScript from "@/components/KlaviyoScript";
+import MetricoolScript from "@/components/MetricoolScript";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -179,6 +180,7 @@ export default function RootLayout({
         <GoogleTag />
         <TikTokPixel />
         <KlaviyoScript />
+        <MetricoolScript />
 
         <CartProvider>
           {/* Skip to Content Link - Accessibility */}
