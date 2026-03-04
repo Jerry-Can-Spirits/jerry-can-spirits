@@ -19,7 +19,7 @@ const articleSchema = {
   headline: 'Armed Forces Covenant - Jerry Can Spirits',
   description: 'Jerry Can Spirits is a veteran-owned military rum brand committed to the Armed Forces Covenant, supporting serving personnel, veterans, and military families.',
   url: 'https://jerrycanspirits.co.uk/armed-forces-covenant/',
-  image: 'https://jerrycanspirits.co.uk/images/AFC_Banner__PNG_.png',
+  image: 'https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/images-afc_banner__png_-png/public',
   author: {
     '@type': 'Organization',
     name: 'Jerry Can Spirits',
@@ -31,7 +31,7 @@ const articleSchema = {
     url: 'https://jerrycanspirits.co.uk',
     logo: {
       '@type': 'ImageObject',
-      url: 'https://jerrycanspirits.co.uk/images/Logo.webp',
+      url: 'https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/images-logo-webp/public',
     },
   },
   datePublished: '2025-09-16',

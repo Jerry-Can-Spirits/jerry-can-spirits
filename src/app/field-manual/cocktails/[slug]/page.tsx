@@ -192,7 +192,7 @@ export default async function CocktailPage({ params }: PageProps) {
     "@type": "Recipe",
     "name": cocktail.name,
     "description": cocktail.description,
-    "image": cocktail.image || "https://jerrycanspirits.co.uk/images/Logo.webp",
+    "image": cocktail.image || "https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/images-logo-webp/public",
     "recipeCategory": recipeCategory,
     "recipeCuisine": "British",
     "keywords": keywords,
@@ -203,7 +203,7 @@ export default async function CocktailPage({ params }: PageProps) {
       "name": `Step ${index + 1}`,
       "text": instruction,
       "url": `https://jerrycanspirits.co.uk/field-manual/cocktails/${slug}/#step-${index + 1}`,
-      "image": cocktail.image || "https://jerrycanspirits.co.uk/images/Logo.webp"
+      "image": cocktail.image || "https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/images-logo-webp/public"
     })) || [],
     "author": {
       "@type": "Organization",
@@ -215,7 +215,7 @@ export default async function CocktailPage({ params }: PageProps) {
       "name": "Jerry Can Spirits",
       "logo": {
         "@type": "ImageObject",
-        "url": "https://jerrycanspirits.co.uk/images/Logo.webp"
+        "url": "https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/images-logo-webp/public"
       }
     },
     "datePublished": cocktail._createdAt,

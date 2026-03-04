@@ -25,7 +25,7 @@ export function OrganizationSchema() {
     name: 'Jerry Can Spirits',
     legalName: 'Jerry Can Spirits Ltd',
     url: 'https://jerrycanspirits.co.uk',
-    logo: 'https://jerrycanspirits.co.uk/images/Logo.webp',
+    logo: 'https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/images-logo-webp/public',
     description: 'Veteran-owned premium British rum with authentic military heritage. Founded by Royal Corps of Signals veterans. Engineered for reliability, designed for adventure.',
     email: 'hello@jerrycanspirits.co.uk',
     address: {
@@ -99,7 +99,7 @@ export function ArticleSchema({
       url: 'https://jerrycanspirits.co.uk',
       logo: {
         '@type': 'ImageObject',
-        url: 'https://jerrycanspirits.co.uk/images/Logo.webp'
+        url: 'https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/images-logo-webp/public'
       }
     },
     ...(imageUrl && {

@@ -484,7 +484,7 @@ export default function Ethos() {
               Try the Rum
             </h2>
             <p className="text-xl text-parchment-300 mb-8 max-w-2xl mx-auto">
-              Enough about us – the proof is in the bottle. Check out our <Link href="/shop/product/expedition-spiced-rum/" className="text-gold-300 hover:text-gold-400 underline decoration-gold-500/40 hover:decoration-gold-400 transition-colors">Expedition Spiced Rum</Link> and see what you think.
+              Enough about us – the proof is in the bottle. Check out our <Link href="/shop/product/jerry-can-spirits-expedition-spiced-rum/" className="text-gold-300 hover:text-gold-400 underline decoration-gold-500/40 hover:decoration-gold-400 transition-colors">Expedition Spiced Rum</Link> and see what you think.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center">

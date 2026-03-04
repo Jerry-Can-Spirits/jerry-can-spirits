@@ -44,7 +44,7 @@ export default function Home() {
       "@type": "Organization",
       "name": "Jerry Can Spirits",
       "url": "https://jerrycanspirits.co.uk",
-      "logo": "https://jerrycanspirits.co.uk/images/Logo.webp",
+      "logo": "https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/images-logo-webp/public",
       "description": "Veteran-owned premium British spiced rum with authentic military heritage. Founded by Royal Corps of Signals veterans. Small-batch craft spirits engineered for reliability, designed for adventure.",
       "foundingDate": "2025",
       "founders": [
@@ -88,7 +88,7 @@ export default function Home() {
       "@type": "LocalBusiness",
       "@id": "https://jerrycanspirits.co.uk/#business",
       "name": "Jerry Can Spirits",
-      "image": "https://jerrycanspirits.co.uk/images/Logo.webp",
+      "image": "https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/images-logo-webp/public",
       "url": "https://jerrycanspirits.co.uk",
       "telephone": "+44 7521 220541",
       "email": "hello@jerrycanspirits.co.uk",
@@ -135,7 +135,7 @@ export default function Home() {
       "@context": "https://schema.org",
       "@type": "Brand",
       "name": "Jerry Can Spirits",
-      "logo": "https://jerrycanspirits.co.uk/images/Logo.webp",
+      "logo": "https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/images-logo-webp/public",
       "slogan": "Engineered for reliability, designed for adventure",
       "description": "Veteran-owned premium British rum with authentic military heritage"
     },
@@ -153,7 +153,7 @@ export default function Home() {
         "@type": "VirtualLocation",
         "url": "https://jerrycanspirits.co.uk"
       },
-      "image": "https://jerrycanspirits.co.uk/images/hero/hero-spiced.webp",
+      "image": "https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/images-hero-hero-spiced-webp/public",
       "organizer": {
         "@type": "Organization",
         "name": "Jerry Can Spirits",

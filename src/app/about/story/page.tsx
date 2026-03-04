@@ -13,7 +13,7 @@ const articleSchema = {
   headline: 'Our Story - How Two Veterans Built a British Rum Brand',
   description: 'How two Royal Signals veterans built a British spiced rum from scratch. No shortcuts. No investors. Expedition Spiced, made with real ingredients in Wales.',
   url: 'https://jerrycanspirits.co.uk/about/story/',
-  image: 'https://jerrycanspirits.co.uk/images/hero/Trail_Hero.webp',
+  image: 'https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/images-hero-trail_hero-webp/public',
   author: {
     '@type': 'Organization',
     name: 'Jerry Can Spirits',
@@ -25,7 +25,7 @@ const articleSchema = {
     url: 'https://jerrycanspirits.co.uk',
     logo: {
       '@type': 'ImageObject',
-      url: 'https://jerrycanspirits.co.uk/images/Logo.webp',
+      url: 'https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/images-logo-webp/public',
     },
   },
   datePublished: '2024-01-01',
@@ -659,7 +659,7 @@ export default function OurStory() {
             <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20">
               <h3 className="text-lg font-semibold text-white mb-3">Where is Jerry Can Spirits based?</h3>
               <p className="text-parchment-300">
-                We&apos;re based in the UK. It&apos;s a home-office operation – nothing glamorous, just us working away. Our <Link href="/shop/product/expedition-spiced-rum/" className="text-gold-300 hover:text-gold-400 underline">Expedition Spiced Rum</Link> is made with Caribbean rum and molasses from a Welsh brewery, blended at <Link href="/friends/" className="text-gold-300 hover:text-gold-400 underline">Spirit of Wales Distillery</Link> right here in Britain.
+                We&apos;re based in the UK. It&apos;s a home-office operation – nothing glamorous, just us working away. Our <Link href="/shop/product/jerry-can-spirits-expedition-spiced-rum/" className="text-gold-300 hover:text-gold-400 underline">Expedition Spiced Rum</Link> is made with Caribbean rum and molasses from a Welsh brewery, blended at <Link href="/friends/" className="text-gold-300 hover:text-gold-400 underline">Spirit of Wales Distillery</Link> right here in Britain.
               </p>
             </div>
 
