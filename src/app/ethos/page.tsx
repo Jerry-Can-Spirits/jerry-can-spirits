@@ -8,13 +8,13 @@ import ScrollReveal from '@/components/ScrollReveal'
 
 export const metadata: Metadata = {
   title: "Our Ethos - How We Make Rum",
-  description: "The values behind Jerry Can Spirits premium spiced rum. Small batch craft rum made with Madagascan vanilla, Ceylon cinnamon, and real botanicals. Veteran-owned, Welsh-distilled.",
+  description: "The values behind Jerry Can Spirits. Built on discipline, integrity, and real ingredients. Madagascan vanilla, Ceylon cinnamon, real botanicals. Veteran-owned, Welsh-distilled.",
   alternates: {
     canonical: 'https://jerrycanspirits.co.uk/ethos/',
   },
   openGraph: {
     title: 'Our Ethos - How We Make Rum | Jerry Can Spirits®',
-    description: 'The values behind Jerry Can Spirits premium spiced rum. Small batch craft rum made with real botanicals, Welsh-distilled, veteran-owned.',
+    description: 'The values behind Jerry Can Spirits. Built on discipline, integrity, and real ingredients. Real botanicals, Welsh-distilled, veteran-owned.',
     url: 'https://jerrycanspirits.co.uk/ethos/',
     siteName: 'Jerry Can Spirits®',
     locale: 'en_GB',
