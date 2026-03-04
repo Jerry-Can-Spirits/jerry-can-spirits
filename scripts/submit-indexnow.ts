@@ -14,22 +14,7 @@ const INDEXNOW_KEY = 'a7e2b5f9c3d1e6a8b4d2f0e5c9a3b7d1'
 const BASE_URL = 'https://jerrycanspirits.co.uk'
 const INDEXNOW_ENDPOINT = 'https://api.indexnow.org/indexnow'
 
-// Load .env.local if present
-try {
-  const { config } = await import('dotenv')
-  config({ path: '.env.local' })
-} catch {
-  // dotenv not required in CI
-}
-
-const sanity = createClient({
-  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || '5mtjmb0t',
-  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
-  useCdn: false,
-  apiVersion: '2024-01-01',
-})
-
-async function getAllUrls(): Promise<string[]> {
+async function getAllUrls(sanity: ReturnType<typeof createClient>): Promise<string[]> {
   const staticUrls = [
     '/',
     '/about/story/',
@@ -106,6 +91,29 @@ async function submitToIndexNow(urls: string[]): Promise<void> {
   }
 }
 
-const urls = await getAllUrls()
-console.log(`Submitting ${urls.length} URLs to IndexNow...`)
-await submitToIndexNow(urls)
+async function main() {
+  // Load .env.local if present (dotenv is optional)
+  try {
+    const dotenv = await import('dotenv')
+    dotenv.config({ path: '.env.local' })
+  } catch {
+    // dotenv not installed — env vars must be set externally
+  }
+
+  const sanity = createClient({
+    projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || '5mtjmb0t',
+    dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
+    useCdn: false,
+    apiVersion: '2024-01-01',
+  })
+
+  // Patch getAllUrls to accept sanity client
+  const urls = await getAllUrls(sanity)
+  console.log(`Submitting ${urls.length} URLs to IndexNow...`)
+  await submitToIndexNow(urls)
+}
+
+main().catch(err => {
+  console.error(err)
+  process.exit(1)
+})
