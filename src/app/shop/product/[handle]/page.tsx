@@ -123,6 +123,7 @@ export async function generateMetadata({
       openGraph: {
         title: `${product.title} | Jerry Can Spirits®`,
         description,
+        url: `https://jerrycanspirits.co.uk/shop/product/${handle}/`,
         images: product.images.length > 0 ? [product.images[0].url] : [],
         type: 'website',
         siteName: 'Jerry Can Spirits®',

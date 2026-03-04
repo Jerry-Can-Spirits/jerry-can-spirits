@@ -117,7 +117,9 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     openGraph: {
       title: `${ingredient.name} Guide | Jerry Can Spirits®`,
       description: ingredient.description,
+      url: `https://jerrycanspirits.co.uk/field-manual/ingredients/${slug}/`,
       images: ingredient.image ? [{ url: urlFor(ingredient.image).url() }] : [],
+      type: 'article',
     },
   }
 }
@@ -423,9 +425,10 @@ export default async function IngredientDetailPage({ params }: { params: Promise
                 </span>
               </div>
 
-              <h1 className="text-4xl sm:text-5xl font-serif font-bold text-white mb-6">
+              {/* p not h1 — mobile section above already has the H1; avoid duplicate H1 for crawlers */}
+              <p className="text-4xl sm:text-5xl font-serif font-bold text-white mb-6">
                 {ingredient.name}
-              </h1>
+              </p>
 
               <p className="text-xl text-parchment-300 leading-relaxed">
                 {ingredient.description}

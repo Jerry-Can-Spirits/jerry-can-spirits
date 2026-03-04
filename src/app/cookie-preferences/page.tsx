@@ -25,18 +25,10 @@ export default function CookiePreferencesPage() {
     }
   }
 
-  if (isLoading) {
-    return (
-      <main className="min-h-screen flex items-center justify-center">
-        <div className="text-parchment-200">Loading...</div>
-      </main>
-    )
-  }
-
   return (
     <main className="min-h-screen py-20">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
+        {/* Header - always rendered so H1 is present in SSR output */}
         <div className="mb-12">
           <Link
             href="/"
@@ -55,6 +47,11 @@ export default function CookiePreferencesPage() {
             Manage your cookie settings and privacy preferences.
           </p>
         </div>
+
+        {isLoading && (
+          <div className="text-parchment-200">Loading preferences...</div>
+        )}
+        {!isLoading && (<>
 
         {/* Success Message */}
         {saved && (
@@ -197,6 +194,7 @@ export default function CookiePreferencesPage() {
             </Link>
           </div>
         </div>
+        </>)}
       </div>
     </main>
   )

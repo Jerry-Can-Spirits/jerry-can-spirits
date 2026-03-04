@@ -149,6 +149,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     openGraph: {
       title: `${guide.metaTitle || guide.title} | Jerry Can Spirits®`,
       description: guide.metaDescription || guide.excerpt,
+      url: `https://jerrycanspirits.co.uk/guides/${guide.slug.current}/`,
       images: guide.heroImage ? [guide.heroImage] : [],
       type: 'article',
     },
