@@ -18,7 +18,8 @@
     "lint": "eslint",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
-    "test:e2e:report": "playwright show-report"
+    "test:e2e:report": "playwright show-report",
+    "indexnow": "tsx scripts/submit-indexnow.ts"
   },
   "dependencies": {
     "@headlessui/react": "^2.2.9",
@@ -56,6 +57,7 @@
     "eslint-plugin-react-hooks": "^5.2.0",
     "postcss": "^8.5.6",
     "tailwindcss": "^3.4.19",
+    "tsx": "^4.21.0",
     "typescript": "^5",
     "wrangler": "^4.69.0"
   },
