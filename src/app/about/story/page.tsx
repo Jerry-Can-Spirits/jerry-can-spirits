@@ -13,7 +13,7 @@ const articleSchema = {
   headline: 'Our Story - How Two Veterans Built a British Rum Brand',
   description: 'How two Royal Signals veterans built a British spiced rum from scratch. No shortcuts. No investors. Expedition Spiced, made with real ingredients in Wales.',
   url: 'https://jerrycanspirits.co.uk/about/story/',
-  image: 'https://jerrycanspirits.co.uk/images/hero/Trail_Hero.webp',
+  image: 'https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/images-hero-trail_hero-webp/public',
   author: {
     '@type': 'Organization',
     name: 'Jerry Can Spirits',
@@ -25,7 +25,7 @@ const articleSchema = {
     url: 'https://jerrycanspirits.co.uk',
     logo: {
       '@type': 'ImageObject',
-      url: 'https://jerrycanspirits.co.uk/images/Logo.webp',
+      url: 'https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/images-logo-webp/public',
     },
   },
   datePublished: '2024-01-01',

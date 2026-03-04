@@ -281,7 +281,7 @@ export default async function ProductPage({
       '@type': 'Brand',
       name: 'Jerry Can Spirits',
       url: 'https://jerrycanspirits.co.uk',
-      logo: 'https://jerrycanspirits.co.uk/images/Logo.webp',
+      logo: 'https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/images-logo-webp/public',
     },
     category: isSpirit ? 'Food & Beverages > Beverages > Alcoholic Beverages > Spirits > Rum' : 'Home & Garden > Kitchen & Dining > Barware',
     countryOfOrigin: {

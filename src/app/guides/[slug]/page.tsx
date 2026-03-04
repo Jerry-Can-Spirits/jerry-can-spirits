@@ -186,7 +186,7 @@ export default async function GuidePage({ params }: PageProps) {
       name: 'Jerry Can Spirits',
       logo: {
         '@type': 'ImageObject',
-        url: 'https://jerrycanspirits.co.uk/images/Logo.webp'
+        url: 'https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/images-logo-webp/public'
       }
     },
     datePublished: guide.publishedAt || new Date().toISOString(),

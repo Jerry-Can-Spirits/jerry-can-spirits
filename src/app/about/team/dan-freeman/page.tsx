@@ -12,7 +12,7 @@ const personSchema = {
   name: 'Dan Freeman',
   jobTitle: 'Founder & Director',
   url: 'https://jerrycanspirits.co.uk/about/team/dan-freeman/',
-  image: 'https://jerrycanspirits.co.uk/images/team/Dan_Headshot.jpg',
+  image: 'https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/1a3a3fdd-fdd8-482c-2088-660df51c6c00/public',
   description: 'Former Royal Signals Corporal with 12 years of service, founder of Jerry Can Spirits.',
   worksFor: {
     '@type': 'Organization',
