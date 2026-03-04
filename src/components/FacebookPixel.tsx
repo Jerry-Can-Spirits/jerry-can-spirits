@@ -21,52 +21,41 @@ export default function FacebookPixel() {
   const { preferences } = useCookieConsent();
 
   useEffect(() => {
-    // Only initialize if marketing cookies are accepted
-    if (!preferences.marketing) {
-      return;
-    }
+    if (typeof window === 'undefined' || !window.fbq) return;
 
-    // Initialize Facebook Pixel
-    if (typeof window !== 'undefined' && window.fbq) {
-      window.fbq('init', FB_PIXEL_ID);
+    if (preferences.marketing) {
+      // User has consented — grant and fire PageView
+      window.fbq('consent', 'grant');
       window.fbq('track', 'PageView');
+    } else {
+      // No consent (or withdrawn) — revoke
+      window.fbq('consent', 'revoke');
     }
   }, [preferences.marketing]);
 
-  // Don't load the pixel script if user hasn't consented to marketing cookies
-  if (!preferences.marketing) {
-    return null;
-  }
-
+  // Always render — pixel loads with consent revoked by default.
+  // fbq('consent', 'revoke') prevents Meta receiving any data until granted.
+  // This makes the pixel detectable by tools (Meta Pixel Helper, audits)
+  // while remaining GDPR compliant.
   return (
-    <>
-      <Script
-        id="facebook-pixel"
-        strategy="lazyOnload"
-        dangerouslySetInnerHTML={{
-          __html: `
-            !function(f,b,e,v,n,t,s)
-            {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-            n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-            if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-            n.queue=[];t=b.createElement(e);t.async=!0;
-            t.src=v;s=b.getElementsByTagName(e)[0];
-            s.parentNode.insertBefore(t,s)}(window, document,'script',
-            'https://connect.facebook.net/en_US/fbevents.js');
-          `,
-        }}
-      />
-      <noscript>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          height="1"
-          width="1"
-          style={{ display: 'none' }}
-          src={`https://www.facebook.com/tr?id=${FB_PIXEL_ID}&ev=PageView&noscript=1`}
-          alt=""
-        />
-      </noscript>
-    </>
+    <Script
+      id="facebook-pixel"
+      strategy="lazyOnload"
+      dangerouslySetInnerHTML={{
+        __html: `
+          !function(f,b,e,v,n,t,s)
+          {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+          n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+          if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+          n.queue=[];t=b.createElement(e);t.async=!0;
+          t.src=v;s=b.getElementsByTagName(e)[0];
+          s.parentNode.insertBefore(t,s)}(window, document,'script',
+          'https://connect.facebook.net/en_US/fbevents.js');
+          fbq('consent', 'revoke');
+          fbq('init', '${FB_PIXEL_ID}');
+        `,
+      }}
+    />
   );
 }
 
