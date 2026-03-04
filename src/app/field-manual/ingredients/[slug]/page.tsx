@@ -117,7 +117,9 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     openGraph: {
       title: `${ingredient.name} Guide | Jerry Can Spirits®`,
       description: ingredient.description,
+      url: `https://jerrycanspirits.co.uk/field-manual/ingredients/${slug}/`,
       images: ingredient.image ? [{ url: urlFor(ingredient.image).url() }] : [],
+      type: 'article',
     },
   }
 }

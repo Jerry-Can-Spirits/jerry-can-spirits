@@ -90,7 +90,9 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     openGraph: {
       title: `${equipment.name} Guide | Jerry Can Spirits®`,
       description: equipment.description,
+      url: `https://jerrycanspirits.co.uk/field-manual/equipment/${slug}/`,
       images: equipment.image ? [{ url: urlFor(equipment.image).url() }] : [],
+      type: 'article',
     },
   }
 }
