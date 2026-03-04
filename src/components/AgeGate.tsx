@@ -137,9 +137,9 @@ export default function AgeGate({ onVerified }: AgeGateProps) {
 
           {/* Main question */}
           <div className="text-center">
-            <h1 className="text-2xl sm:text-3xl font-serif font-bold text-gold-300 mb-6 sm:mb-8">
+            <p className="text-2xl sm:text-3xl font-serif font-bold text-gold-300 mb-6 sm:mb-8">
               WELCOME, EXPLORER
-            </h1>
+            </p>
             <p className="text-gold-400 text-base sm:text-lg mb-2">
               Please confirm you are of legal drinking age in your region.
             </p>
