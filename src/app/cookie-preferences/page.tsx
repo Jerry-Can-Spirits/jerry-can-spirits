@@ -2,14 +2,6 @@
 
 import Link from 'next/link'
 
-declare global {
-  interface Window {
-    Cookiebot?: {
-      renew: () => void
-    }
-  }
-}
-
 export default function CookiePreferencesPage() {
   const openCookiebot = () => {
     if (typeof window !== 'undefined' && window.Cookiebot) {
