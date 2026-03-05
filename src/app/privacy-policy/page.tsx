@@ -97,8 +97,7 @@ export default function PrivacyPolicy() {
               <ul className="list-disc list-inside text-white space-y-2 mb-6">
                 <li><strong className="text-gold-300">Newsletter Signup:</strong> Email address, name (optional), marketing preferences</li>
                 <li><strong className="text-gold-300">Contact Forms:</strong> Name, email address, message content</li>
-                <li><strong className="text-gold-300">Age Verification:</strong> Date of birth for legal compliance</li>
-                <li><strong className="text-gold-300">Account Information:</strong> If you create an account - name, email, password, preferences</li>
+                <li><strong className="text-gold-300">Age Verification:</strong> Confirmation that you are of legal drinking age in your region</li>
               </ul>
 
               <h3 className="text-xl font-serif font-semibold text-white mt-6 mb-3">
@@ -148,17 +147,17 @@ export default function PrivacyPolicy() {
                 5.1 Cookie Categories
               </h3>
               <ul className="list-disc list-inside text-white space-y-2 mb-6">
-                <li><strong className="text-gold-300">Necessary Cookies:</strong> Essential for website functionality, age verification</li>
-                <li><strong className="text-gold-300">Analytics Cookies:</strong> Google Analytics for usage statistics (requires consent)</li>
-                <li><strong className="text-gold-300">Marketing Cookies:</strong> Klaviyo for email marketing tracking (requires consent)</li>
-                <li><strong className="text-gold-300">Third-Party Cookies:</strong> Trustpilot for customer reviews and trust ratings (requires consent)</li>
+                <li><strong className="text-gold-300">Necessary Cookies:</strong> Essential for website functionality and age verification (no consent required)</li>
+                <li><strong className="text-gold-300">Analytics Cookies:</strong> Google Analytics and Google Ads for usage statistics and conversion tracking (requires consent)</li>
+                <li><strong className="text-gold-300">Marketing Cookies:</strong> Meta Pixel, TikTok Pixel, and Klaviyo for advertising and email marketing tracking (requires consent)</li>
+                <li><strong className="text-gold-300">Third-Party Cookies:</strong> Trustpilot for customer reviews (requires consent), Cookiebot for consent management</li>
               </ul>
 
               <h3 className="text-xl font-serif font-semibold text-white mt-6 mb-3">
                 5.2 Cookie Management
               </h3>
               <p className="text-white">
-                You can manage your cookie preferences through our cookie banner or by using the "Cookie Preferences" button in the website footer. You can also control cookies through your browser settings. For detailed information, see our{' '}
+                Your cookie preferences are managed through Cookiebot. You can review or change your preferences at any time using the Cookiebot icon on any page or the "Cookie Preferences" link in the website footer. You can also control cookies through your browser settings. For detailed information, see our{' '}
                 <a href="/cookie-policy/" className="text-gold-300 hover:text-gold-200 underline">Cookie Policy</a>.
               </p>
             </section>
@@ -172,10 +171,14 @@ export default function PrivacyPolicy() {
                 6.1 Third-Party Services
               </h3>
               <ul className="list-disc list-inside text-white space-y-2 mb-6">
-                <li><strong className="text-gold-300">Klaviyo:</strong> Email marketing platform (USA) - adequate protection via Standard Contractual Clauses</li>
-                <li><strong className="text-gold-300">Google Analytics:</strong> Website analytics (Ireland/USA) - Google Ads Data Processing Terms</li>
+                <li><strong className="text-gold-300">Klaviyo:</strong> Email marketing platform (USA) - Standard Contractual Clauses</li>
+                <li><strong className="text-gold-300">Google Analytics / Google Ads:</strong> Website analytics and conversion tracking (Ireland/USA) - Google Ads Data Processing Terms</li>
+                <li><strong className="text-gold-300">Meta (Facebook) Pixel:</strong> Advertising and conversion tracking (USA) - Standard Contractual Clauses</li>
+                <li><strong className="text-gold-300">TikTok Pixel:</strong> Advertising and conversion tracking (USA/Singapore) - Standard Contractual Clauses</li>
                 <li><strong className="text-gold-300">Cloudflare:</strong> Website hosting and CDN (Global network) - GDPR-compliant with Data Processing Addendum</li>
-                <li><strong className="text-gold-300">Trustpilot:</strong> Customer review and ratings platform (Denmark/USA) - GDPR-compliant with Standard Contractual Clauses and Privacy Shield certification</li>
+                <li><strong className="text-gold-300">Trustpilot:</strong> Customer review platform (Denmark/USA) - Standard Contractual Clauses</li>
+                <li><strong className="text-gold-300">Sentry:</strong> Error monitoring and performance tracking (USA) - Standard Contractual Clauses</li>
+                <li><strong className="text-gold-300">Cookiebot (Cybot A/S):</strong> Consent management platform (Denmark) - GDPR-compliant, data processed within the EU</li>
               </ul>
 
               <h3 className="text-xl font-serif font-semibold text-white mt-6 mb-3">
@@ -194,7 +197,7 @@ export default function PrivacyPolicy() {
                 <li><strong className="text-gold-300">Newsletter Subscribers:</strong> Until you unsubscribe or 3 years of inactivity</li>
                 <li><strong className="text-gold-300">Contact Form Data:</strong> 2 years for customer service purposes</li>
                 <li><strong className="text-gold-300">Analytics Data:</strong> 14 months (Google Analytics setting)</li>
-                <li><strong className="text-gold-300">Age Verification:</strong> 30 days in browser local storage</li>
+                <li><strong className="text-gold-300">Age Verification:</strong> 12 months via browser cookie</li>
                 <li><strong className="text-gold-300">Cookie Consent:</strong> 12 months or until consent withdrawn</li>
               </ul>
             </section>
