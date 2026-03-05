@@ -91,13 +91,12 @@ export default function CookiePolicy() {
                 <h3 className="text-xl font-serif font-semibold text-gold-300 mb-3">Essential Cookies</h3>
                 <div className="space-y-2 mb-4">
                   <p className="text-white"><strong className="text-gold-300">Purpose:</strong> Required for basic website functionality</p>
-                  <p className="text-white"><strong className="text-gold-300">Duration:</strong> Session and persistent (up to 30 days)</p>
+                  <p className="text-white"><strong className="text-gold-300">Duration:</strong> Session and persistent (up to 12 months)</p>
                   <p className="text-white"><strong className="text-gold-300">Legal Basis:</strong> Legitimate interest (essential for service provision)</p>
                 </div>
                 <h4 className="text-lg font-semibold text-gold-300 mb-3">Examples include:</h4>
                 <ul className="list-disc list-inside text-white space-y-1">
-                  <li><code className="bg-jerry-green-700 px-2 py-1 rounded text-gold-200">ageGateVerified</code> - Remembers age verification status (30 days)</li>
-                  <li><code className="bg-jerry-green-700 px-2 py-1 rounded text-gold-200">theme</code> - Stores your preferred light/dark theme (localStorage)</li>
+                  <li><code className="bg-jerry-green-700 px-2 py-1 rounded text-gold-200">ageVerified</code> - Remembers age verification status (12 months)</li>
                   <li>Session cookies for site functionality and security</li>
                 </ul>
               </div>
@@ -112,9 +111,9 @@ export default function CookiePolicy() {
                 </div>
                 <h4 className="text-lg font-semibold text-gold-300 mb-3">Examples include:</h4>
                 <ul className="list-disc list-inside text-white space-y-1">
+                  <li><strong className="text-gold-300">Meta (Facebook) Pixel:</strong> Advertising attribution and retargeting</li>
+                  <li><strong className="text-gold-300">TikTok Pixel:</strong> Advertising attribution and retargeting</li>
                   <li><strong className="text-gold-300">Klaviyo:</strong> Email marketing and customer segmentation</li>
-                  <li><strong className="text-gold-300">Social Media Pixels:</strong> Track social media campaign effectiveness</li>
-                  <li>Newsletter signup tracking and preferences</li>
                 </ul>
               </div>
 
@@ -128,9 +127,8 @@ export default function CookiePolicy() {
                 </div>
                 <h4 className="text-lg font-semibold text-gold-300 mb-3">Examples include:</h4>
                 <ul className="list-disc list-inside text-white space-y-1">
-                  <li><strong className="text-gold-300">Google Analytics:</strong> Website traffic and user behavior analysis</li>
-                  <li>Page performance monitoring</li>
-                  <li>User journey tracking (anonymized)</li>
+                  <li><strong className="text-gold-300">Google Analytics:</strong> Website traffic and user behaviour analysis</li>
+                  <li><strong className="text-gold-300">Google Ads:</strong> Conversion tracking for advertising campaigns</li>
                 </ul>
               </div>
             </section>
@@ -143,20 +141,20 @@ export default function CookiePolicy() {
               
               <div className="space-y-4">
                 <div className="border-l-4 border-gold-500 pl-6 py-2">
-                  <h4 className="text-lg font-semibold text-gold-300 mb-2">Klaviyo (Marketing)</h4>
+                  <h4 className="text-lg font-semibold text-gold-300 mb-2">Cookiebot — Consent Management</h4>
                   <p className="text-white">
-                    Email marketing platform used for newsletters and customer communications.{' '}
-                    <a href="https://www.klaviyo.com/privacy" target="_blank" rel="noopener noreferrer" 
+                    Manages your cookie consent preferences and records consent for compliance purposes.{' '}
+                    <a href="https://www.cookiebot.com/en/privacy-policy/" target="_blank" rel="noopener noreferrer"
                        className="text-gold-300 hover:text-gold-200 underline">
-                      View Klaviyo's Privacy Policy
+                      View Cookiebot's Privacy Policy
                     </a>
                   </p>
                 </div>
 
                 <div className="border-l-4 border-gold-500 pl-6 py-2">
-                  <h4 className="text-lg font-semibold text-gold-300 mb-2">Google Analytics (Analytics)</h4>
+                  <h4 className="text-lg font-semibold text-gold-300 mb-2">Google Analytics / Google Ads — Analytics</h4>
                   <p className="text-white">
-                    Web analytics service to understand website usage patterns.{' '}
+                    Website analytics and advertising conversion tracking.{' '}
                     <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer"
                        className="text-gold-300 hover:text-gold-200 underline">
                       View Google's Privacy Policy
@@ -165,12 +163,56 @@ export default function CookiePolicy() {
                 </div>
 
                 <div className="border-l-4 border-gold-500 pl-6 py-2">
-                  <h4 className="text-lg font-semibold text-gold-300 mb-2">Trustpilot (Reviews & Marketing)</h4>
+                  <h4 className="text-lg font-semibold text-gold-300 mb-2">Meta (Facebook) Pixel — Marketing</h4>
+                  <p className="text-white">
+                    Advertising attribution and retargeting across Meta platforms.{' '}
+                    <a href="https://www.facebook.com/privacy/policy/" target="_blank" rel="noopener noreferrer"
+                       className="text-gold-300 hover:text-gold-200 underline">
+                      View Meta's Privacy Policy
+                    </a>
+                  </p>
+                </div>
+
+                <div className="border-l-4 border-gold-500 pl-6 py-2">
+                  <h4 className="text-lg font-semibold text-gold-300 mb-2">TikTok Pixel — Marketing</h4>
+                  <p className="text-white">
+                    Advertising attribution and retargeting on TikTok.{' '}
+                    <a href="https://www.tiktok.com/legal/page/row/privacy-policy/en" target="_blank" rel="noopener noreferrer"
+                       className="text-gold-300 hover:text-gold-200 underline">
+                      View TikTok's Privacy Policy
+                    </a>
+                  </p>
+                </div>
+
+                <div className="border-l-4 border-gold-500 pl-6 py-2">
+                  <h4 className="text-lg font-semibold text-gold-300 mb-2">Klaviyo — Marketing</h4>
+                  <p className="text-white">
+                    Email marketing platform used for newsletters and customer communications.{' '}
+                    <a href="https://www.klaviyo.com/privacy" target="_blank" rel="noopener noreferrer"
+                       className="text-gold-300 hover:text-gold-200 underline">
+                      View Klaviyo's Privacy Policy
+                    </a>
+                  </p>
+                </div>
+
+                <div className="border-l-4 border-gold-500 pl-6 py-2">
+                  <h4 className="text-lg font-semibold text-gold-300 mb-2">Trustpilot — Reviews</h4>
                   <p className="text-white">
                     Customer review platform used to collect and display verified product reviews.{' '}
                     <a href="https://legal.trustpilot.com/for-reviewers/end-user-privacy-terms" target="_blank" rel="noopener noreferrer"
                        className="text-gold-300 hover:text-gold-200 underline">
                       View Trustpilot's Privacy Policy
+                    </a>
+                  </p>
+                </div>
+
+                <div className="border-l-4 border-gold-500 pl-6 py-2">
+                  <h4 className="text-lg font-semibold text-gold-300 mb-2">Sentry — Performance</h4>
+                  <p className="text-white">
+                    Error monitoring and performance tracking to help us identify and fix issues.{' '}
+                    <a href="https://sentry.io/privacy/" target="_blank" rel="noopener noreferrer"
+                       className="text-gold-300 hover:text-gold-200 underline">
+                      View Sentry's Privacy Policy
                     </a>
                   </p>
                 </div>
