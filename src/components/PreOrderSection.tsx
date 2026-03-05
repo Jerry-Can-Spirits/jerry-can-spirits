@@ -13,7 +13,7 @@ interface ProductPricing {
 export default function PreOrderSection() {
   const [bottlesSold, setBottlesSold] = useState<number | null>(null)
   const [bottlePricing, setBottlePricing] = useState<ProductPricing>({ price: '35', compareAtPrice: '45' })
-  const [giftSetPricing, setGiftSetPricing] = useState<ProductPricing>({ price: '55', compareAtPrice: '65' })
+  const [giftSetPricing, setGiftSetPricing] = useState<ProductPricing>({ price: '85', compareAtPrice: null })
   const [tradePackPricing, setTradePackPricing] = useState<ProductPricing>({ price: '180', compareAtPrice: '210' })
   const [loading, setLoading] = useState(true)
   const totalBottles = 700
