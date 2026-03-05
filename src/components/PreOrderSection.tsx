@@ -103,8 +103,6 @@ export default function PreOrderSection() {
 
   const percentageSold = bottlesSold !== null ? (bottlesSold / totalBottles) * 100 : 0
   const showProgressBar = !loading && bottlesSold !== null
-  const bottleDiscount = bottlePricing.compareAtPrice ? parseInt(bottlePricing.compareAtPrice) - parseInt(bottlePricing.price) : 10
-
   // PMO compliance: Calculate unit prices (price per litre)
   const bottleVolumeLitres = 0.7 // 700ml
   const tradePackVolumeLitres = 6 * 0.7 // 6 × 700ml = 4.2L

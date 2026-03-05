@@ -1,8 +1,8 @@
 'use client';
 
 import Script from 'next/script';
+import { usePathname } from 'next/navigation';
 import { useEffect } from 'react';
-import { useCookieConsent } from '@/hooks/useCookieConsent';
 
 const FB_PIXEL_ID = '825009767240821';
 
@@ -18,25 +18,6 @@ declare global {
 }
 
 export default function FacebookPixel() {
-  const { preferences } = useCookieConsent();
-
-  useEffect(() => {
-    if (typeof window === 'undefined' || !window.fbq) return;
-
-    if (preferences.marketing) {
-      // User has consented — grant and fire PageView
-      window.fbq('consent', 'grant');
-      window.fbq('track', 'PageView');
-    } else {
-      // No consent (or withdrawn) — revoke
-      window.fbq('consent', 'revoke');
-    }
-  }, [preferences.marketing]);
-
-  // Always render — pixel loads with consent revoked by default.
-  // fbq('consent', 'revoke') prevents Meta receiving any data until granted.
-  // This makes the pixel detectable by tools (Meta Pixel Helper, audits)
-  // while remaining GDPR compliant.
   return (
     <Script
       id="facebook-pixel"
@@ -51,12 +32,47 @@ export default function FacebookPixel() {
           t.src=v;s=b.getElementsByTagName(e)[0];
           s.parentNode.insertBefore(t,s)}(window, document,'script',
           'https://connect.facebook.net/en_US/fbevents.js');
+
           fbq('consent', 'revoke');
           fbq('init', '${FB_PIXEL_ID}');
+
+          // Check if Cookiebot consent already exists (e.g. returning visitor)
+          if (typeof Cookiebot !== 'undefined' && Cookiebot.consent && Cookiebot.consent.marketing) {
+            fbq('consent', 'grant');
+            fbq('track', 'PageView');
+          }
+
+          // Grant consent and fire PageView when user accepts marketing cookies
+          window.addEventListener('CookiebotOnAccept', function() {
+            if (Cookiebot.consent.marketing) {
+              fbq('consent', 'grant');
+              fbq('track', 'PageView');
+            }
+          });
+
+          // Revoke consent if user declines or withdraws
+          window.addEventListener('CookiebotOnDecline', function() {
+            fbq('consent', 'revoke');
+          });
         `,
       }}
     />
   );
+}
+
+// Fires PageView on every client-side route change
+export function PixelPageView() {
+  const pathname = usePathname();
+
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.fbq) {
+      if (typeof window.Cookiebot !== 'undefined' && window.Cookiebot.consent?.marketing) {
+        window.fbq('track', 'PageView');
+      }
+    }
+  }, [pathname]);
+
+  return null;
 }
 
 // Helper functions for tracking events throughout your app

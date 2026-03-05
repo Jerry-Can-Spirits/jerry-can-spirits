@@ -78,7 +78,16 @@ export default function TermsOfService() {
                   <strong className="text-gold-300">Company:</strong> Jerry Can Spirits® Ltd
                 </p>
                 <p className="text-white mb-2">
-                  <strong className="text-gold-300">Registration:</strong> England and Wales
+                  <strong className="text-gold-300">Company Number:</strong> 16618770 (registered in England and Wales)
+                </p>
+                <p className="text-white mb-2">
+                  <strong className="text-gold-300">Registered Address:</strong> 167-169 Great Portland Street, Mayfair, London, W1W 5PA
+                </p>
+                <p className="text-white mb-2">
+                  <strong className="text-gold-300">VAT Registration:</strong> GB 499 6389 03
+                </p>
+                <p className="text-white mb-2">
+                  <strong className="text-gold-300">AWRS Number:</strong> XFAW 000 0012 3072
                 </p>
                 <p className="text-white mb-2">
                   <strong className="text-gold-300">Trademark:</strong> UK00004263767 (Classes 33, 35)
@@ -168,8 +177,18 @@ export default function TermsOfService() {
                 5.3 Delivery
               </h3>
               <p className="text-white mb-4">
-                Delivery times are estimates and not guaranteed. Risk of loss and title pass to you upon delivery. 
+                Delivery times are estimates and not guaranteed. Risk of loss and title pass to you upon delivery.
                 See our <a href="/shipping-returns/" className="text-gold-300 hover:text-gold-200 underline">Shipping & Returns</a> policy for full details.
+              </p>
+
+              <h3 className="text-xl font-serif font-semibold text-white mt-6 mb-3">
+                5.4 Consumer Contracts Regulations 2013
+              </h3>
+              <p className="text-white mb-4">
+                As a UK consumer purchasing online, you have rights under the Consumer Contracts (Information, Cancellation and Additional Charges) Regulations 2013. However, under Regulation 28(3)(c), the right to cancel does not apply to goods that are liable to deteriorate or expire rapidly, which includes sealed alcoholic beverages. Accordingly, we do not accept change-of-mind returns on alcohol products once an order has been dispatched.
+              </p>
+              <p className="text-white">
+                This does not affect your statutory rights in respect of faulty, damaged, or incorrectly dispatched goods, which are covered under the Consumer Rights Act 2015.
               </p>
             </section>
 
@@ -346,7 +365,8 @@ export default function TermsOfService() {
                   <p className="text-white">
                     <strong className="text-gold-300">Address:</strong><br />
                     Jerry Can Spirits® Ltd<br />
-                    United Kingdom
+                    167-169 Great Portland Street<br />
+                    Mayfair, London, W1W 5PA
                   </p>
                 </div>
               </div>
@@ -363,8 +383,7 @@ export default function TermsOfService() {
             </strong>
           </p>
           <p className="text-parchment-400 text-xs">
-            These terms are subject to legal review and may be updated as required. 
-            Current terms are provisional and will be finalized by our legal team.
+            These terms are governed by the laws of England and Wales. We recommend you retain a copy for your records.
           </p>
         </div>
       </div>

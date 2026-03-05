@@ -31,6 +31,7 @@ declare global {
         preferences: boolean;
         necessary: boolean;
       };
+      renew: () => void;
     };
   }
 }

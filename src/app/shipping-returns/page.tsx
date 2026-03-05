@@ -68,7 +68,7 @@ export default function ShippingReturns() {
         "name": "How long do refunds take?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Once we receive your returned items, refunds are processed within 5-7 business days. Credit/debit cards take 3-5 business days, PayPal takes 1-2 business days, and bank transfers take 5-7 business days to appear."
+          "text": "Once we receive your returned items, refunds are processed within 5-7 business days. Credit/debit cards take 3-5 business days, PayPal takes 1-2 business days, and bank transfers take 3-5 business days to appear."
         }
       },
       {
@@ -120,8 +120,7 @@ export default function ShippingReturns() {
                 UK Shipping
               </h2>
               <p className="text-white mb-4 leading-relaxed">
-                We currently ship throughout the United Kingdom. All orders are dispatched within 2-3 
-                business days and typically arrive within 5-7 business days.
+                We currently ship throughout the United Kingdom. All first-batch orders will be fulfilled in April 2026. Once dispatched, orders typically arrive within 2-3 business days.
               </p>
 
               <h3 className="text-xl font-serif font-semibold text-gold-300 mt-6 mb-3">
@@ -208,7 +207,7 @@ export default function ShippingReturns() {
                 <ol className="list-decimal list-inside text-white space-y-2">
                   <li>Contact us within 14 days of delivery</li>
                   <li>Provide order number and reason for return</li>
-                  <li>Await return authorisation and prepaid shipping label</li>
+                  <li>Await return authorisation — return shipping is at the customer's expense</li>
                   <li>Return items in original, unopened condition</li>
                   <li>Refunds processed within 5-7 business days after receipt</li>
                 </ol>
@@ -229,7 +228,7 @@ export default function ShippingReturns() {
                   <ul className="list-disc list-inside text-white space-y-1">
                     <li><strong className="text-gold-300">Credit/Debit Cards:</strong> 3-5 business days</li>
                     <li><strong className="text-gold-300">PayPal:</strong> 1-2 business days</li>
-                    <li><strong className="text-gold-300">Bank Transfer:</strong> 5-7 business days</li>
+                    <li><strong className="text-gold-300">Bank Transfer:</strong> 3-5 business days</li>
                   </ul>
                 </div>
               </div>
@@ -318,7 +317,7 @@ export default function ShippingReturns() {
               <div className="border-b border-gold-500/10 pb-6">
                 <h3 className="text-lg font-semibold text-gold-300 mb-3">How long do refunds take?</h3>
                 <p className="text-parchment-200 leading-relaxed">
-                  Once we receive your returned items, refunds are processed within 5-7 business days. Credit/debit cards take 3-5 business days, PayPal takes 1-2 business days, and bank transfers take 5-7 business days to appear.
+                  Once we receive your returned items, refunds are processed within 5-7 business days. Credit/debit cards take 3-5 business days, PayPal takes 1-2 business days, and bank transfers take 3-5 business days to appear.
                 </p>
               </div>
 
@@ -340,8 +339,7 @@ export default function ShippingReturns() {
             </strong>
           </p>
           <p className="text-parchment-400 text-xs">
-            This policy is subject to review and will be updated by our legal team as required.
-            Current terms are provisional and may change.
+            This policy applies to all orders placed on jerrycanspirits.co.uk and does not affect your statutory rights.
           </p>
         </div>
       </div>
