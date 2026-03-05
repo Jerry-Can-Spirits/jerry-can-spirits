@@ -457,12 +457,11 @@ export default async function ProductPage({
             </div>
 
             {/* Description */}
-            {product.description && (
-              <div className="prose prose-invert max-w-none">
-                <p className="text-parchment-200 leading-relaxed whitespace-pre-line">
-                  {product.description}
-                </p>
-              </div>
+            {product.descriptionHtml && (
+              <div
+                className="prose prose-invert max-w-none prose-headings:font-serif prose-headings:text-gold-300 prose-p:text-parchment-200 prose-p:leading-relaxed prose-strong:text-white prose-li:text-parchment-200 prose-a:text-blue-400 prose-a:no-underline hover:prose-a:text-blue-300"
+                dangerouslySetInnerHTML={{ __html: product.descriptionHtml }}
+              />
             )}
 
             {/* Variant Selector & Add to Cart */}
@@ -753,7 +752,7 @@ export default async function ProductPage({
                       src={relatedProduct.images[0].url}
                       alt={relatedProduct.images[0].altText || relatedProduct.title}
                       fill
-                      className="object-cover group-hover:scale-110 transition-transform duration-300"
+                      className="object-contain group-hover:scale-110 transition-transform duration-300"
                     />
                   </div>
                 )}
