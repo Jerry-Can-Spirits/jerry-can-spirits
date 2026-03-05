@@ -20,7 +20,7 @@ import { CartProvider } from "@/contexts/CartContext";
 import CartDrawer from "@/components/CartDrawer";
 import SocialProofToast from "@/components/SocialProofToast";
 import { OrganizationSchema, WebsiteSchema } from "@/components/StructuredData";
-import FacebookPixel from "@/components/FacebookPixel";
+import FacebookPixel, { PixelPageView } from "@/components/FacebookPixel";
 import AnnouncementBar from "@/components/AnnouncementBar";
 import GoogleTag from "@/components/GoogleTag";
 import TikTokPixel from "@/components/TikTokPixel";
@@ -177,6 +177,7 @@ export default function RootLayout({
         <OrganizationSchema />
         <WebsiteSchema />
         <FacebookPixel />
+        <PixelPageView />
         <GoogleTag />
         <TikTokPixel />
         <KlaviyoScript />

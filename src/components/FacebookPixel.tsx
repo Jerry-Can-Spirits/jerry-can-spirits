@@ -1,6 +1,8 @@
 'use client';
 
 import Script from 'next/script';
+import { usePathname } from 'next/navigation';
+import { useEffect } from 'react';
 
 const FB_PIXEL_ID = '825009767240821';
 
@@ -56,6 +58,21 @@ export default function FacebookPixel() {
       }}
     />
   );
+}
+
+// Fires PageView on every client-side route change
+export function PixelPageView() {
+  const pathname = usePathname();
+
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.fbq) {
+      if (typeof window.Cookiebot !== 'undefined' && window.Cookiebot.consent?.marketing) {
+        window.fbq('track', 'PageView');
+      }
+    }
+  }, [pathname]);
+
+  return null;
 }
 
 // Helper functions for tracking events throughout your app
