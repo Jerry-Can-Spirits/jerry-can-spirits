@@ -153,7 +153,7 @@ export default function Home() {
         "@type": "VirtualLocation",
         "url": "https://jerrycanspirits.co.uk"
       },
-      "image": "https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/images-hero-hero-spiced-webp/public",
+      "image": "https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/e2852c97-66e2-4b69-bf0d-f7f99bc4a400/public",
       "organizer": {
         "@type": "Organization",
         "name": "Jerry Can Spirits",

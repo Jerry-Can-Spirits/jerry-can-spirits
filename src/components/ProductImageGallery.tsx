@@ -49,7 +49,7 @@ export default function ProductImageGallery({
           src={selectedImage.url}
           alt={selectedImage.altText || productTitle}
           fill
-          className="object-cover"
+          className="object-contain"
           sizes="(max-width: 768px) 100vw, 50vw"
           priority={selectedImageIndex === 0}
         />
@@ -72,7 +72,7 @@ export default function ProductImageGallery({
                 src={image.url}
                 alt={image.altText || `${productTitle} - Image ${index + 1}`}
                 fill
-                className="object-cover"
+                className="object-contain"
                 sizes="(max-width: 768px) 33vw, (max-width: 1024px) 12.5vw, 10vw"
               />
             </button>
