@@ -95,11 +95,13 @@ export const cocktailBySlugQuery = `*[_type == "cocktail" && slug.current == $sl
   featured,
   "image": image.asset->url,
   videoUrl,
+  flavorProfile,
   relatedGuides[] {
     "guide": guide->{ _id, title, slug },
     sectionAnchor,
     linkText
-  }
+  },
+  "relatedCocktails": relatedCocktails[]->{ _id, name, slug, description, difficulty, "image": image.asset->url }
 }`
 
 // Sitemap query - only fetches slug for URL generation

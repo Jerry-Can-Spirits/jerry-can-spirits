@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import Image from 'next/image'
 import { client } from '@/sanity/client'
 import { cocktailBySlugQuery } from '@/sanity/queries'
 import BackToTop from '@/components/BackToTop'
@@ -71,6 +72,15 @@ interface SanityCocktail {
   relatedGuides?: RelatedGuide[]
   longDescription?: Record<string, unknown>[]
   keywords?: string[]
+  flavorProfile?: string[]
+  relatedCocktails?: {
+    _id: string
+    name: string
+    slug: { current: string }
+    description?: string
+    difficulty?: string
+    image?: string
+  }[]
 }
 
 interface PageProps {
@@ -276,10 +286,59 @@ export default async function CocktailPage({ params }: PageProps) {
           {/* Recipe Display Component (Client-side for interactivity) */}
           <CocktailRecipeDisplay cocktail={cocktail} />
 
+          {/* Flavour Profile */}
+          {cocktail.flavorProfile && cocktail.flavorProfile.length > 0 && (
+            <div className="mt-6 sm:mt-8 bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-4 sm:p-6 border border-gold-500/20">
+              <h3 className="text-xl font-serif font-bold text-gold-300 mb-4">Flavour Profile</h3>
+              <div className="flex flex-wrap gap-2">
+                {cocktail.flavorProfile.map((note) => (
+                  <span
+                    key={note}
+                    className="px-4 py-2 bg-jerry-green-800/60 border border-gold-500/30 text-parchment-200 rounded-full text-sm font-medium"
+                  >
+                    {note}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+
           {/* Long Description - Rich editorial content from Sanity */}
           {cocktail.longDescription && cocktail.longDescription.length > 0 && (
             <div className="mt-6 sm:mt-8 bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-4 sm:p-6 md:p-8 border border-gold-500/20">
               <FieldManualPortableText value={cocktail.longDescription} />
+            </div>
+          )}
+
+          {/* Related Cocktails */}
+          {cocktail.relatedCocktails && cocktail.relatedCocktails.length > 0 && (
+            <div className="mt-6 sm:mt-8 bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-4 sm:p-6 border border-gold-500/20">
+              <h3 className="text-xl font-serif font-bold text-gold-300 mb-4">You Might Also Like</h3>
+              <div className="grid sm:grid-cols-2 gap-4">
+                {cocktail.relatedCocktails.map((related) => (
+                  <Link
+                    key={related._id}
+                    href={`/field-manual/cocktails/${related.slug.current}/`}
+                    className="flex items-start gap-4 p-4 bg-jerry-green-800/30 rounded-lg border border-gold-500/20 hover:bg-jerry-green-800/50 hover:border-gold-400/40 transition-all group"
+                  >
+                    {related.image && (
+                      <Image
+                        src={related.image}
+                        alt={related.name}
+                        width={64}
+                        height={64}
+                        className="w-16 h-16 object-cover rounded-lg flex-shrink-0"
+                      />
+                    )}
+                    <div className="min-w-0">
+                      <p className="font-semibold text-white group-hover:text-gold-300 transition-colors">{related.name}</p>
+                      {related.description && (
+                        <p className="text-parchment-400 text-sm mt-1 line-clamp-2">{related.description}</p>
+                      )}
+                    </div>
+                  </Link>
+                ))}
+              </div>
             </div>
           )}
 
