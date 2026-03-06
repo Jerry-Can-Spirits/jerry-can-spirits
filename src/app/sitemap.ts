@@ -99,7 +99,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }))
 
   // Fetch dynamic collection URLs (excludes bespoke collection pages)
-  const BESPOKE_COLLECTIONS = new Set(['drinks', 'barware', 'clothing'])
+  const BESPOKE_COLLECTIONS = new Set(['spirits', 'barware', 'clothing'])
   let dynamicCollectionUrls: MetadataRoute.Sitemap = []
   try {
     const allCollections = await getAllCollections()
@@ -333,7 +333,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.9,
     },
     {
-      url: `${baseUrl}/shop/drinks/`,
+      url: `${baseUrl}/shop/spirits/`,
       lastModified: currentDate,
       changeFrequency: 'daily',
       priority: 0.9,

@@ -188,10 +188,16 @@ const nextConfig: NextConfig = {
         destination: '/shop/product/jerry-can-spirits-expedition-spiced-rum/:path*',
         permanent: true,
       },
+      // Drinks → Spirits URL migration (collection handle changed in Shopify)
+      {
+        source: '/shop/drinks/:path*',
+        destination: '/shop/spirits/:path*',
+        permanent: true,
+      },
       // Affiliate/Creator collab vanity URLs (Shopify Collabs)
       {
         source: '/PatSmithComedy',
-        destination: '/shop/drinks?dt_id=PatSmithComedy',
+        destination: '/shop/spirits?dt_id=PatSmithComedy',
         permanent: false,
       },
     ]
