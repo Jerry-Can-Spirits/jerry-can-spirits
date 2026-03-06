@@ -132,10 +132,42 @@ const nextConfig: NextConfig = {
   // Redirects for URL structure changes and removed content
   async redirects() {
     return [
+      // Specific cocktail slug corrections (must come before the generic rule)
+      {
+        source: '/cocktails/vietnamese-iced-coffee',
+        destination: '/field-manual/cocktails/vietnamese-iced-coffee-cocktail/',
+        permanent: true,
+      },
       // Old /cocktails/* URLs redirect to field-manual
       {
         source: '/cocktails/:slug*',
         destination: '/field-manual/cocktails/:slug*',
+        permanent: true,
+      },
+      // Removed Shopify products — redirect to category pages
+      {
+        source: '/shop/product/contemporary-mixer-glass-31cl',
+        destination: '/shop/barware/',
+        permanent: true,
+      },
+      {
+        source: '/shop/product/stainless-steel-cocktail-shaker',
+        destination: '/shop/barware/',
+        permanent: true,
+      },
+      {
+        source: '/shop/product/stainless-steel-jigger-variants',
+        destination: '/shop/barware/',
+        permanent: true,
+      },
+      {
+        source: '/shop/product/original-handled-drinking-jam-jar-46cl',
+        destination: '/shop/barware/',
+        permanent: true,
+      },
+      {
+        source: '/shop/product/jerry-can-spirits-metal-keyring',
+        destination: '/shop/clothing/',
         permanent: true,
       },
       // Old /notify page (removed - redirect to homepage)

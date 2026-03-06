@@ -67,11 +67,6 @@ export function WebsiteSchema() {
     '@type': 'WebSite',
     name: 'Jerry Can Spirits',
     url: 'https://jerrycanspirits.co.uk',
-    potentialAction: {
-      '@type': 'SearchAction',
-      target: 'https://jerrycanspirits.co.uk/search?q={search_term_string}',
-      'query-input': 'required name=search_term_string',
-    },
   }
 
   return <StructuredData data={schema} id="website-schema" />
