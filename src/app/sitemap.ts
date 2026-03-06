@@ -1,5 +1,5 @@
 import { MetadataRoute } from 'next'
-import { getProducts, type ShopifyProduct } from '@/lib/shopify'
+import { getProducts, getAllCollections, type ShopifyProduct } from '@/lib/shopify'
 import { client } from '@/sanity/client'
 import {
   cocktailsSitemapQuery,
@@ -97,6 +97,23 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     changeFrequency: 'weekly' as const,
     priority: 0.9, // High priority for SEO-focused content
   }))
+
+  // Fetch dynamic collection URLs (excludes bespoke collection pages)
+  const BESPOKE_COLLECTIONS = new Set(['drinks', 'barware', 'clothing'])
+  let dynamicCollectionUrls: MetadataRoute.Sitemap = []
+  try {
+    const allCollections = await getAllCollections()
+    dynamicCollectionUrls = allCollections
+      .filter(c => !BESPOKE_COLLECTIONS.has(c.handle))
+      .map(c => ({
+        url: `${baseUrl}/shop/${c.handle}/`,
+        lastModified: currentDate,
+        changeFrequency: 'weekly' as const,
+        priority: 0.7,
+      }))
+  } catch (error) {
+    console.error('Error fetching collections for sitemap:', error)
+  }
 
   // Fetch all batches from D1
   let batchUrls: MetadataRoute.Sitemap = []
@@ -335,5 +352,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
   ]
 
-  return [...routes, ...productUrls, ...cocktailUrls, ...equipmentUrls, ...ingredientUrls, ...guideUrls, ...batchUrls]
+  return [...routes, ...productUrls, ...cocktailUrls, ...equipmentUrls, ...ingredientUrls, ...guideUrls, ...batchUrls, ...dynamicCollectionUrls]
 }

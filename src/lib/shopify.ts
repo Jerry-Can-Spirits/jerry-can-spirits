@@ -267,6 +267,37 @@ export async function getProductsByCollection(collectionHandle: string): Promise
   }
 }
 
+// Fetch all collections (handle + title only — used for sitemap and nav)
+export interface ShopifyCollectionSummary {
+  handle: string
+  title: string
+}
+
+export async function getAllCollections(): Promise<ShopifyCollectionSummary[]> {
+  const query = `
+    query GetCollections {
+      collections(first: 50) {
+        edges {
+          node {
+            handle
+            title
+          }
+        }
+      }
+    }
+  `
+  try {
+    const { data, errors } = await getClient().request(query)
+    if (errors) throw new Error('Failed to fetch collections')
+    return data.collections.edges.map(
+      (e: { node: ShopifyCollectionSummary }) => e.node
+    )
+  } catch (error) {
+    console.error('Error fetching collections:', error)
+    return []
+  }
+}
+
 // Fetch single product by handle
 // SECURE: Uses GraphQL variables instead of string interpolation
 export async function getProduct(handle: string): Promise<ShopifyProduct | null> {
