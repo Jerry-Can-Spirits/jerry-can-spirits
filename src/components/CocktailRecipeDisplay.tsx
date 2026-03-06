@@ -234,20 +234,18 @@ export default function CocktailRecipeDisplay({ cocktail }: Props) {
               <div key={index} className="flex items-start space-x-3 sm:space-x-4 p-3 sm:p-4 bg-jerry-green-800/30 rounded-lg border border-gold-500/20">
                 <div className="w-2 h-2 bg-gold-400 rounded-full mt-2 flex-shrink-0"></div>
                 <div className="flex-grow">
-                  <div className="flex items-center justify-between mb-1">
-                    {ingredient.ingredientRef ? (
-                      <Link
-                        href={`/field-manual/ingredients/${ingredient.ingredientRef.slug.current}`}
-                        className="font-semibold text-blue-400 hover:text-blue-300 underline decoration-dotted underline-offset-2 transition-colors"
-                        title={`Learn more about ${ingredient.name}`}
-                      >
-                        {ingredient.name}
-                      </Link>
-                    ) : (
-                      <span className="font-semibold text-white">{ingredient.name}</span>
-                    )}
-                    <span className="text-gold-300 font-semibold">{ingredient.amount}</span>
-                  </div>
+                  {ingredient.ingredientRef ? (
+                    <Link
+                      href={`/field-manual/ingredients/${ingredient.ingredientRef.slug.current}`}
+                      className="font-semibold text-blue-400 hover:text-blue-300 underline decoration-dotted underline-offset-2 transition-colors"
+                      title={`Learn more about ${ingredient.name}`}
+                    >
+                      {ingredient.name}
+                    </Link>
+                  ) : (
+                    <span className="font-semibold text-white">{ingredient.name}</span>
+                  )}
+                  <p className="text-gold-300 font-semibold text-sm">{ingredient.amount}</p>
                   {ingredient.description && (
                     <p className="text-parchment-300 text-sm">{ingredient.description}</p>
                   )}

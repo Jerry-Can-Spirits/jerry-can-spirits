@@ -423,11 +423,15 @@ export default async function ProductPage({
           <Link href="/shop/" className="hover:text-gold-300 transition-colors">
             Shop
           </Link>
-          <span>→</span>
+          <svg className="w-4 h-4 text-gold-500/50 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+          </svg>
           <Link href={category.href} className="hover:text-gold-300 transition-colors">
             {category.label}
           </Link>
-          <span>→</span>
+          <svg className="w-4 h-4 text-gold-500/50 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+          </svg>
           <span className="text-gold-300">{product.title}</span>
         </nav>
       </div>
