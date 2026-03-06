@@ -50,7 +50,19 @@ export default function Home() {
       "founders": [
         {
           "@type": "Person",
-          "name": "Jerry Can Spirits Founder",
+          "name": "Dan Freeman",
+          "alumniOf": {
+            "@type": "Organization",
+            "name": "Royal Corps of Signals"
+          },
+          "hasOccupation": {
+            "@type": "Occupation",
+            "name": "British Armed Forces Veteran"
+          }
+        },
+        {
+          "@type": "Person",
+          "name": "Rhys Williams",
           "alumniOf": {
             "@type": "Organization",
             "name": "Royal Corps of Signals"
