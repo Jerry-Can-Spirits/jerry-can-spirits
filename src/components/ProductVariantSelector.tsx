@@ -53,15 +53,22 @@ export default function ProductVariantSelector({
 
     console.log('Adding to cart:', { variantId: selectedVariantId, quantity, productTitle })
 
-    // Track AddToCart event via Zaraz
+    const atcPayload = {
+      content_name: productTitle,
+      content_ids: [productId],
+      content_type: 'product',
+      value: parseFloat(selectedVariant.price.amount) * quantity,
+      currency: currencyCode,
+    }
+
+    // Track AddToCart via Zaraz (server-side)
     if (typeof window !== 'undefined' && window.zaraz?.track) {
-      window.zaraz.track('AddToCart', {
-        content_name: productTitle,
-        content_ids: [productId],
-        content_type: 'product',
-        value: parseFloat(selectedVariant.price.amount) * quantity,
-        currency: currencyCode,
-      })
+      window.zaraz.track('AddToCart', atcPayload)
+    }
+
+    // Track AddToCart via Meta Pixel directly (consent-gated)
+    if (typeof window !== 'undefined' && window.fbq && window.Cookiebot?.consent?.marketing) {
+      window.fbq('track', 'AddToCart', atcPayload)
     }
 
     // Track AddToCart event for Google Ads
