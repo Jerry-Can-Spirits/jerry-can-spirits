@@ -5,19 +5,19 @@ const components: PortableTextComponents = {
   block: {
     h1: ({ children }) => (
       // H1 is suppressed inside body content — rendered as h2 visually
-      <h2 className="text-2xl font-serif font-bold text-gold-300 mt-6 mb-3 first:mt-0">{children}</h2>
+      <h2 className="text-2xl font-serif font-bold text-gold-300 mt-10 mb-4 first:mt-0">{children}</h2>
     ),
     h2: ({ children }) => (
-      <h2 className="text-2xl font-serif font-bold text-gold-300 mt-6 mb-3 first:mt-0">{children}</h2>
+      <h2 className="text-2xl font-serif font-bold text-gold-300 mt-10 mb-4 first:mt-0">{children}</h2>
     ),
     h3: ({ children }) => (
-      <h3 className="text-xl font-serif font-bold text-gold-400 mt-5 mb-2 first:mt-0">{children}</h3>
+      <h3 className="text-xl font-serif font-bold text-gold-400 mt-8 mb-3 first:mt-0">{children}</h3>
     ),
     h4: ({ children }) => (
-      <h4 className="text-lg font-serif font-semibold text-gold-400 mt-4 mb-2 first:mt-0">{children}</h4>
+      <h4 className="text-lg font-serif font-semibold text-gold-400 mt-6 mb-2 first:mt-0">{children}</h4>
     ),
     normal: ({ children }) => (
-      <p className="text-parchment-300 leading-relaxed mb-4 last:mb-0">{children}</p>
+      <p className="text-parchment-300 leading-relaxed mb-5 last:mb-0">{children}</p>
     ),
   },
   marks: {

@@ -170,7 +170,7 @@ export default async function IngredientDetailPage({ params }: { params: Promise
         <div className="flex flex-col lg:grid lg:grid-cols-2 gap-8 items-start">
 
           {/* LEFT COLUMN - Sticky sidebar with key info */}
-          <div className="flex flex-col gap-6 order-1 lg:order-1">
+          <div className="flex flex-col gap-6 order-2 lg:order-1">
             <div className="contents lg:block lg:sticky lg:top-24 lg:space-y-6">
 
               {/* Main Image */}
@@ -415,7 +415,7 @@ export default async function IngredientDetailPage({ params }: { params: Promise
           </div>
 
           {/* RIGHT COLUMN - Main content */}
-          <div className="order-2 lg:order-2 space-y-8">
+          <div className="order-1 lg:order-2 space-y-8">
 
             {/* Header - Desktop Only (Mobile version is above grid) */}
             <div className="hidden lg:block">
