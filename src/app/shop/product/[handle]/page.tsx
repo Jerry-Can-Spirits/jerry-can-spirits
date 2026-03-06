@@ -113,15 +113,16 @@ export async function generateMetadata({
 
     const description = product.description.slice(0, 155) || `Madagascan vanilla, Ceylon cinnamon, ginger, cassia, clove, orange peel, agave, bourbon oak. Pot-distilled in Wales. 40% ABV. 700 bottles per batch.`
 
+    const displayTitle = product.title.replace(/^Jerry Can Spirits[®]?\s*/i, '')
     return {
-      title: `${product.title} | Jerry Can Spirits`,
+      title: `${displayTitle} | Jerry Can Spirits`,
       description,
       keywords: `${product.title}, British spirits, veteran owned, premium spirits, military heritage, Jerry Can Spirits, expedition spirits, small batch, craft spirits`,
       alternates: {
         canonical: `https://jerrycanspirits.co.uk/shop/product/${handle}/`,
       },
       openGraph: {
-        title: `${product.title} | Jerry Can Spirits®`,
+        title: `${displayTitle} | Jerry Can Spirits®`,
         description,
         url: `https://jerrycanspirits.co.uk/shop/product/${handle}/`,
         images: product.images.length > 0 ? [product.images[0].url] : [],
@@ -130,7 +131,7 @@ export async function generateMetadata({
       },
       twitter: {
         card: 'summary_large_image',
-        title: `${product.title} | Jerry Can Spirits®`,
+        title: `${displayTitle} | Jerry Can Spirits®`,
         description,
         images: product.images.length > 0 ? [product.images[0].url] : [],
       },
