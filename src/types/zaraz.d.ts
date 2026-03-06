@@ -6,6 +6,14 @@ import 'react'
 // Extend Window interface for Zaraz
 declare global {
   interface Window {
+    Cookiebot?: {
+      consent?: {
+        marketing?: boolean
+        statistics?: boolean
+        preferences?: boolean
+        necessary?: boolean
+      }
+    }
     zaraz?: {
       track: (eventName: string, properties?: Record<string, unknown>) => void
       set: (key: string, value: unknown) => void
