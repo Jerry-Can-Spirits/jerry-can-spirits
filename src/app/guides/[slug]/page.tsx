@@ -5,6 +5,7 @@ import { notFound } from 'next/navigation'
 import { client } from '@/sanity/client'
 import { guideBySlugQuery, adjacentGuidesQuery } from '@/sanity/queries'
 import BackToTop from '@/components/BackToTop'
+import Breadcrumbs from '@/components/Breadcrumbs'
 import StructuredData from '@/components/StructuredData'
 import ShareButton from '@/components/ShareButton'
 import GuideSections from '@/components/GuideSections'
@@ -217,11 +218,12 @@ export default async function GuidePage({ params }: PageProps) {
       <main className="min-h-screen py-20">
         {/* Breadcrumb */}
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
-          <nav className="text-sm text-parchment-400" aria-label="Breadcrumb">
-            <Link href="/guides/" className="hover:text-gold-300 transition-colors">Guides</Link>
-            <span className="mx-2">→</span>
-            <span className="text-gold-300">{guide.title}</span>
-          </nav>
+          <Breadcrumbs
+            items={[
+              { label: 'Guides', href: '/guides' },
+              { label: guide.title },
+            ]}
+          />
         </div>
 
         {/* Hero Section */}
