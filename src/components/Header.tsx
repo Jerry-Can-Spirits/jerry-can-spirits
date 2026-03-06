@@ -44,15 +44,9 @@ export default function Header() {
       href: '/shop',
       dropdown: [
         { name: 'Spirits', href: '/shop/spirits', description: 'Expedition Spiced Rum' },
-        { name: 'Gift Sets', href: '/shop/gift-sets', description: 'Ready to give' },
         { name: 'Barware', href: '/shop/barware', description: 'Bar tools & equipment' },
-        { name: 'Cocktail Shakers', href: '/shop/cocktail-shakers', description: 'Professional shakers' },
-        { name: 'Glassware', href: '/shop/cocktail-glasses-glassware', description: 'Serve with intention' },
-        { name: 'Measuring Tools', href: '/shop/bar-measuring-tools', description: 'Precision for better drinks' },
-        { name: 'Hip Flasks', href: '/shop/hip-flasks', description: 'Built to travel' },
-        { name: 'Ice & Chilling', href: '/shop/ice-chilling', description: 'Chill properly' },
         { name: 'Clothing', href: '/shop/clothing', description: 'Expedition apparel' },
-        { name: 'Accessories', href: '/shop/accessories', description: 'The finishing details' },
+        { name: 'Explore All Collections', href: '/shop', description: 'Browse everything' },
       ]
     },
     { name: 'Reviews', href: '/reviews' },
@@ -234,7 +228,7 @@ export default function Header() {
                   {item.href ? (
                     <Link
                       href={item.href}
-                      className={`flex items-center space-x-1 text-parchment-100 hover:text-parchment-50 px-3 py-2 text-sm font-semibold uppercase tracking-wide transition-all duration-200 hover:scale-105 relative focus:outline-none focus:ring-2 focus:ring-gold-400 rounded ${
+                      className={`flex items-center space-x-1 whitespace-nowrap text-parchment-100 hover:text-parchment-50 px-3 py-2 text-sm font-semibold uppercase tracking-wide transition-all duration-200 hover:scale-105 relative focus:outline-none focus:ring-2 focus:ring-gold-400 rounded ${
                         activeDropdown === item.name ? 'text-parchment-50' : ''
                       }`}
                       onClick={() => trackMenuClick(item.name)}
@@ -261,7 +255,7 @@ export default function Header() {
                     </Link>
                   ) : (
                     <button
-                      className={`flex items-center space-x-1 text-parchment-100 hover:text-parchment-50 px-3 py-2 text-sm font-semibold uppercase tracking-wide transition-all duration-200 cursor-pointer relative focus:outline-none focus:ring-2 focus:ring-gold-400 rounded ${
+                      className={`flex items-center space-x-1 whitespace-nowrap text-parchment-100 hover:text-parchment-50 px-3 py-2 text-sm font-semibold uppercase tracking-wide transition-all duration-200 cursor-pointer relative focus:outline-none focus:ring-2 focus:ring-gold-400 rounded ${
                         activeDropdown === item.name ? 'text-parchment-50' : ''
                       }`}
                       onClick={() => setActiveDropdown(activeDropdown === item.name ? null : item.name)}
