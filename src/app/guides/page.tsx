@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { client } from '@/sanity/client'
 import { guidesListQuery } from '@/sanity/queries'
 import GuidesClient from './GuidesClient'
+import Breadcrumbs from '@/components/Breadcrumbs'
 import StructuredData from '@/components/StructuredData'
 
 export const dynamic = 'force-dynamic'
@@ -53,6 +54,9 @@ export default async function GuidesPage() {
   return (
     <>
       <StructuredData data={itemListSchema} id="guides-itemlist-schema" />
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 mb-8">
+        <Breadcrumbs items={[{ label: 'Guides' }]} />
+      </div>
       <GuidesClient guides={guides} />
     </>
   )

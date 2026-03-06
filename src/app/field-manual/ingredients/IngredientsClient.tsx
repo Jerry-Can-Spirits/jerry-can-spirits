@@ -107,15 +107,6 @@ export default function IngredientsClient({ ingredients }: IngredientsClientProp
 
   return (
     <main className="min-h-screen py-20">
-      {/* Breadcrumb */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
-        <nav className="text-sm text-parchment-400">
-          <Link href="/field-manual/" className="hover:text-gold-300 transition-colors">Field Manual</Link>
-          <span className="mx-2">→</span>
-          <span className="text-gold-300">Ingredients</span>
-        </nav>
-      </div>
-
       {/* Hero Section */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
         <div className="text-center mb-12">
