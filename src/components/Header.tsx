@@ -43,9 +43,16 @@ export default function Header() {
       name: 'Shop',
       href: '/shop',
       dropdown: [
-        { name: 'Drinks', href: '/shop/drinks', description: 'Spirits collection' },
+        { name: 'Spirits', href: '/shop/spirits', description: 'Expedition Spiced Rum' },
+        { name: 'Gift Sets', href: '/shop/gift-sets', description: 'Ready to give' },
         { name: 'Barware', href: '/shop/barware', description: 'Bar tools & equipment' },
-        { name: 'Clothing', href: '/shop/clothing', description: 'Adventure apparel' },
+        { name: 'Cocktail Shakers', href: '/shop/cocktail-shakers', description: 'Professional shakers' },
+        { name: 'Glassware', href: '/shop/cocktail-glasses-glassware', description: 'Serve with intention' },
+        { name: 'Measuring Tools', href: '/shop/bar-measuring-tools', description: 'Precision for better drinks' },
+        { name: 'Hip Flasks', href: '/shop/hip-flasks', description: 'Built to travel' },
+        { name: 'Ice & Chilling', href: '/shop/ice-chilling', description: 'Chill properly' },
+        { name: 'Clothing', href: '/shop/clothing', description: 'Expedition apparel' },
+        { name: 'Accessories', href: '/shop/accessories', description: 'The finishing details' },
       ]
     },
     { name: 'Reviews', href: '/reviews' },
