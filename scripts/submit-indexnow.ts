@@ -1,11 +1,16 @@
 /**
  * IndexNow bulk URL submission script.
  *
- * Submits all site URLs to IndexNow (Bing, Yandex + Google pilot).
+ * Submits all site URLs to IndexNow (Bing, Yandex).
  * Run after deploy or whenever significant content changes:
  *   npx tsx scripts/submit-indexnow.ts
  *
- * Requires SANITY_PROJECT_ID and SANITY_DATASET env vars (or .env.local).
+ * Requires NEXT_PUBLIC_SANITY_PROJECT_ID, NEXT_PUBLIC_SANITY_DATASET,
+ * NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN, and NEXT_PUBLIC_SHOPIFY_STOREFRONT_ACCESS_TOKEN
+ * env vars (or .env.local).
+ *
+ * Note: D1 batch pages (/batch/[id]/) are excluded — D1 requires Cloudflare
+ * Workers runtime and cannot be queried from a local script.
  */
 
 import { createClient } from '@sanity/client'
@@ -13,6 +18,34 @@ import { createClient } from '@sanity/client'
 const INDEXNOW_KEY = 'a7e2b5f9c3d1e6a8b4d2f0e5c9a3b7d1'
 const BASE_URL = 'https://jerrycanspirits.co.uk'
 const INDEXNOW_ENDPOINT = 'https://api.indexnow.org/indexnow'
+
+async function getShopifyProductHandles(): Promise<string[]> {
+  const storeDomain = process.env.NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN
+  const accessToken = process.env.NEXT_PUBLIC_SHOPIFY_STOREFRONT_ACCESS_TOKEN
+
+  if (!storeDomain || !accessToken) {
+    console.warn('Shopify env vars not set — skipping product URLs')
+    return []
+  }
+
+  const query = `{ products(first: 250) { edges { node { handle } } } }`
+  const res = await fetch(`https://${storeDomain}/api/2026-01/graphql.json`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-Shopify-Storefront-Access-Token': accessToken,
+    },
+    body: JSON.stringify({ query }),
+  })
+
+  if (!res.ok) {
+    console.warn(`Shopify API returned HTTP ${res.status} — skipping product URLs`)
+    return []
+  }
+
+  const json = await res.json() as { data: { products: { edges: Array<{ node: { handle: string } }> } } }
+  return json.data.products.edges.map(e => e.node.handle)
+}
 
 async function getAllUrls(sanity: ReturnType<typeof createClient>): Promise<string[]> {
   const staticUrls = [
@@ -37,6 +70,8 @@ async function getAllUrls(sanity: ReturnType<typeof createClient>): Promise<stri
     '/shipping-returns/',
     '/accessibility/',
     '/armed-forces-covenant/',
+    '/careers/',
+    '/security-policy/',
     '/faq/',
     '/reviews/',
     '/friends/',
@@ -50,12 +85,13 @@ async function getAllUrls(sanity: ReturnType<typeof createClient>): Promise<stri
     '/shop/clothing/',
   ].map(path => `${BASE_URL}${path}`)
 
-  // Fetch dynamic content slugs from Sanity
-  const [cocktails, ingredients, equipment, guides] = await Promise.all([
+  // Fetch dynamic content in parallel
+  const [cocktails, ingredients, equipment, guides, productHandles] = await Promise.all([
     sanity.fetch<Array<{ slug: { current: string } }>>(`*[_type == "cocktail" && defined(slug.current)]{ slug }`),
     sanity.fetch<Array<{ slug: { current: string } }>>(`*[_type == "ingredient" && defined(slug.current)]{ slug }`),
     sanity.fetch<Array<{ slug: { current: string } }>>(`*[_type == "equipment" && defined(slug.current)]{ slug }`),
     sanity.fetch<Array<{ slug: { current: string } }>>(`*[_type == "guide" && defined(slug.current)]{ slug }`),
+    getShopifyProductHandles(),
   ])
 
   const dynamicUrls = [
@@ -63,6 +99,7 @@ async function getAllUrls(sanity: ReturnType<typeof createClient>): Promise<stri
     ...ingredients.map(i => `${BASE_URL}/field-manual/ingredients/${i.slug.current}/`),
     ...equipment.map(e => `${BASE_URL}/field-manual/equipment/${e.slug.current}/`),
     ...guides.map(g => `${BASE_URL}/guides/${g.slug.current}/`),
+    ...productHandles.map(h => `${BASE_URL}/shop/product/${h}/`),
   ]
 
   return [...staticUrls, ...dynamicUrls]
@@ -107,9 +144,9 @@ async function main() {
     apiVersion: '2024-01-01',
   })
 
-  // Patch getAllUrls to accept sanity client
   const urls = await getAllUrls(sanity)
   console.log(`Submitting ${urls.length} URLs to IndexNow...`)
+  urls.forEach(u => console.log(` ${u}`))
   await submitToIndexNow(urls)
 }
 
