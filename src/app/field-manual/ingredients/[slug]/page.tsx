@@ -162,7 +162,7 @@ export default async function IngredientDetailPage({ params }: { params: Promise
             {ingredient.name}
           </h1>
 
-          <p className="text-xl text-parchment-300 leading-relaxed">
+          <p className="text-xl text-parchment-300 leading-relaxed whitespace-pre-line">
             {ingredient.description}
           </p>
         </div>
@@ -399,7 +399,7 @@ export default async function IngredientDetailPage({ params }: { params: Promise
                     <div className="flex-1 space-y-3">
                       <h3 className="text-gold-300 font-semibold">Storage & Handling</h3>
                       {ingredient.storage && (
-                        <p className="text-parchment-300 leading-relaxed text-sm">{ingredient.storage}</p>
+                        <p className="text-parchment-300 leading-relaxed text-sm whitespace-pre-line">{ingredient.storage}</p>
                       )}
                       {ingredient.shelfLife && (
                         <div className="p-3 bg-jerry-green-800/30 rounded-lg border border-gold-500/20">
@@ -430,7 +430,7 @@ export default async function IngredientDetailPage({ params }: { params: Promise
                 {ingredient.name}
               </p>
 
-              <p className="text-xl text-parchment-300 leading-relaxed">
+              <p className="text-xl text-parchment-300 leading-relaxed whitespace-pre-line">
                 {ingredient.description}
               </p>
             </div>
@@ -453,7 +453,7 @@ export default async function IngredientDetailPage({ params }: { params: Promise
                   </div>
                   <div>
                     <h3 className="text-gold-300 font-serif font-bold text-lg mb-2">Pro Tip</h3>
-                    <p className="text-parchment-300 leading-relaxed">{ingredient.professionalTip}</p>
+                    <p className="text-parchment-300 leading-relaxed whitespace-pre-line">{ingredient.professionalTip}</p>
                   </div>
                 </div>
               </div>
@@ -462,7 +462,7 @@ export default async function IngredientDetailPage({ params }: { params: Promise
             {/* Usage */}
             <div className="order-5 bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
               <h2 className="text-2xl font-serif font-bold text-gold-300 mb-4">Usage</h2>
-              <p className="text-parchment-300 leading-relaxed">{ingredient.usage}</p>
+              <p className="text-parchment-300 leading-relaxed whitespace-pre-line">{ingredient.usage}</p>
             </div>
 
             {/* Top Tips */}
@@ -524,7 +524,7 @@ export default async function IngredientDetailPage({ params }: { params: Promise
             {ingredient.productionMethod && (
               <div className="order-10 bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
                 <h2 className="text-2xl font-serif font-bold text-gold-300 mb-4">Production Method</h2>
-                <p className="text-parchment-300 leading-relaxed">{ingredient.productionMethod}</p>
+                <p className="text-parchment-300 leading-relaxed whitespace-pre-line">{ingredient.productionMethod}</p>
               </div>
             )}
 
@@ -532,7 +532,7 @@ export default async function IngredientDetailPage({ params }: { params: Promise
             {ingredient.history && (
               <div className="order-11 bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
                 <h2 className="text-2xl font-serif font-bold text-gold-300 mb-4">History & Context</h2>
-                <p className="text-parchment-300 leading-relaxed">{ingredient.history}</p>
+                <p className="text-parchment-300 leading-relaxed whitespace-pre-line">{ingredient.history}</p>
               </div>
             )}
 
