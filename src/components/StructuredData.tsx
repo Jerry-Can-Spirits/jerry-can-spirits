@@ -28,12 +28,31 @@ export function OrganizationSchema() {
     logo: 'https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/images-logo-webp/public',
     description: 'Veteran-owned premium British rum with authentic military heritage. Founded by Royal Corps of Signals veterans. Engineered for reliability, designed for adventure.',
     email: 'hello@jerrycanspirits.co.uk',
+    foundingDate: '2025',
     address: {
       '@type': 'PostalAddress',
-      addressLocality: 'Blackpool',
-      addressRegion: 'Lancashire',
+      streetAddress: '167-169 Great Portland Street',
+      addressLocality: 'London',
+      addressRegion: 'Greater London',
+      postalCode: 'W1W 5PA',
       addressCountry: 'GB',
     },
+    sameAs: [
+      'https://www.facebook.com/jerrycanspirits',
+      'https://www.instagram.com/jerrycanspirits',
+    ],
+    founders: [
+      {
+        '@type': 'Person',
+        name: 'Dan Freeman',
+        alumniOf: { '@type': 'Organization', name: 'Royal Corps of Signals' },
+      },
+      {
+        '@type': 'Person',
+        name: 'Rhys Williams',
+        alumniOf: { '@type': 'Organization', name: 'Royal Corps of Signals' },
+      },
+    ],
     knowsAbout: ['Premium Rum', 'British Spirits', 'Military Heritage', 'Veteran-Owned Business', 'Small-Batch Distilling'],
     award: 'Armed Forces Covenant Signatory',
   }
