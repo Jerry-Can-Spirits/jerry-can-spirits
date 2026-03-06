@@ -150,7 +150,7 @@ export default function CocktailRecipeDisplay({ cocktail }: Props) {
             )}
 
             {/* Description - full width on mobile */}
-            <p className="text-parchment-300 text-lg leading-relaxed">
+            <p className="text-parchment-300 text-lg leading-relaxed whitespace-pre-line">
               {currentRecipe.description}
             </p>
 
@@ -283,7 +283,7 @@ export default function CocktailRecipeDisplay({ cocktail }: Props) {
                 </svg>
                 <div>
                   <h4 className="text-gold-300 font-semibold mb-2">Expert Tip</h4>
-                  <p className="text-parchment-300 leading-relaxed">
+                  <p className="text-parchment-300 leading-relaxed whitespace-pre-line">
                     {activeVariant >= 0 && cocktail?.variants?.[activeVariant]?.note
                       ? cocktail.variants[activeVariant].note
                       : currentRecipe.note}

@@ -133,7 +133,7 @@ export default async function EquipmentDetailPage({ params }: { params: Promise<
           <h1 className="text-4xl sm:text-5xl font-serif font-bold text-white mb-6">
             {equipment.name}
           </h1>
-          <p className="text-xl text-parchment-300 leading-relaxed">
+          <p className="text-xl text-parchment-300 leading-relaxed whitespace-pre-line">
             {equipment.description}
           </p>
         </div>
@@ -284,7 +284,7 @@ export default async function EquipmentDetailPage({ params }: { params: Promise<
                   </div>
                   <div>
                     <h3 className="text-gold-300 font-serif font-bold text-lg mb-2">Pro Tip</h3>
-                    <p className="text-parchment-300 leading-relaxed">{equipment.professionalTip}</p>
+                    <p className="text-parchment-300 leading-relaxed whitespace-pre-line">{equipment.professionalTip}</p>
                   </div>
                 </div>
               </div>
@@ -293,7 +293,7 @@ export default async function EquipmentDetailPage({ params }: { params: Promise<
             {/* Usage */}
             <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
               <h2 className="text-2xl font-serif font-bold text-gold-300 mb-4">Usage</h2>
-              <p className="text-parchment-300 leading-relaxed">{equipment.usage}</p>
+              <p className="text-parchment-300 leading-relaxed whitespace-pre-line">{equipment.usage}</p>
             </div>
 
             {/* What to Look For */}
@@ -372,7 +372,7 @@ export default async function EquipmentDetailPage({ params }: { params: Promise<
             {equipment.history && (
               <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
                 <h2 className="text-2xl font-serif font-bold text-gold-300 mb-4">History & Context</h2>
-                <p className="text-parchment-300 leading-relaxed">{equipment.history}</p>
+                <p className="text-parchment-300 leading-relaxed whitespace-pre-line">{equipment.history}</p>
               </div>
             )}
 
