@@ -28,13 +28,13 @@ const personSchema = {
 
 export const metadata: Metadata = {
   title: 'Dan Freeman - Founder & Director',
-  description: 'Meet Dan Freeman, founder of Jerry Can Spirits. Former Royal Signals Corporal with 12 years of service who decided to have a go at making rum.',
+  description: 'Meet Dan Freeman, founder of Jerry Can Spirits. Former Royal Signals Corporal with 12 years of service who decided to have a go at building a spirits company.',
   alternates: {
     canonical: 'https://jerrycanspirits.co.uk/about/team/dan-freeman/',
   },
   openGraph: {
     title: 'Dan Freeman - Founder & Director | Jerry Can Spirits®',
-    description: 'Former Royal Signals Corporal with 12 years of service who decided to have a go at making rum.',
+    description: 'Former Royal Signals Corporal with 12 years of service who decided to have a go at building a spirits company.',
     url: 'https://jerrycanspirits.co.uk/about/team/dan-freeman',
     siteName: 'Jerry Can Spirits®',
     locale: 'en_GB',

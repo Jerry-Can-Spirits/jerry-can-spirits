@@ -3,7 +3,7 @@ import Link from 'next/link'
 
 export const metadata: Metadata = {
   title: '404 - Page Not Found',
-  description: 'The page you are looking for could not be found. Browse our rum collection, cocktail recipes, and guides.',
+  description: 'The page you are looking for could not be found. Browse our spirits collection, cocktail recipes, and guides.',
   robots: {
     index: false,
     follow: true,
@@ -29,7 +29,7 @@ const suggestedPages = [
   {
     name: 'Our Story',
     href: '/about/story/',
-    description: 'How two veterans built a rum brand',
+    description: 'How two veterans built a craft spirits business',
   },
   {
     name: 'Contact Us',

@@ -446,7 +446,7 @@ export default async function DrinksPageTest() {
                   "name": "Where is Jerry Can Spirits rum made?",
                   "acceptedAnswer": {
                     "@type": "Answer",
-                    "text": "We blend and distil at Spirit of Wales Distillery in Newport, Wales. The base white rum comes from the Caribbean, and we source molasses from a Welsh brewery's production. The distillation, blending, spicing, and bottling all happen in Wales. We're a British rum brand making British rum."
+                    "text": "We blend and distil at Spirit of Wales Distillery in Newport, Wales. The base white rum comes from the Caribbean, and we source molasses from a Welsh brewery's production. The distillation, blending, spicing, and bottling all happen in Wales. We're a British spirits company, and everything from distillation to bottling happens here in Wales."
                   }
                 },
                 {
@@ -502,7 +502,7 @@ export default async function DrinksPageTest() {
             <div className="border-b border-gold-500/10 pb-6">
               <h3 className="text-lg font-semibold text-gold-300 mb-3">Where is Jerry Can Spirits rum made?</h3>
               <p className="text-parchment-200 leading-relaxed">
-                We blend and distil at Spirit of Wales Distillery in Newport, Wales. The base white rum comes from the Caribbean, and we source molasses from a Welsh brewery's production. The distillation, blending, spicing, and bottling all happen in Wales. We're a British rum brand making British rum.
+                We blend and distil at Spirit of Wales Distillery in Newport, Wales. The base white rum comes from the Caribbean, and we source molasses from a Welsh brewery's production. The distillation, blending, spicing, and bottling all happen in Wales. We're a British spirits company, and everything from distillation to bottling happens here in Wales.
               </p>
             </div>
 

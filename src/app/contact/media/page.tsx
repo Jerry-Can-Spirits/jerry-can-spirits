@@ -115,7 +115,7 @@ export default function MediaContact() {
     },
     {
       name: 'Authenticity',
-      description: 'We\'re genuine. No pretence, no marketing fluff. Two mates who care about making good rum.'
+      description: 'We\'re genuine. No pretence, no marketing fluff. Two mates who care about making good spirits.'
     },
     {
       name: 'Quality',
@@ -143,15 +143,15 @@ export default function MediaContact() {
   ]
 
   // Boilerplate text options
-  const boilerplateShort = `Jerry Can Spirits® is a British veteran-owned spirits company making premium craft rum. Founded by Royal Corps of Signals veterans, we focus on quality over flash – making rum we're genuinely proud of.`
+  const boilerplateShort = `Jerry Can Spirits® is a British veteran-owned spirits company. Founded by Royal Corps of Signals veterans, we focus on quality over flash – making spirits we're genuinely proud of.`
 
-  const boilerplateMedium = `Jerry Can Spirits® is a British veteran-owned spirits company making premium craft rum. Founded by veterans of the Royal Corps of Signals who decided to stop talking about making rum and actually have a go, we take a no-nonsense approach to what we do. Our name comes from the classic jerry can – designed in 1937 and still used today because it just works. Like the jerry can, we're focused on function over form: making rum that's genuinely good, not just fancy-looking.`
+  const boilerplateMedium = `Jerry Can Spirits® is a British veteran-owned spirits company. Founded by veterans of the Royal Corps of Signals who decided to stop talking about it and actually have a go, we take a no-nonsense approach to what we do. Our name comes from the classic jerry can – designed in 1937 and still used today because it just works. Like the jerry can, we're focused on function over form: making spirits that are genuinely good, not just fancy-looking.`
 
-  const boilerplateFull = `Jerry Can Spirits® is a British veteran-owned spirits company making premium craft rum. Founded by Dan and Rhys, veterans of the Royal Corps of Signals who spent years talking about making their own rum before finally having a go, we take a straightforward approach to what we do.
+  const boilerplateFull = `Jerry Can Spirits® is a British veteran-owned spirits company. Founded by Dan and Rhys, veterans of the Royal Corps of Signals who spent years talking about doing this before finally having a go, we take a straightforward approach to what we do.
 
-Our name comes from the classic jerry can – designed in 1937 and still NATO standard today because it just works. That's the approach we take: function over form, quality without shortcuts. We're not trying to reinvent rum or chase trends. We just want to make something we're proud of and that people actually enjoy drinking.
+Our name comes from the classic jerry can – designed in 1937 and still NATO standard today because it just works. That's the approach we take: function over form, quality without shortcuts. We're not trying to chase trends. We just want to make something we're proud of and that people actually enjoy drinking.
 
-Based in the UK, Jerry Can Spirits® is a small operation run by two mates who care about getting it right. Whether you're an outdoors type or just fancy a decent drink, our Expedition Spiced Rum delivers honest quality and proper flavour. We're still learning and growing, but we're committed to making rum that's worth your time.`
+Based in the UK, Jerry Can Spirits® is a small operation run by two mates who care about getting it right. Whether you're an outdoors type or just fancy a decent drink, our Expedition Spiced Rum delivers honest quality and proper flavour. We're still learning and growing, but we're committed to making spirits that are worth your time.`
 
   const socialResponsibilityStatement = `Jerry Can Spirits commits 5% of annual net profits to armed forces charities supporting veteran welfare, mental health services, and military families. This isn't marketing. It's who we are.`
 
@@ -234,7 +234,7 @@ Based in the UK, Jerry Can Spirits® is a small operation run by two mates who c
               </h3>
               <div className="text-parchment-200 leading-relaxed space-y-4">
                 <p>
-                  Jerry Can Spirits® is a British veteran-owned spirits company making premium craft rum. Founded by Dan and Rhys, veterans of the Royal Corps of Signals who spent years talking about making their own rum before finally having a go, we take a straightforward approach to what we do.
+                  Jerry Can Spirits® is a British veteran-owned spirits company. Founded by Dan and Rhys, veterans of the Royal Corps of Signals who spent years talking about doing this before finally having a go, we take a straightforward approach to what we do.
                 </p>
                 <p>
                   Our name comes from the classic jerry can, designed in 1937 and still NATO standard today because it just works. That&apos;s the approach we take: function over form, quality without shortcuts.

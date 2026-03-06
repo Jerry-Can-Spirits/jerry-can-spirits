@@ -15,13 +15,13 @@ const TrustpilotWidget = dynamic(() => import('@/components/TrustpilotWidget'), 
 
 export const metadata: Metadata = {
   title: "Jerry Can Spirits Reviews | Trustpilot, Google & Yell",
-  description: "Read customer reviews of Jerry Can Spirits premium British spiced rum on Trustpilot, Google and Yell. See what people say about our veteran-owned, small-batch craft rum.",
+  description: "Read customer reviews of Jerry Can Spirits Expedition Spiced Rum on Trustpilot, Google and Yell. See what people say about our veteran-owned, small-batch craft spirits.",
   alternates: {
     canonical: 'https://jerrycanspirits.co.uk/reviews/',
   },
   openGraph: {
     title: "Jerry Can Spirits Reviews | Trustpilot, Google & Yell",
-    description: "Read customer reviews of Jerry Can Spirits premium British spiced rum on Trustpilot, Google and Yell. See what people say about our veteran-owned, small-batch craft rum.",
+    description: "Read customer reviews of Jerry Can Spirits Expedition Spiced Rum on Trustpilot, Google and Yell. See what people say about our veteran-owned, small-batch craft spirits.",
   },
 }
 
@@ -34,7 +34,7 @@ export default function ReviewsPage() {
           '@context': 'https://schema.org',
           '@type': 'WebPage',
           name: 'Jerry Can Spirits Reviews',
-          description: 'Customer reviews of Jerry Can Spirits premium British spiced rum on Trustpilot, Google and Yell.',
+          description: 'Customer reviews of Jerry Can Spirits Expedition Spiced Rum on Trustpilot, Google and Yell.',
           url: 'https://jerrycanspirits.co.uk/reviews/',
           isPartOf: {
             '@type': 'WebSite',
@@ -61,7 +61,7 @@ export default function ReviewsPage() {
             Jerry Can Spirits Reviews
           </h1>
           <p className="text-lg text-parchment-300 max-w-2xl mx-auto">
-            Don&apos;t just take our word for it. Here&apos;s what people are saying about our premium British spiced rum.
+            Don&apos;t just take our word for it. Here&apos;s what people are saying about Expedition Spiced Rum.
           </p>
         </ScrollReveal>
       </section>
