@@ -279,6 +279,7 @@ export default async function ProductPage({
     image: product.images.map(img => img.url),
     sku: handle,
     mpn: handle,
+    ...(firstVariant?.barcode && { gtin: firstVariant.barcode }),
     brand: {
       '@type': 'Brand',
       name: 'Jerry Can Spirits',

@@ -51,6 +51,7 @@ export interface ShopifyProductVariant {
   compareAtPrice?: ShopifyMoney | null;
   availableForSale: boolean;
   quantityAvailable?: number;
+  barcode?: string | null;
   image?: ShopifyImage | null;
 }
 
@@ -310,6 +311,7 @@ export async function getProduct(handle: string): Promise<ShopifyProduct | null>
               }
               availableForSale
               quantityAvailable
+              barcode
               image {
                 url
                 altText
