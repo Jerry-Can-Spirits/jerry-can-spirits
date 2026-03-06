@@ -195,9 +195,7 @@ export default function FriendsPage() {
               Friends of Jerry Can Spirits
             </h1>
             <p className="text-xl text-parchment-200 max-w-3xl mx-auto leading-relaxed">
-              Good rum doesn&apos;t happen in isolation. These are the partners – distilleries,
-              suppliers, and collaborators – who help make Jerry Can Spirits what it is.
-              We&apos;re grateful to work with people who share our commitment to quality.
+              Good rum doesn&apos;t happen in isolation. These are the people who help make Jerry Can Spirits what it is. Distilleries, suppliers, collaborators. Each one chosen carefully.
             </p>
           </div>
 
@@ -208,13 +206,10 @@ export default function FriendsPage() {
                 Why Partnerships Matter
               </h2>
               <p className="text-parchment-200 leading-relaxed mb-4">
-                We&apos;re a small team, so we rely on good partners to make this work. From
-                Spirit of Wales who help with our distilling to Harlequin who sort our
-                packaging – every partner contributes something we couldn&apos;t do alone.
+                We&apos;re a small team. We rely on good partners to make this work. From Spirit of Wales who handle our distilling to Harlequin who sort our packaging, every partner contributes something we couldn&apos;t do alone.
               </p>
               <p className="text-parchment-200 leading-relaxed">
-                If you&apos;re a supplier, distillery, or business that might want to work with
-                us, we&apos;d love to hear from you. <Link href="/contact/" className="text-gold-500 hover:text-gold-400 underline">Get in touch</Link>.
+                If you&apos;re a supplier, distillery, or business that shares how we think, <Link href="/contact/" className="text-gold-500 hover:text-gold-400 underline">get in touch</Link>.
               </p>
             </div>
           </div>
@@ -235,13 +230,13 @@ export default function FriendsPage() {
                     >
                       <div className="grid md:grid-cols-[200px_1fr] gap-6">
                         {/* Logo */}
-                        <div className="flex items-center justify-center bg-white rounded-lg p-4 border border-gold-500/20">
-                          <div className="relative w-full h-32">
+                        <div className="flex items-center justify-center">
+                          <div className="relative w-40 h-40 rounded-full overflow-hidden border-2 border-gold-500/30 bg-white flex-shrink-0">
                             <Image
                               src={partner.logo}
                               alt={`${partner.name} logo`}
                               fill
-                              className="object-contain"
+                              className="object-contain p-4"
                             />
                           </div>
                         </div>
@@ -288,8 +283,7 @@ export default function FriendsPage() {
                 Community & Grassroots
               </h2>
               <p className="text-parchment-300 text-center max-w-2xl mx-auto mb-8">
-                Beyond our trade partners, we support grassroots organisations and community initiatives.
-                As a veteran-owned business, backing local clubs and charitable causes is part of who we are.
+                Beyond our trade partnerships, we back the people and organisations that matter to us. As a veteran-owned business, community isn&apos;t a marketing angle. It&apos;s just what we do.
               </p>
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {communityPartners.map((partner, index) => (
@@ -310,13 +304,13 @@ export default function FriendsPage() {
                         </div>
                       </div>
                     ) : (
-                      <div className="flex items-center justify-center bg-white rounded-lg p-4 mb-4 border border-gold-500/20 h-32">
-                        <div className="relative w-full h-full">
+                      <div className="flex items-center justify-center mb-4">
+                        <div className="relative w-28 h-28 rounded-full overflow-hidden border-2 border-gold-500/30 bg-white flex-shrink-0">
                           <Image
                             src={partner.logo}
                             alt={`${partner.name} logo`}
                             fill
-                            className="object-contain"
+                            className="object-contain p-3"
                           />
                         </div>
                       </div>
@@ -454,10 +448,7 @@ export default function FriendsPage() {
               Become a Friend of Jerry Can Spirits
             </h3>
             <p className="text-parchment-200 mb-8 max-w-2xl mx-auto leading-relaxed">
-              Are you a small batch distillery or craft spirit producer who shares our
-              passion for quality and community? We&apos;re currently working with content creators
-              and always looking for partners who share our values. Get in touch to explore
-              how we could work together.
+              We work with businesses and people who build things properly. Distilleries, suppliers, content creators. If what you do aligns with how we think, we&apos;re interested.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
@@ -483,7 +474,7 @@ export default function FriendsPage() {
                   Community Growth
                 </h4>
                 <p className="text-parchment-300 text-sm">
-                  Expand reach through collaboration and mutual support
+                  We bring an audience that already cares about quality. That&apos;s useful for the right partners.
                 </p>
               </div>
             </ScrollReveal>
@@ -503,7 +494,7 @@ export default function FriendsPage() {
                   Quality Recognition
                 </h4>
                 <p className="text-parchment-300 text-sm">
-                  Showcasing excellence across the industry
+                  Good work deserves to be seen. We use our platform to spotlight partners we believe in.
                 </p>
               </div>
             </ScrollReveal>
