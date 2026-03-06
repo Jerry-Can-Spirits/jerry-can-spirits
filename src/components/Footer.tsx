@@ -291,7 +291,7 @@ export default function Footer() {
                 >
                   <Image
                     src="/images/logo-etch.webp"
-                    alt="Jerry Can Spirits® - Premium British Rum"
+                    alt="Jerry Can Spirits®"
                     width={512}
                     height={768}
                     className="h-48 w-auto opacity-90 group-hover:opacity-100 transition-opacity duration-300"
@@ -304,7 +304,7 @@ export default function Footer() {
               {/* Mission Statement */}
               <div className="max-w-sm mx-auto">
                 <p className="text-parchment-200 text-sm leading-relaxed font-serif text-center">
-                  <span className="font-bold text-parchment-100">Jerry Can Spirits®:</span> Premium British rum. Engineered for reliability. Crafted for adventure.
+                  <span className="font-bold text-parchment-100">Jerry Can Spirits®:</span> Engineered for reliability. Crafted for adventure.
                 </p>
                 <p className="text-parchment-200 text-sm leading-relaxed italic font-serif text-center mt-2">
                   Your essential provision for the journey ahead.

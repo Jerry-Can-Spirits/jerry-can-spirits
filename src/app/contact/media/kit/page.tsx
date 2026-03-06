@@ -82,7 +82,7 @@ export default function MediaKitPage() {
             <div className="mb-8">
               <h2 className="text-xl font-serif font-bold text-jerry-green-900 mb-3 border-b-2 border-gold-500 pb-2">About</h2>
               <p className="text-jerry-green-800 leading-relaxed">
-                Jerry Can Spirits® is a British veteran-owned spirits company making premium craft rum. Founded by Dan and Rhys, veterans of the Royal Corps of Signals who spent years talking about making their own rum before finally having a go. Our name comes from the classic jerry can — designed in 1937 and still NATO standard today because it just works. That&apos;s the approach we take: function over form, quality without shortcuts.
+                Jerry Can Spirits® is a British veteran-owned spirits company. Founded by Dan and Rhys, veterans of the Royal Corps of Signals who spent years talking about doing this before finally having a go. Our name comes from the classic jerry can — designed in 1937 and still NATO standard today because it just works. That&apos;s the approach we take: function over form, quality without shortcuts.
               </p>
             </div>
 
@@ -92,7 +92,7 @@ export default function MediaKitPage() {
               <div className="grid grid-cols-2 gap-4">
                 {[
                   { name: 'Reliability', desc: 'We deliver consistently. Colleagues, customers, and partners can count on us.' },
-                  { name: 'Authenticity', desc: 'No pretence, no marketing fluff. Two mates who care about making good rum.' },
+                  { name: 'Authenticity', desc: 'No pretence, no marketing fluff. Two mates who care about making good spirits.' },
                   { name: 'Quality', desc: 'Function over form. Genuinely good, not just fancy-looking.' },
                   { name: 'Community', desc: '5% of profits to armed forces charities. This isn\'t marketing — it\'s who we are.' },
                 ].map((v) => (

@@ -10,8 +10,8 @@ import ScrollReveal from '@/components/ScrollReveal'
 const articleSchema = {
   '@context': 'https://schema.org',
   '@type': 'Article',
-  headline: 'Our Story - How Two Veterans Built a British Rum Brand',
-  description: 'How two Royal Signals veterans built a British spiced rum from scratch. No shortcuts. No investors. Expedition Spiced, made with real ingredients in Wales.',
+  headline: 'Our Story - How Two Veterans Built a British Spirits Company',
+  description: 'How two Royal Signals veterans built a craft spirits company from scratch. No shortcuts. No investors. Expedition Spiced, made with real ingredients in Wales.',
   url: 'https://jerrycanspirits.co.uk/about/story/',
   image: 'https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/images-hero-trail_hero-webp/public',
   author: {
@@ -37,14 +37,14 @@ const articleSchema = {
 }
 
 export const metadata: Metadata = {
-  title: "Our Story - Two Veterans Building a Rum Brand",
-  description: "How two Royal Signals veterans built a British spiced rum from scratch. No shortcuts. No investors. Expedition Spiced, made with real ingredients in Wales.",
+  title: "Our Story - Two Veterans Building a Spirits Company",
+  description: "How two Royal Signals veterans built a craft spirits company from scratch. No shortcuts. No investors. Expedition Spiced, made with real ingredients in Wales.",
   alternates: {
     canonical: 'https://jerrycanspirits.co.uk/about/story/',
   },
   openGraph: {
     title: "Our Story | Jerry Can Spirits®",
-    description: "How two Royal Signals veterans built a British spiced rum from scratch. No shortcuts. No investors. Expedition Spiced, made with real ingredients in Wales.",
+    description: "How two Royal Signals veterans built a craft spirits company from scratch. No shortcuts. No investors. Expedition Spiced, made with real ingredients in Wales.",
   },
   robots: {
     index: true,
@@ -117,7 +117,7 @@ export default function OurStory() {
               What Service Taught Us
             </h2>
             <p className="text-xl text-parchment-300 max-w-3xl mx-auto">
-              Service with the Royal Corps of Signals took us to places where your equipment really gets put to the test. That military background shapes everything about how we make rum.
+              Service with the Royal Corps of Signals took us to places where your equipment really gets put to the test. That military background shapes everything about how we approach our craft.
             </p>
           </div>
 
@@ -256,7 +256,7 @@ export default function OurStory() {
                   Taking the Leap
                 </h3>
                 <p className="text-parchment-300">
-                  &quot;Right, let&apos;s bloody well do it.&quot; Not some grand business plan – just a simple decision to take a chance and see where it takes us. We were going to make rum – the right way. Together.
+                  &quot;Right, let&apos;s bloody well do it.&quot; Not some grand business plan – just a simple decision to take a chance and see where it takes us. We were going to build this properly. Together.
                 </p>
               </div>
             </div>
@@ -668,7 +668,7 @@ export default function OurStory() {
             <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20">
               <h3 className="text-lg font-semibold text-white mb-3">What does the Jerry Can name mean?</h3>
               <p className="text-parchment-300">
-                The jerry can is the ultimate &quot;function over form&quot; design – invented in 1937 and still used today because it just works. No frills, no nonsense. That&apos;s the approach we take with our rum. We&apos;re not trying to be flashy, we&apos;re trying to make something that&apos;s genuinely good.
+                The jerry can is the ultimate &quot;function over form&quot; design – invented in 1937 and still used today because it just works. No frills, no nonsense. That&apos;s the approach we take with our spirits. We&apos;re not trying to be flashy, we&apos;re trying to make something that&apos;s genuinely good.
               </p>
             </div>
 
@@ -729,7 +729,7 @@ export default function OurStory() {
                     "name": "What does the Jerry Can name mean?",
                     "acceptedAnswer": {
                       "@type": "Answer",
-                      "text": "The jerry can is the ultimate \"function over form\" design – invented in 1937 and still used today because it just works. No frills, no nonsense. That's the approach we take with our rum."
+                      "text": "The jerry can is the ultimate \"function over form\" design – invented in 1937 and still used today because it just works. No frills, no nonsense. That's the approach we take with our spirits."
                     }
                   },
                   {

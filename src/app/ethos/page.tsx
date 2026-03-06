@@ -137,7 +137,7 @@ export default function Ethos() {
               Our Values
             </h2>
             <p className="text-xl text-parchment-300 max-w-3xl mx-auto">
-              The things that matter to us when we&apos;re making rum.
+              The things that matter to us when we&apos;re making spirits.
             </p>
           </div>
 
@@ -185,7 +185,7 @@ export default function Ethos() {
           <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-8 border border-gold-500/20 text-center">
             <p className="text-xl text-white leading-relaxed">
               &quot;In the military you learn to appreciate kit that just works – nothing fancy, just reliable.
-              That&apos;s what we&apos;re going for with our rum. Function over flash. Quality that actually delivers.&quot;
+              That&apos;s what we&apos;re going for with our spirits. Function over flash. Quality that actually delivers.&quot;
             </p>
             <div className="mt-6 text-gold-300 text-sm font-semibold uppercase tracking-wider">
               - The Jerry Can Philosophy

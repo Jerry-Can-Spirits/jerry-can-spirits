@@ -5,13 +5,13 @@ import ScrollReveal from '@/components/ScrollReveal'
 
 export const metadata: Metadata = {
   title: "Frequently Asked Questions",
-  description: "Common questions about Jerry Can Spirits premium British rum, shipping, ingredients, and cocktail recipes.",
+  description: "Common questions about Jerry Can Spirits, shipping, ingredients, and cocktail recipes.",
   alternates: {
     canonical: "https://jerrycanspirits.co.uk/faq/",
   },
   openGraph: {
     title: "Frequently Asked Questions | Jerry Can Spirits®",
-    description: "Get answers to common questions about our premium British rum",
+    description: "Get answers to common questions about Jerry Can Spirits",
   },
 }
 
@@ -126,7 +126,7 @@ export default function FAQPage() {
               Got Questions?
             </h1>
             <p className="text-xl text-parchment-200 max-w-2xl mx-auto">
-              Everything you need to know about Jerry Can Spirits premium British rum, how we make it, and how to buy it.
+              Everything you need to know about Jerry Can Spirits, how we make our spirits, and how to buy.
             </p>
           </div>
 
@@ -160,7 +160,7 @@ export default function FAQPage() {
               Still Have Questions?
             </h3>
             <p className="text-parchment-200 mb-6">
-              We're here to help. Reach out to our team for any additional questions about our premium British rum.
+              We're here to help. Reach out to our team for any additional questions.
             </p>
             <a
               href="/contact/"

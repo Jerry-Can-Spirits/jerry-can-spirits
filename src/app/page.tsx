@@ -45,7 +45,7 @@ export default function Home() {
       "name": "Jerry Can Spirits",
       "url": "https://jerrycanspirits.co.uk",
       "logo": "https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/images-logo-webp/public",
-      "description": "Veteran-owned premium British spiced rum with authentic military heritage. Founded by Royal Corps of Signals veterans. Small-batch craft spirits engineered for reliability, designed for adventure.",
+      "description": "Veteran-owned British craft spirits with authentic military heritage. Founded by Royal Corps of Signals veterans. Small-batch spirits engineered for reliability, designed for adventure.",
       "foundingDate": "2025",
       "founders": [
         {
@@ -105,7 +105,7 @@ export default function Home() {
       "telephone": "+44 7521 220541",
       "email": "hello@jerrycanspirits.co.uk",
       "priceRange": "££",
-      "description": "Veteran-owned British spirits company producing premium spiced rum. Founded by Royal Corps of Signals veterans. Military rum crafted with purpose.",
+      "description": "Veteran-owned British spirits company. Founded by Royal Corps of Signals veterans. Expedition Spiced Rum, produced at Spirit of Wales Distillery, Newport.",
       "address": {
         "@type": "PostalAddress",
         "streetAddress": "167-169 Great Portland Street",
@@ -136,7 +136,7 @@ export default function Home() {
       "@type": "WebSite",
       "name": "Jerry Can Spirits",
       "url": "https://jerrycanspirits.co.uk",
-      "description": "Veteran-owned premium British rum - Engineered for reliability, designed for adventure. Expedition Ready.",
+      "description": "Veteran-owned British craft spirits - Engineered for reliability, designed for adventure. Expedition Ready.",
       "publisher": {
         "@type": "Organization",
         "name": "Jerry Can Spirits"
@@ -149,7 +149,7 @@ export default function Home() {
       "name": "Jerry Can Spirits",
       "logo": "https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/images-logo-webp/public",
       "slogan": "Engineered for reliability, designed for adventure",
-      "description": "Veteran-owned premium British rum with authentic military heritage"
+      "description": "Veteran-owned British craft spirits with authentic military heritage"
     },
     // Event schema for product launch
     {
@@ -234,7 +234,7 @@ export default function Home() {
                 </h2>
                 <div className="space-y-4 text-parchment-200 leading-relaxed">
                   <p>
-                    We didn't set out to start a rum company. Between us, we served 17 years in the Royal Corps of Signals. What we wanted was simple: a proper drink to share with mates - something with character, made by people who give a damn. When we couldn't find it, we decided to make it ourselves.
+                    We didn't set out to start a spirits company. Between us, we served 17 years in the Royal Corps of Signals. What we wanted was simple: a proper drink to share with mates - something with character, made by people who give a damn. When we couldn't find it, we decided to make it ourselves.
                   </p>
                   <p>
                     Working with <Link href="/friends/" className="text-gold-300 hover:text-gold-400 underline">Spirit of Wales Distillery</Link>, we blend Caribbean rum with Welsh brewery molasses and put it through their pot stills. The result? Vanilla and caramel upfront, warm spice through the middle, and a finish smooth enough to sip neat - but bold enough to hold its own in a cocktail.

@@ -37,7 +37,7 @@ export default function Careers() {
             Work With Us
           </h1>
           <p className="text-parchment-300 text-lg">
-            A small team making rum we're proud of
+            A small team making spirits we're proud of
           </p>
         </div>
 

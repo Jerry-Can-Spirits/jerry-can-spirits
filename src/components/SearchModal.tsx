@@ -24,7 +24,7 @@ interface SearchModalProps {
 // Static searchable content
 const searchableContent: SearchResult[] = [
   // About section
-  { type: 'page', title: 'Our Story', description: 'Learn about Jerry Can Spirits journey from Royal Signals veterans to rum makers', url: '/about/story/', category: 'About', keywords: 'expedition rum military army royal signals wales south wales british founders history background' },
+  { type: 'page', title: 'Our Story', description: 'Learn about Jerry Can Spirits journey from Royal Signals veterans to craft spirits founders', url: '/about/story/', category: 'About', keywords: 'expedition rum military army royal signals wales south wales british founders history background' },
   { type: 'page', title: 'Team', description: 'Meet the Jerry Can Spirits team of British Armed Forces veterans', url: '/about/team/', category: 'About', keywords: 'staff people founders army military' },
   { type: 'page', title: 'Dan Freeman', description: 'Director & Founder - Royal Corps of Signals veteran with 12 years service', url: '/about/team/dan-freeman/', category: 'Team', keywords: 'director founder army veteran signals' },
   { type: 'page', title: 'Rhys Williams', description: 'Co-Founder - Royal Corps of Signals veteran with 5 years service', url: '/about/team/rhys-williams/', category: 'Team', keywords: 'co-founder army veteran signals' },
@@ -42,8 +42,8 @@ const searchableContent: SearchResult[] = [
   { type: 'page', title: 'Equipment', description: 'Essential bar tools and glassware for home bartending', url: '/field-manual/equipment/', category: 'Field Manual', keywords: 'bar tools shaker jigger strainer glassware muddler' },
   { type: 'page', title: 'Ingredients', description: 'Premium spirits and cocktail components explained', url: '/field-manual/ingredients/', category: 'Field Manual', keywords: 'lime sugar mint bitters orange lemon rum' },
   // Shop
-  { type: 'page', title: 'Shop', description: 'Browse our full range of rum, barware and clothing', url: '/shop/', category: 'Shop', keywords: 'buy purchase order gift' },
-  { type: 'page', title: 'Drinks', description: 'Premium veteran-owned British rum collection', url: '/shop/drinks/', category: 'Shop', keywords: 'expedition spiced rum 40% ABV 700ml bottle buy purchase' },
+  { type: 'page', title: 'Shop', description: 'Browse our full range of spirits, barware and clothing', url: '/shop/', category: 'Shop', keywords: 'buy purchase order gift' },
+  { type: 'page', title: 'Drinks', description: 'Veteran-owned British spirits collection', url: '/shop/drinks/', category: 'Shop', keywords: 'expedition spiced rum 40% ABV 700ml bottle buy purchase' },
   { type: 'page', title: 'Barware', description: 'Professional bar tools and glassware', url: '/shop/barware/', category: 'Shop', keywords: 'shaker tools glasses buy equipment purchase' },
   { type: 'page', title: 'Clothing', description: 'Jerry Can Spirits adventure apparel', url: '/shop/clothing/', category: 'Shop', keywords: 't-shirt hoodie apparel wear merchandise gear' },
   { type: 'page', title: 'Expedition Spiced Rum — Ingredients', description: 'What goes into Expedition Spiced Rum — our full ingredient breakdown', url: '/ingredients/expedition-spiced-rum/', category: 'Product', keywords: 'expedition rum recipe spices vanilla cinnamon what is in ingredient list' },
@@ -52,7 +52,7 @@ const searchableContent: SearchResult[] = [
   { type: 'page', title: 'General Enquiries', description: 'Send a general enquiry to Jerry Can Spirits', url: '/contact/enquiries/', category: 'Support', keywords: 'enquiry question ask contact message' },
   { type: 'page', title: 'Complaints', description: 'How to raise a complaint with Jerry Can Spirits', url: '/contact/complaints/', category: 'Support', keywords: 'complaint issue problem dispute' },
   { type: 'page', title: 'Media', description: 'Press enquiries, brand assets and media kit', url: '/contact/media/', category: 'Support', keywords: 'press journalist PR brand assets logo download' },
-  { type: 'page', title: 'FAQ', description: 'Frequently asked questions about orders, shipping and our rum', url: '/faq/', category: 'Support', keywords: 'questions answers help delivery refund returns order' },
+  { type: 'page', title: 'FAQ', description: 'Frequently asked questions about orders, shipping and our spirits', url: '/faq/', category: 'Support', keywords: 'questions answers help delivery refund returns order' },
   // Policies
   { type: 'page', title: 'Privacy Policy', description: 'How we protect and handle your personal data', url: '/privacy-policy/', category: 'Legal', keywords: 'GDPR data personal information protection' },
   { type: 'page', title: 'Terms of Service', description: 'Terms and conditions for using our website and services', url: '/terms-of-service/', category: 'Legal', keywords: 'terms conditions agreement legal' },

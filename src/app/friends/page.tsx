@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: "Friends & Partners | Jerry Can Spirits®",
-    description: "Our trusted partners, from distilleries to suppliers, who help us make rum we're proud of",
+    description: "Our trusted partners, from distilleries to suppliers, who help us make spirits we're proud of",
   },
 }
 
@@ -165,7 +165,7 @@ export default function FriendsPage() {
         "@type": "Organization",
         "name": "Jerry Can Spirits",
         "url": "https://jerrycanspirits.co.uk",
-        "description": "Veteran-owned British rum company. Man of the Match sponsor for the 2025/26 season."
+        "description": "Veteran-owned British spirits company. Man of the Match sponsor for the 2025/26 season."
       }
     }
   ]
