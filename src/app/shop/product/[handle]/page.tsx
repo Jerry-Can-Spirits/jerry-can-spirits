@@ -65,7 +65,7 @@ function getCategoryFromProductType(productType?: string): { label: string; href
   const type = (productType || '').toLowerCase()
 
   if (type.includes('spirit') || type.includes('rum') || type.includes('alcohol') || type.includes('drink')) {
-    return { label: 'Drinks', href: '/shop/drinks/', trackingCategory: 'Spirits' }
+    return { label: 'Spirits', href: '/shop/spirits/', trackingCategory: 'Spirits' }
   }
   if (type.includes('barware') || type.includes('glass') || type.includes('bar')) {
     return { label: 'Barware', href: '/shop/barware/', trackingCategory: 'Barware' }

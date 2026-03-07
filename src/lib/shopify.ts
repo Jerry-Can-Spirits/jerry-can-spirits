@@ -820,7 +820,7 @@ export function detectProductCategory(product: ShopifyProduct): string | null {
 
   // Check tags first
   if (tags.some(tag => tag.toLowerCase().includes('drink') || tag.toLowerCase().includes('spirit') || tag.toLowerCase().includes('rum'))) {
-    return 'drinks'
+    return 'spirits'
   }
   if (tags.some(tag => tag.toLowerCase().includes('barware') || tag.toLowerCase().includes('glass'))) {
     return 'barware'
@@ -831,7 +831,7 @@ export function detectProductCategory(product: ShopifyProduct): string | null {
 
   // Fallback to productType
   if (productType.includes('spirit') || productType.includes('drink') || productType.includes('rum')) {
-    return 'drinks'
+    return 'spirits'
   }
   if (productType.includes('barware') || productType.includes('glass')) {
     return 'barware'
@@ -855,14 +855,14 @@ export async function getSmartRecommendations(
   // Cross-sell rules: what to recommend if not enough in same collection
   const getCrossSellCollections = (collection: string | null): string[] => {
     switch (collection) {
-      case 'drinks':
-        return ['barware', 'clothing'] // Spirits buyers might want glasses
+      case 'spirits':
+        return ['barware', 'clothing']
       case 'barware':
-        return ['drinks', 'clothing'] // Barware buyers might want spirits
+        return ['spirits', 'clothing']
       case 'clothing':
-        return ['drinks', 'barware'] // Clothing buyers might want anything
+        return ['spirits', 'barware']
       default:
-        return ['drinks', 'barware', 'clothing']
+        return ['spirits', 'barware', 'clothing']
     }
   }
 
@@ -1113,7 +1113,7 @@ export async function getCartRecommendations(
 ): Promise<ShopifyProduct[]> {
   // Fetch all products from all 3 collections in parallel
   const [drinks, barware, clothing] = await Promise.all([
-    getProductsByCollection('drinks').catch(() => []),
+    getProductsByCollection('spirits').catch(() => []),
     getProductsByCollection('barware').catch(() => []),
     getProductsByCollection('clothing').catch(() => []),
   ]);
@@ -1145,8 +1145,8 @@ export async function getCartRecommendations(
 
     // Spirits <-> barware combo bonus
     if (
-      (cartCategories.has('drinks') && category === 'barware') ||
-      (cartCategories.has('barware') && category === 'drinks')
+      (cartCategories.has('spirits') && category === 'barware') ||
+      (cartCategories.has('barware') && category === 'spirits')
     ) {
       score += 50;
     }
