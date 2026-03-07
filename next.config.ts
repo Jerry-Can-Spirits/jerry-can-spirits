@@ -144,42 +144,10 @@ const nextConfig: NextConfig = {
         destination: '/field-manual/cocktails/:slug*',
         permanent: true,
       },
-      // Removed Shopify products — redirect to category pages
-      {
-        source: '/shop/product/contemporary-mixer-glass-31cl',
-        destination: '/shop/barware/',
-        permanent: true,
-      },
-      {
-        source: '/shop/product/stainless-steel-cocktail-shaker',
-        destination: '/shop/barware/',
-        permanent: true,
-      },
-      {
-        source: '/shop/product/stainless-steel-jigger-variants',
-        destination: '/shop/barware/',
-        permanent: true,
-      },
-      {
-        source: '/shop/product/original-handled-drinking-jam-jar-46cl',
-        destination: '/shop/barware/',
-        permanent: true,
-      },
-      {
-        source: '/shop/product/jerry-can-spirits-metal-keyring',
-        destination: '/shop/clothing/',
-        permanent: true,
-      },
       // Old /notify page (removed - redirect to homepage)
       {
         source: '/notify',
         destination: '/#newsletter-signup',
-        permanent: true,
-      },
-      // Removed products redirect to category pages
-      {
-        source: '/shop/product/club-ice-tumbler-26cl',
-        destination: '/shop/barware/',
         permanent: true,
       },
       // Short product URL missing brand prefix — 24 external backlinks point here
