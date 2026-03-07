@@ -69,6 +69,7 @@ export interface ShopifyProduct {
   vendor?: string;
   availableForSale?: boolean;
   metafields?: ShopifyMetafield[];
+  seo?: { title: string; description: string };
 }
 
 export interface ShopifyCollection {
@@ -313,6 +314,10 @@ export async function getProduct(handle: string): Promise<ShopifyProduct | null>
         vendor
         tags
         availableForSale
+        seo {
+          title
+          description
+        }
         priceRange {
           minVariantPrice {
             amount
