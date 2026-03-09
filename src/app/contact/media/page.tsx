@@ -494,7 +494,7 @@ Based in the UK, Jerry Can Spirits® is a small operation run by two mates who c
                   darkBackground={true}
                   formats={[
                     { label: 'PNG', url: '/media-kit/logos/Jerry%20Can%20Spirits%20Logo.png' },
-                    { label: 'WebP', url: '/images/Logo.webp' },
+                    { label: 'WebP', url: 'https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/images-logo-webp/public' },
                   ]}
                 />
                 <DownloadCard
@@ -504,7 +504,7 @@ Based in the UK, Jerry Can Spirits® is a small operation run by two mates who c
                   previewAlt="Jerry Can Spirits® Etched Logo"
                   darkBackground={true}
                   formats={[
-                    { label: 'WebP', url: '/images/logo-etch.webp' },
+                    { label: 'WebP', url: 'https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/images-logo-etch-webp/public' },
                   ]}
                 />
                 <DownloadCard
@@ -859,7 +859,7 @@ Based in the UK, Jerry Can Spirits® is a small operation run by two mates who c
                       </p>
                     </div>
                     <a
-                      href="/images/team/Dan_Headshot.jpg"
+                      href="https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/1a3a3fdd-fdd8-482c-2088-660df51c6c00/public"
                       download="Dan_Freeman_Headshot.jpg"
                       className="mt-2 inline-flex items-center gap-1.5 px-3 py-1.5 bg-jerry-green-700/60 hover:bg-gold-500 text-parchment-200 hover:text-jerry-green-900 text-xs font-semibold rounded transition-all duration-200"
                     >
