@@ -98,7 +98,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="scroll-smooth">
+    <html lang="en" className="scroll-smooth" suppressHydrationWarning>
       <head>
         {/* Google Consent Mode v2 Defaults - MUST load before any Google tags */}
         {/* Cookiebot will update these values when user gives consent */}
@@ -171,6 +171,7 @@ export default function RootLayout({
       </head>
       <body
         className={`${inter.variable} ${playfair.variable} ${jetbrains.variable} antialiased min-h-screen bg-jerry-green-900 text-foreground`}
+        suppressHydrationWarning
       >
         <ServiceWorkerRegistration />
         <InstallPrompt />
