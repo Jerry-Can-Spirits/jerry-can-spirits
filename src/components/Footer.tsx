@@ -46,6 +46,7 @@ export default function Footer() {
       { name: 'FAQ', href: '/faq' },
       { name: 'Contact', href: '/contact' },
       { name: 'Careers', href: '/careers' },
+      { name: 'Site Map', href: '/sitemap' },
     ],
     legal: [
       { name: 'Privacy Policy', href: '/privacy-policy' },
