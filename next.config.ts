@@ -152,14 +152,24 @@ const nextConfig: NextConfig = {
       },
       // Short product URL missing brand prefix — 24 external backlinks point here
       {
-        source: '/shop/product/expedition-spiced-rum/:path*',
-        destination: '/shop/product/jerry-can-spirits-expedition-spiced-rum/:path*',
+        source: '/shop/product/expedition-spiced-rum',
+        destination: '/shop/product/jerry-can-spirits-expedition-spiced-rum/',
+        permanent: true,
+      },
+      {
+        source: '/shop/product/expedition-spiced-rum/:path+',
+        destination: '/shop/product/jerry-can-spirits-expedition-spiced-rum/:path+',
         permanent: true,
       },
       // Drinks → Spirits URL migration (collection handle changed in Shopify)
       {
-        source: '/shop/drinks/:path*',
-        destination: '/shop/spirits/:path*',
+        source: '/shop/drinks',
+        destination: '/shop/spirits/',
+        permanent: true,
+      },
+      {
+        source: '/shop/drinks/:path+',
+        destination: '/shop/spirits/:path+',
         permanent: true,
       },
       // Affiliate/Creator collab vanity URLs (Shopify Collabs)
