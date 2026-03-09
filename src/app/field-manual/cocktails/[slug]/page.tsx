@@ -327,6 +327,7 @@ export default async function CocktailPage({ params }: PageProps) {
                         alt={related.name}
                         width={64}
                         height={64}
+                        sizes="64px"
                         className="w-16 h-16 object-cover rounded-lg flex-shrink-0"
                       />
                     )}
