@@ -15,13 +15,13 @@ const TrustpilotWidget = dynamic(() => import('@/components/TrustpilotWidget'), 
 
 export const metadata: Metadata = {
   title: "Jerry Can Spirits Reviews | Trustpilot, Google & Yell",
-  description: "Read customer reviews of Jerry Can Spirits Expedition Spiced Rum on Trustpilot, Google and Yell. See what people say about our veteran-owned, small-batch craft spirits.",
+  description: "Customer reviews of Jerry Can Spirits Expedition Spiced Rum on Trustpilot, Google and Yell. See what people say about our veteran-owned British spiced rum.",
   alternates: {
     canonical: 'https://jerrycanspirits.co.uk/reviews/',
   },
   openGraph: {
     title: "Jerry Can Spirits Reviews | Trustpilot, Google & Yell",
-    description: "Read customer reviews of Jerry Can Spirits Expedition Spiced Rum on Trustpilot, Google and Yell. See what people say about our veteran-owned, small-batch craft spirits.",
+    description: "Customer reviews of Jerry Can Spirits Expedition Spiced Rum on Trustpilot, Google and Yell. See what people say about our veteran-owned British spiced rum.",
   },
 }
 

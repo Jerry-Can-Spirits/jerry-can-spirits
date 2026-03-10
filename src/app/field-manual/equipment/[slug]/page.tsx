@@ -83,7 +83,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
   return {
     title: equipment.metaTitle || `${equipment.name} Guide`,
-    description: equipment.metaDescription || equipment.description,
+    description: equipment.metaDescription || equipment.description?.slice(0, 160),
     alternates: {
       canonical: `https://jerrycanspirits.co.uk/field-manual/equipment/${slug}/`,
     },

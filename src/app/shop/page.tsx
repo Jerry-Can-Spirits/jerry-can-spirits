@@ -7,13 +7,13 @@ export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'Shop | Jerry Can Spirits',
-  description: 'Browse all Jerry Can Spirits collections. Expedition Spiced Rum, barware, glassware, clothing and more.',
+  description: 'Shop Jerry Can Spirits. Expedition Spiced Rum, cocktail shaker sets, glassware, and expedition gear. Veteran-owned, built properly.',
   alternates: {
     canonical: 'https://jerrycanspirits.co.uk/shop/',
   },
   openGraph: {
     title: 'Shop | Jerry Can Spirits®',
-    description: 'Browse all Jerry Can Spirits collections. Expedition Spiced Rum, barware, glassware, clothing and more.',
+    description: 'Shop Jerry Can Spirits. Expedition Spiced Rum, cocktail shaker sets, glassware, and expedition gear. Veteran-owned, built properly.',
   },
 }
 
