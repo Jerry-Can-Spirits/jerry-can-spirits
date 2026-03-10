@@ -233,7 +233,6 @@ export default async function CocktailPage({ params }: PageProps) {
     "prepTime": prepTime,
     "totalTime": prepTime,
     "recipeYield": "1 cocktail",
-    "suitableForDiet": "https://schema.org/AlcoholicBeverage",
     ...(aggregateRating && { aggregateRating }),
     ...(cookingMethod && cookingMethod.length > 0 && { cookingMethod: cookingMethod.join(', ') }),
     ...(cocktail.videoUrl && {
