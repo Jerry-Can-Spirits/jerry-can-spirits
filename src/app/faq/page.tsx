@@ -5,13 +5,13 @@ import ScrollReveal from '@/components/ScrollReveal'
 
 export const metadata: Metadata = {
   title: "Frequently Asked Questions",
-  description: "Common questions about Jerry Can Spirits, shipping, ingredients, and cocktail recipes.",
+  description: "Common questions about Jerry Can Spirits. Ingredients, shipping, age verification, cocktail recipes, and everything in between.",
   alternates: {
     canonical: "https://jerrycanspirits.co.uk/faq/",
   },
   openGraph: {
     title: "Frequently Asked Questions | Jerry Can Spirits®",
-    description: "Get answers to common questions about Jerry Can Spirits",
+    description: "Common questions about Jerry Can Spirits. Ingredients, shipping, age verification, cocktail recipes, and everything in between.",
   },
 }
 
