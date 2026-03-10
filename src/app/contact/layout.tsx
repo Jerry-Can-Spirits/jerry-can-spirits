@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: 'Contact Us | Jerry Can Spirits®',
-    description: "Get in touch with Jerry Can Spirits. Questions about our rum, press and media enquiries, or just want to know more.",
+    description: "Get in touch with Jerry Can Spirits. Questions about our rum, press and media enquiries, or just want to know more. We're here.",
     url: 'https://jerrycanspirits.co.uk/contact/',
     siteName: 'Jerry Can Spirits®',
     locale: 'en_GB',
