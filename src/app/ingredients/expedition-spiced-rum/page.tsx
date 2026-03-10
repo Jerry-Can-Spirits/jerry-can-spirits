@@ -78,13 +78,13 @@ const faqSchema = {
 
 export const metadata: Metadata = {
   title: "What Is Rum Spiced With? Expedition Spiced Rum Ingredients",
-  description: "What is rum spiced with? Our Expedition Spiced Rum uses Madagascan vanilla, Ceylon cinnamon, ginger, orange peel, cloves, cassia bark, and agave in Caribbean rum.",
+  description: "What is rum spiced with? Expedition Spiced Rum uses Madagascan vanilla, Ceylon cinnamon, ginger, orange peel, cloves, cassia bark and agave in Caribbean rum.",
   alternates: {
     canonical: 'https://jerrycanspirits.co.uk/ingredients/expedition-spiced-rum/',
   },
   openGraph: {
     title: 'What Is Rum Spiced With? Expedition Spiced Rum Ingredients | Jerry Can Spirits®',
-    description: 'What is rum spiced with? Our Expedition Spiced Rum uses Madagascan vanilla, Ceylon cinnamon, ginger, orange peel, cloves, cassia bark, and agave in Caribbean rum.',
+    description: 'What is rum spiced with? Expedition Spiced Rum uses Madagascan vanilla, Ceylon cinnamon, ginger, orange peel, cloves, cassia bark and agave in Caribbean rum.',
     url: 'https://jerrycanspirits.co.uk/ingredients/expedition-spiced-rum/',
     siteName: 'Jerry Can Spirits®',
     locale: 'en_GB',
