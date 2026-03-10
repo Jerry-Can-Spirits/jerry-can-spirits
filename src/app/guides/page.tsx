@@ -9,13 +9,13 @@ export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'Spirits Guides & Education',
-  description: 'Expert guides on cocktail techniques, rum education, and spirits knowledge. Learn from our comprehensive collection of bartending resources.',
+  description: 'Spirits guides and rum education from Jerry Can Spirits. Cocktail techniques, ingredient deep-dives, and the knowledge to build a proper home bar.',
   alternates: {
     canonical: 'https://jerrycanspirits.co.uk/guides/',
   },
   openGraph: {
     title: 'Spirits Guides & Education | Jerry Can Spirits®',
-    description: 'Expert guides on cocktail techniques, rum education, and spirits knowledge. Learn from our comprehensive collection of bartending resources.',
+    description: 'Spirits guides and rum education from Jerry Can Spirits. Cocktail techniques, ingredient deep-dives, and the knowledge to build a proper home bar.',
     url: 'https://jerrycanspirits.co.uk/guides/',
     siteName: 'Jerry Can Spirits®',
     locale: 'en_GB',
