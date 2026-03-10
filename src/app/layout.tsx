@@ -26,6 +26,7 @@ import GoogleTag from "@/components/GoogleTag";
 import TikTokPixel from "@/components/TikTokPixel";
 import KlaviyoScript from "@/components/KlaviyoScript";
 import MetricoolScript from "@/components/MetricoolScript";
+import SentryReplayConsent from "@/components/SentryReplayConsent";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -183,6 +184,7 @@ export default function RootLayout({
         <TikTokPixel />
         <KlaviyoScript />
         <MetricoolScript />
+        <SentryReplayConsent />
 
         <CartProvider>
           {/* Skip to Content Link - Accessibility */}
