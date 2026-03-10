@@ -8,13 +8,13 @@ import ScrollReveal from '@/components/ScrollReveal'
 
 export const metadata: Metadata = {
   title: 'British Spiced Rum | Small-Batch Craft Rum',
-  description: 'Small-batch British spiced rum from veteran-owned Jerry Can Spirits. 700 bottles per batch, pot-distilled at Spirit of Wales. Rich vanilla, warm spices, smooth finish.',
+  description: 'Small-batch British spiced rum from veteran-owned Jerry Can Spirits. Pot-distilled at Spirit of Wales. Rich vanilla, warm spices, smooth finish.',
   alternates: {
     canonical: 'https://jerrycanspirits.co.uk/shop/drinks/',
   },
   openGraph: {
     title: 'British Spiced Rum | Jerry Can Spirits®',
-    description: 'Small-batch British spiced rum from veteran-owned Jerry Can Spirits. 700 bottles per batch, pot-distilled at Spirit of Wales.',
+    description: 'Small-batch British spiced rum from veteran-owned Jerry Can Spirits. Pot-distilled at Spirit of Wales. Rich vanilla, warm spices, smooth finish.',
     url: 'https://jerrycanspirits.co.uk/shop/drinks/',
     siteName: 'Jerry Can Spirits®',
     locale: 'en_GB',

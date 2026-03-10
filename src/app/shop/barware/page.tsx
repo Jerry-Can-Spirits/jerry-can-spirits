@@ -8,13 +8,13 @@ import ScrollReveal from '@/components/ScrollReveal'
 
 export const metadata: Metadata = {
   title: 'Cocktail Shaker Sets, Barware & Bar Tools',
-  description: 'Premium cocktail shaker sets, bar tools, and glassware for home mixologists. Everything you need to craft perfect rum cocktails at home.',
+  description: 'Cocktail shaker sets, bar tools, and glassware for crafting rum cocktails at home. Everything you need to build a proper home bar.',
   alternates: {
     canonical: 'https://jerrycanspirits.co.uk/shop/barware/',
   },
   openGraph: {
     title: 'Cocktail Shaker Sets, Barware & Bar Tools | Jerry Can Spirits®',
-    description: 'Premium cocktail shaker sets, bar tools, and glassware for home mixologists. Everything you need to craft perfect rum cocktails at home.',
+    description: 'Cocktail shaker sets, bar tools, and glassware for crafting rum cocktails at home. Everything you need to build a proper home bar.',
     url: 'https://jerrycanspirits.co.uk/shop/barware/',
     siteName: 'Jerry Can Spirits®',
     locale: 'en_GB',

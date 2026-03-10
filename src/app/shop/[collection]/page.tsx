@@ -26,11 +26,11 @@ export async function generateMetadata({
   const title = titleFromHandle(collection)
   return {
     title: `${title} | Jerry Can Spirits`,
-    description: `${title} from Jerry Can Spirits. Veteran-owned British craft spirits and barware.`,
+    description: `Shop ${title} from Jerry Can Spirits. Veteran-owned British rum, cocktail barware, and expedition gear. Built properly, no shortcuts.`,
     alternates: { canonical: `${BASE_URL}/shop/${collection}/` },
     openGraph: {
       title: `${title} | Jerry Can Spirits®`,
-      description: `${title} from Jerry Can Spirits. Veteran-owned British craft spirits and barware.`,
+      description: `Shop ${title} from Jerry Can Spirits. Veteran-owned British rum, cocktail barware, and expedition gear. Built properly, no shortcuts.`,
       url: `${BASE_URL}/shop/${collection}/`,
       siteName: 'Jerry Can Spirits®',
     },
