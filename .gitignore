@@ -65,3 +65,6 @@ audit-results.json
 
 # Windows/editor artifacts
 nul
+
+# Git worktrees
+.worktrees/
