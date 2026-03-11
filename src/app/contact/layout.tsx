@@ -3,13 +3,13 @@ import StructuredData from '@/components/StructuredData'
 
 export const metadata: Metadata = {
   title: "Contact Us",
-  description: "Get in touch with Jerry Can Spirits for enquiries, partnerships, or feedback. Contact our veteran-owned team via email or our online forms.",
+  description: "Get in touch with Jerry Can Spirits. Questions about our rum, press and media enquiries, or just want to know more. We're here.",
   alternates: {
     canonical: "https://jerrycanspirits.co.uk/contact/",
   },
   openGraph: {
     title: 'Contact Us | Jerry Can Spirits®',
-    description: 'Get in touch with Jerry Can Spirits for enquiries, partnerships, or feedback. Contact our veteran-owned team.',
+    description: "Get in touch with Jerry Can Spirits. Questions about our rum, press and media enquiries, or just want to know more. We're here.",
     url: 'https://jerrycanspirits.co.uk/contact/',
     siteName: 'Jerry Can Spirits®',
     locale: 'en_GB',

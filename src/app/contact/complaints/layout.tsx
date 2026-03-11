@@ -1,17 +1,17 @@
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: "Complaints",
-  description: "Submit a complaint or provide feedback to Jerry Can Spirits. We take all customer concerns seriously and aim to resolve issues promptly.",
+  title: 'Complaints',
+  description: 'Submit a complaint or report an issue with your Jerry Can Spirits order. We take every concern seriously and resolve it quickly.',
   alternates: {
-    canonical: "https://jerrycanspirits.co.uk/contact/complaints/",
+    canonical: 'https://jerrycanspirits.co.uk/contact/complaints/',
+  },
+  robots: {
+    index: false,
+    follow: false,
   },
 }
 
-export default function ComplaintsLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
-  return children
+export default function ComplaintsLayout({ children }: { children: React.ReactNode }) {
+  return <>{children}</>
 }
