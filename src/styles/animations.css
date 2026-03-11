@@ -3,32 +3,34 @@
    =========================================== */
 
 /* Base reveal - fade up */
-.reveal {
+/* Only hide content when JavaScript is active (html.js class set by inline script).
+   Without JS (crawlers, noscript), all content is fully visible. */
+html.js .reveal {
   opacity: 0;
   transform: translateY(24px);
   transition: opacity 0.6s ease, transform 0.6s ease;
 }
 
-.reveal[data-revealed="true"] {
+html.js .reveal[data-revealed="true"] {
   opacity: 1;
   transform: none;
 }
 
 /* Direction variants */
-.reveal-left {
+html.js .reveal-left {
   opacity: 0;
   transform: translateX(-24px);
   transition: opacity 0.6s ease, transform 0.6s ease;
 }
 
-.reveal-right {
+html.js .reveal-right {
   opacity: 0;
   transform: translateX(24px);
   transition: opacity 0.6s ease, transform 0.6s ease;
 }
 
-.reveal-left[data-revealed="true"],
-.reveal-right[data-revealed="true"] {
+html.js .reveal-left[data-revealed="true"],
+html.js .reveal-right[data-revealed="true"] {
   opacity: 1;
   transform: none;
 }
@@ -40,11 +42,11 @@
 .reveal-delay-4 { transition-delay: 0.4s; }
 
 /* Grid child staggered delays (for dynamic grids) */
-.reveal-stagger > .reveal:nth-child(1) { transition-delay: 0s; }
-.reveal-stagger > .reveal:nth-child(2) { transition-delay: 0.1s; }
-.reveal-stagger > .reveal:nth-child(3) { transition-delay: 0.2s; }
-.reveal-stagger > .reveal:nth-child(4) { transition-delay: 0.3s; }
-.reveal-stagger > .reveal:nth-child(n+5) { transition-delay: 0.4s; }
+html.js .reveal-stagger > .reveal:nth-child(1) { transition-delay: 0s; }
+html.js .reveal-stagger > .reveal:nth-child(2) { transition-delay: 0.1s; }
+html.js .reveal-stagger > .reveal:nth-child(3) { transition-delay: 0.2s; }
+html.js .reveal-stagger > .reveal:nth-child(4) { transition-delay: 0.3s; }
+html.js .reveal-stagger > .reveal:nth-child(n+5) { transition-delay: 0.4s; }
 
 /* ===========================================
    Ticker Strip (Infinite Marquee)
