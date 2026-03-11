@@ -43,7 +43,7 @@ export default function robots(): MetadataRoute.Robots {
       },
       // AI crawlers
       {
-        userAgent: ['GPTBot', 'ChatGPT-User', 'CCBot', 'anthropic-ai', 'Claude-Web', 'PerplexityBot', 'Amazonbot'],
+        userAgent: ['GPTBot', 'ChatGPT-User', 'CCBot', 'ClaudeBot', 'anthropic-ai', 'Claude-Web', 'PerplexityBot', 'Amazonbot'],
         allow: '/',
         disallow: [
           '/studio/',

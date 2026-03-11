@@ -101,6 +101,11 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth" suppressHydrationWarning>
       <head>
+        {/* Synchronous JS detection — sets html.js before CSS is applied.
+            Scroll reveal animations only hide content when JS is running,
+            ensuring crawlers without JS see all content at full opacity. */}
+        <script dangerouslySetInnerHTML={{ __html: `document.documentElement.classList.add('js')` }} />
+
         {/* Google Consent Mode v2 Defaults - MUST load before any Google tags */}
         {/* Cookiebot will update these values when user gives consent */}
         <script
