@@ -6,13 +6,13 @@ import Breadcrumbs from '@/components/Breadcrumbs'
 
 export const metadata: Metadata = {
   title: 'Bar Equipment Guide',
-  description: 'Essential bar tools and equipment for crafting perfect cocktails at home. From shakers to strainers to glassware, find everything you need for your bar.',
+  description: 'Bar tools and equipment for serious home bartenders. Guides on cocktail shakers, strainers, glassware, and everything else that earns its place on the bar.',
   alternates: {
     canonical: 'https://jerrycanspirits.co.uk/field-manual/equipment/',
   },
   openGraph: {
     title: 'Bar Equipment Guide | Jerry Can Spirits®',
-    description: 'Essential bar tools and equipment for crafting perfect cocktails at home. From shakers to strainers to glassware.',
+    description: 'Bar tools and equipment for serious home bartenders. Guides on cocktail shakers, strainers, glassware, and everything else that earns its place on the bar.',
     url: 'https://jerrycanspirits.co.uk/field-manual/equipment/',
     siteName: 'Jerry Can Spirits®',
     locale: 'en_GB',

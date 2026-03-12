@@ -6,13 +6,13 @@ import Breadcrumbs from '@/components/Breadcrumbs'
 
 export const metadata: Metadata = {
   title: 'Cocktail Ingredients Guide',
-  description: 'Comprehensive guide to cocktail ingredients. Learn about spirits, liqueurs, mixers, bitters, and garnishes to elevate your home bar and craft perfect drinks.',
+  description: 'Ingredient guides for bartenders who want to know what they\'re working with. Spirits, liqueurs, mixers, bitters, and garnishes, explained properly.',
   alternates: {
     canonical: 'https://jerrycanspirits.co.uk/field-manual/ingredients/',
   },
   openGraph: {
     title: 'Cocktail Ingredients Guide | Jerry Can Spirits®',
-    description: 'Comprehensive guide to cocktail ingredients. Learn about spirits, liqueurs, mixers, bitters, and garnishes to elevate your home bar.',
+    description: 'Ingredient guides for bartenders who want to know what they\'re working with. Spirits, liqueurs, mixers, bitters, and garnishes, explained properly.',
     url: 'https://jerrycanspirits.co.uk/field-manual/ingredients/',
     siteName: 'Jerry Can Spirits®',
     locale: 'en_GB',
