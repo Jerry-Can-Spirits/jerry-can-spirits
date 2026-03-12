@@ -7,13 +7,13 @@ import StructuredData from '@/components/StructuredData'
 
 export const metadata: Metadata = {
   title: 'Cocktail Recipes',
-  description: 'Discover our collection of rum cocktail recipes. From classic serves to signature creations, find the perfect drink for any occasion.',
+  description: 'Cocktail recipes from the Jerry Can Spirits Field Manual. From the simple to the technical, each recipe built around real ingredients and proper technique.',
   alternates: {
     canonical: 'https://jerrycanspirits.co.uk/field-manual/cocktails/',
   },
   openGraph: {
     title: 'Cocktail Recipes | Jerry Can Spirits®',
-    description: 'Discover our collection of rum cocktail recipes. From classic serves to signature creations, find the perfect drink for any occasion.',
+    description: 'Cocktail recipes from the Jerry Can Spirits Field Manual. From the simple to the technical, each recipe built around real ingredients and proper technique.',
     url: 'https://jerrycanspirits.co.uk/field-manual/cocktails/',
     siteName: 'Jerry Can Spirits®',
     locale: 'en_GB',

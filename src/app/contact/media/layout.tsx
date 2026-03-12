@@ -1,17 +1,21 @@
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: "Media & Press",
-  description: "Media enquiries and press resources for Jerry Can Spirits. Download press kits, brand assets, and connect with our communications team.",
+  title: 'Media Centre',
+  description: 'Press assets, product photography, brand guidelines, and media contact for Jerry Can Spirits. Everything a journalist or stockist needs in one place.',
   alternates: {
-    canonical: "https://jerrycanspirits.co.uk/contact/media/",
+    canonical: 'https://jerrycanspirits.co.uk/contact/media/',
+  },
+  openGraph: {
+    title: 'Media Centre | Jerry Can Spirits®',
+    description: 'Press assets, product photography, brand guidelines, and media contact for Jerry Can Spirits. Everything a journalist or stockist needs in one place.',
+    url: 'https://jerrycanspirits.co.uk/contact/media/',
+    siteName: 'Jerry Can Spirits®',
+    locale: 'en_GB',
+    type: 'website',
   },
 }
 
-export default function MediaLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
-  return children
+export default function MediaLayout({ children }: { children: React.ReactNode }) {
+  return <>{children}</>
 }
