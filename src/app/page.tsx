@@ -3,7 +3,6 @@ import HeroSection from "@/components/HeroSection";
 import StructuredData from "@/components/StructuredData";
 import ScrollToHash from "@/components/ScrollToHash";
 import PreOrderSection from "@/components/PreOrderSection";
-import EmailSignup from "@/components/EmailSignup";
 import FounderStorySnippet from "@/components/FounderStorySnippet";
 import SupportingOurForces from "@/components/SupportingOurForces";
 import FieldManualPreview from "@/components/FieldManualPreview";
@@ -194,10 +193,6 @@ export default function Home() {
           <PreOrderSection />
         </ScrollReveal>
 
-        {/* Email Signup */}
-        <ScrollReveal delay={1}>
-          <EmailSignup />
-        </ScrollReveal>
 
         {/* Why Jerry Can - Value Proposition */}
         <ScrollReveal>
