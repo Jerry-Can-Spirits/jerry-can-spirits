@@ -50,6 +50,7 @@ export default function Header() {
       ]
     },
     { name: 'Reviews', href: '/reviews' },
+    { name: 'Stockists', href: '/stockists' },
     {
       name: 'Field Manual',
       href: '/field-manual',
