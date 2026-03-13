@@ -61,6 +61,16 @@ Sentry.init({
         if (exception.value?.includes('ethereum')) {
           return null;
         }
+
+        // Cookiebot auto-blocking mode (uc.js) intercepts event listeners and
+        // replays them after consent. When a listener accesses an iframe that has
+        // since been removed from the DOM, contentWindow becomes null. This is a
+        // known third-party interaction with no user-visible impact.
+        const isCookiebotIframeError =
+          (exception.value?.includes('contentWindow') ||
+           exception.value?.includes('null is not an object')) &&
+          stack.some(frame => frame.filename?.includes('uc.js'));
+        if (isCookiebotIframeError) return null;
       }
     }
 
