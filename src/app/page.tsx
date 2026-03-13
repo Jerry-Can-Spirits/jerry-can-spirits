@@ -189,6 +189,12 @@ export default function Home() {
       <div>
         <HeroSection />
 
+        {/* Social Proof Ticker */}
+        <TickerStrip
+          items={["12+ Years Service", "UK First Philosophy", "Small Batch Quality", "Forces Covenant", "Veteran Owned", "Welsh Distilled"]}
+          className="py-4 bg-jerry-green-900/80 border-y border-gold-500/20"
+        />
+
         {/* Pre-Order Section - Primary CTA */}
         <ScrollReveal>
           <PreOrderSection />
@@ -222,12 +228,6 @@ export default function Home() {
         <ScrollReveal>
           <PressAwards />
         </ScrollReveal>
-
-        {/* Social Proof Ticker */}
-        <TickerStrip
-          items={["12+ Years Service", "UK First Philosophy", "Small Batch Quality", "Forces Covenant", "Veteran Owned", "Welsh Distilled"]}
-          className="py-4 bg-jerry-green-900/80 border-y border-gold-500/20"
-        />
 
         {/* SEO-Rich Content Section - Veteran-Owned British Rum */}
         <section className="py-16 bg-jerry-green-900/50">
