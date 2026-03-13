@@ -61,11 +61,6 @@ export default function ProductVariantSelector({
       currency: currencyCode,
     }
 
-    // Track AddToCart via Zaraz (server-side)
-    if (typeof window !== 'undefined' && window.zaraz?.track) {
-      window.zaraz.track('AddToCart', atcPayload)
-    }
-
     // Track AddToCart via Meta Pixel directly (consent-gated)
     if (typeof window !== 'undefined' && window.fbq && window.Cookiebot?.consent?.marketing) {
       window.fbq('track', 'AddToCart', atcPayload)

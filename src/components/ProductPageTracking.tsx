@@ -27,11 +27,6 @@ export default function ProductPageTracking({
       currency: currency,
     };
 
-    // Track ViewContent via Zaraz (server-side)
-    if (typeof window !== 'undefined' && window.zaraz?.track) {
-      window.zaraz.track('ViewContent', payload);
-    }
-
     // Track ViewContent via Meta Pixel directly (consent-gated)
     if (typeof window !== 'undefined' && window.fbq && window.Cookiebot?.consent?.marketing) {
       window.fbq('track', 'ViewContent', payload);
