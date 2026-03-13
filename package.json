@@ -64,7 +64,8 @@
   "overrides": {
     "hosted-git-info": "^7.0.0",
     "glob": "^13.0.0",
-    "node-domexception": "^2.0.2"
+    "node-domexception": "^2.0.2",
+    "undici": "^7.0.0"
   },
   "browserslist": [
     "chrome >= 92",
