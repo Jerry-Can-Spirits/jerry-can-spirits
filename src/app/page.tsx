@@ -191,7 +191,7 @@ export default function Home() {
 
         {/* Social Proof Ticker */}
         <TickerStrip
-          items={["12+ Years Service", "UK First Philosophy", "Small Batch Quality", "Forces Covenant", "Veteran Owned", "Welsh Distilled"]}
+          items={["17+ Years Service", "UK First Philosophy", "Small Batch Quality", "Armed Forces Covenant", "Veteran Owned", "Welsh Distilled"]}
           className="py-4 bg-jerry-green-900/80 border-y border-gold-500/20"
         />
 

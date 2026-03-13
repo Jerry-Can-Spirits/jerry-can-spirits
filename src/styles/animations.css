@@ -64,7 +64,13 @@ html.js .reveal-stagger > .reveal:nth-child(n+5) { transition-delay: 0.4s; }
 .ticker-strip__track {
   display: flex;
   width: max-content;
-  animation: ticker 30s linear infinite;
+  animation: ticker 15s linear infinite;
+}
+
+@media (min-width: 640px) {
+  .ticker-strip__track {
+    animation-duration: 30s;
+  }
 }
 
 .ticker-strip:hover .ticker-strip__track,
