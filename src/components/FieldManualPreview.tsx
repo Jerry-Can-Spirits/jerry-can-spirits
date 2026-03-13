@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import Image from 'next/image'
+import { unstable_noStore as noStore } from 'next/cache'
 import { client } from '@/sanity/client'
 import { cocktailsListQuery } from '@/sanity/queries'
 
@@ -14,14 +15,18 @@ interface CocktailPreview {
 }
 
 export default async function FieldManualPreview() {
-  // Single fetch - much more efficient than separate fetches for featured and count
+  noStore() // Opt out of static caching so each visit gets a fresh random selection
+
   const allCocktails = await client.fetch<CocktailPreview[]>(cocktailsListQuery)
 
-  // Get 3 featured cocktails, or first 3 if no featured ones
-  const featured = allCocktails.filter(c => c.featured).slice(0, 3)
-  const cocktails = featured.length >= 3 ? featured : allCocktails.slice(0, 3)
+  // Fisher-Yates shuffle for random selection on each visit
+  const shuffled = [...allCocktails]
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1))
+    ;[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]
+  }
+  const cocktails = shuffled.slice(0, 3)
 
-  // Get total count from the same fetch
   const totalCount = allCocktails.length
 
   // Round down to nearest 10 for marketing copy
