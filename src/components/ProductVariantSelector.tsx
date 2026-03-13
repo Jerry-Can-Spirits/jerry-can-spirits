@@ -66,12 +66,13 @@ export default function ProductVariantSelector({
       window.fbq('track', 'AddToCart', atcPayload)
     }
 
-    // Track AddToCart event for Google Ads
+    // Track AddToCart event for Google Ads and GA4
     trackAddToCart(
       productId,
       productTitle,
-      parseFloat(selectedVariant.price.amount) * quantity,
-      currencyCode
+      parseFloat(selectedVariant.price.amount),
+      currencyCode,
+      quantity
     )
 
     await addToCart(selectedVariantId, quantity)
