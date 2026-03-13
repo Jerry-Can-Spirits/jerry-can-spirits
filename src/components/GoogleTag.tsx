@@ -68,23 +68,24 @@ export function trackConversion(
 }
 
 /**
- * Track add to cart event for Google Ads
+ * Track add to cart event for Google Ads and GA4
  */
 export function trackAddToCart(
   productId: string,
   productName: string,
-  value: number,
-  currency: string = 'GBP'
+  unitPrice: number,
+  currency: string = 'GBP',
+  quantity: number = 1
 ) {
   if (typeof window !== 'undefined' && typeof window.gtag === 'function') {
     window.gtag('event', 'add_to_cart', {
       currency: currency,
-      value: value,
+      value: unitPrice * quantity,
       items: [{
-        item_id: productId,
+        item_id: productId.split('/').pop() ?? productId,
         item_name: productName,
-        price: value,
-        quantity: 1,
+        price: unitPrice,
+        quantity: quantity,
       }],
     });
   }

@@ -31,6 +31,21 @@ export default function ProductPageTracking({
     if (typeof window !== 'undefined' && window.fbq && window.Cookiebot?.consent?.marketing) {
       window.fbq('track', 'ViewContent', payload);
     }
+
+    // Track view_item via GA4 (no consent gate — analytics only, no PII)
+    if (typeof window !== 'undefined' && typeof window.gtag === 'function') {
+      window.gtag('event', 'view_item', {
+        currency: currency,
+        value: parseFloat(price),
+        items: [{
+          item_id: productId.split('/').pop() ?? productId,
+          item_name: productName,
+          item_category: category || 'Spirits',
+          price: parseFloat(price),
+          quantity: 1,
+        }],
+      });
+    }
   }, [productId, productName, price, currency, category]);
 
   return null; // This component doesn't render anything

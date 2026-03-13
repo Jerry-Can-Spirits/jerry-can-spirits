@@ -466,6 +466,12 @@ export default function CartDrawer() {
                       window.gtag('event', 'begin_checkout', {
                         currency: cart.cost.totalAmount.currencyCode,
                         value: parseFloat(cart.cost.totalAmount.amount),
+                        items: cart.lines.map(line => ({
+                          item_id: line.merchandise.id.split('/').pop() ?? line.merchandise.id,
+                          item_name: line.merchandise.product.title,
+                          price: parseFloat(line.merchandise.price.amount),
+                          quantity: line.quantity,
+                        })),
                       });
                     }
                   }}
