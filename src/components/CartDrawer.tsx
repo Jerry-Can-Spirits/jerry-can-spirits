@@ -185,7 +185,7 @@ export default function CartDrawer() {
                 </svg>
                 <p className="text-parchment-300">Your cart is empty</p>
                 <Link
-                  href="/shop/drinks/"
+                  href="/shop/spirits/"
                   onClick={closeCart}
                   className="px-6 py-2 bg-gold-500 text-jerry-green-900 font-semibold rounded-lg hover:bg-gold-400 transition-colors"
                 >
@@ -448,9 +448,9 @@ export default function CartDrawer() {
                         window.location.href = getCheckoutUrl()
                       })
                     }
-                    // Track checkout initiation via Zaraz
-                    if (typeof window !== 'undefined' && window.zaraz?.track) {
-                      window.zaraz.track('InitiateCheckout', {
+                    // Track InitiateCheckout via Meta Pixel (consent-gated)
+                    if (typeof window !== 'undefined' && window.fbq && window.Cookiebot?.consent?.marketing) {
+                      window.fbq('track', 'InitiateCheckout', {
                         content_ids: cart.lines.map(line => line.merchandise.id),
                         contents: cart.lines.map(line => ({
                           id: line.merchandise.id,
@@ -459,6 +459,13 @@ export default function CartDrawer() {
                         value: parseFloat(cart.cost.totalAmount.amount),
                         currency: cart.cost.totalAmount.currencyCode,
                         num_items: cart.lines.reduce((sum, line) => sum + line.quantity, 0)
+                      });
+                    }
+                    // Track begin_checkout via GA4
+                    if (typeof window !== 'undefined' && typeof window.gtag === 'function') {
+                      window.gtag('event', 'begin_checkout', {
+                        currency: cart.cost.totalAmount.currencyCode,
+                        value: parseFloat(cart.cost.totalAmount.amount),
                       });
                     }
                   }}
