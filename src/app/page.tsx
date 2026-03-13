@@ -8,6 +8,7 @@ import SupportingOurForces from "@/components/SupportingOurForces";
 import FieldManualPreview from "@/components/FieldManualPreview";
 import WhyJerryCan from "@/components/WhyJerryCan";
 import HomepageFAQ from "@/components/HomepageFAQ";
+import PressAwards from "@/components/PressAwards";
 import ScrollReveal from "@/components/ScrollReveal";
 import TickerStrip from "@/components/TickerStrip";
 import Link from 'next/link'
@@ -199,6 +200,11 @@ export default function Home() {
           <WhyJerryCan />
         </ScrollReveal>
 
+        {/* Field Manual Preview - recipe engagement early in the scroll */}
+        <ScrollReveal>
+          <FieldManualPreview />
+        </ScrollReveal>
+
         {/* FAQ Section with Schema Markup */}
         <HomepageFAQ />
 
@@ -210,6 +216,11 @@ export default function Home() {
         {/* Supporting Our Forces - Armed Forces Commitments */}
         <ScrollReveal>
           <SupportingOurForces />
+        </ScrollReveal>
+
+        {/* Press & Awards */}
+        <ScrollReveal>
+          <PressAwards />
         </ScrollReveal>
 
         {/* Social Proof Ticker */}
@@ -290,11 +301,6 @@ export default function Home() {
             </div>
           </div>
         </section>
-
-        {/* Field Manual Preview */}
-        <ScrollReveal>
-          <FieldManualPreview />
-        </ScrollReveal>
 
         {/* Trustpilot Reviews Section - Hidden until April 2026 launch */}
         {/* CSP is configured for Trustpilot, will activate automatically at launch */}
