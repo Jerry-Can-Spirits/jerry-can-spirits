@@ -43,6 +43,7 @@ export default function Footer() {
       { name: 'Sustainability', href: '/sustainability' },
       { name: 'Friends & Partners', href: '/friends' },
       { name: 'Reviews', href: '/reviews' },
+      { name: 'Stockists', href: '/stockists' },
       { name: 'FAQ', href: '/faq' },
       { name: 'Contact', href: '/contact' },
       { name: 'Careers', href: '/careers' },

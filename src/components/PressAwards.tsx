@@ -16,8 +16,8 @@ interface AwardItem {
 const pressItems: PressItem[] = [
   {
     publication: 'She Rises Studios',
-    quote: 'A story of service, sacrifice and the courage to start something new.',
-    url: 'https://sherisesstudios.com',
+    quote: 'Customers are fed up with faceless corporate brands. They want to meet the people behind what they\'re drinking, and hear the story of the bottle.',
+    url: 'https://www.sherisesstudios.com/post/from-military-service-to-rum-making-how-we-started-before-we-were-ready',
     date: '2025',
   },
 ]
@@ -29,7 +29,7 @@ const awardItems: AwardItem[] = [
   },
   {
     title: 'Employer Recognition Scheme',
-    body: 'Bronze Award — Ministry of Defence.',
+    body: 'Bronze Award — Armed Forces Covenant Employer Recognition Scheme.',
     year: '2025',
   },
 ]
