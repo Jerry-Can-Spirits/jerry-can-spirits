@@ -20,8 +20,8 @@ export default function ProductPageTracking({
   useEffect(() => {
     const payload = {
       content_name: productName,
-      content_ids: [productId],
-      content_type: 'product',
+      content_ids: [productId.split('/').pop() ?? productId],
+      content_type: 'product_group',
       content_category: category || 'Spirits',
       value: parseFloat(price),
       currency: currency,
