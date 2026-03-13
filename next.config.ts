@@ -23,10 +23,22 @@ const nextConfig: NextConfig = {
   // Target modern browsers - disables legacy transforms
   transpilePackages: [],
 
-  // Cache and security headers configured here for Cloudflare Pages compatibility
-  // Middleware headers don't work reliably on Cloudflare Pages Edge Runtime
+  // Cache and security headers configured here for Cloudflare Workers compatibility
+  // Middleware headers don't work reliably on Cloudflare Edge Runtime
   async headers() {
     return [
+      // HTML pages — never cache at edge. Prevents browsers and Cloudflare from
+      // serving stale HTML with outdated chunk hashes after a new deployment.
+      // Excludes /_next/ paths so static asset rules below are unaffected.
+      {
+        source: '/((?!_next/).*)',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=0, must-revalidate',
+          },
+        ],
+      },
       // Cache headers for Next.js hashed static assets (immutable)
       {
         source: '/_next/static/:path*',
