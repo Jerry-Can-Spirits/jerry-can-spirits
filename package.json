@@ -62,7 +62,9 @@
     "wrangler": "^4.71.0"
   },
   "overrides": {
-    "hosted-git-info": "^7.0.0"
+    "hosted-git-info": "^7.0.0",
+    "glob": "^13.0.0",
+    "node-domexception": "^2.0.2"
   },
   "browserslist": [
     "chrome >= 92",
