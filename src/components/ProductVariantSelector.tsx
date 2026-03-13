@@ -55,7 +55,7 @@ export default function ProductVariantSelector({
 
     const atcPayload = {
       content_name: productTitle,
-      content_ids: [productId],
+      content_ids: [selectedVariantId.split('/').pop() ?? selectedVariantId],
       content_type: 'product',
       value: parseFloat(selectedVariant.price.amount) * quantity,
       currency: currencyCode,

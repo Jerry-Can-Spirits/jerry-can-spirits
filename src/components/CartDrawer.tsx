@@ -451,9 +451,9 @@ export default function CartDrawer() {
                     // Track InitiateCheckout via Meta Pixel (consent-gated)
                     if (typeof window !== 'undefined' && window.fbq && window.Cookiebot?.consent?.marketing) {
                       window.fbq('track', 'InitiateCheckout', {
-                        content_ids: cart.lines.map(line => line.merchandise.id),
+                        content_ids: cart.lines.map(line => line.merchandise.id.split('/').pop() ?? line.merchandise.id),
                         contents: cart.lines.map(line => ({
-                          id: line.merchandise.id,
+                          id: line.merchandise.id.split('/').pop() ?? line.merchandise.id,
                           quantity: line.quantity
                         })),
                         value: parseFloat(cart.cost.totalAmount.amount),
@@ -484,7 +484,7 @@ export default function CartDrawer() {
               </div>
 
               <Link
-                href="/shop/drinks/"
+                href="/shop/spirits/"
                 onClick={closeCart}
                 className="block text-center text-gold-300 hover:text-gold-400 transition-colors text-sm"
               >
