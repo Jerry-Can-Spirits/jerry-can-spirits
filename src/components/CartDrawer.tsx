@@ -185,7 +185,7 @@ export default function CartDrawer() {
                 </svg>
                 <p className="text-parchment-300">Your cart is empty</p>
                 <Link
-                  href="/shop/drinks/"
+                  href="/shop/spirits/"
                   onClick={closeCart}
                   className="px-6 py-2 bg-gold-500 text-jerry-green-900 font-semibold rounded-lg hover:bg-gold-400 transition-colors"
                 >
