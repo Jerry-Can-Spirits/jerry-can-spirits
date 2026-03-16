@@ -3,6 +3,7 @@ import { client } from '@/sanity/client'
 import { ingredientsListQuery } from '@/sanity/queries'
 import IngredientsClient from './IngredientsClient'
 import Breadcrumbs from '@/components/Breadcrumbs'
+import { OG_IMAGE } from '@/lib/og'
 
 export const metadata: Metadata = {
   title: 'Cocktail Ingredients Guide',
@@ -17,6 +18,7 @@ export const metadata: Metadata = {
     siteName: 'Jerry Can Spirits®',
     locale: 'en_GB',
     type: 'website',
+    images: OG_IMAGE,
   },
 }
 

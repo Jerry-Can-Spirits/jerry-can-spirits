@@ -4,6 +4,7 @@ import { cocktailsListQuery } from '@/sanity/queries'
 import CocktailsClient from './CocktailsClient'
 import Breadcrumbs from '@/components/Breadcrumbs'
 import StructuredData from '@/components/StructuredData'
+import { OG_IMAGE } from '@/lib/og'
 
 export const metadata: Metadata = {
   title: 'Cocktail Recipes',
@@ -18,6 +19,7 @@ export const metadata: Metadata = {
     siteName: 'Jerry Can Spirits®',
     locale: 'en_GB',
     type: 'website',
+    images: OG_IMAGE,
   },
 }
 

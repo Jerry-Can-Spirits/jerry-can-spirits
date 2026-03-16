@@ -2,11 +2,12 @@ import Link from 'next/link'
 import type { Metadata } from 'next'
 import Breadcrumbs from '@/components/Breadcrumbs'
 import { getAllCollections } from '@/lib/shopify'
+import { OG_IMAGE } from '@/lib/og'
 
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: 'Shop | Jerry Can Spirits',
+  title: 'Shop',
   description: 'Shop Jerry Can Spirits. Expedition Spiced Rum, cocktail shaker sets, glassware, and expedition gear. Veteran-owned, built properly.',
   alternates: {
     canonical: 'https://jerrycanspirits.co.uk/shop/',
@@ -14,6 +15,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Shop | Jerry Can Spirits®',
     description: 'Shop Jerry Can Spirits. Expedition Spiced Rum, cocktail shaker sets, glassware, and expedition gear. Veteran-owned, built properly.',
+    images: OG_IMAGE,
   },
 }
 

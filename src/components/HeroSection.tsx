@@ -1,8 +1,31 @@
+'use client'
+
+import { useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import CountdownTimer from './CountdownTimer'
 
+const HERO_IMAGES = [
+  {
+    src: 'https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/c8ba631a-3382-4bb5-d935-57ac653ca500/public',
+    alt: 'Expedition Spiced Rum — front label',
+    label: 'Bottle',
+  },
+  {
+    src: 'https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/7d3c4e1a-8701-4be4-23f1-cd0af397b900/public',
+    alt: 'Expedition Spiced Rum — tasting notes',
+    label: 'Tasting Notes',
+  },
+  {
+    src: 'https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/447ac5a9-27c5-4135-f48c-7ce9e41c7d00/public',
+    alt: 'Expedition Spiced Rum — compliance label',
+    label: 'Label',
+  },
+]
+
 export default function HeroSection() {
+  const [activeIndex, setActiveIndex] = useState(0)
+
   return (
     <section className="relative overflow-hidden min-h-screen">
 
@@ -19,6 +42,7 @@ export default function HeroSection() {
       <div className="relative w-full px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center min-h-[70vh] sm:min-h-[80vh]">
+
           {/* Content */}
           <div className="text-center lg:text-left order-2 lg:order-1">
             {/* Overline Badge */}
@@ -68,7 +92,7 @@ export default function HeroSection() {
               </Link>
             </div>
 
-            {/* CTA Buttons - Mobile (Single Button) */}
+            {/* CTA Buttons - Mobile */}
             <div className="sm:hidden mb-8">
               <Link
                 href="/shop/product/jerry-can-spirits-expedition-spiced-rum/"
@@ -78,7 +102,7 @@ export default function HeroSection() {
               </Link>
             </div>
 
-            {/* Trust Indicators - Text Only */}
+            {/* Trust Indicators */}
             <div className="pt-8 border-t border-jerry-green-700">
               <p className="text-gold-300 text-sm font-medium text-center lg:text-left">
                 Real Ingredients. No Artificial Flavouring. Veteran Owned. Distilled in Wales.
@@ -89,17 +113,22 @@ export default function HeroSection() {
           {/* Product Image */}
           <div className="relative order-1 lg:order-2">
             <div className="relative bg-gradient-to-br from-jerry-green-800 to-jerry-green-900 rounded-2xl overflow-hidden shadow-2xl border border-gold-500/20">
-              {/* Product Image */}
-              <div className="aspect-[4/5] flex items-center justify-center p-8">
-                <Image
-                  src="/images/hero/hero-spiced.webp"
-                  alt="Jerry Can Spirits Expedition Spiced Rum, 700ml, British spiced rum made with real ingredients"
-                  width={400}
-                  height={500}
-                  className="w-full h-full object-contain"
-                  sizes="(max-width: 768px) 100vw, 50vw"
-                  priority
-                />
+
+              {/* Images — stacked, fade between active */}
+              <div className="aspect-[4/5] relative">
+                {HERO_IMAGES.map((image, index) => (
+                  <Image
+                    key={image.src}
+                    src={image.src}
+                    alt={image.alt}
+                    fill
+                    className={`object-contain p-8 transition-opacity duration-500 ${
+                      index === activeIndex ? 'opacity-100' : 'opacity-0'
+                    }`}
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                    priority={index === 0}
+                  />
+                ))}
               </div>
 
               {/* Floating Badges */}
@@ -107,20 +136,35 @@ export default function HeroSection() {
                 Numbered. Limited to 700.
               </div>
 
-              <div className="absolute bottom-6 right-6 bg-jerry-green-700/80 backdrop-blur-sm text-gold-300 px-4 py-2 rounded-full text-sm font-semibold uppercase tracking-wide border border-gold-500/30 shadow-lg">
+              <div className="absolute bottom-16 right-6 bg-jerry-green-700/80 backdrop-blur-sm text-gold-300 px-4 py-2 rounded-full text-sm font-semibold uppercase tracking-wide border border-gold-500/30 shadow-lg">
                 Limited First Batch
+              </div>
+
+              {/* Dot navigation */}
+              <div className="absolute bottom-5 left-0 right-0 flex justify-center gap-3">
+                {HERO_IMAGES.map((image, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setActiveIndex(index)}
+                    aria-label={`View ${image.label}`}
+                    className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                      index === activeIndex
+                        ? 'bg-gold-400 scale-125'
+                        : 'bg-parchment-600 hover:bg-parchment-400'
+                    }`}
+                  />
+                ))}
               </div>
             </div>
 
-            {/* Decorative elements with gold accents */}
+            {/* Decorative elements */}
             <div className="absolute -top-4 -right-4 w-24 h-24 bg-gold-400 rounded-full opacity-20 blur-xl"></div>
             <div className="absolute -bottom-8 -left-8 w-32 h-32 bg-gold-600 rounded-full opacity-20 blur-2xl"></div>
-
           </div>
+
           </div>
         </div>
       </div>
-
 
     </section>
   )

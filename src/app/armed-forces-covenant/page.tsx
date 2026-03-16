@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import Image from 'next/image'
 
 export const metadata: Metadata = {
-  title: "Armed Forces Covenant | Jerry Can Spirits",
+  title: 'Armed Forces Covenant',
   description: "Jerry Can Spirits is a veteran-owned British spirits company committed to the Armed Forces Covenant, supporting serving personnel, veterans, and military families.",
   alternates: {
     canonical: 'https://jerrycanspirits.co.uk/armed-forces-covenant/',

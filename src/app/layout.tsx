@@ -59,7 +59,7 @@ export const metadata: Metadata = {
   metadataBase: new URL('https://jerrycanspirits.co.uk'),
   title: {
     template: '%s | Jerry Can Spirits®',
-    default: 'Jerry Can Spirits® | Veteran-Owned Premium British Rum',
+    default: 'Jerry Can Spirits® | Veteran-Owned British Rum',
   },
   keywords: "veteran-owned rum, British spirits, military heritage rum, premium rum, Royal Corps of Signals, expedition rum, small-batch spirits, craft rum, British rum, sustainable spirits",
   authors: [{ name: "Jerry Can Spirits®" }],
@@ -72,7 +72,7 @@ export const metadata: Metadata = {
         url: "/images/og-image.jpg",
         width: 1200,
         height: 630,
-        alt: "Jerry Can Spirits® - Veteran-Owned Premium British Rum with Military Heritage",
+        alt: "Jerry Can Spirits® — Veteran-Owned British Rum, distilled in Wales",
       },
     ],
   },
