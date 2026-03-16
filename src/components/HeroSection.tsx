@@ -147,12 +147,14 @@ export default function HeroSection() {
                     key={index}
                     onClick={() => setActiveIndex(index)}
                     aria-label={`View ${image.label}`}
-                    className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                    className="p-1 flex items-center justify-center"
+                  >
+                    <span className={`block w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full transition-all duration-300 ${
                       index === activeIndex
                         ? 'bg-gold-400 scale-125'
                         : 'bg-parchment-600 hover:bg-parchment-400'
-                    }`}
-                  />
+                    }`} />
+                  </button>
                 ))}
               </div>
             </div>
