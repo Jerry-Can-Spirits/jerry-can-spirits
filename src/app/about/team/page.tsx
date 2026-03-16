@@ -3,6 +3,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import CartographicBackground from '@/components/CartographicBackground'
 import Breadcrumbs from '@/components/Breadcrumbs'
+import { OG_IMAGE } from '@/lib/og'
 
 export const metadata: Metadata = {
   title: 'Meet the Team',
@@ -17,6 +18,7 @@ export const metadata: Metadata = {
     siteName: 'Jerry Can Spirits®',
     locale: 'en_GB',
     type: 'website',
+    images: OG_IMAGE,
   },
   robots: {
     index: true,

@@ -72,7 +72,7 @@ export const metadata: Metadata = {
         url: "/images/og-image.jpg",
         width: 1200,
         height: 630,
-        alt: "Jerry Can Spirits® - Veteran-Owned Premium British Rum with Military Heritage",
+        alt: "Jerry Can Spirits® — Veteran-Owned British Rum, distilled in Wales",
       },
     ],
   },

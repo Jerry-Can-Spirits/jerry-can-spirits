@@ -3,6 +3,7 @@ import Image from 'next/image'
 import { getProductsByCollection, type ShopifyProduct } from '@/lib/shopify'
 import type { Metadata } from 'next'
 import Breadcrumbs from '@/components/Breadcrumbs'
+import { OG_IMAGE } from '@/lib/og'
 
 export const metadata: Metadata = {
   title: 'Expedition Gear & Apparel',
@@ -13,6 +14,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Expedition Gear & Apparel | Jerry Can Spirits®',
     description: 'Adventure-ready apparel and branded merchandise. Quality expedition gear engineered for reliability.',
+    images: OG_IMAGE,
   },
 }
 
