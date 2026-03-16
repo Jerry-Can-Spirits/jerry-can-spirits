@@ -26,7 +26,7 @@ export const metadata: Metadata = {
 export default async function IngredientsPage() {
   // Fetch ingredients server-side using optimized list query
   // Only fetches fields needed for preview cards (not full usage/tips/storage)
-  const ingredients = await client.fetch(ingredientsListQuery)
+  const ingredients = await client.fetch(ingredientsListQuery, {}, { next: { revalidate: 3600 } })
 
   // Pass data to Client Component for interactive UI
   return (

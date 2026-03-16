@@ -26,7 +26,7 @@ export const metadata: Metadata = {
 export default async function EquipmentPage() {
   // Fetch equipment server-side using optimized list query
   // Only fetches fields needed for preview cards (not full usage/tips/specifications)
-  const equipment = await client.fetch(equipmentListQuery)
+  const equipment = await client.fetch(equipmentListQuery, {}, { next: { revalidate: 3600 } })
 
   // Pass data to Client Component for interactive UI
   return (

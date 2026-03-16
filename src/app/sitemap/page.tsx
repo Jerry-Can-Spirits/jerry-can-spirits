@@ -90,10 +90,10 @@ const categoryLabels: Record<string, string> = {
 
 export default async function SitemapPage() {
   const [cocktails, ingredients, equipment, guides] = await Promise.all([
-    client.fetch<SlugItem[]>(cocktailsListQuery),
-    client.fetch<SlugItem[]>(ingredientsListQuery),
-    client.fetch<SlugItem[]>(equipmentListQuery),
-    client.fetch<SlugItem[]>(guidesListQuery),
+    client.fetch<SlugItem[]>(cocktailsListQuery, {}, { next: { revalidate: 3600 } }),
+    client.fetch<SlugItem[]>(ingredientsListQuery, {}, { next: { revalidate: 3600 } }),
+    client.fetch<SlugItem[]>(equipmentListQuery, {}, { next: { revalidate: 3600 } }),
+    client.fetch<SlugItem[]>(guidesListQuery, {}, { next: { revalidate: 3600 } }),
   ])
 
   const ingredientsByCategory = groupBy(ingredients, 'category')
