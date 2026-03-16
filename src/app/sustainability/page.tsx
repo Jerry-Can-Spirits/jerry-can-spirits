@@ -4,6 +4,7 @@ import BackToTop from '@/components/BackToTop'
 import Breadcrumbs from '@/components/Breadcrumbs'
 import StructuredData from '@/components/StructuredData'
 import ScrollReveal from '@/components/ScrollReveal'
+import { OG_IMAGE } from '@/lib/og'
 
 // FAQ Schema for rich snippets
 const faqSchema = {
@@ -66,6 +67,7 @@ export const metadata: Metadata = {
     siteName: 'Jerry Can Spirits®',
     locale: 'en_GB',
     type: 'website',
+    images: OG_IMAGE,
   },
   robots: {
     index: true,

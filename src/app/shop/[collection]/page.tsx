@@ -3,6 +3,7 @@ import Image from 'next/image'
 import { getProductsByCollection, type ShopifyProduct } from '@/lib/shopify'
 import type { Metadata } from 'next'
 import Breadcrumbs from '@/components/Breadcrumbs'
+import { OG_IMAGE } from '@/lib/og'
 
 export const dynamic = 'force-dynamic'
 
@@ -33,6 +34,7 @@ export async function generateMetadata({
       description: `Shop ${title} from Jerry Can Spirits. Veteran-owned British rum, cocktail barware, and expedition gear. Built properly, no shortcuts.`,
       url: `${BASE_URL}/shop/${collection}/`,
       siteName: 'Jerry Can Spirits®',
+      images: OG_IMAGE,
     },
   }
 }

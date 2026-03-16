@@ -4,6 +4,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import Breadcrumbs from '@/components/Breadcrumbs'
 import ScrollReveal from '@/components/ScrollReveal'
+import { OG_IMAGE } from '@/lib/og'
 
 const CF_IMG = 'https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ'
 
@@ -22,6 +23,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Jerry Can Spirits Reviews | Trustpilot, Google & Yell",
     description: "Customer reviews of Jerry Can Spirits Expedition Spiced Rum on Trustpilot, Google and Yell. See what people say about our veteran-owned British spiced rum.",
+    images: OG_IMAGE,
   },
 }
 

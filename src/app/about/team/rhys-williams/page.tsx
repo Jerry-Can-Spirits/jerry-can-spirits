@@ -4,6 +4,7 @@ import Image from 'next/image'
 import CartographicBackground from '@/components/CartographicBackground'
 import Breadcrumbs from '@/components/Breadcrumbs'
 import StructuredData from '@/components/StructuredData'
+import { OG_IMAGE } from '@/lib/og'
 
 // Person schema for co-founder profile
 const personSchema = {
@@ -38,6 +39,7 @@ export const metadata: Metadata = {
     siteName: 'Jerry Can Spirits®',
     locale: 'en_GB',
     type: 'profile',
+    images: OG_IMAGE,
   },
   robots: {
     index: true,

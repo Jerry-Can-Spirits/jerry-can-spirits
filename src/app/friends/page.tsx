@@ -4,6 +4,7 @@ import Image from 'next/image'
 import StructuredData from '@/components/StructuredData'
 import Breadcrumbs from '@/components/Breadcrumbs'
 import ScrollReveal from '@/components/ScrollReveal'
+import { OG_IMAGE } from '@/lib/og'
 
 export const metadata: Metadata = {
   title: "Friends & Partners",
@@ -14,6 +15,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Friends & Partners | Jerry Can Spirits®",
     description: "Our trusted partners, from distilleries to suppliers, who help us make spirits we're proud of",
+    images: OG_IMAGE,
   },
 }
 
