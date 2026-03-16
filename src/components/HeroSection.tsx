@@ -92,7 +92,7 @@ export default function HeroSection() {
               {/* Product Image */}
               <div className="aspect-[4/5] flex items-center justify-center p-8">
                 <Image
-                  src="/images/hero/hero-spiced.webp"
+                  src="https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/c8ba631a-3382-4bb5-d935-57ac653ca500/public"
                   alt="Jerry Can Spirits Expedition Spiced Rum, 700ml, British spiced rum made with real ingredients"
                   width={400}
                   height={500}
