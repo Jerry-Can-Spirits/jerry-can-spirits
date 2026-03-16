@@ -22,8 +22,6 @@ export const metadata: Metadata = {
   },
 }
 
-export const revalidate = 3600
-
 // This is now a Server Component - data fetching happens server-side
 export default async function IngredientsPage() {
   // Fetch ingredients server-side using optimized list query

@@ -12,8 +12,6 @@ function roundDownToTen(n: number): number {
   return Math.floor(n / 10) * 10
 }
 
-export const revalidate = 3600
-
 export const metadata: Metadata = {
   title: "Field Manual - Cocktail Recipes & Bar Guides",
   description: "Free cocktail recipes for rum, gin, whisky and more. Bar equipment guides and ingredient breakdowns. No jargon, just great drinks.",
