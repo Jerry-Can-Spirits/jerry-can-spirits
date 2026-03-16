@@ -7,8 +7,8 @@ export const metadata: Metadata = {
     canonical: 'https://jerrycanspirits.co.uk/contact/complaints/',
   },
   robots: {
-    index: false,
-    follow: false,
+    index: true,
+    follow: true,
   },
 }
 
