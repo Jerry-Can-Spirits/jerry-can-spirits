@@ -5,6 +5,7 @@ import type { Metadata } from 'next'
 import Breadcrumbs from '@/components/Breadcrumbs'
 import StructuredData from '@/components/StructuredData'
 import ScrollReveal from '@/components/ScrollReveal'
+import { OG_IMAGE } from '@/lib/og'
 
 export const metadata: Metadata = {
   title: 'Cocktail Shaker Sets, Barware & Bar Tools',
@@ -19,6 +20,7 @@ export const metadata: Metadata = {
     siteName: 'Jerry Can Spirits®',
     locale: 'en_GB',
     type: 'website',
+    images: OG_IMAGE,
   },
 }
 

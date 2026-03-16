@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import StructuredData from '@/components/StructuredData'
+import { OG_IMAGE } from '@/lib/og'
 
 export const metadata: Metadata = {
   title: "Contact Us",
@@ -14,6 +15,7 @@ export const metadata: Metadata = {
     siteName: 'Jerry Can Spirits®',
     locale: 'en_GB',
     type: 'website',
+    images: OG_IMAGE,
   },
 }
 

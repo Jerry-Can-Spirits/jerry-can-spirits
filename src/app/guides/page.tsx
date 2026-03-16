@@ -4,6 +4,7 @@ import { guidesListQuery } from '@/sanity/queries'
 import GuidesClient from './GuidesClient'
 import Breadcrumbs from '@/components/Breadcrumbs'
 import StructuredData from '@/components/StructuredData'
+import { OG_IMAGE } from '@/lib/og'
 
 export const dynamic = 'force-dynamic'
 
@@ -20,6 +21,7 @@ export const metadata: Metadata = {
     siteName: 'Jerry Can Spirits®',
     locale: 'en_GB',
     type: 'website',
+    images: OG_IMAGE,
   },
 }
 
