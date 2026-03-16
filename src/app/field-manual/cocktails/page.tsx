@@ -28,7 +28,7 @@ export default async function CocktailsPage() {
   // Fetch cocktails server-side using optimized list query
   // Only fetches fields needed for preview cards (not full ingredients/instructions)
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const cocktails: any[] = await client.fetch(cocktailsListQuery)
+  const cocktails: any[] = await client.fetch(cocktailsListQuery, {}, { next: { revalidate: 3600 } })
 
   // Build ItemList schema for recipe collection
   // Note: Using URL references instead of inline Recipe objects to avoid

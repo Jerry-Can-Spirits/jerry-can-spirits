@@ -1,3 +1,4 @@
+import { Suspense } from 'react'
 import type { Metadata } from 'next'
 import { client } from '@/sanity/client'
 import { guidesListQuery } from '@/sanity/queries'
@@ -5,8 +6,6 @@ import GuidesClient from './GuidesClient'
 import Breadcrumbs from '@/components/Breadcrumbs'
 import StructuredData from '@/components/StructuredData'
 import { OG_IMAGE } from '@/lib/og'
-
-export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'Spirits Guides & Education',
@@ -29,7 +28,7 @@ export const metadata: Metadata = {
 export default async function GuidesPage() {
   // Fetch guides server-side using optimized list query
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const guides: any[] = await client.fetch(guidesListQuery)
+  const guides: any[] = await client.fetch(guidesListQuery, {}, { next: { revalidate: 3600 } })
 
   // Build ItemList schema for article collection
   const itemListSchema = {
@@ -59,7 +58,9 @@ export default async function GuidesPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 mb-8">
         <Breadcrumbs items={[{ label: 'Guides' }]} />
       </div>
-      <GuidesClient guides={guides} />
+      <Suspense>
+        <GuidesClient guides={guides} />
+      </Suspense>
     </>
   )
 }

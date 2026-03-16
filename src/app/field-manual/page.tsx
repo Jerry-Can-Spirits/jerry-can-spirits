@@ -27,7 +27,7 @@ export const metadata: Metadata = {
 
 export default async function FieldManualHome() {
   // Fetch live counts from Sanity
-  const counts = await client.fetch<{ cocktails: number; ingredients: number; equipment: number }>(fieldManualCountsQuery)
+  const counts = await client.fetch<{ cocktails: number; ingredients: number; equipment: number }>(fieldManualCountsQuery, {}, { next: { revalidate: 3600 } })
 
   return (
     <main className="min-h-screen py-20">
