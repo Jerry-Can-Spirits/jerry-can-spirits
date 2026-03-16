@@ -1,10 +1,13 @@
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Complaints',
+  title: 'Complaints & Issue Resolution',
   description: 'Submit a complaint or report an issue with your Jerry Can Spirits order. We take every concern seriously and resolve it quickly.',
   alternates: {
     canonical: 'https://jerrycanspirits.co.uk/contact/complaints/',
+  },
+  openGraph: {
+    url: 'https://jerrycanspirits.co.uk/contact/complaints/',
   },
   robots: {
     index: true,

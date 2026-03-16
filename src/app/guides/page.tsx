@@ -6,7 +6,7 @@ import Breadcrumbs from '@/components/Breadcrumbs'
 import StructuredData from '@/components/StructuredData'
 import { OG_IMAGE } from '@/lib/og'
 
-export const dynamic = 'force-dynamic'
+export const revalidate = 3600
 
 export const metadata: Metadata = {
   title: 'Spirits Guides & Education',
