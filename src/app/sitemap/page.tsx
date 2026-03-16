@@ -10,7 +10,7 @@ import {
 } from '@/sanity/queries'
 
 export const metadata: Metadata = {
-  title: 'Site Map | Jerry Can Spirits®',
+  title: { absolute: 'Site Map | Jerry Can Spirits®' },
   description: 'A complete index of all pages on the Jerry Can Spirits website — cocktail recipes, ingredient guides, bar equipment, and more.',
   alternates: {
     canonical: 'https://jerrycanspirits.co.uk/sitemap/',

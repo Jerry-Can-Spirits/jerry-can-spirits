@@ -6,7 +6,7 @@ import { getAllCollections } from '@/lib/shopify'
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: 'Shop | Jerry Can Spirits',
+  title: 'Shop',
   description: 'Shop Jerry Can Spirits. Expedition Spiced Rum, cocktail shaker sets, glassware, and expedition gear. Veteran-owned, built properly.',
   alternates: {
     canonical: 'https://jerrycanspirits.co.uk/shop/',

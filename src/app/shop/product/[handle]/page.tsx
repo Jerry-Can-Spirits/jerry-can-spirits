@@ -116,7 +116,7 @@ export async function generateMetadata({
     const metaDescription = product.seo?.description || product.description.slice(0, 155)
 
     return {
-      title: `${metaTitle} | Jerry Can Spirits`,
+      title: metaTitle,
       description: metaDescription,
       keywords: `${product.title}, British spirits, veteran owned, premium spirits, military heritage, Jerry Can Spirits, expedition spirits, small batch, craft spirits`,
       alternates: {

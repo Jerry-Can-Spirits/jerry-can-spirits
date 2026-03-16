@@ -59,7 +59,7 @@ export const metadata: Metadata = {
   metadataBase: new URL('https://jerrycanspirits.co.uk'),
   title: {
     template: '%s | Jerry Can Spirits®',
-    default: 'Jerry Can Spirits® | Veteran-Owned Premium British Rum',
+    default: 'Jerry Can Spirits® | Veteran-Owned British Rum',
   },
   keywords: "veteran-owned rum, British spirits, military heritage rum, premium rum, Royal Corps of Signals, expedition rum, small-batch spirits, craft rum, British rum, sustainable spirits",
   authors: [{ name: "Jerry Can Spirits®" }],
