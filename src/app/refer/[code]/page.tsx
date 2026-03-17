@@ -33,7 +33,7 @@ export default async function ReferralLandingPage({
   const referralData = await kv.get<ReferralData>(`referral:${code}`, 'json');
 
   if (!referralData) {
-    redirect('/shop/drinks/');
+    redirect('/shop/spirits/');
   }
 
   return (
@@ -68,7 +68,7 @@ export default async function ReferralLandingPage({
         </div>
 
         <Link
-          href="/shop/drinks/"
+          href="/shop/spirits/"
           className="inline-flex items-center justify-center space-x-2 bg-gold-500 hover:bg-gold-400 text-jerry-green-900 px-8 py-4 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105"
         >
           <span>Browse Our Rum</span>

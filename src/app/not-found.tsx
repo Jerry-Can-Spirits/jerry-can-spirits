@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 const suggestedPages = [
   {
     name: 'Shop Our Rum',
-    href: '/shop/drinks/',
+    href: '/shop/spirits/',
     description: 'Browse the Expedition Spiced Rum collection',
   },
   {
