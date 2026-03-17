@@ -173,7 +173,7 @@ export default function Home() {
       },
       "offers": {
         "@type": "Offer",
-        "url": "https://jerrycanspirits.co.uk/shop/drinks",
+        "url": "https://jerrycanspirits.co.uk/shop/spirits/",
         "price": "35",
         "priceCurrency": "GBP",
         "availability": "https://schema.org/PreOrder",

@@ -453,7 +453,7 @@ export default async function FieldManualHome() {
             <div className="border-b border-gold-500/10 pb-6">
               <h3 className="text-lg font-semibold text-gold-300 mb-3">Do I need to buy Jerry Can rum to use the recipes?</h3>
               <p className="text-parchment-200 leading-relaxed">
-                No. While we'd love you to try <Link href="/shop/drinks/" className="text-gold-400 hover:text-gold-300 underline">our rum</Link>, every recipe works with any quality spirit in that category. We include notes on what to look for in substitutes when relevant. The Field Manual is useful whether you buy from us or not.
+                No. While we'd love you to try <Link href="/shop/spirits/" className="text-gold-400 hover:text-gold-300 underline">our rum</Link>, every recipe works with any quality spirit in that category. We include notes on what to look for in substitutes when relevant. The Field Manual is useful whether you buy from us or not.
               </p>
             </div>
 

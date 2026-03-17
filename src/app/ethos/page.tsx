@@ -491,7 +491,7 @@ export default function Ethos() {
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
-                href="/shop/drinks/"
+                href="/shop/spirits/"
                 className="inline-flex items-center justify-center space-x-2 bg-gold-500 hover:bg-gold-400 text-jerry-green-900 px-8 py-4 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105"
               >
                 <span>Shop Our Rum</span>

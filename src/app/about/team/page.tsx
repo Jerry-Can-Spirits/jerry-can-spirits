@@ -174,7 +174,7 @@ export default function TeamPage() {
               <p className="text-parchment-200 leading-relaxed">
                 We reckon there&apos;s room for smaller brands that actually care about what they make. We&apos;re not trying
                 to compete with the big corporations – we&apos;re just trying to make spirits we&apos;re proud of and build something
-                real along the way. Check out our <Link href="/shop/drinks/" className="text-gold-300 hover:text-gold-400 underline decoration-gold-500/40 hover:decoration-gold-400 transition-colors">Expedition Spiced Rum</Link> to see what we&apos;ve been working on.
+                real along the way. Check out our <Link href="/shop/spirits/" className="text-gold-300 hover:text-gold-400 underline decoration-gold-500/40 hover:decoration-gold-400 transition-colors">Expedition Spiced Rum</Link> to see what we&apos;ve been working on.
               </p>
             </div>
           </div>
