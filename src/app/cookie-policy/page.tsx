@@ -191,7 +191,7 @@ export default function CookiePolicy() {
                   <h4 className="text-lg font-semibold text-gold-300 mb-2">Klaviyo — Marketing</h4>
                   <p className="text-white">
                     Email marketing platform used for newsletters and customer communications.{' '}
-                    <a href="https://www.klaviyo.com/privacy" target="_blank" rel="noopener noreferrer"
+                    <a href="https://www.klaviyo.com/legal/privacy-notice" target="_blank" rel="noopener noreferrer"
                        className="text-gold-300 hover:text-gold-200 underline">
                       View Klaviyo's Privacy Policy
                     </a>
