@@ -48,7 +48,7 @@ export default function ReviewsPage() {
             name: 'Jerry Can Spirits',
             url: 'https://jerrycanspirits.co.uk',
             sameAs: [
-              'https://uk.trustpilot.com/review/jerrycanspirits.co.uk',
+              'https://www.trustpilot.com/review/jerrycanspirits.co.uk',
               'https://www.yell.com/biz/jerry-can-spirits-ltd-london-11012967/',
             ],
           },
@@ -74,7 +74,7 @@ export default function ReviewsPage() {
           <div className="bg-jerry-green-800/40 border border-gold-500/20 rounded-xl p-8">
             <div className="text-center mb-6">
               <a
-                href="https://uk.trustpilot.com/review/jerrycanspirits.co.uk"
+                href="https://www.trustpilot.com/review/jerrycanspirits.co.uk"
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -87,7 +87,7 @@ export default function ReviewsPage() {
                 />
               </a>
               <a
-                href="https://uk.trustpilot.com/review/jerrycanspirits.co.uk"
+                href="https://www.trustpilot.com/review/jerrycanspirits.co.uk"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-sm text-gold-300 hover:text-gold-400 transition-colors underline"
@@ -207,7 +207,7 @@ export default function ReviewsPage() {
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <a
-                href="https://uk.trustpilot.com/evaluate/jerrycanspirits.co.uk"
+                href="https://www.trustpilot.com/evaluate/jerrycanspirits.co.uk"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 bg-[#00b67a] hover:bg-[#009567] text-white font-semibold px-6 py-3 rounded-lg transition-colors"
