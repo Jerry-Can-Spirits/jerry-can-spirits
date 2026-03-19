@@ -28,7 +28,8 @@ export default function ProductPageTracking({
     };
 
     // Track ViewContent via Meta Pixel directly (consent-gated)
-    if (typeof window !== 'undefined' && window.fbq && window.Cookiebot?.consent?.marketing) {
+    // Spirits/alcohol excluded — Meta prohibits alcohol in product catalogs
+    if (typeof window !== 'undefined' && window.fbq && window.Cookiebot?.consent?.marketing && category !== 'Spirits') {
       window.fbq('track', 'ViewContent', payload);
     }
 
