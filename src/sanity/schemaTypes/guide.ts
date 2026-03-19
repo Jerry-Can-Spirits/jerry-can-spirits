@@ -412,7 +412,15 @@ export default defineType({
       options: {
         hotspot: true,
       },
-      description: 'Featured image for the guide'
+      description: 'Featured image for the guide',
+      fields: [
+        defineField({
+          name: 'alt',
+          title: 'Alt Text',
+          type: 'string',
+          description: 'Describe what is visible in the image. Used for accessibility and SEO.',
+        })
+      ]
     }),
 
     // Call to Action
