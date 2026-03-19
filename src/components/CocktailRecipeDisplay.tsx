@@ -45,6 +45,7 @@ interface SanityCocktail {
   tags?: string[]
   featured?: boolean
   image?: string
+  imageAlt?: string
   longDescription?: Record<string, unknown>[]
 }
 
@@ -115,7 +116,7 @@ export default function CocktailRecipeDisplay({ cocktail }: Props) {
             <div className="mb-6">
               <Image
                 src={cocktail.image}
-                alt={`${cocktail.name} cocktail recipe - Jerry Can Spirits`}
+                alt={cocktail.imageAlt || `${cocktail.name} cocktail recipe - Jerry Can Spirits`}
                 width={800}
                 height={400}
                 className="rounded-lg w-full object-cover"

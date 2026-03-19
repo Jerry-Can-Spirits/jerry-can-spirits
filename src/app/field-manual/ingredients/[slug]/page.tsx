@@ -36,9 +36,9 @@ interface Ingredient {
     }
   }
   storage?: string
-  image?: { asset: { url: string } }
-  budgetImage?: { asset: { url: string } }
-  premiumImage?: { asset: { url: string } }
+  image?: { asset: { url: string }; alt?: string }
+  budgetImage?: { asset: { url: string }; alt?: string }
+  premiumImage?: { asset: { url: string }; alt?: string }
   featured: boolean
   // Enhanced fields
   flavorProfile?: {
@@ -179,7 +179,7 @@ export default async function IngredientDetailPage({ params }: { params: Promise
                   <div className="relative aspect-square bg-transparent rounded-lg overflow-hidden">
                     <Image
                       src={urlFor(ingredient.image).url()}
-                      alt={ingredient.name}
+                      alt={ingredient.image?.alt || ingredient.name}
                       fill
                       className="object-contain mix-blend-multiply p-4"
                       sizes="(max-width: 1024px) 100vw, 45vw"
@@ -321,7 +321,7 @@ export default async function IngredientDetailPage({ params }: { params: Promise
                           {ingredient.budgetImage && (
                             <EnlargeableProductImage
                               src={urlFor(ingredient.budgetImage).url()}
-                              alt={`${ingredient.recommendedBrands.budget} - Budget Choice`}
+                              alt={ingredient.budgetImage?.alt || `${ingredient.recommendedBrands.budget} - Budget Choice`}
                               productName={ingredient.recommendedBrands.budget || 'Budget Choice'}
                             />
                           )}
@@ -369,7 +369,7 @@ export default async function IngredientDetailPage({ params }: { params: Promise
                           {ingredient.premiumImage && (
                             <EnlargeableProductImage
                               src={urlFor(ingredient.premiumImage).url()}
-                              alt={`${ingredient.recommendedBrands.premium} - Premium Choice`}
+                              alt={ingredient.premiumImage?.alt || `${ingredient.recommendedBrands.premium} - Premium Choice`}
                               productName={ingredient.recommendedBrands.premium || 'Premium Choice'}
                             />
                           )}

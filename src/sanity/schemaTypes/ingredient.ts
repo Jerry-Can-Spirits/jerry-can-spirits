@@ -200,6 +200,14 @@ export default defineType({
         hotspot: true
       },
       description: 'Main product image (or budget option if using separate images)',
+      fields: [
+        defineField({
+          name: 'alt',
+          title: 'Alt Text',
+          type: 'string',
+          description: 'Describe what is visible in the image. Used for accessibility and SEO.',
+        })
+      ],
       preview: {
         select: {
           imageUrl: 'asset.url',
@@ -216,6 +224,14 @@ export default defineType({
         hotspot: true
       },
       description: 'Image for budget brand recommendation (optional - leave empty to use main image)',
+      fields: [
+        defineField({
+          name: 'alt',
+          title: 'Alt Text',
+          type: 'string',
+          description: 'Describe what is visible in the image. Used for accessibility and SEO.',
+        })
+      ],
       preview: {
         select: {
           imageUrl: 'asset.url',
@@ -232,6 +248,14 @@ export default defineType({
         hotspot: true
       },
       description: 'Image for premium brand recommendation (optional - leave empty to use main image)',
+      fields: [
+        defineField({
+          name: 'alt',
+          title: 'Alt Text',
+          type: 'string',
+          description: 'Describe what is visible in the image. Used for accessibility and SEO.',
+        })
+      ],
       preview: {
         select: {
           imageUrl: 'asset.url',

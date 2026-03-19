@@ -169,7 +169,15 @@ export default defineType({
         storeOriginalFilename: true,
         hotspot: true
       },
-      description: 'Hero product image for editorial content (Shopify handles e-commerce images)'
+      description: 'Hero product image for editorial content (Shopify handles e-commerce images)',
+      fields: [
+        defineField({
+          name: 'alt',
+          title: 'Alt Text',
+          type: 'string',
+          description: 'Describe what is visible in the image. Used for accessibility and SEO.',
+        })
+      ]
     }),
 
     // Featured Product

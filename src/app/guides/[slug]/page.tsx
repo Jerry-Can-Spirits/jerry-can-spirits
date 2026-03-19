@@ -88,6 +88,7 @@ interface Guide {
   relatedCocktails?: RelatedCocktail[]
   relatedProducts?: RelatedProduct[]
   heroImage?: string
+  heroImageAlt?: string
   callToAction?: {
     text: string
     url: string
@@ -232,7 +233,7 @@ export default async function GuidePage({ params }: PageProps) {
             <div className="relative aspect-[16/9] sm:aspect-[2/1] lg:aspect-[21/9] rounded-xl overflow-hidden mb-8">
               <Image
                 src={guide.heroImage}
-                alt={guide.title}
+                alt={guide.heroImageAlt || guide.title}
                 fill
                 className="object-cover object-center"
                 sizes="(max-width: 640px) 100vw, (max-width: 896px) 100vw, 896px"
