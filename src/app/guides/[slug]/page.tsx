@@ -179,11 +179,17 @@ export default async function GuidePage({ params }: PageProps) {
     headline: guide.title,
     description: guide.excerpt,
     image: guide.heroImage,
-    author: {
-      '@type': 'Organization',
-      name: guide.author || 'Jerry Can Spirits',
-      url: 'https://jerrycanspirits.co.uk'
-    },
+    author: guide.author
+      ? {
+          '@type': 'Person',
+          name: guide.author,
+          url: `https://jerrycanspirits.co.uk/about/team/${guide.author.toLowerCase().replace(/\s+/g, '-')}/`,
+        }
+      : {
+          '@type': 'Organization',
+          name: 'Jerry Can Spirits',
+          url: 'https://jerrycanspirits.co.uk',
+        },
     publisher: {
       '@type': 'Organization',
       name: 'Jerry Can Spirits',
@@ -274,7 +280,12 @@ export default async function GuidePage({ params }: PageProps) {
                   <span className="text-gold-400 font-bold text-sm">{guide.author.charAt(0)}</span>
                 </div>
                 <div>
-                  <p className="text-white font-semibold">{guide.author}</p>
+                  <Link
+                    href={`/about/team/${guide.author.toLowerCase().replace(/\s+/g, '-')}/`}
+                    className="text-white font-semibold hover:text-gold-300 transition-colors"
+                  >
+                    {guide.author}
+                  </Link>
                   {guide.publishedAt && (
                     <p className="text-parchment-400 text-sm">
                       {new Date(guide.publishedAt).toLocaleDateString('en-GB', {
