@@ -16,6 +16,7 @@ interface Guide {
   isPillar: boolean
   publishedAt: string
   heroImage?: string
+  heroImageAlt?: string
 }
 
 interface GuidesClientProps {
@@ -201,7 +202,7 @@ export default function GuidesClient({ guides }: GuidesClientProps) {
                   <div className="relative aspect-[21/9] bg-jerry-green-800/20">
                     <Image
                       src={guide.heroImage}
-                      alt={guide.title}
+                      alt={guide.heroImageAlt || guide.title}
                       fill
                       className="object-cover group-hover:scale-105 transition-transform duration-500"
                       sizes="(max-width: 1024px) 100vw, 50vw"
@@ -255,7 +256,7 @@ export default function GuidesClient({ guides }: GuidesClientProps) {
                   <div className="relative aspect-[16/9] bg-jerry-green-800/20">
                     <Image
                       src={guide.heroImage}
-                      alt={guide.title}
+                      alt={guide.heroImageAlt || guide.title}
                       fill
                       className="object-cover group-hover:scale-110 transition-transform duration-500"
                       sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
@@ -320,7 +321,7 @@ export default function GuidesClient({ guides }: GuidesClientProps) {
                   <div className="relative aspect-[16/9] bg-jerry-green-800/20">
                     <Image
                       src={guide.heroImage}
-                      alt={guide.title}
+                      alt={guide.heroImageAlt || guide.title}
                       fill
                       className="object-cover group-hover:scale-110 transition-transform duration-500"
                       sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"

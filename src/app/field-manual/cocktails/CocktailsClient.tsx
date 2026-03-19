@@ -53,6 +53,7 @@ interface SanityCocktail {
   tags?: string[]
   featured?: boolean
   image?: string
+  imageAlt?: string
 }
 
 // Tag display labels (convert values to readable format)
@@ -525,7 +526,7 @@ export default function CocktailsClient({ cocktails }: CocktailsClientProps) {
                   <div className="relative aspect-[4/3] bg-jerry-green-800/20">
                     <Image
                       src={cocktail.image}
-                      alt={cocktail.name}
+                      alt={cocktail.imageAlt || cocktail.name}
                       fill
                       quality={90}
                       className="object-cover group-hover:scale-110 transition-transform duration-500"
@@ -636,7 +637,7 @@ export default function CocktailsClient({ cocktails }: CocktailsClientProps) {
                   <div className="relative aspect-[4/3] bg-jerry-green-800/20">
                     <Image
                       src={cocktail.image}
-                      alt={cocktail.name}
+                      alt={cocktail.imageAlt || cocktail.name}
                       fill
                       quality={90}
                       className="object-cover group-hover:scale-110 transition-transform duration-500"

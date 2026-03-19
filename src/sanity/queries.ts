@@ -15,7 +15,8 @@ export const cocktailsListQuery = `*[_type == "cocktail"] | order(_createdAt des
   category,
   tags,
   featured,
-  "image": image.asset->url
+  "image": image.asset->url,
+  "imageAlt": image.alt
 }`
 
 // Full query - fetches all fields for detail pages
@@ -52,7 +53,8 @@ export const cocktailsQuery = `*[_type == "cocktail"] | order(_createdAt desc) {
   category,
   tags,
   featured,
-  "image": image.asset->url
+  "image": image.asset->url,
+  "imageAlt": image.alt
 }`
 
 export const cocktailBySlugQuery = `*[_type == "cocktail" && slug.current == $slug][0] {
@@ -94,6 +96,7 @@ export const cocktailBySlugQuery = `*[_type == "cocktail" && slug.current == $sl
   tags,
   featured,
   "image": image.asset->url,
+  "imageAlt": image.alt,
   videoUrl,
   flavorProfile,
   relatedGuides[] {
@@ -101,7 +104,7 @@ export const cocktailBySlugQuery = `*[_type == "cocktail" && slug.current == $sl
     sectionAnchor,
     linkText
   },
-  "relatedCocktails": relatedCocktails[]->{ _id, name, slug, description, difficulty, "image": image.asset->url }
+  "relatedCocktails": relatedCocktails[]->{ _id, name, slug, description, difficulty, "image": image.asset->url, "imageAlt": image.alt }
 }`
 
 // Sitemap query - only fetches slug for URL generation
@@ -255,6 +258,7 @@ export const productByHandleQuery = `*[_type == "product" && (slug.current == $s
   professionalTip,
   history,
   "image": image.asset->url,
+  "imageAlt": image.alt,
   featured,
   videoUrl,
   "relatedCocktails": relatedCocktails[]->{ _id, name, slug },
@@ -289,7 +293,8 @@ export const guidesListQuery = `*[_type == "guide"] | order(publishedAt desc, _c
   featured,
   isPillar,
   publishedAt,
-  "heroImage": heroImage.asset->url
+  "heroImage": heroImage.asset->url,
+  "heroImageAlt": heroImage.alt
 }`
 
 // Full query for guide detail pages
@@ -342,6 +347,7 @@ export const guideBySlugQuery = `*[_type == "guide" && slug.current == $slug][0]
     contextNote
   },
   "heroImage": heroImage.asset->url,
+  "heroImageAlt": heroImage.alt,
   callToAction {
     text,
     url
@@ -356,7 +362,8 @@ export const featuredCocktailsQuery = `*[_type == "cocktail" && baseSpirit == "S
   slug,
   description,
   difficulty,
-  "image": image.asset->url
+  "image": image.asset->url,
+  "imageAlt": image.alt
 }`
 
 // Count queries for Field Manual stats

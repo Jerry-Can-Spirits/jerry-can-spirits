@@ -24,7 +24,7 @@ interface Equipment {
     details?: string
   }
   tips: string[]
-  image?: { asset: { url: string } }
+  image?: { asset: { url: string }; alt?: string }
   featured: boolean
   // Enhanced fields
   priceRange?: {
@@ -148,7 +148,7 @@ export default async function EquipmentDetailPage({ params }: { params: Promise<
                   <div className="relative aspect-square bg-jerry-green-800/20 rounded-lg overflow-hidden">
                     <Image
                       src={urlFor(equipment.image).url()}
-                      alt={equipment.name}
+                      alt={equipment.image?.alt || equipment.name}
                       fill
                       className="object-cover"
                       sizes="(max-width: 1024px) 100vw, 50vw"

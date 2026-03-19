@@ -410,7 +410,15 @@ export default defineType({
       type: 'image',
       options: {
         hotspot: true,
-      }
+      },
+      fields: [
+        defineField({
+          name: 'alt',
+          title: 'Alt Text',
+          type: 'string',
+          description: 'Describe what is visible in the image — the glass, garnish, colour, setting. Used for accessibility and SEO.',
+        })
+      ]
     }),
     defineField({
       name: 'videoUrl',

@@ -20,7 +20,7 @@ interface Ingredient {
     premium?: string
   }
   storage?: string
-  image?: { asset: { url: string } }
+  image?: { asset: { url: string }; alt?: string }
   featured: boolean
 }
 
@@ -196,7 +196,7 @@ export default function IngredientsClient({ ingredients }: IngredientsClientProp
                   <div className="relative aspect-[4/3] bg-transparent">
                     <Image
                       src={urlFor(item.image).url()}
-                      alt={item.name}
+                      alt={item.image?.alt || item.name}
                       fill
                       className="object-contain mix-blend-multiply p-4"
                       sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
@@ -263,7 +263,7 @@ export default function IngredientsClient({ ingredients }: IngredientsClientProp
                   <div className="relative aspect-[4/3] bg-transparent">
                     <Image
                       src={urlFor(item.image).url()}
-                      alt={item.name}
+                      alt={item.image?.alt || item.name}
                       fill
                       className="object-contain mix-blend-multiply p-4"
                       sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"

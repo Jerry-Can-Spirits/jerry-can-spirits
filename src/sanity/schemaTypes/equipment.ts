@@ -125,7 +125,15 @@ export default defineType({
       type: 'image',
       options: {
         hotspot: true,
-      }
+      },
+      fields: [
+        defineField({
+          name: 'alt',
+          title: 'Alt Text',
+          type: 'string',
+          description: 'Describe what is visible in the image. Used for accessibility and SEO.',
+        })
+      ]
     }),
     defineField({
       name: 'featured',
@@ -190,7 +198,15 @@ export default defineType({
       title: 'Budget Alternative Image',
       type: 'image',
       options: {hotspot: true},
-      description: 'Image for the budget alternative (optional)'
+      description: 'Image for the budget alternative (optional)',
+      fields: [
+        defineField({
+          name: 'alt',
+          title: 'Alt Text',
+          type: 'string',
+          description: 'Describe what is visible in the image. Used for accessibility and SEO.',
+        })
+      ]
     }),
     defineField({
       name: 'premiumOption',
@@ -209,7 +225,15 @@ export default defineType({
       title: 'Premium Option Image',
       type: 'image',
       options: {hotspot: true},
-      description: 'Image for the premium option (optional)'
+      description: 'Image for the premium option (optional)',
+      fields: [
+        defineField({
+          name: 'alt',
+          title: 'Alt Text',
+          type: 'string',
+          description: 'Describe what is visible in the image. Used for accessibility and SEO.',
+        })
+      ]
     }),
 
     // Care & Maintenance

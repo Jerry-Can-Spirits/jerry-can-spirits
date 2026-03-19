@@ -80,6 +80,7 @@ interface SanityCocktail {
     description?: string
     difficulty?: string
     image?: string
+    imageAlt?: string
   }[]
 }
 
@@ -323,7 +324,7 @@ export default async function CocktailPage({ params }: PageProps) {
                     {related.image && (
                       <Image
                         src={related.image}
-                        alt={related.name}
+                        alt={related.imageAlt || related.name}
                         width={64}
                         height={64}
                         sizes="64px"
