@@ -71,7 +71,7 @@ export default function StockistsPage() {
                 key={stockist.name}
                 className="bg-jerry-green-800/20 border border-gold-500/20 rounded-xl p-6 hover:border-gold-500/40 transition-all"
               >
-                <div className="flex items-center justify-center bg-white rounded-lg p-4 mb-5 h-24 border border-gold-500/10">
+                <div className="flex items-center justify-center bg-white rounded-lg p-2 mb-5 h-24 border border-gold-500/10">
                   <div className="relative w-full h-full">
                     <Image
                       src={stockist.logo}
