@@ -33,7 +33,11 @@ function haversineDistance(lat1: number, lon1: number, lat2: number, lon2: numbe
   return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
 }
 
-type SearchState = 'idle' | 'searching' | 'results' | 'error'
+function directionsUrl(origin: string, stockist: Stockist): string {
+  return `https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(origin)}&destination=${stockist.lat},${stockist.lng}`
+}
+
+type SearchState = 'idle' | 'searching' | 'locating' | 'results' | 'error'
 
 export default function StockistFinder() {
   const [postcode, setPostcode] = useState('')
@@ -42,6 +46,20 @@ export default function StockistFinder() {
   const [nearbyStockists, setNearbyStockists] = useState<(Stockist & { distance: number })[]>([])
   const [mapCenter, setMapCenter] = useState<[number, number]>(UK_CENTER)
   const [mapZoom, setMapZoom] = useState(UK_ZOOM)
+  const [origin, setOrigin] = useState('')
+
+  function runSearch(latitude: number, longitude: number, originLabel: string) {
+    const nearby = ALL_STOCKISTS
+      .map((s) => ({ ...s, distance: haversineDistance(latitude, longitude, s.lat, s.lng) }))
+      .filter((s) => s.distance <= 25)
+      .sort((a, b) => a.distance - b.distance)
+
+    setNearbyStockists(nearby)
+    setMapCenter([latitude, longitude])
+    setMapZoom(11)
+    setOrigin(originLabel)
+    setSearchState('results')
+  }
 
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -61,20 +79,33 @@ export default function StockistFinder() {
         return
       }
 
-      const { latitude, longitude } = data.result
-      const nearby = ALL_STOCKISTS
-        .map((s) => ({ ...s, distance: haversineDistance(latitude, longitude, s.lat, s.lng) }))
-        .filter((s) => s.distance <= 25)
-        .sort((a, b) => a.distance - b.distance)
-
-      setNearbyStockists(nearby)
-      setMapCenter([latitude, longitude])
-      setMapZoom(11)
-      setSearchState('results')
+      runSearch(data.result.latitude, data.result.longitude, postcode.trim())
     } catch {
       setErrorMessage('Something went wrong. Please try again.')
       setSearchState('error')
     }
+  }
+
+  const handleUseLocation = () => {
+    if (!navigator.geolocation) {
+      setErrorMessage('Your browser does not support location access.')
+      setSearchState('error')
+      return
+    }
+
+    setSearchState('locating')
+    setErrorMessage('')
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        runSearch(position.coords.latitude, position.coords.longitude, `${position.coords.latitude},${position.coords.longitude}`)
+      },
+      () => {
+        setErrorMessage('Location access was denied or unavailable. Try entering your postcode instead.')
+        setSearchState('error')
+      },
+      { timeout: 10000 }
+    )
   }
 
   const typeLabel: Record<Stockist['type'], string> = {
@@ -83,6 +114,8 @@ export default function StockistFinder() {
     restaurant: 'Restaurant',
     online: 'Online',
   }
+
+  const isBusy = searchState === 'searching' || searchState === 'locating'
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-5 gap-0 rounded-xl overflow-hidden border border-gold-500/20 min-h-[500px]">
@@ -94,9 +127,9 @@ export default function StockistFinder() {
         <div>
           <h2 className="text-xl font-serif font-bold text-white mb-2">Find a Stockist</h2>
           <p className="text-parchment-400 text-sm mb-6">
-            Enter your postcode to find the nearest stockist within 25 miles.
+            Enter your postcode or use your current location to find stockists within 25 miles.
           </p>
-          <form onSubmit={handleSearch} className="flex flex-col sm:flex-row gap-2">
+          <form onSubmit={handleSearch} className="flex flex-col sm:flex-row gap-2 mb-3">
             <input
               type="text"
               value={postcode}
@@ -107,12 +140,24 @@ export default function StockistFinder() {
             />
             <button
               type="submit"
-              disabled={searchState === 'searching' || !postcode.trim()}
+              disabled={isBusy || !postcode.trim()}
               className="w-full sm:w-auto px-5 py-3 bg-gold-500 text-jerry-green-900 font-bold rounded-lg hover:bg-gold-400 transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm"
             >
               {searchState === 'searching' ? '...' : 'Search'}
             </button>
           </form>
+          <button
+            type="button"
+            onClick={handleUseLocation}
+            disabled={isBusy}
+            className="inline-flex items-center gap-2 text-parchment-400 hover:text-parchment-200 text-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+            {searchState === 'locating' ? 'Finding your location...' : 'Use my current location'}
+          </button>
           {searchState === 'error' && (
             <p className="text-red-400 text-sm mt-3">{errorMessage}</p>
           )}
@@ -124,7 +169,7 @@ export default function StockistFinder() {
             {nearbyStockists.length === 0 ? (
               <div className="space-y-4">
                 <p className="text-parchment-300 text-sm">
-                  No stockists within 25 miles of that postcode.
+                  No stockists within 25 miles of your location.
                 </p>
                 <p className="text-parchment-500 text-sm">
                   We are expanding our retail presence ahead of launch. If you would like to stock Expedition Spiced, get in touch via our{' '}
@@ -144,7 +189,7 @@ export default function StockistFinder() {
                     key={stockist.id}
                     className="p-4 bg-jerry-green-900/60 rounded-lg border border-gold-500/20"
                   >
-                    <div className="flex items-start justify-between gap-2">
+                    <div className="flex items-start justify-between gap-2 mb-3">
                       <div>
                         <p className="text-white font-semibold text-sm">{stockist.name}</p>
                         <p className="text-parchment-400 text-xs mt-1">{stockist.address}</p>
@@ -158,6 +203,17 @@ export default function StockistFinder() {
                         </p>
                       </div>
                     </div>
+                    <a
+                      href={directionsUrl(origin, stockist)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 text-gold-400 hover:text-gold-300 text-xs font-medium transition-colors"
+                    >
+                      <svg className="w-3 h-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
+                      </svg>
+                      Get directions
+                    </a>
                   </div>
                 ))}
               </div>
