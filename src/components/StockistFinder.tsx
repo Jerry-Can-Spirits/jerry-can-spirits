@@ -6,8 +6,16 @@ import type { Stockist } from './StockistMap'
 
 const StockistMap = dynamic(() => import('./StockistMap'), { ssr: false })
 
-// Add stockists here when retail is live
-const ALL_STOCKISTS: Stockist[] = []
+const ALL_STOCKISTS: Stockist[] = [
+  {
+    id: 'the-bank-blackpool',
+    name: 'The Bank Bar & Grill',
+    address: '28 Corporation St, Blackpool FY1 1EJ',
+    lat: 53.8183,
+    lng: -3.0497,
+    type: 'bar',
+  },
+]
 
 const UK_CENTER: [number, number] = [54.5, -2.5]
 const UK_ZOOM = 6
