@@ -96,7 +96,7 @@ export default function StockistFinder() {
           <p className="text-parchment-400 text-sm mb-6">
             Enter your postcode to find the nearest stockist within 25 miles.
           </p>
-          <form onSubmit={handleSearch} className="flex gap-2">
+          <form onSubmit={handleSearch} className="flex flex-col sm:flex-row gap-2">
             <input
               type="text"
               value={postcode}
@@ -108,7 +108,7 @@ export default function StockistFinder() {
             <button
               type="submit"
               disabled={searchState === 'searching' || !postcode.trim()}
-              className="px-5 py-3 bg-gold-500 text-jerry-green-900 font-bold rounded-lg hover:bg-gold-400 transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm"
+              className="w-full sm:w-auto px-5 py-3 bg-gold-500 text-jerry-green-900 font-bold rounded-lg hover:bg-gold-400 transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm"
             >
               {searchState === 'searching' ? '...' : 'Search'}
             </button>
