@@ -10,6 +10,8 @@ import StructuredData from '@/components/StructuredData'
 import ShareButton from '@/components/ShareButton'
 import GuideSections from '@/components/GuideSections'
 
+const TEAM_MEMBERS = new Set(['Dan Freeman', 'Rhys Williams'])
+
 // Types for guide data
 interface Subsection {
   subheading: string
@@ -179,11 +181,11 @@ export default async function GuidePage({ params }: PageProps) {
     headline: guide.title,
     description: guide.excerpt,
     image: guide.heroImage,
-    author: guide.author
+    author: TEAM_MEMBERS.has(guide.author ?? '')
       ? {
           '@type': 'Person',
           name: guide.author,
-          url: `https://jerrycanspirits.co.uk/about/team/${guide.author.toLowerCase().replace(/\s+/g, '-')}/`,
+          url: `https://jerrycanspirits.co.uk/about/team/${guide.author!.toLowerCase().replace(/\s+/g, '-')}/`,
         }
       : {
           '@type': 'Organization',
@@ -280,12 +282,16 @@ export default async function GuidePage({ params }: PageProps) {
                   <span className="text-gold-400 font-bold text-sm">{guide.author.charAt(0)}</span>
                 </div>
                 <div>
-                  <Link
-                    href={`/about/team/${guide.author.toLowerCase().replace(/\s+/g, '-')}/`}
-                    className="text-white font-semibold hover:text-gold-300 transition-colors"
-                  >
-                    {guide.author}
-                  </Link>
+                  {TEAM_MEMBERS.has(guide.author) ? (
+                    <Link
+                      href={`/about/team/${guide.author.toLowerCase().replace(/\s+/g, '-')}/`}
+                      className="text-white font-semibold hover:text-gold-300 transition-colors"
+                    >
+                      {guide.author}
+                    </Link>
+                  ) : (
+                    <span className="text-white font-semibold">{guide.author}</span>
+                  )}
                   {guide.publishedAt && (
                     <p className="text-parchment-400 text-sm">
                       {new Date(guide.publishedAt).toLocaleDateString('en-GB', {
