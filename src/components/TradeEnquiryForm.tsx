@@ -67,14 +67,14 @@ export default function TradeEnquiryForm() {
   const labelClass = 'block text-sm font-medium text-parchment-200 mb-2'
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
-      {/* Honeypot */}
+    <form onSubmit={handleSubmit} className="relative space-y-6">
+      {/* Honeypot — off-screen, not display:none, to prevent autofill triggering it */}
       <input
         type="text"
         name="website"
         value={honeypot}
         onChange={(e) => setHoneypot(e.target.value)}
-        className="hidden"
+        className="absolute -left-[9999px] top-0 h-px w-px overflow-hidden opacity-0"
         tabIndex={-1}
         autoComplete="off"
         aria-hidden="true"
@@ -118,6 +118,7 @@ export default function TradeEnquiryForm() {
           id="trade-venue-name"
           name="venueName"
           required
+          autoComplete="organization"
           value={formData.venueName}
           onChange={handleChange}
           className={inputClass}
@@ -132,6 +133,7 @@ export default function TradeEnquiryForm() {
             id="trade-venue-type"
             name="venueType"
             required
+            autoComplete="off"
             value={formData.venueType}
             onChange={handleChange}
             className={inputClass}
@@ -149,6 +151,7 @@ export default function TradeEnquiryForm() {
             id="trade-covers"
             name="covers"
             required
+            autoComplete="off"
             value={formData.covers}
             onChange={handleChange}
             className={inputClass}
@@ -168,6 +171,7 @@ export default function TradeEnquiryForm() {
           id="trade-message"
           name="message"
           rows={4}
+          autoComplete="off"
           value={formData.message}
           onChange={handleChange}
           className={inputClass}
