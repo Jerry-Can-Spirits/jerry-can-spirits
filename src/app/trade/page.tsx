@@ -89,7 +89,7 @@ export default function TradePage() {
             What you are working with
           </h2>
           <p className="text-parchment-400 text-sm mb-10">
-            Here is the honest maths. Not a sales case — just the numbers.
+            Here is the honest maths. Not a sales case. Just the numbers.
           </p>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
@@ -166,7 +166,7 @@ export default function TradePage() {
               We do not send bottles out to sit on a back shelf. When it works, it works because both sides are invested in it.
             </p>
             <p className="text-parchment-300 text-sm leading-relaxed mb-4">
-              What we have found helps: listing Expedition Spiced by name on your menu, building one serve around it, and letting us know honestly how it lands. We are not looking for a checklist — we are looking for venues that back what they stock.
+              What we have found helps: listing Expedition Spiced by name on your menu, building one serve around it, and letting us know honestly how it lands. We are not looking for a checklist. We are looking for venues that back what they stock.
             </p>
             <p className="text-parchment-300 text-sm leading-relaxed">
               We are happy to help with serve suggestions, menu wording, or a visit from the founders if you are local. The people who built this are reachable. That is not something you get from a distributor.
@@ -183,7 +183,7 @@ export default function TradePage() {
               Start the conversation
             </h2>
             <p className="text-parchment-400 text-sm mb-10">
-              Fill in the form and we will come back to you within two working days. No pressure, no sales call — just a straightforward conversation about whether this is a good fit.
+              Fill in the form and we will come back to you within two working days. No pressure, no sales call. Just a straightforward conversation about whether this is a good fit.
             </p>
             <TradeEnquiryForm />
           </div>
