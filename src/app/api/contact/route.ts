@@ -7,9 +7,14 @@ const KLAVIYO_API_BASE = 'https://a.klaviyo.com/api'
 interface ContactFormData {
   name: string
   email: string
-  subject: string
+  subject?: string
   message: string
-  formType: 'general' | 'media' | 'complaints'
+  formType: 'general' | 'media' | 'complaints' | 'trade'
+  // trade-specific
+  venueName?: string
+  venueType?: string
+  covers?: string
+  // existing optional fields
   orderNumber?: string
   issueType?: string
   priority?: string
@@ -18,7 +23,7 @@ interface ContactFormData {
 
 interface EventProperties {
   subject: string
-  message: string
+  message?: string
   form_type: string
   submission_date: string
   source: string
@@ -26,6 +31,10 @@ interface EventProperties {
   order_number?: string
   issue_type?: string
   priority?: string
+  // trade-specific
+  venue_name?: string
+  venue_type?: string
+  covers?: string
 }
 
 // Simple in-memory rate limiting (best-effort only on Edge)
@@ -71,7 +80,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400 })
     }
 
-    const { name, email, subject, message, formType, orderNumber, issueType, priority, website } = formData
+    const { name, email, subject, message, formType, orderNumber, issueType, priority, website, venueName, venueType, covers } = formData
 
     // Honeypot check
     if (website && website.trim() !== '') {
@@ -92,8 +101,14 @@ export async function POST(request: Request) {
     recent.push(now)
     submissionTimestamps.set(ip, recent)
 
-    if (!name || !email || !subject || !message) {
-      return NextResponse.json({ error: 'Name, email, subject, and message are required' }, { status: 400 })
+    if (formType === 'trade') {
+      if (!name || !email || !venueName || !venueType || !covers) {
+        return NextResponse.json({ error: 'Name, email, venue name, venue type, and covers are required' }, { status: 400 })
+      }
+    } else {
+      if (!name || !email || !subject || !message) {
+        return NextResponse.json({ error: 'Name, email, subject, and message are required' }, { status: 400 })
+      }
     }
 
     // Validate email format
@@ -108,8 +123,8 @@ export async function POST(request: Request) {
     // Build event details
     let eventName = 'Contact Form Submission'
     const properties: EventProperties = {
-      subject,
-      message,
+      subject: subject ?? '',
+      ...(message ? { message } : {}),
       form_type: formType,
       submission_date: new Date().toISOString(),
       source: 'website_contact_form',
@@ -125,6 +140,15 @@ export async function POST(request: Request) {
         if (issueType) properties.issue_type = issueType
         if (priority) properties.priority = priority
         eventName = 'Customer Complaint'
+        break
+      case 'trade':
+        properties.inquiry_type = 'trade'
+        properties.subject = 'Trade Enquiry'
+        eventName = 'Trade Enquiry'
+        properties.venue_name = venueName
+        properties.venue_type = venueType
+        properties.covers = covers
+        if (message) properties.message = message
         break
       default:
         properties.inquiry_type = 'general'
