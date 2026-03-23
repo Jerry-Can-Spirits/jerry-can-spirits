@@ -73,6 +73,7 @@ const staticPages = [
   { label: 'Friends & Partners', href: '/friends/' },
   { label: 'Reviews', href: '/reviews/' },
   { label: 'Stockists', href: '/stockists/' },
+  { label: 'Trade', href: '/trade/' },
   { label: 'FAQ', href: '/faq/' },
   { label: 'Contact', href: '/contact/' },
   { label: 'Media & Press', href: '/contact/media/' },
