@@ -134,7 +134,7 @@ export default function StockistsPage() {
             We work with independent retailers, bars, and restaurants who hold themselves to the same standard we do. If that is you, we would like to hear from you.
           </p>
           <a
-            href="/contact/enquiries/"
+            href="/trade/"
             className="inline-flex items-center px-6 py-3 bg-gold-500 text-jerry-green-900 font-bold rounded-lg hover:bg-gold-400 transition-colors text-sm"
           >
             Trade Enquiries
