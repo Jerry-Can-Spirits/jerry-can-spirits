@@ -96,7 +96,7 @@ export default function TradePage() {
               { label: 'Bottle size', value: '700ml', note: '40% ABV' },
               { label: 'Serves per bottle', value: '~28', note: 'at 25ml standard measure' },
               { label: 'Serves per case', value: '~168', note: '6 bottles per case' },
-              { label: 'Revenue potential', value: '£1,344–£2,016', note: 'at £8–£12 per serve' },
+              { label: 'Spirit revenue per case', value: '£1,008–£1,512', note: 'at £6–£9 per 25ml serve' },
             ].map((stat) => (
               <div
                 key={stat.label}
@@ -108,6 +108,9 @@ export default function TradePage() {
               </div>
             ))}
           </div>
+          <p className="text-parchment-500 text-xs mt-8 max-w-2xl">
+            Spirit revenue only — based on a straight 25ml serve at realistic UK bar pricing. Many venues build Expedition Spiced into cocktails, which typically command higher serve prices. We have not factored in recipe costs for mixers, juice, or garnish, as those are yours to manage.
+          </p>
         </div>
       </section>
 
