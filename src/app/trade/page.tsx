@@ -28,7 +28,7 @@ const tradeSchema = {
 export default function TradePage() {
   return (
     <main className="min-h-screen">
-      <StructuredData data={tradeSchema} />
+      <StructuredData data={tradeSchema} id="trade-page-schema" />
 
       {/* ── Section 1: Hero ── */}
       <section className="py-24 lg:py-32">
@@ -122,6 +122,7 @@ export default function TradePage() {
           </p>
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
+              <caption className="sr-only">Trade pricing tiers</caption>
               <thead>
                 <tr className="border-b border-gold-500/20">
                   <th className="text-left text-parchment-500 text-xs uppercase tracking-widest py-3 pr-6">Tier</th>
