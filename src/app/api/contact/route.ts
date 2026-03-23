@@ -7,7 +7,7 @@ const KLAVIYO_API_BASE = 'https://a.klaviyo.com/api'
 interface ContactFormData {
   name: string
   email: string
-  subject: string
+  subject?: string
   message: string
   formType: 'general' | 'media' | 'complaints' | 'trade'
   // trade-specific
@@ -145,9 +145,9 @@ export async function POST(request: Request) {
         properties.inquiry_type = 'trade'
         properties.subject = 'Trade Enquiry'
         eventName = 'Trade Enquiry'
-        if (venueName) properties.venue_name = venueName
-        if (venueType) properties.venue_type = venueType
-        if (covers) properties.covers = covers
+        properties.venue_name = venueName
+        properties.venue_type = venueType
+        properties.covers = covers
         if (message) properties.message = message
         break
       default:
