@@ -96,7 +96,7 @@ export default function TradePage() {
               { label: 'Bottle size', value: '700ml', note: '40% ABV' },
               { label: 'Serves per bottle', value: '~28', note: 'at 25ml standard measure' },
               { label: 'Serves per case', value: '~168', note: '6 bottles per case' },
-              { label: 'Spirit revenue per case', value: '£1,008–£1,512', note: 'at £6–£9 per 25ml serve' },
+              { label: 'Spirit revenue per case', value: '£840–£1,344', note: 'at £5–£8 per 25ml serve' },
             ].map((stat) => (
               <div
                 key={stat.label}
