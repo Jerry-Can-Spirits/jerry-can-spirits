@@ -22,6 +22,10 @@ export interface ShopifyOrder {
   order_number: number;
   created_at: string;
   email?: string;
+  customer?: {
+    first_name?: string;
+    last_name?: string;
+  };
   fulfillment_status: string | null;
   line_items: {
     title: string;

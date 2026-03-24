@@ -52,7 +52,7 @@ export default async function ReferralLandingPage({
         </h1>
 
         <p className="text-xl text-parchment-300 max-w-xl mx-auto leading-relaxed mb-8">
-          And honestly, they&apos;re probably right. Here&apos;s £5 off your first order of
+          And honestly, they&apos;re probably right. Here&apos;s 10% off your first order of
           veteran-owned, Welsh-distilled, properly spiced rum.
         </p>
 
@@ -63,7 +63,7 @@ export default async function ReferralLandingPage({
           </p>
           <ReferralCodeClient code={code} />
           <p className="text-parchment-400 text-sm mt-4">
-            £5 off your first order. Single use. No minimum spend.
+            10% off your first order. Single use. No minimum spend.
           </p>
         </div>
 
