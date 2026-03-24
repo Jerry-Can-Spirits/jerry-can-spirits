@@ -231,7 +231,7 @@ export default function Home() {
         </ScrollReveal>
 
         {/* Newsletter Signup */}
-        <section className="py-20 border-t border-gold-500/10">
+        <section id="newsletter-signup" className="py-20 border-t border-gold-500/10">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <div className="inline-block px-4 py-2 bg-jerry-green-800/60 backdrop-blur-sm rounded-full border border-gold-500/30 mb-6">
               <span className="text-gold-300 text-sm font-semibold uppercase tracking-widest">
