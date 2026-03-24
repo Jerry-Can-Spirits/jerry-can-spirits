@@ -292,7 +292,7 @@ export default function Home() {
             <div className="mt-12 grid md:grid-cols-4 gap-6">
               <ScrollReveal delay={0}>
                 <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20 text-center">
-                  <h3 className="text-lg font-serif font-bold text-gold-300 mb-2">12+ Years Service</h3>
+                  <h3 className="text-lg font-serif font-bold text-gold-300 mb-2">17+ Years Service</h3>
                   <p className="text-parchment-300 text-sm">Royal Corps of Signals veterans who built their rum the same way they approached everything else. Carefully, without shortcuts.</p>
                 </div>
               </ScrollReveal>
