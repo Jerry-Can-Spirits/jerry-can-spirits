@@ -11,6 +11,7 @@ import HomepageFAQ from "@/components/HomepageFAQ";
 import PressAwards from "@/components/PressAwards";
 import ScrollReveal from "@/components/ScrollReveal";
 import TickerStrip from "@/components/TickerStrip";
+import NewsletterSignup from "@/components/NewsletterSignup";
 import Link from 'next/link'
 import type { Metadata } from 'next'
 
@@ -228,6 +229,24 @@ export default function Home() {
         <ScrollReveal>
           <PressAwards />
         </ScrollReveal>
+
+        {/* Newsletter Signup */}
+        <section id="newsletter-signup" className="py-20 border-t border-gold-500/10">
+          <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div className="inline-block px-4 py-2 bg-jerry-green-800/60 backdrop-blur-sm rounded-full border border-gold-500/30 mb-6">
+              <span className="text-gold-300 text-sm font-semibold uppercase tracking-widest">
+                Join the Expedition
+              </span>
+            </div>
+            <h2 className="text-3xl sm:text-4xl font-serif font-bold text-white mb-4">
+              10% off your first order.
+            </h2>
+            <p className="text-parchment-300 mb-8">
+              Sign up and we will send you a discount code. Valid from 6 April 2026.
+            </p>
+            <NewsletterSignup />
+          </div>
+        </section>
 
         {/* SEO-Rich Content Section - Veteran-Owned British Rum */}
         <section className="py-16 bg-jerry-green-900/50">
