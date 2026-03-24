@@ -201,34 +201,31 @@ export default function Home() {
           <PreOrderSection />
         </ScrollReveal>
 
+        {/* Press & Awards - social proof before storytelling */}
+        <ScrollReveal>
+          <PressAwards />
+        </ScrollReveal>
 
         {/* Why Jerry Can - Value Proposition */}
         <ScrollReveal>
           <WhyJerryCan />
         </ScrollReveal>
 
-        {/* Field Manual Preview - recipe engagement early in the scroll */}
-        <ScrollReveal>
-          <FieldManualPreview />
-        </ScrollReveal>
-
-        {/* FAQ Section with Schema Markup */}
-        <HomepageFAQ />
-
-        {/* Founder Story Snippet */}
+        {/* Founder Story + Supporting Our Forces - brand identity, kept adjacent */}
         <ScrollReveal>
           <FounderStorySnippet />
         </ScrollReveal>
-
-        {/* Supporting Our Forces - Armed Forces Commitments */}
         <ScrollReveal>
           <SupportingOurForces />
         </ScrollReveal>
 
-        {/* Press & Awards */}
+        {/* Field Manual Preview - content engagement */}
         <ScrollReveal>
-          <PressAwards />
+          <FieldManualPreview />
         </ScrollReveal>
+
+        {/* FAQ Section - objection handling before final CTA */}
+        <HomepageFAQ />
 
         {/* Newsletter Signup */}
         <section id="newsletter-signup" className="py-20 border-t border-gold-500/10">
