@@ -7,7 +7,48 @@ import {
   type ShopifyOrder,
   type ShopifyProduct,
 } from '@/lib/shopify-webhooks';
-import { createDiscountCode } from '@/lib/shopify-admin';
+import { createDiscountCode, createReferrerRewardCode } from '@/lib/shopify-admin';
+import { generateReferralCode } from '@/lib/shopify-admin';
+
+const KLAVIYO_API_BASE = 'https://a.klaviyo.com/api';
+const KLAVIYO_REVISION = '2024-10-15';
+
+async function fireKlaviyoEvent(
+  klaviyoKey: string,
+  eventName: string,
+  email: string,
+  properties: Record<string, unknown>,
+  firstName?: string,
+): Promise<void> {
+  const res = await fetch(`${KLAVIYO_API_BASE}/events/`, {
+    method: 'POST',
+    headers: {
+      Authorization: `Klaviyo-API-Key ${klaviyoKey}`,
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+      revision: KLAVIYO_REVISION,
+    },
+    body: JSON.stringify({
+      data: {
+        type: 'event',
+        attributes: {
+          properties,
+          metric: { data: { type: 'metric', attributes: { name: eventName } } },
+          profile: {
+            data: {
+              type: 'profile',
+              attributes: { email, ...(firstName ? { first_name: firstName } : {}) },
+            },
+          },
+        },
+      },
+    }),
+  });
+  if (!res.ok) {
+    const err = await res.text();
+    console.error(`[webhook] Klaviyo event "${eventName}" failed:`, err);
+  }
+}
 
 export const dynamic = 'force-dynamic';
 
@@ -17,6 +58,8 @@ async function handleOrderCreated(
   order: ShopifyOrder,
   kv: KVNamespace,
   adminToken: string | undefined,
+  db: D1Database,
+  klaviyoKey: string | undefined,
 ) {
   // Only store genuine Jerry Can Spirits products with quantities
   const jcsItems = order.line_items
@@ -51,6 +94,51 @@ async function handleOrderCreated(
   if (adminToken) {
     for (const item of order.line_items) {
       await incrementPreOrderSold(item.product_id, item.quantity, adminToken);
+    }
+  }
+
+  // Generate referral link for this buyer and fire Klaviyo event
+  if (order.email && klaviyoKey) {
+    try {
+      const email = order.email.toLowerCase();
+      let referralCode: string;
+
+      const existing = await db
+        .prepare('SELECT referrer_code FROM referrals WHERE referrer_email = ?')
+        .bind(email)
+        .first<{ referrer_code: string }>();
+
+      if (existing) {
+        referralCode = existing.referrer_code;
+      } else {
+        referralCode = generateReferralCode(email);
+        if (adminToken) {
+          await createDiscountCode(referralCode, adminToken);
+        }
+        await db
+          .prepare('INSERT INTO referrals (referrer_email, referrer_code) VALUES (?, ?)')
+          .bind(email, referralCode)
+          .run();
+        await kv.put(
+          `referral:${referralCode}`,
+          JSON.stringify({ email, code: referralCode, created_at: new Date().toISOString() }),
+          { expirationTtl: 60 * 60 * 24 * 90 },
+        );
+      }
+
+      const shareUrl = `https://jerrycanspirits.co.uk/refer/${referralCode}`;
+      const firstName = order.customer?.first_name;
+
+      await fireKlaviyoEvent(
+        klaviyoKey,
+        'Referral Link Generated',
+        order.email,
+        { share_url: shareUrl, referral_code: referralCode },
+        firstName,
+      );
+    } catch (err) {
+      console.error('[webhook] Referral link generation failed:', err);
+      // non-blocking
     }
   }
 
@@ -96,6 +184,7 @@ async function handleReferralConversion(
   db: D1Database,
   kv: KVNamespace,
   adminToken: string,
+  klaviyoKey: string | undefined,
 ) {
   // Check if order used a referral code (via cart attributes or discount codes)
   const referralAttr = order.note_attributes?.find(
@@ -116,11 +205,11 @@ async function handleReferralConversion(
     return;
   }
 
-  // Create a reward discount code for the referrer (£5 off their next order)
+  // Create a £5 reward code for the referrer (combinable with other discounts)
   const rewardCode = `JCS-REWARD-${referral.referrer_code.split('-').pop()}-${Date.now().toString(16).slice(-4).toUpperCase()}`;
 
   try {
-    await createDiscountCode(rewardCode, adminToken);
+    await createReferrerRewardCode(rewardCode, adminToken);
   } catch (error) {
     console.error(`[webhook] Failed to create reward discount for referrer: ${error}`);
     return;
@@ -153,6 +242,16 @@ async function handleReferralConversion(
     }),
     { expirationTtl: 60 * 60 * 24 * 90 }, // 90 days
   );
+
+  // Notify the referrer via Klaviyo
+  if (klaviyoKey) {
+    await fireKlaviyoEvent(
+      klaviyoKey,
+      'Referral Reward Earned',
+      referral.referrer_email,
+      { reward_code: rewardCode, referee_order: order.order_number },
+    );
+  }
 
   console.log(
     `[webhook] Referral conversion: order #${order.order_number} used code ${referralCode}, reward ${rewardCode} created for ${referral.referrer_email}`,
@@ -204,12 +303,14 @@ export async function POST(request: Request) {
     const adminToken = env.SHOPIFY_ADMIN_API_TOKEN as string | undefined;
     const db = env.DB;
 
+    const klaviyoKey = env.KLAVIYO_PRIVATE_KEY as string | undefined;
+
     switch (topic) {
       case SHOPIFY_WEBHOOK_TOPICS.ORDERS_CREATE:
-        await handleOrderCreated(payload as ShopifyOrder, kv, adminToken);
+        await handleOrderCreated(payload as ShopifyOrder, kv, adminToken, db, klaviyoKey);
         // Check for referral conversion
         if (adminToken) {
-          await handleReferralConversion(payload as ShopifyOrder, db, kv, adminToken);
+          await handleReferralConversion(payload as ShopifyOrder, db, kv, adminToken, klaviyoKey);
         }
         break;
       case SHOPIFY_WEBHOOK_TOPICS.ORDERS_FULFILLED:
