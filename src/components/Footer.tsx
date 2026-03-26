@@ -31,25 +31,46 @@ export default function Footer() {
     }
   }
 
-  // Footer link sections
+  // Footer link sections — grouped for scannability (Miller's Law)
+  const quickLinkGroups = [
+    {
+      label: 'The Brand',
+      links: [
+        { name: 'Home', href: '/' },
+        { name: 'Our Story', href: '/about/story' },
+        { name: 'Sustainability', href: '/sustainability' },
+        { name: 'Friends & Partners', href: '/friends' },
+      ]
+    },
+    {
+      label: 'Shop',
+      links: [
+        { name: 'Shop', href: '/shop' },
+        { name: 'Reviews', href: '/reviews' },
+        { name: 'Stockists', href: '/stockists' },
+        { name: 'Trade', href: '/trade' },
+      ]
+    },
+    {
+      label: 'Explore',
+      links: [
+        { name: 'Field Manual', href: '/field-manual' },
+        { name: 'Guides', href: '/guides' },
+        { name: 'Ingredients', href: '/ingredients' },
+        { name: 'FAQ', href: '/faq' },
+      ]
+    },
+    {
+      label: 'Company',
+      links: [
+        { name: 'Contact', href: '/contact' },
+        { name: 'Careers', href: '/careers' },
+        { name: 'Site Map', href: '/sitemap' },
+      ]
+    },
+  ]
+
   const footerSections = {
-    quickLinks: [
-      { name: 'Home', href: '/' },
-      { name: 'Shop', href: '/shop' },
-      { name: 'Field Manual', href: '/field-manual' },
-      { name: 'Guides', href: '/guides' },
-      { name: 'Our Story', href: '/about/story' },
-      { name: 'Ingredients', href: '/ingredients' },
-      { name: 'Sustainability', href: '/sustainability' },
-      { name: 'Friends & Partners', href: '/friends' },
-      { name: 'Reviews', href: '/reviews' },
-      { name: 'Stockists', href: '/stockists' },
-      { name: 'Trade', href: '/trade' },
-      { name: 'FAQ', href: '/faq' },
-      { name: 'Contact', href: '/contact' },
-      { name: 'Careers', href: '/careers' },
-      { name: 'Site Map', href: '/sitemap' },
-    ],
     legal: [
       { name: 'Privacy Policy', href: '/privacy-policy' },
       { name: 'Cookie Policy', href: '/cookie-policy' },
@@ -143,18 +164,27 @@ export default function Footer() {
                   </p>
                 </div>
 
-                <div className={`space-y-3 ${
+                <div className={`space-y-5 ${
                   openSections.includes('quickLinks') || 'hidden lg:block'
                 }`}>
-                  {footerSections.quickLinks.map((link) => (
-                    <Link
-                      key={link.name}
-                      href={link.href}
-                      className="block text-base text-parchment-200 hover:text-parchment-50 transition-all duration-200 hover:scale-105 hover:translate-x-1"
-                      onClick={() => trackFooterClick('Quick Link', link.name)}
-                    >
-                      {link.name}
-                    </Link>
+                  {quickLinkGroups.map((group) => (
+                    <div key={group.label}>
+                      <p className="text-xs font-semibold uppercase tracking-widest text-parchment-500 mb-2">
+                        {group.label}
+                      </p>
+                      <div className="space-y-2">
+                        {group.links.map((link) => (
+                          <Link
+                            key={link.name}
+                            href={link.href}
+                            className="block text-base text-parchment-200 hover:text-parchment-50 transition-all duration-200 hover:translate-x-1"
+                            onClick={() => trackFooterClick('Quick Link', link.name)}
+                          >
+                            {link.name}
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
                   ))}
                 </div>
               </div>
