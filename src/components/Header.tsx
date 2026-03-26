@@ -36,6 +36,23 @@ export default function Header() {
   // Use refs for scroll tracking to avoid re-renders
   const lastScrollY = useRef(0)
   const ticking = useRef(false)
+  const dropdownCloseTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  // Steering Law: delayed close prevents accidental dismissal during diagonal movement
+  const handleNavEnter = (name: string) => {
+    if (dropdownCloseTimer.current) {
+      clearTimeout(dropdownCloseTimer.current)
+      dropdownCloseTimer.current = null
+    }
+    setActiveDropdown(name)
+  }
+
+  const handleNavLeave = () => {
+    dropdownCloseTimer.current = setTimeout(() => {
+      setActiveDropdown(null)
+      dropdownCloseTimer.current = null
+    }, 150)
+  }
 
   // Navigation structure
   const navigation: NavigationItem[] = [
@@ -225,8 +242,8 @@ export default function Header() {
                 <div 
                   key={item.name} 
                   className="relative group"
-                  onMouseEnter={() => item.dropdown && setActiveDropdown(item.name)}
-                  onMouseLeave={() => item.dropdown && setActiveDropdown(null)}
+                  onMouseEnter={() => item.dropdown && handleNavEnter(item.name)}
+                  onMouseLeave={() => item.dropdown && handleNavLeave()}
                 >
                   {item.href ? (
                     <Link
@@ -286,12 +303,14 @@ export default function Header() {
 
                   {/* Dropdown Menu */}
                   {item.dropdown && (
-                    <div 
+                    <div
                       className={`absolute top-full left-0 pt-2 w-64 transition-all duration-200 ${
-                        activeDropdown === item.name 
-                          ? 'opacity-100 visible translate-y-0' 
+                        activeDropdown === item.name
+                          ? 'opacity-100 visible translate-y-0'
                           : 'opacity-0 invisible -translate-y-2'
                       }`}
+                      onMouseEnter={() => handleNavEnter(item.name)}
+                      onMouseLeave={() => handleNavLeave()}
                     >
                       <div className="bg-jerry-green-800/95 backdrop-blur-lg rounded-lg shadow-2xl border border-jerry-green-600/20 p-2">
                         {item.dropdown.map((subItem) => (
