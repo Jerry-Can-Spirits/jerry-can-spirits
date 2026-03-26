@@ -421,9 +421,16 @@ export default function Header() {
         </nav>
 
         {/* Mobile Menu */}
-        <div className={`md:hidden transition-all duration-300 ${
-          isMobileMenuOpen ? 'max-h-screen opacity-100' : 'max-h-0 opacity-0'
-        }`} style={{ overflowY: isMobileMenuOpen ? 'auto' : 'hidden', maxHeight: isMobileMenuOpen ? 'calc(100vh - 5rem)' : '0' }}>
+        <div
+          className={`md:hidden overflow-hidden transition-[max-height,opacity] duration-300 ${
+            isMobileMenuOpen ? 'opacity-100' : 'opacity-0'
+          }`}
+          style={{ maxHeight: isMobileMenuOpen ? 'calc(100vh - 5rem)' : '0' }}
+        >
+          <div
+            className="overflow-y-auto overscroll-y-contain"
+            style={{ maxHeight: 'calc(100vh - 5rem)' }}
+          >
           <div className="bg-jerry-green-800/95 backdrop-blur-lg border-t border-jerry-green-600/20 px-4 py-6 space-y-4">
             {navigation.map((item) => (
               <div key={item.name}>
@@ -485,6 +492,7 @@ export default function Header() {
                 Join the Expedition
               </Link>
             </div>
+          </div>
           </div>
         </div>
       </header>
