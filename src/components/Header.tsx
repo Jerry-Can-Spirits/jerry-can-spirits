@@ -28,6 +28,7 @@ export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [showHeader, setShowHeader] = useState(true)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const [mobileOpenSections, setMobileOpenSections] = useState<string[]>([])
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null)
   const [isSearchModalOpen, setIsSearchModalOpen] = useState(false)
   const { itemCount, openCart } = useCart()
@@ -35,6 +36,23 @@ export default function Header() {
   // Use refs for scroll tracking to avoid re-renders
   const lastScrollY = useRef(0)
   const ticking = useRef(false)
+  const dropdownCloseTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  // Steering Law: delayed close prevents accidental dismissal during diagonal movement
+  const handleNavEnter = (name: string) => {
+    if (dropdownCloseTimer.current) {
+      clearTimeout(dropdownCloseTimer.current)
+      dropdownCloseTimer.current = null
+    }
+    setActiveDropdown(name)
+  }
+
+  const handleNavLeave = () => {
+    dropdownCloseTimer.current = setTimeout(() => {
+      setActiveDropdown(null)
+      dropdownCloseTimer.current = null
+    }, 150)
+  }
 
   // Navigation structure
   const navigation: NavigationItem[] = [
@@ -140,6 +158,7 @@ export default function Header() {
     const handleResize = () => {
       if (window.innerWidth >= 768) {
         setIsMobileMenuOpen(false)
+        setMobileOpenSections([])
       }
     }
 
@@ -223,8 +242,8 @@ export default function Header() {
                 <div 
                   key={item.name} 
                   className="relative group"
-                  onMouseEnter={() => item.dropdown && setActiveDropdown(item.name)}
-                  onMouseLeave={() => item.dropdown && setActiveDropdown(null)}
+                  onMouseEnter={() => item.dropdown && handleNavEnter(item.name)}
+                  onMouseLeave={() => item.dropdown && handleNavLeave()}
                 >
                   {item.href ? (
                     <Link
@@ -284,12 +303,14 @@ export default function Header() {
 
                   {/* Dropdown Menu */}
                   {item.dropdown && (
-                    <div 
+                    <div
                       className={`absolute top-full left-0 pt-2 w-64 transition-all duration-200 ${
-                        activeDropdown === item.name 
-                          ? 'opacity-100 visible translate-y-0' 
+                        activeDropdown === item.name
+                          ? 'opacity-100 visible translate-y-0'
                           : 'opacity-0 invisible -translate-y-2'
                       }`}
+                      onMouseEnter={() => handleNavEnter(item.name)}
+                      onMouseLeave={() => handleNavLeave()}
                     >
                       <div className="bg-jerry-green-800/95 backdrop-blur-lg rounded-lg shadow-2xl border border-jerry-green-600/20 p-2">
                         {item.dropdown.map((subItem) => (
@@ -318,7 +339,7 @@ export default function Header() {
               {/* Search */}
               <button
                 onClick={() => setIsSearchModalOpen(true)}
-                className="text-parchment-100 hover:text-parchment-50 p-2 transition-all duration-200 hover:scale-110"
+                className="text-parchment-100 hover:text-parchment-50 p-3 transition-all duration-200 hover:scale-110"
                 aria-label="Search"
                 title="Search (⌘K)"
               >
@@ -331,7 +352,7 @@ export default function Header() {
                   trackCTAClick('Cart')
                   openCart()
                 }}
-                className="relative text-parchment-100 hover:text-parchment-50 p-2 transition-all duration-200 hover:scale-110"
+                className="relative text-parchment-100 hover:text-parchment-50 p-3 transition-all duration-200 hover:scale-110"
                 aria-label="Open cart"
               >
                 <ShoppingCartIcon className="w-5 h-5" />
@@ -380,8 +401,12 @@ export default function Header() {
               {/* Mobile Menu Button */}
               <div className="md:hidden">
                 <button
-                  onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                  className="text-parchment-100 hover:text-parchment-50 p-2 transition-all duration-200"
+                  onClick={() => {
+                    const opening = !isMobileMenuOpen
+                    setIsMobileMenuOpen(opening)
+                    if (!opening) setMobileOpenSections([])
+                  }}
+                  className="text-parchment-100 hover:text-parchment-50 p-3 transition-all duration-200"
                   aria-label="Toggle menu"
                 >
                   {isMobileMenuOpen ? (
@@ -396,37 +421,53 @@ export default function Header() {
         </nav>
 
         {/* Mobile Menu */}
-        <div className={`md:hidden transition-all duration-300 ${
-          isMobileMenuOpen ? 'max-h-screen opacity-100' : 'max-h-0 opacity-0'
-        }`} style={{ overflowY: isMobileMenuOpen ? 'auto' : 'hidden', maxHeight: isMobileMenuOpen ? 'calc(100vh - 5rem)' : '0' }}>
+        <div
+          className={`md:hidden overflow-hidden transition-[max-height,opacity] duration-300 ${
+            isMobileMenuOpen ? 'opacity-100' : 'opacity-0'
+          }`}
+          style={{ maxHeight: isMobileMenuOpen ? 'calc(100vh - 5rem)' : '0' }}
+        >
+          <div
+            className="overflow-y-auto overscroll-y-contain"
+            style={{ maxHeight: 'calc(100vh - 5rem)' }}
+          >
           <div className="bg-jerry-green-800/95 backdrop-blur-lg border-t border-jerry-green-600/20 px-4 py-6 space-y-4">
             {navigation.map((item) => (
               <div key={item.name}>
-                {item.href ? (
+                {item.dropdown ? (
+                  <button
+                    className="flex items-center justify-between w-full text-parchment-100 hover:text-parchment-50 py-3 text-lg font-medium transition-colors duration-200"
+                    onClick={() => setMobileOpenSections(prev =>
+                      prev.includes(item.name) ? prev.filter(n => n !== item.name) : [...prev, item.name]
+                    )}
+                    aria-expanded={mobileOpenSections.includes(item.name)}
+                  >
+                    <span>{item.name}</span>
+                    <ChevronDownIcon className={`w-5 h-5 transition-transform duration-200 ${mobileOpenSections.includes(item.name) ? 'rotate-180' : ''}`} />
+                  </button>
+                ) : (
                   <Link
-                    href={item.href}
-                    className="block text-parchment-100 hover:text-parchment-50 py-2 text-lg font-medium transition-colors duration-200"
+                    href={item.href!}
+                    className="block text-parchment-100 hover:text-parchment-50 py-3 text-lg font-medium transition-colors duration-200"
                     onClick={() => {
                       setIsMobileMenuOpen(false)
+                      setMobileOpenSections([])
                       trackMenuClick(`Mobile > ${item.name}`)
                     }}
                   >
                     {item.name}
                   </Link>
-                ) : (
-                  <span className="block text-parchment-100 py-2 text-lg font-medium cursor-default">
-                    {item.name}
-                  </span>
                 )}
-                {item.dropdown && (
-                  <div className="ml-4 space-y-2 mt-2">
+                {item.dropdown && mobileOpenSections.includes(item.name) && (
+                  <div className="ml-2 border-l border-jerry-green-700/50 pl-4 pb-2">
                     {item.dropdown.map((subItem) => (
                       <Link
                         key={subItem.name}
                         href={subItem.href}
-                        className="block text-parchment-200 hover:text-parchment-50 py-1 text-sm transition-colors duration-200"
+                        className="block text-parchment-200 hover:text-parchment-50 py-2 text-sm transition-colors duration-200"
                         onClick={() => {
                           setIsMobileMenuOpen(false)
+                          setMobileOpenSections([])
                           trackMenuClick(`Mobile > ${item.name} > ${subItem.name}`)
                         }}
                       >
@@ -451,6 +492,7 @@ export default function Header() {
                 Join the Expedition
               </Link>
             </div>
+          </div>
           </div>
         </div>
       </header>

@@ -117,7 +117,7 @@ export default function HomepageFAQ() {
                 <tr className="border-b border-gold-500/30">
                   <th className="text-left py-4 px-4 text-parchment-300 font-medium">Aspect</th>
                   <th className="text-left py-4 px-4 text-parchment-400 font-medium">Mass-Produced</th>
-                  <th className="text-left py-4 px-4 text-gold-300 font-medium">Jerry Can Spirits</th>
+                  <th className="text-left py-4 px-4 text-gold-300 font-medium bg-gold-500/5 border-l border-gold-500/20 rounded-tr-lg">Jerry Can Spirits</th>
                 </tr>
               </thead>
               <tbody>
@@ -128,7 +128,7 @@ export default function HomepageFAQ() {
                   >
                     <td className="py-4 px-4 text-parchment-200 font-medium">{row.aspect}</td>
                     <td className="py-4 px-4 text-parchment-400">{row.massProduced}</td>
-                    <td className="py-4 px-4 text-gold-300">{row.jerryCan}</td>
+                    <td className={`py-4 px-4 text-gold-300 bg-gold-500/5 border-l border-gold-500/20${index === comparisonData.length - 1 ? ' rounded-br-lg' : ''}`}>{row.jerryCan}</td>
                   </tr>
                 ))}
               </tbody>
