@@ -180,7 +180,7 @@ export default function TradeEnquiryForm() {
       </div>
 
       {submitStatus === 'success' && (
-        <div className="bg-jerry-green-800/60 border border-gold-500/30 rounded-lg p-4">
+        <div className="bg-jerry-green-800/60 border border-gold-500/30 rounded-lg p-4 animate-slide-up">
           <p className="text-parchment-200 text-sm">
             Received. We will be in touch within two working days.
           </p>
@@ -188,7 +188,7 @@ export default function TradeEnquiryForm() {
       )}
 
       {submitStatus === 'error' && (
-        <div className="bg-red-900/20 border border-red-500/30 rounded-lg p-4">
+        <div className="bg-red-900/20 border border-red-500/30 rounded-lg p-4 animate-slide-up">
           <p className="text-red-300 text-sm">
             Something went wrong. Email us directly at{' '}
             <a href="mailto:trade@jerrycanspirits.co.uk" className="underline hover:text-red-200">
@@ -204,7 +204,15 @@ export default function TradeEnquiryForm() {
           disabled={isSubmitting}
           className="px-8 py-4 bg-gold-500 text-jerry-green-900 font-bold rounded-lg hover:bg-gold-400 transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm uppercase tracking-wide"
         >
-          {isSubmitting ? 'Sending...' : 'Send Enquiry'}
+          {isSubmitting ? (
+        <span className="flex items-center gap-2">
+          <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24" fill="none">
+            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+          </svg>
+          Sending
+        </span>
+      ) : 'Send Enquiry'}
         </button>
       </div>
     </form>

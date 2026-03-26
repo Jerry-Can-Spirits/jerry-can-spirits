@@ -156,9 +156,20 @@ export default function PreOrderSection() {
               We're only making 700 bottles in our first batch. Each one numbered. Pre-order now and you'll be first to receive when we ship in April.
             </p>
 
-            {/* Progress Bar - Only show if we have real inventory data */}
-            {showProgressBar && (
-              <div className="mb-8">
+            {/* Progress Bar - skeleton while loading, real data when ready */}
+            {loading ? (
+              <div className="mb-8 animate-pulse">
+                <div className="flex justify-between items-center mb-3">
+                  <div className="h-4 w-44 bg-jerry-green-700/60 rounded" />
+                  <div className="h-4 w-20 bg-jerry-green-700/60 rounded" />
+                </div>
+                <div className="w-full h-3 bg-jerry-green-800/60 rounded-full overflow-hidden border border-gold-500/20">
+                  <div className="h-full w-1/3 bg-jerry-green-700/60 rounded-full" />
+                </div>
+                <div className="h-3 w-36 bg-jerry-green-700/60 rounded mt-2" />
+              </div>
+            ) : showProgressBar && (
+              <div className="mb-8 animate-fade-in">
                 <div className="flex justify-between items-center mb-3">
                   <span className="text-parchment-200 font-semibold">
                     {bottlesSold} of {totalBottles} bottles reserved

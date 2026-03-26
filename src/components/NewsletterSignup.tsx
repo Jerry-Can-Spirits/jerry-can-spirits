@@ -43,7 +43,7 @@ export default function NewsletterSignup() {
 
   if (status === 'success') {
     return (
-      <div className="text-center py-4">
+      <div className="text-center py-4 animate-fade-in">
         <p className="text-white font-semibold mb-1">You are in.</p>
         <p className="text-parchment-400 text-sm">
           Check your inbox. Your 10% code will be waiting — valid from 6 April 2026.
@@ -92,7 +92,15 @@ export default function NewsletterSignup() {
           disabled={status === 'submitting' || !consent}
           className="px-6 py-3 bg-gold-500 text-jerry-green-900 font-bold text-sm uppercase tracking-wide rounded-lg hover:bg-gold-400 transition-colors disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
         >
-          {status === 'submitting' ? 'Sending...' : 'Join the Expedition'}
+          {status === 'submitting' ? (
+            <span className="flex items-center gap-2">
+              <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24" fill="none">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+              </svg>
+              Sending
+            </span>
+          ) : 'Join the Expedition'}
         </button>
       </div>
 
