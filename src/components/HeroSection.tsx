@@ -161,6 +161,27 @@ export default function HeroSection() {
                 Limited First Batch
               </div>
 
+              {/* Prev/Next arrows — mobile only; signifier for swipe gesture */}
+              <button
+                onClick={() => setActiveIndex(prev => (prev - 1 + HERO_IMAGES.length) % HERO_IMAGES.length)}
+                aria-label="Previous image"
+                className="sm:hidden absolute left-2 top-1/2 -translate-y-1/2 z-10 p-2 bg-jerry-green-900/60 backdrop-blur-sm rounded-full border border-gold-500/20 text-parchment-300"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                </svg>
+              </button>
+
+              <button
+                onClick={() => setActiveIndex(prev => (prev + 1) % HERO_IMAGES.length)}
+                aria-label="Next image"
+                className="sm:hidden absolute right-2 top-1/2 -translate-y-1/2 z-10 p-2 bg-jerry-green-900/60 backdrop-blur-sm rounded-full border border-gold-500/20 text-parchment-300"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </button>
+
               {/* Dot navigation */}
               <div className="absolute bottom-5 left-0 right-0 flex justify-center gap-3">
                 {HERO_IMAGES.map((image, index) => (
