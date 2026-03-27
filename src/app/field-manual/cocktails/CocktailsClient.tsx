@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useRouter, usePathname, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
 import BackToTop from '@/components/BackToTop'
@@ -90,15 +91,40 @@ interface CocktailsClientProps {
 }
 
 export default function CocktailsClient({ cocktails }: CocktailsClientProps) {
-  // Filter states
-  const [selectedFamily, setSelectedFamily] = useState<string>('all')
-  const [selectedSpirit, setSelectedSpirit] = useState<string>('all')
-  const [selectedDifficulty, setSelectedDifficulty] = useState<string>('all')
-  const [searchQuery, setSearchQuery] = useState<string>('')
+  const router = useRouter()
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
+
+  // Filter states — seeded from URL params
+  const [selectedFamily, setSelectedFamily] = useState<string>(
+    searchParams.get('family') ?? 'all'
+  )
+  const [selectedSpirit, setSelectedSpirit] = useState<string>(
+    searchParams.get('spirit') ?? 'all'
+  )
+  const [selectedDifficulty, setSelectedDifficulty] = useState<string>(
+    searchParams.get('difficulty') ?? 'all'
+  )
+  const [searchQuery, setSearchQuery] = useState<string>(
+    searchParams.get('q') ?? ''
+  )
   const [visibleCount, setVisibleCount] = useState<number>(ITEMS_PER_PAGE)
-  const [sortBy, setSortBy] = useState<string>('default')
+  const [sortBy, setSortBy] = useState<string>(
+    searchParams.get('sort') ?? 'default'
+  )
   const [ratings, setRatings] = useState<RatingsMap>({})
   const [ratingsLoaded, setRatingsLoaded] = useState<boolean>(false)
+
+  const updateURL = (family: string, spirit: string, difficulty: string, q: string, sort: string) => {
+    const sp = new URLSearchParams()
+    if (family !== 'all') sp.set('family', family)
+    if (spirit !== 'all') sp.set('spirit', spirit)
+    if (difficulty !== 'all') sp.set('difficulty', difficulty)
+    if (q) sp.set('q', q)
+    if (sort !== 'default') sp.set('sort', sort)
+    const qs = sp.toString()
+    router.replace(pathname + (qs ? `?${qs}` : ''), { scroll: false })
+  }
 
   // Fetch all ratings on mount
   useEffect(() => {
@@ -245,26 +271,31 @@ export default function CocktailsClient({ cocktails }: CocktailsClientProps) {
   const handleFamilyChange = (family: string) => {
     setSelectedFamily(family)
     setVisibleCount(ITEMS_PER_PAGE)
+    updateURL(family, selectedSpirit, selectedDifficulty, searchQuery, sortBy)
   }
 
   const handleSpiritChange = (spirit: string) => {
     setSelectedSpirit(spirit)
     setVisibleCount(ITEMS_PER_PAGE)
+    updateURL(selectedFamily, spirit, selectedDifficulty, searchQuery, sortBy)
   }
 
   const handleDifficultyChange = (difficulty: string) => {
     setSelectedDifficulty(difficulty)
     setVisibleCount(ITEMS_PER_PAGE)
+    updateURL(selectedFamily, selectedSpirit, difficulty, searchQuery, sortBy)
   }
 
   const handleSearchChange = (query: string) => {
     setSearchQuery(query)
     setVisibleCount(ITEMS_PER_PAGE)
+    updateURL(selectedFamily, selectedSpirit, selectedDifficulty, query, sortBy)
   }
 
   const handleSortChange = (sort: string) => {
     setSortBy(sort)
     setVisibleCount(ITEMS_PER_PAGE)
+    updateURL(selectedFamily, selectedSpirit, selectedDifficulty, searchQuery, sort)
   }
 
   const handleShowMore = () => {
@@ -618,6 +649,7 @@ export default function CocktailsClient({ cocktails }: CocktailsClientProps) {
                 setSelectedDifficulty('all')
                 setSearchQuery('')
                 setVisibleCount(ITEMS_PER_PAGE)
+                updateURL('all', 'all', 'all', '', sortBy)
               }}
               className="mt-4 px-6 py-3 bg-gold-500/20 border border-gold-500/40 text-gold-300 rounded-lg hover:bg-gold-500/30 transition-colors"
             >

@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { Suspense } from 'react'
 import { client } from '@/sanity/client'
 import { equipmentListQuery } from '@/sanity/queries'
 import EquipmentClient from './EquipmentClient'
@@ -39,7 +40,9 @@ export default async function EquipmentPage() {
           ]}
         />
       </div>
-      <EquipmentClient equipment={equipment} />
+      <Suspense>
+        <EquipmentClient equipment={equipment} />
+      </Suspense>
     </>
   )
 }

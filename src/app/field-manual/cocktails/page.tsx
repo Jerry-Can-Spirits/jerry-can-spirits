@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { Suspense } from 'react'
 import { client } from '@/sanity/client'
 import { cocktailsListQuery } from '@/sanity/queries'
 import CocktailsClient from './CocktailsClient'
@@ -61,7 +62,9 @@ export default async function CocktailsPage() {
           ]}
         />
       </div>
-      <CocktailsClient cocktails={cocktails} />
+      <Suspense>
+        <CocktailsClient cocktails={cocktails} />
+      </Suspense>
     </>
   )
 }
