@@ -157,10 +157,6 @@ export default function HeroSection() {
                 Numbered. Limited to 700.
               </div>
 
-              <div className="absolute bottom-16 right-6 bg-jerry-green-700/80 backdrop-blur-sm text-gold-300 px-4 py-2 rounded-full text-sm font-semibold uppercase tracking-wide border border-gold-500/30 shadow-lg">
-                Limited First Batch
-              </div>
-
               {/* Prev/Next arrows — mobile only; signifier for swipe gesture */}
               <button
                 onClick={() => setActiveIndex(prev => (prev - 1 + HERO_IMAGES.length) % HERO_IMAGES.length)}
