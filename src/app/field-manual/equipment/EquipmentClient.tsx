@@ -3,7 +3,6 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { urlFor } from '@/sanity/lib/image'
 import BackToTop from '@/components/BackToTop'
 
 // Types for equipment data
@@ -21,7 +20,8 @@ interface Equipment {
     details?: string
   }
   tips: string[]
-  image?: { asset: { url: string }; alt?: string }
+  image?: string
+  imageAlt?: string
   featured: boolean
   careInstructions?: string[] | string
   lifespan?: string[] | string
@@ -193,8 +193,8 @@ export default function EquipmentClient({ equipment }: EquipmentClientProps) {
                 {item.image && (
                   <div className="relative aspect-[4/3] bg-jerry-green-800/20">
                     <Image
-                      src={urlFor(item.image).url()}
-                      alt={item.image?.alt || item.name}
+                      src={item.image}
+                      alt={item.imageAlt || item.name}
                       fill
                       className="object-cover group-hover:scale-110 transition-transform duration-500"
                       sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
@@ -262,8 +262,8 @@ export default function EquipmentClient({ equipment }: EquipmentClientProps) {
                 {item.image && (
                   <div className="relative aspect-[4/3] bg-jerry-green-800/20">
                     <Image
-                      src={urlFor(item.image).url()}
-                      alt={item.image?.alt || item.name}
+                      src={item.image}
+                      alt={item.imageAlt || item.name}
                       fill
                       className="object-cover group-hover:scale-110 transition-transform duration-500"
                       sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
