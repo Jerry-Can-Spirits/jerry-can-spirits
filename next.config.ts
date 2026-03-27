@@ -220,9 +220,7 @@ const nextConfig: NextConfig = {
     minimumCacheTTL: 86400, // 24 hours - images rarely change
   },
   
-  // Disable webpack build cache to prevent large cache files in production
   experimental: {
-    webpackBuildWorker: false,
     optimizePackageImports: ['sanity', '@sanity/vision', 'react-icons'],
   },
   
@@ -233,8 +231,9 @@ const nextConfig: NextConfig = {
       const path = require('path');
       config.cache = {
         type: 'filesystem',
-        // Cache in node_modules/.cache which is preserved between Cloudflare Pages builds
-        cacheDirectory: path.resolve(process.cwd(), 'node_modules/.cache/webpack'),
+        // .next/cache is preserved by the CI cache action (actions/cache@v4)
+        // and persists locally between deploys
+        cacheDirectory: path.resolve(process.cwd(), '.next/cache/webpack'),
       };
     }
 
@@ -285,11 +284,11 @@ const analyzedConfig = withBundleAnalyzer({
 })(nextConfig);
 
 export default withSentryConfig(analyzedConfig, {
-  // For all available options, see:
-  // https://github.com/getsentry/sentry-webpack-plugin#options
-
   org: "jerry-can-spirits-ltd",
   project: "javascript-nextjs",
+
+  // Suppress Sentry build-time telemetry messages
+  telemetry: false,
 
   // Only print logs for uploading source maps in CI
   silent: !process.env.CI,
