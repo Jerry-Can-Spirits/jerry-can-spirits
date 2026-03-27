@@ -25,6 +25,23 @@ const HERO_IMAGES = [
 
 export default function HeroSection() {
   const [activeIndex, setActiveIndex] = useState(0)
+  const [touchStartX, setTouchStartX] = useState<number | null>(null)
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchStartX(e.targetTouches[0].clientX)
+  }
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (touchStartX === null) return
+    const delta = touchStartX - e.changedTouches[0].clientX
+    if (Math.abs(delta) < 50) return
+    setActiveIndex(prev =>
+      delta > 0
+        ? (prev + 1) % HERO_IMAGES.length
+        : (prev - 1 + HERO_IMAGES.length) % HERO_IMAGES.length
+    )
+    setTouchStartX(null)
+  }
 
   return (
     <section className="relative overflow-hidden min-h-screen">
@@ -115,7 +132,11 @@ export default function HeroSection() {
             <div className="relative bg-gradient-to-br from-jerry-green-800 to-jerry-green-900 rounded-2xl overflow-hidden shadow-2xl border border-gold-500/20">
 
               {/* Images — stacked, fade between active */}
-              <div className="aspect-[4/5] relative">
+              <div
+                className="aspect-[4/5] relative"
+                onTouchStart={handleTouchStart}
+                onTouchEnd={handleTouchEnd}
+              >
                 {HERO_IMAGES.map((image, index) => (
                   <Image
                     key={image.src}
