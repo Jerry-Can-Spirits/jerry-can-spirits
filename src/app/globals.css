@@ -4,9 +4,22 @@
 @tailwind components;
 @tailwind utilities;
 
-  /* Opt out of browser dark mode adaptation — site palette is intentional */
+  /* Opt out of browser dark mode adaptation — site palette is intentional.
+     'only light' is the explicit instruction to never apply forced dark mode,
+     stronger than 'light' alone. The media query below is a belt-and-braces
+     fallback for browsers (Samsung Internet, aggressive Chrome flags) that
+     ignore color-scheme and apply their own color transforms. */
   :root {
-    color-scheme: light;
+    color-scheme: only light;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    html {
+      background-color: #1a442e; /* jerry-green-900 */
+    }
+    body {
+      background-color: #1a442e; /* jerry-green-900 */
+    }
   }
 
   /* Base styles */
