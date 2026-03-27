@@ -28,7 +28,7 @@ export default function SocialProofToast() {
       } catch {
         // Silently fail — not critical
       }
-    }, 5000)
+    }, 12000)
 
     return () => clearTimeout(timer)
   }, [])

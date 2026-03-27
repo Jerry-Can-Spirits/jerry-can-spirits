@@ -21,7 +21,6 @@ import InstallPrompt from "@/components/InstallPrompt";
 import { CartProvider } from "@/contexts/CartContext";
 import { OrganizationSchema, WebsiteSchema } from "@/components/StructuredData";
 import FacebookPixel, { PixelPageView } from "@/components/FacebookPixel";
-import AnnouncementBar from "@/components/AnnouncementBar";
 import GoogleTag from "@/components/GoogleTag";
 import TikTokPixel from "@/components/TikTokPixel";
 import KlaviyoScript from "@/components/KlaviyoScript";
@@ -201,9 +200,6 @@ export default function RootLayout({
               ctaLink="/#newsletter-signup"
               isVisible={false}
             />
-
-            {/* Announcement Bar - Pre-order promotion */}
-            <AnnouncementBar />
 
             <Header />
 
