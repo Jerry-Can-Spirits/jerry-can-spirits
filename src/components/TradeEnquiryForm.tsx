@@ -181,8 +181,15 @@ export default function TradeEnquiryForm() {
 
       {submitStatus === 'success' && (
         <div className="bg-jerry-green-800/60 border border-gold-500/30 rounded-lg p-4 animate-slide-up">
-          <p className="text-parchment-200 text-sm">
-            Received. We will be in touch within two working days.
+          <p className="text-parchment-200 text-sm mb-2">
+            Good to hear from you. We will be in touch within two working days.
+          </p>
+          <p className="text-parchment-400 text-sm">
+            In the meantime, the{' '}
+            <a href="/field-manual/" className="text-gold-400 hover:text-gold-300 underline underline-offset-2 transition-colors">
+              Field Manual
+            </a>
+            {' '}has everything your bar team needs to know.
           </p>
         </div>
       )}
