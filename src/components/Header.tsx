@@ -56,7 +56,6 @@ export default function Header() {
 
   // Navigation structure
   const navigation: NavigationItem[] = [
-    { name: 'Home', href: '/' },
     {
       name: 'Shop',
       href: '/shop',
