@@ -48,14 +48,14 @@ export default function HeroSection() {
             {/* Overline Badge */}
             <div className="inline-block px-4 py-2 bg-jerry-green-800 rounded-full border border-gold-500/30 mb-8 shadow-lg">
               <span className="text-gold-300 text-sm font-semibold uppercase tracking-widest">
-                Premium British Spiced Rum
+                British Spiced Rum
               </span>
             </div>
 
             {/* Headline */}
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-serif font-bold text-parchment-50 mb-6 leading-tight">
               <span className="relative" style={{ color: '#fefbf5' }}>
-                Veteran-Owned Premium British Rum
+                Veteran-Owned British Rum
                 <span className="absolute -bottom-2 left-0 w-full h-1 bg-gradient-to-r from-gold-500 to-gold-300 rounded-full"></span>
               </span>
               <br />
