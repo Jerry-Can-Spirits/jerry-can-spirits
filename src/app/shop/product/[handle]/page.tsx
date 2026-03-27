@@ -223,12 +223,6 @@ export default async function ProductPage({
     notFound()
   }
 
-  // Debug: Log product variant info
-  console.log('Product variants:', product.variants)
-  console.log('First variant ID:', product.variants?.[0]?.id)
-  console.log('Available for sale:', product.variants?.[0]?.availableForSale)
-  console.log('Quantity available:', product.variants?.[0]?.quantityAvailable)
-
   const price = formatPrice(
     product.priceRange.minVariantPrice.amount,
     product.priceRange.minVariantPrice.currencyCode
@@ -776,7 +770,7 @@ export default async function ProductPage({
                     )}
                   </p>
                   <div className="mt-4 flex items-center gap-2 text-gold-300 text-sm">
-                    <span>See the Rum</span>
+                    <span>View Product</span>
                     <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                     </svg>
