@@ -313,13 +313,6 @@ export default function CartDrawer() {
                           </svg>
                         </button>
 
-                        <button
-                          onClick={() => removeItem(line.id)}
-                          disabled={isLoading}
-                          className="ml-auto text-sm text-red-400 hover:text-red-300 transition-colors disabled:opacity-50"
-                        >
-                          Remove
-                        </button>
                       </div>
                     </div>
                   </div>
