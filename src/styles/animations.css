@@ -105,6 +105,7 @@ html.js .reveal-stagger > .reveal:nth-child(n+5) { transition-delay: 0.4s; }
    =========================================== */
 
 @media (prefers-reduced-motion: reduce) {
+  /* Disable scroll-based animations */
   .reveal,
   .reveal-left,
   .reveal-right {
@@ -121,6 +122,7 @@ html.js .reveal-stagger > .reveal:nth-child(n+5) { transition-delay: 0.4s; }
     transition-delay: 0s;
   }
 
+  /* Disable marquee and toast */
   .ticker-strip__track {
     animation: none;
   }
@@ -128,5 +130,18 @@ html.js .reveal-stagger > .reveal:nth-child(n+5) { transition-delay: 0.4s; }
   .toast-slide-in,
   .toast-fade-out {
     animation: none;
+  }
+
+  /* Disable smooth scroll */
+  html {
+    scroll-behavior: auto;
+  }
+
+  /* Disable all transitions and animations globally */
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0s !important;
   }
 }

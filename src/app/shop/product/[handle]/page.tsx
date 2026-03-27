@@ -466,7 +466,7 @@ export default async function ProductPage({
             {/* Description */}
             {product.descriptionHtml && (
               <div
-                className="prose prose-invert max-w-none prose-headings:font-serif prose-headings:text-gold-300 prose-p:text-parchment-200 prose-p:leading-relaxed prose-strong:text-white prose-li:text-parchment-200 prose-a:text-blue-400 prose-a:no-underline hover:prose-a:text-blue-300"
+                className="prose prose-invert max-w-none prose-headings:font-serif prose-headings:text-gold-300 prose-p:text-parchment-200 prose-p:leading-relaxed prose-strong:text-white prose-li:text-parchment-200 prose-a:text-blue-400 prose-a:underline prose-a:underline-offset-2 hover:prose-a:text-blue-300"
                 dangerouslySetInnerHTML={{ __html: product.descriptionHtml }}
               />
             )}
