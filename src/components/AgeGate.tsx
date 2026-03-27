@@ -177,7 +177,7 @@ export default function AgeGate({ onVerified }: AgeGateProps) {
             </button>
             <button
               onClick={() => handleAgeVerification(false)}
-              className="bg-metal-600 hover:bg-metal-500 text-white font-bold py-3 sm:py-4 px-4 sm:px-6 rounded-lg transition-all duration-200 transform hover:scale-105 hover:shadow-lg text-base sm:text-lg"
+              className="border-2 border-jerry-green-600 hover:border-jerry-green-500 bg-transparent hover:bg-jerry-green-800/50 text-parchment-300 hover:text-parchment-100 font-bold py-3 sm:py-4 px-4 sm:px-6 rounded-lg transition-all duration-200 text-base sm:text-lg"
             >
               No, Exit
             </button>
