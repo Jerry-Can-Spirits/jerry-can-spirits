@@ -14,8 +14,8 @@ const CartographicBackground = dynamic(
   () => import("@/components/CartographicBackground"),
   { loading: () => null }
 );
-const CartDrawer = dynamic(() => import("@/components/CartDrawer"), { ssr: false });
-const SocialProofToast = dynamic(() => import("@/components/SocialProofToast"), { ssr: false });
+const CartDrawer = dynamic(() => import("@/components/CartDrawer"));
+const SocialProofToast = dynamic(() => import("@/components/SocialProofToast"));
 import ServiceWorkerRegistration from "@/components/ServiceWorkerRegistration";
 import InstallPrompt from "@/components/InstallPrompt";
 import { CartProvider } from "@/contexts/CartContext";
