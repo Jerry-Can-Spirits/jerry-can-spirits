@@ -4,6 +4,11 @@
 @tailwind components;
 @tailwind utilities;
 
+  /* Opt out of browser dark mode adaptation — site palette is intentional */
+  :root {
+    color-scheme: light;
+  }
+
   /* Base styles */
   * {
     box-sizing: border-box;
