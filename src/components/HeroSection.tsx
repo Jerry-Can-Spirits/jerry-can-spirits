@@ -7,19 +7,19 @@ import CountdownTimer from './CountdownTimer'
 
 const HERO_IMAGES = [
   {
-    src: 'https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/c8ba631a-3382-4bb5-d935-57ac653ca500/public',
-    alt: 'Expedition Spiced Rum — front label',
-    label: 'Bottle',
+    src: 'https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/beed84d3-c77d-4ecf-c85f-29719bdea000/public',
+    alt: 'Expedition Spiced Rum — front',
+    label: 'Front',
   },
   {
-    src: 'https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/7d3c4e1a-8701-4be4-23f1-cd0af397b900/public',
-    alt: 'Expedition Spiced Rum — tasting notes',
-    label: 'Tasting Notes',
+    src: 'https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/fffd5ce1-6411-4ab4-6c32-aacf2caa1700/public',
+    alt: 'Expedition Spiced Rum — angled',
+    label: 'Angled',
   },
   {
-    src: 'https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/447ac5a9-27c5-4135-f48c-7ce9e41c7d00/public',
-    alt: 'Expedition Spiced Rum — compliance label',
-    label: 'Label',
+    src: 'https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/8ad4c4c5-6c38-4342-c42a-652af5529f00/public',
+    alt: 'Expedition Spiced Rum — in the field',
+    label: 'In the field',
   },
 ]
 
