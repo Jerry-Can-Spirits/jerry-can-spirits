@@ -80,7 +80,23 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400 })
     }
 
-    const { name, email, subject, message, formType, orderNumber, issueType, priority, website, venueName, venueType, covers } = formData
+    const {
+      name: rawName,
+      email: rawEmail,
+      subject,
+      message,
+      formType,
+      orderNumber,
+      issueType,
+      priority,
+      website,
+      venueName,
+      venueType,
+      covers,
+    } = formData
+
+    const name = rawName?.trim() ?? ''
+    const email = rawEmail?.trim().toLowerCase() ?? ''
 
     // Honeypot check
     if (website && website.trim() !== '') {

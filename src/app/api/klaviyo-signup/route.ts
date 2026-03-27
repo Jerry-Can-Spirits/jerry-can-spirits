@@ -31,7 +31,16 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400 })
     }
 
-    const { firstName, email, interests = [], listId, website } = body
+    const {
+      firstName: rawFirstName,
+      email: rawEmail,
+      interests = [],
+      listId,
+      website,
+    } = body
+
+    const firstName = rawFirstName?.trim() ?? ''
+    const email = rawEmail?.trim().toLowerCase() ?? ''
 
     // Honeypot check
     if (website && website.trim() !== '') {
@@ -54,6 +63,11 @@ export async function POST(request: Request) {
 
     if (!firstName || !email) {
       return NextResponse.json({ error: 'First name and email are required' }, { status: 400 })
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!emailRegex.test(email) || email.length > 254) {
+      return NextResponse.json({ error: 'Please enter a valid email address' }, { status: 400 })
     }
 
     if (!KLAVIYO_PRIVATE_KEY) {
