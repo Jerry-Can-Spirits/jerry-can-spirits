@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useRouter, usePathname, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
 import BackToTop from '@/components/BackToTop'
@@ -35,9 +36,25 @@ interface EquipmentClientProps {
 const ITEMS_PER_PAGE = 16
 
 export default function EquipmentClient({ equipment }: EquipmentClientProps) {
-  const [selectedCategory, setSelectedCategory] = useState<string>('all')
-  const [searchQuery, setSearchQuery] = useState<string>('')
+  const router = useRouter()
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
+
+  const [selectedCategory, setSelectedCategory] = useState<string>(
+    searchParams.get('category') ?? 'all'
+  )
+  const [searchQuery, setSearchQuery] = useState<string>(
+    searchParams.get('q') ?? ''
+  )
   const [visibleCount, setVisibleCount] = useState<number>(ITEMS_PER_PAGE)
+
+  const updateURL = (category: string, q: string) => {
+    const sp = new URLSearchParams()
+    if (category !== 'all') sp.set('category', category)
+    if (q) sp.set('q', q)
+    const qs = sp.toString()
+    router.replace(pathname + (qs ? `?${qs}` : ''), { scroll: false })
+  }
 
   // Filter equipment
   const filteredEquipment = equipment.filter(item => {
@@ -60,11 +77,13 @@ export default function EquipmentClient({ equipment }: EquipmentClientProps) {
   const handleCategoryChange = (category: string) => {
     setSelectedCategory(category)
     setVisibleCount(ITEMS_PER_PAGE)
+    updateURL(category, searchQuery)
   }
 
   const handleSearchChange = (query: string) => {
     setSearchQuery(query)
     setVisibleCount(ITEMS_PER_PAGE)
+    updateURL(selectedCategory, query)
   }
 
   const handleShowMore = () => {
@@ -244,6 +263,7 @@ export default function EquipmentClient({ equipment }: EquipmentClientProps) {
                 setSelectedCategory('all')
                 setSearchQuery('')
                 setVisibleCount(ITEMS_PER_PAGE)
+                updateURL('all', '')
               }}
               className="mt-4 px-6 py-3 bg-gold-500/20 border border-gold-500/40 text-gold-300 rounded-lg hover:bg-gold-500/30 transition-colors"
             >
