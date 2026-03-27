@@ -42,28 +42,14 @@ const submissionTimestamps = new Map<string, number[]>()
 const RATE_LIMIT_WINDOW = 60 * 1000 // 1 minute
 const MAX_REQUESTS = 3 // Max 3 requests/min per IP
 
-// Email validation function
 function isValidEmail(email: string): boolean {
-  // RFC 5322 compliant email validation regex
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-
-  // Additional checks for common invalid patterns
-  if (!emailRegex.test(email)) return false
-  if (email.length > 254) return false // Max email length per RFC
-
-  const [localPart, domain] = email.split('@')
-  if (!localPart || !domain) return false
-  if (localPart.length > 64) return false // Max local part length
-
-  // Check for invalid characters
-  if (email.includes('..')) return false // No consecutive dots
-  if (email.startsWith('.') || email.endsWith('.')) return false
-
-  // Check domain has valid TLD
-  const domainParts = domain.split('.')
-  if (domainParts.length < 2) return false
-  if (domainParts[domainParts.length - 1].length < 2) return false
-
+  if (email.length > 254) return false
+  const at = email.indexOf('@')
+  if (at < 1 || at !== email.lastIndexOf('@')) return false
+  const domain = email.slice(at + 1)
+  const dot = domain.lastIndexOf('.')
+  if (dot < 1 || dot === domain.length - 1) return false
+  if (domain.slice(dot + 1).length < 2) return false
   return true
 }
 

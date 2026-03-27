@@ -19,6 +19,17 @@ interface SignupBody {
   website?: string // honeypot
 }
 
+function isValidEmail(email: string): boolean {
+  if (email.length > 254) return false
+  const at = email.indexOf('@')
+  if (at < 1 || at !== email.lastIndexOf('@')) return false
+  const domain = email.slice(at + 1)
+  const dot = domain.lastIndexOf('.')
+  if (dot < 1 || dot === domain.length - 1) return false
+  if (domain.slice(dot + 1).length < 2) return false
+  return true
+}
+
 export async function POST(request: Request) {
   try {
     const { env } = await getCloudflareContext()
@@ -65,8 +76,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'First name and email are required' }, { status: 400 })
     }
 
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-    if (!emailRegex.test(email) || email.length > 254) {
+    if (!isValidEmail(email)) {
       return NextResponse.json({ error: 'Please enter a valid email address' }, { status: 400 })
     }
 
