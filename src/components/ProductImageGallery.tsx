@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import Image from 'next/image'
 
 interface ProductImage {
@@ -18,6 +18,23 @@ export default function ProductImageGallery({
   productTitle,
 }: ProductImageGalleryProps) {
   const [selectedImageIndex, setSelectedImageIndex] = useState(0)
+  const touchStartXRef = useRef<number | null>(null)
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartXRef.current = e.touches[0].clientX
+  }
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (touchStartXRef.current === null) return
+    const delta = e.changedTouches[0].clientX - touchStartXRef.current
+    touchStartXRef.current = null
+    if (Math.abs(delta) < 40) return
+    if (delta < 0) {
+      setSelectedImageIndex(prev => (prev + 1) % images.length)
+    } else {
+      setSelectedImageIndex(prev => (prev - 1 + images.length) % images.length)
+    }
+  }
 
   if (!images || images.length === 0) {
     return (
@@ -44,7 +61,11 @@ export default function ProductImageGallery({
   return (
     <div className="space-y-3 sm:space-y-4">
       {/* Main Image */}
-      <div className="relative aspect-square sm:aspect-[4/3] lg:aspect-square bg-jerry-green-800/20 rounded-xl overflow-hidden border border-gold-500/20">
+      <div
+        className="relative aspect-square sm:aspect-[4/3] lg:aspect-square bg-jerry-green-800/20 rounded-xl overflow-hidden border border-gold-500/20"
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+      >
         <Image
           src={selectedImage.url}
           alt={selectedImage.altText || productTitle}
@@ -53,6 +74,29 @@ export default function ProductImageGallery({
           sizes="(max-width: 768px) 100vw, 50vw"
           priority={selectedImageIndex === 0}
         />
+
+        {images.length > 1 && (
+          <>
+            <button
+              onClick={() => setSelectedImageIndex(prev => (prev - 1 + images.length) % images.length)}
+              aria-label="Previous image"
+              className="sm:hidden absolute left-2 top-1/2 -translate-y-1/2 z-10 p-2 bg-jerry-green-900/60 backdrop-blur-sm rounded-full border border-gold-500/20 text-parchment-300"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              </svg>
+            </button>
+            <button
+              onClick={() => setSelectedImageIndex(prev => (prev + 1) % images.length)}
+              aria-label="Next image"
+              className="sm:hidden absolute right-2 top-1/2 -translate-y-1/2 z-10 p-2 bg-jerry-green-900/60 backdrop-blur-sm rounded-full border border-gold-500/20 text-parchment-300"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
+          </>
+        )}
       </div>
 
       {/* Thumbnail Grid */}
