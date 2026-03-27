@@ -117,7 +117,8 @@ export const ingredientsListQuery = `*[_type == "ingredient"] | order(category a
   slug,
   category,
   description,
-  image,
+  "image": image.asset->url,
+  "imageAlt": image.alt,
   featured
 }`
 
@@ -179,7 +180,8 @@ export const equipmentListQuery = `*[_type == "equipment"] | order(category asc,
   category,
   description,
   essential,
-  image,
+  "image": image.asset->url,
+  "imageAlt": image.alt,
   featured
 }`
 

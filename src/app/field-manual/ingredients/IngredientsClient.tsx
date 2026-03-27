@@ -3,7 +3,6 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { urlFor } from '@/sanity/lib/image'
 import BackToTop from '@/components/BackToTop'
 
 // Types for ingredient data
@@ -20,7 +19,8 @@ interface Ingredient {
     premium?: string
   }
   storage?: string
-  image?: { asset: { url: string }; alt?: string }
+  image?: string
+  imageAlt?: string
   featured: boolean
 }
 
@@ -195,8 +195,8 @@ export default function IngredientsClient({ ingredients }: IngredientsClientProp
                 {item.image && (
                   <div className="relative aspect-[4/3] bg-transparent">
                     <Image
-                      src={urlFor(item.image).url()}
-                      alt={item.image?.alt || item.name}
+                      src={item.image}
+                      alt={item.imageAlt || item.name}
                       fill
                       className="object-contain mix-blend-multiply p-4"
                       sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
@@ -262,8 +262,8 @@ export default function IngredientsClient({ ingredients }: IngredientsClientProp
                 {item.image && (
                   <div className="relative aspect-[4/3] bg-transparent">
                     <Image
-                      src={urlFor(item.image).url()}
-                      alt={item.image?.alt || item.name}
+                      src={item.image}
+                      alt={item.imageAlt || item.name}
                       fill
                       className="object-contain mix-blend-multiply p-4"
                       sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
