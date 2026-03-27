@@ -223,12 +223,6 @@ export default async function ProductPage({
     notFound()
   }
 
-  // Debug: Log product variant info
-  console.log('Product variants:', product.variants)
-  console.log('First variant ID:', product.variants?.[0]?.id)
-  console.log('Available for sale:', product.variants?.[0]?.availableForSale)
-  console.log('Quantity available:', product.variants?.[0]?.quantityAvailable)
-
   const price = formatPrice(
     product.priceRange.minVariantPrice.amount,
     product.priceRange.minVariantPrice.currencyCode
@@ -546,7 +540,7 @@ export default async function ProductPage({
                       <svg className="w-5 h-5 text-gold-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                         <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                       </svg>
-                      <span>Only 700 bottles per batch - once they're gone, they're gone</span>
+                      <span>700 bottles per batch. Every one numbered. No reprints.</span>
                     </li>
                     <li className="flex items-start gap-3">
                       <svg className="w-5 h-5 text-gold-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
@@ -776,7 +770,7 @@ export default async function ProductPage({
                     )}
                   </p>
                   <div className="mt-4 flex items-center gap-2 text-gold-300 text-sm">
-                    <span>See the Rum</span>
+                    <span>View Product</span>
                     <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                     </svg>
