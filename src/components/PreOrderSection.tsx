@@ -14,14 +14,13 @@ export default function PreOrderSection() {
   const [bottlesSold, setBottlesSold] = useState<number | null>(null)
   const [bottlePricing, setBottlePricing] = useState<ProductPricing>({ price: '35', compareAtPrice: '45' })
   const [giftSetPricing, setGiftSetPricing] = useState<ProductPricing>({ price: '85', compareAtPrice: null })
-  const [tradePackPricing, setTradePackPricing] = useState<ProductPricing>({ price: '180', compareAtPrice: '210' })
   const [loading, setLoading] = useState(true)
   const totalBottles = 700
 
   // Product handles
   const bottleHandle = 'jerry-can-spirits-expedition-spiced-rum'
   const giftSetHandle = 'jerry-can-spirits-premium-gift-pack'
-  const tradePackHandle = 'jerry-can-spirits-expedition-pack-spiced-rum-6-bottles'
+  const tradePackHandle = 'jerry-can-spirits-expedition-pack-spiced-rum-6-bottles' // kept for progress bar tracking
 
   useEffect(() => {
     async function fetchProducts() {
@@ -81,15 +80,6 @@ export default function PreOrderSection() {
             compareAtPrice: variant.compareAtPrice ? parseFloat(variant.compareAtPrice.amount).toFixed(0) : null
           })
         }
-
-        // Process trade pack data
-        if (tradePackProduct?.variants?.[0]) {
-          const variant = tradePackProduct.variants[0]
-          setTradePackPricing({
-            price: parseFloat(variant.price.amount).toFixed(0),
-            compareAtPrice: variant.compareAtPrice ? parseFloat(variant.compareAtPrice.amount).toFixed(0) : null
-          })
-        }
       } catch (error) {
         console.error('Error fetching products:', error)
         setBottlesSold(null)
@@ -103,12 +93,9 @@ export default function PreOrderSection() {
 
   const percentageSold = bottlesSold !== null ? (bottlesSold / totalBottles) * 100 : 0
   const showProgressBar = !loading && bottlesSold !== null
-  // PMO compliance: Calculate unit prices (price per litre)
+  // PMO compliance: Calculate unit price (price per litre)
   const bottleVolumeLitres = 0.7 // 700ml
-  const tradePackVolumeLitres = 6 * 0.7 // 6 × 700ml = 4.2L
   const bottleUnitPrice = (parseFloat(bottlePricing.price) / bottleVolumeLitres).toFixed(2)
-  const tradePackUnitPrice = (parseFloat(tradePackPricing.price) / tradePackVolumeLitres).toFixed(2)
-  const tradePackPerBottle = (parseFloat(tradePackPricing.price) / 6).toFixed(2)
 
   return (
     <section className="py-16 bg-jerry-green-900/50">
@@ -120,7 +107,7 @@ export default function PreOrderSection() {
               <div className="aspect-[4/5] flex items-center justify-center p-8">
                 <Image
                   src="/images/hero/hero-spiced.webp"
-                  alt="Jerry Can Spirits Premium British Rum - First Batch Edition"
+                  alt="Jerry Can Spirits Expedition Spiced Rum - First Batch Edition"
                   width={400}
                   height={500}
                   className="w-full h-full object-contain"
@@ -241,7 +228,7 @@ export default function PreOrderSection() {
                 className="group bg-gradient-to-r from-jerry-green-700 to-jerry-green-800 hover:from-jerry-green-600 hover:to-jerry-green-700 text-white px-6 py-4 rounded-lg font-semibold transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-[1.02] flex items-center justify-between border border-gold-500/30"
               >
                 <div className="flex flex-col">
-                  <span className="text-xs uppercase tracking-wider text-gold-300">Premium Gift Pack</span>
+                  <span className="text-xs uppercase tracking-wider text-gold-300">Gift Pack</span>
                   <span className="text-lg">Bottle + Barware Set</span>
                 </div>
                 <div className="text-right">
@@ -252,26 +239,6 @@ export default function PreOrderSection() {
                 </div>
               </Link>
 
-              {/* Trade Pack - 6 Bottles */}
-              <Link
-                href={`/shop/product/${tradePackHandle}`}
-                className="group bg-gradient-to-r from-jerry-green-700 to-jerry-green-800 hover:from-jerry-green-600 hover:to-jerry-green-700 text-white px-6 py-4 rounded-lg font-semibold transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-[1.02] flex items-center justify-between border border-gold-500/30"
-              >
-                <div className="flex flex-col">
-                  <span className="text-xs uppercase tracking-wider text-gold-300">Trade Pack</span>
-                  <span className="text-lg">6 Bottles - Trade Pack</span>
-                  <span className="text-xs text-parchment-400">(£{tradePackPerBottle}/bottle)</span>
-                </div>
-                <div className="text-right">
-                  <div>
-                    <span className="text-xl font-bold text-gold-300">£{tradePackPricing.price}</span>
-                    {tradePackPricing.compareAtPrice && (
-                      <span className="text-sm line-through opacity-60 text-parchment-400 ml-2">£{tradePackPricing.compareAtPrice}</span>
-                    )}
-                  </div>
-                  <span className="text-xs text-parchment-400">(£{tradePackUnitPrice}/litre)</span>
-                </div>
-              </Link>
             </div>
 
             {/* Enhanced Trust & Social Proof */}
