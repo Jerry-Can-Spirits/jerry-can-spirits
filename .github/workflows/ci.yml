@@ -55,6 +55,7 @@ jobs:
       - name: Build project
         run: npm run build
         env:
+          NEXT_TELEMETRY_DISABLED: 1
           NEXT_PUBLIC_SANITY_PROJECT_ID: 5mtjmb0t
           NEXT_PUBLIC_SANITY_DATASET: production
           NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN: ${{ secrets.NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN }}

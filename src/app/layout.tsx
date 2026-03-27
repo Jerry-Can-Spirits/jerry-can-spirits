@@ -9,16 +9,16 @@ import PromoBanner from "@/components/PromoBanner";
 import ShippingBanner from "@/components/ShippingBanner";
 import ClientWrapper from "@/components/ClientWrapper";
 
-// Lazy load CartographicBackground for code splitting
+// Lazy load non-critical layout components
 const CartographicBackground = dynamic(
   () => import("@/components/CartographicBackground"),
   { loading: () => null }
 );
+const CartDrawer = dynamic(() => import("@/components/CartDrawer"), { ssr: false });
+const SocialProofToast = dynamic(() => import("@/components/SocialProofToast"), { ssr: false });
 import ServiceWorkerRegistration from "@/components/ServiceWorkerRegistration";
 import InstallPrompt from "@/components/InstallPrompt";
 import { CartProvider } from "@/contexts/CartContext";
-import CartDrawer from "@/components/CartDrawer";
-import SocialProofToast from "@/components/SocialProofToast";
 import { OrganizationSchema, WebsiteSchema } from "@/components/StructuredData";
 import FacebookPixel, { PixelPageView } from "@/components/FacebookPixel";
 import AnnouncementBar from "@/components/AnnouncementBar";
