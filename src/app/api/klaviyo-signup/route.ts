@@ -19,6 +19,17 @@ interface SignupBody {
   website?: string // honeypot
 }
 
+function isValidEmail(email: string): boolean {
+  if (email.length > 254) return false
+  const at = email.indexOf('@')
+  if (at < 1 || at !== email.lastIndexOf('@')) return false
+  const domain = email.slice(at + 1)
+  const dot = domain.lastIndexOf('.')
+  if (dot < 1 || dot === domain.length - 1) return false
+  if (domain.slice(dot + 1).length < 2) return false
+  return true
+}
+
 export async function POST(request: Request) {
   try {
     const { env } = await getCloudflareContext()
@@ -31,7 +42,16 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400 })
     }
 
-    const { firstName, email, interests = [], listId, website } = body
+    const {
+      firstName: rawFirstName,
+      email: rawEmail,
+      interests = [],
+      listId,
+      website,
+    } = body
+
+    const firstName = rawFirstName?.trim() ?? ''
+    const email = rawEmail?.trim().toLowerCase() ?? ''
 
     // Honeypot check
     if (website && website.trim() !== '') {
@@ -54,6 +74,10 @@ export async function POST(request: Request) {
 
     if (!firstName || !email) {
       return NextResponse.json({ error: 'First name and email are required' }, { status: 400 })
+    }
+
+    if (!isValidEmail(email)) {
+      return NextResponse.json({ error: 'Please enter a valid email address' }, { status: 400 })
     }
 
     if (!KLAVIYO_PRIVATE_KEY) {
