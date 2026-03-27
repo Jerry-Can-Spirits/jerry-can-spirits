@@ -424,11 +424,11 @@ export default function Header() {
           className={`md:hidden overflow-hidden transition-[max-height,opacity] duration-300 ${
             isMobileMenuOpen ? 'opacity-100' : 'opacity-0'
           }`}
-          style={{ maxHeight: isMobileMenuOpen ? 'calc(100vh - 5rem)' : '0' }}
+          style={{ maxHeight: isMobileMenuOpen ? 'calc(100vh - 5rem - var(--announcement-height, 0px))' : '0' }}
         >
           <div
             className="overflow-y-auto overscroll-y-contain"
-            style={{ maxHeight: 'calc(100vh - 5rem)' }}
+            style={{ maxHeight: 'calc(100vh - 5rem - var(--announcement-height, 0px))' }}
           >
           <div className="bg-jerry-green-800/95 backdrop-blur-lg border-t border-jerry-green-600/20 px-4 py-6 space-y-4">
             {navigation.map((item) => (
