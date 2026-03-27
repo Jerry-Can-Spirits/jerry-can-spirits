@@ -7,19 +7,19 @@ import CountdownTimer from './CountdownTimer'
 
 const HERO_IMAGES = [
   {
-    src: 'https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/c8ba631a-3382-4bb5-d935-57ac653ca500/public',
-    alt: 'Expedition Spiced Rum — front label',
-    label: 'Bottle',
+    src: 'https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/beed84d3-c77d-4ecf-c85f-29719bdea000/public',
+    alt: 'Expedition Spiced Rum — front',
+    label: 'Front',
   },
   {
-    src: 'https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/7d3c4e1a-8701-4be4-23f1-cd0af397b900/public',
-    alt: 'Expedition Spiced Rum — tasting notes',
-    label: 'Tasting Notes',
+    src: 'https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/fffd5ce1-6411-4ab4-6c32-aacf2caa1700/public',
+    alt: 'Expedition Spiced Rum — angled',
+    label: 'Angled',
   },
   {
-    src: 'https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/447ac5a9-27c5-4135-f48c-7ce9e41c7d00/public',
-    alt: 'Expedition Spiced Rum — compliance label',
-    label: 'Label',
+    src: 'https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/8ad4c4c5-6c38-4342-c42a-652af5529f00/public',
+    alt: 'Expedition Spiced Rum — in the field',
+    label: 'In the field',
   },
 ]
 
@@ -160,6 +160,27 @@ export default function HeroSection() {
               <div className="absolute bottom-16 right-6 bg-jerry-green-700/80 backdrop-blur-sm text-gold-300 px-4 py-2 rounded-full text-sm font-semibold uppercase tracking-wide border border-gold-500/30 shadow-lg">
                 Limited First Batch
               </div>
+
+              {/* Prev/Next arrows — mobile only; signifier for swipe gesture */}
+              <button
+                onClick={() => setActiveIndex(prev => (prev - 1 + HERO_IMAGES.length) % HERO_IMAGES.length)}
+                aria-label="Previous image"
+                className="sm:hidden absolute left-2 top-1/2 -translate-y-1/2 z-10 p-2 bg-jerry-green-900/60 backdrop-blur-sm rounded-full border border-gold-500/20 text-parchment-300"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                </svg>
+              </button>
+
+              <button
+                onClick={() => setActiveIndex(prev => (prev + 1) % HERO_IMAGES.length)}
+                aria-label="Next image"
+                className="sm:hidden absolute right-2 top-1/2 -translate-y-1/2 z-10 p-2 bg-jerry-green-900/60 backdrop-blur-sm rounded-full border border-gold-500/20 text-parchment-300"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </button>
 
               {/* Dot navigation */}
               <div className="absolute bottom-5 left-0 right-0 flex justify-center gap-3">
