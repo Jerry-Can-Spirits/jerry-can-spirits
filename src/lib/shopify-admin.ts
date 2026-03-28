@@ -79,6 +79,10 @@ export async function createDiscountCode(
   }
 
   const priceRuleData = (await priceRuleRes.json()) as PriceRuleResponse;
+  if (!priceRuleData.price_rule) {
+    console.error('[shopify-admin] Unexpected price rule response — status:', priceRuleRes.status, '| body:', JSON.stringify(priceRuleData));
+    throw new Error('Price rule response missing price_rule object');
+  }
   const priceRuleId = priceRuleData.price_rule.id;
 
   // 2. Attach the discount code to the price rule
