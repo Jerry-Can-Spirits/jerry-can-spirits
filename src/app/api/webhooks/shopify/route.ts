@@ -47,10 +47,7 @@ async function fireKlaviyoEvent(
   });
   if (!res.ok) {
     const err = await res.text();
-    console.error(
-      `[webhook] Klaviyo event "${eventName}" failed${orderNumber ? ` (order #${orderNumber})` : ''} — status ${res.status}:`,
-      err,
-    );
+    console.error('[webhook] Klaviyo event failed — event:', eventName, '| order:', orderNumber ?? 'n/a', '| status:', res.status, '| response:', err);
   }
 }
 
@@ -144,7 +141,7 @@ async function handleOrderCreated(
         order.order_number,
       );
     } catch (err) {
-      console.error(`[webhook] Referral link generation failed for order #${order.order_number}:`, err);
+      console.error('[webhook] Referral link generation failed — order:', order.order_number, err);
       // non-blocking
     }
   }
