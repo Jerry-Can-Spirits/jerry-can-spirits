@@ -37,5 +37,13 @@
 			"database_name": "jerry-can-spirits-db",
 			"database_id": "35c6ef4c-fab0-4666-9065-052b84ecdb9a"
 		}
-	]
+	],
+	"observability": {
+		"enabled": true,
+		"logs": {
+			"enabled": true,
+			"head_sampling_rate": 1,
+			"invocation_logs": true
+		}
+	}
 }
