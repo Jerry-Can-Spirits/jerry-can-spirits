@@ -5,7 +5,7 @@
  * The REST Price Rules API was removed in Shopify API 2025-01.
  */
 
-const SHOP_DOMAIN = 'shop.jerrycanspirits.co.uk';
+const SHOP_DOMAIN = 'zaeiaw-5z.myshopify.com';
 const API_VERSION = '2025-10';
 
 const GRAPHQL_URL = `https://${SHOP_DOMAIN}/admin/api/${API_VERSION}/graphql.json`;

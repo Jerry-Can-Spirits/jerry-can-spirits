@@ -65,7 +65,7 @@ export interface ShopifyProduct {
 
 // ── Admin API ───────────────────────────────────────────────────────
 
-const SHOP_DOMAIN = 'shop.jerrycanspirits.co.uk';
+const SHOP_DOMAIN = 'zaeiaw-5z.myshopify.com';
 const API_VERSION = '2024-10';
 
 /**
