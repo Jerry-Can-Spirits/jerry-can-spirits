@@ -19,6 +19,7 @@ async function fireKlaviyoEvent(
   email: string,
   properties: Record<string, unknown>,
   firstName?: string,
+  orderNumber?: number,
 ): Promise<void> {
   const res = await fetch(`${KLAVIYO_API_BASE}/events/`, {
     method: 'POST',
@@ -46,7 +47,7 @@ async function fireKlaviyoEvent(
   });
   if (!res.ok) {
     const err = await res.text();
-    console.error(`[webhook] Klaviyo event "${eventName}" failed:`, err);
+    console.error('[webhook] Klaviyo event failed — event:', eventName, '| order:', orderNumber ?? 'n/a', '| status:', res.status, '| response:', err);
   }
 }
 
@@ -98,7 +99,9 @@ async function handleOrderCreated(
   }
 
   // Generate referral link for this buyer and fire Klaviyo event
-  if (order.email && klaviyoKey) {
+  if (!klaviyoKey) {
+    console.warn(`[webhook] KLAVIYO_PRIVATE_KEY not set — skipping Referral Link Generated event for order #${order.order_number}`);
+  } else if (order.email) {
     try {
       const email = order.email.toLowerCase();
       let referralCode: string;
@@ -135,9 +138,10 @@ async function handleOrderCreated(
         order.email,
         { share_url: shareUrl, referral_code: referralCode },
         firstName,
+        order.order_number,
       );
     } catch (err) {
-      console.error('[webhook] Referral link generation failed:', err);
+      console.error('[webhook] Referral link generation failed — order:', order.order_number, err);
       // non-blocking
     }
   }
@@ -244,12 +248,16 @@ async function handleReferralConversion(
   );
 
   // Notify the referrer via Klaviyo
-  if (klaviyoKey) {
+  if (!klaviyoKey) {
+    console.warn(`[webhook] KLAVIYO_PRIVATE_KEY not set — skipping Referral Reward Earned event for order #${order.order_number}`);
+  } else {
     await fireKlaviyoEvent(
       klaviyoKey,
       'Referral Reward Earned',
       referral.referrer_email,
       { reward_code: rewardCode, referee_order: order.order_number },
+      undefined,
+      order.order_number,
     );
   }
 
