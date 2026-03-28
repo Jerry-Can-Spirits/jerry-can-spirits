@@ -24,7 +24,6 @@ export default function CartDrawer() {
     isCartOpen,
     closeCart,
     updateQuantity,
-    removeItem,
     applyDiscountCode,
     updateAttributes,
     isLoading,
