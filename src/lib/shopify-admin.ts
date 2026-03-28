@@ -1,12 +1,14 @@
 /**
- * Shopify Admin REST API helpers for the referral scheme.
+ * Shopify Admin GraphQL API helpers for the referral scheme.
  *
- * Creates price rules and discount codes for £5-off single-use referral rewards.
- * Uses the same SHOP_DOMAIN and API_VERSION as shopify-webhooks.ts.
+ * Creates discount codes using the GraphQL Discounts API (2025-10).
+ * The REST Price Rules API was removed in Shopify API 2025-01.
  */
 
 const SHOP_DOMAIN = 'shop.jerrycanspirits.co.uk';
-const API_VERSION = '2024-10';
+const API_VERSION = '2025-10';
+
+const GRAPHQL_URL = `https://${SHOP_DOMAIN}/admin/api/${API_VERSION}/graphql.json`;
 
 // ── Referral Code Generation ────────────────────────────────────────
 
@@ -24,158 +26,169 @@ export function generateReferralCode(email: string): string {
   return `JCS-${prefix}-${timestamp}`;
 }
 
+// ── GraphQL response types ──────────────────────────────────────────
+
+interface DiscountUserError {
+  field: string[];
+  message: string;
+}
+
+interface CreateDiscountResult {
+  codeDiscountNode: { id: string } | null;
+  userErrors: DiscountUserError[];
+}
+
 // ── Discount Code Creation ──────────────────────────────────────────
-
-interface PriceRuleResponse {
-  price_rule: {
-    id: number;
-  };
-}
-
-interface DiscountCodeResponse {
-  discount_code: {
-    id: number;
-    code: string;
-  };
-}
 
 /**
  * Create a 10%-off single-use discount code in Shopify for a referred friend.
- * Creates a price rule first, then attaches a discount code to it.
+ * Uses GraphQL discountCodeBasicCreate mutation (REST Price Rules removed in 2025-01).
  */
 export async function createDiscountCode(
   code: string,
   adminToken: string,
-): Promise<{ priceRuleId: number; discountCodeId: number; code: string }> {
-  const baseUrl = `https://${SHOP_DOMAIN}/admin/api/${API_VERSION}`;
+): Promise<{ id: string; code: string }> {
   const headers = {
     'X-Shopify-Access-Token': adminToken,
     'Content-Type': 'application/json',
   };
 
-  // 1. Create a price rule (10% off, single use, for the referee/friend)
-  const priceRuleRes = await fetch(`${baseUrl}/price_rules.json`, {
+  const mutation = `
+    mutation CreateReferralDiscount($input: DiscountCodeBasicInput!) {
+      discountCodeBasicCreate(basicCodeDiscount: $input) {
+        codeDiscountNode {
+          id
+        }
+        userErrors {
+          field
+          message
+        }
+      }
+    }
+  `;
+
+  const variables = {
+    input: {
+      title: `Referral: ${code}`,
+      code,
+      usageLimit: 1,
+      appliesOncePerCustomer: true,
+      startsAt: new Date().toISOString(),
+      customerGets: {
+        value: { percentage: 0.10 },
+        items: { all: true },
+      },
+      customerSelection: { all: true },
+    },
+  };
+
+  const res = await fetch(GRAPHQL_URL, {
     method: 'POST',
     headers,
-    body: JSON.stringify({
-      price_rule: {
-        title: `Referral: ${code}`,
-        target_type: 'line_item',
-        target_selection: 'all',
-        allocation_method: 'across',
-        value_type: 'percentage',
-        value: '-10.0',
-        customer_selection: 'all',
-        usage_limit: 1,
-        once_per_customer: true,
-        starts_at: new Date().toISOString(),
-      },
-    }),
+    body: JSON.stringify({ query: mutation, variables }),
   });
 
-  if (!priceRuleRes.ok) {
-    const errText = await priceRuleRes.text();
-    throw new Error(`Failed to create price rule: ${priceRuleRes.status} ${errText}`);
+  if (!res.ok) {
+    const errText = await res.text();
+    throw new Error(`Shopify GraphQL request failed: ${res.status} ${errText}`);
   }
 
-  const priceRuleData = (await priceRuleRes.json()) as PriceRuleResponse;
-  if (!priceRuleData.price_rule) {
-    console.error('[shopify-admin] Unexpected price rule response — status:', priceRuleRes.status, '| body:', JSON.stringify(priceRuleData));
-    throw new Error('Price rule response missing price_rule object');
-  }
-  const priceRuleId = priceRuleData.price_rule.id;
-
-  // 2. Attach the discount code to the price rule
-  const discountRes = await fetch(
-    `${baseUrl}/price_rules/${priceRuleId}/discount_codes.json`,
-    {
-      method: 'POST',
-      headers,
-      body: JSON.stringify({
-        discount_code: { code },
-      }),
-    },
-  );
-
-  if (!discountRes.ok) {
-    const errText = await discountRes.text();
-    throw new Error(`Failed to create discount code: ${discountRes.status} ${errText}`);
-  }
-
-  const discountData = (await discountRes.json()) as DiscountCodeResponse;
-
-  return {
-    priceRuleId,
-    discountCodeId: discountData.discount_code.id,
-    code: discountData.discount_code.code,
+  const json = await res.json() as {
+    data?: { discountCodeBasicCreate?: CreateDiscountResult };
+    errors?: { message: string }[];
   };
+
+  if (json.errors?.length) {
+    throw new Error(`GraphQL error creating referral discount: ${json.errors.map(e => e.message).join(', ')}`);
+  }
+
+  const result = json.data?.discountCodeBasicCreate;
+  if (result?.userErrors?.length) {
+    throw new Error(`Failed to create referral discount: ${result.userErrors.map(e => e.message).join(', ')}`);
+  }
+
+  if (!result?.codeDiscountNode) {
+    throw new Error('Discount creation returned no node — unknown error');
+  }
+
+  return { id: result.codeDiscountNode.id, code };
 }
 
 /**
  * Create a £5-off single-use reward code for the referrer.
- * Combinable with other discounts (e.g. BLUELIGHT10) via combines_with.
+ * Combinable with order, product, and shipping discounts.
  */
 export async function createReferrerRewardCode(
   code: string,
   adminToken: string,
-): Promise<{ priceRuleId: number; discountCodeId: number; code: string }> {
-  const baseUrl = `https://${SHOP_DOMAIN}/admin/api/${API_VERSION}`;
+): Promise<{ id: string; code: string }> {
   const headers = {
     'X-Shopify-Access-Token': adminToken,
     'Content-Type': 'application/json',
   };
 
-  const priceRuleRes = await fetch(`${baseUrl}/price_rules.json`, {
+  const mutation = `
+    mutation CreateReferrerReward($input: DiscountCodeBasicInput!) {
+      discountCodeBasicCreate(basicCodeDiscount: $input) {
+        codeDiscountNode {
+          id
+        }
+        userErrors {
+          field
+          message
+        }
+      }
+    }
+  `;
+
+  const variables = {
+    input: {
+      title: `Referral Reward: ${code}`,
+      code,
+      usageLimit: 1,
+      appliesOncePerCustomer: true,
+      startsAt: new Date().toISOString(),
+      customerGets: {
+        value: { discountAmount: { amount: '5.00', appliesOnEachItem: false } },
+        items: { all: true },
+      },
+      customerSelection: { all: true },
+      combinesWith: {
+        orderDiscounts: true,
+        productDiscounts: true,
+        shippingDiscounts: true,
+      },
+    },
+  };
+
+  const res = await fetch(GRAPHQL_URL, {
     method: 'POST',
     headers,
-    body: JSON.stringify({
-      price_rule: {
-        title: `Referral Reward: ${code}`,
-        target_type: 'line_item',
-        target_selection: 'all',
-        allocation_method: 'across',
-        value_type: 'fixed_amount',
-        value: '-5.00',
-        customer_selection: 'all',
-        usage_limit: 1,
-        once_per_customer: true,
-        starts_at: new Date().toISOString(),
-        combines_with: {
-          order_discounts: true,
-          product_discounts: true,
-          shipping_discounts: true,
-        },
-      },
-    }),
+    body: JSON.stringify({ query: mutation, variables }),
   });
 
-  if (!priceRuleRes.ok) {
-    const errText = await priceRuleRes.text();
-    throw new Error(`Failed to create reward price rule: ${priceRuleRes.status} ${errText}`);
+  if (!res.ok) {
+    const errText = await res.text();
+    throw new Error(`Shopify GraphQL request failed: ${res.status} ${errText}`);
   }
 
-  const priceRuleData = (await priceRuleRes.json()) as PriceRuleResponse;
-  const priceRuleId = priceRuleData.price_rule.id;
-
-  const discountRes = await fetch(
-    `${baseUrl}/price_rules/${priceRuleId}/discount_codes.json`,
-    {
-      method: 'POST',
-      headers,
-      body: JSON.stringify({ discount_code: { code } }),
-    },
-  );
-
-  if (!discountRes.ok) {
-    const errText = await discountRes.text();
-    throw new Error(`Failed to create reward discount code: ${discountRes.status} ${errText}`);
-  }
-
-  const discountData = (await discountRes.json()) as DiscountCodeResponse;
-
-  return {
-    priceRuleId,
-    discountCodeId: discountData.discount_code.id,
-    code: discountData.discount_code.code,
+  const json = await res.json() as {
+    data?: { discountCodeBasicCreate?: CreateDiscountResult };
+    errors?: { message: string }[];
   };
+
+  if (json.errors?.length) {
+    throw new Error(`GraphQL error creating reward discount: ${json.errors.map(e => e.message).join(', ')}`);
+  }
+
+  const result = json.data?.discountCodeBasicCreate;
+  if (result?.userErrors?.length) {
+    throw new Error(`Failed to create reward discount: ${result.userErrors.map(e => e.message).join(', ')}`);
+  }
+
+  if (!result?.codeDiscountNode) {
+    throw new Error('Reward discount creation returned no node — unknown error');
+  }
+
+  return { id: result.codeDiscountNode.id, code };
 }
