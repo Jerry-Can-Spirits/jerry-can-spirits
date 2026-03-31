@@ -65,12 +65,12 @@ export default function ImageGallery({ images, placeholder = false }: ImageGalle
           key={index}
           className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl overflow-hidden border border-gold-500/20 hover:border-gold-400/40 transition-all duration-300"
         >
-          <div className="relative w-full h-48">
+          <div className="relative w-full aspect-[3/4] bg-jerry-green-900/60">
             <Image
               src={image.src}
               alt={image.alt}
               fill
-              className="object-cover"
+              className="object-contain p-4"
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
             />
           </div>
