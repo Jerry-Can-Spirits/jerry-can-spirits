@@ -697,7 +697,38 @@ Based in the UK, Jerry Can Spirits® is a small operation run by two mates who c
             <p className="text-parchment-300 text-center mb-12 max-w-2xl mx-auto">
               High-resolution product photography for press use.
             </p>
-            <ImageGallery images={[]} placeholder={true} />
+            <ImageGallery images={[
+              {
+                src: 'https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/beed84d3-c77d-4ecf-c85f-29719bdea000/public',
+                alt: 'Expedition Spiced Rum bottle — professional product photography',
+                title: 'Expedition Spiced Rum — Product Shot 1',
+                downloads: [
+                  { label: 'PNG', url: 'https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/beed84d3-c77d-4ecf-c85f-29719bdea000/f=png' },
+                  { label: 'JPG', url: 'https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/beed84d3-c77d-4ecf-c85f-29719bdea000/f=jpeg' },
+                  { label: 'WebP', url: 'https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/beed84d3-c77d-4ecf-c85f-29719bdea000/f=webp' },
+                ],
+              },
+              {
+                src: 'https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/fffd5ce1-6411-4ab4-6c32-aacf2caa1700/public',
+                alt: 'Expedition Spiced Rum bottle — professional product photography',
+                title: 'Expedition Spiced Rum — Product Shot 2',
+                downloads: [
+                  { label: 'PNG', url: 'https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/fffd5ce1-6411-4ab4-6c32-aacf2caa1700/f=png' },
+                  { label: 'JPG', url: 'https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/fffd5ce1-6411-4ab4-6c32-aacf2caa1700/f=jpeg' },
+                  { label: 'WebP', url: 'https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/fffd5ce1-6411-4ab4-6c32-aacf2caa1700/f=webp' },
+                ],
+              },
+              {
+                src: 'https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/8ad4c4c5-6c38-4342-c42a-652af5529f00/public',
+                alt: 'Expedition Spiced Rum bottle — professional product photography',
+                title: 'Expedition Spiced Rum — Product Shot 3',
+                downloads: [
+                  { label: 'PNG', url: 'https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/8ad4c4c5-6c38-4342-c42a-652af5529f00/f=png' },
+                  { label: 'JPG', url: 'https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/8ad4c4c5-6c38-4342-c42a-652af5529f00/f=jpeg' },
+                  { label: 'WebP', url: 'https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/8ad4c4c5-6c38-4342-c42a-652af5529f00/f=webp' },
+                ],
+              },
+            ]} />
           </section>
 
           {/* ==================== COMPANY INFORMATION SECTION ==================== */}
