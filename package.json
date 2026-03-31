@@ -43,11 +43,11 @@
     "tailwind-merge": "^3.5.0"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^4.20260317.1",
+    "@cloudflare/workers-types": "^4.20260329.1",
     "@eslint/eslintrc": "^3",
     "@next/bundle-analyzer": "^16.2.1",
     "@next/eslint-plugin-next": "^15.5.14",
-    "@opennextjs/cloudflare": "^1.17.1",
+    "@opennextjs/cloudflare": "^1.18.0",
     "@playwright/test": "^1.58.2",
     "@tailwindcss/typography": "^0.5.16",
     "@types/node": "^20.19.37",
