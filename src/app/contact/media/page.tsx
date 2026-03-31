@@ -703,9 +703,9 @@ Based in the UK, Jerry Can Spirits® is a small operation run by two mates who c
                 alt: 'Expedition Spiced Rum bottle — professional product photography',
                 title: 'Expedition Spiced Rum — Product Shot 1',
                 downloads: [
-                  { label: 'PNG', url: 'https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/beed84d3-c77d-4ecf-c85f-29719bdea000/f=png' },
-                  { label: 'JPG', url: 'https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/beed84d3-c77d-4ecf-c85f-29719bdea000/f=jpeg' },
-                  { label: 'WebP', url: 'https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/beed84d3-c77d-4ecf-c85f-29719bdea000/f=webp' },
+                  { label: 'PNG', url: '/api/media-download/?url=https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/beed84d3-c77d-4ecf-c85f-29719bdea000/f%3Dpng&filename=expedition-spiced-rum-shot-1.png' },
+                  { label: 'JPG', url: '/api/media-download/?url=https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/beed84d3-c77d-4ecf-c85f-29719bdea000/f%3Djpeg&filename=expedition-spiced-rum-shot-1.jpg' },
+                  { label: 'WebP', url: '/api/media-download/?url=https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/beed84d3-c77d-4ecf-c85f-29719bdea000/f%3Dwebp&filename=expedition-spiced-rum-shot-1.webp' },
                 ],
               },
               {
@@ -713,9 +713,9 @@ Based in the UK, Jerry Can Spirits® is a small operation run by two mates who c
                 alt: 'Expedition Spiced Rum bottle — professional product photography',
                 title: 'Expedition Spiced Rum — Product Shot 2',
                 downloads: [
-                  { label: 'PNG', url: 'https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/fffd5ce1-6411-4ab4-6c32-aacf2caa1700/f=png' },
-                  { label: 'JPG', url: 'https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/fffd5ce1-6411-4ab4-6c32-aacf2caa1700/f=jpeg' },
-                  { label: 'WebP', url: 'https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/fffd5ce1-6411-4ab4-6c32-aacf2caa1700/f=webp' },
+                  { label: 'PNG', url: '/api/media-download/?url=https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/fffd5ce1-6411-4ab4-6c32-aacf2caa1700/f%3Dpng&filename=expedition-spiced-rum-shot-2.png' },
+                  { label: 'JPG', url: '/api/media-download/?url=https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/fffd5ce1-6411-4ab4-6c32-aacf2caa1700/f%3Djpeg&filename=expedition-spiced-rum-shot-2.jpg' },
+                  { label: 'WebP', url: '/api/media-download/?url=https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/fffd5ce1-6411-4ab4-6c32-aacf2caa1700/f%3Dwebp&filename=expedition-spiced-rum-shot-2.webp' },
                 ],
               },
               {
@@ -723,9 +723,9 @@ Based in the UK, Jerry Can Spirits® is a small operation run by two mates who c
                 alt: 'Expedition Spiced Rum bottle — professional product photography',
                 title: 'Expedition Spiced Rum — Product Shot 3',
                 downloads: [
-                  { label: 'PNG', url: 'https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/8ad4c4c5-6c38-4342-c42a-652af5529f00/f=png' },
-                  { label: 'JPG', url: 'https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/8ad4c4c5-6c38-4342-c42a-652af5529f00/f=jpeg' },
-                  { label: 'WebP', url: 'https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/8ad4c4c5-6c38-4342-c42a-652af5529f00/f=webp' },
+                  { label: 'PNG', url: '/api/media-download/?url=https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/8ad4c4c5-6c38-4342-c42a-652af5529f00/f%3Dpng&filename=expedition-spiced-rum-shot-3.png' },
+                  { label: 'JPG', url: '/api/media-download/?url=https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/8ad4c4c5-6c38-4342-c42a-652af5529f00/f%3Djpeg&filename=expedition-spiced-rum-shot-3.jpg' },
+                  { label: 'WebP', url: '/api/media-download/?url=https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/8ad4c4c5-6c38-4342-c42a-652af5529f00/f%3Dwebp&filename=expedition-spiced-rum-shot-3.webp' },
                 ],
               },
             ]} />
