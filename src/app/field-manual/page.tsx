@@ -5,7 +5,7 @@ import { client } from '@/sanity/client'
 import { fieldManualCountsQuery } from '@/sanity/queries'
 import Breadcrumbs from '@/components/Breadcrumbs'
 import ScrollReveal from '@/components/ScrollReveal'
-import { OG_IMAGE } from '@/lib/og'
+import { baseOpenGraph } from '@/lib/og'
 
 // Round down to nearest 10
 function roundDownToTen(n: number): number {
@@ -19,9 +19,10 @@ export const metadata: Metadata = {
     canonical: 'https://jerrycanspirits.co.uk/field-manual/',
   },
   openGraph: {
+    ...baseOpenGraph,
     title: "Field Manual | Jerry Can Spirits®",
     description: "Free cocktail recipes for rum, gin, whisky and more. Bar equipment guides and ingredient breakdowns. No jargon, just great drinks.",
-    images: OG_IMAGE,
+    url: 'https://jerrycanspirits.co.uk/field-manual/',
   },
 }
 

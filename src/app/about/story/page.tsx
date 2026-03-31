@@ -5,6 +5,7 @@ import BackToTop from '@/components/BackToTop'
 import Breadcrumbs from '@/components/Breadcrumbs'
 import StructuredData from '@/components/StructuredData'
 import ScrollReveal from '@/components/ScrollReveal'
+import { baseOpenGraph } from '@/lib/og'
 
 // Article schema for the story page
 const articleSchema = {
@@ -43,8 +44,10 @@ export const metadata: Metadata = {
     canonical: 'https://jerrycanspirits.co.uk/about/story/',
   },
   openGraph: {
+    ...baseOpenGraph,
     title: "Our Story | Jerry Can Spirits®",
     description: "How two Royal Signals veterans built a craft spirits company from scratch. No shortcuts. No investors. Expedition Spiced, made with real ingredients in Wales.",
+    url: 'https://jerrycanspirits.co.uk/about/story/',
   },
   robots: {
     index: true,

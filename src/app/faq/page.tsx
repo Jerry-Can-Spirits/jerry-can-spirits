@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import StructuredData from '@/components/StructuredData'
 import ScrollReveal from '@/components/ScrollReveal'
-import { OG_IMAGE } from '@/lib/og'
+import { baseOpenGraph } from '@/lib/og'
 
 export const metadata: Metadata = {
   title: "Frequently Asked Questions",
@@ -11,9 +11,10 @@ export const metadata: Metadata = {
     canonical: "https://jerrycanspirits.co.uk/faq/",
   },
   openGraph: {
+    ...baseOpenGraph,
     title: "Frequently Asked Questions | Jerry Can Spirits®",
     description: "Common questions about Jerry Can Spirits. Ingredients, shipping, age verification, cocktail recipes, and everything in between.",
-    images: OG_IMAGE,
+    url: "https://jerrycanspirits.co.uk/faq/",
   },
 }
 

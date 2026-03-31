@@ -1,12 +1,19 @@
 import type { Metadata } from 'next'
 import TradeEnquiryForm from '@/components/TradeEnquiryForm'
 import StructuredData from '@/components/StructuredData'
+import { baseOpenGraph } from '@/lib/og'
 
 export const metadata: Metadata = {
   title: 'Stock Expedition Spiced Rum | Trade Enquiries',
   description: 'Trade pricing, serve economics and partnership information for bars, restaurants and hotels. Enquire to stock Expedition Spiced Rum.',
   alternates: {
     canonical: 'https://jerrycanspirits.co.uk/trade/',
+  },
+  openGraph: {
+    ...baseOpenGraph,
+    title: 'Stock Expedition Spiced Rum | Trade Enquiries | Jerry Can Spirits®',
+    description: 'Trade pricing, serve economics and partnership information for bars, restaurants and hotels. Enquire to stock Expedition Spiced Rum.',
+    url: 'https://jerrycanspirits.co.uk/trade/',
   },
 }
 

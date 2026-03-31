@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import Breadcrumbs from '@/components/Breadcrumbs'
 import { client } from '@/sanity/client'
+import { baseOpenGraph } from '@/lib/og'
 import {
   cocktailsListQuery,
   ingredientsListQuery,
@@ -14,6 +15,12 @@ export const metadata: Metadata = {
   description: 'A complete index of all pages on the Jerry Can Spirits website — cocktail recipes, ingredient guides, bar equipment, and more.',
   alternates: {
     canonical: 'https://jerrycanspirits.co.uk/sitemap/',
+  },
+  openGraph: {
+    ...baseOpenGraph,
+    title: 'Site Map | Jerry Can Spirits®',
+    description: 'A complete index of all pages on the Jerry Can Spirits website — cocktail recipes, ingredient guides, bar equipment, and more.',
+    url: 'https://jerrycanspirits.co.uk/sitemap/',
   },
 }
 

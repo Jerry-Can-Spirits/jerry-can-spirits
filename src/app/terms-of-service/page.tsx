@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import StructuredData from '@/components/StructuredData'
+import { baseOpenGraph } from '@/lib/og'
 
 // WebPage schema for terms of service
 const webPageSchema = {
@@ -26,6 +27,12 @@ export const metadata: Metadata = {
   description: "Jerry Can Spirits® Terms of Service and conditions of use. Legal terms governing the use of our website and purchase of our premium spirits.",
   alternates: {
     canonical: 'https://jerrycanspirits.co.uk/terms-of-service/',
+  },
+  openGraph: {
+    ...baseOpenGraph,
+    title: 'Terms of Service | Jerry Can Spirits®',
+    description: 'Jerry Can Spirits® Terms of Service and conditions of use. Legal terms governing the use of our website and purchase of our premium spirits.',
+    url: 'https://jerrycanspirits.co.uk/terms-of-service/',
   },
   robots: {
     index: true,

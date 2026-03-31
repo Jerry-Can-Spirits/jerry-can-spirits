@@ -1,11 +1,18 @@
 import type { Metadata } from 'next'
 import Image from 'next/image'
+import { baseOpenGraph } from '@/lib/og'
 
 export const metadata: Metadata = {
   title: 'Armed Forces Covenant',
   description: "Jerry Can Spirits is a veteran-owned British spirits company committed to the Armed Forces Covenant, supporting serving personnel, veterans, and military families.",
   alternates: {
     canonical: 'https://jerrycanspirits.co.uk/armed-forces-covenant/',
+  },
+  openGraph: {
+    ...baseOpenGraph,
+    title: 'Armed Forces Covenant | Jerry Can Spirits®',
+    description: 'Jerry Can Spirits is a veteran-owned British spirits company committed to the Armed Forces Covenant, supporting serving personnel, veterans, and military families.',
+    url: 'https://jerrycanspirits.co.uk/armed-forces-covenant/',
   },
   robots: {
     index: true,

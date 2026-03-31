@@ -3,7 +3,7 @@ import Breadcrumbs from '@/components/Breadcrumbs'
 import StructuredData from '@/components/StructuredData'
 import BatchCard from '@/components/BatchCard'
 import { getD1, getAllBatches, getBatchStats } from '@/lib/d1'
-import { OG_IMAGE } from '@/lib/og'
+import { baseOpenGraph } from '@/lib/og'
 
 export const dynamic = 'force-dynamic'
 
@@ -15,10 +15,10 @@ export const metadata: Metadata = {
     canonical: 'https://jerrycanspirits.co.uk/batch/',
   },
   openGraph: {
-    title: 'Check Your Bottle | Jerry Can Spirits\u00ae',
-    description:
-      'Verify your bottle of Jerry Can Spirits rum. View batch details, tasting notes, and production provenance.',
-    images: OG_IMAGE,
+    ...baseOpenGraph,
+    title: 'Check Your Bottle | Jerry Can Spirits®',
+    description: 'Verify your bottle of Jerry Can Spirits rum. View batch details, tasting notes, and production provenance.',
+    url: 'https://jerrycanspirits.co.uk/batch/',
   },
 }
 
