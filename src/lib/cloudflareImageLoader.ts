@@ -51,7 +51,7 @@ export default function cloudflareImageLoader({
   // Handle Sanity CDN images - add width and quality parameters
   if (src.includes('cdn.sanity.io')) {
     const url = new URL(src)
-    const cappedWidth = Math.min(width, 1920)
+    const cappedWidth = Math.min(width, 1200)
     url.searchParams.set('w', cappedWidth.toString())
     url.searchParams.set('q', quality.toString())
     url.searchParams.set('auto', 'format') // Auto-select best format (WebP/AVIF)
