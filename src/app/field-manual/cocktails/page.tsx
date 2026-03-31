@@ -62,6 +62,24 @@ export default async function CocktailsPage() {
           ]}
         />
       </div>
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
+        <div className="text-center mb-12">
+          <div className="inline-block px-4 py-2 bg-jerry-green-800/60 backdrop-blur-sm rounded-full border border-gold-500/30 mb-6">
+            <span className="text-gold-300 text-sm font-semibold uppercase tracking-widest">
+              Cocktail Collection
+            </span>
+          </div>
+          <h1 className="text-4xl sm:text-6xl font-serif font-bold text-white mb-6">
+            Master the Classics
+            <br />
+            <span className="text-gold-300">Engineer New Adventures</span>
+          </h1>
+          <p className="text-xl text-parchment-300 max-w-3xl mx-auto leading-relaxed">
+            Each cocktail is carefully crafted to highlight quality spirits and balanced flavours.
+            Start with the classics, then explore our signature variations designed for the modern explorer.
+          </p>
+        </div>
+      </section>
       <Suspense>
         <CocktailsClient cocktails={cocktails} />
       </Suspense>
