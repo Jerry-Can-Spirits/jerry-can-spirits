@@ -7,3 +7,10 @@ export const OG_IMAGE = [
     alt: 'Jerry Can Spirits® — Veteran-Owned British Rum, distilled in Wales',
   },
 ]
+
+export const baseOpenGraph = {
+  type: 'website' as const,
+  locale: 'en_GB',
+  siteName: 'Jerry Can Spirits®',
+  images: OG_IMAGE,
+}

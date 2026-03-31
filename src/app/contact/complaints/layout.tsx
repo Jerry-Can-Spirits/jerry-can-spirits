@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { baseOpenGraph } from '@/lib/og'
 
 export const metadata: Metadata = {
   title: 'Complaints & Issue Resolution',
@@ -7,6 +8,9 @@ export const metadata: Metadata = {
     canonical: 'https://jerrycanspirits.co.uk/contact/complaints/',
   },
   openGraph: {
+    ...baseOpenGraph,
+    title: 'Complaints & Issue Resolution | Jerry Can Spirits®',
+    description: 'Submit a complaint or report an issue with your Jerry Can Spirits order. We take every concern seriously and resolve it quickly.',
     url: 'https://jerrycanspirits.co.uk/contact/complaints/',
   },
   robots: {

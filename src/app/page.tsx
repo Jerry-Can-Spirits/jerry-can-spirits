@@ -14,6 +14,7 @@ import TickerStrip from "@/components/TickerStrip";
 import NewsletterSignup from "@/components/NewsletterSignup";
 import Link from 'next/link'
 import type { Metadata } from 'next'
+import { baseOpenGraph } from '@/lib/og'
 
 // Lazy load TrustpilotWidget (below the fold)
 const TrustpilotWidget = dynamic(() => import('@/components/TrustpilotWidget'), {
@@ -31,8 +32,10 @@ export const metadata: Metadata = {
     canonical: "https://jerrycanspirits.co.uk/",
   },
   openGraph: {
+    ...baseOpenGraph,
     title: "Jerry Can Spirits | British Spiced Rum",
     description: "Two Royal Signals veterans, one spiced rum. Real botanicals, pot-distilled in Wales. No artificial flavouring. No shortcuts. Pre-order now for April 2026.",
+    url: "https://jerrycanspirits.co.uk/",
   },
 }
 
