@@ -2,12 +2,19 @@ import type { Metadata } from 'next'
 import Image from 'next/image'
 import StockistFinder from '@/components/StockistFinder'
 import StructuredData from '@/components/StructuredData'
+import { baseOpenGraph } from '@/lib/og'
 
 export const metadata: Metadata = {
   title: 'Find a Stockist',
   description: 'Find Jerry Can Spirits Expedition Spiced Rum near you. Enter your postcode to locate your nearest stockist.',
   alternates: {
     canonical: 'https://jerrycanspirits.co.uk/stockists/',
+  },
+  openGraph: {
+    ...baseOpenGraph,
+    title: 'Find a Stockist | Jerry Can Spirits®',
+    description: 'Find Jerry Can Spirits Expedition Spiced Rum near you. Enter your postcode to locate your nearest stockist.',
+    url: 'https://jerrycanspirits.co.uk/stockists/',
   },
 }
 

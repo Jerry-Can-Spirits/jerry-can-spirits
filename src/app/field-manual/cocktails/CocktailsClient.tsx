@@ -384,29 +384,7 @@ export default function CocktailsClient({ cocktails }: CocktailsClientProps) {
   }
 
   return (
-    <main className="min-h-screen py-20">
-      {/* Hero Section */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
-        <div className="text-center mb-12">
-          <div className="inline-block px-4 py-2 bg-jerry-green-800/60 backdrop-blur-sm rounded-full border border-gold-500/30 mb-6">
-            <span className="text-gold-300 text-sm font-semibold uppercase tracking-widest">
-              Cocktail Collection
-            </span>
-          </div>
-
-          <h1 className="text-4xl sm:text-6xl font-serif font-bold text-white mb-6">
-            Master the Classics
-            <br />
-            <span className="text-gold-300">Engineer New Adventures</span>
-          </h1>
-
-          <p className="text-xl text-parchment-300 max-w-3xl mx-auto leading-relaxed">
-            Each cocktail is carefully crafted to highlight quality spirits and balanced flavours.
-            Start with the classics, then explore our signature variations designed for the modern explorer.
-          </p>
-        </div>
-      </section>
-
+    <main className="min-h-screen pb-20">
       {/* Filters Section */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
         <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">

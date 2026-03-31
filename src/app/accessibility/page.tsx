@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import StructuredData from '@/components/StructuredData'
+import { baseOpenGraph } from '@/lib/og'
 
 // WebPage schema for accessibility statement
 const webPageSchema = {
@@ -26,6 +27,12 @@ export const metadata: Metadata = {
   description: "Jerry Can Spirits accessibility statement and commitment to providing an inclusive web experience for all users, including those with disabilities.",
   alternates: {
     canonical: 'https://jerrycanspirits.co.uk/accessibility/',
+  },
+  openGraph: {
+    ...baseOpenGraph,
+    title: 'Accessibility Statement | Jerry Can Spirits®',
+    description: 'Jerry Can Spirits accessibility statement and commitment to providing an inclusive web experience for all users, including those with disabilities.',
+    url: 'https://jerrycanspirits.co.uk/accessibility/',
   },
   robots: {
     index: true,

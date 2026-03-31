@@ -22,7 +22,6 @@ import { CartProvider } from "@/contexts/CartContext";
 import { OrganizationSchema, WebsiteSchema } from "@/components/StructuredData";
 import FacebookPixel, { PixelPageView } from "@/components/FacebookPixel";
 import GoogleTag from "@/components/GoogleTag";
-import TikTokPixel from "@/components/TikTokPixel";
 import KlaviyoScript from "@/components/KlaviyoScript";
 import MetricoolScript from "@/components/MetricoolScript";
 import SentryReplayConsent from "@/components/SentryReplayConsent";
@@ -174,7 +173,6 @@ export default function RootLayout({
         <FacebookPixel />
         <PixelPageView />
         <GoogleTag />
-        <TikTokPixel />
         <KlaviyoScript />
         <MetricoolScript />
         <SentryReplayConsent />
