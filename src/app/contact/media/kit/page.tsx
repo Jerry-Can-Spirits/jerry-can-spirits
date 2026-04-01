@@ -111,7 +111,7 @@ export default function MediaKitPage() {
                 { label: 'Location', value: 'United Kingdom' },
                 { label: 'Launch Date', value: '6 April 2026' },
                 { label: 'Heritage', value: 'Royal Corps of Signals' },
-                { label: 'Company No.', value: '1661877' },
+                { label: 'Company No.', value: '16618770' },
                 { label: 'Trademark', value: 'UK00004263767' },
               ].map((fact) => (
                 <div key={fact.label} className="border border-jerry-green-200 rounded-lg p-2">
@@ -220,7 +220,7 @@ export default function MediaKitPage() {
                   />
                 </div>
                 <div>
-                  <h3 className="text-sm font-bold text-jerry-green-900">Rhys</h3>
+                  <h3 className="text-sm font-bold text-jerry-green-900">Rhys Williams</h3>
                   <p className="text-xs text-gold-600 font-medium mb-1">Co-Founder & Director</p>
                   <p className="text-xs text-jerry-green-700 leading-relaxed">
                     Royal Signals veteran (2011–2016), F1 onboard comms, live events telecoms. Leads recipe development and production.
@@ -262,7 +262,7 @@ export default function MediaKitPage() {
             {/* Footer */}
             <div className="mt-8 pt-4 border-t border-jerry-green-200 text-center">
               <p className="text-[10px] text-jerry-green-400">
-                Jerry Can Spirits® | jerrycanspirits.co.uk | press@jerrycanspirits.co.uk | Company No. 1661877
+                Jerry Can Spirits® | jerrycanspirits.co.uk | press@jerrycanspirits.co.uk | Company No. 16618770
               </p>
             </div>
           </section>

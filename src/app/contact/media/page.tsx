@@ -102,7 +102,7 @@ export default function MediaContact() {
     { label: 'Founded', value: '2025' },
     { label: 'Location', value: 'United Kingdom' },
     { label: 'Trademark', value: 'UK00004263767' },
-    { label: 'Company Number', value: '1661877' },
+    { label: 'Company Number', value: '16618770' },
     { label: 'Product', value: 'Expedition Spiced Rum' },
     { label: 'Heritage', value: 'Royal Corps of Signals' },
   ]
