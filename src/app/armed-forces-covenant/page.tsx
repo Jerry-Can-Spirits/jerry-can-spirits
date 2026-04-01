@@ -204,7 +204,7 @@ export default function ArmedForcesCovenant() {
                 Housing:
               </h3>
               <ul className="list-disc list-inside text-white space-y-2 mb-6">
-                <li>Supporting armed forces housing charities through our annual profit-sharing programme (5% of net profits)</li>
+                <li>Supporting veteran housing organisations through fundraising and awareness</li>
                 <li>Supporting organisations providing emergency accommodation for veterans facing homelessness</li>
                 <li>Contributing to programmes helping veterans access suitable housing in civilian communities</li>
               </ul>
