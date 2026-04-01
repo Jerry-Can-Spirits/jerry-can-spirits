@@ -4,9 +4,10 @@ import Image from 'next/image'
 import { notFound } from 'next/navigation'
 import Breadcrumbs from '@/components/Breadcrumbs'
 import BatchDetails from '@/components/BatchDetails'
+import BatchIngredients from '@/components/BatchIngredients'
 import BottleLookup from '@/components/BottleLookup'
 import ShareButton from '@/components/ShareButton'
-import { getD1, getBatch, getBatchStats } from '@/lib/d1'
+import { getD1, getBatch, getBatchStats, getBatchIngredients } from '@/lib/d1'
 import { client } from '@/sanity/client'
 import { featuredCocktailsQuery } from '@/sanity/queries'
 
@@ -72,10 +73,11 @@ export default async function BatchDetailPage({ params }: PageProps) {
   const batchId = `batch-${batchNumber}`
 
   const db = await getD1()
-  const [batch, stats, cocktails] = await Promise.all([
+  const [batch, stats, cocktails, ingredients] = await Promise.all([
     getBatch(db, batchId),
     getBatchStats(db, batchId),
     client.fetch<FeaturedCocktail[]>(featuredCocktailsQuery),
+    getBatchIngredients(db, batchId),
   ])
 
   if (!batch) notFound()
@@ -130,6 +132,11 @@ export default async function BatchDetailPage({ params }: PageProps) {
           {/* Main content */}
           <div className="lg:col-span-2">
             <BatchDetails batch={batch} stats={stats} />
+            {ingredients.length > 0 && (
+              <div className="mt-8">
+                <BatchIngredients ingredients={ingredients} />
+              </div>
+            )}
           </div>
 
           {/* Sidebar */}
