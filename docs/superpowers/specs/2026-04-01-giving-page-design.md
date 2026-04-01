@@ -37,7 +37,7 @@ Two new D1 tables added via a single migration (`0008_charity_tables.sql`). Both
 | Column | Type | Notes |
 |---|---|---|
 | `id` | TEXT PRIMARY KEY | e.g. `2026-raf-benevolent-q1` |
-| `charity_id` | TEXT NOT NULL REFERENCES charities(id) | FK → charities |
+| `charity_id` | TEXT NOT NULL REFERENCES charities(id) | FK → charities (declarative only — SQLite does not enforce FKs by default; data integrity maintained via migration discipline) |
 | `amount_gbp` | REAL | Nullable — for non-monetary contributions |
 | `year` | INTEGER NOT NULL | e.g. `2026` |
 | `period_description` | TEXT NOT NULL | e.g. `Q1 2026`, `Year ending April 2026` |
@@ -75,6 +75,7 @@ CREATE INDEX IF NOT EXISTS idx_charity_contributions_charity_id
 
 CREATE INDEX IF NOT EXISTS idx_charity_contributions_year
   ON charity_contributions(year DESC);
+-- Note: DESC in index column definitions requires SQLite 3.33.0+ (2020). D1 supports this.
 ```
 
 Both tables start empty. No seed data.
@@ -156,7 +157,7 @@ export async function getCharityContributions(
 Server component. Props: `{ charity: Charity }`.
 
 Layout:
-- If `logo_url` non-null: logo image at top (max height 80px, `object-contain`)
+- If `logo_url` non-null: logo image at top — use `next/image` with `fill` inside a `relative h-20 w-full mb-4` container, `object-contain`, `sizes="(max-width: 768px) 100vw, 50vw"`
 - Charity name: `text-white font-semibold text-lg`
 - Description: `text-parchment-300 text-sm leading-relaxed`
 - If `website_url` non-null: "Donate directly" link — `text-gold-400 text-sm hover:text-gold-300`, opens in new tab with `rel="noopener noreferrer"`
@@ -169,8 +170,8 @@ Server component. Props: `{ contributions: CharityContribution[], charities: Cha
 
 Renders a list of contribution rows. Each row:
 - Period: `text-parchment-500 text-sm`
-- Charity name (resolved from charities array by `charity_id`): `text-white font-medium`
-- Amount: `text-gold-400 font-semibold` — formatted as `£X,XXX` if non-null, otherwise "Non-monetary contribution"
+- Charity name (resolved from charities array by `charity_id`): `text-white font-medium` — if `charity_id` has no matching entry in the charities array (should not occur via normal migration workflow but SQLite does not enforce the FK), render the `charity_id` string as a fallback
+- Amount: `text-gold-400 font-semibold` — if non-null, format with `amount_gbp.toLocaleString('en-GB', { style: 'currency', currency: 'GBP', minimumFractionDigits: 0, maximumFractionDigits: 2 })`; if null, render "Non-monetary contribution"
 - Notes: `text-parchment-400 text-sm` — rendered only if non-null
 
 Grouped by year with a year heading: `text-xl font-serif font-bold text-white mb-4`
@@ -185,11 +186,19 @@ Server component. `dynamic = 'force-dynamic'`.
 
 ### Metadata
 
+Static export (not `generateMetadata` — metadata does not depend on fetched data):
+
 ```typescript
-title: "Where the 5% Goes | Jerry Can Spirits®"
-description: "Jerry Can Spirits donates 5% of profits to armed forces charities. A transparent record of who receives what, and when."
-canonical: "https://jerrycanspirits.co.uk/giving/"
+export const metadata: Metadata = {
+  title: "Where the 5% Goes | Jerry Can Spirits®",
+  description: "Jerry Can Spirits donates 5% of profits to armed forces charities. A transparent record of who receives what, and when.",
+  alternates: {
+    canonical: "https://jerrycanspirits.co.uk/giving/",
+  },
+}
 ```
+
+No `openGraph` block — omitted intentionally for simplicity.
 
 ### Data fetching
 
