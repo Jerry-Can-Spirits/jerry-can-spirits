@@ -32,7 +32,7 @@ CREATE TABLE IF NOT EXISTS batch_ingredients (
   id TEXT PRIMARY KEY,
   batch_id TEXT NOT NULL REFERENCES batches(id),
   name TEXT NOT NULL,
-  origin TEXT NOT NULL,
+  origin TEXT,
   supplier TEXT,
   notes TEXT,
   sort_order INTEGER NOT NULL DEFAULT 0,
