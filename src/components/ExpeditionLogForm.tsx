@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, useState } from 'react'
+import { useState } from 'react'
 import Script from 'next/script'
 
 interface Props {
@@ -8,7 +8,6 @@ interface Props {
 }
 
 export default function ExpeditionLogForm({ batchId }: Props) {
-  const formRef = useRef<HTMLFormElement>(null)
   const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle')
   const [errorMessage, setErrorMessage] = useState('')
 
@@ -73,7 +72,7 @@ export default function ExpeditionLogForm({ batchId }: Props) {
         src="https://challenges.cloudflare.com/turnstile/v0/api.js"
         strategy="lazyOnload"
       />
-      <form ref={formRef} onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label htmlFor="log-name" className="block text-parchment-400 text-sm mb-1">
             Your name
