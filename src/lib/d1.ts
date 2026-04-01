@@ -185,3 +185,43 @@ export async function getBatchIngredients(
     .all<BatchIngredient>();
   return result.results;
 }
+
+// ── Charity Queries ──────────────────────────────────────────────────
+
+export interface Charity {
+  id: string;
+  name: string;
+  description: string;
+  logo_url: string | null;
+  website_url: string | null;
+  sort_order: number;
+}
+
+export interface CharityContribution {
+  id: string;
+  charity_id: string;
+  amount_gbp: number | null;
+  year: number;
+  period_description: string;
+  notes: string | null;
+}
+
+export async function getCharities(db: D1Database): Promise<Charity[]> {
+  const result = await db
+    .prepare(
+      'SELECT id, name, description, logo_url, website_url, sort_order FROM charities ORDER BY sort_order ASC',
+    )
+    .all<Charity>();
+  return result.results;
+}
+
+export async function getCharityContributions(
+  db: D1Database,
+): Promise<CharityContribution[]> {
+  const result = await db
+    .prepare(
+      'SELECT id, charity_id, amount_gbp, year, period_description, notes FROM charity_contributions ORDER BY year DESC, created_at DESC',
+    )
+    .all<CharityContribution>();
+  return result.results;
+}
