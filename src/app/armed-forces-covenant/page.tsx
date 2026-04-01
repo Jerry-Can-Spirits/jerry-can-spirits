@@ -204,7 +204,7 @@ export default function ArmedForcesCovenant() {
                 Housing:
               </h3>
               <ul className="list-disc list-inside text-white space-y-2 mb-6">
-                <li>Supporting armed forces housing charities through our annual profit-sharing programme (5-15% of net profits)</li>
+                <li>Supporting armed forces housing charities through our annual profit-sharing programme (5% of net profits)</li>
                 <li>Supporting organisations providing emergency accommodation for veterans facing homelessness</li>
                 <li>Contributing to programmes helping veterans access suitable housing in civilian communities</li>
               </ul>
@@ -228,7 +228,7 @@ export default function ArmedForcesCovenant() {
                 Charitable Commitment:
               </h4>
               <ul className="list-disc list-inside text-white space-y-2 mb-4">
-                <li>Donating 5-15% of annual net profits to vetted armed forces charities, with transparent annual reporting of contributions and impact</li>
+                <li>Donating 5% of annual net profits to vetted armed forces charities, with transparent annual reporting of contributions and impact</li>
                 <li>Prioritising organisations supporting veteran mental health, transition services, wounded personnel, and military family welfare</li>
                 <li>Establishing long-term partnerships with 3-5 core military charities rather than dispersed one-off donations</li>
               </ul>
