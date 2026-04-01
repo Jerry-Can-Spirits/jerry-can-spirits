@@ -13,6 +13,7 @@ import { getCloudflareContext } from '@opennextjs/cloudflare';
 export interface Batch {
   id: string;
   name: string;
+  product: string;
   cask_type: string | null;
   distillation_date: string | null;
   bottling_date: string | null;
@@ -158,4 +159,29 @@ export async function getBatchStats(db: D1Database, batchId: string): Promise<Ba
     sold: counts?.sold ?? 0,
     days_aged: daysAged,
   };
+}
+
+// ── Ingredient Queries ───────────────────────────────────────────────
+
+export interface BatchIngredient {
+  id: string;
+  batch_id: string;
+  name: string;
+  origin: string | null;
+  supplier: string | null;
+  notes: string | null;
+  sort_order: number;
+}
+
+export async function getBatchIngredients(
+  db: D1Database,
+  batchId: string,
+): Promise<BatchIngredient[]> {
+  const result = await db
+    .prepare(
+      'SELECT id, batch_id, name, origin, supplier, notes, sort_order FROM batch_ingredients WHERE batch_id = ? ORDER BY sort_order ASC',
+    )
+    .bind(batchId)
+    .all<BatchIngredient>();
+  return result.results;
 }
