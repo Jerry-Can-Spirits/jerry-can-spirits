@@ -1,7 +1,6 @@
 // src/app/api/expedition-log/route.ts
 import { NextResponse } from 'next/server'
 import { getCloudflareContext } from '@opennextjs/cloudflare'
-import { getD1 } from '@/lib/d1'
 
 interface RequestBody {
   name: string
@@ -40,13 +39,14 @@ export async function POST(request: Request) {
 
     if (!name) return NextResponse.json({ error: 'Name is required.' }, { status: 400 })
     if (!batch_id?.trim()) return NextResponse.json({ error: 'Batch ID is required.' }, { status: 400 })
+    if (batch_id.trim().length > 50) return NextResponse.json({ error: 'Batch ID is invalid.' }, { status: 400 })
     if (!turnstileToken?.trim()) return NextResponse.json({ error: 'Bot check token is required.' }, { status: 400 })
     if (name.length > 100) return NextResponse.json({ error: 'Name must be 100 characters or fewer.' }, { status: 400 })
     if (location.length > 100) return NextResponse.json({ error: 'Location must be 100 characters or fewer.' }, { status: 400 })
     if (message.length > 500) return NextResponse.json({ error: 'Message must be 500 characters or fewer.' }, { status: 400 })
 
     // Rate limiting (best-effort)
-    const fwd = request.headers.get('x-forwarded-for') || request.headers.get('cf-connecting-ip') || 'unknown'
+    const fwd = request.headers.get('cf-connecting-ip') || request.headers.get('x-forwarded-for') || 'unknown'
     const ip = fwd.split(',')[0].trim()
     const now = Date.now()
     const timestamps = submissionTimestamps.get(ip) || []
@@ -57,10 +57,10 @@ export async function POST(request: Request) {
     recent.push(now)
     submissionTimestamps.set(ip, recent)
 
-    // Access Cloudflare secrets
+    // Access Cloudflare env (DB + secrets in one call)
     const { env } = await getCloudflareContext()
-    const TURNSTILE_SECRET_KEY = env.TURNSTILE_SECRET_KEY as string | undefined
-    const MAPBOX_SECRET_TOKEN = env.MAPBOX_SECRET_TOKEN as string | undefined
+    const TURNSTILE_SECRET_KEY = env.TURNSTILE_SECRET_KEY
+    const MAPBOX_SECRET_TOKEN = env.MAPBOX_SECRET_TOKEN
 
     if (!TURNSTILE_SECRET_KEY) {
       console.error('TURNSTILE_SECRET_KEY not configured')
@@ -98,7 +98,7 @@ export async function POST(request: Request) {
     }
 
     // Insert
-    const db = await getD1()
+    const db = env.DB
     const id = crypto.randomUUID()
     await db
       .prepare(
