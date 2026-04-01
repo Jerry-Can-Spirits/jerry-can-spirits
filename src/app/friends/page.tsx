@@ -33,6 +33,14 @@ const communityPartners = [
     logo: "https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/040727be-1e59-4528-ebc5-c0472f589300/public",
   },
   {
+    name: "Trust A Veteran®",
+    location: "United Kingdom",
+    description: "Trust A Veteran® is a directory connecting people with high quality, reliable businesses owned and run by Armed Forces veterans. The values at the heart of the directory — loyalty, integrity, discipline, courage, selfless commitment, respect — are the same ones that shaped everyone listed in it. We're a member because it means something.",
+    website: "https://www.trustaveteran.com/",
+    speciality: "Veteran Business Directory",
+    logo: "/images/partners/trust-a-veteran.png",
+  },
+  {
     name: "Pat Smith Comedy",
     location: "Essex, United Kingdom",
     description: "Pat Smith is an Essex-born ex-soldier and award-winning stand-up comedian. He has won Leicester Comedy Festival's Laughter Craft Gong, Frog and Bucket's Beat The Frog, and the inaugural Colchester Comedian of the Year. His comedy draws on military life, family, and everyday observation. Online, his skits have reached millions across YouTube and TikTok. He supported Jim Davidson on tour and has a 30-minute special on Ustreme TV. In 2026 he is running the London Marathon for Tom Harrison House, a specialist addiction recovery centre. The military connection is real. So is the work.",

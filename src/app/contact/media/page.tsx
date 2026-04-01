@@ -449,7 +449,7 @@ Based in the UK, Jerry Can Spirits® is a small operation run by two mates who c
                 <DownloadCard
                   title="Armed Forces Covenant"
                   description="AFC signatory badge"
-                  previewImage="https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/images-afc_banner__png_-png/public"
+                  previewImage="/images/AFC_Banner__PNG_.png"
                   previewAlt="Armed Forces Covenant Banner"
                   darkBackground={false}
                   formats={[
@@ -461,7 +461,7 @@ Based in the UK, Jerry Can Spirits® is a small operation run by two mates who c
                 <DownloadCard
                   title="Trust A Veteran"
                   description="Trust A Veteran membership logo"
-                  previewImage="https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/4e7099a3-a0cb-48a5-d489-edd3d4bca100/public"
+                  previewImage="/images/partners/trust-a-veteran.png"
                   previewAlt="Trust A Veteran Logo"
                   darkBackground={false}
                   formats={[

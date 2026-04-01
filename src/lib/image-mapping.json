@@ -226,5 +226,11 @@
     "cloudflareUrl": "https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/aa81cee1-2611-46ce-41b7-b918e1188c00/public",
     "filename": "fever-tree.webp",
     "uploadedAt": "2026-01-12T00:00:00.000Z"
+  },
+  "/images/partners/trust-a-veteran.png": {
+    "cloudflareId": "4e7099a3-a0cb-48a5-d489-edd3d4bca100",
+    "cloudflareUrl": "https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/4e7099a3-a0cb-48a5-d489-edd3d4bca100/public",
+    "filename": "trust-a-veteran.png",
+    "uploadedAt": "2026-04-01T00:00:00.000Z"
   }
 }
