@@ -165,7 +165,9 @@ No fallback text for null fields. Fields are simply absent.
 
 ### Styling
 
-Section heading: `text-2xl font-serif font-bold text-white mb-6` — matches `BatchDetails` heading style.
+Section heading text: **"What Goes In"** — direct, no label-style language, consistent with brand voice.
+
+Section heading style: `text-2xl font-serif font-bold text-white mb-6` — matches `BatchDetails` heading style.
 
 Cards: `bg-jerry-green-800/60 backdrop-blur-sm border border-gold-500/20 rounded-xl p-6` — matches existing batch page card style.
 
