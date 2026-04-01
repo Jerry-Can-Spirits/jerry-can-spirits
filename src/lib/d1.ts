@@ -225,3 +225,28 @@ export async function getCharityContributions(
     .all<CharityContribution>();
   return result.results;
 }
+
+// ── Expedition Log Queries ────────────────────────────────────────────
+
+export interface ExpeditionLogEntry {
+  id: string;
+  batch_id: string;
+  name: string;
+  location: string | null;
+  location_lat: number | null;
+  location_lng: number | null;
+  message: string | null;
+  created_at: string;
+}
+
+export async function getExpeditionLogEntries(db: D1Database): Promise<ExpeditionLogEntry[]> {
+  const result = await db
+    .prepare(
+      `SELECT id, batch_id, name, location, location_lat, location_lng, message, created_at
+       FROM expedition_log
+       WHERE removed_at IS NULL
+       ORDER BY created_at DESC`,
+    )
+    .all<ExpeditionLogEntry>();
+  return result.results;
+}
