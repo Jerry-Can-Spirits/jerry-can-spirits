@@ -245,7 +245,8 @@ export async function getExpeditionLogEntries(db: D1Database): Promise<Expeditio
       `SELECT id, batch_id, name, location, location_lat, location_lng, message, created_at
        FROM expedition_log
        WHERE removed_at IS NULL
-       ORDER BY created_at DESC`,
+       ORDER BY created_at DESC
+       LIMIT 500`,
     )
     .all<ExpeditionLogEntry>();
   return result.results;
