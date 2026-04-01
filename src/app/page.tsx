@@ -323,7 +323,7 @@ export default function Home() {
 
         {/* Trustpilot Reviews Section - Hidden until April 2026 launch */}
         {/* CSP is configured for Trustpilot, will activate automatically at launch */}
-        {new Date() >= new Date('2026-04-01T00:00:00Z') && (
+        {new Date() >= new Date('2026-04-06T00:00:00Z') && (
           <section className="py-16 bg-jerry-green-900/50">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               <div className="text-center mb-12">
