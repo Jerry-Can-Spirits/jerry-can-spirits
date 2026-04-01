@@ -40,6 +40,7 @@ export default function Footer() {
         { name: 'Our Story', href: '/about/story' },
         { name: 'Sustainability', href: '/sustainability' },
         { name: 'Friends & Partners', href: '/friends' },
+        { name: 'Where the 5% Goes', href: '/giving/' },
       ]
     },
     {
