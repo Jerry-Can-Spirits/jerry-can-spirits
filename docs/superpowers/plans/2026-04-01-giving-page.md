@@ -458,9 +458,114 @@ git commit -m "feat: add /giving/ page"
 
 ---
 
-## Chunk 5: Deploy
+## Chunk 5: Navigation and Copy Fixes
 
-### Task 6: Apply migration to production and open PR
+### Task 6: Add /giving/ link to footer
+
+**Files:**
+- Modify: `src/components/Footer.tsx`
+
+The "The Brand" quick link group starts at line 38. It currently has 4 links: Home, Our Story, Sustainability, Friends & Partners.
+
+- [ ] **Step 1: Add the link**
+
+Find this block in `src/components/Footer.tsx`:
+
+```typescript
+    {
+      label: 'The Brand',
+      links: [
+        { name: 'Home', href: '/' },
+        { name: 'Our Story', href: '/about/story' },
+        { name: 'Sustainability', href: '/sustainability' },
+        { name: 'Friends & Partners', href: '/friends' },
+      ]
+    },
+```
+
+Replace with:
+
+```typescript
+    {
+      label: 'The Brand',
+      links: [
+        { name: 'Home', href: '/' },
+        { name: 'Our Story', href: '/about/story' },
+        { name: 'Sustainability', href: '/sustainability' },
+        { name: 'Friends & Partners', href: '/friends' },
+        { name: 'Where the 5% Goes', href: '/giving/' },
+      ]
+    },
+```
+
+- [ ] **Step 2: Build**
+
+```bash
+npm run build
+```
+
+Expected: clean build, no TypeScript errors.
+
+- [ ] **Step 3: Commit**
+
+```bash
+git add src/components/Footer.tsx
+git commit -m "feat: add giving page link to footer"
+```
+
+---
+
+### Task 7: Fix 5% figure on AFC page
+
+**Files:**
+- Modify: `src/app/armed-forces-covenant/page.tsx`
+
+Two occurrences of "5-15%" need to be updated to "5%". The authoritative figure is 5%.
+
+- [ ] **Step 1: Fix line 207**
+
+Find:
+```
+<li>Supporting armed forces housing charities through our annual profit-sharing programme (5-15% of net profits)</li>
+```
+
+Replace with:
+```
+<li>Supporting armed forces housing charities through our annual profit-sharing programme (5% of net profits)</li>
+```
+
+- [ ] **Step 2: Fix line 231**
+
+Find:
+```
+<li>Donating 5-15% of annual net profits to vetted armed forces charities, with transparent annual reporting of contributions and impact</li>
+```
+
+Replace with:
+```
+<li>Donating 5% of annual net profits to vetted armed forces charities, with transparent annual reporting of contributions and impact</li>
+```
+
+- [ ] **Step 3: Build**
+
+```bash
+npm run build
+```
+
+Expected: clean build.
+
+- [ ] **Step 4: Commit**
+
+```bash
+git add src/app/armed-forces-covenant/page.tsx
+git commit -m "fix: correct profit pledge to 5% on AFC page"
+```
+
+---
+
+## Chunk 6: Deploy
+
+### Task 8: Apply migration to production and open PR
 
 - [ ] **Step 1: Apply migration 0008 to production**
 
