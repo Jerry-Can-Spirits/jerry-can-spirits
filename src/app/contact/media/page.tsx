@@ -394,7 +394,8 @@ Based in the UK, Jerry Can Spirits® is a small operation run by two mates who c
                   darkBackground={true}
                   formats={[
                     { label: 'PNG', url: '/media-kit/logos/Jerry%20Can%20Spirits%20Logo.png' },
-                    { label: 'WebP', url: 'https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/images-logo-webp/public' },
+                    { label: 'JPG', url: '/api/media-download/?id=images-logo-webp&format=jpeg&filename=jerry-can-spirits-logo.jpg' },
+                    { label: 'WebP', url: '/api/media-download/?id=images-logo-webp&format=webp&filename=jerry-can-spirits-logo.webp' },
                   ]}
                 />
                 <DownloadCard
@@ -404,7 +405,9 @@ Based in the UK, Jerry Can Spirits® is a small operation run by two mates who c
                   previewAlt="Jerry Can Spirits® Etched Logo"
                   darkBackground={true}
                   formats={[
-                    { label: 'WebP', url: 'https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/images-logo-etch-webp/public' },
+                    { label: 'PNG', url: '/api/media-download/?id=images-logo-etch-webp&format=png&filename=jerry-can-spirits-logo-etch.png' },
+                    { label: 'JPG', url: '/api/media-download/?id=images-logo-etch-webp&format=jpeg&filename=jerry-can-spirits-logo-etch.jpg' },
+                    { label: 'WebP', url: '/api/media-download/?id=images-logo-etch-webp&format=webp&filename=jerry-can-spirits-logo-etch.webp' },
                   ]}
                 />
                 <DownloadCard
@@ -414,7 +417,9 @@ Based in the UK, Jerry Can Spirits® is a small operation run by two mates who c
                   previewAlt="British Veteran Owned Logo"
                   darkBackground={false}
                   formats={[
-                    { label: 'PNG', url: '/images/British-Veteran-Owned-Logo-Standard.png' },
+                    { label: 'PNG', url: '/api/media-download/?id=images-british-veteran-owned-logo-standard-png&format=png&filename=british-veteran-owned-standard.png' },
+                    { label: 'JPG', url: '/api/media-download/?id=images-british-veteran-owned-logo-standard-png&format=jpeg&filename=british-veteran-owned-standard.jpg' },
+                    { label: 'WebP', url: '/api/media-download/?id=images-british-veteran-owned-logo-standard-png&format=webp&filename=british-veteran-owned-standard.webp' },
                   ]}
                 />
                 <DownloadCard
@@ -424,7 +429,9 @@ Based in the UK, Jerry Can Spirits® is a small operation run by two mates who c
                   previewAlt="British Veteran Owned Logo White"
                   darkBackground={true}
                   formats={[
-                    { label: 'PNG', url: '/images/British-Veteran-Owned-Logo-White.png' },
+                    { label: 'PNG', url: '/api/media-download/?id=images-british-veteran-owned-logo-white-png&format=png&filename=british-veteran-owned-white.png' },
+                    { label: 'JPG', url: '/api/media-download/?id=images-british-veteran-owned-logo-white-png&format=jpeg&filename=british-veteran-owned-white.jpg' },
+                    { label: 'WebP', url: '/api/media-download/?id=images-british-veteran-owned-logo-white-png&format=webp&filename=british-veteran-owned-white.webp' },
                   ]}
                 />
                 <DownloadCard
@@ -434,12 +441,38 @@ Based in the UK, Jerry Can Spirits® is a small operation run by two mates who c
                   previewAlt="British Veteran Owned Logo Black"
                   darkBackground={false}
                   formats={[
-                    { label: 'PNG', url: '/images/British-Veteran-Owned-Logo-Black.png' },
+                    { label: 'PNG', url: '/api/media-download/?id=images-british-veteran-owned-logo-black-png&format=png&filename=british-veteran-owned-black.png' },
+                    { label: 'JPG', url: '/api/media-download/?id=images-british-veteran-owned-logo-black-png&format=jpeg&filename=british-veteran-owned-black.jpg' },
+                    { label: 'WebP', url: '/api/media-download/?id=images-british-veteran-owned-logo-black-png&format=webp&filename=british-veteran-owned-black.webp' },
+                  ]}
+                />
+                <DownloadCard
+                  title="Armed Forces Covenant"
+                  description="AFC signatory badge"
+                  previewImage="https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/images-afc_banner__png_-png/public"
+                  previewAlt="Armed Forces Covenant Banner"
+                  darkBackground={false}
+                  formats={[
+                    { label: 'PNG', url: '/api/media-download/?id=images-afc_banner__png_-png&format=png&filename=armed-forces-covenant.png' },
+                    { label: 'JPG', url: '/api/media-download/?id=images-afc_banner__png_-png&format=jpeg&filename=armed-forces-covenant.jpg' },
+                    { label: 'WebP', url: '/api/media-download/?id=images-afc_banner__png_-png&format=webp&filename=armed-forces-covenant.webp' },
+                  ]}
+                />
+                <DownloadCard
+                  title="Trust A Veteran"
+                  description="Trust A Veteran membership logo"
+                  previewImage="https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/4e7099a3-a0cb-48a5-d489-edd3d4bca100/public"
+                  previewAlt="Trust A Veteran Logo"
+                  darkBackground={false}
+                  formats={[
+                    { label: 'PNG', url: '/api/media-download/?id=4e7099a3-a0cb-48a5-d489-edd3d4bca100&format=png&filename=trust-a-veteran.png' },
+                    { label: 'JPG', url: '/api/media-download/?id=4e7099a3-a0cb-48a5-d489-edd3d4bca100&format=jpeg&filename=trust-a-veteran.jpg' },
+                    { label: 'WebP', url: '/api/media-download/?id=4e7099a3-a0cb-48a5-d489-edd3d4bca100&format=webp&filename=trust-a-veteran.webp' },
                   ]}
                 />
               </div>
               <p className="text-parchment-400 text-sm mt-4 text-center">
-                Need additional formats (SVG, PNG, EPS)? Contact <a href="mailto:press@jerrycanspirits.co.uk" className="text-gold-300 hover:text-gold-200 underline">press@jerrycanspirits.co.uk</a>
+                Need SVG or EPS? Contact <a href="mailto:press@jerrycanspirits.co.uk" className="text-gold-300 hover:text-gold-200 underline">press@jerrycanspirits.co.uk</a>
               </p>
 
               {/* Logo Specifications */}
