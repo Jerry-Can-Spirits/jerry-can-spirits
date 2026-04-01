@@ -236,10 +236,8 @@ export default function MediaKitPage() {
                 <div className="space-y-1 text-xs text-jerry-green-700">
                   <p>Facebook: <span className="font-medium">@jerrycanspirits</span></p>
                   <p>Instagram: <span className="font-medium">@jerrycanspirits</span></p>
-                  <p>TikTok: <span className="font-medium">@jerrycanspirits</span></p>
-                  <p>X: <span className="font-medium">@jerrycanspirits</span></p>
-                  <p>YouTube: <span className="font-medium">@jerrycanspirits</span></p>
-                  <p>Bluesky: <span className="font-medium">@jerrycanspirits</span></p>
+                  <p>YouTube: <span className="font-medium">@JerryCanSpirits</span></p>
+                  <p>LinkedIn: <span className="font-medium">Jerry Can Spirits Ltd</span></p>
                 </div>
               </div>
               <div>
