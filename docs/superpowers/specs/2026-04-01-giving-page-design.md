@@ -10,6 +10,8 @@ Build a public `/giving/` page that shows where Jerry Can Spirits' 5% profit ple
 - Linked from: footer, AFC page
 - Page heading: "Where the 5% Goes"
 
+> **Copy note:** The AFC page currently states "5-15% of annual net profits". The authoritative figure is **5%**. The giving page uses 5% throughout. The AFC page should be updated separately to align.
+
 ## Architecture
 
 Server-rendered Next.js page. Fetches two datasets from Cloudflare D1 in a single `Promise.all`. Passes data to two display components. No client-side interactivity. Consistent with the batch detail page pattern.
