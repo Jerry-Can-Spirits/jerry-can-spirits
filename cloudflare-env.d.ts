@@ -18,6 +18,12 @@ interface CloudflareEnv {
   SHOPIFY_ADMIN_API_TOKEN: string;
   SHOPIFY_WEBHOOK_SECRET: string;
 
+  // Secrets — Turnstile (bot protection)
+  TURNSTILE_SECRET_KEY: string;
+
+  // Secrets — Mapbox (geocoding)
+  MAPBOX_SECRET_TOKEN: string;
+
   // Secrets — Sentry (source map uploads)
   SENTRY_AUTH_TOKEN: string;
 
