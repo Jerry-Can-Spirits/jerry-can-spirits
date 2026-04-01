@@ -73,18 +73,18 @@ Label: **"Charity contribution"**
 The new row follows the existing `dt`/`dd` pattern already in the component:
 
 ```tsx
-{batch.charity_amount_gbp !== null && batch.charity_amount_gbp !== undefined && (
-  <>
-    <dt className="text-parchment-500 text-sm">Charity contribution</dt>
-    <dd className="text-white text-sm font-medium">
-      {batch.charity_amount_gbp.toLocaleString('en-GB', {
+{batch.charity_amount_gbp !== null && (
+  <div>
+    <dt className="text-parchment-500 text-sm uppercase tracking-wider">Charity contribution</dt>
+    <dd className="text-white font-medium mt-1">
+      {batch.charity_amount_gbp!.toLocaleString('en-GB', {
         style: 'currency',
         currency: 'GBP',
         minimumFractionDigits: 0,
         maximumFractionDigits: 2,
       })}
     </dd>
-  </>
+  </div>
 )}
 ```
 
