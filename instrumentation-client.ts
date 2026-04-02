@@ -90,12 +90,6 @@ Sentry.init({
       }
     }
 
-    if (event.breadcrumbs?.values) {
-      for (const bc of event.breadcrumbs.values) {
-        if (bc.message) bc.message = scrub(bc.message)
-      }
-    }
-
     return event;
   },
 });
