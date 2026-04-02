@@ -8,27 +8,19 @@ interface Props {
   entries: ExpeditionLogEntry[]
 }
 
+const UK_CENTER: [number, number] = [54.5, -2.5]
+const UK_ZOOM = 5
+
 export default function ExpeditionLogMap({ entries }: Props) {
   const containerRef = useRef<HTMLDivElement>(null)
   const mapRef = useRef<import('leaflet').Map | null>(null)
 
-  // Filter inside the effect (stable dependency on `entries` reference)
-  const hasCoords = entries.some((e) => e.location_lat !== null)
-
   useEffect(() => {
     if (!containerRef.current) return
-
-    // Re-filter inside the effect to avoid unstable array reference in deps
-    const entriesWithCoords = entries.filter(
-      (e): e is ExpeditionLogEntry & { location_lat: number; location_lng: number } =>
-        e.location_lat !== null && e.location_lng !== null
-    )
-    if (entriesWithCoords.length === 0) return
 
     const container = containerRef.current
 
     import('leaflet').then(async (L) => {
-      // leaflet.heat extends L in-place, no export needed
       await import('leaflet.heat')
 
       if (mapRef.current) {
@@ -37,6 +29,8 @@ export default function ExpeditionLogMap({ entries }: Props) {
       }
 
       const map = L.map(container, {
+        center: UK_CENTER,
+        zoom: UK_ZOOM,
         scrollWheelZoom: false,
         zoomControl: true,
       })
@@ -51,16 +45,15 @@ export default function ExpeditionLogMap({ entries }: Props) {
         }
       ).addTo(map)
 
-      const heatData: [number, number, number][] = entriesWithCoords.map((e) => [
-        e.location_lat,
-        e.location_lng,
-        1,
-      ])
+      const heatData: [number, number, number][] = entries
+        .filter((e): e is ExpeditionLogEntry & { location_lat: number; location_lng: number } =>
+          e.location_lat !== null && e.location_lng !== null
+        )
+        .map((e) => [e.location_lat, e.location_lng, 1])
 
-      L.heatLayer(heatData, { radius: 30, blur: 20, maxZoom: 10 }).addTo(map)
-
-      const bounds = L.latLngBounds(entriesWithCoords.map((e) => [e.location_lat, e.location_lng]))
-      map.fitBounds(bounds, { padding: [40, 40] })
+      if (heatData.length > 0) {
+        L.heatLayer(heatData, { radius: 30, blur: 20, maxZoom: 10 }).addTo(map)
+      }
 
       mapRef.current = map
     })
@@ -70,8 +63,6 @@ export default function ExpeditionLogMap({ entries }: Props) {
       mapRef.current = null
     }
   }, [entries])
-
-  if (!hasCoords) return null
 
   return <div ref={containerRef} className="w-full h-64 rounded-xl" />
 }
