@@ -2,6 +2,10 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getProducts } from '@/lib/shopify'
 import { client } from '@/sanity/lib/client'
 
+const searchTimestamps = new Map<string, number[]>()
+const RATE_LIMIT_WINDOW = 60 * 1000
+const MAX_REQUESTS = 20
+
 interface SearchResult {
   type: 'product' | 'page' | 'recipe' | 'equipment' | 'ingredient' | 'guide'
   title: string
@@ -64,6 +68,8 @@ const searchablePages: SearchResult[] = [
   { type: 'page', title: 'Reviews', description: 'Customer reviews and testimonials for Expedition Spiced Rum', url: '/reviews/', category: 'About', keywords: 'testimonials ratings customer feedback opinions stars' },
   { type: 'page', title: 'Careers', description: 'Job opportunities and careers at Jerry Can Spirits', url: '/careers/', category: 'About', keywords: 'jobs work employment vacancy hiring join apply' },
   { type: 'page', title: 'Batch Tracker', description: 'Track your bottle provenance with our digital product passport', url: '/batch/', category: 'About', keywords: 'QR code batch number bottle tracking scan provenance digital passport' },
+  { type: 'page', title: 'Where the 5% Goes', description: 'How Jerry Can Spirits supports military charities through every bottle sold', url: '/giving/', category: 'About', keywords: 'charity donation military veterans armed forces 5 percent profit giving back support' },
+  { type: 'page', title: 'The Expedition Log', description: 'A public record of founding supporters who bought the first bottles', url: '/expedition-log/', category: 'About', keywords: 'founding supporter first bottle registry log community join expedition record name' },
   // Resources
   { type: 'page', title: 'Field Manual', description: 'Cocktail recipes, bar equipment guides and ingredient information', url: '/field-manual/', category: 'Resources', keywords: 'bartending mixing drinks guide how to spirits' },
   { type: 'page', title: 'Guides', description: 'Expert spirits guides and cocktail tutorials', url: '/guides/', category: 'Resources', keywords: 'tutorials how to education learn rum guide spirits knowledge' },
@@ -151,6 +157,17 @@ const guidesSearchQuery = `*[_type == "guide" && (
 
 export async function GET(request: NextRequest) {
   try {
+    const fwd = request.headers.get('cf-connecting-ip') || request.headers.get('x-forwarded-for') || 'unknown'
+    const ip = fwd.split(',')[0].trim()
+    const now = Date.now()
+    const timestamps = searchTimestamps.get(ip) || []
+    const recent = timestamps.filter(t => now - t < RATE_LIMIT_WINDOW)
+    if (recent.length >= MAX_REQUESTS) {
+      return NextResponse.json({ error: 'Too many requests.' }, { status: 429 })
+    }
+    recent.push(now)
+    searchTimestamps.set(ip, recent)
+
     const searchParams = request.nextUrl.searchParams
     const query = searchParams.get('q')
 

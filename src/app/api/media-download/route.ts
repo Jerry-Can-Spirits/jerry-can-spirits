@@ -30,7 +30,8 @@ export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
   const id = searchParams.get('id')
   const format = searchParams.get('format')
-  const filename = searchParams.get('filename') ?? `expedition-spiced-rum.${format}`
+  const rawFilename = searchParams.get('filename') ?? `expedition-spiced-rum.${format}`
+  const filename = rawFilename.replace(/[^a-zA-Z0-9._-]/g, '_').replace(/^\.+/, '').substring(0, 255) || `expedition-spiced-rum.${format}`
 
   if (!id || !ALLOWED_IMAGE_IDS.has(id)) {
     return NextResponse.json({ error: 'Image not found' }, { status: 404 })

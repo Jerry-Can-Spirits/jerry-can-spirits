@@ -31,27 +31,32 @@ Sentry.init({
       for (const exception of event.exception.values) {
         const stack = exception.stacktrace?.frames || [];
 
-        // Check if error originated from a browser extension
         const isExtensionError = stack.some(frame =>
           frame.filename?.includes('chrome-extension://') ||
           frame.filename?.includes('moz-extension://') ||
           frame.filename?.includes('safari-extension://') ||
           frame.filename?.includes('webkit-masked-url://')
         );
+        if (isExtensionError) return null;
 
-        if (isExtensionError) {
-          return null; // Don't send to Sentry
-        }
+        if (exception.value?.includes('__firefox__')) return null;
+        if (exception.value?.includes('ethereum')) return null;
+      }
+    }
 
-        // Check for Firefox extension variables
-        if (exception.value?.includes('__firefox__')) {
-          return null;
-        }
+    // Scrub PII and secrets from event messages and exception values
+    const emailRegex = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g
+    const secretRegex = /(access_token|api_key|secret|token|password|authorization|bearer)[=:\s]+['"]?[a-zA-Z0-9_\-.]+['"]?/gi
 
-        // Check for MetaMask/crypto wallet errors
-        if (exception.value?.includes('ethereum')) {
-          return null;
-        }
+    function scrub(s: string): string {
+      return s.replace(emailRegex, '[email]').replace(secretRegex, '$1=[redacted]')
+    }
+
+    if (event.message) event.message = scrub(event.message)
+
+    if (event.exception?.values) {
+      for (const exc of event.exception.values) {
+        if (exc.value) exc.value = scrub(exc.value)
       }
     }
 
