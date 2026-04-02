@@ -85,8 +85,7 @@ export async function POST(request: Request) {
       try {
         console.log('[expedition-log] geocoding location:', location, 'token present:', !!MAPBOX_SECRET_TOKEN)
         const geoRes = await fetch(
-          `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(location)}.json?country=gb&limit=1`,
-          { headers: { Authorization: `Bearer ${MAPBOX_SECRET_TOKEN}` } }
+          `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(location)}.json?country=gb&limit=1&access_token=${MAPBOX_SECRET_TOKEN}`
         )
         console.log('[expedition-log] geocode status:', geoRes.status)
         const geoData = await geoRes.json() as { features?: Array<{ geometry: { coordinates: [number, number] } }>, message?: string }
