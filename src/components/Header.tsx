@@ -97,6 +97,8 @@ export default function Header() {
         { name: 'Ethos', href: '/ethos', description: 'Values & craftsmanship' },
         { name: 'Sustainability', href: '/sustainability', description: 'Recycling & local sourcing' },
         { name: 'Friends & Partners', href: '/friends', description: 'Our trusted collaborators' },
+        { name: 'Where the 5% Goes', href: '/giving', description: 'Military charity contributions' },
+        { name: 'The Expedition Log', href: '/expedition-log', description: 'Founding supporters' },
         { name: 'FAQ', href: '/faq', description: 'Common questions answered' },
       ]
     },
