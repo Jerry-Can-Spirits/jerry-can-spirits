@@ -36,10 +36,15 @@ export default function ExpeditionLogMap({ entries }: Props) {
         scrollZoom: false,
       })
 
+<<<<<<< feat/batch-charity-amount
       map.addControl(new mapboxgl.NavigationControl({ showCompass: false }), 'top-right')
 
       mapRef.current = map
 
+=======
+      mapRef.current = map
+
+>>>>>>> main
       map.on('load', () => {
         const geocoded = entries.filter(
           (e): e is ExpeditionLogEntry & { location_lat: number; location_lng: number } =>
@@ -64,7 +69,11 @@ export default function ExpeditionLogMap({ entries }: Props) {
           paint: {
             'heatmap-weight': 1,
             'heatmap-intensity': ['interpolate', ['linear'], ['zoom'], 0, 1, 9, 3],
+<<<<<<< feat/batch-charity-amount
             'heatmap-radius': ['interpolate', ['linear'], ['zoom'], 0, 10, 9, 20],
+=======
+            'heatmap-radius': ['interpolate', ['linear'], ['zoom'], 0, 20, 9, 40],
+>>>>>>> main
             'heatmap-color': [
               'interpolate',
               ['linear'],
