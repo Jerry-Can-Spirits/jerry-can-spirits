@@ -16,8 +16,6 @@ export const metadata: Metadata = {
 export default async function ExpeditionLogPage() {
   const db = await getD1()
   const entries = await getExpeditionLogEntries(db)
-  const hasCoords = entries.some((e) => e.location_lat !== null)
-
   return (
     <main className="min-h-screen py-20">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -38,11 +36,9 @@ export default async function ExpeditionLogPage() {
         </div>
 
         {/* Map */}
-        {hasCoords && (
-          <div className="mb-12">
-            <ExpeditionLogMapClient entries={entries} />
-          </div>
-        )}
+        <div className="mb-12">
+          <ExpeditionLogMapClient entries={entries} />
+        </div>
 
         {/* Entry list */}
         <div className="mb-16">
