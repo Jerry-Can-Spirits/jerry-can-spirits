@@ -64,9 +64,10 @@ export default async function ExpeditionLogPage() {
                       })}
                     </p>
                   </div>
-                  {entry.message && (
-                    <p className="text-parchment-300 text-sm leading-relaxed italic mt-3 border-t border-gold-500/10 pt-3">
-                      {entry.message}
+                  {entry.bottle_type && (
+                    <p className="text-parchment-500 text-xs mt-1">
+                      {entry.bottle_type === 'standard' ? 'Batch 001' : entry.bottle_type === 'premium' ? 'Premium' : 'Founder'}
+                      {entry.bottle_number ? ` · #${entry.bottle_number}` : ''}
                     </p>
                   )}
                 </div>
