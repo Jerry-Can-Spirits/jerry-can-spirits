@@ -41,6 +41,7 @@ export default function Footer() {
         { name: 'Sustainability', href: '/sustainability' },
         { name: 'Friends & Partners', href: '/friends' },
         { name: 'Where the 5% Goes', href: '/giving/' },
+        { name: 'The Expedition Log', href: '/expedition-log/' },
       ]
     },
     {
