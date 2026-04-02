@@ -83,19 +83,25 @@ export async function POST(request: Request) {
     let location_lng: number | null = null
     if (location && MAPBOX_SECRET_TOKEN) {
       try {
+        console.log('[expedition-log] geocoding location:', location, 'token present:', !!MAPBOX_SECRET_TOKEN)
         const geoRes = await fetch(
           `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(location)}.json?country=gb&limit=1`,
           { headers: { Authorization: `Bearer ${MAPBOX_SECRET_TOKEN}` } }
         )
-        const geoData = await geoRes.json() as { features?: Array<{ geometry: { coordinates: [number, number] } }> }
+        console.log('[expedition-log] geocode status:', geoRes.status)
+        const geoData = await geoRes.json() as { features?: Array<{ geometry: { coordinates: [number, number] } }>, message?: string }
+        console.log('[expedition-log] geocode features:', geoData.features?.length ?? 0, geoData.message ?? '')
         if (geoData.features?.[0]) {
           // Mapbox returns [longitude, latitude]
           location_lng = geoData.features[0].geometry.coordinates[0]
           location_lat = geoData.features[0].geometry.coordinates[1]
+          console.log('[expedition-log] geocoded to:', location_lat, location_lng)
         }
       } catch (err) {
         console.error('Mapbox geocoding failed (non-blocking):', err)
       }
+    } else {
+      console.log('[expedition-log] skipping geocode — location:', !!location, 'token:', !!MAPBOX_SECRET_TOKEN)
     }
 
     // Insert
