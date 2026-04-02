@@ -213,7 +213,7 @@ export default function ExpeditionLogForm({ batchId }: Props) {
         />
         <p className="text-parchment-600 text-xs">
           By submitting, your name and approximate location will appear publicly on the Expedition Log.{' '}
-          <a href="/privacy/" className="underline hover:text-parchment-400">Privacy policy</a>.
+          <a href="/privacy-policy/" className="underline hover:text-parchment-400">Privacy policy</a>.
         </p>
         {status === 'error' && (
           <p className="text-red-400 text-sm">{errorMessage}</p>

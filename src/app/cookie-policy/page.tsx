@@ -335,8 +335,8 @@ export default function CookiePolicy() {
                 <div className="space-y-2">
                   <p className="text-white">
                     <strong className="text-gold-300">Email:</strong>{' '}
-                    <a href="mailto:privacy@jerrycanspirits.co.uk" className="text-gold-300 hover:text-gold-200 underline">
-                      privacy@jerrycanspirits.co.uk
+                    <a href="mailto:support@jerrycanspirits.co.uk" className="text-gold-300 hover:text-gold-200 underline">
+                      support@jerrycanspirits.co.uk
                     </a>
                   </p>
                   <p className="text-white">
