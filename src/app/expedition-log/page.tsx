@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
-import nextDynamic from 'next/dynamic'
 import { getD1, getExpeditionLogEntries } from '@/lib/d1'
 import ExpeditionLogForm from '@/components/ExpeditionLogForm'
+import ExpeditionLogMapClient from '@/components/ExpeditionLogMapClient'
 
 export const dynamic = 'force-dynamic'
 
@@ -12,8 +12,6 @@ export const metadata: Metadata = {
     canonical: 'https://jerrycanspirits.co.uk/expedition-log/',
   },
 }
-
-const ExpeditionLogMap = nextDynamic(() => import('@/components/ExpeditionLogMap'), { ssr: false })
 
 export default async function ExpeditionLogPage() {
   const db = await getD1()
@@ -42,7 +40,7 @@ export default async function ExpeditionLogPage() {
         {/* Map */}
         {hasCoords && (
           <div className="mb-12">
-            <ExpeditionLogMap entries={entries} />
+            <ExpeditionLogMapClient entries={entries} />
           </div>
         )}
 
