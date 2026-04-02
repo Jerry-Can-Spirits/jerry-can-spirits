@@ -231,43 +231,26 @@ export default function ExpeditionSpicedRumIngredients() {
               {/* Spices & Botanicals */}
               <div className="border-b border-gold-500/20 pb-6">
                 <h3 className="text-lg font-semibold text-gold-300 mb-3">Spices &amp; Botanicals</h3>
-                <ul className="grid sm:grid-cols-2 gap-2">
-                  <li className="flex items-start space-x-3">
-                    <div className="w-2 h-2 bg-gold-400 rounded-full mt-2 flex-shrink-0"></div>
-                    <span>Madagascan Vanilla Pods</span>
-                  </li>
-                  <li className="flex items-start space-x-3">
-                    <div className="w-2 h-2 bg-gold-400 rounded-full mt-2 flex-shrink-0"></div>
-                    <span>Ceylon Cinnamon</span>
-                  </li>
-                  <li className="flex items-start space-x-3">
-                    <div className="w-2 h-2 bg-gold-400 rounded-full mt-2 flex-shrink-0"></div>
-                    <span>Allspice</span>
-                  </li>
-                  <li className="flex items-start space-x-3">
-                    <div className="w-2 h-2 bg-gold-400 rounded-full mt-2 flex-shrink-0"></div>
-                    <span>Cloves</span>
-                  </li>
-                  <li className="flex items-start space-x-3">
-                    <div className="w-2 h-2 bg-gold-400 rounded-full mt-2 flex-shrink-0"></div>
-                    <span>Orange Peel</span>
-                  </li>
-                  <li className="flex items-start space-x-3">
-                    <div className="w-2 h-2 bg-gold-400 rounded-full mt-2 flex-shrink-0"></div>
-                    <span>Cassia Bark</span>
-                  </li>
-                  <li className="flex items-start space-x-3">
-                    <div className="w-2 h-2 bg-gold-400 rounded-full mt-2 flex-shrink-0"></div>
-                    <span>Ginger</span>
-                  </li>
-                  <li className="flex items-start space-x-3">
-                    <div className="w-2 h-2 bg-gold-400 rounded-full mt-2 flex-shrink-0"></div>
-                    <span>Agave Syrup</span>
-                  </li>
-                  <li className="flex items-start space-x-3">
-                    <div className="w-2 h-2 bg-gold-400 rounded-full mt-2 flex-shrink-0"></div>
-                    <span>Glucose Syrup</span>
-                  </li>
+                <ul className="space-y-3">
+                  {[
+                    { name: 'Madagascan Vanilla Pods', origin: 'Madagascar', supplier: 'Cotswold Ingredients' },
+                    { name: 'Ceylon Cinnamon', origin: 'Sri Lanka', supplier: 'Cotswold Ingredients' },
+                    { name: 'Ginger', origin: 'Peru', supplier: 'Cotswold Ingredients' },
+                    { name: 'Orange Peel', origin: 'Spain', supplier: 'Cotswold Ingredients' },
+                    { name: 'Cloves', origin: 'Sri Lanka', supplier: 'Cotswold Ingredients' },
+                    { name: 'Allspice', origin: 'Guatemala', supplier: 'Cotswold Ingredients' },
+                    { name: 'Cassia Bark', origin: 'Indonesia', supplier: 'Cotswold Ingredients' },
+                    { name: 'Agave Syrup', origin: 'Mexico', supplier: 'Beko' },
+                    { name: 'Glucose Syrup', origin: 'Sussex, England', supplier: 'Beko' },
+                  ].map(({ name, origin, supplier }) => (
+                    <li key={name} className="flex items-start space-x-3">
+                      <div className="w-2 h-2 bg-gold-400 rounded-full mt-2 flex-shrink-0"></div>
+                      <div>
+                        <span className="text-parchment-200">{name}</span>
+                        <span className="text-parchment-500 text-sm ml-2">{origin} &middot; {supplier}</span>
+                      </div>
+                    </li>
+                  ))}
                 </ul>
               </div>
 
