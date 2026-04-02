@@ -12,11 +12,17 @@ interface BottleEntry {
   number: string
 }
 
-const BOTTLE_TYPES: { value: BottleEntry['type']; label: string }[] = [
-  { value: 'standard', label: 'Batch 001' },
-  { value: 'premium', label: 'Premium' },
-  { value: 'founder', label: 'Founder' },
+const BOTTLE_TYPES: { value: BottleEntry['type']; label: string; max: number }[] = [
+  { value: 'standard', label: 'Batch 001', max: 700 },
+  { value: 'premium', label: 'Premium', max: 100 },
+  { value: 'founder', label: 'Founder', max: 40 },
 ]
+
+const BOTTLE_MAX: Record<BottleEntry['type'], number> = {
+  standard: 700,
+  premium: 100,
+  founder: 40,
+}
 
 const MAX_BOTTLES = 20
 
@@ -138,10 +144,11 @@ export default function ExpeditionLogForm({ batchId }: Props) {
             type="text"
             name="location"
             maxLength={100}
-            placeholder="City, country"
+            placeholder="e.g. Blackpool, Manchester, London"
             autoComplete="off"
             className="w-full px-4 py-3 bg-jerry-green-900 border border-gold-500/30 rounded-lg text-white placeholder-parchment-500 text-sm focus:outline-none focus:border-gold-400"
           />
+          <p className="text-parchment-600 text-xs mt-1">Town or city only. Do not enter a full address.</p>
         </div>
         <div className="space-y-2">
           <label className="block text-parchment-400 text-sm">
@@ -161,6 +168,7 @@ export default function ExpeditionLogForm({ batchId }: Props) {
               <input
                 type="number"
                 min="1"
+                max={BOTTLE_MAX[bottle.type]}
                 value={bottle.number}
                 onChange={(e) => updateBottle(i, 'number', e.target.value)}
                 placeholder="Bottle no."
@@ -203,6 +211,10 @@ export default function ExpeditionLogForm({ batchId }: Props) {
           autoComplete="off"
           aria-hidden="true"
         />
+        <p className="text-parchment-600 text-xs">
+          By submitting, your name and approximate location will appear publicly on the Expedition Log.{' '}
+          <a href="/privacy/" className="underline hover:text-parchment-400">Privacy policy</a>.
+        </p>
         {status === 'error' && (
           <p className="text-red-400 text-sm">{errorMessage}</p>
         )}
