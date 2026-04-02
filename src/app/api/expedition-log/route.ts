@@ -122,7 +122,7 @@ export async function POST(request: Request) {
       )
       .run()
 
-    return NextResponse.json({ success: true, _debug: { hasToken: !!MAPBOX_SECRET_TOKEN, hasLocation: !!location, geocoded: location_lat !== null } }, { status: 201 })
+    return NextResponse.json({ success: true }, { status: 201 })
   } catch (error) {
     console.error('Expedition log submission error:', error)
     return NextResponse.json({ error: 'Internal server error.' }, { status: 500 })
