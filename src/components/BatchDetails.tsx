@@ -1,4 +1,5 @@
 import type { Batch, BatchStats } from '@/lib/d1'
+import ExpeditionLogForm from './ExpeditionLogForm'
 
 function TastingNotesDisplay({ notes }: { notes: string }) {
   const sections = notes.match(/(Nose|Palate|Finish):\s*([^]*?)(?=(?:Nose|Palate|Finish):|$)/g)
@@ -95,6 +96,15 @@ export default function BatchDetails({ batch, stats }: BatchDetailsProps) {
           </blockquote>
         </div>
       )}
+
+      {/* Expedition Log */}
+      <div className="bg-jerry-green-800/60 backdrop-blur-sm border border-gold-500/20 rounded-xl p-6">
+        <h2 className="text-2xl font-serif font-bold text-white mb-2">The Expedition Log</h2>
+        <p className="text-parchment-300 text-sm mb-6">
+          If this is your bottle, add your name to the log. A public record of the people who were here first.
+        </p>
+        <ExpeditionLogForm batchId={batch.id} />
+      </div>
     </div>
   )
 }
