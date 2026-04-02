@@ -70,16 +70,23 @@ export default function StockistFinder() {
     setErrorMessage('')
 
     try {
-      const res = await fetch(`https://api.postcodes.io/postcodes/${clean}`)
-      const data = await res.json() as { status: number; result: { latitude: number; longitude: number } }
+      const token = process.env.NEXT_PUBLIC_MAPBOX_TOKEN
+      const res = await fetch(
+        `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(clean)}.json?country=gb&types=postcode&limit=1&access_token=${token}`
+      )
+      const data = await res.json() as {
+        features?: Array<{ geometry: { coordinates: [number, number] } }>
+      }
 
-      if (!res.ok || data.status !== 200) {
+      if (!res.ok || !data.features?.length) {
         setErrorMessage('Postcode not recognised. Please check and try again.')
         setSearchState('error')
         return
       }
 
-      runSearch(data.result.latitude, data.result.longitude, postcode.trim())
+      // Mapbox returns [longitude, latitude] — GeoJSON convention
+      const [lng, lat] = data.features[0].geometry.coordinates
+      runSearch(lat, lng, postcode.trim())
     } catch {
       setErrorMessage('Something went wrong. Please try again.')
       setSearchState('error')

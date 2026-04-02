@@ -38,10 +38,15 @@ export default function StockistMap({ stockists, center, zoom }: StockistMapProp
         scrollWheelZoom: false,
       })
 
-      L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-        attribution: '© <a href="https://openstreetmap.org/copyright">OpenStreetMap</a> contributors © <a href="https://carto.com/attributions">CARTO</a>',
-        maxZoom: 19,
-      }).addTo(map)
+      const mapboxToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN
+      L.tileLayer(
+        `https://api.mapbox.com/styles/v1/mapbox/dark-v11/tiles/{z}/{x}/{y}@2x?access_token=${mapboxToken}`,
+        {
+          tileSize: 512,
+          zoomOffset: -1,
+          attribution: '© <a href="https://www.mapbox.com/about/maps/">Mapbox</a> © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+        }
+      ).addTo(map)
 
       stockists.forEach((stockist) => {
         const icon = L.divIcon({
