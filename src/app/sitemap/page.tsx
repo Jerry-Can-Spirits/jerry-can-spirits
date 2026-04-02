@@ -78,6 +78,8 @@ const staticPages = [
   { label: 'Meet the Team', href: '/about/team/' },
   { label: 'Sustainability', href: '/sustainability/' },
   { label: 'Friends & Partners', href: '/friends/' },
+  { label: 'Where the 5% Goes', href: '/giving/' },
+  { label: 'The Expedition Log', href: '/expedition-log/' },
   { label: 'Reviews', href: '/reviews/' },
   { label: 'Stockists', href: '/stockists/' },
   { label: 'Trade', href: '/trade/' },
