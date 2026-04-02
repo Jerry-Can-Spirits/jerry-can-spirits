@@ -2,6 +2,10 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getProducts } from '@/lib/shopify'
 import { client } from '@/sanity/lib/client'
 
+const searchTimestamps = new Map<string, number[]>()
+const RATE_LIMIT_WINDOW = 60 * 1000
+const MAX_REQUESTS = 20
+
 interface SearchResult {
   type: 'product' | 'page' | 'recipe' | 'equipment' | 'ingredient' | 'guide'
   title: string
@@ -151,6 +155,17 @@ const guidesSearchQuery = `*[_type == "guide" && (
 
 export async function GET(request: NextRequest) {
   try {
+    const fwd = request.headers.get('cf-connecting-ip') || request.headers.get('x-forwarded-for') || 'unknown'
+    const ip = fwd.split(',')[0].trim()
+    const now = Date.now()
+    const timestamps = searchTimestamps.get(ip) || []
+    const recent = timestamps.filter(t => now - t < RATE_LIMIT_WINDOW)
+    if (recent.length >= MAX_REQUESTS) {
+      return NextResponse.json({ error: 'Too many requests.' }, { status: 429 })
+    }
+    recent.push(now)
+    searchTimestamps.set(ip, recent)
+
     const searchParams = request.nextUrl.searchParams
     const query = searchParams.get('q')
 

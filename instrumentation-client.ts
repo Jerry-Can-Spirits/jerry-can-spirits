@@ -74,6 +74,28 @@ Sentry.init({
       }
     }
 
+    // Scrub PII and secrets from event messages and exception values
+    const emailRegex = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g
+    const secretRegex = /(access_token|api_key|secret|token|password|authorization|bearer)[=:\s]+['"]?[a-zA-Z0-9_\-.]+['"]?/gi
+
+    function scrub(s: string): string {
+      return s.replace(emailRegex, '[email]').replace(secretRegex, '$1=[redacted]')
+    }
+
+    if (event.message) event.message = scrub(event.message)
+
+    if (event.exception?.values) {
+      for (const exc of event.exception.values) {
+        if (exc.value) exc.value = scrub(exc.value)
+      }
+    }
+
+    if (event.breadcrumbs?.values) {
+      for (const bc of event.breadcrumbs.values) {
+        if (bc.message) bc.message = scrub(bc.message)
+      }
+    }
+
     return event;
   },
 });
