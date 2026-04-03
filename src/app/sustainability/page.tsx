@@ -4,6 +4,7 @@ import BackToTop from '@/components/BackToTop'
 import Breadcrumbs from '@/components/Breadcrumbs'
 import StructuredData from '@/components/StructuredData'
 import ScrollReveal from '@/components/ScrollReveal'
+import EcologiImpact from '@/components/EcologiImpact'
 import { OG_IMAGE } from '@/lib/og'
 
 // FAQ Schema for rich snippets
@@ -202,6 +203,11 @@ export default function Sustainability() {
           </div>
         </section>
 
+        {/* Carbon Offsetting — live Ecologi stats */}
+        <section className="py-12">
+          <EcologiImpact />
+        </section>
+
         {/* Future Plans */}
         <section className="py-12">
           <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
@@ -222,10 +228,6 @@ export default function Sustainability() {
                 <li className="flex items-start space-x-3">
                   <div className="w-2 h-2 bg-gold-400 rounded-full mt-2 flex-shrink-0"></div>
                   <span><strong className="text-gold-300">Packaging Reduction:</strong> Minimising unnecessary packaging without compromising product protection.</span>
-                </li>
-                <li className="flex items-start space-x-3">
-                  <div className="w-2 h-2 bg-gold-400 rounded-full mt-2 flex-shrink-0"></div>
-                  <span><strong className="text-gold-300">Carbon Footprint:</strong> Understanding and reducing our environmental impact as we grow.</span>
                 </li>
               </ul>
 

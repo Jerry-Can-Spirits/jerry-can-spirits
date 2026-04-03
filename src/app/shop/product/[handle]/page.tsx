@@ -4,6 +4,7 @@ import Image from 'next/image'
 import { getProduct, getSmartRecommendations, type ShopifyProduct, type ShopifyMetafield } from '@/lib/shopify'
 import ProductVariantSelector from '@/components/ProductVariantSelector'
 import BatchStockIndicator from '@/components/BatchStockIndicator'
+import CarbonOffsetToggle from '@/components/CarbonOffsetToggle'
 import ProductImageGallery from '@/components/ProductImageGallery'
 import StructuredData from '@/components/StructuredData'
 import ProductPageTracking from '@/components/ProductPageTracking'
@@ -532,6 +533,9 @@ export default async function ProductPage({
                   </div>
                 </div>
               </div>
+
+              {/* Carbon offset opt-in — spirits only */}
+              {isSpirit && <CarbonOffsetToggle />}
             </div>
 
             {/* Product Features/Highlights - Category-specific content */}
