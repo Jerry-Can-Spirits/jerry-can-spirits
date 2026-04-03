@@ -41,7 +41,7 @@ export const metadata: Metadata = {
 }
 
 export default function TermsOfService() {
-  const lastUpdated = '4 September 2025'
+  const lastUpdated = '2 April 2026'
 
   return (
     <>
