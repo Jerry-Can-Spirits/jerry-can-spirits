@@ -197,7 +197,7 @@ export default function CartDrawer() {
               </div>
             ) : (
               <div className="space-y-4">
-                {cart.lines.filter(line => line.merchandise.product.handle !== 'carbon-offset').map((line) => (
+                {cart.lines.filter(line => line.merchandise.product.handle !== 'uk-tree-fund').map((line) => (
                   <div
                     key={line.id}
                     className="flex gap-4 p-4 bg-jerry-green-800/20 rounded-lg border border-gold-500/20"

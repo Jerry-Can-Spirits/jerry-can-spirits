@@ -33,16 +33,16 @@ export default async function EcologiImpact() {
           />
         </div>
         <h2 className="text-2xl sm:text-3xl font-serif font-bold text-white">
-          Carbon Offsetting
+          Climate Action
         </h2>
       </div>
 
       <div className="space-y-4 text-parchment-300 mb-6">
         <p>
-          Every order placed on this site includes an opt-in £1 carbon offset. The money goes to verified reforestation and carbon reduction projects through Ecologi.
+          Every Jerry Can Spirits order automatically plants a tree and removes 1kg of CO₂ through our Ecologi partnership. No opt-in required.
         </p>
         <p>
-          Shipping from Newport, Wales generates an estimated 0.8 kg CO₂ per delivery. Your £1 offsets that and funds projects beyond our footprint. It is never added automatically.
+          At checkout, customers can go further by adding £1 to fund a UK reforestation project specifically. Every contribution is tracked and publicly visible on our Ecologi profile.
         </p>
       </div>
 

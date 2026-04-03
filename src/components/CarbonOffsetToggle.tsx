@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { useCart } from '@/contexts/CartContext'
 import { getProduct } from '@/lib/shopify'
 
-const OFFSET_HANDLE = 'carbon-offset'
+const OFFSET_HANDLE = 'uk-tree-fund'
 
 export default function CarbonOffsetToggle() {
   const { cart, addToCart, removeItem, isLoading } = useCart()
