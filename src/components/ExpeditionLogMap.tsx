@@ -36,6 +36,8 @@ export default function ExpeditionLogMap({ entries }: Props) {
         scrollZoom: false,
       })
 
+      map.addControl(new mapboxgl.NavigationControl({ showCompass: false }), 'top-right')
+
       mapRef.current = map
 
       map.on('load', () => {
@@ -62,7 +64,7 @@ export default function ExpeditionLogMap({ entries }: Props) {
           paint: {
             'heatmap-weight': 1,
             'heatmap-intensity': ['interpolate', ['linear'], ['zoom'], 0, 1, 9, 3],
-            'heatmap-radius': ['interpolate', ['linear'], ['zoom'], 0, 20, 9, 40],
+            'heatmap-radius': ['interpolate', ['linear'], ['zoom'], 0, 10, 9, 20],
             'heatmap-color': [
               'interpolate',
               ['linear'],

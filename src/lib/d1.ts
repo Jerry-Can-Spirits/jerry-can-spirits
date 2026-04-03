@@ -235,14 +235,15 @@ export interface ExpeditionLogEntry {
   location: string | null;
   location_lat: number | null;
   location_lng: number | null;
-  message: string | null;
+  bottle_type: string | null;
+  bottle_number: number | null;
   created_at: string;
 }
 
 export async function getExpeditionLogEntries(db: D1Database): Promise<ExpeditionLogEntry[]> {
   const result = await db
     .prepare(
-      `SELECT id, batch_id, name, location, location_lat, location_lng, message, created_at
+      `SELECT id, batch_id, name, location, location_lat, location_lng, bottle_type, bottle_number, created_at
        FROM expedition_log
        WHERE removed_at IS NULL
        ORDER BY created_at DESC

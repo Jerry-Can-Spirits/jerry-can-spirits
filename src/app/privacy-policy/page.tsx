@@ -41,7 +41,7 @@ export const metadata: Metadata = {
 }
 
 export default function PrivacyPolicy() {
-  const lastUpdated = new Date('2025-09-04').toLocaleDateString('en-GB', {
+  const lastUpdated = new Date('2026-04-02').toLocaleDateString('en-GB', {
     year: 'numeric',
     month: 'long',
     day: 'numeric'
@@ -86,7 +86,7 @@ export default function PrivacyPolicy() {
               </h2>
               <p className="text-gold-300 font-semibold mb-2">Jerry Can Spirits Ltd</p>
               <p className="text-white mb-2">
-                Email: <a href="mailto:privacy@jerrycanspirits.co.uk" className="text-gold-300 hover:text-gold-200 underline">privacy@jerrycanspirits.co.uk</a>
+                Email: <a href="mailto:support@jerrycanspirits.co.uk" className="text-gold-300 hover:text-gold-200 underline">support@jerrycanspirits.co.uk</a>
               </p>
               <p className="text-white">
                 We are the controller and responsible for your personal data (collectively referred to as "Jerry Can Spirits," "we," "us," or "our" in this privacy policy).
@@ -108,7 +108,25 @@ export default function PrivacyPolicy() {
               </ul>
 
               <h3 className="text-xl font-serif font-semibold text-white mt-6 mb-3">
-                3.2 Information We Collect Automatically
+                3.2 The Expedition Log
+              </h3>
+              <p className="text-white mb-3 leading-relaxed">
+                The Expedition Log is an opt-in public registry for founding supporters. When you submit an entry, we collect your name, approximate location (town or city level), bottle type, and bottle number. This information is displayed publicly on our website.
+              </p>
+              <p className="text-white mb-3 leading-relaxed">
+                The legal basis for processing this data is your consent, given when you submit the form.
+              </p>
+              <p className="text-white mb-3 leading-relaxed">
+                Your location is passed to Mapbox to place your entry on the map. Mapbox&apos;s privacy policy is available at{' '}
+                <a href="https://www.mapbox.com/legal/privacy" target="_blank" rel="noopener noreferrer" className="text-gold-300 hover:text-gold-200 underline">mapbox.com/legal/privacy</a>.
+              </p>
+              <p className="text-white leading-relaxed">
+                To have your entry removed, email{' '}
+                <a href="mailto:support@jerrycanspirits.co.uk" className="text-gold-300 hover:text-gold-200 underline">support@jerrycanspirits.co.uk</a>. We will remove it within 7 days.
+              </p>
+
+              <h3 className="text-xl font-serif font-semibold text-white mt-6 mb-3">
+                3.3 Information We Collect Automatically
               </h3>
               <ul className="list-disc list-inside text-white space-y-2">
                 <li><strong className="text-gold-300">Technical Data:</strong> IP address, browser type, device information, operating system</li>
@@ -156,7 +174,7 @@ export default function PrivacyPolicy() {
               <ul className="list-disc list-inside text-white space-y-2 mb-6">
                 <li><strong className="text-gold-300">Necessary Cookies:</strong> Essential for website functionality and age verification (no consent required)</li>
                 <li><strong className="text-gold-300">Analytics Cookies:</strong> Google Analytics and Google Ads for usage statistics and conversion tracking (requires consent)</li>
-                <li><strong className="text-gold-300">Marketing Cookies:</strong> Meta Pixel, TikTok Pixel, and Klaviyo for advertising and email marketing tracking (requires consent)</li>
+                <li><strong className="text-gold-300">Marketing Cookies:</strong> Meta Pixel, Klaviyo, and Metricool for advertising, email marketing, and content analytics (requires consent)</li>
                 <li><strong className="text-gold-300">Third-Party Cookies:</strong> Trustpilot for customer reviews (requires consent), Cookiebot for consent management</li>
               </ul>
 
@@ -181,7 +199,8 @@ export default function PrivacyPolicy() {
                 <li><strong className="text-gold-300">Klaviyo:</strong> Email marketing platform (USA) - Standard Contractual Clauses</li>
                 <li><strong className="text-gold-300">Google Analytics / Google Ads:</strong> Website analytics and conversion tracking (Ireland/USA) - Google Ads Data Processing Terms</li>
                 <li><strong className="text-gold-300">Meta (Facebook) Pixel:</strong> Advertising and conversion tracking (USA) - Standard Contractual Clauses</li>
-                <li><strong className="text-gold-300">TikTok Pixel:</strong> Advertising and conversion tracking (USA/Singapore) - Standard Contractual Clauses</li>
+                <li><strong className="text-gold-300">Metricool:</strong> Social media and content analytics (Spain/EU) - GDPR-compliant</li>
+                <li><strong className="text-gold-300">Mapbox:</strong> Map rendering and location geocoding for the Expedition Log (USA) - Standard Contractual Clauses</li>
                 <li><strong className="text-gold-300">Cloudflare:</strong> Website hosting and CDN (Global network) - GDPR-compliant with Data Processing Addendum</li>
                 <li><strong className="text-gold-300">Trustpilot:</strong> Customer review platform (Denmark/USA) - Standard Contractual Clauses</li>
                 <li><strong className="text-gold-300">Sentry:</strong> Error monitoring and performance tracking (USA) - Standard Contractual Clauses</li>
@@ -201,6 +220,7 @@ export default function PrivacyPolicy() {
                 7. Data Retention
               </h2>
               <ul className="list-disc list-inside text-white space-y-2">
+                <li><strong className="text-gold-300">Expedition Log Entries:</strong> Until you request removal by emailing support@jerrycanspirits.co.uk</li>
                 <li><strong className="text-gold-300">Newsletter Subscribers:</strong> Until you unsubscribe or 3 years of inactivity</li>
                 <li><strong className="text-gold-300">Contact Form Data:</strong> 2 years for customer service purposes</li>
                 <li><strong className="text-gold-300">Analytics Data:</strong> 14 months (Google Analytics setting)</li>
@@ -226,7 +246,7 @@ export default function PrivacyPolicy() {
               
               <p className="text-white">
                 To exercise any of these rights, email us at{' '}
-                <a href="mailto:privacy@jerrycanspirits.co.uk" className="text-gold-300 hover:text-gold-200 underline">privacy@jerrycanspirits.co.uk</a>. 
+                <a href="mailto:support@jerrycanspirits.co.uk" className="text-gold-300 hover:text-gold-200 underline">support@jerrycanspirits.co.uk</a>. 
                 We will respond within one month.
               </p>
             </section>
@@ -293,7 +313,7 @@ export default function PrivacyPolicy() {
               </p>
               <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20 mb-6">
                 <ul className="list-disc list-inside text-white space-y-2">
-                  <li>Email: <a href="mailto:privacy@jerrycanspirits.co.uk" className="text-gold-300 hover:text-gold-200 underline">privacy@jerrycanspirits.co.uk</a></li>
+                  <li>Email: <a href="mailto:support@jerrycanspirits.co.uk" className="text-gold-300 hover:text-gold-200 underline">support@jerrycanspirits.co.uk</a></li>
                   <li>Contact Form: <a href="/contact/" className="text-gold-300 hover:text-gold-200 underline">jerrycanspirits.co.uk/contact</a></li>
                 </ul>
               </div>
