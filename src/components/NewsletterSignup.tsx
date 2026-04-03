@@ -73,6 +73,7 @@ export default function NewsletterSignup() {
           required
           autoComplete="given-name"
           placeholder="First name"
+          aria-label="First name"
           value={firstName}
           onChange={(e) => setFirstName(e.target.value)}
           className="flex-1 px-4 py-3 bg-jerry-green-900 border border-gold-500/30 rounded-lg text-white placeholder-parchment-500 text-sm focus:outline-none focus:border-gold-400 transition-colors"
@@ -83,6 +84,7 @@ export default function NewsletterSignup() {
           required
           autoComplete="email"
           placeholder="Email address"
+          aria-label="Email address"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           className="flex-1 px-4 py-3 bg-jerry-green-900 border border-gold-500/30 rounded-lg text-white placeholder-parchment-500 text-sm focus:outline-none focus:border-gold-400 transition-colors"

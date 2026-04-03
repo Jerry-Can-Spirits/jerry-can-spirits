@@ -153,6 +153,7 @@ export default function ExpeditionLogForm({ batchId }: Props) {
               <select
                 value={bottle.type}
                 onChange={(e) => updateBottle(i, 'type', e.target.value)}
+                aria-label={`Bottle ${i + 1} type`}
                 className="px-3 py-3 bg-jerry-green-900 border border-gold-500/30 rounded-lg text-white text-sm focus:outline-none focus:border-gold-400"
               >
                 {BOTTLE_TYPES.map((t) => (
@@ -165,6 +166,7 @@ export default function ExpeditionLogForm({ batchId }: Props) {
                 value={bottle.number}
                 onChange={(e) => updateBottle(i, 'number', e.target.value)}
                 placeholder="Bottle no."
+                aria-label={`Bottle ${i + 1} number`}
                 className="w-32 px-3 py-3 bg-jerry-green-900 border border-gold-500/30 rounded-lg text-white placeholder-parchment-500 text-sm focus:outline-none focus:border-gold-400"
               />
               {bottles.length > 1 && (
