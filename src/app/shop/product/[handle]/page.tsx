@@ -773,6 +773,7 @@ export default async function ProductPage({
                       alt={relatedProduct.images[0].altText || relatedProduct.title}
                       fill
                       className="object-contain group-hover:scale-110 transition-transform duration-300"
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                     />
                   </div>
                 )}

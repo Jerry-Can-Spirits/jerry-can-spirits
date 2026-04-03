@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
+import Script from 'next/script'
 
 interface TrustpilotWidgetProps {
   templateId: string
@@ -61,6 +62,8 @@ export default function TrustpilotWidget({
   }
 
   return (
+    <>
+    <Script src="https://widget.trustpilot.com/bootstrap/v5/tp.widget.bootstrap.min.js" strategy="afterInteractive" />
     <div
       ref={ref}
       className="trustpilot-widget"
@@ -75,6 +78,7 @@ export default function TrustpilotWidget({
         Trustpilot
       </a>
     </div>
+    </>
   )
 }
 

@@ -1,5 +1,3 @@
-'use client'
-
 interface TickerStripProps {
   items: string[]
   className?: string

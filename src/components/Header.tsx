@@ -37,6 +37,8 @@ export default function Header() {
   const lastScrollY = useRef(0)
   const ticking = useRef(false)
   const dropdownCloseTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const isScrolledRef = useRef(false)
+  const showHeaderRef = useRef(true)
 
   // Steering Law: delayed close prevents accidental dismissal during diagonal movement
   const handleNavEnter = (name: string) => {
@@ -121,15 +123,12 @@ export default function Header() {
       ticking.current = true
       window.requestAnimationFrame(() => {
         const currentScrollY = window.scrollY
-        const wasScrolled = isScrolled
-        const wasShowingHeader = showHeader
         const prevScrollY = lastScrollY.current
 
-        // Batch state updates - only update if values actually changed
         const shouldBeScrolled = currentScrollY > 20
         const scrollDifference = Math.abs(currentScrollY - prevScrollY)
 
-        let newShowHeader = wasShowingHeader
+        let newShowHeader = showHeaderRef.current
         if (!isMobileMenuOpen && scrollDifference > 5) {
           if (currentScrollY > prevScrollY && currentScrollY > 150) {
             newShowHeader = false
@@ -139,11 +138,12 @@ export default function Header() {
           lastScrollY.current = currentScrollY
         }
 
-        // Only trigger re-renders if values actually changed
-        if (shouldBeScrolled !== wasScrolled) {
+        if (shouldBeScrolled !== isScrolledRef.current) {
+          isScrolledRef.current = shouldBeScrolled
           setIsScrolled(shouldBeScrolled)
         }
-        if (newShowHeader !== wasShowingHeader) {
+        if (newShowHeader !== showHeaderRef.current) {
+          showHeaderRef.current = newShowHeader
           setShowHeader(newShowHeader)
         }
 
@@ -153,7 +153,7 @@ export default function Header() {
 
     window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
-  }, [isMobileMenuOpen, isScrolled, showHeader])
+  }, [isMobileMenuOpen])
 
   // Close mobile menu on resize
   useEffect(() => {

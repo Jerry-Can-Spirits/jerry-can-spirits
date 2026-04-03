@@ -327,11 +327,11 @@ export default function Footer() {
                   <Image
                     src="/images/logo-etch.webp"
                     alt="Jerry Can Spirits®"
-                    width={512}
-                    height={768}
+                    width={128}
+                    height={192}
                     className="h-48 w-auto opacity-90 group-hover:opacity-100 transition-opacity duration-300"
                     sizes="128px"
-                    priority
+                    loading="lazy"
                   />
                 </Link>
               </div>
