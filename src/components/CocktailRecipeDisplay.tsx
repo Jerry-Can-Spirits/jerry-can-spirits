@@ -49,6 +49,23 @@ interface SanityCocktail {
   longDescription?: Record<string, unknown>[]
 }
 
+const SERVES_OPTIONS = [1, 2, 4, 6, 8, 10]
+
+// Scale a structured amount string by a multiplier.
+// Handles "45ml", "2 dashes", "1 lime", etc.
+// Returns as-is if no leading number is found (e.g. "to taste", "splash").
+function scaleAmount(amount: string, multiplier: number): string {
+  if (multiplier === 1) return amount
+  // Capture: number, optional whitespace between number and unit, rest
+  const match = amount.match(/^(\d+(?:\.\d+)?)(\s*)(.*)$/)
+  if (!match) return amount
+  const scaled = parseFloat(match[1]) * multiplier
+  const formatted = Number.isInteger(scaled)
+    ? String(scaled)
+    : parseFloat(scaled.toFixed(1)).toString()
+  return `${formatted}${match[2]}${match[3]}`.trim()
+}
+
 // Tag display labels (convert values to readable format)
 const tagLabels: Record<string, string> = {
   'high-abv': 'High-ABV',
@@ -83,6 +100,7 @@ interface Props {
 
 export default function CocktailRecipeDisplay({ cocktail }: Props) {
   const [activeVariant, setActiveVariant] = useState<number>(-1) // -1 for original, 0+ for variants
+  const [serves, setServes] = useState(1)
 
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty.toLowerCase()) {
@@ -228,7 +246,28 @@ export default function CocktailRecipeDisplay({ cocktail }: Props) {
       <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-4 sm:p-6 md:p-8 border border-gold-500/20 relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-amber-100/5 to-amber-200/10 opacity-50"></div>
         <div className="relative z-10">
-          <h2 className="text-2xl font-serif font-bold text-white mb-4 sm:mb-6">Ingredients</h2>
+          <div className="flex flex-wrap items-center justify-between gap-4 mb-4 sm:mb-6">
+            <h2 className="text-2xl font-serif font-bold text-white">Ingredients</h2>
+            <div className="flex items-center gap-2">
+              <span className="text-parchment-400 text-sm">Serves</span>
+              <div className="flex gap-1">
+                {SERVES_OPTIONS.map((n) => (
+                  <button
+                    key={n}
+                    type="button"
+                    onClick={() => setServes(n)}
+                    className={`w-8 h-8 rounded text-sm font-semibold transition-colors ${
+                      serves === n
+                        ? 'bg-gold-500 text-jerry-green-900'
+                        : 'bg-jerry-green-800/60 text-parchment-300 hover:bg-jerry-green-800 border border-gold-500/20'
+                    }`}
+                  >
+                    {n}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
 
           <div className="space-y-3 sm:space-y-4">
             {currentRecipe.ingredients?.map((ingredient, index) => (
@@ -246,7 +285,7 @@ export default function CocktailRecipeDisplay({ cocktail }: Props) {
                   ) : (
                     <span className="font-semibold text-white">{ingredient.name}</span>
                   )}
-                  <p className="text-gold-300 font-semibold text-sm">{ingredient.amount}</p>
+                  <p className="text-gold-300 font-semibold text-sm">{scaleAmount(ingredient.amount, serves)}</p>
                   {ingredient.description && (
                     <p className="text-parchment-300 text-sm">{ingredient.description}</p>
                   )}

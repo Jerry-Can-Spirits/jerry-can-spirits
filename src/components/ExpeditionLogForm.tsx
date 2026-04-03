@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Link from 'next/link'
 import Script from 'next/script'
 
 interface Props {
@@ -203,6 +204,12 @@ export default function ExpeditionLogForm({ batchId }: Props) {
           autoComplete="off"
           aria-hidden="true"
         />
+        <p className="text-xs text-parchment-500">
+          By submitting, your name and location will appear publicly on the Expedition Log.{' '}
+          <Link href="/privacy-policy/" className="underline hover:text-parchment-400 transition-colors">
+            Privacy policy.
+          </Link>
+        </p>
         {status === 'error' && (
           <p className="text-red-400 text-sm">{errorMessage}</p>
         )}
