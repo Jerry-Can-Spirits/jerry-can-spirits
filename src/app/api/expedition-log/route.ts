@@ -107,10 +107,11 @@ export async function POST(request: Request) {
         const geoRes = await fetch(
           `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(location)}.json?country=gb&limit=1&access_token=${MAPBOX_SECRET_TOKEN}`
         )
-        const geoData = await geoRes.json() as { features?: Array<{ geometry: { coordinates: [number, number] } }> }
-        if (geoData.features?.[0]) {
-          location_lng = geoData.features[0].geometry.coordinates[0]
-          location_lat = geoData.features[0].geometry.coordinates[1]
+        const geoData = await geoRes.json() as { features?: Array<{ geometry: { coordinates: unknown[] } }> }
+        const coords = geoData.features?.[0]?.geometry?.coordinates
+        if (Array.isArray(coords) && typeof coords[0] === 'number' && typeof coords[1] === 'number') {
+          location_lng = coords[0]
+          location_lat = coords[1]
         }
       } catch (err) {
         console.error('Mapbox geocoding failed (non-blocking):', err)

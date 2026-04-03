@@ -24,12 +24,26 @@ export const metadata: Metadata = {
   },
 }
 
+interface CocktailListItem {
+  _id: string
+  name: string
+  slug: { current: string }
+  description: string
+  difficulty: string
+  family: string
+  baseSpirit: string
+  category: string
+  tags: string[]
+  featured: boolean
+  image: string | null
+  imageAlt: string | null
+}
+
 // This is now a Server Component - data fetching happens server-side
 export default async function CocktailsPage() {
   // Fetch cocktails server-side using optimized list query
   // Only fetches fields needed for preview cards (not full ingredients/instructions)
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const cocktails: any[] = await client.fetch(cocktailsListQuery, {}, { next: { revalidate: 3600 } })
+  const cocktails: CocktailListItem[] = await client.fetch(cocktailsListQuery, {}, { next: { revalidate: 3600 } })
 
   // Build ItemList schema for recipe collection
   // Note: Using URL references instead of inline Recipe objects to avoid
