@@ -466,9 +466,20 @@ export default async function ProductPage({
               />
             )}
 
-            {/* Live batch stock — single bottle only */}
+            {/* Live batch stock */}
             {handle === 'jerry-can-spirits-expedition-spiced-rum' && (
-              <BatchStockIndicator />
+              <BatchStockIndicator
+                handle={handle}
+                total={700}
+                label="Batch 001"
+              />
+            )}
+            {handle === 'jerry-can-spirits-premium-gift-pack' && (
+              <BatchStockIndicator
+                handle={handle}
+                total={100}
+                label="Premium Pack"
+              />
             )}
 
             {/* Variant Selector & Add to Cart */}
