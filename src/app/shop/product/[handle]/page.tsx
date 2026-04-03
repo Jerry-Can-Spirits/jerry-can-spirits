@@ -677,14 +677,14 @@ export default async function ProductPage({
           {/* Full Ingredients Link - Spirits only */}
           {isSpirit && (
             <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
-              <div className="flex items-center justify-between">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
                   <h3 className="text-xl font-serif font-bold text-white mb-1">Full Ingredients</h3>
                   <p className="text-parchment-300 text-sm">View the complete ingredient list, allergen info, and sourcing details.</p>
                 </div>
                 <Link
                   href={`/ingredients/${getIngredientsSlug(handle)}`}
-                  className="inline-flex items-center gap-2 bg-jerry-green-800 hover:bg-jerry-green-700 text-parchment-50 px-5 py-2.5 rounded-lg font-semibold border border-gold-500/30 hover:border-gold-500/60 transition-all duration-300 whitespace-nowrap"
+                  className="inline-flex items-center gap-2 bg-jerry-green-800 hover:bg-jerry-green-700 text-parchment-50 px-5 py-2.5 rounded-lg font-semibold border border-gold-500/30 hover:border-gold-500/60 transition-all duration-300 self-start sm:self-auto shrink-0"
                 >
                   <span>View Ingredients</span>
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -698,14 +698,14 @@ export default async function ProductPage({
           {/* Cocktail Recipes Link - Spirits only */}
           {isSpirit && (
             <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
-              <div className="flex items-center justify-between">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
                   <h3 className="text-xl font-serif font-bold text-white mb-1">What to Make With This</h3>
                   <p className="text-parchment-300 text-sm">Classic cocktails and exclusive recipes from the Field Manual.</p>
                 </div>
                 <Link
                   href="/field-manual/cocktails/"
-                  className="inline-flex items-center gap-2 bg-jerry-green-800 hover:bg-jerry-green-700 text-parchment-50 px-5 py-2.5 rounded-lg font-semibold border border-gold-500/30 hover:border-gold-500/60 transition-all duration-300 whitespace-nowrap"
+                  className="inline-flex items-center gap-2 bg-jerry-green-800 hover:bg-jerry-green-700 text-parchment-50 px-5 py-2.5 rounded-lg font-semibold border border-gold-500/30 hover:border-gold-500/60 transition-all duration-300 self-start sm:self-auto shrink-0"
                 >
                   <span>View Recipes</span>
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
