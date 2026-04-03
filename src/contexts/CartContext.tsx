@@ -1,6 +1,6 @@
 'use client'
 
-import React, { createContext, useContext, useState, useEffect, useCallback } from 'react'
+import React, { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react'
 import {
   createCart,
   addToCart as shopifyAddToCart,
@@ -184,22 +184,27 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     }
   }, [cart])
 
-  // Calculate total item count
-  const itemCount = cart?.lines.reduce((total, line) => total + line.quantity, 0) || 0
+  const itemCount = useMemo(
+    () => cart?.lines.reduce((total, line) => total + line.quantity, 0) || 0,
+    [cart]
+  )
 
-  const value: CartContextType = {
-    cart,
-    isLoading,
-    isCartOpen,
-    openCart,
-    closeCart,
-    addToCart,
-    updateQuantity,
-    removeItem,
-    applyDiscountCode,
-    updateAttributes,
-    itemCount,
-  }
+  const value = useMemo<CartContextType>(
+    () => ({
+      cart,
+      isLoading,
+      isCartOpen,
+      openCart,
+      closeCart,
+      addToCart,
+      updateQuantity,
+      removeItem,
+      applyDiscountCode,
+      updateAttributes,
+      itemCount,
+    }),
+    [cart, isLoading, isCartOpen, openCart, closeCart, addToCart, updateQuantity, removeItem, applyDiscountCode, updateAttributes, itemCount]
+  )
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>
 }

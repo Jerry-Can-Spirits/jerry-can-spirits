@@ -5,7 +5,6 @@ import { Inter, Playfair_Display, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import PromoBanner from "@/components/PromoBanner";
 import ShippingBanner from "@/components/ShippingBanner";
 import ClientWrapper from "@/components/ClientWrapper";
 
@@ -156,7 +155,6 @@ export default function RootLayout({
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
         <link rel="dns-prefetch" href="https://www.google-analytics.com" />
         <link rel="dns-prefetch" href="https://widget.trustpilot.com" />
-        <Script src="https://widget.trustpilot.com/bootstrap/v5/tp.widget.bootstrap.min.js" strategy="afterInteractive" />
         <link rel="dns-prefetch" href="https://cloudflareinsights.com" />
 
         {/* Klaviyo is now loaded via KlaviyoScript component with consent */}
@@ -190,15 +188,7 @@ export default function RootLayout({
           {/* Unified Cartographic Background */}
           <CartographicBackground opacity={0.75} showCoordinates={true} showCompass={true} className="fixed inset-0 z-0 pointer-events-none" />
 
-          {/* Promo Banner - Only show when there's an active promotion */}
           <div className="relative z-10">
-            <PromoBanner
-              message="Pre-launch: Be the first to know when Expedition Spiced launches!"
-              ctaText="Notify Me"
-              ctaLink="/#newsletter-signup"
-              isVisible={false}
-            />
-
             <Header />
 
             {/* Main content with proper spacing for fixed header + announcement bar */}
