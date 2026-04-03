@@ -14,9 +14,9 @@ interface Guide {
   category: string
   featured: boolean
   isPillar: boolean
-  publishedAt: string
-  heroImage?: string
-  heroImageAlt?: string
+  publishedAt: string | null
+  heroImage?: string | null
+  heroImageAlt?: string | null
 }
 
 interface GuidesClientProps {

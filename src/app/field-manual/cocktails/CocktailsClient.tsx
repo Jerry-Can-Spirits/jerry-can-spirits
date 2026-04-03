@@ -37,15 +37,16 @@ interface SanityCocktail {
   name: string
   slug: { current: string }
   description: string
-  difficulty: 'novice' | 'wayfinder' | 'trailblazer'
-  ingredients: CocktailIngredient[]
-  instructions: string[]
-  glassware: {
+  difficulty: 'novice' | 'wayfinder' | 'trailblazer' | string
+  // Detail fields — only present on full queries, not list queries
+  ingredients?: CocktailIngredient[]
+  instructions?: string[]
+  glassware?: {
     _id: string
     name: string
     slug: { current: string }
   }
-  garnish: string
+  garnish?: string
   note?: string
   variants?: CocktailVariant[]
   family?: string
@@ -53,8 +54,8 @@ interface SanityCocktail {
   category?: string // Legacy field
   tags?: string[]
   featured?: boolean
-  image?: string
-  imageAlt?: string
+  image?: string | null
+  imageAlt?: string | null
 }
 
 // Tag display labels (convert values to readable format)

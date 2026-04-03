@@ -60,18 +60,26 @@ export async function GET() {
       ),
     ])
 
-    const fbData =
+    const fbData: unknown =
       fbRes.status === 'fulfilled' && fbRes.value.ok
         ? await fbRes.value.json()
         : null
-    const igData =
+    const igData: unknown =
       igRes.status === 'fulfilled' && igRes.value.ok
         ? await igRes.value.json()
         : null
 
+    function extractFollowerCount(data: unknown): number | null {
+      if (data !== null && typeof data === 'object' && 'followers_count' in data) {
+        const count = (data as Record<string, unknown>).followers_count
+        return typeof count === 'number' ? count : null
+      }
+      return null
+    }
+
     const stats: SocialStats = {
-      facebook: (fbData as Record<string, number> | null)?.followers_count ?? null,
-      instagram: (igData as Record<string, number> | null)?.followers_count ?? null,
+      facebook: extractFollowerCount(fbData),
+      instagram: extractFollowerCount(igData),
       lastUpdated: new Date().toISOString(),
     }
 
