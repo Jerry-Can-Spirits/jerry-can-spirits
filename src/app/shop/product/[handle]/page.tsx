@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation'
 import Image from 'next/image'
 import { getProduct, getSmartRecommendations, type ShopifyProduct, type ShopifyMetafield } from '@/lib/shopify'
 import ProductVariantSelector from '@/components/ProductVariantSelector'
+import BatchStockIndicator from '@/components/BatchStockIndicator'
 import ProductImageGallery from '@/components/ProductImageGallery'
 import StructuredData from '@/components/StructuredData'
 import ProductPageTracking from '@/components/ProductPageTracking'
@@ -463,6 +464,11 @@ export default async function ProductPage({
                 className="prose prose-invert max-w-none prose-headings:font-serif prose-headings:text-gold-300 prose-p:text-parchment-200 prose-p:leading-relaxed prose-strong:text-white prose-li:text-parchment-200 prose-a:text-blue-400 prose-a:underline prose-a:underline-offset-2 hover:prose-a:text-blue-300"
                 dangerouslySetInnerHTML={{ __html: product.descriptionHtml }}
               />
+            )}
+
+            {/* Live batch stock — single bottle only */}
+            {handle === 'jerry-can-spirits-expedition-spiced-rum' && (
+              <BatchStockIndicator />
             )}
 
             {/* Variant Selector & Add to Cart */}
