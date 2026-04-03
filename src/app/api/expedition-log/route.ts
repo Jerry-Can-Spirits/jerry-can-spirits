@@ -2,11 +2,19 @@
 import { NextResponse } from 'next/server'
 import { getCloudflareContext } from '@opennextjs/cloudflare'
 
+const VALID_BOTTLE_TYPES = ['standard', 'premium', 'founder'] as const
+type BottleType = typeof VALID_BOTTLE_TYPES[number]
+
+interface BottleEntry {
+  type: BottleType
+  number: number
+}
+
 interface RequestBody {
   name: string
   batch_id: string
   location?: string
-  message?: string
+  bottles: BottleEntry[]
   turnstileToken: string
   website?: string
 }
@@ -25,7 +33,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400 })
     }
 
-    const { name: rawName, batch_id, location: rawLocation, message: rawMessage, turnstileToken, website } = body
+    const { name: rawName, batch_id, location: rawLocation, bottles, turnstileToken, website } = body
 
     // Honeypot
     if (website && website.trim() !== '') {
@@ -35,7 +43,6 @@ export async function POST(request: Request) {
     // Validate inputs
     const name = rawName?.trim() ?? ''
     const location = rawLocation?.trim() ?? ''
-    const message = rawMessage?.trim() ?? ''
 
     if (!name) return NextResponse.json({ error: 'Name is required.' }, { status: 400 })
     if (!batch_id?.trim()) return NextResponse.json({ error: 'Batch ID is required.' }, { status: 400 })
@@ -43,7 +50,21 @@ export async function POST(request: Request) {
     if (!turnstileToken?.trim()) return NextResponse.json({ error: 'Bot check token is required.' }, { status: 400 })
     if (name.length > 100) return NextResponse.json({ error: 'Name must be 100 characters or fewer.' }, { status: 400 })
     if (location.length > 100) return NextResponse.json({ error: 'Location must be 100 characters or fewer.' }, { status: 400 })
-    if (message.length > 500) return NextResponse.json({ error: 'Message must be 500 characters or fewer.' }, { status: 400 })
+
+    if (!Array.isArray(bottles) || bottles.length === 0) {
+      return NextResponse.json({ error: 'At least one bottle is required.' }, { status: 400 })
+    }
+    if (bottles.length > 20) {
+      return NextResponse.json({ error: 'Maximum 20 bottles per submission.' }, { status: 400 })
+    }
+    for (const bottle of bottles) {
+      if (!VALID_BOTTLE_TYPES.includes(bottle.type)) {
+        return NextResponse.json({ error: 'Invalid bottle type.' }, { status: 400 })
+      }
+      if (!Number.isInteger(bottle.number) || bottle.number < 1) {
+        return NextResponse.json({ error: 'Bottle number must be a positive whole number.' }, { status: 400 })
+      }
+    }
 
     // Rate limiting (best-effort)
     const fwd = request.headers.get('cf-connecting-ip') || request.headers.get('x-forwarded-for') || 'unknown'
@@ -78,51 +99,47 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Bot check failed.' }, { status: 400 })
     }
 
-    // Geocode location (non-blocking — failure does not reject the submission)
+    // Geocode location once — shared across all bottle rows
     let location_lat: number | null = null
     let location_lng: number | null = null
     if (location && MAPBOX_SECRET_TOKEN) {
       try {
-        console.log('[expedition-log] geocoding location:', location, 'token present:', !!MAPBOX_SECRET_TOKEN)
         const geoRes = await fetch(
           `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(location)}.json?country=gb&limit=1&access_token=${MAPBOX_SECRET_TOKEN}`
         )
-        console.log('[expedition-log] geocode status:', geoRes.status)
-        const geoData = await geoRes.json() as { features?: Array<{ geometry: { coordinates: [number, number] } }>, message?: string }
-        console.log('[expedition-log] geocode features:', geoData.features?.length ?? 0, geoData.message ?? '')
+        const geoData = await geoRes.json() as { features?: Array<{ geometry: { coordinates: [number, number] } }> }
         if (geoData.features?.[0]) {
-          // Mapbox returns [longitude, latitude]
           location_lng = geoData.features[0].geometry.coordinates[0]
           location_lat = geoData.features[0].geometry.coordinates[1]
-          console.log('[expedition-log] geocoded to:', location_lat, location_lng)
         }
       } catch (err) {
         console.error('Mapbox geocoding failed (non-blocking):', err)
       }
-    } else {
-      console.log('[expedition-log] skipping geocode — location:', !!location, 'token:', !!MAPBOX_SECRET_TOKEN)
     }
 
-    // Insert
+    // Insert one row per bottle
     const db = env.DB
-    const id = crypto.randomUUID()
-    await db
-      .prepare(
-        `INSERT INTO expedition_log (id, batch_id, name, location, location_lat, location_lng, message)
-         VALUES (?, ?, ?, ?, ?, ?, ?)`
-      )
-      .bind(
-        id,
-        batch_id.trim(),
-        name,
-        location || null,
-        location_lat,
-        location_lng,
-        message || null,
-      )
-      .run()
+    const stmt = db.prepare(
+      `INSERT INTO expedition_log (id, batch_id, name, location, location_lat, location_lng, bottle_type, bottle_number)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
+    )
 
-    return NextResponse.json({ success: true, _debug: { hasToken: !!MAPBOX_SECRET_TOKEN, hasLocation: !!location, geocoded: location_lat !== null } }, { status: 201 })
+    await db.batch(
+      bottles.map((bottle) =>
+        stmt.bind(
+          crypto.randomUUID(),
+          batch_id.trim(),
+          name,
+          location || null,
+          location_lat,
+          location_lng,
+          bottle.type,
+          bottle.number,
+        )
+      )
+    )
+
+    return NextResponse.json({ success: true }, { status: 201 })
   } catch (error) {
     console.error('Expedition log submission error:', error)
     return NextResponse.json({ error: 'Internal server error.' }, { status: 500 })
