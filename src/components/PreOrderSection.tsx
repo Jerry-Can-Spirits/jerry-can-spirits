@@ -1,101 +1,84 @@
-'use client'
-
-import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { getProduct } from '@/lib/shopify'
+import PreOrderProgressBar from './PreOrderProgressBar'
 
-interface ProductPricing {
-  price: string
-  compareAtPrice: string | null
-}
+const BOTTLE_HANDLE = 'jerry-can-spirits-expedition-spiced-rum'
+const GIFT_SET_HANDLE = 'jerry-can-spirits-premium-gift-pack'
+const TRADE_PACK_HANDLE = 'jerry-can-spirits-expedition-pack-spiced-rum-6-bottles'
+const TOTAL_BOTTLES = 700
+const BOTTLE_VOLUME_LITRES = 0.7
 
-export default function PreOrderSection() {
-  const [bottlesSold, setBottlesSold] = useState<number | null>(null)
-  const [bottlePricing, setBottlePricing] = useState<ProductPricing>({ price: '35', compareAtPrice: '45' })
-  const [giftSetPricing, setGiftSetPricing] = useState<ProductPricing>({ price: '85', compareAtPrice: null })
-  const [loading, setLoading] = useState(true)
-  const totalBottles = 700
+async function getPreOrderData() {
+  try {
+    const [bottleProduct, giftSetProduct, tradePackProduct] = await Promise.all([
+      getProduct(BOTTLE_HANDLE),
+      getProduct(GIFT_SET_HANDLE),
+      getProduct(TRADE_PACK_HANDLE),
+    ])
 
-  // Product handles
-  const bottleHandle = 'jerry-can-spirits-expedition-spiced-rum'
-  const giftSetHandle = 'jerry-can-spirits-premium-gift-pack'
-  const tradePackHandle = 'jerry-can-spirits-expedition-pack-spiced-rum-6-bottles' // kept for progress bar tracking
+    let singleBottlesSold = 0
+    let tradePacksSold = 0
+    let bottlePrice = '35'
+    let bottleCompareAtPrice: string | null = '45'
+    let giftSetPrice = '85'
+    let giftSetCompareAtPrice: string | null = null
 
-  useEffect(() => {
-    async function fetchProducts() {
-      try {
-        // Fetch all products in parallel
-        const [bottleProduct, giftSetProduct, tradePackProduct] = await Promise.all([
-          getProduct(bottleHandle),
-          getProduct(giftSetHandle),
-          getProduct(tradePackHandle)
-        ])
+    if (bottleProduct?.variants?.[0]) {
+      const variant = bottleProduct.variants[0]
+      bottlePrice = parseFloat(variant.price.amount).toFixed(0)
+      bottleCompareAtPrice = variant.compareAtPrice
+        ? parseFloat(variant.compareAtPrice.amount).toFixed(0)
+        : null
 
-        // Process bottle data
-        let singleBottlesSold = 0
-        let tradePacksSold = 0
-
-        if (bottleProduct?.variants?.[0]) {
-          const variant = bottleProduct.variants[0]
-
-          // Get single bottles sold from metafield
-          const preorderSoldMeta = bottleProduct.metafields?.find(
-            (m: { namespace: string; key: string; value: string } | null) =>
-              m?.namespace === 'custom' && m?.key === 'pre_order_sold'
-          )
-          if (preorderSoldMeta?.value) {
-            singleBottlesSold = parseInt(preorderSoldMeta.value, 10)
-          } else if (variant.quantityAvailable !== undefined) {
-            const available = variant.quantityAvailable
-            singleBottlesSold = Math.max(0, totalBottles - available)
-          }
-
-          setBottlePricing({
-            price: parseFloat(variant.price.amount).toFixed(0),
-            compareAtPrice: variant.compareAtPrice ? parseFloat(variant.compareAtPrice.amount).toFixed(0) : null
-          })
-        }
-
-        // Get trade packs sold from metafield and multiply by 6
-        if (tradePackProduct?.metafields) {
-          const tradePackSoldMeta = tradePackProduct.metafields.find(
-            (m: { namespace: string; key: string; value: string } | null) =>
-              m?.namespace === 'custom' && m?.key === 'pre_order_sold'
-          )
-          if (tradePackSoldMeta?.value) {
-            tradePacksSold = parseInt(tradePackSoldMeta.value, 10)
-          }
-        }
-
-        // Calculate total bottles: single bottles + (trade packs × 6)
-        const totalSold = singleBottlesSold + (tradePacksSold * 6)
-        setBottlesSold(totalSold)
-
-        // Process gift set data
-        if (giftSetProduct?.variants?.[0]) {
-          const variant = giftSetProduct.variants[0]
-          setGiftSetPricing({
-            price: parseFloat(variant.price.amount).toFixed(0),
-            compareAtPrice: variant.compareAtPrice ? parseFloat(variant.compareAtPrice.amount).toFixed(0) : null
-          })
-        }
-      } catch (error) {
-        console.error('Error fetching products:', error)
-        setBottlesSold(null)
-      } finally {
-        setLoading(false)
+      const preorderSoldMeta = bottleProduct.metafields?.find(
+        (m: { namespace: string; key: string; value: string } | null) =>
+          m?.namespace === 'custom' && m?.key === 'pre_order_sold'
+      )
+      if (preorderSoldMeta?.value) {
+        singleBottlesSold = parseInt(preorderSoldMeta.value, 10)
+      } else if (variant.quantityAvailable !== undefined) {
+        singleBottlesSold = Math.max(0, TOTAL_BOTTLES - variant.quantityAvailable)
       }
     }
 
-    fetchProducts()
-  }, [])
+    if (tradePackProduct?.metafields) {
+      const tradePackSoldMeta = tradePackProduct.metafields.find(
+        (m: { namespace: string; key: string; value: string } | null) =>
+          m?.namespace === 'custom' && m?.key === 'pre_order_sold'
+      )
+      if (tradePackSoldMeta?.value) {
+        tradePacksSold = parseInt(tradePackSoldMeta.value, 10)
+      }
+    }
 
-  const percentageSold = bottlesSold !== null ? (bottlesSold / totalBottles) * 100 : 0
-  const showProgressBar = !loading && bottlesSold !== null
-  // PMO compliance: Calculate unit price (price per litre)
-  const bottleVolumeLitres = 0.7 // 700ml
-  const bottleUnitPrice = (parseFloat(bottlePricing.price) / bottleVolumeLitres).toFixed(2)
+    if (giftSetProduct?.variants?.[0]) {
+      const variant = giftSetProduct.variants[0]
+      giftSetPrice = parseFloat(variant.price.amount).toFixed(0)
+      giftSetCompareAtPrice = variant.compareAtPrice
+        ? parseFloat(variant.compareAtPrice.amount).toFixed(0)
+        : null
+    }
+
+    const totalSold = singleBottlesSold + tradePacksSold * 6
+
+    return { totalSold, bottlePrice, bottleCompareAtPrice, giftSetPrice, giftSetCompareAtPrice }
+  } catch {
+    return {
+      totalSold: null,
+      bottlePrice: '35',
+      bottleCompareAtPrice: '45',
+      giftSetPrice: '85',
+      giftSetCompareAtPrice: null,
+    }
+  }
+}
+
+export default async function PreOrderSection() {
+  const { totalSold, bottlePrice, bottleCompareAtPrice, giftSetPrice, giftSetCompareAtPrice } =
+    await getPreOrderData()
+
+  const bottleUnitPrice = (parseFloat(bottlePrice) / BOTTLE_VOLUME_LITRES).toFixed(2)
 
   return (
     <section className="py-16 bg-jerry-green-900/50">
@@ -115,19 +98,17 @@ export default function PreOrderSection() {
                 />
               </div>
 
-              {/* Numbered Badge */}
               <div className="absolute top-6 right-6 bg-gradient-to-r from-gold-600 to-gold-500 text-jerry-green-900 px-4 py-2 rounded-full text-sm font-semibold uppercase tracking-wide shadow-lg">
                 First Batch Edition
               </div>
 
-              {/* Limited Badge */}
               <div className="absolute bottom-6 left-6 bg-jerry-green-700/80 backdrop-blur-sm text-gold-300 px-4 py-2 rounded-full text-sm font-semibold uppercase tracking-wide border border-gold-500/30 shadow-lg">
                 Limited to 700
               </div>
             </div>
           </div>
 
-          {/* Right Column - Pre-Order Content */}
+          {/* Right Column - Content */}
           <div className="order-1 lg:order-2">
             <div className="inline-block px-4 py-2 bg-jerry-green-800/60 backdrop-blur-sm rounded-full border border-gold-500/30 mb-6">
               <span className="text-gold-300 text-sm font-semibold uppercase tracking-widest">
@@ -140,41 +121,11 @@ export default function PreOrderSection() {
             </h2>
 
             <p className="text-xl text-parchment-300 mb-6 leading-relaxed">
-              We're only making 700 bottles in our first batch. Each one numbered. Pre-order now and you'll be first to receive when we ship in April.
+              We&#39;re only making 700 bottles in our first batch. Each one numbered. Pre-order now and you&#39;ll be first to receive when we ship in April.
             </p>
 
-            {/* Progress Bar - skeleton while loading, real data when ready */}
-            {loading ? (
-              <div className="mb-8 animate-pulse">
-                <div className="flex justify-between items-center mb-3">
-                  <div className="h-4 w-44 bg-jerry-green-700/60 rounded" />
-                  <div className="h-4 w-20 bg-jerry-green-700/60 rounded" />
-                </div>
-                <div className="w-full h-3 bg-jerry-green-800/60 rounded-full overflow-hidden border border-gold-500/20">
-                  <div className="h-full w-1/3 bg-jerry-green-700/60 rounded-full" />
-                </div>
-                <div className="h-3 w-36 bg-jerry-green-700/60 rounded mt-2" />
-              </div>
-            ) : showProgressBar && (
-              <div className="mb-8 animate-fade-in">
-                <div className="flex justify-between items-center mb-3">
-                  <span className="text-parchment-200 font-semibold">
-                    {bottlesSold} of {totalBottles} bottles reserved
-                  </span>
-                  <span className="text-gold-300 font-semibold">
-                    {Math.round(percentageSold)}% claimed
-                  </span>
-                </div>
-                <div className="w-full h-3 bg-jerry-green-800/60 rounded-full overflow-hidden border border-gold-500/20">
-                  <div
-                    className="h-full bg-gradient-to-r from-gold-600 to-gold-400 transition-all duration-500"
-                    style={{ width: `${percentageSold}%` }}
-                  />
-                </div>
-                <p className="text-parchment-400 text-sm mt-2">
-                  Only {totalBottles - bottlesSold} bottles remaining
-                </p>
-              </div>
+            {totalSold !== null && (
+              <PreOrderProgressBar sold={totalSold} total={TOTAL_BOTTLES} />
             )}
 
             {/* Benefits List */}
@@ -187,7 +138,7 @@ export default function PreOrderSection() {
                 </li>
                 <li className="flex items-start gap-3">
                   <span className="text-gold-400 flex-shrink-0">•</span>
-                  <span>First Batch supporter price of £{bottlePricing.price}. Ships April 2026.</span>
+                  <span>First Batch supporter price of £{bottlePrice}. Ships April 2026.</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <span className="text-gold-400 flex-shrink-0">•</span>
@@ -195,16 +146,15 @@ export default function PreOrderSection() {
                 </li>
                 <li className="flex items-start gap-3">
                   <span className="text-gold-400 flex-shrink-0">•</span>
-                  <span>Exclusive access to limited releases & events</span>
+                  <span>Exclusive access to limited releases &amp; events</span>
                 </li>
               </ul>
             </div>
 
             {/* CTA Buttons */}
             <div className="flex flex-col gap-4">
-              {/* Standard Bottle */}
               <Link
-                href={`/shop/product/${bottleHandle}`}
+                href={`/shop/product/${BOTTLE_HANDLE}`}
                 className="group bg-gradient-to-r from-gold-600 to-gold-500 hover:from-gold-500 hover:to-gold-400 text-jerry-green-900 px-6 py-4 rounded-lg font-semibold transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-[1.02] flex items-center justify-between"
               >
                 <div className="flex flex-col">
@@ -213,18 +163,17 @@ export default function PreOrderSection() {
                 </div>
                 <div className="text-right">
                   <div>
-                    <span className="text-xl font-bold">£{bottlePricing.price}</span>
-                    {bottlePricing.compareAtPrice && (
-                      <span className="text-sm line-through opacity-60 ml-2">£{bottlePricing.compareAtPrice}</span>
+                    <span className="text-xl font-bold">£{bottlePrice}</span>
+                    {bottleCompareAtPrice && (
+                      <span className="text-sm line-through opacity-60 ml-2">£{bottleCompareAtPrice}</span>
                     )}
                   </div>
                   <span className="text-xs opacity-75">(£{bottleUnitPrice}/litre)</span>
                 </div>
               </Link>
 
-              {/* Premium Gift Pack */}
               <Link
-                href={`/shop/product/${giftSetHandle}`}
+                href={`/shop/product/${GIFT_SET_HANDLE}`}
                 className="group bg-gradient-to-r from-jerry-green-700 to-jerry-green-800 hover:from-jerry-green-600 hover:to-jerry-green-700 text-white px-6 py-4 rounded-lg font-semibold transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-[1.02] flex items-center justify-between border border-gold-500/30"
               >
                 <div className="flex flex-col">
@@ -232,18 +181,16 @@ export default function PreOrderSection() {
                   <span className="text-lg">Bottle + Barware Set</span>
                 </div>
                 <div className="text-right">
-                  <span className="text-xl font-bold text-gold-300">£{giftSetPricing.price}</span>
-                  {giftSetPricing.compareAtPrice && (
-                    <span className="text-sm line-through opacity-60 text-parchment-400 ml-2">£{giftSetPricing.compareAtPrice}</span>
+                  <span className="text-xl font-bold text-gold-300">£{giftSetPrice}</span>
+                  {giftSetCompareAtPrice && (
+                    <span className="text-sm line-through opacity-60 text-parchment-400 ml-2">£{giftSetCompareAtPrice}</span>
                   )}
                 </div>
               </Link>
-
             </div>
 
-            {/* Enhanced Trust & Social Proof */}
+            {/* Trust & Social Proof */}
             <div className="mt-6 pt-6 border-t border-gold-500/20 space-y-4">
-              {/* Trust Badges */}
               <div className="flex flex-wrap items-center justify-center sm:justify-start gap-4 text-parchment-300 text-sm">
                 <span>Secure Checkout</span>
                 <span className="text-gold-500/40">•</span>
@@ -252,7 +199,6 @@ export default function PreOrderSection() {
                 <span>Small-Batch Craft</span>
               </div>
 
-              {/* Social Proof Stats */}
               <div className="bg-jerry-green-800/30 rounded-lg p-4 border border-gold-500/10">
                 <div className="grid grid-cols-3 gap-4 text-center">
                   <div>

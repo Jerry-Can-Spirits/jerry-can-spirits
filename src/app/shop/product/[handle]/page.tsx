@@ -4,7 +4,6 @@ import Image from 'next/image'
 import { getProduct, getSmartRecommendations, type ShopifyProduct, type ShopifyMetafield } from '@/lib/shopify'
 import ProductVariantSelector from '@/components/ProductVariantSelector'
 import BatchStockIndicator from '@/components/BatchStockIndicator'
-import CarbonOffsetToggle from '@/components/CarbonOffsetToggle'
 import ProductImageGallery from '@/components/ProductImageGallery'
 import StructuredData from '@/components/StructuredData'
 import ProductPageTracking from '@/components/ProductPageTracking'
@@ -198,14 +197,21 @@ export default async function ProductPage({
   let relatedProducts: ShopifyProduct[] = []
   let sanityProduct: SanityProduct | null = null
 
+  let stockRemaining: number | null = null
+
   try {
     // Fetch Shopify product and Sanity product data in parallel
     // Sanity slug is typically the handle without the brand prefix
     const slug = handle.replace('jerry-can-spirits-', '')
 
-    const [shopifyProduct, sanityData] = await Promise.all([
+    const TRADE_PACK_HANDLE = 'jerry-can-spirits-expedition-pack-spiced-rum-6-bottles'
+
+    const [shopifyProduct, sanityData, tradePackProduct] = await Promise.all([
       getProduct(handle),
-      client.fetch(productByHandleQuery, { slug, handle }).catch(() => null)
+      client.fetch(productByHandleQuery, { slug, handle }).catch(() => null),
+      handle === 'jerry-can-spirits-expedition-spiced-rum'
+        ? getProduct(TRADE_PACK_HANDLE)
+        : Promise.resolve(null),
     ])
 
     product = shopifyProduct
@@ -213,6 +219,34 @@ export default async function ProductPage({
 
     if (!product) {
       notFound()
+    }
+
+    // Compute stock remaining server-side for limited products
+    if (handle === 'jerry-can-spirits-expedition-spiced-rum' && product.variants?.[0]) {
+      const variant = product.variants[0]
+      const TOTAL = 700
+      const preorderSoldMeta = product.metafields?.find(
+        (m: { namespace: string; key: string; value: string } | null) =>
+          m?.namespace === 'custom' && m?.key === 'pre_order_sold'
+      )
+      const singleSold = preorderSoldMeta?.value
+        ? parseInt(preorderSoldMeta.value, 10)
+        : Math.max(0, TOTAL - (variant.quantityAvailable ?? TOTAL))
+
+      let tradePacksSold = 0
+      if (tradePackProduct?.metafields) {
+        const meta = tradePackProduct.metafields.find(
+          (m: { namespace: string; key: string; value: string } | null) =>
+            m?.namespace === 'custom' && m?.key === 'pre_order_sold'
+        )
+        if (meta?.value) tradePacksSold = parseInt(meta.value, 10)
+      }
+
+      stockRemaining = Math.max(0, TOTAL - singleSold - tradePacksSold * 6)
+    } else if (handle === 'jerry-can-spirits-premium-gift-pack') {
+      const TOTAL = 100
+      stockRemaining = product.variants?.[0]?.quantityAvailable ?? null
+      if (stockRemaining !== null) stockRemaining = Math.max(0, Math.min(TOTAL, stockRemaining))
     }
 
     // Get smart product recommendations
@@ -468,19 +502,11 @@ export default async function ProductPage({
             )}
 
             {/* Live batch stock */}
-            {handle === 'jerry-can-spirits-expedition-spiced-rum' && (
-              <BatchStockIndicator
-                handle={handle}
-                total={700}
-                label="Batch 001"
-              />
+            {stockRemaining !== null && handle === 'jerry-can-spirits-expedition-spiced-rum' && (
+              <BatchStockIndicator remaining={stockRemaining} label="Batch 001" />
             )}
-            {handle === 'jerry-can-spirits-premium-gift-pack' && (
-              <BatchStockIndicator
-                handle={handle}
-                total={100}
-                label="Premium Pack"
-              />
+            {stockRemaining !== null && handle === 'jerry-can-spirits-premium-gift-pack' && (
+              <BatchStockIndicator remaining={stockRemaining} label="Premium Pack" />
             )}
 
             {/* Variant Selector & Add to Cart */}
