@@ -5,6 +5,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useState, useEffect, useRef, useCallback } from 'react'
 import CartUpsell from './CartUpsell'
+import CarbonOffsetToggle from './CarbonOffsetToggle'
 
 // Helper to format price
 function formatPrice(amount: string, currencyCode: string): string {
@@ -196,7 +197,7 @@ export default function CartDrawer() {
               </div>
             ) : (
               <div className="space-y-4">
-                {cart.lines.map((line) => (
+                {cart.lines.filter(line => line.merchandise.product.handle !== 'carbon-offset').map((line) => (
                   <div
                     key={line.id}
                     className="flex gap-4 p-4 bg-jerry-green-800/20 rounded-lg border border-gold-500/20"
@@ -439,6 +440,9 @@ export default function CartDrawer() {
                   </div>
                 )}
               </div>
+
+              {/* Carbon Offset */}
+              <CarbonOffsetToggle />
 
               {/* Total */}
               <div className="flex justify-between items-center text-lg font-semibold pt-4 border-t border-gold-500/20">

@@ -86,7 +86,7 @@ const partners = [
   {
     name: "Ecologi",
     location: "Edinburgh, United Kingdom",
-    description: "Ecologi is a verified carbon reduction platform. We've partnered with them to offer an opt-in £1 carbon offset on every order. The money funds reforestation and carbon reduction projects verified to Gold Standard. Every tree planted and tonne of carbon offset is tracked and publicly visible. You can see our live impact at ecologi.com/jerry-can-spirits.",
+    description: "Ecologi is a verified climate action platform. Every Jerry Can Spirits order automatically plants a tree and removes 1kg of CO₂. Customers can also opt in at checkout to fund a UK reforestation project specifically. All impact is tracked, publicly auditable, and visible on our Ecologi profile.",
     website: "https://ecologi.com/jerry-can-spirits",
     speciality: "Carbon Offsetting & Reforestation",
     logo: "https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/d477a1e2-da59-447e-bf4d-f44c43f64400/public",

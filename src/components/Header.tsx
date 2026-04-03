@@ -239,7 +239,7 @@ export default function Header() {
             </div>
 
             {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center space-x-8">
+            <div className="hidden md:flex items-center space-x-2">
               {navigation.map((item) => (
                 <div 
                   key={item.name} 
