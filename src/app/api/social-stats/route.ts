@@ -47,12 +47,16 @@ export async function GET() {
     }
 
     // Fetch from Meta Graph API in parallel
+    // Token passed via Authorization header (not URL) to avoid leaking in logs/CDN
+    const metaHeaders = { Authorization: `Bearer ${token}` }
     const [fbRes, igRes] = await Promise.allSettled([
       fetch(
-        `https://graph.facebook.com/v19.0/${fbPageId}?fields=followers_count&access_token=${token}`
+        `https://graph.facebook.com/v19.0/${fbPageId}?fields=followers_count`,
+        { headers: metaHeaders }
       ),
       fetch(
-        `https://graph.facebook.com/v19.0/${igAccountId}?fields=followers_count&access_token=${token}`
+        `https://graph.facebook.com/v19.0/${igAccountId}?fields=followers_count`,
+        { headers: metaHeaders }
       ),
     ])
 
