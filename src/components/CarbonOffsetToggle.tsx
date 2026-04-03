@@ -5,7 +5,6 @@ import { useCart } from '@/contexts/CartContext'
 import { getProduct } from '@/lib/shopify'
 
 const OFFSET_HANDLE = 'carbon-offset'
-const EMISSION_KG = 0.8
 
 export default function CarbonOffsetToggle() {
   const { cart, addToCart, removeItem, isLoading } = useCart()
@@ -62,12 +61,11 @@ export default function CarbonOffsetToggle() {
         </span>
         <span>
           <span className="block text-sm text-parchment-300 group-hover:text-parchment-200 transition-colors">
-            Add £1 carbon offset{' '}
-            <span className="text-parchment-500 font-normal">(opt-in)</span>
+            Plant a UK tree{' '}
+            <span className="text-parchment-500 font-normal">(+£1, opt-in)</span>
           </span>
           <span className="block text-xs text-parchment-500 mt-0.5">
-            Shipped from Newport, Wales. Estimated {EMISSION_KG} kg CO₂ per delivery.
-            Your £1 goes to verified offset projects via Ecologi.
+            Every order already plants a tree and removes 1kg CO₂. This funds a UK reforestation project specifically, via Ecologi.
           </span>
         </span>
       </button>
