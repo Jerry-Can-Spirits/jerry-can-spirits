@@ -1,17 +1,12 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { ChevronDownIcon } from '@heroicons/react/24/outline'
 
 export default function Footer() {
   const [openSections, setOpenSections] = useState<string[]>([])
-  const [isClient, setIsClient] = useState(false)
-
-  useEffect(() => {
-    setIsClient(true)
-  }, [])
 
   const toggleSection = (section: string) => {
     setOpenSections(prev =>
@@ -213,8 +208,7 @@ export default function Footer() {
                       onClick={() => trackFooterClick('Drinkaware Logo', 'Drinkaware Website')}
                       aria-label="Visit Drinkaware for responsible drinking information"
                     >
-                      {isClient ? (
-                        <Image
+                      <Image
                           src="https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/5b2f3381-b097-44fc-0277-d0088f1c3d00/public"
                           alt="Be Drinkaware"
                           width={180}
@@ -222,10 +216,8 @@ export default function Footer() {
                           className="h-16 w-auto object-contain max-w-full"
                           sizes="180px"
                           quality={100}
+                          loading="lazy"
                         />
-                      ) : (
-                        <div className="w-36 h-16 bg-parchment-200/20 rounded animate-pulse" />
-                      )}
                     </a>
                   </div>
                 </div>
@@ -252,18 +244,15 @@ export default function Footer() {
                         onClick={() => trackFooterClick('AFC Logo', 'Armed Forces Covenant Page')}
                         aria-label="View our Armed Forces Covenant commitment"
                       >
-                        {isClient ? (
-                          <Image
+                        <Image
                             src="/images/AFC_POSITIVE_RGB.png"
                             alt="Armed Forces Covenant Supporter"
                             width={150}
                             height={100}
                             className="w-full h-auto"
                             sizes="(max-width: 768px) 150px, 150px"
+                            loading="lazy"
                           />
-                        ) : (
-                          <div className="w-full h-20 bg-parchment-200 rounded animate-pulse" />
-                        )}
                       </Link>
 
                       {/* British Veteran Owned Badge - Links to verification page */}
@@ -275,18 +264,15 @@ export default function Footer() {
                         onClick={() => trackFooterClick('British Veteran Owned Badge', 'Verification Page')}
                         aria-label="Verify our British Veteran Owned certification"
                       >
-                        {isClient ? (
-                          <Image
+                        <Image
                             src="/images/British-Veteran-Owned-Logo-Standard.png"
                             alt="British Veteran Owned - Verified Business"
                             width={150}
                             height={100}
                             className="w-full h-auto"
                             sizes="(max-width: 768px) 150px, 150px"
+                            loading="lazy"
                           />
-                        ) : (
-                          <div className="w-full h-20 bg-parchment-200 rounded animate-pulse" />
-                        )}
                       </a>
                     </div>
 
@@ -297,18 +283,15 @@ export default function Footer() {
                       onClick={() => trackFooterClick('ERS Bronze Badge', 'Armed Forces Covenant Page')}
                       aria-label="Armed Forces Covenant Employer Recognition Scheme Bronze Award"
                     >
-                      {isClient ? (
-                        <Image
+                      <Image
                           src="/images/ERS_Bronze_Banner.webp"
                           alt="Defence Employer Recognition Scheme Bronze Award"
                           width={300}
                           height={100}
                           className="w-full h-auto"
                           sizes="(max-width: 768px) 300px, 300px"
+                          loading="lazy"
                         />
-                      ) : (
-                        <div className="w-full h-20 bg-parchment-200 rounded animate-pulse" />
-                      )}
                     </Link>
                   </div>
                 </div>
@@ -463,18 +446,15 @@ export default function Footer() {
                       className="bg-parchment-50 rounded-md p-3 flex items-center justify-center hover:bg-parchment-100 transition-colors duration-200 shadow-sm h-14"
                       title={method.name}
                     >
-                      {isClient ? (
-                        <Image
+                      <Image
                           src={method.src}
                           alt={method.alt}
                           width={80}
                           height={48}
                           className="object-contain max-h-10 w-auto"
                           sizes="80px"
+                          loading="lazy"
                         />
-                      ) : (
-                        <div className="w-16 h-10 bg-parchment-200 rounded animate-pulse" />
-                      )}
                     </div>
                   ))}
                 </div>
@@ -522,7 +502,7 @@ export default function Footer() {
               
               {/* Copyright & Company Info */}
               <div className="text-sm text-parchment-400">
-                <p>© {isClient ? new Date().getFullYear() : '2024'} Jerry Can Spirits® Ltd. All rights reserved.</p>
+                <p>© {new Date().getFullYear()} Jerry Can Spirits® Ltd. All rights reserved.</p>
                 <p className="mt-1">Jerry Can Spirits® is a registered trademark (UK00004263767)</p>
                 <p className="mt-1">Company No. 16618770 | VAT: GB 499 6389 03 | AWRS: XFAW 000 0012 3072</p>
               </div>

@@ -209,12 +209,12 @@ export default function RootLayout({
         {/* Social Proof Toast */}
         <SocialProofToast />
 
-        {/* Google AdSense - lazy loaded via requestIdleCallback to avoid competing with LCP.
+        {/* Google AdSense - consent-gated (statistics) + lazy loaded via requestIdleCallback.
             Uses dangerouslySetInnerHTML instead of next/script to avoid data-nscript attribute
-            which AdSense rejects. */}
+            which AdSense rejects. Only loads after Cookiebot grants statistics consent. */}
         <script
           dangerouslySetInnerHTML={{
-            __html: `(function(){var c=function(){var s=document.createElement('script');s.src='https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5758288828569326';s.crossOrigin='anonymous';s.async=true;document.body.appendChild(s)};if('requestIdleCallback' in window){requestIdleCallback(c)}else{setTimeout(c,3000)}})();`,
+            __html: `(function(){var c=function(){var s=document.createElement('script');s.src='https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5758288828569326';s.crossOrigin='anonymous';s.async=true;document.body.appendChild(s)};var load=function(){if('requestIdleCallback' in window){requestIdleCallback(c)}else{setTimeout(c,3000)}};if(typeof Cookiebot!=='undefined'&&Cookiebot.consent&&Cookiebot.consent.statistics){load()}window.addEventListener('CookiebotOnAccept',function(){if(typeof Cookiebot!=='undefined'&&Cookiebot.consent&&Cookiebot.consent.statistics){load()}})})();`,
           }}
         />
         </CartProvider>
