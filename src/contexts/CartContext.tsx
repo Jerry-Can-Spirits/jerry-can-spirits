@@ -38,19 +38,26 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const loadCart = async () => {
       const cartId = localStorage.getItem('shopify_cart_id')
+      if (!cartId) return
 
-      if (cartId) {
+      // Retry once before giving up — a single network hiccup should not orphan the cart
+      for (let attempt = 0; attempt < 2; attempt++) {
         try {
           const existingCart = await getCart(cartId)
           if (existingCart) {
             setCart(existingCart)
           } else {
-            // Cart doesn't exist anymore, create a new one
+            // Cart expired or deleted on Shopify's side — clear the stale reference
             localStorage.removeItem('shopify_cart_id')
           }
+          return
         } catch (error) {
-          console.error('Error loading cart:', error)
-          localStorage.removeItem('shopify_cart_id')
+          if (attempt === 0) {
+            await new Promise(resolve => setTimeout(resolve, 1000))
+          } else {
+            console.error('Error loading cart after retry:', error)
+            // Do NOT clear cartId on transient errors — preserve it for next page load
+          }
         }
       }
     }
@@ -60,13 +67,22 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
   const openCart = useCallback(() => {
     setIsCartOpen(true)
-  }, [])
+    // Refresh cart from Shopify on drawer open to ensure totals and availability are current
+    if (cart?.id) {
+      getCart(cart.id)
+        .then(fresh => { if (fresh) setCart(fresh) })
+        .catch(() => { /* non-blocking — stale data is acceptable over a broken drawer */ })
+    }
+  }, [cart])
 
   const closeCart = useCallback(() => {
     setIsCartOpen(false)
   }, [])
 
   const addToCart = useCallback(async (variantId: string, quantity: number = 1) => {
+    // Guard against concurrent calls — both would read the same cart snapshot and could
+    // create two separate Shopify carts or produce inconsistent local state
+    if (isLoading) return
     console.log('[CartContext] Starting addToCart:', { variantId, quantity })
     setIsLoading(true)
     try {
@@ -115,7 +131,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     } finally {
       setIsLoading(false)
     }
-  }, [cart])
+  }, [cart, isLoading])
 
   const updateQuantity = useCallback(async (lineId: string, quantity: number) => {
     if (!cart) return

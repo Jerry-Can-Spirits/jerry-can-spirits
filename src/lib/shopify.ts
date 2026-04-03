@@ -161,7 +161,7 @@ interface CartLineEdge {
 export async function getProducts(): Promise<ShopifyProduct[]> {
   const query = `
     query GetProducts {
-      products(first: 20) {
+      products(first: 250) {
         edges {
           node {
             id
@@ -213,7 +213,7 @@ export async function getProductsByCollection(collectionHandle: string): Promise
     query GetProductsByCollection($handle: String!) {
       collection(handle: $handle) {
         title
-        products(first: 20) {
+        products(first: 250) {
           edges {
             node {
               id
