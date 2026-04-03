@@ -84,6 +84,15 @@ const partners = [
     featured: true,
   },
   {
+    name: "Ecologi",
+    location: "Edinburgh, United Kingdom",
+    description: "Ecologi is a verified carbon reduction platform. We've partnered with them to offer an opt-in £1 carbon offset on every order. The money funds reforestation and carbon reduction projects verified to Gold Standard. Every tree planted and tonne of carbon offset is tracked and publicly visible. You can see our live impact at ecologi.com/jerry-can-spirits.",
+    website: "https://ecologi.com/jerry-can-spirits",
+    speciality: "Carbon Offsetting & Reforestation",
+    logo: "https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/d477a1e2-da59-447e-bf4d-f44c43f64400/public",
+    featured: true,
+  },
+  {
     name: "Fever-Tree",
     location: "London, United Kingdom",
     description: "The world's leading premium mixer brand, partnering with Jerry Can Spirits to create the perfect serve. Founded in 2004 with a mission to provide the best-tasting, naturally-sourced mixers, Fever-Tree sources the finest ingredients from around the world. From their iconic Indian Tonic Water to their expanding range of premium mixers, Fever-Tree shares our commitment to quality and craftsmanship, ensuring every cocktail reaches its full potential.",
