@@ -44,7 +44,7 @@ export default function CarbonOffsetToggle() {
   if (!variantId) return null
 
   return (
-    <div className="pt-4 border-t border-gold-500/10">
+    <div>
       <button
         type="button"
         role="checkbox"
