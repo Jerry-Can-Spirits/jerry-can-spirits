@@ -41,7 +41,7 @@ export const metadata: Metadata = {
 }
 
 export default function CookiePolicy() {
-  const lastUpdated = '4 September 2025'
+  const lastUpdated = '2 April 2026'
 
   return (
     <>
@@ -119,8 +119,8 @@ export default function CookiePolicy() {
                 <h4 className="text-lg font-semibold text-gold-300 mb-3">Examples include:</h4>
                 <ul className="list-disc list-inside text-white space-y-1">
                   <li><strong className="text-gold-300">Meta (Facebook) Pixel:</strong> Advertising attribution and retargeting</li>
-                  <li><strong className="text-gold-300">TikTok Pixel:</strong> Advertising attribution and retargeting</li>
                   <li><strong className="text-gold-300">Klaviyo:</strong> Email marketing and customer segmentation</li>
+                  <li><strong className="text-gold-300">Metricool:</strong> Social media and content analytics</li>
                 </ul>
               </div>
 
@@ -181,23 +181,23 @@ export default function CookiePolicy() {
                 </div>
 
                 <div className="border-l-4 border-gold-500 pl-6 py-2">
-                  <h4 className="text-lg font-semibold text-gold-300 mb-2">TikTok Pixel — Marketing</h4>
-                  <p className="text-white">
-                    Advertising attribution and retargeting on TikTok.{' '}
-                    <a href="https://www.tiktok.com/legal/page/row/privacy-policy/en" target="_blank" rel="noopener noreferrer"
-                       className="text-gold-300 hover:text-gold-200 underline">
-                      View TikTok's Privacy Policy
-                    </a>
-                  </p>
-                </div>
-
-                <div className="border-l-4 border-gold-500 pl-6 py-2">
                   <h4 className="text-lg font-semibold text-gold-300 mb-2">Klaviyo — Marketing</h4>
                   <p className="text-white">
                     Email marketing platform used for newsletters and customer communications.{' '}
                     <a href="https://www.klaviyo.com/legal/privacy-notice" target="_blank" rel="noopener noreferrer"
                        className="text-gold-300 hover:text-gold-200 underline">
                       View Klaviyo's Privacy Policy
+                    </a>
+                  </p>
+                </div>
+
+                <div className="border-l-4 border-gold-500 pl-6 py-2">
+                  <h4 className="text-lg font-semibold text-gold-300 mb-2">Metricool — Analytics</h4>
+                  <p className="text-white">
+                    Social media scheduling and content analytics platform.{' '}
+                    <a href="https://metricool.com/privacy-policy/" target="_blank" rel="noopener noreferrer"
+                       className="text-gold-300 hover:text-gold-200 underline">
+                      View Metricool&apos;s Privacy Policy
                     </a>
                   </p>
                 </div>
@@ -335,8 +335,8 @@ export default function CookiePolicy() {
                 <div className="space-y-2">
                   <p className="text-white">
                     <strong className="text-gold-300">Email:</strong>{' '}
-                    <a href="mailto:privacy@jerrycanspirits.co.uk" className="text-gold-300 hover:text-gold-200 underline">
-                      privacy@jerrycanspirits.co.uk
+                    <a href="mailto:support@jerrycanspirits.co.uk" className="text-gold-300 hover:text-gold-200 underline">
+                      support@jerrycanspirits.co.uk
                     </a>
                   </p>
                   <p className="text-white">
