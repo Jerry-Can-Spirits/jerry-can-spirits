@@ -64,7 +64,17 @@ interface SanityCocktail {
   variants?: CocktailVariant[]
   family?: string
   baseSpirit?: string
-  category?: string
+  servings?: string
+  prepTime?: string
+  author?: string
+  featuredSpirit?: {
+    _id: string
+    name: string
+    slug: { current: string }
+    description?: string
+    image?: string
+    imageAlt?: string
+  }
   tags?: string[]
   featured?: boolean
   image?: string
@@ -173,9 +183,10 @@ export default async function CocktailPage({ params }: PageProps) {
     // Ratings unavailable — omit aggregateRating rather than show fake data
   }
 
-  // Map difficulty to prep time
+  // Use Sanity prepTime if set, otherwise derive from difficulty
   const prepTimeMap = { novice: 'PT3M', wayfinder: 'PT5M', trailblazer: 'PT10M' }
-  const prepTime = prepTimeMap[cocktail.difficulty] || 'PT5M'
+  const prepTime = cocktail.prepTime || prepTimeMap[cocktail.difficulty] || 'PT5M'
+  const recipeYield = cocktail.servings || '1 cocktail'
 
   // Derive cookingMethod from tags
   const methodTags = ['shaken', 'stirred', 'built', 'frozen', 'hot']
@@ -218,8 +229,8 @@ export default async function CocktailPage({ params }: PageProps) {
       "image": cocktail.image || "https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/images-logo-webp/public"
     })) || [],
     "author": {
-      "@type": "Organization",
-      "name": "Jerry Can Spirits",
+      "@type": cocktail.author && cocktail.author !== 'Jerry Can Spirits' ? "Person" : "Organization",
+      "name": cocktail.author || "Jerry Can Spirits",
       "url": "https://jerrycanspirits.co.uk"
     },
     "publisher": {
@@ -233,7 +244,7 @@ export default async function CocktailPage({ params }: PageProps) {
     "datePublished": cocktail._createdAt,
     "prepTime": prepTime,
     "totalTime": prepTime,
-    "recipeYield": "1 cocktail",
+    "recipeYield": recipeYield,
     ...(aggregateRating && { aggregateRating }),
     ...(cookingMethod && cookingMethod.length > 0 && { cookingMethod: cookingMethod.join(', ') }),
     ...(cocktail.videoUrl && {
@@ -385,6 +396,44 @@ export default async function CocktailPage({ params }: PageProps) {
             </div>
           )}
 
+          {/* Featured Spirit — links to ingredient guide when set */}
+          {cocktail.featuredSpirit && (
+            <div className="mt-6 sm:mt-8 bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-4 sm:p-6 border border-gold-500/20">
+              <div className="flex items-center gap-4">
+                {cocktail.featuredSpirit.image && (
+                  <Image
+                    src={cocktail.featuredSpirit.image}
+                    alt={cocktail.featuredSpirit.imageAlt || cocktail.featuredSpirit.name}
+                    width={56}
+                    height={56}
+                    className="w-14 h-14 object-cover rounded-lg flex-shrink-0"
+                  />
+                )}
+                <div className="flex-1 min-w-0">
+                  <p className="text-parchment-400 text-xs uppercase tracking-widest mb-0.5">The Spirit</p>
+                  <Link
+                    href={`/field-manual/ingredients/${cocktail.featuredSpirit.slug.current}/`}
+                    className="text-gold-300 font-serif font-bold text-lg hover:text-gold-200 transition-colors"
+                  >
+                    {cocktail.featuredSpirit.name}
+                  </Link>
+                  {cocktail.featuredSpirit.description && (
+                    <p className="text-parchment-400 text-sm mt-1 line-clamp-2">{cocktail.featuredSpirit.description}</p>
+                  )}
+                </div>
+                <Link
+                  href={`/field-manual/ingredients/${cocktail.featuredSpirit.slug.current}/`}
+                  className="flex-shrink-0 flex items-center gap-1 text-gold-400 hover:text-gold-300 text-sm font-semibold transition-colors"
+                >
+                  Learn more
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </Link>
+              </div>
+            </div>
+          )}
+
           {/* Get the Rum CTA - only shown for Spiced Rum cocktails */}
           {cocktail.baseSpirit === 'spiced-rum' && <div className="mt-6 sm:mt-8 bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-4 sm:p-6 border border-gold-500/20">
             <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
@@ -403,6 +452,13 @@ export default async function CocktailPage({ params }: PageProps) {
               </Link>
             </div>
           </div>}
+
+          {/* Author byline */}
+          {cocktail.author && (
+            <p className="mt-4 text-parchment-500 text-sm text-right">
+              Recipe by {cocktail.author}
+            </p>
+          )}
 
           {/* Rating & Share CTA */}
           <div className="mt-6 sm:mt-8 bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-4 sm:p-6 md:p-8 border border-gold-500/20 text-center">

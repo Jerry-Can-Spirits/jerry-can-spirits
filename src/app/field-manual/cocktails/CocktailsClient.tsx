@@ -51,7 +51,6 @@ interface SanityCocktail {
   variants?: CocktailVariant[]
   family?: string
   baseSpirit?: string
-  category?: string // Legacy field
   tags?: string[]
   featured?: boolean
   image?: string | null

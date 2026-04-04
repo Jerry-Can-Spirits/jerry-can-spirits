@@ -12,7 +12,6 @@ export const cocktailsListQuery = `*[_type == "cocktail"] | order(_createdAt des
   difficulty,
   family,
   baseSpirit,
-  category,
   tags,
   featured,
   "image": image.asset->url,
@@ -50,7 +49,6 @@ export const cocktailsQuery = `*[_type == "cocktail"] | order(_createdAt desc) {
   },
   family,
   baseSpirit,
-  category,
   tags,
   featured,
   "image": image.asset->url,
@@ -92,13 +90,16 @@ export const cocktailBySlugQuery = `*[_type == "cocktail" && slug.current == $sl
   },
   family,
   baseSpirit,
-  category,
+  servings,
+  prepTime,
+  author,
   tags,
   featured,
   "image": image.asset->url,
   "imageAlt": image.alt,
   videoUrl,
   flavorProfile,
+  "featuredSpirit": featuredSpirit->{ _id, name, slug, description, "image": image.asset->url, "imageAlt": image.alt },
   relatedGuides[] {
     "guide": guide->{ _id, title, slug },
     sectionAnchor,
@@ -165,6 +166,7 @@ export const ingredientBySlugQuery = `*[_type == "ingredient" && slug.current ==
   videoUrl,
   history,
   professionalTip,
+  author,
   "relatedCocktails": relatedCocktails[]->{ _id, name, slug },
   "relatedIngredients": relatedIngredients[]->{ _id, name, slug }
 }`
@@ -232,11 +234,18 @@ export const equipmentBySlugQuery = `*[_type == "equipment" && slug.current == $
   careInstructions,
   lifespan,
   budgetAlternative,
+  budgetLink,
+  budgetImage,
   premiumOption,
+  premiumLink,
+  premiumImage,
   history,
   professionalTip,
+  author,
   videoUrl,
-  "relatedCocktails": relatedCocktails[]->{ _id, name, slug }
+  "relatedCocktails": relatedCocktails[]->{ _id, name, slug },
+  "relatedEquipment": relatedEquipment[]->{ _id, name, slug },
+  "relatedIngredients": relatedIngredients[]->{ _id, name, slug }
 }`
 
 // Product query - matches by slug or shopifyHandle for flexible matching

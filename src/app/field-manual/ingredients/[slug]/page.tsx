@@ -70,6 +70,7 @@ interface Ingredient {
     slug: { current: string }
   }>
   longDescription?: Record<string, unknown>[]
+  author?: string
 }
 
 const categoryConfig: Record<string, string> = {
@@ -576,6 +577,13 @@ export default async function IngredientDetailPage({ params }: { params: Promise
                   ))}
                 </div>
               </div>
+            )}
+
+            {/* Author byline */}
+            {ingredient.author && (
+              <p className="text-parchment-500 text-sm text-right">
+                Guide by {ingredient.author}
+              </p>
             )}
 
             {/* Back to Ingredients */}

@@ -36,7 +36,22 @@ interface Equipment {
   careInstructions?: string[] | string  // Support both old (string) and new (array) format
   lifespan?: string[] | string  // Support both old (string) and new (array) format
   budgetAlternative?: string
+  budgetLink?: string
+  budgetImage?: { asset: { url: string }; alt?: string }
   premiumOption?: string
+  premiumLink?: string
+  premiumImage?: { asset: { url: string }; alt?: string }
+  author?: string
+  relatedEquipment?: Array<{
+    _id: string
+    name: string
+    slug: { current: string }
+  }>
+  relatedIngredients?: Array<{
+    _id: string
+    name: string
+    slug: { current: string }
+  }>
   metaTitle?: string
   metaDescription?: string
   longDescription?: Record<string, unknown>[]
@@ -204,15 +219,49 @@ export default async function EquipmentDetailPage({ params }: { params: Promise<
                   <h3 className="text-lg font-serif font-bold text-gold-300 mb-4">Alternatives</h3>
                   <div className="space-y-4">
                     {equipment.budgetAlternative && (
-                      <div>
-                        <p className="text-green-400 font-semibold text-sm mb-1">Budget Alternative</p>
-                        <p className="text-parchment-300">{equipment.budgetAlternative}</p>
+                      <div className="flex items-start gap-3">
+                        {equipment.budgetImage && (
+                          <Image
+                            src={urlFor(equipment.budgetImage).url()}
+                            alt={equipment.budgetImage.alt || equipment.budgetAlternative}
+                            width={56}
+                            height={56}
+                            className="w-14 h-14 object-cover rounded-lg flex-shrink-0"
+                          />
+                        )}
+                        <div>
+                          <p className="text-green-400 font-semibold text-sm mb-1">Budget Alternative</p>
+                          {equipment.budgetLink ? (
+                            <a href={equipment.budgetLink} target="_blank" rel="noopener noreferrer" className="text-parchment-300 hover:text-parchment-200 underline transition-colors">
+                              {equipment.budgetAlternative}
+                            </a>
+                          ) : (
+                            <p className="text-parchment-300">{equipment.budgetAlternative}</p>
+                          )}
+                        </div>
                       </div>
                     )}
                     {equipment.premiumOption && (
-                      <div>
-                        <p className="text-gold-400 font-semibold text-sm mb-1">Premium Option</p>
-                        <p className="text-parchment-300">{equipment.premiumOption}</p>
+                      <div className="flex items-start gap-3">
+                        {equipment.premiumImage && (
+                          <Image
+                            src={urlFor(equipment.premiumImage).url()}
+                            alt={equipment.premiumImage.alt || equipment.premiumOption}
+                            width={56}
+                            height={56}
+                            className="w-14 h-14 object-cover rounded-lg flex-shrink-0"
+                          />
+                        )}
+                        <div>
+                          <p className="text-gold-400 font-semibold text-sm mb-1">Premium Option</p>
+                          {equipment.premiumLink ? (
+                            <a href={equipment.premiumLink} target="_blank" rel="noopener noreferrer" className="text-parchment-300 hover:text-parchment-200 underline transition-colors">
+                              {equipment.premiumOption}
+                            </a>
+                          ) : (
+                            <p className="text-parchment-300">{equipment.premiumOption}</p>
+                          )}
+                        </div>
                       </div>
                     )}
                   </div>
@@ -416,6 +465,55 @@ export default async function EquipmentDetailPage({ params }: { params: Promise<
                   ))}
                 </div>
               </div>
+            )}
+
+            {/* Related Equipment */}
+            {equipment.relatedEquipment && equipment.relatedEquipment.length > 0 && (
+              <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+                <h2 className="text-2xl font-serif font-bold text-gold-300 mb-4">Related Equipment</h2>
+                <div className="grid sm:grid-cols-2 gap-3">
+                  {equipment.relatedEquipment.map((item) => (
+                    <Link
+                      key={item._id}
+                      href={`/field-manual/equipment/${item.slug.current}`}
+                      className="flex items-center gap-3 p-3 bg-jerry-green-800/30 rounded-lg border border-gold-500/20 hover:bg-jerry-green-800/50 hover:border-gold-400/40 transition-all group"
+                    >
+                      <svg className="w-5 h-5 text-gold-400 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                      </svg>
+                      <span className="text-parchment-300 group-hover:text-gold-300 transition-colors">{item.name}</span>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Related Ingredients */}
+            {equipment.relatedIngredients && equipment.relatedIngredients.length > 0 && (
+              <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+                <h2 className="text-2xl font-serif font-bold text-gold-300 mb-4">Related Ingredients</h2>
+                <div className="grid sm:grid-cols-2 gap-3">
+                  {equipment.relatedIngredients.map((item) => (
+                    <Link
+                      key={item._id}
+                      href={`/field-manual/ingredients/${item.slug.current}`}
+                      className="flex items-center gap-3 p-3 bg-jerry-green-800/30 rounded-lg border border-gold-500/20 hover:bg-jerry-green-800/50 hover:border-gold-400/40 transition-all group"
+                    >
+                      <svg className="w-5 h-5 text-gold-400 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                      </svg>
+                      <span className="text-parchment-300 group-hover:text-gold-300 transition-colors">{item.name}</span>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Author byline */}
+            {equipment.author && (
+              <p className="text-parchment-500 text-sm text-right">
+                Guide by {equipment.author}
+              </p>
             )}
 
             {/* Back to Equipment */}

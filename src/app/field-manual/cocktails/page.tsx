@@ -32,7 +32,6 @@ interface CocktailListItem {
   difficulty: string
   family: string
   baseSpirit: string
-  category: string
   tags: string[]
   featured: boolean
   image: string | null
