@@ -6,7 +6,7 @@ Jerry Can Spirits is a veteran-owned British craft spirits house. Founded by two
 
 First expression: Expedition Spiced. Caribbean rum base. Welsh molasses. Macerated by Spirit of Wales Distillery, Newport, South Wales. Real ingredients. No artificial flavourings.
 
-RRP: £45 | Founding Supporter Price: £35
+RRP: £40 | Founding Supporter Price: £35 (launch week only, until Sunday 12 April 2026)
 5% of profits support military charities.
 Launch date: April 6, 2026.
 Website: jerrycanspirits.co.uk

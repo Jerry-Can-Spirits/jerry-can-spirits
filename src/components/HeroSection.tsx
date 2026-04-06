@@ -3,7 +3,6 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import CountdownTimer from './CountdownTimer'
 
 const HERO_IMAGES = [
   {
@@ -84,12 +83,14 @@ export default function HeroSection() {
               Between us, we served 17 years in the Royal Signals. We wanted a proper drink to share with mates. Something with character, made by people who give a damn. We couldn't find it. So we made it ourselves.
             </p>
 
-            {/* Launch Countdown */}
+            {/* Founding Supporter Pricing */}
             <div className="mb-8 p-6 bg-jerry-green-800/40 backdrop-blur-sm rounded-xl border border-gold-500/20">
-              <div className="text-gold-300 text-sm font-semibold uppercase tracking-widest mb-4 text-center">
-                April 2026. Pre-order Now
+              <div className="text-gold-300 text-sm font-semibold uppercase tracking-widest mb-2 text-center">
+                Now Shipping
               </div>
-              <CountdownTimer />
+              <p className="text-parchment-200 text-center text-sm">
+                Founding Supporter price: £35 until Sunday 12 April. £40 from Monday.
+              </p>
             </div>
 
             {/* CTA Buttons - Desktop */}
@@ -98,7 +99,7 @@ export default function HeroSection() {
                 href="/shop/product/jerry-can-spirits-expedition-spiced-rum/"
                 className="bg-gradient-to-r from-gold-600 to-gold-500 hover:from-gold-500 hover:to-gold-400 text-jerry-green-900 px-8 py-4 rounded-lg font-semibold uppercase tracking-wide transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 flex items-center justify-center"
               >
-                Reserve Your Bottle
+                Order Now
               </Link>
 
               <Link
@@ -115,7 +116,7 @@ export default function HeroSection() {
                 href="/shop/product/jerry-can-spirits-expedition-spiced-rum/"
                 className="w-full bg-gradient-to-r from-gold-600 to-gold-500 hover:from-gold-500 hover:to-gold-400 text-jerry-green-900 px-8 py-4 rounded-lg font-semibold uppercase tracking-wide transition-all duration-300 shadow-lg hover:shadow-xl flex items-center justify-center"
               >
-                Reserve Your Bottle
+                Order Now
               </Link>
             </div>
 
