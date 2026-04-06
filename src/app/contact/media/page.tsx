@@ -286,7 +286,7 @@ Based in the UK, Jerry Can Spirits® is a small operation run by two mates who c
                     { label: 'Product', value: 'Expedition Spiced Rum' },
                     { label: 'ABV', value: '40%' },
                     { label: 'Volume', value: '700ml' },
-                    { label: 'RRP', value: '£45.00' },
+                    { label: 'RRP', value: '£40.00' },
                     { label: 'Base Spirit', value: 'Caribbean rum' },
                     { label: 'Produced At', value: 'Spirit of Wales Distillery, Newport, South Wales', href: '/friends/' },
                   ].map((item) => (
