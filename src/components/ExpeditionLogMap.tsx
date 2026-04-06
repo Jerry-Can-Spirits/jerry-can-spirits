@@ -6,12 +6,13 @@ import type { ExpeditionLogEntry } from '@/lib/d1'
 
 interface Props {
   entries: ExpeditionLogEntry[]
+  className?: string
 }
 
 const UK_CENTER: [number, number] = [-2.5, 54.5] // Mapbox uses [lng, lat]
 const UK_ZOOM = 4.5
 
-export default function ExpeditionLogMap({ entries }: Props) {
+export default function ExpeditionLogMap({ entries, className }: Props) {
   const containerRef = useRef<HTMLDivElement>(null)
   const mapRef = useRef<unknown>(null)
 
@@ -89,5 +90,5 @@ export default function ExpeditionLogMap({ entries }: Props) {
     }
   }, [entries])
 
-  return <div ref={containerRef} className="w-full h-64 rounded-xl" />
+  return <div ref={containerRef} className={className ?? 'w-full h-64 rounded-xl'} />
 }
