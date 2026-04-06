@@ -46,7 +46,7 @@ export default function NewsletterSignup() {
       <div className="text-center py-4 animate-fade-in">
         <p className="text-white font-semibold mb-1">You are in.</p>
         <p className="text-parchment-400 text-sm">
-          Check your inbox. Your 10% code will be waiting — valid from 6 April 2026.
+          Check your inbox. Your 10% discount code will be waiting.
         </p>
       </div>
     )
