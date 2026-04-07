@@ -37,6 +37,8 @@ const communityPartners = [
     location: "United Kingdom",
     description: "Trust A Veteran® is a directory connecting people with high quality, reliable businesses owned and run by Armed Forces veterans. The values at the heart of the directory — loyalty, integrity, discipline, courage, selfless commitment, respect — are the same ones that shaped everyone listed in it. We're a member because it means something.",
     website: "https://www.trustaveteran.com/",
+    facebook: "https://www.facebook.com/TrustAVeteran",
+    instagram: "https://www.instagram.com/trust_a_veteran_uk/",
     speciality: "Veteran Business Directory",
     logo: "/images/partners/trust-a-veteran.png",
   },
