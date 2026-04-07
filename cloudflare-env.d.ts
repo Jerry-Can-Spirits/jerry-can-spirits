@@ -27,6 +27,10 @@ interface CloudflareEnv {
   // Secrets — Sentry (source map uploads)
   SENTRY_AUTH_TOKEN: string;
 
+  // Secrets — Trade portal
+  TRADE_SESSION_SECRET: string;
+  TRADE_CASE_VARIANT_ID: string;
+
   // Worker bindings
   ASSETS: Fetcher;
   WORKER_SELF_REFERENCE: Fetcher;

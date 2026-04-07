@@ -252,3 +252,24 @@ export async function getExpeditionLogEntries(db: D1Database): Promise<Expeditio
     .all<ExpeditionLogEntry>();
   return result.results;
 }
+
+// ── Trade Account Queries ─────────────────────────────────────────────
+
+export interface TradeAccount {
+  id: string;
+  pin: string;
+  discount_code: string;
+  tier: 'intro' | 'standard' | 'partner';
+  venue_name: string;
+  active: number;
+}
+
+export async function getTradeAccountByPin(
+  db: D1Database,
+  pin: string,
+): Promise<TradeAccount | null> {
+  return db
+    .prepare('SELECT * FROM trade_accounts WHERE pin = ? AND active = 1')
+    .bind(pin)
+    .first<TradeAccount>();
+}

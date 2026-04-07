@@ -352,6 +352,16 @@ export default function Home() {
                   theme="dark"
                   stars=""
                 />
+                <div className="text-center mt-6">
+                  <a
+                    href="https://www.trustpilot.com/review/jerrycanspirits.co.uk"
+                    target="_blank"
+                    rel="nofollow noopener noreferrer"
+                    className="text-sm text-gold-300 hover:text-gold-400 transition-colors underline"
+                  >
+                    View all reviews on Trustpilot
+                  </a>
+                </div>
               </div>
             </div>
           </section>
