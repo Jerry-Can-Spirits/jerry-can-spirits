@@ -26,7 +26,7 @@ const TIER_LABEL: Record<string, string> = {
   partner: 'Partner',
 }
 
-const CATEGORY_ORDER: TradeCategory[] = ['spirits', 'glassware', 'bar-tools']
+const CATEGORY_ORDER: TradeCategory[] = ['spirits', 'glassware', 'bar-tools', 'sustainability']
 
 function formatPrice(amount: string): string {
   return `£${parseFloat(amount).toFixed(2)}`
