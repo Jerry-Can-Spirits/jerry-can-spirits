@@ -14,6 +14,7 @@ export interface TradeProduct {
   handle: string
   title: string
   category: TradeCategory
+  featuredImage?: { url: string; altText: string | null }
   variants: TradeProductVariant[]
 }
 
