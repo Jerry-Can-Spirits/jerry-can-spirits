@@ -77,7 +77,7 @@ export default function ReviewsPage() {
               <a
                 href="https://www.trustpilot.com/review/jerrycanspirits.co.uk"
                 target="_blank"
-                rel="noopener noreferrer"
+                rel="nofollow noopener noreferrer"
               >
                 <Image
                   src={`${CF_IMG}/004c8ba7-42d4-48c8-c82c-fe715eb9cc00/public`}
@@ -90,7 +90,7 @@ export default function ReviewsPage() {
               <a
                 href="https://www.trustpilot.com/review/jerrycanspirits.co.uk"
                 target="_blank"
-                rel="noopener noreferrer"
+                rel="nofollow noopener noreferrer"
                 className="text-sm text-gold-300 hover:text-gold-400 transition-colors underline"
               >
                 View all on Trustpilot
@@ -210,7 +210,7 @@ export default function ReviewsPage() {
               <a
                 href="https://www.trustpilot.com/evaluate/jerrycanspirits.co.uk"
                 target="_blank"
-                rel="noopener noreferrer"
+                rel="nofollow noopener noreferrer"
                 className="inline-flex items-center gap-2 bg-[#00b67a] hover:bg-[#009567] text-white font-semibold px-6 py-3 rounded-lg transition-colors"
               >
                 Review on Trustpilot

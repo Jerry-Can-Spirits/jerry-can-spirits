@@ -86,8 +86,10 @@ const partners = [
   {
     name: "Ecologi",
     location: "Edinburgh, United Kingdom",
-    description: "Ecologi is a verified climate action platform. Every Jerry Can Spirits order automatically plants a tree and removes 1kg of CO₂. Customers can also opt in at checkout to fund a UK reforestation project specifically. All impact is tracked, publicly auditable, and visible on our Ecologi profile.",
+    description: "Ecologi is a verified climate action platform. Every Jerry Can Spirits order automatically plants a tree and removes 1kg of CO₂. All impact is tracked, publicly auditable, and visible on our Ecologi profile.",
     website: "https://ecologi.com/jerry-can-spirits",
+    shopUrl: "/shop/product/uk-tree-fund/",
+    shopUrlLabel: "Add UK Tree Planting",
     speciality: "Carbon Offsetting & Reforestation",
     logo: "https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/d477a1e2-da59-447e-bf4d-f44c43f64400/public",
     featured: true,
@@ -275,14 +277,24 @@ export default function FriendsPage() {
                                 {partner.speciality}
                               </p>
                             </div>
-                            <a
-                              href={partner.website}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="inline-block px-6 py-2 bg-gold-500 text-jerry-green-900 font-semibold rounded-lg hover:bg-gold-400 transition-colors"
-                            >
-                              Visit Website
-                            </a>
+                            <div className="flex flex-wrap gap-2">
+                              <a
+                                href={partner.website}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-block px-6 py-2 bg-gold-500 text-jerry-green-900 font-semibold rounded-lg hover:bg-gold-400 transition-colors"
+                              >
+                                Visit Website
+                              </a>
+                              {'shopUrl' in partner && partner.shopUrl && (
+                                <Link
+                                  href={partner.shopUrl as string}
+                                  className="inline-block px-6 py-2 bg-jerry-green-800/60 text-gold-300 font-semibold rounded-lg hover:bg-jerry-green-800 border border-gold-500/30 transition-colors"
+                                >
+                                  {'shopUrlLabel' in partner ? partner.shopUrlLabel as string : 'Shop'}
+                                </Link>
+                              )}
+                            </div>
                           </div>
                           <p className="text-parchment-200 leading-relaxed">
                             {partner.description}
