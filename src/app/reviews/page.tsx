@@ -51,6 +51,7 @@ export default function ReviewsPage() {
             sameAs: [
               'https://www.trustpilot.com/review/jerrycanspirits.co.uk',
               'https://www.yell.com/biz/jerry-can-spirits-ltd-london-11012967/',
+              'https://www.trustaveteran.com/',
             ],
           },
         }) }}
@@ -77,7 +78,7 @@ export default function ReviewsPage() {
               <a
                 href="https://www.trustpilot.com/review/jerrycanspirits.co.uk"
                 target="_blank"
-                rel="noopener noreferrer"
+                rel="nofollow noopener noreferrer"
               >
                 <Image
                   src={`${CF_IMG}/004c8ba7-42d4-48c8-c82c-fe715eb9cc00/public`}
@@ -90,7 +91,7 @@ export default function ReviewsPage() {
               <a
                 href="https://www.trustpilot.com/review/jerrycanspirits.co.uk"
                 target="_blank"
-                rel="noopener noreferrer"
+                rel="nofollow noopener noreferrer"
                 className="text-sm text-gold-300 hover:text-gold-400 transition-colors underline"
               >
                 View all on Trustpilot
@@ -196,6 +197,50 @@ export default function ReviewsPage() {
         </ScrollReveal>
       </section>
 
+      {/* Trust A Veteran Reviews Section */}
+      <section className="max-w-5xl mx-auto px-6 pb-12">
+        <ScrollReveal>
+          <div className="bg-jerry-green-800/40 border border-gold-500/20 rounded-xl p-8">
+            <div className="text-center mb-6">
+              <a
+                href="https://www.trustaveteran.com/"
+                target="_blank"
+                rel="nofollow noopener noreferrer"
+              >
+                <Image
+                  src="/images/partners/trust-a-veteran.png"
+                  alt="Trust A Veteran"
+                  width={160}
+                  height={40}
+                  className="mx-auto mb-3 hover:opacity-80 transition-opacity"
+                />
+              </a>
+              <a
+                href="https://www.trustaveteran.com/"
+                target="_blank"
+                rel="nofollow noopener noreferrer"
+                className="text-sm text-gold-300 hover:text-gold-400 transition-colors underline"
+              >
+                View on Trust A Veteran
+              </a>
+            </div>
+            <div className="text-center py-6">
+              <a
+                href="https://www.trustaveteran.com/"
+                target="_blank"
+                rel="nofollow noopener noreferrer"
+                className="inline-flex items-center gap-2 bg-jerry-green-800/60 hover:bg-jerry-green-800 text-gold-300 font-semibold px-6 py-3 rounded-lg border border-gold-500/30 transition-colors"
+              >
+                Leave a Trust A Veteran Review
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                </svg>
+              </a>
+            </div>
+          </div>
+        </ScrollReveal>
+      </section>
+
       {/* Leave a Review CTA */}
       <section className="max-w-4xl mx-auto px-6 pb-16">
         <ScrollReveal>
@@ -210,7 +255,7 @@ export default function ReviewsPage() {
               <a
                 href="https://www.trustpilot.com/evaluate/jerrycanspirits.co.uk"
                 target="_blank"
-                rel="noopener noreferrer"
+                rel="nofollow noopener noreferrer"
                 className="inline-flex items-center gap-2 bg-[#00b67a] hover:bg-[#009567] text-white font-semibold px-6 py-3 rounded-lg transition-colors"
               >
                 Review on Trustpilot

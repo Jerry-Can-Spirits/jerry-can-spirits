@@ -206,6 +206,13 @@ export default function Sustainability() {
         {/* Carbon Offsetting — live Ecologi stats */}
         <section className="py-12">
           <EcologiImpact />
+          <p className="mt-6 text-parchment-400 text-sm text-center">
+            Every order plants a tree automatically. You can also{' '}
+            <Link href="/shop/product/uk-tree-fund/" className="text-gold-300 hover:text-gold-400 underline">
+              add a UK reforestation contribution at checkout
+            </Link>
+            {' '}to fund planting closer to home.
+          </p>
         </section>
 
         {/* Future Plans */}

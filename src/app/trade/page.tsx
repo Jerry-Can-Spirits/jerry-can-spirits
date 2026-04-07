@@ -121,50 +121,6 @@ export default function TradePage() {
         </div>
       </section>
 
-      {/* ── Section 4: Pricing ── */}
-      <section className="py-16 border-t border-gold-500/10">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-2xl font-serif font-bold text-white mb-4">
-            Pricing
-          </h2>
-          <p className="text-parchment-400 text-sm mb-10">
-            We price to reward relationships, not just transactions. All prices are per case of 6 bottles.
-          </p>
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <caption className="sr-only">Trade pricing tiers</caption>
-              <thead>
-                <tr className="border-b border-gold-500/20">
-                  <th className="text-left text-parchment-500 text-xs uppercase tracking-widest py-3 pr-6">Tier</th>
-                  <th className="text-left text-parchment-500 text-xs uppercase tracking-widest py-3 pr-6">Per bottle (ex VAT)</th>
-                  <th className="text-left text-parchment-500 text-xs uppercase tracking-widest py-3 pr-6">Per case (ex VAT)</th>
-                  <th className="text-left text-parchment-500 text-xs uppercase tracking-widest py-3 pr-6">Inc VAT</th>
-                  <th className="text-left text-parchment-500 text-xs uppercase tracking-widest py-3">When</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gold-500/10">
-                {[
-                  { tier: 'Intro', perBottle: '~£25', perCase: '£150', incVat: '£180', when: 'First order' },
-                  { tier: 'Standard', perBottle: '~£29', perCase: '£175', incVat: '£210', when: 'Ongoing orders' },
-                  { tier: 'Partner', perBottle: '~£25–£27', perCase: '£150–£160', incVat: '£180–£192', when: 'High-volume, earned' },
-                ].map((row) => (
-                  <tr key={row.tier}>
-                    <td className="py-4 pr-6 font-semibold text-white">{row.tier}</td>
-                    <td className="py-4 pr-6 text-parchment-300">{row.perBottle}</td>
-                    <td className="py-4 pr-6 text-parchment-300">{row.perCase}</td>
-                    <td className="py-4 pr-6 text-parchment-400">{row.incVat}</td>
-                    <td className="py-4 text-parchment-500 text-xs">{row.when}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-          <p className="text-parchment-500 text-xs mt-6">
-            Partner pricing is not applied automatically. It reflects a track record of sell-through and active placement. Delivery terms confirmed on enquiry.
-          </p>
-        </div>
-      </section>
-
       {/* ── Section 5: What Works Well for Both Sides ── */}
       <section className="py-16 border-t border-gold-500/10">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -181,6 +137,26 @@ export default function TradePage() {
             <p className="text-parchment-300 text-sm leading-relaxed">
               We are happy to help with serve suggestions, menu wording, or a visit from the founders if you are local. The people who built this are reachable. That is not something you get from a distributor.
             </p>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Existing Trade Customer ── */}
+      <section className="py-16 border-t border-gold-500/10">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="bg-jerry-green-800/20 border border-gold-500/20 rounded-xl p-8 max-w-xl">
+            <h2 className="text-xl font-serif font-bold text-white mb-2">
+              Already a trade customer?
+            </h2>
+            <p className="text-parchment-400 text-sm mb-6">
+              Use your trade portal to place or repeat an order.
+            </p>
+            <a
+              href="/trade/order/"
+              className="inline-flex items-center px-6 py-3 bg-gold-500 text-jerry-green-900 font-bold rounded-lg hover:bg-gold-400 transition-colors text-sm"
+            >
+              Trade Order Portal
+            </a>
           </div>
         </div>
       </section>

@@ -15,6 +15,22 @@ const ALL_STOCKISTS: Stockist[] = [
     lng: -3.0497,
     type: 'bar',
   },
+  {
+    id: 'spin-the-black-circle-worcester',
+    name: 'Spin the Black Circle',
+    address: '19-21 Pump Street, Worcester WR1 2QX',
+    lat: 52.1929,
+    lng: -2.2218,
+    type: 'independent',
+  },
+  {
+    id: 'the-hog-horsley',
+    name: 'The Hog',
+    address: 'Horsley Hill, Stroud GL6 0PR',
+    lat: 51.6909,
+    lng: -2.2266,
+    type: 'bar',
+  },
 ]
 
 const UK_CENTER: [number, number] = [54.5, -2.5]
@@ -231,7 +247,7 @@ export default function StockistFinder() {
         {searchState === 'idle' && (
           <div className="flex-1 flex items-end">
             <p className="text-parchment-600 text-xs">
-              Retail availability expanding from April 2026.
+              More stockists being added regularly.
             </p>
           </div>
         )}
