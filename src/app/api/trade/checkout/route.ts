@@ -55,6 +55,8 @@ export async function POST(request: Request) {
     const cartWithItem = await addToCart(cart.id, variantId, quantity)
     const cartWithDiscount = await applyDiscount(cartWithItem.id, [account.discount_code])
 
+    console.log('Trade checkout discountCodes:', JSON.stringify(cartWithDiscount.discountCodes))
+
     return NextResponse.json({ checkoutUrl: cartWithDiscount.checkoutUrl })
   } catch (err) {
     console.error('Trade checkout error:', err)
