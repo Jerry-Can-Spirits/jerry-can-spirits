@@ -153,6 +153,7 @@ export default function TradeOrderForm() {
           <p className="text-parchment-500 text-xs uppercase tracking-widest mb-2">Product</p>
           <p className="text-white font-semibold">Expedition Spiced — Trade Case</p>
           <p className="text-parchment-400 text-sm">6 × 700ml bottles, 40% ABV</p>
+<<<<<<< feat/trade-portal-price-display
           <p className="text-gold-400 text-sm font-semibold mt-2">
             £{(210 * quantity).toFixed(2)} inc VAT
             {quantity > 1 && <span className="text-parchment-500 font-normal"> (£210.00 per case)</span>}
@@ -160,6 +161,8 @@ export default function TradeOrderForm() {
           <p className="text-parchment-600 text-xs mt-0.5">
             Your trade discount will be applied at checkout.
           </p>
+=======
+>>>>>>> main
         </div>
 
         <div>
