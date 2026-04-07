@@ -19,7 +19,7 @@ Defines the canonical list of trade products as a static config. Each entry has:
 - `handle` — Shopify product handle
 - `category` — display grouping (`'spirits' | 'glassware' | 'bar-tools'`)
 
-Adding a new product to the trade portal in future is one entry in this array. Price data is never stored here — it is always fetched from Shopify at runtime.
+Adding a new product to the trade portal in future is one entry in this array. Price data is never stored here — it is always fetched from Shopify at runtime. Category is sourced from this config, not from Shopify taxonomy, so display grouping stays independent of Shopify.
 
 ```ts
 export const TRADE_PRODUCTS = [
@@ -35,22 +35,29 @@ export const TRADE_PRODUCTS = [
 
 ### Modified: `src/app/trade/order/page.tsx`
 
-Becomes a proper async server component. Fetches all trade product data from the Shopify Storefront API in parallel at request time. Passes resolved product data (title, variants with id/title/price) to `TradeOrderForm` as props.
+Becomes a proper async server component. Calls the existing `getProduct(handle)` from `src/lib/shopify.ts` for each handle in `TRADE_PRODUCTS`, in parallel via `Promise.all`. Maps the results to `TradeProduct[]` and passes them to `TradeOrderForm` as props.
 
-If a product fetch fails, the page still renders — that product is omitted rather than breaking the whole page.
+Uses the public Shopify Storefront API credentials (`NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN`, `NEXT_PUBLIC_SHOPIFY_STOREFRONT_ACCESS_TOKEN`) — the same credentials used everywhere in the codebase. No elevated permissions needed.
+
+If all fetches fail (Shopify unreachable), passes an `error` prop to `TradeOrderForm` with the message: `"Product catalogue unavailable. Please contact us to place your order."`. If a single product fetch returns null (product deleted from Shopify), that product is silently omitted from the list.
 
 ### Modified: `src/components/TradeOrderForm.tsx`
 
-Accepts a `products` prop of type `TradeProduct[]` (resolved from Shopify). The PIN/session flow is unchanged.
+Accepts two additional props:
+- `products: TradeProduct[]` — resolved from Shopify
+- `error?: string` — set when product catalogue fetch failed
 
-On the order form stage:
+If `error` is set, the order form stage renders the error message with a contact link instead of the product list.
+
+On the order form stage (no error):
 
 - Products are grouped under three category headers: **Spirits**, **Glassware**, **Bar Tools**
-- Each variant is its own row: variant title (or product title for single-variant products), price per unit, quantity stepper (default 0, minimum 0)
+- Each variant is its own row: variant name, price per unit formatted as `£X.XX`, quantity stepper (default 0, minimum 0)
+- For single-variant products (variant title is `'Default Title'`), the row label is the product title. For multi-variant products, the row label is `{productTitle} — {variantTitle}` (e.g. "Stainless Steel Jigger — Silver")
 - The jigger renders as three separate rows under Bar Tools (Silver, Gold, Gunmetal)
-- A running total updates live across all selected items
-- "Your trade discount will be applied at checkout." displayed below the total — always visible, not conditional
-- Checkout button disabled when total quantity is zero across all items
+- Running total updates live: sum of `quantity × parseFloat(price)` across all variants, formatted as `£X.XX`
+- "Your trade discount will be applied at checkout." displayed below the total — always visible
+- Checkout button disabled when no variant has quantity > 0
 
 Form state: `Record<variantId, number>` — a map of variant ID to quantity.
 
@@ -58,45 +65,61 @@ Form state: `Record<variantId, number>` — a map of variant ID to quantity.
 
 Request body changes from `{ quantity: number }` to `{ lines: Array<{ variantId: string, quantity: number }> }`.
 
+Removes the read of `env.TRADE_CASE_VARIANT_ID` — variant IDs now come from the client via the `lines` array.
+
 Validation:
 - At least one line with quantity > 0
 - Each quantity is a positive integer ≤ 100
 - Each variantId is a non-empty string ≤ 100 chars (format check only — Shopify will reject invalid IDs)
 
-Adds all valid lines to the cart (one `addToCart` call per line), then applies the discount code once. Returns `{ checkoutUrl }`.
+Adds all valid lines to the cart in a single `cartLinesAdd` mutation via a new `addLinesToCart(cartId, lines[])` function in `src/lib/shopify.ts`. This replaces the current sequential `addToCart` approach and avoids N serial round-trips to Shopify.
+
+Then applies the discount code once. Returns `{ checkoutUrl }`.
+
+### New function: `addLinesToCart` in `src/lib/shopify.ts`
+
+```ts
+addLinesToCart(cartId: string, lines: Array<{ variantId: string, quantity: number }>): Promise<Cart>
+```
+
+Uses the `cartLinesAdd` mutation with the full `lines` array in a single API call. Returns a `Cart`. This is more efficient than the existing `addToCart` which adds one line at a time.
 
 ## Data Flow
 
 ```
 page.tsx (server)
-  → fetch trade product handles from TRADE_PRODUCTS config
-  → query Shopify Storefront API for each handle in parallel
-  → resolve to TradeProduct[] (title, variants: [{id, title, price}])
-  → pass as props to TradeOrderForm
+  → read TRADE_PRODUCTS config
+  → call getProduct(handle) for each in parallel via Promise.all
+  → map to TradeProduct[] (omitting nulls)
+  → if all null/failed → pass error prop to TradeOrderForm
+  → else → pass products prop to TradeOrderForm
 
 TradeOrderForm (client)
   PIN stage → unchanged
-  Order stage:
+  Order stage (error prop set):
+    → render error message + contact link
+  Order stage (products prop):
     → render products grouped by category
-    → maintain variantId → quantity map in state
-    → compute running total from quantities × prices
+    → maintain Record<variantId, number> in state
+    → compute running total (parseFloat(price) × quantity, formatted £X.XX)
     → on submit → POST /api/trade/checkout with lines array
 
 /api/trade/checkout (server)
   → verify HMAC cookie → look up account in D1
   → validate lines
-  → createCart → addToCart (×N lines) → applyDiscount
+  → createCart → addLinesToCart (single batch call) → applyDiscount
   → return checkoutUrl
 ```
 
 ## Type Definitions
 
+Defined in `src/lib/trade-products.ts` and imported by both `page.tsx` and `TradeOrderForm.tsx`:
+
 ```ts
-// Resolved product data passed from server to client
 export interface TradeProductVariant {
   id: string        // gid://shopify/ProductVariant/...
   title: string     // 'Default Title' | 'Silver' | 'Gold' | etc.
-  price: string     // '210.0'
+  price: string     // '210.0' — format from Shopify Storefront API
 }
 
 export interface TradeProduct {
@@ -107,6 +130,10 @@ export interface TradeProduct {
 }
 ```
 
+## Price Formatting
+
+All prices displayed as `£X.XX` using `parseFloat(price).toFixed(2)`. Currency is always GBP for trade orders. The `currencyCode` from Shopify is not displayed.
+
 ## Category Labels
 
 | Key | Display label |
@@ -115,16 +142,6 @@ export interface TradeProduct {
 | `glassware` | Glassware |
 | `bar-tools` | Bar Tools |
 
-## Variant Row Display
-
-For single-variant products (where variant title is `'Default Title'`), show the product title only. For multi-variant products (jigger), show `{productTitle} — {variantTitle}`.
-
-## Error Handling
-
-- If Shopify is unreachable when fetching product data, the page renders with an error state rather than crashing
-- If a product handle resolves to null (product deleted from Shopify), it is silently omitted from the list
-- Checkout route validation errors return 400 with a user-facing message
-
 ## What Is Not Changing
 
 - PIN entry stage and cookie mechanism — unchanged
@@ -132,3 +149,5 @@ For single-variant products (where variant title is `'Default Title'`), show the
 - `/api/trade/verify` route — unchanged
 - `/trade/page.tsx` — unchanged
 - Discount application — server-side only, code never reaches browser
+- `TRADE_SESSION_SECRET` Cloudflare secret — still required
+- `TRADE_CASE_VARIANT_ID` Cloudflare secret — **removed** from route.ts (variant IDs now come from the client); the secret itself can remain in Cloudflare but is no longer read by the code
