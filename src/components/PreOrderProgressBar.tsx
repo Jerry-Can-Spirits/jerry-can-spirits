@@ -20,7 +20,7 @@ export default function PreOrderProgressBar({ sold, total }: PreOrderProgressBar
     <div className="mb-8">
       <div className="flex justify-between items-center mb-3">
         <span className="text-parchment-200 font-semibold">
-          {sold} of {total} bottles reserved
+          {sold} of {total} bottles claimed
         </span>
         <span className="text-gold-300 font-semibold">{percentage}% claimed</span>
       </div>
@@ -31,7 +31,7 @@ export default function PreOrderProgressBar({ sold, total }: PreOrderProgressBar
         />
       </div>
       <p className="text-parchment-400 text-sm mt-2">
-        Only {total - sold} bottles remaining
+        {total - sold} bottles remaining
       </p>
     </div>
   )

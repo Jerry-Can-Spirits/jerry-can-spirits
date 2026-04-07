@@ -112,7 +112,7 @@ export default async function PreOrderSection() {
           <div className="order-1 lg:order-2">
             <div className="inline-block px-4 py-2 bg-jerry-green-800/60 backdrop-blur-sm rounded-full border border-gold-500/30 mb-6">
               <span className="text-gold-300 text-sm font-semibold uppercase tracking-widest">
-                Reserve Your Bottle
+                Order Now
               </span>
             </div>
 
@@ -121,7 +121,7 @@ export default async function PreOrderSection() {
             </h2>
 
             <p className="text-xl text-parchment-300 mb-6 leading-relaxed">
-              We&#39;re only making 700 bottles in our first batch. Each one numbered. Pre-order now and you&#39;ll be first to receive when we ship in April.
+              700 bottles. Each one numbered. Founding Supporter pricing runs until Sunday 12 April. £40 from Monday.
             </p>
 
             {totalSold !== null && (
@@ -138,11 +138,11 @@ export default async function PreOrderSection() {
                 </li>
                 <li className="flex items-start gap-3">
                   <span className="text-gold-400 flex-shrink-0">•</span>
-                  <span>First Batch supporter price of £{bottlePrice}. Ships April 2026.</span>
+                  <span>Founding Supporter price: £{bottlePrice}. Moves to £40 on Monday 13 April.</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <span className="text-gold-400 flex-shrink-0">•</span>
-                  <span>Priority shipping - first to receive in April 2026</span>
+                  <span>Shipping this week</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <span className="text-gold-400 flex-shrink-0">•</span>

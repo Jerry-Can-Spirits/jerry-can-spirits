@@ -1,5 +1,6 @@
-import dynamic from 'next/dynamic';
+import dynamicImport from 'next/dynamic';
 import HeroSection from "@/components/HeroSection";
+import HomepageExpeditionMap from "@/components/HomepageExpeditionMap";
 import StructuredData from "@/components/StructuredData";
 import ScrollToHash from "@/components/ScrollToHash";
 import PreOrderSection from "@/components/PreOrderSection";
@@ -16,8 +17,10 @@ import Link from 'next/link'
 import type { Metadata } from 'next'
 import { baseOpenGraph } from '@/lib/og'
 
+export const dynamic = 'force-dynamic'
+
 // Lazy load TrustpilotWidget (below the fold)
-const TrustpilotWidget = dynamic(() => import('@/components/TrustpilotWidget'), {
+const TrustpilotWidget = dynamicImport(() => import('@/components/TrustpilotWidget'), {
   loading: () => (
     <div className="h-[150px] bg-jerry-green-800/50 rounded-lg animate-pulse" />
   ),
@@ -27,14 +30,14 @@ export const metadata: Metadata = {
   title: {
     absolute: "Jerry Can Spirits | British Spiced Rum",
   },
-  description: "Two Royal Signals veterans, one spiced rum. Real botanicals, pot-distilled in Wales. No artificial flavouring. No shortcuts. Pre-order now for April 2026.",
+  description: "Two Royal Signals veterans, one spiced rum. Real botanicals, pot-distilled in Wales. No artificial flavouring. No shortcuts. Now shipping.",
   alternates: {
     canonical: "https://jerrycanspirits.co.uk/",
   },
   openGraph: {
     ...baseOpenGraph,
     title: "Jerry Can Spirits | British Spiced Rum",
-    description: "Two Royal Signals veterans, one spiced rum. Real botanicals, pot-distilled in Wales. No artificial flavouring. No shortcuts. Pre-order now for April 2026.",
+    description: "Two Royal Signals veterans, one spiced rum. Real botanicals, pot-distilled in Wales. No artificial flavouring. No shortcuts. Now shipping.",
     url: "https://jerrycanspirits.co.uk/",
   },
 }
@@ -180,7 +183,7 @@ export default function Home() {
         "url": "https://jerrycanspirits.co.uk/shop/spirits/",
         "price": "35",
         "priceCurrency": "GBP",
-        "availability": "https://schema.org/PreOrder",
+        "availability": "https://schema.org/InStock",
         "validFrom": "2025-07-01"
       }
     }
@@ -222,6 +225,9 @@ export default function Home() {
           <SupportingOurForces />
         </ScrollReveal>
 
+        {/* Expedition Log Map - community */}
+        <HomepageExpeditionMap />
+
         {/* Field Manual Preview - content engagement */}
         <ScrollReveal>
           <FieldManualPreview />
@@ -242,7 +248,7 @@ export default function Home() {
               10% off your first order.
             </h2>
             <p className="text-parchment-300 mb-8">
-              Sign up and we will send you a discount code. Valid from 6 April 2026.
+              Sign up and we will send you a 10% discount code.
             </p>
             <NewsletterSignup />
           </div>
@@ -346,6 +352,16 @@ export default function Home() {
                   theme="dark"
                   stars=""
                 />
+                <div className="text-center mt-6">
+                  <a
+                    href="https://www.trustpilot.com/review/jerrycanspirits.co.uk"
+                    target="_blank"
+                    rel="nofollow noopener noreferrer"
+                    className="text-sm text-gold-300 hover:text-gold-400 transition-colors underline"
+                  >
+                    View all reviews on Trustpilot
+                  </a>
+                </div>
               </div>
             </div>
           </section>
