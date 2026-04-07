@@ -14,7 +14,7 @@ export default async function TradeOrderPage() {
 
   try {
     const results = await Promise.all(
-      TRADE_PRODUCTS.map(async ({ handle, category }) => {
+      TRADE_PRODUCTS.map(async ({ handle, category }): Promise<TradeProduct | null> => {
         const product = await getProduct(handle)
         if (!product) return null
 
@@ -22,12 +22,13 @@ export default async function TradeOrderPage() {
           handle,
           title: product.title,
           category,
+          featuredImage: product.images[0] ?? undefined,
           variants: (product.variants || []).map((v) => ({
             id: v.id,
             title: v.title,
             price: v.price.amount,
           })),
-        } satisfies TradeProduct
+        }
       })
     )
 

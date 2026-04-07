@@ -2,7 +2,7 @@
 // Canonical list of products available on the trade order portal.
 // Add new products here — prices are always fetched live from Shopify.
 
-export type TradeCategory = 'spirits' | 'glassware' | 'bar-tools'
+export type TradeCategory = 'spirits' | 'glassware' | 'bar-tools' | 'sustainability'
 
 export interface TradeProductVariant {
   id: string      // gid://shopify/ProductVariant/...
@@ -14,6 +14,7 @@ export interface TradeProduct {
   handle: string
   title: string
   category: TradeCategory
+  featuredImage?: { url: string; altText: string | null }
   variants: TradeProductVariant[]
 }
 
@@ -21,6 +22,7 @@ export const CATEGORY_LABELS: Record<TradeCategory, string> = {
   spirits: 'Spirits',
   glassware: 'Glassware',
   'bar-tools': 'Bar Tools',
+  sustainability: 'Give Back',
 }
 
 export const TRADE_PRODUCTS: Array<{ handle: string; category: TradeCategory }> = [
@@ -31,4 +33,5 @@ export const TRADE_PRODUCTS: Array<{ handle: string; category: TradeCategory }> 
   { handle: 'hurricane-cocktail-glass-42cl', category: 'glassware' },
   { handle: 'bar-blade-bottle-opener', category: 'bar-tools' },
   { handle: 'stainless-steel-jigger', category: 'bar-tools' },
+  { handle: 'uk-tree-fund', category: 'sustainability' },
 ]

@@ -26,7 +26,7 @@ const TIER_LABEL: Record<string, string> = {
   partner: 'Partner',
 }
 
-const CATEGORY_ORDER: TradeCategory[] = ['spirits', 'glassware', 'bar-tools']
+const CATEGORY_ORDER: TradeCategory[] = ['spirits', 'glassware', 'bar-tools', 'sustainability']
 
 function formatPrice(amount: string): string {
   return `£${parseFloat(amount).toFixed(2)}`
@@ -182,7 +182,7 @@ export default function TradeOrderForm({ products, error: catalogueError }: Trad
         <div className="p-6 bg-jerry-green-800/20 border border-gold-500/20 rounded-xl">
           <p className="text-parchment-300 text-sm">{catalogueError}</p>
           <a
-            href="mailto:partnerships@jerrycanspirits.co.uk"
+            href="mailto:trade@jerrycanspirits.co.uk"
             className="mt-4 inline-block text-gold-400 hover:text-gold-300 text-sm underline"
           >
             Contact us
@@ -199,47 +199,67 @@ export default function TradeOrderForm({ products, error: catalogueError }: Trad
                 <h2 className="text-parchment-500 text-xs uppercase tracking-widest mb-4 pb-2 border-b border-gold-500/10">
                   {CATEGORY_LABELS[category]}
                 </h2>
-                <div className="space-y-4">
-                  {categoryProducts.flatMap((product) =>
-                    product.variants.map((variant) => {
-                      const label =
-                        variant.title === 'Default Title'
-                          ? product.title
-                          : `${product.title} — ${variant.title}`
-                      const qty = quantities[variant.id] ?? 0
+                <div className="space-y-6">
+                  {categoryProducts.map((product) => {
+                    const isMultiVariant = product.variants.length > 1 || product.variants[0]?.title !== 'Default Title'
 
-                      return (
-                        <div
-                          key={variant.id}
-                          className="flex items-center justify-between gap-4 py-3 border-b border-gold-500/10 last:border-0"
-                        >
-                          <div className="flex-1 min-w-0">
-                            <p className="text-white text-sm font-medium truncate">{label}</p>
-                            <p className="text-parchment-500 text-xs mt-0.5">{formatPrice(variant.price)} each</p>
-                          </div>
-                          <div className="flex items-center gap-2 flex-shrink-0">
-                            <button
-                              type="button"
-                              onClick={() => setQuantity(variant.id, qty - 1)}
-                              className="w-8 h-8 rounded border border-gold-500/30 text-gold-300 hover:border-gold-400 hover:text-gold-200 transition-colors flex items-center justify-center text-base font-bold"
-                            >
-                              −
-                            </button>
-                            <span className="text-white text-sm font-serif font-bold w-6 text-center">
-                              {qty}
-                            </span>
-                            <button
-                              type="button"
-                              onClick={() => setQuantity(variant.id, qty + 1)}
-                              className="w-8 h-8 rounded border border-gold-500/30 text-gold-300 hover:border-gold-400 hover:text-gold-200 transition-colors flex items-center justify-center text-base font-bold"
-                            >
-                              +
-                            </button>
-                          </div>
+                    return (
+                      <div key={product.handle}>
+                        {/* Product header */}
+                        <div className="flex items-center gap-3 mb-2">
+                          {product.featuredImage && (
+                            // eslint-disable-next-line @next/next/no-img-element
+                            <img
+                              src={product.featuredImage.url}
+                              alt={product.featuredImage.altText ?? product.title}
+                              className="w-12 h-12 rounded object-cover flex-shrink-0 border border-gold-500/20"
+                            />
+                          )}
+                          <p className="text-white text-sm font-semibold">{product.title}</p>
                         </div>
-                      )
-                    })
-                  )}
+
+                        {/* Variant rows */}
+                        <div className={isMultiVariant ? 'pl-16' : ''}>
+                          {product.variants.map((variant) => {
+                            const qty = quantities[variant.id] ?? 0
+
+                            return (
+                              <div
+                                key={variant.id}
+                                className="flex items-center justify-between gap-4 py-2.5 border-b border-gold-500/10 last:border-0"
+                              >
+                                <div className="flex-1 min-w-0">
+                                  {isMultiVariant && (
+                                    <p className="text-parchment-300 text-xs mb-0.5">{variant.title}</p>
+                                  )}
+                                  <p className="text-parchment-500 text-xs">{formatPrice(variant.price)} each</p>
+                                </div>
+                                <div className="flex items-center gap-2 flex-shrink-0">
+                                  <button
+                                    type="button"
+                                    onClick={() => setQuantity(variant.id, qty - 1)}
+                                    className="w-8 h-8 rounded border border-gold-500/30 text-gold-300 hover:border-gold-400 hover:text-gold-200 transition-colors flex items-center justify-center text-base font-bold"
+                                  >
+                                    −
+                                  </button>
+                                  <span className="text-white text-sm font-serif font-bold w-6 text-center">
+                                    {qty}
+                                  </span>
+                                  <button
+                                    type="button"
+                                    onClick={() => setQuantity(variant.id, qty + 1)}
+                                    className="w-8 h-8 rounded border border-gold-500/30 text-gold-300 hover:border-gold-400 hover:text-gold-200 transition-colors flex items-center justify-center text-base font-bold"
+                                  >
+                                    +
+                                  </button>
+                                </div>
+                              </div>
+                            )
+                          })}
+                        </div>
+                      </div>
+                    )
+                  })}
                 </div>
               </div>
             )
@@ -271,7 +291,7 @@ export default function TradeOrderForm({ products, error: catalogueError }: Trad
 
       <p className="mt-8 text-parchment-600 text-xs">
         Questions?{' '}
-        <a href="mailto:partnerships@jerrycanspirits.co.uk" className="text-gold-500 hover:text-gold-400 underline">
+        <a href="mailto:trade@jerrycanspirits.co.uk" className="text-gold-500 hover:text-gold-400 underline">
           Get in touch
         </a>
       </p>
