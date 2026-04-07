@@ -1,12 +1,17 @@
 'use client'
 
 import { useState } from 'react'
+import {
+  type TradeProduct,
+  type TradeCategory,
+  CATEGORY_LABELS,
+} from '@/lib/trade-products'
 
 type Stage = 'pin' | 'order' | 'loading'
 
 interface VerifyResponse {
   venue_name: string
-  tier: 'intro' | 'standard' | 'partner'
+  tier: string
   error?: string
 }
 
@@ -21,17 +26,38 @@ const TIER_LABEL: Record<string, string> = {
   partner: 'Partner',
 }
 
-export default function TradeOrderForm() {
+const CATEGORY_ORDER: TradeCategory[] = ['spirits', 'glassware', 'bar-tools']
+
+function formatPrice(amount: string): string {
+  return `£${parseFloat(amount).toFixed(2)}`
+}
+
+interface TradeOrderFormProps {
+  products: TradeProduct[]
+  error?: string
+}
+
+export default function TradeOrderForm({ products, error: catalogueError }: TradeOrderFormProps) {
   const [stage, setStage] = useState<Stage>('pin')
   const [pin, setPin] = useState('')
   const [venueName, setVenueName] = useState('')
   const [tier, setTier] = useState('')
-  const [quantity, setQuantity] = useState(1)
-  const [error, setError] = useState('')
+  const [quantities, setQuantities] = useState<Record<string, number>>({})
+  const [formError, setFormError] = useState('')
+
+  const setQuantity = (variantId: string, value: number) => {
+    setQuantities((prev) => ({ ...prev, [variantId]: Math.max(0, Math.min(99, value)) }))
+  }
+
+  const totalItems = Object.values(quantities).reduce((sum, q) => sum + q, 0)
+
+  const runningTotal = products
+    .flatMap((p) => p.variants)
+    .reduce((sum, v) => sum + parseFloat(v.price) * (quantities[v.id] ?? 0), 0)
 
   const handleVerify = async (e: React.FormEvent) => {
     e.preventDefault()
-    setError('')
+    setFormError('')
     setStage('loading')
 
     try {
@@ -43,7 +69,7 @@ export default function TradeOrderForm() {
       const data = await res.json() as VerifyResponse
 
       if (!res.ok) {
-        setError(data.error ?? 'Invalid PIN.')
+        setFormError(data.error ?? 'Invalid PIN.')
         setStage('pin')
         return
       }
@@ -52,33 +78,37 @@ export default function TradeOrderForm() {
       setTier(data.tier)
       setStage('order')
     } catch {
-      setError('Something went wrong. Please try again.')
+      setFormError('Something went wrong. Please try again.')
       setStage('pin')
     }
   }
 
   const handleOrder = async (e: React.FormEvent) => {
     e.preventDefault()
-    setError('')
+    setFormError('')
     setStage('loading')
+
+    const lines = Object.entries(quantities)
+      .filter(([, qty]) => qty > 0)
+      .map(([variantId, quantity]) => ({ variantId, quantity }))
 
     try {
       const res = await fetch('/api/trade/checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ quantity }),
+        body: JSON.stringify({ lines }),
       })
       const data = await res.json() as CheckoutResponse
 
       if (!res.ok || !data.checkoutUrl) {
-        setError(data.error ?? 'Failed to start checkout. Please try again.')
+        setFormError(data.error ?? 'Failed to start checkout. Please try again.')
         setStage('order')
         return
       }
 
       window.location.href = data.checkoutUrl
     } catch {
-      setError('Something went wrong. Please try again.')
+      setFormError('Something went wrong. Please try again.')
       setStage('order')
     }
   }
@@ -119,9 +149,7 @@ export default function TradeOrderForm() {
               placeholder="••••••••"
             />
           </div>
-          {error && (
-            <p className="text-red-400 text-sm">{error}</p>
-          )}
+          {formError && <p className="text-red-400 text-sm">{formError}</p>}
           <button
             type="submit"
             disabled={!pin.trim()}
@@ -142,68 +170,106 @@ export default function TradeOrderForm() {
 
   // stage === 'order'
   return (
-    <div className="max-w-sm">
-      <p className="text-gold-400 text-sm font-semibold mb-1">{venueName}</p>
-      <p className="text-parchment-500 text-xs uppercase tracking-widest mb-8">
-        {TIER_LABEL[tier] ?? tier} account
-      </p>
+    <div className="max-w-2xl">
+      <div className="mb-8">
+        <p className="text-gold-400 text-sm font-semibold mb-1">{venueName}</p>
+        <p className="text-parchment-500 text-xs uppercase tracking-widest">
+          {TIER_LABEL[tier] ?? tier} account
+        </p>
+      </div>
 
-      <form onSubmit={handleOrder} className="space-y-6">
-        <div>
-          <p className="text-parchment-500 text-xs uppercase tracking-widest mb-2">Product</p>
-          <p className="text-white font-semibold">Expedition Spiced — Trade Case</p>
-          <p className="text-parchment-400 text-sm">6 × 700ml bottles, 40% ABV</p>
-          <p className="text-gold-400 text-sm font-semibold mt-2">
-            £{(210 * quantity).toFixed(2)} inc VAT
-            {quantity > 1 && <span className="text-parchment-500 font-normal"> (£210.00 per case)</span>}
-          </p>
-          <p className="text-parchment-600 text-xs mt-0.5">
-            Your trade discount will be applied at checkout.
-          </p>
+      {catalogueError ? (
+        <div className="p-6 bg-jerry-green-800/20 border border-gold-500/20 rounded-xl">
+          <p className="text-parchment-300 text-sm">{catalogueError}</p>
+          <a
+            href="mailto:partnerships@jerrycanspirits.co.uk"
+            className="mt-4 inline-block text-gold-400 hover:text-gold-300 text-sm underline"
+          >
+            Contact us
+          </a>
         </div>
+      ) : (
+        <form onSubmit={handleOrder} className="space-y-10">
+          {CATEGORY_ORDER.map((category) => {
+            const categoryProducts = products.filter((p) => p.category === category)
+            if (categoryProducts.length === 0) return null
 
-        <div>
-          <label htmlFor="trade-quantity" className="block text-parchment-500 text-xs uppercase tracking-widest mb-2">
-            Cases
-          </label>
-          <div className="flex items-center gap-3">
+            return (
+              <div key={category}>
+                <h2 className="text-parchment-500 text-xs uppercase tracking-widest mb-4 pb-2 border-b border-gold-500/10">
+                  {CATEGORY_LABELS[category]}
+                </h2>
+                <div className="space-y-4">
+                  {categoryProducts.flatMap((product) =>
+                    product.variants.map((variant) => {
+                      const label =
+                        variant.title === 'Default Title'
+                          ? product.title
+                          : `${product.title} — ${variant.title}`
+                      const qty = quantities[variant.id] ?? 0
+
+                      return (
+                        <div
+                          key={variant.id}
+                          className="flex items-center justify-between gap-4 py-3 border-b border-gold-500/10 last:border-0"
+                        >
+                          <div className="flex-1 min-w-0">
+                            <p className="text-white text-sm font-medium truncate">{label}</p>
+                            <p className="text-parchment-500 text-xs mt-0.5">{formatPrice(variant.price)} each</p>
+                          </div>
+                          <div className="flex items-center gap-2 flex-shrink-0">
+                            <button
+                              type="button"
+                              onClick={() => setQuantity(variant.id, qty - 1)}
+                              className="w-8 h-8 rounded border border-gold-500/30 text-gold-300 hover:border-gold-400 hover:text-gold-200 transition-colors flex items-center justify-center text-base font-bold"
+                            >
+                              −
+                            </button>
+                            <span className="text-white text-sm font-serif font-bold w-6 text-center">
+                              {qty}
+                            </span>
+                            <button
+                              type="button"
+                              onClick={() => setQuantity(variant.id, qty + 1)}
+                              className="w-8 h-8 rounded border border-gold-500/30 text-gold-300 hover:border-gold-400 hover:text-gold-200 transition-colors flex items-center justify-center text-base font-bold"
+                            >
+                              +
+                            </button>
+                          </div>
+                        </div>
+                      )
+                    })
+                  )}
+                </div>
+              </div>
+            )
+          })}
+
+          <div className="pt-4 border-t border-gold-500/20">
+            <div className="flex items-baseline justify-between mb-1">
+              <p className="text-parchment-500 text-xs uppercase tracking-widest">Order total</p>
+              <p className="text-gold-400 text-xl font-serif font-bold">
+                {formatPrice(runningTotal.toString())}
+              </p>
+            </div>
+            <p className="text-parchment-600 text-xs mb-6">
+              Your trade discount will be applied at checkout.
+            </p>
+
+            {formError && <p className="text-red-400 text-sm mb-4">{formError}</p>}
+
             <button
-              type="button"
-              onClick={() => setQuantity(Math.max(1, quantity - 1))}
-              className="w-10 h-10 rounded-lg border border-gold-500/30 text-gold-300 hover:border-gold-400 hover:text-gold-200 transition-colors flex items-center justify-center text-lg font-bold"
+              type="submit"
+              disabled={totalItems === 0}
+              className="w-full sm:w-auto px-8 py-3 bg-gold-500 text-jerry-green-900 font-bold text-sm uppercase tracking-wide rounded-lg hover:bg-gold-400 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              −
+              Proceed to Checkout
             </button>
-            <span className="text-white text-xl font-serif font-bold w-8 text-center">
-              {quantity}
-            </span>
-            <button
-              type="button"
-              onClick={() => setQuantity(Math.min(99, quantity + 1))}
-              className="w-10 h-10 rounded-lg border border-gold-500/30 text-gold-300 hover:border-gold-400 hover:text-gold-200 transition-colors flex items-center justify-center text-lg font-bold"
-            >
-              +
-            </button>
-            <span className="text-parchment-400 text-sm">
-              {quantity * 6} bottles total
-            </span>
           </div>
-        </div>
+        </form>
+      )}
 
-        {error && (
-          <p className="text-red-400 text-sm">{error}</p>
-        )}
-
-        <button
-          type="submit"
-          className="w-full px-6 py-3 bg-gold-500 text-jerry-green-900 font-bold text-sm uppercase tracking-wide rounded-lg hover:bg-gold-400 transition-colors"
-        >
-          Proceed to Checkout
-        </button>
-      </form>
-
-      <p className="mt-6 text-parchment-600 text-xs">
-        Your trade pricing will be applied automatically at checkout.
+      <p className="mt-8 text-parchment-600 text-xs">
         Questions?{' '}
         <a href="mailto:partnerships@jerrycanspirits.co.uk" className="text-gold-500 hover:text-gold-400 underline">
           Get in touch
