@@ -171,7 +171,7 @@ export default function TradeOrderForm({ products, error: catalogueError }: Trad
   // stage === 'order'
   return (
     <div className="max-w-2xl">
-      <div className="mb-8">
+      <div className="mb-6">
         <p className="text-gold-400 text-sm font-semibold mb-1">{venueName}</p>
         <p className="text-parchment-500 text-xs uppercase tracking-widest">
           {TIER_LABEL[tier] ?? tier} account
@@ -179,7 +179,7 @@ export default function TradeOrderForm({ products, error: catalogueError }: Trad
       </div>
 
       {catalogueError ? (
-        <div className="p-6 bg-jerry-green-800/20 border border-gold-500/20 rounded-xl">
+        <div className="p-6 bg-jerry-green-800/60 backdrop-blur-sm border border-gold-500/20 rounded-xl">
           <p className="text-parchment-300 text-sm">{catalogueError}</p>
           <a
             href="mailto:trade@jerrycanspirits.co.uk"
@@ -189,7 +189,7 @@ export default function TradeOrderForm({ products, error: catalogueError }: Trad
           </a>
         </div>
       ) : (
-        <form onSubmit={handleOrder} className="space-y-10">
+        <form onSubmit={handleOrder} className="bg-jerry-green-800/60 backdrop-blur-sm border border-gold-500/20 rounded-xl p-8 space-y-10">
           {CATEGORY_ORDER.map((category) => {
             const categoryProducts = products.filter((p) => p.category === category)
             if (categoryProducts.length === 0) return null
@@ -208,12 +208,14 @@ export default function TradeOrderForm({ products, error: catalogueError }: Trad
                         {/* Product header */}
                         <div className="flex items-center gap-3 mb-2">
                           {product.featuredImage && (
-                            // eslint-disable-next-line @next/next/no-img-element
-                            <img
-                              src={product.featuredImage.url}
-                              alt={product.featuredImage.altText ?? product.title}
-                              className="w-12 h-12 rounded object-cover flex-shrink-0 border border-gold-500/20"
-                            />
+                            <div className="relative flex-shrink-0 w-12 h-12">
+                              {/* eslint-disable-next-line @next/next/no-img-element */}
+                              <img
+                                src={product.featuredImage.url}
+                                alt={product.featuredImage.altText ?? product.title}
+                                className="w-12 h-12 rounded object-cover border border-gold-500/20 cursor-zoom-in transition-transform duration-200 hover:scale-[2.5] hover:z-20 relative"
+                              />
+                            </div>
                           )}
                           <p className="text-white text-sm font-semibold">{product.title}</p>
                         </div>
