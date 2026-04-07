@@ -22,28 +22,57 @@ const featuredStockists = [
   {
     name: 'The Bank Bar & Grill',
     address: '28 Corporation St, Blackpool FY1 1EJ',
+    streetAddress: '28 Corporation St',
+    addressLocality: 'Blackpool',
+    postalCode: 'FY1 1EJ',
     description: 'Family run Bar & Grill restaurant in the centre of Blackpool. Serving Brunch and evening A La Carte Menu.',
     website: 'https://www.thebankblackpool.com/',
     logo: 'https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/9084080c-6c1f-45e5-e29f-9b939ad44100/public',
     type: 'Bar & Grill',
     location: 'Blackpool, Lancashire',
+    schemaType: 'BarOrPub' as const,
+  },
+  {
+    name: 'Spin the Black Circle',
+    address: '19-21 Pump Street, Worcester WR1 2QX',
+    streetAddress: '19-21 Pump Street',
+    addressLocality: 'Worcester',
+    postalCode: 'WR1 2QX',
+    description: 'Independent record shop and cultural hub in the heart of Worcester. Vinyl, music, and a passion for things done properly.',
+    website: 'https://www.spintheblack.com/',
+    logo: 'https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/2a07131a-94d4-4817-90c3-15ccb9c54700/public',
+    type: 'Independent',
+    location: 'Worcester, Worcestershire',
+    schemaType: 'Store' as const,
+  },
+  {
+    name: 'The Hog',
+    address: 'Horsley Hill, Stroud GL6 0PR',
+    streetAddress: 'Horsley Hill',
+    addressLocality: 'Horsley',
+    postalCode: 'GL6 0PR',
+    description: 'A well-regarded pub and kitchen in the Cotswold village of Horsley. Good food, proper drinks, the sort of place worth the journey.',
+    website: 'https://www.hoghorsley.com/',
+    logo: 'https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/36fa355c-9395-4365-d33d-9473815fac00/public',
+    type: 'Pub & Kitchen',
+    location: 'Horsley, Gloucestershire',
+    schemaType: 'BarOrPub' as const,
   },
 ]
 
 const stockistSchema = featuredStockists.map((stockist) => ({
   '@context': 'https://schema.org',
-  '@type': 'BarOrPub',
+  '@type': stockist.schemaType,
   name: stockist.name,
   address: {
     '@type': 'PostalAddress',
-    streetAddress: '28 Corporation St',
-    addressLocality: 'Blackpool',
-    postalCode: 'FY1 1EJ',
+    streetAddress: stockist.streetAddress,
+    addressLocality: stockist.addressLocality,
+    postalCode: stockist.postalCode,
     addressCountry: 'GB',
   },
   url: stockist.website,
   description: stockist.description,
-  servesCuisine: 'British',
 }))
 
 export default function StockistsPage() {
@@ -63,7 +92,7 @@ export default function StockistsPage() {
             Find Expedition Spiced
           </h1>
           <p className="text-xl text-parchment-300 max-w-2xl">
-            Enter your postcode to find the nearest stockist. Retail availability expanding from April 2026.
+            Enter your postcode to find the nearest stockist. More stockists being added regularly.
           </p>
         </div>
 

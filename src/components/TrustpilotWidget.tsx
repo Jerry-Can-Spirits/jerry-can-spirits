@@ -70,12 +70,12 @@ export default function TrustpilotWidget({
       {...dataAttributes}
     >
       <a
-        href="https://uk.trustpilot.com/review/jerrycanspirits.co.uk"
+        href="https://www.trustpilot.com/review/jerrycanspirits.co.uk"
         target="_blank"
-        rel="noopener noreferrer"
+        rel="nofollow noopener noreferrer"
         className="text-gold-300 hover:text-gold-400 transition-colors"
       >
-        Trustpilot
+        Read our reviews on Trustpilot
       </a>
     </div>
     </>
