@@ -40,7 +40,7 @@ export async function signTradeCookie(
   payload: TradeCookiePayload,
   secret: string
 ): Promise<string> {
-  const data = toBase64url(new TextEncoder().encode(JSON.stringify(payload)))
+  const data = toBase64url(new TextEncoder().encode(JSON.stringify(payload)).buffer as ArrayBuffer)
   const key = await getKey(secret)
   const sig = await crypto.subtle.sign('HMAC', key, new TextEncoder().encode(data))
   return `${data}.${toBase64url(sig)}`
@@ -61,7 +61,7 @@ export async function verifyTradeCookie(
     const valid = await crypto.subtle.verify(
       'HMAC',
       key,
-      fromBase64url(sig),
+      fromBase64url(sig).buffer as ArrayBuffer,
       new TextEncoder().encode(data)
     )
     if (!valid) return null
