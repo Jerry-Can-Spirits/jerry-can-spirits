@@ -581,6 +581,84 @@ export async function addToCart(cartId: string, variantId: string, quantity: num
   }
 }
 
+// Add multiple items to cart in a single mutation
+export async function addLinesToCart(
+  cartId: string,
+  lines: Array<{ variantId: string; quantity: number }>
+): Promise<Cart> {
+  const query = `
+    mutation AddLinesToCart($cartId: ID!, $lines: [CartLineInput!]!) {
+      cartLinesAdd(cartId: $cartId, lines: $lines) {
+        cart {
+          id
+          checkoutUrl
+          lines(first: 50) {
+            edges {
+              node {
+                id
+                quantity
+                merchandise {
+                  ... on ProductVariant {
+                    id
+                    title
+                    price {
+                      amount
+                      currencyCode
+                    }
+                  }
+                }
+              }
+            }
+          }
+          cost {
+            totalAmount {
+              amount
+              currencyCode
+            }
+            subtotalAmount {
+              amount
+              currencyCode
+            }
+          }
+          discountCodes {
+            code
+            applicable
+          }
+        }
+      }
+    }
+  `
+
+  const variables = {
+    cartId,
+    lines: lines.map(({ variantId, quantity }) => ({
+      merchandiseId: variantId,
+      quantity,
+    })),
+  }
+
+  try {
+    const { data, errors } = await getClient().request(query, { variables })
+
+    if (errors) {
+      console.error('GraphQL Errors:', errors)
+      throw new Error('Failed to add lines to cart')
+    }
+
+    if (!data?.cartLinesAdd?.cart) {
+      throw new Error('No cart data returned from Shopify')
+    }
+
+    return {
+      ...data.cartLinesAdd.cart,
+      lines: data.cartLinesAdd.cart.lines.edges.map((edge: CartLineEdge) => edge.node),
+    }
+  } catch (error) {
+    console.error('Error adding lines to cart:', error)
+    throw error
+  }
+}
+
 // Update cart line quantity
 export async function updateCartLine(cartId: string, lineId: string, quantity: number): Promise<Cart> {
   const query = `
