@@ -1,4 +1,6 @@
 import type { Metadata } from 'next'
+import { getProduct } from '@/lib/shopify'
+import { TRADE_PRODUCTS, type TradeProduct } from '@/lib/trade-products'
 import TradeOrderForm from '@/components/TradeOrderForm'
 
 export const metadata: Metadata = {
@@ -6,7 +8,38 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 }
 
-export default function TradeOrderPage() {
+export default async function TradeOrderPage() {
+  let products: TradeProduct[] = []
+  let fetchError: string | undefined
+
+  try {
+    const results = await Promise.all(
+      TRADE_PRODUCTS.map(async ({ handle, category }) => {
+        const product = await getProduct(handle)
+        if (!product) return null
+
+        return {
+          handle,
+          title: product.title,
+          category,
+          variants: (product.variants || []).map((v) => ({
+            id: v.id,
+            title: v.title,
+            price: v.price.amount,
+          })),
+        } satisfies TradeProduct
+      })
+    )
+
+    products = results.filter((p): p is TradeProduct => p !== null)
+
+    if (products.length === 0) {
+      fetchError = 'Product catalogue unavailable. Please contact us to place your order.'
+    }
+  } catch {
+    fetchError = 'Product catalogue unavailable. Please contact us to place your order.'
+  }
+
   return (
     <main className="min-h-screen py-24">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -21,7 +54,7 @@ export default function TradeOrderPage() {
         <p className="text-parchment-400 text-sm mb-12 max-w-lg">
           Enter your trade PIN to access your account and place an order.
         </p>
-        <TradeOrderForm />
+        <TradeOrderForm products={products} error={fetchError} />
       </div>
     </main>
   )
