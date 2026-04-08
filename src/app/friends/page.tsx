@@ -77,6 +77,15 @@ const partners = [
     featured: true,
   },
   {
+    name: "Label Apeel Limited",
+    location: "Thurmaston, Leicester, United Kingdom",
+    description: "Our label manufacturer, based in Thurmaston, Leicester. Label Apeel produce labels across a wide range of industries, working with brands that hold their packaging to an exacting standard. They produce the labels on every bottle of Expedition Spiced. The label is the first thing a customer sees. It has to be right.",
+    website: "https://www.labelapeel.co.uk",
+    speciality: "Label Manufacturing",
+    logo: "https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/aa42e11c-95ea-47bc-f066-a0e6d8c4fd00/public",
+    featured: true,
+  },
+  {
     name: "The Engraved Gift Workshop",
     location: "Chatburn, Lancashire",
     description: "Our barware partner, crafting the premium glasses and accessories that complement our spirits. Established in 2005 with a passion for natural products and personalisation, they create unique, elegant products that recipients truly want to use. Based in Lancashire, they source only the highest standard glassware and materials, bringing expertise in engraving and customisation. 'Etching Memories Into Exceptional Products'.",
