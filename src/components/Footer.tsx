@@ -215,7 +215,7 @@ export default function Footer() {
                           height={72}
                           className="h-16 w-auto object-contain max-w-full"
                           sizes="180px"
-                          quality={100}
+                          quality={80}
                           loading="lazy"
                         />
                     </a>

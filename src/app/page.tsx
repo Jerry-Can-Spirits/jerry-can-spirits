@@ -17,7 +17,7 @@ import Link from 'next/link'
 import type { Metadata } from 'next'
 import { baseOpenGraph } from '@/lib/og'
 
-export const dynamic = 'force-dynamic'
+export const revalidate = 60
 
 // Lazy load TrustpilotWidget (below the fold)
 const TrustpilotWidget = dynamicImport(() => import('@/components/TrustpilotWidget'), {

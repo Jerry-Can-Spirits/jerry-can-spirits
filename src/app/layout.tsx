@@ -103,9 +103,11 @@ export default function RootLayout({
             ensuring crawlers without JS see all content at full opacity. */}
         <script dangerouslySetInnerHTML={{ __html: `document.documentElement.classList.add('js')` }} />
 
-        {/* Google Consent Mode v2 Defaults - MUST load before any Google tags */}
+        {/* Google Consent Mode v2 Defaults - runs after interactive, before any Google tags fire */}
         {/* Cookiebot will update these values when user gives consent */}
-        <script
+        <Script
+          id="google-consent-defaults"
+          strategy="afterInteractive"
           dangerouslySetInnerHTML={{
             __html: `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag("consent","default",{ad_personalization:"denied",ad_storage:"denied",ad_user_data:"denied",analytics_storage:"denied",functionality_storage:"denied",personalization_storage:"denied",security_storage:"granted"});gtag("set","ads_data_redaction",true);gtag("set","url_passthrough",false);`,
           }}

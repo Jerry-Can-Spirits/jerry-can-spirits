@@ -63,7 +63,7 @@ export default function TrustpilotWidget({
 
   return (
     <>
-    <Script src="https://widget.trustpilot.com/bootstrap/v5/tp.widget.bootstrap.min.js" strategy="afterInteractive" />
+    <Script src="https://widget.trustpilot.com/bootstrap/v5/tp.widget.bootstrap.min.js" strategy="lazyOnload" />
     <div
       ref={ref}
       className="trustpilot-widget"

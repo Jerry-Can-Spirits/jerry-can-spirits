@@ -24,11 +24,12 @@ export default async function EcologiImpact() {
   return (
     <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
       <div className="flex flex-col sm:flex-row sm:items-center gap-4 mb-6">
-        <div className="relative w-32 h-10 flex-shrink-0">
+        <div className="flex-shrink-0">
           <Image
             src="https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/6f20d43b-bf53-4d31-a389-96e4bfd2c100/public"
             alt="Ecologi"
-            fill
+            width={128}
+            height={40}
             className="object-contain object-left"
           />
         </div>
