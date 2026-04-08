@@ -1,4 +1,3 @@
-import Image from 'next/image'
 import Link from 'next/link'
 
 interface EcologiStats {
@@ -25,12 +24,12 @@ export default async function EcologiImpact() {
     <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
       <div className="flex flex-col sm:flex-row sm:items-center gap-4 mb-6">
         <div className="flex-shrink-0">
-          <Image
-            src="https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/6f20d43b-bf53-4d31-a389-96e4bfd2c100/public"
-            alt="Ecologi"
-            width={128}
-            height={40}
-            className="object-contain object-left"
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="https://api.ecologi.com/badges/trees/69cf809ea3c16250680afe34?white=true&treeOnly=true"
+            alt="Trees planted with Ecologi"
+            height={80}
+            className="h-20 w-auto"
           />
         </div>
         <h2 className="text-2xl sm:text-3xl font-serif font-bold text-white">
