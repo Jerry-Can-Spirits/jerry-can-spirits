@@ -253,6 +253,21 @@ export async function getExpeditionLogEntries(db: D1Database): Promise<Expeditio
   return result.results;
 }
 
+export async function isBottleLogged(
+  db: D1Database,
+  batchId: string,
+  bottleType: string,
+  bottleNumber: number,
+): Promise<boolean> {
+  const result = await db
+    .prepare(
+      'SELECT id FROM expedition_log WHERE batch_id = ? AND bottle_type = ? AND bottle_number = ? AND removed_at IS NULL LIMIT 1',
+    )
+    .bind(batchId, bottleType, bottleNumber)
+    .first();
+  return result !== null;
+}
+
 // ── Trade Account Queries ─────────────────────────────────────────────
 
 export interface TradeAccount {
