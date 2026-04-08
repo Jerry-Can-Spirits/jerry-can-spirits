@@ -392,9 +392,6 @@ export async function getProduct(handle: string): Promise<ShopifyProduct | null>
       return null;
     }
 
-    // Debug log to see what Storefront API returns
-    console.log('Storefront API Product Data:', JSON.stringify(data.product, null, 2));
-
     return {
       ...data.product,
       images: data.product.images.edges.map((edge: ImageEdge) => edge.node),
@@ -465,8 +462,6 @@ export async function createCart(): Promise<Cart> {
   try {
     const response = await getClient().request(query);
 
-    console.log('Full Shopify Response:', JSON.stringify(response, null, 2));
-
     const { data, errors } = response;
 
     if (errors && Object.keys(errors).length > 0) {
@@ -478,8 +473,6 @@ export async function createCart(): Promise<Cart> {
       console.error('No cart created. Response:', data);
       throw new Error('Failed to create cart - no cart returned');
     }
-
-    console.log('Cart created successfully:', data.cartCreate.cart.id);
 
     return {
       ...data.cartCreate.cart,
@@ -493,8 +486,6 @@ export async function createCart(): Promise<Cart> {
 
 // Add item to cart
 export async function addToCart(cartId: string, variantId: string, quantity: number = 1): Promise<Cart> {
-  console.log('Adding to cart:', { cartId, variantId, quantity });
-
   const query = `
     mutation AddToCart($cartId: ID!, $lines: [CartLineInput!]!) {
       cartLinesAdd(cartId: $cartId, lines: $lines) {
@@ -558,8 +549,6 @@ export async function addToCart(cartId: string, variantId: string, quantity: num
 
   try {
     const { data, errors } = await getClient().request(query, { variables });
-
-    console.log('Cart API Response:', { data, errors });
 
     if (errors) {
       console.error('GraphQL Errors:', errors);
