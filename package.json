@@ -42,7 +42,8 @@
     "react-leaflet": "^5.0.0",
     "sanity": "^4.22.0",
     "styled-components": "^6.3.12",
-    "tailwind-merge": "^3.5.0"
+    "tailwind-merge": "^3.5.0",
+    "xss": "^1.0.15"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20260405.1",

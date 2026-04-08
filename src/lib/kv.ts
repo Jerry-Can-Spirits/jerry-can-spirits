@@ -2,9 +2,10 @@
  * Typed KV utilities for the SITE_OPS namespace.
  *
  * Key patterns:
- *   feature:{name}   — Feature flags (JSON, no expiry)
- *   ageverified:{fp}  — Server-side age verification cache (365d TTL)
- *   visitor:{fp}      — First-time vs returning visitor (30d TTL)
+ *   feature:{name}       — Feature flags (JSON, no expiry)
+ *   ageverified:{fp}     — Server-side age verification cache (365d TTL)
+ *   visitor:{fp}         — First-time vs returning visitor (30d TTL)
+ *   trade:failed:{ip}    — Trade PIN failed attempts (15min TTL)
  */
 
 import { getCloudflareContext } from '@opennextjs/cloudflare';
@@ -103,4 +104,36 @@ export async function trackVisitor(
   });
 
   return record;
+}
+
+// ── Trade PIN Rate Limiting ─────────────────────────────────────────
+
+export const TRADE_MAX_ATTEMPTS = 5;
+const TRADE_LOCKOUT_TTL = 15 * 60; // 15 minutes
+
+export async function getTradeFailedAttempts(
+  kv: KVNamespace,
+  ip: string,
+): Promise<number> {
+  const val = await kv.get(`trade:failed:${ip}`);
+  return val ? parseInt(val, 10) : 0;
+}
+
+export async function incrementTradeFailedAttempts(
+  kv: KVNamespace,
+  ip: string,
+): Promise<number> {
+  const current = await getTradeFailedAttempts(kv, ip);
+  const next = current + 1;
+  await kv.put(`trade:failed:${ip}`, String(next), {
+    expirationTtl: TRADE_LOCKOUT_TTL,
+  });
+  return next;
+}
+
+export async function clearTradeFailedAttempts(
+  kv: KVNamespace,
+  ip: string,
+): Promise<void> {
+  await kv.delete(`trade:failed:${ip}`);
 }

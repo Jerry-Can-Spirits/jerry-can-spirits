@@ -7,6 +7,12 @@ import {
   TRADE_COOKIE_MAX_AGE,
   TradeCookiePayload,
 } from '@/lib/trade-cookie'
+import {
+  getTradeFailedAttempts,
+  incrementTradeFailedAttempts,
+  clearTradeFailedAttempts,
+  TRADE_MAX_ATTEMPTS,
+} from '@/lib/kv'
 
 export async function POST(request: Request) {
   let body: { pin?: unknown }
@@ -29,13 +35,29 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Server configuration error.' }, { status: 500 })
   }
 
+  const kv = env.SITE_OPS as KVNamespace
+  const ip =
+    (request.headers.get('CF-Connecting-IP') ?? request.headers.get('X-Forwarded-For') ?? 'unknown')
+      .split(',')[0]
+      .trim()
+
+  const failedAttempts = await getTradeFailedAttempts(kv, ip)
+  if (failedAttempts >= TRADE_MAX_ATTEMPTS) {
+    return NextResponse.json(
+      { error: 'Too many failed attempts. Please try again in 15 minutes.' },
+      { status: 429 },
+    )
+  }
+
   const db = env.DB as D1Database
   const account = await getTradeAccountByPin(db, pin)
 
   if (!account) {
-    await new Promise((r) => setTimeout(r, 200))
+    await incrementTradeFailedAttempts(kv, ip)
     return NextResponse.json({ error: 'Invalid PIN.' }, { status: 401 })
   }
+
+  await clearTradeFailedAttempts(kv, ip)
 
   const payload: TradeCookiePayload = { pin, iat: Date.now() }
   const cookieValue = await signTradeCookie(payload, secret)

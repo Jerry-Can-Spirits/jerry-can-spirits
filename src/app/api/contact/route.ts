@@ -259,14 +259,7 @@ export async function POST(request: Request) {
       // Non-blocking
     }
 
-    // Log (non-sensitive)
-    console.log('Contact form submission received:', {
-      name,
-      email,
-      subject,
-      formType,
-      timestamp: new Date().toISOString(),
-    })
+    console.log('Contact form submission received:', { formType, timestamp: new Date().toISOString() })
 
     return NextResponse.json({
       success: true,

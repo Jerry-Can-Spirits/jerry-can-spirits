@@ -1,6 +1,8 @@
 // src/app/api/expedition-log/route.ts
 import { NextResponse } from 'next/server'
 import { getCloudflareContext } from '@opennextjs/cloudflare'
+import { getBottleByLabel, isBottleLogged } from '@/lib/d1'
+import type { LabelType } from '@/lib/d1'
 
 const VALID_BOTTLE_TYPES = ['standard', 'premium', 'founder'] as const
 type BottleType = typeof VALID_BOTTLE_TYPES[number]
@@ -99,6 +101,25 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Bot check failed.' }, { status: 400 })
     }
 
+    // Validate each bottle exists and hasn't already been logged
+    const db = env.DB
+    for (const bottle of bottles) {
+      const bottleRecord = await getBottleByLabel(db, batch_id.trim(), bottle.type as LabelType, bottle.number)
+      if (!bottleRecord) {
+        return NextResponse.json(
+          { error: `Bottle ${bottle.type} #${bottle.number} is not valid for this batch.` },
+          { status: 400 },
+        )
+      }
+      const alreadyLogged = await isBottleLogged(db, batch_id.trim(), bottle.type, bottle.number)
+      if (alreadyLogged) {
+        return NextResponse.json(
+          { error: `Bottle ${bottle.type} #${bottle.number} has already been registered.` },
+          { status: 409 },
+        )
+      }
+    }
+
     // Geocode location once — shared across all bottle rows
     let location_lat: number | null = null
     let location_lng: number | null = null
@@ -119,7 +140,6 @@ export async function POST(request: Request) {
     }
 
     // Insert one row per bottle
-    const db = env.DB
     const stmt = db.prepare(
       `INSERT INTO expedition_log (id, batch_id, name, location, location_lat, location_lng, bottle_type, bottle_number)
        VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
