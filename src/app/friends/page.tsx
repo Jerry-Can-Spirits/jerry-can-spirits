@@ -103,6 +103,7 @@ const partners = [
     shopUrlLabel: "Add UK Tree Planting",
     speciality: "Carbon Offsetting & Reforestation",
     logo: "https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/d477a1e2-da59-447e-bf4d-f44c43f64400/public",
+    badge: "https://api.ecologi.com/badges/trees/69cf809ea3c16250680afe34?white=true&treeOnly=true",
     featured: true,
   },
   {
@@ -264,14 +265,25 @@ export default function FriendsPage() {
                       <div className="grid md:grid-cols-[200px_1fr] gap-6">
                         {/* Logo */}
                         <div className="flex items-center justify-center">
-                          <div className="relative w-40 h-40 rounded-full overflow-hidden border-2 border-gold-500/30 bg-white flex-shrink-0">
-                            <Image
-                              src={partner.logo}
-                              alt={`${partner.name} logo`}
-                              fill
-                              className="object-contain p-4"
-                            />
-                          </div>
+                          {'badge' in partner && partner.badge ? (
+                            <div className="flex items-center justify-center w-40 h-40 flex-shrink-0">
+                              {/* eslint-disable-next-line @next/next/no-img-element */}
+                              <img
+                                src={partner.badge as string}
+                                alt={`${partner.name} — trees planted`}
+                                className="w-full h-auto object-contain"
+                              />
+                            </div>
+                          ) : (
+                            <div className="relative w-40 h-40 rounded-full overflow-hidden border-2 border-gold-500/30 bg-white flex-shrink-0">
+                              <Image
+                                src={partner.logo}
+                                alt={`${partner.name} logo`}
+                                fill
+                                className="object-contain p-4"
+                              />
+                            </div>
+                          )}
                         </div>
 
                         {/* Partner Info */}
