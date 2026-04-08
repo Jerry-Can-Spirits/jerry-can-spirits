@@ -31,7 +31,6 @@
     "@swc/helpers": "^0.5.21",
     "@types/leaflet": "^1.9.21",
     "clsx": "^2.1.1",
-    "isomorphic-dompurify": "^3.7.1",
     "leaflet": "^1.9.4",
     "leaflet.heat": "^0.2.0",
     "mapbox-gl": "^3.21.0",
@@ -43,7 +42,8 @@
     "react-leaflet": "^5.0.0",
     "sanity": "^4.22.0",
     "styled-components": "^6.3.12",
-    "tailwind-merge": "^3.5.0"
+    "tailwind-merge": "^3.5.0",
+    "xss": "^1.0.15"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20260405.1",
