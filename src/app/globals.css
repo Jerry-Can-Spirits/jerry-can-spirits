@@ -272,7 +272,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: 
+    background:
       /* Enhanced compass points */
       radial-gradient(circle at 15% 25%, rgba(245, 158, 11, 0.08) 3px, transparent 4px),
       radial-gradient(circle at 85% 75%, rgba(245, 158, 11, 0.08) 3px, transparent 4px),
@@ -282,3 +282,16 @@
     pointer-events: none;
     z-index: -1;
   }
+
+/* Stockist map popup */
+.stockist-popup .mapboxgl-popup-content {
+  background: #1a2e1a;
+  border: 1px solid rgba(245, 158, 11, 0.2);
+  border-radius: 8px;
+  padding: 10px 14px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+}
+
+.stockist-popup .mapboxgl-popup-tip {
+  border-top-color: #1a2e1a;
+}
