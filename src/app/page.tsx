@@ -1,4 +1,3 @@
-import dynamicImport from 'next/dynamic';
 import HeroSection from "@/components/HeroSection";
 import HomepageExpeditionMap from "@/components/HomepageExpeditionMap";
 import StructuredData from "@/components/StructuredData";
@@ -19,12 +18,6 @@ import { baseOpenGraph } from '@/lib/og'
 
 export const revalidate = 60
 
-// Lazy load TrustpilotWidget (below the fold)
-const TrustpilotWidget = dynamicImport(() => import('@/components/TrustpilotWidget'), {
-  loading: () => (
-    <div className="h-[150px] bg-jerry-green-800/50 rounded-lg animate-pulse" />
-  ),
-});
 
 export const metadata: Metadata = {
   title: {
@@ -346,12 +339,6 @@ export default function Home() {
                 </p>
               </div>
               <div className="max-w-5xl mx-auto">
-                <TrustpilotWidget
-                  templateId="5406e65db0d04a09e042d5fc"
-                  height="150px"
-                  theme="dark"
-                  stars=""
-                />
                 <div className="text-center mt-6">
                   <a
                     href="https://www.trustpilot.com/review/jerrycanspirits.co.uk"
