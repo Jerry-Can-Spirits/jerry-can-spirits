@@ -2,10 +2,14 @@
 import { NextResponse } from 'next/server'
 import { getCloudflareContext } from '@opennextjs/cloudflare'
 import { getBottleByLabel, isBottleLogged } from '@/lib/d1'
+import { isRateLimited } from '@/lib/kv'
 import type { LabelType } from '@/lib/d1'
 
 const VALID_BOTTLE_TYPES = ['standard', 'premium', 'founder'] as const
 type BottleType = typeof VALID_BOTTLE_TYPES[number]
+
+const BATCH_ID_RE = /^[A-Za-z0-9][A-Za-z0-9\-]{0,49}$/
+const EXPEDITION_RATE_LIMIT = 3
 
 interface BottleEntry {
   type: BottleType
@@ -20,11 +24,6 @@ interface RequestBody {
   turnstileToken: string
   website?: string
 }
-
-// Simple in-memory rate limit — best-effort secondary deterrent (Turnstile is primary)
-const submissionTimestamps = new Map<string, number[]>()
-const RATE_LIMIT_WINDOW = 60 * 1000
-const MAX_REQUESTS = 3
 
 export async function POST(request: Request) {
   try {
@@ -48,7 +47,7 @@ export async function POST(request: Request) {
 
     if (!name) return NextResponse.json({ error: 'Name is required.' }, { status: 400 })
     if (!batch_id?.trim()) return NextResponse.json({ error: 'Batch ID is required.' }, { status: 400 })
-    if (batch_id.trim().length > 50) return NextResponse.json({ error: 'Batch ID is invalid.' }, { status: 400 })
+    if (!BATCH_ID_RE.test(batch_id.trim())) return NextResponse.json({ error: 'Batch ID is invalid.' }, { status: 400 })
     if (!turnstileToken?.trim()) return NextResponse.json({ error: 'Bot check token is required.' }, { status: 400 })
     if (name.length > 100) return NextResponse.json({ error: 'Name must be 100 characters or fewer.' }, { status: 400 })
     if (location.length > 100) return NextResponse.json({ error: 'Location must be 100 characters or fewer.' }, { status: 400 })
@@ -68,22 +67,17 @@ export async function POST(request: Request) {
       }
     }
 
-    // Rate limiting (best-effort)
-    const fwd = request.headers.get('cf-connecting-ip') || request.headers.get('x-forwarded-for') || 'unknown'
-    const ip = fwd.split(',')[0].trim()
-    const now = Date.now()
-    const timestamps = submissionTimestamps.get(ip) || []
-    const recent = timestamps.filter(t => now - t < RATE_LIMIT_WINDOW)
-    if (recent.length >= MAX_REQUESTS) {
-      return NextResponse.json({ error: 'Too many requests. Please try again later.' }, { status: 429 })
-    }
-    recent.push(now)
-    submissionTimestamps.set(ip, recent)
-
-    // Access Cloudflare env (DB + secrets in one call)
+    // Access Cloudflare env — needed for KV rate limiting and secrets
     const { env } = await getCloudflareContext()
     const TURNSTILE_SECRET_KEY = env.TURNSTILE_SECRET_KEY
     const MAPBOX_SECRET_TOKEN = env.MAPBOX_SECRET_TOKEN
+
+    // KV-backed rate limiting (works across all Cloudflare isolates)
+    const ip = (request.headers.get('CF-Connecting-IP') ?? request.headers.get('x-forwarded-for') ?? 'unknown').split(',')[0].trim()
+    const kv = env.SITE_OPS as KVNamespace
+    if (await isRateLimited(kv, 'expedition-log', ip, EXPEDITION_RATE_LIMIT, 60)) {
+      return NextResponse.json({ error: 'Too many requests. Please try again later.' }, { status: 429 })
+    }
 
     if (!TURNSTILE_SECRET_KEY) {
       console.error('TURNSTILE_SECRET_KEY not configured')
@@ -126,7 +120,8 @@ export async function POST(request: Request) {
     if (location && MAPBOX_SECRET_TOKEN) {
       try {
         const geoRes = await fetch(
-          `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(location)}.json?country=gb&limit=1&access_token=${MAPBOX_SECRET_TOKEN}`
+          `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(location)}.json?country=gb&limit=1`,
+          { headers: { Authorization: `Bearer ${MAPBOX_SECRET_TOKEN}` } }
         )
         const geoData = await geoRes.json() as { features?: Array<{ geometry: { coordinates: unknown[] } }> }
         const coords = geoData.features?.[0]?.geometry?.coordinates
