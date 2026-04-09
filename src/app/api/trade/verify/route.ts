@@ -11,6 +11,7 @@ import {
   getTradeFailedAttempts,
   incrementTradeFailedAttempts,
   clearTradeFailedAttempts,
+  createTradeSession,
   TRADE_MAX_ATTEMPTS,
 } from '@/lib/kv'
 
@@ -59,7 +60,10 @@ export async function POST(request: Request) {
 
   await clearTradeFailedAttempts(kv, ip)
 
-  const payload: TradeCookiePayload = { pin, iat: Date.now() }
+  const sid = crypto.randomUUID()
+  await createTradeSession(kv, sid)
+
+  const payload: TradeCookiePayload = { pin, iat: Date.now(), sid }
   const cookieValue = await signTradeCookie(payload, secret)
 
   const res = NextResponse.json({

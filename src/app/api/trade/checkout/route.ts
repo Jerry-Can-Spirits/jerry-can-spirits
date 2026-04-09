@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import { getCloudflareContext } from '@opennextjs/cloudflare'
 import { getTradeAccountByPin } from '@/lib/d1'
 import { verifyTradeCookie, TRADE_COOKIE_NAME } from '@/lib/trade-cookie'
+import { isTradeSessionValid } from '@/lib/kv'
 import { createCart, addLinesToCart, applyDiscount } from '@/lib/shopify'
 
 interface CheckoutLine {
@@ -66,6 +67,11 @@ export async function POST(request: Request) {
 
   const payload = await verifyTradeCookie(cookieValue, secret)
   if (!payload) {
+    return NextResponse.json({ error: 'Session expired. Please re-enter your PIN.' }, { status: 401 })
+  }
+
+  const kv = env.SITE_OPS as KVNamespace
+  if (!await isTradeSessionValid(kv, payload.sid)) {
     return NextResponse.json({ error: 'Session expired. Please re-enter your PIN.' }, { status: 401 })
   }
 
