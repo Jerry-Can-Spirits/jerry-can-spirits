@@ -1,6 +1,7 @@
 // app/api/contact/route.ts
 import { NextResponse } from 'next/server'
 import { getCloudflareContext } from '@opennextjs/cloudflare'
+import { isRateLimited } from '@/lib/kv'
 
 const KLAVIYO_API_BASE = 'https://a.klaviyo.com/api'
 
@@ -37,10 +38,7 @@ interface EventProperties {
   covers?: string
 }
 
-// Simple in-memory rate limiting (best-effort only on Edge)
-const submissionTimestamps = new Map<string, number[]>()
-const RATE_LIMIT_WINDOW = 60 * 1000 // 1 minute
-const MAX_REQUESTS = 3 // Max 3 requests/min per IP
+const CONTACT_RATE_LIMIT = 3 // requests per minute per IP
 
 function isValidEmail(email: string): boolean {
   if (email.length > 254) return false
@@ -58,6 +56,7 @@ export async function POST(request: Request) {
     // Read Workers env vars from Cloudflare context
     const { env } = await getCloudflareContext()
     const KLAVIYO_PRIVATE_KEY = env.KLAVIYO_PRIVATE_KEY as string | undefined
+    const kv = env.SITE_OPS as KVNamespace
 
     let formData: ContactFormData
     try {
@@ -90,18 +89,11 @@ export async function POST(request: Request) {
       return NextResponse.json({ success: true, message: 'Your message has been received.' })
     }
 
-    // Rate limiting (best-effort in-memory)
-    const fwd = request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown'
-    const ip = fwd.split(',')[0].trim()
-    const now = Date.now()
-    const timestamps = submissionTimestamps.get(ip) || []
-    const recent = timestamps.filter(t => now - t < RATE_LIMIT_WINDOW)
-
-    if (recent.length >= MAX_REQUESTS) {
+    // Rate limiting via KV (works across all Worker isolates)
+    const ip = (request.headers.get('CF-Connecting-IP') ?? request.headers.get('x-forwarded-for') ?? 'unknown').split(',')[0].trim()
+    if (await isRateLimited(kv, 'contact', ip, CONTACT_RATE_LIMIT, 60)) {
       return NextResponse.json({ error: 'Too many requests. Please try again later.' }, { status: 429 })
     }
-    recent.push(now)
-    submissionTimestamps.set(ip, recent)
 
     if (formType === 'trade') {
       if (!name || !email || !venueName || !venueType || !covers) {
