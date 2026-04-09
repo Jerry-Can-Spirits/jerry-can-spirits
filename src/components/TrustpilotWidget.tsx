@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Script from 'next/script'
 
 interface TrustpilotWidgetProps {
@@ -29,21 +29,46 @@ export default function TrustpilotWidget({
   name,
 }: TrustpilotWidgetProps) {
   const ref = useRef<HTMLDivElement>(null)
+  const [hasConsent, setHasConsent] = useState(false)
 
   useEffect(() => {
-    // Wait for Trustpilot bootstrap script to be available
+    const checkConsent = () => {
+      if (window.Cookiebot?.consent?.statistics) {
+        setHasConsent(true)
+        return true
+      }
+      return false
+    }
+
+    checkConsent()
+
+    const handleAccept = () => {
+      if (window.Cookiebot?.consent?.statistics) setHasConsent(true)
+    }
+    const handleDecline = () => setHasConsent(false)
+
+    window.addEventListener('CookiebotOnAccept', handleAccept)
+    window.addEventListener('CookiebotOnDecline', handleDecline)
+    return () => {
+      window.removeEventListener('CookiebotOnAccept', handleAccept)
+      window.removeEventListener('CookiebotOnDecline', handleDecline)
+    }
+  }, [])
+
+  useEffect(() => {
+    if (!hasConsent) return
     const loadWidget = () => {
       if (window.Trustpilot && ref.current) {
         window.Trustpilot.loadFromElement(ref.current, true)
-      } else if (typeof window !== 'undefined' && !window.Trustpilot) {
+      } else if (!window.Trustpilot) {
         setTimeout(loadWidget, 100)
       }
     }
-
     loadWidget()
-  }, [templateId, businessUnitId, sku, name])
+  }, [hasConsent, templateId, businessUnitId, sku, name])
 
-  // Build data attributes object
+  if (!hasConsent) return null
+
   const dataAttributes: Record<string, string | undefined> = {
     'data-locale': locale,
     'data-template-id': templateId,
@@ -56,37 +81,41 @@ export default function TrustpilotWidget({
     'data-token': token,
   }
 
-  // Only include stars attribute if it has a value
-  if (stars) {
-    dataAttributes['data-stars'] = stars
-  }
+  if (stars) dataAttributes['data-stars'] = stars
 
   return (
     <>
-    <Script src="https://widget.trustpilot.com/bootstrap/v5/tp.widget.bootstrap.min.js" strategy="lazyOnload" />
-    <div
-      ref={ref}
-      className="trustpilot-widget"
-      {...dataAttributes}
-    >
-      <a
-        href="https://www.trustpilot.com/review/jerrycanspirits.co.uk"
-        target="_blank"
-        rel="nofollow noopener noreferrer"
-        className="text-gold-300 hover:text-gold-400 transition-colors"
-      >
-        Read our reviews on Trustpilot
-      </a>
-    </div>
+      <Script
+        src="https://widget.trustpilot.com/bootstrap/v5/tp.widget.bootstrap.min.js"
+        strategy="lazyOnload"
+      />
+      <div ref={ref} className="trustpilot-widget" {...dataAttributes}>
+        <a
+          href="https://www.trustpilot.com/review/jerrycanspirits.co.uk"
+          target="_blank"
+          rel="nofollow noopener noreferrer"
+          className="text-gold-300 hover:text-gold-400 transition-colors"
+        >
+          Read our reviews on Trustpilot
+        </a>
+      </div>
     </>
   )
 }
 
-// TypeScript declaration for Trustpilot
 declare global {
   interface Window {
     Trustpilot?: {
       loadFromElement: (element: HTMLElement | null, update: boolean) => void
+    }
+    Cookiebot?: {
+      consent: {
+        marketing: boolean
+        statistics: boolean
+        preferences: boolean
+        necessary: boolean
+      }
+      renew: () => void
     }
   }
 }

@@ -1,15 +1,13 @@
 // app/api/klaviyo-signup/route.ts
 import { NextResponse } from 'next/server'
 import { getCloudflareContext } from '@opennextjs/cloudflare'
+import { isRateLimited } from '@/lib/kv'
 
 export const dynamic = 'force-dynamic' // ensure no static optimization
 
 const KLAVIYO_API_BASE = 'https://a.klaviyo.com/api'
 
-// Simple in-memory rate limiting (best-effort on Edge)
-const submissionTimestamps = new Map<string, number[]>()
-const RATE_LIMIT_WINDOW = 60 * 1000 // 1 minute
-const MAX_REQUESTS = 5 // Max 5 signups per minute per IP
+const SIGNUP_RATE_LIMIT = 5 // requests per minute per IP
 
 interface SignupBody {
   firstName: string
@@ -34,6 +32,7 @@ export async function POST(request: Request) {
   try {
     const { env } = await getCloudflareContext()
     const KLAVIYO_PRIVATE_KEY = env.KLAVIYO_PRIVATE_KEY as string | undefined
+    const kv = env.SITE_OPS as KVNamespace
 
     let body: SignupBody
     try {
@@ -59,18 +58,11 @@ export async function POST(request: Request) {
       return NextResponse.json({ success: true, message: 'Thank you for signing up!' })
     }
 
-    // Rate limiting
-    const fwd = request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown'
-    const ip = fwd.split(',')[0].trim()
-    const now = Date.now()
-    const timestamps = submissionTimestamps.get(ip) || []
-    const recent = timestamps.filter(t => now - t < RATE_LIMIT_WINDOW)
-
-    if (recent.length >= MAX_REQUESTS) {
+    // Rate limiting via KV (works across all Worker isolates)
+    const ip = (request.headers.get('CF-Connecting-IP') ?? request.headers.get('x-forwarded-for') ?? 'unknown').split(',')[0].trim()
+    if (await isRateLimited(kv, 'klaviyo-signup', ip, SIGNUP_RATE_LIMIT, 60)) {
       return NextResponse.json({ error: 'Too many requests. Please try again later.' }, { status: 429 })
     }
-    recent.push(now)
-    submissionTimestamps.set(ip, recent)
 
     if (!firstName || !email) {
       return NextResponse.json({ error: 'First name and email are required' }, { status: 400 })

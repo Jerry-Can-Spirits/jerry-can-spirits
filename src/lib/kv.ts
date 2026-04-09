@@ -2,10 +2,11 @@
  * Typed KV utilities for the SITE_OPS namespace.
  *
  * Key patterns:
- *   feature:{name}       — Feature flags (JSON, no expiry)
- *   ageverified:{fp}     — Server-side age verification cache (365d TTL)
- *   visitor:{fp}         — First-time vs returning visitor (30d TTL)
- *   trade:failed:{ip}    — Trade PIN failed attempts (15min TTL)
+ *   feature:{name}          — Feature flags (JSON, no expiry)
+ *   ageverified:{fp}        — Server-side age verification cache (365d TTL)
+ *   visitor:{fp}            — First-time vs returning visitor (30d TTL)
+ *   trade:failed:{ip}       — Trade PIN failed attempts (15min TTL)
+ *   ratelimit:{prefix}:{ip} — Generic rate limit counters (configurable TTL)
  */
 
 import { getCloudflareContext } from '@opennextjs/cloudflare';
@@ -136,4 +137,26 @@ export async function clearTradeFailedAttempts(
   ip: string,
 ): Promise<void> {
   await kv.delete(`trade:failed:${ip}`);
+}
+
+// ── Generic Rate Limiting ────────────────────────────────────────────
+
+/**
+ * Checks whether an IP has exceeded the rate limit for a given prefix,
+ * and increments the counter if not. Returns true if the request should
+ * be rejected. Uses a fixed window (counter resets after windowSeconds).
+ */
+export async function isRateLimited(
+  kv: KVNamespace,
+  prefix: string,
+  ip: string,
+  maxRequests: number,
+  windowSeconds: number,
+): Promise<boolean> {
+  const key = `ratelimit:${prefix}:${ip}`;
+  const val = await kv.get(key);
+  const count = val ? parseInt(val, 10) : 0;
+  if (count >= maxRequests) return true;
+  await kv.put(key, String(count + 1), { expirationTtl: windowSeconds });
+  return false;
 }
