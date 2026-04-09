@@ -105,6 +105,10 @@ const nextConfig: NextConfig = {
             value: 'camera=(), microphone=(), geolocation=(self), payment=(), usb=(), magnetometer=(), gyroscope=(), accelerometer=()',
           },
           {
+            key: 'X-Frame-Options',
+            value: 'DENY',
+          },
+          {
             key: 'Cross-Origin-Opener-Policy',
             value: 'same-origin',
           },
