@@ -83,6 +83,20 @@ export default function TradeOrderForm({ products, error: catalogueError }: Trad
     }
   }
 
+  const handleLogout = async () => {
+    setStage('loading')
+    try {
+      await fetch('/api/trade/logout', { method: 'POST' })
+    } finally {
+      setVenueName('')
+      setTier('')
+      setPin('')
+      setQuantities({})
+      setFormError('')
+      setStage('pin')
+    }
+  }
+
   const handleOrder = async (e: React.FormEvent) => {
     e.preventDefault()
     setFormError('')
@@ -171,11 +185,21 @@ export default function TradeOrderForm({ products, error: catalogueError }: Trad
   // stage === 'order'
   return (
     <div className="max-w-2xl">
-      <div className="mb-6">
-        <p className="text-gold-400 text-sm font-semibold mb-1">{venueName}</p>
-        <p className="text-parchment-500 text-xs uppercase tracking-widest">
-          {TIER_LABEL[tier] ?? tier} account
-        </p>
+      <div className="flex items-start justify-between mb-8">
+        <div>
+          <p className="text-parchment-500 text-xs uppercase tracking-widest mb-1">Welcome back</p>
+          <p className="text-white text-2xl font-serif font-bold">{venueName}</p>
+          <p className="text-parchment-500 text-xs uppercase tracking-widest mt-1">
+            {TIER_LABEL[tier] ?? tier} account
+          </p>
+        </div>
+        <button
+          type="button"
+          onClick={handleLogout}
+          className="text-parchment-600 hover:text-parchment-400 text-xs uppercase tracking-widest transition-colors mt-1"
+        >
+          Sign out
+        </button>
       </div>
 
       {catalogueError ? (
