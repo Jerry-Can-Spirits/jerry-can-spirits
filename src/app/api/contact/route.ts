@@ -185,7 +185,7 @@ export async function POST(request: Request) {
       profileId = profileData.data?.id
     } else if (profileResponse.status === 409) {
       // Already exists: look up by email
-      const filter = encodeURIComponent(`equals(email,"${email}")`)
+      const filter = encodeURIComponent(`equals(email,"${email.replace(/"/g, '')}")`)
       const profileSearchResponse = await fetch(`${KLAVIYO_API_BASE}/profiles/?filter=${filter}`, {
         headers: commonHeaders as Record<string, string>,
       })
