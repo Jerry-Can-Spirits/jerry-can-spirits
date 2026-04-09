@@ -16,6 +16,12 @@ interface RatingBody {
   rating: number
 }
 
+const SLUG_RE = /^[a-z0-9-]{1,80}$/
+
+function isValidSlug(slug: string): boolean {
+  return SLUG_RE.test(slug)
+}
+
 // Generate a simple fingerprint from request headers for duplicate prevention
 function getFingerprint(request: Request): string {
   const ip = request.headers.get('x-forwarded-for')?.split(',')[0].trim() ||
@@ -76,6 +82,10 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: 'Cocktail slug is required' }, { status: 400 })
     }
 
+    if (!isValidSlug(slug)) {
+      return NextResponse.json({ error: 'Invalid slug.' }, { status: 400 })
+    }
+
     if (!kv) {
       // KV not configured - return default values
       return NextResponse.json({
@@ -127,6 +137,10 @@ export async function POST(request: Request) {
 
     if (!slug) {
       return NextResponse.json({ error: 'Cocktail slug is required' }, { status: 400 })
+    }
+
+    if (!isValidSlug(slug)) {
+      return NextResponse.json({ error: 'Invalid slug.' }, { status: 400 })
     }
 
     if (typeof rating !== 'number' || rating < 1 || rating > 5 || !Number.isInteger(rating)) {
