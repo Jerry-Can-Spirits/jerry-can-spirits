@@ -1,5 +1,6 @@
 // HMAC-signed cookie utilities for the trade order portal.
-// The cookie stores { pin, iat } signed with TRADE_SESSION_SECRET.
+// The cookie stores { pin, iat, sid } signed with TRADE_SESSION_SECRET.
+// sid is a server-side session ID stored in KV — revoking it invalidates the cookie.
 // The discount code is never stored client-side.
 
 export const TRADE_COOKIE_NAME = 'jcs_trade'
@@ -33,6 +34,7 @@ async function getKey(secret: string): Promise<CryptoKey> {
 export interface TradeCookiePayload {
   pin: string
   iat: number
+  sid: string
 }
 
 /** Create a signed cookie value from a payload. */

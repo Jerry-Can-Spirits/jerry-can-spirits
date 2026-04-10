@@ -6,6 +6,7 @@
  *   ageverified:{fp}        — Server-side age verification cache (365d TTL)
  *   visitor:{fp}            — First-time vs returning visitor (30d TTL)
  *   trade:failed:{ip}       — Trade PIN failed attempts (15min TTL)
+ *   trade:session:{sid}     — Trade portal session tokens (30d TTL)
  *   ratelimit:{prefix}:{ip} — Generic rate limit counters (configurable TTL)
  */
 
@@ -159,4 +160,29 @@ export async function isRateLimited(
   if (count >= maxRequests) return true;
   await kv.put(key, String(count + 1), { expirationTtl: windowSeconds });
   return false;
+}
+
+// ── Trade Sessions ───────────────────────────────────────────────────
+
+const TRADE_SESSION_TTL = 60 * 60 * 24 * 30; // 30 days
+
+export async function createTradeSession(
+  kv: KVNamespace,
+  sid: string,
+): Promise<void> {
+  await kv.put(`trade:session:${sid}`, '1', { expirationTtl: TRADE_SESSION_TTL });
+}
+
+export async function isTradeSessionValid(
+  kv: KVNamespace,
+  sid: string,
+): Promise<boolean> {
+  return (await kv.get(`trade:session:${sid}`)) !== null;
+}
+
+export async function revokeTradeSession(
+  kv: KVNamespace,
+  sid: string,
+): Promise<void> {
+  await kv.delete(`trade:session:${sid}`);
 }
