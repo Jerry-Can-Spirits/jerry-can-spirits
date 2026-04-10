@@ -147,6 +147,7 @@ export async function createReferrerRewardCode(
       usageLimit: 1,
       appliesOncePerCustomer: true,
       startsAt: new Date().toISOString(),
+      endsAt: new Date(Date.now() + 60 * 60 * 24 * 90 * 1000).toISOString(),
       customerGets: {
         value: { discountAmount: { amount: '5.00', appliesOnEachItem: false } },
         items: { all: true },
