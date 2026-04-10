@@ -19,6 +19,12 @@ export const metadata: Metadata = {
     type: 'website',
     images: OG_IMAGE,
   },
+  twitter: {
+    card: 'summary_large_image' as const,
+    title: 'Product Ingredients | Jerry Can Spirits®',
+    description: 'Full ingredient lists for Jerry Can Spirits rum. What goes into Expedition Spiced Rum: Madagascan vanilla, Ceylon cinnamon, ginger, orange peel, and more.',
+    images: OG_IMAGE,
+  },
   robots: {
     index: true,
     follow: true,

@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import Image from 'next/image'
 import StockistFinder from '@/components/StockistFinder'
 import StructuredData from '@/components/StructuredData'
-import { baseOpenGraph } from '@/lib/og'
+import { baseOpenGraph, OG_IMAGE } from '@/lib/og'
 
 export const metadata: Metadata = {
   title: 'Find a Stockist',
@@ -15,6 +15,12 @@ export const metadata: Metadata = {
     title: 'Find a Stockist | Jerry Can Spirits®',
     description: 'Find Jerry Can Spirits Expedition Spiced Rum near you. Enter your postcode to locate your nearest stockist.',
     url: 'https://jerrycanspirits.co.uk/stockists/',
+  },
+  twitter: {
+    card: 'summary_large_image' as const,
+    title: 'Find a Stockist | Jerry Can Spirits®',
+    description: 'Find Jerry Can Spirits Expedition Spiced Rum near you. Enter your postcode to locate your nearest stockist.',
+    images: OG_IMAGE,
   },
 }
 

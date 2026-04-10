@@ -22,6 +22,12 @@ export const metadata: Metadata = {
     type: 'website',
     images: OG_IMAGE,
   },
+  twitter: {
+    card: 'summary_large_image' as const,
+    title: 'Cocktail Recipes | Jerry Can Spirits®',
+    description: 'Cocktail recipes from the Jerry Can Spirits Field Manual. From the simple to the technical, each recipe built around real ingredients and proper technique.',
+    images: OG_IMAGE,
+  },
 }
 
 interface CocktailListItem {

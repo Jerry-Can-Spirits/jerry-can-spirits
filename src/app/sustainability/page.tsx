@@ -70,6 +70,12 @@ export const metadata: Metadata = {
     type: 'website',
     images: OG_IMAGE,
   },
+  twitter: {
+    card: 'summary_large_image' as const,
+    title: 'Sustainability & Recycling | Jerry Can Spirits®',
+    description: 'How Jerry Can Spirits approaches sustainability. Local sourcing, recycling guidance, and our commitment to reducing environmental impact.',
+    images: OG_IMAGE,
+  },
   robots: {
     index: true,
     follow: true,

@@ -2,7 +2,7 @@ import Link from 'next/link'
 import type { Metadata } from 'next'
 import Breadcrumbs from '@/components/Breadcrumbs'
 import { getAllCollections } from '@/lib/shopify'
-import { baseOpenGraph } from '@/lib/og'
+import { baseOpenGraph, OG_IMAGE } from '@/lib/og'
 
 export const dynamic = 'force-dynamic'
 
@@ -17,6 +17,12 @@ export const metadata: Metadata = {
     title: 'Shop | Jerry Can Spirits®',
     description: 'Shop Jerry Can Spirits. Expedition Spiced Rum, cocktail shaker sets, glassware, and expedition gear. Veteran-owned, built properly.',
     url: 'https://jerrycanspirits.co.uk/shop/',
+  },
+  twitter: {
+    card: 'summary_large_image' as const,
+    title: 'Shop | Jerry Can Spirits®',
+    description: 'Shop Jerry Can Spirits. Expedition Spiced Rum, cocktail shaker sets, glassware, and expedition gear. Veteran-owned, built properly.',
+    images: OG_IMAGE,
   },
 }
 

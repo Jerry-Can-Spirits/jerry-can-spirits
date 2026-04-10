@@ -23,6 +23,12 @@ export const metadata: Metadata = {
     type: 'website',
     images: OG_IMAGE,
   },
+  twitter: {
+    card: 'summary_large_image' as const,
+    title: 'Spirits Guides & Education | Jerry Can Spirits®',
+    description: 'Spirits guides and rum education from Jerry Can Spirits. Cocktail techniques, ingredient deep-dives, and the knowledge to build a proper home bar.',
+    images: OG_IMAGE,
+  },
 }
 
 interface GuideListItem {

@@ -21,6 +21,12 @@ export const metadata: Metadata = {
     type: 'website',
     images: OG_IMAGE,
   },
+  twitter: {
+    card: 'summary_large_image' as const,
+    title: 'Bar Equipment Guide | Jerry Can Spirits®',
+    description: 'Bar tools and equipment for serious home bartenders. Guides on cocktail shakers, strainers, glassware, and everything else that earns its place on the bar.',
+    images: OG_IMAGE,
+  },
 }
 
 // This is now a Server Component - data fetching happens server-side

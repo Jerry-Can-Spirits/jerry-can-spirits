@@ -41,6 +41,12 @@ export const metadata: Metadata = {
     type: 'profile',
     images: OG_IMAGE,
   },
+  twitter: {
+    card: 'summary_large_image' as const,
+    title: 'Rhys Williams - Co-Founder & Director | Jerry Can Spirits®',
+    description: 'Royal Signals veteran, Formula One telecommunications specialist, and co-founder of Jerry Can Spirits.',
+    images: OG_IMAGE,
+  },
   robots: {
     index: true,
     follow: true,

@@ -723,24 +723,36 @@ export default async function ProductPage({
             </div>
           )}
 
-          {/* Cocktail Recipes Link - Spirits only */}
+          {/* Cocktail Recipes - Spirits only */}
           {isSpirit && (
             <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
-              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                <div>
-                  <h3 className="text-xl font-serif font-bold text-white mb-1">What to Make With This</h3>
-                  <p className="text-parchment-300 text-sm">Classic cocktails and exclusive recipes from the Field Manual.</p>
-                </div>
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-xl font-serif font-bold text-white">What to Make With This</h3>
                 <Link
                   href="/field-manual/cocktails/"
-                  className="inline-flex items-center gap-2 bg-jerry-green-800 hover:bg-jerry-green-700 text-parchment-50 px-5 py-2.5 rounded-lg font-semibold border border-gold-500/30 hover:border-gold-500/60 transition-all duration-300 self-start sm:self-auto shrink-0"
+                  className="text-gold-400 hover:text-gold-300 text-sm font-semibold transition-colors"
                 >
-                  <span>View Recipes</span>
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                  </svg>
+                  View all
                 </Link>
               </div>
+              {sanityProduct?.relatedCocktails && sanityProduct.relatedCocktails.length > 0 ? (
+                <div className="grid sm:grid-cols-2 gap-3">
+                  {sanityProduct.relatedCocktails.map((cocktail) => (
+                    <Link
+                      key={cocktail._id}
+                      href={`/field-manual/cocktails/${cocktail.slug.current}/`}
+                      className="flex items-center gap-3 p-3 bg-jerry-green-800/30 rounded-lg border border-gold-500/20 hover:bg-jerry-green-800/50 hover:border-gold-400/40 transition-all group"
+                    >
+                      <svg className="w-4 h-4 text-gold-400 flex-shrink-0 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                      </svg>
+                      <span className="text-parchment-300 group-hover:text-gold-300 transition-colors text-sm font-medium">{cocktail.name}</span>
+                    </Link>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-parchment-300 text-sm">Classic cocktails and exclusive recipes from the Field Manual.</p>
+              )}
             </div>
           )}
 

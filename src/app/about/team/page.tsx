@@ -20,6 +20,12 @@ export const metadata: Metadata = {
     type: 'website',
     images: OG_IMAGE,
   },
+  twitter: {
+    card: 'summary_large_image' as const,
+    title: 'Meet the Team | Jerry Can Spirits®',
+    description: 'Meet Dan and Rhys, the Royal Signals veterans behind Jerry Can Spirits. Two mates who decided to stop talking about it and actually have a go.',
+    images: OG_IMAGE,
+  },
   robots: {
     index: true,
     follow: true,

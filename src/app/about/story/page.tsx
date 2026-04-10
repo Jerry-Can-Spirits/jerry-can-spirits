@@ -5,7 +5,7 @@ import BackToTop from '@/components/BackToTop'
 import Breadcrumbs from '@/components/Breadcrumbs'
 import StructuredData from '@/components/StructuredData'
 import ScrollReveal from '@/components/ScrollReveal'
-import { baseOpenGraph } from '@/lib/og'
+import { baseOpenGraph, OG_IMAGE } from '@/lib/og'
 
 // Article schema for the story page
 const articleSchema = {
@@ -48,6 +48,12 @@ export const metadata: Metadata = {
     title: "Our Story | Jerry Can Spirits®",
     description: "How two Royal Signals veterans built a craft spirits company from scratch. No shortcuts. No investors. Expedition Spiced, made with real ingredients in Wales.",
     url: 'https://jerrycanspirits.co.uk/about/story/',
+  },
+  twitter: {
+    card: 'summary_large_image' as const,
+    title: "Our Story | Jerry Can Spirits®",
+    description: "How two Royal Signals veterans built a craft spirits company from scratch. No shortcuts. No investors. Expedition Spiced, made with real ingredients in Wales.",
+    images: OG_IMAGE,
   },
   robots: {
     index: true,

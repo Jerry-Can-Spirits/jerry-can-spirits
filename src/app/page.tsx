@@ -15,7 +15,7 @@ import TickerStrip from "@/components/TickerStrip";
 import NewsletterSignup from "@/components/NewsletterSignup";
 import Link from 'next/link'
 import type { Metadata } from 'next'
-import { baseOpenGraph } from '@/lib/og'
+import { baseOpenGraph, OG_IMAGE } from '@/lib/og'
 
 export const revalidate = 60
 
@@ -33,6 +33,12 @@ export const metadata: Metadata = {
     title: "Jerry Can Spirits | British Spiced Rum",
     description: "Two Royal Signals veterans, one spiced rum. Real botanicals, pot-distilled in Wales. No artificial flavouring. No shortcuts. Now shipping.",
     url: "https://jerrycanspirits.co.uk/",
+  },
+  twitter: {
+    card: 'summary_large_image' as const,
+    title: "Jerry Can Spirits | British Spiced Rum",
+    description: "Two Royal Signals veterans, one spiced rum. Real botanicals, pot-distilled in Wales. No artificial flavouring. No shortcuts. Now shipping.",
+    images: OG_IMAGE,
   },
 }
 

@@ -22,6 +22,12 @@ export const metadata: Metadata = {
     type: 'website',
     images: OG_IMAGE,
   },
+  twitter: {
+    card: 'summary_large_image' as const,
+    title: 'Our Ethos - How We Make Rum | Jerry Can Spirits®',
+    description: 'The values behind Jerry Can Spirits. Built on discipline, integrity, and real ingredients. Real botanicals, Welsh-distilled, veteran-owned.',
+    images: OG_IMAGE,
+  },
   robots: {
     index: true,
     follow: true,

@@ -7,7 +7,7 @@ export const metadata: Metadata = {
     canonical: "https://jerrycanspirits.co.uk/cookie-preferences/",
   },
   robots: {
-    index: true,
+    index: false,
     follow: true,
   },
 }
