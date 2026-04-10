@@ -22,6 +22,12 @@ export const metadata: Metadata = {
     type: 'website',
     images: OG_IMAGE,
   },
+  twitter: {
+    card: 'summary_large_image' as const,
+    title: 'British Spiced Rum | Jerry Can Spirits®',
+    description: 'Small-batch British spiced rum from veteran-owned Jerry Can Spirits. Pot-distilled at Spirit of Wales. Rich vanilla, warm spices, smooth finish.',
+    images: OG_IMAGE,
+  },
 }
 
 // Configure for Edge Runtime and dynamic rendering

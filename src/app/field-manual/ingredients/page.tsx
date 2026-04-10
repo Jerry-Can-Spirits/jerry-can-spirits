@@ -21,6 +21,12 @@ export const metadata: Metadata = {
     type: 'website',
     images: OG_IMAGE,
   },
+  twitter: {
+    card: 'summary_large_image' as const,
+    title: 'Cocktail Ingredients Guide | Jerry Can Spirits®',
+    description: 'Ingredient guides for bartenders who want to know what they\'re working with. Spirits, liqueurs, mixers, bitters, and garnishes, explained properly.',
+    images: OG_IMAGE,
+  },
 }
 
 // This is now a Server Component - data fetching happens server-side

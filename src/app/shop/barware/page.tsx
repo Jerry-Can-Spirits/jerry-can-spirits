@@ -22,6 +22,12 @@ export const metadata: Metadata = {
     type: 'website',
     images: OG_IMAGE,
   },
+  twitter: {
+    card: 'summary_large_image' as const,
+    title: 'Cocktail Shaker Sets, Barware & Bar Tools | Jerry Can Spirits®',
+    description: 'Cocktail shaker sets, bar tools, and glassware for crafting rum cocktails at home. Everything you need to build a proper home bar.',
+    images: OG_IMAGE,
+  },
 }
 
 // Configure for Edge Runtime and dynamic rendering

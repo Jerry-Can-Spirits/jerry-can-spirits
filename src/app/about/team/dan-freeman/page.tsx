@@ -42,6 +42,12 @@ export const metadata: Metadata = {
     type: 'profile',
     images: OG_IMAGE,
   },
+  twitter: {
+    card: 'summary_large_image' as const,
+    title: 'Dan Freeman - Founder & Director | Jerry Can Spirits®',
+    description: 'Former Royal Signals Corporal with 12 years of service who decided to have a go at building a spirits company.',
+    images: OG_IMAGE,
+  },
   robots: {
     index: true,
     follow: true,

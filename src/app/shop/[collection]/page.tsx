@@ -9,8 +9,39 @@ export const dynamic = 'force-dynamic'
 
 const BASE_URL = 'https://jerrycanspirits.co.uk'
 
-function titleFromHandle(handle: string): string {
-  return handle.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')
+interface CollectionContent {
+  title: string
+  description: string
+  intro: string
+}
+
+const COLLECTION_CONTENT: Record<string, CollectionContent> = {
+  'gifts-and-experience': {
+    title: 'Gift Sets',
+    description: 'Rum gift sets and experience bundles from Jerry Can Spirits. Veteran-owned, Welsh-distilled. Built for people who appreciate quality.',
+    intro: 'For anyone who holds themselves to a higher standard. Each gift set is built around Expedition Spiced Rum — pot-distilled at Spirit of Wales, real ingredients, no shortcuts.',
+  },
+  'bundles': {
+    title: 'Bundles',
+    description: 'Bundle deals on Jerry Can Spirits rum. Save when you stock up on Expedition Spiced Rum — veteran-owned, small-batch, built properly.',
+    intro: 'Stock up and save. The same Expedition Spiced Rum, better value. Every bottle from the same small batch, pot-distilled in South Wales.',
+  },
+  'new-releases': {
+    title: 'New Releases',
+    description: 'New expressions from Jerry Can Spirits. Veteran-owned British spirits house — small-batch, built properly, no shortcuts.',
+    intro: 'The latest from the spirits house. Every expression built on the same principles as the first.',
+  },
+}
+
+function getCollectionContent(handle: string): CollectionContent {
+  const known = COLLECTION_CONTENT[handle]
+  if (known) return known
+  const title = handle.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')
+  return {
+    title,
+    description: `Shop ${title} from Jerry Can Spirits. Veteran-owned British spirits, built properly, no shortcuts.`,
+    intro: '',
+  }
 }
 
 function formatPrice(amount: string, currencyCode: string): string {
@@ -24,16 +55,24 @@ export async function generateMetadata({
   params: Promise<{ collection: string }>
 }): Promise<Metadata> {
   const { collection } = await params
-  const title = titleFromHandle(collection)
+  const { title, description } = getCollectionContent(collection)
   return {
     title: `${title} | Jerry Can Spirits`,
-    description: `Shop ${title} from Jerry Can Spirits. Veteran-owned British rum, cocktail barware, and expedition gear. Built properly, no shortcuts.`,
+    description,
     alternates: { canonical: `${BASE_URL}/shop/${collection}/` },
     openGraph: {
       title: `${title} | Jerry Can Spirits®`,
-      description: `Shop ${title} from Jerry Can Spirits. Veteran-owned British rum, cocktail barware, and expedition gear. Built properly, no shortcuts.`,
+      description,
       url: `${BASE_URL}/shop/${collection}/`,
       siteName: 'Jerry Can Spirits®',
+      locale: 'en_GB',
+      type: 'website',
+      images: OG_IMAGE,
+    },
+    twitter: {
+      card: 'summary_large_image' as const,
+      title: `${title} | Jerry Can Spirits®`,
+      description,
       images: OG_IMAGE,
     },
   }
@@ -45,7 +84,7 @@ export default async function CollectionPage({
   params: Promise<{ collection: string }>
 }) {
   const { collection } = await params
-  const title = titleFromHandle(collection)
+  const { title, intro } = getCollectionContent(collection)
 
   let products: ShopifyProduct[] = []
   let error: string | null = null
@@ -160,6 +199,9 @@ export default async function CollectionPage({
           <h1 className="text-4xl sm:text-6xl font-serif font-bold text-white mb-6">
             {title}
           </h1>
+          {intro && (
+            <p className="text-parchment-300 text-lg max-w-2xl mx-auto mb-6">{intro}</p>
+          )}
           <div className="mt-6 inline-flex items-center gap-2 px-4 py-2 bg-green-800/20 border border-green-500/30 rounded-lg">
             <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
             <span className="text-green-300 text-sm font-medium">
