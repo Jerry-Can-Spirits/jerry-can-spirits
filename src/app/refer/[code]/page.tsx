@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { getCloudflareContext } from '@opennextjs/cloudflare'
+import ReferralCodeClient from './ReferralCodeClient'
 
 export const dynamic = 'force-dynamic'
 
@@ -85,20 +86,3 @@ export default async function ReferralLandingPage({
   )
 }
 
-/**
- * Client component to store referral code in localStorage and display it.
- */
-function ReferralCodeClient({ code }: { code: string }) {
-  return (
-    <>
-      <p className="text-3xl font-mono font-bold text-gold-300 tracking-widest select-all">
-        {code}
-      </p>
-      <script
-        dangerouslySetInnerHTML={{
-          __html: `try{localStorage.setItem('jcs_referral_code','${code.replace(/'/g, "\\'")}');}catch(e){}`,
-        }}
-      />
-    </>
-  )
-}

@@ -190,11 +190,10 @@ async function handleReferralConversion(
   adminToken: string,
   klaviyoKey: string | undefined,
 ) {
-  // Check if order used a referral code (via cart attributes or discount codes)
-  const referralAttr = order.note_attributes?.find(
-    (attr) => attr.name === '_referral_code',
-  );
-  const referralCode = referralAttr?.value;
+  // Check if order used a referral code by looking at applied discount codes
+  const referralCode = order.discount_codes?.find(
+    (dc) => dc.code.startsWith('JCS-') && !dc.code.startsWith('JCS-REWARD-'),
+  )?.code;
 
   if (!referralCode) return;
 
@@ -210,7 +209,7 @@ async function handleReferralConversion(
   }
 
   // Create a £5 reward code for the referrer (combinable with other discounts)
-  const rewardCode = `JCS-REWARD-${referral.referrer_code.split('-').pop()}-${Date.now().toString(16).slice(-4).toUpperCase()}`;
+  const rewardCode = `JCS-REWARD-${crypto.randomUUID().replace(/-/g, '').slice(0, 8).toUpperCase()}`;
 
   try {
     await createReferrerRewardCode(rewardCode, adminToken);
