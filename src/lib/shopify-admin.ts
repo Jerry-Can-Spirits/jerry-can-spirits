@@ -22,8 +22,8 @@ export function generateReferralCode(email: string): string {
     .replace(/[^a-zA-Z0-9]/g, '')
     .slice(0, 6)
     .toUpperCase();
-  const timestamp = Date.now().toString(16).slice(-6).toUpperCase();
-  return `JCS-${prefix}-${timestamp}`;
+  const random = crypto.randomUUID().replace(/-/g, '').slice(0, 6).toUpperCase();
+  return `JCS-${prefix}-${random}`;
 }
 
 // ── GraphQL response types ──────────────────────────────────────────
@@ -71,7 +71,6 @@ export async function createDiscountCode(
     input: {
       title: `Referral: ${code}`,
       code,
-      usageLimit: 1,
       appliesOncePerCustomer: true,
       startsAt: new Date().toISOString(),
       customerGets: {
