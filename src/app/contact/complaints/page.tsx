@@ -92,7 +92,7 @@ export default function Complaints() {
               Complaints & Issues
             </h1>
             <p className="text-xl text-parchment-200 max-w-3xl mx-auto leading-relaxed">
-              We're committed to making things right. If you've experienced an issue with our products or service, please let us know so we can resolve it quickly.
+              If something is not right, tell us. We will investigate and get back to you within 24 hours.
             </p>
           </div>
 
@@ -271,7 +271,7 @@ export default function Complaints() {
                     <span className="font-semibold">Complaint Failed to Submit</span>
                   </div>
                   <p className="text-parchment-200 text-sm">
-                    Please try again or contact us directly at hello@jerrycanspirits.co.uk for urgent matters.
+                    Please try again or contact us directly at complaints@jerrycanspirits.co.uk
                   </p>
                 </div>
               )}
@@ -320,10 +320,10 @@ export default function Complaints() {
                 <p className="text-parchment-200">
                   <span className="text-gold-300 font-medium">Email:</span>{' '}
                   <a
-                    href="mailto:hello@jerrycanspirits.co.uk?subject=Urgent: Customer Service"
+                    href="mailto:complaints@jerrycanspirits.co.uk?subject=Urgent: Customer Service"
                     className="text-gold-300 hover:text-gold-200 underline transition-colors duration-200"
                   >
-                    hello@jerrycanspirits.co.uk
+                    complaints@jerrycanspirits.co.uk
                   </a>
                 </p>
                 <p className="text-parchment-300 text-sm">
