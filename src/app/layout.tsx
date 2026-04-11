@@ -17,6 +17,7 @@ const CartDrawer = dynamic(() => import("@/components/CartDrawer"));
 const SocialProofToast = dynamic(() => import("@/components/SocialProofToast"));
 import ServiceWorkerRegistration from "@/components/ServiceWorkerRegistration";
 import InstallPrompt from "@/components/InstallPrompt";
+import { headers } from "next/headers";
 import { CartProvider } from "@/contexts/CartContext";
 import { OrganizationSchema, WebsiteSchema } from "@/components/StructuredData";
 import FacebookPixel, { PixelPageView } from "@/components/FacebookPixel";
@@ -90,18 +91,23 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const nonce = (await headers()).get('x-nonce') ?? '';
+
   return (
     <html lang="en" className="scroll-smooth" suppressHydrationWarning>
       <head>
         {/* Synchronous JS detection — sets html.js before CSS is applied.
             Scroll reveal animations only hide content when JS is running,
             ensuring crawlers without JS see all content at full opacity. */}
-        <script dangerouslySetInnerHTML={{ __html: `document.documentElement.classList.add('js')` }} />
+        <script
+          nonce={nonce || undefined}
+          dangerouslySetInnerHTML={{ __html: `document.documentElement.classList.add('js')` }}
+        />
 
         {/* Google Consent Mode v2 Defaults - runs after interactive, before any Google tags fire */}
         {/* Cookiebot will update these values when user gives consent */}
