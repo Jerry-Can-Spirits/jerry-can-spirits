@@ -85,7 +85,7 @@ export default function GeneralEnquiries() {
               Get in Touch
             </h1>
             <p className="text-xl text-parchment-200 max-w-3xl mx-auto leading-relaxed">
-              Have a question about our spirits, need product information, or want to know more about Jerry Can Spirits? We're here to help.
+              Have a question about our spirits, need product information, or want to know more about Jerry Can Spirits? We will get back to you within 24 hours.
             </p>
           </div>
 
