@@ -61,15 +61,14 @@ function isBot(userAgent: string | null): boolean {
 }
 
 export function middleware(request: NextRequest) {
-  // PHASE 0 TEST: verify middleware response headers reach the browser on
-  // the current OpenNext/Cloudflare Workers runtime. If x-nonce-test appears
-  // in DevTools → Network → response headers for any HTML page, middleware
-  // can set response headers and we can proceed with the nonce approach.
-  // Remove this block once confirmed.
-  const testNonce = crypto.randomUUID().replace(/-/g, '').slice(0, 16)
-  const response = NextResponse.next()
-  response.headers.set('x-nonce-test', testNonce)
+  // Forward all incoming request headers to the Next.js server-component pipeline.
+  // This is required so that headers set by the outer Cloudflare Worker
+  // (e.g. x-nonce) are visible to server components via headers() from next/headers.
+  // Note: response.headers.set() does NOT reach server components on this runtime --
+  // only request header forwarding via NextResponse.next({ request: { headers } }) works.
+  const requestHeaders = new Headers(request.headers)
 
+  const response = NextResponse.next({ request: { headers: requestHeaders } })
   const userAgent = request.headers.get('user-agent')
 
   // Set a header to indicate if request is from a known bot
@@ -86,7 +85,7 @@ export function middleware(request: NextRequest) {
   }
 
   // Geo-detection via Cloudflare Workers
-  // OpenNext maps cf.country → x-open-next-country → x-vercel-ip-country
+  // OpenNext maps cf.country -> x-open-next-country -> x-vercel-ip-country
   const country =
     request.headers.get('x-vercel-ip-country') ||
     request.headers.get('x-open-next-country') ||
@@ -119,6 +118,6 @@ export const config = {
      * - favicon.ico (favicon file)
      * - public folder files
      */
-    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico)$).*)',
+    '/((?!_next/static|_next/image|favicon.ico|.*\.(?:svg|png|jpg|jpeg|gif|webp|ico)$).*)',
   ],
 }
