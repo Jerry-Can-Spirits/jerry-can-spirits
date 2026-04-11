@@ -60,13 +60,25 @@ function isBot(userAgent: string | null): boolean {
   return BOT_USER_AGENTS.some(bot => ua.includes(bot))
 }
 
+function generateNonce(): string {
+  const bytes = new Uint8Array(16)
+  crypto.getRandomValues(bytes)
+  return btoa(String.fromCharCode(...bytes))
+    .replace(/\+/g, '-')
+    .replace(/\//g, '_')
+    .replace(/=/g, '')
+}
+
 export function middleware(request: NextRequest) {
-  // Forward all incoming request headers to the Next.js server-component pipeline.
-  // This is required so that headers set by the outer Cloudflare Worker
-  // (e.g. x-nonce) are visible to server components via headers() from next/headers.
+  // Generate a per-request nonce and inject it into the request headers so that
+  // server components can read it via headers() from next/headers.
+  // Generating here (not in the outer Cloudflare Worker) because OpenNext does not
+  // forward custom headers added by the outer Worker into the Next.js request pipeline.
   // Note: response.headers.set() does NOT reach server components on this runtime --
   // only request header forwarding via NextResponse.next({ request: { headers } }) works.
+  const nonce = generateNonce()
   const requestHeaders = new Headers(request.headers)
+  requestHeaders.set('x-nonce', nonce)
 
   const response = NextResponse.next({ request: { headers: requestHeaders } })
   const userAgent = request.headers.get('user-agent')

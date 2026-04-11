@@ -96,7 +96,7 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const nonce = (await headers()).get('x-nonce') ?? '';
+  const nonce = (await headers()).get('x-nonce') ?? undefined;
 
   return (
     <html lang="en" className="scroll-smooth" suppressHydrationWarning>
@@ -105,7 +105,7 @@ export default async function RootLayout({
             Scroll reveal animations only hide content when JS is running,
             ensuring crawlers without JS see all content at full opacity. */}
         <script
-          nonce={nonce || undefined}
+          nonce={nonce}
           dangerouslySetInnerHTML={{ __html: `document.documentElement.classList.add('js')` }}
         />
 
