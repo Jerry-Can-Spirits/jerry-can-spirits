@@ -1,4 +1,5 @@
 import HeroSection from "@/components/HeroSection";
+import TrustpilotWidget from "@/components/TrustpilotWidget";
 import HomepageExpeditionMap from "@/components/HomepageExpeditionMap";
 import StructuredData from "@/components/StructuredData";
 import ScrollToHash from "@/components/ScrollToHash";
@@ -344,17 +345,13 @@ export default function Home() {
                   We&apos;ll let the bottles do the talking.
                 </p>
               </div>
-              <div className="max-w-5xl mx-auto">
-                <div className="text-center mt-6">
-                  <a
-                    href="https://www.trustpilot.com/review/jerrycanspirits.co.uk"
-                    target="_blank"
-                    rel="nofollow noopener noreferrer"
-                    className="text-sm text-gold-300 hover:text-gold-400 transition-colors underline"
-                  >
-                    View all reviews on Trustpilot
-                  </a>
-                </div>
+              <div className="max-w-2xl mx-auto">
+                <TrustpilotWidget
+                  templateId="56278e9abfbbba0bdcd568bc"
+                  height="52px"
+                  token="1b8d76a8-b743-471a-8f16-321500842e93"
+                  theme="dark"
+                />
               </div>
             </div>
           </section>
