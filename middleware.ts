@@ -61,7 +61,15 @@ function isBot(userAgent: string | null): boolean {
 }
 
 export function middleware(request: NextRequest) {
+  // PHASE 0 TEST: verify middleware response headers reach the browser on
+  // the current OpenNext/Cloudflare Workers runtime. If x-nonce-test appears
+  // in DevTools → Network → response headers for any HTML page, middleware
+  // can set response headers and we can proceed with the nonce approach.
+  // Remove this block once confirmed.
+  const testNonce = crypto.randomUUID().replace(/-/g, '').slice(0, 16)
   const response = NextResponse.next()
+  response.headers.set('x-nonce-test', testNonce)
+
   const userAgent = request.headers.get('user-agent')
 
   // Set a header to indicate if request is from a known bot
