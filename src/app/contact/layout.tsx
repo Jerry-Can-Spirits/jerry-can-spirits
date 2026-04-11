@@ -46,6 +46,12 @@ const contactSchema = {
       email: 'press@jerrycanspirits.co.uk',
       availableLanguage: 'English',
     },
+    {
+      '@type': 'ContactPoint',
+      contactType: 'complaints',
+      email: 'complaints@jerrycanspirits.co.uk',
+      availableLanguage: 'English',
+    },
   ],
 }
 

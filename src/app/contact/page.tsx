@@ -1,96 +1,60 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { useNewsletterSignup } from '@/hooks/useNewsletterSignup'
 import Breadcrumbs from '@/components/Breadcrumbs'
 
-// Note: metadata export removed as client components cannot export metadata
-// This metadata should be moved to a layout.tsx or handled differently
-
-// All available hashtags for rotation
-const allHashtags = [
-  '#JerryCanSpirits',
-  '#JoinTheExpedition',
-  '#CraftRum',
-  '#BritishRum',
-  '#VeteranOwned',
-  '#PremiumRum',
-  '#CheersToAdventure',
-  '#RumCocktails',
-  '#SupportVeterans',
-  '#VeteranBusiness',
-  '#RumLovers',
-  '#SipResponsibly',
-  '#ProudlyBritish',
-  '#SupportBritish',
-  '#JerryCanRum',
-]
-
-// Function to get random hashtags - always includes core brand hashtags
-const getRandomHashtags = (count = 5) => {
-  // Core hashtags that should always appear
-  const coreHashtags = ['#JerryCanSpirits', '#JoinTheExpedition', '#VeteranOwned']
-
-  // Get remaining hashtags excluding core ones
-  const otherHashtags = allHashtags.filter(tag => !coreHashtags.includes(tag))
-
-  // Shuffle and pick random ones
-  const shuffled = [...otherHashtags].sort(() => Math.random() - 0.5)
-  const randomPicks = shuffled.slice(0, count - coreHashtags.length)
-
-  // Combine core hashtags with random picks
-  return [...coreHashtags, ...randomPicks].join(' ')
-}
-
 const contactMethods = [
   {
     icon: 'email',
-    label: 'Email',
+    label: 'General Enquiries',
     value: 'hello@jerrycanspirits.co.uk',
     link: 'mailto:hello@jerrycanspirits.co.uk',
-    description: 'For general inquiries and customer support',
+    description: 'Questions about our rum, orders, or anything else.',
+    href: '/contact/enquiries/',
   },
   {
     icon: 'partnership',
     label: 'Partnerships',
     value: 'partnerships@jerrycanspirits.co.uk',
     link: 'mailto:partnerships@jerrycanspirits.co.uk',
-    description: 'For wholesale and business opportunities',
+    description: 'Wholesale, stockist, and business opportunities.',
+    href: null,
   },
   {
     icon: 'press',
-    label: 'Press',
+    label: 'Press & Media',
     value: 'press@jerrycanspirits.co.uk',
     link: 'mailto:press@jerrycanspirits.co.uk',
-    description: 'For media inquiries and press releases',
+    description: 'Media enquiries, interviews, and press assets.',
+    href: '/contact/media/',
+  },
+  {
+    icon: 'complaints',
+    label: 'Complaints',
+    value: 'complaints@jerrycanspirits.co.uk',
+    link: 'mailto:complaints@jerrycanspirits.co.uk',
+    description: 'Something not right? Tell us and we will fix it.',
+    href: '/contact/complaints/',
   },
 ]
 
 export default function Contact() {
-  const [hashtags, setHashtags] = useState('')
   const { hasSignedUp, isLoading } = useNewsletterSignup()
+  const [mounted, setMounted] = useState(false)
 
-  // Set hashtags on component mount (client-side only)
   useEffect(() => {
-    setHashtags(getRandomHashtags(5))
+    setMounted(true)
   }, [])
-
 
   return (
     <main className="min-h-screen">
-      {/* Breadcrumb */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
-        <Breadcrumbs
-          items={[
-            { label: 'Contact' },
-          ]}
-        />
+        <Breadcrumbs items={[{ label: 'Contact' }]} />
       </div>
 
-      {/* Page Hero */}
       <section className="relative py-20 lg:py-32 overflow-hidden">
-        {/* Header Content */}
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <div className="inline-block px-4 py-2 bg-jerry-green-800/60 backdrop-blur-sm rounded-full border border-gold-500/30 mb-6">
@@ -102,77 +66,84 @@ export default function Contact() {
               Contact Us
             </h1>
             <p className="text-xl text-parchment-200 max-w-3xl mx-auto leading-relaxed">
-              For inquiries, partnerships, or just to say hello, we'd love to hear from you.
+              We are a small team. Use the right channel and we will come back to you.
             </p>
           </div>
 
-          {/* Contact Methods */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mb-20">
-            {contactMethods.map((method) => (
-              <div
-                key={method.label}
-                className="group bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20 text-center hover:border-gold-400/40 transition-all duration-300 hover:scale-105"
-              >
-                <div className="w-16 h-16 bg-gradient-to-br from-gold-500 to-gold-600 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
-                  {method.icon === 'email' && (
-                    <svg
-                      className="w-8 h-8 text-jerry-green-900"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth={2}
-                      viewBox="0 0 24 24"
-                    >
-                      <rect x="2" y="4" width="20" height="16" rx="2" />
-                      <path d="m22 7-10 5L2 7" />
-                    </svg>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-20">
+            {contactMethods.map((method) => {
+              const CardContent = (
+                <>
+                  <div className="w-16 h-16 bg-gradient-to-br from-gold-500 to-gold-600 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
+                    {method.icon === 'email' && (
+                      <svg className="w-8 h-8 text-jerry-green-900" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                        <rect x="2" y="4" width="20" height="16" rx="2" />
+                        <path d="m22 7-10 5L2 7" />
+                      </svg>
+                    )}
+                    {method.icon === 'partnership' && (
+                      <svg className="w-8 h-8 text-jerry-green-900" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                        <circle cx="9" cy="7" r="4" />
+                        <path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" />
+                      </svg>
+                    )}
+                    {method.icon === 'press' && (
+                      <svg className="w-8 h-8 text-jerry-green-900" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                        <path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8l-6 6v14a2 2 0 0 0 2 2z" />
+                        <path d="M14 2v6h6M3 15h18M3 19h18" />
+                      </svg>
+                    )}
+                    {method.icon === 'complaints' && (
+                      <svg className="w-8 h-8 text-jerry-green-900" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+                      </svg>
+                    )}
+                  </div>
+                  <h3 className="text-xl font-serif font-bold text-parchment-50 mb-2">
+                    {method.label}
+                  </h3>
+                  <a
+                    href={method.link}
+                    onClick={(e) => e.stopPropagation()}
+                    className="inline-block text-gold-300 hover:text-gold-200 font-medium mb-3 transition-colors duration-200 underline decoration-2"
+                  >
+                    {method.value}
+                  </a>
+                  <p className="text-parchment-300 text-sm">
+                    {method.description}
+                  </p>
+                  {method.href && (
+                    <p className="mt-4 text-gold-300 text-xs font-semibold uppercase tracking-widest group-hover:text-gold-200 transition-colors">
+                      Use form →
+                    </p>
                   )}
-                  {method.icon === 'partnership' && (
-                    <svg
-                      className="w-8 h-8 text-jerry-green-900"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth={2}
-                      viewBox="0 0 24 24"
-                    >
-                      <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
-                      <circle cx="9" cy="7" r="4" />
-                      <path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" />
-                    </svg>
-                  )}
-                  {method.icon === 'press' && (
-                    <svg
-                      className="w-8 h-8 text-jerry-green-900"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth={2}
-                      viewBox="0 0 24 24"
-                    >
-                      <path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8l-6 6v14a2 2 0 0 0 2 2z" />
-                      <path d="M14 2v6h6M3 15h18M3 19h18" />
-                    </svg>
-                  )}
-                </div>
-                <h3 className="text-xl font-serif font-bold text-parchment-50 mb-2">
-                  {method.label}
-                </h3>
-                <a
-                  href={method.link}
-                  className="inline-block text-gold-300 hover:text-gold-200 font-medium mb-3 transition-colors duration-200 underline decoration-2"
+                </>
+              )
+
+              return method.href ? (
+                <Link
+                  key={method.label}
+                  href={method.href}
+                  className="group bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20 text-center hover:border-gold-400/40 transition-all duration-300 hover:scale-105"
                 >
-                  {method.value}
-                </a>
-                <p className="text-parchment-300 text-sm">
-                  {method.description}
-                </p>
-              </div>
-            ))}
+                  {CardContent}
+                </Link>
+              ) : (
+                <div
+                  key={method.label}
+                  className="group bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20 text-center"
+                >
+                  {CardContent}
+                </div>
+              )
+            })}
           </div>
 
-          {/* Additional Info */}
           <div className="max-w-2xl mx-auto mb-20">
             <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20 text-center">
               <h2 className="text-2xl font-serif font-bold text-parchment-50 mb-4">Follow Us</h2>
-              <div className="flex justify-center space-x-4 mb-4">
+              <div className="flex justify-center space-x-4">
                 <a
                   href="https://www.instagram.com/jerrycanspirits"
                   target="_blank"
@@ -196,20 +167,14 @@ export default function Contact() {
                   </svg>
                 </a>
               </div>
-              <p className="text-parchment-400 text-sm">
-                {hashtags || '#JerryCanSpirits #JoinTheExpedition #VeteranOwned'}
-              </p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* CTA Section - Only show if user hasn't signed up for newsletter */}
-      {!isLoading && !hasSignedUp && (
+      {mounted && !isLoading && !hasSignedUp && (
         <section className="relative py-20 overflow-hidden">
-          {/* Subtle background overlay */}
-          <div className="absolute inset-0 bg-gradient-to-r from-jerry-green-800/20 to-jerry-green-700/20"></div>
-
+          <div className="absolute inset-0 bg-gradient-to-r from-jerry-green-800/20 to-jerry-green-700/20" />
           <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h2 className="text-3xl sm:text-4xl font-serif font-bold text-parchment-50 mb-6">
               Stay Connected
@@ -219,15 +184,10 @@ export default function Contact() {
             </p>
             <Link
               href="/#newsletter-signup"
-              className="group bg-gradient-to-r from-gold-600 to-gold-500 hover:from-gold-500 hover:to-gold-400 text-jerry-green-900 px-8 py-4 rounded-lg font-semibold uppercase tracking-wide transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 flex items-center justify-center gap-2 mx-auto"
+              className="group bg-gradient-to-r from-gold-600 to-gold-500 hover:from-gold-500 hover:to-gold-400 text-jerry-green-900 px-8 py-4 rounded-lg font-semibold uppercase tracking-wide transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 flex items-center justify-center gap-2 mx-auto w-fit"
             >
-              Become an Insider
-              <svg
-                className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
+              Join the Expedition
+              <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
               </svg>
             </Link>
