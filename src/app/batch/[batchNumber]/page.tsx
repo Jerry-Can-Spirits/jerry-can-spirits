@@ -10,6 +10,7 @@ import ShareButton from '@/components/ShareButton'
 import { getD1, getBatch, getBatchStats, getBatchIngredients } from '@/lib/d1'
 import { client } from '@/sanity/client'
 import { featuredCocktailsQuery } from '@/sanity/queries'
+import { baseOpenGraph } from '@/lib/og'
 
 export const dynamic = 'force-dynamic'
 
@@ -62,8 +63,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       canonical: `https://jerrycanspirits.co.uk/batch/${batchNumber}/`,
     },
     openGraph: {
+      ...baseOpenGraph,
       title: `${batch.name} | Jerry Can Spirits\u00ae`,
       description: batch.tasting_notes || `Production details for ${batch.name}.`,
+      url: `https://jerrycanspirits.co.uk/batch/${batchNumber}/`,
     },
   }
 }

@@ -2,14 +2,21 @@ import type { Metadata } from 'next'
 import { getD1, getExpeditionLogEntries } from '@/lib/d1'
 import ExpeditionLogForm from '@/components/ExpeditionLogForm'
 import ExpeditionLogMapClient from '@/components/ExpeditionLogMapClient'
+import { baseOpenGraph } from '@/lib/og'
 
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: 'The Expedition Log | Jerry Can Spirits®',
+  title: 'The Expedition Log',
   description: 'A public record of the people who bought the first bottles. Names, places, and notes from the field.',
   alternates: {
     canonical: 'https://jerrycanspirits.co.uk/expedition-log/',
+  },
+  openGraph: {
+    ...baseOpenGraph,
+    title: 'The Expedition Log | Jerry Can Spirits®',
+    description: 'A public record of the people who bought the first bottles. Names, places, and notes from the field.',
+    url: 'https://jerrycanspirits.co.uk/expedition-log/',
   },
 }
 
