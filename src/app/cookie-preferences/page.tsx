@@ -1,14 +1,23 @@
-'use client'
-
+import type { Metadata } from 'next'
 import Link from 'next/link'
+import CookiebotRenewButton from '@/components/CookiebotRenewButton'
+import { baseOpenGraph } from '@/lib/og'
+
+export const metadata: Metadata = {
+  title: 'Cookie Preferences',
+  description: 'Manage your cookie preferences for Jerry Can Spirits. Control which cookies are used to enhance your browsing experience and protect your privacy.',
+  alternates: {
+    canonical: 'https://jerrycanspirits.co.uk/cookie-preferences/',
+  },
+  openGraph: {
+    ...baseOpenGraph,
+    title: 'Cookie Preferences | Jerry Can Spirits®',
+    description: 'Manage your cookie preferences for Jerry Can Spirits. Control which cookies are used to enhance your browsing experience and protect your privacy.',
+    url: 'https://jerrycanspirits.co.uk/cookie-preferences/',
+  },
+}
 
 export default function CookiePreferencesPage() {
-  const openCookiebot = () => {
-    if (typeof window !== 'undefined' && window.Cookiebot) {
-      window.Cookiebot.renew()
-    }
-  }
-
   return (
     <main className="min-h-screen py-20">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -38,12 +47,7 @@ export default function CookiePreferencesPage() {
           <p className="text-parchment-300 text-sm leading-relaxed">
             You can also click the Cookiebot icon in the bottom left of any page to update your preferences at any time.
           </p>
-          <button
-            onClick={openCookiebot}
-            className="px-8 py-4 bg-gradient-to-r from-gold-600 to-gold-500 hover:from-gold-500 hover:to-gold-400 text-jerry-green-900 rounded-lg font-semibold uppercase tracking-wide transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105"
-          >
-            Review Cookie Settings
-          </button>
+          <CookiebotRenewButton />
         </div>
 
         <div className="mt-8 p-6 bg-jerry-green-800/20 backdrop-blur-sm rounded-xl border border-gold-500/10">

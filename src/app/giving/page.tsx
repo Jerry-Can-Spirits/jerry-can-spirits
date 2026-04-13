@@ -3,15 +3,22 @@ import Link from 'next/link'
 import { getD1, getCharities, getCharityContributions } from '@/lib/d1'
 import CharityCard from '@/components/CharityCard'
 import ContributionsList from '@/components/ContributionsList'
+import { baseOpenGraph } from '@/lib/og'
 
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: 'Where the 5% Goes | Jerry Can Spirits®',
+  title: 'Where the 5% Goes',
   description:
     'Jerry Can Spirits donates 5% of profits to armed forces charities. A transparent record of who receives what, and when.',
   alternates: {
     canonical: 'https://jerrycanspirits.co.uk/giving/',
+  },
+  openGraph: {
+    ...baseOpenGraph,
+    title: 'Where the 5% Goes | Jerry Can Spirits®',
+    description: 'Jerry Can Spirits donates 5% of profits to armed forces charities. A transparent record of who receives what, and when.',
+    url: 'https://jerrycanspirits.co.uk/giving/',
   },
 }
 
