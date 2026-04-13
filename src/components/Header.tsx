@@ -370,7 +370,7 @@ export default function Header() {
                 <a
                   href="https://www.facebook.com/jerrycanspirits"
                   target="_blank"
-                  rel="noopener noreferrer"
+                  rel="nofollow noopener noreferrer"
                   className="text-parchment-100 hover:text-parchment-50 transition-all duration-200 hover:scale-110"
                   aria-label="Facebook"
                 >
@@ -381,7 +381,7 @@ export default function Header() {
                 <a
                   href="https://www.instagram.com/jerrycanspirits"
                   target="_blank"
-                  rel="noopener noreferrer"
+                  rel="nofollow noopener noreferrer"
                   className="text-parchment-100 hover:text-parchment-50 transition-all duration-200 hover:scale-110"
                   aria-label="Instagram"
                 >
