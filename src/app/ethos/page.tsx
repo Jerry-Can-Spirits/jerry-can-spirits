@@ -9,7 +9,7 @@ import { OG_IMAGE } from '@/lib/og'
 
 export const metadata: Metadata = {
   title: "Our Ethos - How We Make Rum",
-  description: "The values behind Jerry Can Spirits. Built on discipline, integrity, and real ingredients. Madagascan vanilla, Ceylon cinnamon, real botanicals. Veteran-owned, Welsh-distilled.",
+  description: "The values behind Jerry Can Spirits. Built on discipline, integrity, and real ingredients. Madagascan vanilla, Ceylon cinnamon, real botanicals. Veteran-owned.",
   alternates: {
     canonical: 'https://jerrycanspirits.co.uk/ethos/',
   },
