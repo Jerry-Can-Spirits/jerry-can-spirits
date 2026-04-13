@@ -305,13 +305,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'monthly',
       priority: 0.3,
     },
-    // Cookie preferences
-    {
-      url: `${baseUrl}/cookie-preferences/`,
-      lastModified: currentDate,
-      changeFrequency: 'yearly',
-      priority: 0.2,
-    },
     // Reviews page
     {
       url: `${baseUrl}/reviews/`,
