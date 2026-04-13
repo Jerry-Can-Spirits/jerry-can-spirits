@@ -338,7 +338,7 @@ export default function Footer() {
                   <a
                     href="https://www.facebook.com/jerrycanspirits"
                     target="_blank"
-                    rel="noopener noreferrer"
+                    rel="nofollow noopener noreferrer"
                     className="text-parchment-200 hover:text-jerry-green-400 transition-all duration-200 hover:scale-110"
                     aria-label="Follow us on Facebook"
                     onClick={() => trackFooterClick('Social', 'Facebook')}
@@ -350,7 +350,7 @@ export default function Footer() {
                   <a
                     href="https://www.instagram.com/jerrycanspirits"
                     target="_blank"
-                    rel="noopener noreferrer"
+                    rel="nofollow noopener noreferrer"
                     className="text-parchment-200 hover:text-jerry-green-400 transition-all duration-200 hover:scale-110"
                     aria-label="Follow us on Instagram"
                     onClick={() => trackFooterClick('Social', 'Instagram')}
@@ -363,7 +363,7 @@ export default function Footer() {
                   <a
                     href="https://www.youtube.com/@JerryCanSpirits"
                     target="_blank"
-                    rel="noopener noreferrer"
+                    rel="nofollow noopener noreferrer"
                     className="text-parchment-200 hover:text-jerry-green-400 transition-all duration-200 hover:scale-110"
                     aria-label="Subscribe on YouTube"
                     onClick={() => trackFooterClick('Social', 'YouTube')}
@@ -376,7 +376,7 @@ export default function Footer() {
                   <a
                     href="https://www.linkedin.com/company/jerry-can-spirits-ltd/"
                     target="_blank"
-                    rel="noopener noreferrer"
+                    rel="nofollow noopener noreferrer"
                     className="text-parchment-200 hover:text-jerry-green-400 transition-all duration-200 hover:scale-110"
                     aria-label="Follow us on LinkedIn"
                     onClick={() => trackFooterClick('Social', 'LinkedIn')}

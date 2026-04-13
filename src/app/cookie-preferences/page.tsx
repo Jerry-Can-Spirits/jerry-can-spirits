@@ -6,6 +6,7 @@ import { baseOpenGraph } from '@/lib/og'
 export const metadata: Metadata = {
   title: 'Cookie Preferences',
   description: 'Manage your cookie preferences for Jerry Can Spirits. Control which cookies are used to enhance your browsing experience and protect your privacy.',
+  robots: { index: false, follow: true },
   alternates: {
     canonical: 'https://jerrycanspirits.co.uk/cookie-preferences/',
   },

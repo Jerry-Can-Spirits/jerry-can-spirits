@@ -31,6 +31,11 @@ const COLLECTION_CONTENT: Record<string, CollectionContent> = {
     description: 'New expressions from Jerry Can Spirits. Veteran-owned British spirits house — small-batch, built properly, no shortcuts.',
     intro: 'The latest from the spirits house. Every expression built on the same principles as the first.',
   },
+  'gift-sets': {
+    title: 'Gift Sets',
+    description: 'Rum gift sets and experience bundles from Jerry Can Spirits. Veteran-owned, Welsh-distilled. Built for people who appreciate quality.',
+    intro: 'For anyone who holds themselves to a higher standard. Each gift set is built around Expedition Spiced Rum — pot-distilled at Spirit of Wales, real ingredients, no shortcuts.',
+  },
 }
 
 function getCollectionContent(handle: string): CollectionContent {

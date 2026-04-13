@@ -4,14 +4,14 @@ import { baseOpenGraph } from '@/lib/og'
 
 export const metadata: Metadata = {
   title: 'Armed Forces Covenant',
-  description: "Jerry Can Spirits is a veteran-owned British spirits company committed to the Armed Forces Covenant, supporting serving personnel, veterans, and military families.",
+  description: "Veteran-owned British spirits company, committed to the Armed Forces Covenant. Supporting serving personnel, veterans, and their families.",
   alternates: {
     canonical: 'https://jerrycanspirits.co.uk/armed-forces-covenant/',
   },
   openGraph: {
     ...baseOpenGraph,
     title: 'Armed Forces Covenant | Jerry Can Spirits®',
-    description: 'Jerry Can Spirits is a veteran-owned British spirits company committed to the Armed Forces Covenant, supporting serving personnel, veterans, and military families.',
+    description: 'Veteran-owned British spirits company, committed to the Armed Forces Covenant. Supporting serving personnel, veterans, and their families.',
     url: 'https://jerrycanspirits.co.uk/armed-forces-covenant/',
   },
   robots: {
@@ -24,7 +24,7 @@ const articleSchema = {
   '@context': 'https://schema.org',
   '@type': 'Article',
   headline: 'Armed Forces Covenant - Jerry Can Spirits',
-  description: 'Jerry Can Spirits is a veteran-owned British spirits company committed to the Armed Forces Covenant, supporting serving personnel, veterans, and military families.',
+  description: 'Veteran-owned British spirits company, committed to the Armed Forces Covenant. Supporting serving personnel, veterans, and their families.',
   url: 'https://jerrycanspirits.co.uk/armed-forces-covenant/',
   image: 'https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/images-afc_banner__png_-png/public',
   author: {

@@ -56,16 +56,25 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     return { title: 'Batch Not Found' }
   }
 
+  const truncateNotes = (notes: string, maxLen: number) => {
+    if (notes.length <= maxLen) return notes
+    return notes.slice(0, maxLen).replace(/\s\S*$/, '') + '...'
+  }
+
+  const shortNotes = batch.tasting_notes
+    ? truncateNotes(batch.tasting_notes, 100)
+    : `Production details and tasting notes for ${batch.name}.`
+
   return {
     title: `${batch.name} — Check Your Bottle`,
-    description: `${batch.tasting_notes || `Production details and tasting notes for ${batch.name}.`} View bottle provenance and verify your bottle of Jerry Can Spirits rum.`,
+    description: `${shortNotes} Verify your bottle of Jerry Can Spirits rum.`,
     alternates: {
       canonical: `https://jerrycanspirits.co.uk/batch/${batchNumber}/`,
     },
     openGraph: {
       ...baseOpenGraph,
       title: `${batch.name} | Jerry Can Spirits\u00ae`,
-      description: batch.tasting_notes || `Production details for ${batch.name}.`,
+      description: shortNotes,
       url: `https://jerrycanspirits.co.uk/batch/${batchNumber}/`,
     },
   }
