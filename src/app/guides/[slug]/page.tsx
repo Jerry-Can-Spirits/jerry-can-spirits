@@ -533,7 +533,7 @@ export default async function GuidePage({ params }: PageProps) {
                     {guide.relatedProducts.map((product, index) => (
                       <Link
                         key={index}
-                        href={`/shop/product/${product.shopifyHandle}`}
+                        href={`/shop/product/${product.shopifyHandle}/`}
                         className="flex items-center gap-4 p-4 bg-jerry-green-800/30 rounded-lg border border-gold-500/20 hover:bg-jerry-green-800/50 hover:border-gold-400/40 transition-all group"
                       >
                         <div className="w-10 h-10 bg-gold-500/20 rounded-full flex items-center justify-center flex-shrink-0">

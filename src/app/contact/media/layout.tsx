@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { OG_IMAGE } from '@/lib/og'
 
 export const metadata: Metadata = {
-  title: 'Media Centre',
+  title: 'Media Centre, Press Enquiries & Brand Partnerships',
   description: 'Press assets, product photography, brand guidelines, and media contact for Jerry Can Spirits. Everything a journalist or stockist needs in one place.',
   alternates: {
     canonical: 'https://jerrycanspirits.co.uk/contact/media/',

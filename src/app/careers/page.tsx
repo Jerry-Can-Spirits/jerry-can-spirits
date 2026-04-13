@@ -4,14 +4,14 @@ import { baseOpenGraph } from '@/lib/og'
 
 export const metadata: Metadata = {
   title: "Careers - Join Our Team",
-  description: "Career opportunities at Jerry Can Spirits®. We're not hiring right now, but if you're interested in joining a small veteran-owned spirits company, we'd like to hear from you.",
+  description: "Career opportunities at Jerry Can Spirits. Not currently hiring, but if you want to join a veteran-owned British spirits company, we'd like to hear from you.",
   alternates: {
     canonical: 'https://jerrycanspirits.co.uk/careers/',
   },
   openGraph: {
     ...baseOpenGraph,
     title: 'Careers | Jerry Can Spirits®',
-    description: "Career opportunities at Jerry Can Spirits®. We're not hiring right now, but if you're interested in joining a small veteran-owned spirits company, we'd like to hear from you.",
+    description: "Career opportunities at Jerry Can Spirits. Not currently hiring, but if you want to join a veteran-owned British spirits company, we'd like to hear from you.",
     url: 'https://jerrycanspirits.co.uk/careers/',
   },
   robots: {
