@@ -158,35 +158,6 @@ export default function Home() {
       "slogan": "Engineered for reliability, designed for adventure",
       "description": "Veteran-owned British craft spirits with authentic military heritage"
     },
-    // Event schema for product launch
-    {
-      "@context": "https://schema.org",
-      "@type": "Event",
-      "name": "Jerry Can Spirits Expedition Spiced Rum Launch",
-      "description": "Official launch of Jerry Can Spirits Expedition Spiced Rum - premium veteran-owned British craft rum. Pre-orders ship first.",
-      "startDate": "2026-04-06",
-      "endDate": "2026-04-06",
-      "eventStatus": "https://schema.org/EventScheduled",
-      "eventAttendanceMode": "https://schema.org/OnlineEventAttendanceMode",
-      "location": {
-        "@type": "VirtualLocation",
-        "url": "https://jerrycanspirits.co.uk"
-      },
-      "image": "https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/f20c2c79-ac51-4199-3f42-22a072e05900/public",
-      "organizer": {
-        "@type": "Organization",
-        "name": "Jerry Can Spirits",
-        "url": "https://jerrycanspirits.co.uk"
-      },
-      "offers": {
-        "@type": "Offer",
-        "url": "https://jerrycanspirits.co.uk/shop/spirits/",
-        "price": "35",
-        "priceCurrency": "GBP",
-        "availability": "https://schema.org/InStock",
-        "validFrom": "2025-07-01"
-      }
-    }
   ];
 
   return (

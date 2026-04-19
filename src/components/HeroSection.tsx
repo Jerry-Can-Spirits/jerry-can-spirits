@@ -89,7 +89,7 @@ export default function HeroSection() {
                 Now Shipping
               </div>
               <p className="text-parchment-200 text-center text-sm">
-                Founding Supporter price: £35 until Sunday 12 April. £40 from Monday.
+                Founding Supporter price: £35. Orders are being fulfilled and shipped.
               </p>
             </div>
 

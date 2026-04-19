@@ -121,7 +121,7 @@ export default async function PreOrderSection() {
             </h2>
 
             <p className="text-xl text-parchment-300 mb-6 leading-relaxed">
-              700 bottles. Each one numbered. Founding Supporter pricing runs until Sunday 12 April. £40 from Monday.
+              700 bottles. Each one numbered. Founding Supporter pricing.
             </p>
 
             {totalSold !== null && (
@@ -138,11 +138,11 @@ export default async function PreOrderSection() {
                 </li>
                 <li className="flex items-start gap-3">
                   <span className="text-gold-400 flex-shrink-0">•</span>
-                  <span>Founding Supporter price: £{bottlePrice}. Moves to £40 on Monday 13 April.</span>
+                  <span>Founding Supporter price: £{bottlePrice}</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <span className="text-gold-400 flex-shrink-0">•</span>
-                  <span>Shipping this week</span>
+                  <span>Fulfilment in progress</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <span className="text-gold-400 flex-shrink-0">•</span>

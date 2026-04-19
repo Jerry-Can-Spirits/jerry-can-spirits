@@ -22,9 +22,8 @@ export default function ShareButton({ title, text, url, buttonText = 'Share' }: 
           text,
           url,
         })
-      } catch (error) {
-        // User cancelled or error occurred
-        console.log('Share cancelled or failed:', error)
+      } catch {
+        // User cancelled — no action needed
       }
     } else {
       // Fallback to custom share menu
