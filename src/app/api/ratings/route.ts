@@ -1,6 +1,7 @@
 // app/api/ratings/route.ts
 import { NextResponse } from 'next/server'
 import { getCloudflareContext } from '@opennextjs/cloudflare'
+import { isRateLimited } from '@/lib/kv'
 
 export const dynamic = 'force-dynamic'
 
@@ -14,6 +15,7 @@ interface RatingData {
 interface RatingBody {
   slug: string
   rating: number
+  turnstileToken: string
 }
 
 const SLUG_RE = /^[a-z0-9-]{1,80}$/
@@ -133,7 +135,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400 })
     }
 
-    const { slug, rating } = body
+    const { slug, rating, turnstileToken } = body
 
     if (!slug) {
       return NextResponse.json({ error: 'Cocktail slug is required' }, { status: 400 })
@@ -145,6 +147,33 @@ export async function POST(request: Request) {
 
     if (typeof rating !== 'number' || rating < 1 || rating > 5 || !Number.isInteger(rating)) {
       return NextResponse.json({ error: 'Rating must be an integer between 1 and 5' }, { status: 400 })
+    }
+
+    if (!turnstileToken?.trim()) {
+      return NextResponse.json({ error: 'Bot check token is required.' }, { status: 400 })
+    }
+
+    // Rate limit: 5 ratings per IP per hour
+    const ip = (request.headers.get('CF-Connecting-IP') ?? request.headers.get('x-forwarded-for') ?? 'unknown').split(',')[0].trim()
+    const siteOps = env.SITE_OPS as KVNamespace | undefined
+    if (siteOps && await isRateLimited(siteOps, 'ratings', ip, 5, 60 * 60)) {
+      return NextResponse.json({ error: 'Too many requests. Please try again later.' }, { status: 429 })
+    }
+
+    // Verify Turnstile token
+    const turnstileSecret = env.TURNSTILE_SECRET_KEY as string | undefined
+    if (!turnstileSecret) {
+      console.error('TURNSTILE_SECRET_KEY not configured')
+      return NextResponse.json({ error: 'Server configuration error.' }, { status: 500 })
+    }
+    const tsRes = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ secret: turnstileSecret, response: turnstileToken }),
+    })
+    const tsData = await tsRes.json() as { success: boolean }
+    if (!tsData.success) {
+      return NextResponse.json({ error: 'Bot check failed.' }, { status: 400 })
     }
 
     const fingerprint = getFingerprint(request)

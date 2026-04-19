@@ -1,6 +1,7 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
+import Script from 'next/script'
 
 interface StarRatingProps {
   slug: string
@@ -25,7 +26,10 @@ export default function StarRating({ slug, className = '' }: StarRatingProps) {
   const [isLoading, setIsLoading] = useState(true)
   const [showThankYou, setShowThankYou] = useState(false)
 
-  // Fetch current rating data on mount
+  const turnstileContainerRef = useRef<HTMLDivElement>(null)
+  const widgetIdRef = useRef<string | null>(null)
+  const pendingRatingRef = useRef<number>(0)
+
   useEffect(() => {
     async function fetchRating() {
       try {
@@ -45,17 +49,41 @@ export default function StarRating({ slug, className = '' }: StarRatingProps) {
     fetchRating()
   }, [slug])
 
-  const handleSubmitRating = async (selectedRating: number) => {
-    if (hasVoted || isSubmitting) return
+  useEffect(() => {
+    return () => {
+      if (widgetIdRef.current && window.turnstile) {
+        window.turnstile.remove(widgetIdRef.current)
+      }
+    }
+  }, [])
 
-    setIsSubmitting(true)
-    setRating(selectedRating)
+  const initTurnstile = () => {
+    if (!turnstileContainerRef.current || widgetIdRef.current || !window.turnstile) return
+    widgetIdRef.current = window.turnstile.render(turnstileContainerRef.current, {
+      sitekey: process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ?? '',
+      size: 'invisible',
+      theme: 'dark',
+      callback: (token: string) => {
+        void submitRatingWithToken(pendingRatingRef.current, token)
+      },
+      'error-callback': () => {
+        setIsSubmitting(false)
+        setRating(0)
+      },
+      'expired-callback': () => {
+        if (widgetIdRef.current && window.turnstile) {
+          window.turnstile.reset(widgetIdRef.current)
+        }
+      },
+    })
+  }
 
+  const submitRatingWithToken = async (selectedRating: number, turnstileToken: string) => {
     try {
       const response = await fetch('/api/ratings/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ slug, rating: selectedRating })
+        body: JSON.stringify({ slug, rating: selectedRating, turnstileToken })
       })
 
       const data: RatingResponse = await response.json()
@@ -67,14 +95,31 @@ export default function StarRating({ slug, className = '' }: StarRatingProps) {
         setShowThankYou(true)
         setTimeout(() => setShowThankYou(false), 3000)
       } else if (response.status === 409) {
-        // Already voted
         setHasVoted(true)
+      } else {
+        setRating(0)
       }
     } catch (error) {
       console.error('Failed to submit rating:', error)
-      setRating(0) // Reset on error
+      setRating(0)
     } finally {
       setIsSubmitting(false)
+      if (widgetIdRef.current && window.turnstile) {
+        window.turnstile.reset(widgetIdRef.current)
+      }
+    }
+  }
+
+  const handleSubmitRating = (selectedRating: number) => {
+    if (hasVoted || isSubmitting) return
+    setIsSubmitting(true)
+    setRating(selectedRating)
+    pendingRatingRef.current = selectedRating
+    if (widgetIdRef.current && window.turnstile) {
+      window.turnstile.execute(widgetIdRef.current)
+    } else {
+      setIsSubmitting(false)
+      setRating(0)
     }
   }
 
@@ -84,7 +129,6 @@ export default function StarRating({ slug, className = '' }: StarRatingProps) {
 
     return (
       <span key={starIndex} className="relative inline-block">
-        {/* Background star (empty) */}
         <svg
           className="w-6 h-6 text-jerry-green-700"
           fill="currentColor"
@@ -93,7 +137,6 @@ export default function StarRating({ slug, className = '' }: StarRatingProps) {
           <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
         </svg>
 
-        {/* Foreground star (filled) */}
         <svg
           className={`absolute inset-0 w-6 h-6 transition-colors duration-150 ${
             isActive || filled ? 'text-gold-400' : 'text-transparent'
@@ -134,7 +177,6 @@ export default function StarRating({ slug, className = '' }: StarRatingProps) {
         }`}
         aria-label={`Rate ${starIndex} star${starIndex !== 1 ? 's' : ''}`}
       >
-        {/* Background star (empty) */}
         <svg
           className="w-7 h-7 text-jerry-green-700"
           fill="currentColor"
@@ -143,7 +185,6 @@ export default function StarRating({ slug, className = '' }: StarRatingProps) {
           <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
         </svg>
 
-        {/* Foreground star (filled) */}
         <svg
           className={`absolute inset-0 w-7 h-7 transition-colors duration-150 ${
             (hoverRating >= starIndex || rating >= starIndex)
@@ -172,45 +213,52 @@ export default function StarRating({ slug, className = '' }: StarRatingProps) {
   }
 
   return (
-    <div className={`${className}`}>
-      {/* Average rating display */}
-      {ratingCount > 0 && (
-        <div className="flex items-center gap-2 mb-3">
-          <div className="flex gap-0.5">
-            {renderAverageStars()}
-          </div>
-          <span className="text-gold-300 font-semibold">{averageRating.toFixed(1)}</span>
-          <span className="text-parchment-400 text-sm">
-            ({ratingCount} {ratingCount === 1 ? 'rating' : 'ratings'})
-          </span>
-        </div>
-      )}
-
-      {/* Interactive rating */}
-      <div className="flex items-center gap-3">
-        {hasVoted ? (
-          <div className="flex items-center gap-2">
-            <span className="text-gold-300 text-sm font-medium">
-              {showThankYou ? 'Thanks for rating!' : 'You rated this cocktail'}
-            </span>
-            {rating > 0 && (
-              <span className="text-gold-400 text-sm">
-                {rating} star{rating !== 1 ? 's' : ''}
-              </span>
-            )}
-          </div>
-        ) : (
-          <>
-            <span className="text-parchment-300 text-sm">Rate this recipe:</span>
+    <>
+      <Script
+        src="https://challenges.cloudflare.com/turnstile/v0/api.js"
+        strategy="lazyOnload"
+        onLoad={initTurnstile}
+      />
+      {/* Invisible Turnstile widget container */}
+      <div ref={turnstileContainerRef} />
+      <div className={`${className}`}>
+        {ratingCount > 0 && (
+          <div className="flex items-center gap-2 mb-3">
             <div className="flex gap-0.5">
-              {renderInteractiveStars()}
+              {renderAverageStars()}
             </div>
-            {isSubmitting && (
-              <span className="text-parchment-400 text-sm animate-pulse">Saving...</span>
-            )}
-          </>
+            <span className="text-gold-300 font-semibold">{averageRating.toFixed(1)}</span>
+            <span className="text-parchment-400 text-sm">
+              ({ratingCount} {ratingCount === 1 ? 'rating' : 'ratings'})
+            </span>
+          </div>
         )}
+
+        <div className="flex items-center gap-3">
+          {hasVoted ? (
+            <div className="flex items-center gap-2">
+              <span className="text-gold-300 text-sm font-medium">
+                {showThankYou ? 'Thanks for rating!' : 'You rated this cocktail'}
+              </span>
+              {rating > 0 && (
+                <span className="text-gold-400 text-sm">
+                  {rating} star{rating !== 1 ? 's' : ''}
+                </span>
+              )}
+            </div>
+          ) : (
+            <>
+              <span className="text-parchment-300 text-sm">Rate this recipe:</span>
+              <div className="flex gap-0.5">
+                {renderInteractiveStars()}
+              </div>
+              {isSubmitting && (
+                <span className="text-parchment-400 text-sm animate-pulse">Saving...</span>
+              )}
+            </>
+          )}
+        </div>
       </div>
-    </div>
+    </>
   )
 }
