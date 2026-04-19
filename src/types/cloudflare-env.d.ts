@@ -35,4 +35,25 @@ declare global {
     META_FB_PAGE_ID?: string
     META_IG_ACCOUNT_ID?: string
   }
+
+  interface TurnstileRenderOptions {
+    sitekey: string
+    callback?: (token: string) => void
+    'error-callback'?: () => void
+    'expired-callback'?: () => void
+    size?: 'normal' | 'compact' | 'invisible' | 'flexible'
+    theme?: 'light' | 'dark' | 'auto'
+    action?: string
+  }
+
+  interface TurnstileInstance {
+    render: (container: HTMLElement, options: TurnstileRenderOptions) => string
+    execute: (widgetId: string) => void
+    reset: (widgetId: string) => void
+    remove: (widgetId: string) => void
+  }
+
+  interface Window {
+    turnstile?: TurnstileInstance
+  }
 }
