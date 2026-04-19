@@ -83,17 +83,14 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     // Guard against concurrent calls — both would read the same cart snapshot and could
     // create two separate Shopify carts or produce inconsistent local state
     if (isLoading) return
-    console.log('[CartContext] Starting addToCart:', { variantId, quantity })
     setIsLoading(true)
     try {
       let currentCart = cart
 
       // Create cart if it doesn't exist
       if (!currentCart) {
-        console.log('[CartContext] No cart exists, creating new cart...')
         currentCart = await createCart()
         localStorage.setItem('shopify_cart_id', currentCart.id)
-        console.log('[CartContext] New cart created:', currentCart.id)
       }
 
       // Apply referral code to any cart that doesn't already have it set
@@ -107,20 +104,12 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
           currentCart = await shopifyUpdateCartAttributes(currentCart.id, [
             { key: '_referral_code', value: referralCode },
           ])
-          console.log('[CartContext] Referral code applied:', referralCode)
         } catch (err) {
           console.warn('[CartContext] Failed to apply referral code:', err)
         }
       }
 
-      // Add item to cart
-      console.log('[CartContext] Adding item to cart:', currentCart.id)
       const updatedCart = await shopifyAddToCart(currentCart.id, variantId, quantity)
-      console.log('[CartContext] Cart updated successfully:', {
-        cartId: updatedCart.id,
-        lineCount: updatedCart.lines.length,
-        totalItems: updatedCart.lines.reduce((sum, line) => sum + line.quantity, 0)
-      })
       setCart(updatedCart)
 
       // Open cart drawer to show item was added

@@ -51,8 +51,6 @@ export default function ProductVariantSelector({
   const handleAddToCart = async () => {
     if (!selectedVariant) return
 
-    console.log('Adding to cart:', { variantId: selectedVariantId, quantity, productTitle })
-
     const atcPayload = {
       content_name: productTitle,
       content_ids: [selectedVariantId.split('/').pop() ?? selectedVariantId],
