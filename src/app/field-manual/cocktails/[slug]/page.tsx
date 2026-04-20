@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import Image from 'next/image'
 import { client } from '@/sanity/client'
-import { cocktailBySlugQuery } from '@/sanity/queries'
+import { cocktailBySlugQuery, cocktailsSitemapQuery } from '@/sanity/queries'
 import BackToTop from '@/components/BackToTop'
 import StructuredData from '@/components/StructuredData'
 import CocktailRecipeDisplay from '@/components/CocktailRecipeDisplay'
@@ -11,6 +11,7 @@ import ShareButton from '@/components/ShareButton'
 import StarRating from '@/components/StarRating'
 import Breadcrumbs from '@/components/Breadcrumbs'
 import { notFound } from 'next/navigation'
+import { sanityOgUrl } from '@/sanity/lib/image'
 
 // Types for cocktail data
 interface CocktailIngredient {
@@ -100,7 +101,13 @@ interface PageProps {
   }>
 }
 
-// Cloudflare Pages edge runtime for dynamic routes
+export async function generateStaticParams() {
+  const cocktails = await client.fetch<{ slug: { current: string } }[]>(cocktailsSitemapQuery)
+  return cocktails.map(({ slug }) => ({ slug: slug.current }))
+}
+
+export const dynamicParams = true
+
 // Convert heading to URL-friendly slug for anchor links
 function slugify(text: string): string {
   return text
@@ -140,14 +147,14 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       title: `${metaTitle} | Jerry Can Spirits®`,
       description: metaDescription,
       url: `https://jerrycanspirits.co.uk/field-manual/cocktails/${cocktail.slug.current}/`,
-      images: cocktail.image ? [cocktail.image] : [],
+      images: cocktail.image ? [sanityOgUrl(cocktail.image) as string] : [],
       type: 'article',
     },
     twitter: {
       card: 'summary_large_image',
       title: `${metaTitle} | Jerry Can Spirits®`,
       description: metaDescription,
-      images: cocktail.image ? [cocktail.image] : [],
+      images: cocktail.image ? [sanityOgUrl(cocktail.image) as string] : [],
     },
   }
 }
@@ -215,7 +222,7 @@ export default async function CocktailPage({ params }: PageProps) {
     "@type": "Recipe",
     "name": cocktail.name,
     "description": cocktail.description,
-    "image": cocktail.image || "https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/images-logo-webp/public",
+    "image": sanityOgUrl(cocktail.image) || "https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/images-logo-webp/public",
     "recipeCategory": recipeCategory,
     "recipeCuisine": "British",
     "keywords": keywords,
@@ -226,7 +233,7 @@ export default async function CocktailPage({ params }: PageProps) {
       "name": `Step ${index + 1}`,
       "text": instruction,
       "url": `https://jerrycanspirits.co.uk/field-manual/cocktails/${slug}/#step-${index + 1}`,
-      "image": cocktail.image || "https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/images-logo-webp/public"
+      "image": sanityOgUrl(cocktail.image) || "https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/images-logo-webp/public"
     })) || [],
     "author": {
       "@type": cocktail.author && cocktail.author !== 'Jerry Can Spirits' ? "Person" : "Organization",
