@@ -9,10 +9,12 @@ import BackToTop from '@/components/BackToTop'
 import Breadcrumbs from '@/components/Breadcrumbs'
 import EnlargeableProductImage from '@/components/EnlargeableProductImage'
 import FieldManualPortableText from '@/components/FieldManualPortableText'
+import StructuredData from '@/components/StructuredData'
 
 // Types for ingredient data
 interface Ingredient {
   _id: string
+  _createdAt: string
   name: string
   slug: { current: string }
   category: 'spirits' | 'liqueurs' | 'creme-liqueurs' | 'anise-herbal' | 'aromatics' | 'wine' | 'fortified' | 'bitters' | 'mixers' | 'fresh' | 'garnishes'
@@ -141,8 +143,25 @@ export default async function IngredientDetailPage({ params }: { params: Promise
 
   const videoId = ingredient.videoUrl ? getYouTubeVideoId(ingredient.videoUrl) : null
 
+  const articleSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: `${ingredient.name} — Field Manual`,
+    description: ingredient.description,
+    image: ingredient.image ? urlFor(ingredient.image).url() : undefined,
+    datePublished: ingredient._createdAt,
+    author: { '@type': 'Organization', name: 'Jerry Can Spirits', url: 'https://jerrycanspirits.co.uk' },
+    publisher: {
+      '@type': 'Organization',
+      name: 'Jerry Can Spirits',
+      logo: { '@type': 'ImageObject', url: 'https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/images-logo-webp/public' },
+    },
+    mainEntityOfPage: { '@type': 'WebPage', '@id': `https://jerrycanspirits.co.uk/field-manual/ingredients/${slug}/` },
+  }
+
   return (
     <main className="min-h-screen py-20">
+      <StructuredData data={articleSchema} />
       {/* Breadcrumb */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
         <Breadcrumbs
