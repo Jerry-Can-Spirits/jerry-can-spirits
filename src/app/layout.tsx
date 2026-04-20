@@ -23,6 +23,7 @@ import FacebookPixel, { PixelPageView } from "@/components/FacebookPixel";
 import GoogleTag from "@/components/GoogleTag";
 import KlaviyoScript from "@/components/KlaviyoScript";
 import MetricoolScript from "@/components/MetricoolScript";
+import AhrefsAnalytics from "@/components/AhrefsAnalytics";
 import SentryReplayConsent from "@/components/SentryReplayConsent";
 
 const inter = Inter({
@@ -162,6 +163,7 @@ export default function RootLayout({
         <GoogleTag />
         <KlaviyoScript />
         <MetricoolScript />
+        <AhrefsAnalytics />
         <SentryReplayConsent />
 
         <CartProvider>
