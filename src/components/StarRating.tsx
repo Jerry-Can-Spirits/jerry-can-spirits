@@ -61,7 +61,7 @@ export default function StarRating({ slug, className = '' }: StarRatingProps) {
     if (!turnstileContainerRef.current || widgetIdRef.current || !window.turnstile) return
     widgetIdRef.current = window.turnstile.render(turnstileContainerRef.current, {
       sitekey: process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ?? '',
-      size: 'invisible',
+      appearance: 'interaction-only',
       theme: 'dark',
       callback: (token: string) => {
         void submitRatingWithToken(pendingRatingRef.current, token)
