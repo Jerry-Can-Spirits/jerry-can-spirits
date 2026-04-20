@@ -31,6 +31,7 @@ export default function Header() {
   const [mobileOpenSections, setMobileOpenSections] = useState<string[]>([])
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null)
   const [isSearchModalOpen, setIsSearchModalOpen] = useState(false)
+  const searchButtonRef = useRef<HTMLButtonElement>(null)
   const { itemCount, openCart } = useCart()
 
   // Use refs for scroll tracking to avoid re-renders
@@ -340,6 +341,7 @@ export default function Header() {
               
               {/* Search */}
               <button
+                ref={searchButtonRef}
                 onClick={() => setIsSearchModalOpen(true)}
                 className="text-parchment-100 hover:text-parchment-50 p-3 transition-all duration-200 hover:scale-110"
                 aria-label="Search"
@@ -410,6 +412,7 @@ export default function Header() {
                   }}
                   className="text-parchment-100 hover:text-parchment-50 p-3 transition-all duration-200"
                   aria-label="Toggle menu"
+                  aria-expanded={isMobileMenuOpen}
                 >
                   {isMobileMenuOpen ? (
                     <XMarkIcon className="w-6 h-6" />
@@ -500,7 +503,13 @@ export default function Header() {
       </header>
 
       {/* Search Modal */}
-      <SearchModal isOpen={isSearchModalOpen} onClose={() => setIsSearchModalOpen(false)} />
+      <SearchModal
+        isOpen={isSearchModalOpen}
+        onClose={() => {
+          setIsSearchModalOpen(false)
+          setTimeout(() => searchButtonRef.current?.focus(), 0)
+        }}
+      />
     </>
   )
 }

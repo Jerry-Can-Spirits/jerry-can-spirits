@@ -132,6 +132,7 @@ export default function IngredientsClient({ ingredients }: IngredientsClientProp
           <div className="space-y-6">
             {/* Search Bar */}
             <div className="relative">
+              <label htmlFor="ingredient-search" className="sr-only">Search ingredients</label>
               <input
                 type="text"
                 id="ingredient-search"
