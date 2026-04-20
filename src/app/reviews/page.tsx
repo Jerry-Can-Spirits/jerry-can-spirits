@@ -15,7 +15,7 @@ const TrustpilotWidget = dynamic(() => import('@/components/TrustpilotWidget'), 
 })
 
 export const metadata: Metadata = {
-  title: "Jerry Can Spirits Reviews | Trustpilot, Google & Yell",
+  title: "Customer Reviews | Trustpilot, Google & Yell",
   description: "Customer reviews of Jerry Can Spirits Expedition Spiced Rum on Trustpilot, Google and Yell. See what people say about our veteran-owned British spiced rum.",
   alternates: {
     canonical: 'https://jerrycanspirits.co.uk/reviews/',

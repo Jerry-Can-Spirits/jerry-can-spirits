@@ -118,7 +118,6 @@ export default function EnlargeableProductImage({ src, alt, productName }: Enlar
                   fill
                   className="object-contain"
                   sizes="(max-width: 768px) 90vw, 512px"
-                  priority
                 />
               </div>
               <p className="text-center text-gold-300 font-semibold mt-4" id="product-image-modal">

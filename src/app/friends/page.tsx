@@ -80,7 +80,7 @@ const partners = [
     name: "Label Apeel Limited",
     location: "Thurmaston, Leicester, United Kingdom",
     description: "Our label manufacturer, based in Thurmaston, Leicester. Label Apeel produce labels across a wide range of industries, working with brands that hold their packaging to an exacting standard. They produce the labels on every bottle of Expedition Spiced. The label is the first thing a customer sees. It has to be right.",
-    website: "https://www.labelapeel.co.uk",
+    website: "https://labelapeel.co.uk",
     speciality: "Label Manufacturing",
     logo: "https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/aa42e11c-95ea-47bc-f066-a0e6d8c4fd00/public",
     featured: true,
