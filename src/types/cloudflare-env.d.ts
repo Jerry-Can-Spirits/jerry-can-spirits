@@ -41,7 +41,9 @@ declare global {
     callback?: (token: string) => void
     'error-callback'?: () => void
     'expired-callback'?: () => void
-    size?: 'normal' | 'compact' | 'invisible' | 'flexible'
+    size?: 'normal' | 'compact' | 'flexible'
+    appearance?: 'always' | 'execute' | 'interaction-only'
+    execution?: 'render' | 'execute'
     theme?: 'light' | 'dark' | 'auto'
     action?: string
   }
