@@ -71,10 +71,10 @@
     "undici": "^7.0.0"
   },
   "browserslist": [
-    "chrome >= 92",
-    "firefox >= 90",
-    "safari >= 15.4",
-    "edge >= 92",
+    "chrome >= 96",
+    "firefox >= 96",
+    "safari >= 15",
+    "edge >= 96",
     "not dead",
     "not IE 11",
     "not op_mini all"
