@@ -58,9 +58,6 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
 
     // Debounce the search
     const timeoutId = setTimeout(async () => {
-      const searchQuery = query.toLowerCase().trim()
-      const searchTokens = searchQuery.split(/\s+/).filter(Boolean)
-
       // Search API
       try {
         const response = await fetch(`/api/search?q=${encodeURIComponent(query)}`)
