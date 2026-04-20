@@ -2,7 +2,7 @@ import xss from 'xss'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import Image from 'next/image'
-import { getProduct, getSmartRecommendations, type ShopifyProduct, type ShopifyMetafield } from '@/lib/shopify'
+import { getProduct, getProducts, getSmartRecommendations, type ShopifyProduct, type ShopifyMetafield } from '@/lib/shopify'
 import ProductVariantSelector from '@/components/ProductVariantSelector'
 import BatchStockIndicator from '@/components/BatchStockIndicator'
 import ProductImageGallery from '@/components/ProductImageGallery'
@@ -97,7 +97,13 @@ function getIngredientsSlug(handle: string): string {
   return handle.replace(/^jerry-can-spirits-/, '')
 }
 
-// Generate metadata for SEO
+export async function generateStaticParams() {
+  const products = await getProducts()
+  return products.map(({ handle }) => ({ handle }))
+}
+
+export const dynamicParams = true
+
 export async function generateMetadata({
   params
 }: {

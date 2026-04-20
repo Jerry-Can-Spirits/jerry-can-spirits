@@ -3,7 +3,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { notFound } from 'next/navigation'
 import { client } from '@/sanity/client'
-import { ingredientBySlugQuery } from '@/sanity/queries'
+import { ingredientBySlugQuery, ingredientsSitemapQuery } from '@/sanity/queries'
 import { urlFor } from '@/sanity/lib/image'
 import BackToTop from '@/components/BackToTop'
 import Breadcrumbs from '@/components/Breadcrumbs'
@@ -98,7 +98,13 @@ async function getIngredient(slug: string): Promise<Ingredient | null> {
   return await client.fetch(ingredientBySlugQuery, { slug })
 }
 
-// Cloudflare Pages edge runtime for dynamic routes
+export async function generateStaticParams() {
+  const ingredients = await client.fetch<{ slug: { current: string } }[]>(ingredientsSitemapQuery)
+  return ingredients.map(({ slug }) => ({ slug: slug.current }))
+}
+
+export const dynamicParams = true
+
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params
   const ingredient = await getIngredient(slug)

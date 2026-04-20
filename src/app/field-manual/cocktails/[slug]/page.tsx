@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import Image from 'next/image'
 import { client } from '@/sanity/client'
-import { cocktailBySlugQuery } from '@/sanity/queries'
+import { cocktailBySlugQuery, cocktailsSitemapQuery } from '@/sanity/queries'
 import BackToTop from '@/components/BackToTop'
 import StructuredData from '@/components/StructuredData'
 import CocktailRecipeDisplay from '@/components/CocktailRecipeDisplay'
@@ -101,7 +101,13 @@ interface PageProps {
   }>
 }
 
-// Cloudflare Pages edge runtime for dynamic routes
+export async function generateStaticParams() {
+  const cocktails = await client.fetch<{ slug: { current: string } }[]>(cocktailsSitemapQuery)
+  return cocktails.map(({ slug }) => ({ slug: slug.current }))
+}
+
+export const dynamicParams = true
+
 // Convert heading to URL-friendly slug for anchor links
 function slugify(text: string): string {
   return text
