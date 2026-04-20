@@ -8,10 +8,12 @@ import { urlFor } from '@/sanity/lib/image'
 import BackToTop from '@/components/BackToTop'
 import Breadcrumbs from '@/components/Breadcrumbs'
 import FieldManualPortableText from '@/components/FieldManualPortableText'
+import StructuredData from '@/components/StructuredData'
 
 // Types for equipment data
 interface Equipment {
   _id: string
+  _createdAt: string
   name: string
   slug: { current: string }
   category: 'shaking' | 'straining' | 'measuring' | 'glassware' | 'tools' | 'garnish'
@@ -128,8 +130,25 @@ export default async function EquipmentDetailPage({ params }: { params: Promise<
 
   const videoId = equipment.videoUrl ? getYouTubeVideoId(equipment.videoUrl) : null
 
+  const articleSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: `${equipment.name} — Field Manual`,
+    description: equipment.description,
+    image: equipment.image ? urlFor(equipment.image).url() : undefined,
+    datePublished: equipment._createdAt,
+    author: { '@type': 'Organization', name: 'Jerry Can Spirits', url: 'https://jerrycanspirits.co.uk' },
+    publisher: {
+      '@type': 'Organization',
+      name: 'Jerry Can Spirits',
+      logo: { '@type': 'ImageObject', url: 'https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/images-logo-webp/public' },
+    },
+    mainEntityOfPage: { '@type': 'WebPage', '@id': `https://jerrycanspirits.co.uk/field-manual/equipment/${slug}/` },
+  }
+
   return (
     <main className="min-h-screen py-20">
+      <StructuredData data={articleSchema} />
       {/* Breadcrumb */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
         <Breadcrumbs

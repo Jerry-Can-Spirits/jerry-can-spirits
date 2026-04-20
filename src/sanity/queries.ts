@@ -140,6 +140,7 @@ export const ingredientsQuery = `*[_type == "ingredient"] | order(category asc, 
 
 export const ingredientBySlugQuery = `*[_type == "ingredient" && slug.current == $slug][0] {
   _id,
+  _createdAt,
   name,
   slug,
   category,
@@ -208,6 +209,7 @@ export const equipmentQuery = `*[_type == "equipment"] | order(category asc, nam
 
 export const equipmentBySlugQuery = `*[_type == "equipment" && slug.current == $slug][0] {
   _id,
+  _createdAt,
   name,
   slug,
   category,
