@@ -59,6 +59,13 @@ export default function cloudflareImageLoader({
     return url.toString()
   }
 
+  // Handle Cloudflare Images CDN URLs - apply flexible variant sizing
+  if (src.includes('imagedelivery.net')) {
+    const cappedWidth = Math.min(width, 1200)
+    const baseUrl = src.replace(/\/[^/]+$/, '')
+    return `${baseUrl}/w=${cappedWidth},q=${quality}`
+  }
+
   // Handle other external images (Shopify, etc.) - pass through unchanged
   if (src.startsWith('http://') || src.startsWith('https://')) {
     return src

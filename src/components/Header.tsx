@@ -396,7 +396,7 @@ export default function Header() {
               {/* Primary CTA */}
               <Link
                 href="/#newsletter-signup"
-                className="hidden sm:block bg-jerry-green-500 hover:bg-jerry-green-400 text-parchment-50 px-6 py-2 rounded-full text-sm font-semibold uppercase tracking-wide transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-105"
+                className="hidden sm:block bg-jerry-green-700 hover:bg-jerry-green-600 text-parchment-50 px-6 py-2 rounded-full text-sm font-semibold uppercase tracking-wide transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-105"
                 onClick={() => trackCTAClick('Join the Expedition')}
               >
                 Join the Expedition
@@ -488,7 +488,7 @@ export default function Header() {
             <div className="pt-4 border-t border-jerry-green-600/20">
               <Link
                 href="/#newsletter-signup"
-                className="block w-full bg-jerry-green-500 hover:bg-jerry-green-400 text-parchment-50 text-center px-6 py-3 rounded-full font-semibold uppercase tracking-wide transition-all duration-200"
+                className="block w-full bg-jerry-green-700 hover:bg-jerry-green-600 text-parchment-50 text-center px-6 py-3 rounded-full font-semibold uppercase tracking-wide transition-all duration-200"
                 onClick={() => {
                   setIsMobileMenuOpen(false)
                   trackCTAClick('Mobile Join the Expedition')
