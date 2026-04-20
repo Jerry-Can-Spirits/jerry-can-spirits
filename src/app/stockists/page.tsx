@@ -64,6 +64,20 @@ const featuredStockists = [
     location: 'Horsley, Gloucestershire',
     schemaType: 'BarOrPub' as const,
   },
+  {
+    name: 'The Bull Inn',
+    address: '32 High St, Newington, Sittingbourne ME9 7JP',
+    streetAddress: '32 High St',
+    addressLocality: 'Newington',
+    postalCode: 'ME9 7JP',
+    description: 'A friendly pub in the heart of Newington village. Grade II listed, with origins dating to the 17th century — the sort of place that has been part of the community for a very long time.',
+    website: 'https://www.facebook.com/thebullpubnewington/',
+    websiteLabel: 'Visit Facebook page',
+    logo: 'https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/302d8530-c831-4540-e297-b32c09ae2c00/public',
+    type: 'Pub',
+    location: 'Newington, Kent',
+    schemaType: 'BarOrPub' as const,
+  },
 ]
 
 const stockistSchema = featuredStockists.map((stockist) => ({
@@ -148,7 +162,7 @@ export default function StockistsPage() {
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-2 text-gold-400 hover:text-gold-300 text-sm font-medium transition-colors"
                   >
-                    Visit website
+                    {stockist.websiteLabel ?? 'Visit website'}
                     <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                     </svg>

@@ -31,6 +31,14 @@ const ALL_STOCKISTS: Stockist[] = [
     lng: -2.2348,
     type: 'bar',
   },
+  {
+    id: 'the-bull-inn-newington',
+    name: 'The Bull Inn',
+    address: '32 High St, Newington, Sittingbourne ME9 7JP',
+    lat: 51.3519,
+    lng: 0.6676,
+    type: 'bar',
+  },
 ]
 
 const UK_CENTER: [number, number] = [54.5, -2.5]
