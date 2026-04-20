@@ -391,6 +391,7 @@ export default function CocktailsClient({ cocktails }: CocktailsClientProps) {
           <div className="space-y-6">
             {/* Search Bar */}
             <div className="relative">
+              <label htmlFor="cocktail-search" className="sr-only">Search cocktails</label>
               <input
                 type="text"
                 id="cocktail-search"

@@ -140,6 +140,7 @@ export default function GuidesClient({ guides }: GuidesClientProps) {
           <div className="space-y-6">
             {/* Search Bar */}
             <div className="relative">
+              <label htmlFor="guide-search" className="sr-only">Search guides</label>
               <input
                 type="text"
                 id="guide-search"

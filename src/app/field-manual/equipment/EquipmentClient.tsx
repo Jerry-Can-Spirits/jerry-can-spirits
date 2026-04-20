@@ -130,6 +130,7 @@ export default function EquipmentClient({ equipment }: EquipmentClientProps) {
           <div className="space-y-6">
             {/* Search Bar */}
             <div className="relative">
+              <label htmlFor="equipment-search" className="sr-only">Search equipment</label>
               <input
                 type="text"
                 id="equipment-search"
