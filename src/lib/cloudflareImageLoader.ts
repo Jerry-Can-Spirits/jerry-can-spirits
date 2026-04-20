@@ -48,19 +48,29 @@ export default function cloudflareImageLoader({
   width,
   quality = 75,
 }: ImageLoaderProps): string {
-  // Handle Sanity CDN images - add width and quality parameters
-  if (src.includes('cdn.sanity.io')) {
-    const url = new URL(src)
-    const cappedWidth = Math.min(width, 1200)
-    url.searchParams.set('w', cappedWidth.toString())
-    url.searchParams.set('q', quality.toString())
-    url.searchParams.set('auto', 'format') // Auto-select best format (WebP/AVIF)
-    url.searchParams.set('fit', 'max') // Never upscale beyond source dimensions
-    return url.toString()
-  }
-
-  // Handle other external images (Shopify, etc.) - pass through unchanged
+  // Handle absolute URLs — check hostname exactly to avoid substring spoofing
   if (src.startsWith('http://') || src.startsWith('https://')) {
+    try {
+      const parsed = new URL(src)
+
+      if (parsed.hostname === 'cdn.sanity.io') {
+        const cappedWidth = Math.min(width, 1200)
+        parsed.searchParams.set('w', cappedWidth.toString())
+        parsed.searchParams.set('q', quality.toString())
+        parsed.searchParams.set('auto', 'format')
+        parsed.searchParams.set('fit', 'max')
+        return parsed.toString()
+      }
+
+      if (parsed.hostname === 'imagedelivery.net') {
+        const cappedWidth = Math.min(width, 1200)
+        const baseUrl = src.replace(/\/[^/]+$/, '')
+        return `${baseUrl}/w=${cappedWidth},q=${quality}`
+      }
+    } catch {
+      // invalid URL — fall through to return src unchanged
+    }
+
     return src
   }
 
