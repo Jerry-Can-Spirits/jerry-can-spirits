@@ -122,7 +122,7 @@ export default function StockistsPage() {
             Stocking Expedition Spiced
           </h2>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {featuredStockists.map((stockist) => (
+            {featuredStockists.map((stockist, index) => (
               <div
                 key={stockist.name}
                 className="bg-jerry-green-800/20 border border-gold-500/20 rounded-xl p-6 hover:border-gold-500/40 transition-all"
@@ -135,6 +135,7 @@ export default function StockistsPage() {
                       fill
                       className="object-contain"
                       sizes="200px"
+                      priority={index === 0}
                     />
                   </div>
                 </div>
