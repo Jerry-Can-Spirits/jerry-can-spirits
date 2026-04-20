@@ -27,6 +27,9 @@ jobs:
       - name: Run type check
         run: npx tsc --noEmit
 
+      - name: Run ESLint
+        run: npx next lint
+
   build:
     name: Build
     runs-on: ubuntu-latest
