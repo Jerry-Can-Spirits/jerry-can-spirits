@@ -4,7 +4,8 @@ import { TRADE_PRODUCTS, type TradeProduct } from '@/lib/trade-products'
 import TradeOrderForm from '@/components/TradeOrderForm'
 
 export const metadata: Metadata = {
-  title: 'Trade Order Portal | Jerry Can Spirits',
+  title: 'Trade Order Portal',
+  description: 'Authorised trade accounts only. Place wholesale orders for Expedition Spiced Rum.',
   robots: { index: false, follow: false },
 }
 
