@@ -3,7 +3,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { notFound } from 'next/navigation'
 import { client } from '@/sanity/client'
-import { guideBySlugQuery, adjacentGuidesQuery } from '@/sanity/queries'
+import { guideBySlugQuery, adjacentGuidesQuery, guidesSitemapQuery } from '@/sanity/queries'
 import BackToTop from '@/components/BackToTop'
 import Breadcrumbs from '@/components/Breadcrumbs'
 import StructuredData from '@/components/StructuredData'
@@ -114,7 +114,13 @@ interface PageProps {
   params: Promise<{ slug: string }>
 }
 
-// Cloudflare Pages edge runtime
+export async function generateStaticParams() {
+  const guides = await client.fetch<{ slug: { current: string } }[]>(guidesSitemapQuery)
+  return guides.map(({ slug }) => ({ slug: slug.current }))
+}
+
+export const dynamicParams = true
+
 const categoryLabels: Record<string, string> = {
   'spirits-education': 'Spirits Education',
   'rum-guides': 'Rum Guides',
