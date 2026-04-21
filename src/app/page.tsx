@@ -44,9 +44,15 @@ export const metadata: Metadata = {
 }
 
 export default function Home() {
+  const HERO_BASE = 'https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/beed84d3-c77d-4ecf-c85f-29719bdea000'
   ReactDOM.preload(
-    'https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/beed84d3-c77d-4ecf-c85f-29719bdea000/w=1200,q=75',
-    { as: 'image', fetchPriority: 'high' }
+    `${HERO_BASE}/w=1200,q=75`,
+    {
+      as: 'image',
+      fetchPriority: 'high',
+      imageSrcSet: [640, 750, 828, 1080, 1200].map(w => `${HERO_BASE}/w=${w},q=75 ${w}w`).join(', '),
+      imageSizes: '(max-width: 768px) 100vw, 50vw',
+    }
   )
 
   // Structured data for SEO
