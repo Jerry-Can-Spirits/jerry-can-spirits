@@ -1,3 +1,4 @@
+import ReactDOM from 'react-dom';
 import HeroSection from "@/components/HeroSection";
 import TrustpilotWidget from "@/components/TrustpilotWidget";
 import HomepageExpeditionMap from "@/components/HomepageExpeditionMap";
@@ -43,6 +44,11 @@ export const metadata: Metadata = {
 }
 
 export default function Home() {
+  ReactDOM.preload(
+    'https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/beed84d3-c77d-4ecf-c85f-29719bdea000/w=1200,q=75',
+    { as: 'image', fetchPriority: 'high' }
+  )
+
   // Structured data for SEO
   const structuredData = [
     // Organization schema
