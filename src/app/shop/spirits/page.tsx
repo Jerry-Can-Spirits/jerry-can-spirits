@@ -52,7 +52,8 @@ export default async function SpiritsPage() {
   let error: string | null = null
 
   try {
-    products = await getProductsByCollection('spirits')
+    const all = await getProductsByCollection('spirits')
+    products = all.filter(p => p.handle !== 'jerry-can-spirits-expedition-pack-spiced-rum-6-bottles')
   } catch (e) {
     error = e instanceof Error ? e.message : 'Unknown error occurred'
     console.error('Shopify fetch error:', e)
