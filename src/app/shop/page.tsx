@@ -2,6 +2,7 @@ import Link from 'next/link'
 import type { Metadata } from 'next'
 import Breadcrumbs from '@/components/Breadcrumbs'
 import { getAllCollections } from '@/lib/shopify'
+import { CATEGORIES } from '@/lib/categories'
 import { baseOpenGraph, OG_IMAGE } from '@/lib/og'
 
 export const dynamic = 'force-dynamic'
@@ -26,17 +27,59 @@ export const metadata: Metadata = {
   },
 }
 
+// Curated display order for the shop hub — virtual SEO pages first (intent-driven),
+// then Shopify collection pages. Bespoke pages (spirits/barware/clothing) are listed
+// explicitly since they have no CATEGORIES entry.
+const CURATED_HANDLES: Array<{ handle: string; title?: string; description?: string }> = [
+  { handle: 'rum-gifts' },
+  { handle: 'spiced-rum' },
+  { handle: 'cocktail-making-kits' },
+  { handle: 'bar-accessories' },
+  { handle: 'gifts-for-him' },
+  { handle: 'gifts-for-her' },
+  { handle: 'rum-glasses' },
+  { handle: 'gift-sets' },
+  { handle: 'bundles' },
+  { handle: 'new-releases' },
+  { handle: 'spirits', title: 'Spirits', description: 'Expedition Spiced Rum. 40% ABV, 700ml, veteran-owned.' },
+  { handle: 'barware', title: 'Barware', description: 'Professional bar tools and glassware for the home bar.' },
+  { handle: 'clothing', title: 'Clothing', description: 'Expedition apparel built for the field.' },
+]
+
+const CURATED_SET = new Set(CURATED_HANDLES.map(c => c.handle))
+
 function titleFromHandle(handle: string): string {
   return handle.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')
 }
 
 export default async function ShopPage() {
-  let collections: { handle: string; title: string }[] = []
+  let shopifyCollections: { handle: string; title: string }[] = []
   try {
-    collections = await getAllCollections()
+    shopifyCollections = await getAllCollections()
   } catch {
-    // fall through to empty state
+    // fall through — curated list still renders
   }
+
+  // Curated sections: pull title/description from CATEGORIES where available
+  const curatedItems = CURATED_HANDLES.map(({ handle, title, description }) => {
+    const cat = CATEGORIES[handle]
+    return {
+      handle,
+      title: cat?.h1 ?? title ?? titleFromHandle(handle),
+      description: cat?.metaDescription ?? description ?? null,
+    }
+  })
+
+  // Any Shopify collections not already in the curated list
+  const uncuratedCollections = shopifyCollections
+    .filter(c => !CURATED_SET.has(c.handle))
+    .map(c => ({
+      handle: c.handle,
+      title: c.title || titleFromHandle(c.handle),
+      description: null as string | null,
+    }))
+
+  const allItems = [...curatedItems, ...uncuratedCollections]
 
   return (
     <main className="min-h-screen py-20">
@@ -54,30 +97,34 @@ export default async function ShopPage() {
           <h1 className="text-4xl sm:text-6xl font-serif font-bold text-white mb-6">
             Browse the Shop
           </h1>
+          <p className="text-parchment-300 text-lg max-w-2xl mx-auto">
+            Find what you are looking for. Each collection is built around a purpose.
+          </p>
         </div>
       </section>
 
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {collections.length === 0 ? (
-          <div className="text-center text-parchment-300">No collections found.</div>
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-            {collections.map((collection) => (
-              <Link
-                key={collection.handle}
-                href={`/shop/${collection.handle}/`}
-                className="group p-6 bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl border border-gold-500/20 hover:border-gold-400/40 transition-all duration-300 hover:scale-105"
-              >
-                <h2 className="text-lg font-serif font-bold text-white group-hover:text-gold-300 transition-colors">
-                  {collection.title || titleFromHandle(collection.handle)}
-                </h2>
-                <span className="text-gold-300 text-sm font-semibold group-hover:translate-x-1 transition-transform inline-block mt-3">
-                  Browse →
-                </span>
-              </Link>
-            ))}
-          </div>
-        )}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+          {allItems.map((item) => (
+            <Link
+              key={item.handle}
+              href={`/shop/${item.handle}/`}
+              className="group p-6 bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl border border-gold-500/20 hover:border-gold-400/40 transition-all duration-300 hover:scale-105"
+            >
+              <h2 className="text-lg font-serif font-bold text-white group-hover:text-gold-300 transition-colors">
+                {item.title}
+              </h2>
+              {item.description && (
+                <p className="text-parchment-400 text-sm mt-2 leading-relaxed line-clamp-2">
+                  {item.description}
+                </p>
+              )}
+              <span className="text-gold-300 text-sm font-semibold group-hover:translate-x-1 transition-transform inline-block mt-4">
+                Browse →
+              </span>
+            </Link>
+          ))}
+        </div>
       </section>
     </main>
   )
