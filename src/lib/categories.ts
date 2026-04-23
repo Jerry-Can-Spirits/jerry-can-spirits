@@ -57,9 +57,9 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
     productHandles: [
       'jerry-can-spirits-premium-gift-pack',
       'stainless-steel-cocktail-shaker',
-      'stainless-steel-jigger-variants',
+      'stainless-steel-jigger',
       'bar-blade-bottle-opener',
-      'jerry-can-spirits-stainless-steel-freezable-stones',
+      'stainless-steel-spirit-stones',
     ],
   },
 
@@ -76,10 +76,10 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
     ],
     productHandles: [
       'stainless-steel-cocktail-shaker',
-      'stainless-steel-jigger-variants',
+      'stainless-steel-jigger',
       'bar-blade-bottle-opener',
-      'natural-slate-coaster-variants',
-      'jerry-can-spirits-stainless-steel-freezable-stones',
+      'natural-slate-coasters-square-or-round',
+      'stainless-steel-spirit-stones',
       'crystal-ice-hiball-42cl',
       'hiball-glass-38cl',
     ],
@@ -99,8 +99,8 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
     productHandles: [
       'jerry-can-spirits-expedition-spiced-rum',
       'jerry-can-spirits-premium-gift-pack',
-      'stainless-steel-jigger-variants',
-      'jerry-can-spirits-stainless-steel-freezable-stones',
+      'stainless-steel-jigger',
+      'stainless-steel-spirit-stones',
       'crystal-ice-hiball-42cl',
     ],
   },
@@ -119,8 +119,8 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
     productHandles: [
       'jerry-can-spirits-expedition-spiced-rum',
       'jerry-can-spirits-premium-gift-pack',
-      'stainless-steel-jigger-variants',
-      'jerry-can-spirits-stainless-steel-freezable-stones',
+      'stainless-steel-jigger',
+      'stainless-steel-spirit-stones',
       'crystal-ice-hiball-42cl',
     ],
   },
@@ -141,7 +141,71 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
       'hiball-glass-38cl',
       'club-ice-tumbler-26cl',
       'hurricane-cocktail-glass-42cl',
+      'contemporary-mixer-glass-31cl',
     ],
+  },
+
+  'hip-flasks': {
+    h1: 'Hip Flasks UK',
+    metaTitle: 'Hip Flasks UK | Stainless Steel Hip Flask | Jerry Can Spirits®',
+    metaDescription:
+      'Stainless steel hip flasks from Jerry Can Spirits. Built for the field. A proper flask that holds your drink, seals properly, and survives being carried.',
+    introBody: [
+      'A hip flask should do one thing without failing. Hold your drink, seal properly, and survive being in a jacket pocket.',
+      'The flasks here are stainless steel. No chrome plating to flake. No lining to crack. Built to the same standard as everything else we stock.',
+      'Fill it with Expedition Spiced Rum. Put it in your pocket. That is the idea.',
+      'Veteran-owned. No shortcuts.',
+    ],
+    productHandles: ['stainless-steel-hip-flask-500ml'],
+  },
+
+  'ice-chilling': {
+    h1: 'Ice and Chilling',
+    metaTitle: 'Ice and Chilling | Spirit Stones and Chilling Accessories | Jerry Can Spirits®',
+    metaDescription:
+      'Stainless steel spirit stones and chilling accessories. Keep your drink cold without diluting it. From Jerry Can Spirits.',
+    introBody: [
+      'Ice dilutes. That is not always what you want.',
+      'Spirit stones chill your drink without adding water. Stainless steel, reusable, and chilled in the freezer. The temperature drops. The flavour stays.',
+      'For Expedition Spiced Rum sipped slowly, this is the right way to serve it.',
+      'This range will grow. More chilling and serving accessories to follow.',
+    ],
+    productHandles: ['stainless-steel-spirit-stones'],
+  },
+
+  'cocktail-glasses-glassware': {
+    h1: 'Cocktail Glasses UK',
+    metaTitle: 'Cocktail Glasses UK | Highballs, Tumblers and More | Jerry Can Spirits®',
+    metaDescription:
+      'Cocktail glasses for the home bar. Highballs, tumblers, hurricane glasses and mixer glasses. The right vessel makes a difference.',
+    introBody: [
+      'The right glass changes how a drink behaves. Not as a rule for its own sake. Shape affects temperature, dilution, and how the aroma reaches you.',
+      'A highball holds carbonation better. A tumbler lets a spirit open up. A hurricane glass is built for layered cocktails. Each one has a reason.',
+      'The glassware here is selected for the home bar. Nothing decorative. Everything functional.',
+      'Works with rum, whisky, gin, or whatever you are pouring. The Field Manual has the recipes.',
+    ],
+    productHandles: [
+      'crystal-ice-hiball-42cl',
+      'hiball-glass-38cl',
+      'club-ice-tumbler-26cl',
+      'contemporary-mixer-glass-31cl',
+      'hurricane-cocktail-glass-42cl',
+      'original-handled-drinking-jam-jar-46cl',
+    ],
+  },
+
+  'cocktail-shakers': {
+    h1: 'Cocktail Shakers UK',
+    metaTitle: 'Cocktail Shakers UK | Stainless Steel Cocktail Shaker | Jerry Can Spirits®',
+    metaDescription:
+      'Stainless steel cocktail shakers for the home bar. Seals properly, chills properly, built to last. From Jerry Can Spirits.',
+    introBody: [
+      'A cocktail shaker has one job. Seal properly, chill the drink, and not leak when you turn it upside down.',
+      'The shaker here is stainless steel. No plastic seals to split. No chrome finish to peel. Built for regular use.',
+      'Pair it with Expedition Spiced Rum and the Field Manual recipes. Storm and Spice. Dark and Stormy. A Rum Old Fashioned. Everything you need to make a proper drink at home.',
+      'Veteran-owned. No shortcuts.',
+    ],
+    productHandles: ['stainless-steel-cocktail-shaker'],
   },
 
   // ── Shopify collection-based pages (migrated from inline COLLECTION_CONTENT) ──
