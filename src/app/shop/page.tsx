@@ -1,11 +1,10 @@
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import Breadcrumbs from '@/components/Breadcrumbs'
-import { getAllCollections } from '@/lib/shopify'
 import { CATEGORIES } from '@/lib/categories'
 import { baseOpenGraph, OG_IMAGE } from '@/lib/og'
 
-export const dynamic = 'force-dynamic'
+export const dynamic = 'force-static'
 
 export const metadata: Metadata = {
   title: 'Shop',
@@ -46,20 +45,11 @@ const CURATED_HANDLES: Array<{ handle: string; title?: string; description?: str
   { handle: 'clothing', title: 'Clothing', description: 'Expedition apparel built for the field.' },
 ]
 
-const CURATED_SET = new Set(CURATED_HANDLES.map(c => c.handle))
-
 function titleFromHandle(handle: string): string {
   return handle.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')
 }
 
-export default async function ShopPage() {
-  let shopifyCollections: { handle: string; title: string }[] = []
-  try {
-    shopifyCollections = await getAllCollections()
-  } catch {
-    // fall through — curated list still renders
-  }
-
+export default function ShopPage() {
   // Curated sections: pull title/description from CATEGORIES where available
   const curatedItems = CURATED_HANDLES.map(({ handle, title, description }) => {
     const cat = CATEGORIES[handle]
@@ -70,16 +60,7 @@ export default async function ShopPage() {
     }
   })
 
-  // Any Shopify collections not already in the curated list
-  const uncuratedCollections = shopifyCollections
-    .filter(c => !CURATED_SET.has(c.handle))
-    .map(c => ({
-      handle: c.handle,
-      title: c.title || titleFromHandle(c.handle),
-      description: null as string | null,
-    }))
-
-  const allItems = [...curatedItems, ...uncuratedCollections]
+  const allItems = curatedItems
 
   return (
     <main className="min-h-screen py-20">

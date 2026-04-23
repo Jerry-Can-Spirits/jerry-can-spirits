@@ -26,7 +26,7 @@ export default function Footer() {
     }
   }
 
-  // Footer link sections — grouped for scannability (Miller's Law)
+  // Footer link sections grouped for scannability (Miller's Law)
   const quickLinkGroups = [
     {
       label: 'The Brand',
@@ -42,13 +42,15 @@ export default function Footer() {
     {
       label: 'Shop',
       links: [
-        { name: 'Shop', href: '/shop' },
+        { name: 'Expedition Spiced Rum', href: '/shop/spiced-rum' },
         { name: 'Rum Gifts', href: '/shop/rum-gifts' },
         { name: 'Rum Gifts for Him', href: '/shop/gifts-for-him' },
         { name: 'Rum Gifts for Her', href: '/shop/gifts-for-her' },
-        { name: 'British Spiced Rum', href: '/shop/spiced-rum' },
         { name: 'Cocktail Making Kits', href: '/shop/cocktail-making-kits' },
         { name: 'Bar Accessories', href: '/shop/bar-accessories' },
+        { name: 'Rum Glasses', href: '/shop/rum-glasses' },
+        { name: 'Clothing', href: '/shop/clothing' },
+        { name: 'Browse All', href: '/shop' },
         { name: 'Reviews', href: '/reviews' },
         { name: 'Stockists', href: '/stockists' },
         { name: 'Trade', href: '/trade' },

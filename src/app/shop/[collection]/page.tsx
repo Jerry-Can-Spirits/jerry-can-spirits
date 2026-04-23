@@ -5,6 +5,7 @@ import type { Metadata } from 'next'
 import Breadcrumbs from '@/components/Breadcrumbs'
 import { OG_IMAGE } from '@/lib/og'
 import { CATEGORIES } from '@/lib/categories'
+import AddToCartButton from '@/components/AddToCartButton'
 
 export const dynamic = 'force-dynamic'
 
@@ -213,57 +214,78 @@ export default async function CollectionPage({
 
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
-          {products.map((product) => (
-            <Link
-              key={product.id}
-              href={`/shop/product/${product.handle}`}
-              className="group bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl border border-gold-500/20 overflow-hidden hover:border-gold-400/40 transition-all duration-300 hover:scale-105"
-            >
-              <div className="relative aspect-square bg-jerry-green-800/20 flex items-center justify-center p-4">
-                {product.images && product.images.length > 0 ? (
-                  <Image
-                    src={product.images[0].url}
-                    alt={product.images[0].altText || product.title}
-                    fill
-                    className="object-contain group-hover:scale-110 transition-transform duration-500"
-                    sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, 25vw"
-                  />
-                ) : (
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <svg
-                      className="w-12 h-12 text-gold-500/30"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
+          {products.map((product) => {
+            const variants = product.variants ?? []
+            const defaultVariant = variants.length === 1 && variants[0].title === 'Default Title'
+              ? variants[0]
+              : null
+            const productUrl = `/shop/product/${product.handle}`
+
+            return (
+              <div
+                key={product.id}
+                className="group bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl border border-gold-500/20 overflow-hidden hover:border-gold-400/40 transition-all duration-300"
+              >
+                <Link href={productUrl} className="block">
+                  <div className="relative aspect-square bg-jerry-green-800/20 flex items-center justify-center p-4">
+                    {product.images && product.images.length > 0 ? (
+                      <Image
+                        src={product.images[0].url}
+                        alt={product.images[0].altText || product.title}
+                        fill
+                        className="object-contain group-hover:scale-110 transition-transform duration-500"
+                        sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, 25vw"
                       />
-                    </svg>
-                  </div>
-                )}
-              </div>
-              <div className="p-3 sm:p-4 lg:p-6 space-y-2 sm:space-y-3">
-                <h2 className="text-base sm:text-lg font-serif font-bold text-white group-hover:text-gold-300 transition-colors line-clamp-2">
-                  {product.title}
-                </h2>
-                <div className="flex items-center justify-between pt-1 sm:pt-2">
-                  <p className="text-lg font-serif font-bold text-gold-400">
-                    {formatPrice(
-                      product.priceRange.minVariantPrice.amount,
-                      product.priceRange.minVariantPrice.currencyCode,
+                    ) : (
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <svg
+                          className="w-12 h-12 text-gold-500/30"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
+                          />
+                        </svg>
+                      </div>
                     )}
-                  </p>
-                  <span className="text-gold-300 text-xs sm:text-sm font-semibold group-hover:translate-x-1 transition-transform">
-                    View →
-                  </span>
+                  </div>
+                  <div className="p-3 sm:p-4 lg:p-6 pb-0 space-y-2">
+                    <h2 className="text-base sm:text-lg font-serif font-bold text-white group-hover:text-gold-300 transition-colors line-clamp-2">
+                      {product.title}
+                    </h2>
+                    <p className="text-lg font-serif font-bold text-gold-400">
+                      {formatPrice(
+                        product.priceRange.minVariantPrice.amount,
+                        product.priceRange.minVariantPrice.currencyCode,
+                      )}
+                    </p>
+                  </div>
+                </Link>
+                <div className="px-3 sm:px-4 lg:px-6 pb-3 sm:pb-4 lg:pb-6 pt-2">
+                  {defaultVariant && defaultVariant.availableForSale ? (
+                    <AddToCartButton
+                      variantId={defaultVariant.id}
+                      productTitle={product.title}
+                      price={defaultVariant.price.amount}
+                      currencyCode={defaultVariant.price.currencyCode}
+                    />
+                  ) : (
+                    <Link
+                      href={productUrl}
+                      className="block w-full mt-1 px-4 py-2 border border-gold-500/40 hover:border-gold-400 text-gold-300 hover:text-gold-200 text-sm font-semibold rounded-lg text-center transition-all duration-200"
+                    >
+                      {variants.length > 1 ? 'View Options' : 'View'}
+                    </Link>
+                  )}
                 </div>
               </div>
-            </Link>
-          ))}
+            )
+          })}
         </div>
       </section>
 
