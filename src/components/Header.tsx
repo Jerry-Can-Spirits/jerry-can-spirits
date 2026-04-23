@@ -63,10 +63,15 @@ export default function Header() {
       name: 'Shop',
       href: '/shop',
       dropdown: [
-        { name: 'Spirits', href: '/shop/spirits', description: 'Expedition Spiced Rum' },
-        { name: 'Barware', href: '/shop/barware', description: 'Bar tools & equipment' },
+        { name: 'Expedition Spiced Rum', href: '/shop/spiced-rum', description: 'Small-batch British rum, real spices' },
+        { name: 'Rum Gifts', href: '/shop/rum-gifts', description: 'Gifts for people who drink properly' },
+        { name: 'Rum Gifts for Him', href: '/shop/gifts-for-him', description: 'Gift ideas for men' },
+        { name: 'Rum Gifts for Her', href: '/shop/gifts-for-her', description: 'Gift ideas for women' },
+        { name: 'Cocktail Making Kits', href: '/shop/cocktail-making-kits', description: 'Bar tools & spiced rum' },
+        { name: 'Bar Accessories', href: '/shop/bar-accessories', description: 'Shakers, jiggers, glassware' },
+        { name: 'Rum Glasses', href: '/shop/rum-glasses', description: 'The right glass makes a difference' },
         { name: 'Clothing', href: '/shop/clothing', description: 'Expedition apparel' },
-        { name: 'Explore All Collections', href: '/shop', description: 'Browse everything' },
+        { name: 'Browse All', href: '/shop', description: 'All collections' },
       ]
     },
     { name: 'Reviews', href: '/reviews' },

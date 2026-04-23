@@ -104,6 +104,26 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
     ],
   },
 
+  'gifts-for-her': {
+    h1: 'Rum Gifts for Her',
+    metaTitle: 'Rum Gifts for Her | Jerry Can Spirits®',
+    metaDescription:
+      'Rum gifts for women who take their drink seriously. Small-batch British spiced rum from a veteran-owned spirits house. Real ingredients, no shortcuts, 5% to forces charities.',
+    introBody: [
+      'The assumption that a rum gift for her should be softer, sweeter, or less serious is wrong. Expedition Spiced Rum does not adjust for the recipient.',
+      'Caribbean rum base, Welsh molasses, Madagascan vanilla, Ceylon cinnamon, ginger, cassia, clove, orange peel, bourbon oak. Pot-distilled at Spirit of Wales Distillery in Newport in 700-bottle batches. The kind of bottle you pick up, look at, and put somewhere visible.',
+      'It is for the woman who drinks properly. Who takes her time. Who would rather have one good bottle than three forgettable ones.',
+      'Veteran-owned. No investors. 5% of every sale to forces charities. Built by people who mean it.',
+    ],
+    productHandles: [
+      'jerry-can-spirits-expedition-spiced-rum',
+      'jerry-can-spirits-premium-gift-pack',
+      'stainless-steel-jigger-variants',
+      'jerry-can-spirits-stainless-steel-freezable-stones',
+      'crystal-ice-hiball-42cl',
+    ],
+  },
+
   'rum-glasses': {
     h1: 'Rum Glasses UK',
     metaTitle: 'Rum Glasses UK | Best Glass for Rum | Jerry Can Spirits®',

@@ -44,6 +44,8 @@ export default function Footer() {
       links: [
         { name: 'Shop', href: '/shop' },
         { name: 'Rum Gifts', href: '/shop/rum-gifts' },
+        { name: 'Rum Gifts for Him', href: '/shop/gifts-for-him' },
+        { name: 'Rum Gifts for Her', href: '/shop/gifts-for-her' },
         { name: 'British Spiced Rum', href: '/shop/spiced-rum' },
         { name: 'Cocktail Making Kits', href: '/shop/cocktail-making-kits' },
         { name: 'Bar Accessories', href: '/shop/bar-accessories' },
@@ -141,54 +143,46 @@ export default function Footer() {
         <div className="max-w-none mx-auto px-8 sm:px-12 lg:px-16 xl:px-20 py-16">
           <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-7 gap-8 lg:gap-16 xl:gap-20 items-start max-w-screen-2xl mx-auto">
             
-            {/* Column 1 - Quick Links */}
-            <div className="space-y-6">
-              <div>
-                <div className="lg:hidden">
-                  <button
-                    onClick={() => toggleSection('quickLinks')}
-                    className="flex items-center justify-between w-full text-left font-serif text-xl font-bold mb-4 text-parchment-100 border-b border-jerry-green-700 pb-2"
-                    style={{ color: '#fefbf5' }}
-                  >
-                    Quick Links
-                    <ChevronDownIcon
-                      className={`w-5 h-5 transition-transform duration-200 ${
-                        openSections.includes('quickLinks') ? 'rotate-180' : ''
-                      }`}
-                    />
-                  </button>
-                </div>
+            {/* Column 1 - Quick Links (each group independently collapsible on mobile) */}
+            <div className="space-y-4">
+              {quickLinkGroups.map((group) => (
+                <div key={group.label}>
+                  <div className="lg:hidden">
+                    <button
+                      onClick={() => toggleSection(group.label)}
+                      className="flex items-center justify-between w-full text-left font-serif text-base font-bold mb-2 text-parchment-100 border-b border-jerry-green-700 pb-2"
+                      style={{ color: '#fefbf5' }}
+                      aria-expanded={openSections.includes(group.label)}
+                    >
+                      {group.label}
+                      <ChevronDownIcon
+                        className={`w-4 h-4 transition-transform duration-200 ${
+                          openSections.includes(group.label) ? 'rotate-180' : ''
+                        }`}
+                      />
+                    </button>
+                  </div>
 
-                <div className="hidden lg:block">
-                  <p className="font-serif text-xl font-bold mb-4 text-parchment-100 border-b border-jerry-green-700 pb-2" style={{ color: '#fefbf5' }}>
-                    Quick Links
-                  </p>
-                </div>
+                  <div className="hidden lg:block">
+                    <p className="text-xs font-semibold uppercase tracking-widest text-parchment-500 mb-2 border-b border-jerry-green-700 pb-2">
+                      {group.label}
+                    </p>
+                  </div>
 
-                <div className={`space-y-5 ${
-                  openSections.includes('quickLinks') || 'hidden lg:block'
-                }`}>
-                  {quickLinkGroups.map((group) => (
-                    <div key={group.label}>
-                      <p className="text-xs font-semibold uppercase tracking-widest text-parchment-500 mb-2">
-                        {group.label}
-                      </p>
-                      <div className="space-y-2">
-                        {group.links.map((link) => (
-                          <Link
-                            key={link.name}
-                            href={link.href}
-                            className="block text-base text-parchment-200 hover:text-parchment-50 transition-all duration-200 hover:translate-x-1"
-                            onClick={() => trackFooterClick('Quick Link', link.name)}
-                          >
-                            {link.name}
-                          </Link>
-                        ))}
-                      </div>
-                    </div>
-                  ))}
+                  <div className={`space-y-2 ${openSections.includes(group.label) ? 'block' : 'hidden lg:block'}`}>
+                    {group.links.map((link) => (
+                      <Link
+                        key={link.name}
+                        href={link.href}
+                        className="block text-base text-parchment-200 hover:text-parchment-50 transition-all duration-200 hover:translate-x-1"
+                        onClick={() => trackFooterClick(group.label, link.name)}
+                      >
+                        {link.name}
+                      </Link>
+                    ))}
+                  </div>
                 </div>
-              </div>
+              ))}
             </div>
 
             {/* Column 2 - Responsible Drinking */}
