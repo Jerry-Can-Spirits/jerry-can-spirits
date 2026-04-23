@@ -43,6 +43,10 @@ export default function Footer() {
       label: 'Shop',
       links: [
         { name: 'Shop', href: '/shop' },
+        { name: 'Rum Gifts', href: '/shop/rum-gifts' },
+        { name: 'British Spiced Rum', href: '/shop/spiced-rum' },
+        { name: 'Cocktail Making Kits', href: '/shop/cocktail-making-kits' },
+        { name: 'Bar Accessories', href: '/shop/bar-accessories' },
         { name: 'Reviews', href: '/reviews' },
         { name: 'Stockists', href: '/stockists' },
         { name: 'Trade', href: '/trade' },
