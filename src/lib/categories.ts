@@ -11,7 +11,7 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
   // ── SEO category pages (handle-based product fetching) ──────────────────
 
   'rum-gifts': {
-    h1: 'Rum Gifts UK',
+    h1: 'Rum Gifts',
     metaTitle: 'Rum Gifts UK | Jerry Can Spirits®',
     metaDescription:
       'Rum gifts for people who actually drink it. Expedition Spiced Rum from a veteran-owned British spirits house. Real ingredients, small batch, built properly.',
@@ -126,7 +126,7 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
   },
 
   'rum-glasses': {
-    h1: 'Rum Glasses UK',
+    h1: 'Rum Glasses',
     metaTitle: 'Rum Glasses UK | Best Glass for Rum | Jerry Can Spirits®',
     metaDescription:
       'The right glass makes a difference. Rum glasses selected for Expedition Spiced Rum. Highballs to tumblers. Shop rum glassware from Jerry Can Spirits.',
@@ -146,7 +146,7 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
   },
 
   'hip-flasks': {
-    h1: 'Hip Flasks UK',
+    h1: 'Hip Flasks',
     metaTitle: 'Hip Flasks UK | Stainless Steel Hip Flask | Jerry Can Spirits®',
     metaDescription:
       'Stainless steel hip flasks from Jerry Can Spirits. Built for the field. A proper flask that holds your drink, seals properly, and survives being carried.',
@@ -174,7 +174,7 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
   },
 
   'cocktail-glasses-glassware': {
-    h1: 'Cocktail Glasses UK',
+    h1: 'Cocktail Glasses',
     metaTitle: 'Cocktail Glasses UK | Highballs, Tumblers and More | Jerry Can Spirits®',
     metaDescription:
       'Cocktail glasses for the home bar. Highballs, tumblers, hurricane glasses and mixer glasses. The right vessel makes a difference.',
@@ -195,7 +195,7 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
   },
 
   'cocktail-shakers': {
-    h1: 'Cocktail Shakers UK',
+    h1: 'Cocktail Shakers',
     metaTitle: 'Cocktail Shakers UK | Stainless Steel Cocktail Shaker | Jerry Can Spirits®',
     metaDescription:
       'Stainless steel cocktail shakers for the home bar. Seals properly, chills properly, built to last. From Jerry Can Spirits.',
