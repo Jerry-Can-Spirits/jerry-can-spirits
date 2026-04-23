@@ -11,7 +11,7 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
   // ── SEO category pages (handle-based product fetching) ──────────────────
 
   'rum-gifts': {
-    h1: 'Rum Gifts UK',
+    h1: 'Rum Gifts',
     metaTitle: 'Rum Gifts UK | Jerry Can Spirits®',
     metaDescription:
       'Rum gifts for people who actually drink it. Expedition Spiced Rum from a veteran-owned British spirits house. Real ingredients, small batch, built properly.',
@@ -20,7 +20,7 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
       'Expedition Spiced Rum is a different kind of gift. Caribbean rum base, Welsh molasses, and a spice blend of Madagascan vanilla, Ceylon cinnamon, ginger, cassia, orange peel, and bourbon oak. Pot-distilled at Spirit of Wales Distillery in Newport in batches of 700 bottles. Real ingredients. Every one of them.',
       'It is built for people who take their drink seriously. The kind of person who notices the difference between something made properly and something made to a price point.',
       'Veteran-owned. No investors. No shortcuts. 5% of every sale goes to forces charities.',
-      'If you are looking for a rum gift that means something — this is it.',
+      'If you are looking for a rum gift that means something. This is it.',
     ],
     productHandles: [
       'jerry-can-spirits-expedition-spiced-rum',
@@ -36,7 +36,7 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
     introBody: [
       'Most spiced rum is made to a formula. Base spirit, artificial flavourings, a label that leans on nostalgia. The result is consistent, inoffensive, and forgettable.',
       'Expedition Spiced Rum is built differently. Caribbean rum base, Welsh brewery molasses, and a hand-selected spice blend: Madagascan vanilla, Ceylon cinnamon, ginger root, cassia bark, clove, orange peel, and bourbon oak. No artificial flavourings. Nothing that does not belong there.',
-      'It is pot-distilled in Newport, South Wales by Spirit of Wales Distillery — 700 bottles per batch. When a batch is gone, that run is finished. Each batch has the kind of subtle variation that comes from doing things properly rather than at industrial scale.',
+      'It is pot-distilled in Newport, South Wales by Spirit of Wales Distillery. 700 bottles per batch. When a batch is gone, that run is finished. Each batch has the kind of subtle variation that comes from doing things properly rather than at industrial scale.',
       'We are two Royal Corps of Signals veterans. We built this because we could not find what we wanted on the shelf. 17 years of service between us, and the same standards applied here.',
       '40% ABV. 700ml. Built to be sipped, not mixed and forgotten.',
     ],
@@ -49,36 +49,37 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
     metaDescription:
       'Cocktail making kits built for home bars. Proper bar tools paired with small-batch British spiced rum. Everything you need to make a cocktail worth drinking.',
     introBody: [
-      'A cocktail making kit is only as good as what comes with it. Cheap tools and a bottle of something unmemorable is not a gift — it is a collection of items in a box.',
+      'A cocktail making kit is only as good as what comes with it. Cheap tools and a bottle of something unmemorable is not a gift. It is a collection of items in a box.',
       'The barware here is selected for the same reason we selected every ingredient in Expedition Spiced Rum: because it has to work. Cocktail shakers, strainers, jiggers, mixing glasses. Tools that do their job properly and last.',
-      'Pair them with Expedition Spiced Rum — pot-distilled at Spirit of Wales, real spices, no artificial flavourings — and you have everything needed to make a proper drink at home. Storm and Spice. Dark and Stormy. A Rum Old Fashioned. The Field Manual has the recipes.',
+      'Pair them with Expedition Spiced Rum, pot-distilled at Spirit of Wales with real spices and no artificial flavourings. Everything needed to make a proper drink at home. Storm and Spice. Dark and Stormy. A Rum Old Fashioned. The Field Manual has the recipes.',
       'Good cocktails do not require talent. They require the right equipment and a spirit worth using. Both are here.',
     ],
     productHandles: [
       'jerry-can-spirits-premium-gift-pack',
       'stainless-steel-cocktail-shaker',
-      'stainless-steel-jigger-variants',
+      'stainless-steel-jigger',
       'bar-blade-bottle-opener',
-      'jerry-can-spirits-stainless-steel-freezable-stones',
+      'stainless-steel-spirit-stones',
     ],
   },
 
   'bar-accessories': {
-    h1: 'Bar Accessories UK',
+    h1: 'Bar Accessories',
     metaTitle: 'Bar Accessories UK | Home Bar Tools | Jerry Can Spirits®',
     metaDescription:
-      'Bar accessories for a proper home bar. Cocktail shakers, jiggers, strainers, and glassware — built to last, selected for people who take their drinks seriously.',
+      'Bar accessories for a proper home bar. Cocktail shakers, jiggers, and glassware. Built to last, selected for people who take their drinks seriously.',
     introBody: [
       'A home bar does not need to be complicated. It needs the right tools, used correctly.',
-      'The bar accessories here are chosen for function. A cocktail shaker that seals properly. A jigger that measures accurately. A strainer that does not let ice through when it should not. Glassware that holds a drink the way it was designed to be held.',
-      'These are not decorative. They are equipment. The same logic we apply to Expedition Spiced Rum — built properly, no shortcuts — applies to everything we stock.',
+      'The bar accessories here are chosen for function. A cocktail shaker that seals properly. A jigger that measures accurately. Glassware that holds a drink the way it was designed to be held.',
+      'These are not decorative. They are equipment. The same logic applies here as with Expedition Spiced Rum. Built properly. No shortcuts.',
       'Whether you are building a home bar from scratch or replacing something that has seen better days, start with tools that will not let you down. The Field Manual has everything you need to know about using them properly.',
     ],
     productHandles: [
-      'stainless-steel-jigger-variants',
+      'stainless-steel-cocktail-shaker',
+      'stainless-steel-jigger',
       'bar-blade-bottle-opener',
-      'natural-slate-coaster-variants',
-      'jerry-can-spirits-stainless-steel-freezable-stones',
+      'natural-slate-coasters-square-or-round',
+      'stainless-steel-spirit-stones',
       'crystal-ice-hiball-42cl',
       'hiball-glass-38cl',
     ],
@@ -88,9 +89,9 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
     h1: 'Rum Gifts for Him',
     metaTitle: 'Rum Gifts for Him | Jerry Can Spirits®',
     metaDescription:
-      'Rum gifts for men who know what they like. Small-batch British spiced rum from a veteran-owned spirits house. Real ingredients, no shortcuts, 5% to forces charities.',
+      'Rum gifts for men who drink properly. Small-batch British spiced rum, real ingredients, no shortcuts. 5% of every sale to forces charities.',
     introBody: [
-      'The best gifts for him are the ones he would not buy himself. Not because he does not want them — because he has not got around to it, or because he does not feel justified spending the money on himself.',
+      'The best gifts for him are the ones he would not buy himself. Not because he does not want them. Because he has not got around to it, or because he does not feel justified spending the money on himself.',
       'Expedition Spiced Rum sits in that category. Caribbean rum, Welsh molasses, Madagascan vanilla, Ceylon cinnamon, ginger, cassia, clove, orange peel, bourbon oak. Pot-distilled at Spirit of Wales Distillery in 700-bottle batches. The kind of bottle you pick up, look at, and put somewhere visible.',
       'It is for the man who drinks properly. Who takes his time. Who notices the difference between something built with standards and something built to a margin.',
       'Veteran-owned. No investors. 5% of every sale to forces charities. Built by people who mean it.',
@@ -98,8 +99,8 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
     productHandles: [
       'jerry-can-spirits-expedition-spiced-rum',
       'jerry-can-spirits-premium-gift-pack',
-      'stainless-steel-jigger-variants',
-      'jerry-can-spirits-stainless-steel-freezable-stones',
+      'stainless-steel-jigger',
+      'stainless-steel-spirit-stones',
       'crystal-ice-hiball-42cl',
     ],
   },
@@ -108,7 +109,7 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
     h1: 'Rum Gifts for Her',
     metaTitle: 'Rum Gifts for Her | Jerry Can Spirits®',
     metaDescription:
-      'Rum gifts for women who take their drink seriously. Small-batch British spiced rum from a veteran-owned spirits house. Real ingredients, no shortcuts, 5% to forces charities.',
+      'Rum gifts for women who take their drink seriously. Small-batch British spiced rum, real ingredients, no shortcuts. 5% of every sale to forces charities.',
     introBody: [
       'The assumption that a rum gift for her should be softer, sweeter, or less serious is wrong. Expedition Spiced Rum does not adjust for the recipient.',
       'Caribbean rum base, Welsh molasses, Madagascan vanilla, Ceylon cinnamon, ginger, cassia, clove, orange peel, bourbon oak. Pot-distilled at Spirit of Wales Distillery in Newport in 700-bottle batches. The kind of bottle you pick up, look at, and put somewhere visible.',
@@ -118,20 +119,20 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
     productHandles: [
       'jerry-can-spirits-expedition-spiced-rum',
       'jerry-can-spirits-premium-gift-pack',
-      'stainless-steel-jigger-variants',
-      'jerry-can-spirits-stainless-steel-freezable-stones',
+      'stainless-steel-jigger',
+      'stainless-steel-spirit-stones',
       'crystal-ice-hiball-42cl',
     ],
   },
 
   'rum-glasses': {
-    h1: 'Rum Glasses UK',
+    h1: 'Rum Glasses',
     metaTitle: 'Rum Glasses UK | Best Glass for Rum | Jerry Can Spirits®',
     metaDescription:
-      'The right glass makes a difference. Rum glasses selected for Expedition Spiced Rum — from highballs to tumblers. Shop rum glassware from Jerry Can Spirits.',
+      'The right glass makes a difference. Rum glasses selected for Expedition Spiced Rum. Highballs to tumblers. Shop rum glassware from Jerry Can Spirits.',
     introBody: [
-      'The glass matters. Not in a fussy way — in a practical way. The right shape concentrates the nose, holds temperature correctly, and changes how the liquid moves when you drink it.',
-      'For rum drunk neat or with a single cube, a tulip or nosing glass directs the aroma and slows the sip. For cocktails, the right highball or rocks glass is not decoration — it affects dilution, presentation, and how the drink behaves over time.',
+      'The glass matters. Not in a fussy way. In a practical way. The right shape concentrates the nose, holds temperature correctly, and changes how the liquid moves when you drink it.',
+      'For rum drunk neat or with a single cube, a tulip or nosing glass directs the aroma and slows the sip. For cocktails, the right highball or rocks glass is not decoration. It affects dilution, presentation, and how the drink behaves over time.',
       'Expedition Spiced Rum is designed to be sipped slowly. The vanilla and cinnamon open up as it warms slightly in the glass. The ginger and cassia come through in the middle. The bourbon oak holds through to the finish. None of that happens properly in the wrong vessel.',
       'The glassware here is selected with that in mind. Proper rum glasses, for people who drink rum properly.',
     ],
@@ -140,18 +141,84 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
       'hiball-glass-38cl',
       'club-ice-tumbler-26cl',
       'hurricane-cocktail-glass-42cl',
+      'contemporary-mixer-glass-31cl',
     ],
+  },
+
+  'hip-flasks': {
+    h1: 'Hip Flasks',
+    metaTitle: 'Hip Flasks UK | Stainless Steel Hip Flask | Jerry Can Spirits®',
+    metaDescription:
+      'Stainless steel hip flasks from Jerry Can Spirits. Built for the field. A proper flask that holds your drink, seals properly, and survives being carried.',
+    introBody: [
+      'A hip flask should do one thing without failing. Hold your drink, seal properly, and survive being in a jacket pocket.',
+      'The flasks here are stainless steel. No chrome plating to flake. No lining to crack. Built to the same standard as everything else we stock.',
+      'Fill it with Expedition Spiced Rum. Put it in your pocket. That is the idea.',
+      'Veteran-owned. No shortcuts.',
+    ],
+    productHandles: ['stainless-steel-hip-flask-500ml'],
+  },
+
+  'ice-chilling': {
+    h1: 'Ice and Chilling',
+    metaTitle: 'Ice and Chilling | Spirit Stones and Chilling Accessories | Jerry Can Spirits®',
+    metaDescription:
+      'Stainless steel spirit stones and chilling accessories. Keep your drink cold without diluting it. From Jerry Can Spirits.',
+    introBody: [
+      'Ice dilutes. That is not always what you want.',
+      'Spirit stones chill your drink without adding water. Stainless steel, reusable, and chilled in the freezer. The temperature drops. The flavour stays.',
+      'For Expedition Spiced Rum sipped slowly, this is the right way to serve it.',
+      'This range will grow. More chilling and serving accessories to follow.',
+    ],
+    productHandles: ['stainless-steel-spirit-stones'],
+  },
+
+  'cocktail-glasses-glassware': {
+    h1: 'Cocktail Glasses',
+    metaTitle: 'Cocktail Glasses UK | Highballs, Tumblers and More | Jerry Can Spirits®',
+    metaDescription:
+      'Cocktail glasses for the home bar. Highballs, tumblers, hurricane glasses and mixer glasses. The right vessel makes a difference.',
+    introBody: [
+      'The right glass changes how a drink behaves. Not as a rule for its own sake. Shape affects temperature, dilution, and how the aroma reaches you.',
+      'A highball holds carbonation better. A tumbler lets a spirit open up. A hurricane glass is built for layered cocktails. Each one has a reason.',
+      'The glassware here is selected for the home bar. Nothing decorative. Everything functional.',
+      'Works with rum, whisky, gin, or whatever you are pouring. The Field Manual has the recipes.',
+    ],
+    productHandles: [
+      'crystal-ice-hiball-42cl',
+      'hiball-glass-38cl',
+      'club-ice-tumbler-26cl',
+      'contemporary-mixer-glass-31cl',
+      'hurricane-cocktail-glass-42cl',
+      'original-handled-drinking-jam-jar-46cl',
+    ],
+  },
+
+  'cocktail-shakers': {
+    h1: 'Cocktail Shakers',
+    metaTitle: 'Cocktail Shakers UK | Stainless Steel Cocktail Shaker | Jerry Can Spirits®',
+    metaDescription:
+      'Stainless steel cocktail shakers for the home bar. Seals properly, chills properly, built to last. From Jerry Can Spirits.',
+    introBody: [
+      'A cocktail shaker has one job. Seal properly, chill the drink, and not leak when you turn it upside down.',
+      'The shaker here is stainless steel. No plastic seals to split. No chrome finish to peel. Built for regular use.',
+      'Pair it with Expedition Spiced Rum and the Field Manual recipes. Storm and Spice. Dark and Stormy. A Rum Old Fashioned. Everything you need to make a proper drink at home.',
+      'Veteran-owned. No shortcuts.',
+    ],
+    productHandles: ['stainless-steel-cocktail-shaker'],
   },
 
   // ── Shopify collection-based pages (migrated from inline COLLECTION_CONTENT) ──
 
   bundles: {
     h1: 'Bundles',
-    metaTitle: 'Bundles | Jerry Can Spirits®',
+    metaTitle: 'Expedition Spiced Rum Bundles | Save When You Stock Up | Jerry Can Spirits®',
     metaDescription:
-      'Bundle deals on Jerry Can Spirits rum. Save when you stock up on Expedition Spiced Rum — veteran-owned, small-batch, built properly.',
+      'Stock up on Expedition Spiced Rum and save. Same small-batch British rum, better value. Veteran-owned, pot-distilled in South Wales.',
     introBody: [
-      'Stock up and save. The same Expedition Spiced Rum, better value. Every bottle from the same small batch, pot-distilled in South Wales.',
+      'Stock up and save. The same Expedition Spiced Rum at better value when you order more. Caribbean rum base, Welsh molasses, real spices. Built properly, every batch.',
+      'Every bottle comes from the same small batch, pot-distilled at Spirit of Wales Distillery in Newport. 700 bottles per run. When a batch is gone, it is gone.',
+      'If you drink it regularly, this is how you stay stocked.',
     ],
   },
 
@@ -159,8 +226,12 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
     h1: 'New Releases',
     metaTitle: 'New Releases | Jerry Can Spirits®',
     metaDescription:
-      'New expressions from Jerry Can Spirits. Veteran-owned British spirits house — small-batch, built properly, no shortcuts.',
-    introBody: ['The latest from the spirits house. Every expression built on the same principles as the first.'],
+      'New expressions from Jerry Can Spirits. Veteran-owned British spirits house. Small-batch, built properly, no shortcuts. Every release earns its place.',
+    introBody: [
+      'Every new expression starts from the same place. Real ingredients. No artificial flavourings. Pot-distilled in small batches at Spirit of Wales Distillery.',
+      'Expedition Spiced Rum was the first. What comes next is built on the same principles. Nothing ships until it is right.',
+      'Sign up below to hear about new releases before they go public.',
+    ],
   },
 }
 
@@ -170,7 +241,7 @@ const giftSetsConfig: CategoryConfig = {
   metaDescription:
     'Rum gift sets and experience bundles from Jerry Can Spirits. Veteran-owned, Welsh-distilled. Built for people who appreciate quality.',
   introBody: [
-    'For anyone who holds themselves to a higher standard. Each gift set is built around Expedition Spiced Rum — pot-distilled at Spirit of Wales, real ingredients, no shortcuts.',
+    'For anyone who holds themselves to a higher standard. Each gift set is built around Expedition Spiced Rum. Pot-distilled at Spirit of Wales, real ingredients, no shortcuts.',
   ],
 }
 

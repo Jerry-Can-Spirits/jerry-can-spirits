@@ -162,6 +162,27 @@ const nextConfig: NextConfig = {
         destination: '/#newsletter-signup',
         permanent: true,
       },
+      // Shopify collections superseded by bar-accessories SEO page
+      {
+        source: '/shop/accessories/',
+        destination: '/shop/bar-accessories/',
+        permanent: true,
+      },
+      {
+        source: '/shop/accessories',
+        destination: '/shop/bar-accessories/',
+        permanent: true,
+      },
+      {
+        source: '/shop/bar-measuring-tools/',
+        destination: '/shop/bar-accessories/',
+        permanent: true,
+      },
+      {
+        source: '/shop/bar-measuring-tools',
+        destination: '/shop/bar-accessories/',
+        permanent: true,
+      },
       // Short product URL missing brand prefix — 24 external backlinks point here
       {
         source: '/shop/product/expedition-spiced-rum',

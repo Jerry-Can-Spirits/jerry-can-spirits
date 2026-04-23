@@ -90,6 +90,8 @@ interface ProductEdge {
     description: string;
     priceRange: ShopifyPriceRange;
     images: { edges: ImageEdge[] };
+    variants?: { edges: VariantEdge[] };
+    tags?: string[];
   };
 }
 
@@ -235,6 +237,19 @@ export async function getProductsByCollection(collectionHandle: string): Promise
                   }
                 }
               }
+              variants(first: 3) {
+                edges {
+                  node {
+                    id
+                    title
+                    availableForSale
+                    price {
+                      amount
+                      currencyCode
+                    }
+                  }
+                }
+              }
             }
           }
         }
@@ -261,6 +276,7 @@ export async function getProductsByCollection(collectionHandle: string): Promise
     return data.collection.products.edges.map((edge: ProductEdge) => ({
       ...edge.node,
       images: edge.node.images.edges.map((img: ImageEdge) => img.node),
+      variants: edge.node.variants?.edges.map((v: { node: ShopifyProductVariant }) => v.node) ?? [],
     }));
   } catch (error) {
     console.error('Error fetching collection:', error);
