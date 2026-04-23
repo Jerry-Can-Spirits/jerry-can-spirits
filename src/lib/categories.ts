@@ -56,6 +56,7 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
     ],
     productHandles: [
       'jerry-can-spirits-premium-gift-pack',
+      'stainless-steel-cocktail-shaker',
       'stainless-steel-jigger-variants',
       'bar-blade-bottle-opener',
       'jerry-can-spirits-stainless-steel-freezable-stones',
