@@ -152,3 +152,57 @@ test.describe('Shop Navigation', () => {
     }
   })
 })
+
+test.describe('SEO Category Pages', () => {
+  const categories = [
+    { slug: 'rum-gifts', h1: 'Rum Gifts UK' },
+    { slug: 'spiced-rum', h1: 'British Spiced Rum' },
+    { slug: 'cocktail-making-kits', h1: 'Cocktail Making Kits' },
+    { slug: 'bar-accessories', h1: 'Bar Accessories UK' },
+    { slug: 'gifts-for-him', h1: 'Rum Gifts for Him' },
+    { slug: 'rum-glasses', h1: 'Rum Glasses UK' },
+  ]
+
+  for (const { slug, h1 } of categories) {
+    test(`${slug} page loads with correct H1`, async ({ page }) => {
+      await page.goto(`/shop/${slug}/`)
+      await dismissOverlays(page)
+
+      const heading = page.getByRole('heading', { level: 1 })
+      await expect(heading).toBeVisible()
+      await expect(heading).toHaveText(h1)
+    })
+
+    test(`${slug} page has intro content above the grid`, async ({ page }) => {
+      await page.goto(`/shop/${slug}/`)
+      await dismissOverlays(page)
+
+      const intro = page.locator('p.text-parchment-300').first()
+      await expect(intro).toBeVisible()
+    })
+
+    test(`${slug} page has breadcrumb navigation`, async ({ page }) => {
+      await page.goto(`/shop/${slug}/`)
+      await dismissOverlays(page)
+
+      const shopBreadcrumb = page.locator('a[href="/shop"]')
+      await expect(shopBreadcrumb.first()).toBeVisible()
+    })
+  }
+
+  test('footer contains rum gifts link', async ({ page }) => {
+    await page.goto('/')
+    await dismissOverlays(page)
+
+    const rumGiftsLink = page.locator('a[href="/shop/rum-gifts"]')
+    await expect(rumGiftsLink.first()).toBeVisible()
+  })
+
+  test('footer contains spiced rum link', async ({ page }) => {
+    await page.goto('/')
+    await dismissOverlays(page)
+
+    const spicedRumLink = page.locator('a[href="/shop/spiced-rum"]')
+    await expect(spicedRumLink.first()).toBeVisible()
+  })
+})
