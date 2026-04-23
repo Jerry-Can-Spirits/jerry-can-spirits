@@ -1,57 +1,22 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import { getProductsByCollection, type ShopifyProduct } from '@/lib/shopify'
+import { getProductsByCollection, getProduct, type ShopifyProduct } from '@/lib/shopify'
 import type { Metadata } from 'next'
 import Breadcrumbs from '@/components/Breadcrumbs'
 import { OG_IMAGE } from '@/lib/og'
+import { CATEGORIES } from '@/lib/categories'
 
 export const dynamic = 'force-dynamic'
 
 const BASE_URL = 'https://jerrycanspirits.co.uk'
 
-interface CollectionContent {
-  title: string
-  description: string
-  intro: string
-}
-
-const COLLECTION_CONTENT: Record<string, CollectionContent> = {
-  'gifts-and-experience': {
-    title: 'Gift Sets',
-    description: 'Rum gift sets and experience bundles from Jerry Can Spirits. Veteran-owned, Welsh-distilled. Built for people who appreciate quality.',
-    intro: 'For anyone who holds themselves to a higher standard. Each gift set is built around Expedition Spiced Rum — pot-distilled at Spirit of Wales, real ingredients, no shortcuts.',
-  },
-  'bundles': {
-    title: 'Bundles',
-    description: 'Bundle deals on Jerry Can Spirits rum. Save when you stock up on Expedition Spiced Rum — veteran-owned, small-batch, built properly.',
-    intro: 'Stock up and save. The same Expedition Spiced Rum, better value. Every bottle from the same small batch, pot-distilled in South Wales.',
-  },
-  'new-releases': {
-    title: 'New Releases',
-    description: 'New expressions from Jerry Can Spirits. Veteran-owned British spirits house — small-batch, built properly, no shortcuts.',
-    intro: 'The latest from the spirits house. Every expression built on the same principles as the first.',
-  },
-  'gift-sets': {
-    title: 'Gift Sets',
-    description: 'Rum gift sets and experience bundles from Jerry Can Spirits. Veteran-owned, Welsh-distilled. Built for people who appreciate quality.',
-    intro: 'For anyone who holds themselves to a higher standard. Each gift set is built around Expedition Spiced Rum — pot-distilled at Spirit of Wales, real ingredients, no shortcuts.',
-  },
-}
-
-function getCollectionContent(handle: string): CollectionContent {
-  const known = COLLECTION_CONTENT[handle]
-  if (known) return known
-  const title = handle.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')
-  return {
-    title,
-    description: `Shop ${title} from Jerry Can Spirits. Veteran-owned British spirits, built properly, no shortcuts.`,
-    intro: '',
-  }
-}
-
 function formatPrice(amount: string, currencyCode: string): string {
   const symbols: Record<string, string> = { GBP: '£', USD: '$', EUR: '€' }
   return `${symbols[currencyCode] || currencyCode}${parseFloat(amount).toFixed(2)}`
+}
+
+function slugToTitle(slug: string): string {
+  return slug.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')
 }
 
 export async function generateMetadata({
@@ -60,13 +25,19 @@ export async function generateMetadata({
   params: Promise<{ collection: string }>
 }): Promise<Metadata> {
   const { collection } = await params
-  const { title, description } = getCollectionContent(collection)
+  const category = CATEGORIES[collection]
+
+  const title = category?.metaTitle ?? `${slugToTitle(collection)} | Jerry Can Spirits`
+  const description =
+    category?.metaDescription ??
+    `Shop ${slugToTitle(collection)} from Jerry Can Spirits. Veteran-owned British spirits, built properly, no shortcuts.`
+
   return {
-    title: `${title} | Jerry Can Spirits`,
+    title,
     description,
     alternates: { canonical: `${BASE_URL}/shop/${collection}/` },
     openGraph: {
-      title: `${title} | Jerry Can Spirits®`,
+      title,
       description,
       url: `${BASE_URL}/shop/${collection}/`,
       siteName: 'Jerry Can Spirits®',
@@ -76,7 +47,7 @@ export async function generateMetadata({
     },
     twitter: {
       card: 'summary_large_image' as const,
-      title: `${title} | Jerry Can Spirits®`,
+      title,
       description,
       images: OG_IMAGE,
     },
@@ -89,15 +60,62 @@ export default async function CollectionPage({
   params: Promise<{ collection: string }>
 }) {
   const { collection } = await params
-  const { title, intro } = getCollectionContent(collection)
+  const category = CATEGORIES[collection]
+
+  const h1 = category?.h1 ?? slugToTitle(collection)
+  const introBody = category?.introBody ?? []
 
   let products: ShopifyProduct[] = []
   let error: string | null = null
 
   try {
-    products = await getProductsByCollection(collection)
+    if (category?.productHandles) {
+      const fetched = await Promise.all(category.productHandles.map(h => getProduct(h)))
+      products = fetched.filter((p): p is ShopifyProduct => p !== null)
+    } else {
+      products = await getProductsByCollection(collection)
+    }
   } catch (e) {
     error = e instanceof Error ? e.message : 'Unknown error'
+  }
+
+  const itemListSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: `Jerry Can Spirits — ${h1}`,
+    url: `${BASE_URL}/shop/${collection}/`,
+    numberOfItems: products.length,
+    itemListElement: products.map((p, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      item: {
+        '@type': 'Product',
+        name: p.title,
+        description: p.description,
+        url: `${BASE_URL}/shop/product/${p.handle}`,
+        image: p.images?.[0]?.url,
+        brand: { '@type': 'Brand', name: 'Jerry Can Spirits' },
+        offers: {
+          '@type': 'Offer',
+          price: p.priceRange.minVariantPrice.amount,
+          priceCurrency: p.priceRange.minVariantPrice.currencyCode,
+          availability: p.availableForSale
+            ? 'https://schema.org/InStock'
+            : 'https://schema.org/OutOfStock',
+          url: `${BASE_URL}/shop/product/${p.handle}`,
+        },
+      },
+    })),
+  }
+
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: BASE_URL },
+      { '@type': 'ListItem', position: 2, name: 'Shop', item: `${BASE_URL}/shop/` },
+      { '@type': 'ListItem', position: 3, name: h1, item: `${BASE_URL}/shop/${collection}/` },
+    ],
   }
 
   if (error) {
@@ -110,9 +128,7 @@ export default async function CollectionPage({
                 Connection Error
               </span>
             </div>
-            <h1 className="text-4xl font-serif font-bold text-white">
-              Shopify Connection Failed
-            </h1>
+            <h1 className="text-4xl font-serif font-bold text-white">Shopify Connection Failed</h1>
             <div className="bg-red-900/20 border border-red-500/30 rounded-lg p-6 text-left">
               <p className="text-red-300 font-mono text-sm">{error}</p>
             </div>
@@ -134,14 +150,10 @@ export default async function CollectionPage({
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-2xl mx-auto text-center space-y-6">
             <div className="mb-8">
-              <Breadcrumbs
-                items={[{ label: 'Shop', href: '/shop' }, { label: title }]}
-              />
+              <Breadcrumbs items={[{ label: 'Shop', href: '/shop' }, { label: h1 }]} />
             </div>
-            <h1 className="text-4xl font-serif font-bold text-white">{title}</h1>
-            <p className="text-xl text-parchment-200">
-              Nothing here yet. Check back soon.
-            </p>
+            <h1 className="text-4xl font-serif font-bold text-white">{h1}</h1>
+            <p className="text-xl text-parchment-200">Nothing here yet. Check back soon.</p>
             <Link
               href="/shop/"
               className="inline-block px-8 py-3 bg-gold-500 text-jerry-green-900 font-semibold rounded-lg hover:bg-gold-400 transition-colors"
@@ -154,60 +166,43 @@ export default async function CollectionPage({
     )
   }
 
-  const schema = {
-    '@context': 'https://schema.org',
-    '@type': 'ItemList',
-    name: `Jerry Can Spirits — ${title}`,
-    url: `${BASE_URL}/shop/${collection}/`,
-    numberOfItems: products.length,
-    itemListElement: products.map((p, i) => ({
-      '@type': 'ListItem',
-      position: i + 1,
-      item: {
-        '@type': 'Product',
-        name: p.title,
-        description: p.description,
-        url: `${BASE_URL}/shop/product/${p.handle}`,
-        image: p.images?.[0]?.url,
-        brand: { '@type': 'Brand', name: 'Jerry Can Spirits' },
-        offers: {
-          '@type': 'Offer',
-          price: p.priceRange.minVariantPrice.amount,
-          priceCurrency: p.priceRange.minVariantPrice.currencyCode,
-          availability: 'https://schema.org/InStock',
-          url: `${BASE_URL}/shop/product/${p.handle}`,
-        },
-      },
-    })),
-  }
-
   return (
     <main className="min-h-screen py-20">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
-        <Breadcrumbs
-          items={[{ label: 'Shop', href: '/shop' }, { label: title }]}
-        />
+        <Breadcrumbs items={[{ label: 'Shop', href: '/shop' }, { label: h1 }]} />
       </div>
 
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
-        <div className="text-center mb-12">
+        <div className="text-center mb-8">
           <div className="inline-block px-4 py-2 bg-jerry-green-800/60 backdrop-blur-sm rounded-full border border-gold-500/30 mb-6">
             <span className="text-gold-300 text-sm font-semibold uppercase tracking-widest">
-              {title}
+              {h1}
             </span>
           </div>
-          <h1 className="text-4xl sm:text-6xl font-serif font-bold text-white mb-6">
-            {title}
-          </h1>
-          {intro && (
-            <p className="text-parchment-300 text-lg max-w-2xl mx-auto mb-6">{intro}</p>
-          )}
-          <div className="mt-6 inline-flex items-center gap-2 px-4 py-2 bg-green-800/20 border border-green-500/30 rounded-lg">
+          <h1 className="text-4xl sm:text-6xl font-serif font-bold text-white mb-6">{h1}</h1>
+        </div>
+
+        {introBody.length > 0 && (
+          <div className="max-w-3xl mx-auto mb-8 space-y-4">
+            {introBody.map((para) => (
+              <p key={para.slice(0, 40)} className="text-parchment-300 text-lg leading-relaxed">
+                {para}
+              </p>
+            ))}
+          </div>
+        )}
+
+        <div className="text-center">
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-green-800/20 border border-green-500/30 rounded-lg">
             <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
             <span className="text-green-300 text-sm font-medium">
               {products.length} {products.length === 1 ? 'product' : 'products'} loaded
@@ -259,7 +254,7 @@ export default async function CollectionPage({
                   <p className="text-lg font-serif font-bold text-gold-400">
                     {formatPrice(
                       product.priceRange.minVariantPrice.amount,
-                      product.priceRange.minVariantPrice.currencyCode
+                      product.priceRange.minVariantPrice.currencyCode,
                     )}
                   </p>
                   <span className="text-gold-300 text-xs sm:text-sm font-semibold group-hover:translate-x-1 transition-transform">
@@ -274,9 +269,7 @@ export default async function CollectionPage({
 
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12">
         <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-12 border border-gold-500/20 text-center">
-          <h2 className="text-3xl font-serif font-bold text-white mb-4">
-            Join the Expedition
-          </h2>
+          <h2 className="text-3xl font-serif font-bold text-white mb-4">Join the Expedition</h2>
           <p className="text-parchment-300 mb-6 max-w-2xl mx-auto">
             Sign up for exclusive access to limited releases and new product drops.
           </p>
