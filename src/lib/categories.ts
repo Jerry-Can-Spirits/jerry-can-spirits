@@ -1,5 +1,3 @@
-// src/lib/categories.ts
-
 export type CategoryConfig = {
   h1: string
   metaTitle: string
@@ -126,16 +124,6 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
 
   // ── Shopify collection-based pages (migrated from inline COLLECTION_CONTENT) ──
 
-  'gifts-and-experience': {
-    h1: 'Gift Sets',
-    metaTitle: 'Gift Sets | Jerry Can Spirits®',
-    metaDescription:
-      'Rum gift sets and experience bundles from Jerry Can Spirits. Veteran-owned, Welsh-distilled. Built for people who appreciate quality.',
-    introBody: [
-      'For anyone who holds themselves to a higher standard. Each gift set is built around Expedition Spiced Rum — pot-distilled at Spirit of Wales, real ingredients, no shortcuts.',
-    ],
-  },
-
   bundles: {
     h1: 'Bundles',
     metaTitle: 'Bundles | Jerry Can Spirits®',
@@ -153,14 +141,17 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
       'New expressions from Jerry Can Spirits. Veteran-owned British spirits house — small-batch, built properly, no shortcuts.',
     introBody: ['The latest from the spirits house. Every expression built on the same principles as the first.'],
   },
-
-  'gift-sets': {
-    h1: 'Gift Sets',
-    metaTitle: 'Gift Sets | Jerry Can Spirits®',
-    metaDescription:
-      'Rum gift sets and experience bundles from Jerry Can Spirits. Veteran-owned, Welsh-distilled. Built for people who appreciate quality.',
-    introBody: [
-      'For anyone who holds themselves to a higher standard. Each gift set is built around Expedition Spiced Rum — pot-distilled at Spirit of Wales, real ingredients, no shortcuts.',
-    ],
-  },
 }
+
+const giftSetsConfig: CategoryConfig = {
+  h1: 'Gift Sets',
+  metaTitle: 'Gift Sets | Jerry Can Spirits®',
+  metaDescription:
+    'Rum gift sets and experience bundles from Jerry Can Spirits. Veteran-owned, Welsh-distilled. Built for people who appreciate quality.',
+  introBody: [
+    'For anyone who holds themselves to a higher standard. Each gift set is built around Expedition Spiced Rum — pot-distilled at Spirit of Wales, real ingredients, no shortcuts.',
+  ],
+}
+
+CATEGORIES['gifts-and-experience'] = giftSetsConfig
+CATEGORIES['gift-sets'] = giftSetsConfig
