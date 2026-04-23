@@ -99,7 +99,9 @@ export default async function CollectionPage({
           '@type': 'Offer',
           price: p.priceRange.minVariantPrice.amount,
           priceCurrency: p.priceRange.minVariantPrice.currencyCode,
-          availability: 'https://schema.org/InStock',
+          availability: p.availableForSale
+            ? 'https://schema.org/InStock'
+            : 'https://schema.org/OutOfStock',
           url: `${BASE_URL}/shop/product/${p.handle}`,
         },
       },
@@ -191,8 +193,8 @@ export default async function CollectionPage({
 
         {introBody.length > 0 && (
           <div className="max-w-3xl mx-auto mb-8 space-y-4">
-            {introBody.map((para, i) => (
-              <p key={i} className="text-parchment-300 text-lg leading-relaxed">
+            {introBody.map((para) => (
+              <p key={para.slice(0, 40)} className="text-parchment-300 text-lg leading-relaxed">
                 {para}
               </p>
             ))}
