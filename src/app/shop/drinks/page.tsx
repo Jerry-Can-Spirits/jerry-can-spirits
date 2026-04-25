@@ -189,14 +189,14 @@ export default async function DrinksPageTest() {
               '@type': 'ShippingDeliveryTime',
               handlingTime: {
                 '@type': 'QuantitativeValue',
-                minValue: 2,
-                maxValue: 3,
+                minValue: 1,
+                maxValue: 2,
                 unitCode: 'DAY',
               },
               transitTime: {
                 '@type': 'QuantitativeValue',
                 minValue: 2,
-                maxValue: 5,
+                maxValue: 3,
                 unitCode: 'DAY',
               },
             },

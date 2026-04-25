@@ -355,14 +355,14 @@ export default async function ProductPage({
           '@type': 'ShippingDeliveryTime',
           handlingTime: {
             '@type': 'QuantitativeValue',
-            minValue: 2,
-            maxValue: 3,
+            minValue: 1,
+            maxValue: 2,
             unitCode: 'DAY',
           },
           transitTime: {
             '@type': 'QuantitativeValue',
             minValue: 2,
-            maxValue: 5,
+            maxValue: 3,
             unitCode: 'DAY',
           },
         },
@@ -554,6 +554,9 @@ export default async function ProductPage({
               {/* Trust Indicators */}
               <div className="mt-6 pt-6 border-t border-gold-500/10">
                 <div className="space-y-3 text-center">
+                  <p className="text-sm text-parchment-400 tracking-wide">
+                    Ships for £5.00. Free over £100.
+                  </p>
                   <p className="text-sm text-parchment-400 tracking-wide">
                     Secure checkout · Express payment available
                   </p>
