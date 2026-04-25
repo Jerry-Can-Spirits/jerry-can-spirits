@@ -122,7 +122,7 @@ export default function ShippingReturns() {
                 UK Shipping
               </h2>
               <p className="text-white mb-4 leading-relaxed">
-                We currently ship throughout the United Kingdom. All first-batch orders will be fulfilled in April 2026. Once dispatched, orders typically arrive within 2-3 business days.
+                We currently ship throughout the United Kingdom. Once dispatched, orders typically arrive within 3-5 business days.
               </p>
 
               <h3 className="text-xl font-serif font-semibold text-gold-300 mt-6 mb-3">

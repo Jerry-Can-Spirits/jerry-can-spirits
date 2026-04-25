@@ -4,6 +4,12 @@ import { useState } from 'react'
 import Image from 'next/image'
 import { useCart } from '@/contexts/CartContext'
 import { trackAddToCart } from '@/components/GoogleTag'
+import {
+  createCart,
+  addToCart as shopifyAddToCart,
+  applyDiscount as shopifyApplyDiscount,
+  updateCartAttributes as shopifyUpdateCartAttributes,
+} from '@/lib/shopify'
 import type { ShopifyProductVariant, ShopifyImage } from '@/lib/shopify'
 
 interface ProductVariantSelectorProps {
@@ -35,6 +41,7 @@ export default function ProductVariantSelector({
 }: ProductVariantSelectorProps) {
   const { addToCart, isLoading } = useCart()
   const [quantity, setQuantity] = useState(1)
+  const [isBuyingNow, setIsBuyingNow] = useState(false)
 
   // Find first available variant
   const availableVariants = variants.filter(v => v.availableForSale)
@@ -74,6 +81,34 @@ export default function ProductVariantSelector({
     )
 
     await addToCart(selectedVariantId, quantity)
+  }
+
+  const handleBuyNow = async () => {
+    if (!selectedVariant) return
+    setIsBuyingNow(true)
+    try {
+      let newCart = await createCart()
+
+      const referralCode = localStorage.getItem('jcs_referral_code')
+      if (referralCode) {
+        try {
+          newCart = await shopifyApplyDiscount(newCart.id, [referralCode])
+          newCart = await shopifyUpdateCartAttributes(newCart.id, [
+            { key: '_referral_code', value: referralCode },
+          ])
+        } catch {
+          // Non-critical — proceed without referral code
+        }
+      }
+
+      const updatedCart = await shopifyAddToCart(newCart.id, selectedVariantId, quantity)
+      window.location.href = updatedCart.checkoutUrl
+    } catch (error) {
+      console.error('[BuyNow] Error:', error)
+      alert('Failed to start checkout. Please try again.')
+    } finally {
+      setIsBuyingNow(false)
+    }
   }
 
   if (!selectedVariant) {
@@ -240,6 +275,25 @@ export default function ProductVariantSelector({
             </svg>
             Add to Cart
           </>
+        )}
+      </button>
+
+      {/* Buy it now */}
+      <button
+        onClick={handleBuyNow}
+        disabled={isBuyingNow || isLoading || !selectedVariant.availableForSale}
+        className="w-full px-8 py-4 bg-transparent border border-gold-500/40 text-gold-300 font-semibold rounded-lg hover:border-gold-400 hover:text-gold-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+      >
+        {isBuyingNow ? (
+          <>
+            <svg className="animate-spin h-5 w-5" fill="none" viewBox="0 0 24 24">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+            </svg>
+            Taking you to checkout...
+          </>
+        ) : (
+          'Buy it now'
         )}
       </button>
     </div>
