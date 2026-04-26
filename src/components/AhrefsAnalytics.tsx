@@ -9,7 +9,11 @@ export default function AhrefsAnalytics() {
       strategy="lazyOnload"
       dangerouslySetInnerHTML={{
         __html: `
+          var ahrefsLoaded = false;
+
           function loadAhrefs() {
+            if (ahrefsLoaded) return;
+            ahrefsLoaded = true;
             var s = document.createElement('script');
             s.async = true;
             s.src = 'https://analytics.ahrefs.com/analytics.js';
