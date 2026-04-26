@@ -78,6 +78,20 @@ const featuredStockists = [
     location: 'Newington, Kent',
     schemaType: 'BarOrPub' as const,
   },
+  {
+    name: 'The Galleon Bar',
+    address: '68-70 Abingdon St, Blackpool FY1 1NH',
+    streetAddress: '68-70 Abingdon St',
+    addressLocality: 'Blackpool',
+    postalCode: 'FY1 1NH',
+    description: 'One of Blackpool\'s most distinctive bars. The Galleon has been part of the town since 1954 and remains one of its best-loved.',
+    website: 'https://www.facebook.com/galleonbarblackpool',
+    websiteLabel: 'Visit Facebook page',
+    logo: 'https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/ed028291-4049-4a2d-5620-d35e909a4400/public',
+    type: 'Bar',
+    location: 'Blackpool, Lancashire',
+    schemaType: 'BarOrPub' as const,
+  },
 ]
 
 const stockistSchema = featuredStockists.map((stockist) => ({

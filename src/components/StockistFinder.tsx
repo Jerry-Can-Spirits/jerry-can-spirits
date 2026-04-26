@@ -39,6 +39,14 @@ const ALL_STOCKISTS: Stockist[] = [
     lng: 0.6676,
     type: 'bar',
   },
+  {
+    id: 'the-galleon-bar-blackpool',
+    name: 'The Galleon Bar',
+    address: '68-70 Abingdon St, Blackpool FY1 1NH',
+    lat: 53.8182,
+    lng: -3.0541,
+    type: 'bar',
+  },
 ]
 
 const UK_CENTER: [number, number] = [54.5, -2.5]
