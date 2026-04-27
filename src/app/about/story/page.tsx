@@ -29,8 +29,8 @@ const articleSchema = {
       url: 'https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/images-logo-webp/public',
     },
   },
-  datePublished: '2024-01-01',
-  dateModified: '2025-01-01',
+  datePublished: '2025-07-31',
+  dateModified: '2026-04-06',
   mainEntityOfPage: {
     '@type': 'WebPage',
     '@id': 'https://jerrycanspirits.co.uk/about/story/',

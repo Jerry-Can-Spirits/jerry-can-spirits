@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import Image from 'next/image'
 import { getProduct, getProducts, getSmartRecommendations, type ShopifyProduct, type ShopifyMetafield } from '@/lib/shopify'
+import { GB_SHIPPING_DETAILS } from '@/lib/shippingSchema'
 import ProductVariantSelector from '@/components/ProductVariantSelector'
 import BatchStockIndicator from '@/components/BatchStockIndicator'
 import ProductImageGallery from '@/components/ProductImageGallery'
@@ -340,33 +341,7 @@ export default async function ProductPage({
       itemCondition: 'https://schema.org/NewCondition',
       url: `https://jerrycanspirits.co.uk/shop/product/${handle}/`,
       priceValidUntil: new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString().split('T')[0],
-      shippingDetails: {
-        '@type': 'OfferShippingDetails',
-        shippingDestination: {
-          '@type': 'DefinedRegion',
-          addressCountry: 'GB',
-        },
-        shippingRate: {
-          '@type': 'MonetaryAmount',
-          value: '5.00',
-          currency: 'GBP',
-        },
-        deliveryTime: {
-          '@type': 'ShippingDeliveryTime',
-          handlingTime: {
-            '@type': 'QuantitativeValue',
-            minValue: 1,
-            maxValue: 2,
-            unitCode: 'DAY',
-          },
-          transitTime: {
-            '@type': 'QuantitativeValue',
-            minValue: 2,
-            maxValue: 3,
-            unitCode: 'DAY',
-          },
-        },
-      },
+      shippingDetails: GB_SHIPPING_DETAILS,
       hasMerchantReturnPolicy: {
         '@type': 'MerchantReturnPolicy',
         returnPolicyCategory: 'https://schema.org/MerchantReturnFiniteReturnWindow',

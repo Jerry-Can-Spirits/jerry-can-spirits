@@ -51,7 +51,7 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
     introBody: [
       'A cocktail making kit is only as good as what comes with it. Cheap tools and a bottle of something unmemorable is not a gift. It is a collection of items in a box.',
       'The barware here is selected for the same reason we selected every ingredient in Expedition Spiced Rum: because it has to work. Cocktail shakers, strainers, jiggers, mixing glasses. Tools that do their job properly and last.',
-      'Pair them with Expedition Spiced Rum, pot-distilled at Spirit of Wales with real spices and no artificial flavourings. Everything needed to make a proper drink at home. Storm and Spice. Dark and Stormy. A Rum Old Fashioned. The Field Manual has the recipes.',
+      'Pair them with Expedition Spiced Rum, pot-distilled at Spirit of Wales with real spices and no artificial flavourings. Everything needed to make a proper drink at home. A Rum Old Fashioned. A proper sour. The Field Manual has the recipes.',
       'Good cocktails do not require talent. They require the right equipment and a spirit worth using. Both are here.',
     ],
     productHandles: [
@@ -132,7 +132,7 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
       'The right glass makes a difference. Rum glasses selected for Expedition Spiced Rum. Highballs to tumblers. Shop rum glassware from Jerry Can Spirits.',
     introBody: [
       'The glass matters. Not in a fussy way. In a practical way. The right shape concentrates the nose, holds temperature correctly, and changes how the liquid moves when you drink it.',
-      'For rum drunk neat or with a single cube, a tulip or nosing glass directs the aroma and slows the sip. For cocktails, the right highball or rocks glass is not decoration. It affects dilution, presentation, and how the drink behaves over time.',
+      'For rum drunk neat or with a single cube, a highball or rocks glass is not decoration. It affects dilution, presentation, and how the drink behaves over time.',
       'Expedition Spiced Rum is designed to be sipped slowly. The vanilla and cinnamon open up as it warms slightly in the glass. The ginger and cassia come through in the middle. The bourbon oak holds through to the finish. None of that happens properly in the wrong vessel.',
       'The glassware here is selected with that in mind. Proper rum glasses, for people who drink rum properly.',
     ],
@@ -202,7 +202,7 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
     introBody: [
       'A cocktail shaker has one job. Seal properly, chill the drink, and not leak when you turn it upside down.',
       'The shaker here is stainless steel. No plastic seals to split. No chrome finish to peel. Built for regular use.',
-      'Pair it with Expedition Spiced Rum and the Field Manual recipes. Storm and Spice. Dark and Stormy. A Rum Old Fashioned. Everything you need to make a proper drink at home.',
+      'Pair it with Expedition Spiced Rum and the Field Manual recipes. Everything you need to make a proper drink at home.',
       'Veteran-owned. No shortcuts.',
     ],
     productHandles: ['stainless-steel-cocktail-shaker'],
@@ -232,6 +232,7 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
       'Expedition Spiced Rum was the first. What comes next is built on the same principles. Nothing ships until it is right.',
       'Sign up below to hear about new releases before they go public.',
     ],
+    productHandles: ['jerry-can-spirits-expedition-spiced-rum'],
   },
 }
 

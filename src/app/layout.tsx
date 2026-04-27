@@ -102,7 +102,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="scroll-smooth" suppressHydrationWarning>
+    <html lang="en-GB" className="scroll-smooth" suppressHydrationWarning>
       <head>
         {/* Synchronous JS detection — sets html.js before CSS is applied.
             Scroll reveal animations only hide content when JS is running,

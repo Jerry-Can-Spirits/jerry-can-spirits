@@ -3,6 +3,7 @@ import Image from 'next/image'
 import { getProductsByCollection, type ShopifyProduct } from '@/lib/shopify'
 import type { Metadata } from 'next'
 import Breadcrumbs from '@/components/Breadcrumbs'
+import { GB_SHIPPING_DETAILS } from '@/lib/shippingSchema'
 import StructuredData from '@/components/StructuredData'
 import ScrollReveal from '@/components/ScrollReveal'
 import { OG_IMAGE } from '@/lib/og'
@@ -146,35 +147,9 @@ export default async function SpiritsPage() {
           '@type': 'Offer',
           price: product.priceRange.minVariantPrice.amount,
           priceCurrency: product.priceRange.minVariantPrice.currencyCode,
-          availability: 'https://schema.org/InStock',
+          availability: product.availableForSale ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
           priceValidUntil: new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString().split('T')[0],
-          shippingDetails: {
-            '@type': 'OfferShippingDetails',
-            shippingDestination: {
-              '@type': 'DefinedRegion',
-              addressCountry: 'GB',
-            },
-            shippingRate: {
-              '@type': 'MonetaryAmount',
-              value: '5.00',
-              currency: 'GBP',
-            },
-            deliveryTime: {
-              '@type': 'ShippingDeliveryTime',
-              handlingTime: {
-                '@type': 'QuantitativeValue',
-                minValue: 1,
-                maxValue: 2,
-                unitCode: 'DAY',
-              },
-              transitTime: {
-                '@type': 'QuantitativeValue',
-                minValue: 2,
-                maxValue: 3,
-                unitCode: 'DAY',
-              },
-            },
-          },
+          shippingDetails: GB_SHIPPING_DETAILS,
           hasMerchantReturnPolicy: {
             '@type': 'MerchantReturnPolicy',
             returnPolicyCategory: 'https://schema.org/MerchantReturnFiniteReturnWindow',

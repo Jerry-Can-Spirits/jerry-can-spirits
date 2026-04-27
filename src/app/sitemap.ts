@@ -450,6 +450,30 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'weekly' as const,
       priority: 0.9,
     },
+    {
+      url: `${baseUrl}/shop/new-releases/`,
+      lastModified: currentDate,
+      changeFrequency: 'weekly' as const,
+      priority: 0.8,
+    },
+    {
+      url: `${baseUrl}/shop/bundles/`,
+      lastModified: currentDate,
+      changeFrequency: 'weekly' as const,
+      priority: 0.8,
+    },
+    {
+      url: `${baseUrl}/shop/gift-sets/`,
+      lastModified: currentDate,
+      changeFrequency: 'weekly' as const,
+      priority: 0.8,
+    },
+    {
+      url: `${baseUrl}/shop/gifts-and-experience/`,
+      lastModified: currentDate,
+      changeFrequency: 'weekly' as const,
+      priority: 0.8,
+    },
   ]
 
   return [...routes, ...productUrls, ...cocktailUrls, ...equipmentUrls, ...ingredientUrls, ...guideUrls, ...batchUrls, ...dynamicCollectionUrls]
