@@ -44,11 +44,11 @@
     "xss": "^1.0.15"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^4.20260420.1",
+    "@cloudflare/workers-types": "^4.20260426.1",
     "@eslint/eslintrc": "^3",
     "@next/bundle-analyzer": "^16.2.4",
     "@next/eslint-plugin-next": "^15.5.15",
-    "@opennextjs/cloudflare": "^1.19.2",
+    "@opennextjs/cloudflare": "^1.19.4",
     "@playwright/test": "^1.59.1",
     "@tailwindcss/typography": "^0.5.16",
     "@types/node": "^24.12.2",
@@ -58,11 +58,11 @@
     "eslint": "^9",
     "eslint-config-next": "15.5.15",
     "eslint-plugin-react-hooks": "^5.2.0",
-    "postcss": "^8.5.10",
+    "postcss": "^8.5.12",
     "tailwindcss": "^3.4.19",
     "tsx": "^4.21.0",
     "typescript": "^5",
-    "wrangler": "^4.83.0"
+    "wrangler": "^4.85.0"
   },
   "overrides": {
     "hosted-git-info": "^7.0.0",
