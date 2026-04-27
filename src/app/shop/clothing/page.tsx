@@ -208,7 +208,7 @@ export default async function ClothingPage() {
           '@type': 'Offer',
           price: product.priceRange.minVariantPrice.amount,
           priceCurrency: product.priceRange.minVariantPrice.currencyCode,
-          availability: 'https://schema.org/InStock',
+          availability: product.availableForSale ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
           url: `https://jerrycanspirits.co.uk/shop/product/${product.handle}`,
         },
       },

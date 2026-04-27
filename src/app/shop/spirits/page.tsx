@@ -3,8 +3,10 @@ import Image from 'next/image'
 import { getProductsByCollection, type ShopifyProduct } from '@/lib/shopify'
 import type { Metadata } from 'next'
 import Breadcrumbs from '@/components/Breadcrumbs'
+import { GB_SHIPPING_DETAILS } from '@/lib/shippingSchema'
 import StructuredData from '@/components/StructuredData'
 import ScrollReveal from '@/components/ScrollReveal'
+import AddToCartButton from '@/components/AddToCartButton'
 import { OG_IMAGE } from '@/lib/og'
 
 export const metadata: Metadata = {
@@ -146,35 +148,9 @@ export default async function SpiritsPage() {
           '@type': 'Offer',
           price: product.priceRange.minVariantPrice.amount,
           priceCurrency: product.priceRange.minVariantPrice.currencyCode,
-          availability: 'https://schema.org/InStock',
+          availability: product.availableForSale ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
           priceValidUntil: new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString().split('T')[0],
-          shippingDetails: {
-            '@type': 'OfferShippingDetails',
-            shippingDestination: {
-              '@type': 'DefinedRegion',
-              addressCountry: 'GB',
-            },
-            shippingRate: {
-              '@type': 'MonetaryAmount',
-              value: '5.00',
-              currency: 'GBP',
-            },
-            deliveryTime: {
-              '@type': 'ShippingDeliveryTime',
-              handlingTime: {
-                '@type': 'QuantitativeValue',
-                minValue: 1,
-                maxValue: 2,
-                unitCode: 'DAY',
-              },
-              transitTime: {
-                '@type': 'QuantitativeValue',
-                minValue: 2,
-                maxValue: 3,
-                unitCode: 'DAY',
-              },
-            },
-          },
+          shippingDetails: GB_SHIPPING_DETAILS,
           hasMerchantReturnPolicy: {
             '@type': 'MerchantReturnPolicy',
             returnPolicyCategory: 'https://schema.org/MerchantReturnFiniteReturnWindow',
@@ -206,89 +182,92 @@ export default async function SpiritsPage() {
         <div className="text-center mb-12">
           <div className="inline-block px-4 py-2 bg-jerry-green-800/60 backdrop-blur-sm rounded-full border border-gold-500/30 mb-6">
             <span className="text-gold-300 text-sm font-semibold uppercase tracking-widest">
-              Our Spirits
+              Veteran-Owned
             </span>
           </div>
 
           <h1 className="text-4xl sm:text-6xl font-serif font-bold text-white mb-6">
-            Our Spirits
+            British Craft Spirits
             <br />
-            <span className="text-gold-300">Small-Batch British Craft</span>
+            <span className="text-gold-300">Small-Batch, Built Properly</span>
           </h1>
 
-          <p className="text-xl text-parchment-300 max-w-3xl mx-auto leading-relaxed">
-            Built properly, with real ingredients. Expedition Spiced Rum is where we started — pot-distilled at Spirit of Wales, 700 bottles per batch, gone when they're gone.
-          </p>
-
-          <div className="mt-6 inline-flex items-center gap-2 px-4 py-2 bg-green-800/20 border border-green-500/30 rounded-lg">
-            <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
-            <span className="text-green-300 text-sm font-medium">
-              {products.length} {products.length === 1 ? 'product' : 'products'} loaded from Shopify
-            </span>
+          <div className="max-w-3xl mx-auto space-y-4 text-left">
+            <p className="text-xl text-parchment-300 leading-relaxed">
+              Most spiced rum is made to a formula. Base spirit, artificial flavourings, a label that leans on nostalgia. Consistent, inoffensive, and forgettable.
+            </p>
+            <p className="text-lg text-parchment-400 leading-relaxed">
+              Expedition Spiced Rum is built differently. Caribbean rum base, Welsh brewery molasses, and a hand-selected spice blend: Madagascan vanilla, Ceylon cinnamon, ginger root, cassia bark, clove, orange peel, and bourbon oak. No artificial flavourings. Nothing that does not belong there.
+            </p>
+            <p className="text-lg text-parchment-400 leading-relaxed">
+              Pot-distilled at Spirit of Wales Distillery in Newport, South Wales. 700 bottles per batch. When a batch is gone, that run is finished. Two Royal Corps of Signals veterans. 17 years of service between us. The same standards applied here.
+            </p>
           </div>
+
         </div>
       </section>
 
       {/* Products Grid */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
-          {products.map((product: ShopifyProduct, index: number) => (
-            <ScrollReveal key={product.id} delay={(index % 4) as 0 | 1 | 2 | 3}>
-            <Link
-              href={`/shop/product/${product.handle}`}
-              className="group bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl border border-gold-500/20 overflow-hidden hover:border-gold-400/40 transition-all duration-300 hover:scale-105 block"
-            >
-              {/* Product Image */}
-              <div className="relative aspect-square sm:aspect-[4/3] lg:aspect-square bg-jerry-green-800/20 flex items-center justify-center p-4">
-                {product.images && product.images.length > 0 ? (
-                  <Image
-                    src={product.images[0].url}
-                    alt={product.images[0].altText || product.title}
-                    fill
-                    className="object-contain group-hover:scale-110 transition-transform duration-500"
-                    sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, (max-width: 1200px) 33vw, 25vw"
-                  />
-                ) : (
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <svg
-                      className="w-12 h-12 sm:w-16 sm:h-16 text-gold-500/30"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
+          {products.map((product: ShopifyProduct, index: number) => {
+            const variants = product.variants ?? []
+            const defaultVariant = variants.length === 1 && variants[0].title === 'Default Title'
+              ? variants[0]
+              : null
+            const productUrl = `/shop/product/${product.handle}`
+
+            return (
+              <ScrollReveal key={product.id} delay={(index % 4) as 0 | 1 | 2 | 3}>
+                <div className="group bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl border border-gold-500/20 overflow-hidden hover:border-gold-400/40 transition-all duration-300">
+                  <Link href={productUrl} className="block">
+                    <div className="relative aspect-square bg-jerry-green-800/20 flex items-center justify-center p-4">
+                      {product.images && product.images.length > 0 ? (
+                        <Image
+                          src={product.images[0].url}
+                          alt={product.images[0].altText || product.title}
+                          fill
+                          className="object-contain group-hover:scale-110 transition-transform duration-500"
+                          sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, (max-width: 1200px) 33vw, 25vw"
+                        />
+                      ) : (
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <svg className="w-12 h-12 sm:w-16 sm:h-16 text-gold-500/30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                          </svg>
+                        </div>
+                      )}
+                    </div>
+                    <div className="p-3 sm:p-4 lg:p-6 pb-0 space-y-2">
+                      <h2 className="text-base sm:text-lg font-serif font-bold text-white group-hover:text-gold-300 transition-colors line-clamp-2">
+                        {product.title}
+                      </h2>
+                      <p className="text-lg font-serif font-bold text-gold-400">
+                        {formatPrice(product.priceRange.minVariantPrice.amount, product.priceRange.minVariantPrice.currencyCode)}
+                      </p>
+                    </div>
+                  </Link>
+                  <div className="px-3 sm:px-4 lg:px-6 pb-3 sm:pb-4 lg:pb-6">
+                    {defaultVariant && defaultVariant.availableForSale ? (
+                      <AddToCartButton
+                        variantId={defaultVariant.id}
+                        productTitle={product.title}
+                        price={defaultVariant.price.amount}
+                        currencyCode={defaultVariant.price.currencyCode}
                       />
-                    </svg>
-                  </div>
-                )}
-              </div>
-
-              {/* Product Details */}
-              <div className="p-3 sm:p-4 lg:p-6 space-y-2 sm:space-y-3">
-                <h2 className="text-base sm:text-lg lg:text-xl font-serif font-bold text-white group-hover:text-gold-300 transition-colors line-clamp-2">
-                  {product.title}
-                </h2>
-
-                <div className="flex items-center justify-between pt-1 sm:pt-2">
-                  <p className="text-lg sm:text-xl lg:text-2xl font-serif font-bold text-gold-400">
-                    {formatPrice(
-                      product.priceRange.minVariantPrice.amount,
-                      product.priceRange.minVariantPrice.currencyCode
+                    ) : (
+                      <Link
+                        href={productUrl}
+                        className="block w-full mt-3 px-4 py-2 border border-gold-500/40 hover:border-gold-400 text-gold-300 hover:text-gold-200 text-sm font-semibold rounded-lg text-center transition-all duration-200"
+                      >
+                        {variants.length > 1 ? 'View Options' : 'View'}
+                      </Link>
                     )}
-                  </p>
-
-                  <span className="text-gold-300 text-xs sm:text-sm font-semibold group-hover:translate-x-1 transition-transform">
-                    View →
-                  </span>
+                  </div>
                 </div>
-              </div>
-            </Link>
-            </ScrollReveal>
-          ))}
+              </ScrollReveal>
+            )
+          })}
         </div>
       </section>
 

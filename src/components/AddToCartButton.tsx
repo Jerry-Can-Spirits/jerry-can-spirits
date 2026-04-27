@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { useCart } from '@/contexts/CartContext'
+import { createCart, addToCart as shopifyAddToCart } from '@/lib/shopify'
 
 interface AddToCartButtonProps {
   variantId: string
@@ -13,8 +14,9 @@ interface AddToCartButtonProps {
 export default function AddToCartButton({ variantId, productTitle, price, currencyCode }: AddToCartButtonProps) {
   const { addToCart, isLoading } = useCart()
   const [added, setAdded] = useState(false)
+  const [isBuyingNow, setIsBuyingNow] = useState(false)
 
-  const handleClick = async (e: React.MouseEvent) => {
+  const handleAddToCart = async (e: React.MouseEvent) => {
     e.preventDefault()
     e.stopPropagation()
     await addToCart(variantId)
@@ -29,13 +31,37 @@ export default function AddToCartButton({ variantId, productTitle, price, curren
     setTimeout(() => setAdded(false), 2000)
   }
 
+  const handleBuyNow = async (e: React.MouseEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    setIsBuyingNow(true)
+    try {
+      const cart = await createCart()
+      const updated = await shopifyAddToCart(cart.id, variantId, 1)
+      window.location.href = updated.checkoutUrl
+    } catch {
+      setIsBuyingNow(false)
+    }
+  }
+
+  const busy = isLoading || isBuyingNow
+
   return (
-    <button
-      onClick={handleClick}
-      disabled={isLoading || added}
-      className="w-full mt-3 px-4 py-2 bg-gold-500 hover:bg-gold-400 disabled:opacity-60 text-jerry-green-900 text-sm font-semibold rounded-lg transition-all duration-200"
-    >
-      {added ? 'Added' : isLoading ? 'Adding...' : 'Add to Cart'}
-    </button>
+    <div className="flex flex-col gap-2 mt-3">
+      <button
+        onClick={handleAddToCart}
+        disabled={busy || added}
+        className="w-full px-4 py-2 bg-gold-500 hover:bg-gold-400 disabled:opacity-60 text-jerry-green-900 text-sm font-semibold rounded-lg transition-all duration-200"
+      >
+        {added ? 'Added' : isLoading ? 'Adding...' : 'Add to Cart'}
+      </button>
+      <button
+        onClick={handleBuyNow}
+        disabled={busy}
+        className="w-full px-4 py-2 border border-gold-500/40 hover:border-gold-400 text-gold-300 hover:text-gold-200 text-sm font-semibold rounded-lg transition-all duration-200 disabled:opacity-50"
+      >
+        {isBuyingNow ? 'Going to checkout...' : 'Buy it now'}
+      </button>
+    </div>
   )
 }
