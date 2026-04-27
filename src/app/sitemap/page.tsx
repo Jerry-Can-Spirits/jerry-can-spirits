@@ -88,6 +88,31 @@ const staticPages = [
   { label: 'Media & Press', href: '/contact/media/' },
 ]
 
+const shopPages = [
+  { label: 'Browse All Collections', href: '/shop/' },
+  { label: 'Spirits', href: '/shop/spirits/' },
+  { label: 'Barware', href: '/shop/barware/' },
+  { label: 'Bundles', href: '/shop/bundles/' },
+  { label: 'New Releases', href: '/shop/new-releases/' },
+  { label: 'Gift Sets', href: '/shop/gift-sets/' },
+  { label: 'Drinks', href: '/shop/drinks/' },
+  { label: 'Clothing', href: '/shop/clothing/' },
+]
+
+const shopCategoryPages = [
+  { label: 'Rum Gifts', href: '/shop/rum-gifts/' },
+  { label: 'British Spiced Rum', href: '/shop/spiced-rum/' },
+  { label: 'Cocktail Making Kits', href: '/shop/cocktail-making-kits/' },
+  { label: 'Bar Accessories', href: '/shop/bar-accessories/' },
+  { label: 'Rum Gifts for Him', href: '/shop/gifts-for-him/' },
+  { label: 'Rum Gifts for Her', href: '/shop/gifts-for-her/' },
+  { label: 'Rum Glasses', href: '/shop/rum-glasses/' },
+  { label: 'Hip Flasks', href: '/shop/hip-flasks/' },
+  { label: 'Ice & Chilling', href: '/shop/ice-chilling/' },
+  { label: 'Cocktail Glasses & Glassware', href: '/shop/cocktail-glasses-glassware/' },
+  { label: 'Cocktail Shakers', href: '/shop/cocktail-shakers/' },
+]
+
 const categoryLabels: Record<string, string> = {
   'spirits-education': 'Spirits Education',
   'rum-guides': 'Rum Guides',
@@ -139,6 +164,16 @@ export default async function SitemapPage() {
         {/* Static pages */}
         <SitemapSection title="The Expedition">
           <LinkGrid items={staticPages} />
+        </SitemapSection>
+
+        {/* Shop collections */}
+        <SitemapSection title="Shop — Collections">
+          <LinkGrid items={shopPages} />
+        </SitemapSection>
+
+        {/* Shop SEO category pages */}
+        <SitemapSection title="Shop — Categories">
+          <LinkGrid items={shopCategoryPages} />
         </SitemapSection>
 
         {/* Cocktails */}
