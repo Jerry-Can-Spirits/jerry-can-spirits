@@ -218,9 +218,9 @@ export default async function SpiritsPage() {
             const productUrl = `/shop/product/${product.handle}`
 
             return (
-              <ScrollReveal key={product.id} delay={(index % 4) as 0 | 1 | 2 | 3}>
-                <div className="group bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl border border-gold-500/20 overflow-hidden hover:border-gold-400/40 transition-all duration-300">
-                  <Link href={productUrl} className="block">
+              <ScrollReveal key={product.id} delay={(index % 4) as 0 | 1 | 2 | 3} className="h-full">
+                <div className="group bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl border border-gold-500/20 overflow-hidden hover:border-gold-400/40 transition-all duration-300 flex flex-col h-full">
+                  <Link href={productUrl} className="flex-1 flex flex-col">
                     <div className="relative aspect-square bg-jerry-green-800/20 flex items-center justify-center p-4">
                       {product.images && product.images.length > 0 ? (
                         <Image
@@ -238,7 +238,7 @@ export default async function SpiritsPage() {
                         </div>
                       )}
                     </div>
-                    <div className="p-3 sm:p-4 lg:p-6 pb-0 space-y-2">
+                    <div className="p-3 sm:p-4 lg:p-6 pb-0 space-y-2 flex-1">
                       <h2 className="text-base sm:text-lg font-serif font-bold text-white group-hover:text-gold-300 transition-colors line-clamp-2">
                         {product.title}
                       </h2>
