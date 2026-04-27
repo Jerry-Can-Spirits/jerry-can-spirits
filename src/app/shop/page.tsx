@@ -38,6 +38,7 @@ const CURATED_HANDLES: Array<{ handle: string; title?: string; description?: str
   { handle: 'gifts-for-her' },
   { handle: 'rum-glasses' },
   { handle: 'gift-sets' },
+  { handle: 'gifts-and-experience' },
   { handle: 'hip-flasks' },
   { handle: 'cocktail-glasses-glassware' },
   { handle: 'cocktail-shakers' },
