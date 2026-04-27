@@ -195,12 +195,6 @@ export default async function SpiritsPage() {
             Built properly, with real ingredients. Expedition Spiced Rum is where we started — pot-distilled at Spirit of Wales, 700 bottles per batch, gone when they're gone.
           </p>
 
-          <div className="mt-6 inline-flex items-center gap-2 px-4 py-2 bg-green-800/20 border border-green-500/30 rounded-lg">
-            <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
-            <span className="text-green-300 text-sm font-medium">
-              {products.length} {products.length === 1 ? 'product' : 'products'} loaded from Shopify
-            </span>
-          </div>
         </div>
       </section>
 
