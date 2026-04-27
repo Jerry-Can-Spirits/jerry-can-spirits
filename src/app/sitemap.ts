@@ -98,13 +98,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.9, // High priority for SEO-focused content
   }))
 
-  // Fetch dynamic collection URLs (excludes bespoke collection pages)
-  const BESPOKE_COLLECTIONS = new Set(['spirits', 'barware', 'clothing'])
+  // Fetch dynamic collection URLs (excludes bespoke pages and redirected old slugs)
+  const EXCLUDED_COLLECTIONS = new Set([
+    'spirits', 'barware', 'clothing',
+    'accessories', 'bar-measuring-tools', // 308 → /shop/bar-accessories/
+  ])
   let dynamicCollectionUrls: MetadataRoute.Sitemap = []
   try {
     const allCollections = await getAllCollections()
     dynamicCollectionUrls = allCollections
-      .filter(c => !BESPOKE_COLLECTIONS.has(c.handle))
+      .filter(c => !EXCLUDED_COLLECTIONS.has(c.handle))
       .map(c => ({
         url: `${baseUrl}/shop/${c.handle}/`,
         lastModified: currentDate,
