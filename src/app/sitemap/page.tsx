@@ -95,7 +95,7 @@ const shopPages = [
   { label: 'Bundles', href: '/shop/bundles/' },
   { label: 'New Releases', href: '/shop/new-releases/' },
   { label: 'Gift Sets', href: '/shop/gift-sets/' },
-  { label: 'Drinks', href: '/shop/drinks/' },
+  { label: 'Gifts & Experiences', href: '/shop/gifts-and-experience/' },
   { label: 'Clothing', href: '/shop/clothing/' },
 ]
 

@@ -188,9 +188,9 @@ export default async function BarwarePage() {
             const productUrl = `/shop/product/${product.handle}`
 
             return (
-              <ScrollReveal key={product.id} delay={(index % 4) as 0 | 1 | 2 | 3}>
-                <div className="group bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl border border-gold-500/20 overflow-hidden hover:border-gold-400/40 transition-all duration-300">
-                  <Link href={productUrl} className="block">
+              <ScrollReveal key={product.id} delay={(index % 4) as 0 | 1 | 2 | 3} className="h-full">
+                <div className="group bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl border border-gold-500/20 overflow-hidden hover:border-gold-400/40 transition-all duration-300 flex flex-col h-full">
+                  <Link href={productUrl} className="flex-1 flex flex-col">
                     <div className="relative aspect-square bg-jerry-green-800/20 flex items-center justify-center p-4">
                       {product.images && product.images.length > 0 ? (
                         <Image
@@ -208,7 +208,7 @@ export default async function BarwarePage() {
                         </div>
                       )}
                     </div>
-                    <div className="p-3 sm:p-4 lg:p-6 pb-0 space-y-2">
+                    <div className="p-3 sm:p-4 lg:p-6 pb-0 space-y-2 flex-1">
                       <h2 className="text-base sm:text-lg font-serif font-bold text-white group-hover:text-gold-300 transition-colors line-clamp-2">
                         {product.title}
                       </h2>
@@ -242,69 +242,60 @@ export default async function BarwarePage() {
       </section>
 
       {/* SEO Content */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-20">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-20 space-y-10">
         <ScrollReveal>
-          <div className="bg-gradient-to-br from-gold-500/10 to-gold-600/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20 mb-12">
-            <h2 className="text-2xl font-serif font-bold text-gold-300 mb-6 text-center">
-              The Right Tool for the Job
+          <div className="bg-gradient-to-br from-gold-500/10 to-gold-600/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
+            <h2 className="text-2xl font-serif font-bold text-gold-300 mb-8 text-center">
+              How to Build a Home Bar That Works
             </h2>
             <div className="grid md:grid-cols-3 gap-6">
-              <div className="text-center">
-                <div className="w-16 h-16 bg-gold-400/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <svg className="w-8 h-8 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
-                  </svg>
+              {[
+                { title: 'Start With the Shaker', body: 'The shaker is the foundation. It has one job: seal and chill. A stainless steel cobbler shaker does both without failing. No chrome plating to peel, no plastic seal to split.' },
+                { title: 'Measure Accurately', body: 'A jigger is not optional. Guessing volumes produces inconsistent drinks. Measure in 25ml and 50ml and every cocktail comes out the same way, every time.' },
+                { title: 'Choose the Right Glass', body: 'Shape affects how a drink tastes. A highball for long drinks. A rocks glass for spirits over ice. The right vessel changes how the aroma reaches you and how quickly the drink warms.' },
+              ].map((item) => (
+                <div key={item.title} className="text-center">
+                  <h3 className="text-lg font-semibold text-white mb-2">{item.title}</h3>
+                  <p className="text-parchment-300 text-sm leading-relaxed">{item.body}</p>
                 </div>
-                <h3 className="text-lg font-semibold text-white mb-2">Founder-Tested</h3>
-                <p className="text-parchment-300 text-sm">
-                  Every piece of barware in this shop is something we actually use. If it's here, it passed the test. Nothing that looked good in a box but failed in practice.
-                </p>
-              </div>
-              <div className="text-center">
-                <div className="w-16 h-16 bg-gold-400/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <svg className="w-8 h-8 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
-                  </svg>
-                </div>
-                <h3 className="text-lg font-semibold text-white mb-2">Built to Last</h3>
-                <p className="text-parchment-300 text-sm">
-                  Stainless steel. No chrome plating to flake. No plastic seals to split. These are tools designed to be used regularly, not decorative pieces that end up in the back of a cupboard.
-                </p>
-              </div>
-              <div className="text-center">
-                <div className="w-16 h-16 bg-gold-400/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <svg className="w-8 h-8 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                  </svg>
-                </div>
-                <h3 className="text-lg font-semibold text-white mb-2">Use the Field Manual</h3>
-                <p className="text-parchment-300 text-sm">
-                  Every tool here is referenced in the Field Manual. Cocktail recipes, techniques, and serving guides written for people who drink properly. The equipment and the knowledge, in one place.
-                </p>
-              </div>
+              ))}
             </div>
           </div>
         </ScrollReveal>
 
         <ScrollReveal delay={1}>
-          <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20 mb-12">
-            <h2 className="text-3xl font-serif font-bold text-white mb-6">
-              A Home Bar Does Not Need to Be Complicated
-            </h2>
-            <div className="space-y-4 text-parchment-200 leading-relaxed">
-              <p>
-                It needs the right tools, used correctly. A cocktail shaker that seals properly. A jigger that measures accurately. Glassware that holds a drink the way it was designed to be held.
-              </p>
-              <p>
-                These are not decorative. They are equipment. The same logic applies here as with Expedition Spiced Rum. No shortcuts. Nothing that does not belong there.
-              </p>
-              <p>
-                Whether you are building a home bar from scratch or replacing something that has seen better days, start with tools that will not let you down. The{' '}
-                <Link href="/field-manual/" className="text-gold-400 hover:text-gold-300 underline">
-                  Field Manual
-                </Link>{' '}
-                has everything you need to know about using them properly.
-              </p>
+          <div className="grid lg:grid-cols-2 gap-8">
+            <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
+              <h2 className="text-2xl font-serif font-bold text-white mb-4">
+                What We Stock and Why
+              </h2>
+              <div className="space-y-3 text-parchment-200 leading-relaxed text-sm">
+                <p>
+                  Every piece of barware in this collection is something we use ourselves. The stainless steel shaker seals without leaking. The jigger measures in 25ml and 50ml. The glassware is selected for the drinks you are likely to make with it.
+                </p>
+                <p>
+                  We did not curate a range based on what margins looked like. We stocked what works. If it is here, it passed the test. Nothing that looked good in a box and failed in practice.
+                </p>
+                <p>
+                  The same logic that went into Expedition Spiced Rum went into this range. No shortcuts. Nothing that does not belong there.
+                </p>
+              </div>
+            </div>
+            <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
+              <h2 className="text-2xl font-serif font-bold text-white mb-4">
+                The Field Manual
+              </h2>
+              <div className="space-y-3 text-parchment-200 leading-relaxed text-sm">
+                <p>
+                  Every tool in this collection is referenced in the Field Manual alongside the recipes that make use of it. Cocktail guides written for people who want to make a proper drink at home, not a simplified version of one.
+                </p>
+                <p>
+                  Rum Old Fashioned. Rum Sour. Storm and Spice. Techniques for stirring, shaking, and building correctly. The equipment and the knowledge, in one place.
+                </p>
+                <Link href="/field-manual/" className="inline-block text-gold-400 hover:text-gold-300 font-semibold text-sm transition-colors">
+                  Browse the Field Manual →
+                </Link>
+              </div>
             </div>
           </div>
         </ScrollReveal>

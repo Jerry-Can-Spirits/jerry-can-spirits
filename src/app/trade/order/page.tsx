@@ -5,7 +5,7 @@ import TradeOrderForm from '@/components/TradeOrderForm'
 
 export const metadata: Metadata = {
   title: 'Trade Order Portal',
-  description: 'Authorised trade accounts only. Place wholesale orders for Expedition Spiced Rum.',
+  description: 'Authorised trade accounts only. Place wholesale orders for Expedition Spiced Rum from Jerry Can Spirits. Veteran-owned British spirits, built properly.',
   robots: { index: false, follow: false },
 }
 
