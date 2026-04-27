@@ -98,10 +98,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.9, // High priority for SEO-focused content
   }))
 
-  // Fetch dynamic collection URLs (excludes bespoke pages and redirected old slugs)
+  // Fetch dynamic collection URLs — excludes pages already hardcoded above and redirected slugs.
+  // Any collection in this set that is also a static route would appear twice in the sitemap.
   const EXCLUDED_COLLECTIONS = new Set([
+    // Bespoke collection pages with their own route files
     'spirits', 'barware', 'clothing',
-    'accessories', 'bar-measuring-tools', // 308 → /shop/bar-accessories/
+    // Old slugs that 308 → bar-accessories
+    'accessories', 'bar-measuring-tools',
+    // SEO category pages hardcoded as static routes above
+    'rum-gifts', 'spiced-rum', 'cocktail-making-kits', 'bar-accessories',
+    'gifts-for-him', 'gifts-for-her', 'rum-glasses', 'hip-flasks',
+    'ice-chilling', 'cocktail-glasses-glassware', 'cocktail-shakers',
+    'new-releases', 'bundles', 'gift-sets', 'gifts-and-experience',
   ])
   let dynamicCollectionUrls: MetadataRoute.Sitemap = []
   try {
