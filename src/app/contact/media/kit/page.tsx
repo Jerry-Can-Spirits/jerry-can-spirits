@@ -3,8 +3,8 @@ import Image from 'next/image'
 import { PrintButton } from '@/components/media'
 
 export const metadata: Metadata = {
-  title: 'Media Kit',
-  description: 'Jerry Can Spirits media kit one-pager with brand overview, product specifications, and co-founder bios.',
+  title: { absolute: 'Media Kit | Jerry Can Spirits®' },
+  description: 'Jerry Can Spirits media kit. Brand overview, Expedition Spiced Rum specifications, co-founder bios, and approved brand assets for press and partners.',
   robots: { index: true, follow: true },
 }
 
