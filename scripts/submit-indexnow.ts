@@ -49,21 +49,38 @@ async function getShopifyProductHandles(): Promise<string[]> {
 
 async function getAllUrls(sanity: ReturnType<typeof createClient>): Promise<string[]> {
   const staticUrls = [
+    // Core pages
     '/',
     '/about/story/',
     '/about/team/',
     '/about/team/dan-freeman/',
     '/about/team/rhys-williams/',
     '/ethos/',
+    '/faq/',
+    '/reviews/',
+    '/stockists/',
+    '/trade/',
+    '/sitemap/',
+    '/giving/',
+    '/expedition-log/',
+    '/friends/',
+    '/sustainability/',
+    '/ingredients/',
+    '/ingredients/expedition-spiced-rum/',
+    '/batch/',
+    // Field Manual
     '/field-manual/',
     '/field-manual/cocktails/',
     '/field-manual/equipment/',
     '/field-manual/ingredients/',
+    // Guides
     '/guides/',
+    // Contact
     '/contact/',
     '/contact/enquiries/',
     '/contact/media/',
     '/contact/complaints/',
+    // Legal & policy
     '/privacy-policy/',
     '/terms-of-service/',
     '/cookie-policy/',
@@ -72,17 +89,27 @@ async function getAllUrls(sanity: ReturnType<typeof createClient>): Promise<stri
     '/armed-forces-covenant/',
     '/careers/',
     '/security-policy/',
-    '/faq/',
-    '/reviews/',
-    '/friends/',
-    '/sustainability/',
-    '/ingredients/',
-    '/ingredients/expedition-spiced-rum/',
-    '/batch/',
+    // Shop — collection pages
     '/shop/',
-    '/shop/drinks/',
+    '/shop/spirits/',
     '/shop/barware/',
     '/shop/clothing/',
+    '/shop/new-releases/',
+    '/shop/bundles/',
+    '/shop/gift-sets/',
+    '/shop/gifts-and-experience/',
+    // Shop — SEO category pages
+    '/shop/rum-gifts/',
+    '/shop/spiced-rum/',
+    '/shop/cocktail-making-kits/',
+    '/shop/bar-accessories/',
+    '/shop/gifts-for-him/',
+    '/shop/gifts-for-her/',
+    '/shop/rum-glasses/',
+    '/shop/hip-flasks/',
+    '/shop/ice-chilling/',
+    '/shop/cocktail-glasses-glassware/',
+    '/shop/cocktail-shakers/',
   ].map(path => `${BASE_URL}${path}`)
 
   // Fetch dynamic content in parallel
