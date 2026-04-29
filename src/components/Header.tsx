@@ -41,6 +41,10 @@ export default function Header() {
   const isScrolledRef = useRef(false)
   const showHeaderRef = useRef(true)
 
+  // Keyboard nav refs
+  const triggerRefs = useRef<Map<string, HTMLElement>>(new Map())
+  const dropdownRefs = useRef<Map<string, HTMLDivElement>>(new Map())
+
   // Steering Law: delayed close prevents accidental dismissal during diagonal movement
   const handleNavEnter = (name: string) => {
     if (dropdownCloseTimer.current) {
@@ -193,6 +197,58 @@ export default function Header() {
     }
   }
 
+  const openDropdownAndFocusFirst = (name: string) => {
+    setActiveDropdown(name)
+    setTimeout(() => {
+      const menu = dropdownRefs.current.get(name)
+      menu?.querySelector<HTMLElement>('[role="menuitem"]')?.focus()
+    }, 0)
+  }
+
+  const handleTriggerKeyDown = (e: React.KeyboardEvent, item: NavigationItem) => {
+    if (e.key === 'Escape') {
+      setActiveDropdown(null)
+      return
+    }
+    if (!item.dropdown) return
+    if (e.key === 'ArrowDown') {
+      e.preventDefault()
+      openDropdownAndFocusFirst(item.name)
+    } else if (!item.href && (e.key === 'Enter' || e.key === ' ')) {
+      e.preventDefault()
+      if (activeDropdown === item.name) setActiveDropdown(null)
+      else openDropdownAndFocusFirst(item.name)
+    }
+  }
+
+  const handleDropdownKeyDown = (e: React.KeyboardEvent, itemName: string) => {
+    const menu = dropdownRefs.current.get(itemName)
+    if (!menu) return
+    const items = Array.from(menu.querySelectorAll<HTMLElement>('[role="menuitem"]'))
+    if (items.length === 0) return
+    const currentIndex = items.indexOf(document.activeElement as HTMLElement)
+
+    if (e.key === 'ArrowDown') {
+      e.preventDefault()
+      items[(currentIndex + 1) % items.length]?.focus()
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault()
+      items[(currentIndex - 1 + items.length) % items.length]?.focus()
+    } else if (e.key === 'Home') {
+      e.preventDefault()
+      items[0]?.focus()
+    } else if (e.key === 'End') {
+      e.preventDefault()
+      items[items.length - 1]?.focus()
+    } else if (e.key === 'Escape') {
+      e.preventDefault()
+      setActiveDropdown(null)
+      triggerRefs.current.get(itemName)?.focus()
+    } else if (e.key === 'Tab') {
+      setActiveDropdown(null)
+    }
+  }
+
   return (
     <>
       {/* Subtle Map Texture Background */}
@@ -256,22 +312,17 @@ export default function Header() {
                   {item.href ? (
                     <Link
                       href={item.href}
+                      ref={(el) => {
+                        if (el) triggerRefs.current.set(item.name, el)
+                        else triggerRefs.current.delete(item.name)
+                      }}
                       className={`flex items-center space-x-1 whitespace-nowrap text-parchment-100 hover:text-parchment-50 px-3 py-2 text-sm font-semibold uppercase tracking-wide transition-all duration-200 hover:scale-105 relative focus:outline-none focus:ring-2 focus:ring-gold-400 rounded ${
                         activeDropdown === item.name ? 'text-parchment-50' : ''
                       }`}
                       onClick={() => trackMenuClick(item.name)}
-                      onKeyDown={(e) => {
-                        if (item.dropdown && (e.key === 'ArrowDown' || (e.shiftKey && e.key === 'Tab' === false))) {
-                          e.preventDefault()
-                          setActiveDropdown(item.name)
-                        }
-                        if (e.key === 'Escape') {
-                          setActiveDropdown(null)
-                        }
-                      }}
-                      onFocus={() => item.dropdown && setActiveDropdown(item.name)}
+                      onKeyDown={(e) => handleTriggerKeyDown(e, item)}
                       aria-expanded={item.dropdown ? activeDropdown === item.name : undefined}
-                      aria-haspopup={item.dropdown ? "true" : undefined}
+                      aria-haspopup={item.dropdown ? 'menu' : undefined}
                     >
                       <span className="relative">
                         {item.name}
@@ -283,21 +334,20 @@ export default function Header() {
                     </Link>
                   ) : (
                     <button
+                      ref={(el) => {
+                        if (el) triggerRefs.current.set(item.name, el)
+                        else triggerRefs.current.delete(item.name)
+                      }}
                       className={`flex items-center space-x-1 whitespace-nowrap text-parchment-100 hover:text-parchment-50 px-3 py-2 text-sm font-semibold uppercase tracking-wide transition-all duration-200 cursor-pointer relative focus:outline-none focus:ring-2 focus:ring-gold-400 rounded ${
                         activeDropdown === item.name ? 'text-parchment-50' : ''
                       }`}
-                      onClick={() => setActiveDropdown(activeDropdown === item.name ? null : item.name)}
-                      onKeyDown={(e) => {
-                        if (e.key === 'Enter' || e.key === ' ') {
-                          e.preventDefault()
-                          setActiveDropdown(activeDropdown === item.name ? null : item.name)
-                        }
-                        if (e.key === 'Escape') {
-                          setActiveDropdown(null)
-                        }
+                      onClick={() => {
+                        if (activeDropdown === item.name) setActiveDropdown(null)
+                        else openDropdownAndFocusFirst(item.name)
                       }}
+                      onKeyDown={(e) => handleTriggerKeyDown(e, item)}
                       aria-expanded={activeDropdown === item.name}
-                      aria-haspopup="true"
+                      aria-haspopup="menu"
                     >
                       <span className="relative">
                         {item.name}
@@ -320,13 +370,27 @@ export default function Header() {
                       onMouseEnter={() => handleNavEnter(item.name)}
                       onMouseLeave={() => handleNavLeave()}
                     >
-                      <div className="bg-jerry-green-800/95 backdrop-blur-lg rounded-lg shadow-2xl border border-jerry-green-600/20 p-2">
+                      <div
+                        role="menu"
+                        aria-label={`${item.name} submenu`}
+                        ref={(el) => {
+                          if (el) dropdownRefs.current.set(item.name, el)
+                          else dropdownRefs.current.delete(item.name)
+                        }}
+                        onKeyDown={(e) => handleDropdownKeyDown(e, item.name)}
+                        className="bg-jerry-green-800/95 backdrop-blur-lg rounded-lg shadow-2xl border border-jerry-green-600/20 p-2"
+                      >
                         {item.dropdown.map((subItem) => (
                           <Link
                             key={subItem.name}
                             href={subItem.href}
-                            className="block px-4 py-3 text-parchment-100 hover:text-parchment-50 hover:bg-jerry-green-700/50 rounded-md transition-all duration-200 hover:scale-105"
-                            onClick={() => trackMenuClick(`${item.name} > ${subItem.name}`)}
+                            role="menuitem"
+                            tabIndex={-1}
+                            className="block px-4 py-3 text-parchment-100 hover:text-parchment-50 hover:bg-jerry-green-700/50 rounded-md transition-all duration-200 hover:scale-105 focus:outline-none focus:bg-jerry-green-700/50"
+                            onClick={() => {
+                              setActiveDropdown(null)
+                              trackMenuClick(`${item.name} > ${subItem.name}`)
+                            }}
                           >
                             <div className="font-medium">{subItem.name}</div>
                             {subItem.description && (

@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useCart } from '@/contexts/CartContext'
 import { createCart, addToCart as shopifyAddToCart } from '@/lib/shopify'
+import { appendUtmToCheckout } from '@/lib/utm'
 
 interface AddToCartButtonProps {
   variantId: string
@@ -38,7 +39,7 @@ export default function AddToCartButton({ variantId, productTitle, price, curren
     try {
       const cart = await createCart()
       const updated = await shopifyAddToCart(cart.id, variantId, 1)
-      window.location.href = updated.checkoutUrl
+      window.location.href = appendUtmToCheckout(updated.checkoutUrl)
     } catch {
       setIsBuyingNow(false)
     }
@@ -48,6 +49,9 @@ export default function AddToCartButton({ variantId, productTitle, price, curren
 
   return (
     <div className="flex flex-col gap-2 mt-3">
+      <div aria-live="polite" aria-atomic="true" className="sr-only">
+        {added ? `${productTitle} added to cart` : ''}
+      </div>
       <button
         onClick={handleAddToCart}
         disabled={busy || added}

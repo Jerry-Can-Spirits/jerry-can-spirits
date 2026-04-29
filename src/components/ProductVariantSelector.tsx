@@ -11,6 +11,7 @@ import {
   updateCartAttributes as shopifyUpdateCartAttributes,
 } from '@/lib/shopify'
 import type { ShopifyProductVariant, ShopifyImage } from '@/lib/shopify'
+import { appendUtmToCheckout } from '@/lib/utm'
 
 interface ProductVariantSelectorProps {
   variants: ShopifyProductVariant[]
@@ -102,7 +103,7 @@ export default function ProductVariantSelector({
       }
 
       const updatedCart = await shopifyAddToCart(newCart.id, selectedVariantId, quantity)
-      window.location.href = updatedCart.checkoutUrl
+      window.location.href = appendUtmToCheckout(updatedCart.checkoutUrl)
     } catch (error) {
       console.error('[BuyNow] Error:', error)
       alert('Failed to start checkout. Please try again.')

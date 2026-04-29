@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { useState, useEffect, useRef, useCallback } from 'react'
 import CartUpsell from './CartUpsell'
 import CarbonOffsetToggle from './CarbonOffsetToggle'
+import { appendUtmToCheckout } from '@/lib/utm'
 
 // Helper to format price
 function formatPrice(amount: string, currencyCode: string): string {
@@ -151,13 +152,13 @@ export default function CartDrawer() {
     }
   }, [])
 
-  // Build checkout URL with affiliate tracking if present
+  // Build checkout URL with affiliate tracking and UTM params
   const getCheckoutUrl = () => {
     if (!cart?.checkoutUrl) return '#'
     try {
       const url = new URL(cart.checkoutUrl)
       if (affiliateId) url.searchParams.set('dt_id', affiliateId)
-      return url.toString()
+      return appendUtmToCheckout(url.toString())
     } catch {
       return cart.checkoutUrl
     }
