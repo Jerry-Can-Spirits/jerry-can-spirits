@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { getCloudflareContext } from '@opennextjs/cloudflare';
 import { generateReferralCode, createDiscountCode } from '@/lib/shopify-admin';
+import { isAllowedOrigin } from '@/lib/kv';
 
 export const dynamic = 'force-dynamic';
 
@@ -17,6 +18,10 @@ interface ReferralRow {
  * Creates £5 discount in Shopify, stores in D1 + KV, returns { code, share_url }.
  */
 export async function POST(request: Request) {
+  if (!isAllowedOrigin(request)) {
+    return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+  }
+
   try {
     const body = (await request.json()) as { email?: string };
     const email = body.email?.trim().toLowerCase();

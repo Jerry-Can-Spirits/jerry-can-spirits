@@ -382,7 +382,7 @@ export default function CartDrawer() {
             <div className="border-t border-gold-500/20 p-6 space-y-4 overflow-y-auto max-h-[60vh]">
               {/* Discount Code */}
               <div>
-                <label htmlFor="discount-code" className="sr-only">Discount code</label>
+                <label htmlFor="discount-code" className="block text-xs text-parchment-400 mb-1">Discount code</label>
                 <div className="flex gap-2">
                   <input
                     type="text"

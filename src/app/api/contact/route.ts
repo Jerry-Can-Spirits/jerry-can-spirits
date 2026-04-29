@@ -1,7 +1,7 @@
 // app/api/contact/route.ts
 import { NextResponse } from 'next/server'
 import { getCloudflareContext } from '@opennextjs/cloudflare'
-import { isRateLimited } from '@/lib/kv'
+import { isRateLimited, isAllowedOrigin } from '@/lib/kv'
 
 const KLAVIYO_API_BASE = 'https://a.klaviyo.com/api'
 
@@ -52,6 +52,10 @@ function isValidEmail(email: string): boolean {
 }
 
 export async function POST(request: Request) {
+  if (!isAllowedOrigin(request)) {
+    return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+  }
+
   try {
     // Read Workers env vars from Cloudflare context
     const { env } = await getCloudflareContext()

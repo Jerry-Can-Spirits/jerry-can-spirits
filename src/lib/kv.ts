@@ -140,6 +140,21 @@ export async function clearTradeFailedAttempts(
   await kv.delete(`trade:failed:${ip}`);
 }
 
+// ── Origin Validation ───────────────────────────────────────────────
+
+const ALLOWED_ORIGIN = 'https://jerrycanspirits.co.uk';
+
+/**
+ * Returns false if the request has an Origin header that doesn't match our
+ * domain — blocking cross-origin form POSTs while allowing server-to-server
+ * calls (which don't send Origin).
+ */
+export function isAllowedOrigin(request: Request): boolean {
+  const origin = request.headers.get('origin');
+  if (!origin) return true;
+  return origin === ALLOWED_ORIGIN;
+}
+
 // ── Generic Rate Limiting ────────────────────────────────────────────
 
 /**

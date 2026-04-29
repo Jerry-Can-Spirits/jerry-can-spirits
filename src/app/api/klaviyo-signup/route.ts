@@ -1,7 +1,7 @@
 // app/api/klaviyo-signup/route.ts
 import { NextResponse } from 'next/server'
 import { getCloudflareContext } from '@opennextjs/cloudflare'
-import { isRateLimited } from '@/lib/kv'
+import { isRateLimited, isAllowedOrigin } from '@/lib/kv'
 
 export const dynamic = 'force-dynamic' // ensure no static optimization
 
@@ -29,6 +29,10 @@ function isValidEmail(email: string): boolean {
 }
 
 export async function POST(request: Request) {
+  if (!isAllowedOrigin(request)) {
+    return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+  }
+
   try {
     const { env } = await getCloudflareContext()
     const KLAVIYO_PRIVATE_KEY = env.KLAVIYO_PRIVATE_KEY as string | undefined
