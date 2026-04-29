@@ -195,7 +195,7 @@ export default function TradeEnquiryForm() {
       )}
 
       {submitStatus === 'error' && (
-        <div className="bg-red-900/20 border border-red-500/30 rounded-lg p-4 animate-slide-up">
+        <div role="alert" className="bg-red-900/20 border border-red-500/30 rounded-lg p-4 animate-slide-up">
           <p className="text-red-300 text-sm">
             Something went wrong. Email us directly at{' '}
             <a href="mailto:trade@jerrycanspirits.co.uk" className="underline hover:text-red-200">

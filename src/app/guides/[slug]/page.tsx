@@ -327,12 +327,12 @@ export default async function GuidePage({ params }: PageProps) {
         </header>
 
         {/* Table of Contents */}
-        {guide.sections && guide.sections.length > 3 && (
+        {guide.sections && guide.sections.filter(s => s.heading?.trim()).length > 3 && (
           <nav className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
             <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
               <h2 className="text-lg font-serif font-bold text-gold-300 mb-4">In This Guide</h2>
               <ol className="space-y-2">
-                {guide.sections.map((section, index) => (
+                {guide.sections.filter(s => s.heading?.trim()).map((section, index) => (
                   <li key={index}>
                     <a
                       href={`#${slugify(section.heading)}`}

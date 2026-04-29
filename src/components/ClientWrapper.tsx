@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 import AgeGate from './AgeGate';
+import { captureUtmParams } from '@/lib/utm';
 
 interface ClientWrapperProps {
   children: React.ReactNode;
@@ -76,6 +77,8 @@ export default function ClientWrapper({ children }: ClientWrapperProps) {
     } catch {
       // Session storage may be blocked
     }
+
+    captureUtmParams();
 
     setIsReady(true);
   }, [pathname]);

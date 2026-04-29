@@ -120,22 +120,24 @@ export async function POST(request: Request) {
         const data = await searchRes.json() as { data?: { id?: string }[] }
         if (data.data && data.data.length > 0) {
           profileId = data.data[0].id
-          await fetch(`${KLAVIYO_API_BASE}/profiles/${profileId}/`, {
-            method: 'PATCH',
-            headers: commonHeaders,
-            body: JSON.stringify({
-              data: {
-                type: 'profile',
-                id: profileId,
-                attributes: {
-                  properties: {
-                    interests,
-                    last_signup_date: new Date().toISOString(),
+          if (profileId) {
+            await fetch(`${KLAVIYO_API_BASE}/profiles/${profileId}/`, {
+              method: 'PATCH',
+              headers: commonHeaders,
+              body: JSON.stringify({
+                data: {
+                  type: 'profile',
+                  id: profileId,
+                  attributes: {
+                    properties: {
+                      interests,
+                      last_signup_date: new Date().toISOString(),
+                    },
                   },
                 },
-              },
-            }),
-          })
+              }),
+            })
+          }
         }
       }
     } else {

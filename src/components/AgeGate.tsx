@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import CartographicBackground from './CartographicBackground';
@@ -37,6 +37,10 @@ export default function AgeGate({ onVerified }: AgeGateProps) {
   const [selectedRegion, setSelectedRegion] = useState(defaultRegion);
   const [isVisible, setIsVisible] = useState(true);
   const [showRejectionMessage, setShowRejectionMessage] = useState(false);
+
+  const dialogRef = useRef<HTMLDivElement>(null)
+  const enterButtonRef = useRef<HTMLButtonElement>(null)
+  const rejectionButtonRef = useRef<HTMLButtonElement>(null)
 
   useEffect(() => {
     // Prevent body scrolling when age gate is visible
@@ -91,10 +95,50 @@ export default function AgeGate({ onVerified }: AgeGateProps) {
     }
   };
 
+  // Focus the enter button on mount
+  useEffect(() => {
+    enterButtonRef.current?.focus()
+  }, [])
+
+  // Focus the rejection close button when it appears
+  useEffect(() => {
+    if (showRejectionMessage) rejectionButtonRef.current?.focus()
+  }, [showRejectionMessage])
+
+  // Focus trap — Escape is intentionally suppressed (gate is mandatory)
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key !== 'Tab') return
+      const focusable = dialogRef.current?.querySelectorAll<HTMLElement>(
+        'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])'
+      )
+      if (!focusable || focusable.length === 0) return
+      const first = focusable[0]
+      const last = focusable[focusable.length - 1]
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault()
+        last.focus()
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault()
+        first.focus()
+      }
+    }
+    document.addEventListener('keydown', handleKeyDown)
+    return () => document.removeEventListener('keydown', handleKeyDown)
+  }, [])
+
   if (!isVisible) return null;
 
   return (
-    <div className="fixed inset-0 z-[9999] bg-jerry-green-900 overflow-hidden" style={{ height: '100vh', width: '100vw' }}>
+    <div
+      ref={dialogRef}
+      role="alertdialog"
+      aria-modal="true"
+      aria-labelledby="agegate-heading"
+      aria-describedby="agegate-desc"
+      className="fixed inset-0 z-[9999] bg-jerry-green-900 overflow-hidden"
+      style={{ height: '100vh', width: '100vw' }}
+    >
       {/* Real Cartographic Background */}
       <CartographicBackground
         opacity={0.8}
@@ -137,10 +181,10 @@ export default function AgeGate({ onVerified }: AgeGateProps) {
 
           {/* Main question */}
           <div className="text-center">
-            <p className="text-2xl sm:text-3xl font-serif font-bold text-gold-300 mb-6 sm:mb-8">
+            <p id="agegate-heading" className="text-2xl sm:text-3xl font-serif font-bold text-gold-300 mb-6 sm:mb-8">
               WELCOME, EXPLORER
             </p>
-            <p className="text-gold-400 text-base sm:text-lg mb-2">
+            <p id="agegate-desc" className="text-gold-400 text-base sm:text-lg mb-2">
               Please confirm you are of legal drinking age in your region.
             </p>
           </div>
@@ -170,6 +214,7 @@ export default function AgeGate({ onVerified }: AgeGateProps) {
           {/* Age verification buttons */}
           <div className="grid grid-cols-2 gap-3 sm:gap-4">
             <button
+              ref={enterButtonRef}
               onClick={() => handleAgeVerification(true)}
               className="bg-gold-500 hover:bg-gold-400 text-jerry-green-900 font-bold py-3 sm:py-4 px-4 sm:px-6 rounded-lg transition-all duration-200 transform hover:scale-105 hover:shadow-lg text-base sm:text-lg"
             >
@@ -201,15 +246,21 @@ export default function AgeGate({ onVerified }: AgeGateProps) {
 
       {/* Branded Rejection Message Modal */}
       {showRejectionMessage && (
-        <div className="absolute inset-0 bg-jerry-green-900/95 flex items-center justify-center z-20">
+        <div
+          role="alertdialog"
+          aria-modal="true"
+          aria-labelledby="rejection-heading"
+          className="absolute inset-0 bg-jerry-green-900/95 flex items-center justify-center z-20"
+        >
           <div className="bg-jerry-green-800 border-2 border-gold-400 rounded-lg p-8 max-w-md mx-4 text-center">
-            <h3 className="text-2xl font-serif font-bold text-gold-300 mb-4">
+            <h3 id="rejection-heading" className="text-2xl font-serif font-bold text-gold-300 mb-4">
               Every Great Expedition Has Its Time
             </h3>
             <p className="text-gold-400 text-lg mb-6 leading-relaxed">
               Join us when you're ready to embark on the adventure - we'll be here when you're of age!
             </p>
             <button
+              ref={rejectionButtonRef}
               onClick={() => setShowRejectionMessage(false)}
               className="bg-gold-500 hover:bg-gold-400 text-jerry-green-900 font-bold py-3 px-6 rounded-lg transition-all duration-200 transform hover:scale-105"
             >

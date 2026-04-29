@@ -27,17 +27,25 @@ export async function GET() {
     let totalBottles = 0
 
     for (const key of list.keys) {
-      const data = await kv.get<OrderEntry>(key.name, 'json')
-      if (!data) continue
+      const raw = await kv.get(key.name, 'json')
+      if (!raw || typeof raw !== 'object') continue
+      const data = raw as Record<string, unknown>
+      if (!Array.isArray(data.titles) || !data.titles.every((t) => typeof t === 'string')) continue
 
-      const allOurs = data.titles.every((t) =>
+      const entry: OrderEntry = {
+        titles: data.titles as string[],
+        bottleCount: typeof data.bottleCount === 'number' ? data.bottleCount : undefined,
+        country: typeof data.country === 'string' ? data.country : 'unknown',
+        timestamp: typeof data.timestamp === 'number' ? data.timestamp : 0,
+      }
+
+      const allOurs = entry.titles.every((t) =>
         t.toLowerCase().includes('jerry can') ||
         t.toLowerCase().includes('expedition')
       )
       if (!allOurs) continue
 
-      // Use bottleCount if available (new format), otherwise count titles (old format)
-      totalBottles += data.bottleCount ?? data.titles.length
+      totalBottles += entry.bottleCount ?? entry.titles.length
     }
 
     if (totalBottles === 0) {

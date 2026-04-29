@@ -51,6 +51,13 @@
     min-height: -webkit-fill-available;
   }
 
+  /* Prevent iOS Safari auto-zoom on input focus — minimum 16px required */
+  @media screen and (max-width: 767px) {
+    input, select, textarea {
+      font-size: 16px;
+    }
+  }
+
   /* Premium typography */
   h1, h2, h3, h4, h5, h6 {
     font-family: 'Playfair Display', Georgia, serif;

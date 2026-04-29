@@ -193,23 +193,24 @@ export async function POST(request: Request) {
         const searchData = await profileSearchResponse.json() as { data?: { id?: string }[] }
         if (searchData.data && searchData.data.length > 0) {
           profileId = searchData.data[0].id
-          // Patch properties
-          await fetch(`${KLAVIYO_API_BASE}/profiles/${profileId}/`, {
-            method: 'PATCH',
-            headers: commonHeaders,
-            body: JSON.stringify({
-              data: {
-                type: 'profile',
-                id: profileId,
-                attributes: {
-                  properties: {
-                    last_contact_date: new Date().toISOString(),
-                    last_contact_type: formType,
+          if (profileId) {
+            await fetch(`${KLAVIYO_API_BASE}/profiles/${profileId}/`, {
+              method: 'PATCH',
+              headers: commonHeaders,
+              body: JSON.stringify({
+                data: {
+                  type: 'profile',
+                  id: profileId,
+                  attributes: {
+                    properties: {
+                      last_contact_date: new Date().toISOString(),
+                      last_contact_type: formType,
+                    },
                   },
                 },
-              },
-            }),
-          })
+              }),
+            })
+          }
         }
       }
     } else {

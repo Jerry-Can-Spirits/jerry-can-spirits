@@ -22,6 +22,9 @@ export async function POST(request: Request) {
   if (!Array.isArray(body.lines) || body.lines.length === 0) {
     return NextResponse.json({ error: 'No items selected.' }, { status: 400 })
   }
+  if (body.lines.length > 50) {
+    return NextResponse.json({ error: 'Too many items in order.' }, { status: 400 })
+  }
 
   const lines: CheckoutLine[] = []
   for (const item of body.lines) {
@@ -36,7 +39,7 @@ export async function POST(request: Request) {
     const variantId = ((item as Record<string, unknown>).variantId as string).trim()
     const quantity = Math.floor((item as Record<string, unknown>).quantity as number)
 
-    if (!variantId || variantId.length > 100) {
+    if (!variantId.startsWith('gid://shopify/ProductVariant/')) {
       return NextResponse.json({ error: 'Invalid order data.' }, { status: 400 })
     }
     if (quantity < 1 || quantity > 100) {

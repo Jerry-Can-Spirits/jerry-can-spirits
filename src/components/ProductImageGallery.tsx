@@ -106,6 +106,8 @@ export default function ProductImageGallery({
             <button
               key={index}
               onClick={() => setSelectedImageIndex(index)}
+              aria-label={`View image ${index + 1} of ${images.length}${image.altText ? `: ${image.altText}` : ''}`}
+              aria-pressed={index === selectedImageIndex}
               className={`relative aspect-square bg-jerry-green-800/20 rounded-lg overflow-hidden border-2 transition-all ${
                 index === selectedImageIndex
                   ? 'border-gold-400 ring-2 ring-gold-400/50 scale-95'

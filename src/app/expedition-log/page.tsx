@@ -22,7 +22,12 @@ export const metadata: Metadata = {
 
 export default async function ExpeditionLogPage() {
   const db = await getD1()
-  const entries = await getExpeditionLogEntries(db)
+  let entries: Awaited<ReturnType<typeof getExpeditionLogEntries>> = []
+  try {
+    entries = await getExpeditionLogEntries(db)
+  } catch (err) {
+    console.error('[expedition-log] D1 query failed:', err)
+  }
   return (
     <main className="min-h-screen py-20">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">

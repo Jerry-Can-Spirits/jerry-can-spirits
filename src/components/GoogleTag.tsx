@@ -78,7 +78,7 @@ export function trackAddToCart(
   currency: string = 'GBP',
   quantity: number = 1
 ) {
-  if (typeof window !== 'undefined' && typeof window.gtag === 'function') {
+  if (typeof window !== 'undefined' && typeof window.gtag === 'function' && window.Cookiebot?.consent?.statistics) {
     window.gtag('event', 'add_to_cart', {
       currency: currency,
       value: unitPrice * quantity,
