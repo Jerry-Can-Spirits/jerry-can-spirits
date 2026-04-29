@@ -567,7 +567,7 @@ export default async function IngredientDetailPage({ params }: { params: Promise
               <div className="order-15 bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
                 <h2 className="text-2xl font-serif font-bold text-gold-300 mb-4">Featured In These Cocktails</h2>
                 <div className="grid sm:grid-cols-2 gap-3">
-                  {ingredient.relatedCocktails.map((cocktail) => (
+                  {ingredient.relatedCocktails.filter(c => c?.slug?.current).map((cocktail) => (
                     <Link
                       key={cocktail._id}
                       href={`/field-manual/cocktails/${cocktail.slug.current}`}
@@ -588,7 +588,7 @@ export default async function IngredientDetailPage({ params }: { params: Promise
               <div className="order-16 bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
                 <h2 className="text-2xl font-serif font-bold text-gold-300 mb-4">Often Used With</h2>
                 <div className="grid sm:grid-cols-2 gap-3">
-                  {ingredient.relatedIngredients.map((related) => (
+                  {ingredient.relatedIngredients.filter(r => r?.slug?.current).map((related) => (
                     <Link
                       key={related._id}
                       href={`/field-manual/ingredients/${related.slug.current}`}

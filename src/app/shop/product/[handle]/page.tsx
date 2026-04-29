@@ -20,6 +20,8 @@ import { client } from '@/sanity/lib/client'
 import { productByHandleQuery } from '@/sanity/queries'
 import type { Metadata } from 'next'
 
+export const revalidate = 3600
+
 // Sanity product data type
 interface SanityProduct {
   _id: string
@@ -721,7 +723,7 @@ export default async function ProductPage({
               </div>
               {sanityProduct?.relatedCocktails && sanityProduct.relatedCocktails.length > 0 ? (
                 <div className="grid sm:grid-cols-2 gap-3">
-                  {sanityProduct.relatedCocktails.map((cocktail) => (
+                  {sanityProduct.relatedCocktails.filter(c => c?.slug?.current).map((cocktail) => (
                     <Link
                       key={cocktail._id}
                       href={`/field-manual/cocktails/${cocktail.slug.current}/`}

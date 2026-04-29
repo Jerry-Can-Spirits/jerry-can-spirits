@@ -56,7 +56,9 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
             await new Promise(resolve => setTimeout(resolve, 1000))
           } else {
             console.error('Error loading cart after retry:', error)
-            // Do NOT clear cartId on transient errors — preserve it for next page load
+            // Two consecutive failures — likely a persistent error (expired/invalid cart ID).
+            // Clear it so the user can start a fresh cart rather than being stuck.
+            localStorage.removeItem('shopify_cart_id')
           }
         }
       }
@@ -97,7 +99,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       const referralCode = localStorage.getItem('jcs_referral_code')
       const alreadyTagged = currentCart.attributes?.some(
         (a) => a.key === '_referral_code'
-      )
+      ) ?? false
       if (referralCode && !alreadyTagged) {
         try {
           currentCart = await shopifyApplyDiscount(currentCart.id, [referralCode])

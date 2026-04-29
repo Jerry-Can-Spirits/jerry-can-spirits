@@ -33,8 +33,8 @@ export default function ProductPageTracking({
       window.fbq('track', 'ViewContent', payload);
     }
 
-    // Track view_item via GA4 (no consent gate — analytics only, no PII)
-    if (typeof window !== 'undefined' && typeof window.gtag === 'function') {
+    // Track view_item via GA4 — gated on statistics consent (GDPR)
+    if (typeof window !== 'undefined' && typeof window.gtag === 'function' && window.Cookiebot?.consent?.statistics) {
       window.gtag('event', 'view_item', {
         currency: currency,
         value: parseFloat(price),

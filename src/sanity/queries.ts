@@ -1,7 +1,7 @@
 // GROQ queries for fetching data from Sanity
 
 // Sitemap query - only fetches slug for URL generation
-export const cocktailsSitemapQuery = `*[_type == "cocktail"] { slug }`
+export const cocktailsSitemapQuery = `*[_type == "cocktail" && defined(slug.current)] { slug }`
 
 // Optimized listing query - only fetches fields needed for preview cards
 export const cocktailsListQuery = `*[_type == "cocktail"] | order(_createdAt desc) {
@@ -100,16 +100,16 @@ export const cocktailBySlugQuery = `*[_type == "cocktail" && slug.current == $sl
   videoUrl,
   flavorProfile,
   "featuredSpirit": featuredSpirit->{ _id, name, slug, description, "image": image.asset->url, "imageAlt": image.alt },
-  relatedGuides[] {
+  relatedGuides[defined(guide->._id)] {
     "guide": guide->{ _id, title, slug },
     sectionAnchor,
     linkText
   },
-  "relatedCocktails": relatedCocktails[]->{ _id, name, slug, description, difficulty, "image": image.asset->url, "imageAlt": image.alt }
+  "relatedCocktails": relatedCocktails[]->[defined(_id)]{ _id, name, slug, description, difficulty, "image": image.asset->url, "imageAlt": image.alt }
 }`
 
 // Sitemap query - only fetches slug for URL generation
-export const ingredientsSitemapQuery = `*[_type == "ingredient"] { slug }`
+export const ingredientsSitemapQuery = `*[_type == "ingredient" && defined(slug.current)] { slug }`
 
 // Optimized listing query - only fetches fields needed for preview cards
 export const ingredientsListQuery = `*[_type == "ingredient"] | order(category asc, name asc) {
@@ -168,12 +168,12 @@ export const ingredientBySlugQuery = `*[_type == "ingredient" && slug.current ==
   history,
   professionalTip,
   author,
-  "relatedCocktails": relatedCocktails[]->{ _id, name, slug },
-  "relatedIngredients": relatedIngredients[]->{ _id, name, slug }
+  "relatedCocktails": relatedCocktails[]->[defined(_id)]{ _id, name, slug },
+  "relatedIngredients": relatedIngredients[]->[defined(_id)]{ _id, name, slug }
 }`
 
 // Sitemap query - only fetches slug for URL generation
-export const equipmentSitemapQuery = `*[_type == "equipment"] { slug }`
+export const equipmentSitemapQuery = `*[_type == "equipment" && defined(slug.current)] { slug }`
 
 // Optimized listing query - only fetches fields needed for preview cards
 export const equipmentListQuery = `*[_type == "equipment"] | order(category asc, name asc) {
@@ -245,9 +245,9 @@ export const equipmentBySlugQuery = `*[_type == "equipment" && slug.current == $
   professionalTip,
   author,
   videoUrl,
-  "relatedCocktails": relatedCocktails[]->{ _id, name, slug },
-  "relatedEquipment": relatedEquipment[]->{ _id, name, slug },
-  "relatedIngredients": relatedIngredients[]->{ _id, name, slug }
+  "relatedCocktails": relatedCocktails[]->[defined(_id)]{ _id, name, slug },
+  "relatedEquipment": relatedEquipment[]->[defined(_id)]{ _id, name, slug },
+  "relatedIngredients": relatedIngredients[]->[defined(_id)]{ _id, name, slug }
 }`
 
 // Product query - matches by slug or shopifyHandle for flexible matching
@@ -274,7 +274,7 @@ export const productByHandleQuery = `*[_type == "product" && (slug.current == $s
   "imageAlt": image.alt,
   featured,
   videoUrl,
-  "relatedCocktails": relatedCocktails[]->{ _id, name, slug },
+  "relatedCocktails": relatedCocktails[]->[defined(_id)]{ _id, name, slug },
   whatsIncluded[] {
     item,
     description,
@@ -294,7 +294,7 @@ export const productByHandleQuery = `*[_type == "product" && (slug.current == $s
 }`
 
 // Sitemap query - only fetches slug for URL generation
-export const guidesSitemapQuery = `*[_type == "guide"] { slug }`
+export const guidesSitemapQuery = `*[_type == "guide" && defined(slug.current)] { slug }`
 
 // Optimized listing query - only fetches fields needed for preview cards
 export const guidesListQuery = `*[_type == "guide"] | order(publishedAt desc, _createdAt desc) {
@@ -353,8 +353,8 @@ export const guideBySlugQuery = `*[_type == "guide" && slug.current == $slug][0]
     website,
     speciality
   },
-  "relatedGuides": relatedGuides[]->{ _id, title, slug, excerpt, category },
-  "relatedCocktails": relatedCocktails[]->{ _id, name, slug },
+  "relatedGuides": relatedGuides[]->[defined(_id)]{ _id, title, slug, excerpt, category },
+  "relatedCocktails": relatedCocktails[]->[defined(_id)]{ _id, name, slug },
   relatedProducts[] {
     shopifyHandle,
     contextNote

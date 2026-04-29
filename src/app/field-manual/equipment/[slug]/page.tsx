@@ -476,7 +476,7 @@ export default async function EquipmentDetailPage({ params }: { params: Promise<
               <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
                 <h2 className="text-2xl font-serif font-bold text-gold-300 mb-4">Used In These Cocktails</h2>
                 <div className="grid sm:grid-cols-2 gap-3">
-                  {equipment.relatedCocktails.map((cocktail) => (
+                  {equipment.relatedCocktails.filter(c => c?.slug?.current).map((cocktail) => (
                     <Link
                       key={cocktail._id}
                       href={`/field-manual/cocktails/${cocktail.slug.current}`}
@@ -497,7 +497,7 @@ export default async function EquipmentDetailPage({ params }: { params: Promise<
               <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
                 <h2 className="text-2xl font-serif font-bold text-gold-300 mb-4">Related Equipment</h2>
                 <div className="grid sm:grid-cols-2 gap-3">
-                  {equipment.relatedEquipment.map((item) => (
+                  {equipment.relatedEquipment.filter(e => e?.slug?.current).map((item) => (
                     <Link
                       key={item._id}
                       href={`/field-manual/equipment/${item.slug.current}`}
@@ -518,7 +518,7 @@ export default async function EquipmentDetailPage({ params }: { params: Promise<
               <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
                 <h2 className="text-2xl font-serif font-bold text-gold-300 mb-4">Related Ingredients</h2>
                 <div className="grid sm:grid-cols-2 gap-3">
-                  {equipment.relatedIngredients.map((item) => (
+                  {equipment.relatedIngredients.filter(i => i?.slug?.current).map((item) => (
                     <Link
                       key={item._id}
                       href={`/field-manual/ingredients/${item.slug.current}`}

@@ -17,6 +17,11 @@ function getClient() {
       storeDomain,
       apiVersion: '2026-01',
       publicAccessToken: accessToken,
+      customFetchApi: (url, init) => {
+        const controller = new AbortController()
+        const timer = setTimeout(() => controller.abort(), 8000)
+        return fetch(url, { ...init, signal: controller.signal }).finally(() => clearTimeout(timer))
+      },
     });
   }
   return client;
@@ -735,6 +740,10 @@ export async function updateCartLine(cartId: string, lineId: string, quantity: n
       throw new Error('Failed to update cart');
     }
 
+    if (!data?.cartLinesUpdate?.cart) {
+      throw new Error('No cart data returned from Shopify');
+    }
+
     return {
       ...data.cartLinesUpdate.cart,
       lines: data.cartLinesUpdate.cart.lines.edges.map((edge: CartLineEdge) => edge.node),
@@ -809,6 +818,10 @@ export async function removeFromCart(cartId: string, lineIds: string[]): Promise
     if (errors) {
       console.error('GraphQL Errors:', errors);
       throw new Error('Failed to remove from cart');
+    }
+
+    if (!data?.cartLinesRemove?.cart) {
+      throw new Error('No cart data returned from Shopify');
     }
 
     return {
@@ -889,6 +902,10 @@ export async function applyDiscount(cartId: string, discountCodes: string[]): Pr
     if (errors) {
       console.error('GraphQL Errors:', errors);
       throw new Error('Failed to apply discount');
+    }
+
+    if (!data?.cartDiscountCodesUpdate?.cart) {
+      throw new Error('No cart data returned from Shopify');
     }
 
     return {
@@ -1182,6 +1199,10 @@ export async function updateCartAttributes(
     if (errors) {
       console.error('GraphQL Errors:', errors);
       throw new Error('Failed to update cart attributes');
+    }
+
+    if (!data?.cartAttributesUpdate?.cart) {
+      throw new Error('No cart data returned from Shopify');
     }
 
     return {

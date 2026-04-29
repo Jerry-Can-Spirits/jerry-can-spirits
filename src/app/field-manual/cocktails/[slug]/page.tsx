@@ -333,7 +333,7 @@ export default async function CocktailPage({ params }: PageProps) {
             <div className="mt-6 sm:mt-8 bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-4 sm:p-6 border border-gold-500/20">
               <h3 className="text-xl font-serif font-bold text-gold-300 mb-4">You Might Also Like</h3>
               <div className="grid sm:grid-cols-2 gap-4">
-                {cocktail.relatedCocktails.map((related) => (
+                {cocktail.relatedCocktails.filter(r => r?.slug?.current).map((related) => (
                   <Link
                     key={related._id}
                     href={`/field-manual/cocktails/${related.slug.current}/`}
@@ -371,7 +371,7 @@ export default async function CocktailPage({ params }: PageProps) {
                 Master the Techniques
               </h3>
               <div className="space-y-3">
-                {cocktail.relatedGuides.map((item, index) => {
+                {cocktail.relatedGuides.filter(g => g?.guide?.slug?.current).map((item, index) => {
                   const guideUrl = item.sectionAnchor
                     ? `/guides/${item.guide.slug.current}/#${slugify(item.sectionAnchor)}`
                     : `/guides/${item.guide.slug.current}/`
