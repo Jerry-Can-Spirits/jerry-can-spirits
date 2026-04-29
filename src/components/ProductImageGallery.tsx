@@ -118,6 +118,7 @@ export default function ProductImageGallery({
                 src={image.url}
                 alt={image.altText || `${productTitle} - Image ${index + 1}`}
                 fill
+                loading="lazy"
                 className="object-contain"
                 sizes="(max-width: 768px) 33vw, (max-width: 1024px) 12.5vw, 10vw"
               />

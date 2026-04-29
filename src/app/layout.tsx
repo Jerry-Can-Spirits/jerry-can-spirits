@@ -1,20 +1,12 @@
 import type { Metadata } from "next";
 import Script from "next/script";
-import dynamic from "next/dynamic";
 import { Inter, Playfair_Display, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ShippingBanner from "@/components/ShippingBanner";
 import ClientWrapper from "@/components/ClientWrapper";
-
-// Lazy load non-critical layout components
-const CartographicBackground = dynamic(
-  () => import("@/components/CartographicBackground"),
-  { loading: () => null }
-);
-const CartDrawer = dynamic(() => import("@/components/CartDrawer"));
-const SocialProofToast = dynamic(() => import("@/components/SocialProofToast"));
+import { LazyCartographicBackground, LazyCartDrawer, LazySocialProofToast } from "@/components/ClientLazy";
 import ServiceWorkerRegistration from "@/components/ServiceWorkerRegistration";
 import InstallPrompt from "@/components/InstallPrompt";
 import { CartProvider } from "@/contexts/CartContext";
@@ -38,7 +30,7 @@ const inter = Inter({
 const playfair = Playfair_Display({
   variable: "--font-playfair",
   subsets: ["latin"],
-  display: "swap",
+  display: "optional",
   preload: true,
   fallback: ['Georgia', 'serif'],
   adjustFontFallback: true,
@@ -182,7 +174,7 @@ export default function RootLayout({
 
           <ClientWrapper>
           {/* Unified Cartographic Background */}
-          <CartographicBackground opacity={0.75} showCoordinates={true} showCompass={true} className="fixed inset-0 z-0 pointer-events-none" />
+          <LazyCartographicBackground opacity={0.75} showCoordinates={true} showCompass={true} className="fixed inset-0 z-0 pointer-events-none" />
 
           <div className="relative z-10">
             <Header />
@@ -200,10 +192,10 @@ export default function RootLayout({
         </ClientWrapper>
 
         {/* Cart Drawer */}
-        <CartDrawer />
+        <LazyCartDrawer />
 
         {/* Social Proof Toast */}
-        <SocialProofToast />
+        <LazySocialProofToast />
 
         {/* Google AdSense - consent-gated (statistics) + lazy loaded via requestIdleCallback.
             Uses dangerouslySetInnerHTML instead of next/script to avoid data-nscript attribute

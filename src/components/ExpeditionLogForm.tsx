@@ -129,7 +129,7 @@ export default function ExpeditionLogForm({ batchId }: Props) {
             autoComplete="name"
             aria-invalid={status === 'error' && errorMessage.includes('Name')}
             aria-describedby={status === 'error' ? 'expedition-error' : undefined}
-            className="w-full px-4 py-3 bg-jerry-green-900 border border-gold-500/30 rounded-lg text-white placeholder-parchment-500 text-sm focus:outline-none focus:border-gold-400"
+            className="w-full px-4 py-3 bg-jerry-green-900 border border-gold-500/30 rounded-lg text-white placeholder-parchment-500 text-base focus:outline-none focus:border-gold-400"
           />
         </div>
         <div>
@@ -143,7 +143,7 @@ export default function ExpeditionLogForm({ batchId }: Props) {
             maxLength={100}
             placeholder="City, country"
             autoComplete="off"
-            className="w-full px-4 py-3 bg-jerry-green-900 border border-gold-500/30 rounded-lg text-white placeholder-parchment-500 text-sm focus:outline-none focus:border-gold-400"
+            className="w-full px-4 py-3 bg-jerry-green-900 border border-gold-500/30 rounded-lg text-white placeholder-parchment-500 text-base focus:outline-none focus:border-gold-400"
           />
         </div>
         <div className="space-y-2">
@@ -156,7 +156,7 @@ export default function ExpeditionLogForm({ batchId }: Props) {
                 value={bottle.type}
                 onChange={(e) => updateBottle(i, 'type', e.target.value)}
                 aria-label={`Bottle ${i + 1} type`}
-                className="px-3 py-3 bg-jerry-green-900 border border-gold-500/30 rounded-lg text-white text-sm focus:outline-none focus:border-gold-400"
+                className="px-3 py-3 bg-jerry-green-900 border border-gold-500/30 rounded-lg text-white text-base focus:outline-none focus:border-gold-400"
               >
                 {BOTTLE_TYPES.map((t) => (
                   <option key={t.value} value={t.value}>{t.label}</option>
@@ -169,7 +169,7 @@ export default function ExpeditionLogForm({ batchId }: Props) {
                 onChange={(e) => updateBottle(i, 'number', e.target.value)}
                 placeholder="Bottle no."
                 aria-label={`Bottle ${i + 1} number`}
-                className="w-32 px-3 py-3 bg-jerry-green-900 border border-gold-500/30 rounded-lg text-white placeholder-parchment-500 text-sm focus:outline-none focus:border-gold-400"
+                className="w-32 px-3 py-3 bg-jerry-green-900 border border-gold-500/30 rounded-lg text-white placeholder-parchment-500 text-base focus:outline-none focus:border-gold-400"
               />
               {bottles.length > 1 && (
                 <button

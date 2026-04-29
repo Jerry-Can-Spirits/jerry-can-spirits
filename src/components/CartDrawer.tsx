@@ -382,7 +382,7 @@ export default function CartDrawer() {
             <div className="border-t border-gold-500/20 p-6 space-y-4 overflow-y-auto max-h-[60vh]">
               {/* Discount Code */}
               <div>
-                <label htmlFor="discount-code" className="sr-only">Discount code</label>
+                <label htmlFor="discount-code" className="block text-xs text-parchment-400 mb-1">Discount code</label>
                 <div className="flex gap-2">
                   <input
                     type="text"
@@ -471,7 +471,7 @@ export default function CartDrawer() {
                         value={giftRecipient}
                         onChange={(e) => handleGiftRecipientChange(e.target.value)}
                         placeholder="Who is this for?"
-                        className="w-full px-4 py-2 bg-jerry-green-800/50 border border-gold-500/20 rounded-lg text-white placeholder-parchment-400 focus:outline-none focus:border-gold-400 text-sm"
+                        className="w-full px-4 py-2 bg-jerry-green-800/50 border border-gold-500/20 rounded-lg text-white placeholder-parchment-400 focus:outline-none focus:border-gold-400 text-base"
                       />
                     </div>
                     <div>
@@ -485,7 +485,7 @@ export default function CartDrawer() {
                         onChange={(e) => handleGiftMessageChange(e.target.value)}
                         placeholder="Add a personal message..."
                         rows={3}
-                        className="w-full px-4 py-2 bg-jerry-green-800/50 border border-gold-500/20 rounded-lg text-white placeholder-parchment-400 focus:outline-none focus:border-gold-400 text-sm resize-none"
+                        className="w-full px-4 py-2 bg-jerry-green-800/50 border border-gold-500/20 rounded-lg text-white placeholder-parchment-400 focus:outline-none focus:border-gold-400 text-base resize-none"
                       />
                       <p className="text-xs text-parchment-500 text-right mt-1">
                         {giftMessage.length}/200

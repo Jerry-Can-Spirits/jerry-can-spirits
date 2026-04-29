@@ -118,6 +118,9 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       setIsCartOpen(true)
     } catch (error) {
       console.error('[CartContext] Error adding to cart:', error)
+      // Cart may have expired on Shopify's side — clear stale ID so next attempt creates fresh cart
+      localStorage.removeItem('shopify_cart_id')
+      setCart(null)
       alert('Failed to add item to cart. Please try again.')
     } finally {
       setIsLoading(false)
