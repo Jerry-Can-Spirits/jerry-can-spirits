@@ -24,22 +24,17 @@ function isValidSlug(slug: string): boolean {
   return SLUG_RE.test(slug)
 }
 
-// Generate a simple fingerprint from request headers for duplicate prevention
-function getFingerprint(request: Request): string {
+async function getFingerprint(request: Request): Promise<string> {
   const ip = request.headers.get('x-forwarded-for')?.split(',')[0].trim() ||
              request.headers.get('x-real-ip') ||
              'unknown'
   const userAgent = request.headers.get('user-agent') || 'unknown'
-
-  // Create a simple hash from IP and user-agent
-  const data = `${ip}:${userAgent}`
-  let hash = 0
-  for (let i = 0; i < data.length; i++) {
-    const char = data.charCodeAt(i)
-    hash = ((hash << 5) - hash) + char
-    hash = hash & hash // Convert to 32bit integer
-  }
-  return Math.abs(hash).toString(36)
+  const encoded = new TextEncoder().encode(`${ip}:${userAgent}`)
+  const hashBuffer = await crypto.subtle.digest('SHA-256', encoded)
+  return Array.from(new Uint8Array(hashBuffer))
+    .map(b => b.toString(16).padStart(2, '0'))
+    .join('')
+    .slice(0, 32)
 }
 
 // GET - Retrieve rating for a cocktail or all cocktails
@@ -97,7 +92,7 @@ export async function GET(request: Request) {
       })
     }
 
-    const fingerprint = getFingerprint(request)
+    const fingerprint = await getFingerprint(request)
     const ratingKey = `cocktail:${slug}`
     const voteKey = `vote:${slug}:${fingerprint}`
 
@@ -176,7 +171,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Bot check failed.' }, { status: 400 })
     }
 
-    const fingerprint = getFingerprint(request)
+    const fingerprint = await getFingerprint(request)
     const ratingKey = `cocktail:${slug}`
     const voteKey = `vote:${slug}:${fingerprint}`
 

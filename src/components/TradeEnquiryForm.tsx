@@ -91,6 +91,8 @@ export default function TradeEnquiryForm() {
             autoComplete="name"
             value={formData.name}
             onChange={handleChange}
+            aria-invalid={submitStatus === 'error'}
+            aria-describedby={submitStatus === 'error' ? 'trade-error' : undefined}
             className={inputClass}
             placeholder="Your full name"
           />
@@ -105,6 +107,8 @@ export default function TradeEnquiryForm() {
             autoComplete="email"
             value={formData.email}
             onChange={handleChange}
+            aria-invalid={submitStatus === 'error'}
+            aria-describedby={submitStatus === 'error' ? 'trade-error' : undefined}
             className={inputClass}
             placeholder="your@email.com"
           />
@@ -121,6 +125,8 @@ export default function TradeEnquiryForm() {
           autoComplete="organization"
           value={formData.venueName}
           onChange={handleChange}
+          aria-invalid={submitStatus === 'error'}
+          aria-describedby={submitStatus === 'error' ? 'trade-error' : undefined}
           className={inputClass}
           placeholder="The name of your venue"
         />
@@ -195,7 +201,7 @@ export default function TradeEnquiryForm() {
       )}
 
       {submitStatus === 'error' && (
-        <div role="alert" className="bg-red-900/20 border border-red-500/30 rounded-lg p-4 animate-slide-up">
+        <div id="trade-error" role="alert" className="bg-red-900/20 border border-red-500/30 rounded-lg p-4 animate-slide-up">
           <p className="text-red-300 text-sm">
             Something went wrong. Email us directly at{' '}
             <a href="mailto:trade@jerrycanspirits.co.uk" className="underline hover:text-red-200">
