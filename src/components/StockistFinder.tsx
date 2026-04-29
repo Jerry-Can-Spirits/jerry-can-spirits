@@ -1,7 +1,7 @@
 'use client'
 
 import dynamic from 'next/dynamic'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import type { Stockist } from './StockistMap'
 
 const StockistMap = dynamic(() => import('./StockistMap'), { ssr: false })
@@ -79,6 +79,20 @@ export default function StockistFinder() {
   const [mapCenter, setMapCenter] = useState<[number, number]>(UK_CENTER)
   const [mapZoom, setMapZoom] = useState(UK_ZOOM)
   const [origin, setOrigin] = useState('')
+  const [hasConsent, setHasConsent] = useState(false)
+
+  useEffect(() => {
+    const check = () => !!(window.Cookiebot?.consent?.statistics)
+    if (check()) setHasConsent(true)
+    const onAccept = () => { if (check()) setHasConsent(true) }
+    const onDecline = () => setHasConsent(false)
+    window.addEventListener('CookiebotOnAccept', onAccept)
+    window.addEventListener('CookiebotOnDecline', onDecline)
+    return () => {
+      window.removeEventListener('CookiebotOnAccept', onAccept)
+      window.removeEventListener('CookiebotOnDecline', onDecline)
+    }
+  }, [])
 
   function runSearch(latitude: number, longitude: number, originLabel: string) {
     const nearby = ALL_STOCKISTS
@@ -271,11 +285,19 @@ export default function StockistFinder() {
 
       {/* Map */}
       <div className="lg:col-span-3 min-h-[400px] lg:min-h-0 relative bg-jerry-green-900/20">
-        <StockistMap
-          stockists={nearbyStockists.length > 0 ? nearbyStockists : ALL_STOCKISTS}
-          center={mapCenter}
-          zoom={mapZoom}
-        />
+        {hasConsent ? (
+          <StockistMap
+            stockists={nearbyStockists.length > 0 ? nearbyStockists : ALL_STOCKISTS}
+            center={mapCenter}
+            zoom={mapZoom}
+          />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center">
+            <p className="text-parchment-500 text-sm text-center px-4">
+              Accept analytics cookies to view the map.
+            </p>
+          </div>
+        )}
       </div>
 
     </div>
