@@ -1,7 +1,7 @@
 // GROQ queries for fetching data from Sanity
 
 // Sitemap query - only fetches slug for URL generation
-export const cocktailsSitemapQuery = `*[_type == "cocktail"] { slug }`
+export const cocktailsSitemapQuery = `*[_type == "cocktail" && defined(slug.current)] { slug }`
 
 // Optimized listing query - only fetches fields needed for preview cards
 export const cocktailsListQuery = `*[_type == "cocktail"] | order(_createdAt desc) {
@@ -109,7 +109,7 @@ export const cocktailBySlugQuery = `*[_type == "cocktail" && slug.current == $sl
 }`
 
 // Sitemap query - only fetches slug for URL generation
-export const ingredientsSitemapQuery = `*[_type == "ingredient"] { slug }`
+export const ingredientsSitemapQuery = `*[_type == "ingredient" && defined(slug.current)] { slug }`
 
 // Optimized listing query - only fetches fields needed for preview cards
 export const ingredientsListQuery = `*[_type == "ingredient"] | order(category asc, name asc) {
@@ -173,7 +173,7 @@ export const ingredientBySlugQuery = `*[_type == "ingredient" && slug.current ==
 }`
 
 // Sitemap query - only fetches slug for URL generation
-export const equipmentSitemapQuery = `*[_type == "equipment"] { slug }`
+export const equipmentSitemapQuery = `*[_type == "equipment" && defined(slug.current)] { slug }`
 
 // Optimized listing query - only fetches fields needed for preview cards
 export const equipmentListQuery = `*[_type == "equipment"] | order(category asc, name asc) {
@@ -294,7 +294,7 @@ export const productByHandleQuery = `*[_type == "product" && (slug.current == $s
 }`
 
 // Sitemap query - only fetches slug for URL generation
-export const guidesSitemapQuery = `*[_type == "guide"] { slug }`
+export const guidesSitemapQuery = `*[_type == "guide" && defined(slug.current)] { slug }`
 
 // Optimized listing query - only fetches fields needed for preview cards
 export const guidesListQuery = `*[_type == "guide"] | order(publishedAt desc, _createdAt desc) {
