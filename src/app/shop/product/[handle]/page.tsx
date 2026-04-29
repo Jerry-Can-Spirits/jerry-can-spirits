@@ -723,7 +723,7 @@ export default async function ProductPage({
               </div>
               {sanityProduct?.relatedCocktails && sanityProduct.relatedCocktails.length > 0 ? (
                 <div className="grid sm:grid-cols-2 gap-3">
-                  {sanityProduct.relatedCocktails.map((cocktail) => (
+                  {sanityProduct.relatedCocktails.filter(c => c?.slug?.current).map((cocktail) => (
                     <Link
                       key={cocktail._id}
                       href={`/field-manual/cocktails/${cocktail.slug.current}/`}

@@ -513,7 +513,7 @@ export default async function GuidePage({ params }: PageProps) {
                 <div>
                   <h2 className="text-2xl font-serif font-bold text-gold-300 mb-6">Try These Cocktails</h2>
                   <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {guide.relatedCocktails.map((cocktail) => (
+                    {guide.relatedCocktails.filter(c => c?.slug?.current).map((cocktail) => (
                       <Link
                         key={cocktail._id}
                         href={`/field-manual/cocktails/${cocktail.slug.current}`}
@@ -566,7 +566,7 @@ export default async function GuidePage({ params }: PageProps) {
                 <div>
                   <h2 className="text-2xl font-serif font-bold text-gold-300 mb-6">Continue Reading</h2>
                   <div className="grid sm:grid-cols-2 gap-6">
-                    {guide.relatedGuides.map((relatedGuide) => (
+                    {guide.relatedGuides.filter(g => g?.slug?.current).map((relatedGuide) => (
                       <Link
                         key={relatedGuide._id}
                         href={`/guides/${relatedGuide.slug.current}`}
