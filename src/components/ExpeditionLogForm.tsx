@@ -127,6 +127,8 @@ export default function ExpeditionLogForm({ batchId }: Props) {
             maxLength={100}
             placeholder="Your name"
             autoComplete="name"
+            aria-invalid={status === 'error' && errorMessage.includes('Name')}
+            aria-describedby={status === 'error' ? 'expedition-error' : undefined}
             className="w-full px-4 py-3 bg-jerry-green-900 border border-gold-500/30 rounded-lg text-white placeholder-parchment-500 text-sm focus:outline-none focus:border-gold-400"
           />
         </div>
@@ -213,7 +215,7 @@ export default function ExpeditionLogForm({ batchId }: Props) {
           </Link>
         </p>
         {status === 'error' && (
-          <p className="text-red-400 text-sm">{errorMessage}</p>
+          <p id="expedition-error" role="alert" className="text-red-400 text-sm">{errorMessage}</p>
         )}
         <button
           type="submit"

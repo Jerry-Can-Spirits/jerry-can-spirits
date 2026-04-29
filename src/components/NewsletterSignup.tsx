@@ -85,6 +85,8 @@ export default function NewsletterSignup() {
           autoComplete="email"
           placeholder="Email address"
           aria-label="Email address"
+          aria-invalid={status === 'error'}
+          aria-describedby={status === 'error' ? 'newsletter-error' : undefined}
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           className="flex-1 px-4 py-3 bg-jerry-green-900 border border-gold-500/30 rounded-lg text-white placeholder-parchment-500 text-sm focus:outline-none focus:border-gold-400 transition-colors"
@@ -123,7 +125,7 @@ export default function NewsletterSignup() {
       </label>
 
       {status === 'error' && (
-        <p className="mt-3 text-red-400 text-xs">
+        <p id="newsletter-error" role="alert" className="mt-3 text-red-400 text-xs">
           Something went wrong. Try again or email{' '}
           <a href="mailto:hello@jerrycanspirits.co.uk" className="underline">
             hello@jerrycanspirits.co.uk
