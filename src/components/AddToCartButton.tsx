@@ -15,21 +15,28 @@ interface AddToCartButtonProps {
 export default function AddToCartButton({ variantId, productTitle, price, currencyCode }: AddToCartButtonProps) {
   const { addToCart, isLoading } = useCart()
   const [added, setAdded] = useState(false)
+  const [addError, setAddError] = useState(false)
   const [isBuyingNow, setIsBuyingNow] = useState(false)
 
   const handleAddToCart = async (e: React.MouseEvent) => {
     e.preventDefault()
     e.stopPropagation()
-    await addToCart(variantId)
-    if (typeof window !== 'undefined' && typeof window.gtag === 'function' && window.Cookiebot?.consent?.statistics) {
-      window.gtag('event', 'add_to_cart', {
-        currency: currencyCode,
-        value: parseFloat(price),
-        items: [{ item_name: productTitle, price: parseFloat(price), quantity: 1 }],
-      })
+    setAddError(false)
+    try {
+      await addToCart(variantId)
+      if (typeof window !== 'undefined' && typeof window.gtag === 'function' && window.Cookiebot?.consent?.statistics) {
+        window.gtag('event', 'add_to_cart', {
+          currency: currencyCode,
+          value: parseFloat(price),
+          items: [{ item_name: productTitle, price: parseFloat(price), quantity: 1 }],
+        })
+      }
+      setAdded(true)
+      setTimeout(() => setAdded(false), 2000)
+    } catch {
+      setAddError(true)
+      setTimeout(() => setAddError(false), 3000)
     }
-    setAdded(true)
-    setTimeout(() => setAdded(false), 2000)
   }
 
   const handleBuyNow = async (e: React.MouseEvent) => {
@@ -50,14 +57,18 @@ export default function AddToCartButton({ variantId, productTitle, price, curren
   return (
     <div className="flex flex-col gap-2 mt-3">
       <div aria-live="polite" aria-atomic="true" className="sr-only">
-        {added ? `${productTitle} added to cart` : ''}
+        {added ? `${productTitle} added to cart` : addError ? 'Failed to add to cart. Please try again.' : ''}
       </div>
       <button
         onClick={handleAddToCart}
         disabled={busy || added}
-        className="w-full px-4 py-2 bg-gold-500 hover:bg-gold-400 disabled:opacity-60 text-jerry-green-900 text-sm font-semibold rounded-lg transition-all duration-200"
+        className={`w-full px-4 py-2 text-sm font-semibold rounded-lg transition-all duration-200 disabled:opacity-60 ${
+          addError
+            ? 'bg-red-600 hover:bg-red-500 text-white'
+            : 'bg-gold-500 hover:bg-gold-400 text-jerry-green-900'
+        }`}
       >
-        {added ? 'Added' : isLoading ? 'Adding...' : 'Add to Cart'}
+        {addError ? 'Try again' : added ? 'Added' : isLoading ? 'Adding...' : 'Add to Cart'}
       </button>
       <button
         onClick={handleBuyNow}

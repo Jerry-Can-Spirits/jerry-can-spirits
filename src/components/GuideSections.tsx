@@ -35,7 +35,7 @@ export default function GuideSections({ sections, initialVisibleCount = 4 }: Gui
 
   return (
     <div className="space-y-12">
-      {visibleSections.map((section, index) => (
+      {visibleSections.filter(s => s.heading?.trim()).map((section, index) => (
         <section key={index} id={slugify(section.heading)} className="scroll-mt-24">
           <h2 className="text-3xl font-serif font-bold text-white mb-6">
             {section.heading}
