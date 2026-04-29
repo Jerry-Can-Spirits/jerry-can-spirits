@@ -63,7 +63,7 @@ export default function TradeEnquiryForm() {
     }
   }
 
-  const inputClass = 'w-full px-4 py-3 bg-jerry-green-900 border border-gold-500/30 rounded-lg text-white placeholder-parchment-500 text-sm focus:outline-none focus:border-gold-400 transition-colors'
+  const inputClass = 'w-full px-4 py-3 bg-jerry-green-900 border border-gold-500/30 rounded-lg text-white placeholder-parchment-500 text-base focus:outline-none focus:border-gold-400 transition-colors'
   const labelClass = 'block text-sm font-medium text-parchment-200 mb-2'
 
   return (
