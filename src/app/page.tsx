@@ -254,7 +254,10 @@ export default function Home() {
                     Working with <Link href="/friends/" className="text-gold-300 hover:text-gold-400 underline">Spirit of Wales Distillery</Link>, we blend Caribbean rum with Welsh brewery molasses and put it through their pot stills. The result? Vanilla and caramel upfront, warm spice through the middle, and a finish smooth enough to sip neat - but bold enough to hold its own in a cocktail.
                   </p>
                   <p>
-                    Whether you're mixing drinks at home or just unwinding after a long week, this is rum that doesn't let you down. We built it that way on purpose.
+                    Whether you're mixing drinks at home or just unwinding after a long week, this is rum that doesn't let you down. We built it that way on purpose.{' '}
+                    <Link href="/shop/spiced-rum/" className="text-gold-300 hover:text-gold-400 underline underline-offset-2">
+                      Find it in the shop.
+                    </Link>
                   </p>
                 </div>
               </div>
@@ -273,7 +276,10 @@ export default function Home() {
                     We signed the Armed Forces Covenant because supporting veterans isn't a marketing angle for us - it's personal. A portion of every sale goes to forces charities. We guarantee job interviews for veterans. It's baked into how we run the company, not bolted on afterwards.
                   </p>
                   <p>
-                    There's a reason we named ourselves after the jerry can. It wasn't designed to look good on a shelf. It was designed to work - in the desert, in the Arctic, wherever it was needed. That's the standard we hold ourselves to. Rum that does what it's supposed to do, every single time.
+                    There's a reason we named ourselves after the jerry can. It wasn't designed to look good on a shelf. It was designed to work - in the desert, in the Arctic, wherever it was needed. That's the standard we hold ourselves to. Rum that does what it's supposed to do, every single time.{' '}
+                    <Link href="/shop/" className="text-gold-300 hover:text-gold-400 underline underline-offset-2">
+                      Browse the shop.
+                    </Link>
                   </p>
                 </div>
               </div>

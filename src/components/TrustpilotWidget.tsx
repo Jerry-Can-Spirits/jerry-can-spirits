@@ -33,7 +33,7 @@ export default function TrustpilotWidget({
 
   useEffect(() => {
     const checkConsent = () => {
-      if (window.Cookiebot?.consent?.statistics) {
+      if (window.Cookiebot?.consent?.marketing) {
         setHasConsent(true)
         return true
       }
@@ -43,7 +43,7 @@ export default function TrustpilotWidget({
     checkConsent()
 
     const handleAccept = () => {
-      if (window.Cookiebot?.consent?.statistics) setHasConsent(true)
+      if (window.Cookiebot?.consent?.marketing) setHasConsent(true)
     }
     const handleDecline = () => setHasConsent(false)
 
