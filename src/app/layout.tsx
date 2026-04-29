@@ -11,10 +11,10 @@ import ClientWrapper from "@/components/ClientWrapper";
 // Lazy load non-critical layout components
 const CartographicBackground = dynamic(
   () => import("@/components/CartographicBackground"),
-  { loading: () => null }
+  { ssr: false, loading: () => null }
 );
-const CartDrawer = dynamic(() => import("@/components/CartDrawer"));
-const SocialProofToast = dynamic(() => import("@/components/SocialProofToast"));
+const CartDrawer = dynamic(() => import("@/components/CartDrawer"), { ssr: false });
+const SocialProofToast = dynamic(() => import("@/components/SocialProofToast"), { ssr: false });
 import ServiceWorkerRegistration from "@/components/ServiceWorkerRegistration";
 import InstallPrompt from "@/components/InstallPrompt";
 import { CartProvider } from "@/contexts/CartContext";
@@ -38,7 +38,7 @@ const inter = Inter({
 const playfair = Playfair_Display({
   variable: "--font-playfair",
   subsets: ["latin"],
-  display: "swap",
+  display: "optional",
   preload: true,
   fallback: ['Georgia', 'serif'],
   adjustFontFallback: true,

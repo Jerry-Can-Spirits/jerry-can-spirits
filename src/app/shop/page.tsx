@@ -7,20 +7,20 @@ import { baseOpenGraph, OG_IMAGE } from '@/lib/og'
 export const dynamic = 'force-static'
 
 export const metadata: Metadata = {
-  title: 'Shop',
+  title: 'Buy British Spiced Rum, Glassware & Bar Accessories',
   description: 'Shop Jerry Can Spirits. Expedition Spiced Rum, cocktail shaker sets, glassware, and expedition gear. Veteran-owned, built properly.',
   alternates: {
     canonical: 'https://jerrycanspirits.co.uk/shop/',
   },
   openGraph: {
     ...baseOpenGraph,
-    title: 'Shop | Jerry Can Spirits®',
+    title: 'Buy British Spiced Rum, Glassware & Bar Accessories | Jerry Can Spirits®',
     description: 'Shop Jerry Can Spirits. Expedition Spiced Rum, cocktail shaker sets, glassware, and expedition gear. Veteran-owned, built properly.',
     url: 'https://jerrycanspirits.co.uk/shop/',
   },
   twitter: {
     card: 'summary_large_image' as const,
-    title: 'Shop | Jerry Can Spirits®',
+    title: 'Buy British Spiced Rum, Glassware & Bar Accessories | Jerry Can Spirits®',
     description: 'Shop Jerry Can Spirits. Expedition Spiced Rum, cocktail shaker sets, glassware, and expedition gear. Veteran-owned, built properly.',
     images: OG_IMAGE,
   },
@@ -54,6 +54,15 @@ function titleFromHandle(handle: string): string {
   return handle.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')
 }
 
+const breadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://jerrycanspirits.co.uk' },
+    { '@type': 'ListItem', position: 2, name: 'Shop', item: 'https://jerrycanspirits.co.uk/shop/' },
+  ],
+}
+
 export default function ShopPage() {
   // Curated sections: pull title/description from CATEGORIES where available
   const curatedItems = CURATED_HANDLES.map(({ handle, title, description }) => {
@@ -69,6 +78,10 @@ export default function ShopPage() {
 
   return (
     <main className="min-h-screen py-20">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
         <Breadcrumbs items={[{ label: 'Shop' }]} />
       </div>

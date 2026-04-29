@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { getCloudflareContext } from '@opennextjs/cloudflare';
+import * as Sentry from '@sentry/nextjs';
 import {
   verifyWebhookSignature,
   incrementPreOrderSold,
@@ -360,6 +361,7 @@ export async function POST(request: Request) {
   } catch (error) {
     // Always return 200 to prevent Shopify retries on handler errors
     console.error('[webhook] Handler error:', error);
+    Sentry.captureException(error, { tags: { source: 'shopify-webhook' } });
     return NextResponse.json({ success: true });
   }
 }

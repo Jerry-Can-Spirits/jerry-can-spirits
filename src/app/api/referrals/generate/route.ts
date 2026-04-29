@@ -33,6 +33,19 @@ export async function POST(request: Request) {
     const kv = env.SITE_OPS as KVNamespace;
     const adminToken = env.SHOPIFY_ADMIN_API_TOKEN as string | undefined;
 
+    // Rate limit: 5 requests per 15 minutes per IP
+    const ip =
+      request.headers.get('CF-Connecting-IP') ||
+      request.headers.get('x-forwarded-for')?.split(',')[0].trim() ||
+      'unknown';
+    const rateLimitKey = `ratelimit:referral:${ip}`;
+    const rateLimitRaw = await kv.get(rateLimitKey);
+    const rateLimitCount = rateLimitRaw ? parseInt(rateLimitRaw, 10) : 0;
+    if (rateLimitCount >= 5) {
+      return NextResponse.json({ error: 'Too many requests' }, { status: 429 });
+    }
+    await kv.put(rateLimitKey, String(rateLimitCount + 1), { expirationTtl: 900 });
+
     if (!adminToken) {
       console.error('[referral] SHOPIFY_ADMIN_API_TOKEN not configured');
       return NextResponse.json(
