@@ -295,8 +295,18 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Invalid signature' }, { status: 401 });
     }
 
-    // Parse payload
-    const payload = JSON.parse(body);
+    // Parse and validate payload shape before type assertion
+    let payload: unknown;
+    try {
+      payload = JSON.parse(body);
+    } catch {
+      console.error('[webhook] Invalid JSON body');
+      return NextResponse.json({ error: 'Invalid payload' }, { status: 400 });
+    }
+    if (typeof payload !== 'object' || payload === null) {
+      console.error('[webhook] Payload is not an object');
+      return NextResponse.json({ error: 'Invalid payload' }, { status: 400 });
+    }
     const kv = env.SITE_OPS as KVNamespace;
 
     // Log event for audit trail
@@ -312,20 +322,36 @@ export async function POST(request: Request) {
 
     const klaviyoKey = env.KLAVIYO_PRIVATE_KEY as string | undefined;
 
+    const p = payload as Record<string, unknown>;
     switch (topic) {
-      case SHOPIFY_WEBHOOK_TOPICS.ORDERS_CREATE:
-        await handleOrderCreated(payload as ShopifyOrder, kv, adminToken, db, klaviyoKey);
-        // Check for referral conversion
+      case SHOPIFY_WEBHOOK_TOPICS.ORDERS_CREATE: {
+        if (typeof p.id !== 'number' || !Array.isArray(p.line_items)) {
+          console.error('[webhook] orders/create payload missing required fields');
+          return NextResponse.json({ error: 'Invalid payload' }, { status: 400 });
+        }
+        const order = payload as ShopifyOrder;
+        await handleOrderCreated(order, kv, adminToken, db, klaviyoKey);
         if (adminToken) {
-          await handleReferralConversion(payload as ShopifyOrder, db, kv, adminToken, klaviyoKey);
+          await handleReferralConversion(order, db, kv, adminToken, klaviyoKey);
         }
         break;
-      case SHOPIFY_WEBHOOK_TOPICS.ORDERS_FULFILLED:
+      }
+      case SHOPIFY_WEBHOOK_TOPICS.ORDERS_FULFILLED: {
+        if (typeof p.id !== 'number' || !Array.isArray(p.line_items)) {
+          console.error('[webhook] orders/fulfilled payload missing required fields');
+          return NextResponse.json({ error: 'Invalid payload' }, { status: 400 });
+        }
         await handleOrderFulfilled(payload as ShopifyOrder, kv);
         break;
-      case SHOPIFY_WEBHOOK_TOPICS.PRODUCTS_UPDATE:
+      }
+      case SHOPIFY_WEBHOOK_TOPICS.PRODUCTS_UPDATE: {
+        if (typeof p.id !== 'number' || typeof p.handle !== 'string') {
+          console.error('[webhook] products/update payload missing required fields');
+          return NextResponse.json({ error: 'Invalid payload' }, { status: 400 });
+        }
         await handleProductUpdated(payload as ShopifyProduct, kv);
         break;
+      }
       default:
         console.log(`[webhook] Unhandled topic: ${topic}`);
     }
