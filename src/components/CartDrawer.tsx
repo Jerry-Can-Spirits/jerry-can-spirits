@@ -34,6 +34,10 @@ export default function CartDrawer() {
   const [isApplyingDiscount, setIsApplyingDiscount] = useState(false)
   const [affiliateId, setAffiliateId] = useState<string | null>(null)
 
+  const drawerRef = useRef<HTMLDivElement>(null)
+  const closeButtonRef = useRef<HTMLButtonElement>(null)
+  const triggerRef = useRef<HTMLElement | null>(null)
+
   // Gift state
   const [isGift, setIsGift] = useState(false)
   const [giftMessage, setGiftMessage] = useState('')
@@ -99,6 +103,46 @@ export default function CartDrawer() {
     syncGiftAttributes(isGift, giftMessage, value)
   }
 
+  // Focus management: save trigger, move focus into drawer on open, restore on close
+  useEffect(() => {
+    if (isCartOpen) {
+      triggerRef.current = document.activeElement as HTMLElement
+      const timer = setTimeout(() => closeButtonRef.current?.focus(), 50)
+      return () => clearTimeout(timer)
+    } else {
+      triggerRef.current?.focus()
+      triggerRef.current = null
+    }
+  }, [isCartOpen])
+
+  // Escape key closes drawer; Tab key is trapped within drawer
+  useEffect(() => {
+    if (!isCartOpen) return
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        closeCart()
+        return
+      }
+      if (e.key === 'Tab') {
+        const focusable = drawerRef.current?.querySelectorAll<HTMLElement>(
+          'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+        )
+        if (!focusable || focusable.length === 0) return
+        const first = focusable[0]
+        const last = focusable[focusable.length - 1]
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault()
+          last.focus()
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault()
+          first.focus()
+        }
+      }
+    }
+    document.addEventListener('keydown', handleKeyDown)
+    return () => document.removeEventListener('keydown', handleKeyDown)
+  }, [isCartOpen, closeCart])
+
   // Retrieve affiliate tracking ID from sessionStorage (set by ClientWrapper)
   useEffect(() => {
     const dtId = sessionStorage.getItem('affiliate_dt_id')
@@ -139,6 +183,11 @@ export default function CartDrawer() {
 
       {/* Drawer */}
       <div
+        ref={drawerRef}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="cart-heading"
+        aria-hidden={!isCartOpen}
         className={`fixed top-0 right-0 h-full w-full sm:w-[480px] bg-jerry-green-900 border-l border-gold-500/20 z-50 transform transition-transform duration-300 ease-in-out ${
           isCartOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
@@ -146,12 +195,13 @@ export default function CartDrawer() {
         <div className="flex flex-col h-full">
           {/* Header */}
           <div className="flex items-center justify-between p-6 border-b border-gold-500/20">
-            <h2 className="text-2xl font-serif font-bold text-gold-300">
+            <h2 id="cart-heading" className="text-2xl font-serif font-bold text-gold-300">
               Your Cart
             </h2>
             <button
+              ref={closeButtonRef}
               onClick={closeCart}
-              className="p-2 hover:bg-jerry-green-800/50 rounded-lg transition-colors"
+              className="p-3 hover:bg-jerry-green-800/50 rounded-lg transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
               aria-label="Close cart"
             >
               <svg
@@ -260,8 +310,8 @@ export default function CartDrawer() {
                             updateQuantity(line.id, Math.max(0, line.quantity - 1))
                           }
                           disabled={isLoading}
-                          aria-label={line.quantity === 1 ? 'Remove item' : 'Decrease quantity'}
-                          className="w-8 h-8 flex items-center justify-center bg-jerry-green-800/50 hover:bg-jerry-green-800 rounded border border-gold-500/20 transition-colors disabled:opacity-50"
+                          aria-label={line.quantity === 1 ? `Remove ${line.merchandise.product.title}` : `Decrease quantity of ${line.merchandise.product.title}`}
+                          className="min-w-[44px] min-h-[44px] flex items-center justify-center bg-jerry-green-800/50 hover:bg-jerry-green-800 rounded border border-gold-500/20 transition-colors disabled:opacity-50"
                         >
                           {line.quantity === 1 ? (
                             <svg className="w-4 h-4 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -297,7 +347,8 @@ export default function CartDrawer() {
                         <button
                           onClick={() => updateQuantity(line.id, line.quantity + 1)}
                           disabled={isLoading}
-                          className="w-8 h-8 flex items-center justify-center bg-jerry-green-800/50 hover:bg-jerry-green-800 rounded border border-gold-500/20 transition-colors disabled:opacity-50"
+                          aria-label={`Increase quantity of ${line.merchandise.product.title}`}
+                          className="min-w-[44px] min-h-[44px] flex items-center justify-center bg-jerry-green-800/50 hover:bg-jerry-green-800 rounded border border-gold-500/20 transition-colors disabled:opacity-50"
                         >
                           <svg
                             className="w-4 h-4 text-parchment-300"
@@ -330,6 +381,7 @@ export default function CartDrawer() {
             <div className="border-t border-gold-500/20 p-6 space-y-4 overflow-y-auto max-h-[60vh]">
               {/* Discount Code */}
               <div>
+                <label htmlFor="discount-code" className="sr-only">Discount code</label>
                 <div className="flex gap-2">
                   <input
                     type="text"
