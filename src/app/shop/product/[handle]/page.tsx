@@ -20,6 +20,8 @@ import { client } from '@/sanity/lib/client'
 import { productByHandleQuery } from '@/sanity/queries'
 import type { Metadata } from 'next'
 
+export const revalidate = 3600
+
 // Sanity product data type
 interface SanityProduct {
   _id: string

@@ -32,6 +32,7 @@ export default function GoogleTag() {
             // Google Analytics 4
             gtag('config', 'G-6VJL06YBW2', {
               page_path: window.location.pathname,
+              send_page_view: false,
             });
 
             // Google Ads with Enhanced Conversions

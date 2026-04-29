@@ -100,12 +100,12 @@ export const cocktailBySlugQuery = `*[_type == "cocktail" && slug.current == $sl
   videoUrl,
   flavorProfile,
   "featuredSpirit": featuredSpirit->{ _id, name, slug, description, "image": image.asset->url, "imageAlt": image.alt },
-  relatedGuides[] {
+  relatedGuides[defined(guide->._id)] {
     "guide": guide->{ _id, title, slug },
     sectionAnchor,
     linkText
   },
-  "relatedCocktails": relatedCocktails[]->{ _id, name, slug, description, difficulty, "image": image.asset->url, "imageAlt": image.alt }
+  "relatedCocktails": relatedCocktails[]->[defined(_id)]{ _id, name, slug, description, difficulty, "image": image.asset->url, "imageAlt": image.alt }
 }`
 
 // Sitemap query - only fetches slug for URL generation
@@ -168,8 +168,8 @@ export const ingredientBySlugQuery = `*[_type == "ingredient" && slug.current ==
   history,
   professionalTip,
   author,
-  "relatedCocktails": relatedCocktails[]->{ _id, name, slug },
-  "relatedIngredients": relatedIngredients[]->{ _id, name, slug }
+  "relatedCocktails": relatedCocktails[]->[defined(_id)]{ _id, name, slug },
+  "relatedIngredients": relatedIngredients[]->[defined(_id)]{ _id, name, slug }
 }`
 
 // Sitemap query - only fetches slug for URL generation
@@ -245,9 +245,9 @@ export const equipmentBySlugQuery = `*[_type == "equipment" && slug.current == $
   professionalTip,
   author,
   videoUrl,
-  "relatedCocktails": relatedCocktails[]->{ _id, name, slug },
-  "relatedEquipment": relatedEquipment[]->{ _id, name, slug },
-  "relatedIngredients": relatedIngredients[]->{ _id, name, slug }
+  "relatedCocktails": relatedCocktails[]->[defined(_id)]{ _id, name, slug },
+  "relatedEquipment": relatedEquipment[]->[defined(_id)]{ _id, name, slug },
+  "relatedIngredients": relatedIngredients[]->[defined(_id)]{ _id, name, slug }
 }`
 
 // Product query - matches by slug or shopifyHandle for flexible matching
@@ -274,7 +274,7 @@ export const productByHandleQuery = `*[_type == "product" && (slug.current == $s
   "imageAlt": image.alt,
   featured,
   videoUrl,
-  "relatedCocktails": relatedCocktails[]->{ _id, name, slug },
+  "relatedCocktails": relatedCocktails[]->[defined(_id)]{ _id, name, slug },
   whatsIncluded[] {
     item,
     description,
@@ -353,8 +353,8 @@ export const guideBySlugQuery = `*[_type == "guide" && slug.current == $slug][0]
     website,
     speciality
   },
-  "relatedGuides": relatedGuides[]->{ _id, title, slug, excerpt, category },
-  "relatedCocktails": relatedCocktails[]->{ _id, name, slug },
+  "relatedGuides": relatedGuides[]->[defined(_id)]{ _id, title, slug, excerpt, category },
+  "relatedCocktails": relatedCocktails[]->[defined(_id)]{ _id, name, slug },
   relatedProducts[] {
     shopifyHandle,
     contextNote

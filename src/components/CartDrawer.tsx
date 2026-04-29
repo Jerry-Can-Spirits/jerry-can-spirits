@@ -110,12 +110,13 @@ export default function CartDrawer() {
   // Build checkout URL with affiliate tracking if present
   const getCheckoutUrl = () => {
     if (!cart?.checkoutUrl) return '#'
-    if (!affiliateId) return cart.checkoutUrl
-
-    // Append dt_id parameter for Shopify Collabs tracking
-    const url = new URL(cart.checkoutUrl)
-    url.searchParams.set('dt_id', affiliateId)
-    return url.toString()
+    try {
+      const url = new URL(cart.checkoutUrl)
+      if (affiliateId) url.searchParams.set('dt_id', affiliateId)
+      return url.toString()
+    } catch {
+      return cart.checkoutUrl
+    }
   }
 
   const handleApplyDiscount = async () => {
