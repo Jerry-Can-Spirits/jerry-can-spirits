@@ -40,6 +40,7 @@ export default function Header() {
   const dropdownCloseTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
   const isScrolledRef = useRef(false)
   const showHeaderRef = useRef(true)
+  const isMobileMenuOpenRef = useRef(false)
 
   // Keyboard nav refs
   const triggerRefs = useRef<Map<string, HTMLElement>>(new Map())
@@ -139,7 +140,7 @@ export default function Header() {
         const scrollDifference = Math.abs(currentScrollY - prevScrollY)
 
         let newShowHeader = showHeaderRef.current
-        if (!isMobileMenuOpen && scrollDifference > 5) {
+        if (!isMobileMenuOpenRef.current && scrollDifference > 5) {
           if (currentScrollY > prevScrollY && currentScrollY > 150) {
             newShowHeader = false
           } else if (currentScrollY < prevScrollY) {
@@ -163,6 +164,11 @@ export default function Header() {
 
     window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  // Keep ref in sync with state so scroll handler doesn't need isMobileMenuOpen in its dep array
+  useEffect(() => {
+    isMobileMenuOpenRef.current = isMobileMenuOpen
   }, [isMobileMenuOpen])
 
   // Close mobile menu on resize

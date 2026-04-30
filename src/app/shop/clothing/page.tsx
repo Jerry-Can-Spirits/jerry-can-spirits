@@ -3,6 +3,7 @@ import Image from 'next/image'
 import { getProductsByCollection, type ShopifyProduct } from '@/lib/shopify'
 import type { Metadata } from 'next'
 import Breadcrumbs from '@/components/Breadcrumbs'
+import StructuredData from '@/components/StructuredData'
 import { baseOpenGraph, OG_IMAGE } from '@/lib/og'
 
 export const metadata: Metadata = {
@@ -183,6 +184,16 @@ export default async function ClothingPage() {
     )
   }
 
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://jerrycanspirits.co.uk' },
+      { '@type': 'ListItem', position: 2, name: 'Shop', item: 'https://jerrycanspirits.co.uk/shop/' },
+      { '@type': 'ListItem', position: 3, name: 'Expedition Gear', item: 'https://jerrycanspirits.co.uk/shop/clothing/' },
+    ],
+  }
+
   // Structured data for product listing
   const clothingSchema = {
     '@context': 'https://schema.org',
@@ -218,6 +229,7 @@ export default async function ClothingPage() {
   // Success state - products loaded from Shopify
   return (
     <main className="min-h-screen py-20">
+      <StructuredData data={breadcrumbSchema} id="clothing-breadcrumb-schema" />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(clothingSchema) }}

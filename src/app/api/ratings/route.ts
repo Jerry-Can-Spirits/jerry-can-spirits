@@ -1,7 +1,7 @@
 // app/api/ratings/route.ts
 import { NextResponse } from 'next/server'
 import { getCloudflareContext } from '@opennextjs/cloudflare'
-import { isRateLimited } from '@/lib/kv'
+import { isRateLimited, isAllowedOrigin } from '@/lib/kv'
 
 export const dynamic = 'force-dynamic'
 
@@ -115,6 +115,9 @@ export async function GET(request: Request) {
 
 // POST - Submit a rating
 export async function POST(request: Request) {
+  if (!isAllowedOrigin(request)) {
+    return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+  }
   try {
     const { env } = await getCloudflareContext()
     const kv = env.COCKTAIL_RATINGS as KVNamespace | undefined

@@ -152,6 +152,16 @@ export default async function DrinksPageTest() {
     )
   }
 
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://jerrycanspirits.co.uk' },
+      { '@type': 'ListItem', position: 2, name: 'Shop', item: 'https://jerrycanspirits.co.uk/shop/' },
+      { '@type': 'ListItem', position: 3, name: 'Drinks', item: 'https://jerrycanspirits.co.uk/shop/drinks/' },
+    ],
+  }
+
   // Build ItemList schema for product collection
   const itemListSchema = {
     '@context': 'https://schema.org',
@@ -192,6 +202,7 @@ export default async function DrinksPageTest() {
   // Success state - products loaded from Shopify
   return (
     <main className="min-h-screen py-20">
+      <StructuredData data={breadcrumbSchema} id="drinks-breadcrumb-schema" />
       <StructuredData data={itemListSchema} id="drinks-itemlist-schema" />
       {/* Breadcrumb */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">

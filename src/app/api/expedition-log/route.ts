@@ -2,7 +2,7 @@
 import { NextResponse } from 'next/server'
 import { getCloudflareContext } from '@opennextjs/cloudflare'
 import { getBottleByLabel, isBottleLogged } from '@/lib/d1'
-import { isRateLimited } from '@/lib/kv'
+import { isRateLimited, isAllowedOrigin } from '@/lib/kv'
 import type { LabelType } from '@/lib/d1'
 
 const VALID_BOTTLE_TYPES = ['standard', 'premium', 'founder'] as const
@@ -26,6 +26,9 @@ interface RequestBody {
 }
 
 export async function POST(request: Request) {
+  if (!isAllowedOrigin(request)) {
+    return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+  }
   try {
     let body: RequestBody
     try {
