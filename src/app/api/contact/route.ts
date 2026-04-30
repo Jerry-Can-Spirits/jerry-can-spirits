@@ -197,7 +197,7 @@ export async function POST(request: Request) {
         const searchData = await profileSearchResponse.json() as { data?: { id?: string }[] }
         if (searchData.data && searchData.data.length > 0) {
           profileId = searchData.data[0].id
-          if (profileId) {
+          if (profileId && /^[\w-]+$/.test(profileId)) {
             await fetch(`${KLAVIYO_API_BASE}/profiles/${profileId}/`, {
               method: 'PATCH',
               headers: commonHeaders,

@@ -30,6 +30,7 @@ export async function POST(request: Request) {
   }
 
   const lines: CheckoutLine[] = []
+  const seen = new Set<string>()
   for (const item of body.lines) {
     if (
       typeof item !== 'object' || item === null ||
@@ -45,6 +46,14 @@ export async function POST(request: Request) {
     if (!variantId.startsWith('gid://shopify/ProductVariant/')) {
       return NextResponse.json({ error: 'Invalid order data.' }, { status: 400 })
     }
+    const numericSuffix = variantId.slice('gid://shopify/ProductVariant/'.length)
+    if (!/^\d+$/.test(numericSuffix)) {
+      return NextResponse.json({ error: 'Invalid order data.' }, { status: 400 })
+    }
+    if (seen.has(variantId)) {
+      return NextResponse.json({ error: 'Duplicate items in order.' }, { status: 400 })
+    }
+    seen.add(variantId)
     if (quantity < 1 || quantity > 100) {
       return NextResponse.json({ error: 'Quantity must be between 1 and 100.' }, { status: 400 })
     }
