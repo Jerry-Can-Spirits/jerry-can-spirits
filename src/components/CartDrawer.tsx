@@ -27,12 +27,14 @@ export default function CartDrawer() {
     closeCart,
     updateQuantity,
     applyDiscountCode,
+    removeDiscountCode,
     updateAttributes,
     isLoading,
   } = useCart()
 
   const [discountCode, setDiscountCode] = useState('')
   const [isApplyingDiscount, setIsApplyingDiscount] = useState(false)
+  const [discountError, setDiscountError] = useState('')
   const [affiliateId, setAffiliateId] = useState<string | null>(null)
 
   const drawerRef = useRef<HTMLDivElement>(null)
@@ -166,10 +168,16 @@ export default function CartDrawer() {
 
   const handleApplyDiscount = async () => {
     if (!discountCode.trim()) return
+    setDiscountError('')
     setIsApplyingDiscount(true)
-    await applyDiscountCode(discountCode.trim())
-    setDiscountCode('')
-    setIsApplyingDiscount(false)
+    try {
+      await applyDiscountCode(discountCode.trim())
+      setDiscountCode('')
+    } catch (err) {
+      setDiscountError(err instanceof Error ? err.message : 'Code not valid for this cart.')
+    } finally {
+      setIsApplyingDiscount(false)
+    }
   }
 
   return (
@@ -411,20 +419,27 @@ export default function CartDrawer() {
                   </button>
                 </div>
 
+                {discountError && (
+                  <p className="mt-2 text-sm text-red-400">{discountError}</p>
+                )}
+
                 {/* Show applied discounts */}
                 {cart.discountCodes && cart.discountCodes.length > 0 && (
                   <div className="mt-2 space-y-1">
                     {cart.discountCodes.map((discount, index) => (
-                      <p
-                        key={index}
-                        className={`text-sm ${
-                          discount.applicable
-                            ? 'text-green-400'
-                            : 'text-red-400'
-                        }`}
-                      >
-                        {discount.applicable ? '✓' : '✗'} {discount.code}
-                      </p>
+                      <div key={index} className="flex items-center justify-between gap-2">
+                        <p className={`text-sm ${discount.applicable ? 'text-green-400' : 'text-red-400'}`}>
+                          {discount.applicable ? '✓' : '✗'} {discount.code}
+                        </p>
+                        <button
+                          onClick={() => removeDiscountCode(discount.code)}
+                          disabled={isLoading}
+                          className="text-parchment-500 hover:text-parchment-300 text-xs transition-colors disabled:opacity-50"
+                          aria-label={`Remove discount code ${discount.code}`}
+                        >
+                          Remove
+                        </button>
+                      </div>
                     ))}
                   </div>
                 )}

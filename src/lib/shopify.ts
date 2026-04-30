@@ -425,6 +425,73 @@ export async function getProduct(handle: string): Promise<ShopifyProduct | null>
   }
 }
 
+// Fetch multiple products by handle in a single GraphQL call (used by CartUpsell)
+export async function getProductsByHandles(handles: string[]): Promise<ShopifyProduct[]> {
+  if (handles.length === 0) return []
+
+  const queryFilter = handles.map(h => `handle:${h}`).join(' OR ')
+  const query = `
+    query GetProductsByHandles($query: String!, $first: Int!) {
+      products(first: $first, query: $query) {
+        edges {
+          node {
+            id
+            title
+            handle
+            priceRange {
+              minVariantPrice {
+                amount
+                currencyCode
+              }
+            }
+            images(first: 1) {
+              edges {
+                node {
+                  url
+                  altText
+                }
+              }
+            }
+            variants(first: 10) {
+              edges {
+                node {
+                  id
+                  title
+                  price {
+                    amount
+                    currencyCode
+                  }
+                  availableForSale
+                  image {
+                    url
+                    altText
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  `
+
+  try {
+    const { data, errors } = await getClient().request(query, {
+      variables: { query: queryFilter, first: handles.length },
+    })
+    if (errors) throw new Error('Failed to fetch products by handles')
+    return data.products.edges.map((edge: ProductEdge) => ({
+      ...edge.node,
+      images: edge.node.images.edges.map((img: ImageEdge) => img.node),
+      variants: edge.node.variants?.edges.map((v: VariantEdge) => v.node) ?? [],
+      metafields: [],
+    }))
+  } catch (error) {
+    console.error('Error fetching products by handles:', error)
+    return []
+  }
+}
+
 // ===== CART FUNCTIONS =====
 
 const CART_FIELDS = `
