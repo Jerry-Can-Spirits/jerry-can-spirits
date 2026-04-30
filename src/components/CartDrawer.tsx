@@ -371,8 +371,6 @@ export default function CartDrawer() {
                   </div>
                 ))}
 
-                {/* Cross-sell Products */}
-                <CartUpsell />
               </div>
             )}
           </div>
@@ -391,7 +389,7 @@ export default function CartDrawer() {
                     value={discountCode}
                     onChange={(e) => setDiscountCode(e.target.value)}
                     placeholder="Discount code"
-                    className="flex-1 px-4 py-2 bg-jerry-green-800/50 border border-gold-500/20 rounded-lg text-white placeholder-parchment-400 focus:outline-none focus:border-gold-400"
+                    className="flex-1 px-4 py-2 bg-jerry-green-800/50 border border-gold-500/20 rounded-lg text-white placeholder-parchment-400 focus:outline-none focus:border-gold-400 text-base"
                     onKeyDown={(e) => {
                       if (e.key === 'Enter') handleApplyDiscount()
                     }}
@@ -509,6 +507,18 @@ export default function CartDrawer() {
                 </span>
               </div>
 
+              {/* Accepted payment methods */}
+              <div className="flex items-center justify-center gap-2 flex-wrap">
+                {['Visa', 'Mastercard', 'Amex', 'PayPal', 'Shop Pay', 'Apple Pay'].map((method) => (
+                  <span
+                    key={method}
+                    className="px-2 py-1 bg-jerry-green-800/50 border border-gold-500/15 rounded text-parchment-500 text-[10px] uppercase tracking-wide"
+                  >
+                    {method}
+                  </span>
+                ))}
+              </div>
+
               {/* Checkout Buttons */}
               <div className="space-y-3">
                 {/* Main Checkout Button */}
@@ -562,6 +572,9 @@ export default function CartDrawer() {
                   <span>Shop Pay available for faster checkout</span>
                 </div>
               </div>
+
+              {/* Cross-sell Products */}
+              <CartUpsell />
 
               <Link
                 href="/shop/spirits/"

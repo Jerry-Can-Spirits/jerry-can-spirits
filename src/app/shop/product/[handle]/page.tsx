@@ -537,6 +537,9 @@ export default async function ProductPage({
                   <p className="text-sm text-parchment-400 tracking-wide">
                     Secure checkout · Express payment available
                   </p>
+                  <p className="text-sm text-gold-400/80 tracking-wide">
+                    5% of every sale goes to forces charities.
+                  </p>
                   <div className="flex items-center justify-center gap-6 text-xs text-parchment-500 uppercase tracking-widest">
                     <span>SSL Secured</span>
                     <span className="text-gold-500/30">•</span>

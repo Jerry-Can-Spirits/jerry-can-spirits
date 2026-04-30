@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Image from 'next/image'
 import {
   type TradeProduct,
   type TradeCategory,
@@ -159,7 +160,7 @@ export default function TradeOrderForm({ products, error: catalogueError }: Trad
               onChange={(e) => setPin(e.target.value)}
               required
               autoComplete="off"
-              className="w-full px-4 py-3 bg-jerry-green-900 border border-gold-500/30 rounded-lg text-white placeholder-parchment-600 text-sm focus:outline-none focus:border-gold-400 transition-colors tracking-widest"
+              className="w-full px-4 py-3 bg-jerry-green-900 border border-gold-500/30 rounded-lg text-white placeholder-parchment-600 text-base focus:outline-none focus:border-gold-400 transition-colors tracking-widest"
               placeholder="••••••••"
             />
           </div>
@@ -233,11 +234,12 @@ export default function TradeOrderForm({ products, error: catalogueError }: Trad
                         <div className="flex items-center gap-3 mb-2">
                           {product.featuredImage && (
                             <div className="relative flex-shrink-0 w-12 h-12">
-                              {/* eslint-disable-next-line @next/next/no-img-element */}
-                              <img
+                              <Image
                                 src={product.featuredImage.url}
                                 alt={product.featuredImage.altText ?? product.title}
-                                className="w-12 h-12 rounded object-cover border border-gold-500/20 cursor-zoom-in transition-transform duration-200 hover:scale-[2.5] hover:z-20 relative"
+                                width={48}
+                                height={48}
+                                className="rounded object-cover border border-gold-500/20 cursor-zoom-in transition-transform duration-200 hover:scale-[2.5] hover:z-20 relative"
                               />
                             </div>
                           )}
