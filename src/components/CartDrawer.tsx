@@ -538,7 +538,8 @@ export default function CartDrawer() {
                         content_ids: cart.lines.map(line => line.merchandise.id.split('/').pop() ?? line.merchandise.id),
                         contents: cart.lines.map(line => ({
                           id: line.merchandise.id.split('/').pop() ?? line.merchandise.id,
-                          quantity: line.quantity
+                          quantity: line.quantity,
+                          item_price: parseFloat(line.merchandise.price.amount),
                         })),
                         value: parseFloat(cart.cost.totalAmount.amount),
                         currency: cart.cost.totalAmount.currencyCode,

@@ -145,10 +145,26 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const removeItem = useCallback(async (lineId: string) => {
     if (!cart) return
 
+    const removedLine = cart.lines.find(l => l.id === lineId)
+
     setIsLoading(true)
     try {
       const updatedCart = await shopifyRemoveFromCart(cart.id, [lineId])
       setCart(updatedCart)
+
+      if (removedLine && typeof window !== 'undefined' && typeof window.gtag === 'function' && window.Cookiebot?.consent?.statistics) {
+        window.gtag('event', 'remove_from_cart', {
+          currency: removedLine.merchandise.price.currencyCode,
+          value: parseFloat(removedLine.merchandise.price.amount) * removedLine.quantity,
+          items: [{
+            item_id: removedLine.merchandise.id.split('/').pop() ?? removedLine.merchandise.id,
+            item_name: removedLine.merchandise.product.title,
+            item_variant: removedLine.merchandise.title !== 'Default Title' ? removedLine.merchandise.title : undefined,
+            price: parseFloat(removedLine.merchandise.price.amount),
+            quantity: removedLine.quantity,
+          }],
+        })
+      }
     } catch (error) {
       console.error('Error removing item:', error)
       alert('Failed to remove item. Please try again.')

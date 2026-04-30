@@ -28,7 +28,7 @@ export default function AddToCartButton({ variantId, productTitle, price, curren
         window.gtag('event', 'add_to_cart', {
           currency: currencyCode,
           value: parseFloat(price),
-          items: [{ item_name: productTitle, price: parseFloat(price), quantity: 1 }],
+          items: [{ item_id: variantId.split('/').pop() ?? variantId, item_name: productTitle, price: parseFloat(price), quantity: 1 }],
         })
       }
       setAdded(true)
