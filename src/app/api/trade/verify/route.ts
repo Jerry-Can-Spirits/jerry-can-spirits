@@ -13,9 +13,13 @@ import {
   clearTradeFailedAttempts,
   createTradeSession,
   TRADE_MAX_ATTEMPTS,
+  isAllowedOrigin,
 } from '@/lib/kv'
 
 export async function POST(request: Request) {
+  if (!isAllowedOrigin(request)) {
+    return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+  }
   let body: { pin?: unknown }
   try {
     body = await request.json() as { pin?: unknown }
