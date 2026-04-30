@@ -7,6 +7,7 @@ import { GB_SHIPPING_DETAILS } from '@/lib/shippingSchema'
 import StructuredData from '@/components/StructuredData'
 import ScrollReveal from '@/components/ScrollReveal'
 import AddToCartButton from '@/components/AddToCartButton'
+import ViewItemListTracker from '@/components/ViewItemListTracker'
 import { OG_IMAGE } from '@/lib/og'
 
 export const metadata: Metadata = {
@@ -147,8 +148,17 @@ export default async function BarwarePage() {
     })),
   }
 
+  const trackerItems = products.map((p, i) => ({
+    item_id: p.id.split('/').pop() ?? p.id,
+    item_name: p.title,
+    index: i,
+    price: parseFloat(p.priceRange.minVariantPrice.amount),
+  }))
+  const currency = products[0]?.priceRange.minVariantPrice.currencyCode ?? 'GBP'
+
   return (
     <main className="min-h-screen py-20">
+      <ViewItemListTracker listId="barware" listName="Barware" currency={currency} items={trackerItems} />
       <StructuredData data={breadcrumbSchema} id="barware-breadcrumb-schema" />
       <StructuredData data={itemListSchema} id="barware-itemlist-schema" />
 

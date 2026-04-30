@@ -6,6 +6,7 @@ import Breadcrumbs from '@/components/Breadcrumbs'
 import { GB_SHIPPING_DETAILS } from '@/lib/shippingSchema'
 import StructuredData from '@/components/StructuredData'
 import ScrollReveal from '@/components/ScrollReveal'
+import ViewItemListTracker from '@/components/ViewItemListTracker'
 import { OG_IMAGE } from '@/lib/og'
 
 export const metadata: Metadata = {
@@ -199,9 +200,18 @@ export default async function DrinksPageTest() {
     })),
   }
 
+  const trackerItems = products.map((p, i) => ({
+    item_id: p.id.split('/').pop() ?? p.id,
+    item_name: p.title,
+    index: i,
+    price: parseFloat(p.priceRange.minVariantPrice.amount),
+  }))
+  const currency = products[0]?.priceRange.minVariantPrice.currencyCode ?? 'GBP'
+
   // Success state - products loaded from Shopify
   return (
     <main className="min-h-screen py-20">
+      <ViewItemListTracker listId="drinks" listName="Drinks" currency={currency} items={trackerItems} />
       <StructuredData data={breadcrumbSchema} id="drinks-breadcrumb-schema" />
       <StructuredData data={itemListSchema} id="drinks-itemlist-schema" />
       {/* Breadcrumb */}

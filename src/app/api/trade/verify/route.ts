@@ -11,8 +11,12 @@ import {
   getTradeFailedAttempts,
   incrementTradeFailedAttempts,
   clearTradeFailedAttempts,
+  getTradeFailedAttemptsForPin,
+  incrementTradeFailedAttemptsForPin,
+  clearTradeFailedAttemptsForPin,
   createTradeSession,
   TRADE_MAX_ATTEMPTS,
+  TRADE_PIN_MAX_ATTEMPTS,
   isAllowedOrigin,
 } from '@/lib/kv'
 
@@ -46,10 +50,21 @@ export async function POST(request: Request) {
       .split(',')[0]
       .trim()
 
-  const failedAttempts = await getTradeFailedAttempts(kv, ip)
+  const [failedAttempts, pinFailedAttempts] = await Promise.all([
+    getTradeFailedAttempts(kv, ip),
+    getTradeFailedAttemptsForPin(kv, pin),
+  ])
+
   if (failedAttempts >= TRADE_MAX_ATTEMPTS) {
     return NextResponse.json(
       { error: 'Too many failed attempts. Please try again in 15 minutes.' },
+      { status: 429 },
+    )
+  }
+
+  if (pinFailedAttempts >= TRADE_PIN_MAX_ATTEMPTS) {
+    return NextResponse.json(
+      { error: 'This account has been temporarily locked. Please contact support.' },
       { status: 429 },
     )
   }
@@ -58,11 +73,17 @@ export async function POST(request: Request) {
   const account = await getTradeAccountByPin(db, pin)
 
   if (!account) {
-    await incrementTradeFailedAttempts(kv, ip)
+    await Promise.all([
+      incrementTradeFailedAttempts(kv, ip),
+      incrementTradeFailedAttemptsForPin(kv, pin),
+    ])
     return NextResponse.json({ error: 'Invalid PIN.' }, { status: 401 })
   }
 
-  await clearTradeFailedAttempts(kv, ip)
+  await Promise.all([
+    clearTradeFailedAttempts(kv, ip),
+    clearTradeFailedAttemptsForPin(kv, pin),
+  ])
 
   const sid = crypto.randomUUID()
   await createTradeSession(kv, sid)
