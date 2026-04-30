@@ -7,9 +7,8 @@ import { trackAddToCart } from '@/components/GoogleTag'
 import {
   createCart,
   addToCart as shopifyAddToCart,
-  applyDiscount as shopifyApplyDiscount,
-  updateCartAttributes as shopifyUpdateCartAttributes,
 } from '@/lib/shopify'
+import { applyReferralCode } from '@/lib/referrals'
 import type { ShopifyProductVariant, ShopifyImage } from '@/lib/shopify'
 import { appendUtmToCheckout } from '@/lib/utm'
 
@@ -89,19 +88,7 @@ export default function ProductVariantSelector({
     setIsBuyingNow(true)
     try {
       let newCart = await createCart()
-
-      const referralCode = localStorage.getItem('jcs_referral_code')
-      if (referralCode) {
-        try {
-          newCart = await shopifyApplyDiscount(newCart.id, [referralCode])
-          newCart = await shopifyUpdateCartAttributes(newCart.id, [
-            { key: '_referral_code', value: referralCode },
-          ])
-        } catch {
-          // Non-critical — proceed without referral code
-        }
-      }
-
+      newCart = await applyReferralCode(newCart)
       const updatedCart = await shopifyAddToCart(newCart.id, selectedVariantId, quantity)
       window.location.href = appendUtmToCheckout(updatedCart.checkoutUrl)
     } catch (error) {

@@ -120,6 +120,7 @@ export interface CartLine {
       altText: string | null;
     };
     price: ShopifyMoney;
+    compareAtPrice?: ShopifyMoney;
   };
 }
 
@@ -160,6 +161,7 @@ interface CartLineEdge {
         altText: string | null;
       };
       price: ShopifyMoney;
+      compareAtPrice?: ShopifyMoney;
     };
   };
 }
@@ -519,6 +521,10 @@ const CART_FIELDS = `
               altText
             }
             price {
+              amount
+              currencyCode
+            }
+            compareAtPrice {
               amount
               currencyCode
             }
