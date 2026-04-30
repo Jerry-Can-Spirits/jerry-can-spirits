@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server'
 import { getCloudflareContext } from '@opennextjs/cloudflare'
 import { getTradeAccountByPin } from '@/lib/d1'
 import { verifyTradeCookie, TRADE_COOKIE_NAME } from '@/lib/trade-cookie'
-import { isTradeSessionValid } from '@/lib/kv'
+import { isTradeSessionValid, isAllowedOrigin } from '@/lib/kv'
 import { createCart, addLinesToCart, applyDiscount } from '@/lib/shopify'
 
 interface CheckoutLine {
@@ -11,6 +11,9 @@ interface CheckoutLine {
 }
 
 export async function POST(request: Request) {
+  if (!isAllowedOrigin(request)) {
+    return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+  }
   let body: { lines?: unknown }
   try {
     body = await request.json() as { lines?: unknown }

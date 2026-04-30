@@ -348,7 +348,7 @@ export async function getProduct(handle: string): Promise<ShopifyProduct | null>
         images(first: 5) {
           edges {
             node {
-              url
+              url(transform: { maxWidth: 1600 })
               altText
             }
           }

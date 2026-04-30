@@ -1,9 +1,12 @@
 import { NextResponse } from 'next/server'
 import { getCloudflareContext } from '@opennextjs/cloudflare'
 import { verifyTradeCookie, TRADE_COOKIE_NAME } from '@/lib/trade-cookie'
-import { revokeTradeSession } from '@/lib/kv'
+import { revokeTradeSession, isAllowedOrigin } from '@/lib/kv'
 
 export async function POST(request: Request) {
+  if (!isAllowedOrigin(request)) {
+    return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+  }
   const cookieHeader = request.headers.get('cookie') ?? ''
   const cookieMatch = cookieHeader.match(
     new RegExp(`(?:^|;\\s*)${TRADE_COOKIE_NAME}=([^;]+)`)
