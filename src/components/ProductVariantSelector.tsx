@@ -174,8 +174,16 @@ export default function ProductVariantSelector({
 
       {/* Selected variant price display */}
       {hasMultipleVariants && (
-        <div className="text-2xl font-serif font-bold text-gold-400">
-          {formatPrice(selectedVariant.price.amount, currencyCode)}
+        <div className="flex items-baseline gap-4">
+          <div className="text-2xl font-serif font-bold text-gold-400">
+            {formatPrice(selectedVariant.price.amount, currencyCode)}
+          </div>
+          {selectedVariant.compareAtPrice &&
+            parseFloat(selectedVariant.compareAtPrice.amount) > parseFloat(selectedVariant.price.amount) && (
+            <div className="text-xl font-serif text-parchment-400 line-through">
+              {formatPrice(selectedVariant.compareAtPrice.amount, currencyCode)}
+            </div>
+          )}
         </div>
       )}
 

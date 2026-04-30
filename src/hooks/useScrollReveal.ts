@@ -22,8 +22,8 @@ export function useScrollReveal<T extends HTMLElement = HTMLDivElement>(
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          setIsRevealed(true)
           if (once) observer.disconnect()
+          requestAnimationFrame(() => setIsRevealed(true))
         }
       },
       { threshold, rootMargin }
