@@ -5,6 +5,7 @@ import type { Metadata } from 'next'
 import Breadcrumbs from '@/components/Breadcrumbs'
 import StructuredData from '@/components/StructuredData'
 import { baseOpenGraph, OG_IMAGE } from '@/lib/og'
+import ViewItemListTracker from '@/components/ViewItemListTracker'
 
 export const metadata: Metadata = {
   title: 'Expedition Gear & Apparel',
@@ -226,9 +227,18 @@ export default async function ClothingPage() {
     })),
   }
 
+  const trackerItems = products.map((p: ShopifyProduct, i: number) => ({
+    item_id: p.id.split('/').pop() ?? p.id,
+    item_name: p.title,
+    index: i,
+    price: parseFloat(p.priceRange.minVariantPrice.amount),
+  }))
+  const currency = products[0]?.priceRange.minVariantPrice.currencyCode ?? 'GBP'
+
   // Success state - products loaded from Shopify
   return (
     <main className="min-h-screen py-20">
+      <ViewItemListTracker listId="clothing" listName="Expedition Gear" currency={currency} items={trackerItems} />
       <StructuredData data={breadcrumbSchema} id="clothing-breadcrumb-schema" />
       <script
         type="application/ld+json"

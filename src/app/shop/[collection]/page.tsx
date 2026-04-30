@@ -6,6 +6,7 @@ import Breadcrumbs from '@/components/Breadcrumbs'
 import { OG_IMAGE } from '@/lib/og'
 import { CATEGORIES } from '@/lib/categories'
 import AddToCartButton from '@/components/AddToCartButton'
+import ViewItemListTracker from '@/components/ViewItemListTracker'
 
 export const dynamic = 'force-dynamic'
 
@@ -167,8 +168,17 @@ export default async function CollectionPage({
     )
   }
 
+  const trackerItems = products.map((p, i) => ({
+    item_id: p.id.split('/').pop() ?? p.id,
+    item_name: p.title,
+    index: i,
+    price: parseFloat(p.priceRange.minVariantPrice.amount),
+  }))
+  const currency = products[0]?.priceRange.minVariantPrice.currencyCode ?? 'GBP'
+
   return (
     <main className="min-h-screen py-20">
+      <ViewItemListTracker listId={collection} listName={h1} currency={currency} items={trackerItems} />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListSchema) }}
