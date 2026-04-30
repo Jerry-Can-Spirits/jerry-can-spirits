@@ -101,6 +101,16 @@ export default async function BarwarePage() {
     )
   }
 
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://jerrycanspirits.co.uk' },
+      { '@type': 'ListItem', position: 2, name: 'Shop', item: 'https://jerrycanspirits.co.uk/shop/' },
+      { '@type': 'ListItem', position: 3, name: 'Barware', item: 'https://jerrycanspirits.co.uk/shop/barware/' },
+    ],
+  }
+
   const itemListSchema = {
     '@context': 'https://schema.org',
     '@type': 'ItemList',
@@ -139,6 +149,7 @@ export default async function BarwarePage() {
 
   return (
     <main className="min-h-screen py-20">
+      <StructuredData data={breadcrumbSchema} id="barware-breadcrumb-schema" />
       <StructuredData data={itemListSchema} id="barware-itemlist-schema" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">

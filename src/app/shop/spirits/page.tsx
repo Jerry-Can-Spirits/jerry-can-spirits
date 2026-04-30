@@ -127,6 +127,16 @@ export default async function SpiritsPage() {
     )
   }
 
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://jerrycanspirits.co.uk' },
+      { '@type': 'ListItem', position: 2, name: 'Shop', item: 'https://jerrycanspirits.co.uk/shop/' },
+      { '@type': 'ListItem', position: 3, name: 'Spirits', item: 'https://jerrycanspirits.co.uk/shop/spirits/' },
+    ],
+  }
+
   // Build ItemList schema for product collection
   const itemListSchema = {
     '@context': 'https://schema.org',
@@ -166,6 +176,7 @@ export default async function SpiritsPage() {
 
   return (
     <main className="min-h-screen py-20">
+      <StructuredData data={breadcrumbSchema} id="spirits-breadcrumb-schema" />
       <StructuredData data={itemListSchema} id="spirits-itemlist-schema" />
       {/* Breadcrumb */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
