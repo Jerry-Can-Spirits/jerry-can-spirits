@@ -221,7 +221,7 @@ export default function ProductVariantSelector({
             min="1"
             value={quantity}
             onChange={(e) => setQuantity(Math.max(1, parseInt(e.target.value) || 1))}
-            className="w-20 px-4 py-2 bg-jerry-green-800/50 border border-gold-500/20 rounded-lg text-white text-center font-semibold focus:outline-none focus:border-gold-400"
+            className="w-20 px-4 py-2 bg-jerry-green-800/50 border border-gold-500/20 rounded-lg text-white text-base text-center font-semibold focus:outline-none focus:border-gold-400"
           />
 
           <button

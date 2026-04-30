@@ -561,14 +561,15 @@ export default function CartDrawer() {
                         num_items: cart.lines.reduce((sum, line) => sum + line.quantity, 0)
                       });
                     }
-                    // Track begin_checkout via GA4
-                    if (typeof window !== 'undefined' && typeof window.gtag === 'function') {
+                    // Track begin_checkout via GA4 (consent-gated)
+                    if (typeof window !== 'undefined' && typeof window.gtag === 'function' && window.Cookiebot?.consent?.statistics) {
                       window.gtag('event', 'begin_checkout', {
                         currency: cart.cost.totalAmount.currencyCode,
                         value: parseFloat(cart.cost.totalAmount.amount),
                         items: cart.lines.map(line => ({
                           item_id: line.merchandise.id.split('/').pop() ?? line.merchandise.id,
                           item_name: line.merchandise.product.title,
+                          item_variant: line.merchandise.title !== 'Default Title' ? line.merchandise.title : undefined,
                           price: parseFloat(line.merchandise.price.amount),
                           quantity: line.quantity,
                         })),

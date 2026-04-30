@@ -16,6 +16,7 @@ import DutyPaidStatement from '@/components/DutyPaidStatement'
 import ProductFAQ from '@/components/ProductFAQ'
 import WhatsIncluded from '@/components/WhatsIncluded'
 import DietaryInfo from '@/components/DietaryInfo'
+import StickyAddToCart from '@/components/StickyAddToCart'
 import { client } from '@/sanity/lib/client'
 import { productByHandleQuery } from '@/sanity/queries'
 import type { Metadata } from 'next'
@@ -502,7 +503,7 @@ export default async function ProductPage({
             )}
 
             {/* Variant Selector & Add to Cart */}
-            <div className="pt-6">
+            <div id="buy-section" className="pt-6">
               {product.variants && product.variants.length > 0 ? (
                 product.variants.some(v => v.availableForSale) ? (
                   <ProductVariantSelector
@@ -837,6 +838,20 @@ export default async function ProductPage({
           </div>
         </section>
       )}
+
+      {/* Sticky Add-to-Cart bar — mobile only, appears when buy button scrolls out of view */}
+      {(() => {
+        const stickyVariant = product.variants?.find(v => v.availableForSale) ?? product.variants?.[0]
+        return stickyVariant ? (
+          <StickyAddToCart
+            variantId={stickyVariant.id}
+            productTitle={product.title}
+            price={stickyVariant.price.amount}
+            currencyCode={stickyVariant.price.currencyCode}
+            watchElementId="buy-section"
+          />
+        ) : null
+      })()}
     </main>
   )
 }

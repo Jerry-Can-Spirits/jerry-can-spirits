@@ -234,7 +234,7 @@ export default function CartUpsell() {
                     name={`variant-${product.id}`}
                     value={selectedVariants[product.id] || ''}
                     onChange={(e) => handleVariantChange(product.id, e.target.value)}
-                    className="w-full px-2 py-1.5 text-xs bg-jerry-green-900 border border-gold-500/30 rounded text-white cursor-pointer focus:outline-none focus:border-gold-400 focus:ring-1 focus:ring-gold-400/50"
+                    className="w-full px-2 py-1.5 text-base bg-jerry-green-900 border border-gold-500/30 rounded text-white cursor-pointer focus:outline-none focus:border-gold-400 focus:ring-1 focus:ring-gold-400/50"
                     style={{ colorScheme: 'dark' }}
                   >
                     {availableVariants.map((variant) => (
