@@ -23,6 +23,7 @@ interface CartContextType {
   updateQuantity: (lineId: string, quantity: number) => Promise<void>
   removeItem: (lineId: string) => Promise<void>
   applyDiscountCode: (code: string) => Promise<void>
+  removeDiscountCode: (code: string) => Promise<void>
   updateAttributes: (attributes: CartAttribute[]) => Promise<void>
   itemCount: number
 }
@@ -178,22 +179,37 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
     setIsLoading(true)
     try {
-      const updatedCart = await shopifyApplyDiscount(cart.id, [code])
-      setCart(updatedCart)
+      // Preserve currently-applicable codes; add new code on top
+      const existing = cart.discountCodes?.filter(d => d.applicable).map(d => d.code) ?? []
+      const updatedCart = await shopifyApplyDiscount(cart.id, [...existing, code])
 
-      // Check if discount was applied successfully
-      const discountApplied = updatedCart.discountCodes?.some(
-        (discount) => discount.code === code && discount.applicable
-      )
-
-      if (discountApplied) {
-        alert(`Discount code "${code}" applied successfully!`)
-      } else {
-        alert(`Discount code "${code}" is not valid or applicable.`)
+      const applicable = updatedCart.discountCodes?.some(d => d.code === code && d.applicable)
+      if (!applicable) {
+        // Remove the rejected code so it doesn't persist in the cart UI
+        const clean = updatedCart.discountCodes?.filter(d => d.applicable).map(d => d.code) ?? []
+        const cleanCart = await shopifyApplyDiscount(updatedCart.id, clean)
+        setCart(cleanCart)
+        throw new Error(`"${code}" is not valid for this cart.`)
       }
+      setCart(updatedCart)
     } catch (error) {
+      if (error instanceof Error && error.message.includes('is not valid')) throw error
       console.error('Error applying discount:', error)
-      alert('Failed to apply discount code. Please try again.')
+      throw new Error('Failed to apply discount code. Please try again.')
+    } finally {
+      setIsLoading(false)
+    }
+  }, [cart])
+
+  const removeDiscountCode = useCallback(async (code: string) => {
+    if (!cart) return
+    setIsLoading(true)
+    try {
+      const remaining = cart.discountCodes?.filter(d => d.code !== code).map(d => d.code) ?? []
+      const updatedCart = await shopifyApplyDiscount(cart.id, remaining)
+      setCart(updatedCart)
+    } catch (error) {
+      console.error('Error removing discount code:', error)
     } finally {
       setIsLoading(false)
     }
@@ -226,10 +242,11 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       updateQuantity,
       removeItem,
       applyDiscountCode,
+      removeDiscountCode,
       updateAttributes,
       itemCount,
     }),
-    [cart, isLoading, isCartOpen, openCart, closeCart, addToCart, updateQuantity, removeItem, applyDiscountCode, updateAttributes, itemCount]
+    [cart, isLoading, isCartOpen, openCart, closeCart, addToCart, updateQuantity, removeItem, applyDiscountCode, removeDiscountCode, updateAttributes, itemCount]
   )
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>

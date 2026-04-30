@@ -3,7 +3,7 @@
 import { useState, useEffect, useMemo } from 'react'
 import Image from 'next/image'
 import { useCart } from '@/contexts/CartContext'
-import { getProduct, type ShopifyProduct, type ShopifyProductVariant } from '@/lib/shopify'
+import { getProductsByHandles, type ShopifyProduct, type ShopifyProductVariant } from '@/lib/shopify'
 
 // Fallback handles if the API returns empty or fails
 const UPSELL_PRODUCT_HANDLES = [
@@ -75,23 +75,14 @@ export default function CartUpsell() {
       const products: UpsellProduct[] = []
       const initialSelections: Record<string, string> = {}
 
-      // Fetch full product data for variants/images
-      const results = await Promise.allSettled(
-        recommendedHandles.map(handle => getProduct(handle))
-      )
+      // Fetch all products in a single GraphQL call
+      const fetched = await getProductsByHandles(recommendedHandles)
 
-      results.forEach((result) => {
-        if (result.status === 'fulfilled' && result.value) {
-          const product = result.value
-          const availableVariants = product.variants?.filter(v => v.availableForSale) || []
-
-          if (availableVariants.length > 0) {
-            products.push({
-              product,
-              availableVariants
-            })
-            initialSelections[product.id] = availableVariants[0].id
-          }
+      fetched.forEach((product) => {
+        const availableVariants = product.variants?.filter(v => v.availableForSale) || []
+        if (availableVariants.length > 0) {
+          products.push({ product, availableVariants })
+          initialSelections[product.id] = availableVariants[0].id
         }
       })
 
