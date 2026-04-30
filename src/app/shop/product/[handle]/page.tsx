@@ -466,9 +466,17 @@ export default async function ProductPage({
                 {product.title}
               </h1>
               <div>
-                <p className="text-4xl font-serif font-bold text-gold-400">
-                  {price}
-                </p>
+                <div className="flex items-baseline gap-4">
+                  <p className="text-4xl font-serif font-bold text-gold-400">
+                    {price}
+                  </p>
+                  {firstVariant?.compareAtPrice &&
+                    parseFloat(firstVariant.compareAtPrice.amount) > parseFloat(product.priceRange.minVariantPrice.amount) && (
+                    <p className="text-2xl font-serif text-parchment-400 line-through">
+                      {formatPrice(firstVariant.compareAtPrice.amount, firstVariant.compareAtPrice.currencyCode)}
+                    </p>
+                  )}
+                </div>
                 {unitPrice && (
                   <p className="text-sm text-parchment-400 mt-1">
                     ({unitPrice})

@@ -427,54 +427,62 @@ export async function getProduct(handle: string): Promise<ShopifyProduct | null>
 
 // ===== CART FUNCTIONS =====
 
+const CART_FIELDS = `
+  id
+  checkoutUrl
+  attributes {
+    key
+    value
+  }
+  lines(first: 50) {
+    edges {
+      node {
+        id
+        quantity
+        merchandise {
+          ... on ProductVariant {
+            id
+            title
+            product {
+              title
+              handle
+            }
+            image {
+              url
+              altText
+            }
+            price {
+              amount
+              currencyCode
+            }
+          }
+        }
+      }
+    }
+  }
+  cost {
+    totalAmount {
+      amount
+      currencyCode
+    }
+    subtotalAmount {
+      amount
+      currencyCode
+    }
+  }
+  discountCodes {
+    code
+    applicable
+  }
+`
+
 // Create a new cart
 export async function createCart(): Promise<Cart> {
   const query = `
     mutation {
       cartCreate {
         cart {
-          id
-          checkoutUrl
-          attributes {
-            key
-            value
-          }
-          lines(first: 10) {
-            edges {
-              node {
-                id
-                quantity
-                merchandise {
-                  ... on ProductVariant {
-                    id
-                    title
-                    product {
-                      title
-                      handle
-                    }
-                    image {
-                      url
-                      altText
-                    }
-                    price {
-                      amount
-                      currencyCode
-                    }
-                  }
-                }
-              }
-            }
-          }
-          cost {
-            totalAmount {
-              amount
-              currencyCode
-            }
-            subtotalAmount {
-              amount
-              currencyCode
-            }
-          }
+          ${CART_FIELDS}
         }
       }
     }
@@ -511,48 +519,7 @@ export async function addToCart(cartId: string, variantId: string, quantity: num
     mutation AddToCart($cartId: ID!, $lines: [CartLineInput!]!) {
       cartLinesAdd(cartId: $cartId, lines: $lines) {
         cart {
-          id
-          checkoutUrl
-          attributes {
-            key
-            value
-          }
-          lines(first: 50) {
-            edges {
-              node {
-                id
-                quantity
-                merchandise {
-                  ... on ProductVariant {
-                    id
-                    title
-                    product {
-                      title
-                      handle
-                    }
-                    image {
-                      url
-                      altText
-                    }
-                    price {
-                      amount
-                      currencyCode
-                    }
-                  }
-                }
-              }
-            }
-          }
-          cost {
-            totalAmount {
-              amount
-              currencyCode
-            }
-            subtotalAmount {
-              amount
-              currencyCode
-            }
-          }
+          ${CART_FIELDS}
         }
       }
     }
@@ -600,40 +567,7 @@ export async function addLinesToCart(
     mutation AddLinesToCart($cartId: ID!, $lines: [CartLineInput!]!) {
       cartLinesAdd(cartId: $cartId, lines: $lines) {
         cart {
-          id
-          checkoutUrl
-          lines(first: 50) {
-            edges {
-              node {
-                id
-                quantity
-                merchandise {
-                  ... on ProductVariant {
-                    id
-                    title
-                    price {
-                      amount
-                      currencyCode
-                    }
-                  }
-                }
-              }
-            }
-          }
-          cost {
-            totalAmount {
-              amount
-              currencyCode
-            }
-            subtotalAmount {
-              amount
-              currencyCode
-            }
-          }
-          discountCodes {
-            code
-            applicable
-          }
+          ${CART_FIELDS}
         }
       }
     }
@@ -675,48 +609,7 @@ export async function updateCartLine(cartId: string, lineId: string, quantity: n
     mutation UpdateCartLines($cartId: ID!, $lines: [CartLineUpdateInput!]!) {
       cartLinesUpdate(cartId: $cartId, lines: $lines) {
         cart {
-          id
-          checkoutUrl
-          attributes {
-            key
-            value
-          }
-          lines(first: 50) {
-            edges {
-              node {
-                id
-                quantity
-                merchandise {
-                  ... on ProductVariant {
-                    id
-                    title
-                    product {
-                      title
-                      handle
-                    }
-                    image {
-                      url
-                      altText
-                    }
-                    price {
-                      amount
-                      currencyCode
-                    }
-                  }
-                }
-              }
-            }
-          }
-          cost {
-            totalAmount {
-              amount
-              currencyCode
-            }
-            subtotalAmount {
-              amount
-              currencyCode
-            }
-          }
+          ${CART_FIELDS}
         }
       }
     }
@@ -760,48 +653,7 @@ export async function removeFromCart(cartId: string, lineIds: string[]): Promise
     mutation RemoveFromCart($cartId: ID!, $lineIds: [ID!]!) {
       cartLinesRemove(cartId: $cartId, lineIds: $lineIds) {
         cart {
-          id
-          checkoutUrl
-          attributes {
-            key
-            value
-          }
-          lines(first: 50) {
-            edges {
-              node {
-                id
-                quantity
-                merchandise {
-                  ... on ProductVariant {
-                    id
-                    title
-                    product {
-                      title
-                      handle
-                    }
-                    image {
-                      url
-                      altText
-                    }
-                    price {
-                      amount
-                      currencyCode
-                    }
-                  }
-                }
-              }
-            }
-          }
-          cost {
-            totalAmount {
-              amount
-              currencyCode
-            }
-            subtotalAmount {
-              amount
-              currencyCode
-            }
-          }
+          ${CART_FIELDS}
         }
       }
     }
@@ -840,52 +692,7 @@ export async function applyDiscount(cartId: string, discountCodes: string[]): Pr
     mutation ApplyDiscount($cartId: ID!, $discountCodes: [String!]!) {
       cartDiscountCodesUpdate(cartId: $cartId, discountCodes: $discountCodes) {
         cart {
-          id
-          checkoutUrl
-          attributes {
-            key
-            value
-          }
-          lines(first: 50) {
-            edges {
-              node {
-                id
-                quantity
-                merchandise {
-                  ... on ProductVariant {
-                    id
-                    title
-                    product {
-                      title
-                      handle
-                    }
-                    image {
-                      url
-                      altText
-                    }
-                    price {
-                      amount
-                      currencyCode
-                    }
-                  }
-                }
-              }
-            }
-          }
-          cost {
-            totalAmount {
-              amount
-              currencyCode
-            }
-            subtotalAmount {
-              amount
-              currencyCode
-            }
-          }
-          discountCodes {
-            code
-            applicable
-          }
+          ${CART_FIELDS}
         }
       }
     }
@@ -1052,52 +859,7 @@ export async function getCart(cartId: string): Promise<Cart | null> {
   const query = `
     query GetCart($cartId: ID!) {
       cart(id: $cartId) {
-        id
-        checkoutUrl
-        attributes {
-          key
-          value
-        }
-        lines(first: 50) {
-          edges {
-            node {
-              id
-              quantity
-              merchandise {
-                ... on ProductVariant {
-                  id
-                  title
-                  product {
-                    title
-                    handle
-                  }
-                  image {
-                    url
-                    altText
-                  }
-                  price {
-                    amount
-                    currencyCode
-                  }
-                }
-              }
-            }
-          }
-        }
-        cost {
-          totalAmount {
-            amount
-            currencyCode
-          }
-          subtotalAmount {
-            amount
-            currencyCode
-          }
-        }
-        discountCodes {
-          code
-          applicable
-        }
+        ${CART_FIELDS}
       }
     }
   `;
@@ -1137,52 +899,7 @@ export async function updateCartAttributes(
     mutation UpdateCartAttributes($cartId: ID!, $attributes: [AttributeInput!]!) {
       cartAttributesUpdate(cartId: $cartId, attributes: $attributes) {
         cart {
-          id
-          checkoutUrl
-          attributes {
-            key
-            value
-          }
-          lines(first: 50) {
-            edges {
-              node {
-                id
-                quantity
-                merchandise {
-                  ... on ProductVariant {
-                    id
-                    title
-                    product {
-                      title
-                      handle
-                    }
-                    image {
-                      url
-                      altText
-                    }
-                    price {
-                      amount
-                      currencyCode
-                    }
-                  }
-                }
-              }
-            }
-          }
-          cost {
-            totalAmount {
-              amount
-              currencyCode
-            }
-            subtotalAmount {
-              amount
-              currencyCode
-            }
-          }
-          discountCodes {
-            code
-            applicable
-          }
+          ${CART_FIELDS}
         }
       }
     }
