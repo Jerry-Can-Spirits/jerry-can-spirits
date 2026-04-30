@@ -277,6 +277,7 @@ export default async function ClothingPage() {
                     src={product.images[0].url}
                     alt={product.images[0].altText || product.title}
                     fill
+                    loading="lazy"
                     className="object-contain group-hover:scale-110 transition-transform duration-500"
                     sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, (max-width: 1200px) 33vw, 25vw"
                   />

@@ -266,12 +266,13 @@ export default function FriendsPage() {
                         {/* Logo */}
                         <div className="flex items-center justify-center">
                           {'badge' in partner && partner.badge ? (
-                            <div className="flex items-center justify-center w-40 h-40 flex-shrink-0">
-                              {/* eslint-disable-next-line @next/next/no-img-element */}
-                              <img
+                            <div className="relative flex items-center justify-center w-40 h-40 flex-shrink-0">
+                              <Image
                                 src={partner.badge as string}
                                 alt={`${partner.name} — trees planted`}
-                                className="w-full h-auto object-contain"
+                                width={160}
+                                height={160}
+                                className="object-contain"
                               />
                             </div>
                           ) : (

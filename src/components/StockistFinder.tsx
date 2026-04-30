@@ -189,7 +189,7 @@ export default function StockistFinder() {
               onChange={(e) => setPostcode(e.target.value.toUpperCase())}
               placeholder="e.g. SW1A 1AA"
               maxLength={8}
-              className="flex-1 px-4 py-3 bg-jerry-green-900 border border-gold-500/30 rounded-lg text-white placeholder-parchment-500 text-sm focus:outline-none focus:border-gold-400 uppercase tracking-wider"
+              className="flex-1 px-4 py-3 bg-jerry-green-900 border border-gold-500/30 rounded-lg text-white placeholder-parchment-500 text-base focus:outline-none focus:border-gold-400 uppercase tracking-wider"
             />
             <button
               type="submit"
