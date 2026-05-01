@@ -9,6 +9,7 @@ import Breadcrumbs from '@/components/Breadcrumbs'
 import StructuredData from '@/components/StructuredData'
 import ShareButton from '@/components/ShareButton'
 import GuideSections from '@/components/GuideSections'
+import { OG_IMAGE } from '@/lib/og'
 
 const TEAM_MEMBERS = new Set(['Dan Freeman', 'Rhys Williams'])
 
@@ -160,7 +161,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       title: `${guide.metaTitle || guide.title} | Jerry Can Spirits®`,
       description: guide.metaDescription || guide.excerpt,
       url: `https://jerrycanspirits.co.uk/guides/${guide.slug.current}/`,
-      images: guide.heroImage ? [guide.heroImage] : [],
+      images: guide.heroImage ? [guide.heroImage] : OG_IMAGE,
       type: 'article',
     },
   }

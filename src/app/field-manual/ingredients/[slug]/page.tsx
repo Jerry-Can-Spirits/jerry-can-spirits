@@ -10,6 +10,7 @@ import Breadcrumbs from '@/components/Breadcrumbs'
 import EnlargeableProductImage from '@/components/EnlargeableProductImage'
 import FieldManualPortableText from '@/components/FieldManualPortableText'
 import StructuredData from '@/components/StructuredData'
+import { OG_IMAGE_COCKTAIL } from '@/lib/og'
 
 // Types for ingredient data
 interface Ingredient {
@@ -127,7 +128,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       title: `${ingredient.name} Guide | Jerry Can Spirits®`,
       description: ingredient.description,
       url: `https://jerrycanspirits.co.uk/field-manual/ingredients/${slug}/`,
-      images: ingredient.image ? [{ url: urlFor(ingredient.image).url() }] : [],
+      images: ingredient.image ? [{ url: urlFor(ingredient.image).url() }] : OG_IMAGE_COCKTAIL,
       type: 'article',
     },
   }

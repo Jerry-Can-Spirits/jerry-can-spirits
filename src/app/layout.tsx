@@ -17,6 +17,7 @@ import KlaviyoScript from "@/components/KlaviyoScript";
 import MetricoolScript from "@/components/MetricoolScript";
 import AhrefsAnalytics from "@/components/AhrefsAnalytics";
 import SentryReplayConsent from "@/components/SentryReplayConsent";
+import { OG_IMAGE } from "@/lib/og";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -62,18 +63,11 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_GB",
     siteName: "Jerry Can Spirits®",
-    images: [
-      {
-        url: "/images/og-image.jpg",
-        width: 1200,
-        height: 630,
-        alt: "Jerry Can Spirits® — Veteran-Owned British Rum, distilled in Wales",
-      },
-    ],
+    images: OG_IMAGE,
   },
   twitter: {
     card: "summary_large_image",
-    images: ["/images/og-image.jpg"],
+    images: OG_IMAGE,
   },
   robots: {
     index: true,
