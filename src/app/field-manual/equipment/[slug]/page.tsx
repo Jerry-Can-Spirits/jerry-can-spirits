@@ -9,6 +9,7 @@ import BackToTop from '@/components/BackToTop'
 import Breadcrumbs from '@/components/Breadcrumbs'
 import FieldManualPortableText from '@/components/FieldManualPortableText'
 import StructuredData from '@/components/StructuredData'
+import { OG_IMAGE_COCKTAIL } from '@/lib/og'
 
 // Types for equipment data
 interface Equipment {
@@ -114,7 +115,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       title: `${equipment.name} Guide | Jerry Can Spirits®`,
       description: equipment.description,
       url: `https://jerrycanspirits.co.uk/field-manual/equipment/${slug}/`,
-      images: equipment.image ? [{ url: urlFor(equipment.image).url() }] : [],
+      images: equipment.image ? [{ url: urlFor(equipment.image).url() }] : OG_IMAGE_COCKTAIL,
       type: 'article',
     },
   }

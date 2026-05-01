@@ -12,6 +12,7 @@ import StarRating from '@/components/StarRating'
 import Breadcrumbs from '@/components/Breadcrumbs'
 import { notFound } from 'next/navigation'
 import { sanityOgUrl } from '@/sanity/lib/image'
+import { OG_IMAGE_COCKTAIL } from '@/lib/og'
 
 // Types for cocktail data
 interface CocktailIngredient {
@@ -147,14 +148,14 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       title: `${metaTitle} | Jerry Can Spirits®`,
       description: metaDescription,
       url: `https://jerrycanspirits.co.uk/field-manual/cocktails/${cocktail.slug.current}/`,
-      images: cocktail.image ? [sanityOgUrl(cocktail.image) as string] : [],
+      images: cocktail.image ? [sanityOgUrl(cocktail.image) as string] : OG_IMAGE_COCKTAIL,
       type: 'article',
     },
     twitter: {
       card: 'summary_large_image',
       title: `${metaTitle} | Jerry Can Spirits®`,
       description: metaDescription,
-      images: cocktail.image ? [sanityOgUrl(cocktail.image) as string] : [],
+      images: cocktail.image ? [sanityOgUrl(cocktail.image) as string] : OG_IMAGE_COCKTAIL,
     },
   }
 }

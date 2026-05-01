@@ -19,6 +19,7 @@ import DietaryInfo from '@/components/DietaryInfo'
 import StickyAddToCart from '@/components/StickyAddToCart'
 import { client } from '@/sanity/lib/client'
 import { productByHandleQuery } from '@/sanity/queries'
+import { OG_IMAGE } from '@/lib/og'
 import type { Metadata } from 'next'
 
 export const revalidate = 3600
@@ -138,7 +139,7 @@ export async function generateMetadata({
         title: `${metaTitle} | Jerry Can Spirits®`,
         description: metaDescription,
         url: `https://jerrycanspirits.co.uk/shop/product/${handle}/`,
-        images: product.images.length > 0 ? [product.images[0].url] : [],
+        images: product.images.length > 0 ? [product.images[0].url] : OG_IMAGE,
         type: 'website',
         siteName: 'Jerry Can Spirits®',
       },
@@ -146,7 +147,7 @@ export async function generateMetadata({
         card: 'summary_large_image',
         title: `${metaTitle} | Jerry Can Spirits®`,
         description: metaDescription,
-        images: product.images.length > 0 ? [product.images[0].url] : [],
+        images: product.images.length > 0 ? [product.images[0].url] : OG_IMAGE,
       },
     }
   } catch {
