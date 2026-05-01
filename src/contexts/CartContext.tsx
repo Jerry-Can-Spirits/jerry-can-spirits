@@ -12,6 +12,7 @@ import {
   type Cart,
   type CartAttribute,
 } from '@/lib/shopify'
+import { applyReferralCode } from '@/lib/referrals'
 
 interface CartContextType {
   cart: Cart | null
@@ -96,21 +97,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         localStorage.setItem('shopify_cart_id', currentCart.id)
       }
 
-      // Apply referral code to any cart that doesn't already have it set
-      const referralCode = localStorage.getItem('jcs_referral_code')
-      const alreadyTagged = currentCart.attributes?.some(
-        (a) => a.key === '_referral_code'
-      ) ?? false
-      if (referralCode && !alreadyTagged) {
-        try {
-          currentCart = await shopifyApplyDiscount(currentCart.id, [referralCode])
-          currentCart = await shopifyUpdateCartAttributes(currentCart.id, [
-            { key: '_referral_code', value: referralCode },
-          ])
-        } catch (err) {
-          console.warn('[CartContext] Failed to apply referral code:', err)
-        }
-      }
+      currentCart = await applyReferralCode(currentCart)
 
       const updatedCart = await shopifyAddToCart(currentCart.id, variantId, quantity)
       setCart(updatedCart)

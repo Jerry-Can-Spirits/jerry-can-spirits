@@ -305,12 +305,23 @@ export default function CartDrawer() {
                           {line.merchandise.title}
                         </p>
                       )}
-                      <p className="text-gold-400 font-semibold mt-1">
-                        {formatPrice(
-                          line.merchandise.price.amount,
-                          line.merchandise.price.currencyCode
+                      <div className="flex items-baseline gap-2 mt-1">
+                        <p className="text-gold-400 font-semibold">
+                          {formatPrice(
+                            line.merchandise.price.amount,
+                            line.merchandise.price.currencyCode
+                          )}
+                        </p>
+                        {line.merchandise.compareAtPrice &&
+                          parseFloat(line.merchandise.compareAtPrice.amount) > parseFloat(line.merchandise.price.amount) && (
+                          <p className="text-parchment-500 text-sm line-through">
+                            {formatPrice(
+                              line.merchandise.compareAtPrice.amount,
+                              line.merchandise.compareAtPrice.currencyCode
+                            )}
+                          </p>
                         )}
-                      </p>
+                      </div>
 
                       {/* Quantity Controls */}
                       <div className="flex items-center gap-3 mt-3">
