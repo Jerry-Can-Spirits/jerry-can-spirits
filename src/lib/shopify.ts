@@ -73,6 +73,7 @@ export interface ShopifyProduct {
   productType?: string;
   vendor?: string;
   availableForSale?: boolean;
+  updatedAt?: string;
   metafields?: ShopifyMetafield[];
   seo?: { title: string; description: string };
 }
@@ -177,6 +178,7 @@ export async function getProducts(): Promise<ShopifyProduct[]> {
             title
             handle
             description
+            updatedAt
             priceRange {
               minVariantPrice {
                 amount

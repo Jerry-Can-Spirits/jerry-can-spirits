@@ -9,14 +9,18 @@ import {
 } from '@/sanity/queries'
 import { getD1, getAllBatches } from '@/lib/d1'
 
-// Ensure sitemap works on Cloudflare Pages Edge Runtime
-export const dynamic = 'force-dynamic'
+// Regenerate the sitemap at most once per hour. force-dynamic produced a
+// fresh "lastModified" on every Googlebot fetch, which Google treats as a
+// fake freshness signal and discards.
+export const revalidate = 3600
+
+// Bump when the static-route layout meaningfully changes (new routes,
+// removed routes, etc.). Using a literal keeps the timestamp stable across
+// requests instead of changing every hour with revalidate.
+const STATIC_LAST_MODIFIED = new Date('2026-05-01')
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = 'https://jerrycanspirits.co.uk'
-
-  // Get current date for lastModified
-  const currentDate = new Date()
 
   // Fetch all products from Shopify
   let products: ShopifyProduct[] = []
@@ -26,74 +30,70 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     console.error('Error fetching products for sitemap:', error)
   }
 
-  // Generate product URLs dynamically (with trailing slash to match trailingSlash config)
+  // Generate product URLs from real Shopify updatedAt timestamps
   const productUrls: MetadataRoute.Sitemap = products.map((product) => ({
     url: `${baseUrl}/shop/product/${product.handle}/`,
-    lastModified: currentDate,
+    lastModified: product.updatedAt ? new Date(product.updatedAt) : STATIC_LAST_MODIFIED,
     changeFrequency: 'weekly' as const,
     priority: 0.8,
   }))
 
-  // Fetch all cocktails from Sanity (optimized - only slug field)
-  let cocktails: Array<{ slug: { current: string } }> = []
+  // Fetch all cocktails from Sanity
+  let cocktails: Array<{ slug: { current: string }; _updatedAt: string }> = []
   try {
     cocktails = await client.fetch(cocktailsSitemapQuery)
   } catch (error) {
     console.error('Error fetching cocktails for sitemap:', error)
   }
 
-  // Generate cocktail URLs dynamically (with trailing slash)
   const cocktailUrls: MetadataRoute.Sitemap = cocktails.map((cocktail) => ({
     url: `${baseUrl}/field-manual/cocktails/${cocktail.slug.current}/`,
-    lastModified: currentDate,
+    lastModified: new Date(cocktail._updatedAt),
     changeFrequency: 'weekly' as const,
     priority: 0.7,
   }))
 
-  // Fetch all equipment from Sanity (optimized - only slug field)
-  let equipment: Array<{ slug: { current: string } }> = []
+  // Fetch all equipment from Sanity
+  let equipment: Array<{ slug: { current: string }; _updatedAt: string }> = []
   try {
     equipment = await client.fetch(equipmentSitemapQuery)
   } catch (error) {
     console.error('Error fetching equipment for sitemap:', error)
   }
 
-  // Generate equipment URLs dynamically (with trailing slash)
   const equipmentUrls: MetadataRoute.Sitemap = equipment.map((item) => ({
     url: `${baseUrl}/field-manual/equipment/${item.slug.current}/`,
-    lastModified: currentDate,
+    lastModified: new Date(item._updatedAt),
     changeFrequency: 'monthly' as const,
     priority: 0.6,
   }))
 
-  // Fetch all ingredients from Sanity (optimized - only slug field)
-  let ingredients: Array<{ slug: { current: string } }> = []
+  // Fetch all ingredients from Sanity
+  let ingredients: Array<{ slug: { current: string }; _updatedAt: string }> = []
   try {
     ingredients = await client.fetch(ingredientsSitemapQuery)
   } catch (error) {
     console.error('Error fetching ingredients for sitemap:', error)
   }
 
-  // Generate ingredient URLs dynamically (with trailing slash)
   const ingredientUrls: MetadataRoute.Sitemap = ingredients.map((item) => ({
     url: `${baseUrl}/field-manual/ingredients/${item.slug.current}/`,
-    lastModified: currentDate,
+    lastModified: new Date(item._updatedAt),
     changeFrequency: 'monthly' as const,
     priority: 0.6,
   }))
 
-  // Fetch all guides from Sanity (optimized - only slug field)
-  let guides: Array<{ slug: { current: string } }> = []
+  // Fetch all guides from Sanity
+  let guides: Array<{ slug: { current: string }; _updatedAt: string }> = []
   try {
     guides = await client.fetch(guidesSitemapQuery)
   } catch (error) {
     console.error('Error fetching guides for sitemap:', error)
   }
 
-  // Generate guide URLs dynamically (HIGH PRIORITY for SEO, with trailing slash)
   const guideUrls: MetadataRoute.Sitemap = guides.map((item) => ({
     url: `${baseUrl}/guides/${item.slug.current}/`,
-    lastModified: currentDate,
+    lastModified: new Date(item._updatedAt),
     changeFrequency: 'weekly' as const,
     priority: 0.9, // High priority for SEO-focused content
   }))
@@ -118,7 +118,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       .filter(c => !EXCLUDED_COLLECTIONS.has(c.handle))
       .map(c => ({
         url: `${baseUrl}/shop/${c.handle}/`,
-        lastModified: currentDate,
+        lastModified: STATIC_LAST_MODIFIED,
         changeFrequency: 'weekly' as const,
         priority: 0.7,
       }))
@@ -133,7 +133,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const batches = await getAllBatches(db)
     batchUrls = batches.map((batch) => ({
       url: `${baseUrl}/batch/${batch.id.replace('batch-', '')}/`,
-      lastModified: currentDate,
+      lastModified: STATIC_LAST_MODIFIED,
       changeFrequency: 'monthly' as const,
       priority: 0.6,
     }))
@@ -146,342 +146,342 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const routes: MetadataRoute.Sitemap = [
     {
       url: `${baseUrl}/`,
-      lastModified: currentDate,
+      lastModified: STATIC_LAST_MODIFIED,
       changeFrequency: 'weekly',
       priority: 1.0,
     },
     // About pages
     {
       url: `${baseUrl}/about/story/`,
-      lastModified: currentDate,
+      lastModified: STATIC_LAST_MODIFIED,
       changeFrequency: 'monthly',
       priority: 0.8,
     },
     {
       url: `${baseUrl}/about/team/`,
-      lastModified: currentDate,
+      lastModified: STATIC_LAST_MODIFIED,
       changeFrequency: 'monthly',
       priority: 0.8,
     },
     {
       url: `${baseUrl}/about/team/dan-freeman/`,
-      lastModified: currentDate,
+      lastModified: STATIC_LAST_MODIFIED,
       changeFrequency: 'monthly',
       priority: 0.7,
     },
     {
       url: `${baseUrl}/about/team/rhys-williams/`,
-      lastModified: currentDate,
+      lastModified: STATIC_LAST_MODIFIED,
       changeFrequency: 'monthly',
       priority: 0.7,
     },
     {
       url: `${baseUrl}/ethos/`,
-      lastModified: currentDate,
+      lastModified: STATIC_LAST_MODIFIED,
       changeFrequency: 'monthly',
       priority: 0.8,
     },
     // Field Manual pages
     {
       url: `${baseUrl}/field-manual/`,
-      lastModified: currentDate,
+      lastModified: STATIC_LAST_MODIFIED,
       changeFrequency: 'weekly',
       priority: 0.9,
     },
     {
       url: `${baseUrl}/field-manual/cocktails/`,
-      lastModified: currentDate,
+      lastModified: STATIC_LAST_MODIFIED,
       changeFrequency: 'weekly',
       priority: 0.8,
     },
     {
       url: `${baseUrl}/field-manual/equipment/`,
-      lastModified: currentDate,
+      lastModified: STATIC_LAST_MODIFIED,
       changeFrequency: 'monthly',
       priority: 0.7,
     },
     {
       url: `${baseUrl}/field-manual/ingredients/`,
-      lastModified: currentDate,
+      lastModified: STATIC_LAST_MODIFIED,
       changeFrequency: 'monthly',
       priority: 0.7,
     },
     // Guides pages
     {
       url: `${baseUrl}/guides/`,
-      lastModified: currentDate,
+      lastModified: STATIC_LAST_MODIFIED,
       changeFrequency: 'weekly',
       priority: 0.9,
     },
     // Contact pages
     {
       url: `${baseUrl}/contact/`,
-      lastModified: currentDate,
+      lastModified: STATIC_LAST_MODIFIED,
       changeFrequency: 'monthly',
       priority: 0.6,
     },
     {
       url: `${baseUrl}/contact/enquiries/`,
-      lastModified: currentDate,
+      lastModified: STATIC_LAST_MODIFIED,
       changeFrequency: 'monthly',
       priority: 0.5,
     },
     {
       url: `${baseUrl}/contact/media/`,
-      lastModified: currentDate,
+      lastModified: STATIC_LAST_MODIFIED,
       changeFrequency: 'monthly',
       priority: 0.5,
     },
     {
       url: `${baseUrl}/contact/complaints/`,
-      lastModified: currentDate,
+      lastModified: STATIC_LAST_MODIFIED,
       changeFrequency: 'monthly',
       priority: 0.5,
     },
     // Legal & Policy pages
     {
       url: `${baseUrl}/privacy-policy/`,
-      lastModified: currentDate,
+      lastModified: STATIC_LAST_MODIFIED,
       changeFrequency: 'yearly',
       priority: 0.3,
     },
     {
       url: `${baseUrl}/terms-of-service/`,
-      lastModified: currentDate,
+      lastModified: STATIC_LAST_MODIFIED,
       changeFrequency: 'yearly',
       priority: 0.3,
     },
     {
       url: `${baseUrl}/cookie-policy/`,
-      lastModified: currentDate,
+      lastModified: STATIC_LAST_MODIFIED,
       changeFrequency: 'yearly',
       priority: 0.3,
     },
     {
       url: `${baseUrl}/shipping-returns/`,
-      lastModified: currentDate,
+      lastModified: STATIC_LAST_MODIFIED,
       changeFrequency: 'monthly',
       priority: 0.4,
     },
     {
       url: `${baseUrl}/accessibility/`,
-      lastModified: currentDate,
+      lastModified: STATIC_LAST_MODIFIED,
       changeFrequency: 'yearly',
       priority: 0.3,
     },
     {
       url: `${baseUrl}/armed-forces-covenant/`,
-      lastModified: currentDate,
+      lastModified: STATIC_LAST_MODIFIED,
       changeFrequency: 'yearly',
       priority: 0.4,
     },
     // Careers page
     {
       url: `${baseUrl}/careers/`,
-      lastModified: currentDate,
+      lastModified: STATIC_LAST_MODIFIED,
       changeFrequency: 'monthly' as const,
       priority: 0.5,
     },
     // Security policy
     {
       url: `${baseUrl}/security-policy/`,
-      lastModified: currentDate,
+      lastModified: STATIC_LAST_MODIFIED,
       changeFrequency: 'yearly' as const,
       priority: 0.3,
     },
     // FAQ page
     {
       url: `${baseUrl}/faq/`,
-      lastModified: currentDate,
+      lastModified: STATIC_LAST_MODIFIED,
       changeFrequency: 'monthly',
       priority: 0.7,
     },
     // Stockists page
     {
       url: `${baseUrl}/stockists/`,
-      lastModified: currentDate,
+      lastModified: STATIC_LAST_MODIFIED,
       changeFrequency: 'monthly',
       priority: 0.7,
     },
     {
       url: `${baseUrl}/trade/`,
-      lastModified: currentDate,
+      lastModified: STATIC_LAST_MODIFIED,
       changeFrequency: 'monthly' as const,
       priority: 0.7,
     },
     // HTML sitemap
     {
       url: `${baseUrl}/sitemap/`,
-      lastModified: currentDate,
+      lastModified: STATIC_LAST_MODIFIED,
       changeFrequency: 'monthly',
       priority: 0.3,
     },
     // Reviews page
     {
       url: `${baseUrl}/reviews/`,
-      lastModified: currentDate,
+      lastModified: STATIC_LAST_MODIFIED,
       changeFrequency: 'weekly',
       priority: 0.8,
     },
     // Friends & Partners page
     {
       url: `${baseUrl}/friends/`,
-      lastModified: currentDate,
+      lastModified: STATIC_LAST_MODIFIED,
       changeFrequency: 'monthly',
       priority: 0.6,
     },
     // Sustainability & Ingredients pages
     {
       url: `${baseUrl}/sustainability/`,
-      lastModified: currentDate,
+      lastModified: STATIC_LAST_MODIFIED,
       changeFrequency: 'monthly',
       priority: 0.6,
     },
     {
       url: `${baseUrl}/ingredients/`,
-      lastModified: currentDate,
+      lastModified: STATIC_LAST_MODIFIED,
       changeFrequency: 'monthly',
       priority: 0.6,
     },
     {
       url: `${baseUrl}/ingredients/expedition-spiced-rum/`,
-      lastModified: currentDate,
+      lastModified: STATIC_LAST_MODIFIED,
       changeFrequency: 'monthly',
       priority: 0.6,
     },
     // Giving & community pages
     {
       url: `${baseUrl}/giving/`,
-      lastModified: currentDate,
+      lastModified: STATIC_LAST_MODIFIED,
       changeFrequency: 'monthly',
       priority: 0.7,
     },
     {
       url: `${baseUrl}/expedition-log/`,
-      lastModified: currentDate,
+      lastModified: STATIC_LAST_MODIFIED,
       changeFrequency: 'weekly',
       priority: 0.7,
     },
     // Batch pages
     {
       url: `${baseUrl}/batch/`,
-      lastModified: currentDate,
+      lastModified: STATIC_LAST_MODIFIED,
       changeFrequency: 'monthly',
       priority: 0.6,
     },
     // Shop pages
     {
       url: `${baseUrl}/shop/`,
-      lastModified: currentDate,
+      lastModified: STATIC_LAST_MODIFIED,
       changeFrequency: 'daily',
       priority: 0.9,
     },
     {
       url: `${baseUrl}/shop/spirits/`,
-      lastModified: currentDate,
+      lastModified: STATIC_LAST_MODIFIED,
       changeFrequency: 'daily',
       priority: 0.9,
     },
     {
       url: `${baseUrl}/shop/barware/`,
-      lastModified: currentDate,
+      lastModified: STATIC_LAST_MODIFIED,
       changeFrequency: 'weekly',
       priority: 0.8,
     },
     {
       url: `${baseUrl}/shop/clothing/`,
-      lastModified: currentDate,
+      lastModified: STATIC_LAST_MODIFIED,
       changeFrequency: 'weekly',
       priority: 0.8,
     },
     // SEO category pages
     {
       url: `${baseUrl}/shop/rum-gifts/`,
-      lastModified: currentDate,
+      lastModified: STATIC_LAST_MODIFIED,
       changeFrequency: 'weekly' as const,
       priority: 0.9,
     },
     {
       url: `${baseUrl}/shop/spiced-rum/`,
-      lastModified: currentDate,
+      lastModified: STATIC_LAST_MODIFIED,
       changeFrequency: 'weekly' as const,
       priority: 0.9,
     },
     {
       url: `${baseUrl}/shop/cocktail-making-kits/`,
-      lastModified: currentDate,
+      lastModified: STATIC_LAST_MODIFIED,
       changeFrequency: 'weekly' as const,
       priority: 0.9,
     },
     {
       url: `${baseUrl}/shop/bar-accessories/`,
-      lastModified: currentDate,
+      lastModified: STATIC_LAST_MODIFIED,
       changeFrequency: 'weekly' as const,
       priority: 0.9,
     },
     {
       url: `${baseUrl}/shop/gifts-for-him/`,
-      lastModified: currentDate,
+      lastModified: STATIC_LAST_MODIFIED,
       changeFrequency: 'weekly' as const,
       priority: 0.9,
     },
     {
       url: `${baseUrl}/shop/gifts-for-her/`,
-      lastModified: currentDate,
+      lastModified: STATIC_LAST_MODIFIED,
       changeFrequency: 'weekly' as const,
       priority: 0.9,
     },
     {
       url: `${baseUrl}/shop/rum-glasses/`,
-      lastModified: currentDate,
+      lastModified: STATIC_LAST_MODIFIED,
       changeFrequency: 'weekly' as const,
       priority: 0.9,
     },
     {
       url: `${baseUrl}/shop/hip-flasks/`,
-      lastModified: currentDate,
+      lastModified: STATIC_LAST_MODIFIED,
       changeFrequency: 'weekly' as const,
       priority: 0.9,
     },
     {
       url: `${baseUrl}/shop/ice-chilling/`,
-      lastModified: currentDate,
+      lastModified: STATIC_LAST_MODIFIED,
       changeFrequency: 'weekly' as const,
       priority: 0.8,
     },
     {
       url: `${baseUrl}/shop/cocktail-glasses-glassware/`,
-      lastModified: currentDate,
+      lastModified: STATIC_LAST_MODIFIED,
       changeFrequency: 'weekly' as const,
       priority: 0.9,
     },
     {
       url: `${baseUrl}/shop/cocktail-shakers/`,
-      lastModified: currentDate,
+      lastModified: STATIC_LAST_MODIFIED,
       changeFrequency: 'weekly' as const,
       priority: 0.9,
     },
     {
       url: `${baseUrl}/shop/new-releases/`,
-      lastModified: currentDate,
+      lastModified: STATIC_LAST_MODIFIED,
       changeFrequency: 'weekly' as const,
       priority: 0.8,
     },
     {
       url: `${baseUrl}/shop/bundles/`,
-      lastModified: currentDate,
+      lastModified: STATIC_LAST_MODIFIED,
       changeFrequency: 'weekly' as const,
       priority: 0.8,
     },
     {
       url: `${baseUrl}/shop/gift-sets/`,
-      lastModified: currentDate,
+      lastModified: STATIC_LAST_MODIFIED,
       changeFrequency: 'weekly' as const,
       priority: 0.8,
     },
     {
       url: `${baseUrl}/shop/gifts-and-experience/`,
-      lastModified: currentDate,
+      lastModified: STATIC_LAST_MODIFIED,
       changeFrequency: 'weekly' as const,
       priority: 0.8,
     },

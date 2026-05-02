@@ -21,8 +21,10 @@ function safeLinkHref(href: string): string {
 const components: PortableTextComponents = {
   block: {
     h1: ({ children }) => (
-      // H1 is suppressed inside body content — rendered as h2 visually
-      <h2 className="text-2xl font-serif font-bold text-gold-300 mt-10 mb-4 first:mt-0">{children}</h2>
+      // The page already owns the canonical <h1>. If a Sanity author starts
+      // body content with H1, render it as a styled <div> so we don't ship
+      // two H1s in source order (Lighthouse / a11y will flag it).
+      <div className="text-2xl font-serif font-bold text-gold-300 mt-10 mb-4 first:mt-0">{children}</div>
     ),
     h2: ({ children }) => (
       <h2 className="text-2xl font-serif font-bold text-gold-300 mt-10 mb-4 first:mt-0">{children}</h2>

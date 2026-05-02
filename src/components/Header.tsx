@@ -62,66 +62,68 @@ export default function Header() {
     }, 150)
   }
 
-  // Navigation structure
+  // Navigation structure. All hrefs use trailing slashes to match
+  // next.config.ts trailingSlash:true — without them every click
+  // triggers a 308 redirect that adds the slash.
   const navigation: NavigationItem[] = [
     {
       name: 'Shop',
-      href: '/shop',
+      href: '/shop/',
       dropdown: [
-        { name: 'Expedition Spiced Rum', href: '/shop/spiced-rum', description: 'Small-batch British rum, real spices' },
-        { name: 'Rum Gifts', href: '/shop/rum-gifts', description: 'Gifts for people who drink properly' },
-        { name: 'Rum Gifts for Him', href: '/shop/gifts-for-him', description: 'Gift ideas for men' },
-        { name: 'Rum Gifts for Her', href: '/shop/gifts-for-her', description: 'Gift ideas for women' },
-        { name: 'Cocktail Making Kits', href: '/shop/cocktail-making-kits', description: 'Bar tools & spiced rum' },
-        { name: 'Bar Accessories', href: '/shop/bar-accessories', description: 'Shakers, jiggers, glassware' },
-        { name: 'Rum Glasses', href: '/shop/rum-glasses', description: 'The right glass makes a difference' },
-        { name: 'Clothing', href: '/shop/clothing', description: 'Expedition apparel' },
-        { name: 'Browse All', href: '/shop', description: 'All collections' },
+        { name: 'Expedition Spiced Rum', href: '/shop/spiced-rum/', description: 'Small-batch British rum, real spices' },
+        { name: 'Rum Gifts', href: '/shop/rum-gifts/', description: 'Gifts for people who drink properly' },
+        { name: 'Rum Gifts for Him', href: '/shop/gifts-for-him/', description: 'Gift ideas for men' },
+        { name: 'Rum Gifts for Her', href: '/shop/gifts-for-her/', description: 'Gift ideas for women' },
+        { name: 'Cocktail Making Kits', href: '/shop/cocktail-making-kits/', description: 'Bar tools & spiced rum' },
+        { name: 'Bar Accessories', href: '/shop/bar-accessories/', description: 'Shakers, jiggers, glassware' },
+        { name: 'Rum Glasses', href: '/shop/rum-glasses/', description: 'The right glass makes a difference' },
+        { name: 'Clothing', href: '/shop/clothing/', description: 'Expedition apparel' },
+        { name: 'Browse All', href: '/shop/', description: 'All collections' },
       ]
     },
-    { name: 'Reviews', href: '/reviews' },
-    { name: 'Stockists', href: '/stockists' },
-    { name: 'Trade', href: '/trade' },
+    { name: 'Reviews', href: '/reviews/' },
+    { name: 'Stockists', href: '/stockists/' },
+    { name: 'Trade', href: '/trade/' },
     {
       name: 'Field Manual',
-      href: '/field-manual',
+      href: '/field-manual/',
       dropdown: [
-        { name: 'Cocktails', href: '/field-manual/cocktails', description: 'Classic & signature recipes' },
-        { name: 'Equipment', href: '/field-manual/equipment', description: 'Bar tools & glassware' },
-        { name: 'Ingredients', href: '/field-manual/ingredients', description: 'Quality spirits guide' },
+        { name: 'Cocktails', href: '/field-manual/cocktails/', description: 'Classic & signature recipes' },
+        { name: 'Equipment', href: '/field-manual/equipment/', description: 'Bar tools & glassware' },
+        { name: 'Ingredients', href: '/field-manual/ingredients/', description: 'Quality spirits guide' },
       ]
     },
     {
       name: 'Guides',
-      href: '/guides',
+      href: '/guides/',
       dropdown: [
-        { name: 'Rum Guides', href: '/guides?category=rum-guides', description: 'Complete rum education' },
-        { name: 'Cocktail Guides', href: '/guides?category=cocktail-techniques', description: 'Techniques & tutorials' },
-        { name: 'Spirits Education', href: '/guides?category=spirits-education', description: 'Knowledge & insights' },
-        { name: 'Seasonal & Occasions', href: '/guides?category=seasonal-occasions', description: 'Holiday & event drinks' },
-        { name: 'Browse All Guides', href: '/guides', description: 'View the full collection' },
+        { name: 'Rum Guides', href: '/guides/?category=rum-guides', description: 'Complete rum education' },
+        { name: 'Cocktail Guides', href: '/guides/?category=cocktail-techniques', description: 'Techniques & tutorials' },
+        { name: 'Spirits Education', href: '/guides/?category=spirits-education', description: 'Knowledge & insights' },
+        { name: 'Seasonal & Occasions', href: '/guides/?category=seasonal-occasions', description: 'Holiday & event drinks' },
+        { name: 'Browse All Guides', href: '/guides/', description: 'View the full collection' },
       ]
     },
     {
       name: 'About',
       dropdown: [
-        { name: 'Our Story', href: '/about/story', description: 'Brand heritage & mission' },
-        { name: 'Meet the Team', href: '/about/team', description: 'The veterans behind the brand' },
-        { name: 'Ethos', href: '/ethos', description: 'Values & craftsmanship' },
-        { name: 'Sustainability', href: '/sustainability', description: 'Recycling & local sourcing' },
-        { name: 'Friends & Partners', href: '/friends', description: 'Our trusted collaborators' },
-        { name: 'Where the 5% Goes', href: '/giving', description: 'Military charity contributions' },
-        { name: 'The Expedition Log', href: '/expedition-log', description: 'Founding supporters' },
-        { name: 'FAQ', href: '/faq', description: 'Common questions answered' },
+        { name: 'Our Story', href: '/about/story/', description: 'Brand heritage & mission' },
+        { name: 'Meet the Team', href: '/about/team/', description: 'The veterans behind the brand' },
+        { name: 'Ethos', href: '/ethos/', description: 'Values & craftsmanship' },
+        { name: 'Sustainability', href: '/sustainability/', description: 'Recycling & local sourcing' },
+        { name: 'Friends & Partners', href: '/friends/', description: 'Our trusted collaborators' },
+        { name: 'Where the 5% Goes', href: '/giving/', description: 'Military charity contributions' },
+        { name: 'The Expedition Log', href: '/expedition-log/', description: 'Founding supporters' },
+        { name: 'FAQ', href: '/faq/', description: 'Common questions answered' },
       ]
     },
     {
       name: 'Contact',
-      href: '/contact',
+      href: '/contact/',
       dropdown: [
-        { name: 'General Enquiries', href: '/contact/enquiries', description: 'Get in touch' },
-        { name: 'Media', href: '/contact/media', description: 'Press & partnerships' },
-        { name: 'Complaints', href: '/contact/complaints', description: 'Customer service' },
+        { name: 'General Enquiries', href: '/contact/enquiries/', description: 'Get in touch' },
+        { name: 'Media', href: '/contact/media/', description: 'Press & partnerships' },
+        { name: 'Complaints', href: '/contact/complaints/', description: 'Customer service' },
       ]
     },
   ]

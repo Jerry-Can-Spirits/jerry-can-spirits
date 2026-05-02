@@ -344,7 +344,10 @@ export default async function ProductPage({
         : 'https://schema.org/PreOrder',
       itemCondition: 'https://schema.org/NewCondition',
       url: `https://jerrycanspirits.co.uk/shop/product/${handle}/`,
-      priceValidUntil: new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString().split('T')[0],
+      // Fixed end-of-year date so the structured-data response is byte-stable
+      // across requests. Recomputing today+1y per request polluted Google
+      // Merchant Center freshness signals.
+      priceValidUntil: '2026-12-31',
       shippingDetails: GB_SHIPPING_DETAILS,
       hasMerchantReturnPolicy: {
         '@type': 'MerchantReturnPolicy',
