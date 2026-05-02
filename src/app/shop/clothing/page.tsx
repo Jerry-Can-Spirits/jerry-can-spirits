@@ -6,6 +6,7 @@ import Breadcrumbs from '@/components/Breadcrumbs'
 import StructuredData from '@/components/StructuredData'
 import { baseOpenGraph, OG_IMAGE } from '@/lib/og'
 import ViewItemListTracker from '@/components/ViewItemListTracker'
+import { safeJsonLd } from '@/lib/jsonLd'
 
 export const metadata: Metadata = {
   title: 'Expedition Gear & Apparel',
@@ -242,7 +243,7 @@ export default async function ClothingPage() {
       <StructuredData data={breadcrumbSchema} id="clothing-breadcrumb-schema" />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(clothingSchema) }}
+        dangerouslySetInnerHTML={{ __html: safeJsonLd(clothingSchema) }}
       />
       {/* Breadcrumb */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">

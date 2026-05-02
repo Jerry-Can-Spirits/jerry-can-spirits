@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { Suspense } from 'react'
-import { client } from '@/sanity/client'
+import { client } from '@/sanity/lib/client'
 import { cocktailsListQuery } from '@/sanity/queries'
 import CocktailsClient from './CocktailsClient'
 import Breadcrumbs from '@/components/Breadcrumbs'

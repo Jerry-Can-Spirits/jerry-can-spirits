@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import Image from 'next/image'
-import { client } from '@/sanity/client'
+import { client } from '@/sanity/lib/client'
 import { cocktailBySlugQuery, cocktailsSitemapQuery } from '@/sanity/queries'
 import BackToTop from '@/components/BackToTop'
 import StructuredData from '@/components/StructuredData'

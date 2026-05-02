@@ -1,6 +1,6 @@
 import { MetadataRoute } from 'next'
 import { getProducts, getAllCollections, type ShopifyProduct } from '@/lib/shopify'
-import { client } from '@/sanity/client'
+import { client } from '@/sanity/lib/client'
 import {
   cocktailsSitemapQuery,
   equipmentSitemapQuery,

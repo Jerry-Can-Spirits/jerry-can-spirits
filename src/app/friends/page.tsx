@@ -5,6 +5,7 @@ import StructuredData from '@/components/StructuredData'
 import Breadcrumbs from '@/components/Breadcrumbs'
 import ScrollReveal from '@/components/ScrollReveal'
 import { baseOpenGraph } from '@/lib/og'
+import { safeJsonLd } from '@/lib/jsonLd'
 
 export const metadata: Metadata = {
   title: "Friends & Partners",
@@ -562,7 +563,7 @@ export default function FriendsPage() {
             <script
               type="application/ld+json"
               dangerouslySetInnerHTML={{
-                __html: JSON.stringify({
+                __html: safeJsonLd({
                   "@context": "https://schema.org",
                   "@type": "FAQPage",
                   "mainEntity": [

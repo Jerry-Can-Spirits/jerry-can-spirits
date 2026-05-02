@@ -7,6 +7,7 @@ import { OG_IMAGE } from '@/lib/og'
 import { CATEGORIES } from '@/lib/categories'
 import AddToCartButton from '@/components/AddToCartButton'
 import ViewItemListTracker from '@/components/ViewItemListTracker'
+import { safeJsonLd } from '@/lib/jsonLd'
 
 export const dynamic = 'force-dynamic'
 
@@ -181,11 +182,11 @@ export default async function CollectionPage({
       <ViewItemListTracker listId={collection} listName={h1} currency={currency} items={trackerItems} />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListSchema) }}
+        dangerouslySetInnerHTML={{ __html: safeJsonLd(itemListSchema) }}
       />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+        dangerouslySetInnerHTML={{ __html: safeJsonLd(breadcrumbSchema) }}
       />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">

@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { client } from '@/sanity/client'
+import { client } from '@/sanity/lib/client'
 import { guidesListQuery } from '@/sanity/queries'
 import GuidesClient from './GuidesClient'
 import Breadcrumbs from '@/components/Breadcrumbs'

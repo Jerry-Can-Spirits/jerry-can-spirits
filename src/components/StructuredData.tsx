@@ -1,4 +1,5 @@
 import Script from 'next/script'
+import { safeJsonLd } from '@/lib/jsonLd'
 
 interface StructuredDataProps {
   data: Record<string, unknown> | Record<string, unknown>[]
@@ -11,7 +12,7 @@ export default function StructuredData({ data, id = 'structured-data' }: Structu
       id={id}
       type="application/ld+json"
       dangerouslySetInnerHTML={{
-        __html: JSON.stringify(data, null, 2),
+        __html: safeJsonLd(data),
       }}
     />
   )

@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { unstable_noStore as noStore } from 'next/cache'
-import { client } from '@/sanity/client'
+import { client } from '@/sanity/lib/client'
 import { cocktailsListQuery } from '@/sanity/queries'
 
 interface CocktailPreview {

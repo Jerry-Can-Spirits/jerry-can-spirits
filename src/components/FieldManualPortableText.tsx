@@ -1,6 +1,23 @@
 import { PortableText } from 'next-sanity'
 import type { PortableTextBlock, PortableTextComponents } from 'next-sanity'
 
+// Sanity authors are trusted, but defence-in-depth: a Sanity account
+// compromise must not mean clickable javascript: URIs across the Field Manual.
+function safeLinkHref(href: string): string {
+  const trimmed = href.trim()
+  if (
+    trimmed.startsWith('http://') ||
+    trimmed.startsWith('https://') ||
+    trimmed.startsWith('mailto:') ||
+    trimmed.startsWith('tel:') ||
+    trimmed.startsWith('/') ||
+    trimmed.startsWith('#')
+  ) {
+    return trimmed
+  }
+  return '#'
+}
+
 const components: PortableTextComponents = {
   block: {
     h1: ({ children }) => (
@@ -27,16 +44,21 @@ const components: PortableTextComponents = {
     em: ({ children }) => (
       <em className="italic">{children}</em>
     ),
-    link: ({ value, children }) => (
-      <a
-        href={value?.href}
-        target={value?.href?.startsWith('http') ? '_blank' : undefined}
-        rel={value?.href?.startsWith('http') ? 'noopener noreferrer' : undefined}
-        className="text-blue-400 hover:text-blue-300 underline decoration-dotted transition-colors"
-      >
-        {children}
-      </a>
-    ),
+    link: ({ value, children }) => {
+      const rawHref: unknown = value?.href
+      const href = typeof rawHref === 'string' ? safeLinkHref(rawHref) : '#'
+      const isExternal = href.startsWith('http://') || href.startsWith('https://')
+      return (
+        <a
+          href={href}
+          target={isExternal ? '_blank' : undefined}
+          rel={isExternal ? 'noopener noreferrer' : undefined}
+          className="text-blue-400 hover:text-blue-300 underline decoration-dotted transition-colors"
+        >
+          {children}
+        </a>
+      )
+    },
   },
   list: {
     bullet: ({ children }) => (
