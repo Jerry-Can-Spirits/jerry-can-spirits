@@ -152,7 +152,13 @@ export async function POST(request: Request) {
         properties.inquiry_type = 'general'
     }
 
-    // Create or update profile
+    // Create or update profile. Profile creation is unavoidable in Klaviyo
+    // when sending an event with an email (it auto-creates one), so we own
+    // the create call to control attribute payloads. We deliberately do NOT
+    // set marketing-flavoured properties (preferred_contact_method,
+    // marketing tags) or include any subscriptions block — those would
+    // need explicit Article 6/7 marketing consent. last_contact_date and
+    // contact_form_submissions are transactional (replying to an inquiry).
     const profilePayload = {
       data: {
         type: 'profile',
@@ -163,7 +169,6 @@ export async function POST(request: Request) {
           properties: {
             last_contact_date: new Date().toISOString(),
             contact_form_submissions: 1,
-            preferred_contact_method: 'email',
           },
         },
       },
@@ -188,8 +193,12 @@ export async function POST(request: Request) {
       const profileData = await profileResponse.json() as { data?: { id?: string } }
       profileId = profileData.data?.id
     } else if (profileResponse.status === 409) {
-      // Already exists: look up by email
-      const filter = encodeURIComponent(`equals(email,"${email.replace(/"/g, '')}")`)
+      // Already exists: look up by email.
+      // Strict allowlist before substitution — see klaviyo-signup route for rationale.
+      if (!/^[A-Za-z0-9.@_+-]+$/.test(email)) {
+        return NextResponse.json({ error: 'Invalid email format' }, { status: 400 })
+      }
+      const filter = encodeURIComponent(`equals(email,"${email}")`)
       const profileSearchResponse = await fetch(`${KLAVIYO_API_BASE}/profiles/?filter=${filter}`, {
         headers: commonHeaders as Record<string, string>,
       })

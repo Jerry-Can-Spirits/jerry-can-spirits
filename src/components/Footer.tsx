@@ -17,7 +17,7 @@ export default function Footer() {
   }
 
   const trackFooterClick = (action: string, item: string) => {
-    if (typeof window !== 'undefined' && typeof window.gtag === 'function') {
+    if (typeof window !== 'undefined' && typeof window.gtag === 'function' && window.Cookiebot?.consent?.statistics) {
       window.gtag('event', 'navigation_click', {
         menu_item: item,
         navigation_type: 'footer',
