@@ -16,6 +16,7 @@ export default function MediaContact() {
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle')
+  const [errorMessage, setErrorMessage] = useState('')
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -39,6 +40,7 @@ export default function MediaContact() {
 
       if (response.ok) {
         setSubmitStatus('success')
+        setErrorMessage('')
         setFormData({
           name: '',
           email: '',
@@ -47,10 +49,19 @@ export default function MediaContact() {
           message: ''
         })
       } else {
+        let serverError = ''
+        try {
+          const data = await response.json() as { error?: string }
+          if (typeof data?.error === 'string') serverError = data.error
+        } catch {
+          // Body wasn't JSON — keep the generic fallback below
+        }
+        setErrorMessage(serverError)
         setSubmitStatus('error')
       }
     } catch (error) {
       console.error('Form submission error:', error)
+      setErrorMessage('')
       setSubmitStatus('error')
     } finally {
       setIsSubmitting(false)
@@ -1219,7 +1230,7 @@ Based in the UK, Jerry Can Spirits® is a small operation run by two mates who c
                       <span className="font-semibold">Inquiry Failed to Send</span>
                     </div>
                     <p className="text-parchment-200 text-sm">
-                      Please try again or contact us directly at press@jerrycanspirits.co.uk
+                      {errorMessage || 'Please try again or contact us directly at press@jerrycanspirits.co.uk'}
                     </p>
                   </div>
                 )}

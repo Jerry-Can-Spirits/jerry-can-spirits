@@ -10,6 +10,7 @@ export default function NewsletterSignup() {
   const [honeypot, setHoneypot] = useState('')
   const [consent, setConsent] = useState(false)
   const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle')
+  const [errorMessage, setErrorMessage] = useState('')
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -32,12 +33,22 @@ export default function NewsletterSignup() {
 
       if (res.ok) {
         setStatus('success')
+        setErrorMessage('')
         // Set cookie so the form can be hidden elsewhere if needed
         document.cookie = 'jcs_newsletter_signup=1; path=/; max-age=31536000; SameSite=Lax'
       } else {
+        let serverError = ''
+        try {
+          const data = await res.json() as { error?: string }
+          if (typeof data?.error === 'string') serverError = data.error
+        } catch {
+          // Body wasn't JSON — keep the generic fallback below
+        }
+        setErrorMessage(serverError)
         setStatus('error')
       }
     } catch {
+      setErrorMessage('')
       setStatus('error')
     }
   }
@@ -127,11 +138,15 @@ export default function NewsletterSignup() {
 
       {status === 'error' && (
         <p id="newsletter-error" role="alert" className="mt-3 text-red-400 text-xs">
-          Something went wrong. Try again or email{' '}
-          <a href="mailto:hello@jerrycanspirits.co.uk" className="underline">
-            hello@jerrycanspirits.co.uk
-          </a>
-          .
+          {errorMessage || (
+            <>
+              Something went wrong. Try again or email{' '}
+              <a href="mailto:hello@jerrycanspirits.co.uk" className="underline">
+                hello@jerrycanspirits.co.uk
+              </a>
+              .
+            </>
+          )}
         </p>
       )}
     </form>

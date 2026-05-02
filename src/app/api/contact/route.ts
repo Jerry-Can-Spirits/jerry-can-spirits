@@ -122,7 +122,8 @@ export async function POST(request: Request) {
     }
 
     if (!KLAVIYO_PRIVATE_KEY) {
-      return NextResponse.json({ error: 'Klaviyo API key not configured' }, { status: 500 })
+      console.error('[contact] KLAVIYO_PRIVATE_KEY not configured')
+      return NextResponse.json({ error: 'Server configuration error.' }, { status: 500 })
     }
 
     // Build event details

@@ -309,11 +309,15 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Invalid payload' }, { status: 400 });
     }
     const kv = env.SITE_OPS as KVNamespace;
+    const p = payload as Record<string, unknown>;
 
-    // Log event for audit trail
+    // Log event for audit trail. Include the Shopify resource ID so the
+    // log is useful for "did we receive order #1234?" without re-fetching
+    // from Shopify.
+    const resourceId = typeof p.id === 'number' || typeof p.id === 'string' ? p.id : null;
     await kv.put(
       `webhook:log:${topic}:${Date.now()}`,
-      JSON.stringify({ topic, received_at: new Date().toISOString() }),
+      JSON.stringify({ topic, resource_id: resourceId, received_at: new Date().toISOString() }),
       { expirationTtl: 60 * 60 * 24 * 7 }, // 7 days
     );
 
@@ -323,7 +327,6 @@ export async function POST(request: Request) {
 
     const klaviyoKey = env.KLAVIYO_PRIVATE_KEY as string | undefined;
 
-    const p = payload as Record<string, unknown>;
     switch (topic) {
       case SHOPIFY_WEBHOOK_TOPICS.ORDERS_CREATE: {
         if (typeof p.id !== 'number' || !Array.isArray(p.line_items)) {

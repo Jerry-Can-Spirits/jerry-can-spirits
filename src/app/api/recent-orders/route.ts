@@ -15,7 +15,11 @@ export async function GET() {
     const { env } = await getCloudflareContext()
     const kv = env.SITE_OPS
 
-    const list = await kv.list({ prefix: 'order:recent:' })
+    // Cap at 100 keys per call. With 24h TTL the working set is small,
+    // but as order volume grows kv.list() defaults to 1000 and the
+    // sequential fetch loop becomes a measurable latency drag on every
+    // homepage social-proof toast.
+    const list = await kv.list({ prefix: 'order:recent:', limit: 100 })
 
     if (list.keys.length === 0) {
       return NextResponse.json(null, {
@@ -23,11 +27,13 @@ export async function GET() {
       })
     }
 
-    // Fetch all entries and sum bottle counts across genuine orders
-    let totalBottles = 0
+    // Fetch all entries in parallel and sum bottle counts across genuine orders
+    const entries = await Promise.all(
+      list.keys.map((key) => kv.get(key.name, 'json'))
+    )
 
-    for (const key of list.keys) {
-      const raw = await kv.get(key.name, 'json')
+    let totalBottles = 0
+    for (const raw of entries) {
       if (!raw || typeof raw !== 'object') continue
       const data = raw as Record<string, unknown>
       if (!Array.isArray(data.titles) || !data.titles.every((t) => typeof t === 'string')) continue

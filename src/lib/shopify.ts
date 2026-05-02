@@ -903,10 +903,13 @@ export async function getSmartRecommendations(
       score += 100
     }
 
-    // Cross-sell bonus (spirits + barware = great combo)
+    // Cross-sell bonus (spirits + barware = great combo). Earlier code
+    // compared against 'drinks', but detectProductCategory never returns
+    // that value — it returns 'spirits' | 'barware' | 'clothing' | null —
+    // so the bonus had been silently dead.
     if (
-      (primaryCollection === 'drinks' && productCollection === 'barware') ||
-      (primaryCollection === 'barware' && productCollection === 'drinks')
+      (primaryCollection === 'spirits' && productCollection === 'barware') ||
+      (primaryCollection === 'barware' && productCollection === 'spirits')
     ) {
       score += 50
     }

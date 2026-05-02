@@ -114,15 +114,24 @@ export async function GET(request: NextRequest) {
     }
 
     const searchParams = request.nextUrl.searchParams
-    const query = searchParams.get('q')
+    const rawQuery = searchParams.get('q')
 
-    if (!query || query.trim().length === 0) {
+    if (!rawQuery || rawQuery.trim().length === 0) {
       return NextResponse.json({ results: [] })
     }
 
-    const searchQuery = query.toLowerCase().trim()
+    // Cap length and strip non-alphanumeric/space characters before
+    // building the GROQ wildcard expression. `match` on a parameterised
+    // value is safe from operator-injection, but pathological inputs like
+    // 10MB strings or `***...` patterns can still degrade Sanity perf.
+    const query = rawQuery.trim().slice(0, 80).replace(/[^A-Za-z0-9 ]+/g, ' ').trim()
+    if (!query) {
+      return NextResponse.json({ results: [] })
+    }
+
+    const searchQuery = query.toLowerCase()
     const searchTokens = searchQuery.split(/\s+/).filter(Boolean)
-    const sanitySearchTerm = searchTokens.length > 1 ? query.trim() : `*${query.trim()}*`
+    const sanitySearchTerm = searchTokens.length > 1 ? query : `*${query}*`
     const results: SearchResult[] = []
 
     // Search static pages
@@ -141,7 +150,7 @@ export async function GET(request: NextRequest) {
             type: 'product' as const,
             title: product.title,
             description: product.description.substring(0, 100) + (product.description.length > 100 ? '...' : ''),
-            url: `/shop/product/${product.handle}`,
+            url: `/shop/product/${product.handle}/`,
             image: product.images[0]?.url,
             category: 'Shop',
           }))
@@ -180,7 +189,7 @@ export async function GET(request: NextRequest) {
         type: 'equipment' as const,
         title: item.name,
         description: item.description,
-        url: `/field-manual/equipment/${item.slug.current}`,
+        url: `/field-manual/equipment/${item.slug.current}/`,
         image: item.image,
         category: item.category || 'Equipment',
       }))
@@ -199,7 +208,7 @@ export async function GET(request: NextRequest) {
         type: 'ingredient' as const,
         title: item.name,
         description: item.description,
-        url: `/field-manual/ingredients/${item.slug.current}`,
+        url: `/field-manual/ingredients/${item.slug.current}/`,
         image: item.image,
         category: item.category || 'Ingredients',
       }))
@@ -218,7 +227,7 @@ export async function GET(request: NextRequest) {
         type: 'guide' as const,
         title: item.title,
         description: item.excerpt,
-        url: `/guides/${item.slug.current}`,
+        url: `/guides/${item.slug.current}/`,
         image: item.image,
         category: item.category ? item.category.split('-').map((word: string) => word.charAt(0).toUpperCase() + word.slice(1)).join(' ') : 'Guides',
       }))
@@ -227,8 +236,12 @@ export async function GET(request: NextRequest) {
       console.error('Error searching Sanity guides:', error)
     }
 
-    // Limit total results and return
-    return NextResponse.json({ results: results.slice(0, 12) })
+    // Limit total results and return. Cache identical queries briefly in
+    // the user's browser to absorb the inevitable double-search spam.
+    return NextResponse.json(
+      { results: results.slice(0, 12) },
+      { headers: { 'Cache-Control': 'private, max-age=30' } }
+    )
   } catch (error) {
     console.error('Search API error:', error)
     return NextResponse.json({ error: 'Search failed', results: [] }, { status: 500 })
