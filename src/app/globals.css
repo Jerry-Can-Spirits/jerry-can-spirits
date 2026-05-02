@@ -78,11 +78,6 @@
     color: #fcd34d !important;
   }
 
-  /* Smooth transitions */
-  * {
-    transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
-  }
-
   /* Mobile optimizations */
   @media (max-width: 768px) {
     /* Prevent zoom on input focus (iOS) */

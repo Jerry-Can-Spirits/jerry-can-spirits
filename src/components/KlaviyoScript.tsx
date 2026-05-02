@@ -81,37 +81,17 @@ export default function KlaviyoScript() {
     // Only load Klaviyo scripts when consent is given and not already loaded
     if (!hasConsent || isLoaded) return;
 
-    // Initialize Klaviyo stub
+    // Static stub — queues pre-load calls into _klOnsite. Klaviyo's onsite
+    // SDK replaces window.klaviyo with the real API once loaded. The only
+    // method we call client-side before the SDK is ready is push(), so a
+    // Proxy that intercepts arbitrary property access was overkill.
     if (!window.klaviyo) {
       window._klOnsite = window._klOnsite || [];
-      try {
-        window.klaviyo = new Proxy({} as NonNullable<Window['klaviyo']>, {
-          get: function (_n, i: string) {
-            return i === 'push'
-              ? function (...args: unknown[]) {
-                  window._klOnsite?.push(...args);
-                }
-              : function (...args: unknown[]) {
-                  const callback = typeof args[args.length - 1] === 'function'
-                    ? args.pop() as (result: unknown) => void
-                    : undefined;
-                  const promise = new Promise((resolve) => {
-                    window._klOnsite?.push([i, ...args, function (result: unknown) {
-                      if (callback) callback(result);
-                      resolve(result);
-                    }]);
-                  });
-                  return promise;
-                };
-          },
-        });
-      } catch {
-        window.klaviyo = window.klaviyo || ({ push: () => {} } as NonNullable<Window['klaviyo']>);
-        const klObj = window.klaviyo as { push: (...args: unknown[]) => void };
-        klObj.push = function (...args: unknown[]) {
+      window.klaviyo = {
+        push: (...args: unknown[]) => {
           window._klOnsite?.push(...args);
-        };
-      }
+        },
+      } as NonNullable<Window['klaviyo']>;
     }
 
     // Set account ID

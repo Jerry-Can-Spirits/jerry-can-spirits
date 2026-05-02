@@ -130,13 +130,12 @@ export default function Footer() {
 
   return (
     <footer className="relative bg-jerry-green-900 text-parchment-100 overflow-hidden">
-      {/* Subtle Background Pattern */}
+      {/* Subtle Background Pattern — external SVG so it can be cached
+          across pages instead of inlined per-render as a data URI. */}
       <div className="absolute inset-0 opacity-5">
         <div
           className="absolute inset-0 bg-repeat"
-          style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23f5e6b3' fill-opacity='0.08'%3E%3Cpath d='M40 40c0-11 9-20 20-20s20 9 20 20-9 20-20 20-20-9-20-20zm0-40c0-11 9-20 20-20s20 9 20 20-9 20-20 20-20-9-20-20zm-40 40c0-11 9-20 20-20s20 9 20 20-9 20-20 20-20-9-20-20zm0-40c0-11 9-20 20-20s20 9 20 20-9 20-20 20-20-9-20-20z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-          }}
+          style={{ backgroundImage: 'url(/images/footer-pattern.svg)' }}
         />
       </div>
 

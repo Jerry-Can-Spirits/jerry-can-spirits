@@ -1,4 +1,4 @@
-const CACHE_NAME = 'jerry-can-spirits-v7';
+const CACHE_NAME = 'jerry-can-spirits-v8';
 const OFFLINE_URL = '/offline';
 
 // URLs to cache for offline access (Field Manual)
@@ -58,20 +58,14 @@ self.addEventListener('fetch', (event) => {
   // Skip external requests
   if (url.origin !== location.origin) return;
 
-  // Strategy 1: Network-first for HTML navigation (but cache for offline)
+  // Strategy 1: Network-only for HTML navigation, with offline fallback.
+  // We deliberately do NOT cache successful navigation responses on the fly
+  // because each HTML payload references specific /_next/static/... chunk
+  // URLs that 404 after a deploy. Offline support is satisfied by the
+  // PRECACHE_URLS set above plus the inline fallback below.
   if (request.mode === 'navigate') {
     event.respondWith(
       fetch(request)
-        .then((response) => {
-          // Cache successful navigation responses
-          if (response.ok) {
-            const responseClone = response.clone();
-            caches.open(CACHE_NAME).then((cache) => {
-              cache.put(request, responseClone);
-            });
-          }
-          return response;
-        })
         .catch(async () => {
           // Offline: try cache first
           const cachedResponse = await caches.match(request);
@@ -133,7 +127,7 @@ self.addEventListener('fetch', (event) => {
               </head>
               <body>
                 <div>
-                  <h1>📡 Off the Grid</h1>
+                  <h1>Off the Grid</h1>
                   <p>You're currently offline. Some cached content may be available.</p>
                   <div>
                     <button onclick="window.location.href='/field-manual'">Field Manual</button>
