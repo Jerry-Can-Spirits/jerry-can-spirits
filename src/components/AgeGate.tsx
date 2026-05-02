@@ -95,9 +95,11 @@ export default function AgeGate({ onVerified }: AgeGateProps) {
     }
   };
 
-  // Focus the enter button on mount
+  // Focus the dialog itself on mount, not the "Yes, Enter" button. Auto-
+  // focusing the affirmative button caused screen readers to announce it
+  // before users had a chance to read the heading and the legal warning.
   useEffect(() => {
-    enterButtonRef.current?.focus()
+    dialogRef.current?.focus()
   }, [])
 
   // Focus the rejection close button when it appears
@@ -136,7 +138,8 @@ export default function AgeGate({ onVerified }: AgeGateProps) {
       aria-modal="true"
       aria-labelledby="agegate-heading"
       aria-describedby="agegate-desc"
-      className="fixed inset-0 z-[9999] bg-jerry-green-900 overflow-hidden"
+      tabIndex={-1}
+      className="fixed inset-0 z-[9999] bg-jerry-green-900 overflow-hidden focus:outline-none"
       style={{ height: '100vh', width: '100vw' }}
     >
       {/* Real Cartographic Background */}

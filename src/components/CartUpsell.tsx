@@ -55,8 +55,10 @@ export default function CartUpsell() {
       setLoadingProducts(true)
       setPage(0)
 
-      // Determine which handles to fetch recommendations for
-      let recommendedHandles: string[] = UPSELL_PRODUCT_HANDLES
+      // Try the recommendations API first — its response now includes full
+      // variant data (including images), so we can use it directly without
+      // a second getProductsByHandles round-trip.
+      let fetched: ShopifyProduct[] | null = null
 
       if (handlesKey) {
         try {
@@ -64,19 +66,21 @@ export default function CartUpsell() {
           if (res.ok) {
             const data: { products: ShopifyProduct[] } = await res.json()
             if (data.products && data.products.length > 0) {
-              recommendedHandles = data.products.map(p => p.handle)
+              fetched = data.products
             }
           }
         } catch {
-          // Fall back to hardcoded handles
+          // Fall through to the hardcoded fallback below
         }
+      }
+
+      // Fallback: only fetch by handle when the recommendations API returned nothing
+      if (!fetched) {
+        fetched = await getProductsByHandles(UPSELL_PRODUCT_HANDLES)
       }
 
       const products: UpsellProduct[] = []
       const initialSelections: Record<string, string> = {}
-
-      // Fetch all products in a single GraphQL call
-      const fetched = await getProductsByHandles(recommendedHandles)
 
       fetched.forEach((product) => {
         const availableVariants = product.variants?.filter(v => v.availableForSale) || []

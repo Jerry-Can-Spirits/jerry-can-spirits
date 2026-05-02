@@ -137,6 +137,9 @@ export default function HeroSection() {
                   so stacking three was paying for two unused decodes on
                   every initial paint. Browser caches subsequent swaps. */}
               <div
+                role="group"
+                aria-roledescription="carousel"
+                aria-label="Expedition Spiced Rum product views"
                 className="aspect-[4/5] relative"
                 onTouchStart={handleTouchStart}
                 onTouchEnd={handleTouchEnd}
@@ -150,6 +153,9 @@ export default function HeroSection() {
                   sizes="(max-width: 768px) 100vw, 50vw"
                   priority
                 />
+                <div aria-live="polite" aria-atomic="true" className="sr-only">
+                  {`Image ${activeIndex + 1} of ${HERO_IMAGES.length}: ${HERO_IMAGES[activeIndex].label}`}
+                </div>
               </div>
 
               {/* Floating Badges */}

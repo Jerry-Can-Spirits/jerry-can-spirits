@@ -256,6 +256,10 @@ export async function getProductsByCollection(collectionHandle: string): Promise
                       amount
                       currencyCode
                     }
+                    image {
+                      url
+                      altText
+                    }
                   }
                 }
               }
