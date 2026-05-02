@@ -35,7 +35,7 @@ export default function PromoBanner({
   }
 
   const trackPromoClick = (action: string) => {
-    if (typeof window !== 'undefined' && typeof window.gtag === 'function') {
+    if (typeof window !== 'undefined' && typeof window.gtag === 'function' && window.Cookiebot?.consent?.statistics) {
       window.gtag('event', 'promo_click', {
         promo_action: action,
         promo_message: message,

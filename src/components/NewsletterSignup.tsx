@@ -25,6 +25,7 @@ export default function NewsletterSignup() {
           firstName,
           email,
           listId: NEWSLETTER_LIST_ID,
+          marketingConsent: consent,
           website: honeypot,
         }),
       })

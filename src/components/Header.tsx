@@ -186,9 +186,11 @@ export default function Header() {
     return () => window.removeEventListener('resize', handleResize)
   }, [])
 
-  // GA4 navigation tracking
+  // GA4 navigation tracking — consent-gated to match the rest of the site.
+  // Consent Mode v2 redacts these server-side, but pre-config events still
+  // hit dataLayer and may leak through any GTM custom triggers added later.
   const trackMenuClick = (itemName: string) => {
-    if (typeof window !== 'undefined' && typeof window.gtag === 'function') {
+    if (typeof window !== 'undefined' && typeof window.gtag === 'function' && window.Cookiebot?.consent?.statistics) {
       window.gtag('event', 'navigation_click', {
         menu_item: itemName,
         navigation_type: 'header',
@@ -197,7 +199,7 @@ export default function Header() {
   }
 
   const trackCTAClick = (action: string) => {
-    if (typeof window !== 'undefined' && typeof window.gtag === 'function') {
+    if (typeof window !== 'undefined' && typeof window.gtag === 'function' && window.Cookiebot?.consent?.statistics) {
       window.gtag('event', 'cta_click', {
         cta_action: action,
         cta_location: 'header',

@@ -14,6 +14,10 @@ interface SignupBody {
   email: string
   interests?: string[]
   listId?: string
+  // Required consent flag — server enforces this even though the form
+  // gates submission client-side, so a direct POST cannot subscribe a
+  // user without explicit opt-in. UK GDPR Article 6/7 hardening.
+  marketingConsent?: boolean
   website?: string // honeypot
 }
 
@@ -50,6 +54,7 @@ export async function POST(request: Request) {
       email: rawEmail,
       interests = [],
       listId,
+      marketingConsent,
       website,
     } = body
 
@@ -115,8 +120,14 @@ export async function POST(request: Request) {
       const profileData = await profileResponse.json() as { data?: { id?: string } }
       profileId = profileData.data?.id
     } else if (profileResponse.status === 409) {
-      // Profile exists—look up ID and patch properties
-      const filter = encodeURIComponent(`equals(email,"${email.replace(/"/g, '')}")`)
+      // Profile exists — look up ID and patch properties.
+      // Strict allowlist before substitution: isValidEmail upstream lets through
+      // characters that could perturb the Klaviyo filter expression. We belt-
+      // and-brace by rejecting anything outside the RFC-safe character set.
+      if (!/^[A-Za-z0-9.@_+-]+$/.test(email)) {
+        return NextResponse.json({ error: 'Invalid email format' }, { status: 400 })
+      }
+      const filter = encodeURIComponent(`equals(email,"${email}")`)
       const searchRes = await fetch(`${KLAVIYO_API_BASE}/profiles/?filter=${filter}`, {
         headers: commonHeaders as Record<string, string>,
       })
@@ -150,8 +161,11 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Failed to create profile' }, { status: 500 })
     }
 
-    // Subscribe profile to a list if provided
-    if (listId && profileId) {
+    // Subscribe profile to a list only when explicit marketing consent has
+    // been granted in the request body. The newsletter form ticks a
+    // checkbox to set marketingConsent=true; a direct POST without that
+    // flag creates the profile but cannot opt the user into marketing.
+    if (listId && profileId && marketingConsent === true) {
       const subscriptionPayload = {
         data: {
           type: 'profile-subscription-bulk-create-job',

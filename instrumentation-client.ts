@@ -48,6 +48,25 @@ Sentry.init({
       }
     }
 
+    // Scrub PII and secrets from event messages and exception values.
+    // Mirrors the server-side scrub in sentry.server.config.ts so client-side
+    // captures (form input typos, validation errors, fetch failures) cannot
+    // leak emails or auth tokens to Sentry.
+    const emailRegex = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g
+    const secretRegex = /(access_token|api_key|secret|token|password|authorization|bearer)[=:\s]+['"]?[a-zA-Z0-9_\-.]+['"]?/gi
+
+    function scrub(s: string): string {
+      return s.replace(emailRegex, '[email]').replace(secretRegex, '$1=[redacted]')
+    }
+
+    if (event.message) event.message = scrub(event.message)
+
+    if (event.exception?.values) {
+      for (const exc of event.exception.values) {
+        if (exc.value) exc.value = scrub(exc.value)
+      }
+    }
+
     return event;
   },
 });

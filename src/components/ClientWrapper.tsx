@@ -65,8 +65,7 @@ export default function ClientWrapper({ children }: ClientWrapperProps) {
 
     const botDetected = checkIsBot();
     const urlParams = new URLSearchParams(window.location.search);
-    const auditBypass = urlParams.get('seo_audit') === 'true';
-    if (botDetected || auditBypass) setIsBot(true);
+    if (botDetected) setIsBot(true);
 
     // Preserve affiliate tracking parameters (dt_id for Shopify Collabs)
     try {
