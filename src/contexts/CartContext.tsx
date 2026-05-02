@@ -1,6 +1,7 @@
 'use client'
 
 import React, { createContext, useContext, useState, useEffect, useCallback, useMemo, useRef } from 'react'
+import * as Sentry from '@sentry/nextjs'
 import {
   createCart,
   addToCart as shopifyAddToCart,
@@ -81,7 +82,17 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     if (cart?.id) {
       getCart(cart.id)
         .then(fresh => { if (fresh) setCart(fresh) })
-        .catch(() => { /* non-blocking — stale data is acceptable over a broken drawer */ })
+        .catch(error => {
+          // Non-blocking — stale data is acceptable over a broken drawer.
+          // Drop a breadcrumb so if the next thing the user does errors,
+          // Sentry has context about the cart-refresh failure.
+          Sentry.addBreadcrumb({
+            category: 'cart',
+            message: 'openCart refresh failed',
+            level: 'warning',
+            data: { error: error instanceof Error ? error.message : String(error) },
+          })
+        })
     }
   }, [cart])
 

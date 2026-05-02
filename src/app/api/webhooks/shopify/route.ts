@@ -359,9 +359,13 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    // Always return 200 to prevent Shopify retries on handler errors
+    // Return 500 so Shopify retries with backoff. Permanent malformed-payload
+    // failures are already short-circuited above with explicit 400s, so a
+    // throw here means a transient failure (Shopify API blip, KV write
+    // hiccup, etc.) that we genuinely want retried. Sentry capture stays
+    // for visibility.
     console.error('[webhook] Handler error:', error);
     Sentry.captureException(error, { tags: { source: 'shopify-webhook' } });
-    return NextResponse.json({ success: true });
+    return NextResponse.json({ error: 'Webhook handler failed' }, { status: 500 });
   }
 }

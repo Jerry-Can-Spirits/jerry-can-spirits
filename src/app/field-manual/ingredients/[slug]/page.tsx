@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import type { PortableTextBlock } from 'next-sanity'
 import Link from 'next/link'
 import Image from 'next/image'
 import { notFound } from 'next/navigation'
@@ -72,7 +73,7 @@ interface Ingredient {
     name: string
     slug: { current: string }
   }>
-  longDescription?: Record<string, unknown>[]
+  longDescription?: PortableTextBlock[]
   author?: string
 }
 
