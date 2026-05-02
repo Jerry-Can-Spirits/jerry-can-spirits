@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import Image from 'next/image'
 import { baseOpenGraph } from '@/lib/og'
+import { safeJsonLd } from '@/lib/jsonLd'
 
 export const metadata: Metadata = {
   title: 'Armed Forces Covenant',
@@ -57,7 +58,7 @@ export default function ArmedForcesCovenant() {
     <main className="min-h-screen py-20">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
+        dangerouslySetInnerHTML={{ __html: safeJsonLd(articleSchema) }}
       />
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}

@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { safeJsonLd } from '@/lib/jsonLd'
 
 // FAQ data with internal linking opportunities
 const faqs = [
@@ -59,7 +60,7 @@ export default function HomepageFAQ() {
       {/* FAQ Schema markup */}
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+        dangerouslySetInnerHTML={{ __html: safeJsonLd(faqSchema) }}
       />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

@@ -1,11 +1,12 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import type { Metadata } from 'next'
-import { client } from '@/sanity/client'
+import { client } from '@/sanity/lib/client'
 import { fieldManualCountsQuery } from '@/sanity/queries'
 import Breadcrumbs from '@/components/Breadcrumbs'
 import ScrollReveal from '@/components/ScrollReveal'
 import { baseOpenGraph, OG_IMAGE } from '@/lib/og'
+import { safeJsonLd } from '@/lib/jsonLd'
 
 // Round down to nearest 10
 function roundDownToTen(n: number): number {
@@ -392,7 +393,7 @@ export default async function FieldManualHome() {
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
+            __html: safeJsonLd({
               "@context": "https://schema.org",
               "@type": "FAQPage",
               "mainEntity": [

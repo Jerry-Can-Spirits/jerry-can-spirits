@@ -8,7 +8,7 @@ import BatchIngredients from '@/components/BatchIngredients'
 import BottleLookup from '@/components/BottleLookup'
 import ShareButton from '@/components/ShareButton'
 import { getD1, getBatch, getBatchStats, getBatchIngredients } from '@/lib/d1'
-import { client } from '@/sanity/client'
+import { client } from '@/sanity/lib/client'
 import { featuredCocktailsQuery } from '@/sanity/queries'
 import { baseOpenGraph } from '@/lib/og'
 

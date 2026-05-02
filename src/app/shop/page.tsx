@@ -3,6 +3,7 @@ import type { Metadata } from 'next'
 import Breadcrumbs from '@/components/Breadcrumbs'
 import { CATEGORIES } from '@/lib/categories'
 import { baseOpenGraph, OG_IMAGE } from '@/lib/og'
+import { safeJsonLd } from '@/lib/jsonLd'
 
 export const dynamic = 'force-static'
 
@@ -80,7 +81,7 @@ export default function ShopPage() {
     <main className="min-h-screen py-20">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+        dangerouslySetInnerHTML={{ __html: safeJsonLd(breadcrumbSchema) }}
       />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
         <Breadcrumbs items={[{ label: 'Shop' }]} />

@@ -5,6 +5,7 @@ import Link from 'next/link'
 import Breadcrumbs from '@/components/Breadcrumbs'
 import ScrollReveal from '@/components/ScrollReveal'
 import { baseOpenGraph } from '@/lib/og'
+import { safeJsonLd } from '@/lib/jsonLd'
 
 const CF_IMG = 'https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ'
 
@@ -33,7 +34,7 @@ export default function ReviewsPage() {
     <main className="bg-jerry-green-900 text-parchment-100 min-h-screen">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify({
+        dangerouslySetInnerHTML={{ __html: safeJsonLd({
           '@context': 'https://schema.org',
           '@type': 'WebPage',
           name: 'Jerry Can Spirits Reviews',

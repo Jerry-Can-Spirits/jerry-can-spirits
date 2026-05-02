@@ -1,3 +1,5 @@
+import { safeJsonLd } from '@/lib/jsonLd'
+
 interface FAQ {
   question: string
   answer: string
@@ -30,7 +32,7 @@ export default function ProductFAQ({ faqs, productName }: ProductFAQProps) {
       {/* FAQ Schema markup */}
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+        dangerouslySetInnerHTML={{ __html: safeJsonLd(faqSchema) }}
       />
 
       <h2 className="text-2xl font-serif font-bold text-white mb-2">

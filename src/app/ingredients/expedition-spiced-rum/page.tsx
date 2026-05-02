@@ -4,6 +4,7 @@ import BackToTop from '@/components/BackToTop'
 import Breadcrumbs from '@/components/Breadcrumbs'
 import StructuredData from '@/components/StructuredData'
 import { baseOpenGraph, OG_IMAGE } from '@/lib/og'
+import { safeJsonLd } from '@/lib/jsonLd'
 
 // FAQ Schema for rich snippets
 const faqSchema = {
@@ -136,7 +137,7 @@ export default function ExpeditionSpicedRumIngredients() {
       <StructuredData data={faqSchema} id="ingredients-faq-schema" />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
+        dangerouslySetInnerHTML={{ __html: safeJsonLd(articleSchema) }}
       />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
         <Breadcrumbs

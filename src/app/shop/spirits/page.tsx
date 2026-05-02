@@ -9,6 +9,7 @@ import ScrollReveal from '@/components/ScrollReveal'
 import AddToCartButton from '@/components/AddToCartButton'
 import ViewItemListTracker from '@/components/ViewItemListTracker'
 import { OG_IMAGE } from '@/lib/og'
+import { safeJsonLd } from '@/lib/jsonLd'
 
 export const metadata: Metadata = {
   title: 'British Craft Spirits | Veteran-Owned Small-Batch',
@@ -386,7 +387,7 @@ export default async function SpiritsPage() {
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
+            __html: safeJsonLd({
               "@context": "https://schema.org",
               "@type": "FAQPage",
               "mainEntity": [

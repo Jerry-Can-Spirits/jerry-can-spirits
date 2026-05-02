@@ -32,7 +32,7 @@ export async function POST(request: Request) {
   }
 
   const pin = typeof body.pin === 'string' ? body.pin.trim() : ''
-  if (!pin || pin.length > 50) {
+  if (!/^[A-Za-z0-9]{4,32}$/.test(pin)) {
     return NextResponse.json({ error: 'Invalid PIN.' }, { status: 400 })
   }
 

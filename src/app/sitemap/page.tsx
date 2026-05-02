@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import Breadcrumbs from '@/components/Breadcrumbs'
-import { client } from '@/sanity/client'
+import { client } from '@/sanity/lib/client'
 import { baseOpenGraph } from '@/lib/og'
 import {
   cocktailsListQuery,

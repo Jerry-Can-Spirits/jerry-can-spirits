@@ -8,6 +8,7 @@ import StructuredData from '@/components/StructuredData'
 import ScrollReveal from '@/components/ScrollReveal'
 import ViewItemListTracker from '@/components/ViewItemListTracker'
 import { OG_IMAGE } from '@/lib/og'
+import { safeJsonLd } from '@/lib/jsonLd'
 
 export const metadata: Metadata = {
   title: 'British Spiced Rum | Small-Batch Craft Rum',
@@ -410,7 +411,7 @@ export default async function DrinksPageTest() {
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
+            __html: safeJsonLd({
               "@context": "https://schema.org",
               "@type": "FAQPage",
               "mainEntity": [
