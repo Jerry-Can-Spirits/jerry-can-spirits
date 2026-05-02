@@ -2,6 +2,7 @@
 import { NextResponse } from 'next/server'
 import { getCloudflareContext } from '@opennextjs/cloudflare'
 import { isRateLimited, isAllowedOrigin } from '@/lib/kv'
+import { emailDomainAcceptsMail } from '@/lib/email-validation'
 
 const KLAVIYO_API_BASE = 'https://a.klaviyo.com/api'
 
@@ -112,6 +113,12 @@ export async function POST(request: Request) {
     // Validate email format
     if (!isValidEmail(email)) {
       return NextResponse.json({ error: 'Please enter a valid email address' }, { status: 400 })
+    }
+
+    // Verify the domain actually accepts mail. Catches typos and fake
+    // domains that pass syntax validation (e.g. user@notarealdomain.xyz).
+    if (!(await emailDomainAcceptsMail(email))) {
+      return NextResponse.json({ error: 'That email domain does not appear to accept mail. Please check and try again.' }, { status: 400 })
     }
 
     if (!KLAVIYO_PRIVATE_KEY) {
