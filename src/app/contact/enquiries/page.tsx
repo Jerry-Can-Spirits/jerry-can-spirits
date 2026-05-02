@@ -13,6 +13,7 @@ export default function GeneralEnquiries() {
 
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle')
+  const [errorMessage, setErrorMessage] = useState('')
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -36,6 +37,7 @@ export default function GeneralEnquiries() {
 
       if (response.ok) {
         setSubmitStatus('success')
+        setErrorMessage('')
         setFormData({
           name: '',
           email: '',
@@ -43,10 +45,20 @@ export default function GeneralEnquiries() {
           message: ''
         })
       } else {
+        // Surface the API's specific error to the user
+        let serverError = ''
+        try {
+          const data = await response.json() as { error?: string }
+          if (typeof data?.error === 'string') serverError = data.error
+        } catch {
+          // Body wasn't JSON — keep the generic fallback below
+        }
+        setErrorMessage(serverError)
         setSubmitStatus('error')
       }
     } catch (error) {
       console.error('Form submission error:', error)
+      setErrorMessage('')
       setSubmitStatus('error')
     } finally {
       setIsSubmitting(false)
@@ -190,7 +202,7 @@ export default function GeneralEnquiries() {
                     <span className="font-semibold">Message Failed to Send</span>
                   </div>
                   <p className="text-parchment-200 text-sm">
-                    Please try again or contact us directly at hello@jerrycanspirits.co.uk
+                    {errorMessage || 'Please try again or contact us directly at hello@jerrycanspirits.co.uk'}
                   </p>
                 </div>
               )}

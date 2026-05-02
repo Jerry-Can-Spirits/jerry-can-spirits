@@ -22,6 +22,7 @@ export default function TradeEnquiryForm() {
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle')
+  const [errorMessage, setErrorMessage] = useState('')
   const [honeypot, setHoneypot] = useState('')
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -52,11 +53,23 @@ export default function TradeEnquiryForm() {
 
       if (response.ok) {
         setSubmitStatus('success')
+        setErrorMessage('')
         setFormData({ name: '', email: '', venueName: '', venueType: '', covers: '', message: '' })
       } else {
+        // Surface the API's specific error (e.g. "That email domain does not
+        // appear to accept mail") instead of a generic fallback.
+        let serverError = ''
+        try {
+          const data = await response.json() as { error?: string }
+          if (typeof data?.error === 'string') serverError = data.error
+        } catch {
+          // Body wasn't JSON — keep the generic fallback below
+        }
+        setErrorMessage(serverError)
         setSubmitStatus('error')
       }
     } catch {
+      setErrorMessage('')
       setSubmitStatus('error')
     } finally {
       setIsSubmitting(false)
@@ -203,10 +216,14 @@ export default function TradeEnquiryForm() {
       {submitStatus === 'error' && (
         <div id="trade-error" role="alert" className="bg-red-900/20 border border-red-500/30 rounded-lg p-4 animate-slide-up">
           <p className="text-red-300 text-sm">
-            Something went wrong. Email us directly at{' '}
-            <a href="mailto:trade@jerrycanspirits.co.uk" className="underline hover:text-red-200">
-              trade@jerrycanspirits.co.uk
-            </a>
+            {errorMessage || (
+              <>
+                Something went wrong. Email us directly at{' '}
+                <a href="mailto:trade@jerrycanspirits.co.uk" className="underline hover:text-red-200">
+                  trade@jerrycanspirits.co.uk
+                </a>
+              </>
+            )}
           </p>
         </div>
       )}

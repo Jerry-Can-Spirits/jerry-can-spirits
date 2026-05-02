@@ -15,6 +15,7 @@ export default function Complaints() {
 
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle')
+  const [errorMessage, setErrorMessage] = useState('')
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -41,6 +42,7 @@ export default function Complaints() {
 
       if (response.ok) {
         setSubmitStatus('success')
+        setErrorMessage('')
         setFormData({
           name: '',
           email: '',
@@ -50,10 +52,19 @@ export default function Complaints() {
           priority: 'normal'
         })
       } else {
+        let serverError = ''
+        try {
+          const data = await response.json() as { error?: string }
+          if (typeof data?.error === 'string') serverError = data.error
+        } catch {
+          // Body wasn't JSON — keep the generic fallback below
+        }
+        setErrorMessage(serverError)
         setSubmitStatus('error')
       }
     } catch (error) {
       console.error('Form submission error:', error)
+      setErrorMessage('')
       setSubmitStatus('error')
     } finally {
       setIsSubmitting(false)
@@ -271,7 +282,7 @@ export default function Complaints() {
                     <span className="font-semibold">Complaint Failed to Submit</span>
                   </div>
                   <p className="text-parchment-200 text-sm">
-                    Please try again or contact us directly at complaints@jerrycanspirits.co.uk
+                    {errorMessage || 'Please try again or contact us directly at complaints@jerrycanspirits.co.uk'}
                   </p>
                 </div>
               )}
