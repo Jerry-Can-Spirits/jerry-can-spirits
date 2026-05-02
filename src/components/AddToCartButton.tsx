@@ -13,7 +13,7 @@ interface AddToCartButtonProps {
 }
 
 export default function AddToCartButton({ variantId, productTitle, price, currencyCode }: AddToCartButtonProps) {
-  const { addToCart, isLoading } = useCart()
+  const { cart, addToCart, isLoading } = useCart()
   const [added, setAdded] = useState(false)
   const [addError, setAddError] = useState(false)
   const [isBuyingNow, setIsBuyingNow] = useState(false)
@@ -44,8 +44,15 @@ export default function AddToCartButton({ variantId, productTitle, price, curren
     e.stopPropagation()
     setIsBuyingNow(true)
     try {
-      const cart = await createCart()
-      const updated = await shopifyAddToCart(cart.id, variantId, 1)
+      // Reuse existing cart if the user has one — creating a fresh cart here
+      // silently abandoned any items already in their drawer.
+      let cartId = cart?.id
+      if (!cartId) {
+        const fresh = await createCart()
+        cartId = fresh.id
+        localStorage.setItem('shopify_cart_id', cartId)
+      }
+      const updated = await shopifyAddToCart(cartId, variantId, 1)
       window.location.href = appendUtmToCheckout(updated.checkoutUrl)
     } catch {
       setIsBuyingNow(false)

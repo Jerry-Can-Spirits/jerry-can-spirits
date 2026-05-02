@@ -1,6 +1,6 @@
 'use client'
 
-import React, { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react'
+import React, { createContext, useContext, useState, useEffect, useCallback, useMemo, useRef } from 'react'
 import {
   createCart,
   addToCart as shopifyAddToCart,
@@ -36,6 +36,11 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState(false)
   const [isCartOpen, setIsCartOpen] = useState(false)
 
+  // Synchronous in-flight flag for addToCart. setIsLoading is batched by React
+  // so two synchronous clicks could both pass an `if (isLoading) return` guard.
+  // A ref is updated immediately and prevents the double-cart-create race.
+  const addInFlightRef = useRef(false)
+
   // Load cart from localStorage on mount
   useEffect(() => {
     const loadCart = async () => {
@@ -58,9 +63,10 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
             await new Promise(resolve => setTimeout(resolve, 1000))
           } else {
             console.error('Error loading cart after retry:', error)
-            // Two consecutive failures — likely a persistent error (expired/invalid cart ID).
-            // Clear it so the user can start a fresh cart rather than being stuck.
-            localStorage.removeItem('shopify_cart_id')
+            // Two consecutive throws — could be a persistent invalid cart ID, but is
+            // just as likely a transient Shopify 5xx. Leaving the cartId in place
+            // means a refresh after the outage will still find their cart;
+            // dropping it permanently empties carts during every brief outage.
           }
         }
       }
@@ -84,9 +90,11 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   }, [])
 
   const addToCart = useCallback(async (variantId: string, quantity: number = 1) => {
-    // Guard against concurrent calls — both would read the same cart snapshot and could
-    // create two separate Shopify carts or produce inconsistent local state
-    if (isLoading) return
+    // Guard against concurrent calls — two synchronous clicks would read the same
+    // cart snapshot and create two separate Shopify carts. The ref is set
+    // immediately, before React batches the setIsLoading state update.
+    if (addInFlightRef.current) return
+    addInFlightRef.current = true
     setIsLoading(true)
     try {
       let currentCart = cart
@@ -112,8 +120,9 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       alert('Failed to add item to cart. Please try again.')
     } finally {
       setIsLoading(false)
+      addInFlightRef.current = false
     }
-  }, [cart, isLoading])
+  }, [cart])
 
   const updateQuantity = useCallback(async (lineId: string, quantity: number) => {
     if (!cart) return

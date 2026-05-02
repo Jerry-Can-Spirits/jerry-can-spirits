@@ -164,7 +164,9 @@ export default function TradeOrderForm({ products, error: catalogueError }: Trad
               placeholder="••••••••"
             />
           </div>
-          {formError && <p className="text-red-400 text-sm">{formError}</p>}
+          <p role="alert" aria-live="assertive" className="text-red-400 text-sm min-h-[1.25rem]">
+            {formError}
+          </p>
           <button
             type="submit"
             disabled={!pin.trim()}
@@ -304,7 +306,9 @@ export default function TradeOrderForm({ products, error: catalogueError }: Trad
               Your trade discount will be applied at checkout.
             </p>
 
-            {formError && <p className="text-red-400 text-sm mb-4">{formError}</p>}
+            <p role="alert" aria-live="assertive" className="text-red-400 text-sm mb-4 min-h-[1.25rem]">
+              {formError}
+            </p>
 
             <button
               type="submit"

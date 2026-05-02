@@ -47,6 +47,18 @@ export default function CartDrawer() {
   const [giftRecipient, setGiftRecipient] = useState('')
   const debounceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
+  // Cancel any pending gift-attribute sync if the drawer unmounts. Without
+  // this, a debounced setTimeout would still fire and update an attribute on
+  // a cart the user may have already abandoned.
+  useEffect(() => {
+    return () => {
+      if (debounceTimerRef.current) {
+        clearTimeout(debounceTimerRef.current)
+        debounceTimerRef.current = null
+      }
+    }
+  }, [])
+
   // Hydrate gift state from cart attributes on load
   useEffect(() => {
     if (!cart?.attributes) return
@@ -440,7 +452,9 @@ export default function CartDrawer() {
                     {cart.discountCodes.map((discount, index) => (
                       <div key={index} className="flex items-center justify-between gap-2">
                         <p className={`text-sm ${discount.applicable ? 'text-green-400' : 'text-red-400'}`}>
-                          {discount.applicable ? '✓' : '✗'} {discount.code}
+                          <span aria-hidden="true">{discount.applicable ? '✓' : '✗'}</span>
+                          <span className="sr-only">{discount.applicable ? 'Applied: ' : 'Not applicable: '}</span>
+                          {' '}{discount.code}
                         </p>
                         <button
                           onClick={() => removeDiscountCode(discount.code)}
