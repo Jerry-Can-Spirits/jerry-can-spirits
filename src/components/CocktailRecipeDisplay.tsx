@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
+import type { PortableTextBlock } from 'next-sanity'
 
 // Types for cocktail data
 interface CocktailIngredient {
@@ -46,7 +47,7 @@ interface SanityCocktail {
   featured?: boolean
   image?: string
   imageAlt?: string
-  longDescription?: Record<string, unknown>[]
+  longDescription?: PortableTextBlock[]
 }
 
 const SERVES_OPTIONS = [1, 2, 4, 6, 8, 10]

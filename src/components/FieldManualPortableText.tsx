@@ -84,9 +84,9 @@ const components: PortableTextComponents = {
 }
 
 interface FieldManualPortableTextProps {
-  value: Record<string, unknown>[]
+  value: PortableTextBlock[]
 }
 
 export default function FieldManualPortableText({ value }: FieldManualPortableTextProps) {
-  return <PortableText value={value as unknown as PortableTextBlock[]} components={components} />
+  return <PortableText value={value} components={components} />
 }

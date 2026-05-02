@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import type { PortableTextBlock } from 'next-sanity'
 import Link from 'next/link'
 import Image from 'next/image'
 import { notFound } from 'next/navigation'
@@ -57,7 +58,7 @@ interface Equipment {
   }>
   metaTitle?: string
   metaDescription?: string
-  longDescription?: Record<string, unknown>[]
+  longDescription?: PortableTextBlock[]
   history?: string
   professionalTip?: string
   videoUrl?: string

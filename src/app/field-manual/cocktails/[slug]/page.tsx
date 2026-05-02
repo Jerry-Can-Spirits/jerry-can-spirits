@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import type { PortableTextBlock } from 'next-sanity'
 import Link from 'next/link'
 import Image from 'next/image'
 import { client } from '@/sanity/lib/client'
@@ -82,7 +83,7 @@ interface SanityCocktail {
   image?: string
   videoUrl?: string
   relatedGuides?: RelatedGuide[]
-  longDescription?: Record<string, unknown>[]
+  longDescription?: PortableTextBlock[]
   keywords?: string[]
   flavorProfile?: string[]
   relatedCocktails?: {
