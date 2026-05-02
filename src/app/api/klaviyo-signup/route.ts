@@ -2,6 +2,7 @@
 import { NextResponse } from 'next/server'
 import { getCloudflareContext } from '@opennextjs/cloudflare'
 import { isRateLimited, isAllowedOrigin } from '@/lib/kv'
+import { emailDomainAcceptsMail } from '@/lib/email-validation'
 
 export const dynamic = 'force-dynamic' // ensure no static optimization
 
@@ -79,6 +80,11 @@ export async function POST(request: Request) {
 
     if (!isValidEmail(email)) {
       return NextResponse.json({ error: 'Please enter a valid email address' }, { status: 400 })
+    }
+
+    // Verify the domain actually accepts mail (catches typos / fake domains).
+    if (!(await emailDomainAcceptsMail(email))) {
+      return NextResponse.json({ error: 'That email domain does not appear to accept mail. Please check and try again.' }, { status: 400 })
     }
 
     if (!KLAVIYO_PRIVATE_KEY) {
