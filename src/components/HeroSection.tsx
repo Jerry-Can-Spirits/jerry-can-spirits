@@ -132,25 +132,24 @@ export default function HeroSection() {
           <div className="relative order-1 lg:order-2">
             <div className="relative bg-gradient-to-br from-jerry-green-800 to-jerry-green-900 rounded-2xl overflow-hidden shadow-2xl border border-gold-500/20">
 
-              {/* Images — stacked, fade between active */}
+              {/* Render only the active image — Next.js fetches all images
+                  whose <Image> component is mounted, regardless of opacity,
+                  so stacking three was paying for two unused decodes on
+                  every initial paint. Browser caches subsequent swaps. */}
               <div
                 className="aspect-[4/5] relative"
                 onTouchStart={handleTouchStart}
                 onTouchEnd={handleTouchEnd}
               >
-                {HERO_IMAGES.map((image, index) => (
-                  <Image
-                    key={image.src}
-                    src={image.src}
-                    alt={image.alt}
-                    fill
-                    className={`object-contain p-8 transition-opacity duration-500 ${
-                      index === activeIndex ? 'opacity-100' : 'opacity-0'
-                    }`}
-                    sizes="(max-width: 768px) 100vw, 50vw"
-                    priority={index === 0}
-                  />
-                ))}
+                <Image
+                  key={HERO_IMAGES[activeIndex].src}
+                  src={HERO_IMAGES[activeIndex].src}
+                  alt={HERO_IMAGES[activeIndex].alt}
+                  fill
+                  className="object-contain p-8"
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  priority
+                />
               </div>
 
               {/* Floating Badges */}
