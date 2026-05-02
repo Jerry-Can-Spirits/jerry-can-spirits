@@ -24,6 +24,15 @@ interface DohResponse {
 const DOH_URL = 'https://cloudflare-dns.com/dns-query'
 const DOH_TIMEOUT_MS = 1500
 
+// DoH RCODE values per RFC 8484.
+// 0 NOERROR  — query completed; check Answer[]
+// 3 NXDOMAIN — definitive "no such domain"
+// Anything else (SERVFAIL, REFUSED, etc.) is a transport/server problem
+// and we fall back to accept rather than block real users when DNS infra
+// is having a moment.
+const DOH_RCODE_NOERROR = 0
+const DOH_RCODE_NXDOMAIN = 3
+
 async function dnsQuery(domain: string, type: 'MX' | 'A'): Promise<DohAnswer[] | null> {
   const controller = new AbortController()
   const timeout = setTimeout(() => controller.abort(), DOH_TIMEOUT_MS)
@@ -34,7 +43,11 @@ async function dnsQuery(domain: string, type: 'MX' | 'A'): Promise<DohAnswer[] |
     })
     if (!res.ok) return null
     const data = (await res.json()) as DohResponse
-    if (data.Status !== 0) return null
+    // NXDOMAIN is a definitive "no such domain" — return empty array, NOT null.
+    // The previous version collapsed NXDOMAIN into "DoH failed → accept",
+    // letting fake domains like notrealdomainhere.com through.
+    if (data.Status === DOH_RCODE_NXDOMAIN) return []
+    if (data.Status !== DOH_RCODE_NOERROR) return null
     return data.Answer ?? []
   } catch {
     return null
