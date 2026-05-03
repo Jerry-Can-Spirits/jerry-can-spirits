@@ -69,6 +69,15 @@ const partners = [
     featured: true,
   },
   {
+    name: "Croxsons",
+    location: "Crayford, United Kingdom",
+    description: "Founded in 1872, Croxsons is one of Britain's longest-established glass packaging specialists. Five generations of the same family have built it into a trusted supplier to spirits, food, and drinks producers across the UK. Every bottle of Expedition Spiced starts here. Heritage that matches the standards we hold ourselves to.",
+    website: "https://www.croxsons.com",
+    speciality: "Glass Bottles & Packaging",
+    logo: "https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/2483f006-f7a7-40fb-ee1e-57de23acf700/public",
+    featured: true,
+  },
+  {
     name: "Harlequin Print Group",
     location: "Pontyclun, South Wales",
     description: "Established in 1997, Harlequin Print Group has grown to become a leading producer of high quality retail cartons. Our packaging partner provides market-leading material across retail packaging, digital print, signage and graphic design, ensuring our products are presented with the quality they deserve.",
@@ -93,6 +102,15 @@ const partners = [
     website: "https://the-engraved-gift-workshop.co.uk/",
     speciality: "Barware, Glassware & Engraving",
     logo: "/images/partners/The_Engraved_Gift_Workshop-logo.webp",
+    featured: true,
+  },
+  {
+    name: "British Distillers Alliance",
+    location: "United Kingdom",
+    description: "The British Distillers Alliance is the trade body representing distillers across the United Kingdom, from established producers to independent craft operations. Membership signals commitment to industry standards, regulatory practice, and the wider distilling community. We're members because the craft is stronger when its makers speak together.",
+    website: "https://britishdistillersalliance.com",
+    speciality: "UK Distillers Trade Body",
+    logo: "https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/77cd3e56-0502-4357-8e97-447c31960c00/public",
     featured: true,
   },
   {
