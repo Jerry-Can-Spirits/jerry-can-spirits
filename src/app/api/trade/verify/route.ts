@@ -94,6 +94,10 @@ export async function POST(request: Request) {
   const res = NextResponse.json({
     venue_name: account.venue_name,
     tier: account.tier,
+    // Discount code is already visible to the trade user at Shopify checkout.
+    // Returning it here lets the order page show pre-discount and trade prices
+    // side by side instead of revealing the discount only at checkout.
+    discount_code: account.discount_code,
   })
 
   res.cookies.set(TRADE_COOKIE_NAME, cookieValue, {

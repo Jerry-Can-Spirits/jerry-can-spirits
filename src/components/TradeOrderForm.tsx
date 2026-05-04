@@ -13,6 +13,7 @@ type Stage = 'pin' | 'order' | 'loading'
 interface VerifyResponse {
   venue_name: string
   tier: string
+  discount_code?: string
   error?: string
 }
 
@@ -27,10 +28,22 @@ const TIER_LABEL: Record<string, string> = {
   partner: 'Partner',
 }
 
+// Map of Shopify discount codes to their trade-price percentage. Kept here so
+// the order page can render trade prices upfront instead of waiting until
+// Shopify checkout. Source of truth is still the Shopify discount itself —
+// any drift will be visible at checkout where the venue would flag it.
+const DISCOUNT_BY_CODE: Record<string, number> = {
+  'TRADE-INTRO': 15,
+  'TRADE-PARTNER-1': 5,
+  'TRADE-PARTNER-2': 10,
+  'TRADE-PARTNER-3': 15,
+}
+
 const CATEGORY_ORDER: TradeCategory[] = ['spirits', 'glassware', 'bar-tools', 'sustainability']
 
-function formatPrice(amount: string): string {
-  return `£${parseFloat(amount).toFixed(2)}`
+function formatPrice(amount: string | number): string {
+  const value = typeof amount === 'string' ? parseFloat(amount) : amount
+  return `£${value.toFixed(2)}`
 }
 
 interface TradeOrderFormProps {
@@ -43,8 +56,13 @@ export default function TradeOrderForm({ products, error: catalogueError }: Trad
   const [pin, setPin] = useState('')
   const [venueName, setVenueName] = useState('')
   const [tier, setTier] = useState('')
+  const [discountCode, setDiscountCode] = useState('')
   const [quantities, setQuantities] = useState<Record<string, number>>({})
   const [formError, setFormError] = useState('')
+
+  const discountPercent = DISCOUNT_BY_CODE[discountCode] ?? 0
+  const tradePrice = (fullPrice: string): number =>
+    parseFloat(fullPrice) * (1 - discountPercent / 100)
 
   const setQuantity = (variantId: string, value: number) => {
     setQuantities((prev) => ({ ...prev, [variantId]: Math.max(0, Math.min(99, value)) }))
@@ -52,7 +70,11 @@ export default function TradeOrderForm({ products, error: catalogueError }: Trad
 
   const totalItems = Object.values(quantities).reduce((sum, q) => sum + q, 0)
 
+  // Trade-price totals (what the venue actually pays, post-discount).
   const runningTotal = products
+    .flatMap((p) => p.variants)
+    .reduce((sum, v) => sum + tradePrice(v.price) * (quantities[v.id] ?? 0), 0)
+  const fullTotal = products
     .flatMap((p) => p.variants)
     .reduce((sum, v) => sum + parseFloat(v.price) * (quantities[v.id] ?? 0), 0)
 
@@ -77,6 +99,7 @@ export default function TradeOrderForm({ products, error: catalogueError }: Trad
 
       setVenueName(data.venue_name)
       setTier(data.tier)
+      setDiscountCode(data.discount_code ?? '')
       setStage('order')
     } catch {
       setFormError('Something went wrong. Please try again.')
@@ -91,6 +114,7 @@ export default function TradeOrderForm({ products, error: catalogueError }: Trad
     } finally {
       setVenueName('')
       setTier('')
+      setDiscountCode('')
       setPin('')
       setQuantities({})
       setFormError('')
@@ -217,6 +241,16 @@ export default function TradeOrderForm({ products, error: catalogueError }: Trad
         </div>
       ) : (
         <form onSubmit={handleOrder} className="bg-jerry-green-800/60 backdrop-blur-sm border border-gold-500/20 rounded-xl p-8 space-y-10">
+          {discountPercent > 0 && (
+            <div className="bg-gold-500/10 border border-gold-500/30 rounded-lg p-4">
+              <p className="text-gold-300 text-sm">
+                <span className="font-semibold">{discountPercent}% trade discount applied.</span>{' '}
+                <span className="text-parchment-300">
+                  Prices below already reflect your rate. Discount is applied automatically at checkout.
+                </span>
+              </p>
+            </div>
+          )}
           {CATEGORY_ORDER.map((category) => {
             const categoryProducts = products.filter((p) => p.category === category)
             if (categoryProducts.length === 0) return null
@@ -262,7 +296,15 @@ export default function TradeOrderForm({ products, error: catalogueError }: Trad
                                   {isMultiVariant && (
                                     <p className="text-parchment-300 text-xs mb-0.5">{variant.title}</p>
                                   )}
-                                  <p className="text-parchment-500 text-xs">{formatPrice(variant.price)} each</p>
+                                  {discountPercent > 0 ? (
+                                    <p className="text-parchment-500 text-xs">
+                                      <span className="text-gold-300 font-semibold">{formatPrice(tradePrice(variant.price))}</span>
+                                      <span className="text-parchment-600 line-through ml-2">{formatPrice(variant.price)}</span>
+                                      <span className="ml-1">each</span>
+                                    </p>
+                                  ) : (
+                                    <p className="text-parchment-500 text-xs">{formatPrice(variant.price)} each</p>
+                                  )}
                                 </div>
                                 <div className="flex items-center gap-2 flex-shrink-0">
                                   <button
@@ -298,13 +340,26 @@ export default function TradeOrderForm({ products, error: catalogueError }: Trad
           <div className="pt-4 border-t border-gold-500/20">
             <div className="flex items-baseline justify-between mb-1">
               <p className="text-parchment-500 text-xs uppercase tracking-widest">Order total</p>
-              <p className="text-gold-400 text-xl font-serif font-bold">
-                {formatPrice(runningTotal.toString())}
-              </p>
+              <div className="text-right">
+                {discountPercent > 0 && fullTotal > 0 && (
+                  <p className="text-parchment-600 text-xs line-through">
+                    {formatPrice(fullTotal)}
+                  </p>
+                )}
+                <p className="text-gold-400 text-xl font-serif font-bold">
+                  {formatPrice(runningTotal)}
+                </p>
+              </div>
             </div>
-            <p className="text-parchment-600 text-xs mb-6">
-              Your trade discount will be applied at checkout.
-            </p>
+            {discountPercent > 0 && fullTotal > 0 ? (
+              <p className="text-parchment-600 text-xs mb-6">
+                You save {formatPrice(fullTotal - runningTotal)} ({discountPercent}% off). Discount applied automatically at checkout.
+              </p>
+            ) : (
+              <p className="text-parchment-600 text-xs mb-6">
+                Your trade discount will be applied at checkout.
+              </p>
+            )}
 
             <p role="alert" aria-live="assertive" className="text-red-400 text-sm mb-4 min-h-[1.25rem]">
               {formError}
