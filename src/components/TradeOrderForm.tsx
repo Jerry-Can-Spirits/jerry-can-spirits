@@ -316,7 +316,7 @@ export default function TradeOrderForm({ products, error: catalogueError }: Trad
                                     <p className="text-parchment-500 text-xs">
                                       {formatPrice(variant.price)} each
                                       {discountPercent > 0 && isExcluded && (
-                                        <span className="ml-2 text-parchment-600 italic">(donation, no trade discount)</span>
+                                        <span className="ml-2 text-parchment-600 italic">(no trade discount)</span>
                                       )}
                                     </p>
                                   )}
