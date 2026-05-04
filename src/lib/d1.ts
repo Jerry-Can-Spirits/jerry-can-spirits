@@ -44,9 +44,17 @@ export interface BottleWithBatch extends Bottle {
 
 // ── Database Access ─────────────────────────────────────────────────
 
-/** Get the D1 database binding from the Cloudflare context. */
+/** Get the D1 database binding from the Cloudflare context.
+ *
+ * Uses async mode because the sitemap route (revalidate=3600) calls
+ * getAllBatches() during static-generation as part of `next build`, where
+ * the Cloudflare runtime context is only available asynchronously.
+ * Without this, the build still succeeds but logs a noisy "sync mode"
+ * error and the sitemap is generated without batch URLs until the first
+ * runtime regeneration.
+ */
 export async function getD1(): Promise<D1Database> {
-  const { env } = await getCloudflareContext();
+  const { env } = await getCloudflareContext({ async: true });
   return env.DB;
 }
 
