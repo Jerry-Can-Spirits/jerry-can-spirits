@@ -15,7 +15,7 @@ export default async function TradeOrderPage() {
 
   try {
     const results = await Promise.all(
-      TRADE_PRODUCTS.map(async ({ handle, category }): Promise<TradeProduct | null> => {
+      TRADE_PRODUCTS.map(async ({ handle, category, excludeFromDiscount }): Promise<TradeProduct | null> => {
         const product = await getProduct(handle)
         if (!product) return null
 
@@ -29,6 +29,7 @@ export default async function TradeOrderPage() {
             title: v.title,
             price: v.price.amount,
           })),
+          excludeFromDiscount,
         }
       })
     )

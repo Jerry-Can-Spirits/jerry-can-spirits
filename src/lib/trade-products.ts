@@ -16,6 +16,11 @@ export interface TradeProduct {
   category: TradeCategory
   featuredImage?: { url: string; altText: string | null }
   variants: TradeProductVariant[]
+  // Items the trade-tier Shopify discount codes do NOT apply to (e.g. the
+  // Ecologi tree donation, which always charges £1 regardless of tier).
+  // Mirrors the product scope configured on the Shopify discount itself —
+  // keep this flag in sync with the discount code's eligibility rules.
+  excludeFromDiscount?: boolean
 }
 
 export const CATEGORY_LABELS: Record<TradeCategory, string> = {
@@ -25,7 +30,11 @@ export const CATEGORY_LABELS: Record<TradeCategory, string> = {
   sustainability: 'Give Back',
 }
 
-export const TRADE_PRODUCTS: Array<{ handle: string; category: TradeCategory }> = [
+export const TRADE_PRODUCTS: Array<{
+  handle: string
+  category: TradeCategory
+  excludeFromDiscount?: boolean
+}> = [
   { handle: 'jerry-can-spirits-expedition-pack-spiced-rum-6-bottles', category: 'spirits' },
   { handle: 'crystal-ice-hiball-42cl', category: 'glassware' },
   { handle: 'hiball-glass-38cl', category: 'glassware' },
@@ -33,5 +42,5 @@ export const TRADE_PRODUCTS: Array<{ handle: string; category: TradeCategory }> 
   { handle: 'hurricane-cocktail-glass-42cl', category: 'glassware' },
   { handle: 'bar-blade-bottle-opener', category: 'bar-tools' },
   { handle: 'stainless-steel-jigger', category: 'bar-tools' },
-  { handle: 'uk-tree-fund', category: 'sustainability' },
+  { handle: 'uk-tree-fund', category: 'sustainability', excludeFromDiscount: true },
 ]
