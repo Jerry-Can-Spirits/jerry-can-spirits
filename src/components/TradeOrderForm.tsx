@@ -61,8 +61,12 @@ export default function TradeOrderForm({ products, error: catalogueError }: Trad
   const [formError, setFormError] = useState('')
 
   const discountPercent = DISCOUNT_BY_CODE[discountCode] ?? 0
-  const tradePrice = (fullPrice: string): number =>
-    parseFloat(fullPrice) * (1 - discountPercent / 100)
+  // Per-product trade price. Discount-excluded items (e.g. the Ecologi
+  // donation, which the Shopify discount code is scoped to skip) are
+  // always returned at full price so the displayed total matches what
+  // the venue will actually pay at Shopify checkout.
+  const tradePrice = (fullPrice: string, excluded: boolean): number =>
+    excluded ? parseFloat(fullPrice) : parseFloat(fullPrice) * (1 - discountPercent / 100)
 
   const setQuantity = (variantId: string, value: number) => {
     setQuantities((prev) => ({ ...prev, [variantId]: Math.max(0, Math.min(99, value)) }))
@@ -71,9 +75,13 @@ export default function TradeOrderForm({ products, error: catalogueError }: Trad
   const totalItems = Object.values(quantities).reduce((sum, q) => sum + q, 0)
 
   // Trade-price totals (what the venue actually pays, post-discount).
-  const runningTotal = products
-    .flatMap((p) => p.variants)
-    .reduce((sum, v) => sum + tradePrice(v.price) * (quantities[v.id] ?? 0), 0)
+  const runningTotal = products.reduce((sum, p) => {
+    const excluded = p.excludeFromDiscount ?? false
+    return sum + p.variants.reduce(
+      (vsum, v) => vsum + tradePrice(v.price, excluded) * (quantities[v.id] ?? 0),
+      0,
+    )
+  }, 0)
   const fullTotal = products
     .flatMap((p) => p.variants)
     .reduce((sum, v) => sum + parseFloat(v.price) * (quantities[v.id] ?? 0), 0)
@@ -263,6 +271,8 @@ export default function TradeOrderForm({ products, error: catalogueError }: Trad
                 <div className="space-y-6">
                   {categoryProducts.map((product) => {
                     const isMultiVariant = product.variants.length > 1 || product.variants[0]?.title !== 'Default Title'
+                    const isExcluded = product.excludeFromDiscount ?? false
+                    const showTradePrice = discountPercent > 0 && !isExcluded
 
                     return (
                       <div key={product.handle}>
@@ -296,14 +306,19 @@ export default function TradeOrderForm({ products, error: catalogueError }: Trad
                                   {isMultiVariant && (
                                     <p className="text-parchment-300 text-xs mb-0.5">{variant.title}</p>
                                   )}
-                                  {discountPercent > 0 ? (
+                                  {showTradePrice ? (
                                     <p className="text-parchment-500 text-xs">
-                                      <span className="text-gold-300 font-semibold">{formatPrice(tradePrice(variant.price))}</span>
+                                      <span className="text-gold-300 font-semibold">{formatPrice(tradePrice(variant.price, isExcluded))}</span>
                                       <span className="text-parchment-600 line-through ml-2">{formatPrice(variant.price)}</span>
                                       <span className="ml-1">each</span>
                                     </p>
                                   ) : (
-                                    <p className="text-parchment-500 text-xs">{formatPrice(variant.price)} each</p>
+                                    <p className="text-parchment-500 text-xs">
+                                      {formatPrice(variant.price)} each
+                                      {discountPercent > 0 && isExcluded && (
+                                        <span className="ml-2 text-parchment-600 italic">(donation, no trade discount)</span>
+                                      )}
+                                    </p>
                                   )}
                                 </div>
                                 <div className="flex items-center gap-2 flex-shrink-0">
