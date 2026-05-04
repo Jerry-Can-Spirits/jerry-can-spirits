@@ -52,6 +52,38 @@ interface SanityCocktail {
 
 const SERVES_OPTIONS = [1, 2, 4, 6, 8, 10]
 
+// Pluralise a single-word ingredient unit (e.g. "dash" → "dashes").
+// Only acts on space-separated word units. Volume abbreviations (ml, cl, oz)
+// and multi-word phrases ("fresh lime juice") are returned unchanged so we
+// don't generate "8 fresh lime juices" from a wrong heuristic.
+const UNIT_IRREGULARS: Record<string, string> = {
+  dash: 'dashes',
+  pinch: 'pinches',
+  leaf: 'leaves',
+  cherry: 'cherries',
+  berry: 'berries',
+  raspberry: 'raspberries',
+  blueberry: 'blueberries',
+  strawberry: 'strawberries',
+}
+const NON_PLURAL_UNITS = new Set(['ml', 'cl', 'oz', 'tsp', 'tbsp', 'fl', 'g', 'kg', 'l'])
+
+function pluraliseUnit(unit: string, count: number): string {
+  if (count <= 1) return unit
+  const trimmed = unit.trim()
+  if (!trimmed) return unit
+  // Multi-word phrases: too risky to auto-pluralise correctly
+  if (/\s/.test(trimmed)) return unit
+  const lower = trimmed.toLowerCase()
+  if (NON_PLURAL_UNITS.has(lower)) return unit
+  // Heuristic: anything already ending in 's' is treated as already plural
+  if (lower.endsWith('s')) return unit
+  if (UNIT_IRREGULARS[lower]) return UNIT_IRREGULARS[lower]
+  if (/(x|z|ch|sh)$/.test(lower)) return trimmed + 'es'
+  if (/[bcdfghjklmnpqrstvwxz]y$/.test(lower)) return trimmed.slice(0, -1) + 'ies'
+  return trimmed + 's'
+}
+
 // Scale a structured amount string by a multiplier.
 // Handles "45ml", "2 dashes", "1 lime", etc.
 // Returns as-is if no leading number is found (e.g. "to taste", "splash").
@@ -64,7 +96,10 @@ function scaleAmount(amount: string, multiplier: number): string {
   const formatted = Number.isInteger(scaled)
     ? String(scaled)
     : parseFloat(scaled.toFixed(1)).toString()
-  return `${formatted}${match[2]}${match[3]}`.trim()
+  // Only pluralise word-units (those separated from the number by whitespace).
+  // Volume abbreviations like "45ml" stick to the number and don't take a plural.
+  const unit = match[2] ? pluraliseUnit(match[3], scaled) : match[3]
+  return `${formatted}${match[2]}${unit}`.trim()
 }
 
 // Tag display labels (convert values to readable format)
