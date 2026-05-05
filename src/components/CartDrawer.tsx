@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { useState, useEffect, useRef, useCallback } from 'react'
 import CartUpsell from './CartUpsell'
 import CarbonOffsetToggle from './CarbonOffsetToggle'
+import PresentationBoxUpsell from './PresentationBoxUpsell'
 import { appendUtmToCheckout } from '@/lib/utm'
 
 // Helper to format price
@@ -614,6 +615,9 @@ export default function CartDrawer() {
                   <span>Shop Pay available for faster checkout</span>
                 </div>
               </div>
+
+              {/* Presentation box upsell (only when rum is in cart) */}
+              <PresentationBoxUpsell />
 
               {/* Cross-sell Products */}
               <CartUpsell />
