@@ -108,7 +108,7 @@ export default function PresentationBoxUpsell() {
                   onClick={handleDecrement}
                   disabled={quantity <= 1 || isAdding || isLoading}
                   aria-label="Decrease box quantity"
-                  className="w-8 h-8 flex items-center justify-center bg-jerry-green-800/50 hover:bg-jerry-green-800 rounded border border-gold-500/20 transition-colors disabled:opacity-40"
+                  className="min-w-[44px] min-h-[44px] flex items-center justify-center bg-jerry-green-800/50 hover:bg-jerry-green-800 rounded border border-gold-500/20 transition-colors disabled:opacity-50"
                 >
                   <svg className="w-3.5 h-3.5 text-parchment-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
@@ -124,7 +124,7 @@ export default function PresentationBoxUpsell() {
                   onClick={handleIncrement}
                   disabled={quantity >= rumQuantityInCart || isAdding || isLoading}
                   aria-label="Increase box quantity"
-                  className="w-8 h-8 flex items-center justify-center bg-jerry-green-800/50 hover:bg-jerry-green-800 rounded border border-gold-500/20 transition-colors disabled:opacity-40"
+                  className="min-w-[44px] min-h-[44px] flex items-center justify-center bg-jerry-green-800/50 hover:bg-jerry-green-800 rounded border border-gold-500/20 transition-colors disabled:opacity-50"
                 >
                   <svg className="w-3.5 h-3.5 text-parchment-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
