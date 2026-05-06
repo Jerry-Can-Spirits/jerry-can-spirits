@@ -535,6 +535,12 @@ export default function CartDrawer() {
                 )}
               </div>
 
+              {/* Presentation box upsell (only when rum is in cart) */}
+              <PresentationBoxUpsell />
+
+              {/* Cross-sell Products */}
+              <CartUpsell />
+
               {/* Carbon Offset */}
               <CarbonOffsetToggle />
 
@@ -614,12 +620,6 @@ export default function CartDrawer() {
                   <span>Shop Pay available for faster checkout</span>
                 </div>
               </div>
-
-              {/* Presentation box upsell (only when rum is in cart) */}
-              <PresentationBoxUpsell />
-
-              {/* Cross-sell Products */}
-              <CartUpsell />
 
               <Link
                 href="/shop/spirits/"
