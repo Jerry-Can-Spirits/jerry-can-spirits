@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
+import { trackEventDual } from '@/lib/meta-capi';
 
 interface ProductPageTrackingProps {
   productId: string;
@@ -27,10 +28,10 @@ export default function ProductPageTracking({
       currency: currency,
     };
 
-    // Track ViewContent via Meta Pixel directly (consent-gated)
+    // Track ViewContent via Meta Pixel + CAPI (consent-gated inside trackEventDual)
     // Spirits/alcohol excluded — Meta prohibits alcohol in product catalogs
-    if (typeof window !== 'undefined' && window.fbq && window.Cookiebot?.consent?.marketing && category !== 'Spirits') {
-      window.fbq('track', 'ViewContent', payload);
+    if (category !== 'Spirits') {
+      trackEventDual('ViewContent', payload);
     }
 
     // Track view_item via GA4 — gated on statistics consent (GDPR)
@@ -49,5 +50,5 @@ export default function ProductPageTracking({
     }
   }, [productId, productName, price, currency, category]);
 
-  return null; // This component doesn't render anything
+  return null;
 }
