@@ -6,7 +6,15 @@ declare global {
       params?: Record<string, unknown>,
       options?: { eventID?: string }
     ) => void
-    Cookiebot?: { consent?: { marketing?: boolean } }
+    Cookiebot?: {
+      consent: {
+        marketing: boolean
+        statistics: boolean
+        preferences: boolean
+        necessary: boolean
+      }
+      renew: () => void
+    }
   }
 }
 
