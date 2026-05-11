@@ -1,5 +1,5 @@
 import { getCloudflareContext } from '@opennextjs/cloudflare'
-import { getSessionCookieValue, readSession } from './session'
+import { getTradeSessionCookieValue, readTradeSession } from '@/lib/trade-portal/session'
 import type { PourIqLicence } from './types'
 
 export type AccessResult =
@@ -8,14 +8,14 @@ export type AccessResult =
   | { kind: 'ok', tradeAccountId: string, licence: PourIqLicence }
 
 export async function checkPourIqAccess(): Promise<AccessResult> {
-  const sid = await getSessionCookieValue()
+  const sid = await getTradeSessionCookieValue()
   if (!sid) return { kind: 'no-session' }
 
   const { env } = await getCloudflareContext()
   const kv = env.SITE_OPS as KVNamespace
   const db = env.DB as D1Database
 
-  const session = await readSession(kv, sid)
+  const session = await readTradeSession(kv, sid)
   if (!session) return { kind: 'no-session' }
 
   const licence = await db
