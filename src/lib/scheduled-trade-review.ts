@@ -15,7 +15,7 @@ interface ScheduledEnv {
 }
 
 const REVIEW_WINDOW_DAYS = 30
-const FROM_EMAIL = 'Jerry Can Spirits <hello@jerrycanspirits.co.uk>'
+const FROM_EMAIL = 'Jerry Can Spirits <applications@send.jerrycanspirits.co.uk>'
 
 export async function runTradeReviewDigest(env: ScheduledEnv): Promise<void> {
   const due = await getApplicationsDueForReview(env.DB, REVIEW_WINDOW_DAYS)

@@ -36,7 +36,7 @@ export const runtime = 'nodejs'
 const KLAVIYO_API_BASE = 'https://a.klaviyo.com/api'
 const KLAVIYO_REVISION = '2024-10-15'
 const SUBMIT_RATE_LIMIT = 3 // per hour per IP
-const FROM_EMAIL = 'Jerry Can Spirits <hello@jerrycanspirits.co.uk>'
+const FROM_EMAIL = 'Jerry Can Spirits <applications@send.jerrycanspirits.co.uk>'
 
 interface Address {
   line1: string
