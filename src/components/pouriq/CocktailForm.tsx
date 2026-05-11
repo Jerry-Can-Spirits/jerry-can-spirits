@@ -80,32 +80,52 @@ export function CocktailForm({ menuId, cocktail }: Props) {
     if (!name.trim()) { setError('Cocktail name is required'); return }
     if (!Number.isFinite(sale_price_p) || sale_price_p <= 0) { setError('Sale price must be > 0'); return }
 
-    const parsedIngredients = ingredients.map((ing): {
+    const parsedIngredients: Array<{
       name: string
       ingredient_type: IngredientType
       pour_ml: number | null
       bottle_size_ml: number | null
       bottle_cost_p: number | null
       unit_cost_p: number | null
-    } | null => {
-      if (!ing.name.trim()) return null
+    }> = []
+    for (let idx = 0; idx < ingredients.length; idx++) {
+      const ing = ingredients[idx]
+      if (!ing.name.trim()) {
+        setError(`Ingredient ${idx + 1}: name is required`)
+        return
+      }
       if (ing.pricing_mode === 'bottle') {
         const pour_ml = parseFloat(ing.pour_ml)
         const bottle_size_ml = parseFloat(ing.bottle_size_ml)
         const bottle_cost_p = Math.round(parseFloat(ing.bottle_cost_p) * 100)
-        if (!Number.isFinite(pour_ml) || !Number.isFinite(bottle_size_ml) || !Number.isFinite(bottle_cost_p)) return null
-        return {
+        if (!Number.isFinite(pour_ml) || pour_ml <= 0) {
+          setError(`Ingredient ${idx + 1} ("${ing.name}"): pour must be a positive number`)
+          return
+        }
+        if (!Number.isFinite(bottle_size_ml) || bottle_size_ml <= 0) {
+          setError(`Ingredient ${idx + 1} ("${ing.name}"): bottle size must be a positive number`)
+          return
+        }
+        if (!Number.isFinite(bottle_cost_p) || bottle_cost_p < 0) {
+          setError(`Ingredient ${idx + 1} ("${ing.name}"): bottle cost must be a number`)
+          return
+        }
+        parsedIngredients.push({
           name: ing.name.trim(), ingredient_type: ing.ingredient_type,
           pour_ml, bottle_size_ml, bottle_cost_p, unit_cost_p: null,
+        })
+      } else {
+        const unit_cost_p = Math.round(parseFloat(ing.unit_cost_p) * 100)
+        if (!Number.isFinite(unit_cost_p) || unit_cost_p < 0) {
+          setError(`Ingredient ${idx + 1} ("${ing.name}"): unit cost must be a number`)
+          return
         }
+        parsedIngredients.push({
+          name: ing.name.trim(), ingredient_type: ing.ingredient_type,
+          pour_ml: null, bottle_size_ml: null, bottle_cost_p: null, unit_cost_p,
+        })
       }
-      const unit_cost_p = Math.round(parseFloat(ing.unit_cost_p) * 100)
-      if (!Number.isFinite(unit_cost_p)) return null
-      return {
-        name: ing.name.trim(), ingredient_type: ing.ingredient_type,
-        pour_ml: null, bottle_size_ml: null, bottle_cost_p: null, unit_cost_p,
-      }
-    }).filter((x): x is NonNullable<typeof x> => x !== null)
+    }
 
     if (parsedIngredients.length === 0) { setError('Add at least one ingredient'); return }
 
