@@ -175,7 +175,7 @@ export default function TradeApplyPage() {
         contact_email: data.contact_email,
         contact_phone: data.contact_phone,
         director_name: data.director_name,
-        director_id_ticket: data.director_id_file?.ticket,
+        director_id_ticket: data.director_id_file!.ticket,
         expected_initial_volume: data.expected_initial_volume,
         expected_monthly_volume: data.expected_monthly_volume,
         payment_terms_pref: data.payment_terms_pref,
