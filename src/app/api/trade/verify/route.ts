@@ -2,23 +2,21 @@ import { NextResponse } from 'next/server'
 import { getCloudflareContext } from '@opennextjs/cloudflare'
 import { getTradeAccountByPin } from '@/lib/d1'
 import {
-  signTradeCookie,
-  TRADE_COOKIE_NAME,
-  TRADE_COOKIE_MAX_AGE,
-  TradeCookiePayload,
-} from '@/lib/trade-cookie'
-import {
   getTradeFailedAttempts,
   incrementTradeFailedAttempts,
   clearTradeFailedAttempts,
   getTradeFailedAttemptsForPin,
   incrementTradeFailedAttemptsForPin,
   clearTradeFailedAttemptsForPin,
-  createTradeSession,
   TRADE_MAX_ATTEMPTS,
   TRADE_PIN_MAX_ATTEMPTS,
   isAllowedOrigin,
 } from '@/lib/kv'
+import {
+  createTradeSession,
+  setTradeSessionCookie,
+  TRADE_SESSION_COOKIE,
+} from '@/lib/trade-portal/session'
 
 export async function POST(request: Request) {
   if (!isAllowedOrigin(request)) {
@@ -85,11 +83,8 @@ export async function POST(request: Request) {
     clearTradeFailedAttemptsForPin(kv, pin),
   ])
 
-  const sid = crypto.randomUUID()
-  await createTradeSession(kv, sid)
-
-  const payload: TradeCookiePayload = { pin, iat: Date.now(), sid }
-  const cookieValue = await signTradeCookie(payload, secret)
+  const sid = await createTradeSession(kv, account.id)
+  await setTradeSessionCookie(sid)
 
   const res = NextResponse.json({
     venue_name: account.venue_name,
@@ -98,14 +93,6 @@ export async function POST(request: Request) {
     // Returning it here lets the order page show pre-discount and trade prices
     // side by side instead of revealing the discount only at checkout.
     discount_code: account.discount_code,
-  })
-
-  res.cookies.set(TRADE_COOKIE_NAME, cookieValue, {
-    httpOnly: true,
-    secure: true,
-    sameSite: 'lax',
-    maxAge: TRADE_COOKIE_MAX_AGE,
-    path: '/',
   })
 
   return res
