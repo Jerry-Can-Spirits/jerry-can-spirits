@@ -45,7 +45,7 @@ export function calculateIngredientOverlap(
     }
   }
   return Array.from(map.entries())
-    .map(([_, v]) => ({
+    .map(([, v]) => ({
       ingredient_name: v.display,
       cocktail_count: v.cocktailIds.size,
       cocktail_ids: Array.from(v.cocktailIds),

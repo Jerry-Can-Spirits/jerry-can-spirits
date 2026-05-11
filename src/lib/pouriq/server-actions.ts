@@ -7,7 +7,7 @@ import { checkPourIqAccess } from './access'
 import {
   insertMenu, updateMenu, deleteMenu,
   insertCocktail, deleteCocktail, replaceIngredients,
-  getMenu, getCocktail,
+  getMenu,
 } from './menus'
 import { matchFieldManualSlug } from './field-manual-match'
 import type { IngredientType } from './types'
