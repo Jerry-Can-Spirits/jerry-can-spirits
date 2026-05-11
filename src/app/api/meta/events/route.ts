@@ -3,7 +3,7 @@ import * as Sentry from '@sentry/nextjs'
 import { getCloudflareContext } from '@opennextjs/cloudflare'
 import { isAllowedOrigin, isRateLimited } from '@/lib/kv'
 
-export const runtime = 'edge'
+export const runtime = 'nodejs'
 
 const META_PIXEL_ID = '825009767240821'
 const RATE_LIMIT = 60 // events per minute per IP
