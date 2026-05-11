@@ -30,6 +30,7 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
     productHandles: [
       'jerry-can-spirits-expedition-spiced-rum',
       'jerry-can-spirits-premium-gift-pack',
+      'jerry-can-spirits-expedition-spiced-rum-presentation-box',
     ],
     seoTitle: 'What Makes Expedition Spiced Rum a Proper Rum Gift',
     seoBody: [
@@ -159,6 +160,7 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
     productHandles: [
       'jerry-can-spirits-expedition-spiced-rum',
       'jerry-can-spirits-premium-gift-pack',
+      'jerry-can-spirits-expedition-spiced-rum-presentation-box',
       'stainless-steel-jigger',
       'stainless-steel-spirit-stones',
       'crystal-ice-hiball-42cl',
@@ -190,6 +192,7 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
     productHandles: [
       'jerry-can-spirits-expedition-spiced-rum',
       'jerry-can-spirits-premium-gift-pack',
+      'jerry-can-spirits-expedition-spiced-rum-presentation-box',
       'stainless-steel-jigger',
       'stainless-steel-spirit-stones',
       'crystal-ice-hiball-42cl',

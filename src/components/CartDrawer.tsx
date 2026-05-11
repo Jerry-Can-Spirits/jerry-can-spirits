@@ -6,7 +6,9 @@ import Link from 'next/link'
 import { useState, useEffect, useRef, useCallback } from 'react'
 import CartUpsell from './CartUpsell'
 import CarbonOffsetToggle from './CarbonOffsetToggle'
+import PresentationBoxUpsell from './PresentationBoxUpsell'
 import { appendUtmToCheckout } from '@/lib/utm'
+import { trackEventDual } from '@/lib/meta-capi'
 
 // Helper to format price
 function formatPrice(amount: string, currencyCode: string): string {
@@ -533,6 +535,12 @@ export default function CartDrawer() {
                 )}
               </div>
 
+              {/* Presentation box upsell (only when rum is in cart) */}
+              <PresentationBoxUpsell />
+
+              {/* Cross-sell Products */}
+              <CartUpsell />
+
               {/* Carbon Offset */}
               <CarbonOffsetToggle />
 
@@ -572,20 +580,18 @@ export default function CartDrawer() {
                         window.location.href = getCheckoutUrl()
                       })
                     }
-                    // Track InitiateCheckout via Meta Pixel (consent-gated)
-                    if (typeof window !== 'undefined' && window.fbq && window.Cookiebot?.consent?.marketing) {
-                      window.fbq('track', 'InitiateCheckout', {
-                        content_ids: cart.lines.map(line => line.merchandise.id.split('/').pop() ?? line.merchandise.id),
-                        contents: cart.lines.map(line => ({
-                          id: line.merchandise.id.split('/').pop() ?? line.merchandise.id,
-                          quantity: line.quantity,
-                          item_price: parseFloat(line.merchandise.price.amount),
-                        })),
-                        value: parseFloat(cart.cost.totalAmount.amount),
-                        currency: cart.cost.totalAmount.currencyCode,
-                        num_items: cart.lines.reduce((sum, line) => sum + line.quantity, 0)
-                      });
-                    }
+                    // Track InitiateCheckout via Meta Pixel + CAPI (consent-gated inside trackEventDual)
+                    trackEventDual('InitiateCheckout', {
+                      content_ids: cart.lines.map(line => line.merchandise.id.split('/').pop() ?? line.merchandise.id),
+                      contents: cart.lines.map(line => ({
+                        id: line.merchandise.id.split('/').pop() ?? line.merchandise.id,
+                        quantity: line.quantity,
+                        item_price: parseFloat(line.merchandise.price.amount),
+                      })),
+                      value: parseFloat(cart.cost.totalAmount.amount),
+                      currency: cart.cost.totalAmount.currencyCode,
+                      num_items: cart.lines.reduce((sum, line) => sum + line.quantity, 0)
+                    })
                     // Track begin_checkout via GA4 (consent-gated)
                     if (typeof window !== 'undefined' && typeof window.gtag === 'function' && window.Cookiebot?.consent?.statistics) {
                       window.gtag('event', 'begin_checkout', {
@@ -614,9 +620,6 @@ export default function CartDrawer() {
                   <span>Shop Pay available for faster checkout</span>
                 </div>
               </div>
-
-              {/* Cross-sell Products */}
-              <CartUpsell />
 
               <Link
                 href="/shop/spirits/"

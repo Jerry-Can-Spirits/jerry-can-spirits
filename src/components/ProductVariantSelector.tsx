@@ -11,6 +11,7 @@ import {
 import { applyReferralCode } from '@/lib/referrals'
 import type { ShopifyProductVariant, ShopifyImage } from '@/lib/shopify'
 import { appendUtmToCheckout } from '@/lib/utm'
+import { trackEventDual } from '@/lib/meta-capi'
 
 interface ProductVariantSelectorProps {
   variants: ShopifyProductVariant[]
@@ -66,10 +67,8 @@ export default function ProductVariantSelector({
       currency: currencyCode,
     }
 
-    // Track AddToCart via Meta Pixel directly (consent-gated)
-    if (typeof window !== 'undefined' && window.fbq && window.Cookiebot?.consent?.marketing) {
-      window.fbq('track', 'AddToCart', atcPayload)
-    }
+    // Track AddToCart via Meta Pixel + CAPI (consent-gated inside trackEventDual)
+    trackEventDual('AddToCart', atcPayload)
 
     // Track AddToCart event for Google Ads and GA4
     trackAddToCart(
