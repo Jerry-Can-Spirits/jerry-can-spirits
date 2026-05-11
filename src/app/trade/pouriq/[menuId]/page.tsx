@@ -9,6 +9,7 @@ import { KpiCards } from '@/components/pouriq/KpiCards'
 import { CocktailTable } from '@/components/pouriq/CocktailTable'
 import { IngredientOverlapTable } from '@/components/pouriq/IngredientOverlapTable'
 import { RecommendationStream } from '@/components/pouriq/RecommendationStream'
+import { DeleteMenuButton } from '@/components/pouriq/DeleteMenuButton'
 
 export const dynamic = 'force-dynamic'
 
@@ -43,6 +44,10 @@ export default async function MenuDetailPage({ params }: Props) {
         <p className="text-parchment-400 text-sm mb-10">
           {menu.venue_type ?? 'Menu'}{menu.city && ` · ${menu.city}`} · Target GP {menu.target_gp_pct}%
         </p>
+
+        <div className="flex justify-end mb-6">
+          <DeleteMenuButton menuId={menuId} menuName={menu.name} />
+        </div>
 
         {cocktails.length === 0 ? (
           <div className="bg-jerry-green-800/40 border border-gold-500/20 rounded-xl p-12 text-center">
