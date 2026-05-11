@@ -105,7 +105,14 @@ export async function saveCocktailAction(
 }
 
 export async function deleteCocktailAction(menuId: string, cocktailId: string): Promise<void> {
-  const { db } = await requireDb()
-  await deleteCocktail(db, cocktailId)
+  const { db, tradeAccountId } = await requireDb()
+  // Verify the menu belongs to this tenant before deleting any cocktails from it.
+  const menu = await getMenu(db, menuId, tradeAccountId)
+  if (!menu) throw new Error('Menu not found')
+  // Restrict delete to cocktails that actually belong to this menu.
+  await db
+    .prepare(`DELETE FROM pouriq_cocktails WHERE id = ?1 AND menu_id = ?2`)
+    .bind(cocktailId, menuId)
+    .run()
   revalidatePath(`/trade/pouriq/${menuId}`)
 }
