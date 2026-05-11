@@ -274,7 +274,7 @@ export default function CookiePolicy() {
                     </a>
                   </li>
                   <li>
-                    <a href="https://support.microsoft.com/en-us/help/4027947/microsoft-edge-delete-cookies" target="_blank" rel="noopener noreferrer"
+                    <a href="https://support.microsoft.com/en-US/microsoft-edge/63947406-40ac-c3b8-57b9-2a946a29ae09" target="_blank" rel="noopener noreferrer"
                        className="text-gold-300 hover:text-gold-200 underline">
                       Microsoft Edge
                     </a>
