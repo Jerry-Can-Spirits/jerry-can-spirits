@@ -44,7 +44,10 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Invalid request' }, { status: 400 })
   }
   const pin = body.pin?.trim()
-  if (!pin || !/^\d{6,12}$/.test(pin)) {
+  // Length-only sanity check. Format (digits, alphanumeric, etc.) is not enforced
+  // here because the existing trade_accounts table has no format constraint —
+  // the DB lookup below is the source of truth.
+  if (!pin || pin.length < 4 || pin.length > 32) {
     return NextResponse.json({ error: 'Invalid PIN' }, { status: 400 })
   }
 
