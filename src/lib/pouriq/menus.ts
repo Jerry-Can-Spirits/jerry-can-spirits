@@ -170,10 +170,6 @@ export async function insertCocktail(
   return result.id
 }
 
-export async function deleteCocktail(db: D1Database, cocktailId: string): Promise<void> {
-  await db.prepare(`DELETE FROM pouriq_cocktails WHERE id = ?1`).bind(cocktailId).run()
-}
-
 export async function replaceIngredients(
   db: D1Database,
   cocktailId: string,

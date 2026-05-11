@@ -94,7 +94,12 @@ export function CocktailForm({ menuId, cocktail }: Props) {
         setError(`Ingredient ${idx + 1}: name is required`)
         return
       }
-      if (ing.pricing_mode === 'bottle') {
+      // Mirror the render-time rule: some ingredient types (e.g. garnish)
+      // force unit pricing regardless of the user's last dropdown selection.
+      // Validate against the EFFECTIVE mode, not the stored mode.
+      const forceUnit = TYPES_REQUIRING_UNIT_PRICING.includes(ing.ingredient_type)
+      const effectiveMode: 'bottle' | 'unit' = forceUnit ? 'unit' : ing.pricing_mode
+      if (effectiveMode === 'bottle') {
         const pour_ml = parseFloat(ing.pour_ml)
         const bottle_size_ml = parseFloat(ing.bottle_size_ml)
         const bottle_cost_p = Math.round(parseFloat(ing.bottle_cost_p) * 100)

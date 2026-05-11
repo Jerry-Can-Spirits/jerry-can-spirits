@@ -126,7 +126,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     console.error('Error fetching collections for sitemap:', error)
   }
 
-  // Fetch all batches from D1
+  // Fetch all batches from D1.
+  //
+  // During Cloudflare's `next build` (static prerender) the D1 binding does
+  // not point at the production database, so the `batches` table is missing
+  // and the query throws. This is harmless: the prerendered sitemap omits
+  // batches at build time, and the next runtime regeneration (within an
+  // hour via `revalidate`) picks them up against the real DB. Suppress that
+  // specific expected error to keep build logs clean; surface anything else.
   let batchUrls: MetadataRoute.Sitemap = []
   try {
     const db = await getD1()
@@ -138,7 +145,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.6,
     }))
   } catch (error) {
-    console.error('Error fetching batches for sitemap:', error)
+    const msg = error instanceof Error ? error.message : String(error)
+    if (!msg.includes('no such table')) {
+      console.error('Error fetching batches for sitemap:', error)
+    }
   }
 
   // Define all static routes with priorities and change frequencies

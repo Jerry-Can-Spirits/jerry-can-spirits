@@ -2,7 +2,7 @@
 	"$schema": "node_modules/wrangler/config-schema.json",
 	"main": "./cloudflare-worker-entry.mjs",
 	"name": "jerry-can-spirits-prod",
-	"compatibility_date": "2025-05-05",
+	"compatibility_date": "2026-05-11",
 	"compatibility_flags": [
 		"nodejs_compat"
 	],
