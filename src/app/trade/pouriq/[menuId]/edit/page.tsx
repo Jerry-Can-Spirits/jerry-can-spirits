@@ -15,7 +15,7 @@ interface Props {
 
 export default async function EditMenuPage({ params, searchParams }: Props) {
   const access = await checkPourIqAccess()
-  if (access.kind === 'no-session') redirect('/trade/pouriq/login')
+  if (access.kind === 'no-session') redirect('/trade/login')
   if (access.kind === 'no-licence') return <LicenceGate />
 
   const { menuId } = await params
