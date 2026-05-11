@@ -108,7 +108,7 @@ const partners = [
     name: "British Distillers Alliance",
     location: "United Kingdom",
     description: "The British Distillers Alliance is the trade body representing distillers across the United Kingdom, from established producers to independent craft operations. Membership signals commitment to industry standards, regulatory practice, and the wider distilling community. We're members because the craft is stronger when its makers speak together.",
-    website: "https://britishdistillersalliance.com",
+    website: "https://www.britishdistillersalliance.com/",
     speciality: "UK Distillers Trade Body",
     logo: "https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/77cd3e56-0502-4357-8e97-447c31960c00/public",
     featured: true,
