@@ -63,7 +63,7 @@ CREATE TABLE IF NOT EXISTS trade_application_review_log (
   notes                    TEXT,
   reviewed_by              TEXT,
   next_review_date         TEXT,
-  created_at               TEXT NOT NULL,
+  created_at               TEXT NOT NULL DEFAULT (datetime('now')),
   FOREIGN KEY (trade_application_id) REFERENCES trade_applications(id)
 );
 
@@ -72,6 +72,8 @@ CREATE INDEX IF NOT EXISTS idx_trade_application_review_log_application
 
 -- Link existing trade_accounts (PIN table) to an originating application.
 -- Existing rows have NULL; future PIN issuance from approved applications carries the link.
+-- NOTE: ADD COLUMN is not idempotent in SQLite. This whole migration is single-run;
+-- if you need to re-apply earlier statements, copy them into a new migration file.
 ALTER TABLE trade_accounts ADD COLUMN application_id TEXT REFERENCES trade_applications(id);
 CREATE INDEX IF NOT EXISTS idx_trade_accounts_application
   ON trade_accounts(application_id);
