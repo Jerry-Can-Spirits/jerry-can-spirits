@@ -1,21 +1,21 @@
-# MenuIQ — AI Menu & Margin Optimisation Tool — Design Spec
+# Pour IQ — AI Menu & Margin Optimisation Tool — Design Spec
 
 **Date:** 2026-05-11
 **Status:** Design (pending implementation)
-**Branch:** `feat/menuiq`
+**Branch:** `feat/pouriq`
 
 ## Context & Goal
 
 Jerry Can Spirits trade customers (pubs, bars, restaurants, hotels) regularly rewrite their cocktail menus. Most do this by gut feel — they have no quick way to see which cocktails are pulling down their margin, which ingredients only appear in one drink (waste risk), or whether their menu over-indexes on one base spirit.
 
-MenuIQ is an integrated tool inside the existing trade portal that lets a venue:
+Pour IQ is an integrated tool inside the existing trade portal that lets a venue:
 
 1. Enter their current cocktail menu (recipes, costs, sale prices)
 2. See deterministic profitability metrics (GP% per cocktail, ingredient overlap, waste flags)
 3. Receive AI-generated, brand-voiced recommendations for what to change to improve margin and reduce complexity
 4. Save successive menu analyses to track changes over time
 
-It is gated by a paid annual licence (`menuiq_subscriptions` table) on top of an existing trade account. The pilot venue receives a comp licence; future paying venues are added manually (Stripe Checkout integration is deferred to Phase 4+).
+It is gated by a paid annual licence (`pouriq_subscriptions` table) on top of an existing trade account. The pilot venue receives a comp licence; future paying venues are added manually (Stripe Checkout integration is deferred to Phase 4+).
 
 This spec covers the MVP. CSV/PDF/photo OCR upload, version comparison views, self-serve Stripe checkout, and magic-link auth migration are deliberately out of scope for v1.
 
@@ -25,22 +25,22 @@ This spec covers the MVP. CSV/PDF/photo OCR upload, version comparison views, se
 
 | State | Behaviour |
 |---|---|
-| Public (no PIN session) | `/trade/menuiq/*` redirects to existing `/trade/order/` login. Public `/trade/` page does NOT explicitly market MenuIQ in v1 — applying for a trade account is the gate. |
-| Logged in, no MenuIQ licence | Trade portal nav shows MenuIQ tab. Clicking renders a "licence gate" page in brand voice with a `mailto:trade@jerrycanspirits.co.uk` enquiry link. No hard sell. |
-| Logged in, has active MenuIQ licence | Full access to dashboard, create menu, analyse, AI recommendations. |
+| Public (no PIN session) | `/trade/pouriq/*` redirects to existing `/trade/order/` login. Public `/trade/` page does NOT explicitly market Pour IQ in v1 — applying for a trade account is the gate. |
+| Logged in, no Pour IQ licence | Trade portal nav shows Pour IQ tab. Clicking renders a "licence gate" page in brand voice with a `mailto:trade@jerrycanspirits.co.uk` enquiry link. No hard sell. |
+| Logged in, has active Pour IQ licence | Full access to dashboard, create menu, analyse, AI recommendations. |
 
 ### Access function
 A single library function gates every entry point:
 
 ```ts
-// src/lib/menuiq/access.ts
+// src/lib/pouriq/access.ts
 async function assertMenuIqAccess(tradeAccountId: string): Promise<MenuIqLicence>
 ```
 
-Reads the existing PIN-validated session, looks up an active row in `menuiq_subscriptions`, throws on miss. When PIN auth is later replaced by magic-link, only the session reader inside this function changes — nothing in MenuIQ itself does.
+Reads the existing PIN-validated session, looks up an active row in `pouriq_subscriptions`, throws on miss. When PIN auth is later replaced by magic-link, only the session reader inside this function changes — nothing in Pour IQ itself does.
 
 ### Licence lifecycle (manual for v1)
-- Pilot venue: `INSERT INTO menuiq_subscriptions (...) VALUES (..., 'pilot', 0, datetime('now', '+12 months'))`
+- Pilot venue: `INSERT INTO pouriq_subscriptions (...) VALUES (..., 'pilot', 0, datetime('now', '+12 months'))`
 - Future paying customers: same insert with `licence_type='annual'` and `price_paid_p` set after off-platform payment (bank transfer, invoice)
 - Phase 4+: a Stripe webhook does the same insert automatically
 
@@ -49,26 +49,26 @@ The `licence_type` CHECK constraint accepts `'pilot' | 'annual' | 'biannual' | '
 ## Architecture Overview
 
 ### Surface area
-- All UI under `/trade/menuiq/*`, gated by existing PIN session middleware
+- All UI under `/trade/pouriq/*`, gated by existing PIN session middleware
 - Server actions for forms (create menu, edit cocktails, save changes)
 - API routes for two cases server actions cannot do well:
-  - `POST /api/menuiq/analyze` — deterministic calculation (Node runtime, cacheable)
-  - `POST /api/menuiq/recommend` — streaming AI output via SSE (edge runtime)
-- Library modules in `src/lib/menuiq/` — pure calculations, AI client, D1 helpers, types
+  - `POST /api/pouriq/analyze` — deterministic calculation (Node runtime, cacheable)
+  - `POST /api/pouriq/recommend` — streaming AI output via SSE (edge runtime)
+- Library modules in `src/lib/pouriq/` — pure calculations, AI client, D1 helpers, types
 
 ### Folder layout
 
 ```
 src/
-  app/trade/menuiq/
+  app/trade/pouriq/
     page.tsx                  ← dashboard: licence status + saved menus list
     new/page.tsx              ← create menu
     [menuId]/page.tsx         ← menu detail + cocktails + analysis + AI recs
     [menuId]/edit/page.tsx    ← edit cocktails
-  app/api/menuiq/
+  app/api/pouriq/
     analyze/route.ts          ← Node runtime, deterministic
     recommend/route.ts        ← Edge runtime, streams Anthropic via SSE
-  lib/menuiq/
+  lib/pouriq/
     access.ts                 ← assertMenuIqAccess
     calculations.ts           ← GP%, pour cost, overlap, waste (pure functions)
     anthropic.ts              ← fetch wrapper, streaming, prompt cache
@@ -76,9 +76,9 @@ src/
     menus.ts                  ← D1 query helpers
     field-manual-match.ts     ← Sanity GROQ + fuzzy match
     types.ts
-  components/menuiq/
+  components/pouriq/
     LicenceGate.tsx
-    TradePortalLayout.tsx     ← shared nav for /trade/order and /trade/menuiq
+    TradePortalLayout.tsx     ← shared nav for /trade/order and /trade/pouriq
     MenuList.tsx
     CocktailForm.tsx
     KpiCards.tsx
@@ -86,7 +86,7 @@ src/
     RecommendationStream.tsx
     SuggestedChangeCard.tsx
 migrations/
-  0015_menuiq.sql
+  0015_pouriq.sql
 ```
 
 ### Reused patterns
@@ -97,13 +97,13 @@ migrations/
 
 ## D1 Schema
 
-Single migration `0015_menuiq.sql`. Five tables. Multi-tenant via `trade_account_id` from day one.
+Single migration `0015_pouriq.sql`. Five tables. Multi-tenant via `trade_account_id` from day one.
 
-### `menuiq_subscriptions`
+### `pouriq_subscriptions`
 Access / licensing record.
 
 ```sql
-CREATE TABLE menuiq_subscriptions (
+CREATE TABLE pouriq_subscriptions (
   id               TEXT PRIMARY KEY DEFAULT (lower(hex(randomblob(16)))),
   trade_account_id TEXT NOT NULL REFERENCES trade_accounts(id),
   licence_type     TEXT NOT NULL CHECK(licence_type IN ('pilot','annual','biannual','monthly')),
@@ -114,15 +114,15 @@ CREATE TABLE menuiq_subscriptions (
   created_at       TEXT NOT NULL DEFAULT (datetime('now'))
 );
 
-CREATE INDEX idx_menuiq_subscriptions_trade_account ON menuiq_subscriptions(trade_account_id);
-CREATE INDEX idx_menuiq_subscriptions_valid_until   ON menuiq_subscriptions(valid_until);
+CREATE INDEX idx_pouriq_subscriptions_trade_account ON pouriq_subscriptions(trade_account_id);
+CREATE INDEX idx_pouriq_subscriptions_valid_until   ON pouriq_subscriptions(valid_until);
 ```
 
-### `menuiq_menus`
+### `pouriq_menus`
 One row per saved menu analysis project.
 
 ```sql
-CREATE TABLE menuiq_menus (
+CREATE TABLE pouriq_menus (
   id               TEXT PRIMARY KEY DEFAULT (lower(hex(randomblob(16)))),
   trade_account_id TEXT NOT NULL REFERENCES trade_accounts(id),
   name             TEXT NOT NULL,
@@ -135,16 +135,16 @@ CREATE TABLE menuiq_menus (
   updated_at       TEXT NOT NULL DEFAULT (datetime('now'))
 );
 
-CREATE INDEX idx_menuiq_menus_trade_account ON menuiq_menus(trade_account_id);
+CREATE INDEX idx_pouriq_menus_trade_account ON pouriq_menus(trade_account_id);
 ```
 
-### `menuiq_cocktails`
+### `pouriq_cocktails`
 One row per cocktail in a menu.
 
 ```sql
-CREATE TABLE menuiq_cocktails (
+CREATE TABLE pouriq_cocktails (
   id                TEXT PRIMARY KEY DEFAULT (lower(hex(randomblob(16)))),
-  menu_id           TEXT NOT NULL REFERENCES menuiq_menus(id) ON DELETE CASCADE,
+  menu_id           TEXT NOT NULL REFERENCES pouriq_menus(id) ON DELETE CASCADE,
   name              TEXT NOT NULL,
   sale_price_p      INTEGER NOT NULL,                 -- pence
   position          INTEGER NOT NULL DEFAULT 0,       -- ordering on the menu
@@ -152,17 +152,17 @@ CREATE TABLE menuiq_cocktails (
   notes             TEXT
 );
 
-CREATE INDEX idx_menuiq_cocktails_menu      ON menuiq_cocktails(menu_id);
-CREATE INDEX idx_menuiq_cocktails_field_man ON menuiq_cocktails(field_manual_slug);
+CREATE INDEX idx_pouriq_cocktails_menu      ON pouriq_cocktails(menu_id);
+CREATE INDEX idx_pouriq_cocktails_field_man ON pouriq_cocktails(field_manual_slug);
 ```
 
-### `menuiq_ingredients`
+### `pouriq_ingredients`
 One row per ingredient line in a cocktail. Two pricing modes supported via the CHECK constraint.
 
 ```sql
-CREATE TABLE menuiq_ingredients (
+CREATE TABLE pouriq_ingredients (
   id              TEXT PRIMARY KEY DEFAULT (lower(hex(randomblob(16)))),
-  cocktail_id     TEXT NOT NULL REFERENCES menuiq_cocktails(id) ON DELETE CASCADE,
+  cocktail_id     TEXT NOT NULL REFERENCES pouriq_cocktails(id) ON DELETE CASCADE,
   name            TEXT NOT NULL,                      -- e.g. "Vodka", "Cinnamon Syrup"
   ingredient_type TEXT NOT NULL CHECK(ingredient_type IN ('spirit','liqueur','wine','beer','mixer','syrup','juice','garnish','other')),
   pour_ml         REAL,                               -- volume served; null for unit-priced items
@@ -175,16 +175,16 @@ CREATE TABLE menuiq_ingredients (
   )
 );
 
-CREATE INDEX idx_menuiq_ingredients_cocktail ON menuiq_ingredients(cocktail_id);
+CREATE INDEX idx_pouriq_ingredients_cocktail ON pouriq_ingredients(cocktail_id);
 ```
 
-### `menuiq_analyses`
+### `pouriq_analyses`
 Append-only audit. One row per AI analysis run. Lets the user (and Dan) track how a menu's KPIs and AI advice evolved.
 
 ```sql
-CREATE TABLE menuiq_analyses (
+CREATE TABLE pouriq_analyses (
   id                   TEXT PRIMARY KEY DEFAULT (lower(hex(randomblob(16)))),
-  menu_id              TEXT NOT NULL REFERENCES menuiq_menus(id) ON DELETE CASCADE,
+  menu_id              TEXT NOT NULL REFERENCES pouriq_menus(id) ON DELETE CASCADE,
   model                TEXT NOT NULL,                 -- 'claude-sonnet-4-6'
   prompt_tokens        INTEGER,
   output_tokens        INTEGER,
@@ -193,7 +193,7 @@ CREATE TABLE menuiq_analyses (
   created_at           TEXT NOT NULL DEFAULT (datetime('now'))
 );
 
-CREATE INDEX idx_menuiq_analyses_menu ON menuiq_analyses(menu_id);
+CREATE INDEX idx_pouriq_analyses_menu ON pouriq_analyses(menu_id);
 ```
 
 ### Schema rationale
@@ -201,7 +201,7 @@ CREATE INDEX idx_menuiq_analyses_menu ON menuiq_analyses(menu_id);
 - **CHECK constraint on ingredients.** Every ingredient must have either bottle pricing (size + cost + pour) or unit pricing. Garbage data cannot enter the DB.
 - **`ingredient_type` enum check.** Catches typos at write time; the AI prompt can rely on these values being clean.
 - **`field_manual_slug` is nullable.** Signature/house cocktails just don't get a link. Graceful degradation as the Field Manual grows.
-- **`menuiq_analyses` is append-only.** Every analysis run preserved. Token counts tracked for cost auditing.
+- **`pouriq_analyses` is append-only.** Every analysis run preserved. Token counts tracked for cost auditing.
 - **All foreign keys use `ON DELETE CASCADE` where the dependent row only makes sense alongside its parent** (cocktails/ingredients/analyses with their menu).
 
 ## Field Manual Integration
@@ -210,7 +210,7 @@ CREATE INDEX idx_menuiq_analyses_menu ON menuiq_analyses(menu_id);
 1. On cocktail save (create or edit), the server runs a Sanity GROQ query: `*[_type == "cocktail"]{ name, "slug": slug.current }`
 2. Result is cached in the Worker isolate for ~15 minutes (small dataset, infrequent updates)
 3. Fuzzy match the cocktail name against the result: lowercase, strip punctuation, exact match wins
-4. If matched, save the slug to `menuiq_cocktails.field_manual_slug`. Otherwise null.
+4. If matched, save the slug to `pouriq_cocktails.field_manual_slug`. Otherwise null.
 
 ### Where the links surface
 - **KPI cards and cocktail rows**: subtle inline link "Read in the Field Manual" beside the cocktail name when matched
@@ -235,7 +235,7 @@ Three layers:
 **1. System prompt (prompt-cached)** — defines persona, output rules:
 - Hospitality consultant trained on British craft spirits trade
 - Brand voice constraints from `CLAUDE.md` (no em-dashes, no exclamations, measured, direct)
-- Must call the `menuiq_recommendations` tool — never free-text
+- Must call the `pouriq_recommendations` tool — never free-text
 - When a cocktail has a `field_manual_url`, may reference it where genuinely useful, sparingly
 
 **2. User message (not cached)** — the menu data for this run:
@@ -248,7 +248,7 @@ Three layers:
 
 ```ts
 {
-  name: "menuiq_recommendations",
+  name: "pouriq_recommendations",
   description: "Return a list of recommendations for this menu",
   input_schema: {
     type: "object",
@@ -289,7 +289,7 @@ Three layers:
 }
 ```
 
-`tool_choice: { type: "tool", name: "menuiq_recommendations" }` forces the AI to call this tool. We always receive parseable JSON conforming to the schema.
+`tool_choice: { type: "tool", name: "pouriq_recommendations" }` forces the AI to call this tool. We always receive parseable JSON conforming to the schema.
 
 ### Streaming
 **SSE from edge runtime endpoint.** Anthropic emits `input_json_delta` events with partial JSON. Server-side we accumulate JSON, detect when each top-level recommendation object closes (matched braces), and emit it to the client as a discrete SSE event. The client renders cards as they arrive — no long blank wait.
@@ -309,7 +309,7 @@ Enabled on the system prompt only (~800 tokens, cacheable at 10% of input price)
 | Tool output schema mismatch | Sentry-log raw output, friendly error. `tool_choice` enforcement should make this nearly impossible — defence in depth. |
 
 ### Token and cost tracking
-Each analysis writes `prompt_tokens`, `output_tokens`, `model` to `menuiq_analyses`. Lets us reconcile against Anthropic's invoice and detect prompt creep.
+Each analysis writes `prompt_tokens`, `output_tokens`, `model` to `pouriq_analyses`. Lets us reconcile against Anthropic's invoice and detect prompt creep.
 
 ### Environment variable
 - `ANTHROPIC_API_KEY` — new Worker secret
@@ -317,10 +317,10 @@ Each analysis writes `prompt_tokens`, `output_tokens`, `model` to `menuiq_analys
 ## Trade Portal Integration
 
 ### Shared layout
-A new `TradePortalLayout` component renders a top nav for `/trade/order/*` AND `/trade/menuiq/*`:
+A new `TradePortalLayout` component renders a top nav for `/trade/order/*` AND `/trade/pouriq/*`:
 
 ```
-Trade Portal:  [Orders]  [MenuIQ]
+Trade Portal:  [Orders]  [Pour IQ]
 ```
 
 Existing `/trade/order/*` pages refactor to use this layout in Phase 0. Single shared layout component, no duplication.
@@ -329,21 +329,21 @@ Existing `/trade/order/*` pages refactor to use this layout in Phase 0. Single s
 
 | State | Behaviour |
 |---|---|
-| Not logged in | `/trade/menuiq/*` redirects to `/trade/order/` login |
-| Logged in, no licence | MenuIQ nav tab visible. Clicking shows licence-gate page with `mailto:trade@jerrycanspirits.co.uk` enquiry link |
-| Logged in, with licence | Full MenuIQ access |
+| Not logged in | `/trade/pouriq/*` redirects to `/trade/order/` login |
+| Logged in, no licence | Pour IQ nav tab visible. Clicking shows licence-gate page with `mailto:trade@jerrycanspirits.co.uk` enquiry link |
+| Logged in, with licence | Full Pour IQ access |
 
 ### Public marketing
-The public `/trade/` page does NOT explicitly market MenuIQ in v1. The intent is that trade-account application itself remains the gate. Once the pilot is complete and a testimonial is available, a "benefits" section can be added on the public page in Phase 4+.
+The public `/trade/` page does NOT explicitly market Pour IQ in v1. The intent is that trade-account application itself remains the gate. Once the pilot is complete and a testimonial is available, a "benefits" section can be added on the public page in Phase 4+.
 
 ## MVP Phasing
 
 ### Phase 0 — Foundations (1 day)
-- D1 migration `0015_menuiq.sql` (all five tables)
+- D1 migration `0015_pouriq.sql` (all five tables)
 - `TradePortalLayout` shared nav component
 - Refactor `/trade/order/*` pages to use shared layout
 - `assertMenuIqAccess()` library + licence-gate page
-- Route scaffolding under `/trade/menuiq` (dashboard, new, [menuId])
+- Route scaffolding under `/trade/pouriq` (dashboard, new, [menuId])
 - Empty dashboard rendering "No menus yet — create one to begin"
 
 **Pilot can't use this yet, but the bones are in place. Build verifies green on Cloudflare.**
@@ -361,14 +361,14 @@ The public `/trade/` page does NOT explicitly market MenuIQ in v1. The intent is
 **Pilot can use this. They can model their menu and see numbers they couldn't before.**
 
 ### Phase 2 — AI recommendations (2 days)
-- `lib/menuiq/anthropic.ts` — fetch wrapper with streaming and prompt cache
-- `lib/menuiq/prompts.ts` — system prompt + tool schema
-- SSE endpoint at `/api/menuiq/recommend`
+- `lib/pouriq/anthropic.ts` — fetch wrapper with streaming and prompt cache
+- `lib/pouriq/prompts.ts` — system prompt + tool schema
+- SSE endpoint at `/api/pouriq/recommend`
 - `RecommendationStream` client component consuming SSE
-- Each analysis run writes to `menuiq_analyses`
+- Each analysis run writes to `pouriq_analyses`
 - Field Manual references rendered inline on recommendation cards
 
-**Pilot now has the full MenuIQ experience.**
+**Pilot now has the full Pour IQ experience.**
 
 ### Phase 3 — Polish and pilot launch (1 day)
 - Empty states, error states, loading skeletons
@@ -391,25 +391,25 @@ The public `/trade/` page does NOT explicitly market MenuIQ in v1. The intent is
 - AI evals + Haiku cost-down path
 - Ingredient library (save common ingredients with prices per tenant for reuse)
 - Sub-recipes (define "cinnamon syrup" once, use across cocktails)
-- Public marketing of MenuIQ on the trade landing page
+- Public marketing of Pour IQ on the trade landing page
 - Multi-currency support (GBP only in v1)
 
 ## Pilot Prerequisites (Manual)
 
-1. Brief the pilot venue — short intro on what MenuIQ does, set expectation that it's a working prototype not a finished product
+1. Brief the pilot venue — short intro on what Pour IQ does, set expectation that it's a working prototype not a finished product
 2. Sit with them the first time they use it — observe what confuses them
 3. Create comp licence row:
    ```
-   wrangler d1 execute jerry-can-spirits-db --remote --command "INSERT INTO menuiq_subscriptions (trade_account_id, licence_type, valid_until, price_paid_p) VALUES ('<pilot-trade-account-id>', 'pilot', datetime('now','+12 months'), 0);"
+   wrangler d1 execute jerry-can-spirits-db --remote --command "INSERT INTO pouriq_subscriptions (trade_account_id, licence_type, valid_until, price_paid_p) VALUES ('<pilot-trade-account-id>', 'pilot', datetime('now','+12 months'), 0);"
    ```
 4. Set Worker secret `ANTHROPIC_API_KEY` before Phase 2 ships
 
 ## Acceptance Criteria
 
-- [ ] `/trade/menuiq` renders responsive, brand-aligned layout
+- [ ] `/trade/pouriq` renders responsive, brand-aligned layout
 - [ ] Licence gate page renders for trade accounts without an active licence
-- [ ] Trade portal nav shared between `/trade/order` and `/trade/menuiq`
-- [ ] Create-menu form validates required fields and writes a `menuiq_menus` row
+- [ ] Trade portal nav shared between `/trade/order` and `/trade/pouriq`
+- [ ] Create-menu form validates required fields and writes a `pouriq_menus` row
 - [ ] Cocktail entry supports both bottle and unit pricing modes with server-side validation
 - [ ] Field Manual slug populated on cocktail save when name matches a Sanity cocktail document
 - [ ] KPI cards show avg GP%, best/worst margin, waste-risk count
@@ -417,7 +417,7 @@ The public `/trade/` page does NOT explicitly market MenuIQ in v1. The intent is
 - [ ] Ingredient overlap table flags ingredients used in only one cocktail
 - [ ] AI recommendation endpoint streams structured recommendations via SSE
 - [ ] Recommendation cards render with severity, category, body, optional suggested change, optional Field Manual reference
-- [ ] Every AI run writes a row to `menuiq_analyses` with token counts
+- [ ] Every AI run writes a row to `pouriq_analyses` with token counts
 - [ ] Build passes `npm run build` and `npx opennextjs-cloudflare build`
 - [ ] Pilot venue completes a real menu analysis end-to-end without developer intervention
 
