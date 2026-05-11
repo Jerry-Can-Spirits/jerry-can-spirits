@@ -325,6 +325,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'monthly' as const,
       priority: 0.6,
     },
+    {
+      url: `${baseUrl}/trade/pour-iq/`,
+      lastModified: STATIC_LAST_MODIFIED,
+      changeFrequency: 'monthly' as const,
+      priority: 0.7,
+    },
     // HTML sitemap
     {
       url: `${baseUrl}/sitemap/`,
