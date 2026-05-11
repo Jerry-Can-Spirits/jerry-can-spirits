@@ -8,6 +8,7 @@ interface CloudflareEnv {
 
   // Secrets — Klaviyo
   KLAVIYO_PRIVATE_KEY: string;
+  KLAVIYO_TRADE_LIST_ID: string;
 
   // Secrets — Meta / Social
   META_ACCESS_TOKEN: string;
@@ -30,6 +31,18 @@ interface CloudflareEnv {
   // Secrets — Trade portal
   TRADE_SESSION_SECRET: string;
   TRADE_CASE_VARIANT_ID: string;
+
+  // Secrets — Resend (trade application admin emails)
+  RESEND_API_KEY: string;
+  TRADE_APPLICATIONS_EMAIL: string;
+
+  // Secrets — R2 presigning (S3-compatible API for presigning download URLs)
+  R2_ACCESS_KEY_ID: string;
+  R2_SECRET_ACCESS_KEY: string;
+  R2_ACCOUNT_ID: string;
+
+  // R2 Buckets
+  TRADE_DOCS: R2Bucket;
 
   // Worker bindings
   ASSETS: Fetcher;

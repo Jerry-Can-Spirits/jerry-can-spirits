@@ -54,6 +54,28 @@ export default function TradePage() {
         </div>
       </section>
 
+      {/* ── Section: Apply CTA ── */}
+      <section className="pb-16 -mt-8 lg:-mt-12">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="bg-jerry-green-800/40 border border-gold-500/30 rounded-xl p-8 lg:p-10">
+            <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+              <div>
+                <h2 className="text-2xl font-serif font-bold text-white mb-2">Stock Expedition Spiced</h2>
+                <p className="text-parchment-300 text-sm leading-relaxed max-w-xl">
+                  Apply for a trade account. We review and respond within three working days.
+                </p>
+              </div>
+              <a
+                href="/trade/apply/"
+                className="inline-flex items-center justify-center px-6 py-3 bg-gold-500 text-jerry-green-900 font-bold rounded-lg hover:bg-gold-400 transition-colors text-sm whitespace-nowrap"
+              >
+                Apply for a trade account
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* ── Section 2: Why It Works Behind the Bar ── */}
       <section className="py-16 border-t border-gold-500/10">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">

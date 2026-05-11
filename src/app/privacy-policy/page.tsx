@@ -137,6 +137,27 @@ export default function PrivacyPolicy() {
 
             <section className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20">
               <h2 className="text-2xl font-serif font-bold text-white mb-4 pb-2 border-b border-gold-500/20">
+                3.4 Trade account applications
+              </h2>
+              <p className="text-white mb-4 leading-relaxed">
+                If you apply for a trade account, we collect information about your business, premises licensing, primary contact, and one director or owner. This includes a copy of your premises licence and photo identification of a director or owner.
+              </p>
+              <p className="text-white mb-4 leading-relaxed">
+                <strong className="text-gold-300">Lawful basis.</strong> We process this data to meet our legal obligations under HMRC&rsquo;s Alcohol Wholesaler Registration Scheme (AWRS) due diligence requirements, and our legitimate interest in verifying the businesses we trade with.
+              </p>
+              <p className="text-white mb-4 leading-relaxed">
+                <strong className="text-gold-300">Retention.</strong> Photo identification and premises licence copies are deleted from our systems 30 days after submission. Application details and verification records are retained for the life of the trade account and for six years after closure, in line with HMRC record-keeping requirements.
+              </p>
+              <p className="text-white mb-4 leading-relaxed">
+                <strong className="text-gold-300">Recipients.</strong> This data is accessible only to Jerry Can Spirits directors. It is stored in Cloudflare R2 (United Kingdom and European Union regions) and Cloudflare D1.
+              </p>
+              <p className="text-white leading-relaxed">
+                <strong className="text-gold-300">Your rights.</strong> You can request access, correction, or deletion of your data by emailing <a href="mailto:hello@jerrycanspirits.co.uk" className="text-gold-300 underline hover:text-gold-200">hello@jerrycanspirits.co.uk</a>. Deletion requests for active trade accounts will close the account.
+              </p>
+            </section>
+
+            <section className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20">
+              <h2 className="text-2xl font-serif font-bold text-white mb-4 pb-2 border-b border-gold-500/20">
                 4. How We Use Your Information
               </h2>
               
