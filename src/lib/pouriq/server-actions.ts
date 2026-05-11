@@ -6,7 +6,7 @@ import { getCloudflareContext } from '@opennextjs/cloudflare'
 import { checkPourIqAccess } from './access'
 import {
   insertMenu, updateMenu, deleteMenu,
-  insertCocktail, deleteCocktail, replaceIngredients,
+  insertCocktail, replaceIngredients,
   getMenu,
 } from './menus'
 import { matchFieldManualSlug } from './field-manual-match'
