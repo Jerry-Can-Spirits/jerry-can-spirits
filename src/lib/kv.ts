@@ -210,27 +210,3 @@ export async function isRateLimited(
   return false;
 }
 
-// ── Trade Sessions ───────────────────────────────────────────────────
-
-const TRADE_SESSION_TTL = 60 * 60 * 24 * 30; // 30 days
-
-export async function createTradeSession(
-  kv: KVNamespace,
-  sid: string,
-): Promise<void> {
-  await kv.put(`trade:session:${sid}`, '1', { expirationTtl: TRADE_SESSION_TTL });
-}
-
-export async function isTradeSessionValid(
-  kv: KVNamespace,
-  sid: string,
-): Promise<boolean> {
-  return (await kv.get(`trade:session:${sid}`)) !== null;
-}
-
-export async function revokeTradeSession(
-  kv: KVNamespace,
-  sid: string,
-): Promise<void> {
-  await kv.delete(`trade:session:${sid}`);
-}

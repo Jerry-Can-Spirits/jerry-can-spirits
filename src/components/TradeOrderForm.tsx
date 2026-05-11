@@ -8,14 +8,7 @@ import {
   CATEGORY_LABELS,
 } from '@/lib/trade-products'
 
-type Stage = 'pin' | 'order' | 'loading'
-
-interface VerifyResponse {
-  venue_name: string
-  tier: string
-  discount_code?: string
-  error?: string
-}
+type Stage = 'order' | 'loading'
 
 interface CheckoutResponse {
   checkoutUrl: string
@@ -49,18 +42,19 @@ function formatPrice(amount: string | number): string {
 interface TradeOrderFormProps {
   products: TradeProduct[]
   error?: string
+  account: {
+    venue_name: string
+    tier: string
+    discount_code: string
+  }
 }
 
-export default function TradeOrderForm({ products, error: catalogueError }: TradeOrderFormProps) {
-  const [stage, setStage] = useState<Stage>('pin')
-  const [pin, setPin] = useState('')
-  const [venueName, setVenueName] = useState('')
-  const [tier, setTier] = useState('')
-  const [discountCode, setDiscountCode] = useState('')
+export default function TradeOrderForm({ products, error: catalogueError, account }: TradeOrderFormProps) {
+  const [stage, setStage] = useState<Stage>('order')
   const [quantities, setQuantities] = useState<Record<string, number>>({})
   const [formError, setFormError] = useState('')
 
-  const discountPercent = DISCOUNT_BY_CODE[discountCode] ?? 0
+  const discountPercent = DISCOUNT_BY_CODE[account.discount_code] ?? 0
   // Per-product trade price. Discount-excluded items (e.g. the Ecologi
   // donation, which the Shopify discount code is scoped to skip) are
   // always returned at full price so the displayed total matches what
@@ -86,47 +80,14 @@ export default function TradeOrderForm({ products, error: catalogueError }: Trad
     .flatMap((p) => p.variants)
     .reduce((sum, v) => sum + parseFloat(v.price) * (quantities[v.id] ?? 0), 0)
 
-  const handleVerify = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setFormError('')
-    setStage('loading')
-
-    try {
-      const res = await fetch('/api/trade/verify', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ pin: pin.trim() }),
-      })
-      const data = await res.json() as VerifyResponse
-
-      if (!res.ok) {
-        setFormError(data.error ?? 'Invalid PIN.')
-        setStage('pin')
-        return
-      }
-
-      setVenueName(data.venue_name)
-      setTier(data.tier)
-      setDiscountCode(data.discount_code ?? '')
-      setStage('order')
-    } catch {
-      setFormError('Something went wrong. Please try again.')
-      setStage('pin')
-    }
-  }
-
   const handleLogout = async () => {
     setStage('loading')
     try {
       await fetch('/api/trade/logout', { method: 'POST' })
     } finally {
-      setVenueName('')
-      setTier('')
-      setDiscountCode('')
-      setPin('')
       setQuantities({})
       setFormError('')
-      setStage('pin')
+      window.location.href = '/trade/'
     }
   }
 
@@ -174,58 +135,14 @@ export default function TradeOrderForm({ products, error: catalogueError }: Trad
     )
   }
 
-  if (stage === 'pin') {
-    return (
-      <div className="max-w-sm">
-        <p className="text-parchment-400 text-sm mb-8">
-          Enter the trade access PIN from your welcome email.
-        </p>
-        <form onSubmit={handleVerify} className="space-y-4">
-          <div>
-            <label htmlFor="trade-pin" className="block text-parchment-500 text-xs uppercase tracking-widest mb-2">
-              Trade PIN
-            </label>
-            <input
-              id="trade-pin"
-              type="password"
-              value={pin}
-              onChange={(e) => setPin(e.target.value)}
-              required
-              autoComplete="off"
-              className="w-full px-4 py-3 bg-jerry-green-900 border border-gold-500/30 rounded-lg text-white placeholder-parchment-600 text-base focus:outline-none focus:border-gold-400 transition-colors tracking-widest"
-              placeholder="••••••••"
-            />
-          </div>
-          <p role="alert" aria-live="assertive" className="text-red-400 text-sm min-h-[1.25rem]">
-            {formError}
-          </p>
-          <button
-            type="submit"
-            disabled={!pin.trim()}
-            className="w-full px-6 py-3 bg-gold-500 text-jerry-green-900 font-bold text-sm uppercase tracking-wide rounded-lg hover:bg-gold-400 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            Continue
-          </button>
-        </form>
-        <p className="mt-6 text-parchment-600 text-xs">
-          Don&apos;t have a PIN?{' '}
-          <a href="/trade/" className="text-gold-500 hover:text-gold-400 underline">
-            Make a trade enquiry
-          </a>
-        </p>
-      </div>
-    )
-  }
-
-  // stage === 'order'
   return (
     <div className="max-w-2xl">
       <div className="flex items-start justify-between mb-8">
         <div>
           <p className="text-parchment-500 text-xs uppercase tracking-widest mb-1">Welcome back</p>
-          <p className="text-white text-2xl font-serif font-bold">{venueName}</p>
+          <p className="text-white text-2xl font-serif font-bold">{account.venue_name}</p>
           <p className="text-parchment-500 text-xs uppercase tracking-widest mt-1">
-            {TIER_LABEL[tier] ?? tier} account
+            {TIER_LABEL[account.tier] ?? account.tier} account
           </p>
         </div>
         <button

@@ -14,7 +14,7 @@ import type { IngredientType } from './types'
 
 async function requireDb() {
   const access = await checkPourIqAccess()
-  if (access.kind !== 'ok') redirect('/trade/pouriq/login')
+  if (access.kind !== 'ok') redirect('/trade/login')
   const { env } = await getCloudflareContext()
   return { db: env.DB as D1Database, tradeAccountId: access.tradeAccountId }
 }

@@ -1,5 +1,6 @@
 import { cookies } from 'next/headers'
-import { TRADE_SESSION_COOKIE } from './types'
+
+export const TRADE_SESSION_COOKIE = 'jcs_trade_sid'
 
 interface SessionData {
   tradeAccountId: string
@@ -9,10 +10,10 @@ interface SessionData {
 const SESSION_TTL_SECONDS = 60 * 60 * 24 * 30 // 30 days
 
 function sessionKey(sid: string): string {
-  return `pouriq:session:${sid}`
+  return `trade:session:${sid}`
 }
 
-export async function createPourIqSession(
+export async function createTradeSession(
   kv: KVNamespace,
   tradeAccountId: string,
 ): Promise<string> {
@@ -27,7 +28,7 @@ export async function createPourIqSession(
   return sid
 }
 
-export async function readSession(kv: KVNamespace, sid: string): Promise<SessionData | null> {
+export async function readTradeSession(kv: KVNamespace, sid: string): Promise<SessionData | null> {
   const raw = await kv.get(sessionKey(sid))
   if (!raw) return null
   try {
@@ -37,11 +38,11 @@ export async function readSession(kv: KVNamespace, sid: string): Promise<Session
   }
 }
 
-export async function revokePourIqSession(kv: KVNamespace, sid: string): Promise<void> {
+export async function revokeTradeSession(kv: KVNamespace, sid: string): Promise<void> {
   await kv.delete(sessionKey(sid))
 }
 
-export async function setSessionCookie(sid: string): Promise<void> {
+export async function setTradeSessionCookie(sid: string): Promise<void> {
   const cookieStore = await cookies()
   cookieStore.set(TRADE_SESSION_COOKIE, sid, {
     httpOnly: true,
@@ -52,12 +53,12 @@ export async function setSessionCookie(sid: string): Promise<void> {
   })
 }
 
-export async function clearSessionCookie(): Promise<void> {
+export async function clearTradeSessionCookie(): Promise<void> {
   const cookieStore = await cookies()
   cookieStore.delete(TRADE_SESSION_COOKIE)
 }
 
-export async function getSessionCookieValue(): Promise<string | null> {
+export async function getTradeSessionCookieValue(): Promise<string | null> {
   const cookieStore = await cookies()
   return cookieStore.get(TRADE_SESSION_COOKIE)?.value ?? null
 }

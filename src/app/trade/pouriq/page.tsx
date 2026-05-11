@@ -10,7 +10,7 @@ export const dynamic = 'force-dynamic'
 
 export default async function PourIqDashboard() {
   const access = await checkPourIqAccess()
-  if (access.kind === 'no-session') redirect('/trade/pouriq/login')
+  if (access.kind === 'no-session') redirect('/trade/login')
   if (access.kind === 'no-licence') return <LicenceGate />
 
   const { env } = await getCloudflareContext()

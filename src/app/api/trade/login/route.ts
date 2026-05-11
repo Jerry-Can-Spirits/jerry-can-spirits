@@ -1,8 +1,6 @@
-// POST /api/pouriq/login
+// POST /api/trade/login
 // Body: { pin: string }
 // Sets the jcs_trade_sid cookie on success.
-//
-// Env: SITE_OPS (KV), DB (D1)
 
 import { NextResponse } from 'next/server'
 import { getCloudflareContext } from '@opennextjs/cloudflare'
@@ -13,7 +11,7 @@ import {
   clearTradeFailedAttempts,
   TRADE_MAX_ATTEMPTS,
 } from '@/lib/kv'
-import { createPourIqSession, setSessionCookie } from '@/lib/pouriq/session'
+import { createTradeSession, setTradeSessionCookie } from '@/lib/trade-portal/session'
 
 export const runtime = 'nodejs'
 
@@ -33,7 +31,7 @@ export async function POST(request: Request) {
   const db = env.DB as D1Database
 
   const ip = (request.headers.get('CF-Connecting-IP') ?? request.headers.get('x-forwarded-for') ?? 'unknown').split(',')[0].trim()
-  if (await isRateLimited(kv, 'pouriq-login', ip, LOGIN_RATE_LIMIT, 3600)) {
+  if (await isRateLimited(kv, 'trade-login', ip, LOGIN_RATE_LIMIT, 3600)) {
     return NextResponse.json({ error: 'Too many attempts. Try again later.' }, { status: 429 })
   }
 
@@ -44,9 +42,6 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Invalid request' }, { status: 400 })
   }
   const pin = body.pin?.trim()
-  // Length-only sanity check. Format (digits, alphanumeric, etc.) is not enforced
-  // here because the existing trade_accounts table has no format constraint —
-  // the DB lookup below is the source of truth.
   if (!pin || pin.length < 4 || pin.length > 32) {
     return NextResponse.json({ error: 'Invalid PIN' }, { status: 400 })
   }
@@ -65,7 +60,7 @@ export async function POST(request: Request) {
   }
 
   await clearTradeFailedAttempts(kv, ip)
-  const sid = await createPourIqSession(kv, account.id)
-  await setSessionCookie(sid)
+  const sid = await createTradeSession(kv, account.id)
+  await setTradeSessionCookie(sid)
   return NextResponse.json({ success: true })
 }

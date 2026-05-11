@@ -1,8 +1,7 @@
 import { NextResponse } from 'next/server'
 import { getCloudflareContext } from '@opennextjs/cloudflare'
-import { getTradeAccountByPin } from '@/lib/d1'
-import { verifyTradeCookie, TRADE_COOKIE_NAME } from '@/lib/trade-cookie'
-import { isTradeSessionValid, isAllowedOrigin } from '@/lib/kv'
+import { isAllowedOrigin } from '@/lib/kv'
+import { getTradeSessionCookieValue, readTradeSession } from '@/lib/trade-portal/session'
 import { createCart, addLinesToCart, applyDiscount } from '@/lib/shopify'
 
 interface CheckoutLine {
@@ -61,39 +60,26 @@ export async function POST(request: Request) {
     lines.push({ variantId, quantity })
   }
 
-  // Read + verify the trade session cookie
-  const cookieHeader = request.headers.get('cookie') ?? ''
-  const cookieMatch = cookieHeader.match(
-    new RegExp(`(?:^|;\\s*)${TRADE_COOKIE_NAME}=([^;]+)`)
-  )
-  const cookieValue = cookieMatch?.[1]
-
-  if (!cookieValue) {
-    return NextResponse.json({ error: 'Not authenticated.' }, { status: 401 })
+  const sid = await getTradeSessionCookieValue()
+  if (!sid) {
+    return NextResponse.json({ error: 'Not authenticated' }, { status: 401 })
   }
 
   const { env } = await getCloudflareContext()
-  const secret = env.TRADE_SESSION_SECRET as string | undefined
-
-  if (!secret) {
-    console.error('TRADE_SESSION_SECRET not configured')
-    return NextResponse.json({ error: 'Server configuration error.' }, { status: 500 })
-  }
-
-  const payload = await verifyTradeCookie(cookieValue, secret)
-  if (!payload) {
-    return NextResponse.json({ error: 'Session expired. Please re-enter your PIN.' }, { status: 401 })
-  }
-
   const kv = env.SITE_OPS as KVNamespace
-  if (!await isTradeSessionValid(kv, payload.sid)) {
-    return NextResponse.json({ error: 'Session expired. Please re-enter your PIN.' }, { status: 401 })
+  const db = env.DB as D1Database
+
+  const session = await readTradeSession(kv, sid)
+  if (!session) {
+    return NextResponse.json({ error: 'Session expired' }, { status: 401 })
   }
 
-  const db = env.DB as D1Database
-  const account = await getTradeAccountByPin(db, payload.pin)
+  const account = await db
+    .prepare(`SELECT id, tier, discount_code FROM trade_accounts WHERE id = ?1 AND active = 1`)
+    .bind(session.tradeAccountId)
+    .first<{ id: string; tier: string; discount_code: string }>()
   if (!account) {
-    return NextResponse.json({ error: 'Account not found. Please contact us.' }, { status: 401 })
+    return NextResponse.json({ error: 'Account not found' }, { status: 401 })
   }
 
   try {

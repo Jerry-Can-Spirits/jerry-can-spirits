@@ -113,5 +113,3 @@ export interface Recommendation {
     why_relevant: string
   }
 }
-
-export const TRADE_SESSION_COOKIE = 'jcs_trade_sid'

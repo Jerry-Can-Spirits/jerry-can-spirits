@@ -164,13 +164,13 @@ export default function TradePage() {
                 Already a trade customer?
               </h2>
               <p className="text-parchment-400 text-sm mb-6">
-                Use your trade portal to place or repeat an order.
+                Sign in to access the order portal and any additional services on your account.
               </p>
               <a
-                href="/trade/order/"
+                href="/trade/login/"
                 className="inline-flex items-center px-6 py-3 bg-gold-500 text-jerry-green-900 font-bold rounded-lg hover:bg-gold-400 transition-colors text-sm"
               >
-                Trade Order Portal
+                Sign in
               </a>
             </div>
           </div>
