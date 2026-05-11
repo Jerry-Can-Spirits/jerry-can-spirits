@@ -329,12 +329,15 @@ export async function POST(request: Request) {
   }
 
   // --- Generate .ics ---
+  // Organizer is the system sender address; attendee is the reviewer's inbox.
+  // Distinct addresses make Outlook/Apple Mail render an inline Accept button.
   const ics = generateIcs({
     startUtc: nextReview,
     title: `Yearly trade review: ${payload.trading_name}`,
     description: `Trade application ${appId}\nContact: ${payload.contact_name} <${payload.contact_email}>\nBusiness type: ${payload.business_type}`,
     uid: appId,
-    organizerEmail: 'hello@jerrycanspirits.co.uk',
+    organizerEmail: 'applications@send.jerrycanspirits.co.uk',
+    attendeeEmail: env.TRADE_APPLICATIONS_EMAIL,
   })
 
   // --- Admin email ---
@@ -369,7 +372,7 @@ export async function POST(request: Request) {
         {
           filename: `trade-review-${appId}.ics`,
           content: toBase64(ics),
-          contentType: 'text/calendar',
+          contentType: 'text/calendar; method=REQUEST; charset=utf-8',
         },
       ],
     })
