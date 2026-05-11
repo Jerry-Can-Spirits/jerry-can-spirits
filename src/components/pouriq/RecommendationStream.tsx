@@ -42,8 +42,19 @@ export function RecommendationStream({ menuId }: { menuId: string }) {
       while ((idx = buf.indexOf('\n\n')) !== -1) {
         const ev = buf.slice(0, idx)
         buf = buf.slice(idx + 2)
-        const dataLine = ev.split('\n').find((l) => l.startsWith('data: '))
+        const lines = ev.split('\n')
+        const eventLine = lines.find((l) => l.startsWith('event: '))
+        const dataLine = lines.find((l) => l.startsWith('data: '))
         if (!dataLine) continue
+        if (eventLine === 'event: error') {
+          try {
+            const errObj = JSON.parse(dataLine.slice(6)) as { error?: string }
+            setError(errObj.error ?? 'AI recommendation failed.')
+          } catch {
+            setError('AI recommendation failed.')
+          }
+          continue
+        }
         const payload = dataLine.slice(6)
         if (payload === '[DONE]') continue
         try {
