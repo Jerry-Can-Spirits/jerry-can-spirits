@@ -1,7 +1,9 @@
-// Cloudflare Workers entry point — wraps OpenNext worker with edge caching.
+// Cloudflare Workers entry point — wraps OpenNext worker with edge caching
+// and adds a scheduled handler for the weekly trade review digest cron.
 // .open-next/worker.js is generated at build time by opennextjs-cloudflare
 export * from './.open-next/worker.js';
 import openNextWorker from './.open-next/worker.js';
+import { runTradeReviewDigest } from './src/lib/scheduled-trade-review.ts';
 
 const EDGE_CACHE_PATHS = new Set([
   '/',
@@ -43,5 +45,9 @@ export default {
     }
 
     return openNextWorker.fetch(request, env, ctx);
+  },
+
+  async scheduled(event, env, ctx) {
+    ctx.waitUntil(runTradeReviewDigest(env));
   },
 };
