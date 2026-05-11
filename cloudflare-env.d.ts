@@ -10,6 +10,9 @@ interface CloudflareEnv {
   KLAVIYO_PRIVATE_KEY: string;
   KLAVIYO_TRADE_LIST_ID: string;
 
+  // Secrets — Anthropic (Pour IQ AI recommendations)
+  ANTHROPIC_API_KEY: string;
+
   // Secrets — Meta / Social
   META_ACCESS_TOKEN: string;
   META_FB_PAGE_ID: string;
