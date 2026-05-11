@@ -38,6 +38,19 @@
 			"database_id": "35c6ef4c-fab0-4666-9065-052b84ecdb9a"
 		}
 	],
+	"r2_buckets": [
+		{
+			// Trade application supporting documents (premises licence, director ID)
+			// Lifecycle rules configured in Cloudflare dashboard:
+			//   pending/      → delete after 24h
+			//   applications/ → delete after 30 days
+			"binding": "TRADE_DOCS",
+			"bucket_name": "jerry-can-spirits-trade-docs"
+		}
+	],
+	"triggers": {
+		"crons": ["0 8 * * 1"]
+	},
 	"observability": {
 		"enabled": true,
 		"logs": {
