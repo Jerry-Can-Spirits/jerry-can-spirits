@@ -2,17 +2,13 @@
 
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { trackEventDual } from '@/lib/meta-capi';
 
 const FB_PIXEL_ID = '825009767240821';
 
 declare global {
   interface Window {
-    fbq: (
-      track: string,
-      event: string,
-      params?: Record<string, unknown>
-    ) => void;
-    _fbq: unknown;
+    _fbq?: unknown;
   }
 }
 
@@ -35,6 +31,8 @@ export default function FacebookPixel() {
       if (window.fbq) {
         window.fbq('consent', 'revoke');
       }
+      // Best-effort: clear the hashed-email identity cookie when consent is revoked.
+      fetch('/api/meta/clear-identity/', { method: 'POST', keepalive: true }).catch(() => {});
       setHasConsent(false);
     };
 
@@ -50,7 +48,6 @@ export default function FacebookPixel() {
   useEffect(() => {
     if (!hasConsent || isLoaded) return;
 
-    // Initialise the fbq stub before the script loads
     if (!window.fbq) {
       const fbq = function (...args: unknown[]) {
         if ((fbq as unknown as { callMethod: (...a: unknown[]) => void }).callMethod) {
@@ -66,9 +63,10 @@ export default function FacebookPixel() {
       window.fbq = fbq;
     }
 
-    window.fbq('consent', 'grant');
-    window.fbq('init', FB_PIXEL_ID);
-    window.fbq('track', 'PageView');
+    window.fbq!('consent', 'grant');
+    window.fbq!('init', FB_PIXEL_ID);
+    // Initial PageView routed through dual-fire so it gets an eventID and CAPI mirror.
+    trackEventDual('PageView');
 
     const script = document.createElement('script');
     script.src = 'https://connect.facebook.net/en_US/fbevents.js';
@@ -80,23 +78,18 @@ export default function FacebookPixel() {
   return null;
 }
 
-// Fires PageView on every client-side route change
+// Fires PageView on every client-side route change.
 export function PixelPageView() {
   const pathname = usePathname();
 
   useEffect(() => {
-    if (typeof window !== 'undefined' && window.fbq) {
-      if (window.Cookiebot?.consent?.marketing) {
-        window.fbq('track', 'PageView');
-      }
-    }
+    trackEventDual('PageView');
   }, [pathname]);
 
   return null;
 }
 
-// Helper functions for tracking events throughout your app
-
+// Legacy helper kept for surfaces not yet migrated to trackEventDual.
 export const trackEvent = (
   event: string,
   params?: Record<string, unknown>
@@ -106,9 +99,9 @@ export const trackEvent = (
   }
 };
 
-// Predefined event trackers for common actions
+// Predefined event trackers. Pixel-only. Deduplication only applies
+// to events fired through trackEventDual. Consider migrating these later.
 export const FacebookPixelEvents = {
-  // E-commerce events
   viewContent: (params: {
     content_name: string;
     content_category?: string;
@@ -141,7 +134,6 @@ export const FacebookPixelEvents = {
     num_items: number;
   }) => trackEvent('Purchase', params),
 
-  // Lead generation events
   lead: (params?: { content_name?: string; content_category?: string }) =>
     trackEvent('Lead', params),
 
@@ -150,13 +142,11 @@ export const FacebookPixelEvents = {
     status?: string;
   }) => trackEvent('CompleteRegistration', params),
 
-  // Content/Engagement events
   search: (params: { search_string: string; content_category?: string }) =>
     trackEvent('Search', params),
 
   contact: () => trackEvent('Contact'),
 
-  // Custom events for your site
   viewRecipe: (recipeName: string, category?: string) =>
     trackEvent('ViewContent', {
       content_name: recipeName,

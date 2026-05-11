@@ -3,6 +3,7 @@ import { NextResponse } from 'next/server'
 import { getCloudflareContext } from '@opennextjs/cloudflare'
 import { isRateLimited, isAllowedOrigin } from '@/lib/kv'
 import { emailDomainAcceptsMail } from '@/lib/email-validation'
+import { hashEmail } from '@/lib/meta-capi'
 
 export const dynamic = 'force-dynamic' // ensure no static optimization
 
@@ -31,6 +32,14 @@ function isValidEmail(email: string): boolean {
   if (dot < 1 || dot === domain.length - 1) return false
   if (domain.slice(dot + 1).length < 2) return false
   return true
+}
+
+async function buildEmailIdentityCookie(email: string, request: Request): Promise<string | null> {
+  const cookieHeader = request.headers.get('cookie') ?? ''
+  const hasFbp = /(?:^|;\s*)_fbp=/.test(cookieHeader)
+  if (!hasFbp) return null
+  const hashed = await hashEmail(email)
+  return `jcs_em=${hashed}; HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=7776000`
 }
 
 export async function POST(request: Request) {
@@ -257,7 +266,14 @@ export async function POST(request: Request) {
       // non-blocking
     }
 
-    return NextResponse.json({ success: true })
+    const response = NextResponse.json({ success: true })
+    try {
+      const identityCookie = await buildEmailIdentityCookie(email, request)
+      if (identityCookie) response.headers.append('Set-Cookie', identityCookie)
+    } catch {
+      // Hash failure is non-fatal. Signup itself succeeded.
+    }
+    return response
   } catch (error) {
     console.error('Klaviyo signup error:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
