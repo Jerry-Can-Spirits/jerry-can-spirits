@@ -176,14 +176,14 @@ export function ImportSourceTabs({ menuId, initialSource, onPreview }: Props) {
 
       {source === 'spreadsheet' && (
         <div>
-          <input ref={sheetInputRef} type="file" accept=".csv,.xls,.xlsx,text/csv,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" className="sr-only" onChange={(e) => handleSpreadsheet(e.target.files?.[0] ?? null)} />
+          <input ref={sheetInputRef} type="file" accept=".csv,.xlsx,text/csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" className="sr-only" onChange={(e) => handleSpreadsheet(e.target.files?.[0] ?? null)} />
           <div className="flex items-center gap-3">
             <button type="button" onClick={() => sheetInputRef.current?.click()} className="px-4 py-2 bg-jerry-green-700/50 border border-gold-500/30 rounded-lg text-parchment-100 hover:border-gold-400 transition-colors text-sm">
               {spreadsheetText ? 'Replace file' : 'Choose spreadsheet'}
             </button>
             {spreadsheetText && <span className="text-sm text-parchment-200">{spreadsheetText.filename}</span>}
           </div>
-          <p className="mt-2 text-xs text-parchment-400">Max 5MB. .csv, .xls, or .xlsx. Headers like Name, Price, Ingredients help us read it.</p>
+          <p className="mt-2 text-xs text-parchment-400">Max 5MB. .csv or .xlsx. Headers like Name, Price, Ingredients help us read it.</p>
         </div>
       )}
 
