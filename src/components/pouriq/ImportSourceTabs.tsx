@@ -2,24 +2,41 @@
 
 import { useRef, useState } from 'react'
 import type { PreviewPayload } from '@/app/api/pouriq/import/extract/route'
+import { spreadsheetToText } from '@/lib/pouriq/spreadsheet-to-text'
+
+type Source = 'text' | 'pdf' | 'spreadsheet'
 
 const inputClass = 'w-full px-4 py-3 bg-jerry-green-700/50 border border-gold-500/30 rounded-lg text-parchment-50 text-sm focus:border-gold-400 focus:outline-none'
-const tabClass = 'px-4 py-2 text-sm font-medium border-b-2 transition-colors'
+
+interface SourceTile {
+  id: Source
+  title: string
+  description: string
+}
+
+const SOURCES: SourceTile[] = [
+  { id: 'text', title: 'Paste menu text', description: 'Copy from your existing menu or type it out.' },
+  { id: 'pdf', title: 'Upload a PDF', description: 'Photo, scan, or print-ready PDF — we read it directly.' },
+  { id: 'spreadsheet', title: 'Upload spreadsheet', description: 'Excel (.xlsx) or CSV. Best if your costs already live in a sheet.' },
+]
 
 interface Props {
   menuId: string
+  initialSource?: Source | null
   onPreview: (payload: PreviewPayload) => void
 }
 
-export function ImportSourceTabs({ menuId, onPreview }: Props) {
-  const [tab, setTab] = useState<'text' | 'pdf'>('text')
+export function ImportSourceTabs({ menuId, initialSource, onPreview }: Props) {
+  const [source, setSource] = useState<Source | null>(initialSource ?? null)
   const [text, setText] = useState('')
   const [pdfTicket, setPdfTicket] = useState<{ ticket: string; filename: string } | null>(null)
+  const [spreadsheetText, setSpreadsheetText] = useState<{ text: string; filename: string } | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [submitting, setSubmitting] = useState(false)
-  const inputRef = useRef<HTMLInputElement>(null)
+  const pdfInputRef = useRef<HTMLInputElement>(null)
+  const sheetInputRef = useRef<HTMLInputElement>(null)
 
-  async function handleFile(file: File | null) {
+  async function handlePdf(file: File | null) {
     setError(null)
     if (!file) return
     if (file.size > 5 * 1024 * 1024) { setError('File exceeds 5MB limit'); return }
@@ -43,13 +60,34 @@ export function ImportSourceTabs({ menuId, onPreview }: Props) {
     }
   }
 
+  async function handleSpreadsheet(file: File | null) {
+    setError(null)
+    if (!file) return
+    setSubmitting(true)
+    try {
+      const text = await spreadsheetToText(file)
+      setSpreadsheetText({ text, filename: file.name })
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Could not read this file')
+    } finally {
+      setSubmitting(false)
+    }
+  }
+
   async function handleExtract() {
     setError(null)
     setSubmitting(true)
     try {
-      const body = tab === 'text'
-        ? { menuId, source: 'text', text }
-        : { menuId, source: 'pdf', ticket: pdfTicket!.ticket }
+      let body: { menuId: string; source: 'text'; text: string } | { menuId: string; source: 'pdf'; ticket: string }
+      if (source === 'text') {
+        body = { menuId, source: 'text', text }
+      } else if (source === 'pdf') {
+        if (!pdfTicket) { setError('Upload a PDF first'); setSubmitting(false); return }
+        body = { menuId, source: 'pdf', ticket: pdfTicket.ticket }
+      } else {
+        if (!spreadsheetText) { setError('Upload a spreadsheet first'); setSubmitting(false); return }
+        body = { menuId, source: 'text', text: spreadsheetText.text }
+      }
       const res = await fetch('/api/pouriq/import/extract', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -67,39 +105,85 @@ export function ImportSourceTabs({ menuId, onPreview }: Props) {
     }
   }
 
-  const canExtract = tab === 'text' ? text.trim().length > 0 : pdfTicket !== null
+  function changeSource() {
+    setSource(null)
+    setError(null)
+    setText('')
+    setPdfTicket(null)
+    setSpreadsheetText(null)
+  }
+
+  const canExtract =
+    source === 'text' ? text.trim().length > 0 :
+    source === 'pdf' ? pdfTicket !== null :
+    source === 'spreadsheet' ? spreadsheetText !== null :
+    false
+
+  if (source === null) {
+    return (
+      <div className="space-y-4">
+        <p className="text-sm text-parchment-300">Choose where your menu data is coming from.</p>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          {SOURCES.map((s) => (
+            <button
+              key={s.id}
+              type="button"
+              onClick={() => setSource(s.id)}
+              className="text-left bg-jerry-green-700/40 hover:bg-jerry-green-700/60 border border-gold-500/30 hover:border-gold-400/60 rounded-xl p-4 transition-colors"
+            >
+              <h3 className="text-base font-serif font-bold text-white mb-1">{s.title}</h3>
+              <p className="text-xs text-parchment-300 leading-relaxed">{s.description}</p>
+            </button>
+          ))}
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="space-y-4">
-      <div role="tablist" aria-label="Menu source" className="flex border-b border-gold-500/20">
-        <button type="button" role="tab" aria-selected={tab === 'text'} onClick={() => setTab('text')} className={`${tabClass} ${tab === 'text' ? 'border-gold-400 text-white' : 'border-transparent text-parchment-400 hover:text-parchment-200'}`}>
-          Paste text
-        </button>
-        <button type="button" role="tab" aria-selected={tab === 'pdf'} onClick={() => setTab('pdf')} className={`${tabClass} ${tab === 'pdf' ? 'border-gold-400 text-white' : 'border-transparent text-parchment-400 hover:text-parchment-200'}`}>
-          Upload PDF
+      <div className="flex items-center justify-between">
+        <p className="text-sm text-parchment-300">
+          <span className="font-medium text-white">{SOURCES.find((s) => s.id === source)?.title}</span>
+        </p>
+        <button type="button" onClick={changeSource} className="text-xs text-parchment-400 hover:text-parchment-200 underline">
+          Change source
         </button>
       </div>
 
-      {tab === 'text' ? (
+      {source === 'text' && (
+        <textarea
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+          rows={12}
+          className={`${inputClass} resize-vertical font-mono text-xs`}
+          placeholder="Paste your menu here. Drink names, ingredients, and prices if you have them."
+        />
+      )}
+
+      {source === 'pdf' && (
         <div>
-          <textarea
-            value={text}
-            onChange={(e) => setText(e.target.value)}
-            rows={12}
-            className={`${inputClass} resize-vertical font-mono text-xs`}
-            placeholder="Paste your menu here. Drink names, ingredients, and prices if you have them."
-          />
-        </div>
-      ) : (
-        <div>
-          <input ref={inputRef} type="file" accept=".pdf,application/pdf" className="sr-only" onChange={(e) => handleFile(e.target.files?.[0] ?? null)} />
+          <input ref={pdfInputRef} type="file" accept=".pdf,application/pdf" className="sr-only" onChange={(e) => handlePdf(e.target.files?.[0] ?? null)} />
           <div className="flex items-center gap-3">
-            <button type="button" onClick={() => inputRef.current?.click()} className="px-4 py-2 bg-jerry-green-700/50 border border-gold-500/30 rounded-lg text-parchment-100 hover:border-gold-400 transition-colors text-sm">
+            <button type="button" onClick={() => pdfInputRef.current?.click()} className="px-4 py-2 bg-jerry-green-700/50 border border-gold-500/30 rounded-lg text-parchment-100 hover:border-gold-400 transition-colors text-sm">
               {pdfTicket ? 'Replace PDF' : 'Choose PDF'}
             </button>
             {pdfTicket && <span className="text-sm text-parchment-200">{pdfTicket.filename}</span>}
           </div>
           <p className="mt-2 text-xs text-parchment-400">Max 5MB. PDF only.</p>
+        </div>
+      )}
+
+      {source === 'spreadsheet' && (
+        <div>
+          <input ref={sheetInputRef} type="file" accept=".csv,.xls,.xlsx,text/csv,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" className="sr-only" onChange={(e) => handleSpreadsheet(e.target.files?.[0] ?? null)} />
+          <div className="flex items-center gap-3">
+            <button type="button" onClick={() => sheetInputRef.current?.click()} className="px-4 py-2 bg-jerry-green-700/50 border border-gold-500/30 rounded-lg text-parchment-100 hover:border-gold-400 transition-colors text-sm">
+              {spreadsheetText ? 'Replace file' : 'Choose spreadsheet'}
+            </button>
+            {spreadsheetText && <span className="text-sm text-parchment-200">{spreadsheetText.filename}</span>}
+          </div>
+          <p className="mt-2 text-xs text-parchment-400">Max 5MB. .csv, .xls, or .xlsx. Headers like Name, Price, Ingredients help us read it.</p>
         </div>
       )}
 

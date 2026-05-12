@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
+import { useSearchParams } from 'next/navigation'
 import { ImportSourceTabs } from '@/components/pouriq/ImportSourceTabs'
 import { ImportPreview } from '@/components/pouriq/ImportPreview'
 import type { PreviewPayload } from '@/app/api/pouriq/import/extract/route'
@@ -11,7 +12,16 @@ interface Props {
   params: Promise<{ menuId: string }>
 }
 
+type Source = 'text' | 'pdf' | 'spreadsheet'
+
+function parseSource(raw: string | null): Source | null {
+  if (raw === 'text' || raw === 'pdf' || raw === 'spreadsheet') return raw
+  return null
+}
+
 export default function ImportPage({ params }: Props) {
+  const searchParams = useSearchParams()
+  const initialSource = parseSource(searchParams.get('source'))
   const [menuId, setMenuId] = useState<string | null>(null)
   const [preview, setPreview] = useState<PreviewPayload | null>(null)
   const [library, setLibrary] = useState<IngredientLibraryRow[] | null>(null)
@@ -38,12 +48,12 @@ export default function ImportPage({ params }: Props) {
         <Link href={`/trade/pouriq/${menuId}`} className="text-sm text-parchment-400 hover:text-parchment-200">← Back to menu</Link>
         <h1 className="text-3xl font-serif font-bold text-white mt-4 mb-2">Import drinks</h1>
         <p className="text-parchment-400 text-sm mb-10">
-          Paste your menu text or upload a PDF. We&rsquo;ll extract the drinks and match ingredients to your library — you confirm before anything is saved.
+          Paste menu text, upload a PDF, or upload an Excel/CSV. We&rsquo;ll extract the drinks and match ingredients to your library — you confirm before anything is saved.
         </p>
 
         <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
           {!preview ? (
-            <ImportSourceTabs menuId={menuId} onPreview={setPreview} />
+            <ImportSourceTabs menuId={menuId} initialSource={initialSource} onPreview={setPreview} />
           ) : library ? (
             <ImportPreview menuId={menuId} drinks={preview.drinks} libraryEntries={library} />
           ) : (
