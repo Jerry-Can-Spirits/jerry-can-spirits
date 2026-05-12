@@ -20,7 +20,7 @@ export function CocktailTable({ menuId, cocktails, metrics, targetGpPct }: Props
       <table className="w-full text-sm">
         <thead className="bg-jerry-green-900/40">
           <tr className="text-left text-parchment-400 text-xs uppercase tracking-widest">
-            <th className="px-4 py-3">Cocktail</th>
+            <th className="px-4 py-3">Drink</th>
             <th className="px-4 py-3">Price</th>
             <th className="px-4 py-3">Pour cost</th>
             <th className="px-4 py-3">Margin</th>

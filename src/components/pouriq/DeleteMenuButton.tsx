@@ -15,7 +15,7 @@ export function DeleteMenuButton({ menuId, menuName }: Props) {
 
   async function handleDelete() {
     const confirmed = confirm(
-      `Delete "${menuName}"? This removes the menu and all its cocktails and analyses. This cannot be undone.`
+      `Delete "${menuName}"? This removes the menu and all its drinks and analyses. This cannot be undone.`
     )
     if (!confirmed) return
     setSubmitting(true)

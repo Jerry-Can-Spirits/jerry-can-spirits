@@ -9,10 +9,21 @@ import type {
   MenuMetrics,
 } from './types'
 
-function ingredientCostPence(i: CocktailWithIngredients['ingredients'][0]): number {
-  if (i.unit_cost_p !== null) return i.unit_cost_p
-  if (i.bottle_size_ml === null || i.bottle_cost_p === null || i.pour_ml === null) return 0
-  return Math.round((i.bottle_cost_p / i.bottle_size_ml) * i.pour_ml)
+function ingredientCostPence(i: import('./types').IngredientWithLibrary): number {
+  // Unit-priced: library has unit_cost_p; cocktail row has unit_count
+  if (i.library.unit_cost_p !== null) {
+    const count = i.unit_count ?? 1
+    return Math.round(i.library.unit_cost_p * count)
+  }
+  // Bottle-priced: library has bottle_size_ml + bottle_cost_p; cocktail row has pour_ml
+  if (
+    i.library.bottle_size_ml !== null &&
+    i.library.bottle_cost_p !== null &&
+    i.pour_ml !== null
+  ) {
+    return Math.round((i.library.bottle_cost_p / i.library.bottle_size_ml) * i.pour_ml)
+  }
+  return 0
 }
 
 export function calculateCocktailMetrics(cocktail: CocktailWithIngredients): CocktailMetrics {
@@ -39,8 +50,8 @@ export function calculateIngredientOverlap(
   const map = new Map<string, { display: string; cocktailIds: Set<string> }>()
   for (const c of cocktails) {
     for (const ing of c.ingredients) {
-      const key = normaliseIngredientName(ing.name)
-      if (!map.has(key)) map.set(key, { display: ing.name.trim(), cocktailIds: new Set() })
+      const key = normaliseIngredientName(ing.library.name)
+      if (!map.has(key)) map.set(key, { display: ing.library.name.trim(), cocktailIds: new Set() })
       map.get(key)!.cocktailIds.add(c.id)
     }
   }

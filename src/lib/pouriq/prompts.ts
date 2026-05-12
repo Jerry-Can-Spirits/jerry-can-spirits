@@ -12,7 +12,7 @@ Output rules:
 - You must call the pouriq_recommendations tool. Never reply in free text.
 - Each recommendation: severity, category, title, body. Optional suggested_change. Optional field_manual_reference.
 - "info" = observation, "warn" = problem worth attention, "action" = specific change to make.
-- Reference cocktails by their cocktail_id when applicable.
+- Reference drinks by their drink_id when applicable.
 - When a cocktail has a field_manual_url provided, you may include a field_manual_reference if the bartender would benefit from consulting it for technique. Don't oversell.
 - Aim for 5-10 recommendations. Quality over quantity.
 - Focus areas: pricing gaps vs target GP, ingredient overlap and waste risks, menu balance (over-indexing on one base spirit), complexity (ingredients used once that bloat inventory), high-effort/low-margin cocktails.
@@ -33,7 +33,7 @@ export const RECOMMEND_TOOL = {
           properties: {
             severity: { type: 'string', enum: ['info', 'warn', 'action'] },
             category: { type: 'string', enum: ['pricing', 'waste', 'balance', 'complexity', 'opportunity'] },
-            cocktail_id: { type: 'string', description: 'References a cocktail in the menu, if applicable' },
+            drink_id: { type: 'string', description: 'References a drink in the menu, if applicable' },
             title: { type: 'string', description: 'Plain-English one-line summary' },
             body: { type: 'string', description: '2-3 sentence explanation' },
             suggested_change: {
@@ -72,10 +72,10 @@ export function buildUserMessage(
       target_gp_pct: menu.target_gp_pct,
       positioning: menu.positioning,
     },
-    cocktails: metrics.cocktail_metrics.map((m) => {
+    drinks: metrics.cocktail_metrics.map((m) => {
       const fm = fieldManualMatches.find((f) => f.cocktail_id === m.cocktail_id)
       return {
-        cocktail_id: m.cocktail_id,
+        drink_id: m.cocktail_id,
         name: m.name,
         sale_price_p: m.sale_price_p,
         pour_cost_p: m.pour_cost_p,

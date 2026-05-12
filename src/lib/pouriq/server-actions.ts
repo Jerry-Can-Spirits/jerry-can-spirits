@@ -9,8 +9,14 @@ import {
   insertCocktail, replaceIngredients,
   getMenu,
 } from './menus'
+import {
+  insertLibraryEntry,
+  updateLibraryEntry,
+  deleteLibraryEntry,
+  getLibraryEntry,
+  getLibraryUsageCounts,
+} from './ingredient-library'
 import { matchFieldManualSlug } from './field-manual-match'
-import type { IngredientType } from './types'
 
 async function requireDb() {
   const access = await checkPourIqAccess()
@@ -62,12 +68,9 @@ interface CocktailInput {
   sale_price_p: number
   notes: string | null
   ingredients: Array<{
-    name: string
-    ingredient_type: IngredientType
+    library_ingredient_id: string
     pour_ml: number | null
-    bottle_size_ml: number | null
-    bottle_cost_p: number | null
-    unit_cost_p: number | null
+    unit_count: number | null
   }>
 }
 
@@ -115,4 +118,46 @@ export async function deleteCocktailAction(menuId: string, cocktailId: string): 
     .bind(cocktailId, menuId)
     .run()
   revalidatePath(`/trade/pouriq/${menuId}`)
+}
+
+interface LibraryEntryInput {
+  name: string
+  ingredient_type: import('./types').IngredientType
+  bottle_size_ml: number | null
+  bottle_cost_p: number | null
+  unit_cost_p: number | null
+  notes: string | null
+}
+
+export async function saveLibraryEntryAction(
+  entryId: string | null,
+  input: LibraryEntryInput,
+): Promise<{ entryId: string }> {
+  const { db, tradeAccountId } = await requireDb()
+  if (entryId === null) {
+    const id = await insertLibraryEntry(db, { ...input, trade_account_id: tradeAccountId })
+    revalidatePath('/trade/pouriq/library')
+    return { entryId: id }
+  }
+  // Verify ownership before update
+  const existing = await getLibraryEntry(db, entryId, tradeAccountId)
+  if (!existing) throw new Error('Ingredient not found')
+  await updateLibraryEntry(db, entryId, tradeAccountId, input)
+  revalidatePath('/trade/pouriq/library')
+  revalidatePath(`/trade/pouriq/library/${entryId}/edit`)
+  return { entryId }
+}
+
+export async function deleteLibraryEntryAction(entryId: string): Promise<void> {
+  const { db, tradeAccountId } = await requireDb()
+  // Block delete if in use — match the UI guard
+  const usage = await getLibraryUsageCounts(db, tradeAccountId)
+  if ((usage.get(entryId) ?? 0) > 0) {
+    throw new Error('Cannot delete: ingredient is used in one or more drinks')
+  }
+  // Verify ownership before delete
+  const existing = await getLibraryEntry(db, entryId, tradeAccountId)
+  if (!existing) throw new Error('Ingredient not found')
+  await deleteLibraryEntry(db, entryId, tradeAccountId)
+  revalidatePath('/trade/pouriq/library')
 }
