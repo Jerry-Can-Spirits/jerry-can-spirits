@@ -17,6 +17,29 @@ interface Props {
   params: Promise<{ menuId: string }>
 }
 
+interface StartTile {
+  title: string
+  description: string
+  href: string
+  cta: string
+}
+
+function StartTile({ title, description, href, cta }: StartTile) {
+  return (
+    <Link
+      href={href}
+      className="block bg-jerry-green-700/40 hover:bg-jerry-green-700/60 border border-gold-500/30 hover:border-gold-400/60 rounded-xl p-6 transition-colors"
+    >
+      <h3 className="text-lg font-serif font-bold text-white mb-2">{title}</h3>
+      <p className="text-parchment-300 text-sm leading-relaxed mb-4">{description}</p>
+      <span className="inline-flex items-center text-gold-300 text-sm font-medium">
+        {cta}
+        <span aria-hidden="true" className="ml-2">→</span>
+      </span>
+    </Link>
+  )
+}
+
 export default async function MenuDetailPage({ params }: Props) {
   const access = await checkPourIqAccess()
   if (access.kind === 'no-session') redirect('/trade/login')
@@ -38,32 +61,49 @@ export default async function MenuDetailPage({ params }: Props) {
           <Link href="/trade/pouriq" className="text-sm text-parchment-400 hover:text-parchment-200">← All menus</Link>
           <Link href="/trade/pouriq/library" className="text-sm text-parchment-400 hover:text-parchment-200">Library</Link>
         </div>
-        <div className="flex items-baseline justify-between mt-4 mb-3">
+        <div className="flex flex-wrap items-baseline justify-between gap-3 mt-4 mb-3">
           <h1 className="text-3xl md:text-4xl font-serif font-bold text-white">{menu.name}</h1>
-          <div className="flex items-center gap-3">
-            <Link href={`/trade/pouriq/${menuId}/import`} className="text-sm text-gold-300 hover:text-gold-200 underline">
-              Import drinks
-            </Link>
-            <Link href={`/trade/pouriq/${menuId}/edit`} className="text-sm px-4 py-2 bg-gold-500 text-jerry-green-900 font-bold rounded-lg hover:bg-gold-400 transition-colors">
-              Add drink
-            </Link>
-          </div>
+          {cocktails.length > 0 && (
+            <div className="flex items-center gap-2">
+              <Link href={`/trade/pouriq/${menuId}/import`} className="text-sm px-4 py-2 border border-gold-500/40 text-gold-200 hover:bg-gold-500/10 hover:border-gold-400 rounded-lg transition-colors">
+                Import drinks
+              </Link>
+              <Link href={`/trade/pouriq/${menuId}/edit`} className="text-sm px-4 py-2 bg-gold-500 text-jerry-green-900 font-bold rounded-lg hover:bg-gold-400 transition-colors">
+                Add drink
+              </Link>
+            </div>
+          )}
         </div>
         <p className="text-parchment-400 text-sm mb-10">
           {menu.venue_type ?? 'Menu'}{menu.city && ` · ${menu.city}`} · Target GP {menu.target_gp_pct}%
         </p>
 
-        <div className="flex justify-end mb-6">
-          <DeleteMenuButton menuId={menuId} menuName={menu.name} />
-        </div>
-
         {cocktails.length === 0 ? (
-          <div className="bg-jerry-green-800/40 border border-gold-500/20 rounded-xl p-12 text-center">
-            <p className="text-parchment-300 mb-2">No drinks yet.</p>
-            <p className="text-parchment-400 text-sm mb-6">Add your first to see the numbers.</p>
-            <Link href={`/trade/pouriq/${menuId}/edit`} className="inline-flex items-center px-5 py-3 bg-gold-500 text-jerry-green-900 font-bold rounded-lg hover:bg-gold-400 transition-colors text-sm">
-              Add a drink
-            </Link>
+          <div className="space-y-4">
+            <div className="bg-jerry-green-800/40 border border-gold-500/20 rounded-xl p-6">
+              <h2 className="text-xl font-serif font-bold text-white mb-1">Get drinks onto this menu</h2>
+              <p className="text-parchment-300 text-sm mb-6">Pick the option that matches how your menu currently lives.</p>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                <StartTile
+                  title="Import from PDF"
+                  description="Upload your existing drinks menu PDF. We extract every drink and inferred recipe — you review before saving."
+                  href={`/trade/pouriq/${menuId}/import?source=pdf`}
+                  cta="Upload PDF"
+                />
+                <StartTile
+                  title="Import from spreadsheet"
+                  description="Excel or CSV. Best if your cocktails and costs already live in a sheet."
+                  href={`/trade/pouriq/${menuId}/import?source=spreadsheet`}
+                  cta="Upload spreadsheet"
+                />
+                <StartTile
+                  title="Add drinks manually"
+                  description="Type each drink in one at a time. Best for short menus or small adjustments."
+                  href={`/trade/pouriq/${menuId}/edit`}
+                  cta="Add a drink"
+                />
+              </div>
+            </div>
           </div>
         ) : (
           <div className="space-y-8">
@@ -87,6 +127,10 @@ export default async function MenuDetailPage({ params }: Props) {
             </section>
           </div>
         )}
+
+        <div className="flex justify-end mt-16 pt-8 border-t border-gold-500/10">
+          <DeleteMenuButton menuId={menuId} menuName={menu.name} />
+        </div>
       </div>
     </main>
   )
