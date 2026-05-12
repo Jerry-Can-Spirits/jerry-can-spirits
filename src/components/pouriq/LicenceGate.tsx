@@ -8,7 +8,7 @@ export function LicenceGate() {
           </div>
           <h1 className="text-3xl font-serif font-bold text-white mb-4">An additional service for trade accounts</h1>
           <p className="text-parchment-300 leading-relaxed mb-4">
-            Pour IQ is a margin and complexity analysis tool for cocktail menus. Trade customers can licence it as an add-on to their existing account.
+            Pour IQ is a margin and complexity analysis tool for drink menus. Trade customers can licence it as an add-on to their existing account.
           </p>
           <p className="text-parchment-300 leading-relaxed mb-8">
             We are running a closed pilot. If you would like access, get in touch.
