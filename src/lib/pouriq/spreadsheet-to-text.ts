@@ -25,7 +25,7 @@ export async function spreadsheetToText(file: File): Promise<string> {
   }
 
   if (lower.endsWith('.xlsx')) {
-    const readXlsxFile = (await import('read-excel-file')).default
+    const readXlsxFile = (await import('read-excel-file/browser')).default
     // Pass 1: enumerate sheets so we can label each block in the output.
     const sheetMeta = await readXlsxFile(file, { getSheets: true })
     const blocks: string[] = []
