@@ -1,8 +1,8 @@
 import type {
   MenuRow,
   CocktailRow,
-  IngredientRow,
   CocktailWithIngredients,
+  IngredientWithLibrary,
   IngredientType,
 } from './types'
 
@@ -113,16 +113,71 @@ export async function listCocktailsForMenu(
   const cocktails = cocktailsResult.results ?? []
   if (cocktails.length === 0) return []
 
+  // Join library entry inline so calculations can read costs without a second pass.
   const ingredientsResult = await db
-    .prepare(`SELECT * FROM pouriq_ingredients WHERE cocktail_id IN (SELECT id FROM pouriq_cocktails WHERE menu_id = ?1)`)
+    .prepare(`
+      SELECT
+        i.id AS i_id,
+        i.cocktail_id,
+        i.library_ingredient_id,
+        i.pour_ml,
+        i.unit_count,
+        l.id AS l_id,
+        l.trade_account_id AS l_trade_account_id,
+        l.name AS l_name,
+        l.ingredient_type AS l_ingredient_type,
+        l.bottle_size_ml AS l_bottle_size_ml,
+        l.bottle_cost_p AS l_bottle_cost_p,
+        l.unit_cost_p AS l_unit_cost_p,
+        l.notes AS l_notes,
+        l.created_at AS l_created_at,
+        l.updated_at AS l_updated_at
+      FROM pouriq_ingredients i
+      JOIN pouriq_ingredients_library l ON l.id = i.library_ingredient_id
+      WHERE i.cocktail_id IN (SELECT id FROM pouriq_cocktails WHERE menu_id = ?1)
+    `)
     .bind(menuId)
-    .all<IngredientRow>()
-  const ingredients = ingredientsResult.results ?? []
+    .all<{
+      i_id: string
+      cocktail_id: string
+      library_ingredient_id: string
+      pour_ml: number | null
+      unit_count: number | null
+      l_id: string
+      l_trade_account_id: string
+      l_name: string
+      l_ingredient_type: IngredientType
+      l_bottle_size_ml: number | null
+      l_bottle_cost_p: number | null
+      l_unit_cost_p: number | null
+      l_notes: string | null
+      l_created_at: string
+      l_updated_at: string
+    }>()
 
-  const byCocktail = new Map<string, IngredientRow[]>()
-  for (const ing of ingredients) {
-    if (!byCocktail.has(ing.cocktail_id)) byCocktail.set(ing.cocktail_id, [])
-    byCocktail.get(ing.cocktail_id)!.push(ing)
+  const byCocktail = new Map<string, IngredientWithLibrary[]>()
+  for (const row of ingredientsResult.results ?? []) {
+    const ing: IngredientWithLibrary = {
+      id: row.i_id,
+      cocktail_id: row.cocktail_id,
+      library_ingredient_id: row.library_ingredient_id,
+      pour_ml: row.pour_ml,
+      unit_count: row.unit_count,
+      library: {
+        id: row.l_id,
+        trade_account_id: row.l_trade_account_id,
+        name: row.l_name,
+        ingredient_type: row.l_ingredient_type,
+        bottle_size_ml: row.l_bottle_size_ml,
+        bottle_cost_p: row.l_bottle_cost_p,
+        unit_cost_p: row.l_unit_cost_p,
+        notes: row.l_notes,
+        created_at: row.l_created_at,
+        updated_at: row.l_updated_at,
+      },
+    }
+    if (!byCocktail.has(row.cocktail_id)) byCocktail.set(row.cocktail_id, [])
+    byCocktail.get(row.cocktail_id)!.push(ing)
   }
   return cocktails.map((c) => ({ ...c, ingredients: byCocktail.get(c.id) ?? [] }))
 }
@@ -136,11 +191,59 @@ export async function getCocktail(
     .bind(cocktailId)
     .first<CocktailRow>()
   if (!cocktail) return null
-  const ingredients = await db
-    .prepare(`SELECT * FROM pouriq_ingredients WHERE cocktail_id = ?1`)
+
+  const ingredientsResult = await db
+    .prepare(`
+      SELECT
+        i.id AS i_id, i.cocktail_id, i.library_ingredient_id, i.pour_ml, i.unit_count,
+        l.id AS l_id, l.trade_account_id AS l_trade_account_id, l.name AS l_name,
+        l.ingredient_type AS l_ingredient_type, l.bottle_size_ml AS l_bottle_size_ml,
+        l.bottle_cost_p AS l_bottle_cost_p, l.unit_cost_p AS l_unit_cost_p,
+        l.notes AS l_notes, l.created_at AS l_created_at, l.updated_at AS l_updated_at
+      FROM pouriq_ingredients i
+      JOIN pouriq_ingredients_library l ON l.id = i.library_ingredient_id
+      WHERE i.cocktail_id = ?1
+    `)
     .bind(cocktailId)
-    .all<IngredientRow>()
-  return { ...cocktail, ingredients: ingredients.results ?? [] }
+    .all<{
+      i_id: string
+      cocktail_id: string
+      library_ingredient_id: string
+      pour_ml: number | null
+      unit_count: number | null
+      l_id: string
+      l_trade_account_id: string
+      l_name: string
+      l_ingredient_type: IngredientType
+      l_bottle_size_ml: number | null
+      l_bottle_cost_p: number | null
+      l_unit_cost_p: number | null
+      l_notes: string | null
+      l_created_at: string
+      l_updated_at: string
+    }>()
+
+  const ingredients: IngredientWithLibrary[] = (ingredientsResult.results ?? []).map((row) => ({
+    id: row.i_id,
+    cocktail_id: row.cocktail_id,
+    library_ingredient_id: row.library_ingredient_id,
+    pour_ml: row.pour_ml,
+    unit_count: row.unit_count,
+    library: {
+      id: row.l_id,
+      trade_account_id: row.l_trade_account_id,
+      name: row.l_name,
+      ingredient_type: row.l_ingredient_type,
+      bottle_size_ml: row.l_bottle_size_ml,
+      bottle_cost_p: row.l_bottle_cost_p,
+      unit_cost_p: row.l_unit_cost_p,
+      notes: row.l_notes,
+      created_at: row.l_created_at,
+      updated_at: row.l_updated_at,
+    },
+  }))
+
+  return { ...cocktail, ingredients }
 }
 
 export async function insertCocktail(
@@ -174,12 +277,9 @@ export async function replaceIngredients(
   db: D1Database,
   cocktailId: string,
   ingredients: Array<{
-    name: string
-    ingredient_type: IngredientType
+    library_ingredient_id: string
     pour_ml: number | null
-    bottle_size_ml: number | null
-    bottle_cost_p: number | null
-    unit_cost_p: number | null
+    unit_count: number | null
   }>,
 ): Promise<void> {
   await db.prepare(`DELETE FROM pouriq_ingredients WHERE cocktail_id = ?1`).bind(cocktailId).run()
@@ -187,13 +287,10 @@ export async function replaceIngredients(
     await db
       .prepare(`
         INSERT INTO pouriq_ingredients
-          (cocktail_id, name, ingredient_type, pour_ml, bottle_size_ml, bottle_cost_p, unit_cost_p)
-        VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7)
+          (cocktail_id, library_ingredient_id, pour_ml, unit_count)
+        VALUES (?1, ?2, ?3, ?4)
       `)
-      .bind(
-        cocktailId, ing.name, ing.ingredient_type, ing.pour_ml,
-        ing.bottle_size_ml, ing.bottle_cost_p, ing.unit_cost_p,
-      )
+      .bind(cocktailId, ing.library_ingredient_id, ing.pour_ml, ing.unit_count)
       .run()
   }
 }
