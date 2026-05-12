@@ -10,7 +10,6 @@ import {
   getMenu,
 } from './menus'
 import { matchFieldManualSlug } from './field-manual-match'
-import type { IngredientType } from './types'
 
 async function requireDb() {
   const access = await checkPourIqAccess()
@@ -62,12 +61,9 @@ interface CocktailInput {
   sale_price_p: number
   notes: string | null
   ingredients: Array<{
-    name: string
-    ingredient_type: IngredientType
+    library_ingredient_id: string
     pour_ml: number | null
-    bottle_size_ml: number | null
-    bottle_cost_p: number | null
-    unit_cost_p: number | null
+    unit_count: number | null
   }>
 }
 
