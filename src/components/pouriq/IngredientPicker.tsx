@@ -114,6 +114,7 @@ export function IngredientPicker({ libraryEntries, selectedEntryId, onChange }: 
         ref={inputRef}
         id={id}
         type="text"
+        aria-label="Ingredient picker"
         value={open || showCreate ? query : (selectedEntry?.name ?? '')}
         onFocus={() => setOpen(true)}
         onChange={(e) => { setQuery(e.target.value); setOpen(true) }}
