@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
 import { ImportSourceTabs } from '@/components/pouriq/ImportSourceTabs'
 import { ImportPreview } from '@/components/pouriq/ImportPreview'
 import type { PreviewPayload } from '@/app/api/pouriq/import/extract/route'
@@ -13,7 +12,6 @@ interface Props {
 }
 
 export default function ImportPage({ params }: Props) {
-  const router = useRouter()
   const [menuId, setMenuId] = useState<string | null>(null)
   const [preview, setPreview] = useState<PreviewPayload | null>(null)
   const [library, setLibrary] = useState<IngredientLibraryRow[] | null>(null)
