@@ -115,7 +115,7 @@ export interface FieldManualMatch {
 export interface Recommendation {
   severity: RecommendationSeverity
   category: RecommendationCategory
-  cocktail_id?: string
+  drink_id?: string
   title: string
   body: string
   suggested_change?: {
