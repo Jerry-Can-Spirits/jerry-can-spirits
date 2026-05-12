@@ -2,8 +2,10 @@ import { EXTRACT_SYSTEM_PROMPT, EXTRACT_TOOL, type ExtractResult } from './impor
 
 interface ExtractArgs {
   apiKey: string
-  menuText: string
   model?: string
+  // Exactly one of these must be supplied.
+  menuText?: string
+  pdfBase64?: string
 }
 
 interface FinalUsage {
@@ -17,12 +19,34 @@ export interface ExtractCallResult {
   usage: FinalUsage
 }
 
+type UserContentBlock =
+  | { type: 'text'; text: string }
+  | { type: 'document'; source: { type: 'base64'; media_type: 'application/pdf'; data: string } }
+
 /**
  * Call Anthropic Claude Sonnet with tool-based structured output to extract
- * the drinks list from the menu text. Forces the pouriq_extract_menu tool.
+ * the drinks list. Source is either menu text or a base64-encoded PDF — the
+ * model reads PDFs natively, so we don't run a Node-only PDF parser inside
+ * the Workers runtime.
  */
 export async function extractMenuWithAnthropic(args: ExtractArgs): Promise<ExtractCallResult> {
   const model = args.model ?? 'claude-sonnet-4-6'
+
+  const userContent: UserContentBlock[] = []
+  if (args.pdfBase64) {
+    userContent.push({
+      type: 'document',
+      source: { type: 'base64', media_type: 'application/pdf', data: args.pdfBase64 },
+    })
+    userContent.push({
+      type: 'text',
+      text: 'Extract every drink from this menu using the pouriq_extract_menu tool.',
+    })
+  } else if (args.menuText) {
+    userContent.push({ type: 'text', text: args.menuText })
+  } else {
+    throw new Error('extractMenuWithAnthropic: provide either menuText or pdfBase64')
+  }
 
   const body = {
     model,
@@ -32,7 +56,7 @@ export async function extractMenuWithAnthropic(args: ExtractArgs): Promise<Extra
     ],
     tools: [EXTRACT_TOOL],
     tool_choice: { type: 'tool', name: 'pouriq_extract_menu' },
-    messages: [{ role: 'user', content: args.menuText }],
+    messages: [{ role: 'user', content: userContent }],
   }
 
   const response = await fetch('https://api.anthropic.com/v1/messages', {
