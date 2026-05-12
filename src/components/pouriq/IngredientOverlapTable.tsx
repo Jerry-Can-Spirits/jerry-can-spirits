@@ -16,7 +16,7 @@ export function IngredientOverlapTable({ overlap }: { overlap: IngredientOverlap
             <tr key={o.ingredient_name} className="border-t border-gold-500/10">
               <td className="px-4 py-3 text-parchment-100">{o.ingredient_name}</td>
               <td className={`px-4 py-3 ${o.cocktail_count === 1 ? 'text-red-300' : 'text-parchment-200'}`}>
-                {o.cocktail_count} cocktail{o.cocktail_count === 1 ? '' : 's'}
+                {o.cocktail_count} drink{o.cocktail_count === 1 ? '' : 's'}
                 {o.cocktail_count === 1 && ' (single-use)'}
               </td>
             </tr>

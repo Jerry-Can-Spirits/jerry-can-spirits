@@ -41,7 +41,7 @@ export default async function MenuDetailPage({ params }: Props) {
         <div className="flex items-baseline justify-between mt-4 mb-3">
           <h1 className="text-3xl md:text-4xl font-serif font-bold text-white">{menu.name}</h1>
           <Link href={`/trade/pouriq/${menuId}/edit`} className="text-sm px-4 py-2 bg-gold-500 text-jerry-green-900 font-bold rounded-lg hover:bg-gold-400 transition-colors">
-            Add cocktail
+            Add drink
           </Link>
         </div>
         <p className="text-parchment-400 text-sm mb-10">
@@ -54,17 +54,17 @@ export default async function MenuDetailPage({ params }: Props) {
 
         {cocktails.length === 0 ? (
           <div className="bg-jerry-green-800/40 border border-gold-500/20 rounded-xl p-12 text-center">
-            <p className="text-parchment-300 mb-2">No cocktails yet.</p>
+            <p className="text-parchment-300 mb-2">No drinks yet.</p>
             <p className="text-parchment-400 text-sm mb-6">Add your first to see the numbers.</p>
             <Link href={`/trade/pouriq/${menuId}/edit`} className="inline-flex items-center px-5 py-3 bg-gold-500 text-jerry-green-900 font-bold rounded-lg hover:bg-gold-400 transition-colors text-sm">
-              Add a cocktail
+              Add a drink
             </Link>
           </div>
         ) : (
           <div className="space-y-8">
             <KpiCards menu={menu} metrics={metrics} />
             <section>
-              <h2 className="text-xl font-serif font-bold text-white mb-4">Cocktails</h2>
+              <h2 className="text-xl font-serif font-bold text-white mb-4">Drinks</h2>
               <CocktailTable
                 menuId={menuId}
                 cocktails={cocktails}
