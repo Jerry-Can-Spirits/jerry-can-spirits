@@ -282,17 +282,21 @@ export async function replaceIngredients(
     unit_count: number | null
   }>,
 ): Promise<void> {
-  await db.prepare(`DELETE FROM pouriq_ingredients WHERE cocktail_id = ?1`).bind(cocktailId).run()
+  const statements: D1PreparedStatement[] = [
+    db.prepare(`DELETE FROM pouriq_ingredients WHERE cocktail_id = ?1`).bind(cocktailId),
+  ]
   for (const ing of ingredients) {
-    await db
-      .prepare(`
-        INSERT INTO pouriq_ingredients
-          (cocktail_id, library_ingredient_id, pour_ml, unit_count)
-        VALUES (?1, ?2, ?3, ?4)
-      `)
-      .bind(cocktailId, ing.library_ingredient_id, ing.pour_ml, ing.unit_count)
-      .run()
+    statements.push(
+      db
+        .prepare(`
+          INSERT INTO pouriq_ingredients
+            (cocktail_id, library_ingredient_id, pour_ml, unit_count)
+          VALUES (?1, ?2, ?3, ?4)
+        `)
+        .bind(cocktailId, ing.library_ingredient_id, ing.pour_ml, ing.unit_count),
+    )
   }
+  await db.batch(statements)
 }
 
 export async function insertAnalysis(
