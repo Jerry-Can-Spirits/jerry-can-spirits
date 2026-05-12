@@ -43,19 +43,35 @@ export interface CocktailRow {
   notes: string | null
 }
 
-export interface IngredientRow {
+export interface IngredientLibraryRow {
   id: string
-  cocktail_id: string
+  trade_account_id: string
   name: string
   ingredient_type: IngredientType
-  pour_ml: number | null
   bottle_size_ml: number | null
   bottle_cost_p: number | null
   unit_cost_p: number | null
+  notes: string | null
+  created_at: string
+  updated_at: string
+}
+
+export interface IngredientRow {
+  id: string
+  cocktail_id: string
+  library_ingredient_id: string
+  pour_ml: number | null
+  unit_count: number | null
+}
+
+// IngredientRow with the library entry joined in — what calculations and
+// rendering layers actually want to work with.
+export interface IngredientWithLibrary extends IngredientRow {
+  library: IngredientLibraryRow
 }
 
 export interface CocktailWithIngredients extends CocktailRow {
-  ingredients: IngredientRow[]
+  ingredients: IngredientWithLibrary[]
 }
 
 export interface CocktailMetrics {
