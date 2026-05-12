@@ -120,7 +120,20 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Could not read your menu — try again or paste the text directly' }, { status: 502 })
   }
 
+  if (extracted.stopReason === 'max_tokens') {
+    Sentry.captureMessage('pouriq-import-extract: hit max_tokens', {
+      level: 'warning',
+      tags: { route: 'pouriq-import-extract', phase: 'anthropic', stop_reason: 'max_tokens' },
+      extra: { drinkCount: extracted.result.drinks?.length ?? 0, source: body.source },
+    })
+  }
+
   if (!extracted.result.drinks || extracted.result.drinks.length === 0) {
+    Sentry.captureMessage('pouriq-import-extract: empty drinks array', {
+      level: 'warning',
+      tags: { route: 'pouriq-import-extract', phase: 'anthropic', stop_reason: extracted.stopReason },
+      extra: { source: body.source, model: extracted.usage.model },
+    })
     return NextResponse.json({ error: 'No drinks found in the source — try editing the source text' }, { status: 422 })
   }
 

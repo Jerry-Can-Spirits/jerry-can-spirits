@@ -17,6 +17,7 @@ interface FinalUsage {
 export interface ExtractCallResult {
   result: ExtractResult
   usage: FinalUsage
+  stopReason: string
 }
 
 type UserContentBlock =
@@ -50,7 +51,10 @@ export async function extractMenuWithAnthropic(args: ExtractArgs): Promise<Extra
 
   const body = {
     model,
-    max_tokens: 4096,
+    // Large UK bar menus can have 100+ drinks; each ~100 tokens in the
+    // tool input. 4096 truncates mid-array and Anthropic returns an
+    // empty drinks: [] tool input.
+    max_tokens: 16384,
     system: [
       { type: 'text', text: EXTRACT_SYSTEM_PROMPT, cache_control: { type: 'ephemeral' } },
     ],
@@ -76,6 +80,7 @@ export async function extractMenuWithAnthropic(args: ExtractArgs): Promise<Extra
 
   const data = (await response.json()) as {
     content: Array<{ type: string; name?: string; input?: unknown }>
+    stop_reason?: string
     usage?: { input_tokens?: number; output_tokens?: number }
   }
 
@@ -91,5 +96,6 @@ export async function extractMenuWithAnthropic(args: ExtractArgs): Promise<Extra
       output_tokens: data.usage?.output_tokens ?? 0,
       model,
     },
+    stopReason: data.stop_reason ?? 'unknown',
   }
 }
