@@ -40,7 +40,17 @@ export default async function EditLibraryEntryPage({ params }: Props) {
     <main className="min-h-screen">
       <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-24">
         <Link href="/trade/pouriq/library" className="text-sm text-parchment-400 hover:text-parchment-200">← Library</Link>
-        <h1 className="text-3xl font-serif font-bold text-white mt-3 mb-8">{entry.name}</h1>
+        <div className="flex flex-wrap items-baseline justify-between gap-3 mt-3 mb-8">
+          <h1 className="text-3xl font-serif font-bold text-white">{entry.name}</h1>
+          {usage.length > 0 && (
+            <Link
+              href={`/trade/pouriq/library/what-if?ingredient=${encodeURIComponent(entry.id)}`}
+              className="text-sm px-4 py-2 border border-gold-500/40 text-gold-200 hover:bg-gold-500/10 hover:border-gold-400 rounded-lg transition-colors"
+            >
+              Test a cost change
+            </Link>
+          )}
+        </div>
 
         <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20 mb-8">
           <IngredientForm entry={entry} usageCount={usage.length} />

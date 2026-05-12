@@ -29,9 +29,14 @@ export default async function LibraryPage() {
             <h1 className="text-3xl md:text-4xl font-serif font-bold text-white mt-3">Ingredient library</h1>
             <p className="text-parchment-400 text-sm mt-2">{entries.length} ingredient{entries.length === 1 ? '' : 's'}</p>
           </div>
-          <Link href="/trade/pouriq/library/new" className="inline-flex items-center px-5 py-3 bg-gold-500 text-jerry-green-900 font-bold rounded-lg hover:bg-gold-400 transition-colors text-sm">
-            Add ingredient
-          </Link>
+          <div className="flex items-center gap-2">
+            <Link href="/trade/pouriq/library/what-if" className="inline-flex items-center px-4 py-3 border border-gold-500/40 text-gold-200 hover:bg-gold-500/10 hover:border-gold-400 rounded-lg transition-colors text-sm">
+              Run a what-if
+            </Link>
+            <Link href="/trade/pouriq/library/new" className="inline-flex items-center px-5 py-3 bg-gold-500 text-jerry-green-900 font-bold rounded-lg hover:bg-gold-400 transition-colors text-sm">
+              Add ingredient
+            </Link>
+          </div>
         </div>
 
         <IngredientList entries={entries} usageCounts={usageCounts} />
