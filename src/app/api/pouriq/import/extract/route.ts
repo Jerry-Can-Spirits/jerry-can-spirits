@@ -14,7 +14,7 @@ import { extractTextFromPdf } from '@/lib/pouriq/pdf-extract'
 import { extractMenuWithAnthropic } from '@/lib/pouriq/menu-extract'
 import { parseMeasurement } from '@/lib/pouriq/measurement-parse'
 import { matchIngredient } from '@/lib/pouriq/match'
-import type { IngredientLibraryRow, IngredientType } from '@/lib/pouriq/types'
+import type { IngredientType } from '@/lib/pouriq/types'
 
 export const runtime = 'nodejs'
 
