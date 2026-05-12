@@ -1,0 +1,229 @@
+'use client'
+
+import { useState } from 'react'
+import { useRouter } from 'next/navigation'
+import type { IngredientLibraryRow, IngredientType } from '@/lib/pouriq/types'
+import { IngredientMatchRow, type MatchRowState } from '@/components/pouriq/IngredientMatchRow'
+
+const inputClass = 'w-full px-3 py-2 bg-jerry-green-700/50 border border-gold-500/30 rounded-lg text-parchment-50 text-sm focus:border-gold-400 focus:outline-none'
+
+export interface PreviewDrinkInput {
+  name: string
+  sale_price_p: number | null
+  ingredients: Array<{
+    extracted_name: string
+    raw_measurement: string
+    inferred_type: IngredientType
+    parsed:
+      | { pour_ml: number }
+      | { unit_count: number }
+      | { raw: string }
+    match:
+      | { kind: 'auto'; library_id: string; library_name: string }
+      | { kind: 'suggestions'; entries: Array<{ id: string; name: string }> }
+      | { kind: 'no-match' }
+  }>
+}
+
+interface DrinkState {
+  skip: boolean
+  name: string
+  salePoundsStr: string
+  ingredients: MatchRowState[]
+}
+
+function initialIngredientState(input: PreviewDrinkInput['ingredients'][0]): MatchRowState {
+  const pour_ml = 'pour_ml' in input.parsed ? input.parsed.pour_ml : null
+  const unit_count = 'unit_count' in input.parsed ? input.parsed.unit_count : null
+  if (input.match.kind === 'auto') {
+    return {
+      existing_library_id: input.match.library_id,
+      pour_ml,
+      unit_count,
+    }
+  }
+  return { pour_ml, unit_count }
+}
+
+function initialDrinkState(d: PreviewDrinkInput): DrinkState {
+  return {
+    skip: false,
+    name: d.name,
+    salePoundsStr: d.sale_price_p !== null ? (d.sale_price_p / 100).toFixed(2) : '',
+    ingredients: d.ingredients.map(initialIngredientState),
+  }
+}
+
+interface Props {
+  menuId: string
+  drinks: PreviewDrinkInput[]
+  libraryEntries: IngredientLibraryRow[]
+}
+
+export function ImportPreview({ menuId, drinks: extracted, libraryEntries }: Props) {
+  const router = useRouter()
+  const [drinks, setDrinks] = useState<DrinkState[]>(() => extracted.map(initialDrinkState))
+  const [expanded, setExpanded] = useState<Set<number>>(() => new Set([0, 1, 2]))
+  const [error, setError] = useState<string | null>(null)
+  const [submitting, setSubmitting] = useState(false)
+
+  const stats = drinks.reduce((acc, d, i) => {
+    if (d.skip) return acc
+    acc.included++
+    for (const ing of d.ingredients) {
+      if (ing.existing_library_id) acc.matched++
+      else if (ing.new_library) acc.toCreate++
+      else acc.needsChoice++
+    }
+    return acc
+  }, { included: 0, matched: 0, toCreate: 0, needsChoice: 0 })
+
+  function toggle(idx: number) {
+    setExpanded((set) => {
+      const next = new Set(set)
+      if (next.has(idx)) next.delete(idx); else next.add(idx)
+      return next
+    })
+  }
+
+  function updateDrink(idx: number, patch: Partial<DrinkState>) {
+    setDrinks((arr) => arr.map((d, i) => i === idx ? { ...d, ...patch } : d))
+  }
+
+  function updateIngredient(drinkIdx: number, ingIdx: number, state: MatchRowState) {
+    setDrinks((arr) => arr.map((d, i) => {
+      if (i !== drinkIdx) return d
+      return {
+        ...d,
+        ingredients: d.ingredients.map((ing, j) => j === ingIdx ? state : ing),
+      }
+    }))
+  }
+
+  async function handleCommit() {
+    setError(null)
+    if (stats.needsChoice > 0) {
+      setError(`${stats.needsChoice} ingredients still need a library match`)
+      return
+    }
+    if (stats.included === 0) {
+      setError('No drinks selected for import')
+      return
+    }
+
+    // Validation: every included drink needs a name + sale price > 0;
+    // every kept ingredient needs pour_ml or unit_count > 0.
+    for (let i = 0; i < drinks.length; i++) {
+      const d = drinks[i]
+      if (d.skip) continue
+      if (!d.name.trim()) { setError(`Drink ${i + 1} needs a name`); return }
+      const sale_price_p = Math.round(parseFloat(d.salePoundsStr) * 100)
+      if (!Number.isFinite(sale_price_p) || sale_price_p <= 0) { setError(`${d.name}: needs a sale price`); return }
+      for (let j = 0; j < d.ingredients.length; j++) {
+        const ing = d.ingredients[j]
+        if (!ing.existing_library_id && !ing.new_library) { setError(`${d.name} ingredient ${j + 1} unresolved`); return }
+        const hasQty = (ing.pour_ml !== null && ing.pour_ml > 0) || (ing.unit_count !== null && ing.unit_count > 0)
+        if (!hasQty) { setError(`${d.name} ingredient ${j + 1} needs a pour or unit count`); return }
+      }
+    }
+
+    const body = {
+      menuId,
+      drinks: drinks
+        .filter((d) => !d.skip)
+        .map((d) => ({
+          name: d.name.trim(),
+          sale_price_p: Math.round(parseFloat(d.salePoundsStr) * 100),
+          ingredients: d.ingredients.map((ing) => ({
+            existing_library_id: ing.existing_library_id,
+            new_library: ing.new_library,
+            pour_ml: ing.pour_ml,
+            unit_count: ing.unit_count,
+          })),
+        })),
+    }
+
+    setSubmitting(true)
+    const res = await fetch('/api/pouriq/import/commit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    })
+    if (!res.ok) {
+      const data = await res.json().catch(() => ({ error: 'Commit failed' })) as { error?: string }
+      setError(data.error ?? 'Commit failed')
+      setSubmitting(false)
+      return
+    }
+    router.push(`/trade/pouriq/${menuId}`)
+    router.refresh()
+  }
+
+  return (
+    <div className="space-y-6">
+      <div className="bg-jerry-green-800/40 border border-gold-500/30 rounded-xl p-4 text-sm text-parchment-200">
+        <p>
+          <strong className="text-gold-300">{stats.included}</strong> drinks ·{' '}
+          <strong className="text-emerald-300">{stats.matched}</strong> auto-matched ·{' '}
+          <strong className="text-amber-300">{stats.toCreate}</strong> new library entries ·{' '}
+          {stats.needsChoice > 0
+            ? <strong className="text-red-300">{stats.needsChoice} need a choice</strong>
+            : <strong className="text-emerald-300">all resolved</strong>}
+        </p>
+      </div>
+
+      <div className="space-y-4">
+        {drinks.map((d, idx) => (
+          <div key={idx} className={`border rounded-xl ${d.skip ? 'border-parchment-500/20 bg-jerry-green-900/20' : 'border-gold-500/20 bg-jerry-green-800/40'}`}>
+            <button type="button" onClick={() => toggle(idx)} className="w-full text-left p-4 flex items-baseline justify-between gap-3">
+              <h3 className={`text-base font-serif font-bold ${d.skip ? 'text-parchment-500 line-through' : 'text-white'}`}>
+                {d.name}
+              </h3>
+              <span className="text-xs text-parchment-400">{expanded.has(idx) ? 'Hide' : 'Show'} ({d.ingredients.length} ing.)</span>
+            </button>
+            {expanded.has(idx) && (
+              <div className="px-4 pb-4 space-y-3">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  <div className="sm:col-span-2">
+                    <label className="block text-xs font-medium text-parchment-300 mb-1">Name</label>
+                    <input value={d.name} onChange={(e) => updateDrink(idx, { name: e.target.value })} className={inputClass} />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-parchment-300 mb-1">Sale price (£)</label>
+                    <input type="number" step="0.01" min={0} value={d.salePoundsStr} onChange={(e) => updateDrink(idx, { salePoundsStr: e.target.value })} className={inputClass} placeholder="0.00" />
+                  </div>
+                </div>
+                <label className="flex items-center gap-2 text-sm text-parchment-300 cursor-pointer">
+                  <input type="checkbox" checked={d.skip} onChange={(e) => updateDrink(idx, { skip: e.target.checked })} className="w-4 h-4 accent-gold-500" />
+                  Skip this drink
+                </label>
+                {!d.skip && extracted[idx].ingredients.map((ing, ingIdx) => (
+                  <IngredientMatchRow
+                    key={ingIdx}
+                    extractedName={ing.extracted_name}
+                    rawMeasurement={ing.raw_measurement}
+                    inferredType={ing.inferred_type}
+                    matchKind={ing.match.kind}
+                    suggestionEntries={ing.match.kind === 'suggestions' ? ing.match.entries : []}
+                    libraryEntries={libraryEntries}
+                    state={d.ingredients[ingIdx]}
+                    onChange={(state) => updateIngredient(idx, ingIdx, state)}
+                  />
+                ))}
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+
+      {error && <p role="alert" className="text-sm text-red-300">{error}</p>}
+
+      <div className="flex justify-end">
+        <button type="button" onClick={handleCommit} disabled={submitting || stats.needsChoice > 0 || stats.included === 0}
+          className="px-6 py-3 bg-gradient-to-r from-gold-600 to-gold-500 hover:from-gold-500 hover:to-gold-400 disabled:from-gray-600 disabled:to-gray-500 text-jerry-green-900 font-semibold rounded-lg">
+          {submitting ? 'Importing…' : `Import ${stats.included} drink${stats.included === 1 ? '' : 's'}`}
+        </button>
+      </div>
+    </div>
+  )
+}
