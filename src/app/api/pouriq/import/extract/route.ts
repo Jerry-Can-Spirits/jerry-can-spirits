@@ -10,7 +10,6 @@ import { isAllowedOrigin, isRateLimited } from '@/lib/kv'
 import { checkPourIqAccess } from '@/lib/pouriq/access'
 import { getMenu } from '@/lib/pouriq/menus'
 import { listLibraryEntries } from '@/lib/pouriq/ingredient-library'
-import { extractTextFromPdf } from '@/lib/pouriq/pdf-extract'
 import { extractMenuWithAnthropic } from '@/lib/pouriq/menu-extract'
 import { parseMeasurement } from '@/lib/pouriq/measurement-parse'
 import { matchIngredient } from '@/lib/pouriq/match'
@@ -44,6 +43,10 @@ export interface PreviewDrink {
 export interface PreviewPayload {
   drinks: PreviewDrink[]
   source_text_preview: string
+}
+
+function bufferToBase64(buffer: ArrayBuffer): string {
+  return Buffer.from(buffer).toString('base64')
 }
 
 export async function POST(request: Request) {
@@ -82,8 +85,9 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Menu not found' }, { status: 404 })
   }
 
-  // 1. Resolve source text
-  let menuText: string
+  // 1. Resolve source — either pasted text or a PDF held in R2.
+  let menuText: string | undefined
+  let pdfBase64: string | undefined
   let pdfR2Key: string | null = null
   if (body.source === 'text') {
     menuText = body.text?.trim() ?? ''
@@ -100,24 +104,16 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Upload expired — please re-upload the PDF' }, { status: 400 })
     }
     const buffer = await obj.arrayBuffer()
-    try {
-      const result = await extractTextFromPdf(buffer)
-      menuText = result.text.trim()
-    } catch (err) {
-      Sentry.captureException(err, { tags: { route: 'pouriq-import-extract', phase: 'pdf' } })
-      return NextResponse.json({ error: 'Could not read this PDF — try pasting the text instead' }, { status: 400 })
-    }
-    if (!menuText) {
-      return NextResponse.json({ error: 'PDF contained no extractable text' }, { status: 400 })
-    }
+    pdfBase64 = bufferToBase64(buffer)
   }
 
-  // 2. Call Anthropic
+  // 2. Call Anthropic — model reads either text or the PDF document block directly.
   let extracted
   try {
     extracted = await extractMenuWithAnthropic({
       apiKey: env.ANTHROPIC_API_KEY,
       menuText,
+      pdfBase64,
     })
   } catch (err) {
     Sentry.captureException(err, { tags: { route: 'pouriq-import-extract', phase: 'anthropic' } })
@@ -161,11 +157,10 @@ export async function POST(request: Request) {
 
   const payload: PreviewPayload = {
     drinks,
-    source_text_preview: menuText.slice(0, 500),
+    source_text_preview: menuText ? menuText.slice(0, 500) : '',
   }
 
   if (pdfR2Key) {
-    // R2 lifecycle covers stragglers; this is the happy path cleanup.
     try { await r2.delete(pdfR2Key) } catch { /* swallow */ }
   }
 
