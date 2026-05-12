@@ -71,11 +71,11 @@ export function ImportSourceTabs({ menuId, onPreview }: Props) {
 
   return (
     <div className="space-y-4">
-      <div className="flex border-b border-gold-500/20">
-        <button type="button" onClick={() => setTab('text')} className={`${tabClass} ${tab === 'text' ? 'border-gold-400 text-white' : 'border-transparent text-parchment-400 hover:text-parchment-200'}`}>
+      <div role="tablist" aria-label="Menu source" className="flex border-b border-gold-500/20">
+        <button type="button" role="tab" aria-selected={tab === 'text'} onClick={() => setTab('text')} className={`${tabClass} ${tab === 'text' ? 'border-gold-400 text-white' : 'border-transparent text-parchment-400 hover:text-parchment-200'}`}>
           Paste text
         </button>
-        <button type="button" onClick={() => setTab('pdf')} className={`${tabClass} ${tab === 'pdf' ? 'border-gold-400 text-white' : 'border-transparent text-parchment-400 hover:text-parchment-200'}`}>
+        <button type="button" role="tab" aria-selected={tab === 'pdf'} onClick={() => setTab('pdf')} className={`${tabClass} ${tab === 'pdf' ? 'border-gold-400 text-white' : 'border-transparent text-parchment-400 hover:text-parchment-200'}`}>
           Upload PDF
         </button>
       </div>

@@ -6,7 +6,7 @@
 import { NextResponse } from 'next/server'
 import * as Sentry from '@sentry/nextjs'
 import { getCloudflareContext } from '@opennextjs/cloudflare'
-import { isAllowedOrigin } from '@/lib/kv'
+import { isAllowedOrigin, isRateLimited } from '@/lib/kv'
 import { checkPourIqAccess } from '@/lib/pouriq/access'
 import { getMenu } from '@/lib/pouriq/menus'
 import { listLibraryEntries } from '@/lib/pouriq/ingredient-library'
@@ -17,6 +17,8 @@ import { matchIngredient } from '@/lib/pouriq/match'
 import type { IngredientType } from '@/lib/pouriq/types'
 
 export const runtime = 'nodejs'
+
+const EXTRACT_RATE_LIMIT = 60 // per hour per tenant
 
 interface TextBody { menuId: string; source: 'text'; text: string }
 interface PdfBody { menuId: string; source: 'pdf'; ticket: string }
@@ -54,16 +56,26 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
+  const { env } = await getCloudflareContext()
+  const kv = env.SITE_OPS as KVNamespace
+  const db = env.DB as D1Database
+  const r2 = env.TRADE_DOCS as R2Bucket
+
+  if (!env.ANTHROPIC_API_KEY) {
+    Sentry.captureMessage('pouriq-import-extract: ANTHROPIC_API_KEY missing', { tags: { route: 'pouriq-import-extract', phase: 'config' } })
+    return NextResponse.json({ error: 'Menu import is temporarily unavailable. Please try again later.' }, { status: 503 })
+  }
+
+  if (await isRateLimited(kv, 'pouriq-import-extract', access.tradeAccountId, EXTRACT_RATE_LIMIT, 3600)) {
+    return NextResponse.json({ error: 'Too many extractions. Please try again later.' }, { status: 429 })
+  }
+
   let body: Body
   try {
     body = (await request.json()) as Body
   } catch {
     return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 })
   }
-
-  const { env } = await getCloudflareContext()
-  const db = env.DB as D1Database
-  const r2 = env.TRADE_DOCS as R2Bucket
 
   const menu = await getMenu(db, body.menuId, access.tradeAccountId)
   if (!menu) {
@@ -72,6 +84,7 @@ export async function POST(request: Request) {
 
   // 1. Resolve source text
   let menuText: string
+  let pdfR2Key: string | null = null
   if (body.source === 'text') {
     menuText = body.text?.trim() ?? ''
     if (!menuText) {
@@ -81,7 +94,8 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Text too long (max 50,000 characters)' }, { status: 400 })
     }
   } else {
-    const obj = await r2.get(`pouriq-imports/${body.ticket}`)
+    pdfR2Key = `pouriq-imports/${body.ticket}`
+    const obj = await r2.get(pdfR2Key)
     if (!obj) {
       return NextResponse.json({ error: 'Upload expired — please re-upload the PDF' }, { status: 400 })
     }
@@ -149,5 +163,11 @@ export async function POST(request: Request) {
     drinks,
     source_text_preview: menuText.slice(0, 500),
   }
+
+  if (pdfR2Key) {
+    // R2 lifecycle covers stragglers; this is the happy path cleanup.
+    try { await r2.delete(pdfR2Key) } catch { /* swallow */ }
+  }
+
   return NextResponse.json(payload)
 }

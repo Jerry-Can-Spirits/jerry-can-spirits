@@ -175,14 +175,14 @@ export function ImportPreview({ menuId, drinks: extracted, libraryEntries }: Pro
       <div className="space-y-4">
         {drinks.map((d, idx) => (
           <div key={idx} className={`border rounded-xl ${d.skip ? 'border-parchment-500/20 bg-jerry-green-900/20' : 'border-gold-500/20 bg-jerry-green-800/40'}`}>
-            <button type="button" onClick={() => toggle(idx)} className="w-full text-left p-4 flex items-baseline justify-between gap-3">
+            <button type="button" onClick={() => toggle(idx)} aria-expanded={expanded.has(idx)} aria-controls={`drink-panel-${idx}`} className="w-full text-left p-4 flex items-baseline justify-between gap-3">
               <h3 className={`text-base font-serif font-bold ${d.skip ? 'text-parchment-500 line-through' : 'text-white'}`}>
                 {d.name}
               </h3>
               <span className="text-xs text-parchment-400">{expanded.has(idx) ? 'Hide' : 'Show'} ({d.ingredients.length} ing.)</span>
             </button>
             {expanded.has(idx) && (
-              <div className="px-4 pb-4 space-y-3">
+              <div id={`drink-panel-${idx}`} className="px-4 pb-4 space-y-3">
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   <div className="sm:col-span-2">
                     <label className="block text-xs font-medium text-parchment-300 mb-1">Name</label>
@@ -197,7 +197,9 @@ export function ImportPreview({ menuId, drinks: extracted, libraryEntries }: Pro
                   <input type="checkbox" checked={d.skip} onChange={(e) => updateDrink(idx, { skip: e.target.checked })} className="w-4 h-4 accent-gold-500" />
                   Skip this drink
                 </label>
-                {!d.skip && extracted[idx].ingredients.map((ing, ingIdx) => (
+                {!d.skip && d.ingredients.map((_ingState, ingIdx) => {
+                  const ing = extracted[idx].ingredients[ingIdx]
+                  return (
                   <IngredientMatchRow
                     key={ingIdx}
                     extractedName={ing.extracted_name}
@@ -209,7 +211,8 @@ export function ImportPreview({ menuId, drinks: extracted, libraryEntries }: Pro
                     state={d.ingredients[ingIdx]}
                     onChange={(state) => updateIngredient(idx, ingIdx, state)}
                   />
-                ))}
+                  )
+                })}
               </div>
             )}
           </div>
