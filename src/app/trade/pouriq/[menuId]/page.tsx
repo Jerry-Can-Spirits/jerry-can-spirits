@@ -34,7 +34,10 @@ export default async function MenuDetailPage({ params }: Props) {
   return (
     <main className="min-h-screen">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-24">
-        <Link href="/trade/pouriq" className="text-sm text-parchment-400 hover:text-parchment-200">← All menus</Link>
+        <div className="flex items-baseline gap-4">
+          <Link href="/trade/pouriq" className="text-sm text-parchment-400 hover:text-parchment-200">← All menus</Link>
+          <Link href="/trade/pouriq/library" className="text-sm text-parchment-400 hover:text-parchment-200">Library</Link>
+        </div>
         <div className="flex items-baseline justify-between mt-4 mb-3">
           <h1 className="text-3xl md:text-4xl font-serif font-bold text-white">{menu.name}</h1>
           <Link href={`/trade/pouriq/${menuId}/edit`} className="text-sm px-4 py-2 bg-gold-500 text-jerry-green-900 font-bold rounded-lg hover:bg-gold-400 transition-colors">

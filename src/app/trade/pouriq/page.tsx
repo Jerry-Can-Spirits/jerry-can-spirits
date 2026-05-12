@@ -27,12 +27,15 @@ export default async function PourIqDashboard() {
             </div>
             <h1 className="text-3xl md:text-4xl font-serif font-bold text-white">Your menus</h1>
           </div>
-          <Link
-            href="/trade/pouriq/new"
-            className="inline-flex items-center px-5 py-3 bg-gold-500 text-jerry-green-900 font-bold rounded-lg hover:bg-gold-400 transition-colors text-sm"
-          >
-            New menu
-          </Link>
+          <div className="flex items-center gap-3">
+            <Link href="/trade/pouriq/library" className="text-sm text-parchment-300 hover:text-parchment-100 underline">Library</Link>
+            <Link
+              href="/trade/pouriq/new"
+              className="inline-flex items-center px-5 py-3 bg-gold-500 text-jerry-green-900 font-bold rounded-lg hover:bg-gold-400 transition-colors text-sm"
+            >
+              New menu
+            </Link>
+          </div>
         </div>
 
         {menus.length === 0 ? (
