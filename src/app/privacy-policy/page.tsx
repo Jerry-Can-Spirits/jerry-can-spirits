@@ -41,7 +41,7 @@ export const metadata: Metadata = {
 }
 
 export default function PrivacyPolicy() {
-  const lastUpdated = new Date('2026-04-02').toLocaleDateString('en-GB', {
+  const lastUpdated = new Date('2026-05-12').toLocaleDateString('en-GB', {
     year: 'numeric',
     month: 'long',
     day: 'numeric'
@@ -158,6 +158,30 @@ export default function PrivacyPolicy() {
 
             <section className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20">
               <h2 className="text-2xl font-serif font-bold text-white mb-4 pb-2 border-b border-gold-500/20">
+                3.5 Pour IQ
+              </h2>
+              <p className="text-white mb-4 leading-relaxed">
+                If you hold a Pour IQ licence, we process the cocktail menu data you enter, including cocktail names, recipes, ingredient costs, sale prices, and the resulting analyses.
+              </p>
+              <p className="text-white mb-4 leading-relaxed">
+                <strong className="text-gold-300">Lawful basis.</strong> Contract performance &mdash; providing the menu analysis service your licence entitles you to.
+              </p>
+              <p className="text-white mb-4 leading-relaxed">
+                <strong className="text-gold-300">Recipients.</strong> Cocktail menu data is sent to Anthropic PBC (United States) for AI-powered analysis. Anthropic does not train its models on API data per their commercial terms. Menus and analyses are stored in Cloudflare D1 (United Kingdom and European Union regions). Pour IQ data is strictly per-tenant &mdash; never shared between trade customers.
+              </p>
+              <p className="text-white mb-4 leading-relaxed">
+                <strong className="text-gold-300">Retention.</strong> Menu and analysis data is retained for the lifetime of your Pour IQ licence and for two years after cancellation, then deleted. Individual menus can be deleted at any time from within Pour IQ.
+              </p>
+              <p className="text-white mb-4 leading-relaxed">
+                <strong className="text-gold-300">International transfers.</strong> Data sent to Anthropic in the United States is protected under the UK Extension to the EU-US Data Privacy Framework (the UK-US Data Bridge). Anthropic is self-certified under that framework.
+              </p>
+              <p className="text-white leading-relaxed">
+                <strong className="text-gold-300">Your rights.</strong> You can request access, correction, or deletion of your Pour IQ data by emailing <a href="mailto:hello@jerrycanspirits.co.uk" className="text-gold-300 underline hover:text-gold-200">hello@jerrycanspirits.co.uk</a>.
+              </p>
+            </section>
+
+            <section className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20">
+              <h2 className="text-2xl font-serif font-bold text-white mb-4 pb-2 border-b border-gold-500/20">
                 4. How We Use Your Information
               </h2>
               
@@ -217,15 +241,19 @@ export default function PrivacyPolicy() {
                 6.1 Third-Party Services
               </h3>
               <ul className="list-disc list-inside text-white space-y-2 mb-6">
-                <li><strong className="text-gold-300">Klaviyo:</strong> Email marketing platform (USA) - Standard Contractual Clauses</li>
-                <li><strong className="text-gold-300">Google Analytics / Google Ads:</strong> Website analytics and conversion tracking (Ireland/USA) - Google Ads Data Processing Terms</li>
-                <li><strong className="text-gold-300">Meta (Facebook) Pixel:</strong> Advertising and conversion tracking (USA) - Standard Contractual Clauses</li>
-                <li><strong className="text-gold-300">Metricool:</strong> Social media and content analytics (Spain/EU) - GDPR-compliant</li>
-                <li><strong className="text-gold-300">Mapbox:</strong> Map rendering and location geocoding for the Expedition Log (USA) - Standard Contractual Clauses</li>
-                <li><strong className="text-gold-300">Cloudflare:</strong> Website hosting and CDN (Global network) - GDPR-compliant with Data Processing Addendum</li>
-                <li><strong className="text-gold-300">Trustpilot:</strong> Customer review platform (Denmark/USA) - Standard Contractual Clauses</li>
-                <li><strong className="text-gold-300">Sentry:</strong> Error monitoring and performance tracking (USA) - Standard Contractual Clauses</li>
-                <li><strong className="text-gold-300">Cookiebot (Cybot A/S):</strong> Consent management platform (Denmark) - GDPR-compliant, data processed within the EU</li>
+                <li><strong className="text-gold-300">Shopify:</strong> Checkout, order processing, and customer accounts (Canada with global infrastructure) &mdash; Standard Contractual Clauses and UK-US Data Bridge</li>
+                <li><strong className="text-gold-300">Klaviyo:</strong> Email marketing platform (United Kingdom and United States regions) &mdash; UK adequacy regulations and Standard Contractual Clauses</li>
+                <li><strong className="text-gold-300">Resend:</strong> Transactional email delivery for trade application notifications (United States, with EU sending region) &mdash; Standard Contractual Clauses</li>
+                <li><strong className="text-gold-300">Anthropic PBC:</strong> AI analysis provider for Pour IQ (United States) &mdash; UK-US Data Bridge. Does not train models on API data.</li>
+                <li><strong className="text-gold-300">Sanity:</strong> Headless CMS hosting Field Manual content (United States with EU regions) &mdash; Standard Contractual Clauses</li>
+                <li><strong className="text-gold-300">Google Analytics / Google Ads:</strong> Website analytics and conversion tracking (USA) &mdash; UK-US Data Bridge and Google Ads Data Processing Terms</li>
+                <li><strong className="text-gold-300">Meta (Facebook) Pixel and Conversions API:</strong> Advertising and conversion tracking (USA) &mdash; UK-US Data Bridge and Standard Contractual Clauses</li>
+                <li><strong className="text-gold-300">Metricool:</strong> Social media and content analytics (Spain/EU) &mdash; GDPR-compliant</li>
+                <li><strong className="text-gold-300">Mapbox:</strong> Map rendering and location geocoding for the Expedition Log (USA) &mdash; Standard Contractual Clauses</li>
+                <li><strong className="text-gold-300">Cloudflare:</strong> Website hosting, CDN, R2 file storage, D1 database, Turnstile bot protection (United Kingdom and European Union edge regions for our services) &mdash; GDPR-compliant with Data Processing Addendum</li>
+                <li><strong className="text-gold-300">Trustpilot:</strong> Customer review platform (Denmark/USA) &mdash; Standard Contractual Clauses</li>
+                <li><strong className="text-gold-300">Sentry:</strong> Error monitoring and performance tracking (USA) &mdash; Standard Contractual Clauses</li>
+                <li><strong className="text-gold-300">Cookiebot (Cybot A/S):</strong> Consent management platform (Denmark) &mdash; GDPR-compliant, data processed within the EU</li>
               </ul>
 
               <h3 className="text-xl font-serif font-semibold text-white mt-6 mb-3">
@@ -293,14 +321,33 @@ export default function PrivacyPolicy() {
                 10. International Transfers
               </h2>
               <p className="text-white mb-4">
-                Some of our service providers are located outside the European Economic Area (EEA). When we transfer your data internationally, we ensure adequate protection through:
+                Some of our service providers are located outside the United Kingdom and the European Economic Area. We rely on the following transfer mechanisms depending on the provider:
               </p>
-              <ul className="list-disc list-inside text-white space-y-2">
-                <li>EU Commission adequacy decisions</li>
-                <li>Standard Contractual Clauses (SCCs)</li>
-                <li>Binding Corporate Rules</li>
-                <li>Certification schemes</li>
-              </ul>
+
+              <h3 className="text-xl font-serif font-semibold text-white mt-6 mb-3">
+                10.1 UK or EU adequacy
+              </h3>
+              <p className="text-white mb-4 leading-relaxed">
+                Data processed by providers in the UK or EU (or in regions covered by a UK or EU adequacy decision) does not require additional safeguards. This applies to Klaviyo&apos;s UK infrastructure, Cloudflare&apos;s UK and EU edge regions, Cookiebot (Denmark), Metricool (Spain), and Sanity&apos;s EU regions.
+              </p>
+
+              <h3 className="text-xl font-serif font-semibold text-white mt-6 mb-3">
+                10.2 UK-US Data Bridge
+              </h3>
+              <p className="text-white mb-4 leading-relaxed">
+                For US providers self-certified under the UK Extension to the EU-US Data Privacy Framework, we rely on the UK-US Data Bridge. This currently applies to Anthropic (Pour IQ AI analysis), Google (Analytics and Ads), and Meta (Pixel and Conversions API).
+              </p>
+
+              <h3 className="text-xl font-serif font-semibold text-white mt-6 mb-3">
+                10.3 Standard Contractual Clauses
+              </h3>
+              <p className="text-white mb-4 leading-relaxed">
+                For US and other non-adequate destinations not covered by the UK-US Data Bridge, we rely on the UK International Data Transfer Agreement (IDTA) or the EU Standard Contractual Clauses with UK Addendum. This applies to Shopify, Resend, Mapbox, Trustpilot, and Sentry.
+              </p>
+
+              <p className="text-white leading-relaxed">
+                For each transfer, we have assessed the destination&apos;s legal regime under the UK GDPR and concluded the safeguards provide protection equivalent to UK standards. You can request a copy of our transfer impact assessment by emailing <a href="mailto:support@jerrycanspirits.co.uk" className="text-gold-300 hover:text-gold-200 underline">support@jerrycanspirits.co.uk</a>.
+              </p>
             </section>
 
             <section className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20">
