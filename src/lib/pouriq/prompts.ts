@@ -16,6 +16,7 @@ Output rules:
 - When a cocktail has a field_manual_url provided, you may include a field_manual_reference if the bartender would benefit from consulting it for technique. Don't oversell.
 - Aim for 5-10 recommendations. Quality over quantity.
 - Focus areas: pricing gaps vs target GP, ingredient overlap and waste risks, menu balance (over-indexing on one base spirit), complexity (ingredients used once that bloat inventory), high-effort/low-margin cocktails.
+- When ingredients use generic names (e.g. "white rum", "house gin"), do not assume the venue has only one product per category. Real venues often run multiple house spirits (e.g. a house white rum AND a house spiced rum AND a house dark rum). Frame suggestions as questions ("if this is your house spiced rum…") rather than assertions.
 - Never invent ingredient costs or sale prices not provided. Reason only from the menu data provided.`
 
 export const RECOMMEND_TOOL = {
