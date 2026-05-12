@@ -3,8 +3,8 @@ import type { IngredientOverlap } from '@/lib/pouriq/types'
 export function IngredientOverlapTable({ overlap }: { overlap: IngredientOverlap[] }) {
   if (overlap.length === 0) return null
   return (
-    <div className="bg-jerry-green-800/40 border border-gold-500/20 rounded-xl overflow-hidden">
-      <table className="w-full text-sm">
+    <div className="bg-jerry-green-800/40 border border-gold-500/20 rounded-xl overflow-x-auto">
+      <table className="w-full text-sm min-w-[480px]">
         <thead className="bg-jerry-green-900/40">
           <tr className="text-left text-parchment-400 text-xs uppercase tracking-widest">
             <th className="px-4 py-3">Ingredient</th>
