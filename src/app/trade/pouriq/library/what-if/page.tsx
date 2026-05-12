@@ -1,12 +1,20 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { Suspense, useEffect, useState } from 'react'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import { CostImpactPanel } from '@/components/pouriq/CostImpactPanel'
 import type { IngredientLibraryRow } from '@/lib/pouriq/types'
 
 export default function WhatIfPage() {
+  return (
+    <Suspense fallback={null}>
+      <WhatIfContent />
+    </Suspense>
+  )
+}
+
+function WhatIfContent() {
   const searchParams = useSearchParams()
   const initialIngredient = searchParams.get('ingredient')
   const [entries, setEntries] = useState<IngredientLibraryRow[] | null>(null)

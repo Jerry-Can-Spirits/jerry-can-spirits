@@ -66,7 +66,7 @@ export function CostImpactPanel({ ingredientId }: Props) {
   }
 
   const { ingredient } = data
-  const { projected, rollups, newCostP, currentP, delta, mode } = projection
+  const { projected, rollups, currentP, delta, mode } = projection
   const unitLabel = mode === 'unit' ? 'per unit' : `per ${ingredient.bottle_size_ml ?? ''}ml bottle`
   const noUsage = projected.length === 0
   const projectedByMenu = new Map<string, ProjectedCocktail[]>()
