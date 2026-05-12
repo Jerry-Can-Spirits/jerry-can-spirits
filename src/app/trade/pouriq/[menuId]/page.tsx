@@ -40,9 +40,14 @@ export default async function MenuDetailPage({ params }: Props) {
         </div>
         <div className="flex items-baseline justify-between mt-4 mb-3">
           <h1 className="text-3xl md:text-4xl font-serif font-bold text-white">{menu.name}</h1>
-          <Link href={`/trade/pouriq/${menuId}/edit`} className="text-sm px-4 py-2 bg-gold-500 text-jerry-green-900 font-bold rounded-lg hover:bg-gold-400 transition-colors">
-            Add drink
-          </Link>
+          <div className="flex items-center gap-3">
+            <Link href={`/trade/pouriq/${menuId}/import`} className="text-sm text-gold-300 hover:text-gold-200 underline">
+              Import drinks
+            </Link>
+            <Link href={`/trade/pouriq/${menuId}/edit`} className="text-sm px-4 py-2 bg-gold-500 text-jerry-green-900 font-bold rounded-lg hover:bg-gold-400 transition-colors">
+              Add drink
+            </Link>
+          </div>
         </div>
         <p className="text-parchment-400 text-sm mb-10">
           {menu.venue_type ?? 'Menu'}{menu.city && ` · ${menu.city}`} · Target GP {menu.target_gp_pct}%

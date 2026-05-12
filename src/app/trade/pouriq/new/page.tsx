@@ -17,7 +17,7 @@ export default async function NewMenuPage() {
           <span className="text-gold-300 text-sm font-semibold uppercase tracking-widest">Pour IQ</span>
         </div>
         <h1 className="text-3xl font-serif font-bold text-white mb-3">Create a new menu</h1>
-        <p className="text-parchment-400 text-sm mb-10">Start with the basics. You can add drinks on the next screen.</p>
+        <p className="text-parchment-400 text-sm mb-10">Start with the basics. You can add drinks one at a time, or use AI menu import to paste/upload an existing menu on the next screen.</p>
         <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
           <CreateMenuForm />
         </div>
