@@ -7,6 +7,7 @@ export interface IngredientLibraryInsert {
   bottle_size_ml: number | null
   bottle_cost_p: number | null
   unit_cost_p: number | null
+  barcode: string | null
   notes: string | null
 }
 
@@ -51,17 +52,29 @@ export async function insertLibraryEntry(
   const result = await db
     .prepare(`
       INSERT INTO pouriq_ingredients_library
-        (trade_account_id, name, ingredient_type, bottle_size_ml, bottle_cost_p, unit_cost_p, notes)
-      VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7)
+        (trade_account_id, name, ingredient_type, bottle_size_ml, bottle_cost_p, unit_cost_p, barcode, notes)
+      VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8)
       RETURNING id
     `)
     .bind(
       data.trade_account_id, data.name, data.ingredient_type,
-      data.bottle_size_ml, data.bottle_cost_p, data.unit_cost_p, data.notes,
+      data.bottle_size_ml, data.bottle_cost_p, data.unit_cost_p,
+      data.barcode, data.notes,
     )
     .first<{ id: string }>()
   if (!result) throw new Error('Library insert returned no id')
   return result.id
+}
+
+export async function findLibraryEntryByBarcode(
+  db: D1Database,
+  tradeAccountId: string,
+  barcode: string,
+): Promise<IngredientLibraryRow | null> {
+  return await db
+    .prepare(`SELECT * FROM pouriq_ingredients_library WHERE trade_account_id = ?1 AND barcode = ?2`)
+    .bind(tradeAccountId, barcode)
+    .first<IngredientLibraryRow>()
 }
 
 export async function updateLibraryEntry(
@@ -71,7 +84,7 @@ export async function updateLibraryEntry(
   patch: Partial<Omit<IngredientLibraryInsert, 'trade_account_id'>>,
 ): Promise<void> {
   const allowedFields = [
-    'name','ingredient_type','bottle_size_ml','bottle_cost_p','unit_cost_p','notes',
+    'name','ingredient_type','bottle_size_ml','bottle_cost_p','unit_cost_p','barcode','notes',
   ] as const
   const sets: string[] = []
   const binds: unknown[] = []
