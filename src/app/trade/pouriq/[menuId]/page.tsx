@@ -14,6 +14,7 @@ import { VatModeToggle } from '@/components/pouriq/VatModeToggle'
 import { PrintReportButton } from '@/components/pouriq/PrintReportButton'
 import { BulkPromoActions } from '@/components/pouriq/BulkPromoActions'
 import { VolumeEditor } from '@/components/pouriq/VolumeEditor'
+import { DuplicateMenuButton } from '@/components/pouriq/DuplicateMenuButton'
 import { listVolumesForPeriod, currentPeriod } from '@/lib/pouriq/volumes'
 import { PRIMARY_BUTTON, SECONDARY_BUTTON_SM } from '@/lib/pouriq/button-styles'
 
@@ -79,7 +80,8 @@ export default async function MenuDetailPage({ params }: Props) {
         <div className="flex flex-wrap items-baseline justify-between gap-3 mt-4 mb-3">
           <h1 className="text-3xl md:text-4xl font-serif font-bold text-white">{menu.name}</h1>
           {cocktails.length > 0 && (
-            <div className="flex items-center gap-2 no-print">
+            <div className="flex flex-wrap items-start gap-2 no-print">
+              <DuplicateMenuButton menuId={menuId} menuName={menu.name} />
               <Link href={`/trade/pouriq/${menuId}/import`} className={SECONDARY_BUTTON_SM}>
                 Import drinks
               </Link>

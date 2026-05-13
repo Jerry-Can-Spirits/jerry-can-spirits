@@ -7,7 +7,7 @@ import { checkPourIqAccess } from './access'
 import {
   insertMenu, updateMenu, deleteMenu,
   insertCocktail, replaceIngredients,
-  getMenu,
+  getMenu, listCocktailsForMenu,
 } from './menus'
 import {
   insertLibraryEntry,
@@ -43,6 +43,52 @@ export async function createMenuAction(formData: FormData): Promise<void> {
   })
   revalidatePath('/trade/pouriq')
   redirect(`/trade/pouriq/${id}`)
+}
+
+export async function cloneMenuAction(menuId: string, newName?: string): Promise<{ menuId: string }> {
+  const { db, tradeAccountId } = await requireDb()
+  const source = await getMenu(db, menuId, tradeAccountId)
+  if (!source) throw new Error('Menu not found')
+
+  // Copy menu metadata.
+  const newId = await insertMenu(db, {
+    trade_account_id: tradeAccountId,
+    name: (newName?.trim() || `Copy of ${source.name}`).slice(0, 200),
+    venue_type: source.venue_type,
+    city: source.city,
+    target_gp_pct: source.target_gp_pct,
+    positioning: source.positioning,
+    notes: source.notes,
+    prices_include_vat: source.prices_include_vat === 1,
+  })
+
+  // Copy every cocktail with its ingredient links. Volumes and analyses
+  // are intentionally NOT copied — they are time-bound to the original
+  // menu's actual operation.
+  const cocktails = await listCocktailsForMenu(db, menuId)
+  for (let idx = 0; idx < cocktails.length; idx++) {
+    const c = cocktails[idx]
+    const newCocktailId = await insertCocktail(db, {
+      menu_id: newId,
+      name: c.name,
+      sale_price_p: c.sale_price_p,
+      promotional_price_p: c.promotional_price_p,
+      promotional_label: c.promotional_label,
+      position: c.position ?? idx,
+      field_manual_slug: c.field_manual_slug,
+      notes: c.notes,
+    })
+    if (c.ingredients.length > 0) {
+      await replaceIngredients(db, newCocktailId, c.ingredients.map((i) => ({
+        library_ingredient_id: i.library_ingredient_id,
+        pour_ml: i.pour_ml,
+        unit_count: i.unit_count,
+      })))
+    }
+  }
+
+  revalidatePath('/trade/pouriq')
+  return { menuId: newId }
 }
 
 export async function setMenuVatModeAction(menuId: string, includesVat: boolean): Promise<void> {

@@ -28,7 +28,8 @@ export default async function PourIqDashboard() {
             </div>
             <h1 className="text-3xl md:text-4xl font-serif font-bold text-white">Your menus</h1>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
+            <Link href="/trade/pouriq/compare" className={SECONDARY_BUTTON}>Compare menus</Link>
             <Link href="/trade/pouriq/library" className={SECONDARY_BUTTON}>Library</Link>
             <Link href="/trade/pouriq/new" className={PRIMARY_BUTTON}>New menu</Link>
           </div>
