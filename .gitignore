@@ -68,3 +68,10 @@ nul
 
 # Git worktrees
 .worktrees/
+
+# Claude Code internal state
+.claude/scheduled_tasks.lock
+
+# Local D1 backups (must not be committed — contain production data)
+*-backup.sql
+pre-*.sql

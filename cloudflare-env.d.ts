@@ -39,6 +39,12 @@ interface CloudflareEnv {
   RESEND_API_KEY: string;
   TRADE_APPLICATIONS_EMAIL: string;
 
+  // Secrets — Square (POS integration)
+  SQUARE_APP_ID: string;
+  SQUARE_APP_SECRET: string;
+  SQUARE_WEBHOOK_SIGNATURE_KEY: string;
+  SQUARE_ENV?: string;  // 'sandbox' to target sandbox hosts; anything else = production
+
   // Secrets — R2 presigning (S3-compatible API for presigning download URLs)
   R2_ACCESS_KEY_ID: string;
   R2_SECRET_ACCESS_KEY: string;
