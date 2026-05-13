@@ -272,6 +272,7 @@ interface LibraryEntryInput {
   bottle_size_ml: number | null
   bottle_cost_p: number | null
   unit_cost_p: number | null
+  barcode: string | null
   notes: string | null
 }
 

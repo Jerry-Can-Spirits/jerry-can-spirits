@@ -3,6 +3,7 @@
 import { useEffect, useId, useMemo, useRef, useState } from 'react'
 import type { IngredientLibraryRow, IngredientType } from '@/lib/pouriq/types'
 import { saveLibraryEntryAction } from '@/lib/pouriq/server-actions'
+import { BarcodeScanner } from '@/components/pouriq/BarcodeScanner'
 
 const INGREDIENT_TYPES: IngredientType[] = ['spirit','liqueur','wine','beer','mixer','syrup','juice','garnish','other']
 const COMMON_BOTTLE_SIZES = [500, 700, 750, 1000]
@@ -22,6 +23,8 @@ export function IngredientPicker({ libraryEntries, selectedEntryId, onChange }: 
   const [open, setOpen] = useState(false)
   const [query, setQuery] = useState('')
   const [showCreate, setShowCreate] = useState(false)
+  const [scanOpen, setScanOpen] = useState(false)
+  const [scanInfo, setScanInfo] = useState<string | null>(null)
   // Inline-create form state
   const [name, setName] = useState('')
   const [ingredient_type, setIngredientType] = useState<IngredientType>('spirit')
@@ -29,6 +32,10 @@ export function IngredientPicker({ libraryEntries, selectedEntryId, onChange }: 
   const [bottle_size_ml, setBottleSize] = useState('700')
   const [bottle_cost_pounds, setBottleCostPounds] = useState('')
   const [unit_cost_pounds, setUnitCostPounds] = useState('')
+  // When a scan didn't match an existing library entry, we surface
+  // the scanned code so the new entry gets saved with it. Cleared on
+  // form cancel.
+  const [pendingBarcode, setPendingBarcode] = useState<string | null>(null)
   const [createError, setCreateError] = useState<string | null>(null)
   const [creating, setCreating] = useState(false)
 
@@ -58,6 +65,37 @@ export function IngredientPicker({ libraryEntries, selectedEntryId, onChange }: 
     setQuery('')
     setOpen(false)
     setShowCreate(false)
+    setScanInfo(null)
+    setPendingBarcode(null)
+  }
+
+  async function handleScan(code: string) {
+    setScanOpen(false)
+    setScanInfo(null)
+    // First check the local library copy for an instant match.
+    const localMatch = libraryEntries.find((e) => e.barcode === code)
+    if (localMatch) {
+      selectEntry(localMatch)
+      return
+    }
+    // Server lookup in case the local copy is stale.
+    try {
+      const res = await fetch(`/api/pouriq/library/by-barcode?code=${encodeURIComponent(code)}`)
+      if (res.ok) {
+        const data = await res.json() as { entry: IngredientLibraryRow | null }
+        if (data.entry) {
+          libraryEntries.push(data.entry)
+          selectEntry(data.entry)
+          return
+        }
+      }
+    } catch { /* fall through to create flow */ }
+    // No match — open the inline create form with the barcode prefilled.
+    setPendingBarcode(code)
+    setShowCreate(true)
+    setOpen(true)
+    setName('')
+    setScanInfo(`Scanned ${code}. Fill in the rest to add it to your library.`)
   }
 
   async function handleCreate() {
@@ -80,10 +118,9 @@ export function IngredientPicker({ libraryEntries, selectedEntryId, onChange }: 
       const result = await saveLibraryEntryAction(null, {
         name: name.trim(), ingredient_type,
         bottle_size_ml: bottle_size_ml_n, bottle_cost_p, unit_cost_p,
+        barcode: pendingBarcode,
         notes: null,
       })
-      // Build the new entry shape for the parent. Full row would require a refetch;
-      // synthesise enough for the parent to render and recalc.
       const newEntry: IngredientLibraryRow = {
         id: result.entryId,
         trade_account_id: '',
@@ -92,15 +129,14 @@ export function IngredientPicker({ libraryEntries, selectedEntryId, onChange }: 
         bottle_size_ml: bottle_size_ml_n,
         bottle_cost_p,
         unit_cost_p,
+        barcode: pendingBarcode,
         notes: null,
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),
       }
-      // Append to local library copy so it appears in the dropdown for the next pick.
       libraryEntries.push(newEntry)
       selectEntry(newEntry)
-      // Reset form
-      setName(''); setBottleCostPounds(''); setUnitCostPounds(''); setShowCreate(false)
+      setName(''); setBottleCostPounds(''); setUnitCostPounds(''); setShowCreate(false); setPendingBarcode(null)
     } catch (e) {
       setCreateError((e as Error).message || 'Could not create')
     } finally {
@@ -110,17 +146,33 @@ export function IngredientPicker({ libraryEntries, selectedEntryId, onChange }: 
 
   return (
     <div className="relative">
-      <input
-        ref={inputRef}
-        id={id}
-        type="text"
-        aria-label="Ingredient picker"
-        value={open || showCreate ? query : (selectedEntry?.name ?? '')}
-        onFocus={() => setOpen(true)}
-        onChange={(e) => { setQuery(e.target.value); setOpen(true) }}
-        placeholder={selectedEntry ? selectedEntry.name : 'Pick an ingredient…'}
-        className={inputClass}
-      />
+      <div className="flex gap-2">
+        <input
+          ref={inputRef}
+          id={id}
+          type="text"
+          aria-label="Ingredient picker"
+          value={open || showCreate ? query : (selectedEntry?.name ?? '')}
+          onFocus={() => setOpen(true)}
+          onChange={(e) => { setQuery(e.target.value); setOpen(true) }}
+          placeholder={selectedEntry ? selectedEntry.name : 'Pick an ingredient…'}
+          className={inputClass}
+        />
+        <button
+          type="button"
+          onClick={() => setScanOpen(true)}
+          title="Scan a barcode"
+          aria-label="Scan a barcode"
+          className="shrink-0 px-3 py-2 bg-jerry-green-700/50 border border-gold-500/30 rounded-lg text-parchment-100 hover:border-gold-400 transition-colors text-sm"
+        >
+          Scan
+        </button>
+      </div>
+
+      {scanInfo && !scanOpen && (
+        <p className="mt-1 text-xs text-gold-200">{scanInfo}</p>
+      )}
+
       {open && !showCreate && (
         <div className="absolute z-10 left-0 right-0 mt-1 max-h-64 overflow-y-auto bg-jerry-green-800 border border-gold-500/30 rounded-lg shadow-lg">
           {matches.length === 0 && (
@@ -149,6 +201,9 @@ export function IngredientPicker({ libraryEntries, selectedEntryId, onChange }: 
 
       {showCreate && (
         <div className="absolute z-10 left-0 right-0 mt-1 p-4 bg-jerry-green-800 border border-gold-500/30 rounded-lg shadow-lg space-y-3">
+          {pendingBarcode && (
+            <p className="text-xs text-gold-200">Barcode: <span className="font-mono">{pendingBarcode}</span></p>
+          )}
           <div>
             <label className={labelClass}>Name</label>
             <input value={name} onChange={(e) => setName(e.target.value)} className={inputClass} placeholder="e.g. Tito's Vodka" autoFocus />
@@ -189,12 +244,16 @@ export function IngredientPicker({ libraryEntries, selectedEntryId, onChange }: 
           )}
           {createError && <p role="alert" className="text-xs text-red-300">{createError}</p>}
           <div className="flex justify-between items-center">
-            <button type="button" onClick={() => setShowCreate(false)} className="text-xs text-parchment-400 hover:text-parchment-200">Cancel</button>
+            <button type="button" onClick={() => { setShowCreate(false); setPendingBarcode(null); setScanInfo(null) }} className="text-xs text-parchment-400 hover:text-parchment-200">Cancel</button>
             <button type="button" onClick={handleCreate} disabled={creating} className="px-4 py-2 bg-gold-500 text-jerry-green-900 font-semibold rounded text-sm disabled:opacity-50">
               {creating ? 'Adding…' : 'Add to library'}
             </button>
           </div>
         </div>
+      )}
+
+      {scanOpen && (
+        <BarcodeScanner onScan={handleScan} onClose={() => setScanOpen(false)} />
       )}
     </div>
   )

@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import type { IngredientLibraryRow, IngredientType } from '@/lib/pouriq/types'
 import { saveLibraryEntryAction, deleteLibraryEntryAction } from '@/lib/pouriq/server-actions'
+import { BarcodeScanner } from '@/components/pouriq/BarcodeScanner'
 
 const INGREDIENT_TYPES: IngredientType[] = ['spirit','liqueur','wine','beer','mixer','syrup','juice','garnish','other']
 const COMMON_BOTTLE_SIZES = [500, 700, 750, 1000]
@@ -35,6 +36,8 @@ export function IngredientForm({ entry, usageCount = 0 }: Props) {
     entry?.unit_cost_p !== null && entry?.unit_cost_p !== undefined
       ? (entry.unit_cost_p / 100).toFixed(2) : ''
   )
+  const [barcode, setBarcode] = useState(entry?.barcode ?? '')
+  const [scanOpen, setScanOpen] = useState(false)
   const [notes, setNotes] = useState(entry?.notes ?? '')
   const [error, setError] = useState<string | null>(null)
   const [submitting, setSubmitting] = useState(false)
@@ -71,6 +74,7 @@ export function IngredientForm({ entry, usageCount = 0 }: Props) {
         bottle_size_ml: bottle_size_ml_n,
         bottle_cost_p,
         unit_cost_p,
+        barcode: barcode.trim() || null,
         notes: notes.trim() || null,
       })
       router.push('/trade/pouriq/library')
@@ -143,11 +147,33 @@ export function IngredientForm({ entry, usageCount = 0 }: Props) {
       )}
 
       <div>
+        <label htmlFor="barcode" className={labelClass}>Barcode</label>
+        <div className="flex gap-2">
+          <input id="barcode" value={barcode} onChange={(e) => setBarcode(e.target.value)} className={inputClass} placeholder="Optional — scan or type the bottle's barcode" />
+          <button
+            type="button"
+            onClick={() => setScanOpen(true)}
+            className="shrink-0 px-3 py-2 bg-jerry-green-700/50 border border-gold-500/30 rounded-lg text-parchment-100 hover:border-gold-400 transition-colors text-sm"
+          >
+            Scan
+          </button>
+        </div>
+        <p className="text-xs text-parchment-400 mt-2">Once set, scanning this bottle in the cocktail editor auto-selects this ingredient.</p>
+      </div>
+
+      <div>
         <label htmlFor="notes" className={labelClass}>Notes</label>
         <textarea id="notes" rows={2} value={notes} onChange={(e) => setNotes(e.target.value)} className={`${inputClass} resize-vertical`} placeholder="Optional — supplier, SKU, anything useful" />
       </div>
 
       {error && <p role="alert" className="text-sm text-red-300">{error}</p>}
+
+      {scanOpen && (
+        <BarcodeScanner
+          onScan={(code) => { setBarcode(code); setScanOpen(false) }}
+          onClose={() => setScanOpen(false)}
+        />
+      )}
 
       <div className="flex justify-between items-center">
         {entry ? (

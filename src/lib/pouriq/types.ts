@@ -75,6 +75,7 @@ export interface IngredientLibraryRow {
   bottle_size_ml: number | null
   bottle_cost_p: number | null
   unit_cost_p: number | null
+  barcode: string | null
   notes: string | null
   created_at: string
   updated_at: string
