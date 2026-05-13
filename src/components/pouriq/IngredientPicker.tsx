@@ -36,6 +36,10 @@ export function IngredientPicker({ libraryEntries, selectedEntryId, onChange }: 
   // the scanned code so the new entry gets saved with it. Cleared on
   // form cancel.
   const [pendingBarcode, setPendingBarcode] = useState<string | null>(null)
+  // True when name/type/size were prefilled from the cross-tenant
+  // catalogue — surfaces a small hint so the user sanity-checks the
+  // prefill before saving.
+  const [prefilledFromCatalogue, setPrefilledFromCatalogue] = useState(false)
   const [createError, setCreateError] = useState<string | null>(null)
   const [creating, setCreating] = useState(false)
 
@@ -67,35 +71,57 @@ export function IngredientPicker({ libraryEntries, selectedEntryId, onChange }: 
     setShowCreate(false)
     setScanInfo(null)
     setPendingBarcode(null)
+    setPrefilledFromCatalogue(false)
   }
 
   async function handleScan(code: string) {
     setScanOpen(false)
     setScanInfo(null)
+    setPrefilledFromCatalogue(false)
     // First check the local library copy for an instant match.
     const localMatch = libraryEntries.find((e) => e.barcode === code)
     if (localMatch) {
       selectEntry(localMatch)
       return
     }
-    // Server lookup in case the local copy is stale.
+    // Server lookup: tenant library + cross-tenant catalogue prefill.
+    let cataloguePrefill: { name: string; ingredient_type: IngredientType; bottle_size_ml: number | null } | null = null
     try {
       const res = await fetch(`/api/pouriq/library/by-barcode?code=${encodeURIComponent(code)}`)
       if (res.ok) {
-        const data = await res.json() as { entry: IngredientLibraryRow | null }
+        const data = await res.json() as {
+          entry: IngredientLibraryRow | null
+          catalogue: { name: string; ingredient_type: IngredientType; bottle_size_ml: number | null; verified: boolean } | null
+        }
         if (data.entry) {
           libraryEntries.push(data.entry)
           selectEntry(data.entry)
           return
         }
+        if (data.catalogue) {
+          cataloguePrefill = data.catalogue
+        }
       }
     } catch { /* fall through to create flow */ }
-    // No match — open the inline create form with the barcode prefilled.
+    // No tenant match — open the inline create form with the barcode
+    // prefilled, plus name/type/size from the shared catalogue if we
+    // recognised the product.
     setPendingBarcode(code)
     setShowCreate(true)
     setOpen(true)
-    setName('')
-    setScanInfo(`Scanned ${code}. Fill in the rest to add it to your library.`)
+    if (cataloguePrefill) {
+      setName(cataloguePrefill.name)
+      setIngredientType(cataloguePrefill.ingredient_type)
+      if (cataloguePrefill.bottle_size_ml) {
+        setPricingMode('bottle')
+        setBottleSize(String(cataloguePrefill.bottle_size_ml))
+      }
+      setPrefilledFromCatalogue(true)
+      setScanInfo(`Recognised ${code}. We've pre-filled the name, type and size — just add your cost.`)
+    } else {
+      setName('')
+      setScanInfo(`Scanned ${code}. Fill in the rest to add it to your library.`)
+    }
   }
 
   async function handleCreate() {
@@ -204,6 +230,9 @@ export function IngredientPicker({ libraryEntries, selectedEntryId, onChange }: 
           {pendingBarcode && (
             <p className="text-xs text-gold-200">Barcode: <span className="font-mono">{pendingBarcode}</span></p>
           )}
+          {prefilledFromCatalogue && (
+            <p className="text-xs text-emerald-200">Name, type and size came from the Pour IQ shared catalogue — sanity-check before saving.</p>
+          )}
           <div>
             <label className={labelClass}>Name</label>
             <input value={name} onChange={(e) => setName(e.target.value)} className={inputClass} placeholder="e.g. Tito's Vodka" autoFocus />
@@ -244,7 +273,7 @@ export function IngredientPicker({ libraryEntries, selectedEntryId, onChange }: 
           )}
           {createError && <p role="alert" className="text-xs text-red-300">{createError}</p>}
           <div className="flex justify-between items-center">
-            <button type="button" onClick={() => { setShowCreate(false); setPendingBarcode(null); setScanInfo(null) }} className="text-xs text-parchment-400 hover:text-parchment-200">Cancel</button>
+            <button type="button" onClick={() => { setShowCreate(false); setPendingBarcode(null); setScanInfo(null); setPrefilledFromCatalogue(false) }} className="text-xs text-parchment-400 hover:text-parchment-200">Cancel</button>
             <button type="button" onClick={handleCreate} disabled={creating} className="px-4 py-2 bg-gold-500 text-jerry-green-900 font-semibold rounded text-sm disabled:opacity-50">
               {creating ? 'Adding…' : 'Add to library'}
             </button>

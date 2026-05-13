@@ -19,7 +19,8 @@ export function BarcodeScanner({ onScan, onClose }: Props) {
 
   useEffect(() => {
     let cancelled = false
-    let scanner: { stop: () => Promise<void>; clear?: () => void } | null = null
+    type Html5QrcodeInstance = InstanceType<typeof import('html5-qrcode').Html5Qrcode>
+    let scanner: Html5QrcodeInstance | null = null
 
     async function start() {
       try {
@@ -39,7 +40,7 @@ export function BarcodeScanner({ onScan, onClose }: Props) {
         await scanner.start(
           { facingMode: 'environment' },
           { fps: 10, qrbox: { width: 260, height: 160 } },
-          (decoded) => {
+          (decoded: string) => {
             if (cancelled) return
             // Stop the camera before the parent handler reacts so the
             // viewfinder dismisses immediately on success.

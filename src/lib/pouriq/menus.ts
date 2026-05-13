@@ -132,6 +132,7 @@ export async function listCocktailsForMenu(
         l.bottle_size_ml AS l_bottle_size_ml,
         l.bottle_cost_p AS l_bottle_cost_p,
         l.unit_cost_p AS l_unit_cost_p,
+        l.barcode AS l_barcode,
         l.notes AS l_notes,
         l.created_at AS l_created_at,
         l.updated_at AS l_updated_at
@@ -153,6 +154,7 @@ export async function listCocktailsForMenu(
       l_bottle_size_ml: number | null
       l_bottle_cost_p: number | null
       l_unit_cost_p: number | null
+      l_barcode: string | null
       l_notes: string | null
       l_created_at: string
       l_updated_at: string
@@ -174,6 +176,7 @@ export async function listCocktailsForMenu(
         bottle_size_ml: row.l_bottle_size_ml,
         bottle_cost_p: row.l_bottle_cost_p,
         unit_cost_p: row.l_unit_cost_p,
+        barcode: row.l_barcode,
         notes: row.l_notes,
         created_at: row.l_created_at,
         updated_at: row.l_updated_at,
@@ -202,6 +205,7 @@ export async function getCocktail(
         l.id AS l_id, l.trade_account_id AS l_trade_account_id, l.name AS l_name,
         l.ingredient_type AS l_ingredient_type, l.bottle_size_ml AS l_bottle_size_ml,
         l.bottle_cost_p AS l_bottle_cost_p, l.unit_cost_p AS l_unit_cost_p,
+        l.barcode AS l_barcode,
         l.notes AS l_notes, l.created_at AS l_created_at, l.updated_at AS l_updated_at
       FROM pouriq_ingredients i
       JOIN pouriq_ingredients_library l ON l.id = i.library_ingredient_id
@@ -221,6 +225,7 @@ export async function getCocktail(
       l_bottle_size_ml: number | null
       l_bottle_cost_p: number | null
       l_unit_cost_p: number | null
+      l_barcode: string | null
       l_notes: string | null
       l_created_at: string
       l_updated_at: string
@@ -240,6 +245,7 @@ export async function getCocktail(
       bottle_size_ml: row.l_bottle_size_ml,
       bottle_cost_p: row.l_bottle_cost_p,
       unit_cost_p: row.l_unit_cost_p,
+      barcode: row.l_barcode,
       notes: row.l_notes,
       created_at: row.l_created_at,
       updated_at: row.l_updated_at,

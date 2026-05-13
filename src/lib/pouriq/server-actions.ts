@@ -281,18 +281,36 @@ export async function saveLibraryEntryAction(
   input: LibraryEntryInput,
 ): Promise<{ entryId: string }> {
   const { db, tradeAccountId } = await requireDb()
+  let savedId: string
   if (entryId === null) {
-    const id = await insertLibraryEntry(db, { ...input, trade_account_id: tradeAccountId })
-    revalidatePath('/trade/pouriq/library')
-    return { entryId: id }
+    savedId = await insertLibraryEntry(db, { ...input, trade_account_id: tradeAccountId })
+  } else {
+    // Verify ownership before update
+    const existing = await getLibraryEntry(db, entryId, tradeAccountId)
+    if (!existing) throw new Error('Ingredient not found')
+    await updateLibraryEntry(db, entryId, tradeAccountId, input)
+    savedId = entryId
   }
-  // Verify ownership before update
-  const existing = await getLibraryEntry(db, entryId, tradeAccountId)
-  if (!existing) throw new Error('Ingredient not found')
-  await updateLibraryEntry(db, entryId, tradeAccountId, input)
+
+  // Best-effort contribution to the cross-tenant barcode catalogue. Only
+  // attributes are shared — no cost, no tenant data. Failures here must
+  // not block the user's save.
+  if (input.barcode && input.barcode.trim()) {
+    try {
+      const { contributeToCatalogue } = await import('./barcode-catalogue')
+      await contributeToCatalogue(db, {
+        barcode: input.barcode.trim(),
+        name: input.name.trim(),
+        ingredient_type: input.ingredient_type,
+        bottle_size_ml: input.bottle_size_ml,
+        trade_account_id: tradeAccountId,
+      })
+    } catch { /* swallow — non-critical */ }
+  }
+
   revalidatePath('/trade/pouriq/library')
-  revalidatePath(`/trade/pouriq/library/${entryId}/edit`)
-  return { entryId }
+  if (entryId !== null) revalidatePath(`/trade/pouriq/library/${entryId}/edit`)
+  return { entryId: savedId }
 }
 
 export async function deleteLibraryEntryAction(entryId: string): Promise<void> {
