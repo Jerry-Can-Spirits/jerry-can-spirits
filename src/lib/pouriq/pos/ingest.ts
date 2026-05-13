@@ -1,7 +1,7 @@
 import type { PosConnection, PosOrderLine } from './types'
 import { matchPosItemToCocktail } from './match'
 import { currentPeriod } from '../volumes'
-import { getMenu, listCocktailsForMenu, listMenusForTradeAccount } from '../menus'
+import { listCocktailsForMenu, listMenusForTradeAccount } from '../menus'
 
 /**
  * Take a batch of POS order lines, match each to a cocktail across
@@ -72,11 +72,6 @@ export async function ingestOrderLines(
       .bind(v.cocktailId, v.period_start, v.period_end, Math.round(v.units))
       .run()
   }
-
-  // Verify menu ownership belongs to this tenant — defense in depth.
-  // (cocktail_id was resolved from cocktailsByMenu which is tenant-scoped,
-  // so this is structural rather than runtime-required.)
-  void getMenu
 
   return { matched, unmatched }
 }

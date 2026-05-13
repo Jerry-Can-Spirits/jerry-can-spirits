@@ -8,6 +8,19 @@ import { IntegrationCard } from '@/components/pouriq/IntegrationCard'
 
 export const dynamic = 'force-dynamic'
 
+const OAUTH_ERROR_MESSAGES: Record<string, string> = {
+  access_denied: 'You declined access. Connect again when you are ready.',
+  invalid_scope: 'The requested permissions could not be granted. Please contact support.',
+  invalid_state: 'The connection request expired. Please try again.',
+  missing_params: 'The connection response was incomplete. Please try again.',
+  token_exchange_failed: 'We could not complete the connection. Please try again or contact support.',
+}
+
+function friendlyOAuthError(code: string | undefined): string | null {
+  if (!code) return null
+  return OAUTH_ERROR_MESSAGES[code] ?? 'Connection failed. Please try again or contact support.'
+}
+
 interface SearchParams {
   searchParams: Promise<{ connected?: string; error?: string }>
 }
@@ -24,7 +37,7 @@ export default async function IntegrationsPage({ searchParams }: SearchParams) {
 
   const sp = await searchParams
   const justConnected = sp.connected
-  const oauthError = sp.error
+  const oauthError = friendlyOAuthError(sp.error)
 
   return (
     <main className="min-h-screen">
@@ -39,7 +52,7 @@ export default async function IntegrationsPage({ searchParams }: SearchParams) {
           <p className="mb-6 text-sm text-emerald-300">Connected {justConnected}. First sync runs within an hour, or click Sync now.</p>
         )}
         {oauthError && (
-          <p role="alert" className="mb-6 text-sm text-red-300">Connection failed ({oauthError}). Try again or contact support.</p>
+          <p role="alert" className="mb-6 text-sm text-red-300">{oauthError}</p>
         )}
 
         <div className="space-y-4">

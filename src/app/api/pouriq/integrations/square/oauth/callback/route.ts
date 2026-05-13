@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import * as Sentry from '@sentry/nextjs'
 import { getCloudflareContext } from '@opennextjs/cloudflare'
+import { checkPourIqAccess } from '@/lib/pouriq/access'
 import { consumeOAuthState, upsertConnection } from '@/lib/pouriq/pos/connections'
 import { createSquareAdapter } from '@/lib/pouriq/pos/providers/square'
 
@@ -22,10 +23,15 @@ export async function GET(request: Request) {
     return NextResponse.redirect(settingsUrl)
   }
 
+  const access = await checkPourIqAccess()
+  if (access.kind !== 'ok') {
+    return NextResponse.redirect(new URL('/trade/login', request.url))
+  }
+
   const { env } = await getCloudflareContext()
   const db = env.DB as D1Database
   const stateRow = await consumeOAuthState(db, state)
-  if (!stateRow || stateRow.provider !== 'square') {
+  if (!stateRow || stateRow.provider !== 'square' || stateRow.trade_account_id !== access.tradeAccountId) {
     settingsUrl.searchParams.set('error', 'invalid_state')
     return NextResponse.redirect(settingsUrl)
   }
