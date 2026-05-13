@@ -8,58 +8,60 @@ interface Props {
   pricesIncludeVat: boolean
 }
 
+const segBase = 'px-3 py-1.5 text-xs font-semibold transition-colors'
+const segActive = 'bg-gold-500/30 text-gold-50'
+const segIdle = 'text-parchment-300 hover:text-parchment-100'
+
 export function VatModeToggle({ menuId, pricesIncludeVat }: Props) {
-  const [open, setOpen] = useState(false)
+  const [optimistic, setOptimistic] = useState<boolean | null>(null)
   const [pending, startTransition] = useTransition()
   const [error, setError] = useState<string | null>(null)
 
+  const value = optimistic ?? pricesIncludeVat
+
   function flip(next: boolean) {
-    if (next === pricesIncludeVat) { setOpen(false); return }
+    if (next === value || pending) return
     setError(null)
+    setOptimistic(next)
     startTransition(async () => {
       try {
         await setMenuVatModeAction(menuId, next)
-        setOpen(false)
       } catch (e) {
+        setOptimistic(null)
         setError((e as Error).message || 'Could not update VAT mode')
       }
     })
   }
 
-  const label = pricesIncludeVat ? 'Prices include VAT' : 'Prices net of VAT'
-
   return (
     <span className="inline-flex flex-col items-end gap-1">
-      <button
-        type="button"
-        onClick={() => setOpen((v) => !v)}
-        className="text-xs text-parchment-400 hover:text-parchment-200 underline underline-offset-4"
+      <span className="text-[10px] uppercase tracking-widest text-parchment-400">Prices</span>
+      <span
+        role="group"
+        aria-label="Sale prices VAT mode"
+        className="inline-flex items-stretch rounded-lg border border-gold-500/30 overflow-hidden bg-jerry-green-800/40"
       >
-        {label} (change)
-      </button>
-      {open && (
-        <span className="bg-jerry-green-800/90 border border-gold-500/20 rounded-lg p-3 text-xs space-y-2 shadow-xl">
-          <button
-            type="button"
-            disabled={pending}
-            onClick={() => flip(true)}
-            className={`block w-full text-left px-2 py-1 rounded ${pricesIncludeVat ? 'text-gold-200' : 'text-parchment-200 hover:bg-jerry-green-700/40'}`}
-          >
-            Include VAT (20%)
-            <span className="block text-[10px] text-parchment-400">Customer-facing prices.</span>
-          </button>
-          <button
-            type="button"
-            disabled={pending}
-            onClick={() => flip(false)}
-            className={`block w-full text-left px-2 py-1 rounded ${!pricesIncludeVat ? 'text-gold-200' : 'text-parchment-200 hover:bg-jerry-green-700/40'}`}
-          >
-            Net of VAT
-            <span className="block text-[10px] text-parchment-400">Internal margin tracking.</span>
-          </button>
-          {error && <span role="alert" className="block text-red-300">{error}</span>}
-        </span>
-      )}
+        <button
+          type="button"
+          onClick={() => flip(true)}
+          disabled={pending}
+          aria-pressed={value === true}
+          className={`${segBase} ${value ? segActive : segIdle}`}
+        >
+          Inc VAT
+        </button>
+        <span aria-hidden="true" className="w-px bg-gold-500/30" />
+        <button
+          type="button"
+          onClick={() => flip(false)}
+          disabled={pending}
+          aria-pressed={value === false}
+          className={`${segBase} ${!value ? segActive : segIdle}`}
+        >
+          Net VAT
+        </button>
+      </span>
+      {error && <span role="alert" className="text-xs text-red-300">{error}</span>}
     </span>
   )
 }

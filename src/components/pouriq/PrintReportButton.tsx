@@ -1,11 +1,13 @@
 'use client'
 
+import { SECONDARY_BUTTON } from '@/lib/pouriq/button-styles'
+
 export function PrintReportButton() {
   return (
     <button
       type="button"
       onClick={() => window.print()}
-      className="text-sm px-4 py-2 border border-gold-500/40 text-gold-200 hover:bg-gold-500/10 hover:border-gold-400 rounded-lg transition-colors no-print"
+      className={`${SECONDARY_BUTTON} no-print`}
     >
       Print report
     </button>
