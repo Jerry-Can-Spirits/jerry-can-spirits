@@ -12,6 +12,7 @@ import { RecommendationStream } from '@/components/pouriq/RecommendationStream'
 import { DeleteMenuButton } from '@/components/pouriq/DeleteMenuButton'
 import { VatModeToggle } from '@/components/pouriq/VatModeToggle'
 import { PrintReportButton } from '@/components/pouriq/PrintReportButton'
+import { BulkPromoActions } from '@/components/pouriq/BulkPromoActions'
 import { PRIMARY_BUTTON, SECONDARY_BUTTON_SM } from '@/lib/pouriq/button-styles'
 
 export const dynamic = 'force-dynamic'
@@ -125,7 +126,12 @@ export default async function MenuDetailPage({ params }: Props) {
           <div className="space-y-8">
             <KpiCards menu={menu} metrics={metrics} />
             <section>
-              <h2 className="text-xl font-serif font-bold text-white mb-4">Drinks</h2>
+              <div className="flex flex-wrap items-baseline justify-between gap-3 mb-4">
+                <h2 className="text-xl font-serif font-bold text-white">Drinks</h2>
+                <div className="no-print">
+                  <BulkPromoActions menuId={menuId} />
+                </div>
+              </div>
               <CocktailTable
                 menuId={menuId}
                 cocktails={cocktails}

@@ -167,12 +167,10 @@ export function CocktailForm({ menuId, cocktail, libraryEntries }: Props) {
         </div>
       </div>
 
-      <details className="border border-gold-500/20 rounded-lg p-4 bg-jerry-green-900/30">
-        <summary className="cursor-pointer text-sm font-medium text-parchment-100">
-          Promotional price (optional)
-        </summary>
-        <p className="text-xs text-parchment-400 mt-2 mb-4">
-          Set a promo price for happy hour, 2-4-1, or any period when this drink sells for less. Pour IQ shows the alternative GP% alongside the standard one so you can see the trade-off.
+      <div className="border border-gold-500/20 rounded-lg p-4 bg-jerry-green-900/30">
+        <h3 className="text-sm font-medium text-parchment-100">Promotional price (optional)</h3>
+        <p className="text-xs text-parchment-400 mt-1 mb-3">
+          Set a promo price for happy hour, 2-4-1, or any period when this drink sells for less. Leave blank if there&rsquo;s no promo.
         </p>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
@@ -184,7 +182,7 @@ export function CocktailForm({ menuId, cocktail, libraryEntries }: Props) {
             <input id="promo_label" value={promoLabel} onChange={(e) => setPromoLabel(e.target.value)} className={inputClass} placeholder="e.g. Happy hour, 2-4-1" />
           </div>
         </div>
-      </details>
+      </div>
 
       <div className="border border-gold-500/20 rounded-lg p-4 bg-jerry-green-900/30">
         <h3 className="text-sm font-medium text-parchment-100 mb-4">Ingredients</h3>

@@ -121,6 +121,71 @@ export async function saveCocktailAction(
   return { cocktailId: id }
 }
 
+export type BulkPromoMode = 'percent' | 'flat' | 'clear'
+
+interface BulkPromoInput {
+  mode: BulkPromoMode
+  amount?: number  // percent (1-99) or pence (positive integer) depending on mode
+  label?: string | null
+}
+
+export async function bulkApplyPromoAction(menuId: string, input: BulkPromoInput): Promise<{ updated: number }> {
+  const { db, tradeAccountId } = await requireDb()
+  const menu = await getMenu(db, menuId, tradeAccountId)
+  if (!menu) throw new Error('Menu not found')
+
+  if (input.mode === 'clear') {
+    const result = await db
+      .prepare(`UPDATE pouriq_cocktails SET promotional_price_p = NULL, promotional_label = NULL WHERE menu_id = ?1`)
+      .bind(menuId)
+      .run()
+    revalidatePath(`/trade/pouriq/${menuId}`)
+    return { updated: result.meta?.changes ?? 0 }
+  }
+
+  const amount = input.amount ?? 0
+  if (input.mode === 'percent') {
+    if (!Number.isFinite(amount) || amount < 1 || amount > 99) {
+      throw new Error('Percentage off must be between 1 and 99')
+    }
+  } else {
+    if (!Number.isInteger(amount) || amount <= 0) {
+      throw new Error('Flat amount off must be a positive integer (pence)')
+    }
+  }
+  const label = input.label?.trim() || null
+
+  // Apply per-drink so we can compute promo price from each drink's own sale price.
+  const drinks = await db
+    .prepare(`SELECT id, sale_price_p FROM pouriq_cocktails WHERE menu_id = ?1`)
+    .bind(menuId)
+    .all<{ id: string; sale_price_p: number }>()
+  const rows = drinks.results ?? []
+
+  const statements: D1PreparedStatement[] = []
+  let updated = 0
+  for (const r of rows) {
+    let promo_p: number
+    if (input.mode === 'percent') {
+      promo_p = Math.round(r.sale_price_p * (1 - amount / 100))
+    } else {
+      promo_p = r.sale_price_p - amount
+    }
+    // Skip if the computed promo is non-positive or would equal/exceed the
+    // normal price (no-op or invalid).
+    if (promo_p <= 0 || promo_p >= r.sale_price_p) continue
+    statements.push(
+      db
+        .prepare(`UPDATE pouriq_cocktails SET promotional_price_p = ?1, promotional_label = ?2 WHERE id = ?3 AND menu_id = ?4`)
+        .bind(promo_p, label, r.id, menuId),
+    )
+    updated++
+  }
+  if (statements.length > 0) await db.batch(statements)
+  revalidatePath(`/trade/pouriq/${menuId}`)
+  return { updated }
+}
+
 export async function deleteCocktailAction(menuId: string, cocktailId: string): Promise<void> {
   const { db, tradeAccountId } = await requireDb()
   // Verify the menu belongs to this tenant before deleting any cocktails from it.

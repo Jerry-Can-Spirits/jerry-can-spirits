@@ -1,0 +1,148 @@
+'use client'
+
+import { useState, useTransition } from 'react'
+import { useRouter } from 'next/navigation'
+import { bulkApplyPromoAction, type BulkPromoMode } from '@/lib/pouriq/server-actions'
+import { SECONDARY_BUTTON_SM, PRIMARY_BUTTON } from '@/lib/pouriq/button-styles'
+
+const inputClass = 'w-full px-3 py-2 bg-jerry-green-700/50 border border-gold-500/30 rounded-lg text-parchment-50 text-sm focus:border-gold-400 focus:outline-none'
+const labelClass = 'block text-xs font-medium text-parchment-300 mb-1'
+
+interface Props {
+  menuId: string
+}
+
+export function BulkPromoActions({ menuId }: Props) {
+  const router = useRouter()
+  const [open, setOpen] = useState(false)
+  const [mode, setMode] = useState<BulkPromoMode>('percent')
+  const [amountStr, setAmountStr] = useState('')
+  const [label, setLabel] = useState('')
+  const [error, setError] = useState<string | null>(null)
+  const [info, setInfo] = useState<string | null>(null)
+  const [pending, startTransition] = useTransition()
+
+  function reset() {
+    setMode('percent')
+    setAmountStr('')
+    setLabel('')
+    setError(null)
+    setInfo(null)
+  }
+
+  function close() {
+    setOpen(false)
+    reset()
+  }
+
+  function apply() {
+    setError(null)
+    setInfo(null)
+    let amount: number | undefined
+    if (mode === 'percent') {
+      amount = parseFloat(amountStr)
+      if (!Number.isFinite(amount) || amount < 1 || amount > 99) {
+        setError('Enter a percentage between 1 and 99')
+        return
+      }
+    } else if (mode === 'flat') {
+      const pounds = parseFloat(amountStr)
+      if (!Number.isFinite(pounds) || pounds <= 0) {
+        setError('Enter an amount greater than 0')
+        return
+      }
+      amount = Math.round(pounds * 100)
+    }
+    startTransition(async () => {
+      try {
+        const result = await bulkApplyPromoAction(menuId, {
+          mode,
+          amount,
+          label: mode === 'clear' ? null : (label.trim() || null),
+        })
+        setInfo(
+          mode === 'clear'
+            ? `Cleared promos from ${result.updated} drink${result.updated === 1 ? '' : 's'}.`
+            : `Applied to ${result.updated} drink${result.updated === 1 ? '' : 's'}.`,
+        )
+        router.refresh()
+      } catch (e) {
+        setError((e as Error).message || 'Could not apply promo')
+      }
+    })
+  }
+
+  if (!open) {
+    return (
+      <button type="button" onClick={() => setOpen(true)} className={SECONDARY_BUTTON_SM}>
+        Bulk promo
+      </button>
+    )
+  }
+
+  return (
+    <div className="bg-jerry-green-800/60 border border-gold-500/30 rounded-xl p-4 space-y-3">
+      <div className="flex items-baseline justify-between">
+        <h3 className="text-sm font-medium text-parchment-100">Apply a promo to every drink</h3>
+        <button type="button" onClick={close} className="text-xs text-parchment-400 hover:text-parchment-200">Close</button>
+      </div>
+
+      <div role="group" aria-label="Promo mode" className="inline-flex rounded-lg border border-gold-500/30 overflow-hidden bg-jerry-green-700/40 text-xs">
+        {(['percent', 'flat', 'clear'] as BulkPromoMode[]).map((m) => (
+          <button
+            key={m}
+            type="button"
+            onClick={() => { setMode(m); setError(null); setInfo(null) }}
+            aria-pressed={mode === m}
+            className={`px-3 py-1.5 font-semibold transition-colors ${mode === m ? 'bg-gold-500/30 text-gold-50' : 'text-parchment-300 hover:text-parchment-100'}`}
+          >
+            {m === 'percent' ? '% off' : m === 'flat' ? '£ off' : 'Clear all'}
+          </button>
+        ))}
+      </div>
+
+      {mode !== 'clear' && (
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label htmlFor="bulk_amount" className={labelClass}>
+              {mode === 'percent' ? 'Percent off' : 'Amount off (£)'}
+            </label>
+            <input
+              id="bulk_amount"
+              type="number"
+              step={mode === 'percent' ? '1' : '0.01'}
+              min={0}
+              value={amountStr}
+              onChange={(e) => setAmountStr(e.target.value)}
+              className={inputClass}
+              placeholder={mode === 'percent' ? '20' : '2.00'}
+            />
+          </div>
+          <div>
+            <label htmlFor="bulk_label" className={labelClass}>Label (optional)</label>
+            <input
+              id="bulk_label"
+              value={label}
+              onChange={(e) => setLabel(e.target.value)}
+              className={inputClass}
+              placeholder="e.g. Happy hour"
+            />
+          </div>
+        </div>
+      )}
+
+      {mode === 'clear' && (
+        <p className="text-xs text-parchment-300">Removes the promo price and label from every drink on this menu. Can&rsquo;t be undone in bulk — drinks would need to be re-edited individually.</p>
+      )}
+
+      {error && <p role="alert" className="text-sm text-red-300">{error}</p>}
+      {info && <p className="text-sm text-emerald-300">{info}</p>}
+
+      <div className="flex justify-end">
+        <button type="button" onClick={apply} disabled={pending} className={PRIMARY_BUTTON}>
+          {pending ? 'Applying…' : mode === 'clear' ? 'Clear all promos' : 'Apply'}
+        </button>
+      </div>
+    </div>
+  )
+}
