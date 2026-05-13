@@ -69,7 +69,7 @@ export function RecommendationStream({ menuId }: { menuId: string }) {
   return (
     <div>
       {recs.length === 0 && !streaming && !error && (
-        <div className="bg-jerry-green-800/40 border border-gold-500/20 rounded-xl p-8 text-center">
+        <div className="bg-jerry-green-800/40 border border-gold-500/20 rounded-xl p-8 text-center no-print">
           <p className="text-parchment-300 mb-4">Generate AI recommendations for this menu.</p>
           <button onClick={start} className="px-6 py-3 bg-gold-500 text-jerry-green-900 font-bold rounded-lg hover:bg-gold-400 transition-colors text-sm">
             Analyse menu
@@ -107,9 +107,9 @@ export function RecommendationStream({ menuId }: { menuId: string }) {
               )}
             </article>
           ))}
-          {streaming && <p className="text-parchment-400 text-sm">Generating more…</p>}
+          {streaming && <p className="text-parchment-400 text-sm no-print">Generating more…</p>}
           {!streaming && (
-            <button onClick={() => { startedRef.current = false; start() }} className="text-sm text-gold-300 hover:text-gold-200 underline">
+            <button onClick={() => { startedRef.current = false; start() }} className="text-sm text-gold-300 hover:text-gold-200 underline no-print">
               Re-run analysis
             </button>
           )}
