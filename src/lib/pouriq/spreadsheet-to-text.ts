@@ -1,6 +1,6 @@
 // Convert a CSV or XLSX File to plain text we can send to Claude via the
-// existing /api/pouriq/import/extract text path. ExcelJS is dynamically
-// imported so the bundle only loads on the import page.
+// existing /api/pouriq/import/extract text path. read-excel-file is
+// dynamically imported so the bundle only loads on the import page.
 
 const MAX_BYTES = 5 * 1024 * 1024
 
@@ -11,14 +11,6 @@ function csvEscape(value: string): string {
 function cellToString(value: unknown): string {
   if (value === null || value === undefined) return ''
   if (value instanceof Date) return value.toISOString().slice(0, 10)
-  if (typeof value === 'object') {
-    const obj = value as { text?: unknown; result?: unknown; richText?: Array<{ text?: string }>; hyperlink?: string }
-    if (typeof obj.result !== 'undefined') return cellToString(obj.result)
-    if (typeof obj.text === 'string') return obj.text
-    if (Array.isArray(obj.richText)) return obj.richText.map((r) => r.text ?? '').join('')
-    if (typeof obj.hyperlink === 'string') return obj.hyperlink
-    return ''
-  }
   return String(value)
 }
 
@@ -33,26 +25,20 @@ export async function spreadsheetToText(file: File): Promise<string> {
   }
 
   if (lower.endsWith('.xlsx')) {
-    const ExcelJS = (await import('exceljs')).default
-    const workbook = new ExcelJS.Workbook()
-    await workbook.xlsx.load(await file.arrayBuffer())
-    const sheets: string[] = []
-    workbook.eachSheet((sheet) => {
-      const rows: string[] = []
-      sheet.eachRow({ includeEmpty: false }, (row) => {
-        const values: string[] = []
-        const cellCount = sheet.columnCount || row.cellCount
-        for (let i = 1; i <= cellCount; i++) {
-          values.push(csvEscape(cellToString(row.getCell(i).value)))
-        }
-        // Trim trailing empty cells to keep the CSV tidy.
-        while (values.length > 0 && values[values.length - 1] === '') values.pop()
-        if (values.length > 0) rows.push(values.join(','))
-      })
-      if (rows.length > 0) sheets.push(`--- Sheet: ${sheet.name} ---\n${rows.join('\n')}`)
-    })
-    if (sheets.length === 0) throw new Error('Spreadsheet has no readable rows')
-    return sheets.join('\n\n')
+    const readXlsxFile = (await import('read-excel-file/browser')).default
+    const sheets = await readXlsxFile(file)
+    const blocks: string[] = []
+    for (const sheet of sheets) {
+      const lines: string[] = []
+      for (const row of sheet.data) {
+        const cells = row.map((c) => csvEscape(cellToString(c)))
+        while (cells.length > 0 && cells[cells.length - 1] === '') cells.pop()
+        if (cells.length > 0) lines.push(cells.join(','))
+      }
+      if (lines.length > 0) blocks.push(`--- Sheet: ${sheet.sheet} ---\n${lines.join('\n')}`)
+    }
+    if (blocks.length === 0) throw new Error('Spreadsheet has no readable rows')
+    return blocks.join('\n\n')
   }
 
   throw new Error('Only .csv and .xlsx files are accepted')
