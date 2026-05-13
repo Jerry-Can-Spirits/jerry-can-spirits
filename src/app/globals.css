@@ -357,6 +357,17 @@
   .print-region [class*='border-'] {
     border-color: #d4d4d4 !important;
   }
+  /* Tables use overflow-x-auto + min-width on screen so they scroll on
+     mobile. On paper there's no scroll, so the overflowing content just
+     gets clipped — show it all by removing the overflow and width
+     constraints. */
+  .print-region [class*='overflow-x'] {
+    overflow: visible !important;
+  }
+  .print-region table {
+    min-width: 0 !important;
+    width: 100% !important;
+  }
   /* Cards and sections should not split across pages mid-content. */
   .print-region section,
   .print-region article,

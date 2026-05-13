@@ -255,6 +255,8 @@ export async function insertCocktail(
     menu_id: string
     name: string
     sale_price_p: number
+    promotional_price_p: number | null
+    promotional_label: string | null
     position: number
     field_manual_slug: string | null
     notes: string | null
@@ -263,13 +265,14 @@ export async function insertCocktail(
   const result = await db
     .prepare(`
       INSERT INTO pouriq_cocktails
-        (menu_id, name, sale_price_p, position, field_manual_slug, notes)
-      VALUES (?1, ?2, ?3, ?4, ?5, ?6)
+        (menu_id, name, sale_price_p, promotional_price_p, promotional_label, position, field_manual_slug, notes)
+      VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8)
       RETURNING id
     `)
     .bind(
-      data.menu_id, data.name, data.sale_price_p, data.position,
-      data.field_manual_slug, data.notes,
+      data.menu_id, data.name, data.sale_price_p,
+      data.promotional_price_p, data.promotional_label,
+      data.position, data.field_manual_slug, data.notes,
     )
     .first<{ id: string }>()
   if (!result) throw new Error('Cocktail insert returned no id')
