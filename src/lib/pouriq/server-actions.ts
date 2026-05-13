@@ -34,13 +34,23 @@ export async function createMenuAction(formData: FormData): Promise<void> {
   const city = String(formData.get('city') ?? '').trim() || null
   const positioning = String(formData.get('positioning') ?? '').trim() || null
   const notes = String(formData.get('notes') ?? '').trim() || null
+  const prices_include_vat = String(formData.get('prices_include_vat') ?? '1') !== '0'
 
   const id = await insertMenu(db, {
     trade_account_id: tradeAccountId,
     name, venue_type, city, target_gp_pct, positioning, notes,
+    prices_include_vat,
   })
   revalidatePath('/trade/pouriq')
   redirect(`/trade/pouriq/${id}`)
+}
+
+export async function setMenuVatModeAction(menuId: string, includesVat: boolean): Promise<void> {
+  const { db, tradeAccountId } = await requireDb()
+  await updateMenu(db, menuId, tradeAccountId, {
+    prices_include_vat: includesVat ? 1 : 0,
+  })
+  revalidatePath(`/trade/pouriq/${menuId}`)
 }
 
 export async function updateMenuAction(menuId: string, formData: FormData): Promise<void> {

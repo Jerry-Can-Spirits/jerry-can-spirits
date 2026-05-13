@@ -9,6 +9,16 @@ import type {
   MenuMetrics,
 } from './types'
 
+// UK VAT rate (20%). Sale prices entered inc-VAT must be divided by
+// 1.20 before computing margin so GP% matches what an accountant
+// would see on the P&L.
+const VAT_DIVISOR = 1.20
+
+export function netSalePrice(sale_price_p: number, priceIncludesVat: boolean): number {
+  if (!priceIncludesVat) return sale_price_p
+  return Math.round(sale_price_p / VAT_DIVISOR)
+}
+
 function ingredientCostPence(i: import('./types').IngredientWithLibrary): number {
   // Unit-priced: library has unit_cost_p; cocktail row has unit_count
   if (i.library.unit_cost_p !== null) {
@@ -26,10 +36,14 @@ function ingredientCostPence(i: import('./types').IngredientWithLibrary): number
   return 0
 }
 
-export function calculateCocktailMetrics(cocktail: CocktailWithIngredients): CocktailMetrics {
+export function calculateCocktailMetrics(
+  cocktail: CocktailWithIngredients,
+  priceIncludesVat: boolean,
+): CocktailMetrics {
   const pour_cost_p = cocktail.ingredients.reduce((sum, ing) => sum + ingredientCostPence(ing), 0)
-  const margin_p = cocktail.sale_price_p - pour_cost_p
-  const gp_pct = cocktail.sale_price_p === 0 ? 0 : (margin_p / cocktail.sale_price_p) * 100
+  const net_sale_p = netSalePrice(cocktail.sale_price_p, priceIncludesVat)
+  const margin_p = net_sale_p - pour_cost_p
+  const gp_pct = net_sale_p === 0 ? 0 : (margin_p / net_sale_p) * 100
   return {
     cocktail_id: cocktail.id,
     name: cocktail.name,
@@ -82,8 +96,11 @@ export function calculateWasteRisks(
   })
 }
 
-export function calculateMenuMetrics(cocktails: CocktailWithIngredients[]): MenuMetrics {
-  const cocktail_metrics = cocktails.map(calculateCocktailMetrics)
+export function calculateMenuMetrics(
+  cocktails: CocktailWithIngredients[],
+  priceIncludesVat: boolean,
+): MenuMetrics {
+  const cocktail_metrics = cocktails.map((c) => calculateCocktailMetrics(c, priceIncludesVat))
   const ingredient_overlap = calculateIngredientOverlap(cocktails)
   const waste_risks = calculateWasteRisks(cocktails, ingredient_overlap)
 

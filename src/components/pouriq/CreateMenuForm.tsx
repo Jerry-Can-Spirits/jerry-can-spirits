@@ -60,6 +60,25 @@ export function CreateMenuForm() {
         </div>
       </div>
       <div>
+        <label className={labelClass}>Sale prices</label>
+        <div className="space-y-2">
+          <label className="flex items-start gap-3 cursor-pointer">
+            <input type="radio" name="prices_include_vat" value="1" defaultChecked className="mt-1 accent-gold-500" />
+            <span className="text-sm text-parchment-200">
+              Include VAT (20%)
+              <span className="block text-xs text-parchment-400 mt-0.5">Prices match what you show customers on the menu.</span>
+            </span>
+          </label>
+          <label className="flex items-start gap-3 cursor-pointer">
+            <input type="radio" name="prices_include_vat" value="0" className="mt-1 accent-gold-500" />
+            <span className="text-sm text-parchment-200">
+              Net of VAT
+              <span className="block text-xs text-parchment-400 mt-0.5">Prices match what hits your P&amp;L (post-VAT).</span>
+            </span>
+          </label>
+        </div>
+      </div>
+      <div>
         <label htmlFor="notes" className={labelClass}>Notes</label>
         <textarea id="notes" name="notes" rows={3} className={`${inputClass} resize-vertical`} />
       </div>
