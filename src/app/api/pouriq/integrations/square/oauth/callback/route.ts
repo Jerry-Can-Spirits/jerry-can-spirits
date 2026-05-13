@@ -58,8 +58,11 @@ export async function GET(request: Request) {
     settingsUrl.searchParams.set('connected', 'square')
     return NextResponse.redirect(settingsUrl)
   } catch (e) {
-    Sentry.captureException(e, { tags: { route: 'square-oauth-callback' } })
+    const detail = (e as Error)?.message ?? 'unknown'
+    console.error('square-oauth-callback failed:', detail)
+    Sentry.captureException(e, { tags: { route: 'square-oauth-callback' }, extra: { detail } })
     settingsUrl.searchParams.set('error', 'token_exchange_failed')
+    settingsUrl.searchParams.set('detail', detail.slice(0, 300))
     return NextResponse.redirect(settingsUrl)
   }
 }
