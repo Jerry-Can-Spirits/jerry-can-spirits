@@ -10,6 +10,7 @@ import { CocktailTable } from '@/components/pouriq/CocktailTable'
 import { IngredientOverlapTable } from '@/components/pouriq/IngredientOverlapTable'
 import { RecommendationStream } from '@/components/pouriq/RecommendationStream'
 import { DeleteMenuButton } from '@/components/pouriq/DeleteMenuButton'
+import { VatModeToggle } from '@/components/pouriq/VatModeToggle'
 
 export const dynamic = 'force-dynamic'
 
@@ -52,7 +53,7 @@ export default async function MenuDetailPage({ params }: Props) {
   if (!menu) notFound()
 
   const cocktails = await listCocktailsForMenu(db, menuId)
-  const metrics = calculateMenuMetrics(cocktails)
+  const metrics = calculateMenuMetrics(cocktails, menu.prices_include_vat === 1)
 
   return (
     <main className="min-h-screen">
@@ -74,9 +75,12 @@ export default async function MenuDetailPage({ params }: Props) {
             </div>
           )}
         </div>
-        <p className="text-parchment-400 text-sm mb-10">
-          {menu.venue_type ?? 'Menu'}{menu.city && ` · ${menu.city}`} · Target GP {menu.target_gp_pct}%
-        </p>
+        <div className="flex flex-wrap items-start justify-between gap-3 mb-10">
+          <p className="text-parchment-400 text-sm">
+            {menu.venue_type ?? 'Menu'}{menu.city && ` · ${menu.city}`} · Target GP {menu.target_gp_pct}%
+          </p>
+          <VatModeToggle menuId={menuId} pricesIncludeVat={menu.prices_include_vat === 1} />
+        </div>
 
         {cocktails.length === 0 ? (
           <div className="space-y-4">

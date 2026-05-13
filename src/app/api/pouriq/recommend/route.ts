@@ -29,7 +29,7 @@ export async function POST(request: Request) {
   if (!menu) return new Response('Not found', { status: 404 })
 
   const cocktails = await listCocktailsForMenu(db, menuId)
-  const metrics = calculateMenuMetrics(cocktails)
+  const metrics = calculateMenuMetrics(cocktails, menu.prices_include_vat === 1)
   const fieldManualMatches: FieldManualMatch[] = cocktails
     .filter((c) => c.field_manual_slug)
     .map((c) => ({

@@ -22,6 +22,7 @@ interface RawRow {
   menu_id: string
   menu_name: string
   menu_target_gp_pct: number
+  menu_prices_include_vat: number
   ingredient_library_id: string
   ingredient_pour_ml: number | null
   ingredient_unit_count: number | null
@@ -84,6 +85,7 @@ export async function GET(_request: Request, { params }: Params) {
         m.id AS menu_id,
         m.name AS menu_name,
         m.target_gp_pct AS menu_target_gp_pct,
+        m.prices_include_vat AS menu_prices_include_vat,
         i.library_ingredient_id AS ingredient_library_id,
         i.pour_ml AS ingredient_pour_ml,
         i.unit_count AS ingredient_unit_count,
@@ -130,6 +132,7 @@ export async function GET(_request: Request, { params }: Params) {
       menu_id: first.menu_id,
       menu_name: first.menu_name,
       menu_target_gp_pct: first.menu_target_gp_pct,
+      menu_prices_include_vat: first.menu_prices_include_vat === 1,
       sale_price_p: first.cocktail_sale_price_p,
       current_pour_cost_p: totalPourCost,
       current_ingredient_contribution_p: thisContribution,

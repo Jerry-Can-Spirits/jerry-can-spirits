@@ -29,6 +29,9 @@ export interface MenuRow {
   target_gp_pct: number
   positioning: string | null
   notes: string | null
+  // 1 (default): sale prices include 20% UK VAT (customer-facing).
+  // 0: sale prices are net of VAT (internal margin tracking).
+  prices_include_vat: number
   created_at: string
   updated_at: string
 }

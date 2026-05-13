@@ -23,6 +23,7 @@ export interface ImpactCocktail {
   menu_id: string
   menu_name: string
   menu_target_gp_pct: number
+  menu_prices_include_vat: boolean
   sale_price_p: number
   current_pour_cost_p: number
   current_ingredient_contribution_p: number
@@ -76,6 +77,12 @@ export interface ProjectedCocktail extends ImpactCocktail {
   below_target_after: boolean
 }
 
+const VAT_DIVISOR = 1.20
+function netSalePrice(sale_price_p: number, includeVat: boolean): number {
+  if (!includeVat) return sale_price_p
+  return Math.round(sale_price_p / VAT_DIVISOR)
+}
+
 export function projectCocktail(
   ingredient: ImpactIngredient,
   cocktail: ImpactCocktail,
@@ -84,12 +91,13 @@ export function projectCocktail(
   const newContribution = newIngredientContributionP(ingredient, cocktail, newCostP)
   const projected_pour_cost_p =
     cocktail.current_pour_cost_p - cocktail.current_ingredient_contribution_p + newContribution
-  const current_margin_p = cocktail.sale_price_p - cocktail.current_pour_cost_p
-  const projected_margin_p = cocktail.sale_price_p - projected_pour_cost_p
+  const net_sale_p = netSalePrice(cocktail.sale_price_p, cocktail.menu_prices_include_vat)
+  const current_margin_p = net_sale_p - cocktail.current_pour_cost_p
+  const projected_margin_p = net_sale_p - projected_pour_cost_p
   const current_gp_pct =
-    cocktail.sale_price_p === 0 ? 0 : (current_margin_p / cocktail.sale_price_p) * 100
+    net_sale_p === 0 ? 0 : (current_margin_p / net_sale_p) * 100
   const projected_gp_pct =
-    cocktail.sale_price_p === 0 ? 0 : (projected_margin_p / cocktail.sale_price_p) * 100
+    net_sale_p === 0 ? 0 : (projected_margin_p / net_sale_p) * 100
   return {
     ...cocktail,
     projected_pour_cost_p,

@@ -38,18 +38,20 @@ export async function insertMenu(
     target_gp_pct: number
     positioning: string | null
     notes: string | null
+    prices_include_vat: boolean
   },
 ): Promise<string> {
   const result = await db
     .prepare(`
       INSERT INTO pouriq_menus
-        (trade_account_id, name, venue_type, city, target_gp_pct, positioning, notes)
-      VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7)
+        (trade_account_id, name, venue_type, city, target_gp_pct, positioning, notes, prices_include_vat)
+      VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8)
       RETURNING id
     `)
     .bind(
       data.trade_account_id, data.name, data.venue_type, data.city,
       data.target_gp_pct, data.positioning, data.notes,
+      data.prices_include_vat ? 1 : 0,
     )
     .first<{ id: string }>()
   if (!result) throw new Error('Menu insert returned no id')
@@ -67,10 +69,11 @@ export async function updateMenu(
     target_gp_pct: number
     positioning: string | null
     notes: string | null
+    prices_include_vat: number
   }>,
 ): Promise<void> {
   const allowedFields = [
-    'name','venue_type','city','target_gp_pct','positioning','notes',
+    'name','venue_type','city','target_gp_pct','positioning','notes','prices_include_vat',
   ] as const
   const sets: string[] = []
   const binds: unknown[] = []
