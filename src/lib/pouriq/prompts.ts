@@ -17,6 +17,9 @@ Output rules:
 - Aim for 5-10 recommendations. Quality over quantity.
 - Focus areas: pricing gaps vs target GP, ingredient overlap and waste risks, menu balance (over-indexing on one base spirit), complexity (ingredients used once that bloat inventory), high-effort/low-margin cocktails.
 - When ingredients use generic names (e.g. "white rum", "house gin"), do not assume the venue has only one product per category. Real venues often run multiple house spirits (e.g. a house white rum AND a house spiced rum AND a house dark rum). Frame suggestions as questions ("if this is your house spiced rum…") rather than assertions.
+- When a drink includes "units_sold" and "contribution_p" (volume data), treat contribution as the headline number — it is the actual cash the drink puts on the bar. A high-volume drink with mid-range GP can outperform a low-volume drink with great GP. Do NOT recommend removing or repricing a low-GP drink without weighing its contribution. Acknowledge volume explicitly in your reasoning when it is available.
+- When a drink includes a "promo" block (promotional pricing), treat the promo GP as intentional (the bar is trading margin for volume during specific periods). Do not flag promo GP as a pricing failure. You may comment on whether the trade-off looks sensible if volume data is present.
+- If volumes are absent, you cannot speak to revenue or contribution. Reason from margin and GP alone and avoid making confident claims about which drinks earn the most cash.
 - Never invent ingredient costs or sale prices not provided. Reason only from the menu data provided.`
 
 export const RECOMMEND_TOOL = {
@@ -60,6 +63,25 @@ export const RECOMMEND_TOOL = {
   },
 } as const
 
+interface DrinkPayload {
+  drink_id: string
+  name: string
+  sale_price_p: number
+  pour_cost_p: number
+  margin_p: number
+  gp_pct: number
+  field_manual_url?: string
+  promo?: {
+    sale_price_p: number
+    margin_p: number
+    gp_pct: number
+    label: string | null
+  }
+  units_sold?: number
+  contribution_p?: number
+  volume_period?: { start: string; end: string }
+}
+
 export function buildUserMessage(
   menu: MenuRow,
   metrics: MenuMetrics,
@@ -72,10 +94,12 @@ export function buildUserMessage(
       city: menu.city,
       target_gp_pct: menu.target_gp_pct,
       positioning: menu.positioning,
+      prices_include_vat: menu.prices_include_vat === 1,
+      volume_cadence: menu.volume_cadence,
     },
-    drinks: metrics.cocktail_metrics.map((m) => {
+    drinks: metrics.cocktail_metrics.map((m): DrinkPayload => {
       const fm = fieldManualMatches.find((f) => f.cocktail_id === m.cocktail_id)
-      return {
+      const out: DrinkPayload = {
         drink_id: m.cocktail_id,
         name: m.name,
         sale_price_p: m.sale_price_p,
@@ -84,6 +108,20 @@ export function buildUserMessage(
         gp_pct: m.gp_pct,
         field_manual_url: fm?.field_manual_url,
       }
+      if (m.promo) {
+        out.promo = {
+          sale_price_p: m.promo.sale_price_p,
+          margin_p: m.promo.margin_p,
+          gp_pct: m.promo.gp_pct,
+          label: m.promo.label,
+        }
+      }
+      if (m.volume) {
+        out.units_sold = m.volume.units_sold
+        out.contribution_p = m.volume.contribution_p
+        out.volume_period = { start: m.volume.period_start, end: m.volume.period_end }
+      }
+      return out
     }),
     ingredient_overlap: metrics.ingredient_overlap,
     waste_risks: metrics.waste_risks,
