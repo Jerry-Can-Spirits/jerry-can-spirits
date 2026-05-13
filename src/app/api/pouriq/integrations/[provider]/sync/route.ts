@@ -40,8 +40,16 @@ export async function POST(_request: Request, { params }: Params) {
   try {
     const lines = await adapter.fetchOrdersSince(connection, since)
     const result = await ingestOrderLines(db, connection, lines)
-    await markSyncSuccess(db, connection.id)
-    return NextResponse.json({ ok: true, matched: result.matched, unmatched: result.unmatched, since: since.toISOString() })
+    if (!result.paused) {
+      await markSyncSuccess(db, connection.id)
+    }
+    return NextResponse.json({
+      ok: true,
+      paused: result.paused === true,
+      matched: result.matched,
+      unmatched: result.unmatched,
+      since: since.toISOString(),
+    })
   } catch (e) {
     Sentry.captureException(e, { tags: { route: 'pos-sync', provider } })
     await markSyncError(db, connection.id, (e as Error).message ?? 'unknown').catch(() => {})

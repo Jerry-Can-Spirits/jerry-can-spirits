@@ -4,6 +4,7 @@ import { getCloudflareContext } from '@opennextjs/cloudflare'
 import { checkPourIqAccess } from '@/lib/pouriq/access'
 import { LicenceGate } from '@/components/pouriq/LicenceGate'
 import { listConnections } from '@/lib/pouriq/pos/connections'
+import { listMenusForTradeAccount } from '@/lib/pouriq/menus'
 import { IntegrationCard } from '@/components/pouriq/IntegrationCard'
 
 export const dynamic = 'force-dynamic'
@@ -32,8 +33,12 @@ export default async function IntegrationsPage({ searchParams }: SearchParams) {
 
   const { env } = await getCloudflareContext()
   const db = env.DB as D1Database
-  const connections = await listConnections(db, access.tradeAccountId)
+  const [connections, allMenus] = await Promise.all([
+    listConnections(db, access.tradeAccountId),
+    listMenusForTradeAccount(db, access.tradeAccountId),
+  ])
   const byProvider = new Map(connections.map((c) => [c.provider, c]))
+  const menuOptions = allMenus.map((m) => ({ id: m.id, name: m.name }))
 
   const sp = await searchParams
   const justConnected = sp.connected
@@ -61,6 +66,7 @@ export default async function IntegrationsPage({ searchParams }: SearchParams) {
             title="Square"
             description="Most common UK POS for independent bars and small chains. Sales flow in via webhooks plus hourly backfill."
             connection={byProvider.get('square') ?? null}
+            menus={menuOptions}
           />
           {/* Placeholder cards — disabled until adapters ship */}
           <IntegrationCard
@@ -68,6 +74,7 @@ export default async function IntegrationsPage({ searchParams }: SearchParams) {
             title="Lightspeed Restaurant"
             description="Coming soon. The architecture is in place — adapter ships in a follow-up sprint."
             connection={byProvider.get('lightspeed') ?? null}
+            menus={menuOptions}
             disabled
           />
           <IntegrationCard
@@ -75,6 +82,7 @@ export default async function IntegrationsPage({ searchParams }: SearchParams) {
             title="ePOSnow"
             description="Coming soon. UK pub focus. Adapter follows Lightspeed."
             connection={byProvider.get('eposnow') ?? null}
+            menus={menuOptions}
             disabled
           />
         </div>
