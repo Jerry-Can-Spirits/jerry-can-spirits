@@ -13,6 +13,8 @@ import { DeleteMenuButton } from '@/components/pouriq/DeleteMenuButton'
 import { VatModeToggle } from '@/components/pouriq/VatModeToggle'
 import { PrintReportButton } from '@/components/pouriq/PrintReportButton'
 import { BulkPromoActions } from '@/components/pouriq/BulkPromoActions'
+import { VolumeEditor } from '@/components/pouriq/VolumeEditor'
+import { listVolumesForPeriod, currentPeriod } from '@/lib/pouriq/volumes'
 import { PRIMARY_BUTTON, SECONDARY_BUTTON_SM } from '@/lib/pouriq/button-styles'
 
 export const dynamic = 'force-dynamic'
@@ -56,7 +58,9 @@ export default async function MenuDetailPage({ params }: Props) {
   if (!menu) notFound()
 
   const cocktails = await listCocktailsForMenu(db, menuId)
-  const metrics = calculateMenuMetrics(cocktails, menu.prices_include_vat === 1)
+  const period = currentPeriod(menu.volume_cadence)
+  const volumes = await listVolumesForPeriod(db, menuId, period.start, period.end)
+  const metrics = calculateMenuMetrics(cocktails, menu.prices_include_vat === 1, volumes)
 
   const reportDate = new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })
 
@@ -137,6 +141,14 @@ export default async function MenuDetailPage({ params }: Props) {
                 cocktails={cocktails}
                 metrics={metrics.cocktail_metrics}
                 targetGpPct={menu.target_gp_pct}
+              />
+            </section>
+            <section className="no-print">
+              <VolumeEditor
+                menuId={menuId}
+                cocktails={cocktails}
+                metrics={metrics.cocktail_metrics}
+                initialCadence={menu.volume_cadence}
               />
             </section>
             <section>

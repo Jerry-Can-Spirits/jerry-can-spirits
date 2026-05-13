@@ -20,6 +20,9 @@ export interface PourIqLicence {
   price_paid_p: number
 }
 
+export type VolumeCadence = 'weekly' | 'monthly'
+export type VolumeSource = 'manual' | 'pos'
+
 export interface MenuRow {
   id: string
   trade_account_id: string
@@ -32,6 +35,18 @@ export interface MenuRow {
   // 1 (default): sale prices include 20% UK VAT (customer-facing).
   // 0: sale prices are net of VAT (internal margin tracking).
   prices_include_vat: number
+  volume_cadence: VolumeCadence
+  created_at: string
+  updated_at: string
+}
+
+export interface DrinkVolumeRow {
+  id: string
+  cocktail_id: string
+  period_start: string  // ISO date YYYY-MM-DD
+  period_end: string    // ISO date YYYY-MM-DD, inclusive
+  units_sold: number
+  source: VolumeSource
   created_at: string
   updated_at: string
 }
@@ -93,6 +108,15 @@ export interface CocktailMetrics {
     margin_p: number
     gp_pct: number
     label: string | null
+  }
+  // Populated when a volume entry exists for the current period. The
+  // contribution is margin_p × units_sold and is the real "drink
+  // pulling its weight" number once volumes are tracked.
+  volume?: {
+    units_sold: number
+    period_start: string
+    period_end: string
+    contribution_p: number
   }
 }
 

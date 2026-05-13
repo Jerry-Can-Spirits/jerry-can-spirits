@@ -7,6 +7,7 @@ import type {
   IngredientOverlap,
   WasteRisk,
   MenuMetrics,
+  DrinkVolumeRow,
 } from './types'
 
 // UK VAT rate (20%). Sale prices entered inc-VAT must be divided by
@@ -114,8 +115,24 @@ export function calculateWasteRisks(
 export function calculateMenuMetrics(
   cocktails: CocktailWithIngredients[],
   priceIncludesVat: boolean,
+  volumes: DrinkVolumeRow[] = [],
 ): MenuMetrics {
-  const cocktail_metrics = cocktails.map((c) => calculateCocktailMetrics(c, priceIncludesVat))
+  const volumeByCocktail = new Map<string, DrinkVolumeRow>()
+  for (const v of volumes) volumeByCocktail.set(v.cocktail_id, v)
+
+  const cocktail_metrics = cocktails.map((c) => {
+    const m = calculateCocktailMetrics(c, priceIncludesVat)
+    const v = volumeByCocktail.get(c.id)
+    if (v) {
+      m.volume = {
+        units_sold: v.units_sold,
+        period_start: v.period_start,
+        period_end: v.period_end,
+        contribution_p: m.margin_p * v.units_sold,
+      }
+    }
+    return m
+  })
   const ingredient_overlap = calculateIngredientOverlap(cocktails)
   const waste_risks = calculateWasteRisks(cocktails, ingredient_overlap)
 

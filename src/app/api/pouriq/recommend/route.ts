@@ -8,6 +8,7 @@ import { getCloudflareContext } from '@opennextjs/cloudflare'
 import { checkPourIqAccess } from '@/lib/pouriq/access'
 import { getMenu, listCocktailsForMenu, insertAnalysis } from '@/lib/pouriq/menus'
 import { calculateMenuMetrics } from '@/lib/pouriq/calculations'
+import { currentPeriod, listVolumesForPeriod } from '@/lib/pouriq/volumes'
 import { buildUserMessage } from '@/lib/pouriq/prompts'
 import { streamRecommendations } from '@/lib/pouriq/anthropic'
 import { fieldManualUrl } from '@/lib/pouriq/field-manual-match'
@@ -29,7 +30,9 @@ export async function POST(request: Request) {
   if (!menu) return new Response('Not found', { status: 404 })
 
   const cocktails = await listCocktailsForMenu(db, menuId)
-  const metrics = calculateMenuMetrics(cocktails, menu.prices_include_vat === 1)
+  const period = currentPeriod(menu.volume_cadence)
+  const volumes = await listVolumesForPeriod(db, menuId, period.start, period.end)
+  const metrics = calculateMenuMetrics(cocktails, menu.prices_include_vat === 1, volumes)
   const fieldManualMatches: FieldManualMatch[] = cocktails
     .filter((c) => c.field_manual_slug)
     .map((c) => ({
