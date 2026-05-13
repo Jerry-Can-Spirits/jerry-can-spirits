@@ -41,6 +41,7 @@ export async function GET(request: Request) {
       SQUARE_APP_ID: env.SQUARE_APP_ID,
       SQUARE_APP_SECRET: env.SQUARE_APP_SECRET,
       SQUARE_WEBHOOK_SIGNATURE_KEY: env.SQUARE_WEBHOOK_SIGNATURE_KEY,
+      SQUARE_ENV: env.SQUARE_ENV,
     })
     const redirectUri = new URL('/api/pouriq/integrations/square/oauth/callback', request.url).toString()
     const token = await adapter.exchangeCodeForToken(code, redirectUri)

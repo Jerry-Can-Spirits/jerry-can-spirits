@@ -1,24 +1,33 @@
 import type { PosAdapter, PosConnection, PosOrderLine } from '../types'
 
-const SQUARE_API = 'https://connect.squareup.com'
-// Sandbox uses https://connect.squareupsandbox.com — swap via env if needed
-const SQUARE_TOKEN_URL = `${SQUARE_API}/oauth2/token`
-const SQUARE_ORDERS_SEARCH_URL = `${SQUARE_API}/v2/orders/search`
+const SQUARE_VERSION = '2026-01-22'
 
-interface Env {
+export interface SquareEnv {
   SQUARE_APP_ID: string
   SQUARE_APP_SECRET: string
   SQUARE_WEBHOOK_SIGNATURE_KEY: string
+  SQUARE_ENV?: string
 }
 
-export function createSquareAdapter(env: Env): PosAdapter {
+export function getSquareBaseUrl(env: Pick<SquareEnv, 'SQUARE_ENV'>): string {
+  return env.SQUARE_ENV === 'sandbox'
+    ? 'https://connect.squareupsandbox.com'
+    : 'https://connect.squareup.com'
+}
+
+export function createSquareAdapter(env: SquareEnv): PosAdapter {
+  const baseUrl = getSquareBaseUrl(env)
+  const tokenUrl = `${baseUrl}/oauth2/token`
+  const ordersSearchUrl = `${baseUrl}/v2/orders/search`
+  const locationsUrl = `${baseUrl}/v2/locations`
+
   return {
     provider: 'square',
 
     async exchangeCodeForToken(code, redirectUri) {
-      const res = await fetch(SQUARE_TOKEN_URL, {
+      const res = await fetch(tokenUrl, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Square-Version': '2025-09-24' },
+        headers: { 'Content-Type': 'application/json', 'Square-Version': SQUARE_VERSION },
         body: JSON.stringify({
           client_id: env.SQUARE_APP_ID,
           client_secret: env.SQUARE_APP_SECRET,
@@ -49,9 +58,9 @@ export function createSquareAdapter(env: Env): PosAdapter {
     },
 
     async refreshAccessToken(refreshToken) {
-      const res = await fetch(SQUARE_TOKEN_URL, {
+      const res = await fetch(tokenUrl, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Square-Version': '2025-09-24' },
+        headers: { 'Content-Type': 'application/json', 'Square-Version': SQUARE_VERSION },
         body: JSON.stringify({
           client_id: env.SQUARE_APP_ID,
           client_secret: env.SQUARE_APP_SECRET,
@@ -78,14 +87,14 @@ export function createSquareAdapter(env: Env): PosAdapter {
       // location-scoped search; first fetch resolves location if missing
       const locationIds = connection.external_location_id
         ? [connection.external_location_id]
-        : await resolveAllLocations(connection.access_token)
+        : await resolveAllLocations(locationsUrl, connection.access_token)
       do {
-        const res = await fetch(SQUARE_ORDERS_SEARCH_URL, {
+        const res = await fetch(ordersSearchUrl, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${connection.access_token}`,
-            'Square-Version': '2025-09-24',
+            'Square-Version': SQUARE_VERSION,
           },
           body: JSON.stringify({
             location_ids: locationIds,
@@ -180,11 +189,11 @@ export function createSquareAdapter(env: Env): PosAdapter {
   }
 }
 
-async function resolveAllLocations(accessToken: string): Promise<string[]> {
-  const res = await fetch(`${SQUARE_API}/v2/locations`, {
+async function resolveAllLocations(locationsUrl: string, accessToken: string): Promise<string[]> {
+  const res = await fetch(locationsUrl, {
     headers: {
       'Authorization': `Bearer ${accessToken}`,
-      'Square-Version': '2025-09-24',
+      'Square-Version': SQUARE_VERSION,
     },
   })
   if (!res.ok) throw new Error(`Square locations ${res.status}`)

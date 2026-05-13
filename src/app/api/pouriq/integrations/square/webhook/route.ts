@@ -14,6 +14,7 @@ export async function POST(request: Request) {
     SQUARE_APP_ID: env.SQUARE_APP_ID,
     SQUARE_APP_SECRET: env.SQUARE_APP_SECRET,
     SQUARE_WEBHOOK_SIGNATURE_KEY: env.SQUARE_WEBHOOK_SIGNATURE_KEY,
+    SQUARE_ENV: env.SQUARE_ENV,
   })
 
   // We must read the body as text first to verify the signature, then

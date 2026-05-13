@@ -30,6 +30,7 @@ export async function POST(_request: Request, { params }: Params) {
     SQUARE_APP_ID: env.SQUARE_APP_ID,
     SQUARE_APP_SECRET: env.SQUARE_APP_SECRET,
     SQUARE_WEBHOOK_SIGNATURE_KEY: env.SQUARE_WEBHOOK_SIGNATURE_KEY,
+    SQUARE_ENV: env.SQUARE_ENV,
   })
   // Sync from last_synced_at - 1 hour overlap (for safety), or 7 days
   // back on the very first sync.

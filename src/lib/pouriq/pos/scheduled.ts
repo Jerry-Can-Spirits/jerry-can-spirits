@@ -14,6 +14,7 @@ interface Env {
   SQUARE_APP_ID: string
   SQUARE_APP_SECRET: string
   SQUARE_WEBHOOK_SIGNATURE_KEY: string
+  SQUARE_ENV?: string
 }
 
 export async function runHourlyPosBackfill(env: Env): Promise<void> {

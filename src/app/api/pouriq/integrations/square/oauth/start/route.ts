@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import { getCloudflareContext } from '@opennextjs/cloudflare'
 import { checkPourIqAccess } from '@/lib/pouriq/access'
 import { createOAuthState } from '@/lib/pouriq/pos/connections'
+import { getSquareBaseUrl } from '@/lib/pouriq/pos/providers/square'
 
 export const runtime = 'nodejs'
 
@@ -22,6 +23,6 @@ export async function GET(request: Request) {
     state,
     redirect_uri: redirectUri,
   })
-  const authorizeUrl = `https://connect.squareup.com/oauth2/authorize?${params.toString()}`
+  const authorizeUrl = `${getSquareBaseUrl(env)}/oauth2/authorize?${params.toString()}`
   return NextResponse.redirect(authorizeUrl)
 }
