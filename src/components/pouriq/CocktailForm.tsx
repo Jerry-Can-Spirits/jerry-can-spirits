@@ -59,6 +59,13 @@ export function CocktailForm({ menuId, cocktail, libraryEntries }: Props) {
       ? (cocktail.promotional_price_p / 100).toFixed(2) : ''
   )
   const [promoLabel, setPromoLabel] = useState(cocktail?.promotional_label ?? '')
+  const [promoDays, setPromoDays] = useState<number[]>(
+    cocktail?.promotional_days
+      ? cocktail.promotional_days.split(',').map((s) => parseInt(s.trim(), 10)).filter((n) => Number.isInteger(n) && n >= 0 && n <= 6)
+      : []
+  )
+  const [promoValidFrom, setPromoValidFrom] = useState(cocktail?.promotional_valid_from ?? '')
+  const [promoValidUntil, setPromoValidUntil] = useState(cocktail?.promotional_valid_until ?? '')
   const [notes, setNotes] = useState(cocktail?.notes ?? '')
   const [ingredients, setIngredients] = useState<FormIngredient[]>(
     cocktail?.ingredients.length
@@ -128,6 +135,22 @@ export function CocktailForm({ menuId, cocktail, libraryEntries }: Props) {
     }
     const promotional_label = promoLabel.trim() || null
 
+    let promotional_days: string | null = null
+    let promotional_valid_from: string | null = null
+    let promotional_valid_until: string | null = null
+    if (promotional_price_p !== null) {
+      if (promoDays.length > 0 && promoDays.length < 7) {
+        promotional_days = [...promoDays].sort((a, b) => a - b).join(',')
+      }
+      const isoDate = (s: string) => /^\d{4}-\d{2}-\d{2}$/.test(s.trim()) ? s.trim() : null
+      promotional_valid_from = isoDate(promoValidFrom)
+      promotional_valid_until = isoDate(promoValidUntil)
+      if (promotional_valid_from && promotional_valid_until && promotional_valid_until < promotional_valid_from) {
+        setError('Promo end date must be on or after the start date')
+        return
+      }
+    }
+
     setSubmitting(true)
     try {
       await saveCocktailAction(menuId, cocktail?.id ?? null, {
@@ -135,6 +158,9 @@ export function CocktailForm({ menuId, cocktail, libraryEntries }: Props) {
         sale_price_p,
         promotional_price_p,
         promotional_label,
+        promotional_days,
+        promotional_valid_from,
+        promotional_valid_until,
         notes: notes.trim() || null,
         ingredients: parsed,
       })
@@ -182,6 +208,46 @@ export function CocktailForm({ menuId, cocktail, libraryEntries }: Props) {
             <input id="promo_label" value={promoLabel} onChange={(e) => setPromoLabel(e.target.value)} className={inputClass} placeholder="e.g. Happy hour, 2-4-1" />
           </div>
         </div>
+        {promoPricePounds.trim() !== '' && (
+          <>
+            <div className="mt-4">
+              <label className={labelClass}>Active on (leave none selected for every day)</label>
+              <div className="flex flex-wrap gap-1.5">
+                {[
+                  { value: 1, label: 'Mon' },
+                  { value: 2, label: 'Tue' },
+                  { value: 3, label: 'Wed' },
+                  { value: 4, label: 'Thu' },
+                  { value: 5, label: 'Fri' },
+                  { value: 6, label: 'Sat' },
+                  { value: 0, label: 'Sun' },
+                ].map((d) => {
+                  const active = promoDays.includes(d.value)
+                  return (
+                    <button
+                      key={d.value}
+                      type="button"
+                      onClick={() => setPromoDays((arr) => active ? arr.filter((n) => n !== d.value) : [...arr, d.value])}
+                      className={`${chipClass} ${active ? chipActive : chipIdle}`}
+                    >
+                      {d.label}
+                    </button>
+                  )
+                })}
+              </div>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+              <div>
+                <label htmlFor="promo_valid_from" className={labelClass}>Valid from (optional)</label>
+                <input id="promo_valid_from" type="date" value={promoValidFrom} onChange={(e) => setPromoValidFrom(e.target.value)} className={inputClass} />
+              </div>
+              <div>
+                <label htmlFor="promo_valid_until" className={labelClass}>Valid until (optional)</label>
+                <input id="promo_valid_until" type="date" value={promoValidUntil} onChange={(e) => setPromoValidUntil(e.target.value)} className={inputClass} />
+              </div>
+            </div>
+          </>
+        )}
       </div>
 
       <div className="border border-gold-500/20 rounded-lg p-4 bg-jerry-green-900/30">

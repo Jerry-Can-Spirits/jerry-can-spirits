@@ -70,6 +70,17 @@ export function CocktailTable({ menuId, cocktails, metrics, targetGpPct }: Props
                       <span className={promoBelowTarget ? 'text-red-300' : 'text-amber-200'}>
                         {formatMoney(promo.sale_price_p)} · {promo.gp_pct.toFixed(1)}%
                         {promo.label && <span className="block text-[10px] text-parchment-400 mt-0.5">{promo.label}</span>}
+                        {promo.active_today && (
+                          <span className="inline-block text-[10px] mt-0.5 px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-200 border border-emerald-500/40">Active today</span>
+                        )}
+                        {!promo.active_today && (promo.days || promo.valid_from || promo.valid_until) && (
+                          <span className="block text-[10px] text-parchment-400 mt-0.5">
+                            {promo.days ? promo.days.map((n) => ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][n]).join(' ') : 'Every day'}
+                            {(promo.valid_from || promo.valid_until) && (
+                              <> · {promo.valid_from ?? '…'} → {promo.valid_until ?? '…'}</>
+                            )}
+                          </span>
+                        )}
                       </span>
                     ) : (
                       <span className="text-parchment-500">—</span>

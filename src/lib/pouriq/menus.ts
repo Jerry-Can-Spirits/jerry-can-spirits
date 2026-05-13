@@ -257,6 +257,9 @@ export async function insertCocktail(
     sale_price_p: number
     promotional_price_p: number | null
     promotional_label: string | null
+    promotional_days: string | null
+    promotional_valid_from: string | null
+    promotional_valid_until: string | null
     position: number
     field_manual_slug: string | null
     notes: string | null
@@ -265,13 +268,17 @@ export async function insertCocktail(
   const result = await db
     .prepare(`
       INSERT INTO pouriq_cocktails
-        (menu_id, name, sale_price_p, promotional_price_p, promotional_label, position, field_manual_slug, notes)
-      VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8)
+        (menu_id, name, sale_price_p,
+         promotional_price_p, promotional_label,
+         promotional_days, promotional_valid_from, promotional_valid_until,
+         position, field_manual_slug, notes)
+      VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11)
       RETURNING id
     `)
     .bind(
       data.menu_id, data.name, data.sale_price_p,
       data.promotional_price_p, data.promotional_label,
+      data.promotional_days, data.promotional_valid_from, data.promotional_valid_until,
       data.position, data.field_manual_slug, data.notes,
     )
     .first<{ id: string }>()

@@ -74,6 +74,9 @@ export async function cloneMenuAction(menuId: string, newName?: string): Promise
       sale_price_p: c.sale_price_p,
       promotional_price_p: c.promotional_price_p,
       promotional_label: c.promotional_label,
+      promotional_days: c.promotional_days,
+      promotional_valid_from: c.promotional_valid_from,
+      promotional_valid_until: c.promotional_valid_until,
       position: c.position ?? idx,
       field_manual_slug: c.field_manual_slug,
       notes: c.notes,
@@ -124,6 +127,9 @@ interface CocktailInput {
   sale_price_p: number
   promotional_price_p: number | null
   promotional_label: string | null
+  promotional_days: string | null
+  promotional_valid_from: string | null
+  promotional_valid_until: string | null
   notes: string | null
   ingredients: Array<{
     library_ingredient_id: string
@@ -151,6 +157,9 @@ export async function saveCocktailAction(
       sale_price_p: input.sale_price_p,
       promotional_price_p: input.promotional_price_p,
       promotional_label: input.promotional_label,
+      promotional_days: input.promotional_days,
+      promotional_valid_from: input.promotional_valid_from,
+      promotional_valid_until: input.promotional_valid_until,
       position: 0,
       field_manual_slug: slug,
       notes: input.notes,
@@ -158,8 +167,13 @@ export async function saveCocktailAction(
   } else {
     id = cocktailId
     await db
-      .prepare(`UPDATE pouriq_cocktails SET name = ?1, sale_price_p = ?2, promotional_price_p = ?3, promotional_label = ?4, field_manual_slug = ?5, notes = ?6 WHERE id = ?7 AND menu_id = ?8`)
-      .bind(input.name, input.sale_price_p, input.promotional_price_p, input.promotional_label, slug, input.notes, id, menuId)
+      .prepare(`UPDATE pouriq_cocktails SET name = ?1, sale_price_p = ?2, promotional_price_p = ?3, promotional_label = ?4, promotional_days = ?5, promotional_valid_from = ?6, promotional_valid_until = ?7, field_manual_slug = ?8, notes = ?9 WHERE id = ?10 AND menu_id = ?11`)
+      .bind(
+        input.name, input.sale_price_p,
+        input.promotional_price_p, input.promotional_label,
+        input.promotional_days, input.promotional_valid_from, input.promotional_valid_until,
+        slug, input.notes, id, menuId,
+      )
       .run()
   }
   await replaceIngredients(db, id, input.ingredients)
@@ -173,6 +187,10 @@ interface BulkPromoInput {
   mode: BulkPromoMode
   amount?: number  // percent (1-99) or pence (positive integer) depending on mode
   label?: string | null
+  // Day-of-week constraint (CSV of 0-6, 0=Sun). null = every day.
+  days?: string | null
+  valid_from?: string | null  // ISO YYYY-MM-DD
+  valid_until?: string | null
 }
 
 export async function bulkApplyPromoAction(menuId: string, input: BulkPromoInput): Promise<{ updated: number }> {
@@ -182,7 +200,7 @@ export async function bulkApplyPromoAction(menuId: string, input: BulkPromoInput
 
   if (input.mode === 'clear') {
     const result = await db
-      .prepare(`UPDATE pouriq_cocktails SET promotional_price_p = NULL, promotional_label = NULL WHERE menu_id = ?1`)
+      .prepare(`UPDATE pouriq_cocktails SET promotional_price_p = NULL, promotional_label = NULL, promotional_days = NULL, promotional_valid_from = NULL, promotional_valid_until = NULL WHERE menu_id = ?1`)
       .bind(menuId)
       .run()
     revalidatePath(`/trade/pouriq/${menuId}`)
@@ -200,6 +218,9 @@ export async function bulkApplyPromoAction(menuId: string, input: BulkPromoInput
     }
   }
   const label = input.label?.trim() || null
+  const days = input.days?.trim() || null
+  const validFrom = input.valid_from?.trim() || null
+  const validUntil = input.valid_until?.trim() || null
 
   // Apply per-drink so we can compute promo price from each drink's own sale price.
   const drinks = await db
@@ -222,8 +243,8 @@ export async function bulkApplyPromoAction(menuId: string, input: BulkPromoInput
     if (promo_p <= 0 || promo_p >= r.sale_price_p) continue
     statements.push(
       db
-        .prepare(`UPDATE pouriq_cocktails SET promotional_price_p = ?1, promotional_label = ?2 WHERE id = ?3 AND menu_id = ?4`)
-        .bind(promo_p, label, r.id, menuId),
+        .prepare(`UPDATE pouriq_cocktails SET promotional_price_p = ?1, promotional_label = ?2, promotional_days = ?3, promotional_valid_from = ?4, promotional_valid_until = ?5 WHERE id = ?6 AND menu_id = ?7`)
+        .bind(promo_p, label, days, validFrom, validUntil, r.id, menuId),
     )
     updated++
   }

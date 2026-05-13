@@ -58,6 +58,10 @@ export interface CocktailRow {
   sale_price_p: number
   promotional_price_p: number | null
   promotional_label: string | null
+  // CSV of day numbers, 0=Sun .. 6=Sat. NULL = every day.
+  promotional_days: string | null
+  promotional_valid_from: string | null  // ISO YYYY-MM-DD
+  promotional_valid_until: string | null
   position: number
   field_manual_slug: string | null
   notes: string | null
@@ -108,6 +112,13 @@ export interface CocktailMetrics {
     margin_p: number
     gp_pct: number
     label: string | null
+    // Day-of-week numbers (0=Sun..6=Sat). null = applies every day.
+    days: number[] | null
+    valid_from: string | null
+    valid_until: string | null
+    // True iff the promo is in effect on the date the metrics were
+    // computed (server "now"). Drives the UI's "Active today" badge.
+    active_today: boolean
   }
   // Populated when a volume entry exists for the current period. The
   // contribution is margin_p × units_sold and is the real "drink
