@@ -37,28 +37,59 @@ export function BarcodeScanner({ onScan, onClose }: Props) {
           mod.Html5QrcodeSupportedFormats.QR_CODE,
         ]
         scanner = new Html5Qrcode(regionId, { formatsToSupport: formats, verbose: false })
-        await scanner.start(
-          { facingMode: 'environment' },
-          { fps: 10, qrbox: { width: 260, height: 160 } },
-          (decoded: string) => {
-            if (cancelled) return
-            // Stop the camera before the parent handler reacts so the
-            // viewfinder dismisses immediately on success.
-            scanner?.stop().catch(() => {})
-            onScan(decoded)
-          },
-          () => { /* per-frame failures are normal until a code is in view */ },
-        )
+
+        const onDecoded = (decoded: string) => {
+          if (cancelled) return
+          scanner?.stop().catch(() => {})
+          onScan(decoded)
+        }
+        const config = { fps: 10, qrbox: { width: 260, height: 160 } }
+
+        // Try the rear camera first. On phones that don't expose a
+        // distinct rear camera (rare), fall back to any available camera.
+        try {
+          await scanner.start({ facingMode: 'environment' }, config, onDecoded, () => {})
+        } catch (rearErr) {
+          if (cancelled) return
+          const rearMsg = (rearErr as Error)?.message || ''
+          // Permission / no-secure-context errors are terminal — re-throw
+          // so the outer catch surfaces the right message. Only fall back
+          // on 'no rear camera' kinds of failures.
+          if (/permission|denied|notallowed|secure/i.test(rearMsg)) {
+            throw rearErr
+          }
+          await scanner.start({ video: true } as MediaTrackConstraints, config, onDecoded, () => {})
+        }
         if (!cancelled) setStarting(false)
       } catch (e) {
         if (cancelled) return
-        const msg = (e as Error)?.message || 'Could not start camera'
-        if (/permission|denied|notallowed/i.test(msg)) {
-          setError('Camera access was blocked. Allow camera access in your browser settings and try again.')
-        } else if (/notfound|nodevice/i.test(msg)) {
+        const err = e as { name?: string; message?: string }
+        const name = err?.name ?? ''
+        const msg = err?.message ?? ''
+        const lower = `${name} ${msg}`.toLowerCase()
+        if (/notallowed|permission|denied/.test(lower)) {
+          const isStandalone = typeof window !== 'undefined' && (
+            window.matchMedia?.('(display-mode: standalone)').matches ||
+            // iOS Safari quirk: the standalone flag lives on the navigator
+            ('standalone' in window.navigator && (window.navigator as { standalone?: boolean }).standalone === true)
+          )
+          if (isStandalone) {
+            setError(
+              "Camera access is blocked. You're using the installed app: open your phone's Settings, find Jerry Can Spirits (Android) or Safari (iPhone) → Camera → Allow. Then reopen the app."
+            )
+          } else {
+            setError(
+              'Camera access was blocked. Tap the padlock icon in the address bar → Permissions → Camera → Allow. Then reload the page and try again.'
+            )
+          }
+        } else if (/notfound|nodevice|noavailable/.test(lower)) {
           setError('No camera was found on this device.')
+        } else if (/notreadable|trackstart|aborted/.test(lower)) {
+          setError('The camera is in use by another app or tab. Close other apps using the camera and try again.')
+        } else if (/secure/.test(lower) || (typeof window !== 'undefined' && !window.isSecureContext)) {
+          setError('Camera access needs HTTPS. Open this page in your normal browser (not an in-app browser like Instagram or Facebook).')
         } else {
-          setError(msg)
+          setError(`Could not start camera (${name || 'unknown'}): ${msg || 'no details'}`)
         }
         setStarting(false)
       }
@@ -89,6 +120,11 @@ export function BarcodeScanner({ onScan, onClose }: Props) {
         <p className="mt-3 text-xs text-parchment-400">
           Point the camera at the barcode on the back of the bottle. We support EAN-13, UPC, Code 128 and QR.
         </p>
+        {error && (
+          <p className="mt-2 text-xs text-parchment-500">
+            Tip: in-app browsers (Instagram, Facebook, Twitter) block camera access. Open this page in Safari or Chrome directly.
+          </p>
+        )}
       </div>
     </div>
   )
