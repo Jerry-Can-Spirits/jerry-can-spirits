@@ -153,6 +153,32 @@ export default async function MenuDetailPage({ params }: Props) {
                 initialCadence={menu.volume_cadence}
               />
             </section>
+            {/* Print-only sales volume summary. The interactive editor is
+                hidden on paper; this block surfaces the period range and
+                total contribution so the report stands on its own. The
+                per-drink Units/Contribution columns live on the drinks
+                table above. */}
+            {volumes.length > 0 && (() => {
+              const totalUnits = volumes.reduce((s, v) => s + v.units_sold, 0)
+              const totalContribution = metrics.cocktail_metrics.reduce(
+                (s, m) => s + (m.volume?.contribution_p ?? 0), 0
+              )
+              const fmtDate = (s: string) =>
+                new Date(s).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })
+              return (
+                <section className="hidden print:block">
+                  <h2 className="text-xl font-serif font-bold text-white mb-2">Sales volume</h2>
+                  <p className="text-sm">
+                    Period: {fmtDate(period.start)} – {fmtDate(period.end)} ({menu.volume_cadence}).
+                  </p>
+                  <p className="text-sm mt-1">
+                    {totalUnits} drink{totalUnits === 1 ? '' : 's'} sold ·{' '}
+                    Total contribution £{(totalContribution / 100).toFixed(2)}
+                  </p>
+                  <p className="text-xs mt-2">Per-drink units and contribution shown in the Drinks table above.</p>
+                </section>
+              )
+            })()}
             <section>
               <h2 className="text-xl font-serif font-bold text-white mb-4">Ingredient overlap</h2>
               <IngredientOverlapTable overlap={metrics.ingredient_overlap} />

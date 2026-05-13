@@ -16,4 +16,4 @@ export const SECONDARY_BUTTON_SM =
   'inline-flex items-center px-4 py-2 bg-gold-500/15 border border-gold-400/60 text-gold-100 hover:bg-gold-500/25 hover:border-gold-400 rounded-lg transition-colors text-sm font-semibold'
 
 export const DESTRUCTIVE_BUTTON =
-  'inline-flex items-center px-4 py-2 bg-red-700/80 text-white font-semibold rounded-lg hover:bg-red-700 transition-colors text-sm disabled:opacity-50'
+  'inline-flex items-center px-4 py-2 bg-red-700 text-white font-semibold rounded-lg border border-red-500/60 hover:bg-red-800 hover:border-red-400 transition-colors text-sm disabled:opacity-50'
