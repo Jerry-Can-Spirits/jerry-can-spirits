@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { deleteMenuAction } from '@/lib/pouriq/server-actions'
+import { DESTRUCTIVE_BUTTON } from '@/lib/pouriq/button-styles'
 
 interface Props {
   menuId: string
@@ -25,8 +26,6 @@ export function DeleteMenuButton({ menuId, menuName }: Props) {
       setSubmitting(false)
       alert('Could not delete the menu. Please try again.')
     }
-    // deleteMenuAction redirects to /trade/pouriq on success, so we don't
-    // need to handle the success path here.
     router.refresh()
   }
 
@@ -35,7 +34,7 @@ export function DeleteMenuButton({ menuId, menuName }: Props) {
       type="button"
       onClick={handleDelete}
       disabled={submitting}
-      className="text-sm text-red-300 hover:text-red-200 underline disabled:opacity-50"
+      className={DESTRUCTIVE_BUTTON}
     >
       {submitting ? 'Deleting…' : 'Delete menu'}
     </button>

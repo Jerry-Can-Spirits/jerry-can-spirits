@@ -5,6 +5,7 @@ import { checkPourIqAccess } from '@/lib/pouriq/access'
 import { listMenusForTradeAccount } from '@/lib/pouriq/menus'
 import { LicenceGate } from '@/components/pouriq/LicenceGate'
 import { MenuListCard } from '@/components/pouriq/MenuListCard'
+import { PRIMARY_BUTTON, SECONDARY_BUTTON } from '@/lib/pouriq/button-styles'
 
 export const dynamic = 'force-dynamic'
 
@@ -27,14 +28,9 @@ export default async function PourIqDashboard() {
             </div>
             <h1 className="text-3xl md:text-4xl font-serif font-bold text-white">Your menus</h1>
           </div>
-          <div className="flex items-center gap-3">
-            <Link href="/trade/pouriq/library" className="text-sm text-parchment-300 hover:text-parchment-100 underline">Library</Link>
-            <Link
-              href="/trade/pouriq/new"
-              className="inline-flex items-center px-5 py-3 bg-gold-500 text-jerry-green-900 font-bold rounded-lg hover:bg-gold-400 transition-colors text-sm"
-            >
-              New menu
-            </Link>
+          <div className="flex items-center gap-2">
+            <Link href="/trade/pouriq/library" className={SECONDARY_BUTTON}>Library</Link>
+            <Link href="/trade/pouriq/new" className={PRIMARY_BUTTON}>New menu</Link>
           </div>
         </div>
 

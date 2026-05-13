@@ -5,6 +5,7 @@ import { checkPourIqAccess } from '@/lib/pouriq/access'
 import { listLibraryEntries, getLibraryUsageCounts } from '@/lib/pouriq/ingredient-library'
 import { LicenceGate } from '@/components/pouriq/LicenceGate'
 import { IngredientList } from '@/components/pouriq/IngredientList'
+import { PRIMARY_BUTTON, SECONDARY_BUTTON } from '@/lib/pouriq/button-styles'
 
 export const dynamic = 'force-dynamic'
 
@@ -30,12 +31,8 @@ export default async function LibraryPage() {
             <p className="text-parchment-400 text-sm mt-2">{entries.length} ingredient{entries.length === 1 ? '' : 's'}</p>
           </div>
           <div className="flex items-center gap-2">
-            <Link href="/trade/pouriq/library/what-if" className="inline-flex items-center px-4 py-3 border border-gold-500/40 text-gold-200 hover:bg-gold-500/10 hover:border-gold-400 rounded-lg transition-colors text-sm">
-              Run a what-if
-            </Link>
-            <Link href="/trade/pouriq/library/new" className="inline-flex items-center px-5 py-3 bg-gold-500 text-jerry-green-900 font-bold rounded-lg hover:bg-gold-400 transition-colors text-sm">
-              Add ingredient
-            </Link>
+            <Link href="/trade/pouriq/library/what-if" className={SECONDARY_BUTTON}>Run a what-if</Link>
+            <Link href="/trade/pouriq/library/new" className={PRIMARY_BUTTON}>Add ingredient</Link>
           </div>
         </div>
 

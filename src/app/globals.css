@@ -305,9 +305,16 @@
   @page {
     margin: 12mm;
   }
-  html, body {
-    background: #ffffff !important;
+  /* Body has bg-jerry-green-900 from Tailwind. Use attribute selector to
+     win the specificity fight, and print-color-adjust to force the white
+     background through regardless of the browser's 'Background graphics'
+     toggle. */
+  html, body, body[class] {
+    background-color: #ffffff !important;
+    background-image: none !important;
     color: #1a1a1a !important;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
   }
   /* Hide global chrome by default. Pages that want to print use `.print-region`
      on the main wrapper to opt in. */
@@ -326,11 +333,14 @@
     background: #ffffff !important;
   }
   /* Force readable text inside the print region — the live site uses light
-     parchment text on dark green which would be invisible on white paper. */
+     parchment text on dark green which would be invisible on white paper.
+     Use background-color (not the background shorthand) so we override the
+     specific Tailwind utility cleanly. */
   .print-region,
   .print-region * {
     color: #1a1a1a !important;
-    background: transparent !important;
+    background-color: transparent !important;
+    background-image: none !important;
     box-shadow: none !important;
   }
   /* Keep accent colors distinct so red/amber callouts still read on paper. */

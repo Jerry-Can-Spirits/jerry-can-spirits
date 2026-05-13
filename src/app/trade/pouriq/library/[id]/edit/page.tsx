@@ -8,6 +8,7 @@ import {
 } from '@/lib/pouriq/ingredient-library'
 import { LicenceGate } from '@/components/pouriq/LicenceGate'
 import { IngredientForm } from '@/components/pouriq/IngredientForm'
+import { SECONDARY_BUTTON_SM } from '@/lib/pouriq/button-styles'
 
 export const dynamic = 'force-dynamic'
 
@@ -45,7 +46,7 @@ export default async function EditLibraryEntryPage({ params }: Props) {
           {usage.length > 0 && (
             <Link
               href={`/trade/pouriq/library/what-if?ingredient=${encodeURIComponent(entry.id)}`}
-              className="text-sm px-4 py-2 border border-gold-500/40 text-gold-200 hover:bg-gold-500/10 hover:border-gold-400 rounded-lg transition-colors"
+              className={SECONDARY_BUTTON_SM}
             >
               Test a cost change
             </Link>
