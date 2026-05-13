@@ -19,8 +19,15 @@ export function BarcodeScanner({ onScan, onClose }: Props) {
 
   useEffect(() => {
     let cancelled = false
+    let stopped = false
     type Html5QrcodeInstance = InstanceType<typeof import('html5-qrcode').Html5Qrcode>
     let scanner: Html5QrcodeInstance | null = null
+
+    async function safeStop() {
+      if (stopped || !scanner) return
+      stopped = true
+      try { await scanner.stop() } catch { /* already stopping */ }
+    }
 
     async function start() {
       try {
@@ -40,10 +47,20 @@ export function BarcodeScanner({ onScan, onClose }: Props) {
 
         const onDecoded = (decoded: string) => {
           if (cancelled) return
-          scanner?.stop().catch(() => {})
+          safeStop()
           onScan(decoded)
         }
-        const config = { fps: 10, qrbox: { width: 260, height: 160 } }
+        // qrbox sized dynamically. Linear barcodes (EAN-13, Code 128)
+        // need a wide horizontal region — narrow qrbox crops them out
+        // before the decoder ever sees them. Take 90% of the viewfinder
+        // width and a 35%-of-width height so 1D codes scan from any
+        // reasonable distance, while QR codes still fit.
+        const qrbox = (vfw: number, vfh: number) => {
+          const w = Math.floor(Math.min(vfw, vfh > 0 ? vfh * 2 : vfw) * 0.9)
+          const h = Math.floor(w * 0.4)
+          return { width: w, height: h }
+        }
+        const config = { fps: 15, qrbox, aspectRatio: 1.333 }
 
         // Try the rear camera first. On phones that don't expose a
         // distinct rear camera (rare), fall back to any available camera.
@@ -99,7 +116,7 @@ export function BarcodeScanner({ onScan, onClose }: Props) {
 
     return () => {
       cancelled = true
-      scanner?.stop().catch(() => {})
+      safeStop()
     }
   }, [onScan, regionId])
 
