@@ -14,6 +14,7 @@ import { VatModeToggle } from '@/components/pouriq/VatModeToggle'
 import { PrintReportButton } from '@/components/pouriq/PrintReportButton'
 import { BulkPromoActions } from '@/components/pouriq/BulkPromoActions'
 import { VolumeEditor } from '@/components/pouriq/VolumeEditor'
+import { DuplicateMenuButton } from '@/components/pouriq/DuplicateMenuButton'
 import { listVolumesForPeriod, currentPeriod } from '@/lib/pouriq/volumes'
 import { PRIMARY_BUTTON, SECONDARY_BUTTON_SM } from '@/lib/pouriq/button-styles'
 
@@ -79,7 +80,8 @@ export default async function MenuDetailPage({ params }: Props) {
         <div className="flex flex-wrap items-baseline justify-between gap-3 mt-4 mb-3">
           <h1 className="text-3xl md:text-4xl font-serif font-bold text-white">{menu.name}</h1>
           {cocktails.length > 0 && (
-            <div className="flex items-center gap-2 no-print">
+            <div className="flex flex-wrap items-start gap-2 no-print">
+              <DuplicateMenuButton menuId={menuId} menuName={menu.name} />
               <Link href={`/trade/pouriq/${menuId}/import`} className={SECONDARY_BUTTON_SM}>
                 Import drinks
               </Link>
@@ -151,6 +153,32 @@ export default async function MenuDetailPage({ params }: Props) {
                 initialCadence={menu.volume_cadence}
               />
             </section>
+            {/* Print-only sales volume summary. The interactive editor is
+                hidden on paper; this block surfaces the period range and
+                total contribution so the report stands on its own. The
+                per-drink Units/Contribution columns live on the drinks
+                table above. */}
+            {volumes.length > 0 && (() => {
+              const totalUnits = volumes.reduce((s, v) => s + v.units_sold, 0)
+              const totalContribution = metrics.cocktail_metrics.reduce(
+                (s, m) => s + (m.volume?.contribution_p ?? 0), 0
+              )
+              const fmtDate = (s: string) =>
+                new Date(s).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })
+              return (
+                <section className="hidden print:block">
+                  <h2 className="text-xl font-serif font-bold text-white mb-2">Sales volume</h2>
+                  <p className="text-sm">
+                    Period: {fmtDate(period.start)} – {fmtDate(period.end)} ({menu.volume_cadence}).
+                  </p>
+                  <p className="text-sm mt-1">
+                    {totalUnits} drink{totalUnits === 1 ? '' : 's'} sold ·{' '}
+                    Total contribution £{(totalContribution / 100).toFixed(2)}
+                  </p>
+                  <p className="text-xs mt-2">Per-drink units and contribution shown in the Drinks table above.</p>
+                </section>
+              )
+            })()}
             <section>
               <h2 className="text-xl font-serif font-bold text-white mb-4">Ingredient overlap</h2>
               <IngredientOverlapTable overlap={metrics.ingredient_overlap} />

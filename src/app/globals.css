@@ -368,6 +368,20 @@
     min-width: 0 !important;
     width: 100% !important;
   }
+  /* Section headings should be clearly bigger than table column headers
+     so the reader can navigate the report. */
+  .print-region h2 {
+    font-size: 1.4rem !important;
+    margin-top: 1.5rem !important;
+    margin-bottom: 0.75rem !important;
+    border-bottom: 1px solid #cbd5cb;
+    padding-bottom: 0.25rem;
+  }
+  .print-region h3 {
+    font-size: 1.1rem !important;
+    margin-top: 1rem !important;
+    margin-bottom: 0.5rem !important;
+  }
   /* Cards and sections should not split across pages mid-content. */
   .print-region section,
   .print-region article,
