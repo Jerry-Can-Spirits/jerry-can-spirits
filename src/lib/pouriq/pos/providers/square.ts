@@ -10,7 +10,7 @@ export interface SquareEnv {
 }
 
 export function getSquareBaseUrl(env: Pick<SquareEnv, 'SQUARE_ENV'>): string {
-  return env.SQUARE_ENV === 'sandbox'
+  return env.SQUARE_ENV?.trim().toLowerCase() === 'sandbox'
     ? 'https://connect.squareupsandbox.com'
     : 'https://connect.squareup.com'
 }

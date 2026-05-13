@@ -2,17 +2,9 @@ import { NextResponse } from 'next/server'
 import { getCloudflareContext } from '@opennextjs/cloudflare'
 import { checkPourIqAccess } from '@/lib/pouriq/access'
 import { createOAuthState } from '@/lib/pouriq/pos/connections'
+import { getSquareBaseUrl } from '@/lib/pouriq/pos/providers/square'
 
 export const runtime = 'nodejs'
-
-// Square's OAuth authorize endpoint is unified: production and sandbox
-// both use connect.squareup.com/oauth2/authorize. Square distinguishes
-// environments by the client_id prefix ('sandbox-sq0idb-' vs 'sq0idp-'),
-// not by host. The sandbox-specific host (connect.squareupsandbox.com)
-// only serves the API endpoints — token exchange, orders, locations —
-// not the consent UI. Hitting connect.squareupsandbox.com/oauth2/authorize
-// 302s to a 400 page with broken assets.
-const SQUARE_AUTHORIZE_URL = 'https://connect.squareup.com/oauth2/authorize'
 
 export async function GET(request: Request) {
   const access = await checkPourIqAccess()
@@ -31,5 +23,5 @@ export async function GET(request: Request) {
     state,
     redirect_uri: redirectUri,
   })
-  return NextResponse.redirect(`${SQUARE_AUTHORIZE_URL}?${params.toString()}`)
+  return NextResponse.redirect(`${getSquareBaseUrl(env)}/oauth2/authorize?${params.toString()}`)
 }
