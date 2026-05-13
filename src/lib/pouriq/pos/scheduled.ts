@@ -31,8 +31,10 @@ export async function runHourlyPosBackfill(env: Env): Promise<void> {
           ? new Date(new Date(conn.last_synced_at).getTime() - 60 * 60 * 1000)
           : new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
         const lines = await adapter.fetchOrdersSince(conn, since)
-        await ingestOrderLines(db, conn, lines)
-        await markSyncSuccess(db, conn.id)
+        const result = await ingestOrderLines(db, conn, lines)
+        if (!result.paused) {
+          await markSyncSuccess(db, conn.id)
+        }
       }
       // Future providers: dispatch here.
     } catch (e) {
