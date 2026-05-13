@@ -54,6 +54,11 @@ export function CocktailForm({ menuId, cocktail, libraryEntries }: Props) {
   const [salePricePounds, setSalePricePounds] = useState(
     cocktail ? (cocktail.sale_price_p / 100).toFixed(2) : ''
   )
+  const [promoPricePounds, setPromoPricePounds] = useState(
+    cocktail?.promotional_price_p !== null && cocktail?.promotional_price_p !== undefined
+      ? (cocktail.promotional_price_p / 100).toFixed(2) : ''
+  )
+  const [promoLabel, setPromoLabel] = useState(cocktail?.promotional_label ?? '')
   const [notes, setNotes] = useState(cocktail?.notes ?? '')
   const [ingredients, setIngredients] = useState<FormIngredient[]>(
     cocktail?.ingredients.length
@@ -108,11 +113,28 @@ export function CocktailForm({ menuId, cocktail, libraryEntries }: Props) {
 
     if (parsed.length === 0) { setError('Add at least one ingredient'); return }
 
+    let promotional_price_p: number | null = null
+    const promoTrimmed = promoPricePounds.trim()
+    if (promoTrimmed) {
+      promotional_price_p = Math.round(Number(promoTrimmed) * 100)
+      if (!Number.isFinite(promotional_price_p) || promotional_price_p <= 0) {
+        setError('Promo price must be > 0 if set')
+        return
+      }
+      if (promotional_price_p >= sale_price_p) {
+        setError('Promo price should be lower than the normal sale price')
+        return
+      }
+    }
+    const promotional_label = promoLabel.trim() || null
+
     setSubmitting(true)
     try {
       await saveCocktailAction(menuId, cocktail?.id ?? null, {
         name: name.trim(),
         sale_price_p,
+        promotional_price_p,
+        promotional_label,
         notes: notes.trim() || null,
         ingredients: parsed,
       })
@@ -144,6 +166,25 @@ export function CocktailForm({ menuId, cocktail, libraryEntries }: Props) {
           <input id="sale_price" type="number" step="0.01" min={0} required value={salePricePounds} onChange={(e) => setSalePricePounds(e.target.value)} className={inputClass} />
         </div>
       </div>
+
+      <details className="border border-gold-500/20 rounded-lg p-4 bg-jerry-green-900/30">
+        <summary className="cursor-pointer text-sm font-medium text-parchment-100">
+          Promotional price (optional)
+        </summary>
+        <p className="text-xs text-parchment-400 mt-2 mb-4">
+          Set a promo price for happy hour, 2-4-1, or any period when this drink sells for less. Pour IQ shows the alternative GP% alongside the standard one so you can see the trade-off.
+        </p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label htmlFor="promo_price" className={labelClass}>Promo price (£)</label>
+            <input id="promo_price" type="number" step="0.01" min={0} value={promoPricePounds} onChange={(e) => setPromoPricePounds(e.target.value)} className={inputClass} placeholder="leave blank for none" />
+          </div>
+          <div>
+            <label htmlFor="promo_label" className={labelClass}>Label</label>
+            <input id="promo_label" value={promoLabel} onChange={(e) => setPromoLabel(e.target.value)} className={inputClass} placeholder="e.g. Happy hour, 2-4-1" />
+          </div>
+        </div>
+      </details>
 
       <div className="border border-gold-500/20 rounded-lg p-4 bg-jerry-green-900/30">
         <h3 className="text-sm font-medium text-parchment-100 mb-4">Ingredients</h3>

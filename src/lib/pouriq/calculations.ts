@@ -44,7 +44,8 @@ export function calculateCocktailMetrics(
   const net_sale_p = netSalePrice(cocktail.sale_price_p, priceIncludesVat)
   const margin_p = net_sale_p - pour_cost_p
   const gp_pct = net_sale_p === 0 ? 0 : (margin_p / net_sale_p) * 100
-  return {
+
+  const metrics: CocktailMetrics = {
     cocktail_id: cocktail.id,
     name: cocktail.name,
     sale_price_p: cocktail.sale_price_p,
@@ -52,6 +53,20 @@ export function calculateCocktailMetrics(
     margin_p,
     gp_pct: Math.round(gp_pct * 10) / 10,
   }
+
+  if (cocktail.promotional_price_p !== null && cocktail.promotional_price_p !== undefined) {
+    const promo_net_p = netSalePrice(cocktail.promotional_price_p, priceIncludesVat)
+    const promo_margin_p = promo_net_p - pour_cost_p
+    const promo_gp_pct = promo_net_p === 0 ? 0 : (promo_margin_p / promo_net_p) * 100
+    metrics.promo = {
+      sale_price_p: cocktail.promotional_price_p,
+      margin_p: promo_margin_p,
+      gp_pct: Math.round(promo_gp_pct * 10) / 10,
+      label: cocktail.promotional_label ?? null,
+    }
+  }
+
+  return metrics
 }
 
 function normaliseIngredientName(name: string): string {

@@ -41,6 +41,8 @@ export interface CocktailRow {
   menu_id: string
   name: string
   sale_price_p: number
+  promotional_price_p: number | null
+  promotional_label: string | null
   position: number
   field_manual_slug: string | null
   notes: string | null
@@ -84,6 +86,14 @@ export interface CocktailMetrics {
   pour_cost_p: number
   margin_p: number
   gp_pct: number
+  // Populated only when the drink has a promotional price set. Same
+  // pour_cost; margin and GP recomputed against the promotional price.
+  promo?: {
+    sale_price_p: number
+    margin_p: number
+    gp_pct: number
+    label: string | null
+  }
 }
 
 export interface IngredientOverlap {

@@ -76,6 +76,8 @@ export async function deleteMenuAction(menuId: string): Promise<void> {
 interface CocktailInput {
   name: string
   sale_price_p: number
+  promotional_price_p: number | null
+  promotional_label: string | null
   notes: string | null
   ingredients: Array<{
     library_ingredient_id: string
@@ -101,6 +103,8 @@ export async function saveCocktailAction(
       menu_id: menuId,
       name: input.name,
       sale_price_p: input.sale_price_p,
+      promotional_price_p: input.promotional_price_p,
+      promotional_label: input.promotional_label,
       position: 0,
       field_manual_slug: slug,
       notes: input.notes,
@@ -108,8 +112,8 @@ export async function saveCocktailAction(
   } else {
     id = cocktailId
     await db
-      .prepare(`UPDATE pouriq_cocktails SET name = ?1, sale_price_p = ?2, field_manual_slug = ?3, notes = ?4 WHERE id = ?5 AND menu_id = ?6`)
-      .bind(input.name, input.sale_price_p, slug, input.notes, id, menuId)
+      .prepare(`UPDATE pouriq_cocktails SET name = ?1, sale_price_p = ?2, promotional_price_p = ?3, promotional_label = ?4, field_manual_slug = ?5, notes = ?6 WHERE id = ?7 AND menu_id = ?8`)
+      .bind(input.name, input.sale_price_p, input.promotional_price_p, input.promotional_label, slug, input.notes, id, menuId)
       .run()
   }
   await replaceIngredients(db, id, input.ingredients)

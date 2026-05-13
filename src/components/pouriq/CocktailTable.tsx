@@ -14,10 +14,12 @@ export function CocktailTable({ menuId, cocktails, metrics, targetGpPct }: Props
   const byId = new Map(metrics.map((m) => [m.cocktail_id, m]))
   const rows = cocktails.map((c) => ({ cocktail: c, m: byId.get(c.id)! })).filter((r) => r.m)
   rows.sort((a, b) => b.m.margin_p - a.m.margin_p)
+  const anyPromo = rows.some((r) => r.m.promo)
+  const minWidth = anyPromo ? 'min-w-[860px]' : 'min-w-[640px]'
 
   return (
     <div className="bg-jerry-green-800/40 border border-gold-500/20 rounded-xl overflow-x-auto">
-      <table className="w-full text-sm min-w-[640px]">
+      <table className={`w-full text-sm ${minWidth}`}>
         <thead className="bg-jerry-green-900/40">
           <tr className="text-left text-parchment-400 text-xs uppercase tracking-widest">
             <th className="px-4 py-3">Drink</th>
@@ -25,12 +27,15 @@ export function CocktailTable({ menuId, cocktails, metrics, targetGpPct }: Props
             <th className="px-4 py-3">Pour cost</th>
             <th className="px-4 py-3">Margin</th>
             <th className="px-4 py-3">GP %</th>
+            {anyPromo && <th className="px-4 py-3">Promo · GP %</th>}
             <th className="px-4 py-3"></th>
           </tr>
         </thead>
         <tbody>
           {rows.map(({ cocktail, m }) => {
             const belowTarget = m.gp_pct < targetGpPct
+            const promo = m.promo
+            const promoBelowTarget = promo ? promo.gp_pct < targetGpPct : false
             return (
               <tr key={cocktail.id} className="border-t border-gold-500/10">
                 <td className="px-4 py-3 text-parchment-100">
@@ -45,6 +50,18 @@ export function CocktailTable({ menuId, cocktails, metrics, targetGpPct }: Props
                 <td className="px-4 py-3 text-parchment-200">{formatMoney(m.pour_cost_p)}</td>
                 <td className="px-4 py-3 text-parchment-100">{formatMoney(m.margin_p)}</td>
                 <td className={`px-4 py-3 ${belowTarget ? 'text-red-300' : 'text-parchment-100'}`}>{m.gp_pct.toFixed(1)}%</td>
+                {anyPromo && (
+                  <td className="px-4 py-3">
+                    {promo ? (
+                      <span className={promoBelowTarget ? 'text-red-300' : 'text-amber-200'}>
+                        {formatMoney(promo.sale_price_p)} · {promo.gp_pct.toFixed(1)}%
+                        {promo.label && <span className="block text-[10px] text-parchment-400 mt-0.5">{promo.label}</span>}
+                      </span>
+                    ) : (
+                      <span className="text-parchment-500">—</span>
+                    )}
+                  </td>
+                )}
                 <td className="px-4 py-3 text-right">
                   <Link href={`/trade/pouriq/${menuId}/edit?cocktail=${cocktail.id}`} className="text-gold-300 hover:text-gold-200 underline text-xs">Edit</Link>
                 </td>
