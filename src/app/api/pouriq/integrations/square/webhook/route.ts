@@ -41,11 +41,17 @@ export async function POST(request: Request) {
 
   try {
     const lines = adapter.parseWebhookPayload(payload)
+    let paused = false
     if (lines.length > 0) {
-      await ingestOrderLines(db, connection, lines)
+      const result = await ingestOrderLines(db, connection, lines)
+      paused = result.paused === true
     }
-    await markSyncSuccess(db, connection.id)
-    return NextResponse.json({ ok: true })
+    // When paused (no target menu yet), don't advance last_synced_at —
+    // the next cron poll after a menu is picked will backfill these orders.
+    if (!paused) {
+      await markSyncSuccess(db, connection.id)
+    }
+    return NextResponse.json({ ok: true, paused })
   } catch (e) {
     Sentry.captureException(e, { tags: { route: 'square-webhook' } })
     await markSyncError(db, connection.id, (e as Error).message ?? 'unknown').catch(() => {})

@@ -4,27 +4,39 @@ import { currentPeriod } from '../volumes'
 import { listCocktailsForMenu, listMenusForTradeAccount } from '../menus'
 
 /**
- * Take a batch of POS order lines, match each to a cocktail across
- * the tenant's menus, aggregate quantity by (cocktail, period), and
- * upsert into pouriq_drink_volumes. Source on the row is marked 'pos'.
+ * Take a batch of POS order lines, match each to a cocktail in the
+ * connection's target menu, aggregate quantity by (cocktail, period),
+ * and upsert into pouriq_drink_volumes with source = 'pos'.
  *
- * Lines that don't match any cocktail are silently ignored at this
- * layer — they'll surface in the integrations UI's "unmatched items"
- * panel via a separate query.
+ * When `connection.target_menu_id` is null (or points at a deleted
+ * menu), ingest is paused and the function returns immediately with
+ * `paused: true`. Callers must skip advancing `last_synced_at` in
+ * that case so the next sync after a target menu is picked still
+ * fetches the orders that arrived while paused.
  */
 export async function ingestOrderLines(
   db: D1Database,
   connection: PosConnection,
   lines: PosOrderLine[],
-): Promise<{ matched: number; unmatched: number }> {
+): Promise<{ matched: number; unmatched: number; paused?: boolean }> {
+  if (!connection.target_menu_id) {
+    return { matched: 0, unmatched: 0, paused: true }
+  }
   if (lines.length === 0) return { matched: 0, unmatched: 0 }
 
-  // Build the cocktail pool across all menus in this tenant once.
-  const menus = await listMenusForTradeAccount(db, connection.trade_account_id)
-  const cocktailsByMenu = new Map<string, Awaited<ReturnType<typeof listCocktailsForMenu>>>()
-  for (const m of menus) {
-    cocktailsByMenu.set(m.id, await listCocktailsForMenu(db, m.id))
+  // Limit the cocktail pool to the designated target menu. Other menus
+  // (e.g. the previous season's, a draft, a clone for what-if analysis)
+  // are intentionally excluded so each menu's volume reflects only the
+  // period when it was actually live.
+  const allMenus = await listMenusForTradeAccount(db, connection.trade_account_id)
+  const targetMenu = allMenus.find((m) => m.id === connection.target_menu_id)
+  if (!targetMenu) {
+    // Target menu was deleted — pause until a new one is picked.
+    return { matched: 0, unmatched: 0, paused: true }
   }
+  const menus = [targetMenu]
+  const cocktailsByMenu = new Map<string, Awaited<ReturnType<typeof listCocktailsForMenu>>>()
+  cocktailsByMenu.set(targetMenu.id, await listCocktailsForMenu(db, targetMenu.id))
   const allCocktails = Array.from(cocktailsByMenu.values()).flat()
 
   // Bucket by (menu_id, cocktail_id, period_start, period_end, units).

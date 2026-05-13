@@ -5,11 +5,17 @@ import { useRouter } from 'next/navigation'
 import type { PosConnection, PosProvider } from '@/lib/pouriq/pos/types'
 import { PRIMARY_BUTTON, SECONDARY_BUTTON_SM, DESTRUCTIVE_BUTTON } from '@/lib/pouriq/button-styles'
 
+interface MenuOption {
+  id: string
+  name: string
+}
+
 interface Props {
   provider: PosProvider
   title: string
   description: string
   connection: PosConnection | null
+  menus: MenuOption[]
   disabled?: boolean
 }
 
@@ -25,10 +31,13 @@ function formatRelativeTime(iso: string | null): string {
   return `${days} day${days === 1 ? '' : 's'} ago`
 }
 
-export function IntegrationCard({ provider, title, description, connection, disabled }: Props) {
+export function IntegrationCard({ provider, title, description, connection, menus, disabled }: Props) {
   const router = useRouter()
   const [pending, startTransition] = useTransition()
   const [error, setError] = useState<string | null>(null)
+  const [targetMenuId, setTargetMenuId] = useState<string>(connection?.target_menu_id ?? '')
+
+  const targetMissing = connection !== null && !targetMenuId
 
   function connect() {
     window.location.href = `/api/pouriq/integrations/${provider}/oauth/start`
@@ -56,6 +65,25 @@ export function IntegrationCard({ provider, title, description, connection, disa
     })
   }
 
+  function updateTargetMenu(menuId: string) {
+    setError(null)
+    setTargetMenuId(menuId)
+    startTransition(async () => {
+      const res = await fetch(`/api/pouriq/integrations/${provider}/target-menu`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ menuId: menuId || null }),
+      })
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({})) as { error?: string }
+        setError(err.error ?? 'Could not update active menu')
+        setTargetMenuId(connection?.target_menu_id ?? '')
+        return
+      }
+      router.refresh()
+    })
+  }
+
   return (
     <div className="bg-jerry-green-800/40 border border-gold-500/20 rounded-xl p-6">
       <div className="flex flex-wrap items-baseline justify-between gap-3 mb-2">
@@ -69,6 +97,7 @@ export function IntegrationCard({ provider, title, description, connection, disa
         )}
       </div>
       <p className="text-sm text-parchment-300 mb-4">{description}</p>
+
       {connection && (
         <p className="text-xs text-parchment-400 mb-4">
           Last sync: {formatRelativeTime(connection.last_synced_at)}
@@ -77,7 +106,39 @@ export function IntegrationCard({ provider, title, description, connection, disa
           )}
         </p>
       )}
+
+      {connection && (
+        <div className="mb-4">
+          <label htmlFor={`target-menu-${provider}`} className="block text-xs font-medium text-parchment-300 mb-2">
+            Route sales to
+          </label>
+          <select
+            id={`target-menu-${provider}`}
+            value={targetMenuId}
+            onChange={(e) => updateTargetMenu(e.target.value)}
+            disabled={pending || menus.length === 0}
+            className="w-full px-3 py-2 bg-jerry-green-700/50 border border-gold-500/30 rounded-lg text-parchment-100 text-sm focus:border-gold-400 focus:ring-2 focus:ring-gold-400/20 focus:outline-none"
+          >
+            <option value="">— Select an active menu —</option>
+            {menus.map((m) => (
+              <option key={m.id} value={m.id}>{m.name}</option>
+            ))}
+          </select>
+          {targetMissing && (
+            <p role="alert" className="mt-2 text-xs text-amber-300">
+              Sales are paused until you pick an active menu. The next sync will backfill anything received while paused.
+            </p>
+          )}
+          {menus.length === 0 && (
+            <p className="mt-2 text-xs text-parchment-400">
+              No menus yet — create one from the Pour IQ dashboard first.
+            </p>
+          )}
+        </div>
+      )}
+
       {error && <p role="alert" className="text-xs text-red-300 mb-3">{error}</p>}
+
       <div className="flex flex-wrap gap-2">
         {connection ? (
           <>
