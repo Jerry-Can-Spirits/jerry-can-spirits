@@ -31,7 +31,7 @@ interface PeriodSummary {
   entries: DrinkVolumeRow[]
 }
 
-export async function GET(_request: Request, { params }: Params) {
+export async function GET(request: Request, { params }: Params) {
   const access = await checkPourIqAccess()
   if (access.kind !== 'ok') {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
@@ -42,6 +42,17 @@ export async function GET(_request: Request, { params }: Params) {
 
   const menu = await getMenu(db, menuId, access.tradeAccountId)
   if (!menu) return NextResponse.json({ error: 'Not found' }, { status: 404 })
+
+  // The client may pass ?cadence=weekly|monthly to override the menu's
+  // stored cadence when computing current_period. This avoids a race
+  // when the user toggles the tab — the menu's stored cadence is the
+  // source of truth for writes, but the GET for display uses whichever
+  // cadence the tab is currently showing.
+  const url = new URL(request.url)
+  const requestedCadence = url.searchParams.get('cadence')
+  const effectiveCadence = requestedCadence === 'weekly' || requestedCadence === 'monthly'
+    ? requestedCadence
+    : menu.volume_cadence
 
   const [cocktails, volumes] = await Promise.all([
     listCocktailsForMenu(db, menuId),
@@ -84,9 +95,9 @@ export async function GET(_request: Request, { params }: Params) {
   }
   periods.sort((a, b) => b.period_start.localeCompare(a.period_start))
 
-  const current = currentPeriod(menu.volume_cadence)
+  const current = currentPeriod(effectiveCadence)
   return NextResponse.json({
-    cadence: menu.volume_cadence,
+    cadence: effectiveCadence,
     current_period: current,
     periods,
   })

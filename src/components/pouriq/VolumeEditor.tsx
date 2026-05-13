@@ -51,11 +51,14 @@ export function VolumeEditor({ menuId, cocktails, metrics, initialCadence }: Pro
 
   const marginByCocktail = new Map(metrics.map((m) => [m.cocktail_id, m.margin_p]))
 
-  // Load volumes
+  // Load volumes. The cadence query param lets the API return the
+  // current_period for whichever tab the user is on, without waiting
+  // for the cadence PUT to round-trip — otherwise tab toggles race and
+  // the "Current period" line shows the old cadence's range.
   useEffect(() => {
     let cancelled = false
     setLoading(true)
-    fetch(`/api/pouriq/menus/${encodeURIComponent(menuId)}/volumes`)
+    fetch(`/api/pouriq/menus/${encodeURIComponent(menuId)}/volumes?cadence=${cadence}`)
       .then((r) => r.ok ? r.json() as Promise<VolumesResponse> : Promise.reject(new Error('Could not load volumes')))
       .then((d) => {
         if (cancelled) return
@@ -249,30 +252,57 @@ export function VolumeEditor({ menuId, cocktails, metrics, initialCadence }: Pro
               </tr>
             </thead>
             <tbody>
-              {cocktails.map((c) => {
-                const raw = edits[c.id] ?? ''
-                const units = parseInt(raw, 10)
-                const margin = marginByCocktail.get(c.id) ?? 0
-                const contribution = Number.isFinite(units) ? margin * units : 0
-                return (
-                  <tr key={c.id} className="border-t border-gold-500/10">
-                    <td className="px-4 py-3 text-parchment-100">{c.name}</td>
-                    <td className="px-4 py-3">
-                      <input
-                        type="number"
-                        min={0}
-                        step={1}
-                        value={raw}
-                        onChange={(e) => setEdits((s) => ({ ...s, [c.id]: e.target.value }))}
-                        className={inputClass}
-                        placeholder="0"
-                      />
-                    </td>
-                    <td className="px-4 py-3 text-parchment-200">{formatMoney(margin)}</td>
-                    <td className="px-4 py-3 text-parchment-100">{Number.isFinite(units) && units > 0 ? formatMoney(contribution) : '—'}</td>
-                  </tr>
-                )
-              })}
+              {(() => {
+                // Total contribution across visible rows, so each row can
+                // show its share as a percentage alongside the £ figure.
+                let totalContribution = 0
+                const rowContributions = new Map<string, number>()
+                for (const c of cocktails) {
+                  const raw = edits[c.id] ?? ''
+                  const units = parseInt(raw, 10)
+                  const margin = marginByCocktail.get(c.id) ?? 0
+                  const contribution = Number.isFinite(units) && units > 0 ? margin * units : 0
+                  rowContributions.set(c.id, contribution)
+                  totalContribution += contribution
+                }
+                return cocktails.map((c) => {
+                  const raw = edits[c.id] ?? ''
+                  const units = parseInt(raw, 10)
+                  const margin = marginByCocktail.get(c.id) ?? 0
+                  const contribution = rowContributions.get(c.id) ?? 0
+                  const hasUnits = Number.isFinite(units) && units > 0
+                  const pct = hasUnits && totalContribution > 0
+                    ? (contribution / totalContribution) * 100
+                    : 0
+                  return (
+                    <tr key={c.id} className="border-t border-gold-500/10">
+                      <td className="px-4 py-3 text-parchment-100">{c.name}</td>
+                      <td className="px-4 py-3">
+                        <input
+                          type="number"
+                          min={0}
+                          step={1}
+                          value={raw}
+                          onChange={(e) => setEdits((s) => ({ ...s, [c.id]: e.target.value }))}
+                          className={inputClass}
+                          placeholder="0"
+                        />
+                      </td>
+                      <td className="px-4 py-3 text-parchment-200">{formatMoney(margin)}</td>
+                      <td className="px-4 py-3 text-parchment-100">
+                        {hasUnits ? (
+                          <span>
+                            {formatMoney(contribution)}
+                            {totalContribution > 0 && (
+                              <span className="text-parchment-400 ml-2">· {pct.toFixed(1)}%</span>
+                            )}
+                          </span>
+                        ) : '—'}
+                      </td>
+                    </tr>
+                  )
+                })
+              })()}
             </tbody>
           </table>
         </div>
