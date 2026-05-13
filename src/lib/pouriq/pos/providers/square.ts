@@ -1,0 +1,193 @@
+import type { PosAdapter, PosConnection, PosOrderLine } from '../types'
+
+const SQUARE_API = 'https://connect.squareup.com'
+// Sandbox uses https://connect.squareupsandbox.com — swap via env if needed
+const SQUARE_TOKEN_URL = `${SQUARE_API}/oauth2/token`
+const SQUARE_ORDERS_SEARCH_URL = `${SQUARE_API}/v2/orders/search`
+
+interface Env {
+  SQUARE_APP_ID: string
+  SQUARE_APP_SECRET: string
+  SQUARE_WEBHOOK_SIGNATURE_KEY: string
+}
+
+export function createSquareAdapter(env: Env): PosAdapter {
+  return {
+    provider: 'square',
+
+    async exchangeCodeForToken(code, redirectUri) {
+      const res = await fetch(SQUARE_TOKEN_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Square-Version': '2025-09-24' },
+        body: JSON.stringify({
+          client_id: env.SQUARE_APP_ID,
+          client_secret: env.SQUARE_APP_SECRET,
+          code,
+          grant_type: 'authorization_code',
+          redirect_uri: redirectUri,
+        }),
+      })
+      if (!res.ok) {
+        const errText = await res.text().catch(() => '')
+        throw new Error(`Square OAuth ${res.status}: ${errText}`)
+      }
+      const data = await res.json() as {
+        access_token: string
+        refresh_token: string
+        expires_at: string
+        merchant_id: string
+        token_type: string
+      }
+      return {
+        accessToken: data.access_token,
+        refreshToken: data.refresh_token,
+        expiresAt: data.expires_at,
+        scopes: 'ORDERS_READ,ITEMS_READ,MERCHANT_PROFILE_READ',
+        externalAccountId: data.merchant_id,
+        externalLocationId: null,  // resolved on first fetch
+      }
+    },
+
+    async refreshAccessToken(refreshToken) {
+      const res = await fetch(SQUARE_TOKEN_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Square-Version': '2025-09-24' },
+        body: JSON.stringify({
+          client_id: env.SQUARE_APP_ID,
+          client_secret: env.SQUARE_APP_SECRET,
+          grant_type: 'refresh_token',
+          refresh_token: refreshToken,
+        }),
+      })
+      if (!res.ok) throw new Error(`Square refresh ${res.status}`)
+      const data = await res.json() as {
+        access_token: string
+        refresh_token: string
+        expires_at: string
+      }
+      return {
+        accessToken: data.access_token,
+        refreshToken: data.refresh_token,
+        expiresAt: data.expires_at,
+      }
+    },
+
+    async fetchOrdersSince(connection, since) {
+      const lines: PosOrderLine[] = []
+      let cursor: string | undefined
+      // location-scoped search; first fetch resolves location if missing
+      const locationIds = connection.external_location_id
+        ? [connection.external_location_id]
+        : await resolveAllLocations(connection.access_token)
+      do {
+        const res = await fetch(SQUARE_ORDERS_SEARCH_URL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${connection.access_token}`,
+            'Square-Version': '2025-09-24',
+          },
+          body: JSON.stringify({
+            location_ids: locationIds,
+            query: {
+              filter: {
+                state_filter: { states: ['COMPLETED'] },
+                date_time_filter: {
+                  closed_at: { start_at: since.toISOString() },
+                },
+              },
+              sort: { sort_field: 'CLOSED_AT', sort_order: 'ASC' },
+            },
+            limit: 200,
+            cursor,
+          }),
+        })
+        if (!res.ok) throw new Error(`Square orders ${res.status}`)
+        const data = await res.json() as {
+          orders?: Array<{
+            id: string
+            closed_at?: string
+            line_items?: Array<{
+              uid: string
+              name: string
+              quantity: string
+              catalog_object_id?: string
+              gross_sales_money?: { amount: number; currency: string }
+            }>
+          }>
+          cursor?: string
+        }
+        for (const order of data.orders ?? []) {
+          if (!order.closed_at) continue
+          for (const li of order.line_items ?? []) {
+            lines.push({
+              external_order_id: order.id,
+              external_item_id: li.catalog_object_id ?? null,
+              name: li.name,
+              quantity: parseFloat(li.quantity) || 1,
+              sold_at: order.closed_at,
+              gross_amount_p: li.gross_sales_money?.amount ?? 0,
+            })
+          }
+        }
+        cursor = data.cursor
+      } while (cursor)
+      return lines
+    },
+
+    async verifyWebhook(request, body) {
+      const signature = request.headers.get('X-Square-HmacSha256-Signature')
+      if (!signature) return false
+      const url = request.url
+      const keyData = new TextEncoder().encode(env.SQUARE_WEBHOOK_SIGNATURE_KEY)
+      const messageData = new TextEncoder().encode(url + body)
+      const cryptoKey = await crypto.subtle.importKey(
+        'raw', keyData, { name: 'HMAC', hash: 'SHA-256' }, false, ['sign'],
+      )
+      const sigBuffer = await crypto.subtle.sign('HMAC', cryptoKey, messageData)
+      const sigBase64 = btoa(String.fromCharCode(...new Uint8Array(sigBuffer)))
+      return sigBase64 === signature
+    },
+
+    parseWebhookPayload(payload) {
+      // Square webhook payload shape:
+      // { merchant_id, type, event_id, created_at, data: { type: 'order', id, object: { order: {...} } } }
+      const p = payload as {
+        type?: string
+        data?: { object?: { order?: {
+          id: string
+          state?: string
+          closed_at?: string
+          line_items?: Array<{
+            name: string
+            quantity: string
+            catalog_object_id?: string
+            gross_sales_money?: { amount: number }
+          }>
+        } } }
+      }
+      const order = p.data?.object?.order
+      if (!order || order.state !== 'COMPLETED' || !order.closed_at) return []
+      return (order.line_items ?? []).map((li) => ({
+        external_order_id: order.id,
+        external_item_id: li.catalog_object_id ?? null,
+        name: li.name,
+        quantity: parseFloat(li.quantity) || 1,
+        sold_at: order.closed_at!,
+        gross_amount_p: li.gross_sales_money?.amount ?? 0,
+      }))
+    },
+  }
+}
+
+async function resolveAllLocations(accessToken: string): Promise<string[]> {
+  const res = await fetch(`${SQUARE_API}/v2/locations`, {
+    headers: {
+      'Authorization': `Bearer ${accessToken}`,
+      'Square-Version': '2025-09-24',
+    },
+  })
+  if (!res.ok) throw new Error(`Square locations ${res.status}`)
+  const data = await res.json() as { locations?: Array<{ id: string; status?: string }> }
+  return (data.locations ?? []).filter((l) => l.status !== 'INACTIVE').map((l) => l.id)
+}
