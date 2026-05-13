@@ -74,7 +74,6 @@ export default async function MenuDetailPage({ params }: Props) {
           <h1 className="text-3xl md:text-4xl font-serif font-bold text-white">{menu.name}</h1>
           {cocktails.length > 0 && (
             <div className="flex items-center gap-2 no-print">
-              <PrintReportButton />
               <Link href={`/trade/pouriq/${menuId}/import`} className="text-sm px-4 py-2 border border-gold-500/40 text-gold-200 hover:bg-gold-500/10 hover:border-gold-400 rounded-lg transition-colors">
                 Import drinks
               </Link>
@@ -141,6 +140,12 @@ export default async function MenuDetailPage({ params }: Props) {
               <h2 className="text-xl font-serif font-bold text-white mb-4">AI recommendations</h2>
               <RecommendationStream menuId={menuId} />
             </section>
+          </div>
+        )}
+
+        {cocktails.length > 0 && (
+          <div className="flex justify-end mt-12 pt-6 border-t border-gold-500/10 no-print">
+            <PrintReportButton />
           </div>
         )}
 

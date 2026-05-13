@@ -168,7 +168,9 @@ export default function RootLayout({
 
           <ClientWrapper>
           {/* Unified Cartographic Background */}
-          <LazyCartographicBackground opacity={0.75} showCoordinates={true} showCompass={true} className="fixed inset-0 z-0 pointer-events-none" />
+          <div className="print:hidden">
+            <LazyCartographicBackground opacity={0.75} showCoordinates={true} showCompass={true} className="fixed inset-0 z-0 pointer-events-none" />
+          </div>
 
           <div className="relative z-10">
             <Header />
@@ -178,7 +180,9 @@ export default function RootLayout({
               {children}
             </main>
             
-            <ShippingBanner />
+            <div className="print:hidden">
+              <ShippingBanner />
+            </div>
             <Footer />
           </div>
           
