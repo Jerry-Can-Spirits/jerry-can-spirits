@@ -3,7 +3,6 @@
 // dynamically imported so the bundle only loads on the import page.
 
 const MAX_BYTES = 5 * 1024 * 1024
-const MAX_SHEETS = 50
 
 function csvEscape(value: string): string {
   return /[",\n\r]/.test(value) ? `"${value.replace(/"/g, '""')}"` : value
@@ -27,25 +26,16 @@ export async function spreadsheetToText(file: File): Promise<string> {
 
   if (lower.endsWith('.xlsx')) {
     const readXlsxFile = (await import('read-excel-file/browser')).default
-    // The library has a runtime `getSheets: true` mode for enumeration,
-    // but its public types don't expose it. Iterate by index until we hit
-    // an empty/missing sheet; safety-bound at MAX_SHEETS.
+    const sheets = await readXlsxFile(file)
     const blocks: string[] = []
-    for (let sheetIndex = 1; sheetIndex <= MAX_SHEETS; sheetIndex++) {
-      let rows: unknown[][]
-      try {
-        rows = await readXlsxFile(file, { sheet: sheetIndex })
-      } catch {
-        break
-      }
-      if (!rows || rows.length === 0) break
+    for (const sheet of sheets) {
       const lines: string[] = []
-      for (const row of rows) {
+      for (const row of sheet.data) {
         const cells = row.map((c) => csvEscape(cellToString(c)))
         while (cells.length > 0 && cells[cells.length - 1] === '') cells.pop()
         if (cells.length > 0) lines.push(cells.join(','))
       }
-      if (lines.length > 0) blocks.push(`--- Sheet ${sheetIndex} ---\n${lines.join('\n')}`)
+      if (lines.length > 0) blocks.push(`--- Sheet: ${sheet.sheet} ---\n${lines.join('\n')}`)
     }
     if (blocks.length === 0) throw new Error('Spreadsheet has no readable rows')
     return blocks.join('\n\n')
