@@ -38,9 +38,48 @@ export function IngredientForm({ entry, usageCount = 0 }: Props) {
   )
   const [barcode, setBarcode] = useState(entry?.barcode ?? '')
   const [scanOpen, setScanOpen] = useState(false)
+  const [scanInfo, setScanInfo] = useState<string | null>(null)
+  const [existingEntryHref, setExistingEntryHref] = useState<string | null>(null)
   const [notes, setNotes] = useState(entry?.notes ?? '')
   const [error, setError] = useState<string | null>(null)
   const [submitting, setSubmitting] = useState(false)
+
+  async function handleScan(code: string) {
+    setScanOpen(false)
+    setScanInfo(null)
+    setExistingEntryHref(null)
+    setBarcode(code)
+
+    // If this barcode is already on a different library entry for the
+    // same tenant, surface that rather than letting the user create a
+    // duplicate (which would also fail the unique index on save).
+    // Otherwise, if the cross-tenant catalogue has the product, prefill
+    // name/type/size so the user only enters their own cost.
+    try {
+      const res = await fetch(`/api/pouriq/library/by-barcode?code=${encodeURIComponent(code)}`)
+      if (!res.ok) return
+      const data = await res.json() as {
+        entry: IngredientLibraryRow | null
+        catalogue: { name: string; ingredient_type: IngredientType; bottle_size_ml: number | null; verified: boolean } | null
+      }
+      if (data.entry && data.entry.id !== entry?.id) {
+        setExistingEntryHref(`/trade/pouriq/library/${data.entry.id}/edit`)
+        setScanInfo(`This barcode is already on your library entry "${data.entry.name}".`)
+        return
+      }
+      if (data.catalogue && !entry) {
+        // New library entry being created — accept the catalogue prefill.
+        // Only fill empty fields so user-entered values are preserved.
+        if (!name.trim()) setName(data.catalogue.name)
+        setIngredientType(data.catalogue.ingredient_type)
+        if (data.catalogue.bottle_size_ml) {
+          setPricingMode('bottle')
+          setBottleSize(String(data.catalogue.bottle_size_ml))
+        }
+        setScanInfo("Name, type and size came from the Pour IQ shared catalogue — sanity-check before saving.")
+      }
+    } catch { /* network blip — just leave the barcode populated */ }
+  }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -168,9 +207,18 @@ export function IngredientForm({ entry, usageCount = 0 }: Props) {
 
       {error && <p role="alert" className="text-sm text-red-300">{error}</p>}
 
+      {scanInfo && (
+        <p className="text-xs text-gold-200">
+          {scanInfo}{' '}
+          {existingEntryHref && (
+            <a href={existingEntryHref} className="underline hover:text-gold-100">Open it</a>
+          )}
+        </p>
+      )}
+
       {scanOpen && (
         <BarcodeScanner
-          onScan={(code) => { setBarcode(code); setScanOpen(false) }}
+          onScan={handleScan}
           onClose={() => setScanOpen(false)}
         />
       )}
