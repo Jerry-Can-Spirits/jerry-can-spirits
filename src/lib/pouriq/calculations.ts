@@ -20,6 +20,25 @@ export function netSalePrice(sale_price_p: number, priceIncludesVat: boolean): n
   return Math.round(sale_price_p / VAT_DIVISOR)
 }
 
+export function parsePromoDays(csv: string | null | undefined): number[] | null {
+  if (!csv) return null
+  const parts = csv.split(',').map((s) => parseInt(s.trim(), 10)).filter((n) => Number.isInteger(n) && n >= 0 && n <= 6)
+  return parts.length > 0 ? Array.from(new Set(parts)).sort((a, b) => a - b) : null
+}
+
+export function isPromoActiveOn(
+  date: Date,
+  days: number[] | null,
+  validFrom: string | null,
+  validUntil: string | null,
+): boolean {
+  const iso = date.toISOString().slice(0, 10)
+  if (validFrom && iso < validFrom) return false
+  if (validUntil && iso > validUntil) return false
+  if (!days || days.length === 0) return true
+  return days.includes(date.getUTCDay())
+}
+
 function ingredientCostPence(i: import('./types').IngredientWithLibrary): number {
   // Unit-priced: library has unit_cost_p; cocktail row has unit_count
   if (i.library.unit_cost_p !== null) {
@@ -59,11 +78,18 @@ export function calculateCocktailMetrics(
     const promo_net_p = netSalePrice(cocktail.promotional_price_p, priceIncludesVat)
     const promo_margin_p = promo_net_p - pour_cost_p
     const promo_gp_pct = promo_net_p === 0 ? 0 : (promo_margin_p / promo_net_p) * 100
+    const days = parsePromoDays(cocktail.promotional_days)
+    const validFrom = cocktail.promotional_valid_from ?? null
+    const validUntil = cocktail.promotional_valid_until ?? null
     metrics.promo = {
       sale_price_p: cocktail.promotional_price_p,
       margin_p: promo_margin_p,
       gp_pct: Math.round(promo_gp_pct * 10) / 10,
       label: cocktail.promotional_label ?? null,
+      days,
+      valid_from: validFrom,
+      valid_until: validUntil,
+      active_today: isPromoActiveOn(new Date(), days, validFrom, validUntil),
     }
   }
 

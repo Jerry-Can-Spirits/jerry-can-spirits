@@ -18,6 +18,9 @@ export function BulkPromoActions({ menuId }: Props) {
   const [mode, setMode] = useState<BulkPromoMode>('percent')
   const [amountStr, setAmountStr] = useState('')
   const [label, setLabel] = useState('')
+  const [days, setDays] = useState<number[]>([])
+  const [validFrom, setValidFrom] = useState('')
+  const [validUntil, setValidUntil] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [info, setInfo] = useState<string | null>(null)
   const [pending, startTransition] = useTransition()
@@ -26,6 +29,9 @@ export function BulkPromoActions({ menuId }: Props) {
     setMode('percent')
     setAmountStr('')
     setLabel('')
+    setDays([])
+    setValidFrom('')
+    setValidUntil('')
     setError(null)
     setInfo(null)
   }
@@ -53,12 +59,26 @@ export function BulkPromoActions({ menuId }: Props) {
       }
       amount = Math.round(pounds * 100)
     }
+    const isoDate = (s: string) => /^\d{4}-\d{2}-\d{2}$/.test(s.trim()) ? s.trim() : null
+    const sortedDays = days.length > 0 && days.length < 7
+      ? [...days].sort((a, b) => a - b).join(',')
+      : null
+    const vf = isoDate(validFrom)
+    const vu = isoDate(validUntil)
+    if (vf && vu && vu < vf) {
+      setError('End date must be on or after start date')
+      return
+    }
+
     startTransition(async () => {
       try {
         const result = await bulkApplyPromoAction(menuId, {
           mode,
           amount,
           label: mode === 'clear' ? null : (label.trim() || null),
+          days: mode === 'clear' ? null : sortedDays,
+          valid_from: mode === 'clear' ? null : vf,
+          valid_until: mode === 'clear' ? null : vu,
         })
         setInfo(
           mode === 'clear'
@@ -102,33 +122,71 @@ export function BulkPromoActions({ menuId }: Props) {
       </div>
 
       {mode !== 'clear' && (
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <div>
-            <label htmlFor="bulk_amount" className={labelClass}>
-              {mode === 'percent' ? 'Percent off' : 'Amount off (£)'}
-            </label>
-            <input
-              id="bulk_amount"
-              type="number"
-              step={mode === 'percent' ? '1' : '0.01'}
-              min={0}
-              value={amountStr}
-              onChange={(e) => setAmountStr(e.target.value)}
-              className={inputClass}
-              placeholder={mode === 'percent' ? '20' : '2.00'}
-            />
+        <>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label htmlFor="bulk_amount" className={labelClass}>
+                {mode === 'percent' ? 'Percent off' : 'Amount off (£)'}
+              </label>
+              <input
+                id="bulk_amount"
+                type="number"
+                step={mode === 'percent' ? '1' : '0.01'}
+                min={0}
+                value={amountStr}
+                onChange={(e) => setAmountStr(e.target.value)}
+                className={inputClass}
+                placeholder={mode === 'percent' ? '20' : '2.00'}
+              />
+            </div>
+            <div>
+              <label htmlFor="bulk_label" className={labelClass}>Label (optional)</label>
+              <input
+                id="bulk_label"
+                value={label}
+                onChange={(e) => setLabel(e.target.value)}
+                className={inputClass}
+                placeholder="e.g. Happy hour"
+              />
+            </div>
           </div>
           <div>
-            <label htmlFor="bulk_label" className={labelClass}>Label (optional)</label>
-            <input
-              id="bulk_label"
-              value={label}
-              onChange={(e) => setLabel(e.target.value)}
-              className={inputClass}
-              placeholder="e.g. Happy hour"
-            />
+            <label className={labelClass}>Active on (leave none for every day)</label>
+            <div className="flex flex-wrap gap-1.5">
+              {[
+                { value: 1, label: 'Mon' },
+                { value: 2, label: 'Tue' },
+                { value: 3, label: 'Wed' },
+                { value: 4, label: 'Thu' },
+                { value: 5, label: 'Fri' },
+                { value: 6, label: 'Sat' },
+                { value: 0, label: 'Sun' },
+              ].map((d) => {
+                const active = days.includes(d.value)
+                return (
+                  <button
+                    key={d.value}
+                    type="button"
+                    onClick={() => setDays((arr) => active ? arr.filter((n) => n !== d.value) : [...arr, d.value])}
+                    className={`px-2 py-1 rounded border text-xs transition-colors ${active ? 'bg-gold-500/30 border-gold-400 text-gold-50' : 'bg-jerry-green-700/30 border-gold-500/20 text-parchment-300 hover:border-gold-400/40'}`}
+                  >
+                    {d.label}
+                  </button>
+                )
+              })}
+            </div>
           </div>
-        </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label htmlFor="bulk_valid_from" className={labelClass}>Valid from (optional)</label>
+              <input id="bulk_valid_from" type="date" value={validFrom} onChange={(e) => setValidFrom(e.target.value)} className={inputClass} />
+            </div>
+            <div>
+              <label htmlFor="bulk_valid_until" className={labelClass}>Valid until (optional)</label>
+              <input id="bulk_valid_until" type="date" value={validUntil} onChange={(e) => setValidUntil(e.target.value)} className={inputClass} />
+            </div>
+          </div>
+        </>
       )}
 
       {mode === 'clear' && (

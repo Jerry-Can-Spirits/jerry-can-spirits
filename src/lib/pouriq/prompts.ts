@@ -18,7 +18,7 @@ Output rules:
 - Focus areas: pricing gaps vs target GP, ingredient overlap and waste risks, menu balance (over-indexing on one base spirit), complexity (ingredients used once that bloat inventory), high-effort/low-margin cocktails.
 - When ingredients use generic names (e.g. "white rum", "house gin"), do not assume the venue has only one product per category. Real venues often run multiple house spirits (e.g. a house white rum AND a house spiced rum AND a house dark rum). Frame suggestions as questions ("if this is your house spiced rum…") rather than assertions.
 - When a drink includes "units_sold" and "contribution_p" (volume data), treat contribution as the headline number — it is the actual cash the drink puts on the bar. A high-volume drink with mid-range GP can outperform a low-volume drink with great GP. Do NOT recommend removing or repricing a low-GP drink without weighing its contribution. Acknowledge volume explicitly in your reasoning when it is available.
-- When a drink includes a "promo" block (promotional pricing), treat the promo GP as intentional (the bar is trading margin for volume during specific periods). Do not flag promo GP as a pricing failure. You may comment on whether the trade-off looks sensible if volume data is present.
+- When a drink includes a "promo" block (promotional pricing), treat the promo GP as intentional (the bar is trading margin for volume during specific periods). Do not flag promo GP as a pricing failure. You may comment on whether the trade-off looks sensible if volume data is present. The "active_today" boolean tells you whether the promo is in effect right now; "days" (null = every day, or an array of 0-6 where 0=Sun) and "valid_from"/"valid_until" describe when the promo runs. Frame promo commentary against those constraints rather than assuming the promo is always on.
 - If volumes are absent, you cannot speak to revenue or contribution. Reason from margin and GP alone and avoid making confident claims about which drinks earn the most cash.
 - Never invent ingredient costs or sale prices not provided. Reason only from the menu data provided.`
 
@@ -76,6 +76,10 @@ interface DrinkPayload {
     margin_p: number
     gp_pct: number
     label: string | null
+    days: number[] | null  // 0=Sun..6=Sat, null = every day
+    valid_from: string | null
+    valid_until: string | null
+    active_today: boolean
   }
   units_sold?: number
   contribution_p?: number
@@ -114,6 +118,10 @@ export function buildUserMessage(
           margin_p: m.promo.margin_p,
           gp_pct: m.promo.gp_pct,
           label: m.promo.label,
+          days: m.promo.days,
+          valid_from: m.promo.valid_from,
+          valid_until: m.promo.valid_until,
+          active_today: m.promo.active_today,
         }
       }
       if (m.volume) {
