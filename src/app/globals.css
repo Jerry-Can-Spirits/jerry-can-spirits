@@ -297,3 +297,66 @@
 .stockist-popup .mapboxgl-popup-tip {
   border-top-color: #1a2e1a;
 }
+
+/* Print rules: force dark-on-light for paper output and hide site chrome.
+   Scoped to elements marked with .print-region; if no such element exists
+   on a page, the user gets the default browser print behaviour. */
+@media print {
+  @page {
+    margin: 12mm;
+  }
+  html, body {
+    background: #ffffff !important;
+    color: #1a1a1a !important;
+  }
+  /* Hide global chrome by default. Pages that want to print use `.print-region`
+     on the main wrapper to opt in. */
+  header, footer,
+  [data-print-hide],
+  .no-print {
+    display: none !important;
+  }
+  /* If the print region happens to contain its own header/footer (none today,
+     but cheap insurance), allow them to render. */
+  .print-region header,
+  .print-region footer {
+    display: block !important;
+  }
+  .print-region {
+    background: #ffffff !important;
+  }
+  /* Force readable text inside the print region — the live site uses light
+     parchment text on dark green which would be invisible on white paper. */
+  .print-region,
+  .print-region * {
+    color: #1a1a1a !important;
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+  /* Keep accent colors distinct so red/amber callouts still read on paper. */
+  .print-region .text-red-300,
+  .print-region .text-red-200 { color: #991b1b !important; }
+  .print-region .text-amber-300,
+  .print-region .text-amber-200 { color: #92400e !important; }
+  .print-region .text-emerald-300,
+  .print-region .text-emerald-200 { color: #047857 !important; }
+  .print-region .text-gold-300,
+  .print-region .text-gold-200,
+  .print-region .text-gold-100 { color: #4a3c00 !important; }
+  /* Borders need to be visible on white. */
+  .print-region [class*='border-'] {
+    border-color: #d4d4d4 !important;
+  }
+  /* Cards and sections should not split across pages mid-content. */
+  .print-region section,
+  .print-region article,
+  .print-region table {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+  /* Strip background-derived rounded card styling so cards look like report
+     blocks on paper rather than UI tiles. */
+  .print-region [class*='rounded-'] {
+    border-radius: 0 !important;
+  }
+}

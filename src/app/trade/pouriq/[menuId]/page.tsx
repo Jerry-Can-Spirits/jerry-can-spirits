@@ -11,6 +11,7 @@ import { IngredientOverlapTable } from '@/components/pouriq/IngredientOverlapTab
 import { RecommendationStream } from '@/components/pouriq/RecommendationStream'
 import { DeleteMenuButton } from '@/components/pouriq/DeleteMenuButton'
 import { VatModeToggle } from '@/components/pouriq/VatModeToggle'
+import { PrintReportButton } from '@/components/pouriq/PrintReportButton'
 
 export const dynamic = 'force-dynamic'
 
@@ -55,17 +56,25 @@ export default async function MenuDetailPage({ params }: Props) {
   const cocktails = await listCocktailsForMenu(db, menuId)
   const metrics = calculateMenuMetrics(cocktails, menu.prices_include_vat === 1)
 
+  const reportDate = new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })
+
   return (
-    <main className="min-h-screen">
+    <main className="min-h-screen print-region">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-24">
-        <div className="flex items-baseline gap-4">
+        <div className="flex items-baseline gap-4 no-print">
           <Link href="/trade/pouriq" className="text-sm text-parchment-400 hover:text-parchment-200">← All menus</Link>
           <Link href="/trade/pouriq/library" className="text-sm text-parchment-400 hover:text-parchment-200">Library</Link>
+        </div>
+        {/* Print-only report header — never visible on screen */}
+        <div className="hidden print:block mb-6 pb-4 border-b border-stone-300">
+          <p className="text-xs uppercase tracking-widest">Pour IQ menu report</p>
+          <p className="text-xs">Generated {reportDate}</p>
         </div>
         <div className="flex flex-wrap items-baseline justify-between gap-3 mt-4 mb-3">
           <h1 className="text-3xl md:text-4xl font-serif font-bold text-white">{menu.name}</h1>
           {cocktails.length > 0 && (
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 no-print">
+              <PrintReportButton />
               <Link href={`/trade/pouriq/${menuId}/import`} className="text-sm px-4 py-2 border border-gold-500/40 text-gold-200 hover:bg-gold-500/10 hover:border-gold-400 rounded-lg transition-colors">
                 Import drinks
               </Link>
@@ -78,12 +87,15 @@ export default async function MenuDetailPage({ params }: Props) {
         <div className="flex flex-wrap items-start justify-between gap-3 mb-10">
           <p className="text-parchment-400 text-sm">
             {menu.venue_type ?? 'Menu'}{menu.city && ` · ${menu.city}`} · Target GP {menu.target_gp_pct}%
+            <span className="hidden print:inline"> · Prices {menu.prices_include_vat === 1 ? 'include VAT' : 'net of VAT'}</span>
           </p>
-          <VatModeToggle menuId={menuId} pricesIncludeVat={menu.prices_include_vat === 1} />
+          <span className="no-print">
+            <VatModeToggle menuId={menuId} pricesIncludeVat={menu.prices_include_vat === 1} />
+          </span>
         </div>
 
         {cocktails.length === 0 ? (
-          <div className="space-y-4">
+          <div className="space-y-4 no-print">
             <div className="bg-jerry-green-800/40 border border-gold-500/20 rounded-xl p-6">
               <h2 className="text-xl font-serif font-bold text-white mb-1">Get drinks onto this menu</h2>
               <p className="text-parchment-300 text-sm mb-6">Pick the option that matches how your menu currently lives.</p>
@@ -132,7 +144,7 @@ export default async function MenuDetailPage({ params }: Props) {
           </div>
         )}
 
-        <div className="flex justify-end mt-16 pt-8 border-t border-gold-500/10">
+        <div className="flex justify-end mt-16 pt-8 border-t border-gold-500/10 no-print">
           <DeleteMenuButton menuId={menuId} menuName={menu.name} />
         </div>
       </div>
