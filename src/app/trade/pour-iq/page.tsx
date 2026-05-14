@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { baseOpenGraph } from '@/lib/og'
 
 export const metadata: Metadata = {
-  title: 'Pour IQ — Margin Analysis for Cocktail Menus | Jerry Can Spirits',
+  title: 'Pour IQ™ — Margin Analysis for Cocktail Menus | Jerry Can Spirits®',
   description:
     'Pour IQ analyses your cocktail menu for margin, ingredient overlap, and waste risk, with AI recommendations grounded in the Jerry Can Spirits Field Manual. Available to trade customers as an additional service.',
   alternates: {
@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     ...baseOpenGraph,
-    title: 'Pour IQ — Margin Analysis for Cocktail Menus | Jerry Can Spirits®',
+    title: 'Pour IQ™ — Margin Analysis for Cocktail Menus | Jerry Can Spirits®',
     description:
       'AI margin analysis for cocktail menus. For pubs, bars, restaurants, and hotels.',
     url: 'https://jerrycanspirits.co.uk/trade/pour-iq/',
@@ -100,7 +100,7 @@ export default function PourIqMarketingPage() {
       <section className="py-20 lg:py-28">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="inline-block px-4 py-2 bg-jerry-green-800/60 backdrop-blur-sm rounded-full border border-gold-500/30 mb-8">
-            <span className="text-gold-300 text-sm font-semibold uppercase tracking-widest">Pour IQ</span>
+            <span className="text-gold-300 text-sm font-semibold uppercase tracking-widest">Pour IQ™</span>
           </div>
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold text-white mb-6 leading-tight">
             Margin analysis for cocktail menus.

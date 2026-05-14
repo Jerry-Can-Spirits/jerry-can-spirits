@@ -52,7 +52,7 @@ export default async function TradeLandingPage() {
           {hasPourIq ? (
             <TradeTile
               variant="active"
-              title="Pour IQ"
+              title="Pour IQ™"
               description="Margin analysis and AI recommendations for your cocktail menu."
               href="/trade/pouriq/"
               ctaLabel="Open Pour IQ"
@@ -60,7 +60,7 @@ export default async function TradeLandingPage() {
           ) : (
             <TradeTile
               variant="greyed"
-              title="Pour IQ"
+              title="Pour IQ™"
               description="Margin analysis and AI recommendations for your cocktail menu."
               learnMoreHref="/trade/pour-iq/"
               unavailableNote="Available as an additional service."

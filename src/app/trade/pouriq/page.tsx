@@ -24,7 +24,7 @@ export default async function PourIqDashboard() {
         <div className="flex items-baseline justify-between mb-10">
           <div>
             <div className="inline-block px-4 py-2 bg-jerry-green-800/60 backdrop-blur-sm rounded-full border border-gold-500/30 mb-4">
-              <span className="text-gold-300 text-sm font-semibold uppercase tracking-widest">Pour IQ</span>
+              <span className="text-gold-300 text-sm font-semibold uppercase tracking-widest">Pour IQ™</span>
             </div>
             <h1 className="text-3xl md:text-4xl font-serif font-bold text-white">Your menus</h1>
           </div>
