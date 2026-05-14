@@ -1,4 +1,5 @@
 import type { IngredientLibraryRow, IngredientType } from './types'
+import { insertCostChange, type CostPricingMode } from './cost-changes'
 
 export interface IngredientLibraryInsert {
   trade_account_id: string
@@ -86,6 +87,11 @@ export async function updateLibraryEntry(
   const allowedFields = [
     'name','ingredient_type','bottle_size_ml','bottle_cost_p','unit_cost_p','barcode','notes',
   ] as const
+
+  // Read current state for cost-change detection before mutating.
+  const before = await getLibraryEntry(db, id, tradeAccountId)
+  if (!before) return
+
   const sets: string[] = []
   const binds: unknown[] = []
   let idx = 1
@@ -103,6 +109,35 @@ export async function updateLibraryEntry(
     .prepare(`UPDATE pouriq_ingredients_library SET ${sets.join(', ')} WHERE id = ?${idx++} AND trade_account_id = ?${idx}`)
     .bind(...binds)
     .run()
+
+  // Detect a cost change and log it. An entry is either bottle-priced
+  // (bottle_cost_p set, unit_cost_p null) or unit-priced (the inverse).
+  // The pricing mode in the audit row reflects the mode AFTER this update.
+  const newBottleCost = ('bottle_cost_p' in patch) ? patch.bottle_cost_p ?? null : before.bottle_cost_p
+  const newUnitCost = ('unit_cost_p' in patch) ? patch.unit_cost_p ?? null : before.unit_cost_p
+
+  let mode: CostPricingMode | null = null
+  let oldCost: number | null = null
+  let newCost: number | null = null
+  if (newUnitCost !== null) {
+    mode = 'unit'
+    oldCost = before.unit_cost_p
+    newCost = newUnitCost
+  } else if (newBottleCost !== null) {
+    mode = 'bottle'
+    oldCost = before.bottle_cost_p
+    newCost = newBottleCost
+  }
+
+  if (mode && newCost !== null && oldCost !== newCost) {
+    await insertCostChange(db, {
+      library_ingredient_id: id,
+      pricing_mode: mode,
+      old_cost_p: oldCost,
+      new_cost_p: newCost,
+      source: 'manual',
+    })
+  }
 }
 
 export async function deleteLibraryEntry(
