@@ -70,7 +70,7 @@ Wire the inline ripple, confirm modal, and post-save toast into the ingredient e
 The edit page already fetches the entry + usage. It will now also fetch the impact payload once (using the same `GET /api/pouriq/library/[id]/impact` endpoint).
 
 `IngredientForm` gains:
-- A "preview" mode when `newCostP !== savedCostP` and the impact payload has at least one affected cocktail
+- A "preview" mode when the impact payload has at least one affected cocktail and either: (a) `newCostP !== savedCostP` for a cost *change*, or (b) `savedCostP === null && newCostP > 0` for first-cost entry. Both cases need the preview; only (a) is gated by the modal.
 - A `useMemo` that recomputes projection + rollups whenever `newCostP` changes
 - `<RipplePreview>` rendered below the form fields
 - A save handler that intercepts the submit, checks for newly-below-target drinks, and either opens the modal or calls `saveLibraryEntryAction` directly
@@ -83,19 +83,18 @@ The existing save path is a Next.js server action (`saveLibraryEntryAction` in `
 interface RippleConfirmModalProps {
   isOpen: boolean
   ingredientName: string
-  isFirstCost: boolean  // adapts copy when prior cost was null
   newlyBelowTarget: ProjectedCocktail[]
   onCancel: () => void
   onConfirm: () => void  // triggers commit (calls saveLibraryEntryAction)
 }
 ```
 
-Two buttons: **Cancel** and **Save**. The modal lists each newly-below-target drink with current → projected GP and the menu's target. Copy adapts for the first-cost case.
+Two buttons: **Cancel** and **Save**. The modal lists each newly-below-target drink with current → projected GP and the menu's target. The modal is only ever opened for cost *changes* — never for first-cost saves (handled differently, see Edge cases).
 
-**New:** post-save toast. On successful commit, surface affected drinks as inline links. The toast contract:
+**New:** `src/components/pouriq/CostUpdateToast.tsx` — follows the existing `SocialProofToast.tsx` pattern.
 
 ```ts
-interface CostUpdateToastData {
+interface CostUpdateToastProps {
   ingredientName: string
   newlyBelowTarget: Array<{
     cocktailId: string
@@ -105,10 +104,20 @@ interface CostUpdateToastData {
     projectedGpPct: number
     targetGpPct: number
   }>
+  onDismiss: () => void
 }
 ```
 
-Implementation: reuse the existing toast mechanism if one exists in the codebase (check on entry to PR 2); otherwise add a minimal toast component scoped to this feature. The toast itself is a small adjacent decision — not central to the design — and the PR 2 plan will pick the approach based on what's already in use.
+Follows the same conventions as `SocialProofToast.tsx`:
+- Fixed-positioned (`bottom-4 left-4 right-4 sm:right-auto sm:max-w-sm`)
+- 6-second auto-dismiss timer + manual close button
+- `toast-slide-in` / `toast-fade-out` animation classes from `src/styles/animations.css`
+- `role="status" aria-live="polite"` for screen readers
+
+Differences from `SocialProofToast`:
+- No `sessionStorage` gate (this fires per save, not once per session)
+- Body lists each newly-below-target drink as a link to `/trade/pouriq/[menuId]/edit?cocktail=[id]` (same URL pattern already used on the ingredient "Used in" section)
+- Mounted by the ingredient edit page; visibility driven by the parent component's post-save state, not internal timing.
 
 ---
 
@@ -132,6 +141,10 @@ User edits the cost field → form state `newCostP` updates
 <RipplePreview> renders below the form (if usage > 0 and newCostP differs)
    │
 User clicks Save
+   │
+   ├─ Is this a first-cost save (savedCostP === null)?
+   │     │
+   │     └── YES → commit straight through (no modal, ever)
    │
    ├─ Is any drink newly below target (below_target_after && !below_target_now)?
    │     │
@@ -162,7 +175,7 @@ Page revalidates; impact payload refetched on next interaction
 | Impact API fetch fails | Show inline notice ("Couldn't load impact preview"). Save still works; no modal fires; no toast. |
 | Save fails (network/5xx) | If modal open, show error inside modal and stay open. If no modal, surface error inline on the form (existing behaviour). No toast. |
 | Cost equals saved cost | Preview shows "no change" via existing `currentP === newCostP` path. No modal triggers on save. |
-| First-time cost (was null) | Modal fires if any drink would be below target with the new cost. Copy adapts: "Setting first cost for {ingredient} — N drinks will now reflect real pour costs." |
+| First-time cost (was null) | **No modal gate.** The inline `<RipplePreview>` still renders so the bar manager can see the resulting GP as they enter the cost — that's the whole point: they should be able to type figures, watch GP land in their target range, and adjust before committing. Going from null → real cost isn't a regression to warn about, it's the system telling the truth for the first time. Save commits straight through. |
 | User clicks Cancel in modal | Close modal. No commit. Cost field retains the typed value so the user can adjust. |
 | Toast dismissed | Cost is committed; no further action required. Default lifetime ~6 s. |
 
@@ -185,11 +198,13 @@ Page revalidates; impact payload refetched on next interaction
 ### PR 2 (inline ripple + modal + toast)
 
 - **Unit:** pure function `getNewlyBelowTarget(projected: ProjectedCocktail[]): ProjectedCocktail[]` — filter logic for `below_target_after && !below_target_now`. Tested with synthetic projection arrays covering: all above, all newly below, mix, edge of target by 0.1pp, first-cost case.
-- **Component:** render `<RippleConfirmModal>` with 0 / 1 / many newly-below-target drinks; verify Cancel and Save fire the correct callback; first-cost copy variant renders.
+- **Component:** render `<RippleConfirmModal>` with 0 / 1 / many newly-below-target drinks; verify Cancel and Save fire the correct callback.
+- **Component:** render `<CostUpdateToast>` with 0 / 1 / many affected drinks; verify auto-dismiss timer fires; verify manual close button calls `onDismiss`; verify drink links render with correct `/trade/pouriq/[menuId]/edit?cocktail=[id]` URLs.
 - **Manual integration:**
   - Edit cost with no usage → no panel, straight save, no toast
   - Edit cost with usage, all drinks stay above target → preview shows, save commits silently, no modal, no toast
   - Edit cost that drops a drink below target → preview shows; click Save → modal opens; click Cancel → no commit; click Save → commit + toast appears; toast link navigates to the right drink edit page
+  - **First-cost entry** (ingredient with bottle_cost_p/unit_cost_p still null but used by cocktails): type a cost → preview renders showing the resulting GP for each affected drink; Save commits straight through with no modal, even if drinks land below target
   - Impact API mocked to fail → form still saves cleanly; inline notice rendered
 
 ### CI
@@ -214,7 +229,7 @@ Both PRs go through standard CI (build + type-check). Branch off `origin/main`, 
 | `src/components/pouriq/IngredientForm.tsx` | Add inline ripple preview, save interception, modal trigger logic. |
 | `src/app/trade/pouriq/library/[id]/edit/page.tsx` | Fetch impact payload server-side; pass to `IngredientForm`. |
 | `src/components/pouriq/RippleConfirmModal.tsx` | **New.** Cancel/Save modal. |
-| `src/components/pouriq/CostUpdateToast.tsx` *or equivalent* | **New** if no existing toast pattern; reuse if one exists. |
+| `src/components/pouriq/CostUpdateToast.tsx` | **New.** Follows `src/components/SocialProofToast.tsx` pattern; per-save rather than session-bound. |
 | `src/lib/pouriq/cost-impact.ts` | Add `getNewlyBelowTarget()` helper. Pure, tested. |
 
 ---
