@@ -4,12 +4,12 @@ import { useEffect, useState } from 'react'
 import Link from 'next/link'
 
 interface AffectedDrink {
-  cocktailId: string
-  cocktailName: string
-  menuId: string
-  menuName: string
-  projectedGpPct: number
-  targetGpPct: number
+  cocktail_id: string
+  cocktail_name: string
+  menu_id: string
+  menu_name: string
+  projected_gp_pct: number
+  target_gp_pct: number
 }
 
 interface Props {
@@ -57,14 +57,14 @@ export function CostUpdateToast({ ingredientName, newlyBelowTarget, onDismiss }:
           </p>
           <ul className="mt-2 space-y-1">
             {newlyBelowTarget.map((d) => (
-              <li key={d.cocktailId}>
+              <li key={d.cocktail_id}>
                 <Link
-                  href={`/trade/pouriq/${d.menuId}/edit?cocktail=${d.cocktailId}`}
+                  href={`/trade/pouriq/${d.menu_id}/edit?cocktail=${d.cocktail_id}`}
                   className="text-gold-300 hover:text-gold-200 underline"
                 >
-                  {d.cocktailName}
+                  {d.cocktail_name}
                 </Link>
-                <span className="text-parchment-400 text-xs"> {formatPct(d.projectedGpPct)} (target {d.targetGpPct}%)</span>
+                <span className="text-parchment-400 text-xs"> {formatPct(d.projected_gp_pct)} (target {d.target_gp_pct}%)</span>
               </li>
             ))}
           </ul>

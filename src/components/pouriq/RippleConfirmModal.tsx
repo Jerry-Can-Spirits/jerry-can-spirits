@@ -26,7 +26,7 @@ export function RippleConfirmModal({
 }: Props) {
   const count = newlyBelowTarget.length
   return (
-    <Dialog open={isOpen} onClose={onCancel} className="relative z-50">
+    <Dialog open={isOpen} onClose={() => { if (!submitting) onCancel() }} className="relative z-50">
       <div className="fixed inset-0 bg-black/60" aria-hidden="true" />
       <div className="fixed inset-0 flex items-center justify-center p-4">
         <DialogPanel className="w-full max-w-lg bg-jerry-green-800 border border-gold-500/30 rounded-xl p-6 shadow-2xl">
