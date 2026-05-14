@@ -20,7 +20,7 @@ export function RipplePreview({ projected, rollups, emptyMessage }: Props) {
   if (projected.length === 0) {
     return (
       <div className="bg-jerry-green-800/40 border border-gold-500/20 rounded-xl p-6 text-sm text-parchment-300">
-        {emptyMessage ?? "This ingredient isn't used in any drinks yet. Add it to a cocktail to see the impact."}
+        {emptyMessage ?? "This ingredient isn’t used in any drinks yet. Add it to a cocktail to see the impact."}
       </div>
     )
   }
