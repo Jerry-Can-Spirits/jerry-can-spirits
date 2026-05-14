@@ -158,7 +158,7 @@ export default function PrivacyPolicy() {
 
             <section className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20">
               <h2 className="text-2xl font-serif font-bold text-white mb-4 pb-2 border-b border-gold-500/20">
-                3.5 Pour IQ
+                3.5 Pour IQ™
               </h2>
               <p className="text-white mb-4 leading-relaxed">
                 If you hold a Pour IQ licence, we process the cocktail menu data you enter, including cocktail names, recipes, ingredient costs, sale prices, and the resulting analyses.
