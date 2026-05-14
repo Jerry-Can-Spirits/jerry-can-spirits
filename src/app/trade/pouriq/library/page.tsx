@@ -5,6 +5,7 @@ import { checkPourIqAccess } from '@/lib/pouriq/access'
 import { listLibraryEntries, getLibraryUsageCounts } from '@/lib/pouriq/ingredient-library'
 import { LicenceGate } from '@/components/pouriq/LicenceGate'
 import { IngredientList } from '@/components/pouriq/IngredientList'
+import { CostUpdateToastReader } from '@/components/pouriq/CostUpdateToastReader'
 import { PRIMARY_BUTTON, SECONDARY_BUTTON } from '@/lib/pouriq/button-styles'
 
 export const dynamic = 'force-dynamic'
@@ -38,6 +39,7 @@ export default async function LibraryPage() {
 
         <IngredientList entries={entries} usageCounts={usageCounts} />
       </div>
+      <CostUpdateToastReader />
     </main>
   )
 }

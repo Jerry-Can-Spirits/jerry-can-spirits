@@ -6,6 +6,7 @@ import {
   getLibraryEntry,
   getLibraryEntryUsage,
 } from '@/lib/pouriq/ingredient-library'
+import { loadImpactPayload } from '@/lib/pouriq/cost-impact-loader'
 import { LicenceGate } from '@/components/pouriq/LicenceGate'
 import { IngredientForm } from '@/components/pouriq/IngredientForm'
 import { SECONDARY_BUTTON_SM } from '@/lib/pouriq/button-styles'
@@ -29,8 +30,9 @@ export default async function EditLibraryEntryPage({ params }: Props) {
   if (!entry) notFound()
 
   const usage = await getLibraryEntryUsage(db, id)
+  const impactPayload = await loadImpactPayload(db, id, access.tradeAccountId)
+  if (!impactPayload) notFound()
 
-  // Group usage by menu for the "Used in" section
   const byMenu = new Map<string, { menuName: string; cocktails: Array<{ id: string; name: string }> }>()
   for (const u of usage) {
     if (!byMenu.has(u.menu_id)) byMenu.set(u.menu_id, { menuName: u.menu_name, cocktails: [] })
@@ -54,7 +56,7 @@ export default async function EditLibraryEntryPage({ params }: Props) {
         </div>
 
         <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20 mb-8">
-          <IngredientForm entry={entry} usageCount={usage.length} />
+          <IngredientForm entry={entry} usageCount={usage.length} impactPayload={impactPayload} />
         </div>
 
         {byMenu.size > 0 && (

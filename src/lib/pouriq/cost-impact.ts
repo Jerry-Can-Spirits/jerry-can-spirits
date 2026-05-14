@@ -148,3 +148,34 @@ export function rollupByMenu(projected: ProjectedCocktail[]): MenuRollup[] {
   rollups.sort((a, b) => a.menu_name.localeCompare(b.menu_name))
   return rollups
 }
+
+/**
+ * Drinks that would cross from at/above their menu's target GP to below
+ * it as a result of the cost change. Used by the inline cost-ripple flow
+ * to decide whether to fire the confirm modal on save — only newly-below
+ * drinks warrant interruption; already-below drinks are not regressions
+ * caused by this change.
+ */
+export function getNewlyBelowTarget(projected: ProjectedCocktail[]): ProjectedCocktail[] {
+  return projected.filter((p) => !p.below_target_now && p.below_target_after)
+}
+
+// Shared post-save toast contract. Used by IngredientForm (producer),
+// CostUpdateToastReader (sessionStorage consumer), and CostUpdateToast
+// (UI). One source of truth prevents drift across the three call sites.
+
+export const COST_UPDATE_TOAST_KEY = 'pouriq_cost_update_toast'
+
+export interface CostUpdateToastDrink {
+  cocktail_id: string
+  cocktail_name: string
+  menu_id: string
+  menu_name: string
+  projected_gp_pct: number
+  target_gp_pct: number
+}
+
+export interface CostUpdateToastPayload {
+  ingredientName: string
+  newlyBelowTarget: CostUpdateToastDrink[]
+}
