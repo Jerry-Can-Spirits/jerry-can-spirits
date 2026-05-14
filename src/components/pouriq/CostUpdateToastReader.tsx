@@ -1,29 +1,21 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import {
+  COST_UPDATE_TOAST_KEY,
+  type CostUpdateToastPayload,
+} from '@/lib/pouriq/cost-impact'
 import { CostUpdateToast } from './CostUpdateToast'
 
-interface ToastData {
-  ingredientName: string
-  newlyBelowTarget: Array<{
-    cocktail_id: string
-    cocktail_name: string
-    menu_id: string
-    menu_name: string
-    projected_gp_pct: number
-    target_gp_pct: number
-  }>
-}
-
 export function CostUpdateToastReader() {
-  const [data, setData] = useState<ToastData | null>(null)
+  const [data, setData] = useState<CostUpdateToastPayload | null>(null)
 
   useEffect(() => {
-    const raw = sessionStorage.getItem('pouriq_cost_update_toast')
+    const raw = sessionStorage.getItem(COST_UPDATE_TOAST_KEY)
     if (!raw) return
-    sessionStorage.removeItem('pouriq_cost_update_toast')
+    sessionStorage.removeItem(COST_UPDATE_TOAST_KEY)
     try {
-      const parsed = JSON.parse(raw) as ToastData
+      const parsed = JSON.parse(raw) as CostUpdateToastPayload
       if (parsed.newlyBelowTarget && parsed.newlyBelowTarget.length > 0) {
         setData(parsed)
       }

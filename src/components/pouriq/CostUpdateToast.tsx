@@ -2,19 +2,11 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
-
-interface AffectedDrink {
-  cocktail_id: string
-  cocktail_name: string
-  menu_id: string
-  menu_name: string
-  projected_gp_pct: number
-  target_gp_pct: number
-}
+import type { CostUpdateToastDrink } from '@/lib/pouriq/cost-impact'
 
 interface Props {
   ingredientName: string
-  newlyBelowTarget: AffectedDrink[]
+  newlyBelowTarget: CostUpdateToastDrink[]
   onDismiss: () => void
 }
 
@@ -55,7 +47,7 @@ export function CostUpdateToast({ ingredientName, newlyBelowTarget, onDismiss }:
             <span className="font-semibold text-gold-400">{ingredientName}</span> updated.
             {count === 1 ? ' 1 drink now below target:' : ` ${count} drinks now below target:`}
           </p>
-          <ul className="mt-2 space-y-1">
+          <ul className="mt-2 space-y-1 max-h-48 overflow-y-auto">
             {newlyBelowTarget.map((d) => (
               <li key={d.cocktail_id}>
                 <Link

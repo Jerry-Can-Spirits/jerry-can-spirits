@@ -8,10 +8,12 @@ import { BarcodeScanner } from '@/components/pouriq/BarcodeScanner'
 import { RipplePreview } from '@/components/pouriq/RipplePreview'
 import { RippleConfirmModal } from '@/components/pouriq/RippleConfirmModal'
 import {
+  COST_UPDATE_TOAST_KEY,
   getNewlyBelowTarget,
   projectCocktail,
   rollupByMenu,
   type CostImpactPayload,
+  type CostUpdateToastPayload,
   type ProjectedCocktail,
 } from '@/lib/pouriq/cost-impact'
 
@@ -28,18 +30,6 @@ interface Props {
   entry: IngredientLibraryRow | null
   usageCount?: number
   impactPayload?: CostImpactPayload
-}
-
-interface PendingToast {
-  ingredientName: string
-  newlyBelowTarget: Array<{
-    cocktail_id: string
-    cocktail_name: string
-    menu_id: string
-    menu_name: string
-    projected_gp_pct: number
-    target_gp_pct: number
-  }>
 }
 
 interface PendingValues {
@@ -72,7 +62,7 @@ export function IngredientForm({ entry, usageCount = 0, impactPayload }: Props) 
   const [error, setError] = useState<string | null>(null)
   const [submitting, setSubmitting] = useState(false)
   const [modalOpen, setModalOpen] = useState(false)
-  const [pendingToast, setPendingToast] = useState<PendingToast | null>(null)
+  const [pendingToast, setPendingToast] = useState<CostUpdateToastPayload | null>(null)
   const pendingValuesRef = useRef<PendingValues | null>(null)
 
   const savedCostP =
@@ -148,7 +138,7 @@ export function IngredientForm({ entry, usageCount = 0, impactPayload }: Props) 
     return { bottle_size_ml_n, bottle_cost_p, unit_cost_p }
   }
 
-  async function commit(values: PendingValues, toastData: PendingToast | null) {
+  async function commit(values: PendingValues, toastData: CostUpdateToastPayload | null) {
     setSubmitting(true)
     try {
       await saveLibraryEntryAction(entry?.id ?? null, {
@@ -161,7 +151,7 @@ export function IngredientForm({ entry, usageCount = 0, impactPayload }: Props) 
         notes: notes.trim() || null,
       })
       if (toastData) {
-        sessionStorage.setItem('pouriq_cost_update_toast', JSON.stringify(toastData))
+        sessionStorage.setItem(COST_UPDATE_TOAST_KEY, JSON.stringify(toastData))
       }
       router.push('/trade/pouriq/library')
       router.refresh()
@@ -191,7 +181,7 @@ export function IngredientForm({ entry, usageCount = 0, impactPayload }: Props) 
       return
     }
 
-    const toastData: PendingToast = {
+    const toastData: CostUpdateToastPayload = {
       ingredientName: name.trim(),
       newlyBelowTarget: newlyBelow.map((p) => ({
         cocktail_id: p.cocktail_id,
