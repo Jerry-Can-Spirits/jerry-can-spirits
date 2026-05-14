@@ -15,6 +15,11 @@ export function InvoiceUpload({ onUploaded, disabled = false }: Props) {
 
   async function uploadFile(file: File) {
     setError(null)
+    if (file.size === 0) { setError('Empty file'); return }
+    if (file.size > 5 * 1024 * 1024) { setError('File exceeds 5MB limit'); return }
+    if (file.type !== 'application/pdf' && !file.name.toLowerCase().endsWith('.pdf')) {
+      setError('Only PDF files are accepted'); return
+    }
     setUploading(true)
     try {
       const formData = new FormData()

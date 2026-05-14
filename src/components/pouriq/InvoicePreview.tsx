@@ -1,32 +1,15 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import type { PreviewPayload } from '@/app/api/pouriq/invoices/extract/route'
-import type { IngredientLibraryRow, IngredientType } from '@/lib/pouriq/types'
+import type { IngredientLibraryRow } from '@/lib/pouriq/types'
+import { InvoiceLineRow, type LineState } from './InvoiceLineRow'
 
 interface Props {
   initial: PreviewPayload
   library: IngredientLibraryRow[]
 }
-
-interface LineState {
-  applied: boolean
-  unit_price_p: number       // editable; defaults to extracted_unit_price_p
-  library_id: string | null  // when matched to an existing library entry
-  // When creating a new library entry inline:
-  create_new: boolean
-  new_name: string
-  new_type: IngredientType
-  new_pricing_mode: 'bottle' | 'unit'
-  new_bottle_size_ml: number | null
-}
-
-function formatMoney(p: number): string {
-  return `£${(p / 100).toFixed(2)}`
-}
-
-const INGREDIENT_TYPES: IngredientType[] = ['spirit','liqueur','wine','beer','mixer','syrup','juice','garnish','other']
 
 export function InvoicePreview({ initial, library }: Props) {
   const router = useRouter()
@@ -38,28 +21,54 @@ export function InvoicePreview({ initial, library }: Props) {
 
   const [lines, setLines] = useState<LineState[]>(() =>
     initial.lines.map((l): LineState => {
-      let library_id: string | null = null
-      if (l.match.kind === 'auto') library_id = l.match.library_id
+      if (l.match.kind === 'auto') {
+        return {
+          applied: true,
+          unit_price_p: l.extracted_unit_price_p,
+          match: { kind: 'existing', library_id: l.match.library_id },
+        }
+      }
       return {
-        applied: l.match.kind === 'auto',
+        applied: false,
         unit_price_p: l.extracted_unit_price_p,
-        library_id,
-        create_new: false,
-        new_name: l.extracted_name,
-        new_type: 'spirit',
-        new_pricing_mode: 'bottle',
-        new_bottle_size_ml: null,
+        match: { kind: 'existing', library_id: null },
       }
     }),
   )
 
-  function updateLine(index: number, patch: Partial<LineState>) {
+  const handleChange = useCallback((index: number, patch: Partial<LineState>) => {
     setLines((prev) => {
       const next = [...prev]
       next[index] = { ...next[index], ...patch }
       return next
     })
-  }
+  }, [])
+
+  const handleToggleCreateNew = useCallback((index: number, toNew: boolean) => {
+    setLines((prev) => {
+      const next = [...prev]
+      const current = next[index]
+      if (toNew) {
+        const seedName = initial.lines[index].extracted_name
+        next[index] = {
+          ...current,
+          match: {
+            kind: 'new',
+            new_name: seedName,
+            new_type: 'spirit',
+            new_pricing_mode: 'bottle',
+            new_bottle_size_ml: null,
+          },
+        }
+      } else {
+        next[index] = {
+          ...current,
+          match: { kind: 'existing', library_id: null },
+        }
+      }
+      return next
+    })
+  }, [initial.lines])
 
   const libraryById = useMemo(() => {
     const m = new Map<string, IngredientLibraryRow>()
@@ -67,18 +76,8 @@ export function InvoicePreview({ initial, library }: Props) {
     return m
   }, [library])
 
-  function currentCostFor(libraryId: string | null): number | null {
-    if (!libraryId) return null
-    const entry = libraryById.get(libraryId)
-    if (!entry) return null
-    return entry.unit_cost_p ?? entry.bottle_cost_p ?? null
-  }
-
   async function handleSave() {
     setError(null)
-    if (!lines.some((l) => l.applied)) {
-      // Still allowed — saves an invoice record with applied_line_count=0
-    }
 
     const body = {
       ticket: initial.ticket,
@@ -95,22 +94,22 @@ export function InvoicePreview({ initial, library }: Props) {
           applied: s.applied,
         }
         if (!s.applied) return base
-        if (s.create_new) {
+        if (s.match.kind === 'new') {
           return {
             ...base,
             new_library: {
-              name: s.new_name.trim(),
-              ingredient_type: s.new_type,
-              bottle_size_ml: s.new_pricing_mode === 'bottle' ? s.new_bottle_size_ml : null,
-              bottle_cost_p: s.new_pricing_mode === 'bottle' ? s.unit_price_p : null,
-              unit_cost_p: s.new_pricing_mode === 'unit' ? s.unit_price_p : null,
+              name: s.match.new_name.trim(),
+              ingredient_type: s.match.new_type,
+              bottle_size_ml: s.match.new_pricing_mode === 'bottle' ? s.match.new_bottle_size_ml : null,
+              bottle_cost_p: s.match.new_pricing_mode === 'bottle' ? s.unit_price_p : null,
+              unit_cost_p: s.match.new_pricing_mode === 'unit' ? s.unit_price_p : null,
             },
             new_cost_p: s.unit_price_p,
           }
         }
         return {
           ...base,
-          library_id: s.library_id!,
+          library_id: s.match.library_id,
           new_cost_p: s.unit_price_p,
         }
       }),
@@ -137,6 +136,7 @@ export function InvoicePreview({ initial, library }: Props) {
       router.refresh()
     } catch (e) {
       setError((e as Error).message)
+    } finally {
       setSubmitting(false)
     }
   }
@@ -176,97 +176,18 @@ export function InvoicePreview({ initial, library }: Props) {
               </tr>
             </thead>
             <tbody>
-              {initial.lines.map((line, idx) => {
-                const s = lines[idx]
-                const currentP = currentCostFor(s.library_id)
-                const delta = currentP !== null ? s.unit_price_p - currentP : null
-                return (
-                  <tr key={idx} className="border-t border-gold-500/10 align-top">
-                    <td className="px-3 py-3">
-                      <input
-                        type="checkbox"
-                        checked={s.applied}
-                        onChange={(e) => updateLine(idx, { applied: e.target.checked })}
-                        className="h-4 w-4"
-                        aria-label={`Apply line ${idx + 1}`}
-                      />
-                    </td>
-                    <td className="px-3 py-3 text-parchment-100">
-                      <div className="font-medium">{line.extracted_name}</div>
-                      {line.extracted_line_total_p !== null && (
-                        <div className="text-xs text-parchment-400 mt-1">Line total {formatMoney(line.extracted_line_total_p)}</div>
-                      )}
-                    </td>
-                    <td className="px-3 py-3 text-parchment-300">{line.extracted_quantity ?? '—'}</td>
-                    <td className="px-3 py-3">
-                      <input
-                        type="number"
-                        step="0.01"
-                        min={0}
-                        value={(s.unit_price_p / 100).toFixed(2)}
-                        onChange={(e) => updateLine(idx, { unit_price_p: Math.round(parseFloat(e.target.value || '0') * 100) })}
-                        className="w-24 px-2 py-1 bg-jerry-green-700/50 border border-gold-500/30 rounded text-parchment-50"
-                        aria-label={`New net price for line ${idx + 1}`}
-                      />
-                    </td>
-                    <td className="px-3 py-3">
-                      {s.create_new ? (
-                        <div className="space-y-2 min-w-[260px]">
-                          <input value={s.new_name} onChange={(e) => updateLine(idx, { new_name: e.target.value })} placeholder="Name" className="w-full px-2 py-1 bg-jerry-green-700/50 border border-gold-500/30 rounded text-parchment-50 text-sm" />
-                          <div className="flex gap-2">
-                            <select value={s.new_type} onChange={(e) => updateLine(idx, { new_type: e.target.value as IngredientType })} className="px-2 py-1 bg-jerry-green-700/50 border border-gold-500/30 rounded text-parchment-50 text-sm">
-                              {INGREDIENT_TYPES.map((t) => <option key={t} value={t}>{t}</option>)}
-                            </select>
-                            <select value={s.new_pricing_mode} onChange={(e) => updateLine(idx, { new_pricing_mode: e.target.value as 'bottle' | 'unit' })} className="px-2 py-1 bg-jerry-green-700/50 border border-gold-500/30 rounded text-parchment-50 text-sm">
-                              <option value="bottle">Per bottle</option>
-                              <option value="unit">Per unit</option>
-                            </select>
-                          </div>
-                          {s.new_pricing_mode === 'bottle' && (
-                            <input
-                              type="number"
-                              min={0}
-                              step="1"
-                              placeholder="Bottle size (ml)"
-                              value={s.new_bottle_size_ml ?? ''}
-                              onChange={(e) => updateLine(idx, { new_bottle_size_ml: e.target.value ? parseInt(e.target.value, 10) : null })}
-                              className="w-full px-2 py-1 bg-jerry-green-700/50 border border-gold-500/30 rounded text-parchment-50 text-sm"
-                            />
-                          )}
-                          <button type="button" onClick={() => updateLine(idx, { create_new: false })} className="text-xs text-parchment-400 hover:text-parchment-200 underline">
-                            Cancel new entry
-                          </button>
-                        </div>
-                      ) : (
-                        <div className="space-y-1 min-w-[220px]">
-                          <select
-                            value={s.library_id ?? ''}
-                            onChange={(e) => updateLine(idx, { library_id: e.target.value || null })}
-                            className="w-full px-2 py-1 bg-jerry-green-700/50 border border-gold-500/30 rounded text-parchment-50 text-sm"
-                          >
-                            <option value="">— select library entry —</option>
-                            {line.match.kind === 'suggestions' && line.match.entries.map((e) => (
-                              <option key={e.id} value={e.id}>{e.name} (suggested)</option>
-                            ))}
-                            {library.map((e) => (
-                              <option key={e.id} value={e.id}>{e.name}</option>
-                            ))}
-                          </select>
-                          <button type="button" onClick={() => updateLine(idx, { create_new: true, library_id: null })} className="text-xs text-gold-300 hover:text-gold-200 underline">
-                            Create new library entry
-                          </button>
-                        </div>
-                      )}
-                    </td>
-                    <td className="px-3 py-3 text-parchment-200">
-                      {currentP !== null ? formatMoney(currentP) : '—'}
-                    </td>
-                    <td className={`px-3 py-3 ${delta !== null && delta > 0 ? 'text-amber-300' : delta !== null && delta < 0 ? 'text-emerald-300' : 'text-parchment-300'}`}>
-                      {delta === null ? '—' : `${delta > 0 ? '+' : ''}${formatMoney(delta)}`}
-                    </td>
-                  </tr>
-                )
-              })}
+              {initial.lines.map((line, idx) => (
+                <InvoiceLineRow
+                  key={idx}
+                  index={idx}
+                  line={line}
+                  state={lines[idx]}
+                  library={library}
+                  libraryById={libraryById}
+                  onChange={handleChange}
+                  onToggleCreateNew={handleToggleCreateNew}
+                />
+              ))}
             </tbody>
           </table>
         </div>

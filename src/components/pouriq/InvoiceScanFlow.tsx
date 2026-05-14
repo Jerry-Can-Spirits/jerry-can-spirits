@@ -51,7 +51,7 @@ export function InvoiceScanFlow({ library }: Props) {
 
   if (phase.kind === 'extracting') {
     return (
-      <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-10 border border-gold-500/20 text-center">
+      <div role="status" className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-10 border border-gold-500/20 text-center">
         <p className="text-lg text-parchment-100 mb-2">Reading {phase.filename}…</p>
         <p className="text-sm text-parchment-400">This usually takes a few seconds.</p>
       </div>
