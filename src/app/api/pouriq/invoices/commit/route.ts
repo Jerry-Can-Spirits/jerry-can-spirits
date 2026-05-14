@@ -1,6 +1,9 @@
 // POST /api/pouriq/invoices/commit
 // JSON body: ticket + header + lines (with applied/library refs)
-// Atomic: invoice + lines + cost_changes + library updates, then R2 move.
+// Per-applied-line writes (library UPDATE + invoice_line INSERT + cost_change
+// INSERT) run as one D1 batch so they are atomic relative to each other.
+// New library entries are inserted before their batch and de-duped within
+// one invoice so split-line invoices don't create duplicate library rows.
 
 import { NextResponse } from 'next/server'
 import * as Sentry from '@sentry/nextjs'
@@ -12,7 +15,7 @@ import {
   insertInvoiceLine,
   finaliseInvoiceTotals,
 } from '@/lib/pouriq/invoices'
-import { insertCostChange, type CostPricingMode } from '@/lib/pouriq/cost-changes'
+import { type CostPricingMode } from '@/lib/pouriq/cost-changes'
 import { getLibraryEntry, insertLibraryEntry } from '@/lib/pouriq/ingredient-library'
 import type { IngredientType } from '@/lib/pouriq/types'
 
@@ -57,6 +60,10 @@ function isPositiveInteger(n: unknown): n is number {
 
 function isNonNegativeInteger(n: unknown): n is number {
   return typeof n === 'number' && Number.isInteger(n) && n >= 0
+}
+
+function genId(): string {
+  return crypto.randomUUID().replace(/-/g, '')
 }
 
 function validateBody(body: CommitBody): string | null {
@@ -139,21 +146,49 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Could not save invoice header' }, { status: 500 })
   }
 
-  // 2. For each line: insert new library if needed, update existing library
-  //    cost if it changed, insert cost_changes audit, insert invoice_line row.
+  // 2. Process each line. Applied lines run library + invoice_line + cost_change
+  //    as one D1 batch so they're atomic relative to each other. New library
+  //    entries are de-duped by normalised name within one invoice.
   let appliedCount = 0
   let netTotalP: number | null = null
   let netSawAny = false
+  const newLibraryIdByName = new Map<string, string>()
 
   try {
     for (const line of body.lines) {
-      let matchedLibraryId: string | null = null
-      if (line.applied) {
-        let libraryId: string
-        let oldCostP: number | null = null
-        let pricingMode: CostPricingMode
+      if (!line.applied) {
+        // Skipped line — just record for the audit/ledger.
+        await insertInvoiceLine(db, {
+          invoice_id: invoiceId,
+          extracted_name: line.extracted_name,
+          extracted_quantity: line.extracted_quantity,
+          extracted_unit_price_p: line.extracted_unit_price_p,
+          extracted_line_total_p: line.extracted_line_total_p,
+          matched_library_id: null,
+          applied: false,
+        })
+        continue
+      }
 
-        if (line.new_library) {
+      let libraryId: string
+      let pricingMode: CostPricingMode
+      let oldCostP: number | null
+
+      if (line.new_library) {
+        const dedupeKey = line.new_library.name.trim().toLowerCase()
+        const dedupedId = newLibraryIdByName.get(dedupeKey)
+        if (dedupedId) {
+          // Already created earlier in this invoice. Route through the
+          // existing-library path so the second line updates the cost (last
+          // wins) and inserts a proper cost_change audit row.
+          libraryId = dedupedId
+          const existing = await getLibraryEntry(db, libraryId, access.tradeAccountId)
+          if (!existing) throw new Error(`Deduped library entry ${libraryId} not found`)
+          pricingMode = existing.unit_cost_p !== null ? 'unit' : 'bottle'
+          oldCostP = pricingMode === 'unit' ? existing.unit_cost_p : existing.bottle_cost_p
+        } else {
+          // First sighting of this name in this invoice. Insert the library
+          // row now; the per-line batch below records the audit + invoice_line.
           libraryId = await insertLibraryEntry(db, {
             trade_account_id: access.tradeAccountId,
             name: line.new_library.name.trim(),
@@ -164,80 +199,90 @@ export async function POST(request: Request) {
             barcode: null,
             notes: null,
           })
+          newLibraryIdByName.set(dedupeKey, libraryId)
           pricingMode = line.new_library.unit_cost_p !== null ? 'unit' : 'bottle'
           oldCostP = null
-        } else {
-          libraryId = line.library_id!
-          const existing = await getLibraryEntry(db, libraryId, access.tradeAccountId)
-          if (!existing) {
-            throw new Error(`Library entry ${libraryId} not found for tenant`)
-          }
-          pricingMode = existing.unit_cost_p !== null ? 'unit' : 'bottle'
-          oldCostP = pricingMode === 'unit' ? existing.unit_cost_p : existing.bottle_cost_p
-          // Update the cost field directly (bypassing updateLibraryEntry so
-          // we control the source='invoice' attribution on cost_changes).
-          const newCostP = line.new_cost_p!
-          if (newCostP !== oldCostP) {
-            if (pricingMode === 'unit') {
-              await db
-                .prepare(`UPDATE pouriq_ingredients_library SET unit_cost_p = ?1, updated_at = datetime('now') WHERE id = ?2 AND trade_account_id = ?3`)
-                .bind(newCostP, libraryId, access.tradeAccountId)
-                .run()
-            } else {
-              await db
-                .prepare(`UPDATE pouriq_ingredients_library SET bottle_cost_p = ?1, updated_at = datetime('now') WHERE id = ?2 AND trade_account_id = ?3`)
-                .bind(newCostP, libraryId, access.tradeAccountId)
-                .run()
-            }
-          }
-        }
-        matchedLibraryId = libraryId
-
-        // Insert the invoice line first to get its id, then the cost_change.
-        const invoiceLineId = await insertInvoiceLine(db, {
-          invoice_id: invoiceId,
-          extracted_name: line.extracted_name,
-          extracted_quantity: line.extracted_quantity,
-          extracted_unit_price_p: line.extracted_unit_price_p,
-          extracted_line_total_p: line.extracted_line_total_p,
-          matched_library_id: matchedLibraryId,
-          applied: true,
-        })
-
-        // Log the cost change. For a brand-new library entry, old_cost_p is
-        // null; we always log, even if the user happened to set the same
-        // cost as some existing entry (the audit row records the action).
-        const newCostP = line.new_cost_p!
-        await insertCostChange(db, {
-          library_ingredient_id: libraryId,
-          pricing_mode: pricingMode,
-          old_cost_p: oldCostP,
-          new_cost_p: newCostP,
-          source: 'invoice',
-          invoice_id: invoiceId,
-          invoice_line_id: invoiceLineId,
-        })
-        appliedCount++
-        if (line.extracted_line_total_p !== null) {
-          netTotalP = (netTotalP ?? 0) + line.extracted_line_total_p
-          netSawAny = true
         }
       } else {
-        // Not applied — just record the line for the audit/ledger.
-        await insertInvoiceLine(db, {
-          invoice_id: invoiceId,
-          extracted_name: line.extracted_name,
-          extracted_quantity: line.extracted_quantity,
-          extracted_unit_price_p: line.extracted_unit_price_p,
-          extracted_line_total_p: line.extracted_line_total_p,
-          matched_library_id: null,
-          applied: false,
-        })
+        libraryId = line.library_id!
+        const existing = await getLibraryEntry(db, libraryId, access.tradeAccountId)
+        if (!existing) throw new Error(`Library entry ${libraryId} not found for tenant`)
+        pricingMode = existing.unit_cost_p !== null ? 'unit' : 'bottle'
+        oldCostP = pricingMode === 'unit' ? existing.unit_cost_p : existing.bottle_cost_p
+      }
+
+      const newCostP = line.new_cost_p!
+      const invoiceLineId = genId()
+      const costChangeId = genId()
+
+      // Build the atomic batch for this line: optional library UPDATE,
+      // invoice_line INSERT, cost_change INSERT. The cost_change references
+      // invoice_line by the explicit invoiceLineId we just generated.
+      const stmts: D1PreparedStatement[] = []
+
+      const shouldUpdateLibraryCost = oldCostP !== null && newCostP !== oldCostP
+      if (shouldUpdateLibraryCost) {
+        if (pricingMode === 'unit') {
+          stmts.push(
+            db.prepare(
+              `UPDATE pouriq_ingredients_library SET unit_cost_p = ?1, updated_at = datetime('now') WHERE id = ?2 AND trade_account_id = ?3`,
+            ).bind(newCostP, libraryId, access.tradeAccountId),
+          )
+        } else {
+          stmts.push(
+            db.prepare(
+              `UPDATE pouriq_ingredients_library SET bottle_cost_p = ?1, updated_at = datetime('now') WHERE id = ?2 AND trade_account_id = ?3`,
+            ).bind(newCostP, libraryId, access.tradeAccountId),
+          )
+        }
+      }
+
+      stmts.push(
+        db.prepare(`
+          INSERT INTO pouriq_invoice_lines
+            (id, invoice_id, extracted_name, extracted_quantity, extracted_unit_price_p, extracted_line_total_p, matched_library_id, applied)
+          VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, 1)
+        `).bind(
+          invoiceLineId,
+          invoiceId,
+          line.extracted_name,
+          line.extracted_quantity,
+          line.extracted_unit_price_p,
+          line.extracted_line_total_p,
+          libraryId,
+        ),
+      )
+
+      stmts.push(
+        db.prepare(`
+          INSERT INTO pouriq_cost_changes
+            (id, library_ingredient_id, pricing_mode, old_cost_p, new_cost_p, source, invoice_id, invoice_line_id)
+          VALUES (?1, ?2, ?3, ?4, ?5, 'invoice', ?6, ?7)
+        `).bind(
+          costChangeId,
+          libraryId,
+          pricingMode,
+          oldCostP,
+          newCostP,
+          invoiceId,
+          invoiceLineId,
+        ),
+      )
+
+      await db.batch(stmts)
+
+      appliedCount++
+      if (line.extracted_line_total_p !== null) {
+        netTotalP = (netTotalP ?? 0) + line.extracted_line_total_p
+        netSawAny = true
       }
     }
   } catch (err) {
-    Sentry.captureException(err, { tags: { route: 'pouriq-invoice-commit', phase: 'lines' } })
-    // Best-effort rollback of the invoice header.
+    Sentry.captureException(err, { tags: { route: 'pouriq-invoice-commit', phase: 'lines' }, extra: { invoiceId } })
+    // Best-effort rollback of the invoice header. Cascade removes invoice_lines.
+    // pouriq_cost_changes rows for already-batched lines survive with
+    // invoice_id set to NULL (per ON DELETE SET NULL) — the audit trail of
+    // any library UPDATE that did succeed is preserved.
     try { await db.prepare(`DELETE FROM pouriq_invoices WHERE id = ?1`).bind(invoiceId).run() } catch { /* swallow */ }
     return NextResponse.json({ error: 'Could not save invoice lines. Please try again.' }, { status: 500 })
   }

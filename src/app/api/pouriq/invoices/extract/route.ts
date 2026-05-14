@@ -79,7 +79,7 @@ export async function POST(request: Request) {
   const pdfR2Key = `pouriq-invoices/_pending/${body.ticket}.pdf`
   const obj = await r2.get(pdfR2Key)
   if (!obj) {
-    return NextResponse.json({ error: 'Upload expired — please re-upload the PDF' }, { status: 400 })
+    return NextResponse.json({ error: 'Upload expired. Please re-upload the PDF.' }, { status: 400 })
   }
   const buffer = await obj.arrayBuffer()
   const pdfBase64 = bufferToBase64(buffer)
@@ -92,7 +92,7 @@ export async function POST(request: Request) {
     })
   } catch (err) {
     Sentry.captureException(err, { tags: { route: 'pouriq-invoice-extract', phase: 'anthropic' } })
-    return NextResponse.json({ error: 'Could not read your invoice — try a clearer scan' }, { status: 502 })
+    return NextResponse.json({ error: 'Could not read your invoice. Try a clearer scan.' }, { status: 502 })
   }
 
   if (extracted.stopReason === 'max_tokens') {
@@ -108,7 +108,7 @@ export async function POST(request: Request) {
       level: 'warning',
       tags: { route: 'pouriq-invoice-extract', phase: 'anthropic' },
     })
-    return NextResponse.json({ error: 'No items found in invoice — try a clearer scan' }, { status: 422 })
+    return NextResponse.json({ error: 'No items found in invoice. Try a clearer scan.' }, { status: 422 })
   }
 
   const library = await listLibraryEntries(db, access.tradeAccountId)
