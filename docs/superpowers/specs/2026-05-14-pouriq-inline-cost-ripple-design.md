@@ -189,27 +189,28 @@ Page revalidates; impact payload refetched on next interaction
 
 ## Testing
 
+The project has Playwright for e2e tests but no unit/component test framework. Verification for both PRs is therefore: `npm run lint`, `npm run build` (which runs `tsc`), and manual integration testing against `npm run dev`.
+
 ### PR 1 (refactor)
 
-- Existing tests for `cost-impact.ts` calculations stay untouched and continue to pass — no pure logic moves.
-- Manual visual confirmation: `/trade/pouriq/library/what-if` renders identically before and after the refactor.
-- `tsc --noEmit` clean.
+- `npm run build` succeeds (TypeScript type-check passes)
+- `npm run lint` clean
+- Manual: open `/trade/pouriq/library/what-if` before merge — confirm rollup cards, drilldown tables, ingredient picker, cost input field, and "no usage" empty state all render identically to today
 
 ### PR 2 (inline ripple + modal + toast)
 
-- **Unit:** pure function `getNewlyBelowTarget(projected: ProjectedCocktail[]): ProjectedCocktail[]` — filter logic for `below_target_after && !below_target_now`. Tested with synthetic projection arrays covering: all above, all newly below, mix, edge of target by 0.1pp, first-cost case.
-- **Component:** render `<RippleConfirmModal>` with 0 / 1 / many newly-below-target drinks; verify Cancel and Save fire the correct callback.
-- **Component:** render `<CostUpdateToast>` with 0 / 1 / many affected drinks; verify auto-dismiss timer fires; verify manual close button calls `onDismiss`; verify drink links render with correct `/trade/pouriq/[menuId]/edit?cocktail=[id]` URLs.
-- **Manual integration:**
+- `npm run build` and `npm run lint` clean
+- Manual integration checklist:
   - Edit cost with no usage → no panel, straight save, no toast
   - Edit cost with usage, all drinks stay above target → preview shows, save commits silently, no modal, no toast
   - Edit cost that drops a drink below target → preview shows; click Save → modal opens; click Cancel → no commit; click Save → commit + toast appears; toast link navigates to the right drink edit page
-  - **First-cost entry** (ingredient with bottle_cost_p/unit_cost_p still null but used by cocktails): type a cost → preview renders showing the resulting GP for each affected drink; Save commits straight through with no modal, even if drinks land below target
-  - Impact API mocked to fail → form still saves cleanly; inline notice rendered
+  - **First-cost entry** (ingredient with `bottle_cost_p`/`unit_cost_p` still null but used by cocktails): type a cost → preview renders showing the resulting GP for each affected drink; Save commits straight through with no modal, even if drinks land below target
+  - Impact API mocked to fail (block the network request in DevTools) → form still saves cleanly; inline notice rendered
+- The `getNewlyBelowTarget` helper is small and pure; correctness verified through the integration cases above. If a future PR introduces a unit test framework, this is a natural first target.
 
 ### CI
 
-Both PRs go through standard CI (build + type-check). Branch off `origin/main`, PR review, merge after green. Follows the project branch-discipline rule (no commits to merged branches; fresh branch per PR).
+Both PRs go through standard CI (build + lint). Branch off `origin/main`, PR review, merge after green. Follows the project branch-discipline rule (no commits to merged branches; fresh branch per PR).
 
 ---
 
