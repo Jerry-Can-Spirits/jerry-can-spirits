@@ -170,7 +170,7 @@ export default function PrivacyPolicy() {
                 <strong className="text-gold-300">Recipients.</strong> Cocktail menu data is sent to Anthropic PBC (United States) for AI-powered analysis. Anthropic does not train its models on API data per their commercial terms. Menus and analyses are stored in Cloudflare D1 (United Kingdom and European Union regions). Pour IQ data is strictly per-tenant &mdash; never shared between trade customers.
               </p>
               <p className="text-white mb-4 leading-relaxed">
-                <strong className="text-gold-300">Retention.</strong> Menu and analysis data is retained for the lifetime of your Pour IQ™ licence and for two years after cancellation, then deleted. Individual menus can be deleted at any time from within Pour IQ™. Scanned supplier invoice PDFs and their extracted line-item data are retained on the same schedule — this aligns with HMRC&rsquo;s six-year VAT-records requirement.
+                <strong className="text-gold-300">Retention.</strong> Menu and analysis data is retained for the lifetime of your Pour IQ licence and for two years after cancellation, then deleted. Individual menus can be deleted at any time from within Pour IQ. Scanned supplier invoice PDFs and their extracted line-item data are retained on the same schedule. This aligns with HMRC&rsquo;s six-year VAT-records requirement.
               </p>
               <p className="text-white mb-4 leading-relaxed">
                 <strong className="text-gold-300">International transfers.</strong> Data sent to Anthropic in the United States is protected under the UK Extension to the EU-US Data Privacy Framework (the UK-US Data Bridge). Anthropic is self-certified under that framework.
