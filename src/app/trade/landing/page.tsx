@@ -55,7 +55,7 @@ export default async function TradeLandingPage() {
               title="Pour IQ™"
               description="Margin analysis and AI recommendations for your cocktail menu."
               href="/trade/pouriq/"
-              ctaLabel="Open Pour IQ"
+              ctaLabel="Open Pour IQ™"
             />
           ) : (
             <TradeTile
@@ -64,6 +64,23 @@ export default async function TradeLandingPage() {
               description="Margin analysis and AI recommendations for your cocktail menu."
               learnMoreHref="/trade/pour-iq/"
               unavailableNote="Available as an additional service."
+            />
+          )}
+          {hasPourIq ? (
+            <TradeTile
+              variant="active"
+              title="Pour IQ™ help"
+              description="A working operations guide. How to scan invoices, read margin, fix gotchas."
+              href="/trade/pouriq/help"
+              ctaLabel="Open guide"
+            />
+          ) : (
+            <TradeTile
+              variant="greyed"
+              title="Pour IQ™ help"
+              description="A working operations guide for the Pour IQ™ platform."
+              learnMoreHref="/trade/pour-iq"
+              unavailableNote="Available with a Pour IQ™ licence."
             />
           )}
         </div>
