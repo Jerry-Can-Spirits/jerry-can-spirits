@@ -21,7 +21,8 @@ export default async function PourIqDashboard() {
   return (
     <main className="min-h-screen">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-24">
-        <div className="flex items-baseline justify-between mb-10">
+        <Link href="/trade/landing" className="text-sm text-parchment-400 hover:text-parchment-200">← Trade Hub</Link>
+        <div className="flex items-baseline justify-between mt-3 mb-10">
           <div>
             <div className="inline-block px-4 py-2 bg-jerry-green-800/60 backdrop-blur-sm rounded-full border border-gold-500/30 mb-4">
               <span className="text-gold-300 text-sm font-semibold uppercase tracking-widest">Pour IQ™</span>
