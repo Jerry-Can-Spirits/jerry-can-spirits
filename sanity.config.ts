@@ -13,12 +13,28 @@ import {apiVersion, dataset, projectId} from './src/sanity/env'
 import {schema} from './src/sanity/schemaTypes'
 import {structure} from './src/sanity/structure'
 
+// Document types that must exist as exactly one instance. The Studio
+// structure pins these as a list item; these config hooks block the
+// "Create new" affordance from the global + button and remove the
+// duplicate/delete actions so an editor can't accidentally fork them.
+const SINGLETON_TYPES = new Set(['tradeHelp'])
+
 export default defineConfig({
   basePath: '/studio',
   projectId,
   dataset,
   // Add and edit the content schema in the './sanity/schemaTypes' folder
   schema,
+  document: {
+    newDocumentOptions: (prev, { creationContext }) =>
+      creationContext.type === 'global'
+        ? prev.filter((opt) => !SINGLETON_TYPES.has(opt.templateId))
+        : prev,
+    actions: (prev, { schemaType }) =>
+      SINGLETON_TYPES.has(schemaType)
+        ? prev.filter((a) => !['duplicate', 'delete'].includes(a.action ?? ''))
+        : prev,
+  },
   plugins: [
     structureTool({structure}),
     // Only enable Vision in development for performance
