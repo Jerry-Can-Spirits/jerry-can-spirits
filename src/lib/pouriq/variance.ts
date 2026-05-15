@@ -1,0 +1,91 @@
+// Pure deterministic helpers for variance tracking. No DB access, no
+// side effects. Used by the server-side loader to build VarianceRow[]
+// for the menu page's variance editor.
+
+export interface VarianceRow {
+  library_ingredient_id: string
+  library_name: string
+  bottle_size_ml: number               // for display context (e.g. "Smirnoff (700ml)")
+  bottle_cost_p: number                // net of VAT, from library
+
+  // Stock count input (null when the manager hasn't entered yet)
+  start_count: number | null
+  end_count: number | null
+
+  // Calculated (null when inputs missing or theoretical is zero)
+  theoretical_used_ml: number
+  actual_used_ml: number | null
+  variance_ml: number | null
+  variance_pct: number | null          // null when theoretical is zero (undefined % against a zero base)
+  variance_cost_p: number | null
+}
+
+/**
+ * Theoretical millilitres used of one ingredient across all drinks on
+ * a menu, given recipes and per-cocktail sales volumes. Unit-priced
+ * contributions (unit_count, pour_ml null) are excluded — variance
+ * lite tracks bottle-priced only.
+ */
+export function calcTheoreticalUsedMl(
+  ingredient_id: string,
+  drinks: Array<{
+    cocktail_id: string
+    ingredients: Array<{ library_id: string; pour_ml: number | null }>
+  }>,
+  volumesByCocktail: Map<string, number>,
+): number {
+  let total = 0
+  for (const drink of drinks) {
+    const units = volumesByCocktail.get(drink.cocktail_id) ?? 0
+    if (units === 0) continue
+    for (const ing of drink.ingredients) {
+      if (ing.library_id !== ingredient_id) continue
+      if (ing.pour_ml === null) continue
+      total += units * ing.pour_ml
+    }
+  }
+  return total
+}
+
+/**
+ * Actual millilitres used from start/end bottle counts. Returns null
+ * if either count is missing — caller decides how to render that.
+ */
+export function calcActualUsedMl(
+  start: number | null,
+  end: number | null,
+  bottle_size_ml: number,
+): number | null {
+  if (start === null || end === null) return null
+  return (start - end) * bottle_size_ml
+}
+
+/**
+ * Variance derives from actual − theoretical. Percentage is null when
+ * theoretical is zero (no sales to compare against).
+ */
+export function calcVariance(
+  actual_ml: number | null,
+  theoretical_ml: number,
+): { variance_ml: number | null; variance_pct: number | null } {
+  if (actual_ml === null) return { variance_ml: null, variance_pct: null }
+  const variance_ml = actual_ml - theoretical_ml
+  if (theoretical_ml === 0) return { variance_ml, variance_pct: null }
+  const variance_pct = (variance_ml / theoretical_ml) * 100
+  return { variance_ml, variance_pct }
+}
+
+/**
+ * Cash cost of variance: variance_ml × (bottle_cost_p / bottle_size_ml).
+ * Positive = money out (overpour); negative = money "back" (under-pour
+ * or sales misreport). Rounded to whole pence to keep with the rest
+ * of pouriq's integer-pence convention.
+ */
+export function calcVarianceCostP(
+  variance_ml: number | null,
+  bottle_size_ml: number,
+  bottle_cost_p: number,
+): number | null {
+  if (variance_ml === null) return null
+  return Math.round(variance_ml * (bottle_cost_p / bottle_size_ml))
+}
