@@ -119,6 +119,9 @@ export async function POST(request: Request, { params }: Params) {
   if (!ISO_DATE.test(body.period_start ?? '') || !ISO_DATE.test(body.period_end ?? '')) {
     return NextResponse.json({ error: 'period_start and period_end must be ISO YYYY-MM-DD' }, { status: 400 })
   }
+  if (body.period_end < body.period_start) {
+    return NextResponse.json({ error: 'period_end must be on or after period_start' }, { status: 400 })
+  }
   if (!Array.isArray(body.entries)) {
     return NextResponse.json({ error: 'entries must be an array' }, { status: 400 })
   }
