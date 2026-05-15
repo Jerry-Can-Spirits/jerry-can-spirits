@@ -1,4 +1,5 @@
 import { redirect } from 'next/navigation'
+import Link from 'next/link'
 import * as Sentry from '@sentry/nextjs'
 import type { PortableTextBlock } from 'next-sanity'
 import { checkPourIqAccess } from '@/lib/pouriq/access'
@@ -52,7 +53,8 @@ export default async function PourIqHelpPage() {
   return (
     <main className="min-h-screen">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-24">
-        <h1 className="text-3xl md:text-4xl font-serif font-bold text-white mb-3">{title}</h1>
+        <Link href="/trade/pouriq" className="text-sm text-parchment-400 hover:text-parchment-200">← Pour IQ™</Link>
+        <h1 className="text-3xl md:text-4xl font-serif font-bold text-white mt-3 mb-3">{title}</h1>
         {intro && <p className="text-parchment-300 text-base leading-relaxed mb-10">{intro}</p>}
 
         {sections.length === 0 ? (
