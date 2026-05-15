@@ -43,9 +43,11 @@ export default defineType({
               name: 'body',
               title: 'Body',
               type: 'array',
+              // Text-only for v1. Image support can be added later as a
+              // paired schema + HelpPortableText renderer change — shipping
+              // the schema slot alone would silently drop any inserted image.
               of: [
                 { type: 'block' },
-                { type: 'image', options: { hotspot: true } },
               ],
               validation: (Rule) => Rule.required(),
             }),
