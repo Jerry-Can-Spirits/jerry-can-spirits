@@ -407,3 +407,13 @@ export const adjacentGuidesQuery = `{
     category
   }
 }`
+
+// Pour IQ™ help guide — singleton document fetch.
+export const tradeHelpQuery = `*[_type == "tradeHelp"][0]{
+  title,
+  intro,
+  sections[] {
+    title,
+    body
+  }
+}`
