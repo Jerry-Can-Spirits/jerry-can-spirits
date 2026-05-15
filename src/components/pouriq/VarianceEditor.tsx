@@ -83,6 +83,10 @@ export function VarianceEditor({ menuId, initialCadence }: Props) {
   const [pending, startTransition] = useTransition()
 
   useEffect(() => {
+    setPeriod(null)
+  }, [initialCadence])
+
+  useEffect(() => {
     let cancelled = false
     setLoading(true)
     setError(null)
@@ -285,7 +289,7 @@ export function VarianceEditor({ menuId, initialCadence }: Props) {
       )}
 
       {error && <p role="alert" className="text-sm text-red-300">{error}</p>}
-      {info && <p className="text-sm text-emerald-300">{info}</p>}
+      {info && <p role="status" className="text-sm text-emerald-300">{info}</p>}
 
       <div className="flex justify-end">
         <button type="button" onClick={save} disabled={pending || loading || visibleRows.length === 0} className={PRIMARY_BUTTON}>
