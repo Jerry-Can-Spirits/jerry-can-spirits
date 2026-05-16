@@ -9,6 +9,7 @@ import { isAllowedOrigin, isRateLimited } from '@/lib/kv'
 import { checkPourIqAccess } from '@/lib/pouriq/access'
 import { getMenu } from '@/lib/pouriq/menus'
 import { loadVariancePayload } from '@/lib/pouriq/variance-loader'
+import { currentPeriod } from '@/lib/pouriq/volumes'
 import type { VolumeCadence } from '@/lib/pouriq/types'
 
 export const runtime = 'nodejs'
@@ -35,27 +36,6 @@ function parseCadence(raw: string | null): VolumeCadence {
   return raw === 'weekly' ? 'weekly' : 'monthly'
 }
 
-/**
- * Returns ISO YYYY-MM-DD start and end (inclusive) for the period
- * containing `today` given the cadence. Weekly = Mon-Sun.
- * Monthly = 1st-to-last-of-month.
- */
-function derivePeriod(cadence: VolumeCadence, today: Date): { start: string; end: string } {
-  const iso = (d: Date) => d.toISOString().slice(0, 10)
-  if (cadence === 'weekly') {
-    const day = today.getUTCDay() // 0 = Sun
-    const mondayOffset = day === 0 ? -6 : 1 - day
-    const monday = new Date(Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate() + mondayOffset))
-    const sunday = new Date(Date.UTC(monday.getUTCFullYear(), monday.getUTCMonth(), monday.getUTCDate() + 6))
-    return { start: iso(monday), end: iso(sunday) }
-  }
-  const year = today.getUTCFullYear()
-  const month = today.getUTCMonth()
-  const first = new Date(Date.UTC(year, month, 1))
-  const last = new Date(Date.UTC(year, month + 1, 0))
-  return { start: iso(first), end: iso(last) }
-}
-
 export async function GET(request: Request, { params }: Params) {
   const access = await checkPourIqAccess()
   if (access.kind !== 'ok') {
@@ -74,7 +54,7 @@ export async function GET(request: Request, { params }: Params) {
   let periodEnd = url.searchParams.get('period_end') ?? null
 
   if (periodStart === null || periodEnd === null) {
-    const p = derivePeriod(cadence, new Date())
+    const p = currentPeriod(cadence)
     periodStart = p.start
     periodEnd = p.end
   } else if (!ISO_DATE.test(periodStart) || !ISO_DATE.test(periodEnd)) {
