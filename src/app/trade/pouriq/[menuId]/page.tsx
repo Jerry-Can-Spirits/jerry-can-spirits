@@ -14,6 +14,7 @@ import { VatModeToggle } from '@/components/pouriq/VatModeToggle'
 import { PrintReportButton } from '@/components/pouriq/PrintReportButton'
 import { BulkPromoActions } from '@/components/pouriq/BulkPromoActions'
 import { VolumeEditor } from '@/components/pouriq/VolumeEditor'
+import { VarianceEditor } from '@/components/pouriq/VarianceEditor'
 import { DuplicateMenuButton } from '@/components/pouriq/DuplicateMenuButton'
 import { listVolumesForPeriod, currentPeriod } from '@/lib/pouriq/volumes'
 import { PRIMARY_BUTTON, SECONDARY_BUTTON_SM } from '@/lib/pouriq/button-styles'
@@ -150,6 +151,12 @@ export default async function MenuDetailPage({ params }: Props) {
                 menuId={menuId}
                 cocktails={cocktails}
                 metrics={metrics.cocktail_metrics}
+                initialCadence={menu.volume_cadence}
+              />
+            </section>
+            <section className="no-print">
+              <VarianceEditor
+                menuId={menuId}
                 initialCadence={menu.volume_cadence}
               />
             </section>
