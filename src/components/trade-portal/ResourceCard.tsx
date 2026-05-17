@@ -7,17 +7,19 @@ interface Props {
 }
 
 export function ResourceCard({ resource }: Props) {
+  const href =
+    resource.kind === 'pdf'
+      ? `/api/trade/resources/${encodeURIComponent(resource.slug)}`
+      : resource.href
+  const label = resource.kind === 'pdf' ? 'Download PDF' : 'Open guide'
+
   return (
     <article className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20 flex flex-col gap-3">
       <h2 className="text-xl font-serif font-bold text-white">{resource.title}</h2>
       <p className="text-sm text-parchment-300 leading-relaxed flex-grow">{resource.description}</p>
       <div>
-        <Link
-          href={`/api/trade/resources/${encodeURIComponent(resource.slug)}`}
-          className={PRIMARY_BUTTON}
-          prefetch={false}
-        >
-          Download PDF
+        <Link href={href} className={PRIMARY_BUTTON} prefetch={false}>
+          {label}
         </Link>
       </div>
     </article>

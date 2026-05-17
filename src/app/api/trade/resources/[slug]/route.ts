@@ -23,7 +23,7 @@ export async function GET(_request: Request, { params }: Params) {
 
   const { slug } = await params
   const resource = findResourceBySlug(slug)
-  if (!resource) return new Response('Not found', { status: 404 })
+  if (!resource || resource.kind !== 'pdf') return new Response('Not found', { status: 404 })
 
   const r2 = env.TRADE_DOCS as R2Bucket
   const object = await r2.get(resource.r2_key)
