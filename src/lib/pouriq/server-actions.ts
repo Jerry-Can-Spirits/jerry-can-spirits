@@ -17,6 +17,7 @@ import {
   getLibraryUsageCounts,
 } from './ingredient-library'
 import { matchFieldManualSlug } from './field-manual-match'
+import { upsertVoiceProfile, type VoiceProfileInput } from './voice-profile'
 
 async function requireDb() {
   const access = await checkPourIqAccess()
@@ -325,4 +326,41 @@ export async function deleteLibraryEntryAction(entryId: string): Promise<void> {
   if (!existing) throw new Error('Ingredient not found')
   await deleteLibraryEntry(db, entryId, tradeAccountId)
   revalidatePath('/trade/pouriq/library')
+}
+
+export async function setVoiceProfileAction(input: VoiceProfileInput): Promise<void> {
+  const { db, tradeAccountId } = await requireDb()
+  // Light validation. The form already constrains the enum dropdowns, but we
+  // re-check here since server actions can be called with arbitrary input.
+  if (!['refined', 'casual', 'cheeky', 'classic', 'minimal', 'other'].includes(input.tone)) {
+    throw new Error('Invalid tone')
+  }
+  if (input.tone === 'other' && !(input.tone_other && input.tone_other.trim())) {
+    throw new Error('Tell us how to describe your tone (free-text required when "Other" is chosen)')
+  }
+  if (!['we', 'i', 'you', 'third'].includes(input.person)) {
+    throw new Error('Invalid person')
+  }
+  if (!['short', 'medium', 'long'].includes(input.length)) {
+    throw new Error('Invalid length')
+  }
+  if (!Array.isArray(input.rules) || !Array.isArray(input.samples)) {
+    throw new Error('Rules and samples must be arrays')
+  }
+  // At least one sample is required.
+  const cleanedSamples = input.samples.map((s) => s.trim()).filter((s) => s.length > 0).slice(0, 3)
+  if (cleanedSamples.length === 0) {
+    throw new Error('Please paste at least one sample description')
+  }
+  const cleanedRules = input.rules.map((s) => s.trim()).filter((s) => s.length > 0).slice(0, 30)
+  await upsertVoiceProfile(db, tradeAccountId, {
+    tone: input.tone,
+    tone_other: input.tone === 'other' ? (input.tone_other?.trim() ?? null) : null,
+    person: input.person,
+    length: input.length,
+    rules: cleanedRules,
+    samples: cleanedSamples,
+    notes: input.notes.trim(),
+  })
+  revalidatePath('/trade/pouriq/settings/voice-profile')
 }

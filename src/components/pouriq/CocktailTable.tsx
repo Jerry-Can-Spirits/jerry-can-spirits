@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import type { CocktailMetrics, CocktailRow } from '@/lib/pouriq/types'
+import { GenerateDescriptionModal } from '@/components/pouriq/GenerateDescriptionModal'
 
 function formatMoney(p: number) { return `£${(p / 100).toFixed(2)}` }
 
@@ -59,6 +60,16 @@ export function CocktailTable({ menuId, cocktails, metrics, targetGpPct }: Props
                       Field Manual
                     </a>
                   )}
+                  {cocktail.description && (
+                    <p className="text-sm text-parchment-300 italic mt-2">{cocktail.description}</p>
+                  )}
+                  <div className="no-print mt-1">
+                    <GenerateDescriptionModal
+                      cocktailId={cocktail.id}
+                      cocktailName={cocktail.name}
+                      existingDescription={cocktail.description ?? null}
+                    />
+                  </div>
                 </td>
                 <td className="px-4 py-3 text-parchment-200">{formatMoney(m.sale_price_p)}</td>
                 <td className="px-4 py-3 text-parchment-200">{formatMoney(m.pour_cost_p)}</td>
