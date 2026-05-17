@@ -13,11 +13,12 @@ import { DeleteMenuButton } from '@/components/pouriq/DeleteMenuButton'
 import { VatModeToggle } from '@/components/pouriq/VatModeToggle'
 import { PrintReportButton } from '@/components/pouriq/PrintReportButton'
 import { BulkPromoActions } from '@/components/pouriq/BulkPromoActions'
+import { BulkGenerateDescriptionsButton } from '@/components/pouriq/BulkGenerateDescriptionsButton'
 import { VolumeEditor } from '@/components/pouriq/VolumeEditor'
 import { VarianceEditor } from '@/components/pouriq/VarianceEditor'
 import { DuplicateMenuButton } from '@/components/pouriq/DuplicateMenuButton'
 import { listVolumesForPeriod, currentPeriod } from '@/lib/pouriq/volumes'
-import { PRIMARY_BUTTON, SECONDARY_BUTTON_SM } from '@/lib/pouriq/button-styles'
+import { PRIMARY_BUTTON, SECONDARY_BUTTON, SECONDARY_BUTTON_SM } from '@/lib/pouriq/button-styles'
 
 export const dynamic = 'force-dynamic'
 
@@ -63,6 +64,7 @@ export default async function MenuDetailPage({ params }: Props) {
   const period = currentPeriod(menu.volume_cadence)
   const volumes = await listVolumesForPeriod(db, menuId, period.start, period.end)
   const metrics = calculateMenuMetrics(cocktails, menu.prices_include_vat === 1, volumes)
+  const missingCount = cocktails.filter((c) => !c.description || c.description.trim() === '').length
 
   const reportDate = new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })
 
@@ -89,6 +91,8 @@ export default async function MenuDetailPage({ params }: Props) {
               <Link href={`/trade/pouriq/${menuId}/edit`} className={PRIMARY_BUTTON}>
                 Add drink
               </Link>
+              <BulkGenerateDescriptionsButton menuId={menuId} missingCount={missingCount} />
+              <Link href={`/trade/pouriq/${menuId}/menu-copy`} className={SECONDARY_BUTTON}>Menu copy</Link>
             </div>
           )}
         </div>

@@ -65,6 +65,8 @@ export interface CocktailRow {
   position: number
   field_manual_slug: string | null
   notes: string | null
+  description: string | null
+  description_updated_at: string | null
 }
 
 export interface IngredientLibraryRow {
