@@ -83,6 +83,13 @@ export default async function TradeLandingPage() {
               unavailableNote="Available with a Pour IQ™ licence."
             />
           )}
+          <TradeTile
+            variant="active"
+            title="Trade resources"
+            description="Bar signage, pour guides, and other downloads for your venue."
+            href="/trade/resources/"
+            ctaLabel="Browse resources"
+          />
         </div>
       </div>
     </main>
