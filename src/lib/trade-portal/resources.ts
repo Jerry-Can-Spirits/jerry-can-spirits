@@ -32,6 +32,13 @@ export const TRADE_RESOURCES: TradeResource[] = [
   },
   {
     kind: 'page',
+    slug: 'brand-story',
+    title: 'Brand Story',
+    description: 'Trade-facing one-pager. Brand, product, production standard, military commitment. For handing to buyers and restaurant operators.',
+    href: '/trade/resources/brand-story',
+  },
+  {
+    kind: 'page',
     slug: 'product-fact-sheet',
     title: 'Product Fact Sheet',
     description: 'Formal one-pager for stock managers and sales reps. ABV, dimensions, case and pallet config, EANs, dietary, brand.',
