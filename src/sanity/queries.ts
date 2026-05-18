@@ -55,6 +55,19 @@ export const cocktailsQuery = `*[_type == "cocktail"] | order(_createdAt desc) {
   "imageAlt": image.alt
 }`
 
+// Trade cocktail listing: lightweight projection for the trade resources
+// listing grid. Only fields needed for thumbnails.
+export const cocktailsByTradeSlugsQuery = `*[_type == "cocktail" && slug.current in $slugs] {
+  _id,
+  name,
+  "slug": slug.current,
+  description,
+  difficulty,
+  family,
+  "image": image.asset->url,
+  "imageAlt": image.alt
+}`
+
 export const cocktailBySlugQuery = `*[_type == "cocktail" && slug.current == $slug][0] {
   _id,
   _createdAt,

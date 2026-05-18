@@ -60,6 +60,13 @@ export const TRADE_RESOURCES: TradeResource[] = [
   },
   {
     kind: 'page',
+    slug: 'cocktail-cards',
+    title: 'Cocktail Recipe Cards',
+    description: 'House serves on printable cards. Storm & Spice, Explorers Gold, The Old Standard, Jerry Can Julep. Glass, ingredients, method, variants.',
+    href: '/trade/resources/cocktails',
+  },
+  {
+    kind: 'page',
     slug: 'bartenders-guide-pub',
     title: 'Bartender’s Guide: Traditional Pub',
     description: 'Default serves, scripted responses, and the three things to remember for a pub bar.',
