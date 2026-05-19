@@ -4,7 +4,7 @@ import { baseOpenGraph } from '@/lib/og'
 export const metadata: Metadata = {
   title: 'Apply for a Trade Account | Jerry Can Spirits',
   description:
-    'Apply to stock Expedition Spiced Rum. Trade account application for pubs, bars, restaurants, hotels, retailers, and wholesalers. We review and respond within three working days.',
+    'Apply to stock Expedition Spiced Rum. For pubs, bars, restaurants, hotels, retailers, and wholesalers. We reply within three working days.',
   alternates: {
     canonical: 'https://jerrycanspirits.co.uk/trade/apply/',
   },
