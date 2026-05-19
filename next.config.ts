@@ -150,6 +150,22 @@ const nextConfig: NextConfig = {
         destination: '/field-manual/cocktails/vietnamese-iced-coffee-cocktail/',
         permanent: true,
       },
+      {
+        source: '/cocktails/rum-and-honey',
+        destination: '/field-manual/cocktails/explorers-gold-rum-and-honey/',
+        permanent: true,
+      },
+      // Renamed cocktail slug: rum-and-honey → explorers-gold-rum-and-honey
+      {
+        source: '/field-manual/cocktails/rum-and-honey',
+        destination: '/field-manual/cocktails/explorers-gold-rum-and-honey/',
+        permanent: true,
+      },
+      {
+        source: '/field-manual/cocktails/rum-and-honey/',
+        destination: '/field-manual/cocktails/explorers-gold-rum-and-honey/',
+        permanent: true,
+      },
       // Old /cocktails/* URLs redirect to field-manual
       {
         source: '/cocktails/:slug*',
