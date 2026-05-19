@@ -3,9 +3,8 @@ import { TradeSheetSection, TradeSheetShell } from '@/components/trade-portal/Tr
 
 export const dynamic = 'force-dynamic'
 
-// Pilot dates. Update these once finalised with the Venue.
-const PILOT_START = '[START DATE]'
-const PILOT_END = '[START DATE + 90 days]'
+const PILOT_START = 'Monday 1 June 2026'
+const PILOT_END = 'Sunday 30 August 2026'
 
 export default async function BankBarGrillPilotPage() {
   await requireTradeSession()
