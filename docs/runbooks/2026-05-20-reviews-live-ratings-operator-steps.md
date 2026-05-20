@@ -2,7 +2,9 @@
 
 Companion runbook for PR implementing `docs/superpowers/specs/2026-05-20-reviews-live-ratings-design.md`. The code ships dark — these are the steps to switch it on.
 
-Total time: roughly 20-30 minutes. Each step is independent; you can interleave them.
+**Revised 2026-05-20: Google-only.** Trustpilot dropped due to API cost. Skip Steps 3 and 4 below; everything else applies. Step 5 (verify) checks only the Google KV entry.
+
+Total time: roughly 10-15 minutes (Google side only). Each step is independent; you can interleave them.
 
 ---
 

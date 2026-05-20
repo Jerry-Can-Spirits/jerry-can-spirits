@@ -1,7 +1,9 @@
-# Live Google + Trustpilot Ratings on /reviews/ — Design Spec
+# Live Google Ratings on /reviews/ — Design Spec
 
 **Date:** 2026-05-20
 **Status:** Design approved; ready for implementation plan.
+
+**Revision (2026-05-20, post-approval):** Trustpilot dropped from scope. Their lowest API tier is Business Plus at ~£869/month, which isn't justified at current revenue. Trustpilot section on /reviews/ keeps its existing Review Collector widget and "View all on Trustpilot" link unchanged. The spec and plan still mention Trustpilot in some places for context; treat any "Trustpilot fetch" or "TRUSTPILOT_API_KEY" reference as deferred. The infrastructure (KV cache, scheduled handler, ratings-cache module) is kept platform-generic so adding Trustpilot later, if it ever makes sense, is a small follow-up rather than a rewrite.
 
 ## Goal
 

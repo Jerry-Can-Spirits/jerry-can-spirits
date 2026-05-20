@@ -2,9 +2,11 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Display live Google + Trustpilot rating and review count on `/reviews/` and add `aggregateRating` to its JSON-LD, sourced from a Cloudflare KV cache that is refreshed hourly by the existing cron trigger.
+> **Revised 2026-05-20: Google-only scope.** Trustpilot API access starts at ~£869/month (Business Plus), so live Trustpilot ratings are out of scope. The Trustpilot section of `/reviews/` is unchanged from PR #704. All references below to "Trustpilot fetch", "TRUSTPILOT_API_KEY", "TRUSTPILOT_BUSINESS_UNIT_ID", or `rating:trustpilot` KV writes should be SKIPPED. The KV / cache / handler module is kept generic so adding Trustpilot later is a small follow-up.
 
-**Architecture:** A new scheduled handler (`runRatingsFetch`) is wired into the existing `cloudflare-worker-entry.mjs` `scheduled()` dispatch alongside `runHourlyPosBackfill`. It calls Google Places Details and Trustpilot Business Unit APIs, writing each result to its own KV key (`rating:google`, `rating:trustpilot`) in the existing `SITE_OPS` namespace. The `/reviews/` page (newly async, ISR `revalidate = 3600`) reads both keys at server-render time, renders a presentational `RatingRow` inside the Google and Trustpilot sections, and adds an `about.aggregateRating` field to the page WebPage JSON-LD using the higher-quality signal (Google preferred, Trustpilot fallback).
+**Goal:** Display live Google rating and review count on `/reviews/` and add `aggregateRating` to its JSON-LD, sourced from a Cloudflare KV cache that is refreshed hourly by the existing cron trigger.
+
+**Architecture:** A new scheduled handler (`runRatingsFetch`) is wired into the existing `cloudflare-worker-entry.mjs` `scheduled()` dispatch alongside `runHourlyPosBackfill`. It calls Google Places Details and writes the result to `rating:google` in the existing `SITE_OPS` namespace. The `/reviews/` page (newly async, ISR `revalidate = 3600`) reads the key at server-render time, renders a presentational `RatingRow` inside the Google section, and adds an `about.aggregateRating` field to the page WebPage JSON-LD when the rating is present.
 
 **Tech Stack:** Next.js 15 App Router (server components), TypeScript, Cloudflare Workers + KV via OpenNext, Tailwind CSS.
 
