@@ -73,6 +73,40 @@ export function SpecCard({ cocktail, priceIncludesVat }: Props) {
           </ul>
         )}
       </section>
+
+      {cocktail.notes != null && cocktail.notes.trim() !== '' && (
+        <section className="mb-6">
+          <h3 className="text-xs uppercase tracking-widest text-gold-400 print:text-black mb-2">
+            Note
+          </h3>
+          <p className="text-sm italic text-parchment-300 print:text-stone-700">
+            {cocktail.notes}
+          </p>
+        </section>
+      )}
+
+      {cocktail.description != null && cocktail.description.trim() !== '' && (
+        <section className="mb-6">
+          <h3 className="text-xs uppercase tracking-widest text-gold-400 print:text-black mb-2">
+            Tell the customer
+          </h3>
+          <p className="text-sm text-parchment-200 print:text-black leading-relaxed">
+            {cocktail.description}
+          </p>
+        </section>
+      )}
+
+      {cocktail.field_manual_slug != null && (
+        <a
+          href={`https://jerrycanspirits.co.uk/field-manual/cocktails/${cocktail.field_manual_slug}/`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center text-sm text-gold-300 hover:text-gold-200 print:text-black print:underline border-b border-gold-500/30 hover:border-gold-400 print:border-none pb-1"
+        >
+          Full method &amp; technique
+          <span aria-hidden="true" className="ml-2 print:hidden">→</span>
+        </a>
+      )}
     </article>
   )
 }
