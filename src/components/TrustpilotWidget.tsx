@@ -14,6 +14,8 @@ interface TrustpilotWidgetProps {
   token?: string
   sku?: string
   name?: string
+  minReviewCount?: string
+  styleAlignment?: 'left' | 'center' | 'right'
 }
 
 export default function TrustpilotWidget({
@@ -27,6 +29,8 @@ export default function TrustpilotWidget({
   token,
   sku,
   name,
+  minReviewCount,
+  styleAlignment,
 }: TrustpilotWidgetProps) {
   const ref = useRef<HTMLDivElement>(null)
   const [hasConsent, setHasConsent] = useState(false)
@@ -82,6 +86,8 @@ export default function TrustpilotWidget({
   }
 
   if (stars) dataAttributes['data-stars'] = stars
+  if (minReviewCount) dataAttributes['data-min-review-count'] = minReviewCount
+  if (styleAlignment) dataAttributes['data-style-alignment'] = styleAlignment
 
   return (
     <>
