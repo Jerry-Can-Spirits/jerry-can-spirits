@@ -15,6 +15,7 @@ const UK_ZOOM = 4.5
 export default function ExpeditionLogMap({ entries, className }: Props) {
   const containerRef = useRef<HTMLDivElement>(null)
   const mapRef = useRef<unknown>(null)
+  const markersRef = useRef<unknown[]>([])
 
   useEffect(() => {
     if (!containerRef.current) return
@@ -47,37 +48,62 @@ export default function ExpeditionLogMap({ entries, className }: Props) {
             e.location_lat !== null && e.location_lng !== null
         )
 
-        const geojson: GeoJSON.FeatureCollection<GeoJSON.Point> = {
-          type: 'FeatureCollection',
-          features: geocoded.map((e) => ({
-            type: 'Feature',
-            geometry: { type: 'Point', coordinates: [e.location_lng, e.location_lat] },
-            properties: {},
-          })),
-        }
+        markersRef.current = geocoded.map((entry) => {
+          const el = document.createElement('div')
+          el.style.cssText = `
+            width: 14px;
+            height: 14px;
+            background: #f59e0b;
+            border-radius: 50%;
+            border: 2px solid #fff;
+            box-shadow: 0 0 8px rgba(245,158,11,0.6);
+            cursor: pointer;
+          `
 
-        map.addSource('supporters', { type: 'geojson', data: geojson })
+          // Build popup body with textContent to defuse any XSS from
+          // user-supplied name / location strings.
+          const popupContent = document.createElement('div')
+          popupContent.style.cssText = 'font-family: sans-serif; padding: 2px 0;'
 
-        map.addLayer({
-          id: 'supporters-heat',
-          type: 'heatmap',
-          source: 'supporters',
-          paint: {
-            'heatmap-weight': 1,
-            'heatmap-intensity': ['interpolate', ['linear'], ['zoom'], 0, 1, 9, 3],
-            'heatmap-radius': ['interpolate', ['linear'], ['zoom'], 0, 10, 9, 20],
-            'heatmap-color': [
-              'interpolate',
-              ['linear'],
-              ['heatmap-density'],
-              0, 'rgba(0,0,0,0)',
-              0.2, '#b8860b',
-              0.5, '#d4a017',
-              0.8, '#f5c842',
-              1, '#ffe680',
-            ],
-            'heatmap-opacity': 0.85,
-          },
+          const nameEl = document.createElement('p')
+          nameEl.style.cssText = 'margin: 0 0 4px; font-weight: 600; color: #fff; font-size: 13px;'
+          nameEl.textContent = entry.name
+          popupContent.appendChild(nameEl)
+
+          if (entry.location) {
+            const locEl = document.createElement('p')
+            locEl.style.cssText = 'margin: 0; color: #c8bfa8; font-size: 12px;'
+            locEl.textContent = entry.location
+            popupContent.appendChild(locEl)
+          }
+
+          const popup = new mapboxgl.Popup({
+            closeButton: false,
+            closeOnClick: false,
+            offset: 12,
+            className: 'expedition-popup',
+          }).setDOMContent(popupContent)
+
+          const marker = new mapboxgl.Marker({ element: el })
+            .setLngLat([entry.location_lng, entry.location_lat])
+            .addTo(map)
+
+          // Desktop: hover
+          el.addEventListener('mouseenter', () => {
+            popup.setLngLat([entry.location_lng, entry.location_lat]).addTo(map)
+          })
+          el.addEventListener('mouseleave', () => popup.remove())
+
+          // Mobile: tap toggles popup
+          el.addEventListener('click', () => {
+            if (popup.isOpen()) {
+              popup.remove()
+            } else {
+              popup.setLngLat([entry.location_lng, entry.location_lat]).addTo(map)
+            }
+          })
+
+          return marker
         })
       })
     })
@@ -87,6 +113,7 @@ export default function ExpeditionLogMap({ entries, className }: Props) {
         ;(mapRef.current as { remove: () => void }).remove()
         mapRef.current = null
       }
+      markersRef.current = []
     }
   }, [entries])
 
