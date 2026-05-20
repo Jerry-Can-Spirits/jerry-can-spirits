@@ -64,7 +64,7 @@ export default async function SpecCardsPage({ params }: Props) {
         </div>
 
         {cocktails.length === 0 ? (
-          <p className="text-parchment-300">
+          <p className="text-parchment-300 no-print">
             No drinks on this menu yet.{' '}
             <Link
               href={`/trade/pouriq/${menuId}`}
