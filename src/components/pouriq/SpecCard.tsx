@@ -96,7 +96,8 @@ export function SpecCard({ cocktail, priceIncludesVat }: Props) {
         </section>
       )}
 
-      {cocktail.field_manual_slug != null && (
+      {cocktail.field_manual_slug != null &&
+        /^[a-z0-9-]+$/.test(cocktail.field_manual_slug) && (
         <a
           href={`https://jerrycanspirits.co.uk/field-manual/cocktails/${cocktail.field_manual_slug}/`}
           target="_blank"
