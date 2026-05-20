@@ -5,6 +5,7 @@ export * from './.open-next/worker.js';
 import openNextWorker from './.open-next/worker.js';
 import { runTradeReviewDigest } from './src/lib/scheduled-trade-review.ts';
 import { runHourlyPosBackfill } from './src/lib/pouriq/pos/scheduled.ts';
+import { runRatingsFetch } from './src/lib/scheduled-ratings.ts';
 
 const EDGE_CACHE_PATHS = new Set([
   '/',
@@ -51,6 +52,7 @@ export default {
   async scheduled(event, env, ctx) {
     if (event.cron === '0 * * * *') {
       ctx.waitUntil(runHourlyPosBackfill(env));
+      ctx.waitUntil(runRatingsFetch(env));
       return;
     }
     ctx.waitUntil(runTradeReviewDigest(env));
