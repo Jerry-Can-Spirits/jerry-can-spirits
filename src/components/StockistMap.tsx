@@ -67,17 +67,29 @@ export default function StockistMap({ stockists, center, zoom }: StockistMapProp
             cursor: pointer;
           `
 
+          // Build popup body with textContent rather than setHTML to keep
+          // the XSS-safe pattern consistent with ExpeditionLogMap. Stockist
+          // data is admin-curated today, so the risk is theoretical, but
+          // the cost of the safe form is nil.
+          const popupContent = document.createElement('div')
+          popupContent.style.cssText = 'font-family: sans-serif; padding: 2px 0;'
+
+          const nameEl = document.createElement('p')
+          nameEl.style.cssText = 'margin: 0 0 4px; font-weight: 600; color: #fff; font-size: 13px;'
+          nameEl.textContent = stockist.name
+          popupContent.appendChild(nameEl)
+
+          const addressEl = document.createElement('p')
+          addressEl.style.cssText = 'margin: 0; color: #c8bfa8; font-size: 12px;'
+          addressEl.textContent = stockist.address
+          popupContent.appendChild(addressEl)
+
           const popup = new mapboxgl.Popup({
             closeButton: false,
             closeOnClick: false,
             offset: 12,
             className: 'stockist-popup',
-          }).setHTML(`
-            <div style="font-family: sans-serif; padding: 2px 0;">
-              <p style="margin: 0 0 4px; font-weight: 600; color: #fff; font-size: 13px;">${stockist.name}</p>
-              <p style="margin: 0; color: #c8bfa8; font-size: 12px;">${stockist.address}</p>
-            </div>
-          `)
+          }).setDOMContent(popupContent)
 
           const marker = new mapboxgl.Marker({ element: el })
             .setLngLat([stockist.lng, stockist.lat])
