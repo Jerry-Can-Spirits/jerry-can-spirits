@@ -1,5 +1,6 @@
 // src/app/api/expedition-log/route.ts
 import { NextResponse } from 'next/server'
+import { revalidatePath } from 'next/cache'
 import { getCloudflareContext } from '@opennextjs/cloudflare'
 import { getBottleByLabel, isBottleLogged } from '@/lib/d1'
 import { isRateLimited, isAllowedOrigin } from '@/lib/kv'
@@ -158,6 +159,12 @@ export async function POST(request: Request) {
         )
       )
     )
+
+    // Invalidate cached pages that show expedition log data so the new
+    // entry reflects on the next request rather than waiting for the
+    // homepage's 60s ISR window to elapse.
+    revalidatePath('/')
+    revalidatePath('/expedition-log/')
 
     return NextResponse.json({ success: true }, { status: 201 })
   } catch (error) {
