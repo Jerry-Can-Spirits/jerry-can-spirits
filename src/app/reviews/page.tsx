@@ -16,15 +16,15 @@ const TrustpilotWidget = dynamic(() => import('@/components/TrustpilotWidget'), 
 })
 
 export const metadata: Metadata = {
-  title: "Customer Reviews | Trustpilot, Google & Yell",
-  description: "Customer reviews of Jerry Can Spirits Expedition Spiced Rum on Trustpilot, Google and Yell. See what people say about our veteran-owned British spiced rum.",
+  title: "Customer Reviews | Trustpilot, Google, Yell & Trust A Veteran",
+  description: "Reviews of Expedition Spiced Rum on Trustpilot, Google, Yell, and Trust A Veteran. Veteran-owned British spiced rum, no shortcuts.",
   alternates: {
     canonical: 'https://jerrycanspirits.co.uk/reviews/',
   },
   openGraph: {
     ...baseOpenGraph,
-    title: "Jerry Can Spirits Reviews | Trustpilot, Google & Yell",
-    description: "Customer reviews of Jerry Can Spirits Expedition Spiced Rum on Trustpilot, Google and Yell. See what people say about our veteran-owned British spiced rum.",
+    title: "Jerry Can Spirits Reviews | Trustpilot, Google, Yell & Trust A Veteran",
+    description: "Reviews of Expedition Spiced Rum on Trustpilot, Google, Yell, and Trust A Veteran. Veteran-owned British spiced rum, no shortcuts.",
     url: 'https://jerrycanspirits.co.uk/reviews/',
   },
 }
@@ -66,7 +66,7 @@ export default function ReviewsPage() {
             Jerry Can Spirits Reviews
           </h1>
           <p className="text-lg text-parchment-300 max-w-2xl mx-auto">
-            Don&apos;t just take our word for it. Here&apos;s what people are saying about Expedition Spiced Rum.
+            What people say after they&apos;ve poured it. Reviews left on Trustpilot, Google, Yell, and Trust A Veteran.
           </p>
         </ScrollReveal>
       </section>
@@ -137,19 +137,6 @@ export default function ReviewsPage() {
                 View on Google
               </a>
             </div>
-            <div className="text-center py-6">
-              <a
-                href="https://g.page/r/CdkZacM6VKi-EAI/review"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 bg-gold-500 hover:bg-gold-600 text-jerry-green-900 font-semibold px-6 py-3 rounded-lg transition-colors"
-              >
-                Leave a Google Review
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                </svg>
-              </a>
-            </div>
           </div>
         </ScrollReveal>
       </section>
@@ -181,19 +168,6 @@ export default function ReviewsPage() {
                 View on Yell
               </a>
             </div>
-            <div className="text-center py-6">
-              <a
-                href="https://www.yell.com/biz/jerry-can-spirits-ltd-london-11012967/#reviews"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 bg-[#FED900] hover:bg-[#CAB010] text-jerry-green-900 font-semibold px-6 py-3 rounded-lg transition-colors"
-              >
-                Leave a Yell Review
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                </svg>
-              </a>
-            </div>
           </div>
         </ScrollReveal>
       </section>
@@ -223,19 +197,6 @@ export default function ReviewsPage() {
                 className="text-sm text-gold-300 hover:text-gold-400 transition-colors underline"
               >
                 View on Trust A Veteran
-              </a>
-            </div>
-            <div className="text-center py-6">
-              <a
-                href="https://www.trustaveteran.com/"
-                target="_blank"
-                rel="nofollow noopener noreferrer"
-                className="inline-flex items-center gap-2 bg-jerry-green-800/60 hover:bg-jerry-green-800 text-gold-300 font-semibold px-6 py-3 rounded-lg border border-gold-500/30 transition-colors"
-              >
-                Leave a Trust A Veteran Review
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                </svg>
               </a>
             </div>
           </div>
@@ -282,6 +243,17 @@ export default function ReviewsPage() {
                 className="inline-flex items-center gap-2 bg-[#FED900] hover:bg-[#CAB010] text-jerry-green-900 font-semibold px-6 py-3 rounded-lg transition-colors"
               >
                 Review on Yell
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                </svg>
+              </a>
+              <a
+                href="https://www.trustaveteran.com/"
+                target="_blank"
+                rel="nofollow noopener noreferrer"
+                className="inline-flex items-center gap-2 bg-jerry-green-800/60 hover:bg-jerry-green-800 text-gold-300 font-semibold px-6 py-3 rounded-lg border border-gold-500/30 transition-colors"
+              >
+                Review on Trust A Veteran
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                 </svg>
