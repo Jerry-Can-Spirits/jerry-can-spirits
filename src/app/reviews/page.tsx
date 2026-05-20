@@ -6,6 +6,9 @@ import Breadcrumbs from '@/components/Breadcrumbs'
 import ScrollReveal from '@/components/ScrollReveal'
 import { baseOpenGraph } from '@/lib/og'
 import { safeJsonLd } from '@/lib/jsonLd'
+import { getCloudflareContext } from '@opennextjs/cloudflare'
+import { getRating } from '@/lib/ratings-cache'
+import { RatingRow } from '@/components/RatingRow'
 
 const CF_IMG = 'https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ'
 
@@ -14,6 +17,8 @@ const TrustpilotWidget = dynamic(() => import('@/components/TrustpilotWidget'), 
     <div className="h-[52px] bg-jerry-green-800/50 rounded-lg animate-pulse" />
   ),
 })
+
+export const revalidate = 3600
 
 export const metadata: Metadata = {
   title: "Customer Reviews | Trustpilot, Google, Yell & Trust A Veteran",
@@ -29,7 +34,26 @@ export const metadata: Metadata = {
   },
 }
 
-export default function ReviewsPage() {
+export default async function ReviewsPage() {
+  const { env } = await getCloudflareContext({ async: true })
+  const kv = env.SITE_OPS as KVNamespace
+  const google = await getRating(kv, 'google')
+
+  const aggregateRating = google
+    ? {
+        '@type': 'AggregateRating',
+        'ratingValue': google.rating.toFixed(1),
+        'reviewCount': google.count.toString(),
+        'bestRating': '5',
+        'worstRating': '1',
+        'itemReviewed': {
+          '@type': 'Product',
+          'name': 'Expedition Spiced Rum',
+          'url': 'https://jerrycanspirits.co.uk/shop/product/jerry-can-spirits-expedition-spiced-rum/',
+        },
+      }
+    : undefined
+
   return (
     <main className="bg-jerry-green-900 text-parchment-100 min-h-screen">
       <script
@@ -54,6 +78,7 @@ export default function ReviewsPage() {
               'https://www.yell.com/biz/jerry-can-spirits-ltd-london-11012967/',
               'https://www.trustaveteran.com/',
             ],
+            ...(aggregateRating ? { aggregateRating } : {}),
           },
         }) }}
       />
@@ -137,6 +162,9 @@ export default function ReviewsPage() {
                 View on Google
               </a>
             </div>
+            {google && (
+              <RatingRow rating={google.rating} count={google.count} platform="google" />
+            )}
           </div>
         </ScrollReveal>
       </section>
