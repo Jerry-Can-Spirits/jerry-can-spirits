@@ -28,6 +28,9 @@ interface CloudflareEnv {
   // Secrets — Mapbox (geocoding)
   MAPBOX_SECRET_TOKEN: string;
 
+  // Secrets — Google Maps (Places API for live ratings)
+  GOOGLE_MAPS_API_KEY: string;
+
   // Secrets — Sentry (source map uploads)
   SENTRY_AUTH_TOKEN: string;
 
