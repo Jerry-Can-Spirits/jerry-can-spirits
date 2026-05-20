@@ -123,6 +123,15 @@ export default async function ReviewsPage() {
                 View all on Trustpilot
               </a>
             </div>
+            <TrustpilotWidget
+              templateId="5419b6a8b0d04a076446a9ad"
+              height="24px"
+              width="100%"
+              theme="dark"
+              token="a1e45713-88d1-4731-9a5b-f2fffed8a4d0"
+              minReviewCount="10"
+              styleAlignment="center"
+            />
             {/* Review Collector widget */}
             <TrustpilotWidget
               templateId="56278e9abfbbba0bdcd568bc"
