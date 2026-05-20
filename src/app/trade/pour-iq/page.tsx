@@ -5,7 +5,7 @@ import { baseOpenGraph } from '@/lib/og'
 export const metadata: Metadata = {
   title: 'Pour IQ™ — Margin Analysis for Cocktail Menus | Jerry Can Spirits®',
   description:
-    'Pour IQ analyses your cocktail menu for margin, ingredient overlap, and waste risk, with AI recommendations grounded in the Jerry Can Spirits Field Manual. Available to trade customers as an additional service.',
+    'Pour IQ analyses your cocktail menu for margin, ingredient overlap, and waste risk. AI recommendations grounded in the Jerry Can Spirits Field Manual.',
   alternates: {
     canonical: 'https://jerrycanspirits.co.uk/trade/pour-iq/',
   },
