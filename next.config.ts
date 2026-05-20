@@ -227,6 +227,31 @@ const nextConfig: NextConfig = {
         destination: '/shop/spirits?dt_id=PatSmithComedy',
         permanent: false,
       },
+      // Shopify-style /pages/* URLs redirect to the canonical Next.js paths.
+      // Headless setup means anyone hitting a Shopify page URL on the main
+      // domain (stale SERP result, typed by hand, etc.) lands on a 404
+      // without these. Specific override for /pages/about (target slug
+      // differs); generic /pages/:slug catches the rest where slugs match.
+      {
+        source: '/pages/about',
+        destination: '/about/story/',
+        permanent: true,
+      },
+      {
+        source: '/pages/about/',
+        destination: '/about/story/',
+        permanent: true,
+      },
+      {
+        source: '/pages/:slug',
+        destination: '/:slug/',
+        permanent: true,
+      },
+      {
+        source: '/pages/:slug/',
+        destination: '/:slug/',
+        permanent: true,
+      },
     ]
   },
 
