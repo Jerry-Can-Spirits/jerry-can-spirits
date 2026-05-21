@@ -59,14 +59,14 @@ function formatPrepTime(iso: string): string {
 
 function IngredientList({ ingredients }: { ingredients: CocktailIngredient[] }) {
   return (
-    <table className="w-full text-sm">
+    <table className="w-full text-sm print:text-xs">
       <tbody>
         {ingredients.map((ing, idx) => (
           <tr key={idx} className="border-b border-gold-500/15 print:border-black/30 last:border-0">
-            <td className="py-1.5 pr-3 font-medium text-parchment-100 print:text-black w-24 sm:w-32 align-top">
+            <td className="py-1.5 print:py-0.5 pr-3 font-medium text-parchment-100 print:text-black w-24 sm:w-32 align-top">
               {ing.amount}
             </td>
-            <td className="py-1.5 align-top">
+            <td className="py-1.5 print:py-0.5 align-top">
               <span className="text-parchment-100 print:text-black">{ing.name}</span>
               {ing.description && (
                 <span className="block text-xs text-parchment-400 print:text-black/70">
@@ -83,7 +83,7 @@ function IngredientList({ ingredients }: { ingredients: CocktailIngredient[] }) 
 
 function Method({ steps }: { steps: string[] }) {
   return (
-    <ol className="list-decimal list-outside ml-5 text-sm leading-relaxed space-y-1.5">
+    <ol className="list-decimal list-outside ml-5 text-sm leading-relaxed space-y-1.5 print:text-xs print:leading-snug print:space-y-0.5">
       {steps.map((s, idx) => (
         <li key={idx}>{s}</li>
       ))}
@@ -105,7 +105,7 @@ export function CocktailCard({ cocktail }: { cocktail: CocktailCardData }) {
       subtitle={subtitleBits.join(' · ')}
     >
       {cocktail.image && (
-        <div className="relative w-full aspect-[3/2] mb-6 rounded-lg overflow-hidden bg-jerry-green-800/40 print:bg-transparent print:mb-4 print:break-inside-avoid">
+        <div className="relative w-full aspect-[3/2] mb-6 rounded-lg overflow-hidden bg-jerry-green-800/40 print:bg-transparent print:mb-3 print:break-inside-avoid print:aspect-[5/2] print:max-h-[55mm]">
           <Image
             src={cocktail.image}
             alt={cocktail.imageAlt ?? cocktail.name}
@@ -118,7 +118,7 @@ export function CocktailCard({ cocktail }: { cocktail: CocktailCardData }) {
       )}
 
       {cocktail.description && (
-        <p className="text-base leading-relaxed text-parchment-200 print:text-black mb-6 print:mb-4">
+        <p className="text-base leading-relaxed text-parchment-200 print:text-black mb-6 print:mb-3 print:text-sm print:leading-snug">
           {cocktail.description}
         </p>
       )}
