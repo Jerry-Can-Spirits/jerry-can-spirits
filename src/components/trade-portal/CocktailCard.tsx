@@ -105,7 +105,7 @@ export function CocktailCard({ cocktail }: { cocktail: CocktailCardData }) {
       subtitle={subtitleBits.join(' · ')}
     >
       {cocktail.image && (
-        <div className="relative w-full aspect-[3/2] mb-6 rounded-lg overflow-hidden bg-jerry-green-800/40 print:bg-transparent print:mb-3 print:break-inside-avoid print:aspect-[5/2] print:max-h-[55mm]">
+        <div className="relative w-full aspect-[3/2] mb-6 rounded-lg overflow-hidden bg-jerry-green-800/40 print:hidden">
           <Image
             src={cocktail.image}
             alt={cocktail.imageAlt ?? cocktail.name}
@@ -118,7 +118,7 @@ export function CocktailCard({ cocktail }: { cocktail: CocktailCardData }) {
       )}
 
       {cocktail.description && (
-        <p className="text-base leading-relaxed text-parchment-200 print:text-black mb-6 print:mb-3 print:text-sm print:leading-snug">
+        <p className="text-base leading-relaxed text-parchment-200 mb-6 print:hidden">
           {cocktail.description}
         </p>
       )}
@@ -142,9 +142,11 @@ export function CocktailCard({ cocktail }: { cocktail: CocktailCardData }) {
       </TradeSheetSection>
 
       {cocktail.note && (
-        <TradeSheetSection title="Expert tip">
-          <p className="text-sm leading-relaxed italic">{cocktail.note}</p>
-        </TradeSheetSection>
+        <div className="print:hidden">
+          <TradeSheetSection title="Expert tip">
+            <p className="text-sm leading-relaxed italic">{cocktail.note}</p>
+          </TradeSheetSection>
+        </div>
       )}
 
       {cocktail.variants && cocktail.variants.length > 0 && (
