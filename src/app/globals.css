@@ -317,10 +317,17 @@
     -webkit-print-color-adjust: exact;
   }
   /* Hide global chrome by default. Pages that want to print use `.print-region`
-     on the main wrapper to opt in. */
+     on the main wrapper to opt in.
+     Cookiebot injects a persistent renew-consent badge at the body level
+     (#CookiebotWidget on current versions, #CybotCookiebot* on older ones);
+     attribute selectors catch every variant so the badge does not overlay
+     printed content. */
   header, footer,
   [data-print-hide],
-  .no-print {
+  .no-print,
+  [id^="Cybot"],
+  [id^="Cookiebot"],
+  .cookieconsent-badge {
     display: none !important;
   }
   /* If the print region happens to contain its own header/footer (none today,
