@@ -1,10 +1,21 @@
+/* Jerry Can Spirits global styles.
+   Structure:
+     1. Tailwind directives and base color-scheme handling
+     2. Base element styles (html, body, *)
+     3. Typography (Playfair Display headings) and brand-driven heading overrides
+     4. Mobile-specific iOS workarounds
+     5. Reusable utility classes (.btn-primary, .h-15, .scrollbar-hide)
+     6. Decorative backgrounds (cartography variants)
+     7. Stockist map popup
+     8. Print rules, scoped to the .print-region opt-in */
+
 @import '../styles/animations.css';
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-  /* Opt out of browser dark mode adaptation — site palette is intentional.
+  /* Opt out of browser dark mode adaptation. The site palette is intentional.
      'only light' is the explicit instruction to never apply forced dark mode,
      stronger than 'light' alone. The media query below is a belt-and-braces
      fallback for browsers (Samsung Internet, aggressive Chrome flags) that
@@ -51,7 +62,7 @@
     min-height: -webkit-fill-available;
   }
 
-  /* Prevent iOS Safari auto-zoom on input focus — minimum 16px required */
+  /* Prevent iOS Safari auto-zoom on input focus. Minimum 16px required. */
   @media screen and (max-width: 767px) {
     input, select, textarea {
       font-size: 16px;
@@ -66,15 +77,19 @@
     @apply text-jerry-green-800;
   }
 
-  /* Override heading colors for legal pages with white text */
-  .text-white h1, .text-white h2, .text-white h3, .text-white h4, .text-white h5, .text-white h6,
-  h1.text-white, h2.text-white, h3.text-white, h4.text-white, h5.text-white, h6.text-white {
+  /* When a wrapper sets text-white, descendant headings should inherit white.
+     Descendant-only by intent. The direct-class form (h1.text-white) was
+     removed in May 2026 because its !important blocked print:text-black on
+     the TradeSheetShell title, rendering it invisible white-on-white when
+     printed. If you ever need a single h1 to be white without a wrapper,
+     use a more specific class or wrap a parent. */
+  .text-white h1, .text-white h2, .text-white h3, .text-white h4, .text-white h5, .text-white h6 {
     color: white !important;
   }
 
-  /* Override heading colors for legal pages with gold text */
-  .text-gold-300 h1, .text-gold-300 h2, .text-gold-300 h3, .text-gold-300 h4, .text-gold-300 h5, .text-gold-300 h6,
-  h1.text-gold-300, h2.text-gold-300, h3.text-gold-300, h4.text-gold-300, h5.text-gold-300, h6.text-gold-300 {
+  /* Same descendant-only pattern for gold-themed wrappers. The direct-class
+     form was removed for the same print-contrast reason as the white override. */
+  .text-gold-300 h1, .text-gold-300 h2, .text-gold-300 h3, .text-gold-300 h4, .text-gold-300 h5, .text-gold-300 h6 {
     color: #fcd34d !important;
   }
 
@@ -339,8 +354,8 @@
   .print-region {
     background: #ffffff !important;
   }
-  /* Force readable text inside the print region — the live site uses light
-     parchment text on dark green which would be invisible on white paper.
+  /* Force readable text inside the print region. The live site uses light
+     parchment text on dark green, which would be invisible on white paper.
      Use background-color (not the background shorthand) so we override the
      specific Tailwind utility cleanly. */
   .print-region,
@@ -366,7 +381,7 @@
   }
   /* Tables use overflow-x-auto + min-width on screen so they scroll on
      mobile. On paper there's no scroll, so the overflowing content just
-     gets clipped — show it all by removing the overflow and width
+     gets clipped. Show it all by removing the overflow and width
      constraints. */
   .print-region [class*='overflow-x'] {
     overflow: visible !important;
