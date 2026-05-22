@@ -1,6 +1,5 @@
 import ReactDOM from 'react-dom';
 import HeroSection from "@/components/HeroSection";
-import TrustpilotWidget from "@/components/TrustpilotWidget";
 import HomepageExpeditionMap from "@/components/HomepageExpeditionMap";
 import StructuredData from "@/components/StructuredData";
 import ScrollToHash from "@/components/ScrollToHash";
@@ -10,10 +9,10 @@ import SupportingOurForces from "@/components/SupportingOurForces";
 import FieldManualPreview from "@/components/FieldManualPreview";
 import WhyJerryCan from "@/components/WhyJerryCan";
 import HomepageFAQ from "@/components/HomepageFAQ";
-import PressAwards from "@/components/PressAwards";
 import ScrollReveal from "@/components/ScrollReveal";
-import TickerStrip from "@/components/TickerStrip";
 import NewsletterSignup from "@/components/NewsletterSignup";
+import PullQuoteStrip from "@/components/PullQuoteStrip";
+import PairedSocialProof from "@/components/PairedSocialProof";
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import { baseOpenGraph, OG_IMAGE } from '@/lib/og'
@@ -179,47 +178,46 @@ export default function Home() {
       <div>
         <HeroSection />
 
-        {/* Social Proof Ticker */}
-        <TickerStrip
-          items={["17+ Years Service", "UK First Philosophy", "Small Batch Quality", "Armed Forces Covenant", "Veteran Owned", "Welsh Distilled"]}
-          className="py-4 bg-jerry-green-900/80 border-y border-gold-500/20"
-        />
+        {/* Pull-quote strip — instant social proof under the hero */}
+        <PullQuoteStrip />
 
-        {/* Order Section - Primary CTA */}
+        {/* Founder story — story leads, builds belief */}
         <ScrollReveal>
-          <OrderSection />
+          <FounderStorySnippet />
         </ScrollReveal>
 
-        {/* Press & Awards - social proof before storytelling */}
-        <ScrollReveal>
-          <PressAwards />
-        </ScrollReveal>
-
-        {/* Why Jerry Can - Value Proposition */}
+        {/* Why Jerry Can — value proposition */}
         <ScrollReveal>
           <WhyJerryCan />
         </ScrollReveal>
 
-        {/* Founder Story + Supporting Our Forces - brand identity, kept adjacent */}
+        {/* Paired social proof — Trustpilot widget + Press & Awards together */}
         <ScrollReveal>
-          <FounderStorySnippet />
+          <PairedSocialProof />
         </ScrollReveal>
+
+        {/* Order Section — the buy ask, after belief is built */}
+        <ScrollReveal>
+          <OrderSection />
+        </ScrollReveal>
+
+        {/* Supporting our forces — pledge */}
         <ScrollReveal>
           <SupportingOurForces />
         </ScrollReveal>
 
-        {/* Expedition Log Map - community */}
+        {/* Expedition log map — community */}
         <HomepageExpeditionMap />
 
-        {/* Field Manual Preview - content engagement */}
+        {/* Field Manual Preview — content engagement */}
         <ScrollReveal>
           <FieldManualPreview />
         </ScrollReveal>
 
-        {/* FAQ Section - objection handling before final CTA */}
+        {/* FAQ — objection handling before final CTA */}
         <HomepageFAQ />
 
-        {/* Newsletter Signup */}
+        {/* Newsletter Signup — final CTA */}
         <section id="newsletter-signup" className="py-20 border-t border-gold-500/10">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <div className="inline-block px-4 py-2 bg-jerry-green-800/60 backdrop-blur-sm rounded-full border border-gold-500/30 mb-6">
@@ -237,7 +235,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* SEO-Rich Content Section - Veteran-Owned British Rum */}
+        {/* SEO-Rich Content Section — kept for crawlers, lowest priority */}
         <section className="py-16 bg-jerry-green-900/50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid lg:grid-cols-2 gap-12">
@@ -316,35 +314,6 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Trustpilot Reviews Section - Hidden until April 2026 launch */}
-        {/* CSP is configured for Trustpilot, will activate automatically at launch */}
-        {new Date() >= new Date('2026-04-06T00:00:00Z') && (
-          <section className="py-16 bg-jerry-green-900/50">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-              <div className="text-center mb-12">
-                <div className="inline-block px-4 py-2 bg-jerry-green-800/60 backdrop-blur-sm rounded-full border border-gold-500/30 mb-6">
-                  <span className="text-gold-300 text-sm font-semibold uppercase tracking-widest">
-                    Field Reports
-                  </span>
-                </div>
-                <h2 className="text-3xl md:text-4xl font-playfair font-bold text-gold-500 mb-4">
-                  Field Reports
-                </h2>
-                <p className="text-parchment-200 text-lg max-w-2xl mx-auto">
-                  We&apos;ll let the bottles do the talking.
-                </p>
-              </div>
-              <div className="max-w-2xl mx-auto">
-                <TrustpilotWidget
-                  templateId="56278e9abfbbba0bdcd568bc"
-                  height="52px"
-                  token="1b8d76a8-b743-471a-8f16-321500842e93"
-                  theme="dark"
-                />
-              </div>
-            </div>
-          </section>
-        )}
       </div>
     </>
   );
