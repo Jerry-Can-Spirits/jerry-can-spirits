@@ -144,15 +144,21 @@ export default function HeroSection() {
                 onTouchStart={handleTouchStart}
                 onTouchEnd={handleTouchEnd}
               >
-                <Image
-                  key={HERO_IMAGES[activeIndex].src}
-                  src={HERO_IMAGES[activeIndex].src}
-                  alt={HERO_IMAGES[activeIndex].alt}
-                  fill
-                  className="object-contain p-8"
-                  sizes="(max-width: 768px) 100vw, 50vw"
-                  priority
-                />
+                <Link
+                  href="/shop/product/jerry-can-spirits-expedition-spiced-rum/"
+                  aria-label="View Expedition Spiced Rum product page"
+                  className="absolute inset-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-400 rounded-2xl"
+                >
+                  <Image
+                    key={HERO_IMAGES[activeIndex].src}
+                    src={HERO_IMAGES[activeIndex].src}
+                    alt={HERO_IMAGES[activeIndex].alt}
+                    fill
+                    className="object-contain p-8 transition-transform duration-300 hover:scale-[1.02]"
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                    priority
+                  />
+                </Link>
                 <div aria-live="polite" aria-atomic="true" className="sr-only">
                   {`Image ${activeIndex + 1} of ${HERO_IMAGES.length}: ${HERO_IMAGES[activeIndex].label}`}
                 </div>
