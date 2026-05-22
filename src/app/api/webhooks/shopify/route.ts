@@ -3,7 +3,7 @@ import { getCloudflareContext } from '@opennextjs/cloudflare';
 import * as Sentry from '@sentry/nextjs';
 import {
   verifyWebhookSignature,
-  incrementPreOrderSold,
+  incrementBottlesSold,
   SHOPIFY_WEBHOOK_TOPICS,
   type ShopifyOrder,
   type ShopifyProduct,
@@ -92,10 +92,10 @@ async function handleOrderCreated(
     { expirationTtl: 60 * 60 * 24 }, // 24 hours
   );
 
-  // Auto-increment pre_order_sold metafield for each product in the order
+  // Auto-increment the bottles-sold metafield for each product in the order
   if (adminToken) {
     for (const item of order.line_items) {
-      await incrementPreOrderSold(item.product_id, item.quantity, adminToken);
+      await incrementBottlesSold(item.product_id, item.quantity, adminToken);
     }
   }
 

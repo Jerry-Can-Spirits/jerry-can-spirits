@@ -69,15 +69,15 @@ test.describe('Product Display', () => {
     expect(count).toBeGreaterThanOrEqual(0) // May show "coming soon" message
   })
 
-  test('product pages have pricing information or pre-order info', async ({ page }) => {
+  test('product pages have pricing information', async ({ page }) => {
     await page.goto('/shop/drinks/')
     await dismissOverlays(page)
 
-    // Check for price or pre-order messaging
-    const priceOrPreorder = page.locator('text=/£|price|pre-order|coming soon/i')
-    const isVisible = await priceOrPreorder.first().isVisible({ timeout: 3000 }).catch(() => false)
+    // Check for price messaging
+    const priceLocator = page.locator('text=/£|price|out of stock/i')
+    const isVisible = await priceLocator.first().isVisible({ timeout: 3000 }).catch(() => false)
 
-    // Either pricing or pre-order messaging should be present
+    // Pricing should be present on a live product page
     expect(isVisible || true).toBe(true) // Soft check - page structure may vary
   })
 })
@@ -115,16 +115,16 @@ test.describe('Cart Functionality', () => {
   })
 })
 
-test.describe('Pre-order Section', () => {
-  test('pre-order section is visible on homepage', async ({ page }) => {
+test.describe('Order Section', () => {
+  test('order section is visible on homepage', async ({ page }) => {
     await page.goto('/')
     await dismissOverlays(page)
 
-    // Look for pre-order related content
-    const preorderSection = page.locator('text=/pre-order|notify|coming soon|launch/i').first()
-    const isVisible = await preorderSection.isVisible({ timeout: 5000 }).catch(() => false)
+    // Look for order-related content
+    const orderSection = page.locator('text=/order|shop|founding batch|numbered/i').first()
+    const isVisible = await orderSection.isVisible({ timeout: 5000 }).catch(() => false)
 
-    // Pre-order or launch information should be present
+    // Order information should be present on the live homepage
     expect(isVisible || true).toBe(true)
   })
 })

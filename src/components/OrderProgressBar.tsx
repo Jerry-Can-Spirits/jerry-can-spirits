@@ -2,12 +2,12 @@
 
 import { useEffect, useState } from 'react'
 
-interface PreOrderProgressBarProps {
+interface OrderProgressBarProps {
   sold: number
   total: number
 }
 
-export default function PreOrderProgressBar({ sold, total }: PreOrderProgressBarProps) {
+export default function OrderProgressBar({ sold, total }: OrderProgressBarProps) {
   const [width, setWidth] = useState(0)
   const percentage = Math.round((sold / total) * 100)
 

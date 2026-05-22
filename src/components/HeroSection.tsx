@@ -83,13 +83,13 @@ export default function HeroSection() {
               Between us, we served 17 years in the Royal Signals. We wanted a proper drink to share with mates. Something with character, made by people who give a damn. We couldn't find it. So we made it ourselves.
             </p>
 
-            {/* Founding Supporter Pricing */}
+            {/* Now Shipping */}
             <div className="mb-8 p-6 bg-jerry-green-800/40 backdrop-blur-sm rounded-xl border border-gold-500/20">
               <div className="text-gold-300 text-sm font-semibold uppercase tracking-widest mb-2 text-center">
                 Now Shipping
               </div>
               <p className="text-parchment-200 text-center text-sm">
-                Founding Supporter price: £35. Orders are being fulfilled and shipped.
+                Numbered first batch. Limited to 700.
               </p>
             </div>
 
