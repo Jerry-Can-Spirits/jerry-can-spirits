@@ -178,46 +178,46 @@ export default function Home() {
       <div>
         <HeroSection />
 
-        {/* Pull-quote strip — instant social proof under the hero */}
+        {/* Pull-quote strip - instant social proof under the hero */}
         <PullQuoteStrip />
 
-        {/* Founder story — story leads, builds belief */}
+        {/* Founder story - story leads, builds belief */}
         <ScrollReveal>
           <FounderStorySnippet />
         </ScrollReveal>
 
-        {/* Why Jerry Can — value proposition */}
+        {/* Why Jerry Can - value proposition */}
         <ScrollReveal>
           <WhyJerryCan />
         </ScrollReveal>
 
-        {/* Paired social proof — Trustpilot widget + Press & Awards together */}
+        {/* Paired social proof - Trustpilot widget + Press & Awards together */}
         <ScrollReveal>
           <PairedSocialProof />
         </ScrollReveal>
 
-        {/* Order Section — the buy ask, after belief is built */}
+        {/* Order Section - the buy ask, after belief is built */}
         <ScrollReveal>
           <OrderSection />
         </ScrollReveal>
 
-        {/* Supporting our forces — pledge */}
+        {/* Supporting our forces - pledge */}
         <ScrollReveal>
           <SupportingOurForces />
         </ScrollReveal>
 
-        {/* Expedition log map — community */}
+        {/* Expedition log map - community */}
         <HomepageExpeditionMap />
 
-        {/* Field Manual Preview — content engagement */}
+        {/* Field Manual Preview - content engagement */}
         <ScrollReveal>
           <FieldManualPreview />
         </ScrollReveal>
 
-        {/* FAQ — objection handling before final CTA */}
+        {/* FAQ - objection handling before final CTA */}
         <HomepageFAQ />
 
-        {/* Newsletter Signup — final CTA */}
+        {/* Newsletter Signup - final CTA */}
         <section id="newsletter-signup" className="py-20 border-t border-gold-500/10">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <div className="inline-block px-4 py-2 bg-jerry-green-800/60 backdrop-blur-sm rounded-full border border-gold-500/30 mb-6">
@@ -235,7 +235,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* SEO-Rich Content Section — kept for crawlers, lowest priority */}
+        {/* SEO-Rich Content Section - kept for crawlers, lowest priority */}
         <section className="py-16 bg-jerry-green-900/50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid lg:grid-cols-2 gap-12">
