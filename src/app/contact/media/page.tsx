@@ -1022,7 +1022,7 @@ Based in the UK, Jerry Can Spirits® is a small operation run by two mates who c
               </div>
               <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 md:p-8 border border-gold-500/20 flex flex-col items-center justify-center text-center">
                 <p className="text-4xl font-serif font-bold text-gold-300 mb-2">60+</p>
-                <p className="text-parchment-200 text-sm">Pre-orders before launch</p>
+                <p className="text-parchment-200 text-sm">Launched April 2026</p>
                 <p className="text-parchment-400 text-xs mt-2">A growing community of rum enthusiasts</p>
               </div>
             </div>

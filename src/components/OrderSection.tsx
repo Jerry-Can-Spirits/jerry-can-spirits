@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { getProduct } from '@/lib/shopify'
-import PreOrderProgressBar from './PreOrderProgressBar'
+import OrderProgressBar from './OrderProgressBar'
 
 const BOTTLE_HANDLE = 'jerry-can-spirits-expedition-spiced-rum'
 const GIFT_SET_HANDLE = 'jerry-can-spirits-premium-gift-pack'
@@ -9,7 +9,7 @@ const TRADE_PACK_HANDLE = 'jerry-can-spirits-expedition-pack-spiced-rum-6-bottle
 const TOTAL_BOTTLES = 700
 const BOTTLE_VOLUME_LITRES = 0.7
 
-async function getPreOrderData() {
+async function getOrderData() {
   try {
     const [bottleProduct, giftSetProduct, tradePackProduct] = await Promise.all([
       getProduct(BOTTLE_HANDLE),
@@ -19,8 +19,8 @@ async function getPreOrderData() {
 
     let singleBottlesSold = 0
     let tradePacksSold = 0
-    let bottlePrice = '35'
-    let bottleCompareAtPrice: string | null = '45'
+    let bottlePrice = '40'
+    let bottleCompareAtPrice: string | null = null
     let giftSetPrice = '85'
     let giftSetCompareAtPrice: string | null = null
 
@@ -66,17 +66,17 @@ async function getPreOrderData() {
   } catch {
     return {
       totalSold: null,
-      bottlePrice: '35',
-      bottleCompareAtPrice: '45',
+      bottlePrice: '40',
+      bottleCompareAtPrice: null,
       giftSetPrice: '85',
       giftSetCompareAtPrice: null,
     }
   }
 }
 
-export default async function PreOrderSection() {
+export default async function OrderSection() {
   const { totalSold, bottlePrice, bottleCompareAtPrice, giftSetPrice, giftSetCompareAtPrice } =
-    await getPreOrderData()
+    await getOrderData()
 
   const bottleUnitPrice = (parseFloat(bottlePrice) / BOTTLE_VOLUME_LITRES).toFixed(2)
 
@@ -121,11 +121,11 @@ export default async function PreOrderSection() {
             </h2>
 
             <p className="text-xl text-parchment-300 mb-6 leading-relaxed">
-              700 bottles. Each one numbered. Founding Supporter pricing.
+              700 bottles. Each one numbered. The founding batch.
             </p>
 
             {totalSold !== null && (
-              <PreOrderProgressBar sold={totalSold} total={TOTAL_BOTTLES} />
+              <OrderProgressBar sold={totalSold} total={TOTAL_BOTTLES} />
             )}
 
             {/* Benefits List */}
@@ -138,7 +138,7 @@ export default async function PreOrderSection() {
                 </li>
                 <li className="flex items-start gap-3">
                   <span className="text-gold-400 flex-shrink-0">•</span>
-                  <span>Founding Supporter price: £{bottlePrice}</span>
+                  <span>Founding batch. £{bottlePrice} per bottle.</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <span className="text-gold-400 flex-shrink-0">•</span>

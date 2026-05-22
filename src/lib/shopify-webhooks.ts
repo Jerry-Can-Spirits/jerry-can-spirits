@@ -69,10 +69,10 @@ const SHOP_DOMAIN = 'zaeiaw-5z.myshopify.com';
 const API_VERSION = '2024-10';
 
 /**
- * Increment the `custom.pre_order_sold` metafield on a product.
+ * Increment the bottles-sold metafield on a product.
  * Uses Shopify Admin REST API. Creates the metafield if it doesn't exist.
  */
-export async function incrementPreOrderSold(
+export async function incrementBottlesSold(
   productId: number,
   quantity: number,
   adminToken: string,
@@ -143,7 +143,7 @@ export async function incrementPreOrderSold(
     }
   }
 
-  console.log(`[webhook] Updated pre_order_sold for product ${safeProductId}: ${currentValue} → ${newValue}`);
+  console.log(`[webhook] Updated bottles sold for product ${safeProductId}: ${currentValue} → ${newValue}`);
 }
 
 // ── HMAC-SHA256 Verification (Web Crypto) ───────────────────────────

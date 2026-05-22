@@ -54,13 +54,13 @@ export default function AnnouncementBar() {
               className="inline-flex items-center gap-1 sm:gap-2 hover:underline font-medium"
             >
               <span className="text-xs sm:text-sm">
-                <span className="font-semibold">Pre-order Expedition Spiced Rum</span>
-                <span className="hidden sm:inline">. Limited to 700 bottles</span>
+                <span className="font-semibold">Expedition Spiced Rum</span>
+                <span className="hidden sm:inline">. Numbered first batch, limited to 700</span>
                 <span className="mx-1 sm:mx-2">|</span>
-                <span>April 2026</span>
+                <span>Shipping now</span>
               </span>
               <span className="font-semibold underline underline-offset-2 text-xs sm:text-sm whitespace-nowrap">
-                Pre-order Now
+                Shop Now
               </span>
             </Link>
           </div>

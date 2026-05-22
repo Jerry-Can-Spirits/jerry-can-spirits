@@ -4,7 +4,7 @@ import TrustpilotWidget from "@/components/TrustpilotWidget";
 import HomepageExpeditionMap from "@/components/HomepageExpeditionMap";
 import StructuredData from "@/components/StructuredData";
 import ScrollToHash from "@/components/ScrollToHash";
-import PreOrderSection from "@/components/PreOrderSection";
+import OrderSection from "@/components/OrderSection";
 import FounderStorySnippet from "@/components/FounderStorySnippet";
 import SupportingOurForces from "@/components/SupportingOurForces";
 import FieldManualPreview from "@/components/FieldManualPreview";
@@ -185,9 +185,9 @@ export default function Home() {
           className="py-4 bg-jerry-green-900/80 border-y border-gold-500/20"
         />
 
-        {/* Pre-Order Section - Primary CTA */}
+        {/* Order Section - Primary CTA */}
         <ScrollReveal>
-          <PreOrderSection />
+          <OrderSection />
         </ScrollReveal>
 
         {/* Press & Awards - social proof before storytelling */}

@@ -237,12 +237,12 @@ export default async function ProductPage({
     if (handle === 'jerry-can-spirits-expedition-spiced-rum' && product.variants?.[0]) {
       const variant = product.variants[0]
       const TOTAL = 700
-      const preorderSoldMeta = product.metafields?.find(
+      const bottlesSoldMeta = product.metafields?.find(
         (m: { namespace: string; key: string; value: string } | null) =>
           m?.namespace === 'custom' && m?.key === 'pre_order_sold'
       )
-      const singleSold = preorderSoldMeta?.value
-        ? parseInt(preorderSoldMeta.value, 10)
+      const singleSold = bottlesSoldMeta?.value
+        ? parseInt(bottlesSoldMeta.value, 10)
         : Math.max(0, TOTAL - (variant.quantityAvailable ?? TOTAL))
 
       let tradePacksSold = 0
@@ -341,7 +341,7 @@ export default async function ProductPage({
       priceCurrency: product.priceRange.minVariantPrice.currencyCode,
       availability: firstVariant?.availableForSale
         ? 'https://schema.org/InStock'
-        : 'https://schema.org/PreOrder',
+        : 'https://schema.org/OutOfStock',
       itemCondition: 'https://schema.org/NewCondition',
       url: `https://jerrycanspirits.co.uk/shop/product/${handle}/`,
       // Fixed end-of-year date so the structured-data response is byte-stable
