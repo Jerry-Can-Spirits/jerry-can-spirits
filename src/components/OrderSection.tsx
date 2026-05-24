@@ -103,7 +103,7 @@ export default async function OrderSection() {
               </div>
 
               <div className="absolute bottom-6 left-6 bg-jerry-green-700/80 backdrop-blur-sm text-gold-300 px-4 py-2 rounded-full text-sm font-semibold uppercase tracking-wide border border-gold-500/30 shadow-lg">
-                Limited to 700
+                700 for general release
               </div>
             </div>
           </div>
@@ -117,11 +117,11 @@ export default async function OrderSection() {
             </div>
 
             <h2 className="text-3xl md:text-4xl font-serif font-bold text-white mb-6">
-              First Batch. Numbered Bottles. Limited to 700.
+              First Batch. Numbered. 700 for general release.
             </h2>
 
             <p className="text-xl text-parchment-300 mb-6 leading-relaxed">
-              700 bottles. Each one numbered. The founding batch.
+              700 bottles for general release. Each one numbered. The founding batch.
             </p>
 
             {totalSold !== null && (
@@ -203,7 +203,7 @@ export default async function OrderSection() {
                 <div className="grid grid-cols-3 gap-4 text-center">
                   <div>
                     <div className="text-gold-300 font-bold text-lg">700</div>
-                    <div className="text-parchment-400 text-xs uppercase tracking-wide">Bottles Only</div>
+                    <div className="text-parchment-400 text-xs uppercase tracking-wide">General Release</div>
                   </div>
                   <div>
                     <div className="text-gold-300 font-bold text-lg">1st</div>

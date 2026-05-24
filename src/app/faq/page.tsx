@@ -28,7 +28,7 @@ const faqs = [
   // Product Information
   {
     question: "What makes Jerry Can Spirits rum unique?",
-    answer: "We make one spiced rum. It's pot-distilled at Spirit of Wales in Newport, 700 bottles per batch, using real botanicals and no artificial flavouring. What makes it different is that we actually give a damn about what goes in it."
+    answer: "We make one spiced rum. It's pot-distilled at our British partner distillery, 700 numbered bottles for general release per batch, using real botanicals and no artificial flavouring. What makes it different is that we actually give a damn about what goes in it."
   },
   {
     question: "What type of rum do you produce?",
@@ -96,7 +96,7 @@ const faqs = [
   },
   {
     question: "Can I visit your distillery?",
-    answer: "Jerry Can Spirits contracts the Spirit of Wales Distillery to create our products. Spirit of Wales offer tours - see their website for further information."
+    answer: "Jerry Can Spirits works with a British partner distillery to produce our spirits. Contact us at hello@jerrycanspirits.co.uk for any production enquiries."
   },
   {
     question: "Do you offer corporate gifts or bulk orders?",

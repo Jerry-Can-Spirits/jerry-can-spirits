@@ -458,32 +458,7 @@ Row 10: ["Bourbon Barrel Chips", "United States", "Oak structure, vanilla, dry f
 
 ## FEATURED UK CRAFT DISTILLERIES
 
-### Distillery 1
-
-**Name:**
-```
-Spirit of Wales Distillery
-```
-
-**Location:**
-```
-Newport, South Wales
-```
-
-**Description:**
-```
-Spirit of Wales Distillery produces Expedition Spiced Rum using innovative copper-lined stills with multiple vapour chambers. The extended copper contact keeps spirit in vapour form longer, building complex esters and flavours while creating an exceptionally smooth finish. Their Newport facility combines traditional craft with modern precision, and pure Welsh water is used throughout the production process.
-```
-
-**Website:**
-```
-https://www.spiritofwales.com
-```
-
-**Speciality:**
-```
-Copper-lined still distillation, Welsh craft spirits
-```
+[Section to be updated when production partner details are confirmed]
 
 ---
 
@@ -516,7 +491,7 @@ expedition-spiced-rum
 ```
 **Context Note:**
 ```
-Expedition Spiced Rum features every botanical described in this guide, steeped in Caribbean rum and blended at Spirit of Wales Distillery. See the full ingredient list on our ingredients page or order a bottle to taste these botanicals for yourself.
+Expedition Spiced Rum features every botanical described in this guide, steeped in Caribbean rum at our British partner distillery. See the full ingredient list on our ingredients page or order a bottle to taste these botanicals for yourself.
 ```
 
 ---
@@ -558,7 +533,7 @@ See Our Full Ingredient List
 - [ ] Category set to rum-guides
 - [ ] Featured = Yes
 - [ ] Word count updated
-- [ ] Featured Distillery: Spirit of Wales included
+- [ ] Featured Distillery: update when production partner is confirmed
 - [ ] Cross-link to /ingredients/expedition-spiced-rum/ page within content
 - [ ] No duplication of tasting notes (already on ingredients page)
 - [ ] No duplication of allergen info (already on ingredients page)

@@ -475,32 +475,7 @@ Row 8: ["Best known for", "Character and diversity", "Terroir and authenticity",
 
 ## FEATURED UK CRAFT DISTILLERIES
 
-### Distillery 1
-
-**Name:**
-```
-Spirit of Wales Distillery
-```
-
-**Location:**
-```
-Newport, South Wales
-```
-
-**Description:**
-```
-Spirit of Wales Distillery represents the modern evolution of English-style rum in Britain. Using innovative copper-lined stills with multiple vapour chambers and Caribbean rum as a foundation, they produce craft spirits that combine traditional rum character with contemporary British botanical expertise. Their work with Jerry Can Spirits' Expedition Spiced Rum exemplifies the UK's growing role in the global rum landscape.
-```
-
-**Website:**
-```
-https://www.spiritofwales.com
-```
-
-**Speciality:**
-```
-British craft rum, copper-lined still distillation
-```
+[Section to be updated when production partner details are confirmed]
 
 ---
 
@@ -577,6 +552,6 @@ Explore Our Craft Rum
 - [ ] Category set to spirits-education
 - [ ] Featured = Yes
 - [ ] Word count updated
-- [ ] Featured Distillery: Spirit of Wales included
+- [ ] Featured Distillery: update when production partner is confirmed
 - [ ] FAQs target key search queries (rhum, ron, rhum agricole, cachaça)
 - [ ] No overlap with existing Complete Guide to Rum (complementary, not duplicative)

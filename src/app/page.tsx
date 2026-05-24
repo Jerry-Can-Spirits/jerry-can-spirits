@@ -123,7 +123,7 @@ export default function Home() {
       "telephone": "+44 7521 220541",
       "email": "hello@jerrycanspirits.co.uk",
       "priceRange": "££",
-      "description": "Veteran-owned British spirits company. Founded by Royal Corps of Signals veterans. Expedition Spiced Rum, produced at Spirit of Wales Distillery, Newport.",
+      "description": "Veteran-owned British spirits company. Founded by Royal Corps of Signals veterans. Expedition Spiced Rum, produced at our British partner distillery.",
       "address": {
         "@type": "PostalAddress",
         "streetAddress": "167-169 Great Portland Street",
@@ -249,7 +249,7 @@ export default function Home() {
                     We didn't set out to start a spirits company. Between us, we served 17 years in the Royal Corps of Signals. What we wanted was simple: a proper drink to share with mates - something with character, made by people who give a damn. When we couldn't find it, we decided to make it ourselves.
                   </p>
                   <p>
-                    Working with <Link href="/friends/" className="text-gold-300 hover:text-gold-400 underline">Spirit of Wales Distillery</Link>, we blend Caribbean rum with Welsh brewery molasses and put it through their pot stills. The result? Vanilla and caramel upfront, warm spice through the middle, and a finish smooth enough to sip neat - but bold enough to hold its own in a cocktail.
+                    We blend Caribbean rum with molasses and put it through the pot stills at our British partner distillery. The result? Vanilla and caramel upfront, warm spice through the middle, and a finish smooth enough to sip neat - but bold enough to hold its own in a cocktail.
                   </p>
                   <p>
                     Whether you're mixing drinks at home or just unwinding after a long week, this is rum that doesn't let you down. We built it that way on purpose.{' '}
@@ -295,13 +295,13 @@ export default function Home() {
               <ScrollReveal delay={1}>
                 <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20 text-center">
                   <h3 className="text-lg font-serif font-bold text-gold-300 mb-2">UK First Philosophy</h3>
-                  <p className="text-parchment-300 text-sm">Welsh distillery, Welsh brewery molasses, real botanicals</p>
+                  <p className="text-parchment-300 text-sm">Welsh distillery, molasses, real botanicals</p>
                 </div>
               </ScrollReveal>
               <ScrollReveal delay={2}>
                 <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20 text-center">
                   <h3 className="text-lg font-serif font-bold text-gold-300 mb-2">Small Batch. Properly Made.</h3>
-                  <p className="text-parchment-300 text-sm">Pot stilled at Spirit of Wales Distillery, Newport. Extended copper contact. Every batch small enough to pay attention to.</p>
+                  <p className="text-parchment-300 text-sm">Pot stilled at our British partner distillery. Extended copper contact. Every batch small enough to pay attention to.</p>
                 </div>
               </ScrollReveal>
               <ScrollReveal delay={3}>
