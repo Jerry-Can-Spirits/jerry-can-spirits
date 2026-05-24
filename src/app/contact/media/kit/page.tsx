@@ -135,7 +135,7 @@ export default function MediaKitPage() {
                     { label: 'Volume', value: '700ml' },
                     { label: 'RRP', value: '£40.00' },
                     { label: 'Base Spirit', value: 'Caribbean rum' },
-                    { label: 'Distillery', value: 'Spirit of Wales, Newport' },
+                    { label: 'Distillery', value: 'our British partner distillery' },
                   ].map((spec) => (
                     <div key={spec.label} className="flex justify-between border-b border-jerry-green-100 pb-1 text-sm">
                       <span className="text-jerry-green-500">{spec.label}</span>

@@ -89,7 +89,7 @@ export default function HeroSection() {
                 Now Shipping
               </div>
               <p className="text-parchment-200 text-center text-sm">
-                Numbered first batch. Limited to 700.
+                Numbered first batch. 700 for general release.
               </p>
             </div>
 
@@ -166,7 +166,7 @@ export default function HeroSection() {
 
               {/* Floating Badges */}
               <div className="absolute top-6 left-6 bg-gradient-to-r from-gold-600 to-gold-500 text-jerry-green-900 px-4 py-2 rounded-full text-sm font-semibold uppercase tracking-wide shadow-lg">
-                Numbered. Limited to 700.
+                Numbered. 700 for general release.
               </div>
 
               {/* Prev/Next arrows — mobile only; signifier for swipe gesture */}

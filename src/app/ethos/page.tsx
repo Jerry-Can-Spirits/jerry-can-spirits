@@ -52,7 +52,7 @@ const faqSchema = {
       name: 'Where is Jerry Can Spirits rum made?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Our rum is distilled at Spirit of Wales Distillery in Newport, Gwent. We use their advanced copper-lined stills combined with Caribbean rum base and pure Welsh water to create our signature spirits.',
+        text: 'Our rum is distilled at our British partner distillery in the UK. We use their pot stills combined with Caribbean rum base and pure Welsh water to create our signature spirits.',
       },
     },
     {
@@ -68,7 +68,7 @@ const faqSchema = {
       name: 'What makes your distillation process different?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'We partner with Spirit of Wales Distillery who use innovative copper-lined stills with multiple vapour chambers. This extended copper contact keeps the spirit in vapour form longer, building complex esters and flavours while creating an exceptionally smooth, soft finish.',
+        text: 'We work with a British partner distillery whose copper pot stills provide extended vapour contact. This keeps the spirit in vapour form longer, building complex esters and flavours while creating an exceptionally smooth, soft finish.',
       },
     },
     {
@@ -109,7 +109,7 @@ export default function Ethos() {
             <div className="relative w-full max-w-3xl mx-auto mb-8">
               <Image
                 src="/images/hero/Compass_Still.webp"
-                alt="A compass and copper pot still representing the distillation process at Spirit of Wales Distillery, Newport"
+                alt="A compass and copper pot still representing the distillation process"
                 width={1200}
                 height={600}
                 className="rounded-lg"
@@ -241,7 +241,7 @@ export default function Ethos() {
                         <h4 className="text-gold-300 font-semibold mb-2">UK Sourced</h4>
                         <ul className="text-sm text-parchment-300 space-y-1">
                           <li>• Pure Welsh water</li>
-                          <li>• Welsh brewery molasses</li>
+                          <li>• Molasses</li>
                           <li>• Bourbon barrel chips</li>
                           <li>• Agave syrup</li>
                         </ul>
@@ -273,13 +273,13 @@ export default function Ethos() {
                     Selection: Working With the Right Distillery
                   </h3>
                   <p className="text-parchment-300 mb-6">
-                    We partnered with <Link href="/friends/" className="text-gold-300 hover:text-gold-400 underline"><strong>Spirit of Wales Distillery in Newport, South Wales</strong></Link>, craftspeople who take the same approach to distillation that we take to everything else. Their copper pot stills are the right tool for the job. Extended vapour contact. Proper copper interaction. No shortcuts.
+                    We work with a British partner distillery whose people take the same approach to distillation that we take to everything else. Their copper pot stills are the right tool for the job. Extended vapour contact. Proper copper interaction. No shortcuts.
                   </p>
 
                   {/* Details - Always Visible */}
                   <div className="mt-6">
                     <div className="bg-jerry-green-800/60 rounded-lg p-6">
-                      <h4 className="text-gold-300 font-semibold mb-3">The Spirit of Wales Approach</h4>
+                      <h4 className="text-gold-300 font-semibold mb-3">The Distillery Approach</h4>
                       <div className="text-sm text-parchment-300 space-y-4">
                         <div>
                           <strong className="text-gold-300">Copper-Lined Innovation</strong>
@@ -291,7 +291,7 @@ export default function Ethos() {
                         </div>
                         <div>
                           <strong className="text-gold-300">Engineering Excellence</strong>
-                          <p>The copper does the work it has been doing for centuries. Spirit of Wales have built a still that lets it do more of it. Multiple vapour chambers, maximum contact time, complex esters, smooth finish.</p>
+                          <p>The copper does the work it has been doing for centuries. Multiple vapour chambers, maximum contact time, complex esters, smooth finish.</p>
                         </div>
                       </div>
                     </div>
@@ -428,7 +428,7 @@ export default function Ethos() {
                   <div className="w-2 h-2 bg-gold-400 rounded-full mt-2 flex-shrink-0"></div>
                   <div>
                     <p className="font-semibold text-gold-300">Welsh Partnership</p>
-                    <p className="text-sm">Working with <Link href="/friends/" className="text-gold-300 hover:text-gold-400 underline">Spirit of Wales Distillery</Link> for our blending and production</p>
+                    <p className="text-sm">Working with our British partner distillery for our blending and production</p>
                   </div>
                 </div>
                 <div className="flex items-start space-x-3">
