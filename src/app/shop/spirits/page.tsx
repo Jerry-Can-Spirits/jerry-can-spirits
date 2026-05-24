@@ -13,13 +13,13 @@ import { safeJsonLd } from '@/lib/jsonLd'
 
 export const metadata: Metadata = {
   title: 'British Craft Spirits | Veteran-Owned Small-Batch',
-  description: 'Veteran-owned British craft spirits, small-batch and built properly. Currently: Expedition Spiced Rum, pot-distilled at Spirit of Wales, real ingredients.',
+  description: 'Veteran-owned British craft spirits, small-batch and built properly. Currently: Expedition Spiced Rum, pot-distilled in the UK, real ingredients.',
   alternates: {
     canonical: 'https://jerrycanspirits.co.uk/shop/spirits/',
   },
   openGraph: {
     title: 'British Craft Spirits | Jerry Can Spirits®',
-    description: 'Veteran-owned British craft spirits, small-batch and built properly. Currently: Expedition Spiced Rum, pot-distilled at Spirit of Wales, real ingredients.',
+    description: 'Veteran-owned British craft spirits, small-batch and built properly. Currently: Expedition Spiced Rum, pot-distilled in the UK, real ingredients.',
     url: 'https://jerrycanspirits.co.uk/shop/spirits/',
     siteName: 'Jerry Can Spirits®',
     locale: 'en_GB',
@@ -29,7 +29,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image' as const,
     title: 'British Craft Spirits | Jerry Can Spirits®',
-    description: 'Veteran-owned British craft spirits, small-batch and built properly. Currently: Expedition Spiced Rum, pot-distilled at Spirit of Wales, real ingredients.',
+    description: 'Veteran-owned British craft spirits, small-batch and built properly. Currently: Expedition Spiced Rum, pot-distilled in the UK, real ingredients.',
     images: OG_IMAGE,
   },
 }
@@ -219,10 +219,10 @@ export default async function SpiritsPage() {
               Most spiced rum is made to a formula. Base spirit, artificial flavourings, a label that leans on nostalgia. Consistent, inoffensive, and forgettable.
             </p>
             <p className="text-lg text-parchment-400 leading-relaxed">
-              Expedition Spiced Rum is built differently. Caribbean rum base, Welsh brewery molasses, and a hand-selected spice blend: Madagascan vanilla, Ceylon cinnamon, ginger root, cassia bark, clove, orange peel, and bourbon oak. No artificial flavourings. Nothing that does not belong there.
+              Expedition Spiced Rum is built differently. Caribbean rum base, molasses, and a hand-selected spice blend: Madagascan vanilla, Ceylon cinnamon, ginger root, cassia bark, clove, orange peel, and bourbon oak. No artificial flavourings. Nothing that does not belong there.
             </p>
             <p className="text-lg text-parchment-400 leading-relaxed">
-              Pot-distilled at Spirit of Wales Distillery in Newport, South Wales. 700 bottles per batch. When a batch is gone, that run is finished. Two Royal Corps of Signals veterans. 17 years of service between us. The same standards applied here.
+              Pot-distilled at our British partner distillery. 700 numbered bottles for general release per batch. When a batch is gone, that run is finished. Two Royal Corps of Signals veterans. 17 years of service between us. The same standards applied here.
             </p>
           </div>
 
@@ -304,7 +304,7 @@ export default async function SpiritsPage() {
             </h2>
             <div className="space-y-4 text-parchment-200 leading-relaxed">
               <p>
-                Expedition Spiced Rum starts with Caribbean white rum and Welsh brewery molasses. We blend these at Spirit of Wales Distillery in Newport, pot-distilling in small batches of just 700 bottles.
+                Expedition Spiced Rum starts with Caribbean white rum and molasses. We blend these at our British partner distillery, pot-distilling in small batches of 700 numbered bottles for general release.
               </p>
               <p>
                 The flavour profile opens with Madagascan vanilla and Ceylon cinnamon, moves into warming ginger and cassia through the middle, and finishes smooth with bourbon oak and a hint of citrus. It's designed to drink neat, work in cocktails, and hold its own over ice.
@@ -362,7 +362,7 @@ export default async function SpiritsPage() {
               </div>
               <h4 className="text-lg font-semibold text-white mb-2">Properly Small-Batch</h4>
               <p className="text-parchment-300 text-sm">
-                700 bottles per batch. Not a marketing number — that's genuinely what our pot still at Spirit of Wales produces. When a batch is gone, it's gone.
+                700 numbered bottles for general release per batch. Not a marketing number. When a batch is gone, it's gone.
               </p>
             </div>
             <div className="text-center">
@@ -412,7 +412,7 @@ export default async function SpiritsPage() {
                   "name": "What does 'small-batch' actually mean?",
                   "acceptedAnswer": {
                     "@type": "Answer",
-                    "text": "For us, it means exactly 700 bottles per batch. That's the capacity of our pot still at Spirit of Wales Distillery in Newport. It's not a marketing term — it's a physical limitation. When a batch sells out, that specific run is gone. We can make more, but each batch has subtle variations based on the distillation."
+                    "text": "For us, it means 700 numbered bottles for general release per batch. It's not a marketing term. When a batch sells out, that specific run is gone. We can make more, but each batch has subtle variations based on the distillation."
                   }
                 },
                 {
@@ -420,7 +420,7 @@ export default async function SpiritsPage() {
                   "name": "Is Jerry Can Spirits rum vegan?",
                   "acceptedAnswer": {
                     "@type": "Answer",
-                    "text": "Yes. Our Expedition Spiced Rum contains no animal products. The base is Caribbean white rum, we add Welsh brewery molasses, and the spice blend is entirely plant-based. No honey, no animal-derived filtering agents, no animal products in production."
+                    "text": "Yes. Our Expedition Spiced Rum contains no animal products. The base is Caribbean white rum, we use molasses, and the spice blend is entirely plant-based. No honey, no animal-derived filtering agents, no animal products in production."
                   }
                 },
                 {
@@ -428,7 +428,7 @@ export default async function SpiritsPage() {
                   "name": "Where is Jerry Can Spirits rum made?",
                   "acceptedAnswer": {
                     "@type": "Answer",
-                    "text": "We blend and distil at Spirit of Wales Distillery in Newport, Wales. The base white rum comes from the Caribbean, and we source molasses from a Welsh brewery's production. The distillation, blending, spicing, and bottling all happen in Wales. We're a British spirits company, and everything from distillation to bottling happens here in Wales."
+                    "text": "We blend and distil at our British partner distillery in the UK. The base white rum comes from the Caribbean. The distillation, blending, spicing, and bottling all happen in Britain."
                   }
                 },
                 {
@@ -470,21 +470,21 @@ export default async function SpiritsPage() {
             <div className="border-b border-gold-500/10 pb-6">
               <h3 className="text-lg font-semibold text-gold-300 mb-3">What does 'small-batch' actually mean?</h3>
               <p className="text-parchment-200 leading-relaxed">
-                For us, it means exactly 700 bottles per batch. That's the capacity of our pot still at Spirit of Wales Distillery in Newport. It's not a marketing term — it's a physical limitation. When a batch sells out, that specific run is gone. We can make more, but each batch has subtle variations based on the distillation.
+                For us, it means 700 numbered bottles for general release per batch. It's not a marketing term. When a batch sells out, that specific run is gone. We can make more, but each batch has subtle variations based on the distillation.
               </p>
             </div>
 
             <div className="border-b border-gold-500/10 pb-6">
               <h3 className="text-lg font-semibold text-gold-300 mb-3">Is Jerry Can Spirits rum vegan?</h3>
               <p className="text-parchment-200 leading-relaxed">
-                Yes. Our Expedition Spiced Rum contains no animal products. The base is Caribbean white rum, we add Welsh brewery molasses, and the spice blend is entirely plant-based. No honey, no animal-derived filtering agents, no animal products in production.
+                Yes. Our Expedition Spiced Rum contains no animal products. The base is Caribbean white rum, we use molasses, and the spice blend is entirely plant-based. No honey, no animal-derived filtering agents, no animal products in production.
               </p>
             </div>
 
             <div className="border-b border-gold-500/10 pb-6">
               <h3 className="text-lg font-semibold text-gold-300 mb-3">Where is Jerry Can Spirits rum made?</h3>
               <p className="text-parchment-200 leading-relaxed">
-                We blend and distil at Spirit of Wales Distillery in Newport, Wales. The base white rum comes from the Caribbean, and we source molasses from a Welsh brewery's production. The distillation, blending, spicing, and bottling all happen in Wales. We're a British spirits company, and everything from distillation to bottling happens here in Wales.
+                We blend and distil at our British partner distillery in the UK. The base white rum comes from the Caribbean. The distillation, blending, spicing, and bottling all happen in Britain.
               </p>
             </div>
 

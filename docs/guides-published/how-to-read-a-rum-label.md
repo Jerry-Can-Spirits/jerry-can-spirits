@@ -520,32 +520,7 @@ Row 10: ["40% ABV", "Standard strength", "International quality standard — abo
 
 ## FEATURED UK CRAFT DISTILLERIES
 
-### Distillery 1
-
-**Name:**
-```
-Spirit of Wales Distillery
-```
-
-**Location:**
-```
-Newport, South Wales
-```
-
-**Description:**
-```
-Spirit of Wales Distillery embodies the label transparency that this guide advocates. Their production of Expedition Spiced Rum for Jerry Can Spirits demonstrates what full ingredient disclosure looks like in practice — every botanical named, every process explained, nothing hidden behind vague terminology. Their copper-lined stills with multiple vapour chambers produce spirits with a distinctively smooth character.
-```
-
-**Website:**
-```
-https://www.spiritofwales.com
-```
-
-**Speciality:**
-```
-Transparent craft spirits, copper-lined still distillation
-```
+[Section to be updated when production partner details are confirmed]
 
 ---
 
@@ -622,7 +597,7 @@ See What's In Our Bottle
 - [ ] Category set to spirits-education
 - [ ] Featured = Yes
 - [ ] Word count updated
-- [ ] Featured Distillery: Spirit of Wales included
+- [ ] Featured Distillery: update when production partner is confirmed
 - [ ] Tone is educational not preachy — inform, don't lecture
 - [ ] No specific competitor brands named negatively
 - [ ] Reinforces JCS transparency values without being overtly self-promotional

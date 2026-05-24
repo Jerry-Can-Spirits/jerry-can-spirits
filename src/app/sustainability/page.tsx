@@ -41,7 +41,7 @@ const faqSchema = {
       name: 'Where is Jerry Can Spirits rum made?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Our rum is distilled at Spirit of Wales Distillery in Newport, Gwent. We use Welsh water and source molasses from local Welsh breweries, reducing waste and supporting local producers.',
+        text: 'Our rum is distilled at our British partner distillery in the UK. We use Welsh water and source molasses locally where possible, reducing waste and supporting local producers.',
       },
     },
     {
@@ -173,7 +173,7 @@ export default function Sustainability() {
 
             <div className="space-y-4 text-parchment-300">
               <p>
-                We work with what&apos;s close to home where we can. Our rum is distilled in Wales using Welsh water, and the molasses comes partly from a local brewery&apos;s beer production. Good ingredients that would otherwise go to waste.
+                We work with what&apos;s close to home where we can. Our rum is distilled in Wales using Welsh water. Good ingredients, sourced to reduce waste.
               </p>
               <p>
                 It&apos;s not about slapping &quot;eco-friendly&quot; on the label. It&apos;s just how we think things should be done. Read more about <Link href="/about/story/" className="text-gold-300 hover:text-gold-400 underline">our story</Link> and the values that shape how we work.
@@ -188,14 +188,14 @@ export default function Sustainability() {
                 </ScrollReveal>
                 <ScrollReveal delay={1}>
                 <div className="bg-jerry-green-800/60 rounded-lg p-4">
-                  <h3 className="text-gold-300 font-semibold mb-2">Brewery Molasses</h3>
-                  <p className="text-sm">Sourced from local Welsh brewery production, reducing waste.</p>
+                  <h3 className="text-gold-300 font-semibold mb-2">Molasses</h3>
+                  <p className="text-sm">Sourced locally where possible, reducing waste.</p>
                 </div>
                 </ScrollReveal>
                 <ScrollReveal delay={0}>
                 <div className="bg-jerry-green-800/60 rounded-lg p-4">
                   <h3 className="text-gold-300 font-semibold mb-2">UK Distillation</h3>
-                  <p className="text-sm">Distilled at <Link href="/friends/" className="text-gold-300 hover:text-gold-400 underline">Spirit of Wales Distillery</Link> in Newport, Gwent.</p>
+                  <p className="text-sm">Distilled at our British partner distillery in the UK.</p>
                 </div>
                 </ScrollReveal>
                 <ScrollReveal delay={1}>

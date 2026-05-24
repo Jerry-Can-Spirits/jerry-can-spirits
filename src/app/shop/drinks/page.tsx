@@ -12,13 +12,13 @@ import { safeJsonLd } from '@/lib/jsonLd'
 
 export const metadata: Metadata = {
   title: 'British Spiced Rum | Small-Batch Craft Rum',
-  description: 'Small-batch British spiced rum from veteran-owned Jerry Can Spirits. Pot-distilled at Spirit of Wales. Rich vanilla, warm spices, smooth finish.',
+  description: 'Small-batch British spiced rum from veteran-owned Jerry Can Spirits. Pot-distilled in the UK. Rich vanilla, warm spices, smooth finish.',
   alternates: {
     canonical: 'https://jerrycanspirits.co.uk/shop/drinks/',
   },
   openGraph: {
     title: 'British Spiced Rum | Jerry Can Spirits®',
-    description: 'Small-batch British spiced rum from veteran-owned Jerry Can Spirits. Pot-distilled at Spirit of Wales. Rich vanilla, warm spices, smooth finish.',
+    description: 'Small-batch British spiced rum from veteran-owned Jerry Can Spirits. Pot-distilled in the UK. Rich vanilla, warm spices, smooth finish.',
     url: 'https://jerrycanspirits.co.uk/shop/drinks/',
     siteName: 'Jerry Can Spirits®',
     locale: 'en_GB',
@@ -28,7 +28,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image' as const,
     title: 'British Spiced Rum | Jerry Can Spirits®',
-    description: 'Small-batch British spiced rum from veteran-owned Jerry Can Spirits. Pot-distilled at Spirit of Wales. Rich vanilla, warm spices, smooth finish.',
+    description: 'Small-batch British spiced rum from veteran-owned Jerry Can Spirits. Pot-distilled in the UK. Rich vanilla, warm spices, smooth finish.',
     images: OG_IMAGE,
   },
 }
@@ -241,7 +241,7 @@ export default async function DrinksPageTest() {
           </h1>
 
           <p className="text-xl text-parchment-300 max-w-3xl mx-auto leading-relaxed">
-            We make one thing and we make it properly. Expedition Spiced Rum - pot-distilled at Spirit of Wales, 700 bottles per batch, gone when they're gone.
+            We make one thing and we make it properly. Expedition Spiced Rum, pot-distilled in the UK. 700 numbered bottles for general release per batch. Gone when they're gone.
           </p>
 
           {/* Shopify Connection Success Indicator */}
@@ -328,7 +328,7 @@ export default async function DrinksPageTest() {
             </h2>
             <div className="space-y-4 text-parchment-200 leading-relaxed">
               <p>
-                Expedition Spiced Rum starts with Caribbean white rum and Welsh brewery molasses. We blend these at Spirit of Wales Distillery in Newport, pot-distilling in small batches of just 700 bottles.
+                Expedition Spiced Rum starts with Caribbean white rum and molasses. We blend these at our British partner distillery, pot-distilling in small batches of 700 numbered bottles for general release.
               </p>
               <p>
                 The flavour profile opens with Madagascan vanilla and Ceylon cinnamon, moves into warming ginger and cassia through the middle, and finishes smooth with bourbon oak and a hint of citrus. It's designed to drink neat, work in cocktails, and hold its own over ice.
@@ -386,7 +386,7 @@ export default async function DrinksPageTest() {
               </div>
               <h4 className="text-lg font-semibold text-white mb-2">Properly Small-Batch</h4>
               <p className="text-parchment-300 text-sm">
-                700 bottles per batch. Not a marketing number - that's genuinely what our pot still at Spirit of Wales produces. When a batch is gone, it's gone.
+                700 numbered bottles for general release per batch. Not a marketing number. When a batch is gone, it's gone.
               </p>
             </div>
             <div className="text-center">
@@ -436,7 +436,7 @@ export default async function DrinksPageTest() {
                   "name": "What does 'small-batch' actually mean?",
                   "acceptedAnswer": {
                     "@type": "Answer",
-                    "text": "For us, it means exactly 700 bottles per batch. That's the capacity of our pot still at Spirit of Wales Distillery in Newport. It's not a marketing term - it's a physical limitation. When a batch sells out, that specific run is gone. We can make more, but each batch has subtle variations based on the distillation."
+                    "text": "For us, it means 700 numbered bottles for general release per batch. It's not a marketing term. When a batch sells out, that specific run is gone. We can make more, but each batch has subtle variations based on the distillation."
                   }
                 },
                 {
@@ -444,7 +444,7 @@ export default async function DrinksPageTest() {
                   "name": "Is Jerry Can Spirits rum vegan?",
                   "acceptedAnswer": {
                     "@type": "Answer",
-                    "text": "Yes. Our Expedition Spiced Rum contains no animal products. The base is Caribbean white rum, we add Welsh brewery molasses, and the spice blend is entirely plant-based. No honey, no animal-derived filtering agents, no animal products in production."
+                    "text": "Yes. Our Expedition Spiced Rum contains no animal products. The base is Caribbean white rum, we use molasses, and the spice blend is entirely plant-based. No honey, no animal-derived filtering agents, no animal products in production."
                   }
                 },
                 {
@@ -452,7 +452,7 @@ export default async function DrinksPageTest() {
                   "name": "Where is Jerry Can Spirits rum made?",
                   "acceptedAnswer": {
                     "@type": "Answer",
-                    "text": "We blend and distil at Spirit of Wales Distillery in Newport, Wales. The base white rum comes from the Caribbean, and we source molasses from a Welsh brewery's production. The distillation, blending, spicing, and bottling all happen in Wales. We're a British spirits company, and everything from distillation to bottling happens here in Wales."
+                    "text": "We blend and distil at our British partner distillery in the UK. The base white rum comes from the Caribbean. The distillation, blending, spicing, and bottling all happen in Britain."
                   }
                 },
                 {
@@ -494,21 +494,21 @@ export default async function DrinksPageTest() {
             <div className="border-b border-gold-500/10 pb-6">
               <h3 className="text-lg font-semibold text-gold-300 mb-3">What does 'small-batch' actually mean?</h3>
               <p className="text-parchment-200 leading-relaxed">
-                For us, it means exactly 700 bottles per batch. That's the capacity of our pot still at Spirit of Wales Distillery in Newport. It's not a marketing term - it's a physical limitation. When a batch sells out, that specific run is gone. We can make more, but each batch has subtle variations based on the distillation.
+                For us, it means 700 numbered bottles for general release per batch. It's not a marketing term. When a batch sells out, that specific run is gone. We can make more, but each batch has subtle variations based on the distillation.
               </p>
             </div>
 
             <div className="border-b border-gold-500/10 pb-6">
               <h3 className="text-lg font-semibold text-gold-300 mb-3">Is Jerry Can Spirits rum vegan?</h3>
               <p className="text-parchment-200 leading-relaxed">
-                Yes. Our Expedition Spiced Rum contains no animal products. The base is Caribbean white rum, we add Welsh brewery molasses, and the spice blend is entirely plant-based. No honey, no animal-derived filtering agents, no animal products in production.
+                Yes. Our Expedition Spiced Rum contains no animal products. The base is Caribbean white rum, we use molasses, and the spice blend is entirely plant-based. No honey, no animal-derived filtering agents, no animal products in production.
               </p>
             </div>
 
             <div className="border-b border-gold-500/10 pb-6">
               <h3 className="text-lg font-semibold text-gold-300 mb-3">Where is Jerry Can Spirits rum made?</h3>
               <p className="text-parchment-200 leading-relaxed">
-                We blend and distil at Spirit of Wales Distillery in Newport, Wales. The base white rum comes from the Caribbean, and we source molasses from a Welsh brewery's production. The distillation, blending, spicing, and bottling all happen in Wales. We're a British spirits company, and everything from distillation to bottling happens here in Wales.
+                We blend and distil at our British partner distillery in the UK. The base white rum comes from the Caribbean. The distillation, blending, spicing, and bottling all happen in Britain.
               </p>
             </div>
 
