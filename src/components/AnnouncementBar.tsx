@@ -55,7 +55,7 @@ export default function AnnouncementBar() {
             >
               <span className="text-xs sm:text-sm">
                 <span className="font-semibold">Expedition Spiced Rum</span>
-                <span className="hidden sm:inline">. Numbered first batch, limited to 700</span>
+                <span className="hidden sm:inline">. Numbered first batch. 700 for general release</span>
                 <span className="mx-1 sm:mx-2">|</span>
                 <span>Shipping now</span>
               </span>

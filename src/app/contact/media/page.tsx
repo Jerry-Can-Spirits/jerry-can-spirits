@@ -299,15 +299,11 @@ Based in the UK, Jerry Can Spirits® is a small operation run by two mates who c
                     { label: 'Volume', value: '700ml' },
                     { label: 'RRP', value: '£40.00' },
                     { label: 'Base Spirit', value: 'Caribbean rum' },
-                    { label: 'Produced At', value: 'Spirit of Wales Distillery, Newport, South Wales', href: '/friends/' },
+                    { label: 'Produced At', value: 'our British partner distillery' },
                   ].map((item) => (
                     <div key={item.label} className="flex justify-between items-baseline border-b border-gold-500/10 pb-2">
                       <span className="text-parchment-400 text-sm">{item.label}</span>
-                      {'href' in item && item.href ? (
-                        <a href={item.href} className="text-gold-300 hover:text-gold-200 font-medium text-sm underline transition-colors">{item.value}</a>
-                      ) : (
-                        <span className="text-parchment-50 font-medium text-sm">{item.value}</span>
-                      )}
+                      <span className="text-parchment-50 font-medium text-sm">{item.value}</span>
                     </div>
                   ))}
                 </div>
@@ -989,7 +985,7 @@ Based in the UK, Jerry Can Spirits® is a small operation run by two mates who c
               <div className="relative border-l-2 border-gold-500/30 ml-4">
                 {[
                   { date: '31 July 2025', event: 'Jerry Can Spirits founded on Black Tot Day — the anniversary of the Royal Navy\'s last daily rum ration.' },
-                  { date: 'Q3 2025', event: 'Recipe development begins with Spirit of Wales Distillery in Newport, South Wales.' },
+                  { date: 'Q3 2025', event: 'Recipe development begins with our British partner distillery.' },
                   { date: '2025/26 Season', event: 'Worcester RFC Match Afternoon sponsorship begins.' },
                   { date: '6 April 2026', event: 'Expedition Spiced Rum official launch.' },
                 ].map((milestone, index) => (

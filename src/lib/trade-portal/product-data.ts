@@ -14,7 +14,7 @@ export const EXPEDITION_SPICED = {
   volume_ml: 700,
 
   // Production
-  distillery: 'Spirit of Wales Distillery, Newport',
+  distillery: 'our British partner distillery',
   country_of_production: 'United Kingdom',
   brand_owner: 'Jerry Can Spirits Ltd',
 
