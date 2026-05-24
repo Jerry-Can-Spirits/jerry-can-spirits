@@ -69,7 +69,7 @@ export const BARTENDER_GUIDES: Record<VenueSlug, BartenderGuide> = {
     venue_slug: 'cocktail-bar',
     venue_label: 'Cocktail bar edition',
     what_it_is:
-      'A spiced rum macerated with real ingredients. Vanilla, cinnamon, allspice, clove, orange peel, cassia, ginger, agave. Finished on bourbon oak. Caribbean rum base, 40% ABV. No essences. No artificial flavourings. Macerated at Spirit of Wales Distillery in Newport.',
+      'A spiced rum macerated with real ingredients. Vanilla, cinnamon, allspice, clove, orange peel, cassia, ginger, agave. Finished on bourbon oak. Caribbean rum base, 40% ABV. No essences. No artificial flavourings. Macerated at our British partner distillery.',
     serves: [
       {
         heading: 'Lead with this',
@@ -114,7 +114,7 @@ export const BARTENDER_GUIDES: Record<VenueSlug, BartenderGuide> = {
       },
     ],
     about:
-      'Jerry Can Spirits is veteran-owned and bootstrapped. Two Royal Signals veterans. Macerated at Spirit of Wales Distillery in Newport. 5% of profits go to military charities. This is their first release. jerrycanspirits.co.uk.',
+      'Jerry Can Spirits is veteran-owned and bootstrapped. Two Royal Signals veterans. Macerated at our British partner distillery. 5% of profits go to military charities. This is their first release. jerrycanspirits.co.uk.',
   },
 
   nightclub: {
@@ -166,7 +166,7 @@ export const BARTENDER_GUIDES: Record<VenueSlug, BartenderGuide> = {
     venue_slug: 'hotel',
     venue_label: 'Hotel bar edition',
     what_it_is:
-      'A spiced rum macerated with real ingredients. Vanilla, cinnamon, allspice, clove, orange peel, cassia, ginger, agave, bourbon oak. Caribbean rum base, 40% ABV. No essences, no artificial flavourings. Macerated at Spirit of Wales Distillery in Newport. Founded by two Royal Signals veterans. 5% of profits go to military charities.',
+      'A spiced rum macerated with real ingredients. Vanilla, cinnamon, allspice, clove, orange peel, cassia, ginger, agave, bourbon oak. Caribbean rum base, 40% ABV. No essences, no artificial flavourings. Macerated at our British partner distillery. Founded by two Royal Signals veterans. 5% of profits go to military charities.',
     serves: [
       {
         heading: 'How to serve it',
@@ -186,7 +186,7 @@ export const BARTENDER_GUIDES: Record<VenueSlug, BartenderGuide> = {
       },
     ],
     three_things: [
-      'Real ingredients, properly macerated. Made at Spirit of Wales Distillery, Newport.',
+      'Real ingredients, properly macerated. Made at our British partner distillery.',
       'Veteran-owned British brand. 5% of profits to military charities.',
       'Best appreciated neat or over a large cube. Let the spirit show.',
     ],
@@ -205,7 +205,7 @@ export const BARTENDER_GUIDES: Record<VenueSlug, BartenderGuide> = {
       },
     ],
     about:
-      'Jerry Can Spirits is veteran-owned and bootstrapped. Two Royal Signals veterans, no investors, real ingredients. Macerated at Spirit of Wales Distillery in Newport. 5% of profits go to military charities. Expedition Spiced is their first release. jerrycanspirits.co.uk.',
+      'Jerry Can Spirits is veteran-owned and bootstrapped. Two Royal Signals veterans, no investors, real ingredients. Macerated at our British partner distillery. 5% of profits go to military charities. Expedition Spiced is their first release. jerrycanspirits.co.uk.',
   },
 }
 

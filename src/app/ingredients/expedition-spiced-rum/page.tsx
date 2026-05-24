@@ -32,7 +32,7 @@ const faqSchema = {
       name: 'What is Expedition Spiced Rum made from?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Expedition Spiced Rum is made with Caribbean rum, Madagascan vanilla pods, Ceylon cinnamon, ginger, orange peel, cloves, allspice, cassia bark, agave syrup, and glucose syrup for natural sweetness. It\'s rested on bourbon barrel chips and blended at Spirit of Wales Distillery in Newport, South Wales. We never use artificial sweeteners, colours, flavourings, or additives.',
+        text: 'Expedition Spiced Rum is made with Caribbean rum, Madagascan vanilla pods, Ceylon cinnamon, ginger, orange peel, cloves, allspice, cassia bark, agave syrup, and glucose syrup for natural sweetness. It\'s rested on bourbon barrel chips and blended at our British partner distillery. We never use artificial sweeteners, colours, flavourings, or additives.',
       },
     },
     {
@@ -226,11 +226,10 @@ export default function ExpeditionSpicedRumIngredients() {
                 <ul className="space-y-2">
                   <li className="flex items-start space-x-3">
                     <div className="w-2 h-2 bg-gold-400 rounded-full mt-2 flex-shrink-0"></div>
-                    <span>Caribbean Rum</span>
-                  </li>
-                  <li className="flex items-start space-x-3">
-                    <div className="w-2 h-2 bg-gold-400 rounded-full mt-2 flex-shrink-0"></div>
-                    <span>Welsh Brewery Molasses</span>
+                    <div>
+                      <span className="text-parchment-200">Caribbean Rum</span>
+                      <span className="text-parchment-500 text-sm ml-2">A soft white blend, chosen so the botanicals lead</span>
+                    </div>
                   </li>
                 </ul>
               </div>
@@ -247,6 +246,23 @@ export default function ExpeditionSpicedRumIngredients() {
                     { name: 'Cloves', origin: 'Sri Lanka', supplier: 'Cotswold Ingredients' },
                     { name: 'Allspice', origin: 'Guatemala', supplier: 'Cotswold Ingredients' },
                     { name: 'Cassia Bark', origin: 'Indonesia', supplier: 'Cotswold Ingredients' },
+                  ].map(({ name, origin, supplier }) => (
+                    <li key={name} className="flex items-start space-x-3">
+                      <div className="w-2 h-2 bg-gold-400 rounded-full mt-2 flex-shrink-0"></div>
+                      <div>
+                        <span className="text-parchment-200">{name}</span>
+                        <span className="text-parchment-500 text-sm ml-2">{origin} &middot; {supplier}</span>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* Sweetness & Mouthfeel */}
+              <div className="border-b border-gold-500/20 pb-6">
+                <h3 className="text-lg font-semibold text-gold-300 mb-3">Sweetness &amp; Mouthfeel</h3>
+                <ul className="space-y-3">
+                  {[
                     { name: 'Agave Syrup', origin: 'Mexico', supplier: 'Beko' },
                     { name: 'Glucose Syrup', origin: 'Sussex, England', supplier: 'Beko' },
                   ].map(({ name, origin, supplier }) => (
