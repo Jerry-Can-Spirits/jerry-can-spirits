@@ -4,7 +4,7 @@
 
 Jerry Can Spirits is a veteran-owned British craft spirits house. Founded by two Royal Signals veterans. Bootstrapped. No investors. No shortcuts.
 
-First expression: Expedition Spiced. Caribbean rum base. Welsh molasses. Macerated by Spirit of Wales Distillery, Newport, South Wales. Real ingredients. No artificial flavourings.
+First expression: Expedition Spiced. Caribbean rum base. Molasses. Macerated at our British partner distillery. Real ingredients. No artificial flavourings.
 
 RRP: £40 | Founding Supporter Price: £35 (launch week only, until Sunday 12 April 2026)
 5% of profits support military charities.
@@ -124,8 +124,8 @@ All content connects to one of these layers, in order of priority:
 
 - Name: Expedition Spiced
 - Base: Caribbean rum
-- Molasses: Welsh
-- Maceration partner: Spirit of Wales Distillery, Newport, South Wales
+- Molasses: molasses
+- Maceration partner: our British partner distillery
 - Flavour profile: Vanilla, cinnamon, allspice, clove, orange peel, cassia, ginger, agave, bourbon oak
 - ABV: 40% | Volume: 700ml
 - Designed for slow sipping. Not shots. Not a mixer to forget.

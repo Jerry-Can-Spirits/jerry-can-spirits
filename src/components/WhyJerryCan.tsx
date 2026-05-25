@@ -2,7 +2,7 @@ export default function WhyJerryCan() {
   const pillars = [
     {
       title: 'Real Ingredients',
-      description: 'Madagascan vanilla, Ceylon cinnamon, ginger, orange peel, cloves, cassia, agave. Pot stilled with Welsh brewery molasses. No artificial flavouring. That is what goes in. Nothing else.'
+      description: 'Madagascan vanilla, Ceylon cinnamon, ginger, orange peel, cloves, cassia, agave, molasses. No artificial flavouring. That is what goes in. Nothing else.'
     },
     {
       title: 'Veteran Heritage',
@@ -58,7 +58,7 @@ export default function WhyJerryCan() {
         <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-6">
           <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20 text-center">
             <div className="text-3xl font-bold text-gold-300 mb-2">700</div>
-            <div className="text-parchment-400 text-sm uppercase tracking-wide">Limited First Batch</div>
+            <div className="text-parchment-400 text-sm uppercase tracking-wide">General Release</div>
           </div>
 
           <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20 text-center">

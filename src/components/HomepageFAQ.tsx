@@ -33,10 +33,10 @@ const faqs = [
 
 // Comparison table data
 const comparisonData = [
-  { aspect: "Batch Size", massProduced: "100,000+ litres", jerryCan: "700 bottles" },
+  { aspect: "Batch Size", massProduced: "100,000+ litres", jerryCan: "700 for general release" },
   { aspect: "Distillation", massProduced: "Column still", jerryCan: "Pot still" },
-  { aspect: "Sourcing", massProduced: "Single industrial source", jerryCan: "Caribbean rum + Welsh brewery molasses" },
-  { aspect: "Provenance", massProduced: "Unknown", jerryCan: "Spirit of Wales Distillery" },
+  { aspect: "Sourcing", massProduced: "Single industrial source", jerryCan: "Caribbean rum, molasses, real botanicals" },
+  { aspect: "Provenance", massProduced: "Unknown", jerryCan: "British partner distillery" },
   { aspect: "Ownership", massProduced: "Corporate", jerryCan: "100% Veteran-owned" },
 ]
 

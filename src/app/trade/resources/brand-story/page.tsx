@@ -27,7 +27,7 @@ export default async function BrandStoryPage() {
 
       <TradeSheetSection title="What we make">
         <p className="text-sm leading-relaxed mb-3">
-          Expedition Spiced, the first release, is a Caribbean-base spiced rum macerated at Spirit of Wales Distillery in Newport. 40% ABV. 700ml. Vegan, gluten-free, no declared allergens. Real botanicals: Madagascan vanilla, Ceylon cinnamon, ginger, orange peel, clove, allspice, cassia bark, agave. Rested on bourbon barrel chips. No essences, no artificial flavourings.
+          Expedition Spiced, the first release, is a Caribbean-base spiced rum macerated at our British partner distillery. 40% ABV. 700ml. Vegan, gluten-free, no declared allergens. Real botanicals: Madagascan vanilla, Ceylon cinnamon, ginger, orange peel, clove, allspice, cassia bark, agave. Rested on bourbon barrel chips. No essences, no artificial flavourings.
         </p>
         <p className="text-sm leading-relaxed">
           Full specification is on the Product Fact Sheet. Tasting notes are on the Tasting Notes resource. Both available in the trade resources section.
@@ -39,7 +39,7 @@ export default async function BrandStoryPage() {
           <div>
             <p className="font-serif text-lg text-white print:text-black mb-1">Reliable</p>
             <p className="text-sm leading-relaxed">
-              Same product every time. Single production partnership at Spirit of Wales Distillery. No formulation drift, no rotated factories, no surprises in the case.
+              Same product every time. Single production partnership with our British partner distillery. No formulation drift, no rotated factories, no surprises in the case.
             </p>
           </div>
           <div>

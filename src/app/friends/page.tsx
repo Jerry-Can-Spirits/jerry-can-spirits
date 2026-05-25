@@ -60,15 +60,6 @@ const communityPartners = [
 // Partner data - Add your partners here
 const partners = [
   {
-    name: "Spirit of Wales Distillery",
-    location: "Newport, Wales",
-    description: "Our trusted distilling partner, creating handcrafted spirits inspired by Welsh landscapes and heritage. From their award-winning Steeltown Welsh gins and vodkas that honour the steel, coal, and mining industries that built the nation, to the curious Dragon's Breath spirits, Spirit of Wales invites you on a flavour journey that pays tribute to Welsh passion and craftsmanship.",
-    website: "https://www.spiritofwales.com",
-    speciality: "Gin, Vodka and Rum",
-    logo: "/images/partners/spirit-of-wales.webp",
-    featured: true,
-  },
-  {
     name: "Croxsons",
     location: "Crayford, United Kingdom",
     description: "Founded in 1872, Croxsons is one of Britain's longest-established glass packaging specialists. Five generations of the same family have built it into a trusted supplier to spirits, food, and drinks producers across the UK. Every bottle of Expedition Spiced starts here. Heritage that matches the standards we hold ourselves to.",
@@ -259,7 +250,7 @@ export default function FriendsPage() {
                 Why Partnerships Matter
               </h2>
               <p className="text-parchment-200 leading-relaxed mb-4">
-                We&apos;re a small team. We rely on good partners to make this work. From Spirit of Wales who handle our distilling to Harlequin who sort our packaging, every partner contributes something we couldn&apos;t do alone.
+                We&apos;re a small team. We rely on good partners to make this work. From our distilling partner to Harlequin who sort our packaging, every partner contributes something we couldn&apos;t do alone.
               </p>
               <p className="text-parchment-200 leading-relaxed">
                 If you&apos;re a supplier, distillery, or business that shares how we think, <Link href="/contact/" className="text-gold-500 hover:text-gold-400 underline">get in touch</Link>.

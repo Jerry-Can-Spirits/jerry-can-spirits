@@ -45,7 +45,9 @@ Foot of page, smallest type:
 >
 > Between us we served seventeen years in the Royal Signals. We wanted a proper drink to share with mates. Something with character, made by people who give a damn. We could not find it. So we made it ourselves.
 >
-> Expedition Spiced is macerated at Spirit of Wales Distillery in Newport. Caribbean rum base, Welsh molasses, ten real botanicals, finished on bourbon oak. No essences. No artificial flavourings. No shortcuts.
+> Expedition Spiced is built around a Caribbean white rum base, chosen clean so the spices can lead. Seven of them, sourced through named British suppliers. Madagascan vanilla, Ceylon cinnamon, Peruvian ginger, Spanish orange peel, Sri Lankan cloves, Guatemalan allspice, Indonesian cassia. Two natural sweeteners: Mexican agave syrup, Sussex glucose. Finished on bourbon oak. Forty per cent ABV.
+>
+> We chose every ingredient on this list. We can tell you where each one came from.
 >
 > This book is short on purpose. The serving ritual on the next page tells you how to taste the rum properly the first time. The three recipes after that are our house serves. The tasting card at the back is for your own notes.
 >
