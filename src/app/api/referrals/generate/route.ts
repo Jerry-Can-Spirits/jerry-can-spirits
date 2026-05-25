@@ -15,7 +15,7 @@ interface ReferralRow {
  * POST /api/referrals/generate
  *
  * Accepts { email }, checks D1 for existing referral, generates new code if needed.
- * Creates £5 discount in Shopify, stores in D1 + KV, returns { code, share_url }.
+ * Creates a 10% discount in Shopify, stores in D1 + KV, returns { code, share_url }.
  */
 export async function POST(request: Request) {
   if (!isAllowedOrigin(request)) {
@@ -76,7 +76,7 @@ export async function POST(request: Request) {
     // Generate new referral code
     const code = generateReferralCode(email);
 
-    // Create £5 discount in Shopify (for the referee — friend gets £5 off)
+    // Create a 10% discount in Shopify (for the referee — friend gets 10% off)
     await createDiscountCode(code, adminToken);
 
     // Store in D1
