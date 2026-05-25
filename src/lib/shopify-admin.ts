@@ -114,7 +114,7 @@ export async function createDiscountCode(
 }
 
 /**
- * Create a £5-off single-use reward code for the referrer.
+ * Create a 10%-off single-use reward code for the referrer.
  * Combinable with order, product, and shipping discounts.
  */
 export async function createReferrerRewardCode(
@@ -149,7 +149,7 @@ export async function createReferrerRewardCode(
       startsAt: new Date().toISOString(),
       endsAt: new Date(Date.now() + 60 * 60 * 24 * 90 * 1000).toISOString(),
       customerGets: {
-        value: { discountAmount: { amount: '5.00', appliesOnEachItem: false } },
+        value: { percentage: 0.10 },
         items: { all: true },
       },
       customerSelection: { all: true },

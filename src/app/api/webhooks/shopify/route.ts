@@ -209,7 +209,7 @@ async function handleReferralConversion(
     return;
   }
 
-  // Create a £5 reward code for the referrer (combinable with other discounts)
+  // Create a 10% reward code for the referrer (combinable with other discounts)
   const rewardCode = `JCS-REWARD-${crypto.randomUUID().replace(/-/g, '').slice(0, 8).toUpperCase()}`;
 
   try {

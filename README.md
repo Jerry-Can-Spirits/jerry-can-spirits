@@ -56,6 +56,13 @@ Open [http://localhost:3000](http://localhost:3000) to view the site.
 - `npm run cf-typegen` - Generate Cloudflare environment types
 - `npm run lint` - Run ESLint
 
+## Testing
+
+- `npm run test:unit` - Run Vitest unit tests (pure-function and module-level tests under `tests/unit/`)
+- `npm run test:unit:watch` - Vitest in watch mode for local development
+- `npm run test:e2e` - Run Playwright end-to-end tests (browser-level flows under `tests/e2e/`)
+- `npm run test:e2e:ui` - Playwright UI mode for debugging individual specs
+
 ## Project Structure
 
 ```
