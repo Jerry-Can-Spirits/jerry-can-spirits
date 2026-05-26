@@ -103,6 +103,12 @@ export async function POST(request: Request) {
     if (!obj) {
       return NextResponse.json({ error: 'Upload expired — please re-upload the PDF' }, { status: 400 })
     }
+    // Defense-in-depth: verify the uploader tenant matches the requester.
+    // Tickets are crypto.randomUUID() so guessing is infeasible, but a leaked
+    // ticket must not let another tenant extract from someone else's PDF.
+    if (obj.customMetadata?.tradeAccountId !== access.tradeAccountId) {
+      return NextResponse.json({ error: 'Upload not found' }, { status: 404 })
+    }
     const buffer = await obj.arrayBuffer()
     pdfBase64 = bufferToBase64(buffer)
   }
