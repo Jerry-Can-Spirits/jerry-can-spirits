@@ -191,10 +191,18 @@ export async function listCocktailsForMenu(
 export async function getCocktail(
   db: D1Database,
   cocktailId: string,
+  tradeAccountId: string,
 ): Promise<CocktailWithIngredients | null> {
+  // Defensive tenant scope: cocktails don't carry trade_account_id directly,
+  // so we JOIN through the parent menu and filter on that. Prevents callers
+  // from accidentally returning another tenant's cocktail by id.
   const cocktail = await db
-    .prepare(`SELECT * FROM pouriq_cocktails WHERE id = ?1`)
-    .bind(cocktailId)
+    .prepare(`
+      SELECT c.* FROM pouriq_cocktails c
+      JOIN pouriq_menus m ON m.id = c.menu_id
+      WHERE c.id = ?1 AND m.trade_account_id = ?2
+    `)
+    .bind(cocktailId, tradeAccountId)
     .first<CocktailRow>()
   if (!cocktail) return null
 
