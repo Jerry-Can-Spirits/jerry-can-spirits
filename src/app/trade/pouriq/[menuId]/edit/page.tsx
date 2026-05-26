@@ -27,7 +27,7 @@ export default async function EditMenuPage({ params, searchParams }: Props) {
 
   const [menu, cocktail, libraryEntries] = await Promise.all([
     getMenu(db, menuId, access.tradeAccountId),
-    cocktailId ? getCocktail(db, cocktailId) : Promise.resolve(null),
+    cocktailId ? getCocktail(db, cocktailId, access.tradeAccountId) : Promise.resolve(null),
     listLibraryEntries(db, access.tradeAccountId),
   ])
 
