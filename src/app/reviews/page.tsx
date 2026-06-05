@@ -55,7 +55,7 @@ export default async function ReviewsPage() {
     : undefined
 
   return (
-    <main className="bg-jerry-green-900 text-parchment-100 min-h-screen">
+    <main className="text-parchment-100 min-h-screen">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: safeJsonLd({
@@ -82,7 +82,9 @@ export default async function ReviewsPage() {
           },
         }) }}
       />
-      <Breadcrumbs items={[{ label: 'Reviews' }]} />
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
+        <Breadcrumbs items={[{ label: 'Reviews' }]} />
+      </div>
 
       {/* Hero Section */}
       <section className="max-w-4xl mx-auto px-6 pt-12 pb-8 text-center">
