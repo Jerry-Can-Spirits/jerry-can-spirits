@@ -101,7 +101,22 @@ export default async function ReviewsPage() {
       {/* Trustpilot Section */}
       <section className="max-w-5xl mx-auto px-6 pb-12">
         <ScrollReveal>
-          <div className="bg-jerry-green-800/40 border border-gold-500/20 rounded-xl p-8 flex items-center justify-center min-h-[120px]">
+          <div className="bg-jerry-green-800/40 border border-gold-500/20 rounded-xl p-8">
+            <div className="text-center mb-6">
+              <a
+                href="https://www.trustpilot.com/review/jerrycanspirits.co.uk"
+                target="_blank"
+                rel="nofollow noopener noreferrer"
+              >
+                <Image
+                  src={`${CF_IMG}/004c8ba7-42d4-48c8-c82c-fe715eb9cc00/public`}
+                  alt="Trustpilot"
+                  width={160}
+                  height={40}
+                  className="mx-auto hover:opacity-80 transition-opacity"
+                />
+              </a>
+            </div>
             <TrustpilotWidget
               templateId="5419b6a8b0d04a076446a9ad"
               height="24px"
