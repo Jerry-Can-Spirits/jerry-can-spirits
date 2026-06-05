@@ -99,30 +99,7 @@ export default async function ReviewsPage() {
       {/* Trustpilot Section */}
       <section className="max-w-5xl mx-auto px-6 pb-12">
         <ScrollReveal>
-          <div className="bg-jerry-green-800/40 border border-gold-500/20 rounded-xl p-8">
-            <div className="text-center mb-6">
-              <a
-                href="https://www.trustpilot.com/review/jerrycanspirits.co.uk"
-                target="_blank"
-                rel="nofollow noopener noreferrer"
-              >
-                <Image
-                  src={`${CF_IMG}/004c8ba7-42d4-48c8-c82c-fe715eb9cc00/public`}
-                  alt="Trustpilot"
-                  width={160}
-                  height={40}
-                  className="mx-auto mb-3 hover:opacity-80 transition-opacity"
-                />
-              </a>
-              <a
-                href="https://www.trustpilot.com/review/jerrycanspirits.co.uk"
-                target="_blank"
-                rel="nofollow noopener noreferrer"
-                className="text-sm text-gold-300 hover:text-gold-400 transition-colors underline"
-              >
-                View all on Trustpilot
-              </a>
-            </div>
+          <div className="bg-jerry-green-800/40 border border-gold-500/20 rounded-xl p-8 flex items-center justify-center min-h-[120px]">
             <TrustpilotWidget
               templateId="5419b6a8b0d04a076446a9ad"
               height="24px"
@@ -131,14 +108,6 @@ export default async function ReviewsPage() {
               token="a1e45713-88d1-4731-9a5b-f2fffed8a4d0"
               minReviewCount="10"
               styleAlignment="center"
-            />
-            {/* Review Collector widget */}
-            <TrustpilotWidget
-              templateId="56278e9abfbbba0bdcd568bc"
-              height="52px"
-              theme="dark"
-              stars="1,2,3,4,5"
-              token="9323db11-b776-4e7e-b956-0b8762a3cf63"
             />
           </div>
         </ScrollReveal>
