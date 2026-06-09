@@ -3,8 +3,8 @@
 import { useEffect } from 'react'
 
 /**
- * Component that handles smooth scrolling to hash anchors
- * when users navigate from other pages with #newsletter-signup
+ * Component that handles smooth scrolling to hash anchors when users
+ * navigate to a page with a hash in the URL.
  */
 export default function ScrollToHash() {
   useEffect(() => {

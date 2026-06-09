@@ -18,7 +18,7 @@ const SHIPPING_MESSAGES: Record<string, ShippingMessage> = {
   US: {
     text: 'We\'re not yet available in the US',
     detail: 'Sign up to be notified when we launch stateside.',
-    cta: { label: 'Notify Me', href: '/#newsletter-signup' },
+    cta: { label: 'Notify Me', href: '/first-pour/' },
   },
 }
 
@@ -36,7 +36,7 @@ function getShippingMessage(country: string | null): ShippingMessage | null {
     return {
       text: 'EU shipping coming soon',
       detail: 'We\'re working on bringing Expedition Spiced Rum to Europe.',
-      cta: { label: 'Get Notified', href: '/#newsletter-signup' },
+      cta: { label: 'Get Notified', href: '/first-pour/' },
     }
   }
   // Only show for non-UK international visitors
