@@ -2,9 +2,9 @@
 
 import { useState } from 'react'
 
-const NEWSLETTER_LIST_ID = 'RcxQRP'
+const FIRST_POUR_LIST_ID = 'Uu9vFn'
 
-export default function NewsletterSignup() {
+export default function FirstPourSignup() {
   const [firstName, setFirstName] = useState('')
   const [email, setEmail] = useState('')
   const [honeypot, setHoneypot] = useState('')
@@ -25,7 +25,8 @@ export default function NewsletterSignup() {
         body: JSON.stringify({
           firstName,
           email,
-          listId: NEWSLETTER_LIST_ID,
+          listId: FIRST_POUR_LIST_ID,
+          interests: ['first-pour-book'],
           marketingConsent: consent,
           website: honeypot,
         }),
@@ -34,15 +35,13 @@ export default function NewsletterSignup() {
       if (res.ok) {
         setStatus('success')
         setErrorMessage('')
-        // Set cookie so the form can be hidden elsewhere if needed
-        document.cookie = 'jcs_newsletter_signup=1; path=/; max-age=31536000; SameSite=Lax'
       } else {
         let serverError = ''
         try {
           const data = await res.json() as { error?: string }
           if (typeof data?.error === 'string') serverError = data.error
         } catch {
-          // Body wasn't JSON — keep the generic fallback below
+          // Body wasn't JSON
         }
         setErrorMessage(serverError)
         setStatus('error')
@@ -55,10 +54,10 @@ export default function NewsletterSignup() {
 
   if (status === 'success') {
     return (
-      <div className="text-center py-4 animate-fade-in">
-        <p className="text-white font-semibold mb-1">You are in.</p>
+      <div className="text-center py-6 animate-fade-in">
+        <p className="text-white font-semibold text-lg mb-2">Check your inbox.</p>
         <p className="text-parchment-400 text-sm">
-          Check your inbox. Your 10% discount code will be waiting.
+          The book is on its way. If you do not see it in a few minutes, check your spam folder.
         </p>
       </div>
     )
@@ -66,7 +65,6 @@ export default function NewsletterSignup() {
 
   return (
     <form onSubmit={handleSubmit} className="relative">
-      {/* Honeypot */}
       <input
         type="text"
         name="website"
@@ -78,7 +76,7 @@ export default function NewsletterSignup() {
         aria-hidden="true"
       />
 
-      <div className="flex flex-col sm:flex-row gap-3 mb-4">
+      <div className="flex flex-col gap-3 mb-4">
         <input
           type="text"
           name="firstName"
@@ -88,7 +86,7 @@ export default function NewsletterSignup() {
           aria-label="First name"
           value={firstName}
           onChange={(e) => setFirstName(e.target.value)}
-          className="flex-1 px-4 py-3 bg-jerry-green-900 border border-gold-500/30 rounded-lg text-white placeholder-parchment-500 text-base focus:outline-none focus:border-gold-400 transition-colors"
+          className="w-full px-4 py-3 bg-jerry-green-900 border border-gold-500/30 rounded-lg text-white placeholder-parchment-500 text-base focus:outline-none focus:border-gold-400 transition-colors"
         />
         <input
           type="email"
@@ -98,25 +96,25 @@ export default function NewsletterSignup() {
           placeholder="Email address"
           aria-label="Email address"
           aria-invalid={status === 'error'}
-          aria-describedby={status === 'error' ? 'newsletter-error' : undefined}
+          aria-describedby={status === 'error' ? 'first-pour-error' : undefined}
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="flex-1 px-4 py-3 bg-jerry-green-900 border border-gold-500/30 rounded-lg text-white placeholder-parchment-500 text-base focus:outline-none focus:border-gold-400 transition-colors"
+          className="w-full px-4 py-3 bg-jerry-green-900 border border-gold-500/30 rounded-lg text-white placeholder-parchment-500 text-base focus:outline-none focus:border-gold-400 transition-colors"
         />
         <button
           type="submit"
           disabled={status === 'submitting' || !consent}
-          className="px-6 py-3 bg-gold-500 text-jerry-green-900 font-bold text-sm uppercase tracking-wide rounded-lg hover:bg-gold-400 transition-colors disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
+          className="w-full px-6 py-3 bg-gold-500 text-jerry-green-900 font-bold text-sm uppercase tracking-wide rounded-lg hover:bg-gold-400 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {status === 'submitting' ? (
-            <span className="flex items-center gap-2">
+            <span className="flex items-center justify-center gap-2">
               <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24" fill="none">
                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                 <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
               </svg>
               Sending
             </span>
-          ) : 'Join the Expedition'}
+          ) : 'Send me the book'}
         </button>
       </div>
 
@@ -128,7 +126,7 @@ export default function NewsletterSignup() {
           className="mt-0.5 h-4 w-4 rounded border-gold-500/40 bg-jerry-green-900 accent-gold-500 flex-shrink-0"
         />
         <span className="text-parchment-500 text-xs leading-relaxed">
-          I agree to receive marketing emails from Jerry Can Spirits. You can unsubscribe at any time. See our{' '}
+          I agree to receive the book and occasional emails from Jerry Can Spirits. You can unsubscribe at any time. See our{' '}
           <a href="/privacy-policy/" className="underline hover:text-parchment-300 transition-colors">
             Privacy Policy
           </a>
@@ -137,7 +135,7 @@ export default function NewsletterSignup() {
       </label>
 
       {status === 'error' && (
-        <p id="newsletter-error" role="alert" className="mt-3 text-red-400 text-xs">
+        <p id="first-pour-error" role="alert" className="mt-3 text-red-400 text-xs">
           {errorMessage || (
             <>
               Something went wrong. Try again or email{' '}

@@ -333,7 +333,7 @@ export default async function BarwarePage() {
             Sign up for new product drops, cocktail recipes from the Field Manual, and batch release updates.
           </p>
           <Link
-            href="/#newsletter-signup"
+            href="/first-pour/"
             className="inline-block px-8 py-3 bg-gold-500 text-jerry-green-900 font-semibold rounded-lg hover:bg-gold-400 transition-colors"
           >
             Join the List

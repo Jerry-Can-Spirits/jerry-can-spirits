@@ -59,6 +59,7 @@ export default function Footer() {
     {
       label: 'Explore',
       links: [
+        { name: 'First Pour Book', href: '/first-pour' },
         { name: 'Field Manual', href: '/field-manual' },
         { name: 'Guides', href: '/guides' },
         { name: 'Ingredients', href: '/ingredients' },

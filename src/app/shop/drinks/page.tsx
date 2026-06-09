@@ -532,7 +532,7 @@ export default async function DrinksPageTest() {
             Join our mailing list for batch release updates, cocktail recipes from the Field Manual, and the occasional story from the road. No spam - just rum news when there's rum news.
           </p>
           <Link
-            href="/#newsletter-signup"
+            href="/first-pour/"
             className="inline-block px-8 py-3 bg-gold-500 text-jerry-green-900 font-semibold rounded-lg hover:bg-gold-400 transition-colors"
           >
             Join the List

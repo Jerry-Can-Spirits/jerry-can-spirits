@@ -298,7 +298,7 @@ export default function ShippingReturns() {
               <div className="border-b border-gold-500/10 pb-6">
                 <h3 className="text-lg font-semibold text-gold-300 mb-3">Do you ship internationally?</h3>
                 <p className="text-parchment-200 leading-relaxed">
-                  We currently only ship within the United Kingdom. We&apos;re working on expanding our delivery network – <Link href="/#newsletter-signup" className="text-gold-400 hover:text-gold-300 underline">join our mailing list</Link> to be notified when we ship to your country.
+                  We currently only ship within the United Kingdom. We&apos;re working on expanding our delivery network – <Link href="/first-pour/" className="text-gold-400 hover:text-gold-300 underline">join our mailing list</Link> to be notified when we ship to your country.
                 </p>
               </div>
 
