@@ -135,6 +135,37 @@ export default async function FieldManualHome() {
         </div>
       </section>
 
+      {/* First Pour Companion Book */}
+      <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
+        <Link
+          href="/first-pour/"
+          className="group block bg-gradient-to-r from-jerry-green-800/60 to-jerry-green-800/40 border border-gold-500/30 rounded-xl p-6 sm:p-8 hover:border-gold-400/50 transition-colors"
+        >
+          <div className="flex flex-col sm:flex-row items-center gap-6 text-center sm:text-left">
+            <div className="flex-shrink-0">
+              <div className="inline-block px-3 py-1 bg-gold-500/20 rounded-full">
+                <span className="text-gold-300 text-xs font-semibold uppercase tracking-widest">
+                  Free companion book
+                </span>
+              </div>
+            </div>
+            <div className="flex-1">
+              <h3 className="font-serif text-xl text-white mb-1 group-hover:text-gold-300 transition-colors">
+                First Pour
+              </h3>
+              <p className="text-parchment-300 text-sm">
+                The short companion to our spiced rum. How it is built, how to drink it, the first cocktails to try.
+              </p>
+            </div>
+            <div className="flex-shrink-0 text-gold-300 group-hover:translate-x-1 transition-transform">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+              </svg>
+            </div>
+          </div>
+        </Link>
+      </section>
+
       {/* Navigation Cards */}
       <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8 lg:items-stretch">

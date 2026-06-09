@@ -180,10 +180,10 @@ export default function Contact() {
               Stay Connected
             </h2>
             <p className="text-xl text-parchment-200 mb-8 max-w-2xl mx-auto leading-relaxed">
-              Sign up for batch release updates and early access to new releases
+              Get the First Pour companion book. The short guide to drinking our rum properly.
             </p>
             <Link
-              href="/#newsletter-signup"
+              href="/first-pour/"
               className="group bg-gradient-to-r from-gold-600 to-gold-500 hover:from-gold-500 hover:to-gold-400 text-jerry-green-900 px-8 py-4 rounded-lg font-semibold uppercase tracking-wide transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 flex items-center justify-center gap-2 mx-auto w-fit"
             >
               Join the Expedition

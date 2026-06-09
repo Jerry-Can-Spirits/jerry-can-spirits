@@ -350,7 +350,7 @@ export default async function CollectionPage({
             Sign up for batch release updates, new product drops, and cocktail recipes from the Field Manual.
           </p>
           <Link
-            href="/#newsletter-signup"
+            href="/first-pour/"
             className="inline-block px-8 py-3 bg-gold-500 text-jerry-green-900 font-semibold rounded-lg hover:bg-gold-400 transition-colors"
           >
             Join the List

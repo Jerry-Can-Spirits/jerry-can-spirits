@@ -175,7 +175,7 @@ export default async function ClothingPage() {
             </div>
 
             <Link
-              href="/#newsletter-signup"
+              href="/first-pour/"
               className="inline-block px-8 py-3 bg-gold-500 text-jerry-green-900 font-semibold rounded-lg hover:bg-gold-400 transition-colors mt-8"
             >
               Get Notified at Launch
@@ -401,7 +401,7 @@ export default async function ClothingPage() {
             Sign up for exclusive access to limited releases, expedition updates, and special offers.
           </p>
           <Link
-            href="/#newsletter-signup"
+            href="/first-pour/"
             className="inline-block px-8 py-3 bg-gold-500 text-jerry-green-900 font-semibold rounded-lg hover:bg-gold-400 transition-colors"
           >
             Get Early Access
