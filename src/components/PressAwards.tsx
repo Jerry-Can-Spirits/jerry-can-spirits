@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 
 interface PressItem {
   publication: string
@@ -11,6 +12,7 @@ interface AwardItem {
   title: string
   body?: string
   year?: string
+  image?: string
 }
 
 const pressItems: PressItem[] = [
@@ -31,6 +33,18 @@ const awardItems: AwardItem[] = [
     title: 'Employer Recognition Scheme',
     body: 'Bronze Award — Armed Forces Covenant Employer Recognition Scheme.',
     year: '2025',
+  },
+  {
+    title: 'IWSC 2026 Bronze Medal',
+    body: 'Expedition Spiced. International Wine and Spirit Competition.',
+    year: '2026',
+    image: 'https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/66191572-4bf8-4de0-ba4d-01aab5c20700/public',
+  },
+  {
+    title: 'IWSC 2026 Silver Medal',
+    body: 'Expedition Spiced and cola, judged with Franklin and Sons.',
+    year: '2026',
+    image: 'https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/2558fe93-bdf0-458c-85d6-5de6097ed300/public',
   },
 ]
 
@@ -95,7 +109,17 @@ export default function PressAwards() {
                   key={award.title}
                   className="flex items-start gap-4 p-5 bg-jerry-green-800/20 rounded-xl border border-gold-500/20"
                 >
-                  <div className="w-2 h-2 rounded-full bg-gold-400 mt-2 flex-shrink-0" />
+                  {award.image ? (
+                    <Image
+                      src={award.image}
+                      alt={`${award.title} medal`}
+                      width={48}
+                      height={48}
+                      className="flex-shrink-0"
+                    />
+                  ) : (
+                    <div className="w-2 h-2 rounded-full bg-gold-400 mt-2 flex-shrink-0" />
+                  )}
                   <div>
                     <p className="text-white font-semibold">{award.title}</p>
                     {award.body && (
