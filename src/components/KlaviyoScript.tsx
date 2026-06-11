@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 /**
  * Klaviyo Script Loader with GDPR Consent
  *
- * Company ID: UavTvg
+ * Company ID: T8pKVn
  *
  * GDPR Compliance:
  * - Only loads Klaviyo scripts after marketing/statistics consent is given
@@ -95,11 +95,11 @@ export default function KlaviyoScript() {
     }
 
     // Set account ID
-    window.klaviyo?.push(['account', 'UavTvg']);
+    window.klaviyo?.push(['account', 'T8pKVn']);
 
     // Load the external Klaviyo script
     const script = document.createElement('script');
-    script.src = 'https://static.klaviyo.com/onsite/js/UavTvg/klaviyo.js';
+    script.src = 'https://static.klaviyo.com/onsite/js/T8pKVn/klaviyo.js';
     script.async = true;
     script.onload = () => {
       setIsLoaded(true);
