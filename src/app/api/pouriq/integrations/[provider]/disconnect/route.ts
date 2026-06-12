@@ -1,7 +1,8 @@
 import { NextResponse } from 'next/server'
 import { getCloudflareContext } from '@opennextjs/cloudflare'
 import { checkPourIqAccess } from '@/lib/pouriq/access'
-import { deleteConnection } from '@/lib/pouriq/pos/connections'
+import { deleteConnection, getConnection } from '@/lib/pouriq/pos/connections'
+import { createSquareAdapter } from '@/lib/pouriq/pos/providers/square'
 import type { PosProvider } from '@/lib/pouriq/pos/types'
 
 export const runtime = 'nodejs'
@@ -19,6 +20,22 @@ export async function POST(_request: Request, { params }: Params) {
   }
   const { env } = await getCloudflareContext()
   const db = env.DB as D1Database
+
+  // Revoke the token with the provider first, best-effort. A failed
+  // revocation never blocks the disconnect.
+  if (provider === 'square') {
+    const connection = await getConnection(db, access.tradeAccountId, 'square')
+    if (connection) {
+      const adapter = createSquareAdapter({
+        SQUARE_APP_ID: env.SQUARE_APP_ID,
+        SQUARE_APP_SECRET: env.SQUARE_APP_SECRET,
+        SQUARE_WEBHOOK_SIGNATURE_KEY: env.SQUARE_WEBHOOK_SIGNATURE_KEY,
+        SQUARE_ENV: env.SQUARE_ENV,
+      })
+      await adapter.revokeToken?.(connection.access_token).catch(() => {})
+    }
+  }
+
   await deleteConnection(db, access.tradeAccountId, provider as PosProvider)
   return NextResponse.json({ ok: true })
 }

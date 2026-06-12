@@ -2,6 +2,14 @@ import type { PosAdapter, PosOrderLine } from '../types'
 
 const SQUARE_VERSION = '2026-01-22'
 
+// Constant-time string comparison for webhook signatures.
+function timingSafeEqualStr(a: string, b: string): boolean {
+  if (a.length !== b.length) return false
+  let diff = 0
+  for (let i = 0; i < a.length; i++) diff |= a.charCodeAt(i) ^ b.charCodeAt(i)
+  return diff === 0
+}
+
 export interface SquareEnv {
   SQUARE_APP_ID: string
   SQUARE_APP_SECRET: string
@@ -155,7 +163,20 @@ export function createSquareAdapter(env: SquareEnv): PosAdapter {
       )
       const sigBuffer = await crypto.subtle.sign('HMAC', cryptoKey, messageData)
       const sigBase64 = btoa(String.fromCharCode(...new Uint8Array(sigBuffer)))
-      return sigBase64 === signature
+      return timingSafeEqualStr(sigBase64, signature)
+    },
+
+    async revokeToken(accessToken) {
+      const res = await fetch(`${baseUrl}/oauth2/revoke`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Square-Version': SQUARE_VERSION,
+          'Authorization': `Client ${env.SQUARE_APP_SECRET}`,
+        },
+        body: JSON.stringify({ client_id: env.SQUARE_APP_ID, access_token: accessToken }),
+      })
+      if (!res.ok) throw new Error(`Square revoke ${res.status}`)
     },
 
     parseWebhookPayload(payload) {

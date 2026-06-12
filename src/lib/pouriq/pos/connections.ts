@@ -86,6 +86,24 @@ export async function deleteConnection(
     .run()
 }
 
+export async function updateConnectionTokens(
+  db: D1Database,
+  connectionId: string,
+  tokens: { accessToken: string; refreshToken: string | null; expiresAt: string | null },
+): Promise<void> {
+  await db
+    .prepare(`
+      UPDATE pouriq_pos_connections
+      SET access_token = ?1,
+          refresh_token = COALESCE(?2, refresh_token),
+          token_expires_at = ?3,
+          updated_at = datetime('now')
+      WHERE id = ?4
+    `)
+    .bind(tokens.accessToken, tokens.refreshToken, tokens.expiresAt, connectionId)
+    .run()
+}
+
 export async function markSyncSuccess(
   db: D1Database,
   connectionId: string,
