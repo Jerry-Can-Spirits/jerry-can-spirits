@@ -3,9 +3,9 @@ import * as Sentry from '@sentry/nextjs'
 import { getCloudflareContext } from '@opennextjs/cloudflare'
 import { checkPourIqAccess } from '@/lib/pouriq/access'
 import { getConnection, markSyncSuccess, markSyncError } from '@/lib/pouriq/pos/connections'
-import { createSquareAdapter } from '@/lib/pouriq/pos/providers/square'
+import { getAdapterForProvider } from '@/lib/pouriq/pos/providers'
 import { ingestOrderLines } from '@/lib/pouriq/pos/ingest'
-import type { PosProvider } from '@/lib/pouriq/pos/types'
+import { isKnownProvider } from '@/lib/pouriq/pos/types'
 
 export const runtime = 'nodejs'
 
@@ -17,21 +17,19 @@ export async function POST(_request: Request, { params }: Params) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
   const { provider } = await params
-  if (provider !== 'square') {
+  if (!isKnownProvider(provider)) {
     return NextResponse.json({ error: 'Unknown provider' }, { status: 400 })
   }
   const { env } = await getCloudflareContext()
   const db = env.DB as D1Database
-  const connection = await getConnection(db, access.tradeAccountId, provider as PosProvider)
+  const connection = await getConnection(db, access.tradeAccountId, provider)
   if (!connection) {
     return NextResponse.json({ error: 'Not connected' }, { status: 404 })
   }
-  const adapter = createSquareAdapter({
-    SQUARE_APP_ID: env.SQUARE_APP_ID,
-    SQUARE_APP_SECRET: env.SQUARE_APP_SECRET,
-    SQUARE_WEBHOOK_SIGNATURE_KEY: env.SQUARE_WEBHOOK_SIGNATURE_KEY,
-    SQUARE_ENV: env.SQUARE_ENV,
-  })
+  const adapter = getAdapterForProvider(provider, env)
+  if (!adapter) {
+    return NextResponse.json({ error: 'Provider not available' }, { status: 400 })
+  }
   // Sync from last_synced_at - 1 hour overlap (for safety), or 7 days
   // back on the very first sync.
   const since = connection.last_synced_at

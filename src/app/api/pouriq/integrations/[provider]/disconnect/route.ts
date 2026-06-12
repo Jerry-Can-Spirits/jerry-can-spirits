@@ -2,8 +2,8 @@ import { NextResponse } from 'next/server'
 import { getCloudflareContext } from '@opennextjs/cloudflare'
 import { checkPourIqAccess } from '@/lib/pouriq/access'
 import { deleteConnection, getConnection } from '@/lib/pouriq/pos/connections'
-import { createSquareAdapter } from '@/lib/pouriq/pos/providers/square'
-import type { PosProvider } from '@/lib/pouriq/pos/types'
+import { getAdapterForProvider } from '@/lib/pouriq/pos/providers'
+import { isKnownProvider } from '@/lib/pouriq/pos/types'
 
 export const runtime = 'nodejs'
 
@@ -15,7 +15,7 @@ export async function POST(_request: Request, { params }: Params) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
   const { provider } = await params
-  if (!['square', 'eposnow', 'lightspeed', 'toast'].includes(provider)) {
+  if (!isKnownProvider(provider)) {
     return NextResponse.json({ error: 'Unknown provider' }, { status: 400 })
   }
   const { env } = await getCloudflareContext()
@@ -23,19 +23,12 @@ export async function POST(_request: Request, { params }: Params) {
 
   // Revoke the token with the provider first, best-effort. A failed
   // revocation never blocks the disconnect.
-  if (provider === 'square') {
-    const connection = await getConnection(db, access.tradeAccountId, 'square')
-    if (connection) {
-      const adapter = createSquareAdapter({
-        SQUARE_APP_ID: env.SQUARE_APP_ID,
-        SQUARE_APP_SECRET: env.SQUARE_APP_SECRET,
-        SQUARE_WEBHOOK_SIGNATURE_KEY: env.SQUARE_WEBHOOK_SIGNATURE_KEY,
-        SQUARE_ENV: env.SQUARE_ENV,
-      })
-      await adapter.revokeToken?.(connection.access_token).catch(() => {})
-    }
+  const connection = await getConnection(db, access.tradeAccountId, provider)
+  if (connection) {
+    const adapter = getAdapterForProvider(provider, env)
+    await adapter?.revokeToken?.(connection.access_token).catch(() => {})
   }
 
-  await deleteConnection(db, access.tradeAccountId, provider as PosProvider)
+  await deleteConnection(db, access.tradeAccountId, provider)
   return NextResponse.json({ ok: true })
 }
