@@ -68,6 +68,13 @@ export default async function IntegrationsPage({ searchParams }: SearchParams) {
             connection={byProvider.get('square') ?? null}
             menus={menuOptions}
           />
+          <IntegrationCard
+            provider="zettle"
+            title="Zettle by PayPal"
+            description="Free POS used by thousands of UK independents. Sales import hourly once connected."
+            connection={byProvider.get('zettle') ?? null}
+            menus={menuOptions}
+          />
           {/* Placeholder cards — disabled until adapters ship */}
           <IntegrationCard
             provider="lightspeed"
