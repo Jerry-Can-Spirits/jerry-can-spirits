@@ -67,7 +67,7 @@ export function ImportPreview({ menuId, drinks: extracted, libraryEntries }: Pro
   const [error, setError] = useState<string | null>(null)
   const [submitting, setSubmitting] = useState(false)
 
-  const stats = drinks.reduce((acc, d, i) => {
+  const stats = drinks.reduce((acc, d) => {
     if (d.skip) return acc
     acc.included++
     for (const ing of d.ingredients) {
