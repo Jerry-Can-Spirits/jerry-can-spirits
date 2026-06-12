@@ -10,6 +10,7 @@ import ProductImageGallery from '@/components/ProductImageGallery'
 import StructuredData from '@/components/StructuredData'
 import ProductPageTracking from '@/components/ProductPageTracking'
 import ProductSpecifications from '@/components/ProductSpecifications'
+import ProductAwards, { PRODUCT_AWARDS, AWARDED_HANDLES } from '@/components/ProductAwards'
 import TastingNotes from '@/components/TastingNotes'
 import ProductProcess from '@/components/ProductProcess'
 import DutyPaidStatement from '@/components/DutyPaidStatement'
@@ -374,6 +375,9 @@ export default async function ProductPage({
         addressCountry: 'GB',
       },
     },
+    ...(AWARDED_HANDLES.includes(handle) && {
+      award: PRODUCT_AWARDS.map((a) => a.schemaText),
+    }),
     // Additional properties for spirits
     ...(isSpirit && {
       additionalProperty: [
@@ -489,6 +493,9 @@ export default async function ProductPage({
                 )}
               </div>
             </div>
+
+            {/* IWSC 2026 medals */}
+            {AWARDED_HANDLES.includes(handle) && <ProductAwards />}
 
             {/* Description */}
             {product.descriptionHtml && (
