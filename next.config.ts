@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import path from "node:path";
 import { withSentryConfig } from "@sentry/nextjs";
 import withBundleAnalyzer from "@next/bundle-analyzer";
 import { initOpenNextCloudflareForDev } from "@opennextjs/cloudflare";
@@ -294,7 +295,6 @@ const nextConfig: NextConfig = {
   webpack: (config, { dev, isServer }) => {
     // Enable filesystem cache for faster builds (Cloudflare Pages supports this)
     if (!dev) {
-      const path = require('path');
       config.cache = {
         type: 'filesystem',
         // .next/cache is preserved by the CI cache action (actions/cache@v4)

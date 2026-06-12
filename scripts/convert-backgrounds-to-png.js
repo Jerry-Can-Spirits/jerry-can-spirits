@@ -160,12 +160,12 @@ async function main() {
         await execAsync('npm install sharp --no-save');
         await convertWithSharp();
         console.log('\n✨ PNG conversion complete using Sharp!');
-      } catch (installError) {
+      } catch {
         console.log('⚠️  Could not install Sharp automatically.\n');
         try {
           await convertWithCanvas();
           console.log('\n✨ PNG conversion complete using node-canvas!');
-        } catch (canvasError) {
+        } catch {
           await createInstructions();
         }
       }

@@ -90,7 +90,7 @@ const PlannerAgent = {
    */
   calculateScore(scrollScreens: number, extras: { domNodeCount: number; firstCtaScreens: number | null }): { score: number; reason: string } {
     let score = 100
-    let reasons: string[] = []
+    const reasons: string[] = []
 
     // Primary penalty based on scroll depth
     if (scrollScreens <= 2.5) {
@@ -180,7 +180,7 @@ const CrawlerAgent = {
           if (normalized) urls.push(normalized)
         }
       }
-    } catch (e) {
+    } catch {
       console.log('  Sitemap not available or failed to parse')
     }
     return urls
@@ -241,7 +241,7 @@ const CrawlerAgent = {
       const crawledLinks = await this.crawlPage(page, baseUrl, baseUrl)
       crawledLinks.forEach(u => this.discoveredUrls.add(u))
       console.log(`  Crawled ${crawledLinks.length} additional links from homepage`)
-    } catch (e) {
+    } catch {
       console.log('  Homepage crawl failed, continuing with discovered URLs')
     }
 
@@ -374,7 +374,7 @@ const AnalyzerAgent = {
         domNodeCount: extras.domNodeCount,
         firstCtaScreens: extras.firstCtaScreens,
       }
-    } catch (e) {
+    } catch {
       console.log(`    ✗ Failed: ${path}`)
       return null
     }
@@ -502,7 +502,7 @@ const AnalyzerAgent = {
         domNodeCount: extras.domNodeCount,
         firstCtaScreens: extras.firstCtaScreens,
       }
-    } catch (e) {
+    } catch {
       console.log(`    ✗ Failed: ${path}`)
       return null
     }

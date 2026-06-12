@@ -68,9 +68,6 @@ test.describe('Heading Hierarchy', () => {
       await page.goto(url)
       await dismissOverlays(page)
 
-      // Get all headings
-      const headings = await page.locator('h1, h2, h3, h4, h5, h6').all()
-
       // Should have at least one h1
       const h1Count = await page.locator('h1').count()
       expect(h1Count).toBeGreaterThanOrEqual(1)
@@ -91,7 +88,6 @@ test.describe('Image Accessibility', () => {
     const count = await images.count()
 
     let imagesWithAlt = 0
-    let imagesWithoutAlt = 0
 
     for (let i = 0; i < count; i++) {
       const img = images.nth(i)
@@ -100,7 +96,6 @@ test.describe('Image Accessibility', () => {
       if (alt !== null) {
         imagesWithAlt++
       } else {
-        imagesWithoutAlt++
         const src = await img.getAttribute('src')
         console.log(`Image missing alt: ${src}`)
       }
