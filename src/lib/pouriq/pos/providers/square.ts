@@ -1,4 +1,4 @@
-import type { PosAdapter, PosConnection, PosOrderLine } from '../types'
+import type { PosAdapter, PosOrderLine } from '../types'
 
 const SQUARE_VERSION = '2026-01-22'
 
