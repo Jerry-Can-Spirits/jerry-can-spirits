@@ -55,4 +55,6 @@ export interface PosAdapter {
   ): Promise<PosOrderLine[]>
   verifyWebhook(request: Request, body: string): Promise<boolean>
   parseWebhookPayload(payload: unknown): PosOrderLine[]
+  /** Revoke the token with the provider on disconnect. Best-effort. */
+  revokeToken?(accessToken: string): Promise<void>
 }

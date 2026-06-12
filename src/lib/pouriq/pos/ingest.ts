@@ -34,6 +34,24 @@ export async function ingestOrderLines(
     // Target menu was deleted — pause until a new one is picked.
     return { matched: 0, unmatched: 0, paused: true }
   }
+
+  // Order-level dedup: the hourly cron re-fetches a one-hour overlap and
+  // webhooks can deliver orders the cron later fetches again. Volumes are
+  // additive, so each order must be ingested exactly once per connection.
+  // INSERT OR IGNORE marks the order seen; only orders whose insert took
+  // effect (meta.changes > 0) are processed. Runs after the paused checks
+  // so paused orders stay unseen and are picked up by the post-pause sync.
+  const orderIds = Array.from(new Set(lines.map((l) => l.external_order_id)))
+  const seenResults = await db.batch(
+    orderIds.map((oid) =>
+      db
+        .prepare(`INSERT OR IGNORE INTO pouriq_pos_seen_orders (connection_id, external_order_id) VALUES (?1, ?2)`)
+        .bind(connection.id, oid),
+    ),
+  )
+  const freshOrderIds = new Set(orderIds.filter((_, i) => (seenResults[i]?.meta.changes ?? 0) > 0))
+  lines = lines.filter((l) => freshOrderIds.has(l.external_order_id))
+  if (lines.length === 0) return { matched: 0, unmatched: 0 }
   const menus = [targetMenu]
   const cocktailsByMenu = new Map<string, Awaited<ReturnType<typeof listCocktailsForMenu>>>()
   cocktailsByMenu.set(targetMenu.id, await listCocktailsForMenu(db, targetMenu.id))
