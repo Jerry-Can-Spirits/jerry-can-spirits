@@ -7,6 +7,7 @@ interface ProductAward {
   citation: string
   image: string
   schemaText: string
+  judgesNote?: string
 }
 
 export const PRODUCT_AWARDS: ProductAward[] = [
@@ -15,6 +16,7 @@ export const PRODUCT_AWARDS: ProductAward[] = [
     citation: 'Expedition Spiced.',
     image: `${CF_IMAGES}/863f3ff8-7252-477f-9627-a805f6c6a100/public`,
     schemaText: 'IWSC 2026 Bronze Medal - Expedition Spiced',
+    judgesNote: 'A hint of coconut leads to vibrant ginger and citrus, with gingerbread and winter spices.',
   },
   {
     title: 'IWSC 2026 Silver',
@@ -32,21 +34,29 @@ export const AWARDED_HANDLES = [
 
 export default function ProductAwards() {
   return (
-    <div className="flex flex-col sm:flex-row gap-4 sm:gap-8">
-      {PRODUCT_AWARDS.map((award) => (
-        <div key={award.title} className="flex items-center gap-3">
-          <Image
-            src={award.image}
-            alt={`${award.title} medal. ${award.citation}`}
-            width={80}
-            height={80}
-            className="flex-shrink-0"
-          />
-          <div>
-            <p className="text-white font-semibold text-sm">{award.title}</p>
-            <p className="text-parchment-400 text-xs mt-0.5">{award.citation}</p>
+    <div className="space-y-3">
+      <div className="flex flex-col sm:flex-row gap-4 sm:gap-8">
+        {PRODUCT_AWARDS.map((award) => (
+          <div key={award.title} className="flex items-center gap-3">
+            <Image
+              src={award.image}
+              alt={`${award.title} medal. ${award.citation}`}
+              width={80}
+              height={80}
+              className="flex-shrink-0"
+            />
+            <div>
+              <p className="text-white font-semibold text-sm">{award.title}</p>
+              <p className="text-parchment-400 text-xs mt-0.5">{award.citation}</p>
+            </div>
           </div>
-        </div>
+        ))}
+      </div>
+      {PRODUCT_AWARDS.filter((award) => award.judgesNote).map((award) => (
+        <p key={award.title} className="text-parchment-300 text-sm italic leading-relaxed">
+          &ldquo;{award.judgesNote}&rdquo;{' '}
+          <span className="not-italic text-parchment-500 text-xs">IWSC judging notes</span>
+        </p>
       ))}
     </div>
   )
