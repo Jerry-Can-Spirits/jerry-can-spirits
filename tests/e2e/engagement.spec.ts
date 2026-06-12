@@ -28,14 +28,6 @@ interface PageMetrics {
   totalSections: number
 }
 
-interface ScrollMetrics {
-  scrollDepth25: boolean
-  scrollDepth50: boolean
-  scrollDepth75: boolean
-  scrollDepth100: boolean
-  timeToScroll100: number
-}
-
 // Pages to test for engagement metrics
 const pagesToTest = [
   '/',

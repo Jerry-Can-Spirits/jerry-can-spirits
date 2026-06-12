@@ -18,7 +18,7 @@ const EDGE_CACHE_PATHS = new Set([
 
 const CACHE_TTL = 3600; // 1 hour
 
-export default {
+const worker = {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
 
@@ -58,3 +58,5 @@ export default {
     ctx.waitUntil(runTradeReviewDigest(env));
   },
 };
+
+export default worker;
