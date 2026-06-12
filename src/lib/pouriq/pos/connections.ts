@@ -1,4 +1,4 @@
-import type { PosConnection, PosProvider } from './types'
+import type { PosAuthMode, PosConnection, PosProvider } from './types'
 
 export interface NewConnection {
   trade_account_id: string
@@ -9,6 +9,7 @@ export interface NewConnection {
   refresh_token: string | null
   token_expires_at: string | null
   scopes: string | null
+  auth_mode?: PosAuthMode
 }
 
 export async function upsertConnection(
@@ -19,8 +20,8 @@ export async function upsertConnection(
     .prepare(`
       INSERT INTO pouriq_pos_connections
         (trade_account_id, provider, external_account_id, external_location_id,
-         access_token, refresh_token, token_expires_at, scopes)
-      VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8)
+         access_token, refresh_token, token_expires_at, scopes, auth_mode)
+      VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9)
       ON CONFLICT(trade_account_id, provider) DO UPDATE SET
         external_account_id = excluded.external_account_id,
         external_location_id = excluded.external_location_id,
@@ -28,6 +29,7 @@ export async function upsertConnection(
         refresh_token = excluded.refresh_token,
         token_expires_at = excluded.token_expires_at,
         scopes = excluded.scopes,
+        auth_mode = excluded.auth_mode,
         last_sync_error = NULL,
         enabled = 1,
         updated_at = datetime('now')
@@ -36,6 +38,7 @@ export async function upsertConnection(
     .bind(
       data.trade_account_id, data.provider, data.external_account_id, data.external_location_id,
       data.access_token, data.refresh_token, data.token_expires_at, data.scopes,
+      data.auth_mode ?? 'oauth',
     )
     .first<{ id: string }>()
   if (!result) throw new Error('Connection upsert returned no id')
