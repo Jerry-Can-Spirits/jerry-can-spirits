@@ -24,10 +24,6 @@ const BOT_PATTERNS = [
 function checkIsBot(): boolean {
   if (typeof window === 'undefined') return false;
 
-  // Check for bot cookie set by middleware
-  if (document.cookie.includes('isBot=true')) return true;
-
-  // Fallback: check user agent client-side
   const ua = navigator.userAgent.toLowerCase();
   return BOT_PATTERNS.some(pattern => ua.includes(pattern));
 }

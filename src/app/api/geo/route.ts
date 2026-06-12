@@ -4,8 +4,8 @@ export const dynamic = 'force-dynamic'
 
 /**
  * Returns the visitor's country code from Cloudflare geo headers.
- * Also sets a `detectedCountry` cookie so subsequent page loads
- * don't need to call this again.
+ * Deliberately cookie-free: clients cache the result in sessionStorage
+ * (src/lib/geo.ts) so no pre-consent cookie is ever set.
  */
 export async function GET(request: Request) {
   const country =
@@ -15,15 +15,6 @@ export async function GET(request: Request) {
     null
 
   const response = NextResponse.json({ country })
-
-  if (country) {
-    response.cookies.set('detectedCountry', country, {
-      httpOnly: false,
-      secure: true,
-      sameSite: 'strict',
-      maxAge: 60 * 60 * 24, // 24 hours
-    })
-  }
 
   // Tiny response, cache per-user for 24h
   response.headers.set('Cache-Control', 'private, max-age=86400')

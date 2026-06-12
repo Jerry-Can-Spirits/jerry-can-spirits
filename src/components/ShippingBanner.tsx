@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import { detectCountry } from '@/lib/geo'
 
 /** Country code → shipping/compliance message config */
 interface ShippingMessage {
@@ -59,18 +60,8 @@ export default function ShippingBanner() {
       return
     }
 
-    // Check cookie first (set by /api/geo on previous visit)
-    const match = document.cookie.match(/(?:^|;\s*)detectedCountry=([A-Z]{2})/)
-    if (match) {
-      setMessage(getShippingMessage(match[1]))
-      return
-    }
-
-    // No cookie yet — fetch from geo API (sets cookie for next time)
-    fetch('/api/geo')
-      .then((res) => res.json() as Promise<{ country: string | null }>)
-      .then(({ country }) => setMessage(getShippingMessage(country)))
-      .catch(() => { /* silently fail */ })
+    // sessionStorage cache first, then geo API (cookie-free)
+    detectCountry().then((country) => setMessage(getShippingMessage(country)))
   }, [])
 
   if (!message || dismissed) return null
