@@ -1,7 +1,15 @@
 // Shared types for POS integrations. Provider-agnostic so Lightspeed
 // and ePOSnow can drop into the same architecture in later sprints.
 
-export type PosProvider = 'square' | 'eposnow' | 'lightspeed' | 'toast'
+export type PosProvider = 'square' | 'zettle' | 'sumup' | 'tevalis' | 'eposnow' | 'lightspeed' | 'toast'
+
+export type PosAuthMode = 'oauth' | 'api-key'
+
+const KNOWN_PROVIDERS: readonly PosProvider[] = ['square', 'zettle', 'sumup', 'tevalis', 'eposnow', 'lightspeed', 'toast']
+
+export function isKnownProvider(p: string): p is PosProvider {
+  return (KNOWN_PROVIDERS as readonly string[]).includes(p)
+}
 
 export interface PosConnection {
   id: string
@@ -16,6 +24,7 @@ export interface PosConnection {
   last_synced_at: string | null
   last_sync_error: string | null
   enabled: number
+  auth_mode: PosAuthMode
   target_menu_id: string | null
   created_at: string
   updated_at: string
@@ -36,7 +45,9 @@ export interface PosOrderLine {
 // What every adapter must implement.
 export interface PosAdapter {
   provider: PosProvider
-  exchangeCodeForToken(code: string, redirectUri: string): Promise<{
+  authMode: PosAuthMode
+  /** OAuth adapters only. */
+  exchangeCodeForToken?(code: string, redirectUri: string): Promise<{
     accessToken: string
     refreshToken: string | null
     expiresAt: string | null
@@ -44,10 +55,16 @@ export interface PosAdapter {
     externalAccountId: string
     externalLocationId: string | null
   }>
-  refreshAccessToken(refreshToken: string): Promise<{
+  /** OAuth adapters only. */
+  refreshAccessToken?(refreshToken: string): Promise<{
     accessToken: string
     refreshToken: string | null
     expiresAt: string | null
+  }>
+  /** Api-key adapters only: verify credentials against the provider, return account identity. */
+  validateCredentials?(fields: Record<string, string>): Promise<{
+    externalAccountId: string
+    externalLocationId: string | null
   }>
   fetchOrdersSince(
     connection: PosConnection,
@@ -58,3 +75,12 @@ export interface PosAdapter {
   /** Revoke the token with the provider on disconnect. Best-effort. */
   revokeToken?(accessToken: string): Promise<void>
 }
+
+export interface ProviderCredentialField {
+  key: string
+  label: string
+  secret: boolean
+}
+
+/** Credential fields per api-key provider. Empty until Tevalis lands. */
+export const PROVIDER_CREDENTIAL_FIELDS: Partial<Record<PosProvider, ProviderCredentialField[]>> = {}

@@ -44,7 +44,7 @@ export async function GET(request: Request) {
       SQUARE_ENV: env.SQUARE_ENV,
     })
     const redirectUri = new URL('/api/pouriq/integrations/square/oauth/callback', request.url).toString()
-    const token = await adapter.exchangeCodeForToken(code, redirectUri)
+    const token = await adapter.exchangeCodeForToken!(code, redirectUri)
     await upsertConnection(db, {
       trade_account_id: stateRow.trade_account_id,
       provider: 'square',

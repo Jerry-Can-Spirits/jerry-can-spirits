@@ -31,6 +31,7 @@ export function createSquareAdapter(env: SquareEnv): PosAdapter {
 
   return {
     provider: 'square',
+    authMode: 'oauth',
 
     async exchangeCodeForToken(code, redirectUri) {
       const res = await fetch(tokenUrl, {

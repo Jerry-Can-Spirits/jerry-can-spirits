@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
-import type { PosConnection, PosProvider } from '@/lib/pouriq/pos/types'
+import { PROVIDER_CREDENTIAL_FIELDS, type PosConnection, type PosProvider } from '@/lib/pouriq/pos/types'
 import { PRIMARY_BUTTON, SECONDARY_BUTTON_SM, DESTRUCTIVE_BUTTON } from '@/lib/pouriq/button-styles'
 
 interface MenuOption {
@@ -36,11 +36,30 @@ export function IntegrationCard({ provider, title, description, connection, menu
   const [pending, startTransition] = useTransition()
   const [error, setError] = useState<string | null>(null)
   const [targetMenuId, setTargetMenuId] = useState<string>(connection?.target_menu_id ?? '')
+  const [credentials, setCredentials] = useState<Record<string, string>>({})
 
+  const credentialFields = PROVIDER_CREDENTIAL_FIELDS[provider]
   const targetMissing = connection !== null && !targetMenuId
 
   function connect() {
     window.location.href = `/api/pouriq/integrations/${provider}/oauth/start`
+  }
+
+  function connectWithKey() {
+    setError(null)
+    startTransition(async () => {
+      const res = await fetch(`/api/pouriq/integrations/${provider}/connect-key`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ fields: credentials }),
+      })
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({})) as { error?: string }
+        setError(err.error ?? 'Could not connect')
+        return
+      }
+      router.refresh()
+    })
   }
 
   function disconnect() {
@@ -149,6 +168,30 @@ export function IntegrationCard({ provider, title, description, connection, menu
               Disconnect
             </button>
           </>
+        ) : credentialFields ? (
+          <form
+            onSubmit={(e) => { e.preventDefault(); connectWithKey() }}
+            className="w-full space-y-3"
+          >
+            {credentialFields.map((f) => (
+              <div key={f.key}>
+                <label htmlFor={`${provider}-${f.key}`} className="block text-xs font-medium text-parchment-300 mb-1">
+                  {f.label}
+                </label>
+                <input
+                  id={`${provider}-${f.key}`}
+                  type={f.secret ? 'password' : 'text'}
+                  autoComplete="off"
+                  value={credentials[f.key] ?? ''}
+                  onChange={(e) => setCredentials((c) => ({ ...c, [f.key]: e.target.value }))}
+                  className="w-full px-3 py-2 bg-jerry-green-700/50 border border-gold-500/30 rounded-lg text-parchment-100 text-sm focus:border-gold-400 focus:ring-2 focus:ring-gold-400/20 focus:outline-none"
+                />
+              </div>
+            ))}
+            <button type="submit" disabled={disabled || pending} className={PRIMARY_BUTTON}>
+              {pending ? 'Connecting…' : `Connect ${title}`}
+            </button>
+          </form>
         ) : (
           <button type="button" onClick={connect} disabled={disabled || pending} className={PRIMARY_BUTTON}>
             Connect {title}
