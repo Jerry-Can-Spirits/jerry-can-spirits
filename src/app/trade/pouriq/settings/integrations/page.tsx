@@ -75,6 +75,13 @@ export default async function IntegrationsPage({ searchParams }: SearchParams) {
             connection={byProvider.get('zettle') ?? null}
             menus={menuOptions}
           />
+          <IntegrationCard
+            provider="sumup"
+            title="SumUp"
+            description="Free card reader and POS popular with UK independents. Sales import hourly once connected."
+            connection={byProvider.get('sumup') ?? null}
+            menus={menuOptions}
+          />
           {/* Placeholder cards — disabled until adapters ship */}
           <IntegrationCard
             provider="lightspeed"
