@@ -77,7 +77,9 @@ export function getOAuthAuthorizeUrl(
       const params = new URLSearchParams({
         response_type: 'code',
         client_id: env.SUMUP_CLIENT_ID,
-        scope: 'transactions.history',
+        // transactions.history reads sales; user.profile_readonly lets the
+        // /v0.1/me call resolve the merchant_code every transactions path needs.
+        scope: 'transactions.history user.profile_readonly',
         state,
         redirect_uri: redirectUri,
       })

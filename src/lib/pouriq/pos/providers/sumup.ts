@@ -71,7 +71,7 @@ export function createSumUpAdapter(env: SumUpEnv): PosAdapter {
         accessToken: data.access_token,
         refreshToken: data.refresh_token ?? null,
         expiresAt: toExpiryIso(data.expires_in),
-        scopes: 'transactions.history',
+        scopes: 'transactions.history user.profile_readonly',
         externalAccountId: merchantCode,
         externalLocationId: null,
       }
