@@ -1,4 +1,5 @@
 import { createSquareAdapter, getSquareBaseUrl } from './square'
+import { createZettleAdapter } from './zettle'
 import type { PosAdapter, PosProvider } from '../types'
 
 /** Env slice the registry needs. All optional — adapters are unavailable (null) when their vars are missing. */
@@ -20,6 +21,12 @@ export function getAdapterForProvider(provider: PosProvider, env: ProvidersEnv):
         SQUARE_APP_SECRET: env.SQUARE_APP_SECRET,
         SQUARE_WEBHOOK_SIGNATURE_KEY: env.SQUARE_WEBHOOK_SIGNATURE_KEY,
         SQUARE_ENV: env.SQUARE_ENV,
+      })
+    case 'zettle':
+      if (!env.ZETTLE_CLIENT_ID || !env.ZETTLE_CLIENT_SECRET) return null
+      return createZettleAdapter({
+        ZETTLE_CLIENT_ID: env.ZETTLE_CLIENT_ID,
+        ZETTLE_CLIENT_SECRET: env.ZETTLE_CLIENT_SECRET,
       })
     default:
       return null
@@ -44,6 +51,17 @@ export function getOAuthAuthorizeUrl(
         redirect_uri: redirectUri,
       })
       return `${getSquareBaseUrl({ SQUARE_ENV: env.SQUARE_ENV })}/oauth2/authorize?${params.toString()}`
+    }
+    case 'zettle': {
+      if (!env.ZETTLE_CLIENT_ID) return null
+      const params = new URLSearchParams({
+        response_type: 'code',
+        client_id: env.ZETTLE_CLIENT_ID,
+        scope: 'READ:PURCHASE',
+        state,
+        redirect_uri: redirectUri,
+      })
+      return `https://oauth.zettle.com/authorize?${params.toString()}`
     }
     default:
       return null
