@@ -41,8 +41,9 @@ export async function countUnmatched(db: D1Database, tradeAccountId: string): Pr
 }
 
 // Cocktails across the tenant's connected POS target menus — the pool we
-// suggest matches from and (implicitly) the only menus a mapping can backfill.
-async function targetMenuCocktailPool(
+// suggest matches from, populate the review dropdown with, and (implicitly)
+// the only menus a mapping can backfill.
+export async function listMappableCocktails(
   db: D1Database,
   tradeAccountId: string,
 ): Promise<Array<{ id: string; name: string }>> {
@@ -76,7 +77,7 @@ export async function listUnmatched(db: D1Database, tradeAccountId: string): Pro
   const rows = res.results ?? []
   if (rows.length === 0) return []
 
-  const pool = await targetMenuCocktailPool(db, tradeAccountId)
+  const pool = await listMappableCocktails(db, tradeAccountId)
   return rows.map((r) => {
     const guess = bestGuessCocktail(r.raw_name, pool)
     return {
