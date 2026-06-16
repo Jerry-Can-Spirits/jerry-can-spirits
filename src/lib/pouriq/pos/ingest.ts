@@ -1,46 +1,100 @@
 import type { PosConnection, PosOrderLine } from './types'
-import { matchPosItemToCocktail } from './match'
+import { matchPosItemToCocktail, normalise } from './match'
+import { loadAliases } from './item-map'
 import { currentPeriod } from '../volumes'
 import { listCocktailsForMenu, listMenusForTradeAccount } from '../menus'
+import type { MenuRow } from '../types'
+
+export interface BucketEntry {
+  cocktailId: string
+  periodStart: string
+  periodEnd: string
+  units: number
+}
+
+interface CocktailLine {
+  cocktail_id: string
+  quantity: number
+  sold_at: string
+}
+
+// Pure: turn matched lines into (cocktail, period) buckets using the menu's
+// cadence. Shared by live ingest and by mapping backfill so both attribute
+// volume identically.
+export function bucketLines(menu: Pick<MenuRow, 'volume_cadence'>, lines: CocktailLine[]): BucketEntry[] {
+  const bucket = new Map<string, BucketEntry>()
+  for (const line of lines) {
+    const period = currentPeriod(menu.volume_cadence, new Date(line.sold_at))
+    const key = `${line.cocktail_id}::${period.start}::${period.end}`
+    const existing = bucket.get(key)
+    if (existing) existing.units += line.quantity
+    else bucket.set(key, {
+      cocktailId: line.cocktail_id,
+      periodStart: period.start,
+      periodEnd: period.end,
+      units: line.quantity,
+    })
+  }
+  return Array.from(bucket.values())
+}
+
+// Additive upsert (existing units + new units). POS volume accumulates,
+// unlike the manual volumes.ts upsert which REPLACES.
+export async function upsertAdditiveVolumes(db: D1Database, entries: BucketEntry[]): Promise<void> {
+  for (const v of entries) {
+    await db
+      .prepare(`
+        INSERT INTO pouriq_drink_volumes (cocktail_id, period_start, period_end, units_sold, source)
+        VALUES (?1, ?2, ?3, ?4, 'pos')
+        ON CONFLICT(cocktail_id, period_start, period_end) DO UPDATE SET
+          units_sold = units_sold + excluded.units_sold,
+          source = CASE WHEN source = 'manual' THEN 'manual' ELSE 'pos' END,
+          updated_at = datetime('now')
+      `)
+      .bind(v.cocktailId, v.periodStart, v.periodEnd, Math.round(v.units))
+      .run()
+  }
+}
 
 /**
- * Take a batch of POS order lines, match each to a cocktail in the
- * connection's target menu, aggregate quantity by (cocktail, period),
- * and upsert into pouriq_drink_volumes with source = 'pos'.
+ * Take a batch of POS order lines, resolve each to a cocktail in the
+ * connection's target menu (ignored alias → mapped alias → exact/fuzzy),
+ * aggregate by (cocktail, period), and additively upsert into
+ * pouriq_drink_volumes. Lines that resolve to nothing are logged to
+ * pouriq_pos_unmatched_lines for review and later backfill.
  *
- * When `connection.target_menu_id` is null (or points at a deleted
- * menu), ingest is paused and the function returns immediately with
- * `paused: true`. Callers must skip advancing `last_synced_at` in
- * that case so the next sync after a target menu is picked still
- * fetches the orders that arrived while paused.
+ * When `connection.target_menu_id` is null (or points at a deleted menu),
+ * ingest is paused and returns `paused: true`; callers must skip advancing
+ * `last_synced_at` so the next sync backfills orders received while paused.
  */
 export async function ingestOrderLines(
   db: D1Database,
   connection: PosConnection,
   lines: PosOrderLine[],
 ): Promise<{ matched: number; unmatched: number; paused?: boolean }> {
+  // Keep the unmatched-line log bounded to the 90-day backfill window.
+  await db
+    .prepare(`DELETE FROM pouriq_pos_unmatched_lines WHERE created_at < datetime('now','-90 days')`)
+    .run()
+    .catch(() => {})
+
   if (!connection.target_menu_id) {
     return { matched: 0, unmatched: 0, paused: true }
   }
   if (lines.length === 0) return { matched: 0, unmatched: 0 }
 
   // Limit the cocktail pool to the designated target menu. Other menus
-  // (e.g. the previous season's, a draft, a clone for what-if analysis)
-  // are intentionally excluded so each menu's volume reflects only the
-  // period when it was actually live.
+  // (previous season's, drafts, what-if clones) are intentionally excluded
+  // so each menu's volume reflects only its live period.
   const allMenus = await listMenusForTradeAccount(db, connection.trade_account_id)
   const targetMenu = allMenus.find((m) => m.id === connection.target_menu_id)
   if (!targetMenu) {
-    // Target menu was deleted — pause until a new one is picked.
     return { matched: 0, unmatched: 0, paused: true }
   }
 
   // Order-level dedup: the hourly cron re-fetches a one-hour overlap and
   // webhooks can deliver orders the cron later fetches again. Volumes are
   // additive, so each order must be ingested exactly once per connection.
-  // INSERT OR IGNORE marks the order seen; only orders whose insert took
-  // effect (meta.changes > 0) are processed. Runs after the paused checks
-  // so paused orders stay unseen and are picked up by the post-pause sync.
   const orderIds = Array.from(new Set(lines.map((l) => l.external_order_id)))
   const seenResults = await db.batch(
     orderIds.map((oid) =>
@@ -52,56 +106,49 @@ export async function ingestOrderLines(
   const freshOrderIds = new Set(orderIds.filter((_, i) => (seenResults[i]?.meta.changes ?? 0) > 0))
   lines = lines.filter((l) => freshOrderIds.has(l.external_order_id))
   if (lines.length === 0) return { matched: 0, unmatched: 0 }
-  const menus = [targetMenu]
-  const cocktailsByMenu = new Map<string, Awaited<ReturnType<typeof listCocktailsForMenu>>>()
-  cocktailsByMenu.set(targetMenu.id, await listCocktailsForMenu(db, targetMenu.id))
-  const allCocktails = Array.from(cocktailsByMenu.values()).flat()
 
-  // Bucket by (menu_id, cocktail_id, period_start, period_end, units).
-  type Key = string
-  const bucket = new Map<Key, { menuId: string; cocktailId: string; period_start: string; period_end: string; units: number }>()
-  let matched = 0
-  let unmatched = 0
+  const cocktails = await listCocktailsForMenu(db, targetMenu.id)
+  const cocktailByNormName = new Map(cocktails.map((c) => [normalise(c.name), c]))
+  const aliases = await loadAliases(db, connection.trade_account_id)
+
+  const matchedLines: CocktailLine[] = []
+  const unmatchedLines: PosOrderLine[] = []
   for (const line of lines) {
-    const cocktail = matchPosItemToCocktail(line.name, allCocktails)
-    if (!cocktail) { unmatched++; continue }
-    matched++
-    // Find which menu this cocktail belongs to so we can apply the menu's
-    // cadence when bucketing into a period.
-    let menuId: string | null = null
-    for (const [mid, list] of cocktailsByMenu.entries()) {
-      if (list.some((c) => c.id === cocktail.id)) { menuId = mid; break }
+    const norm = normalise(line.name)
+    const alias = aliases.get(norm)
+    if (alias?.ignored) continue // suppressed non-cocktail till button
+
+    let cocktailId: string | null = null
+    if (alias?.cocktail_name) {
+      // Resolve by name so the mapping survives a seasonal menu change.
+      cocktailId = cocktailByNormName.get(alias.cocktail_name)?.id ?? null
     }
-    if (!menuId) continue
-    const menu = menus.find((m) => m.id === menuId)
-    if (!menu) continue
-    const period = currentPeriod(menu.volume_cadence, new Date(line.sold_at))
-    const key = `${menuId}::${cocktail.id}::${period.start}::${period.end}`
-    const existing = bucket.get(key)
-    if (existing) existing.units += line.quantity
-    else bucket.set(key, {
-      menuId, cocktailId: cocktail.id,
-      period_start: period.start, period_end: period.end,
-      units: line.quantity,
-    })
+    if (!cocktailId) {
+      cocktailId = matchPosItemToCocktail(line.name, cocktails)?.id ?? null
+    }
+
+    if (cocktailId) {
+      matchedLines.push({ cocktail_id: cocktailId, quantity: line.quantity, sold_at: line.sold_at })
+    } else {
+      unmatchedLines.push(line)
+    }
   }
 
-  // Apply each bucket as an additive upsert (existing units + new units).
-  // We can't use the volumes.ts upsertVolumes helper because that REPLACES
-  // units; for POS we need to ADD.
-  for (const v of bucket.values()) {
-    await db
-      .prepare(`
-        INSERT INTO pouriq_drink_volumes (cocktail_id, period_start, period_end, units_sold, source)
-        VALUES (?1, ?2, ?3, ?4, 'pos')
-        ON CONFLICT(cocktail_id, period_start, period_end) DO UPDATE SET
-          units_sold = units_sold + excluded.units_sold,
-          source = CASE WHEN source = 'manual' THEN 'manual' ELSE 'pos' END,
-          updated_at = datetime('now')
-      `)
-      .bind(v.cocktailId, v.period_start, v.period_end, Math.round(v.units))
-      .run()
+  await upsertAdditiveVolumes(db, bucketLines(targetMenu, matchedLines))
+
+  if (unmatchedLines.length > 0) {
+    await db.batch(
+      unmatchedLines.map((l) =>
+        db
+          .prepare(`
+            INSERT INTO pouriq_pos_unmatched_lines
+              (connection_id, trade_account_id, normalised_name, raw_name, quantity, sold_at)
+            VALUES (?1, ?2, ?3, ?4, ?5, ?6)
+          `)
+          .bind(connection.id, connection.trade_account_id, normalise(l.name), l.name, Math.round(l.quantity), l.sold_at),
+      ),
+    )
   }
 
-  return { matched, unmatched }
+  return { matched: matchedLines.length, unmatched: unmatchedLines.length }
 }
