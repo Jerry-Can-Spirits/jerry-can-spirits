@@ -1,60 +1,8 @@
 import type { PosConnection, PosOrderLine } from './types'
 import { matchPosItemToCocktail, normalise } from './match'
 import { loadAliases } from './item-map'
-import { currentPeriod } from '../volumes'
+import { bucketLines, upsertAdditiveVolumes, type CocktailLine } from './volume-buckets'
 import { listCocktailsForMenu, listMenusForTradeAccount } from '../menus'
-import type { MenuRow } from '../types'
-
-export interface BucketEntry {
-  cocktailId: string
-  periodStart: string
-  periodEnd: string
-  units: number
-}
-
-interface CocktailLine {
-  cocktail_id: string
-  quantity: number
-  sold_at: string
-}
-
-// Pure: turn matched lines into (cocktail, period) buckets using the menu's
-// cadence. Shared by live ingest and by mapping backfill so both attribute
-// volume identically.
-export function bucketLines(menu: Pick<MenuRow, 'volume_cadence'>, lines: CocktailLine[]): BucketEntry[] {
-  const bucket = new Map<string, BucketEntry>()
-  for (const line of lines) {
-    const period = currentPeriod(menu.volume_cadence, new Date(line.sold_at))
-    const key = `${line.cocktail_id}::${period.start}::${period.end}`
-    const existing = bucket.get(key)
-    if (existing) existing.units += line.quantity
-    else bucket.set(key, {
-      cocktailId: line.cocktail_id,
-      periodStart: period.start,
-      periodEnd: period.end,
-      units: line.quantity,
-    })
-  }
-  return Array.from(bucket.values())
-}
-
-// Additive upsert (existing units + new units). POS volume accumulates,
-// unlike the manual volumes.ts upsert which REPLACES.
-export async function upsertAdditiveVolumes(db: D1Database, entries: BucketEntry[]): Promise<void> {
-  for (const v of entries) {
-    await db
-      .prepare(`
-        INSERT INTO pouriq_drink_volumes (cocktail_id, period_start, period_end, units_sold, source)
-        VALUES (?1, ?2, ?3, ?4, 'pos')
-        ON CONFLICT(cocktail_id, period_start, period_end) DO UPDATE SET
-          units_sold = units_sold + excluded.units_sold,
-          source = CASE WHEN source = 'manual' THEN 'manual' ELSE 'pos' END,
-          updated_at = datetime('now')
-      `)
-      .bind(v.cocktailId, v.periodStart, v.periodEnd, Math.round(v.units))
-      .run()
-  }
-}
 
 /**
  * Take a batch of POS order lines, resolve each to a cocktail in the

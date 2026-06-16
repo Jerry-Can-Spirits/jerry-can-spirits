@@ -44,13 +44,13 @@ export function matchPosItemToCocktail(
 
 // Nearest cocktail by edit distance, ignoring the auto-match threshold.
 // Used to pre-fill a best-guess in the unmatched-items review screen.
-export function bestGuessCocktail(
+export function bestGuessCocktail<T extends { name: string }>(
   itemName: string,
-  cocktails: CocktailRow[],
-): CocktailRow | null {
+  cocktails: T[],
+): T | null {
   const target = normalise(itemName)
   if (!target || cocktails.length === 0) return null
-  let best: { cocktail: CocktailRow; score: number } | null = null
+  let best: { cocktail: T; score: number } | null = null
   for (const c of cocktails) {
     const dist = levenshtein(target, normalise(c.name))
     if (best === null || dist < best.score) best = { cocktail: c, score: dist }
