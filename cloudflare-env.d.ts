@@ -48,6 +48,14 @@ interface CloudflareEnv {
   SQUARE_WEBHOOK_SIGNATURE_KEY: string;
   SQUARE_ENV?: string;  // 'sandbox' to target sandbox hosts; anything else = production
 
+  // Secrets — Zettle / PayPal POS (POS integration)
+  ZETTLE_CLIENT_ID: string;
+  ZETTLE_CLIENT_SECRET: string;
+
+  // Secrets — SumUp (POS integration)
+  SUMUP_CLIENT_ID: string;
+  SUMUP_CLIENT_SECRET: string;
+
   // Secrets — R2 presigning (S3-compatible API for presigning download URLs)
   R2_ACCESS_KEY_ID: string;
   R2_SECRET_ACCESS_KEY: string;
