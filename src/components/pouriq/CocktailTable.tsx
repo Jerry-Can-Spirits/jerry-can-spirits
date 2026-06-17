@@ -19,11 +19,14 @@ export function CocktailTable({ menuId, cocktails, metrics, targetGpPct }: Props
   const anyVolume = rows.some((r) => r.m.volume)
 
   // When volumes exist, contribution is the meaningful sort. Falls back
-  // to absolute margin order otherwise (current behaviour).
+  // to absolute margin order otherwise (current behaviour). Drinks with
+  // incomplete cost data sort last — their margin is understated/inflated,
+  // so they must not top the table.
+  const rank = (m: CocktailMetrics) => (m.cost_complete ? 1 : 0)
   if (anyVolume) {
-    rows.sort((a, b) => (b.m.volume?.contribution_p ?? -1) - (a.m.volume?.contribution_p ?? -1))
+    rows.sort((a, b) => rank(b.m) - rank(a.m) || (b.m.volume?.contribution_p ?? -1) - (a.m.volume?.contribution_p ?? -1))
   } else {
-    rows.sort((a, b) => b.m.margin_p - a.m.margin_p)
+    rows.sort((a, b) => rank(b.m) - rank(a.m) || b.m.margin_p - a.m.margin_p)
   }
 
   const extraCols = (anyPromo ? 1 : 0) + (anyVolume ? 2 : 0)
@@ -47,6 +50,7 @@ export function CocktailTable({ menuId, cocktails, metrics, targetGpPct }: Props
         </thead>
         <tbody>
           {rows.map(({ cocktail, m }) => {
+            const incomplete = !m.cost_complete
             const belowTarget = m.gp_pct < targetGpPct
             const promo = m.promo
             const volume = m.volume
@@ -74,7 +78,15 @@ export function CocktailTable({ menuId, cocktails, metrics, targetGpPct }: Props
                 <td className="px-4 py-3 text-parchment-200">{formatMoney(m.sale_price_p)}</td>
                 <td className="px-4 py-3 text-parchment-200">{formatMoney(m.pour_cost_p)}</td>
                 <td className="px-4 py-3 text-parchment-100">{formatMoney(m.margin_p)}</td>
-                <td className={`px-4 py-3 ${belowTarget ? 'text-red-300' : 'text-parchment-100'}`}>{m.gp_pct.toFixed(1)}%</td>
+                <td className={`px-4 py-3 ${incomplete ? 'text-amber-200' : belowTarget ? 'text-red-300' : 'text-parchment-100'}`}>
+                  {incomplete ? (
+                    <Link href={`/trade/pouriq/${menuId}/edit?cocktail=${cocktail.id}`} className="text-amber-200 hover:text-amber-100 underline">
+                      ⚠ Cost incomplete — add prices
+                    </Link>
+                  ) : (
+                    `${m.gp_pct.toFixed(1)}%`
+                  )}
+                </td>
                 {anyPromo && (
                   <td className="px-4 py-3">
                     {promo ? (
