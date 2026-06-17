@@ -4,6 +4,7 @@ import { getCloudflareContext } from '@opennextjs/cloudflare'
 import { checkPourIqAccess } from '@/lib/pouriq/access'
 import { LicenceGate } from '@/components/pouriq/LicenceGate'
 import { listConnections } from '@/lib/pouriq/pos/connections'
+import { countUnmatched } from '@/lib/pouriq/pos/item-map'
 import { listMenusForTradeAccount } from '@/lib/pouriq/menus'
 import { IntegrationCard } from '@/components/pouriq/IntegrationCard'
 
@@ -33,9 +34,10 @@ export default async function IntegrationsPage({ searchParams }: SearchParams) {
 
   const { env } = await getCloudflareContext()
   const db = env.DB as D1Database
-  const [connections, allMenus] = await Promise.all([
+  const [connections, allMenus, unmatchedCount] = await Promise.all([
     listConnections(db, access.tradeAccountId),
     listMenusForTradeAccount(db, access.tradeAccountId),
+    countUnmatched(db, access.tradeAccountId),
   ])
   const byProvider = new Map(connections.map((c) => [c.provider, c]))
   const menuOptions = allMenus.map((m) => ({ id: m.id, name: m.name }))
@@ -58,6 +60,18 @@ export default async function IntegrationsPage({ searchParams }: SearchParams) {
         )}
         {oauthError && (
           <p role="alert" className="mb-6 text-sm text-red-300">{oauthError}</p>
+        )}
+
+        {unmatchedCount > 0 && (
+          <Link
+            href="/trade/pouriq/unmatched"
+            className="flex items-center justify-between gap-3 mb-6 px-4 py-3 rounded-xl bg-amber-500/15 border border-amber-400/40 text-amber-100 text-sm hover:bg-amber-500/25 transition-colors"
+          >
+            <span>
+              <strong>{unmatchedCount}</strong> till {unmatchedCount === 1 ? 'item is' : 'items are'} not matched to a cocktail, so their sales are not counting yet.
+            </span>
+            <span className="font-semibold whitespace-nowrap">Review →</span>
+          </Link>
         )}
 
         <div className="space-y-4">

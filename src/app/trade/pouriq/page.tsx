@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { getCloudflareContext } from '@opennextjs/cloudflare'
 import { checkPourIqAccess } from '@/lib/pouriq/access'
 import { listMenusForTradeAccount } from '@/lib/pouriq/menus'
+import { countUnmatched } from '@/lib/pouriq/pos/item-map'
 import { LicenceGate } from '@/components/pouriq/LicenceGate'
 import { MenuListCard } from '@/components/pouriq/MenuListCard'
 import { PRIMARY_BUTTON, SECONDARY_BUTTON } from '@/lib/pouriq/button-styles'
@@ -16,7 +17,10 @@ export default async function PourIqDashboard() {
 
   const { env } = await getCloudflareContext()
   const db = env.DB as D1Database
-  const menus = await listMenusForTradeAccount(db, access.tradeAccountId)
+  const [menus, unmatchedCount] = await Promise.all([
+    listMenusForTradeAccount(db, access.tradeAccountId),
+    countUnmatched(db, access.tradeAccountId),
+  ])
 
   return (
     <main className="min-h-screen">
@@ -37,6 +41,18 @@ export default async function PourIqDashboard() {
             <Link href="/trade/pouriq/new" className={PRIMARY_BUTTON}>New menu</Link>
           </div>
         </div>
+
+        {unmatchedCount > 0 && (
+          <Link
+            href="/trade/pouriq/unmatched"
+            className="flex items-center justify-between gap-3 mb-6 px-4 py-3 rounded-xl bg-amber-500/15 border border-amber-400/40 text-amber-100 text-sm hover:bg-amber-500/25 transition-colors"
+          >
+            <span>
+              <strong>{unmatchedCount}</strong> till {unmatchedCount === 1 ? 'item' : 'items'} from your POS {unmatchedCount === 1 ? 'is' : 'are'} not matched to a cocktail yet.
+            </span>
+            <span className="font-semibold whitespace-nowrap">Review →</span>
+          </Link>
+        )}
 
         {menus.length === 0 ? (
           <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-12 border border-gold-500/20 text-center">

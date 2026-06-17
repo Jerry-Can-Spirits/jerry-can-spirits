@@ -1,10 +1,10 @@
 import type { CocktailRow } from '../types'
 
-function normalise(s: string): string {
+export function normalise(s: string): string {
   return s.toLowerCase().replace(/['.,]/g, '').replace(/\s+/g, ' ').trim()
 }
 
-function levenshtein(a: string, b: string): number {
+export function levenshtein(a: string, b: string): number {
   if (a === b) return 0
   if (a.length === 0) return b.length
   if (b.length === 0) return a.length
@@ -38,6 +38,22 @@ export function matchPosItemToCocktail(
     if (dist <= 2 && (best === null || dist < best.score)) {
       best = { cocktail: c, score: dist }
     }
+  }
+  return best?.cocktail ?? null
+}
+
+// Nearest cocktail by edit distance, ignoring the auto-match threshold.
+// Used to pre-fill a best-guess in the unmatched-items review screen.
+export function bestGuessCocktail<T extends { name: string }>(
+  itemName: string,
+  cocktails: T[],
+): T | null {
+  const target = normalise(itemName)
+  if (!target || cocktails.length === 0) return null
+  let best: { cocktail: T; score: number } | null = null
+  for (const c of cocktails) {
+    const dist = levenshtein(target, normalise(c.name))
+    if (best === null || dist < best.score) best = { cocktail: c, score: dist }
   }
   return best?.cocktail ?? null
 }
