@@ -105,9 +105,15 @@ export interface CocktailMetrics {
   cocktail_id: string
   name: string
   sale_price_p: number
+  // Net of VAT (sale_price_p ÷ 1.2 when the menu prices include VAT).
+  // Exposed so menu-level blended GP can weight by net revenue.
+  net_sale_p: number
   pour_cost_p: number
   margin_p: number
   gp_pct: number
+  // False when any ingredient can't be priced (cost falls back to £0,
+  // inflating GP). Drives the "cost incomplete" flag and headline exclusion.
+  cost_complete: boolean
   // Populated only when the drink has a promotional price set. Same
   // pour_cost; margin and GP recomputed against the promotional price.
   promo?: {
@@ -148,7 +154,17 @@ export interface WasteRisk {
 }
 
 export interface MenuMetrics {
+  // Unweighted mean GP% across costed drinks. Fallback headline when no
+  // sales volumes exist yet.
   avg_gp_pct: number
+  // Σ(margin × units) ÷ Σ(net sale × units) across costed drinks with
+  // volume. Null when no costed drink has sold this period.
+  blended_gp_pct: number | null
+  // What the headline should show: blended when available, else average.
+  headline_gp_pct: number
+  headline_basis: 'blended' | 'average'
+  // Drinks excluded from the headline because their cost data is incomplete.
+  incomplete_cost_count: number
   best_margin: CocktailMetrics | null
   worst_margin: CocktailMetrics | null
   waste_risk_count: number
