@@ -2,18 +2,18 @@ import type { PosConnection, PosOrderLine } from './types'
 import { matchPosItemToCocktail, normalise } from './match'
 import { loadAliases } from './item-map'
 import { bucketLines, upsertAdditiveVolumes, type CocktailLine } from './volume-buckets'
-import { listCocktailsForMenu, listMenusForTradeAccount } from '../menus'
+import { listCocktailsForMenu, getActiveMenu } from '../menus'
 
 /**
  * Take a batch of POS order lines, resolve each to a cocktail in the
- * connection's target menu (ignored alias → mapped alias → exact/fuzzy),
+ * tenant's active menu (ignored alias → mapped alias → exact/fuzzy),
  * aggregate by (cocktail, period), and additively upsert into
  * pouriq_drink_volumes. Lines that resolve to nothing are logged to
  * pouriq_pos_unmatched_lines for review and later backfill.
  *
- * When `connection.target_menu_id` is null (or points at a deleted menu),
- * ingest is paused and returns `paused: true`; callers must skip advancing
- * `last_synced_at` so the next sync backfills orders received while paused.
+ * When the tenant has no active menu, ingest is paused and returns
+ * `paused: true`; callers must skip advancing `last_synced_at` so the next
+ * sync backfills orders received while paused.
  */
 export async function ingestOrderLines(
   db: D1Database,
@@ -26,16 +26,11 @@ export async function ingestOrderLines(
     .run()
     .catch(() => {})
 
-  if (!connection.target_menu_id) {
-    return { matched: 0, unmatched: 0, paused: true }
-  }
   if (lines.length === 0) return { matched: 0, unmatched: 0 }
 
-  // Limit the cocktail pool to the designated target menu. Other menus
-  // (previous season's, drafts, what-if clones) are intentionally excluded
-  // so each menu's volume reflects only its live period.
-  const allMenus = await listMenusForTradeAccount(db, connection.trade_account_id)
-  const targetMenu = allMenus.find((m) => m.id === connection.target_menu_id)
+  // Sales route to the tenant's active menu. No active menu → pause (the next
+  // sync after one is set backfills). Dormant menus never receive volume.
+  const targetMenu = await getActiveMenu(db, connection.trade_account_id)
   if (!targetMenu) {
     return { matched: 0, unmatched: 0, paused: true }
   }
