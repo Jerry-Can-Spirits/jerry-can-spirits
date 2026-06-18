@@ -28,6 +28,27 @@ export async function getMenu(
     .first<MenuRow>()
 }
 
+export async function getActiveMenu(db: D1Database, tradeAccountId: string): Promise<MenuRow | null> {
+  return await db
+    .prepare(`SELECT * FROM pouriq_menus WHERE trade_account_id = ?1 AND is_active = 1 LIMIT 1`)
+    .bind(tradeAccountId)
+    .first<MenuRow>()
+}
+
+// Set the tenant's one active menu, clearing any other. Verifies ownership
+// first so we never clear the active flag without setting a valid replacement.
+export async function setActiveMenu(db: D1Database, tradeAccountId: string, menuId: string): Promise<void> {
+  const owns = await db
+    .prepare(`SELECT 1 AS one FROM pouriq_menus WHERE id = ?1 AND trade_account_id = ?2`)
+    .bind(menuId, tradeAccountId)
+    .first<{ one: number }>()
+  if (!owns) throw new Error('Menu not found for this account')
+  await db.batch([
+    db.prepare(`UPDATE pouriq_menus SET is_active = 0, updated_at = datetime('now') WHERE trade_account_id = ?1 AND is_active = 1`).bind(tradeAccountId),
+    db.prepare(`UPDATE pouriq_menus SET is_active = 1, updated_at = datetime('now') WHERE id = ?1 AND trade_account_id = ?2`).bind(menuId, tradeAccountId),
+  ])
+}
+
 export async function insertMenu(
   db: D1Database,
   data: {
@@ -41,17 +62,25 @@ export async function insertMenu(
     prices_include_vat: boolean
   },
 ): Promise<string> {
+  // The tenant's first menu becomes active automatically — there is always
+  // an active menu once one exists. Later menus insert inactive.
+  const existing = await db
+    .prepare(`SELECT COUNT(*) AS c FROM pouriq_menus WHERE trade_account_id = ?1`)
+    .bind(data.trade_account_id)
+    .first<{ c: number }>()
+  const isActive = (existing?.c ?? 0) === 0 ? 1 : 0
+
   const result = await db
     .prepare(`
       INSERT INTO pouriq_menus
-        (trade_account_id, name, venue_type, city, target_gp_pct, positioning, notes, prices_include_vat)
-      VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8)
+        (trade_account_id, name, venue_type, city, target_gp_pct, positioning, notes, prices_include_vat, is_active)
+      VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9)
       RETURNING id
     `)
     .bind(
       data.trade_account_id, data.name, data.venue_type, data.city,
       data.target_gp_pct, data.positioning, data.notes,
-      data.prices_include_vat ? 1 : 0,
+      data.prices_include_vat ? 1 : 0, isActive,
     )
     .first<{ id: string }>()
   if (!result) throw new Error('Menu insert returned no id')
@@ -99,10 +128,25 @@ export async function deleteMenu(
   menuId: string,
   tradeAccountId: string,
 ): Promise<void> {
+  const row = await db
+    .prepare(`SELECT is_active FROM pouriq_menus WHERE id = ?1 AND trade_account_id = ?2`)
+    .bind(menuId, tradeAccountId)
+    .first<{ is_active: number }>()
   await db
     .prepare(`DELETE FROM pouriq_menus WHERE id = ?1 AND trade_account_id = ?2`)
     .bind(menuId, tradeAccountId)
     .run()
+  // If the active menu was deleted, promote the most-recently-updated
+  // remaining menu so there is always an active menu when any exist.
+  if (row?.is_active === 1) {
+    await db
+      .prepare(`
+        UPDATE pouriq_menus SET is_active = 1, updated_at = datetime('now')
+        WHERE id = (SELECT id FROM pouriq_menus WHERE trade_account_id = ?1 ORDER BY updated_at DESC LIMIT 1)
+      `)
+      .bind(tradeAccountId)
+      .run()
+  }
 }
 
 export async function listCocktailsForMenu(

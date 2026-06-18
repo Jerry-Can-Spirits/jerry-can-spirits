@@ -3,8 +3,7 @@
 
 import { bestGuessCocktail, normalise } from './match'
 import { bucketLines, upsertAdditiveVolumes } from './volume-buckets'
-import { listConnections } from './connections'
-import { listCocktailsForMenu } from '../menus'
+import { listCocktailsForMenu, getActiveMenu } from '../menus'
 
 export interface PosItemAlias {
   normalised_pos_name: string
@@ -40,24 +39,15 @@ export async function countUnmatched(db: D1Database, tradeAccountId: string): Pr
   return row?.c ?? 0
 }
 
-// Cocktails across the tenant's connected POS target menus — the pool we
-// suggest matches from, populate the review dropdown with, and (implicitly)
-// the only menus a mapping can backfill.
+// Cocktails of the tenant's active menu — the pool we suggest matches from,
+// populate the review dropdown with, and the only menu a mapping backfills.
 export async function listMappableCocktails(
   db: D1Database,
   tradeAccountId: string,
 ): Promise<Array<{ id: string; name: string }>> {
-  const connections = await listConnections(db, tradeAccountId)
-  const menuIds = Array.from(
-    new Set(connections.map((c) => c.target_menu_id).filter((m): m is string => !!m)),
-  )
-  const byId = new Map<string, { id: string; name: string }>()
-  for (const menuId of menuIds) {
-    for (const c of await listCocktailsForMenu(db, menuId)) {
-      byId.set(c.id, { id: c.id, name: c.name })
-    }
-  }
-  return Array.from(byId.values())
+  const active = await getActiveMenu(db, tradeAccountId)
+  if (!active) return []
+  return (await listCocktailsForMenu(db, active.id)).map((c) => ({ id: c.id, name: c.name }))
 }
 
 export async function listUnmatched(db: D1Database, tradeAccountId: string): Promise<UnmatchedItem[]> {
@@ -129,30 +119,28 @@ export async function createMapping(
     .bind(tradeAccountId, normalisedName, cocktailId, normalise(cocktail.name))
     .run()
 
-  // Backfill: only lines whose connection targets this cocktail's menu.
-  const connections = await listConnections(db, tradeAccountId)
-  const connectionsForMenu = new Set(
-    connections.filter((c) => c.target_menu_id === cocktail.menu_id).map((c) => c.id),
-  )
-  if (connectionsForMenu.size === 0) return
+  // Backfill only when this cocktail's menu is the active menu (where all
+  // POS sales route). Otherwise leave the logged lines for later.
+  const active = await getActiveMenu(db, tradeAccountId)
+  if (!active || active.id !== cocktail.menu_id) return
 
   const linesRes = await db
-    .prepare(`SELECT id, connection_id, quantity, sold_at FROM pouriq_pos_unmatched_lines WHERE trade_account_id = ?1 AND normalised_name = ?2`)
+    .prepare(`SELECT id, quantity, sold_at FROM pouriq_pos_unmatched_lines WHERE trade_account_id = ?1 AND normalised_name = ?2`)
     .bind(tradeAccountId, normalisedName)
-    .all<{ id: string; connection_id: string; quantity: number; sold_at: string }>()
-  const eligible = (linesRes.results ?? []).filter((l) => connectionsForMenu.has(l.connection_id))
-  if (eligible.length === 0) return
+    .all<{ id: string; quantity: number; sold_at: string }>()
+  const lines = linesRes.results ?? []
+  if (lines.length === 0) return
 
   await upsertAdditiveVolumes(
     db,
     bucketLines(
       { volume_cadence: cocktail.volume_cadence },
-      eligible.map((l) => ({ cocktail_id: cocktailId, quantity: l.quantity, sold_at: l.sold_at })),
+      lines.map((l) => ({ cocktail_id: cocktailId, quantity: l.quantity, sold_at: l.sold_at })),
     ),
   )
 
   await db.batch(
-    eligible.map((l) =>
+    lines.map((l) =>
       db.prepare(`DELETE FROM pouriq_pos_unmatched_lines WHERE id = ?1`).bind(l.id),
     ),
   )
