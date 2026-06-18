@@ -102,6 +102,7 @@ export default async function MenuDetailPage({ params }: Props) {
               <BulkGenerateDescriptionsButton menuId={menuId} missingCount={missingCount} />
               <Link href={`/trade/pouriq/${menuId}/menu-copy`} className={SECONDARY_BUTTON}>Menu copy</Link>
               <Link href={`/trade/pouriq/${menuId}/specs`} className={SECONDARY_BUTTON}>Spec cards</Link>
+              <Link href={`/trade/pouriq/${menuId}/menu-builder`} className={SECONDARY_BUTTON}>Menu builder</Link>
             </div>
           )}
         </div>
