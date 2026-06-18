@@ -36,6 +36,9 @@ export interface MenuRow {
   // 0: sale prices are net of VAT (internal margin tracking).
   prices_include_vat: number
   volume_cadence: VolumeCadence
+  // Exactly one menu per tenant has is_active = 1: the live menu POS sales
+  // route to. Enforced in code (setActiveMenu clears siblings).
+  is_active: number
   created_at: string
   updated_at: string
 }
