@@ -8,7 +8,7 @@ export type MatchStatus =
   | { kind: 'suggestions'; entries: IngredientLibraryRow[] }
   | { kind: 'no-match' }
 
-function normalise(name: string): string {
+export function normalise(name: string): string {
   return name
     .toLowerCase()
     .replace(/['.,]/g, '')
@@ -18,7 +18,7 @@ function normalise(name: string): string {
 }
 
 // Standard Levenshtein, O(n*m) — fine for short ingredient names.
-function levenshtein(a: string, b: string): number {
+export function levenshtein(a: string, b: string): number {
   if (a === b) return 0
   if (a.length === 0) return b.length
   if (b.length === 0) return a.length

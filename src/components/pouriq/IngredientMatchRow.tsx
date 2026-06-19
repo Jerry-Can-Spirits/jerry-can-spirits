@@ -37,7 +37,7 @@ interface Props {
   extractedName: string
   rawMeasurement: string
   inferredType: IngredientType
-  matchKind: 'auto' | 'suggestions' | 'no-match'
+  matchKind: 'auto' | 'suggestions' | 'no-match' | 'catalogue'
   suggestionEntries: Array<{ id: string; name: string }>
   libraryEntries: IngredientLibraryRow[]
   state: MatchRowState
@@ -101,9 +101,11 @@ export function IngredientMatchRow({
 
   const matchBadge = matchKind === 'auto'
     ? <span className="text-xs text-emerald-300">auto-matched</span>
-    : matchKind === 'suggestions'
-      ? <span className="text-xs text-amber-300">pick a match</span>
-      : <span className="text-xs text-red-300">no match in library</span>
+    : matchKind === 'catalogue'
+      ? <span className="text-xs text-sky-300">from catalogue — set your price</span>
+      : matchKind === 'suggestions'
+        ? <span className="text-xs text-amber-300">pick a match</span>
+        : <span className="text-xs text-red-300">no match in library</span>
 
   return (
     <div className="border border-gold-500/10 rounded-lg p-3 bg-jerry-green-800/30 space-y-3">
