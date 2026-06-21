@@ -3,6 +3,7 @@
 import { memo } from 'react'
 import type { PreviewLine } from '@/app/api/pouriq/invoices/extract/route'
 import type { IngredientLibraryRow, IngredientType } from '@/lib/pouriq/types'
+import { PriceInput } from '@/components/pouriq/PriceInput'
 
 export type LineState = {
   applied: boolean
@@ -66,12 +67,9 @@ function InvoiceLineRowComponent({ index, line, state, library, libraryById, onC
       </td>
       <td className="px-3 py-3 text-parchment-300">{line.extracted_quantity ?? '—'}</td>
       <td className="px-3 py-3">
-        <input
-          type="number"
-          step="0.01"
-          min={0}
-          value={(state.unit_price_p / 100).toFixed(2)}
-          onChange={(e) => onChange(index, { unit_price_p: Math.round(parseFloat(e.target.value || '0') * 100) })}
+        <PriceInput
+          valueP={state.unit_price_p}
+          onChangeP={(p) => onChange(index, { unit_price_p: p })}
           className="w-24 px-2 py-1 bg-jerry-green-700/50 border border-gold-500/30 rounded text-parchment-50"
           aria-label={`New net price for line ${index + 1}`}
         />

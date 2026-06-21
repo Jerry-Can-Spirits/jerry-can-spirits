@@ -1,6 +1,7 @@
 'use client'
 
 import type { IngredientLibraryRow, IngredientType } from '@/lib/pouriq/types'
+import { PriceInput } from '@/components/pouriq/PriceInput'
 
 const INGREDIENT_TYPES: IngredientType[] = ['spirit','liqueur','wine','beer','mixer','syrup','juice','garnish','other']
 const COMMON_BOTTLE_SIZES = [500, 700, 750, 1000]
@@ -145,9 +146,9 @@ export function IngredientMatchRow({
               </select>
             </div>
             {state.new_library.unit_cost_p !== null ? (
-              <input type="number" step="0.01" min={0}
-                value={state.new_library.unit_cost_p === null ? '' : (state.new_library.unit_cost_p / 100).toFixed(2)}
-                onChange={(e) => updateNewLibrary({ unit_cost_p: Math.round(parseFloat(e.target.value || '0') * 100) })}
+              <PriceInput
+                valueP={state.new_library.unit_cost_p}
+                onChangeP={(p) => updateNewLibrary({ unit_cost_p: p })}
                 className={inputClass} placeholder="Unit cost (£)" />
             ) : (
               <div className="grid grid-cols-2 gap-2">
@@ -158,9 +159,9 @@ export function IngredientMatchRow({
                 >
                   {COMMON_BOTTLE_SIZES.map((s) => <option key={s} value={s}>{s}ml</option>)}
                 </select>
-                <input type="number" step="0.01" min={0}
-                  value={state.new_library.bottle_cost_p === null ? '' : (state.new_library.bottle_cost_p / 100).toFixed(2)}
-                  onChange={(e) => updateNewLibrary({ bottle_cost_p: Math.round(parseFloat(e.target.value || '0') * 100) })}
+                <PriceInput
+                  valueP={state.new_library.bottle_cost_p}
+                  onChangeP={(p) => updateNewLibrary({ bottle_cost_p: p })}
                   className={inputClass} placeholder="Bottle cost (£)" />
               </div>
             )}
