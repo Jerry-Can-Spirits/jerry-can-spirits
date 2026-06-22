@@ -11,4 +11,8 @@ export default defineCliConfig({
   api: { projectId, dataset },
   // Fixed host so `sanity deploy` always targets jerrycanspirits.sanity.studio.
   studioHost: 'jerrycanspirits',
+  // Pinned so deploys don't prompt for the application id (public identifier).
+  deployment: {
+    appId: 'wdxeixeflg9fyb03z7v3k096',
+  },
 })
