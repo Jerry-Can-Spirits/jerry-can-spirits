@@ -11,6 +11,8 @@ interface Props {
   placeholder?: string
   className?: string
   'aria-label'?: string
+  /** Fired on blur, after the latest value has been emitted. */
+  onCommit?: () => void
 }
 
 function penceToText(p: number | null): string {
@@ -24,7 +26,7 @@ function penceToText(p: number | null): string {
  * forced a double-click. A decimal text field (not a number spinner) keeps
  * typing reliable and gives mobile a numeric keypad.
  */
-export function PriceInput({ valueP, onChangeP, id, placeholder, className, 'aria-label': ariaLabel }: Props) {
+export function PriceInput({ valueP, onChangeP, id, placeholder, className, 'aria-label': ariaLabel, onCommit }: Props) {
   const [text, setText] = useState(() => penceToText(valueP))
   // Tracks the pence value this input last emitted, so we can tell an external
   // change (e.g. a pricing-mode reset) apart from our own keystroke echoing back.
@@ -52,6 +54,7 @@ export function PriceInput({ valueP, onChangeP, id, placeholder, className, 'ari
       inputMode="decimal"
       value={text}
       onChange={(e) => handleChange(e.target.value)}
+      onBlur={() => onCommit?.()}
       className={className}
       placeholder={placeholder}
       aria-label={ariaLabel}
