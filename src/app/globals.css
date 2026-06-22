@@ -1,6 +1,6 @@
 /* Jerry Can Spirits global styles.
    Structure:
-     1. Tailwind directives and base color-scheme handling
+     1. Tailwind import, @theme tokens, border-colour compat shim, and prose colour variables
      2. Base element styles (html, body, *)
      3. Typography (Playfair Display headings) and brand-driven heading overrides
      4. Mobile-specific iOS workarounds
@@ -99,8 +99,6 @@
   /* Background images */
   --background-image-hero-pattern: linear-gradient(135deg, rgba(26,68,46,0.9) 0%, rgba(30,83,55,0.8) 100%);
   --background-image-card-pattern: linear-gradient(135deg, rgba(241,231,208,0.1) 0%, rgba(223,195,150,0.05) 100%);
-  --background-image-gradient-radial: radial-gradient(var(--tw-gradient-stops));
-  --background-image-gradient-conic: conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops));
 }
 
 /*
@@ -121,7 +119,7 @@
   }
 }
 
-/* Brand prose colours (was typography.DEFAULT.css in tailwind.config.js).
+/* Brand prose colours (was theme.extend.typography.DEFAULT.css in tailwind.config.js).
    Set as --tw-prose-* variables, the v4 way to customise @tailwindcss/typography. */
 .prose {
   --tw-prose-body: #f1e7d0;

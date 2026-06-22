@@ -56,7 +56,6 @@
     "@playwright/test": "^1.61.0",
     "@tailwindcss/postcss": "^4.3.1",
     "@tailwindcss/typography": "^0.5.20",
-    "@tailwindcss/upgrade": "^4.3.1",
     "@types/node": "^24.13.2",
     "@types/react": "^19",
     "@types/react-dom": "^19",
