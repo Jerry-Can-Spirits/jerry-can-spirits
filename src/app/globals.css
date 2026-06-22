@@ -121,6 +121,32 @@
   }
 }
 
+/* Brand prose colours (was typography.DEFAULT.css in tailwind.config.js).
+   Set as --tw-prose-* variables, the v4 way to customise @tailwindcss/typography. */
+.prose {
+  --tw-prose-body: #f1e7d0;
+  --tw-prose-headings: #fef3c7;
+  --tw-prose-lead: #dfc396;
+  --tw-prose-links: #fcd34d;
+  --tw-prose-bold: #fef3c7;
+  --tw-prose-counters: #d97706;
+  --tw-prose-bullets: #d97706;
+  --tw-prose-hr: #92400e;
+  --tw-prose-quotes: #dfc396;
+  --tw-prose-quote-borders: #d97706;
+  --tw-prose-captions: #dfc396;
+  --tw-prose-code: #fcd34d;
+  --tw-prose-pre-code: #f1e7d0;
+  --tw-prose-pre-bg: #1a442e;
+  --tw-prose-th-borders: #92400e;
+  --tw-prose-td-borders: #432f20;
+}
+
+/* No --tw-prose variable exists for link hover; preserve the v3 hover colour. */
+.prose a:hover {
+  color: #f59e0b;
+}
+
 /* Opt out of browser dark mode adaptation. The site palette is intentional.
      'only light' is the explicit instruction to never apply forced dark mode,
      stronger than 'light' alone. The media query below is a belt-and-braces
