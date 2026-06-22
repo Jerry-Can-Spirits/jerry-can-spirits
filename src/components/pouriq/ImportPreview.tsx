@@ -4,6 +4,8 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import type { IngredientLibraryRow, IngredientType } from '@/lib/pouriq/types'
 import { IngredientMatchRow, type MatchRowState } from '@/components/pouriq/IngredientMatchRow'
+import { normalise } from '@/lib/pouriq/match'
+import { planBulkFill, type BulkFillRow } from '@/lib/pouriq/import-bulk-fill'
 
 const inputClass = 'w-full px-3 py-2 bg-jerry-green-700/50 border border-gold-500/30 rounded-lg text-parchment-50 text-sm focus:border-gold-400 focus:outline-none'
 
@@ -21,8 +23,32 @@ export interface PreviewDrinkInput {
     match:
       | { kind: 'auto'; library_id: string; library_name: string }
       | { kind: 'suggestions'; entries: Array<{ id: string; name: string }> }
+      | { kind: 'catalogue'; catalogue_id: string; name: string; ingredient_type: IngredientType; pricing_mode: 'bottle' | 'unit'; default_bottle_size_ml: number | null }
       | { kind: 'no-match' }
   }>
+}
+
+// A staged new_library entry is only "resolved" once it carries a usable
+// price — catalogue adoptions start price-less and must be filled in.
+function newLibraryPriced(nl: NonNullable<MatchRowState['new_library']>): boolean {
+  if (nl.unit_cost_p !== null) return nl.unit_cost_p > 0
+  return nl.bottle_size_ml !== null && nl.bottle_cost_p !== null && nl.bottle_cost_p > 0
+}
+
+function isRowResolved(s: MatchRowState): boolean {
+  if (s.existing_library_id) return true
+  if (s.new_library) return newLibraryPriced(s.new_library)
+  return false
+}
+
+// Stable per-row grouping for bulk-fill: catalogue matches group by catalogue
+// id (so spelling variants collapse), pickable rows by normalised menu name.
+// Auto-matched rows are already resolved and never grouped.
+function groupKeyFor(input: PreviewDrinkInput['ingredients'][0]): string | null {
+  const m = input.match
+  if (m.kind === 'catalogue') return `cat:${m.catalogue_id}`
+  if (m.kind === 'suggestions' || m.kind === 'no-match') return `name:${normalise(input.extracted_name)}`
+  return null
 }
 
 interface DrinkState {
@@ -38,6 +64,23 @@ function initialIngredientState(input: PreviewDrinkInput['ingredients'][0]): Mat
   if (input.match.kind === 'auto') {
     return {
       existing_library_id: input.match.library_id,
+      pour_ml,
+      unit_count,
+    }
+  }
+  if (input.match.kind === 'catalogue') {
+    // Pre-stage a new library entry from the catalogue; the bar just types
+    // the price. Starts price-less so it counts as "needs price" until filled.
+    const m = input.match
+    const isUnit = m.pricing_mode === 'unit'
+    return {
+      new_library: {
+        name: m.name,
+        ingredient_type: m.ingredient_type,
+        bottle_size_ml: isUnit ? null : (m.default_bottle_size_ml ?? 700),
+        bottle_cost_p: null,
+        unit_cost_p: isUnit ? 0 : null,
+      },
       pour_ml,
       unit_count,
     }
@@ -72,7 +115,10 @@ export function ImportPreview({ menuId, drinks: extracted, libraryEntries }: Pro
     acc.included++
     for (const ing of d.ingredients) {
       if (ing.existing_library_id) acc.matched++
-      else if (ing.new_library) acc.toCreate++
+      else if (ing.new_library) {
+        if (newLibraryPriced(ing.new_library)) acc.toCreate++
+        else acc.needsChoice++
+      }
       else acc.needsChoice++
     }
     return acc
@@ -100,10 +146,46 @@ export function ImportPreview({ menuId, drinks: extracted, libraryEntries }: Pro
     }))
   }
 
+  // When a row resolves, auto-fill every other still-unresolved row for the
+  // same ingredient (price/library copied; each drink keeps its own pour/unit).
+  // Functional updater so it reads the just-resolved state, not a stale closure.
+  function propagateFrom(drinkIdx: number, ingIdx: number) {
+    setDrinks((arr) => {
+      const flat: BulkFillRow[] = []
+      const coords: Array<{ d: number; i: number }> = []
+      arr.forEach((d, di) => {
+        if (d.skip) return
+        d.ingredients.forEach((st, ii) => {
+          flat.push({
+            groupKey: groupKeyFor(extracted[di].ingredients[ii]),
+            resolved: isRowResolved(st),
+            state: st,
+          })
+          coords.push({ d: di, i: ii })
+        })
+      })
+      const sourcePos = coords.findIndex((c) => c.d === drinkIdx && c.i === ingIdx)
+      if (sourcePos < 0) return arr
+      const plan = planBulkFill(flat, sourcePos)
+      if (!plan) return arr
+      const next = arr.map((d) => ({ ...d, ingredients: d.ingredients.slice() }))
+      for (const t of plan.targets) {
+        const { d, i } = coords[t]
+        const target = next[d].ingredients[i]
+        next[d].ingredients[i] = {
+          ...target,
+          existing_library_id: plan.apply.existing_library_id,
+          new_library: plan.apply.new_library ? { ...plan.apply.new_library } : undefined,
+        }
+      }
+      return next
+    })
+  }
+
   async function handleCommit() {
     setError(null)
     if (stats.needsChoice > 0) {
-      setError(`${stats.needsChoice} ingredients still need a library match`)
+      setError(`${stats.needsChoice} ingredients still need a library match or a price`)
       return
     }
     if (stats.included === 0) {
@@ -210,6 +292,7 @@ export function ImportPreview({ menuId, drinks: extracted, libraryEntries }: Pro
                     libraryEntries={libraryEntries}
                     state={d.ingredients[ingIdx]}
                     onChange={(state) => updateIngredient(idx, ingIdx, state)}
+                    onResolvedCommit={() => propagateFrom(idx, ingIdx)}
                   />
                   )
                 })}
