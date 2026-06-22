@@ -82,33 +82,38 @@ export default async function CollectionPage({
     error = e instanceof Error ? e.message : 'Unknown error'
   }
 
-  const itemListSchema = {
+  // CollectionPage wrapping the product ItemList — the fuller pattern AI
+  // shopping channels and search reward for a category/listing page.
+  const collectionPageSchema = {
     '@context': 'https://schema.org',
-    '@type': 'ItemList',
+    '@type': 'CollectionPage',
     name: `Jerry Can Spirits — ${h1}`,
     url: `${BASE_URL}/shop/${collection}/`,
-    numberOfItems: products.length,
-    itemListElement: products.map((p, i) => ({
-      '@type': 'ListItem',
-      position: i + 1,
-      item: {
-        '@type': 'Product',
-        name: p.title,
-        description: p.description,
-        url: `${BASE_URL}/shop/product/${p.handle}`,
-        image: p.images?.[0]?.url,
-        brand: { '@type': 'Brand', name: 'Jerry Can Spirits' },
-        offers: {
-          '@type': 'Offer',
-          price: p.priceRange.minVariantPrice.amount,
-          priceCurrency: p.priceRange.minVariantPrice.currencyCode,
-          availability: p.availableForSale
-            ? 'https://schema.org/InStock'
-            : 'https://schema.org/OutOfStock',
+    mainEntity: {
+      '@type': 'ItemList',
+      numberOfItems: products.length,
+      itemListElement: products.map((p, i) => ({
+        '@type': 'ListItem',
+        position: i + 1,
+        item: {
+          '@type': 'Product',
+          name: p.title,
+          description: p.description,
           url: `${BASE_URL}/shop/product/${p.handle}`,
+          image: p.images?.[0]?.url,
+          brand: { '@type': 'Brand', name: 'Jerry Can Spirits' },
+          offers: {
+            '@type': 'Offer',
+            price: p.priceRange.minVariantPrice.amount,
+            priceCurrency: p.priceRange.minVariantPrice.currencyCode,
+            availability: p.availableForSale
+              ? 'https://schema.org/InStock'
+              : 'https://schema.org/OutOfStock',
+            url: `${BASE_URL}/shop/product/${p.handle}`,
+          },
         },
-      },
-    })),
+      })),
+    },
   }
 
   const breadcrumbSchema = {
@@ -182,7 +187,7 @@ export default async function CollectionPage({
       <ViewItemListTracker listId={collection} listName={h1} currency={currency} items={trackerItems} />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: safeJsonLd(itemListSchema) }}
+        dangerouslySetInnerHTML={{ __html: safeJsonLd(collectionPageSchema) }}
       />
       <script
         type="application/ld+json"

@@ -401,6 +401,21 @@ export default async function ProductPage({
           name: 'Production Method',
           value: 'Small Batch',
         },
+        // Tasting data from Sanity, when present — richer signal for AI
+        // shopping channels and search. Only emitted when the field exists,
+        // and these are the same values shown on the page.
+        ...(sanityProduct?.flavorProfile?.primary && sanityProduct.flavorProfile.primary.length > 0
+          ? [{ '@type': 'PropertyValue', name: 'Flavour Profile', value: sanityProduct.flavorProfile.primary.join(', ') }]
+          : []),
+        ...(sanityProduct?.tastingNotes?.aroma
+          ? [{ '@type': 'PropertyValue', name: 'Aroma', value: sanityProduct.tastingNotes.aroma }]
+          : []),
+        ...(sanityProduct?.tastingNotes?.palate
+          ? [{ '@type': 'PropertyValue', name: 'Palate', value: sanityProduct.tastingNotes.palate }]
+          : []),
+        ...(sanityProduct?.tastingNotes?.finish
+          ? [{ '@type': 'PropertyValue', name: 'Finish', value: sanityProduct.tastingNotes.finish }]
+          : []),
       ],
     }),
   }
