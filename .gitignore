@@ -78,3 +78,7 @@ nul
 # Local D1 backups (must not be committed — contain production data)
 *-backup.sql
 pre-*.sql
+
+# Sanity Studio build output (deployed via `sanity deploy`, not committed)
+dist/
+.sanity/
