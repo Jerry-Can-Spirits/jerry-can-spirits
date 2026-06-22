@@ -6,7 +6,7 @@ export default function robots(): MetadataRoute.Robots {
   // Single source of disallow patterns. /refer/ and /search are noindex'd at
   // the page level too, but blocking the crawl saves Googlebot budget on
   // routes that produce thin or per-user content.
-  const disallow = ['/studio/', '/api/', '/refer/', '/search']
+  const disallow = ['/api/', '/refer/', '/search']
 
   return {
     rules: [
