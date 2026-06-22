@@ -9,11 +9,99 @@
      7. Stockist map popup
      8. Print rules, scoped to the .print-region opt-in */
 
+@import 'tailwindcss';
 @import '../styles/animations.css' layer(base);
 
-@import 'tailwindcss';
+@plugin "@tailwindcss/typography";
 
-@config '../../tailwind.config.js';
+@theme {
+  /* Brand colours */
+  --color-jerry-green-50: #f0f9f4;
+  --color-jerry-green-100: #dcf2e4;
+  --color-jerry-green-200: #bbe5cc;
+  --color-jerry-green-300: #8dd3aa;
+  --color-jerry-green-400: #5abb81;
+  --color-jerry-green-500: #38a063;
+  --color-jerry-green-600: #2a824f;
+  --color-jerry-green-700: #236842;
+  --color-jerry-green-800: #1e5337;
+  --color-jerry-green-900: #1a442e;
+  --color-jerry-green-950: #0e2519;
+
+  --color-parchment-50: #fefdfb;
+  --color-parchment-100: #fcf9f3;
+  --color-parchment-200: #f7f1e3;
+  --color-parchment-300: #f1e7d0;
+  --color-parchment-400: #e9d8b7;
+  --color-parchment-500: #dfc396;
+  --color-parchment-600: #d0a972;
+  --color-parchment-700: #bc8c54;
+  --color-parchment-800: #9b7048;
+  --color-parchment-900: #7f5c3e;
+  --color-parchment-950: #432f20;
+
+  --color-gold-50: #fffbeb;
+  --color-gold-100: #fef3c7;
+  --color-gold-200: #fde68a;
+  --color-gold-300: #fcd34d;
+  --color-gold-400: #fbbf24;
+  --color-gold-500: #f59e0b;
+  --color-gold-600: #d97706;
+  --color-gold-700: #b45309;
+  --color-gold-800: #92400e;
+  --color-gold-900: #78350f;
+  --color-gold-950: #451a03;
+
+  /* Font families */
+  --font-serif: Georgia, Cambria, 'Times New Roman', Times, serif;
+  --font-sans: Inter, system-ui, sans-serif;
+  --font-display: 'Playfair Display', Georgia, serif;
+
+  /* Custom animations */
+  --animate-fade-in: fadeIn 0.5s ease-in-out;
+  --animate-slide-up: slideUp 0.3s ease-out;
+  --animate-pulse-slow: pulse 3s infinite;
+  --animate-bounce-gentle: bounceGentle 2s infinite;
+  --animate-float: float 3s ease-in-out infinite;
+  --animate-shimmer: shimmer 2s linear infinite;
+
+  /* Keyframes */
+  @keyframes fadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+  }
+  @keyframes slideUp {
+    0% { opacity: 0; transform: translateY(20px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes bounceGentle {
+    0%, 100% { transform: translateY(0); animation-timing-function: cubic-bezier(0.8, 0, 1, 1); }
+    50% { transform: translateY(-5px); animation-timing-function: cubic-bezier(0, 0, 0.2, 1); }
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+  }
+  @keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+
+  /* Backdrop blur extension */
+  --blur-xs: 2px;
+
+  /* Box shadows */
+  --shadow-glow: 0 0 20px rgba(252,211,77,0.3);
+  --shadow-glow-sm: 0 0 10px rgba(252,211,77,0.2);
+  --shadow-inner-glow: inset 0 0 20px rgba(252,211,77,0.1);
+  --shadow-elegant: 0 10px 25px -3px rgba(0,0,0,0.3), 0 4px 6px -2px rgba(0,0,0,0.05);
+
+  /* Background images */
+  --background-image-hero-pattern: linear-gradient(135deg, rgba(26,68,46,0.9) 0%, rgba(30,83,55,0.8) 100%);
+  --background-image-card-pattern: linear-gradient(135deg, rgba(241,231,208,0.1) 0%, rgba(223,195,150,0.05) 100%);
+  --background-image-gradient-radial: radial-gradient(var(--tw-gradient-stops));
+  --background-image-gradient-conic: conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops));
+}
 
 /*
   The default border color has changed to `currentcolor` in Tailwind CSS v4,
