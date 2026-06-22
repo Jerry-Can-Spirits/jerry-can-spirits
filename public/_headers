@@ -39,15 +39,6 @@
 # SECURITY HEADERS
 # =============================================================================
 
-# Less restrictive CSP for Sanity Studio
-/studio/*
-  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https: data:; style-src 'self' 'unsafe-inline' https: data:; font-src 'self' https: data:; img-src 'self' data: https: blob:; media-src 'self' https: data:; connect-src 'self' https: wss: ws:; frame-src 'self' https:; object-src 'none'; base-uri 'self'; form-action 'self' https:; frame-ancestors 'none'; upgrade-insecure-requests
-  X-Content-Type-Options: nosniff
-  Referrer-Policy: strict-origin-when-cross-origin
-  X-DNS-Prefetch-Control: on
-  Permissions-Policy: camera=(self), microphone=(), geolocation=(self), payment=(), usb=(), magnetometer=(), gyroscope=(), accelerometer=()
-  Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
-
 # Security headers for all other routes
 # CSP is applied via middleware.ts — covers all Worker-handled routes (all HTML pages)
 /*

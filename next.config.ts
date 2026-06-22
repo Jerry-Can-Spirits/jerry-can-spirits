@@ -111,40 +111,25 @@ const nextConfig: NextConfig = {
           },
         ],
       },
-      // Security headers for Sanity Studio (permissive CSP — must come AFTER /:path* to override it)
-      {
-        source: '/studio/:path*',
-        headers: [
-          {
-            key: 'Content-Security-Policy',
-            value: [
-              "default-src 'self'",
-              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https: data:",
-              "style-src 'self' 'unsafe-inline' https: data:",
-              "font-src 'self' https: data:",
-              "img-src 'self' data: https: https://imagedelivery.net blob:",
-              "media-src 'self' https: data:",
-              "connect-src 'self' https: wss: ws:",
-              "frame-src 'self' https:",
-              "object-src 'none'",
-              "base-uri 'self'",
-              "form-action 'self' https:",
-              "frame-ancestors 'none'",
-              "upgrade-insecure-requests",
-            ].join('; '),
-          },
-          {
-            key: 'Cross-Origin-Opener-Policy',
-            value: 'same-origin',
-          },
-        ],
-      },
     ]
   },
 
   // Redirects for URL structure changes and removed content
   async redirects() {
     return [
+      // Sanity Studio moved to Sanity hosting — send old bookmarks there.
+      {
+        source: '/studio',
+        destination: 'https://jerrycanspirits.sanity.studio',
+        permanent: false,
+        basePath: false,
+      },
+      {
+        source: '/studio/:path*',
+        destination: 'https://jerrycanspirits.sanity.studio',
+        permanent: false,
+        basePath: false,
+      },
       // Specific cocktail slug corrections (must come before the generic rule)
       {
         source: '/cocktails/vietnamese-iced-coffee',

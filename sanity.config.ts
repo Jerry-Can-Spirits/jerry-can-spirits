@@ -20,7 +20,8 @@ import {structure} from './src/sanity/structure'
 const SINGLETON_TYPES = new Set(['tradeHelp'])
 
 export default defineConfig({
-  basePath: '/studio',
+  // Served at the root of the hosted Studio subdomain (jerrycanspirits.sanity.studio).
+  basePath: '/',
   projectId,
   dataset,
   // Add and edit the content schema in the './sanity/schemaTypes' folder
@@ -37,7 +38,8 @@ export default defineConfig({
   },
   plugins: [
     structureTool({structure}),
-    // Only enable Vision in development for performance
-    ...(process.env.NODE_ENV === 'development' ? [visionTool({defaultApiVersion: apiVersion})] : []),
+    // Enabled in the hosted Studio (internal tool) — the bundle reason for
+    // gating it to development no longer applies now Studio is out of the worker.
+    visionTool({defaultApiVersion: apiVersion}),
   ],
 })
