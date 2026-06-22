@@ -105,8 +105,7 @@ export default function Contact() {
                   </h3>
                   <a
                     href={method.link}
-                    onClick={(e) => e.stopPropagation()}
-                    className="inline-block text-gold-300 hover:text-gold-200 font-medium mb-3 transition-colors duration-200 underline decoration-2"
+                    className="relative z-10 inline-block text-gold-300 hover:text-gold-200 font-medium mb-3 transition-colors duration-200 underline decoration-2"
                   >
                     {method.value}
                   </a>
@@ -122,13 +121,19 @@ export default function Contact() {
               )
 
               return method.href ? (
-                <Link
+                <div
                   key={method.label}
-                  href={method.href}
-                  className="group bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20 text-center hover:border-gold-400/40 transition-all duration-300 hover:scale-105"
+                  className="group relative bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20 text-center hover:border-gold-400/40 transition-all duration-300 hover:scale-105"
                 >
                   {CardContent}
-                </Link>
+                  <Link
+                    href={method.href}
+                    aria-label={`${method.label}: use contact form`}
+                    className="absolute inset-0 rounded-xl focus:outline-hidden focus:ring-2 focus:ring-gold-400"
+                  >
+                    <span className="sr-only">Use form</span>
+                  </Link>
+                </div>
               ) : (
                 <div
                   key={method.label}
