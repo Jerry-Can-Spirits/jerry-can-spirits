@@ -9,8 +9,8 @@
      7. Stockist map popup
      8. Print rules, scoped to the .print-region opt-in */
 
+@import '../styles/animations.css';
 @import 'tailwindcss';
-@import '../styles/animations.css' layer(base);
 
 @plugin "@tailwindcss/typography";
 
