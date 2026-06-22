@@ -145,6 +145,13 @@
   color: #f59e0b;
 }
 
+/* Base element styles MUST live in @layer base so Tailwind utility classes win
+   over them (e.g. bg-jerry-green-900 on <body>, h-8/w-8 on header icons). In v4
+   un-layered CSS beats every named layer regardless of specificity, so leaving
+   these loose would let `body { background: parchment }` override the body's
+   bg-jerry-green-900 utility and `img { height: auto }` override icon sizing. */
+@layer base {
+
 /* Opt out of browser dark mode adaptation. The site palette is intentional.
      'only light' is the explicit instruction to never apply forced dark mode,
      stronger than 'light' alone. The media query below is a belt-and-braces
@@ -258,6 +265,10 @@
     max-width: 100%;
     height: auto;
   }
+}
+/* End @layer base. Rules below stay un-layered so they keep winning over
+   utilities, exactly as they did in v3 (btn-primary, custom utilities,
+   cartography backgrounds, the mapbox popup, and the print block). */
 
   /* Premium button base styles */
   .btn-primary {
