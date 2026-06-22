@@ -1,6 +1,7 @@
 'use client'
 
 import type { IngredientLibraryRow, IngredientType } from '@/lib/pouriq/types'
+import { PriceInput } from '@/components/pouriq/PriceInput'
 
 const INGREDIENT_TYPES: IngredientType[] = ['spirit','liqueur','wine','beer','mixer','syrup','juice','garnish','other']
 const COMMON_BOTTLE_SIZES = [500, 700, 750, 1000]
@@ -37,11 +38,14 @@ interface Props {
   extractedName: string
   rawMeasurement: string
   inferredType: IngredientType
-  matchKind: 'auto' | 'suggestions' | 'no-match'
+  matchKind: 'auto' | 'suggestions' | 'no-match' | 'catalogue'
   suggestionEntries: Array<{ id: string; name: string }>
   libraryEntries: IngredientLibraryRow[]
   state: MatchRowState
   onChange: (state: MatchRowState) => void
+  // Fired when this row becomes resolved (existing entry picked, or a new
+  // entry's price field blurred) so the parent can bulk-fill matching rows.
+  onResolvedCommit?: () => void
 }
 
 function isUnitPricedSelection(state: MatchRowState, library: IngredientLibraryRow[]): boolean {
@@ -56,7 +60,7 @@ function isUnitPricedSelection(state: MatchRowState, library: IngredientLibraryR
 export function IngredientMatchRow({
   extractedName, rawMeasurement, inferredType,
   matchKind, suggestionEntries, libraryEntries,
-  state, onChange,
+  state, onChange, onResolvedCommit,
 }: Props) {
   const unitPriced = isUnitPricedSelection(state, libraryEntries)
   const selectedExisting = state.existing_library_id
@@ -70,6 +74,8 @@ export function IngredientMatchRow({
       pour_ml: state.pour_ml,
       unit_count: state.unit_count,
     })
+    // Picking an existing entry resolves the row instantly (no blur).
+    onResolvedCommit?.()
   }
 
   function startNewLibrary() {
@@ -101,9 +107,11 @@ export function IngredientMatchRow({
 
   const matchBadge = matchKind === 'auto'
     ? <span className="text-xs text-emerald-300">auto-matched</span>
-    : matchKind === 'suggestions'
-      ? <span className="text-xs text-amber-300">pick a match</span>
-      : <span className="text-xs text-red-300">no match in library</span>
+    : matchKind === 'catalogue'
+      ? <span className="text-xs text-sky-300">from catalogue — set your price</span>
+      : matchKind === 'suggestions'
+        ? <span className="text-xs text-amber-300">pick a match</span>
+        : <span className="text-xs text-red-300">no match in library</span>
 
   return (
     <div className="border border-gold-500/10 rounded-lg p-3 bg-jerry-green-800/30 space-y-3">
@@ -143,9 +151,10 @@ export function IngredientMatchRow({
               </select>
             </div>
             {state.new_library.unit_cost_p !== null ? (
-              <input type="number" step="0.01" min={0}
-                value={state.new_library.unit_cost_p === null ? '' : (state.new_library.unit_cost_p / 100).toFixed(2)}
-                onChange={(e) => updateNewLibrary({ unit_cost_p: Math.round(parseFloat(e.target.value || '0') * 100) })}
+              <PriceInput
+                valueP={state.new_library.unit_cost_p}
+                onChangeP={(p) => updateNewLibrary({ unit_cost_p: p })}
+                onCommit={onResolvedCommit}
                 className={inputClass} placeholder="Unit cost (£)" />
             ) : (
               <div className="grid grid-cols-2 gap-2">
@@ -156,9 +165,10 @@ export function IngredientMatchRow({
                 >
                   {COMMON_BOTTLE_SIZES.map((s) => <option key={s} value={s}>{s}ml</option>)}
                 </select>
-                <input type="number" step="0.01" min={0}
-                  value={state.new_library.bottle_cost_p === null ? '' : (state.new_library.bottle_cost_p / 100).toFixed(2)}
-                  onChange={(e) => updateNewLibrary({ bottle_cost_p: Math.round(parseFloat(e.target.value || '0') * 100) })}
+                <PriceInput
+                  valueP={state.new_library.bottle_cost_p}
+                  onChangeP={(p) => updateNewLibrary({ bottle_cost_p: p })}
+                  onCommit={onResolvedCommit}
                   className={inputClass} placeholder="Bottle cost (£)" />
               </div>
             )}

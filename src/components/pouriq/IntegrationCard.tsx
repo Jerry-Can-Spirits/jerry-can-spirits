@@ -5,17 +5,12 @@ import { useRouter } from 'next/navigation'
 import { PROVIDER_CREDENTIAL_FIELDS, type PosConnection, type PosProvider } from '@/lib/pouriq/pos/types'
 import { PRIMARY_BUTTON, SECONDARY_BUTTON_SM, DESTRUCTIVE_BUTTON } from '@/lib/pouriq/button-styles'
 
-interface MenuOption {
-  id: string
-  name: string
-}
-
 interface Props {
   provider: PosProvider
   title: string
   description: string
   connection: PosConnection | null
-  menus: MenuOption[]
+  activeMenuName: string | null
   disabled?: boolean
 }
 
@@ -31,15 +26,13 @@ function formatRelativeTime(iso: string | null): string {
   return `${days} day${days === 1 ? '' : 's'} ago`
 }
 
-export function IntegrationCard({ provider, title, description, connection, menus, disabled }: Props) {
+export function IntegrationCard({ provider, title, description, connection, activeMenuName, disabled }: Props) {
   const router = useRouter()
   const [pending, startTransition] = useTransition()
   const [error, setError] = useState<string | null>(null)
-  const [targetMenuId, setTargetMenuId] = useState<string>(connection?.target_menu_id ?? '')
   const [credentials, setCredentials] = useState<Record<string, string>>({})
 
   const credentialFields = PROVIDER_CREDENTIAL_FIELDS[provider]
-  const targetMissing = connection !== null && !targetMenuId
 
   function connect() {
     window.location.href = `/api/pouriq/integrations/${provider}/oauth/start`
@@ -84,25 +77,6 @@ export function IntegrationCard({ provider, title, description, connection, menu
     })
   }
 
-  function updateTargetMenu(menuId: string) {
-    setError(null)
-    setTargetMenuId(menuId)
-    startTransition(async () => {
-      const res = await fetch(`/api/pouriq/integrations/${provider}/target-menu`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ menuId: menuId || null }),
-      })
-      if (!res.ok) {
-        const err = await res.json().catch(() => ({})) as { error?: string }
-        setError(err.error ?? 'Could not update active menu')
-        setTargetMenuId(connection?.target_menu_id ?? '')
-        return
-      }
-      router.refresh()
-    })
-  }
-
   return (
     <div className="bg-jerry-green-800/40 border border-gold-500/20 rounded-xl p-6">
       <div className="flex flex-wrap items-baseline justify-between gap-3 mb-2">
@@ -127,33 +101,17 @@ export function IntegrationCard({ provider, title, description, connection, menu
       )}
 
       {connection && (
-        <div className="mb-4">
-          <label htmlFor={`target-menu-${provider}`} className="block text-xs font-medium text-parchment-300 mb-2">
-            Route sales to
-          </label>
-          <select
-            id={`target-menu-${provider}`}
-            value={targetMenuId}
-            onChange={(e) => updateTargetMenu(e.target.value)}
-            disabled={pending || menus.length === 0}
-            className="w-full px-3 py-2 bg-jerry-green-700/50 border border-gold-500/30 rounded-lg text-parchment-100 text-sm focus:border-gold-400 focus:ring-2 focus:ring-gold-400/20 focus:outline-none"
-          >
-            <option value="">— Select an active menu —</option>
-            {menus.map((m) => (
-              <option key={m.id} value={m.id}>{m.name}</option>
-            ))}
-          </select>
-          {targetMissing && (
-            <p role="alert" className="mt-2 text-xs text-amber-300">
-              Sales are paused until you pick an active menu. The next sync will backfill anything received while paused.
-            </p>
+        <p className="text-xs mb-4">
+          {activeMenuName ? (
+            <span className="text-parchment-400">
+              Sales route to your active menu: <span className="text-parchment-200">{activeMenuName}</span>
+            </span>
+          ) : (
+            <span className="text-amber-300">
+              Set an active menu so sales can flow — choose one on the Pour IQ dashboard. The next sync backfills anything received while paused.
+            </span>
           )}
-          {menus.length === 0 && (
-            <p className="mt-2 text-xs text-parchment-400">
-              No menus yet — create one from the Pour IQ dashboard first.
-            </p>
-          )}
-        </div>
+        </p>
       )}
 
       {error && <p role="alert" className="text-xs text-red-300 mb-3">{error}</p>}

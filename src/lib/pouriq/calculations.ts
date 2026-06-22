@@ -39,6 +39,15 @@ export function isPromoActiveOn(
   return days.includes(date.getUTCDay())
 }
 
+// True when an ingredient's cost can actually be computed — mirrors the two
+// branches of ingredientCostPence. False means the cost falls back to £0.
+export function ingredientCostComplete(i: import('./types').IngredientWithLibrary): boolean {
+  if (i.library.unit_cost_p !== null) return true
+  return i.library.bottle_size_ml !== null
+    && i.library.bottle_cost_p !== null
+    && i.pour_ml !== null
+}
+
 function ingredientCostPence(i: import('./types').IngredientWithLibrary): number {
   // Unit-priced: library has unit_cost_p; cocktail row has unit_count
   if (i.library.unit_cost_p !== null) {
@@ -65,13 +74,21 @@ export function calculateCocktailMetrics(
   const margin_p = net_sale_p - pour_cost_p
   const gp_pct = net_sale_p === 0 ? 0 : (margin_p / net_sale_p) * 100
 
+  // A drink's cost is trustworthy only when every ingredient can be priced
+  // (and it has at least one). Otherwise the £0 fallback understates cost
+  // and inflates GP, so downstream the drink is flagged and excluded.
+  const cost_complete = cocktail.ingredients.length > 0
+    && cocktail.ingredients.every(ingredientCostComplete)
+
   const metrics: CocktailMetrics = {
     cocktail_id: cocktail.id,
     name: cocktail.name,
     sale_price_p: cocktail.sale_price_p,
+    net_sale_p,
     pour_cost_p,
     margin_p,
     gp_pct: Math.round(gp_pct * 10) / 10,
+    cost_complete,
   }
 
   if (cocktail.promotional_price_p !== null && cocktail.promotional_price_p !== undefined) {
@@ -162,17 +179,39 @@ export function calculateMenuMetrics(
   const ingredient_overlap = calculateIngredientOverlap(cocktails)
   const waste_risks = calculateWasteRisks(cocktails, ingredient_overlap)
 
-  const validGps = cocktail_metrics.filter((m) => m.sale_price_p > 0)
-  const avg_gp_pct = validGps.length === 0
-    ? 0
-    : Math.round((validGps.reduce((s, m) => s + m.gp_pct, 0) / validGps.length) * 10) / 10
+  // Only drinks with trustworthy costs feed the headline numbers. Drinks
+  // with incomplete cost data have understated cost / inflated GP, so they
+  // are excluded from the average, blended GP, and best/worst margin.
+  const costed = cocktail_metrics.filter((m) => m.cost_complete && m.sale_price_p > 0)
+  const incomplete_cost_count = cocktail_metrics.filter((m) => !m.cost_complete).length
 
-  const sorted = [...cocktail_metrics].sort((a, b) => b.margin_p - a.margin_p)
+  const avg_gp_pct = costed.length === 0
+    ? 0
+    : Math.round((costed.reduce((s, m) => s + m.gp_pct, 0) / costed.length) * 10) / 10
+
+  // Blended GP: total contribution margin ÷ total net sales across costed
+  // drinks that actually sold. The P&L-true headline once volumes exist.
+  let totalMargin = 0
+  let totalNet = 0
+  for (const m of costed) {
+    if (!m.volume) continue
+    totalMargin += m.margin_p * m.volume.units_sold
+    totalNet += m.net_sale_p * m.volume.units_sold
+  }
+  const blended_gp_pct = totalNet > 0 ? Math.round((totalMargin / totalNet) * 1000) / 10 : null
+  const headline_gp_pct = blended_gp_pct ?? avg_gp_pct
+  const headline_basis: 'blended' | 'average' = blended_gp_pct !== null ? 'blended' : 'average'
+
+  const sorted = [...costed].sort((a, b) => b.margin_p - a.margin_p)
   const best_margin = sorted[0] ?? null
   const worst_margin = sorted[sorted.length - 1] ?? null
 
   return {
     avg_gp_pct,
+    blended_gp_pct,
+    headline_gp_pct,
+    headline_basis,
+    incomplete_cost_count,
     best_margin,
     worst_margin,
     waste_risk_count: waste_risks.length,

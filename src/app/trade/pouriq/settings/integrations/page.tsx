@@ -5,7 +5,7 @@ import { checkPourIqAccess } from '@/lib/pouriq/access'
 import { LicenceGate } from '@/components/pouriq/LicenceGate'
 import { listConnections } from '@/lib/pouriq/pos/connections'
 import { countUnmatched } from '@/lib/pouriq/pos/item-map'
-import { listMenusForTradeAccount } from '@/lib/pouriq/menus'
+import { getActiveMenu } from '@/lib/pouriq/menus'
 import { IntegrationCard } from '@/components/pouriq/IntegrationCard'
 
 export const dynamic = 'force-dynamic'
@@ -34,13 +34,13 @@ export default async function IntegrationsPage({ searchParams }: SearchParams) {
 
   const { env } = await getCloudflareContext()
   const db = env.DB as D1Database
-  const [connections, allMenus, unmatchedCount] = await Promise.all([
+  const [connections, activeMenu, unmatchedCount] = await Promise.all([
     listConnections(db, access.tradeAccountId),
-    listMenusForTradeAccount(db, access.tradeAccountId),
+    getActiveMenu(db, access.tradeAccountId),
     countUnmatched(db, access.tradeAccountId),
   ])
   const byProvider = new Map(connections.map((c) => [c.provider, c]))
-  const menuOptions = allMenus.map((m) => ({ id: m.id, name: m.name }))
+  const activeMenuName = activeMenu?.name ?? null
 
   const sp = await searchParams
   const justConnected = sp.connected
@@ -80,21 +80,21 @@ export default async function IntegrationsPage({ searchParams }: SearchParams) {
             title="Square"
             description="Most common UK POS for independent bars and small chains. Sales flow in via webhooks plus hourly backfill."
             connection={byProvider.get('square') ?? null}
-            menus={menuOptions}
+            activeMenuName={activeMenuName}
           />
           <IntegrationCard
             provider="zettle"
             title="Zettle by PayPal"
             description="Free POS used by thousands of UK independents. Sales import hourly once connected."
             connection={byProvider.get('zettle') ?? null}
-            menus={menuOptions}
+            activeMenuName={activeMenuName}
           />
           <IntegrationCard
             provider="sumup"
             title="SumUp"
             description="Free card reader and POS popular with UK independents. Sales import hourly once connected."
             connection={byProvider.get('sumup') ?? null}
-            menus={menuOptions}
+            activeMenuName={activeMenuName}
           />
           {/* Placeholder cards — disabled until adapters ship */}
           <IntegrationCard
@@ -102,7 +102,7 @@ export default async function IntegrationsPage({ searchParams }: SearchParams) {
             title="Lightspeed Restaurant"
             description="Coming soon. The architecture is in place — adapter ships in a follow-up sprint."
             connection={byProvider.get('lightspeed') ?? null}
-            menus={menuOptions}
+            activeMenuName={activeMenuName}
             disabled
           />
           <IntegrationCard
@@ -110,7 +110,7 @@ export default async function IntegrationsPage({ searchParams }: SearchParams) {
             title="ePOSnow"
             description="Coming soon. UK pub focus. Adapter follows Lightspeed."
             connection={byProvider.get('eposnow') ?? null}
-            menus={menuOptions}
+            activeMenuName={activeMenuName}
             disabled
           />
         </div>

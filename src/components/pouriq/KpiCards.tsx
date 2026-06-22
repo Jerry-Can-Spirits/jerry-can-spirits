@@ -4,10 +4,14 @@ function formatGp(pct: number) { return `${pct.toFixed(1)}%` }
 function formatMoney(p: number) { return `£${(p / 100).toFixed(2)}` }
 
 export function KpiCards({ menu, metrics }: { menu: MenuRow; metrics: MenuMetrics }) {
-  const gpDelta = metrics.avg_gp_pct - menu.target_gp_pct
-  const gpDeltaLabel = `${gpDelta >= 0 ? '+' : ''}${gpDelta.toFixed(1)} vs target`
+  const gpDelta = metrics.headline_gp_pct - menu.target_gp_pct
+  const gpLabel = metrics.headline_basis === 'blended' ? 'Blended GP' : 'Average GP'
+  const gpNote =
+    `${gpDelta >= 0 ? '+' : ''}${gpDelta.toFixed(1)} vs target` +
+    (metrics.headline_basis === 'average' ? ' · no sales data yet' : '') +
+    (metrics.incomplete_cost_count > 0 ? ` · ${metrics.incomplete_cost_count} excluded (cost incomplete)` : '')
   const items = [
-    { label: 'Average GP', value: formatGp(metrics.avg_gp_pct), note: gpDeltaLabel },
+    { label: gpLabel, value: formatGp(metrics.headline_gp_pct), note: gpNote },
     { label: 'Best margin', value: metrics.best_margin ? formatMoney(metrics.best_margin.margin_p) : '—', note: metrics.best_margin?.name ?? '' },
     { label: 'Worst margin', value: metrics.worst_margin ? formatMoney(metrics.worst_margin.margin_p) : '—', note: metrics.worst_margin?.name ?? '' },
     { label: 'Waste risk flags', value: String(metrics.waste_risk_count), note: 'Single-use ingredients' },

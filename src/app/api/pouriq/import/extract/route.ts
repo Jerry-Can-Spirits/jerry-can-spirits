@@ -13,6 +13,7 @@ import { listLibraryEntries } from '@/lib/pouriq/ingredient-library'
 import { extractMenuWithAnthropic } from '@/lib/pouriq/menu-extract'
 import { parseMeasurement } from '@/lib/pouriq/measurement-parse'
 import { matchIngredient } from '@/lib/pouriq/match'
+import { listCatalogue, matchCatalogue } from '@/lib/pouriq/ingredient-catalogue'
 import type { IngredientType } from '@/lib/pouriq/types'
 
 export const runtime = 'nodejs'
@@ -31,6 +32,7 @@ export interface PreviewIngredient {
   match:
     | { kind: 'auto'; library_id: string; library_name: string }
     | { kind: 'suggestions'; entries: Array<{ id: string; name: string }> }
+    | { kind: 'catalogue'; catalogue_id: string; name: string; ingredient_type: IngredientType; pricing_mode: 'bottle' | 'unit'; default_bottle_size_ml: number | null }
     | { kind: 'no-match' }
 }
 
@@ -143,8 +145,9 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'No drinks found in the source — try editing the source text' }, { status: 422 })
   }
 
-  // 3. Load the tenant's library once for matching
+  // 3. Load the tenant's library and the shared catalogue once for matching
   const library = await listLibraryEntries(db, access.tradeAccountId)
+  const catalogue = await listCatalogue(db)
 
   // 4. Build the preview payload
   const drinks: PreviewDrink[] = extracted.result.drinks.map((d) => ({
@@ -155,14 +158,28 @@ export async function POST(request: Request) {
       const matched = matchIngredient(i.name, library)
       let match: PreviewIngredient['match']
       if (matched.kind === 'auto') {
+        // The bar's own priced library entry always wins.
         match = { kind: 'auto', library_id: matched.entry.id, library_name: matched.entry.name }
-      } else if (matched.kind === 'suggestions') {
-        match = {
-          kind: 'suggestions',
-          entries: matched.entries.map((e) => ({ id: e.id, name: e.name })),
-        }
       } else {
-        match = { kind: 'no-match' }
+        // Not in their library — offer a shared-catalogue adoption (set price).
+        const cat = matchCatalogue(i.name, catalogue)
+        if (cat) {
+          match = {
+            kind: 'catalogue',
+            catalogue_id: cat.id,
+            name: cat.name,
+            ingredient_type: cat.ingredient_type,
+            pricing_mode: cat.pricing_mode,
+            default_bottle_size_ml: cat.default_bottle_size_ml,
+          }
+        } else if (matched.kind === 'suggestions') {
+          match = {
+            kind: 'suggestions',
+            entries: matched.entries.map((e) => ({ id: e.id, name: e.name })),
+          }
+        } else {
+          match = { kind: 'no-match' }
+        }
       }
       return {
         extracted_name: i.name,

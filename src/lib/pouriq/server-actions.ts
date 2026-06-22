@@ -5,7 +5,7 @@ import { redirect } from 'next/navigation'
 import { getCloudflareContext } from '@opennextjs/cloudflare'
 import { checkPourIqAccess } from './access'
 import {
-  insertMenu, updateMenu, deleteMenu,
+  insertMenu, updateMenu, deleteMenu, setActiveMenu,
   insertCocktail, replaceIngredients,
   getMenu, listCocktailsForMenu,
 } from './menus'
@@ -44,6 +44,13 @@ export async function createMenuAction(formData: FormData): Promise<void> {
   })
   revalidatePath('/trade/pouriq')
   redirect(`/trade/pouriq/${id}`)
+}
+
+export async function setActiveMenuAction(menuId: string): Promise<void> {
+  const { db, tradeAccountId } = await requireDb()
+  await setActiveMenu(db, tradeAccountId, menuId)
+  revalidatePath('/trade/pouriq')
+  revalidatePath(`/trade/pouriq/${menuId}`)
 }
 
 export async function cloneMenuAction(menuId: string, newName?: string): Promise<{ menuId: string }> {
