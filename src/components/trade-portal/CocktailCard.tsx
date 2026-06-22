@@ -105,7 +105,7 @@ export function CocktailCard({ cocktail }: { cocktail: CocktailCardData }) {
       subtitle={subtitleBits.join(' · ')}
     >
       {cocktail.image && (
-        <div className="relative w-full aspect-[3/2] mb-6 rounded-lg overflow-hidden bg-jerry-green-800/40 print:hidden">
+        <div className="relative w-full aspect-3/2 mb-6 rounded-lg overflow-hidden bg-jerry-green-800/40 print:hidden">
           <Image
             src={cocktail.image}
             alt={cocktail.imageAlt ?? cocktail.name}

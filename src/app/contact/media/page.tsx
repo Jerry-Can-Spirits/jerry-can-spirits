@@ -832,7 +832,7 @@ Based in the UK, Jerry Can Spirits® is a small operation run by two mates who c
                     <a
                       href="https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/1a3a3fdd-fdd8-482c-2088-660df51c6c00/public"
                       download="Dan_Freeman_Headshot.jpg"
-                      className="mt-2 inline-flex items-center gap-1.5 px-3 py-1.5 bg-jerry-green-700/60 hover:bg-gold-500 text-parchment-200 hover:text-jerry-green-900 text-xs font-semibold rounded transition-all duration-200"
+                      className="mt-2 inline-flex items-center gap-1.5 px-3 py-1.5 bg-jerry-green-700/60 hover:bg-gold-500 text-parchment-200 hover:text-jerry-green-900 text-xs font-semibold rounded-sm transition-all duration-200"
                     >
                       <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
@@ -869,7 +869,7 @@ Based in the UK, Jerry Can Spirits® is a small operation run by two mates who c
                     <a
                       href="https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/bcacb452-4f56-4676-b4c8-ac6afa7c1e00/public"
                       download="Rhys_Headshot.jpg"
-                      className="mt-2 inline-flex items-center gap-1.5 px-3 py-1.5 bg-jerry-green-700/60 hover:bg-gold-500 text-parchment-200 hover:text-jerry-green-900 text-xs font-semibold rounded transition-all duration-200"
+                      className="mt-2 inline-flex items-center gap-1.5 px-3 py-1.5 bg-jerry-green-700/60 hover:bg-gold-500 text-parchment-200 hover:text-jerry-green-900 text-xs font-semibold rounded-sm transition-all duration-200"
                     >
                       <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
@@ -904,12 +904,12 @@ Based in the UK, Jerry Can Spirits® is a small operation run by two mates who c
             {/* Brand Guidelines PDF */}
             <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 md:p-8 border border-gold-500/20">
               <div className="flex flex-col md:flex-row items-center gap-6">
-                <div className="w-20 h-20 bg-gold-400/20 rounded-xl flex items-center justify-center flex-shrink-0">
+                <div className="w-20 h-20 bg-gold-400/20 rounded-xl flex items-center justify-center shrink-0">
                   <svg className="w-10 h-10 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
                   </svg>
                 </div>
-                <div className="flex-grow text-center md:text-left">
+                <div className="grow text-center md:text-left">
                   <h3 className="text-xl font-serif font-bold text-parchment-50 mb-2">Brand Guidelines</h3>
                   <p className="text-parchment-300 text-sm mb-4">
                     Complete brand guidelines including logo usage, trademark requirements, colour specifications, and typography standards.
@@ -991,7 +991,7 @@ Based in the UK, Jerry Can Spirits® is a small operation run by two mates who c
                 ].map((milestone, index) => (
                   <ScrollReveal key={index} delay={(index % 3) as 0 | 1 | 2}>
                   <div className="relative pl-8 pb-10 last:pb-0">
-                    <div className="absolute -left-[9px] top-1 w-4 h-4 bg-gold-500 rounded-full border-2 border-jerry-green-900" />
+                    <div className="absolute left-[-9px] top-1 w-4 h-4 bg-gold-500 rounded-full border-2 border-jerry-green-900" />
                     <p className="text-gold-300 text-sm font-semibold mb-1">{milestone.date}</p>
                     <p className="text-parchment-200 text-sm leading-relaxed">{milestone.event}</p>
                   </div>
@@ -1126,7 +1126,7 @@ Based in the UK, Jerry Can Spirits® is a small operation run by two mates who c
                       required
                       value={formData.name}
                       onChange={handleChange}
-                      className="w-full px-4 py-3 bg-jerry-green-700/50 border border-gold-500/30 rounded-lg text-parchment-50 placeholder-parchment-400 focus:border-gold-400 focus:ring-2 focus:ring-gold-400/20 focus:outline-none transition-colors duration-200"
+                      className="w-full px-4 py-3 bg-jerry-green-700/50 border border-gold-500/30 rounded-lg text-parchment-50 placeholder-parchment-400 focus:border-gold-400 focus:ring-2 focus:ring-gold-400/20 focus:outline-hidden transition-colors duration-200"
                       placeholder="Your full name"
                     />
                   </div>
@@ -1141,7 +1141,7 @@ Based in the UK, Jerry Can Spirits® is a small operation run by two mates who c
                       required
                       value={formData.email}
                       onChange={handleChange}
-                      className="w-full px-4 py-3 bg-jerry-green-700/50 border border-gold-500/30 rounded-lg text-parchment-50 placeholder-parchment-400 focus:border-gold-400 focus:ring-2 focus:ring-gold-400/20 focus:outline-none transition-colors duration-200"
+                      className="w-full px-4 py-3 bg-jerry-green-700/50 border border-gold-500/30 rounded-lg text-parchment-50 placeholder-parchment-400 focus:border-gold-400 focus:ring-2 focus:ring-gold-400/20 focus:outline-hidden transition-colors duration-200"
                       placeholder="your@email.com"
                     />
                   </div>
@@ -1158,7 +1158,7 @@ Based in the UK, Jerry Can Spirits® is a small operation run by two mates who c
                       name="organisation"
                       value={formData.organisation}
                       onChange={handleChange}
-                      className="w-full px-4 py-3 bg-jerry-green-700/50 border border-gold-500/30 rounded-lg text-parchment-50 placeholder-parchment-400 focus:border-gold-400 focus:ring-2 focus:ring-gold-400/20 focus:outline-none transition-colors duration-200"
+                      className="w-full px-4 py-3 bg-jerry-green-700/50 border border-gold-500/30 rounded-lg text-parchment-50 placeholder-parchment-400 focus:border-gold-400 focus:ring-2 focus:ring-gold-400/20 focus:outline-hidden transition-colors duration-200"
                       placeholder="Publication, blog, or company"
                     />
                   </div>
@@ -1172,7 +1172,7 @@ Based in the UK, Jerry Can Spirits® is a small operation run by two mates who c
                       required
                       value={formData.subject}
                       onChange={handleChange}
-                      className="w-full px-4 py-3 bg-jerry-green-700/50 border border-gold-500/30 rounded-lg text-parchment-50 focus:border-gold-400 focus:ring-2 focus:ring-gold-400/20 focus:outline-none transition-colors duration-200"
+                      className="w-full px-4 py-3 bg-jerry-green-700/50 border border-gold-500/30 rounded-lg text-parchment-50 focus:border-gold-400 focus:ring-2 focus:ring-gold-400/20 focus:outline-hidden transition-colors duration-200"
                     >
                       <option value="">Select inquiry type</option>
                       <option value="Press Release">Press Release Request</option>
@@ -1197,7 +1197,7 @@ Based in the UK, Jerry Can Spirits® is a small operation run by two mates who c
                     rows={6}
                     value={formData.message}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 bg-jerry-green-700/50 border border-gold-500/30 rounded-lg text-parchment-50 placeholder-parchment-400 focus:border-gold-400 focus:ring-2 focus:ring-gold-400/20 focus:outline-none transition-colors duration-200 resize-vertical"
+                    className="w-full px-4 py-3 bg-jerry-green-700/50 border border-gold-500/30 rounded-lg text-parchment-50 placeholder-parchment-400 focus:border-gold-400 focus:ring-2 focus:ring-gold-400/20 focus:outline-hidden transition-colors duration-200 resize-vertical"
                     placeholder="Please provide details about your media inquiry, including deadline requirements, publication details, and specific information needed..."
                   />
                 </div>
@@ -1235,7 +1235,7 @@ Based in the UK, Jerry Can Spirits® is a small operation run by two mates who c
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="group bg-gradient-to-r from-gold-600 to-gold-500 hover:from-gold-500 hover:to-gold-400 disabled:from-gray-600 disabled:to-gray-500 disabled:cursor-not-allowed text-jerry-green-900 px-8 py-4 rounded-lg font-semibold uppercase tracking-wide transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 disabled:hover:scale-100 flex items-center justify-center gap-2 mx-auto"
+                    className="group bg-linear-to-r from-gold-600 to-gold-500 hover:from-gold-500 hover:to-gold-400 disabled:from-gray-600 disabled:to-gray-500 disabled:cursor-not-allowed text-jerry-green-900 px-8 py-4 rounded-lg font-semibold uppercase tracking-wide transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 disabled:hover:scale-100 flex items-center justify-center gap-2 mx-auto"
                   >
                     {isSubmitting ? (
                       <>

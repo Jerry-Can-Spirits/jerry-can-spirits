@@ -83,7 +83,7 @@ export function CostImpactPanel({ ingredientId }: Props) {
           min={0}
           value={newCostPounds}
           onChange={(e) => setNewCostPounds(e.target.value)}
-          className="w-48 px-4 py-3 bg-jerry-green-700/50 border border-gold-500/30 rounded-lg text-parchment-50 placeholder-parchment-400 focus:border-gold-400 focus:outline-none"
+          className="w-48 px-4 py-3 bg-jerry-green-700/50 border border-gold-500/30 rounded-lg text-parchment-50 placeholder-parchment-400 focus:border-gold-400 focus:outline-hidden"
         />
         <p className="mt-3 text-sm text-parchment-300">
           Change: <strong className={delta === 0 ? 'text-parchment-200' : delta > 0 ? 'text-amber-300' : 'text-emerald-300'}>

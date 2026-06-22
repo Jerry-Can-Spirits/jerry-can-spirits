@@ -83,14 +83,14 @@ export default async function ComparePage({ searchParams }: SearchParams) {
         <form className="bg-jerry-green-800/40 border border-gold-500/20 rounded-xl p-6 mb-8 grid grid-cols-1 sm:grid-cols-2 gap-4" method="get">
           <div>
             <label htmlFor="a" className="block text-sm font-medium text-parchment-200 mb-2">Baseline (A)</label>
-            <select id="a" name="a" defaultValue={aId ?? ''} className="w-full px-4 py-3 bg-jerry-green-700/50 border border-gold-500/30 rounded-lg text-parchment-50 focus:border-gold-400 focus:outline-none">
+            <select id="a" name="a" defaultValue={aId ?? ''} className="w-full px-4 py-3 bg-jerry-green-700/50 border border-gold-500/30 rounded-lg text-parchment-50 focus:border-gold-400 focus:outline-hidden">
               <option value="">Pick a menu</option>
               {menus.map((m) => <option key={m.id} value={m.id}>{m.name}</option>)}
             </select>
           </div>
           <div>
             <label htmlFor="b" className="block text-sm font-medium text-parchment-200 mb-2">Compare against (B)</label>
-            <select id="b" name="b" defaultValue={bId ?? ''} className="w-full px-4 py-3 bg-jerry-green-700/50 border border-gold-500/30 rounded-lg text-parchment-50 focus:border-gold-400 focus:outline-none">
+            <select id="b" name="b" defaultValue={bId ?? ''} className="w-full px-4 py-3 bg-jerry-green-700/50 border border-gold-500/30 rounded-lg text-parchment-50 focus:border-gold-400 focus:outline-hidden">
               <option value="">Pick a menu</option>
               {menus.map((m) => <option key={m.id} value={m.id}>{m.name}</option>)}
             </select>

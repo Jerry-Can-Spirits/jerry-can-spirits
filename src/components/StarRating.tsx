@@ -205,7 +205,7 @@ export default function StarRating({ slug, className = '' }: StarRatingProps) {
       <div className={`flex items-center gap-3 ${className}`}>
         <div className="flex gap-0.5">
           {[1, 2, 3, 4, 5].map((i) => (
-            <div key={i} className="w-6 h-6 bg-jerry-green-700/50 rounded animate-pulse" />
+            <div key={i} className="w-6 h-6 bg-jerry-green-700/50 rounded-sm animate-pulse" />
           ))}
         </div>
       </div>

@@ -172,7 +172,7 @@ export default function Careers() {
         </div>
 
         {/* Footer CTA */}
-        <div className="mt-12 p-8 bg-gradient-to-r from-jerry-green-800/60 to-gold-900/40 backdrop-blur-sm rounded-xl border border-gold-500/30 text-center">
+        <div className="mt-12 p-8 bg-linear-to-r from-jerry-green-800/60 to-gold-900/40 backdrop-blur-sm rounded-xl border border-gold-500/30 text-center">
           <h3 className="text-2xl font-serif font-bold text-white mb-4">
             Questions About Careers?
           </h3>

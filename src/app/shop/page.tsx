@@ -109,7 +109,7 @@ export default function ShopPage() {
             <Link
               key={item.handle}
               href={`/shop/${item.handle}/`}
-              className="group p-6 bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl border border-gold-500/20 hover:border-gold-400/40 transition-all duration-300 hover:scale-105"
+              className="group p-6 bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl border border-gold-500/20 hover:border-gold-400/40 transition-all duration-300 hover:scale-105"
             >
               <h2 className="text-lg font-serif font-bold text-white group-hover:text-gold-300 transition-colors">
                 {item.title}

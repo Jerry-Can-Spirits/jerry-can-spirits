@@ -185,7 +185,7 @@ export default async function EquipmentDetailPage({ params }: { params: Promise<
           <div className="order-2 lg:order-1">
             <div className="lg:sticky lg:top-24 space-y-6">
               {/* Image Section - Mobile Order 1 */}
-              <div className="order-1 bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
+              <div className="order-1 bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
                 {equipment.image ? (
                   <div className="relative aspect-square bg-jerry-green-800/20 rounded-lg overflow-hidden">
                     <Image
@@ -225,7 +225,7 @@ export default async function EquipmentDetailPage({ params }: { params: Promise<
 
               {/* Price Range - Mobile Order 11 */}
               {equipment.priceRange && (
-                <div className="order-[11] lg:order-none bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+                <div className="order-11 lg:order-0 bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
                   <h3 className="text-lg font-serif font-bold text-gold-300 mb-4">Price Guide</h3>
                   <div className="space-y-3">
                     <div className="flex justify-between items-center">
@@ -242,7 +242,7 @@ export default async function EquipmentDetailPage({ params }: { params: Promise<
 
               {/* Alternatives - Mobile Order 12 */}
               {(equipment.budgetAlternative || equipment.premiumOption) && (
-                <div className="order-[12] lg:order-none bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+                <div className="order-12 lg:order-0 bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
                   <h3 className="text-lg font-serif font-bold text-gold-300 mb-4">Alternatives</h3>
                   <div className="space-y-4">
                     {equipment.budgetAlternative && (
@@ -253,7 +253,7 @@ export default async function EquipmentDetailPage({ params }: { params: Promise<
                             alt={equipment.budgetImage.alt || equipment.budgetAlternative}
                             width={56}
                             height={56}
-                            className="w-14 h-14 object-cover rounded-lg flex-shrink-0"
+                            className="w-14 h-14 object-cover rounded-lg shrink-0"
                           />
                         )}
                         <div>
@@ -276,7 +276,7 @@ export default async function EquipmentDetailPage({ params }: { params: Promise<
                             alt={equipment.premiumImage.alt || equipment.premiumOption}
                             width={56}
                             height={56}
-                            className="w-14 h-14 object-cover rounded-lg flex-shrink-0"
+                            className="w-14 h-14 object-cover rounded-lg shrink-0"
                           />
                         )}
                         <div>
@@ -297,7 +297,7 @@ export default async function EquipmentDetailPage({ params }: { params: Promise<
 
               {/* Care & Maintenance - Mobile Order 10, Desktop here */}
               {(equipment.careInstructions || equipment.lifespan) && (
-                <div className="order-[10] lg:order-none bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+                <div className="order-10 lg:order-0 bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
                   <h2 className="text-2xl font-serif font-bold text-gold-300 mb-4">Care & Maintenance</h2>
                   <div className="space-y-4">
                     {equipment.careInstructions && (
@@ -344,16 +344,16 @@ export default async function EquipmentDetailPage({ params }: { params: Promise<
 
             {/* Long Description - Rich editorial content from Sanity */}
             {equipment.longDescription && equipment.longDescription.length > 0 && (
-              <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+              <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
                 <FieldManualPortableText value={equipment.longDescription} />
               </div>
             )}
 
             {/* Professional Tip */}
             {equipment.professionalTip && (
-              <div className="bg-gradient-to-br from-gold-500/10 to-gold-600/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/30">
+              <div className="bg-linear-to-br from-gold-500/10 to-gold-600/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/30">
                 <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 bg-gold-500/20 rounded-full flex items-center justify-center flex-shrink-0">
+                  <div className="w-10 h-10 bg-gold-500/20 rounded-full flex items-center justify-center shrink-0">
                     <svg className="w-5 h-5 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
                     </svg>
@@ -367,14 +367,14 @@ export default async function EquipmentDetailPage({ params }: { params: Promise<
             )}
 
             {/* Usage */}
-            <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+            <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
               <h2 className="text-2xl font-serif font-bold text-gold-300 mb-4">Usage</h2>
               <p className="text-parchment-300 leading-relaxed whitespace-pre-line">{equipment.usage}</p>
             </div>
 
             {/* What to Look For */}
             {equipment.whatToLookFor && equipment.whatToLookFor.length > 0 && (
-              <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+              <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
                 <h2 className="text-2xl font-serif font-bold text-gold-300 mb-4">What to Look For</h2>
                 <ul className="space-y-4">
                   {equipment.whatToLookFor.map((item, index) => (
@@ -388,7 +388,7 @@ export default async function EquipmentDetailPage({ params }: { params: Promise<
 
             {/* Common Mistakes */}
             {equipment.commonMistakes && equipment.commonMistakes.length > 0 && (
-              <div className="bg-gradient-to-br from-red-500/10 to-red-600/5 backdrop-blur-sm rounded-xl p-6 border border-red-500/20">
+              <div className="bg-linear-to-br from-red-500/10 to-red-600/5 backdrop-blur-sm rounded-xl p-6 border border-red-500/20">
                 <h2 className="text-2xl font-serif font-bold text-red-400 mb-4">Common Mistakes to Avoid</h2>
                 <ul className="space-y-4">
                   {equipment.commonMistakes.map((mistake, index) => (
@@ -402,12 +402,12 @@ export default async function EquipmentDetailPage({ params }: { params: Promise<
 
             {/* Professional Tips */}
             {equipment.tips && equipment.tips.length > 0 && (
-              <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+              <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
                 <h2 className="text-2xl font-serif font-bold text-gold-300 mb-4">Professional Tips</h2>
                 <ul className="space-y-4">
                   {equipment.tips.map((tip, index) => (
                     <li key={index} className="flex items-start gap-3">
-                      <div className="w-6 h-6 bg-gold-400/20 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <div className="w-6 h-6 bg-gold-400/20 rounded-full flex items-center justify-center shrink-0 mt-0.5">
                         <div className="w-2 h-2 bg-gold-400 rounded-full"></div>
                       </div>
                       <span className="text-parchment-300 leading-relaxed">{tip}</span>
@@ -419,7 +419,7 @@ export default async function EquipmentDetailPage({ params }: { params: Promise<
 
             {/* Specifications */}
             {equipment.specifications && (equipment.specifications.material || equipment.specifications.capacity || equipment.specifications.details) && (
-              <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+              <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
                 <h2 className="text-2xl font-serif font-bold text-gold-300 mb-4">Specifications</h2>
                 <div className="grid md:grid-cols-3 gap-4">
                   {equipment.specifications.material && (
@@ -446,7 +446,7 @@ export default async function EquipmentDetailPage({ params }: { params: Promise<
 
             {/* History */}
             {equipment.history && (
-              <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+              <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
                 <h2 className="text-2xl font-serif font-bold text-gold-300 mb-4">History & Context</h2>
                 <p className="text-parchment-300 leading-relaxed whitespace-pre-line">{equipment.history}</p>
               </div>
@@ -454,7 +454,7 @@ export default async function EquipmentDetailPage({ params }: { params: Promise<
 
             {/* Video Tutorial */}
             {videoId && (
-              <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+              <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
                 <h2 className="text-2xl font-serif font-bold text-gold-300 mb-4 flex items-center gap-2">
                   <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
@@ -475,7 +475,7 @@ export default async function EquipmentDetailPage({ params }: { params: Promise<
 
             {/* Related Cocktails */}
             {equipment.relatedCocktails && equipment.relatedCocktails.length > 0 && (
-              <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+              <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
                 <h2 className="text-2xl font-serif font-bold text-gold-300 mb-4">Used In These Cocktails</h2>
                 <div className="grid sm:grid-cols-2 gap-3">
                   {equipment.relatedCocktails.filter(c => c?.slug?.current).map((cocktail) => (
@@ -496,7 +496,7 @@ export default async function EquipmentDetailPage({ params }: { params: Promise<
 
             {/* Related Equipment */}
             {equipment.relatedEquipment && equipment.relatedEquipment.length > 0 && (
-              <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+              <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
                 <h2 className="text-2xl font-serif font-bold text-gold-300 mb-4">Related Equipment</h2>
                 <div className="grid sm:grid-cols-2 gap-3">
                   {equipment.relatedEquipment.filter(e => e?.slug?.current).map((item) => (
@@ -517,7 +517,7 @@ export default async function EquipmentDetailPage({ params }: { params: Promise<
 
             {/* Related Ingredients */}
             {equipment.relatedIngredients && equipment.relatedIngredients.length > 0 && (
-              <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+              <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
                 <h2 className="text-2xl font-serif font-bold text-gold-300 mb-4">Related Ingredients</h2>
                 <div className="grid sm:grid-cols-2 gap-3">
                   {equipment.relatedIngredients.filter(i => i?.slug?.current).map((item) => (

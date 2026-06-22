@@ -54,7 +54,7 @@ export default function TradeLoginPage() {
               required
               value={pin}
               onChange={(e) => setPin(e.target.value)}
-              className="w-full px-4 py-3 bg-jerry-green-700/50 border border-gold-500/30 rounded-lg text-parchment-50 placeholder-parchment-400 focus:border-gold-400 focus:ring-2 focus:ring-gold-400/20 focus:outline-none transition-colors duration-200"
+              className="w-full px-4 py-3 bg-jerry-green-700/50 border border-gold-500/30 rounded-lg text-parchment-50 placeholder-parchment-400 focus:border-gold-400 focus:ring-2 focus:ring-gold-400/20 focus:outline-hidden transition-colors duration-200"
             />
           </div>
           {error && <p role="alert" className="text-sm text-red-300">{error}</p>}
@@ -62,7 +62,7 @@ export default function TradeLoginPage() {
             type="submit"
             disabled={submitting || pin.length === 0}
             aria-disabled={submitting || pin.length === 0}
-            className="w-full px-6 py-3 bg-gradient-to-r from-gold-600 to-gold-500 hover:from-gold-500 hover:to-gold-400 disabled:from-gray-600 disabled:to-gray-500 disabled:cursor-not-allowed text-jerry-green-900 font-semibold rounded-lg transition-all"
+            className="w-full px-6 py-3 bg-linear-to-r from-gold-600 to-gold-500 hover:from-gold-500 hover:to-gold-400 disabled:from-gray-600 disabled:to-gray-500 disabled:cursor-not-allowed text-jerry-green-900 font-semibold rounded-lg transition-all"
           >
             {submitting ? 'Signing in…' : 'Sign in'}
           </button>

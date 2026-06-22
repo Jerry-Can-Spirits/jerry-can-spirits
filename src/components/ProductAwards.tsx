@@ -43,7 +43,7 @@ export default function ProductAwards() {
               alt={`${award.title} medal. ${award.citation}`}
               width={80}
               height={80}
-              className="flex-shrink-0"
+              className="shrink-0"
             />
             <div>
               <p className="text-white font-semibold text-sm">{award.title}</p>

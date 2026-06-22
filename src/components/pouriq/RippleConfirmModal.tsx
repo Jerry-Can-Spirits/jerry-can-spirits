@@ -66,7 +66,7 @@ export function RippleConfirmModal({
               type="button"
               onClick={onConfirm}
               disabled={submitting}
-              className="px-6 py-2 bg-gradient-to-r from-gold-600 to-gold-500 hover:from-gold-500 hover:to-gold-400 disabled:from-gray-600 disabled:to-gray-500 text-jerry-green-900 font-semibold rounded-lg text-sm"
+              className="px-6 py-2 bg-linear-to-r from-gold-600 to-gold-500 hover:from-gold-500 hover:to-gold-400 disabled:from-gray-600 disabled:to-gray-500 text-jerry-green-900 font-semibold rounded-lg text-sm"
             >
               {submitting ? 'Saving…' : 'Save'}
             </button>

@@ -127,7 +127,7 @@ export function BarcodeScanner({ onScan, onClose }: Props) {
           <h3 className="text-base font-serif font-bold text-white">Scan a barcode</h3>
           <button type="button" onClick={onClose} className="text-sm text-parchment-400 hover:text-parchment-200">Close</button>
         </div>
-        <div id={regionId} ref={containerRef} className="w-full aspect-[4/3] bg-black rounded-lg overflow-hidden" />
+        <div id={regionId} ref={containerRef} className="w-full aspect-4/3 bg-black rounded-lg overflow-hidden" />
         {starting && !error && (
           <p className="mt-3 text-xs text-parchment-400">Starting camera… you may be asked to allow access.</p>
         )}

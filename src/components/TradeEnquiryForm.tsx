@@ -76,7 +76,7 @@ export default function TradeEnquiryForm() {
     }
   }
 
-  const inputClass = 'w-full px-4 py-3 bg-jerry-green-900 border border-gold-500/30 rounded-lg text-white placeholder-parchment-500 text-base focus:outline-none focus:border-gold-400 transition-colors'
+  const inputClass = 'w-full px-4 py-3 bg-jerry-green-900 border border-gold-500/30 rounded-lg text-white placeholder-parchment-500 text-base focus:outline-hidden focus:border-gold-400 transition-colors'
   const labelClass = 'block text-sm font-medium text-parchment-200 mb-2'
 
   return (
@@ -87,7 +87,7 @@ export default function TradeEnquiryForm() {
         name="website"
         value={honeypot}
         onChange={(e) => setHoneypot(e.target.value)}
-        className="absolute -left-[9999px] top-0 h-px w-px overflow-hidden opacity-0"
+        className="absolute left-[-9999px] top-0 h-px w-px overflow-hidden opacity-0"
         tabIndex={-1}
         autoComplete="off"
         aria-hidden="true"

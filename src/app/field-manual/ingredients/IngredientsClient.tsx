@@ -128,7 +128,7 @@ export default function IngredientsClient({ ingredients }: IngredientsClientProp
     <main className="min-h-screen pb-20">
       {/* Filters Section */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
-        <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+        <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
           <div className="space-y-6">
             {/* Search Bar */}
             <div className="relative">
@@ -140,7 +140,7 @@ export default function IngredientsClient({ ingredients }: IngredientsClientProp
                 placeholder="Search ingredients..."
                 value={searchQuery}
                 onChange={(e) => handleSearchChange(e.target.value)}
-                className="w-full px-4 py-3 pl-12 bg-jerry-green-800/40 border border-gold-500/20 rounded-lg text-white placeholder-parchment-400 focus:outline-none focus:border-gold-400/40 transition-colors"
+                className="w-full px-4 py-3 pl-12 bg-jerry-green-800/40 border border-gold-500/20 rounded-lg text-white placeholder-parchment-400 focus:outline-hidden focus:border-gold-400/40 transition-colors"
               />
               <svg className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -187,11 +187,11 @@ export default function IngredientsClient({ ingredients }: IngredientsClientProp
               <Link
                 key={item._id}
                 href={`/field-manual/ingredients/${item.slug.current}`}
-                className="group bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl border border-gold-500/30 overflow-hidden hover:border-gold-400/60 transition-all duration-300 hover:scale-105 hover:shadow-xl"
+                className="group bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl border border-gold-500/30 overflow-hidden hover:border-gold-400/60 transition-all duration-300 hover:scale-105 hover:shadow-xl"
               >
                 {/* Image */}
                 {item.image && (
-                  <div className="relative aspect-[4/3] bg-transparent">
+                  <div className="relative aspect-4/3 bg-transparent">
                     <Image
                       src={item.image}
                       alt={item.imageAlt || item.name}
@@ -255,11 +255,11 @@ export default function IngredientsClient({ ingredients }: IngredientsClientProp
               <Link
                 key={item._id}
                 href={`/field-manual/ingredients/${item.slug.current}`}
-                className="group bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl border border-gold-500/20 overflow-hidden hover:border-gold-400/40 transition-all duration-300 hover:scale-105"
+                className="group bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl border border-gold-500/20 overflow-hidden hover:border-gold-400/40 transition-all duration-300 hover:scale-105"
               >
                 {/* Image */}
                 {item.image && (
-                  <div className="relative aspect-[4/3] bg-transparent">
+                  <div className="relative aspect-4/3 bg-transparent">
                     <Image
                       src={item.image}
                       alt={item.imageAlt || item.name}
@@ -297,7 +297,7 @@ export default function IngredientsClient({ ingredients }: IngredientsClientProp
           <div className="mt-10 text-center">
             <button
               onClick={handleShowMore}
-              className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-gold-500/20 to-gold-600/20 border border-gold-500/40 text-gold-300 rounded-xl hover:from-gold-500/30 hover:to-gold-600/30 hover:border-gold-400/60 transition-all duration-300 font-semibold"
+              className="inline-flex items-center gap-2 px-8 py-4 bg-linear-to-r from-gold-500/20 to-gold-600/20 border border-gold-500/40 text-gold-300 rounded-xl hover:from-gold-500/30 hover:to-gold-600/30 hover:border-gold-400/60 transition-all duration-300 font-semibold"
             >
               <span>Show More Ingredients</span>
               <span className="text-parchment-400 text-sm">

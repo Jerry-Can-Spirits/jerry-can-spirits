@@ -65,7 +65,7 @@ export default function ImageGallery({ images, placeholder = false }: ImageGalle
           key={index}
           className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl overflow-hidden border border-gold-500/20 hover:border-gold-400/40 transition-all duration-300"
         >
-          <div className="relative w-full aspect-[3/4] bg-jerry-green-900/60">
+          <div className="relative w-full aspect-3/4 bg-jerry-green-900/60">
             <Image
               src={image.src}
               alt={image.alt}
@@ -83,7 +83,7 @@ export default function ImageGallery({ images, placeholder = false }: ImageGalle
                     key={dl.label}
                     href={dl.url}
                     download
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-jerry-green-700/60 hover:bg-gold-500 text-parchment-200 hover:text-jerry-green-900 text-xs font-semibold rounded transition-all duration-200"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-jerry-green-700/60 hover:bg-gold-500 text-parchment-200 hover:text-jerry-green-900 text-xs font-semibold rounded-sm transition-all duration-200"
                   >
                     <svg
                       className="w-3.5 h-3.5"

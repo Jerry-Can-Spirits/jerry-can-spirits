@@ -8,7 +8,7 @@ import { BarcodeScanner } from '@/components/pouriq/BarcodeScanner'
 const INGREDIENT_TYPES: IngredientType[] = ['spirit','liqueur','wine','beer','mixer','syrup','juice','garnish','other']
 const COMMON_BOTTLE_SIZES = [500, 700, 750, 1000]
 
-const inputClass = 'w-full px-3 py-2 bg-jerry-green-700/50 border border-gold-500/30 rounded-lg text-parchment-50 text-sm placeholder-parchment-400 focus:border-gold-400 focus:outline-none'
+const inputClass = 'w-full px-3 py-2 bg-jerry-green-700/50 border border-gold-500/30 rounded-lg text-parchment-50 text-sm placeholder-parchment-400 focus:border-gold-400 focus:outline-hidden'
 const labelClass = 'block text-xs font-medium text-parchment-300 mb-1'
 
 interface Props {
@@ -274,7 +274,7 @@ export function IngredientPicker({ libraryEntries, selectedEntryId, onChange }: 
           {createError && <p role="alert" className="text-xs text-red-300">{createError}</p>}
           <div className="flex justify-between items-center">
             <button type="button" onClick={() => { setShowCreate(false); setPendingBarcode(null); setScanInfo(null); setPrefilledFromCatalogue(false) }} className="text-xs text-parchment-400 hover:text-parchment-200">Cancel</button>
-            <button type="button" onClick={handleCreate} disabled={creating} className="px-4 py-2 bg-gold-500 text-jerry-green-900 font-semibold rounded text-sm disabled:opacity-50">
+            <button type="button" onClick={handleCreate} disabled={creating} className="px-4 py-2 bg-gold-500 text-jerry-green-900 font-semibold rounded-sm text-sm disabled:opacity-50">
               {creating ? 'Adding…' : 'Add to library'}
             </button>
           </div>

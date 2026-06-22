@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import { bulkApplyPromoAction, type BulkPromoMode } from '@/lib/pouriq/server-actions'
 import { SECONDARY_BUTTON_SM, PRIMARY_BUTTON } from '@/lib/pouriq/button-styles'
 
-const inputClass = 'w-full px-3 py-2 bg-jerry-green-700/50 border border-gold-500/30 rounded-lg text-parchment-50 text-sm focus:border-gold-400 focus:outline-none'
+const inputClass = 'w-full px-3 py-2 bg-jerry-green-700/50 border border-gold-500/30 rounded-lg text-parchment-50 text-sm focus:border-gold-400 focus:outline-hidden'
 const labelClass = 'block text-xs font-medium text-parchment-300 mb-1'
 
 interface Props {
@@ -168,7 +168,7 @@ export function BulkPromoActions({ menuId }: Props) {
                     key={d.value}
                     type="button"
                     onClick={() => setDays((arr) => active ? arr.filter((n) => n !== d.value) : [...arr, d.value])}
-                    className={`px-2 py-1 rounded border text-xs transition-colors ${active ? 'bg-gold-500/30 border-gold-400 text-gold-50' : 'bg-jerry-green-700/30 border-gold-500/20 text-parchment-300 hover:border-gold-400/40'}`}
+                    className={`px-2 py-1 rounded-sm border text-xs transition-colors ${active ? 'bg-gold-500/30 border-gold-400 text-gold-50' : 'bg-jerry-green-700/30 border-gold-500/20 text-parchment-300 hover:border-gold-400/40'}`}
                   >
                     {d.label}
                   </button>

@@ -210,7 +210,7 @@ export default async function BarwarePage() {
 
             return (
               <ScrollReveal key={product.id} delay={(index % 4) as 0 | 1 | 2 | 3} className="h-full">
-                <div className="group bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl border border-gold-500/20 overflow-hidden hover:border-gold-400/40 transition-all duration-300 flex flex-col h-full">
+                <div className="group bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl border border-gold-500/20 overflow-hidden hover:border-gold-400/40 transition-all duration-300 flex flex-col h-full">
                   <Link href={productUrl} className="flex-1 flex flex-col">
                     <div className="relative aspect-square bg-jerry-green-800/20 flex items-center justify-center p-4">
                       {product.images && product.images.length > 0 ? (
@@ -266,7 +266,7 @@ export default async function BarwarePage() {
       {/* SEO Content */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-20 space-y-10">
         <ScrollReveal>
-          <div className="bg-gradient-to-br from-gold-500/10 to-gold-600/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
+          <div className="bg-linear-to-br from-gold-500/10 to-gold-600/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
             <h2 className="text-2xl font-serif font-bold text-gold-300 mb-8 text-center">
               How to Build a Home Bar That Works
             </h2>
@@ -287,7 +287,7 @@ export default async function BarwarePage() {
 
         <ScrollReveal delay={1}>
           <div className="grid lg:grid-cols-2 gap-8">
-            <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
+            <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
               <h2 className="text-2xl font-serif font-bold text-white mb-4">
                 What We Stock and Why
               </h2>
@@ -303,7 +303,7 @@ export default async function BarwarePage() {
                 </p>
               </div>
             </div>
-            <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
+            <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
               <h2 className="text-2xl font-serif font-bold text-white mb-4">
                 The Field Manual
               </h2>
@@ -325,7 +325,7 @@ export default async function BarwarePage() {
 
       {/* CTA */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
-        <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-12 border border-gold-500/20 text-center">
+        <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-12 border border-gold-500/20 text-center">
           <h2 className="text-3xl font-serif font-bold text-white mb-4">
             Join the Expedition
           </h2>

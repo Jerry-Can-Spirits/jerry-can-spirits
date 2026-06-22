@@ -95,7 +95,7 @@ export default function OurStory() {
                 sizes="(max-width: 768px) 100vw, 672px"
                 priority
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-jerry-green-900/60 to-transparent" />
+              <div className="absolute inset-0 bg-linear-to-t from-jerry-green-900/60 to-transparent" />
             </div>
           </div>
 
@@ -157,24 +157,24 @@ export default function OurStory() {
                   className="object-contain"
                   sizes="(max-width: 768px) 100vw, 50vw"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-jerry-green-900/40 to-transparent" />
+                <div className="absolute inset-0 bg-linear-to-t from-jerry-green-900/40 to-transparent" />
               </div>
 
               <div className="space-y-3">
                 <div className="flex items-center space-x-3">
-                  <div className="w-2 h-2 bg-gold-400 rounded-full flex-shrink-0"></div>
+                  <div className="w-2 h-2 bg-gold-400 rounded-full shrink-0"></div>
                   <p className="text-parchment-300 text-sm">We learned what reliable means with service</p>
                 </div>
                 <div className="flex items-center space-x-3">
-                  <div className="w-2 h-2 bg-gold-400 rounded-full flex-shrink-0"></div>
+                  <div className="w-2 h-2 bg-gold-400 rounded-full shrink-0"></div>
                   <p className="text-parchment-300 text-sm">That&apos;s tested in the field, under pressure</p>
                 </div>
                 <div className="flex items-center space-x-3">
-                  <div className="w-2 h-2 bg-gold-400 rounded-full flex-shrink-0"></div>
+                  <div className="w-2 h-2 bg-gold-400 rounded-full shrink-0"></div>
                   <p className="text-parchment-300 text-sm">Function over form, always, is our way</p>
                 </div>
                 <div className="flex items-center space-x-3">
-                  <div className="w-2 h-2 bg-gold-400 rounded-full flex-shrink-0"></div>
+                  <div className="w-2 h-2 bg-gold-400 rounded-full shrink-0"></div>
                   <p className="text-parchment-300 text-sm">Getting the details right, every time</p>
                 </div>
               </div>
@@ -444,7 +444,7 @@ export default function OurStory() {
 
               <div className="space-y-4">
                 <div className="flex items-center space-x-4 p-4 bg-jerry-green-800/40 backdrop-blur-sm rounded-lg border border-gold-500/20">
-                  <div className="w-8 h-8 bg-gold-400/20 rounded-full flex items-center justify-center flex-shrink-0">
+                  <div className="w-8 h-8 bg-gold-400/20 rounded-full flex items-center justify-center shrink-0">
                     <span className="text-gold-400 font-bold">R</span>
                   </div>
                   <div>
@@ -454,7 +454,7 @@ export default function OurStory() {
                 </div>
 
                 <div className="flex items-center space-x-4 p-4 bg-jerry-green-800/40 backdrop-blur-sm rounded-lg border border-gold-500/20">
-                  <div className="w-8 h-8 bg-gold-400/20 rounded-full flex items-center justify-center flex-shrink-0">
+                  <div className="w-8 h-8 bg-gold-400/20 rounded-full flex items-center justify-center shrink-0">
                     <span className="text-gold-400 font-bold">D</span>
                   </div>
                   <div>
@@ -464,7 +464,7 @@ export default function OurStory() {
                 </div>
 
                 <div className="flex items-center space-x-4 p-4 bg-jerry-green-800/40 backdrop-blur-sm rounded-lg border border-gold-500/20">
-                  <div className="w-8 h-8 bg-gold-400/20 rounded-full flex items-center justify-center flex-shrink-0">
+                  <div className="w-8 h-8 bg-gold-400/20 rounded-full flex items-center justify-center shrink-0">
                     <span className="text-gold-400 font-bold">P</span>
                   </div>
                   <div>

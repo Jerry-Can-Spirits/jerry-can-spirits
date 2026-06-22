@@ -64,7 +64,7 @@ export function SpecCard({ cocktail, priceIncludesVat }: Props) {
                 key={i.id}
                 className="text-sm text-parchment-200 print:text-black flex gap-3"
               >
-                <span className="font-mono w-20 flex-shrink-0">
+                <span className="font-mono w-20 shrink-0">
                   {formatMeasure(i.pour_ml, i.unit_count)}
                 </span>
                 <span>{i.library.name}</span>

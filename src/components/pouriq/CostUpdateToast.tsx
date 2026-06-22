@@ -40,7 +40,7 @@ export function CostUpdateToast({ ingredientName, newlyBelowTarget, onDismiss }:
       }`}
     >
       <div className="flex items-start gap-3">
-        <span className="mt-1 h-2 w-2 flex-shrink-0 rounded-full bg-gold-500" aria-hidden="true" />
+        <span className="mt-1 h-2 w-2 shrink-0 rounded-full bg-gold-500" aria-hidden="true" />
 
         <div className="flex-1 text-sm text-parchment-100">
           <p>
@@ -64,7 +64,7 @@ export function CostUpdateToast({ ingredientName, newlyBelowTarget, onDismiss }:
 
         <button
           onClick={dismiss}
-          className="flex-shrink-0 text-parchment/40 hover:text-parchment transition-colors"
+          className="shrink-0 text-parchment/40 hover:text-parchment transition-colors"
           aria-label="Dismiss notification"
         >
           <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">

@@ -3,7 +3,7 @@ import type { MenuRow } from '@/lib/pouriq/types'
 import { MakeActiveButton } from './MakeActiveButton'
 
 const ACTIVE_BADGE =
-  'inline-block px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-200 border border-emerald-500/40 text-[10px] uppercase tracking-widest'
+  'inline-block px-2 py-0.5 rounded-sm bg-emerald-500/20 text-emerald-200 border border-emerald-500/40 text-[10px] uppercase tracking-widest'
 
 export function MenuListCard({ menu }: { menu: MenuRow }) {
   const updated = new Date(menu.updated_at).toLocaleDateString('en-GB', {

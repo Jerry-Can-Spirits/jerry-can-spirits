@@ -232,7 +232,7 @@ export default async function CollectionPage({
             return (
               <div
                 key={product.id}
-                className="group bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl border border-gold-500/20 overflow-hidden hover:border-gold-400/40 transition-all duration-300 flex flex-col h-full"
+                className="group bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl border border-gold-500/20 overflow-hidden hover:border-gold-400/40 transition-all duration-300 flex flex-col h-full"
               >
                 <Link href={productUrl} className="flex-1 flex flex-col">
                   <div className="relative aspect-square bg-jerry-green-800/20 flex items-center justify-center p-4">
@@ -302,7 +302,7 @@ export default async function CollectionPage({
       {(category?.seoTitle || category?.pillars) && (
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-16 space-y-10">
           {category.pillars && (
-            <div className="bg-gradient-to-br from-gold-500/10 to-gold-600/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
+            <div className="bg-linear-to-br from-gold-500/10 to-gold-600/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
               {category.seoTitle && (
                 <h2 className="text-2xl font-serif font-bold text-gold-300 mb-8 text-center">
                   {category.seoTitle}
@@ -320,7 +320,7 @@ export default async function CollectionPage({
           )}
 
           {category.seoBody && category.seoBody.length > 0 && (
-            <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
+            <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
               {category.seoTitle && !category.pillars && (
                 <h2 className="text-3xl font-serif font-bold text-white mb-6">{category.seoTitle}</h2>
               )}
@@ -349,7 +349,7 @@ export default async function CollectionPage({
           ))}
         </div>
 
-        <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-12 border border-gold-500/20 text-center">
+        <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-12 border border-gold-500/20 text-center">
           <h2 className="text-3xl font-serif font-bold text-white mb-4">Join the Expedition</h2>
           <p className="text-parchment-300 mb-6 max-w-2xl mx-auto">
             Sign up for batch release updates, new product drops, and cocktail recipes from the Field Manual.

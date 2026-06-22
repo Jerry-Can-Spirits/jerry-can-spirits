@@ -14,9 +14,9 @@ const UNIT_CHIPS: Array<{ label: string; value: number }> = [
   { label: '1', value: 1 },
 ]
 
-const inputClass = 'w-full px-3 py-2 bg-jerry-green-700/50 border border-gold-500/30 rounded-lg text-parchment-50 text-sm placeholder-parchment-400 focus:border-gold-400 focus:outline-none'
+const inputClass = 'w-full px-3 py-2 bg-jerry-green-700/50 border border-gold-500/30 rounded-lg text-parchment-50 text-sm placeholder-parchment-400 focus:border-gold-400 focus:outline-hidden'
 const labelClass = 'block text-xs font-medium text-parchment-300 mb-1'
-const chipClass = 'px-2 py-1 rounded border text-xs transition-colors'
+const chipClass = 'px-2 py-1 rounded-sm border text-xs transition-colors'
 const chipActive = 'bg-gold-500/20 border-gold-400 text-gold-100'
 const chipIdle = 'bg-jerry-green-700/30 border-gold-500/20 text-parchment-300 hover:border-gold-400/40'
 
@@ -327,7 +327,7 @@ export function CocktailForm({ menuId, cocktail, libraryEntries }: Props) {
             Delete drink
           </button>
         ) : <span />}
-        <button type="submit" disabled={submitting} className="px-6 py-3 bg-gradient-to-r from-gold-600 to-gold-500 hover:from-gold-500 hover:to-gold-400 disabled:from-gray-600 disabled:to-gray-500 text-jerry-green-900 font-semibold rounded-lg">
+        <button type="submit" disabled={submitting} className="px-6 py-3 bg-linear-to-r from-gold-600 to-gold-500 hover:from-gold-500 hover:to-gold-400 disabled:from-gray-600 disabled:to-gray-500 text-jerry-green-900 font-semibold rounded-lg">
           {submitting ? 'Saving…' : cocktail ? 'Save changes' : 'Add drink'}
         </button>
       </div>

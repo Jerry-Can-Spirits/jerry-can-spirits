@@ -58,7 +58,7 @@ function WhatIfContent() {
               id="ingredient"
               value={selectedId ?? ''}
               onChange={(e) => setSelectedId(e.target.value || null)}
-              className="w-full max-w-md px-4 py-3 bg-jerry-green-700/50 border border-gold-500/30 rounded-lg text-parchment-50 focus:border-gold-400 focus:outline-none"
+              className="w-full max-w-md px-4 py-3 bg-jerry-green-700/50 border border-gold-500/30 rounded-lg text-parchment-50 focus:border-gold-400 focus:outline-hidden"
             >
               {entries.map((entry) => (
                 <option key={entry.id} value={entry.id}>{entry.name}</option>

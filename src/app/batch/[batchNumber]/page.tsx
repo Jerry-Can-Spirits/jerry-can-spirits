@@ -180,7 +180,7 @@ export default async function BatchDetailPage({ params }: PageProps) {
                   className="group block bg-jerry-green-800/60 backdrop-blur-sm border border-gold-500/20 rounded-xl overflow-hidden hover:border-gold-500/40 transition-all duration-300"
                 >
                   {cocktail.image && (
-                    <div className="aspect-[4/3] relative overflow-hidden">
+                    <div className="aspect-4/3 relative overflow-hidden">
                       <Image
                         src={cocktail.image}
                         alt={cocktail.name}

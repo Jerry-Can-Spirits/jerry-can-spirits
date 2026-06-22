@@ -261,10 +261,10 @@ export default async function DrinksPageTest() {
             <ScrollReveal key={product.id} delay={(index % 4) as 0 | 1 | 2 | 3}>
             <Link
               href={`/shop/product/${product.handle}`}
-              className="group bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl border border-gold-500/20 overflow-hidden hover:border-gold-400/40 transition-all duration-300 hover:scale-105 block"
+              className="group bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl border border-gold-500/20 overflow-hidden hover:border-gold-400/40 transition-all duration-300 hover:scale-105 block"
             >
               {/* Product Image */}
-              <div className="relative aspect-square sm:aspect-[4/3] lg:aspect-square bg-jerry-green-800/20 flex items-center justify-center p-4">
+              <div className="relative aspect-square sm:aspect-4/3 lg:aspect-square bg-jerry-green-800/20 flex items-center justify-center p-4">
                 {product.images && product.images.length > 0 ? (
                   <Image
                     src={product.images[0].url}
@@ -322,7 +322,7 @@ export default async function DrinksPageTest() {
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-20">
         <div className="grid lg:grid-cols-2 gap-12 mb-16">
           <ScrollReveal>
-          <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20 h-full">
+          <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20 h-full">
             <h2 className="text-3xl font-serif font-bold text-white mb-6">
               What's in the Bottle
             </h2>
@@ -341,7 +341,7 @@ export default async function DrinksPageTest() {
 
           </ScrollReveal>
           <ScrollReveal delay={1}>
-          <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20 h-full">
+          <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20 h-full">
             <h2 className="text-3xl font-serif font-bold text-white mb-6">
               The Story Behind It
             </h2>
@@ -362,7 +362,7 @@ export default async function DrinksPageTest() {
 
         {/* What You're Getting */}
         <ScrollReveal>
-        <div className="bg-gradient-to-br from-gold-500/10 to-gold-600/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20 mb-16">
+        <div className="bg-linear-to-br from-gold-500/10 to-gold-600/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20 mb-16">
           <h3 className="text-2xl font-serif font-bold text-gold-300 mb-6 text-center">
             What You're Actually Getting
           </h3>
@@ -468,7 +468,7 @@ export default async function DrinksPageTest() {
           }}
         />
 
-        <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
+        <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
           <h2 className="text-3xl font-serif font-bold text-white mb-2">
             Common Questions
           </h2>
@@ -524,7 +524,7 @@ export default async function DrinksPageTest() {
 
       {/* CTA Section */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-20">
-        <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-12 border border-gold-500/20 text-center">
+        <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-12 border border-gold-500/20 text-center">
           <h2 className="text-3xl font-serif font-bold text-white mb-4">
             Try It Yourself
           </h2>

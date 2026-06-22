@@ -72,7 +72,7 @@ export default function HeroSection() {
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-serif font-bold text-parchment-50 mb-6 leading-tight">
               <span className="relative" style={{ color: '#fefbf5' }}>
                 Veteran-Owned British Rum
-                <span className="absolute -bottom-2 left-0 w-full h-1 bg-gradient-to-r from-gold-500 to-gold-300 rounded-full"></span>
+                <span className="absolute -bottom-2 left-0 w-full h-1 bg-linear-to-r from-gold-500 to-gold-300 rounded-full"></span>
               </span>
               <br />
               <span className="text-gold-300 text-3xl sm:text-4xl lg:text-5xl block mt-4">Built Without Compromise</span>
@@ -97,7 +97,7 @@ export default function HeroSection() {
             <div className="hidden sm:flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-8">
               <Link
                 href="/shop/product/jerry-can-spirits-expedition-spiced-rum/"
-                className="bg-gradient-to-r from-gold-600 to-gold-500 hover:from-gold-500 hover:to-gold-400 text-jerry-green-900 px-8 py-4 rounded-lg font-semibold uppercase tracking-wide transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 flex items-center justify-center"
+                className="bg-linear-to-r from-gold-600 to-gold-500 hover:from-gold-500 hover:to-gold-400 text-jerry-green-900 px-8 py-4 rounded-lg font-semibold uppercase tracking-wide transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 flex items-center justify-center"
               >
                 Order Now
               </Link>
@@ -114,7 +114,7 @@ export default function HeroSection() {
             <div className="sm:hidden mb-8">
               <Link
                 href="/shop/product/jerry-can-spirits-expedition-spiced-rum/"
-                className="w-full bg-gradient-to-r from-gold-600 to-gold-500 hover:from-gold-500 hover:to-gold-400 text-jerry-green-900 px-8 py-4 rounded-lg font-semibold uppercase tracking-wide transition-all duration-300 shadow-lg hover:shadow-xl flex items-center justify-center"
+                className="w-full bg-linear-to-r from-gold-600 to-gold-500 hover:from-gold-500 hover:to-gold-400 text-jerry-green-900 px-8 py-4 rounded-lg font-semibold uppercase tracking-wide transition-all duration-300 shadow-lg hover:shadow-xl flex items-center justify-center"
               >
                 Order Now
               </Link>
@@ -130,7 +130,7 @@ export default function HeroSection() {
 
           {/* Product Image */}
           <div className="relative order-1 lg:order-2">
-            <div className="relative bg-gradient-to-br from-jerry-green-800 to-jerry-green-900 rounded-2xl overflow-hidden shadow-2xl border border-gold-500/20">
+            <div className="relative bg-linear-to-br from-jerry-green-800 to-jerry-green-900 rounded-2xl overflow-hidden shadow-2xl border border-gold-500/20">
 
               {/* Render only the active image — Next.js fetches all images
                   whose <Image> component is mounted, regardless of opacity,
@@ -140,14 +140,14 @@ export default function HeroSection() {
                 role="group"
                 aria-roledescription="carousel"
                 aria-label="Expedition Spiced Rum product views"
-                className="aspect-[4/5] relative"
+                className="aspect-4/5 relative"
                 onTouchStart={handleTouchStart}
                 onTouchEnd={handleTouchEnd}
               >
                 <Link
                   href="/shop/product/jerry-can-spirits-expedition-spiced-rum/"
                   aria-label="View Expedition Spiced Rum product page"
-                  className="absolute inset-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-400 rounded-2xl"
+                  className="absolute inset-0 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-gold-400 rounded-2xl"
                 >
                   <Image
                     key={HERO_IMAGES[activeIndex].src}
@@ -165,7 +165,7 @@ export default function HeroSection() {
               </div>
 
               {/* Floating Badges */}
-              <div className="absolute top-6 left-6 bg-gradient-to-r from-gold-600 to-gold-500 text-jerry-green-900 px-4 py-2 rounded-full text-sm font-semibold uppercase tracking-wide shadow-lg">
+              <div className="absolute top-6 left-6 bg-linear-to-r from-gold-600 to-gold-500 text-jerry-green-900 px-4 py-2 rounded-full text-sm font-semibold uppercase tracking-wide shadow-lg">
                 Numbered. 700 for general release.
               </div>
 

@@ -68,7 +68,7 @@ export default async function ExpeditionLogPage() {
                         <p className="text-parchment-400 text-sm mt-0.5">{entry.location}</p>
                       )}
                     </div>
-                    <p className="text-parchment-500 text-xs flex-shrink-0">
+                    <p className="text-parchment-500 text-xs shrink-0">
                       {new Date(entry.created_at).toLocaleDateString('en-GB', {
                         day: 'numeric',
                         month: 'long',

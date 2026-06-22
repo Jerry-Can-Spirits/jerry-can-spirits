@@ -167,7 +167,7 @@ export default async function SearchPage({ searchParams }: PageProps) {
               defaultValue={query}
               placeholder="Search products, cocktails, guides..."
               autoFocus={!query}
-              className="w-full pl-12 pr-4 py-4 bg-jerry-green-800/40 border border-gold-500/30 rounded-xl text-white placeholder-parchment-400 text-lg focus:outline-none focus:border-gold-400 transition-colors"
+              className="w-full pl-12 pr-4 py-4 bg-jerry-green-800/40 border border-gold-500/30 rounded-xl text-white placeholder-parchment-400 text-lg focus:outline-hidden focus:border-gold-400 transition-colors"
             />
           </div>
         </form>
@@ -185,7 +185,7 @@ export default async function SearchPage({ searchParams }: PageProps) {
                   href={result.url}
                   className="flex items-start gap-4 p-4 rounded-xl bg-jerry-green-800/20 border border-gold-500/10 hover:border-gold-500/30 hover:bg-jerry-green-800/40 transition-all group"
                 >
-                  <div className="flex-shrink-0 w-14 h-14 rounded-lg overflow-hidden bg-jerry-green-800/60 border border-gold-500/10 flex items-center justify-center">
+                  <div className="shrink-0 w-14 h-14 rounded-lg overflow-hidden bg-jerry-green-800/60 border border-gold-500/10 flex items-center justify-center">
                     {result.image ? (
                       <Image
                         src={result.image}
@@ -224,7 +224,7 @@ export default async function SearchPage({ searchParams }: PageProps) {
                       </p>
                     )}
                   </div>
-                  <span className="flex-shrink-0 text-gold-500/40 group-hover:text-gold-400 transition-colors text-lg mt-1" aria-hidden="true">→</span>
+                  <span className="shrink-0 text-gold-500/40 group-hover:text-gold-400 transition-colors text-lg mt-1" aria-hidden="true">→</span>
                 </Link>
               ))}
             </div>

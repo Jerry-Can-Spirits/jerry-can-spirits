@@ -38,7 +38,7 @@ export default function PullQuoteStrip() {
                 {quote.text}
               </blockquote>
               <figcaption className="text-xs uppercase tracking-widest text-gold-300 font-semibold">
-                <span aria-hidden="true" className="text-gold-400 mr-2 tracking-[0.1em]">
+                <span aria-hidden="true" className="text-gold-400 mr-2 tracking-widest">
                   ★★★★★
                 </span>
                 {quote.attribution}

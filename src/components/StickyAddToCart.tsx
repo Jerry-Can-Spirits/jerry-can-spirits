@@ -58,7 +58,7 @@ export default function StickyAddToCart({
       <button
         onClick={handleAdd}
         disabled={isLoading || added}
-        className="flex-shrink-0 px-4 py-2.5 bg-gold-500 hover:bg-gold-400 text-jerry-green-900 text-sm font-bold rounded-lg transition-colors disabled:opacity-60"
+        className="shrink-0 px-4 py-2.5 bg-gold-500 hover:bg-gold-400 text-jerry-green-900 text-sm font-bold rounded-lg transition-colors disabled:opacity-60"
       >
         {added ? 'Added' : isLoading ? '...' : 'Add to Cart'}
       </button>

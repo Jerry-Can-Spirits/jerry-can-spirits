@@ -93,7 +93,7 @@ export function UnmatchedReview({ items, cocktails }: Props) {
             value={selection[row.normalised_name] ?? ''}
             onChange={(e) => setSelection((s) => ({ ...s, [row.normalised_name]: e.target.value }))}
             disabled={pending}
-            className="w-full px-3 py-2 bg-jerry-green-700/50 border border-gold-500/30 rounded-lg text-parchment-100 text-sm focus:border-gold-400 focus:ring-2 focus:ring-gold-400/20 focus:outline-none mb-4"
+            className="w-full px-3 py-2 bg-jerry-green-700/50 border border-gold-500/30 rounded-lg text-parchment-100 text-sm focus:border-gold-400 focus:ring-2 focus:ring-gold-400/20 focus:outline-hidden mb-4"
           >
             <option value="">— Select a cocktail —</option>
             {cocktails.map((c) => (

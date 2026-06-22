@@ -104,7 +104,7 @@ export default function NotFound() {
               Looking for something specific?
             </p>
             <p className="text-parchment-400 text-sm">
-              Use the search icon in the navigation bar or press <kbd className="px-2 py-1 bg-jerry-green-700 rounded text-parchment-200 text-xs font-mono">Ctrl+K</kbd> to search the site.
+              Use the search icon in the navigation bar or press <kbd className="px-2 py-1 bg-jerry-green-700 rounded-sm text-parchment-200 text-xs font-mono">Ctrl+K</kbd> to search the site.
             </p>
           </div>
         </section>

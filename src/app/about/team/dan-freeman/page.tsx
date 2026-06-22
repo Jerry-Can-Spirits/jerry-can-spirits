@@ -89,7 +89,7 @@ export default function DanFreemanPage() {
           <div className="lg:col-span-1">
             <div className="lg:sticky lg:top-24 space-y-6">
               {/* Photo */}
-              <div className="relative aspect-[3/4] rounded-xl overflow-hidden border border-gold-500/20">
+              <div className="relative aspect-3/4 rounded-xl overflow-hidden border border-gold-500/20">
                 <Image
                   src="/images/team/Dan_Headshot.jpg"
                   alt="Dan Freeman - Founder & Director of Jerry Can Spirits"
@@ -140,9 +140,9 @@ export default function DanFreemanPage() {
               </div>
 
               {/* Fun Fact */}
-              <div className="bg-gradient-to-br from-gold-500/10 to-gold-600/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+              <div className="bg-linear-to-br from-gold-500/10 to-gold-600/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
                 <div className="flex items-start gap-3">
-                  <div className="flex-shrink-0 mt-1">
+                  <div className="shrink-0 mt-1">
                     <svg className="w-5 h-5 text-gold-400" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
                     </svg>
@@ -224,9 +224,9 @@ export default function DanFreemanPage() {
               </div>
 
               {/* Personal Quote */}
-              <div className="bg-gradient-to-br from-gold-500/10 to-gold-600/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
+              <div className="bg-linear-to-br from-gold-500/10 to-gold-600/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
                 <div className="flex items-start gap-4">
-                  <div className="flex-shrink-0">
+                  <div className="shrink-0">
                     <svg className="w-8 h-8 text-gold-400" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z" clipRule="evenodd" />
                     </svg>

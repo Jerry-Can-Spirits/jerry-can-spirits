@@ -190,7 +190,7 @@ export default async function BankBarGrillPilotPage() {
 function SignatureLine({ label }: { label: string }) {
   return (
     <div className="flex items-baseline gap-4">
-      <span className="text-parchment-400 print:text-black/70 w-20 flex-shrink-0">{label}:</span>
+      <span className="text-parchment-400 print:text-black/70 w-20 shrink-0">{label}:</span>
       <span className="flex-1 border-b border-parchment-400 print:border-black/60 h-6" />
     </div>
   )

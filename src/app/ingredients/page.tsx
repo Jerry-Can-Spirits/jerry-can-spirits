@@ -99,7 +99,7 @@ export default function IngredientsIndex() {
                       <span className="text-gold-400">{product.alcohol}</span>
                     </div>
                   </div>
-                  <div className="flex-shrink-0">
+                  <div className="shrink-0">
                     <span className="inline-flex items-center gap-2 text-gold-300 group-hover:text-gold-400 transition-colors">
                       <span>View Ingredients</span>
                       <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -127,7 +127,7 @@ export default function Sustainability() {
             <div className="space-y-6 text-parchment-300">
               <ScrollReveal delay={0}>
               <div className="flex items-start space-x-4">
-                <div className="w-10 h-10 bg-gold-400/20 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                <div className="w-10 h-10 bg-gold-400/20 rounded-full flex items-center justify-center shrink-0 mt-1">
                   <span className="text-gold-400 font-bold">1</span>
                 </div>
                 <div>
@@ -139,7 +139,7 @@ export default function Sustainability() {
 
               <ScrollReveal delay={1}>
               <div className="flex items-start space-x-4">
-                <div className="w-10 h-10 bg-gold-400/20 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                <div className="w-10 h-10 bg-gold-400/20 rounded-full flex items-center justify-center shrink-0 mt-1">
                   <span className="text-gold-400 font-bold">2</span>
                 </div>
                 <div>
@@ -151,7 +151,7 @@ export default function Sustainability() {
 
               <ScrollReveal delay={2}>
               <div className="flex items-start space-x-4">
-                <div className="w-10 h-10 bg-gold-400/20 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                <div className="w-10 h-10 bg-gold-400/20 rounded-full flex items-center justify-center shrink-0 mt-1">
                   <span className="text-gold-400 font-bold">3</span>
                 </div>
                 <div>
@@ -235,11 +235,11 @@ export default function Sustainability() {
 
               <ul className="space-y-3">
                 <li className="flex items-start space-x-3">
-                  <div className="w-2 h-2 bg-gold-400 rounded-full mt-2 flex-shrink-0"></div>
+                  <div className="w-2 h-2 bg-gold-400 rounded-full mt-2 shrink-0"></div>
                   <span><strong className="text-gold-300">Refill Programme:</strong> We&apos;re looking into a bottle return and refill scheme for future batches.</span>
                 </li>
                 <li className="flex items-start space-x-3">
-                  <div className="w-2 h-2 bg-gold-400 rounded-full mt-2 flex-shrink-0"></div>
+                  <div className="w-2 h-2 bg-gold-400 rounded-full mt-2 shrink-0"></div>
                   <span><strong className="text-gold-300">Packaging Reduction:</strong> Minimising unnecessary packaging without compromising product protection.</span>
                 </li>
               </ul>

@@ -17,7 +17,7 @@ export default function TastingNotes({
   professionalTip,
 }: TastingNotesProps) {
   return (
-    <section className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 sm:p-8 border border-gold-500/20 space-y-6">
+    <section className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 sm:p-8 border border-gold-500/20 space-y-6">
       <h2 className="text-2xl sm:text-3xl font-serif font-bold text-gold-300 mb-6">
         Tasting Notes
       </h2>
@@ -112,7 +112,7 @@ export default function TastingNotes({
         <div className="mt-6 p-4 bg-gold-500/10 border-l-4 border-gold-500 rounded-r-lg">
           <div className="flex items-start gap-3">
             <svg
-              className="w-6 h-6 text-gold-400 flex-shrink-0 mt-0.5"
+              className="w-6 h-6 text-gold-400 shrink-0 mt-0.5"
               fill="currentColor"
               viewBox="0 0 20 20"
             >

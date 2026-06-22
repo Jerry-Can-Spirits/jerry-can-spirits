@@ -85,7 +85,7 @@ export default async function MenuDetailPage({ params }: Props) {
           <div className="flex flex-wrap items-center gap-3">
             <h1 className="text-3xl md:text-4xl font-serif font-bold text-white">{menu.name}</h1>
             {menu.is_active === 1 ? (
-              <span className="inline-block px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-200 border border-emerald-500/40 text-[10px] uppercase tracking-widest no-print">Active</span>
+              <span className="inline-block px-2 py-0.5 rounded-sm bg-emerald-500/20 text-emerald-200 border border-emerald-500/40 text-[10px] uppercase tracking-widest no-print">Active</span>
             ) : (
               <span className="no-print"><MakeActiveButton menuId={menuId} /></span>
             )}

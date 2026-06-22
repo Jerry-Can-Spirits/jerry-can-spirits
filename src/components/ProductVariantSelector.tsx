@@ -140,7 +140,7 @@ export default function ProductVariantSelector({
             name="variant-selector"
             value={selectedVariantId}
             onChange={(e) => setSelectedVariantId(e.target.value)}
-            className="w-full px-4 py-3 bg-jerry-green-900 border border-gold-500/30 rounded-lg text-white cursor-pointer focus:outline-none focus:border-gold-400 focus:ring-1 focus:ring-gold-400/50"
+            className="w-full px-4 py-3 bg-jerry-green-900 border border-gold-500/30 rounded-lg text-white cursor-pointer focus:outline-hidden focus:border-gold-400 focus:ring-1 focus:ring-gold-400/50"
             style={{ colorScheme: 'dark' }}
           >
             {variants.map((variant) => (
@@ -182,7 +182,7 @@ export default function ProductVariantSelector({
           <button
             onClick={() => setQuantity(Math.max(1, quantity - 1))}
             disabled={isLoading || quantity <= 1}
-            className="w-10 h-10 flex items-center justify-center bg-jerry-green-800/50 hover:bg-jerry-green-800 rounded border border-gold-500/20 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-10 h-10 flex items-center justify-center bg-jerry-green-800/50 hover:bg-jerry-green-800 rounded-sm border border-gold-500/20 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             aria-label="Decrease quantity"
           >
             <svg
@@ -207,13 +207,13 @@ export default function ProductVariantSelector({
             min="1"
             value={quantity}
             onChange={(e) => setQuantity(Math.max(1, parseInt(e.target.value) || 1))}
-            className="w-20 px-4 py-2 bg-jerry-green-800/50 border border-gold-500/20 rounded-lg text-white text-base text-center font-semibold focus:outline-none focus:border-gold-400"
+            className="w-20 px-4 py-2 bg-jerry-green-800/50 border border-gold-500/20 rounded-lg text-white text-base text-center font-semibold focus:outline-hidden focus:border-gold-400"
           />
 
           <button
             onClick={() => setQuantity(quantity + 1)}
             disabled={isLoading}
-            className="w-10 h-10 flex items-center justify-center bg-jerry-green-800/50 hover:bg-jerry-green-800 rounded border border-gold-500/20 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-10 h-10 flex items-center justify-center bg-jerry-green-800/50 hover:bg-jerry-green-800 rounded-sm border border-gold-500/20 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             aria-label="Increase quantity"
           >
             <svg

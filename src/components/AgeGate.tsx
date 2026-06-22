@@ -124,7 +124,7 @@ export default function AgeGate({ onVerified }: AgeGateProps) {
       aria-labelledby="agegate-heading"
       aria-describedby="agegate-desc"
       tabIndex={-1}
-      className="fixed inset-0 z-[9999] bg-jerry-green-900 overflow-hidden focus:outline-none"
+      className="fixed inset-0 z-9999 bg-jerry-green-900 overflow-hidden focus:outline-hidden"
       style={{ height: '100vh', width: '100vw' }}
     >
       {/* Real Cartographic Background */}
@@ -136,8 +136,8 @@ export default function AgeGate({ onVerified }: AgeGateProps) {
       />
 
       {/* Background image - visible on larger screens */}
-      <div className="hidden md:block absolute inset-0 z-[1]">
-        <div className="absolute inset-0 bg-gradient-to-r from-jerry-green-900 via-jerry-green-900/80 to-transparent z-10"></div>
+      <div className="hidden md:block absolute inset-0 z-1">
+        <div className="absolute inset-0 bg-linear-to-r from-jerry-green-900 via-jerry-green-900/80 to-transparent z-10"></div>
         <Image
           src="/images/hero/hero-spiced.webp"
           alt="Jerry Can Spirits Expedition Spiced Rum bottle"
@@ -189,7 +189,7 @@ export default function AgeGate({ onVerified }: AgeGateProps) {
                 const region = regions.find(r => r.code === e.target.value);
                 if (region) setSelectedRegion(region);
               }}
-              className="w-full p-3 sm:p-4 bg-jerry-green-800 border-2 border-gold-400 rounded-lg text-gold-300 font-medium text-base sm:text-lg focus:outline-none focus:border-gold-300 focus:ring-2 focus:ring-gold-300/20"
+              className="w-full p-3 sm:p-4 bg-jerry-green-800 border-2 border-gold-400 rounded-lg text-gold-300 font-medium text-base sm:text-lg focus:outline-hidden focus:border-gold-300 focus:ring-2 focus:ring-gold-300/20"
             >
               {regions.map((region) => (
                 <option key={region.code} value={region.code} className="bg-jerry-green-800">

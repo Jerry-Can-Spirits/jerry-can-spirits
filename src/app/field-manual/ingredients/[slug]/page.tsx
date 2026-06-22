@@ -202,7 +202,7 @@ export default async function IngredientDetailPage({ params }: { params: Promise
             <div className="contents lg:block lg:sticky lg:top-24 lg:space-y-6">
 
               {/* Main Image */}
-              <div className="order-1 bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+              <div className="order-1 bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
                 {ingredient.image ? (
                   <div className="relative aspect-square bg-transparent rounded-lg overflow-hidden">
                     <Image
@@ -242,7 +242,7 @@ export default async function IngredientDetailPage({ params }: { params: Promise
 
               {/* Quick Facts */}
               {(ingredient.abv || ingredient.origin || ingredient.flavorProfile?.strength) && (
-                <div className="order-2 bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+                <div className="order-2 bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
                   <h3 className="text-lg font-serif font-bold text-gold-300 mb-4">Quick Facts</h3>
                   <div className="space-y-3">
                     {ingredient.abv && (
@@ -275,7 +275,7 @@ export default async function IngredientDetailPage({ params }: { params: Promise
 
               {/* Flavour Profile */}
               {ingredient.flavorProfile && (ingredient.flavorProfile.primary || ingredient.flavorProfile.tasting) && (
-                <div className="order-4 bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+                <div className="order-4 bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
                   <h2 className="text-xl font-serif font-bold text-gold-300 mb-4">Flavour Profile</h2>
                   <div className="space-y-4">
                     {ingredient.flavorProfile.primary && ingredient.flavorProfile.primary.length > 0 && (
@@ -305,7 +305,7 @@ export default async function IngredientDetailPage({ params }: { params: Promise
 
               {/* Recommended Brands */}
               {ingredient.recommendedBrands && (ingredient.recommendedBrands.budget || ingredient.recommendedBrands.premium) && (
-                <div className="order-12 bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+                <div className="order-12 bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
                   <h2 className="text-xl font-serif font-bold text-gold-300 mb-4">Recommended Brands</h2>
                   <div className="space-y-4">
                     {ingredient.recommendedBrands.budget && (
@@ -319,12 +319,12 @@ export default async function IngredientDetailPage({ params }: { params: Promise
                             {(ingredient.priceRange?.budget || ingredient.recommendedBrands.budgetNutrition) && (
                               <div className="mb-3 flex flex-wrap gap-2">
                                 {ingredient.priceRange?.budget && (
-                                  <span className="inline-flex items-center px-2 py-1 bg-green-500/20 border border-green-500/30 rounded text-green-400 text-xs font-semibold">
+                                  <span className="inline-flex items-center px-2 py-1 bg-green-500/20 border border-green-500/30 rounded-sm text-green-400 text-xs font-semibold">
                                     ~£{ingredient.priceRange.budget}
                                   </span>
                                 )}
                                 {ingredient.recommendedBrands.budgetNutrition && (
-                                  <span className="inline-flex items-center px-2 py-1 bg-jerry-green-800/40 border border-gold-500/10 rounded text-parchment-400 text-xs">
+                                  <span className="inline-flex items-center px-2 py-1 bg-jerry-green-800/40 border border-gold-500/10 rounded-sm text-parchment-400 text-xs">
                                     <span className="text-gold-400 font-semibold">{ingredient.recommendedBrands.budgetNutrition.calories} kcal</span>&nbsp;{ingredient.recommendedBrands.budgetNutrition.unit}
                                   </span>
                                 )}
@@ -367,12 +367,12 @@ export default async function IngredientDetailPage({ params }: { params: Promise
                             {(ingredient.priceRange?.premium || ingredient.recommendedBrands.premiumNutrition) && (
                               <div className="mb-3 flex flex-wrap gap-2">
                                 {ingredient.priceRange?.premium && (
-                                  <span className="inline-flex items-center px-2 py-1 bg-gold-500/20 border border-gold-500/30 rounded text-gold-400 text-xs font-semibold">
+                                  <span className="inline-flex items-center px-2 py-1 bg-gold-500/20 border border-gold-500/30 rounded-sm text-gold-400 text-xs font-semibold">
                                     ~£{ingredient.priceRange.premium}
                                   </span>
                                 )}
                                 {ingredient.recommendedBrands.premiumNutrition && (
-                                  <span className="inline-flex items-center px-2 py-1 bg-jerry-green-800/40 border border-gold-500/10 rounded text-parchment-400 text-xs">
+                                  <span className="inline-flex items-center px-2 py-1 bg-jerry-green-800/40 border border-gold-500/10 rounded-sm text-parchment-400 text-xs">
                                     <span className="text-gold-400 font-semibold">{ingredient.recommendedBrands.premiumNutrition.calories} kcal</span>&nbsp;{ingredient.recommendedBrands.premiumNutrition.unit}
                                   </span>
                                 )}
@@ -421,7 +421,7 @@ export default async function IngredientDetailPage({ params }: { params: Promise
               {(ingredient.storage || ingredient.shelfLife) && (
                 <div className="order-14 p-6 bg-jerry-green-800/40 rounded-xl border border-gold-500/20">
                   <div className="flex items-start gap-3">
-                    <svg className="w-5 h-5 text-gold-400 flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-5 h-5 text-gold-400 shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                     <div className="flex-1 space-y-3">
@@ -465,16 +465,16 @@ export default async function IngredientDetailPage({ params }: { params: Promise
 
             {/* Long Description - Rich editorial content from Sanity */}
             {ingredient.longDescription && ingredient.longDescription.length > 0 && (
-              <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+              <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
                 <FieldManualPortableText value={ingredient.longDescription} />
               </div>
             )}
 
             {/* Professional Tip Callout */}
             {ingredient.professionalTip && (
-              <div className="order-3 bg-gradient-to-br from-gold-500/10 to-gold-600/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/30">
+              <div className="order-3 bg-linear-to-br from-gold-500/10 to-gold-600/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/30">
                 <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 bg-gold-500/20 rounded-full flex items-center justify-center flex-shrink-0">
+                  <div className="w-10 h-10 bg-gold-500/20 rounded-full flex items-center justify-center shrink-0">
                     <svg className="w-5 h-5 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
                     </svg>
@@ -488,19 +488,19 @@ export default async function IngredientDetailPage({ params }: { params: Promise
             )}
 
             {/* Usage */}
-            <div className="order-5 bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+            <div className="order-5 bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
               <h2 className="text-2xl font-serif font-bold text-gold-300 mb-4">Usage</h2>
               <p className="text-parchment-300 leading-relaxed whitespace-pre-line">{ingredient.usage}</p>
             </div>
 
             {/* Top Tips */}
             {ingredient.topTips && ingredient.topTips.length > 0 && (
-              <div className="order-6 bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+              <div className="order-6 bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
                 <h2 className="text-2xl font-serif font-bold text-gold-300 mb-4">Top Tips</h2>
                 <ul className="space-y-4">
                   {ingredient.topTips.map((tip, index) => (
                     <li key={index} className="flex items-start gap-3">
-                      <div className="w-6 h-6 bg-gold-400/20 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <div className="w-6 h-6 bg-gold-400/20 rounded-full flex items-center justify-center shrink-0 mt-0.5">
                         <div className="w-2 h-2 bg-gold-400 rounded-full"></div>
                       </div>
                       <span className="text-parchment-300 leading-relaxed">{tip}</span>
@@ -512,7 +512,7 @@ export default async function IngredientDetailPage({ params }: { params: Promise
 
             {/* Video Tutorial */}
             {videoId && (
-              <div className="order-9 bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+              <div className="order-9 bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
                 <h2 className="text-2xl font-serif font-bold text-gold-300 mb-4 flex items-center gap-2">
                   <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
@@ -533,12 +533,12 @@ export default async function IngredientDetailPage({ params }: { params: Promise
 
             {/* Substitutions */}
             {ingredient.substitutions && ingredient.substitutions.length > 0 && (
-              <div className="order-8 bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+              <div className="order-8 bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
                 <h2 className="text-2xl font-serif font-bold text-gold-300 mb-4">Possible Substitutions</h2>
                 <ul className="space-y-3">
                   {ingredient.substitutions.map((sub, index) => (
                     <li key={index} className="flex items-start gap-3">
-                      <svg className="w-5 h-5 text-gold-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg className="w-5 h-5 text-gold-400 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
                       </svg>
                       <span className="text-parchment-300 leading-relaxed">{sub}</span>
@@ -550,7 +550,7 @@ export default async function IngredientDetailPage({ params }: { params: Promise
 
             {/* Production Method */}
             {ingredient.productionMethod && (
-              <div className="order-10 bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+              <div className="order-10 bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
                 <h2 className="text-2xl font-serif font-bold text-gold-300 mb-4">Production Method</h2>
                 <p className="text-parchment-300 leading-relaxed whitespace-pre-line">{ingredient.productionMethod}</p>
               </div>
@@ -558,7 +558,7 @@ export default async function IngredientDetailPage({ params }: { params: Promise
 
             {/* History/Context */}
             {ingredient.history && (
-              <div className="order-11 bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+              <div className="order-11 bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
                 <h2 className="text-2xl font-serif font-bold text-gold-300 mb-4">History & Context</h2>
                 <p className="text-parchment-300 leading-relaxed whitespace-pre-line">{ingredient.history}</p>
               </div>
@@ -566,7 +566,7 @@ export default async function IngredientDetailPage({ params }: { params: Promise
 
             {/* Related Cocktails */}
             {ingredient.relatedCocktails && ingredient.relatedCocktails.length > 0 && (
-              <div className="order-15 bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+              <div className="order-15 bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
                 <h2 className="text-2xl font-serif font-bold text-gold-300 mb-4">Featured In These Cocktails</h2>
                 <div className="grid sm:grid-cols-2 gap-3">
                   {ingredient.relatedCocktails.filter(c => c?.slug?.current).map((cocktail) => (
@@ -587,7 +587,7 @@ export default async function IngredientDetailPage({ params }: { params: Promise
 
             {/* Related Ingredients */}
             {ingredient.relatedIngredients && ingredient.relatedIngredients.length > 0 && (
-              <div className="order-16 bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+              <div className="order-16 bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
                 <h2 className="text-2xl font-serif font-bold text-gold-300 mb-4">Often Used With</h2>
                 <div className="grid sm:grid-cols-2 gap-3">
                   {ingredient.relatedIngredients.filter(r => r?.slug?.current).map((related) => (

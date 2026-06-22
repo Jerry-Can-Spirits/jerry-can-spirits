@@ -110,7 +110,7 @@ export default function SitemapPage() {
                       className="group flex items-start gap-3 p-3 rounded-lg hover:bg-jerry-green-800/60 transition-colors duration-200"
                     >
                       <svg
-                        className="w-5 h-5 text-gold-400 mt-1 flex-shrink-0 group-hover:translate-x-1 transition-transform duration-200"
+                        className="w-5 h-5 text-gold-400 mt-1 shrink-0 group-hover:translate-x-1 transition-transform duration-200"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"

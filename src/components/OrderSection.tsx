@@ -86,8 +86,8 @@ export default async function OrderSection() {
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Left Column - Product Image */}
           <div className="order-2 lg:order-1">
-            <div className="relative bg-gradient-to-br from-jerry-green-800 to-jerry-green-900 rounded-2xl overflow-hidden shadow-2xl border border-gold-500/20">
-              <div className="aspect-[4/5] flex items-center justify-center p-8">
+            <div className="relative bg-linear-to-br from-jerry-green-800 to-jerry-green-900 rounded-2xl overflow-hidden shadow-2xl border border-gold-500/20">
+              <div className="aspect-4/5 flex items-center justify-center p-8">
                 <Image
                   src="/images/hero/hero-spiced.webp"
                   alt="Jerry Can Spirits Expedition Spiced Rum - First Batch Edition"
@@ -98,7 +98,7 @@ export default async function OrderSection() {
                 />
               </div>
 
-              <div className="absolute top-6 right-6 bg-gradient-to-r from-gold-600 to-gold-500 text-jerry-green-900 px-4 py-2 rounded-full text-sm font-semibold uppercase tracking-wide shadow-lg">
+              <div className="absolute top-6 right-6 bg-linear-to-r from-gold-600 to-gold-500 text-jerry-green-900 px-4 py-2 rounded-full text-sm font-semibold uppercase tracking-wide shadow-lg">
                 First Batch Edition
               </div>
 
@@ -133,19 +133,19 @@ export default async function OrderSection() {
               <h3 className="text-gold-300 font-semibold mb-4">What You Get:</h3>
               <ul className="space-y-3 text-parchment-200">
                 <li className="flex items-start gap-3">
-                  <span className="text-gold-400 flex-shrink-0">•</span>
+                  <span className="text-gold-400 shrink-0">•</span>
                   <span>Individually numbered First Batch Edition bottle</span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <span className="text-gold-400 flex-shrink-0">•</span>
+                  <span className="text-gold-400 shrink-0">•</span>
                   <span>Founding batch. £{bottlePrice} per bottle.</span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <span className="text-gold-400 flex-shrink-0">•</span>
+                  <span className="text-gold-400 shrink-0">•</span>
                   <span>Fulfilment in progress</span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <span className="text-gold-400 flex-shrink-0">•</span>
+                  <span className="text-gold-400 shrink-0">•</span>
                   <span>Exclusive access to limited releases &amp; events</span>
                 </li>
               </ul>
@@ -155,7 +155,7 @@ export default async function OrderSection() {
             <div className="flex flex-col gap-4">
               <Link
                 href={`/shop/product/${BOTTLE_HANDLE}`}
-                className="group bg-gradient-to-r from-gold-600 to-gold-500 hover:from-gold-500 hover:to-gold-400 text-jerry-green-900 px-6 py-4 rounded-lg font-semibold transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-[1.02] flex items-center justify-between"
+                className="group bg-linear-to-r from-gold-600 to-gold-500 hover:from-gold-500 hover:to-gold-400 text-jerry-green-900 px-6 py-4 rounded-lg font-semibold transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-[1.02] flex items-center justify-between"
               >
                 <div className="flex flex-col">
                   <span className="text-xs uppercase tracking-wider opacity-75">Standard Bottle</span>
@@ -174,7 +174,7 @@ export default async function OrderSection() {
 
               <Link
                 href={`/shop/product/${GIFT_SET_HANDLE}`}
-                className="group bg-gradient-to-r from-jerry-green-700 to-jerry-green-800 hover:from-jerry-green-600 hover:to-jerry-green-700 text-white px-6 py-4 rounded-lg font-semibold transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-[1.02] flex items-center justify-between border border-gold-500/30"
+                className="group bg-linear-to-r from-jerry-green-700 to-jerry-green-800 hover:from-jerry-green-600 hover:to-jerry-green-700 text-white px-6 py-4 rounded-lg font-semibold transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-[1.02] flex items-center justify-between border border-gold-500/30"
               >
                 <div className="flex flex-col">
                   <span className="text-xs uppercase tracking-wider text-gold-300">Gift Pack</span>

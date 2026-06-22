@@ -6,7 +6,7 @@ import { spreadsheetToText } from '@/lib/pouriq/spreadsheet-to-text'
 
 type Source = 'text' | 'pdf' | 'spreadsheet'
 
-const inputClass = 'w-full px-4 py-3 bg-jerry-green-700/50 border border-gold-500/30 rounded-lg text-parchment-50 text-sm focus:border-gold-400 focus:outline-none'
+const inputClass = 'w-full px-4 py-3 bg-jerry-green-700/50 border border-gold-500/30 rounded-lg text-parchment-50 text-sm focus:border-gold-400 focus:outline-hidden'
 
 interface SourceTile {
   id: Source
@@ -191,7 +191,7 @@ export function ImportSourceTabs({ menuId, initialSource, onPreview }: Props) {
 
       <div className="flex justify-end">
         <button type="button" onClick={handleExtract} disabled={!canExtract || submitting}
-          className="px-6 py-3 bg-gradient-to-r from-gold-600 to-gold-500 hover:from-gold-500 hover:to-gold-400 disabled:from-gray-600 disabled:to-gray-500 text-jerry-green-900 font-semibold rounded-lg">
+          className="px-6 py-3 bg-linear-to-r from-gold-600 to-gold-500 hover:from-gold-500 hover:to-gold-400 disabled:from-gray-600 disabled:to-gray-500 text-jerry-green-900 font-semibold rounded-lg">
           {submitting ? 'Reading menu…' : 'Extract drinks →'}
         </button>
       </div>

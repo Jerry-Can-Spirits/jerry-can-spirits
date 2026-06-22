@@ -38,14 +38,14 @@ export default function OfflinePage() {
         <div className="space-y-4 pt-4">
           <button
             onClick={() => window.location.reload()}
-            className="w-full px-6 py-3 bg-gold-500 text-jerry-green-900 font-semibold rounded-lg hover:bg-gold-400 transition-colors focus:outline-none focus:ring-2 focus:ring-gold-300 focus:ring-offset-2 focus:ring-offset-jerry-green-900"
+            className="w-full px-6 py-3 bg-gold-500 text-jerry-green-900 font-semibold rounded-lg hover:bg-gold-400 transition-colors focus:outline-hidden focus:ring-2 focus:ring-gold-300 focus:ring-offset-2 focus:ring-offset-jerry-green-900"
           >
             Retry Connection
           </button>
 
           <Link
             href="/"
-            className="block w-full px-6 py-3 border-2 border-gold-500 text-gold-500 font-semibold rounded-lg hover:bg-gold-500 hover:text-jerry-green-900 transition-colors focus:outline-none focus:ring-2 focus:ring-gold-300 focus:ring-offset-2 focus:ring-offset-jerry-green-900"
+            className="block w-full px-6 py-3 border-2 border-gold-500 text-gold-500 font-semibold rounded-lg hover:bg-gold-500 hover:text-jerry-green-900 transition-colors focus:outline-hidden focus:ring-2 focus:ring-gold-300 focus:ring-offset-2 focus:ring-offset-jerry-green-900"
           >
             Return to Base Camp
           </Link>

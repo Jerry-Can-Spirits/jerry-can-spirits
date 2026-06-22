@@ -44,12 +44,12 @@ export default function EnlargeableProductImage({ src, alt, productName }: Enlar
   return (
     <>
       {/* Small Image - Mobile: Click to enlarge, Desktop: Hover to enlarge */}
-      <div className="relative w-20 h-20 flex-shrink-0 bg-transparent rounded-lg overflow-visible group">
+      <div className="relative w-20 h-20 shrink-0 bg-transparent rounded-lg overflow-visible group">
         {/* Mobile: Clickable version, Desktop: Non-interactive */}
         <button
           onClick={handleMobileClick}
           type="button"
-          className="relative w-full h-full rounded-lg overflow-hidden focus:outline-none focus:ring-2 focus:ring-gold-400 md:cursor-default md:pointer-events-none"
+          className="relative w-full h-full rounded-lg overflow-hidden focus:outline-hidden focus:ring-2 focus:ring-gold-400 md:cursor-default md:pointer-events-none"
           aria-label={isMobile ? `View larger image of ${productName}` : undefined}
           disabled={!isMobile}
         >
@@ -64,7 +64,7 @@ export default function EnlargeableProductImage({ src, alt, productName }: Enlar
 
         {/* Desktop: Hover enlargement - Uses green background to match tile */}
         <div className="hidden md:block absolute left-0 top-0 w-20 h-20 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-50">
-          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-gradient-to-br from-jerry-green-800/95 to-jerry-green-900/95 backdrop-blur-sm rounded-xl shadow-2xl border-2 border-gold-400 p-4">
+          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-linear-to-br from-jerry-green-800/95 to-jerry-green-900/95 backdrop-blur-sm rounded-xl shadow-2xl border-2 border-gold-400 p-4">
             <div className="relative w-full h-full">
               <Image
                 src={src}
@@ -90,7 +90,7 @@ export default function EnlargeableProductImage({ src, alt, productName }: Enlar
       {/* Mobile Modal */}
       {isModalOpen && isMobile && (
         <div
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4"
+          className="fixed inset-0 z-100 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4"
           onClick={() => setIsModalOpen(false)}
           role="dialog"
           aria-modal="true"
@@ -110,7 +110,7 @@ export default function EnlargeableProductImage({ src, alt, productName }: Enlar
             </button>
 
             {/* Enlarged image - Matches green theme */}
-            <div className="bg-gradient-to-br from-jerry-green-800 to-jerry-green-900 rounded-xl p-6 shadow-2xl border-2 border-gold-400">
+            <div className="bg-linear-to-br from-jerry-green-800 to-jerry-green-900 rounded-xl p-6 shadow-2xl border-2 border-gold-400">
               <div className="relative w-full aspect-square">
                 <Image
                   src={src}

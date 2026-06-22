@@ -70,7 +70,7 @@ function InvoiceLineRowComponent({ index, line, state, library, libraryById, onC
         <PriceInput
           valueP={state.unit_price_p}
           onChangeP={(p) => onChange(index, { unit_price_p: p })}
-          className="w-24 px-2 py-1 bg-jerry-green-700/50 border border-gold-500/30 rounded text-parchment-50"
+          className="w-24 px-2 py-1 bg-jerry-green-700/50 border border-gold-500/30 rounded-sm text-parchment-50"
           aria-label={`New net price for line ${index + 1}`}
         />
       </td>
@@ -81,20 +81,20 @@ function InvoiceLineRowComponent({ index, line, state, library, libraryById, onC
               value={match.new_name}
               onChange={(e) => onChange(index, { match: { ...match, new_name: e.target.value } })}
               placeholder="Name"
-              className="w-full px-2 py-1 bg-jerry-green-700/50 border border-gold-500/30 rounded text-parchment-50 text-sm"
+              className="w-full px-2 py-1 bg-jerry-green-700/50 border border-gold-500/30 rounded-sm text-parchment-50 text-sm"
             />
             <div className="flex gap-2">
               <select
                 value={match.new_type}
                 onChange={(e) => onChange(index, { match: { ...match, new_type: e.target.value as IngredientType } })}
-                className="px-2 py-1 bg-jerry-green-700/50 border border-gold-500/30 rounded text-parchment-50 text-sm"
+                className="px-2 py-1 bg-jerry-green-700/50 border border-gold-500/30 rounded-sm text-parchment-50 text-sm"
               >
                 {INGREDIENT_TYPES.map((t) => <option key={t} value={t}>{t}</option>)}
               </select>
               <select
                 value={match.new_pricing_mode}
                 onChange={(e) => onChange(index, { match: { ...match, new_pricing_mode: e.target.value as 'bottle' | 'unit' } })}
-                className="px-2 py-1 bg-jerry-green-700/50 border border-gold-500/30 rounded text-parchment-50 text-sm"
+                className="px-2 py-1 bg-jerry-green-700/50 border border-gold-500/30 rounded-sm text-parchment-50 text-sm"
               >
                 <option value="bottle">Per bottle</option>
                 <option value="unit">Per unit</option>
@@ -108,7 +108,7 @@ function InvoiceLineRowComponent({ index, line, state, library, libraryById, onC
                 placeholder="Bottle size (ml)"
                 value={match.new_bottle_size_ml ?? ''}
                 onChange={(e) => onChange(index, { match: { ...match, new_bottle_size_ml: e.target.value ? parseInt(e.target.value, 10) : null } })}
-                className="w-full px-2 py-1 bg-jerry-green-700/50 border border-gold-500/30 rounded text-parchment-50 text-sm"
+                className="w-full px-2 py-1 bg-jerry-green-700/50 border border-gold-500/30 rounded-sm text-parchment-50 text-sm"
               />
             )}
             <button type="button" onClick={() => onToggleCreateNew(index, false)} className="text-xs text-parchment-400 hover:text-parchment-200 underline">
@@ -120,7 +120,7 @@ function InvoiceLineRowComponent({ index, line, state, library, libraryById, onC
             <select
               value={match.library_id ?? ''}
               onChange={(e) => onChange(index, { match: { kind: 'existing', library_id: e.target.value || null } })}
-              className="w-full px-2 py-1 bg-jerry-green-700/50 border border-gold-500/30 rounded text-parchment-50 text-sm"
+              className="w-full px-2 py-1 bg-jerry-green-700/50 border border-gold-500/30 rounded-sm text-parchment-50 text-sm"
             >
               <option value="">— select library entry —</option>
               {line.match.kind === 'suggestions' && line.match.entries.map((e) => (
