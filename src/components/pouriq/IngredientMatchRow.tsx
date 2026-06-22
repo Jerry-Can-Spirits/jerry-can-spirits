@@ -43,6 +43,9 @@ interface Props {
   libraryEntries: IngredientLibraryRow[]
   state: MatchRowState
   onChange: (state: MatchRowState) => void
+  // Fired when this row becomes resolved (existing entry picked, or a new
+  // entry's price field blurred) so the parent can bulk-fill matching rows.
+  onResolvedCommit?: () => void
 }
 
 function isUnitPricedSelection(state: MatchRowState, library: IngredientLibraryRow[]): boolean {
@@ -57,7 +60,7 @@ function isUnitPricedSelection(state: MatchRowState, library: IngredientLibraryR
 export function IngredientMatchRow({
   extractedName, rawMeasurement, inferredType,
   matchKind, suggestionEntries, libraryEntries,
-  state, onChange,
+  state, onChange, onResolvedCommit,
 }: Props) {
   const unitPriced = isUnitPricedSelection(state, libraryEntries)
   const selectedExisting = state.existing_library_id
@@ -71,6 +74,8 @@ export function IngredientMatchRow({
       pour_ml: state.pour_ml,
       unit_count: state.unit_count,
     })
+    // Picking an existing entry resolves the row instantly (no blur).
+    onResolvedCommit?.()
   }
 
   function startNewLibrary() {
@@ -149,6 +154,7 @@ export function IngredientMatchRow({
               <PriceInput
                 valueP={state.new_library.unit_cost_p}
                 onChangeP={(p) => updateNewLibrary({ unit_cost_p: p })}
+                onCommit={onResolvedCommit}
                 className={inputClass} placeholder="Unit cost (£)" />
             ) : (
               <div className="grid grid-cols-2 gap-2">
@@ -162,6 +168,7 @@ export function IngredientMatchRow({
                 <PriceInput
                   valueP={state.new_library.bottle_cost_p}
                   onChangeP={(p) => updateNewLibrary({ bottle_cost_p: p })}
+                  onCommit={onResolvedCommit}
                   className={inputClass} placeholder="Bottle cost (£)" />
               </div>
             )}
