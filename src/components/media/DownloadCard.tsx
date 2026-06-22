@@ -53,7 +53,7 @@ export default function DownloadCard({
             key={format.label}
             href={format.url}
             download
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-jerry-green-700/60 hover:bg-gold-500 text-parchment-200 hover:text-jerry-green-900 text-xs font-semibold rounded transition-all duration-200"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-jerry-green-700/60 hover:bg-gold-500 text-parchment-200 hover:text-jerry-green-900 text-xs font-semibold rounded-sm transition-all duration-200"
           >
             <svg
               className="w-3.5 h-3.5"

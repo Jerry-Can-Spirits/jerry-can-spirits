@@ -196,13 +196,13 @@ export default function TradeOrderForm({ products, error: catalogueError, accoun
                         {/* Product header */}
                         <div className="flex items-center gap-3 mb-2">
                           {product.featuredImage && (
-                            <div className="relative flex-shrink-0 w-12 h-12">
+                            <div className="relative shrink-0 w-12 h-12">
                               <Image
                                 src={product.featuredImage.url}
                                 alt={product.featuredImage.altText ?? product.title}
                                 width={48}
                                 height={48}
-                                className="rounded object-cover border border-gold-500/20 cursor-zoom-in transition-transform duration-200 hover:scale-[2.5] hover:z-20 relative"
+                                className="rounded-sm object-cover border border-gold-500/20 cursor-zoom-in transition-transform duration-200 hover:scale-[2.5] hover:z-20 relative"
                               />
                             </div>
                           )}
@@ -238,11 +238,11 @@ export default function TradeOrderForm({ products, error: catalogueError, accoun
                                     </p>
                                   )}
                                 </div>
-                                <div className="flex items-center gap-2 flex-shrink-0">
+                                <div className="flex items-center gap-2 shrink-0">
                                   <button
                                     type="button"
                                     onClick={() => setQuantity(variant.id, qty - 1)}
-                                    className="w-8 h-8 rounded border border-gold-500/30 text-gold-300 hover:border-gold-400 hover:text-gold-200 transition-colors flex items-center justify-center text-base font-bold"
+                                    className="w-8 h-8 rounded-sm border border-gold-500/30 text-gold-300 hover:border-gold-400 hover:text-gold-200 transition-colors flex items-center justify-center text-base font-bold"
                                   >
                                     −
                                   </button>
@@ -252,7 +252,7 @@ export default function TradeOrderForm({ products, error: catalogueError, accoun
                                   <button
                                     type="button"
                                     onClick={() => setQuantity(variant.id, qty + 1)}
-                                    className="w-8 h-8 rounded border border-gold-500/30 text-gold-300 hover:border-gold-400 hover:text-gold-200 transition-colors flex items-center justify-center text-base font-bold"
+                                    className="w-8 h-8 rounded-sm border border-gold-500/30 text-gold-300 hover:border-gold-400 hover:text-gold-200 transition-colors flex items-center justify-center text-base font-bold"
                                   >
                                     +
                                   </button>
@@ -293,7 +293,7 @@ export default function TradeOrderForm({ products, error: catalogueError, accoun
               </p>
             )}
 
-            <p role="alert" aria-live="assertive" className="text-red-400 text-sm mb-4 min-h-[1.25rem]">
+            <p role="alert" aria-live="assertive" className="text-red-400 text-sm mb-4 min-h-5">
               {formError}
             </p>
 

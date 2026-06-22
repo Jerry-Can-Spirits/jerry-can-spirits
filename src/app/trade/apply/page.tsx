@@ -248,7 +248,7 @@ export default function TradeApplyPage() {
           <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 sm:p-8 border border-gold-500/20">
             <StepProgress step={step} total={TOTAL_STEPS} />
 
-            <h2 ref={headingRef} tabIndex={-1} className="text-xl font-serif font-bold text-parchment-50 mb-6 outline-none">
+            <h2 ref={headingRef} tabIndex={-1} className="text-xl font-serif font-bold text-parchment-50 mb-6 outline-hidden">
               {STEP_HEADINGS[step - 1]}
             </h2>
 
@@ -279,14 +279,14 @@ export default function TradeApplyPage() {
 
               {step < TOTAL_STEPS && (
                 <button type="button" onClick={next}
-                  className="px-6 py-3 bg-gradient-to-r from-gold-600 to-gold-500 hover:from-gold-500 hover:to-gold-400 text-jerry-green-900 font-semibold rounded-lg transition-all">
+                  className="px-6 py-3 bg-linear-to-r from-gold-600 to-gold-500 hover:from-gold-500 hover:to-gold-400 text-jerry-green-900 font-semibold rounded-lg transition-all">
                   Next
                 </button>
               )}
               {step === TOTAL_STEPS && (
                 <button type="button" onClick={handleSubmit} disabled={submitting || !data.declaration}
                   aria-disabled={submitting || !data.declaration}
-                  className="px-6 py-3 bg-gradient-to-r from-gold-600 to-gold-500 hover:from-gold-500 hover:to-gold-400 disabled:from-gray-600 disabled:to-gray-500 disabled:cursor-not-allowed text-jerry-green-900 font-semibold rounded-lg transition-all">
+                  className="px-6 py-3 bg-linear-to-r from-gold-600 to-gold-500 hover:from-gold-500 hover:to-gold-400 disabled:from-gray-600 disabled:to-gray-500 disabled:cursor-not-allowed text-jerry-green-900 font-semibold rounded-lg transition-all">
                   {submitting ? 'Submitting…' : 'Submit application'}
                 </button>
               )}

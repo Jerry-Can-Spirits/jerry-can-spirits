@@ -68,7 +68,7 @@ export default async function InvoiceImpactPage({ params }: Props) {
         />
 
         <div className="mt-10 flex justify-end">
-          <Link href="/trade/pouriq/library" className="px-6 py-3 bg-gradient-to-r from-gold-600 to-gold-500 hover:from-gold-500 hover:to-gold-400 text-jerry-green-900 font-semibold rounded-lg">
+          <Link href="/trade/pouriq/library" className="px-6 py-3 bg-linear-to-r from-gold-600 to-gold-500 hover:from-gold-500 hover:to-gold-400 text-jerry-green-900 font-semibold rounded-lg">
             Done
           </Link>
         </div>

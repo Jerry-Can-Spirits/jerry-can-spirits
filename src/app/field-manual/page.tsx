@@ -68,7 +68,7 @@ export default async function FieldManualHome() {
                 sizes="(max-width: 768px) 100vw, 896px"
                 priority
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-jerry-green-900/60 to-transparent" />
+              <div className="absolute inset-0 bg-linear-to-t from-jerry-green-900/60 to-transparent" />
             </div>
           </div>
 
@@ -87,7 +87,7 @@ export default async function FieldManualHome() {
       {/* Stats Banner */}
       <ScrollReveal>
       <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 -mt-8 mb-8 relative z-10">
-        <div className="bg-gradient-to-r from-jerry-green-800/80 via-jerry-green-700/80 to-jerry-green-800/80 backdrop-blur-sm rounded-xl border border-gold-500/30 py-6 px-8">
+        <div className="bg-linear-to-r from-jerry-green-800/80 via-jerry-green-700/80 to-jerry-green-800/80 backdrop-blur-sm rounded-xl border border-gold-500/30 py-6 px-8">
           <div className="grid grid-cols-3 divide-x divide-gold-500/30">
             <div className="text-center px-4">
               <div className="text-3xl sm:text-4xl font-serif font-bold text-gold-300">
@@ -139,10 +139,10 @@ export default async function FieldManualHome() {
       <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
         <Link
           href="/first-pour/"
-          className="group block bg-gradient-to-r from-jerry-green-800/60 to-jerry-green-800/40 border border-gold-500/30 rounded-xl p-6 sm:p-8 hover:border-gold-400/50 transition-colors"
+          className="group block bg-linear-to-r from-jerry-green-800/60 to-jerry-green-800/40 border border-gold-500/30 rounded-xl p-6 sm:p-8 hover:border-gold-400/50 transition-colors"
         >
           <div className="flex flex-col sm:flex-row items-center gap-6 text-center sm:text-left">
-            <div className="flex-shrink-0">
+            <div className="shrink-0">
               <div className="inline-block px-3 py-1 bg-gold-500/20 rounded-full">
                 <span className="text-gold-300 text-xs font-semibold uppercase tracking-widest">
                   Free companion book
@@ -157,7 +157,7 @@ export default async function FieldManualHome() {
                 The short companion to our spiced rum. How it is built, how to drink it, the first cocktails to try.
               </p>
             </div>
-            <div className="flex-shrink-0 text-gold-300 group-hover:translate-x-1 transition-transform">
+            <div className="shrink-0 text-gold-300 group-hover:translate-x-1 transition-transform">
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
               </svg>
@@ -173,9 +173,9 @@ export default async function FieldManualHome() {
           {/* Cocktails Section */}
           <ScrollReveal delay={0}>
           <Link href="/field-manual/cocktails/" className="group h-full">
-            <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20 hover:border-gold-400/40 transition-all duration-300 transform hover:scale-105 hover:shadow-2xl relative overflow-hidden h-full flex flex-col">
+            <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20 hover:border-gold-400/40 transition-all duration-300 transform hover:scale-105 hover:shadow-2xl relative overflow-hidden h-full flex flex-col">
               {/* Parchment texture */}
-              <div className="absolute inset-0 bg-gradient-to-br from-amber-100/5 to-amber-200/10 opacity-50"></div>
+              <div className="absolute inset-0 bg-linear-to-br from-amber-100/5 to-amber-200/10 opacity-50"></div>
               
               <div className="relative z-10">
                 <div className="text-center mb-6">
@@ -214,9 +214,9 @@ export default async function FieldManualHome() {
           {/* Ingredients Section */}
           <ScrollReveal delay={1}>
           <Link href="/field-manual/ingredients/" className="group h-full">
-            <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20 hover:border-gold-400/40 transition-all duration-300 transform hover:scale-105 hover:shadow-2xl relative overflow-hidden h-full flex flex-col">
+            <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20 hover:border-gold-400/40 transition-all duration-300 transform hover:scale-105 hover:shadow-2xl relative overflow-hidden h-full flex flex-col">
               {/* Parchment texture */}
-              <div className="absolute inset-0 bg-gradient-to-br from-amber-100/5 to-amber-200/10 opacity-50"></div>
+              <div className="absolute inset-0 bg-linear-to-br from-amber-100/5 to-amber-200/10 opacity-50"></div>
               
               <div className="relative z-10">
                 <div className="text-center mb-6">
@@ -255,9 +255,9 @@ export default async function FieldManualHome() {
           {/* Equipment Section */}
           <ScrollReveal delay={2}>
           <Link href="/field-manual/equipment/" className="group h-full">
-            <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20 hover:border-gold-400/40 transition-all duration-300 transform hover:scale-105 hover:shadow-2xl relative overflow-hidden h-full flex flex-col">
+            <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20 hover:border-gold-400/40 transition-all duration-300 transform hover:scale-105 hover:shadow-2xl relative overflow-hidden h-full flex flex-col">
               {/* Parchment texture */}
-              <div className="absolute inset-0 bg-gradient-to-br from-amber-100/5 to-amber-200/10 opacity-50"></div>
+              <div className="absolute inset-0 bg-linear-to-br from-amber-100/5 to-amber-200/10 opacity-50"></div>
               
               <div className="relative z-10">
                 <div className="text-center mb-6">
@@ -295,8 +295,8 @@ export default async function FieldManualHome() {
 
         {/* Call to Action */}
         <div className="text-center mt-16">
-          <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20 relative overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-br from-amber-100/5 to-amber-200/10 opacity-50"></div>
+          <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20 relative overflow-hidden">
+            <div className="absolute inset-0 bg-linear-to-br from-amber-100/5 to-amber-200/10 opacity-50"></div>
             <div className="relative z-10">
               <h2 className="text-2xl font-serif font-bold text-white mb-4">
                 Start Anywhere
@@ -315,7 +315,7 @@ export default async function FieldManualHome() {
       {/* Difficulty Comparison Table */}
       <ScrollReveal>
       <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
+        <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
           <h2 className="text-2xl sm:text-3xl font-serif font-bold text-white mb-2 text-center">
             Cocktail Difficulty Levels
           </h2>
@@ -473,7 +473,7 @@ export default async function FieldManualHome() {
           }}
         />
 
-        <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
+        <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
           <h2 className="text-3xl font-serif font-bold text-white mb-2">
             Questions About the Field Manual
           </h2>

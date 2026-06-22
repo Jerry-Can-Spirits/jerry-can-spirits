@@ -38,7 +38,7 @@ export default function ProductImageGallery({
 
   if (!images || images.length === 0) {
     return (
-      <div className="aspect-square sm:aspect-[4/3] lg:aspect-square bg-jerry-green-800/20 rounded-xl flex items-center justify-center border border-gold-500/20">
+      <div className="aspect-square sm:aspect-4/3 lg:aspect-square bg-jerry-green-800/20 rounded-xl flex items-center justify-center border border-gold-500/20">
         <svg
           className="w-24 h-24 text-gold-500/30"
           fill="none"
@@ -62,7 +62,7 @@ export default function ProductImageGallery({
     <div className="space-y-3 sm:space-y-4">
       {/* Main Image */}
       <div
-        className="relative aspect-square sm:aspect-[4/3] lg:aspect-square bg-jerry-green-800/20 rounded-xl overflow-hidden border border-gold-500/20"
+        className="relative aspect-square sm:aspect-4/3 lg:aspect-square bg-jerry-green-800/20 rounded-xl overflow-hidden border border-gold-500/20"
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
       >

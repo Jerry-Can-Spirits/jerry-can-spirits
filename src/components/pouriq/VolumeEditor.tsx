@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import { PRIMARY_BUTTON, SECONDARY_BUTTON_SM } from '@/lib/pouriq/button-styles'
 import type { CocktailRow, CocktailMetrics, VolumeCadence } from '@/lib/pouriq/types'
 
-const inputClass = 'w-24 px-2 py-1 bg-jerry-green-700/50 border border-gold-500/30 rounded text-parchment-50 text-sm focus:border-gold-400 focus:outline-none'
+const inputClass = 'w-24 px-2 py-1 bg-jerry-green-700/50 border border-gold-500/30 rounded-sm text-parchment-50 text-sm focus:border-gold-400 focus:outline-hidden'
 
 function formatMoney(p: number): string { return `£${(p / 100).toFixed(2)}` }
 function formatDateRange(start: string, end: string): string {
@@ -224,7 +224,7 @@ export function VolumeEditor({ menuId, cocktails, metrics, initialCadence }: Pro
             value={pasteText}
             onChange={(e) => setPasteText(e.target.value)}
             rows={8}
-            className="w-full px-3 py-2 bg-jerry-green-700/50 border border-gold-500/30 rounded text-parchment-50 text-xs font-mono focus:border-gold-400 focus:outline-none"
+            className="w-full px-3 py-2 bg-jerry-green-700/50 border border-gold-500/30 rounded-sm text-parchment-50 text-xs font-mono focus:border-gold-400 focus:outline-hidden"
             placeholder={`Mojito\t28\nNegroni\t12\nEspresso Martini\t34`}
           />
           <div className="flex justify-end gap-2">

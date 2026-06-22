@@ -74,7 +74,7 @@ export default function Contact() {
             {contactMethods.map((method) => {
               const CardContent = (
                 <>
-                  <div className="w-16 h-16 bg-gradient-to-br from-gold-500 to-gold-600 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
+                  <div className="w-16 h-16 bg-linear-to-br from-gold-500 to-gold-600 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
                     {method.icon === 'email' && (
                       <svg className="w-8 h-8 text-jerry-green-900" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
                         <rect x="2" y="4" width="20" height="16" rx="2" />
@@ -174,7 +174,7 @@ export default function Contact() {
 
       {mounted && !isLoading && !hasSignedUp && (
         <section className="relative py-20 overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-r from-jerry-green-800/20 to-jerry-green-700/20" />
+          <div className="absolute inset-0 bg-linear-to-r from-jerry-green-800/20 to-jerry-green-700/20" />
           <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h2 className="text-3xl sm:text-4xl font-serif font-bold text-parchment-50 mb-6">
               Stay Connected
@@ -184,7 +184,7 @@ export default function Contact() {
             </p>
             <Link
               href="/first-pour/"
-              className="group bg-gradient-to-r from-gold-600 to-gold-500 hover:from-gold-500 hover:to-gold-400 text-jerry-green-900 px-8 py-4 rounded-lg font-semibold uppercase tracking-wide transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 flex items-center justify-center gap-2 mx-auto w-fit"
+              className="group bg-linear-to-r from-gold-600 to-gold-500 hover:from-gold-500 hover:to-gold-400 text-jerry-green-900 px-8 py-4 rounded-lg font-semibold uppercase tracking-wide transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 flex items-center justify-center gap-2 mx-auto w-fit"
             >
               Join the Expedition
               <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">

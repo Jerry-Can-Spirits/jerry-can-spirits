@@ -77,11 +77,11 @@ export default async function FieldManualPreview() {
             <Link
               key={cocktail._id}
               href={`/field-manual/cocktails/${cocktail.slug.current}`}
-              className="group bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl border border-gold-500/20 overflow-hidden hover:border-gold-400/40 transition-all duration-300 hover:scale-105"
+              className="group bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl border border-gold-500/20 overflow-hidden hover:border-gold-400/40 transition-all duration-300 hover:scale-105"
             >
               {/* Image */}
               {cocktail.image && (
-                <div className="relative aspect-[4/3] bg-jerry-green-800/20">
+                <div className="relative aspect-4/3 bg-jerry-green-800/20">
                   <Image
                     src={cocktail.image}
                     alt={cocktail.name}
@@ -119,7 +119,7 @@ export default async function FieldManualPreview() {
         <div className="text-center">
           <Link
             href="/field-manual/"
-            className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-gold-600 to-gold-500 hover:from-gold-500 hover:to-gold-400 text-jerry-green-900 rounded-lg font-semibold uppercase tracking-wide transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105"
+            className="inline-flex items-center px-8 py-4 bg-linear-to-r from-gold-600 to-gold-500 hover:from-gold-500 hover:to-gold-400 text-jerry-green-900 rounded-lg font-semibold uppercase tracking-wide transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105"
           >
             Explore Full Field Manual
           </Link>

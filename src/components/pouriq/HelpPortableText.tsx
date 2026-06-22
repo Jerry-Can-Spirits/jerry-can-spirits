@@ -72,7 +72,7 @@ const components: PortableTextComponents = {
   listItem: {
     bullet: ({ children }) => (
       <li className="flex items-start gap-3">
-        <span className="w-1.5 h-1.5 bg-gold-400 rounded-full flex-shrink-0 mt-2" aria-hidden="true" />
+        <span className="w-1.5 h-1.5 bg-gold-400 rounded-full shrink-0 mt-2" aria-hidden="true" />
         <span className="text-parchment-300 leading-relaxed">{children}</span>
       </li>
     ),

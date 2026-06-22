@@ -161,7 +161,7 @@ export default function RootLayout({
           {/* Skip to Content Link - Accessibility */}
           <a
             href="#main-content"
-            className="sr-only focus:not-sr-only fixed top-4 left-4 z-[9999] px-4 py-2 bg-gold-500 text-jerry-green-900 font-semibold rounded-lg shadow-lg focus:outline-none focus:ring-2 focus:ring-gold-300 transition-all duration-200"
+            className="sr-only focus:not-sr-only fixed top-4 left-4 z-9999 px-4 py-2 bg-gold-500 text-jerry-green-900 font-semibold rounded-lg shadow-lg focus:outline-hidden focus:ring-2 focus:ring-gold-300 transition-all duration-200"
           >
             Skip to main content
           </a>

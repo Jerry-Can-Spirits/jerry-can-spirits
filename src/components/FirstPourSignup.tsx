@@ -70,7 +70,7 @@ export default function FirstPourSignup() {
         name="website"
         value={honeypot}
         onChange={(e) => setHoneypot(e.target.value)}
-        className="absolute -left-[9999px] top-0 h-px w-px overflow-hidden opacity-0"
+        className="absolute left-[-9999px] top-0 h-px w-px overflow-hidden opacity-0"
         tabIndex={-1}
         autoComplete="off"
         aria-hidden="true"
@@ -86,7 +86,7 @@ export default function FirstPourSignup() {
           aria-label="First name"
           value={firstName}
           onChange={(e) => setFirstName(e.target.value)}
-          className="w-full px-4 py-3 bg-jerry-green-900 border border-gold-500/30 rounded-lg text-white placeholder-parchment-500 text-base focus:outline-none focus:border-gold-400 transition-colors"
+          className="w-full px-4 py-3 bg-jerry-green-900 border border-gold-500/30 rounded-lg text-white placeholder-parchment-500 text-base focus:outline-hidden focus:border-gold-400 transition-colors"
         />
         <input
           type="email"
@@ -99,7 +99,7 @@ export default function FirstPourSignup() {
           aria-describedby={status === 'error' ? 'first-pour-error' : undefined}
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="w-full px-4 py-3 bg-jerry-green-900 border border-gold-500/30 rounded-lg text-white placeholder-parchment-500 text-base focus:outline-none focus:border-gold-400 transition-colors"
+          className="w-full px-4 py-3 bg-jerry-green-900 border border-gold-500/30 rounded-lg text-white placeholder-parchment-500 text-base focus:outline-hidden focus:border-gold-400 transition-colors"
         />
         <button
           type="submit"
@@ -123,7 +123,7 @@ export default function FirstPourSignup() {
           type="checkbox"
           checked={consent}
           onChange={(e) => setConsent(e.target.checked)}
-          className="mt-0.5 h-4 w-4 rounded border-gold-500/40 bg-jerry-green-900 accent-gold-500 flex-shrink-0"
+          className="mt-0.5 h-4 w-4 rounded-sm border-gold-500/40 bg-jerry-green-900 accent-gold-500 shrink-0"
         />
         <span className="text-parchment-500 text-xs leading-relaxed">
           I agree to receive the book and occasional emails from Jerry Can Spirits. You can unsubscribe at any time. See our{' '}

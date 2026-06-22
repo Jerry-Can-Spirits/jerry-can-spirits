@@ -221,7 +221,7 @@ export default function Home() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid lg:grid-cols-2 gap-12">
               <ScrollReveal>
-              <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
+              <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
                 <h2 className="text-3xl font-serif font-bold text-white mb-6">
                   Why We Started Making Rum
                 </h2>
@@ -243,7 +243,7 @@ export default function Home() {
               </ScrollReveal>
 
               <ScrollReveal delay={1}>
-              <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
+              <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
                 <h2 className="text-3xl font-serif font-bold text-white mb-6">
                   Why We Do It This Way
                 </h2>

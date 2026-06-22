@@ -143,7 +143,7 @@ export default function Footer() {
       <div className="relative">
         {/* Main Footer Content */}
         <div className="max-w-none mx-auto px-8 sm:px-12 lg:px-16 xl:px-20 py-16">
-          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-7 gap-8 lg:gap-16 xl:gap-20 items-start max-w-screen-2xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-7 gap-8 lg:gap-16 xl:gap-20 items-start max-w-(--breakpoint-2xl) mx-auto">
             
             {/* Column 1 - Quick Links (each group independently collapsible on mobile) */}
             <div className="space-y-4">
@@ -443,7 +443,7 @@ export default function Footer() {
                   {paymentMethods.map((method) => (
                     <div
                       key={method.name}
-                      className="bg-parchment-50 rounded-md p-3 flex items-center justify-center hover:bg-parchment-100 transition-colors duration-200 shadow-sm h-14"
+                      className="bg-parchment-50 rounded-md p-3 flex items-center justify-center hover:bg-parchment-100 transition-colors duration-200 shadow-xs h-14"
                       title={method.name}
                     >
                       <Image
@@ -497,7 +497,7 @@ export default function Footer() {
         {/* Bottom Bar */}
         <div className="border-t border-jerry-green-700 bg-jerry-green-950/50">
           <div className="max-w-none mx-auto px-8 sm:px-12 lg:px-16 xl:px-20 py-6">
-            <div className="max-w-screen-2xl mx-auto">
+            <div className="max-w-(--breakpoint-2xl) mx-auto">
             <div className="flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0">
               
               {/* Copyright & Company Info */}

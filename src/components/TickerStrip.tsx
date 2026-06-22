@@ -19,7 +19,7 @@ export default function TickerStrip({ items, className = '' }: TickerStripProps)
             key={i}
             className="inline-flex items-center whitespace-nowrap px-8 text-gold-300 font-semibold text-sm uppercase tracking-widest"
           >
-            <span className="w-1.5 h-1.5 bg-gold-400 rounded-full mr-8 flex-shrink-0" />
+            <span className="w-1.5 h-1.5 bg-gold-400 rounded-full mr-8 shrink-0" />
             {item}
           </span>
         ))}

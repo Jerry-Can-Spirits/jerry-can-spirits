@@ -91,7 +91,7 @@ export default function ShippingBanner() {
           </div>
           <button
             onClick={handleDismiss}
-            className="p-1 hover:bg-gold-400/10 rounded transition-colors flex-shrink-0"
+            className="p-1 hover:bg-gold-400/10 rounded-sm transition-colors shrink-0"
             aria-label="Dismiss shipping info"
           >
             <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

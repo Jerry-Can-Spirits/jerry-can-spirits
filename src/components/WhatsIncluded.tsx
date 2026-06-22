@@ -12,7 +12,7 @@ export default function WhatsIncluded({ items }: WhatsIncludedProps) {
   if (!items || items.length === 0) return null
 
   return (
-    <section className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
+    <section className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
       <div className="mb-6">
         <h2 className="text-2xl font-serif font-bold text-white">
           What's in the Box
@@ -29,7 +29,7 @@ export default function WhatsIncluded({ items }: WhatsIncludedProps) {
             className="flex items-start gap-4 p-4 bg-jerry-green-800/30 rounded-lg border border-gold-500/10"
           >
             {/* Quantity badge */}
-            <div className="flex-shrink-0 w-10 h-10 bg-gold-500/20 rounded-lg flex items-center justify-center">
+            <div className="shrink-0 w-10 h-10 bg-gold-500/20 rounded-lg flex items-center justify-center">
               <span className="text-gold-300 font-bold">
                 {item.quantity && item.quantity > 1 ? `${item.quantity}x` : '1x'}
               </span>

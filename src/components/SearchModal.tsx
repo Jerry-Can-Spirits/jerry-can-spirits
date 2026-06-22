@@ -124,7 +124,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                       }
                     }}
                     placeholder="Search products, guides, cocktails, equipment..."
-                    className="w-full pl-12 pr-12 py-4 bg-transparent text-parchment-50 text-lg placeholder:text-parchment-400 focus:outline-none"
+                    className="w-full pl-12 pr-12 py-4 bg-transparent text-parchment-50 text-lg placeholder:text-parchment-400 focus:outline-hidden"
                   />
                   <button
                     onClick={handleClose}
@@ -151,7 +151,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                           className="flex items-start gap-4 p-4 rounded-lg hover:bg-jerry-green-700/50 transition-colors group"
                         >
                           {result.image && (
-                            <div className="flex-shrink-0 w-16 h-16 bg-jerry-green-700 rounded-lg overflow-hidden">
+                            <div className="shrink-0 w-16 h-16 bg-jerry-green-700 rounded-lg overflow-hidden">
                               <Image
                                 src={result.image}
                                 alt={result.title}
@@ -182,7 +182,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                               </p>
                             )}
                           </div>
-                          <div className="flex-shrink-0 text-gold-300 opacity-0 group-hover:opacity-100 transition-opacity">
+                          <div className="shrink-0 text-gold-300 opacity-0 group-hover:opacity-100 transition-opacity">
                             →
                           </div>
                         </Link>
@@ -220,16 +220,16 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                 <div className="hidden md:flex border-t border-gold-500/20 p-3 items-center justify-between text-xs text-parchment-400">
                   <div className="flex items-center gap-4">
                     <span className="flex items-center gap-1">
-                      <kbd className="px-2 py-1 bg-jerry-green-700/60 rounded border border-gold-500/20">↵</kbd>
+                      <kbd className="px-2 py-1 bg-jerry-green-700/60 rounded-sm border border-gold-500/20">↵</kbd>
                       to select
                     </span>
                     <span className="flex items-center gap-1">
-                      <kbd className="px-2 py-1 bg-jerry-green-700/60 rounded border border-gold-500/20">ESC</kbd>
+                      <kbd className="px-2 py-1 bg-jerry-green-700/60 rounded-sm border border-gold-500/20">ESC</kbd>
                       to close
                     </span>
                   </div>
                   <span className="flex items-center gap-1">
-                    <kbd className="px-2 py-1 bg-jerry-green-700/60 rounded border border-gold-500/20">⌘K</kbd>
+                    <kbd className="px-2 py-1 bg-jerry-green-700/60 rounded-sm border border-gold-500/20">⌘K</kbd>
                     to search
                   </span>
                 </div>

@@ -74,7 +74,7 @@ export default function BottleLookup({ batchNumber }: BottleLookupProps) {
             value={bottleNumber}
             onChange={(e) => setBottleNumber(e.target.value)}
             placeholder={`1–${maxBottle}`}
-            className="w-full px-4 py-3 bg-jerry-green-700/60 border border-gold-500/20 rounded-lg text-white placeholder-parchment-600 focus:outline-none focus:border-gold-500/50 focus:ring-1 focus:ring-gold-500/30 transition-colors"
+            className="w-full px-4 py-3 bg-jerry-green-700/60 border border-gold-500/20 rounded-lg text-white placeholder-parchment-600 focus:outline-hidden focus:border-gold-500/50 focus:ring-1 focus:ring-gold-500/30 transition-colors"
           />
         </div>
 

@@ -35,7 +35,7 @@ export default function ColorSwatch({ name, hex, className = '' }: ColorSwatchPr
       <p className="text-parchment-400 text-xs font-mono">{hex}</p>
 
       {copied && (
-        <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-gold-500 text-jerry-green-900 text-xs px-2 py-1 rounded font-semibold whitespace-nowrap">
+        <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-gold-500 text-jerry-green-900 text-xs px-2 py-1 rounded-sm font-semibold whitespace-nowrap">
           Copied!
         </span>
       )}

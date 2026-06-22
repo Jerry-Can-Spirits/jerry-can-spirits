@@ -87,7 +87,7 @@ export function GenerateDescriptionModal({ cocktailId, cocktailName, existingDes
               value={text}
               onChange={(e) => setText(e.target.value)}
               placeholder="Click Generate to start, or write your own description."
-              className="w-full min-h-[160px] px-3 py-2 bg-jerry-green-700/50 border border-gold-500/30 rounded text-parchment-50 focus:border-gold-400 focus:outline-none"
+              className="w-full min-h-[160px] px-3 py-2 bg-jerry-green-700/50 border border-gold-500/30 rounded-sm text-parchment-50 focus:border-gold-400 focus:outline-hidden"
               aria-label="Description text"
             />
 

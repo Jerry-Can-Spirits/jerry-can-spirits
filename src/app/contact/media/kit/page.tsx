@@ -63,7 +63,7 @@ export default function MediaKitPage() {
           <section className="print-section mb-12 print:mb-8">
             {/* Header */}
             <div className="flex items-center gap-6 mb-8">
-              <div className="w-24 h-24 relative flex-shrink-0">
+              <div className="w-24 h-24 relative shrink-0">
                 <Image
                   src="/images/Logo.webp"
                   alt="Jerry Can Spirits® Logo"
@@ -151,7 +151,7 @@ export default function MediaKitPage() {
 
                 <div className="flex gap-2 mt-3 flex-wrap">
                   {['Gluten-free', 'Vegan', 'Dairy-free', 'Nut-free'].map((d) => (
-                    <span key={d} className="text-[10px] font-semibold uppercase px-2 py-0.5 bg-green-100 text-green-800 rounded">
+                    <span key={d} className="text-[10px] font-semibold uppercase px-2 py-0.5 bg-green-100 text-green-800 rounded-sm">
                       {d}
                     </span>
                   ))}
@@ -192,7 +192,7 @@ export default function MediaKitPage() {
             {/* Co-Founders */}
             <div className="grid grid-cols-2 gap-6 mb-8">
               <div className="flex gap-4">
-                <div className="w-20 h-20 relative flex-shrink-0 rounded-lg overflow-hidden">
+                <div className="w-20 h-20 relative shrink-0 rounded-lg overflow-hidden">
                   <Image
                     src="/images/team/Dan_Headshot.jpg"
                     alt="Dan Freeman"
@@ -210,7 +210,7 @@ export default function MediaKitPage() {
                 </div>
               </div>
               <div className="flex gap-4">
-                <div className="w-20 h-20 relative flex-shrink-0 rounded-lg overflow-hidden">
+                <div className="w-20 h-20 relative shrink-0 rounded-lg overflow-hidden">
                   <Image
                     src="https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/bcacb452-4f56-4676-b4c8-ac6afa7c1e00/public"
                     alt="Rhys"

@@ -115,10 +115,10 @@ export default function PressAwards() {
                       alt={`${award.title} medal`}
                       width={48}
                       height={48}
-                      className="flex-shrink-0"
+                      className="shrink-0"
                     />
                   ) : (
-                    <div className="w-2 h-2 rounded-full bg-gold-400 mt-2 flex-shrink-0" />
+                    <div className="w-2 h-2 rounded-full bg-gold-400 mt-2 shrink-0" />
                   )}
                   <div>
                     <p className="text-white font-semibold">{award.title}</p>

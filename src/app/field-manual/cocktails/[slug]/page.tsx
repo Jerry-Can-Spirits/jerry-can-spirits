@@ -308,7 +308,7 @@ export default async function CocktailPage({ params }: PageProps) {
 
           {/* Flavour Profile */}
           {cocktail.flavorProfile && cocktail.flavorProfile.length > 0 && (
-            <div className="mt-6 sm:mt-8 bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-4 sm:p-6 border border-gold-500/20">
+            <div className="mt-6 sm:mt-8 bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-4 sm:p-6 border border-gold-500/20">
               <h3 className="text-xl font-serif font-bold text-gold-300 mb-4">Flavour Profile</h3>
               <div className="flex flex-wrap gap-2">
                 {cocktail.flavorProfile.map((note) => (
@@ -325,14 +325,14 @@ export default async function CocktailPage({ params }: PageProps) {
 
           {/* Long Description - Rich editorial content from Sanity */}
           {cocktail.longDescription && cocktail.longDescription.length > 0 && (
-            <div className="mt-6 sm:mt-8 bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-4 sm:p-6 md:p-8 border border-gold-500/20">
+            <div className="mt-6 sm:mt-8 bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-4 sm:p-6 md:p-8 border border-gold-500/20">
               <FieldManualPortableText value={cocktail.longDescription} />
             </div>
           )}
 
           {/* Related Cocktails */}
           {cocktail.relatedCocktails && cocktail.relatedCocktails.length > 0 && (
-            <div className="mt-6 sm:mt-8 bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-4 sm:p-6 border border-gold-500/20">
+            <div className="mt-6 sm:mt-8 bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-4 sm:p-6 border border-gold-500/20">
               <h3 className="text-xl font-serif font-bold text-gold-300 mb-4">You Might Also Like</h3>
               <div className="grid sm:grid-cols-2 gap-4">
                 {cocktail.relatedCocktails.filter(r => r?.slug?.current).map((related) => (
@@ -348,7 +348,7 @@ export default async function CocktailPage({ params }: PageProps) {
                         width={64}
                         height={64}
                         sizes="64px"
-                        className="w-16 h-16 object-cover rounded-lg flex-shrink-0"
+                        className="w-16 h-16 object-cover rounded-lg shrink-0"
                       />
                     )}
                     <div className="min-w-0">
@@ -365,7 +365,7 @@ export default async function CocktailPage({ params }: PageProps) {
 
           {/* Related Technique Guides */}
           {cocktail.relatedGuides && cocktail.relatedGuides.length > 0 && (
-            <div className="mt-6 sm:mt-8 bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-4 sm:p-6 border border-gold-500/20">
+            <div className="mt-6 sm:mt-8 bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-4 sm:p-6 border border-gold-500/20">
               <h3 className="text-xl font-serif font-bold text-gold-300 mb-4 flex items-center gap-2">
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
@@ -385,7 +385,7 @@ export default async function CocktailPage({ params }: PageProps) {
                       href={guideUrl}
                       className="flex items-center gap-3 p-3 bg-jerry-green-800/30 rounded-lg border border-gold-500/20 hover:bg-jerry-green-800/50 hover:border-gold-400/40 transition-all group"
                     >
-                      <svg className="w-5 h-5 text-gold-400 group-hover:scale-110 transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg className="w-5 h-5 text-gold-400 group-hover:scale-110 transition-transform shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                       </svg>
                       <div className="flex-1 min-w-0">
@@ -407,7 +407,7 @@ export default async function CocktailPage({ params }: PageProps) {
 
           {/* Featured Spirit — links to ingredient guide when set */}
           {cocktail.featuredSpirit && (
-            <div className="mt-6 sm:mt-8 bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-4 sm:p-6 border border-gold-500/20">
+            <div className="mt-6 sm:mt-8 bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-4 sm:p-6 border border-gold-500/20">
               <div className="flex items-center gap-4">
                 {cocktail.featuredSpirit.image && (
                   <Image
@@ -415,7 +415,7 @@ export default async function CocktailPage({ params }: PageProps) {
                     alt={cocktail.featuredSpirit.imageAlt || cocktail.featuredSpirit.name}
                     width={56}
                     height={56}
-                    className="w-14 h-14 object-cover rounded-lg flex-shrink-0"
+                    className="w-14 h-14 object-cover rounded-lg shrink-0"
                   />
                 )}
                 <div className="flex-1 min-w-0">
@@ -432,7 +432,7 @@ export default async function CocktailPage({ params }: PageProps) {
                 </div>
                 <Link
                   href={`/field-manual/ingredients/${cocktail.featuredSpirit.slug.current}/`}
-                  className="flex-shrink-0 flex items-center gap-1 text-gold-400 hover:text-gold-300 text-sm font-semibold transition-colors"
+                  className="shrink-0 flex items-center gap-1 text-gold-400 hover:text-gold-300 text-sm font-semibold transition-colors"
                 >
                   Learn more
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -444,7 +444,7 @@ export default async function CocktailPage({ params }: PageProps) {
           )}
 
           {/* Get the Rum CTA - only shown for Spiced Rum cocktails */}
-          {cocktail.baseSpirit === 'spiced-rum' && <div className="mt-6 sm:mt-8 bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-4 sm:p-6 border border-gold-500/20">
+          {cocktail.baseSpirit === 'spiced-rum' && <div className="mt-6 sm:mt-8 bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-4 sm:p-6 border border-gold-500/20">
             <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
               <div>
                 <h3 className="text-xl font-serif font-bold text-white mb-1">Need the Rum?</h3>
@@ -470,7 +470,7 @@ export default async function CocktailPage({ params }: PageProps) {
           )}
 
           {/* Rating & Share CTA */}
-          <div className="mt-6 sm:mt-8 bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-4 sm:p-6 md:p-8 border border-gold-500/20 text-center">
+          <div className="mt-6 sm:mt-8 bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-4 sm:p-6 md:p-8 border border-gold-500/20 text-center">
             <h3 className="text-2xl font-serif font-bold text-white mb-4">
               Enjoyed This Recipe?
             </h3>

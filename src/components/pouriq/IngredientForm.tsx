@@ -20,7 +20,7 @@ import {
 const INGREDIENT_TYPES: IngredientType[] = ['spirit','liqueur','wine','beer','mixer','syrup','juice','garnish','other']
 const COMMON_BOTTLE_SIZES = [500, 700, 750, 1000]
 
-const inputClass = 'w-full px-4 py-3 bg-jerry-green-700/50 border border-gold-500/30 rounded-lg text-parchment-50 placeholder-parchment-400 focus:border-gold-400 focus:ring-2 focus:ring-gold-400/20 focus:outline-none transition-colors duration-200'
+const inputClass = 'w-full px-4 py-3 bg-jerry-green-700/50 border border-gold-500/30 rounded-lg text-parchment-50 placeholder-parchment-400 focus:border-gold-400 focus:ring-2 focus:ring-gold-400/20 focus:outline-hidden transition-colors duration-200'
 const labelClass = 'block text-sm font-medium text-parchment-200 mb-2'
 const chipClass = 'px-3 py-2 rounded-lg border text-sm transition-colors'
 const chipActive = 'bg-gold-500/20 border-gold-400 text-gold-100'
@@ -318,7 +318,7 @@ export function IngredientForm({ entry, usageCount = 0, impactPayload }: Props) 
               {usageCount > 0 ? `Used in ${usageCount} drink${usageCount === 1 ? '' : 's'} — can't delete` : 'Delete ingredient'}
             </button>
           ) : <span />}
-          <button type="submit" disabled={submitting} className="px-6 py-3 bg-gradient-to-r from-gold-600 to-gold-500 hover:from-gold-500 hover:to-gold-400 disabled:from-gray-600 disabled:to-gray-500 text-jerry-green-900 font-semibold rounded-lg">
+          <button type="submit" disabled={submitting} className="px-6 py-3 bg-linear-to-r from-gold-600 to-gold-500 hover:from-gold-500 hover:to-gold-400 disabled:from-gray-600 disabled:to-gray-500 text-jerry-green-900 font-semibold rounded-lg">
             {submitting ? 'Saving…' : entry ? 'Save changes' : 'Add ingredient'}
           </button>
         </div>

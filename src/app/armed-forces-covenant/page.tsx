@@ -92,9 +92,9 @@ export default function ArmedForcesCovenant() {
 
         {/* ERS Bronze Award Recognition */}
         <div className="mb-12">
-          <div className="bg-gradient-to-br from-gold-500/10 to-gold-600/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/30">
+          <div className="bg-linear-to-br from-gold-500/10 to-gold-600/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/30">
             <div className="flex flex-col md:flex-row gap-6 items-center">
-              <div className="flex-shrink-0">
+              <div className="shrink-0">
                 <div className="bg-white rounded-lg p-4 shadow-lg">
                   <Image
                     src="/images/ERS_Bronze_Banner.webp"

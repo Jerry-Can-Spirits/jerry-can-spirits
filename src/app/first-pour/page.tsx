@@ -57,8 +57,8 @@ export default function FirstPourPage() {
 
             {/* Cover placeholder */}
             <ScrollReveal>
-              <div className="relative aspect-[3/4] max-w-sm mx-auto md:mx-0 md:ml-auto">
-                <div className="absolute inset-0 bg-gradient-to-br from-jerry-green-800 to-jerry-green-900 border border-gold-500/30 rounded-lg shadow-2xl flex flex-col items-center justify-center p-8 text-center">
+              <div className="relative aspect-3/4 max-w-sm mx-auto md:mx-0 md:ml-auto">
+                <div className="absolute inset-0 bg-linear-to-br from-jerry-green-800 to-jerry-green-900 border border-gold-500/30 rounded-lg shadow-2xl flex flex-col items-center justify-center p-8 text-center">
                   <div className="text-gold-300 text-xs font-semibold uppercase tracking-widest mb-4">
                     Jerry Can Spirits
                   </div>

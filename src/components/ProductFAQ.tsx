@@ -28,7 +28,7 @@ export default function ProductFAQ({ faqs, productName }: ProductFAQProps) {
   }
 
   return (
-    <section className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
+    <section className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
       {/* FAQ Schema markup */}
       <script
         type="application/ld+json"

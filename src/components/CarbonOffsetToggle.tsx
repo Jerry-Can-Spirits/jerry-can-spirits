@@ -52,7 +52,7 @@ export default function CarbonOffsetToggle() {
         disabled={isActing || isLoading}
         className="flex items-start gap-3 w-full text-left group disabled:opacity-50"
       >
-        <span className="mt-0.5 w-5 h-5 rounded border border-gold-500/40 flex-shrink-0 flex items-center justify-center bg-jerry-green-900 group-hover:border-gold-400 transition-colors">
+        <span className="mt-0.5 w-5 h-5 rounded-sm border border-gold-500/40 shrink-0 flex items-center justify-center bg-jerry-green-900 group-hover:border-gold-400 transition-colors">
           {isInCart && (
             <svg className="w-3 h-3 text-gold-400" fill="currentColor" viewBox="0 0 20 20">
               <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />

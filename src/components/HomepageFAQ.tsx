@@ -86,7 +86,7 @@ export default function HomepageFAQ() {
           {faqs.map((faq, index) => (
             <div
               key={index}
-              className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20"
+              className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20"
             >
               <h3 className="text-lg font-serif font-bold text-gold-300 mb-3">
                 {faq.question}
@@ -107,7 +107,7 @@ export default function HomepageFAQ() {
         </div>
 
         {/* Comparison Table */}
-        <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
+        <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
           <h3 className="text-2xl font-serif font-bold text-white mb-6 text-center">
             Mass-Produced vs Craft Rum
           </h3>

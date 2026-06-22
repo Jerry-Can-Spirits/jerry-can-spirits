@@ -7,7 +7,7 @@ import { IngredientMatchRow, type MatchRowState } from '@/components/pouriq/Ingr
 import { normalise } from '@/lib/pouriq/match'
 import { planBulkFill, type BulkFillRow } from '@/lib/pouriq/import-bulk-fill'
 
-const inputClass = 'w-full px-3 py-2 bg-jerry-green-700/50 border border-gold-500/30 rounded-lg text-parchment-50 text-sm focus:border-gold-400 focus:outline-none'
+const inputClass = 'w-full px-3 py-2 bg-jerry-green-700/50 border border-gold-500/30 rounded-lg text-parchment-50 text-sm focus:border-gold-400 focus:outline-hidden'
 
 export interface PreviewDrinkInput {
   name: string
@@ -306,7 +306,7 @@ export function ImportPreview({ menuId, drinks: extracted, libraryEntries }: Pro
 
       <div className="flex justify-end">
         <button type="button" onClick={handleCommit} disabled={submitting || stats.needsChoice > 0 || stats.included === 0}
-          className="px-6 py-3 bg-gradient-to-r from-gold-600 to-gold-500 hover:from-gold-500 hover:to-gold-400 disabled:from-gray-600 disabled:to-gray-500 text-jerry-green-900 font-semibold rounded-lg">
+          className="px-6 py-3 bg-linear-to-r from-gold-600 to-gold-500 hover:from-gold-500 hover:to-gold-400 disabled:from-gray-600 disabled:to-gray-500 text-jerry-green-900 font-semibold rounded-lg">
           {submitting ? 'Importing…' : `Import ${stats.included} drink${stats.included === 1 ? '' : 's'}`}
         </button>
       </div>

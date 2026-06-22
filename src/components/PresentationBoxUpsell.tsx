@@ -81,7 +81,7 @@ export default function PresentationBoxUpsell() {
     <div className="py-4 border-t border-gold-500/20">
       <div className="bg-jerry-green-800/30 rounded-lg border border-gold-500/20 p-4">
         <div className="flex gap-4">
-          <div className="relative w-20 h-20 flex-shrink-0 bg-jerry-green-800/20 rounded-lg overflow-hidden">
+          <div className="relative w-20 h-20 shrink-0 bg-jerry-green-800/20 rounded-lg overflow-hidden">
             {image ? (
               <Image
                 src={image.url}
@@ -108,7 +108,7 @@ export default function PresentationBoxUpsell() {
                   onClick={handleDecrement}
                   disabled={quantity <= 1 || isAdding || isLoading}
                   aria-label="Decrease box quantity"
-                  className="min-w-[44px] min-h-[44px] flex items-center justify-center bg-jerry-green-800/50 hover:bg-jerry-green-800 rounded border border-gold-500/20 transition-colors disabled:opacity-50"
+                  className="min-w-[44px] min-h-[44px] flex items-center justify-center bg-jerry-green-800/50 hover:bg-jerry-green-800 rounded-sm border border-gold-500/20 transition-colors disabled:opacity-50"
                 >
                   <svg className="w-3.5 h-3.5 text-parchment-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
@@ -124,7 +124,7 @@ export default function PresentationBoxUpsell() {
                   onClick={handleIncrement}
                   disabled={quantity >= rumQuantityInCart || isAdding || isLoading}
                   aria-label="Increase box quantity"
-                  className="min-w-[44px] min-h-[44px] flex items-center justify-center bg-jerry-green-800/50 hover:bg-jerry-green-800 rounded border border-gold-500/20 transition-colors disabled:opacity-50"
+                  className="min-w-[44px] min-h-[44px] flex items-center justify-center bg-jerry-green-800/50 hover:bg-jerry-green-800 rounded-sm border border-gold-500/20 transition-colors disabled:opacity-50"
                 >
                   <svg className="w-3.5 h-3.5 text-parchment-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -137,7 +137,7 @@ export default function PresentationBoxUpsell() {
                 onClick={handleAdd}
                 disabled={isAdding || isLoading}
                 aria-label={`Add ${quantity} presentation ${quantity === 1 ? 'box' : 'boxes'} for ${totalPriceDisplay}`}
-                className="ml-auto px-4 py-2 bg-gold-500 hover:bg-gold-400 text-jerry-green-900 text-sm font-semibold rounded transition-colors disabled:opacity-50"
+                className="ml-auto px-4 py-2 bg-gold-500 hover:bg-gold-400 text-jerry-green-900 text-sm font-semibold rounded-sm transition-colors disabled:opacity-50"
               >
                 {isAdding ? 'Adding...' : `Add ${totalPriceDisplay}`}
               </button>

@@ -229,7 +229,7 @@ export default async function ReviewsPage() {
       {/* Leave a Review CTA */}
       <section className="max-w-4xl mx-auto px-6 pb-16">
         <ScrollReveal>
-          <div className="bg-gradient-to-r from-jerry-green-800 to-jerry-green-800/60 border border-gold-500/30 rounded-xl p-8 text-center">
+          <div className="bg-linear-to-r from-jerry-green-800 to-jerry-green-800/60 border border-gold-500/30 rounded-xl p-8 text-center">
             <h2 className="font-serif text-2xl font-bold text-parchment-50 mb-3">
               Tried Our Rum?
             </h2>

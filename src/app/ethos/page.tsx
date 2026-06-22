@@ -216,13 +216,13 @@ export default function Ethos() {
           {/* Process Timeline */}
           <div className="relative">
             {/* Timeline Line */}
-            <div className="absolute left-8 top-0 bottom-0 w-px bg-gradient-to-b from-gold-400 via-gold-500 to-gold-600"></div>
+            <div className="absolute left-8 top-0 bottom-0 w-px bg-linear-to-b from-gold-400 via-gold-500 to-gold-600"></div>
             
             <div className="space-y-12">
               {/* Sourcing */}
               <ScrollReveal direction="left">
               <div className="relative flex items-start space-x-8 group">
-                <div className="flex-shrink-0 w-16 h-16 bg-jerry-green-800 rounded-full border-4 border-gold-400 flex items-center justify-center z-10">
+                <div className="shrink-0 w-16 h-16 bg-jerry-green-800 rounded-full border-4 border-gold-400 flex items-center justify-center z-10">
                   <span className="text-gold-300 font-bold text-xl">1</span>
                 </div>
                 <div className="flex-1 bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-8 border border-gold-500/20 group-hover:border-gold-400/40 transition-all duration-300">
@@ -265,7 +265,7 @@ export default function Ethos() {
               {/* Selection */}
               <ScrollReveal direction="right">
               <div className="relative flex items-start space-x-8 group">
-                <div className="flex-shrink-0 w-16 h-16 bg-jerry-green-800 rounded-full border-4 border-gold-400 flex items-center justify-center z-10">
+                <div className="shrink-0 w-16 h-16 bg-jerry-green-800 rounded-full border-4 border-gold-400 flex items-center justify-center z-10">
                   <span className="text-gold-300 font-bold text-xl">2</span>
                 </div>
                 <div className="flex-1 bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-8 border border-gold-500/20 group-hover:border-gold-400/40 transition-all duration-300">
@@ -304,7 +304,7 @@ export default function Ethos() {
               {/* Crafting */}
               <ScrollReveal direction="left">
               <div className="relative flex items-start space-x-8 group">
-                <div className="flex-shrink-0 w-16 h-16 bg-jerry-green-800 rounded-full border-4 border-gold-400 flex items-center justify-center z-10">
+                <div className="shrink-0 w-16 h-16 bg-jerry-green-800 rounded-full border-4 border-gold-400 flex items-center justify-center z-10">
                   <span className="text-gold-300 font-bold text-xl">3</span>
                 </div>
                 <div className="flex-1 bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-8 border border-gold-500/20 group-hover:border-gold-400/40 transition-all duration-300">
@@ -351,7 +351,7 @@ export default function Ethos() {
               {/* Aging - Future Products */}
               <ScrollReveal direction="right">
               <div className="relative flex items-start space-x-8 group">
-                <div className="flex-shrink-0 w-16 h-16 bg-jerry-green-800 rounded-full border-4 border-gold-400 flex items-center justify-center z-10">
+                <div className="shrink-0 w-16 h-16 bg-jerry-green-800 rounded-full border-4 border-gold-400 flex items-center justify-center z-10">
                   <span className="text-gold-300 font-bold text-xl">4</span>
                 </div>
                 <div className="flex-1 bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-8 border border-gold-500/20 group-hover:border-gold-400/40 transition-all duration-300">
@@ -418,21 +418,21 @@ export default function Ethos() {
 
               <div className="space-y-4 text-parchment-300">
                 <div className="flex items-start space-x-3">
-                  <div className="w-2 h-2 bg-gold-400 rounded-full mt-2 flex-shrink-0"></div>
+                  <div className="w-2 h-2 bg-gold-400 rounded-full mt-2 shrink-0"></div>
                   <div>
                     <p className="font-semibold text-gold-300">Local Sourcing</p>
                     <p className="text-sm">We try to source from the UK when we can – it makes sense for a British brand</p>
                   </div>
                 </div>
                 <div className="flex items-start space-x-3">
-                  <div className="w-2 h-2 bg-gold-400 rounded-full mt-2 flex-shrink-0"></div>
+                  <div className="w-2 h-2 bg-gold-400 rounded-full mt-2 shrink-0"></div>
                   <div>
                     <p className="font-semibold text-gold-300">Welsh Partnership</p>
                     <p className="text-sm">Working with our British partner distillery for our blending and production</p>
                   </div>
                 </div>
                 <div className="flex items-start space-x-3">
-                  <div className="w-2 h-2 bg-gold-400 rounded-full mt-2 flex-shrink-0"></div>
+                  <div className="w-2 h-2 bg-gold-400 rounded-full mt-2 shrink-0"></div>
                   <div>
                     <p className="font-semibold text-gold-300">Caribbean Rum</p>
                     <p className="text-sm">Some things have to come from elsewhere – we use quality Caribbean rum as our base</p>
@@ -459,21 +459,21 @@ export default function Ethos() {
 
               <div className="space-y-4 text-parchment-300">
                 <div className="flex items-start space-x-3">
-                  <div className="w-2 h-2 bg-gold-400 rounded-full mt-2 flex-shrink-0"></div>
+                  <div className="w-2 h-2 bg-gold-400 rounded-full mt-2 shrink-0"></div>
                   <div>
                     <p className="font-semibold text-gold-300">No Shortcuts</p>
                     <p className="text-sm">We&apos;d rather make less rum that&apos;s actually good than more that&apos;s mediocre</p>
                   </div>
                 </div>
                 <div className="flex items-start space-x-3">
-                  <div className="w-2 h-2 bg-gold-400 rounded-full mt-2 flex-shrink-0"></div>
+                  <div className="w-2 h-2 bg-gold-400 rounded-full mt-2 shrink-0"></div>
                   <div>
                     <p className="font-semibold text-gold-300">Continuous Improvement</p>
                     <p className="text-sm">Every batch is an opportunity to refine our craft and push for better</p>
                   </div>
                 </div>
                 <div className="flex items-start space-x-3">
-                  <div className="w-2 h-2 bg-gold-400 rounded-full mt-2 flex-shrink-0"></div>
+                  <div className="w-2 h-2 bg-gold-400 rounded-full mt-2 shrink-0"></div>
                   <div>
                     <p className="font-semibold text-gold-300">Small Batch</p>
                     <p className="text-sm">Keeping things small means we can actually pay attention to what we&apos;re making</p>

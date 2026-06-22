@@ -24,7 +24,7 @@ export function StepProgress({ step, total }: StepProgressProps) {
         className="h-1.5 w-full bg-jerry-green-700/50 rounded-full overflow-hidden"
       >
         <div
-          className="h-full bg-gradient-to-r from-gold-500 to-gold-400 transition-all duration-300"
+          className="h-full bg-linear-to-r from-gold-500 to-gold-400 transition-all duration-300"
           style={{ width: `${pct}%` }}
         />
       </div>

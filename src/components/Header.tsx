@@ -290,7 +290,7 @@ export default function Header() {
           <div className="flex items-center justify-between h-full">
             
             {/* Logo */}
-            <div className="flex-shrink-0 z-10">
+            <div className="shrink-0 z-10">
               <Link 
                 href="/" 
                 className="flex items-center group"
@@ -326,7 +326,7 @@ export default function Header() {
                         if (el) triggerRefs.current.set(item.name, el)
                         else triggerRefs.current.delete(item.name)
                       }}
-                      className={`flex items-center space-x-1 whitespace-nowrap text-parchment-100 hover:text-parchment-50 px-3 py-2 text-sm font-semibold uppercase tracking-wide transition-all duration-200 hover:scale-105 relative focus:outline-none focus:ring-2 focus:ring-gold-400 rounded ${
+                      className={`flex items-center space-x-1 whitespace-nowrap text-parchment-100 hover:text-parchment-50 px-3 py-2 text-sm font-semibold uppercase tracking-wide transition-all duration-200 hover:scale-105 relative focus:outline-hidden focus:ring-2 focus:ring-gold-400 rounded ${
                         activeDropdown === item.name ? 'text-parchment-50' : ''
                       }`}
                       onClick={() => trackMenuClick(item.name)}
@@ -339,7 +339,7 @@ export default function Header() {
                         <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-jerry-green-400 transition-all duration-200 group-hover:w-full"></span>
                       </span>
                       {item.dropdown && (
-                        <ChevronDownIcon className="w-3.5 h-3.5 flex-shrink-0 transition-transform duration-200 group-hover:rotate-180" />
+                        <ChevronDownIcon className="w-3.5 h-3.5 shrink-0 transition-transform duration-200 group-hover:rotate-180" />
                       )}
                     </Link>
                   ) : (
@@ -348,7 +348,7 @@ export default function Header() {
                         if (el) triggerRefs.current.set(item.name, el)
                         else triggerRefs.current.delete(item.name)
                       }}
-                      className={`flex items-center space-x-1 whitespace-nowrap text-parchment-100 hover:text-parchment-50 px-3 py-2 text-sm font-semibold uppercase tracking-wide transition-all duration-200 cursor-pointer relative focus:outline-none focus:ring-2 focus:ring-gold-400 rounded ${
+                      className={`flex items-center space-x-1 whitespace-nowrap text-parchment-100 hover:text-parchment-50 px-3 py-2 text-sm font-semibold uppercase tracking-wide transition-all duration-200 cursor-pointer relative focus:outline-hidden focus:ring-2 focus:ring-gold-400 rounded ${
                         activeDropdown === item.name ? 'text-parchment-50' : ''
                       }`}
                       onClick={() => {
@@ -364,7 +364,7 @@ export default function Header() {
                         <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-jerry-green-400 transition-all duration-200 group-hover:w-full"></span>
                       </span>
                       {item.dropdown && (
-                        <ChevronDownIcon className="w-3.5 h-3.5 flex-shrink-0 transition-transform duration-200 group-hover:rotate-180" />
+                        <ChevronDownIcon className="w-3.5 h-3.5 shrink-0 transition-transform duration-200 group-hover:rotate-180" />
                       )}
                     </button>
                   )}
@@ -396,7 +396,7 @@ export default function Header() {
                             href={subItem.href}
                             role="menuitem"
                             tabIndex={-1}
-                            className="block px-4 py-3 text-parchment-100 hover:text-parchment-50 hover:bg-jerry-green-700/50 rounded-md transition-all duration-200 hover:scale-105 focus:outline-none focus:bg-jerry-green-700/50"
+                            className="block px-4 py-3 text-parchment-100 hover:text-parchment-50 hover:bg-jerry-green-700/50 rounded-md transition-all duration-200 hover:scale-105 focus:outline-hidden focus:bg-jerry-green-700/50"
                             onClick={() => {
                               setActiveDropdown(null)
                               trackMenuClick(`${item.name} > ${subItem.name}`)

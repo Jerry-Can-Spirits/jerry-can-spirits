@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { createMenuAction } from '@/lib/pouriq/server-actions'
 
-const inputClass = 'w-full px-4 py-3 bg-jerry-green-700/50 border border-gold-500/30 rounded-lg text-parchment-50 placeholder-parchment-400 focus:border-gold-400 focus:ring-2 focus:ring-gold-400/20 focus:outline-none'
+const inputClass = 'w-full px-4 py-3 bg-jerry-green-700/50 border border-gold-500/30 rounded-lg text-parchment-50 placeholder-parchment-400 focus:border-gold-400 focus:ring-2 focus:ring-gold-400/20 focus:outline-hidden'
 const labelClass = 'block text-sm font-medium text-parchment-200 mb-2'
 
 export function CreateMenuForm() {
@@ -83,7 +83,7 @@ export function CreateMenuForm() {
         <textarea id="notes" name="notes" rows={3} className={`${inputClass} resize-vertical`} />
       </div>
       {error && <p role="alert" className="text-sm text-red-300">{error}</p>}
-      <button type="submit" disabled={submitting} className="px-6 py-3 bg-gradient-to-r from-gold-600 to-gold-500 hover:from-gold-500 hover:to-gold-400 disabled:from-gray-600 disabled:to-gray-500 text-jerry-green-900 font-semibold rounded-lg">
+      <button type="submit" disabled={submitting} className="px-6 py-3 bg-linear-to-r from-gold-600 to-gold-500 hover:from-gold-500 hover:to-gold-400 disabled:from-gray-600 disabled:to-gray-500 text-jerry-green-900 font-semibold rounded-lg">
         {submitting ? 'Creating…' : 'Create menu'}
       </button>
     </form>

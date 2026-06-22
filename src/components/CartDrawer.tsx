@@ -277,7 +277,7 @@ export default function CartDrawer() {
                     className="flex gap-4 p-4 bg-jerry-green-800/20 rounded-lg border border-gold-500/20"
                   >
                     {/* Product Image */}
-                    <div className="relative w-20 h-20 flex-shrink-0 bg-jerry-green-800/20 rounded-lg overflow-hidden">
+                    <div className="relative w-20 h-20 shrink-0 bg-jerry-green-800/20 rounded-lg overflow-hidden">
                       {line.merchandise.image ? (
                         <Image
                           src={line.merchandise.image.url}
@@ -345,7 +345,7 @@ export default function CartDrawer() {
                           }
                           disabled={isLoading}
                           aria-label={line.quantity === 1 ? `Remove ${line.merchandise.product.title}` : `Decrease quantity of ${line.merchandise.product.title}`}
-                          className="min-w-[44px] min-h-[44px] flex items-center justify-center bg-jerry-green-800/50 hover:bg-jerry-green-800 rounded border border-gold-500/20 transition-colors disabled:opacity-50"
+                          className="min-w-[44px] min-h-[44px] flex items-center justify-center bg-jerry-green-800/50 hover:bg-jerry-green-800 rounded-sm border border-gold-500/20 transition-colors disabled:opacity-50"
                         >
                           {line.quantity === 1 ? (
                             <svg className="w-4 h-4 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -382,7 +382,7 @@ export default function CartDrawer() {
                           onClick={() => updateQuantity(line.id, line.quantity + 1)}
                           disabled={isLoading}
                           aria-label={`Increase quantity of ${line.merchandise.product.title}`}
-                          className="min-w-[44px] min-h-[44px] flex items-center justify-center bg-jerry-green-800/50 hover:bg-jerry-green-800 rounded border border-gold-500/20 transition-colors disabled:opacity-50"
+                          className="min-w-[44px] min-h-[44px] flex items-center justify-center bg-jerry-green-800/50 hover:bg-jerry-green-800 rounded-sm border border-gold-500/20 transition-colors disabled:opacity-50"
                         >
                           <svg
                             className="w-4 h-4 text-parchment-300"
@@ -422,7 +422,7 @@ export default function CartDrawer() {
                     value={discountCode}
                     onChange={(e) => setDiscountCode(e.target.value)}
                     placeholder="Discount code"
-                    className="flex-1 px-4 py-2 bg-jerry-green-800/50 border border-gold-500/20 rounded-lg text-white placeholder-parchment-400 focus:outline-none focus:border-gold-400 text-base"
+                    className="flex-1 px-4 py-2 bg-jerry-green-800/50 border border-gold-500/20 rounded-lg text-white placeholder-parchment-400 focus:outline-hidden focus:border-gold-400 text-base"
                     onKeyDown={(e) => {
                       if (e.key === 'Enter') handleApplyDiscount()
                     }}
@@ -511,7 +511,7 @@ export default function CartDrawer() {
                         value={giftRecipient}
                         onChange={(e) => handleGiftRecipientChange(e.target.value)}
                         placeholder="Who is this for?"
-                        className="w-full px-4 py-2 bg-jerry-green-800/50 border border-gold-500/20 rounded-lg text-white placeholder-parchment-400 focus:outline-none focus:border-gold-400 text-base"
+                        className="w-full px-4 py-2 bg-jerry-green-800/50 border border-gold-500/20 rounded-lg text-white placeholder-parchment-400 focus:outline-hidden focus:border-gold-400 text-base"
                       />
                     </div>
                     <div>
@@ -525,7 +525,7 @@ export default function CartDrawer() {
                         onChange={(e) => handleGiftMessageChange(e.target.value)}
                         placeholder="Add a personal message..."
                         rows={3}
-                        className="w-full px-4 py-2 bg-jerry-green-800/50 border border-gold-500/20 rounded-lg text-white placeholder-parchment-400 focus:outline-none focus:border-gold-400 text-base resize-none"
+                        className="w-full px-4 py-2 bg-jerry-green-800/50 border border-gold-500/20 rounded-lg text-white placeholder-parchment-400 focus:outline-hidden focus:border-gold-400 text-base resize-none"
                       />
                       <p className="text-xs text-parchment-500 text-right mt-1">
                         {giftMessage.length}/200
@@ -560,7 +560,7 @@ export default function CartDrawer() {
                 {['Visa', 'Mastercard', 'Amex', 'PayPal', 'Shop Pay', 'Apple Pay'].map((method) => (
                   <span
                     key={method}
-                    className="px-2 py-1 bg-jerry-green-800/50 border border-gold-500/15 rounded text-parchment-500 text-[10px] uppercase tracking-wide"
+                    className="px-2 py-1 bg-jerry-green-800/50 border border-gold-500/15 rounded-sm text-parchment-500 text-[10px] uppercase tracking-wide"
                   >
                     {method}
                   </span>

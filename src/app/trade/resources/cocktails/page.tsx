@@ -67,7 +67,7 @@ export default async function TradeCocktailsListPage() {
                 prefetch={false}
               >
                 {c.image && (
-                  <div className="relative w-full aspect-[3/2]">
+                  <div className="relative w-full aspect-3/2">
                     <Image
                       src={c.image}
                       alt={c.imageAlt ?? c.name}

@@ -45,7 +45,7 @@ export function DuplicateMenuButton({ menuId, menuName }: Props) {
         id="dup-name"
         value={newName}
         onChange={(e) => setNewName(e.target.value)}
-        className="w-full px-3 py-2 bg-jerry-green-700/50 border border-gold-500/30 rounded text-parchment-50 text-sm focus:border-gold-400 focus:outline-none"
+        className="w-full px-3 py-2 bg-jerry-green-700/50 border border-gold-500/30 rounded-sm text-parchment-50 text-sm focus:border-gold-400 focus:outline-hidden"
         placeholder="e.g. Summer 2026"
         autoFocus
       />

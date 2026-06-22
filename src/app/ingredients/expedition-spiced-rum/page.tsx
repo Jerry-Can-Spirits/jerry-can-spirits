@@ -225,7 +225,7 @@ export default function ExpeditionSpicedRumIngredients() {
                 <h3 className="text-lg font-semibold text-gold-300 mb-3">Base Spirit</h3>
                 <ul className="space-y-2">
                   <li className="flex items-start space-x-3">
-                    <div className="w-2 h-2 bg-gold-400 rounded-full mt-2 flex-shrink-0"></div>
+                    <div className="w-2 h-2 bg-gold-400 rounded-full mt-2 shrink-0"></div>
                     <div>
                       <span className="text-parchment-200">Caribbean Rum</span>
                       <span className="text-parchment-500 text-sm ml-2">A soft white blend, chosen so the botanicals lead</span>
@@ -248,7 +248,7 @@ export default function ExpeditionSpicedRumIngredients() {
                     { name: 'Cassia Bark', origin: 'Indonesia', supplier: 'Cotswold Ingredients' },
                   ].map(({ name, origin, supplier }) => (
                     <li key={name} className="flex items-start space-x-3">
-                      <div className="w-2 h-2 bg-gold-400 rounded-full mt-2 flex-shrink-0"></div>
+                      <div className="w-2 h-2 bg-gold-400 rounded-full mt-2 shrink-0"></div>
                       <div>
                         <span className="text-parchment-200">{name}</span>
                         <span className="text-parchment-500 text-sm ml-2">{origin} &middot; {supplier}</span>
@@ -267,7 +267,7 @@ export default function ExpeditionSpicedRumIngredients() {
                     { name: 'Glucose Syrup', origin: 'Sussex, England', supplier: 'Beko' },
                   ].map(({ name, origin, supplier }) => (
                     <li key={name} className="flex items-start space-x-3">
-                      <div className="w-2 h-2 bg-gold-400 rounded-full mt-2 flex-shrink-0"></div>
+                      <div className="w-2 h-2 bg-gold-400 rounded-full mt-2 shrink-0"></div>
                       <div>
                         <span className="text-parchment-200">{name}</span>
                         <span className="text-parchment-500 text-sm ml-2">{origin} &middot; {supplier}</span>
@@ -282,7 +282,7 @@ export default function ExpeditionSpicedRumIngredients() {
                 <h3 className="text-lg font-semibold text-gold-300 mb-3">Maturation</h3>
                 <ul className="space-y-2">
                   <li className="flex items-start space-x-3">
-                    <div className="w-2 h-2 bg-gold-400 rounded-full mt-2 flex-shrink-0"></div>
+                    <div className="w-2 h-2 bg-gold-400 rounded-full mt-2 shrink-0"></div>
                     <span>Bourbon Barrel Chips</span>
                   </li>
                 </ul>
@@ -293,7 +293,7 @@ export default function ExpeditionSpicedRumIngredients() {
                 <h3 className="text-lg font-semibold text-gold-300 mb-3">Water</h3>
                 <ul className="space-y-2">
                   <li className="flex items-start space-x-3">
-                    <div className="w-2 h-2 bg-gold-400 rounded-full mt-2 flex-shrink-0"></div>
+                    <div className="w-2 h-2 bg-gold-400 rounded-full mt-2 shrink-0"></div>
                     <span>Pure Welsh Water</span>
                   </li>
                 </ul>

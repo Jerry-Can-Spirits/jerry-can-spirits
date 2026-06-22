@@ -44,7 +44,7 @@ export default function FounderStorySnippet() {
 
           {/* Right Column - Image */}
           <div className="relative">
-            <div className="relative bg-gradient-to-br from-jerry-green-800 to-jerry-green-900 rounded-2xl overflow-hidden shadow-2xl border border-gold-500/20 p-8">
+            <div className="relative bg-linear-to-br from-jerry-green-800 to-jerry-green-900 rounded-2xl overflow-hidden shadow-2xl border border-gold-500/20 p-8">
               {/* Founders Photo - Dan & Rhys */}
               <div className="aspect-square relative rounded-xl overflow-hidden">
                 <Image
@@ -58,7 +58,7 @@ export default function FounderStorySnippet() {
               </div>
 
               {/* Armed Forces Covenant Badge */}
-              <div className="absolute top-6 right-6 bg-gradient-to-r from-gold-600 to-gold-500 text-jerry-green-900 px-4 py-2 rounded-full text-sm font-semibold uppercase tracking-wide shadow-lg">
+              <div className="absolute top-6 right-6 bg-linear-to-r from-gold-600 to-gold-500 text-jerry-green-900 px-4 py-2 rounded-full text-sm font-semibold uppercase tracking-wide shadow-lg">
                 Armed Forces Covenant
               </div>
             </div>

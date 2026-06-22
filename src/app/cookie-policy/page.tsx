@@ -103,7 +103,7 @@ export default function CookiePolicy() {
                 </div>
                 <h4 className="text-lg font-semibold text-gold-300 mb-3">Examples include:</h4>
                 <ul className="list-disc list-inside text-white space-y-1">
-                  <li><code className="bg-jerry-green-700 px-2 py-1 rounded text-gold-200">ageVerified</code> - Remembers age verification status (12 months)</li>
+                  <li><code className="bg-jerry-green-700 px-2 py-1 rounded-sm text-gold-200">ageVerified</code> - Remembers age verification status (12 months)</li>
                   <li>Session cookies for site functionality and security</li>
                 </ul>
               </div>

@@ -26,7 +26,7 @@ export default function OrderProgressBar({ sold, total }: OrderProgressBarProps)
       </div>
       <div className="w-full h-3 bg-jerry-green-800/60 rounded-full overflow-hidden border border-gold-500/20">
         <div
-          className="h-full bg-gradient-to-r from-gold-600 to-gold-400 transition-all duration-700"
+          className="h-full bg-linear-to-r from-gold-600 to-gold-400 transition-all duration-700"
           style={{ width: `${width}%` }}
         />
       </div>

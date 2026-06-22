@@ -276,7 +276,7 @@ export default function FriendsPage() {
                         {/* Logo */}
                         <div className="flex items-center justify-center">
                           {'badge' in partner && partner.badge ? (
-                            <div className="relative flex items-center justify-center w-40 h-40 flex-shrink-0">
+                            <div className="relative flex items-center justify-center w-40 h-40 shrink-0">
                               <Image
                                 src={partner.badge as string}
                                 alt={`${partner.name} — trees planted`}
@@ -286,7 +286,7 @@ export default function FriendsPage() {
                               />
                             </div>
                           ) : (
-                            <div className="relative w-40 h-40 rounded-full overflow-hidden border-2 border-gold-500/30 bg-white flex-shrink-0">
+                            <div className="relative w-40 h-40 rounded-full overflow-hidden border-2 border-gold-500/30 bg-white shrink-0">
                               <Image
                                 src={partner.logo}
                                 alt={`${partner.name} logo`}
@@ -360,7 +360,7 @@ export default function FriendsPage() {
                     {/* Logo / Headshot */}
                     {'circular' in partner && partner.circular ? (
                       <div className="flex items-center justify-center mb-4">
-                        <div className="relative w-28 h-28 rounded-full overflow-hidden border-2 border-gold-500/30 flex-shrink-0">
+                        <div className="relative w-28 h-28 rounded-full overflow-hidden border-2 border-gold-500/30 shrink-0">
                           <Image
                             src={partner.logo}
                             alt={partner.name}
@@ -371,7 +371,7 @@ export default function FriendsPage() {
                       </div>
                     ) : (
                       <div className="flex items-center justify-center mb-4">
-                        <div className="relative w-28 h-28 rounded-full overflow-hidden border-2 border-gold-500/30 bg-white flex-shrink-0">
+                        <div className="relative w-28 h-28 rounded-full overflow-hidden border-2 border-gold-500/30 bg-white shrink-0">
                           <Image
                             src={partner.logo}
                             alt={`${partner.name} logo`}
@@ -509,7 +509,7 @@ export default function FriendsPage() {
           )}
 
           {/* Become a Friend CTA */}
-          <div className="mt-20 text-center p-12 bg-gradient-to-br from-jerry-green-800/30 to-jerry-green-900/30 border border-gold-500/30 rounded-lg">
+          <div className="mt-20 text-center p-12 bg-linear-to-br from-jerry-green-800/30 to-jerry-green-900/30 border border-gold-500/30 rounded-lg">
             <h3 className="text-3xl font-playfair font-bold text-gold-500 mb-4">
               Become a Friend of Jerry Can Spirits
             </h3>
@@ -613,7 +613,7 @@ export default function FriendsPage() {
               }}
             />
 
-            <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
+            <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
               <h2 className="text-3xl font-playfair font-bold text-gold-500 mb-2 text-center">
                 Partnership Questions
               </h2>

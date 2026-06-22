@@ -136,7 +136,7 @@ export default function GuidesClient({ guides }: GuidesClientProps) {
 
       {/* Filters Section */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
-        <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+        <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
           <div className="space-y-6">
             {/* Search Bar */}
             <div className="relative">
@@ -148,7 +148,7 @@ export default function GuidesClient({ guides }: GuidesClientProps) {
                 placeholder="Search guides..."
                 value={searchQuery}
                 onChange={(e) => handleSearchChange(e.target.value)}
-                className="w-full px-4 py-3 pl-12 bg-jerry-green-800/40 border border-gold-500/20 rounded-lg text-white placeholder-parchment-400 focus:outline-none focus:border-gold-400/40 transition-colors"
+                className="w-full px-4 py-3 pl-12 bg-jerry-green-800/40 border border-gold-500/20 rounded-lg text-white placeholder-parchment-400 focus:outline-hidden focus:border-gold-400/40 transition-colors"
               />
               <svg className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -197,10 +197,10 @@ export default function GuidesClient({ guides }: GuidesClientProps) {
               <Link
                 key={guide._id}
                 href={`/guides/${guide.slug.current}`}
-                className="group bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl border border-gold-500/30 overflow-hidden hover:border-gold-400/60 transition-all duration-300 hover:scale-[1.02] hover:shadow-xl"
+                className="group bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl border border-gold-500/30 overflow-hidden hover:border-gold-400/60 transition-all duration-300 hover:scale-[1.02] hover:shadow-xl"
               >
                 {guide.heroImage && (
-                  <div className="relative aspect-[21/9] bg-jerry-green-800/20">
+                  <div className="relative aspect-21/9 bg-jerry-green-800/20">
                     <Image
                       src={guide.heroImage}
                       alt={guide.heroImageAlt || guide.title}
@@ -208,7 +208,7 @@ export default function GuidesClient({ guides }: GuidesClientProps) {
                       className="object-cover group-hover:scale-105 transition-transform duration-500"
                       sizes="(max-width: 1024px) 100vw, 50vw"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-jerry-green-900/80 to-transparent" />
+                    <div className="absolute inset-0 bg-linear-to-t from-jerry-green-900/80 to-transparent" />
                     <div className="absolute top-4 left-4 px-3 py-1 bg-gold-500/90 backdrop-blur-sm rounded-full">
                       <span className="text-jerry-green-900 text-xs font-bold">Complete Guide</span>
                     </div>
@@ -251,10 +251,10 @@ export default function GuidesClient({ guides }: GuidesClientProps) {
               <Link
                 key={guide._id}
                 href={`/guides/${guide.slug.current}`}
-                className="group bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl border border-gold-500/30 overflow-hidden hover:border-gold-400/60 transition-all duration-300 hover:scale-105"
+                className="group bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl border border-gold-500/30 overflow-hidden hover:border-gold-400/60 transition-all duration-300 hover:scale-105"
               >
                 {guide.heroImage && (
-                  <div className="relative aspect-[16/9] bg-jerry-green-800/20">
+                  <div className="relative aspect-video bg-jerry-green-800/20">
                     <Image
                       src={guide.heroImage}
                       alt={guide.heroImageAlt || guide.title}
@@ -268,7 +268,7 @@ export default function GuidesClient({ guides }: GuidesClientProps) {
                   </div>
                 )}
                 <div className="p-6">
-                  <span className="px-2 py-1 bg-jerry-green-800/60 border border-gold-500/20 text-gold-300 rounded text-xs font-semibold">
+                  <span className="px-2 py-1 bg-jerry-green-800/60 border border-gold-500/20 text-gold-300 rounded-sm text-xs font-semibold">
                     {categoryLabels[guide.category] || guide.category}
                   </span>
                   <h3 className="text-xl font-serif font-bold text-white group-hover:text-gold-300 transition-colors mt-3 mb-2">
@@ -316,10 +316,10 @@ export default function GuidesClient({ guides }: GuidesClientProps) {
               <Link
                 key={guide._id}
                 href={`/guides/${guide.slug.current}`}
-                className="group bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl border border-gold-500/20 overflow-hidden hover:border-gold-400/40 transition-all duration-300 hover:scale-105"
+                className="group bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl border border-gold-500/20 overflow-hidden hover:border-gold-400/40 transition-all duration-300 hover:scale-105"
               >
                 {guide.heroImage && (
-                  <div className="relative aspect-[16/9] bg-jerry-green-800/20">
+                  <div className="relative aspect-video bg-jerry-green-800/20">
                     <Image
                       src={guide.heroImage}
                       alt={guide.heroImageAlt || guide.title}
@@ -330,7 +330,7 @@ export default function GuidesClient({ guides }: GuidesClientProps) {
                   </div>
                 )}
                 <div className="p-6">
-                  <span className="px-2 py-1 bg-jerry-green-800/60 border border-gold-500/20 text-gold-300 rounded text-xs font-semibold">
+                  <span className="px-2 py-1 bg-jerry-green-800/60 border border-gold-500/20 text-gold-300 rounded-sm text-xs font-semibold">
                     {categoryLabels[guide.category] || guide.category}
                   </span>
                   <h3 className="text-xl font-serif font-bold text-white group-hover:text-gold-300 transition-colors mt-3 mb-2">
@@ -356,7 +356,7 @@ export default function GuidesClient({ guides }: GuidesClientProps) {
           <div className="mt-10 text-center">
             <button
               onClick={handleShowMore}
-              className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-gold-500/20 to-gold-600/20 border border-gold-500/40 text-gold-300 rounded-xl hover:from-gold-500/30 hover:to-gold-600/30 hover:border-gold-400/60 transition-all duration-300 font-semibold"
+              className="inline-flex items-center gap-2 px-8 py-4 bg-linear-to-r from-gold-500/20 to-gold-600/20 border border-gold-500/40 text-gold-300 rounded-xl hover:from-gold-500/30 hover:to-gold-600/30 hover:border-gold-400/60 transition-all duration-300 font-semibold"
             >
               <span>Show More Guides</span>
               <span className="text-parchment-400 text-sm">

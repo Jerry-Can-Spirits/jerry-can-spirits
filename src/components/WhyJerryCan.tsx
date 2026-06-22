@@ -39,7 +39,7 @@ export default function WhyJerryCan() {
           {pillars.map((pillar, index) => (
             <div
               key={index}
-              className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20 hover:border-gold-400/40 transition-all duration-300 group hover:scale-105"
+              className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20 hover:border-gold-400/40 transition-all duration-300 group hover:scale-105"
             >
               {/* Title */}
               <h3 className="text-2xl font-serif font-bold text-white mb-4">

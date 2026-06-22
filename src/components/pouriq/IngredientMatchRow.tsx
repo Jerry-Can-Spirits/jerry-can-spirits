@@ -13,9 +13,9 @@ const UNIT_CHIPS = [
   { label: '1', value: 1 },
 ]
 
-const inputClass = 'w-full px-3 py-2 bg-jerry-green-700/50 border border-gold-500/30 rounded-lg text-parchment-50 text-sm focus:border-gold-400 focus:outline-none'
+const inputClass = 'w-full px-3 py-2 bg-jerry-green-700/50 border border-gold-500/30 rounded-lg text-parchment-50 text-sm focus:border-gold-400 focus:outline-hidden'
 const labelClass = 'block text-xs font-medium text-parchment-300 mb-1'
-const chipClass = 'px-2 py-1 rounded border text-xs transition-colors'
+const chipClass = 'px-2 py-1 rounded-sm border text-xs transition-colors'
 const chipActive = 'bg-gold-500/20 border-gold-400 text-gold-100'
 const chipIdle = 'bg-jerry-green-700/30 border-gold-500/20 text-parchment-300 hover:border-gold-400/40'
 
@@ -127,7 +127,7 @@ export function IngredientMatchRow({
       <div>
         <label className={labelClass}>Library entry</label>
         {state.new_library ? (
-          <div className="space-y-2 p-3 rounded border border-gold-500/20 bg-jerry-green-900/30">
+          <div className="space-y-2 p-3 rounded-sm border border-gold-500/20 bg-jerry-green-900/30">
             <div className="flex items-baseline justify-between">
               <p className="text-xs text-gold-300">Creating new library entry</p>
               <button type="button" onClick={() => onChange({ existing_library_id: undefined, new_library: undefined, pour_ml: state.pour_ml, unit_count: state.unit_count })} className="text-xs text-parchment-400 hover:text-parchment-200">Cancel</button>

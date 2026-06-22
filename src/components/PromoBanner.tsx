@@ -46,7 +46,7 @@ export default function PromoBanner({
   if (!isOpen) return null
 
   return (
-    <div className="relative bg-gradient-to-r from-jerry-green-600 to-jerry-green-500 text-parchment-50 py-3 px-4 shadow-lg animate-in slide-in-from-top duration-500">
+    <div className="relative bg-linear-to-r from-jerry-green-600 to-jerry-green-500 text-parchment-50 py-3 px-4 shadow-lg animate-in slide-in-from-top duration-500">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         <div className="flex items-center justify-center flex-1 text-center">
           <p className="text-sm font-semibold tracking-wide">
@@ -66,7 +66,7 @@ export default function PromoBanner({
 
         <button
           onClick={handleClose}
-          className="flex-shrink-0 p-1 hover:bg-jerry-green-700/30 rounded-full transition-colors duration-200"
+          className="shrink-0 p-1 hover:bg-jerry-green-700/30 rounded-full transition-colors duration-200"
           aria-label="Close banner"
         >
           <XMarkIcon className="w-5 h-5" />

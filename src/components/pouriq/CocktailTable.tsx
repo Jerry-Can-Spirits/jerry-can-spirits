@@ -94,7 +94,7 @@ export function CocktailTable({ menuId, cocktails, metrics, targetGpPct }: Props
                         {formatMoney(promo.sale_price_p)} · {promo.gp_pct.toFixed(1)}%
                         {promo.label && <span className="block text-[10px] text-parchment-400 mt-0.5">{promo.label}</span>}
                         {promo.active_today && (
-                          <span className="inline-block text-[10px] mt-0.5 px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-200 border border-emerald-500/40">Active today</span>
+                          <span className="inline-block text-[10px] mt-0.5 px-1.5 py-0.5 rounded-sm bg-emerald-500/20 text-emerald-200 border border-emerald-500/40">Active today</span>
                         )}
                         {!promo.active_today && (promo.days || promo.valid_from || promo.valid_until) && (
                           <span className="block text-[10px] text-parchment-400 mt-0.5">

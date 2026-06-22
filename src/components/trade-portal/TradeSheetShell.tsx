@@ -19,10 +19,10 @@ export function TradeSheetShell({ title, eyebrow, subtitle, children }: Props) {
           <PrintButton />
         </div>
         <article className="text-parchment-100 print:text-black">
-          {/* print:!block overrides the global "header, footer { display: none }"
+          {/* print:block! overrides the global "header, footer { display: none }"
               rule in globals.css that hides site-level chrome. Without it, the
               card title disappears from print. */}
-          <header className="mb-8 print:mb-4 print:!block">
+          <header className="mb-8 print:mb-4 print:block!">
             {eyebrow && (
               <p className="text-gold-300 text-xs uppercase tracking-widest mb-2 print:text-black">
                 {eyebrow}

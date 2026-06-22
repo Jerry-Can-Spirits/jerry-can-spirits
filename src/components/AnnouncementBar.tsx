@@ -44,7 +44,7 @@ export default function AnnouncementBar() {
 
   return (
     <div
-      className="fixed top-0 left-0 right-0 z-[60] bg-gradient-to-r from-gold-600 via-gold-500 to-gold-600 text-jerry-green-900 transition-all duration-300"
+      className="fixed top-0 left-0 right-0 z-60 bg-linear-to-r from-gold-600 via-gold-500 to-gold-600 text-jerry-green-900 transition-all duration-300"
     >
       <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between py-3 sm:py-2.5 text-sm min-h-[52px] sm:min-h-[40px]">
@@ -66,7 +66,7 @@ export default function AnnouncementBar() {
           </div>
           <button
             onClick={handleDismiss}
-            className="p-1.5 hover:bg-jerry-green-900/10 rounded transition-colors flex-shrink-0"
+            className="p-1.5 hover:bg-jerry-green-900/10 rounded-sm transition-colors shrink-0"
             aria-label="Dismiss announcement"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

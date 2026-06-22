@@ -245,7 +245,7 @@ export default async function GuidePage({ params }: PageProps) {
         {/* Hero Section */}
         <header className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
           {guide.heroImage && (
-            <div className="relative aspect-[16/9] sm:aspect-[2/1] lg:aspect-[21/9] rounded-xl overflow-hidden mb-8">
+            <div className="relative aspect-video sm:aspect-2/1 lg:aspect-21/9 rounded-xl overflow-hidden mb-8">
               <Image
                 src={guide.heroImage}
                 alt={guide.heroImageAlt || guide.title}
@@ -254,7 +254,7 @@ export default async function GuidePage({ params }: PageProps) {
                 sizes="(max-width: 640px) 100vw, (max-width: 896px) 100vw, 896px"
                 priority
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-jerry-green-900/80 via-jerry-green-900/20 to-transparent" />
+              <div className="absolute inset-0 bg-linear-to-t from-jerry-green-900/80 via-jerry-green-900/20 to-transparent" />
             </div>
           )}
 
@@ -330,7 +330,7 @@ export default async function GuidePage({ params }: PageProps) {
         {/* Table of Contents */}
         {guide.sections && guide.sections.filter(s => s.heading?.trim()).length > 3 && (
           <nav className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
-            <div className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+            <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
               <h2 className="text-lg font-serif font-bold text-gold-300 mb-4">In This Guide</h2>
               <ol className="space-y-2">
                 {guide.sections.filter(s => s.heading?.trim()).map((section, index) => (
@@ -373,7 +373,7 @@ export default async function GuidePage({ params }: PageProps) {
           {guide.comparisonTables && guide.comparisonTables.length > 0 && (
             <div className="mt-16 space-y-12">
               {guide.comparisonTables.map((table, index) => (
-                <div key={index} className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20 overflow-hidden">
+                <div key={index} className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20 overflow-hidden">
                   <h3 className="text-2xl font-serif font-bold text-gold-300 mb-6">
                     {table.caption}
                   </h3>
@@ -447,14 +447,14 @@ export default async function GuidePage({ params }: PageProps) {
                 {guide.featuredDistilleries.map((distillery, index) => (
                   <div
                     key={index}
-                    className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20"
+                    className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20"
                   >
                     <h3 className="text-xl font-serif font-bold text-gold-300 mb-2">
                       {distillery.name}
                     </h3>
                     <p className="text-parchment-400 text-sm mb-3">{distillery.location}</p>
                     {distillery.speciality && (
-                      <span className="inline-block px-2 py-1 bg-jerry-green-800/60 border border-gold-500/20 text-gold-300 rounded text-xs font-semibold mb-3">
+                      <span className="inline-block px-2 py-1 bg-jerry-green-800/60 border border-gold-500/20 text-gold-300 rounded-sm text-xs font-semibold mb-3">
                         {distillery.speciality}
                       </span>
                     )}
@@ -490,7 +490,7 @@ export default async function GuidePage({ params }: PageProps) {
                 {guide.faqs.map((faq, index) => (
                   <div
                     key={index}
-                    className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20"
+                    className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20"
                   >
                     <h3 className="text-lg font-serif font-bold text-gold-300 mb-3">
                       {faq.question}
@@ -543,7 +543,7 @@ export default async function GuidePage({ params }: PageProps) {
                         href={`/shop/product/${product.shopifyHandle}/`}
                         className="flex items-center gap-4 p-4 bg-jerry-green-800/30 rounded-lg border border-gold-500/20 hover:bg-jerry-green-800/50 hover:border-gold-400/40 transition-all group"
                       >
-                        <div className="w-10 h-10 bg-gold-500/20 rounded-full flex items-center justify-center flex-shrink-0">
+                        <div className="w-10 h-10 bg-gold-500/20 rounded-full flex items-center justify-center shrink-0">
                           <svg className="w-5 h-5 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
                           </svg>
@@ -571,9 +571,9 @@ export default async function GuidePage({ params }: PageProps) {
                       <Link
                         key={relatedGuide._id}
                         href={`/guides/${relatedGuide.slug.current}`}
-                        className="bg-gradient-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20 hover:border-gold-400/40 transition-all group"
+                        className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20 hover:border-gold-400/40 transition-all group"
                       >
-                        <span className="px-2 py-1 bg-jerry-green-800/60 border border-gold-500/20 text-gold-300 rounded text-xs font-semibold">
+                        <span className="px-2 py-1 bg-jerry-green-800/60 border border-gold-500/20 text-gold-300 rounded-sm text-xs font-semibold">
                           {categoryLabels[relatedGuide.category] || relatedGuide.category}
                         </span>
                         <h3 className="text-lg font-serif font-bold text-white group-hover:text-gold-300 transition-colors mt-3 mb-2">
@@ -592,7 +592,7 @@ export default async function GuidePage({ params }: PageProps) {
 
           {/* Call to Action */}
           {guide.callToAction && guide.callToAction.text && (
-            <div className="mt-16 bg-gradient-to-br from-gold-500/10 to-gold-600/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/30 text-center">
+            <div className="mt-16 bg-linear-to-br from-gold-500/10 to-gold-600/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/30 text-center">
               <h3 className="text-2xl font-serif font-bold text-white mb-4">
                 Ready to Get Started?
               </h3>

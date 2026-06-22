@@ -37,7 +37,7 @@ interface Props {
   initialCadence: VolumeCadence
 }
 
-const inputClass = 'w-20 px-2 py-1 bg-jerry-green-700/50 border border-gold-500/30 rounded text-parchment-50 text-sm focus:border-gold-400 focus:outline-none'
+const inputClass = 'w-20 px-2 py-1 bg-jerry-green-700/50 border border-gold-500/30 rounded-sm text-parchment-50 text-sm focus:border-gold-400 focus:outline-hidden'
 
 function formatMoney(p: number | null): string {
   if (p === null) return '—'

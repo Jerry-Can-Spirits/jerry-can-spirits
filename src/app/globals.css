@@ -1,6 +1,6 @@
 /* Jerry Can Spirits global styles.
    Structure:
-     1. Tailwind directives and base color-scheme handling
+     1. Tailwind import, @theme tokens, border-colour compat shim, and prose colour variables
      2. Base element styles (html, body, *)
      3. Typography (Playfair Display headings) and brand-driven heading overrides
      4. Mobile-specific iOS workarounds
@@ -10,12 +10,149 @@
      8. Print rules, scoped to the .print-region opt-in */
 
 @import '../styles/animations.css';
+@import 'tailwindcss';
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@plugin "@tailwindcss/typography";
 
-  /* Opt out of browser dark mode adaptation. The site palette is intentional.
+@theme {
+  /* Brand colours */
+  --color-jerry-green-50: #f0f9f4;
+  --color-jerry-green-100: #dcf2e4;
+  --color-jerry-green-200: #bbe5cc;
+  --color-jerry-green-300: #8dd3aa;
+  --color-jerry-green-400: #5abb81;
+  --color-jerry-green-500: #38a063;
+  --color-jerry-green-600: #2a824f;
+  --color-jerry-green-700: #236842;
+  --color-jerry-green-800: #1e5337;
+  --color-jerry-green-900: #1a442e;
+  --color-jerry-green-950: #0e2519;
+
+  --color-parchment-50: #fefdfb;
+  --color-parchment-100: #fcf9f3;
+  --color-parchment-200: #f7f1e3;
+  --color-parchment-300: #f1e7d0;
+  --color-parchment-400: #e9d8b7;
+  --color-parchment-500: #dfc396;
+  --color-parchment-600: #d0a972;
+  --color-parchment-700: #bc8c54;
+  --color-parchment-800: #9b7048;
+  --color-parchment-900: #7f5c3e;
+  --color-parchment-950: #432f20;
+
+  --color-gold-50: #fffbeb;
+  --color-gold-100: #fef3c7;
+  --color-gold-200: #fde68a;
+  --color-gold-300: #fcd34d;
+  --color-gold-400: #fbbf24;
+  --color-gold-500: #f59e0b;
+  --color-gold-600: #d97706;
+  --color-gold-700: #b45309;
+  --color-gold-800: #92400e;
+  --color-gold-900: #78350f;
+  --color-gold-950: #451a03;
+
+  /* Font families */
+  --font-serif: Georgia, Cambria, 'Times New Roman', Times, serif;
+  --font-sans: Inter, system-ui, sans-serif;
+  --font-display: 'Playfair Display', Georgia, serif;
+
+  /* Custom animations */
+  --animate-fade-in: fadeIn 0.5s ease-in-out;
+  --animate-slide-up: slideUp 0.3s ease-out;
+  --animate-pulse-slow: pulse 3s infinite;
+  --animate-bounce-gentle: bounceGentle 2s infinite;
+  --animate-float: float 3s ease-in-out infinite;
+  --animate-shimmer: shimmer 2s linear infinite;
+
+  /* Keyframes */
+  @keyframes fadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+  }
+  @keyframes slideUp {
+    0% { opacity: 0; transform: translateY(20px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes bounceGentle {
+    0%, 100% { transform: translateY(0); animation-timing-function: cubic-bezier(0.8, 0, 1, 1); }
+    50% { transform: translateY(-5px); animation-timing-function: cubic-bezier(0, 0, 0.2, 1); }
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+  }
+  @keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+
+  /* Backdrop blur extension */
+  --blur-xs: 2px;
+
+  /* Box shadows */
+  --shadow-glow: 0 0 20px rgba(252,211,77,0.3);
+  --shadow-glow-sm: 0 0 10px rgba(252,211,77,0.2);
+  --shadow-inner-glow: inset 0 0 20px rgba(252,211,77,0.1);
+  --shadow-elegant: 0 10px 25px -3px rgba(0,0,0,0.3), 0 4px 6px -2px rgba(0,0,0,0.05);
+
+  /* Background images */
+  --background-image-hero-pattern: linear-gradient(135deg, rgba(26,68,46,0.9) 0%, rgba(30,83,55,0.8) 100%);
+  --background-image-card-pattern: linear-gradient(135deg, rgba(241,231,208,0.1) 0%, rgba(223,195,150,0.05) 100%);
+}
+
+/*
+  The default border color has changed to `currentcolor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentcolor);
+  }
+}
+
+/* Brand prose colours (was theme.extend.typography.DEFAULT.css in tailwind.config.js).
+   Set as --tw-prose-* variables, the v4 way to customise @tailwindcss/typography. */
+.prose {
+  --tw-prose-body: #f1e7d0;
+  --tw-prose-headings: #fef3c7;
+  --tw-prose-lead: #dfc396;
+  --tw-prose-links: #fcd34d;
+  --tw-prose-bold: #fef3c7;
+  --tw-prose-counters: #d97706;
+  --tw-prose-bullets: #d97706;
+  --tw-prose-hr: #92400e;
+  --tw-prose-quotes: #dfc396;
+  --tw-prose-quote-borders: #d97706;
+  --tw-prose-captions: #dfc396;
+  --tw-prose-code: #fcd34d;
+  --tw-prose-pre-code: #f1e7d0;
+  --tw-prose-pre-bg: #1a442e;
+  --tw-prose-th-borders: #92400e;
+  --tw-prose-td-borders: #432f20;
+}
+
+/* No --tw-prose variable exists for link hover; preserve the v3 hover colour. */
+.prose a:hover {
+  color: #f59e0b;
+}
+
+/* Base element styles MUST live in @layer base so Tailwind utility classes win
+   over them (e.g. bg-jerry-green-900 on <body>, h-8/w-8 on header icons). In v4
+   un-layered CSS beats every named layer regardless of specificity, so leaving
+   these loose would let `body { background: parchment }` override the body's
+   bg-jerry-green-900 utility and `img { height: auto }` override icon sizing. */
+@layer base {
+
+/* Opt out of browser dark mode adaptation. The site palette is intentional.
      'only light' is the explicit instruction to never apply forced dark mode,
      stronger than 'light' alone. The media query below is a belt-and-braces
      fallback for browsers (Samsung Internet, aggressive Chrome flags) that
@@ -128,6 +265,10 @@
     max-width: 100%;
     height: auto;
   }
+}
+/* End @layer base. Rules below stay un-layered so they keep winning over
+   utilities, exactly as they did in v3 (btn-primary, custom utilities,
+   cartography backgrounds, the mapbox popup, and the print block). */
 
   /* Premium button base styles */
   .btn-primary {

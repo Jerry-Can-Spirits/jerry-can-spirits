@@ -46,7 +46,7 @@ const LENGTH_OPTIONS: Array<{ value: VoiceLength; label: string }> = [
 ]
 
 const fieldLabel = 'block text-xs uppercase tracking-widest text-parchment-400 mb-1.5'
-const inputClass = 'w-full px-3 py-2 bg-jerry-green-700/50 border border-gold-500/30 rounded text-parchment-50 focus:border-gold-400 focus:outline-none'
+const inputClass = 'w-full px-3 py-2 bg-jerry-green-700/50 border border-gold-500/30 rounded-sm text-parchment-50 focus:border-gold-400 focus:outline-hidden'
 const textareaClass = `${inputClass} min-h-[100px]`
 const selectClass = inputClass
 

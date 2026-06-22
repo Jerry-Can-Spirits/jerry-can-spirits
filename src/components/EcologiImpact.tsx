@@ -23,7 +23,7 @@ export default async function EcologiImpact() {
   return (
     <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
       <div className="flex flex-col sm:flex-row sm:items-center gap-4 mb-6">
-        <div className="flex-shrink-0">
+        <div className="shrink-0">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="https://api.ecologi.com/badges/trees/69cf809ea3c16250680afe34?white=true&treeOnly=true"
