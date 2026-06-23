@@ -41,7 +41,7 @@ export default async function EditLibraryEntryPage({ params }: Props) {
 
   return (
     <main className="min-h-screen">
-      <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-24">
+      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-24">
         <Link href="/trade/pouriq/library" className="text-sm text-parchment-400 hover:text-parchment-200">← Library</Link>
         <div className="flex flex-wrap items-baseline justify-between gap-3 mt-3 mb-8">
           <h1 className="text-3xl font-serif font-bold text-white">{entry.name}</h1>
