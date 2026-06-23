@@ -5,7 +5,7 @@ import { NextResponse } from 'next/server'
 import { getCloudflareContext } from '@opennextjs/cloudflare'
 import { checkPourIqAccess } from '@/lib/pouriq/access'
 import { isRateLimited } from '@/lib/kv'
-import { createMapping } from '@/lib/pouriq/pos/item-map'
+import { createMapping, createServeMapping } from '@/lib/pouriq/pos/item-map'
 
 export const runtime = 'nodejs'
 
@@ -20,17 +20,31 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Too many requests. Try again later.' }, { status: 429 })
   }
 
-  let body: { normalisedName?: string; cocktailId?: string }
+  let body: { normalisedName?: string; cocktailId?: string; serveId?: string; target?: 'cocktail' | 'serve' }
   try { body = await request.json() } catch {
     return NextResponse.json({ error: 'Invalid request body' }, { status: 400 })
   }
   const normalisedName = body.normalisedName?.trim()
+  const target = body.target === 'serve' ? 'serve' : 'cocktail'
+  const db = env.DB as D1Database
+
+  if (target === 'serve') {
+    const serveId = body.serveId?.trim()
+    if (!normalisedName || !serveId) {
+      return NextResponse.json({ error: 'normalisedName and serveId are required' }, { status: 400 })
+    }
+    try {
+      await createServeMapping(db, access.tradeAccountId, normalisedName, serveId)
+      return NextResponse.json({ ok: true })
+    } catch {
+      return NextResponse.json({ error: 'That serve is not available on this account' }, { status: 422 })
+    }
+  }
+
   const cocktailId = body.cocktailId?.trim()
   if (!normalisedName || !cocktailId) {
     return NextResponse.json({ error: 'normalisedName and cocktailId are required' }, { status: 400 })
   }
-
-  const db = env.DB as D1Database
   try {
     await createMapping(db, access.tradeAccountId, normalisedName, cocktailId)
     return NextResponse.json({ ok: true })

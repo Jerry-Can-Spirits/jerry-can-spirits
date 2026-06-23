@@ -11,7 +11,7 @@ export async function listMenusForTradeAccount(
   tradeAccountId: string,
 ): Promise<MenuRow[]> {
   const result = await db
-    .prepare(`SELECT * FROM pouriq_menus WHERE trade_account_id = ?1 ORDER BY updated_at DESC`)
+    .prepare(`SELECT * FROM pouriq_menus WHERE trade_account_id = ?1 AND is_serves_menu = 0 ORDER BY updated_at DESC`)
     .bind(tradeAccountId)
     .all<MenuRow>()
   return result.results ?? []
@@ -374,6 +374,25 @@ export async function replaceIngredients(
     )
   }
   await db.batch(statements)
+}
+
+// The hidden per-tenant menu that holds serves. Created lazily. Never active,
+// never shown in menu lists; exists only to satisfy the cocktails.menu_id FK.
+export async function getOrCreateServesMenu(db: D1Database, tradeAccountId: string): Promise<string> {
+  const existing = await db
+    .prepare(`SELECT id FROM pouriq_menus WHERE trade_account_id = ?1 AND is_serves_menu = 1 LIMIT 1`)
+    .bind(tradeAccountId).first<{ id: string }>()
+  if (existing) return existing.id
+  const created = await db
+    .prepare(`INSERT INTO pouriq_menus (trade_account_id, name, venue_type, city, target_gp_pct, positioning, notes, prices_include_vat, is_active, is_serves_menu) VALUES (?1, 'Bar serves', NULL, NULL, 0, NULL, NULL, 1, 0, 1) RETURNING id`)
+    .bind(tradeAccountId).first<{ id: string }>()
+  if (!created) throw new Error('Could not create serves menu')
+  return created.id
+}
+
+export async function listServes(db: D1Database, tradeAccountId: string) {
+  const menuId = await getOrCreateServesMenu(db, tradeAccountId)
+  return listCocktailsForMenu(db, menuId)
 }
 
 export async function insertAnalysis(

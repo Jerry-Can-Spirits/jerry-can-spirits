@@ -39,6 +39,8 @@ export interface MenuRow {
   // Exactly one menu per tenant has is_active = 1: the live menu POS sales
   // route to. Enforced in code (setActiveMenu clears siblings).
   is_active: number
+  // Hidden per-tenant menu that holds serves; never shown in menu lists.
+  is_serves_menu: number
   created_at: string
   updated_at: string
 }
@@ -70,6 +72,8 @@ export interface CocktailRow {
   notes: string | null
   description: string | null
   description_updated_at: string | null
+  // 1 when this row is a "serve" (lives on the hidden serves menu).
+  is_serve: number
 }
 
 export interface IngredientLibraryRow {
