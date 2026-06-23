@@ -83,8 +83,13 @@ Replace the period start/end grid with a rolling-count list:
 **Phase 1:** migration (`is_serve` on `pouriq_cocktails`; "Bar serves" hidden menu handling); `menus.ts` (exclude serves/hidden menu from listings + GP; include in depletion); POS ingest/item-map (`map to serve`, volume routing by mapped cocktail_id); unmatched-items review UI (serve action + quick-create); new `/trade/pouriq/serves` management page; exclude serves from spec cards / matrix / movers / menu copy.
 **Phase 2:** migration (`pouriq_stock_count_events`); `variance.ts` (rolling pair calc, reuse `classifyVariance`, helpers); new whole-bar variance loader (replaces per-menu `variance-loader.ts` logic; theoretical from cocktails+serves volumes in window; coverage check against unmatched lines); `VarianceEditor.tsx` rework; trend + count-what-matters ordering.
 
+## Forward compatibility (long-term: everything through Pour IQ)
+The serve model is deliberately the **same model as a menu item**, so the long-term goal of running complete menus through Pour IQ (not just cocktails) is a promotion, not a rebuild: a serve becomes a visible menu item by flipping `is_serve` off, giving it a sale price, and assigning it to a real menu — same recipe rows, same ingredient library, same depletion. Today serves are hidden, depletion-only; tomorrow the bar can surface them as priced menu items and they already cost/deplete correctly.
+
+The separate prerequisite for full menus is **AI extraction of complete menus** (a real venue menu is ~14 pages of beers, wines, spirits and food, not 2–3 cocktail pages). That is its own future workstream — it ties into the existing large-PDF import timeout and the compound-ingredient extraction item — and is explicitly NOT part of variance v2. Serves here are mapped manually from the POS unmatched-items review.
+
 ## Out of scope (future)
-Live perpetual on-hand + delivery ledger; per-day POS sales storage; keg line-wastage yield % (tracked separately); auto-suggesting serve pour specs from POS item names.
+Live perpetual on-hand + delivery ledger; per-day POS sales storage; keg line-wastage yield % (tracked separately); auto-suggesting serve pour specs from POS item names; full-menu AI extraction (above).
 
 ## Success criteria
 - A spirit sold mostly outside cocktails shows an **accurate** variance once its serves are mapped — or a clear "usage understated" prompt until they are, never a false loss.
