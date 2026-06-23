@@ -4,6 +4,7 @@ import { useEffect, useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 import { PRIMARY_BUTTON } from '@/lib/pouriq/button-styles'
 import type { VolumeCadence } from '@/lib/pouriq/types'
+import { classifyVariance, type VarianceSeverity } from '@/lib/pouriq/variance'
 
 interface VarianceRow {
   library_ingredient_id: string
@@ -58,12 +59,12 @@ function formatPct(pct: number | null): string {
   return `${sign}${pct.toFixed(1)}%`
 }
 
-function colourForVariance(pct: number | null): string {
-  if (pct === null) return 'text-parchment-300'
-  const abs = Math.abs(pct)
-  if (abs < 10) return 'text-parchment-100'
-  if (abs <= 20) return 'text-amber-300'
-  return 'text-red-300'
+function colourForSeverity(severity: VarianceSeverity): string {
+  switch (severity) {
+    case 'amber': return 'text-amber-300'
+    case 'red': return 'text-red-300'
+    default: return 'text-parchment-300' // none / within-tolerance: not alarming
+  }
 }
 
 function formatDateRange(start: string, end: string): string {
@@ -236,6 +237,7 @@ export function VarianceEditor({ menuId, initialCadence }: Props) {
                     ? Math.round(liveVarianceMl * (r.bottle_cost_p / r.bottle_size_ml))
                     : null
                 const endExceedsStart = startN !== null && endN !== null && endN > startN
+                const severity = classifyVariance(liveVarianceMl, liveVariancePct, r.bottle_size_ml)
                 return (
                   <tr key={r.library_ingredient_id} className="border-t border-gold-500/10 align-top">
                     <td className="px-4 py-3 text-parchment-100">
@@ -273,13 +275,21 @@ export function VarianceEditor({ menuId, initialCadence }: Props) {
                     </td>
                     <td className="px-4 py-3 text-parchment-200">{formatMl(liveUsedMl)}</td>
                     <td className="px-4 py-3 text-parchment-200">{formatMl(r.theoretical_used_ml)}</td>
-                    <td className={`px-4 py-3 ${colourForVariance(liveVariancePct)}`}>
-                      {formatMl(liveVarianceMl)}
-                      {liveVariancePct !== null && (
-                        <span className="block text-xs">{formatPct(liveVariancePct)}</span>
+                    <td className={`px-4 py-3 ${colourForSeverity(severity)}`}>
+                      {severity === 'within-tolerance' ? (
+                        <span className="text-xs">Within tolerance</span>
+                      ) : (
+                        <>
+                          {formatMl(liveVarianceMl)}
+                          {liveVariancePct !== null && (
+                            <span className="block text-xs">{formatPct(liveVariancePct)}</span>
+                          )}
+                        </>
                       )}
                     </td>
-                    <td className={`px-4 py-3 ${colourForVariance(liveVariancePct)}`}>{formatMoney(liveCostP)}</td>
+                    <td className={`px-4 py-3 ${colourForSeverity(severity)}`}>
+                      {severity === 'within-tolerance' ? '—' : formatMoney(liveCostP)}
+                    </td>
                   </tr>
                 )
               })}
