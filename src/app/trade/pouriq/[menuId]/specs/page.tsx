@@ -5,6 +5,7 @@ import { checkPourIqAccess } from '@/lib/pouriq/access'
 import { LicenceGate } from '@/components/pouriq/LicenceGate'
 import { getMenu, listCocktailsForMenu } from '@/lib/pouriq/menus'
 import { SpecCard } from '@/components/pouriq/SpecCard'
+import { PrintReportButton } from '@/components/pouriq/PrintReportButton'
 
 export const dynamic = 'force-dynamic'
 
@@ -51,9 +52,10 @@ export default async function SpecCardsPage({ params }: Props) {
           <h1 className="text-3xl md:text-4xl font-serif font-bold text-white mb-3">
             Spec cards
           </h1>
-          <p className="text-parchment-300 text-base leading-relaxed mb-8">
-            Every drink on this menu as a one-page training reference. Open your browser's print dialog for one card per page. Print the lot, or pick a range.
+          <p className="text-parchment-300 text-base leading-relaxed mb-6">
+            Every drink on this menu as a one-page training reference, one card per page. Print the lot, or pick a range in the print dialog.
           </p>
+          {cocktails.length > 0 && <PrintReportButton label="Print spec cards" />}
         </div>
 
         <div className="hidden print:block mb-6 pb-4 border-b border-stone-300">
