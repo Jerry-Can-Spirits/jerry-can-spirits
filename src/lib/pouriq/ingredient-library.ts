@@ -8,6 +8,7 @@ export interface IngredientLibraryInsert {
   bottle_size_ml: number | null
   bottle_cost_p: number | null
   unit_cost_p: number | null
+  purchase_qty?: number   // items the price covers; defaults to 1
   barcode: string | null
   notes: string | null
 }
@@ -53,13 +54,14 @@ export async function insertLibraryEntry(
   const result = await db
     .prepare(`
       INSERT INTO pouriq_ingredients_library
-        (trade_account_id, name, ingredient_type, bottle_size_ml, bottle_cost_p, unit_cost_p, barcode, notes)
-      VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8)
+        (trade_account_id, name, ingredient_type, bottle_size_ml, bottle_cost_p, unit_cost_p, purchase_qty, barcode, notes)
+      VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9)
       RETURNING id
     `)
     .bind(
       data.trade_account_id, data.name, data.ingredient_type,
       data.bottle_size_ml, data.bottle_cost_p, data.unit_cost_p,
+      data.purchase_qty ?? 1,
       data.barcode, data.notes,
     )
     .first<{ id: string }>()
@@ -85,7 +87,7 @@ export async function updateLibraryEntry(
   patch: Partial<Omit<IngredientLibraryInsert, 'trade_account_id'>>,
 ): Promise<void> {
   const allowedFields = [
-    'name','ingredient_type','bottle_size_ml','bottle_cost_p','unit_cost_p','barcode','notes',
+    'name','ingredient_type','bottle_size_ml','bottle_cost_p','unit_cost_p','purchase_qty','barcode','notes',
   ] as const
 
   // Read current state for cost-change detection before mutating.

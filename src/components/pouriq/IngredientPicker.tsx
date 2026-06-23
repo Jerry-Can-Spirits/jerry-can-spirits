@@ -4,9 +4,9 @@ import { useEffect, useId, useMemo, useRef, useState } from 'react'
 import type { IngredientLibraryRow, IngredientType } from '@/lib/pouriq/types'
 import { saveLibraryEntryAction } from '@/lib/pouriq/server-actions'
 import { BarcodeScanner } from '@/components/pouriq/BarcodeScanner'
+import { BOTTLE_SIZES_ML } from '@/lib/pouriq/measures'
 
 const INGREDIENT_TYPES: IngredientType[] = ['spirit','liqueur','wine','beer','mixer','syrup','juice','garnish','other']
-const COMMON_BOTTLE_SIZES = [500, 700, 750, 1000]
 
 const inputClass = 'w-full px-3 py-2 bg-jerry-green-700/50 border border-gold-500/30 rounded-lg text-parchment-50 text-sm placeholder-parchment-400 focus:border-gold-400 focus:outline-hidden'
 const labelClass = 'block text-xs font-medium text-parchment-300 mb-1'
@@ -149,6 +149,7 @@ export function IngredientPicker({ libraryEntries, selectedEntryId, onChange }: 
       const result = await saveLibraryEntryAction(null, {
         name: name.trim(), ingredient_type,
         bottle_size_ml: bottle_size_ml_n, bottle_cost_p, unit_cost_p,
+        purchase_qty: 1,
         barcode: pendingBarcode,
         notes: null,
       })
@@ -160,6 +161,7 @@ export function IngredientPicker({ libraryEntries, selectedEntryId, onChange }: 
         bottle_size_ml: bottle_size_ml_n,
         bottle_cost_p,
         unit_cost_p,
+        purchase_qty: 1,
         barcode: pendingBarcode,
         notes: null,
         created_at: new Date().toISOString(),
@@ -262,7 +264,7 @@ export function IngredientPicker({ libraryEntries, selectedEntryId, onChange }: 
               <div>
                 <label className={labelClass}>Size (ml)</label>
                 <select value={bottle_size_ml} onChange={(e) => setBottleSize(e.target.value)} className={inputClass}>
-                  {COMMON_BOTTLE_SIZES.map((s) => <option key={s} value={s}>{s}</option>)}
+                  {BOTTLE_SIZES_ML.map((s) => <option key={s} value={s}>{s}</option>)}
                 </select>
               </div>
               <div>

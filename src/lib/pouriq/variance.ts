@@ -78,7 +78,7 @@ export function calcVariance(
 }
 
 /**
- * Cash cost of variance: variance_ml × (bottle_cost_p / bottle_size_ml).
+ * Cash cost of variance: variance_ml × per-ml cost (purchase_qty-aware).
  * Positive = money out (overpour); negative = money "back" (under-pour
  * or sales misreport). Rounded to whole pence to keep with the rest
  * of pouriq's integer-pence convention.

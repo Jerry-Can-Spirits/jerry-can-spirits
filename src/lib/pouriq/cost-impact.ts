@@ -8,6 +8,8 @@
 // ingredient. The client subtracts the old contribution and adds the
 // new contribution to get the projected numbers.
 
+import { unitPourCostP, bottlePourCostP } from './calculations'
+
 export interface ImpactIngredient {
   id: string
   name: string
@@ -15,6 +17,7 @@ export interface ImpactIngredient {
   bottle_size_ml: number | null
   bottle_cost_p: number | null
   unit_cost_p: number | null
+  purchase_qty: number
 }
 
 export interface ImpactCocktail {
@@ -54,15 +57,16 @@ export function newIngredientContributionP(
   cocktail: ImpactCocktail,
   newCostP: number,
 ): number {
+  // newCostP is the PURCHASE price (matches the stored cost field), so divide
+  // by purchase_qty via the shared helpers.
   if (pricingMode(ingredient) === 'unit') {
-    const count = cocktail.unit_count ?? 1
-    return Math.round(newCostP * count)
+    return unitPourCostP(newCostP, ingredient.purchase_qty, cocktail.unit_count ?? 1)
   }
   if (
     ingredient.bottle_size_ml !== null &&
     cocktail.pour_ml !== null
   ) {
-    return Math.round((newCostP / ingredient.bottle_size_ml) * cocktail.pour_ml)
+    return bottlePourCostP(newCostP, ingredient.bottle_size_ml, ingredient.purchase_qty, cocktail.pour_ml)
   }
   return 0
 }
