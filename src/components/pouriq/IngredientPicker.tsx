@@ -19,6 +19,7 @@ interface Props {
 
 export function IngredientPicker({ libraryEntries, selectedEntryId, onChange }: Props) {
   const id = useId()
+  const containerRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
   const [open, setOpen] = useState(false)
   const [query, setQuery] = useState('')
@@ -56,7 +57,11 @@ export function IngredientPicker({ libraryEntries, selectedEntryId, onChange }: 
   useEffect(() => {
     if (!open) return
     function handleClickOutside(e: MouseEvent) {
-      if (inputRef.current?.parentElement?.contains(e.target as Node)) return
+      // Containment must be tested against the whole component, not just the
+      // input's row: the options dropdown and inline-create form are siblings
+      // of that row, so checking the row alone treated option clicks as
+      // "outside" and closed the menu on mousedown before the click landed.
+      if (containerRef.current?.contains(e.target as Node)) return
       setOpen(false)
       setShowCreate(false)
     }
@@ -171,7 +176,7 @@ export function IngredientPicker({ libraryEntries, selectedEntryId, onChange }: 
   }
 
   return (
-    <div className="relative">
+    <div ref={containerRef} className="relative">
       <div className="flex gap-2">
         <input
           ref={inputRef}
