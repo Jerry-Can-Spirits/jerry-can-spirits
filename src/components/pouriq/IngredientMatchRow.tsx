@@ -2,10 +2,10 @@
 
 import type { IngredientLibraryRow, IngredientType } from '@/lib/pouriq/types'
 import { PriceInput } from '@/components/pouriq/PriceInput'
+import { POUR_PRESETS } from '@/lib/pouriq/measures'
 
 const INGREDIENT_TYPES: IngredientType[] = ['spirit','liqueur','wine','beer','mixer','syrup','juice','garnish','other']
 const COMMON_BOTTLE_SIZES = [500, 700, 750, 1000]
-const POUR_CHIPS = [15, 25, 35, 50, 75, 100]
 const UNIT_CHIPS = [
   { label: '1/8', value: 0.125 },
   { label: '1/4', value: 0.25 },
@@ -217,10 +217,10 @@ export function IngredientMatchRow({
                     {c.label}
                   </button>
                 ))
-              : POUR_CHIPS.map((ml) => (
-                  <button type="button" key={ml} onClick={() => setPour(ml)}
-                    className={`${chipClass} ${state.pour_ml === ml ? chipActive : chipIdle}`}>
-                    {ml}ml
+              : POUR_PRESETS.map((p) => (
+                  <button type="button" key={p.ml} onClick={() => setPour(p.ml)}
+                    className={`${chipClass} ${state.pour_ml === p.ml ? chipActive : chipIdle}`}>
+                    {p.label}
                   </button>
                 ))}
           </div>
