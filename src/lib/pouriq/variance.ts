@@ -89,3 +89,29 @@ export function calcVarianceCostP(
   if (variance_ml === null) return null
   return Math.round(variance_ml * (bottle_cost_p / bottle_size_ml))
 }
+
+export type VarianceSeverity = 'none' | 'within-tolerance' | 'amber' | 'red'
+
+// Eyeballing a partial bottle is only accurate to roughly a fifth of a bottle,
+// so anything smaller is measurement noise, not loss.
+export const VARIANCE_TOLERANCE_BOTTLES = 0.2
+
+/**
+ * Classify a variance for display. Absolute variances within the counting
+ * noise floor (≈0.2 of a bottle) — or small percentages — are "within
+ * tolerance" and should not be flagged as a figure, so staff aren't trained
+ * to ignore an always-red report. Beyond that: amber to 20%, red above.
+ */
+export function classifyVariance(
+  variance_ml: number | null,
+  variance_pct: number | null,
+  bottle_size_ml: number,
+): VarianceSeverity {
+  if (variance_ml === null) return 'none'
+  if (Math.abs(variance_ml) <= VARIANCE_TOLERANCE_BOTTLES * bottle_size_ml) return 'within-tolerance'
+  if (variance_pct === null) return 'amber'
+  const abs = Math.abs(variance_pct)
+  if (abs < 10) return 'within-tolerance'
+  if (abs <= 20) return 'amber'
+  return 'red'
+}
