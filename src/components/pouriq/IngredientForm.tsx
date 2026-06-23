@@ -7,6 +7,8 @@ import { saveLibraryEntryAction, deleteLibraryEntryAction } from '@/lib/pouriq/s
 import { BarcodeScanner } from '@/components/pouriq/BarcodeScanner'
 import { RipplePreview } from '@/components/pouriq/RipplePreview'
 import { RippleConfirmModal } from '@/components/pouriq/RippleConfirmModal'
+import { formatPurchaseBasis } from '@/lib/pouriq/calculations'
+import { BOTTLE_SIZES_ML } from '@/lib/pouriq/measures'
 import {
   COST_UPDATE_TOAST_KEY,
   getNewlyBelowTarget,
@@ -18,7 +20,6 @@ import {
 } from '@/lib/pouriq/cost-impact'
 
 const INGREDIENT_TYPES: IngredientType[] = ['spirit','liqueur','wine','beer','mixer','syrup','juice','garnish','other']
-const COMMON_BOTTLE_SIZES = [500, 700, 750, 1000]
 
 const inputClass = 'w-full px-4 py-3 bg-jerry-green-700/50 border border-gold-500/30 rounded-lg text-parchment-50 placeholder-parchment-400 focus:border-gold-400 focus:ring-2 focus:ring-gold-400/20 focus:outline-hidden transition-colors duration-200'
 const labelClass = 'block text-sm font-medium text-parchment-200 mb-2'
@@ -54,6 +55,8 @@ export function IngredientForm({ entry, usageCount = 0, impactPayload }: Props) 
     entry?.unit_cost_p !== null && entry?.unit_cost_p !== undefined
       ? (entry.unit_cost_p / 100).toFixed(2) : ''
   )
+  const [purchase_qty_str, setPurchaseQty] = useState(entry?.purchase_qty?.toString() ?? '1')
+  const purchase_qty = Math.max(1, Math.round(Number(purchase_qty_str) || 1))
   const [barcode, setBarcode] = useState(entry?.barcode ?? '')
   const [scanOpen, setScanOpen] = useState(false)
   const [scanInfo, setScanInfo] = useState<string | null>(null)
@@ -79,11 +82,11 @@ export function IngredientForm({ entry, usageCount = 0, impactPayload }: Props) 
     if (!impactPayload || newCostP === null) return null
     if (savedCostP !== null && newCostP === savedCostP) return null
     const projected: ProjectedCocktail[] = impactPayload.affected.map((c) =>
-      projectCocktail(impactPayload.ingredient, c, newCostP),
+      projectCocktail({ ...impactPayload.ingredient, purchase_qty }, c, newCostP),
     )
     const rollups = rollupByMenu(projected)
     return { projected, rollups }
-  }, [impactPayload, newCostP, savedCostP])
+  }, [impactPayload, newCostP, savedCostP, purchase_qty])
 
   async function handleScan(code: string) {
     setScanOpen(false)
@@ -147,6 +150,7 @@ export function IngredientForm({ entry, usageCount = 0, impactPayload }: Props) 
         bottle_size_ml: values.bottle_size_ml_n,
         bottle_cost_p: values.bottle_cost_p,
         unit_cost_p: values.unit_cost_p,
+        purchase_qty,
         barcode: barcode.trim() || null,
         notes: notes.trim() || null,
       })
@@ -235,31 +239,52 @@ export function IngredientForm({ entry, usageCount = 0, impactPayload }: Props) 
           </div>
         </div>
 
-        {pricing_mode === 'bottle' ? (
-          <>
-            <div>
-              <label htmlFor="bottle_size_ml" className={labelClass}>Bottle size (ml) *</label>
-              <div className="flex flex-wrap gap-2 mb-3">
-                {COMMON_BOTTLE_SIZES.map((s) => (
-                  <button type="button" key={s} onClick={() => setBottleSize(String(s))} className={`${chipClass} ${bottle_size_ml === String(s) ? chipActive : chipIdle}`}>
-                    {s}ml
-                  </button>
-                ))}
-              </div>
-              <input id="bottle_size_ml" type="number" step="1" min={0} value={bottle_size_ml} onChange={(e) => setBottleSize(e.target.value)} className={inputClass} placeholder="700" />
-            </div>
-            <div>
-              <label htmlFor="bottle_cost_pounds" className={labelClass}>Bottle cost (£) *</label>
-              <input id="bottle_cost_pounds" type="number" step="0.01" min={0} value={bottle_cost_pounds} onChange={(e) => setBottleCostPounds(e.target.value)} className={inputClass} placeholder="25.00" />
-            </div>
-          </>
-        ) : (
+        {/* How you buy it: price + how many that buys (+ size for poured) */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
-            <label htmlFor="unit_cost_pounds" className={labelClass}>Unit cost (£) *</label>
-            <input id="unit_cost_pounds" type="number" step="0.01" min={0} value={unit_cost_pounds} onChange={(e) => setUnitCostPounds(e.target.value)} className={inputClass} placeholder="1.00" />
-            <p className="text-xs text-parchment-400 mt-2">e.g., the cost of one whole lime, one bunch of mint, one jar of cherries.</p>
+            <label htmlFor="purchase_price" className={labelClass}>Price you pay (£) *</label>
+            <input
+              id="purchase_price" type="number" step="0.01" min={0}
+              value={pricing_mode === 'bottle' ? bottle_cost_pounds : unit_cost_pounds}
+              onChange={(e) => pricing_mode === 'bottle' ? setBottleCostPounds(e.target.value) : setUnitCostPounds(e.target.value)}
+              className={inputClass} placeholder="14.40"
+            />
           </div>
+          <div>
+            <label htmlFor="purchase_qty" className={labelClass}>How many does that buy? *</label>
+            <input id="purchase_qty" type="number" step="1" min={1} value={purchase_qty_str} onChange={(e) => setPurchaseQty(e.target.value)} className={inputClass} placeholder="1" />
+            <p className="text-xs text-parchment-400 mt-1">
+              {pricing_mode === 'bottle' ? 'e.g. 24 for a case' : 'e.g. 6 for a 6-pack'} — leave 1 for a single {pricing_mode === 'bottle' ? 'bottle' : 'item'}.
+            </p>
+          </div>
+        </div>
+
+        {pricing_mode === 'bottle' ? (
+          <div>
+            <label htmlFor="bottle_size_ml" className={labelClass}>Size of each (ml) *</label>
+            <div className="flex flex-wrap gap-2 mb-3">
+              {BOTTLE_SIZES_ML.map((s) => (
+                <button type="button" key={s} onClick={() => setBottleSize(String(s))} className={`${chipClass} ${bottle_size_ml === String(s) ? chipActive : chipIdle}`}>
+                  {s}ml
+                </button>
+              ))}
+            </div>
+            <input id="bottle_size_ml" type="number" step="1" min={0} value={bottle_size_ml} onChange={(e) => setBottleSize(e.target.value)} className={inputClass} placeholder="700 — or type any size, e.g. 10000 for a 10L keg/BIB" />
+          </div>
+        ) : (
+          <p className="text-xs text-parchment-400">Whole-item pricing — e.g. one lime, one jar of cherries. Recipes use a count (¼, ½, 1).</p>
         )}
+
+        {newCostP !== null && (() => {
+          const sizeN = parseFloat(bottle_size_ml)
+          const basis = formatPurchaseBasis({
+            bottle_cost_p: pricing_mode === 'bottle' ? newCostP : null,
+            bottle_size_ml: pricing_mode === 'bottle' && Number.isFinite(sizeN) ? sizeN : null,
+            unit_cost_p: pricing_mode === 'unit' ? newCostP : null,
+            purchase_qty,
+          })
+          return basis === '—' ? null : <p className="text-sm text-gold-200">= {basis}</p>
+        })()}
 
         {showRipple && projection && (
           <div>

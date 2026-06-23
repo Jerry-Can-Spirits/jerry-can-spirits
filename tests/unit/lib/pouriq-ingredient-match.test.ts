@@ -12,6 +12,7 @@ function row(name: string): IngredientLibraryRow {
     bottle_size_ml: 700,
     bottle_cost_p: 1000,
     unit_cost_p: null,
+    purchase_qty: 1,
     barcode: null,
     notes: null,
     created_at: '',

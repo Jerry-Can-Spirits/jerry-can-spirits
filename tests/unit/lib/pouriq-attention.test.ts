@@ -11,6 +11,7 @@ function ingredient(opts: { unit_cost_p?: number | null }): IngredientWithLibrar
   const library: IngredientLibraryRow = {
     id: 'lib', trade_account_id: 't', name: 'x', ingredient_type: 'spirit',
     bottle_size_ml: null, bottle_cost_p: null, unit_cost_p: opts.unit_cost_p ?? null,
+    purchase_qty: 1,
     barcode: null, notes: null, created_at: '', updated_at: '',
   }
   return { id: 'ing', cocktail_id: 'c', library_ingredient_id: 'lib', pour_ml: null, unit_count: 1, library }

@@ -2,10 +2,9 @@
 
 import type { IngredientLibraryRow, IngredientType } from '@/lib/pouriq/types'
 import { PriceInput } from '@/components/pouriq/PriceInput'
-import { POUR_PRESETS } from '@/lib/pouriq/measures'
+import { POUR_PRESETS, BOTTLE_SIZES_ML } from '@/lib/pouriq/measures'
 
 const INGREDIENT_TYPES: IngredientType[] = ['spirit','liqueur','wine','beer','mixer','syrup','juice','garnish','other']
-const COMMON_BOTTLE_SIZES = [500, 700, 750, 1000]
 const UNIT_CHIPS = [
   { label: '1/8', value: 0.125 },
   { label: '1/4', value: 0.25 },
@@ -163,7 +162,7 @@ export function IngredientMatchRow({
                   onChange={(e) => updateNewLibrary({ bottle_size_ml: parseInt(e.target.value, 10) })}
                   className={inputClass}
                 >
-                  {COMMON_BOTTLE_SIZES.map((s) => <option key={s} value={s}>{s}ml</option>)}
+                  {BOTTLE_SIZES_ML.map((s) => <option key={s} value={s}>{s}ml</option>)}
                 </select>
                 <PriceInput
                   valueP={state.new_library.bottle_cost_p}

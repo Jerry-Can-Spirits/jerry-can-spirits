@@ -8,6 +8,7 @@
 // the current contribution.
 
 import { rollupByMenu, type MenuRollup, type ProjectedCocktail } from './cost-impact'
+import { unitPourCostP, bottlePourCostP } from './calculations'
 
 export interface AppliedCostChange {
   library_ingredient_id: string
@@ -37,6 +38,7 @@ interface RawRow {
   lib_bottle_size_ml: number | null
   lib_bottle_cost_p: number | null
   lib_unit_cost_p: number | null
+  lib_purchase_qty: number
 }
 
 const VAT_DIVISOR = 1.20
@@ -57,20 +59,19 @@ function placeholders(n: number, offset: number): string {
  * pre-commit value).
  */
 function contributionP(
-  row: Pick<RawRow, 'ingredient_pour_ml' | 'ingredient_unit_count' | 'lib_bottle_size_ml'>,
+  row: Pick<RawRow, 'ingredient_pour_ml' | 'ingredient_unit_count' | 'lib_bottle_size_ml' | 'lib_purchase_qty'>,
   bottleCostP: number | null,
   unitCostP: number | null,
 ): number {
   if (unitCostP !== null) {
-    const count = row.ingredient_unit_count ?? 1
-    return Math.round(unitCostP * count)
+    return unitPourCostP(unitCostP, row.lib_purchase_qty, row.ingredient_unit_count ?? 1)
   }
   if (
     row.lib_bottle_size_ml !== null &&
     bottleCostP !== null &&
     row.ingredient_pour_ml !== null
   ) {
-    return Math.round((bottleCostP / row.lib_bottle_size_ml) * row.ingredient_pour_ml)
+    return bottlePourCostP(bottleCostP, row.lib_bottle_size_ml, row.lib_purchase_qty, row.ingredient_pour_ml)
   }
   return 0
 }
@@ -118,7 +119,8 @@ export async function loadMultiCostImpact(
       i.unit_count AS ingredient_unit_count,
       lib.bottle_size_ml AS lib_bottle_size_ml,
       lib.bottle_cost_p AS lib_bottle_cost_p,
-      lib.unit_cost_p AS lib_unit_cost_p
+      lib.unit_cost_p AS lib_unit_cost_p,
+      lib.purchase_qty AS lib_purchase_qty
     FROM affected a
     JOIN pouriq_cocktails c ON c.id = a.cocktail_id
     JOIN pouriq_menus m ON m.id = c.menu_id

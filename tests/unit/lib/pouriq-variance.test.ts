@@ -1,7 +1,21 @@
 import { describe, it, expect } from 'vitest'
-import { classifyVariance } from '@/lib/pouriq/variance'
+import { classifyVariance, calcVarianceCostP } from '@/lib/pouriq/variance'
 
 const BOTTLE = 700 // tolerance floor = 0.2 * 700 = 140 ml
+
+describe('calcVarianceCostP with purchase_qty', () => {
+  it('divides the bottle price by purchase_qty (case of 24)', () => {
+    // 200ml short of a £14.40/24×200ml case: per-ml 0.3p * 200 = 60p
+    expect(calcVarianceCostP(200, 200, 1440, 24)).toBe(60)
+  })
+  it('qty 1 matches the old behaviour', () => {
+    // 100ml of a £20/700ml bottle: (2000/700)*100 = 285.7 -> 286
+    expect(calcVarianceCostP(100, 700, 2000, 1)).toBe(286)
+  })
+  it('returns null when variance is null', () => {
+    expect(calcVarianceCostP(null, 700, 2000, 1)).toBeNull()
+  })
+})
 
 describe('classifyVariance', () => {
   it('returns "none" when there is no actual count', () => {

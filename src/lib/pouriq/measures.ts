@@ -12,3 +12,8 @@ export const POUR_PRESETS: ReadonlyArray<{ ml: number; label: string }> = [
   { ml: 75, label: '75ml' },
   { ml: 100, label: '100ml' },
 ]
+
+// Common per-item sizes for the "how you buy it" cost entry. Quick chips; the
+// size field also accepts a typed value (e.g. 10000 for a 10L keg/BIB).
+// Covers 150/200ml (Britvic/Fever-Tree splits) up to 2000ml bottled mixers.
+export const BOTTLE_SIZES_ML: readonly number[] = [150, 200, 330, 500, 700, 750, 1000, 2000]
