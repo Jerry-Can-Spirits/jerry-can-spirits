@@ -3,7 +3,7 @@
 
 import { bestGuessCocktail, normalise } from './match'
 import { bucketLines, upsertAdditiveVolumes } from './volume-buckets'
-import { listCocktailsForMenu, getActiveMenu } from '../menus'
+import { listCocktailsForMenu, getActiveMenu, listServes, getOrCreateServesMenu } from '../menus'
 
 export interface PosItemAlias {
   normalised_pos_name: string
@@ -48,6 +48,66 @@ export async function listMappableCocktails(
   const active = await getActiveMenu(db, tradeAccountId)
   if (!active) return []
   return (await listCocktailsForMenu(db, active.id)).map((c) => ({ id: c.id, name: c.name }))
+}
+
+export async function listMappableServes(
+  db: D1Database,
+  tradeAccountId: string,
+): Promise<Array<{ id: string; name: string }>> {
+  return (await listServes(db, tradeAccountId)).map((s) => ({ id: s.id, name: s.name }))
+}
+
+/**
+ * Map a previously-unmatched till name to a serve: persist the alias and
+ * backfill the logged lines using the active menu's cadence (serves are
+ * menu-independent; we use the active menu's cadence as the tenant default).
+ * Throws if the serve does not belong to the tenant.
+ */
+export async function createServeMapping(
+  db: D1Database,
+  tradeAccountId: string,
+  normalisedName: string,
+  serveId: string,
+): Promise<void> {
+  const servesMenuId = await getOrCreateServesMenu(db, tradeAccountId)
+  const serve = await db
+    .prepare(`SELECT id, name FROM pouriq_cocktails WHERE id = ?1 AND menu_id = ?2 AND is_serve = 1`)
+    .bind(serveId, servesMenuId)
+    .first<{ id: string; name: string }>()
+  if (!serve) throw new Error('Serve not found for this account')
+
+  await db
+    .prepare(`
+      INSERT INTO pouriq_pos_item_map (trade_account_id, normalised_pos_name, cocktail_id, cocktail_name, ignored)
+      VALUES (?1, ?2, ?3, ?4, 0)
+      ON CONFLICT(trade_account_id, normalised_pos_name) DO UPDATE SET
+        cocktail_id = excluded.cocktail_id,
+        cocktail_name = excluded.cocktail_name,
+        ignored = 0,
+        updated_at = datetime('now')
+    `)
+    .bind(tradeAccountId, normalisedName, serveId, normalise(serve.name))
+    .run()
+
+  const linesRes = await db
+    .prepare(`SELECT id, quantity, sold_at FROM pouriq_pos_unmatched_lines WHERE trade_account_id = ?1 AND normalised_name = ?2`)
+    .bind(tradeAccountId, normalisedName)
+    .all<{ id: string; quantity: number; sold_at: string }>()
+  const lines = linesRes.results ?? []
+  if (lines.length === 0) return
+
+  const active = await getActiveMenu(db, tradeAccountId)
+  const cadence = active?.volume_cadence ?? 'weekly'
+  await upsertAdditiveVolumes(
+    db,
+    bucketLines(
+      { volume_cadence: cadence },
+      lines.map((l) => ({ cocktail_id: serveId, quantity: l.quantity, sold_at: l.sold_at })),
+    ),
+  )
+  await db.batch(
+    lines.map((l) => db.prepare(`DELETE FROM pouriq_pos_unmatched_lines WHERE id = ?1`).bind(l.id)),
+  )
 }
 
 export async function listUnmatched(db: D1Database, tradeAccountId: string): Promise<UnmatchedItem[]> {
