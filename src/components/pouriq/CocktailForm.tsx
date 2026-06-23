@@ -5,8 +5,8 @@ import { useRouter } from 'next/navigation'
 import { saveCocktailAction, deleteCocktailAction } from '@/lib/pouriq/server-actions'
 import { IngredientPicker } from '@/components/pouriq/IngredientPicker'
 import type { CocktailWithIngredients, IngredientLibraryRow } from '@/lib/pouriq/types'
+import { POUR_PRESETS } from '@/lib/pouriq/measures'
 
-const POUR_CHIPS = [15, 25, 35, 50, 75, 100]
 const UNIT_CHIPS: Array<{ label: string; value: number }> = [
   { label: '1/8', value: 0.125 },
   { label: '1/4', value: 0.25 },
@@ -287,10 +287,10 @@ export function CocktailForm({ menuId, cocktail, libraryEntries }: Props) {
                       <div>
                         <label className={labelClass}>Pour (ml)</label>
                         <div className="flex flex-wrap gap-2 mb-2">
-                          {POUR_CHIPS.map((ml) => (
-                            <button type="button" key={ml} onClick={() => updateIngredient(idx, { pour_ml: ml.toString() })}
-                              className={`${chipClass} ${ing.pour_ml === ml.toString() ? chipActive : chipIdle}`}>
-                              {ml}ml
+                          {POUR_PRESETS.map((p) => (
+                            <button type="button" key={p.ml} onClick={() => updateIngredient(idx, { pour_ml: p.ml.toString() })}
+                              className={`${chipClass} ${ing.pour_ml === p.ml.toString() ? chipActive : chipIdle}`}>
+                              {p.label}
                             </button>
                           ))}
                         </div>
