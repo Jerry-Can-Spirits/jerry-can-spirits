@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import type { IngredientLibraryRow, IngredientType } from '@/lib/pouriq/types'
 import { IngredientMatchRow, type MatchRowState } from '@/components/pouriq/IngredientMatchRow'
@@ -182,6 +182,26 @@ export function ImportPreview({ menuId, drinks: extracted, libraryEntries }: Pro
     })
   }
 
+  // Step through the rows still needing a library choice/price: expand the
+  // drink that holds the next one and scroll it into view. Saves slow-scrolling
+  // a long list hunting for what's left. Cycles back to the first when it runs off the end.
+  const lastJumpRef = useRef(-1)
+  function jumpToNextUnresolved() {
+    const coords: Array<{ d: number; i: number }> = []
+    drinks.forEach((d, di) => {
+      if (d.skip) return
+      d.ingredients.forEach((st, ii) => { if (!isRowResolved(st)) coords.push({ d: di, i: ii }) })
+    })
+    if (coords.length === 0) return
+    lastJumpRef.current = (lastJumpRef.current + 1) % coords.length
+    const { d, i } = coords[lastJumpRef.current]
+    setExpanded((set) => new Set(set).add(d))
+    // Let the expand re-render before scrolling to the row.
+    setTimeout(() => {
+      document.getElementById(`import-ing-${d}-${i}`)?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    }, 60)
+  }
+
   async function handleCommit() {
     setError(null)
     if (stats.needsChoice > 0) {
@@ -243,15 +263,26 @@ export function ImportPreview({ menuId, drinks: extracted, libraryEntries }: Pro
 
   return (
     <div className="space-y-6">
-      <div className="bg-jerry-green-800/40 border border-gold-500/30 rounded-xl p-4 text-sm text-parchment-200">
-        <p>
-          <strong className="text-gold-300">{stats.included}</strong> drinks ·{' '}
-          <strong className="text-emerald-300">{stats.matched}</strong> auto-matched ·{' '}
-          <strong className="text-amber-300">{stats.toCreate}</strong> new library entries ·{' '}
-          {stats.needsChoice > 0
-            ? <strong className="text-red-300">{stats.needsChoice} need a choice</strong>
-            : <strong className="text-emerald-300">all resolved</strong>}
-        </p>
+      <div className="sticky top-2 z-20 bg-jerry-green-800/95 backdrop-blur-sm border border-gold-500/30 rounded-xl p-4 text-sm text-parchment-200">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <p>
+            <strong className="text-gold-300">{stats.included}</strong> drinks ·{' '}
+            <strong className="text-emerald-300">{stats.matched}</strong> auto-matched ·{' '}
+            <strong className="text-amber-300">{stats.toCreate}</strong> new library entries ·{' '}
+            {stats.needsChoice > 0
+              ? <strong className="text-red-300">{stats.needsChoice} need a choice</strong>
+              : <strong className="text-emerald-300">all resolved</strong>}
+          </p>
+          {stats.needsChoice > 0 && (
+            <button
+              type="button"
+              onClick={jumpToNextUnresolved}
+              className="shrink-0 px-3 py-1.5 rounded-lg bg-gold-500/20 border border-gold-400 text-gold-100 text-xs font-semibold hover:bg-gold-500/30"
+            >
+              Jump to next unresolved →
+            </button>
+          )}
+        </div>
       </div>
 
       <div className="space-y-4">
@@ -282,18 +313,19 @@ export function ImportPreview({ menuId, drinks: extracted, libraryEntries }: Pro
                 {!d.skip && d.ingredients.map((_ingState, ingIdx) => {
                   const ing = extracted[idx].ingredients[ingIdx]
                   return (
-                  <IngredientMatchRow
-                    key={ingIdx}
-                    extractedName={ing.extracted_name}
-                    rawMeasurement={ing.raw_measurement}
-                    inferredType={ing.inferred_type}
-                    matchKind={ing.match.kind}
-                    suggestionEntries={ing.match.kind === 'suggestions' ? ing.match.entries : []}
-                    libraryEntries={libraryEntries}
-                    state={d.ingredients[ingIdx]}
-                    onChange={(state) => updateIngredient(idx, ingIdx, state)}
-                    onResolvedCommit={() => propagateFrom(idx, ingIdx)}
-                  />
+                  <div key={ingIdx} id={`import-ing-${idx}-${ingIdx}`} className="scroll-mt-24">
+                    <IngredientMatchRow
+                      extractedName={ing.extracted_name}
+                      rawMeasurement={ing.raw_measurement}
+                      inferredType={ing.inferred_type}
+                      matchKind={ing.match.kind}
+                      suggestionEntries={ing.match.kind === 'suggestions' ? ing.match.entries : []}
+                      libraryEntries={libraryEntries}
+                      state={d.ingredients[ingIdx]}
+                      onChange={(state) => updateIngredient(idx, ingIdx, state)}
+                      onResolvedCommit={() => propagateFrom(idx, ingIdx)}
+                    />
+                  </div>
                   )
                 })}
               </div>
