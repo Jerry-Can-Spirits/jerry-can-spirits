@@ -2,6 +2,8 @@
 // side effects. Used by the server-side loader to build VarianceRow[]
 // for the menu page's variance editor.
 
+import { costPerMlP } from './calculations'
+
 export interface VarianceRow {
   library_ingredient_id: string
   library_name: string
@@ -85,9 +87,10 @@ export function calcVarianceCostP(
   variance_ml: number | null,
   bottle_size_ml: number,
   bottle_cost_p: number,
+  purchase_qty: number,
 ): number | null {
   if (variance_ml === null) return null
-  return Math.round(variance_ml * (bottle_cost_p / bottle_size_ml))
+  return Math.round(variance_ml * costPerMlP(bottle_cost_p, bottle_size_ml, purchase_qty))
 }
 
 export type VarianceSeverity = 'none' | 'within-tolerance' | 'amber' | 'red'
