@@ -48,4 +48,11 @@ describe('matchCatalogue', () => {
   it('still prefers an exact canonical-name match', () => {
     expect(matchCatalogue('amaretto', cat)?.name).toBe('Amaretto')
   })
+
+  it('does NOT match a differing head noun ("lime slice" must not adopt "Lime Juice")', () => {
+    expect(matchCatalogue('lime slice', cat)).toBeNull()
+  })
+  it('does NOT conflate short words ("mint" must not adopt anything here)', () => {
+    expect(matchCatalogue('mint', cat)).toBeNull()
+  })
 })

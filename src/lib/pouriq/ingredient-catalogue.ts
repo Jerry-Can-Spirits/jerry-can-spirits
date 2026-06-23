@@ -4,7 +4,7 @@
 // catalogue (specific scanned bottles).
 
 import type { IngredientType } from './types'
-import { normalise, levenshtein } from './match'
+import { normalise, significantTokens, tokenKey, tokensAreTypoNear } from './match'
 
 export interface CatalogueEntry {
   id: string
@@ -52,33 +52,38 @@ export async function listCatalogue(db: D1Database): Promise<CatalogueEntry[]> {
   }))
 }
 
-// Best catalogue entry when confident: exact normalised match, else nearest
-// within Levenshtein <= 2, else a multi-word substring containment. Null
-// otherwise, so we never silently mis-adopt an unrelated ingredient.
+// Best catalogue entry when confident, using the same token-aware logic as
+// matchIngredient (shared helpers): exact name/alias, else identical
+// significant-token set (qualifier-stripped), else a token-subset or a
+// single-token typo. Null otherwise, so we never silently mis-adopt an
+// unrelated ingredient (e.g. "mint" must not resolve to "gin").
 export function matchCatalogue(name: string, entries: CatalogueEntry[]): CatalogueEntry | null {
-  const target = normalise(name)
-  if (!target) return null
-  // Exact match on the canonical name or any alias.
-  const exact = entries.find((e) => e.normalised_name === target || e.aliases.includes(target))
+  const targetNorm = normalise(name)
+  if (!targetNorm) return null
+  // Exact match on the canonical name or any alias (brand/synonym strings).
+  const exact = entries.find((e) => e.normalised_name === targetNorm || e.aliases.includes(targetNorm))
   if (exact) return exact
-  let best: { entry: CatalogueEntry; score: number } | null = null
+
+  const tTokens = significantTokens(name)
+  if (tTokens.length === 0) return null
+  const tKey = tokenKey(tTokens)
+  const tSet = new Set(tTokens)
+
+  const scored: { entry: CatalogueEntry; score: number }[] = []
   for (const e of entries) {
-    // Compare against the name and every alias; keep the closest.
     for (const cand of [e.normalised_name, ...e.aliases]) {
-      if (cand.length < 3) continue
-      const dist = levenshtein(target, cand)
-      if (dist <= 2) {
-        if (best === null || dist < best.score) best = { entry: e, score: dist }
+      const cTokens = significantTokens(cand)
+      if (cTokens.length === 0) continue
+      const cSet = new Set(cTokens)
+      if (tokenKey(cTokens) === tKey) { scored.push({ entry: e, score: 0 }); break }
+      if (tTokens.every((t) => cSet.has(t)) || cTokens.every((c) => tSet.has(c))) {
+        scored.push({ entry: e, score: 1 + Math.abs(tTokens.length - cTokens.length) })
         continue
       }
-      if (
-        (target.length >= 5 && cand.includes(target)) ||
-        (cand.length >= 5 && target.includes(cand))
-      ) {
-        const s = 100 + Math.abs(target.length - cand.length)
-        if (best === null || s < best.score) best = { entry: e, score: s }
-      }
+      if (tokensAreTypoNear(tTokens, cTokens)) scored.push({ entry: e, score: 10 })
     }
   }
-  return best?.entry ?? null
+  if (scored.length === 0) return null
+  scored.sort((a, b) => a.score - b.score)
+  return scored[0].entry
 }
