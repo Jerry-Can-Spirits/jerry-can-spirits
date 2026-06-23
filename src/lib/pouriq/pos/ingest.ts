@@ -2,7 +2,7 @@ import type { PosConnection, PosOrderLine } from './types'
 import { matchPosItemToCocktail, normalise } from './match'
 import { loadAliases } from './item-map'
 import { bucketLines, upsertAdditiveVolumes, type CocktailLine } from './volume-buckets'
-import { listCocktailsForMenu, getActiveMenu } from '../menus'
+import { listCocktailsForMenu, getActiveMenu, listServes } from '../menus'
 
 /**
  * Take a batch of POS order lines, resolve each to a cocktail in the
@@ -52,6 +52,8 @@ export async function ingestOrderLines(
 
   const cocktails = await listCocktailsForMenu(db, targetMenu.id)
   const cocktailByNormName = new Map(cocktails.map((c) => [normalise(c.name), c]))
+  const serves = await listServes(db, connection.trade_account_id)
+  const serveById = new Map(serves.map((s) => [s.id, s]))
   const aliases = await loadAliases(db, connection.trade_account_id)
 
   const matchedLines: CocktailLine[] = []
@@ -62,8 +64,11 @@ export async function ingestOrderLines(
     if (alias?.ignored) continue // suppressed non-cocktail till button
 
     let cocktailId: string | null = null
-    if (alias?.cocktail_name) {
-      // Resolve by name so the mapping survives a seasonal menu change.
+    if (alias?.cocktail_id && serveById.has(alias.cocktail_id)) {
+      // Serve alias — resolve by id; serves are stable and menu-independent.
+      cocktailId = alias.cocktail_id
+    } else if (alias?.cocktail_name) {
+      // Cocktail alias — resolve by name so the mapping survives a seasonal menu change.
       cocktailId = cocktailByNormName.get(alias.cocktail_name)?.id ?? null
     }
     if (!cocktailId) {

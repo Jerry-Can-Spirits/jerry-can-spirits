@@ -1,7 +1,10 @@
 'use client'
 
 import { useState, useTransition } from 'react'
-import { PRIMARY_BUTTON, DESTRUCTIVE_BUTTON } from '@/lib/pouriq/button-styles'
+import { PRIMARY_BUTTON, SECONDARY_BUTTON_SM, DESTRUCTIVE_BUTTON } from '@/lib/pouriq/button-styles'
+import { ServeForm } from '@/components/pouriq/ServeForm'
+import { saveServeAction } from '@/lib/pouriq/server-actions'
+import type { IngredientLibraryRow } from '@/lib/pouriq/types'
 
 interface UnmatchedItem {
   normalised_name: string
@@ -14,6 +17,8 @@ interface UnmatchedItem {
 interface Props {
   items: UnmatchedItem[]
   cocktails: Array<{ id: string; name: string }>
+  serves: Array<{ id: string; name: string }>
+  libraryEntries: IngredientLibraryRow[]
 }
 
 function formatDate(iso: string): string {
@@ -21,11 +26,14 @@ function formatDate(iso: string): string {
   return isNaN(d.getTime()) ? iso : d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })
 }
 
-export function UnmatchedReview({ items, cocktails }: Props) {
+export function UnmatchedReview({ items, cocktails, serves, libraryEntries }: Props) {
   const [rows, setRows] = useState(items)
+  const [serveList, setServeList] = useState(serves)
   const [selection, setSelection] = useState<Record<string, string>>(
     () => Object.fromEntries(items.map((i) => [i.normalised_name, i.suggestion?.cocktail_id ?? ''])),
   )
+  const [serveSelection, setServeSelection] = useState<Record<string, string>>({})
+  const [creatingFor, setCreatingFor] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [pending, startTransition] = useTransition()
 
@@ -33,22 +41,35 @@ export function UnmatchedReview({ items, cocktails }: Props) {
     setRows((rs) => rs.filter((r) => r.normalised_name !== name))
   }
 
+  async function postMap(body: Record<string, string>): Promise<boolean> {
+    const res = await fetch('/api/pouriq/integrations/unmatched/map', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    })
+    if (!res.ok) {
+      const e = await res.json().catch(() => ({})) as { error?: string }
+      setError(e.error ?? 'Could not save the mapping.')
+      return false
+    }
+    return true
+  }
+
   function confirm(name: string) {
     const cocktailId = selection[name]
     if (!cocktailId) { setError('Pick a cocktail first.'); return }
     setError(null)
     startTransition(async () => {
-      const res = await fetch('/api/pouriq/integrations/unmatched/map', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ normalisedName: name, cocktailId }),
-      })
-      if (!res.ok) {
-        const e = await res.json().catch(() => ({})) as { error?: string }
-        setError(e.error ?? 'Could not save the mapping.')
-        return
-      }
-      remove(name)
+      if (await postMap({ normalisedName: name, cocktailId })) remove(name)
+    })
+  }
+
+  function confirmServe(name: string) {
+    const serveId = serveSelection[name]
+    if (!serveId) { setError('Pick a serve first.'); return }
+    setError(null)
+    startTransition(async () => {
+      if (await postMap({ normalisedName: name, target: 'serve', serveId })) remove(name)
     })
   }
 
@@ -86,28 +107,82 @@ export function UnmatchedReview({ items, cocktails }: Props) {
             </span>
           </div>
           <label htmlFor={`map-${row.normalised_name}`} className="block text-xs font-medium text-parchment-300 mb-2">
-            This is
+            This is a cocktail
           </label>
           <select
             id={`map-${row.normalised_name}`}
             value={selection[row.normalised_name] ?? ''}
             onChange={(e) => setSelection((s) => ({ ...s, [row.normalised_name]: e.target.value }))}
             disabled={pending}
-            className="w-full px-3 py-2 bg-jerry-green-700/50 border border-gold-500/30 rounded-lg text-parchment-100 text-sm focus:border-gold-400 focus:ring-2 focus:ring-gold-400/20 focus:outline-hidden mb-4"
+            className="w-full px-3 py-2 bg-jerry-green-700/50 border border-gold-500/30 rounded-lg text-parchment-100 text-sm focus:border-gold-400 focus:ring-2 focus:ring-gold-400/20 focus:outline-hidden mb-2"
           >
             <option value="">— Select a cocktail —</option>
             {cocktails.map((c) => (
               <option key={c.id} value={c.id}>{c.name}</option>
             ))}
           </select>
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-2 mb-4">
             <button type="button" onClick={() => confirm(row.normalised_name)} disabled={pending} className={PRIMARY_BUTTON}>
-              {pending ? 'Saving…' : 'Confirm'}
+              {pending ? 'Saving…' : 'Confirm cocktail'}
             </button>
             <button type="button" onClick={() => ignore(row.normalised_name)} disabled={pending} className={DESTRUCTIVE_BUTTON}>
               Not a cocktail
             </button>
           </div>
+
+          <label htmlFor={`serve-${row.normalised_name}`} className="block text-xs font-medium text-parchment-300 mb-2">
+            Or this is a serve
+          </label>
+          <select
+            id={`serve-${row.normalised_name}`}
+            value={serveSelection[row.normalised_name] ?? ''}
+            onChange={(e) => setServeSelection((s) => ({ ...s, [row.normalised_name]: e.target.value }))}
+            disabled={pending}
+            className="w-full px-3 py-2 bg-jerry-green-700/50 border border-gold-500/30 rounded-lg text-parchment-100 text-sm focus:border-gold-400 focus:ring-2 focus:ring-gold-400/20 focus:outline-hidden mb-2"
+          >
+            <option value="">— Select a serve —</option>
+            {serveList.map((s) => (
+              <option key={s.id} value={s.id}>{s.name}</option>
+            ))}
+          </select>
+          <div className="flex flex-wrap gap-2">
+            <button type="button" onClick={() => confirmServe(row.normalised_name)} disabled={pending} className={PRIMARY_BUTTON}>
+              {pending ? 'Saving…' : 'Confirm serve'}
+            </button>
+            <button
+              type="button"
+              onClick={() => setCreatingFor((c) => c === row.normalised_name ? null : row.normalised_name)}
+              disabled={pending}
+              className={SECONDARY_BUTTON_SM}
+            >
+              {creatingFor === row.normalised_name ? 'Cancel new serve' : 'Create serve'}
+            </button>
+          </div>
+
+          {creatingFor === row.normalised_name && (
+            <ServeForm
+              defaultName={row.raw_name}
+              libraryEntries={libraryEntries}
+              pending={pending}
+              submitLabel="Create serve and map"
+              onError={setError}
+              onSubmit={(name, ingredients) => {
+                setError(null)
+                startTransition(async () => {
+                  try {
+                    const { serveId } = await saveServeAction(null, { name, ingredients })
+                    if (await postMap({ normalisedName: row.normalised_name, target: 'serve', serveId })) {
+                      setServeList((list) => [...list, { id: serveId, name }])
+                      setCreatingFor(null)
+                      remove(row.normalised_name)
+                    }
+                  } catch (e) {
+                    setError((e as Error).message || 'Could not create the serve.')
+                  }
+                })
+              }}
+            />
+          )}
         </div>
       ))}
       <p className="text-xs text-parchment-500">

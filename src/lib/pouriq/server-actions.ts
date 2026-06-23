@@ -7,7 +7,7 @@ import { checkPourIqAccess } from './access'
 import {
   insertMenu, updateMenu, deleteMenu, setActiveMenu,
   insertCocktail, replaceIngredients,
-  getMenu, listCocktailsForMenu,
+  getMenu, listCocktailsForMenu, getOrCreateServesMenu,
 } from './menus'
 import {
   insertLibraryEntry,
@@ -337,6 +337,52 @@ export async function deleteLibraryEntryAction(entryId: string): Promise<void> {
   if (!existing) throw new Error('Ingredient not found')
   await deleteLibraryEntry(db, entryId, tradeAccountId)
   revalidatePath('/trade/pouriq/library')
+}
+
+export async function saveServeAction(
+  serveId: string | null,
+  input: { name: string; ingredients: Array<{ library_ingredient_id: string; pour_ml: number | null; unit_count: number | null }> },
+): Promise<{ serveId: string }> {
+  const { db, tradeAccountId } = await requireDb()
+  if (!input.name.trim()) throw new Error('Serve name is required')
+  const menuId = await getOrCreateServesMenu(db, tradeAccountId)
+  let id = serveId
+  if (id === null) {
+    const row = await db
+      .prepare(`
+        INSERT INTO pouriq_cocktails (menu_id, name, sale_price_p, position, field_manual_slug, notes, is_serve)
+        VALUES (?1, ?2, 0, 0, NULL, NULL, 1) RETURNING id
+      `)
+      .bind(menuId, input.name.trim())
+      .first<{ id: string }>()
+    if (!row) throw new Error('Serve insert returned no id')
+    id = row.id
+  } else {
+    const owns = await db
+      .prepare(`SELECT 1 FROM pouriq_cocktails WHERE id = ?1 AND menu_id = ?2 AND is_serve = 1`)
+      .bind(id, menuId)
+      .first()
+    if (!owns) throw new Error('Serve not found')
+    await db
+      .prepare(`UPDATE pouriq_cocktails SET name = ?1 WHERE id = ?2`)
+      .bind(input.name.trim(), id)
+      .run()
+  }
+  await replaceIngredients(db, id, input.ingredients)
+  revalidatePath('/trade/pouriq/serves')
+  return { serveId: id }
+}
+
+export async function deleteServeAction(serveId: string): Promise<void> {
+  const { db, tradeAccountId } = await requireDb()
+  const menuId = await getOrCreateServesMenu(db, tradeAccountId)
+  const owns = await db
+    .prepare(`SELECT 1 FROM pouriq_cocktails WHERE id = ?1 AND menu_id = ?2 AND is_serve = 1`)
+    .bind(serveId, menuId)
+    .first()
+  if (!owns) throw new Error('Serve not found')
+  await db.prepare(`DELETE FROM pouriq_cocktails WHERE id = ?1`).bind(serveId).run()
+  revalidatePath('/trade/pouriq/serves')
 }
 
 export async function setVoiceProfileAction(input: VoiceProfileInput): Promise<void> {
