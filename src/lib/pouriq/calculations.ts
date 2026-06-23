@@ -15,6 +15,43 @@ import type {
 // would see on the P&L.
 const VAT_DIVISOR = 1.20
 
+// Purchase-basis cost. The stored cost (bottle_cost_p / unit_cost_p) is the
+// price for ALL purchase_qty items, so per-item / per-ml divides by qty first.
+// purchase_qty defaults to 1 (existing rows), making these a no-op for current
+// data. These are the single source of truth for cost derivation — every site
+// that turns a library cost into a pour/serve cost must go through them.
+export function costPerMlP(bottle_cost_p: number, bottle_size_ml: number, purchase_qty: number): number {
+  return (bottle_cost_p / purchase_qty) / bottle_size_ml
+}
+export function bottlePourCostP(bottle_cost_p: number, bottle_size_ml: number, purchase_qty: number, pour_ml: number): number {
+  return Math.round(costPerMlP(bottle_cost_p, bottle_size_ml, purchase_qty) * pour_ml)
+}
+export function unitPourCostP(unit_cost_p: number, purchase_qty: number, unit_count: number): number {
+  return Math.round((unit_cost_p / purchase_qty) * unit_count)
+}
+
+// Plain-English read-back of how an ingredient is bought, e.g.
+// "£14.40 / 24 × 200ml (£0.003/ml)" or "£2.00 / 6 (£0.33 each)".
+export function formatPurchaseBasis(e: {
+  bottle_cost_p: number | null
+  bottle_size_ml: number | null
+  unit_cost_p: number | null
+  purchase_qty: number
+}): string {
+  const gbp = (p: number) => `£${(p / 100).toFixed(2)}`
+  if (e.unit_cost_p !== null) {
+    const each = e.unit_cost_p / e.purchase_qty / 100
+    const qtyPart = e.purchase_qty === 1 ? '' : ` / ${e.purchase_qty}`
+    return `${gbp(e.unit_cost_p)}${qtyPart} (£${each.toFixed(2)} each)`
+  }
+  if (e.bottle_cost_p !== null && e.bottle_size_ml !== null) {
+    const perMl = costPerMlP(e.bottle_cost_p, e.bottle_size_ml, e.purchase_qty) / 100
+    const buys = e.purchase_qty === 1 ? `${e.bottle_size_ml}ml` : `${e.purchase_qty} × ${e.bottle_size_ml}ml`
+    return `${gbp(e.bottle_cost_p)} / ${buys} (£${perMl.toFixed(3)}/ml)`
+  }
+  return '—'
+}
+
 export function netSalePrice(sale_price_p: number, priceIncludesVat: boolean): number {
   if (!priceIncludesVat) return sale_price_p
   return Math.round(sale_price_p / VAT_DIVISOR)
@@ -49,10 +86,10 @@ export function ingredientCostComplete(i: import('./types').IngredientWithLibrar
 }
 
 function ingredientCostPence(i: import('./types').IngredientWithLibrary): number {
+  const qty = i.library.purchase_qty
   // Unit-priced: library has unit_cost_p; cocktail row has unit_count
   if (i.library.unit_cost_p !== null) {
-    const count = i.unit_count ?? 1
-    return Math.round(i.library.unit_cost_p * count)
+    return unitPourCostP(i.library.unit_cost_p, qty, i.unit_count ?? 1)
   }
   // Bottle-priced: library has bottle_size_ml + bottle_cost_p; cocktail row has pour_ml
   if (
@@ -60,7 +97,7 @@ function ingredientCostPence(i: import('./types').IngredientWithLibrary): number
     i.library.bottle_cost_p !== null &&
     i.pour_ml !== null
   ) {
-    return Math.round((i.library.bottle_cost_p / i.library.bottle_size_ml) * i.pour_ml)
+    return bottlePourCostP(i.library.bottle_cost_p, i.library.bottle_size_ml, qty, i.pour_ml)
   }
   return 0
 }

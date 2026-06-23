@@ -5,6 +5,7 @@
 // server-side to avoid a client waterfall on every keystroke).
 
 import { getLibraryEntry } from './ingredient-library'
+import { unitPourCostP, bottlePourCostP } from './calculations'
 import type {
   CostImpactPayload,
   ImpactCocktail,
@@ -25,19 +26,19 @@ interface RawRow {
   lib_bottle_size_ml: number | null
   lib_bottle_cost_p: number | null
   lib_unit_cost_p: number | null
+  lib_purchase_qty: number
 }
 
 function rowContributionP(row: RawRow): number {
   if (row.lib_unit_cost_p !== null) {
-    const count = row.ingredient_unit_count ?? 1
-    return Math.round(row.lib_unit_cost_p * count)
+    return unitPourCostP(row.lib_unit_cost_p, row.lib_purchase_qty, row.ingredient_unit_count ?? 1)
   }
   if (
     row.lib_bottle_size_ml !== null &&
     row.lib_bottle_cost_p !== null &&
     row.ingredient_pour_ml !== null
   ) {
-    return Math.round((row.lib_bottle_cost_p / row.lib_bottle_size_ml) * row.ingredient_pour_ml)
+    return bottlePourCostP(row.lib_bottle_cost_p, row.lib_bottle_size_ml, row.lib_purchase_qty, row.ingredient_pour_ml)
   }
   return 0
 }
@@ -77,7 +78,8 @@ export async function loadImpactPayload(
         i.unit_count AS ingredient_unit_count,
         lib.bottle_size_ml AS lib_bottle_size_ml,
         lib.bottle_cost_p AS lib_bottle_cost_p,
-        lib.unit_cost_p AS lib_unit_cost_p
+        lib.unit_cost_p AS lib_unit_cost_p,
+        lib.purchase_qty AS lib_purchase_qty
       FROM affected a
       JOIN pouriq_cocktails c ON c.id = a.cocktail_id
       JOIN pouriq_menus m ON m.id = c.menu_id
@@ -133,6 +135,7 @@ export async function loadImpactPayload(
     bottle_size_ml: entry.bottle_size_ml,
     bottle_cost_p: entry.bottle_cost_p,
     unit_cost_p: entry.unit_cost_p,
+    purchase_qty: entry.purchase_qty,
   }
 
   return { ingredient, affected }

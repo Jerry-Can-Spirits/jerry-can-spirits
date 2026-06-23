@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import type { IngredientLibraryRow } from '@/lib/pouriq/types'
+import { formatPurchaseBasis } from '@/lib/pouriq/calculations'
 
 interface Props {
   entries: IngredientLibraryRow[]
@@ -7,13 +8,7 @@ interface Props {
 }
 
 function formatCost(entry: IngredientLibraryRow): string {
-  if (entry.unit_cost_p !== null) {
-    return `£${(entry.unit_cost_p / 100).toFixed(2)} / unit`
-  }
-  if (entry.bottle_size_ml !== null && entry.bottle_cost_p !== null) {
-    return `£${(entry.bottle_cost_p / 100).toFixed(2)} / ${entry.bottle_size_ml}ml`
-  }
-  return '—'
+  return formatPurchaseBasis(entry)
 }
 
 export function IngredientList({ entries, usageCounts }: Props) {

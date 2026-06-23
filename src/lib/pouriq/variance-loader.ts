@@ -35,6 +35,7 @@ interface RecipeRow {
   library_name: string
   bottle_size_ml: number
   bottle_cost_p: number
+  purchase_qty: number
 }
 
 interface CountRow {
@@ -80,7 +81,8 @@ async function readRecipes(
         i.pour_ml AS pour_ml,
         lib.name AS library_name,
         lib.bottle_size_ml AS bottle_size_ml,
-        lib.bottle_cost_p AS bottle_cost_p
+        lib.bottle_cost_p AS bottle_cost_p,
+        lib.purchase_qty AS purchase_qty
       FROM pouriq_cocktails c
       JOIN pouriq_ingredients i ON i.cocktail_id = c.id
       JOIN pouriq_ingredients_library lib ON lib.id = i.library_ingredient_id
@@ -171,6 +173,7 @@ export async function loadVarianceRows(
     library_name: string
     bottle_size_ml: number
     bottle_cost_p: number
+    purchase_qty: number
   }
   const metaByIngredient = new Map<string, IngredientMeta>()
   const drinkIngredients = new Map<string, Array<{ library_id: string; pour_ml: number | null }>>()
@@ -180,6 +183,7 @@ export async function loadVarianceRows(
         library_name: r.library_name,
         bottle_size_ml: r.bottle_size_ml,
         bottle_cost_p: r.bottle_cost_p,
+        purchase_qty: r.purchase_qty,
       })
     }
     if (!drinkIngredients.has(r.cocktail_id)) drinkIngredients.set(r.cocktail_id, [])
@@ -208,7 +212,7 @@ export async function loadVarianceRows(
     const end_count = count?.end ?? null
     const actual_used_ml = calcActualUsedMl(start_count, end_count, meta.bottle_size_ml)
     const { variance_ml, variance_pct } = calcVariance(actual_used_ml, theoretical_used_ml)
-    const variance_cost_p = calcVarianceCostP(variance_ml, meta.bottle_size_ml, meta.bottle_cost_p)
+    const variance_cost_p = calcVarianceCostP(variance_ml, meta.bottle_size_ml, meta.bottle_cost_p, meta.purchase_qty)
     rows.push({
       library_ingredient_id: ingredient_id,
       library_name: meta.library_name,

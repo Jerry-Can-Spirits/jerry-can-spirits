@@ -280,6 +280,7 @@ interface LibraryEntryInput {
   bottle_size_ml: number | null
   bottle_cost_p: number | null
   unit_cost_p: number | null
+  purchase_qty: number   // how many items the price covers; 1 for a single bottle/unit
   barcode: string | null
   notes: string | null
 }
@@ -289,6 +290,9 @@ export async function saveLibraryEntryAction(
   input: LibraryEntryInput,
 ): Promise<{ entryId: string }> {
   const { db, tradeAccountId } = await requireDb()
+  if (!Number.isInteger(input.purchase_qty) || input.purchase_qty < 1) {
+    throw new Error('purchase_qty must be a positive whole number')
+  }
   let savedId: string
   if (entryId === null) {
     savedId = await insertLibraryEntry(db, { ...input, trade_account_id: tradeAccountId })
