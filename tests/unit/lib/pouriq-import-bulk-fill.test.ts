@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import { planBulkFill, type BulkFillRow } from '@/lib/pouriq/import-bulk-fill'
 
-const priced = { name: 'Sugar Syrup', ingredient_type: 'syrup' as const, bottle_size_ml: 1000, bottle_cost_p: 500, unit_cost_p: null }
+const priced = { name: 'Sugar Syrup', ingredient_type: 'syrup' as const, bottle_size_ml: 1000, bottle_cost_p: 500, unit_cost_p: null, purchase_qty: 1 }
 const row = (groupKey: string | null, resolved: boolean, state: Partial<BulkFillRow['state']> = {}): BulkFillRow => ({
   groupKey,
   resolved,

@@ -237,6 +237,9 @@ export function IngredientForm({ entry, usageCount = 0, impactPayload }: Props) 
               Per unit
             </button>
           </div>
+          <p className="text-xs text-parchment-400 mt-2">
+            Per bottle covers anything bought by volume: bottles, cans, kegs, bag-in-box. Per unit is whole items like limes or garnish.
+          </p>
         </div>
 
         {/* How you buy it: price + how many that buys (+ size for poured) */}

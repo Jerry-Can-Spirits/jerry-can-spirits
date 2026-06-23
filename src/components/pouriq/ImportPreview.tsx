@@ -80,6 +80,7 @@ function initialIngredientState(input: PreviewDrinkInput['ingredients'][0]): Mat
         bottle_size_ml: isUnit ? null : (m.default_bottle_size_ml ?? 700),
         bottle_cost_p: null,
         unit_cost_p: isUnit ? 0 : null,
+        purchase_qty: 1,
       },
       pour_ml,
       unit_count,

@@ -3,6 +3,7 @@
 import type { IngredientLibraryRow, IngredientType } from '@/lib/pouriq/types'
 import { PriceInput } from '@/components/pouriq/PriceInput'
 import { POUR_PRESETS, BOTTLE_SIZES_ML } from '@/lib/pouriq/measures'
+import { formatPurchaseBasis } from '@/lib/pouriq/calculations'
 
 const INGREDIENT_TYPES: IngredientType[] = ['spirit','liqueur','wine','beer','mixer','syrup','juice','garnish','other']
 const UNIT_CHIPS = [
@@ -28,6 +29,7 @@ export interface MatchRowState {
     bottle_size_ml: number | null
     bottle_cost_p: number | null
     unit_cost_p: number | null
+    purchase_qty: number
   }
   pour_ml: number | null
   unit_count: number | null
@@ -86,6 +88,7 @@ export function IngredientMatchRow({
         bottle_size_ml: 700,
         bottle_cost_p: null,
         unit_cost_p: null,
+        purchase_qty: 1,
       },
       pour_ml: state.pour_ml,
       unit_count: state.unit_count,
@@ -132,45 +135,77 @@ export function IngredientMatchRow({
               <button type="button" onClick={() => onChange({ existing_library_id: undefined, new_library: undefined, pour_ml: state.pour_ml, unit_count: state.unit_count })} className="text-xs text-parchment-400 hover:text-parchment-200">Cancel</button>
             </div>
             <input value={state.new_library.name} onChange={(e) => updateNewLibrary({ name: e.target.value })} className={inputClass} placeholder="Name" />
-            <div className="grid grid-cols-2 gap-2">
-              <select value={state.new_library.ingredient_type} onChange={(e) => updateNewLibrary({ ingredient_type: e.target.value as IngredientType })} className={inputClass}>
-                {INGREDIENT_TYPES.map((t) => <option key={t} value={t}>{t}</option>)}
-              </select>
-              <select
-                value={state.new_library.unit_cost_p !== null ? 'unit' : 'bottle'}
-                onChange={(e) => {
-                  const mode = e.target.value
-                  if (mode === 'unit') updateNewLibrary({ bottle_size_ml: null, bottle_cost_p: null, unit_cost_p: 0 })
-                  else updateNewLibrary({ bottle_size_ml: 700, bottle_cost_p: 0, unit_cost_p: null })
-                }}
-                className={inputClass}
-              >
-                <option value="bottle">Per bottle</option>
-                <option value="unit">Per unit</option>
-              </select>
-            </div>
-            {state.new_library.unit_cost_p !== null ? (
-              <PriceInput
-                valueP={state.new_library.unit_cost_p}
-                onChangeP={(p) => updateNewLibrary({ unit_cost_p: p })}
-                onCommit={onResolvedCommit}
-                className={inputClass} placeholder="Unit cost (£)" />
-            ) : (
-              <div className="grid grid-cols-2 gap-2">
-                <select
-                  value={state.new_library.bottle_size_ml ?? 700}
-                  onChange={(e) => updateNewLibrary({ bottle_size_ml: parseInt(e.target.value, 10) })}
-                  className={inputClass}
-                >
-                  {BOTTLE_SIZES_ML.map((s) => <option key={s} value={s}>{s}ml</option>)}
-                </select>
-                <PriceInput
-                  valueP={state.new_library.bottle_cost_p}
-                  onChangeP={(p) => updateNewLibrary({ bottle_cost_p: p })}
-                  onCommit={onResolvedCommit}
-                  className={inputClass} placeholder="Bottle cost (£)" />
-              </div>
-            )}
+            {(() => {
+              const nl = state.new_library
+              const isUnit = nl.unit_cost_p !== null
+              const sizeN = nl.bottle_size_ml
+              const basis = formatPurchaseBasis({
+                bottle_cost_p: nl.bottle_cost_p,
+                bottle_size_ml: nl.bottle_size_ml,
+                unit_cost_p: nl.unit_cost_p,
+                purchase_qty: nl.purchase_qty,
+              })
+              return (
+                <>
+                  <div className="grid grid-cols-2 gap-2">
+                    <select value={nl.ingredient_type} onChange={(e) => updateNewLibrary({ ingredient_type: e.target.value as IngredientType })} className={inputClass}>
+                      {INGREDIENT_TYPES.map((t) => <option key={t} value={t}>{t}</option>)}
+                    </select>
+                    <select
+                      value={isUnit ? 'unit' : 'bottle'}
+                      onChange={(e) => {
+                        if (e.target.value === 'unit') updateNewLibrary({ bottle_size_ml: null, bottle_cost_p: null, unit_cost_p: 0, purchase_qty: nl.purchase_qty })
+                        else updateNewLibrary({ bottle_size_ml: 700, bottle_cost_p: 0, unit_cost_p: null, purchase_qty: nl.purchase_qty })
+                      }}
+                      className={inputClass}
+                    >
+                      <option value="bottle">By volume (bottles, cans, kegs, BIB)</option>
+                      <option value="unit">Per item (limes, garnish)</option>
+                    </select>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2">
+                    <div>
+                      <label className={labelClass}>Price you pay (£)</label>
+                      <PriceInput
+                        valueP={isUnit ? nl.unit_cost_p : nl.bottle_cost_p}
+                        onChangeP={(p) => updateNewLibrary(isUnit ? { unit_cost_p: p } : { bottle_cost_p: p })}
+                        onCommit={onResolvedCommit}
+                        className={inputClass} placeholder="14.40" />
+                    </div>
+                    <div>
+                      <label className={labelClass}>How many does that buy?</label>
+                      <input
+                        type="number" step="1" min={1}
+                        value={nl.purchase_qty}
+                        onChange={(e) => updateNewLibrary({ purchase_qty: Math.max(1, Math.round(Number(e.target.value) || 1)) })}
+                        className={inputClass} placeholder="1" />
+                    </div>
+                  </div>
+                  <p className="text-xs text-parchment-400">
+                    {isUnit ? 'e.g. 6 for a 6-pack' : 'e.g. 24 for a case'}. Leave 1 for a single {isUnit ? 'item' : 'bottle'}.
+                  </p>
+                  {!isUnit && (
+                    <div>
+                      <label className={labelClass}>Size of each (ml)</label>
+                      <div className="flex flex-wrap gap-2 mb-2">
+                        {BOTTLE_SIZES_ML.map((s) => (
+                          <button type="button" key={s} onClick={() => updateNewLibrary({ bottle_size_ml: s })}
+                            className={`${chipClass} ${sizeN === s ? chipActive : chipIdle}`}>
+                            {s}ml
+                          </button>
+                        ))}
+                      </div>
+                      <input
+                        type="number" step="1" min={0}
+                        value={nl.bottle_size_ml ?? ''}
+                        onChange={(e) => updateNewLibrary({ bottle_size_ml: e.target.value === '' ? null : Math.round(Number(e.target.value) || 0) })}
+                        className={inputClass} placeholder="330 for a can, 50000 for a keg, 10000 for a 10L BIB" />
+                    </div>
+                  )}
+                  {basis !== '—' && <p className="text-xs text-gold-200">= {basis}</p>}
+                </>
+              )
+            })()}
           </div>
         ) : (
           <div className="space-y-2">

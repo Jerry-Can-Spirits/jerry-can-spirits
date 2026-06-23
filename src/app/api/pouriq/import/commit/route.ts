@@ -29,6 +29,7 @@ interface CommitIngredient {
     bottle_size_ml: number | null
     bottle_cost_p: number | null
     unit_cost_p: number | null
+    purchase_qty: number
   }
   pour_ml: number | null
   unit_count: number | null
@@ -82,6 +83,7 @@ function validateBody(body: CommitBody): string | null {
         const nl = ing.new_library
         if (!nl.name || typeof nl.name !== 'string' || !nl.name.trim()) return `${tag}: new library name required`
         if (!INGREDIENT_TYPES.includes(nl.ingredient_type)) return `${tag}: invalid ingredient_type`
+        if (!isPositiveInteger(nl.purchase_qty)) return `${tag}: purchase_qty must be a positive integer`
         const hasBottle = nl.bottle_size_ml !== null && nl.bottle_cost_p !== null
         const hasUnit = nl.unit_cost_p !== null
         if (hasBottle === hasUnit) return `${tag}: new library must be either bottle-priced or unit-priced`
@@ -160,8 +162,8 @@ export async function POST(request: Request) {
         const result = await db
           .prepare(`
             INSERT INTO pouriq_ingredients_library
-              (trade_account_id, name, ingredient_type, bottle_size_ml, bottle_cost_p, unit_cost_p)
-            VALUES (?1, ?2, ?3, ?4, ?5, ?6)
+              (trade_account_id, name, ingredient_type, bottle_size_ml, bottle_cost_p, unit_cost_p, purchase_qty)
+            VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7)
             RETURNING id
           `)
           .bind(
@@ -171,6 +173,7 @@ export async function POST(request: Request) {
             ing.new_library.bottle_size_ml,
             ing.new_library.bottle_cost_p,
             ing.new_library.unit_cost_p,
+            ing.new_library.purchase_qty,
           )
           .first<{ id: string }>()
         if (!result) throw new Error('Library insert returned no id')
