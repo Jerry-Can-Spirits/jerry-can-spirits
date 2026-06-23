@@ -77,7 +77,7 @@ export function SpecCard({ cocktail, priceIncludesVat }: Props) {
       {cocktail.notes != null && cocktail.notes.trim() !== '' && (
         <section className="mb-6">
           <h3 className="text-xs uppercase tracking-widest text-gold-400 print:text-black mb-2">
-            Note
+            Directions
           </h3>
           <p className="text-sm italic text-parchment-300 print:text-stone-700">
             {cocktail.notes}

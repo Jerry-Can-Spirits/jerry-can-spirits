@@ -315,8 +315,9 @@ export function CocktailForm({ menuId, cocktail, libraryEntries }: Props) {
       </div>
 
       <div>
-        <label htmlFor="notes" className={labelClass}>Notes</label>
-        <textarea id="notes" rows={2} value={notes} onChange={(e) => setNotes(e.target.value)} className={`${inputClass} resize-vertical`} />
+        <label htmlFor="notes" className={labelClass}>Directions</label>
+        <p className="text-xs text-parchment-400 mb-1">Your method for this drink (build, glass, technique). Shown to staff on the spec card.</p>
+        <textarea id="notes" rows={2} value={notes} onChange={(e) => setNotes(e.target.value)} className={`${inputClass} resize-vertical`} placeholder="e.g. Build over cubed ice, stir, lemon twist." />
       </div>
 
       {error && <p role="alert" className="text-sm text-red-300">{error}</p>}
