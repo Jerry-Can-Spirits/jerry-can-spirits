@@ -182,7 +182,7 @@ export function IngredientMatchRow({
                     </div>
                   </div>
                   <p className="text-xs text-parchment-400">
-                    {isUnit ? 'e.g. 6 for a 6-pack' : 'e.g. 24 for a case'} — leave 1 for a single {isUnit ? 'item' : 'bottle'}.
+                    {isUnit ? 'e.g. 6 for a 6-pack' : 'e.g. 24 for a case'}. Leave 1 for a single {isUnit ? 'item' : 'bottle'}.
                   </p>
                   {!isUnit && (
                     <div>
