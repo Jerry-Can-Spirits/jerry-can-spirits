@@ -61,3 +61,40 @@ export function serveUnitsFor(baseUnit: BaseUnit, custom: ServeUnit[]): ServeUni
 export function recipeBaseAmount(recipe_qty: number, base_per_unit: number): number {
   return recipe_qty * base_per_unit
 }
+
+// Pluralise a unit name. Handles -sh/-ch/-s/-x → add 'es'; otherwise add 's'.
+function pluralise(unit: string, qty: number): string {
+  if (qty === 1) return unit
+  if (/(?:sh|ch|[sx])$/i.test(unit)) return unit + 'es'
+  return unit + 's'
+}
+
+// Format a qty number: strip trailing '.0' so "50.0" renders as "50".
+function fmtQty(qty: number): string {
+  return Number.isInteger(qty) ? String(qty) : String(qty)
+}
+
+/**
+ * Format a recipe-line measure for display.
+ *
+ * When recipe_unit and recipe_qty are present (new rows):
+ *   ml / g → "{qty} ml" / "{qty} g" (no pluralisation)
+ *   other  → "{qty} {unit}" with simple English pluralisation
+ *
+ * Falls back to the base-amount fields for older rows.
+ */
+export function formatServeMeasure(
+  recipe_unit: string | null,
+  recipe_qty: number | null,
+  pour_ml: number | null,
+  unit_count: number | null,
+): string {
+  if (recipe_unit !== null && recipe_qty !== null) {
+    const q = fmtQty(recipe_qty)
+    if (recipe_unit === 'ml' || recipe_unit === 'g') return `${q} ${recipe_unit}`
+    return `${q} ${pluralise(recipe_unit, recipe_qty)}`
+  }
+  if (pour_ml != null) return `${pour_ml}ml`
+  if (unit_count != null) return unit_count === 1 ? '1 unit' : `${unit_count} units`
+  return ''
+}

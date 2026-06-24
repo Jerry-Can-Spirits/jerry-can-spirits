@@ -1,4 +1,5 @@
 import type { CocktailWithIngredients } from '@/lib/pouriq/types'
+import { formatServeMeasure } from '@/lib/pouriq/measures'
 
 interface Props {
   cocktail: CocktailWithIngredients
@@ -10,11 +11,6 @@ function formatPrice(pence: number, vatIncluded: boolean): string {
   return `£${pounds.toFixed(2)}${vatIncluded ? '' : ' net'}`
 }
 
-function formatMeasure(pour_ml: number | null, unit_count: number | null): string {
-  if (pour_ml != null) return `${pour_ml}ml`
-  if (unit_count != null) return unit_count === 1 ? '1 unit' : `${unit_count} units`
-  return ''
-}
 
 export function SpecCard({ cocktail, priceIncludesVat }: Props) {
   const garnishes = cocktail.ingredients.filter(
@@ -71,7 +67,7 @@ export function SpecCard({ cocktail, priceIncludesVat }: Props) {
                 className="text-sm text-parchment-200 print:text-black flex gap-3"
               >
                 <span className="font-mono w-20 shrink-0">
-                  {formatMeasure(i.pour_ml, i.unit_count)}
+                  {formatServeMeasure(i.recipe_unit, i.recipe_qty, i.pour_ml, i.unit_count)}
                 </span>
                 <span>{i.library.name}</span>
               </li>

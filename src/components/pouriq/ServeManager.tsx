@@ -3,6 +3,7 @@
 import { useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 import { PRIMARY_BUTTON, SECONDARY_BUTTON_SM, DESTRUCTIVE_BUTTON } from '@/lib/pouriq/button-styles'
+import { formatServeMeasure } from '@/lib/pouriq/measures'
 import { ServeForm, type ServeFormIngredient } from '@/components/pouriq/ServeForm'
 import { saveServeAction, deleteServeAction } from '@/lib/pouriq/server-actions'
 import type { CocktailWithIngredients, IngredientLibraryRow, IngredientWithLibrary, ServeUnitRow } from '@/lib/pouriq/types'
@@ -14,14 +15,7 @@ interface Props {
 }
 
 function formatPour(ing: IngredientWithLibrary): string {
-  if (ing.recipe_qty !== null && ing.recipe_unit !== null) {
-    return `${ing.recipe_qty} ${ing.recipe_unit}`
-  }
-  if (ing.unit_count !== null) {
-    return `${ing.unit_count} ${ing.unit_count === 1 ? 'unit' : 'units'}`
-  }
-  if (ing.pour_ml !== null) return `${ing.pour_ml} ml`
-  return ''
+  return formatServeMeasure(ing.recipe_unit, ing.recipe_qty, ing.pour_ml, ing.unit_count)
 }
 
 function toFormIngredients(serve: CocktailWithIngredients): ServeFormIngredient[] {
