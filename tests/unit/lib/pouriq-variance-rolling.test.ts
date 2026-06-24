@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { pairLatestCounts, sumBucketsInWindow, persistentLossFlag } from '@/lib/pouriq/variance'
+import { pairLatestCounts, sumBucketsInWindow, persistentLossFlag, applyYield } from '@/lib/pouriq/variance'
 
 describe('pairLatestCounts', () => {
   it('returns the two most recent counts (latest + previous) by counted_at', () => {
@@ -48,5 +48,18 @@ describe('persistentLossFlag', () => {
   })
   it('uses only the most recent 3 (older positives do not save it)', () => {
     expect(persistentLossFlag([50, -100, -50, -200])).toBe(true)
+  })
+})
+
+describe('applyYield', () => {
+  it('is a no-op at 100%', () => {
+    expect(applyYield(1000, 100)).toBe(1000)
+  })
+  it('increases expected usage as yield drops (90% -> ~+11%)', () => {
+    expect(applyYield(1000, 90)).toBeCloseTo(1111.11, 1)
+  })
+  it('treats 0 or negative yield as 100% (defensive)', () => {
+    expect(applyYield(1000, 0)).toBe(1000)
+    expect(applyYield(1000, -5)).toBe(1000)
   })
 })
