@@ -39,6 +39,7 @@ export default async function PourIqDashboard() {
             <Link href="/trade/pouriq/library" className={SECONDARY_BUTTON}>Library</Link>
             <Link href="/trade/pouriq/serves" className={SECONDARY_BUTTON}>Serves</Link>
             <Link href="/trade/pouriq/variance" className={SECONDARY_BUTTON}>Variance</Link>
+            <Link href="/trade/pouriq/stock" className={SECONDARY_BUTTON}>Stock</Link>
             <Link href="/trade/pouriq/settings/integrations" className={SECONDARY_BUTTON}>Integrations</Link>
             <Link href="/trade/pouriq/settings/voice-profile" className={SECONDARY_BUTTON}>Voice Profile</Link>
             <Link href="/trade/pouriq/new" className={PRIMARY_BUTTON}>New menu</Link>
