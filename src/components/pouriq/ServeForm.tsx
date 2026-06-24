@@ -11,6 +11,8 @@ export interface ServeFormIngredient {
   library_ingredient_id: string
   pour_ml: number | null
   unit_count: number | null
+  recipe_unit: string | null
+  recipe_qty: number | null
 }
 
 interface FormIngredient {
@@ -79,11 +81,11 @@ export function ServeForm({ defaultName, defaultGlass, defaultIngredients, libra
       if (isUnitPriced(ing.library_entry)) {
         const count = parseFloat(ing.unit_count)
         if (!Number.isFinite(count) || count <= 0) { onError(`Ingredient ${idx + 1} ("${ing.library_entry.name}"): unit count must be > 0.`); return }
-        parsed.push({ library_ingredient_id: ing.library_entry.id, pour_ml: null, unit_count: count })
+        parsed.push({ library_ingredient_id: ing.library_entry.id, pour_ml: null, unit_count: count, recipe_unit: null, recipe_qty: null })
       } else {
         const pour = parseFloat(ing.pour_ml)
         if (!Number.isFinite(pour) || pour <= 0) { onError(`Ingredient ${idx + 1} ("${ing.library_entry.name}"): pour must be > 0 ml.`); return }
-        parsed.push({ library_ingredient_id: ing.library_entry.id, pour_ml: pour, unit_count: null })
+        parsed.push({ library_ingredient_id: ing.library_entry.id, pour_ml: pour, unit_count: null, recipe_unit: null, recipe_qty: null })
       }
     }
     if (parsed.length === 0) { onError('Add at least one ingredient.'); return }

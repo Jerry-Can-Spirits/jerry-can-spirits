@@ -96,6 +96,8 @@ export async function cloneMenuAction(menuId: string, newName?: string): Promise
         library_ingredient_id: i.library_ingredient_id,
         pour_ml: i.pour_ml,
         unit_count: i.unit_count,
+        recipe_unit: i.recipe_unit,
+        recipe_qty: i.recipe_qty,
       })))
     }
   }
@@ -146,6 +148,8 @@ interface CocktailInput {
     library_ingredient_id: string
     pour_ml: number | null
     unit_count: number | null
+    recipe_unit: string | null
+    recipe_qty: number | null
   }>
 }
 
@@ -358,7 +362,7 @@ export async function bulkDeleteLibraryEntriesAction(entryIds: string[]): Promis
 
 export async function saveServeAction(
   serveId: string | null,
-  input: { name: string; glass: string | null; ingredients: Array<{ library_ingredient_id: string; pour_ml: number | null; unit_count: number | null }> },
+  input: { name: string; glass: string | null; ingredients: Array<{ library_ingredient_id: string; pour_ml: number | null; unit_count: number | null; recipe_unit: string | null; recipe_qty: number | null }> },
 ): Promise<{ serveId: string }> {
   const { db, tradeAccountId } = await requireDb()
   if (!input.name.trim()) throw new Error('Serve name is required')

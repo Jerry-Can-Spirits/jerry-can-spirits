@@ -25,6 +25,8 @@ function toFormIngredients(serve: CocktailWithIngredients): ServeFormIngredient[
     library_ingredient_id: ing.library_ingredient_id,
     pour_ml: ing.pour_ml,
     unit_count: ing.unit_count,
+    recipe_unit: ing.recipe_unit,
+    recipe_qty: ing.recipe_qty,
   }))
 }
 

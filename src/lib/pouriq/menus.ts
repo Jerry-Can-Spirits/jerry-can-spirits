@@ -385,6 +385,8 @@ export async function replaceIngredients(
     library_ingredient_id: string
     pour_ml: number | null
     unit_count: number | null
+    recipe_unit: string | null
+    recipe_qty: number | null
   }>,
 ): Promise<void> {
   const statements: D1PreparedStatement[] = [
@@ -395,10 +397,10 @@ export async function replaceIngredients(
       db
         .prepare(`
           INSERT INTO pouriq_ingredients
-            (cocktail_id, library_ingredient_id, pour_ml, unit_count)
-          VALUES (?1, ?2, ?3, ?4)
+            (cocktail_id, library_ingredient_id, pour_ml, unit_count, recipe_unit, recipe_qty)
+          VALUES (?1, ?2, ?3, ?4, ?5, ?6)
         `)
-        .bind(cocktailId, ing.library_ingredient_id, ing.pour_ml, ing.unit_count),
+        .bind(cocktailId, ing.library_ingredient_id, ing.pour_ml, ing.unit_count, ing.recipe_unit, ing.recipe_qty),
     )
   }
   await db.batch(statements)

@@ -96,7 +96,7 @@ export function CocktailForm({ menuId, cocktail, libraryEntries }: Props) {
     if (!name.trim()) { setError('Drink name is required'); return }
     if (!Number.isFinite(sale_price_p) || sale_price_p <= 0) { setError('Sale price must be > 0'); return }
 
-    const parsed: Array<{ library_ingredient_id: string; pour_ml: number | null; unit_count: number | null }> = []
+    const parsed: Array<{ library_ingredient_id: string; pour_ml: number | null; unit_count: number | null; recipe_unit: string | null; recipe_qty: number | null }> = []
     for (let idx = 0; idx < ingredients.length; idx++) {
       const ing = ingredients[idx]
       if (!ing.library_entry) {
@@ -109,14 +109,14 @@ export function CocktailForm({ menuId, cocktail, libraryEntries }: Props) {
           setError(`Ingredient ${idx + 1} ("${ing.library_entry.name}"): unit count must be > 0`)
           return
         }
-        parsed.push({ library_ingredient_id: ing.library_entry.id, pour_ml: null, unit_count: count })
+        parsed.push({ library_ingredient_id: ing.library_entry.id, pour_ml: null, unit_count: count, recipe_unit: null, recipe_qty: null })
       } else {
         const pour = parseFloat(ing.pour_ml)
         if (!Number.isFinite(pour) || pour <= 0) {
           setError(`Ingredient ${idx + 1} ("${ing.library_entry.name}"): pour must be > 0 ml`)
           return
         }
-        parsed.push({ library_ingredient_id: ing.library_entry.id, pour_ml: pour, unit_count: null })
+        parsed.push({ library_ingredient_id: ing.library_entry.id, pour_ml: pour, unit_count: null, recipe_unit: null, recipe_qty: null })
       }
     }
 
