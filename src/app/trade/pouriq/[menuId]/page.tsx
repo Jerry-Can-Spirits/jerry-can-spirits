@@ -19,6 +19,8 @@ import { DuplicateMenuButton } from '@/components/pouriq/DuplicateMenuButton'
 import { MakeActiveButton } from '@/components/pouriq/MakeActiveButton'
 import { listVolumesForPeriod, currentPeriod } from '@/lib/pouriq/volumes'
 import { PRIMARY_BUTTON, SECONDARY_BUTTON, SECONDARY_BUTTON_SM } from '@/lib/pouriq/button-styles'
+import { classifyMenuBalance } from '@/lib/pouriq/menu-balance'
+import { MenuBalance } from '@/components/pouriq/MenuBalance'
 
 export const dynamic = 'force-dynamic'
 
@@ -65,6 +67,24 @@ export default async function MenuDetailPage({ params }: Props) {
   const volumes = await listVolumesForPeriod(db, menuId, period.start, period.end)
   const metrics = calculateMenuMetrics(cocktails, menu.prices_include_vat === 1, volumes)
   const missingCount = cocktails.filter((c) => !c.description || c.description.trim() === '').length
+
+  const volumeUnits = new Map<string, number>()
+  for (const v of volumes) volumeUnits.set(v.cocktail_id, v.units_sold)
+
+  const includedDrinks = metrics.cocktail_metrics
+    .filter((m) => m.cost_complete && m.sale_price_p > 0)
+    .map((m) => ({
+      id: m.cocktail_id,
+      name: m.name,
+      gp_pct: m.gp_pct,
+      units: volumeUnits.get(m.cocktail_id) ?? 0,
+    }))
+
+  const balanceIncompleteCount = cocktails.length - includedDrinks.length
+  const balance = classifyMenuBalance(includedDrinks, {
+    targetGpPct: menu.target_gp_pct,
+    avgGpPct: metrics.avg_gp_pct,
+  })
 
   const reportDate = new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })
 
@@ -171,6 +191,15 @@ export default async function MenuDetailPage({ params }: Props) {
               <h2 className="text-lg font-semibold text-white mb-2">Variance</h2>
               <p className="text-sm text-parchment-400 mb-3">Stock variance is now counted across your whole bar, not per menu.</p>
               <a href="/trade/pouriq/variance" className="text-sm text-gold-300 hover:text-gold-200">Go to Variance</a>
+            </section>
+            <section className="no-print">
+              <h2 className="text-lg font-semibold text-white mb-3">Menu balance</h2>
+              <MenuBalance
+                result={balance}
+                targetGpPct={menu.target_gp_pct}
+                incompleteCount={balanceIncompleteCount}
+                hasSalesData={balance.totalUnits > 0}
+              />
             </section>
             {/* Print-only sales volume summary. The interactive editor is
                 hidden on paper; this block surfaces the period range and
