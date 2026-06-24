@@ -42,7 +42,8 @@ const selectClass =
   'px-2 py-1 bg-jerry-green-700/50 border border-gold-500/30 rounded-sm text-parchment-50 text-sm focus:border-gold-400 focus:outline-hidden'
 
 function formatMoney(p: number): string {
-  return `£${(p / 100).toFixed(2)}`
+  const sign = p < 0 ? '-' : ''
+  return `${sign}£${(Math.abs(p) / 100).toFixed(2)}`
 }
 
 function formatShortDate(iso: string): string {
@@ -108,6 +109,11 @@ export function VarianceEditor() {
         delete next[id]
         return next
       })
+      setReasons((prev) => {
+        const next = { ...prev }
+        delete next[id]
+        return next
+      })
     })
   }
 
@@ -165,7 +171,7 @@ export function VarianceEditor() {
                   <p>
                     Last count: {formatShortDate(row.latest_count_at)}
                     {row.latest_count_qty !== null && (
-                      <span className="text-parchment-200 ml-1">— {row.latest_count_qty} bottles</span>
+                      <span className="text-parchment-200 ml-1">· {row.latest_count_qty} bottles</span>
                     )}
                   </p>
                 ) : (
