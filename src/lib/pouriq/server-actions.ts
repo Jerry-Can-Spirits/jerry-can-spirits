@@ -315,7 +315,7 @@ export async function saveLibraryEntryAction(
         barcode: input.barcode.trim(),
         name: input.name.trim(),
         ingredient_type: input.ingredient_type,
-        bottle_size_ml: (input.base_unit === 'ml' && input.pack_size != null) ? input.pack_size : (input.bottle_size_ml ?? null),
+        pack_size_ml: input.base_unit === 'ml' ? input.pack_size : null,
         trade_account_id: tradeAccountId,
       })
     } catch { /* swallow — non-critical */ }

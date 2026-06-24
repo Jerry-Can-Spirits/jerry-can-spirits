@@ -236,10 +236,6 @@ export async function listCocktailsForMenu(
         notes: row.l_notes,
         created_at: row.l_created_at,
         updated_at: row.l_updated_at,
-        // legacy fields retired in a later task; not read
-        bottle_size_ml: null,
-        bottle_cost_p: null,
-        unit_cost_p: null,
       },
     }
     if (!byCocktail.has(row.cocktail_id)) byCocktail.set(row.cocktail_id, [])
@@ -328,10 +324,6 @@ export async function getCocktail(
       notes: row.l_notes,
       created_at: row.l_created_at,
       updated_at: row.l_updated_at,
-      // legacy fields retired in a later task; not read
-      bottle_size_ml: null,
-      bottle_cost_p: null,
-      unit_cost_p: null,
     },
   }))
 

@@ -85,7 +85,7 @@ export function StockManager({ rows }: Props) {
             <div key={id} className="bg-jerry-green-800/40 border border-gold-500/20 rounded-xl p-4">
               <div className="mb-3">
                 <span className="text-parchment-100 font-medium">{row.library_name}</span>
-                <span className="text-parchment-400 text-sm ml-1">({row.bottle_size_ml}ml)</span>
+                <span className="text-parchment-400 text-sm ml-1">({row.pack_size}ml)</span>
               </div>
 
               {row.needs_opening_count ? (

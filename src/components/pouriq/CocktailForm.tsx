@@ -40,7 +40,7 @@ function blankIngredient(): FormIngredient {
 }
 
 function isUnitPriced(entry: IngredientLibraryRow | null): boolean {
-  return entry !== null && entry.unit_cost_p !== null
+  return entry !== null && entry.base_unit === 'each'
 }
 
 interface Props {

@@ -15,19 +15,15 @@ import type {
 // would see on the P&L.
 const VAT_DIVISOR = 1.20
 
-// Purchase-basis cost. The stored cost (bottle_cost_p / unit_cost_p) is the
-// price for ALL purchase_qty items, so per-item / per-ml divides by qty first.
-// purchase_qty defaults to 1 (existing rows), making these a no-op for current
-// data. These are the single source of truth for cost derivation — every site
-// that turns a library cost into a pour/serve cost must go through them.
-export function costPerMlP(bottle_cost_p: number, bottle_size_ml: number, purchase_qty: number): number {
-  return (bottle_cost_p / purchase_qty) / bottle_size_ml
+// price_p is the total price paid for purchase_qty packs of pack_size ml each.
+export function costPerMlP(price_p: number, pack_size: number, purchase_qty: number): number {
+  return (price_p / purchase_qty) / pack_size
 }
-export function bottlePourCostP(bottle_cost_p: number, bottle_size_ml: number, purchase_qty: number, pour_ml: number): number {
-  return Math.round(costPerMlP(bottle_cost_p, bottle_size_ml, purchase_qty) * pour_ml)
+export function bottlePourCostP(price_p: number, pack_size: number, purchase_qty: number, pour_ml: number): number {
+  return Math.round(costPerMlP(price_p, pack_size, purchase_qty) * pour_ml)
 }
-export function unitPourCostP(unit_cost_p: number, purchase_qty: number, unit_count: number): number {
-  return Math.round((unit_cost_p / purchase_qty) * unit_count)
+export function unitPourCostP(price_p: number, purchase_qty: number, unit_count: number): number {
+  return Math.round((price_p / purchase_qty) * unit_count)
 }
 
 // Plain-English read-back of how an ingredient is bought, e.g.

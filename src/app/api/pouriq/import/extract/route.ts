@@ -32,7 +32,7 @@ export interface PreviewIngredient {
   match:
     | { kind: 'auto'; library_id: string; library_name: string }
     | { kind: 'suggestions'; entries: Array<{ id: string; name: string }> }
-    | { kind: 'catalogue'; catalogue_id: string; name: string; ingredient_type: IngredientType; pricing_mode: 'bottle' | 'unit'; default_bottle_size_ml: number | null }
+    | { kind: 'catalogue'; catalogue_id: string; name: string; ingredient_type: IngredientType; pricing_mode: 'bottle' | 'unit'; default_pack_size_ml: number | null }
     | { kind: 'no-match' }
 }
 
@@ -170,7 +170,7 @@ export async function POST(request: Request) {
             name: cat.name,
             ingredient_type: cat.ingredient_type,
             pricing_mode: cat.pricing_mode,
-            default_bottle_size_ml: cat.default_bottle_size_ml,
+            default_pack_size_ml: cat.default_pack_size_ml,
           }
         } else if (matched.kind === 'suggestions') {
           match = {

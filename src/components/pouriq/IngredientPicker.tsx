@@ -93,13 +93,13 @@ export function IngredientPicker({ libraryEntries, selectedEntryId, onChange }: 
       return
     }
     // Server lookup: tenant library + cross-tenant catalogue prefill.
-    let cataloguePrefill: { name: string; ingredient_type: IngredientType; bottle_size_ml: number | null } | null = null
+    let cataloguePrefill: { name: string; ingredient_type: IngredientType; pack_size_ml: number | null } | null = null
     try {
       const res = await fetch(`/api/pouriq/library/by-barcode?code=${encodeURIComponent(code)}`)
       if (res.ok) {
         const data = await res.json() as {
           entry: IngredientLibraryRow | null
-          catalogue: { name: string; ingredient_type: IngredientType; bottle_size_ml: number | null; verified: boolean } | null
+          catalogue: { name: string; ingredient_type: IngredientType; pack_size_ml: number | null; verified: boolean } | null
         }
         if (data.entry) {
           libraryEntries.push(data.entry)
@@ -120,9 +120,9 @@ export function IngredientPicker({ libraryEntries, selectedEntryId, onChange }: 
     if (cataloguePrefill) {
       setName(cataloguePrefill.name)
       setIngredientType(cataloguePrefill.ingredient_type)
-      if (cataloguePrefill.bottle_size_ml) {
+      if (cataloguePrefill.pack_size_ml) {
         setBaseUnit('ml')
-        setPackSizeStr(String(cataloguePrefill.bottle_size_ml))
+        setPackSizeStr(String(cataloguePrefill.pack_size_ml))
       }
       setPrefilledFromCatalogue(true)
       setScanInfo(`Recognised ${code}. We've pre-filled the name, type and size — just add your cost.`)
@@ -163,10 +163,6 @@ export function IngredientPicker({ libraryEntries, selectedEntryId, onChange }: 
         price_p,
         pack_format: null,
         subcategory: null,
-        // legacy fields retired in a later task; not read
-        bottle_size_ml: null,
-        bottle_cost_p: null,
-        unit_cost_p: null,
         purchase_qty,
         yield_pct: 100,
         barcode: pendingBarcode,

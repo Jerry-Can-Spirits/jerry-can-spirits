@@ -26,7 +26,7 @@ function normaliseForCompare(name: string): string {
 
 /**
  * Match an extracted invoice line name against the tenant's library, preferring
- * entries whose bottle_size_ml matches a size suffix on the extracted name.
+ * entries whose pack_size matches a size suffix on the extracted name.
  * Avoids silently updating the 70cl Smirnoff library row from a 1L invoice line.
  *
  * Rules when the extracted name carries a size suffix:

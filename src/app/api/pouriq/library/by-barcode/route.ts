@@ -40,7 +40,7 @@ export async function GET(request: Request) {
       ? {
           name: catalogue.name,
           ingredient_type: catalogue.ingredient_type,
-          bottle_size_ml: catalogue.bottle_size_ml,
+          pack_size_ml: catalogue.pack_size_ml,
           verified: catalogue.verified === 1,
         }
       : null,

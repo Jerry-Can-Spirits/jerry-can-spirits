@@ -82,16 +82,11 @@ export interface IngredientLibraryRow {
   trade_account_id: string
   name: string
   ingredient_type: IngredientType
-  // New purchase-model fields (migration 0043)
   base_unit: 'ml' | 'g' | 'each'
   pack_size: number
   price_p: number
   pack_format: string | null
   subcategory: string | null
-  // legacy fields retired in a later task; not read
-  bottle_size_ml: number | null
-  bottle_cost_p: number | null
-  unit_cost_p: number | null
   purchase_qty: number
   yield_pct: number
   barcode: string | null

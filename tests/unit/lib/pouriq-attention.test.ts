@@ -11,8 +11,6 @@ function ingredient(opts: { price_p?: number }): IngredientWithLibrary {
   const library: IngredientLibraryRow = {
     id: 'lib', trade_account_id: 't', name: 'x', ingredient_type: 'spirit',
     base_unit: 'each', pack_size: 1, price_p: opts.price_p ?? 0, pack_format: null, subcategory: null,
-    // legacy fields — null in all new rows
-    bottle_size_ml: null, bottle_cost_p: null, unit_cost_p: null,
     purchase_qty: 1,
     yield_pct: 100,
     barcode: null, notes: null, created_at: '', updated_at: '',

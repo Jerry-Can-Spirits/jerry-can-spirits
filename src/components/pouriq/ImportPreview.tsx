@@ -24,7 +24,7 @@ export interface PreviewDrinkInput {
     match:
       | { kind: 'auto'; library_id: string; library_name: string }
       | { kind: 'suggestions'; entries: Array<{ id: string; name: string }> }
-      | { kind: 'catalogue'; catalogue_id: string; name: string; ingredient_type: IngredientType; pricing_mode: 'bottle' | 'unit'; default_bottle_size_ml: number | null }
+      | { kind: 'catalogue'; catalogue_id: string; name: string; ingredient_type: IngredientType; pricing_mode: 'bottle' | 'unit'; default_pack_size_ml: number | null }
       | { kind: 'no-match' }
   }>
 }
@@ -78,7 +78,7 @@ function initialIngredientState(input: PreviewDrinkInput['ingredients'][0]): Mat
         name: m.name,
         ingredient_type: m.ingredient_type,
         base_unit: isUnit ? 'each' : 'ml',
-        pack_size: isUnit ? 1 : (m.default_bottle_size_ml ?? 700),
+        pack_size: isUnit ? 1 : (m.default_pack_size_ml ?? 700),
         price_p: null,
         purchase_qty: 1,
       },

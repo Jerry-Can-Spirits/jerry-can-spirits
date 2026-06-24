@@ -15,7 +15,7 @@ export type LineState = {
         new_name: string
         new_type: IngredientType
         new_pricing_mode: 'bottle' | 'unit'
-        new_bottle_size_ml: number | null
+        new_pack_size: number | null
       }
 }
 
@@ -39,7 +39,7 @@ function currentCostFor(libraryById: Map<string, IngredientLibraryRow>, libraryI
   if (!libraryId) return null
   const entry = libraryById.get(libraryId)
   if (!entry) return null
-  return entry.unit_cost_p ?? entry.bottle_cost_p ?? null
+  return entry.price_p > 0 ? entry.price_p : null
 }
 
 function InvoiceLineRowComponent({ index, line, state, library, libraryById, onChange, onToggleCreateNew }: InvoiceLineRowProps) {
@@ -105,9 +105,9 @@ function InvoiceLineRowComponent({ index, line, state, library, libraryById, onC
                 type="number"
                 min={0}
                 step="1"
-                placeholder="Bottle size (ml)"
-                value={match.new_bottle_size_ml ?? ''}
-                onChange={(e) => onChange(index, { match: { ...match, new_bottle_size_ml: e.target.value ? parseInt(e.target.value, 10) : null } })}
+                placeholder="Pack size (ml)"
+                value={match.new_pack_size ?? ''}
+                onChange={(e) => onChange(index, { match: { ...match, new_pack_size: e.target.value ? parseInt(e.target.value, 10) : null } })}
                 className="w-full px-2 py-1 bg-jerry-green-700/50 border border-gold-500/30 rounded-sm text-parchment-50 text-sm"
               />
             )}

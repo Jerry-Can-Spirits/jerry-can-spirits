@@ -190,7 +190,7 @@ export function IngredientForm({ entry, usageCount = 0, impactPayload }: Props) 
       if (!res.ok) return
       const data = await res.json() as {
         entry: IngredientLibraryRow | null
-        catalogue: { name: string; ingredient_type: IngredientType; bottle_size_ml: number | null; verified: boolean } | null
+        catalogue: { name: string; ingredient_type: IngredientType; pack_size_ml: number | null; verified: boolean } | null
       }
       if (data.entry && data.entry.id !== entry?.id) {
         setExistingEntryHref(`/trade/pouriq/library/${data.entry.id}/edit`)
@@ -200,9 +200,9 @@ export function IngredientForm({ entry, usageCount = 0, impactPayload }: Props) 
       if (data.catalogue && !entry) {
         if (!name.trim()) setName(data.catalogue.name)
         setIngredientType(data.catalogue.ingredient_type)
-        if (data.catalogue.bottle_size_ml) {
+        if (data.catalogue.pack_size_ml) {
           setBaseUnit('ml')
-          setPackSizeStr(String(data.catalogue.bottle_size_ml))
+          setPackSizeStr(String(data.catalogue.pack_size_ml))
         }
         setScanInfo("Name, type and size came from the Pour IQ shared catalogue — sanity-check before saving.")
       }

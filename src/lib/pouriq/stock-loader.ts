@@ -5,7 +5,7 @@ import { computeOnHandBottles } from './stock'
 export interface RollingStockRow {
   library_ingredient_id: string
   library_name: string
-  bottle_size_ml: number
+  pack_size: number
   yield_pct: number
   on_hand_bottles: number | null
   needs_opening_count: boolean
@@ -18,7 +18,7 @@ export interface RollingStockRow {
 // The stockable universe: every ml-priced library ingredient, whether or not
 // it appears in a recipe. Usage is recipe-derived (0 when an ingredient is
 // stocked but used in no cocktail/serve).
-interface LibraryMetaRow { id: string; name: string; bottle_size_ml: number; yield_pct: number }
+interface LibraryMetaRow { id: string; name: string; pack_size: number; yield_pct: number }
 interface LibraryMetaDbRow { id: string; name: string; pack_size: number; yield_pct: number }
 interface RecipeLineRow { cocktail_id: string; library_ingredient_id: string; pour_ml: number }
 interface VolumeRow { cocktail_id: string; period_start: string; period_end: string; units_sold: number }
@@ -31,7 +31,7 @@ async function readTenantLibrary(db: D1Database, tradeAccountId: string): Promis
     FROM pouriq_ingredients_library
     WHERE trade_account_id = ?1 AND base_unit = 'ml' AND price_p > 0
   `).bind(tradeAccountId).all<LibraryMetaDbRow>()
-  return (res.results ?? []).map((r) => ({ ...r, bottle_size_ml: r.pack_size }))
+  return (res.results ?? []).map((r) => ({ ...r }))
 }
 
 async function readTenantRecipes(db: D1Database, tradeAccountId: string): Promise<RecipeLineRow[]> {
@@ -130,7 +130,7 @@ export async function loadStockLevels(db: D1Database, tradeAccountId: string): P
       rows.push({
         library_ingredient_id: ingId,
         library_name: meta.name,
-        bottle_size_ml: meta.bottle_size_ml,
+        pack_size: meta.pack_size,
         yield_pct: meta.yield_pct,
         on_hand_bottles: null,
         needs_opening_count: true,
@@ -154,7 +154,7 @@ export async function loadStockLevels(db: D1Database, tradeAccountId: string): P
         anchorCountQty: anchor.count_qty,
         receiptsSinceBottles: receiptsSince,
         usageSinceMl,
-        bottleSizeMl: meta.bottle_size_ml,
+        bottleSizeMl: meta.pack_size,
         yieldPct: meta.yield_pct,
       })
 
@@ -163,7 +163,7 @@ export async function loadStockLevels(db: D1Database, tradeAccountId: string): P
       rows.push({
         library_ingredient_id: ingId,
         library_name: meta.name,
-        bottle_size_ml: meta.bottle_size_ml,
+        pack_size: meta.pack_size,
         yield_pct: meta.yield_pct,
         on_hand_bottles: on_hand,
         needs_opening_count: false,

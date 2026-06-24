@@ -33,7 +33,7 @@ const chipActive = 'bg-gold-500/20 border-gold-400 text-gold-100'
 const chipIdle = 'bg-jerry-green-700/30 border-gold-500/20 text-parchment-300 hover:border-gold-400/40'
 
 function isUnitPriced(entry: IngredientLibraryRow | null): boolean {
-  return entry !== null && entry.unit_cost_p !== null
+  return entry !== null && entry.base_unit === 'each'
 }
 
 function blankIngredient(): FormIngredient {

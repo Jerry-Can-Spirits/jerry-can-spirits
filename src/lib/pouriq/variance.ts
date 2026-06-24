@@ -7,8 +7,8 @@ import { costPerMlP } from './calculations'
 export interface VarianceRow {
   library_ingredient_id: string
   library_name: string
-  bottle_size_ml: number               // for display context (e.g. "Smirnoff (700ml)")
-  bottle_cost_p: number                // net of VAT, from library
+  pack_size: number                    // for display context (e.g. "Smirnoff (700ml)")
+  price_p: number                      // net of VAT, from library
 
   // Stock count input (null when the manager hasn't entered yet)
   start_count: number | null
@@ -56,10 +56,10 @@ export function calcTheoreticalUsedMl(
 export function calcActualUsedMl(
   start: number | null,
   end: number | null,
-  bottle_size_ml: number,
+  pack_size: number,
 ): number | null {
   if (start === null || end === null) return null
-  return (start - end) * bottle_size_ml
+  return (start - end) * pack_size
 }
 
 /**
@@ -85,12 +85,12 @@ export function calcVariance(
  */
 export function calcVarianceCostP(
   variance_ml: number | null,
-  bottle_size_ml: number,
-  bottle_cost_p: number,
+  pack_size: number,
+  price_p: number,
   purchase_qty: number,
 ): number | null {
   if (variance_ml === null) return null
-  return Math.round(variance_ml * costPerMlP(bottle_cost_p, bottle_size_ml, purchase_qty))
+  return Math.round(variance_ml * costPerMlP(price_p, pack_size, purchase_qty))
 }
 
 export type VarianceSeverity = 'none' | 'within-tolerance' | 'amber' | 'red'
@@ -108,10 +108,10 @@ export const VARIANCE_TOLERANCE_BOTTLES = 0.2
 export function classifyVariance(
   variance_ml: number | null,
   variance_pct: number | null,
-  bottle_size_ml: number,
+  pack_size: number,
 ): VarianceSeverity {
   if (variance_ml === null) return 'none'
-  if (Math.abs(variance_ml) <= VARIANCE_TOLERANCE_BOTTLES * bottle_size_ml) return 'within-tolerance'
+  if (Math.abs(variance_ml) <= VARIANCE_TOLERANCE_BOTTLES * pack_size) return 'within-tolerance'
   if (variance_pct === null) return 'amber'
   const abs = Math.abs(variance_pct)
   if (abs < 10) return 'within-tolerance'

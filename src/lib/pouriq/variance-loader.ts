@@ -33,8 +33,8 @@ interface RecipeRow {
   library_ingredient_id: string
   pour_ml: number | null
   library_name: string
-  bottle_size_ml: number
-  bottle_cost_p: number
+  pack_size: number
+  price_p: number
   purchase_qty: number
 }
 
@@ -103,11 +103,7 @@ async function readRecipes(
     `)
     .bind(menuId)
     .all<RecipeDbRow>()
-  return (result.results ?? []).map((r) => ({
-    ...r,
-    bottle_size_ml: r.pack_size,
-    bottle_cost_p: r.price_p,
-  }))
+  return (result.results ?? []).map((r) => ({ ...r }))
 }
 
 async function readCounts(
@@ -185,8 +181,8 @@ export async function loadVarianceRows(
   // Group recipes by ingredient and also remember per-cocktail pour_ml for the calc.
   interface IngredientMeta {
     library_name: string
-    bottle_size_ml: number
-    bottle_cost_p: number
+    pack_size: number
+    price_p: number
     purchase_qty: number
   }
   const metaByIngredient = new Map<string, IngredientMeta>()
@@ -195,8 +191,8 @@ export async function loadVarianceRows(
     if (!metaByIngredient.has(r.library_ingredient_id)) {
       metaByIngredient.set(r.library_ingredient_id, {
         library_name: r.library_name,
-        bottle_size_ml: r.bottle_size_ml,
-        bottle_cost_p: r.bottle_cost_p,
+        pack_size: r.pack_size,
+        price_p: r.price_p,
         purchase_qty: r.purchase_qty,
       })
     }
@@ -224,14 +220,14 @@ export async function loadVarianceRows(
     const count = countsByIngredient.get(ingredient_id) ?? null
     const start_count = count?.start ?? null
     const end_count = count?.end ?? null
-    const actual_used_ml = calcActualUsedMl(start_count, end_count, meta.bottle_size_ml)
+    const actual_used_ml = calcActualUsedMl(start_count, end_count, meta.pack_size)
     const { variance_ml, variance_pct } = calcVariance(actual_used_ml, theoretical_used_ml)
-    const variance_cost_p = calcVarianceCostP(variance_ml, meta.bottle_size_ml, meta.bottle_cost_p, meta.purchase_qty)
+    const variance_cost_p = calcVarianceCostP(variance_ml, meta.pack_size, meta.price_p, meta.purchase_qty)
     rows.push({
       library_ingredient_id: ingredient_id,
       library_name: meta.library_name,
-      bottle_size_ml: meta.bottle_size_ml,
-      bottle_cost_p: meta.bottle_cost_p,
+      pack_size: meta.pack_size,
+      price_p: meta.price_p,
       start_count,
       end_count,
       theoretical_used_ml,
