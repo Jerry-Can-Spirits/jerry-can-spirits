@@ -4,6 +4,7 @@ import type { IngredientLibraryRow, IngredientType } from '@/lib/pouriq/types'
 import { PriceInput } from '@/components/pouriq/PriceInput'
 import { POUR_PRESETS, BOTTLE_SIZES_ML } from '@/lib/pouriq/measures'
 import { formatPurchaseBasis } from '@/lib/pouriq/calculations'
+import { PortionHelper } from '@/components/pouriq/PortionHelper'
 
 const INGREDIENT_TYPES: IngredientType[] = ['spirit','liqueur','wine','beer','mixer','syrup','juice','garnish','other']
 const UNIT_CHIPS = [
@@ -259,7 +260,10 @@ export function IngredientMatchRow({
                 ))}
           </div>
           {unitPriced ? (
-            <input type="number" step="0.001" min={0} value={state.unit_count ?? ''} onChange={(e) => setUnit(parseFloat(e.target.value) || 0)} className={inputClass} placeholder="custom" />
+            <>
+              <input type="number" step="0.001" min={0} value={state.unit_count ?? ''} onChange={(e) => setUnit(parseFloat(e.target.value) || 0)} className={inputClass} placeholder="custom" />
+              <PortionHelper className="mt-2" onApply={(v) => setUnit(v)} />
+            </>
           ) : (
             <input type="number" step="0.1" min={0} value={state.pour_ml ?? ''} onChange={(e) => setPour(parseFloat(e.target.value) || 0)} className={inputClass} placeholder="custom" />
           )}
