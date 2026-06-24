@@ -342,6 +342,22 @@ export async function deleteLibraryEntryAction(entryId: string): Promise<void> {
   revalidatePath('/trade/pouriq/library')
 }
 
+export async function bulkDeleteLibraryEntriesAction(entryIds: string[]): Promise<{ deleted: number }> {
+  const { db, tradeAccountId } = await requireDb()
+  if (entryIds.length === 0) return { deleted: 0 }
+  const usage = await getLibraryUsageCounts(db, tradeAccountId)
+  let deleted = 0
+  for (const id of entryIds) {
+    // Skip anything in use (same rule as single delete) — defensive even though
+    // the UI only offers unused ingredients.
+    if ((usage.get(id) ?? 0) > 0) continue
+    await deleteLibraryEntry(db, id, tradeAccountId)
+    deleted++
+  }
+  revalidatePath('/trade/pouriq/library')
+  return { deleted }
+}
+
 export async function saveServeAction(
   serveId: string | null,
   input: { name: string; glass: string | null; ingredients: Array<{ library_ingredient_id: string; pour_ml: number | null; unit_count: number | null }> },
