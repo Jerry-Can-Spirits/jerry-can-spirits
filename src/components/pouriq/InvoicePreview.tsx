@@ -57,7 +57,7 @@ export function InvoicePreview({ initial, library }: Props) {
             new_name: seedName,
             new_type: 'spirit',
             new_pricing_mode: 'bottle',
-            new_bottle_size_ml: null,
+            new_pack_size: null,
           },
         }
       } else {
@@ -95,14 +95,15 @@ export function InvoicePreview({ initial, library }: Props) {
         }
         if (!s.applied) return base
         if (s.match.kind === 'new') {
+          const isUnit = s.match.new_pricing_mode === 'unit'
           return {
             ...base,
             new_library: {
               name: s.match.new_name.trim(),
               ingredient_type: s.match.new_type,
-              bottle_size_ml: s.match.new_pricing_mode === 'bottle' ? s.match.new_bottle_size_ml : null,
-              bottle_cost_p: s.match.new_pricing_mode === 'bottle' ? s.unit_price_p : null,
-              unit_cost_p: s.match.new_pricing_mode === 'unit' ? s.unit_price_p : null,
+              base_unit: isUnit ? 'each' as const : 'ml' as const,
+              pack_size: isUnit ? 1 : (s.match.new_pack_size ?? 700),
+              price_p: s.unit_price_p,
             },
             new_cost_p: s.unit_price_p,
           }

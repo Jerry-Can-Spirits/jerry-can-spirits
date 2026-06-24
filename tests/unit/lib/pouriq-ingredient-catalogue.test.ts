@@ -7,7 +7,7 @@ const c = (name: string, aliases: string[] = []): CatalogueEntry => ({
   normalised_name: name.toLowerCase(),
   ingredient_type: 'spirit',
   pricing_mode: 'bottle',
-  default_bottle_size_ml: 700,
+  default_pack_size_ml: 700,
   aliases,
 })
 

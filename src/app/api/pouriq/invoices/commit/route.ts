@@ -25,15 +25,15 @@ export const runtime = 'nodejs'
 const COMMIT_RATE_LIMIT = 30
 
 const INGREDIENT_TYPES: ReadonlyArray<IngredientType> = [
-  'spirit', 'liqueur', 'wine', 'beer', 'mixer', 'syrup', 'juice', 'garnish', 'other',
+  'spirit', 'liqueur', 'wine', 'beer', 'mixer', 'syrup', 'juice', 'garnish', 'soft-drink', 'food', 'other',
 ]
 
 interface CommitLineNewLibrary {
   name: string
   ingredient_type: IngredientType
-  bottle_size_ml: number | null
-  bottle_cost_p: number | null
-  unit_cost_p: number | null
+  base_unit: 'ml' | 'g' | 'each'
+  pack_size: number
+  price_p: number
 }
 
 interface CommitLine {
@@ -91,12 +91,9 @@ function validateBody(body: CommitBody): string | null {
         const nl = line.new_library
         if (!nl.name || typeof nl.name !== 'string' || !nl.name.trim()) return `Line ${i + 1}: new library name required`
         if (!INGREDIENT_TYPES.includes(nl.ingredient_type)) return `Line ${i + 1}: invalid ingredient_type`
-        const hasBottle = nl.bottle_size_ml !== null && nl.bottle_cost_p !== null
-        const hasUnit = nl.unit_cost_p !== null
-        if (hasBottle === hasUnit) return `Line ${i + 1}: new library must be either bottle-priced or unit-priced`
-        if (hasBottle && !isPositiveInteger(nl.bottle_size_ml)) return `Line ${i + 1}: bottle_size_ml must be a positive integer`
-        if (hasBottle && !isNonNegativeInteger(nl.bottle_cost_p)) return `Line ${i + 1}: bottle_cost_p must be a non-negative integer`
-        if (hasUnit && !isNonNegativeInteger(nl.unit_cost_p)) return `Line ${i + 1}: unit_cost_p must be a non-negative integer`
+        if (!['ml', 'g', 'each'].includes(nl.base_unit)) return `Line ${i + 1}: invalid base_unit`
+        if (nl.base_unit !== 'each' && !isPositiveInteger(nl.pack_size)) return `Line ${i + 1}: pack_size must be a positive integer`
+        if (!isNonNegativeInteger(nl.price_p)) return `Line ${i + 1}: price_p must be a non-negative integer`
       }
     }
   }
@@ -186,8 +183,8 @@ export async function POST(request: Request) {
           libraryId = dedupedId
           const existing = await getLibraryEntry(db, libraryId, access.tradeAccountId)
           if (!existing) throw new Error(`Deduped library entry ${libraryId} not found`)
-          pricingMode = existing.unit_cost_p !== null ? 'unit' : 'bottle'
-          oldCostP = pricingMode === 'unit' ? existing.unit_cost_p : existing.bottle_cost_p
+          pricingMode = existing.base_unit === 'each' ? 'unit' : 'bottle'
+          oldCostP = existing.price_p
         } else {
           // First sighting of this name in this invoice. Insert the library
           // row now; the per-line batch below records the audit + invoice_line.
@@ -195,22 +192,22 @@ export async function POST(request: Request) {
             trade_account_id: access.tradeAccountId,
             name: line.new_library.name.trim(),
             ingredient_type: line.new_library.ingredient_type,
-            bottle_size_ml: line.new_library.bottle_size_ml,
-            bottle_cost_p: line.new_library.bottle_cost_p,
-            unit_cost_p: line.new_library.unit_cost_p,
+            base_unit: line.new_library.base_unit,
+            pack_size: line.new_library.pack_size,
+            price_p: line.new_library.price_p,
             barcode: null,
             notes: null,
           })
           newLibraryIdByName.set(dedupeKey, libraryId)
-          pricingMode = line.new_library.unit_cost_p !== null ? 'unit' : 'bottle'
+          pricingMode = line.new_library.base_unit === 'each' ? 'unit' : 'bottle'
           oldCostP = null
         }
       } else {
         libraryId = line.library_id!
         const existing = await getLibraryEntry(db, libraryId, access.tradeAccountId)
         if (!existing) throw new Error(`Library entry ${libraryId} not found for tenant`)
-        pricingMode = existing.unit_cost_p !== null ? 'unit' : 'bottle'
-        oldCostP = pricingMode === 'unit' ? existing.unit_cost_p : existing.bottle_cost_p
+        pricingMode = existing.base_unit === 'each' ? 'unit' : 'bottle'
+        oldCostP = existing.price_p
       }
 
       const newCostP = line.new_cost_p!
@@ -227,19 +224,11 @@ export async function POST(request: Request) {
 
       const shouldUpdateLibraryCost = oldCostP !== null && newCostP !== oldCostP
       if (shouldUpdateLibraryCost) {
-        if (pricingMode === 'unit') {
-          stmts.push(
-            db.prepare(
-              `UPDATE pouriq_ingredients_library SET unit_cost_p = ?1, updated_at = datetime('now') WHERE id = ?2 AND trade_account_id = ?3`,
-            ).bind(newCostP, libraryId, access.tradeAccountId),
-          )
-        } else {
-          stmts.push(
-            db.prepare(
-              `UPDATE pouriq_ingredients_library SET bottle_cost_p = ?1, updated_at = datetime('now') WHERE id = ?2 AND trade_account_id = ?3`,
-            ).bind(newCostP, libraryId, access.tradeAccountId),
-          )
-        }
+        stmts.push(
+          db.prepare(
+            `UPDATE pouriq_ingredients_library SET price_p = ?1, updated_at = datetime('now') WHERE id = ?2 AND trade_account_id = ?3`,
+          ).bind(newCostP, libraryId, access.tradeAccountId),
+        )
       }
 
       stmts.push(

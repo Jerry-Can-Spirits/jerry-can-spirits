@@ -8,16 +8,17 @@
 // ingredient. The client subtracts the old contribution and adds the
 // new contribution to get the projected numbers.
 
-import { unitPourCostP, bottlePourCostP } from './calculations'
+import { usableCostPerBaseUnitP } from './calculations'
 
 export interface ImpactIngredient {
   id: string
   name: string
   ingredient_type: string
-  bottle_size_ml: number | null
-  bottle_cost_p: number | null
-  unit_cost_p: number | null
+  base_unit: 'ml' | 'g' | 'each'
+  pack_size: number
+  price_p: number
   purchase_qty: number
+  yield_pct: number
 }
 
 export interface ImpactCocktail {
@@ -44,31 +45,28 @@ export interface CostImpactPayload {
 export type PricingMode = 'bottle' | 'unit'
 
 export function pricingMode(i: ImpactIngredient): PricingMode {
-  return i.unit_cost_p !== null ? 'unit' : 'bottle'
+  return i.base_unit === 'each' ? 'unit' : 'bottle'
 }
 
 /**
  * Compute the new contribution of this ingredient to a single cocktail's
  * pour cost given a hypothetical new cost (in pence). Returns pence rounded
  * to the nearest integer, mirroring `calculations.ts`.
+ *
+ * newCostP is the candidate PURCHASE price for the ingredient (price_p).
  */
 export function newIngredientContributionP(
   ingredient: ImpactIngredient,
   cocktail: ImpactCocktail,
   newCostP: number,
 ): number {
-  // newCostP is the PURCHASE price (matches the stored cost field), so divide
-  // by purchase_qty via the shared helpers.
-  if (pricingMode(ingredient) === 'unit') {
-    return unitPourCostP(newCostP, ingredient.purchase_qty, cocktail.unit_count ?? 1)
-  }
-  if (
-    ingredient.bottle_size_ml !== null &&
-    cocktail.pour_ml !== null
-  ) {
-    return bottlePourCostP(newCostP, ingredient.bottle_size_ml, ingredient.purchase_qty, cocktail.pour_ml)
-  }
-  return 0
+  const amount = ingredient.base_unit === 'each'
+    ? (cocktail.unit_count ?? 1)
+    : (cocktail.pour_ml ?? 0)
+  if (amount === 0) return 0
+  return Math.round(
+    usableCostPerBaseUnitP(newCostP, ingredient.purchase_qty, ingredient.pack_size, ingredient.yield_pct) * amount,
+  )
 }
 
 export interface ProjectedCocktail extends ImpactCocktail {

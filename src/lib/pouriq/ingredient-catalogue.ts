@@ -12,7 +12,7 @@ export interface CatalogueEntry {
   normalised_name: string
   ingredient_type: IngredientType
   pricing_mode: 'bottle' | 'unit'
-  default_bottle_size_ml: number | null
+  default_pack_size_ml: number | null
   // Synonyms (brand names, alternative spellings), pre-normalised.
   aliases: string[]
 }
@@ -23,7 +23,7 @@ interface CatalogueRow {
   normalised_name: string
   ingredient_type: IngredientType
   pricing_mode: 'bottle' | 'unit'
-  default_bottle_size_ml: number | null
+  default_pack_size_ml: number | null
   aliases: string
 }
 
@@ -39,7 +39,7 @@ function parseAliases(raw: string): string[] {
 
 export async function listCatalogue(db: D1Database): Promise<CatalogueEntry[]> {
   const res = await db
-    .prepare(`SELECT id, name, normalised_name, ingredient_type, pricing_mode, default_bottle_size_ml, aliases FROM pouriq_ingredient_catalogue`)
+    .prepare(`SELECT id, name, normalised_name, ingredient_type, pricing_mode, default_bottle_size_ml AS default_pack_size_ml, aliases FROM pouriq_ingredient_catalogue`)
     .all<CatalogueRow>()
   return (res.results ?? []).map((r) => ({
     id: r.id,
@@ -47,7 +47,7 @@ export async function listCatalogue(db: D1Database): Promise<CatalogueEntry[]> {
     normalised_name: r.normalised_name,
     ingredient_type: r.ingredient_type,
     pricing_mode: r.pricing_mode,
-    default_bottle_size_ml: r.default_bottle_size_ml,
+    default_pack_size_ml: r.default_pack_size_ml,
     aliases: parseAliases(r.aliases),
   }))
 }

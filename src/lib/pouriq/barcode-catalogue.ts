@@ -12,7 +12,7 @@ export interface BarcodeCatalogueEntry {
   barcode: string
   name: string
   ingredient_type: IngredientType
-  bottle_size_ml: number | null
+  pack_size_ml: number | null
   contributor_count: number
   verified: number
 }
@@ -25,7 +25,7 @@ export async function findCatalogueEntry(
 ): Promise<BarcodeCatalogueEntry | null> {
   return await db
     .prepare(`
-      SELECT barcode, name, ingredient_type, bottle_size_ml, contributor_count, verified
+      SELECT barcode, name, ingredient_type, bottle_size_ml AS pack_size_ml, contributor_count, verified
       FROM pouriq_barcode_catalogue
       WHERE barcode = ?1
     `)
@@ -37,7 +37,7 @@ interface ContributeInput {
   barcode: string
   name: string
   ingredient_type: IngredientType
-  bottle_size_ml: number | null
+  pack_size_ml: number | null
   trade_account_id: string
 }
 
@@ -60,7 +60,7 @@ export async function contributeToCatalogue(
         VALUES (?1, ?2, ?3, ?4, ?5)
         ON CONFLICT(barcode) DO NOTHING
       `)
-      .bind(input.barcode, input.name, input.ingredient_type, input.bottle_size_ml, input.trade_account_id)
+      .bind(input.barcode, input.name, input.ingredient_type, input.pack_size_ml, input.trade_account_id)
       .run()
     return
   }

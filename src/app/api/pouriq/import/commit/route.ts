@@ -16,7 +16,7 @@ export const runtime = 'nodejs'
 const COMMIT_RATE_LIMIT = 30 // per hour per tenant
 
 const INGREDIENT_TYPES: ReadonlyArray<IngredientType> = [
-  'spirit', 'liqueur', 'wine', 'beer', 'mixer', 'syrup', 'juice', 'garnish', 'other',
+  'spirit', 'liqueur', 'wine', 'beer', 'mixer', 'syrup', 'juice', 'garnish', 'soft-drink', 'food', 'other',
 ]
 
 interface CommitIngredient {
@@ -26,9 +26,9 @@ interface CommitIngredient {
   new_library?: {
     name: string
     ingredient_type: IngredientType
-    bottle_size_ml: number | null
-    bottle_cost_p: number | null
-    unit_cost_p: number | null
+    base_unit: 'ml' | 'g' | 'each'
+    pack_size: number
+    price_p: number
     purchase_qty: number
   }
   pour_ml: number | null
@@ -83,17 +83,10 @@ function validateBody(body: CommitBody): string | null {
         const nl = ing.new_library
         if (!nl.name || typeof nl.name !== 'string' || !nl.name.trim()) return `${tag}: new library name required`
         if (!INGREDIENT_TYPES.includes(nl.ingredient_type)) return `${tag}: invalid ingredient_type`
+        if (!['ml', 'g', 'each'].includes(nl.base_unit)) return `${tag}: base_unit must be ml, g, or each`
+        if (!isPositiveNumber(nl.pack_size)) return `${tag}: pack_size must be a positive number`
+        if (!isNonNegativeInteger(nl.price_p)) return `${tag}: price_p must be a non-negative integer`
         if (!isPositiveInteger(nl.purchase_qty)) return `${tag}: purchase_qty must be a positive integer`
-        const hasBottle = nl.bottle_size_ml !== null && nl.bottle_cost_p !== null
-        const hasUnit = nl.unit_cost_p !== null
-        if (hasBottle === hasUnit) return `${tag}: new library must be either bottle-priced or unit-priced`
-        if (hasBottle) {
-          if (!isPositiveInteger(nl.bottle_size_ml)) return `${tag}: bottle_size_ml must be a positive integer`
-          if (!isNonNegativeInteger(nl.bottle_cost_p)) return `${tag}: bottle_cost_p must be a non-negative integer`
-        }
-        if (hasUnit) {
-          if (!isNonNegativeInteger(nl.unit_cost_p)) return `${tag}: unit_cost_p must be a non-negative integer`
-        }
       }
 
       const hasPour = ing.pour_ml !== null
@@ -162,7 +155,7 @@ export async function POST(request: Request) {
         const result = await db
           .prepare(`
             INSERT INTO pouriq_ingredients_library
-              (trade_account_id, name, ingredient_type, bottle_size_ml, bottle_cost_p, unit_cost_p, purchase_qty)
+              (trade_account_id, name, ingredient_type, base_unit, pack_size, price_p, purchase_qty)
             VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7)
             RETURNING id
           `)
@@ -170,9 +163,9 @@ export async function POST(request: Request) {
             access.tradeAccountId,
             ing.new_library.name.trim(),
             ing.new_library.ingredient_type,
-            ing.new_library.bottle_size_ml,
-            ing.new_library.bottle_cost_p,
-            ing.new_library.unit_cost_p,
+            ing.new_library.base_unit,
+            ing.new_library.pack_size,
+            ing.new_library.price_p,
             ing.new_library.purchase_qty,
           )
           .first<{ id: string }>()

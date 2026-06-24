@@ -26,7 +26,7 @@ function normaliseForCompare(name: string): string {
 
 /**
  * Match an extracted invoice line name against the tenant's library, preferring
- * entries whose bottle_size_ml matches a size suffix on the extracted name.
+ * entries whose pack_size matches a size suffix on the extracted name.
  * Avoids silently updating the 70cl Smirnoff library row from a 1L invoice line.
  *
  * Rules when the extracted name carries a size suffix:
@@ -51,14 +51,14 @@ export function matchInvoiceLine(
   if (sizeMl === null) return baseMatch
 
   if (baseMatch.kind === 'auto') {
-    if (baseMatch.entry.bottle_size_ml === sizeMl) return baseMatch
+    if ((baseMatch.entry.base_unit === 'ml' ? baseMatch.entry.pack_size : null) === sizeMl) return baseMatch
 
     // Look for a size-correct candidate whose normalised name matches the
     // base entry (same product at the right size). Auto-promote to it.
     const baseNorm = normaliseForCompare(baseMatch.entry.name)
     const sizeAndNameMatch = library.find(
       (e) =>
-        e.bottle_size_ml === sizeMl &&
+        (e.base_unit === 'ml' ? e.pack_size : null) === sizeMl &&
         e.id !== baseMatch.entry.id &&
         normaliseForCompare(e.name) === baseNorm,
     )
@@ -67,7 +67,7 @@ export function matchInvoiceLine(
     // Failing that, any size-correct candidate at all becomes the top
     // suggestion alongside the base.
     const sizeMatch = library.find(
-      (e) => e.bottle_size_ml === sizeMl && e.id !== baseMatch.entry.id,
+      (e) => (e.base_unit === 'ml' ? e.pack_size : null) === sizeMl && e.id !== baseMatch.entry.id,
     )
     if (sizeMatch) {
       return { kind: 'suggestions', entries: [sizeMatch, baseMatch.entry] }
@@ -81,8 +81,8 @@ export function matchInvoiceLine(
   }
 
   if (baseMatch.kind === 'suggestions') {
-    const sizeMatches = baseMatch.entries.filter((e) => e.bottle_size_ml === sizeMl)
-    const others = baseMatch.entries.filter((e) => e.bottle_size_ml !== sizeMl)
+    const sizeMatches = baseMatch.entries.filter((e) => (e.base_unit === 'ml' ? e.pack_size : null) === sizeMl)
+    const others = baseMatch.entries.filter((e) => (e.base_unit === 'ml' ? e.pack_size : null) !== sizeMl)
     return { kind: 'suggestions', entries: [...sizeMatches, ...others] }
   }
 

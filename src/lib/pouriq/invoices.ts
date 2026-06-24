@@ -46,9 +46,9 @@ export interface InsertInvoiceLine {
 export interface NewLibraryFromInvoice {
   name: string
   ingredient_type: IngredientType
-  bottle_size_ml: number | null
-  bottle_cost_p: number | null
-  unit_cost_p: number | null
+  base_unit: 'ml' | 'g' | 'each'
+  pack_size: number
+  price_p: number
 }
 
 export async function insertInvoiceHeader(

@@ -15,6 +15,7 @@ import {
   deleteLibraryEntry,
   getLibraryEntry,
   getLibraryUsageCounts,
+  type IngredientLibraryInsert,
 } from './ingredient-library'
 import { matchFieldManualSlug } from './field-manual-match'
 import { upsertVoiceProfile, type VoiceProfileInput } from './voice-profile'
@@ -277,25 +278,22 @@ export async function deleteCocktailAction(menuId: string, cocktailId: string): 
   revalidatePath(`/trade/pouriq/${menuId}`)
 }
 
-interface LibraryEntryInput {
-  name: string
-  ingredient_type: import('./types').IngredientType
-  bottle_size_ml: number | null
-  bottle_cost_p: number | null
-  unit_cost_p: number | null
-  purchase_qty: number   // how many items the price covers; 1 for a single bottle/unit
-  barcode: string | null
-  notes: string | null
-}
+// LibraryEntryInput is the public-facing shape for saveLibraryEntryAction.
+// It mirrors IngredientLibraryInsert without the server-only trade_account_id.
+export type LibraryEntryInput = Omit<IngredientLibraryInsert, 'trade_account_id'>
+
+const VALID_BASE_UNITS = new Set(['ml', 'g', 'each'])
 
 export async function saveLibraryEntryAction(
   entryId: string | null,
   input: LibraryEntryInput,
 ): Promise<{ entryId: string }> {
   const { db, tradeAccountId } = await requireDb()
-  if (!Number.isInteger(input.purchase_qty) || input.purchase_qty < 1) {
-    throw new Error('purchase_qty must be a positive whole number')
-  }
+  if (input.base_unit !== undefined && !VALID_BASE_UNITS.has(input.base_unit)) throw new Error('Invalid base_unit')
+  if (input.price_p !== undefined && (!Number.isFinite(input.price_p) || input.price_p < 0)) throw new Error('price_p must be a non-negative number')
+  if (input.pack_size !== undefined && (!Number.isFinite(input.pack_size) || input.pack_size <= 0)) throw new Error('pack_size must be a positive number')
+  if (input.purchase_qty !== undefined && (!Number.isInteger(input.purchase_qty) || input.purchase_qty < 1)) throw new Error('purchase_qty must be a positive whole number')
+
   let savedId: string
   if (entryId === null) {
     savedId = await insertLibraryEntry(db, { ...input, trade_account_id: tradeAccountId })
@@ -317,7 +315,7 @@ export async function saveLibraryEntryAction(
         barcode: input.barcode.trim(),
         name: input.name.trim(),
         ingredient_type: input.ingredient_type,
-        bottle_size_ml: input.bottle_size_ml,
+        pack_size_ml: input.base_unit === 'ml' ? input.pack_size : null,
         trade_account_id: tradeAccountId,
       })
     } catch { /* swallow — non-critical */ }

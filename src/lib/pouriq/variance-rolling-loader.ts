@@ -15,8 +15,8 @@ export interface RollingTrendPoint {
 export interface RollingVarianceRow {
   library_ingredient_id: string
   library_name: string
-  bottle_size_ml: number
-  bottle_cost_p: number
+  pack_size: number
+  price_p: number
   purchase_qty: number
   latest_count_at: string | null
   latest_count_qty: number | null
@@ -39,8 +39,19 @@ interface RecipeLineRow {
   library_ingredient_id: string
   pour_ml: number
   name: string
-  bottle_size_ml: number
-  bottle_cost_p: number
+  pack_size: number
+  price_p: number
+  purchase_qty: number
+  yield_pct: number
+}
+
+interface RecipeLineDbRow {
+  cocktail_id: string
+  library_ingredient_id: string
+  pour_ml: number
+  name: string
+  pack_size: number
+  price_p: number
   purchase_qty: number
   yield_pct: number
 }
@@ -50,16 +61,16 @@ interface EventRow { library_ingredient_id: string; counted_at: string; count_qt
 async function readTenantRecipes(db: D1Database, tradeAccountId: string): Promise<RecipeLineRow[]> {
   const res = await db.prepare(`
     SELECT c.id AS cocktail_id, i.library_ingredient_id AS library_ingredient_id, i.pour_ml AS pour_ml,
-           lib.name AS name, lib.bottle_size_ml AS bottle_size_ml, lib.bottle_cost_p AS bottle_cost_p,
+           lib.name AS name, lib.pack_size AS pack_size, lib.price_p AS price_p,
            lib.purchase_qty AS purchase_qty, lib.yield_pct AS yield_pct
     FROM pouriq_cocktails c
     JOIN pouriq_menus m ON m.id = c.menu_id
     JOIN pouriq_ingredients i ON i.cocktail_id = c.id
     JOIN pouriq_ingredients_library lib ON lib.id = i.library_ingredient_id
     WHERE m.trade_account_id = ?1
-      AND lib.bottle_size_ml IS NOT NULL AND lib.bottle_cost_p IS NOT NULL AND i.pour_ml IS NOT NULL
-  `).bind(tradeAccountId).all<RecipeLineRow>()
-  return res.results ?? []
+      AND lib.base_unit = 'ml' AND lib.price_p > 0 AND i.pour_ml IS NOT NULL
+  `).bind(tradeAccountId).all<RecipeLineDbRow>()
+  return (res.results ?? []).map((r) => ({ ...r }))
 }
 
 async function readTenantVolumes(db: D1Database, tradeAccountId: string): Promise<VolumeRow[]> {
@@ -111,13 +122,13 @@ export async function loadRollingVariance(db: D1Database, tradeAccountId: string
     arr.push(v); volumesByCocktail.set(v.cocktail_id, arr)
   }
 
-  interface Meta { name: string; bottle_size_ml: number; bottle_cost_p: number; purchase_qty: number; yield_pct: number }
+  interface Meta { name: string; pack_size: number; price_p: number; purchase_qty: number; yield_pct: number }
   const metaByIngredient = new Map<string, Meta>()
   const linesByIngredient = new Map<string, Array<{ cocktail_id: string; pour_ml: number }>>()
   for (const r of recipes) {
     if (!metaByIngredient.has(r.library_ingredient_id)) {
       metaByIngredient.set(r.library_ingredient_id, {
-        name: r.name, bottle_size_ml: r.bottle_size_ml, bottle_cost_p: r.bottle_cost_p, purchase_qty: r.purchase_qty, yield_pct: r.yield_pct,
+        name: r.name, pack_size: r.pack_size, price_p: r.price_p, purchase_qty: r.purchase_qty, yield_pct: r.yield_pct,
       })
     }
     const arr = linesByIngredient.get(r.library_ingredient_id) ?? []
@@ -154,14 +165,14 @@ export async function loadRollingVariance(db: D1Database, tradeAccountId: string
         rawTheoretical += sumBucketsInWindow(buckets, ws.slice(0, 10), we.slice(0, 10)) * line.pour_ml
       }
       theoretical = applyYield(rawTheoretical, meta.yield_pct)
-      actual = (pair.previous.count_qty - pair.latest.count_qty) * meta.bottle_size_ml
+      actual = (pair.previous.count_qty - pair.latest.count_qty) * meta.pack_size
       unmatched = await readUnmatchedInWindow(db, tradeAccountId, ws, we)
     }
 
     const { variance_ml, variance_pct } = calcVariance(actual, theoretical)
-    const variance_cost_p = calcVarianceCostP(variance_ml, meta.bottle_size_ml, meta.bottle_cost_p, meta.purchase_qty)
-    const severity = classifyVariance(variance_ml, variance_pct, meta.bottle_size_ml)
-    const impact_p = Math.round(theoretical * costPerMlP(meta.bottle_cost_p, meta.bottle_size_ml, meta.purchase_qty))
+    const variance_cost_p = calcVarianceCostP(variance_ml, meta.pack_size, meta.price_p, meta.purchase_qty)
+    const severity = classifyVariance(variance_ml, variance_pct, meta.pack_size)
+    const impact_p = Math.round(theoretical * costPerMlP(meta.price_p, meta.pack_size, meta.purchase_qty))
 
     const sortedEvents = [...ingEvents].sort((a, b) => a.counted_at.localeCompare(b.counted_at))
     const trend: RollingTrendPoint[] = []
@@ -173,9 +184,9 @@ export async function loadRollingVariance(db: D1Database, tradeAccountId: string
         rawTheo += sumBucketsInWindow(buckets, prev.counted_at.slice(0, 10), cur.counted_at.slice(0, 10)) * line.pour_ml
       }
       const theo = applyYield(rawTheo, meta.yield_pct)
-      const act = (prev.count_qty - cur.count_qty) * meta.bottle_size_ml
+      const act = (prev.count_qty - cur.count_qty) * meta.pack_size
       const v = calcVariance(act, theo)
-      trend.push({ counted_at: cur.counted_at, variance_cost_p: calcVarianceCostP(v.variance_ml, meta.bottle_size_ml, meta.bottle_cost_p, meta.purchase_qty), reason: cur.reason })
+      trend.push({ counted_at: cur.counted_at, variance_cost_p: calcVarianceCostP(v.variance_ml, meta.pack_size, meta.price_p, meta.purchase_qty), reason: cur.reason })
     }
     const recentTrend = trend.slice(-TREND_LIMIT)
     const persistent = persistentLossFlag(recentTrend.map((t) => t.variance_cost_p))
@@ -183,8 +194,8 @@ export async function loadRollingVariance(db: D1Database, tradeAccountId: string
     rows.push({
       library_ingredient_id: ingId,
       library_name: meta.name,
-      bottle_size_ml: meta.bottle_size_ml,
-      bottle_cost_p: meta.bottle_cost_p,
+      pack_size: meta.pack_size,
+      price_p: meta.price_p,
       purchase_qty: meta.purchase_qty,
       latest_count_at: ingEvents.length ? sortedEvents[sortedEvents.length - 1].counted_at : null,
       latest_count_qty: ingEvents.length ? sortedEvents[sortedEvents.length - 1].count_qty : null,

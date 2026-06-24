@@ -5,12 +5,42 @@ export interface IngredientLibraryInsert {
   trade_account_id: string
   name: string
   ingredient_type: IngredientType
-  bottle_size_ml: number | null
-  bottle_cost_p: number | null
-  unit_cost_p: number | null
-  purchase_qty?: number   // items the price covers; defaults to 1
+  base_unit: 'ml' | 'g' | 'each'
+  pack_size: number
+  price_p: number
+  purchase_qty?: number   // defaults to 1
+  yield_pct?: number
+  pack_format?: string | null
+  subcategory?: string | null
   barcode: string | null
   notes: string | null
+}
+
+// Columns present in the new schema (migration 0043).
+const LIBRARY_SELECT = `
+  id, trade_account_id, name, ingredient_type,
+  base_unit, pack_size, price_p, pack_format, subcategory,
+  purchase_qty, yield_pct, barcode, notes, created_at, updated_at
+`
+
+function mapLibraryRow(r: {
+  id: string
+  trade_account_id: string
+  name: string
+  ingredient_type: IngredientType
+  base_unit: 'ml' | 'g' | 'each'
+  pack_size: number
+  price_p: number
+  pack_format: string | null
+  subcategory: string | null
+  purchase_qty: number
+  yield_pct: number
+  barcode: string | null
+  notes: string | null
+  created_at: string
+  updated_at: string
+}): IngredientLibraryRow {
+  return { ...r }
 }
 
 export interface IngredientLibraryUsage {
@@ -27,13 +57,14 @@ export async function listLibraryEntries(
 ): Promise<IngredientLibraryRow[]> {
   const result = await db
     .prepare(`
-      SELECT * FROM pouriq_ingredients_library
+      SELECT ${LIBRARY_SELECT}
+      FROM pouriq_ingredients_library
       WHERE trade_account_id = ?1
       ORDER BY LOWER(name) ASC
     `)
     .bind(tradeAccountId)
-    .all<IngredientLibraryRow>()
-  return result.results ?? []
+    .all<Parameters<typeof mapLibraryRow>[0]>()
+  return (result.results ?? []).map(mapLibraryRow)
 }
 
 export async function getLibraryEntry(
@@ -41,10 +72,11 @@ export async function getLibraryEntry(
   id: string,
   tradeAccountId: string,
 ): Promise<IngredientLibraryRow | null> {
-  return await db
-    .prepare(`SELECT * FROM pouriq_ingredients_library WHERE id = ?1 AND trade_account_id = ?2`)
+  const row = await db
+    .prepare(`SELECT ${LIBRARY_SELECT} FROM pouriq_ingredients_library WHERE id = ?1 AND trade_account_id = ?2`)
     .bind(id, tradeAccountId)
-    .first<IngredientLibraryRow>()
+    .first<Parameters<typeof mapLibraryRow>[0]>()
+  return row ? mapLibraryRow(row) : null
 }
 
 export async function insertLibraryEntry(
@@ -54,14 +86,15 @@ export async function insertLibraryEntry(
   const result = await db
     .prepare(`
       INSERT INTO pouriq_ingredients_library
-        (trade_account_id, name, ingredient_type, bottle_size_ml, bottle_cost_p, unit_cost_p, purchase_qty, barcode, notes)
-      VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9)
+        (trade_account_id, name, ingredient_type, base_unit, pack_size, price_p, purchase_qty, yield_pct, pack_format, subcategory, barcode, notes)
+      VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12)
       RETURNING id
     `)
     .bind(
       data.trade_account_id, data.name, data.ingredient_type,
-      data.bottle_size_ml, data.bottle_cost_p, data.unit_cost_p,
-      data.purchase_qty ?? 1,
+      data.base_unit, data.pack_size > 0 ? data.pack_size : 1, data.price_p,
+      data.purchase_qty ?? 1, data.yield_pct ?? 100,
+      data.pack_format ?? null, data.subcategory ?? null,
       data.barcode, data.notes,
     )
     .first<{ id: string }>()
@@ -74,10 +107,11 @@ export async function findLibraryEntryByBarcode(
   tradeAccountId: string,
   barcode: string,
 ): Promise<IngredientLibraryRow | null> {
-  return await db
-    .prepare(`SELECT * FROM pouriq_ingredients_library WHERE trade_account_id = ?1 AND barcode = ?2`)
+  const row = await db
+    .prepare(`SELECT ${LIBRARY_SELECT} FROM pouriq_ingredients_library WHERE trade_account_id = ?1 AND barcode = ?2`)
     .bind(tradeAccountId, barcode)
-    .first<IngredientLibraryRow>()
+    .first<Parameters<typeof mapLibraryRow>[0]>()
+  return row ? mapLibraryRow(row) : null
 }
 
 export async function updateLibraryEntry(
@@ -86,22 +120,33 @@ export async function updateLibraryEntry(
   tradeAccountId: string,
   patch: Partial<Omit<IngredientLibraryInsert, 'trade_account_id'>>,
 ): Promise<void> {
-  const allowedFields = [
-    'name','ingredient_type','bottle_size_ml','bottle_cost_p','unit_cost_p','purchase_qty','barcode','notes',
-  ] as const
-
   // Read current state for cost-change detection before mutating.
   const before = await getLibraryEntry(db, id, tradeAccountId)
   if (!before) return
 
+  const newModelPatch: Record<string, unknown> = {}
+  if ('name' in patch) newModelPatch['name'] = patch.name
+  if ('ingredient_type' in patch) newModelPatch['ingredient_type'] = patch.ingredient_type
+  if ('purchase_qty' in patch) newModelPatch['purchase_qty'] = patch.purchase_qty
+  if ('barcode' in patch) newModelPatch['barcode'] = patch.barcode
+  if ('notes' in patch) newModelPatch['notes'] = patch.notes
+
+  const hasCostOrSize = 'base_unit' in patch || 'pack_size' in patch || 'price_p' in patch
+  if (hasCostOrSize) {
+    newModelPatch['base_unit'] = patch.base_unit ?? before.base_unit
+    newModelPatch['pack_size'] = patch.pack_size != null && patch.pack_size > 0 ? patch.pack_size : before.pack_size
+    newModelPatch['price_p'] = patch.price_p ?? before.price_p
+  }
+  if ('yield_pct' in patch) newModelPatch['yield_pct'] = patch.yield_pct ?? 100
+  if ('pack_format' in patch) newModelPatch['pack_format'] = patch.pack_format ?? null
+  if ('subcategory' in patch) newModelPatch['subcategory'] = patch.subcategory ?? null
+
   const sets: string[] = []
   const binds: unknown[] = []
   let idx = 1
-  for (const key of allowedFields) {
-    if (key in patch) {
-      sets.push(`${key} = ?${idx++}`)
-      binds.push((patch as Record<string, unknown>)[key])
-    }
+  for (const [key, val] of Object.entries(newModelPatch)) {
+    sets.push(`${key} = ?${idx++}`)
+    binds.push(val ?? null)
   }
   if (sets.length === 0) return
   sets.push(`updated_at = datetime('now')`)
@@ -112,31 +157,17 @@ export async function updateLibraryEntry(
     .bind(...binds)
     .run()
 
-  // Detect a cost change and log it. An entry is either bottle-priced
-  // (bottle_cost_p set, unit_cost_p null) or unit-priced (the inverse).
-  // The pricing mode in the audit row reflects the mode AFTER this update.
-  const newBottleCost = ('bottle_cost_p' in patch) ? patch.bottle_cost_p ?? null : before.bottle_cost_p
-  const newUnitCost = ('unit_cost_p' in patch) ? patch.unit_cost_p ?? null : before.unit_cost_p
-
-  let mode: CostPricingMode | null = null
-  let oldCost: number | null = null
-  let newCost: number | null = null
-  if (newUnitCost !== null) {
-    mode = 'unit'
-    oldCost = before.unit_cost_p
-    newCost = newUnitCost
-  } else if (newBottleCost !== null) {
-    mode = 'bottle'
-    oldCost = before.bottle_cost_p
-    newCost = newBottleCost
-  }
-
-  if (mode && newCost !== null && oldCost !== newCost) {
+  // Detect a cost change and log it.
+  const newPriceP = hasCostOrSize ? (patch.price_p ?? before.price_p) : before.price_p
+  const oldPriceP = before.price_p
+  if (newPriceP !== oldPriceP) {
+    const newBaseUnit = hasCostOrSize ? (patch.base_unit ?? before.base_unit) : before.base_unit
+    const mode: CostPricingMode = newBaseUnit === 'each' ? 'unit' : 'bottle'
     await insertCostChange(db, {
       library_ingredient_id: id,
       pricing_mode: mode,
-      old_cost_p: oldCost,
-      new_cost_p: newCost,
+      old_cost_p: oldPriceP,
+      new_cost_p: newPriceP,
       source: 'manual',
     })
   }

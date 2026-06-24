@@ -12,8 +12,8 @@ interface RollingTrendPoint {
 interface RollingVarianceRow {
   library_ingredient_id: string
   library_name: string
-  bottle_size_ml: number
-  bottle_cost_p: number
+  pack_size: number
+  price_p: number
   purchase_qty: number
   latest_count_at: string | null
   latest_count_qty: number | null
@@ -150,7 +150,7 @@ export function VarianceEditor() {
               <div className="flex flex-wrap items-start justify-between gap-2 mb-3">
                 <div>
                   <span className="text-parchment-100 font-medium">{row.library_name}</span>
-                  <span className="text-parchment-400 text-sm ml-1">({row.bottle_size_ml}ml)</span>
+                  <span className="text-parchment-400 text-sm ml-1">({row.pack_size}ml)</span>
                   {row.persistent_loss && (
                     <span className="ml-2 inline-block px-1.5 py-0.5 rounded-sm bg-red-500/20 text-red-300 border border-red-500/40 text-[10px] uppercase tracking-widest">
                       persistent loss

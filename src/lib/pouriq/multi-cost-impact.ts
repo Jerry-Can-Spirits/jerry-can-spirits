@@ -35,9 +35,9 @@ interface RawRow {
   ingredient_library_id: string
   ingredient_pour_ml: number | null
   ingredient_unit_count: number | null
-  lib_bottle_size_ml: number | null
-  lib_bottle_cost_p: number | null
-  lib_unit_cost_p: number | null
+  lib_base_unit: 'ml' | 'g' | 'each'
+  lib_pack_size: number
+  lib_price_p: number
   lib_purchase_qty: number
 }
 
@@ -55,23 +55,17 @@ function placeholders(n: number, offset: number): string {
 
 /**
  * Pour cost contribution of a single ingredient row using the supplied
- * bottle_cost_p / unit_cost_p (which may be the current OR the historical
- * pre-commit value).
+ * costP (which may be the current OR the historical pre-commit value).
  */
 function contributionP(
-  row: Pick<RawRow, 'ingredient_pour_ml' | 'ingredient_unit_count' | 'lib_bottle_size_ml' | 'lib_purchase_qty'>,
-  bottleCostP: number | null,
-  unitCostP: number | null,
+  row: Pick<RawRow, 'ingredient_pour_ml' | 'ingredient_unit_count' | 'lib_base_unit' | 'lib_pack_size' | 'lib_purchase_qty'>,
+  costP: number,
 ): number {
-  if (unitCostP !== null) {
-    return unitPourCostP(unitCostP, row.lib_purchase_qty, row.ingredient_unit_count ?? 1)
+  if (row.lib_base_unit === 'each') {
+    return unitPourCostP(costP, row.lib_purchase_qty, row.ingredient_unit_count ?? 1)
   }
-  if (
-    row.lib_bottle_size_ml !== null &&
-    bottleCostP !== null &&
-    row.ingredient_pour_ml !== null
-  ) {
-    return bottlePourCostP(bottleCostP, row.lib_bottle_size_ml, row.lib_purchase_qty, row.ingredient_pour_ml)
+  if (row.ingredient_pour_ml !== null) {
+    return bottlePourCostP(costP, row.lib_pack_size, row.lib_purchase_qty, row.ingredient_pour_ml)
   }
   return 0
 }
@@ -117,9 +111,9 @@ export async function loadMultiCostImpact(
       i.library_ingredient_id AS ingredient_library_id,
       i.pour_ml AS ingredient_pour_ml,
       i.unit_count AS ingredient_unit_count,
-      lib.bottle_size_ml AS lib_bottle_size_ml,
-      lib.bottle_cost_p AS lib_bottle_cost_p,
-      lib.unit_cost_p AS lib_unit_cost_p,
+      lib.base_unit AS lib_base_unit,
+      lib.pack_size AS lib_pack_size,
+      lib.price_p AS lib_price_p,
       lib.purchase_qty AS lib_purchase_qty
     FROM affected a
     JOIN pouriq_cocktails c ON c.id = a.cocktail_id
@@ -152,32 +146,18 @@ export async function loadMultiCostImpact(
       // Current contribution = use the pre-commit cost where this row was
       // changed by the invoice; otherwise the library's current value
       // (unchanged for non-targeted ingredients).
-      let curBottle = r.lib_bottle_cost_p
-      let curUnit = r.lib_unit_cost_p
-      if (change) {
-        // The library is currently at the NEW cost. Substitute OLD for the
-        // pricing-mode field, but only if old_cost_p is non-null (first-cost
-        // case has no historical value).
-        if (change.pricing_mode === 'bottle') {
-          curBottle = change.old_cost_p
-        } else {
-          curUnit = change.old_cost_p
-        }
-      }
-      currentTotal += contributionP(r, curBottle, curUnit)
+      // The library is currently at the NEW cost. Substitute OLD for the
+      // price field, but only if old_cost_p is non-null (first-cost
+      // case has no historical value — treat as 0 contribution).
+      const curCostP = change
+        ? (change.old_cost_p ?? 0)
+        : r.lib_price_p
+      currentTotal += contributionP(r, curCostP)
 
       // Projected contribution = use the new cost where this row was
       // changed (library is already at this value); otherwise unchanged.
-      let newBottle = r.lib_bottle_cost_p
-      let newUnit = r.lib_unit_cost_p
-      if (change) {
-        if (change.pricing_mode === 'bottle') {
-          newBottle = change.new_cost_p
-        } else {
-          newUnit = change.new_cost_p
-        }
-      }
-      projectedTotal += contributionP(r, newBottle, newUnit)
+      const newCostP = change ? change.new_cost_p : r.lib_price_p
+      projectedTotal += contributionP(r, newCostP)
     }
 
     const includeVat = first.menu_prices_include_vat === 1

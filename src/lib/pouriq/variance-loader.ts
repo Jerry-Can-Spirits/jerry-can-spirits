@@ -33,8 +33,18 @@ interface RecipeRow {
   library_ingredient_id: string
   pour_ml: number | null
   library_name: string
-  bottle_size_ml: number
-  bottle_cost_p: number
+  pack_size: number
+  price_p: number
+  purchase_qty: number
+}
+
+interface RecipeDbRow {
+  cocktail_id: string
+  library_ingredient_id: string
+  pour_ml: number | null
+  library_name: string
+  pack_size: number
+  price_p: number
   purchase_qty: number
 }
 
@@ -80,20 +90,20 @@ async function readRecipes(
         i.library_ingredient_id AS library_ingredient_id,
         i.pour_ml AS pour_ml,
         lib.name AS library_name,
-        lib.bottle_size_ml AS bottle_size_ml,
-        lib.bottle_cost_p AS bottle_cost_p,
+        lib.pack_size AS pack_size,
+        lib.price_p AS price_p,
         lib.purchase_qty AS purchase_qty
       FROM pouriq_cocktails c
       JOIN pouriq_ingredients i ON i.cocktail_id = c.id
       JOIN pouriq_ingredients_library lib ON lib.id = i.library_ingredient_id
       WHERE c.menu_id = ?1
-        AND lib.bottle_size_ml IS NOT NULL
-        AND lib.bottle_cost_p IS NOT NULL
+        AND lib.base_unit = 'ml'
+        AND lib.price_p > 0
         AND i.pour_ml IS NOT NULL
     `)
     .bind(menuId)
-    .all<RecipeRow>()
-  return result.results ?? []
+    .all<RecipeDbRow>()
+  return (result.results ?? []).map((r) => ({ ...r }))
 }
 
 async function readCounts(
@@ -171,8 +181,8 @@ export async function loadVarianceRows(
   // Group recipes by ingredient and also remember per-cocktail pour_ml for the calc.
   interface IngredientMeta {
     library_name: string
-    bottle_size_ml: number
-    bottle_cost_p: number
+    pack_size: number
+    price_p: number
     purchase_qty: number
   }
   const metaByIngredient = new Map<string, IngredientMeta>()
@@ -181,8 +191,8 @@ export async function loadVarianceRows(
     if (!metaByIngredient.has(r.library_ingredient_id)) {
       metaByIngredient.set(r.library_ingredient_id, {
         library_name: r.library_name,
-        bottle_size_ml: r.bottle_size_ml,
-        bottle_cost_p: r.bottle_cost_p,
+        pack_size: r.pack_size,
+        price_p: r.price_p,
         purchase_qty: r.purchase_qty,
       })
     }
@@ -210,14 +220,14 @@ export async function loadVarianceRows(
     const count = countsByIngredient.get(ingredient_id) ?? null
     const start_count = count?.start ?? null
     const end_count = count?.end ?? null
-    const actual_used_ml = calcActualUsedMl(start_count, end_count, meta.bottle_size_ml)
+    const actual_used_ml = calcActualUsedMl(start_count, end_count, meta.pack_size)
     const { variance_ml, variance_pct } = calcVariance(actual_used_ml, theoretical_used_ml)
-    const variance_cost_p = calcVarianceCostP(variance_ml, meta.bottle_size_ml, meta.bottle_cost_p, meta.purchase_qty)
+    const variance_cost_p = calcVarianceCostP(variance_ml, meta.pack_size, meta.price_p, meta.purchase_qty)
     rows.push({
       library_ingredient_id: ingredient_id,
       library_name: meta.library_name,
-      bottle_size_ml: meta.bottle_size_ml,
-      bottle_cost_p: meta.bottle_cost_p,
+      pack_size: meta.pack_size,
+      price_p: meta.price_p,
       start_count,
       end_count,
       theoretical_used_ml,

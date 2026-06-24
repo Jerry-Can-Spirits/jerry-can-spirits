@@ -5,7 +5,7 @@ export type LicenceType = 'pilot' | 'annual' | 'biannual' | 'monthly'
 
 export type IngredientType =
   | 'spirit' | 'liqueur' | 'wine' | 'beer' | 'mixer'
-  | 'syrup' | 'juice' | 'garnish' | 'other'
+  | 'syrup' | 'juice' | 'garnish' | 'soft-drink' | 'food' | 'other'
 
 export type RecommendationSeverity = 'info' | 'warn' | 'action'
 export type RecommendationCategory = 'pricing' | 'waste' | 'balance' | 'complexity' | 'opportunity'
@@ -82,9 +82,11 @@ export interface IngredientLibraryRow {
   trade_account_id: string
   name: string
   ingredient_type: IngredientType
-  bottle_size_ml: number | null
-  bottle_cost_p: number | null
-  unit_cost_p: number | null
+  base_unit: 'ml' | 'g' | 'each'
+  pack_size: number
+  price_p: number
+  pack_format: string | null
+  subcategory: string | null
   purchase_qty: number
   yield_pct: number
   barcode: string | null
