@@ -15,7 +15,6 @@ import { PrintReportButton } from '@/components/pouriq/PrintReportButton'
 import { BulkPromoActions } from '@/components/pouriq/BulkPromoActions'
 import { BulkGenerateDescriptionsButton } from '@/components/pouriq/BulkGenerateDescriptionsButton'
 import { VolumeEditor } from '@/components/pouriq/VolumeEditor'
-import { VarianceEditor } from '@/components/pouriq/VarianceEditor'
 import { DuplicateMenuButton } from '@/components/pouriq/DuplicateMenuButton'
 import { MakeActiveButton } from '@/components/pouriq/MakeActiveButton'
 import { listVolumesForPeriod, currentPeriod } from '@/lib/pouriq/volumes'
@@ -169,10 +168,9 @@ export default async function MenuDetailPage({ params }: Props) {
               />
             </section>
             <section className="no-print">
-              <VarianceEditor
-                menuId={menuId}
-                initialCadence={menu.volume_cadence}
-              />
+              <h2 className="text-lg font-semibold text-white mb-2">Variance</h2>
+              <p className="text-sm text-parchment-400 mb-3">Stock variance is now counted across your whole bar, not per menu.</p>
+              <a href="/trade/pouriq/variance" className="text-sm text-gold-300 hover:text-gold-200">Go to Variance</a>
             </section>
             {/* Print-only sales volume summary. The interactive editor is
                 hidden on paper; this block surfaces the period range and
