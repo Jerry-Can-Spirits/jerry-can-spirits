@@ -32,7 +32,7 @@ export default async function MenuCopyPage({ params }: Params) {
 
   const drinks = (
     await db
-      .prepare(`SELECT name, description, sale_price_p FROM pouriq_cocktails WHERE menu_id = ?1 ORDER BY position ASC, name ASC`)
+      .prepare(`SELECT name, description, sale_price_p FROM pouriq_cocktails WHERE menu_id = ?1 ORDER BY name COLLATE NOCASE ASC`)
       .bind(menuId)
       .all<DrinkRow>()
   ).results ?? []

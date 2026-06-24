@@ -23,6 +23,7 @@ function cocktail(id: string, salePriceP: number, ings: IngredientWithLibrary[])
     promotional_price_p: null, promotional_label: null, promotional_days: null,
     promotional_valid_from: null, promotional_valid_until: null, position: 0,
     field_manual_slug: null, notes: null, description: null, description_updated_at: null,
+    glass: null,
     is_serve: 0,
     ingredients: ings,
   }

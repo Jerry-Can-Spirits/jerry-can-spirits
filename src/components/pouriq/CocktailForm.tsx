@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import { saveCocktailAction, deleteCocktailAction } from '@/lib/pouriq/server-actions'
 import { IngredientPicker } from '@/components/pouriq/IngredientPicker'
 import type { CocktailWithIngredients, IngredientLibraryRow } from '@/lib/pouriq/types'
-import { POUR_PRESETS } from '@/lib/pouriq/measures'
+import { POUR_PRESETS, GLASS_OPTIONS } from '@/lib/pouriq/measures'
 
 const UNIT_CHIPS: Array<{ label: string; value: number }> = [
   { label: '1/8', value: 0.125 },
@@ -67,6 +67,7 @@ export function CocktailForm({ menuId, cocktail, libraryEntries }: Props) {
   const [promoValidFrom, setPromoValidFrom] = useState(cocktail?.promotional_valid_from ?? '')
   const [promoValidUntil, setPromoValidUntil] = useState(cocktail?.promotional_valid_until ?? '')
   const [notes, setNotes] = useState(cocktail?.notes ?? '')
+  const [glass, setGlass] = useState(cocktail?.glass ?? '')
   const [ingredients, setIngredients] = useState<FormIngredient[]>(
     cocktail?.ingredients.length
       ? cocktail.ingredients.map(ingredientRowToForm)
@@ -162,6 +163,7 @@ export function CocktailForm({ menuId, cocktail, libraryEntries }: Props) {
         promotional_valid_from,
         promotional_valid_until,
         notes: notes.trim() || null,
+        glass: glass.trim() || null,
         ingredients: parsed,
       })
       router.push(`/trade/pouriq/${menuId}`)
@@ -312,6 +314,19 @@ export function CocktailForm({ menuId, cocktail, libraryEntries }: Props) {
         <button type="button" onClick={addIngredient} className="mt-4 text-sm text-gold-300 hover:text-gold-200 underline">
           Add another ingredient
         </button>
+      </div>
+
+      <div>
+        <label htmlFor="glass" className={labelClass}>Glass</label>
+        <div className="flex flex-wrap gap-2 mb-2">
+          {GLASS_OPTIONS.map((g) => (
+            <button type="button" key={g} onClick={() => setGlass(g)}
+              className={`${chipClass} ${glass === g ? chipActive : chipIdle}`}>
+              {g}
+            </button>
+          ))}
+        </div>
+        <input id="glass" value={glass} onChange={(e) => setGlass(e.target.value)} className={inputClass} placeholder="e.g. Rocks, Highball" />
       </div>
 
       <div>

@@ -35,11 +35,11 @@ export function ServeManager({ serves, libraryEntries }: Props) {
   const [error, setError] = useState<string | null>(null)
   const [pending, startTransition] = useTransition()
 
-  function save(serveId: string | null, name: string, ingredients: ServeFormIngredient[]) {
+  function save(serveId: string | null, name: string, glass: string | null, ingredients: ServeFormIngredient[]) {
     setError(null)
     startTransition(async () => {
       try {
-        await saveServeAction(serveId, { name, ingredients })
+        await saveServeAction(serveId, { name, glass, ingredients })
         setCreating(false)
         setEditingId(null)
         router.refresh()
@@ -79,7 +79,7 @@ export function ServeManager({ serves, libraryEntries }: Props) {
           pending={pending}
           submitLabel="Create serve"
           onError={setError}
-          onSubmit={(name, ingredients) => save(null, name, ingredients)}
+          onSubmit={(name, glass, ingredients) => save(null, name, glass, ingredients)}
         />
       )}
 
@@ -103,6 +103,12 @@ export function ServeManager({ serves, libraryEntries }: Props) {
               </div>
             </div>
 
+            {serve.glass != null && serve.glass.trim() !== '' && (
+              <p className="text-sm text-parchment-300 mb-2">
+                <span className="font-semibold">Glass:</span> {serve.glass}
+              </p>
+            )}
+
             {serve.ingredients.length === 0 ? (
               <p className="text-parchment-400 text-sm">No ingredients set.</p>
             ) : (
@@ -119,12 +125,13 @@ export function ServeManager({ serves, libraryEntries }: Props) {
             {editingId === serve.id && (
               <ServeForm
                 defaultName={serve.name}
+                defaultGlass={serve.glass}
                 defaultIngredients={toFormIngredients(serve)}
                 libraryEntries={libraryEntries}
                 pending={pending}
                 submitLabel="Save serve"
                 onError={setError}
-                onSubmit={(name, ingredients) => save(serve.id, name, ingredients)}
+                onSubmit={(name, glass, ingredients) => save(serve.id, name, glass, ingredients)}
               />
             )}
           </div>

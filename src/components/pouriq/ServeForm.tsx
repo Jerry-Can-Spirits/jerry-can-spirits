@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { PRIMARY_BUTTON } from '@/lib/pouriq/button-styles'
 import { IngredientPicker } from '@/components/pouriq/IngredientPicker'
 import type { IngredientLibraryRow } from '@/lib/pouriq/types'
-import { POUR_PRESETS } from '@/lib/pouriq/measures'
+import { POUR_PRESETS, GLASS_OPTIONS } from '@/lib/pouriq/measures'
 
 export interface ServeFormIngredient {
   library_ingredient_id: string
@@ -41,16 +41,18 @@ function blankIngredient(): FormIngredient {
 
 interface Props {
   defaultName: string
+  defaultGlass?: string | null
   defaultIngredients?: ServeFormIngredient[]
   libraryEntries: IngredientLibraryRow[]
   pending: boolean
   submitLabel: string
   onError: (message: string) => void
-  onSubmit: (name: string, ingredients: ServeFormIngredient[]) => void
+  onSubmit: (name: string, glass: string | null, ingredients: ServeFormIngredient[]) => void
 }
 
-export function ServeForm({ defaultName, defaultIngredients, libraryEntries, pending, submitLabel, onError, onSubmit }: Props) {
+export function ServeForm({ defaultName, defaultGlass, defaultIngredients, libraryEntries, pending, submitLabel, onError, onSubmit }: Props) {
   const [name, setName] = useState(defaultName)
+  const [glass, setGlass] = useState(defaultGlass ?? '')
   const [ingredients, setIngredients] = useState<FormIngredient[]>(() => {
     if (!defaultIngredients || defaultIngredients.length === 0) return [blankIngredient()]
     return defaultIngredients.map((ing) => {
@@ -84,7 +86,7 @@ export function ServeForm({ defaultName, defaultIngredients, libraryEntries, pen
       }
     }
     if (parsed.length === 0) { onError('Add at least one ingredient.'); return }
-    onSubmit(name.trim(), parsed)
+    onSubmit(name.trim(), glass.trim() || null, parsed)
   }
 
   return (
@@ -92,6 +94,18 @@ export function ServeForm({ defaultName, defaultIngredients, libraryEntries, pen
       <div>
         <label className={labelClass}>Serve name</label>
         <input value={name} onChange={(e) => setName(e.target.value)} className={inputClass} />
+      </div>
+      <div>
+        <label className={labelClass}>Glass</label>
+        <div className="flex flex-wrap gap-2 mb-2">
+          {GLASS_OPTIONS.map((g) => (
+            <button type="button" key={g} onClick={() => setGlass(g)}
+              className={`${chipClass} ${glass === g ? chipActive : chipIdle}`}>
+              {g}
+            </button>
+          ))}
+        </div>
+        <input value={glass} onChange={(e) => setGlass(e.target.value)} className={inputClass} placeholder="e.g. Rocks, Highball" />
       </div>
       <div className="space-y-4">
         {ingredients.map((ing, idx) => {
