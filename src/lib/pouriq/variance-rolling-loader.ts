@@ -83,10 +83,14 @@ async function readTenantEvents(db: D1Database, tradeAccountId: string): Promise
 }
 
 async function readUnmatchedInWindow(db: D1Database, tradeAccountId: string, windowStart: string, windowEnd: string): Promise<number> {
+  // counted_at is stored via datetime('now') as "YYYY-MM-DD HH:MM:SS" (space),
+  // while POS sold_at is ISO 8601 with a "T". Normalise the window bounds to the
+  // "T" form so the lexical comparison against sold_at is correct on the
+  // count-start and count-end dates.
   const row = await db.prepare(`
     SELECT COALESCE(SUM(quantity), 0) AS q
     FROM pouriq_pos_unmatched_lines
-    WHERE trade_account_id = ?1 AND sold_at > ?2 AND sold_at <= ?3
+    WHERE trade_account_id = ?1 AND sold_at > replace(?2, ' ', 'T') AND sold_at <= replace(?3, ' ', 'T')
   `).bind(tradeAccountId, windowStart, windowEnd).first<{ q: number }>()
   return row?.q ?? 0
 }
