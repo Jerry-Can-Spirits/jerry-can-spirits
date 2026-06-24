@@ -106,8 +106,16 @@ function getIngredientsSlug(handle: string): string {
 }
 
 export async function generateStaticParams() {
-  const products = await getProducts()
-  return products.map(({ handle }) => ({ handle }))
+  // Shopify unreachable at build time must not fail the whole build/deploy.
+  // dynamicParams is true, so returning [] just defers every product page to
+  // on-demand rendering instead of pre-generating them.
+  try {
+    const products = await getProducts()
+    return products.map(({ handle }) => ({ handle }))
+  } catch (e) {
+    console.warn('generateStaticParams(/shop/product): Shopify fetch failed, rendering on-demand', e)
+    return []
+  }
 }
 
 export const dynamicParams = true
