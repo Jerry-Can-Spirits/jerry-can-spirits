@@ -17,7 +17,7 @@ function mkIng(
     pack_format: null, subcategory: null,
     barcode: null, notes: null, created_at: '', updated_at: '',
   }
-  return { id: 'ing', cocktail_id: 'c', library_ingredient_id: 'lib', pour_ml, unit_count, library }
+  return { id: 'ing', cocktail_id: 'c', library_ingredient_id: 'lib', pour_ml, unit_count, recipe_unit: null, recipe_qty: null, library }
 }
 
 describe('costPerBaseUnitP', () => {
