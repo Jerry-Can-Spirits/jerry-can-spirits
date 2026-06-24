@@ -177,6 +177,7 @@ export async function listCocktailsForMenu(
         l.bottle_cost_p AS l_bottle_cost_p,
         l.unit_cost_p AS l_unit_cost_p,
         l.purchase_qty AS l_purchase_qty,
+        l.yield_pct AS l_yield_pct,
         l.barcode AS l_barcode,
         l.notes AS l_notes,
         l.created_at AS l_created_at,
@@ -200,6 +201,7 @@ export async function listCocktailsForMenu(
       l_bottle_cost_p: number | null
       l_unit_cost_p: number | null
       l_purchase_qty: number
+      l_yield_pct: number
       l_barcode: string | null
       l_notes: string | null
       l_created_at: string
@@ -223,6 +225,7 @@ export async function listCocktailsForMenu(
         bottle_cost_p: row.l_bottle_cost_p,
         unit_cost_p: row.l_unit_cost_p,
         purchase_qty: row.l_purchase_qty,
+        yield_pct: row.l_yield_pct,
         barcode: row.l_barcode,
         notes: row.l_notes,
         created_at: row.l_created_at,
@@ -261,6 +264,7 @@ export async function getCocktail(
         l.ingredient_type AS l_ingredient_type, l.bottle_size_ml AS l_bottle_size_ml,
         l.bottle_cost_p AS l_bottle_cost_p, l.unit_cost_p AS l_unit_cost_p,
         l.purchase_qty AS l_purchase_qty,
+        l.yield_pct AS l_yield_pct,
         l.barcode AS l_barcode,
         l.notes AS l_notes, l.created_at AS l_created_at, l.updated_at AS l_updated_at
       FROM pouriq_ingredients i
@@ -282,6 +286,7 @@ export async function getCocktail(
       l_bottle_cost_p: number | null
       l_unit_cost_p: number | null
       l_purchase_qty: number
+      l_yield_pct: number
       l_barcode: string | null
       l_notes: string | null
       l_created_at: string
@@ -303,6 +308,7 @@ export async function getCocktail(
       bottle_cost_p: row.l_bottle_cost_p,
       unit_cost_p: row.l_unit_cost_p,
       purchase_qty: row.l_purchase_qty,
+      yield_pct: row.l_yield_pct,
       barcode: row.l_barcode,
       notes: row.l_notes,
       created_at: row.l_created_at,
