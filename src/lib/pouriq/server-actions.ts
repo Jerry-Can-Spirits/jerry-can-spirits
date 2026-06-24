@@ -426,6 +426,47 @@ export async function recordStockCountAction(libraryIngredientId: string, countQ
   revalidatePath('/trade/pouriq/stock')
 }
 
+export async function saveServeUnitAction(libraryIngredientId: string, name: string, basePerUnit: number): Promise<void> {
+  const { db, tradeAccountId } = await requireDb()
+  const trimmed = name.trim()
+  if (!trimmed) throw new Error('Serve unit needs a name')
+  if (!Number.isFinite(basePerUnit) || basePerUnit <= 0) throw new Error('Conversion must be a positive number')
+  const owns = await db
+    .prepare(`SELECT 1 FROM pouriq_ingredients_library WHERE id = ?1 AND trade_account_id = ?2`)
+    .bind(libraryIngredientId, tradeAccountId)
+    .first()
+  if (!owns) throw new Error('Ingredient not found')
+  await db
+    .prepare(`
+      INSERT INTO pouriq_ingredient_serve_units (library_ingredient_id, name, base_per_unit)
+      VALUES (?1, ?2, ?3)
+      ON CONFLICT(library_ingredient_id, name) DO UPDATE SET base_per_unit = excluded.base_per_unit
+    `)
+    .bind(libraryIngredientId, trimmed, basePerUnit)
+    .run()
+  revalidatePath(`/trade/pouriq/library/${libraryIngredientId}/edit`)
+  revalidatePath('/trade/pouriq/library')
+}
+
+export async function deleteServeUnitAction(serveUnitId: string): Promise<void> {
+  const { db, tradeAccountId } = await requireDb()
+  // Ownership verified via join to the library ingredient.
+  const owns = await db
+    .prepare(`
+      SELECT 1 FROM pouriq_ingredient_serve_units su
+      JOIN pouriq_ingredients_library lib ON lib.id = su.library_ingredient_id
+      WHERE su.id = ?1 AND lib.trade_account_id = ?2
+    `)
+    .bind(serveUnitId, tradeAccountId)
+    .first()
+  if (!owns) throw new Error('Serve unit not found')
+  await db
+    .prepare(`DELETE FROM pouriq_ingredient_serve_units WHERE id = ?1`)
+    .bind(serveUnitId)
+    .run()
+  revalidatePath('/trade/pouriq/library')
+}
+
 export async function setVoiceProfileAction(input: VoiceProfileInput): Promise<void> {
   const { db, tradeAccountId } = await requireDb()
   // Light validation. The form already constrains the enum dropdowns, but we
