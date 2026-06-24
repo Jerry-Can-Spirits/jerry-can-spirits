@@ -59,12 +59,13 @@ describe('migration 0043 backfill mapping', () => {
       );
     `)
 
-    // Insert a bottle row: bottle_size_ml=700, bottle_cost_p=2000
+    // Insert a bottle row: bottle_size_ml=700, bottle_cost_p=2000, plus
+    // pass-through columns (yield_pct, barcode, notes) to assert preservation.
     db.exec(`
       INSERT INTO pouriq_ingredients_library
-        (id, trade_account_id, name, ingredient_type, bottle_size_ml, bottle_cost_p, unit_cost_p, purchase_qty, yield_pct)
+        (id, trade_account_id, name, ingredient_type, bottle_size_ml, bottle_cost_p, unit_cost_p, purchase_qty, yield_pct, barcode, notes)
       VALUES
-        ('id-bottle', 'acct-1', 'Dark Rum', 'spirit', 700, 2000, NULL, 1, 100);
+        ('id-bottle', 'acct-1', 'Dark Rum', 'spirit', 700, 2000, NULL, 1, 90, '5012345678900', 'cellar shelf');
     `)
 
     // Insert a unit row: bottle_size_ml=NULL, unit_cost_p=800, purchase_qty=40
@@ -84,7 +85,7 @@ describe('migration 0043 backfill mapping', () => {
     // Read back all rows
     const rows = db
       .prepare(
-        `SELECT id, base_unit, pack_size, price_p, purchase_qty FROM pouriq_ingredients_library ORDER BY id`,
+        `SELECT id, base_unit, pack_size, price_p, purchase_qty, yield_pct, barcode, notes FROM pouriq_ingredients_library ORDER BY id`,
       )
       .all() as Array<{
       id: string
@@ -92,6 +93,9 @@ describe('migration 0043 backfill mapping', () => {
       pack_size: number
       price_p: number
       purchase_qty: number
+      yield_pct: number
+      barcode: string | null
+      notes: string | null
     }>
 
     expect(rows).toHaveLength(2)
@@ -102,6 +106,10 @@ describe('migration 0043 backfill mapping', () => {
     expect(bottle!.pack_size).toBe(700)
     expect(bottle!.price_p).toBe(2000)
     expect(bottle!.purchase_qty).toBe(1)
+    // pass-through columns preserved
+    expect(bottle!.yield_pct).toBe(90)
+    expect(bottle!.barcode).toBe('5012345678900')
+    expect(bottle!.notes).toBe('cellar shelf')
 
     const unit = rows.find(r => r.id === 'id-unit')
     expect(unit).toBeDefined()

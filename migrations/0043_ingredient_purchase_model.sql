@@ -62,10 +62,10 @@ ALTER TABLE pouriq_ingredients_library_new RENAME TO pouriq_ingredients_library;
 CREATE INDEX idx_pouriq_lib_trade_account
   ON pouriq_ingredients_library(trade_account_id);
 
--- 2. Uniqueness index: was (trade_account_id, LOWER(name), COALESCE(bottle_size_ml, -1))
---    bottle_size_ml is now pack_size; semantics are identical
+-- 2. Uniqueness index: was (trade_account_id, LOWER(name), COALESCE(bottle_size_ml, -1)).
+--    pack_size replaces bottle_size_ml and is NOT NULL, so no COALESCE is needed.
 CREATE UNIQUE INDEX idx_pouriq_lib_uniqueness
-  ON pouriq_ingredients_library(trade_account_id, LOWER(name), COALESCE(pack_size, -1));
+  ON pouriq_ingredients_library(trade_account_id, LOWER(name), pack_size);
 
 -- 3. Barcode uniqueness per tenant (partial; from migration 0021)
 CREATE UNIQUE INDEX uniq_pouriq_library_barcode_per_tenant
