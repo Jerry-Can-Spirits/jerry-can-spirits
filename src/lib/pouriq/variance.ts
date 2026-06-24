@@ -118,3 +118,44 @@ export function classifyVariance(
   if (abs <= 20) return 'amber'
   return 'red'
 }
+
+export interface CountEvent {
+  counted_at: string
+  count_qty: number
+  reason: string | null
+}
+
+export interface CountPair {
+  latest: CountEvent
+  previous: CountEvent
+}
+
+// The two most recent counts (by counted_at), or null if fewer than two.
+export function pairLatestCounts(events: CountEvent[]): CountPair | null {
+  if (events.length < 2) return null
+  const sorted = [...events].sort((a, b) => a.counted_at.localeCompare(b.counted_at))
+  return { latest: sorted[sorted.length - 1], previous: sorted[sorted.length - 2] }
+}
+
+// Sum POS units for buckets whose period falls within (windowStart, windowEnd].
+// windowStart/windowEnd are ISO date strings (YYYY-MM-DD). Bucket boundaries
+// are the cadence period_start/period_end. Exact when counts land on the
+// cadence boundary, approximate mid-bucket (accepted caveat).
+export function sumBucketsInWindow(
+  buckets: Array<{ period_start: string; period_end: string; units_sold: number }>,
+  windowStart: string,
+  windowEnd: string,
+): number {
+  return buckets.reduce(
+    (sum, b) => (b.period_start > windowStart && b.period_end <= windowEnd ? sum + b.units_sold : sum),
+    0,
+  )
+}
+
+// Persistent shrinkage: the most recent 3 variance figures are all negative.
+export function persistentLossFlag(recentVariancesNewestLast: Array<number | null>): boolean {
+  const defined = recentVariancesNewestLast.filter((v): v is number => v !== null)
+  if (defined.length < 3) return false
+  const lastThree = defined.slice(-3)
+  return lastThree.every((v) => v < 0)
+}
