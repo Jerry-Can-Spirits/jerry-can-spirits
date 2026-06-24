@@ -192,6 +192,20 @@ export function calculateWasteRisks(
   })
 }
 
+// Unified cost per base unit (ml | g | each). price_p is the price for `packs`
+// packs; each pack holds `pack_size` base units. Single source for the new
+// ingredient model. Defends against zero packs/size.
+export function costPerBaseUnitP(price_p: number, packs: number, pack_size: number): number {
+  const p = packs > 0 ? packs : 1
+  const s = pack_size > 0 ? pack_size : 1
+  return (price_p / p) / s
+}
+// Usable cost per base unit, accounting for yield/waste (yield_pct 100 = no loss).
+export function usableCostPerBaseUnitP(price_p: number, packs: number, pack_size: number, yield_pct: number): number {
+  const y = yield_pct > 0 ? yield_pct : 100
+  return costPerBaseUnitP(price_p, packs, pack_size) / (y / 100)
+}
+
 export function calculateMenuMetrics(
   cocktails: CocktailWithIngredients[],
   priceIncludesVat: boolean,
