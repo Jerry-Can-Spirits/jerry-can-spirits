@@ -4,12 +4,15 @@ import { useEffect, useId, useMemo, useRef, useState } from 'react'
 import type { IngredientLibraryRow, IngredientType } from '@/lib/pouriq/types'
 import { saveLibraryEntryAction } from '@/lib/pouriq/server-actions'
 import { BarcodeScanner } from '@/components/pouriq/BarcodeScanner'
-import { BOTTLE_SIZES_ML } from '@/lib/pouriq/measures'
+import { BOTTLE_SIZES_ML, WEIGHT_SIZES_G } from '@/lib/pouriq/measures'
 
 const INGREDIENT_TYPES: IngredientType[] = ['spirit','liqueur','wine','beer','mixer','syrup','juice','garnish','other']
 
 const inputClass = 'w-full px-3 py-2 bg-jerry-green-700/50 border border-gold-500/30 rounded-lg text-parchment-50 text-sm placeholder-parchment-400 focus:border-gold-400 focus:outline-hidden'
 const labelClass = 'block text-xs font-medium text-parchment-300 mb-1'
+const chipClass = 'px-2 py-1 rounded-sm border text-xs transition-colors'
+const chipActive = 'bg-gold-500/20 border-gold-400 text-gold-100'
+const chipIdle = 'bg-jerry-green-700/30 border-gold-500/20 text-parchment-300 hover:border-gold-400/40'
 
 interface Props {
   libraryEntries: IngredientLibraryRow[]
@@ -26,13 +29,13 @@ export function IngredientPicker({ libraryEntries, selectedEntryId, onChange }: 
   const [showCreate, setShowCreate] = useState(false)
   const [scanOpen, setScanOpen] = useState(false)
   const [scanInfo, setScanInfo] = useState<string | null>(null)
-  // Inline-create form state
+  // Inline-create form state (new model)
   const [name, setName] = useState('')
   const [ingredient_type, setIngredientType] = useState<IngredientType>('spirit')
-  const [pricing_mode, setPricingMode] = useState<'bottle' | 'unit'>('bottle')
-  const [bottle_size_ml, setBottleSize] = useState('700')
-  const [bottle_cost_pounds, setBottleCostPounds] = useState('')
-  const [unit_cost_pounds, setUnitCostPounds] = useState('')
+  const [base_unit, setBaseUnit] = useState<'ml' | 'g' | 'each'>('ml')
+  const [pack_size_str, setPackSizeStr] = useState('700')
+  const [cost_pounds, setCostPounds] = useState('')
+  const [purchase_qty_str, setPurchaseQtyStr] = useState('1')
   // When a scan didn't match an existing library entry, we surface
   // the scanned code so the new entry gets saved with it. Cleared on
   // form cancel.
@@ -118,8 +121,8 @@ export function IngredientPicker({ libraryEntries, selectedEntryId, onChange }: 
       setName(cataloguePrefill.name)
       setIngredientType(cataloguePrefill.ingredient_type)
       if (cataloguePrefill.bottle_size_ml) {
-        setPricingMode('bottle')
-        setBottleSize(String(cataloguePrefill.bottle_size_ml))
+        setBaseUnit('ml')
+        setPackSizeStr(String(cataloguePrefill.bottle_size_ml))
       }
       setPrefilledFromCatalogue(true)
       setScanInfo(`Recognised ${code}. We've pre-filled the name, type and size — just add your cost.`)
@@ -132,24 +135,21 @@ export function IngredientPicker({ libraryEntries, selectedEntryId, onChange }: 
   async function handleCreate() {
     setCreateError(null)
     if (!name.trim()) { setCreateError('Name required'); return }
-    let bottle_size_ml_n: number | null = null
-    let bottle_cost_p: number | null = null
-    let unit_cost_p: number | null = null
-    if (pricing_mode === 'bottle') {
-      bottle_size_ml_n = parseFloat(bottle_size_ml)
-      bottle_cost_p = Math.round(parseFloat(bottle_cost_pounds) * 100)
-      if (!Number.isFinite(bottle_size_ml_n) || bottle_size_ml_n <= 0) { setCreateError('Bottle size invalid'); return }
-      if (!Number.isFinite(bottle_cost_p) || bottle_cost_p < 0) { setCreateError('Bottle cost invalid'); return }
-    } else {
-      unit_cost_p = Math.round(parseFloat(unit_cost_pounds) * 100)
-      if (!Number.isFinite(unit_cost_p) || unit_cost_p < 0) { setCreateError('Unit cost invalid'); return }
+    const pack_size = parseFloat(pack_size_str)
+    const price_p = Math.round(parseFloat(cost_pounds) * 100)
+    const purchase_qty = Math.max(1, Math.round(parseFloat(purchase_qty_str) || 1))
+    if (base_unit !== 'each') {
+      if (!Number.isFinite(pack_size) || pack_size <= 0) { setCreateError('Pack size invalid'); return }
     }
+    if (!Number.isFinite(price_p) || price_p < 0) { setCreateError('Cost invalid'); return }
     setCreating(true)
     try {
       const result = await saveLibraryEntryAction(null, {
         name: name.trim(), ingredient_type,
-        bottle_size_ml: bottle_size_ml_n, bottle_cost_p, unit_cost_p,
-        purchase_qty: 1,
+        base_unit,
+        pack_size: base_unit === 'each' ? 1 : pack_size,
+        price_p,
+        purchase_qty,
         barcode: pendingBarcode,
         notes: null,
       })
@@ -158,16 +158,16 @@ export function IngredientPicker({ libraryEntries, selectedEntryId, onChange }: 
         trade_account_id: '',
         name: name.trim(),
         ingredient_type,
-        base_unit: bottle_size_ml_n !== null ? 'ml' : 'each',
-        pack_size: bottle_size_ml_n ?? 1,
-        price_p: bottle_cost_p ?? unit_cost_p ?? 0,
+        base_unit,
+        pack_size: base_unit === 'each' ? 1 : pack_size,
+        price_p,
         pack_format: null,
         subcategory: null,
         // legacy fields retired in a later task; not read
-        bottle_size_ml: bottle_size_ml_n,
-        bottle_cost_p,
-        unit_cost_p,
-        purchase_qty: 1,
+        bottle_size_ml: null,
+        bottle_cost_p: null,
+        unit_cost_p: null,
+        purchase_qty,
         yield_pct: 100,
         barcode: pendingBarcode,
         notes: null,
@@ -176,13 +176,15 @@ export function IngredientPicker({ libraryEntries, selectedEntryId, onChange }: 
       }
       libraryEntries.push(newEntry)
       selectEntry(newEntry)
-      setName(''); setBottleCostPounds(''); setUnitCostPounds(''); setShowCreate(false); setPendingBarcode(null)
+      setName(''); setCostPounds(''); setPurchaseQtyStr('1'); setShowCreate(false); setPendingBarcode(null)
     } catch (e) {
       setCreateError((e as Error).message || 'Could not create')
     } finally {
       setCreating(false)
     }
   }
+
+  const sizePresets = base_unit === 'ml' ? BOTTLE_SIZES_ML : base_unit === 'g' ? WEIGHT_SIZES_G : null
 
   return (
     <div ref={containerRef} className="relative">
@@ -249,7 +251,7 @@ export function IngredientPicker({ libraryEntries, selectedEntryId, onChange }: 
           )}
           <div>
             <label className={labelClass}>Name</label>
-            <input value={name} onChange={(e) => setName(e.target.value)} className={inputClass} placeholder="e.g. Tito's Vodka" autoFocus />
+            <input value={name} onChange={(e) => setName(e.target.value)} className={inputClass} placeholder="e.g. Expedition Spiced Rum" autoFocus />
           </div>
           <div className="grid grid-cols-2 gap-3">
             <div>
@@ -259,32 +261,48 @@ export function IngredientPicker({ libraryEntries, selectedEntryId, onChange }: 
               </select>
             </div>
             <div>
-              <label className={labelClass}>Pricing</label>
-              <select value={pricing_mode} onChange={(e) => setPricingMode(e.target.value as 'bottle' | 'unit')} className={inputClass}>
-                <option value="bottle">Per bottle</option>
-                <option value="unit">Per unit</option>
+              <label className={labelClass}>How you buy it</label>
+              <select value={base_unit} onChange={(e) => {
+                const bu = e.target.value as 'ml' | 'g' | 'each'
+                setBaseUnit(bu)
+                setPackSizeStr(bu === 'ml' ? '700' : bu === 'g' ? '1000' : '1')
+              }} className={inputClass}>
+                <option value="ml">Liquid (ml)</option>
+                <option value="g">Weight (g)</option>
+                <option value="each">Count (each)</option>
               </select>
             </div>
           </div>
-          {pricing_mode === 'bottle' ? (
-            <div className="grid grid-cols-2 gap-3">
-              <div>
-                <label className={labelClass}>Size (ml)</label>
-                <select value={bottle_size_ml} onChange={(e) => setBottleSize(e.target.value)} className={inputClass}>
-                  {BOTTLE_SIZES_ML.map((s) => <option key={s} value={s}>{s}</option>)}
-                </select>
-              </div>
-              <div>
-                <label className={labelClass}>Cost (£)</label>
-                <input type="number" step="0.01" min={0} value={bottle_cost_pounds} onChange={(e) => setBottleCostPounds(e.target.value)} className={inputClass} placeholder="25.00" />
-              </div>
-            </div>
-          ) : (
+          {base_unit !== 'each' && (
             <div>
-              <label className={labelClass}>Unit cost (£)</label>
-              <input type="number" step="0.01" min={0} value={unit_cost_pounds} onChange={(e) => setUnitCostPounds(e.target.value)} className={inputClass} placeholder="1.00" />
+              <label className={labelClass}>{base_unit === 'ml' ? 'Size (ml)' : 'Weight per pack (g)'}</label>
+              {sizePresets && (
+                <div className="flex flex-wrap gap-2 mb-2">
+                  {sizePresets.map((s) => (
+                    <button type="button" key={s} onClick={() => setPackSizeStr(String(s))}
+                      className={`${chipClass} ${pack_size_str === String(s) ? chipActive : chipIdle}`}>
+                      {s}{base_unit}
+                    </button>
+                  ))}
+                </div>
+              )}
+              <input type="number" step="1" min={1} value={pack_size_str} onChange={(e) => setPackSizeStr(e.target.value)} className={inputClass}
+                placeholder={base_unit === 'ml' ? '330, 700, 1000…' : '500, 1000, 2500…'} />
             </div>
           )}
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className={labelClass}>Cost (£)</label>
+              <input type="number" step="0.01" min={0} value={cost_pounds} onChange={(e) => setCostPounds(e.target.value)} className={inputClass} placeholder="25.00" />
+            </div>
+            <div>
+              <label className={labelClass}>Packs bought</label>
+              <input type="number" step="1" min={1} value={purchase_qty_str} onChange={(e) => setPurchaseQtyStr(e.target.value)} className={inputClass} placeholder="1" />
+              <p className="text-xs text-parchment-400 mt-1">
+                {base_unit === 'each' ? 'e.g. 6 for a 6-pack' : 'e.g. 24 for a case'}
+              </p>
+            </div>
+          </div>
           {createError && <p role="alert" className="text-xs text-red-300">{createError}</p>}
           <div className="flex justify-between items-center">
             <button type="button" onClick={() => { setShowCreate(false); setPendingBarcode(null); setScanInfo(null); setPrefilledFromCatalogue(false) }} className="text-xs text-parchment-400 hover:text-parchment-200">Cancel</button>

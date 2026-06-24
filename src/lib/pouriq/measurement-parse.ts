@@ -1,5 +1,5 @@
 // Parse raw measurement strings extracted by AI into either pour_ml
-// (for bottle-priced ingredients) or unit_count (for unit-priced).
+// (for liquid ingredients) or unit_count (for unit-priced/each ingredients).
 // Examples in the spec:
 //   "50ml"          → { pour_ml: 50 }
 //   "1.5oz"         → { pour_ml: 44 }   (oz → ml, round to 5)
@@ -9,12 +9,19 @@
 //   "wedge"         → { unit_count: 0.125 }  (1/8 of a lime)
 //   "1 sprig"       → { unit_count: 1 }
 //   "top"           → { pour_ml: 50 }   (default soft top-up)
+//   "5g"            → { weight_g: 5 }   (weight-bought ingredients)
+//   "2kg"           → { weight_g: 2000 }
 // Anything not matched returns { raw: input } for the UI to surface.
+//
+// The weight_g variant is for the inline-create prefill only: when an
+// extracted measurement is in grams, the match row can default base_unit
+// to 'g'. It does not map to a pour or unit count.
 
 export type ParsedMeasurement =
-  | { pour_ml: number; unit_count?: never; raw?: never }
-  | { unit_count: number; pour_ml?: never; raw?: never }
-  | { raw: string; pour_ml?: never; unit_count?: never }
+  | { pour_ml: number; unit_count?: never; weight_g?: never; raw?: never }
+  | { unit_count: number; pour_ml?: never; weight_g?: never; raw?: never }
+  | { weight_g: number; pour_ml?: never; unit_count?: never; raw?: never }
+  | { raw: string; pour_ml?: never; unit_count?: never; weight_g?: never }
 
 const OZ_TO_ML = 29.5735
 function roundTo5(n: number): number {
@@ -28,6 +35,12 @@ export function parseMeasurement(input: string): ParsedMeasurement {
   // Explicit ml
   const mlMatch = s.match(/^(\d+(?:\.\d+)?)\s*ml$/)
   if (mlMatch) return { pour_ml: Math.round(parseFloat(mlMatch[1])) }
+
+  // Explicit grams / kilograms
+  const gMatch = s.match(/^(\d+(?:\.\d+)?)\s*g$/)
+  if (gMatch) return { weight_g: Math.round(parseFloat(gMatch[1])) }
+  const kgMatch = s.match(/^(\d+(?:\.\d+)?)\s*kg$/)
+  if (kgMatch) return { weight_g: Math.round(parseFloat(kgMatch[1]) * 1000) }
 
   // Explicit oz
   const ozMatch = s.match(/^(\d+(?:\.\d+)?)\s*oz$/)

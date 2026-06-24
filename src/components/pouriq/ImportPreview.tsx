@@ -19,6 +19,7 @@ export interface PreviewDrinkInput {
     parsed:
       | { pour_ml: number }
       | { unit_count: number }
+      | { weight_g: number }
       | { raw: string }
     match:
       | { kind: 'auto'; library_id: string; library_name: string }
@@ -31,8 +32,7 @@ export interface PreviewDrinkInput {
 // A staged new_library entry is only "resolved" once it carries a usable
 // price — catalogue adoptions start price-less and must be filled in.
 function newLibraryPriced(nl: NonNullable<MatchRowState['new_library']>): boolean {
-  if (nl.unit_cost_p !== null) return nl.unit_cost_p > 0
-  return nl.bottle_size_ml !== null && nl.bottle_cost_p !== null && nl.bottle_cost_p > 0
+  return nl.price_p !== null && nl.price_p > 0
 }
 
 function isRowResolved(s: MatchRowState): boolean {
@@ -77,9 +77,9 @@ function initialIngredientState(input: PreviewDrinkInput['ingredients'][0]): Mat
       new_library: {
         name: m.name,
         ingredient_type: m.ingredient_type,
-        bottle_size_ml: isUnit ? null : (m.default_bottle_size_ml ?? 700),
-        bottle_cost_p: null,
-        unit_cost_p: isUnit ? 0 : null,
+        base_unit: isUnit ? 'each' : 'ml',
+        pack_size: isUnit ? 1 : (m.default_bottle_size_ml ?? 700),
+        price_p: null,
         purchase_qty: 1,
       },
       pour_ml,

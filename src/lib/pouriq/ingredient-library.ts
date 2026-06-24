@@ -7,7 +7,7 @@ export interface IngredientLibraryInsert {
   ingredient_type: IngredientType
   // New purchase-model fields. When base_unit is not provided the server action
   // derives it from the legacy bottle_size_ml / bottle_cost_p / unit_cost_p fields
-  // for backward compatibility while IngredientPicker migrates in a follow-up task.
+  // for backward compatibility while the invoice inline-create migrates (Task 8).
   base_unit?: 'ml' | 'g' | 'each'
   pack_size?: number
   price_p?: number
@@ -17,7 +17,8 @@ export interface IngredientLibraryInsert {
   subcategory?: string | null
   barcode: string | null
   notes: string | null
-  // Legacy fields — still accepted from IngredientPicker until that form is updated.
+  // Legacy fields — still accepted from the invoice commit route until that path
+  // is migrated to the new model (Task 8). Do not use in new code.
   bottle_size_ml?: number | null
   bottle_cost_p?: number | null
   unit_cost_p?: number | null

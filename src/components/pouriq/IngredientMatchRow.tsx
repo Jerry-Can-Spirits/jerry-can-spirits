@@ -2,7 +2,7 @@
 
 import type { IngredientLibraryRow, IngredientType } from '@/lib/pouriq/types'
 import { PriceInput } from '@/components/pouriq/PriceInput'
-import { POUR_PRESETS, BOTTLE_SIZES_ML } from '@/lib/pouriq/measures'
+import { POUR_PRESETS, BOTTLE_SIZES_ML, WEIGHT_SIZES_G } from '@/lib/pouriq/measures'
 import { formatPurchaseBasis } from '@/lib/pouriq/calculations'
 import { PortionHelper } from '@/components/pouriq/PortionHelper'
 
@@ -27,10 +27,12 @@ export interface MatchRowState {
   new_library?: {
     name: string
     ingredient_type: IngredientType
-    bottle_size_ml: number | null
-    bottle_cost_p: number | null
-    unit_cost_p: number | null
+    base_unit: 'ml' | 'g' | 'each'
+    pack_size: number
+    price_p: number | null
     purchase_qty: number
+    pack_format?: string | null
+    subcategory?: string | null
   }
   pour_ml: number | null
   unit_count: number | null
@@ -51,10 +53,10 @@ interface Props {
 }
 
 function isUnitPricedSelection(state: MatchRowState, library: IngredientLibraryRow[]): boolean {
-  if (state.new_library) return state.new_library.unit_cost_p !== null
+  if (state.new_library) return state.new_library.base_unit === 'each'
   if (state.existing_library_id) {
     const entry = library.find((e) => e.id === state.existing_library_id)
-    return entry?.unit_cost_p !== null && entry?.unit_cost_p !== undefined
+    return entry?.base_unit === 'each'
   }
   return false
 }
@@ -86,9 +88,9 @@ export function IngredientMatchRow({
       new_library: {
         name: extractedName,
         ingredient_type: inferredType,
-        bottle_size_ml: 700,
-        bottle_cost_p: null,
-        unit_cost_p: null,
+        base_unit: 'ml',
+        pack_size: 700,
+        price_p: null,
         purchase_qty: 1,
       },
       pour_ml: state.pour_ml,
@@ -138,14 +140,10 @@ export function IngredientMatchRow({
             <input value={state.new_library.name} onChange={(e) => updateNewLibrary({ name: e.target.value })} className={inputClass} placeholder="Name" />
             {(() => {
               const nl = state.new_library
-              const isUnit = nl.unit_cost_p !== null
-              const sizeN = nl.bottle_size_ml
-              const basis = formatPurchaseBasis({
-                base_unit: isUnit ? 'each' : 'ml',
-                pack_size: sizeN ?? 1,
-                price_p: nl.unit_cost_p ?? nl.bottle_cost_p ?? 0,
-                purchase_qty: nl.purchase_qty,
-              })
+              const basis = nl.price_p !== null && nl.price_p > 0
+                ? formatPurchaseBasis({ base_unit: nl.base_unit, pack_size: nl.pack_size, price_p: nl.price_p, purchase_qty: nl.purchase_qty })
+                : null
+              const sizePresets = nl.base_unit === 'ml' ? BOTTLE_SIZES_ML : nl.base_unit === 'g' ? WEIGHT_SIZES_G : null
               return (
                 <>
                   <div className="grid grid-cols-2 gap-2">
@@ -153,23 +151,25 @@ export function IngredientMatchRow({
                       {INGREDIENT_TYPES.map((t) => <option key={t} value={t}>{t}</option>)}
                     </select>
                     <select
-                      value={isUnit ? 'unit' : 'bottle'}
+                      value={nl.base_unit}
                       onChange={(e) => {
-                        if (e.target.value === 'unit') updateNewLibrary({ bottle_size_ml: null, bottle_cost_p: null, unit_cost_p: 0, purchase_qty: nl.purchase_qty })
-                        else updateNewLibrary({ bottle_size_ml: 700, bottle_cost_p: 0, unit_cost_p: null, purchase_qty: nl.purchase_qty })
+                        const bu = e.target.value as 'ml' | 'g' | 'each'
+                        const defaultSize = bu === 'ml' ? 700 : bu === 'g' ? 1000 : 1
+                        updateNewLibrary({ base_unit: bu, pack_size: defaultSize })
                       }}
                       className={inputClass}
                     >
-                      <option value="bottle">By volume (bottles, cans, kegs, BIB)</option>
-                      <option value="unit">Per item (limes, garnish)</option>
+                      <option value="ml">Liquid (ml)</option>
+                      <option value="g">Weight (g)</option>
+                      <option value="each">Count (each)</option>
                     </select>
                   </div>
                   <div className="grid grid-cols-2 gap-2">
                     <div>
-                      <label className={labelClass}>Price you pay (£)</label>
+                      <label className={labelClass}>Price paid (£)</label>
                       <PriceInput
-                        valueP={isUnit ? nl.unit_cost_p : nl.bottle_cost_p}
-                        onChangeP={(p) => updateNewLibrary(isUnit ? { unit_cost_p: p } : { bottle_cost_p: p })}
+                        valueP={nl.price_p}
+                        onChangeP={(p) => updateNewLibrary({ price_p: p })}
                         onCommit={onResolvedCommit}
                         className={inputClass} placeholder="14.40" />
                     </div>
@@ -180,30 +180,36 @@ export function IngredientMatchRow({
                         value={nl.purchase_qty}
                         onChange={(e) => updateNewLibrary({ purchase_qty: Math.max(1, Math.round(Number(e.target.value) || 1)) })}
                         className={inputClass} placeholder="1" />
+                      <p className="text-xs text-parchment-400 mt-1">
+                        {nl.base_unit === 'each' ? 'e.g. 6 for a 6-pack' : 'e.g. 24 for a case'}
+                      </p>
                     </div>
                   </div>
-                  <p className="text-xs text-parchment-400">
-                    {isUnit ? 'e.g. 6 for a 6-pack' : 'e.g. 24 for a case'}. Leave 1 for a single {isUnit ? 'item' : 'bottle'}.
-                  </p>
-                  {!isUnit && (
+                  {nl.base_unit !== 'each' && (
                     <div>
-                      <label className={labelClass}>Size of each (ml)</label>
-                      <div className="flex flex-wrap gap-2 mb-2">
-                        {BOTTLE_SIZES_ML.map((s) => (
-                          <button type="button" key={s} onClick={() => updateNewLibrary({ bottle_size_ml: s })}
-                            className={`${chipClass} ${sizeN === s ? chipActive : chipIdle}`}>
-                            {s}ml
-                          </button>
-                        ))}
-                      </div>
+                      <label className={labelClass}>
+                        {nl.base_unit === 'ml' ? 'Size of each (ml)' : 'Weight per pack (g)'}
+                      </label>
+                      {sizePresets && (
+                        <div className="flex flex-wrap gap-2 mb-2">
+                          {sizePresets.map((s) => (
+                            <button type="button" key={s} onClick={() => updateNewLibrary({ pack_size: s })}
+                              className={`${chipClass} ${nl.pack_size === s ? chipActive : chipIdle}`}>
+                              {s}{nl.base_unit}
+                            </button>
+                          ))}
+                        </div>
+                      )}
                       <input
-                        type="number" step="1" min={0}
-                        value={nl.bottle_size_ml ?? ''}
-                        onChange={(e) => updateNewLibrary({ bottle_size_ml: e.target.value === '' ? null : Math.round(Number(e.target.value) || 0) })}
-                        className={inputClass} placeholder="330 for a can, 50000 for a keg, 10000 for a 10L BIB" />
+                        type="number" step="1" min={1}
+                        value={nl.pack_size}
+                        onChange={(e) => updateNewLibrary({ pack_size: Math.max(1, Math.round(Number(e.target.value) || 1)) })}
+                        className={inputClass}
+                        placeholder={nl.base_unit === 'ml' ? '330 for a can, 50000 for a 10L keg' : '500, 1000, 2500…'} />
+                      <p className="text-xs text-parchment-400 mt-1">Enter any size not shown above.</p>
                     </div>
                   )}
-                  {basis !== '—' && <p className="text-xs text-gold-200">= {basis}</p>}
+                  {basis !== null && <p className="text-xs text-gold-200">= {basis}</p>}
                 </>
               )
             })()}
@@ -232,8 +238,9 @@ export function IngredientMatchRow({
             {selectedExisting && (
               <p className="text-xs text-parchment-400">
                 Linked to {selectedExisting.name}
-                {selectedExisting.bottle_size_ml ? ` · £${((selectedExisting.bottle_cost_p ?? 0)/100).toFixed(2)} / ${selectedExisting.bottle_size_ml}ml` : ''}
-                {selectedExisting.unit_cost_p !== null ? ` · £${((selectedExisting.unit_cost_p ?? 0)/100).toFixed(2)} / unit` : ''}
+                {selectedExisting.base_unit !== 'each'
+                  ? ` · £${(selectedExisting.price_p / 100).toFixed(2)} / ${selectedExisting.pack_size}${selectedExisting.base_unit}`
+                  : ` · £${(selectedExisting.price_p / 100).toFixed(2)} each`}
               </p>
             )}
           </div>
