@@ -15,28 +15,31 @@ export interface RollingStockRow {
   expected_usage_bottles: number
 }
 
-interface RecipeLineRow {
-  cocktail_id: string
-  library_ingredient_id: string
-  pour_ml: number
-  name: string
-  bottle_size_ml: number
-  yield_pct: number
-}
+// The stockable universe: every bottle-priced library ingredient, whether or not
+// it appears in a recipe. Usage is recipe-derived (0 when an ingredient is
+// stocked but used in no cocktail/serve).
+interface LibraryMetaRow { id: string; name: string; bottle_size_ml: number; yield_pct: number }
+interface RecipeLineRow { cocktail_id: string; library_ingredient_id: string; pour_ml: number }
 interface VolumeRow { cocktail_id: string; period_start: string; period_end: string; units_sold: number }
 interface EventRow { library_ingredient_id: string; counted_at: string; count_qty: number }
 interface ReceiptRow { library_ingredient_id: string; received_at: string; qty: number }
 
+async function readTenantLibrary(db: D1Database, tradeAccountId: string): Promise<LibraryMetaRow[]> {
+  const res = await db.prepare(`
+    SELECT id, name, bottle_size_ml, yield_pct
+    FROM pouriq_ingredients_library
+    WHERE trade_account_id = ?1 AND bottle_size_ml IS NOT NULL AND bottle_cost_p IS NOT NULL
+  `).bind(tradeAccountId).all<LibraryMetaRow>()
+  return res.results ?? []
+}
+
 async function readTenantRecipes(db: D1Database, tradeAccountId: string): Promise<RecipeLineRow[]> {
   const res = await db.prepare(`
-    SELECT c.id AS cocktail_id, i.library_ingredient_id AS library_ingredient_id, i.pour_ml AS pour_ml,
-           lib.name AS name, lib.bottle_size_ml AS bottle_size_ml, lib.yield_pct AS yield_pct
+    SELECT c.id AS cocktail_id, i.library_ingredient_id AS library_ingredient_id, i.pour_ml AS pour_ml
     FROM pouriq_cocktails c
     JOIN pouriq_menus m ON m.id = c.menu_id
     JOIN pouriq_ingredients i ON i.cocktail_id = c.id
-    JOIN pouriq_ingredients_library lib ON lib.id = i.library_ingredient_id
-    WHERE m.trade_account_id = ?1
-      AND lib.bottle_size_ml IS NOT NULL AND lib.bottle_cost_p IS NOT NULL AND i.pour_ml IS NOT NULL
+    WHERE m.trade_account_id = ?1 AND i.pour_ml IS NOT NULL
   `).bind(tradeAccountId).all<RecipeLineRow>()
   return res.results ?? []
 }
@@ -65,12 +68,13 @@ async function readTenantEvents(db: D1Database, tradeAccountId: string): Promise
 async function readTenantReceipts(db: D1Database, tradeAccountId: string): Promise<ReceiptRow[]> {
   const res = await db.prepare(
     `SELECT library_ingredient_id, received_at, qty FROM pouriq_stock_receipts WHERE trade_account_id = ?1`
-  ).bind(tradeAccountId).all<{ library_ingredient_id: string; received_at: string; qty: number }>()
+  ).bind(tradeAccountId).all<ReceiptRow>()
   return res.results ?? []
 }
 
 export async function loadStockLevels(db: D1Database, tradeAccountId: string): Promise<RollingStockRow[]> {
-  const [recipes, volumes, events, receipts] = await Promise.all([
+  const [library, recipes, volumes, events, receipts] = await Promise.all([
+    readTenantLibrary(db, tradeAccountId),
     readTenantRecipes(db, tradeAccountId),
     readTenantVolumes(db, tradeAccountId),
     readTenantEvents(db, tradeAccountId),
@@ -83,15 +87,11 @@ export async function loadStockLevels(db: D1Database, tradeAccountId: string): P
     arr.push(v); volumesByCocktail.set(v.cocktail_id, arr)
   }
 
-  interface Meta { name: string; bottle_size_ml: number; yield_pct: number }
-  const metaByIngredient = new Map<string, Meta>()
+  // Recipe pour lines per ingredient (for theoretical usage). Lines for
+  // non-bottle-priced ingredients are simply never looked up (only library ids
+  // below are iterated).
   const linesByIngredient = new Map<string, Array<{ cocktail_id: string; pour_ml: number }>>()
   for (const r of recipes) {
-    if (!metaByIngredient.has(r.library_ingredient_id)) {
-      metaByIngredient.set(r.library_ingredient_id, {
-        name: r.name, bottle_size_ml: r.bottle_size_ml, yield_pct: r.yield_pct,
-      })
-    }
     const arr = linesByIngredient.get(r.library_ingredient_id) ?? []
     arr.push({ cocktail_id: r.cocktail_id, pour_ml: r.pour_ml })
     linesByIngredient.set(r.library_ingredient_id, arr)
@@ -109,12 +109,6 @@ export async function loadStockLevels(db: D1Database, tradeAccountId: string): P
     arr.push(r); receiptsByIngredient.set(r.library_ingredient_id, arr)
   }
 
-  const ingredientIds = new Set<string>([
-    ...linesByIngredient.keys(),
-    ...eventsByIngredient.keys(),
-    ...receiptsByIngredient.keys(),
-  ])
-
   // Usage window runs from the anchor count to the far future so the CURRENT open
   // POS period (whose bucket period_end is later than today) is still counted.
   // Without this, mid-week/mid-month sales would not draw down on-hand until the
@@ -122,12 +116,10 @@ export async function loadStockLevels(db: D1Database, tradeAccountId: string): P
   const WINDOW_END = '9999-12-31'
 
   const rows: RollingStockRow[] = []
-  for (const ingId of ingredientIds) {
-    const meta = metaByIngredient.get(ingId)
+  for (const meta of library) {
+    const ingId = meta.id
     const ingEvents = eventsByIngredient.get(ingId) ?? []
     const ingReceipts = receiptsByIngredient.get(ingId) ?? []
-    if (!meta) continue
-
     const lines = linesByIngredient.get(ingId) ?? []
     // ingEvents already sorted ascending by counted_at from the DB query
     const anchor = ingEvents.length > 0 ? ingEvents[ingEvents.length - 1] : null
