@@ -186,8 +186,8 @@ export async function POST(request: Request) {
           libraryId = dedupedId
           const existing = await getLibraryEntry(db, libraryId, access.tradeAccountId)
           if (!existing) throw new Error(`Deduped library entry ${libraryId} not found`)
-          pricingMode = existing.unit_cost_p !== null ? 'unit' : 'bottle'
-          oldCostP = pricingMode === 'unit' ? existing.unit_cost_p : existing.bottle_cost_p
+          pricingMode = existing.base_unit === 'each' ? 'unit' : 'bottle'
+          oldCostP = existing.price_p
         } else {
           // First sighting of this name in this invoice. Insert the library
           // row now; the per-line batch below records the audit + invoice_line.
@@ -209,8 +209,8 @@ export async function POST(request: Request) {
         libraryId = line.library_id!
         const existing = await getLibraryEntry(db, libraryId, access.tradeAccountId)
         if (!existing) throw new Error(`Library entry ${libraryId} not found for tenant`)
-        pricingMode = existing.unit_cost_p !== null ? 'unit' : 'bottle'
-        oldCostP = pricingMode === 'unit' ? existing.unit_cost_p : existing.bottle_cost_p
+        pricingMode = existing.base_unit === 'each' ? 'unit' : 'bottle'
+        oldCostP = existing.price_p
       }
 
       const newCostP = line.new_cost_p!
@@ -227,19 +227,11 @@ export async function POST(request: Request) {
 
       const shouldUpdateLibraryCost = oldCostP !== null && newCostP !== oldCostP
       if (shouldUpdateLibraryCost) {
-        if (pricingMode === 'unit') {
-          stmts.push(
-            db.prepare(
-              `UPDATE pouriq_ingredients_library SET unit_cost_p = ?1, updated_at = datetime('now') WHERE id = ?2 AND trade_account_id = ?3`,
-            ).bind(newCostP, libraryId, access.tradeAccountId),
-          )
-        } else {
-          stmts.push(
-            db.prepare(
-              `UPDATE pouriq_ingredients_library SET bottle_cost_p = ?1, updated_at = datetime('now') WHERE id = ?2 AND trade_account_id = ?3`,
-            ).bind(newCostP, libraryId, access.tradeAccountId),
-          )
-        }
+        stmts.push(
+          db.prepare(
+            `UPDATE pouriq_ingredients_library SET price_p = ?1, updated_at = datetime('now') WHERE id = ?2 AND trade_account_id = ?3`,
+          ).bind(newCostP, libraryId, access.tradeAccountId),
+        )
       }
 
       stmts.push(

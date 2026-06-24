@@ -159,10 +159,14 @@ export async function POST(request: Request) {
           newLibraryIdByMarker.set(`${drinkIdx}:${ingIdx}`, existing)
           continue
         }
+        // Derive new-model fields from legacy input until callers are migrated.
+        const base_unit: 'ml' | 'g' | 'each' = ing.new_library.bottle_size_ml !== null ? 'ml' : 'each'
+        const pack_size = ing.new_library.bottle_size_ml ?? 1
+        const price_p = ing.new_library.bottle_cost_p ?? ing.new_library.unit_cost_p ?? 0
         const result = await db
           .prepare(`
             INSERT INTO pouriq_ingredients_library
-              (trade_account_id, name, ingredient_type, bottle_size_ml, bottle_cost_p, unit_cost_p, purchase_qty)
+              (trade_account_id, name, ingredient_type, base_unit, pack_size, price_p, purchase_qty)
             VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7)
             RETURNING id
           `)
@@ -170,9 +174,9 @@ export async function POST(request: Request) {
             access.tradeAccountId,
             ing.new_library.name.trim(),
             ing.new_library.ingredient_type,
-            ing.new_library.bottle_size_ml,
-            ing.new_library.bottle_cost_p,
-            ing.new_library.unit_cost_p,
+            base_unit,
+            pack_size,
+            price_p,
             ing.new_library.purchase_qty,
           )
           .first<{ id: string }>()

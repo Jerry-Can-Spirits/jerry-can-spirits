@@ -9,6 +9,8 @@ function row(name: string): IngredientLibraryRow {
     trade_account_id: 't',
     name,
     ingredient_type: 'other',
+    base_unit: 'ml', pack_size: 700, price_p: 1000, pack_format: null, subcategory: null,
+    // legacy fields retired in a later task; not read
     bottle_size_ml: 700,
     bottle_cost_p: 1000,
     unit_cost_p: null,

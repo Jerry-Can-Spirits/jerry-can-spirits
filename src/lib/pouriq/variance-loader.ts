@@ -38,6 +38,16 @@ interface RecipeRow {
   purchase_qty: number
 }
 
+interface RecipeDbRow {
+  cocktail_id: string
+  library_ingredient_id: string
+  pour_ml: number | null
+  library_name: string
+  pack_size: number
+  price_p: number
+  purchase_qty: number
+}
+
 interface CountRow {
   library_ingredient_id: string
   start_count: number
@@ -80,20 +90,24 @@ async function readRecipes(
         i.library_ingredient_id AS library_ingredient_id,
         i.pour_ml AS pour_ml,
         lib.name AS library_name,
-        lib.bottle_size_ml AS bottle_size_ml,
-        lib.bottle_cost_p AS bottle_cost_p,
+        lib.pack_size AS pack_size,
+        lib.price_p AS price_p,
         lib.purchase_qty AS purchase_qty
       FROM pouriq_cocktails c
       JOIN pouriq_ingredients i ON i.cocktail_id = c.id
       JOIN pouriq_ingredients_library lib ON lib.id = i.library_ingredient_id
       WHERE c.menu_id = ?1
-        AND lib.bottle_size_ml IS NOT NULL
-        AND lib.bottle_cost_p IS NOT NULL
+        AND lib.base_unit = 'ml'
+        AND lib.price_p > 0
         AND i.pour_ml IS NOT NULL
     `)
     .bind(menuId)
-    .all<RecipeRow>()
-  return result.results ?? []
+    .all<RecipeDbRow>()
+  return (result.results ?? []).map((r) => ({
+    ...r,
+    bottle_size_ml: r.pack_size,
+    bottle_cost_p: r.price_p,
+  }))
 }
 
 async function readCounts(

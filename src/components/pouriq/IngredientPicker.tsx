@@ -158,6 +158,12 @@ export function IngredientPicker({ libraryEntries, selectedEntryId, onChange }: 
         trade_account_id: '',
         name: name.trim(),
         ingredient_type,
+        base_unit: bottle_size_ml_n !== null ? 'ml' : 'each',
+        pack_size: bottle_size_ml_n ?? 1,
+        price_p: bottle_cost_p ?? unit_cost_p ?? 0,
+        pack_format: null,
+        subcategory: null,
+        // legacy fields retired in a later task; not read
         bottle_size_ml: bottle_size_ml_n,
         bottle_cost_p,
         unit_cost_p,

@@ -44,22 +44,37 @@ interface RecipeLineRow {
   purchase_qty: number
   yield_pct: number
 }
+
+interface RecipeLineDbRow {
+  cocktail_id: string
+  library_ingredient_id: string
+  pour_ml: number
+  name: string
+  pack_size: number
+  price_p: number
+  purchase_qty: number
+  yield_pct: number
+}
 interface VolumeRow { cocktail_id: string; period_start: string; period_end: string; units_sold: number }
 interface EventRow { library_ingredient_id: string; counted_at: string; count_qty: number; reason: string | null }
 
 async function readTenantRecipes(db: D1Database, tradeAccountId: string): Promise<RecipeLineRow[]> {
   const res = await db.prepare(`
     SELECT c.id AS cocktail_id, i.library_ingredient_id AS library_ingredient_id, i.pour_ml AS pour_ml,
-           lib.name AS name, lib.bottle_size_ml AS bottle_size_ml, lib.bottle_cost_p AS bottle_cost_p,
+           lib.name AS name, lib.pack_size AS pack_size, lib.price_p AS price_p,
            lib.purchase_qty AS purchase_qty, lib.yield_pct AS yield_pct
     FROM pouriq_cocktails c
     JOIN pouriq_menus m ON m.id = c.menu_id
     JOIN pouriq_ingredients i ON i.cocktail_id = c.id
     JOIN pouriq_ingredients_library lib ON lib.id = i.library_ingredient_id
     WHERE m.trade_account_id = ?1
-      AND lib.bottle_size_ml IS NOT NULL AND lib.bottle_cost_p IS NOT NULL AND i.pour_ml IS NOT NULL
-  `).bind(tradeAccountId).all<RecipeLineRow>()
-  return res.results ?? []
+      AND lib.base_unit = 'ml' AND lib.price_p > 0 AND i.pour_ml IS NOT NULL
+  `).bind(tradeAccountId).all<RecipeLineDbRow>()
+  return (res.results ?? []).map((r) => ({
+    ...r,
+    bottle_size_ml: r.pack_size,
+    bottle_cost_p: r.price_p,
+  }))
 }
 
 async function readTenantVolumes(db: D1Database, tradeAccountId: string): Promise<VolumeRow[]> {

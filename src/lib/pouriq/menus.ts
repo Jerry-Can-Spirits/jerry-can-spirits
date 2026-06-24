@@ -173,9 +173,11 @@ export async function listCocktailsForMenu(
         l.trade_account_id AS l_trade_account_id,
         l.name AS l_name,
         l.ingredient_type AS l_ingredient_type,
-        l.bottle_size_ml AS l_bottle_size_ml,
-        l.bottle_cost_p AS l_bottle_cost_p,
-        l.unit_cost_p AS l_unit_cost_p,
+        l.base_unit AS l_base_unit,
+        l.pack_size AS l_pack_size,
+        l.price_p AS l_price_p,
+        l.pack_format AS l_pack_format,
+        l.subcategory AS l_subcategory,
         l.purchase_qty AS l_purchase_qty,
         l.yield_pct AS l_yield_pct,
         l.barcode AS l_barcode,
@@ -197,9 +199,11 @@ export async function listCocktailsForMenu(
       l_trade_account_id: string
       l_name: string
       l_ingredient_type: IngredientType
-      l_bottle_size_ml: number | null
-      l_bottle_cost_p: number | null
-      l_unit_cost_p: number | null
+      l_base_unit: 'ml' | 'g' | 'each'
+      l_pack_size: number
+      l_price_p: number
+      l_pack_format: string | null
+      l_subcategory: string | null
       l_purchase_qty: number
       l_yield_pct: number
       l_barcode: string | null
@@ -221,15 +225,21 @@ export async function listCocktailsForMenu(
         trade_account_id: row.l_trade_account_id,
         name: row.l_name,
         ingredient_type: row.l_ingredient_type,
-        bottle_size_ml: row.l_bottle_size_ml,
-        bottle_cost_p: row.l_bottle_cost_p,
-        unit_cost_p: row.l_unit_cost_p,
+        base_unit: row.l_base_unit,
+        pack_size: row.l_pack_size,
+        price_p: row.l_price_p,
+        pack_format: row.l_pack_format,
+        subcategory: row.l_subcategory,
         purchase_qty: row.l_purchase_qty,
         yield_pct: row.l_yield_pct,
         barcode: row.l_barcode,
         notes: row.l_notes,
         created_at: row.l_created_at,
         updated_at: row.l_updated_at,
+        // legacy fields retired in a later task; not read
+        bottle_size_ml: null,
+        bottle_cost_p: null,
+        unit_cost_p: null,
       },
     }
     if (!byCocktail.has(row.cocktail_id)) byCocktail.set(row.cocktail_id, [])
@@ -261,8 +271,9 @@ export async function getCocktail(
       SELECT
         i.id AS i_id, i.cocktail_id, i.library_ingredient_id, i.pour_ml, i.unit_count,
         l.id AS l_id, l.trade_account_id AS l_trade_account_id, l.name AS l_name,
-        l.ingredient_type AS l_ingredient_type, l.bottle_size_ml AS l_bottle_size_ml,
-        l.bottle_cost_p AS l_bottle_cost_p, l.unit_cost_p AS l_unit_cost_p,
+        l.ingredient_type AS l_ingredient_type,
+        l.base_unit AS l_base_unit, l.pack_size AS l_pack_size, l.price_p AS l_price_p,
+        l.pack_format AS l_pack_format, l.subcategory AS l_subcategory,
         l.purchase_qty AS l_purchase_qty,
         l.yield_pct AS l_yield_pct,
         l.barcode AS l_barcode,
@@ -282,9 +293,11 @@ export async function getCocktail(
       l_trade_account_id: string
       l_name: string
       l_ingredient_type: IngredientType
-      l_bottle_size_ml: number | null
-      l_bottle_cost_p: number | null
-      l_unit_cost_p: number | null
+      l_base_unit: 'ml' | 'g' | 'each'
+      l_pack_size: number
+      l_price_p: number
+      l_pack_format: string | null
+      l_subcategory: string | null
       l_purchase_qty: number
       l_yield_pct: number
       l_barcode: string | null
@@ -304,15 +317,21 @@ export async function getCocktail(
       trade_account_id: row.l_trade_account_id,
       name: row.l_name,
       ingredient_type: row.l_ingredient_type,
-      bottle_size_ml: row.l_bottle_size_ml,
-      bottle_cost_p: row.l_bottle_cost_p,
-      unit_cost_p: row.l_unit_cost_p,
+      base_unit: row.l_base_unit,
+      pack_size: row.l_pack_size,
+      price_p: row.l_price_p,
+      pack_format: row.l_pack_format,
+      subcategory: row.l_subcategory,
       purchase_qty: row.l_purchase_qty,
       yield_pct: row.l_yield_pct,
       barcode: row.l_barcode,
       notes: row.l_notes,
       created_at: row.l_created_at,
       updated_at: row.l_updated_at,
+      // legacy fields retired in a later task; not read
+      bottle_size_ml: null,
+      bottle_cost_p: null,
+      unit_cost_p: null,
     },
   }))
 

@@ -15,10 +15,11 @@ export interface RollingStockRow {
   expected_usage_bottles: number
 }
 
-// The stockable universe: every bottle-priced library ingredient, whether or not
+// The stockable universe: every ml-priced library ingredient, whether or not
 // it appears in a recipe. Usage is recipe-derived (0 when an ingredient is
 // stocked but used in no cocktail/serve).
 interface LibraryMetaRow { id: string; name: string; bottle_size_ml: number; yield_pct: number }
+interface LibraryMetaDbRow { id: string; name: string; pack_size: number; yield_pct: number }
 interface RecipeLineRow { cocktail_id: string; library_ingredient_id: string; pour_ml: number }
 interface VolumeRow { cocktail_id: string; period_start: string; period_end: string; units_sold: number }
 interface EventRow { library_ingredient_id: string; counted_at: string; count_qty: number }
@@ -26,11 +27,11 @@ interface ReceiptRow { library_ingredient_id: string; received_at: string; qty: 
 
 async function readTenantLibrary(db: D1Database, tradeAccountId: string): Promise<LibraryMetaRow[]> {
   const res = await db.prepare(`
-    SELECT id, name, bottle_size_ml, yield_pct
+    SELECT id, name, pack_size, yield_pct
     FROM pouriq_ingredients_library
-    WHERE trade_account_id = ?1 AND bottle_size_ml IS NOT NULL AND bottle_cost_p IS NOT NULL
-  `).bind(tradeAccountId).all<LibraryMetaRow>()
-  return res.results ?? []
+    WHERE trade_account_id = ?1 AND base_unit = 'ml' AND price_p > 0
+  `).bind(tradeAccountId).all<LibraryMetaDbRow>()
+  return (res.results ?? []).map((r) => ({ ...r, bottle_size_ml: r.pack_size }))
 }
 
 async function readTenantRecipes(db: D1Database, tradeAccountId: string): Promise<RecipeLineRow[]> {

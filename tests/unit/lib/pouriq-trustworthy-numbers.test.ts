@@ -18,6 +18,11 @@ interface IngOpts {
 function ingredient(opts: IngOpts): IngredientWithLibrary {
   const library: IngredientLibraryRow = {
     id: 'lib', trade_account_id: 't', name: 'x', ingredient_type: 'spirit',
+    base_unit: opts.unit_cost_p != null ? 'each' : 'ml',
+    pack_size: opts.bottle_size_ml ?? 1,
+    price_p: opts.bottle_cost_p ?? opts.unit_cost_p ?? 0,
+    pack_format: null, subcategory: null,
+    // legacy fields retired in a later task; not read
     bottle_size_ml: opts.bottle_size_ml ?? null,
     bottle_cost_p: opts.bottle_cost_p ?? null,
     unit_cost_p: opts.unit_cost_p ?? null,

@@ -23,22 +23,18 @@ interface RawRow {
   ingredient_library_id: string
   ingredient_pour_ml: number | null
   ingredient_unit_count: number | null
-  lib_bottle_size_ml: number | null
-  lib_bottle_cost_p: number | null
-  lib_unit_cost_p: number | null
+  lib_base_unit: 'ml' | 'g' | 'each'
+  lib_pack_size: number
+  lib_price_p: number
   lib_purchase_qty: number
 }
 
 function rowContributionP(row: RawRow): number {
-  if (row.lib_unit_cost_p !== null) {
-    return unitPourCostP(row.lib_unit_cost_p, row.lib_purchase_qty, row.ingredient_unit_count ?? 1)
+  if (row.lib_base_unit === 'each') {
+    return unitPourCostP(row.lib_price_p, row.lib_purchase_qty, row.ingredient_unit_count ?? 1)
   }
-  if (
-    row.lib_bottle_size_ml !== null &&
-    row.lib_bottle_cost_p !== null &&
-    row.ingredient_pour_ml !== null
-  ) {
-    return bottlePourCostP(row.lib_bottle_cost_p, row.lib_bottle_size_ml, row.lib_purchase_qty, row.ingredient_pour_ml)
+  if (row.ingredient_pour_ml !== null) {
+    return bottlePourCostP(row.lib_price_p, row.lib_pack_size, row.lib_purchase_qty, row.ingredient_pour_ml)
   }
   return 0
 }
@@ -76,9 +72,9 @@ export async function loadImpactPayload(
         i.library_ingredient_id AS ingredient_library_id,
         i.pour_ml AS ingredient_pour_ml,
         i.unit_count AS ingredient_unit_count,
-        lib.bottle_size_ml AS lib_bottle_size_ml,
-        lib.bottle_cost_p AS lib_bottle_cost_p,
-        lib.unit_cost_p AS lib_unit_cost_p,
+        lib.base_unit AS lib_base_unit,
+        lib.pack_size AS lib_pack_size,
+        lib.price_p AS lib_price_p,
         lib.purchase_qty AS lib_purchase_qty
       FROM affected a
       JOIN pouriq_cocktails c ON c.id = a.cocktail_id
@@ -132,9 +128,10 @@ export async function loadImpactPayload(
     id: entry.id,
     name: entry.name,
     ingredient_type: entry.ingredient_type,
-    bottle_size_ml: entry.bottle_size_ml,
-    bottle_cost_p: entry.bottle_cost_p,
-    unit_cost_p: entry.unit_cost_p,
+    // legacy fields retired in a later task; not read
+    bottle_size_ml: entry.base_unit !== 'each' ? entry.pack_size : null,
+    bottle_cost_p: entry.base_unit !== 'each' ? entry.price_p : null,
+    unit_cost_p: entry.base_unit === 'each' ? entry.price_p : null,
     purchase_qty: entry.purchase_qty,
   }
 
