@@ -1,10 +1,13 @@
-// Quick-select pour measures for recipe entry. "Dash" (~2ml) and "Barspoon"
-// (~5ml) cover the small bartending measures (e.g. dashing bitters) that a raw
-// ml field alone makes fiddly to estimate. Shared by the add/edit drink form
-// and the import match row so the options stay in sync.
+// Quick-select pour measures for recipe entry. "Dash" (~0.6ml, e.g. dashing
+// bitters) and "Barspoon" (~5ml) cover the small bartending measures that a raw
+// ml field alone makes fiddly to estimate. These are just quick chips; the ml
+// field also takes free text for anything off-preset (7ml, 12.5ml, etc.).
+// Shared by the add/edit drink form and the import match row so the options
+// stay in sync.
 export const POUR_PRESETS: ReadonlyArray<{ ml: number; label: string }> = [
-  { ml: 2, label: 'Dash' },
+  { ml: 0.6, label: 'Dash' },
   { ml: 5, label: 'Barspoon' },
+  { ml: 10, label: '10ml' },
   { ml: 15, label: '15ml' },
   { ml: 25, label: '25ml' },
   { ml: 35, label: '35ml' },
