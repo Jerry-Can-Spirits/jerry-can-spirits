@@ -5,6 +5,7 @@ import { PRIMARY_BUTTON } from '@/lib/pouriq/button-styles'
 import { IngredientPicker } from '@/components/pouriq/IngredientPicker'
 import type { IngredientLibraryRow } from '@/lib/pouriq/types'
 import { POUR_PRESETS, GLASS_OPTIONS } from '@/lib/pouriq/measures'
+import { PortionHelper } from '@/components/pouriq/PortionHelper'
 
 export interface ServeFormIngredient {
   library_ingredient_id: string
@@ -136,6 +137,7 @@ export function ServeForm({ defaultName, defaultGlass, defaultIngredients, libra
                         ))}
                       </div>
                       <input type="number" step="0.001" min={0} value={ing.unit_count} onChange={(e) => updateIngredient(idx, { unit_count: e.target.value })} className={inputClass} placeholder="custom (e.g., 0.5 for half a lime)" />
+                      <PortionHelper className="mt-2" onApply={(v) => updateIngredient(idx, { unit_count: v.toString() })} />
                     </div>
                   ) : (
                     <div>
