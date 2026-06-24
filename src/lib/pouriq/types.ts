@@ -205,3 +205,16 @@ export interface Recommendation {
     why_relevant: string
   }
 }
+
+export const VARIANCE_REASONS = ['over-pour', 'spillage', 'comps', 'breakage', 'theft', 'unknown'] as const
+export type VarianceReason = (typeof VARIANCE_REASONS)[number]
+
+export interface StockCountEventRow {
+  id: string
+  trade_account_id: string
+  library_ingredient_id: string
+  counted_at: string
+  count_qty: number
+  reason: string | null
+  created_at: string
+}

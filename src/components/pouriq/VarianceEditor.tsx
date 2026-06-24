@@ -1,165 +1,100 @@
 'use client'
 
 import { useEffect, useState, useTransition } from 'react'
-import { useRouter } from 'next/navigation'
-import { PRIMARY_BUTTON } from '@/lib/pouriq/button-styles'
-import type { VolumeCadence } from '@/lib/pouriq/types'
-import { classifyVariance, type VarianceSeverity } from '@/lib/pouriq/variance'
+import { VARIANCE_REASONS } from '@/lib/pouriq/types'
 
-interface VarianceRow {
+interface RollingTrendPoint {
+  counted_at: string
+  variance_cost_p: number | null
+  reason: string | null
+}
+
+interface RollingVarianceRow {
   library_ingredient_id: string
   library_name: string
   bottle_size_ml: number
   bottle_cost_p: number
-  start_count: number | null
-  end_count: number | null
+  purchase_qty: number
+  latest_count_at: string | null
+  latest_count_qty: number | null
+  previous_count_at: string | null
   theoretical_used_ml: number
   actual_used_ml: number | null
   variance_ml: number | null
   variance_pct: number | null
   variance_cost_p: number | null
+  severity: 'none' | 'within-tolerance' | 'amber' | 'red'
+  impact_p: number
+  unmatched_in_window: number
+  latest_reason: string | null
+  persistent_loss: boolean
+  trend: RollingTrendPoint[]
 }
 
-interface RecentPeriod {
-  period_start: string
-  period_end: string
-  total_abs_cost_p: number
+interface VarianceApiResponse {
+  rows: RollingVarianceRow[]
 }
 
-interface VarianceResponse {
-  cadence: VolumeCadence
-  current_period: { start: string; end: string }
-  rows: VarianceRow[]
-  recent_periods: RecentPeriod[]
-}
+const inputClass =
+  'w-24 px-2 py-1 bg-jerry-green-700/50 border border-gold-500/30 rounded-sm text-parchment-50 text-sm focus:border-gold-400 focus:outline-hidden'
 
-interface Props {
-  menuId: string
-  initialCadence: VolumeCadence
-}
+const selectClass =
+  'px-2 py-1 bg-jerry-green-700/50 border border-gold-500/30 rounded-sm text-parchment-50 text-sm focus:border-gold-400 focus:outline-hidden'
 
-const inputClass = 'w-20 px-2 py-1 bg-jerry-green-700/50 border border-gold-500/30 rounded-sm text-parchment-50 text-sm focus:border-gold-400 focus:outline-hidden'
-
-function formatMoney(p: number | null): string {
-  if (p === null) return '—'
-  const sign = p > 0 ? '+' : p < 0 ? '−' : ''
+function formatMoney(p: number): string {
+  const sign = p < 0 ? '-' : ''
   return `${sign}£${(Math.abs(p) / 100).toFixed(2)}`
 }
 
-function formatMl(ml: number | null): string {
-  if (ml === null) return '—'
-  const rounded = Math.round(ml)
-  const sign = rounded > 0 ? '+' : ''
-  return `${sign}${rounded.toLocaleString('en-GB')} ml`
+function formatShortDate(iso: string): string {
+  return new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
 }
 
-function formatPct(pct: number | null): string {
-  if (pct === null) return '—'
-  const sign = pct > 0 ? '+' : ''
-  return `${sign}${pct.toFixed(1)}%`
-}
-
-function colourForSeverity(severity: VarianceSeverity): string {
+function severityClass(severity: RollingVarianceRow['severity']): string {
   switch (severity) {
+    case 'within-tolerance': return 'text-parchment-300'
     case 'amber': return 'text-amber-300'
     case 'red': return 'text-red-300'
-    default: return 'text-parchment-300' // none / within-tolerance: not alarming
+    default: return 'text-parchment-400'
   }
 }
 
-function formatDateRange(start: string, end: string): string {
-  const fmt = (s: string) =>
-    new Date(s).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
-  return `${fmt(start)} – ${fmt(end)}`
-}
-
-export function VarianceEditor({ menuId, initialCadence }: Props) {
-  const router = useRouter()
-  const [period, setPeriod] = useState<{ start: string; end: string } | null>(null)
-  const [data, setData] = useState<VarianceResponse | null>(null)
-  const [edits, setEdits] = useState<Record<string, { start: string; end: string }>>({})
+export function VarianceEditor() {
+  const [rows, setRows] = useState<RollingVarianceRow[] | null>(null)
+  const [counts, setCounts] = useState<Record<string, string>>({})
+  const [reasons, setReasons] = useState<Record<string, string>>({})
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [info, setInfo] = useState<string | null>(null)
   const [pending, startTransition] = useTransition()
+  const [openTrend, setOpenTrend] = useState<string | null>(null)
 
   useEffect(() => {
-    setPeriod(null)
-  }, [initialCadence])
-
-  useEffect(() => {
-    let cancelled = false
     setLoading(true)
     setError(null)
-    setInfo(null)
-    const params = new URLSearchParams({ cadence: initialCadence })
-    if (period) {
-      params.set('period_start', period.start)
-      params.set('period_end', period.end)
-    }
-    fetch(`/api/pouriq/menus/${encodeURIComponent(menuId)}/variance?${params.toString()}`)
+    fetch('/api/pouriq/variance')
       .then((r) =>
-        r.ok ? (r.json() as Promise<VarianceResponse>) : Promise.reject(new Error('Could not load variance')),
+        r.ok
+          ? (r.json() as Promise<VarianceApiResponse>)
+          : Promise.reject(new Error('Could not load variance data')),
       )
-      .then((d) => {
-        if (cancelled) return
-        setData(d)
-        const seed: Record<string, { start: string; end: string }> = {}
-        for (const r of d.rows) {
-          seed[r.library_ingredient_id] = {
-            start: r.start_count !== null ? String(r.start_count) : '',
-            end: r.end_count !== null ? String(r.end_count) : '',
-          }
-        }
-        setEdits(seed)
-      })
-      .catch((e: Error) => {
-        if (!cancelled) setError(e.message)
-      })
-      .finally(() => {
-        if (!cancelled) setLoading(false)
-      })
-    return () => {
-      cancelled = true
-    }
-  }, [menuId, initialCadence, period])
+      .then((d) => setRows(d.rows))
+      .catch((e: Error) => setError(e.message))
+      .finally(() => setLoading(false))
+  }, [])
 
-  function updateEdit(id: string, patch: Partial<{ start: string; end: string }>) {
-    setEdits((s) => ({ ...s, [id]: { ...(s[id] ?? { start: '', end: '' }), ...patch } }))
-  }
-
-  function save() {
-    if (!data) return
-    setError(null)
-    setInfo(null)
-    const entries: Array<{ library_ingredient_id: string; start_count: number; end_count: number }> = []
-    for (const r of data.rows) {
-      const e = edits[r.library_ingredient_id]
-      if (!e || e.start === '' || e.end === '') continue
-      const startN = parseFloat(e.start)
-      const endN = parseFloat(e.end)
-      if (!Number.isFinite(startN) || startN < 0) {
-        setError(`${r.library_name}: start count must be a non-negative number`)
-        return
-      }
-      if (!Number.isFinite(endN) || endN < 0) {
-        setError(`${r.library_name}: end count must be a non-negative number`)
-        return
-      }
-      entries.push({
-        library_ingredient_id: r.library_ingredient_id,
-        start_count: startN,
-        end_count: endN,
-      })
-    }
+  function saveCount(id: string) {
+    const raw = counts[id]
+    const qty = parseFloat(raw)
+    if (!Number.isFinite(qty) || qty < 0) return
     startTransition(async () => {
-      const res = await fetch(`/api/pouriq/menus/${encodeURIComponent(menuId)}/variance`, {
+      setError(null)
+      const res = await fetch('/api/pouriq/variance', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          period_start: data.current_period.start,
-          period_end: data.current_period.end,
-          entries,
+          library_ingredient_id: id,
+          count_qty: qty,
+          reason: reasons[id] || undefined,
         }),
       })
       if (!res.ok) {
@@ -167,176 +102,163 @@ export function VarianceEditor({ menuId, initialCadence }: Props) {
         setError(err.error ?? 'Save failed')
         return
       }
-      const updated = (await res.json()) as VarianceResponse
-      setData(updated)
-      setInfo(`Saved ${entries.length} ingredient count${entries.length === 1 ? '' : 's'}.`)
-      router.refresh()
+      const data = (await res.json()) as VarianceApiResponse
+      setRows(data.rows)
+      setCounts((prev) => {
+        const next = { ...prev }
+        delete next[id]
+        return next
+      })
+      setReasons((prev) => {
+        const next = { ...prev }
+        delete next[id]
+        return next
+      })
     })
   }
 
-  if (loading) return <p className="text-sm text-parchment-300">Loading variance…</p>
-  if (error && !data) return <p role="alert" className="text-sm text-red-300">{error}</p>
-  if (!data) return null
-
-  const anyTheoretical = data.rows.some((r) => r.theoretical_used_ml > 0)
-  const visibleRows = data.rows.filter((r) => r.theoretical_used_ml > 0 || r.start_count !== null)
+  if (loading) return <p className="text-sm text-parchment-300">Loading variance data…</p>
+  if (error && !rows) return <p role="alert" className="text-sm text-red-300">{error}</p>
+  if (!rows) return null
+  if (rows.length === 0) {
+    return (
+      <p className="text-sm text-parchment-300">
+        No bottle-priced ingredients in your library yet. Add ingredients before counting stock.
+      </p>
+    )
+  }
 
   return (
     <div className="space-y-4">
-      <div className="flex flex-wrap items-baseline justify-between gap-3">
-        <div>
-          <h2 className="text-xl font-serif font-bold text-white">Stock variance</h2>
-          <p className="text-xs text-parchment-400 mt-1">
-            Current period: {formatDateRange(data.current_period.start, data.current_period.end)}
-          </p>
-        </div>
-        <p className="text-xs text-parchment-400 max-w-md">
-          Enter the bottle count at the start of the period and what is left at the end. Pour IQ compares that against what sales should have used.
-        </p>
-      </div>
-
-      {!anyTheoretical && (
-        <div className="bg-jerry-green-800/40 border border-amber-500/30 rounded-xl p-4 text-sm text-amber-200">
-          Enter sales volumes above first. Variance compares stock used against what sales should have used.
-        </div>
-      )}
-
-      {visibleRows.length === 0 ? (
-        <p className="text-sm text-parchment-300">No bottle-priced ingredients on this menu yet.</p>
-      ) : (
-        <div className="bg-jerry-green-800/40 border border-gold-500/20 rounded-xl overflow-x-auto">
-          <table className="w-full text-sm min-w-[760px]">
-            <thead className="bg-jerry-green-900/40">
-              <tr className="text-left text-parchment-400 text-xs uppercase tracking-widest">
-                <th className="px-4 py-3">Ingredient</th>
-                <th className="px-4 py-3">Start</th>
-                <th className="px-4 py-3">End</th>
-                <th className="px-4 py-3">Used</th>
-                <th className="px-4 py-3">Theoretical</th>
-                <th className="px-4 py-3">Variance</th>
-                <th className="px-4 py-3">Cost</th>
-              </tr>
-            </thead>
-            <tbody>
-              {visibleRows.map((r) => {
-                const e = edits[r.library_ingredient_id] ?? { start: '', end: '' }
-                const startN = e.start === '' ? null : parseFloat(e.start)
-                const endN = e.end === '' ? null : parseFloat(e.end)
-                const liveUsedMl =
-                  startN !== null && endN !== null && Number.isFinite(startN) && Number.isFinite(endN)
-                    ? (startN - endN) * r.bottle_size_ml
-                    : null
-                const liveVarianceMl =
-                  liveUsedMl !== null ? liveUsedMl - r.theoretical_used_ml : null
-                const liveVariancePct =
-                  liveVarianceMl !== null && r.theoretical_used_ml > 0
-                    ? (liveVarianceMl / r.theoretical_used_ml) * 100
-                    : null
-                const liveCostP =
-                  liveVarianceMl !== null
-                    ? Math.round(liveVarianceMl * (r.bottle_cost_p / r.bottle_size_ml))
-                    : null
-                const endExceedsStart = startN !== null && endN !== null && endN > startN
-                const severity = classifyVariance(liveVarianceMl, liveVariancePct, r.bottle_size_ml)
-                return (
-                  <tr key={r.library_ingredient_id} className="border-t border-gold-500/10 align-top">
-                    <td className="px-4 py-3 text-parchment-100">
-                      {r.library_name}
-                      <span className="block text-xs text-parchment-400">({r.bottle_size_ml} ml)</span>
-                    </td>
-                    <td className="px-4 py-3">
-                      <input
-                        type="number"
-                        step="0.1"
-                        min={0}
-                        value={e.start}
-                        onChange={(ev) => updateEdit(r.library_ingredient_id, { start: ev.target.value })}
-                        className={inputClass}
-                        placeholder="0"
-                        aria-label={`${r.library_name} start count`}
-                      />
-                    </td>
-                    <td className="px-4 py-3">
-                      <input
-                        type="number"
-                        step="0.1"
-                        min={0}
-                        value={e.end}
-                        onChange={(ev) => updateEdit(r.library_ingredient_id, { end: ev.target.value })}
-                        className={inputClass}
-                        placeholder="0"
-                        aria-label={`${r.library_name} end count`}
-                      />
-                      {endExceedsStart && (
-                        <p className="text-xs text-amber-300 mt-1">
-                          Stock went up. Add deliveries to the start count, or check your figures.
-                        </p>
-                      )}
-                    </td>
-                    <td className="px-4 py-3 text-parchment-200">{formatMl(liveUsedMl)}</td>
-                    <td className="px-4 py-3 text-parchment-200">{formatMl(r.theoretical_used_ml)}</td>
-                    <td className={`px-4 py-3 ${colourForSeverity(severity)}`}>
-                      {severity === 'within-tolerance' ? (
-                        <span className="text-xs">Within tolerance</span>
-                      ) : (
-                        <>
-                          {formatMl(liveVarianceMl)}
-                          {liveVariancePct !== null && (
-                            <span className="block text-xs">{formatPct(liveVariancePct)}</span>
-                          )}
-                        </>
-                      )}
-                    </td>
-                    <td className={`px-4 py-3 ${colourForSeverity(severity)}`}>
-                      {severity === 'within-tolerance' ? '—' : formatMoney(liveCostP)}
-                    </td>
-                  </tr>
-                )
-              })}
-            </tbody>
-          </table>
-        </div>
-      )}
-
       {error && <p role="alert" className="text-sm text-red-300">{error}</p>}
-      {info && <p role="status" className="text-sm text-emerald-300">{info}</p>}
+      <div className="space-y-3">
+        {rows.map((row) => {
+          const id = row.library_ingredient_id
+          const countVal = counts[id] ?? ''
+          const countNum = parseFloat(countVal)
+          const saveEnabled = !pending && Number.isFinite(countNum) && countNum >= 0
+          const showVariance =
+            row.variance_cost_p !== null && row.unmatched_in_window === 0
+          const showReason = row.severity === 'amber' || row.severity === 'red'
+          const isTrendOpen = openTrend === id
 
-      <div className="flex justify-end">
-        <button type="button" onClick={save} disabled={pending || loading || visibleRows.length === 0} className={PRIMARY_BUTTON}>
-          {pending ? 'Saving…' : 'Save counts'}
-        </button>
-      </div>
-
-      {data.recent_periods.length > 0 && (
-        <div className="mt-8">
-          <h3 className="text-sm font-medium text-parchment-100 mb-3">Recent periods</h3>
-          <ul className="space-y-1.5">
-            {data.recent_periods.map((p) => (
-              <li key={`${p.period_start}-${p.period_end}`}>
+          return (
+            <div
+              key={id}
+              className="bg-jerry-green-800/40 border border-gold-500/20 rounded-xl p-4"
+            >
+              <div className="flex flex-wrap items-start justify-between gap-2 mb-3">
+                <div>
+                  <span className="text-parchment-100 font-medium">{row.library_name}</span>
+                  <span className="text-parchment-400 text-sm ml-1">({row.bottle_size_ml}ml)</span>
+                  {row.persistent_loss && (
+                    <span className="ml-2 inline-block px-1.5 py-0.5 rounded-sm bg-red-500/20 text-red-300 border border-red-500/40 text-[10px] uppercase tracking-widest">
+                      persistent loss
+                    </span>
+                  )}
+                </div>
                 <button
                   type="button"
-                  onClick={() => setPeriod({ start: p.period_start, end: p.period_end })}
-                  className="text-sm text-gold-300 hover:text-gold-200 underline text-left"
+                  onClick={() => setOpenTrend(isTrendOpen ? null : id)}
+                  className="text-xs text-parchment-400 hover:text-parchment-200 underline"
                 >
-                  {formatDateRange(p.period_start, p.period_end)}
+                  {isTrendOpen ? 'Hide trend' : 'Trend'}
                 </button>
-                <span className="text-parchment-400 text-sm">
-                  {' · '}Total cost variance: £{(p.total_abs_cost_p / 100).toFixed(2)}
-                </span>
-              </li>
-            ))}
-          </ul>
-          {period && (
-            <button
-              type="button"
-              onClick={() => setPeriod(null)}
-              className="mt-3 text-xs text-parchment-400 hover:text-parchment-200 underline"
-            >
-              Back to current period
-            </button>
-          )}
-        </div>
-      )}
+              </div>
+
+              <div className="text-sm text-parchment-400 mb-3 space-y-0.5">
+                {row.latest_count_at ? (
+                  <p>
+                    Last count: {formatShortDate(row.latest_count_at)}
+                    {row.latest_count_qty !== null && (
+                      <span className="text-parchment-200 ml-1">· {row.latest_count_qty} bottles</span>
+                    )}
+                  </p>
+                ) : (
+                  <p>Never counted</p>
+                )}
+                {row.previous_count_at && (
+                  <p>Expected used since last count: {Math.round(row.theoretical_used_ml)} ml</p>
+                )}
+              </div>
+
+              {showVariance && (
+                <div className={`text-sm mb-3 ${severityClass(row.severity)}`}>
+                  {row.severity === 'within-tolerance' ? (
+                    <span>Within tolerance</span>
+                  ) : (
+                    <>
+                      {row.variance_ml !== null && <span>{Math.round(row.variance_ml)} ml</span>}
+                      {row.variance_pct !== null && (
+                        <span className="ml-2">({row.variance_pct.toFixed(1)}%)</span>
+                      )}
+                      <span className="ml-2">{formatMoney(row.variance_cost_p as number)}</span>
+                    </>
+                  )}
+                </div>
+              )}
+
+              {row.unmatched_in_window > 0 && (
+                <p className="text-sm text-amber-300 mb-3">
+                  <a href="/trade/pouriq/unmatched" className="underline hover:text-amber-200">
+                    Usage understated, {row.unmatched_in_window} unmapped sales this period
+                  </a>
+                </p>
+              )}
+
+              <div className="flex flex-wrap items-center gap-3">
+                <input
+                  type="number"
+                  step="0.1"
+                  min={0}
+                  value={countVal}
+                  onChange={(e) => setCounts((prev) => ({ ...prev, [id]: e.target.value }))}
+                  className={inputClass}
+                  placeholder="bottles"
+                  aria-label={`${row.library_name} count now`}
+                />
+                {showReason && (
+                  <select
+                    value={reasons[id] ?? ''}
+                    onChange={(e) => setReasons((prev) => ({ ...prev, [id]: e.target.value }))}
+                    className={selectClass}
+                    aria-label={`${row.library_name} reason`}
+                  >
+                    <option value="">reason (optional)</option>
+                    {VARIANCE_REASONS.map((r) => (
+                      <option key={r} value={r}>{r}</option>
+                    ))}
+                  </select>
+                )}
+                <button
+                  type="button"
+                  onClick={() => saveCount(id)}
+                  disabled={!saveEnabled}
+                  className="px-3 py-1 bg-gold-500/15 border border-gold-400/60 text-gold-100 hover:bg-gold-500/25 hover:border-gold-400 rounded-lg transition-colors text-sm font-semibold disabled:opacity-40"
+                >
+                  Save count
+                </button>
+              </div>
+
+              {isTrendOpen && row.trend.length > 0 && (
+                <div className="mt-3 pt-3 border-t border-gold-500/10 space-y-1">
+                  {row.trend.map((point, i) => (
+                    <div key={i} className="text-xs text-parchment-400 flex gap-3">
+                      <span className="text-parchment-300">{formatShortDate(point.counted_at)}</span>
+                      {point.variance_cost_p !== null && (
+                        <span className={point.variance_cost_p < 0 ? 'text-red-300' : 'text-parchment-200'}>
+                          {formatMoney(point.variance_cost_p)}
+                        </span>
+                      )}
+                      {point.reason && <span>{point.reason}</span>}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )
+        })}
+      </div>
     </div>
   )
 }
