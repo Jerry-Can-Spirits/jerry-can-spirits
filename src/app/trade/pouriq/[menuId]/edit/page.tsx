@@ -4,8 +4,10 @@ import Link from 'next/link'
 import { checkPourIqAccess } from '@/lib/pouriq/access'
 import { getMenu, getCocktail } from '@/lib/pouriq/menus'
 import { listLibraryEntries } from '@/lib/pouriq/ingredient-library'
+import { listServeUnitsForTenant } from '@/lib/pouriq/serve-units'
 import { LicenceGate } from '@/components/pouriq/LicenceGate'
 import { CocktailForm } from '@/components/pouriq/CocktailForm'
+import type { ServeUnitRow } from '@/lib/pouriq/types'
 
 export const dynamic = 'force-dynamic'
 
@@ -25,14 +27,19 @@ export default async function EditMenuPage({ params, searchParams }: Props) {
   const { env } = await getCloudflareContext()
   const db = env.DB as D1Database
 
-  const [menu, cocktail, libraryEntries] = await Promise.all([
+  const [menu, cocktail, libraryEntries, serveUnitsMap] = await Promise.all([
     getMenu(db, menuId, access.tradeAccountId),
     cocktailId ? getCocktail(db, cocktailId, access.tradeAccountId) : Promise.resolve(null),
     listLibraryEntries(db, access.tradeAccountId),
+    listServeUnitsForTenant(db, access.tradeAccountId),
   ])
 
   if (!menu) notFound()
   if (cocktailId && (!cocktail || cocktail.menu_id !== menuId)) notFound()
+
+  // Serialise Map → plain object for client component prop boundary.
+  const serveUnits: Record<string, ServeUnitRow[]> = {}
+  for (const [id, rows] of serveUnitsMap) serveUnits[id] = rows
 
   return (
     <main className="min-h-screen">
@@ -42,7 +49,7 @@ export default async function EditMenuPage({ params, searchParams }: Props) {
           {cocktail ? `Edit ${cocktail.name}` : 'Add a drink'}
         </h1>
         <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
-          <CocktailForm menuId={menuId} cocktail={cocktail} libraryEntries={libraryEntries} />
+          <CocktailForm menuId={menuId} cocktail={cocktail} libraryEntries={libraryEntries} serveUnits={serveUnits} />
         </div>
       </div>
     </main>

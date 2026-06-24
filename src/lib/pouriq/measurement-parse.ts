@@ -3,8 +3,9 @@
 // Examples in the spec:
 //   "50ml"          → { pour_ml: 50 }
 //   "1.5oz"         → { pour_ml: 44 }   (oz → ml, round to 5)
-//   "barspoon"      → { pour_ml: 5 }
-//   "2 dashes"      → { pour_ml: 2 }    (1ml per dash)
+//   "barspoon"      → { pour_ml: 5, serve_unit: 'barspoon', serve_qty: 1 }
+//   "2 dashes"      → { pour_ml: 1, serve_unit: 'dash', serve_qty: 2 }   (0.6ml per dash)
+//   "tsp"           → { pour_ml: 5, serve_unit: 'tsp', serve_qty: 1 }
 //   "1/2 lime"      → { unit_count: 0.5 }
 //   "wedge"         → { unit_count: 0.125 }  (1/8 of a lime)
 //   "1 sprig"       → { unit_count: 1 }
@@ -17,8 +18,13 @@
 // extracted measurement is in grams, the match row can default base_unit
 // to 'g'. It does not map to a pour or unit count.
 
+// When the input names a recognised bartending unit (dash/barspoon/tsp), the
+// pour_ml variant carries serve_unit + serve_qty so the import row can default
+// recipe_unit/recipe_qty directly from the parse result.
+export type RecognisedServeUnit = 'dash' | 'barspoon' | 'tsp'
+
 export type ParsedMeasurement =
-  | { pour_ml: number; unit_count?: never; weight_g?: never; raw?: never }
+  | { pour_ml: number; serve_unit?: RecognisedServeUnit; serve_qty?: number; unit_count?: never; weight_g?: never; raw?: never }
   | { unit_count: number; pour_ml?: never; weight_g?: never; raw?: never }
   | { weight_g: number; pour_ml?: never; unit_count?: never; raw?: never }
   | { raw: string; pour_ml?: never; unit_count?: never; weight_g?: never }
@@ -50,14 +56,21 @@ export function parseMeasurement(input: string): ParsedMeasurement {
   const barspoonMatch = s.match(/^(?:(\d+(?:\.\d+)?)\s+)?bar\s?spoons?$/)
   if (barspoonMatch) {
     const n = barspoonMatch[1] ? parseFloat(barspoonMatch[1]) : 1
-    return { pour_ml: Math.round(n * 5) }
+    return { pour_ml: Math.round(n * 5), serve_unit: 'barspoon', serve_qty: n }
   }
 
-  // Dash(es) — ~1ml per dash
+  // Dash(es) — ~0.6ml per dash (STANDARD_SERVE_UNITS value)
   const dashMatch = s.match(/^(?:(\d+)\s+)?dashe?s?$/)
   if (dashMatch) {
     const n = dashMatch[1] ? parseInt(dashMatch[1], 10) : 1
-    return { pour_ml: n }
+    return { pour_ml: Math.round(n * 0.6), serve_unit: 'dash', serve_qty: n }
+  }
+
+  // Tsp / teaspoon (~5ml each, optional count)
+  const tspMatch = s.match(/^(?:(\d+(?:\.\d+)?)\s+)?(?:tsp|teaspoons?)$/)
+  if (tspMatch) {
+    const n = tspMatch[1] ? parseFloat(tspMatch[1]) : 1
+    return { pour_ml: Math.round(n * 5), serve_unit: 'tsp', serve_qty: n }
   }
 
   // Splash / top — default soft 50ml

@@ -5,7 +5,9 @@ import { checkPourIqAccess } from '@/lib/pouriq/access'
 import { LicenceGate } from '@/components/pouriq/LicenceGate'
 import { listUnmatched, listMappableCocktails, listMappableServes } from '@/lib/pouriq/pos/item-map'
 import { listLibraryEntries } from '@/lib/pouriq/ingredient-library'
+import { listServeUnitsForTenant } from '@/lib/pouriq/serve-units'
 import { UnmatchedReview } from '@/components/pouriq/UnmatchedReview'
+import type { ServeUnitRow } from '@/lib/pouriq/types'
 
 export const dynamic = 'force-dynamic'
 
@@ -16,12 +18,16 @@ export default async function UnmatchedPage() {
 
   const { env } = await getCloudflareContext()
   const db = env.DB as D1Database
-  const [items, cocktails, serves, libraryEntries] = await Promise.all([
+  const [items, cocktails, serves, libraryEntries, serveUnitsMap] = await Promise.all([
     listUnmatched(db, access.tradeAccountId),
     listMappableCocktails(db, access.tradeAccountId),
     listMappableServes(db, access.tradeAccountId),
     listLibraryEntries(db, access.tradeAccountId),
+    listServeUnitsForTenant(db, access.tradeAccountId),
   ])
+
+  const serveUnits: Record<string, ServeUnitRow[]> = {}
+  for (const [id, rows] of serveUnitsMap) serveUnits[id] = rows
 
   return (
     <main className="min-h-screen">
@@ -31,7 +37,7 @@ export default async function UnmatchedPage() {
         <p className="text-parchment-400 text-sm mb-10">
           Till items your POS sent that did not match a cocktail. Map each one so its sales count, or mark it as not a cocktail.
         </p>
-        <UnmatchedReview items={items} cocktails={cocktails} serves={serves} libraryEntries={libraryEntries} />
+        <UnmatchedReview items={items} cocktails={cocktails} serves={serves} libraryEntries={libraryEntries} serveUnits={serveUnits} />
       </div>
     </main>
   )

@@ -4,16 +4,10 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { saveCocktailAction, deleteCocktailAction } from '@/lib/pouriq/server-actions'
 import { IngredientPicker } from '@/components/pouriq/IngredientPicker'
-import type { CocktailWithIngredients, IngredientLibraryRow } from '@/lib/pouriq/types'
-import { POUR_PRESETS, GLASS_OPTIONS } from '@/lib/pouriq/measures'
-import { PortionHelper } from '@/components/pouriq/PortionHelper'
-
-const UNIT_CHIPS: Array<{ label: string; value: number }> = [
-  { label: '1/8', value: 0.125 },
-  { label: '1/4', value: 0.25 },
-  { label: '1/2', value: 0.5 },
-  { label: '1', value: 1 },
-]
+import { ServeUnitPicker } from '@/components/pouriq/ServeUnitPicker'
+import type { CocktailWithIngredients, IngredientLibraryRow, ServeUnitRow } from '@/lib/pouriq/types'
+import { GLASS_OPTIONS } from '@/lib/pouriq/measures'
+import type { ServeUnit } from '@/lib/pouriq/measures'
 
 const inputClass = 'w-full px-3 py-2 bg-jerry-green-700/50 border border-gold-500/30 rounded-lg text-parchment-50 text-sm placeholder-parchment-400 focus:border-gold-400 focus:outline-hidden'
 const labelClass = 'block text-xs font-medium text-parchment-300 mb-1'
@@ -23,33 +17,34 @@ const chipIdle = 'bg-jerry-green-700/30 border-gold-500/20 text-parchment-300 ho
 
 interface FormIngredient {
   library_entry: IngredientLibraryRow | null
-  pour_ml: string
-  unit_count: string
+  pour_ml: number | null
+  unit_count: number | null
+  recipe_unit: string | null
+  recipe_qty: number | null
 }
 
 function ingredientRowToForm(row: CocktailWithIngredients['ingredients'][0]): FormIngredient {
   return {
     library_entry: row.library,
-    pour_ml: row.pour_ml?.toString() ?? '',
-    unit_count: row.unit_count?.toString() ?? '',
+    pour_ml: row.pour_ml,
+    unit_count: row.unit_count,
+    recipe_unit: row.recipe_unit,
+    recipe_qty: row.recipe_qty,
   }
 }
 
 function blankIngredient(): FormIngredient {
-  return { library_entry: null, pour_ml: '', unit_count: '' }
-}
-
-function isUnitPriced(entry: IngredientLibraryRow | null): boolean {
-  return entry !== null && entry.base_unit === 'each'
+  return { library_entry: null, pour_ml: null, unit_count: null, recipe_unit: null, recipe_qty: null }
 }
 
 interface Props {
   menuId: string
   cocktail: CocktailWithIngredients | null
   libraryEntries: IngredientLibraryRow[]
+  serveUnits: Record<string, ServeUnitRow[]>
 }
 
-export function CocktailForm({ menuId, cocktail, libraryEntries }: Props) {
+export function CocktailForm({ menuId, cocktail, libraryEntries, serveUnits }: Props) {
   const router = useRouter()
   const [name, setName] = useState(cocktail?.name ?? '')
   const [salePricePounds, setSalePricePounds] = useState(
@@ -96,28 +91,32 @@ export function CocktailForm({ menuId, cocktail, libraryEntries }: Props) {
     if (!name.trim()) { setError('Drink name is required'); return }
     if (!Number.isFinite(sale_price_p) || sale_price_p <= 0) { setError('Sale price must be > 0'); return }
 
-    const parsed: Array<{ library_ingredient_id: string; pour_ml: number | null; unit_count: number | null }> = []
+    const parsed: Array<{ library_ingredient_id: string; pour_ml: number | null; unit_count: number | null; recipe_unit: string | null; recipe_qty: number | null }> = []
     for (let idx = 0; idx < ingredients.length; idx++) {
       const ing = ingredients[idx]
       if (!ing.library_entry) {
         setError(`Ingredient ${idx + 1}: pick an ingredient or remove the row`)
         return
       }
-      if (isUnitPriced(ing.library_entry)) {
-        const count = parseFloat(ing.unit_count)
-        if (!Number.isFinite(count) || count <= 0) {
-          setError(`Ingredient ${idx + 1} ("${ing.library_entry.name}"): unit count must be > 0`)
+      const baseUnit = ing.library_entry.base_unit
+      if (baseUnit === 'each') {
+        if (ing.unit_count === null || ing.unit_count <= 0) {
+          setError(`Ingredient ${idx + 1} ("${ing.library_entry.name}"): quantity must be > 0`)
           return
         }
-        parsed.push({ library_ingredient_id: ing.library_entry.id, pour_ml: null, unit_count: count })
       } else {
-        const pour = parseFloat(ing.pour_ml)
-        if (!Number.isFinite(pour) || pour <= 0) {
-          setError(`Ingredient ${idx + 1} ("${ing.library_entry.name}"): pour must be > 0 ml`)
+        if (ing.pour_ml === null || ing.pour_ml <= 0) {
+          setError(`Ingredient ${idx + 1} ("${ing.library_entry.name}"): amount must be > 0`)
           return
         }
-        parsed.push({ library_ingredient_id: ing.library_entry.id, pour_ml: pour, unit_count: null })
       }
+      parsed.push({
+        library_ingredient_id: ing.library_entry.id,
+        pour_ml: ing.pour_ml,
+        unit_count: ing.unit_count,
+        recipe_unit: ing.recipe_unit,
+        recipe_qty: ing.recipe_qty,
+      })
     }
 
     if (parsed.length === 0) { setError('Add at least one ingredient'); return }
@@ -257,50 +256,34 @@ export function CocktailForm({ menuId, cocktail, libraryEntries }: Props) {
         <h3 className="text-sm font-medium text-parchment-100 mb-4">Ingredients</h3>
         <div className="space-y-4">
           {ingredients.map((ing, idx) => {
-            const unitPriced = isUnitPriced(ing.library_entry)
+            const entry = ing.library_entry
+            const customUnits: ServeUnit[] = entry
+              ? (serveUnits[entry.id] ?? [])
+              : []
             return (
               <div key={idx} className="border border-gold-500/10 rounded-lg p-3 bg-jerry-green-800/30">
                 <label className={labelClass}>Ingredient {idx + 1}</label>
                 <IngredientPicker
                   libraryEntries={libraryEntries}
                   selectedEntryId={ing.library_entry?.id ?? null}
-                  onChange={(entry) => updateIngredient(idx, {
-                    library_entry: entry,
-                    pour_ml: isUnitPriced(entry) ? '' : ing.pour_ml,
-                    unit_count: isUnitPriced(entry) ? ing.unit_count : '',
+                  onChange={(newEntry) => updateIngredient(idx, {
+                    library_entry: newEntry,
+                    pour_ml: null,
+                    unit_count: null,
+                    recipe_unit: null,
+                    recipe_qty: null,
                   })}
                 />
 
-                {ing.library_entry && (
+                {entry && (
                   <div className="mt-3">
-                    {unitPriced ? (
-                      <div>
-                        <label className={labelClass}>How much per drink</label>
-                        <div className="flex flex-wrap gap-2 mb-2">
-                          {UNIT_CHIPS.map((c) => (
-                            <button type="button" key={c.value} onClick={() => updateIngredient(idx, { unit_count: c.value.toString() })}
-                              className={`${chipClass} ${ing.unit_count === c.value.toString() ? chipActive : chipIdle}`}>
-                              {c.label}
-                            </button>
-                          ))}
-                        </div>
-                        <input type="number" step="0.001" min={0} value={ing.unit_count} onChange={(e) => updateIngredient(idx, { unit_count: e.target.value })} className={inputClass} placeholder="custom (e.g., 0.5 for half a lime)" />
-                        <PortionHelper className="mt-2" onApply={(v) => updateIngredient(idx, { unit_count: v.toString() })} />
-                      </div>
-                    ) : (
-                      <div>
-                        <label className={labelClass}>Pour (ml)</label>
-                        <div className="flex flex-wrap gap-2 mb-2">
-                          {POUR_PRESETS.map((p) => (
-                            <button type="button" key={p.ml} onClick={() => updateIngredient(idx, { pour_ml: p.ml.toString() })}
-                              className={`${chipClass} ${ing.pour_ml === p.ml.toString() ? chipActive : chipIdle}`}>
-                              {p.label}
-                            </button>
-                          ))}
-                        </div>
-                        <input type="number" step="0.1" min={0} value={ing.pour_ml} onChange={(e) => updateIngredient(idx, { pour_ml: e.target.value })} className={inputClass} placeholder="custom" />
-                      </div>
-                    )}
+                    <ServeUnitPicker
+                      baseUnit={entry.base_unit}
+                      customUnits={customUnits}
+                      recipeUnit={ing.recipe_unit}
+                      recipeQty={ing.recipe_qty}
+                      onChange={(next) => updateIngredient(idx, next)}
+                    />
                   </div>
                 )}
 

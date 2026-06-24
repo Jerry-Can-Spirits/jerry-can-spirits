@@ -96,6 +96,8 @@ export async function cloneMenuAction(menuId: string, newName?: string): Promise
         library_ingredient_id: i.library_ingredient_id,
         pour_ml: i.pour_ml,
         unit_count: i.unit_count,
+        recipe_unit: i.recipe_unit,
+        recipe_qty: i.recipe_qty,
       })))
     }
   }
@@ -146,6 +148,8 @@ interface CocktailInput {
     library_ingredient_id: string
     pour_ml: number | null
     unit_count: number | null
+    recipe_unit: string | null
+    recipe_qty: number | null
   }>
 }
 
@@ -358,7 +362,7 @@ export async function bulkDeleteLibraryEntriesAction(entryIds: string[]): Promis
 
 export async function saveServeAction(
   serveId: string | null,
-  input: { name: string; glass: string | null; ingredients: Array<{ library_ingredient_id: string; pour_ml: number | null; unit_count: number | null }> },
+  input: { name: string; glass: string | null; ingredients: Array<{ library_ingredient_id: string; pour_ml: number | null; unit_count: number | null; recipe_unit: string | null; recipe_qty: number | null }> },
 ): Promise<{ serveId: string }> {
   const { db, tradeAccountId } = await requireDb()
   if (!input.name.trim()) throw new Error('Serve name is required')
@@ -424,6 +428,47 @@ export async function recordStockCountAction(libraryIngredientId: string, countQ
     VALUES (?1, ?2, datetime('now'), ?3, NULL)
   `).bind(tradeAccountId, libraryIngredientId, countQty).run()
   revalidatePath('/trade/pouriq/stock')
+}
+
+export async function saveServeUnitAction(libraryIngredientId: string, name: string, basePerUnit: number): Promise<void> {
+  const { db, tradeAccountId } = await requireDb()
+  const trimmed = name.trim()
+  if (!trimmed) throw new Error('Serve unit needs a name')
+  if (!Number.isFinite(basePerUnit) || basePerUnit <= 0) throw new Error('Conversion must be a positive number')
+  const owns = await db
+    .prepare(`SELECT 1 FROM pouriq_ingredients_library WHERE id = ?1 AND trade_account_id = ?2`)
+    .bind(libraryIngredientId, tradeAccountId)
+    .first()
+  if (!owns) throw new Error('Ingredient not found')
+  await db
+    .prepare(`
+      INSERT INTO pouriq_ingredient_serve_units (library_ingredient_id, name, base_per_unit)
+      VALUES (?1, ?2, ?3)
+      ON CONFLICT(library_ingredient_id, name) DO UPDATE SET base_per_unit = excluded.base_per_unit
+    `)
+    .bind(libraryIngredientId, trimmed, basePerUnit)
+    .run()
+  revalidatePath(`/trade/pouriq/library/${libraryIngredientId}/edit`)
+  revalidatePath('/trade/pouriq/library')
+}
+
+export async function deleteServeUnitAction(serveUnitId: string): Promise<void> {
+  const { db, tradeAccountId } = await requireDb()
+  // Ownership verified via join to the library ingredient.
+  const owns = await db
+    .prepare(`
+      SELECT 1 FROM pouriq_ingredient_serve_units su
+      JOIN pouriq_ingredients_library lib ON lib.id = su.library_ingredient_id
+      WHERE su.id = ?1 AND lib.trade_account_id = ?2
+    `)
+    .bind(serveUnitId, tradeAccountId)
+    .first()
+  if (!owns) throw new Error('Serve unit not found')
+  await db
+    .prepare(`DELETE FROM pouriq_ingredient_serve_units WHERE id = ?1`)
+    .bind(serveUnitId)
+    .run()
+  revalidatePath('/trade/pouriq/library')
 }
 
 export async function setVoiceProfileAction(input: VoiceProfileInput): Promise<void> {

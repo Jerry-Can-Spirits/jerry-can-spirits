@@ -5,7 +5,7 @@ const priced = { name: 'Sugar Syrup', ingredient_type: 'syrup' as const, base_un
 const row = (groupKey: string | null, resolved: boolean, state: Partial<BulkFillRow['state']> = {}): BulkFillRow => ({
   groupKey,
   resolved,
-  state: { pour_ml: 25, unit_count: null, ...state },
+  state: { pour_ml: 25, unit_count: null, recipe_unit: null, recipe_qty: null, ...state },
 })
 
 describe('planBulkFill', () => {

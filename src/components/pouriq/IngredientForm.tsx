@@ -1,14 +1,14 @@
 'use client'
 
-import { useMemo, useRef, useState } from 'react'
+import { useMemo, useRef, useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
-import type { IngredientLibraryRow, IngredientType } from '@/lib/pouriq/types'
-import { saveLibraryEntryAction, deleteLibraryEntryAction, type LibraryEntryInput } from '@/lib/pouriq/server-actions'
+import type { IngredientLibraryRow, IngredientType, ServeUnitRow } from '@/lib/pouriq/types'
+import { saveLibraryEntryAction, deleteLibraryEntryAction, saveServeUnitAction, deleteServeUnitAction, type LibraryEntryInput } from '@/lib/pouriq/server-actions'
 import { BarcodeScanner } from '@/components/pouriq/BarcodeScanner'
 import { RipplePreview } from '@/components/pouriq/RipplePreview'
 import { RippleConfirmModal } from '@/components/pouriq/RippleConfirmModal'
 import { costPerBaseUnitP, usableCostPerBaseUnitP } from '@/lib/pouriq/calculations'
-import { BOTTLE_SIZES_ML, WEIGHT_SIZES_G } from '@/lib/pouriq/measures'
+import { BOTTLE_SIZES_ML, WEIGHT_SIZES_G, STANDARD_SERVE_UNITS } from '@/lib/pouriq/measures'
 import {
   COST_UPDATE_TOAST_KEY,
   getNewlyBelowTarget,
@@ -59,6 +59,7 @@ interface Props {
   entry: IngredientLibraryRow | null
   usageCount?: number
   impactPayload?: CostImpactPayload
+  serveUnits?: ServeUnitRow[]
 }
 
 // Derive initial base_unit from a stored row.
@@ -67,7 +68,7 @@ function rowToBaseUnit(entry: IngredientLibraryRow | null): BaseUnit {
   return entry.base_unit
 }
 
-export function IngredientForm({ entry, usageCount = 0, impactPayload }: Props) {
+export function IngredientForm({ entry, usageCount = 0, impactPayload, serveUnits = [] }: Props) {
   const router = useRouter()
 
   // --- Core identity ---
@@ -111,6 +112,12 @@ export function IngredientForm({ entry, usageCount = 0, impactPayload }: Props) 
   const [modalOpen, setModalOpen] = useState(false)
   const [pendingToast, setPendingToast] = useState<CostUpdateToastPayload | null>(null)
   const pendingValuesRef = useRef<LibraryEntryInput | null>(null)
+
+  // --- Serve units ---
+  const [suName, setSuName] = useState('')
+  const [suQtyStr, setSuQtyStr] = useState('')
+  const [suError, setSuError] = useState<string | null>(null)
+  const [suPending, startSuTransition] = useTransition()
 
   // Parsed values for live readout
   const price_p_live = useMemo(() => {
@@ -207,6 +214,49 @@ export function IngredientForm({ entry, usageCount = 0, impactPayload }: Props) 
         setScanInfo("Name, type and size came from the Pour IQ shared catalogue — sanity-check before saving.")
       }
     } catch { /* network blip — barcode field already populated */ }
+  }
+
+  function computeBasePerUnit(): number | null {
+    const qty = parseFloat(suQtyStr)
+    if (!Number.isFinite(qty) || qty <= 0) return null
+    if (base_unit === 'each') {
+      // qty = items per whole item; base_per_unit = fraction of one item
+      return 1 / qty
+    }
+    // ml / g: 1 unit = qty base units
+    return qty
+  }
+
+  function handleAddServeUnit() {
+    if (!entry) return
+    setSuError(null)
+    const trimmedName = suName.trim()
+    if (!trimmedName) { setSuError('Unit name is required'); return }
+    const basePerUnit = computeBasePerUnit()
+    if (basePerUnit === null) { setSuError('Enter a valid number greater than 0'); return }
+    startSuTransition(async () => {
+      try {
+        await saveServeUnitAction(entry.id, trimmedName, basePerUnit)
+        setSuName('')
+        setSuQtyStr('')
+        router.refresh()
+      } catch (e) {
+        setSuError((e as Error).message || 'Could not save serve unit')
+      }
+    })
+  }
+
+  function handleDeleteServeUnit(serveUnitId: string, unitName: string) {
+    if (!confirm(`Remove "${unitName}"? This cannot be undone.`)) return
+    setSuError(null)
+    startSuTransition(async () => {
+      try {
+        await deleteServeUnitAction(serveUnitId)
+        router.refresh()
+      } catch (e) {
+        setSuError((e as Error).message || 'Could not delete serve unit')
+      }
+    })
   }
 
   function buildInput(): LibraryEntryInput | null {
@@ -556,6 +606,162 @@ export function IngredientForm({ entry, usageCount = 0, impactPayload }: Props) 
               </FieldHelper>
             </div>
           )}
+        </div>
+
+        {/* Serve units */}
+        <div className="border border-gold-500/20 rounded-lg overflow-hidden">
+          <div className="px-4 py-3 border-b border-gold-500/20">
+            <p className="text-sm font-medium text-parchment-200">Serve units</p>
+          </div>
+          <div className="px-4 py-4 space-y-4">
+            {/* Standard (always-available) units */}
+            <div>
+              <p className={helperClass}>
+                Always available:{' '}
+                {STANDARD_SERVE_UNITS[base_unit].map((u) => u.name).join(', ')}
+              </p>
+              <div className="flex flex-wrap gap-2 mt-2">
+                {STANDARD_SERVE_UNITS[base_unit].map((u) => (
+                  <span key={u.name} className="px-3 py-1.5 rounded-lg border border-gold-500/20 bg-jerry-green-700/20 text-xs text-parchment-400">
+                    {u.name}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            {entry === null ? (
+              <p className={helperClass}>Save this ingredient first, then add custom serve units.</p>
+            ) : (
+              <>
+                {/* Existing custom units */}
+                {serveUnits.length > 0 && (
+                  <ul className="space-y-2">
+                    {serveUnits.map((u) => {
+                      const convLabel =
+                        base_unit === 'each'
+                          ? `${(1 / u.base_per_unit).toFixed(4).replace(/\.?0+$/, '')} per item`
+                          : `1 ${u.name} = ${u.base_per_unit} ${base_unit}`
+                      return (
+                        <li key={u.id} className="flex items-center justify-between gap-3 text-sm">
+                          <span className="text-parchment-100 font-medium">{u.name}</span>
+                          <span className="text-parchment-400 text-xs tabular-nums">{convLabel}</span>
+                          <button
+                            type="button"
+                            disabled={suPending}
+                            onClick={() => handleDeleteServeUnit(u.id, u.name)}
+                            className="text-xs text-red-300 hover:text-red-200 underline disabled:opacity-50"
+                          >
+                            Remove
+                          </button>
+                        </li>
+                      )
+                    })}
+                  </ul>
+                )}
+
+                {/* Add new unit */}
+                <div className="pt-2 border-t border-gold-500/10">
+                  <p className="text-sm font-medium text-parchment-200 mb-3">Add a serve unit</p>
+                  {base_unit === 'each' && (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <div>
+                        <label htmlFor="su-name" className={labelClass}>Unit name</label>
+                        <input
+                          id="su-name"
+                          value={suName}
+                          onChange={(e) => setSuName(e.target.value)}
+                          className={inputClass}
+                          placeholder="e.g. wedge"
+                        />
+                        <FieldHelper>What you call one portion of this item.</FieldHelper>
+                      </div>
+                      <div>
+                        <label htmlFor="su-qty" className={labelClass}>How many per item</label>
+                        <input
+                          id="su-qty"
+                          type="number"
+                          step="any"
+                          min="0.0001"
+                          value={suQtyStr}
+                          onChange={(e) => setSuQtyStr(e.target.value)}
+                          className={inputClass}
+                          placeholder="e.g. 6"
+                        />
+                        <FieldHelper>How many of this unit you get from one whole item.</FieldHelper>
+                      </div>
+                    </div>
+                  )}
+                  {base_unit === 'ml' && (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <div>
+                        <label htmlFor="su-name" className={labelClass}>Unit name</label>
+                        <input
+                          id="su-name"
+                          value={suName}
+                          onChange={(e) => setSuName(e.target.value)}
+                          className={inputClass}
+                          placeholder="e.g. shot"
+                        />
+                        <FieldHelper>What you call this serve unit.</FieldHelper>
+                      </div>
+                      <div>
+                        <label htmlFor="su-qty" className={labelClass}>ml per unit</label>
+                        <input
+                          id="su-qty"
+                          type="number"
+                          step="any"
+                          min="0.0001"
+                          value={suQtyStr}
+                          onChange={(e) => setSuQtyStr(e.target.value)}
+                          className={inputClass}
+                          placeholder="e.g. 25"
+                        />
+                        <FieldHelper>The volume of one unit in ml.</FieldHelper>
+                      </div>
+                    </div>
+                  )}
+                  {base_unit === 'g' && (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <div>
+                        <label htmlFor="su-name" className={labelClass}>Unit name</label>
+                        <input
+                          id="su-name"
+                          value={suName}
+                          onChange={(e) => setSuName(e.target.value)}
+                          className={inputClass}
+                          placeholder="e.g. bean"
+                        />
+                        <FieldHelper>What you call this serve unit.</FieldHelper>
+                      </div>
+                      <div>
+                        <label htmlFor="su-qty" className={labelClass}>Grams per unit</label>
+                        <input
+                          id="su-qty"
+                          type="number"
+                          step="any"
+                          min="0.0001"
+                          value={suQtyStr}
+                          onChange={(e) => setSuQtyStr(e.target.value)}
+                          className={inputClass}
+                          placeholder="e.g. 0.2"
+                        />
+                        <FieldHelper>The weight of one unit in grams.</FieldHelper>
+                      </div>
+                    </div>
+                  )}
+                  {suError && <p role="alert" className="text-sm text-red-300 mt-2">{suError}</p>}
+                  <button
+                    type="button"
+                    disabled={suPending}
+                    onClick={handleAddServeUnit}
+                    className="mt-3 px-4 py-2 bg-gold-500/15 border border-gold-400/60 text-gold-100 hover:bg-gold-500/25 hover:border-gold-400 rounded-lg transition-colors text-sm font-semibold disabled:opacity-50"
+                  >
+                    {suPending ? 'Saving…' : 'Add unit'}
+                  </button>
+                </div>
+              </>
+            )}
+          </div>
         </div>
 
         {/* Barcode */}

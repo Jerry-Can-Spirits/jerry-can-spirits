@@ -169,6 +169,8 @@ export async function listCocktailsForMenu(
         i.library_ingredient_id,
         i.pour_ml,
         i.unit_count,
+        i.recipe_unit,
+        i.recipe_qty,
         l.id AS l_id,
         l.trade_account_id AS l_trade_account_id,
         l.name AS l_name,
@@ -195,6 +197,8 @@ export async function listCocktailsForMenu(
       library_ingredient_id: string
       pour_ml: number | null
       unit_count: number | null
+      recipe_unit: string | null
+      recipe_qty: number | null
       l_id: string
       l_trade_account_id: string
       l_name: string
@@ -220,6 +224,8 @@ export async function listCocktailsForMenu(
       library_ingredient_id: row.library_ingredient_id,
       pour_ml: row.pour_ml,
       unit_count: row.unit_count,
+      recipe_unit: row.recipe_unit,
+      recipe_qty: row.recipe_qty,
       library: {
         id: row.l_id,
         trade_account_id: row.l_trade_account_id,
@@ -265,7 +271,7 @@ export async function getCocktail(
   const ingredientsResult = await db
     .prepare(`
       SELECT
-        i.id AS i_id, i.cocktail_id, i.library_ingredient_id, i.pour_ml, i.unit_count,
+        i.id AS i_id, i.cocktail_id, i.library_ingredient_id, i.pour_ml, i.unit_count, i.recipe_unit, i.recipe_qty,
         l.id AS l_id, l.trade_account_id AS l_trade_account_id, l.name AS l_name,
         l.ingredient_type AS l_ingredient_type,
         l.base_unit AS l_base_unit, l.pack_size AS l_pack_size, l.price_p AS l_price_p,
@@ -285,6 +291,8 @@ export async function getCocktail(
       library_ingredient_id: string
       pour_ml: number | null
       unit_count: number | null
+      recipe_unit: string | null
+      recipe_qty: number | null
       l_id: string
       l_trade_account_id: string
       l_name: string
@@ -308,6 +316,8 @@ export async function getCocktail(
     library_ingredient_id: row.library_ingredient_id,
     pour_ml: row.pour_ml,
     unit_count: row.unit_count,
+    recipe_unit: row.recipe_unit,
+    recipe_qty: row.recipe_qty,
     library: {
       id: row.l_id,
       trade_account_id: row.l_trade_account_id,
@@ -375,6 +385,8 @@ export async function replaceIngredients(
     library_ingredient_id: string
     pour_ml: number | null
     unit_count: number | null
+    recipe_unit: string | null
+    recipe_qty: number | null
   }>,
 ): Promise<void> {
   const statements: D1PreparedStatement[] = [
@@ -385,10 +397,10 @@ export async function replaceIngredients(
       db
         .prepare(`
           INSERT INTO pouriq_ingredients
-            (cocktail_id, library_ingredient_id, pour_ml, unit_count)
-          VALUES (?1, ?2, ?3, ?4)
+            (cocktail_id, library_ingredient_id, pour_ml, unit_count, recipe_unit, recipe_qty)
+          VALUES (?1, ?2, ?3, ?4, ?5, ?6)
         `)
-        .bind(cocktailId, ing.library_ingredient_id, ing.pour_ml, ing.unit_count),
+        .bind(cocktailId, ing.library_ingredient_id, ing.pour_ml, ing.unit_count, ing.recipe_unit, ing.recipe_qty),
     )
   }
   await db.batch(statements)

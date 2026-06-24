@@ -17,7 +17,7 @@ export default async function NewLibraryEntryPage() {
         <Link href="/trade/pouriq/library" className="text-sm text-parchment-400 hover:text-parchment-200">← Library</Link>
         <h1 className="text-3xl font-serif font-bold text-white mt-3 mb-8">Add an ingredient</h1>
         <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
-          <IngredientForm entry={null} />
+          <IngredientForm entry={null} serveUnits={[]} />
         </div>
       </div>
     </main>

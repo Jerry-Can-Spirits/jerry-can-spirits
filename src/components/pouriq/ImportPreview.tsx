@@ -2,10 +2,11 @@
 
 import { useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import type { IngredientLibraryRow, IngredientType } from '@/lib/pouriq/types'
+import type { IngredientLibraryRow, IngredientType, ServeUnitRow } from '@/lib/pouriq/types'
 import { IngredientMatchRow, type MatchRowState } from '@/components/pouriq/IngredientMatchRow'
 import { normalise } from '@/lib/pouriq/match'
 import { planBulkFill, type BulkFillRow } from '@/lib/pouriq/import-bulk-fill'
+import type { ParsedMeasurement, RecognisedServeUnit } from '@/lib/pouriq/measurement-parse'
 
 const inputClass = 'w-full px-3 py-2 bg-jerry-green-700/50 border border-gold-500/30 rounded-lg text-parchment-50 text-sm focus:border-gold-400 focus:outline-hidden'
 
@@ -16,11 +17,7 @@ export interface PreviewDrinkInput {
     extracted_name: string
     raw_measurement: string
     inferred_type: IngredientType
-    parsed:
-      | { pour_ml: number }
-      | { unit_count: number }
-      | { weight_g: number }
-      | { raw: string }
+    parsed: ParsedMeasurement
     match:
       | { kind: 'auto'; library_id: string; library_name: string }
       | { kind: 'suggestions'; entries: Array<{ id: string; name: string }> }
@@ -58,14 +55,27 @@ interface DrinkState {
   ingredients: MatchRowState[]
 }
 
+function serveUnitFromParsed(parsed: ParsedMeasurement): { recipe_unit: RecognisedServeUnit | null; recipe_qty: number | null } {
+  if (!('pour_ml' in parsed) || parsed.pour_ml === undefined) return { recipe_unit: null, recipe_qty: null }
+  return { recipe_unit: parsed.serve_unit ?? null, recipe_qty: parsed.serve_qty ?? null }
+}
+
 function initialIngredientState(input: PreviewDrinkInput['ingredients'][0]): MatchRowState {
-  const pour_ml = 'pour_ml' in input.parsed ? input.parsed.pour_ml : null
-  const unit_count = 'unit_count' in input.parsed ? input.parsed.unit_count : null
+  const pour_ml: number | null = 'pour_ml' in input.parsed ? (input.parsed.pour_ml ?? null) : null
+  const unit_count: number | null = 'unit_count' in input.parsed ? (input.parsed.unit_count ?? null) : null
+
+  // If the measurement named a recognised serve unit (dash/barspoon/tsp),
+  // default recipe_unit/recipe_qty from the parse result so the picker starts
+  // on the right unit without the user needing to adjust it.
+  const { recipe_unit, recipe_qty } = serveUnitFromParsed(input.parsed)
+
   if (input.match.kind === 'auto') {
     return {
       existing_library_id: input.match.library_id,
       pour_ml,
       unit_count,
+      recipe_unit,
+      recipe_qty,
     }
   }
   if (input.match.kind === 'catalogue') {
@@ -84,9 +94,11 @@ function initialIngredientState(input: PreviewDrinkInput['ingredients'][0]): Mat
       },
       pour_ml,
       unit_count,
+      recipe_unit,
+      recipe_qty,
     }
   }
-  return { pour_ml, unit_count }
+  return { pour_ml, unit_count, recipe_unit, recipe_qty }
 }
 
 function initialDrinkState(d: PreviewDrinkInput): DrinkState {
@@ -102,9 +114,10 @@ interface Props {
   menuId: string
   drinks: PreviewDrinkInput[]
   libraryEntries: IngredientLibraryRow[]
+  serveUnits: Record<string, ServeUnitRow[]>
 }
 
-export function ImportPreview({ menuId, drinks: extracted, libraryEntries }: Props) {
+export function ImportPreview({ menuId, drinks: extracted, libraryEntries, serveUnits }: Props) {
   const router = useRouter()
   const [drinks, setDrinks] = useState<DrinkState[]>(() => extracted.map(initialDrinkState))
   const [expanded, setExpanded] = useState<Set<number>>(() => new Set([0, 1, 2]))
@@ -242,6 +255,8 @@ export function ImportPreview({ menuId, drinks: extracted, libraryEntries }: Pro
             new_library: ing.new_library,
             pour_ml: ing.pour_ml,
             unit_count: ing.unit_count,
+            recipe_unit: ing.recipe_unit,
+            recipe_qty: ing.recipe_qty,
           })),
         })),
     }
@@ -322,6 +337,7 @@ export function ImportPreview({ menuId, drinks: extracted, libraryEntries }: Pro
                       matchKind={ing.match.kind}
                       suggestionEntries={ing.match.kind === 'suggestions' ? ing.match.entries : []}
                       libraryEntries={libraryEntries}
+                      serveUnits={serveUnits}
                       state={d.ingredients[ingIdx]}
                       onChange={(state) => updateIngredient(idx, ingIdx, state)}
                       onResolvedCommit={() => propagateFrom(idx, ingIdx)}

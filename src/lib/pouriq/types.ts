@@ -95,12 +95,22 @@ export interface IngredientLibraryRow {
   updated_at: string
 }
 
+export interface ServeUnitRow {
+  id: string
+  library_ingredient_id: string
+  name: string
+  base_per_unit: number
+  created_at: string
+}
+
 export interface IngredientRow {
   id: string
   cocktail_id: string
   library_ingredient_id: string
   pour_ml: number | null
   unit_count: number | null
+  recipe_unit: string | null
+  recipe_qty: number | null
 }
 
 // IngredientRow with the library entry joined in — what calculations and

@@ -3,21 +3,19 @@
 import { useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 import { PRIMARY_BUTTON, SECONDARY_BUTTON_SM, DESTRUCTIVE_BUTTON } from '@/lib/pouriq/button-styles'
+import { formatServeMeasure } from '@/lib/pouriq/measures'
 import { ServeForm, type ServeFormIngredient } from '@/components/pouriq/ServeForm'
 import { saveServeAction, deleteServeAction } from '@/lib/pouriq/server-actions'
-import type { CocktailWithIngredients, IngredientLibraryRow, IngredientWithLibrary } from '@/lib/pouriq/types'
+import type { CocktailWithIngredients, IngredientLibraryRow, IngredientWithLibrary, ServeUnitRow } from '@/lib/pouriq/types'
 
 interface Props {
   serves: CocktailWithIngredients[]
   libraryEntries: IngredientLibraryRow[]
+  serveUnits: Record<string, ServeUnitRow[]>
 }
 
 function formatPour(ing: IngredientWithLibrary): string {
-  if (ing.unit_count !== null) {
-    return `${ing.unit_count} ${ing.unit_count === 1 ? 'unit' : 'units'}`
-  }
-  if (ing.pour_ml !== null) return `${ing.pour_ml} ml`
-  return ''
+  return formatServeMeasure(ing.recipe_unit, ing.recipe_qty, ing.pour_ml, ing.unit_count)
 }
 
 function toFormIngredients(serve: CocktailWithIngredients): ServeFormIngredient[] {
@@ -25,10 +23,12 @@ function toFormIngredients(serve: CocktailWithIngredients): ServeFormIngredient[
     library_ingredient_id: ing.library_ingredient_id,
     pour_ml: ing.pour_ml,
     unit_count: ing.unit_count,
+    recipe_unit: ing.recipe_unit,
+    recipe_qty: ing.recipe_qty,
   }))
 }
 
-export function ServeManager({ serves, libraryEntries }: Props) {
+export function ServeManager({ serves, libraryEntries, serveUnits }: Props) {
   const router = useRouter()
   const [creating, setCreating] = useState(false)
   const [editingId, setEditingId] = useState<string | null>(null)
@@ -76,6 +76,7 @@ export function ServeManager({ serves, libraryEntries }: Props) {
         <ServeForm
           defaultName=""
           libraryEntries={libraryEntries}
+          serveUnits={serveUnits}
           pending={pending}
           submitLabel="Create serve"
           onError={setError}
@@ -128,6 +129,7 @@ export function ServeManager({ serves, libraryEntries }: Props) {
                 defaultGlass={serve.glass}
                 defaultIngredients={toFormIngredients(serve)}
                 libraryEntries={libraryEntries}
+                serveUnits={serveUnits}
                 pending={pending}
                 submitLabel="Save serve"
                 onError={setError}

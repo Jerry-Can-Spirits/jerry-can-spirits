@@ -15,7 +15,7 @@ function ingredient(opts: { price_p?: number }): IngredientWithLibrary {
     yield_pct: 100,
     barcode: null, notes: null, created_at: '', updated_at: '',
   }
-  return { id: 'ing', cocktail_id: 'c', library_ingredient_id: 'lib', pour_ml: null, unit_count: 1, library }
+  return { id: 'ing', cocktail_id: 'c', library_ingredient_id: 'lib', pour_ml: null, unit_count: 1, recipe_unit: null, recipe_qty: null, library }
 }
 
 function cocktail(id: string, salePriceP: number, ings: IngredientWithLibrary[]): CocktailWithIngredients {

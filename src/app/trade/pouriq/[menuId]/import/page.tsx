@@ -6,7 +6,7 @@ import { useSearchParams } from 'next/navigation'
 import { ImportSourceTabs } from '@/components/pouriq/ImportSourceTabs'
 import { ImportPreview } from '@/components/pouriq/ImportPreview'
 import type { PreviewPayload } from '@/app/api/pouriq/import/extract/route'
-import type { IngredientLibraryRow } from '@/lib/pouriq/types'
+import type { IngredientLibraryRow, ServeUnitRow } from '@/lib/pouriq/types'
 
 interface Props {
   params: Promise<{ menuId: string }>
@@ -25,17 +25,27 @@ export default function ImportPage({ params }: Props) {
   const [menuId, setMenuId] = useState<string | null>(null)
   const [preview, setPreview] = useState<PreviewPayload | null>(null)
   const [library, setLibrary] = useState<IngredientLibraryRow[] | null>(null)
+  const [serveUnits, setServeUnits] = useState<Record<string, ServeUnitRow[]> | null>(null)
   const [error, setError] = useState<string | null>(null)
 
-  useEffect(() => { params.then(({ menuId }) => setMenuId(menuId)) }, [params])
+  useEffect(() => { params.then(({ menuId: id }) => setMenuId(id)) }, [params])
 
-  // Fetch library once when entering preview step (so user sees latest data).
+  // Fetch library and serve units once when entering preview step.
   useEffect(() => {
     if (!preview || !menuId) return
     let cancelled = false
-    fetch(`/api/pouriq/library?menuId=${encodeURIComponent(menuId)}`)
-      .then((r) => r.ok ? r.json() as Promise<{ entries: IngredientLibraryRow[] }> : Promise.reject(new Error('library fetch failed')))
-      .then((data) => { if (!cancelled) setLibrary(data.entries) })
+    Promise.all([
+      fetch(`/api/pouriq/library?menuId=${encodeURIComponent(menuId)}`)
+        .then((r) => r.ok ? r.json() as Promise<{ entries: IngredientLibraryRow[] }> : Promise.reject(new Error('library fetch failed'))),
+      fetch('/api/pouriq/serve-units')
+        .then((r) => r.ok ? r.json() as Promise<{ serveUnits: Record<string, ServeUnitRow[]> }> : Promise.reject(new Error('serve units fetch failed'))),
+    ])
+      .then(([libData, suData]) => {
+        if (!cancelled) {
+          setLibrary(libData.entries)
+          setServeUnits(suData.serveUnits)
+        }
+      })
       .catch(() => { if (!cancelled) setError('Could not load your library — please reload the page') })
     return () => { cancelled = true }
   }, [preview, menuId])
@@ -54,8 +64,8 @@ export default function ImportPage({ params }: Props) {
         <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
           {!preview ? (
             <ImportSourceTabs menuId={menuId} initialSource={initialSource} onPreview={setPreview} />
-          ) : library ? (
-            <ImportPreview menuId={menuId} drinks={preview.drinks} libraryEntries={library} />
+          ) : library && serveUnits ? (
+            <ImportPreview menuId={menuId} drinks={preview.drinks} libraryEntries={library} serveUnits={serveUnits} />
           ) : (
             <p className="text-parchment-300 text-sm">Loading your library…</p>
           )}
@@ -63,7 +73,7 @@ export default function ImportPage({ params }: Props) {
         </div>
 
         {preview && (
-          <button type="button" onClick={() => { setPreview(null); setLibrary(null) }} className="mt-4 text-sm text-parchment-400 hover:text-parchment-200 underline">
+          <button type="button" onClick={() => { setPreview(null); setLibrary(null); setServeUnits(null) }} className="mt-4 text-sm text-parchment-400 hover:text-parchment-200 underline">
             Start over (change source)
           </button>
         )}
