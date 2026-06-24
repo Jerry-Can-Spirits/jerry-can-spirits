@@ -86,6 +86,7 @@ export interface IngredientLibraryRow {
   bottle_cost_p: number | null
   unit_cost_p: number | null
   purchase_qty: number
+  yield_pct: number
   barcode: string | null
   notes: string | null
   created_at: string
@@ -216,5 +217,16 @@ export interface StockCountEventRow {
   counted_at: string
   count_qty: number
   reason: string | null
+  created_at: string
+}
+
+export interface StockReceiptRow {
+  id: string
+  trade_account_id: string
+  library_ingredient_id: string
+  received_at: string
+  qty: number
+  source: 'invoice' | 'manual'
+  invoice_line_id: string | null
   created_at: string
 }

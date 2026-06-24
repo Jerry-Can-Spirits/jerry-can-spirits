@@ -404,6 +404,30 @@ export async function deleteServeAction(serveId: string): Promise<void> {
   revalidatePath('/trade/pouriq/serves')
 }
 
+export async function receiveStockAction(libraryIngredientId: string, qtyBottles: number, receivedAtISO?: string): Promise<void> {
+  const { db, tradeAccountId } = await requireDb()
+  if (!Number.isFinite(qtyBottles) || qtyBottles <= 0) throw new Error('Enter a positive quantity')
+  const owns = await db.prepare(`SELECT 1 FROM pouriq_ingredients_library WHERE id = ?1 AND trade_account_id = ?2`).bind(libraryIngredientId, tradeAccountId).first()
+  if (!owns) throw new Error('Ingredient not found')
+  await db.prepare(`
+    INSERT INTO pouriq_stock_receipts (trade_account_id, library_ingredient_id, received_at, qty, source, invoice_line_id)
+    VALUES (?1, ?2, ?3, ?4, 'manual', NULL)
+  `).bind(tradeAccountId, libraryIngredientId, receivedAtISO ?? new Date().toISOString(), qtyBottles).run()
+  revalidatePath('/trade/pouriq/stock')
+}
+
+export async function recordStockCountAction(libraryIngredientId: string, countQty: number): Promise<void> {
+  const { db, tradeAccountId } = await requireDb()
+  if (!Number.isFinite(countQty) || countQty < 0) throw new Error('Enter a non-negative count')
+  const owns = await db.prepare(`SELECT 1 FROM pouriq_ingredients_library WHERE id = ?1 AND trade_account_id = ?2`).bind(libraryIngredientId, tradeAccountId).first()
+  if (!owns) throw new Error('Ingredient not found')
+  await db.prepare(`
+    INSERT INTO pouriq_stock_count_events (trade_account_id, library_ingredient_id, counted_at, count_qty, reason)
+    VALUES (?1, ?2, datetime('now'), ?3, NULL)
+  `).bind(tradeAccountId, libraryIngredientId, countQty).run()
+  revalidatePath('/trade/pouriq/stock')
+}
+
 export async function setVoiceProfileAction(input: VoiceProfileInput): Promise<void> {
   const { db, tradeAccountId } = await requireDb()
   // Light validation. The form already constrains the enum dropdowns, but we

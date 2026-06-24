@@ -2,7 +2,7 @@ import 'server-only'
 import { costPerMlP } from './calculations'
 import {
   pairLatestCounts, sumBucketsInWindow, persistentLossFlag,
-  calcVariance, calcVarianceCostP, classifyVariance,
+  calcVariance, calcVarianceCostP, classifyVariance, applyYield,
   type VarianceSeverity, type CountEvent,
 } from './variance'
 
@@ -42,6 +42,7 @@ interface RecipeLineRow {
   bottle_size_ml: number
   bottle_cost_p: number
   purchase_qty: number
+  yield_pct: number
 }
 interface VolumeRow { cocktail_id: string; period_start: string; period_end: string; units_sold: number }
 interface EventRow { library_ingredient_id: string; counted_at: string; count_qty: number; reason: string | null }
@@ -50,7 +51,7 @@ async function readTenantRecipes(db: D1Database, tradeAccountId: string): Promis
   const res = await db.prepare(`
     SELECT c.id AS cocktail_id, i.library_ingredient_id AS library_ingredient_id, i.pour_ml AS pour_ml,
            lib.name AS name, lib.bottle_size_ml AS bottle_size_ml, lib.bottle_cost_p AS bottle_cost_p,
-           lib.purchase_qty AS purchase_qty
+           lib.purchase_qty AS purchase_qty, lib.yield_pct AS yield_pct
     FROM pouriq_cocktails c
     JOIN pouriq_menus m ON m.id = c.menu_id
     JOIN pouriq_ingredients i ON i.cocktail_id = c.id
@@ -110,13 +111,13 @@ export async function loadRollingVariance(db: D1Database, tradeAccountId: string
     arr.push(v); volumesByCocktail.set(v.cocktail_id, arr)
   }
 
-  interface Meta { name: string; bottle_size_ml: number; bottle_cost_p: number; purchase_qty: number }
+  interface Meta { name: string; bottle_size_ml: number; bottle_cost_p: number; purchase_qty: number; yield_pct: number }
   const metaByIngredient = new Map<string, Meta>()
   const linesByIngredient = new Map<string, Array<{ cocktail_id: string; pour_ml: number }>>()
   for (const r of recipes) {
     if (!metaByIngredient.has(r.library_ingredient_id)) {
       metaByIngredient.set(r.library_ingredient_id, {
-        name: r.name, bottle_size_ml: r.bottle_size_ml, bottle_cost_p: r.bottle_cost_p, purchase_qty: r.purchase_qty,
+        name: r.name, bottle_size_ml: r.bottle_size_ml, bottle_cost_p: r.bottle_cost_p, purchase_qty: r.purchase_qty, yield_pct: r.yield_pct,
       })
     }
     const arr = linesByIngredient.get(r.library_ingredient_id) ?? []
@@ -147,10 +148,12 @@ export async function loadRollingVariance(db: D1Database, tradeAccountId: string
     if (pair) {
       const ws = pair.previous.counted_at
       const we = pair.latest.counted_at
+      let rawTheoretical = 0
       for (const line of lines) {
         const buckets = volumesByCocktail.get(line.cocktail_id) ?? []
-        theoretical += sumBucketsInWindow(buckets, ws.slice(0, 10), we.slice(0, 10)) * line.pour_ml
+        rawTheoretical += sumBucketsInWindow(buckets, ws.slice(0, 10), we.slice(0, 10)) * line.pour_ml
       }
+      theoretical = applyYield(rawTheoretical, meta.yield_pct)
       actual = (pair.previous.count_qty - pair.latest.count_qty) * meta.bottle_size_ml
       unmatched = await readUnmatchedInWindow(db, tradeAccountId, ws, we)
     }
@@ -164,11 +167,12 @@ export async function loadRollingVariance(db: D1Database, tradeAccountId: string
     const trend: RollingTrendPoint[] = []
     for (let k = 1; k < sortedEvents.length; k++) {
       const prev = sortedEvents[k - 1], cur = sortedEvents[k]
-      let theo = 0
+      let rawTheo = 0
       for (const line of lines) {
         const buckets = volumesByCocktail.get(line.cocktail_id) ?? []
-        theo += sumBucketsInWindow(buckets, prev.counted_at.slice(0, 10), cur.counted_at.slice(0, 10)) * line.pour_ml
+        rawTheo += sumBucketsInWindow(buckets, prev.counted_at.slice(0, 10), cur.counted_at.slice(0, 10)) * line.pour_ml
       }
+      const theo = applyYield(rawTheo, meta.yield_pct)
       const act = (prev.count_qty - cur.count_qty) * meta.bottle_size_ml
       const v = calcVariance(act, theo)
       trend.push({ counted_at: cur.counted_at, variance_cost_p: calcVarianceCostP(v.variance_ml, meta.bottle_size_ml, meta.bottle_cost_p, meta.purchase_qty), reason: cur.reason })

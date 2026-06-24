@@ -22,6 +22,7 @@ function ingredient(opts: IngOpts): IngredientWithLibrary {
     bottle_cost_p: opts.bottle_cost_p ?? null,
     unit_cost_p: opts.unit_cost_p ?? null,
     purchase_qty: 1,
+    yield_pct: 100,
     barcode: null, notes: null, created_at: '', updated_at: '',
   }
   return {

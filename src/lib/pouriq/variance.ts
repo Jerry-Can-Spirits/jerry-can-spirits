@@ -152,6 +152,13 @@ export function sumBucketsInWindow(
   )
 }
 
+// Expected real-world usage from raw poured ml, accounting for line/keg wastage.
+// yield_pct 100 = no loss (no-op). Lower yield means more is drawn down per ml sold.
+export function applyYield(rawMl: number, yieldPct: number): number {
+  const y = yieldPct > 0 ? yieldPct : 100
+  return rawMl / (y / 100)
+}
+
 // Persistent shrinkage: the most recent 3 variance figures are all negative.
 export function persistentLossFlag(recentVariancesNewestLast: Array<number | null>): boolean {
   const defined = recentVariancesNewestLast.filter((v): v is number => v !== null)

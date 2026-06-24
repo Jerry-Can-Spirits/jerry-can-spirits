@@ -17,6 +17,7 @@ import {
 } from '@/lib/pouriq/invoices'
 import { type CostPricingMode } from '@/lib/pouriq/cost-changes'
 import { getLibraryEntry, insertLibraryEntry } from '@/lib/pouriq/ingredient-library'
+import { receiptBottlesFromInvoiceLine } from '@/lib/pouriq/stock'
 import type { IngredientType } from '@/lib/pouriq/types'
 
 export const runtime = 'nodejs'
@@ -153,6 +154,7 @@ export async function POST(request: Request) {
   let netTotalP: number | null = null
   let netSawAny = false
   const newLibraryIdByName = new Map<string, string>()
+  const appliedReceipts: Array<{ invoiceLineId: string; libraryId: string; extractedQuantity: number | null }> = []
 
   try {
     for (const line of body.lines) {
@@ -214,6 +216,9 @@ export async function POST(request: Request) {
       const newCostP = line.new_cost_p!
       const invoiceLineId = genId()
       const costChangeId = genId()
+
+      // Track this applied line so we can book a stock receipt after the loop.
+      appliedReceipts.push({ invoiceLineId, libraryId, extractedQuantity: line.extracted_quantity })
 
       // Build the atomic batch for this line: optional library UPDATE,
       // invoice_line INSERT, cost_change INSERT. The cost_change references
@@ -287,7 +292,46 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Could not save invoice lines. Please try again.' }, { status: 500 })
   }
 
-  // 3. Move the R2 PDF from _pending/ to its permanent tenant-namespaced key.
+  // 3. Book stock receipts for each applied line that has a quantity.
+  //    Failures here must not roll back or 500 the commit — cost application
+  //    already succeeded. ON CONFLICT(invoice_line_id) DO NOTHING makes
+  //    re-committing the same invoice idempotent.
+  try {
+    const purchaseQtyRows = await db
+      .prepare(`SELECT id, purchase_qty FROM pouriq_ingredients_library WHERE trade_account_id = ?1`)
+      .bind(access.tradeAccountId)
+      .all<{ id: string; purchase_qty: number }>()
+    const purchaseQtyById = new Map<string, number>(
+      purchaseQtyRows.results.map((r) => [r.id, r.purchase_qty]),
+    )
+
+    const invoiceDateISO = body.invoice_date?.trim() || new Date().toISOString()
+
+    for (const receipt of appliedReceipts) {
+      const bottles = receiptBottlesFromInvoiceLine(
+        receipt.extractedQuantity,
+        purchaseQtyById.get(receipt.libraryId) ?? 1,
+      )
+      if (bottles === null || bottles <= 0) continue
+      await db
+        .prepare(`
+          INSERT INTO pouriq_stock_receipts (trade_account_id, library_ingredient_id, received_at, qty, source, invoice_line_id)
+          VALUES (?1, ?2, ?3, ?4, 'invoice', ?5)
+          ON CONFLICT(invoice_line_id) DO NOTHING
+        `)
+        .bind(access.tradeAccountId, receipt.libraryId, invoiceDateISO, bottles, receipt.invoiceLineId)
+        .run()
+    }
+  } catch (err) {
+    Sentry.captureException(err, {
+      tags: { route: 'pouriq-invoice-commit', feature: 'pouriq-invoices/receipt-booking' },
+      extra: { invoiceId },
+    })
+    // Intentionally swallowed — cost data is committed; receipt booking is
+    // best-effort and will not 500 or roll back the response.
+  }
+
+  // 4. Move the R2 PDF from _pending/ to its permanent tenant-namespaced key.
   let r2Key: string | null = null
   try {
     const pendingKey = `pouriq-invoices/_pending/${body.ticket}.pdf`
@@ -307,7 +351,7 @@ export async function POST(request: Request) {
     // Don't fail the commit. r2_key stays null; Download PDF will be hidden.
   }
 
-  // 4. Finalise totals on the invoice row.
+  // 5. Finalise totals on the invoice row.
   try {
     await finaliseInvoiceTotals(db, invoiceId, appliedCount, netSawAny ? netTotalP : null, r2Key)
   } catch (err) {
