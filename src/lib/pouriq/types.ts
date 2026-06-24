@@ -72,6 +72,7 @@ export interface CocktailRow {
   notes: string | null
   description: string | null
   description_updated_at: string | null
+  glass: string | null
   // 1 when this row is a "serve" (lives on the hidden serves menu).
   is_serve: number
 }

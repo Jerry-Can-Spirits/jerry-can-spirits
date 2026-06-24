@@ -166,11 +166,11 @@ export function UnmatchedReview({ items, cocktails, serves, libraryEntries }: Pr
               pending={pending}
               submitLabel="Create serve and map"
               onError={setError}
-              onSubmit={(name, ingredients) => {
+              onSubmit={(name, glass, ingredients) => {
                 setError(null)
                 startTransition(async () => {
                   try {
-                    const { serveId } = await saveServeAction(null, { name, ingredients })
+                    const { serveId } = await saveServeAction(null, { name, glass, ingredients })
                     if (await postMap({ normalisedName: row.normalised_name, target: 'serve', serveId })) {
                       setServeList((list) => [...list, { id: serveId, name }])
                       setCreatingFor(null)

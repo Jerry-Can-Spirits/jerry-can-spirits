@@ -88,6 +88,7 @@ export async function cloneMenuAction(menuId: string, newName?: string): Promise
       position: c.position ?? idx,
       field_manual_slug: c.field_manual_slug,
       notes: c.notes,
+      glass: c.glass,
     })
     if (c.ingredients.length > 0) {
       await replaceIngredients(db, newCocktailId, c.ingredients.map((i) => ({
@@ -139,6 +140,7 @@ interface CocktailInput {
   promotional_valid_from: string | null
   promotional_valid_until: string | null
   notes: string | null
+  glass: string | null
   ingredients: Array<{
     library_ingredient_id: string
     pour_ml: number | null
@@ -171,16 +173,17 @@ export async function saveCocktailAction(
       position: 0,
       field_manual_slug: slug,
       notes: input.notes,
+      glass: input.glass,
     })
   } else {
     id = cocktailId
     await db
-      .prepare(`UPDATE pouriq_cocktails SET name = ?1, sale_price_p = ?2, promotional_price_p = ?3, promotional_label = ?4, promotional_days = ?5, promotional_valid_from = ?6, promotional_valid_until = ?7, field_manual_slug = ?8, notes = ?9 WHERE id = ?10 AND menu_id = ?11`)
+      .prepare(`UPDATE pouriq_cocktails SET name = ?1, sale_price_p = ?2, promotional_price_p = ?3, promotional_label = ?4, promotional_days = ?5, promotional_valid_from = ?6, promotional_valid_until = ?7, field_manual_slug = ?8, notes = ?9, glass = ?10 WHERE id = ?11 AND menu_id = ?12`)
       .bind(
         input.name, input.sale_price_p,
         input.promotional_price_p, input.promotional_label,
         input.promotional_days, input.promotional_valid_from, input.promotional_valid_until,
-        slug, input.notes, id, menuId,
+        slug, input.notes, input.glass, id, menuId,
       )
       .run()
   }
@@ -341,7 +344,7 @@ export async function deleteLibraryEntryAction(entryId: string): Promise<void> {
 
 export async function saveServeAction(
   serveId: string | null,
-  input: { name: string; ingredients: Array<{ library_ingredient_id: string; pour_ml: number | null; unit_count: number | null }> },
+  input: { name: string; glass: string | null; ingredients: Array<{ library_ingredient_id: string; pour_ml: number | null; unit_count: number | null }> },
 ): Promise<{ serveId: string }> {
   const { db, tradeAccountId } = await requireDb()
   if (!input.name.trim()) throw new Error('Serve name is required')
@@ -350,10 +353,10 @@ export async function saveServeAction(
   if (id === null) {
     const row = await db
       .prepare(`
-        INSERT INTO pouriq_cocktails (menu_id, name, sale_price_p, position, field_manual_slug, notes, is_serve)
-        VALUES (?1, ?2, 0, 0, NULL, NULL, 1) RETURNING id
+        INSERT INTO pouriq_cocktails (menu_id, name, sale_price_p, position, field_manual_slug, notes, glass, is_serve)
+        VALUES (?1, ?2, 0, 0, NULL, NULL, ?3, 1) RETURNING id
       `)
-      .bind(menuId, input.name.trim())
+      .bind(menuId, input.name.trim(), input.glass)
       .first<{ id: string }>()
     if (!row) throw new Error('Serve insert returned no id')
     id = row.id
@@ -364,8 +367,8 @@ export async function saveServeAction(
       .first()
     if (!owns) throw new Error('Serve not found')
     await db
-      .prepare(`UPDATE pouriq_cocktails SET name = ?1 WHERE id = ?2`)
-      .bind(input.name.trim(), id)
+      .prepare(`UPDATE pouriq_cocktails SET name = ?1, glass = ?2 WHERE id = ?3`)
+      .bind(input.name.trim(), input.glass, id)
       .run()
   }
   await replaceIngredients(db, id, input.ingredients)

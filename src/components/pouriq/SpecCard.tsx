@@ -42,6 +42,12 @@ export function SpecCard({ cocktail, priceIncludesVat }: Props) {
         </p>
       </header>
 
+      {cocktail.glass != null && cocktail.glass.trim() !== '' && (
+        <p className="text-sm text-parchment-300 print:text-black mb-2">
+          <span className="font-semibold">Glass:</span> {cocktail.glass}
+        </p>
+      )}
+
       {garnishes.length > 0 && (
         <p className="text-sm text-parchment-300 print:text-black mb-6">
           <span className="font-semibold">Garnish:</span>{' '}

@@ -86,7 +86,7 @@ export async function POST(request: Request, { params }: Params) {
 
   const drinks = (
     await db
-      .prepare(`SELECT id, name, sale_price_p, description FROM pouriq_cocktails WHERE menu_id = ?1 ORDER BY position ASC, name ASC`)
+      .prepare(`SELECT id, name, sale_price_p, description FROM pouriq_cocktails WHERE menu_id = ?1 ORDER BY name COLLATE NOCASE ASC`)
       .bind(menuId)
       .all<DrinkRow>()
   ).results ?? []
