@@ -22,15 +22,23 @@ describe('purchase-basis cost helpers', () => {
 
 describe('formatPurchaseBasis', () => {
   it('case of small bottles', () => {
-    expect(formatPurchaseBasis({ bottle_cost_p: 1440, bottle_size_ml: 200, unit_cost_p: null, purchase_qty: 24 }))
+    expect(formatPurchaseBasis({ base_unit: 'ml', pack_size: 200, price_p: 1440, purchase_qty: 24 }))
       .toBe('£14.40 / 24 × 200ml (£0.003/ml)')
   })
   it('single bottle', () => {
-    expect(formatPurchaseBasis({ bottle_cost_p: 2000, bottle_size_ml: 700, unit_cost_p: null, purchase_qty: 1 }))
+    expect(formatPurchaseBasis({ base_unit: 'ml', pack_size: 700, price_p: 2000, purchase_qty: 1 }))
       .toBe('£20.00 / 700ml (£0.029/ml)')
   })
   it('pack of whole items', () => {
-    expect(formatPurchaseBasis({ bottle_cost_p: null, bottle_size_ml: null, unit_cost_p: 200, purchase_qty: 6 }))
+    expect(formatPurchaseBasis({ base_unit: 'each', pack_size: 1, price_p: 200, purchase_qty: 6 }))
       .toBe('£2.00 / 6 (£0.33 each)')
+  })
+  it('g base unit: 5kg sugar bag', () => {
+    expect(formatPurchaseBasis({ base_unit: 'g', pack_size: 5000, price_p: 600, purchase_qty: 1 }))
+      .toBe('£6.00 / 5000g (£0.001/g)')
+  })
+  it('single each item', () => {
+    expect(formatPurchaseBasis({ base_unit: 'each', pack_size: 1, price_p: 33, purchase_qty: 1 }))
+      .toBe('£0.33 (£0.33 each)')
   })
 })

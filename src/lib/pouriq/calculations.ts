@@ -33,23 +33,23 @@ export function unitPourCostP(unit_cost_p: number, purchase_qty: number, unit_co
 // Plain-English read-back of how an ingredient is bought, e.g.
 // "£14.40 / 24 × 200ml (£0.003/ml)" or "£2.00 / 6 (£0.33 each)".
 export function formatPurchaseBasis(e: {
-  bottle_cost_p: number | null
-  bottle_size_ml: number | null
-  unit_cost_p: number | null
+  base_unit: 'ml' | 'g' | 'each'
+  pack_size: number
+  price_p: number
   purchase_qty: number
 }): string {
   const gbp = (p: number) => `£${(p / 100).toFixed(2)}`
-  if (e.unit_cost_p !== null) {
-    const each = e.unit_cost_p / e.purchase_qty / 100
+  if (e.base_unit === 'each') {
+    const each = e.price_p / e.purchase_qty / 100
     const qtyPart = e.purchase_qty === 1 ? '' : ` / ${e.purchase_qty}`
-    return `${gbp(e.unit_cost_p)}${qtyPart} (£${each.toFixed(2)} each)`
+    return `${gbp(e.price_p)}${qtyPart} (£${each.toFixed(2)} each)`
   }
-  if (e.bottle_cost_p !== null && e.bottle_size_ml !== null) {
-    const perMl = costPerMlP(e.bottle_cost_p, e.bottle_size_ml, e.purchase_qty) / 100
-    const buys = e.purchase_qty === 1 ? `${e.bottle_size_ml}ml` : `${e.purchase_qty} × ${e.bottle_size_ml}ml`
-    return `${gbp(e.bottle_cost_p)} / ${buys} (£${perMl.toFixed(3)}/ml)`
-  }
-  return '—'
+  const unit = e.base_unit // 'ml' or 'g'
+  const perBase = costPerBaseUnitP(e.price_p, e.purchase_qty, e.pack_size) / 100
+  const buys = e.purchase_qty === 1
+    ? `${e.pack_size}${unit}`
+    : `${e.purchase_qty} × ${e.pack_size}${unit}`
+  return `${gbp(e.price_p)} / ${buys} (£${perBase.toFixed(3)}/${unit})`
 }
 
 export function netSalePrice(sale_price_p: number, priceIncludesVat: boolean): number {
@@ -76,30 +76,18 @@ export function isPromoActiveOn(
   return days.includes(date.getUTCDay())
 }
 
-// True when an ingredient's cost can actually be computed — mirrors the two
-// branches of ingredientCostPence. False means the cost falls back to £0.
+// True when an ingredient's cost can actually be computed — mirrors the logic
+// of ingredientCostPence. False means the cost falls back to £0.
 export function ingredientCostComplete(i: import('./types').IngredientWithLibrary): boolean {
-  if (i.library.unit_cost_p !== null) return true
-  return i.library.bottle_size_ml !== null
-    && i.library.bottle_cost_p !== null
-    && i.pour_ml !== null
+  const lib = i.library
+  if (lib.price_p <= 0 || lib.pack_size <= 0) return false
+  return lib.base_unit === 'each' ? i.unit_count != null : i.pour_ml != null
 }
 
-function ingredientCostPence(i: import('./types').IngredientWithLibrary): number {
-  const qty = i.library.purchase_qty
-  // Unit-priced: library has unit_cost_p; cocktail row has unit_count
-  if (i.library.unit_cost_p !== null) {
-    return unitPourCostP(i.library.unit_cost_p, qty, i.unit_count ?? 1)
-  }
-  // Bottle-priced: library has bottle_size_ml + bottle_cost_p; cocktail row has pour_ml
-  if (
-    i.library.bottle_size_ml !== null &&
-    i.library.bottle_cost_p !== null &&
-    i.pour_ml !== null
-  ) {
-    return bottlePourCostP(i.library.bottle_cost_p, i.library.bottle_size_ml, qty, i.pour_ml)
-  }
-  return 0
+export function ingredientCostPence(i: import('./types').IngredientWithLibrary): number {
+  const lib = i.library
+  const amount = lib.base_unit === 'each' ? (i.unit_count ?? 0) : (i.pour_ml ?? 0)
+  return Math.round(usableCostPerBaseUnitP(lib.price_p, lib.purchase_qty, lib.pack_size, lib.yield_pct) * amount)
 }
 
 export function calculateCocktailMetrics(

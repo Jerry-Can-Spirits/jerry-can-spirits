@@ -8,9 +8,10 @@ import type {
 } from '@/lib/pouriq/types'
 
 interface IngOpts {
-  unit_cost_p?: number | null
-  bottle_size_ml?: number | null
-  bottle_cost_p?: number | null
+  // New-model fields
+  base_unit?: 'ml' | 'g' | 'each'
+  pack_size?: number
+  price_p?: number
   pour_ml?: number | null
   unit_count?: number | null
 }
@@ -18,14 +19,12 @@ interface IngOpts {
 function ingredient(opts: IngOpts): IngredientWithLibrary {
   const library: IngredientLibraryRow = {
     id: 'lib', trade_account_id: 't', name: 'x', ingredient_type: 'spirit',
-    base_unit: opts.unit_cost_p != null ? 'each' : 'ml',
-    pack_size: opts.bottle_size_ml ?? 1,
-    price_p: opts.bottle_cost_p ?? opts.unit_cost_p ?? 0,
+    base_unit: opts.base_unit ?? 'ml',
+    pack_size: opts.pack_size ?? 1,
+    price_p: opts.price_p ?? 0,
     pack_format: null, subcategory: null,
-    // legacy fields retired in a later task; not read
-    bottle_size_ml: opts.bottle_size_ml ?? null,
-    bottle_cost_p: opts.bottle_cost_p ?? null,
-    unit_cost_p: opts.unit_cost_p ?? null,
+    // legacy fields — null in all new rows
+    bottle_size_ml: null, bottle_cost_p: null, unit_cost_p: null,
     purchase_qty: 1,
     yield_pct: 100,
     barcode: null, notes: null, created_at: '', updated_at: '',
@@ -56,17 +55,17 @@ function volume(cocktailId: string, units: number): DrinkVolumeRow {
 }
 
 describe('ingredientCostComplete', () => {
-  it('is true for a unit-priced ingredient', () => {
-    expect(ingredientCostComplete(ingredient({ unit_cost_p: 50, unit_count: 1 }))).toBe(true)
+  it('is true for a unit-priced (each) ingredient with unit_count', () => {
+    expect(ingredientCostComplete(ingredient({ base_unit: 'each', pack_size: 1, price_p: 50, unit_count: 1 }))).toBe(true)
   })
-  it('is true for a fully bottle-priced ingredient', () => {
-    expect(ingredientCostComplete(ingredient({ bottle_size_ml: 700, bottle_cost_p: 1400, pour_ml: 50 }))).toBe(true)
+  it('is true for a ml-priced ingredient with pour_ml', () => {
+    expect(ingredientCostComplete(ingredient({ base_unit: 'ml', pack_size: 700, price_p: 1400, pour_ml: 50 }))).toBe(true)
   })
-  it('is false when pour_ml is missing', () => {
-    expect(ingredientCostComplete(ingredient({ bottle_size_ml: 700, bottle_cost_p: 1400 }))).toBe(false)
+  it('is false when pour_ml is missing on a ml ingredient', () => {
+    expect(ingredientCostComplete(ingredient({ base_unit: 'ml', pack_size: 700, price_p: 1400 }))).toBe(false)
   })
-  it('is false when bottle_cost_p is missing', () => {
-    expect(ingredientCostComplete(ingredient({ bottle_size_ml: 700, pour_ml: 50 }))).toBe(false)
+  it('is false when price_p is zero', () => {
+    expect(ingredientCostComplete(ingredient({ base_unit: 'ml', pack_size: 700, price_p: 0, pour_ml: 50 }))).toBe(false)
   })
   it('is false with no pricing at all', () => {
     expect(ingredientCostComplete(ingredient({}))).toBe(false)
@@ -75,12 +74,12 @@ describe('ingredientCostComplete', () => {
 
 describe('calculateCocktailMetrics cost_complete + net_sale_p', () => {
   it('is complete when every ingredient is priced', () => {
-    const m = calculateCocktailMetrics(cocktail('A', 800, [ingredient({ unit_cost_p: 200, unit_count: 1 })]), false)
+    const m = calculateCocktailMetrics(cocktail('A', 800, [ingredient({ base_unit: 'each', pack_size: 1, price_p: 200, unit_count: 1 })]), false)
     expect(m.cost_complete).toBe(true)
   })
   it('is incomplete when one ingredient is unpriced', () => {
     const m = calculateCocktailMetrics(
-      cocktail('A', 800, [ingredient({ unit_cost_p: 200, unit_count: 1 }), ingredient({})]),
+      cocktail('A', 800, [ingredient({ base_unit: 'each', pack_size: 1, price_p: 200, unit_count: 1 }), ingredient({})]),
       false,
     )
     expect(m.cost_complete).toBe(false)
@@ -89,15 +88,15 @@ describe('calculateCocktailMetrics cost_complete + net_sale_p', () => {
     expect(calculateCocktailMetrics(cocktail('A', 800, []), false).cost_complete).toBe(false)
   })
   it('nets VAT out of net_sale_p when prices include VAT', () => {
-    const m = calculateCocktailMetrics(cocktail('A', 1200, [ingredient({ unit_cost_p: 100, unit_count: 1 })]), true)
+    const m = calculateCocktailMetrics(cocktail('A', 1200, [ingredient({ base_unit: 'each', pack_size: 1, price_p: 100, unit_count: 1 })]), true)
     expect(m.net_sale_p).toBe(1000) // 1200 / 1.2
   })
 })
 
 describe('calculateMenuMetrics blended GP + exclusions', () => {
   // A: net 800, cost 200 → margin 600, gp 75%; B: net 500, cost 250 → margin 250, gp 50%.
-  const A = cocktail('A', 800, [ingredient({ unit_cost_p: 200, unit_count: 1 })])
-  const B = cocktail('B', 500, [ingredient({ unit_cost_p: 250, unit_count: 1 })])
+  const A = cocktail('A', 800, [ingredient({ base_unit: 'each', pack_size: 1, price_p: 200, unit_count: 1 })])
+  const B = cocktail('B', 500, [ingredient({ base_unit: 'each', pack_size: 1, price_p: 250, unit_count: 1 })])
   // C: incomplete (unpriced), would look like a huge margin if counted.
   const C = cocktail('C', 1000, [ingredient({})])
 

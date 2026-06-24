@@ -141,9 +141,9 @@ export function IngredientMatchRow({
               const isUnit = nl.unit_cost_p !== null
               const sizeN = nl.bottle_size_ml
               const basis = formatPurchaseBasis({
-                bottle_cost_p: nl.bottle_cost_p,
-                bottle_size_ml: nl.bottle_size_ml,
-                unit_cost_p: nl.unit_cost_p,
+                base_unit: isUnit ? 'each' : 'ml',
+                pack_size: sizeN ?? 1,
+                price_p: nl.unit_cost_p ?? nl.bottle_cost_p ?? 0,
                 purchase_qty: nl.purchase_qty,
               })
               return (

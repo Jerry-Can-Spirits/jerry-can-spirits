@@ -281,9 +281,9 @@ export function IngredientForm({ entry, usageCount = 0, impactPayload }: Props) 
         {newCostP !== null && (() => {
           const sizeN = parseFloat(bottle_size_ml)
           const basis = formatPurchaseBasis({
-            bottle_cost_p: pricing_mode === 'bottle' ? newCostP : null,
-            bottle_size_ml: pricing_mode === 'bottle' && Number.isFinite(sizeN) ? sizeN : null,
-            unit_cost_p: pricing_mode === 'unit' ? newCostP : null,
+            base_unit: pricing_mode === 'unit' ? 'each' : 'ml',
+            pack_size: pricing_mode === 'bottle' && Number.isFinite(sizeN) ? sizeN : 1,
+            price_p: newCostP,
             purchase_qty,
           })
           return basis === '—' ? null : <p className="text-sm text-gold-200">= {basis}</p>

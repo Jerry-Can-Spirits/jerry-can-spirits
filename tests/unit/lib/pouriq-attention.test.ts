@@ -7,12 +7,12 @@ import type {
   IngredientLibraryRow,
 } from '@/lib/pouriq/types'
 
-function ingredient(opts: { unit_cost_p?: number | null }): IngredientWithLibrary {
+function ingredient(opts: { price_p?: number }): IngredientWithLibrary {
   const library: IngredientLibraryRow = {
     id: 'lib', trade_account_id: 't', name: 'x', ingredient_type: 'spirit',
-    base_unit: 'each', pack_size: 1, price_p: opts.unit_cost_p ?? 0, pack_format: null, subcategory: null,
-    // legacy fields retired in a later task; not read
-    bottle_size_ml: null, bottle_cost_p: null, unit_cost_p: opts.unit_cost_p ?? null,
+    base_unit: 'each', pack_size: 1, price_p: opts.price_p ?? 0, pack_format: null, subcategory: null,
+    // legacy fields — null in all new rows
+    bottle_size_ml: null, bottle_cost_p: null, unit_cost_p: null,
     purchase_qty: 1,
     yield_pct: 100,
     barcode: null, notes: null, created_at: '', updated_at: '',
@@ -34,9 +34,9 @@ function cocktail(id: string, salePriceP: number, ings: IngredientWithLibrary[])
 
 describe('deriveMenuAttention', () => {
   // GOOD: net 800, cost 200 → gp 75% (>= target 70). HEALTHY.
-  const good = cocktail('Good', 800, [ingredient({ unit_cost_p: 200 })])
+  const good = cocktail('Good', 800, [ingredient({ price_p: 200 })])
   // LOW: net 500, cost 300 → gp 40% (< target). UNDER TARGET.
-  const low = cocktail('Low', 500, [ingredient({ unit_cost_p: 300 })])
+  const low = cocktail('Low', 500, [ingredient({ price_p: 300 })])
   // INCOMPLETE: unpriced ingredient → cost_complete false. NOT under-target.
   const incomplete = cocktail('Incomplete', 600, [ingredient({})])
 
