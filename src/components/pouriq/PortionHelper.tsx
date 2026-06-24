@@ -23,7 +23,7 @@ export function PortionHelper({ onApply, className }: Props) {
       <span>This item gives</span>
       <input type="number" step="1" min={1} value={per} onChange={(e) => setPer(e.target.value)} className={inputClass} placeholder="8" aria-label="portions per item" />
       <span>portions, using</span>
-      <input type="number" step="0.5" min={0} value={used} onChange={(e) => setUsed(e.target.value)} className={inputClass} placeholder="1" aria-label="portions used" />
+      <input type="number" step="0.5" min={0.001} value={used} onChange={(e) => setUsed(e.target.value)} className={inputClass} placeholder="1" aria-label="portions used" />
       <button
         type="button"
         disabled={result === null}
