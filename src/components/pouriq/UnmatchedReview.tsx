@@ -4,7 +4,7 @@ import { useState, useTransition } from 'react'
 import { PRIMARY_BUTTON, SECONDARY_BUTTON_SM, DESTRUCTIVE_BUTTON } from '@/lib/pouriq/button-styles'
 import { ServeForm } from '@/components/pouriq/ServeForm'
 import { saveServeAction } from '@/lib/pouriq/server-actions'
-import type { IngredientLibraryRow } from '@/lib/pouriq/types'
+import type { IngredientLibraryRow, ServeUnitRow } from '@/lib/pouriq/types'
 
 interface UnmatchedItem {
   normalised_name: string
@@ -19,6 +19,7 @@ interface Props {
   cocktails: Array<{ id: string; name: string }>
   serves: Array<{ id: string; name: string }>
   libraryEntries: IngredientLibraryRow[]
+  serveUnits: Record<string, ServeUnitRow[]>
 }
 
 function formatDate(iso: string): string {
@@ -26,7 +27,7 @@ function formatDate(iso: string): string {
   return isNaN(d.getTime()) ? iso : d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })
 }
 
-export function UnmatchedReview({ items, cocktails, serves, libraryEntries }: Props) {
+export function UnmatchedReview({ items, cocktails, serves, libraryEntries, serveUnits }: Props) {
   const [rows, setRows] = useState(items)
   const [serveList, setServeList] = useState(serves)
   const [selection, setSelection] = useState<Record<string, string>>(
@@ -163,6 +164,7 @@ export function UnmatchedReview({ items, cocktails, serves, libraryEntries }: Pr
             <ServeForm
               defaultName={row.raw_name}
               libraryEntries={libraryEntries}
+              serveUnits={serveUnits}
               pending={pending}
               submitLabel="Create serve and map"
               onError={setError}

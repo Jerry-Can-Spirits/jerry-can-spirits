@@ -5,14 +5,18 @@ import { useRouter } from 'next/navigation'
 import { PRIMARY_BUTTON, SECONDARY_BUTTON_SM, DESTRUCTIVE_BUTTON } from '@/lib/pouriq/button-styles'
 import { ServeForm, type ServeFormIngredient } from '@/components/pouriq/ServeForm'
 import { saveServeAction, deleteServeAction } from '@/lib/pouriq/server-actions'
-import type { CocktailWithIngredients, IngredientLibraryRow, IngredientWithLibrary } from '@/lib/pouriq/types'
+import type { CocktailWithIngredients, IngredientLibraryRow, IngredientWithLibrary, ServeUnitRow } from '@/lib/pouriq/types'
 
 interface Props {
   serves: CocktailWithIngredients[]
   libraryEntries: IngredientLibraryRow[]
+  serveUnits: Record<string, ServeUnitRow[]>
 }
 
 function formatPour(ing: IngredientWithLibrary): string {
+  if (ing.recipe_qty !== null && ing.recipe_unit !== null) {
+    return `${ing.recipe_qty} ${ing.recipe_unit}`
+  }
   if (ing.unit_count !== null) {
     return `${ing.unit_count} ${ing.unit_count === 1 ? 'unit' : 'units'}`
   }
@@ -30,7 +34,7 @@ function toFormIngredients(serve: CocktailWithIngredients): ServeFormIngredient[
   }))
 }
 
-export function ServeManager({ serves, libraryEntries }: Props) {
+export function ServeManager({ serves, libraryEntries, serveUnits }: Props) {
   const router = useRouter()
   const [creating, setCreating] = useState(false)
   const [editingId, setEditingId] = useState<string | null>(null)
@@ -78,6 +82,7 @@ export function ServeManager({ serves, libraryEntries }: Props) {
         <ServeForm
           defaultName=""
           libraryEntries={libraryEntries}
+          serveUnits={serveUnits}
           pending={pending}
           submitLabel="Create serve"
           onError={setError}
@@ -130,6 +135,7 @@ export function ServeManager({ serves, libraryEntries }: Props) {
                 defaultGlass={serve.glass}
                 defaultIngredients={toFormIngredients(serve)}
                 libraryEntries={libraryEntries}
+                serveUnits={serveUnits}
                 pending={pending}
                 submitLabel="Save serve"
                 onError={setError}

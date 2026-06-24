@@ -1,18 +1,13 @@
 'use client'
 
-import type { IngredientLibraryRow, IngredientType } from '@/lib/pouriq/types'
+import type { IngredientLibraryRow, IngredientType, ServeUnitRow } from '@/lib/pouriq/types'
 import { PriceInput } from '@/components/pouriq/PriceInput'
-import { POUR_PRESETS, BOTTLE_SIZES_ML, WEIGHT_SIZES_G } from '@/lib/pouriq/measures'
+import { ServeUnitPicker } from '@/components/pouriq/ServeUnitPicker'
+import { BOTTLE_SIZES_ML, WEIGHT_SIZES_G } from '@/lib/pouriq/measures'
+import type { ServeUnit } from '@/lib/pouriq/measures'
 import { formatPurchaseBasis } from '@/lib/pouriq/calculations'
-import { PortionHelper } from '@/components/pouriq/PortionHelper'
 
 const INGREDIENT_TYPES: IngredientType[] = ['spirit','liqueur','wine','beer','mixer','syrup','juice','garnish','other']
-const UNIT_CHIPS = [
-  { label: '1/8', value: 0.125 },
-  { label: '1/4', value: 0.25 },
-  { label: '1/2', value: 0.5 },
-  { label: '1', value: 1 },
-]
 
 const inputClass = 'w-full px-3 py-2 bg-jerry-green-700/50 border border-gold-500/30 rounded-lg text-parchment-50 text-sm focus:border-gold-400 focus:outline-hidden'
 const labelClass = 'block text-xs font-medium text-parchment-300 mb-1'
@@ -36,6 +31,8 @@ export interface MatchRowState {
   }
   pour_ml: number | null
   unit_count: number | null
+  recipe_unit: string | null
+  recipe_qty: number | null
 }
 
 interface Props {
@@ -45,6 +42,7 @@ interface Props {
   matchKind: 'auto' | 'suggestions' | 'no-match' | 'catalogue'
   suggestionEntries: Array<{ id: string; name: string }>
   libraryEntries: IngredientLibraryRow[]
+  serveUnits: Record<string, ServeUnitRow[]>
   state: MatchRowState
   onChange: (state: MatchRowState) => void
   // Fired when this row becomes resolved (existing entry picked, or a new
@@ -52,24 +50,27 @@ interface Props {
   onResolvedCommit?: () => void
 }
 
-function isUnitPricedSelection(state: MatchRowState, library: IngredientLibraryRow[]): boolean {
-  if (state.new_library) return state.new_library.base_unit === 'each'
+function resolvedBaseUnit(state: MatchRowState, library: IngredientLibraryRow[]): 'ml' | 'g' | 'each' {
+  if (state.new_library) return state.new_library.base_unit
   if (state.existing_library_id) {
-    const entry = library.find((e) => e.id === state.existing_library_id)
-    return entry?.base_unit === 'each'
+    return library.find((e) => e.id === state.existing_library_id)?.base_unit ?? 'ml'
   }
-  return false
+  return 'ml'
 }
 
 export function IngredientMatchRow({
   extractedName, rawMeasurement, inferredType,
-  matchKind, suggestionEntries, libraryEntries,
+  matchKind, suggestionEntries, libraryEntries, serveUnits,
   state, onChange, onResolvedCommit,
 }: Props) {
-  const unitPriced = isUnitPricedSelection(state, libraryEntries)
+  const baseUnit = resolvedBaseUnit(state, libraryEntries)
   const selectedExisting = state.existing_library_id
     ? libraryEntries.find((e) => e.id === state.existing_library_id) ?? null
     : null
+
+  const customUnits: ServeUnit[] = selectedExisting
+    ? (serveUnits[selectedExisting.id] ?? [])
+    : []
 
   function pickExisting(id: string) {
     onChange({
@@ -77,8 +78,9 @@ export function IngredientMatchRow({
       new_library: undefined,
       pour_ml: state.pour_ml,
       unit_count: state.unit_count,
+      recipe_unit: state.recipe_unit,
+      recipe_qty: state.recipe_qty,
     })
-    // Picking an existing entry resolves the row instantly (no blur).
     onResolvedCommit?.()
   }
 
@@ -95,19 +97,14 @@ export function IngredientMatchRow({
       },
       pour_ml: state.pour_ml,
       unit_count: state.unit_count,
+      recipe_unit: state.recipe_unit,
+      recipe_qty: state.recipe_qty,
     })
   }
 
   function updateNewLibrary(patch: Partial<NonNullable<MatchRowState['new_library']>>) {
     if (!state.new_library) return
     onChange({ ...state, new_library: { ...state.new_library, ...patch } })
-  }
-
-  function setPour(ml: number | null) {
-    onChange({ ...state, pour_ml: ml, unit_count: null })
-  }
-  function setUnit(count: number | null) {
-    onChange({ ...state, unit_count: count, pour_ml: null })
   }
 
   const matchBadge = matchKind === 'auto'
@@ -135,7 +132,7 @@ export function IngredientMatchRow({
           <div className="space-y-2 p-3 rounded-sm border border-gold-500/20 bg-jerry-green-900/30">
             <div className="flex items-baseline justify-between">
               <p className="text-xs text-gold-300">Creating new library entry</p>
-              <button type="button" onClick={() => onChange({ existing_library_id: undefined, new_library: undefined, pour_ml: state.pour_ml, unit_count: state.unit_count })} className="text-xs text-parchment-400 hover:text-parchment-200">Cancel</button>
+              <button type="button" onClick={() => onChange({ existing_library_id: undefined, new_library: undefined, pour_ml: state.pour_ml, unit_count: state.unit_count, recipe_unit: state.recipe_unit, recipe_qty: state.recipe_qty })} className="text-xs text-parchment-400 hover:text-parchment-200">Cancel</button>
             </div>
             <input value={state.new_library.name} onChange={(e) => updateNewLibrary({ name: e.target.value })} className={inputClass} placeholder="Name" />
             {(() => {
@@ -247,34 +244,15 @@ export function IngredientMatchRow({
         )}
       </div>
 
-      {/* Pour or unit count */}
+      {/* Serve unit picker */}
       {(state.existing_library_id || state.new_library) && (
-        <div>
-          <label className={labelClass}>{unitPriced ? 'How much per drink' : 'Pour (ml)'}</label>
-          <div className="flex flex-wrap gap-2 mb-2">
-            {unitPriced
-              ? UNIT_CHIPS.map((c) => (
-                  <button type="button" key={c.value} onClick={() => setUnit(c.value)}
-                    className={`${chipClass} ${state.unit_count === c.value ? chipActive : chipIdle}`}>
-                    {c.label}
-                  </button>
-                ))
-              : POUR_PRESETS.map((p) => (
-                  <button type="button" key={p.ml} onClick={() => setPour(p.ml)}
-                    className={`${chipClass} ${state.pour_ml === p.ml ? chipActive : chipIdle}`}>
-                    {p.label}
-                  </button>
-                ))}
-          </div>
-          {unitPriced ? (
-            <>
-              <input type="number" step="0.001" min={0} value={state.unit_count ?? ''} onChange={(e) => setUnit(parseFloat(e.target.value) || 0)} className={inputClass} placeholder="custom" />
-              <PortionHelper className="mt-2" onApply={(v) => setUnit(v)} />
-            </>
-          ) : (
-            <input type="number" step="0.1" min={0} value={state.pour_ml ?? ''} onChange={(e) => setPour(parseFloat(e.target.value) || 0)} className={inputClass} placeholder="custom" />
-          )}
-        </div>
+        <ServeUnitPicker
+          baseUnit={baseUnit}
+          customUnits={customUnits}
+          recipeUnit={state.recipe_unit}
+          recipeQty={state.recipe_qty}
+          onChange={(next) => onChange({ ...state, ...next })}
+        />
       )}
     </div>
   )

@@ -2,7 +2,7 @@
 
 import { useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import type { IngredientLibraryRow, IngredientType } from '@/lib/pouriq/types'
+import type { IngredientLibraryRow, IngredientType, ServeUnitRow } from '@/lib/pouriq/types'
 import { IngredientMatchRow, type MatchRowState } from '@/components/pouriq/IngredientMatchRow'
 import { normalise } from '@/lib/pouriq/match'
 import { planBulkFill, type BulkFillRow } from '@/lib/pouriq/import-bulk-fill'
@@ -66,6 +66,8 @@ function initialIngredientState(input: PreviewDrinkInput['ingredients'][0]): Mat
       existing_library_id: input.match.library_id,
       pour_ml,
       unit_count,
+      recipe_unit: null,
+      recipe_qty: null,
     }
   }
   if (input.match.kind === 'catalogue') {
@@ -84,9 +86,11 @@ function initialIngredientState(input: PreviewDrinkInput['ingredients'][0]): Mat
       },
       pour_ml,
       unit_count,
+      recipe_unit: null,
+      recipe_qty: null,
     }
   }
-  return { pour_ml, unit_count }
+  return { pour_ml, unit_count, recipe_unit: null, recipe_qty: null }
 }
 
 function initialDrinkState(d: PreviewDrinkInput): DrinkState {
@@ -102,9 +106,10 @@ interface Props {
   menuId: string
   drinks: PreviewDrinkInput[]
   libraryEntries: IngredientLibraryRow[]
+  serveUnits: Record<string, ServeUnitRow[]>
 }
 
-export function ImportPreview({ menuId, drinks: extracted, libraryEntries }: Props) {
+export function ImportPreview({ menuId, drinks: extracted, libraryEntries, serveUnits }: Props) {
   const router = useRouter()
   const [drinks, setDrinks] = useState<DrinkState[]>(() => extracted.map(initialDrinkState))
   const [expanded, setExpanded] = useState<Set<number>>(() => new Set([0, 1, 2]))
@@ -242,6 +247,8 @@ export function ImportPreview({ menuId, drinks: extracted, libraryEntries }: Pro
             new_library: ing.new_library,
             pour_ml: ing.pour_ml,
             unit_count: ing.unit_count,
+            recipe_unit: ing.recipe_unit,
+            recipe_qty: ing.recipe_qty,
           })),
         })),
     }
@@ -322,6 +329,7 @@ export function ImportPreview({ menuId, drinks: extracted, libraryEntries }: Pro
                       matchKind={ing.match.kind}
                       suggestionEntries={ing.match.kind === 'suggestions' ? ing.match.entries : []}
                       libraryEntries={libraryEntries}
+                      serveUnits={serveUnits}
                       state={d.ingredients[ingIdx]}
                       onChange={(state) => updateIngredient(idx, ingIdx, state)}
                       onResolvedCommit={() => propagateFrom(idx, ingIdx)}
