@@ -21,8 +21,6 @@ interface RecipeLineRow {
   pour_ml: number
   name: string
   bottle_size_ml: number
-  bottle_cost_p: number
-  purchase_qty: number
   yield_pct: number
 }
 interface VolumeRow { cocktail_id: string; period_start: string; period_end: string; units_sold: number }
@@ -32,8 +30,7 @@ interface ReceiptRow { library_ingredient_id: string; received_at: string; qty: 
 async function readTenantRecipes(db: D1Database, tradeAccountId: string): Promise<RecipeLineRow[]> {
   const res = await db.prepare(`
     SELECT c.id AS cocktail_id, i.library_ingredient_id AS library_ingredient_id, i.pour_ml AS pour_ml,
-           lib.name AS name, lib.bottle_size_ml AS bottle_size_ml, lib.bottle_cost_p AS bottle_cost_p,
-           lib.purchase_qty AS purchase_qty, lib.yield_pct AS yield_pct
+           lib.name AS name, lib.bottle_size_ml AS bottle_size_ml, lib.yield_pct AS yield_pct
     FROM pouriq_cocktails c
     JOIN pouriq_menus m ON m.id = c.menu_id
     JOIN pouriq_ingredients i ON i.cocktail_id = c.id
@@ -118,7 +115,11 @@ export async function loadStockLevels(db: D1Database, tradeAccountId: string): P
     ...receiptsByIngredient.keys(),
   ])
 
-  const todayDate = new Date().toISOString().slice(0, 10)
+  // Usage window runs from the anchor count to the far future so the CURRENT open
+  // POS period (whose bucket period_end is later than today) is still counted.
+  // Without this, mid-week/mid-month sales would not draw down on-hand until the
+  // period closed. Buckets are keyed by (cocktail, period) so each counts once.
+  const WINDOW_END = '9999-12-31'
 
   const rows: RollingStockRow[] = []
   for (const ingId of ingredientIds) {
@@ -153,7 +154,7 @@ export async function loadStockLevels(db: D1Database, tradeAccountId: string): P
       let usageSinceMl = 0
       for (const line of lines) {
         const buckets = volumesByCocktail.get(line.cocktail_id) ?? []
-        usageSinceMl += sumBucketsInWindow(buckets, anchor.counted_at.slice(0, 10), todayDate) * line.pour_ml
+        usageSinceMl += sumBucketsInWindow(buckets, anchor.counted_at.slice(0, 10), WINDOW_END) * line.pour_ml
       }
 
       const on_hand = computeOnHandBottles({
