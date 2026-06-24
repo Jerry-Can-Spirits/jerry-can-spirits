@@ -128,11 +128,11 @@ export async function loadImpactPayload(
     id: entry.id,
     name: entry.name,
     ingredient_type: entry.ingredient_type,
-    // legacy fields retired in a later task; not read
-    bottle_size_ml: entry.base_unit !== 'each' ? entry.pack_size : null,
-    bottle_cost_p: entry.base_unit !== 'each' ? entry.price_p : null,
-    unit_cost_p: entry.base_unit === 'each' ? entry.price_p : null,
+    base_unit: entry.base_unit,
+    pack_size: entry.pack_size,
+    price_p: entry.price_p,
     purchase_qty: entry.purchase_qty,
+    yield_pct: entry.yield_pct,
   }
 
   return { ingredient, affected }

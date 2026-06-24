@@ -32,8 +32,7 @@ export function CostImpactPanel({ ingredientId }: Props) {
       .then((d) => {
         if (cancelled) return
         setData(d)
-        const currentP = d.ingredient.unit_cost_p ?? d.ingredient.bottle_cost_p ?? 0
-        setNewCostPounds((currentP / 100).toFixed(2))
+        setNewCostPounds((d.ingredient.price_p / 100).toFixed(2))
         setError(null)
       })
       .catch((e: Error) => { if (!cancelled) setError(e.message) })
@@ -45,7 +44,7 @@ export function CostImpactPanel({ ingredientId }: Props) {
     if (!data) return null
     const newCostP = Math.round((parseFloat(newCostPounds) || 0) * 100)
     const mode = pricingMode(data.ingredient)
-    const currentP = (mode === 'unit' ? data.ingredient.unit_cost_p : data.ingredient.bottle_cost_p) ?? 0
+    const currentP = data.ingredient.price_p
     const delta = newCostP - currentP
     const projected: ProjectedCocktail[] = data.affected.map((c) =>
       projectCocktail(data.ingredient, c, newCostP),
@@ -63,7 +62,7 @@ export function CostImpactPanel({ ingredientId }: Props) {
 
   const { ingredient } = data
   const { projected, rollups, currentP, delta, mode } = projection
-  const unitLabel = mode === 'unit' ? 'per unit' : `per ${ingredient.bottle_size_ml ?? ''}ml bottle`
+  const unitLabel = mode === 'unit' ? 'per unit' : `per ${ingredient.pack_size}${ingredient.base_unit} pack`
 
   return (
     <div className="space-y-6">
