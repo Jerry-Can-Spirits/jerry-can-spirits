@@ -3,7 +3,9 @@
 import { PRIMARY_BUTTON } from '@/lib/pouriq/button-styles'
 
 interface OrderRow {
+  id: string
   name: string
+  pack_size: number
   on_hand: number | null
   par: number | null
   order_qty: number
@@ -36,8 +38,8 @@ export function OrderReport({ rows }: { rows: OrderRow[] }) {
         </thead>
         <tbody>
           {rows.map((r) => (
-            <tr key={r.name} className="border-b border-gold-500/10">
-              <td className="py-2 pr-4 text-parchment-100">{r.name}</td>
+            <tr key={r.id} className="border-b border-gold-500/10">
+              <td className="py-2 pr-4 text-parchment-100">{r.name} <span className="text-parchment-400">({r.pack_size}ml)</span></td>
               <td className="py-2 pr-4 text-right text-parchment-300">{r.on_hand !== null ? r.on_hand.toFixed(1) : '—'}</td>
               <td className="py-2 pr-4 text-right text-parchment-300">{r.par !== null ? r.par : '—'}</td>
               <td className="py-2 text-right text-parchment-100 font-semibold">{r.order_qty}</td>

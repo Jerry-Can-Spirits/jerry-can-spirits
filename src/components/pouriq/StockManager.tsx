@@ -142,7 +142,7 @@ export function StockManager({ rows }: Props) {
                     )}
                   </p>
                   {row.needs_reorder && (
-                    <p className="text-amber-300 text-xs">Low — order {row.reorder_qty} {row.reorder_qty === 1 ? 'bottle' : 'bottles'}</p>
+                    <p className="text-amber-300 text-xs">Low · order {row.reorder_qty} {row.reorder_qty === 1 ? 'bottle' : 'bottles'}</p>
                   )}
                   {row.anchor_count_at && (
                     <p className="text-parchment-400 text-xs">estimate, last counted {formatShortDate(row.anchor_count_at)}</p>

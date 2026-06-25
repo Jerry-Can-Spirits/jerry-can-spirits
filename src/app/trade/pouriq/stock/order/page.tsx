@@ -19,7 +19,7 @@ export default async function OrderReportPage() {
   const toOrder = rows
     .filter((r) => r.needs_reorder)
     .sort((a, b) => a.library_name.localeCompare(b.library_name))
-    .map((r) => ({ name: r.library_name, on_hand: r.on_hand_bottles, par: r.par_bottles, order_qty: r.reorder_qty }))
+    .map((r) => ({ id: r.library_ingredient_id, name: r.library_name, pack_size: r.pack_size, on_hand: r.on_hand_bottles, par: r.par_bottles, order_qty: r.reorder_qty }))
 
   return (
     <main className="min-h-screen">
