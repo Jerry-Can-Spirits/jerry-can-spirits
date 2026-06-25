@@ -1,10 +1,11 @@
 'use client'
 
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useMemo, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import type { PreviewPayload } from '@/app/api/pouriq/invoices/extract/route'
 import type { IngredientLibraryRow } from '@/lib/pouriq/types'
 import { InvoiceLineRow, type LineState } from './InvoiceLineRow'
+import { classifyInvoiceLine, summariseInvoiceLines, type InvoiceLineInput } from '@/lib/pouriq/invoice-review'
 
 interface Props {
   initial: PreviewPayload
@@ -18,6 +19,8 @@ export function InvoicePreview({ initial, library }: Props) {
   const [invoiceDate, setInvoiceDate] = useState(initial.invoice_date ?? '')
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [showAuto, setShowAuto] = useState(false)
+  const attentionRef = useRef<HTMLDivElement>(null)
 
   const [lines, setLines] = useState<LineState[]>(() =>
     initial.lines.map((l): LineState => {
@@ -93,6 +96,59 @@ export function InvoicePreview({ initial, library }: Props) {
     for (const e of library) m.set(e.id, e)
     return m
   }, [library])
+
+  // Per-line review classification (existing data only).
+  const lineInputs: InvoiceLineInput[] = initial.lines.map((line, idx) => {
+    const st = lines[idx]
+    let priceChanged = false
+    if (st.match.kind === 'existing' && st.match.library_id) {
+      const cur = libraryById.get(st.match.library_id)?.price_p
+      priceChanged = cur != null && cur > 0 && st.unit_price_p !== cur
+    }
+    let resolved = true
+    if (st.applied) resolved = st.match.kind === 'existing' ? !!st.match.library_id : st.unit_price_p > 0
+    return { matchKind: line.match.kind, priceChanged, resolved }
+  })
+  const summary = summariseInvoiceLines(lineInputs)
+  const allIdx = initial.lines.map((_, i) => i)
+  const attentionIdx = allIdx.filter((i) => classifyInvoiceLine(lineInputs[i]) === 'needs-attention')
+  const priceChangeIdx = allIdx.filter((i) => classifyInvoiceLine(lineInputs[i]) === 'price-change')
+  const autoIdx = allIdx.filter((i) => classifyInvoiceLine(lineInputs[i]) === 'auto-ok')
+
+  const thead = (
+    <thead className="bg-jerry-green-900/40">
+      <tr className="text-left text-parchment-400 text-xs uppercase tracking-widest">
+        <th className="px-3 py-3">Apply</th>
+        <th className="px-3 py-3">Extracted</th>
+        <th className="px-3 py-3">Qty</th>
+        <th className="px-3 py-3">New net £</th>
+        <th className="px-3 py-3">Match</th>
+        <th className="px-3 py-3">Current cost</th>
+        <th className="px-3 py-3">Δ</th>
+      </tr>
+    </thead>
+  )
+  const sectionTable = (indices: number[]) => (
+    <div className="overflow-x-auto">
+      <table className="w-full text-sm min-w-[820px]">
+        {thead}
+        <tbody>
+          {indices.map((idx) => (
+            <InvoiceLineRow
+              key={idx}
+              index={idx}
+              line={initial.lines[idx]}
+              state={lines[idx]}
+              library={library}
+              libraryById={libraryById}
+              onChange={handleChange}
+              onToggleCreateNew={handleToggleCreateNew}
+            />
+          ))}
+        </tbody>
+      </table>
+    </div>
+  )
 
   async function handleSave() {
     setError(null)
@@ -180,41 +236,58 @@ export function InvoicePreview({ initial, library }: Props) {
         </div>
       </div>
 
-      <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl overflow-hidden border border-gold-500/20">
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm min-w-[960px]">
-            <thead className="bg-jerry-green-900/40">
-              <tr className="text-left text-parchment-400 text-xs uppercase tracking-widest">
-                <th className="px-3 py-3">Apply</th>
-                <th className="px-3 py-3">Extracted</th>
-                <th className="px-3 py-3">Qty</th>
-                <th className="px-3 py-3">New net £</th>
-                <th className="px-3 py-3">Match</th>
-                <th className="px-3 py-3">Current cost</th>
-                <th className="px-3 py-3">Δ</th>
-              </tr>
-            </thead>
-            <tbody>
-              {initial.lines.map((line, idx) => (
-                <InvoiceLineRow
-                  key={idx}
-                  index={idx}
-                  line={line}
-                  state={lines[idx]}
-                  library={library}
-                  libraryById={libraryById}
-                  onChange={handleChange}
-                  onToggleCreateNew={handleToggleCreateNew}
-                />
-              ))}
-            </tbody>
-          </table>
+      <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl border border-gold-500/20 p-4 flex flex-wrap items-center justify-between gap-3">
+        <div className="text-sm">
+          <span className="text-emerald-300">● {summary.autoMatched} auto-matched</span>
+          <span className="text-parchment-500"> · </span>
+          <span className="text-amber-300">{summary.needChoice} need a choice</span>
+          <span className="text-parchment-500"> · </span>
+          <span className="text-red-300">{summary.newProducts} new</span>
+          <span className="block text-xs text-parchment-500 mt-1">Net prices read from the invoice.</span>
         </div>
+        {summary.unresolved > 0 && (
+          <button
+            type="button"
+            onClick={() => attentionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
+            className="text-sm text-gold-300 hover:text-gold-200 underline"
+          >
+            Jump to decisions ↓
+          </button>
+        )}
       </div>
+
+      {attentionIdx.length > 0 && (
+        <div ref={attentionRef} className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl overflow-hidden border border-amber-400/30">
+          <div className="px-4 py-2 text-xs uppercase tracking-widest text-amber-200/80 bg-amber-500/5">Needs your attention ({attentionIdx.length})</div>
+          {sectionTable(attentionIdx)}
+        </div>
+      )}
+
+      {priceChangeIdx.length > 0 && (
+        <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl overflow-hidden border border-gold-500/20">
+          <div className="px-4 py-2 text-xs uppercase tracking-widest text-parchment-400">Price changes detected ({priceChangeIdx.length})</div>
+          {sectionTable(priceChangeIdx)}
+        </div>
+      )}
+
+      {autoIdx.length > 0 && (
+        <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl overflow-hidden border border-gold-500/20">
+          <button type="button" onClick={() => setShowAuto((s) => !s)} className="w-full px-4 py-3 flex items-center justify-between text-sm">
+            <span className="text-emerald-300">● {autoIdx.length} auto-matched to existing ingredients</span>
+            <span className="text-parchment-400">{showAuto ? 'Hide ▲' : 'Review all ▼'}</span>
+          </button>
+          {showAuto && sectionTable(autoIdx)}
+        </div>
+      )}
 
       {error && <p role="alert" className="text-sm text-red-300">{error}</p>}
 
-      <div className="flex justify-end">
+      <div className="flex items-center justify-between gap-3 flex-wrap">
+        <span className="text-sm text-parchment-400">
+          {summary.unresolved > 0
+            ? `${summary.unresolved} line${summary.unresolved === 1 ? '' : 's'} still need a decision.`
+            : 'All lines reviewed.'}
+        </span>
         <button
           type="button"
           onClick={handleSave}
