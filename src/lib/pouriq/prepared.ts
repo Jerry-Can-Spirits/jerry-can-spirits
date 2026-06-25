@@ -119,3 +119,28 @@ export async function recomputeDependents(db: D1Database, tradeAccountId: string
     await recomputePreparedCost(db, id)
   }
 }
+
+// Sum production amounts (yield or consumption) strictly after an anchor date.
+export function sumProductionAfter(rows: Array<{ amount: number; produced_at: string }>, anchorAtISO: string): number {
+  return rows.reduce((s, r) => (r.produced_at > anchorAtISO ? s + r.amount : s), 0)
+}
+
+export interface ProductionYieldRow { prepared_ingredient_id: string; yield_base_produced: number; produced_at: string }
+export interface ProductionConsumptionRow { component_ingredient_id: string; amount_base_consumed: number; produced_at: string }
+
+export async function readProductionYields(db: D1Database, tradeAccountId: string): Promise<ProductionYieldRow[]> {
+  const res = await db.prepare(
+    `SELECT prepared_ingredient_id, yield_base_produced, produced_at FROM pouriq_production_events WHERE trade_account_id = ?1`
+  ).bind(tradeAccountId).all<ProductionYieldRow>()
+  return res.results ?? []
+}
+
+export async function readProductionConsumption(db: D1Database, tradeAccountId: string): Promise<ProductionConsumptionRow[]> {
+  const res = await db.prepare(`
+    SELECT pc.component_ingredient_id, pc.amount_base_consumed, pc.produced_at
+    FROM pouriq_production_components pc
+    JOIN pouriq_production_events pe ON pe.id = pc.production_event_id
+    WHERE pe.trade_account_id = ?1
+  `).bind(tradeAccountId).all<ProductionConsumptionRow>()
+  return res.results ?? []
+}

@@ -44,3 +44,22 @@ describe('recomputeOrder', () => {
     expect(recomputeOrder(g, 'lemon')).toEqual(['sour'])
   })
 })
+
+import { sumProductionAfter } from '@/lib/pouriq/prepared'
+
+describe('sumProductionAfter', () => {
+  const rows = [
+    { amount: 4000, produced_at: '2026-06-01T10:00:00Z' },
+    { amount: 1000, produced_at: '2026-06-10T10:00:00Z' },
+    { amount: 500, produced_at: '2026-05-20T10:00:00Z' },
+  ]
+  it('sums only rows strictly after the anchor', () => {
+    expect(sumProductionAfter(rows, '2026-06-01T10:00:00Z')).toBe(1000)
+  })
+  it('sums all when anchor is before everything', () => {
+    expect(sumProductionAfter(rows, '2026-01-01T00:00:00Z')).toBe(5500)
+  })
+  it('is 0 when anchor is after everything', () => {
+    expect(sumProductionAfter(rows, '2026-07-01T00:00:00Z')).toBe(0)
+  })
+})
