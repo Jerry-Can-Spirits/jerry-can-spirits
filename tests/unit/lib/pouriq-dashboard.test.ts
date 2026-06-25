@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { deriveSalesSummary } from '@/lib/pouriq/dashboard'
+import { deriveSalesSummary, buildSetupProgress } from '@/lib/pouriq/dashboard'
 import type { MenuMetrics, CocktailMetrics } from '@/lib/pouriq/types'
 
 function cocktail(name: string, sale_price_p: number, units?: number): CocktailMetrics {
@@ -44,5 +44,25 @@ describe('deriveSalesSummary', () => {
   })
   it('is zero when nothing has sold this period', () => {
     expect(deriveSalesSummary(metricsWith([cocktail('Negroni', 1000)]))).toEqual({ revenue_p: 0, serves: 0, top: [] })
+  })
+})
+
+describe('buildSetupProgress', () => {
+  it('reports no progress when nothing is set up', () => {
+    const p = buildSetupProgress({ hasInvoice: false, hasMenu: false, hasPos: false, hasCount: false })
+    expect(p.completeCount).toBe(0)
+    expect(p.total).toBe(4)
+    expect(p.allComplete).toBe(false)
+    expect(p.steps.map((s) => s.key)).toEqual(['invoice', 'menu', 'pos', 'count'])
+    expect(p.steps.every((s) => !s.done)).toBe(true)
+  })
+  it('counts partial progress', () => {
+    const p = buildSetupProgress({ hasInvoice: true, hasMenu: true, hasPos: false, hasCount: false })
+    expect(p.completeCount).toBe(2)
+    expect(p.allComplete).toBe(false)
+  })
+  it('is complete when all four are done', () => {
+    const p = buildSetupProgress({ hasInvoice: true, hasMenu: true, hasPos: true, hasCount: true })
+    expect(p.allComplete).toBe(true)
   })
 })
