@@ -14,6 +14,7 @@ import { extractMenuWithAnthropic } from '@/lib/pouriq/menu-extract'
 import { parseMeasurement } from '@/lib/pouriq/measurement-parse'
 import { matchIngredient } from '@/lib/pouriq/match'
 import { listCatalogue, matchCatalogue } from '@/lib/pouriq/ingredient-catalogue'
+import { splitCompoundIngredients } from '@/lib/pouriq/compound'
 import type { IngredientType } from '@/lib/pouriq/types'
 
 export const runtime = 'nodejs'
@@ -32,7 +33,7 @@ export interface PreviewIngredient {
   match:
     | { kind: 'auto'; library_id: string; library_name: string }
     | { kind: 'suggestions'; entries: Array<{ id: string; name: string }> }
-    | { kind: 'catalogue'; catalogue_id: string; name: string; ingredient_type: IngredientType; pricing_mode: 'bottle' | 'unit'; default_pack_size_ml: number | null }
+    | { kind: 'catalogue'; catalogue_id: string; name: string; ingredient_type: IngredientType; base_unit: 'ml' | 'g' | 'each'; default_pack_size: number | null }
     | { kind: 'no-match' }
 }
 
@@ -153,7 +154,7 @@ export async function POST(request: Request) {
   const drinks: PreviewDrink[] = extracted.result.drinks.map((d) => ({
     name: d.name,
     sale_price_p: d.sale_price_p,
-    ingredients: d.ingredients.map((i): PreviewIngredient => {
+    ingredients: splitCompoundIngredients(d.ingredients).map((i): PreviewIngredient => {
       const parsed = parseMeasurement(i.raw_measurement)
       const matched = matchIngredient(i.name, library)
       let match: PreviewIngredient['match']
@@ -169,8 +170,8 @@ export async function POST(request: Request) {
             catalogue_id: cat.id,
             name: cat.name,
             ingredient_type: cat.ingredient_type,
-            pricing_mode: cat.pricing_mode,
-            default_pack_size_ml: cat.default_pack_size_ml,
+            base_unit: cat.base_unit,
+            default_pack_size: cat.default_pack_size,
           }
         } else if (matched.kind === 'suggestions') {
           match = {

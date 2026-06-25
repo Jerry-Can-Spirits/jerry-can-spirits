@@ -21,7 +21,7 @@ export interface PreviewDrinkInput {
     match:
       | { kind: 'auto'; library_id: string; library_name: string }
       | { kind: 'suggestions'; entries: Array<{ id: string; name: string }> }
-      | { kind: 'catalogue'; catalogue_id: string; name: string; ingredient_type: IngredientType; pricing_mode: 'bottle' | 'unit'; default_pack_size_ml: number | null }
+      | { kind: 'catalogue'; catalogue_id: string; name: string; ingredient_type: IngredientType; base_unit: 'ml' | 'g' | 'each'; default_pack_size: number | null }
       | { kind: 'no-match' }
   }>
 }
@@ -82,13 +82,12 @@ function initialIngredientState(input: PreviewDrinkInput['ingredients'][0]): Mat
     // Pre-stage a new library entry from the catalogue; the bar just types
     // the price. Starts price-less so it counts as "needs price" until filled.
     const m = input.match
-    const isUnit = m.pricing_mode === 'unit'
     return {
       new_library: {
         name: m.name,
         ingredient_type: m.ingredient_type,
-        base_unit: isUnit ? 'each' : 'ml',
-        pack_size: isUnit ? 1 : (m.default_pack_size_ml ?? 700),
+        base_unit: m.base_unit,
+        pack_size: m.default_pack_size ?? (m.base_unit === 'each' ? 1 : 700),
         price_p: null,
         purchase_qty: 1,
       },

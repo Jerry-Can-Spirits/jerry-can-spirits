@@ -6,8 +6,8 @@ const c = (name: string, aliases: string[] = []): CatalogueEntry => ({
   name,
   normalised_name: name.toLowerCase(),
   ingredient_type: 'spirit',
-  pricing_mode: 'bottle',
-  default_pack_size_ml: 700,
+  base_unit: 'ml',
+  default_pack_size: 700,
   aliases,
 })
 
@@ -47,6 +47,9 @@ describe('matchCatalogue', () => {
   })
   it('still prefers an exact canonical-name match', () => {
     expect(matchCatalogue('amaretto', cat)?.name).toBe('Amaretto')
+  })
+  it('exposes base_unit on the matched entry', () => {
+    expect(matchCatalogue('dark rum', cat)?.base_unit).toBe('ml')
   })
 
   it('does NOT match a differing head noun ("lime slice" must not adopt "Lime Juice")', () => {
