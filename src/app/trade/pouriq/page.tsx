@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { getCloudflareContext } from '@opennextjs/cloudflare'
 import { checkPourIqAccess } from '@/lib/pouriq/access'
 import { LicenceGate } from '@/components/pouriq/LicenceGate'
-import { loadDashboard } from '@/lib/pouriq/dashboard'
+import { loadDashboard, loadSetupProgress } from '@/lib/pouriq/dashboard'
 import { SECONDARY_BUTTON_SM } from '@/lib/pouriq/button-styles'
 
 export const dynamic = 'force-dynamic'
@@ -19,12 +19,35 @@ export default async function TodayDashboard() {
 
   const { env } = await getCloudflareContext()
   const db = env.DB as D1Database
-  const { attention, sales, profitability } = await loadDashboard(db, access.tradeAccountId)
+  const [{ attention, sales, profitability }, setup] = await Promise.all([
+    loadDashboard(db, access.tradeAccountId),
+    loadSetupProgress(db, access.tradeAccountId),
+  ])
 
   return (
     <main className="min-h-screen">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-24">
         <h1 className="text-3xl md:text-4xl font-serif font-bold text-white mb-8">Today</h1>
+
+        {!setup.allComplete && (
+          <section className="mb-8 rounded-xl border border-gold-500/30 bg-jerry-green-800/40 p-5">
+            <div className="flex items-baseline justify-between gap-3 mb-3">
+              <h2 className="text-sm font-semibold text-gold-200">Pour IQ setup</h2>
+              <span className="text-xs text-parchment-400">{setup.completeCount} of {setup.total} complete</span>
+            </div>
+            <ul className="space-y-1.5 text-sm">
+              {setup.steps.map((step) => (
+                <li key={step.key}>
+                  {step.done ? (
+                    <span className="text-parchment-400"><span className="text-emerald-300">✓</span> {step.label}</span>
+                  ) : (
+                    <Link href={step.href} className="text-gold-300 hover:text-gold-200">○ {step.label} →</Link>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
 
         <section className="mb-8">
           <h2 className="text-xs uppercase tracking-widest text-parchment-400 mb-3">Attention required</h2>
