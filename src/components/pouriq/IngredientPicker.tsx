@@ -163,6 +163,7 @@ export function IngredientPicker({ libraryEntries, selectedEntryId, onChange }: 
         price_p,
         pack_format: null,
         subcategory: null,
+        is_prepared: 0,
         purchase_qty,
         yield_pct: 100,
         barcode: pendingBarcode,

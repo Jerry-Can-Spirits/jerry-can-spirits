@@ -16,11 +16,11 @@ export interface IngredientLibraryInsert {
   notes: string | null
 }
 
-// Columns present in the new schema (migration 0043).
+// Columns present in the new schema (migration 0045).
 const LIBRARY_SELECT = `
   id, trade_account_id, name, ingredient_type,
   base_unit, pack_size, price_p, pack_format, subcategory,
-  purchase_qty, yield_pct, barcode, notes, created_at, updated_at
+  is_prepared, purchase_qty, yield_pct, barcode, notes, created_at, updated_at
 `
 
 function mapLibraryRow(r: {
@@ -33,6 +33,7 @@ function mapLibraryRow(r: {
   price_p: number
   pack_format: string | null
   subcategory: string | null
+  is_prepared: number
   purchase_qty: number
   yield_pct: number
   barcode: string | null

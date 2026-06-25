@@ -87,12 +87,23 @@ export interface IngredientLibraryRow {
   price_p: number
   pack_format: string | null
   subcategory: string | null
+  is_prepared: number
   purchase_qty: number
   yield_pct: number
   barcode: string | null
   notes: string | null
   created_at: string
   updated_at: string
+}
+
+export interface PreparedComponentRow {
+  id: string
+  prepared_ingredient_id: string
+  component_ingredient_id: string
+  amount_base: number
+  recipe_unit: string | null
+  recipe_qty: number | null
+  created_at: string
 }
 
 export interface ServeUnitRow {

@@ -10,6 +10,7 @@ function row(name: string): IngredientLibraryRow {
     name,
     ingredient_type: 'other',
     base_unit: 'ml', pack_size: 700, price_p: 1000, pack_format: null, subcategory: null,
+    is_prepared: 0,
     purchase_qty: 1,
     yield_pct: 100,
     barcode: null,

@@ -15,6 +15,7 @@ function mkIng(
     id: 'lib', trade_account_id: 't', name: 'x', ingredient_type: 'spirit',
     base_unit, pack_size, price_p, purchase_qty, yield_pct,
     pack_format: null, subcategory: null,
+    is_prepared: 0,
     barcode: null, notes: null, created_at: '', updated_at: '',
   }
   return { id: 'ing', cocktail_id: 'c', library_ingredient_id: 'lib', pour_ml, unit_count, recipe_unit: null, recipe_qty: null, library }
