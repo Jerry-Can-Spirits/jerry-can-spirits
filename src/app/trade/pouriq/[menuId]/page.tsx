@@ -21,6 +21,8 @@ import { listVolumesForPeriod, currentPeriod } from '@/lib/pouriq/volumes'
 import { PRIMARY_BUTTON, SECONDARY_BUTTON, SECONDARY_BUTTON_SM } from '@/lib/pouriq/button-styles'
 import { classifyMenuBalance } from '@/lib/pouriq/menu-balance'
 import { MenuBalance } from '@/components/pouriq/MenuBalance'
+import { buildMenuPerformance } from '@/lib/pouriq/menu-performance'
+import { MenuMatrix } from '@/components/pouriq/MenuMatrix'
 
 export const dynamic = 'force-dynamic'
 
@@ -66,6 +68,7 @@ export default async function MenuDetailPage({ params }: Props) {
   const period = currentPeriod(menu.volume_cadence)
   const volumes = await listVolumesForPeriod(db, menuId, period.start, period.end)
   const metrics = calculateMenuMetrics(cocktails, menu.prices_include_vat === 1, volumes)
+  const perf = buildMenuPerformance(metrics.cocktail_metrics, menu.target_gp_pct)
   const missingCount = cocktails.filter((c) => !c.description || c.description.trim() === '').length
 
   const volumeUnits = new Map<string, number>()
@@ -166,6 +169,14 @@ export default async function MenuDetailPage({ params }: Props) {
           <div className="space-y-8">
             <KpiCards menu={menu} metrics={metrics} />
             <section>
+              <h2 className="text-xl font-serif font-bold text-white mb-4">Menu performance</h2>
+              {perf.hasSales ? (
+                <MenuMatrix quadrants={perf.quadrants} />
+              ) : (
+                <p className="text-sm text-parchment-400">Add this week&rsquo;s sales below to see your menu performance matrix.</p>
+              )}
+            </section>
+            <section>
               <div className="flex flex-wrap items-baseline justify-between gap-3 mb-4">
                 <h2 className="text-xl font-serif font-bold text-white">Drinks</h2>
                 <div className="no-print">
@@ -177,6 +188,7 @@ export default async function MenuDetailPage({ params }: Props) {
                 cocktails={cocktails}
                 metrics={metrics.cocktail_metrics}
                 targetGpPct={menu.target_gp_pct}
+                statusById={perf.statusById}
               />
             </section>
             <section className="no-print">

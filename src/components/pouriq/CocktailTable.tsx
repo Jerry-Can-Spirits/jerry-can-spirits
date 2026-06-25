@@ -1,17 +1,29 @@
 import Link from 'next/link'
 import type { CocktailMetrics, CocktailRow } from '@/lib/pouriq/types'
 import { GenerateDescriptionModal } from '@/components/pouriq/GenerateDescriptionModal'
+import { STATUS_LABEL, type PerfStatus } from '@/lib/pouriq/menu-performance'
 
 function formatMoney(p: number) { return `£${(p / 100).toFixed(2)}` }
+
+function statusClass(s: PerfStatus | undefined): string {
+  switch (s) {
+    case 'winner': return 'text-emerald-300'
+    case 'promote': return 'text-sky-300'
+    case 'fix-margin': return 'text-amber-200'
+    case 'review': case 'missing-cost': case 'needs-price': return 'text-red-300'
+    default: return 'text-parchment-400'
+  }
+}
 
 interface Props {
   menuId: string
   cocktails: CocktailRow[]
   metrics: CocktailMetrics[]
   targetGpPct: number
+  statusById: Record<string, PerfStatus>
 }
 
-export function CocktailTable({ menuId, cocktails, metrics, targetGpPct }: Props) {
+export function CocktailTable({ menuId, cocktails, metrics, targetGpPct, statusById }: Props) {
   const byId = new Map(metrics.map((m) => [m.cocktail_id, m]))
   const rows = cocktails.map((c) => ({ cocktail: c, m: byId.get(c.id)! })).filter((r) => r.m)
 
@@ -30,7 +42,7 @@ export function CocktailTable({ menuId, cocktails, metrics, targetGpPct }: Props
   }
 
   const extraCols = (anyPromo ? 1 : 0) + (anyVolume ? 2 : 0)
-  const minWidth = extraCols >= 2 ? 'min-w-[1000px]' : extraCols === 1 ? 'min-w-[860px]' : 'min-w-[640px]'
+  const minWidth = extraCols >= 2 ? 'min-w-[1120px]' : extraCols === 1 ? 'min-w-[980px]' : 'min-w-[760px]'
 
   return (
     <div className="bg-jerry-green-800/40 border border-gold-500/20 rounded-xl overflow-x-auto">
@@ -45,6 +57,7 @@ export function CocktailTable({ menuId, cocktails, metrics, targetGpPct }: Props
             {anyPromo && <th className="px-4 py-3">Promo · GP %</th>}
             {anyVolume && <th className="px-4 py-3">Units</th>}
             {anyVolume && <th className="px-4 py-3">Contribution</th>}
+            <th className="px-4 py-3">Status</th>
             <th className="px-4 py-3"></th>
           </tr>
         </thead>
@@ -120,6 +133,9 @@ export function CocktailTable({ menuId, cocktails, metrics, targetGpPct }: Props
                     {volume ? formatMoney(volume.contribution_p) : <span className="text-parchment-500">—</span>}
                   </td>
                 )}
+                <td className={`px-4 py-3 ${statusClass(statusById[cocktail.id])}`}>
+                  {statusById[cocktail.id] ? STATUS_LABEL[statusById[cocktail.id]] : <span className="text-parchment-500">—</span>}
+                </td>
                 <td className="px-4 py-3 text-right">
                   <Link href={`/trade/pouriq/${menuId}/edit?cocktail=${cocktail.id}`} className="text-gold-300 hover:text-gold-200 underline text-xs">Edit</Link>
                 </td>
