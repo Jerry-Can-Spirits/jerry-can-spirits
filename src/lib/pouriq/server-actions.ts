@@ -527,6 +527,18 @@ export async function recordStockCountAction(libraryIngredientId: string, countQ
   revalidatePath('/trade/pouriq/stock')
 }
 
+export async function setParAction(libraryIngredientId: string, parBottles: number | null): Promise<void> {
+  const { db, tradeAccountId } = await requireDb()
+  if (parBottles !== null && (!Number.isFinite(parBottles) || parBottles < 0)) throw new Error('Par must be a non-negative number')
+  const owns = await db.prepare(`SELECT 1 FROM pouriq_ingredients_library WHERE id = ?1 AND trade_account_id = ?2`).bind(libraryIngredientId, tradeAccountId).first()
+  if (!owns) throw new Error('Ingredient not found')
+  await db.prepare(`
+    UPDATE pouriq_ingredients_library SET par_bottles = ?1, updated_at = datetime('now') WHERE id = ?2 AND trade_account_id = ?3
+  `).bind(parBottles, libraryIngredientId, tradeAccountId).run()
+  revalidatePath('/trade/pouriq/stock')
+  revalidatePath('/trade/pouriq/stock/order')
+}
+
 export async function saveServeUnitAction(libraryIngredientId: string, name: string, basePerUnit: number): Promise<void> {
   const { db, tradeAccountId } = await requireDb()
   const trimmed = name.trim()
