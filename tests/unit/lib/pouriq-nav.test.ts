@@ -14,4 +14,9 @@ describe('isNavActive', () => {
   it('does not cross sections', () => {
     expect(isNavActive('/trade/pouriq/stock', '/trade/pouriq/variance')).toBe(false)
   })
+  it('separates Dashboard (home) from Menus (/menus)', () => {
+    expect(isNavActive('/trade/pouriq/menus', '/trade/pouriq/menus')).toBe(true)
+    expect(isNavActive('/trade/pouriq', '/trade/pouriq/menus')).toBe(false)
+    expect(isNavActive('/trade/pouriq/menus', '/trade/pouriq')).toBe(false)
+  })
 })

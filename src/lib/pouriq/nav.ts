@@ -8,11 +8,12 @@ const HOME = '/trade/pouriq'
 // spec cards, Imports, Team & locations) are added as their screens ship.
 export const NAV_GROUPS: NavGroup[] = [
   { label: 'Operate', items: [
+    { label: 'Dashboard', href: HOME },
     { label: 'Variance', href: '/trade/pouriq/variance' },
     { label: 'Stock', href: '/trade/pouriq/stock' },
   ] },
   { label: 'Build', items: [
-    { label: 'Menus', href: HOME },
+    { label: 'Menus', href: '/trade/pouriq/menus' },
     { label: 'Ingredients', href: '/trade/pouriq/library' },
     { label: 'Serves', href: '/trade/pouriq/serves' },
     { label: 'Suppliers & invoices', href: '/trade/pouriq/invoices' },
