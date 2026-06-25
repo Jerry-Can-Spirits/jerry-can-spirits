@@ -5,9 +5,11 @@ import { checkPourIqAccess } from '@/lib/pouriq/access'
 import {
   getLibraryEntry,
   getLibraryEntryUsage,
+  listLibraryEntries,
 } from '@/lib/pouriq/ingredient-library'
 import { loadImpactPayload } from '@/lib/pouriq/cost-impact-loader'
 import { listServeUnits } from '@/lib/pouriq/serve-units'
+import { listPreparedComponents } from '@/lib/pouriq/prepared'
 import { LicenceGate } from '@/components/pouriq/LicenceGate'
 import { IngredientForm } from '@/components/pouriq/IngredientForm'
 import { SECONDARY_BUTTON_SM } from '@/lib/pouriq/button-styles'
@@ -30,10 +32,12 @@ export default async function EditLibraryEntryPage({ params }: Props) {
   const entry = await getLibraryEntry(db, id, access.tradeAccountId)
   if (!entry) notFound()
 
-  const [usage, serveUnits, impactPayload] = await Promise.all([
+  const [usage, serveUnits, impactPayload, components, libraryEntries] = await Promise.all([
     getLibraryEntryUsage(db, id),
     listServeUnits(db, id),
     loadImpactPayload(db, id, access.tradeAccountId),
+    entry.is_prepared ? listPreparedComponents(db, id) : Promise.resolve([]),
+    listLibraryEntries(db, access.tradeAccountId),
   ])
   if (!impactPayload) notFound()
 
@@ -60,7 +64,7 @@ export default async function EditLibraryEntryPage({ params }: Props) {
         </div>
 
         <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20 mb-8">
-          <IngredientForm entry={entry} usageCount={usage.length} impactPayload={impactPayload} serveUnits={serveUnits} />
+          <IngredientForm entry={entry} usageCount={usage.length} impactPayload={impactPayload} serveUnits={serveUnits} components={components} libraryEntries={libraryEntries} />
         </div>
 
         {byMenu.size > 0 && (
