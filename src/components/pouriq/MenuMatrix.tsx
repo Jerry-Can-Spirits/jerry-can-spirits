@@ -7,7 +7,7 @@ const TONES = {
   review: { card: 'border-red-500/35', label: 'text-red-200', chip: 'border-red-500/40' },
 } as const
 
-function Quadrant({ label, tone, drinks }: { label: string; tone: keyof typeof TONES; drinks: Array<{ name: string }> }) {
+function Quadrant({ label, tone, drinks }: { label: string; tone: keyof typeof TONES; drinks: Array<{ cocktail_id: string; name: string }> }) {
   const t = TONES[tone]
   return (
     <div className={`rounded-lg border p-3 min-h-[92px] ${t.card}`}>
@@ -17,7 +17,7 @@ function Quadrant({ label, tone, drinks }: { label: string; tone: keyof typeof T
       ) : (
         <div className="flex flex-wrap gap-1.5 mt-2">
           {drinks.map((d) => (
-            <span key={d.name} className={`text-xs rounded-full border px-2 py-0.5 text-parchment-100 ${t.chip}`}>{d.name}</span>
+            <span key={d.cocktail_id} className={`text-xs rounded-full border px-2 py-0.5 text-parchment-100 ${t.chip}`}>{d.name}</span>
           ))}
         </div>
       )}
