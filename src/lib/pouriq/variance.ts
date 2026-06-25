@@ -201,3 +201,40 @@ export function countInWindow(rows: Array<{ at: string }>, ws: string, we: strin
   for (const r of rows) if (inWindow(r.at, ws, we)) n++
   return n
 }
+
+export interface VarianceLedger {
+  opening_bottles: number
+  deliveries_bottles: number
+  produced_bottles: number
+  consumed_bottles: number
+  expected_usage_bottles: number
+  expected_closing_bottles: number
+  actual_closing_bottles: number
+  variance_bottles: number // expected closing − actual closing; positive = unexplained loss
+}
+
+// Reconciles the bottle-denominated stock identity for the variance detail
+// ledger: opening + deliveries + produced − consumed − expected usage = expected
+// closing; the gap to the actual count is the unexplained variance. Same terms
+// as the rolling loader's actual-usage fold, just shown as a transparent ledger.
+export function buildVarianceLedger(input: {
+  openingQty: number
+  closingQty: number
+  deliveriesBottles: number
+  producedBottles: number
+  consumedBottles: number
+  expectedUsageBottles: number
+}): VarianceLedger {
+  const expected_closing =
+    input.openingQty + input.deliveriesBottles + input.producedBottles - input.consumedBottles - input.expectedUsageBottles
+  return {
+    opening_bottles: input.openingQty,
+    deliveries_bottles: input.deliveriesBottles,
+    produced_bottles: input.producedBottles,
+    consumed_bottles: input.consumedBottles,
+    expected_usage_bottles: input.expectedUsageBottles,
+    expected_closing_bottles: expected_closing,
+    actual_closing_bottles: input.closingQty,
+    variance_bottles: expected_closing - input.closingQty,
+  }
+}
