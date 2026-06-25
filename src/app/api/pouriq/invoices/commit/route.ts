@@ -325,18 +325,16 @@ export async function POST(request: Request) {
 
   // 4. Propagate cost changes to any prepared recipes that depend on updated
   //    ingredients. Best-effort: failures must not break the commit response.
-  if (costUpdatedLibraryIds.size > 0) {
+  for (const updatedId of costUpdatedLibraryIds) {
+    // Per-ingredient so one failure doesn't skip the rest. Best-effort:
+    // cost data is committed; recompute failures must not 500 or roll back.
     try {
-      for (const updatedId of costUpdatedLibraryIds) {
-        await recomputeDependents(db, access.tradeAccountId, updatedId)
-      }
+      await recomputeDependents(db, access.tradeAccountId, updatedId)
     } catch (err) {
       Sentry.captureException(err, {
         tags: { route: 'pouriq-invoice-commit', feature: 'pouriq-invoices/prepared-recompute' },
-        extra: { invoiceId },
+        extra: { invoiceId, updatedId },
       })
-      // Intentionally swallowed — cost data is committed; prepared recompute is
-      // best-effort and will not 500 or roll back the response.
     }
   }
 
