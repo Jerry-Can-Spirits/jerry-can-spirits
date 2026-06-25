@@ -83,7 +83,9 @@ export async function loadSetupProgress(db: D1Database, tradeAccountId: string):
   const exists = (table: string) => db.prepare(`SELECT 1 FROM ${table} WHERE trade_account_id = ?1 LIMIT 1`).bind(tradeAccountId).first()
   const [inv, menu, count, connections] = await Promise.all([
     exists('pouriq_invoices'),
-    exists('pouriq_menus'),
+    // Exclude the hidden per-tenant "serves" menu (lazily created by POS / the
+    // serves page) — only a real imported menu counts as the menu step.
+    db.prepare(`SELECT 1 FROM pouriq_menus WHERE trade_account_id = ?1 AND is_serves_menu = 0 LIMIT 1`).bind(tradeAccountId).first(),
     exists('pouriq_stock_count_events'),
     listConnections(db, tradeAccountId),
   ])

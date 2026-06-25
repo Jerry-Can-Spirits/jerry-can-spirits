@@ -39,9 +39,9 @@ export default async function TodayDashboard() {
               {setup.steps.map((step) => (
                 <li key={step.key}>
                   {step.done ? (
-                    <span className="text-parchment-400"><span className="text-emerald-300">✓</span> {step.label}</span>
+                    <span className="text-parchment-400"><span aria-hidden className="text-emerald-300">✓</span> {step.label}</span>
                   ) : (
-                    <Link href={step.href} className="text-gold-300 hover:text-gold-200">○ {step.label} →</Link>
+                    <Link href={step.href} className="text-gold-300 hover:text-gold-200"><span aria-hidden>○ </span>{step.label}<span aria-hidden> →</span></Link>
                   )}
                 </li>
               ))}
