@@ -3,6 +3,7 @@ import { getAttentionRows, deriveMenuAttention, type AttentionRow } from './atte
 import { getActiveMenu, listCocktailsForMenu } from './menus'
 import { listVolumesForPeriod, currentPeriod } from './volumes'
 import { calculateMenuMetrics } from './calculations'
+import { listConnections } from './pos/connections'
 
 export interface SalesSummary { revenue_p: number; serves: number; top: Array<{ name: string; units: number }> }
 export interface ProfitabilitySummary {
@@ -60,4 +61,36 @@ export async function loadDashboard(db: D1Database, tradeAccountId: string): Pro
     },
     activeMenuId: activeMenu.id,
   }
+}
+
+export interface SetupStep { key: string; label: string; href: string; done: boolean }
+export interface SetupProgress { steps: SetupStep[]; completeCount: number; total: number; allComplete: boolean }
+
+// Pure: the four onboarding steps + completion, from booleans for each signal.
+export function buildSetupProgress(flags: { hasInvoice: boolean; hasMenu: boolean; hasPos: boolean; hasCount: boolean }): SetupProgress {
+  const steps: SetupStep[] = [
+    { key: 'invoice', label: 'Upload your first invoice', href: '/trade/pouriq/invoices/new', done: flags.hasInvoice },
+    { key: 'menu', label: 'Import your first menu', href: '/trade/pouriq/new', done: flags.hasMenu },
+    { key: 'pos', label: 'Connect your till', href: '/trade/pouriq/settings/integrations', done: flags.hasPos },
+    { key: 'count', label: 'Complete your first stock count', href: '/trade/pouriq/stock', done: flags.hasCount },
+  ]
+  const completeCount = steps.filter((s) => s.done).length
+  return { steps, completeCount, total: steps.length, allComplete: completeCount === steps.length }
+}
+
+export async function loadSetupProgress(db: D1Database, tradeAccountId: string): Promise<SetupProgress> {
+  // Table names are fixed constants, not user input.
+  const exists = (table: string) => db.prepare(`SELECT 1 FROM ${table} WHERE trade_account_id = ?1 LIMIT 1`).bind(tradeAccountId).first()
+  const [inv, menu, count, connections] = await Promise.all([
+    exists('pouriq_invoices'),
+    exists('pouriq_menus'),
+    exists('pouriq_stock_count_events'),
+    listConnections(db, tradeAccountId),
+  ])
+  return buildSetupProgress({
+    hasInvoice: !!inv,
+    hasMenu: !!menu,
+    hasPos: connections.some((c) => c.enabled === 1),
+    hasCount: !!count,
+  })
 }
