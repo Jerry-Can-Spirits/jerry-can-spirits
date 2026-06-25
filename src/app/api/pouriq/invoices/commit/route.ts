@@ -18,6 +18,7 @@ import {
 import { type CostPricingMode } from '@/lib/pouriq/cost-changes'
 import { getLibraryEntry, insertLibraryEntry } from '@/lib/pouriq/ingredient-library'
 import { receiptBottlesFromInvoiceLine } from '@/lib/pouriq/stock'
+import { recomputeDependents } from '@/lib/pouriq/prepared'
 import type { IngredientType } from '@/lib/pouriq/types'
 
 export const runtime = 'nodejs'
@@ -152,6 +153,7 @@ export async function POST(request: Request) {
   let netSawAny = false
   const newLibraryIdByName = new Map<string, string>()
   const appliedReceipts: Array<{ invoiceLineId: string; libraryId: string; extractedQuantity: number | null }> = []
+  const costUpdatedLibraryIds = new Set<string>()
 
   try {
     for (const line of body.lines) {
@@ -229,6 +231,7 @@ export async function POST(request: Request) {
             `UPDATE pouriq_ingredients_library SET price_p = ?1, updated_at = datetime('now') WHERE id = ?2 AND trade_account_id = ?3`,
           ).bind(newCostP, libraryId, access.tradeAccountId),
         )
+        costUpdatedLibraryIds.add(libraryId)
       }
 
       stmts.push(
@@ -320,7 +323,24 @@ export async function POST(request: Request) {
     // best-effort and will not 500 or roll back the response.
   }
 
-  // 4. Move the R2 PDF from _pending/ to its permanent tenant-namespaced key.
+  // 4. Propagate cost changes to any prepared recipes that depend on updated
+  //    ingredients. Best-effort: failures must not break the commit response.
+  if (costUpdatedLibraryIds.size > 0) {
+    try {
+      for (const updatedId of costUpdatedLibraryIds) {
+        await recomputeDependents(db, access.tradeAccountId, updatedId)
+      }
+    } catch (err) {
+      Sentry.captureException(err, {
+        tags: { route: 'pouriq-invoice-commit', feature: 'pouriq-invoices/prepared-recompute' },
+        extra: { invoiceId },
+      })
+      // Intentionally swallowed — cost data is committed; prepared recompute is
+      // best-effort and will not 500 or roll back the response.
+    }
+  }
+
+  // 6. Move the R2 PDF from _pending/ to its permanent tenant-namespaced key.
   let r2Key: string | null = null
   try {
     const pendingKey = `pouriq-invoices/_pending/${body.ticket}.pdf`
@@ -340,7 +360,7 @@ export async function POST(request: Request) {
     // Don't fail the commit. r2_key stays null; Download PDF will be hidden.
   }
 
-  // 5. Finalise totals on the invoice row.
+  // 7. Finalise totals on the invoice row.
   try {
     await finaliseInvoiceTotals(db, invoiceId, appliedCount, netSawAny ? netTotalP : null, r2Key)
   } catch (err) {
