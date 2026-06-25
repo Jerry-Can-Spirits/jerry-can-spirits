@@ -2,7 +2,7 @@ import 'server-only'
 import { costPerMlP } from './calculations'
 import {
   pairLatestCounts, sumBucketsInWindow, persistentLossFlag,
-  calcVariance, calcVarianceCostP, classifyVariance, applyYield, sumAmountsInWindow,
+  calcVariance, calcVarianceCostP, classifyVariance, applyYield, sumAmountsInWindow, countInWindow,
   type VarianceSeverity, type CountEvent,
 } from './variance'
 import { readProductionYields, readProductionConsumption } from './prepared'
@@ -209,8 +209,8 @@ export async function loadRollingVariance(db: D1Database, tradeAccountId: string
       const prodYieldMl = sumAmountsInWindow(yieldRows, ws, we)
       const prodConsumeMl = sumAmountsInWindow(consumeRows, ws, we)
       actual = (pair.previous.count_qty - pair.latest.count_qty) * meta.pack_size + receiptsMl + prodYieldMl - prodConsumeMl
-      deliveries = ingReceipts.filter((r) => r.at > ws && r.at <= we).length
-      batches = yieldRows.filter((r) => r.at > ws && r.at <= we).length + consumeRows.filter((r) => r.at > ws && r.at <= we).length
+      deliveries = countInWindow(ingReceipts, ws, we)
+      batches = countInWindow(yieldRows, ws, we) + countInWindow(consumeRows, ws, we)
       unmatched = await readUnmatchedInWindow(db, tradeAccountId, ws, we)
     }
 

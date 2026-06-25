@@ -167,15 +167,37 @@ export function persistentLossFlag(recentVariancesNewestLast: Array<number | nul
   return lastThree.every((v) => v < 0)
 }
 
-// Sum amounts strictly after `ws` and up to and including `we` (raw string
-// compare; all timestamps are server datetimes in the same format as counts).
-// Used to fold deliveries and production into the variance count window.
+// Canonicalise a stored timestamp for lexical window comparison. Counts and
+// production are space-form "YYYY-MM-DD HH:MM:SS"; stock receipts may be ISO
+// ("...THH:MM:SS.sssZ") or date-only. Convert all to space-form at seconds
+// precision so ordering is correct across the formats (without this, the ISO
+// "T" sorts after a space and a same-day delivery falls out of its window).
+export function canonTs(s: string): string {
+  return s.replace('T', ' ').slice(0, 19)
+}
+
+// Rows whose timestamp is strictly after `ws` and up to and including `we`.
+function inWindow(at: string, ws: string, we: string): boolean {
+  const a = canonTs(at)
+  return a > canonTs(ws) && a <= canonTs(we)
+}
+
+// Sum amounts in the window (ws, we]. Used to fold deliveries and production
+// into the variance count window.
 export function sumAmountsInWindow(
   rows: Array<{ amount: number; at: string }>,
   ws: string,
   we: string,
 ): number {
   let total = 0
-  for (const r of rows) if (r.at > ws && r.at <= we) total += r.amount
+  for (const r of rows) if (inWindow(r.at, ws, we)) total += r.amount
   return total
+}
+
+// Count of rows in the window (ws, we] — shares the boundary logic with
+// sumAmountsInWindow so a count can never diverge from its sum.
+export function countInWindow(rows: Array<{ at: string }>, ws: string, we: string): number {
+  let n = 0
+  for (const r of rows) if (inWindow(r.at, ws, we)) n++
+  return n
 }

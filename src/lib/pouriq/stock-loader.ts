@@ -1,5 +1,5 @@
 import 'server-only'
-import { sumBucketsInWindow } from './variance'
+import { sumBucketsInWindow, canonTs } from './variance'
 import { computeOnHandBottles } from './stock'
 import { sumProductionAfter, readProductionYields, readProductionConsumption } from './prepared'
 
@@ -160,7 +160,7 @@ export async function loadStockLevels(db: D1Database, tradeAccountId: string): P
       })
     } else {
       const receiptsSince = ingReceipts
-        .filter((r) => r.received_at > anchor.counted_at)
+        .filter((r) => canonTs(r.received_at) > canonTs(anchor.counted_at))
         .reduce((sum, r) => sum + r.qty, 0)
 
       let usageSinceMl = 0
