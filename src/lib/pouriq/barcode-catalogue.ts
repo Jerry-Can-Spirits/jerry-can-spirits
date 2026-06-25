@@ -25,7 +25,7 @@ export async function findCatalogueEntry(
 ): Promise<BarcodeCatalogueEntry | null> {
   return await db
     .prepare(`
-      SELECT barcode, name, ingredient_type, bottle_size_ml AS pack_size_ml, contributor_count, verified
+      SELECT barcode, name, ingredient_type, pack_size_ml, contributor_count, verified
       FROM pouriq_barcode_catalogue
       WHERE barcode = ?1
     `)
@@ -56,7 +56,7 @@ export async function contributeToCatalogue(
     await db
       .prepare(`
         INSERT INTO pouriq_barcode_catalogue
-          (barcode, name, ingredient_type, bottle_size_ml, first_contributor_account_id)
+          (barcode, name, ingredient_type, pack_size_ml, first_contributor_account_id)
         VALUES (?1, ?2, ?3, ?4, ?5)
         ON CONFLICT(barcode) DO NOTHING
       `)
