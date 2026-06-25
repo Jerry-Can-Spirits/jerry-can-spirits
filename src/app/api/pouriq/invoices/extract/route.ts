@@ -11,6 +11,8 @@ import { checkPourIqAccess } from '@/lib/pouriq/access'
 import { listLibraryEntries } from '@/lib/pouriq/ingredient-library'
 import { extractInvoiceWithAnthropic } from '@/lib/pouriq/invoice-extract'
 import { matchInvoiceLine } from '@/lib/pouriq/invoice-match'
+import { listCatalogue, matchCatalogue, adoptionName } from '@/lib/pouriq/ingredient-catalogue'
+import type { IngredientType } from '@/lib/pouriq/types'
 
 export const runtime = 'nodejs'
 
@@ -24,6 +26,7 @@ export interface PreviewLine {
   match:
     | { kind: 'auto'; library_id: string; library_name: string }
     | { kind: 'suggestions'; entries: Array<{ id: string; name: string }> }
+    | { kind: 'catalogue'; catalogue_id: string; name: string; ingredient_type: IngredientType; base_unit: 'ml' | 'g' | 'each'; default_pack_size: number | null }
     | { kind: 'no-match' }
 }
 
@@ -118,18 +121,33 @@ export async function POST(request: Request) {
   }
 
   const library = await listLibraryEntries(db, access.tradeAccountId)
+  const catalogue = await listCatalogue(db)
   const lines: PreviewLine[] = extracted.result.lines.map((line) => {
     const matched = matchInvoiceLine(line.extracted_name, library)
     let match: PreviewLine['match']
     if (matched.kind === 'auto') {
+      // The bar's own priced library entry always wins.
       match = { kind: 'auto', library_id: matched.entry.id, library_name: matched.entry.name }
-    } else if (matched.kind === 'suggestions') {
-      match = {
-        kind: 'suggestions',
-        entries: matched.entries.map((e) => ({ id: e.id, name: e.name })),
-      }
     } else {
-      match = { kind: 'no-match' }
+      // Not in their library — offer a shared-catalogue adoption (set price).
+      const cat = matchCatalogue(line.extracted_name, catalogue)
+      if (cat) {
+        match = {
+          kind: 'catalogue',
+          catalogue_id: cat.id,
+          name: adoptionName(line.extracted_name, cat),
+          ingredient_type: cat.ingredient_type,
+          base_unit: cat.base_unit,
+          default_pack_size: cat.default_pack_size,
+        }
+      } else if (matched.kind === 'suggestions') {
+        match = {
+          kind: 'suggestions',
+          entries: matched.entries.map((e) => ({ id: e.id, name: e.name })),
+        }
+      } else {
+        match = { kind: 'no-match' }
+      }
     }
     return {
       extracted_name: line.extracted_name,

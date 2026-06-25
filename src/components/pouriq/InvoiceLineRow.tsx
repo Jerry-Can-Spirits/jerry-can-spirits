@@ -78,6 +78,9 @@ function InvoiceLineRowComponent({ index, line, state, library, libraryById, onC
       <td className="px-3 py-3">
         {match.kind === 'new' ? (
           <div className="space-y-2 min-w-[260px]">
+            {line.match.kind === 'catalogue' && (
+              <p className="text-xs text-sky-300">from catalogue — set your price</p>
+            )}
             <input
               value={match.new_name}
               onChange={(e) => onChange(index, { match: { ...match, new_name: e.target.value } })}

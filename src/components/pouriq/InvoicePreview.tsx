@@ -28,6 +28,23 @@ export function InvoicePreview({ initial, library }: Props) {
           match: { kind: 'existing', library_id: l.match.library_id },
         }
       }
+      if (l.match.kind === 'catalogue') {
+        // Pre-stage a new library entry from the catalogue; the bar just sets
+        // the price (and ticks Apply) to adopt it.
+        const m = l.match
+        return {
+          applied: false,
+          unit_price_p: l.extracted_unit_price_p,
+          match: {
+            kind: 'new',
+            new_name: m.name,
+            new_type: m.ingredient_type,
+            base_unit: m.base_unit,
+            pack_size: m.default_pack_size ?? (m.base_unit === 'each' ? 1 : 700),
+            purchase_qty: 1,
+          },
+        }
+      }
       return {
         applied: false,
         unit_price_p: l.extracted_unit_price_p,
