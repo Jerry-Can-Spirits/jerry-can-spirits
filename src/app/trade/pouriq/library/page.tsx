@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { getCloudflareContext } from '@opennextjs/cloudflare'
 import { checkPourIqAccess } from '@/lib/pouriq/access'
 import { listLibraryEntries, getLibraryUsageCounts } from '@/lib/pouriq/ingredient-library'
+import { loadStockLevels } from '@/lib/pouriq/stock-loader'
 import { LicenceGate } from '@/components/pouriq/LicenceGate'
 import { IngredientList } from '@/components/pouriq/IngredientList'
 import { CostUpdateToastReader } from '@/components/pouriq/CostUpdateToastReader'
@@ -17,10 +18,15 @@ export default async function LibraryPage() {
 
   const { env } = await getCloudflareContext()
   const db = env.DB as D1Database
-  const [entries, usageCounts] = await Promise.all([
+  const [entries, usageCounts, stockRows] = await Promise.all([
     listLibraryEntries(db, access.tradeAccountId),
     getLibraryUsageCounts(db, access.tradeAccountId),
+    loadStockLevels(db, access.tradeAccountId),
   ])
+  const stockById: Record<string, { needs_reorder: boolean; reorder_qty: number; on_hand_bottles: number | null }> = {}
+  for (const r of stockRows) {
+    stockById[r.library_ingredient_id] = { needs_reorder: r.needs_reorder, reorder_qty: r.reorder_qty, on_hand_bottles: r.on_hand_bottles }
+  }
 
   return (
     <main className="min-h-screen">
@@ -39,7 +45,7 @@ export default async function LibraryPage() {
           </div>
         </div>
 
-        <IngredientList entries={entries} usageCounts={usageCounts} />
+        <IngredientList entries={entries} usageCounts={usageCounts} stockById={stockById} />
       </div>
       <CostUpdateToastReader />
     </main>
