@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { isNavActive } from '@/lib/pouriq/nav'
+import { isNavActive, isPourIqAppRoute } from '@/lib/pouriq/nav'
 
 describe('isNavActive', () => {
   it('matches the home item only exactly', () => {
@@ -18,5 +18,19 @@ describe('isNavActive', () => {
     expect(isNavActive('/trade/pouriq/menus', '/trade/pouriq/menus')).toBe(true)
     expect(isNavActive('/trade/pouriq', '/trade/pouriq/menus')).toBe(false)
     expect(isNavActive('/trade/pouriq/menus', '/trade/pouriq')).toBe(false)
+  })
+})
+
+describe('isPourIqAppRoute', () => {
+  it('is true on the app home and its sub-routes', () => {
+    expect(isPourIqAppRoute('/trade/pouriq')).toBe(true)
+    expect(isPourIqAppRoute('/trade/pouriq/menus')).toBe(true)
+    expect(isPourIqAppRoute('/trade/pouriq/variance/abc')).toBe(true)
+  })
+  it('is false on marketing and public trade pages', () => {
+    expect(isPourIqAppRoute('/')).toBe(false)
+    expect(isPourIqAppRoute('/trade/login')).toBe(false)
+    expect(isPourIqAppRoute('/trade/apply')).toBe(false)
+    expect(isPourIqAppRoute(null)).toBe(false)
   })
 })

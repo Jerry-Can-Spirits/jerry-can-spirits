@@ -33,3 +33,9 @@ export function isNavActive(pathname: string, href: string): boolean {
   if (href === HOME) return pathname === HOME
   return pathname === href || pathname.startsWith(href + '/')
 }
+
+// True on the authenticated Pour IQ app (its own chrome), false on marketing
+// routes and the public /trade entry pages (login/apply/landing).
+export function isPourIqAppRoute(pathname: string | null): boolean {
+  return pathname != null && (pathname === HOME || pathname.startsWith(HOME + '/'))
+}
