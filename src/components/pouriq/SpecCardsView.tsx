@@ -21,8 +21,8 @@ export function SpecCardsView({ cocktails, costById, priceIncludesVat }: Props) 
       <div className="no-print flex flex-wrap items-center gap-x-4 gap-y-3 mb-6">
         <div className="flex items-center gap-2">
           <span className="text-xs uppercase tracking-widest text-parchment-400">Layout</span>
-          <button type="button" onClick={() => setCompact(false)} className={compact ? SECONDARY_BUTTON_SM : PRIMARY_BUTTON}>One per page</button>
-          <button type="button" onClick={() => setCompact(true)} className={compact ? PRIMARY_BUTTON : SECONDARY_BUTTON_SM}>Compact</button>
+          <button type="button" aria-pressed={!compact} onClick={() => setCompact(false)} className={compact ? SECONDARY_BUTTON_SM : PRIMARY_BUTTON}>One per page</button>
+          <button type="button" aria-pressed={compact} onClick={() => setCompact(true)} className={compact ? PRIMARY_BUTTON : SECONDARY_BUTTON_SM}>Compact</button>
         </div>
         <label className="flex items-center gap-2 text-sm text-parchment-300">
           <input type="checkbox" checked={showCost} onChange={(e) => setShowCost(e.target.checked)} />
