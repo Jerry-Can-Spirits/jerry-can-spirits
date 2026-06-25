@@ -26,6 +26,8 @@ interface RollingVarianceRow {
   severity: 'none' | 'within-tolerance' | 'amber' | 'red'
   impact_p: number
   unmatched_in_window: number
+  deliveries_in_window: number
+  batches_in_window: number
   latest_reason: string | null
   persistent_loss: boolean
   trend: RollingTrendPoint[]
@@ -203,6 +205,16 @@ export function VarianceEditor() {
                   <a href="/trade/pouriq/unmatched" className="underline hover:text-amber-200">
                     Usage understated, {row.unmatched_in_window} unmapped sales this period
                   </a>
+                </p>
+              )}
+
+              {(row.deliveries_in_window > 0 || row.batches_in_window > 0) && (
+                <p className="text-xs text-parchment-400 mb-3">
+                  Accounts for{' '}
+                  {[
+                    row.deliveries_in_window > 0 ? `${row.deliveries_in_window} ${row.deliveries_in_window === 1 ? 'delivery' : 'deliveries'}` : null,
+                    row.batches_in_window > 0 ? `${row.batches_in_window} ${row.batches_in_window === 1 ? 'batch' : 'batches'}` : null,
+                  ].filter(Boolean).join(', ')}{' '}this period.
                 </p>
               )}
 

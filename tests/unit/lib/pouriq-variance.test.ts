@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { classifyVariance, calcVarianceCostP } from '@/lib/pouriq/variance'
+import { classifyVariance, calcVarianceCostP, sumAmountsInWindow, countInWindow, canonTs } from '@/lib/pouriq/variance'
 
 const BOTTLE = 700 // tolerance floor = 0.2 * 700 = 140 ml
 
@@ -47,5 +47,45 @@ describe('classifyVariance', () => {
   it('is symmetric for under- and over-variance', () => {
     expect(classifyVariance(-300, -30, BOTTLE)).toBe('red')
     expect(classifyVariance(-50, -40, BOTTLE)).toBe('within-tolerance')
+  })
+})
+
+describe('sumAmountsInWindow', () => {
+  const rows = [
+    { amount: 1, at: '2026-06-01 09:00:00' },       // = ws, excluded
+    { amount: 2, at: '2026-06-02 09:00:00' },       // space-form, in window
+    { amount: 16, at: '2026-06-02T12:00:00.000Z' }, // ISO, in window
+    { amount: 32, at: '2026-06-03' },               // date-only, in window
+    { amount: 4, at: '2026-06-03 09:00:00' },       // = we, included
+    { amount: 8, at: '2026-06-04 09:00:00' },       // > we, excluded
+  ]
+  it('sums amounts in (ws, we] across timestamp formats', () => {
+    expect(sumAmountsInWindow(rows, '2026-06-01 09:00:00', '2026-06-03 09:00:00')).toBe(54)
+  })
+  it('includes a same-day ISO delivery that precedes the closing count', () => {
+    // The ISO "T" must not sort after the space-form count bound.
+    const r = [{ amount: 5, at: '2026-06-03T08:00:00.000Z' }]
+    expect(sumAmountsInWindow(r, '2026-06-01 09:00:00', '2026-06-03 09:00:00')).toBe(5)
+  })
+  it('returns 0 for no rows', () => {
+    expect(sumAmountsInWindow([], 'a', 'b')).toBe(0)
+  })
+})
+
+describe('countInWindow', () => {
+  it('counts rows in (ws, we] with the same boundary as the sum', () => {
+    const rows = [
+      { at: '2026-06-01 09:00:00' }, { at: '2026-06-02 09:00:00' },
+      { at: '2026-06-03 09:00:00' }, { at: '2026-06-04 09:00:00' },
+    ]
+    expect(countInWindow(rows, '2026-06-01 09:00:00', '2026-06-03 09:00:00')).toBe(2)
+  })
+})
+
+describe('canonTs', () => {
+  it('normalises ISO and date-only to space-form seconds', () => {
+    expect(canonTs('2026-06-02T12:00:00.000Z')).toBe('2026-06-02 12:00:00')
+    expect(canonTs('2026-06-02 12:00:00')).toBe('2026-06-02 12:00:00')
+    expect(canonTs('2026-06-02')).toBe('2026-06-02')
   })
 })
