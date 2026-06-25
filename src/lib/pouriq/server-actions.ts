@@ -138,7 +138,7 @@ export async function deleteMenuAction(menuId: string): Promise<void> {
   const { db, tradeAccountId } = await requireDb()
   await deleteMenu(db, menuId, tradeAccountId)
   revalidatePath('/trade/pouriq')
-  redirect('/trade/pouriq')
+  redirect('/trade/pouriq/menus')
 }
 
 interface CocktailInput {

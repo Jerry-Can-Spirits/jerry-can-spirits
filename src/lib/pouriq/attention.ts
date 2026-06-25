@@ -41,7 +41,7 @@ export async function getAttentionRows(db: D1Database, tradeAccountId: string): 
 
   // 1. Sales paused — a POS is connected but there's no active menu to route to.
   if (enabled.length > 0 && !activeMenu) {
-    rows.push({ key: 'paused', label: 'Sales are paused — set an active menu', href: '/trade/pouriq', severity: 'high' })
+    rows.push({ key: 'paused', label: 'Sales are paused — set an active menu', href: '/trade/pouriq/menus', severity: 'high' })
   }
   // 2. Sync errors, per connection.
   for (const c of connections) {
