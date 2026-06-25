@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
-import { receiveStockAction, recordStockCountAction, recordProductionAction } from '@/lib/pouriq/server-actions'
+import { receiveStockAction, recordStockCountAction, recordProductionAction, setParAction } from '@/lib/pouriq/server-actions'
 import type { RollingStockRow } from '@/lib/pouriq/stock-loader'
 
 interface Props {
@@ -25,6 +25,7 @@ export function StockManager({ rows }: Props) {
   const [receiveInputs, setReceiveInputs] = useState<Record<string, string>>({})
   const [countInputs, setCountInputs] = useState<Record<string, string>>({})
   const [batchInputs, setBatchInputs] = useState<Record<string, string>>({})
+  const [parInputs, setParInputs] = useState<Record<string, string>>({})
   const [error, setError] = useState<string | null>(null)
 
   if (rows.length === 0) {
@@ -67,6 +68,22 @@ export function StockManager({ rows }: Props) {
     })
   }
 
+  function handleSetPar(id: string) {
+    const trimmed = (parInputs[id] ?? '').trim()
+    const par = trimmed === '' ? null : parseFloat(trimmed)
+    if (par !== null && (!Number.isFinite(par) || par < 0)) return
+    setError(null)
+    startTransition(async () => {
+      try {
+        await setParAction(id, par)
+        setParInputs((prev) => { const next = { ...prev }; delete next[id]; return next })
+        router.refresh()
+      } catch (e) {
+        setError((e as Error).message || 'Could not save par level.')
+      }
+    })
+  }
+
   function handleMakeBatch(id: string) {
     const raw = batchInputs[id] ?? ''
     const batches = parseFloat(raw)
@@ -86,12 +103,16 @@ export function StockManager({ rows }: Props) {
   return (
     <div className="space-y-4">
       {error && <p role="alert" className="text-sm text-red-300">{error}</p>}
+      <div className="flex justify-end">
+        <a href="/trade/pouriq/stock/order" className="text-sm text-gold-300 hover:text-gold-200 underline">Order report →</a>
+      </div>
       <div className="space-y-3">
         {rows.map((row) => {
           const id = row.library_ingredient_id
           const receiveVal = receiveInputs[id] ?? ''
           const countVal = countInputs[id] ?? ''
           const batchVal = batchInputs[id] ?? ''
+          const parVal = parInputs[id] ?? (row.par_bottles != null ? String(row.par_bottles) : '')
           const receiveQty = parseFloat(receiveVal)
           const countQty = parseFloat(countVal)
           const batchQty = parseFloat(batchVal)
@@ -120,6 +141,9 @@ export function StockManager({ rows }: Props) {
                       <span className="text-parchment-400 ml-2">(check stock)</span>
                     )}
                   </p>
+                  {row.needs_reorder && (
+                    <p className="text-amber-300 text-xs">Low · order {row.reorder_qty} {row.reorder_qty === 1 ? 'bottle' : 'bottles'}</p>
+                  )}
                   {row.anchor_count_at && (
                     <p className="text-parchment-400 text-xs">estimate, last counted {formatShortDate(row.anchor_count_at)}</p>
                   )}
@@ -175,6 +199,27 @@ export function StockManager({ rows }: Props) {
                     className={actionButtonClass}
                   >
                     {row.needs_opening_count ? 'Set opening count' : 'Save count'}
+                  </button>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <input
+                    type="number"
+                    step="0.1"
+                    min={0}
+                    value={parVal}
+                    onChange={(e) => setParInputs((prev) => ({ ...prev, [id]: e.target.value }))}
+                    className={inputClass}
+                    placeholder="par"
+                    aria-label={`${row.library_name} par level`}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => handleSetPar(id)}
+                    disabled={pending}
+                    className={actionButtonClass}
+                  >
+                    Set par
                   </button>
                 </div>
 

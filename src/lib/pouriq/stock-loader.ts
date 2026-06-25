@@ -1,6 +1,6 @@
 import 'server-only'
 import { sumBucketsInWindow, canonTs } from './variance'
-import { computeOnHandBottles } from './stock'
+import { computeOnHandBottles, reorderQty } from './stock'
 import { sumProductionAfter, readProductionYields, readProductionConsumption } from './prepared'
 
 export interface RollingStockRow {
@@ -15,13 +15,16 @@ export interface RollingStockRow {
   anchor_count_qty: number | null
   receipts_since: number
   expected_usage_bottles: number
+  par_bottles: number | null
+  needs_reorder: boolean
+  reorder_qty: number
 }
 
 // The stockable universe: every ml-priced library ingredient, whether or not
 // it appears in a recipe. Usage is recipe-derived (0 when an ingredient is
 // stocked but used in no cocktail/serve).
-interface LibraryMetaRow { id: string; name: string; pack_size: number; yield_pct: number; is_prepared: number }
-interface LibraryMetaDbRow { id: string; name: string; pack_size: number; yield_pct: number; is_prepared: number }
+interface LibraryMetaRow { id: string; name: string; pack_size: number; yield_pct: number; is_prepared: number; par_bottles: number | null }
+interface LibraryMetaDbRow { id: string; name: string; pack_size: number; yield_pct: number; is_prepared: number; par_bottles: number | null }
 interface RecipeLineRow { cocktail_id: string; library_ingredient_id: string; pour_ml: number }
 interface VolumeRow { cocktail_id: string; period_start: string; period_end: string; units_sold: number }
 interface EventRow { library_ingredient_id: string; counted_at: string; count_qty: number }
@@ -29,7 +32,7 @@ interface ReceiptRow { library_ingredient_id: string; received_at: string; qty: 
 
 async function readTenantLibrary(db: D1Database, tradeAccountId: string): Promise<LibraryMetaRow[]> {
   const res = await db.prepare(`
-    SELECT id, name, pack_size, yield_pct, is_prepared
+    SELECT id, name, pack_size, yield_pct, is_prepared, par_bottles
     FROM pouriq_ingredients_library
     WHERE trade_account_id = ?1 AND base_unit = 'ml' AND price_p > 0
   `).bind(tradeAccountId).all<LibraryMetaDbRow>()
@@ -157,6 +160,9 @@ export async function loadStockLevels(db: D1Database, tradeAccountId: string): P
         anchor_count_qty: null,
         receipts_since: receiptsSince,
         expected_usage_bottles: 0,
+        par_bottles: meta.par_bottles,
+        needs_reorder: false,
+        reorder_qty: 0,
       })
     } else {
       const receiptsSince = ingReceipts
@@ -182,6 +188,7 @@ export async function loadStockLevels(db: D1Database, tradeAccountId: string): P
 
       const totalReceiptsSince = receiptsSince + prodYieldBase / meta.pack_size
       const expected_usage_bottles = anchor.count_qty + totalReceiptsSince - on_hand
+      const reorder_qty = reorderQty(on_hand, meta.par_bottles)
 
       rows.push({
         library_ingredient_id: ingId,
@@ -195,6 +202,9 @@ export async function loadStockLevels(db: D1Database, tradeAccountId: string): P
         anchor_count_qty: anchor.count_qty,
         receipts_since: totalReceiptsSince,
         expected_usage_bottles,
+        par_bottles: meta.par_bottles,
+        needs_reorder: reorder_qty > 0,
+        reorder_qty,
       })
     }
   }
