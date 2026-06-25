@@ -166,3 +166,16 @@ export function persistentLossFlag(recentVariancesNewestLast: Array<number | nul
   const lastThree = defined.slice(-3)
   return lastThree.every((v) => v < 0)
 }
+
+// Sum amounts strictly after `ws` and up to and including `we` (raw string
+// compare; all timestamps are server datetimes in the same format as counts).
+// Used to fold deliveries and production into the variance count window.
+export function sumAmountsInWindow(
+  rows: Array<{ amount: number; at: string }>,
+  ws: string,
+  we: string,
+): number {
+  let total = 0
+  for (const r of rows) if (r.at > ws && r.at <= we) total += r.amount
+  return total
+}

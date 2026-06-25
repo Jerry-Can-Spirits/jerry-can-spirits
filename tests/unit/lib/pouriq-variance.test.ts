@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { classifyVariance, calcVarianceCostP } from '@/lib/pouriq/variance'
+import { classifyVariance, calcVarianceCostP, sumAmountsInWindow } from '@/lib/pouriq/variance'
 
 const BOTTLE = 700 // tolerance floor = 0.2 * 700 = 140 ml
 
@@ -47,5 +47,20 @@ describe('classifyVariance', () => {
   it('is symmetric for under- and over-variance', () => {
     expect(classifyVariance(-300, -30, BOTTLE)).toBe('red')
     expect(classifyVariance(-50, -40, BOTTLE)).toBe('within-tolerance')
+  })
+})
+
+describe('sumAmountsInWindow', () => {
+  const rows = [
+    { amount: 1, at: '2026-06-01 09:00:00' }, // = ws, excluded
+    { amount: 2, at: '2026-06-02 09:00:00' }, // in window
+    { amount: 4, at: '2026-06-03 09:00:00' }, // = we, included
+    { amount: 8, at: '2026-06-04 09:00:00' }, // > we, excluded
+  ]
+  it('sums amounts in (ws, we]', () => {
+    expect(sumAmountsInWindow(rows, '2026-06-01 09:00:00', '2026-06-03 09:00:00')).toBe(6)
+  })
+  it('returns 0 for no rows', () => {
+    expect(sumAmountsInWindow([], 'a', 'b')).toBe(0)
   })
 })
