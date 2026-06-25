@@ -1,6 +1,7 @@
 import 'server-only'
 import { sumBucketsInWindow } from './variance'
 import { computeOnHandBottles } from './stock'
+import { sumProductionAfter, readProductionYields, readProductionConsumption } from './prepared'
 
 export interface RollingStockRow {
   library_ingredient_id: string
@@ -74,12 +75,14 @@ async function readTenantReceipts(db: D1Database, tradeAccountId: string): Promi
 }
 
 export async function loadStockLevels(db: D1Database, tradeAccountId: string): Promise<RollingStockRow[]> {
-  const [library, recipes, volumes, events, receipts] = await Promise.all([
+  const [library, recipes, volumes, events, receipts, productionYields, productionConsumption] = await Promise.all([
     readTenantLibrary(db, tradeAccountId),
     readTenantRecipes(db, tradeAccountId),
     readTenantVolumes(db, tradeAccountId),
     readTenantEvents(db, tradeAccountId),
     readTenantReceipts(db, tradeAccountId),
+    readProductionYields(db, tradeAccountId),
+    readProductionConsumption(db, tradeAccountId),
   ])
 
   const volumesByCocktail = new Map<string, VolumeRow[]>()
@@ -108,6 +111,20 @@ export async function loadStockLevels(db: D1Database, tradeAccountId: string): P
   for (const r of receipts) {
     const arr = receiptsByIngredient.get(r.library_ingredient_id) ?? []
     arr.push(r); receiptsByIngredient.set(r.library_ingredient_id, arr)
+  }
+
+  const yieldByPrepared = new Map<string, Array<{ amount: number; produced_at: string }>>()
+  for (const y of productionYields) {
+    const arr = yieldByPrepared.get(y.prepared_ingredient_id) ?? []
+    arr.push({ amount: y.yield_base_produced, produced_at: y.produced_at })
+    yieldByPrepared.set(y.prepared_ingredient_id, arr)
+  }
+
+  const consumptionByComponent = new Map<string, Array<{ amount: number; produced_at: string }>>()
+  for (const c of productionConsumption) {
+    const arr = consumptionByComponent.get(c.component_ingredient_id) ?? []
+    arr.push({ amount: c.amount_base_consumed, produced_at: c.produced_at })
+    consumptionByComponent.set(c.component_ingredient_id, arr)
   }
 
   // Usage window runs from the anchor count to the far future so the CURRENT open
@@ -150,15 +167,19 @@ export async function loadStockLevels(db: D1Database, tradeAccountId: string): P
         usageSinceMl += sumBucketsInWindow(buckets, anchor.counted_at.slice(0, 10), WINDOW_END) * line.pour_ml
       }
 
+      const prodYieldBase = sumProductionAfter(yieldByPrepared.get(ingId) ?? [], anchor.counted_at)
+      const prodConsumeBase = sumProductionAfter(consumptionByComponent.get(ingId) ?? [], anchor.counted_at)
+
       const on_hand = computeOnHandBottles({
         anchorCountQty: anchor.count_qty,
-        receiptsSinceBottles: receiptsSince,
+        receiptsSinceBottles: receiptsSince + prodYieldBase / meta.pack_size,
         usageSinceMl,
         bottleSizeMl: meta.pack_size,
         yieldPct: meta.yield_pct,
-      })
+      }) - prodConsumeBase / meta.pack_size
 
-      const expected_usage_bottles = anchor.count_qty + receiptsSince - on_hand
+      const totalReceiptsSince = receiptsSince + prodYieldBase / meta.pack_size
+      const expected_usage_bottles = anchor.count_qty + totalReceiptsSince - on_hand
 
       rows.push({
         library_ingredient_id: ingId,
@@ -169,7 +190,7 @@ export async function loadStockLevels(db: D1Database, tradeAccountId: string): P
         needs_opening_count: false,
         anchor_count_at: anchor.counted_at,
         anchor_count_qty: anchor.count_qty,
-        receipts_since: receiptsSince,
+        receipts_since: totalReceiptsSince,
         expected_usage_bottles,
       })
     }
