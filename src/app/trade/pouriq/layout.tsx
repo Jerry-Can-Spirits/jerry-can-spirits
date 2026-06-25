@@ -4,6 +4,10 @@ import { getCloudflareContext } from '@opennextjs/cloudflare'
 import { checkPourIqAccess } from '@/lib/pouriq/access'
 import { PourIqShell } from '@/components/pouriq/PourIqShell'
 
+// The authenticated trade app should never be indexed (matches the sibling
+// trade layouts: apply / landing / login).
+export const metadata = { robots: { index: false, follow: false } }
+
 export default async function PourIqLayout({ children }: { children: ReactNode }) {
   const access = await checkPourIqAccess()
   if (access.kind === 'no-session') redirect('/trade/login')
