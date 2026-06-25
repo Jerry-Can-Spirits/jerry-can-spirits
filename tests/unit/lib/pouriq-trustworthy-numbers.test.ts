@@ -23,6 +23,7 @@ function ingredient(opts: IngOpts): IngredientWithLibrary {
     pack_size: opts.pack_size ?? 1,
     price_p: opts.price_p ?? 0,
     pack_format: null, subcategory: null,
+    is_prepared: 0,
     purchase_qty: 1,
     yield_pct: 100,
     barcode: null, notes: null, created_at: '', updated_at: '',

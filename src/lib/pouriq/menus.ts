@@ -180,6 +180,7 @@ export async function listCocktailsForMenu(
         l.price_p AS l_price_p,
         l.pack_format AS l_pack_format,
         l.subcategory AS l_subcategory,
+        l.is_prepared AS l_is_prepared,
         l.purchase_qty AS l_purchase_qty,
         l.yield_pct AS l_yield_pct,
         l.barcode AS l_barcode,
@@ -208,6 +209,7 @@ export async function listCocktailsForMenu(
       l_price_p: number
       l_pack_format: string | null
       l_subcategory: string | null
+      l_is_prepared: number
       l_purchase_qty: number
       l_yield_pct: number
       l_barcode: string | null
@@ -236,6 +238,7 @@ export async function listCocktailsForMenu(
         price_p: row.l_price_p,
         pack_format: row.l_pack_format,
         subcategory: row.l_subcategory,
+        is_prepared: row.l_is_prepared,
         purchase_qty: row.l_purchase_qty,
         yield_pct: row.l_yield_pct,
         barcode: row.l_barcode,
@@ -276,6 +279,7 @@ export async function getCocktail(
         l.ingredient_type AS l_ingredient_type,
         l.base_unit AS l_base_unit, l.pack_size AS l_pack_size, l.price_p AS l_price_p,
         l.pack_format AS l_pack_format, l.subcategory AS l_subcategory,
+        l.is_prepared AS l_is_prepared,
         l.purchase_qty AS l_purchase_qty,
         l.yield_pct AS l_yield_pct,
         l.barcode AS l_barcode,
@@ -302,6 +306,7 @@ export async function getCocktail(
       l_price_p: number
       l_pack_format: string | null
       l_subcategory: string | null
+      l_is_prepared: number
       l_purchase_qty: number
       l_yield_pct: number
       l_barcode: string | null
@@ -328,6 +333,7 @@ export async function getCocktail(
       price_p: row.l_price_p,
       pack_format: row.l_pack_format,
       subcategory: row.l_subcategory,
+      is_prepared: row.l_is_prepared,
       purchase_qty: row.l_purchase_qty,
       yield_pct: row.l_yield_pct,
       barcode: row.l_barcode,

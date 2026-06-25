@@ -11,6 +11,7 @@ function ingredient(opts: { price_p?: number }): IngredientWithLibrary {
   const library: IngredientLibraryRow = {
     id: 'lib', trade_account_id: 't', name: 'x', ingredient_type: 'spirit',
     base_unit: 'each', pack_size: 1, price_p: opts.price_p ?? 0, pack_format: null, subcategory: null,
+    is_prepared: 0,
     purchase_qty: 1,
     yield_pct: 100,
     barcode: null, notes: null, created_at: '', updated_at: '',

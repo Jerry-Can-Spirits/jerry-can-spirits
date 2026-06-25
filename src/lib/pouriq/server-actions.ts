@@ -19,6 +19,12 @@ import {
 } from './ingredient-library'
 import { matchFieldManualSlug } from './field-manual-match'
 import { upsertVoiceProfile, type VoiceProfileInput } from './voice-profile'
+import {
+  loadPreparedGraph,
+  wouldCreateCycle,
+  recomputePreparedCost,
+  recomputeDependents,
+} from './prepared'
 
 async function requireDb() {
   const access = await checkPourIqAccess()
@@ -293,20 +299,59 @@ export async function saveLibraryEntryAction(
   input: LibraryEntryInput,
 ): Promise<{ entryId: string }> {
   const { db, tradeAccountId } = await requireDb()
-  if (input.base_unit !== undefined && !VALID_BASE_UNITS.has(input.base_unit)) throw new Error('Invalid base_unit')
-  if (input.price_p !== undefined && (!Number.isFinite(input.price_p) || input.price_p < 0)) throw new Error('price_p must be a non-negative number')
-  if (input.pack_size !== undefined && (!Number.isFinite(input.pack_size) || input.pack_size <= 0)) throw new Error('pack_size must be a positive number')
-  if (input.purchase_qty !== undefined && (!Number.isInteger(input.purchase_qty) || input.purchase_qty < 1)) throw new Error('purchase_qty must be a positive whole number')
+
+  const isPrepared = !!input.is_prepared
+
+  if (!isPrepared) {
+    // Standard ingredient: all cost/size fields are required and validated.
+    if (input.base_unit !== undefined && !VALID_BASE_UNITS.has(input.base_unit)) throw new Error('Invalid base_unit')
+    if (input.price_p !== undefined && (!Number.isFinite(input.price_p) || input.price_p < 0)) throw new Error('price_p must be a non-negative number')
+    if (input.pack_size !== undefined && (!Number.isFinite(input.pack_size) || input.pack_size <= 0)) throw new Error('pack_size must be a positive number')
+    if (input.purchase_qty !== undefined && (!Number.isInteger(input.purchase_qty) || input.purchase_qty < 1)) throw new Error('purchase_qty must be a positive whole number')
+  }
 
   let savedId: string
   if (entryId === null) {
-    savedId = await insertLibraryEntry(db, { ...input, trade_account_id: tradeAccountId })
+    if (isPrepared) {
+      // Prepared ingredient: yield unit = base_unit, yield amount = pack_size,
+      // purchase_qty = 1, yield_pct = 100. Price is derived; default to 0 until
+      // components are added.
+      savedId = await insertLibraryEntry(db, {
+        ...input,
+        trade_account_id: tradeAccountId,
+        is_prepared: 1,
+        price_p: 0,
+        purchase_qty: 1,
+        yield_pct: 100,
+      })
+    } else {
+      savedId = await insertLibraryEntry(db, { ...input, trade_account_id: tradeAccountId, is_prepared: 0 })
+    }
   } else {
     // Verify ownership before update
     const existing = await getLibraryEntry(db, entryId, tradeAccountId)
     if (!existing) throw new Error('Ingredient not found')
-    await updateLibraryEntry(db, entryId, tradeAccountId, input)
+    if (isPrepared) {
+      await updateLibraryEntry(db, entryId, tradeAccountId, {
+        ...input,
+        is_prepared: 1,
+        purchase_qty: 1,
+        yield_pct: 100,
+      })
+    } else {
+      await updateLibraryEntry(db, entryId, tradeAccountId, { ...input, is_prepared: 0 })
+    }
     savedId = entryId
+  }
+
+  if (isPrepared) {
+    await recomputePreparedCost(db, savedId)
+    await recomputeDependents(db, tradeAccountId, savedId)
+  } else if (entryId !== null) {
+    // Non-prepared update: any cost-field change should propagate to prepared
+    // recipes that use this ingredient. recomputeDependents is a no-op when
+    // nothing depends on this ingredient.
+    await recomputeDependents(db, tradeAccountId, entryId)
   }
 
   // Best-effort contribution to the cross-tenant barcode catalogue. Only
@@ -328,6 +373,57 @@ export async function saveLibraryEntryAction(
   revalidatePath('/trade/pouriq/library')
   if (entryId !== null) revalidatePath(`/trade/pouriq/library/${entryId}/edit`)
   return { entryId: savedId }
+}
+
+export async function addPreparedComponentAction(
+  preparedId: string,
+  componentId: string,
+  amount_base: number,
+  recipe_unit: string | null,
+  recipe_qty: number | null,
+): Promise<void> {
+  const { db, tradeAccountId } = await requireDb()
+  if (!Number.isFinite(amount_base) || amount_base <= 0) throw new Error('Component amount must be positive')
+  if (preparedId === componentId) throw new Error('A recipe cannot contain itself')
+  // Both ingredients must belong to the tenant.
+  const ok = await db
+    .prepare(`SELECT COUNT(*) AS n FROM pouriq_ingredients_library WHERE id IN (?1, ?2) AND trade_account_id = ?3`)
+    .bind(preparedId, componentId, tradeAccountId)
+    .first<{ n: number }>()
+  if (!ok || ok.n < 2) throw new Error('Ingredient not found')
+  const graph = await loadPreparedGraph(db, tradeAccountId)
+  if (wouldCreateCycle(graph, preparedId, componentId)) throw new Error('That would create a loop between recipes')
+  await db
+    .prepare(`
+      INSERT INTO pouriq_prepared_components (prepared_ingredient_id, component_ingredient_id, amount_base, recipe_unit, recipe_qty)
+      VALUES (?1, ?2, ?3, ?4, ?5)
+    `)
+    .bind(preparedId, componentId, amount_base, recipe_unit, recipe_qty)
+    .run()
+  await recomputePreparedCost(db, preparedId)
+  await recomputeDependents(db, tradeAccountId, preparedId)
+  revalidatePath(`/trade/pouriq/library/${preparedId}/edit`)
+  revalidatePath('/trade/pouriq/library')
+}
+
+export async function removePreparedComponentAction(componentRowId: string): Promise<void> {
+  const { db, tradeAccountId } = await requireDb()
+  // Resolve the parent prepared ingredient + tenant-guard via join.
+  const row = await db
+    .prepare(`
+      SELECT pc.prepared_ingredient_id AS preparedId
+      FROM pouriq_prepared_components pc
+      JOIN pouriq_ingredients_library lib ON lib.id = pc.prepared_ingredient_id
+      WHERE pc.id = ?1 AND lib.trade_account_id = ?2
+    `)
+    .bind(componentRowId, tradeAccountId)
+    .first<{ preparedId: string }>()
+  if (!row) throw new Error('Component not found')
+  await db.prepare(`DELETE FROM pouriq_prepared_components WHERE id = ?1`).bind(componentRowId).run()
+  await recomputePreparedCost(db, row.preparedId)
+  await recomputeDependents(db, tradeAccountId, row.preparedId)
+  revalidatePath(`/trade/pouriq/library/${row.preparedId}/edit`)
+  revalidatePath('/trade/pouriq/library')
 }
 
 export async function deleteLibraryEntryAction(entryId: string): Promise<void> {

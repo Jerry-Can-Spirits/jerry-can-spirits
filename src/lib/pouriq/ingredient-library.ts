@@ -14,13 +14,14 @@ export interface IngredientLibraryInsert {
   subcategory?: string | null
   barcode: string | null
   notes: string | null
+  is_prepared?: boolean | number
 }
 
-// Columns present in the new schema (migration 0043).
+// Columns present in the new schema (migration 0045).
 const LIBRARY_SELECT = `
   id, trade_account_id, name, ingredient_type,
   base_unit, pack_size, price_p, pack_format, subcategory,
-  purchase_qty, yield_pct, barcode, notes, created_at, updated_at
+  is_prepared, purchase_qty, yield_pct, barcode, notes, created_at, updated_at
 `
 
 function mapLibraryRow(r: {
@@ -33,6 +34,7 @@ function mapLibraryRow(r: {
   price_p: number
   pack_format: string | null
   subcategory: string | null
+  is_prepared: number
   purchase_qty: number
   yield_pct: number
   barcode: string | null
@@ -83,11 +85,12 @@ export async function insertLibraryEntry(
   db: D1Database,
   data: IngredientLibraryInsert,
 ): Promise<string> {
+  const isPrepared = data.is_prepared ? 1 : 0
   const result = await db
     .prepare(`
       INSERT INTO pouriq_ingredients_library
-        (trade_account_id, name, ingredient_type, base_unit, pack_size, price_p, purchase_qty, yield_pct, pack_format, subcategory, barcode, notes)
-      VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12)
+        (trade_account_id, name, ingredient_type, base_unit, pack_size, price_p, purchase_qty, yield_pct, pack_format, subcategory, barcode, notes, is_prepared)
+      VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13)
       RETURNING id
     `)
     .bind(
@@ -95,7 +98,7 @@ export async function insertLibraryEntry(
       data.base_unit, data.pack_size > 0 ? data.pack_size : 1, data.price_p,
       data.purchase_qty ?? 1, data.yield_pct ?? 100,
       data.pack_format ?? null, data.subcategory ?? null,
-      data.barcode, data.notes,
+      data.barcode, data.notes, isPrepared,
     )
     .first<{ id: string }>()
   if (!result) throw new Error('Library insert returned no id')
@@ -130,6 +133,7 @@ export async function updateLibraryEntry(
   if ('purchase_qty' in patch) newModelPatch['purchase_qty'] = patch.purchase_qty
   if ('barcode' in patch) newModelPatch['barcode'] = patch.barcode
   if ('notes' in patch) newModelPatch['notes'] = patch.notes
+  if ('is_prepared' in patch) newModelPatch['is_prepared'] = patch.is_prepared ? 1 : 0
 
   const hasCostOrSize = 'base_unit' in patch || 'pack_size' in patch || 'price_p' in patch
   if (hasCostOrSize) {
