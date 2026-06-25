@@ -13,7 +13,7 @@ import { listLibraryEntries } from '@/lib/pouriq/ingredient-library'
 import { extractMenuWithAnthropic } from '@/lib/pouriq/menu-extract'
 import { parseMeasurement } from '@/lib/pouriq/measurement-parse'
 import { matchIngredient } from '@/lib/pouriq/match'
-import { listCatalogue, matchCatalogue } from '@/lib/pouriq/ingredient-catalogue'
+import { listCatalogue, matchCatalogue, adoptionName } from '@/lib/pouriq/ingredient-catalogue'
 import { splitCompoundIngredients } from '@/lib/pouriq/compound'
 import type { IngredientType } from '@/lib/pouriq/types'
 
@@ -168,7 +168,7 @@ export async function POST(request: Request) {
           match = {
             kind: 'catalogue',
             catalogue_id: cat.id,
-            name: cat.name,
+            name: adoptionName(i.name, cat),
             ingredient_type: cat.ingredient_type,
             base_unit: cat.base_unit,
             default_pack_size: cat.default_pack_size,
