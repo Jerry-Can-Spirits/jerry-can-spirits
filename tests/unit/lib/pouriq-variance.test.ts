@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { classifyVariance, calcVarianceCostP, sumAmountsInWindow, countInWindow, canonTs } from '@/lib/pouriq/variance'
+import { classifyVariance, calcVarianceCostP, sumAmountsInWindow, countInWindow, canonTs, buildVarianceLedger } from '@/lib/pouriq/variance'
 
 const BOTTLE = 700 // tolerance floor = 0.2 * 700 = 140 ml
 
@@ -87,5 +87,17 @@ describe('canonTs', () => {
     expect(canonTs('2026-06-02T12:00:00.000Z')).toBe('2026-06-02 12:00:00')
     expect(canonTs('2026-06-02 12:00:00')).toBe('2026-06-02 12:00:00')
     expect(canonTs('2026-06-02')).toBe('2026-06-02')
+  })
+})
+
+describe('buildVarianceLedger', () => {
+  it('reconciles opening + deliveries + produced − consumed − expected usage = expected closing', () => {
+    const l = buildVarianceLedger({ openingQty: 12, closingQty: 7.9, deliveriesBottles: 6, producedBottles: 0, consumedBottles: 0, expectedUsageBottles: 9.2 })
+    expect(l.expected_closing_bottles).toBeCloseTo(8.8, 5)
+    expect(l.variance_bottles).toBeCloseTo(0.9, 5)
+  })
+  it('shows no variance when a delivery exactly accounts for the rise', () => {
+    const l = buildVarianceLedger({ openingQty: 4, closingQty: 10, deliveriesBottles: 6, producedBottles: 0, consumedBottles: 0, expectedUsageBottles: 0 })
+    expect(l.variance_bottles).toBeCloseTo(0, 5)
   })
 })
