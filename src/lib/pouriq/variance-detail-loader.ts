@@ -46,7 +46,7 @@ export async function loadVarianceDetail(
   ingredientId: string,
 ): Promise<VarianceDetail | null> {
   const meta = await db
-    .prepare(`SELECT name, pack_size, price_p, purchase_qty, yield_pct FROM pouriq_ingredients_library WHERE id = ?1 AND trade_account_id = ?2 AND base_unit = 'ml'`)
+    .prepare(`SELECT name, pack_size, price_p, purchase_qty, yield_pct FROM pouriq_ingredients_library WHERE id = ?1 AND trade_account_id = ?2 AND base_unit = 'ml' AND price_p > 0`)
     .bind(ingredientId, tradeAccountId)
     .first<MetaRow>()
   if (!meta) return null
