@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState, useTransition } from 'react'
+import Link from 'next/link'
 import { VARIANCE_REASONS } from '@/lib/pouriq/types'
 
 interface RollingTrendPoint {
@@ -159,13 +160,16 @@ export function VarianceEditor() {
                     </span>
                   )}
                 </div>
-                <button
-                  type="button"
-                  onClick={() => setOpenTrend(isTrendOpen ? null : id)}
-                  className="text-xs text-parchment-400 hover:text-parchment-200 underline"
-                >
-                  {isTrendOpen ? 'Hide trend' : 'Trend'}
-                </button>
+                <div className="flex items-center gap-3">
+                  <Link href={`/trade/pouriq/variance/${id}`} className="text-xs text-gold-300 hover:text-gold-200 underline">View detail →</Link>
+                  <button
+                    type="button"
+                    onClick={() => setOpenTrend(isTrendOpen ? null : id)}
+                    className="text-xs text-parchment-400 hover:text-parchment-200 underline"
+                  >
+                    {isTrendOpen ? 'Hide trend' : 'Trend'}
+                  </button>
+                </div>
               </div>
 
               <div className="text-sm text-parchment-400 mb-3 space-y-0.5">

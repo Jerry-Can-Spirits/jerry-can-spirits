@@ -4,6 +4,7 @@ import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { getCloudflareContext } from '@opennextjs/cloudflare'
 import { checkPourIqAccess } from './access'
+import { VARIANCE_REASONS } from './types'
 import {
   insertMenu, updateMenu, deleteMenu, setActiveMenu,
   insertCocktail, replaceIngredients,
@@ -537,6 +538,27 @@ export async function setParAction(libraryIngredientId: string, parBottles: numb
   `).bind(parBottles, libraryIngredientId, tradeAccountId).run()
   revalidatePath('/trade/pouriq/stock')
   revalidatePath('/trade/pouriq/stock/order')
+}
+
+export async function setVarianceReasonAction(libraryIngredientId: string, reason: string | null): Promise<void> {
+  const { db, tradeAccountId } = await requireDb()
+  if (reason !== null && !(VARIANCE_REASONS as readonly string[]).includes(reason)) throw new Error('Invalid reason')
+  // Reason attaches to the latest count event for this ingredient (the period
+  // whose variance the detail page shows) — no new count is created.
+  const res = await db
+    .prepare(`
+      UPDATE pouriq_stock_count_events SET reason = ?1
+      WHERE id = (
+        SELECT id FROM pouriq_stock_count_events
+        WHERE trade_account_id = ?2 AND library_ingredient_id = ?3
+        ORDER BY counted_at DESC LIMIT 1
+      )
+    `)
+    .bind(reason, tradeAccountId, libraryIngredientId)
+    .run()
+  if (!res.meta.changes) throw new Error('No stock count yet to attach a reason to')
+  revalidatePath('/trade/pouriq/variance')
+  revalidatePath(`/trade/pouriq/variance/${libraryIngredientId}`)
 }
 
 export async function saveServeUnitAction(libraryIngredientId: string, name: string, basePerUnit: number): Promise<void> {
