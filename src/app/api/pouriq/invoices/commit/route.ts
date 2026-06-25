@@ -34,6 +34,7 @@ interface CommitLineNewLibrary {
   ingredient_type: IngredientType
   base_unit: 'ml' | 'g' | 'each'
   pack_size: number
+  purchase_qty: number
   price_p: number
 }
 
@@ -94,6 +95,7 @@ function validateBody(body: CommitBody): string | null {
         if (!INGREDIENT_TYPES.includes(nl.ingredient_type)) return `Line ${i + 1}: invalid ingredient_type`
         if (!['ml', 'g', 'each'].includes(nl.base_unit)) return `Line ${i + 1}: invalid base_unit`
         if (nl.base_unit !== 'each' && !isPositiveInteger(nl.pack_size)) return `Line ${i + 1}: pack_size must be a positive integer`
+        if (!isPositiveInteger(nl.purchase_qty)) return `Line ${i + 1}: purchase_qty must be a positive integer`
         if (!isNonNegativeInteger(nl.price_p)) return `Line ${i + 1}: price_p must be a non-negative integer`
       }
     }
@@ -196,6 +198,7 @@ export async function POST(request: Request) {
             ingredient_type: line.new_library.ingredient_type,
             base_unit: line.new_library.base_unit,
             pack_size: line.new_library.pack_size,
+            purchase_qty: line.new_library.purchase_qty,
             price_p: line.new_library.price_p,
             barcode: null,
             notes: null,

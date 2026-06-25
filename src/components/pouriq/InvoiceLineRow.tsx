@@ -14,8 +14,9 @@ export type LineState = {
         kind: 'new'
         new_name: string
         new_type: IngredientType
-        new_pricing_mode: 'bottle' | 'unit'
-        new_pack_size: number | null
+        base_unit: 'ml' | 'g' | 'each'
+        pack_size: number
+        purchase_qty: number
       }
 }
 
@@ -29,7 +30,7 @@ interface InvoiceLineRowProps {
   onToggleCreateNew: (index: number, toNew: boolean) => void
 }
 
-const INGREDIENT_TYPES: IngredientType[] = ['spirit','liqueur','wine','beer','mixer','syrup','juice','garnish','other']
+const INGREDIENT_TYPES: IngredientType[] = ['spirit','liqueur','wine','beer','mixer','syrup','juice','garnish','soft-drink','food','other']
 
 function formatMoney(p: number): string {
   return `£${(p / 100).toFixed(2)}`
@@ -92,25 +93,41 @@ function InvoiceLineRowComponent({ index, line, state, library, libraryById, onC
                 {INGREDIENT_TYPES.map((t) => <option key={t} value={t}>{t}</option>)}
               </select>
               <select
-                value={match.new_pricing_mode}
-                onChange={(e) => onChange(index, { match: { ...match, new_pricing_mode: e.target.value as 'bottle' | 'unit' } })}
+                value={match.base_unit}
+                onChange={(e) => {
+                  const bu = e.target.value as 'ml' | 'g' | 'each'
+                  const defaultSize = bu === 'ml' ? 700 : bu === 'g' ? 1000 : 1
+                  onChange(index, { match: { ...match, base_unit: bu, pack_size: defaultSize } })
+                }}
                 className="px-2 py-1 bg-jerry-green-700/50 border border-gold-500/30 rounded-sm text-parchment-50 text-sm"
               >
-                <option value="bottle">Per bottle</option>
-                <option value="unit">Per unit</option>
+                <option value="ml">Liquid (ml)</option>
+                <option value="g">Weight (g)</option>
+                <option value="each">Count (each)</option>
               </select>
             </div>
-            {match.new_pricing_mode === 'bottle' && (
-              <input
-                type="number"
-                min={0}
-                step="1"
-                placeholder="Pack size (ml)"
-                value={match.new_pack_size ?? ''}
-                onChange={(e) => onChange(index, { match: { ...match, new_pack_size: e.target.value ? parseInt(e.target.value, 10) : null } })}
-                className="w-full px-2 py-1 bg-jerry-green-700/50 border border-gold-500/30 rounded-sm text-parchment-50 text-sm"
-              />
-            )}
+            <div className="flex gap-2">
+              <label className="flex-1 text-xs text-parchment-400">
+                How many bought
+                <input
+                  type="number" min={1} step="1"
+                  value={match.purchase_qty}
+                  onChange={(e) => onChange(index, { match: { ...match, purchase_qty: Math.max(1, Math.round(Number(e.target.value) || 1)) } })}
+                  className="mt-1 w-full px-2 py-1 bg-jerry-green-700/50 border border-gold-500/30 rounded-sm text-parchment-50 text-sm"
+                />
+              </label>
+              {match.base_unit !== 'each' && (
+                <label className="flex-1 text-xs text-parchment-400">
+                  {match.base_unit === 'ml' ? 'Size each (ml)' : 'Weight each (g)'}
+                  <input
+                    type="number" min={1} step="1"
+                    value={match.pack_size}
+                    onChange={(e) => onChange(index, { match: { ...match, pack_size: Math.max(1, Math.round(Number(e.target.value) || 1)) } })}
+                    className="mt-1 w-full px-2 py-1 bg-jerry-green-700/50 border border-gold-500/30 rounded-sm text-parchment-50 text-sm"
+                  />
+                </label>
+              )}
+            </div>
             <button type="button" onClick={() => onToggleCreateNew(index, false)} className="text-xs text-parchment-400 hover:text-parchment-200 underline">
               Cancel new entry
             </button>
