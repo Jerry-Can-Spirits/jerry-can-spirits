@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
-import { receiveStockAction, recordStockCountAction } from '@/lib/pouriq/server-actions'
+import { receiveStockAction, recordStockCountAction, recordProductionAction } from '@/lib/pouriq/server-actions'
 import type { RollingStockRow } from '@/lib/pouriq/stock-loader'
 
 interface Props {
@@ -24,6 +24,7 @@ export function StockManager({ rows }: Props) {
   const [pending, startTransition] = useTransition()
   const [receiveInputs, setReceiveInputs] = useState<Record<string, string>>({})
   const [countInputs, setCountInputs] = useState<Record<string, string>>({})
+  const [batchInputs, setBatchInputs] = useState<Record<string, string>>({})
   const [error, setError] = useState<string | null>(null)
 
   if (rows.length === 0) {
@@ -66,6 +67,22 @@ export function StockManager({ rows }: Props) {
     })
   }
 
+  function handleMakeBatch(id: string) {
+    const raw = batchInputs[id] ?? ''
+    const batches = parseFloat(raw)
+    if (!Number.isFinite(batches) || batches <= 0) return
+    setError(null)
+    startTransition(async () => {
+      try {
+        await recordProductionAction(id, batches)
+        setBatchInputs((prev) => { const next = { ...prev }; delete next[id]; return next })
+        router.refresh()
+      } catch (e) {
+        setError((e as Error).message || 'Could not record batch.')
+      }
+    })
+  }
+
   return (
     <div className="space-y-4">
       {error && <p role="alert" className="text-sm text-red-300">{error}</p>}
@@ -74,10 +91,13 @@ export function StockManager({ rows }: Props) {
           const id = row.library_ingredient_id
           const receiveVal = receiveInputs[id] ?? ''
           const countVal = countInputs[id] ?? ''
+          const batchVal = batchInputs[id] ?? ''
           const receiveQty = parseFloat(receiveVal)
           const countQty = parseFloat(countVal)
+          const batchQty = parseFloat(batchVal)
           const receiveEnabled = !pending && Number.isFinite(receiveQty) && receiveQty > 0
           const countEnabled = !pending && Number.isFinite(countQty) && countQty >= 0
+          const batchEnabled = !pending && Number.isFinite(batchQty) && batchQty > 0
           const onHand = row.on_hand_bottles !== null ? Math.max(0, row.on_hand_bottles) : null
           const isNegative = row.on_hand_bottles !== null && row.on_hand_bottles < 0
 
@@ -157,6 +177,34 @@ export function StockManager({ rows }: Props) {
                     {row.needs_opening_count ? 'Set opening count' : 'Save count'}
                   </button>
                 </div>
+
+                {row.is_prepared === 1 && (
+                  <div className="flex flex-col gap-1">
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="number"
+                        step="0.5"
+                        min={0}
+                        value={batchVal}
+                        onChange={(e) => setBatchInputs((prev) => ({ ...prev, [id]: e.target.value }))}
+                        className={inputClass}
+                        placeholder="batches"
+                        aria-label={`${row.library_name} batch quantity`}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => handleMakeBatch(id)}
+                        disabled={!batchEnabled}
+                        className={actionButtonClass}
+                      >
+                        Make batch
+                      </button>
+                    </div>
+                    <p className="text-parchment-400 text-xs">
+                      Records a batch. Tops up this recipe&apos;s stock and draws down its components.
+                    </p>
+                  </div>
+                )}
               </div>
             </div>
           )

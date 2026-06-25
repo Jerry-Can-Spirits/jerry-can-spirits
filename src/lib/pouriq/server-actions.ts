@@ -24,6 +24,7 @@ import {
   wouldCreateCycle,
   recomputePreparedCost,
   recomputeDependents,
+  listPreparedComponents,
 } from './prepared'
 
 async function requireDb() {
@@ -565,6 +566,27 @@ export async function deleteServeUnitAction(serveUnitId: string): Promise<void> 
     .bind(serveUnitId)
     .run()
   revalidatePath('/trade/pouriq/library')
+}
+
+export async function recordProductionAction(preparedId: string, batches: number): Promise<void> {
+  const { db, tradeAccountId } = await requireDb()
+  if (!Number.isFinite(batches) || batches <= 0) throw new Error('Enter a positive number of batches')
+  const prep = await db.prepare(`SELECT pack_size FROM pouriq_ingredients_library WHERE id = ?1 AND trade_account_id = ?2 AND is_prepared = 1`).bind(preparedId, tradeAccountId).first<{ pack_size: number }>()
+  if (!prep) throw new Error('Prepared recipe not found')
+  const components = await listPreparedComponents(db, preparedId)
+  const yield_base = prep.pack_size * batches
+  const evRow = await db.prepare(`
+    INSERT INTO pouriq_production_events (trade_account_id, prepared_ingredient_id, batches, yield_base_produced)
+    VALUES (?1, ?2, ?3, ?4) RETURNING id, produced_at
+  `).bind(tradeAccountId, preparedId, batches, yield_base).first<{ id: string; produced_at: string }>()
+  if (!evRow) throw new Error('Could not record production')
+  for (const c of components) {
+    await db.prepare(`
+      INSERT INTO pouriq_production_components (production_event_id, component_ingredient_id, amount_base_consumed, produced_at)
+      VALUES (?1, ?2, ?3, ?4)
+    `).bind(evRow.id, c.component_ingredient_id, c.amount_base * batches, evRow.produced_at).run()
+  }
+  revalidatePath('/trade/pouriq/stock')
 }
 
 export async function setVoiceProfileAction(input: VoiceProfileInput): Promise<void> {
