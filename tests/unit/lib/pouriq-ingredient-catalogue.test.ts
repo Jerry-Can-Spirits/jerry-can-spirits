@@ -77,6 +77,26 @@ describe('brand tier — specific beats generic', () => {
   it('a bare generic still resolves to the generic', () => {
     expect(matchCatalogue('lager', brandCat)?.name).toBe('Lager')
   })
+
+  it('matches an "&" brand from its literal form (normalise keeps &)', () => {
+    const wray: CatalogueEntry = {
+      id: 'w', name: 'Wray & Nephew', normalised_name: 'wray & nephew',
+      ingredient_type: 'spirit', base_unit: 'ml', default_pack_size: 700,
+      generic: 'overproof rum', aliases: ['wray and nephew'],
+    }
+    expect(matchCatalogue('Wray & Nephew', [wray])?.name).toBe('Wray & Nephew')
+    expect(matchCatalogue('wray and nephew', [wray])?.name).toBe('Wray & Nephew')
+  })
+
+  it('matches an accented brand by either spelling', () => {
+    const madri: CatalogueEntry = {
+      id: 'm', name: 'Madrí', normalised_name: 'madrí',
+      ingredient_type: 'beer', base_unit: 'ml', default_pack_size: 330,
+      generic: 'lager', aliases: ['madri'],
+    }
+    expect(matchCatalogue('Madrí', [madri])?.name).toBe('Madrí')
+    expect(matchCatalogue('Madri', [madri])?.name).toBe('Madrí')
+  })
 })
 
 describe('adoptionName', () => {

@@ -79,7 +79,7 @@ function InvoiceLineRowComponent({ index, line, state, library, libraryById, onC
         {match.kind === 'new' ? (
           <div className="space-y-2 min-w-[260px]">
             {line.match.kind === 'catalogue' && (
-              <p className="text-xs text-sky-300">from catalogue — set your price</p>
+              <p className="text-xs text-sky-300">from catalogue. Set your price.</p>
             )}
             <input
               value={match.new_name}

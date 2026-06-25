@@ -10,8 +10,9 @@
 --
 -- Additive only. Brand names that already exist as ALIASES on a generic are
 -- left as-is: the matcher prefers an exact name over an alias, so a brand
--- entry wins regardless. normalised_name/aliases are lower-case, punctuation-
--- and accent-free.
+-- entry wins regardless. normalised_name/aliases are lower-case and stored
+-- exactly as normalise() produces them (it keeps accents and "&"), with the
+-- accent-free / spelled-out variant listed as an alias so both forms match.
 
 ALTER TABLE pouriq_ingredient_catalogue ADD COLUMN generic TEXT;
 
@@ -21,7 +22,7 @@ INSERT INTO pouriq_ingredient_catalogue (name, normalised_name, ingredient_type,
 ('Foster''s','fosters','beer','ml',330,'[]','lager'),
 ('Carlsberg','carlsberg','beer','ml',330,'[]','lager'),
 ('Stella Artois','stella artois','beer','ml',330,'["stella"]','lager'),
-('Madrí','madri','beer','ml',330,'["madri excepcional"]','lager'),
+('Madrí','madrí','beer','ml',330,'["madri","madri excepcional"]','lager'),
 ('San Miguel','san miguel','beer','ml',330,'[]','lager'),
 ('Peroni','peroni','beer','ml',330,'[]','lager'),
 ('Birra Moretti','birra moretti','beer','ml',330,'["moretti"]','lager'),
@@ -71,7 +72,7 @@ INSERT INTO pouriq_ingredient_catalogue (name, normalised_name, ingredient_type,
 ('Sailor Jerry','sailor jerry','spirit','ml',700,'[]','spiced rum'),
 ('Havana Club','havana club','spirit','ml',700,'["havana"]','aged rum'),
 ('Lamb''s','lambs','spirit','ml',700,'["lambs navy"]','dark rum'),
-('Wray & Nephew','wray and nephew','spirit','ml',700,'[]','overproof rum'),
+('Wray & Nephew','wray & nephew','spirit','ml',700,'["wray and nephew"]','overproof rum'),
 ('Malibu','malibu','spirit','ml',700,'[]','coconut rum'),
 -- Whisky
 ('Jack Daniel''s','jack daniels','spirit','ml',700,'["jd"]','whisky'),
@@ -87,12 +88,12 @@ INSERT INTO pouriq_ingredient_catalogue (name, normalised_name, ingredient_type,
 -- Tequila
 ('Jose Cuervo','jose cuervo','spirit','ml',700,'["cuervo"]','tequila'),
 ('Olmeca','olmeca','spirit','ml',700,'[]','tequila'),
-('Patrón','patron','spirit','ml',700,'[]','tequila'),
+('Patrón','patrón','spirit','ml',700,'["patron"]','tequila'),
 ('El Jimador','el jimador','spirit','ml',700,'[]','tequila'),
 -- Brandy / cognac
 ('Courvoisier','courvoisier','spirit','ml',700,'[]','cognac'),
 ('Hennessy','hennessy','spirit','ml',700,'[]','cognac'),
-('Rémy Martin','remy martin','spirit','ml',700,'["remy"]','cognac'),
+('Rémy Martin','rémy martin','spirit','ml',700,'["remy","remy martin"]','cognac'),
 -- Vermouth / aperitif
 ('Martini Rosso','martini rosso','liqueur','ml',750,'["martini"]','sweet vermouth'),
 ('Martini Extra Dry','martini extra dry','liqueur','ml',750,'[]','dry vermouth'),
