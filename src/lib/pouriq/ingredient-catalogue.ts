@@ -13,6 +13,9 @@ export interface CatalogueEntry {
   ingredient_type: IngredientType
   base_unit: 'ml' | 'g' | 'each'
   default_pack_size: number | null
+  // The generic this brand rolls up to (its normalised_name); null for
+  // generic entries.
+  generic: string | null
   // Synonyms (brand names, alternative spellings), pre-normalised.
   aliases: string[]
 }
@@ -24,6 +27,7 @@ interface CatalogueRow {
   ingredient_type: IngredientType
   base_unit: 'ml' | 'g' | 'each'
   default_pack_size: number | null
+  generic: string | null
   aliases: string
 }
 
@@ -39,7 +43,7 @@ function parseAliases(raw: string): string[] {
 
 export async function listCatalogue(db: D1Database): Promise<CatalogueEntry[]> {
   const res = await db
-    .prepare(`SELECT id, name, normalised_name, ingredient_type, base_unit, default_pack_size, aliases FROM pouriq_ingredient_catalogue`)
+    .prepare(`SELECT id, name, normalised_name, ingredient_type, base_unit, default_pack_size, generic, aliases FROM pouriq_ingredient_catalogue`)
     .all<CatalogueRow>()
   return (res.results ?? []).map((r) => ({
     id: r.id,
@@ -48,6 +52,7 @@ export async function listCatalogue(db: D1Database): Promise<CatalogueEntry[]> {
     ingredient_type: r.ingredient_type,
     base_unit: r.base_unit,
     default_pack_size: r.default_pack_size,
+    generic: r.generic,
     aliases: parseAliases(r.aliases),
   }))
 }
@@ -60,9 +65,12 @@ export async function listCatalogue(db: D1Database): Promise<CatalogueEntry[]> {
 export function matchCatalogue(name: string, entries: CatalogueEntry[]): CatalogueEntry | null {
   const targetNorm = normalise(name)
   if (!targetNorm) return null
-  // Exact match on the canonical name or any alias (brand/synonym strings).
-  const exact = entries.find((e) => e.normalised_name === targetNorm || e.aliases.includes(targetNorm))
-  if (exact) return exact
+  // Exact match: prefer the canonical name over an alias, so a specific brand
+  // entry (e.g. "Smirnoff") beats a generic that merely lists it as an alias.
+  const exactName = entries.find((e) => e.normalised_name === targetNorm)
+  if (exactName) return exactName
+  const exactAlias = entries.find((e) => e.aliases.includes(targetNorm))
+  if (exactAlias) return exactAlias
 
   const tTokens = significantTokens(name)
   if (tTokens.length === 0) return null
@@ -84,6 +92,19 @@ export function matchCatalogue(name: string, entries: CatalogueEntry[]): Catalog
     }
   }
   if (scored.length === 0) return null
-  scored.sort((a, b) => a.score - b.score)
+  // Lowest score wins; on a tie prefer a brand entry (linked to a generic)
+  // over the generic, so "Carling Lager" resolves to Carling, not Lager.
+  scored.sort((a, b) => a.score - b.score || (a.entry.generic ? 0 : 1) - (b.entry.generic ? 0 : 1))
   return scored[0].entry
+}
+
+// The library name to adopt for a catalogue match. Keeps the line's own
+// wording when it is strictly more specific than the matched entry (so
+// "Carling Lager" stays itself instead of collapsing to "Lager"), otherwise
+// uses the entry's canonical name (so a clean "triple sec" becomes "Triple Sec").
+export function adoptionName(extractedName: string, entry: CatalogueEntry): string {
+  const ext = significantTokens(extractedName)
+  const cat = significantTokens(entry.name)
+  const strictSuperset = cat.length > 0 && cat.every((t) => ext.includes(t)) && ext.length > cat.length
+  return strictSuperset ? extractedName.trim() : entry.name
 }

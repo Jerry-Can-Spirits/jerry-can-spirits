@@ -1,13 +1,14 @@
 import { describe, it, expect } from 'vitest'
-import { matchCatalogue, type CatalogueEntry } from '@/lib/pouriq/ingredient-catalogue'
+import { matchCatalogue, adoptionName, type CatalogueEntry } from '@/lib/pouriq/ingredient-catalogue'
 
-const c = (name: string, aliases: string[] = []): CatalogueEntry => ({
+const c = (name: string, aliases: string[] = [], generic: string | null = null): CatalogueEntry => ({
   id: name,
   name,
   normalised_name: name.toLowerCase(),
   ingredient_type: 'spirit',
   base_unit: 'ml',
   default_pack_size: 700,
+  generic,
   aliases,
 })
 
@@ -57,5 +58,56 @@ describe('matchCatalogue', () => {
   })
   it('does NOT conflate short words ("mint" must not adopt anything here)', () => {
     expect(matchCatalogue('mint', cat)).toBeNull()
+  })
+})
+
+describe('brand tier — specific beats generic', () => {
+  const vodka = c('Vodka', ['smirnoff'])          // generic that lists a brand alias
+  const smirnoff = c('Smirnoff', [], 'vodka')     // brand entry
+  const lager = c('Lager')                         // generic
+  const carling = c('Carling', [], 'lager')        // brand entry
+  const brandCat = [vodka, smirnoff, lager, carling]
+
+  it('an exact brand name beats a generic that lists it as an alias', () => {
+    expect(matchCatalogue('smirnoff', brandCat)?.name).toBe('Smirnoff')
+  })
+  it('a brand beats the generic on a subset tie', () => {
+    expect(matchCatalogue('Carling Lager', brandCat)?.name).toBe('Carling')
+  })
+  it('a bare generic still resolves to the generic', () => {
+    expect(matchCatalogue('lager', brandCat)?.name).toBe('Lager')
+  })
+
+  it('matches an "&" brand from its literal form (normalise keeps &)', () => {
+    const wray: CatalogueEntry = {
+      id: 'w', name: 'Wray & Nephew', normalised_name: 'wray & nephew',
+      ingredient_type: 'spirit', base_unit: 'ml', default_pack_size: 700,
+      generic: 'overproof rum', aliases: ['wray and nephew'],
+    }
+    expect(matchCatalogue('Wray & Nephew', [wray])?.name).toBe('Wray & Nephew')
+    expect(matchCatalogue('wray and nephew', [wray])?.name).toBe('Wray & Nephew')
+  })
+
+  it('matches an accented brand by either spelling', () => {
+    const madri: CatalogueEntry = {
+      id: 'm', name: 'Madrí', normalised_name: 'madrí',
+      ingredient_type: 'beer', base_unit: 'ml', default_pack_size: 330,
+      generic: 'lager', aliases: ['madri'],
+    }
+    expect(matchCatalogue('Madrí', [madri])?.name).toBe('Madrí')
+    expect(matchCatalogue('Madri', [madri])?.name).toBe('Madrí')
+  })
+})
+
+describe('adoptionName', () => {
+  const lager = c('Lager')
+  const vodka = c('Vodka')
+  const tripleSec = c('Triple Sec')
+  it('keeps a more-specific line name', () => {
+    expect(adoptionName('Carling Lager', lager)).toBe('Carling Lager')
+    expect(adoptionName('Smirnoff Red Vodka', vodka)).toBe('Smirnoff Red Vodka')
+  })
+  it('uses the canonical name for a clean match', () => {
+    expect(adoptionName('triple sec', tripleSec)).toBe('Triple Sec')
   })
 })
