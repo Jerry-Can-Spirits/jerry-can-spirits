@@ -43,6 +43,9 @@ export function IngredientList({ entries, usageCounts, stockById }: Props) {
   const lowStockIds = new Set(entries.filter((e) => stockById[e.id]?.needs_reorder).map((e) => e.id))
   const types = [...new Set(entries.map((e) => e.ingredient_type))].sort()
   const visible = filterIngredients(entries, { search, category }, lowStockIds)
+  // Bulk actions only ever touch what's currently visible, so changing the
+  // filter can never silently delete a selected ingredient you can't see.
+  const visibleSelectedIds = visible.filter((e) => selected.has(e.id)).map((e) => e.id)
 
   function toggleSelected(id: string) {
     setSelected((prev) => {
@@ -54,7 +57,8 @@ export function IngredientList({ entries, usageCounts, stockById }: Props) {
   }
 
   function handleBulkDelete() {
-    const ids = [...selected]
+    const ids = visibleSelectedIds
+    if (ids.length === 0) return
     if (!window.confirm(`Delete ${ids.length} ingredient${ids.length === 1 ? '' : 's'}? This cannot be undone.`)) return
     setError(null)
     startTransition(async () => {
@@ -77,12 +81,12 @@ export function IngredientList({ entries, usageCounts, stockById }: Props) {
 
   return (
     <div>
-      {selected.size > 0 && (
+      {visibleSelectedIds.length > 0 && (
         <div className="flex items-center gap-3 mb-4 px-4 py-3 bg-jerry-green-800/60 border border-gold-500/30 rounded-xl">
-          <span className="text-parchment-200 text-sm flex-1">{selected.size} selected</span>
+          <span className="text-parchment-200 text-sm flex-1">{visibleSelectedIds.length} selected</span>
           <button type="button" onClick={() => setSelected(new Set())} className={SECONDARY_BUTTON_SM} disabled={isPending}>Clear</button>
           <button type="button" onClick={handleBulkDelete} className={DESTRUCTIVE_BUTTON} disabled={isPending}>
-            {isPending ? 'Deleting...' : `Delete ${selected.size} selected`}
+            {isPending ? 'Deleting...' : `Delete ${visibleSelectedIds.length} selected`}
           </button>
         </div>
       )}
