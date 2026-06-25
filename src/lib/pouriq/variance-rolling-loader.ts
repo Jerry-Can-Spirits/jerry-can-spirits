@@ -2,9 +2,10 @@ import 'server-only'
 import { costPerMlP } from './calculations'
 import {
   pairLatestCounts, sumBucketsInWindow, persistentLossFlag,
-  calcVariance, calcVarianceCostP, classifyVariance, applyYield,
+  calcVariance, calcVarianceCostP, classifyVariance, applyYield, sumAmountsInWindow,
   type VarianceSeverity, type CountEvent,
 } from './variance'
+import { readProductionYields, readProductionConsumption } from './prepared'
 
 export interface RollingTrendPoint {
   counted_at: string
@@ -29,6 +30,8 @@ export interface RollingVarianceRow {
   severity: VarianceSeverity
   impact_p: number
   unmatched_in_window: number
+  deliveries_in_window: number
+  batches_in_window: number
   latest_reason: string | null
   persistent_loss: boolean
   trend: RollingTrendPoint[]
@@ -57,6 +60,7 @@ interface RecipeLineDbRow {
 }
 interface VolumeRow { cocktail_id: string; period_start: string; period_end: string; units_sold: number }
 interface EventRow { library_ingredient_id: string; counted_at: string; count_qty: number; reason: string | null }
+interface ReceiptRow { library_ingredient_id: string; received_at: string; qty: number }
 
 async function readTenantRecipes(db: D1Database, tradeAccountId: string): Promise<RecipeLineRow[]> {
   const res = await db.prepare(`
@@ -94,6 +98,13 @@ async function readTenantEvents(db: D1Database, tradeAccountId: string): Promise
   return res.results ?? []
 }
 
+async function readTenantReceipts(db: D1Database, tradeAccountId: string): Promise<ReceiptRow[]> {
+  const res = await db.prepare(
+    `SELECT library_ingredient_id, received_at, qty FROM pouriq_stock_receipts WHERE trade_account_id = ?1`
+  ).bind(tradeAccountId).all<ReceiptRow>()
+  return res.results ?? []
+}
+
 async function readUnmatchedInWindow(db: D1Database, tradeAccountId: string, windowStart: string, windowEnd: string): Promise<number> {
   // counted_at is stored via datetime('now') as "YYYY-MM-DD HH:MM:SS" (space),
   // while POS sold_at is ISO 8601 with a "T". Normalise the window bounds to the
@@ -110,10 +121,13 @@ async function readUnmatchedInWindow(db: D1Database, tradeAccountId: string, win
 const TREND_LIMIT = 6
 
 export async function loadRollingVariance(db: D1Database, tradeAccountId: string): Promise<RollingVarianceRow[]> {
-  const [recipes, volumes, events] = await Promise.all([
+  const [recipes, volumes, events, receipts, productionYields, productionConsumption] = await Promise.all([
     readTenantRecipes(db, tradeAccountId),
     readTenantVolumes(db, tradeAccountId),
     readTenantEvents(db, tradeAccountId),
+    readTenantReceipts(db, tradeAccountId),
+    readProductionYields(db, tradeAccountId),
+    readProductionConsumption(db, tradeAccountId),
   ])
 
   const volumesByCocktail = new Map<string, VolumeRow[]>()
@@ -142,6 +156,24 @@ export async function loadRollingVariance(db: D1Database, tradeAccountId: string
     arr.push(e); eventsByIngredient.set(e.library_ingredient_id, arr)
   }
 
+  // Stock movements folded into actual usage so deliveries/production are not
+  // mistaken for pour variance. Same sources as stock-loader.ts.
+  const receiptsByIngredient = new Map<string, Array<{ amount: number; at: string }>>()
+  for (const r of receipts) {
+    const arr = receiptsByIngredient.get(r.library_ingredient_id) ?? []
+    arr.push({ amount: r.qty, at: r.received_at }); receiptsByIngredient.set(r.library_ingredient_id, arr)
+  }
+  const yieldByPrepared = new Map<string, Array<{ amount: number; at: string }>>()
+  for (const y of productionYields) {
+    const arr = yieldByPrepared.get(y.prepared_ingredient_id) ?? []
+    arr.push({ amount: y.yield_base_produced, at: y.produced_at }); yieldByPrepared.set(y.prepared_ingredient_id, arr)
+  }
+  const consumptionByComponent = new Map<string, Array<{ amount: number; at: string }>>()
+  for (const c of productionConsumption) {
+    const arr = consumptionByComponent.get(c.component_ingredient_id) ?? []
+    arr.push({ amount: c.amount_base_consumed, at: c.produced_at }); consumptionByComponent.set(c.component_ingredient_id, arr)
+  }
+
   const ingredientIds = new Set<string>([...linesByIngredient.keys(), ...eventsByIngredient.keys()])
 
   const rows: RollingVarianceRow[] = []
@@ -151,11 +183,16 @@ export async function loadRollingVariance(db: D1Database, tradeAccountId: string
     if (!meta) continue
 
     const lines = linesByIngredient.get(ingId) ?? []
+    const ingReceipts = receiptsByIngredient.get(ingId) ?? []
+    const yieldRows = yieldByPrepared.get(ingId) ?? []
+    const consumeRows = consumptionByComponent.get(ingId) ?? []
     const pair = pairLatestCounts(ingEvents.map((e): CountEvent => ({ counted_at: e.counted_at, count_qty: e.count_qty, reason: e.reason })))
 
     let theoretical = 0
     let actual: number | null = null
     let unmatched = 0
+    let deliveries = 0
+    let batches = 0
     if (pair) {
       const ws = pair.previous.counted_at
       const we = pair.latest.counted_at
@@ -165,7 +202,15 @@ export async function loadRollingVariance(db: D1Database, tradeAccountId: string
         rawTheoretical += sumBucketsInWindow(buckets, ws.slice(0, 10), we.slice(0, 10)) * line.pour_ml
       }
       theoretical = applyYield(rawTheoretical, meta.yield_pct)
-      actual = (pair.previous.count_qty - pair.latest.count_qty) * meta.pack_size
+      // Fold stock movements into the physical drop so deliveries/production are
+      // not counted as pour variance (receipts are in bottles -> *pack_size;
+      // production yield/consumption are already in base ml).
+      const receiptsMl = sumAmountsInWindow(ingReceipts, ws, we) * meta.pack_size
+      const prodYieldMl = sumAmountsInWindow(yieldRows, ws, we)
+      const prodConsumeMl = sumAmountsInWindow(consumeRows, ws, we)
+      actual = (pair.previous.count_qty - pair.latest.count_qty) * meta.pack_size + receiptsMl + prodYieldMl - prodConsumeMl
+      deliveries = ingReceipts.filter((r) => r.at > ws && r.at <= we).length
+      batches = yieldRows.filter((r) => r.at > ws && r.at <= we).length + consumeRows.filter((r) => r.at > ws && r.at <= we).length
       unmatched = await readUnmatchedInWindow(db, tradeAccountId, ws, we)
     }
 
@@ -184,7 +229,11 @@ export async function loadRollingVariance(db: D1Database, tradeAccountId: string
         rawTheo += sumBucketsInWindow(buckets, prev.counted_at.slice(0, 10), cur.counted_at.slice(0, 10)) * line.pour_ml
       }
       const theo = applyYield(rawTheo, meta.yield_pct)
-      const act = (prev.count_qty - cur.count_qty) * meta.pack_size
+      const wsT = prev.counted_at, weT = cur.counted_at
+      const receiptsMlT = sumAmountsInWindow(ingReceipts, wsT, weT) * meta.pack_size
+      const prodYieldMlT = sumAmountsInWindow(yieldRows, wsT, weT)
+      const prodConsumeMlT = sumAmountsInWindow(consumeRows, wsT, weT)
+      const act = (prev.count_qty - cur.count_qty) * meta.pack_size + receiptsMlT + prodYieldMlT - prodConsumeMlT
       const v = calcVariance(act, theo)
       trend.push({ counted_at: cur.counted_at, variance_cost_p: calcVarianceCostP(v.variance_ml, meta.pack_size, meta.price_p, meta.purchase_qty), reason: cur.reason })
     }
@@ -205,6 +254,8 @@ export async function loadRollingVariance(db: D1Database, tradeAccountId: string
       variance_ml, variance_pct, variance_cost_p, severity,
       impact_p,
       unmatched_in_window: unmatched,
+      deliveries_in_window: deliveries,
+      batches_in_window: batches,
       latest_reason: pair?.latest.reason ?? null,
       persistent_loss: persistent,
       trend: recentTrend,
