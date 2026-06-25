@@ -7,7 +7,6 @@ import { getAttentionRows } from '@/lib/pouriq/attention'
 import { LicenceGate } from '@/components/pouriq/LicenceGate'
 import { MenuListCard } from '@/components/pouriq/MenuListCard'
 import { AttentionPanel } from '@/components/pouriq/AttentionPanel'
-import { PRIMARY_BUTTON, SECONDARY_BUTTON } from '@/lib/pouriq/button-styles'
 
 export const dynamic = 'force-dynamic'
 
@@ -26,24 +25,9 @@ export default async function PourIqDashboard() {
   return (
     <main className="min-h-screen">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-24">
-        <Link href="/trade/landing" className="text-sm text-parchment-400 hover:text-parchment-200">← Trade Hub</Link>
-        <div className="flex items-baseline justify-between mt-3 mb-10">
-          <div>
-            <div className="inline-block px-4 py-2 bg-jerry-green-800/60 backdrop-blur-sm rounded-full border border-gold-500/30 mb-4">
-              <span className="text-gold-300 text-sm font-semibold uppercase tracking-widest">Pour IQ™</span>
-            </div>
-            <h1 className="text-3xl md:text-4xl font-serif font-bold text-white">Your menus</h1>
-          </div>
-          <div className="flex flex-wrap items-center gap-2">
-            <Link href="/trade/pouriq/compare" className={SECONDARY_BUTTON}>Compare menus</Link>
-            <Link href="/trade/pouriq/library" className={SECONDARY_BUTTON}>Library</Link>
-            <Link href="/trade/pouriq/serves" className={SECONDARY_BUTTON}>Serves</Link>
-            <Link href="/trade/pouriq/variance" className={SECONDARY_BUTTON}>Variance</Link>
-            <Link href="/trade/pouriq/stock" className={SECONDARY_BUTTON}>Stock</Link>
-            <Link href="/trade/pouriq/settings/integrations" className={SECONDARY_BUTTON}>Integrations</Link>
-            <Link href="/trade/pouriq/settings/voice-profile" className={SECONDARY_BUTTON}>Voice Profile</Link>
-            <Link href="/trade/pouriq/new" className={PRIMARY_BUTTON}>New menu</Link>
-          </div>
+        <div className="flex items-baseline justify-between gap-3 flex-wrap mb-10">
+          <h1 className="text-3xl md:text-4xl font-serif font-bold text-white">Your menus</h1>
+          <Link href="/trade/pouriq/compare" className="text-sm text-gold-300 hover:text-gold-200 underline">Compare menus →</Link>
         </div>
 
         <AttentionPanel rows={attentionRows} />
