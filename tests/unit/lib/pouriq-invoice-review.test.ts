@@ -9,6 +9,9 @@ describe('classifyInvoiceLine', () => {
     expect(classifyInvoiceLine({ matchKind: 'suggestions', priceChanged: false, resolved: false })).toBe('needs-attention')
     expect(classifyInvoiceLine({ matchKind: 'no-match', priceChanged: false, resolved: false })).toBe('needs-attention')
   })
+  it('routes an unresolved auto line to needs-attention (so it is never hidden)', () => {
+    expect(classifyInvoiceLine({ matchKind: 'auto', priceChanged: false, resolved: false })).toBe('needs-attention')
+  })
 })
 
 describe('summariseInvoiceLines', () => {

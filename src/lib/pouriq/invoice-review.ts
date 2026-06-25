@@ -17,6 +17,10 @@ export interface InvoiceReviewSummary {
 }
 
 export function classifyInvoiceLine(i: InvoiceLineInput): InvoiceLineCategory {
+  // Anything still needing a decision belongs in the (always-visible) attention
+  // group — including an auto match the user un-resolved (e.g. cleared the
+  // library selection) — so it is never hidden in the collapsed auto section.
+  if (!i.resolved) return 'needs-attention'
   if (i.matchKind !== 'auto') return 'needs-attention'
   return i.priceChanged ? 'price-change' : 'auto-ok'
 }
