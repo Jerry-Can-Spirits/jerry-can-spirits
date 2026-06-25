@@ -4,8 +4,8 @@ import { getCloudflareContext } from '@opennextjs/cloudflare'
 import { checkPourIqAccess } from '@/lib/pouriq/access'
 import { LicenceGate } from '@/components/pouriq/LicenceGate'
 import { getMenu, listCocktailsForMenu } from '@/lib/pouriq/menus'
-import { SpecCard } from '@/components/pouriq/SpecCard'
-import { PrintReportButton } from '@/components/pouriq/PrintReportButton'
+import { SpecCardsView } from '@/components/pouriq/SpecCardsView'
+import { calculateMenuMetrics } from '@/lib/pouriq/calculations'
 
 export const dynamic = 'force-dynamic'
 
@@ -27,6 +27,11 @@ export default async function SpecCardsPage({ params }: Props) {
 
   const cocktails = await listCocktailsForMenu(db, menuId)
   const priceIncludesVat = menu.prices_include_vat === 1
+  const metrics = calculateMenuMetrics(cocktails, priceIncludesVat, [])
+  const costById: Record<string, { pourCostP: number; gpPct: number; complete: boolean }> = {}
+  for (const m of metrics.cocktail_metrics) {
+    costById[m.cocktail_id] = { pourCostP: m.pour_cost_p, gpPct: m.gp_pct, complete: m.cost_complete }
+  }
 
   const reportDate = new Date().toLocaleDateString('en-GB', {
     day: 'numeric',
@@ -53,9 +58,8 @@ export default async function SpecCardsPage({ params }: Props) {
             Spec cards
           </h1>
           <p className="text-parchment-300 text-base leading-relaxed mb-6">
-            Every drink on this menu as a one-page training reference, one card per page. Print the lot, or pick a range in the print dialog.
+            Every drink on this menu as a training reference. Print one card per page for a booklet, or compact for strips along the bar.
           </p>
-          {cocktails.length > 0 && <PrintReportButton label="Print spec cards" />}
         </div>
 
         <div className="hidden print:block mb-6 pb-4 border-b border-stone-300">
@@ -77,11 +81,7 @@ export default async function SpecCardsPage({ params }: Props) {
             first.
           </p>
         ) : (
-          <div>
-            {cocktails.map((c) => (
-              <SpecCard key={c.id} cocktail={c} priceIncludesVat={priceIncludesVat} />
-            ))}
-          </div>
+          <SpecCardsView cocktails={cocktails} costById={costById} priceIncludesVat={priceIncludesVat} />
         )}
       </div>
     </main>
