@@ -14,6 +14,7 @@ import { extractMenuWithAnthropic } from '@/lib/pouriq/menu-extract'
 import { parseMeasurement } from '@/lib/pouriq/measurement-parse'
 import { matchIngredient } from '@/lib/pouriq/match'
 import { listCatalogue, matchCatalogue } from '@/lib/pouriq/ingredient-catalogue'
+import { splitCompoundIngredients } from '@/lib/pouriq/compound'
 import type { IngredientType } from '@/lib/pouriq/types'
 
 export const runtime = 'nodejs'
@@ -153,7 +154,7 @@ export async function POST(request: Request) {
   const drinks: PreviewDrink[] = extracted.result.drinks.map((d) => ({
     name: d.name,
     sale_price_p: d.sale_price_p,
-    ingredients: d.ingredients.map((i): PreviewIngredient => {
+    ingredients: splitCompoundIngredients(d.ingredients).map((i): PreviewIngredient => {
       const parsed = parseMeasurement(i.raw_measurement)
       const matched = matchIngredient(i.name, library)
       let match: PreviewIngredient['match']
