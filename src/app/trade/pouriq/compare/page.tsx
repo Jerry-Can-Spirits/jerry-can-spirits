@@ -74,7 +74,7 @@ export default async function ComparePage({ searchParams }: SearchParams) {
   return (
     <main className="min-h-screen">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-24">
-        <Link href="/trade/pouriq" className="text-sm text-parchment-400 hover:text-parchment-200">← All menus</Link>
+        <Link href="/trade/pouriq/menus" className="text-sm text-parchment-400 hover:text-parchment-200">← All menus</Link>
         <h1 className="text-3xl md:text-4xl font-serif font-bold text-white mt-3 mb-2">Compare menus</h1>
         <p className="text-parchment-400 text-sm mb-10">
           Pick two menus to see what changed: drinks added, drinks removed, and per-drink shifts in GP, margin, and contribution.

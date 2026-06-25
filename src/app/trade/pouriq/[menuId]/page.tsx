@@ -92,7 +92,7 @@ export default async function MenuDetailPage({ params }: Props) {
     <main className="min-h-screen print-region">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-24">
         <div className="flex items-baseline gap-4 no-print">
-          <Link href="/trade/pouriq" className="text-sm text-parchment-400 hover:text-parchment-200">← All menus</Link>
+          <Link href="/trade/pouriq/menus" className="text-sm text-parchment-400 hover:text-parchment-200">← All menus</Link>
           <Link href="/trade/pouriq/library" className="text-sm text-parchment-400 hover:text-parchment-200">Library</Link>
         </div>
         {/* Print-only report header — never visible on screen */}

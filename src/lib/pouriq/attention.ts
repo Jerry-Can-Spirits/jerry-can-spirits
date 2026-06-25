@@ -13,6 +13,7 @@ export interface AttentionRow {
   key: string
   label: string
   href: string
+  severity: 'high' | 'medium'
 }
 
 // Pure: the menu-specific counts derived from computed metrics. Incomplete-cost
@@ -40,7 +41,7 @@ export async function getAttentionRows(db: D1Database, tradeAccountId: string): 
 
   // 1. Sales paused — a POS is connected but there's no active menu to route to.
   if (enabled.length > 0 && !activeMenu) {
-    rows.push({ key: 'paused', label: 'Sales are paused — set an active menu', href: '/trade/pouriq' })
+    rows.push({ key: 'paused', label: 'Sales are paused — set an active menu', href: '/trade/pouriq/menus', severity: 'high' })
   }
   // 2. Sync errors, per connection.
   for (const c of connections) {
@@ -49,6 +50,7 @@ export async function getAttentionRows(db: D1Database, tradeAccountId: string): 
         key: `sync-${c.provider}`,
         label: `${PROVIDER_LABELS[c.provider] ?? c.provider} sync error — reconnect`,
         href: '/trade/pouriq/settings/integrations',
+        severity: 'high',
       })
     }
   }
@@ -58,6 +60,7 @@ export async function getAttentionRows(db: D1Database, tradeAccountId: string): 
       key: 'unmatched',
       label: `${unmatched} unmatched till ${unmatched === 1 ? 'item' : 'items'} — sales not counting`,
       href: '/trade/pouriq/unmatched',
+      severity: 'medium',
     })
   }
   // 4 & 5. Active-menu cost/GP signals.
@@ -74,6 +77,7 @@ export async function getAttentionRows(db: D1Database, tradeAccountId: string): 
         key: 'prices',
         label: `${incompleteCostCount} drink${incompleteCostCount === 1 ? '' : 's'} need prices on ${activeMenu.name}`,
         href: `/trade/pouriq/${activeMenu.id}`,
+        severity: 'medium',
       })
     }
     if (underTargetCount > 0) {
@@ -81,6 +85,7 @@ export async function getAttentionRows(db: D1Database, tradeAccountId: string): 
         key: 'gp',
         label: `${underTargetCount} drink${underTargetCount === 1 ? '' : 's'} under target GP on ${activeMenu.name}`,
         href: `/trade/pouriq/${activeMenu.id}`,
+        severity: 'medium',
       })
     }
   }
