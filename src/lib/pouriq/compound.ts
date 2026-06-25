@@ -24,7 +24,7 @@ export function splitCompoundIngredients<T extends { name: string; raw_measureme
   return ingredients.flatMap((ing) => {
     const m = ing.name.trim().match(COMPOUND_RE)
     if (!m) return [ing]
-    // A comma signals a 3+ item list — leave it intact rather than guess.
+    // A comma signals a 3+ item list, so leave it intact rather than guess.
     if (m[1].includes(',')) return [ing]
     const noun = m[2]
     const parts = m[1].split(SEPARATOR_RE).map((p) => p.trim()).filter((p) => p.length > 0)
