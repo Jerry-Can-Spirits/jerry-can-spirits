@@ -4,8 +4,8 @@
 export type LicenceType = 'pilot' | 'annual' | 'biannual' | 'monthly'
 
 export type IngredientType =
-  | 'spirit' | 'liqueur' | 'wine' | 'beer' | 'mixer'
-  | 'syrup' | 'juice' | 'garnish' | 'soft-drink' | 'food' | 'other'
+  | 'spirit' | 'liqueur' | 'wine' | 'beer' | 'cider' | 'mixer'
+  | 'syrup' | 'juice' | 'garnish' | 'soft-drink' | 'alcohol-free' | 'food' | 'other'
 
 export type RecommendationSeverity = 'info' | 'warn' | 'action'
 export type RecommendationCategory = 'pricing' | 'waste' | 'balance' | 'complexity' | 'opportunity'

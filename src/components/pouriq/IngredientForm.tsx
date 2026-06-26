@@ -26,8 +26,8 @@ type BaseUnit = 'ml' | 'g' | 'each'
 type PurchaseMode = BaseUnit | 'prepared'
 
 const INGREDIENT_TYPES: IngredientType[] = [
-  'spirit', 'liqueur', 'wine', 'beer', 'mixer',
-  'syrup', 'juice', 'garnish', 'soft-drink', 'food', 'other',
+  'spirit', 'liqueur', 'wine', 'beer', 'cider', 'mixer',
+  'syrup', 'juice', 'garnish', 'soft-drink', 'alcohol-free', 'food', 'other',
 ]
 
 const INGREDIENT_TYPE_LABELS: Record<IngredientType, string> = {
@@ -35,11 +35,13 @@ const INGREDIENT_TYPE_LABELS: Record<IngredientType, string> = {
   liqueur: 'Liqueur',
   wine: 'Wine',
   beer: 'Beer',
+  cider: 'Cider',
   mixer: 'Mixer',
   syrup: 'Syrup',
   juice: 'Juice',
   garnish: 'Garnish',
   'soft-drink': 'Soft drink',
+  'alcohol-free': 'Alcohol-free',
   food: 'Food',
   other: 'Other',
 }

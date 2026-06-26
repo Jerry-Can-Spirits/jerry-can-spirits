@@ -30,7 +30,7 @@ interface InvoiceLineRowProps {
   onToggleCreateNew: (index: number, toNew: boolean) => void
 }
 
-const INGREDIENT_TYPES: IngredientType[] = ['spirit','liqueur','wine','beer','mixer','syrup','juice','garnish','soft-drink','food','other']
+const INGREDIENT_TYPES: IngredientType[] = ['spirit','liqueur','wine','beer','cider','mixer','syrup','juice','garnish','soft-drink','alcohol-free','food','other']
 
 function formatMoney(p: number): string {
   return `£${(p / 100).toFixed(2)}`

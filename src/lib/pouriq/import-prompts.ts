@@ -10,7 +10,7 @@ Ingredient rules:
 - When the menu lists ingredients, capture each name AS WRITTEN. "Tito's vodka" stays "Tito's vodka", not "Vodka".
 - When you populate ingredients from a classic recipe, use plain category names ("white rum", "lime juice", "sugar syrup") so the matcher can suggest the venue's library entries.
 - For measurements: use what the menu shows, otherwise use UK on-trade defaults — spirit 50ml, liqueur modifier 25ml, citrus 25ml, syrup 15ml, bitters 2 dashes, mint 8 leaves, lime wedge 1/8.
-- Infer ingredient_type: spirit, liqueur, wine, beer, mixer, syrup, juice, garnish, other. When uncertain return 'other'.
+- Infer ingredient_type: spirit, liqueur, wine, beer, cider, mixer, syrup, juice, garnish, soft-drink, alcohol-free, food, other. Use 'cider' for ciders, 'alcohol-free' for 0% / low-alcohol beers. When uncertain return 'other'.
 
 Other rules:
 - Capture sale_price_p in pence if visible (£9.50 = 950). Else null.
@@ -62,7 +62,7 @@ export const EXTRACT_TOOL = {
                   raw_measurement: { type: 'string' },
                   inferred_type: {
                     type: 'string',
-                    enum: ['spirit','liqueur','wine','beer','mixer','syrup','juice','garnish','other'],
+                    enum: ['spirit','liqueur','wine','beer','cider','mixer','syrup','juice','garnish','soft-drink','alcohol-free','food','other'],
                   },
                 },
               },
