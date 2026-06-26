@@ -115,6 +115,7 @@ function InvoiceLineRowComponent({ index, line, state, library, libraryById, onC
                 <input
                   type="number" min={1} step="1"
                   value={match.purchase_qty}
+                  onFocus={(e) => e.target.select()}
                   onChange={(e) => onChange(index, { match: { ...match, purchase_qty: Math.max(1, Math.round(Number(e.target.value) || 1)) } })}
                   className="mt-1 w-full px-2 py-1 bg-jerry-green-700/50 border border-gold-500/30 rounded-sm text-parchment-50 text-sm"
                 />

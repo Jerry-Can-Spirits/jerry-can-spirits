@@ -7,6 +7,7 @@ export interface RollingStockRow {
   library_ingredient_id: string
   library_name: string
   pack_size: number
+  pack_format: string | null
   yield_pct: number
   is_prepared: number
   on_hand_bottles: number | null
@@ -23,8 +24,8 @@ export interface RollingStockRow {
 // The stockable universe: every ml-priced library ingredient, whether or not
 // it appears in a recipe. Usage is recipe-derived (0 when an ingredient is
 // stocked but used in no cocktail/serve).
-interface LibraryMetaRow { id: string; name: string; pack_size: number; yield_pct: number; is_prepared: number; par_bottles: number | null }
-interface LibraryMetaDbRow { id: string; name: string; pack_size: number; yield_pct: number; is_prepared: number; par_bottles: number | null }
+interface LibraryMetaRow { id: string; name: string; pack_size: number; pack_format: string | null; yield_pct: number; is_prepared: number; par_bottles: number | null }
+interface LibraryMetaDbRow { id: string; name: string; pack_size: number; pack_format: string | null; yield_pct: number; is_prepared: number; par_bottles: number | null }
 interface RecipeLineRow { cocktail_id: string; library_ingredient_id: string; pour_ml: number }
 interface VolumeRow { cocktail_id: string; period_start: string; period_end: string; units_sold: number }
 interface EventRow { library_ingredient_id: string; counted_at: string; count_qty: number }
@@ -32,7 +33,7 @@ interface ReceiptRow { library_ingredient_id: string; received_at: string; qty: 
 
 async function readTenantLibrary(db: D1Database, tradeAccountId: string): Promise<LibraryMetaRow[]> {
   const res = await db.prepare(`
-    SELECT id, name, pack_size, yield_pct, is_prepared, par_bottles
+    SELECT id, name, pack_size, pack_format, yield_pct, is_prepared, par_bottles
     FROM pouriq_ingredients_library
     WHERE trade_account_id = ?1 AND base_unit = 'ml' AND price_p > 0
   `).bind(tradeAccountId).all<LibraryMetaDbRow>()
@@ -152,6 +153,7 @@ export async function loadStockLevels(db: D1Database, tradeAccountId: string): P
         library_ingredient_id: ingId,
         library_name: meta.name,
         pack_size: meta.pack_size,
+        pack_format: meta.pack_format,
         yield_pct: meta.yield_pct,
         is_prepared: meta.is_prepared,
         on_hand_bottles: null,
@@ -194,6 +196,7 @@ export async function loadStockLevels(db: D1Database, tradeAccountId: string): P
         library_ingredient_id: ingId,
         library_name: meta.name,
         pack_size: meta.pack_size,
+        pack_format: meta.pack_format,
         yield_pct: meta.yield_pct,
         is_prepared: meta.is_prepared,
         on_hand_bottles: on_hand,
