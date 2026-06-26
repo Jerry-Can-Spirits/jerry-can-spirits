@@ -178,6 +178,8 @@ export async function listCocktailsForMenu(
         l.base_unit AS l_base_unit,
         l.pack_size AS l_pack_size,
         l.price_p AS l_price_p,
+        l.price_includes_vat AS l_price_includes_vat,
+        l.price_entered_p AS l_price_entered_p,
         l.pack_format AS l_pack_format,
         l.subcategory AS l_subcategory,
         l.is_prepared AS l_is_prepared,
@@ -207,6 +209,8 @@ export async function listCocktailsForMenu(
       l_base_unit: 'ml' | 'g' | 'each'
       l_pack_size: number
       l_price_p: number
+      l_price_includes_vat: number
+      l_price_entered_p: number | null
       l_pack_format: string | null
       l_subcategory: string | null
       l_is_prepared: number
@@ -236,6 +240,8 @@ export async function listCocktailsForMenu(
         base_unit: row.l_base_unit,
         pack_size: row.l_pack_size,
         price_p: row.l_price_p,
+        price_includes_vat: row.l_price_includes_vat,
+        price_entered_p: row.l_price_entered_p,
         pack_format: row.l_pack_format,
         subcategory: row.l_subcategory,
         is_prepared: row.l_is_prepared,
@@ -278,6 +284,7 @@ export async function getCocktail(
         l.id AS l_id, l.trade_account_id AS l_trade_account_id, l.name AS l_name,
         l.ingredient_type AS l_ingredient_type,
         l.base_unit AS l_base_unit, l.pack_size AS l_pack_size, l.price_p AS l_price_p,
+        l.price_includes_vat AS l_price_includes_vat, l.price_entered_p AS l_price_entered_p,
         l.pack_format AS l_pack_format, l.subcategory AS l_subcategory,
         l.is_prepared AS l_is_prepared,
         l.purchase_qty AS l_purchase_qty,
@@ -304,6 +311,8 @@ export async function getCocktail(
       l_base_unit: 'ml' | 'g' | 'each'
       l_pack_size: number
       l_price_p: number
+      l_price_includes_vat: number
+      l_price_entered_p: number | null
       l_pack_format: string | null
       l_subcategory: string | null
       l_is_prepared: number
@@ -331,6 +340,8 @@ export async function getCocktail(
       base_unit: row.l_base_unit,
       pack_size: row.l_pack_size,
       price_p: row.l_price_p,
+      price_includes_vat: row.l_price_includes_vat,
+      price_entered_p: row.l_price_entered_p,
       pack_format: row.l_pack_format,
       subcategory: row.l_subcategory,
       is_prepared: row.l_is_prepared,

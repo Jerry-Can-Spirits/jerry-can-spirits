@@ -22,6 +22,7 @@ function ingredient(opts: IngOpts): IngredientWithLibrary {
     base_unit: opts.base_unit ?? 'ml',
     pack_size: opts.pack_size ?? 1,
     price_p: opts.price_p ?? 0,
+    price_includes_vat: 0, price_entered_p: null,
     pack_format: null, subcategory: null,
     is_prepared: 0,
     purchase_qty: 1,

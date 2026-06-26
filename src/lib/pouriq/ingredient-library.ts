@@ -8,6 +8,8 @@ export interface IngredientLibraryInsert {
   base_unit: 'ml' | 'g' | 'each'
   pack_size: number
   price_p: number
+  price_includes_vat?: number      // 0 = net/ex; 1 = inc (price_p already net)
+  price_entered_p?: number | null  // exact entered pence (gross when inc)
   purchase_qty?: number   // defaults to 1
   yield_pct?: number
   pack_format?: string | null
@@ -20,7 +22,8 @@ export interface IngredientLibraryInsert {
 // Columns present in the new schema (migration 0045).
 const LIBRARY_SELECT = `
   id, trade_account_id, name, ingredient_type,
-  base_unit, pack_size, price_p, pack_format, subcategory,
+  base_unit, pack_size, price_p, price_includes_vat, price_entered_p,
+  pack_format, subcategory,
   is_prepared, purchase_qty, yield_pct, barcode, notes, created_at, updated_at
 `
 
@@ -32,6 +35,8 @@ function mapLibraryRow(r: {
   base_unit: 'ml' | 'g' | 'each'
   pack_size: number
   price_p: number
+  price_includes_vat: number
+  price_entered_p: number | null
   pack_format: string | null
   subcategory: string | null
   is_prepared: number
@@ -89,13 +94,14 @@ export async function insertLibraryEntry(
   const result = await db
     .prepare(`
       INSERT INTO pouriq_ingredients_library
-        (trade_account_id, name, ingredient_type, base_unit, pack_size, price_p, purchase_qty, yield_pct, pack_format, subcategory, barcode, notes, is_prepared)
-      VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13)
+        (trade_account_id, name, ingredient_type, base_unit, pack_size, price_p, price_includes_vat, price_entered_p, purchase_qty, yield_pct, pack_format, subcategory, barcode, notes, is_prepared)
+      VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13, ?14, ?15)
       RETURNING id
     `)
     .bind(
       data.trade_account_id, data.name, data.ingredient_type,
       data.base_unit, data.pack_size > 0 ? data.pack_size : 1, data.price_p,
+      data.price_includes_vat ?? 0, data.price_entered_p ?? data.price_p,
       data.purchase_qty ?? 1, data.yield_pct ?? 100,
       data.pack_format ?? null, data.subcategory ?? null,
       data.barcode, data.notes, isPrepared,
@@ -141,6 +147,8 @@ export async function updateLibraryEntry(
     newModelPatch['pack_size'] = patch.pack_size != null && patch.pack_size > 0 ? patch.pack_size : before.pack_size
     newModelPatch['price_p'] = patch.price_p ?? before.price_p
   }
+  if ('price_includes_vat' in patch) newModelPatch['price_includes_vat'] = patch.price_includes_vat ?? 0
+  if ('price_entered_p' in patch) newModelPatch['price_entered_p'] = patch.price_entered_p ?? newModelPatch['price_p'] ?? before.price_p
   if ('yield_pct' in patch) newModelPatch['yield_pct'] = patch.yield_pct ?? 100
   if ('pack_format' in patch) newModelPatch['pack_format'] = patch.pack_format ?? null
   if ('subcategory' in patch) newModelPatch['subcategory'] = patch.subcategory ?? null

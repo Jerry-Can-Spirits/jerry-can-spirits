@@ -9,7 +9,7 @@ function row(name: string): IngredientLibraryRow {
     trade_account_id: 't',
     name,
     ingredient_type: 'other',
-    base_unit: 'ml', pack_size: 700, price_p: 1000, pack_format: null, subcategory: null,
+    base_unit: 'ml', pack_size: 700, price_p: 1000, price_includes_vat: 0, price_entered_p: null, pack_format: null, subcategory: null,
     is_prepared: 0,
     purchase_qty: 1,
     yield_pct: 100,
