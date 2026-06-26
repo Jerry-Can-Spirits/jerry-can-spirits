@@ -21,6 +21,10 @@ export const POUR_PRESETS: ReadonlyArray<{ ml: number; label: string }> = [
 // Covers 150/200ml (Britvic/Fever-Tree splits) up to 2000ml bottled mixers.
 export const BOTTLE_SIZES_ML: readonly number[] = [150, 200, 330, 500, 700, 750, 1000, 2000]
 
+// Draught keg/cask sizes (ml) for the pack-size chips on beer. Quick chips only;
+// the size field still takes free text for odd sizes (e.g. 40914 for a 9gal firkin).
+export const KEG_SIZES_ML: readonly number[] = [20000, 30000, 50000]
+
 // Common bag/tub sizes for weight-bought ingredients (spices, sugar, citric
 // acid, etc.). Quick chips; the size field also accepts free text.
 export const WEIGHT_SIZES_G: readonly number[] = [500, 1000, 2500, 5000]
@@ -40,6 +44,13 @@ export const STANDARD_SERVE_UNITS: Record<BaseUnit, ServeUnit[]> = {
     { name: 'dash', base_per_unit: 0.6 },
     { name: 'barspoon', base_per_unit: 5 },
     { name: 'tsp', base_per_unit: 5 },
+    // Draught and wine serves, so a beer or wine is "1 pint" / "1 large glass"
+    // rather than a typed ml amount.
+    { name: 'half pint', base_per_unit: 284 },
+    { name: 'pint', base_per_unit: 568 },
+    { name: 'small glass', base_per_unit: 125 },
+    { name: 'medium glass', base_per_unit: 175 },
+    { name: 'large glass', base_per_unit: 250 },
   ],
   g: [
     { name: 'g', base_per_unit: 1 },

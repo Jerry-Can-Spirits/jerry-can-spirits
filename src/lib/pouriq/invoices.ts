@@ -154,3 +154,32 @@ export async function listInvoicesForTenant(
     .all<InvoiceRow>()
   return result.results ?? []
 }
+
+// Delete an invoice and everything booked off it. Deletes are explicit and
+// ordered rather than relying on FK cascade, so it is correct regardless of FK
+// enforcement: stock receipts first (they link to a line by a plain column with
+// no FK and would otherwise orphan and keep counting toward perpetual stock),
+// then the invoice lines, then the invoice. Already-applied prices stay (the
+// pouriq_cost_changes price-history rows are not touched). Returns the stored R2
+// key (for the caller to delete the PDF) or null when not found/owned.
+export async function deleteInvoice(
+  db: D1Database,
+  id: string,
+  tradeAccountId: string,
+): Promise<{ r2_key: string | null } | null> {
+  const invoice = await db
+    .prepare(`SELECT r2_key FROM pouriq_invoices WHERE id = ?1 AND trade_account_id = ?2`)
+    .bind(id, tradeAccountId)
+    .first<{ r2_key: string | null }>()
+  if (!invoice) return null
+  await db.batch([
+    db
+      .prepare(`DELETE FROM pouriq_stock_receipts WHERE invoice_line_id IN (SELECT id FROM pouriq_invoice_lines WHERE invoice_id = ?1)`)
+      .bind(id),
+    db.prepare(`DELETE FROM pouriq_invoice_lines WHERE invoice_id = ?1`).bind(id),
+    db
+      .prepare(`DELETE FROM pouriq_invoices WHERE id = ?1 AND trade_account_id = ?2`)
+      .bind(id, tradeAccountId),
+  ])
+  return { r2_key: invoice.r2_key }
+}
