@@ -56,7 +56,7 @@ interface CommitBody {
   supplier_name: string | null
   invoice_number: string | null
   invoice_date: string | null
-  prices_include_vat: boolean
+  prices_include_vat?: boolean
   lines: CommitLine[]
 }
 
@@ -182,6 +182,8 @@ export async function POST(request: Request) {
       let libraryId: string
       let pricingMode: CostPricingMode
       let oldCostP: number | null
+      // Hoisted before the new_library branch because insertLibraryEntry needs them;
+      // netCostP/enteredCostP are derived after newCostP below.
       const includesVat = body.prices_include_vat === true
       const vatFlag = includesVat ? 1 : 0
 
