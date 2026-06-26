@@ -1,6 +1,8 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { usePathname } from 'next/navigation'
+import { isPourIqAppRoute } from '@/lib/pouriq/nav'
 
 interface OrderData {
   bottleCount: number
@@ -10,8 +12,10 @@ export default function SocialProofToast() {
   const [data, setData] = useState<OrderData | null>(null)
   const [visible, setVisible] = useState(false)
   const [dismissing, setDismissing] = useState(false)
+  const pathname = usePathname()
 
   useEffect(() => {
+    if (isPourIqAppRoute(pathname)) return
     if (sessionStorage.getItem('social_proof_seen')) return
 
     const timer = setTimeout(async () => {
@@ -31,7 +35,7 @@ export default function SocialProofToast() {
     }, 12000)
 
     return () => clearTimeout(timer)
-  }, [])
+  }, [pathname])
 
   function dismiss() {
     setDismissing(true)
@@ -39,7 +43,7 @@ export default function SocialProofToast() {
     setTimeout(() => setVisible(false), 300)
   }
 
-  if (!visible || !data) return null
+  if (!visible || !data || isPourIqAppRoute(pathname)) return null
 
   const bottles = data.bottleCount
   const label = bottles === 1 ? 'bottle' : 'bottles'

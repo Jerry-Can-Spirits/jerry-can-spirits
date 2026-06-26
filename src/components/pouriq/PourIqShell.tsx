@@ -77,7 +77,7 @@ export function PourIqShell({ venueName, children }: { venueName: string; childr
           </div>
         )}
 
-        <div className="flex-1 min-w-0">{children}</div>
+        <div id="main-content" className="flex-1 min-w-0">{children}</div>
       </div>
     </div>
   )
