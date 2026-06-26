@@ -4,6 +4,9 @@ import { formatServeMeasure } from '@/lib/pouriq/measures'
 interface Props {
   cocktail: CocktailWithIngredients
   priceIncludesVat: boolean
+  compact?: boolean
+  showCost?: boolean
+  cost?: { pourCostP: number; gpPct: number; complete: boolean } | null
 }
 
 function formatPrice(pence: number, vatIncluded: boolean): string {
@@ -12,7 +15,7 @@ function formatPrice(pence: number, vatIncluded: boolean): string {
 }
 
 
-export function SpecCard({ cocktail, priceIncludesVat }: Props) {
+export function SpecCard({ cocktail, priceIncludesVat, compact = false, showCost = false, cost = null }: Props) {
   const garnishes = cocktail.ingredients.filter(
     (i) => i.library.ingredient_type === 'garnish'
   )
@@ -22,12 +25,14 @@ export function SpecCard({ cocktail, priceIncludesVat }: Props) {
 
   return (
     <article
-      className="
+      className={`
         mb-12 p-8
         bg-jerry-green-800/40 border border-gold-500/30 rounded-xl
-        print:bg-white print:border-stone-300 print:rounded-none print:p-6 print:mb-0
-        print:break-before-page print:first:break-before-auto
-      "
+        print:bg-white print:border-stone-300 print:rounded-none
+        ${compact
+          ? 'print:p-4 print:mb-4 print:break-inside-avoid'
+          : 'print:p-6 print:mb-0 print:break-before-page print:first:break-before-auto'}
+      `}
     >
       <header className="flex flex-wrap items-baseline justify-between gap-3 pb-3 border-b border-gold-500/20 print:border-stone-300 mb-4">
         <h2 className="text-3xl font-serif font-bold text-white print:text-black">
@@ -96,6 +101,14 @@ export function SpecCard({ cocktail, priceIncludesVat }: Props) {
             {cocktail.description}
           </p>
         </section>
+      )}
+
+      {showCost && cost && (
+        <p className="text-xs text-parchment-400 print:text-stone-600 mb-4">
+          {cost.complete
+            ? `Pour cost £${(cost.pourCostP / 100).toFixed(2)} · GP ${cost.gpPct.toFixed(0)}%`
+            : 'Cost incomplete'}
+        </p>
       )}
 
       {cocktail.field_manual_slug != null &&
