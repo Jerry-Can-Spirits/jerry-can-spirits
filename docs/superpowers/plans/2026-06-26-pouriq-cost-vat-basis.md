@@ -368,7 +368,7 @@ Replace the `price_p_live` memo (lines 146-149) with an entered figure and a der
 
 - [ ] **Step 4: Add the toggle + net read-back under the price field**
 
-In the standard-mode price block, replace the existing helper line (currently `<FieldHelper>The total you pay at the till, including VAT if applicable.</FieldHelper>`, around line 588) with the toggle and an updated helper:
+In the standard-mode price block, replace the existing helper line (post-#827 it reads `<FieldHelper>The total you pay your supplier, including VAT if applicable. Enter every ingredient on the same VAT basis (inc or ex VAT), or your pour costs will not be comparable.</FieldHelper>`, around line 588) with the toggle and an updated helper:
 
 ```tsx
               <div className="mt-2 inline-flex items-stretch rounded-lg border border-gold-500/30 overflow-hidden bg-jerry-green-800/40">
