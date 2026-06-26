@@ -36,4 +36,23 @@ describe('summariseVarianceByReason', () => {
     ])
     expect(s.rows.map((r) => r.reason)).toEqual(['theft', 'unattributed'])
   })
+
+  it('allocates shares so they always sum to exactly 100', () => {
+    const s = summariseVarianceByReason([
+      { variance_cost_p: -334, latest_reason: 'theft' },
+      { variance_cost_p: -333, latest_reason: 'spillage' },
+      { variance_cost_p: -333, latest_reason: 'comps' },
+    ])
+    expect(s.rows.reduce((sum, r) => sum + r.share_pct, 0)).toBe(100)
+    // largest remainder (theft, 33.4) takes the extra point
+    expect(s.rows.find((r) => r.reason === 'theft')?.share_pct).toBe(34)
+  })
+
+  it('breaks equal-loss ties by reason name', () => {
+    const s = summariseVarianceByReason([
+      { variance_cost_p: -500, latest_reason: 'theft' },
+      { variance_cost_p: -500, latest_reason: 'comps' },
+    ])
+    expect(s.rows.map((r) => r.reason)).toEqual(['comps', 'theft'])
+  })
 })

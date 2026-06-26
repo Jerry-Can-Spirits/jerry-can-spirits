@@ -260,11 +260,19 @@ export function summariseVarianceByReason(
     byReason.set(key, (byReason.get(key) ?? 0) + loss)
   }
   if (total === 0) return { rows: [], total_loss_p: 0 }
-  const out: ReasonSummaryRow[] = Array.from(byReason.entries()).map(([reason, loss_p]) => ({
-    reason,
-    loss_p,
-    share_pct: Math.round((loss_p / total) * 100),
-  }))
+  // Largest-remainder allocation so the shares sum to exactly 100 (plain
+  // per-row rounding can give a 99% or 101% column that reads as a bug).
+  const parts = Array.from(byReason.entries()).map(([reason, loss_p]) => {
+    const raw = (loss_p / total) * 100
+    return { reason, loss_p, share_pct: Math.floor(raw), rem: raw - Math.floor(raw) }
+  })
+  let remaining = 100 - parts.reduce((s, p) => s + p.share_pct, 0)
+  for (const p of [...parts].sort((a, b) => b.rem - a.rem || b.loss_p - a.loss_p)) {
+    if (remaining <= 0) break
+    p.share_pct += 1
+    remaining -= 1
+  }
+  const out: ReasonSummaryRow[] = parts.map(({ reason, loss_p, share_pct }) => ({ reason, loss_p, share_pct }))
   out.sort((a, b) => {
     if (a.reason === 'unattributed') return 1
     if (b.reason === 'unattributed') return -1

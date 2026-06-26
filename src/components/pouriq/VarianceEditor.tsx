@@ -146,7 +146,7 @@ export function VarianceEditor() {
           <ul className="space-y-1">
             {reasonSummary.rows.map((r) => (
               <li key={r.reason} className="flex items-baseline justify-between gap-3 text-sm">
-                <span className="text-parchment-200">{r.reason === 'unattributed' ? 'Unattributed' : r.reason}</span>
+                <span className="text-parchment-200">{r.reason === 'unattributed' ? 'Unattributed' : r.reason.charAt(0).toUpperCase() + r.reason.slice(1)}</span>
                 <span className="text-parchment-300 font-mono">{formatMoney(-r.loss_p)} · {r.share_pct}%</span>
               </li>
             ))}
