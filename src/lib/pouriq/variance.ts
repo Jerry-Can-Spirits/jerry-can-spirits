@@ -238,3 +238,45 @@ export function buildVarianceLedger(input: {
     variance_bottles: expected_closing - input.closingQty,
   }
 }
+
+export interface ReasonSummaryRow { reason: string; loss_p: number; share_pct: number }
+export interface VarianceReasonSummary { rows: ReasonSummaryRow[]; total_loss_p: number }
+
+// Aggregate this period's variance LOSSES (negative cost) by their reason code,
+// with an 'unattributed' bucket for losses that have no reason set. Surpluses
+// (variance_cost_p >= 0) are excluded. Pure: operates on the minimal row shape
+// so the client variance editor and unit tests can both call it.
+export function summariseVarianceByReason(
+  rows: Array<{ variance_cost_p: number | null; latest_reason: string | null }>,
+): VarianceReasonSummary {
+  const byReason = new Map<string, number>()
+  let total = 0
+  for (const r of rows) {
+    const v = r.variance_cost_p
+    if (v == null || v >= 0) continue
+    const loss = -v
+    total += loss
+    const key = r.latest_reason && r.latest_reason.trim() !== '' ? r.latest_reason : 'unattributed'
+    byReason.set(key, (byReason.get(key) ?? 0) + loss)
+  }
+  if (total === 0) return { rows: [], total_loss_p: 0 }
+  // Largest-remainder allocation so the shares sum to exactly 100 (plain
+  // per-row rounding can give a 99% or 101% column that reads as a bug).
+  const parts = Array.from(byReason.entries()).map(([reason, loss_p]) => {
+    const raw = (loss_p / total) * 100
+    return { reason, loss_p, share_pct: Math.floor(raw), rem: raw - Math.floor(raw) }
+  })
+  let remaining = 100 - parts.reduce((s, p) => s + p.share_pct, 0)
+  for (const p of [...parts].sort((a, b) => b.rem - a.rem || b.loss_p - a.loss_p)) {
+    if (remaining <= 0) break
+    p.share_pct += 1
+    remaining -= 1
+  }
+  const out: ReasonSummaryRow[] = parts.map(({ reason, loss_p, share_pct }) => ({ reason, loss_p, share_pct }))
+  out.sort((a, b) => {
+    if (a.reason === 'unattributed') return 1
+    if (b.reason === 'unattributed') return -1
+    return b.loss_p - a.loss_p || a.reason.localeCompare(b.reason)
+  })
+  return { rows: out, total_loss_p: total }
+}

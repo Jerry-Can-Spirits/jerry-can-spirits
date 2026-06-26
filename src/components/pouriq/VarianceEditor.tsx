@@ -3,6 +3,7 @@
 import { useEffect, useState, useTransition } from 'react'
 import Link from 'next/link'
 import { VARIANCE_REASONS } from '@/lib/pouriq/types'
+import { summariseVarianceByReason } from '@/lib/pouriq/variance'
 
 interface RollingTrendPoint {
   counted_at: string
@@ -131,9 +132,27 @@ export function VarianceEditor() {
     )
   }
 
+  const reasonSummary = summariseVarianceByReason(
+    rows.filter((r) => r.unmatched_in_window === 0),
+  )
+
   return (
     <div className="space-y-4">
       {error && <p role="alert" className="text-sm text-red-300">{error}</p>}
+      {reasonSummary.total_loss_p > 0 && (
+        <div className="bg-jerry-green-800/40 border border-gold-500/20 rounded-xl p-4">
+          <h2 className="text-sm font-semibold text-white mb-1">Where the variance went</h2>
+          <p className="text-xs text-parchment-400 mb-3">Total loss this period {formatMoney(-reasonSummary.total_loss_p)}</p>
+          <ul className="space-y-1">
+            {reasonSummary.rows.map((r) => (
+              <li key={r.reason} className="flex items-baseline justify-between gap-3 text-sm">
+                <span className="text-parchment-200">{r.reason === 'unattributed' ? 'Unattributed' : r.reason.charAt(0).toUpperCase() + r.reason.slice(1)}</span>
+                <span className="text-parchment-300 font-mono">{formatMoney(-r.loss_p)} · {r.share_pct}%</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
       <div className="space-y-3">
         {rows.map((row) => {
           const id = row.library_ingredient_id
