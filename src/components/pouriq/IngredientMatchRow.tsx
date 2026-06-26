@@ -141,7 +141,7 @@ export function IngredientMatchRow({
                 ? formatPurchaseBasis({ base_unit: nl.base_unit, pack_size: nl.pack_size, price_p: nl.price_p, purchase_qty: nl.purchase_qty })
                 : null
               const sizePresets = nl.base_unit === 'ml'
-                ? (nl.ingredient_type === 'beer' ? [...BOTTLE_SIZES_ML, ...KEG_SIZES_ML] : BOTTLE_SIZES_ML)
+                ? (nl.ingredient_type === 'beer' || nl.ingredient_type === 'cider' ? [...BOTTLE_SIZES_ML, ...KEG_SIZES_ML] : BOTTLE_SIZES_ML)
                 : nl.base_unit === 'g' ? WEIGHT_SIZES_G : null
               return (
                 <>
