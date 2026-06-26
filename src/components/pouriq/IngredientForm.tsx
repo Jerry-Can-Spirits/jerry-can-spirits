@@ -597,7 +597,11 @@ export function IngredientForm({ entry, usageCount = 0, impactPayload, serveUnit
                 className={inputClass}
                 placeholder="e.g. 14.40"
               />
-              <div className="mt-2 inline-flex items-stretch rounded-lg border border-gold-500/30 overflow-hidden bg-jerry-green-800/40">
+              <div
+                role="group"
+                aria-label="Price VAT basis"
+                className="mt-2 inline-flex items-stretch rounded-lg border border-gold-500/30 overflow-hidden bg-jerry-green-800/40"
+              >
                 <button
                   type="button"
                   onClick={() => setPriceIncludesVat(true)}
@@ -620,10 +624,10 @@ export function IngredientForm({ entry, usageCount = 0, impactPayload, serveUnit
                 {priceIncludesVat
                   ? 'The total you pay your supplier including VAT. We store it net (÷ 1.2) so cost matches your net sale prices.'
                   : 'The ex-VAT (net) price, as it appears on most trade invoice lines.'}
-                {' '}Flat 20%: enter zero-rated items as Ex VAT.
               </FieldHelper>
+              <FieldHelper>Assumes 20% VAT. For zero-rated items, select Ex VAT.</FieldHelper>
               {priceIncludesVat && entered_p_live !== null && entered_p_live > 0 && (
-                <p className="text-xs text-gold-200 mt-1 tabular-nums">Stored net: £{((price_p_live ?? 0) / 100).toFixed(2)}</p>
+                <p className="text-xs text-gold-200 mt-1 tabular-nums">Stored net: £{(price_p_live! / 100).toFixed(2)}</p>
               )}
             </div>
             <div>
