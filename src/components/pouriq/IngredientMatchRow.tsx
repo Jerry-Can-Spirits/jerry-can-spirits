@@ -195,7 +195,7 @@ export function IngredientMatchRow({
                           {sizePresets.map((s) => (
                             <button type="button" key={s} onClick={() => updateNewLibrary({ pack_size: s })}
                               className={`${chipClass} ${nl.pack_size === s ? chipActive : chipIdle}`}>
-                              {s}{nl.base_unit}
+                              {nl.base_unit === 'ml' && s >= 10000 ? `${s / 1000}L` : `${s}${nl.base_unit}`}
                             </button>
                           ))}
                         </div>
@@ -206,7 +206,7 @@ export function IngredientMatchRow({
                         onFocus={(e) => e.target.select()}
                         onChange={(e) => updateNewLibrary({ pack_size: Math.max(1, Math.round(Number(e.target.value) || 1)) })}
                         className={inputClass}
-                        placeholder={nl.base_unit === 'ml' ? '330 for a can, 50000 for a 10L keg' : '500, 1000, 2500…'} />
+                        placeholder={nl.base_unit === 'ml' ? '330 for a can, 50000 for a 50L keg' : '500, 1000, 2500…'} />
                       <p className="text-xs text-parchment-400 mt-1">Enter any size not shown above.</p>
                     </div>
                   )}
