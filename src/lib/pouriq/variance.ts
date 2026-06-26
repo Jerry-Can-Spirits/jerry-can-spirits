@@ -238,3 +238,37 @@ export function buildVarianceLedger(input: {
     variance_bottles: expected_closing - input.closingQty,
   }
 }
+
+export interface ReasonSummaryRow { reason: string; loss_p: number; share_pct: number }
+export interface VarianceReasonSummary { rows: ReasonSummaryRow[]; total_loss_p: number }
+
+// Aggregate this period's variance LOSSES (negative cost) by their reason code,
+// with an 'unattributed' bucket for losses that have no reason set. Surpluses
+// (variance_cost_p >= 0) are excluded. Pure: operates on the minimal row shape
+// so the client variance editor and unit tests can both call it.
+export function summariseVarianceByReason(
+  rows: Array<{ variance_cost_p: number | null; latest_reason: string | null }>,
+): VarianceReasonSummary {
+  const byReason = new Map<string, number>()
+  let total = 0
+  for (const r of rows) {
+    const v = r.variance_cost_p
+    if (v == null || v >= 0) continue
+    const loss = -v
+    total += loss
+    const key = r.latest_reason && r.latest_reason.trim() !== '' ? r.latest_reason : 'unattributed'
+    byReason.set(key, (byReason.get(key) ?? 0) + loss)
+  }
+  if (total === 0) return { rows: [], total_loss_p: 0 }
+  const out: ReasonSummaryRow[] = Array.from(byReason.entries()).map(([reason, loss_p]) => ({
+    reason,
+    loss_p,
+    share_pct: Math.round((loss_p / total) * 100),
+  }))
+  out.sort((a, b) => {
+    if (a.reason === 'unattributed') return 1
+    if (b.reason === 'unattributed') return -1
+    return b.loss_p - a.loss_p || a.reason.localeCompare(b.reason)
+  })
+  return { rows: out, total_loss_p: total }
+}
