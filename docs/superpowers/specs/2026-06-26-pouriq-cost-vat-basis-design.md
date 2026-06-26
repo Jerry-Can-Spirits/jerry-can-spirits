@@ -42,39 +42,49 @@ a VAT flag through all of them is error-prone.
 - **VAT rate: flat 20%** (`VAT_DIVISOR = 1.20`, already defined). Zero-rated
   items (some food) are entered as "Ex VAT" — their price carries no VAT — so a
   flat 20% on the Inc path is always correct. No per-item rates (YAGNI).
-- **Inc-path display rounding:** on re-edit, the gross figure is recomputed from
-  the stored net (`net × 1.2`), which can drift 1p in rare cases. Accepted as
-  cosmetic-only; we do **not** add a second column to store the exact entered
-  value.
+- **Penny-exact entered value:** the exact figure the user typed is stored in
+  its own column (`price_entered_p`), so re-edit and any accountant-facing audit
+  show the precise number entered, with no recompute drift. `price_p` (net)
+  stays the costing source of truth.
 
 ## Components
 
-### 1. Schema — migration `0054_library_price_includes_vat.sql`
+### 1. Schema — migration `0054_library_price_vat_basis.sql`
 
 ```sql
 ALTER TABLE pouriq_ingredients_library
   ADD COLUMN price_includes_vat INTEGER NOT NULL DEFAULT 0;
+ALTER TABLE pouriq_ingredients_library
+  ADD COLUMN price_entered_p INTEGER;
+UPDATE pouriq_ingredients_library
+  SET price_entered_p = price_p WHERE price_entered_p IS NULL;
 ```
 
 Additive. The table's CHECK references only `base_unit`/`pack_size`/`price_p`,
 so a plain `ADD COLUMN` is safe (no rebuild). Numbered `0054` because `0052`
 (PR #826, auth_mode) and `0053` (PR #827, catalogue) are in-flight; this branch
-should rebase onto main after those merge so the sequence stays 0051→0054. `0` = entered net/ex VAT; `1` =
-entered inc VAT (we stored net). The flag exists **only** to round-trip the form
-display; it does not feed the cost calc.
+should rebase onto main after those merge so the sequence stays 0051→0054.
+
+- `price_includes_vat`: `0` = entered net/ex VAT; `1` = entered inc VAT (we
+  stored net). Drives the form's basis toggle; does **not** feed the cost calc.
+- `price_entered_p`: the exact pence the user typed on whatever basis (gross when
+  inc, net when ex). Display/audit only; nullable, backfilled to `price_p` for
+  existing rows. The app reads `price_entered_p ?? price_p` defensively.
 
 ### 2. Types (`src/lib/pouriq/types.ts`)
 
-Add `price_includes_vat: number` to `IngredientLibraryRow` and the insert type,
-so it flows through `LibraryEntryInput`.
+Add `price_includes_vat: number` and `price_entered_p: number` to
+`IngredientLibraryRow` and the insert type, so both flow through
+`LibraryEntryInput`. (Reads use `price_entered_p ?? price_p` for safety against
+any row predating the backfill.)
 
 ### 3. Library save (`server-actions.ts`)
 
 `saveLibraryEntryAction` / `insertLibraryEntry` / the update path accept and
 persist `price_includes_vat`. The action receives an already-net `price_p` from
-the form (the form does the conversion), so the server simply stores both
-`price_p` and the flag. Prepared ingredients keep `price_includes_vat = 0`
-(price is derived).
+the form (the form does the conversion), so the server stores `price_p` (net), the flag,
+and `price_entered_p` (exact). Prepared ingredients keep `price_includes_vat = 0`
+and `price_entered_p = 0` (price is derived from components).
 
 ### 4. Library form (`IngredientForm.tsx`)
 
@@ -82,9 +92,10 @@ the form (the form does the conversion), so the server simply stores both
   for a new entry; for an existing entry, derive from `entry.price_includes_vat`.
 - Helper updated; flat-20% note added.
 - Derived net: `priceNetP = incVat ? round(enteredPence / 1.20) : enteredPence`.
-- On submit, `buildInput()` sets `price_p = priceNetP` and `price_includes_vat`.
-- On edit-load, the displayed pounds value is `incVat ? (price_p * 1.2)/100 :
-  price_p/100`.
+- On submit, `buildInput()` sets `price_p = priceNetP`, `price_entered_p =
+  enteredPence`, and `price_includes_vat`.
+- On edit-load, the displayed pounds value is `(price_entered_p ?? price_p)/100`
+  (penny-exact), and the toggle is set from `price_includes_vat`.
 - Live `costReadout` uses `priceNetP` (so it shows true net cost), and when Inc
   is selected shows a small "Stored net: £X.XX" line for transparency.
 
@@ -94,8 +105,10 @@ the form (the form does the conversion), so the server simply stores both
   invoice — invoices are uniformly net or gross).
 - When true, every applied line's written price is converted to net (÷1.20)
   before the insert (new library row `price_p`) and the update
-  (`UPDATE ... SET price_p = ...`), and `price_includes_vat` is persisted as `1`
-  on those rows; when false, prices are written as-is with flag `0`.
+  (`UPDATE ... SET price_p = ...`); `price_entered_p` is set to the original
+  (gross) line price and `price_includes_vat` to `1`. When false, prices are
+  written as-is with `price_entered_p = price_p` and flag `0`. The update path
+  sets all three columns.
 - Bug fix in the same file: add `'cider'` and `'alcohol-free'` to the route's
   `INGREDIENT_TYPES` (currently missing, so a new cider/AF line is rejected).
 
@@ -112,9 +125,10 @@ the form (the form does the conversion), so the server simply stores both
 ```
 LIBRARY FORM                              INVOICE IMPORT
 entered £ + basis                         invoice net/gross toggle
-   |  round(/1.2) if Inc                      |  per-line net price
+   |  round(/1.2) if Inc                      |  per-line price
    v                                          v  round(/1.2) if Inc
-price_p (NET) + price_includes_vat   --> commit route writes price_p (NET) + flag
+price_p (NET) + price_includes_vat   --> commit writes price_p (NET) + flag
+  + price_entered_p (exact)                   + price_entered_p (exact)
    |
    v
 calculations.ts (unchanged) — price_p is net, GP basis now consistent
@@ -124,18 +138,20 @@ calculations.ts (unchanged) — price_p is net, GP basis now consistent
 
 - **Zero / empty price:** unchanged validation (`price_p >= 0`); conversion of 0
   is 0.
-- **Re-edit drift:** documented above; cosmetic 1p at worst.
+- **Re-edit:** penny-exact via `price_entered_p`; no recompute, no drift.
 - **Prepared ingredients:** flag stays 0, price derived from components (already
   net via their own rows).
-- **Existing rows on first edit:** load as Ex (flag 0) showing stored value; the
-  owner can flip to Inc if appropriate, which then stores net.
+- **Existing rows on first edit:** `price_entered_p` was backfilled to `price_p`,
+  so they load as Ex (flag 0) showing the stored value exactly; the owner can
+  flip to Inc if appropriate, which then re-derives net.
 
 ## Testing
 
 - Unit: a small pure helper `netPriceP(enteredP, includesVat)` with cases
   (inc 1440 -> 1200; ex 1440 -> 1440; 0 -> 0; rounding 999 inc).
-- Form round-trip: save Inc £14.40 -> stored 1200 + flag 1; reload shows £14.40,
-  toggle Inc.
+- Form round-trip: save Inc £14.40 -> `price_p` 1200, `price_entered_p` 1440,
+  flag 1; reload shows exactly £14.40, toggle Inc. Save Inc £9.99 -> reload shows
+  exactly £9.99 (penny-exact, no drift).
 - Commit route: invoice inc-VAT toggle converts a £12.00 line to 1000 net on
   both insert and update paths; cider/AF new line is accepted.
 - GP regression: a drink using an Inc-entered ingredient now yields the same GP
@@ -144,5 +160,5 @@ calculations.ts (unchanged) — price_p is net, GP basis now consistent
 ## Out of scope
 
 - Per-item VAT rates / reduced-rate handling.
-- Backfilling existing library rows.
-- Storing the exact entered gross value (only net + basis flag are stored).
+- Recomputing GP for existing rows (their stored `price_p` is treated as net,
+  unchanged; only the new `price_entered_p` backfill touches them).
