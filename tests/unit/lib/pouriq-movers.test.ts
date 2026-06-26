@@ -51,6 +51,18 @@ describe('buildMoversReport', () => {
     expect(r.not_selling.map((e) => e.cocktail_id)).toEqual(['d'])
   })
 
+  it('reports has_sales but all dead when sales exist only before the window', () => {
+    const r = buildMoversReport(
+      [{ id: 'a', name: 'A' }, { id: 'b', name: 'B' }],
+      [{ cocktail_id: 'a', period_end: '2026-01-10', units_sold: 50 }],
+      NOW,
+    )
+    expect(r.has_sales).toBe(true)
+    expect(r.top_sellers).toEqual([])
+    expect(r.slow_sellers).toEqual([])
+    expect(r.not_selling.map((e) => e.cocktail_id)).toEqual(['a', 'b'])
+  })
+
   it('orders not_selling oldest-sale first, never-sold last', () => {
     const r = buildMoversReport(
       [

@@ -1,7 +1,9 @@
 // Top / slow / dead-stock by POS sales over a trailing window. Pure: ranks
 // cocktails by units sold in the last N days, with a not-selling bucket for
 // menu rationalisation. Popularity threshold mirrors menu-performance.ts so
-// the movers list and the menu-engineering matrix agree on "popular".
+// the movers list and the menu-engineering matrix agree on "popular" — the
+// only difference is movers ranks WINDOWED units (last 30 days) where the
+// matrix uses all-time units, so the two splits can differ by design.
 
 export interface MoverEntry { cocktail_id: string; name: string; units: number; last_sold: string | null }
 export interface MoversReport {
