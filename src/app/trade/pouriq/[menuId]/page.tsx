@@ -17,12 +17,14 @@ import { BulkGenerateDescriptionsButton } from '@/components/pouriq/BulkGenerate
 import { VolumeEditor } from '@/components/pouriq/VolumeEditor'
 import { DuplicateMenuButton } from '@/components/pouriq/DuplicateMenuButton'
 import { MakeActiveButton } from '@/components/pouriq/MakeActiveButton'
-import { listVolumesForPeriod, currentPeriod } from '@/lib/pouriq/volumes'
+import { listVolumesForPeriod, listVolumesForMenu, currentPeriod } from '@/lib/pouriq/volumes'
 import { PRIMARY_BUTTON, SECONDARY_BUTTON, SECONDARY_BUTTON_SM } from '@/lib/pouriq/button-styles'
 import { classifyMenuBalance } from '@/lib/pouriq/menu-balance'
 import { MenuBalance } from '@/components/pouriq/MenuBalance'
 import { buildMenuPerformance } from '@/lib/pouriq/menu-performance'
 import { MenuMatrix } from '@/components/pouriq/MenuMatrix'
+import { buildMoversReport } from '@/lib/pouriq/movers'
+import { MoversReport } from '@/components/pouriq/MoversReport'
 
 export const dynamic = 'force-dynamic'
 
@@ -69,6 +71,8 @@ export default async function MenuDetailPage({ params }: Props) {
   const volumes = await listVolumesForPeriod(db, menuId, period.start, period.end)
   const metrics = calculateMenuMetrics(cocktails, menu.prices_include_vat === 1, volumes)
   const perf = buildMenuPerformance(metrics.cocktail_metrics, menu.target_gp_pct)
+  const allVolumes = await listVolumesForMenu(db, menuId)
+  const movers = buildMoversReport(cocktails.map((c) => ({ id: c.id, name: c.name })), allVolumes)
   const missingCount = cocktails.filter((c) => !c.description || c.description.trim() === '').length
 
   const volumeUnits = new Map<string, number>()
@@ -175,6 +179,10 @@ export default async function MenuDetailPage({ params }: Props) {
               ) : (
                 <p className="text-sm text-parchment-400">Add this week&rsquo;s sales below to see your menu performance matrix.</p>
               )}
+            </section>
+            <section>
+              <h2 className="text-xl font-serif font-bold text-white mb-4">Movers (last 30 days)</h2>
+              <MoversReport report={movers} />
             </section>
             <section>
               <div className="flex flex-wrap items-baseline justify-between gap-3 mb-4">
