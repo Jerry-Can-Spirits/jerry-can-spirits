@@ -3,7 +3,7 @@
 import type { IngredientLibraryRow, IngredientType, ServeUnitRow } from '@/lib/pouriq/types'
 import { PriceInput } from '@/components/pouriq/PriceInput'
 import { ServeUnitPicker } from '@/components/pouriq/ServeUnitPicker'
-import { BOTTLE_SIZES_ML, WEIGHT_SIZES_G } from '@/lib/pouriq/measures'
+import { BOTTLE_SIZES_ML, WEIGHT_SIZES_G, KEG_SIZES_ML } from '@/lib/pouriq/measures'
 import type { ServeUnit } from '@/lib/pouriq/measures'
 import { formatPurchaseBasis } from '@/lib/pouriq/calculations'
 
@@ -140,7 +140,9 @@ export function IngredientMatchRow({
               const basis = nl.price_p !== null && nl.price_p > 0
                 ? formatPurchaseBasis({ base_unit: nl.base_unit, pack_size: nl.pack_size, price_p: nl.price_p, purchase_qty: nl.purchase_qty })
                 : null
-              const sizePresets = nl.base_unit === 'ml' ? BOTTLE_SIZES_ML : nl.base_unit === 'g' ? WEIGHT_SIZES_G : null
+              const sizePresets = nl.base_unit === 'ml'
+                ? (nl.ingredient_type === 'beer' ? [...BOTTLE_SIZES_ML, ...KEG_SIZES_ML] : BOTTLE_SIZES_ML)
+                : nl.base_unit === 'g' ? WEIGHT_SIZES_G : null
               return (
                 <>
                   <div className="grid grid-cols-2 gap-2">
@@ -193,7 +195,7 @@ export function IngredientMatchRow({
                           {sizePresets.map((s) => (
                             <button type="button" key={s} onClick={() => updateNewLibrary({ pack_size: s })}
                               className={`${chipClass} ${nl.pack_size === s ? chipActive : chipIdle}`}>
-                              {s}{nl.base_unit}
+                              {nl.base_unit === 'ml' && s >= 10000 ? `${s / 1000}L` : `${s}${nl.base_unit}`}
                             </button>
                           ))}
                         </div>
@@ -204,7 +206,7 @@ export function IngredientMatchRow({
                         onFocus={(e) => e.target.select()}
                         onChange={(e) => updateNewLibrary({ pack_size: Math.max(1, Math.round(Number(e.target.value) || 1)) })}
                         className={inputClass}
-                        placeholder={nl.base_unit === 'ml' ? '330 for a can, 50000 for a 10L keg' : '500, 1000, 2500…'} />
+                        placeholder={nl.base_unit === 'ml' ? '330 for a can, 50000 for a 50L keg' : '500, 1000, 2500…'} />
                       <p className="text-xs text-parchment-400 mt-1">Enter any size not shown above.</p>
                     </div>
                   )}

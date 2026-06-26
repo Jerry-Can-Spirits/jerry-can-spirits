@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { formatServeMeasure } from '@/lib/pouriq/measures'
+import { formatServeMeasure, serveUnitsFor } from '@/lib/pouriq/measures'
 
 describe('formatServeMeasure', () => {
   describe('ml and g units', () => {
@@ -56,6 +56,20 @@ describe('formatServeMeasure', () => {
     })
   })
 
+  describe('draught and wine serve presets', () => {
+    it('formats a single pint', () => {
+      expect(formatServeMeasure('pint', 1, 568, null)).toBe('1 pint')
+    })
+
+    it('pluralises half pint to half pints', () => {
+      expect(formatServeMeasure('half pint', 2, 568, null)).toBe('2 half pints')
+    })
+
+    it('pluralises a wine glass with -es (glass -> glasses)', () => {
+      expect(formatServeMeasure('large glass', 2, 500, null)).toBe('2 large glasses')
+    })
+  })
+
   describe('fallback to base-amount fields (recipe_unit is null)', () => {
     it('falls back to pour_ml when recipe_unit is null', () => {
       expect(formatServeMeasure(null, null, 50, null)).toBe('50ml')
@@ -76,5 +90,20 @@ describe('formatServeMeasure', () => {
     it('returns empty string when all fields are null', () => {
       expect(formatServeMeasure(null, null, null, null)).toBe('')
     })
+  })
+})
+
+describe('serveUnitsFor', () => {
+  it('offers pint and wine-glass presets for ml ingredients', () => {
+    const names = serveUnitsFor('ml', []).map((u) => u.name)
+    expect(names).toContain('pint')
+    expect(names).toContain('large glass')
+    expect(names).toContain('ml')
+  })
+
+  it('does not offer ml-only presets for each-based ingredients', () => {
+    const names = serveUnitsFor('each', []).map((u) => u.name)
+    expect(names).not.toContain('pint')
+    expect(names).toEqual(['item'])
   })
 })

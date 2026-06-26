@@ -4,6 +4,7 @@ import { getCloudflareContext } from '@opennextjs/cloudflare'
 import { checkPourIqAccess } from '@/lib/pouriq/access'
 import { getInvoice, listInvoiceLines } from '@/lib/pouriq/invoices'
 import { LicenceGate } from '@/components/pouriq/LicenceGate'
+import { DeleteInvoiceButton } from '@/components/pouriq/DeleteInvoiceButton'
 
 export const dynamic = 'force-dynamic'
 
@@ -59,6 +60,7 @@ export default async function InvoiceDetailPage({ params }: Props) {
                 Download original PDF
               </a>
             )}
+            <DeleteInvoiceButton invoiceId={invoice.id} />
           </div>
         </div>
 

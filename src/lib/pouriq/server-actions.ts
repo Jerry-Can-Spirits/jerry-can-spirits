@@ -18,6 +18,7 @@ import {
   getLibraryUsageCounts,
   type IngredientLibraryInsert,
 } from './ingredient-library'
+import { deleteInvoice } from './invoices'
 import { matchFieldManualSlug } from './field-manual-match'
 import { upsertVoiceProfile, type VoiceProfileInput } from './voice-profile'
 import {
@@ -140,6 +141,23 @@ export async function deleteMenuAction(menuId: string): Promise<void> {
   await deleteMenu(db, menuId, tradeAccountId)
   revalidatePath('/trade/pouriq')
   redirect('/trade/pouriq/menus')
+}
+
+export async function deleteInvoiceAction(invoiceId: string): Promise<void> {
+  const { db, tradeAccountId } = await requireDb()
+  const result = await deleteInvoice(db, invoiceId, tradeAccountId)
+  if (result?.r2_key) {
+    const { env } = await getCloudflareContext()
+    try {
+      await (env.TRADE_DOCS as R2Bucket).delete(result.r2_key)
+    } catch {
+      // Best-effort: the DB record is already gone; a stray R2 object is harmless.
+    }
+  }
+  // Invoice existence drives the onboarding setup panel on the dashboard.
+  revalidatePath('/trade/pouriq/invoices')
+  revalidatePath('/trade/pouriq')
+  redirect('/trade/pouriq/invoices')
 }
 
 interface CocktailInput {
