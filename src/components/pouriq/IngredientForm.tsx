@@ -585,7 +585,7 @@ export function IngredientForm({ entry, usageCount = 0, impactPayload, serveUnit
                 className={inputClass}
                 placeholder="e.g. 14.40"
               />
-              <FieldHelper>The total you pay at the till, including VAT if applicable.</FieldHelper>
+              <FieldHelper>The total you pay your supplier, including VAT if applicable. Enter every ingredient on the same VAT basis (inc or ex VAT), or your pour costs will not be comparable.</FieldHelper>
             </div>
             <div>
               <label htmlFor="ing-purchase-qty" className={labelClass}>Packs bought *</label>

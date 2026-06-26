@@ -42,9 +42,9 @@ export function PourIqShell({ venueName, children }: { venueName: string; childr
         <Link
           href="/trade/landing"
           onClick={() => setNavOpen(false)}
-          className="block rounded-md px-3 py-2 text-sm text-parchment-300 hover:bg-jerry-green-700/40 hover:text-parchment-100"
+          className="block rounded-md border border-red-500/30 px-3 py-2 text-sm text-red-300 hover:border-red-500/50 hover:bg-red-900/20 hover:text-red-200"
         >
-          ← Trade account
+          ← Return to trade account
         </Link>
       </div>
     </nav>
