@@ -2,11 +2,9 @@ import type { Metadata } from "next";
 import Script from "next/script";
 import { Inter, Playfair_Display, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
-import ShippingBanner from "@/components/ShippingBanner";
+import SiteChrome from "@/components/SiteChrome";
 import ClientWrapper from "@/components/ClientWrapper";
-import { LazyCartographicBackground, LazyCartDrawer, LazySocialProofToast } from "@/components/ClientLazy";
+import { LazyCartDrawer, LazySocialProofToast } from "@/components/ClientLazy";
 import ServiceWorkerRegistration from "@/components/ServiceWorkerRegistration";
 import InstallPrompt from "@/components/InstallPrompt";
 import { CartProvider } from "@/contexts/CartContext";
@@ -167,25 +165,8 @@ export default function RootLayout({
           </a>
 
           <ClientWrapper>
-          {/* Unified Cartographic Background */}
-          <div className="print:hidden">
-            <LazyCartographicBackground opacity={0.75} showCoordinates={true} showCompass={true} className="fixed inset-0 z-0 pointer-events-none" />
-          </div>
+          <SiteChrome>{children}</SiteChrome>
 
-          <div className="relative z-10">
-            <Header />
-
-            {/* Main content with proper spacing for fixed header + announcement bar */}
-            <main id="main-content" className="pt-20" style={{ paddingTop: 'calc(5rem + var(--announcement-height, 0px))' }}>
-              {children}
-            </main>
-            
-            <div className="print:hidden">
-              <ShippingBanner />
-            </div>
-            <Footer />
-          </div>
-          
           {/* Consent now handled by Cookiebot CMP */}
         </ClientWrapper>
 

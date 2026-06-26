@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 import AgeGate from './AgeGate';
 import { captureUtmParams } from '@/lib/utm';
+import { isPourIqAppRoute } from '@/lib/pouriq/nav';
 
 interface ClientWrapperProps {
   children: React.ReactNode;
@@ -79,7 +80,7 @@ export default function ClientWrapper({ children }: ClientWrapperProps) {
   }, [pathname]);
 
   // Bypass age gate for: verified users, legal pages, or known bots
-  const shouldBypassGate = isAgeVerified || isLegalPage || isBot;
+  const shouldBypassGate = isAgeVerified || isLegalPage || isBot || isPourIqAppRoute(pathname);
 
   return (
     <>
