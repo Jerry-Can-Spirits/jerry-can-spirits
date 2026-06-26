@@ -7,7 +7,7 @@ import { BOTTLE_SIZES_ML, WEIGHT_SIZES_G, KEG_SIZES_ML } from '@/lib/pouriq/meas
 import type { ServeUnit } from '@/lib/pouriq/measures'
 import { formatPurchaseBasis } from '@/lib/pouriq/calculations'
 
-const INGREDIENT_TYPES: IngredientType[] = ['spirit','liqueur','wine','beer','mixer','syrup','juice','garnish','soft-drink','food','other']
+const INGREDIENT_TYPES: IngredientType[] = ['spirit','liqueur','wine','beer','cider','mixer','syrup','juice','garnish','soft-drink','alcohol-free','food','other']
 
 const inputClass = 'w-full px-3 py-2 bg-jerry-green-700/50 border border-gold-500/30 rounded-lg text-parchment-50 text-sm focus:border-gold-400 focus:outline-hidden'
 const labelClass = 'block text-xs font-medium text-parchment-300 mb-1'
