@@ -341,6 +341,8 @@ export async function saveLibraryEntryAction(
         trade_account_id: tradeAccountId,
         is_prepared: 1,
         price_p: 0,
+        price_includes_vat: 0,
+        price_entered_p: 0,
         purchase_qty: 1,
         yield_pct: 100,
       })
@@ -355,6 +357,8 @@ export async function saveLibraryEntryAction(
       await updateLibraryEntry(db, entryId, tradeAccountId, {
         ...input,
         is_prepared: 1,
+        price_includes_vat: 0,
+        price_entered_p: 0,
         purchase_qty: 1,
         yield_pct: 100,
       })
