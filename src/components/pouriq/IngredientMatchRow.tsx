@@ -201,6 +201,7 @@ export function IngredientMatchRow({
                       <input
                         type="number" step="1" min={1}
                         value={nl.pack_size}
+                        onFocus={(e) => e.target.select()}
                         onChange={(e) => updateNewLibrary({ pack_size: Math.max(1, Math.round(Number(e.target.value) || 1)) })}
                         className={inputClass}
                         placeholder={nl.base_unit === 'ml' ? '330 for a can, 50000 for a 10L keg' : '500, 1000, 2500…'} />
