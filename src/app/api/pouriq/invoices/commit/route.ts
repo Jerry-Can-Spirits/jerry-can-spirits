@@ -19,6 +19,7 @@ import { type CostPricingMode } from '@/lib/pouriq/cost-changes'
 import { getLibraryEntry, insertLibraryEntry } from '@/lib/pouriq/ingredient-library'
 import { receiptBottlesFromInvoiceLine } from '@/lib/pouriq/stock'
 import { recomputeDependents } from '@/lib/pouriq/prepared'
+import { netPriceP } from '@/lib/pouriq/calculations'
 import type { IngredientType } from '@/lib/pouriq/types'
 
 export const runtime = 'nodejs'
@@ -26,7 +27,8 @@ export const runtime = 'nodejs'
 const COMMIT_RATE_LIMIT = 30
 
 const INGREDIENT_TYPES: ReadonlyArray<IngredientType> = [
-  'spirit', 'liqueur', 'wine', 'beer', 'mixer', 'syrup', 'juice', 'garnish', 'soft-drink', 'food', 'other',
+  'spirit', 'liqueur', 'wine', 'beer', 'cider', 'mixer', 'syrup', 'juice',
+  'garnish', 'soft-drink', 'alcohol-free', 'food', 'other',
 ]
 
 interface CommitLineNewLibrary {
@@ -54,6 +56,7 @@ interface CommitBody {
   supplier_name: string | null
   invoice_number: string | null
   invoice_date: string | null
+  prices_include_vat?: boolean
   lines: CommitLine[]
 }
 
@@ -71,6 +74,9 @@ function genId(): string {
 
 function validateBody(body: CommitBody): string | null {
   if (!body.ticket || typeof body.ticket !== 'string') return 'Missing ticket'
+  if (body.prices_include_vat !== undefined && typeof body.prices_include_vat !== 'boolean') {
+    return 'prices_include_vat must be a boolean'
+  }
   if (!Array.isArray(body.lines) || body.lines.length === 0) return 'No lines provided'
   for (let i = 0; i < body.lines.length; i++) {
     const line = body.lines[i]
@@ -176,6 +182,10 @@ export async function POST(request: Request) {
       let libraryId: string
       let pricingMode: CostPricingMode
       let oldCostP: number | null
+      // Hoisted before the new_library branch because insertLibraryEntry needs them;
+      // netCostP/enteredCostP are derived after newCostP below.
+      const includesVat = body.prices_include_vat === true
+      const vatFlag = includesVat ? 1 : 0
 
       if (line.new_library) {
         const dedupeKey = line.new_library.name.trim().toLowerCase()
@@ -199,7 +209,9 @@ export async function POST(request: Request) {
             base_unit: line.new_library.base_unit,
             pack_size: line.new_library.pack_size,
             purchase_qty: line.new_library.purchase_qty,
-            price_p: line.new_library.price_p,
+            price_p: netPriceP(line.new_library.price_p, includesVat),
+            price_includes_vat: vatFlag,
+            price_entered_p: line.new_library.price_p,
             barcode: null,
             notes: null,
           })
@@ -216,6 +228,8 @@ export async function POST(request: Request) {
       }
 
       const newCostP = line.new_cost_p!
+      const netCostP = netPriceP(newCostP, includesVat)
+      const enteredCostP = newCostP
       const invoiceLineId = genId()
       const costChangeId = genId()
 
@@ -227,12 +241,12 @@ export async function POST(request: Request) {
       // invoice_line by the explicit invoiceLineId we just generated.
       const stmts: D1PreparedStatement[] = []
 
-      const shouldUpdateLibraryCost = oldCostP !== null && newCostP !== oldCostP
+      const shouldUpdateLibraryCost = oldCostP !== null && netCostP !== oldCostP
       if (shouldUpdateLibraryCost) {
         stmts.push(
           db.prepare(
-            `UPDATE pouriq_ingredients_library SET price_p = ?1, updated_at = datetime('now') WHERE id = ?2 AND trade_account_id = ?3`,
-          ).bind(newCostP, libraryId, access.tradeAccountId),
+            `UPDATE pouriq_ingredients_library SET price_p = ?1, price_includes_vat = ?2, price_entered_p = ?3, updated_at = datetime('now') WHERE id = ?4 AND trade_account_id = ?5`,
+          ).bind(netCostP, vatFlag, enteredCostP, libraryId, access.tradeAccountId),
         )
         costUpdatedLibraryIds.add(libraryId)
       }
@@ -263,7 +277,7 @@ export async function POST(request: Request) {
           libraryId,
           pricingMode,
           oldCostP,
-          newCostP,
+          netCostP,
           invoiceId,
           invoiceLineId,
         ),

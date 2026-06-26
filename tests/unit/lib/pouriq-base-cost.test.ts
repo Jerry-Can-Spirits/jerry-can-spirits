@@ -14,6 +14,7 @@ function mkIng(
   const library: IngredientLibraryRow = {
     id: 'lib', trade_account_id: 't', name: 'x', ingredient_type: 'spirit',
     base_unit, pack_size, price_p, purchase_qty, yield_pct,
+    price_includes_vat: 0, price_entered_p: null,
     pack_format: null, subcategory: null,
     is_prepared: 0,
     barcode: null, notes: null, created_at: '', updated_at: '',

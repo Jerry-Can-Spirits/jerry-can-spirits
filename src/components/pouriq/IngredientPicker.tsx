@@ -161,6 +161,8 @@ export function IngredientPicker({ libraryEntries, selectedEntryId, onChange }: 
         base_unit,
         pack_size: base_unit === 'each' ? 1 : pack_size,
         price_p,
+        price_includes_vat: 0,
+        price_entered_p: price_p,
         pack_format: null,
         subcategory: null,
         is_prepared: 0,

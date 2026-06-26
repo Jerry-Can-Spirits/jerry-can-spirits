@@ -9,7 +9,7 @@ import { RipplePreview } from '@/components/pouriq/RipplePreview'
 import { RippleConfirmModal } from '@/components/pouriq/RippleConfirmModal'
 import { IngredientPicker } from '@/components/pouriq/IngredientPicker'
 import { ServeUnitPicker } from '@/components/pouriq/ServeUnitPicker'
-import { costPerBaseUnitP, usableCostPerBaseUnitP } from '@/lib/pouriq/calculations'
+import { costPerBaseUnitP, usableCostPerBaseUnitP, netPriceP } from '@/lib/pouriq/calculations'
 import { BOTTLE_SIZES_ML, WEIGHT_SIZES_G, STANDARD_SERVE_UNITS, serveUnitsFor, recipeBaseAmount } from '@/lib/pouriq/measures'
 import {
   COST_UPDATE_TOAST_KEY,
@@ -94,8 +94,13 @@ export function IngredientForm({ entry, usageCount = 0, impactPayload, serveUnit
   const [yieldAmountStr, setYieldAmountStr] = useState(
     entry?.is_prepared && entry.pack_size > 0 ? entry.pack_size.toString() : '',
   )
-  const [price_str, setPriceStr] = useState(
-    entry && !entry.is_prepared && entry.price_p > 0 ? (entry.price_p / 100).toFixed(2) : '',
+  const [price_str, setPriceStr] = useState(() => {
+    if (!entry || entry.is_prepared) return ''
+    const entered = entry.price_entered_p ?? entry.price_p
+    return entered > 0 ? (entered / 100).toFixed(2) : ''
+  })
+  const [priceIncludesVat, setPriceIncludesVat] = useState<boolean>(
+    entry ? entry.price_includes_vat === 1 : true,
   )
   const [purchase_qty_str, setPurchaseQtyStr] = useState(
     entry?.purchase_qty?.toString() ?? '1',
@@ -143,10 +148,14 @@ export function IngredientForm({ entry, usageCount = 0, impactPayload, serveUnit
   const [suPending, startSuTransition] = useTransition()
 
   // Parsed values for live readout
-  const price_p_live = useMemo(() => {
+  const entered_p_live = useMemo(() => {
     const n = Math.round(parseFloat(price_str) * 100)
     return Number.isFinite(n) ? n : null
   }, [price_str])
+
+  const price_p_live = useMemo(() => {
+    return entered_p_live === null ? null : netPriceP(entered_p_live, priceIncludesVat)
+  }, [entered_p_live, priceIncludesVat])
 
   const pack_size_live = useMemo(() => {
     const n = parseFloat(pack_size_str)
@@ -307,8 +316,9 @@ export function IngredientForm({ entry, usageCount = 0, impactPayload, serveUnit
       }
     }
 
-    const price_p = Math.round(parseFloat(price_str) * 100)
-    if (!Number.isFinite(price_p) || price_p < 0) { setError('Enter a valid price'); return null }
+    const entered_p = Math.round(parseFloat(price_str) * 100)
+    if (!Number.isFinite(entered_p) || entered_p < 0) { setError('Enter a valid price'); return null }
+    const price_p = netPriceP(entered_p, priceIncludesVat)
 
     const pack_size_n = parseFloat(pack_size_str)
     if (base_unit !== 'each' && (!Number.isFinite(pack_size_n) || pack_size_n <= 0)) {
@@ -330,6 +340,8 @@ export function IngredientForm({ entry, usageCount = 0, impactPayload, serveUnit
       base_unit,
       pack_size,
       price_p,
+      price_includes_vat: priceIncludesVat ? 1 : 0,
+      price_entered_p: entered_p,
       purchase_qty,
       yield_pct,
       pack_format: pack_format.trim() || null,
@@ -585,7 +597,38 @@ export function IngredientForm({ entry, usageCount = 0, impactPayload, serveUnit
                 className={inputClass}
                 placeholder="e.g. 14.40"
               />
-              <FieldHelper>The total you pay your supplier, including VAT if applicable. Enter every ingredient on the same VAT basis (inc or ex VAT), or your pour costs will not be comparable.</FieldHelper>
+              <div
+                role="group"
+                aria-label="Price VAT basis"
+                className="mt-2 inline-flex items-stretch rounded-lg border border-gold-500/30 overflow-hidden bg-jerry-green-800/40"
+              >
+                <button
+                  type="button"
+                  onClick={() => setPriceIncludesVat(true)}
+                  aria-pressed={priceIncludesVat}
+                  className={`px-3 py-1.5 text-xs font-semibold transition-colors ${priceIncludesVat ? 'bg-gold-500/30 text-gold-50' : 'text-parchment-300 hover:text-parchment-100'}`}
+                >
+                  Inc VAT
+                </button>
+                <span aria-hidden="true" className="w-px bg-gold-500/30" />
+                <button
+                  type="button"
+                  onClick={() => setPriceIncludesVat(false)}
+                  aria-pressed={!priceIncludesVat}
+                  className={`px-3 py-1.5 text-xs font-semibold transition-colors ${!priceIncludesVat ? 'bg-gold-500/30 text-gold-50' : 'text-parchment-300 hover:text-parchment-100'}`}
+                >
+                  Ex VAT
+                </button>
+              </div>
+              <FieldHelper>
+                {priceIncludesVat
+                  ? 'The total you pay your supplier including VAT. We store it net (÷ 1.2) so cost matches your net sale prices.'
+                  : 'The ex-VAT (net) price, as it appears on most trade invoice lines.'}
+              </FieldHelper>
+              <FieldHelper>Assumes 20% VAT. For zero-rated items, select Ex VAT.</FieldHelper>
+              {priceIncludesVat && entered_p_live !== null && entered_p_live > 0 && (
+                <p className="text-xs text-gold-200 mt-1 tabular-nums">Stored net: £{(price_p_live! / 100).toFixed(2)}</p>
+              )}
             </div>
             <div>
               <label htmlFor="ing-purchase-qty" className={labelClass}>Packs bought *</label>

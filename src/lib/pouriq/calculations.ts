@@ -53,6 +53,14 @@ export function netSalePrice(sale_price_p: number, priceIncludesVat: boolean): n
   return Math.round(sale_price_p / VAT_DIVISOR)
 }
 
+// VAT basis conversion for purchase prices. A price entered inc-VAT is divided
+// by VAT_DIVISOR to the net price we store; an ex-VAT price is already net.
+// Whole pence. Single source of truth for the library form and invoice import.
+export function netPriceP(enteredP: number, includesVat: boolean): number {
+  if (!includesVat) return enteredP
+  return Math.round(enteredP / VAT_DIVISOR)
+}
+
 export function parsePromoDays(csv: string | null | undefined): number[] | null {
   if (!csv) return null
   const parts = csv.split(',').map((s) => parseInt(s.trim(), 10)).filter((n) => Number.isInteger(n) && n >= 0 && n <= 6)

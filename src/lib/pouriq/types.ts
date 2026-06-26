@@ -85,6 +85,8 @@ export interface IngredientLibraryRow {
   base_unit: 'ml' | 'g' | 'each'
   pack_size: number
   price_p: number
+  price_includes_vat: number
+  price_entered_p: number | null
   pack_format: string | null
   subcategory: string | null
   is_prepared: number
