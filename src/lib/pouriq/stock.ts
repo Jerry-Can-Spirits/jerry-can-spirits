@@ -14,6 +14,32 @@ export function reorderQty(onHandBottles: number | null, parBottles: number | nu
   return Math.max(0, Math.ceil(parBottles - onHandBottles))
 }
 
+// The noun the stock page uses for a counted pack, driven by the ingredient's
+// free-text pack_format (e.g. keg, can, box, bag-in-box). Defaults to bottle
+// when unset, so a 10L cola box can read "boxes" instead of "bottles" once its
+// format is filled in. Known formats get a correct plural; unknown free text is
+// shown verbatim with a naive plural.
+const KNOWN_PACK_WORDS: Record<string, { one: string; many: string }> = {
+  bottle: { one: 'bottle', many: 'bottles' },
+  can: { one: 'can', many: 'cans' },
+  keg: { one: 'keg', many: 'kegs' },
+  cask: { one: 'cask', many: 'casks' },
+  box: { one: 'box', many: 'boxes' },
+  case: { one: 'case', many: 'cases' },
+  carton: { one: 'carton', many: 'cartons' },
+  pouch: { one: 'pouch', many: 'pouches' },
+  bag: { one: 'bag', many: 'bags' },
+  'bag-in-box': { one: 'bag-in-box', many: 'bags-in-box' },
+}
+
+export function stockUnitWords(packFormat: string | null): { one: string; many: string } {
+  const raw = packFormat?.trim()
+  if (!raw) return { one: 'bottle', many: 'bottles' }
+  const known = KNOWN_PACK_WORDS[raw.toLowerCase()]
+  if (known) return known
+  return { one: raw, many: /(s|x|z|ch|sh)$/i.test(raw) ? `${raw}es` : `${raw}s` }
+}
+
 // Anchored perpetual on-hand, in bottles/containers.
 export function computeOnHandBottles(input: {
   anchorCountQty: number

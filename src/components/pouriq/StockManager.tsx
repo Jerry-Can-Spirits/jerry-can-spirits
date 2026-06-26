@@ -4,6 +4,7 @@ import { useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 import { receiveStockAction, recordStockCountAction, recordProductionAction, setParAction } from '@/lib/pouriq/server-actions'
 import type { RollingStockRow } from '@/lib/pouriq/stock-loader'
+import { stockUnitWords } from '@/lib/pouriq/stock'
 
 interface Props {
   rows: RollingStockRow[]
@@ -121,6 +122,7 @@ export function StockManager({ rows }: Props) {
           const batchEnabled = !pending && Number.isFinite(batchQty) && batchQty > 0
           const onHand = row.on_hand_bottles !== null ? Math.max(0, row.on_hand_bottles) : null
           const isNegative = row.on_hand_bottles !== null && row.on_hand_bottles < 0
+          const unit = stockUnitWords(row.pack_format)
 
           return (
             <div key={id} className="bg-jerry-green-800/40 border border-gold-500/20 rounded-xl p-4">
@@ -136,13 +138,13 @@ export function StockManager({ rows }: Props) {
               ) : (
                 <div className="text-sm text-parchment-300 mb-3 space-y-0.5">
                   <p>
-                    <span className="text-parchment-100">{onHand?.toFixed(1)} bottles</span>
+                    <span className="text-parchment-100">{onHand?.toFixed(1)} {unit.many}</span>
                     {isNegative && (
                       <span className="text-parchment-400 ml-2">(check stock)</span>
                     )}
                   </p>
                   {row.needs_reorder && (
-                    <p className="text-amber-300 text-xs">Low · order {row.reorder_qty} {row.reorder_qty === 1 ? 'bottle' : 'bottles'}</p>
+                    <p className="text-amber-300 text-xs">Low · order {row.reorder_qty} {row.reorder_qty === 1 ? unit.one : unit.many}</p>
                   )}
                   {row.anchor_count_at && (
                     <p className="text-parchment-400 text-xs">estimate, last counted {formatShortDate(row.anchor_count_at)}</p>
@@ -167,7 +169,7 @@ export function StockManager({ rows }: Props) {
                       value={receiveVal}
                       onChange={(e) => setReceiveInputs((prev) => ({ ...prev, [id]: e.target.value }))}
                       className={inputClass}
-                      placeholder="bottles"
+                      placeholder={unit.many}
                       aria-label={`${row.library_name} delivery quantity`}
                     />
                     <button
@@ -189,7 +191,7 @@ export function StockManager({ rows }: Props) {
                     value={countVal}
                     onChange={(e) => setCountInputs((prev) => ({ ...prev, [id]: e.target.value }))}
                     className={inputClass}
-                    placeholder="bottles"
+                    placeholder={unit.many}
                     aria-label={`${row.library_name} count`}
                   />
                   <button

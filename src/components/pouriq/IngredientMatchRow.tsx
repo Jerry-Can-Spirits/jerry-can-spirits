@@ -7,7 +7,7 @@ import { BOTTLE_SIZES_ML, WEIGHT_SIZES_G } from '@/lib/pouriq/measures'
 import type { ServeUnit } from '@/lib/pouriq/measures'
 import { formatPurchaseBasis } from '@/lib/pouriq/calculations'
 
-const INGREDIENT_TYPES: IngredientType[] = ['spirit','liqueur','wine','beer','mixer','syrup','juice','garnish','other']
+const INGREDIENT_TYPES: IngredientType[] = ['spirit','liqueur','wine','beer','mixer','syrup','juice','garnish','soft-drink','food','other']
 
 const inputClass = 'w-full px-3 py-2 bg-jerry-green-700/50 border border-gold-500/30 rounded-lg text-parchment-50 text-sm focus:border-gold-400 focus:outline-hidden'
 const labelClass = 'block text-xs font-medium text-parchment-300 mb-1'
@@ -175,6 +175,7 @@ export function IngredientMatchRow({
                       <input
                         type="number" step="1" min={1}
                         value={nl.purchase_qty}
+                        onFocus={(e) => e.target.select()}
                         onChange={(e) => updateNewLibrary({ purchase_qty: Math.max(1, Math.round(Number(e.target.value) || 1)) })}
                         className={inputClass} placeholder="1" />
                       <p className="text-xs text-parchment-400 mt-1">
@@ -200,6 +201,7 @@ export function IngredientMatchRow({
                       <input
                         type="number" step="1" min={1}
                         value={nl.pack_size}
+                        onFocus={(e) => e.target.select()}
                         onChange={(e) => updateNewLibrary({ pack_size: Math.max(1, Math.round(Number(e.target.value) || 1)) })}
                         className={inputClass}
                         placeholder={nl.base_unit === 'ml' ? '330 for a can, 50000 for a 10L keg' : '500, 1000, 2500…'} />
