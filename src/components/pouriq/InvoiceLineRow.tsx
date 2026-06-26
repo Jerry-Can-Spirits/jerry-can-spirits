@@ -4,6 +4,7 @@ import { memo } from 'react'
 import type { PreviewLine } from '@/app/api/pouriq/invoices/extract/route'
 import type { IngredientLibraryRow, IngredientType } from '@/lib/pouriq/types'
 import { PriceInput } from '@/components/pouriq/PriceInput'
+import { netPriceP } from '@/lib/pouriq/calculations'
 
 export type LineState = {
   applied: boolean
@@ -26,6 +27,7 @@ interface InvoiceLineRowProps {
   state: LineState
   library: IngredientLibraryRow[]
   libraryById: Map<string, IngredientLibraryRow>
+  pricesIncludeVat: boolean
   onChange: (index: number, patch: Partial<LineState>) => void
   onToggleCreateNew: (index: number, toNew: boolean) => void
 }
@@ -43,11 +45,12 @@ function currentCostFor(libraryById: Map<string, IngredientLibraryRow>, libraryI
   return entry.price_p > 0 ? entry.price_p : null
 }
 
-function InvoiceLineRowComponent({ index, line, state, library, libraryById, onChange, onToggleCreateNew }: InvoiceLineRowProps) {
+function InvoiceLineRowComponent({ index, line, state, library, libraryById, pricesIncludeVat, onChange, onToggleCreateNew }: InvoiceLineRowProps) {
   const match = state.match
   const libraryId = match.kind === 'existing' ? match.library_id : null
   const currentP = currentCostFor(libraryById, libraryId)
-  const delta = currentP !== null ? state.unit_price_p - currentP : null
+  const netNewP = netPriceP(state.unit_price_p, pricesIncludeVat)
+  const delta = currentP !== null ? netNewP - currentP : null
 
   return (
     <tr className="border-t border-gold-500/10 align-top">

@@ -17,6 +17,7 @@ export function InvoicePreview({ initial, library }: Props) {
   const [supplier, setSupplier] = useState(initial.supplier_name ?? '')
   const [invoiceNumber, setInvoiceNumber] = useState(initial.invoice_number ?? '')
   const [invoiceDate, setInvoiceDate] = useState(initial.invoice_date ?? '')
+  const [pricesIncludeVat, setPricesIncludeVat] = useState(false)
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [showAuto, setShowAuto] = useState(false)
@@ -141,6 +142,7 @@ export function InvoicePreview({ initial, library }: Props) {
               state={lines[idx]}
               library={library}
               libraryById={libraryById}
+              pricesIncludeVat={pricesIncludeVat}
               onChange={handleChange}
               onToggleCreateNew={handleToggleCreateNew}
             />
@@ -158,6 +160,7 @@ export function InvoicePreview({ initial, library }: Props) {
       supplier_name: supplier.trim() || null,
       invoice_number: invoiceNumber.trim() || null,
       invoice_date: invoiceDate.trim() || null,
+      prices_include_vat: pricesIncludeVat,
       lines: lines.map((s, idx) => {
         const original = initial.lines[idx]
         const base = {
@@ -243,7 +246,16 @@ export function InvoicePreview({ initial, library }: Props) {
           <span className="text-amber-300">{summary.needChoice} need a choice</span>
           <span className="text-parchment-500"> · </span>
           <span className="text-red-300">{summary.newProducts} new</span>
-          <span className="block text-xs text-parchment-500 mt-1">Net prices read from the invoice.</span>
+          <span className="mt-1 inline-flex items-center gap-2">
+            <span className="text-xs text-parchment-500">Invoice prices are</span>
+            <span role="group" aria-label="Invoice VAT basis" className="inline-flex items-stretch rounded-md border border-gold-500/30 overflow-hidden">
+              <button type="button" onClick={() => setPricesIncludeVat(false)} aria-pressed={!pricesIncludeVat}
+                className={`px-2 py-1 text-xs font-semibold ${!pricesIncludeVat ? 'bg-gold-500/30 text-gold-50' : 'text-parchment-300'}`}>Ex VAT</button>
+              <span aria-hidden="true" className="w-px bg-gold-500/30" />
+              <button type="button" onClick={() => setPricesIncludeVat(true)} aria-pressed={pricesIncludeVat}
+                className={`px-2 py-1 text-xs font-semibold ${pricesIncludeVat ? 'bg-gold-500/30 text-gold-50' : 'text-parchment-300'}`}>Inc VAT</button>
+            </span>
+          </span>
         </div>
         {summary.unresolved > 0 && (
           <button
