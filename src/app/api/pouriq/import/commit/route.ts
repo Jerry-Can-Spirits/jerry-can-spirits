@@ -16,7 +16,8 @@ export const runtime = 'nodejs'
 const COMMIT_RATE_LIMIT = 30 // per hour per tenant
 
 const INGREDIENT_TYPES: ReadonlyArray<IngredientType> = [
-  'spirit', 'liqueur', 'wine', 'beer', 'mixer', 'syrup', 'juice', 'garnish', 'soft-drink', 'food', 'other',
+  'spirit', 'liqueur', 'wine', 'beer', 'cider', 'mixer', 'syrup', 'juice',
+  'garnish', 'soft-drink', 'alcohol-free', 'food', 'other',
 ]
 
 interface CommitIngredient {
