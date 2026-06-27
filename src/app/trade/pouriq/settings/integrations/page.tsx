@@ -49,23 +49,23 @@ export default async function IntegrationsPage({ searchParams }: SearchParams) {
   return (
     <main className="min-h-screen">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-24">
-        <Link href="/trade/pouriq" className="text-sm text-parchment-400 hover:text-parchment-200">← Pour IQ™</Link>
-        <h1 className="text-3xl md:text-4xl font-serif font-bold text-white mt-3 mb-2">Integrations</h1>
-        <p className="text-parchment-400 text-sm mb-10">
+        <Link href="/trade/pouriq" className="text-sm text-slate-500 hover:text-slate-700">← Pour IQ™</Link>
+        <h1 className="text-3xl md:text-4xl font-bold text-slate-900 mt-3 mb-2">Integrations</h1>
+        <p className="text-slate-500 text-sm mb-10">
           Connect your POS so sales volumes flow into Pour IQ automatically. You can still enter or paste volumes manually any time.
         </p>
 
         {justConnected && (
-          <p className="mb-6 text-sm text-emerald-300">Connected {justConnected}. First sync runs within an hour, or click Sync now.</p>
+          <p className="mb-6 text-sm text-emerald-600">Connected {justConnected}. First sync runs within an hour, or click Sync now.</p>
         )}
         {oauthError && (
-          <p role="alert" className="mb-6 text-sm text-red-300">{oauthError}</p>
+          <p role="alert" className="mb-6 text-sm text-rose-600">{oauthError}</p>
         )}
 
         {unmatchedCount > 0 && (
           <Link
             href="/trade/pouriq/unmatched"
-            className="flex items-center justify-between gap-3 mb-6 px-4 py-3 rounded-xl bg-amber-500/15 border border-amber-400/40 text-amber-100 text-sm hover:bg-amber-500/25 transition-colors"
+            className="flex items-center justify-between gap-3 mb-6 px-4 py-3 rounded-xl bg-amber-50 border border-amber-200 text-amber-700 text-sm hover:bg-amber-100 transition-colors"
           >
             <span>
               <strong>{unmatchedCount}</strong> till {unmatchedCount === 1 ? 'item is' : 'items are'} not matched to a cocktail, so their sales are not counting yet.

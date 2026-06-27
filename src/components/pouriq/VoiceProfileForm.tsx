@@ -45,8 +45,8 @@ const LENGTH_OPTIONS: Array<{ value: VoiceLength; label: string }> = [
   { value: 'long', label: 'Long (a short paragraph)' },
 ]
 
-const fieldLabel = 'block text-xs uppercase tracking-widest text-parchment-400 mb-1.5'
-const inputClass = 'w-full px-3 py-2 bg-jerry-green-700/50 border border-gold-500/30 rounded-sm text-parchment-50 focus:border-gold-400 focus:outline-hidden'
+const fieldLabel = 'block text-xs uppercase tracking-widest text-slate-500 mb-1.5'
+const inputClass = 'w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-slate-900 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-hidden'
 const textareaClass = `${inputClass} min-h-[100px]`
 const selectClass = inputClass
 
@@ -157,12 +157,12 @@ export function VoiceProfileForm({ initial }: Props) {
         <span className={fieldLabel}>Hard rules</span>
         <div className="grid sm:grid-cols-2 gap-2">
           {DEFAULT_RULES.map((rule) => (
-            <label key={rule} className="flex items-center gap-2 text-sm text-parchment-100">
+            <label key={rule} className="flex items-center gap-2 text-sm text-slate-700">
               <input
                 type="checkbox"
                 checked={defaultRules.has(rule)}
                 onChange={() => toggleRule(rule)}
-                className="w-4 h-4 accent-gold-500"
+                className="w-4 h-4 accent-emerald-600"
               />
               <span>{rule}</span>
             </label>
@@ -180,7 +180,7 @@ export function VoiceProfileForm({ initial }: Props) {
 
       <div>
         <span className={fieldLabel}>Sample descriptions (paste 1-3)</span>
-        <p className="text-xs text-parchment-400 mb-2">Concrete examples are the most powerful input. The AI will imitate the cadence, vocabulary, and rhythm. Yours, a competitor&apos;s, anything you like.</p>
+        <p className="text-xs text-slate-500 mb-2">Concrete examples are the most powerful input. The AI will imitate the cadence, vocabulary, and rhythm. Yours, a competitor&apos;s, anything you like.</p>
         {[0, 1, 2].map((idx) => (
           <textarea
             key={idx}
@@ -204,8 +204,8 @@ export function VoiceProfileForm({ initial }: Props) {
         />
       </div>
 
-      {error && <p role="alert" className="text-sm text-red-300">{error}</p>}
-      {info && <p role="status" className="text-sm text-emerald-300">{info}</p>}
+      {error && <p role="alert" className="text-sm text-rose-600">{error}</p>}
+      {info && <p role="status" className="text-sm text-emerald-600">{info}</p>}
 
       <div className="flex justify-end">
         <button type="button" onClick={submit} disabled={pending} className={PRIMARY_BUTTON}>
