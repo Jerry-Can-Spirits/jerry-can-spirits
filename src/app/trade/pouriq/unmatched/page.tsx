@@ -32,9 +32,9 @@ export default async function UnmatchedPage() {
   return (
     <main className="min-h-screen">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-24">
-        <Link href="/trade/pouriq/settings/integrations" className="text-sm text-parchment-400 hover:text-parchment-200">← Integrations</Link>
-        <h1 className="text-3xl md:text-4xl font-serif font-bold text-white mt-3 mb-2">Unmatched sales</h1>
-        <p className="text-parchment-400 text-sm mb-10">
+        <Link href="/trade/pouriq/settings/integrations" className="text-sm text-slate-500 hover:text-slate-700">← Integrations</Link>
+        <h1 className="text-3xl md:text-4xl font-bold text-slate-900 mt-3 mb-2">Unmatched sales</h1>
+        <p className="text-slate-500 text-sm mb-10">
           Till items your POS sent that did not match a cocktail. Map each one so its sales count, or mark it as not a cocktail.
         </p>
         <UnmatchedReview items={items} cocktails={cocktails} serves={serves} libraryEntries={libraryEntries} serveUnits={serveUnits} />

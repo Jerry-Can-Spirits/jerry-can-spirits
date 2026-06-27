@@ -35,16 +35,16 @@ export function CostUpdateToast({ ingredientName, newlyBelowTarget, onDismiss }:
     <div
       role="status"
       aria-live="polite"
-      className={`fixed bottom-4 left-4 right-4 sm:right-auto sm:max-w-md z-40 rounded-lg border border-gold-500/20 bg-jerry-green-800 p-4 shadow-xl ${
+      className={`fixed bottom-4 left-4 right-4 sm:right-auto sm:max-w-md z-40 rounded-lg border border-slate-200 bg-white p-4 shadow-xl ${
         dismissing ? 'toast-fade-out' : 'toast-slide-in'
       }`}
     >
       <div className="flex items-start gap-3">
-        <span className="mt-1 h-2 w-2 shrink-0 rounded-full bg-gold-500" aria-hidden="true" />
+        <span className="mt-1 h-2 w-2 shrink-0 rounded-full bg-emerald-600" aria-hidden="true" />
 
-        <div className="flex-1 text-sm text-parchment-100">
+        <div className="flex-1 text-sm text-slate-900">
           <p>
-            <span className="font-semibold text-gold-400">{ingredientName}</span> updated.
+            <span className="font-semibold text-emerald-700">{ingredientName}</span> updated.
             {count === 1 ? ' 1 drink now below target:' : ` ${count} drinks now below target:`}
           </p>
           <ul className="mt-2 space-y-1 max-h-48 overflow-y-auto">
@@ -52,11 +52,11 @@ export function CostUpdateToast({ ingredientName, newlyBelowTarget, onDismiss }:
               <li key={d.cocktail_id}>
                 <Link
                   href={`/trade/pouriq/${d.menu_id}/edit?cocktail=${d.cocktail_id}`}
-                  className="text-gold-300 hover:text-gold-200 underline"
+                  className="text-emerald-700 hover:text-emerald-600 underline"
                 >
                   {d.cocktail_name}
                 </Link>
-                <span className="text-parchment-400 text-xs"> {formatPct(d.projected_gp_pct)} (target {d.target_gp_pct}%)</span>
+                <span className="text-slate-500 text-xs"> {formatPct(d.projected_gp_pct)} (target {d.target_gp_pct}%)</span>
               </li>
             ))}
           </ul>
@@ -64,7 +64,7 @@ export function CostUpdateToast({ ingredientName, newlyBelowTarget, onDismiss }:
 
         <button
           onClick={dismiss}
-          className="shrink-0 text-parchment/40 hover:text-parchment transition-colors"
+          className="shrink-0 text-slate-400 hover:text-slate-700 transition-colors"
           aria-label="Dismiss notification"
         >
           <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">

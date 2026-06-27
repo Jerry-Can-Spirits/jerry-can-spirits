@@ -187,7 +187,7 @@ export function UnmatchedReview({ items, cocktails, serves, libraryEntries, serv
           )}
         </div>
       ))}
-      <p className="text-xs text-slate-400">
+      <p className="text-xs text-slate-500">
         Confirming a match also recovers the waiting sales (up to 90 days) and remembers the mapping for next time.
       </p>
     </div>

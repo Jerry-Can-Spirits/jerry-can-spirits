@@ -28,14 +28,14 @@ export function AddImportMenu() {
       {open && (
         <>
           <div className="fixed inset-0 z-30" onClick={() => setOpen(false)} aria-hidden="true" />
-          <div role="menu" className="absolute right-0 mt-2 w-56 z-40 rounded-lg border border-gold-500/30 bg-jerry-green-800 shadow-xl py-1">
+          <div role="menu" className="absolute right-0 mt-2 w-56 z-40 rounded-lg border border-slate-200 bg-white shadow-xl py-1">
             {ACTIONS.map((a) => (
               <Link
                 key={a.href}
                 href={a.href}
                 role="menuitem"
                 onClick={() => setOpen(false)}
-                className="block px-4 py-2 text-sm text-parchment-100 hover:bg-gold-500/15 hover:text-gold-100"
+                className="block px-4 py-2 text-sm text-slate-900 hover:bg-emerald-50 hover:text-emerald-700"
               >
                 {a.label}
               </Link>

@@ -23,24 +23,24 @@ const components: PortableTextComponents = {
     // The page owns H1; section <summary> owns H2-equivalent. Authors' H1/H2
     // become styled divs so we don't ship duplicate heading levels.
     h1: ({ children }) => (
-      <div className="text-lg font-serif font-bold text-gold-300 mt-6 mb-3 first:mt-0">{children}</div>
+      <div className="text-lg font-bold text-emerald-700 mt-6 mb-3 first:mt-0">{children}</div>
     ),
     h2: ({ children }) => (
-      <div className="text-lg font-serif font-bold text-gold-300 mt-6 mb-3 first:mt-0">{children}</div>
+      <div className="text-lg font-bold text-emerald-700 mt-6 mb-3 first:mt-0">{children}</div>
     ),
     h3: ({ children }) => (
-      <h3 className="text-base font-serif font-bold text-gold-400 mt-5 mb-2 first:mt-0">{children}</h3>
+      <h3 className="text-base font-bold text-emerald-700 mt-5 mb-2 first:mt-0">{children}</h3>
     ),
     h4: ({ children }) => (
-      <h4 className="text-sm font-serif font-semibold text-gold-400 mt-4 mb-2 first:mt-0">{children}</h4>
+      <h4 className="text-sm font-semibold text-emerald-700 mt-4 mb-2 first:mt-0">{children}</h4>
     ),
     normal: ({ children }) => (
-      <p className="text-parchment-300 leading-relaxed mb-4 last:mb-0">{children}</p>
+      <p className="text-slate-600 leading-relaxed mb-4 last:mb-0">{children}</p>
     ),
   },
   marks: {
     strong: ({ children }) => (
-      <strong className="text-white font-semibold">{children}</strong>
+      <strong className="text-slate-900 font-semibold">{children}</strong>
     ),
     em: ({ children }) => (
       <em className="italic">{children}</em>
@@ -54,7 +54,7 @@ const components: PortableTextComponents = {
           href={href}
           target={isExternal ? '_blank' : undefined}
           rel={isExternal ? 'noopener noreferrer' : undefined}
-          className="text-gold-300 hover:text-gold-200 underline decoration-dotted transition-colors"
+          className="text-emerald-700 hover:text-emerald-600 underline decoration-dotted transition-colors"
         >
           {children}
         </a>
@@ -72,12 +72,12 @@ const components: PortableTextComponents = {
   listItem: {
     bullet: ({ children }) => (
       <li className="flex items-start gap-3">
-        <span className="w-1.5 h-1.5 bg-gold-400 rounded-full shrink-0 mt-2" aria-hidden="true" />
-        <span className="text-parchment-300 leading-relaxed">{children}</span>
+        <span className="w-1.5 h-1.5 bg-emerald-600 rounded-full shrink-0 mt-2" aria-hidden="true" />
+        <span className="text-slate-600 leading-relaxed">{children}</span>
       </li>
     ),
     number: ({ children }) => (
-      <li className="text-parchment-300 leading-relaxed pl-1">{children}</li>
+      <li className="text-slate-600 leading-relaxed pl-1">{children}</li>
     ),
   },
 }

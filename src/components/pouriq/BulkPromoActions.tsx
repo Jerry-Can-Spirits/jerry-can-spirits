@@ -5,8 +5,8 @@ import { useRouter } from 'next/navigation'
 import { bulkApplyPromoAction, type BulkPromoMode } from '@/lib/pouriq/server-actions'
 import { SECONDARY_BUTTON_SM, PRIMARY_BUTTON } from '@/lib/pouriq/button-styles'
 
-const inputClass = 'w-full px-3 py-2 bg-jerry-green-700/50 border border-gold-500/30 rounded-lg text-parchment-50 text-sm focus:border-gold-400 focus:outline-hidden'
-const labelClass = 'block text-xs font-medium text-parchment-300 mb-1'
+const inputClass = 'w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-slate-900 text-sm focus:border-emerald-500 focus:outline-hidden'
+const labelClass = 'block text-xs font-medium text-slate-600 mb-1'
 
 interface Props {
   menuId: string
@@ -101,20 +101,20 @@ export function BulkPromoActions({ menuId }: Props) {
   }
 
   return (
-    <div className="bg-jerry-green-800/60 border border-gold-500/30 rounded-xl p-4 space-y-3">
+    <div className="bg-white border border-slate-200 rounded-xl p-4 space-y-3">
       <div className="flex items-baseline justify-between">
-        <h3 className="text-sm font-medium text-parchment-100">Apply a promo to every drink</h3>
-        <button type="button" onClick={close} className="text-xs text-parchment-400 hover:text-parchment-200">Close</button>
+        <h3 className="text-sm font-medium text-slate-900">Apply a promo to every drink</h3>
+        <button type="button" onClick={close} className="text-xs text-slate-500 hover:text-slate-700">Close</button>
       </div>
 
-      <div role="group" aria-label="Promo mode" className="inline-flex rounded-lg border border-gold-500/30 overflow-hidden bg-jerry-green-700/40 text-xs">
+      <div role="group" aria-label="Promo mode" className="inline-flex rounded-lg border border-slate-200 overflow-hidden bg-slate-50 text-xs">
         {(['percent', 'flat', 'clear'] as BulkPromoMode[]).map((m) => (
           <button
             key={m}
             type="button"
             onClick={() => { setMode(m); setError(null); setInfo(null) }}
             aria-pressed={mode === m}
-            className={`px-3 py-1.5 font-semibold transition-colors ${mode === m ? 'bg-gold-500/30 text-gold-50' : 'text-parchment-300 hover:text-parchment-100'}`}
+            className={`px-3 py-1.5 font-semibold transition-colors ${mode === m ? 'bg-emerald-100 text-emerald-700' : 'text-slate-600 hover:text-slate-900'}`}
           >
             {m === 'percent' ? '% off' : m === 'flat' ? '£ off' : 'Clear all'}
           </button>
@@ -168,7 +168,7 @@ export function BulkPromoActions({ menuId }: Props) {
                     key={d.value}
                     type="button"
                     onClick={() => setDays((arr) => active ? arr.filter((n) => n !== d.value) : [...arr, d.value])}
-                    className={`px-2 py-1 rounded-sm border text-xs transition-colors ${active ? 'bg-gold-500/30 border-gold-400 text-gold-50' : 'bg-jerry-green-700/30 border-gold-500/20 text-parchment-300 hover:border-gold-400/40'}`}
+                    className={`px-2 py-1 rounded-sm border text-xs transition-colors ${active ? 'bg-emerald-100 border-emerald-600 text-emerald-700' : 'bg-white border-slate-200 text-slate-600 hover:border-emerald-400'}`}
                   >
                     {d.label}
                   </button>
@@ -190,11 +190,11 @@ export function BulkPromoActions({ menuId }: Props) {
       )}
 
       {mode === 'clear' && (
-        <p className="text-xs text-parchment-300">Removes the promo price and label from every drink on this menu. Can&rsquo;t be undone in bulk — drinks would need to be re-edited individually.</p>
+        <p className="text-xs text-slate-600">Removes the promo price and label from every drink on this menu. Can&rsquo;t be undone in bulk — drinks would need to be re-edited individually.</p>
       )}
 
-      {error && <p role="alert" className="text-sm text-red-300">{error}</p>}
-      {info && <p className="text-sm text-emerald-300">{info}</p>}
+      {error && <p role="alert" className="text-sm text-rose-600">{error}</p>}
+      {info && <p className="text-sm text-emerald-600">{info}</p>}
 
       <div className="flex justify-end">
         <button type="button" onClick={apply} disabled={pending} className={PRIMARY_BUTTON}>
