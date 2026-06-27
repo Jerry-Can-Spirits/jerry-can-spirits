@@ -31,7 +31,7 @@ export default async function TradeLandingPage() {
   return (
     <main className="min-h-screen bg-slate-50">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-24">
-        <div className="flex items-baseline justify-between mb-8">
+        <div className="flex items-center justify-between mb-8">
           <PourIqWordmark />
           <SignOutLink />
         </div>
