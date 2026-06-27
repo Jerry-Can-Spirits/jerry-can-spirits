@@ -5,16 +5,16 @@ import { useRouter } from 'next/navigation'
 import { receiveStockAction, recordStockCountAction, recordProductionAction, setParAction } from '@/lib/pouriq/server-actions'
 import type { RollingStockRow } from '@/lib/pouriq/stock-loader'
 import { stockUnitWords } from '@/lib/pouriq/stock'
+import { SECONDARY_BUTTON_SM } from '@/lib/pouriq/button-styles'
 
 interface Props {
   rows: RollingStockRow[]
 }
 
 const inputClass =
-  'w-24 px-2 py-1 bg-jerry-green-700/50 border border-gold-500/30 rounded-sm text-parchment-50 text-sm focus:border-gold-400 focus:outline-hidden'
+  'w-24 px-2 py-1 bg-white border border-slate-300 rounded-sm text-slate-900 text-sm focus:border-emerald-500 focus:outline-hidden'
 
-const actionButtonClass =
-  'px-3 py-1 bg-gold-500/15 border border-gold-400/60 text-gold-100 hover:bg-gold-500/25 hover:border-gold-400 rounded-lg transition-colors text-sm font-semibold disabled:opacity-40'
+const actionButtonClass = SECONDARY_BUTTON_SM
 
 function formatShortDate(iso: string): string {
   return new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
@@ -31,7 +31,7 @@ export function StockManager({ rows }: Props) {
 
   if (rows.length === 0) {
     return (
-      <p className="text-sm text-parchment-300">
+      <p className="text-sm text-slate-600">
         No bottle-priced ingredients yet. Add ingredients with a bottle size and cost to track stock.
       </p>
     )
@@ -103,9 +103,9 @@ export function StockManager({ rows }: Props) {
 
   return (
     <div className="space-y-4">
-      {error && <p role="alert" className="text-sm text-red-300">{error}</p>}
+      {error && <p role="alert" className="text-sm text-rose-600">{error}</p>}
       <div className="flex justify-end">
-        <a href="/trade/pouriq/stock/order" className="text-sm text-gold-300 hover:text-gold-200 underline">Order report →</a>
+        <a href="/trade/pouriq/stock/order" className="text-sm text-emerald-700 hover:text-emerald-600 underline">Order report →</a>
       </div>
       <div className="space-y-3">
         {rows.map((row) => {
@@ -125,32 +125,32 @@ export function StockManager({ rows }: Props) {
           const unit = stockUnitWords(row.pack_format)
 
           return (
-            <div key={id} className="bg-jerry-green-800/40 border border-gold-500/20 rounded-xl p-4">
+            <div key={id} className="bg-white border border-slate-200 rounded-xl p-4">
               <div className="mb-3">
-                <span className="text-parchment-100 font-medium">{row.library_name}</span>
-                <span className="text-parchment-400 text-sm ml-1">({row.pack_size}ml)</span>
+                <span className="text-slate-900 font-medium">{row.library_name}</span>
+                <span className="text-slate-500 text-sm ml-1">({row.pack_size}ml)</span>
               </div>
 
               {row.needs_opening_count ? (
-                <p className="text-sm text-amber-300 mb-3">
+                <p className="text-sm text-amber-600 mb-3">
                   Set an opening count to start tracking on-hand stock.
                 </p>
               ) : (
-                <div className="text-sm text-parchment-300 mb-3 space-y-0.5">
+                <div className="text-sm text-slate-600 mb-3 space-y-0.5">
                   <p>
-                    <span className="text-parchment-100">{onHand?.toFixed(1)} {unit.many}</span>
+                    <span className="text-slate-900">{onHand?.toFixed(1)} {unit.many}</span>
                     {isNegative && (
-                      <span className="text-parchment-400 ml-2">(check stock)</span>
+                      <span className="text-slate-500 ml-2">(check stock)</span>
                     )}
                   </p>
                   {row.needs_reorder && (
-                    <p className="text-amber-300 text-xs">Low · order {row.reorder_qty} {row.reorder_qty === 1 ? unit.one : unit.many}</p>
+                    <p className="text-amber-600 text-xs">Low · order {row.reorder_qty} {row.reorder_qty === 1 ? unit.one : unit.many}</p>
                   )}
                   {row.anchor_count_at && (
-                    <p className="text-parchment-400 text-xs">estimate, last counted {formatShortDate(row.anchor_count_at)}</p>
+                    <p className="text-slate-500 text-xs">estimate, last counted {formatShortDate(row.anchor_count_at)}</p>
                   )}
                   {(row.receipts_since > 0 || row.expected_usage_bottles > 0) && (
-                    <p className="text-parchment-400 text-xs">
+                    <p className="text-slate-500 text-xs">
                       {row.receipts_since > 0 && `+${row.receipts_since.toFixed(1)} received`}
                       {row.receipts_since > 0 && row.expected_usage_bottles > 0 && ' · '}
                       {row.expected_usage_bottles > 0 && `${row.expected_usage_bottles.toFixed(1)} used`}
@@ -247,7 +247,7 @@ export function StockManager({ rows }: Props) {
                         Make batch
                       </button>
                     </div>
-                    <p className="text-parchment-400 text-xs">
+                    <p className="text-slate-500 text-xs">
                       Records a batch. Tops up this recipe&apos;s stock and draws down its components.
                     </p>
                   </div>
