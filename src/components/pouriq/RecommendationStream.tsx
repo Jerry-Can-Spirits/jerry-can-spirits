@@ -2,11 +2,12 @@
 
 import { useRef, useState } from 'react'
 import type { Recommendation } from '@/lib/pouriq/types'
+import { PRIMARY_BUTTON } from '@/lib/pouriq/button-styles'
 
 const severityStyles: Record<Recommendation['severity'], string> = {
-  info: 'border-gold-500/30 bg-jerry-green-800/40',
-  warn: 'border-amber-500/40 bg-amber-900/20',
-  action: 'border-red-500/40 bg-red-900/20',
+  info: 'border-slate-200 bg-white',
+  warn: 'border-amber-200 bg-amber-50',
+  action: 'border-rose-200 bg-rose-50',
 }
 
 export function RecommendationStream({ menuId }: { menuId: string }) {
@@ -69,17 +70,17 @@ export function RecommendationStream({ menuId }: { menuId: string }) {
   return (
     <div>
       {recs.length === 0 && !streaming && !error && (
-        <div className="bg-jerry-green-800/40 border border-gold-500/20 rounded-xl p-8 text-center no-print">
-          <p className="text-parchment-300 mb-4">Generate AI recommendations for this menu.</p>
-          <button onClick={start} className="px-6 py-3 bg-gold-500 text-jerry-green-900 font-bold rounded-lg hover:bg-gold-400 transition-colors text-sm">
+        <div className="bg-white border border-slate-200 rounded-xl p-8 text-center no-print">
+          <p className="text-slate-700 mb-4">Generate AI recommendations for this menu.</p>
+          <button onClick={start} className={PRIMARY_BUTTON}>
             Analyse menu
           </button>
         </div>
       )}
 
       {streaming && recs.length === 0 && (
-        <div className="bg-jerry-green-800/40 border border-gold-500/20 rounded-xl p-8 text-center">
-          <p className="text-parchment-300">Reading your menu…</p>
+        <div className="bg-white border border-slate-200 rounded-xl p-8 text-center">
+          <p className="text-slate-700">Reading your menu…</p>
         </div>
       )}
 
@@ -88,28 +89,28 @@ export function RecommendationStream({ menuId }: { menuId: string }) {
           {recs.map((r, i) => (
             <article key={i} className={`border rounded-xl p-5 ${severityStyles[r.severity]}`}>
               <div className="flex items-baseline gap-2 mb-2">
-                <span className="text-xs uppercase tracking-widest text-parchment-400">{r.category}</span>
-                <h3 className="text-lg font-serif font-bold text-white">{r.title}</h3>
+                <span className="text-xs uppercase tracking-widest text-slate-500">{r.category}</span>
+                <h3 className="text-lg font-bold text-slate-900">{r.title}</h3>
               </div>
-              <p className="text-parchment-200 text-sm leading-relaxed">{r.body}</p>
+              <p className="text-slate-700 text-sm leading-relaxed">{r.body}</p>
               {r.suggested_change && (
-                <div className="mt-3 text-sm text-parchment-300">
-                  <strong className="text-parchment-100">Suggested: </strong>
+                <div className="mt-3 text-sm text-slate-700">
+                  <strong className="text-slate-900">Suggested: </strong>
                   {r.suggested_change.action.replace('_', ' ')}
                   {r.suggested_change.from && r.suggested_change.to && ` — ${r.suggested_change.from} → ${r.suggested_change.to}`}
-                  <p className="text-xs text-parchment-400 mt-1">{r.suggested_change.impact_summary}</p>
+                  <p className="text-xs text-slate-500 mt-1">{r.suggested_change.impact_summary}</p>
                 </div>
               )}
               {r.field_manual_reference && (
-                <a href={r.field_manual_reference.url} className="inline-block mt-3 text-xs text-gold-300 hover:text-gold-200 underline">
+                <a href={r.field_manual_reference.url} className="inline-block mt-3 text-xs text-emerald-700 hover:text-emerald-800 underline">
                   See in the Field Manual
                 </a>
               )}
             </article>
           ))}
-          {streaming && <p className="text-parchment-400 text-sm no-print">Generating more…</p>}
+          {streaming && <p className="text-slate-500 text-sm no-print">Generating more…</p>}
           {!streaming && (
-            <button onClick={() => { startedRef.current = false; start() }} className="text-sm text-gold-300 hover:text-gold-200 underline no-print">
+            <button onClick={() => { startedRef.current = false; start() }} className="text-sm text-emerald-700 hover:text-emerald-800 underline no-print">
               Re-run analysis
             </button>
           )}
@@ -117,7 +118,7 @@ export function RecommendationStream({ menuId }: { menuId: string }) {
       )}
 
       {error && (
-        <div role="alert" className="bg-red-600/20 border border-red-500/30 rounded-lg p-4 text-sm text-red-200">
+        <div role="alert" className="bg-rose-50 border border-rose-200 rounded-lg p-4 text-sm text-rose-600">
           {error}
         </div>
       )}
