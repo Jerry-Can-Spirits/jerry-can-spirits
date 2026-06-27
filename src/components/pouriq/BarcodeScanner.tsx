@@ -122,23 +122,23 @@ export function BarcodeScanner({ onScan, onClose }: Props) {
 
   return (
     <div className="fixed inset-0 bg-black/85 z-50 flex items-start sm:items-center justify-center p-4 overflow-y-auto" role="dialog" aria-label="Scan a barcode">
-      <div className="bg-jerry-green-800 border border-gold-500/30 rounded-xl p-4 max-w-md w-full mt-8 sm:mt-0">
+      <div className="bg-white border border-slate-200 rounded-xl p-4 max-w-md w-full mt-8 sm:mt-0">
         <div className="flex items-baseline justify-between mb-3">
-          <h3 className="text-base font-serif font-bold text-white">Scan a barcode</h3>
-          <button type="button" onClick={onClose} className="text-sm text-parchment-400 hover:text-parchment-200">Close</button>
+          <h3 className="text-base font-bold text-slate-900">Scan a barcode</h3>
+          <button type="button" onClick={onClose} className="text-sm text-slate-500 hover:text-slate-700">Close</button>
         </div>
         <div id={regionId} ref={containerRef} className="w-full aspect-4/3 bg-black rounded-lg overflow-hidden" />
         {starting && !error && (
-          <p className="mt-3 text-xs text-parchment-400">Starting camera… you may be asked to allow access.</p>
+          <p className="mt-3 text-xs text-slate-500">Starting camera… you may be asked to allow access.</p>
         )}
         {error && (
-          <p role="alert" className="mt-3 text-sm text-red-300">{error}</p>
+          <p role="alert" className="mt-3 text-sm text-rose-600">{error}</p>
         )}
-        <p className="mt-3 text-xs text-parchment-400">
+        <p className="mt-3 text-xs text-slate-500">
           Point the camera at the barcode on the back of the bottle. We support EAN-13, UPC, Code 128 and QR.
         </p>
         {error && (
-          <p className="mt-2 text-xs text-parchment-500">
+          <p className="mt-2 text-xs text-slate-400">
             Tip: in-app browsers (Instagram, Facebook, Twitter) block camera access. Open this page in Safari or Chrome directly.
           </p>
         )}

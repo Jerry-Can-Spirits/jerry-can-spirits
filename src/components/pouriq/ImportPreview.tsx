@@ -7,8 +7,9 @@ import { IngredientMatchRow, type MatchRowState } from '@/components/pouriq/Ingr
 import { normalise } from '@/lib/pouriq/match'
 import { planBulkFill, type BulkFillRow } from '@/lib/pouriq/import-bulk-fill'
 import type { ParsedMeasurement, RecognisedServeUnit } from '@/lib/pouriq/measurement-parse'
+import { PRIMARY_BUTTON } from '@/lib/pouriq/button-styles'
 
-const inputClass = 'w-full px-3 py-2 bg-jerry-green-700/50 border border-gold-500/30 rounded-lg text-parchment-50 text-sm focus:border-gold-400 focus:outline-hidden'
+const inputClass = 'w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-slate-900 text-sm focus:border-emerald-500 focus:outline-hidden'
 
 export interface PreviewDrinkInput {
   name: string
@@ -278,21 +279,21 @@ export function ImportPreview({ menuId, drinks: extracted, libraryEntries, serve
 
   return (
     <div className="space-y-6">
-      <div className="sticky top-2 z-20 bg-jerry-green-800/95 backdrop-blur-sm border border-gold-500/30 rounded-xl p-4 text-sm text-parchment-200">
+      <div className="sticky top-2 z-20 bg-white border border-slate-200 rounded-xl p-4 text-sm text-slate-700">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <p>
-            <strong className="text-gold-300">{stats.included}</strong> drinks ·{' '}
-            <strong className="text-emerald-300">{stats.matched}</strong> auto-matched ·{' '}
-            <strong className="text-amber-300">{stats.toCreate}</strong> new library entries ·{' '}
+            <strong className="text-emerald-700">{stats.included}</strong> drinks ·{' '}
+            <strong className="text-emerald-600">{stats.matched}</strong> auto-matched ·{' '}
+            <strong className="text-amber-600">{stats.toCreate}</strong> new library entries ·{' '}
             {stats.needsChoice > 0
-              ? <strong className="text-red-300">{stats.needsChoice} need a choice</strong>
-              : <strong className="text-emerald-300">all resolved</strong>}
+              ? <strong className="text-rose-600">{stats.needsChoice} need a choice</strong>
+              : <strong className="text-emerald-600">all resolved</strong>}
           </p>
           {stats.needsChoice > 0 && (
             <button
               type="button"
               onClick={jumpToNextUnresolved}
-              className="shrink-0 px-3 py-1.5 rounded-lg bg-gold-500/20 border border-gold-400 text-gold-100 text-xs font-semibold hover:bg-gold-500/30"
+              className="shrink-0 px-3 py-1.5 rounded-lg bg-emerald-50 border border-emerald-600 text-emerald-700 text-xs font-semibold hover:bg-emerald-100"
             >
               Jump to next unresolved →
             </button>
@@ -302,27 +303,27 @@ export function ImportPreview({ menuId, drinks: extracted, libraryEntries, serve
 
       <div className="space-y-4">
         {drinks.map((d, idx) => (
-          <div key={idx} className={`border rounded-xl ${d.skip ? 'border-parchment-500/20 bg-jerry-green-900/20' : 'border-gold-500/20 bg-jerry-green-800/40'}`}>
+          <div key={idx} className={`border rounded-xl ${d.skip ? 'border-slate-200 bg-slate-50' : 'border-slate-200 bg-white'}`}>
             <button type="button" onClick={() => toggle(idx)} aria-expanded={expanded.has(idx)} aria-controls={`drink-panel-${idx}`} className="w-full text-left p-4 flex items-baseline justify-between gap-3">
-              <h3 className={`text-base font-serif font-bold ${d.skip ? 'text-parchment-500 line-through' : 'text-white'}`}>
+              <h3 className={`text-base font-bold ${d.skip ? 'text-slate-400 line-through' : 'text-slate-900'}`}>
                 {d.name}
               </h3>
-              <span className="text-xs text-parchment-400">{expanded.has(idx) ? 'Hide' : 'Show'} ({d.ingredients.length} ing.)</span>
+              <span className="text-xs text-slate-500">{expanded.has(idx) ? 'Hide' : 'Show'} ({d.ingredients.length} ing.)</span>
             </button>
             {expanded.has(idx) && (
               <div id={`drink-panel-${idx}`} className="px-4 pb-4 space-y-3">
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   <div className="sm:col-span-2">
-                    <label className="block text-xs font-medium text-parchment-300 mb-1">Name</label>
+                    <label className="block text-xs font-medium text-slate-600 mb-1">Name</label>
                     <input value={d.name} onChange={(e) => updateDrink(idx, { name: e.target.value })} className={inputClass} />
                   </div>
                   <div>
-                    <label className="block text-xs font-medium text-parchment-300 mb-1">Sale price (£)</label>
+                    <label className="block text-xs font-medium text-slate-600 mb-1">Sale price (£)</label>
                     <input type="number" step="0.01" min={0} value={d.salePoundsStr} onChange={(e) => updateDrink(idx, { salePoundsStr: e.target.value })} className={inputClass} placeholder="0.00" />
                   </div>
                 </div>
-                <label className="flex items-center gap-2 text-sm text-parchment-300 cursor-pointer">
-                  <input type="checkbox" checked={d.skip} onChange={(e) => updateDrink(idx, { skip: e.target.checked })} className="w-4 h-4 accent-gold-500" />
+                <label className="flex items-center gap-2 text-sm text-slate-600 cursor-pointer">
+                  <input type="checkbox" checked={d.skip} onChange={(e) => updateDrink(idx, { skip: e.target.checked })} className="w-4 h-4 accent-emerald-600" />
                   Skip this drink
                 </label>
                 {!d.skip && d.ingredients.map((_ingState, ingIdx) => {
@@ -350,11 +351,11 @@ export function ImportPreview({ menuId, drinks: extracted, libraryEntries, serve
         ))}
       </div>
 
-      {error && <p role="alert" className="text-sm text-red-300">{error}</p>}
+      {error && <p role="alert" className="text-sm text-rose-600">{error}</p>}
 
       <div className="flex justify-end">
         <button type="button" onClick={handleCommit} disabled={submitting || stats.needsChoice > 0 || stats.included === 0}
-          className="px-6 py-3 bg-linear-to-r from-gold-600 to-gold-500 hover:from-gold-500 hover:to-gold-400 disabled:from-gray-600 disabled:to-gray-500 text-jerry-green-900 font-semibold rounded-lg">
+          className={PRIMARY_BUTTON}>
           {submitting ? 'Importing…' : `Import ${stats.included} drink${stats.included === 1 ? '' : 's'}`}
         </button>
       </div>

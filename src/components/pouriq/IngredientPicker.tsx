@@ -5,14 +5,15 @@ import type { IngredientLibraryRow, IngredientType } from '@/lib/pouriq/types'
 import { saveLibraryEntryAction } from '@/lib/pouriq/server-actions'
 import { BarcodeScanner } from '@/components/pouriq/BarcodeScanner'
 import { BOTTLE_SIZES_ML, WEIGHT_SIZES_G } from '@/lib/pouriq/measures'
+import { PRIMARY_BUTTON } from '@/lib/pouriq/button-styles'
 
 const INGREDIENT_TYPES: IngredientType[] = ['spirit','liqueur','wine','beer','mixer','syrup','juice','garnish','other']
 
-const inputClass = 'w-full px-3 py-2 bg-jerry-green-700/50 border border-gold-500/30 rounded-lg text-parchment-50 text-sm placeholder-parchment-400 focus:border-gold-400 focus:outline-hidden'
-const labelClass = 'block text-xs font-medium text-parchment-300 mb-1'
+const inputClass = 'w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-slate-900 text-sm placeholder-slate-400 focus:border-emerald-500 focus:outline-hidden'
+const labelClass = 'block text-xs font-medium text-slate-600 mb-1'
 const chipClass = 'px-2 py-1 rounded-sm border text-xs transition-colors'
-const chipActive = 'bg-gold-500/20 border-gold-400 text-gold-100'
-const chipIdle = 'bg-jerry-green-700/30 border-gold-500/20 text-parchment-300 hover:border-gold-400/40'
+const chipActive = 'bg-emerald-50 border-emerald-600 text-emerald-700'
+const chipIdle = 'bg-white border-slate-300 text-slate-600 hover:border-emerald-400'
 
 interface Props {
   libraryEntries: IngredientLibraryRow[]
@@ -204,36 +205,36 @@ export function IngredientPicker({ libraryEntries, selectedEntryId, onChange }: 
           onClick={() => setScanOpen(true)}
           title="Scan a barcode"
           aria-label="Scan a barcode"
-          className="shrink-0 px-3 py-2 bg-jerry-green-700/50 border border-gold-500/30 rounded-lg text-parchment-100 hover:border-gold-400 transition-colors text-sm"
+          className="shrink-0 px-3 py-2 bg-white border border-slate-300 rounded-lg text-slate-700 hover:border-emerald-500 transition-colors text-sm"
         >
           Scan
         </button>
       </div>
 
       {scanInfo && !scanOpen && (
-        <p className="mt-1 text-xs text-gold-200">{scanInfo}</p>
+        <p className="mt-1 text-xs text-emerald-700">{scanInfo}</p>
       )}
 
       {open && !showCreate && (
-        <div className="absolute z-10 left-0 right-0 mt-1 max-h-64 overflow-y-auto bg-jerry-green-800 border border-gold-500/30 rounded-lg shadow-lg">
+        <div className="absolute z-10 left-0 right-0 mt-1 max-h-64 overflow-y-auto bg-white border border-slate-200 rounded-lg shadow-lg">
           {matches.length === 0 && (
-            <p className="px-3 py-2 text-sm text-parchment-400">No matches in your library.</p>
+            <p className="px-3 py-2 text-sm text-slate-500">No matches in your library.</p>
           )}
           {matches.map((entry) => (
             <button
               type="button"
               key={entry.id}
               onClick={() => selectEntry(entry)}
-              className="block w-full text-left px-3 py-2 text-sm text-parchment-100 hover:bg-jerry-green-700"
+              className="block w-full text-left px-3 py-2 text-sm text-slate-900 hover:bg-slate-50"
             >
               <span className="font-medium">{entry.name}</span>
-              <span className="text-xs text-parchment-400 ml-2">{entry.ingredient_type}</span>
+              <span className="text-xs text-slate-500 ml-2">{entry.ingredient_type}</span>
             </button>
           ))}
           <button
             type="button"
             onClick={() => { setShowCreate(true); setName(query) }}
-            className="block w-full text-left px-3 py-2 text-sm text-gold-300 hover:bg-jerry-green-700 border-t border-gold-500/20"
+            className="block w-full text-left px-3 py-2 text-sm text-emerald-700 hover:bg-slate-50 border-t border-slate-200"
           >
             + Create new ingredient{query.trim() ? `: "${query.trim()}"` : ''}
           </button>
@@ -241,12 +242,12 @@ export function IngredientPicker({ libraryEntries, selectedEntryId, onChange }: 
       )}
 
       {showCreate && (
-        <div className="absolute z-10 left-0 right-0 mt-1 p-4 bg-jerry-green-800 border border-gold-500/30 rounded-lg shadow-lg space-y-3">
+        <div className="absolute z-10 left-0 right-0 mt-1 p-4 bg-white border border-slate-200 rounded-lg shadow-lg space-y-3">
           {pendingBarcode && (
-            <p className="text-xs text-gold-200">Barcode: <span className="font-mono">{pendingBarcode}</span></p>
+            <p className="text-xs text-emerald-700">Barcode: <span className="font-mono">{pendingBarcode}</span></p>
           )}
           {prefilledFromCatalogue && (
-            <p className="text-xs text-emerald-200">Name, type and size came from the Pour IQ shared catalogue — sanity-check before saving.</p>
+            <p className="text-xs text-emerald-700">Name, type and size came from the Pour IQ shared catalogue — sanity-check before saving.</p>
           )}
           <div>
             <label className={labelClass}>Name</label>
@@ -297,15 +298,15 @@ export function IngredientPicker({ libraryEntries, selectedEntryId, onChange }: 
             <div>
               <label className={labelClass}>Packs bought</label>
               <input type="number" step="1" min={1} value={purchase_qty_str} onChange={(e) => setPurchaseQtyStr(e.target.value)} className={inputClass} placeholder="1" />
-              <p className="text-xs text-parchment-400 mt-1">
+              <p className="text-xs text-slate-500 mt-1">
                 {base_unit === 'each' ? 'e.g. 6 for a 6-pack' : 'e.g. 24 for a case'}
               </p>
             </div>
           </div>
-          {createError && <p role="alert" className="text-xs text-red-300">{createError}</p>}
+          {createError && <p role="alert" className="text-xs text-rose-600">{createError}</p>}
           <div className="flex justify-between items-center">
-            <button type="button" onClick={() => { setShowCreate(false); setPendingBarcode(null); setScanInfo(null); setPrefilledFromCatalogue(false) }} className="text-xs text-parchment-400 hover:text-parchment-200">Cancel</button>
-            <button type="button" onClick={handleCreate} disabled={creating} className="px-4 py-2 bg-gold-500 text-jerry-green-900 font-semibold rounded-sm text-sm disabled:opacity-50">
+            <button type="button" onClick={() => { setShowCreate(false); setPendingBarcode(null); setScanInfo(null); setPrefilledFromCatalogue(false) }} className="text-xs text-slate-500 hover:text-slate-700">Cancel</button>
+            <button type="button" onClick={handleCreate} disabled={creating} className={PRIMARY_BUTTON}>
               {creating ? 'Adding…' : 'Add to library'}
             </button>
           </div>

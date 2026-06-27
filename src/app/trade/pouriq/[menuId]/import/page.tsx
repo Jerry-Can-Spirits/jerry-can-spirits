@@ -55,25 +55,25 @@ export default function ImportPage({ params }: Props) {
   return (
     <main className="min-h-screen">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-24">
-        <Link href={`/trade/pouriq/${menuId}`} className="text-sm text-parchment-400 hover:text-parchment-200">← Back to menu</Link>
-        <h1 className="text-3xl font-serif font-bold text-white mt-4 mb-2">Import drinks</h1>
-        <p className="text-parchment-400 text-sm mb-10">
+        <Link href={`/trade/pouriq/${menuId}`} className="text-sm text-slate-500 hover:text-slate-700">← Back to menu</Link>
+        <h1 className="text-3xl font-bold text-slate-900 mt-4 mb-2">Import drinks</h1>
+        <p className="text-slate-500 text-sm mb-10">
           Paste menu text, upload a PDF, or upload an Excel/CSV. We&rsquo;ll extract the drinks and match ingredients to your library — you confirm before anything is saved.
         </p>
 
-        <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+        <div className="bg-white rounded-xl p-6 border border-slate-200">
           {!preview ? (
             <ImportSourceTabs menuId={menuId} initialSource={initialSource} onPreview={setPreview} />
           ) : library && serveUnits ? (
             <ImportPreview menuId={menuId} drinks={preview.drinks} libraryEntries={library} serveUnits={serveUnits} />
           ) : (
-            <p className="text-parchment-300 text-sm">Loading your library…</p>
+            <p className="text-slate-600 text-sm">Loading your library…</p>
           )}
-          {error && <p role="alert" className="mt-4 text-sm text-red-300">{error}</p>}
+          {error && <p role="alert" className="mt-4 text-sm text-rose-600">{error}</p>}
         </div>
 
         {preview && (
-          <button type="button" onClick={() => { setPreview(null); setLibrary(null); setServeUnits(null) }} className="mt-4 text-sm text-parchment-400 hover:text-parchment-200 underline">
+          <button type="button" onClick={() => { setPreview(null); setLibrary(null); setServeUnits(null) }} className="mt-4 text-sm text-slate-500 hover:text-slate-700 underline">
             Start over (change source)
           </button>
         )}

@@ -2,8 +2,8 @@
 
 import { serveUnitsFor, recipeBaseAmount, type BaseUnit, type ServeUnit } from '@/lib/pouriq/measures'
 
-const inputClass = 'px-3 py-2 bg-jerry-green-700/50 border border-gold-500/30 rounded-lg text-parchment-50 text-sm focus:border-gold-400 focus:outline-hidden'
-const labelClass = 'block text-xs font-medium text-parchment-300 mb-1'
+const inputClass = 'px-3 py-2 bg-white border border-slate-300 rounded-lg text-slate-900 text-sm focus:border-emerald-500 focus:outline-hidden'
+const labelClass = 'block text-xs font-medium text-slate-600 mb-1'
 
 interface PickerChange {
   recipe_unit: string
@@ -96,7 +96,7 @@ export function ServeUnitPicker({
           ))}
         </select>
         {costDisplay && (
-          <span className="text-xs text-parchment-400">{costDisplay}</span>
+          <span className="text-xs text-slate-500">{costDisplay}</span>
         )}
       </div>
     </div>

@@ -9,11 +9,11 @@ import { formatPurchaseBasis } from '@/lib/pouriq/calculations'
 
 const INGREDIENT_TYPES: IngredientType[] = ['spirit','liqueur','wine','beer','cider','mixer','syrup','juice','garnish','soft-drink','alcohol-free','food','other']
 
-const inputClass = 'w-full px-3 py-2 bg-jerry-green-700/50 border border-gold-500/30 rounded-lg text-parchment-50 text-sm focus:border-gold-400 focus:outline-hidden'
-const labelClass = 'block text-xs font-medium text-parchment-300 mb-1'
+const inputClass = 'w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-slate-900 text-sm focus:border-emerald-500 focus:outline-hidden'
+const labelClass = 'block text-xs font-medium text-slate-600 mb-1'
 const chipClass = 'px-2 py-1 rounded-sm border text-xs transition-colors'
-const chipActive = 'bg-gold-500/20 border-gold-400 text-gold-100'
-const chipIdle = 'bg-jerry-green-700/30 border-gold-500/20 text-parchment-300 hover:border-gold-400/40'
+const chipActive = 'bg-emerald-50 border-emerald-600 text-emerald-700'
+const chipIdle = 'bg-white border-slate-300 text-slate-600 hover:border-emerald-400'
 
 export interface MatchRowState {
   // Either picked an existing library entry...
@@ -108,19 +108,19 @@ export function IngredientMatchRow({
   }
 
   const matchBadge = matchKind === 'auto'
-    ? <span className="text-xs text-emerald-300">auto-matched</span>
+    ? <span className="text-xs text-emerald-600">auto-matched</span>
     : matchKind === 'catalogue'
-      ? <span className="text-xs text-sky-300">from catalogue — set your price</span>
+      ? <span className="text-xs text-sky-600">from catalogue — set your price</span>
       : matchKind === 'suggestions'
-        ? <span className="text-xs text-amber-300">pick a match</span>
-        : <span className="text-xs text-red-300">no match in library</span>
+        ? <span className="text-xs text-amber-600">pick a match</span>
+        : <span className="text-xs text-rose-600">no match in library</span>
 
   return (
-    <div className="border border-gold-500/10 rounded-lg p-3 bg-jerry-green-800/30 space-y-3">
+    <div className="border border-slate-200 rounded-lg p-3 bg-white space-y-3">
       <div className="flex items-baseline justify-between gap-3">
         <div>
-          <p className="text-sm text-parchment-100 font-medium">{extractedName}</p>
-          <p className="text-xs text-parchment-400 mt-1">menu: &ldquo;{rawMeasurement}&rdquo; · type: {inferredType}</p>
+          <p className="text-sm text-slate-900 font-medium">{extractedName}</p>
+          <p className="text-xs text-slate-500 mt-1">menu: &ldquo;{rawMeasurement}&rdquo; · type: {inferredType}</p>
         </div>
         {matchBadge}
       </div>
@@ -129,10 +129,10 @@ export function IngredientMatchRow({
       <div>
         <label className={labelClass}>Library entry</label>
         {state.new_library ? (
-          <div className="space-y-2 p-3 rounded-sm border border-gold-500/20 bg-jerry-green-900/30">
+          <div className="space-y-2 p-3 rounded-sm border border-slate-200 bg-slate-50">
             <div className="flex items-baseline justify-between">
-              <p className="text-xs text-gold-300">Creating new library entry</p>
-              <button type="button" onClick={() => onChange({ existing_library_id: undefined, new_library: undefined, pour_ml: state.pour_ml, unit_count: state.unit_count, recipe_unit: state.recipe_unit, recipe_qty: state.recipe_qty })} className="text-xs text-parchment-400 hover:text-parchment-200">Cancel</button>
+              <p className="text-xs text-emerald-700">Creating new library entry</p>
+              <button type="button" onClick={() => onChange({ existing_library_id: undefined, new_library: undefined, pour_ml: state.pour_ml, unit_count: state.unit_count, recipe_unit: state.recipe_unit, recipe_qty: state.recipe_qty })} className="text-xs text-slate-500 hover:text-slate-700">Cancel</button>
             </div>
             <input value={state.new_library.name} onChange={(e) => updateNewLibrary({ name: e.target.value })} className={inputClass} placeholder="Name" />
             {(() => {
@@ -180,7 +180,7 @@ export function IngredientMatchRow({
                         onFocus={(e) => e.target.select()}
                         onChange={(e) => updateNewLibrary({ purchase_qty: Math.max(1, Math.round(Number(e.target.value) || 1)) })}
                         className={inputClass} placeholder="1" />
-                      <p className="text-xs text-parchment-400 mt-1">
+                      <p className="text-xs text-slate-500 mt-1">
                         {nl.base_unit === 'each' ? 'e.g. 6 for a 6-pack' : 'e.g. 24 for a case'}
                       </p>
                     </div>
@@ -207,10 +207,10 @@ export function IngredientMatchRow({
                         onChange={(e) => updateNewLibrary({ pack_size: Math.max(1, Math.round(Number(e.target.value) || 1)) })}
                         className={inputClass}
                         placeholder={nl.base_unit === 'ml' ? '330 for a can, 50000 for a 50L keg' : '500, 1000, 2500…'} />
-                      <p className="text-xs text-parchment-400 mt-1">Enter any size not shown above.</p>
+                      <p className="text-xs text-slate-500 mt-1">Enter any size not shown above.</p>
                     </div>
                   )}
-                  {basis !== null && <p className="text-xs text-gold-200">= {basis}</p>}
+                  {basis !== null && <p className="text-xs text-emerald-700">= {basis}</p>}
                 </>
               )
             })()}
@@ -237,7 +237,7 @@ export function IngredientMatchRow({
               <option value="__new__">+ Create new from this entry</option>
             </select>
             {selectedExisting && (
-              <p className="text-xs text-parchment-400">
+              <p className="text-xs text-slate-500">
                 Linked to {selectedExisting.name}
                 {selectedExisting.base_unit !== 'each'
                   ? ` · £${(selectedExisting.price_p / 100).toFixed(2)} / ${selectedExisting.pack_size}${selectedExisting.base_unit}`

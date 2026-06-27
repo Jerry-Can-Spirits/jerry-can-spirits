@@ -33,9 +33,9 @@ export default async function LibraryPage() {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-24">
         <div className="flex items-baseline justify-between mb-8 flex-wrap gap-3">
           <div>
-            <Link href="/trade/pouriq/menus" className="text-sm text-parchment-400 hover:text-parchment-200">← All menus</Link>
-            <h1 className="text-3xl md:text-4xl font-serif font-bold text-white mt-3">Ingredient library</h1>
-            <p className="text-parchment-400 text-sm mt-2">{entries.length} ingredient{entries.length === 1 ? '' : 's'}</p>
+            <Link href="/trade/pouriq/menus" className="text-sm text-slate-500 hover:text-slate-700">← All menus</Link>
+            <h1 className="text-3xl md:text-4xl font-bold text-slate-900 mt-3">Ingredient library</h1>
+            <p className="text-slate-500 text-sm mt-2">{entries.length} ingredient{entries.length === 1 ? '' : 's'}</p>
           </div>
           <div className="flex flex-wrap items-center gap-2">
             <Link href="/trade/pouriq/invoices" className={SECONDARY_BUTTON}>Recent invoices</Link>
