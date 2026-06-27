@@ -7,6 +7,8 @@ import type { IngredientLibraryRow } from '@/lib/pouriq/types'
 import { InvoiceLineRow, type LineState } from './InvoiceLineRow'
 import { classifyInvoiceLine, summariseInvoiceLines, type InvoiceLineInput } from '@/lib/pouriq/invoice-review'
 import { netPriceP } from '@/lib/pouriq/calculations'
+import { INPUT } from '@/lib/pouriq/ui'
+import { PRIMARY_BUTTON } from '@/lib/pouriq/button-styles'
 
 interface Props {
   initial: PreviewPayload
@@ -118,8 +120,8 @@ export function InvoicePreview({ initial, library }: Props) {
   const autoIdx = allIdx.filter((i) => classifyInvoiceLine(lineInputs[i]) === 'auto-ok')
 
   const thead = (
-    <thead className="bg-jerry-green-900/40">
-      <tr className="text-left text-parchment-400 text-xs uppercase tracking-widest">
+    <thead className="bg-slate-50">
+      <tr className="text-left text-slate-500 text-xs uppercase tracking-widest">
         <th className="px-3 py-3">Apply</th>
         <th className="px-3 py-3">Extracted</th>
         <th className="px-3 py-3">Qty</th>
@@ -222,39 +224,39 @@ export function InvoicePreview({ initial, library }: Props) {
 
   return (
     <div className="space-y-6">
-      <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
-        <h2 className="text-lg font-serif font-bold text-white mb-4">Invoice details</h2>
+      <div className="bg-white rounded-xl p-6 border border-slate-200">
+        <h2 className="text-lg font-bold text-slate-900 mb-4">Invoice details</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
-            <label htmlFor="supplier" className="block text-sm font-medium text-parchment-200 mb-2">Supplier</label>
-            <input id="supplier" value={supplier} onChange={(e) => setSupplier(e.target.value)} className="w-full px-4 py-3 bg-jerry-green-700/50 border border-gold-500/30 rounded-lg text-parchment-50 focus:border-gold-400 focus:outline-hidden" />
+            <label htmlFor="supplier" className="block text-sm font-medium text-slate-700 mb-2">Supplier</label>
+            <input id="supplier" value={supplier} onChange={(e) => setSupplier(e.target.value)} className={INPUT} />
           </div>
           <div>
-            <label htmlFor="number" className="block text-sm font-medium text-parchment-200 mb-2">Invoice number</label>
-            <input id="number" value={invoiceNumber} onChange={(e) => setInvoiceNumber(e.target.value)} className="w-full px-4 py-3 bg-jerry-green-700/50 border border-gold-500/30 rounded-lg text-parchment-50 focus:border-gold-400 focus:outline-hidden" />
+            <label htmlFor="number" className="block text-sm font-medium text-slate-700 mb-2">Invoice number</label>
+            <input id="number" value={invoiceNumber} onChange={(e) => setInvoiceNumber(e.target.value)} className={INPUT} />
           </div>
           <div>
-            <label htmlFor="date" className="block text-sm font-medium text-parchment-200 mb-2">Date (YYYY-MM-DD)</label>
-            <input id="date" value={invoiceDate} onChange={(e) => setInvoiceDate(e.target.value)} placeholder="2026-05-14" className="w-full px-4 py-3 bg-jerry-green-700/50 border border-gold-500/30 rounded-lg text-parchment-50 focus:border-gold-400 focus:outline-hidden" />
+            <label htmlFor="date" className="block text-sm font-medium text-slate-700 mb-2">Date (YYYY-MM-DD)</label>
+            <input id="date" value={invoiceDate} onChange={(e) => setInvoiceDate(e.target.value)} placeholder="2026-05-14" className={INPUT} />
           </div>
         </div>
       </div>
 
-      <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl border border-gold-500/20 p-4 flex flex-wrap items-center justify-between gap-3">
+      <div className="bg-white rounded-xl border border-slate-200 p-4 flex flex-wrap items-center justify-between gap-3">
         <div className="text-sm">
-          <span className="text-emerald-300">● {summary.autoMatched} auto-matched</span>
-          <span className="text-parchment-500"> · </span>
-          <span className="text-amber-300">{summary.needChoice} need a choice</span>
-          <span className="text-parchment-500"> · </span>
-          <span className="text-red-300">{summary.newProducts} new</span>
+          <span className="text-emerald-600">● {summary.autoMatched} auto-matched</span>
+          <span className="text-slate-400"> · </span>
+          <span className="text-amber-600">{summary.needChoice} need a choice</span>
+          <span className="text-slate-400"> · </span>
+          <span className="text-rose-600">{summary.newProducts} new</span>
           <span className="mt-1 inline-flex items-center gap-2">
-            <span className="text-xs text-parchment-500">Invoice prices are</span>
-            <span role="group" aria-label="Invoice VAT basis" className="inline-flex items-stretch rounded-lg border border-gold-500/30 overflow-hidden">
+            <span className="text-xs text-slate-500">Invoice prices are</span>
+            <span role="group" aria-label="Invoice VAT basis" className="inline-flex items-stretch rounded-lg border border-slate-300 overflow-hidden">
               <button type="button" onClick={() => setPricesIncludeVat(false)} aria-pressed={!pricesIncludeVat}
-                className={`px-2 py-1 text-xs font-semibold ${!pricesIncludeVat ? 'bg-gold-500/30 text-gold-50' : 'text-parchment-300 hover:text-parchment-100 transition-colors'}`}>Ex VAT</button>
-              <span aria-hidden="true" className="w-px bg-gold-500/30" />
+                className={`px-2 py-1 text-xs font-semibold ${!pricesIncludeVat ? 'bg-emerald-50 text-emerald-700' : 'text-slate-500 hover:text-slate-700 transition-colors'}`}>Ex VAT</button>
+              <span aria-hidden="true" className="w-px bg-slate-300" />
               <button type="button" onClick={() => setPricesIncludeVat(true)} aria-pressed={pricesIncludeVat}
-                className={`px-2 py-1 text-xs font-semibold ${pricesIncludeVat ? 'bg-gold-500/30 text-gold-50' : 'text-parchment-300 hover:text-parchment-100 transition-colors'}`}>Inc VAT</button>
+                className={`px-2 py-1 text-xs font-semibold ${pricesIncludeVat ? 'bg-emerald-50 text-emerald-700' : 'text-slate-500 hover:text-slate-700 transition-colors'}`}>Inc VAT</button>
             </span>
           </span>
         </div>
@@ -262,7 +264,7 @@ export function InvoicePreview({ initial, library }: Props) {
           <button
             type="button"
             onClick={() => attentionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
-            className="text-sm text-gold-300 hover:text-gold-200 underline"
+            className="text-sm text-emerald-700 hover:text-emerald-600 underline"
           >
             Jump to decisions ↓
           </button>
@@ -270,33 +272,33 @@ export function InvoicePreview({ initial, library }: Props) {
       </div>
 
       {attentionIdx.length > 0 && (
-        <div ref={attentionRef} className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl overflow-hidden border border-amber-400/30">
-          <div className="px-4 py-2 text-xs uppercase tracking-widest text-amber-200/80 bg-amber-500/5">Needs your attention ({attentionIdx.length})</div>
+        <div ref={attentionRef} className="overflow-hidden rounded-xl border border-amber-200">
+          <div className="px-4 py-2 text-xs uppercase tracking-widest text-amber-600 bg-amber-50">Needs your attention ({attentionIdx.length})</div>
           {sectionTable(attentionIdx)}
         </div>
       )}
 
       {priceChangeIdx.length > 0 && (
-        <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl overflow-hidden border border-gold-500/20">
-          <div className="px-4 py-2 text-xs uppercase tracking-widest text-parchment-400">Price changes detected ({priceChangeIdx.length})</div>
+        <div className="overflow-hidden rounded-xl border border-slate-200">
+          <div className="px-4 py-2 text-xs uppercase tracking-widest text-slate-500">Price changes detected ({priceChangeIdx.length})</div>
           {sectionTable(priceChangeIdx)}
         </div>
       )}
 
       {autoIdx.length > 0 && (
-        <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl overflow-hidden border border-gold-500/20">
+        <div className="overflow-hidden rounded-xl border border-slate-200">
           <button type="button" onClick={() => setShowAuto((s) => !s)} className="w-full px-4 py-3 flex items-center justify-between text-sm">
-            <span className="text-emerald-300">● {autoIdx.length} auto-matched to existing ingredients</span>
-            <span className="text-parchment-400">{showAuto ? 'Hide ▲' : 'Review all ▼'}</span>
+            <span className="text-emerald-600">● {autoIdx.length} auto-matched to existing ingredients</span>
+            <span className="text-slate-500">{showAuto ? 'Hide ▲' : 'Review all ▼'}</span>
           </button>
           {showAuto && sectionTable(autoIdx)}
         </div>
       )}
 
-      {error && <p role="alert" className="text-sm text-red-300">{error}</p>}
+      {error && <p role="alert" className="text-sm text-rose-600">{error}</p>}
 
       <div className="flex items-center justify-between gap-3 flex-wrap">
-        <span className="text-sm text-parchment-400">
+        <span className="text-sm text-slate-500">
           {summary.unresolved > 0
             ? `${summary.unresolved} line${summary.unresolved === 1 ? '' : 's'} still need a decision.`
             : 'All lines reviewed.'}
@@ -305,7 +307,7 @@ export function InvoicePreview({ initial, library }: Props) {
           type="button"
           onClick={handleSave}
           disabled={submitting}
-          className="px-6 py-3 bg-linear-to-r from-gold-600 to-gold-500 hover:from-gold-500 hover:to-gold-400 disabled:from-gray-600 disabled:to-gray-500 text-jerry-green-900 font-semibold rounded-lg"
+          className={PRIMARY_BUTTON}
         >
           {submitting ? 'Saving…' : 'Save invoice'}
         </button>

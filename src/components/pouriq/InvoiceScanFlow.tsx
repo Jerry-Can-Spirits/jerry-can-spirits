@@ -44,16 +44,16 @@ export function InvoiceScanFlow({ library }: Props) {
     return (
       <>
         <InvoiceUpload onUploaded={handleUploaded} />
-        {error && <p role="alert" className="mt-4 text-sm text-red-300">{error}</p>}
+        {error && <p role="alert" className="mt-4 text-sm text-rose-600">{error}</p>}
       </>
     )
   }
 
   if (phase.kind === 'extracting') {
     return (
-      <div role="status" className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-10 border border-gold-500/20 text-center">
-        <p className="text-lg text-parchment-100 mb-2">Reading {phase.filename}…</p>
-        <p className="text-sm text-parchment-400">This usually takes a few seconds.</p>
+      <div role="status" className="bg-white rounded-xl p-10 border border-slate-200 text-center">
+        <p className="text-lg text-slate-900 mb-2">Reading {phase.filename}…</p>
+        <p className="text-sm text-slate-500">This usually takes a few seconds.</p>
       </div>
     )
   }
