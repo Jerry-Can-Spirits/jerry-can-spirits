@@ -6,21 +6,21 @@ function formatDate(iso: string): string {
 
 function MoverList({ title, entries, dead = false }: { title: string; entries: MoverEntry[]; dead?: boolean }) {
   return (
-    <div className="bg-jerry-green-800/40 border border-gold-500/20 rounded-xl p-4">
-      <h3 className="text-xs uppercase tracking-widest text-gold-400 mb-3">{title}</h3>
+    <div className="bg-white border border-slate-200 rounded-xl p-4">
+      <h3 className="text-xs uppercase tracking-widest text-slate-500 mb-3">{title}</h3>
       {entries.length === 0 ? (
-        <p className="text-sm text-parchment-500">None</p>
+        <p className="text-sm text-slate-400">None</p>
       ) : (
         <ul className="space-y-1.5">
           {entries.map((e) => (
             <li key={e.cocktail_id} className="text-sm">
-              <span className="text-parchment-100">{e.name}</span>
+              <span className="text-slate-900">{e.name}</span>
               {dead ? (
-                <span className="block text-xs text-parchment-400">
+                <span className="block text-xs text-slate-500">
                   {e.last_sold ? `last sold ${formatDate(e.last_sold)}` : 'No sales recorded'}
                 </span>
               ) : (
-                <span className="text-parchment-400 ml-2">{e.units} sold</span>
+                <span className="text-slate-500 ml-2">{e.units} sold</span>
               )}
             </li>
           ))}
@@ -32,7 +32,7 @@ function MoverList({ title, entries, dead = false }: { title: string; entries: M
 
 export function MoversReport({ report }: { report: MoversReportData }) {
   if (!report.has_sales) {
-    return <p className="text-sm text-parchment-400">Add this period&rsquo;s sales to see your movers.</p>
+    return <p className="text-sm text-slate-500">Add this period&rsquo;s sales to see your movers.</p>
   }
 
   return (

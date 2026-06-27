@@ -34,9 +34,9 @@ export default async function MenuBuilderPage({ params }: Props) {
   return (
     <main className="min-h-screen print-region">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-24">
-        <Link href={`/trade/pouriq/${menuId}`} className="text-sm text-parchment-400 hover:text-parchment-200 no-print">← Back to menu</Link>
-        <h1 className="text-3xl md:text-4xl font-serif font-bold text-white mt-3 mb-2 no-print">Menu builder</h1>
-        <p className="text-parchment-400 text-sm mb-8 no-print">
+        <Link href={`/trade/pouriq/${menuId}`} className="text-sm text-slate-500 hover:text-slate-700 no-print">← Back to menu</Link>
+        <h1 className="text-3xl md:text-4xl font-bold text-slate-900 mt-3 mb-2 no-print">Menu builder</h1>
+        <p className="text-slate-500 text-sm mb-8 no-print">
           A branded, customer-facing version of this menu. Adjust it, then save it as a PDF to print or send.
         </p>
         <MenuBuilder menuName={menu.name} drinks={drinks} />

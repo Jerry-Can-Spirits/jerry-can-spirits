@@ -10,16 +10,16 @@ interface Props {
 }
 
 const GROUP_COLOUR: Record<MenuBalanceGroupKey, string> = {
-  strong: 'text-emerald-300',
-  'popular-low-margin': 'text-amber-300',
-  'high-margin-low-sales': 'text-sky-300',
-  underperformers: 'text-red-400',
+  strong: 'text-emerald-600',
+  'popular-low-margin': 'text-amber-600',
+  'high-margin-low-sales': 'text-sky-600',
+  underperformers: 'text-rose-600',
 }
 
 export function MenuBalance({ result, targetGpPct, incompleteCount, hasSalesData }: Props) {
   if (result.includedCount === 0) {
     return (
-      <p className="text-sm text-parchment-400">
+      <p className="text-sm text-slate-500">
         Add costs and prices to your drinks to see your menu balance.
       </p>
     )
@@ -27,11 +27,11 @@ export function MenuBalance({ result, targetGpPct, incompleteCount, hasSalesData
 
   if (!hasSalesData) {
     return (
-      <p className="text-sm text-parchment-400">
+      <p className="text-sm text-slate-500">
         Add sales data (
         <Link
           href="/trade/pouriq/settings/integrations"
-          className="text-gold-300 hover:text-gold-200 underline underline-offset-2"
+          className="text-emerald-700 hover:text-emerald-600 underline underline-offset-2"
         >
           sync your POS or enter volumes
         </Link>
@@ -55,17 +55,17 @@ export function MenuBalance({ result, targetGpPct, incompleteCount, hasSalesData
           return (
             <div
               key={key}
-              className="bg-jerry-green-800/40 border border-gold-500/20 rounded-xl p-5"
+              className="bg-white border border-slate-200 rounded-xl p-5"
             >
               <p className={`text-xs uppercase tracking-widest mb-0.5 font-semibold ${GROUP_COLOUR[key]}`}>
                 {title}
               </p>
-              <p className="text-parchment-500 text-xs mb-3">{action}</p>
+              <p className="text-slate-500 text-xs mb-3">{action}</p>
               <ul className="space-y-1.5">
                 {drinks.map((d) => (
                   <li key={d.id} className="flex items-center justify-between gap-3">
-                    <span className="text-sm text-parchment-200 truncate">{d.name}</span>
-                    <span className="text-xs text-parchment-400 whitespace-nowrap shrink-0">
+                    <span className="text-sm text-slate-700 truncate">{d.name}</span>
+                    <span className="text-xs text-slate-500 whitespace-nowrap shrink-0">
                       {d.gp_pct.toFixed(1)}% GP, {d.units} sold
                     </span>
                   </li>
@@ -76,7 +76,7 @@ export function MenuBalance({ result, targetGpPct, incompleteCount, hasSalesData
         })}
       </div>
 
-      <p className="text-xs text-parchment-500">
+      <p className="text-xs text-slate-500">
         Measured against {thresholdLabel} and {Math.ceil(result.popularityThreshold)}+ sales.
         {incompleteCount > 0 && (
           <> {incompleteCount} drink{incompleteCount === 1 ? '' : 's'} not shown (missing cost or price).</>

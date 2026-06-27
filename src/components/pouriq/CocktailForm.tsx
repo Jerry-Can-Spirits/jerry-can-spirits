@@ -8,12 +8,8 @@ import { ServeUnitPicker } from '@/components/pouriq/ServeUnitPicker'
 import type { CocktailWithIngredients, IngredientLibraryRow, ServeUnitRow } from '@/lib/pouriq/types'
 import { GLASS_OPTIONS } from '@/lib/pouriq/measures'
 import type { ServeUnit } from '@/lib/pouriq/measures'
-
-const inputClass = 'w-full px-3 py-2 bg-jerry-green-700/50 border border-gold-500/30 rounded-lg text-parchment-50 text-sm placeholder-parchment-400 focus:border-gold-400 focus:outline-hidden'
-const labelClass = 'block text-xs font-medium text-parchment-300 mb-1'
-const chipClass = 'px-2 py-1 rounded-sm border text-xs transition-colors'
-const chipActive = 'bg-gold-500/20 border-gold-400 text-gold-100'
-const chipIdle = 'bg-jerry-green-700/30 border-gold-500/20 text-parchment-300 hover:border-gold-400/40'
+import { INPUT, LABEL, CHIP, CHIP_ACTIVE, CHIP_IDLE } from '@/lib/pouriq/ui'
+import { PRIMARY_BUTTON } from '@/lib/pouriq/button-styles'
 
 interface FormIngredient {
   library_entry: IngredientLibraryRow | null
@@ -186,34 +182,34 @@ export function CocktailForm({ menuId, cocktail, libraryEntries, serveUnits }: P
     <form onSubmit={handleSubmit} className="space-y-6">
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
-          <label htmlFor="cocktail_name" className={labelClass}>Drink name *</label>
-          <input id="cocktail_name" required value={name} onChange={(e) => setName(e.target.value)} className={inputClass} />
+          <label htmlFor="cocktail_name" className={LABEL}>Drink name *</label>
+          <input id="cocktail_name" required value={name} onChange={(e) => setName(e.target.value)} className={INPUT} />
         </div>
         <div>
-          <label htmlFor="sale_price" className={labelClass}>Sale price (£) *</label>
-          <input id="sale_price" type="number" step="0.01" min={0} required value={salePricePounds} onChange={(e) => setSalePricePounds(e.target.value)} className={inputClass} />
+          <label htmlFor="sale_price" className={LABEL}>Sale price (£) *</label>
+          <input id="sale_price" type="number" step="0.01" min={0} required value={salePricePounds} onChange={(e) => setSalePricePounds(e.target.value)} className={INPUT} />
         </div>
       </div>
 
-      <div className="border border-gold-500/20 rounded-lg p-4 bg-jerry-green-900/30">
-        <h3 className="text-sm font-medium text-parchment-100">Promotional price (optional)</h3>
-        <p className="text-xs text-parchment-400 mt-1 mb-3">
+      <div className="border border-slate-200 rounded-lg p-4 bg-white">
+        <h3 className="text-sm font-medium text-slate-900">Promotional price (optional)</h3>
+        <p className="text-xs text-slate-500 mt-1 mb-3">
           Set a promo price for happy hour, 2-4-1, or any period when this drink sells for less. Leave blank if there&rsquo;s no promo.
         </p>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label htmlFor="promo_price" className={labelClass}>Promo price (£)</label>
-            <input id="promo_price" type="number" step="0.01" min={0} value={promoPricePounds} onChange={(e) => setPromoPricePounds(e.target.value)} className={inputClass} placeholder="leave blank for none" />
+            <label htmlFor="promo_price" className={LABEL}>Promo price (£)</label>
+            <input id="promo_price" type="number" step="0.01" min={0} value={promoPricePounds} onChange={(e) => setPromoPricePounds(e.target.value)} className={INPUT} placeholder="leave blank for none" />
           </div>
           <div>
-            <label htmlFor="promo_label" className={labelClass}>Label</label>
-            <input id="promo_label" value={promoLabel} onChange={(e) => setPromoLabel(e.target.value)} className={inputClass} placeholder="e.g. Happy hour, 2-4-1" />
+            <label htmlFor="promo_label" className={LABEL}>Label</label>
+            <input id="promo_label" value={promoLabel} onChange={(e) => setPromoLabel(e.target.value)} className={INPUT} placeholder="e.g. Happy hour, 2-4-1" />
           </div>
         </div>
         {promoPricePounds.trim() !== '' && (
           <>
             <div className="mt-4">
-              <label className={labelClass}>Active on (leave none selected for every day)</label>
+              <label className={LABEL}>Active on (leave none selected for every day)</label>
               <div className="flex flex-wrap gap-1.5">
                 {[
                   { value: 1, label: 'Mon' },
@@ -230,7 +226,7 @@ export function CocktailForm({ menuId, cocktail, libraryEntries, serveUnits }: P
                       key={d.value}
                       type="button"
                       onClick={() => setPromoDays((arr) => active ? arr.filter((n) => n !== d.value) : [...arr, d.value])}
-                      className={`${chipClass} ${active ? chipActive : chipIdle}`}
+                      className={`${CHIP} ${active ? CHIP_ACTIVE : CHIP_IDLE}`}
                     >
                       {d.label}
                     </button>
@@ -240,20 +236,20 @@ export function CocktailForm({ menuId, cocktail, libraryEntries, serveUnits }: P
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
               <div>
-                <label htmlFor="promo_valid_from" className={labelClass}>Valid from (optional)</label>
-                <input id="promo_valid_from" type="date" value={promoValidFrom} onChange={(e) => setPromoValidFrom(e.target.value)} className={inputClass} />
+                <label htmlFor="promo_valid_from" className={LABEL}>Valid from (optional)</label>
+                <input id="promo_valid_from" type="date" value={promoValidFrom} onChange={(e) => setPromoValidFrom(e.target.value)} className={INPUT} />
               </div>
               <div>
-                <label htmlFor="promo_valid_until" className={labelClass}>Valid until (optional)</label>
-                <input id="promo_valid_until" type="date" value={promoValidUntil} onChange={(e) => setPromoValidUntil(e.target.value)} className={inputClass} />
+                <label htmlFor="promo_valid_until" className={LABEL}>Valid until (optional)</label>
+                <input id="promo_valid_until" type="date" value={promoValidUntil} onChange={(e) => setPromoValidUntil(e.target.value)} className={INPUT} />
               </div>
             </div>
           </>
         )}
       </div>
 
-      <div className="border border-gold-500/20 rounded-lg p-4 bg-jerry-green-900/30">
-        <h3 className="text-sm font-medium text-parchment-100 mb-4">Ingredients</h3>
+      <div className="border border-slate-200 rounded-lg p-4 bg-white">
+        <h3 className="text-sm font-medium text-slate-900 mb-4">Ingredients</h3>
         <div className="space-y-4">
           {ingredients.map((ing, idx) => {
             const entry = ing.library_entry
@@ -261,8 +257,8 @@ export function CocktailForm({ menuId, cocktail, libraryEntries, serveUnits }: P
               ? (serveUnits[entry.id] ?? [])
               : []
             return (
-              <div key={idx} className="border border-gold-500/10 rounded-lg p-3 bg-jerry-green-800/30">
-                <label className={labelClass}>Ingredient {idx + 1}</label>
+              <div key={idx} className="border border-slate-200 rounded-lg p-3 bg-slate-50">
+                <label className={LABEL}>Ingredient {idx + 1}</label>
                 <IngredientPicker
                   libraryEntries={libraryEntries}
                   selectedEntryId={ing.library_entry?.id ?? null}
@@ -288,7 +284,7 @@ export function CocktailForm({ menuId, cocktail, libraryEntries, serveUnits }: P
                 )}
 
                 {ingredients.length > 1 && (
-                  <button type="button" onClick={() => removeIngredient(idx)} className="mt-3 text-xs text-parchment-400 hover:text-red-300 underline">
+                  <button type="button" onClick={() => removeIngredient(idx)} className="mt-3 text-xs text-slate-500 hover:text-rose-600 underline">
                     Remove ingredient
                   </button>
                 )}
@@ -296,39 +292,39 @@ export function CocktailForm({ menuId, cocktail, libraryEntries, serveUnits }: P
             )
           })}
         </div>
-        <button type="button" onClick={addIngredient} className="mt-4 text-sm text-gold-300 hover:text-gold-200 underline">
+        <button type="button" onClick={addIngredient} className="mt-4 text-sm text-emerald-700 hover:text-emerald-600 underline">
           Add another ingredient
         </button>
       </div>
 
       <div>
-        <label htmlFor="glass" className={labelClass}>Glass</label>
+        <label htmlFor="glass" className={LABEL}>Glass</label>
         <div className="flex flex-wrap gap-2 mb-2">
           {GLASS_OPTIONS.map((g) => (
             <button type="button" key={g} onClick={() => setGlass(g)}
-              className={`${chipClass} ${glass === g ? chipActive : chipIdle}`}>
+              className={`${CHIP} ${glass === g ? CHIP_ACTIVE : CHIP_IDLE}`}>
               {g}
             </button>
           ))}
         </div>
-        <input id="glass" value={glass} onChange={(e) => setGlass(e.target.value)} className={inputClass} placeholder="e.g. Rocks, Highball" />
+        <input id="glass" value={glass} onChange={(e) => setGlass(e.target.value)} className={INPUT} placeholder="e.g. Rocks, Highball" />
       </div>
 
       <div>
-        <label htmlFor="notes" className={labelClass}>Directions</label>
-        <p className="text-xs text-parchment-400 mb-1">Your method for this drink (build, glass, technique). Shown to staff on the spec card.</p>
-        <textarea id="notes" rows={2} value={notes} onChange={(e) => setNotes(e.target.value)} className={`${inputClass} resize-vertical`} placeholder="e.g. Build over cubed ice, stir, lemon twist." />
+        <label htmlFor="notes" className={LABEL}>Directions</label>
+        <p className="text-xs text-slate-500 mb-1">Your method for this drink (build, glass, technique). Shown to staff on the spec card.</p>
+        <textarea id="notes" rows={2} value={notes} onChange={(e) => setNotes(e.target.value)} className={`${INPUT} resize-vertical`} placeholder="e.g. Build over cubed ice, stir, lemon twist." />
       </div>
 
-      {error && <p role="alert" className="text-sm text-red-300">{error}</p>}
+      {error && <p role="alert" className="text-sm text-rose-600">{error}</p>}
 
       <div className="flex justify-between items-center">
         {cocktail ? (
-          <button type="button" onClick={handleDelete} className="text-sm text-red-300 hover:text-red-200 underline">
+          <button type="button" onClick={handleDelete} className="text-sm text-rose-600 hover:text-rose-700 underline">
             Delete drink
           </button>
         ) : <span />}
-        <button type="submit" disabled={submitting} className="px-6 py-3 bg-linear-to-r from-gold-600 to-gold-500 hover:from-gold-500 hover:to-gold-400 disabled:from-gray-600 disabled:to-gray-500 text-jerry-green-900 font-semibold rounded-lg">
+        <button type="submit" disabled={submitting} className={PRIMARY_BUTTON}>
           {submitting ? 'Saving…' : cocktail ? 'Save changes' : 'Add drink'}
         </button>
       </div>

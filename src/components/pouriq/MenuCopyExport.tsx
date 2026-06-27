@@ -94,8 +94,8 @@ export function MenuCopyExport({ menuName, drinks }: Props) {
         </button>
       </div>
 
-      <div className="bg-jerry-green-800/40 border border-gold-500/20 rounded-xl p-6">
-        <pre className="whitespace-pre-wrap text-sm text-parchment-100 font-sans">
+      <div className="bg-white border border-slate-200 rounded-xl p-6">
+        <pre className="whitespace-pre-wrap text-sm text-slate-900 font-sans">
 {formatPlainText(menuName, drinks)}
         </pre>
       </div>
