@@ -57,21 +57,21 @@ export function MenuBuilder({ menuName, drinks }: { menuName: string; drinks: Dr
 
       {/* The menu — this is what prints */}
       <article className="font-serif">
-        <h2 className="text-3xl md:text-4xl font-bold text-center text-white mb-8">{title}</h2>
+        <h2 className="text-3xl md:text-4xl font-bold text-center text-slate-900 mb-8">{title}</h2>
         {drinks.length === 0 ? (
-          <p className="text-parchment-400 text-center text-sm no-print">This menu has no drinks yet.</p>
+          <p className="text-slate-500 text-center text-sm no-print">This menu has no drinks yet.</p>
         ) : (
           <div className={columns === 2 ? 'sm:columns-2 sm:gap-12' : ''}>
             {drinks.map((d, i) => (
               <div key={`${d.name}-${i}`} className="mb-5 break-inside-avoid">
                 <div className="flex items-baseline justify-between gap-4">
-                  <h3 className="text-lg font-bold text-white">{d.name}</h3>
+                  <h3 className="text-lg font-bold text-slate-900">{d.name}</h3>
                   {showPrices && d.sale_price_p !== null && (
-                    <span className="text-lg text-gold-300 whitespace-nowrap">{formatMoney(d.sale_price_p)}</span>
+                    <span className="text-lg text-slate-700 whitespace-nowrap">{formatMoney(d.sale_price_p)}</span>
                   )}
                 </div>
                 {showDescriptions && d.description && d.description.trim() !== '' && (
-                  <p className="text-sm text-parchment-300 italic mt-1 leading-relaxed">{d.description}</p>
+                  <p className="text-sm text-slate-600 italic mt-1 leading-relaxed">{d.description}</p>
                 )}
               </div>
             ))}
