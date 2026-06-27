@@ -2,6 +2,9 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { PourIqWordmark } from '@/components/pouriq/PourIqWordmark'
+import { PRIMARY_BUTTON } from '@/lib/pouriq/button-styles'
+import { INPUT, LABEL } from '@/lib/pouriq/ui'
 
 export default function TradeLoginPage() {
   const [pin, setPin] = useState('')
@@ -34,17 +37,17 @@ export default function TradeLoginPage() {
   }
 
   return (
-    <main className="min-h-screen">
+    <main className="min-h-screen bg-slate-50">
       <div className="max-w-md mx-auto px-4 sm:px-6 lg:px-8 pt-24">
-        <div className="inline-block px-4 py-2 bg-jerry-green-800/60 backdrop-blur-sm rounded-full border border-gold-500/30 mb-8">
-          <span className="text-gold-300 text-sm font-semibold uppercase tracking-widest">Trade Portal</span>
+        <div className="mb-8">
+          <PourIqWordmark />
         </div>
-        <h1 className="text-3xl font-serif font-bold text-white mb-3">Sign in</h1>
-        <p className="text-parchment-400 text-sm mb-10">Enter your trade account PIN to continue.</p>
+        <h1 className="text-3xl font-bold text-slate-900 mb-3">Sign in</h1>
+        <p className="text-slate-500 text-sm mb-10">Enter your trade account PIN to continue.</p>
 
-        <form onSubmit={handleSubmit} className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20 space-y-5">
+        <form onSubmit={handleSubmit} className="bg-white rounded-xl p-6 border border-slate-200 space-y-5">
           <div>
-            <label htmlFor="pin" className="block text-sm font-medium text-parchment-200 mb-2">Trade PIN</label>
+            <label htmlFor="pin" className={LABEL}>Trade PIN</label>
             <input
               id="pin"
               type="password"
@@ -54,23 +57,23 @@ export default function TradeLoginPage() {
               required
               value={pin}
               onChange={(e) => setPin(e.target.value)}
-              className="w-full px-4 py-3 bg-jerry-green-700/50 border border-gold-500/30 rounded-lg text-parchment-50 placeholder-parchment-400 focus:border-gold-400 focus:ring-2 focus:ring-gold-400/20 focus:outline-hidden transition-colors duration-200"
+              className={INPUT}
             />
           </div>
-          {error && <p role="alert" className="text-sm text-red-300">{error}</p>}
+          {error && <p role="alert" className="text-sm text-rose-600">{error}</p>}
           <button
             type="submit"
             disabled={submitting || pin.length === 0}
             aria-disabled={submitting || pin.length === 0}
-            className="w-full px-6 py-3 bg-linear-to-r from-gold-600 to-gold-500 hover:from-gold-500 hover:to-gold-400 disabled:from-gray-600 disabled:to-gray-500 disabled:cursor-not-allowed text-jerry-green-900 font-semibold rounded-lg transition-all"
+            className={`${PRIMARY_BUTTON} w-full justify-center`}
           >
             {submitting ? 'Signing in…' : 'Sign in'}
           </button>
         </form>
 
-        <p className="text-center text-xs text-parchment-500 mt-6">
+        <p className="text-center text-xs text-slate-400 mt-6">
           Don&rsquo;t have a trade account?{' '}
-          <a href="/trade/apply/" className="text-gold-300 hover:text-gold-200 underline">Apply for one</a>
+          <a href="/trade/apply/" className="text-emerald-700 hover:text-emerald-800 underline">Apply for one</a>
         </p>
       </div>
     </main>

@@ -3,6 +3,7 @@ import { requireTradeSession } from '@/lib/trade-portal/session-check'
 import { TradeTile } from '@/components/trade-portal/TradeTile'
 import { AnnouncementBanner } from '@/components/trade-portal/AnnouncementBanner'
 import { SignOutLink } from '@/components/trade-portal/SignOutLink'
+import { PourIqWordmark } from '@/components/pouriq/PourIqWordmark'
 
 export const dynamic = 'force-dynamic'
 
@@ -28,14 +29,14 @@ export default async function TradeLandingPage() {
   const hasPourIq = await hasActivePourIqLicence(db, session.tradeAccountId)
 
   return (
-    <main className="min-h-screen">
+    <main className="min-h-screen bg-slate-50">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-24">
         <div className="flex items-baseline justify-between mb-8">
-          <span className="text-gold-300 text-xs uppercase tracking-widest">Trade Portal</span>
+          <PourIqWordmark />
           <SignOutLink />
         </div>
 
-        <h1 className="text-3xl md:text-4xl font-serif font-bold text-white mb-10">
+        <h1 className="text-3xl md:text-4xl font-bold text-slate-900 mb-10">
           Welcome back, {session.venue_name}.
         </h1>
 
