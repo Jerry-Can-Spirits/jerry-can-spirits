@@ -39,26 +39,26 @@ function WhatIfContent() {
   return (
     <main className="min-h-screen">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-24">
-        <Link href="/trade/pouriq/library" className="text-sm text-parchment-400 hover:text-parchment-200">← Library</Link>
-        <h1 className="text-3xl font-serif font-bold text-white mt-3 mb-2">Cost change what-if</h1>
-        <p className="text-parchment-400 text-sm mb-10">
+        <Link href="/trade/pouriq/library" className="text-sm text-slate-500 hover:text-slate-700">← Library</Link>
+        <h1 className="text-3xl font-bold text-slate-900 mt-3 mb-2">Cost change what-if</h1>
+        <p className="text-slate-500 text-sm mb-10">
           Pick an ingredient, change its cost, and see how every drink that uses it would shift. Nothing is saved.
         </p>
 
-        <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20 mb-6">
-          <label htmlFor="ingredient" className="block text-sm font-medium text-parchment-200 mb-2">Ingredient</label>
+        <div className="bg-white rounded-xl p-6 border border-slate-200 mb-6">
+          <label htmlFor="ingredient" className="block text-sm font-medium text-slate-700 mb-2">Ingredient</label>
           {entries === null ? (
-            <p className="text-sm text-parchment-300">Loading your library…</p>
+            <p className="text-sm text-slate-600">Loading your library…</p>
           ) : entries.length === 0 ? (
-            <p className="text-sm text-parchment-300">
-              Your library is empty. <Link href="/trade/pouriq/library/new" className="text-gold-300 hover:text-gold-200 underline">Add an ingredient</Link> first.
+            <p className="text-sm text-slate-600">
+              Your library is empty. <Link href="/trade/pouriq/library/new" className="text-emerald-700 hover:text-emerald-600 underline">Add an ingredient</Link> first.
             </p>
           ) : (
             <select
               id="ingredient"
               value={selectedId ?? ''}
               onChange={(e) => setSelectedId(e.target.value || null)}
-              className="w-full max-w-md px-4 py-3 bg-jerry-green-700/50 border border-gold-500/30 rounded-lg text-parchment-50 focus:border-gold-400 focus:outline-hidden"
+              className="w-full max-w-md px-4 py-3 bg-white border border-slate-300 rounded-lg text-slate-900 focus:border-emerald-500 focus:outline-hidden"
             >
               {entries.map((entry) => (
                 <option key={entry.id} value={entry.id}>{entry.name}</option>
@@ -67,7 +67,7 @@ function WhatIfContent() {
           )}
         </div>
 
-        {error && <p role="alert" className="text-sm text-red-300 mb-4">{error}</p>}
+        {error && <p role="alert" className="text-sm text-rose-600 mb-4">{error}</p>}
 
         {selectedId && <CostImpactPanel key={selectedId} ingredientId={selectedId} />}
       </div>

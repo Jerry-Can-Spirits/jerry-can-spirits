@@ -21,13 +21,13 @@ export default async function MenusPage() {
     <main className="min-h-screen">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-24">
         <div className="flex items-baseline justify-between gap-3 flex-wrap mb-10">
-          <h1 className="text-3xl md:text-4xl font-serif font-bold text-white">Your menus</h1>
-          <Link href="/trade/pouriq/compare" className="text-sm text-gold-300 hover:text-gold-200 underline">Compare menus →</Link>
+          <h1 className="text-3xl md:text-4xl font-bold text-slate-900">Your menus</h1>
+          <Link href="/trade/pouriq/compare" className="text-sm text-emerald-700 hover:text-emerald-600 underline">Compare menus →</Link>
         </div>
         {menus.length === 0 ? (
-          <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-12 border border-gold-500/20 text-center">
-            <p className="text-parchment-300 mb-2">No menus yet.</p>
-            <p className="text-parchment-400 text-sm">Create your first to begin analysis.</p>
+          <div className="bg-white rounded-xl p-12 border border-slate-200 text-center">
+            <p className="text-slate-600 mb-2">No menus yet.</p>
+            <p className="text-slate-500 text-sm">Create your first to begin analysis.</p>
           </div>
         ) : (
           <div className="grid sm:grid-cols-2 gap-4">

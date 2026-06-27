@@ -7,11 +7,11 @@ function formatMoney(p: number) { return `£${(p / 100).toFixed(2)}` }
 
 function statusClass(s: PerfStatus | undefined): string {
   switch (s) {
-    case 'winner': return 'text-emerald-300'
-    case 'promote': return 'text-sky-300'
-    case 'fix-margin': return 'text-amber-200'
-    case 'review': case 'missing-cost': case 'needs-price': return 'text-red-300'
-    default: return 'text-parchment-400'
+    case 'winner': return 'text-emerald-600'
+    case 'promote': return 'text-sky-600'
+    case 'fix-margin': return 'text-amber-600'
+    case 'review': case 'missing-cost': case 'needs-price': return 'text-rose-600'
+    default: return 'text-slate-500'
   }
 }
 
@@ -45,10 +45,10 @@ export function CocktailTable({ menuId, cocktails, metrics, targetGpPct, statusB
   const minWidth = extraCols >= 2 ? 'min-w-[1120px]' : extraCols === 1 ? 'min-w-[980px]' : 'min-w-[760px]'
 
   return (
-    <div className="bg-jerry-green-800/40 border border-gold-500/20 rounded-xl overflow-x-auto">
+    <div className="bg-white border border-slate-200 rounded-xl overflow-x-auto">
       <table className={`w-full text-sm ${minWidth}`}>
-        <thead className="bg-jerry-green-900/40">
-          <tr className="text-left text-parchment-400 text-xs uppercase tracking-widest">
+        <thead className="bg-slate-50">
+          <tr className="text-left text-slate-500 text-xs uppercase tracking-widest">
             <th className="px-4 py-3">Drink</th>
             <th className="px-4 py-3">Price</th>
             <th className="px-4 py-3">Pour cost</th>
@@ -69,16 +69,16 @@ export function CocktailTable({ menuId, cocktails, metrics, targetGpPct, statusB
             const volume = m.volume
             const promoBelowTarget = promo ? promo.gp_pct < targetGpPct : false
             return (
-              <tr key={cocktail.id} className="border-t border-gold-500/10">
-                <td className="px-4 py-3 text-parchment-100">
+              <tr key={cocktail.id} className="border-t border-slate-200">
+                <td className="px-4 py-3 text-slate-900">
                   {cocktail.name}
                   {cocktail.field_manual_slug && (
-                    <a href={`/field-manual/cocktails/${cocktail.field_manual_slug}`} className="ml-2 text-xs text-gold-300 hover:text-gold-200 underline">
+                    <a href={`/field-manual/cocktails/${cocktail.field_manual_slug}`} className="ml-2 text-xs text-emerald-700 hover:text-emerald-600 underline">
                       Field Manual
                     </a>
                   )}
                   {cocktail.description && (
-                    <p className="text-sm text-parchment-300 italic mt-2">{cocktail.description}</p>
+                    <p className="text-sm text-slate-600 italic mt-2">{cocktail.description}</p>
                   )}
                   <div className="no-print mt-1">
                     <GenerateDescriptionModal
@@ -88,12 +88,12 @@ export function CocktailTable({ menuId, cocktails, metrics, targetGpPct, statusB
                     />
                   </div>
                 </td>
-                <td className="px-4 py-3 text-parchment-200">{formatMoney(m.sale_price_p)}</td>
-                <td className="px-4 py-3 text-parchment-200">{formatMoney(m.pour_cost_p)}</td>
-                <td className="px-4 py-3 text-parchment-100">{formatMoney(m.margin_p)}</td>
-                <td className={`px-4 py-3 ${incomplete ? 'text-amber-200' : belowTarget ? 'text-red-300' : 'text-parchment-100'}`}>
+                <td className="px-4 py-3 text-slate-700">{formatMoney(m.sale_price_p)}</td>
+                <td className="px-4 py-3 text-slate-700">{formatMoney(m.pour_cost_p)}</td>
+                <td className="px-4 py-3 text-slate-900">{formatMoney(m.margin_p)}</td>
+                <td className={`px-4 py-3 ${incomplete ? 'text-amber-600' : belowTarget ? 'text-rose-600' : 'text-slate-900'}`}>
                   {incomplete ? (
-                    <Link href={`/trade/pouriq/${menuId}/edit?cocktail=${cocktail.id}`} className="text-amber-200 hover:text-amber-100 underline">
+                    <Link href={`/trade/pouriq/${menuId}/edit?cocktail=${cocktail.id}`} className="text-amber-600 hover:text-amber-700 underline">
                       ⚠ Cost incomplete — add prices
                     </Link>
                   ) : (
@@ -103,14 +103,14 @@ export function CocktailTable({ menuId, cocktails, metrics, targetGpPct, statusB
                 {anyPromo && (
                   <td className="px-4 py-3">
                     {promo ? (
-                      <span className={promoBelowTarget ? 'text-red-300' : 'text-amber-200'}>
+                      <span className={promoBelowTarget ? 'text-rose-600' : 'text-amber-600'}>
                         {formatMoney(promo.sale_price_p)} · {promo.gp_pct.toFixed(1)}%
-                        {promo.label && <span className="block text-[10px] text-parchment-400 mt-0.5">{promo.label}</span>}
+                        {promo.label && <span className="block text-[10px] text-slate-500 mt-0.5">{promo.label}</span>}
                         {promo.active_today && (
-                          <span className="inline-block text-[10px] mt-0.5 px-1.5 py-0.5 rounded-sm bg-emerald-500/20 text-emerald-200 border border-emerald-500/40">Active today</span>
+                          <span className="inline-block text-[10px] mt-0.5 px-1.5 py-0.5 rounded-sm bg-emerald-50 text-emerald-700 border border-emerald-600">Active today</span>
                         )}
                         {!promo.active_today && (promo.days || promo.valid_from || promo.valid_until) && (
-                          <span className="block text-[10px] text-parchment-400 mt-0.5">
+                          <span className="block text-[10px] text-slate-500 mt-0.5">
                             {promo.days ? promo.days.map((n) => ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][n]).join(' ') : 'Every day'}
                             {(promo.valid_from || promo.valid_until) && (
                               <> · {promo.valid_from ?? '…'} → {promo.valid_until ?? '…'}</>
@@ -119,25 +119,25 @@ export function CocktailTable({ menuId, cocktails, metrics, targetGpPct, statusB
                         )}
                       </span>
                     ) : (
-                      <span className="text-parchment-500">—</span>
+                      <span className="text-slate-400">—</span>
                     )}
                   </td>
                 )}
                 {anyVolume && (
-                  <td className="px-4 py-3 text-parchment-200">
-                    {volume ? volume.units_sold : <span className="text-parchment-500">—</span>}
+                  <td className="px-4 py-3 text-slate-700">
+                    {volume ? volume.units_sold : <span className="text-slate-400">—</span>}
                   </td>
                 )}
                 {anyVolume && (
-                  <td className="px-4 py-3 text-parchment-100">
-                    {volume ? formatMoney(volume.contribution_p) : <span className="text-parchment-500">—</span>}
+                  <td className="px-4 py-3 text-slate-900">
+                    {volume ? formatMoney(volume.contribution_p) : <span className="text-slate-400">—</span>}
                   </td>
                 )}
                 <td className={`px-4 py-3 ${statusClass(statusById[cocktail.id])}`}>
-                  {statusById[cocktail.id] ? STATUS_LABEL[statusById[cocktail.id]] : <span className="text-parchment-500">—</span>}
+                  {statusById[cocktail.id] ? STATUS_LABEL[statusById[cocktail.id]] : <span className="text-slate-400">—</span>}
                 </td>
                 <td className="px-4 py-3 text-right">
-                  <Link href={`/trade/pouriq/${menuId}/edit?cocktail=${cocktail.id}`} className="text-gold-300 hover:text-gold-200 underline text-xs">Edit</Link>
+                  <Link href={`/trade/pouriq/${menuId}/edit?cocktail=${cocktail.id}`} className="text-emerald-700 hover:text-emerald-600 underline text-xs">Edit</Link>
                 </td>
               </tr>
             )

@@ -4,6 +4,8 @@ import { useEffect, useState, useTransition } from 'react'
 import Link from 'next/link'
 import { VARIANCE_REASONS } from '@/lib/pouriq/types'
 import { summariseVarianceByReason } from '@/lib/pouriq/variance'
+import { statusText } from '@/lib/pouriq/ui'
+import { SECONDARY_BUTTON_SM } from '@/lib/pouriq/button-styles'
 
 interface RollingTrendPoint {
   counted_at: string
@@ -40,10 +42,10 @@ interface VarianceApiResponse {
 }
 
 const inputClass =
-  'w-24 px-2 py-1 bg-jerry-green-700/50 border border-gold-500/30 rounded-sm text-parchment-50 text-sm focus:border-gold-400 focus:outline-hidden'
+  'w-24 px-2 py-1 bg-white border border-slate-300 rounded-sm text-slate-900 text-sm focus:border-emerald-500 focus:outline-hidden'
 
 const selectClass =
-  'px-2 py-1 bg-jerry-green-700/50 border border-gold-500/30 rounded-sm text-parchment-50 text-sm focus:border-gold-400 focus:outline-hidden'
+  'px-2 py-1 bg-white border border-slate-300 rounded-sm text-slate-900 text-sm focus:border-emerald-500 focus:outline-hidden'
 
 function formatMoney(p: number): string {
   const sign = p < 0 ? '-' : ''
@@ -56,10 +58,10 @@ function formatShortDate(iso: string): string {
 
 function severityClass(severity: RollingVarianceRow['severity']): string {
   switch (severity) {
-    case 'within-tolerance': return 'text-parchment-300'
-    case 'amber': return 'text-amber-300'
-    case 'red': return 'text-red-300'
-    default: return 'text-parchment-400'
+    case 'within-tolerance': return statusText('good')
+    case 'amber': return statusText('watch')
+    case 'red': return statusText('bad')
+    default: return statusText('neutral')
   }
 }
 
@@ -121,12 +123,12 @@ export function VarianceEditor() {
     })
   }
 
-  if (loading) return <p className="text-sm text-parchment-300">Loading variance data…</p>
-  if (error && !rows) return <p role="alert" className="text-sm text-red-300">{error}</p>
+  if (loading) return <p className="text-sm text-slate-600">Loading variance data…</p>
+  if (error && !rows) return <p role="alert" className="text-sm text-rose-600">{error}</p>
   if (!rows) return null
   if (rows.length === 0) {
     return (
-      <p className="text-sm text-parchment-300">
+      <p className="text-sm text-slate-600">
         No bottle-priced ingredients in your library yet. Add ingredients before counting stock.
       </p>
     )
@@ -138,16 +140,16 @@ export function VarianceEditor() {
 
   return (
     <div className="space-y-4">
-      {error && <p role="alert" className="text-sm text-red-300">{error}</p>}
+      {error && <p role="alert" className="text-sm text-rose-600">{error}</p>}
       {reasonSummary.total_loss_p > 0 && (
-        <div className="bg-jerry-green-800/40 border border-gold-500/20 rounded-xl p-4">
-          <h2 className="text-sm font-semibold text-white mb-1">Where the variance went</h2>
-          <p className="text-xs text-parchment-400 mb-3">Total loss this period {formatMoney(-reasonSummary.total_loss_p)}</p>
+        <div className="bg-white border border-slate-200 rounded-xl p-4">
+          <h2 className="text-sm font-semibold text-slate-900 mb-1">Where the variance went</h2>
+          <p className="text-xs text-slate-500 mb-3">Total loss this period {formatMoney(-reasonSummary.total_loss_p)}</p>
           <ul className="space-y-1">
             {reasonSummary.rows.map((r) => (
               <li key={r.reason} className="flex items-baseline justify-between gap-3 text-sm">
-                <span className="text-parchment-200">{r.reason === 'unattributed' ? 'Unattributed' : r.reason.charAt(0).toUpperCase() + r.reason.slice(1)}</span>
-                <span className="text-parchment-300 font-mono">{formatMoney(-r.loss_p)} · {r.share_pct}%</span>
+                <span className="text-slate-700">{r.reason === 'unattributed' ? 'Unattributed' : r.reason.charAt(0).toUpperCase() + r.reason.slice(1)}</span>
+                <span className="text-slate-600 font-mono">{formatMoney(-r.loss_p)} · {r.share_pct}%</span>
               </li>
             ))}
           </ul>
@@ -167,36 +169,36 @@ export function VarianceEditor() {
           return (
             <div
               key={id}
-              className="bg-jerry-green-800/40 border border-gold-500/20 rounded-xl p-4"
+              className="bg-white border border-slate-200 rounded-xl p-4"
             >
               <div className="flex flex-wrap items-start justify-between gap-2 mb-3">
                 <div>
-                  <span className="text-parchment-100 font-medium">{row.library_name}</span>
-                  <span className="text-parchment-400 text-sm ml-1">({row.pack_size}ml)</span>
+                  <span className="text-slate-900 font-medium">{row.library_name}</span>
+                  <span className="text-slate-500 text-sm ml-1">({row.pack_size}ml)</span>
                   {row.persistent_loss && (
-                    <span className="ml-2 inline-block px-1.5 py-0.5 rounded-sm bg-red-500/20 text-red-300 border border-red-500/40 text-[10px] uppercase tracking-widest">
+                    <span className="ml-2 inline-block px-1.5 py-0.5 rounded-sm bg-rose-50 text-rose-600 border border-rose-200 text-[10px] uppercase tracking-widest">
                       persistent loss
                     </span>
                   )}
                 </div>
                 <div className="flex items-center gap-3">
-                  <Link href={`/trade/pouriq/variance/${id}`} className="text-xs text-gold-300 hover:text-gold-200 underline">View detail →</Link>
+                  <Link href={`/trade/pouriq/variance/${id}`} className="text-xs text-emerald-700 hover:text-emerald-600 underline">View detail →</Link>
                   <button
                     type="button"
                     onClick={() => setOpenTrend(isTrendOpen ? null : id)}
-                    className="text-xs text-parchment-400 hover:text-parchment-200 underline"
+                    className="text-xs text-slate-500 hover:text-slate-700 underline"
                   >
                     {isTrendOpen ? 'Hide trend' : 'Trend'}
                   </button>
                 </div>
               </div>
 
-              <div className="text-sm text-parchment-400 mb-3 space-y-0.5">
+              <div className="text-sm text-slate-500 mb-3 space-y-0.5">
                 {row.latest_count_at ? (
                   <p>
                     Last count: {formatShortDate(row.latest_count_at)}
                     {row.latest_count_qty !== null && (
-                      <span className="text-parchment-200 ml-1">· {row.latest_count_qty} bottles</span>
+                      <span className="text-slate-700 ml-1">· {row.latest_count_qty} bottles</span>
                     )}
                   </p>
                 ) : (
@@ -224,15 +226,15 @@ export function VarianceEditor() {
               )}
 
               {row.unmatched_in_window > 0 && (
-                <p className="text-sm text-amber-300 mb-3">
-                  <a href="/trade/pouriq/unmatched" className="underline hover:text-amber-200">
+                <p className="text-sm text-amber-600 mb-3">
+                  <a href="/trade/pouriq/unmatched" className="underline hover:text-amber-700">
                     Usage understated, {row.unmatched_in_window} unmapped sales this period
                   </a>
                 </p>
               )}
 
               {(row.deliveries_in_window > 0 || row.batches_in_window > 0) && (
-                <p className="text-xs text-parchment-400 mb-3">
+                <p className="text-xs text-slate-500 mb-3">
                   Accounts for{' '}
                   {[
                     row.deliveries_in_window > 0 ? `${row.deliveries_in_window} ${row.deliveries_in_window === 1 ? 'delivery' : 'deliveries'}` : null,
@@ -269,19 +271,19 @@ export function VarianceEditor() {
                   type="button"
                   onClick={() => saveCount(id)}
                   disabled={!saveEnabled}
-                  className="px-3 py-1 bg-gold-500/15 border border-gold-400/60 text-gold-100 hover:bg-gold-500/25 hover:border-gold-400 rounded-lg transition-colors text-sm font-semibold disabled:opacity-40"
+                  className={SECONDARY_BUTTON_SM}
                 >
                   Save count
                 </button>
               </div>
 
               {isTrendOpen && row.trend.length > 0 && (
-                <div className="mt-3 pt-3 border-t border-gold-500/10 space-y-1">
+                <div className="mt-3 pt-3 border-t border-slate-100 space-y-1">
                   {row.trend.map((point, i) => (
-                    <div key={i} className="text-xs text-parchment-400 flex gap-3">
-                      <span className="text-parchment-300">{formatShortDate(point.counted_at)}</span>
+                    <div key={i} className="text-xs text-slate-500 flex gap-3">
+                      <span className="text-slate-600">{formatShortDate(point.counted_at)}</span>
                       {point.variance_cost_p !== null && (
-                        <span className={point.variance_cost_p < 0 ? 'text-red-300' : 'text-parchment-200'}>
+                        <span className={point.variance_cost_p < 0 ? 'text-rose-600' : 'text-slate-700'}>
                           {formatMoney(point.variance_cost_p)}
                         </span>
                       )}

@@ -45,19 +45,19 @@ export default async function SpecCardsPage({ params }: Props) {
         <div className="no-print">
           <Link
             href={`/trade/pouriq/${menuId}`}
-            className="text-sm text-parchment-400 hover:text-parchment-200"
+            className="text-sm text-slate-500 hover:text-slate-700"
           >
             ← {menu.name}
           </Link>
-          <div className="inline-block px-4 py-2 bg-jerry-green-800/60 backdrop-blur-sm rounded-full border border-gold-500/30 mt-3 mb-6">
-            <span className="text-gold-300 text-sm font-semibold uppercase tracking-widest">
+          <div className="inline-block px-4 py-2 bg-slate-100 rounded-full border border-slate-200 mt-3 mb-6">
+            <span className="text-slate-500 text-sm font-semibold uppercase tracking-widest">
               Pour IQ™
             </span>
           </div>
-          <h1 className="text-3xl md:text-4xl font-serif font-bold text-white mb-3">
+          <h1 className="text-3xl md:text-4xl font-bold text-slate-900 mb-3">
             Spec cards
           </h1>
-          <p className="text-parchment-300 text-base leading-relaxed mb-6">
+          <p className="text-slate-600 text-base leading-relaxed mb-6">
             Every drink on this menu as a training reference. Print one card per page for a booklet, or compact for strips along the bar.
           </p>
         </div>
@@ -70,11 +70,11 @@ export default async function SpecCardsPage({ params }: Props) {
         </div>
 
         {cocktails.length === 0 ? (
-          <p className="text-parchment-300 no-print">
+          <p className="text-slate-600 no-print">
             No drinks on this menu yet.{' '}
             <Link
               href={`/trade/pouriq/${menuId}`}
-              className="text-gold-300 hover:text-gold-200 underline"
+              className="text-emerald-700 hover:text-emerald-600 underline"
             >
               Add or import drinks
             </Link>{' '}

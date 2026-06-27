@@ -78,24 +78,24 @@ export function IntegrationCard({ provider, title, description, connection, acti
   }
 
   return (
-    <div className="bg-jerry-green-800/40 border border-gold-500/20 rounded-xl p-6">
+    <div className="bg-white border border-slate-200 rounded-xl p-6">
       <div className="flex flex-wrap items-baseline justify-between gap-3 mb-2">
-        <h2 className="text-lg font-serif font-bold text-white">{title}</h2>
+        <h2 className="text-lg font-bold text-slate-900">{title}</h2>
         {connection ? (
-          <span className="text-xs text-emerald-300">Connected</span>
+          <span className="text-xs text-emerald-600">Connected</span>
         ) : disabled ? (
-          <span className="text-xs text-parchment-500">Coming soon</span>
+          <span className="text-xs text-slate-400">Coming soon</span>
         ) : (
-          <span className="text-xs text-parchment-400">Not connected</span>
+          <span className="text-xs text-slate-500">Not connected</span>
         )}
       </div>
-      <p className="text-sm text-parchment-300 mb-4">{description}</p>
+      <p className="text-sm text-slate-600 mb-4">{description}</p>
 
       {connection && (
-        <p className="text-xs text-parchment-400 mb-4">
+        <p className="text-xs text-slate-500 mb-4">
           Last sync: {formatRelativeTime(connection.last_synced_at)}
           {connection.last_sync_error && (
-            <span className="block text-red-300 mt-1">Last error: {connection.last_sync_error}</span>
+            <span className="block text-rose-600 mt-1">Last error: {connection.last_sync_error}</span>
           )}
         </p>
       )}
@@ -103,18 +103,18 @@ export function IntegrationCard({ provider, title, description, connection, acti
       {connection && (
         <p className="text-xs mb-4">
           {activeMenuName ? (
-            <span className="text-parchment-400">
-              Sales route to your active menu: <span className="text-parchment-200">{activeMenuName}</span>
+            <span className="text-slate-500">
+              Sales route to your active menu: <span className="text-slate-700">{activeMenuName}</span>
             </span>
           ) : (
-            <span className="text-amber-300">
+            <span className="text-amber-600">
               Set an active menu so sales can flow — choose one on the Pour IQ dashboard. The next sync backfills anything received while paused.
             </span>
           )}
         </p>
       )}
 
-      {error && <p role="alert" className="text-xs text-red-300 mb-3">{error}</p>}
+      {error && <p role="alert" className="text-xs text-rose-600 mb-3">{error}</p>}
 
       <div className="flex flex-wrap gap-2">
         {connection ? (
@@ -133,7 +133,7 @@ export function IntegrationCard({ provider, title, description, connection, acti
           >
             {credentialFields.map((f) => (
               <div key={f.key}>
-                <label htmlFor={`${provider}-${f.key}`} className="block text-xs font-medium text-parchment-300 mb-1">
+                <label htmlFor={`${provider}-${f.key}`} className="block text-xs font-medium text-slate-600 mb-1">
                   {f.label}
                 </label>
                 <input
@@ -142,7 +142,7 @@ export function IntegrationCard({ provider, title, description, connection, acti
                   autoComplete="off"
                   value={credentials[f.key] ?? ''}
                   onChange={(e) => setCredentials((c) => ({ ...c, [f.key]: e.target.value }))}
-                  className="w-full px-3 py-2 bg-jerry-green-700/50 border border-gold-500/30 rounded-lg text-parchment-100 text-sm focus:border-gold-400 focus:ring-2 focus:ring-gold-400/20 focus:outline-hidden"
+                  className="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-slate-900 text-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-hidden"
                 />
               </div>
             ))}

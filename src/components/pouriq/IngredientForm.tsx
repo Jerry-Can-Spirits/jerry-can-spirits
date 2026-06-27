@@ -21,6 +21,8 @@ import {
   type ProjectedCocktail,
 } from '@/lib/pouriq/cost-impact'
 import type { PreparedComponentWithCost } from '@/lib/pouriq/prepared'
+import { INPUT, LABEL, CHIP, CHIP_ACTIVE, CHIP_IDLE, HELPER } from '@/lib/pouriq/ui'
+import { PRIMARY_BUTTON, SECONDARY_BUTTON_SM } from '@/lib/pouriq/button-styles'
 
 type BaseUnit = 'ml' | 'g' | 'each'
 type PurchaseMode = BaseUnit | 'prepared'
@@ -50,15 +52,8 @@ const PACK_FORMATS = [
   'bottle', 'can', 'keg', 'bag-in-box', 'carton', 'pouch', 'case', 'crate', 'bag', 'tub', 'box', 'other',
 ] as const
 
-const inputClass = 'w-full px-4 py-3 bg-jerry-green-700/50 border border-gold-500/30 rounded-lg text-parchment-50 placeholder-parchment-400 focus:border-gold-400 focus:ring-2 focus:ring-gold-400/20 focus:outline-hidden transition-colors duration-200'
-const labelClass = 'block text-sm font-medium text-parchment-200 mb-2'
-const chipClass = 'px-3 py-2 rounded-lg border text-sm transition-colors'
-const chipActive = 'bg-gold-500/20 border-gold-400 text-gold-100'
-const chipIdle = 'bg-jerry-green-700/30 border-gold-500/20 text-parchment-300 hover:border-gold-400/40'
-const helperClass = 'text-xs text-parchment-400 mt-1.5'
-
 function FieldHelper({ children }: { children: React.ReactNode }) {
-  return <p className={helperClass}>{children}</p>
+  return <p className={HELPER}>{children}</p>
 }
 
 interface Props {
@@ -472,13 +467,13 @@ export function IngredientForm({ entry, usageCount = 0, impactPayload, serveUnit
 
         {/* Name */}
         <div>
-          <label htmlFor="ing-name" className={labelClass}>Name *</label>
+          <label htmlFor="ing-name" className={LABEL}>Name *</label>
           <input
             id="ing-name"
             required
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className={inputClass}
+            className={INPUT}
             placeholder="e.g. Expedition Spiced Rum"
           />
         </div>
@@ -486,12 +481,12 @@ export function IngredientForm({ entry, usageCount = 0, impactPayload, serveUnit
         {/* Category + Subcategory */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
-            <label htmlFor="ing-type" className={labelClass}>Category *</label>
+            <label htmlFor="ing-type" className={LABEL}>Category *</label>
             <select
               id="ing-type"
               value={ingredient_type}
               onChange={(e) => setIngredientType(e.target.value as IngredientType)}
-              className={inputClass}
+              className={INPUT}
             >
               {INGREDIENT_TYPES.map((t) => (
                 <option key={t} value={t}>{INGREDIENT_TYPE_LABELS[t]}</option>
@@ -499,12 +494,12 @@ export function IngredientForm({ entry, usageCount = 0, impactPayload, serveUnit
             </select>
           </div>
           <div>
-            <label htmlFor="ing-subcategory" className={labelClass}>Subcategory</label>
+            <label htmlFor="ing-subcategory" className={LABEL}>Subcategory</label>
             <input
               id="ing-subcategory"
               value={subcategory}
               onChange={(e) => setSubcategory(e.target.value)}
-              className={inputClass}
+              className={INPUT}
               placeholder="e.g. Spiced rum, Elderflower"
             />
             <FieldHelper>Optional. Helps you filter and group ingredients.</FieldHelper>
@@ -513,7 +508,7 @@ export function IngredientForm({ entry, usageCount = 0, impactPayload, serveUnit
 
         {/* How do you buy this? */}
         <fieldset>
-          <legend className={labelClass}>How do you buy this? *</legend>
+          <legend className={LABEL}>How do you buy this? *</legend>
           <div className="flex flex-wrap gap-2">
             {([ 'ml', 'g', 'each' ] as const).map((u) => {
               const labels: Record<BaseUnit, string> = { ml: 'Liquid / volume', g: 'Weight', each: 'Count / each' }
@@ -526,7 +521,7 @@ export function IngredientForm({ entry, usageCount = 0, impactPayload, serveUnit
                     setBaseUnit(u)
                     if (u === 'each') setPackSizeStr('1')
                   }}
-                  className={`${chipClass} ${purchaseMode === u ? chipActive : chipIdle}`}
+                  className={`${CHIP} ${purchaseMode === u ? CHIP_ACTIVE : CHIP_IDLE}`}
                 >
                   {labels[u]}
                 </button>
@@ -535,7 +530,7 @@ export function IngredientForm({ entry, usageCount = 0, impactPayload, serveUnit
             <button
               type="button"
               onClick={() => setPurchaseMode('prepared')}
-              className={`${chipClass} ${purchaseMode === 'prepared' ? chipActive : chipIdle}`}
+              className={`${CHIP} ${purchaseMode === 'prepared' ? CHIP_ACTIVE : CHIP_IDLE}`}
             >
               Made in-house
             </button>
@@ -552,12 +547,12 @@ export function IngredientForm({ entry, usageCount = 0, impactPayload, serveUnit
         {purchaseMode === 'prepared' && (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
-              <label htmlFor="ing-yield-unit" className={labelClass}>Yield unit *</label>
+              <label htmlFor="ing-yield-unit" className={LABEL}>Yield unit *</label>
               <select
                 id="ing-yield-unit"
                 value={yieldUnit}
                 onChange={(e) => setYieldUnit(e.target.value as BaseUnit)}
-                className={inputClass}
+                className={INPUT}
               >
                 <option value="ml">ml (volume)</option>
                 <option value="g">g (weight)</option>
@@ -566,7 +561,7 @@ export function IngredientForm({ entry, usageCount = 0, impactPayload, serveUnit
               <FieldHelper>The unit this recipe produces, e.g. ml for a syrup.</FieldHelper>
             </div>
             <div>
-              <label htmlFor="ing-yield-amount" className={labelClass}>Yield amount *</label>
+              <label htmlFor="ing-yield-amount" className={LABEL}>Yield amount *</label>
               <input
                 id="ing-yield-amount"
                 type="number"
@@ -574,7 +569,7 @@ export function IngredientForm({ entry, usageCount = 0, impactPayload, serveUnit
                 min={1}
                 value={yieldAmountStr}
                 onChange={(e) => setYieldAmountStr(e.target.value)}
-                className={inputClass}
+                className={INPUT}
                 placeholder="e.g. 1600"
               />
               <FieldHelper>How much one batch makes, e.g. 1600 for a 1.6L syrup.</FieldHelper>
@@ -586,7 +581,7 @@ export function IngredientForm({ entry, usageCount = 0, impactPayload, serveUnit
         {purchaseMode !== 'prepared' && (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
-              <label htmlFor="ing-price" className={labelClass}>Price paid (£) *</label>
+              <label htmlFor="ing-price" className={LABEL}>Price paid (£) *</label>
               <input
                 id="ing-price"
                 type="number"
@@ -594,28 +589,28 @@ export function IngredientForm({ entry, usageCount = 0, impactPayload, serveUnit
                 min={0}
                 value={price_str}
                 onChange={(e) => setPriceStr(e.target.value)}
-                className={inputClass}
+                className={INPUT}
                 placeholder="e.g. 14.40"
               />
               <div
                 role="group"
                 aria-label="Price VAT basis"
-                className="mt-2 inline-flex items-stretch rounded-lg border border-gold-500/30 overflow-hidden bg-jerry-green-800/40"
+                className="mt-2 inline-flex items-stretch rounded-lg border border-slate-300 overflow-hidden bg-white"
               >
                 <button
                   type="button"
                   onClick={() => setPriceIncludesVat(true)}
                   aria-pressed={priceIncludesVat}
-                  className={`px-3 py-1.5 text-xs font-semibold transition-colors ${priceIncludesVat ? 'bg-gold-500/30 text-gold-50' : 'text-parchment-300 hover:text-parchment-100'}`}
+                  className={`px-3 py-1.5 text-xs font-semibold transition-colors ${priceIncludesVat ? 'bg-emerald-50 text-emerald-700' : 'text-slate-500 hover:text-slate-700'}`}
                 >
                   Inc VAT
                 </button>
-                <span aria-hidden="true" className="w-px bg-gold-500/30" />
+                <span aria-hidden="true" className="w-px bg-slate-300" />
                 <button
                   type="button"
                   onClick={() => setPriceIncludesVat(false)}
                   aria-pressed={!priceIncludesVat}
-                  className={`px-3 py-1.5 text-xs font-semibold transition-colors ${!priceIncludesVat ? 'bg-gold-500/30 text-gold-50' : 'text-parchment-300 hover:text-parchment-100'}`}
+                  className={`px-3 py-1.5 text-xs font-semibold transition-colors ${!priceIncludesVat ? 'bg-emerald-50 text-emerald-700' : 'text-slate-500 hover:text-slate-700'}`}
                 >
                   Ex VAT
                 </button>
@@ -627,11 +622,11 @@ export function IngredientForm({ entry, usageCount = 0, impactPayload, serveUnit
               </FieldHelper>
               <FieldHelper>Assumes 20% VAT. For zero-rated items, select Ex VAT.</FieldHelper>
               {priceIncludesVat && entered_p_live !== null && entered_p_live > 0 && (
-                <p className="text-xs text-gold-200 mt-1 tabular-nums">Stored net: £{(price_p_live! / 100).toFixed(2)}</p>
+                <p className="text-xs text-emerald-700 mt-1 tabular-nums">Stored net: £{(price_p_live! / 100).toFixed(2)}</p>
               )}
             </div>
             <div>
-              <label htmlFor="ing-purchase-qty" className={labelClass}>Packs bought *</label>
+              <label htmlFor="ing-purchase-qty" className={LABEL}>Packs bought *</label>
               <input
                 id="ing-purchase-qty"
                 type="number"
@@ -639,7 +634,7 @@ export function IngredientForm({ entry, usageCount = 0, impactPayload, serveUnit
                 min={1}
                 value={purchase_qty_str}
                 onChange={(e) => setPurchaseQtyStr(e.target.value)}
-                className={inputClass}
+                className={INPUT}
                 placeholder="1"
               />
               <FieldHelper>
@@ -654,14 +649,14 @@ export function IngredientForm({ entry, usageCount = 0, impactPayload, serveUnit
           <div>
             {base_unit === 'ml' && (
               <>
-                <label htmlFor="ing-pack-size" className={labelClass}>Volume per pack (ml) *</label>
+                <label htmlFor="ing-pack-size" className={LABEL}>Volume per pack (ml) *</label>
                 <div className="flex flex-wrap gap-2 mb-3">
                   {BOTTLE_SIZES_ML.map((s) => (
                     <button
                       type="button"
                       key={s}
                       onClick={() => setPackSizeStr(String(s))}
-                      className={`${chipClass} ${pack_size_str === String(s) ? chipActive : chipIdle}`}
+                      className={`${CHIP} ${pack_size_str === String(s) ? CHIP_ACTIVE : CHIP_IDLE}`}
                     >
                       {s}ml
                     </button>
@@ -674,7 +669,7 @@ export function IngredientForm({ entry, usageCount = 0, impactPayload, serveUnit
                   min={1}
                   value={pack_size_str}
                   onChange={(e) => setPackSizeStr(e.target.value)}
-                  className={inputClass}
+                  className={INPUT}
                   placeholder="700 — or type any volume, e.g. 10000 for a 10L keg"
                 />
                 <FieldHelper>
@@ -685,14 +680,14 @@ export function IngredientForm({ entry, usageCount = 0, impactPayload, serveUnit
 
             {base_unit === 'g' && (
               <>
-                <label htmlFor="ing-pack-size" className={labelClass}>Weight per pack (g) *</label>
+                <label htmlFor="ing-pack-size" className={LABEL}>Weight per pack (g) *</label>
                 <div className="flex flex-wrap gap-2 mb-3">
                   {WEIGHT_SIZES_G.map((s) => (
                     <button
                       type="button"
                       key={s}
                       onClick={() => setPackSizeStr(String(s))}
-                      className={`${chipClass} ${pack_size_str === String(s) ? chipActive : chipIdle}`}
+                      className={`${CHIP} ${pack_size_str === String(s) ? CHIP_ACTIVE : CHIP_IDLE}`}
                     >
                       {s}g
                     </button>
@@ -705,7 +700,7 @@ export function IngredientForm({ entry, usageCount = 0, impactPayload, serveUnit
                   min={1}
                   value={pack_size_str}
                   onChange={(e) => setPackSizeStr(e.target.value)}
-                  className={inputClass}
+                  className={INPUT}
                   placeholder="e.g. 1000 for a 1kg bag"
                 />
                 <FieldHelper>
@@ -716,7 +711,7 @@ export function IngredientForm({ entry, usageCount = 0, impactPayload, serveUnit
 
             {base_unit === 'each' && (
               <>
-                <label htmlFor="ing-pack-size" className={labelClass}>Items per pack</label>
+                <label htmlFor="ing-pack-size" className={LABEL}>Items per pack</label>
                 <input
                   id="ing-pack-size"
                   type="number"
@@ -724,7 +719,7 @@ export function IngredientForm({ entry, usageCount = 0, impactPayload, serveUnit
                   min={1}
                   value={pack_size_str}
                   onChange={(e) => setPackSizeStr(e.target.value)}
-                  className={inputClass}
+                  className={INPUT}
                   placeholder="1"
                 />
                 <FieldHelper>
@@ -738,12 +733,12 @@ export function IngredientForm({ entry, usageCount = 0, impactPayload, serveUnit
         {/* Pack format (standard mode only) */}
         {purchaseMode !== 'prepared' && (
           <div>
-            <label htmlFor="ing-pack-format" className={labelClass}>Pack format</label>
+            <label htmlFor="ing-pack-format" className={LABEL}>Pack format</label>
             <select
               id="ing-pack-format"
               value={pack_format}
               onChange={(e) => setPackFormat(e.target.value)}
-              className={inputClass}
+              className={INPUT}
             >
               <option value="">Not specified</option>
               {PACK_FORMATS.map((f) => (
@@ -758,18 +753,18 @@ export function IngredientForm({ entry, usageCount = 0, impactPayload, serveUnit
 
         {/* Standard mode: Live cost readout */}
         {purchaseMode !== 'prepared' && costReadout !== null && (
-          <p className="text-sm text-gold-200 tabular-nums">{costReadout}</p>
+          <p className="text-sm text-emerald-700 tabular-nums">{costReadout}</p>
         )}
 
         {/* Components editor (prepared mode) */}
         {purchaseMode === 'prepared' && (
-          <div className="border border-gold-500/20 rounded-lg overflow-hidden">
-            <div className="px-4 py-3 border-b border-gold-500/20">
-              <p className="text-sm font-medium text-parchment-200">Components</p>
+          <div className="border border-slate-200 rounded-lg overflow-hidden">
+            <div className="px-4 py-3 border-b border-slate-200">
+              <p className="text-sm font-medium text-slate-700">Components</p>
             </div>
             <div className="px-4 py-4 space-y-4">
               {entry === null ? (
-                <p className={helperClass}>Save this in-house recipe first, then add its components.</p>
+                <p className={HELPER}>Save this in-house recipe first, then add its components.</p>
               ) : (
                 <>
                   {/* Component list */}
@@ -784,14 +779,14 @@ export function IngredientForm({ entry, usageCount = 0, impactPayload, serveUnit
                           : `${c.amount_base} ${c.component_base_unit}`
                         return (
                           <li key={c.id} className="flex items-center justify-between gap-3 text-sm">
-                            <span className="text-parchment-100 font-medium">{c.component_name}</span>
-                            <span className="text-parchment-400 text-xs tabular-nums">{measure}</span>
-                            <span className="text-gold-200 text-xs tabular-nums">£{(costP / 100).toFixed(2)}</span>
+                            <span className="text-slate-900 font-medium">{c.component_name}</span>
+                            <span className="text-slate-500 text-xs tabular-nums">{measure}</span>
+                            <span className="text-emerald-700 text-xs tabular-nums">£{(costP / 100).toFixed(2)}</span>
                             <button
                               type="button"
                               disabled={compPending}
                               onClick={() => handleDeleteComponent(c.id)}
-                              className="text-xs text-red-300 hover:text-red-200 underline disabled:opacity-50"
+                              className="text-xs text-rose-600 hover:text-rose-700 underline disabled:opacity-50"
                             >
                               Remove
                             </button>
@@ -803,7 +798,7 @@ export function IngredientForm({ entry, usageCount = 0, impactPayload, serveUnit
 
                   {/* Live batch cost readout */}
                   {components.length > 0 && (
-                    <div className="text-sm text-gold-200 tabular-nums space-y-1 pt-2 border-t border-gold-500/10">
+                    <div className="text-sm text-emerald-700 tabular-nums space-y-1 pt-2 border-t border-slate-200">
                       <p>Batch cost: £{(batchCostP / 100).toFixed(2)}</p>
                       {yieldAmountLive !== null && yieldAmountLive > 0 && (
                         <>
@@ -820,11 +815,11 @@ export function IngredientForm({ entry, usageCount = 0, impactPayload, serveUnit
                   )}
 
                   {/* Add component */}
-                  <div className="pt-2 border-t border-gold-500/10">
-                    <p className="text-sm font-medium text-parchment-200 mb-3">Add a component</p>
+                  <div className="pt-2 border-t border-slate-200">
+                    <p className="text-sm font-medium text-slate-700 mb-3">Add a component</p>
                     <div className="space-y-3">
                       <div>
-                        <label className={labelClass}>Ingredient</label>
+                        <label className={LABEL}>Ingredient</label>
                         <IngredientPicker
                           libraryEntries={libraryEntries.filter((e) => e.id !== entry.id)}
                           selectedEntryId={selectedComponent?.id ?? null}
@@ -854,12 +849,12 @@ export function IngredientForm({ entry, usageCount = 0, impactPayload, serveUnit
                           )}
                         />
                       )}
-                      {compError && <p role="alert" className="text-sm text-red-300">{compError}</p>}
+                      {compError && <p role="alert" className="text-sm text-rose-600">{compError}</p>}
                       <button
                         type="button"
                         disabled={compPending || selectedComponent === null}
                         onClick={handleAddComponent}
-                        className="px-4 py-2 bg-gold-500/15 border border-gold-400/60 text-gold-100 hover:bg-gold-500/25 hover:border-gold-400 rounded-lg transition-colors text-sm font-semibold disabled:opacity-50"
+                        className={SECONDARY_BUTTON_SM}
                       >
                         {compPending ? 'Adding…' : 'Add component'}
                       </button>
@@ -874,24 +869,24 @@ export function IngredientForm({ entry, usageCount = 0, impactPayload, serveUnit
         {/* Ripple preview */}
         {showRipple && projection && (
           <div>
-            <p className="text-sm text-parchment-300 mb-3">Impact on drinks using this ingredient:</p>
+            <p className="text-sm text-slate-600 mb-3">Impact on drinks using this ingredient:</p>
             <RipplePreview projected={projection.projected} rollups={projection.rollups} />
           </div>
         )}
 
         {/* Advanced costing (standard mode only) */}
-        {purchaseMode !== 'prepared' && <div className="border border-gold-500/20 rounded-lg overflow-hidden">
+        {purchaseMode !== 'prepared' && <div className="border border-slate-200 rounded-lg overflow-hidden">
           <button
             type="button"
             onClick={() => setAdvancedOpen((v) => !v)}
-            className="w-full flex justify-between items-center px-4 py-3 text-sm text-parchment-300 hover:text-parchment-100 transition-colors"
+            className="w-full flex justify-between items-center px-4 py-3 text-sm text-slate-600 hover:text-slate-900 transition-colors"
           >
             <span>Advanced costing</span>
-            <span className="text-parchment-500 text-xs">{advancedOpen ? 'Hide' : 'Show'}</span>
+            <span className="text-slate-400 text-xs">{advancedOpen ? 'Hide' : 'Show'}</span>
           </button>
           {advancedOpen && (
-            <div className="px-4 pb-4 border-t border-gold-500/20 pt-4">
-              <label htmlFor="ing-yield" className={labelClass}>Yield %</label>
+            <div className="px-4 pb-4 border-t border-slate-200 pt-4">
+              <label htmlFor="ing-yield" className={LABEL}>Yield %</label>
               <input
                 id="ing-yield"
                 type="number"
@@ -900,7 +895,7 @@ export function IngredientForm({ entry, usageCount = 0, impactPayload, serveUnit
                 max={100}
                 value={yield_pct_str}
                 onChange={(e) => setYieldPctStr(e.target.value)}
-                className={inputClass}
+                className={INPUT}
                 placeholder="100"
               />
               <FieldHelper>
@@ -911,20 +906,20 @@ export function IngredientForm({ entry, usageCount = 0, impactPayload, serveUnit
         </div>}
 
         {/* Serve units (standard mode only) */}
-        {purchaseMode !== 'prepared' && <div className="border border-gold-500/20 rounded-lg overflow-hidden">
-          <div className="px-4 py-3 border-b border-gold-500/20">
-            <p className="text-sm font-medium text-parchment-200">Serve units</p>
+        {purchaseMode !== 'prepared' && <div className="border border-slate-200 rounded-lg overflow-hidden">
+          <div className="px-4 py-3 border-b border-slate-200">
+            <p className="text-sm font-medium text-slate-700">Serve units</p>
           </div>
           <div className="px-4 py-4 space-y-4">
             {/* Standard (always-available) units */}
             <div>
-              <p className={helperClass}>
+              <p className={HELPER}>
                 Always available:{' '}
                 {STANDARD_SERVE_UNITS[base_unit].map((u) => u.name).join(', ')}
               </p>
               <div className="flex flex-wrap gap-2 mt-2">
                 {STANDARD_SERVE_UNITS[base_unit].map((u) => (
-                  <span key={u.name} className="px-3 py-1.5 rounded-lg border border-gold-500/20 bg-jerry-green-700/20 text-xs text-parchment-400">
+                  <span key={u.name} className="px-3 py-1.5 rounded-lg border border-slate-200 bg-slate-50 text-xs text-slate-500">
                     {u.name}
                   </span>
                 ))}
@@ -932,7 +927,7 @@ export function IngredientForm({ entry, usageCount = 0, impactPayload, serveUnit
             </div>
 
             {entry === null ? (
-              <p className={helperClass}>Save this ingredient first, then add custom serve units.</p>
+              <p className={HELPER}>Save this ingredient first, then add custom serve units.</p>
             ) : (
               <>
                 {/* Existing custom units */}
@@ -945,13 +940,13 @@ export function IngredientForm({ entry, usageCount = 0, impactPayload, serveUnit
                           : `1 ${u.name} = ${u.base_per_unit} ${base_unit}`
                       return (
                         <li key={u.id} className="flex items-center justify-between gap-3 text-sm">
-                          <span className="text-parchment-100 font-medium">{u.name}</span>
-                          <span className="text-parchment-400 text-xs tabular-nums">{convLabel}</span>
+                          <span className="text-slate-900 font-medium">{u.name}</span>
+                          <span className="text-slate-500 text-xs tabular-nums">{convLabel}</span>
                           <button
                             type="button"
                             disabled={suPending}
                             onClick={() => handleDeleteServeUnit(u.id, u.name)}
-                            className="text-xs text-red-300 hover:text-red-200 underline disabled:opacity-50"
+                            className="text-xs text-rose-600 hover:text-rose-700 underline disabled:opacity-50"
                           >
                             Remove
                           </button>
@@ -962,23 +957,23 @@ export function IngredientForm({ entry, usageCount = 0, impactPayload, serveUnit
                 )}
 
                 {/* Add new unit */}
-                <div className="pt-2 border-t border-gold-500/10">
-                  <p className="text-sm font-medium text-parchment-200 mb-3">Add a serve unit</p>
+                <div className="pt-2 border-t border-slate-200">
+                  <p className="text-sm font-medium text-slate-700 mb-3">Add a serve unit</p>
                   {base_unit === 'each' && (
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                       <div>
-                        <label htmlFor="su-name" className={labelClass}>Unit name</label>
+                        <label htmlFor="su-name" className={LABEL}>Unit name</label>
                         <input
                           id="su-name"
                           value={suName}
                           onChange={(e) => setSuName(e.target.value)}
-                          className={inputClass}
+                          className={INPUT}
                           placeholder="e.g. wedge"
                         />
                         <FieldHelper>What you call one portion of this item.</FieldHelper>
                       </div>
                       <div>
-                        <label htmlFor="su-qty" className={labelClass}>How many per item</label>
+                        <label htmlFor="su-qty" className={LABEL}>How many per item</label>
                         <input
                           id="su-qty"
                           type="number"
@@ -986,7 +981,7 @@ export function IngredientForm({ entry, usageCount = 0, impactPayload, serveUnit
                           min="0.0001"
                           value={suQtyStr}
                           onChange={(e) => setSuQtyStr(e.target.value)}
-                          className={inputClass}
+                          className={INPUT}
                           placeholder="e.g. 6"
                         />
                         <FieldHelper>How many of this unit you get from one whole item.</FieldHelper>
@@ -996,18 +991,18 @@ export function IngredientForm({ entry, usageCount = 0, impactPayload, serveUnit
                   {base_unit === 'ml' && (
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                       <div>
-                        <label htmlFor="su-name" className={labelClass}>Unit name</label>
+                        <label htmlFor="su-name" className={LABEL}>Unit name</label>
                         <input
                           id="su-name"
                           value={suName}
                           onChange={(e) => setSuName(e.target.value)}
-                          className={inputClass}
+                          className={INPUT}
                           placeholder="e.g. shot"
                         />
                         <FieldHelper>What you call this serve unit.</FieldHelper>
                       </div>
                       <div>
-                        <label htmlFor="su-qty" className={labelClass}>ml per unit</label>
+                        <label htmlFor="su-qty" className={LABEL}>ml per unit</label>
                         <input
                           id="su-qty"
                           type="number"
@@ -1015,7 +1010,7 @@ export function IngredientForm({ entry, usageCount = 0, impactPayload, serveUnit
                           min="0.0001"
                           value={suQtyStr}
                           onChange={(e) => setSuQtyStr(e.target.value)}
-                          className={inputClass}
+                          className={INPUT}
                           placeholder="e.g. 25"
                         />
                         <FieldHelper>The volume of one unit in ml.</FieldHelper>
@@ -1025,18 +1020,18 @@ export function IngredientForm({ entry, usageCount = 0, impactPayload, serveUnit
                   {base_unit === 'g' && (
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                       <div>
-                        <label htmlFor="su-name" className={labelClass}>Unit name</label>
+                        <label htmlFor="su-name" className={LABEL}>Unit name</label>
                         <input
                           id="su-name"
                           value={suName}
                           onChange={(e) => setSuName(e.target.value)}
-                          className={inputClass}
+                          className={INPUT}
                           placeholder="e.g. bean"
                         />
                         <FieldHelper>What you call this serve unit.</FieldHelper>
                       </div>
                       <div>
-                        <label htmlFor="su-qty" className={labelClass}>Grams per unit</label>
+                        <label htmlFor="su-qty" className={LABEL}>Grams per unit</label>
                         <input
                           id="su-qty"
                           type="number"
@@ -1044,19 +1039,19 @@ export function IngredientForm({ entry, usageCount = 0, impactPayload, serveUnit
                           min="0.0001"
                           value={suQtyStr}
                           onChange={(e) => setSuQtyStr(e.target.value)}
-                          className={inputClass}
+                          className={INPUT}
                           placeholder="e.g. 0.2"
                         />
                         <FieldHelper>The weight of one unit in grams.</FieldHelper>
                       </div>
                     </div>
                   )}
-                  {suError && <p role="alert" className="text-sm text-red-300 mt-2">{suError}</p>}
+                  {suError && <p role="alert" className="text-sm text-rose-600 mt-2">{suError}</p>}
                   <button
                     type="button"
                     disabled={suPending}
                     onClick={handleAddServeUnit}
-                    className="mt-3 px-4 py-2 bg-gold-500/15 border border-gold-400/60 text-gold-100 hover:bg-gold-500/25 hover:border-gold-400 rounded-lg transition-colors text-sm font-semibold disabled:opacity-50"
+                    className={`mt-3 ${SECONDARY_BUTTON_SM}`}
                   >
                     {suPending ? 'Saving…' : 'Add unit'}
                   </button>
@@ -1068,19 +1063,19 @@ export function IngredientForm({ entry, usageCount = 0, impactPayload, serveUnit
 
         {/* Barcode */}
         <div>
-          <label htmlFor="ing-barcode" className={labelClass}>Barcode</label>
+          <label htmlFor="ing-barcode" className={LABEL}>Barcode</label>
           <div className="flex gap-2">
             <input
               id="ing-barcode"
               value={barcode}
               onChange={(e) => setBarcode(e.target.value)}
-              className={inputClass}
+              className={INPUT}
               placeholder="Optional — scan or type the barcode"
             />
             <button
               type="button"
               onClick={() => setScanOpen(true)}
-              className="shrink-0 px-3 py-2 bg-jerry-green-700/50 border border-gold-500/30 rounded-lg text-parchment-100 hover:border-gold-400 transition-colors text-sm"
+              className="shrink-0 px-3 py-2 bg-white border border-slate-300 rounded-lg text-slate-700 hover:border-emerald-500 transition-colors text-sm"
             >
               Scan
             </button>
@@ -1090,24 +1085,24 @@ export function IngredientForm({ entry, usageCount = 0, impactPayload, serveUnit
 
         {/* Notes */}
         <div>
-          <label htmlFor="ing-notes" className={labelClass}>Notes</label>
+          <label htmlFor="ing-notes" className={LABEL}>Notes</label>
           <textarea
             id="ing-notes"
             rows={2}
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
-            className={`${inputClass} resize-vertical`}
+            className={`${INPUT} resize-vertical`}
             placeholder="Optional — supplier, SKU, anything useful"
           />
         </div>
 
-        {error && <p role="alert" className="text-sm text-red-300">{error}</p>}
+        {error && <p role="alert" className="text-sm text-rose-600">{error}</p>}
 
         {scanInfo && (
-          <p className="text-xs text-gold-200">
+          <p className="text-xs text-emerald-700">
             {scanInfo}{' '}
             {existingEntryHref && (
-              <a href={existingEntryHref} className="underline hover:text-gold-100">Open it</a>
+              <a href={existingEntryHref} className="underline hover:text-emerald-600">Open it</a>
             )}
           </p>
         )}
@@ -1123,7 +1118,7 @@ export function IngredientForm({ entry, usageCount = 0, impactPayload, serveUnit
               onClick={handleDelete}
               disabled={usageCount > 0}
               title={usageCount > 0 ? `Used in ${usageCount} drink${usageCount === 1 ? '' : 's'}. Remove from those first.` : undefined}
-              className="text-sm text-red-300 hover:text-red-200 underline disabled:text-parchment-500 disabled:no-underline disabled:cursor-not-allowed"
+              className="text-sm text-rose-600 hover:text-rose-700 underline disabled:text-slate-400 disabled:no-underline disabled:cursor-not-allowed"
             >
               {usageCount > 0 ? `Used in ${usageCount} drink${usageCount === 1 ? '' : 's'} — can't delete` : 'Delete ingredient'}
             </button>
@@ -1131,7 +1126,7 @@ export function IngredientForm({ entry, usageCount = 0, impactPayload, serveUnit
           <button
             type="submit"
             disabled={submitting}
-            className="px-6 py-3 bg-linear-to-r from-gold-600 to-gold-500 hover:from-gold-500 hover:to-gold-400 disabled:from-gray-600 disabled:to-gray-500 text-jerry-green-900 font-semibold rounded-lg"
+            className={PRIMARY_BUTTON}
           >
             {submitting ? 'Saving…' : entry ? 'Save changes' : 'Add ingredient'}
           </button>

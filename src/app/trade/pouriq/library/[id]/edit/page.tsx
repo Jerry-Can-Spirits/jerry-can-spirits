@@ -50,9 +50,9 @@ export default async function EditLibraryEntryPage({ params }: Props) {
   return (
     <main className="min-h-screen">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-24">
-        <Link href="/trade/pouriq/library" className="text-sm text-parchment-400 hover:text-parchment-200">← Library</Link>
+        <Link href="/trade/pouriq/library" className="text-sm text-slate-500 hover:text-slate-700">← Library</Link>
         <div className="flex flex-wrap items-baseline justify-between gap-3 mt-3 mb-8">
-          <h1 className="text-3xl font-serif font-bold text-white">{entry.name}</h1>
+          <h1 className="text-3xl font-bold text-slate-900">{entry.name}</h1>
           {usage.length > 0 && (
             <Link
               href={`/trade/pouriq/library/what-if?ingredient=${encodeURIComponent(entry.id)}`}
@@ -63,23 +63,23 @@ export default async function EditLibraryEntryPage({ params }: Props) {
           )}
         </div>
 
-        <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20 mb-8">
+        <div className="bg-white rounded-xl p-6 border border-slate-200 mb-8">
           <IngredientForm entry={entry} usageCount={usage.length} impactPayload={impactPayload} serveUnits={serveUnits} components={components} libraryEntries={libraryEntries} />
         </div>
 
         {byMenu.size > 0 && (
-          <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
-            <h2 className="text-lg font-serif font-bold text-white mb-4">Used in</h2>
+          <div className="bg-white rounded-xl p-6 border border-slate-200">
+            <h2 className="text-lg font-bold text-slate-900 mb-4">Used in</h2>
             <div className="space-y-4">
               {Array.from(byMenu.entries()).map(([menuId, info]) => (
                 <div key={menuId}>
-                  <Link href={`/trade/pouriq/${menuId}`} className="text-sm font-medium text-gold-300 hover:text-gold-200 underline">
+                  <Link href={`/trade/pouriq/${menuId}`} className="text-sm font-medium text-emerald-700 hover:text-emerald-600 underline">
                     {info.menuName}
                   </Link>
-                  <ul className="mt-1 text-sm text-parchment-300 list-inside list-disc">
+                  <ul className="mt-1 text-sm text-slate-600 list-inside list-disc">
                     {info.cocktails.map((c) => (
                       <li key={c.id}>
-                        <Link href={`/trade/pouriq/${menuId}/edit?cocktail=${c.id}`} className="hover:text-parchment-100 underline">
+                        <Link href={`/trade/pouriq/${menuId}/edit?cocktail=${c.id}`} className="hover:text-slate-900 underline">
                           {c.name}
                         </Link>
                       </li>

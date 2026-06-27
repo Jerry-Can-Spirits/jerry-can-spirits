@@ -3,10 +3,11 @@
 import { useRef, useState } from 'react'
 import type { PreviewPayload } from '@/app/api/pouriq/import/extract/route'
 import { spreadsheetToText } from '@/lib/pouriq/spreadsheet-to-text'
+import { PRIMARY_BUTTON } from '@/lib/pouriq/button-styles'
 
 type Source = 'text' | 'pdf' | 'spreadsheet'
 
-const inputClass = 'w-full px-4 py-3 bg-jerry-green-700/50 border border-gold-500/30 rounded-lg text-parchment-50 text-sm focus:border-gold-400 focus:outline-hidden'
+const inputClass = 'w-full px-4 py-3 bg-white border border-slate-300 rounded-lg text-slate-900 text-sm focus:border-emerald-500 focus:outline-hidden'
 
 interface SourceTile {
   id: Source
@@ -122,17 +123,17 @@ export function ImportSourceTabs({ menuId, initialSource, onPreview }: Props) {
   if (source === null) {
     return (
       <div className="space-y-4">
-        <p className="text-sm text-parchment-300">Choose where your menu data is coming from.</p>
+        <p className="text-sm text-slate-600">Choose where your menu data is coming from.</p>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           {SOURCES.map((s) => (
             <button
               key={s.id}
               type="button"
               onClick={() => setSource(s.id)}
-              className="text-left bg-jerry-green-700/40 hover:bg-jerry-green-700/60 border border-gold-500/30 hover:border-gold-400/60 rounded-xl p-4 transition-colors"
+              className="text-left bg-white hover:bg-slate-50 border border-slate-200 hover:border-emerald-400 rounded-xl p-4 transition-colors"
             >
-              <h3 className="text-base font-serif font-bold text-white mb-1">{s.title}</h3>
-              <p className="text-xs text-parchment-300 leading-relaxed">{s.description}</p>
+              <h3 className="text-base font-bold text-slate-900 mb-1">{s.title}</h3>
+              <p className="text-xs text-slate-600 leading-relaxed">{s.description}</p>
             </button>
           ))}
         </div>
@@ -143,10 +144,10 @@ export function ImportSourceTabs({ menuId, initialSource, onPreview }: Props) {
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <p className="text-sm text-parchment-300">
-          <span className="font-medium text-white">{SOURCES.find((s) => s.id === source)?.title}</span>
+        <p className="text-sm text-slate-600">
+          <span className="font-medium text-slate-900">{SOURCES.find((s) => s.id === source)?.title}</span>
         </p>
-        <button type="button" onClick={changeSource} className="text-xs text-parchment-400 hover:text-parchment-200 underline">
+        <button type="button" onClick={changeSource} className="text-xs text-slate-500 hover:text-slate-700 underline">
           Change source
         </button>
       </div>
@@ -165,12 +166,12 @@ export function ImportSourceTabs({ menuId, initialSource, onPreview }: Props) {
         <div>
           <input ref={pdfInputRef} type="file" accept=".pdf,application/pdf" className="sr-only" onChange={(e) => handlePdf(e.target.files?.[0] ?? null)} />
           <div className="flex items-center gap-3">
-            <button type="button" onClick={() => pdfInputRef.current?.click()} className="px-4 py-2 bg-jerry-green-700/50 border border-gold-500/30 rounded-lg text-parchment-100 hover:border-gold-400 transition-colors text-sm">
+            <button type="button" onClick={() => pdfInputRef.current?.click()} className="px-4 py-2 bg-white border border-slate-300 rounded-lg text-slate-700 hover:border-emerald-500 transition-colors text-sm">
               {pdfTicket ? 'Replace PDF' : 'Choose PDF'}
             </button>
-            {pdfTicket && <span className="text-sm text-parchment-200">{pdfTicket.filename}</span>}
+            {pdfTicket && <span className="text-sm text-slate-700">{pdfTicket.filename}</span>}
           </div>
-          <p className="mt-2 text-xs text-parchment-400">Max 5MB. PDF only.</p>
+          <p className="mt-2 text-xs text-slate-500">Max 5MB. PDF only.</p>
         </div>
       )}
 
@@ -178,20 +179,20 @@ export function ImportSourceTabs({ menuId, initialSource, onPreview }: Props) {
         <div>
           <input ref={sheetInputRef} type="file" accept=".csv,.xlsx,text/csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" className="sr-only" onChange={(e) => handleSpreadsheet(e.target.files?.[0] ?? null)} />
           <div className="flex items-center gap-3">
-            <button type="button" onClick={() => sheetInputRef.current?.click()} className="px-4 py-2 bg-jerry-green-700/50 border border-gold-500/30 rounded-lg text-parchment-100 hover:border-gold-400 transition-colors text-sm">
+            <button type="button" onClick={() => sheetInputRef.current?.click()} className="px-4 py-2 bg-white border border-slate-300 rounded-lg text-slate-700 hover:border-emerald-500 transition-colors text-sm">
               {spreadsheetText ? 'Replace file' : 'Choose spreadsheet'}
             </button>
-            {spreadsheetText && <span className="text-sm text-parchment-200">{spreadsheetText.filename}</span>}
+            {spreadsheetText && <span className="text-sm text-slate-700">{spreadsheetText.filename}</span>}
           </div>
-          <p className="mt-2 text-xs text-parchment-400">Max 5MB. .csv or .xlsx. Headers like Name, Price, Ingredients help us read it.</p>
+          <p className="mt-2 text-xs text-slate-500">Max 5MB. .csv or .xlsx. Headers like Name, Price, Ingredients help us read it.</p>
         </div>
       )}
 
-      {error && <p role="alert" className="text-sm text-red-300">{error}</p>}
+      {error && <p role="alert" className="text-sm text-rose-600">{error}</p>}
 
       <div className="flex justify-end">
         <button type="button" onClick={handleExtract} disabled={!canExtract || submitting}
-          className="px-6 py-3 bg-linear-to-r from-gold-600 to-gold-500 hover:from-gold-500 hover:to-gold-400 disabled:from-gray-600 disabled:to-gray-500 text-jerry-green-900 font-semibold rounded-lg">
+          className={PRIMARY_BUTTON}>
           {submitting ? 'Reading menu…' : 'Extract drinks →'}
         </button>
       </div>

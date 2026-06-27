@@ -14,7 +14,7 @@ interface OrderRow {
 export function OrderReport({ rows }: { rows: OrderRow[] }) {
   if (rows.length === 0) {
     return (
-      <p className="text-sm text-parchment-300">
+      <p className="text-sm text-slate-600">
         Nothing to order. Everything is at or above its par level.
       </p>
     )
@@ -29,7 +29,7 @@ export function OrderReport({ rows }: { rows: OrderRow[] }) {
       </div>
       <table className="w-full text-sm">
         <thead>
-          <tr className="text-left text-parchment-400 border-b border-gold-500/20">
+          <tr className="text-left text-slate-500 border-b border-slate-200">
             <th className="py-2 pr-4">Ingredient</th>
             <th className="py-2 pr-4 text-right">On hand</th>
             <th className="py-2 pr-4 text-right">Par</th>
@@ -38,11 +38,11 @@ export function OrderReport({ rows }: { rows: OrderRow[] }) {
         </thead>
         <tbody>
           {rows.map((r) => (
-            <tr key={r.id} className="border-b border-gold-500/10">
-              <td className="py-2 pr-4 text-parchment-100">{r.name} <span className="text-parchment-400">({r.pack_size}ml)</span></td>
-              <td className="py-2 pr-4 text-right text-parchment-300">{r.on_hand !== null ? r.on_hand.toFixed(1) : '—'}</td>
-              <td className="py-2 pr-4 text-right text-parchment-300">{r.par !== null ? r.par : '—'}</td>
-              <td className="py-2 text-right text-parchment-100 font-semibold">{r.order_qty}</td>
+            <tr key={r.id} className="border-b border-slate-100">
+              <td className="py-2 pr-4 text-slate-900">{r.name} <span className="text-slate-500">({r.pack_size}ml)</span></td>
+              <td className="py-2 pr-4 text-right text-slate-600">{r.on_hand !== null ? r.on_hand.toFixed(1) : '—'}</td>
+              <td className="py-2 pr-4 text-right text-slate-600">{r.par !== null ? r.par : '—'}</td>
+              <td className="py-2 text-right text-slate-900 font-semibold">{r.order_qty}</td>
             </tr>
           ))}
         </tbody>

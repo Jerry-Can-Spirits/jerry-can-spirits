@@ -24,11 +24,11 @@ interface FormIngredient {
   recipe_qty: number | null
 }
 
-const inputClass = 'w-full px-3 py-2 bg-jerry-green-700/50 border border-gold-500/30 rounded-lg text-parchment-100 text-sm focus:border-gold-400 focus:ring-2 focus:ring-gold-400/20 focus:outline-hidden'
-const labelClass = 'block text-xs font-medium text-parchment-300 mb-1'
+const inputClass = 'w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-slate-900 text-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-hidden'
+const labelClass = 'block text-xs font-medium text-slate-600 mb-1'
 const chipClass = 'px-2 py-1 rounded-sm border text-xs transition-colors'
-const chipActive = 'bg-gold-500/20 border-gold-400 text-gold-100'
-const chipIdle = 'bg-jerry-green-700/30 border-gold-500/20 text-parchment-300 hover:border-gold-400/40'
+const chipActive = 'bg-emerald-50 border-emerald-600 text-emerald-700'
+const chipIdle = 'bg-white border-slate-200 text-slate-600 hover:border-emerald-400'
 
 function blankIngredient(): FormIngredient {
   return { library_entry: null, pour_ml: null, unit_count: null, recipe_unit: null, recipe_qty: null }
@@ -92,7 +92,7 @@ export function ServeForm({ defaultName, defaultGlass, defaultIngredients, libra
   }
 
   return (
-    <div className="mt-4 border border-gold-500/20 rounded-lg p-4 bg-jerry-green-900/30 space-y-4">
+    <div className="mt-4 border border-slate-200 rounded-lg p-4 bg-slate-50 space-y-4">
       <div>
         <label className={labelClass}>Serve name</label>
         <input value={name} onChange={(e) => setName(e.target.value)} className={inputClass} />
@@ -116,7 +116,7 @@ export function ServeForm({ defaultName, defaultGlass, defaultIngredients, libra
             ? (serveUnits[entry.id] ?? [])
             : []
           return (
-            <div key={idx} className="border border-gold-500/10 rounded-lg p-3 bg-jerry-green-800/30">
+            <div key={idx} className="border border-slate-100 rounded-lg p-3 bg-white">
               <label className={labelClass}>Ingredient {idx + 1}</label>
               <IngredientPicker
                 libraryEntries={libraryEntries}
@@ -141,7 +141,7 @@ export function ServeForm({ defaultName, defaultGlass, defaultIngredients, libra
                 </div>
               )}
               {ingredients.length > 1 && (
-                <button type="button" onClick={() => setIngredients((arr) => arr.filter((_, i) => i !== idx))} className="mt-3 text-xs text-parchment-400 hover:text-red-300 underline">
+                <button type="button" onClick={() => setIngredients((arr) => arr.filter((_, i) => i !== idx))} className="mt-3 text-xs text-slate-500 hover:text-rose-600 underline">
                   Remove ingredient
                 </button>
               )}
@@ -149,7 +149,7 @@ export function ServeForm({ defaultName, defaultGlass, defaultIngredients, libra
           )
         })}
       </div>
-      <button type="button" onClick={() => setIngredients((arr) => [...arr, blankIngredient()])} className="text-sm text-gold-300 hover:text-gold-200 underline">
+      <button type="button" onClick={() => setIngredients((arr) => [...arr, blankIngredient()])} className="text-sm text-emerald-700 hover:text-emerald-600 underline">
         Add another ingredient
       </button>
       <div className="flex justify-end">

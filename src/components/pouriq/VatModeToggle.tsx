@@ -9,8 +9,8 @@ interface Props {
 }
 
 const segBase = 'px-3 py-1.5 text-xs font-semibold transition-colors'
-const segActive = 'bg-gold-500/30 text-gold-50'
-const segIdle = 'text-parchment-300 hover:text-parchment-100'
+const segActive = 'bg-emerald-50 text-emerald-700'
+const segIdle = 'text-slate-500 hover:text-slate-700'
 
 export function VatModeToggle({ menuId, pricesIncludeVat }: Props) {
   const [optimistic, setOptimistic] = useState<boolean | null>(null)
@@ -35,11 +35,11 @@ export function VatModeToggle({ menuId, pricesIncludeVat }: Props) {
 
   return (
     <span className="inline-flex flex-col items-end gap-1">
-      <span className="text-[10px] uppercase tracking-widest text-parchment-400">Prices</span>
+      <span className="text-[10px] uppercase tracking-widest text-slate-500">Prices</span>
       <span
         role="group"
         aria-label="Sale prices VAT mode"
-        className="inline-flex items-stretch rounded-lg border border-gold-500/30 overflow-hidden bg-jerry-green-800/40"
+        className="inline-flex items-stretch rounded-lg border border-slate-300 overflow-hidden bg-white"
       >
         <button
           type="button"
@@ -50,7 +50,7 @@ export function VatModeToggle({ menuId, pricesIncludeVat }: Props) {
         >
           Inc VAT
         </button>
-        <span aria-hidden="true" className="w-px bg-gold-500/30" />
+        <span aria-hidden="true" className="w-px bg-slate-300" />
         <button
           type="button"
           onClick={() => flip(false)}
@@ -61,7 +61,7 @@ export function VatModeToggle({ menuId, pricesIncludeVat }: Props) {
           Net VAT
         </button>
       </span>
-      {error && <span role="alert" className="text-xs text-red-300">{error}</span>}
+      {error && <span role="alert" className="text-xs text-rose-600">{error}</span>}
     </span>
   )
 }

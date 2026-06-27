@@ -7,6 +7,7 @@ import { listCostChangesForInvoice } from '@/lib/pouriq/cost-changes'
 import { loadMultiCostImpact } from '@/lib/pouriq/multi-cost-impact'
 import { LicenceGate } from '@/components/pouriq/LicenceGate'
 import { RipplePreview } from '@/components/pouriq/RipplePreview'
+import { PRIMARY_BUTTON } from '@/lib/pouriq/button-styles'
 
 export const dynamic = 'force-dynamic'
 
@@ -46,17 +47,17 @@ export default async function InvoiceImpactPage({ params }: Props) {
       : 'Invoice impact'
 
   return (
-    <main className="min-h-screen">
+    <main className="min-h-screen bg-slate-50">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-24">
-        <Link href={`/trade/pouriq/invoices/${invoice.id}`} className="text-sm text-parchment-400 hover:text-parchment-200">← Invoice detail</Link>
-        <h1 className="text-3xl md:text-4xl font-serif font-bold text-white mt-3 mb-2">{headline}</h1>
-        <p className="text-parchment-400 text-sm mb-10">
+        <Link href={`/trade/pouriq/invoices/${invoice.id}`} className="text-sm text-slate-500 hover:text-slate-700">← Invoice detail</Link>
+        <h1 className="text-3xl md:text-4xl font-bold text-slate-900 mt-3 mb-2">{headline}</h1>
+        <p className="text-slate-500 text-sm mb-10">
           {invoice.applied_line_count} cost{invoice.applied_line_count === 1 ? '' : 's'} updated.{' '}
           {payload.affected_drink_count} drink{payload.affected_drink_count === 1 ? '' : 's'} affected.
           {payload.newly_below_target_count > 0 && (
             <>
               {' '}
-              <span className="text-red-300">{payload.newly_below_target_count} now below target.</span>
+              <span className="text-rose-600">{payload.newly_below_target_count} now below target.</span>
             </>
           )}
         </p>
@@ -68,7 +69,7 @@ export default async function InvoiceImpactPage({ params }: Props) {
         />
 
         <div className="mt-10 flex justify-end">
-          <Link href="/trade/pouriq/library" className="px-6 py-3 bg-linear-to-r from-gold-600 to-gold-500 hover:from-gold-500 hover:to-gold-400 text-jerry-green-900 font-semibold rounded-lg">
+          <Link href="/trade/pouriq/library" className={PRIMARY_BUTTON}>
             Done
           </Link>
         </div>

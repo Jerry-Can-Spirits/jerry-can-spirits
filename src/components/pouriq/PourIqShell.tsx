@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { NAV_GROUPS, isNavActive } from '@/lib/pouriq/nav'
 import { AddImportMenu } from './AddImportMenu'
+import { PourIqWordmark } from './PourIqWordmark'
 
 export function PourIqShell({ venueName, children }: { venueName: string; children: ReactNode }) {
   const pathname = usePathname()
@@ -14,7 +15,7 @@ export function PourIqShell({ venueName, children }: { venueName: string; childr
     <nav aria-label="Pour IQ" className="px-3 py-4 space-y-5">
       {NAV_GROUPS.map((group) => (
         <div key={group.label}>
-          <div className="px-2 mb-1 text-[11px] font-semibold uppercase tracking-widest text-parchment-500">{group.label}</div>
+          <div className="px-2 mb-1 text-[11px] font-semibold uppercase tracking-widest text-slate-400">{group.label}</div>
           <ul className="space-y-0.5">
             {group.items.map((item) => {
               const active = isNavActive(pathname, item.href)
@@ -26,8 +27,8 @@ export function PourIqShell({ venueName, children }: { venueName: string; childr
                     onClick={() => setNavOpen(false)}
                     className={`block rounded-md px-3 py-2 text-sm transition-colors ${
                       active
-                        ? 'bg-gold-500/15 text-gold-100 font-semibold'
-                        : 'text-parchment-300 hover:bg-jerry-green-700/40 hover:text-parchment-100'
+                        ? 'bg-emerald-50 text-emerald-700 font-semibold'
+                        : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
                     }`}
                   >
                     {item.label}
@@ -38,11 +39,11 @@ export function PourIqShell({ venueName, children }: { venueName: string; childr
           </ul>
         </div>
       ))}
-      <div className="pt-3 mt-1 border-t border-gold-500/10">
+      <div className="pt-3 mt-1 border-t border-slate-200">
         <Link
           href="/trade/landing"
           onClick={() => setNavOpen(false)}
-          className="block rounded-md border border-red-500/30 px-3 py-2 text-sm text-red-300 hover:border-red-500/50 hover:bg-red-900/20 hover:text-red-200"
+          className="block rounded-md px-3 py-2 text-sm text-slate-500 hover:bg-slate-100 hover:text-slate-700"
         >
           ← Return to trade account
         </Link>
@@ -52,35 +53,35 @@ export function PourIqShell({ venueName, children }: { venueName: string; childr
 
   return (
     <div className="min-h-screen">
-      <header className="sticky top-0 z-20 flex items-center justify-between gap-3 border-b border-gold-500/20 bg-jerry-green-900/80 backdrop-blur-sm px-4 py-3">
+      <header className="sticky top-0 z-20 flex items-center justify-between gap-3 border-b border-slate-200 bg-white px-4 py-3">
         <div className="flex items-center gap-3 min-w-0">
           <button
             type="button"
             onClick={() => setNavOpen((o) => !o)}
-            className="lg:hidden text-parchment-200 hover:text-white"
+            className="lg:hidden text-slate-500 hover:text-slate-900"
             aria-label="Menu"
           >
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
               <line x1="3" y1="6" x2="21" y2="6" /><line x1="3" y1="12" x2="21" y2="12" /><line x1="3" y1="18" x2="21" y2="18" />
             </svg>
           </button>
-          <Link href="/trade/pouriq" className="flex items-baseline gap-2 min-w-0">
-            <span className="text-gold-300 font-semibold uppercase tracking-widest text-sm whitespace-nowrap">Pour IQ&trade;</span>
-            <span className="text-parchment-400 text-sm truncate">{venueName}</span>
+          <Link href="/trade/pouriq" className="flex items-center gap-3 min-w-0">
+            <PourIqWordmark />
+            <span className="text-slate-400 text-sm truncate border-l border-slate-200 pl-3">{venueName}</span>
           </Link>
         </div>
         <AddImportMenu />
       </header>
 
       <div className="flex">
-        <aside className="hidden lg:block w-56 shrink-0 border-r border-gold-500/15 min-h-[calc(100vh-57px)]">
+        <aside className="hidden lg:block w-56 shrink-0 border-r border-slate-200 bg-white min-h-[calc(100vh-57px)]">
           {nav}
         </aside>
 
         {navOpen && (
           <div className="lg:hidden fixed inset-0 z-30">
             <div className="absolute inset-0 bg-black/50" onClick={() => setNavOpen(false)} aria-hidden="true" />
-            <aside className="absolute left-0 top-0 bottom-0 w-64 bg-jerry-green-900 border-r border-gold-500/20 overflow-y-auto">
+            <aside className="absolute left-0 top-0 bottom-0 w-64 bg-white border-r border-slate-200 overflow-y-auto">
               {nav}
             </aside>
           </div>

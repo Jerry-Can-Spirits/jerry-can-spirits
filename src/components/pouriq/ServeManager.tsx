@@ -64,7 +64,7 @@ export function ServeManager({ serves, libraryEntries, serveUnits }: Props) {
 
   return (
     <div className="space-y-4">
-      {error && <p role="alert" className="text-sm text-red-300">{error}</p>}
+      {error && <p role="alert" className="text-sm text-rose-600">{error}</p>}
 
       {!creating && (
         <button type="button" onClick={() => { setEditingId(null); setCreating(true) }} disabled={pending} className={PRIMARY_BUTTON}>
@@ -85,15 +85,15 @@ export function ServeManager({ serves, libraryEntries, serveUnits }: Props) {
       )}
 
       {serves.length === 0 && !creating ? (
-        <div className="bg-jerry-green-800/40 border border-gold-500/20 rounded-xl p-12 text-center">
-          <p className="text-parchment-200 font-medium mb-1">No serves yet.</p>
-          <p className="text-parchment-400 text-sm">Add a serve so non-cocktail POS sales deplete stock.</p>
+        <div className="bg-white border border-slate-200 rounded-xl p-12 text-center">
+          <p className="text-slate-700 font-medium mb-1">No serves yet.</p>
+          <p className="text-slate-500 text-sm">Add a serve so non-cocktail POS sales deplete stock.</p>
         </div>
       ) : (
         serves.map((serve) => (
-          <div key={serve.id} className="bg-jerry-green-800/40 border border-gold-500/20 rounded-xl p-5">
+          <div key={serve.id} className="bg-white border border-slate-200 rounded-xl p-5">
             <div className="flex flex-wrap items-baseline justify-between gap-2 mb-3">
-              <h2 className="text-lg font-serif font-bold text-white">{serve.name}</h2>
+              <h2 className="text-lg font-bold text-slate-900">{serve.name}</h2>
               <div className="flex flex-wrap gap-2">
                 <button type="button" onClick={() => { setCreating(false); setEditingId((id) => id === serve.id ? null : serve.id) }} disabled={pending} className={SECONDARY_BUTTON_SM}>
                   {editingId === serve.id ? 'Cancel edit' : 'Edit'}
@@ -105,19 +105,19 @@ export function ServeManager({ serves, libraryEntries, serveUnits }: Props) {
             </div>
 
             {serve.glass != null && serve.glass.trim() !== '' && (
-              <p className="text-sm text-parchment-300 mb-2">
+              <p className="text-sm text-slate-600 mb-2">
                 <span className="font-semibold">Glass:</span> {serve.glass}
               </p>
             )}
 
             {serve.ingredients.length === 0 ? (
-              <p className="text-parchment-400 text-sm">No ingredients set.</p>
+              <p className="text-slate-500 text-sm">No ingredients set.</p>
             ) : (
               <ul className="space-y-1">
                 {serve.ingredients.map((ing) => (
                   <li key={ing.id} className="flex items-baseline justify-between gap-3 text-sm">
-                    <span className="text-parchment-100">{ing.library.name}</span>
-                    <span className="text-parchment-400 shrink-0">{formatPour(ing)}</span>
+                    <span className="text-slate-900">{ing.library.name}</span>
+                    <span className="text-slate-500 shrink-0">{formatPour(ing)}</span>
                   </li>
                 ))}
               </ul>

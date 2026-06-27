@@ -23,7 +23,7 @@ export function SignOutLink() {
       type="button"
       onClick={handleSignOut}
       disabled={submitting}
-      className="text-sm text-parchment-300 hover:text-parchment-100 underline underline-offset-4 disabled:opacity-50"
+      className="text-sm text-slate-500 hover:text-slate-700 underline underline-offset-4 disabled:opacity-50"
     >
       {submitting ? 'Signing out…' : 'Sign out'}
     </button>

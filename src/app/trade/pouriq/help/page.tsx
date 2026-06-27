@@ -53,13 +53,13 @@ export default async function PourIqHelpPage() {
   return (
     <main className="min-h-screen">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-24">
-        <Link href="/trade/pouriq" className="text-sm text-parchment-400 hover:text-parchment-200">← Pour IQ™</Link>
-        <h1 className="text-3xl md:text-4xl font-serif font-bold text-white mt-3 mb-3">{title}</h1>
-        {intro && <p className="text-parchment-300 text-base leading-relaxed mb-10">{intro}</p>}
+        <Link href="/trade/pouriq" className="text-sm text-slate-500 hover:text-slate-700">← Pour IQ™</Link>
+        <h1 className="text-3xl md:text-4xl font-bold text-slate-900 mt-3 mb-3">{title}</h1>
+        {intro && <p className="text-slate-600 text-base leading-relaxed mb-10">{intro}</p>}
 
         {sections.length === 0 ? (
-          <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
-            <p className="text-parchment-300 leading-relaxed">
+          <div className="bg-white rounded-xl p-8 border border-slate-200">
+            <p className="text-slate-600 leading-relaxed">
               We are writing this guide as Pour IQ™ evolves. Check back soon.
             </p>
           </div>
@@ -72,22 +72,22 @@ export default async function PourIqHelpPage() {
                 <details
                   key={id}
                   id={id}
-                  className="group bg-jerry-green-800/40 backdrop-blur-sm rounded-xl border border-gold-500/20 overflow-hidden"
+                  className="group bg-white rounded-xl border border-slate-200 overflow-hidden"
                 >
-                  <summary className="cursor-pointer list-none px-6 py-4 flex items-center justify-between gap-4 text-base font-serif font-bold text-white hover:bg-jerry-green-700/30 transition-colors">
+                  <summary className="cursor-pointer list-none px-6 py-4 flex items-center justify-between gap-4 text-base font-bold text-slate-900 hover:bg-slate-50 transition-colors">
                     <span>{section.title}</span>
                     <span
                       aria-hidden="true"
-                      className="text-gold-400 text-lg transition-transform group-open:rotate-45"
+                      className="text-emerald-600 text-lg transition-transform group-open:rotate-45"
                     >
                       +
                     </span>
                   </summary>
-                  <div className="px-6 pb-6 pt-2 border-t border-gold-500/10">
+                  <div className="px-6 pb-6 pt-2 border-t border-slate-200">
                     {hasBody ? (
                       <HelpPortableText value={section.body} />
                     ) : (
-                      <p className="text-parchment-400 italic">This section is being written.</p>
+                      <p className="text-slate-500 italic">This section is being written.</p>
                     )}
                   </div>
                 </details>

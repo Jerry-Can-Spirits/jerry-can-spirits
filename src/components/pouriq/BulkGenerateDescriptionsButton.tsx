@@ -67,9 +67,9 @@ export function BulkGenerateDescriptionsButton({ menuId, missingCount }: Props) 
       <Dialog open={confirmOpen} onClose={() => setConfirmOpen(false)} className="relative z-50">
         <div className="fixed inset-0 bg-black/60" aria-hidden="true" />
         <div className="fixed inset-0 flex items-center justify-center p-4">
-          <DialogPanel className="mx-auto w-full max-w-md rounded-xl bg-jerry-green-900 border border-gold-500/30 p-6">
-            <DialogTitle className="text-lg font-serif font-bold text-white mb-2">Generate descriptions?</DialogTitle>
-            <p className="text-sm text-parchment-300 mb-5">
+          <DialogPanel className="mx-auto w-full max-w-md rounded-xl bg-white border border-slate-200 p-6">
+            <DialogTitle className="text-lg font-bold text-slate-900 mb-2">Generate descriptions?</DialogTitle>
+            <p className="text-sm text-slate-600 mb-5">
               This will generate descriptions for {missingCount} drink{missingCount === 1 ? '' : 's'} using your Voice Profile. You can edit each one afterwards.
             </p>
             <div className="flex justify-end gap-2">
@@ -84,16 +84,16 @@ export function BulkGenerateDescriptionsButton({ menuId, missingCount }: Props) 
       <Dialog open={resultsOpen} onClose={() => setResultsOpen(false)} className="relative z-50">
         <div className="fixed inset-0 bg-black/60" aria-hidden="true" />
         <div className="fixed inset-0 flex items-center justify-center p-4">
-          <DialogPanel className="mx-auto w-full max-w-xl rounded-xl bg-jerry-green-900 border border-gold-500/30 p-6 max-h-[90vh] overflow-y-auto">
-            <DialogTitle className="text-lg font-serif font-bold text-white mb-3">Bulk generation complete</DialogTitle>
+          <DialogPanel className="mx-auto w-full max-w-xl rounded-xl bg-white border border-slate-200 p-6 max-h-[90vh] overflow-y-auto">
+            <DialogTitle className="text-lg font-bold text-slate-900 mb-3">Bulk generation complete</DialogTitle>
             <ul className="space-y-3">
               {results.map((r) => (
-                <li key={r.cocktail_id} className="border-b border-gold-500/10 pb-3 last:border-0">
-                  <p className="text-sm font-semibold text-parchment-100">{r.name}</p>
+                <li key={r.cocktail_id} className="border-b border-slate-100 pb-3 last:border-0">
+                  <p className="text-sm font-semibold text-slate-900">{r.name}</p>
                   {r.description ? (
-                    <p className="text-sm text-parchment-300 mt-1">{r.description}</p>
+                    <p className="text-sm text-slate-600 mt-1">{r.description}</p>
                   ) : (
-                    <p role="alert" className="text-sm text-red-300 mt-1">{r.error ?? 'Failed'}</p>
+                    <p role="alert" className="text-sm text-rose-600 mt-1">{r.error ?? 'Failed'}</p>
                   )}
                 </li>
               ))}
@@ -106,12 +106,12 @@ export function BulkGenerateDescriptionsButton({ menuId, missingCount }: Props) 
       </Dialog>
 
       {error && (
-        <p role="alert" className="text-sm text-red-300 mt-2">
+        <p role="alert" className="text-sm text-rose-600 mt-2">
           {error}
           {settingsUrl && (
             <>
               {' '}
-              <a href={settingsUrl} className="underline text-gold-300">Set Voice Profile</a>
+              <a href={settingsUrl} className="underline text-emerald-700">Set Voice Profile</a>
             </>
           )}
         </p>

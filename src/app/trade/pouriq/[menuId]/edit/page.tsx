@@ -44,11 +44,11 @@ export default async function EditMenuPage({ params, searchParams }: Props) {
   return (
     <main className="min-h-screen">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-24">
-        <Link href={`/trade/pouriq/${menuId}`} className="text-sm text-parchment-400 hover:text-parchment-200">← Back to {menu.name}</Link>
-        <h1 className="text-3xl font-serif font-bold text-white mt-4 mb-8">
+        <Link href={`/trade/pouriq/${menuId}`} className="text-sm text-slate-500 hover:text-slate-700">← Back to {menu.name}</Link>
+        <h1 className="text-3xl font-bold text-slate-900 mt-4 mb-8">
           {cocktail ? `Edit ${cocktail.name}` : 'Add a drink'}
         </h1>
-        <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+        <div className="bg-white rounded-xl p-6 border border-slate-200">
           <CocktailForm menuId={menuId} cocktail={cocktail} libraryEntries={libraryEntries} serveUnits={serveUnits} />
         </div>
       </div>

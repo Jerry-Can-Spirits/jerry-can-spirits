@@ -39,19 +39,19 @@ export function DuplicateMenuButton({ menuId, menuName }: Props) {
   }
 
   return (
-    <div className="bg-jerry-green-800/60 border border-gold-500/30 rounded-xl p-3 space-y-2 min-w-[260px]">
-      <label htmlFor="dup-name" className="block text-xs font-medium text-parchment-300">New menu name</label>
+    <div className="bg-white border border-slate-200 rounded-xl p-3 space-y-2 min-w-[260px]">
+      <label htmlFor="dup-name" className="block text-xs font-medium text-slate-600">New menu name</label>
       <input
         id="dup-name"
         value={newName}
         onChange={(e) => setNewName(e.target.value)}
-        className="w-full px-3 py-2 bg-jerry-green-700/50 border border-gold-500/30 rounded-sm text-parchment-50 text-sm focus:border-gold-400 focus:outline-hidden"
+        className="w-full px-3 py-2 bg-white border border-slate-300 rounded-sm text-slate-900 text-sm focus:border-emerald-500 focus:outline-hidden"
         placeholder="e.g. Summer 2026"
         autoFocus
       />
-      {error && <p role="alert" className="text-xs text-red-300">{error}</p>}
+      {error && <p role="alert" className="text-xs text-rose-600">{error}</p>}
       <div className="flex justify-end gap-2">
-        <button type="button" onClick={() => setOpen(false)} className="text-xs text-parchment-400 hover:text-parchment-200 px-2 py-1">
+        <button type="button" onClick={() => setOpen(false)} className="text-xs text-slate-500 hover:text-slate-700 px-2 py-1">
           Cancel
         </button>
         <button type="button" onClick={go} disabled={pending || !newName.trim()} className={SECONDARY_BUTTON_SM}>

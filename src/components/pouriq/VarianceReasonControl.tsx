@@ -4,6 +4,7 @@ import { useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 import { VARIANCE_REASONS } from '@/lib/pouriq/types'
 import { setVarianceReasonAction } from '@/lib/pouriq/server-actions'
+import { SECONDARY_BUTTON_SM } from '@/lib/pouriq/button-styles'
 
 export function VarianceReasonControl({ ingredientId, current }: { ingredientId: string; current: string | null }) {
   const router = useRouter()
@@ -29,7 +30,7 @@ export function VarianceReasonControl({ ingredientId, current }: { ingredientId:
         value={reason}
         onChange={(e) => setReason(e.target.value)}
         aria-label="Variance reason"
-        className="px-2 py-1 bg-jerry-green-700/50 border border-gold-500/30 rounded-sm text-parchment-50 text-sm"
+        className="px-2 py-1 bg-white border border-slate-300 rounded-sm text-slate-900 text-sm focus:border-emerald-500 focus:outline-hidden"
       >
         <option value="">No reason set</option>
         {VARIANCE_REASONS.map((r) => <option key={r} value={r}>{r}</option>)}
@@ -38,11 +39,11 @@ export function VarianceReasonControl({ ingredientId, current }: { ingredientId:
         type="button"
         onClick={save}
         disabled={pending}
-        className="px-3 py-1 bg-gold-500/15 border border-gold-400/60 text-gold-100 hover:bg-gold-500/25 hover:border-gold-400 rounded-lg text-sm font-semibold disabled:opacity-40"
+        className={SECONDARY_BUTTON_SM}
       >
         Save reason
       </button>
-      {error && <span role="alert" className="text-xs text-red-300">{error}</span>}
+      {error && <span role="alert" className="text-xs text-rose-600">{error}</span>}
     </div>
   )
 }

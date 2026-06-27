@@ -43,11 +43,11 @@ function StartTile({ title, description, href, cta }: StartTile) {
   return (
     <Link
       href={href}
-      className="block bg-jerry-green-700/40 hover:bg-jerry-green-700/60 border border-gold-500/30 hover:border-gold-400/60 rounded-xl p-6 transition-colors"
+      className="block bg-white hover:bg-slate-50 border border-slate-200 hover:border-emerald-600 rounded-xl p-6 transition-colors"
     >
-      <h3 className="text-lg font-serif font-bold text-white mb-2">{title}</h3>
-      <p className="text-parchment-300 text-sm leading-relaxed mb-4">{description}</p>
-      <span className="inline-flex items-center text-gold-300 text-sm font-medium">
+      <h3 className="text-lg font-bold text-slate-900 mb-2">{title}</h3>
+      <p className="text-slate-600 text-sm leading-relaxed mb-4">{description}</p>
+      <span className="inline-flex items-center text-emerald-700 text-sm font-medium">
         {cta}
         <span aria-hidden="true" className="ml-2">→</span>
       </span>
@@ -99,8 +99,8 @@ export default async function MenuDetailPage({ params }: Props) {
     <main className="min-h-screen print-region">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-24">
         <div className="flex items-baseline gap-4 no-print">
-          <Link href="/trade/pouriq/menus" className="text-sm text-parchment-400 hover:text-parchment-200">← All menus</Link>
-          <Link href="/trade/pouriq/library" className="text-sm text-parchment-400 hover:text-parchment-200">Library</Link>
+          <Link href="/trade/pouriq/menus" className="text-sm text-slate-500 hover:text-slate-700">← All menus</Link>
+          <Link href="/trade/pouriq/library" className="text-sm text-slate-500 hover:text-slate-700">Library</Link>
         </div>
         {/* Print-only report header — never visible on screen */}
         <div className="hidden print:block mb-6 pb-4 border-b border-stone-300">
@@ -109,9 +109,9 @@ export default async function MenuDetailPage({ params }: Props) {
         </div>
         <div className="flex flex-wrap items-baseline justify-between gap-3 mt-4 mb-3">
           <div className="flex flex-wrap items-center gap-3">
-            <h1 className="text-3xl md:text-4xl font-serif font-bold text-white">{menu.name}</h1>
+            <h1 className="text-3xl md:text-4xl font-bold text-slate-900">{menu.name}</h1>
             {menu.is_active === 1 ? (
-              <span className="inline-block px-2 py-0.5 rounded-sm bg-emerald-500/20 text-emerald-200 border border-emerald-500/40 text-[10px] uppercase tracking-widest no-print">Active</span>
+              <span className="inline-block px-2 py-0.5 rounded-sm bg-emerald-50 text-emerald-700 border border-emerald-600 text-[10px] uppercase tracking-widest no-print">Active</span>
             ) : (
               <span className="no-print"><MakeActiveButton menuId={menuId} /></span>
             )}
@@ -133,7 +133,7 @@ export default async function MenuDetailPage({ params }: Props) {
           )}
         </div>
         <div className="flex flex-wrap items-start justify-between gap-3 mb-10">
-          <p className="text-parchment-400 text-sm">
+          <p className="text-slate-500 text-sm">
             {menu.venue_type ?? 'Menu'}{menu.city && ` · ${menu.city}`} · Target GP {menu.target_gp_pct}%
             <span className="hidden print:inline"> · Prices {menu.prices_include_vat === 1 ? 'include VAT' : 'net of VAT'}</span>
           </p>
@@ -144,9 +144,9 @@ export default async function MenuDetailPage({ params }: Props) {
 
         {cocktails.length === 0 ? (
           <div className="space-y-4 no-print">
-            <div className="bg-jerry-green-800/40 border border-gold-500/20 rounded-xl p-6">
-              <h2 className="text-xl font-serif font-bold text-white mb-1">Get drinks onto this menu</h2>
-              <p className="text-parchment-300 text-sm mb-6">Pick the option that matches how your menu currently lives.</p>
+            <div className="bg-white border border-slate-200 rounded-xl p-6">
+              <h2 className="text-xl font-bold text-slate-900 mb-1">Get drinks onto this menu</h2>
+              <p className="text-slate-600 text-sm mb-6">Pick the option that matches how your menu currently lives.</p>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                 <StartTile
                   title="Import from PDF"
@@ -173,20 +173,20 @@ export default async function MenuDetailPage({ params }: Props) {
           <div className="space-y-8">
             <KpiCards menu={menu} metrics={metrics} />
             <section>
-              <h2 className="text-xl font-serif font-bold text-white mb-4">Menu performance</h2>
+              <h2 className="text-xl font-bold text-slate-900 mb-4">Menu performance</h2>
               {perf.hasSales ? (
                 <MenuMatrix quadrants={perf.quadrants} />
               ) : (
-                <p className="text-sm text-parchment-400">Add this week&rsquo;s sales below to see your menu performance matrix.</p>
+                <p className="text-sm text-slate-500">Add this week&rsquo;s sales below to see your menu performance matrix.</p>
               )}
             </section>
             <section>
-              <h2 className="text-xl font-serif font-bold text-white mb-4">Movers (last 30 days)</h2>
+              <h2 className="text-xl font-bold text-slate-900 mb-4">Movers (last 30 days)</h2>
               <MoversReport report={movers} />
             </section>
             <section>
               <div className="flex flex-wrap items-baseline justify-between gap-3 mb-4">
-                <h2 className="text-xl font-serif font-bold text-white">Drinks</h2>
+                <h2 className="text-xl font-bold text-slate-900">Drinks</h2>
                 <div className="no-print">
                   <BulkPromoActions menuId={menuId} />
                 </div>
@@ -208,12 +208,12 @@ export default async function MenuDetailPage({ params }: Props) {
               />
             </section>
             <section className="no-print">
-              <h2 className="text-lg font-semibold text-white mb-2">Variance</h2>
-              <p className="text-sm text-parchment-400 mb-3">Stock variance is now counted across your whole bar, not per menu.</p>
-              <a href="/trade/pouriq/variance" className="text-sm text-gold-300 hover:text-gold-200">Go to Variance</a>
+              <h2 className="text-lg font-semibold text-slate-900 mb-2">Variance</h2>
+              <p className="text-sm text-slate-500 mb-3">Stock variance is now counted across your whole bar, not per menu.</p>
+              <a href="/trade/pouriq/variance" className="text-sm text-emerald-700 hover:text-emerald-600">Go to Variance</a>
             </section>
             <section className="no-print">
-              <h2 className="text-lg font-semibold text-white mb-3">Menu balance</h2>
+              <h2 className="text-lg font-semibold text-slate-900 mb-3">Menu balance</h2>
               <MenuBalance
                 result={balance}
                 targetGpPct={menu.target_gp_pct}
@@ -248,23 +248,23 @@ export default async function MenuDetailPage({ params }: Props) {
               )
             })()}
             <section>
-              <h2 className="text-xl font-serif font-bold text-white mb-4">Ingredient overlap</h2>
+              <h2 className="text-xl font-bold text-slate-900 mb-4">Ingredient overlap</h2>
               <IngredientOverlapTable overlap={metrics.ingredient_overlap} />
             </section>
             <section>
-              <h2 className="text-xl font-serif font-bold text-white mb-4">AI recommendations</h2>
+              <h2 className="text-xl font-bold text-slate-900 mb-4">AI recommendations</h2>
               <RecommendationStream menuId={menuId} />
             </section>
           </div>
         )}
 
         {cocktails.length > 0 && (
-          <div className="flex justify-end mt-12 pt-6 border-t border-gold-500/10 no-print">
+          <div className="flex justify-end mt-12 pt-6 border-t border-slate-200 no-print">
             <PrintReportButton />
           </div>
         )}
 
-        <div className="flex justify-end mt-16 pt-8 border-t border-gold-500/10 no-print">
+        <div className="flex justify-end mt-16 pt-8 border-t border-slate-200 no-print">
           <DeleteMenuButton menuId={menuId} menuName={menu.name} />
         </div>
       </div>

@@ -89,25 +89,25 @@ export function UnmatchedReview({ items, cocktails, serves, libraryEntries, serv
 
   if (rows.length === 0) {
     return (
-      <div className="bg-jerry-green-800/40 border border-gold-500/20 rounded-xl p-12 text-center">
-        <p className="text-parchment-200 font-medium mb-1">Nothing to review.</p>
-        <p className="text-parchment-400 text-sm">Every till item from your POS is matched to a cocktail.</p>
+      <div className="bg-white border border-slate-200 rounded-xl p-12 text-center">
+        <p className="text-slate-900 font-medium mb-1">Nothing to review.</p>
+        <p className="text-slate-500 text-sm">Every till item from your POS is matched to a cocktail.</p>
       </div>
     )
   }
 
   return (
     <div className="space-y-4">
-      {error && <p role="alert" className="text-sm text-red-300">{error}</p>}
+      {error && <p role="alert" className="text-sm text-rose-600">{error}</p>}
       {rows.map((row) => (
-        <div key={row.normalised_name} className="bg-jerry-green-800/40 border border-gold-500/20 rounded-xl p-5">
+        <div key={row.normalised_name} className="bg-white border border-slate-200 rounded-xl p-5">
           <div className="flex flex-wrap items-baseline justify-between gap-2 mb-3">
-            <h2 className="text-lg font-serif font-bold text-white">{row.raw_name}</h2>
-            <span className="text-xs text-parchment-400">
+            <h2 className="text-lg font-bold text-slate-900">{row.raw_name}</h2>
+            <span className="text-xs text-slate-500">
               {row.total_quantity} {row.total_quantity === 1 ? 'sale' : 'sales'} waiting · last seen {formatDate(row.last_seen)}
             </span>
           </div>
-          <label htmlFor={`map-${row.normalised_name}`} className="block text-xs font-medium text-parchment-300 mb-2">
+          <label htmlFor={`map-${row.normalised_name}`} className="block text-xs font-medium text-slate-600 mb-2">
             This is a cocktail
           </label>
           <select
@@ -115,7 +115,7 @@ export function UnmatchedReview({ items, cocktails, serves, libraryEntries, serv
             value={selection[row.normalised_name] ?? ''}
             onChange={(e) => setSelection((s) => ({ ...s, [row.normalised_name]: e.target.value }))}
             disabled={pending}
-            className="w-full px-3 py-2 bg-jerry-green-700/50 border border-gold-500/30 rounded-lg text-parchment-100 text-sm focus:border-gold-400 focus:ring-2 focus:ring-gold-400/20 focus:outline-hidden mb-2"
+            className="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-slate-900 text-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-hidden mb-2"
           >
             <option value="">— Select a cocktail —</option>
             {cocktails.map((c) => (
@@ -131,7 +131,7 @@ export function UnmatchedReview({ items, cocktails, serves, libraryEntries, serv
             </button>
           </div>
 
-          <label htmlFor={`serve-${row.normalised_name}`} className="block text-xs font-medium text-parchment-300 mb-2">
+          <label htmlFor={`serve-${row.normalised_name}`} className="block text-xs font-medium text-slate-600 mb-2">
             Or this is a serve
           </label>
           <select
@@ -139,7 +139,7 @@ export function UnmatchedReview({ items, cocktails, serves, libraryEntries, serv
             value={serveSelection[row.normalised_name] ?? ''}
             onChange={(e) => setServeSelection((s) => ({ ...s, [row.normalised_name]: e.target.value }))}
             disabled={pending}
-            className="w-full px-3 py-2 bg-jerry-green-700/50 border border-gold-500/30 rounded-lg text-parchment-100 text-sm focus:border-gold-400 focus:ring-2 focus:ring-gold-400/20 focus:outline-hidden mb-2"
+            className="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-slate-900 text-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-hidden mb-2"
           >
             <option value="">— Select a serve —</option>
             {serveList.map((s) => (
@@ -187,7 +187,7 @@ export function UnmatchedReview({ items, cocktails, serves, libraryEntries, serv
           )}
         </div>
       ))}
-      <p className="text-xs text-parchment-500">
+      <p className="text-xs text-slate-500">
         Confirming a match also recovers the waiting sales (up to 90 days) and remembers the mapping for next time.
       </p>
     </div>

@@ -54,10 +54,10 @@ export function CostImpactPanel({ ingredientId }: Props) {
   }, [data, newCostPounds])
 
   if (loading) {
-    return <p className="text-sm text-parchment-300">Loading impact…</p>
+    return <p className="text-sm text-slate-600">Loading impact…</p>
   }
   if (error || !data || !projection) {
-    return <p role="alert" className="text-sm text-red-300">{error ?? 'Could not load impact data'}</p>
+    return <p role="alert" className="text-sm text-rose-600">{error ?? 'Could not load impact data'}</p>
   }
 
   const { ingredient } = data
@@ -66,13 +66,13 @@ export function CostImpactPanel({ ingredientId }: Props) {
 
   return (
     <div className="space-y-6">
-      <div className="bg-jerry-green-800/40 border border-gold-500/20 rounded-xl p-6">
-        <h2 className="text-lg font-serif font-bold text-white mb-1">Cost change impact</h2>
-        <p className="text-sm text-parchment-300 mb-5">
+      <div className="bg-white border border-slate-200 rounded-xl p-6">
+        <h2 className="text-lg font-bold text-slate-900 mb-1">Cost change impact</h2>
+        <p className="text-sm text-slate-600 mb-5">
           {ingredient.name} · current {formatMoney(currentP)} {unitLabel}
         </p>
 
-        <label htmlFor="new-cost" className="block text-sm font-medium text-parchment-200 mb-2">
+        <label htmlFor="new-cost" className="block text-sm font-medium text-slate-700 mb-2">
           New cost ({unitLabel})
         </label>
         <input
@@ -82,14 +82,14 @@ export function CostImpactPanel({ ingredientId }: Props) {
           min={0}
           value={newCostPounds}
           onChange={(e) => setNewCostPounds(e.target.value)}
-          className="w-48 px-4 py-3 bg-jerry-green-700/50 border border-gold-500/30 rounded-lg text-parchment-50 placeholder-parchment-400 focus:border-gold-400 focus:outline-hidden"
+          className="w-48 px-4 py-3 bg-white border border-slate-300 rounded-lg text-slate-900 placeholder-slate-400 focus:border-emerald-500 focus:outline-hidden"
         />
-        <p className="mt-3 text-sm text-parchment-300">
-          Change: <strong className={delta === 0 ? 'text-parchment-200' : delta > 0 ? 'text-amber-300' : 'text-emerald-300'}>
+        <p className="mt-3 text-sm text-slate-600">
+          Change: <strong className={delta === 0 ? 'text-slate-700' : delta > 0 ? 'text-amber-600' : 'text-emerald-600'}>
             {delta === 0 ? 'no change' : `${delta > 0 ? '+' : ''}${formatMoney(delta)}`}
           </strong>{' '}
           {currentP > 0 && delta !== 0 && (
-            <span className="text-parchment-400">({((delta / currentP) * 100).toFixed(1)}%)</span>
+            <span className="text-slate-500">({((delta / currentP) * 100).toFixed(1)}%)</span>
           )}
         </p>
       </div>

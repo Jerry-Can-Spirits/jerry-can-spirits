@@ -1,6 +1,7 @@
 'use client'
 
 import { useRef, useState } from 'react'
+import { PRIMARY_BUTTON } from '@/lib/pouriq/button-styles'
 
 interface Props {
   onUploaded: (ticket: string, filename: string) => void
@@ -57,18 +58,18 @@ export function InvoiceUpload({ onUploaded, disabled = false }: Props) {
         if (disabled || uploading) return
         handleFiles(e.dataTransfer.files)
       }}
-      className={`bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-10 border-2 border-dashed transition-colors ${
-        dragOver ? 'border-gold-400 bg-jerry-green-800/60' : 'border-gold-500/30'
+      className={`bg-white rounded-xl p-10 border-2 border-dashed transition-colors ${
+        dragOver ? 'border-emerald-600 bg-emerald-50' : 'border-slate-300'
       }`}
     >
       <div className="text-center">
-        <p className="text-lg text-parchment-100 mb-2">Drop a supplier invoice PDF here</p>
-        <p className="text-sm text-parchment-400 mb-6">Or choose a file. Maximum 5MB.</p>
+        <p className="text-lg text-slate-900 mb-2">Drop a supplier invoice PDF here</p>
+        <p className="text-sm text-slate-500 mb-6">Or choose a file. Maximum 5MB.</p>
         <button
           type="button"
           onClick={handleChoose}
           disabled={disabled || uploading}
-          className="px-6 py-3 bg-linear-to-r from-gold-600 to-gold-500 hover:from-gold-500 hover:to-gold-400 disabled:from-gray-600 disabled:to-gray-500 text-jerry-green-900 font-semibold rounded-lg"
+          className={PRIMARY_BUTTON}
         >
           {uploading ? 'Uploading…' : 'Choose a PDF'}
         </button>
@@ -79,7 +80,7 @@ export function InvoiceUpload({ onUploaded, disabled = false }: Props) {
           className="hidden"
           onChange={(e) => handleFiles(e.target.files)}
         />
-        {error && <p role="alert" className="mt-4 text-sm text-red-300">{error}</p>}
+        {error && <p role="alert" className="mt-4 text-sm text-rose-600">{error}</p>}
       </div>
     </div>
   )

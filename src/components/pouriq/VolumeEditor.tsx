@@ -3,9 +3,10 @@
 import { useEffect, useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 import { PRIMARY_BUTTON, SECONDARY_BUTTON_SM } from '@/lib/pouriq/button-styles'
+import { INPUT } from '@/lib/pouriq/ui'
 import type { CocktailRow, CocktailMetrics, VolumeCadence } from '@/lib/pouriq/types'
 
-const inputClass = 'w-24 px-2 py-1 bg-jerry-green-700/50 border border-gold-500/30 rounded-sm text-parchment-50 text-sm focus:border-gold-400 focus:outline-hidden'
+const inputClass = 'w-24 px-2 py-1 bg-white border border-slate-300 rounded-sm text-slate-900 text-sm focus:border-emerald-500 focus:outline-hidden'
 
 function formatMoney(p: number): string { return `£${(p / 100).toFixed(2)}` }
 function formatDateRange(start: string, end: string): string {
@@ -178,9 +179,9 @@ export function VolumeEditor({ menuId, cocktails, metrics, initialCadence }: Pro
     <div className="space-y-4">
       <div className="flex flex-wrap items-baseline justify-between gap-3">
         <div>
-          <h2 className="text-xl font-serif font-bold text-white">Sales volume</h2>
+          <h2 className="text-xl font-bold text-slate-900">Sales volume</h2>
           {data && (
-            <p className="text-xs text-parchment-400 mt-1">
+            <p className="text-xs text-slate-500 mt-1">
               Current period: {formatDateRange(data.current_period.start, data.current_period.end)}
             </p>
           )}
@@ -189,7 +190,7 @@ export function VolumeEditor({ menuId, cocktails, metrics, initialCadence }: Pro
           <span
             role="group"
             aria-label="Reporting cadence"
-            className="inline-flex rounded-lg border border-gold-500/30 overflow-hidden bg-jerry-green-700/40 text-xs"
+            className="inline-flex rounded-lg border border-slate-200 overflow-hidden bg-white text-xs"
           >
             {(['weekly', 'monthly'] as VolumeCadence[]).map((c) => (
               <button
@@ -198,7 +199,7 @@ export function VolumeEditor({ menuId, cocktails, metrics, initialCadence }: Pro
                 onClick={() => changeCadence(c)}
                 disabled={pending}
                 aria-pressed={cadence === c}
-                className={`px-3 py-1.5 font-semibold transition-colors ${cadence === c ? 'bg-gold-500/30 text-gold-50' : 'text-parchment-300 hover:text-parchment-100'}`}
+                className={`px-3 py-1.5 font-semibold transition-colors ${cadence === c ? 'bg-emerald-50 text-emerald-700' : 'text-slate-500 hover:text-slate-700'}`}
               >
                 {c.charAt(0).toUpperCase() + c.slice(1)}
               </button>
@@ -211,11 +212,11 @@ export function VolumeEditor({ menuId, cocktails, metrics, initialCadence }: Pro
       </div>
 
       {pasteOpen && (
-        <div className="bg-jerry-green-800/60 border border-gold-500/30 rounded-xl p-4 space-y-3">
-          <p className="text-sm text-parchment-200">
+        <div className="bg-white border border-slate-200 rounded-xl p-4 space-y-3">
+          <p className="text-sm text-slate-700">
             Paste one of the following formats:
           </p>
-          <ul className="text-xs text-parchment-400 list-disc list-inside space-y-1">
+          <ul className="text-xs text-slate-500 list-disc list-inside space-y-1">
             <li><span className="font-mono">Drink name TAB units</span> (one per line, matched by name)</li>
             <li><span className="font-mono">Drink name, units</span></li>
             <li><span className="font-mono">just numbers</span>, one per line, in the same order as drinks below</li>
@@ -224,11 +225,11 @@ export function VolumeEditor({ menuId, cocktails, metrics, initialCadence }: Pro
             value={pasteText}
             onChange={(e) => setPasteText(e.target.value)}
             rows={8}
-            className="w-full px-3 py-2 bg-jerry-green-700/50 border border-gold-500/30 rounded-sm text-parchment-50 text-xs font-mono focus:border-gold-400 focus:outline-hidden"
+            className={`${INPUT} text-xs font-mono`}
             placeholder={`Mojito\t28\nNegroni\t12\nEspresso Martini\t34`}
           />
           <div className="flex justify-end gap-2">
-            <button type="button" onClick={() => { setPasteOpen(false); setPasteText('') }} className="text-xs text-parchment-400 hover:text-parchment-200 px-3 py-1">
+            <button type="button" onClick={() => { setPasteOpen(false); setPasteText('') }} className="text-xs text-slate-500 hover:text-slate-700 px-3 py-1">
               Cancel
             </button>
             <button type="button" onClick={applyPaste} className={SECONDARY_BUTTON_SM}>
@@ -239,12 +240,12 @@ export function VolumeEditor({ menuId, cocktails, metrics, initialCadence }: Pro
       )}
 
       {loading ? (
-        <p className="text-sm text-parchment-300">Loading volumes…</p>
+        <p className="text-sm text-slate-600">Loading volumes…</p>
       ) : (
-        <div className="bg-jerry-green-800/40 border border-gold-500/20 rounded-xl overflow-x-auto">
+        <div className="bg-white border border-slate-200 rounded-xl overflow-x-auto">
           <table className="w-full text-sm min-w-[520px]">
-            <thead className="bg-jerry-green-900/40">
-              <tr className="text-left text-parchment-400 text-xs uppercase tracking-widest">
+            <thead className="bg-slate-50">
+              <tr className="text-left text-slate-500 text-xs uppercase tracking-widest">
                 <th className="px-4 py-3">Drink</th>
                 <th className="px-4 py-3">Units sold</th>
                 <th className="px-4 py-3">Margin / unit</th>
@@ -275,8 +276,8 @@ export function VolumeEditor({ menuId, cocktails, metrics, initialCadence }: Pro
                     ? (contribution / totalContribution) * 100
                     : 0
                   return (
-                    <tr key={c.id} className="border-t border-gold-500/10">
-                      <td className="px-4 py-3 text-parchment-100">{c.name}</td>
+                    <tr key={c.id} className="border-t border-slate-200">
+                      <td className="px-4 py-3 text-slate-900">{c.name}</td>
                       <td className="px-4 py-3">
                         <input
                           type="number"
@@ -288,13 +289,13 @@ export function VolumeEditor({ menuId, cocktails, metrics, initialCadence }: Pro
                           placeholder="0"
                         />
                       </td>
-                      <td className="px-4 py-3 text-parchment-200">{formatMoney(margin)}</td>
-                      <td className="px-4 py-3 text-parchment-100">
+                      <td className="px-4 py-3 text-slate-700">{formatMoney(margin)}</td>
+                      <td className="px-4 py-3 text-slate-900">
                         {hasUnits ? (
                           <span>
                             {formatMoney(contribution)}
                             {totalContribution > 0 && (
-                              <span className="text-parchment-400 ml-2">· {pct.toFixed(1)}%</span>
+                              <span className="text-slate-500 ml-2">· {pct.toFixed(1)}%</span>
                             )}
                           </span>
                         ) : '—'}
@@ -308,8 +309,8 @@ export function VolumeEditor({ menuId, cocktails, metrics, initialCadence }: Pro
         </div>
       )}
 
-      {error && <p role="alert" className="text-sm text-red-300">{error}</p>}
-      {info && <p className="text-sm text-emerald-300">{info}</p>}
+      {error && <p role="alert" className="text-sm text-rose-600">{error}</p>}
+      {info && <p className="text-sm text-emerald-600">{info}</p>}
 
       <div className="flex justify-end">
         <button type="button" onClick={save} disabled={pending || loading} className={PRIMARY_BUTTON}>
@@ -319,11 +320,11 @@ export function VolumeEditor({ menuId, cocktails, metrics, initialCadence }: Pro
 
       {data && data.periods.length > 1 && (
         <div className="mt-8">
-          <h3 className="text-sm font-medium text-parchment-100 mb-3">Recent periods</h3>
-          <div className="bg-jerry-green-800/40 border border-gold-500/20 rounded-xl overflow-x-auto">
+          <h3 className="text-sm font-medium text-slate-900 mb-3">Recent periods</h3>
+          <div className="bg-white border border-slate-200 rounded-xl overflow-x-auto">
             <table className="w-full text-sm min-w-[440px]">
-              <thead className="bg-jerry-green-900/40">
-                <tr className="text-left text-parchment-400 text-xs uppercase tracking-widest">
+              <thead className="bg-slate-50">
+                <tr className="text-left text-slate-500 text-xs uppercase tracking-widest">
                   <th className="px-4 py-3">Period</th>
                   <th className="px-4 py-3">Units</th>
                   <th className="px-4 py-3">Contribution</th>
@@ -331,10 +332,10 @@ export function VolumeEditor({ menuId, cocktails, metrics, initialCadence }: Pro
               </thead>
               <tbody>
                 {data.periods.slice(0, 6).map((p) => (
-                  <tr key={`${p.period_start}-${p.period_end}`} className="border-t border-gold-500/10">
-                    <td className="px-4 py-3 text-parchment-100">{formatDateRange(p.period_start, p.period_end)}</td>
-                    <td className="px-4 py-3 text-parchment-200">{p.total_units}</td>
-                    <td className="px-4 py-3 text-parchment-100">{formatMoney(p.total_contribution_p)}</td>
+                  <tr key={`${p.period_start}-${p.period_end}`} className="border-t border-slate-200">
+                    <td className="px-4 py-3 text-slate-900">{formatDateRange(p.period_start, p.period_end)}</td>
+                    <td className="px-4 py-3 text-slate-700">{p.total_units}</td>
+                    <td className="px-4 py-3 text-slate-900">{formatMoney(p.total_contribution_p)}</td>
                   </tr>
                 ))}
               </tbody>
