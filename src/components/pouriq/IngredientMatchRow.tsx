@@ -1,13 +1,11 @@
 'use client'
 
-import type { IngredientLibraryRow, IngredientType, ServeUnitRow } from '@/lib/pouriq/types'
+import { ALL_INGREDIENT_TYPES, type IngredientLibraryRow, type IngredientType, type ServeUnitRow } from '@/lib/pouriq/types'
 import { PriceInput } from '@/components/pouriq/PriceInput'
 import { ServeUnitPicker } from '@/components/pouriq/ServeUnitPicker'
 import { BOTTLE_SIZES_ML, WEIGHT_SIZES_G, KEG_SIZES_ML } from '@/lib/pouriq/measures'
 import type { ServeUnit } from '@/lib/pouriq/measures'
 import { formatPurchaseBasis } from '@/lib/pouriq/calculations'
-
-const INGREDIENT_TYPES: IngredientType[] = ['spirit','liqueur','wine','beer','cider','mixer','syrup','juice','garnish','soft-drink','alcohol-free','food','other']
 
 const inputClass = 'w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-slate-900 text-sm focus:border-emerald-500 focus:outline-hidden'
 const labelClass = 'block text-xs font-medium text-slate-600 mb-1'
@@ -147,7 +145,7 @@ export function IngredientMatchRow({
                 <>
                   <div className="grid grid-cols-2 gap-2">
                     <select value={nl.ingredient_type} onChange={(e) => updateNewLibrary({ ingredient_type: e.target.value as IngredientType })} className={inputClass}>
-                      {INGREDIENT_TYPES.map((t) => <option key={t} value={t}>{t}</option>)}
+                      {ALL_INGREDIENT_TYPES.map((t) => <option key={t} value={t}>{t}</option>)}
                     </select>
                     <select
                       value={nl.base_unit}

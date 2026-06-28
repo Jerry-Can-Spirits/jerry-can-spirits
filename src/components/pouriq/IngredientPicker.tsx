@@ -1,13 +1,11 @@
 'use client'
 
 import { useEffect, useId, useMemo, useRef, useState } from 'react'
-import type { IngredientLibraryRow, IngredientType } from '@/lib/pouriq/types'
+import { ALL_INGREDIENT_TYPES, type IngredientLibraryRow, type IngredientType } from '@/lib/pouriq/types'
 import { saveLibraryEntryAction } from '@/lib/pouriq/server-actions'
 import { BarcodeScanner } from '@/components/pouriq/BarcodeScanner'
 import { BOTTLE_SIZES_ML, WEIGHT_SIZES_G } from '@/lib/pouriq/measures'
 import { PRIMARY_BUTTON } from '@/lib/pouriq/button-styles'
-
-const INGREDIENT_TYPES: IngredientType[] = ['spirit','liqueur','wine','beer','mixer','syrup','juice','garnish','other']
 
 const inputClass = 'w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-slate-900 text-sm placeholder-slate-400 focus:border-emerald-500 focus:outline-hidden'
 const labelClass = 'block text-xs font-medium text-slate-600 mb-1'
@@ -257,7 +255,7 @@ export function IngredientPicker({ libraryEntries, selectedEntryId, onChange }: 
             <div>
               <label className={labelClass}>Type</label>
               <select value={ingredient_type} onChange={(e) => setIngredientType(e.target.value as IngredientType)} className={inputClass}>
-                {INGREDIENT_TYPES.map((t) => <option key={t} value={t}>{t}</option>)}
+                {ALL_INGREDIENT_TYPES.map((t) => <option key={t} value={t}>{t}</option>)}
               </select>
             </div>
             <div>
