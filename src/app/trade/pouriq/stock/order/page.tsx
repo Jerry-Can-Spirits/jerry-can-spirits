@@ -22,7 +22,7 @@ export default async function OrderReportPage() {
     .map((r) => ({ id: r.library_ingredient_id, name: r.library_name, pack_size: r.pack_size, on_hand: r.on_hand_bottles, par: r.par_bottles, order_qty: r.reorder_qty }))
 
   return (
-    <main className="min-h-screen">
+    <main className="min-h-screen print-region">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-24">
         <Link href="/trade/pouriq/stock" className="text-sm text-slate-500 hover:text-slate-700 no-print">← Stock</Link>
         <h1 className="text-3xl md:text-4xl font-bold text-slate-900 mt-3 mb-2">Order report</h1>
