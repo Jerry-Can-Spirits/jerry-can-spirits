@@ -10,6 +10,7 @@ import { checkPourIqAccess } from '@/lib/pouriq/access'
 import { getMenu } from '@/lib/pouriq/menus'
 import { matchFieldManualSlug } from '@/lib/pouriq/field-manual-match'
 import { ALL_INGREDIENT_TYPES, type IngredientType } from '@/lib/pouriq/types'
+import { netPriceP } from '@/lib/pouriq/calculations'
 
 export const runtime = 'nodejs'
 
@@ -25,6 +26,7 @@ interface CommitIngredient {
     base_unit: 'ml' | 'g' | 'each'
     pack_size: number
     price_p: number
+    price_includes_vat?: boolean
     purchase_qty: number
   }
   pour_ml: number | null
@@ -148,11 +150,14 @@ export async function POST(request: Request) {
           newLibraryIdByMarker.set(`${drinkIdx}:${ingIdx}`, existing)
           continue
         }
+        const includesVat = ing.new_library.price_includes_vat === true
+        const netP = netPriceP(ing.new_library.price_p, includesVat)
         const result = await db
           .prepare(`
             INSERT INTO pouriq_ingredients_library
-              (trade_account_id, name, ingredient_type, base_unit, pack_size, price_p, purchase_qty)
-            VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7)
+              (trade_account_id, name, ingredient_type, base_unit, pack_size, price_p,
+               price_includes_vat, price_entered_p, purchase_qty)
+            VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9)
             RETURNING id
           `)
           .bind(
@@ -161,6 +166,8 @@ export async function POST(request: Request) {
             ing.new_library.ingredient_type,
             ing.new_library.base_unit,
             ing.new_library.pack_size,
+            netP,
+            includesVat ? 1 : 0,
             ing.new_library.price_p,
             ing.new_library.purchase_qty,
           )

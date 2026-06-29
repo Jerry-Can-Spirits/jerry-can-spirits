@@ -24,6 +24,7 @@ export interface MatchRowState {
     base_unit: 'ml' | 'g' | 'each'
     pack_size: number
     price_p: number | null
+    price_includes_vat: boolean
     purchase_qty: number
     pack_format?: string | null
     subcategory?: string | null
@@ -81,6 +82,7 @@ export function IngredientMatchRow({
         base_unit: 'ml',
         pack_size: pack?.pack_size ?? 700,
         price_p: null,
+        price_includes_vat: false,
         purchase_qty: pack?.purchase_qty ?? 1,
       },
       pour_ml: state.pour_ml,
@@ -153,13 +155,28 @@ export function IngredientMatchRow({
                   </div>
                   <div className="grid grid-cols-2 gap-2">
                     <div>
-                      <label className={labelClass}>Price paid (£)</label>
+                      <div className="flex items-center justify-between mb-1">
+                        <label className={labelClass}>Price paid (£)</label>
+                        <div role="group" aria-label="Price VAT basis" className="inline-flex items-stretch rounded border border-slate-300 overflow-hidden bg-white">
+                          <button type="button" onClick={() => updateNewLibrary({ price_includes_vat: true })} aria-pressed={nl.price_includes_vat}
+                            className={`px-2 py-0.5 text-xs font-semibold transition-colors ${nl.price_includes_vat ? 'bg-emerald-50 text-emerald-700' : 'text-slate-500 hover:text-slate-700'}`}>
+                            Inc VAT
+                          </button>
+                          <span aria-hidden="true" className="w-px bg-slate-300" />
+                          <button type="button" onClick={() => updateNewLibrary({ price_includes_vat: false })} aria-pressed={!nl.price_includes_vat}
+                            className={`px-2 py-0.5 text-xs font-semibold transition-colors ${!nl.price_includes_vat ? 'bg-emerald-50 text-emerald-700' : 'text-slate-500 hover:text-slate-700'}`}>
+                            Ex VAT
+                          </button>
+                        </div>
+                      </div>
                       <PriceInput
                         valueP={nl.price_p}
                         onChangeP={(p) => updateNewLibrary({ price_p: p })}
                         onCommit={onResolvedCommit}
                         className={inputClass} placeholder="14.40" />
-                      <p className="text-xs text-slate-500 mt-1">Ex-VAT (net) cost from your supplier, not the menu sale price.</p>
+                      <p className="text-xs text-slate-500 mt-1">
+                        {nl.price_includes_vat ? 'Price including VAT (stored net, divided by 1.2).' : 'Ex-VAT (net) cost from your supplier.'}
+                      </p>
                     </div>
                     <div>
                       <label className={labelClass}>How many does that buy?</label>

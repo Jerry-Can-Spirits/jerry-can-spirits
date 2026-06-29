@@ -82,6 +82,7 @@ function initialIngredientState(input: PreviewDrinkInput['ingredients'][0], libr
         base_unit: m.base_unit,
         pack_size: pack?.pack_size ?? m.default_pack_size ?? (m.base_unit === 'each' ? 1 : 700),
         price_p: null,
+        price_includes_vat: false,
         purchase_qty: pack?.purchase_qty ?? 1,
       },
       pour_ml,
