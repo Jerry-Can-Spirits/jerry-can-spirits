@@ -3,6 +3,7 @@
 import { ALL_INGREDIENT_TYPES, type IngredientLibraryRow, type IngredientType, type ServeUnitRow } from '@/lib/pouriq/types'
 import { PriceInput } from '@/components/pouriq/PriceInput'
 import { ServeUnitPicker } from '@/components/pouriq/ServeUnitPicker'
+import { LibrarySearchSelect } from '@/components/pouriq/LibrarySearchSelect'
 import { BOTTLE_SIZES_ML, WEIGHT_SIZES_G, KEG_SIZES_ML, parsePackFormat } from '@/lib/pouriq/measures'
 import type { ServeUnit } from '@/lib/pouriq/measures'
 import { formatPurchaseBasis } from '@/lib/pouriq/calculations'
@@ -82,12 +83,13 @@ export function IngredientMatchRow({
     onResolvedCommit?.()
   }
 
-  function startNewLibrary() {
-    const pack = parsePackFormat(extractedName)
+  function startNewLibrary(name?: string) {
+    const entryName = name ?? extractedName
+    const pack = parsePackFormat(entryName)
     onChange({
       existing_library_id: undefined,
       new_library: {
-        name: extractedName,
+        name: entryName,
         ingredient_type: inferredType,
         base_unit: 'ml',
         pack_size: pack?.pack_size ?? 700,
@@ -217,32 +219,43 @@ export function IngredientMatchRow({
           </div>
         ) : (
           <div className="space-y-2">
-            <select
-              value={state.existing_library_id ?? ''}
-              onChange={(e) => {
-                if (e.target.value === '__new__') startNewLibrary()
-                else if (e.target.value) pickExisting(e.target.value)
-              }}
-              className={inputClass}
-            >
-              <option value="">Choose…</option>
-              {matchKind === 'suggestions' && suggestionEntries.length > 0 && (
-                <optgroup label="Suggested matches">
-                  {suggestionEntries.map((s) => <option key={s.id} value={s.id}>{s.name}</option>)}
-                </optgroup>
-              )}
-              <optgroup label="All library">
-                {libraryEntries.map((e) => <option key={e.id} value={e.id}>{e.name}</option>)}
-              </optgroup>
-              <option value="__new__">+ Create new from this entry</option>
-            </select>
-            {selectedExisting && (
-              <p className="text-xs text-slate-500">
-                Linked to {selectedExisting.name}
-                {selectedExisting.base_unit !== 'each'
-                  ? ` · £${(selectedExisting.price_p / 100).toFixed(2)} / ${selectedExisting.pack_size}${selectedExisting.base_unit}`
-                  : ` · £${(selectedExisting.price_p / 100).toFixed(2)} each`}
-              </p>
+            {state.existing_library_id ? (
+              <div className="flex items-center justify-between gap-2">
+                <p className="text-sm text-slate-900">
+                  {selectedExisting
+                    ? <>
+                        {selectedExisting.name}
+                        {selectedExisting.base_unit !== 'each'
+                          ? <span className="text-xs text-slate-500 ml-2">· £{(selectedExisting.price_p / 100).toFixed(2)} / {selectedExisting.pack_size}{selectedExisting.base_unit}</span>
+                          : <span className="text-xs text-slate-500 ml-2">· £{(selectedExisting.price_p / 100).toFixed(2)} each</span>}
+                      </>
+                    : state.existing_library_id}
+                </p>
+                <button
+                  type="button"
+                  onClick={() => onChange({ ...state, existing_library_id: undefined })}
+                  className="shrink-0 text-xs text-slate-500 hover:text-slate-700"
+                >
+                  Change
+                </button>
+              </div>
+            ) : (
+              <LibrarySearchSelect
+                libraryEntries={libraryEntries}
+                inferredType={inferredType}
+                onPick={(e) => {
+                  onChange({
+                    existing_library_id: e.id,
+                    new_library: undefined,
+                    pour_ml: state.pour_ml,
+                    unit_count: state.unit_count,
+                    recipe_unit: state.recipe_unit,
+                    recipe_qty: state.recipe_qty,
+                  })
+                  onResolvedCommit?.()
+                }}
+                onRequestCreate={(q) => startNewLibrary(q)}
+              />
             )}
           </div>
         )}

@@ -4,7 +4,7 @@ import { useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import type { IngredientLibraryRow, IngredientType, ServeUnitRow } from '@/lib/pouriq/types'
 import { IngredientMatchRow, type MatchRowState } from '@/components/pouriq/IngredientMatchRow'
-import { normalise } from '@/lib/pouriq/match'
+import { normalise, singleContainmentMatch } from '@/lib/pouriq/match'
 import { planBulkFill, type BulkFillRow } from '@/lib/pouriq/import-bulk-fill'
 import type { ParsedMeasurement, RecognisedServeUnit } from '@/lib/pouriq/measurement-parse'
 import { parsePackFormat } from '@/lib/pouriq/measures'
@@ -62,7 +62,7 @@ function serveUnitFromParsed(parsed: ParsedMeasurement): { recipe_unit: Recognis
   return { recipe_unit: parsed.serve_unit ?? null, recipe_qty: parsed.serve_qty ?? null }
 }
 
-function initialIngredientState(input: PreviewDrinkInput['ingredients'][0]): MatchRowState {
+function initialIngredientState(input: PreviewDrinkInput['ingredients'][0], libraryEntries: IngredientLibraryRow[]): MatchRowState {
   const pour_ml: number | null = 'pour_ml' in input.parsed ? (input.parsed.pour_ml ?? null) : null
   const unit_count: number | null = 'unit_count' in input.parsed ? (input.parsed.unit_count ?? null) : null
 
@@ -100,15 +100,19 @@ function initialIngredientState(input: PreviewDrinkInput['ingredients'][0]): Mat
       recipe_qty,
     }
   }
+  const preselect = singleContainmentMatch(input.extracted_name, libraryEntries)
+  if (preselect) {
+    return { existing_library_id: preselect.id, pour_ml, unit_count, recipe_unit, recipe_qty }
+  }
   return { pour_ml, unit_count, recipe_unit, recipe_qty }
 }
 
-function initialDrinkState(d: PreviewDrinkInput): DrinkState {
+function initialDrinkState(d: PreviewDrinkInput, libraryEntries: IngredientLibraryRow[]): DrinkState {
   return {
     skip: false,
     name: d.name,
     salePoundsStr: d.sale_price_p !== null ? (d.sale_price_p / 100).toFixed(2) : '',
-    ingredients: d.ingredients.map(initialIngredientState),
+    ingredients: d.ingredients.map((ing) => initialIngredientState(ing, libraryEntries)),
   }
 }
 
@@ -121,7 +125,7 @@ interface Props {
 
 export function ImportPreview({ menuId, drinks: extracted, libraryEntries, serveUnits }: Props) {
   const router = useRouter()
-  const [drinks, setDrinks] = useState<DrinkState[]>(() => extracted.map(initialDrinkState))
+  const [drinks, setDrinks] = useState<DrinkState[]>(() => extracted.map((d) => initialDrinkState(d, libraryEntries)))
   const [expanded, setExpanded] = useState<Set<number>>(() => new Set([0, 1, 2]))
   const [error, setError] = useState<string | null>(null)
   const [submitting, setSubmitting] = useState(false)
