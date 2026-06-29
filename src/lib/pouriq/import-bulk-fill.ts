@@ -5,8 +5,14 @@ import type { IngredientType } from '@/lib/pouriq/types'
 export function groupKeyFor(input: { extracted_name: string; inferred_type: IngredientType; match: { kind: string; catalogue_id?: string } }): string | null {
   if (input.inferred_type === 'spirit') return null
   const m = input.match
-  if (m.kind === 'catalogue') return `cat:${m.catalogue_id}`
-  if (m.kind === 'suggestions' || m.kind === 'no-match') return `name:${normalise(input.extracted_name)}`
+  // Group by the line's own (normalised) name for every groupable kind, including
+  // catalogue matches. Grouping catalogue matches by catalogue_id collapsed
+  // distinct products that share one generic entry (e.g. "Peroni" vs "Peroni
+  // Gluten Free", each Kopparberg flavour) into one name; grouping by name keeps
+  // genuinely different products separate while identical names still price once.
+  if (m.kind === 'catalogue' || m.kind === 'suggestions' || m.kind === 'no-match') {
+    return `name:${normalise(input.extracted_name)}`
+  }
   return null
 }
 

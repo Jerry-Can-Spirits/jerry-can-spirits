@@ -62,3 +62,15 @@ test('non-spirit identical names group', () => {
   expect(groupKeyFor({ extracted_name: 'Lemon Juice', inferred_type: 'juice', match: { kind: 'no-match' } } as Parameters<typeof groupKeyFor>[0]))
     .toBe('name:lemon juice')
 })
+test('catalogue matches group by name, not catalogue id (variants sharing one entry stay distinct)', () => {
+  const peroni = groupKeyFor({ extracted_name: 'Peroni', inferred_type: 'beer', match: { kind: 'catalogue', catalogue_id: 'cat-peroni' } } as Parameters<typeof groupKeyFor>[0])
+  const peroniGf = groupKeyFor({ extracted_name: 'Peroni Gluten Free', inferred_type: 'beer', match: { kind: 'catalogue', catalogue_id: 'cat-peroni' } } as Parameters<typeof groupKeyFor>[0])
+  expect(peroni).toBe('name:peroni')
+  expect(peroniGf).toBe('name:peroni gluten free')
+  expect(peroni).not.toBe(peroniGf)
+})
+test('catalogue matches with the identical name still group (price once)', () => {
+  const a = groupKeyFor({ extracted_name: 'Peroni', inferred_type: 'beer', match: { kind: 'catalogue', catalogue_id: 'cat-peroni' } } as Parameters<typeof groupKeyFor>[0])
+  const b = groupKeyFor({ extracted_name: 'peroni', inferred_type: 'beer', match: { kind: 'catalogue', catalogue_id: 'cat-peroni' } } as Parameters<typeof groupKeyFor>[0])
+  expect(a).toBe(b)
+})
