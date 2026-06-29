@@ -28,6 +28,13 @@ import {
   recomputeDependents,
   listPreparedComponents,
 } from './prepared'
+import {
+  createSection,
+  renameSection,
+  deleteSection,
+  reorderSections,
+  moveDrink,
+} from './menu-sections'
 
 async function requireDb() {
   const access = await checkPourIqAccess()
@@ -647,6 +654,112 @@ export async function recordProductionAction(preparedId: string, batches: number
   }
   revalidatePath('/trade/pouriq/stock')
 }
+
+// --- Menu section actions ---
+// Each verifies tenant ownership before mutating; revalidates the builder and menu pages.
+
+export async function createSectionAction(
+  menuId: string,
+  name: string,
+  parentSectionId: string | null,
+): Promise<{ sectionId: string }> {
+  const { db, tradeAccountId } = await requireDb()
+  const menu = await getMenu(db, menuId, tradeAccountId)
+  if (!menu) throw new Error('Menu not found')
+  if (parentSectionId !== null) {
+    const parent = await db
+      .prepare(`SELECT parent_section_id FROM pouriq_menu_sections WHERE id = ?1 AND menu_id = ?2`)
+      .bind(parentSectionId, menuId)
+      .first<{ parent_section_id: string | null }>()
+    if (!parent) throw new Error('Parent section not found')
+    if (parent.parent_section_id !== null) throw new Error('Cannot nest beyond two levels')
+  }
+  const sectionId = await createSection(db, menuId, name, parentSectionId)
+  revalidatePath(`/trade/pouriq/${menuId}`)
+  revalidatePath(`/trade/pouriq/${menuId}/menu-builder`)
+  return { sectionId }
+}
+
+export async function renameSectionAction(
+  sectionId: string,
+  menuId: string,
+  name: string,
+): Promise<void> {
+  const { db, tradeAccountId } = await requireDb()
+  const owns = await db
+    .prepare(`
+      SELECT 1 AS one FROM pouriq_menu_sections s
+      JOIN pouriq_menus m ON m.id = s.menu_id
+      WHERE s.id = ?1 AND m.id = ?2 AND m.trade_account_id = ?3
+    `)
+    .bind(sectionId, menuId, tradeAccountId)
+    .first<{ one: number }>()
+  if (!owns) throw new Error('Section not found')
+  await renameSection(db, sectionId, name)
+  revalidatePath(`/trade/pouriq/${menuId}`)
+  revalidatePath(`/trade/pouriq/${menuId}/menu-builder`)
+}
+
+export async function deleteSectionAction(sectionId: string, menuId: string): Promise<void> {
+  const { db, tradeAccountId } = await requireDb()
+  const owns = await db
+    .prepare(`
+      SELECT 1 AS one FROM pouriq_menu_sections s
+      JOIN pouriq_menus m ON m.id = s.menu_id
+      WHERE s.id = ?1 AND m.id = ?2 AND m.trade_account_id = ?3
+    `)
+    .bind(sectionId, menuId, tradeAccountId)
+    .first<{ one: number }>()
+  if (!owns) throw new Error('Section not found')
+  await deleteSection(db, sectionId, menuId)
+  revalidatePath(`/trade/pouriq/${menuId}`)
+  revalidatePath(`/trade/pouriq/${menuId}/menu-builder`)
+}
+
+export async function reorderSectionsAction(orderedIds: string[], menuId: string): Promise<void> {
+  const { db, tradeAccountId } = await requireDb()
+  const menu = await getMenu(db, menuId, tradeAccountId)
+  if (!menu) throw new Error('Menu not found')
+  if (orderedIds.length > 0) {
+    const placeholders = orderedIds.map((_, i) => `?${i + 2}`).join(', ')
+    const count = await db
+      .prepare(`SELECT COUNT(*) AS c FROM pouriq_menu_sections WHERE id IN (${placeholders}) AND menu_id = ?1`)
+      .bind(menuId, ...orderedIds)
+      .first<{ c: number }>()
+    if ((count?.c ?? 0) !== orderedIds.length) throw new Error('Section not found')
+  }
+  await reorderSections(db, orderedIds)
+  revalidatePath(`/trade/pouriq/${menuId}`)
+  revalidatePath(`/trade/pouriq/${menuId}/menu-builder`)
+}
+
+export async function moveDrinkAction(
+  cocktailId: string,
+  sectionId: string | null,
+  menuId: string,
+  position: number,
+): Promise<void> {
+  const { db, tradeAccountId } = await requireDb()
+  const menu = await getMenu(db, menuId, tradeAccountId)
+  if (!menu) throw new Error('Menu not found')
+  const drinkOwned = await db
+    .prepare(`SELECT 1 AS one FROM pouriq_cocktails WHERE id = ?1 AND menu_id = ?2`)
+    .bind(cocktailId, menuId)
+    .first<{ one: number }>()
+  if (!drinkOwned) throw new Error('Drink not found')
+  if (sectionId !== null) {
+    const sectionOwned = await db
+      .prepare(`SELECT 1 AS one FROM pouriq_menu_sections WHERE id = ?1 AND menu_id = ?2`)
+      .bind(sectionId, menuId)
+      .first<{ one: number }>()
+    if (!sectionOwned) throw new Error('Section not found')
+  }
+  await moveDrink(db, cocktailId, sectionId, position)
+  revalidatePath(`/trade/pouriq/${menuId}`)
+  revalidatePath(`/trade/pouriq/${menuId}/menu-builder`)
+}
+
+// --- Voice profile ---
 
 export async function setVoiceProfileAction(input: VoiceProfileInput): Promise<void> {
   const { db, tradeAccountId } = await requireDb()
