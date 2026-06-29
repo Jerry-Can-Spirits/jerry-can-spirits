@@ -11,6 +11,8 @@ export type MatchStatus =
 export function normalise(name: string): string {
   return name
     .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '') // strip diacritics
     .replace(/['.,]/g, '')
     .replace(/\b(\d+\s?(?:ml|cl|l|oz))\b/g, '') // strip size suffixes like "70cl"
     .replace(/\s+/g, ' ')
@@ -110,4 +112,29 @@ export function matchIngredient(
   if (scored.length === 0) return { kind: 'no-match' }
   scored.sort((a, b) => a.score - b.score)
   return { kind: 'suggestions', entries: scored.slice(0, 3).map((s) => s.entry) }
+}
+
+// One unambiguous containment match for UI pre-selection. Returns the sole
+// library entry whose significant tokens fully contain, or are contained by,
+// the line's tokens — but NOT an exact token-set equal (that is matchIngredient's
+// `auto` job) and NOT when more than one entry qualifies (ambiguous — user picks).
+export function singleContainmentMatch(
+  extractedName: string,
+  library: IngredientLibraryRow[],
+): IngredientLibraryRow | null {
+  const t = significantTokens(extractedName)
+  if (t.length === 0) return null
+  const tKey = tokenKey(t)
+  const tSet = new Set(t)
+  const hits: IngredientLibraryRow[] = []
+  for (const e of library) {
+    const c = significantTokens(e.name)
+    if (c.length === 0) continue
+    if (tokenKey(c) === tKey) return null // exact equal exists — not our job
+    const cSet = new Set(c)
+    const contains = t.every((x) => cSet.has(x)) || c.every((x) => tSet.has(x))
+    if (contains) hits.push(e)
+    if (hits.length > 1) return null
+  }
+  return hits.length === 1 ? hits[0] : null
 }
