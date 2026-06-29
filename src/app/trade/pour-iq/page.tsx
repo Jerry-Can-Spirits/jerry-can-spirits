@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { baseOpenGraph } from '@/lib/og'
+import { safeJsonLd } from '@/lib/jsonLd'
 
 export const metadata: Metadata = {
   title: 'Pour IQ™ — Margin Analysis for Cocktail Menus | Jerry Can Spirits®',
@@ -94,9 +95,24 @@ const COMING_SOON: FeatureBlock[] = [
   },
 ]
 
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: 'Pour IQ',
+  applicationCategory: 'BusinessApplication',
+  operatingSystem: 'Web',
+  url: 'https://jerrycanspirits.co.uk/trade/pour-iq/',
+  description: 'Menu engineering and margin analysis for bars: AI menu import, recipe costing, GP and variance, invoice scanning and stock — built for hospitality operators.',
+  publisher: { '@type': 'Organization', name: 'Jerry Can Spirits', url: 'https://jerrycanspirits.co.uk/' },
+}
+
 export default function PourIqMarketingPage() {
   return (
     <main className="min-h-screen">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: safeJsonLd(jsonLd) }}
+      />
       {/* Hero */}
       <section className="py-20 lg:py-28">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
