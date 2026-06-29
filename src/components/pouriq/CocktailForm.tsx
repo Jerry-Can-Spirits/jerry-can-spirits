@@ -5,10 +5,11 @@ import { useRouter } from 'next/navigation'
 import { saveCocktailAction, deleteCocktailAction } from '@/lib/pouriq/server-actions'
 import { IngredientPicker } from '@/components/pouriq/IngredientPicker'
 import { ServeUnitPicker } from '@/components/pouriq/ServeUnitPicker'
-import type { CocktailWithIngredients, IngredientLibraryRow, ServeUnitRow } from '@/lib/pouriq/types'
+import type { CocktailWithIngredients, IngredientLibraryRow, ServeUnitRow, ItemType } from '@/lib/pouriq/types'
+import { ITEM_TYPES } from '@/lib/pouriq/types'
 import { GLASS_OPTIONS } from '@/lib/pouriq/measures'
 import type { ServeUnit } from '@/lib/pouriq/measures'
-import { INPUT, LABEL, CHIP, CHIP_ACTIVE, CHIP_IDLE } from '@/lib/pouriq/ui'
+import { INPUT, SELECT, LABEL, CHIP, CHIP_ACTIVE, CHIP_IDLE } from '@/lib/pouriq/ui'
 import { PRIMARY_BUTTON } from '@/lib/pouriq/button-styles'
 
 interface FormIngredient {
@@ -60,6 +61,7 @@ export function CocktailForm({ menuId, cocktail, libraryEntries, serveUnits }: P
   const [promoValidUntil, setPromoValidUntil] = useState(cocktail?.promotional_valid_until ?? '')
   const [notes, setNotes] = useState(cocktail?.notes ?? '')
   const [glass, setGlass] = useState(cocktail?.glass ?? '')
+  const [itemType, setItemType] = useState<ItemType>(cocktail?.item_type ?? 'cocktail')
   const [ingredients, setIngredients] = useState<FormIngredient[]>(
     cocktail?.ingredients.length
       ? cocktail.ingredients.map(ingredientRowToForm)
@@ -160,6 +162,7 @@ export function CocktailForm({ menuId, cocktail, libraryEntries, serveUnits }: P
         promotional_valid_until,
         notes: notes.trim() || null,
         glass: glass.trim() || null,
+        item_type: itemType,
         ingredients: parsed,
       })
       router.push(`/trade/pouriq/${menuId}`)
@@ -189,6 +192,20 @@ export function CocktailForm({ menuId, cocktail, libraryEntries, serveUnits }: P
           <label htmlFor="sale_price" className={LABEL}>Sale price (£) *</label>
           <input id="sale_price" type="number" step="0.01" min={0} required value={salePricePounds} onChange={(e) => setSalePricePounds(e.target.value)} className={INPUT} />
         </div>
+      </div>
+
+      <div className="sm:w-1/2 sm:pr-2">
+        <label htmlFor="item_type" className={LABEL}>Drink type</label>
+        <select
+          id="item_type"
+          value={itemType}
+          onChange={(e) => setItemType(e.target.value as ItemType)}
+          className={SELECT}
+        >
+          {ITEM_TYPES.map((t) => (
+            <option key={t} value={t}>{t.charAt(0).toUpperCase() + t.slice(1).replace('-', ' ')}</option>
+          ))}
+        </select>
       </div>
 
       <div className="border border-slate-200 rounded-lg p-4 bg-white">
