@@ -12,6 +12,9 @@ export const ALL_INGREDIENT_TYPES = [
   'garnish', 'soft-drink', 'alcohol-free', 'food', 'other',
 ] as const satisfies readonly IngredientType[]
 
+export const ITEM_TYPES = ['cocktail', 'beer', 'cider', 'wine', 'spirit', 'soft-drink', 'food', 'other'] as const
+export type ItemType = typeof ITEM_TYPES[number]
+
 export type RecommendationSeverity = 'info' | 'warn' | 'action'
 export type RecommendationCategory = 'pricing' | 'waste' | 'balance' | 'complexity' | 'opportunity'
 export type RecommendationAction = 'adjust_price' | 'remove_cocktail' | 'remove_ingredient' | 'swap_ingredient'
@@ -80,6 +83,7 @@ export interface CocktailRow {
   glass: string | null
   // 1 when this row is a "serve" (lives on the hidden serves menu).
   is_serve: number
+  item_type: ItemType
 }
 
 export interface IngredientLibraryRow {

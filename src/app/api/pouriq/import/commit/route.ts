@@ -10,6 +10,7 @@ import { checkPourIqAccess } from '@/lib/pouriq/access'
 import { getMenu } from '@/lib/pouriq/menus'
 import { matchFieldManualSlug } from '@/lib/pouriq/field-manual-match'
 import { ALL_INGREDIENT_TYPES, type IngredientType } from '@/lib/pouriq/types'
+import { itemTypeFromIngredients } from '@/lib/pouriq/item-type'
 import { netPriceP } from '@/lib/pouriq/calculations'
 
 export const runtime = 'nodejs'
@@ -182,19 +183,45 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Could not save new library entries' }, { status: 500 })
   }
 
+  // Build a map of existing library ingredient types so item_type can be inferred.
+  const existingIdSet = new Set<string>()
+  for (const drink of body.drinks) {
+    for (const ing of drink.ingredients) {
+      if (ing.existing_library_id) existingIdSet.add(ing.existing_library_id)
+    }
+  }
+  const existingLibraryTypes = new Map<string, IngredientType>()
+  if (existingIdSet.size > 0) {
+    const existingIds = [...existingIdSet]
+    const placeholders = existingIds.map((_, i) => `?${i + 1}`).join(', ')
+    const typeRows = await db
+      .prepare(`SELECT id, ingredient_type FROM pouriq_ingredients_library WHERE id IN (${placeholders})`)
+      .bind(...existingIds)
+      .all<{ id: string; ingredient_type: IngredientType }>()
+    for (const row of typeRows.results ?? []) {
+      existingLibraryTypes.set(row.id, row.ingredient_type)
+    }
+  }
+
   const createdDrinkIds: string[] = []
   try {
     for (let drinkIdx = 0; drinkIdx < body.drinks.length; drinkIdx++) {
       const drink = body.drinks[drinkIdx]
       const slug = await matchFieldManualSlug(drink.name)
+      const ingredientTypes = drink.ingredients.map((ing) =>
+        ing.new_library
+          ? ing.new_library.ingredient_type
+          : (existingLibraryTypes.get(ing.existing_library_id as string) ?? 'other'),
+      )
+      const item_type = itemTypeFromIngredients(ingredientTypes)
       const cocktailResult = await db
         .prepare(`
           INSERT INTO pouriq_cocktails
-            (menu_id, name, sale_price_p, position, field_manual_slug)
-          VALUES (?1, ?2, ?3, ?4, ?5)
+            (menu_id, name, sale_price_p, position, field_manual_slug, item_type)
+          VALUES (?1, ?2, ?3, ?4, ?5, ?6)
           RETURNING id
         `)
-        .bind(body.menuId, drink.name.trim(), drink.sale_price_p, drinkIdx, slug)
+        .bind(body.menuId, drink.name.trim(), drink.sale_price_p, drinkIdx, slug, item_type)
         .first<{ id: string }>()
       if (!cocktailResult) throw new Error('Cocktail insert returned no id')
       const cocktailId = cocktailResult.id
