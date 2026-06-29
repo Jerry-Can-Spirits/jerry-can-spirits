@@ -61,6 +61,48 @@ describe('matchCatalogue', () => {
   })
 })
 
+describe('matchCatalogue — ingredient type guard', () => {
+  const mintGarnish: CatalogueEntry = {
+    id: 'mint',
+    name: 'Mint',
+    normalised_name: 'mint',
+    ingredient_type: 'garnish',
+    base_unit: 'each',
+    default_pack_size: null,
+    generic: null,
+    aliases: [],
+  }
+  const strawberryMintLiqueur: CatalogueEntry = {
+    id: 'zymsm',
+    name: 'Zymurgorium Strawberry & Mint',
+    normalised_name: 'zymurgorium strawberry & mint',
+    ingredient_type: 'liqueur',
+    base_unit: 'ml',
+    default_pack_size: 500,
+    generic: null,
+    aliases: [],
+  }
+  const typedCat = [mintGarnish, strawberryMintLiqueur]
+
+  it('liqueur-typed line containing "mint" returns null when only a garnish mint entry exists', () => {
+    // Real bug: "Zymurgorium Strawberry & Mint" (liqueur) was matching bare
+    // "Mint" garnish entry via token subset — the type guard must block this.
+    const result = matchCatalogue('Zymurgorium Strawberry & Mint', [mintGarnish], 'liqueur')
+    expect(result).toBeNull()
+  })
+
+  it('when inferredType is undefined, still matches as before (no regression)', () => {
+    // "fresh mint" with no type -> still resolves to garnish mint via token subset
+    const result = matchCatalogue('fresh mint', [mintGarnish])
+    expect(result?.name).toBe('Mint')
+  })
+
+  it('garnish-typed "mint" does NOT cross-match a liqueur entry', () => {
+    const result = matchCatalogue('mint', [strawberryMintLiqueur], 'garnish')
+    expect(result).toBeNull()
+  })
+})
+
 describe('brand tier — specific beats generic', () => {
   const vodka = c('Vodka', ['smirnoff'])          // generic that lists a brand alias
   const smirnoff = c('Smirnoff', [], 'vodka')     // brand entry
