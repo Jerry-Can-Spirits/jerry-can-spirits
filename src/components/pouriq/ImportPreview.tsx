@@ -331,7 +331,6 @@ export function ImportPreview({ menuId, drinks: extracted, libraryEntries, serve
                       rawMeasurement={ing.raw_measurement}
                       inferredType={ing.inferred_type}
                       matchKind={ing.match.kind}
-                      suggestionEntries={ing.match.kind === 'suggestions' ? ing.match.entries : []}
                       libraryEntries={libraryEntries}
                       serveUnits={serveUnits}
                       state={d.ingredients[ingIdx]}

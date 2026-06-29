@@ -12,7 +12,6 @@ const baseProps = {
   rawMeasurement: '50ml',
   inferredType: 'spirit' as IngredientType,
   matchKind: 'no-match' as const,
-  suggestionEntries: [],
   libraryEntries: [],
   serveUnits: {},
   state: { pour_ml: 50, unit_count: null, recipe_unit: null, recipe_qty: null },

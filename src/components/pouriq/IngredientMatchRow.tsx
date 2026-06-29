@@ -39,7 +39,6 @@ interface Props {
   rawMeasurement: string
   inferredType: IngredientType
   matchKind: 'auto' | 'suggestions' | 'no-match' | 'catalogue'
-  suggestionEntries: Array<{ id: string; name: string }>
   libraryEntries: IngredientLibraryRow[]
   serveUnits: Record<string, ServeUnitRow[]>
   state: MatchRowState
@@ -59,7 +58,7 @@ function resolvedBaseUnit(state: MatchRowState, library: IngredientLibraryRow[])
 
 export function IngredientMatchRow({
   extractedName, rawMeasurement, inferredType,
-  matchKind, suggestionEntries, libraryEntries, serveUnits,
+  matchKind, libraryEntries, serveUnits,
   state, onChange, onResolvedCommit,
 }: Props) {
   const baseUnit = resolvedBaseUnit(state, libraryEntries)
@@ -70,18 +69,6 @@ export function IngredientMatchRow({
   const customUnits: ServeUnit[] = selectedExisting
     ? (serveUnits[selectedExisting.id] ?? [])
     : []
-
-  function pickExisting(id: string) {
-    onChange({
-      existing_library_id: id,
-      new_library: undefined,
-      pour_ml: state.pour_ml,
-      unit_count: state.unit_count,
-      recipe_unit: state.recipe_unit,
-      recipe_qty: state.recipe_qty,
-    })
-    onResolvedCommit?.()
-  }
 
   function startNewLibrary(name?: string) {
     const entryName = name ?? extractedName
