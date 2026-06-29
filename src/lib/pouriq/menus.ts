@@ -4,6 +4,7 @@ import type {
   CocktailWithIngredients,
   IngredientWithLibrary,
   IngredientType,
+  ItemType,
 } from './types'
 
 export async function listMenusForTradeAccount(
@@ -372,6 +373,7 @@ export async function insertCocktail(
     field_manual_slug: string | null
     notes: string | null
     glass: string | null
+    item_type: ItemType
   },
 ): Promise<string> {
   const result = await db
@@ -380,15 +382,15 @@ export async function insertCocktail(
         (menu_id, name, sale_price_p,
          promotional_price_p, promotional_label,
          promotional_days, promotional_valid_from, promotional_valid_until,
-         position, field_manual_slug, notes, glass)
-      VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12)
+         position, field_manual_slug, notes, glass, item_type)
+      VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13)
       RETURNING id
     `)
     .bind(
       data.menu_id, data.name, data.sale_price_p,
       data.promotional_price_p, data.promotional_label,
       data.promotional_days, data.promotional_valid_from, data.promotional_valid_until,
-      data.position, data.field_manual_slug, data.notes, data.glass,
+      data.position, data.field_manual_slug, data.notes, data.glass, data.item_type,
     )
     .first<{ id: string }>()
   if (!result) throw new Error('Cocktail insert returned no id')

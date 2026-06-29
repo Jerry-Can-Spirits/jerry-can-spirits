@@ -4,7 +4,7 @@ import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { getCloudflareContext } from '@opennextjs/cloudflare'
 import { checkPourIqAccess } from './access'
-import { VARIANCE_REASONS } from './types'
+import { VARIANCE_REASONS, type ItemType } from './types'
 import {
   insertMenu, updateMenu, deleteMenu, setActiveMenu,
   insertCocktail, replaceIngredients,
@@ -99,6 +99,7 @@ export async function cloneMenuAction(menuId: string, newName?: string): Promise
       field_manual_slug: c.field_manual_slug,
       notes: c.notes,
       glass: c.glass,
+      item_type: c.item_type,
     })
     if (c.ingredients.length > 0) {
       await replaceIngredients(db, newCocktailId, c.ingredients.map((i) => ({
@@ -170,6 +171,7 @@ interface CocktailInput {
   promotional_valid_until: string | null
   notes: string | null
   glass: string | null
+  item_type?: ItemType
   ingredients: Array<{
     library_ingredient_id: string
     pour_ml: number | null
@@ -205,16 +207,17 @@ export async function saveCocktailAction(
       field_manual_slug: slug,
       notes: input.notes,
       glass: input.glass,
+      item_type: input.item_type ?? 'cocktail',
     })
   } else {
     id = cocktailId
     await db
-      .prepare(`UPDATE pouriq_cocktails SET name = ?1, sale_price_p = ?2, promotional_price_p = ?3, promotional_label = ?4, promotional_days = ?5, promotional_valid_from = ?6, promotional_valid_until = ?7, field_manual_slug = ?8, notes = ?9, glass = ?10 WHERE id = ?11 AND menu_id = ?12`)
+      .prepare(`UPDATE pouriq_cocktails SET name = ?1, sale_price_p = ?2, promotional_price_p = ?3, promotional_label = ?4, promotional_days = ?5, promotional_valid_from = ?6, promotional_valid_until = ?7, field_manual_slug = ?8, notes = ?9, glass = ?10, item_type = ?11 WHERE id = ?12 AND menu_id = ?13`)
       .bind(
         input.name, input.sale_price_p,
         input.promotional_price_p, input.promotional_label,
         input.promotional_days, input.promotional_valid_from, input.promotional_valid_until,
-        slug, input.notes, input.glass, id, menuId,
+        slug, input.notes, input.glass, input.item_type ?? 'cocktail', id, menuId,
       )
       .run()
   }
