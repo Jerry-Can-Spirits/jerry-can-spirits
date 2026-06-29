@@ -169,6 +169,7 @@ export function IngredientMatchRow({
                         onChangeP={(p) => updateNewLibrary({ price_p: p })}
                         onCommit={onResolvedCommit}
                         className={inputClass} placeholder="14.40" />
+                      <p className="text-xs text-slate-500 mt-1">Ex-VAT (net) cost from your supplier, not the menu sale price.</p>
                     </div>
                     <div>
                       <label className={labelClass}>How many does that buy?</label>
