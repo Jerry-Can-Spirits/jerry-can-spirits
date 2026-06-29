@@ -3,16 +3,27 @@
 import { useState } from 'react'
 import { SECONDARY_BUTTON_SM, PRIMARY_BUTTON } from '@/lib/pouriq/button-styles'
 import { INPUT } from '@/lib/pouriq/ui'
+import type { MenuSectionRow, ItemType } from '@/lib/pouriq/types'
 
 interface Drink {
+  id: string
   name: string
   description: string | null
   sale_price_p: number | null
+  section_id: string | null
+  item_type: ItemType
+}
+
+interface Props {
+  menuId: string
+  menuName: string
+  sections: MenuSectionRow[]
+  drinks: Drink[]
 }
 
 function formatMoney(p: number) { return `£${(p / 100).toFixed(2)}` }
 
-export function MenuBuilder({ menuName, drinks }: { menuName: string; drinks: Drink[] }) {
+export function MenuBuilder({ menuName, drinks }: Props) {
   const [title, setTitle] = useState(menuName)
   const [columns, setColumns] = useState<1 | 2>(1)
   const [showPrices, setShowPrices] = useState(true)

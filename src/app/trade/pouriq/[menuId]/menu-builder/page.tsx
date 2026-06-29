@@ -4,6 +4,7 @@ import { getCloudflareContext } from '@opennextjs/cloudflare'
 import { checkPourIqAccess } from '@/lib/pouriq/access'
 import { LicenceGate } from '@/components/pouriq/LicenceGate'
 import { getMenu, listCocktailsForMenu } from '@/lib/pouriq/menus'
+import { ensureSeededSections, listSectionsForMenu } from '@/lib/pouriq/menu-sections'
 import { MenuBuilder } from '@/components/pouriq/MenuBuilder'
 
 export const dynamic = 'force-dynamic'
@@ -24,11 +25,16 @@ export default async function MenuBuilderPage({ params }: Props) {
   const menu = await getMenu(db, menuId, access.tradeAccountId)
   if (!menu) notFound()
 
+  await ensureSeededSections(db, menuId)
+  const sections = await listSectionsForMenu(db, menuId)
   const cocktails = await listCocktailsForMenu(db, menuId)
   const drinks = cocktails.map((c) => ({
+    id: c.id,
     name: c.name,
     description: c.description,
     sale_price_p: c.sale_price_p,
+    section_id: c.section_id,
+    item_type: c.item_type,
   }))
 
   return (
@@ -39,7 +45,7 @@ export default async function MenuBuilderPage({ params }: Props) {
         <p className="text-slate-500 text-sm mb-8 no-print">
           A branded, customer-facing version of this menu. Adjust it, then save it as a PDF to print or send.
         </p>
-        <MenuBuilder menuName={menu.name} drinks={drinks} />
+        <MenuBuilder menuId={menuId} menuName={menu.name} sections={sections} drinks={drinks} />
       </div>
     </main>
   )
