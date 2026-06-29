@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { matchIngredient } from '@/lib/pouriq/match'
+import { matchIngredient, normalise } from '@/lib/pouriq/match'
 import type { IngredientLibraryRow } from '@/lib/pouriq/types'
 
 // Minimal library-row factory — matchIngredient only reads `name`.
@@ -22,6 +22,16 @@ function row(name: string): IngredientLibraryRow {
 
 const names = (s: { kind: string } & Record<string, unknown>): string[] =>
   s.kind === 'suggestions' ? (s.entries as IngredientLibraryRow[]).map((e) => e.name) : []
+
+describe('normalise — accent folding', () => {
+  it('folds diacritics so accented brands match their plain spelling', () => {
+    expect(normalise('Kahlúa')).toBe('kahlua')
+    expect(normalise('Crème de Cassis')).toBe('creme de cassis')
+  })
+  it('leaves unaccented names unchanged', () => {
+    expect(normalise('Absolut Vodka')).toBe('absolut vodka')
+  })
+})
 
 describe('matchIngredient — exact & confident', () => {
   it('exact normalised match auto-selects', () => {

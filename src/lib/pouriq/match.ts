@@ -11,6 +11,8 @@ export type MatchStatus =
 export function normalise(name: string): string {
   return name
     .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '') // strip diacritics
     .replace(/['.,]/g, '')
     .replace(/\b(\d+\s?(?:ml|cl|l|oz))\b/g, '') // strip size suffixes like "70cl"
     .replace(/\s+/g, ' ')
