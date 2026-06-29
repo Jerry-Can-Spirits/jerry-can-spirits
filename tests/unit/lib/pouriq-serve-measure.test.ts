@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { formatServeMeasure, serveUnitsFor } from '@/lib/pouriq/measures'
+import { formatServeMeasure, serveUnitsFor, parsePackFormat } from '@/lib/pouriq/measures'
 
 describe('formatServeMeasure', () => {
   describe('ml and g units', () => {
@@ -90,6 +90,33 @@ describe('formatServeMeasure', () => {
     it('returns empty string when all fields are null', () => {
       expect(formatServeMeasure(null, null, null, null)).toBe('')
     })
+  })
+})
+
+describe('parsePackFormat', () => {
+  it('parses "N × Mml" (unicode times) into {purchase_qty, pack_size}', () => {
+    expect(parsePackFormat('Peroni Nastro Azzurro 24 × 330ml')).toEqual({ purchase_qty: 24, pack_size: 330 })
+  })
+  it('parses "N x Mml" (ascii x) with no spaces', () => {
+    expect(parsePackFormat('Heineken 12x330ml')).toEqual({ purchase_qty: 12, pack_size: 330 })
+  })
+  it('converts cl to ml (×10)', () => {
+    expect(parsePackFormat('Gordon\'s Gin 6 x 70cl')).toEqual({ purchase_qty: 6, pack_size: 700 })
+  })
+  it('converts L to ml (×1000)', () => {
+    expect(parsePackFormat('Cola 12 x 1L')).toEqual({ purchase_qty: 12, pack_size: 1000 })
+  })
+  it('is case-insensitive for unit (CL, ML, L)', () => {
+    expect(parsePackFormat('Tonic 24 x 200ML')).toEqual({ purchase_qty: 24, pack_size: 200 })
+    expect(parsePackFormat('Soda 6 x 1.5L')).toEqual({ purchase_qty: 6, pack_size: 1500 })
+  })
+  it('returns null when there is no count (bare size only)', () => {
+    expect(parsePackFormat('Whisky 1L')).toBeNull()
+    expect(parsePackFormat('Rum 700ml')).toBeNull()
+  })
+  it('returns null when the name has no volume at all', () => {
+    expect(parsePackFormat('House Gin')).toBeNull()
+    expect(parsePackFormat('')).toBeNull()
   })
 })
 

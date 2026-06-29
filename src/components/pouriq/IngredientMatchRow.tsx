@@ -3,7 +3,7 @@
 import { ALL_INGREDIENT_TYPES, type IngredientLibraryRow, type IngredientType, type ServeUnitRow } from '@/lib/pouriq/types'
 import { PriceInput } from '@/components/pouriq/PriceInput'
 import { ServeUnitPicker } from '@/components/pouriq/ServeUnitPicker'
-import { BOTTLE_SIZES_ML, WEIGHT_SIZES_G, KEG_SIZES_ML } from '@/lib/pouriq/measures'
+import { BOTTLE_SIZES_ML, WEIGHT_SIZES_G, KEG_SIZES_ML, parsePackFormat } from '@/lib/pouriq/measures'
 import type { ServeUnit } from '@/lib/pouriq/measures'
 import { formatPurchaseBasis } from '@/lib/pouriq/calculations'
 
@@ -83,15 +83,16 @@ export function IngredientMatchRow({
   }
 
   function startNewLibrary() {
+    const pack = parsePackFormat(extractedName)
     onChange({
       existing_library_id: undefined,
       new_library: {
         name: extractedName,
         ingredient_type: inferredType,
         base_unit: 'ml',
-        pack_size: 700,
+        pack_size: pack?.pack_size ?? 700,
         price_p: null,
-        purchase_qty: 1,
+        purchase_qty: pack?.purchase_qty ?? 1,
       },
       pour_ml: state.pour_ml,
       unit_count: state.unit_count,

@@ -7,6 +7,7 @@ import { IngredientMatchRow, type MatchRowState } from '@/components/pouriq/Ingr
 import { normalise } from '@/lib/pouriq/match'
 import { planBulkFill, type BulkFillRow } from '@/lib/pouriq/import-bulk-fill'
 import type { ParsedMeasurement, RecognisedServeUnit } from '@/lib/pouriq/measurement-parse'
+import { parsePackFormat } from '@/lib/pouriq/measures'
 import { PRIMARY_BUTTON } from '@/lib/pouriq/button-styles'
 
 const inputClass = 'w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-slate-900 text-sm focus:border-emerald-500 focus:outline-hidden'
@@ -83,14 +84,15 @@ function initialIngredientState(input: PreviewDrinkInput['ingredients'][0]): Mat
     // Pre-stage a new library entry from the catalogue; the bar just types
     // the price. Starts price-less so it counts as "needs price" until filled.
     const m = input.match
+    const pack = m.base_unit === 'ml' ? parsePackFormat(input.extracted_name) : null
     return {
       new_library: {
         name: m.name,
         ingredient_type: m.ingredient_type,
         base_unit: m.base_unit,
-        pack_size: m.default_pack_size ?? (m.base_unit === 'each' ? 1 : 700),
+        pack_size: pack?.pack_size ?? m.default_pack_size ?? (m.base_unit === 'each' ? 1 : 700),
         price_p: null,
-        purchase_qty: 1,
+        purchase_qty: pack?.purchase_qty ?? 1,
       },
       pour_ml,
       unit_count,
