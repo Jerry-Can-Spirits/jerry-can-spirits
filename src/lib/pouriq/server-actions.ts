@@ -666,6 +666,14 @@ export async function createSectionAction(
   const { db, tradeAccountId } = await requireDb()
   const menu = await getMenu(db, menuId, tradeAccountId)
   if (!menu) throw new Error('Menu not found')
+  if (parentSectionId !== null) {
+    const parent = await db
+      .prepare(`SELECT parent_section_id FROM pouriq_menu_sections WHERE id = ?1 AND menu_id = ?2`)
+      .bind(parentSectionId, menuId)
+      .first<{ parent_section_id: string | null }>()
+    if (!parent) throw new Error('Parent section not found')
+    if (parent.parent_section_id !== null) throw new Error('Cannot nest beyond two levels')
+  }
   const sectionId = await createSection(db, menuId, name, parentSectionId)
   revalidatePath(`/trade/pouriq/${menuId}`)
   revalidatePath(`/trade/pouriq/${menuId}/menu-builder`)
@@ -703,7 +711,7 @@ export async function deleteSectionAction(sectionId: string, menuId: string): Pr
     .bind(sectionId, menuId, tradeAccountId)
     .first<{ one: number }>()
   if (!owns) throw new Error('Section not found')
-  await deleteSection(db, sectionId)
+  await deleteSection(db, sectionId, menuId)
   revalidatePath(`/trade/pouriq/${menuId}`)
   revalidatePath(`/trade/pouriq/${menuId}/menu-builder`)
 }

@@ -96,10 +96,10 @@ export async function renameSection(db: D1Database, sectionId: string, name: str
 // Explicitly NULLs section_id on affected drinks and deletes sub-sections
 // before deleting the section — D1 has foreign keys off, so ON DELETE cascade/set-null
 // is not enforced at runtime.
-export async function deleteSection(db: D1Database, sectionId: string): Promise<void> {
+export async function deleteSection(db: D1Database, sectionId: string, menuId: string): Promise<void> {
   const subResult = await db
-    .prepare(`SELECT id FROM pouriq_menu_sections WHERE parent_section_id = ?1`)
-    .bind(sectionId)
+    .prepare(`SELECT id FROM pouriq_menu_sections WHERE parent_section_id = ?1 AND menu_id = ?2`)
+    .bind(sectionId, menuId)
     .all<{ id: string }>()
   const subIds = (subResult.results ?? []).map((r) => r.id)
 
