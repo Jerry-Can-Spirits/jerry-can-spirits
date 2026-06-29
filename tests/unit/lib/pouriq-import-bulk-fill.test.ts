@@ -1,7 +1,7 @@
 import { describe, it, expect, test } from 'vitest'
 import { planBulkFill, groupKeyFor, type BulkFillRow } from '@/lib/pouriq/import-bulk-fill'
 
-const priced = { name: 'Sugar Syrup', ingredient_type: 'syrup' as const, base_unit: 'ml' as const, pack_size: 1000, price_p: 500, purchase_qty: 1 }
+const priced = { name: 'Sugar Syrup', ingredient_type: 'syrup' as const, base_unit: 'ml' as const, pack_size: 1000, price_p: 500, purchase_qty: 1, price_includes_vat: false }
 const row = (groupKey: string | null, resolved: boolean, state: Partial<BulkFillRow['state']> = {}): BulkFillRow => ({
   groupKey,
   resolved,
@@ -56,9 +56,9 @@ describe('planBulkFill', () => {
 })
 
 test('spirit lines do not group (picked per cocktail)', () => {
-  expect(groupKeyFor({ extracted_name: 'Gin', inferred_type: 'spirit', match: { kind: 'no-match' } } as any)).toBeNull()
+  expect(groupKeyFor({ extracted_name: 'Gin', inferred_type: 'spirit', match: { kind: 'no-match' } } as Parameters<typeof groupKeyFor>[0])).toBeNull()
 })
 test('non-spirit identical names group', () => {
-  expect(groupKeyFor({ extracted_name: 'Lemon Juice', inferred_type: 'juice', match: { kind: 'no-match' } } as any))
+  expect(groupKeyFor({ extracted_name: 'Lemon Juice', inferred_type: 'juice', match: { kind: 'no-match' } } as Parameters<typeof groupKeyFor>[0]))
     .toBe('name:lemon juice')
 })
