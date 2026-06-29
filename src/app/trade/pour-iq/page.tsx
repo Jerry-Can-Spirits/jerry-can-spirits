@@ -11,6 +11,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     ...baseOpenGraph,
+    images: undefined,
     title: 'Pour IQ™ — Margin Analysis for Cocktail Menus | Jerry Can Spirits®',
     description:
       'AI margin analysis for cocktail menus. For pubs, bars, restaurants, and hotels.',
