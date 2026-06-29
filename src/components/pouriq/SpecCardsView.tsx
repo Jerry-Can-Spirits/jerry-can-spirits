@@ -1,10 +1,12 @@
 'use client'
 
 import { useState } from 'react'
-import type { CocktailWithIngredients } from '@/lib/pouriq/types'
+import type { CocktailWithIngredients, ItemType } from '@/lib/pouriq/types'
+import { ITEM_TYPES } from '@/lib/pouriq/types'
 import { SpecCard } from './SpecCard'
 import { PrintReportButton } from './PrintReportButton'
 import { PRIMARY_BUTTON, SECONDARY_BUTTON_SM } from '@/lib/pouriq/button-styles'
+import { CHIP, CHIP_ACTIVE, CHIP_IDLE } from '@/lib/pouriq/ui'
 
 interface Props {
   cocktails: CocktailWithIngredients[]
@@ -12,9 +14,25 @@ interface Props {
   priceIncludesVat: boolean
 }
 
+function labelForType(t: ItemType): string {
+  return t.charAt(0).toUpperCase() + t.slice(1).replace('-', ' ')
+}
+
 export function SpecCardsView({ cocktails, costById, priceIncludesVat }: Props) {
   const [compact, setCompact] = useState(false)
   const [showCost, setShowCost] = useState(false)
+  const [selected, setSelected] = useState<Set<ItemType>>(new Set(['cocktail']))
+
+  const present = ITEM_TYPES.filter((t) => cocktails.some((c) => c.item_type === t))
+  const visible = cocktails.filter((c) => selected.has(c.item_type))
+
+  function toggleType(t: ItemType) {
+    setSelected((prev) => {
+      const next = new Set(prev)
+      if (next.has(t)) { next.delete(t) } else { next.add(t) }
+      return next
+    })
+  }
 
   return (
     <>
@@ -28,21 +46,40 @@ export function SpecCardsView({ cocktails, costById, priceIncludesVat }: Props) 
           <input type="checkbox" checked={showCost} onChange={(e) => setShowCost(e.target.checked)} />
           Show costs
         </label>
+        {present.length > 1 && (
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="text-xs uppercase tracking-widest text-slate-500">Type</span>
+            {present.map((t) => (
+              <button
+                key={t}
+                type="button"
+                onClick={() => toggleType(t)}
+                className={`${CHIP} ${selected.has(t) ? CHIP_ACTIVE : CHIP_IDLE}`}
+              >
+                {labelForType(t)}
+              </button>
+            ))}
+          </div>
+        )}
         <span className="ml-auto"><PrintReportButton label="Print spec cards" /></span>
       </div>
 
-      <div className={compact ? 'print:grid print:grid-cols-2 print:gap-4' : ''}>
-        {cocktails.map((c) => (
-          <SpecCard
-            key={c.id}
-            cocktail={c}
-            priceIncludesVat={priceIncludesVat}
-            compact={compact}
-            showCost={showCost}
-            cost={costById[c.id] ?? null}
-          />
-        ))}
-      </div>
+      {visible.length === 0 ? (
+        <p className="no-print text-sm text-slate-500">No cards for the selected categories.</p>
+      ) : (
+        <div className={compact ? 'print:grid print:grid-cols-2 print:gap-4' : ''}>
+          {visible.map((c) => (
+            <SpecCard
+              key={c.id}
+              cocktail={c}
+              priceIncludesVat={priceIncludesVat}
+              compact={compact}
+              showCost={showCost}
+              cost={costById[c.id] ?? null}
+            />
+          ))}
+        </div>
+      )}
     </>
   )
 }
