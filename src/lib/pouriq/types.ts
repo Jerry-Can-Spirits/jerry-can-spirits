@@ -31,6 +31,15 @@ export interface PourIqLicence {
 export type VolumeCadence = 'weekly' | 'monthly'
 export type VolumeSource = 'manual' | 'pos'
 
+export interface MenuSectionRow {
+  id: string
+  menu_id: string
+  name: string
+  parent_section_id: string | null
+  position: number
+  created_at: string
+}
+
 export interface MenuRow {
   id: string
   trade_account_id: string
@@ -84,6 +93,7 @@ export interface CocktailRow {
   // 1 when this row is a "serve" (lives on the hidden serves menu).
   is_serve: number
   item_type: ItemType
+  section_id: string | null
 }
 
 export interface IngredientLibraryRow {
