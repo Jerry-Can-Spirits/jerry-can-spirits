@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, useState } from 'react'
+import { useState } from 'react'
 import { ALL_INGREDIENT_TYPES, type IngredientLibraryRow, type IngredientType } from '@/lib/pouriq/types'
 import { saveLibraryEntryAction } from '@/lib/pouriq/server-actions'
 import { BarcodeScanner } from '@/components/pouriq/BarcodeScanner'
@@ -21,7 +21,6 @@ interface Props {
 }
 
 export function IngredientPicker({ libraryEntries, selectedEntryId, onChange }: Props) {
-  const containerRef = useRef<HTMLDivElement>(null)
   const [showCreate, setShowCreate] = useState(false)
   const [scanOpen, setScanOpen] = useState(false)
   const [scanInfo, setScanInfo] = useState<string | null>(null)
@@ -156,7 +155,7 @@ export function IngredientPicker({ libraryEntries, selectedEntryId, onChange }: 
   const sizePresets = base_unit === 'ml' ? BOTTLE_SIZES_ML : base_unit === 'g' ? WEIGHT_SIZES_G : null
 
   return (
-    <div ref={containerRef} className="relative">
+    <div className="relative">
       {!showCreate && (
         <div className="flex gap-2">
           <LibrarySearchSelect

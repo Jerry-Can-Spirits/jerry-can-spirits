@@ -31,6 +31,12 @@ export function LibrarySearchSelect({
   const [query, setQuery] = useState(initialQuery)
   const [open, setOpen] = useState(false)
 
+  // Re-sync the displayed query when the parent changes the selected entry
+  // (e.g. a second pick within the same mount), so the selected name shows.
+  useEffect(() => {
+    setQuery(initialQuery)
+  }, [initialQuery])
+
   useEffect(() => {
     if (!open) return
     function handleClickOutside(e: MouseEvent) {
