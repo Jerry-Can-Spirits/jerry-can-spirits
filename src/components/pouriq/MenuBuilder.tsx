@@ -160,6 +160,7 @@ export function MenuBuilder({ menuId, menuName, sections, drinks }: Props) {
   function moveDrinkTo(drinkId: string, targetSectionId: string | null) {
     const drink = localDrinks.find((d) => d.id === drinkId)
     if (!drink || drink.section_id === targetSectionId) return
+    if (targetSectionId !== null && isTemp(targetSectionId)) return
     const prevDrinks = localDrinks
     const newPosition = localDrinks.filter((d) => d.section_id === targetSectionId).length
     const updated = localDrinks.find((d) => d.id === drinkId)!
@@ -184,6 +185,7 @@ export function MenuBuilder({ menuId, menuName, sections, drinks }: Props) {
   }
 
   function reorderSibling(siblings: MenuSectionRow[], sectionId: string, dir: 'up' | 'down') {
+    if (siblings.some((s) => isTemp(s.id))) return
     const ordered = [...siblings].sort((a, b) => a.position - b.position)
     const idx = ordered.findIndex((s) => s.id === sectionId)
     const swap = dir === 'up' ? idx - 1 : idx + 1
@@ -196,6 +198,7 @@ export function MenuBuilder({ menuId, menuName, sections, drinks }: Props) {
   function addSection(parentId: string | null, name: string) {
     const trimmed = name.trim()
     if (!trimmed) return
+    if (parentId !== null && isTemp(parentId)) return
     const tempId = `temp:${crypto.randomUUID()}`
     const position = localSections.filter((s) => s.parent_section_id === parentId).length
     const optimistic: MenuSectionRow = {
