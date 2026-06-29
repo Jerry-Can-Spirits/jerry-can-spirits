@@ -4,6 +4,24 @@
 // field also takes free text for anything off-preset (7ml, 12.5ml, etc.).
 // Shared by the add/edit drink form and the import match row so the options
 // stay in sync.
+// Parse a "N x Mml" / "N × Mcl" / "N x ML" pack pattern from a product name.
+// Returns {purchase_qty, pack_size_ml} or null when no clear N×size is found.
+// Recognises 'x', 'X', and the unicode '×' separator; units ml/cl/l (any case).
+// Converts cl→ml (×10) and l/L→ml (×1000).
+export function parsePackFormat(name: string): { purchase_qty: number; pack_size: number } | null {
+  const m = name.match(/(\d+)\s*[xX×]\s*(\d+(?:\.\d+)?)\s*(ml|cl|l)\b/i)
+  if (!m) return null
+  const qty = parseInt(m[1], 10)
+  const size = parseFloat(m[2])
+  const unit = m[3].toLowerCase()
+  let pack_size: number
+  if (unit === 'cl') pack_size = Math.round(size * 10)
+  else if (unit === 'l') pack_size = Math.round(size * 1000)
+  else pack_size = Math.round(size)
+  if (!Number.isFinite(qty) || qty < 1 || !Number.isFinite(pack_size) || pack_size < 1) return null
+  return { purchase_qty: qty, pack_size }
+}
+
 export const POUR_PRESETS: ReadonlyArray<{ ml: number; label: string }> = [
   { ml: 0.6, label: 'Dash' },
   { ml: 5, label: 'Barspoon' },

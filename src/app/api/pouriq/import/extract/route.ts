@@ -163,7 +163,7 @@ export async function POST(request: Request) {
         match = { kind: 'auto', library_id: matched.entry.id, library_name: matched.entry.name }
       } else {
         // Not in their library — offer a shared-catalogue adoption (set price).
-        const cat = matchCatalogue(i.name, catalogue)
+        const cat = matchCatalogue(i.name, catalogue, i.inferred_type)
         if (cat) {
           match = {
             kind: 'catalogue',

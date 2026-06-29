@@ -9,8 +9,8 @@ CRITICAL: Most printed UK bar menus only show drink names and prices, NOT ingred
 Ingredient rules:
 - When the menu lists ingredients, capture each name AS WRITTEN. "Tito's vodka" stays "Tito's vodka", not "Vodka".
 - When you populate ingredients from a classic recipe, use plain category names ("white rum", "lime juice", "sugar syrup") so the matcher can suggest the venue's library entries.
-- For measurements: use what the menu shows, otherwise use UK on-trade defaults — spirit 50ml, liqueur modifier 25ml, citrus 25ml, syrup 15ml, bitters 2 dashes, mint 8 leaves, lime wedge 1/8.
-- Infer ingredient_type: spirit, liqueur, wine, beer, cider, mixer, syrup, juice, garnish, soft-drink, alcohol-free, food, other. Use 'cider' for ciders, 'alcohol-free' for 0% / low-alcohol beers. When uncertain return 'other'.
+- For measurements: use what the menu shows, otherwise use UK on-trade defaults — spirit 25ml, liqueur modifier 25ml, citrus 25ml, syrup 15ml, bitters 2 dashes, mint 8 leaves, lime wedge 1/8.
+- Infer ingredient_type: spirit, liqueur, wine, beer, cider, mixer, syrup, juice, garnish, soft-drink, alcohol-free, food, other. Use 'cider' for ciders, 'alcohol-free' for 0% / low-alcohol beers. When uncertain return 'other'. Infer the type from the product's own words, not the brand's usual category — e.g. 'Kopparberg Strawberry & Lime Gin' is a gin, not a cider; 'Old J Spiced' is a rum.
 
 Other rules:
 - Capture sale_price_p in pence if visible (£9.50 = 950). Else null.

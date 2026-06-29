@@ -61,6 +61,48 @@ describe('matchCatalogue', () => {
   })
 })
 
+describe('matchCatalogue — ingredient type guard', () => {
+  const mintGarnish: CatalogueEntry = {
+    id: 'mint',
+    name: 'Mint',
+    normalised_name: 'mint',
+    ingredient_type: 'garnish',
+    base_unit: 'each',
+    default_pack_size: null,
+    generic: null,
+    aliases: [],
+  }
+  const strawberryMintLiqueur: CatalogueEntry = {
+    id: 'zymsm',
+    name: 'Zymurgorium Strawberry & Mint',
+    normalised_name: 'zymurgorium strawberry & mint',
+    ingredient_type: 'liqueur',
+    base_unit: 'ml',
+    default_pack_size: 500,
+    generic: null,
+    aliases: [],
+  }
+  const typedCat = [mintGarnish, strawberryMintLiqueur]
+
+  it('liqueur-typed line containing "mint" returns null when only a garnish mint entry exists', () => {
+    // Real bug: "Zymurgorium Strawberry & Mint" (liqueur) was matching bare
+    // "Mint" garnish entry via token subset — the type guard must block this.
+    const result = matchCatalogue('Zymurgorium Strawberry & Mint', [mintGarnish], 'liqueur')
+    expect(result).toBeNull()
+  })
+
+  it('when inferredType is undefined, still matches as before (no regression)', () => {
+    // "fresh mint" with no type -> still resolves to garnish mint via token subset
+    const result = matchCatalogue('fresh mint', [mintGarnish])
+    expect(result?.name).toBe('Mint')
+  })
+
+  it('garnish-typed "mint" does NOT cross-match a liqueur entry', () => {
+    const result = matchCatalogue('mint', [strawberryMintLiqueur], 'garnish')
+    expect(result).toBeNull()
+  })
+})
+
 describe('brand tier — specific beats generic', () => {
   const vodka = c('Vodka', ['smirnoff'])          // generic that lists a brand alias
   const smirnoff = c('Smirnoff', [], 'vodka')     // brand entry
@@ -109,5 +151,37 @@ describe('adoptionName', () => {
   })
   it('uses the canonical name for a clean match', () => {
     expect(adoptionName('triple sec', tripleSec)).toBe('Triple Sec')
+  })
+
+  describe('alias-match cases — brand/flavour name must be kept', () => {
+    const aniseedLiqueur: CatalogueEntry = {
+      id: 'aniseed-liqueur',
+      name: 'Aniseed Liqueur',
+      normalised_name: 'aniseed liqueur',
+      ingredient_type: 'liqueur',
+      base_unit: 'ml',
+      default_pack_size: 700,
+      generic: null,
+      aliases: ['sambuca', 'antica sambuca', 'antica sambuca classic'],
+    }
+    const carling: CatalogueEntry = {
+      id: 'carling',
+      name: 'Carling',
+      normalised_name: 'carling',
+      ingredient_type: 'beer',
+      base_unit: 'ml',
+      default_pack_size: 330,
+      generic: 'lager',
+      aliases: [],
+    }
+    it('keeps the brand name when matched via alias (Antica Sambuca -> Aniseed Liqueur)', () => {
+      expect(adoptionName('Antica Sambuca', aniseedLiqueur)).toBe('Antica Sambuca')
+    })
+    it('uses canonical name when extracted adds nothing over it (triple sec -> Triple Sec)', () => {
+      expect(adoptionName('triple sec', tripleSec)).toBe('Triple Sec')
+    })
+    it('keeps the brand+descriptor when it adds info beyond the entry name (Carling Lager -> Carling Lager)', () => {
+      expect(adoptionName('Carling Lager', carling)).toBe('Carling Lager')
+    })
   })
 })

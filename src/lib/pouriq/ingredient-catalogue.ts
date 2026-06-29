@@ -62,14 +62,23 @@ export async function listCatalogue(db: D1Database): Promise<CatalogueEntry[]> {
 // significant-token set (qualifier-stripped), else a token-subset or a
 // single-token typo. Null otherwise, so we never silently mis-adopt an
 // unrelated ingredient (e.g. "mint" must not resolve to "gin").
-export function matchCatalogue(name: string, entries: CatalogueEntry[]): CatalogueEntry | null {
+//
+// inferredType, when supplied, blocks cross-family matches between drink-ish
+// ingredients and garnish/food entries — preventing e.g. a liqueur from
+// adopting a "Mint" garnish entry because "mint" is a subset token.
+export function matchCatalogue(name: string, entries: CatalogueEntry[], inferredType?: IngredientType): CatalogueEntry | null {
   const targetNorm = normalise(name)
   if (!targetNorm) return null
+
+  const isGarnishy = (t: IngredientType) => t === 'garnish' || t === 'food'
+  const typeOk = (e: CatalogueEntry) =>
+    inferredType === undefined || isGarnishy(inferredType) === isGarnishy(e.ingredient_type)
+
   // Exact match: prefer the canonical name over an alias, so a specific brand
   // entry (e.g. "Smirnoff") beats a generic that merely lists it as an alias.
-  const exactName = entries.find((e) => e.normalised_name === targetNorm)
+  const exactName = entries.find((e) => typeOk(e) && e.normalised_name === targetNorm)
   if (exactName) return exactName
-  const exactAlias = entries.find((e) => e.aliases.includes(targetNorm))
+  const exactAlias = entries.find((e) => typeOk(e) && e.aliases.includes(targetNorm))
   if (exactAlias) return exactAlias
 
   const tTokens = significantTokens(name)
@@ -79,6 +88,7 @@ export function matchCatalogue(name: string, entries: CatalogueEntry[]): Catalog
 
   const scored: { entry: CatalogueEntry; score: number }[] = []
   for (const e of entries) {
+    if (!typeOk(e)) continue
     for (const cand of [e.normalised_name, ...e.aliases]) {
       const cTokens = significantTokens(cand)
       if (cTokens.length === 0) continue
@@ -102,9 +112,15 @@ export function matchCatalogue(name: string, entries: CatalogueEntry[]): Catalog
 // wording when it is strictly more specific than the matched entry (so
 // "Carling Lager" stays itself instead of collapsing to "Lager"), otherwise
 // uses the entry's canonical name (so a clean "triple sec" becomes "Triple Sec").
+// Also keeps brand/flavour names matched via alias — "Antica Sambuca" (matched
+// as generic "Aniseed Liqueur" via alias) stays "Antica Sambuca".
 export function adoptionName(extractedName: string, entry: CatalogueEntry): string {
   const ext = significantTokens(extractedName)
+  if (ext.length === 0) return entry.name
   const cat = significantTokens(entry.name)
-  const strictSuperset = cat.length > 0 && cat.every((t) => ext.includes(t)) && ext.length > cat.length
-  return strictSuperset ? extractedName.trim() : entry.name
+  // Keep the line's own (more specific) name unless it adds nothing over the
+  // entry's canonical name — so "Antica Sambuca" / "Kopparberg Mixed Fruit" keep
+  // their brand+flavour, while a bare "triple sec" tidies to "Triple Sec".
+  const extAddsNothing = ext.every((t) => cat.includes(t))
+  return extAddsNothing ? entry.name : extractedName.trim()
 }

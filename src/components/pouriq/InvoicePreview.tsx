@@ -7,6 +7,7 @@ import type { IngredientLibraryRow } from '@/lib/pouriq/types'
 import { InvoiceLineRow, type LineState } from './InvoiceLineRow'
 import { classifyInvoiceLine, summariseInvoiceLines, type InvoiceLineInput } from '@/lib/pouriq/invoice-review'
 import { netPriceP } from '@/lib/pouriq/calculations'
+import { parsePackFormat } from '@/lib/pouriq/measures'
 import { INPUT } from '@/lib/pouriq/ui'
 import { PRIMARY_BUTTON } from '@/lib/pouriq/button-styles'
 
@@ -39,6 +40,7 @@ export function InvoicePreview({ initial, library }: Props) {
         // Pre-stage a new library entry from the catalogue; the bar just sets
         // the price (and ticks Apply) to adopt it.
         const m = l.match
+        const pack = m.base_unit === 'ml' ? parsePackFormat(l.extracted_name) : null
         return {
           applied: false,
           unit_price_p: l.extracted_unit_price_p,
@@ -47,8 +49,8 @@ export function InvoicePreview({ initial, library }: Props) {
             new_name: m.name,
             new_type: m.ingredient_type,
             base_unit: m.base_unit,
-            pack_size: m.default_pack_size ?? (m.base_unit === 'each' ? 1 : 700),
-            purchase_qty: 1,
+            pack_size: pack?.pack_size ?? m.default_pack_size ?? (m.base_unit === 'each' ? 1 : 700),
+            purchase_qty: pack?.purchase_qty ?? 1,
           },
         }
       }
@@ -74,6 +76,7 @@ export function InvoicePreview({ initial, library }: Props) {
       const current = next[index]
       if (toNew) {
         const seedName = initial.lines[index].extracted_name
+        const pack = parsePackFormat(seedName)
         next[index] = {
           ...current,
           match: {
@@ -81,8 +84,8 @@ export function InvoicePreview({ initial, library }: Props) {
             new_name: seedName,
             new_type: 'spirit',
             base_unit: 'ml',
-            pack_size: 700,
-            purchase_qty: 1,
+            pack_size: pack?.pack_size ?? 700,
+            purchase_qty: pack?.purchase_qty ?? 1,
           },
         }
       } else {
