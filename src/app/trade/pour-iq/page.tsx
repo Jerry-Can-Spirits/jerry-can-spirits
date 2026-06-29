@@ -97,13 +97,13 @@ const COMING_SOON: FeatureBlock[] = [
 
 const jsonLd = {
   '@context': 'https://schema.org',
-  '@type': 'SoftwareApplication',
+  '@type': 'Service',
   name: 'Pour IQ',
-  applicationCategory: 'BusinessApplication',
-  operatingSystem: 'Web',
+  serviceType: 'Bar menu engineering and inventory software',
   url: 'https://jerrycanspirits.co.uk/trade/pour-iq/',
-  description: 'Menu engineering and margin analysis for bars: AI menu import, recipe costing, GP and variance, invoice scanning and stock — built for hospitality operators.',
-  publisher: { '@type': 'Organization', name: 'Jerry Can Spirits', url: 'https://jerrycanspirits.co.uk/' },
+  description: 'Menu engineering and margin analysis for bars: AI menu import, recipe costing, GP and variance, invoice scanning and stock. Built for hospitality operators.',
+  provider: { '@type': 'Organization', name: 'Jerry Can Spirits', url: 'https://jerrycanspirits.co.uk/' },
+  areaServed: { '@type': 'Country', name: 'United Kingdom' },
 }
 
 export default function PourIqMarketingPage() {
