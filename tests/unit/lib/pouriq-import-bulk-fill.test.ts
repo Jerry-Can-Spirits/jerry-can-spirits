@@ -1,5 +1,5 @@
-import { describe, it, expect } from 'vitest'
-import { planBulkFill, type BulkFillRow } from '@/lib/pouriq/import-bulk-fill'
+import { describe, it, expect, test } from 'vitest'
+import { planBulkFill, groupKeyFor, type BulkFillRow } from '@/lib/pouriq/import-bulk-fill'
 
 const priced = { name: 'Sugar Syrup', ingredient_type: 'syrup' as const, base_unit: 'ml' as const, pack_size: 1000, price_p: 500, purchase_qty: 1 }
 const row = (groupKey: string | null, resolved: boolean, state: Partial<BulkFillRow['state']> = {}): BulkFillRow => ({
@@ -53,4 +53,12 @@ describe('planBulkFill', () => {
     expect(plan?.targets).toEqual([1])
     expect(plan?.apply.existing_library_id).toBe('lib-1')
   })
+})
+
+test('spirit lines do not group (picked per cocktail)', () => {
+  expect(groupKeyFor({ extracted_name: 'Gin', inferred_type: 'spirit', match: { kind: 'no-match' } } as any)).toBeNull()
+})
+test('non-spirit identical names group', () => {
+  expect(groupKeyFor({ extracted_name: 'Lemon Juice', inferred_type: 'juice', match: { kind: 'no-match' } } as any))
+    .toBe('name:lemon juice')
 })

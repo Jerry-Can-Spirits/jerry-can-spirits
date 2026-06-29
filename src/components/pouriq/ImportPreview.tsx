@@ -4,8 +4,8 @@ import { useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import type { IngredientLibraryRow, IngredientType, ServeUnitRow } from '@/lib/pouriq/types'
 import { IngredientMatchRow, type MatchRowState } from '@/components/pouriq/IngredientMatchRow'
-import { normalise, singleContainmentMatch } from '@/lib/pouriq/match'
-import { planBulkFill, type BulkFillRow } from '@/lib/pouriq/import-bulk-fill'
+import { singleContainmentMatch } from '@/lib/pouriq/match'
+import { planBulkFill, groupKeyFor, type BulkFillRow } from '@/lib/pouriq/import-bulk-fill'
 import type { ParsedMeasurement, RecognisedServeUnit } from '@/lib/pouriq/measurement-parse'
 import { parsePackFormat } from '@/lib/pouriq/measures'
 import { PRIMARY_BUTTON } from '@/lib/pouriq/button-styles'
@@ -38,16 +38,6 @@ function isRowResolved(s: MatchRowState): boolean {
   if (s.existing_library_id) return true
   if (s.new_library) return newLibraryPriced(s.new_library)
   return false
-}
-
-// Stable per-row grouping for bulk-fill: catalogue matches group by catalogue
-// id (so spelling variants collapse), pickable rows by normalised menu name.
-// Auto-matched rows are already resolved and never grouped.
-function groupKeyFor(input: PreviewDrinkInput['ingredients'][0]): string | null {
-  const m = input.match
-  if (m.kind === 'catalogue') return `cat:${m.catalogue_id}`
-  if (m.kind === 'suggestions' || m.kind === 'no-match') return `name:${normalise(input.extracted_name)}`
-  return null
 }
 
 interface DrinkState {

@@ -1,4 +1,14 @@
 import type { MatchRowState } from '@/components/pouriq/IngredientMatchRow'
+import { normalise } from '@/lib/pouriq/match'
+import type { IngredientType } from '@/lib/pouriq/types'
+
+export function groupKeyFor(input: { extracted_name: string; inferred_type: IngredientType; match: { kind: string; catalogue_id?: string } }): string | null {
+  if (input.inferred_type === 'spirit') return null
+  const m = input.match
+  if (m.kind === 'catalogue') return `cat:${m.catalogue_id}`
+  if (m.kind === 'suggestions' || m.kind === 'no-match') return `name:${normalise(input.extracted_name)}`
+  return null
+}
 
 export interface BulkFillRow {
   // null = auto-matched / ungrouped: never a source or a target of fill.
