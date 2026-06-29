@@ -1,9 +1,16 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { Fragment, useMemo, useState, useTransition, type DragEvent } from 'react'
 import { SECONDARY_BUTTON_SM, PRIMARY_BUTTON } from '@/lib/pouriq/button-styles'
 import { INPUT } from '@/lib/pouriq/ui'
 import type { MenuSectionRow, ItemType } from '@/lib/pouriq/types'
+import {
+  createSectionAction,
+  renameSectionAction,
+  deleteSectionAction,
+  reorderSectionsAction,
+  moveDrinkAction,
+} from '@/lib/pouriq/server-actions'
 
 interface Drink {
   id: string
@@ -27,7 +34,10 @@ interface SectionView {
   subSections: { section: MenuSectionRow; drinks: Drink[] }[]
 }
 
+const UNPLACED_KEY = 'unplaced'
+
 function formatMoney(p: number) { return `£${(p / 100).toFixed(2)}` }
+function isTemp(id: string) { return id.startsWith('temp:') }
 
 function buildViewModel(sections: MenuSectionRow[], drinks: Drink[]) {
   const top = sections
@@ -62,25 +72,204 @@ function DrinkPreview({ drink, showPrices, showDescriptions }: { drink: Drink; s
   )
 }
 
-function ArrangeDrink({ drink }: { drink: Drink }) {
+function ArrangeDrink({
+  drink,
+  sectionOptions,
+  onMove,
+  disabled,
+}: {
+  drink: Drink
+  sectionOptions: { id: string; label: string }[]
+  onMove: (drinkId: string, sectionId: string | null) => void
+  disabled: boolean
+}) {
   return (
-    <div className="flex items-baseline justify-between gap-3 rounded-md border border-slate-200 bg-white px-3 py-2">
-      <span className="text-sm text-slate-800">{drink.name}</span>
-      {drink.sale_price_p !== null && (
-        <span className="text-xs text-slate-500 whitespace-nowrap">{formatMoney(drink.sale_price_p)}</span>
-      )}
+    <div
+      draggable
+      onDragStart={(e) => {
+        e.dataTransfer.setData('text/plain', drink.id)
+        e.dataTransfer.effectAllowed = 'move'
+      }}
+      className="flex items-center justify-between gap-3 rounded-md border border-slate-200 bg-white px-3 py-2 cursor-grab active:cursor-grabbing"
+    >
+      <span className="text-sm text-slate-800 truncate">{drink.name}</span>
+      <div className="flex items-center gap-2 shrink-0">
+        {drink.sale_price_p !== null && (
+          <span className="text-xs text-slate-500 whitespace-nowrap">{formatMoney(drink.sale_price_p)}</span>
+        )}
+        <label htmlFor={`move-${drink.id}`} className="sr-only">Move {drink.name} to</label>
+        <select
+          id={`move-${drink.id}`}
+          value={drink.section_id ?? ''}
+          disabled={disabled}
+          onChange={(e) => onMove(drink.id, e.target.value === '' ? null : e.target.value)}
+          className="text-xs border border-slate-300 rounded-md px-1.5 py-1 bg-white text-slate-700 max-w-[9rem]"
+        >
+          <option value="">Unplaced</option>
+          {sectionOptions.map((o) => (
+            <option key={o.id} value={o.id}>{o.label}</option>
+          ))}
+        </select>
+      </div>
     </div>
   )
 }
 
-export function MenuBuilder({ menuName, sections, drinks }: Props) {
+export function MenuBuilder({ menuId, menuName, sections, drinks }: Props) {
   const [title, setTitle] = useState(menuName)
   const [columns, setColumns] = useState<1 | 2>(1)
   const [showPrices, setShowPrices] = useState(true)
   const [showDescriptions, setShowDescriptions] = useState(true)
 
-  const { topSections, unplaced } = useMemo(() => buildViewModel(sections, drinks), [sections, drinks])
+  const [localSections, setLocalSections] = useState<MenuSectionRow[]>(sections)
+  const [localDrinks, setLocalDrinks] = useState<Drink[]>(drinks)
+  const [error, setError] = useState<string | null>(null)
+  const [isPending, startTransition] = useTransition()
+
+  const [editingId, setEditingId] = useState<string | null>(null)
+  const [editName, setEditName] = useState('')
+  const [addingSubFor, setAddingSubFor] = useState<string | null>(null)
+  const [subName, setSubName] = useState('')
+  const [newTop, setNewTop] = useState('')
+  const [dropKey, setDropKey] = useState<string | null>(null)
+
+  const { topSections, unplaced } = useMemo(() => buildViewModel(localSections, localDrinks), [localSections, localDrinks])
   const hasPreview = topSections.some((t) => t.drinks.length > 0 || t.subSections.some((s) => s.drinks.length > 0))
+
+  const sectionOptions = useMemo(
+    () =>
+      topSections.flatMap((t) => [
+        { id: t.section.id, label: t.section.name },
+        ...t.subSections.map((s) => ({ id: s.section.id, label: `↳ ${s.section.name}` })),
+      ]),
+    [topSections],
+  )
+
+  function persist(action: () => Promise<void>, revert: () => void, message: string) {
+    setError(null)
+    startTransition(async () => {
+      try {
+        await action()
+      } catch {
+        revert()
+        setError(message)
+      }
+    })
+  }
+
+  function moveDrinkTo(drinkId: string, targetSectionId: string | null) {
+    const drink = localDrinks.find((d) => d.id === drinkId)
+    if (!drink || drink.section_id === targetSectionId) return
+    const prevDrinks = localDrinks
+    const newPosition = localDrinks.filter((d) => d.section_id === targetSectionId).length
+    const updated = localDrinks.find((d) => d.id === drinkId)!
+    const rest = localDrinks.filter((d) => d.id !== drinkId)
+    setLocalDrinks([...rest, { ...updated, section_id: targetSectionId }])
+    persist(
+      () => moveDrinkAction(drinkId, targetSectionId, menuId, newPosition),
+      () => setLocalDrinks(prevDrinks),
+      'Could not move that drink. The change was not saved.',
+    )
+  }
+
+  function persistReorder(orderedIds: string[]) {
+    const prevSections = localSections
+    const posById = new Map(orderedIds.map((id, i) => [id, i]))
+    setLocalSections(localSections.map((s) => (posById.has(s.id) ? { ...s, position: posById.get(s.id)! } : s)))
+    persist(
+      () => reorderSectionsAction(orderedIds, menuId),
+      () => setLocalSections(prevSections),
+      'Could not reorder the sections. The change was not saved.',
+    )
+  }
+
+  function reorderSibling(siblings: MenuSectionRow[], sectionId: string, dir: 'up' | 'down') {
+    const ordered = [...siblings].sort((a, b) => a.position - b.position)
+    const idx = ordered.findIndex((s) => s.id === sectionId)
+    const swap = dir === 'up' ? idx - 1 : idx + 1
+    if (idx < 0 || swap < 0 || swap >= ordered.length) return
+    const next = [...ordered]
+    ;[next[idx], next[swap]] = [next[swap], next[idx]]
+    persistReorder(next.map((s) => s.id))
+  }
+
+  function addSection(parentId: string | null, name: string) {
+    const trimmed = name.trim()
+    if (!trimmed) return
+    const tempId = `temp:${crypto.randomUUID()}`
+    const position = localSections.filter((s) => s.parent_section_id === parentId).length
+    const optimistic: MenuSectionRow = {
+      id: tempId,
+      menu_id: menuId,
+      name: trimmed,
+      parent_section_id: parentId,
+      position,
+      created_at: '',
+    }
+    const prevSections = localSections
+    setLocalSections([...localSections, optimistic])
+    setError(null)
+    startTransition(async () => {
+      try {
+        const { sectionId } = await createSectionAction(menuId, trimmed, parentId)
+        setLocalSections((cur) => cur.map((s) => (s.id === tempId ? { ...s, id: sectionId } : s)))
+      } catch {
+        setLocalSections(prevSections)
+        setError('Could not add the section. The change was not saved.')
+      }
+    })
+  }
+
+  function renameSectionTo(sectionId: string, name: string) {
+    setEditingId(null)
+    const trimmed = name.trim()
+    const current = localSections.find((s) => s.id === sectionId)
+    if (!current || isTemp(sectionId) || !trimmed || trimmed === current.name) return
+    const prevSections = localSections
+    setLocalSections(localSections.map((s) => (s.id === sectionId ? { ...s, name: trimmed } : s)))
+    persist(
+      () => renameSectionAction(sectionId, menuId, trimmed),
+      () => setLocalSections(prevSections),
+      'Could not rename the section. The change was not saved.',
+    )
+  }
+
+  function removeSection(sectionId: string) {
+    if (isTemp(sectionId)) return
+    if (!window.confirm('Delete this section? Its drinks move back to Unplaced.')) return
+    const prevSections = localSections
+    const prevDrinks = localDrinks
+    const subIds = localSections.filter((s) => s.parent_section_id === sectionId).map((s) => s.id)
+    const removed = new Set([sectionId, ...subIds])
+    setLocalSections(localSections.filter((s) => !removed.has(s.id)))
+    setLocalDrinks(localDrinks.map((d) => (d.section_id !== null && removed.has(d.section_id) ? { ...d, section_id: null } : d)))
+    persist(
+      () => deleteSectionAction(sectionId, menuId),
+      () => {
+        setLocalSections(prevSections)
+        setLocalDrinks(prevDrinks)
+      },
+      'Could not delete the section. The change was not saved.',
+    )
+  }
+
+  function dropHandlers(key: string, targetSectionId: string | null) {
+    return {
+      onDragOver: (e: DragEvent) => {
+        e.preventDefault()
+        if (dropKey !== key) setDropKey(key)
+      },
+      onDragLeave: () => setDropKey((k) => (k === key ? null : k)),
+      onDrop: (e: DragEvent) => {
+        e.preventDefault()
+        setDropKey(null)
+        const id = e.dataTransfer.getData('text/plain')
+        if (id) moveDrinkTo(id, targetSectionId)
+      },
+    }
+  }
+
+  const ring = (key: string) => (dropKey === key ? 'ring-2 ring-emerald-400' : '')
 
   return (
     <>
@@ -122,41 +311,146 @@ export function MenuBuilder({ menuName, sections, drinks }: Props) {
       <div className="grid gap-8 lg:grid-cols-2">
         {/* Arrange pane — never printed */}
         <div className="no-print space-y-5">
-          <h2 className="text-xs font-semibold uppercase tracking-widest text-slate-500">Arrange</h2>
+          <div className="flex items-center justify-between gap-3">
+            <h2 className="text-xs font-semibold uppercase tracking-widest text-slate-500">Arrange</h2>
+            {isPending && <span className="text-xs text-slate-400">Saving&hellip;</span>}
+          </div>
+          {error && <p className="text-xs text-rose-600">{error}</p>}
 
-          <div className="rounded-xl border border-dashed border-slate-300 bg-slate-50 p-4">
+          {/* Unplaced tray */}
+          <div
+            {...dropHandlers(UNPLACED_KEY, null)}
+            className={`rounded-xl border border-dashed border-slate-300 bg-slate-50 p-4 ${ring(UNPLACED_KEY)}`}
+          >
             <h3 className="text-sm font-semibold text-slate-700 mb-2">Unplaced</h3>
             {unplaced.length === 0 ? (
               <p className="text-xs text-slate-400">Every drink is in a section.</p>
             ) : (
               <div className="space-y-2">
-                {unplaced.map((d) => <ArrangeDrink key={d.id} drink={d} />)}
+                {unplaced.map((d) => (
+                  <ArrangeDrink key={d.id} drink={d} sectionOptions={sectionOptions} onMove={moveDrinkTo} disabled={isPending} />
+                ))}
               </div>
             )}
           </div>
 
-          {topSections.map(({ section, drinks: direct, subSections }) => (
-            <div key={section.id} className="rounded-xl border border-slate-200 bg-white p-4">
-              <h3 className="text-sm font-bold text-slate-900 mb-3">{section.name}</h3>
-              {direct.length > 0 && (
-                <div className="space-y-2 mb-3">
-                  {direct.map((d) => <ArrangeDrink key={d.id} drink={d} />)}
-                </div>
-              )}
-              {subSections.map(({ section: sub, drinks: subDrinks }) => (
-                <div key={sub.id} className="mt-3 rounded-lg border border-slate-100 bg-slate-50 p-3">
-                  <h4 className="text-xs font-semibold uppercase tracking-wide text-slate-500 mb-2">{sub.name}</h4>
-                  {subDrinks.length === 0 ? (
-                    <p className="text-xs text-slate-400">No drinks yet.</p>
+          {topSections.map(({ section, drinks: direct, subSections }, topIdx) => {
+            const topSiblings = topSections.map((t) => t.section)
+            return (
+              <div
+                key={section.id}
+                {...dropHandlers(section.id, section.id)}
+                className={`rounded-xl border border-slate-200 bg-white p-4 ${ring(section.id)}`}
+              >
+                <div className="flex items-center justify-between gap-2 mb-3">
+                  {editingId === section.id ? (
+                    <input
+                      autoFocus
+                      value={editName}
+                      onChange={(e) => setEditName(e.target.value)}
+                      onBlur={() => renameSectionTo(section.id, editName)}
+                      onKeyDown={(e) => { if (e.key === 'Enter') renameSectionTo(section.id, editName) }}
+                      className="flex-1 text-sm font-bold text-slate-900 border border-slate-300 rounded-md px-2 py-1"
+                    />
                   ) : (
-                    <div className="space-y-2">
-                      {subDrinks.map((d) => <ArrangeDrink key={d.id} drink={d} />)}
-                    </div>
+                    <button
+                      type="button"
+                      onClick={() => { setEditingId(section.id); setEditName(section.name) }}
+                      className="flex-1 text-left text-sm font-bold text-slate-900 hover:text-emerald-700"
+                    >
+                      {section.name}
+                    </button>
                   )}
+                  <div className="flex items-center gap-1 shrink-0 text-xs">
+                    <button type="button" onClick={() => reorderSibling(topSiblings, section.id, 'up')} disabled={topIdx === 0} className="px-1.5 py-1 text-slate-500 hover:text-slate-800 disabled:opacity-30" aria-label="Move section up">↑</button>
+                    <button type="button" onClick={() => reorderSibling(topSiblings, section.id, 'down')} disabled={topIdx === topSections.length - 1} className="px-1.5 py-1 text-slate-500 hover:text-slate-800 disabled:opacity-30" aria-label="Move section down">↓</button>
+                    <button type="button" onClick={() => setAddingSubFor(addingSubFor === section.id ? null : section.id)} className="px-1.5 py-1 text-emerald-700 hover:text-emerald-800">+ sub-section</button>
+                    <button type="button" onClick={() => removeSection(section.id)} className="px-1.5 py-1 text-rose-600 hover:text-rose-700">Delete</button>
+                  </div>
                 </div>
-              ))}
-            </div>
-          ))}
+
+                {direct.length > 0 && (
+                  <div className="space-y-2 mb-3">
+                    {direct.map((d) => (
+                      <ArrangeDrink key={d.id} drink={d} sectionOptions={sectionOptions} onMove={moveDrinkTo} disabled={isPending} />
+                    ))}
+                  </div>
+                )}
+
+                {addingSubFor === section.id && (
+                  <form
+                    onSubmit={(e) => { e.preventDefault(); addSection(section.id, subName); setSubName(''); setAddingSubFor(null) }}
+                    className="flex gap-2 mb-3"
+                  >
+                    <input
+                      autoFocus
+                      value={subName}
+                      onChange={(e) => setSubName(e.target.value)}
+                      placeholder="Sub-section name"
+                      className="flex-1 text-xs border border-slate-300 rounded-md px-2 py-1.5"
+                    />
+                    <button type="submit" className={SECONDARY_BUTTON_SM}>Add</button>
+                  </form>
+                )}
+
+                {subSections.map(({ section: sub, drinks: subDrinks }, subIdx) => (
+                  <div
+                    key={sub.id}
+                    {...dropHandlers(sub.id, sub.id)}
+                    className={`mt-3 rounded-lg border border-slate-100 bg-slate-50 p-3 ${ring(sub.id)}`}
+                  >
+                    <div className="flex items-center justify-between gap-2 mb-2">
+                      {editingId === sub.id ? (
+                        <input
+                          autoFocus
+                          value={editName}
+                          onChange={(e) => setEditName(e.target.value)}
+                          onBlur={() => renameSectionTo(sub.id, editName)}
+                          onKeyDown={(e) => { if (e.key === 'Enter') renameSectionTo(sub.id, editName) }}
+                          className="flex-1 text-xs font-semibold text-slate-700 border border-slate-300 rounded-md px-2 py-1"
+                        />
+                      ) : (
+                        <button
+                          type="button"
+                          onClick={() => { setEditingId(sub.id); setEditName(sub.name) }}
+                          className="flex-1 text-left text-xs font-semibold uppercase tracking-wide text-slate-500 hover:text-emerald-700"
+                        >
+                          {sub.name}
+                        </button>
+                      )}
+                      <div className="flex items-center gap-1 shrink-0 text-xs">
+                        <button type="button" onClick={() => reorderSibling(subSections.map((s) => s.section), sub.id, 'up')} disabled={subIdx === 0} className="px-1.5 py-1 text-slate-500 hover:text-slate-800 disabled:opacity-30" aria-label="Move sub-section up">↑</button>
+                        <button type="button" onClick={() => reorderSibling(subSections.map((s) => s.section), sub.id, 'down')} disabled={subIdx === subSections.length - 1} className="px-1.5 py-1 text-slate-500 hover:text-slate-800 disabled:opacity-30" aria-label="Move sub-section down">↓</button>
+                        <button type="button" onClick={() => removeSection(sub.id)} className="px-1.5 py-1 text-rose-600 hover:text-rose-700">Delete</button>
+                      </div>
+                    </div>
+                    {subDrinks.length === 0 ? (
+                      <p className="text-xs text-slate-400">Drop a drink here.</p>
+                    ) : (
+                      <div className="space-y-2">
+                        {subDrinks.map((d) => (
+                          <ArrangeDrink key={d.id} drink={d} sectionOptions={sectionOptions} onMove={moveDrinkTo} disabled={isPending} />
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )
+          })}
+
+          <form
+            onSubmit={(e) => { e.preventDefault(); addSection(null, newTop); setNewTop('') }}
+            className="flex gap-2"
+          >
+            <input
+              value={newTop}
+              onChange={(e) => setNewTop(e.target.value)}
+              placeholder="New section name"
+              className="flex-1 text-sm border border-slate-300 rounded-lg px-3 py-2"
+            />
+            <button type="submit" className={SECONDARY_BUTTON_SM}>Add section</button>
+          </form>
         </div>
 
         {/* Preview pane — this is what prints */}
@@ -175,7 +469,9 @@ export function MenuBuilder({ menuName, sections, drinks }: Props) {
                       <DrinkPreview key={d.id} drink={d} showPrices={showPrices} showDescriptions={showDescriptions} />
                     ))}
                     {subSections.map(({ section: sub, drinks: subDrinks }) => (
-                      subDrinks.length === 0 ? null : (
+                      subDrinks.length === 0 ? (
+                        <Fragment key={sub.id} />
+                      ) : (
                         <div key={sub.id} className="mt-4">
                           <h4 className="text-sm font-semibold uppercase tracking-widest text-slate-500 mb-3">{sub.name}</h4>
                           {subDrinks.map((d) => (
