@@ -168,3 +168,40 @@ Note for each: did it import/cost at all, and which limit you hit. This list is 
 - Phases 1–8 should pass on the **cocktail** path end to end.
 - Phase 9 documents the whole-menu limits (expected).
 - Log every ⚠️/❌ with the phase number; that becomes the next fix/build list.
+
+---
+
+## Appendix A — Time-to-value measurement (the metric that sells it)
+
+The single biggest objection to onboarding software is "how long until it's set up." Capture timings during this run — this is the data that decides whether the initial phase is sellable. Target framing for the pitch: a real venue should reach a **fully costed menu in well under an hour**, not a day.
+
+| Metric | How to capture | Target | Actual |
+|---|---|---|---|
+| **Total onboarding** | Stopwatch from blank venue → first menu with GP on every drink | < 45–60 min | |
+| Extract time **per PDF** (×4) | Time each upload→preview | < ~60s each | |
+| Whole-menu extract total | Sum of the 4 | | |
+| **Auto-match hit rate** | (auto-matched + catalogue-matched) ÷ total ingredient lines | higher = faster | |
+| Ingredients needing **manual creation** | Count the new entries you had to price | lower = faster | |
+| Avg **time per drink** to resolve/price | total review time ÷ drinks | | |
+| Invoice scan (Phase 4) | upload → committed | < ~2 min | |
+| First **stock count** for N ingredients | time to enter | | |
+
+Note any specific time sinks (slow scroll to find unresolved lines, re-entering the same price, fiddly pack sizes). Those are the onboarding-speed backlog. The higher the catalogue auto-match rate, the less manual entry — so **every missing brand/generic you log below is also onboarding-time saved for the next venue.**
+
+---
+
+## Appendix B — Brand / generic gap log
+
+As you import all 4 PDFs, log every line the catalogue did NOT cover (had to create manually). This feeds the next catalogue migration.
+
+| Product (as on the menu) | Type | Should map to (generic) | In catalogue? |
+|---|---|---|---|
+| | | | |
+
+---
+
+## Appendix C — Test supplier invoice (for Phase 4)
+
+Use the prompt Claude gave you to render this as a PDF, then scan it in Phase 4. It is built to exercise the full matcher + every pack format + the cider/AF commit path + catalogue 0055 items. Net (ex-VAT) line prices; 20% VAT summary at the foot (so the per-invoice toggle defaults to **Ex/net** correctly). The lines deliberately mix: catalogue auto-matches, brand↔generic, 0055/0053 additions, cider + alcohol-free, and awkward formats (keg / BIB post-mix / 2L / small bottle / case / weight / count / food).
+
+(The full line list lives in the ChatGPT prompt Claude supplied; reproduce it here once finalised so the test invoice is repeatable.)
