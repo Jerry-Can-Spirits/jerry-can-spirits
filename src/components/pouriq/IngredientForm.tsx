@@ -2,7 +2,7 @@
 
 import { useMemo, useRef, useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
-import type { IngredientLibraryRow, IngredientType, ServeUnitRow } from '@/lib/pouriq/types'
+import { ALL_INGREDIENT_TYPES, type IngredientLibraryRow, type IngredientType, type ServeUnitRow } from '@/lib/pouriq/types'
 import { saveLibraryEntryAction, deleteLibraryEntryAction, saveServeUnitAction, deleteServeUnitAction, addPreparedComponentAction, removePreparedComponentAction, type LibraryEntryInput } from '@/lib/pouriq/server-actions'
 import { BarcodeScanner } from '@/components/pouriq/BarcodeScanner'
 import { RipplePreview } from '@/components/pouriq/RipplePreview'
@@ -26,11 +26,6 @@ import { PRIMARY_BUTTON, SECONDARY_BUTTON_SM } from '@/lib/pouriq/button-styles'
 
 type BaseUnit = 'ml' | 'g' | 'each'
 type PurchaseMode = BaseUnit | 'prepared'
-
-const INGREDIENT_TYPES: IngredientType[] = [
-  'spirit', 'liqueur', 'wine', 'beer', 'cider', 'mixer',
-  'syrup', 'juice', 'garnish', 'soft-drink', 'alcohol-free', 'food', 'other',
-]
 
 const INGREDIENT_TYPE_LABELS: Record<IngredientType, string> = {
   spirit: 'Spirit',
@@ -488,7 +483,7 @@ export function IngredientForm({ entry, usageCount = 0, impactPayload, serveUnit
               onChange={(e) => setIngredientType(e.target.value as IngredientType)}
               className={INPUT}
             >
-              {INGREDIENT_TYPES.map((t) => (
+              {ALL_INGREDIENT_TYPES.map((t) => (
                 <option key={t} value={t}>{INGREDIENT_TYPE_LABELS[t]}</option>
               ))}
             </select>

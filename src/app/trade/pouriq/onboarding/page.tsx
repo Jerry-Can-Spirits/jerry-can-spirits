@@ -17,6 +17,7 @@ export default async function PourIqOnboardingPage() {
       title="Your first session"
       eyebrow="Pour IQ™ Quickstart"
       subtitle="Thirty minutes to set up and import your first menu"
+      tone="light"
     >
       <p className="text-base leading-relaxed mb-6">
         Welcome to Pour IQ™. This sheet covers your first thirty minutes. Sign in, set your Voice Profile, import your first menu. Everything else comes after.

@@ -9,16 +9,11 @@ import { isAllowedOrigin, isRateLimited } from '@/lib/kv'
 import { checkPourIqAccess } from '@/lib/pouriq/access'
 import { getMenu } from '@/lib/pouriq/menus'
 import { matchFieldManualSlug } from '@/lib/pouriq/field-manual-match'
-import type { IngredientType } from '@/lib/pouriq/types'
+import { ALL_INGREDIENT_TYPES, type IngredientType } from '@/lib/pouriq/types'
 
 export const runtime = 'nodejs'
 
 const COMMIT_RATE_LIMIT = 30 // per hour per tenant
-
-const INGREDIENT_TYPES: ReadonlyArray<IngredientType> = [
-  'spirit', 'liqueur', 'wine', 'beer', 'cider', 'mixer', 'syrup', 'juice',
-  'garnish', 'soft-drink', 'alcohol-free', 'food', 'other',
-]
 
 interface CommitIngredient {
   // Either pick an existing library entry...
@@ -83,7 +78,7 @@ function validateBody(body: CommitBody): string | null {
       if (hasNew && ing.new_library) {
         const nl = ing.new_library
         if (!nl.name || typeof nl.name !== 'string' || !nl.name.trim()) return `${tag}: new library name required`
-        if (!INGREDIENT_TYPES.includes(nl.ingredient_type)) return `${tag}: invalid ingredient_type`
+        if (!ALL_INGREDIENT_TYPES.includes(nl.ingredient_type)) return `${tag}: invalid ingredient_type`
         if (!['ml', 'g', 'each'].includes(nl.base_unit)) return `${tag}: base_unit must be ml, g, or each`
         if (!isPositiveNumber(nl.pack_size)) return `${tag}: pack_size must be a positive number`
         if (!isNonNegativeInteger(nl.price_p)) return `${tag}: price_p must be a non-negative integer`

@@ -1,10 +1,10 @@
 import type { MenuPerformance } from '@/lib/pouriq/menu-performance'
 
 const TONES = {
-  winner: { card: 'border-emerald-300 bg-emerald-50', label: 'text-emerald-700', chip: 'border-emerald-300' },
-  promote: { card: 'border-sky-300 bg-sky-50', label: 'text-sky-700', chip: 'border-sky-300' },
-  fix: { card: 'border-amber-300 bg-amber-50', label: 'text-amber-700', chip: 'border-amber-300' },
-  review: { card: 'border-rose-300 bg-rose-50', label: 'text-rose-700', chip: 'border-rose-300' },
+  winner: { card: 'border-emerald-300 bg-emerald-50 print:border-emerald-600', label: 'text-emerald-700', chip: 'border-emerald-300' },
+  promote: { card: 'border-sky-300 bg-sky-50 print:border-sky-600', label: 'text-sky-700', chip: 'border-sky-300' },
+  fix: { card: 'border-amber-300 bg-amber-50 print:border-amber-600', label: 'text-amber-700', chip: 'border-amber-300' },
+  review: { card: 'border-rose-300 bg-rose-50 print:border-rose-600', label: 'text-rose-700', chip: 'border-rose-300' },
 } as const
 
 function Quadrant({ label, tone, drinks }: { label: string; tone: keyof typeof TONES; drinks: Array<{ cocktail_id: string; name: string }> }) {

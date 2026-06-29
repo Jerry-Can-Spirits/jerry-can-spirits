@@ -7,6 +7,11 @@ export type IngredientType =
   | 'spirit' | 'liqueur' | 'wine' | 'beer' | 'cider' | 'mixer'
   | 'syrup' | 'juice' | 'garnish' | 'soft-drink' | 'alcohol-free' | 'food' | 'other'
 
+export const ALL_INGREDIENT_TYPES = [
+  'spirit', 'liqueur', 'wine', 'beer', 'cider', 'mixer', 'syrup', 'juice',
+  'garnish', 'soft-drink', 'alcohol-free', 'food', 'other',
+] as const satisfies readonly IngredientType[]
+
 export type RecommendationSeverity = 'info' | 'warn' | 'action'
 export type RecommendationCategory = 'pricing' | 'waste' | 'balance' | 'complexity' | 'opportunity'
 export type RecommendationAction = 'adjust_price' | 'remove_cocktail' | 'remove_ingredient' | 'swap_ingredient'

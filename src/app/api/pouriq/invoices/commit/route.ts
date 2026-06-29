@@ -20,16 +20,11 @@ import { getLibraryEntry, insertLibraryEntry } from '@/lib/pouriq/ingredient-lib
 import { receiptBottlesFromInvoiceLine } from '@/lib/pouriq/stock'
 import { recomputeDependents } from '@/lib/pouriq/prepared'
 import { netPriceP } from '@/lib/pouriq/calculations'
-import type { IngredientType } from '@/lib/pouriq/types'
+import { ALL_INGREDIENT_TYPES, type IngredientType } from '@/lib/pouriq/types'
 
 export const runtime = 'nodejs'
 
 const COMMIT_RATE_LIMIT = 30
-
-const INGREDIENT_TYPES: ReadonlyArray<IngredientType> = [
-  'spirit', 'liqueur', 'wine', 'beer', 'cider', 'mixer', 'syrup', 'juice',
-  'garnish', 'soft-drink', 'alcohol-free', 'food', 'other',
-]
 
 interface CommitLineNewLibrary {
   name: string
@@ -98,7 +93,7 @@ function validateBody(body: CommitBody): string | null {
       if (hasNew && line.new_library) {
         const nl = line.new_library
         if (!nl.name || typeof nl.name !== 'string' || !nl.name.trim()) return `Line ${i + 1}: new library name required`
-        if (!INGREDIENT_TYPES.includes(nl.ingredient_type)) return `Line ${i + 1}: invalid ingredient_type`
+        if (!ALL_INGREDIENT_TYPES.includes(nl.ingredient_type)) return `Line ${i + 1}: invalid ingredient_type`
         if (!['ml', 'g', 'each'].includes(nl.base_unit)) return `Line ${i + 1}: invalid base_unit`
         if (nl.base_unit !== 'each' && !isPositiveInteger(nl.pack_size)) return `Line ${i + 1}: pack_size must be a positive integer`
         if (!isPositiveInteger(nl.purchase_qty)) return `Line ${i + 1}: purchase_qty must be a positive integer`

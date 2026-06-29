@@ -2,7 +2,7 @@
 
 import { memo } from 'react'
 import type { PreviewLine } from '@/app/api/pouriq/invoices/extract/route'
-import type { IngredientLibraryRow, IngredientType } from '@/lib/pouriq/types'
+import { ALL_INGREDIENT_TYPES, type IngredientLibraryRow, type IngredientType } from '@/lib/pouriq/types'
 import { PriceInput } from '@/components/pouriq/PriceInput'
 import { netPriceP } from '@/lib/pouriq/calculations'
 
@@ -31,8 +31,6 @@ interface InvoiceLineRowProps {
   onChange: (index: number, patch: Partial<LineState>) => void
   onToggleCreateNew: (index: number, toNew: boolean) => void
 }
-
-const INGREDIENT_TYPES: IngredientType[] = ['spirit','liqueur','wine','beer','cider','mixer','syrup','juice','garnish','soft-drink','alcohol-free','food','other']
 
 function formatMoney(p: number): string {
   return `£${(p / 100).toFixed(2)}`
@@ -96,7 +94,7 @@ function InvoiceLineRowComponent({ index, line, state, library, libraryById, pri
                 onChange={(e) => onChange(index, { match: { ...match, new_type: e.target.value as IngredientType } })}
                 className="px-2 py-1 bg-white border border-slate-300 rounded-sm text-slate-900 text-sm"
               >
-                {INGREDIENT_TYPES.map((t) => <option key={t} value={t}>{t}</option>)}
+                {ALL_INGREDIENT_TYPES.map((t) => <option key={t} value={t}>{t}</option>)}
               </select>
               <select
                 value={match.base_unit}

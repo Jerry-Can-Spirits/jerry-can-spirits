@@ -235,7 +235,7 @@ export default async function MenuDetailPage({ params }: Props) {
                 new Date(s).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })
               return (
                 <section className="hidden print:block">
-                  <h2 className="text-xl font-serif font-bold text-white mb-2">Sales volume</h2>
+                  <h2 className="text-xl font-serif font-bold text-slate-900 mb-2">Sales volume</h2>
                   <p className="text-sm">
                     Period: {fmtDate(period.start)} – {fmtDate(period.end)} ({menu.volume_cadence}).
                   </p>
