@@ -12,7 +12,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     ...baseOpenGraph,
-    images: undefined,
+    images: [{ url: '/og/pour-iq.png', width: 1200, height: 630, alt: 'Pour IQ — Margin analysis for cocktail menus' }],
     title: 'Pour IQ™ — Margin Analysis for Cocktail Menus | Jerry Can Spirits®',
     description:
       'AI margin analysis for cocktail menus. For pubs, bars, restaurants, and hotels.',
