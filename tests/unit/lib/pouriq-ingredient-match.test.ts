@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { matchIngredient, normalise } from '@/lib/pouriq/match'
+import { matchIngredient, normalise, singleContainmentMatch } from '@/lib/pouriq/match'
 import type { IngredientLibraryRow } from '@/lib/pouriq/types'
 
 // Minimal library-row factory — matchIngredient only reads `name`.
@@ -80,5 +80,30 @@ describe('matchIngredient — typo tolerance kept (as suggestion, not auto)', ()
 
   it('returns no-match when nothing is close', () => {
     expect(matchIngredient('elderflower tonic foam', [row('Gin'), row('Lime Juice')]).kind).toBe('no-match')
+  })
+})
+
+const lib = (id: string, name: string): IngredientLibraryRow =>
+  ({ id, name, ingredient_type: 'spirit', base_unit: 'ml', pack_size: 700, price_p: 1500,
+     trade_account_id: 't', price_includes_vat: 0, price_entered_p: 1500, pack_format: null,
+     subcategory: null, is_prepared: 0, purchase_qty: 1, yield_pct: 100, barcode: null,
+     notes: null, created_at: '', updated_at: '' } as IngredientLibraryRow)
+
+describe('singleContainmentMatch', () => {
+  it('returns the sole entry whose tokens are contained by the line', () => {
+    const library = [lib('1', 'Absolut'), lib('2', 'Beefeater')]
+    expect(singleContainmentMatch('Absolut Vodka', library)?.id).toBe('1')
+  })
+  it('returns null when two entries both contain (ambiguous)', () => {
+    const library = [lib('1', "Gordon's Gin"), lib('2', "Gordon's Pink Gin")]
+    expect(singleContainmentMatch("Gordon's", library)).toBeNull()
+  })
+  it('returns null when nothing is a clean containment', () => {
+    const library = [lib('1', 'Lime Juice')]
+    expect(singleContainmentMatch('Lemon Juice', library)).toBeNull()
+  })
+  it('returns null when an exact auto-match already exists (leave to matchIngredient)', () => {
+    const library = [lib('1', 'Absolut Vodka')]
+    expect(singleContainmentMatch('Absolut Vodka', library)).toBeNull()
   })
 })
