@@ -46,6 +46,20 @@ export function IngredientList({ entries, usageCounts, stockById }: Props) {
   // Bulk actions only ever touch what's currently visible, so changing the
   // filter can never silently delete a selected ingredient you can't see.
   const visibleSelectedIds = visible.filter((e) => selected.has(e.id)).map((e) => e.id)
+  const deletableVisibleIds = visible.filter((e) => (usageCounts.get(e.id) ?? 0) === 0).map((e) => e.id)
+  const allUnusedSelected = deletableVisibleIds.length > 0 && deletableVisibleIds.every((id) => selected.has(id))
+
+  function toggleSelectAllUnused() {
+    setSelected((prev) => {
+      const next = new Set(prev)
+      if (allUnusedSelected) {
+        for (const id of deletableVisibleIds) next.delete(id)
+      } else {
+        for (const id of deletableVisibleIds) next.add(id)
+      }
+      return next
+    })
+  }
 
   function toggleSelected(id: string) {
     setSelected((prev) => {
@@ -100,6 +114,18 @@ export function IngredientList({ entries, usageCounts, stockById }: Props) {
           aria-label="Search ingredients"
           className="flex-1 min-w-[180px] px-3 py-2 bg-white border border-slate-300 rounded-lg text-slate-900 text-sm focus:border-emerald-500 focus:outline-hidden"
         />
+        {deletableVisibleIds.length > 0 && (
+          <label className="flex items-center gap-2 text-sm text-slate-600 cursor-pointer select-none">
+            <input
+              type="checkbox"
+              checked={allUnusedSelected}
+              onChange={toggleSelectAllUnused}
+              aria-label="Select all unused"
+              className="h-4 w-4 accent-emerald-600"
+            />
+            Select all unused
+          </label>
+        )}
         <div className="flex flex-wrap gap-2">
           <button type="button" onClick={() => setCategory('all')} className={`${chipBase} ${category === 'all' ? chipActive : chipIdle}`}>All</button>
           {types.map((t) => (

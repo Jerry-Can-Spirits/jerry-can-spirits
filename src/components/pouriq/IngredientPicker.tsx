@@ -1,11 +1,12 @@
 'use client'
 
-import { useEffect, useId, useMemo, useRef, useState } from 'react'
+import { useState } from 'react'
 import { ALL_INGREDIENT_TYPES, type IngredientLibraryRow, type IngredientType } from '@/lib/pouriq/types'
 import { saveLibraryEntryAction } from '@/lib/pouriq/server-actions'
 import { BarcodeScanner } from '@/components/pouriq/BarcodeScanner'
 import { BOTTLE_SIZES_ML, WEIGHT_SIZES_G } from '@/lib/pouriq/measures'
 import { PRIMARY_BUTTON } from '@/lib/pouriq/button-styles'
+import { LibrarySearchSelect } from '@/components/pouriq/LibrarySearchSelect'
 
 const inputClass = 'w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-slate-900 text-sm placeholder-slate-400 focus:border-emerald-500 focus:outline-hidden'
 const labelClass = 'block text-xs font-medium text-slate-600 mb-1'
@@ -20,11 +21,6 @@ interface Props {
 }
 
 export function IngredientPicker({ libraryEntries, selectedEntryId, onChange }: Props) {
-  const id = useId()
-  const containerRef = useRef<HTMLDivElement>(null)
-  const inputRef = useRef<HTMLInputElement>(null)
-  const [open, setOpen] = useState(false)
-  const [query, setQuery] = useState('')
   const [showCreate, setShowCreate] = useState(false)
   const [scanOpen, setScanOpen] = useState(false)
   const [scanInfo, setScanInfo] = useState<string | null>(null)
@@ -48,33 +44,8 @@ export function IngredientPicker({ libraryEntries, selectedEntryId, onChange }: 
 
   const selectedEntry = libraryEntries.find((e) => e.id === selectedEntryId) ?? null
 
-  const matches = useMemo(() => {
-    if (!query.trim()) return libraryEntries.slice(0, 20)
-    const q = query.toLowerCase()
-    return libraryEntries
-      .filter((e) => e.name.toLowerCase().includes(q))
-      .slice(0, 20)
-  }, [libraryEntries, query])
-
-  useEffect(() => {
-    if (!open) return
-    function handleClickOutside(e: MouseEvent) {
-      // Containment must be tested against the whole component, not just the
-      // input's row: the options dropdown and inline-create form are siblings
-      // of that row, so checking the row alone treated option clicks as
-      // "outside" and closed the menu on mousedown before the click landed.
-      if (containerRef.current?.contains(e.target as Node)) return
-      setOpen(false)
-      setShowCreate(false)
-    }
-    document.addEventListener('mousedown', handleClickOutside)
-    return () => document.removeEventListener('mousedown', handleClickOutside)
-  }, [open])
-
   function selectEntry(entry: IngredientLibraryRow) {
     onChange(entry)
-    setQuery('')
-    setOpen(false)
     setShowCreate(false)
     setScanInfo(null)
     setPendingBarcode(null)
@@ -115,7 +86,6 @@ export function IngredientPicker({ libraryEntries, selectedEntryId, onChange }: 
     // recognised the product.
     setPendingBarcode(code)
     setShowCreate(true)
-    setOpen(true)
     if (cataloguePrefill) {
       setName(cataloguePrefill.name)
       setIngredientType(cataloguePrefill.ingredient_type)
@@ -185,58 +155,30 @@ export function IngredientPicker({ libraryEntries, selectedEntryId, onChange }: 
   const sizePresets = base_unit === 'ml' ? BOTTLE_SIZES_ML : base_unit === 'g' ? WEIGHT_SIZES_G : null
 
   return (
-    <div ref={containerRef} className="relative">
-      <div className="flex gap-2">
-        <input
-          ref={inputRef}
-          id={id}
-          type="text"
-          aria-label="Ingredient picker"
-          value={open || showCreate ? query : (selectedEntry?.name ?? '')}
-          onFocus={() => setOpen(true)}
-          onChange={(e) => { setQuery(e.target.value); setOpen(true) }}
-          placeholder={selectedEntry ? selectedEntry.name : 'Pick an ingredient…'}
-          className={inputClass}
-        />
-        <button
-          type="button"
-          onClick={() => setScanOpen(true)}
-          title="Scan a barcode"
-          aria-label="Scan a barcode"
-          className="shrink-0 px-3 py-2 bg-white border border-slate-300 rounded-lg text-slate-700 hover:border-emerald-500 transition-colors text-sm"
-        >
-          Scan
-        </button>
-      </div>
+    <div className="relative">
+      {!showCreate && (
+        <div className="flex gap-2">
+          <LibrarySearchSelect
+            libraryEntries={libraryEntries}
+            onPick={(e) => selectEntry(libraryEntries.find((le) => le.id === e.id)!)}
+            onRequestCreate={(q) => { setShowCreate(true); setName(q) }}
+            placeholder={selectedEntry ? selectedEntry.name : 'Pick an ingredient...'}
+            initialQuery={selectedEntry ? selectedEntry.name : ''}
+          />
+          <button
+            type="button"
+            onClick={() => setScanOpen(true)}
+            title="Scan a barcode"
+            aria-label="Scan a barcode"
+            className="shrink-0 px-3 py-2 bg-white border border-slate-300 rounded-lg text-slate-700 hover:border-emerald-500 transition-colors text-sm"
+          >
+            Scan
+          </button>
+        </div>
+      )}
 
       {scanInfo && !scanOpen && (
         <p className="mt-1 text-xs text-emerald-700">{scanInfo}</p>
-      )}
-
-      {open && !showCreate && (
-        <div className="absolute z-10 left-0 right-0 mt-1 max-h-64 overflow-y-auto bg-white border border-slate-200 rounded-lg shadow-lg">
-          {matches.length === 0 && (
-            <p className="px-3 py-2 text-sm text-slate-500">No matches in your library.</p>
-          )}
-          {matches.map((entry) => (
-            <button
-              type="button"
-              key={entry.id}
-              onClick={() => selectEntry(entry)}
-              className="block w-full text-left px-3 py-2 text-sm text-slate-900 hover:bg-slate-50"
-            >
-              <span className="font-medium">{entry.name}</span>
-              <span className="text-xs text-slate-500 ml-2">{entry.ingredient_type}</span>
-            </button>
-          ))}
-          <button
-            type="button"
-            onClick={() => { setShowCreate(true); setName(query) }}
-            className="block w-full text-left px-3 py-2 text-sm text-emerald-700 hover:bg-slate-50 border-t border-slate-200"
-          >
-            + Create new ingredient{query.trim() ? `: "${query.trim()}"` : ''}
-          </button>
-        </div>
       )}
 
       {showCreate && (

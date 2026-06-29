@@ -8,6 +8,7 @@ import { InvoiceLineRow, type LineState } from './InvoiceLineRow'
 import { classifyInvoiceLine, summariseInvoiceLines, type InvoiceLineInput } from '@/lib/pouriq/invoice-review'
 import { netPriceP } from '@/lib/pouriq/calculations'
 import { parsePackFormat } from '@/lib/pouriq/measures'
+import { singleContainmentMatch } from '@/lib/pouriq/match'
 import { INPUT } from '@/lib/pouriq/ui'
 import { PRIMARY_BUTTON } from '@/lib/pouriq/button-styles'
 
@@ -54,10 +55,13 @@ export function InvoicePreview({ initial, library }: Props) {
           },
         }
       }
+      const preselect = (l.match.kind === 'suggestions' || l.match.kind === 'no-match')
+        ? singleContainmentMatch(l.extracted_name, library)
+        : null
       return {
         applied: false,
         unit_price_p: l.extracted_unit_price_p,
-        match: { kind: 'existing', library_id: null },
+        match: { kind: 'existing', library_id: preselect?.id ?? null },
       }
     }),
   )
@@ -146,7 +150,7 @@ export function InvoicePreview({ initial, library }: Props) {
               index={idx}
               line={initial.lines[idx]}
               state={lines[idx]}
-              library={library}
+              libraryEntries={library}
               libraryById={libraryById}
               pricesIncludeVat={pricesIncludeVat}
               onChange={handleChange}

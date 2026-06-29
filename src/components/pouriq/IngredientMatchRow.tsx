@@ -3,6 +3,7 @@
 import { ALL_INGREDIENT_TYPES, type IngredientLibraryRow, type IngredientType, type ServeUnitRow } from '@/lib/pouriq/types'
 import { PriceInput } from '@/components/pouriq/PriceInput'
 import { ServeUnitPicker } from '@/components/pouriq/ServeUnitPicker'
+import { LibrarySearchSelect } from '@/components/pouriq/LibrarySearchSelect'
 import { BOTTLE_SIZES_ML, WEIGHT_SIZES_G, KEG_SIZES_ML, parsePackFormat } from '@/lib/pouriq/measures'
 import type { ServeUnit } from '@/lib/pouriq/measures'
 import { formatPurchaseBasis } from '@/lib/pouriq/calculations'
@@ -23,6 +24,7 @@ export interface MatchRowState {
     base_unit: 'ml' | 'g' | 'each'
     pack_size: number
     price_p: number | null
+    price_includes_vat: boolean
     purchase_qty: number
     pack_format?: string | null
     subcategory?: string | null
@@ -38,7 +40,6 @@ interface Props {
   rawMeasurement: string
   inferredType: IngredientType
   matchKind: 'auto' | 'suggestions' | 'no-match' | 'catalogue'
-  suggestionEntries: Array<{ id: string; name: string }>
   libraryEntries: IngredientLibraryRow[]
   serveUnits: Record<string, ServeUnitRow[]>
   state: MatchRowState
@@ -58,7 +59,7 @@ function resolvedBaseUnit(state: MatchRowState, library: IngredientLibraryRow[])
 
 export function IngredientMatchRow({
   extractedName, rawMeasurement, inferredType,
-  matchKind, suggestionEntries, libraryEntries, serveUnits,
+  matchKind, libraryEntries, serveUnits,
   state, onChange, onResolvedCommit,
 }: Props) {
   const baseUnit = resolvedBaseUnit(state, libraryEntries)
@@ -70,28 +71,18 @@ export function IngredientMatchRow({
     ? (serveUnits[selectedExisting.id] ?? [])
     : []
 
-  function pickExisting(id: string) {
-    onChange({
-      existing_library_id: id,
-      new_library: undefined,
-      pour_ml: state.pour_ml,
-      unit_count: state.unit_count,
-      recipe_unit: state.recipe_unit,
-      recipe_qty: state.recipe_qty,
-    })
-    onResolvedCommit?.()
-  }
-
-  function startNewLibrary() {
-    const pack = parsePackFormat(extractedName)
+  function startNewLibrary(name?: string) {
+    const entryName = name ?? extractedName
+    const pack = parsePackFormat(entryName)
     onChange({
       existing_library_id: undefined,
       new_library: {
-        name: extractedName,
+        name: entryName,
         ingredient_type: inferredType,
         base_unit: 'ml',
         pack_size: pack?.pack_size ?? 700,
         price_p: null,
+        price_includes_vat: false,
         purchase_qty: pack?.purchase_qty ?? 1,
       },
       pour_ml: state.pour_ml,
@@ -164,13 +155,28 @@ export function IngredientMatchRow({
                   </div>
                   <div className="grid grid-cols-2 gap-2">
                     <div>
-                      <label className={labelClass}>Price paid (£)</label>
+                      <div className="flex items-center justify-between mb-1">
+                        <label className={labelClass}>Price paid (£)</label>
+                        <div role="group" aria-label="Price VAT basis" className="inline-flex items-stretch rounded border border-slate-300 overflow-hidden bg-white">
+                          <button type="button" onClick={() => updateNewLibrary({ price_includes_vat: true })} aria-pressed={nl.price_includes_vat}
+                            className={`px-2 py-0.5 text-xs font-semibold transition-colors ${nl.price_includes_vat ? 'bg-emerald-50 text-emerald-700' : 'text-slate-500 hover:text-slate-700'}`}>
+                            Inc VAT
+                          </button>
+                          <span aria-hidden="true" className="w-px bg-slate-300" />
+                          <button type="button" onClick={() => updateNewLibrary({ price_includes_vat: false })} aria-pressed={!nl.price_includes_vat}
+                            className={`px-2 py-0.5 text-xs font-semibold transition-colors ${!nl.price_includes_vat ? 'bg-emerald-50 text-emerald-700' : 'text-slate-500 hover:text-slate-700'}`}>
+                            Ex VAT
+                          </button>
+                        </div>
+                      </div>
                       <PriceInput
                         valueP={nl.price_p}
                         onChangeP={(p) => updateNewLibrary({ price_p: p })}
                         onCommit={onResolvedCommit}
                         className={inputClass} placeholder="14.40" />
-                      <p className="text-xs text-slate-500 mt-1">Ex-VAT (net) cost from your supplier, not the menu sale price.</p>
+                      <p className="text-xs text-slate-500 mt-1">
+                        {nl.price_includes_vat ? 'Price including VAT (stored net, divided by 1.2).' : 'Ex-VAT (net) cost from your supplier.'}
+                      </p>
                     </div>
                     <div>
                       <label className={labelClass}>How many does that buy?</label>
@@ -217,32 +223,43 @@ export function IngredientMatchRow({
           </div>
         ) : (
           <div className="space-y-2">
-            <select
-              value={state.existing_library_id ?? ''}
-              onChange={(e) => {
-                if (e.target.value === '__new__') startNewLibrary()
-                else if (e.target.value) pickExisting(e.target.value)
-              }}
-              className={inputClass}
-            >
-              <option value="">Choose…</option>
-              {matchKind === 'suggestions' && suggestionEntries.length > 0 && (
-                <optgroup label="Suggested matches">
-                  {suggestionEntries.map((s) => <option key={s.id} value={s.id}>{s.name}</option>)}
-                </optgroup>
-              )}
-              <optgroup label="All library">
-                {libraryEntries.map((e) => <option key={e.id} value={e.id}>{e.name}</option>)}
-              </optgroup>
-              <option value="__new__">+ Create new from this entry</option>
-            </select>
-            {selectedExisting && (
-              <p className="text-xs text-slate-500">
-                Linked to {selectedExisting.name}
-                {selectedExisting.base_unit !== 'each'
-                  ? ` · £${(selectedExisting.price_p / 100).toFixed(2)} / ${selectedExisting.pack_size}${selectedExisting.base_unit}`
-                  : ` · £${(selectedExisting.price_p / 100).toFixed(2)} each`}
-              </p>
+            {state.existing_library_id ? (
+              <div className="flex items-center justify-between gap-2">
+                <p className="text-sm text-slate-900">
+                  {selectedExisting
+                    ? <>
+                        {selectedExisting.name}
+                        {selectedExisting.base_unit !== 'each'
+                          ? <span className="text-xs text-slate-500 ml-2">· £{(selectedExisting.price_p / 100).toFixed(2)} / {selectedExisting.pack_size}{selectedExisting.base_unit}</span>
+                          : <span className="text-xs text-slate-500 ml-2">· £{(selectedExisting.price_p / 100).toFixed(2)} each</span>}
+                      </>
+                    : state.existing_library_id}
+                </p>
+                <button
+                  type="button"
+                  onClick={() => onChange({ ...state, existing_library_id: undefined })}
+                  className="shrink-0 text-xs text-slate-500 hover:text-slate-700"
+                >
+                  Change
+                </button>
+              </div>
+            ) : (
+              <LibrarySearchSelect
+                libraryEntries={libraryEntries}
+                inferredType={inferredType}
+                onPick={(e) => {
+                  onChange({
+                    existing_library_id: e.id,
+                    new_library: undefined,
+                    pour_ml: state.pour_ml,
+                    unit_count: state.unit_count,
+                    recipe_unit: state.recipe_unit,
+                    recipe_qty: state.recipe_qty,
+                  })
+                  onResolvedCommit?.()
+                }}
+                onRequestCreate={(q) => startNewLibrary(q)}
+              />
             )}
           </div>
         )}

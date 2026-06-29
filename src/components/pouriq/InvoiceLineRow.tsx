@@ -4,6 +4,7 @@ import { memo } from 'react'
 import type { PreviewLine } from '@/app/api/pouriq/invoices/extract/route'
 import { ALL_INGREDIENT_TYPES, type IngredientLibraryRow, type IngredientType } from '@/lib/pouriq/types'
 import { PriceInput } from '@/components/pouriq/PriceInput'
+import { LibrarySearchSelect } from '@/components/pouriq/LibrarySearchSelect'
 import { netPriceP } from '@/lib/pouriq/calculations'
 
 export type LineState = {
@@ -25,7 +26,7 @@ interface InvoiceLineRowProps {
   index: number
   line: PreviewLine
   state: LineState
-  library: IngredientLibraryRow[]
+  libraryEntries: IngredientLibraryRow[]
   libraryById: Map<string, IngredientLibraryRow>
   pricesIncludeVat: boolean
   onChange: (index: number, patch: Partial<LineState>) => void
@@ -43,7 +44,7 @@ function currentCostFor(libraryById: Map<string, IngredientLibraryRow>, libraryI
   return entry.price_p > 0 ? entry.price_p : null
 }
 
-function InvoiceLineRowComponent({ index, line, state, library, libraryById, pricesIncludeVat, onChange, onToggleCreateNew }: InvoiceLineRowProps) {
+function InvoiceLineRowComponent({ index, line, state, libraryEntries, libraryById, pricesIncludeVat, onChange, onToggleCreateNew }: InvoiceLineRowProps) {
   const match = state.match
   const libraryId = match.kind === 'existing' ? match.library_id : null
   const currentP = currentCostFor(libraryById, libraryId)
@@ -140,19 +141,27 @@ function InvoiceLineRowComponent({ index, line, state, library, libraryById, pri
           </div>
         ) : (
           <div className="space-y-1 min-w-[220px]">
-            <select
-              value={match.library_id ?? ''}
-              onChange={(e) => onChange(index, { match: { kind: 'existing', library_id: e.target.value || null } })}
-              className="w-full px-2 py-1 bg-white border border-slate-300 rounded-sm text-slate-900 text-sm"
-            >
-              <option value="">— select library entry —</option>
-              {line.match.kind === 'suggestions' && line.match.entries.map((e) => (
-                <option key={e.id} value={e.id}>{e.name} (suggested)</option>
-              ))}
-              {library.map((e) => (
-                <option key={e.id} value={e.id}>{e.name}</option>
-              ))}
-            </select>
+            {match.library_id ? (
+              <div className="flex items-center justify-between gap-2">
+                <p className="text-sm text-slate-900">
+                  {libraryById.get(match.library_id)?.name ?? match.library_id}
+                </p>
+                <button
+                  type="button"
+                  onClick={() => onChange(index, { match: { kind: 'existing', library_id: null } })}
+                  className="shrink-0 text-xs text-slate-500 hover:text-slate-700"
+                >
+                  Change
+                </button>
+              </div>
+            ) : (
+              <LibrarySearchSelect
+                libraryEntries={libraryEntries}
+                onPick={(e) => onChange(index, { match: { kind: 'existing', library_id: e.id } })}
+                onRequestCreate={() => onToggleCreateNew(index, true)}
+                placeholder="Search library…"
+              />
+            )}
             <button type="button" onClick={() => onToggleCreateNew(index, true)} className="text-xs text-emerald-700 hover:text-emerald-600 underline">
               Create new library entry
             </button>
