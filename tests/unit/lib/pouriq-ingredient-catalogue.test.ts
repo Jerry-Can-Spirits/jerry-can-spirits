@@ -110,4 +110,36 @@ describe('adoptionName', () => {
   it('uses the canonical name for a clean match', () => {
     expect(adoptionName('triple sec', tripleSec)).toBe('Triple Sec')
   })
+
+  describe('alias-match cases — brand/flavour name must be kept', () => {
+    const aniseedLiqueur: CatalogueEntry = {
+      id: 'aniseed-liqueur',
+      name: 'Aniseed Liqueur',
+      normalised_name: 'aniseed liqueur',
+      ingredient_type: 'liqueur',
+      base_unit: 'ml',
+      default_pack_size: 700,
+      generic: null,
+      aliases: ['sambuca', 'antica sambuca', 'antica sambuca classic'],
+    }
+    const carling: CatalogueEntry = {
+      id: 'carling',
+      name: 'Carling',
+      normalised_name: 'carling',
+      ingredient_type: 'beer',
+      base_unit: 'ml',
+      default_pack_size: 330,
+      generic: 'lager',
+      aliases: [],
+    }
+    it('keeps the brand name when matched via alias (Antica Sambuca -> Aniseed Liqueur)', () => {
+      expect(adoptionName('Antica Sambuca', aniseedLiqueur)).toBe('Antica Sambuca')
+    })
+    it('uses canonical name when extracted adds nothing over it (triple sec -> Triple Sec)', () => {
+      expect(adoptionName('triple sec', tripleSec)).toBe('Triple Sec')
+    })
+    it('keeps the brand+descriptor when it adds info beyond the entry name (Carling Lager -> Carling Lager)', () => {
+      expect(adoptionName('Carling Lager', carling)).toBe('Carling Lager')
+    })
+  })
 })

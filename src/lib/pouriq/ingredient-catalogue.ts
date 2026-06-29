@@ -102,9 +102,15 @@ export function matchCatalogue(name: string, entries: CatalogueEntry[]): Catalog
 // wording when it is strictly more specific than the matched entry (so
 // "Carling Lager" stays itself instead of collapsing to "Lager"), otherwise
 // uses the entry's canonical name (so a clean "triple sec" becomes "Triple Sec").
+// Also keeps brand/flavour names matched via alias — "Antica Sambuca" (matched
+// as generic "Aniseed Liqueur" via alias) stays "Antica Sambuca".
 export function adoptionName(extractedName: string, entry: CatalogueEntry): string {
   const ext = significantTokens(extractedName)
+  if (ext.length === 0) return entry.name
   const cat = significantTokens(entry.name)
-  const strictSuperset = cat.length > 0 && cat.every((t) => ext.includes(t)) && ext.length > cat.length
-  return strictSuperset ? extractedName.trim() : entry.name
+  // Keep the line's own (more specific) name unless it adds nothing over the
+  // entry's canonical name — so "Antica Sambuca" / "Kopparberg Mixed Fruit" keep
+  // their brand+flavour, while a bare "triple sec" tidies to "Triple Sec".
+  const extAddsNothing = ext.every((t) => cat.includes(t))
+  return extAddsNothing ? entry.name : extractedName.trim()
 }
