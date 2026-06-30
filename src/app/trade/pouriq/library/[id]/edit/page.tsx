@@ -10,8 +10,11 @@ import {
 import { loadImpactPayload } from '@/lib/pouriq/cost-impact-loader'
 import { listServeUnits } from '@/lib/pouriq/serve-units'
 import { listPreparedComponents } from '@/lib/pouriq/prepared'
+import { listIngredientServes } from '@/lib/pouriq/menus'
+import { usableCostPerBaseUnitP } from '@/lib/pouriq/calculations'
 import { LicenceGate } from '@/components/pouriq/LicenceGate'
 import { IngredientForm } from '@/components/pouriq/IngredientForm'
+import { IngredientServes } from '@/components/pouriq/IngredientServes'
 import { SECONDARY_BUTTON_SM } from '@/lib/pouriq/button-styles'
 
 export const dynamic = 'force-dynamic'
@@ -32,14 +35,17 @@ export default async function EditLibraryEntryPage({ params }: Props) {
   const entry = await getLibraryEntry(db, id, access.tradeAccountId)
   if (!entry) notFound()
 
-  const [usage, serveUnits, impactPayload, components, libraryEntries] = await Promise.all([
+  const [usage, serveUnits, impactPayload, components, libraryEntries, ingredientServes] = await Promise.all([
     getLibraryEntryUsage(db, id),
     listServeUnits(db, id),
     loadImpactPayload(db, id, access.tradeAccountId),
     entry.is_prepared ? listPreparedComponents(db, id) : Promise.resolve([]),
     listLibraryEntries(db, access.tradeAccountId),
+    listIngredientServes(db, access.tradeAccountId, id),
   ])
   if (!impactPayload) notFound()
+
+  const costPerMlNetP = usableCostPerBaseUnitP(entry.price_p, entry.purchase_qty, entry.pack_size, entry.yield_pct)
 
   const byMenu = new Map<string, { menuName: string; cocktails: Array<{ id: string; name: string }> }>()
   for (const u of usage) {
@@ -66,6 +72,14 @@ export default async function EditLibraryEntryPage({ params }: Props) {
         <div className="bg-white rounded-xl p-6 border border-slate-200 mb-8">
           <IngredientForm entry={entry} usageCount={usage.length} impactPayload={impactPayload} serveUnits={serveUnits} components={components} libraryEntries={libraryEntries} />
         </div>
+
+        <IngredientServes
+          libraryId={entry.id}
+          ingredientName={entry.name}
+          ingredientType={entry.ingredient_type}
+          costPerMlNetP={costPerMlNetP}
+          serves={ingredientServes}
+        />
 
         {byMenu.size > 0 && (
           <div className="bg-white rounded-xl p-6 border border-slate-200">

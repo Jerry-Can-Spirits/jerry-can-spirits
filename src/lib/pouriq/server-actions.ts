@@ -9,6 +9,7 @@ import {
   insertMenu, updateMenu, deleteMenu, setActiveMenu,
   insertCocktail, replaceIngredients,
   getMenu, listCocktailsForMenu, getOrCreateServesMenu,
+  listIngredientServes,
 } from './menus'
 import {
   insertLibraryEntry,
@@ -492,19 +493,20 @@ export async function bulkDeleteLibraryEntriesAction(entryIds: string[]): Promis
 
 export async function saveServeAction(
   serveId: string | null,
-  input: { name: string; glass: string | null; ingredients: Array<{ library_ingredient_id: string; pour_ml: number | null; unit_count: number | null; recipe_unit: string | null; recipe_qty: number | null }> },
+  input: { name: string; glass: string | null; sale_price_p?: number; ingredients: Array<{ library_ingredient_id: string; pour_ml: number | null; unit_count: number | null; recipe_unit: string | null; recipe_qty: number | null }> },
 ): Promise<{ serveId: string }> {
   const { db, tradeAccountId } = await requireDb()
   if (!input.name.trim()) throw new Error('Serve name is required')
   const menuId = await getOrCreateServesMenu(db, tradeAccountId)
+  const salePriceP = input.sale_price_p ?? 0
   let id = serveId
   if (id === null) {
     const row = await db
       .prepare(`
         INSERT INTO pouriq_cocktails (menu_id, name, sale_price_p, position, field_manual_slug, notes, glass, is_serve)
-        VALUES (?1, ?2, 0, 0, NULL, NULL, ?3, 1) RETURNING id
+        VALUES (?1, ?2, ?3, 0, NULL, NULL, ?4, 1) RETURNING id
       `)
-      .bind(menuId, input.name.trim(), input.glass)
+      .bind(menuId, input.name.trim(), salePriceP, input.glass)
       .first<{ id: string }>()
     if (!row) throw new Error('Serve insert returned no id')
     id = row.id
@@ -515,8 +517,8 @@ export async function saveServeAction(
       .first()
     if (!owns) throw new Error('Serve not found')
     await db
-      .prepare(`UPDATE pouriq_cocktails SET name = ?1, glass = ?2 WHERE id = ?3`)
-      .bind(input.name.trim(), input.glass, id)
+      .prepare(`UPDATE pouriq_cocktails SET name = ?1, glass = ?2, sale_price_p = ?3 WHERE id = ?4`)
+      .bind(input.name.trim(), input.glass, salePriceP, id)
       .run()
   }
   await replaceIngredients(db, id, input.ingredients)
@@ -534,6 +536,46 @@ export async function deleteServeAction(serveId: string): Promise<void> {
   if (!owns) throw new Error('Serve not found')
   await db.prepare(`DELETE FROM pouriq_cocktails WHERE id = ?1`).bind(serveId).run()
   revalidatePath('/trade/pouriq/serves')
+}
+
+export async function createIngredientServeAction(
+  libraryIngredientId: string,
+  name: string,
+  pourMl: number,
+  salePriceP: number,
+): Promise<{ serveId: string }> {
+  const { db, tradeAccountId } = await requireDb()
+  if (!name.trim()) throw new Error('Serve name is required')
+  if (pourMl <= 0) throw new Error('Pour size must be greater than 0')
+  const owns = await db
+    .prepare(`SELECT 1 FROM pouriq_ingredients_library WHERE id = ?1 AND trade_account_id = ?2`)
+    .bind(libraryIngredientId, tradeAccountId)
+    .first()
+  if (!owns) throw new Error('Ingredient not found')
+  const menuId = await getOrCreateServesMenu(db, tradeAccountId)
+  const row = await db
+    .prepare(`
+      INSERT INTO pouriq_cocktails (menu_id, name, sale_price_p, position, field_manual_slug, notes, glass, is_serve)
+      VALUES (?1, ?2, ?3, 0, NULL, NULL, NULL, 1) RETURNING id
+    `)
+    .bind(menuId, name.trim(), salePriceP)
+    .first<{ id: string }>()
+  if (!row) throw new Error('Serve insert returned no id')
+  await replaceIngredients(db, row.id, [{
+    library_ingredient_id: libraryIngredientId,
+    pour_ml: pourMl,
+    unit_count: null,
+    recipe_unit: null,
+    recipe_qty: null,
+  }])
+  revalidatePath(`/trade/pouriq/library/${libraryIngredientId}/edit`)
+  revalidatePath('/trade/pouriq/serves')
+  return { serveId: row.id }
+}
+
+export async function listIngredientServesAction(libraryIngredientId: string) {
+  const { db, tradeAccountId } = await requireDb()
+  return listIngredientServes(db, tradeAccountId, libraryIngredientId)
 }
 
 export async function receiveStockAction(libraryIngredientId: string, qtyBottles: number, receivedAtISO?: string): Promise<void> {

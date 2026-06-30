@@ -444,6 +444,39 @@ export async function listServes(db: D1Database, tradeAccountId: string) {
   return listCocktailsForMenu(db, menuId)
 }
 
+export interface IngredientServeRow {
+  id: string
+  name: string
+  sale_price_p: number
+  pour_ml: number
+}
+
+// Returns the is_serve cocktails on the tenant's serves menu whose recipe is
+// exactly one ingredient referencing libraryIngredientId (i.e. single-ingredient
+// serves created via createIngredientServeAction or the serves page).
+export async function listIngredientServes(
+  db: D1Database,
+  tradeAccountId: string,
+  libraryIngredientId: string,
+): Promise<IngredientServeRow[]> {
+  const menuId = await getOrCreateServesMenu(db, tradeAccountId)
+  const rows = await db
+    .prepare(`
+      SELECT c.id, c.name, c.sale_price_p, i.pour_ml
+      FROM pouriq_cocktails c
+      JOIN pouriq_ingredients i ON i.cocktail_id = c.id
+      WHERE c.menu_id = ?1
+        AND c.is_serve = 1
+        AND i.library_ingredient_id = ?2
+        AND (SELECT COUNT(*) FROM pouriq_ingredients WHERE cocktail_id = c.id) = 1
+      ORDER BY c.name COLLATE NOCASE ASC
+    `)
+    .bind(menuId, libraryIngredientId)
+    .all<{ id: string; name: string; sale_price_p: number; pour_ml: number | null }>()
+  return (rows.results ?? [])
+    .filter((r): r is IngredientServeRow => r.pour_ml !== null)
+}
+
 export async function insertAnalysis(
   db: D1Database,
   data: {

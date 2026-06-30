@@ -37,18 +37,22 @@ function blankIngredient(): FormIngredient {
 interface Props {
   defaultName: string
   defaultGlass?: string | null
+  defaultSalePriceP?: number
   defaultIngredients?: ServeFormIngredient[]
   libraryEntries: IngredientLibraryRow[]
   serveUnits: Record<string, ServeUnitRow[]>
   pending: boolean
   submitLabel: string
   onError: (message: string) => void
-  onSubmit: (name: string, glass: string | null, ingredients: ServeFormIngredient[]) => void
+  onSubmit: (name: string, glass: string | null, ingredients: ServeFormIngredient[], salePriceP: number) => void
 }
 
-export function ServeForm({ defaultName, defaultGlass, defaultIngredients, libraryEntries, serveUnits, pending, submitLabel, onError, onSubmit }: Props) {
+export function ServeForm({ defaultName, defaultGlass, defaultSalePriceP, defaultIngredients, libraryEntries, serveUnits, pending, submitLabel, onError, onSubmit }: Props) {
   const [name, setName] = useState(defaultName)
   const [glass, setGlass] = useState(defaultGlass ?? '')
+  const [salePrice, setSalePrice] = useState(() =>
+    defaultSalePriceP && defaultSalePriceP > 0 ? (defaultSalePriceP / 100).toFixed(2) : ''
+  )
   const [ingredients, setIngredients] = useState<FormIngredient[]>(() => {
     if (!defaultIngredients || defaultIngredients.length === 0) return [blankIngredient()]
     return defaultIngredients.map((ing) => {
@@ -88,7 +92,8 @@ export function ServeForm({ defaultName, defaultGlass, defaultIngredients, libra
       })
     }
     if (parsed.length === 0) { onError('Add at least one ingredient.'); return }
-    onSubmit(name.trim(), glass.trim() || null, parsed)
+    const salePriceP = Math.round(parseFloat(salePrice || '0') * 100) || 0
+    onSubmit(name.trim(), glass.trim() || null, parsed, salePriceP)
   }
 
   return (
@@ -108,6 +113,18 @@ export function ServeForm({ defaultName, defaultGlass, defaultIngredients, libra
           ))}
         </div>
         <input value={glass} onChange={(e) => setGlass(e.target.value)} className={inputClass} placeholder="e.g. Rocks, Highball" />
+      </div>
+      <div>
+        <label className={labelClass}>Sale price (£)</label>
+        <input
+          type="number"
+          min="0"
+          step="0.01"
+          value={salePrice}
+          onChange={(e) => setSalePrice(e.target.value)}
+          className={inputClass}
+          placeholder="e.g. 3.50"
+        />
       </div>
       <div className="space-y-4">
         {ingredients.map((ing, idx) => {
