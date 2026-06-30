@@ -25,6 +25,7 @@ import { buildMenuPerformance } from '@/lib/pouriq/menu-performance'
 import { MenuMatrix } from '@/components/pouriq/MenuMatrix'
 import { buildMoversReport } from '@/lib/pouriq/movers'
 import { MoversReport } from '@/components/pouriq/MoversReport'
+import { menuCostConfidence } from '@/lib/pouriq/cost-confidence'
 
 export const dynamic = 'force-dynamic'
 
@@ -73,6 +74,7 @@ export default async function MenuDetailPage({ params }: Props) {
   const perf = buildMenuPerformance(metrics.cocktail_metrics, menu.target_gp_pct)
   const allVolumes = await listVolumesForMenu(db, menuId)
   const movers = buildMoversReport(cocktails.map((c) => ({ id: c.id, name: c.name })), allVolumes)
+  const { unconfirmed_drinks } = menuCostConfidence(cocktails)
   const missingCount = cocktails.filter((c) => !c.description || c.description.trim() === '').length
 
   const volumeUnits = new Map<string, number>()
@@ -191,6 +193,9 @@ export default async function MenuDetailPage({ params }: Props) {
                   <BulkPromoActions menuId={menuId} />
                 </div>
               </div>
+              {unconfirmed_drinks > 0 && (
+                <p className="text-sm text-slate-500 mb-3 no-print">{unconfirmed_drinks} drink{unconfirmed_drinks === 1 ? '' : 's'} use unconfirmed costs.</p>
+              )}
               <CocktailTable
                 menuId={menuId}
                 cocktails={cocktails}
