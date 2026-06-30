@@ -35,6 +35,7 @@ export default async function MenuBuilderPage({ params }: Props) {
     sale_price_p: c.sale_price_p,
     section_id: c.section_id,
     item_type: c.item_type,
+    position: c.position,
   }))
 
   return (

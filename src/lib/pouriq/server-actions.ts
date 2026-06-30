@@ -9,7 +9,7 @@ import {
   insertMenu, updateMenu, deleteMenu, setActiveMenu,
   insertCocktail, replaceIngredients,
   getMenu, listCocktailsForMenu, getOrCreateServesMenu,
-  listIngredientServes,
+  listIngredientServes, reorderDrinks,
 } from './menus'
 import {
   insertLibraryEntry,
@@ -798,6 +798,26 @@ export async function moveDrinkAction(
   }
   await moveDrink(db, cocktailId, sectionId, position)
   revalidatePath(`/trade/pouriq/${menuId}`)
+  revalidatePath(`/trade/pouriq/${menuId}/menu-builder`)
+}
+
+export async function reorderDrinksAction(
+  menuId: string,
+  sectionId: string | null,
+  orderedCocktailIds: string[],
+): Promise<void> {
+  const { db, tradeAccountId } = await requireDb()
+  const menu = await getMenu(db, menuId, tradeAccountId)
+  if (!menu) throw new Error('Menu not found')
+  if (orderedCocktailIds.length > 0) {
+    const placeholders = orderedCocktailIds.map((_, i) => `?${i + 2}`).join(', ')
+    const count = await db
+      .prepare(`SELECT COUNT(*) AS c FROM pouriq_cocktails WHERE id IN (${placeholders}) AND menu_id = ?1`)
+      .bind(menuId, ...orderedCocktailIds)
+      .first<{ c: number }>()
+    if ((count?.c ?? 0) !== orderedCocktailIds.length) throw new Error('Drink not found')
+  }
+  await reorderDrinks(db, menuId, sectionId, orderedCocktailIds)
   revalidatePath(`/trade/pouriq/${menuId}/menu-builder`)
 }
 

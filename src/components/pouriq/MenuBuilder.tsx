@@ -4,12 +4,14 @@ import { Fragment, useMemo, useState, useTransition, type DragEvent } from 'reac
 import { SECONDARY_BUTTON_SM, PRIMARY_BUTTON } from '@/lib/pouriq/button-styles'
 import { INPUT } from '@/lib/pouriq/ui'
 import type { MenuSectionRow, ItemType } from '@/lib/pouriq/types'
+import { insertAt } from '@/lib/pouriq/reorder'
 import {
   createSectionAction,
   renameSectionAction,
   deleteSectionAction,
   reorderSectionsAction,
   moveDrinkAction,
+  reorderDrinksAction,
 } from '@/lib/pouriq/server-actions'
 
 interface Drink {
@@ -19,6 +21,7 @@ interface Drink {
   sale_price_p: number | null
   section_id: string | null
   item_type: ItemType
+  position: number
 }
 
 interface Props {
@@ -43,7 +46,8 @@ function buildViewModel(sections: MenuSectionRow[], drinks: Drink[]) {
   const top = sections
     .filter((s) => s.parent_section_id === null)
     .sort((a, b) => a.position - b.position)
-  const drinksFor = (sectionId: string) => drinks.filter((d) => d.section_id === sectionId)
+  const drinksFor = (sectionId: string) =>
+    drinks.filter((d) => d.section_id === sectionId).sort((a, b) => a.position - b.position)
   const topSections: SectionView[] = top.map((section) => ({
     section,
     drinks: drinksFor(section.id),
@@ -52,7 +56,7 @@ function buildViewModel(sections: MenuSectionRow[], drinks: Drink[]) {
       .sort((a, b) => a.position - b.position)
       .map((sub) => ({ section: sub, drinks: drinksFor(sub.id) })),
   }))
-  const unplaced = drinks.filter((d) => d.section_id === null)
+  const unplaced = drinks.filter((d) => d.section_id === null).sort((a, b) => a.position - b.position)
   return { topSections, unplaced }
 }
 
@@ -74,13 +78,25 @@ function DrinkPreview({ drink, showPrices, showDescriptions }: { drink: Drink; s
 
 function ArrangeDrink({
   drink,
+  index,
+  isFirst,
+  isLast,
   sectionOptions,
   onMove,
+  onDropAt,
+  onMoveUp,
+  onMoveDown,
   disabled,
 }: {
   drink: Drink
+  index: number
+  isFirst: boolean
+  isLast: boolean
   sectionOptions: { id: string; label: string }[]
   onMove: (drinkId: string, sectionId: string | null) => void
+  onDropAt: (drinkId: string, dropIndex: number, targetSectionId: string | null) => void
+  onMoveUp: () => void
+  onMoveDown: () => void
   disabled: boolean
 }) {
   return (
@@ -90,6 +106,13 @@ function ArrangeDrink({
         e.dataTransfer.setData('text/plain', drink.id)
         e.dataTransfer.effectAllowed = 'move'
       }}
+      onDragOver={(e) => e.preventDefault()}
+      onDrop={(e) => {
+        e.preventDefault()
+        e.stopPropagation()
+        const id = e.dataTransfer.getData('text/plain')
+        if (id) onDropAt(id, index, drink.section_id)
+      }}
       className="flex items-center justify-between gap-3 rounded-md border border-slate-200 bg-white px-3 py-2 cursor-grab active:cursor-grabbing"
     >
       <span className="text-sm text-slate-800 truncate">{drink.name}</span>
@@ -97,6 +120,8 @@ function ArrangeDrink({
         {drink.sale_price_p !== null && (
           <span className="text-xs text-slate-500 whitespace-nowrap">{formatMoney(drink.sale_price_p)}</span>
         )}
+        <button type="button" onClick={onMoveUp} disabled={isFirst || disabled} aria-label="Move up" className="px-1 py-0.5 text-slate-500 hover:text-slate-800 disabled:opacity-30 text-xs">&#8593;</button>
+        <button type="button" onClick={onMoveDown} disabled={isLast || disabled} aria-label="Move down" className="px-1 py-0.5 text-slate-500 hover:text-slate-800 disabled:opacity-30 text-xs">&#8595;</button>
         <label htmlFor={`move-${drink.id}`} className="sr-only">Move {drink.name} to</label>
         <select
           id={`move-${drink.id}`}
@@ -159,7 +184,7 @@ export function MenuBuilder({ menuId, menuName, sections, drinks }: Props) {
 
   function moveDrinkTo(drinkId: string, targetSectionId: string | null) {
     const drink = localDrinks.find((d) => d.id === drinkId)
-    if (!drink || drink.section_id === targetSectionId) return
+    if (!drink) return
     if (targetSectionId !== null && isTemp(targetSectionId)) return
     const prevDrinks = localDrinks
     const newPosition = localDrinks.filter((d) => d.section_id === targetSectionId).length
@@ -170,6 +195,22 @@ export function MenuBuilder({ menuId, menuName, sections, drinks }: Props) {
       () => moveDrinkAction(drinkId, targetSectionId, menuId, newPosition),
       () => setLocalDrinks(prevDrinks),
       'Could not move that drink. The change was not saved.',
+    )
+  }
+
+  function reorderDrinkAt(drinkId: string, dropIndex: number, targetSectionId: string | null) {
+    if (targetSectionId !== null && isTemp(targetSectionId)) return
+    const ordered = localDrinks
+      .filter((d) => d.section_id === targetSectionId)
+      .sort((a, b) => a.position - b.position)
+    const newOrderedIds = insertAt(ordered.map((d) => d.id), drinkId, dropIndex)
+    const prevDrinks = localDrinks
+    const posById = new Map(newOrderedIds.map((id, i) => [id, i]))
+    setLocalDrinks(localDrinks.map((d) => posById.has(d.id) ? { ...d, section_id: targetSectionId, position: posById.get(d.id)! } : d))
+    persist(
+      () => reorderDrinksAction(menuId, targetSectionId, newOrderedIds),
+      () => setLocalDrinks(prevDrinks),
+      'Could not reorder that drink. The change was not saved.',
     )
   }
 
@@ -330,8 +371,20 @@ export function MenuBuilder({ menuId, menuName, sections, drinks }: Props) {
               <p className="text-xs text-slate-400">Every drink is in a section.</p>
             ) : (
               <div className="space-y-2">
-                {unplaced.map((d) => (
-                  <ArrangeDrink key={d.id} drink={d} sectionOptions={sectionOptions} onMove={moveDrinkTo} disabled={isPending} />
+                {unplaced.map((d, i) => (
+                  <ArrangeDrink
+                    key={d.id}
+                    drink={d}
+                    index={i}
+                    isFirst={i === 0}
+                    isLast={i === unplaced.length - 1}
+                    sectionOptions={sectionOptions}
+                    onMove={moveDrinkTo}
+                    onDropAt={reorderDrinkAt}
+                    onMoveUp={() => reorderDrinkAt(d.id, i - 1, d.section_id)}
+                    onMoveDown={() => reorderDrinkAt(d.id, i + 1, d.section_id)}
+                    disabled={isPending}
+                  />
                 ))}
               </div>
             )}
@@ -374,8 +427,20 @@ export function MenuBuilder({ menuId, menuName, sections, drinks }: Props) {
 
                 {direct.length > 0 && (
                   <div className="space-y-2 mb-3">
-                    {direct.map((d) => (
-                      <ArrangeDrink key={d.id} drink={d} sectionOptions={sectionOptions} onMove={moveDrinkTo} disabled={isPending} />
+                    {direct.map((d, i) => (
+                      <ArrangeDrink
+                        key={d.id}
+                        drink={d}
+                        index={i}
+                        isFirst={i === 0}
+                        isLast={i === direct.length - 1}
+                        sectionOptions={sectionOptions}
+                        onMove={moveDrinkTo}
+                        onDropAt={reorderDrinkAt}
+                        onMoveUp={() => reorderDrinkAt(d.id, i - 1, d.section_id)}
+                        onMoveDown={() => reorderDrinkAt(d.id, i + 1, d.section_id)}
+                        disabled={isPending}
+                      />
                     ))}
                   </div>
                 )}
@@ -431,8 +496,20 @@ export function MenuBuilder({ menuId, menuName, sections, drinks }: Props) {
                       <p className="text-xs text-slate-400">Drop a drink here.</p>
                     ) : (
                       <div className="space-y-2">
-                        {subDrinks.map((d) => (
-                          <ArrangeDrink key={d.id} drink={d} sectionOptions={sectionOptions} onMove={moveDrinkTo} disabled={isPending} />
+                        {subDrinks.map((d, i) => (
+                          <ArrangeDrink
+                            key={d.id}
+                            drink={d}
+                            index={i}
+                            isFirst={i === 0}
+                            isLast={i === subDrinks.length - 1}
+                            sectionOptions={sectionOptions}
+                            onMove={moveDrinkTo}
+                            onDropAt={reorderDrinkAt}
+                            onMoveUp={() => reorderDrinkAt(d.id, i - 1, d.section_id)}
+                            onMoveDown={() => reorderDrinkAt(d.id, i + 1, d.section_id)}
+                            disabled={isPending}
+                          />
                         ))}
                       </div>
                     )}

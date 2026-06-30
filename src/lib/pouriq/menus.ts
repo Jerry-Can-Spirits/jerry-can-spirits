@@ -156,7 +156,7 @@ export async function listCocktailsForMenu(
   menuId: string,
 ): Promise<CocktailWithIngredients[]> {
   const cocktailsResult = await db
-    .prepare(`SELECT * FROM pouriq_cocktails WHERE menu_id = ?1 ORDER BY name COLLATE NOCASE ASC`)
+    .prepare(`SELECT * FROM pouriq_cocktails WHERE menu_id = ?1 ORDER BY position ASC, name COLLATE NOCASE ASC`)
     .bind(menuId)
     .all<CocktailRow>()
   const cocktails = cocktailsResult.results ?? []
@@ -476,12 +476,28 @@ export async function listIngredientServes(
         AND c.is_serve = 1
         AND i.library_ingredient_id = ?2
         AND (SELECT COUNT(*) FROM pouriq_ingredients WHERE cocktail_id = c.id) = 1
-      ORDER BY c.name COLLATE NOCASE ASC
+      ORDER BY c.position ASC, c.name COLLATE NOCASE ASC
     `)
     .bind(menuId, libraryIngredientId)
     .all<{ id: string; name: string; sale_price_p: number; pour_ml: number | null }>()
   return (rows.results ?? [])
     .filter((r): r is IngredientServeRow => r.pour_ml !== null)
+}
+
+export async function reorderDrinks(
+  db: D1Database,
+  menuId: string,
+  sectionId: string | null,
+  orderedIds: string[],
+): Promise<void> {
+  if (orderedIds.length === 0) return
+  await db.batch(
+    orderedIds.map((id, i) =>
+      db
+        .prepare(`UPDATE pouriq_cocktails SET section_id = ?1, position = ?2 WHERE id = ?3 AND menu_id = ?4`)
+        .bind(sectionId, i, id, menuId),
+    ),
+  )
 }
 
 export async function insertAnalysis(
