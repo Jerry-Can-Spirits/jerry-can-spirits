@@ -46,6 +46,7 @@ function cocktail(id: string, salePriceP: number, ings: IngredientWithLibrary[])
     is_serve: 0,
     item_type: 'cocktail',
     section_id: null,
+    photo_r2_key: null,
     ingredients: ings,
   }
 }

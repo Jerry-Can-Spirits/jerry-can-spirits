@@ -63,6 +63,9 @@ export interface MenuRow {
   is_serves_menu: number
   created_at: string
   updated_at: string
+  theme: MenuTheme
+  logo_r2_key: string | null
+  logo_align: LogoAlign
 }
 
 export interface DrinkVolumeRow {
@@ -97,6 +100,7 @@ export interface CocktailRow {
   is_serve: number
   item_type: ItemType
   section_id: string | null
+  photo_r2_key: string | null
 }
 
 export interface IngredientLibraryRow {
@@ -254,6 +258,10 @@ export interface Recommendation {
     why_relevant: string
   }
 }
+
+export const MENU_THEMES = ['heritage', 'premium', 'clean', 'casual', 'bold', 'classic'] as const
+export type MenuTheme = typeof MENU_THEMES[number]
+export type LogoAlign = 'left' | 'center' | 'right'
 
 export const VARIANCE_REASONS = ['over-pour', 'spillage', 'comps', 'breakage', 'theft', 'unknown'] as const
 export type VarianceReason = (typeof VARIANCE_REASONS)[number]
