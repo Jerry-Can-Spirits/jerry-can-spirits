@@ -8,6 +8,7 @@ import { formatPurchaseBasis } from '@/lib/pouriq/calculations'
 import { filterIngredients } from '@/lib/pouriq/ingredient-filter'
 import { bulkDeleteLibraryEntriesAction } from '@/lib/pouriq/server-actions'
 import { DESTRUCTIVE_BUTTON, SECONDARY_BUTTON_SM } from '@/lib/pouriq/button-styles'
+import { costConfidenceBadge } from '@/lib/pouriq/cost-confidence'
 
 interface StockInfo { needs_reorder: boolean; reorder_qty: number; on_hand_bottles: number | null }
 
@@ -162,6 +163,7 @@ export function IngredientList({ entries, usageCounts, stockById }: Props) {
               <tbody>
                 {visible.map((entry) => {
                   const count = usageCounts.get(entry.id) ?? 0
+                  const b = costConfidenceBadge(entry.cost_confidence)
                   return (
                     <tr key={entry.id} className="border-t border-slate-200">
                       <td className="px-3 py-3">
@@ -170,7 +172,10 @@ export function IngredientList({ entries, usageCounts, stockById }: Props) {
                         )}
                       </td>
                       <td className="px-3 py-3">
-                        <Link href={`/trade/pouriq/library/${entry.id}/edit`} className="text-slate-900 hover:text-emerald-700">{entry.name}</Link>
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <Link href={`/trade/pouriq/library/${entry.id}/edit`} className="text-slate-900 hover:text-emerald-700">{entry.name}</Link>
+                          <span className={`text-[10px] px-1.5 py-0.5 rounded-sm ${b.className}`}>{b.label}</span>
+                        </div>
                       </td>
                       <td className="px-3 py-3 text-slate-500">{entry.ingredient_type}</td>
                       <td className="px-3 py-3 text-slate-700">{formatPurchaseBasis(entry)}</td>
@@ -189,11 +194,15 @@ export function IngredientList({ entries, usageCounts, stockById }: Props) {
               const isUnused = count === 0
               const isChecked = selected.has(entry.id)
               const s = stockById[entry.id]
+              const b = costConfidenceBadge(entry.cost_confidence)
               return (
                 <div key={entry.id} className="relative">
                   <Link href={`/trade/pouriq/library/${entry.id}/edit`} className="block bg-white rounded-xl p-5 border border-slate-200 hover:border-emerald-400 transition-colors">
                     <div className="flex items-baseline justify-between gap-2 mb-2">
-                      <h3 className="text-base font-bold text-slate-900 truncate">{entry.name}</h3>
+                      <div>
+                        <h3 className="text-base font-bold text-slate-900 truncate">{entry.name}</h3>
+                        <span className={`text-[10px] px-1.5 py-0.5 rounded-sm ${b.className}`}>{b.label}</span>
+                      </div>
                       <span className="text-xs uppercase tracking-widest text-slate-500 shrink-0">{entry.ingredient_type}</span>
                     </div>
                     <p className="text-slate-700 text-sm">{formatPurchaseBasis(entry)}</p>

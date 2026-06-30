@@ -22,6 +22,7 @@ import {
 } from '@/lib/pouriq/cost-impact'
 import type { PreparedComponentWithCost } from '@/lib/pouriq/prepared'
 import { INPUT, LABEL, CHIP, CHIP_ACTIVE, CHIP_IDLE, HELPER } from '@/lib/pouriq/ui'
+import { costConfidenceBadge } from '@/lib/pouriq/cost-confidence'
 import { PRIMARY_BUTTON, SECONDARY_BUTTON_SM } from '@/lib/pouriq/button-styles'
 
 type BaseUnit = 'ml' | 'g' | 'each'
@@ -194,6 +195,7 @@ export function IngredientForm({ entry, usageCount = 0, impactPayload, serveUnit
 
   // Impact projection (uses saved price as baseline)
   const savedPriceP = entry?.price_p ?? null
+  const confidenceBadge = entry ? costConfidenceBadge(entry.cost_confidence) : null
 
   const projection = useMemo(() => {
     if (!impactPayload || price_p_live === null) return null
@@ -576,7 +578,12 @@ export function IngredientForm({ entry, usageCount = 0, impactPayload, serveUnit
         {purchaseMode !== 'prepared' && (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
-              <label htmlFor="ing-price" className={LABEL}>Price paid (£) *</label>
+              <div className="flex items-center gap-2 mb-2">
+                <label htmlFor="ing-price" className="text-sm font-medium text-slate-700">Price paid (£) *</label>
+                {confidenceBadge && (
+                  <span className={`text-[10px] px-1.5 py-0.5 rounded-sm ${confidenceBadge.className}`}>{confidenceBadge.label}</span>
+                )}
+              </div>
               <input
                 id="ing-price"
                 type="number"
