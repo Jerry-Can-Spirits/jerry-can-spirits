@@ -45,8 +45,8 @@ export function CocktailTable({ menuId, cocktails, metrics, targetGpPct, statusB
   const minWidth = extraCols >= 2 ? 'min-w-[1120px]' : extraCols === 1 ? 'min-w-[980px]' : 'min-w-[760px]'
 
   return (
-    <div className="bg-white border border-slate-200 rounded-xl overflow-x-auto">
-      <table className={`w-full text-sm ${minWidth}`}>
+    <div className="bg-white border border-slate-200 rounded-xl overflow-x-auto print:overflow-visible">
+      <table className={`w-full text-sm ${minWidth} print:min-w-0 print:text-[10px] print:[&_th]:px-1.5 print:[&_th]:py-1 print:[&_td]:px-1.5 print:[&_td]:py-1`}>
         <thead className="bg-slate-50">
           <tr className="text-left text-slate-500 text-xs uppercase tracking-widest">
             <th className="px-4 py-3">Drink</th>
