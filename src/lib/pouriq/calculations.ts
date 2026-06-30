@@ -198,6 +198,16 @@ export function usableCostPerBaseUnitP(price_p: number, packs: number, pack_size
   return costPerBaseUnitP(price_p, packs, pack_size) / (y / 100)
 }
 
+// GP% for a single priced serve. Returns null when no price is set (no GP to show).
+// cost = costPerMlNetP * pourMl; if pricesIncludeVat the sale price is netted first.
+export function serveGp(args: { costPerMlNetP: number; pourMl: number; salePriceP: number; pricesIncludeVat: boolean }): number | null {
+  if (args.salePriceP <= 0) return null
+  const saleNet = args.pricesIncludeVat ? netPriceP(args.salePriceP, true) : args.salePriceP
+  if (saleNet <= 0) return null
+  const cost = args.costPerMlNetP * args.pourMl
+  return ((saleNet - cost) / saleNet) * 100
+}
+
 export function calculateMenuMetrics(
   cocktails: CocktailWithIngredients[],
   priceIncludesVat: boolean,
