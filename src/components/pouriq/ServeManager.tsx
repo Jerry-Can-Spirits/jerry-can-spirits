@@ -6,6 +6,7 @@ import { PRIMARY_BUTTON, SECONDARY_BUTTON_SM, DESTRUCTIVE_BUTTON } from '@/lib/p
 import { formatServeMeasure } from '@/lib/pouriq/measures'
 import { ServeForm, type ServeFormIngredient } from '@/components/pouriq/ServeForm'
 import { saveServeAction, deleteServeAction } from '@/lib/pouriq/server-actions'
+import { serveGp, usableCostPerBaseUnitP } from '@/lib/pouriq/calculations'
 import type { CocktailWithIngredients, IngredientLibraryRow, IngredientWithLibrary, ServeUnitRow } from '@/lib/pouriq/types'
 
 interface Props {
@@ -35,11 +36,11 @@ export function ServeManager({ serves, libraryEntries, serveUnits }: Props) {
   const [error, setError] = useState<string | null>(null)
   const [pending, startTransition] = useTransition()
 
-  function save(serveId: string | null, name: string, glass: string | null, ingredients: ServeFormIngredient[]) {
+  function save(serveId: string | null, name: string, glass: string | null, ingredients: ServeFormIngredient[], salePriceP: number) {
     setError(null)
     startTransition(async () => {
       try {
-        await saveServeAction(serveId, { name, glass, ingredients })
+        await saveServeAction(serveId, { name, glass, sale_price_p: salePriceP, ingredients })
         setCreating(false)
         setEditingId(null)
         router.refresh()
@@ -80,7 +81,7 @@ export function ServeManager({ serves, libraryEntries, serveUnits }: Props) {
           pending={pending}
           submitLabel="Create serve"
           onError={setError}
-          onSubmit={(name, glass, ingredients) => save(null, name, glass, ingredients)}
+          onSubmit={(name, glass, ingredients, salePriceP) => save(null, name, glass, ingredients, salePriceP)}
         />
       )}
 
@@ -110,6 +111,19 @@ export function ServeManager({ serves, libraryEntries, serveUnits }: Props) {
               </p>
             )}
 
+            {serve.sale_price_p > 0 && (
+              <p className="text-sm text-slate-600 mb-2">
+                <span className="font-semibold">Price:</span> £{(serve.sale_price_p / 100).toFixed(2)}
+                {serve.ingredients.length === 1 && serve.ingredients[0].pour_ml != null && (() => {
+                  const ing = serve.ingredients[0]
+                  const lib = ing.library
+                  const costPerMl = usableCostPerBaseUnitP(lib.price_p, lib.purchase_qty, lib.pack_size, lib.yield_pct)
+                  const gp = serveGp({ costPerMlNetP: costPerMl, pourMl: ing.pour_ml!, salePriceP: serve.sale_price_p, pricesIncludeVat: false })
+                  return gp !== null ? <span className="ml-2 text-emerald-700 font-medium">GP {gp.toFixed(1)}%</span> : null
+                })()}
+              </p>
+            )}
+
             {serve.ingredients.length === 0 ? (
               <p className="text-slate-500 text-sm">No ingredients set.</p>
             ) : (
@@ -127,13 +141,14 @@ export function ServeManager({ serves, libraryEntries, serveUnits }: Props) {
               <ServeForm
                 defaultName={serve.name}
                 defaultGlass={serve.glass}
+                defaultSalePriceP={serve.sale_price_p}
                 defaultIngredients={toFormIngredients(serve)}
                 libraryEntries={libraryEntries}
                 serveUnits={serveUnits}
                 pending={pending}
                 submitLabel="Save serve"
                 onError={setError}
-                onSubmit={(name, glass, ingredients) => save(serve.id, name, glass, ingredients)}
+                onSubmit={(name, glass, ingredients, salePriceP) => save(serve.id, name, glass, ingredients, salePriceP)}
               />
             )}
           </div>

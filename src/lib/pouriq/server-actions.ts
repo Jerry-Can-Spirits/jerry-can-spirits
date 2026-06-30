@@ -492,19 +492,20 @@ export async function bulkDeleteLibraryEntriesAction(entryIds: string[]): Promis
 
 export async function saveServeAction(
   serveId: string | null,
-  input: { name: string; glass: string | null; ingredients: Array<{ library_ingredient_id: string; pour_ml: number | null; unit_count: number | null; recipe_unit: string | null; recipe_qty: number | null }> },
+  input: { name: string; glass: string | null; sale_price_p?: number; ingredients: Array<{ library_ingredient_id: string; pour_ml: number | null; unit_count: number | null; recipe_unit: string | null; recipe_qty: number | null }> },
 ): Promise<{ serveId: string }> {
   const { db, tradeAccountId } = await requireDb()
   if (!input.name.trim()) throw new Error('Serve name is required')
   const menuId = await getOrCreateServesMenu(db, tradeAccountId)
+  const salePriceP = input.sale_price_p ?? 0
   let id = serveId
   if (id === null) {
     const row = await db
       .prepare(`
         INSERT INTO pouriq_cocktails (menu_id, name, sale_price_p, position, field_manual_slug, notes, glass, is_serve)
-        VALUES (?1, ?2, 0, 0, NULL, NULL, ?3, 1) RETURNING id
+        VALUES (?1, ?2, ?3, 0, NULL, NULL, ?4, 1) RETURNING id
       `)
-      .bind(menuId, input.name.trim(), input.glass)
+      .bind(menuId, input.name.trim(), salePriceP, input.glass)
       .first<{ id: string }>()
     if (!row) throw new Error('Serve insert returned no id')
     id = row.id
@@ -515,8 +516,8 @@ export async function saveServeAction(
       .first()
     if (!owns) throw new Error('Serve not found')
     await db
-      .prepare(`UPDATE pouriq_cocktails SET name = ?1, glass = ?2 WHERE id = ?3`)
-      .bind(input.name.trim(), input.glass, id)
+      .prepare(`UPDATE pouriq_cocktails SET name = ?1, glass = ?2, sale_price_p = ?3 WHERE id = ?4`)
+      .bind(input.name.trim(), input.glass, salePriceP, id)
       .run()
   }
   await replaceIngredients(db, id, input.ingredients)
