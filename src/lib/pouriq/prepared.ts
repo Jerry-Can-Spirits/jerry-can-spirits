@@ -107,7 +107,7 @@ export async function recomputePreparedCost(db: D1Database, preparedId: string):
   const price_p = batchCostP(comps.map((c) => ({
     price_p: c.price_p, purchase_qty: c.purchase_qty, pack_size: c.pack_size, yield_pct: c.yield_pct, amount_base: c.amount_base,
   })))
-  await db.prepare(`UPDATE pouriq_ingredients_library SET price_p = ?1, updated_at = datetime('now') WHERE id = ?2`).bind(price_p, preparedId).run()
+  await db.prepare(`UPDATE pouriq_ingredients_library SET price_p = ?1, cost_confidence = 'set', updated_at = datetime('now') WHERE id = ?2`).bind(price_p, preparedId).run()
   return price_p
 }
 

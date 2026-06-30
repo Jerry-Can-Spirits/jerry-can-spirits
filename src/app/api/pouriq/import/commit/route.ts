@@ -157,8 +157,8 @@ export async function POST(request: Request) {
           .prepare(`
             INSERT INTO pouriq_ingredients_library
               (trade_account_id, name, ingredient_type, base_unit, pack_size, price_p,
-               price_includes_vat, price_entered_p, purchase_qty)
-            VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9)
+               price_includes_vat, price_entered_p, purchase_qty, cost_confidence)
+            VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10)
             RETURNING id
           `)
           .bind(
@@ -171,6 +171,7 @@ export async function POST(request: Request) {
             includesVat ? 1 : 0,
             ing.new_library.price_p,
             ing.new_library.purchase_qty,
+            netP > 0 ? 'set' : 'estimated',
           )
           .first<{ id: string }>()
         if (!result) throw new Error('Library insert returned no id')
