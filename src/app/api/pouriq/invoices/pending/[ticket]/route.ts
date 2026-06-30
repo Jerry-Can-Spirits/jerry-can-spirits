@@ -8,6 +8,11 @@ export async function GET(_request: Request, { params }: { params: Promise<{ tic
   if (access.kind === 'no-session') return new Response('Unauthorized', { status: 401 })
   if (access.kind === 'no-licence') return new Response('Forbidden', { status: 403 })
   const { ticket } = await params
+  // Tickets are minted as crypto.randomUUID() at upload. Enforce that contract
+  // at the boundary before the value reaches the R2 key.
+  if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(ticket)) {
+    return new Response('Bad Request', { status: 400 })
+  }
   // Pending files are not tenant-tagged in R2; the gate is a licensed session +
   // the unguessable upload ticket. Acceptable for a short-lived pre-commit doc.
   const { env } = await getCloudflareContext()
