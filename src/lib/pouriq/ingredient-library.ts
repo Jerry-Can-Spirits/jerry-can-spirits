@@ -1,4 +1,4 @@
-import type { IngredientLibraryRow, IngredientType } from './types'
+import type { CostConfidence, IngredientLibraryRow, IngredientType } from './types'
 import { insertCostChange, type CostPricingMode } from './cost-changes'
 
 export interface IngredientLibraryInsert {
@@ -19,12 +19,12 @@ export interface IngredientLibraryInsert {
   is_prepared?: boolean | number
 }
 
-// Columns present in the new schema (migration 0045).
+// Columns present in the new schema (migration 0045 + 0059).
 const LIBRARY_SELECT = `
   id, trade_account_id, name, ingredient_type,
   base_unit, pack_size, price_p, price_includes_vat, price_entered_p,
   pack_format, subcategory,
-  is_prepared, purchase_qty, yield_pct, barcode, notes, created_at, updated_at
+  is_prepared, purchase_qty, yield_pct, barcode, notes, cost_confidence, created_at, updated_at
 `
 
 function mapLibraryRow(r: {
@@ -44,6 +44,7 @@ function mapLibraryRow(r: {
   yield_pct: number
   barcode: string | null
   notes: string | null
+  cost_confidence: CostConfidence
   created_at: string
   updated_at: string
 }): IngredientLibraryRow {
@@ -91,11 +92,12 @@ export async function insertLibraryEntry(
   data: IngredientLibraryInsert,
 ): Promise<string> {
   const isPrepared = data.is_prepared ? 1 : 0
+  const confidence: CostConfidence = data.price_p > 0 ? 'set' : 'estimated'
   const result = await db
     .prepare(`
       INSERT INTO pouriq_ingredients_library
-        (trade_account_id, name, ingredient_type, base_unit, pack_size, price_p, price_includes_vat, price_entered_p, purchase_qty, yield_pct, pack_format, subcategory, barcode, notes, is_prepared)
-      VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13, ?14, ?15)
+        (trade_account_id, name, ingredient_type, base_unit, pack_size, price_p, price_includes_vat, price_entered_p, purchase_qty, yield_pct, pack_format, subcategory, barcode, notes, is_prepared, cost_confidence)
+      VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13, ?14, ?15, ?16)
       RETURNING id
     `)
     .bind(
@@ -104,7 +106,7 @@ export async function insertLibraryEntry(
       data.price_includes_vat ?? 0, data.price_entered_p ?? data.price_p,
       data.purchase_qty ?? 1, data.yield_pct ?? 100,
       data.pack_format ?? null, data.subcategory ?? null,
-      data.barcode, data.notes, isPrepared,
+      data.barcode, data.notes, isPrepared, confidence,
     )
     .first<{ id: string }>()
   if (!result) throw new Error('Library insert returned no id')
@@ -146,6 +148,7 @@ export async function updateLibraryEntry(
     newModelPatch['base_unit'] = patch.base_unit ?? before.base_unit
     newModelPatch['pack_size'] = patch.pack_size != null && patch.pack_size > 0 ? patch.pack_size : before.pack_size
     newModelPatch['price_p'] = patch.price_p ?? before.price_p
+    newModelPatch['cost_confidence'] = (patch.price_p ?? before.price_p) > 0 ? 'set' : 'estimated'
   }
   if ('price_includes_vat' in patch) newModelPatch['price_includes_vat'] = patch.price_includes_vat ?? 0
   if ('price_entered_p' in patch) newModelPatch['price_entered_p'] = patch.price_entered_p ?? newModelPatch['price_p'] ?? before.price_p

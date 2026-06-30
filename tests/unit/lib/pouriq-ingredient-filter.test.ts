@@ -6,7 +6,7 @@ function row(id: string, name: string, type: IngredientLibraryRow['ingredient_ty
   return {
     id, name, ingredient_type: type,
     base_unit: 'ml', pack_size: 700, price_p: 1000, purchase_qty: 1, yield_pct: 100,
-    pack_format: null, subcategory: null, barcode: null, notes: null, is_prepared: 0,
+    pack_format: null, subcategory: null, barcode: null, notes: null, is_prepared: 0, cost_confidence: 'set',
   } as IngredientLibraryRow
 }
 

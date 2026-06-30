@@ -3,6 +3,9 @@
 
 export type LicenceType = 'pilot' | 'annual' | 'biannual' | 'monthly'
 
+export const COST_CONFIDENCE = ['estimated', 'set', 'confirmed'] as const
+export type CostConfidence = typeof COST_CONFIDENCE[number]
+
 export type IngredientType =
   | 'spirit' | 'liqueur' | 'wine' | 'beer' | 'cider' | 'mixer'
   | 'syrup' | 'juice' | 'garnish' | 'soft-drink' | 'alcohol-free' | 'food' | 'other'
@@ -113,6 +116,7 @@ export interface IngredientLibraryRow {
   yield_pct: number
   barcode: string | null
   notes: string | null
+  cost_confidence: CostConfidence
   created_at: string
   updated_at: string
 }

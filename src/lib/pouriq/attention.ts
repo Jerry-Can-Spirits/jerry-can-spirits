@@ -80,6 +80,20 @@ export async function getAttentionRows(db: D1Database, tradeAccountId: string): 
         severity: 'medium',
       })
     }
+    const estimatedIngCount = new Set(
+      cocktails
+        .flatMap((c) => c.ingredients)
+        .filter((i) => i.library.cost_confidence === 'estimated')
+        .map((i) => i.library_ingredient_id),
+    ).size
+    if (estimatedIngCount > 0) {
+      rows.push({
+        key: 'estimated-costs',
+        label: `${estimatedIngCount} ingredient${estimatedIngCount === 1 ? '' : 's'} ${estimatedIngCount === 1 ? 'has' : 'have'} estimated costs. Scan an invoice to confirm.`,
+        href: '/trade/pouriq/invoices',
+        severity: 'medium',
+      })
+    }
     if (underTargetCount > 0) {
       rows.push({
         key: 'gp',
