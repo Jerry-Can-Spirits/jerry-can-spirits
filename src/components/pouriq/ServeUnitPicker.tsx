@@ -91,7 +91,7 @@ export function ServeUnitPicker({
         >
           {units.map((u) => (
             <option key={u.name} value={u.name}>
-              {u.name}
+              {baseUnit === 'ml' && u.base_per_unit !== 1 ? `${u.name} (${u.base_per_unit}ml)` : u.name}
             </option>
           ))}
         </select>
