@@ -27,7 +27,7 @@ function ingredient(opts: IngOpts): IngredientWithLibrary {
     is_prepared: 0,
     purchase_qty: 1,
     yield_pct: 100,
-    barcode: null, notes: null, created_at: '', updated_at: '',
+    barcode: null, notes: null, cost_confidence: 'set', created_at: '', updated_at: '',
   }
   return {
     id: 'ing', cocktail_id: 'c', library_ingredient_id: 'lib',

@@ -139,6 +139,7 @@ export function IngredientPicker({ libraryEntries, selectedEntryId, onChange }: 
         yield_pct: 100,
         barcode: pendingBarcode,
         notes: null,
+        cost_confidence: price_p > 0 ? 'set' : 'estimated',
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),
       }

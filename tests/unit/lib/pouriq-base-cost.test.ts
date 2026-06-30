@@ -17,7 +17,7 @@ function mkIng(
     price_includes_vat: 0, price_entered_p: null,
     pack_format: null, subcategory: null,
     is_prepared: 0,
-    barcode: null, notes: null, created_at: '', updated_at: '',
+    barcode: null, notes: null, cost_confidence: 'set', created_at: '', updated_at: '',
   }
   return { id: 'ing', cocktail_id: 'c', library_ingredient_id: 'lib', pour_ml, unit_count, recipe_unit: null, recipe_qty: null, library }
 }

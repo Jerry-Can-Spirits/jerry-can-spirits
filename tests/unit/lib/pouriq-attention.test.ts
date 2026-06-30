@@ -14,7 +14,7 @@ function ingredient(opts: { price_p?: number }): IngredientWithLibrary {
     is_prepared: 0,
     purchase_qty: 1,
     yield_pct: 100,
-    barcode: null, notes: null, created_at: '', updated_at: '',
+    barcode: null, notes: null, cost_confidence: 'set', created_at: '', updated_at: '',
   }
   return { id: 'ing', cocktail_id: 'c', library_ingredient_id: 'lib', pour_ml: null, unit_count: 1, recipe_unit: null, recipe_qty: null, library }
 }

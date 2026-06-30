@@ -15,6 +15,7 @@ function row(name: string): IngredientLibraryRow {
     yield_pct: 100,
     barcode: null,
     notes: null,
+    cost_confidence: 'set',
     created_at: '',
     updated_at: '',
   }
@@ -87,7 +88,7 @@ const lib = (id: string, name: string): IngredientLibraryRow =>
   ({ id, name, ingredient_type: 'spirit', base_unit: 'ml', pack_size: 700, price_p: 1500,
      trade_account_id: 't', price_includes_vat: 0, price_entered_p: 1500, pack_format: null,
      subcategory: null, is_prepared: 0, purchase_qty: 1, yield_pct: 100, barcode: null,
-     notes: null, created_at: '', updated_at: '' } as IngredientLibraryRow)
+     notes: null, cost_confidence: 'set', created_at: '', updated_at: '' } as IngredientLibraryRow)
 
 describe('singleContainmentMatch', () => {
   it('returns the sole entry whose tokens are contained by the line', () => {

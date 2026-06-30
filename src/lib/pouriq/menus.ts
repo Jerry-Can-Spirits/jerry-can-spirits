@@ -1,4 +1,5 @@
 import type {
+  CostConfidence,
   MenuRow,
   CocktailRow,
   CocktailWithIngredients,
@@ -188,6 +189,7 @@ export async function listCocktailsForMenu(
         l.yield_pct AS l_yield_pct,
         l.barcode AS l_barcode,
         l.notes AS l_notes,
+        l.cost_confidence AS l_cost_confidence,
         l.created_at AS l_created_at,
         l.updated_at AS l_updated_at
       FROM pouriq_ingredients i
@@ -219,6 +221,7 @@ export async function listCocktailsForMenu(
       l_yield_pct: number
       l_barcode: string | null
       l_notes: string | null
+      l_cost_confidence: CostConfidence
       l_created_at: string
       l_updated_at: string
     }>()
@@ -250,6 +253,7 @@ export async function listCocktailsForMenu(
         yield_pct: row.l_yield_pct,
         barcode: row.l_barcode,
         notes: row.l_notes,
+        cost_confidence: row.l_cost_confidence,
         created_at: row.l_created_at,
         updated_at: row.l_updated_at,
       },
@@ -291,7 +295,8 @@ export async function getCocktail(
         l.purchase_qty AS l_purchase_qty,
         l.yield_pct AS l_yield_pct,
         l.barcode AS l_barcode,
-        l.notes AS l_notes, l.created_at AS l_created_at, l.updated_at AS l_updated_at
+        l.notes AS l_notes, l.cost_confidence AS l_cost_confidence,
+        l.created_at AS l_created_at, l.updated_at AS l_updated_at
       FROM pouriq_ingredients i
       JOIN pouriq_ingredients_library l ON l.id = i.library_ingredient_id
       WHERE i.cocktail_id = ?1
@@ -321,6 +326,7 @@ export async function getCocktail(
       l_yield_pct: number
       l_barcode: string | null
       l_notes: string | null
+      l_cost_confidence: CostConfidence
       l_created_at: string
       l_updated_at: string
     }>()
@@ -350,6 +356,7 @@ export async function getCocktail(
       yield_pct: row.l_yield_pct,
       barcode: row.l_barcode,
       notes: row.l_notes,
+      cost_confidence: row.l_cost_confidence,
       created_at: row.l_created_at,
       updated_at: row.l_updated_at,
     },
