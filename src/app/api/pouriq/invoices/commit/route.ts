@@ -244,6 +244,14 @@ export async function POST(request: Request) {
           ).bind(netCostP, vatFlag, enteredCostP, libraryId, access.tradeAccountId),
         )
         costUpdatedLibraryIds.add(libraryId)
+      } else {
+        // Price unchanged, or a brand-new entry created from this invoice:
+        // the line is still invoice-verified, so confirm the cost confidence.
+        stmts.push(
+          db.prepare(
+            `UPDATE pouriq_ingredients_library SET cost_confidence = 'confirmed', updated_at = datetime('now') WHERE id = ?1 AND trade_account_id = ?2`,
+          ).bind(libraryId, access.tradeAccountId),
+        )
       }
 
       stmts.push(
