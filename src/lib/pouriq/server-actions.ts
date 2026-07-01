@@ -817,6 +817,13 @@ export async function reorderDrinksAction(
       .first<{ c: number }>()
     if ((count?.c ?? 0) !== orderedCocktailIds.length) throw new Error('Drink not found')
   }
+  if (sectionId !== null) {
+    const sectionOwned = await db
+      .prepare(`SELECT 1 AS one FROM pouriq_menu_sections WHERE id = ?1 AND menu_id = ?2`)
+      .bind(sectionId, menuId)
+      .first<{ one: number }>()
+    if (!sectionOwned) throw new Error('Section not found')
+  }
   await reorderDrinks(db, menuId, sectionId, orderedCocktailIds)
   revalidatePath(`/trade/pouriq/${menuId}/menu-builder`)
 }
