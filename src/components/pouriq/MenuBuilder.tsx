@@ -106,7 +106,7 @@ function DrinkPreview({
         <img
           src={`/api/pouriq/cocktails/${drink.id}/photo?v=${encodeURIComponent(drink.updated_at)}`}
           alt=""
-          className="w-full h-32 object-cover rounded mb-2 print:h-24"
+          className="w-full h-32 object-contain rounded mb-2 print:h-24"
         />
       )}
       <div className="flex items-baseline justify-between gap-4">
