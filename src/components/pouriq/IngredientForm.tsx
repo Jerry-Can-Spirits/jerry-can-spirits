@@ -776,7 +776,7 @@ export function IngredientForm({ entry, usageCount = 0, impactPayload, serveUnit
                       {ok ? '✓' : '○'}
                     </span>
                     <span className={ok ? 'text-slate-600' : 'text-slate-400'}>
-                      {label}{ok ? '' : ' — needed'}
+                      {label}{ok ? '' : ' (needed)'}
                     </span>
                   </li>
                 )
