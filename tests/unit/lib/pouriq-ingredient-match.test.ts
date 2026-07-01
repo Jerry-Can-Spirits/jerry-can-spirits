@@ -18,6 +18,9 @@ function row(name: string): IngredientLibraryRow {
     cost_confidence: 'set',
     created_at: '',
     updated_at: '',
+    allergens: '[]',
+    dietary: '[]',
+    allergens_reviewed: 0,
   }
 }
 

@@ -191,7 +191,10 @@ export async function listCocktailsForMenu(
         l.notes AS l_notes,
         l.cost_confidence AS l_cost_confidence,
         l.created_at AS l_created_at,
-        l.updated_at AS l_updated_at
+        l.updated_at AS l_updated_at,
+        l.allergens AS l_allergens,
+        l.dietary AS l_dietary,
+        l.allergens_reviewed AS l_allergens_reviewed
       FROM pouriq_ingredients i
       JOIN pouriq_ingredients_library l ON l.id = i.library_ingredient_id
       WHERE i.cocktail_id IN (SELECT id FROM pouriq_cocktails WHERE menu_id = ?1)
@@ -224,6 +227,9 @@ export async function listCocktailsForMenu(
       l_cost_confidence: CostConfidence
       l_created_at: string
       l_updated_at: string
+      l_allergens: string
+      l_dietary: string
+      l_allergens_reviewed: number
     }>()
 
   const byCocktail = new Map<string, IngredientWithLibrary[]>()
@@ -256,6 +262,9 @@ export async function listCocktailsForMenu(
         cost_confidence: row.l_cost_confidence,
         created_at: row.l_created_at,
         updated_at: row.l_updated_at,
+        allergens: row.l_allergens,
+        dietary: row.l_dietary,
+        allergens_reviewed: row.l_allergens_reviewed,
       },
     }
     if (!byCocktail.has(row.cocktail_id)) byCocktail.set(row.cocktail_id, [])
@@ -296,7 +305,8 @@ export async function getCocktail(
         l.yield_pct AS l_yield_pct,
         l.barcode AS l_barcode,
         l.notes AS l_notes, l.cost_confidence AS l_cost_confidence,
-        l.created_at AS l_created_at, l.updated_at AS l_updated_at
+        l.created_at AS l_created_at, l.updated_at AS l_updated_at,
+        l.allergens AS l_allergens, l.dietary AS l_dietary, l.allergens_reviewed AS l_allergens_reviewed
       FROM pouriq_ingredients i
       JOIN pouriq_ingredients_library l ON l.id = i.library_ingredient_id
       WHERE i.cocktail_id = ?1
@@ -329,6 +339,9 @@ export async function getCocktail(
       l_cost_confidence: CostConfidence
       l_created_at: string
       l_updated_at: string
+      l_allergens: string
+      l_dietary: string
+      l_allergens_reviewed: number
     }>()
 
   const ingredients: IngredientWithLibrary[] = (ingredientsResult.results ?? []).map((row) => ({
@@ -359,6 +372,9 @@ export async function getCocktail(
       cost_confidence: row.l_cost_confidence,
       created_at: row.l_created_at,
       updated_at: row.l_updated_at,
+      allergens: row.l_allergens,
+      dietary: row.l_dietary,
+      allergens_reviewed: row.l_allergens_reviewed,
     },
   }))
 
