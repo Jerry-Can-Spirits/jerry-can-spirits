@@ -90,7 +90,7 @@ export async function POST(request: Request) {
     const key = `pouriq-drink-photos/${tradeAccountId}/${id}`
     await r2.put(key, buffer, { httpMetadata: { contentType: file.type } })
     await db
-      .prepare(`UPDATE pouriq_cocktails SET photo_r2_key = ?1 WHERE id = ?2`)
+      .prepare(`UPDATE pouriq_cocktails SET photo_r2_key = ?1, updated_at = datetime('now') WHERE id = ?2`)
       .bind(key, id)
       .run()
   }

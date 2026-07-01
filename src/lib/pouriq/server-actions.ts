@@ -220,7 +220,7 @@ export async function saveCocktailAction(
   } else {
     id = cocktailId
     await db
-      .prepare(`UPDATE pouriq_cocktails SET name = ?1, sale_price_p = ?2, promotional_price_p = ?3, promotional_label = ?4, promotional_days = ?5, promotional_valid_from = ?6, promotional_valid_until = ?7, field_manual_slug = ?8, notes = ?9, glass = ?10, item_type = ?11 WHERE id = ?12 AND menu_id = ?13`)
+      .prepare(`UPDATE pouriq_cocktails SET name = ?1, sale_price_p = ?2, promotional_price_p = ?3, promotional_label = ?4, promotional_days = ?5, promotional_valid_from = ?6, promotional_valid_until = ?7, field_manual_slug = ?8, notes = ?9, glass = ?10, item_type = ?11, updated_at = datetime('now') WHERE id = ?12 AND menu_id = ?13`)
       .bind(
         input.name, input.sale_price_p,
         input.promotional_price_p, input.promotional_label,
@@ -932,7 +932,7 @@ export async function removeCocktailPhotoAction(menuId: string, cocktailId: stri
     }
   }
   await db
-    .prepare(`UPDATE pouriq_cocktails SET photo_r2_key = NULL WHERE id = ?1 AND menu_id = ?2`)
+    .prepare(`UPDATE pouriq_cocktails SET photo_r2_key = NULL, updated_at = datetime('now') WHERE id = ?1 AND menu_id = ?2`)
     .bind(cocktailId, menuId)
     .run()
   revalidatePath(`/trade/pouriq/${menuId}`)
