@@ -6,6 +6,7 @@ interface Props {
   priceIncludesVat: boolean
   compact?: boolean
   showCost?: boolean
+  showPhotos?: boolean
   cost?: { pourCostP: number; gpPct: number; complete: boolean } | null
 }
 
@@ -15,7 +16,7 @@ function formatPrice(pence: number, vatIncluded: boolean): string {
 }
 
 
-export function SpecCard({ cocktail, priceIncludesVat, compact = false, showCost = false, cost = null }: Props) {
+export function SpecCard({ cocktail, priceIncludesVat, compact = false, showCost = false, showPhotos = false, cost = null }: Props) {
   const garnishes = cocktail.ingredients.filter(
     (i) => i.library.ingredient_type === 'garnish'
   )
@@ -42,6 +43,14 @@ export function SpecCard({ cocktail, priceIncludesVat, compact = false, showCost
           {formatPrice(cocktail.sale_price_p, priceIncludesVat)}
         </p>
       </header>
+
+      {showPhotos && cocktail.photo_r2_key && (
+        <img
+          src={`/api/pouriq/cocktails/${cocktail.id}/photo`}
+          alt=""
+          className="w-full h-48 object-cover rounded-lg mb-4 print:h-36"
+        />
+      )}
 
       {cocktail.glass != null && cocktail.glass.trim() !== '' && (
         <p className="text-sm text-slate-600 print:text-black mb-2">
