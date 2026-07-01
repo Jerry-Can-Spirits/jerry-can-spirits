@@ -3,6 +3,7 @@
 // active menu for the menu-specific ones.
 
 import type { MenuMetrics } from './types'
+import { ingredientCompleteness } from './cost-confidence'
 import { countUnmatched } from './pos/item-map'
 import { listConnections } from './pos/connections'
 import { getActiveMenu, listCocktailsForMenu } from './menus'
@@ -91,6 +92,20 @@ export async function getAttentionRows(db: D1Database, tradeAccountId: string): 
         key: 'estimated-costs',
         label: `${estimatedIngCount} ingredient${estimatedIngCount === 1 ? '' : 's'} ${estimatedIngCount === 1 ? 'has' : 'have'} estimated costs. Scan an invoice to confirm.`,
         href: '/trade/pouriq/invoices',
+        severity: 'medium',
+      })
+    }
+    const incompleteIngCount = new Set(
+      cocktails
+        .flatMap((c) => c.ingredients)
+        .filter((i) => !ingredientCompleteness(i.library).complete)
+        .map((i) => i.library_ingredient_id),
+    ).size
+    if (incompleteIngCount > 0) {
+      rows.push({
+        key: 'incomplete-ingredients',
+        label: `${incompleteIngCount} ingredient${incompleteIngCount === 1 ? '' : 's'} ${incompleteIngCount === 1 ? 'is' : 'are'} missing cost details.`,
+        href: '/trade/pouriq/library',
         severity: 'medium',
       })
     }
