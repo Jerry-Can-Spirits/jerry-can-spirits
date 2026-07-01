@@ -4,6 +4,8 @@ import { useMemo, useRef, useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 import { ALL_INGREDIENT_TYPES, type IngredientLibraryRow, type IngredientType, type ServeUnitRow } from '@/lib/pouriq/types'
 import { saveLibraryEntryAction, deleteLibraryEntryAction, saveServeUnitAction, deleteServeUnitAction, addPreparedComponentAction, removePreparedComponentAction, type LibraryEntryInput } from '@/lib/pouriq/server-actions'
+import { parseTags, ALLERGENS, DIETARY, type AllergenKey, type DietaryKey } from '@/lib/pouriq/allergens'
+import { AllergenPicker } from '@/components/pouriq/AllergenPicker'
 import { BarcodeScanner } from '@/components/pouriq/BarcodeScanner'
 import { RipplePreview } from '@/components/pouriq/RipplePreview'
 import { RippleConfirmModal } from '@/components/pouriq/RippleConfirmModal'
@@ -121,6 +123,21 @@ export function IngredientForm({ entry, usageCount = 0, impactPayload, serveUnit
   // --- Misc ---
   const [barcode, setBarcode] = useState(entry?.barcode ?? '')
   const [notes, setNotes] = useState(entry?.notes ?? '')
+
+  // --- Allergens & dietary (editing only) ---
+  const [allergenTags, setAllergenTags] = useState<AllergenKey[]>(() => {
+    if (!entry) return []
+    const parsed = parseTags(entry.allergens)
+    return ALLERGENS.filter((a) => parsed.includes(a))
+  })
+  const [dietaryTags, setDietaryTags] = useState<DietaryKey[]>(() => {
+    if (!entry) return []
+    const parsed = parseTags(entry.dietary)
+    return DIETARY.filter((d) => parsed.includes(d))
+  })
+  const [allergensReviewed, setAllergensReviewed] = useState(
+    entry ? entry.allergens_reviewed === 1 : false,
+  )
 
   // --- UI state ---
   const [scanOpen, setScanOpen] = useState(false)
@@ -305,6 +322,9 @@ export function IngredientForm({ entry, usageCount = 0, impactPayload, serveUnit
         barcode: barcode.trim() || null,
         notes: notes.trim() || null,
         is_prepared: true,
+        allergens: allergenTags,
+        dietary: dietaryTags,
+        allergens_reviewed: allergensReviewed,
       }
     }
 
@@ -341,6 +361,9 @@ export function IngredientForm({ entry, usageCount = 0, impactPayload, serveUnit
       barcode: barcode.trim() || null,
       notes: notes.trim() || null,
       is_prepared: false,
+      allergens: allergenTags,
+      dietary: dietaryTags,
+      allergens_reviewed: allergensReviewed,
     }
   }
 
@@ -1124,6 +1147,20 @@ export function IngredientForm({ entry, usageCount = 0, impactPayload, serveUnit
             placeholder="Optional — supplier, SKU, anything useful"
           />
         </div>
+
+        {/* Allergens & dietary (editing only) */}
+        {entry !== null && (
+          <AllergenPicker
+            allergens={allergenTags}
+            dietary={dietaryTags}
+            reviewed={allergensReviewed}
+            onChange={(a, d, r) => {
+              setAllergenTags(a)
+              setDietaryTags(d)
+              setAllergensReviewed(r)
+            }}
+          />
+        )}
 
         {error && <p role="alert" className="text-sm text-rose-600">{error}</p>}
 
