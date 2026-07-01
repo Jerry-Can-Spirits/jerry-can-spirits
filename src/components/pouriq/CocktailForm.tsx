@@ -74,6 +74,7 @@ export function CocktailForm({ menuId, cocktail, libraryEntries, serveUnits }: P
   const [photoVersion, setPhotoVersion] = useState(0)
   const [photoError, setPhotoError] = useState<string | null>(null)
   const [photoUploading, startPhotoTransition] = useTransition()
+  const [removingPhoto, setRemovingPhoto] = useState(false)
 
   function handlePhotoUpload(file: File) {
     if (!cocktail) return
@@ -95,13 +96,16 @@ export function CocktailForm({ menuId, cocktail, libraryEntries, serveUnits }: P
   }
 
   async function handleRemovePhoto() {
-    if (!cocktail) return
+    if (!cocktail || removingPhoto) return
+    setRemovingPhoto(true)
     setPhotoError(null)
     try {
       await removeCocktailPhotoAction(menuId, cocktail.id)
       setPhotoHasImage(false)
     } catch {
       setPhotoError('Could not remove photo')
+    } finally {
+      setRemovingPhoto(false)
     }
   }
 
@@ -377,7 +381,7 @@ export function CocktailForm({ menuId, cocktail, libraryEntries, serveUnits }: P
           </p>
           {photoHasImage && (
             <img
-              src={`/api/pouriq/cocktails/${cocktail.id}/photo${photoVersion > 0 ? `?v=${photoVersion}` : ''}`}
+              src={`/api/pouriq/cocktails/${cocktail.id}/photo?v=${photoVersion > 0 ? photoVersion : encodeURIComponent(cocktail.updated_at)}`}
               alt=""
               className="mb-3 w-24 h-24 object-cover rounded-lg border border-slate-200"
             />
@@ -389,7 +393,7 @@ export function CocktailForm({ menuId, cocktail, libraryEntries, serveUnits }: P
                 type="file"
                 accept="image/png,image/jpeg,image/webp"
                 className="sr-only"
-                disabled={photoUploading}
+                disabled={photoUploading || removingPhoto}
                 onChange={(e) => {
                   const f = e.target.files?.[0]
                   if (f) handlePhotoUpload(f)
@@ -401,10 +405,10 @@ export function CocktailForm({ menuId, cocktail, libraryEntries, serveUnits }: P
               <button
                 type="button"
                 onClick={handleRemovePhoto}
-                disabled={photoUploading}
-                className="text-xs text-rose-600 hover:text-rose-700 underline"
+                disabled={photoUploading || removingPhoto}
+                className="text-xs text-rose-600 hover:text-rose-700 underline disabled:opacity-50"
               >
-                Remove photo
+                {removingPhoto ? 'Removing...' : 'Remove photo'}
               </button>
             )}
           </div>

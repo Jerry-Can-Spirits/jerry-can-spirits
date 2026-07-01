@@ -46,7 +46,7 @@ export function SpecCard({ cocktail, priceIncludesVat, compact = false, showCost
 
       {showPhotos && cocktail.photo_r2_key && (
         <img
-          src={`/api/pouriq/cocktails/${cocktail.id}/photo`}
+          src={`/api/pouriq/cocktails/${cocktail.id}/photo?v=${encodeURIComponent(cocktail.updated_at)}`}
           alt=""
           className="w-full h-48 object-contain rounded-lg mb-4 print:h-36"
         />
