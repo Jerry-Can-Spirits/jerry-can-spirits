@@ -4,7 +4,7 @@ import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { getCloudflareContext } from '@opennextjs/cloudflare'
 import { checkPourIqAccess } from './access'
-import { VARIANCE_REASONS, type ItemType } from './types'
+import { VARIANCE_REASONS, MENU_THEMES, type ItemType } from './types'
 import {
   insertMenu, updateMenu, deleteMenu, setActiveMenu,
   insertCocktail, replaceIngredients,
@@ -873,8 +873,7 @@ export async function setMenuThemeAction(menuId: string, theme: string): Promise
   const { db, tradeAccountId } = await requireDb()
   const menu = await getMenu(db, menuId, tradeAccountId)
   if (!menu) throw new Error('Menu not found')
-  const validThemes = ['heritage', 'premium', 'clean', 'casual', 'bold', 'classic']
-  if (!validThemes.includes(theme)) throw new Error('Invalid theme')
+  if (!(MENU_THEMES as readonly string[]).includes(theme)) throw new Error('Invalid theme')
   await db
     .prepare(`UPDATE pouriq_menus SET theme = ?1, updated_at = datetime('now') WHERE id = ?2 AND trade_account_id = ?3`)
     .bind(theme, menuId, tradeAccountId)
