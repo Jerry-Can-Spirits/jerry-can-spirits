@@ -374,7 +374,7 @@ export function CocktailForm({ menuId, cocktail, libraryEntries, serveUnits }: P
 
       {cocktail && (
         <div className="border border-slate-200 rounded-lg p-4 bg-white">
-          <h3 className="text-sm font-medium text-slate-900 mb-1">Dish photo</h3>
+          <h3 className="text-sm font-medium text-slate-900 mb-1">Drink photo</h3>
           <p className="text-xs text-slate-500 mb-3">
             Appears on the printed menu and spec cards when photos are turned on.
             Add a photo after saving the drink for the first time.
