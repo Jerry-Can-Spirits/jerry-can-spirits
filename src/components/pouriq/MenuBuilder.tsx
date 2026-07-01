@@ -4,6 +4,8 @@ import { Fragment, useMemo, useState, useTransition, type DragEvent } from 'reac
 import { useRouter } from 'next/navigation'
 import { SECONDARY_BUTTON_SM, PRIMARY_BUTTON } from '@/lib/pouriq/button-styles'
 import { INPUT } from '@/lib/pouriq/ui'
+import { ALLERGEN_LABELS } from '@/lib/pouriq/allergens'
+import type { AllergenKey } from '@/lib/pouriq/allergens'
 import type { MenuSectionRow, ItemType, MenuTheme, LogoAlign } from '@/lib/pouriq/types'
 import { MENU_THEMES } from '@/lib/pouriq/types'
 import { menuTheme, type ThemeTokens } from '@/lib/pouriq/menu-theme'
@@ -19,6 +21,14 @@ import {
   setMenuLogoAlignAction,
   removeMenuLogoAction,
 } from '@/lib/pouriq/server-actions'
+
+interface AllergenInfo {
+  contains: AllergenKey[]
+  reviewed: boolean
+  vegetarian: boolean
+  vegan: boolean
+  glutenFree: boolean
+}
 
 interface Drink {
   id: string
@@ -41,6 +51,7 @@ interface Props {
   logoR2Key: string | null
   logoAlign: LogoAlign
   menuUpdatedAt: string
+  allergenInfoById: Record<string, AllergenInfo>
 }
 
 interface SectionView {
@@ -77,12 +88,16 @@ function DrinkPreview({
   showPrices,
   showDescriptions,
   showPhotos,
+  showAllergens,
+  allergenInfo,
   tok,
 }: {
   drink: Drink
   showPrices: boolean
   showDescriptions: boolean
   showPhotos: boolean
+  showAllergens: boolean
+  allergenInfo: AllergenInfo | undefined
   tok: ThemeTokens
 }) {
   return (
@@ -102,6 +117,35 @@ function DrinkPreview({
       </div>
       {showDescriptions && drink.description && drink.description.trim() !== '' && (
         <p className={`mt-1 leading-relaxed ${tok.desc}`}>{drink.description}</p>
+      )}
+      {showAllergens && allergenInfo && (
+        <div className={`mt-1 ${tok.desc}`}>
+          {!allergenInfo.reviewed ? (
+            <p className="text-xs text-amber-700 print:text-black">Allergen info incomplete.</p>
+          ) : (
+            <>
+              {allergenInfo.contains.length > 0 && (
+                <p className="text-xs">
+                  <span className="font-semibold">Contains:</span>{' '}
+                  {allergenInfo.contains.map((a) => ALLERGEN_LABELS[a]).join(', ')}
+                </p>
+              )}
+              {(allergenInfo.vegetarian || allergenInfo.vegan || allergenInfo.glutenFree) && (
+                <span className="inline-flex gap-1.5 mt-0.5">
+                  {allergenInfo.vegetarian && (
+                    <span className="text-xs border border-current rounded-sm px-1 py-0.5">V</span>
+                  )}
+                  {allergenInfo.vegan && (
+                    <span className="text-xs border border-current rounded-sm px-1 py-0.5">Ve</span>
+                  )}
+                  {allergenInfo.glutenFree && (
+                    <span className="text-xs border border-current rounded-sm px-1 py-0.5">GF</span>
+                  )}
+                </span>
+              )}
+            </>
+          )}
+        </div>
       )}
     </div>
   )
@@ -171,7 +215,7 @@ function ArrangeDrink({
   )
 }
 
-export function MenuBuilder({ menuId, menuName, sections, drinks, theme, logoR2Key, logoAlign, menuUpdatedAt }: Props) {
+export function MenuBuilder({ menuId, menuName, sections, drinks, theme, logoR2Key, logoAlign, menuUpdatedAt, allergenInfoById }: Props) {
   const router = useRouter()
 
   const [title, setTitle] = useState(menuName)
@@ -179,6 +223,11 @@ export function MenuBuilder({ menuId, menuName, sections, drinks, theme, logoR2K
   const [showPrices, setShowPrices] = useState(true)
   const [showDescriptions, setShowDescriptions] = useState(true)
   const [showPhotos, setShowPhotos] = useState(drinks.some((d) => d.photo_r2_key !== null))
+  const [showAllergens, setShowAllergens] = useState(() =>
+    Object.values(allergenInfoById).some(
+      (info) => info.reviewed || info.contains.length > 0 || info.vegetarian || info.vegan || info.glutenFree,
+    ),
+  )
 
   const [localTheme, setLocalTheme] = useState<MenuTheme>(theme)
   const [localLogoR2Key, setLocalLogoR2Key] = useState<string | null>(logoR2Key)
@@ -503,6 +552,10 @@ export function MenuBuilder({ menuId, menuName, sections, drinks, theme, logoR2K
             <input type="checkbox" checked={showPhotos} onChange={(e) => setShowPhotos(e.target.checked)} />
             Show photos
           </label>
+          <label className="flex items-center gap-2 text-xs text-slate-700">
+            <input type="checkbox" checked={showAllergens} onChange={(e) => setShowAllergens(e.target.checked)} />
+            Show allergens
+          </label>
           <button type="button" onClick={() => window.print()} className={`${PRIMARY_BUTTON} ml-auto`}>
             Save as PDF
           </button>
@@ -715,7 +768,7 @@ export function MenuBuilder({ menuId, menuName, sections, drinks, theme, logoR2K
                   <section key={section.id} className="mb-8 break-inside-avoid">
                     <h3 className={`text-2xl pb-2 mb-4 ${tok.section}`}>{section.name}</h3>
                     {direct.map((d) => (
-                      <DrinkPreview key={d.id} drink={d} showPrices={showPrices} showDescriptions={showDescriptions} showPhotos={showPhotos} tok={tok} />
+                      <DrinkPreview key={d.id} drink={d} showPrices={showPrices} showDescriptions={showDescriptions} showPhotos={showPhotos} showAllergens={showAllergens} allergenInfo={allergenInfoById[d.id]} tok={tok} />
                     ))}
                     {subSections.map(({ section: sub, drinks: subDrinks }) => (
                       subDrinks.length === 0 ? (
@@ -724,7 +777,7 @@ export function MenuBuilder({ menuId, menuName, sections, drinks, theme, logoR2K
                         <div key={sub.id} className="mt-4">
                           <h4 className={`text-sm mb-3 ${tok.sub}`}>{sub.name}</h4>
                           {subDrinks.map((d) => (
-                            <DrinkPreview key={d.id} drink={d} showPrices={showPrices} showDescriptions={showDescriptions} showPhotos={showPhotos} tok={tok} />
+                            <DrinkPreview key={d.id} drink={d} showPrices={showPrices} showDescriptions={showDescriptions} showPhotos={showPhotos} showAllergens={showAllergens} allergenInfo={allergenInfoById[d.id]} tok={tok} />
                           ))}
                         </div>
                       )

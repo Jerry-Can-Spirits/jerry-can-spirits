@@ -22,6 +22,16 @@ export function SpecCardsView({ cocktails, costById, priceIncludesVat }: Props) 
   const [compact, setCompact] = useState(false)
   const [showCost, setShowCost] = useState(false)
   const [showPhotos, setShowPhotos] = useState(cocktails.some((c) => c.photo_r2_key !== null))
+  const [showAllergens, setShowAllergens] = useState(() =>
+    cocktails.some((c) =>
+      c.ingredients.some(
+        (i) =>
+          i.library.allergens_reviewed === 1 ||
+          i.library.allergens !== '[]' ||
+          i.library.dietary !== '[]',
+      ),
+    ),
+  )
   const [selected, setSelected] = useState<Set<ItemType>>(new Set(['cocktail']))
 
   const present = ITEM_TYPES.filter((t) => cocktails.some((c) => c.item_type === t))
@@ -50,6 +60,10 @@ export function SpecCardsView({ cocktails, costById, priceIncludesVat }: Props) 
         <label className="flex items-center gap-2 text-sm text-slate-600">
           <input type="checkbox" checked={showPhotos} onChange={(e) => setShowPhotos(e.target.checked)} />
           Show photos
+        </label>
+        <label className="flex items-center gap-2 text-sm text-slate-600">
+          <input type="checkbox" checked={showAllergens} onChange={(e) => setShowAllergens(e.target.checked)} />
+          Show allergens
         </label>
         {present.length > 1 && (
           <div className="flex flex-wrap items-center gap-2">
@@ -81,6 +95,7 @@ export function SpecCardsView({ cocktails, costById, priceIncludesVat }: Props) 
               compact={compact}
               showCost={showCost}
               showPhotos={showPhotos}
+              showAllergens={showAllergens}
               cost={costById[c.id] ?? null}
             />
           ))}

@@ -1,5 +1,6 @@
 import type { CocktailWithIngredients } from '@/lib/pouriq/types'
 import { formatServeMeasure } from '@/lib/pouriq/measures'
+import { cocktailAllergenInfo, ALLERGEN_LABELS } from '@/lib/pouriq/allergens'
 
 interface Props {
   cocktail: CocktailWithIngredients
@@ -7,6 +8,7 @@ interface Props {
   compact?: boolean
   showCost?: boolean
   showPhotos?: boolean
+  showAllergens?: boolean
   cost?: { pourCostP: number; gpPct: number; complete: boolean } | null
 }
 
@@ -16,7 +18,8 @@ function formatPrice(pence: number, vatIncluded: boolean): string {
 }
 
 
-export function SpecCard({ cocktail, priceIncludesVat, compact = false, showCost = false, showPhotos = false, cost = null }: Props) {
+export function SpecCard({ cocktail, priceIncludesVat, compact = false, showCost = false, showPhotos = false, showAllergens = false, cost = null }: Props) {
+  const allergenInfo = showAllergens ? cocktailAllergenInfo(cocktail.ingredients) : null
   const garnishes = cocktail.ingredients.filter(
     (i) => i.library.ingredient_type === 'garnish'
   )
@@ -109,6 +112,36 @@ export function SpecCard({ cocktail, priceIncludesVat, compact = false, showCost
           <p className="text-sm text-slate-700 print:text-black leading-relaxed">
             {cocktail.description}
           </p>
+        </section>
+      )}
+
+      {allergenInfo && (
+        <section className="mb-6">
+          {!allergenInfo.reviewed ? (
+            <p className="text-xs text-amber-700 print:text-black">Allergen info incomplete for this drink.</p>
+          ) : (
+            <>
+              {allergenInfo.contains.length > 0 && (
+                <p className="text-sm text-slate-700 print:text-black mb-1">
+                  <span className="font-semibold">Contains:</span>{' '}
+                  {allergenInfo.contains.map((a) => ALLERGEN_LABELS[a]).join(', ')}
+                </p>
+              )}
+              {(allergenInfo.vegetarian || allergenInfo.vegan || allergenInfo.glutenFree) && (
+                <div className="flex gap-2 mt-1">
+                  {allergenInfo.vegetarian && (
+                    <span className="text-xs px-1.5 py-0.5 bg-green-50 border border-green-300 text-green-700 rounded-sm print:bg-transparent print:border-black print:text-black">V</span>
+                  )}
+                  {allergenInfo.vegan && (
+                    <span className="text-xs px-1.5 py-0.5 bg-green-50 border border-green-300 text-green-700 rounded-sm print:bg-transparent print:border-black print:text-black">Ve</span>
+                  )}
+                  {allergenInfo.glutenFree && (
+                    <span className="text-xs px-1.5 py-0.5 bg-blue-50 border border-blue-300 text-blue-700 rounded-sm print:bg-transparent print:border-black print:text-black">GF</span>
+                  )}
+                </div>
+              )}
+            </>
+          )}
         </section>
       )}
 
