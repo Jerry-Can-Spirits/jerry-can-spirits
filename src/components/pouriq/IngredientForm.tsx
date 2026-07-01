@@ -22,7 +22,7 @@ import {
 } from '@/lib/pouriq/cost-impact'
 import type { PreparedComponentWithCost } from '@/lib/pouriq/prepared'
 import { INPUT, LABEL, CHIP, CHIP_ACTIVE, CHIP_IDLE, HELPER } from '@/lib/pouriq/ui'
-import { costConfidenceBadge } from '@/lib/pouriq/cost-confidence'
+import { costConfidenceBadge, ingredientCompleteness } from '@/lib/pouriq/cost-confidence'
 import { PRIMARY_BUTTON, SECONDARY_BUTTON_SM } from '@/lib/pouriq/button-styles'
 
 type BaseUnit = 'ml' | 'g' | 'each'
@@ -757,6 +757,33 @@ export function IngredientForm({ entry, usageCount = 0, impactPayload, serveUnit
         {purchaseMode !== 'prepared' && costReadout !== null && (
           <p className="text-sm text-emerald-700 tabular-nums">{costReadout}</p>
         )}
+
+        {/* Completeness checklist (editing only) */}
+        {purchaseMode !== 'prepared' && entry !== null && (() => {
+          const { missing } = ingredientCompleteness(entry)
+          const fields: Array<{ key: string; label: string }> = [
+            { key: 'price', label: 'Price' },
+            { key: 'pack size', label: 'Pack size' },
+            { key: 'purchase quantity', label: 'Purchase quantity' },
+          ]
+          return (
+            <ul className="space-y-1">
+              {fields.map(({ key, label }) => {
+                const ok = !missing.includes(key)
+                return (
+                  <li key={key} className="flex items-center gap-2 text-xs">
+                    <span className={ok ? 'text-emerald-600' : 'text-slate-400'}>
+                      {ok ? '✓' : '○'}
+                    </span>
+                    <span className={ok ? 'text-slate-600' : 'text-slate-400'}>
+                      {label}{ok ? '' : ' — needed'}
+                    </span>
+                  </li>
+                )
+              })}
+            </ul>
+          )
+        })()}
 
         {/* Components editor (prepared mode) */}
         {purchaseMode === 'prepared' && (

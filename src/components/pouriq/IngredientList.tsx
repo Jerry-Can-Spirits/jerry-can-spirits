@@ -8,7 +8,7 @@ import { formatPurchaseBasis } from '@/lib/pouriq/calculations'
 import { filterIngredients } from '@/lib/pouriq/ingredient-filter'
 import { bulkDeleteLibraryEntriesAction } from '@/lib/pouriq/server-actions'
 import { DESTRUCTIVE_BUTTON, SECONDARY_BUTTON_SM } from '@/lib/pouriq/button-styles'
-import { costConfidenceBadge } from '@/lib/pouriq/cost-confidence'
+import { costConfidenceBadge, ingredientCompleteness } from '@/lib/pouriq/cost-confidence'
 
 interface StockInfo { needs_reorder: boolean; reorder_qty: number; on_hand_bottles: number | null }
 
@@ -164,6 +164,7 @@ export function IngredientList({ entries, usageCounts, stockById }: Props) {
                 {visible.map((entry) => {
                   const count = usageCounts.get(entry.id) ?? 0
                   const b = costConfidenceBadge(entry.cost_confidence)
+                  const { complete } = ingredientCompleteness(entry)
                   return (
                     <tr key={entry.id} className="border-t border-slate-200">
                       <td className="px-3 py-3">
@@ -175,6 +176,7 @@ export function IngredientList({ entries, usageCounts, stockById }: Props) {
                         <div className="flex items-center gap-2 flex-wrap">
                           <Link href={`/trade/pouriq/library/${entry.id}/edit`} className="text-slate-900 hover:text-emerald-700">{entry.name}</Link>
                           <span className={`text-[10px] px-1.5 py-0.5 rounded-sm ${b.className}`}>{b.label}</span>
+                          {!complete && <span className="text-[10px] px-1.5 py-0.5 rounded-sm bg-amber-50 text-amber-700 border border-amber-500">incomplete</span>}
                         </div>
                       </td>
                       <td className="px-3 py-3 text-slate-500">{entry.ingredient_type}</td>
@@ -195,13 +197,17 @@ export function IngredientList({ entries, usageCounts, stockById }: Props) {
               const isChecked = selected.has(entry.id)
               const s = stockById[entry.id]
               const b = costConfidenceBadge(entry.cost_confidence)
+              const { complete } = ingredientCompleteness(entry)
               return (
                 <div key={entry.id} className="relative">
                   <Link href={`/trade/pouriq/library/${entry.id}/edit`} className="block bg-white rounded-xl p-5 border border-slate-200 hover:border-emerald-400 transition-colors">
                     <div className="flex items-baseline justify-between gap-2 mb-2">
                       <div>
                         <h3 className="text-base font-bold text-slate-900 truncate">{entry.name}</h3>
-                        <span className={`text-[10px] px-1.5 py-0.5 rounded-sm ${b.className}`}>{b.label}</span>
+                        <div className="flex items-center gap-1 flex-wrap">
+                          <span className={`text-[10px] px-1.5 py-0.5 rounded-sm ${b.className}`}>{b.label}</span>
+                          {!complete && <span className="text-[10px] px-1.5 py-0.5 rounded-sm bg-amber-50 text-amber-700 border border-amber-500">incomplete</span>}
+                        </div>
                       </div>
                       <span className="text-xs uppercase tracking-widest text-slate-500 shrink-0">{entry.ingredient_type}</span>
                     </div>
