@@ -1,3 +1,5 @@
+'use client'
+
 import { ALLERGENS, ALLERGEN_LABELS, DIETARY, type AllergenKey, type DietaryKey } from '@/lib/pouriq/allergens'
 import { CHIP, CHIP_ACTIVE, CHIP_IDLE, HELPER, LABEL } from '@/lib/pouriq/ui'
 

@@ -121,11 +121,13 @@ export function SpecCard({ cocktail, priceIncludesVat, compact = false, showCost
             <p className="text-xs text-amber-700 print:text-black">Allergen info incomplete for this drink.</p>
           ) : (
             <>
-              {allergenInfo.contains.length > 0 && (
+              {allergenInfo.contains.length > 0 ? (
                 <p className="text-sm text-slate-700 print:text-black mb-1">
                   <span className="font-semibold">Contains:</span>{' '}
                   {allergenInfo.contains.map((a) => ALLERGEN_LABELS[a]).join(', ')}
                 </p>
+              ) : (
+                <p className="text-sm text-slate-500 print:text-black mb-1">No regulated allergens declared.</p>
               )}
               {(allergenInfo.vegetarian || allergenInfo.vegan || allergenInfo.glutenFree) && (
                 <div className="flex gap-2 mt-1">
