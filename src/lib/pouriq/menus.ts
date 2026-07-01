@@ -389,8 +389,8 @@ export async function insertCocktail(
         (menu_id, name, sale_price_p,
          promotional_price_p, promotional_label,
          promotional_days, promotional_valid_from, promotional_valid_until,
-         position, field_manual_slug, notes, glass, item_type)
-      VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13)
+         position, field_manual_slug, notes, glass, item_type, updated_at)
+      VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13, datetime('now'))
       RETURNING id
     `)
     .bind(

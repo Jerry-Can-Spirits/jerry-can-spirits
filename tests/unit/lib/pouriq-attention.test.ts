@@ -30,6 +30,7 @@ function cocktail(id: string, salePriceP: number, ings: IngredientWithLibrary[])
     item_type: 'cocktail',
     section_id: null,
     photo_r2_key: null,
+    updated_at: '',
     ingredients: ings,
   }
 }

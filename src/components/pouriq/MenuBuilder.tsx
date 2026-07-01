@@ -29,6 +29,7 @@ interface Drink {
   item_type: ItemType
   position: number
   photo_r2_key: string | null
+  updated_at: string
 }
 
 interface Props {
@@ -88,7 +89,7 @@ function DrinkPreview({
     <div className="mb-4 break-inside-avoid">
       {showPhotos && drink.photo_r2_key && (
         <img
-          src={`/api/pouriq/cocktails/${drink.id}/photo`}
+          src={`/api/pouriq/cocktails/${drink.id}/photo?v=${encodeURIComponent(drink.updated_at)}`}
           alt=""
           className="w-full h-32 object-cover rounded mb-2 print:h-24"
         />

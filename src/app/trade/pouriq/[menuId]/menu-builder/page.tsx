@@ -37,6 +37,7 @@ export default async function MenuBuilderPage({ params }: Props) {
     item_type: c.item_type,
     position: c.position,
     photo_r2_key: c.photo_r2_key,
+    updated_at: c.updated_at,
   }))
 
   return (

@@ -101,6 +101,7 @@ export interface CocktailRow {
   item_type: ItemType
   section_id: string | null
   photo_r2_key: string | null
+  updated_at: string
 }
 
 export interface IngredientLibraryRow {
