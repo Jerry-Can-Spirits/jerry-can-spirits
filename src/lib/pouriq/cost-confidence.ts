@@ -1,5 +1,17 @@
 import type { CostConfidence } from './types'
 
+export function ingredientCompleteness(
+  row: { price_p: number; pack_size: number; purchase_qty: number; is_prepared: number },
+): { complete: boolean; missing: string[] } {
+  const missing: string[] = []
+  if (row.price_p <= 0) missing.push('price')
+  if (!row.is_prepared) {
+    if (row.pack_size <= 0) missing.push('pack size')
+    if (row.purchase_qty <= 0) missing.push('purchase quantity')
+  }
+  return { complete: missing.length === 0, missing }
+}
+
 export function costConfidenceBadge(c: CostConfidence): { label: string; className: string } {
   switch (c) {
     case 'confirmed': return { label: 'Confirmed', className: 'bg-emerald-50 text-emerald-700 border border-emerald-600' }

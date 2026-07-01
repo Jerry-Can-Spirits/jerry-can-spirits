@@ -1,6 +1,11 @@
 // Helpers for the pouriq_cost_changes audit table. Cost changes can come from
 // manual library edits (source='manual') or invoice commits (source='invoice').
 
+export function pctChange(oldP: number | null, newP: number): number | null {
+  if (oldP === null || oldP === 0) return null
+  return Math.round(((newP - oldP) / oldP) * 100)
+}
+
 export type CostChangeSource = 'manual' | 'invoice'
 export type CostPricingMode = 'bottle' | 'unit'
 
