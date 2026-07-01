@@ -155,6 +155,29 @@ export async function listInvoicesForTenant(
   return result.results ?? []
 }
 
+export interface PriceChangeRow {
+  id: string
+  ingredient_name: string
+  old_cost_p: number | null
+  new_cost_p: number
+  source: 'manual' | 'invoice'
+  supplier_name: string | null
+  changed_at: string
+}
+
+export async function listCostChanges(db: D1Database, tradeAccountId: string, limit = 100): Promise<PriceChangeRow[]> {
+  const { results } = await db
+    .prepare(`SELECT cc.id, l.name AS ingredient_name, cc.old_cost_p, cc.new_cost_p, cc.source,
+                     i.supplier_name, cc.changed_at
+              FROM pouriq_cost_changes cc
+              JOIN pouriq_ingredients_library l ON l.id = cc.library_ingredient_id AND l.trade_account_id = ?1
+              LEFT JOIN pouriq_invoices i ON i.id = cc.invoice_id
+              ORDER BY cc.changed_at DESC LIMIT ?2`)
+    .bind(tradeAccountId, limit)
+    .all<PriceChangeRow>()
+  return results ?? []
+}
+
 // Delete an invoice and everything booked off it. Deletes are explicit and
 // ordered rather than relying on FK cascade, so it is correct regardless of FK
 // enforcement: stock receipts first (they link to a line by a plain column with

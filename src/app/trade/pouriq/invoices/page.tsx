@@ -31,7 +31,10 @@ export default async function InvoicesListPage() {
             <h1 className="text-3xl md:text-4xl font-bold text-slate-900 mt-3">Recent invoices</h1>
             <p className="text-slate-500 text-sm mt-2">{invoices.length} invoice{invoices.length === 1 ? '' : 's'} scanned</p>
           </div>
-          <Link href="/trade/pouriq/invoices/new" className={PRIMARY_BUTTON}>Scan an invoice</Link>
+          <div className="flex items-center gap-3">
+            <Link href="/trade/pouriq/price-changes" className="text-sm text-slate-600 hover:text-slate-900">Price changes</Link>
+            <Link href="/trade/pouriq/invoices/new" className={PRIMARY_BUTTON}>Scan an invoice</Link>
+          </div>
         </div>
 
         {invoices.length === 0 ? (
