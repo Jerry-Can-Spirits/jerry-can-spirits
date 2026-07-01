@@ -142,6 +142,9 @@ export function IngredientPicker({ libraryEntries, selectedEntryId, onChange }: 
         cost_confidence: price_p > 0 ? 'set' : 'estimated',
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),
+        allergens: '[]',
+        dietary: '[]',
+        allergens_reviewed: 0,
       }
       libraryEntries.push(newEntry)
       selectEntry(newEntry)

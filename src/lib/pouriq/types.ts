@@ -124,6 +124,9 @@ export interface IngredientLibraryRow {
   cost_confidence: CostConfidence
   created_at: string
   updated_at: string
+  allergens: string
+  dietary: string
+  allergens_reviewed: number
 }
 
 export interface PreparedComponentRow {

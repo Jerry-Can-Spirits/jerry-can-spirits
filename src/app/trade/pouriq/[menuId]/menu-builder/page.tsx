@@ -6,6 +6,7 @@ import { LicenceGate } from '@/components/pouriq/LicenceGate'
 import { getMenu, listCocktailsForMenu } from '@/lib/pouriq/menus'
 import { ensureSeededSections, listSectionsForMenu } from '@/lib/pouriq/menu-sections'
 import { MenuBuilder } from '@/components/pouriq/MenuBuilder'
+import { cocktailAllergenInfo } from '@/lib/pouriq/allergens'
 
 export const dynamic = 'force-dynamic'
 
@@ -39,6 +40,9 @@ export default async function MenuBuilderPage({ params }: Props) {
     photo_r2_key: c.photo_r2_key,
     updated_at: c.updated_at,
   }))
+  const allergenInfoById = Object.fromEntries(
+    cocktails.map((c) => [c.id, cocktailAllergenInfo(c.ingredients)]),
+  )
 
   return (
     <main className="min-h-screen print-region">
@@ -57,6 +61,7 @@ export default async function MenuBuilderPage({ params }: Props) {
           logoR2Key={menu.logo_r2_key}
           logoAlign={menu.logo_align}
           menuUpdatedAt={menu.updated_at}
+          allergenInfoById={allergenInfoById}
         />
       </div>
     </main>
