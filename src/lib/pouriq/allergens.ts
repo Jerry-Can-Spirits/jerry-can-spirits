@@ -29,3 +29,17 @@ export function parseTags(json: string): string[] {
     return []
   }
 }
+
+export function cocktailAllergenInfo(
+  ingredients: { library: { allergens: string; dietary: string; allergens_reviewed: number } }[],
+): { contains: AllergenKey[]; reviewed: boolean; vegetarian: boolean; vegan: boolean; glutenFree: boolean } {
+  const reviewed = ingredients.length > 0 && ingredients.every((i) => i.library.allergens_reviewed === 1)
+  const set = new Set<string>()
+  for (const i of ingredients) for (const a of parseTags(i.library.allergens)) set.add(a)
+  const contains = ALLERGENS.filter((a) => set.has(a))
+  const diet = ingredients.map((i) => parseTags(i.library.dietary))
+  const vegan = reviewed && diet.every((d) => d.includes('vegan'))
+  const vegetarian = reviewed && diet.every((d) => d.includes('vegetarian') || d.includes('vegan'))
+  const glutenFree = reviewed && !contains.includes('gluten')
+  return { contains, reviewed, vegetarian, vegan, glutenFree }
+}
