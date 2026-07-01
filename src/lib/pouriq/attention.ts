@@ -109,6 +109,20 @@ export async function getAttentionRows(db: D1Database, tradeAccountId: string): 
         severity: 'medium',
       })
     }
+    const unreviewedIngCount = new Set(
+      cocktails
+        .flatMap((c) => c.ingredients)
+        .filter((i) => i.library.allergens_reviewed === 0)
+        .map((i) => i.library_ingredient_id),
+    ).size
+    if (unreviewedIngCount > 0) {
+      rows.push({
+        key: 'allergen-review',
+        label: `${unreviewedIngCount} ingredient${unreviewedIngCount === 1 ? '' : 's'} need${unreviewedIngCount === 1 ? 's' : ''} an allergen review.`,
+        href: '/trade/pouriq/library',
+        severity: 'medium',
+      })
+    }
     if (underTargetCount > 0) {
       rows.push({
         key: 'gp',
