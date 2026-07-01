@@ -50,7 +50,12 @@ describe('cocktailAllergenInfo', () => {
     expect(g.glutenFree).toBe(false)
   })
 
-  it('empty drink is not reviewed', () => {
-    expect(cocktailAllergenInfo([]).reviewed).toBe(false)
+  it('empty drink is not reviewed and makes no positive claims', () => {
+    const r = cocktailAllergenInfo([])
+    expect(r.reviewed).toBe(false)
+    expect(r.contains).toEqual([])
+    expect(r.vegetarian).toBe(false)
+    expect(r.vegan).toBe(false)
+    expect(r.glutenFree).toBe(false)
   })
 })
