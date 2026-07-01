@@ -21,6 +21,7 @@ function labelForType(t: ItemType): string {
 export function SpecCardsView({ cocktails, costById, priceIncludesVat }: Props) {
   const [compact, setCompact] = useState(false)
   const [showCost, setShowCost] = useState(false)
+  const [showPhotos, setShowPhotos] = useState(cocktails.some((c) => c.photo_r2_key !== null))
   const [selected, setSelected] = useState<Set<ItemType>>(new Set(['cocktail']))
 
   const present = ITEM_TYPES.filter((t) => cocktails.some((c) => c.item_type === t))
@@ -45,6 +46,10 @@ export function SpecCardsView({ cocktails, costById, priceIncludesVat }: Props) 
         <label className="flex items-center gap-2 text-sm text-slate-600">
           <input type="checkbox" checked={showCost} onChange={(e) => setShowCost(e.target.checked)} />
           Show costs
+        </label>
+        <label className="flex items-center gap-2 text-sm text-slate-600">
+          <input type="checkbox" checked={showPhotos} onChange={(e) => setShowPhotos(e.target.checked)} />
+          Show photos
         </label>
         {present.length > 1 && (
           <div className="flex flex-wrap items-center gap-2">
@@ -75,6 +80,7 @@ export function SpecCardsView({ cocktails, costById, priceIncludesVat }: Props) 
               priceIncludesVat={priceIncludesVat}
               compact={compact}
               showCost={showCost}
+              showPhotos={showPhotos}
               cost={costById[c.id] ?? null}
             />
           ))}

@@ -1,15 +1,23 @@
 'use client'
 
 import { Fragment, useMemo, useState, useTransition, type DragEvent } from 'react'
+import { useRouter } from 'next/navigation'
 import { SECONDARY_BUTTON_SM, PRIMARY_BUTTON } from '@/lib/pouriq/button-styles'
 import { INPUT } from '@/lib/pouriq/ui'
-import type { MenuSectionRow, ItemType } from '@/lib/pouriq/types'
+import type { MenuSectionRow, ItemType, MenuTheme, LogoAlign } from '@/lib/pouriq/types'
+import { MENU_THEMES } from '@/lib/pouriq/types'
+import { menuTheme, type ThemeTokens } from '@/lib/pouriq/menu-theme'
+import { insertAt } from '@/lib/pouriq/reorder'
 import {
   createSectionAction,
   renameSectionAction,
   deleteSectionAction,
   reorderSectionsAction,
   moveDrinkAction,
+  reorderDrinksAction,
+  setMenuThemeAction,
+  setMenuLogoAlignAction,
+  removeMenuLogoAction,
 } from '@/lib/pouriq/server-actions'
 
 interface Drink {
@@ -19,6 +27,8 @@ interface Drink {
   sale_price_p: number | null
   section_id: string | null
   item_type: ItemType
+  position: number
+  photo_r2_key: string | null
 }
 
 interface Props {
@@ -26,6 +36,10 @@ interface Props {
   menuName: string
   sections: MenuSectionRow[]
   drinks: Drink[]
+  theme: MenuTheme
+  logoR2Key: string | null
+  logoAlign: LogoAlign
+  menuUpdatedAt: string
 }
 
 interface SectionView {
@@ -43,7 +57,8 @@ function buildViewModel(sections: MenuSectionRow[], drinks: Drink[]) {
   const top = sections
     .filter((s) => s.parent_section_id === null)
     .sort((a, b) => a.position - b.position)
-  const drinksFor = (sectionId: string) => drinks.filter((d) => d.section_id === sectionId)
+  const drinksFor = (sectionId: string) =>
+    drinks.filter((d) => d.section_id === sectionId).sort((a, b) => a.position - b.position)
   const topSections: SectionView[] = top.map((section) => ({
     section,
     drinks: drinksFor(section.id),
@@ -52,21 +67,40 @@ function buildViewModel(sections: MenuSectionRow[], drinks: Drink[]) {
       .sort((a, b) => a.position - b.position)
       .map((sub) => ({ section: sub, drinks: drinksFor(sub.id) })),
   }))
-  const unplaced = drinks.filter((d) => d.section_id === null)
+  const unplaced = drinks.filter((d) => d.section_id === null).sort((a, b) => a.position - b.position)
   return { topSections, unplaced }
 }
 
-function DrinkPreview({ drink, showPrices, showDescriptions }: { drink: Drink; showPrices: boolean; showDescriptions: boolean }) {
+function DrinkPreview({
+  drink,
+  showPrices,
+  showDescriptions,
+  showPhotos,
+  tok,
+}: {
+  drink: Drink
+  showPrices: boolean
+  showDescriptions: boolean
+  showPhotos: boolean
+  tok: ThemeTokens
+}) {
   return (
     <div className="mb-4 break-inside-avoid">
+      {showPhotos && drink.photo_r2_key && (
+        <img
+          src={`/api/pouriq/cocktails/${drink.id}/photo`}
+          alt=""
+          className="w-full h-32 object-cover rounded mb-2 print:h-24"
+        />
+      )}
       <div className="flex items-baseline justify-between gap-4">
-        <h4 className="text-lg font-bold text-slate-900">{drink.name}</h4>
+        <h4 className={`text-lg font-bold ${tok.drinkName}`}>{drink.name}</h4>
         {showPrices && drink.sale_price_p !== null && (
-          <span className="text-lg text-slate-700 whitespace-nowrap">{formatMoney(drink.sale_price_p)}</span>
+          <span className={`text-lg whitespace-nowrap ${tok.price}`}>{formatMoney(drink.sale_price_p)}</span>
         )}
       </div>
       {showDescriptions && drink.description && drink.description.trim() !== '' && (
-        <p className="text-sm text-slate-600 italic mt-1 leading-relaxed">{drink.description}</p>
+        <p className={`mt-1 leading-relaxed ${tok.desc}`}>{drink.description}</p>
       )}
     </div>
   )
@@ -74,13 +108,25 @@ function DrinkPreview({ drink, showPrices, showDescriptions }: { drink: Drink; s
 
 function ArrangeDrink({
   drink,
+  index,
+  isFirst,
+  isLast,
   sectionOptions,
   onMove,
+  onDropAt,
+  onMoveUp,
+  onMoveDown,
   disabled,
 }: {
   drink: Drink
+  index: number
+  isFirst: boolean
+  isLast: boolean
   sectionOptions: { id: string; label: string }[]
   onMove: (drinkId: string, sectionId: string | null) => void
+  onDropAt: (drinkId: string, dropIndex: number, targetSectionId: string | null) => void
+  onMoveUp: () => void
+  onMoveDown: () => void
   disabled: boolean
 }) {
   return (
@@ -90,6 +136,13 @@ function ArrangeDrink({
         e.dataTransfer.setData('text/plain', drink.id)
         e.dataTransfer.effectAllowed = 'move'
       }}
+      onDragOver={(e) => e.preventDefault()}
+      onDrop={(e) => {
+        e.preventDefault()
+        e.stopPropagation()
+        const id = e.dataTransfer.getData('text/plain')
+        if (id) onDropAt(id, index, drink.section_id)
+      }}
       className="flex items-center justify-between gap-3 rounded-md border border-slate-200 bg-white px-3 py-2 cursor-grab active:cursor-grabbing"
     >
       <span className="text-sm text-slate-800 truncate">{drink.name}</span>
@@ -97,6 +150,8 @@ function ArrangeDrink({
         {drink.sale_price_p !== null && (
           <span className="text-xs text-slate-500 whitespace-nowrap">{formatMoney(drink.sale_price_p)}</span>
         )}
+        <button type="button" onClick={onMoveUp} disabled={isFirst || disabled} aria-label="Move up" className="px-1 py-0.5 text-slate-500 hover:text-slate-800 disabled:opacity-30 text-xs">&#8593;</button>
+        <button type="button" onClick={onMoveDown} disabled={isLast || disabled} aria-label="Move down" className="px-1 py-0.5 text-slate-500 hover:text-slate-800 disabled:opacity-30 text-xs">&#8595;</button>
         <label htmlFor={`move-${drink.id}`} className="sr-only">Move {drink.name} to</label>
         <select
           id={`move-${drink.id}`}
@@ -115,11 +170,19 @@ function ArrangeDrink({
   )
 }
 
-export function MenuBuilder({ menuId, menuName, sections, drinks }: Props) {
+export function MenuBuilder({ menuId, menuName, sections, drinks, theme, logoR2Key, logoAlign, menuUpdatedAt }: Props) {
+  const router = useRouter()
+
   const [title, setTitle] = useState(menuName)
   const [columns, setColumns] = useState<1 | 2>(1)
   const [showPrices, setShowPrices] = useState(true)
   const [showDescriptions, setShowDescriptions] = useState(true)
+  const [showPhotos, setShowPhotos] = useState(drinks.some((d) => d.photo_r2_key !== null))
+
+  const [localTheme, setLocalTheme] = useState<MenuTheme>(theme)
+  const [localLogoR2Key, setLocalLogoR2Key] = useState<string | null>(logoR2Key)
+  const [localLogoAlign, setLocalLogoAlign] = useState<LogoAlign>(logoAlign)
+  const [logoVersion, setLogoVersion] = useState(0)
 
   const [localSections, setLocalSections] = useState<MenuSectionRow[]>(sections)
   const [localDrinks, setLocalDrinks] = useState<Drink[]>(drinks)
@@ -133,6 +196,7 @@ export function MenuBuilder({ menuId, menuName, sections, drinks }: Props) {
   const [newTop, setNewTop] = useState('')
   const [dropKey, setDropKey] = useState<string | null>(null)
 
+  const tok = useMemo(() => menuTheme(localTheme), [localTheme])
   const { topSections, unplaced } = useMemo(() => buildViewModel(localSections, localDrinks), [localSections, localDrinks])
   const hasPreview = topSections.some((t) => t.drinks.length > 0 || t.subSections.some((s) => s.drinks.length > 0))
 
@@ -157,9 +221,58 @@ export function MenuBuilder({ menuId, menuName, sections, drinks }: Props) {
     })
   }
 
+  function handleThemeChange(t: MenuTheme) {
+    const prev = localTheme
+    setLocalTheme(t)
+    persist(
+      () => setMenuThemeAction(menuId, t),
+      () => setLocalTheme(prev),
+      'Could not update the theme. The change was not saved.',
+    )
+  }
+
+  function handleLogoAlignChange(a: LogoAlign) {
+    const prev = localLogoAlign
+    setLocalLogoAlign(a)
+    persist(
+      () => setMenuLogoAlignAction(menuId, a),
+      () => setLocalLogoAlign(prev),
+      'Could not update the logo alignment. The change was not saved.',
+    )
+  }
+
+  function handleRemoveLogo() {
+    const prevKey = localLogoR2Key
+    setLocalLogoR2Key(null)
+    persist(
+      () => removeMenuLogoAction(menuId),
+      () => setLocalLogoR2Key(prevKey),
+      'Could not remove the logo. The change was not saved.',
+    )
+  }
+
+  function handleLogoUpload(file: File) {
+    const fd = new FormData()
+    fd.append('file', file)
+    fd.append('target', 'menu-logo')
+    fd.append('id', menuId)
+    setError(null)
+    startTransition(async () => {
+      try {
+        const res = await fetch('/api/pouriq/images/upload', { method: 'POST', body: fd })
+        if (!res.ok) { setError('Could not upload logo'); return }
+        setLocalLogoR2Key('set')
+        setLogoVersion((v) => v + 1)
+        router.refresh()
+      } catch {
+        setError('Could not upload logo')
+      }
+    })
+  }
+
   function moveDrinkTo(drinkId: string, targetSectionId: string | null) {
     const drink = localDrinks.find((d) => d.id === drinkId)
-    if (!drink || drink.section_id === targetSectionId) return
+    if (!drink) return
     if (targetSectionId !== null && isTemp(targetSectionId)) return
     const prevDrinks = localDrinks
     const newPosition = localDrinks.filter((d) => d.section_id === targetSectionId).length
@@ -170,6 +283,22 @@ export function MenuBuilder({ menuId, menuName, sections, drinks }: Props) {
       () => moveDrinkAction(drinkId, targetSectionId, menuId, newPosition),
       () => setLocalDrinks(prevDrinks),
       'Could not move that drink. The change was not saved.',
+    )
+  }
+
+  function reorderDrinkAt(drinkId: string, dropIndex: number, targetSectionId: string | null) {
+    if (targetSectionId !== null && isTemp(targetSectionId)) return
+    const ordered = localDrinks
+      .filter((d) => d.section_id === targetSectionId)
+      .sort((a, b) => a.position - b.position)
+    const newOrderedIds = insertAt(ordered.map((d) => d.id), drinkId, dropIndex)
+    const prevDrinks = localDrinks
+    const posById = new Map(newOrderedIds.map((id, i) => [id, i]))
+    setLocalDrinks(localDrinks.map((d) => posById.has(d.id) ? { ...d, section_id: targetSectionId, position: posById.get(d.id)! } : d))
+    persist(
+      () => reorderDrinksAction(menuId, targetSectionId, newOrderedIds),
+      () => setLocalDrinks(prevDrinks),
+      'Could not reorder that drink. The change was not saved.',
     )
   }
 
@@ -274,6 +403,12 @@ export function MenuBuilder({ menuId, menuName, sections, drinks }: Props) {
 
   const ring = (key: string) => (dropKey === key ? 'ring-2 ring-emerald-400' : '')
 
+  const logoAlignClass =
+    localLogoAlign === 'center' ? 'justify-center' :
+    localLogoAlign === 'right' ? 'justify-end' : 'justify-start'
+
+  const logoSrc = `${localLogoR2Key ? `/api/pouriq/menus/${menuId}/logo` : ''}${logoVersion > 0 ? `?v=${logoVersion}` : menuUpdatedAt ? `?v=${encodeURIComponent(menuUpdatedAt)}` : ''}`
+
   return (
     <>
       {/* Controls — never printed */}
@@ -288,6 +423,67 @@ export function MenuBuilder({ menuId, menuName, sections, drinks }: Props) {
             className={INPUT}
           />
         </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label htmlFor="menu-theme" className="block text-xs font-medium text-slate-700 mb-2">Theme</label>
+            <select
+              id="menu-theme"
+              value={localTheme}
+              onChange={(e) => handleThemeChange(e.target.value as MenuTheme)}
+              disabled={isPending}
+              className={INPUT}
+            >
+              {MENU_THEMES.map((t) => (
+                <option key={t} value={t}>{t.charAt(0).toUpperCase() + t.slice(1)}</option>
+              ))}
+            </select>
+          </div>
+
+          <div>
+            <span className="block text-xs font-medium text-slate-700 mb-2">Logo</span>
+            <div className="flex flex-wrap items-center gap-3">
+              <label className="cursor-pointer text-xs text-emerald-700 hover:text-emerald-800 underline">
+                {localLogoR2Key ? 'Replace logo' : 'Upload logo'}
+                <input
+                  type="file"
+                  accept="image/png,image/jpeg,image/webp"
+                  className="sr-only"
+                  onChange={(e) => {
+                    const f = e.target.files?.[0]
+                    if (f) handleLogoUpload(f)
+                    e.target.value = ''
+                  }}
+                />
+              </label>
+              {localLogoR2Key && (
+                <>
+                  <span className="text-xs text-slate-400">Align:</span>
+                  {(['left', 'center', 'right'] as LogoAlign[]).map((a) => (
+                    <button
+                      key={a}
+                      type="button"
+                      onClick={() => handleLogoAlignChange(a)}
+                      disabled={isPending}
+                      className={localLogoAlign === a ? PRIMARY_BUTTON : SECONDARY_BUTTON_SM}
+                    >
+                      {a.charAt(0).toUpperCase() + a.slice(1)}
+                    </button>
+                  ))}
+                  <button
+                    type="button"
+                    onClick={handleRemoveLogo}
+                    disabled={isPending}
+                    className="text-xs text-rose-600 hover:text-rose-700 underline"
+                  >
+                    Remove logo
+                  </button>
+                </>
+              )}
+            </div>
+          </div>
+        </div>
+
         <div className="flex flex-wrap items-center gap-4">
           <div className="flex items-center gap-2">
             <span className="text-xs text-slate-700">Layout:</span>
@@ -301,6 +497,10 @@ export function MenuBuilder({ menuId, menuName, sections, drinks }: Props) {
           <label className="flex items-center gap-2 text-xs text-slate-700">
             <input type="checkbox" checked={showDescriptions} onChange={(e) => setShowDescriptions(e.target.checked)} />
             Show descriptions
+          </label>
+          <label className="flex items-center gap-2 text-xs text-slate-700">
+            <input type="checkbox" checked={showPhotos} onChange={(e) => setShowPhotos(e.target.checked)} />
+            Show photos
           </label>
           <button type="button" onClick={() => window.print()} className={`${PRIMARY_BUTTON} ml-auto`}>
             Save as PDF
@@ -330,8 +530,20 @@ export function MenuBuilder({ menuId, menuName, sections, drinks }: Props) {
               <p className="text-xs text-slate-400">Every drink is in a section.</p>
             ) : (
               <div className="space-y-2">
-                {unplaced.map((d) => (
-                  <ArrangeDrink key={d.id} drink={d} sectionOptions={sectionOptions} onMove={moveDrinkTo} disabled={isPending} />
+                {unplaced.map((d, i) => (
+                  <ArrangeDrink
+                    key={d.id}
+                    drink={d}
+                    index={i}
+                    isFirst={i === 0}
+                    isLast={i === unplaced.length - 1}
+                    sectionOptions={sectionOptions}
+                    onMove={moveDrinkTo}
+                    onDropAt={reorderDrinkAt}
+                    onMoveUp={() => reorderDrinkAt(d.id, i - 1, d.section_id)}
+                    onMoveDown={() => reorderDrinkAt(d.id, i + 1, d.section_id)}
+                    disabled={isPending}
+                  />
                 ))}
               </div>
             )}
@@ -374,8 +586,20 @@ export function MenuBuilder({ menuId, menuName, sections, drinks }: Props) {
 
                 {direct.length > 0 && (
                   <div className="space-y-2 mb-3">
-                    {direct.map((d) => (
-                      <ArrangeDrink key={d.id} drink={d} sectionOptions={sectionOptions} onMove={moveDrinkTo} disabled={isPending} />
+                    {direct.map((d, i) => (
+                      <ArrangeDrink
+                        key={d.id}
+                        drink={d}
+                        index={i}
+                        isFirst={i === 0}
+                        isLast={i === direct.length - 1}
+                        sectionOptions={sectionOptions}
+                        onMove={moveDrinkTo}
+                        onDropAt={reorderDrinkAt}
+                        onMoveUp={() => reorderDrinkAt(d.id, i - 1, d.section_id)}
+                        onMoveDown={() => reorderDrinkAt(d.id, i + 1, d.section_id)}
+                        disabled={isPending}
+                      />
                     ))}
                   </div>
                 )}
@@ -431,8 +655,20 @@ export function MenuBuilder({ menuId, menuName, sections, drinks }: Props) {
                       <p className="text-xs text-slate-400">Drop a drink here.</p>
                     ) : (
                       <div className="space-y-2">
-                        {subDrinks.map((d) => (
-                          <ArrangeDrink key={d.id} drink={d} sectionOptions={sectionOptions} onMove={moveDrinkTo} disabled={isPending} />
+                        {subDrinks.map((d, i) => (
+                          <ArrangeDrink
+                            key={d.id}
+                            drink={d}
+                            index={i}
+                            isFirst={i === 0}
+                            isLast={i === subDrinks.length - 1}
+                            sectionOptions={sectionOptions}
+                            onMove={moveDrinkTo}
+                            onDropAt={reorderDrinkAt}
+                            onMoveUp={() => reorderDrinkAt(d.id, i - 1, d.section_id)}
+                            onMoveDown={() => reorderDrinkAt(d.id, i + 1, d.section_id)}
+                            disabled={isPending}
+                          />
                         ))}
                       </div>
                     )}
@@ -457,8 +693,17 @@ export function MenuBuilder({ menuId, menuName, sections, drinks }: Props) {
         </div>
 
         {/* Preview pane — this is what prints */}
-        <article className="font-serif">
-          <h2 className="text-3xl md:text-4xl font-bold text-center text-slate-900 mb-8">{title}</h2>
+        <article className={`font-serif rounded-xl print:rounded-none p-6 print:p-0 ${tok.page}`}>
+          {localLogoR2Key && (
+            <div className={`mb-6 flex ${logoAlignClass}`}>
+              <img
+                src={logoSrc}
+                alt=""
+                className="h-16 max-w-[240px] object-contain"
+              />
+            </div>
+          )}
+          <h2 className={`text-3xl md:text-4xl text-center mb-8 ${tok.title}`}>{title}</h2>
           {!hasPreview ? (
             <p className="text-slate-500 text-center text-sm no-print">This menu has no placed drinks yet.</p>
           ) : (
@@ -467,18 +712,18 @@ export function MenuBuilder({ menuId, menuName, sections, drinks }: Props) {
                 if (direct.length === 0 && subSections.every((s) => s.drinks.length === 0)) return null
                 return (
                   <section key={section.id} className="mb-8 break-inside-avoid">
-                    <h3 className="text-2xl font-bold text-slate-900 border-b border-slate-200 pb-2 mb-4">{section.name}</h3>
+                    <h3 className={`text-2xl pb-2 mb-4 ${tok.section}`}>{section.name}</h3>
                     {direct.map((d) => (
-                      <DrinkPreview key={d.id} drink={d} showPrices={showPrices} showDescriptions={showDescriptions} />
+                      <DrinkPreview key={d.id} drink={d} showPrices={showPrices} showDescriptions={showDescriptions} showPhotos={showPhotos} tok={tok} />
                     ))}
                     {subSections.map(({ section: sub, drinks: subDrinks }) => (
                       subDrinks.length === 0 ? (
                         <Fragment key={sub.id} />
                       ) : (
                         <div key={sub.id} className="mt-4">
-                          <h4 className="text-sm font-semibold uppercase tracking-widest text-slate-500 mb-3">{sub.name}</h4>
+                          <h4 className={`text-sm mb-3 ${tok.sub}`}>{sub.name}</h4>
                           {subDrinks.map((d) => (
-                            <DrinkPreview key={d.id} drink={d} showPrices={showPrices} showDescriptions={showDescriptions} />
+                            <DrinkPreview key={d.id} drink={d} showPrices={showPrices} showDescriptions={showDescriptions} showPhotos={showPhotos} tok={tok} />
                           ))}
                         </div>
                       )

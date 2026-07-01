@@ -1,8 +1,8 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
-import { saveCocktailAction, deleteCocktailAction } from '@/lib/pouriq/server-actions'
+import { saveCocktailAction, deleteCocktailAction, removeCocktailPhotoAction } from '@/lib/pouriq/server-actions'
 import { IngredientPicker } from '@/components/pouriq/IngredientPicker'
 import { ServeUnitPicker } from '@/components/pouriq/ServeUnitPicker'
 import type { CocktailWithIngredients, IngredientLibraryRow, ServeUnitRow, ItemType } from '@/lib/pouriq/types'
@@ -69,6 +69,41 @@ export function CocktailForm({ menuId, cocktail, libraryEntries, serveUnits }: P
   )
   const [error, setError] = useState<string | null>(null)
   const [submitting, setSubmitting] = useState(false)
+
+  const [photoHasImage, setPhotoHasImage] = useState(cocktail?.photo_r2_key !== null && cocktail?.photo_r2_key !== undefined)
+  const [photoVersion, setPhotoVersion] = useState(0)
+  const [photoError, setPhotoError] = useState<string | null>(null)
+  const [photoUploading, startPhotoTransition] = useTransition()
+
+  function handlePhotoUpload(file: File) {
+    if (!cocktail) return
+    const fd = new FormData()
+    fd.append('file', file)
+    fd.append('target', 'drink-photo')
+    fd.append('id', cocktail.id)
+    setPhotoError(null)
+    startPhotoTransition(async () => {
+      try {
+        const res = await fetch('/api/pouriq/images/upload', { method: 'POST', body: fd })
+        if (!res.ok) { setPhotoError('Could not upload photo'); return }
+        setPhotoHasImage(true)
+        setPhotoVersion((v) => v + 1)
+      } catch {
+        setPhotoError('Could not upload photo')
+      }
+    })
+  }
+
+  async function handleRemovePhoto() {
+    if (!cocktail) return
+    setPhotoError(null)
+    try {
+      await removeCocktailPhotoAction(menuId, cocktail.id)
+      setPhotoHasImage(false)
+    } catch {
+      setPhotoError('Could not remove photo')
+    }
+  }
 
   function updateIngredient(idx: number, patch: Partial<FormIngredient>) {
     setIngredients((arr) => arr.map((ing, i) => i === idx ? { ...ing, ...patch } : ing))
@@ -332,6 +367,50 @@ export function CocktailForm({ menuId, cocktail, libraryEntries, serveUnits }: P
         <p className="text-xs text-slate-500 mb-1">Your method for this drink (build, glass, technique). Shown to staff on the spec card.</p>
         <textarea id="notes" rows={2} value={notes} onChange={(e) => setNotes(e.target.value)} className={`${INPUT} resize-vertical`} placeholder="e.g. Build over cubed ice, stir, lemon twist." />
       </div>
+
+      {cocktail && (
+        <div className="border border-slate-200 rounded-lg p-4 bg-white">
+          <h3 className="text-sm font-medium text-slate-900 mb-1">Dish photo</h3>
+          <p className="text-xs text-slate-500 mb-3">
+            Appears on the printed menu and spec cards when photos are turned on.
+            Add a photo after saving the drink for the first time.
+          </p>
+          {photoHasImage && (
+            <img
+              src={`/api/pouriq/cocktails/${cocktail.id}/photo${photoVersion > 0 ? `?v=${photoVersion}` : ''}`}
+              alt=""
+              className="mb-3 w-24 h-24 object-cover rounded-lg border border-slate-200"
+            />
+          )}
+          <div className="flex flex-wrap items-center gap-3">
+            <label className="cursor-pointer text-xs text-emerald-700 hover:text-emerald-800 underline">
+              {photoHasImage ? 'Replace photo' : 'Add photo'}
+              <input
+                type="file"
+                accept="image/png,image/jpeg,image/webp"
+                className="sr-only"
+                disabled={photoUploading}
+                onChange={(e) => {
+                  const f = e.target.files?.[0]
+                  if (f) handlePhotoUpload(f)
+                  e.target.value = ''
+                }}
+              />
+            </label>
+            {photoHasImage && (
+              <button
+                type="button"
+                onClick={handleRemovePhoto}
+                disabled={photoUploading}
+                className="text-xs text-rose-600 hover:text-rose-700 underline"
+              >
+                Remove photo
+              </button>
+            )}
+          </div>
+          {photoError && <p className="text-xs text-rose-600 mt-2">{photoError}</p>}
+        </div>
+      )}
 
       {error && <p role="alert" className="text-sm text-rose-600">{error}</p>}
 

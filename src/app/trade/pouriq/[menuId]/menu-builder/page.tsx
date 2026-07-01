@@ -35,6 +35,8 @@ export default async function MenuBuilderPage({ params }: Props) {
     sale_price_p: c.sale_price_p,
     section_id: c.section_id,
     item_type: c.item_type,
+    position: c.position,
+    photo_r2_key: c.photo_r2_key,
   }))
 
   return (
@@ -45,7 +47,16 @@ export default async function MenuBuilderPage({ params }: Props) {
         <p className="text-slate-500 text-sm mb-8 no-print">
           A branded, customer-facing version of this menu. Adjust it, then save it as a PDF to print or send.
         </p>
-        <MenuBuilder menuId={menuId} menuName={menu.name} sections={sections} drinks={drinks} />
+        <MenuBuilder
+          menuId={menuId}
+          menuName={menu.name}
+          sections={sections}
+          drinks={drinks}
+          theme={menu.theme}
+          logoR2Key={menu.logo_r2_key}
+          logoAlign={menu.logo_align}
+          menuUpdatedAt={menu.updated_at}
+        />
       </div>
     </main>
   )

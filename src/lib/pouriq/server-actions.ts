@@ -4,12 +4,12 @@ import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { getCloudflareContext } from '@opennextjs/cloudflare'
 import { checkPourIqAccess } from './access'
-import { VARIANCE_REASONS, type ItemType } from './types'
+import { VARIANCE_REASONS, MENU_THEMES, type ItemType } from './types'
 import {
   insertMenu, updateMenu, deleteMenu, setActiveMenu,
   insertCocktail, replaceIngredients,
   getMenu, listCocktailsForMenu, getOrCreateServesMenu,
-  listIngredientServes,
+  listIngredientServes, reorderDrinks,
 } from './menus'
 import {
   insertLibraryEntry,
@@ -801,6 +801,33 @@ export async function moveDrinkAction(
   revalidatePath(`/trade/pouriq/${menuId}/menu-builder`)
 }
 
+export async function reorderDrinksAction(
+  menuId: string,
+  sectionId: string | null,
+  orderedCocktailIds: string[],
+): Promise<void> {
+  const { db, tradeAccountId } = await requireDb()
+  const menu = await getMenu(db, menuId, tradeAccountId)
+  if (!menu) throw new Error('Menu not found')
+  if (orderedCocktailIds.length > 0) {
+    const placeholders = orderedCocktailIds.map((_, i) => `?${i + 2}`).join(', ')
+    const count = await db
+      .prepare(`SELECT COUNT(*) AS c FROM pouriq_cocktails WHERE id IN (${placeholders}) AND menu_id = ?1`)
+      .bind(menuId, ...orderedCocktailIds)
+      .first<{ c: number }>()
+    if ((count?.c ?? 0) !== orderedCocktailIds.length) throw new Error('Drink not found')
+  }
+  if (sectionId !== null) {
+    const sectionOwned = await db
+      .prepare(`SELECT 1 AS one FROM pouriq_menu_sections WHERE id = ?1 AND menu_id = ?2`)
+      .bind(sectionId, menuId)
+      .first<{ one: number }>()
+    if (!sectionOwned) throw new Error('Section not found')
+  }
+  await reorderDrinks(db, menuId, sectionId, orderedCocktailIds)
+  revalidatePath(`/trade/pouriq/${menuId}/menu-builder`)
+}
+
 // --- Voice profile ---
 
 export async function setVoiceProfileAction(input: VoiceProfileInput): Promise<void> {
@@ -838,4 +865,76 @@ export async function setVoiceProfileAction(input: VoiceProfileInput): Promise<v
     notes: input.notes.trim(),
   })
   revalidatePath('/trade/pouriq/settings/voice-profile')
+}
+
+// --- Menu builder: theme + logo ---
+
+export async function setMenuThemeAction(menuId: string, theme: string): Promise<void> {
+  const { db, tradeAccountId } = await requireDb()
+  const menu = await getMenu(db, menuId, tradeAccountId)
+  if (!menu) throw new Error('Menu not found')
+  if (!(MENU_THEMES as readonly string[]).includes(theme)) throw new Error('Invalid theme')
+  await db
+    .prepare(`UPDATE pouriq_menus SET theme = ?1, updated_at = datetime('now') WHERE id = ?2 AND trade_account_id = ?3`)
+    .bind(theme, menuId, tradeAccountId)
+    .run()
+  revalidatePath(`/trade/pouriq/${menuId}/menu-builder`)
+}
+
+export async function setMenuLogoAlignAction(menuId: string, align: string): Promise<void> {
+  const { db, tradeAccountId } = await requireDb()
+  const menu = await getMenu(db, menuId, tradeAccountId)
+  if (!menu) throw new Error('Menu not found')
+  if (!['left', 'center', 'right'].includes(align)) throw new Error('Invalid alignment')
+  await db
+    .prepare(`UPDATE pouriq_menus SET logo_align = ?1, updated_at = datetime('now') WHERE id = ?2 AND trade_account_id = ?3`)
+    .bind(align, menuId, tradeAccountId)
+    .run()
+  revalidatePath(`/trade/pouriq/${menuId}/menu-builder`)
+}
+
+export async function removeMenuLogoAction(menuId: string): Promise<void> {
+  const { db, tradeAccountId } = await requireDb()
+  const menu = await getMenu(db, menuId, tradeAccountId)
+  if (!menu) throw new Error('Menu not found')
+  if (menu.logo_r2_key) {
+    const { env } = await getCloudflareContext()
+    try {
+      await (env.TRADE_DOCS as R2Bucket).delete(menu.logo_r2_key)
+    } catch {
+      // Best-effort: a stray R2 object is harmless
+    }
+  }
+  await db
+    .prepare(`UPDATE pouriq_menus SET logo_r2_key = NULL, updated_at = datetime('now') WHERE id = ?1 AND trade_account_id = ?2`)
+    .bind(menuId, tradeAccountId)
+    .run()
+  revalidatePath(`/trade/pouriq/${menuId}/menu-builder`)
+}
+
+// --- Cocktail photo ---
+
+export async function removeCocktailPhotoAction(menuId: string, cocktailId: string): Promise<void> {
+  const { db, tradeAccountId } = await requireDb()
+  const menu = await getMenu(db, menuId, tradeAccountId)
+  if (!menu) throw new Error('Menu not found')
+  const row = await db
+    .prepare(`SELECT photo_r2_key FROM pouriq_cocktails WHERE id = ?1 AND menu_id = ?2`)
+    .bind(cocktailId, menuId)
+    .first<{ photo_r2_key: string | null }>()
+  if (!row) throw new Error('Drink not found')
+  if (row.photo_r2_key) {
+    const { env } = await getCloudflareContext()
+    try {
+      await (env.TRADE_DOCS as R2Bucket).delete(row.photo_r2_key)
+    } catch {
+      // Best-effort
+    }
+  }
+  await db
+    .prepare(`UPDATE pouriq_cocktails SET photo_r2_key = NULL WHERE id = ?1 AND menu_id = ?2`)
+    .bind(cocktailId, menuId)
+    .run()
+  revalidatePath(`/trade/pouriq/${menuId}`)
+  revalidatePath(`/trade/pouriq/${menuId}/menu-builder`)
 }
