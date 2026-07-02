@@ -123,12 +123,14 @@ export function StockManager({ rows }: Props) {
           const onHand = row.on_hand_bottles !== null ? Math.max(0, row.on_hand_bottles) : null
           const isNegative = row.on_hand_bottles !== null && row.on_hand_bottles < 0
           const unit = stockUnitWords(row.pack_format)
+          const countLabel = row.base_unit === 'ml' ? unit.many : row.base_unit
+          const countLabelOne = row.base_unit === 'ml' ? unit.one : row.base_unit
 
           return (
             <div key={id} className="bg-white border border-slate-200 rounded-xl p-4">
               <div className="mb-3">
                 <span className="text-slate-900 font-medium">{row.library_name}</span>
-                <span className="text-slate-500 text-sm ml-1">({row.pack_size}ml)</span>
+                <span className="text-slate-500 text-sm ml-1">({row.pack_size}{row.base_unit === 'ml' ? 'ml' : ` ${row.base_unit}`})</span>
               </div>
 
               {row.needs_opening_count ? (
@@ -138,13 +140,13 @@ export function StockManager({ rows }: Props) {
               ) : (
                 <div className="text-sm text-slate-600 mb-3 space-y-0.5">
                   <p>
-                    <span className="text-slate-900">{onHand?.toFixed(1)} {unit.many}</span>
+                    <span className="text-slate-900">{onHand?.toFixed(1)} {countLabel}</span>
                     {isNegative && (
                       <span className="text-slate-500 ml-2">(check stock)</span>
                     )}
                   </p>
                   {row.needs_reorder && (
-                    <p className="text-amber-600 text-xs">Low · order {row.reorder_qty} {row.reorder_qty === 1 ? unit.one : unit.many}</p>
+                    <p className="text-amber-600 text-xs">Low · order {row.reorder_qty} {row.reorder_qty === 1 ? countLabelOne : countLabel}</p>
                   )}
                   {row.anchor_count_at && (
                     <p className="text-slate-500 text-xs">estimate, last counted {formatShortDate(row.anchor_count_at)}</p>
@@ -164,12 +166,12 @@ export function StockManager({ rows }: Props) {
                   <div className="flex items-center gap-2">
                     <input
                       type="number"
-                      step="0.1"
+                      step={row.base_unit === 'each' ? 1 : 0.1}
                       min={0}
                       value={receiveVal}
                       onChange={(e) => setReceiveInputs((prev) => ({ ...prev, [id]: e.target.value }))}
                       className={inputClass}
-                      placeholder={unit.many}
+                      placeholder={countLabel}
                       aria-label={`${row.library_name} delivery quantity`}
                     />
                     <button
@@ -186,12 +188,12 @@ export function StockManager({ rows }: Props) {
                 <div className="flex items-center gap-2">
                   <input
                     type="number"
-                    step="0.1"
+                    step={row.base_unit === 'each' ? 1 : 0.1}
                     min={0}
                     value={countVal}
                     onChange={(e) => setCountInputs((prev) => ({ ...prev, [id]: e.target.value }))}
                     className={inputClass}
-                    placeholder={unit.many}
+                    placeholder={countLabel}
                     aria-label={`${row.library_name} count`}
                   />
                   <button

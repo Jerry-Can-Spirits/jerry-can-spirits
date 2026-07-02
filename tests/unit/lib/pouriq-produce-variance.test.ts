@@ -66,3 +66,19 @@ describe('produce variance computation', () => {
     expect(variance_pct).toBeCloseTo(-4.0, 0)
   })
 })
+
+// Produce stock on-hand formula (mirrors the ml formula but in purchase units).
+describe('produce stock on-hand', () => {
+  it('on-hand = anchor + receipts - theoretical usage in purchase units', () => {
+    // Lemon (each): 10 anchor, 5 received, 40 drinks sold, 25ml juice, 30ml/lemon
+    const usageSince = 40 * produceLineUnits(1, 25, 30) // ~33.33 lemons
+    const onHand = 10 + 5 - usageSince
+    expect(onHand).toBeCloseTo(10 + 5 - 33.333, 2)
+  })
+  it('on-hand is zero when usage equals anchor + receipts', () => {
+    // 8 wheels per lime, 80 drinks ordered 1 wheel each: 10 limes used
+    const usageSince = 80 * produceLineUnits(1, 1, 8) // 10 limes
+    const onHand = 5 + 5 - usageSince // anchor=5, received=5
+    expect(onHand).toBe(0)
+  })
+})

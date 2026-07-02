@@ -1,5 +1,5 @@
 import 'server-only'
-import { sumBucketsInWindow, canonTs } from './variance'
+import { sumBucketsInWindow, canonTs, produceLineUnits } from './variance'
 import { computeOnHandBottles, reorderQty } from './stock'
 import { sumProductionAfter, readProductionYields, readProductionConsumption } from './prepared'
 
@@ -80,8 +80,38 @@ async function readTenantReceipts(db: D1Database, tradeAccountId: string): Promi
   return res.results ?? []
 }
 
+interface ProduceRecipeLineRow {
+  cocktail_id: string
+  library_ingredient_id: string
+  recipe_qty: number
+  yield_qty: number
+  base_unit: string
+  name: string
+  pack_size: number
+  pack_format: string | null
+  yield_pct: number
+  par_bottles: number | null
+}
+
+async function readTenantProduceRecipes(db: D1Database, tradeAccountId: string): Promise<ProduceRecipeLineRow[]> {
+  const res = await db.prepare(`
+    SELECT c.id AS cocktail_id, i.library_ingredient_id AS library_ingredient_id,
+           i.recipe_qty AS recipe_qty, u.yield_qty AS yield_qty,
+           lib.base_unit AS base_unit, lib.name AS name, lib.pack_size AS pack_size,
+           lib.pack_format AS pack_format, lib.yield_pct AS yield_pct, lib.par_bottles AS par_bottles
+    FROM pouriq_cocktails c
+    JOIN pouriq_menus m ON m.id = c.menu_id
+    JOIN pouriq_ingredients i ON i.cocktail_id = c.id
+    JOIN pouriq_ingredients_library lib ON lib.id = i.library_ingredient_id
+    JOIN pouriq_ingredient_uses u ON u.id = i.use_id
+    WHERE m.trade_account_id = ?1
+      AND lib.base_unit IN ('each', 'g') AND lib.price_p > 0 AND i.use_id IS NOT NULL
+  `).bind(tradeAccountId).all<ProduceRecipeLineRow>()
+  return (res.results ?? []).map((r) => ({ ...r }))
+}
+
 export async function loadStockLevels(db: D1Database, tradeAccountId: string): Promise<RollingStockRow[]> {
-  const [library, recipes, volumes, events, receipts, productionYields, productionConsumption] = await Promise.all([
+  const [library, recipes, volumes, events, receipts, productionYields, productionConsumption, produceRecipes] = await Promise.all([
     readTenantLibrary(db, tradeAccountId),
     readTenantRecipes(db, tradeAccountId),
     readTenantVolumes(db, tradeAccountId),
@@ -89,6 +119,7 @@ export async function loadStockLevels(db: D1Database, tradeAccountId: string): P
     readTenantReceipts(db, tradeAccountId),
     readProductionYields(db, tradeAccountId),
     readProductionConsumption(db, tradeAccountId),
+    readTenantProduceRecipes(db, tradeAccountId),
   ])
 
   const volumesByCocktail = new Map<string, VolumeRow[]>()
@@ -207,6 +238,85 @@ export async function loadStockLevels(db: D1Database, tradeAccountId: string): P
         anchor_count_at: anchor.counted_at,
         anchor_count_qty: anchor.count_qty,
         receipts_since: totalReceiptsSince,
+        expected_usage_bottles,
+        par_bottles: meta.par_bottles,
+        needs_reorder: reorder_qty > 0,
+        reorder_qty,
+      })
+    }
+  }
+
+  // --- Produce pass (additive; disjoint from the ml loop above) ---
+  interface ProduceMeta { name: string; pack_size: number; pack_format: string | null; yield_pct: number; base_unit: 'each' | 'g'; par_bottles: number | null }
+  const produceMetaByIngredient = new Map<string, ProduceMeta>()
+  const produceLinesByIngredient = new Map<string, Array<{ cocktail_id: string; recipe_qty: number; yield_qty: number }>>()
+  for (const r of produceRecipes) {
+    if (!produceMetaByIngredient.has(r.library_ingredient_id)) {
+      produceMetaByIngredient.set(r.library_ingredient_id, {
+        name: r.name, pack_size: r.pack_size, pack_format: r.pack_format,
+        yield_pct: r.yield_pct, base_unit: r.base_unit as 'each' | 'g',
+        par_bottles: r.par_bottles,
+      })
+    }
+    const arr = produceLinesByIngredient.get(r.library_ingredient_id) ?? []
+    arr.push({ cocktail_id: r.cocktail_id, recipe_qty: r.recipe_qty, yield_qty: r.yield_qty })
+    produceLinesByIngredient.set(r.library_ingredient_id, arr)
+  }
+
+  for (const [ingId, meta] of produceMetaByIngredient) {
+    const ingEvents = eventsByIngredient.get(ingId) ?? []
+    const ingReceipts = receiptsByIngredient.get(ingId) ?? []
+    const lines = produceLinesByIngredient.get(ingId) ?? []
+    const anchor = ingEvents.length > 0 ? ingEvents[ingEvents.length - 1] : null
+
+    if (anchor === null) {
+      const receiptsSince = ingReceipts.reduce((sum, r) => sum + r.qty, 0)
+      rows.push({
+        library_ingredient_id: ingId,
+        library_name: meta.name,
+        pack_size: meta.pack_size,
+        pack_format: meta.pack_format,
+        yield_pct: meta.yield_pct,
+        is_prepared: 0,
+        base_unit: meta.base_unit,
+        on_hand_bottles: null,
+        needs_opening_count: true,
+        anchor_count_at: null,
+        anchor_count_qty: null,
+        receipts_since: receiptsSince,
+        expected_usage_bottles: 0,
+        par_bottles: meta.par_bottles,
+        needs_reorder: false,
+        reorder_qty: 0,
+      })
+    } else {
+      const receiptsSince = ingReceipts
+        .filter((r) => canonTs(r.received_at) > canonTs(anchor.counted_at))
+        .reduce((sum, r) => sum + r.qty, 0)
+
+      let usageSince = 0
+      for (const line of lines) {
+        const buckets = volumesByCocktail.get(line.cocktail_id) ?? []
+        usageSince += sumBucketsInWindow(buckets, anchor.counted_at.slice(0, 10), WINDOW_END) * produceLineUnits(1, line.recipe_qty, line.yield_qty)
+      }
+
+      const on_hand = anchor.count_qty + receiptsSince - usageSince
+      const expected_usage_bottles = anchor.count_qty + receiptsSince - on_hand
+      const reorder_qty = reorderQty(on_hand, meta.par_bottles)
+
+      rows.push({
+        library_ingredient_id: ingId,
+        library_name: meta.name,
+        pack_size: meta.pack_size,
+        pack_format: meta.pack_format,
+        yield_pct: meta.yield_pct,
+        is_prepared: 0,
+        base_unit: meta.base_unit,
+        on_hand_bottles: on_hand,
+        needs_opening_count: false,
+        anchor_count_at: anchor.counted_at,
+        anchor_count_qty: anchor.count_qty,
+        receipts_since: receiptsSince,
         expected_usage_bottles,
         par_bottles: meta.par_bottles,
         needs_reorder: reorder_qty > 0,
