@@ -300,8 +300,10 @@ export async function loadStockLevels(db: D1Database, tradeAccountId: string): P
         usageSince += sumBucketsInWindow(buckets, anchor.counted_at.slice(0, 10), WINDOW_END) * produceLineUnits(1, line.recipe_qty, line.yield_qty)
       }
 
-      const on_hand = anchor.count_qty + receiptsSince - usageSince
-      const expected_usage_bottles = anchor.count_qty + receiptsSince - on_hand
+      // On-hand in individual units (each/g), matching usageSince and the
+      // rolling loader: counts + receipts are in packs, so scale by pack_size.
+      const on_hand = anchor.count_qty * meta.pack_size + receiptsSince * meta.pack_size - usageSince
+      const expected_usage_bottles = usageSince
       const reorder_qty = reorderQty(on_hand, meta.par_bottles)
 
       rows.push({

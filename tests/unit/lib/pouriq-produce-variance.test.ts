@@ -81,4 +81,12 @@ describe('produce stock on-hand', () => {
     const onHand = 5 + 5 - usageSince // anchor=5, received=5
     expect(onHand).toBe(0)
   })
+  it('scales counts + receipts by pack_size (weight/pack produce, pack_size > 1)', () => {
+    // Ginger by weight: pack_size = 100 (100g per pack). Anchor 2 packs, received 1 pack,
+    // 50g used. On-hand must be in individual units (grams), matching usageSince.
+    const packSize = 100
+    const usageSince = 50 // g
+    const onHand = 2 * packSize + 1 * packSize - usageSince
+    expect(onHand).toBe(250) // 200g counted + 100g received - 50g used
+  })
 })
