@@ -1,5 +1,28 @@
 import type { IngredientUseRow } from './types'
 
+export async function listUsesForTenant(
+  db: D1Database,
+  tradeAccountId: string,
+): Promise<Map<string, IngredientUseRow[]>> {
+  const res = await db
+    .prepare(`
+      SELECT u.id, u.ingredient_id, u.name, u.recipe_unit, u.yield_qty, u.position, u.created_at
+      FROM pouriq_ingredient_uses u
+      JOIN pouriq_ingredients_library lib ON lib.id = u.ingredient_id
+      WHERE lib.trade_account_id = ?1
+      ORDER BY u.ingredient_id, u.position ASC, u.created_at ASC
+    `)
+    .bind(tradeAccountId)
+    .all<IngredientUseRow>()
+  const map = new Map<string, IngredientUseRow[]>()
+  for (const r of res.results ?? []) {
+    const arr = map.get(r.ingredient_id) ?? []
+    arr.push(r)
+    map.set(r.ingredient_id, arr)
+  }
+  return map
+}
+
 export async function listIngredientUses(
   db: D1Database,
   ingredientId: string,

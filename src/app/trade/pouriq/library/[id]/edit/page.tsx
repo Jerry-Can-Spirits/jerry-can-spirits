@@ -11,6 +11,7 @@ import { loadImpactPayload } from '@/lib/pouriq/cost-impact-loader'
 import { listServeUnits } from '@/lib/pouriq/serve-units'
 import { listPreparedComponents } from '@/lib/pouriq/prepared'
 import { listIngredientServes } from '@/lib/pouriq/menus'
+import { listIngredientUses } from '@/lib/pouriq/ingredient-uses'
 import { usableCostPerBaseUnitP } from '@/lib/pouriq/calculations'
 import { LicenceGate } from '@/components/pouriq/LicenceGate'
 import { IngredientForm } from '@/components/pouriq/IngredientForm'
@@ -35,13 +36,14 @@ export default async function EditLibraryEntryPage({ params }: Props) {
   const entry = await getLibraryEntry(db, id, access.tradeAccountId)
   if (!entry) notFound()
 
-  const [usage, serveUnits, impactPayload, components, libraryEntries, ingredientServes] = await Promise.all([
+  const [usage, serveUnits, impactPayload, components, libraryEntries, ingredientServes, ingredientUses] = await Promise.all([
     getLibraryEntryUsage(db, id),
     listServeUnits(db, id),
     loadImpactPayload(db, id, access.tradeAccountId),
     entry.is_prepared ? listPreparedComponents(db, id) : Promise.resolve([]),
     listLibraryEntries(db, access.tradeAccountId),
     listIngredientServes(db, access.tradeAccountId, id),
+    listIngredientUses(db, id),
   ])
   if (!impactPayload) notFound()
 
@@ -70,7 +72,7 @@ export default async function EditLibraryEntryPage({ params }: Props) {
         </div>
 
         <div className="bg-white rounded-xl p-6 border border-slate-200 mb-8">
-          <IngredientForm entry={entry} usageCount={usage.length} impactPayload={impactPayload} serveUnits={serveUnits} components={components} libraryEntries={libraryEntries} />
+          <IngredientForm entry={entry} usageCount={usage.length} impactPayload={impactPayload} serveUnits={serveUnits} components={components} libraryEntries={libraryEntries} uses={ingredientUses} />
         </div>
 
         <IngredientServes
