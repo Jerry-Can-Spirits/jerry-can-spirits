@@ -34,8 +34,7 @@ export interface CategoryGpInput {
   sale_price_p: number
 }
 export interface CategoryGpRow {
-  item_type: ItemType
-  label: string
+  label: string            // category label, e.g. "Beer & Cider"
   drink_count: number      // costed drinks in the category
   gp_pct: number           // headline (blended or average), 1 dp
   basis: 'blended' | 'average'
@@ -44,8 +43,8 @@ export interface CategoryGpRow {
 export function categoryGp(rows: CategoryGpInput[], targetGpPct: number): CategoryGpRow[]
 ```
 - Keep only costed rows (`cost_complete && sale_price_p > 0`).
-- Group by `item_type`. Per group: `drink_count = group.length`; `totalMargin/totalNet` summed over rows with `units_sold > 0`; `blended = totalNet > 0 ? round1(totalMargin/totalNet*100) : null`; `average = round1(mean gp_pct)`; `gp_pct = blended ?? average`; `basis = blended !== null ? 'blended' : 'average'`; `under_target = gp_pct < targetGpPct`.
-- Return rows in the canonical category order (the `ORDER` list in `menu-sections-plan.ts`, extended to cover all `ItemType`), empty categories omitted.
+- **Group by category LABEL** (`itemTypeToSectionName(row.item_type)`), NOT the raw item_type — beer and cider both map to "Beer & Cider", so they merge into one category (as a venue expects). Per group: `drink_count = group.length`; `totalMargin/totalNet` summed over rows with `units_sold > 0`; `blended = totalNet > 0 ? round1(totalMargin/totalNet*100) : null`; `average = round1(mean gp_pct)`; `gp_pct = blended ?? average`; `basis = blended !== null ? 'blended' : 'average'`; `under_target = gp_pct < targetGpPct`.
+- Return rows in the canonical order of the `ORDER` list in `menu-sections-plan.ts` (`ORDER.indexOf(label)`; unknown labels sort last), empty categories omitted.
 - Pure, unit-tested.
 
 ## Display
