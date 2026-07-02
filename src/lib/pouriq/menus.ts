@@ -173,6 +173,7 @@ export async function listCocktailsForMenu(
         i.unit_count,
         i.recipe_unit,
         i.recipe_qty,
+        i.use_id,
         l.id AS l_id,
         l.trade_account_id AS l_trade_account_id,
         l.name AS l_name,
@@ -195,9 +196,17 @@ export async function listCocktailsForMenu(
         l.allergens AS l_allergens,
         l.dietary AS l_dietary,
         l.allergens_reviewed AS l_allergens_reviewed,
-        l.abv AS l_abv
+        l.abv AS l_abv,
+        u.id AS u_id,
+        u.ingredient_id AS u_ingredient_id,
+        u.name AS u_name,
+        u.recipe_unit AS u_recipe_unit,
+        u.yield_qty AS u_yield_qty,
+        u.position AS u_position,
+        u.created_at AS u_created_at
       FROM pouriq_ingredients i
       JOIN pouriq_ingredients_library l ON l.id = i.library_ingredient_id
+      LEFT JOIN pouriq_ingredient_uses u ON u.id = i.use_id
       WHERE i.cocktail_id IN (SELECT id FROM pouriq_cocktails WHERE menu_id = ?1)
     `)
     .bind(menuId)
@@ -209,6 +218,7 @@ export async function listCocktailsForMenu(
       unit_count: number | null
       recipe_unit: string | null
       recipe_qty: number | null
+      use_id: string | null
       l_id: string
       l_trade_account_id: string
       l_name: string
@@ -232,6 +242,13 @@ export async function listCocktailsForMenu(
       l_dietary: string
       l_allergens_reviewed: number
       l_abv: number
+      u_id: string | null
+      u_ingredient_id: string | null
+      u_name: string | null
+      u_recipe_unit: string | null
+      u_yield_qty: number | null
+      u_position: number | null
+      u_created_at: string | null
     }>()
 
   const byCocktail = new Map<string, IngredientWithLibrary[]>()
@@ -244,6 +261,16 @@ export async function listCocktailsForMenu(
       unit_count: row.unit_count,
       recipe_unit: row.recipe_unit,
       recipe_qty: row.recipe_qty,
+      use_id: row.use_id,
+      use: row.u_id != null ? {
+        id: row.u_id,
+        ingredient_id: row.u_ingredient_id!,
+        name: row.u_name!,
+        recipe_unit: row.u_recipe_unit! as 'ml' | 'count' | 'g',
+        yield_qty: row.u_yield_qty!,
+        position: row.u_position!,
+        created_at: row.u_created_at!,
+      } : null,
       library: {
         id: row.l_id,
         trade_account_id: row.l_trade_account_id,
@@ -298,6 +325,7 @@ export async function getCocktail(
     .prepare(`
       SELECT
         i.id AS i_id, i.cocktail_id, i.library_ingredient_id, i.pour_ml, i.unit_count, i.recipe_unit, i.recipe_qty,
+        i.use_id,
         l.id AS l_id, l.trade_account_id AS l_trade_account_id, l.name AS l_name,
         l.ingredient_type AS l_ingredient_type,
         l.base_unit AS l_base_unit, l.pack_size AS l_pack_size, l.price_p AS l_price_p,
@@ -310,9 +338,13 @@ export async function getCocktail(
         l.notes AS l_notes, l.cost_confidence AS l_cost_confidence,
         l.created_at AS l_created_at, l.updated_at AS l_updated_at,
         l.allergens AS l_allergens, l.dietary AS l_dietary, l.allergens_reviewed AS l_allergens_reviewed,
-        l.abv AS l_abv
+        l.abv AS l_abv,
+        u.id AS u_id, u.ingredient_id AS u_ingredient_id, u.name AS u_name,
+        u.recipe_unit AS u_recipe_unit, u.yield_qty AS u_yield_qty,
+        u.position AS u_position, u.created_at AS u_created_at
       FROM pouriq_ingredients i
       JOIN pouriq_ingredients_library l ON l.id = i.library_ingredient_id
+      LEFT JOIN pouriq_ingredient_uses u ON u.id = i.use_id
       WHERE i.cocktail_id = ?1
     `)
     .bind(cocktailId)
@@ -324,6 +356,7 @@ export async function getCocktail(
       unit_count: number | null
       recipe_unit: string | null
       recipe_qty: number | null
+      use_id: string | null
       l_id: string
       l_trade_account_id: string
       l_name: string
@@ -347,6 +380,13 @@ export async function getCocktail(
       l_dietary: string
       l_allergens_reviewed: number
       l_abv: number
+      u_id: string | null
+      u_ingredient_id: string | null
+      u_name: string | null
+      u_recipe_unit: string | null
+      u_yield_qty: number | null
+      u_position: number | null
+      u_created_at: string | null
     }>()
 
   const ingredients: IngredientWithLibrary[] = (ingredientsResult.results ?? []).map((row) => ({
@@ -357,6 +397,16 @@ export async function getCocktail(
     unit_count: row.unit_count,
     recipe_unit: row.recipe_unit,
     recipe_qty: row.recipe_qty,
+    use_id: row.use_id,
+    use: row.u_id != null ? {
+      id: row.u_id,
+      ingredient_id: row.u_ingredient_id!,
+      name: row.u_name!,
+      recipe_unit: row.u_recipe_unit! as 'ml' | 'count' | 'g',
+      yield_qty: row.u_yield_qty!,
+      position: row.u_position!,
+      created_at: row.u_created_at!,
+    } : null,
     library: {
       id: row.l_id,
       trade_account_id: row.l_trade_account_id,
@@ -435,6 +485,7 @@ export async function replaceIngredients(
     unit_count: number | null
     recipe_unit: string | null
     recipe_qty: number | null
+    use_id: string | null
   }>,
 ): Promise<void> {
   const statements: D1PreparedStatement[] = [
@@ -445,10 +496,10 @@ export async function replaceIngredients(
       db
         .prepare(`
           INSERT INTO pouriq_ingredients
-            (cocktail_id, library_ingredient_id, pour_ml, unit_count, recipe_unit, recipe_qty)
-          VALUES (?1, ?2, ?3, ?4, ?5, ?6)
+            (cocktail_id, library_ingredient_id, pour_ml, unit_count, recipe_unit, recipe_qty, use_id)
+          VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7)
         `)
-        .bind(cocktailId, ing.library_ingredient_id, ing.pour_ml, ing.unit_count, ing.recipe_unit, ing.recipe_qty),
+        .bind(cocktailId, ing.library_ingredient_id, ing.pour_ml, ing.unit_count, ing.recipe_unit, ing.recipe_qty, ing.use_id),
     )
   }
   await db.batch(statements)

@@ -2,17 +2,19 @@
 
 import { useMemo, useRef, useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
-import { ALL_INGREDIENT_TYPES, type IngredientLibraryRow, type IngredientType, type ServeUnitRow } from '@/lib/pouriq/types'
-import { saveLibraryEntryAction, deleteLibraryEntryAction, saveServeUnitAction, deleteServeUnitAction, addPreparedComponentAction, removePreparedComponentAction, type LibraryEntryInput } from '@/lib/pouriq/server-actions'
+import { ALL_INGREDIENT_TYPES, type IngredientLibraryRow, type IngredientType, type ServeUnitRow, type IngredientUseRow } from '@/lib/pouriq/types'
+import { saveLibraryEntryAction, deleteLibraryEntryAction, saveServeUnitAction, deleteServeUnitAction, addPreparedComponentAction, removePreparedComponentAction, saveIngredientUsesAction, type LibraryEntryInput } from '@/lib/pouriq/server-actions'
 import { parseTags, ALLERGENS, DIETARY, type AllergenKey, type DietaryKey } from '@/lib/pouriq/allergens'
 import { isAlcoholicType } from '@/lib/pouriq/abv'
 import { AllergenPicker } from '@/components/pouriq/AllergenPicker'
+import { IngredientUsesEditor } from '@/components/pouriq/IngredientUsesEditor'
 import { BarcodeScanner } from '@/components/pouriq/BarcodeScanner'
 import { RipplePreview } from '@/components/pouriq/RipplePreview'
 import { RippleConfirmModal } from '@/components/pouriq/RippleConfirmModal'
 import { IngredientPicker } from '@/components/pouriq/IngredientPicker'
 import { ServeUnitPicker } from '@/components/pouriq/ServeUnitPicker'
 import { costPerBaseUnitP, usableCostPerBaseUnitP, netPriceP } from '@/lib/pouriq/calculations'
+import { PRODUCE_LIBRARY, type ProduceTemplate } from '@/lib/pouriq/produce-library'
 import { BOTTLE_SIZES_ML, WEIGHT_SIZES_G, STANDARD_SERVE_UNITS, serveUnitsFor, recipeBaseAmount } from '@/lib/pouriq/measures'
 import {
   COST_UPDATE_TOAST_KEY,
@@ -62,6 +64,7 @@ interface Props {
   serveUnits?: ServeUnitRow[]
   components?: PreparedComponentWithCost[]
   libraryEntries?: IngredientLibraryRow[]
+  uses?: IngredientUseRow[]
 }
 
 // Derive initial base_unit from a stored row.
@@ -70,7 +73,7 @@ function rowToBaseUnit(entry: IngredientLibraryRow | null): BaseUnit {
   return entry.base_unit
 }
 
-export function IngredientForm({ entry, usageCount = 0, impactPayload, serveUnits = [], components = [], libraryEntries = [] }: Props) {
+export function IngredientForm({ entry, usageCount = 0, impactPayload, serveUnits = [], components = [], libraryEntries = [], uses = [] }: Props) {
   const router = useRouter()
 
   // --- Core identity ---
@@ -139,6 +142,9 @@ export function IngredientForm({ entry, usageCount = 0, impactPayload, serveUnit
   const [allergensReviewed, setAllergensReviewed] = useState(
     entry ? entry.allergens_reviewed === 1 : false,
   )
+
+  // --- Produce library (new ingredient path) ---
+  const [pendingTemplate, setPendingTemplate] = useState<ProduceTemplate | null>(null)
 
   // --- ABV ---
   const [abv_str, setAbvStr] = useState(String(entry?.abv ?? 0))
@@ -378,7 +384,10 @@ export function IngredientForm({ entry, usageCount = 0, impactPayload, serveUnit
   async function commit(values: LibraryEntryInput, toastData: CostUpdateToastPayload | null) {
     setSubmitting(true)
     try {
-      await saveLibraryEntryAction(entry?.id ?? null, values)
+      const { entryId: savedId } = await saveLibraryEntryAction(entry?.id ?? null, values)
+      if (pendingTemplate !== null && entry === null) {
+        await saveIngredientUsesAction(savedId, pendingTemplate.uses)
+      }
       if (toastData) {
         sessionStorage.setItem(COST_UPDATE_TOAST_KEY, JSON.stringify(toastData))
       }
@@ -492,6 +501,37 @@ export function IngredientForm({ entry, usageCount = 0, impactPayload, serveUnit
   return (
     <>
       <form onSubmit={handleSubmit} className="space-y-6">
+
+        {/* Produce library quick-start (new ingredients only) */}
+        {entry === null && (
+          <div>
+            <p className={LABEL}>From produce library</p>
+            <div className="flex flex-wrap gap-2">
+              {PRODUCE_LIBRARY.map((t) => (
+                <button
+                  key={t.name}
+                  type="button"
+                  onClick={() => {
+                    setName(t.name)
+                    setBaseUnit(t.base_unit)
+                    setPurchaseMode(t.base_unit)
+                    if (t.base_unit === 'each') setPackSizeStr('1')
+                    setYieldPctStr('100')
+                    setPendingTemplate(t)
+                  }}
+                  className={`${CHIP} ${pendingTemplate?.name === t.name ? CHIP_ACTIVE : CHIP_IDLE}`}
+                >
+                  {t.name}
+                </button>
+              ))}
+            </div>
+            {pendingTemplate !== null && (
+              <p className={HELPER}>
+                {pendingTemplate.uses.length} {pendingTemplate.uses.length === 1 ? 'use' : 'uses'} will be added: {pendingTemplate.uses.map((u) => u.name).join(', ')}
+              </p>
+            )}
+          </div>
+        )}
 
         {/* Name */}
         <div>
@@ -1143,6 +1183,11 @@ export function IngredientForm({ entry, usageCount = 0, impactPayload, serveUnit
             )}
           </div>
         </div>}
+
+        {/* Uses (each / g ingredients, editing only) */}
+        {entry !== null && (base_unit === 'each' || base_unit === 'g') && purchaseMode !== 'prepared' && (
+          <IngredientUsesEditor entry={entry} uses={uses} />
+        )}
 
         {/* Barcode */}
         <div>

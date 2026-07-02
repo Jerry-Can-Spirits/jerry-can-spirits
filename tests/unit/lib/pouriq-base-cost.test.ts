@@ -20,7 +20,7 @@ function mkIng(
     barcode: null, notes: null, cost_confidence: 'set', created_at: '', updated_at: '',
     allergens: '[]', dietary: '[]', allergens_reviewed: 0, abv: 0,
   }
-  return { id: 'ing', cocktail_id: 'c', library_ingredient_id: 'lib', pour_ml, unit_count, recipe_unit: null, recipe_qty: null, library }
+  return { id: 'ing', cocktail_id: 'c', library_ingredient_id: 'lib', pour_ml, unit_count, recipe_unit: null, recipe_qty: null, use_id: null, use: null, library }
 }
 
 describe('costPerBaseUnitP', () => {

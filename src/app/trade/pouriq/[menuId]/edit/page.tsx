@@ -5,9 +5,10 @@ import { checkPourIqAccess } from '@/lib/pouriq/access'
 import { getMenu, getCocktail } from '@/lib/pouriq/menus'
 import { listLibraryEntries } from '@/lib/pouriq/ingredient-library'
 import { listServeUnitsForTenant } from '@/lib/pouriq/serve-units'
+import { listUsesForTenant } from '@/lib/pouriq/ingredient-uses'
 import { LicenceGate } from '@/components/pouriq/LicenceGate'
 import { CocktailForm } from '@/components/pouriq/CocktailForm'
-import type { ServeUnitRow } from '@/lib/pouriq/types'
+import type { ServeUnitRow, IngredientUseRow } from '@/lib/pouriq/types'
 
 export const dynamic = 'force-dynamic'
 
@@ -27,19 +28,22 @@ export default async function EditMenuPage({ params, searchParams }: Props) {
   const { env } = await getCloudflareContext()
   const db = env.DB as D1Database
 
-  const [menu, cocktail, libraryEntries, serveUnitsMap] = await Promise.all([
+  const [menu, cocktail, libraryEntries, serveUnitsMap, ingredientUsesMap] = await Promise.all([
     getMenu(db, menuId, access.tradeAccountId),
     cocktailId ? getCocktail(db, cocktailId, access.tradeAccountId) : Promise.resolve(null),
     listLibraryEntries(db, access.tradeAccountId),
     listServeUnitsForTenant(db, access.tradeAccountId),
+    listUsesForTenant(db, access.tradeAccountId),
   ])
 
   if (!menu) notFound()
   if (cocktailId && (!cocktail || cocktail.menu_id !== menuId)) notFound()
 
-  // Serialise Map → plain object for client component prop boundary.
+  // Serialise Maps → plain objects for client component prop boundary.
   const serveUnits: Record<string, ServeUnitRow[]> = {}
   for (const [id, rows] of serveUnitsMap) serveUnits[id] = rows
+  const ingredientUses: Record<string, IngredientUseRow[]> = {}
+  for (const [id, rows] of ingredientUsesMap) ingredientUses[id] = rows
 
   return (
     <main className="min-h-screen">
@@ -49,7 +53,7 @@ export default async function EditMenuPage({ params, searchParams }: Props) {
           {cocktail ? `Edit ${cocktail.name}` : 'Add a drink'}
         </h1>
         <div className="bg-white rounded-xl p-6 border border-slate-200">
-          <CocktailForm menuId={menuId} cocktail={cocktail} libraryEntries={libraryEntries} serveUnits={serveUnits} />
+          <CocktailForm menuId={menuId} cocktail={cocktail} libraryEntries={libraryEntries} serveUnits={serveUnits} ingredientUses={ingredientUses} />
         </div>
       </div>
     </main>

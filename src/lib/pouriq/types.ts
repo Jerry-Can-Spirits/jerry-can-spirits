@@ -130,6 +130,16 @@ export interface IngredientLibraryRow {
   abv: number
 }
 
+export interface IngredientUseRow {
+  id: string
+  ingredient_id: string
+  name: string
+  recipe_unit: 'ml' | 'count' | 'g'
+  yield_qty: number
+  position: number
+  created_at: string
+}
+
 export interface PreparedComponentRow {
   id: string
   prepared_ingredient_id: string
@@ -162,6 +172,8 @@ export interface IngredientRow {
 // rendering layers actually want to work with.
 export interface IngredientWithLibrary extends IngredientRow {
   library: IngredientLibraryRow
+  use_id: string | null
+  use: IngredientUseRow | null
 }
 
 export interface CocktailWithIngredients extends CocktailRow {
