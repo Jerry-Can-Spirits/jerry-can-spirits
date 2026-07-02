@@ -26,6 +26,8 @@ import { MenuMatrix } from '@/components/pouriq/MenuMatrix'
 import { buildMoversReport } from '@/lib/pouriq/movers'
 import { MoversReport } from '@/components/pouriq/MoversReport'
 import { menuCostConfidence } from '@/lib/pouriq/cost-confidence'
+import { categoryGp } from '@/lib/pouriq/category-gp'
+import { CategoryGpTable } from '@/components/pouriq/CategoryGpTable'
 
 export const dynamic = 'force-dynamic'
 
@@ -79,6 +81,20 @@ export default async function MenuDetailPage({ params }: Props) {
 
   const volumeUnits = new Map<string, number>()
   for (const v of volumes) volumeUnits.set(v.cocktail_id, v.units_sold)
+
+  const cocktailById = new Map(cocktails.map((c) => [c.id, c]))
+  const categoryRows = categoryGp(
+    metrics.cocktail_metrics.map((m) => ({
+      item_type: cocktailById.get(m.cocktail_id)!.item_type,
+      gp_pct: m.gp_pct,
+      margin_p: m.margin_p,
+      net_sale_p: m.net_sale_p,
+      units_sold: volumeUnits.get(m.cocktail_id) ?? 0,
+      cost_complete: m.cost_complete,
+      sale_price_p: m.sale_price_p,
+    })),
+    menu.target_gp_pct,
+  )
 
   const includedDrinks = metrics.cocktail_metrics
     .filter((m) => m.cost_complete && m.sale_price_p > 0)
@@ -224,6 +240,13 @@ export default async function MenuDetailPage({ params }: Props) {
                 targetGpPct={menu.target_gp_pct}
                 incompleteCount={balanceIncompleteCount}
                 hasSalesData={balance.totalUnits > 0}
+              />
+            </section>
+            <section className="no-print">
+              <CategoryGpTable
+                rows={categoryRows}
+                targetGpPct={menu.target_gp_pct}
+                excludedCount={metrics.incomplete_cost_count}
               />
             </section>
             {/* Print-only sales volume summary. The interactive editor is
