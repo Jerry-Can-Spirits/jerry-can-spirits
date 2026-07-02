@@ -1,8 +1,9 @@
 import 'server-only'
-import { costPerMlP } from './calculations'
+import { costPerMlP, usableCostPerBaseUnitP } from './calculations'
 import {
   pairLatestCounts, sumBucketsInWindow, persistentLossFlag,
   calcVariance, calcVarianceCostP, classifyVariance, applyYield, sumAmountsInWindow, countInWindow,
+  produceLineUnits,
   type VarianceSeverity, type CountEvent,
 } from './variance'
 import { readProductionYields, readProductionConsumption } from './prepared'
@@ -78,6 +79,48 @@ async function readTenantRecipes(db: D1Database, tradeAccountId: string): Promis
   return (res.results ?? []).map((r) => ({ ...r }))
 }
 
+interface ProduceRecipeLineDbRow {
+  cocktail_id: string
+  library_ingredient_id: string
+  recipe_qty: number
+  yield_qty: number
+  base_unit: string
+  name: string
+  pack_size: number
+  price_p: number
+  purchase_qty: number
+  yield_pct: number
+}
+interface ProduceRecipeLineRow {
+  cocktail_id: string
+  library_ingredient_id: string
+  recipe_qty: number
+  yield_qty: number
+  base_unit: string
+  name: string
+  pack_size: number
+  price_p: number
+  purchase_qty: number
+  yield_pct: number
+}
+
+async function readTenantProduceRecipes(db: D1Database, tradeAccountId: string): Promise<ProduceRecipeLineRow[]> {
+  const res = await db.prepare(`
+    SELECT c.id AS cocktail_id, i.library_ingredient_id AS library_ingredient_id,
+           i.recipe_qty AS recipe_qty, u.yield_qty AS yield_qty,
+           lib.base_unit AS base_unit, lib.name AS name, lib.pack_size AS pack_size,
+           lib.price_p AS price_p, lib.purchase_qty AS purchase_qty, lib.yield_pct AS yield_pct
+    FROM pouriq_cocktails c
+    JOIN pouriq_menus m ON m.id = c.menu_id
+    JOIN pouriq_ingredients i ON i.cocktail_id = c.id
+    JOIN pouriq_ingredients_library lib ON lib.id = i.library_ingredient_id
+    JOIN pouriq_ingredient_uses u ON u.id = i.use_id
+    WHERE m.trade_account_id = ?1
+      AND lib.base_unit IN ('each', 'g') AND lib.price_p > 0 AND i.use_id IS NOT NULL
+  `).bind(tradeAccountId).all<ProduceRecipeLineDbRow>()
+  return (res.results ?? []).map((r) => ({ ...r }))
+}
+
 async function readTenantVolumes(db: D1Database, tradeAccountId: string): Promise<VolumeRow[]> {
   const res = await db.prepare(`
     SELECT v.cocktail_id AS cocktail_id, v.period_start AS period_start, v.period_end AS period_end, v.units_sold AS units_sold
@@ -122,8 +165,9 @@ async function readUnmatchedInWindow(db: D1Database, tradeAccountId: string, win
 const TREND_LIMIT = 6
 
 export async function loadRollingVariance(db: D1Database, tradeAccountId: string): Promise<RollingVarianceRow[]> {
-  const [recipes, volumes, events, receipts, productionYields, productionConsumption] = await Promise.all([
+  const [recipes, produceRecipes, volumes, events, receipts, productionYields, productionConsumption] = await Promise.all([
     readTenantRecipes(db, tradeAccountId),
+    readTenantProduceRecipes(db, tradeAccountId),
     readTenantVolumes(db, tradeAccountId),
     readTenantEvents(db, tradeAccountId),
     readTenantReceipts(db, tradeAccountId),
@@ -248,6 +292,111 @@ export async function loadRollingVariance(db: D1Database, tradeAccountId: string
       price_p: meta.price_p,
       purchase_qty: meta.purchase_qty,
       base_unit: 'ml',
+      latest_count_at: ingEvents.length ? sortedEvents[sortedEvents.length - 1].counted_at : null,
+      latest_count_qty: ingEvents.length ? sortedEvents[sortedEvents.length - 1].count_qty : null,
+      previous_count_at: pair?.previous.counted_at ?? null,
+      theoretical_used_ml: theoretical,
+      actual_used_ml: actual,
+      variance_ml, variance_pct, variance_cost_p, severity,
+      impact_p,
+      unmatched_in_window: unmatched,
+      deliveries_in_window: deliveries,
+      batches_in_window: batches,
+      latest_reason: pair?.latest.reason ?? null,
+      persistent_loss: persistent,
+      trend: recentTrend,
+    })
+  }
+
+  // --- Produce pass (additive; disjoint from the ml loop above) ---
+  interface ProduceMeta { name: string; pack_size: number; price_p: number; purchase_qty: number; yield_pct: number; base_unit: 'each' | 'g' }
+  const produceMetaByIngredient = new Map<string, ProduceMeta>()
+  const produceLinesByIngredient = new Map<string, Array<{ cocktail_id: string; recipe_qty: number; yield_qty: number }>>()
+  for (const r of produceRecipes) {
+    if (!produceMetaByIngredient.has(r.library_ingredient_id)) {
+      produceMetaByIngredient.set(r.library_ingredient_id, {
+        name: r.name, pack_size: r.pack_size, price_p: r.price_p,
+        purchase_qty: r.purchase_qty, yield_pct: r.yield_pct,
+        base_unit: r.base_unit as 'each' | 'g',
+      })
+    }
+    const arr = produceLinesByIngredient.get(r.library_ingredient_id) ?? []
+    arr.push({ cocktail_id: r.cocktail_id, recipe_qty: r.recipe_qty, yield_qty: r.yield_qty })
+    produceLinesByIngredient.set(r.library_ingredient_id, arr)
+  }
+
+  const produceIngredientIds = new Set<string>(produceLinesByIngredient.keys())
+
+  for (const ingId of produceIngredientIds) {
+    const meta = produceMetaByIngredient.get(ingId)
+    const ingEvents = eventsByIngredient.get(ingId) ?? []
+    if (!meta) continue
+
+    const lines = produceLinesByIngredient.get(ingId) ?? []
+    const ingReceipts = receiptsByIngredient.get(ingId) ?? []
+    const yieldRows = yieldByPrepared.get(ingId) ?? []
+    const consumeRows = consumptionByComponent.get(ingId) ?? []
+    const pair = pairLatestCounts(ingEvents.map((e): CountEvent => ({ counted_at: e.counted_at, count_qty: e.count_qty, reason: e.reason })))
+
+    let theoretical = 0
+    let actual: number | null = null
+    let unmatched = 0
+    let deliveries = 0
+    let batches = 0
+    if (pair) {
+      const ws = pair.previous.counted_at
+      const we = pair.latest.counted_at
+      for (const line of lines) {
+        const buckets = volumesByCocktail.get(line.cocktail_id) ?? []
+        theoretical += sumBucketsInWindow(buckets, ws.slice(0, 10), we.slice(0, 10)) * produceLineUnits(1, line.recipe_qty, line.yield_qty)
+      }
+      // No applyYield: the per-use yield (yield_qty) is the only conversion; produce yield_pct is 100
+      const receiptsUnits = sumAmountsInWindow(ingReceipts, ws, we) * meta.pack_size
+      const prodYieldUnits = sumAmountsInWindow(yieldRows, ws, we)
+      const prodConsumeUnits = sumAmountsInWindow(consumeRows, ws, we)
+      actual = (pair.previous.count_qty - pair.latest.count_qty) * meta.pack_size + receiptsUnits + prodYieldUnits - prodConsumeUnits
+      deliveries = countInWindow(ingReceipts, ws, we)
+      batches = countInWindow(yieldRows, ws, we) + countInWindow(consumeRows, ws, we)
+      unmatched = await readUnmatchedInWindow(db, tradeAccountId, ws, we)
+    }
+
+    const { variance_ml, variance_pct } = calcVariance(actual, theoretical)
+    const usableCostP = usableCostPerBaseUnitP(meta.price_p, meta.purchase_qty, meta.pack_size, meta.yield_pct)
+    const variance_cost_p = variance_ml !== null ? Math.round(variance_ml * usableCostP) : null
+    const severity = classifyVariance(variance_ml, variance_pct, meta.pack_size)
+    const impact_p = Math.round(theoretical * usableCostP)
+
+    const sortedEvents = [...ingEvents].sort((a, b) => a.counted_at.localeCompare(b.counted_at))
+    const trend: RollingTrendPoint[] = []
+    for (let k = 1; k < sortedEvents.length; k++) {
+      const prev = sortedEvents[k - 1], cur = sortedEvents[k]
+      let trendTheo = 0
+      for (const line of lines) {
+        const buckets = volumesByCocktail.get(line.cocktail_id) ?? []
+        trendTheo += sumBucketsInWindow(buckets, prev.counted_at.slice(0, 10), cur.counted_at.slice(0, 10)) * produceLineUnits(1, line.recipe_qty, line.yield_qty)
+      }
+      const wsT = prev.counted_at, weT = cur.counted_at
+      const receiptsT = sumAmountsInWindow(ingReceipts, wsT, weT) * meta.pack_size
+      const prodYieldT = sumAmountsInWindow(yieldRows, wsT, weT)
+      const prodConsumeT = sumAmountsInWindow(consumeRows, wsT, weT)
+      const act = (prev.count_qty - cur.count_qty) * meta.pack_size + receiptsT + prodYieldT - prodConsumeT
+      const v = calcVariance(act, trendTheo)
+      trend.push({
+        counted_at: cur.counted_at,
+        variance_cost_p: v.variance_ml !== null ? Math.round(v.variance_ml * usableCostP) : null,
+        reason: cur.reason,
+      })
+    }
+    const recentTrend = trend.slice(-TREND_LIMIT)
+    const persistent = persistentLossFlag(recentTrend.map((t) => t.variance_cost_p))
+
+    rows.push({
+      library_ingredient_id: ingId,
+      library_name: meta.name,
+      pack_size: meta.pack_size,
+      price_p: meta.price_p,
+      purchase_qty: meta.purchase_qty,
+      base_unit: meta.base_unit,
       latest_count_at: ingEvents.length ? sortedEvents[sortedEvents.length - 1].counted_at : null,
       latest_count_qty: ingEvents.length ? sortedEvents[sortedEvents.length - 1].count_qty : null,
       previous_count_at: pair?.previous.counted_at ?? null,
