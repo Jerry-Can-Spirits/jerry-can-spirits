@@ -92,13 +92,17 @@ export function useLineCostP(costPerPurchaseUnitP: number, yieldQty: number, amo
 export function ingredientCostComplete(i: import('./types').IngredientWithLibrary): boolean {
   const lib = i.library
   if (lib.price_p <= 0 || lib.pack_size <= 0) return false
+  if (i.use) return i.recipe_qty != null
   return lib.base_unit === 'each' ? i.unit_count != null : i.pour_ml != null
 }
 
 export function ingredientCostPence(i: import('./types').IngredientWithLibrary): number {
   const lib = i.library
+  const perPurchaseUnitP = usableCostPerBaseUnitP(lib.price_p, lib.purchase_qty, lib.pack_size, lib.yield_pct)
+  // eslint-disable-next-line react-hooks/rules-of-hooks -- useLineCostP is a pure helper, not a React hook
+  if (i.use) return useLineCostP(perPurchaseUnitP, i.use.yield_qty, i.recipe_qty ?? 0)
   const amount = lib.base_unit === 'each' ? (i.unit_count ?? 0) : (i.pour_ml ?? 0)
-  return Math.round(usableCostPerBaseUnitP(lib.price_p, lib.purchase_qty, lib.pack_size, lib.yield_pct) * amount)
+  return Math.round(perPurchaseUnitP * amount)
 }
 
 export function calculateCocktailMetrics(
