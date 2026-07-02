@@ -82,7 +82,7 @@ export function isPromoActiveOn(
 
 // Cost for a single recipe line that references a produce use (e.g. 25ml lemon juice
 // at 30p/lemon with a 30ml yield = 25p). Returns 0 when yield is zero or negative.
-export function useLineCostP(costPerPurchaseUnitP: number, yieldQty: number, amount: number): number {
+export function lineCostFromUseP(costPerPurchaseUnitP: number, yieldQty: number, amount: number): number {
   if (yieldQty <= 0) return 0
   return Math.round((costPerPurchaseUnitP / yieldQty) * amount)
 }
@@ -99,8 +99,7 @@ export function ingredientCostComplete(i: import('./types').IngredientWithLibrar
 export function ingredientCostPence(i: import('./types').IngredientWithLibrary): number {
   const lib = i.library
   const perPurchaseUnitP = usableCostPerBaseUnitP(lib.price_p, lib.purchase_qty, lib.pack_size, lib.yield_pct)
-  // eslint-disable-next-line react-hooks/rules-of-hooks -- useLineCostP is a pure helper, not a React hook
-  if (i.use) return useLineCostP(perPurchaseUnitP, i.use.yield_qty, i.recipe_qty ?? 0)
+  if (i.use) return lineCostFromUseP(perPurchaseUnitP, i.use.yield_qty, i.recipe_qty ?? 0)
   const amount = lib.base_unit === 'each' ? (i.unit_count ?? 0) : (i.pour_ml ?? 0)
   return Math.round(perPurchaseUnitP * amount)
 }

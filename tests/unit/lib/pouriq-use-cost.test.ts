@@ -1,13 +1,13 @@
 import { describe, it, expect } from 'vitest'
-import { useLineCostP, ingredientCostPence, ingredientCostComplete } from '@/lib/pouriq/calculations'
+import { lineCostFromUseP, ingredientCostPence, ingredientCostComplete } from '@/lib/pouriq/calculations'
 import type { IngredientWithLibrary, IngredientLibraryRow, IngredientUseRow } from '@/lib/pouriq/types'
 
 it('costs a use from its yield', () => {
-  expect(useLineCostP(30, 30, 25)).toBe(25)   // 30p/lemon, 30ml/lemon, 25ml -> 25p
-  expect(useLineCostP(30, 8, 1)).toBe(4)       // 30p/lemon, 8 wheels, 1 wheel -> 3.75 -> 4p
+  expect(lineCostFromUseP(30, 30, 25)).toBe(25)   // 30p/lemon, 30ml/lemon, 25ml -> 25p
+  expect(lineCostFromUseP(30, 8, 1)).toBe(4)       // 30p/lemon, 8 wheels, 1 wheel -> 3.75 -> 4p
 })
 it('guards a zero/negative yield', () => {
-  expect(useLineCostP(30, 0, 25)).toBe(0)
+  expect(lineCostFromUseP(30, 0, 25)).toBe(0)
 })
 
 // Factory helpers for use-aware cost tests
