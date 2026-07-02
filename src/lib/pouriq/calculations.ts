@@ -80,6 +80,13 @@ export function isPromoActiveOn(
   return days.includes(date.getUTCDay())
 }
 
+// Cost for a single recipe line that references a produce use (e.g. 25ml lemon juice
+// at 30p/lemon with a 30ml yield = 25p). Returns 0 when yield is zero or negative.
+export function useLineCostP(costPerPurchaseUnitP: number, yieldQty: number, amount: number): number {
+  if (yieldQty <= 0) return 0
+  return Math.round((costPerPurchaseUnitP / yieldQty) * amount)
+}
+
 // True when an ingredient's cost can actually be computed — mirrors the logic
 // of ingredientCostPence. False means the cost falls back to £0.
 export function ingredientCostComplete(i: import('./types').IngredientWithLibrary): boolean {

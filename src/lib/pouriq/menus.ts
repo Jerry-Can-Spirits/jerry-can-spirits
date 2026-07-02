@@ -244,6 +244,8 @@ export async function listCocktailsForMenu(
       unit_count: row.unit_count,
       recipe_unit: row.recipe_unit,
       recipe_qty: row.recipe_qty,
+      use_id: null,
+      use: null,
       library: {
         id: row.l_id,
         trade_account_id: row.l_trade_account_id,
@@ -357,6 +359,8 @@ export async function getCocktail(
     unit_count: row.unit_count,
     recipe_unit: row.recipe_unit,
     recipe_qty: row.recipe_qty,
+    use_id: null,
+    use: null,
     library: {
       id: row.l_id,
       trade_account_id: row.l_trade_account_id,

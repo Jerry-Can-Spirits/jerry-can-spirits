@@ -33,7 +33,7 @@ function ingredient(opts: IngOpts): IngredientWithLibrary {
   return {
     id: 'ing', cocktail_id: 'c', library_ingredient_id: 'lib',
     pour_ml: opts.pour_ml ?? null, unit_count: opts.unit_count ?? null,
-    recipe_unit: null, recipe_qty: null, library,
+    recipe_unit: null, recipe_qty: null, use_id: null, use: null, library,
   }
 }
 
