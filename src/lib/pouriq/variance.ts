@@ -239,6 +239,18 @@ export function buildVarianceLedger(input: {
   }
 }
 
+/**
+ * Theoretical purchase units of a produce ingredient consumed across
+ * a period. Each drink contributes recipeQty of the raw ingredient,
+ * converted to purchase units via the use yield (yieldQty per
+ * purchase unit). Guards a zero/negative yield (e.g. unset) by
+ * returning 0 so callers get a safe no-op rather than Infinity.
+ */
+export function produceLineUnits(unitsSold: number, recipeQty: number, yieldQty: number): number {
+  if (yieldQty <= 0) return 0
+  return unitsSold * (recipeQty / yieldQty)
+}
+
 export interface ReasonSummaryRow { reason: string; loss_p: number; share_pct: number }
 export interface VarianceReasonSummary { rows: ReasonSummaryRow[]; total_loss_p: number }
 

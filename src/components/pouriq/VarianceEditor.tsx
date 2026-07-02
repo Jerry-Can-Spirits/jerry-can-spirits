@@ -19,6 +19,7 @@ interface RollingVarianceRow {
   pack_size: number
   price_p: number
   purchase_qty: number
+  base_unit: 'ml' | 'each' | 'g'
   latest_count_at: string | null
   latest_count_qty: number | null
   previous_count_at: string | null
@@ -158,6 +159,8 @@ export function VarianceEditor() {
       <div className="space-y-3">
         {rows.map((row) => {
           const id = row.library_ingredient_id
+          const unitLabel = row.base_unit
+          const countLabel = row.base_unit === 'ml' ? 'bottles' : row.base_unit
           const countVal = counts[id] ?? ''
           const countNum = parseFloat(countVal)
           const saveEnabled = !pending && Number.isFinite(countNum) && countNum >= 0
@@ -174,7 +177,7 @@ export function VarianceEditor() {
               <div className="flex flex-wrap items-start justify-between gap-2 mb-3">
                 <div>
                   <span className="text-slate-900 font-medium">{row.library_name}</span>
-                  <span className="text-slate-500 text-sm ml-1">({row.pack_size}ml)</span>
+                  <span className="text-slate-500 text-sm ml-1">({row.pack_size}{row.base_unit === 'ml' ? unitLabel : ` ${unitLabel}`})</span>
                   {row.persistent_loss && (
                     <span className="ml-2 inline-block px-1.5 py-0.5 rounded-sm bg-rose-50 text-rose-600 border border-rose-200 text-[10px] uppercase tracking-widest">
                       persistent loss
@@ -198,14 +201,14 @@ export function VarianceEditor() {
                   <p>
                     Last count: {formatShortDate(row.latest_count_at)}
                     {row.latest_count_qty !== null && (
-                      <span className="text-slate-700 ml-1">· {row.latest_count_qty} bottles</span>
+                      <span className="text-slate-700 ml-1">· {row.latest_count_qty} {countLabel}</span>
                     )}
                   </p>
                 ) : (
                   <p>Never counted</p>
                 )}
                 {row.previous_count_at && (
-                  <p>Expected used since last count: {Math.round(row.theoretical_used_ml)} ml</p>
+                  <p>Expected used since last count: {Math.round(row.theoretical_used_ml)} {unitLabel}</p>
                 )}
               </div>
 
@@ -215,7 +218,7 @@ export function VarianceEditor() {
                     <span>Within tolerance</span>
                   ) : (
                     <>
-                      {row.variance_ml !== null && <span>{Math.round(row.variance_ml)} ml</span>}
+                      {row.variance_ml !== null && <span>{Math.round(row.variance_ml)} {unitLabel}</span>}
                       {row.variance_pct !== null && (
                         <span className="ml-2">({row.variance_pct.toFixed(1)}%)</span>
                       )}
@@ -246,12 +249,12 @@ export function VarianceEditor() {
               <div className="flex flex-wrap items-center gap-3">
                 <input
                   type="number"
-                  step="0.1"
+                  step={row.base_unit === 'each' ? 1 : 0.1}
                   min={0}
                   value={countVal}
                   onChange={(e) => setCounts((prev) => ({ ...prev, [id]: e.target.value }))}
                   className={inputClass}
-                  placeholder="bottles"
+                  placeholder={countLabel}
                   aria-label={`${row.library_name} count now`}
                 />
                 {showReason && (
