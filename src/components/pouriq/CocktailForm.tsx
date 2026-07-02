@@ -5,11 +5,12 @@ import { useRouter } from 'next/navigation'
 import { saveCocktailAction, deleteCocktailAction, removeCocktailPhotoAction } from '@/lib/pouriq/server-actions'
 import { IngredientPicker } from '@/components/pouriq/IngredientPicker'
 import { ServeUnitPicker } from '@/components/pouriq/ServeUnitPicker'
-import type { CocktailWithIngredients, IngredientLibraryRow, ServeUnitRow, ItemType } from '@/lib/pouriq/types'
+import type { CocktailWithIngredients, IngredientLibraryRow, ServeUnitRow, ItemType, IngredientUseRow } from '@/lib/pouriq/types'
 import { ITEM_TYPES } from '@/lib/pouriq/types'
 import { GLASS_OPTIONS } from '@/lib/pouriq/measures'
 import type { ServeUnit } from '@/lib/pouriq/measures'
-import { INPUT, SELECT, LABEL, CHIP, CHIP_ACTIVE, CHIP_IDLE } from '@/lib/pouriq/ui'
+import { INPUT, SELECT, LABEL, CHIP, CHIP_ACTIVE, CHIP_IDLE, HELPER } from '@/lib/pouriq/ui'
+import { lineCostFromUseP, usableCostPerBaseUnitP } from '@/lib/pouriq/calculations'
 import { PRIMARY_BUTTON } from '@/lib/pouriq/button-styles'
 
 interface FormIngredient {
@@ -18,6 +19,7 @@ interface FormIngredient {
   unit_count: number | null
   recipe_unit: string | null
   recipe_qty: number | null
+  use_id: string | null
 }
 
 function ingredientRowToForm(row: CocktailWithIngredients['ingredients'][0]): FormIngredient {
@@ -27,11 +29,12 @@ function ingredientRowToForm(row: CocktailWithIngredients['ingredients'][0]): Fo
     unit_count: row.unit_count,
     recipe_unit: row.recipe_unit,
     recipe_qty: row.recipe_qty,
+    use_id: row.use_id,
   }
 }
 
 function blankIngredient(): FormIngredient {
-  return { library_entry: null, pour_ml: null, unit_count: null, recipe_unit: null, recipe_qty: null }
+  return { library_entry: null, pour_ml: null, unit_count: null, recipe_unit: null, recipe_qty: null, use_id: null }
 }
 
 interface Props {
@@ -39,9 +42,10 @@ interface Props {
   cocktail: CocktailWithIngredients | null
   libraryEntries: IngredientLibraryRow[]
   serveUnits: Record<string, ServeUnitRow[]>
+  ingredientUses: Record<string, IngredientUseRow[]>
 }
 
-export function CocktailForm({ menuId, cocktail, libraryEntries, serveUnits }: Props) {
+export function CocktailForm({ menuId, cocktail, libraryEntries, serveUnits, ingredientUses }: Props) {
   const router = useRouter()
   const [name, setName] = useState(cocktail?.name ?? '')
   const [salePricePounds, setSalePricePounds] = useState(
@@ -135,26 +139,49 @@ export function CocktailForm({ menuId, cocktail, libraryEntries, serveUnits }: P
         setError(`Ingredient ${idx + 1}: pick an ingredient or remove the row`)
         return
       }
-      const baseUnit = ing.library_entry.base_unit
-      if (baseUnit === 'each') {
-        if (ing.unit_count === null || ing.unit_count <= 0) {
-          setError(`Ingredient ${idx + 1} ("${ing.library_entry.name}"): quantity must be > 0`)
+      const entryUses = ingredientUses[ing.library_entry.id] ?? []
+      if (entryUses.length > 0) {
+        // Use-based row: require a use selection and a positive amount
+        if (!ing.use_id) {
+          setError(`Ingredient ${idx + 1} ("${ing.library_entry.name}"): select a use`)
           return
         }
-      } else {
-        if (ing.pour_ml === null || ing.pour_ml <= 0) {
+        if (ing.recipe_qty === null || ing.recipe_qty <= 0) {
           setError(`Ingredient ${idx + 1} ("${ing.library_entry.name}"): amount must be > 0`)
           return
         }
+        const selectedUse = entryUses.find((u) => u.id === ing.use_id)
+        parsed.push({
+          library_ingredient_id: ing.library_entry.id,
+          pour_ml: null,
+          unit_count: null,
+          recipe_unit: selectedUse?.recipe_unit ?? ing.recipe_unit,
+          recipe_qty: ing.recipe_qty,
+          use_id: ing.use_id,
+        })
+      } else {
+        // No uses: original validation (unchanged)
+        const baseUnit = ing.library_entry.base_unit
+        if (baseUnit === 'each') {
+          if (ing.unit_count === null || ing.unit_count <= 0) {
+            setError(`Ingredient ${idx + 1} ("${ing.library_entry.name}"): quantity must be > 0`)
+            return
+          }
+        } else {
+          if (ing.pour_ml === null || ing.pour_ml <= 0) {
+            setError(`Ingredient ${idx + 1} ("${ing.library_entry.name}"): amount must be > 0`)
+            return
+          }
+        }
+        parsed.push({
+          library_ingredient_id: ing.library_entry.id,
+          pour_ml: ing.pour_ml,
+          unit_count: ing.unit_count,
+          recipe_unit: ing.recipe_unit,
+          recipe_qty: ing.recipe_qty,
+          use_id: null,
+        })
       }
-      parsed.push({
-        library_ingredient_id: ing.library_entry.id,
-        pour_ml: ing.pour_ml,
-        unit_count: ing.unit_count,
-        recipe_unit: ing.recipe_unit,
-        recipe_qty: ing.recipe_qty,
-        use_id: null,
-      })
     }
 
     if (parsed.length === 0) { setError('Add at least one ingredient'); return }
@@ -310,9 +337,17 @@ export function CocktailForm({ menuId, cocktail, libraryEntries, serveUnits }: P
         <div className="space-y-4">
           {ingredients.map((ing, idx) => {
             const entry = ing.library_entry
-            const customUnits: ServeUnit[] = entry
-              ? (serveUnits[entry.id] ?? [])
-              : []
+            const customUnits: ServeUnit[] = entry ? (serveUnits[entry.id] ?? []) : []
+            const uses: IngredientUseRow[] = entry ? (ingredientUses[entry.id] ?? []) : []
+            const hasUses = uses.length > 0
+            const selectedUse = hasUses ? (uses.find((u) => u.id === ing.use_id) ?? null) : null
+            const perPurchaseUnitP = entry && hasUses && selectedUse
+              ? usableCostPerBaseUnitP(entry.price_p, entry.purchase_qty, entry.pack_size, entry.yield_pct)
+              : 0
+            const costP = selectedUse && ing.recipe_qty !== null && ing.recipe_qty > 0
+              ? lineCostFromUseP(perPurchaseUnitP, selectedUse.yield_qty, ing.recipe_qty)
+              : null
+
             return (
               <div key={idx} className="border border-slate-200 rounded-lg p-3 bg-slate-50">
                 <label className={LABEL}>Ingredient {idx + 1}</label>
@@ -325,10 +360,61 @@ export function CocktailForm({ menuId, cocktail, libraryEntries, serveUnits }: P
                     unit_count: null,
                     recipe_unit: null,
                     recipe_qty: null,
+                    use_id: null,
                   })}
                 />
 
-                {entry && (
+                {entry && hasUses && (
+                  <div className="mt-3 space-y-3">
+                    <div>
+                      <label className={LABEL}>Use</label>
+                      <select
+                        value={ing.use_id ?? ''}
+                        onChange={(e) => {
+                          const newUseId = e.target.value || null
+                          const newUse = uses.find((u) => u.id === newUseId) ?? null
+                          updateIngredient(idx, {
+                            use_id: newUseId,
+                            recipe_unit: newUse?.recipe_unit ?? null,
+                            recipe_qty: null,
+                            pour_ml: null,
+                            unit_count: null,
+                          })
+                        }}
+                        className={INPUT}
+                      >
+                        <option value="">Select a use</option>
+                        {uses.map((u) => (
+                          <option key={u.id} value={u.id}>{u.name} ({u.recipe_unit})</option>
+                        ))}
+                      </select>
+                    </div>
+                    {selectedUse && (
+                      <div>
+                        <label className={LABEL}>Amount ({selectedUse.recipe_unit})</label>
+                        <input
+                          type="number"
+                          step="any"
+                          min="0.001"
+                          value={ing.recipe_qty ?? ''}
+                          onChange={(e) => {
+                            const n = parseFloat(e.target.value)
+                            updateIngredient(idx, { recipe_qty: Number.isFinite(n) && n > 0 ? n : null })
+                          }}
+                          className={INPUT}
+                          placeholder={selectedUse.recipe_unit === 'ml' ? 'e.g. 25' : 'e.g. 1'}
+                        />
+                        {costP !== null && (
+                          <p className={`${HELPER} text-emerald-700`}>
+                            £{(costP / 100).toFixed(3)}
+                          </p>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {entry && !hasUses && (
                   <div className="mt-3">
                     <ServeUnitPicker
                       baseUnit={entry.base_unit}
