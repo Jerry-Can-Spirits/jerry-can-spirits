@@ -115,7 +115,7 @@ export function IngredientUsesEditor({ entry, uses }: Props) {
                 <li key={u.id} className="flex items-center justify-between gap-3 text-sm">
                   <span className="text-slate-900 font-medium">{u.name}</span>
                   <span className="text-slate-500 text-xs tabular-nums">
-                    {u.yield_qty} {u.recipe_unit} per item{costStr}
+                    {u.yield_qty}{u.recipe_unit === 'count' ? '' : ` ${u.recipe_unit}`} per item{costStr}
                   </span>
                   <button
                     type="button"
