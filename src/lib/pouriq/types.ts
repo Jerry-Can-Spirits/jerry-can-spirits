@@ -127,6 +127,7 @@ export interface IngredientLibraryRow {
   allergens: string
   dietary: string
   allergens_reviewed: number
+  abv: number
 }
 
 export interface PreparedComponentRow {
