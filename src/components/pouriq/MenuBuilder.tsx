@@ -30,6 +30,12 @@ interface AllergenInfo {
   glutenFree: boolean
 }
 
+interface AbvInfo {
+  abvPct: number
+  units: number
+  complete: boolean
+}
+
 interface Drink {
   id: string
   name: string
@@ -52,6 +58,7 @@ interface Props {
   logoAlign: LogoAlign
   menuUpdatedAt: string
   allergenInfoById: Record<string, AllergenInfo>
+  abvById: Record<string, AbvInfo>
 }
 
 interface SectionView {
@@ -90,6 +97,8 @@ function DrinkPreview({
   showPhotos,
   showAllergens,
   allergenInfo,
+  showAbv,
+  abvInfo,
   tok,
 }: {
   drink: Drink
@@ -98,6 +107,8 @@ function DrinkPreview({
   showPhotos: boolean
   showAllergens: boolean
   allergenInfo: AllergenInfo | undefined
+  showAbv: boolean
+  abvInfo: AbvInfo | undefined
   tok: ThemeTokens
 }) {
   return (
@@ -144,6 +155,17 @@ function DrinkPreview({
                 </span>
               )}
             </>
+          )}
+        </div>
+      )}
+      {showAbv && abvInfo && (
+        <div className={`mt-1 ${tok.desc}`}>
+          {abvInfo.complete ? (
+            <p className="text-xs">
+              ABV {abvInfo.abvPct}% &middot; {abvInfo.units} units
+            </p>
+          ) : (
+            <p className="text-xs text-amber-700 print:text-black">ABV estimate incomplete.</p>
           )}
         </div>
       )}
@@ -215,7 +237,7 @@ function ArrangeDrink({
   )
 }
 
-export function MenuBuilder({ menuId, menuName, sections, drinks, theme, logoR2Key, logoAlign, menuUpdatedAt, allergenInfoById }: Props) {
+export function MenuBuilder({ menuId, menuName, sections, drinks, theme, logoR2Key, logoAlign, menuUpdatedAt, allergenInfoById, abvById }: Props) {
   const router = useRouter()
 
   const [title, setTitle] = useState(menuName)
@@ -227,6 +249,9 @@ export function MenuBuilder({ menuId, menuName, sections, drinks, theme, logoR2K
     Object.values(allergenInfoById).some(
       (info) => info.reviewed || info.contains.length > 0 || info.vegetarian || info.vegan || info.glutenFree,
     ),
+  )
+  const [showAbv, setShowAbv] = useState(() =>
+    Object.values(abvById).some((info) => !info.complete || info.abvPct > 0),
   )
 
   const [localTheme, setLocalTheme] = useState<MenuTheme>(theme)
@@ -556,6 +581,10 @@ export function MenuBuilder({ menuId, menuName, sections, drinks, theme, logoR2K
             <input type="checkbox" checked={showAllergens} onChange={(e) => setShowAllergens(e.target.checked)} />
             Show allergens
           </label>
+          <label className="flex items-center gap-2 text-xs text-slate-700">
+            <input type="checkbox" checked={showAbv} onChange={(e) => setShowAbv(e.target.checked)} />
+            Show ABV
+          </label>
           <button type="button" onClick={() => window.print()} className={`${PRIMARY_BUTTON} ml-auto`}>
             Save as PDF
           </button>
@@ -768,7 +797,7 @@ export function MenuBuilder({ menuId, menuName, sections, drinks, theme, logoR2K
                   <section key={section.id} className="mb-8 break-inside-avoid">
                     <h3 className={`text-2xl pb-2 mb-4 ${tok.section}`}>{section.name}</h3>
                     {direct.map((d) => (
-                      <DrinkPreview key={d.id} drink={d} showPrices={showPrices} showDescriptions={showDescriptions} showPhotos={showPhotos} showAllergens={showAllergens} allergenInfo={allergenInfoById[d.id]} tok={tok} />
+                      <DrinkPreview key={d.id} drink={d} showPrices={showPrices} showDescriptions={showDescriptions} showPhotos={showPhotos} showAllergens={showAllergens} allergenInfo={allergenInfoById[d.id]} showAbv={showAbv} abvInfo={abvById[d.id]} tok={tok} />
                     ))}
                     {subSections.map(({ section: sub, drinks: subDrinks }) => (
                       subDrinks.length === 0 ? (
@@ -777,7 +806,7 @@ export function MenuBuilder({ menuId, menuName, sections, drinks, theme, logoR2K
                         <div key={sub.id} className="mt-4">
                           <h4 className={`text-sm mb-3 ${tok.sub}`}>{sub.name}</h4>
                           {subDrinks.map((d) => (
-                            <DrinkPreview key={d.id} drink={d} showPrices={showPrices} showDescriptions={showDescriptions} showPhotos={showPhotos} showAllergens={showAllergens} allergenInfo={allergenInfoById[d.id]} tok={tok} />
+                            <DrinkPreview key={d.id} drink={d} showPrices={showPrices} showDescriptions={showDescriptions} showPhotos={showPhotos} showAllergens={showAllergens} allergenInfo={allergenInfoById[d.id]} showAbv={showAbv} abvInfo={abvById[d.id]} tok={tok} />
                           ))}
                         </div>
                       )

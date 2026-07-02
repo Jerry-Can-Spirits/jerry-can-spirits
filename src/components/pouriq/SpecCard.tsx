@@ -1,6 +1,7 @@
 import type { CocktailWithIngredients } from '@/lib/pouriq/types'
 import { formatServeMeasure } from '@/lib/pouriq/measures'
 import { cocktailAllergenInfo, ALLERGEN_LABELS } from '@/lib/pouriq/allergens'
+import { cocktailAbv } from '@/lib/pouriq/abv'
 
 interface Props {
   cocktail: CocktailWithIngredients
@@ -9,6 +10,7 @@ interface Props {
   showCost?: boolean
   showPhotos?: boolean
   showAllergens?: boolean
+  showAbv?: boolean
   cost?: { pourCostP: number; gpPct: number; complete: boolean } | null
 }
 
@@ -18,8 +20,9 @@ function formatPrice(pence: number, vatIncluded: boolean): string {
 }
 
 
-export function SpecCard({ cocktail, priceIncludesVat, compact = false, showCost = false, showPhotos = false, showAllergens = false, cost = null }: Props) {
+export function SpecCard({ cocktail, priceIncludesVat, compact = false, showCost = false, showPhotos = false, showAllergens = false, showAbv = false, cost = null }: Props) {
   const allergenInfo = showAllergens ? cocktailAllergenInfo(cocktail.ingredients) : null
+  const abvInfo = showAbv ? cocktailAbv(cocktail.ingredients) : null
   const garnishes = cocktail.ingredients.filter(
     (i) => i.library.ingredient_type === 'garnish'
   )
@@ -143,6 +146,18 @@ export function SpecCard({ cocktail, priceIncludesVat, compact = false, showCost
                 </div>
               )}
             </>
+          )}
+        </section>
+      )}
+
+      {abvInfo && (
+        <section className="mb-6">
+          {abvInfo.complete ? (
+            <p className="text-sm text-slate-700 print:text-black">
+              <span className="font-semibold">ABV</span> {abvInfo.abvPct}% &middot; {abvInfo.units} units
+            </p>
+          ) : (
+            <p className="text-xs text-amber-700 print:text-black">ABV estimate incomplete.</p>
           )}
         </section>
       )}
