@@ -21,6 +21,7 @@ function row(name: string): IngredientLibraryRow {
     allergens: '[]',
     dietary: '[]',
     allergens_reviewed: 0,
+    abv: 0,
   }
 }
 
