@@ -14,6 +14,7 @@ export interface ServeFormIngredient {
   unit_count: number | null
   recipe_unit: string | null
   recipe_qty: number | null
+  use_id: string | null
 }
 
 interface FormIngredient {
@@ -89,6 +90,7 @@ export function ServeForm({ defaultName, defaultGlass, defaultSalePriceP, defaul
         unit_count: ing.unit_count,
         recipe_unit: ing.recipe_unit,
         recipe_qty: ing.recipe_qty,
+        use_id: null,
       })
     }
     if (parsed.length === 0) { onError('Add at least one ingredient.'); return }

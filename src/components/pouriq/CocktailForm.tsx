@@ -128,7 +128,7 @@ export function CocktailForm({ menuId, cocktail, libraryEntries, serveUnits }: P
     if (!name.trim()) { setError('Drink name is required'); return }
     if (!Number.isFinite(sale_price_p) || sale_price_p <= 0) { setError('Sale price must be > 0'); return }
 
-    const parsed: Array<{ library_ingredient_id: string; pour_ml: number | null; unit_count: number | null; recipe_unit: string | null; recipe_qty: number | null }> = []
+    const parsed: Array<{ library_ingredient_id: string; pour_ml: number | null; unit_count: number | null; recipe_unit: string | null; recipe_qty: number | null; use_id: string | null }> = []
     for (let idx = 0; idx < ingredients.length; idx++) {
       const ing = ingredients[idx]
       if (!ing.library_entry) {
@@ -153,6 +153,7 @@ export function CocktailForm({ menuId, cocktail, libraryEntries, serveUnits }: P
         unit_count: ing.unit_count,
         recipe_unit: ing.recipe_unit,
         recipe_qty: ing.recipe_qty,
+        use_id: null,
       })
     }
 

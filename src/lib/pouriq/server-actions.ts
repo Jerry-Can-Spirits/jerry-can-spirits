@@ -19,6 +19,7 @@ import {
   getLibraryUsageCounts,
   type IngredientLibraryInsert,
 } from './ingredient-library'
+import { listIngredientUses, replaceIngredientUses } from './ingredient-uses'
 import { deleteInvoice } from './invoices'
 import { matchFieldManualSlug } from './field-manual-match'
 import { upsertVoiceProfile, type VoiceProfileInput } from './voice-profile'
@@ -130,6 +131,7 @@ export async function cloneMenuAction(menuId: string, newName?: string): Promise
         unit_count: i.unit_count,
         recipe_unit: i.recipe_unit,
         recipe_qty: i.recipe_qty,
+        use_id: i.use_id,
       })))
     }
   }
@@ -200,6 +202,7 @@ interface CocktailInput {
     unit_count: number | null
     recipe_unit: string | null
     recipe_qty: number | null
+    use_id: string | null
   }>
 }
 
@@ -475,6 +478,25 @@ export async function removePreparedComponentAction(componentRowId: string): Pro
   revalidatePath('/trade/pouriq/library')
 }
 
+export async function saveIngredientUsesAction(
+  ingredientId: string,
+  uses: Array<{ name: string; recipe_unit: 'ml' | 'count' | 'g'; yield_qty: number }>,
+): Promise<void> {
+  const { db, tradeAccountId } = await requireDb()
+  const existing = await getLibraryEntry(db, ingredientId, tradeAccountId)
+  if (!existing) throw new Error('Ingredient not found')
+  await replaceIngredientUses(db, ingredientId, uses)
+  revalidatePath('/trade/pouriq/library')
+  revalidatePath(`/trade/pouriq/library/${ingredientId}/edit`)
+}
+
+export async function listIngredientUsesAction(ingredientId: string) {
+  const { db, tradeAccountId } = await requireDb()
+  const existing = await getLibraryEntry(db, ingredientId, tradeAccountId)
+  if (!existing) throw new Error('Ingredient not found')
+  return listIngredientUses(db, ingredientId)
+}
+
 export async function deleteLibraryEntryAction(entryId: string): Promise<void> {
   const { db, tradeAccountId } = await requireDb()
   // Block delete if in use — match the UI guard
@@ -507,7 +529,7 @@ export async function bulkDeleteLibraryEntriesAction(entryIds: string[]): Promis
 
 export async function saveServeAction(
   serveId: string | null,
-  input: { name: string; glass: string | null; sale_price_p?: number; ingredients: Array<{ library_ingredient_id: string; pour_ml: number | null; unit_count: number | null; recipe_unit: string | null; recipe_qty: number | null }> },
+  input: { name: string; glass: string | null; sale_price_p?: number; ingredients: Array<{ library_ingredient_id: string; pour_ml: number | null; unit_count: number | null; recipe_unit: string | null; recipe_qty: number | null; use_id: string | null }> },
 ): Promise<{ serveId: string }> {
   const { db, tradeAccountId } = await requireDb()
   if (!input.name.trim()) throw new Error('Serve name is required')
@@ -581,6 +603,7 @@ export async function createIngredientServeAction(
     unit_count: null,
     recipe_unit: null,
     recipe_qty: null,
+    use_id: null,
   }])
   revalidatePath(`/trade/pouriq/library/${libraryIngredientId}/edit`)
   revalidatePath('/trade/pouriq/serves')
