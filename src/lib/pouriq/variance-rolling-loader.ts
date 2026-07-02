@@ -19,6 +19,7 @@ export interface RollingVarianceRow {
   pack_size: number
   price_p: number
   purchase_qty: number
+  base_unit: 'ml' | 'each' | 'g'
   latest_count_at: string | null
   latest_count_qty: number | null
   previous_count_at: string | null
@@ -246,6 +247,7 @@ export async function loadRollingVariance(db: D1Database, tradeAccountId: string
       pack_size: meta.pack_size,
       price_p: meta.price_p,
       purchase_qty: meta.purchase_qty,
+      base_unit: 'ml',
       latest_count_at: ingEvents.length ? sortedEvents[sortedEvents.length - 1].counted_at : null,
       latest_count_qty: ingEvents.length ? sortedEvents[sortedEvents.length - 1].count_qty : null,
       previous_count_at: pair?.previous.counted_at ?? null,

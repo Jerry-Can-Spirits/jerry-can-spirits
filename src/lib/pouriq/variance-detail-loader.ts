@@ -19,6 +19,7 @@ export interface VarianceDetail {
   pack_size: number
   price_p: number
   purchase_qty: number
+  base_unit: 'ml' | 'each' | 'g'
   window: { opening_at: string; opening_qty: number; closing_at: string; closing_qty: number } | null
   ledger: VarianceLedger | null
   variance_ml: number | null
@@ -90,6 +91,7 @@ export async function loadVarianceDetail(
     pack_size: meta.pack_size,
     price_p: meta.price_p,
     purchase_qty: meta.purchase_qty,
+    base_unit: 'ml' as const,
     latest_reason: events.length ? events[events.length - 1].reason : null,
   }
 

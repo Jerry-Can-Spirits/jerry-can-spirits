@@ -10,6 +10,7 @@ export interface RollingStockRow {
   pack_format: string | null
   yield_pct: number
   is_prepared: number
+  base_unit: 'ml' | 'each' | 'g'
   on_hand_bottles: number | null
   needs_opening_count: boolean
   anchor_count_at: string | null
@@ -156,6 +157,7 @@ export async function loadStockLevels(db: D1Database, tradeAccountId: string): P
         pack_format: meta.pack_format,
         yield_pct: meta.yield_pct,
         is_prepared: meta.is_prepared,
+        base_unit: 'ml',
         on_hand_bottles: null,
         needs_opening_count: true,
         anchor_count_at: null,
@@ -199,6 +201,7 @@ export async function loadStockLevels(db: D1Database, tradeAccountId: string): P
         pack_format: meta.pack_format,
         yield_pct: meta.yield_pct,
         is_prepared: meta.is_prepared,
+        base_unit: 'ml',
         on_hand_bottles: on_hand,
         needs_opening_count: false,
         anchor_count_at: anchor.counted_at,
