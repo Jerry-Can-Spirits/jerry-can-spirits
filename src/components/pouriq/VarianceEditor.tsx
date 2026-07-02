@@ -177,7 +177,7 @@ export function VarianceEditor() {
               <div className="flex flex-wrap items-start justify-between gap-2 mb-3">
                 <div>
                   <span className="text-slate-900 font-medium">{row.library_name}</span>
-                  <span className="text-slate-500 text-sm ml-1">({row.pack_size}{unitLabel})</span>
+                  <span className="text-slate-500 text-sm ml-1">({row.pack_size}{row.base_unit === 'ml' ? unitLabel : ` ${unitLabel}`})</span>
                   {row.persistent_loss && (
                     <span className="ml-2 inline-block px-1.5 py-0.5 rounded-sm bg-rose-50 text-rose-600 border border-rose-200 text-[10px] uppercase tracking-widest">
                       persistent loss
