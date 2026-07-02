@@ -7,6 +7,7 @@ import { getMenu, listCocktailsForMenu } from '@/lib/pouriq/menus'
 import { ensureSeededSections, listSectionsForMenu } from '@/lib/pouriq/menu-sections'
 import { MenuBuilder } from '@/components/pouriq/MenuBuilder'
 import { cocktailAllergenInfo } from '@/lib/pouriq/allergens'
+import { cocktailAbv } from '@/lib/pouriq/abv'
 
 export const dynamic = 'force-dynamic'
 
@@ -43,6 +44,9 @@ export default async function MenuBuilderPage({ params }: Props) {
   const allergenInfoById = Object.fromEntries(
     cocktails.map((c) => [c.id, cocktailAllergenInfo(c.ingredients)]),
   )
+  const abvById = Object.fromEntries(
+    cocktails.map((c) => [c.id, cocktailAbv(c.ingredients)]),
+  )
 
   return (
     <main className="min-h-screen print-region">
@@ -62,6 +66,7 @@ export default async function MenuBuilderPage({ params }: Props) {
           logoAlign={menu.logo_align}
           menuUpdatedAt={menu.updated_at}
           allergenInfoById={allergenInfoById}
+          abvById={abvById}
         />
       </div>
     </main>

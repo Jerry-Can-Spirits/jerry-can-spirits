@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import type { CocktailWithIngredients, ItemType } from '@/lib/pouriq/types'
 import { ITEM_TYPES } from '@/lib/pouriq/types'
+import { isAlcoholicType } from '@/lib/pouriq/abv'
 import { SpecCard } from './SpecCard'
 import { PrintReportButton } from './PrintReportButton'
 import { PRIMARY_BUTTON, SECONDARY_BUTTON_SM } from '@/lib/pouriq/button-styles'
@@ -31,6 +32,9 @@ export function SpecCardsView({ cocktails, costById, priceIncludesVat }: Props) 
           i.library.dietary !== '[]',
       ),
     ),
+  )
+  const [showAbv, setShowAbv] = useState(() =>
+    cocktails.some((c) => c.ingredients.some((i) => isAlcoholicType(i.library.ingredient_type))),
   )
   const [selected, setSelected] = useState<Set<ItemType>>(new Set(['cocktail']))
 
@@ -65,6 +69,10 @@ export function SpecCardsView({ cocktails, costById, priceIncludesVat }: Props) 
           <input type="checkbox" checked={showAllergens} onChange={(e) => setShowAllergens(e.target.checked)} />
           Show allergens
         </label>
+        <label className="flex items-center gap-2 text-sm text-slate-600">
+          <input type="checkbox" checked={showAbv} onChange={(e) => setShowAbv(e.target.checked)} />
+          Show ABV
+        </label>
         {present.length > 1 && (
           <div className="flex flex-wrap items-center gap-2">
             <span className="text-xs uppercase tracking-widest text-slate-500">Type</span>
@@ -96,6 +104,7 @@ export function SpecCardsView({ cocktails, costById, priceIncludesVat }: Props) 
               showCost={showCost}
               showPhotos={showPhotos}
               showAllergens={showAllergens}
+              showAbv={showAbv}
               cost={costById[c.id] ?? null}
             />
           ))}

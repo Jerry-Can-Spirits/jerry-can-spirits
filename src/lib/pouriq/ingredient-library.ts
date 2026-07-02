@@ -20,15 +20,16 @@ export interface IngredientLibraryInsert {
   allergens?: string[]
   dietary?: string[]
   allergens_reviewed?: boolean
+  abv?: number
 }
 
-// Columns present in the new schema (migration 0045 + 0059 + 0062).
+// Columns present in the new schema (migration 0045 + 0059 + 0062 + 0063).
 const LIBRARY_SELECT = `
   id, trade_account_id, name, ingredient_type,
   base_unit, pack_size, price_p, price_includes_vat, price_entered_p,
   pack_format, subcategory,
   is_prepared, purchase_qty, yield_pct, barcode, notes, cost_confidence, created_at, updated_at,
-  allergens, dietary, allergens_reviewed
+  allergens, dietary, allergens_reviewed, abv
 `
 
 function mapLibraryRow(r: {
@@ -54,6 +55,7 @@ function mapLibraryRow(r: {
   allergens: string
   dietary: string
   allergens_reviewed: number
+  abv: number
 }): IngredientLibraryRow {
   return { ...r }
 }
@@ -103,8 +105,8 @@ export async function insertLibraryEntry(
   const result = await db
     .prepare(`
       INSERT INTO pouriq_ingredients_library
-        (trade_account_id, name, ingredient_type, base_unit, pack_size, price_p, price_includes_vat, price_entered_p, purchase_qty, yield_pct, pack_format, subcategory, barcode, notes, is_prepared, cost_confidence, allergens, dietary, allergens_reviewed)
-      VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13, ?14, ?15, ?16, ?17, ?18, ?19)
+        (trade_account_id, name, ingredient_type, base_unit, pack_size, price_p, price_includes_vat, price_entered_p, purchase_qty, yield_pct, pack_format, subcategory, barcode, notes, is_prepared, cost_confidence, allergens, dietary, allergens_reviewed, abv)
+      VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13, ?14, ?15, ?16, ?17, ?18, ?19, ?20)
       RETURNING id
     `)
     .bind(
@@ -117,6 +119,7 @@ export async function insertLibraryEntry(
       JSON.stringify(data.allergens ?? []),
       JSON.stringify(data.dietary ?? []),
       data.allergens_reviewed ? 1 : 0,
+      data.abv ?? 0,
     )
     .first<{ id: string }>()
   if (!result) throw new Error('Library insert returned no id')
@@ -168,6 +171,7 @@ export async function updateLibraryEntry(
   if ('allergens' in patch) newModelPatch['allergens'] = JSON.stringify(patch.allergens ?? [])
   if ('dietary' in patch) newModelPatch['dietary'] = JSON.stringify(patch.dietary ?? [])
   if ('allergens_reviewed' in patch) newModelPatch['allergens_reviewed'] = patch.allergens_reviewed ? 1 : 0
+  if ('abv' in patch) newModelPatch['abv'] = patch.abv ?? 0
 
   const sets: string[] = []
   const binds: unknown[] = []

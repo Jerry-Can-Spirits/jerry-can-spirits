@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { ALL_INGREDIENT_TYPES, type IngredientLibraryRow, type IngredientType, type ServeUnitRow } from '@/lib/pouriq/types'
 import { saveLibraryEntryAction, deleteLibraryEntryAction, saveServeUnitAction, deleteServeUnitAction, addPreparedComponentAction, removePreparedComponentAction, type LibraryEntryInput } from '@/lib/pouriq/server-actions'
 import { parseTags, ALLERGENS, DIETARY, type AllergenKey, type DietaryKey } from '@/lib/pouriq/allergens'
+import { isAlcoholicType } from '@/lib/pouriq/abv'
 import { AllergenPicker } from '@/components/pouriq/AllergenPicker'
 import { BarcodeScanner } from '@/components/pouriq/BarcodeScanner'
 import { RipplePreview } from '@/components/pouriq/RipplePreview'
@@ -138,6 +139,9 @@ export function IngredientForm({ entry, usageCount = 0, impactPayload, serveUnit
   const [allergensReviewed, setAllergensReviewed] = useState(
     entry ? entry.allergens_reviewed === 1 : false,
   )
+
+  // --- ABV ---
+  const [abv_str, setAbvStr] = useState(String(entry?.abv ?? 0))
 
   // --- UI state ---
   const [scanOpen, setScanOpen] = useState(false)
@@ -304,6 +308,8 @@ export function IngredientForm({ entry, usageCount = 0, impactPayload, serveUnit
     setError(null)
     if (!name.trim()) { setError('Name is required'); return null }
 
+    const abv_val = Math.min(100, Math.max(0, parseFloat(abv_str) || 0))
+
     if (purchaseMode === 'prepared') {
       const yieldAmount = parseFloat(yieldAmountStr)
       if (!Number.isFinite(yieldAmount) || yieldAmount <= 0) {
@@ -325,6 +331,7 @@ export function IngredientForm({ entry, usageCount = 0, impactPayload, serveUnit
         allergens: allergenTags,
         dietary: dietaryTags,
         allergens_reviewed: allergensReviewed,
+        abv: abv_val,
       }
     }
 
@@ -364,6 +371,7 @@ export function IngredientForm({ entry, usageCount = 0, impactPayload, serveUnit
       allergens: allergenTags,
       dietary: dietaryTags,
       allergens_reviewed: allergensReviewed,
+      abv: abv_val,
     }
   }
 
@@ -525,6 +533,29 @@ export function IngredientForm({ entry, usageCount = 0, impactPayload, serveUnit
             <FieldHelper>Optional. Helps you filter and group ingredients.</FieldHelper>
           </div>
         </div>
+
+        {/* ABV (alcoholic types only) */}
+        {isAlcoholicType(ingredient_type) && (
+          <div>
+            <label htmlFor="ing-abv" className={LABEL}>ABV %</label>
+            <input
+              id="ing-abv"
+              type="number"
+              step="0.1"
+              min={0}
+              max={100}
+              value={abv_str}
+              onChange={(e) => {
+                const raw = parseFloat(e.target.value)
+                const clamped = Number.isFinite(raw) ? Math.min(100, Math.max(0, raw)) : 0
+                setAbvStr(String(clamped))
+              }}
+              className={INPUT}
+              placeholder="e.g. 40"
+            />
+            <FieldHelper>The alcohol by volume of this ingredient. Used to calculate per-drink ABV and UK units.</FieldHelper>
+          </div>
+        )}
 
         {/* How do you buy this? */}
         <fieldset>

@@ -9,6 +9,7 @@ import { listConnections } from './pos/connections'
 import { getActiveMenu, listCocktailsForMenu } from './menus'
 import { listVolumesForPeriod, currentPeriod } from './volumes'
 import { calculateMenuMetrics } from './calculations'
+import { isAlcoholicType } from './abv'
 
 export interface AttentionRow {
   key: string
@@ -119,6 +120,20 @@ export async function getAttentionRows(db: D1Database, tradeAccountId: string): 
       rows.push({
         key: 'allergen-review',
         label: `${unreviewedIngCount} ingredient${unreviewedIngCount === 1 ? '' : 's'} need${unreviewedIngCount === 1 ? 's' : ''} an allergen review.`,
+        href: '/trade/pouriq/library',
+        severity: 'medium',
+      })
+    }
+    const needsAbvCount = new Set(
+      cocktails
+        .flatMap((c) => c.ingredients)
+        .filter((i) => isAlcoholicType(i.library.ingredient_type) && i.library.abv === 0)
+        .map((i) => i.library_ingredient_id),
+    ).size
+    if (needsAbvCount > 0) {
+      rows.push({
+        key: 'abv-missing',
+        label: `${needsAbvCount} alcoholic ingredient${needsAbvCount === 1 ? '' : 's'} need${needsAbvCount === 1 ? 's' : ''} an ABV.`,
         href: '/trade/pouriq/library',
         severity: 'medium',
       })

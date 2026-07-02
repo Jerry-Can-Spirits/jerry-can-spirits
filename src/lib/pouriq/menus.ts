@@ -194,7 +194,8 @@ export async function listCocktailsForMenu(
         l.updated_at AS l_updated_at,
         l.allergens AS l_allergens,
         l.dietary AS l_dietary,
-        l.allergens_reviewed AS l_allergens_reviewed
+        l.allergens_reviewed AS l_allergens_reviewed,
+        l.abv AS l_abv
       FROM pouriq_ingredients i
       JOIN pouriq_ingredients_library l ON l.id = i.library_ingredient_id
       WHERE i.cocktail_id IN (SELECT id FROM pouriq_cocktails WHERE menu_id = ?1)
@@ -230,6 +231,7 @@ export async function listCocktailsForMenu(
       l_allergens: string
       l_dietary: string
       l_allergens_reviewed: number
+      l_abv: number
     }>()
 
   const byCocktail = new Map<string, IngredientWithLibrary[]>()
@@ -265,6 +267,7 @@ export async function listCocktailsForMenu(
         allergens: row.l_allergens,
         dietary: row.l_dietary,
         allergens_reviewed: row.l_allergens_reviewed,
+        abv: row.l_abv,
       },
     }
     if (!byCocktail.has(row.cocktail_id)) byCocktail.set(row.cocktail_id, [])
@@ -306,7 +309,8 @@ export async function getCocktail(
         l.barcode AS l_barcode,
         l.notes AS l_notes, l.cost_confidence AS l_cost_confidence,
         l.created_at AS l_created_at, l.updated_at AS l_updated_at,
-        l.allergens AS l_allergens, l.dietary AS l_dietary, l.allergens_reviewed AS l_allergens_reviewed
+        l.allergens AS l_allergens, l.dietary AS l_dietary, l.allergens_reviewed AS l_allergens_reviewed,
+        l.abv AS l_abv
       FROM pouriq_ingredients i
       JOIN pouriq_ingredients_library l ON l.id = i.library_ingredient_id
       WHERE i.cocktail_id = ?1
@@ -342,6 +346,7 @@ export async function getCocktail(
       l_allergens: string
       l_dietary: string
       l_allergens_reviewed: number
+      l_abv: number
     }>()
 
   const ingredients: IngredientWithLibrary[] = (ingredientsResult.results ?? []).map((row) => ({
@@ -375,6 +380,7 @@ export async function getCocktail(
       allergens: row.l_allergens,
       dietary: row.l_dietary,
       allergens_reviewed: row.l_allergens_reviewed,
+      abv: row.l_abv,
     },
   }))
 

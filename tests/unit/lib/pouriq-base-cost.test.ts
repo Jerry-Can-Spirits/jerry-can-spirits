@@ -18,7 +18,7 @@ function mkIng(
     pack_format: null, subcategory: null,
     is_prepared: 0,
     barcode: null, notes: null, cost_confidence: 'set', created_at: '', updated_at: '',
-    allergens: '[]', dietary: '[]', allergens_reviewed: 0,
+    allergens: '[]', dietary: '[]', allergens_reviewed: 0, abv: 0,
   }
   return { id: 'ing', cocktail_id: 'c', library_ingredient_id: 'lib', pour_ml, unit_count, recipe_unit: null, recipe_qty: null, library }
 }

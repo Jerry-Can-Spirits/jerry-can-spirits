@@ -145,6 +145,7 @@ export function IngredientPicker({ libraryEntries, selectedEntryId, onChange }: 
         allergens: '[]',
         dietary: '[]',
         allergens_reviewed: 0,
+        abv: 0,
       }
       libraryEntries.push(newEntry)
       selectEntry(newEntry)
