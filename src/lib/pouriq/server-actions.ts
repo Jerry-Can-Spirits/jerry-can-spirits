@@ -35,6 +35,7 @@ import {
   deleteSection,
   reorderSections,
   moveDrink,
+  cloneSections,
 } from './menu-sections'
 
 async function requireDb() {
@@ -88,6 +89,10 @@ export async function cloneMenuAction(menuId: string, newName?: string): Promise
     prices_include_vat: source.prices_include_vat === 1,
   })
 
+  // Copy the section structure first, keeping a map from each source section
+  // id to its new id so cloned drinks can be re-pointed at the right section.
+  const sectionIdMap = await cloneSections(db, menuId, newId)
+
   // Copy every cocktail with its ingredient links. Volumes and analyses
   // are intentionally NOT copied — they are time-bound to the original
   // menu's actual operation.
@@ -109,6 +114,15 @@ export async function cloneMenuAction(menuId: string, newName?: string): Promise
       glass: c.glass,
       item_type: c.item_type,
     })
+    // Re-point the cloned drink at its copied section (insertCocktail leaves it
+    // unplaced; the source drink's section maps through sectionIdMap).
+    const newSectionId = c.section_id ? sectionIdMap.get(c.section_id) : undefined
+    if (newSectionId) {
+      await db
+        .prepare(`UPDATE pouriq_cocktails SET section_id = ?1 WHERE id = ?2`)
+        .bind(newSectionId, newCocktailId)
+        .run()
+    }
     if (c.ingredients.length > 0) {
       await replaceIngredients(db, newCocktailId, c.ingredients.map((i) => ({
         library_ingredient_id: i.library_ingredient_id,

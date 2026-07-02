@@ -1,5 +1,5 @@
 import type { MenuSectionRow, ItemType } from './types'
-import { planSeededSections, resequence } from './menu-sections-plan'
+import { planSeededSections, resequence, planSectionClone } from './menu-sections-plan'
 
 export async function listSectionsForMenu(
   db: D1Database,
@@ -56,6 +56,27 @@ export async function ensureSeededSections(db: D1Database, menuId: string): Prom
   }
 
   await db.batch(statements)
+}
+
+// Deep-copy a source menu's sections into a new menu. Returns a map from each
+// source section id to its new id, so the caller can re-point cloned cocktails.
+export async function cloneSections(
+  db: D1Database,
+  sourceMenuId: string,
+  newMenuId: string,
+): Promise<Map<string, string>> {
+  const sections = await listSectionsForMenu(db, sourceMenuId)
+  const { inserts, idMap } = planSectionClone(sections, () => crypto.randomUUID())
+  if (inserts.length > 0) {
+    await db.batch(
+      inserts.map((s) =>
+        db
+          .prepare(`INSERT INTO pouriq_menu_sections (id, menu_id, name, parent_section_id, position) VALUES (?1, ?2, ?3, ?4, ?5)`)
+          .bind(s.id, newMenuId, s.name, s.parent_section_id, s.position),
+      ),
+    )
+  }
+  return idMap
 }
 
 export async function createSection(
