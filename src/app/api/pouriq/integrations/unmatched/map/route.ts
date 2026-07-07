@@ -4,12 +4,15 @@
 import { NextResponse } from 'next/server'
 import { getCloudflareContext } from '@opennextjs/cloudflare'
 import { checkPourIqAccess } from '@/lib/pouriq/access'
-import { isRateLimited } from '@/lib/kv'
+import { isAllowedOrigin, isRateLimited } from '@/lib/kv'
 import { createMapping, createServeMapping } from '@/lib/pouriq/pos/item-map'
 
 export const runtime = 'nodejs'
 
 export async function POST(request: Request) {
+  if (!isAllowedOrigin(request)) {
+    return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+  }
   const access = await checkPourIqAccess()
   if (access.kind !== 'ok') {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })

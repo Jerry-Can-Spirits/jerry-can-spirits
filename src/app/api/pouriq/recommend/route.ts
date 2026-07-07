@@ -4,7 +4,10 @@
 //
 // Edge runtime — fetch streaming end-to-end without Node deps.
 
+import { NextResponse } from 'next/server'
+import * as Sentry from '@sentry/nextjs'
 import { getCloudflareContext } from '@opennextjs/cloudflare'
+import { isAllowedOrigin, isRateLimited } from '@/lib/kv'
 import { checkPourIqAccess } from '@/lib/pouriq/access'
 import { getMenu, listCocktailsForMenu, insertAnalysis } from '@/lib/pouriq/menus'
 import { calculateMenuMetrics } from '@/lib/pouriq/calculations'
@@ -16,7 +19,13 @@ import type { Recommendation, FieldManualMatch } from '@/lib/pouriq/types'
 
 export const runtime = 'nodejs'
 
+const RECOMMEND_RATE_LIMIT = 60
+
 export async function POST(request: Request) {
+  if (!isAllowedOrigin(request)) {
+    return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+  }
+
   const access = await checkPourIqAccess()
   if (access.kind !== 'ok') return new Response('Unauthorized', { status: 401 })
 
@@ -25,7 +34,18 @@ export async function POST(request: Request) {
   if (!menuId) return new Response('menuId required', { status: 400 })
 
   const { env } = await getCloudflareContext()
+  const kv = env.SITE_OPS as KVNamespace
   const db = env.DB as D1Database
+
+  if (!env.ANTHROPIC_API_KEY) {
+    Sentry.captureMessage('pouriq-recommend: ANTHROPIC_API_KEY missing', { tags: { route: 'pouriq-recommend', phase: 'config' } })
+    return NextResponse.json({ error: 'AI recommendations are temporarily unavailable. Please try again later.' }, { status: 503 })
+  }
+
+  if (await isRateLimited(kv, 'pouriq-recommend', access.tradeAccountId, RECOMMEND_RATE_LIMIT, 3600)) {
+    return NextResponse.json({ error: 'Too many recommendation requests. Please try again later.' }, { status: 429 })
+  }
+
   const menu = await getMenu(db, menuId, access.tradeAccountId)
   if (!menu) return new Response('Not found', { status: 404 })
 
@@ -68,6 +88,7 @@ export async function POST(request: Request) {
           metrics_json: JSON.stringify(metrics),
         })
       } catch (err) {
+        Sentry.captureException(err, { tags: { route: 'pouriq-recommend' } })
         const message = (err as Error).message || 'Stream failed'
         controller.enqueue(encoder.encode(`event: error\ndata: ${JSON.stringify({ error: message })}\n\n`))
       } finally {

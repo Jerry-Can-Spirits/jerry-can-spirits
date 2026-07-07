@@ -7,7 +7,7 @@ import { LicenceGate } from '@/components/pouriq/LicenceGate'
 import { InvoiceListTabs } from '@/components/pouriq/InvoiceListTabs'
 import { PRIMARY_BUTTON } from '@/lib/pouriq/button-styles'
 import { listAccountingConnections, isConnectionReady } from '@/lib/pouriq/accounting/connections'
-import { getPushMapForInvoices } from '@/lib/pouriq/accounting/pushes'
+import { getPushMapForInvoices, PUSH_CLAIM_SENTINEL } from '@/lib/pouriq/accounting/pushes'
 
 export const dynamic = 'force-dynamic'
 
@@ -24,7 +24,9 @@ export default async function InvoicesListPage() {
   const hasAccounting = accountingConnections.some(isConnectionReady)
   const pushMap = hasAccounting ? await getPushMapForInvoices(db, invoices.map((i) => i.id)) : new Map()
   const pushBadges = Object.fromEntries(
-    [...pushMap.entries()].map(([id, p]) => [id, p.status]),
+    [...pushMap.entries()]
+      .filter(([, p]) => !(p.status === 'failed' && p.error === PUSH_CLAIM_SENTINEL))
+      .map(([id, p]) => [id, p.status]),
   ) as Record<string, 'pushed' | 'failed'>
 
   return (

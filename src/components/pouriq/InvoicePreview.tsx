@@ -259,6 +259,11 @@ export function InvoicePreview({ initial, library }: Props) {
         </div>
 
         <div className={`${pane === 'lines' ? '' : 'hidden'} lg:block space-y-6`}>
+          {initial.truncated && (
+            <div className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
+              This document was long and extraction may be incomplete. Check the last lines against the original before saving.
+            </div>
+          )}
           <div className="bg-white rounded-xl p-6 border border-slate-200">
             <h2 className="text-lg font-bold text-slate-900 mb-4">Invoice details</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">

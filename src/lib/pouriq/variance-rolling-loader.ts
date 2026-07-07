@@ -49,17 +49,6 @@ interface RecipeLineRow {
   purchase_qty: number
   yield_pct: number
 }
-
-interface RecipeLineDbRow {
-  cocktail_id: string
-  library_ingredient_id: string
-  pour_ml: number
-  name: string
-  pack_size: number
-  price_p: number
-  purchase_qty: number
-  yield_pct: number
-}
 interface VolumeRow { cocktail_id: string; period_start: string; period_end: string; units_sold: number }
 interface EventRow { library_ingredient_id: string; counted_at: string; count_qty: number; reason: string | null }
 interface ReceiptRow { library_ingredient_id: string; received_at: string; qty: number }
@@ -75,22 +64,10 @@ async function readTenantRecipes(db: D1Database, tradeAccountId: string): Promis
     JOIN pouriq_ingredients_library lib ON lib.id = i.library_ingredient_id
     WHERE m.trade_account_id = ?1
       AND lib.base_unit = 'ml' AND lib.price_p > 0 AND i.pour_ml IS NOT NULL
-  `).bind(tradeAccountId).all<RecipeLineDbRow>()
-  return (res.results ?? []).map((r) => ({ ...r }))
+  `).bind(tradeAccountId).all<RecipeLineRow>()
+  return res.results ?? []
 }
 
-interface ProduceRecipeLineDbRow {
-  cocktail_id: string
-  library_ingredient_id: string
-  recipe_qty: number
-  yield_qty: number
-  base_unit: string
-  name: string
-  pack_size: number
-  price_p: number
-  purchase_qty: number
-  yield_pct: number
-}
 interface ProduceRecipeLineRow {
   cocktail_id: string
   library_ingredient_id: string
@@ -117,8 +94,8 @@ async function readTenantProduceRecipes(db: D1Database, tradeAccountId: string):
     JOIN pouriq_ingredient_uses u ON u.id = i.use_id
     WHERE m.trade_account_id = ?1
       AND lib.base_unit IN ('each', 'g') AND lib.price_p > 0 AND i.use_id IS NOT NULL
-  `).bind(tradeAccountId).all<ProduceRecipeLineDbRow>()
-  return (res.results ?? []).map((r) => ({ ...r }))
+  `).bind(tradeAccountId).all<ProduceRecipeLineRow>()
+  return res.results ?? []
 }
 
 async function readTenantVolumes(db: D1Database, tradeAccountId: string): Promise<VolumeRow[]> {

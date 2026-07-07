@@ -1,5 +1,9 @@
 import type { AccountingProvider } from './types'
 
+/** Sentinel error value written by claimPush. A row with this error is an
+ *  in-flight claim (or a crash-left reservation) — never a real failure. */
+export const PUSH_CLAIM_SENTINEL = '__claiming__'
+
 export interface AccountingPushRow {
   id: string
   invoice_id: string
@@ -40,6 +44,31 @@ export async function recordPushResult(db: D1Database, result: PushResult): Prom
       result.status, result.externalBillId, result.error ? result.error.slice(0, 500) : null,
     )
     .run()
+}
+
+/** Atomically reserve (invoice_id, provider) before calling the provider.
+ *  Inserts a sentinel 'failed' row using the UNIQUE constraint as a mutex.
+ *  Returns true only when this call inserted the row (meta.changes === 1).
+ *  A false return means another invocation already holds the slot; callers
+ *  inspect the row they read earlier to decide whether to skip or retry.
+ *  A crash after claiming leaves a 'failed/__claiming__' row that is treated
+ *  as retry-eligible by the sweep (same as any real failed row). */
+export async function claimPush(
+  db: D1Database,
+  invoiceId: string,
+  connectionId: string,
+  provider: AccountingProvider,
+): Promise<boolean> {
+  const result = await db
+    .prepare(`
+      INSERT INTO pouriq_accounting_pushes
+        (invoice_id, connection_id, provider, status, external_bill_id, error)
+      VALUES (?1, ?2, ?3, 'failed', NULL, ?4)
+      ON CONFLICT(invoice_id, provider) DO NOTHING
+    `)
+    .bind(invoiceId, connectionId, provider, PUSH_CLAIM_SENTINEL)
+    .run()
+  return result.meta.changes === 1
 }
 
 export async function getPushForInvoiceProvider(

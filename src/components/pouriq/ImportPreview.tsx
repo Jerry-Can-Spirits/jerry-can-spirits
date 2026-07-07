@@ -112,9 +112,10 @@ interface Props {
   drinks: PreviewDrinkInput[]
   libraryEntries: IngredientLibraryRow[]
   serveUnits: Record<string, ServeUnitRow[]>
+  truncated?: boolean
 }
 
-export function ImportPreview({ menuId, drinks: extracted, libraryEntries, serveUnits }: Props) {
+export function ImportPreview({ menuId, drinks: extracted, libraryEntries, serveUnits, truncated }: Props) {
   const router = useRouter()
   const [drinks, setDrinks] = useState<DrinkState[]>(() => extracted.map((d) => initialDrinkState(d, libraryEntries)))
   const [expanded, setExpanded] = useState<Set<number>>(() => new Set([0, 1, 2]))
@@ -297,6 +298,12 @@ export function ImportPreview({ menuId, drinks: extracted, libraryEntries, serve
           )}
         </div>
       </div>
+
+      {truncated && (
+        <div className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
+          This menu was long and extraction may be incomplete. Check the last drinks against the original before importing.
+        </div>
+      )}
 
       <div className="space-y-4">
         {drinks.map((d, idx) => (

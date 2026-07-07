@@ -125,7 +125,7 @@ export async function cloneMenuAction(menuId: string, newName?: string): Promise
         .run()
     }
     if (c.ingredients.length > 0) {
-      await replaceIngredients(db, newCocktailId, c.ingredients.map((i) => ({
+      await replaceIngredients(db, newCocktailId, tradeAccountId, c.ingredients.map((i) => ({
         library_ingredient_id: i.library_ingredient_id,
         pour_ml: i.pour_ml,
         unit_count: i.unit_count,
@@ -246,7 +246,7 @@ export async function saveCocktailAction(
       )
       .run()
   }
-  await replaceIngredients(db, id, input.ingredients)
+  await replaceIngredients(db, id, tradeAccountId, input.ingredients)
   revalidatePath(`/trade/pouriq/${menuId}`)
   return { cocktailId: id }
 }
@@ -557,7 +557,7 @@ export async function saveServeAction(
       .bind(input.name.trim(), input.glass, salePriceP, id)
       .run()
   }
-  await replaceIngredients(db, id, input.ingredients)
+  await replaceIngredients(db, id, tradeAccountId, input.ingredients)
   revalidatePath('/trade/pouriq/serves')
   return { serveId: id }
 }
@@ -597,7 +597,7 @@ export async function createIngredientServeAction(
     .bind(menuId, name.trim(), salePriceP)
     .first<{ id: string }>()
   if (!row) throw new Error('Serve insert returned no id')
-  await replaceIngredients(db, row.id, [{
+  await replaceIngredients(db, row.id, tradeAccountId, [{
     library_ingredient_id: libraryIngredientId,
     pour_ml: pourMl,
     unit_count: null,

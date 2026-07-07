@@ -65,7 +65,7 @@ function makeDb(cfg: DbConfig) {
       const executor = {
         async first() { ran.push(sql); return route(sql, cfg) },
         async all() { ran.push(sql); return route(sql, cfg) },
-        async run() { ran.push(sql); return { success: true } },
+        async run() { ran.push(sql); return { success: true, meta: { changes: 1 } } },
       }
       return { ...executor, bind: () => executor }
     },
@@ -142,6 +142,42 @@ describe('pushInvoiceWithConnection', () => {
     expect(outcome).toBe('skipped')
     expect(fakeAdapter.pushBill).not.toHaveBeenCalled()
     expect(fakeAdapter.refreshAccessToken).not.toHaveBeenCalled()
+  })
+
+  it('prevents duplicate provider calls when two invocations race on the same invoice', async () => {
+    // Simulate the TOCTOU race: both invocations see no existing push row,
+    // but only the first claimPush wins (meta.changes === 1); the second
+    // sees changes === 0 and skips without calling the provider.
+    let claimCallCount = 0
+    const raceCfg = { pushRow: null, invoiceRow: invoiceHeader, lines: [appliedLine] }
+    const raceDb = {
+      prepare(sql: string) {
+        const isClaim = sql.includes('DO NOTHING')
+        const executor = {
+          async first() { return route(sql, raceCfg) },
+          async all() { return route(sql, raceCfg) },
+          async run() {
+            if (isClaim) {
+              claimCallCount++
+              return { success: true, meta: { changes: claimCallCount === 1 ? 1 : 0 } }
+            }
+            return { success: true, meta: { changes: 1 } }
+          },
+        }
+        return { ...executor, bind: () => executor }
+      },
+    } as unknown as D1Database
+
+    fakeAdapter.pushBill.mockResolvedValue({ externalBillId: 'bill-1' })
+
+    const [r1, r2] = await Promise.all([
+      pushInvoiceWithConnection(raceDb, {}, baseConn, 'inv-1'),
+      pushInvoiceWithConnection(raceDb, {}, baseConn, 'inv-1'),
+    ])
+
+    expect(fakeAdapter.pushBill).toHaveBeenCalledTimes(1)
+    expect([r1, r2]).toContain('pushed')
+    expect([r1, r2]).toContain('skipped')
   })
 })
 

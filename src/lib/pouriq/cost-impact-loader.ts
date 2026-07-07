@@ -5,7 +5,7 @@
 // server-side to avoid a client waterfall on every keystroke).
 
 import { getLibraryEntry } from './ingredient-library'
-import { unitPourCostP, bottlePourCostP } from './calculations'
+import { usableCostPerBaseUnitP } from './calculations'
 import type {
   CostImpactPayload,
   ImpactCocktail,
@@ -27,16 +27,16 @@ interface RawRow {
   lib_pack_size: number
   lib_price_p: number
   lib_purchase_qty: number
+  lib_yield_pct: number
 }
 
-function rowContributionP(row: RawRow): number {
-  if (row.lib_base_unit === 'each') {
-    return unitPourCostP(row.lib_price_p, row.lib_purchase_qty, row.ingredient_unit_count ?? 1)
-  }
-  if (row.ingredient_pour_ml !== null) {
-    return bottlePourCostP(row.lib_price_p, row.lib_pack_size, row.lib_purchase_qty, row.ingredient_pour_ml)
-  }
-  return 0
+export function rowContributionP(row: Pick<RawRow, 'lib_price_p' | 'lib_purchase_qty' | 'lib_pack_size' | 'lib_yield_pct' | 'lib_base_unit' | 'ingredient_pour_ml' | 'ingredient_unit_count'>): number {
+  const perBaseUnit = usableCostPerBaseUnitP(row.lib_price_p, row.lib_purchase_qty, row.lib_pack_size, row.lib_yield_pct)
+  const amount = row.lib_base_unit === 'each'
+    ? (row.ingredient_unit_count ?? 0)
+    : (row.ingredient_pour_ml ?? 0)
+  if (amount === 0) return 0
+  return Math.round(perBaseUnit * amount)
 }
 
 /**
@@ -75,7 +75,8 @@ export async function loadImpactPayload(
         lib.base_unit AS lib_base_unit,
         lib.pack_size AS lib_pack_size,
         lib.price_p AS lib_price_p,
-        lib.purchase_qty AS lib_purchase_qty
+        lib.purchase_qty AS lib_purchase_qty,
+        lib.yield_pct AS lib_yield_pct
       FROM affected a
       JOIN pouriq_cocktails c ON c.id = a.cocktail_id
       JOIN pouriq_menus m ON m.id = c.menu_id

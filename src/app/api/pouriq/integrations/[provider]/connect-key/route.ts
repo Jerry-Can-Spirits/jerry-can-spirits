@@ -5,7 +5,7 @@
 import { NextResponse } from 'next/server'
 import { getCloudflareContext } from '@opennextjs/cloudflare'
 import { checkPourIqAccess } from '@/lib/pouriq/access'
-import { isRateLimited } from '@/lib/kv'
+import { isAllowedOrigin, isRateLimited } from '@/lib/kv'
 import { upsertConnection } from '@/lib/pouriq/pos/connections'
 import { getAdapterForProvider } from '@/lib/pouriq/pos/providers'
 import { isKnownProvider, PROVIDER_CREDENTIAL_FIELDS } from '@/lib/pouriq/pos/types'
@@ -15,6 +15,9 @@ export const runtime = 'nodejs'
 interface Params { params: Promise<{ provider: string }> }
 
 export async function POST(request: Request, { params }: Params) {
+  if (!isAllowedOrigin(request)) {
+    return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+  }
   const access = await checkPourIqAccess()
   if (access.kind !== 'ok') {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })

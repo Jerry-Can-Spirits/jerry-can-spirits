@@ -32,7 +32,7 @@ export async function getMenu(
 
 export async function getActiveMenu(db: D1Database, tradeAccountId: string): Promise<MenuRow | null> {
   return await db
-    .prepare(`SELECT * FROM pouriq_menus WHERE trade_account_id = ?1 AND is_active = 1 LIMIT 1`)
+    .prepare(`SELECT * FROM pouriq_menus WHERE trade_account_id = ?1 AND is_active = 1 AND is_serves_menu = 0 LIMIT 1`)
     .bind(tradeAccountId)
     .first<MenuRow>()
 }
@@ -67,7 +67,7 @@ export async function insertMenu(
   // The tenant's first menu becomes active automatically — there is always
   // an active menu once one exists. Later menus insert inactive.
   const existing = await db
-    .prepare(`SELECT COUNT(*) AS c FROM pouriq_menus WHERE trade_account_id = ?1`)
+    .prepare(`SELECT COUNT(*) AS c FROM pouriq_menus WHERE trade_account_id = ?1 AND is_serves_menu = 0`)
     .bind(data.trade_account_id)
     .first<{ c: number }>()
   const isActive = (existing?.c ?? 0) === 0 ? 1 : 0
@@ -134,21 +134,24 @@ export async function deleteMenu(
     .prepare(`SELECT is_active FROM pouriq_menus WHERE id = ?1 AND trade_account_id = ?2`)
     .bind(menuId, tradeAccountId)
     .first<{ is_active: number }>()
-  await db
-    .prepare(`DELETE FROM pouriq_menus WHERE id = ?1 AND trade_account_id = ?2`)
-    .bind(menuId, tradeAccountId)
-    .run()
-  // If the active menu was deleted, promote the most-recently-updated
-  // remaining menu so there is always an active menu when any exist.
+
+  const statements: D1PreparedStatement[] = [
+    db.prepare(`DELETE FROM pouriq_menus WHERE id = ?1 AND trade_account_id = ?2`).bind(menuId, tradeAccountId),
+  ]
+  // If the active menu was deleted, promote the most-recently-updated real
+  // menu so there is always an active menu when any exist. The serves menu
+  // (is_serves_menu = 1) must never become the active real menu.
   if (row?.is_active === 1) {
-    await db
-      .prepare(`
-        UPDATE pouriq_menus SET is_active = 1, updated_at = datetime('now')
-        WHERE id = (SELECT id FROM pouriq_menus WHERE trade_account_id = ?1 ORDER BY updated_at DESC LIMIT 1)
-      `)
-      .bind(tradeAccountId)
-      .run()
+    statements.push(
+      db
+        .prepare(`
+          UPDATE pouriq_menus SET is_active = 1, updated_at = datetime('now')
+          WHERE id = (SELECT id FROM pouriq_menus WHERE trade_account_id = ?1 AND is_serves_menu = 0 ORDER BY updated_at DESC LIMIT 1)
+        `)
+        .bind(tradeAccountId),
+    )
   }
+  await db.batch(statements)
 }
 
 export async function listCocktailsForMenu(
@@ -479,6 +482,7 @@ export async function insertCocktail(
 export async function replaceIngredients(
   db: D1Database,
   cocktailId: string,
+  tradeAccountId: string,
   ingredients: Array<{
     library_ingredient_id: string
     pour_ml: number | null
@@ -488,6 +492,23 @@ export async function replaceIngredients(
     use_id: string | null
   }>,
 ): Promise<void> {
+  // Validate ownership of all supplied library ingredient ids before writing.
+  // Lines with no library link (free-text/uncosted) are excluded from the check.
+  const libIds = [...new Set(ingredients.map(i => i.library_ingredient_id).filter(id => !!id))]
+  if (libIds.length > 0) {
+    const placeholders = libIds.map((_, i) => `?${i + 2}`).join(', ')
+    const rows = await db
+      .prepare(`SELECT id FROM pouriq_ingredients_library WHERE trade_account_id = ?1 AND id IN (${placeholders})`)
+      .bind(tradeAccountId, ...libIds)
+      .all<{ id: string }>()
+    const verified = new Set((rows.results ?? []).map(r => r.id))
+    for (const id of libIds) {
+      if (!verified.has(id)) {
+        throw new Error('One or more ingredient library entries do not belong to this account')
+      }
+    }
+  }
+
   const statements: D1PreparedStatement[] = [
     db.prepare(`DELETE FROM pouriq_ingredients WHERE cocktail_id = ?1`).bind(cocktailId),
   ]

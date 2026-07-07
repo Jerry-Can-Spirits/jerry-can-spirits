@@ -133,6 +133,39 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Menu not found' }, { status: 404 })
   }
 
+  // Resolve all caller-supplied existing_library_ids up front, scoped to this tenant.
+  // Doing this before phase-1 inserts ensures we never orphan newly created library rows
+  // if an IDOR rejection fires partway through.
+  const existingIdSet = new Set<string>()
+  for (const drink of body.drinks) {
+    for (const ing of drink.ingredients) {
+      if (ing.existing_library_id) existingIdSet.add(ing.existing_library_id)
+    }
+  }
+  const existingLibraryTypes = new Map<string, IngredientType>()
+  if (existingIdSet.size > 0) {
+    const existingIds = [...existingIdSet]
+    const placeholders = existingIds.map((_, i) => `?${i + 1}`).join(', ')
+    const typeRows = await db
+      .prepare(
+        `SELECT id, ingredient_type FROM pouriq_ingredients_library WHERE id IN (${placeholders}) AND trade_account_id = ?${existingIds.length + 1}`,
+      )
+      .bind(...existingIds, access.tradeAccountId)
+      .all<{ id: string; ingredient_type: IngredientType }>()
+    for (const row of typeRows.results ?? []) {
+      existingLibraryTypes.set(row.id, row.ingredient_type)
+    }
+    // Reject if any caller-supplied id was not found for this tenant (unknown or foreign).
+    for (const id of existingIds) {
+      if (!existingLibraryTypes.has(id)) {
+        return NextResponse.json(
+          { error: 'One or more ingredient library entries do not belong to this account' },
+          { status: 400 },
+        )
+      }
+    }
+  }
+
   // Dedupe new library entries by normalised name within this request. If two
   // drinks both reference the same new ingredient, we want a single library row.
   const dedupeKey = (name: string) => name.trim().toLowerCase()
@@ -181,27 +214,17 @@ export async function POST(request: Request) {
     }
   } catch (err) {
     Sentry.captureException(err, { tags: { route: 'pouriq-import-commit', phase: 'library' } })
+    // Remove any library rows created earlier in this request so retries don't
+    // collide with the unique index (trade_account_id, LOWER(name), pack_size).
+    try {
+      for (const id of newLibraryIdByName.values()) {
+        await db
+          .prepare(`DELETE FROM pouriq_ingredients_library WHERE id = ?1 AND trade_account_id = ?2`)
+          .bind(id, access.tradeAccountId)
+          .run()
+      }
+    } catch { /* swallow */ }
     return NextResponse.json({ error: 'Could not save new library entries' }, { status: 500 })
-  }
-
-  // Build a map of existing library ingredient types so item_type can be inferred.
-  const existingIdSet = new Set<string>()
-  for (const drink of body.drinks) {
-    for (const ing of drink.ingredients) {
-      if (ing.existing_library_id) existingIdSet.add(ing.existing_library_id)
-    }
-  }
-  const existingLibraryTypes = new Map<string, IngredientType>()
-  if (existingIdSet.size > 0) {
-    const existingIds = [...existingIdSet]
-    const placeholders = existingIds.map((_, i) => `?${i + 1}`).join(', ')
-    const typeRows = await db
-      .prepare(`SELECT id, ingredient_type FROM pouriq_ingredients_library WHERE id IN (${placeholders})`)
-      .bind(...existingIds)
-      .all<{ id: string; ingredient_type: IngredientType }>()
-    for (const row of typeRows.results ?? []) {
-      existingLibraryTypes.set(row.id, row.ingredient_type)
-    }
   }
 
   const createdDrinkIds: string[] = []
@@ -253,6 +276,15 @@ export async function POST(request: Request) {
     try {
       for (const id of createdDrinkIds) {
         await db.prepare(`DELETE FROM pouriq_cocktails WHERE id = ?1`).bind(id).run()
+      }
+    } catch { /* swallow */ }
+    // Also remove phase-1 library rows so retries don't collide on the unique index.
+    try {
+      for (const id of newLibraryIdByName.values()) {
+        await db
+          .prepare(`DELETE FROM pouriq_ingredients_library WHERE id = ?1 AND trade_account_id = ?2`)
+          .bind(id, access.tradeAccountId)
+          .run()
       }
     } catch { /* swallow */ }
     return NextResponse.json({ error: 'Could not save drinks. Please try again.' }, { status: 500 })

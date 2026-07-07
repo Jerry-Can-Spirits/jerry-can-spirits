@@ -8,7 +8,7 @@
 // ingredient. The client subtracts the old contribution and adds the
 // new contribution to get the projected numbers.
 
-import { usableCostPerBaseUnitP } from './calculations'
+import { usableCostPerBaseUnitP, netSalePrice } from './calculations'
 
 export interface ImpactIngredient {
   id: string
@@ -77,12 +77,6 @@ export interface ProjectedCocktail extends ImpactCocktail {
   current_margin_p: number
   below_target_now: boolean
   below_target_after: boolean
-}
-
-const VAT_DIVISOR = 1.20
-function netSalePrice(sale_price_p: number, includeVat: boolean): number {
-  if (!includeVat) return sale_price_p
-  return Math.round(sale_price_p / VAT_DIVISOR)
 }
 
 export function projectCocktail(

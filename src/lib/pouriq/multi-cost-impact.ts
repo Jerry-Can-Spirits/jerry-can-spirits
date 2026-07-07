@@ -8,7 +8,7 @@
 // the current contribution.
 
 import { rollupByMenu, type MenuRollup, type ProjectedCocktail } from './cost-impact'
-import { unitPourCostP, bottlePourCostP } from './calculations'
+import { netSalePrice, usableCostPerBaseUnitP } from './calculations'
 
 export interface AppliedCostChange {
   library_ingredient_id: string
@@ -39,12 +39,7 @@ interface RawRow {
   lib_pack_size: number
   lib_price_p: number
   lib_purchase_qty: number
-}
-
-const VAT_DIVISOR = 1.20
-function netSalePrice(salePriceP: number, includeVat: boolean): number {
-  if (!includeVat) return salePriceP
-  return Math.round(salePriceP / VAT_DIVISOR)
+  lib_yield_pct: number
 }
 
 function placeholders(n: number, offset: number): string {
@@ -57,17 +52,16 @@ function placeholders(n: number, offset: number): string {
  * Pour cost contribution of a single ingredient row using the supplied
  * costP (which may be the current OR the historical pre-commit value).
  */
-function contributionP(
-  row: Pick<RawRow, 'ingredient_pour_ml' | 'ingredient_unit_count' | 'lib_base_unit' | 'lib_pack_size' | 'lib_purchase_qty'>,
+export function contributionP(
+  row: Pick<RawRow, 'ingredient_pour_ml' | 'ingredient_unit_count' | 'lib_base_unit' | 'lib_pack_size' | 'lib_purchase_qty' | 'lib_yield_pct'>,
   costP: number,
 ): number {
-  if (row.lib_base_unit === 'each') {
-    return unitPourCostP(costP, row.lib_purchase_qty, row.ingredient_unit_count ?? 1)
-  }
-  if (row.ingredient_pour_ml !== null) {
-    return bottlePourCostP(costP, row.lib_pack_size, row.lib_purchase_qty, row.ingredient_pour_ml)
-  }
-  return 0
+  const perBaseUnit = usableCostPerBaseUnitP(costP, row.lib_purchase_qty, row.lib_pack_size, row.lib_yield_pct)
+  const amount = row.lib_base_unit === 'each'
+    ? (row.ingredient_unit_count ?? 0)
+    : (row.ingredient_pour_ml ?? 0)
+  if (amount === 0) return 0
+  return Math.round(perBaseUnit * amount)
 }
 
 export async function loadMultiCostImpact(
@@ -114,7 +108,8 @@ export async function loadMultiCostImpact(
       lib.base_unit AS lib_base_unit,
       lib.pack_size AS lib_pack_size,
       lib.price_p AS lib_price_p,
-      lib.purchase_qty AS lib_purchase_qty
+      lib.purchase_qty AS lib_purchase_qty,
+      lib.yield_pct AS lib_yield_pct
     FROM affected a
     JOIN pouriq_cocktails c ON c.id = a.cocktail_id
     JOIN pouriq_menus m ON m.id = c.menu_id
