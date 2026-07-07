@@ -46,6 +46,7 @@ export interface PreviewDrink {
 export interface PreviewPayload {
   drinks: PreviewDrink[]
   source_text_preview: string
+  truncated?: boolean
 }
 
 function bufferToBase64(buffer: ArrayBuffer): string {
@@ -195,6 +196,7 @@ export async function POST(request: Request) {
   const payload: PreviewPayload = {
     drinks,
     source_text_preview: menuText ? menuText.slice(0, 500) : '',
+    truncated: extracted.stopReason === 'max_tokens' ? true : undefined,
   }
 
   if (pdfR2Key) {

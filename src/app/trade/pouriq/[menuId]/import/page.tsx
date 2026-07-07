@@ -65,7 +65,7 @@ export default function ImportPage({ params }: Props) {
           {!preview ? (
             <ImportSourceTabs menuId={menuId} initialSource={initialSource} onPreview={setPreview} />
           ) : library && serveUnits ? (
-            <ImportPreview menuId={menuId} drinks={preview.drinks} libraryEntries={library} serveUnits={serveUnits} />
+            <ImportPreview menuId={menuId} drinks={preview.drinks} libraryEntries={library} serveUnits={serveUnits} truncated={preview.truncated} />
           ) : (
             <p className="text-slate-600 text-sm">Loading your library…</p>
           )}

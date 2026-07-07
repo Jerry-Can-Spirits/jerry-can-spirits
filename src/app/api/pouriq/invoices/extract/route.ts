@@ -36,6 +36,7 @@ export interface PreviewPayload {
   invoice_number: string | null
   invoice_date: string | null
   lines: PreviewLine[]
+  truncated?: boolean
 }
 
 interface Body { ticket: string }
@@ -164,6 +165,7 @@ export async function POST(request: Request) {
     invoice_number: extracted.result.invoice_number,
     invoice_date: extracted.result.invoice_date,
     lines,
+    truncated: extracted.stopReason === 'max_tokens' ? true : undefined,
   }
 
   return NextResponse.json(payload)
