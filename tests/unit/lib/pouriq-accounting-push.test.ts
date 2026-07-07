@@ -93,6 +93,18 @@ describe('pushInvoiceWithConnection', () => {
     expect(ranHas(ran, 'SET enabled = 0')).toBe(false)
   })
 
+  it('does not misclassify a 400 error with "401" in the body as auth-failed', async () => {
+    const { db, ran } = makeDb({ pushRow: null, invoiceRow: invoiceHeader, lines: [appliedLine] })
+    fakeAdapter.pushBill.mockRejectedValue(new Error('Xero 400: LineAmount 401.00 is invalid'))
+
+    const outcome = await pushInvoiceWithConnection(db, {}, baseConn, 'inv-1')
+
+    expect(outcome).toBe('failed')
+    expect(ranHas(ran, 'INSERT INTO pouriq_accounting_pushes')).toBe(true)
+    expect(ranHas(ran, 'SET last_push_error = ?1')).toBe(true)
+    expect(ranHas(ran, 'SET enabled = 0')).toBe(false)
+  })
+
   it('refreshes an expired access token, persists it, then pushes', async () => {
     const conn = { ...baseConn, token_expires_at: '2000-01-01T00:00:00Z' }
     const { db, ran } = makeDb({ pushRow: null, invoiceRow: invoiceHeader, lines: [appliedLine] })

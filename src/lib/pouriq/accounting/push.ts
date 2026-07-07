@@ -91,7 +91,8 @@ export async function pushInvoiceWithConnection(
     } catch (e) {
       const message = (e as Error)?.message ?? 'unknown'
       await recordFailure(db, conn, invoiceId, message)
-      if (/\b401\b/.test(message)) {
+      // Status is anchored right after the provider name; body text may echo "401" in amounts
+      if (/^\w+ 401\b/.test(message)) {
         await markAccountingAuthFailure(db, conn.id, message)
         Sentry.captureException(e, {
           tags: { feature: 'pouriq-accounting-push', provider: conn.provider },
