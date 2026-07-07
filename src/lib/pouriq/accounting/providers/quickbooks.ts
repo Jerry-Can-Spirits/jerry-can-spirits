@@ -33,7 +33,10 @@ export async function getQuickBooksDiscovery(env: Pick<QuickBooksEnv, 'QUICKBOOK
   if (discoveryCache) return discoveryCache
   const url = env.QUICKBOOKS_ENV === 'production' ? DISCOVERY_PRODUCTION : DISCOVERY_SANDBOX
   const res = await fetch(url, { headers: { Accept: 'application/json' } })
-  if (!res.ok) throw new Error(`QuickBooks discovery ${res.status}`)
+  if (!res.ok) {
+    const tid = res.headers.get('intuit_tid') ?? 'none'
+    throw new Error(`QuickBooks discovery ${res.status} [intuit_tid ${tid}]`)
+  }
   const doc = await res.json() as Discovery
   discoveryCache = doc
   return doc
@@ -184,11 +187,15 @@ export function createQuickBooksAdapter(env: QuickBooksEnv): AccountingAdapter {
 
     async revokeToken(connection) {
       const token = connection.refresh_token ?? connection.access_token
-      await fetch(REVOKE_URL, {
+      const res = await fetch(REVOKE_URL, {
         method: 'POST',
         headers: { Authorization: basicAuth, 'Content-Type': 'application/json', Accept: 'application/json' },
         body: JSON.stringify({ token }),
       })
+      if (!res.ok) {
+        const tid = res.headers.get('intuit_tid') ?? 'none'
+        throw new Error(`QuickBooks revoke ${res.status} [intuit_tid ${tid}]`)
+      }
     },
   }
 }

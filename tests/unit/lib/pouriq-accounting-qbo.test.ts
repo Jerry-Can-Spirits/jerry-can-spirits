@@ -113,4 +113,14 @@ describe('createQuickBooksAdapter', () => {
       { code: '90', name: 'Rent' },
     ])
   })
+
+  it('marks inclusive bills as TaxInclusive', async () => {
+    fetchMock
+      .mockResolvedValueOnce(jsonResponse({ QueryResponse: { Vendor: [{ Id: 'v7' }] } }))
+      .mockResolvedValueOnce(jsonResponse({ Bill: { Id: 'qbo-bill-3' } }))
+    const adapter = createQuickBooksAdapter(env)
+    await adapter.pushBill(connection, { ...bill, amountsIncludeTax: true })
+    const payload = JSON.parse(fetchMock.mock.calls[1][1].body as string)
+    expect(payload.GlobalTaxCalculation).toBe('TaxInclusive')
+  })
 })
