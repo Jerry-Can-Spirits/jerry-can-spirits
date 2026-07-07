@@ -105,6 +105,8 @@ export function AccountingCard({ provider, title, description, connection, avail
         )}
       </div>
 
+      {optionsError && <p role="alert" className="mt-4 text-sm text-rose-600">{optionsError}</p>}
+
       {available && connection && !needsSetup && (
         <div className="mt-4 text-sm text-slate-600 space-y-1">
           <p>
@@ -126,7 +128,6 @@ export function AccountingCard({ provider, title, description, connection, avail
           <p className="text-sm text-slate-500">
             Choose where pushed bills should be coded. Invoices committed in the meantime are queued and pushed once this is saved.
           </p>
-          {optionsError && <p role="alert" className="text-sm text-rose-600">{optionsError}</p>}
           {options?.needsTenant && (
             <label className="block text-sm">
               <span className="text-slate-700">Organisation</span>
