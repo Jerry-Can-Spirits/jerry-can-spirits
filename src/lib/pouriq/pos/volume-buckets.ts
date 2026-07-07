@@ -39,9 +39,12 @@ export function bucketLines(menu: Pick<MenuRow, 'volume_cadence'>, lines: Cockta
 
 // Additive upsert (existing units + new units). POS volume accumulates,
 // unlike the manual volumes.ts upsert which REPLACES.
+// All bucket upserts are sent as one db.batch so they commit atomically.
+// A mid-loop Worker timeout can no longer lose volume for partially-processed buckets.
 export async function upsertAdditiveVolumes(db: D1Database, entries: BucketEntry[]): Promise<void> {
-  for (const v of entries) {
-    await db
+  if (entries.length === 0) return
+  const stmts = entries.map((v) =>
+    db
       .prepare(`
         INSERT INTO pouriq_drink_volumes (cocktail_id, period_start, period_end, units_sold, source)
         VALUES (?1, ?2, ?3, ?4, 'pos')
@@ -51,6 +54,6 @@ export async function upsertAdditiveVolumes(db: D1Database, entries: BucketEntry
           updated_at = datetime('now')
       `)
       .bind(v.cocktailId, v.periodStart, v.periodEnd, Math.round(v.units))
-      .run()
-  }
+  )
+  await db.batch(stmts)
 }
