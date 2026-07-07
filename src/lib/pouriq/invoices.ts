@@ -9,6 +9,7 @@ export interface InvoiceRow {
   net_total_p: number | null
   line_count: number
   applied_line_count: number
+  prices_include_vat: number | null
   r2_key: string | null
   created_at: string
 }
@@ -31,6 +32,7 @@ export interface InsertInvoiceHeader {
   invoice_number: string | null
   invoice_date: string | null
   line_count: number
+  prices_include_vat: number
 }
 
 export interface InsertInvoiceLine {
@@ -58,8 +60,8 @@ export async function insertInvoiceHeader(
   const result = await db
     .prepare(`
       INSERT INTO pouriq_invoices
-        (trade_account_id, supplier_name, invoice_number, invoice_date, line_count, applied_line_count)
-      VALUES (?1, ?2, ?3, ?4, ?5, 0)
+        (trade_account_id, supplier_name, invoice_number, invoice_date, line_count, applied_line_count, prices_include_vat)
+      VALUES (?1, ?2, ?3, ?4, ?5, 0, ?6)
       RETURNING id
     `)
     .bind(
@@ -68,10 +70,25 @@ export async function insertInvoiceHeader(
       data.invoice_number,
       data.invoice_date,
       data.line_count,
+      data.prices_include_vat,
     )
     .first<{ id: string }>()
   if (!result) throw new Error('Invoice header insert returned no id')
   return result.id
+}
+
+// Normalise an invoice date string (possibly date-only "YYYY-MM-DD") to a
+// SQLite datetime string suitable for comparison with timestamp columns.
+// A bare date would sort BEFORE any timestamp on the same day (string order),
+// so same-day deliveries would fall outside receipt windows. Bare dates are
+// expanded to start-of-day ("YYYY-MM-DD 00:00:00"). Full ISO strings are kept
+// as-is. Falls back to nowIso when invoiceDate is null/empty.
+export function receiptTimestamp(invoiceDate: string | null, nowIso: string): string {
+  const trimmed = invoiceDate?.trim()
+  if (!trimmed) return nowIso
+  // Bare date: no "T", length <= 10 (e.g. "2026-07-07")
+  if (!trimmed.includes('T') && trimmed.length <= 10) return `${trimmed} 00:00:00`
+  return trimmed
 }
 
 export async function insertInvoiceLine(

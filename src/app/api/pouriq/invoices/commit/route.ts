@@ -14,6 +14,7 @@ import {
   insertInvoiceHeader,
   insertInvoiceLine,
   finaliseInvoiceTotals,
+  receiptTimestamp,
 } from '@/lib/pouriq/invoices'
 import { type CostPricingMode } from '@/lib/pouriq/cost-changes'
 import { getLibraryEntry, insertLibraryEntry } from '@/lib/pouriq/ingredient-library'
@@ -134,7 +135,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: validationError }, { status: 400 })
   }
 
-  // 1. Insert the invoice header.
+  // 1. Insert the invoice header (prices_include_vat written atomically).
   let invoiceId: string
   try {
     invoiceId = await insertInvoiceHeader(db, {
@@ -143,21 +144,11 @@ export async function POST(request: Request) {
       invoice_number: body.invoice_number?.trim() || null,
       invoice_date: body.invoice_date?.trim() || null,
       line_count: body.lines.length,
+      prices_include_vat: body.prices_include_vat === true ? 1 : 0,
     })
   } catch (err) {
     Sentry.captureException(err, { tags: { route: 'pouriq-invoice-commit', phase: 'header' } })
     return NextResponse.json({ error: 'Could not save invoice header' }, { status: 500 })
-  }
-
-  // Record the commit-time VAT basis so a later accounting-push retry can
-  // build the bill with the right inclusive/exclusive tax flag.
-  try {
-    await db
-      .prepare(`UPDATE pouriq_invoices SET prices_include_vat = ?1 WHERE id = ?2`)
-      .bind(body.prices_include_vat === true ? 1 : 0, invoiceId)
-      .run()
-  } catch (err) {
-    Sentry.captureException(err, { tags: { route: 'pouriq-invoice-commit', phase: 'vat-basis' }, extra: { invoiceId } })
   }
 
   // 2. Process each line. Applied lines run library + invoice_line + cost_change
@@ -227,14 +218,16 @@ export async function POST(request: Request) {
           oldCostP = null
         }
       } else {
-        libraryId = line.library_id!
+        if (!line.library_id) throw new Error(`Line is applied but library_id is missing`)
+        libraryId = line.library_id
         const existing = await getLibraryEntry(db, libraryId, access.tradeAccountId)
         if (!existing) throw new Error(`Library entry ${libraryId} not found for tenant`)
         pricingMode = existing.base_unit === 'each' ? 'unit' : 'bottle'
         oldCostP = existing.price_p
       }
 
-      const newCostP = line.new_cost_p!
+      if (line.new_cost_p === undefined || line.new_cost_p === null) throw new Error(`Line is applied but new_cost_p is missing`)
+      const newCostP = line.new_cost_p
       const netCostP = netPriceP(newCostP, includesVat)
       const enteredCostP = newCostP
       const invoiceLineId = genId()
@@ -313,6 +306,16 @@ export async function POST(request: Request) {
     // invoice_id set to NULL (per ON DELETE SET NULL) — the audit trail of
     // any library UPDATE that did succeed is preserved.
     try { await db.prepare(`DELETE FROM pouriq_invoices WHERE id = ?1`).bind(invoiceId).run() } catch { /* swallow */ }
+    // Also delete any library entries created during THIS request so a retry
+    // doesn't collide with the unique index (trade_account_id, LOWER(name), pack_size).
+    for (const orphanId of newLibraryIdByName.values()) {
+      try {
+        await db
+          .prepare(`DELETE FROM pouriq_ingredients_library WHERE id = ?1 AND trade_account_id = ?2`)
+          .bind(orphanId, access.tradeAccountId)
+          .run()
+      } catch { /* swallow */ }
+    }
     return NextResponse.json({ error: 'Could not save invoice lines. Please try again.' }, { status: 500 })
   }
 
@@ -329,7 +332,7 @@ export async function POST(request: Request) {
       purchaseQtyRows.results.map((r) => [r.id, r.purchase_qty]),
     )
 
-    const invoiceDateISO = body.invoice_date?.trim() || new Date().toISOString()
+    const invoiceDateISO = receiptTimestamp(body.invoice_date ?? null, new Date().toISOString())
 
     for (const receipt of appliedReceipts) {
       const bottles = receiptBottlesFromInvoiceLine(
