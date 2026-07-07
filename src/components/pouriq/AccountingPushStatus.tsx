@@ -10,9 +10,10 @@ interface Props {
   status: 'pushed' | 'failed' | 'pending'
   error: string | null
   pushedAt: string | null
+  predatesConnection?: boolean
 }
 
-export function AccountingPushStatus({ invoiceId, provider, providerTitle, status, error, pushedAt }: Props) {
+export function AccountingPushStatus({ invoiceId, provider, providerTitle, status, error, pushedAt, predatesConnection }: Props) {
   const router = useRouter()
   const [retrying, setRetrying] = useState(false)
 
@@ -42,7 +43,9 @@ export function AccountingPushStatus({ invoiceId, provider, providerTitle, statu
       <span className="text-rose-600" role={status === 'failed' ? 'alert' : undefined}>
         {status === 'failed'
           ? `Push to ${providerTitle} failed${error ? `: ${error}` : ''}`
-          : `Queued for ${providerTitle}. It will push on the next hourly run.`}
+          : predatesConnection
+            ? `This invoice predates the ${providerTitle} connection. Push it now to send it across.`
+            : `Queued for ${providerTitle}. It will push on the next hourly run.`}
       </span>
       <button
         type="button"

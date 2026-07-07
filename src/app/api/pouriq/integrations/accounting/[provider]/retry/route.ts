@@ -2,7 +2,8 @@ import { NextResponse } from 'next/server'
 import { getCloudflareContext } from '@opennextjs/cloudflare'
 import { isAllowedOrigin } from '@/lib/kv'
 import { checkPourIqAccess } from '@/lib/pouriq/access'
-import { pushInvoiceToAccounting } from '@/lib/pouriq/accounting/push'
+import { pushInvoiceWithConnection } from '@/lib/pouriq/accounting/push'
+import { getAccountingConnection, isConnectionReady } from '@/lib/pouriq/accounting/connections'
 import { getPushForInvoiceProvider } from '@/lib/pouriq/accounting/pushes'
 import { isKnownAccountingProvider } from '@/lib/pouriq/accounting/types'
 
@@ -35,7 +36,10 @@ export async function POST(request: Request, { params }: Params) {
     .first<{ id: string }>()
   if (!invoice) return NextResponse.json({ error: 'Invoice not found' }, { status: 404 })
 
-  await pushInvoiceToAccounting(db, env, access.tradeAccountId, body.invoice_id)
+  const conn = await getAccountingConnection(db, access.tradeAccountId, provider)
+  if (!conn || !isConnectionReady(conn)) return NextResponse.json({ error: 'Not connected' }, { status: 404 })
+
+  await pushInvoiceWithConnection(db, env, conn, body.invoice_id)
   const push = await getPushForInvoiceProvider(db, body.invoice_id, provider)
   return NextResponse.json({ status: push?.status ?? 'failed', error: push?.error ?? null })
 }

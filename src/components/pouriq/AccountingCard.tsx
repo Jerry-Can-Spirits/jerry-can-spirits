@@ -7,6 +7,7 @@ export interface AccountingCardConnection {
   external_account_name: string | null
   default_account_code: string | null
   needs_setup: boolean
+  needs_reconnect: boolean
   last_push_at: string | null
   last_push_error: string | null
 }
@@ -17,6 +18,7 @@ interface Props {
   description: string
   connection: AccountingCardConnection | null
   available: boolean
+  unavailableReason?: string
 }
 
 interface Options {
@@ -26,7 +28,7 @@ interface Options {
   taxOptions: Array<{ code: string; name: string }>
 }
 
-export function AccountingCard({ provider, title, description, connection, available }: Props) {
+export function AccountingCard({ provider, title, description, connection, available, unavailableReason }: Props) {
   const router = useRouter()
   const [options, setOptions] = useState<Options | null>(null)
   const [optionsError, setOptionsError] = useState<string | null>(null)
@@ -90,7 +92,9 @@ export function AccountingCard({ provider, title, description, connection, avail
           <p className="text-sm text-slate-500 mt-1">{description}</p>
         </div>
         {!available ? (
-          <span className="text-xs text-slate-400 whitespace-nowrap">Coming soon</span>
+          <span className={`text-xs text-slate-400 ${unavailableReason ? 'text-right max-w-[12rem]' : 'whitespace-nowrap'}`}>
+            {unavailableReason ?? 'Coming soon'}
+          </span>
         ) : !connection ? (
           <a
             href={`/api/pouriq/integrations/accounting/${provider}/oauth/start`}
@@ -107,7 +111,21 @@ export function AccountingCard({ provider, title, description, connection, avail
 
       {optionsError && <p role="alert" className="mt-4 text-sm text-rose-600">{optionsError}</p>}
 
-      {available && connection && !needsSetup && (
+      {available && connection && connection.needs_reconnect && (
+        <div className="mt-4 border-t border-slate-100 pt-4 space-y-3">
+          <p role="alert" className="text-sm text-rose-600">
+            The connection has stopped working and pushing is paused. Reconnect to resume.
+          </p>
+          <a
+            href={`/api/pouriq/integrations/accounting/${provider}/oauth/start`}
+            className="inline-block px-4 py-2 rounded-lg bg-emerald-600 text-white text-sm font-medium hover:bg-emerald-500 whitespace-nowrap"
+          >
+            Reconnect {title}
+          </a>
+        </div>
+      )}
+
+      {available && connection && !connection.needs_reconnect && !needsSetup && (
         <div className="mt-4 text-sm text-slate-600 space-y-1">
           <p>
             Connected to <strong className="text-slate-900">{connection.external_account_name ?? title}</strong>,
@@ -122,7 +140,7 @@ export function AccountingCard({ provider, title, description, connection, avail
         </div>
       )}
 
-      {available && connection && needsSetup && (
+      {available && connection && !connection.needs_reconnect && needsSetup && (
         <div className="mt-4 border-t border-slate-100 pt-4 space-y-3">
           <p className="text-sm font-medium text-slate-900">Finish setup</p>
           <p className="text-sm text-slate-500">

@@ -37,6 +37,10 @@ export default async function InvoiceDetailPage({ params }: Props) {
   const accountingConnections = await listAccountingConnections(db, access.tradeAccountId)
   const accountingConn = accountingConnections.find(isConnectionReady) ?? null
   const push = accountingConn ? await getPushForInvoiceProvider(db, id, accountingConn.provider) : null
+  // Both columns are D1 datetime('now') strings in the same format, so a plain
+  // string comparison is the correct chronological test. The sweep only covers
+  // invoices committed at or after the connection was created.
+  const predatesConnection = !!accountingConn && !push && invoice.created_at < accountingConn.created_at
 
   const lines = await listInvoiceLines(db, id)
   const applied = lines.filter((l) => l.applied === 1)
@@ -82,6 +86,7 @@ export default async function InvoiceDetailPage({ params }: Props) {
               status={push?.status ?? 'pending'}
               error={push?.error ?? null}
               pushedAt={push?.status === 'pushed' ? push.pushed_at : null}
+              predatesConnection={predatesConnection}
             />
           </div>
         )}

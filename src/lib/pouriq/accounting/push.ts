@@ -9,13 +9,15 @@ import * as Sentry from '@sentry/nextjs'
 import { buildBill, needsTokenRefresh, type BillInvoiceHeader, type BillInvoiceLine } from './bill-builder'
 import {
   isConnectionReady, listAccountingConnections,
-  markAccountingPushError, markAccountingPushSuccess, updateAccountingTokens,
+  markAccountingAuthFailure, markAccountingPushError, markAccountingPushSuccess, updateAccountingTokens,
 } from './connections'
 import { getPushForInvoiceProvider, recordPushResult } from './pushes'
 import { getAccountingAdapter, type AccountingProvidersEnv } from './providers'
 import type { AccountingAdapter, AccountingConnection } from './types'
 
 const SWEEP_BATCH_LIMIT = 25
+
+export type PushOutcome = 'pushed' | 'failed' | 'auth-failed' | 'skipped'
 
 async function ensureFreshToken(
   db: D1Database,
@@ -34,61 +36,117 @@ async function ensureFreshToken(
   }
 }
 
-export async function pushInvoiceToAccounting(
+/** Push one invoice to one known connection. Never throws: every failure
+ *  mode is recorded and classified. Auth failures (revoked/expired refresh
+ *  token, or a 401 from the push) pause the connection instead of looping. */
+export async function pushInvoiceWithConnection(
   db: D1Database,
   env: AccountingProvidersEnv,
-  tradeAccountId: string,
+  conn: AccountingConnection,
   invoiceId: string,
-): Promise<void> {
-  let conn: AccountingConnection | null = null
+): Promise<PushOutcome> {
   try {
-    const connections = await listAccountingConnections(db, tradeAccountId)
-    conn = connections.find(isConnectionReady) ?? null
-    if (!conn) return
-
     const existing = await getPushForInvoiceProvider(db, invoiceId, conn.provider)
-    if (existing?.status === 'pushed') return
+    if (existing?.status === 'pushed') return 'skipped'
 
     const adapter = getAccountingAdapter(conn.provider, env)
-    if (!adapter) return
+    if (!adapter) return 'skipped'
 
     const invoice = await db
       .prepare(`SELECT supplier_name, invoice_number, invoice_date, created_at, prices_include_vat
                 FROM pouriq_invoices WHERE id = ?1 AND trade_account_id = ?2`)
-      .bind(invoiceId, tradeAccountId)
+      .bind(invoiceId, conn.trade_account_id)
       .first<BillInvoiceHeader>()
-    if (!invoice) return
+    if (!invoice) return 'skipped'
     const lines = await db
       .prepare(`SELECT extracted_name, extracted_quantity, extracted_unit_price_p, extracted_line_total_p, applied
                 FROM pouriq_invoice_lines WHERE invoice_id = ?1`)
       .bind(invoiceId)
       .all<BillInvoiceLine>()
     const bill = buildBill(invoice, lines.results ?? [])
-    if (!bill) return
+    if (!bill) return 'skipped'
 
-    const fresh = await ensureFreshToken(db, adapter, conn)
-    const { externalBillId } = await adapter.pushBill(fresh, bill)
+    let fresh: AccountingConnection
+    try {
+      fresh = await ensureFreshToken(db, adapter, conn)
+    } catch (e) {
+      const message = (e as Error)?.message ?? 'unknown'
+      await recordFailure(db, conn, invoiceId, message)
+      await markAccountingAuthFailure(db, conn.id, message)
+      Sentry.captureException(e, {
+        tags: { feature: 'pouriq-accounting-push', provider: conn.provider },
+        extra: { invoiceId, phase: 'token-refresh' },
+      })
+      return 'auth-failed'
+    }
 
-    await recordPushResult(db, {
-      invoiceId, connectionId: conn.id, provider: conn.provider,
-      status: 'pushed', externalBillId, error: null,
-    })
-    await markAccountingPushSuccess(db, conn.id)
+    try {
+      const { externalBillId } = await adapter.pushBill(fresh, bill)
+      await recordPushResult(db, {
+        invoiceId, connectionId: conn.id, provider: conn.provider,
+        status: 'pushed', externalBillId, error: null,
+      })
+      await markAccountingPushSuccess(db, conn.id)
+      return 'pushed'
+    } catch (e) {
+      const message = (e as Error)?.message ?? 'unknown'
+      await recordFailure(db, conn, invoiceId, message)
+      if (/\b401\b/.test(message)) {
+        await markAccountingAuthFailure(db, conn.id, message)
+        Sentry.captureException(e, {
+          tags: { feature: 'pouriq-accounting-push', provider: conn.provider },
+          extra: { invoiceId, phase: 'push' },
+        })
+        return 'auth-failed'
+      }
+      await markAccountingPushError(db, conn.id, message)
+      Sentry.captureException(e, {
+        tags: { feature: 'pouriq-accounting-push', provider: conn.provider },
+        extra: { invoiceId, phase: 'push' },
+      })
+      return 'failed'
+    }
   } catch (e) {
     try {
       const message = (e as Error)?.message ?? 'unknown'
       Sentry.captureException(e, {
-        tags: { feature: 'pouriq-accounting-push', provider: conn?.provider ?? 'unknown' },
+        tags: { feature: 'pouriq-accounting-push', provider: conn.provider },
         extra: { invoiceId },
       })
-      if (conn) {
-        await recordPushResult(db, {
-          invoiceId, connectionId: conn.id, provider: conn.provider,
-          status: 'failed', externalBillId: null, error: message,
-        })
-        await markAccountingPushError(db, conn.id, message)
-      }
+      await recordFailure(db, conn, invoiceId, message)
+      await markAccountingPushError(db, conn.id, message)
     } catch { /* push bookkeeping must never break the caller */ }
+    return 'failed'
+  }
+}
+
+async function recordFailure(
+  db: D1Database, conn: AccountingConnection, invoiceId: string, message: string,
+): Promise<void> {
+  await recordPushResult(db, {
+    invoiceId, connectionId: conn.id, provider: conn.provider,
+    status: 'failed', externalBillId: null, error: message,
+  })
+}
+
+/** Commit-hook entry: resolve the venue's first ready connection and push.
+ *  Never throws — a failed push must not fail the commit. */
+export async function pushInvoiceToAccounting(
+  db: D1Database,
+  env: AccountingProvidersEnv,
+  tradeAccountId: string,
+  invoiceId: string,
+): Promise<void> {
+  try {
+    const connections = await listAccountingConnections(db, tradeAccountId)
+    const conn = connections.find(isConnectionReady) ?? null
+    if (!conn) return
+    await pushInvoiceWithConnection(db, env, conn, invoiceId)
+  } catch (e) {
+    Sentry.captureException(e, {
+      tags: { feature: 'pouriq-accounting-push', provider: 'unknown' },
+      extra: { invoiceId },
+    })
   }
 }
 
@@ -98,30 +156,39 @@ export async function pushInvoiceToAccounting(
 export async function runAccountingPushSweep(
   env: { DB: D1Database } & AccountingProvidersEnv,
 ): Promise<void> {
-  const db = env.DB
-  const result = await db
-    .prepare(`SELECT * FROM pouriq_accounting_connections WHERE enabled = 1`)
-    .all<AccountingConnection>()
-  for (const conn of result.results ?? []) {
-    if (!isConnectionReady(conn)) continue
-    try {
-      const pending = await db
-        .prepare(`
-          SELECT i.id FROM pouriq_invoices i
-          LEFT JOIN pouriq_accounting_pushes p ON p.invoice_id = i.id AND p.provider = ?1
-          WHERE i.trade_account_id = ?2
-            AND i.created_at >= ?3
-            AND (p.id IS NULL OR p.status = 'failed')
-          ORDER BY i.created_at ASC
-          LIMIT ${SWEEP_BATCH_LIMIT}
-        `)
-        .bind(conn.provider, conn.trade_account_id, conn.created_at)
-        .all<{ id: string }>()
-      for (const row of pending.results ?? []) {
-        await pushInvoiceToAccounting(db, env, conn.trade_account_id, row.id)
+  try {
+    const db = env.DB
+    const result = await db
+      .prepare(`SELECT * FROM pouriq_accounting_connections WHERE enabled = 1`)
+      .all<AccountingConnection>()
+    for (const conn of result.results ?? []) {
+      if (!isConnectionReady(conn)) continue
+      try {
+        const pending = await db
+          .prepare(`
+            SELECT i.id FROM pouriq_invoices i
+            LEFT JOIN pouriq_accounting_pushes p ON p.invoice_id = i.id AND p.provider = ?1
+            WHERE i.trade_account_id = ?2
+              AND i.created_at >= ?3
+              AND (p.id IS NULL OR p.status = 'failed')
+            ORDER BY i.created_at ASC
+            LIMIT ${SWEEP_BATCH_LIMIT}
+          `)
+          .bind(conn.provider, conn.trade_account_id, conn.created_at)
+          .all<{ id: string }>()
+        for (const row of pending.results ?? []) {
+          const outcome = await pushInvoiceWithConnection(db, env, conn, row.id)
+          // The connection is now enabled = 0; abandon its batch so we do not
+          // hammer a revoked token. Future sweeps skip it via WHERE enabled = 1.
+          if (outcome === 'auth-failed') break
+        }
+      } catch (e) {
+        Sentry.captureException(e, { tags: { feature: 'pouriq-accounting-sweep', provider: conn.provider } })
       }
-    } catch (e) {
-      Sentry.captureException(e, { tags: { feature: 'pouriq-accounting-sweep', provider: conn.provider } })
     }
+  } catch (e) {
+    // An unapplied migration would otherwise throw hourly into waitUntil
+    // with no Sentry event.
+    Sentry.captureException(e, { tags: { feature: 'pouriq-accounting-sweep', provider: 'unknown' } })
   }
 }

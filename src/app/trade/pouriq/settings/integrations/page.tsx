@@ -7,7 +7,7 @@ import { listConnections } from '@/lib/pouriq/pos/connections'
 import { countUnmatched } from '@/lib/pouriq/pos/item-map'
 import { getActiveMenu } from '@/lib/pouriq/menus'
 import { IntegrationCard } from '@/components/pouriq/IntegrationCard'
-import { listAccountingConnections, isConnectionReady } from '@/lib/pouriq/accounting/connections'
+import { listAccountingConnections } from '@/lib/pouriq/accounting/connections'
 import { getAccountingAdapter } from '@/lib/pouriq/accounting/providers'
 import { AccountingCard, type AccountingCardConnection } from '@/components/pouriq/AccountingCard'
 import type { AccountingProvider } from '@/lib/pouriq/accounting/types'
@@ -54,11 +54,15 @@ export default async function IntegrationsPage({ searchParams }: SearchParams) {
     return {
       external_account_name: c.external_account_name,
       default_account_code: c.default_account_code,
-      needs_setup: !isConnectionReady(c),
+      needs_setup: c.enabled === 1
+        && (c.external_account_id === '' || c.default_account_code === null || c.default_tax_code === null),
+      needs_reconnect: c.enabled === 0,
       last_push_at: c.last_push_at,
       last_push_error: c.last_push_error,
     }
   }
+  const xeroConnected = accountingByProvider.has('xero')
+  const quickbooksConnected = accountingByProvider.has('quickbooks')
 
   const sp = await searchParams
   const justConnected = sp.connected
@@ -143,14 +147,16 @@ export default async function IntegrationsPage({ searchParams }: SearchParams) {
             title="Xero"
             description="Committed invoices push as draft bills, coded to the account you choose."
             connection={accountingCardConnection('xero')}
-            available={getAccountingAdapter('xero', env) !== null}
+            available={getAccountingAdapter('xero', env) !== null && !quickbooksConnected}
+            unavailableReason={quickbooksConnected ? 'One accounting connection per venue. Disconnect the other provider first.' : undefined}
           />
           <AccountingCard
             provider="quickbooks"
             title="QuickBooks Online"
             description="Committed invoices push as draft bills. Requires QuickBooks Essentials or above (bills are not available on Simple Start)."
             connection={accountingCardConnection('quickbooks')}
-            available={getAccountingAdapter('quickbooks', env) !== null}
+            available={getAccountingAdapter('quickbooks', env) !== null && !xeroConnected}
+            unavailableReason={xeroConnected ? 'One accounting connection per venue. Disconnect the other provider first.' : undefined}
           />
         </div>
       </div>

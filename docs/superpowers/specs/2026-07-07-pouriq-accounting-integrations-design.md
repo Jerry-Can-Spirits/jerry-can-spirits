@@ -103,6 +103,7 @@ These are answers given to Intuit in writing; the implementation must honour the
 - **Mocked-fetch adapter tests** covering: expired token → refresh then retry; revoked refresh token → connection flagged; provider 4xx → failed push recorded without throwing into commit.
 - No live API calls in CI. Run `tsc --noEmit` + `eslint src tests` before pushing (test files added; CI-gates lesson).
 - **Manual E2E per provider**: connect (Xero Demo Company / Intuit sandbox company), finish setup, commit a scanned invoice, verify the draft bill (supplier, reference, date, net amounts, VAT treatment). Failure drill: revoke app access provider-side, commit an invoice, confirm it records as failed and the retry sweep recovers it after reconnecting.
+- **Discounted-line invoice to Xero**: push an invoice with a line whose total is not quantity times unit price (a line discount), since Xero validates Quantity times UnitAmount against LineAmount.
 
 ## Go-live sequence
 

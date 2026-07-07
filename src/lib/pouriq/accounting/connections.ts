@@ -136,6 +136,15 @@ export async function markAccountingPushError(db: D1Database, connectionId: stri
     .run()
 }
 
+/** Auth failure (revoked/expired refresh token): pause pushing entirely.
+ *  Reconnecting re-enables via the upsert (enabled = 1, error cleared). */
+export async function markAccountingAuthFailure(db: D1Database, connectionId: string, error: string): Promise<void> {
+  await db
+    .prepare(`UPDATE pouriq_accounting_connections SET enabled = 0, last_push_error = ?1, updated_at = datetime('now') WHERE id = ?2`)
+    .bind(error.slice(0, 500), connectionId)
+    .run()
+}
+
 /** Fully set up and enabled: pushing is held until this is true, so a
  *  half-configured connection queues invoices rather than mis-coding them. */
 export function isConnectionReady(conn: AccountingConnection): boolean {
