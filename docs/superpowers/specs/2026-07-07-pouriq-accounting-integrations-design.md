@@ -85,6 +85,18 @@ Note: the Xero app was registered 2026-07-07 with the callback path `/api/pouriq
 
 Xero scopes: `openid profile email accounting.transactions accounting.settings.read offline_access`. QBO scope: `com.intuit.quickbooks.accounting`. Intuit App ID: befbd9c5-bf4e-45b4-8fc7-cfc262d82e74.
 
+## Commitments made in the Intuit production questionnaire (2026-07-07)
+
+These are answers given to Intuit in writing; the implementation must honour them:
+
+- **OAuth endpoints from the discovery document.** The QBO adapter resolves its authorize/token endpoints from Intuit's OpenID discovery document, not hardcoded URLs.
+- **`intuit_tid` capture.** Every QBO error response's `intuit_tid` header is stored in the push record's error text and attached to the Sentry event.
+- **No auth retry loops.** Failed refresh / invalid grant is never auto-retried: flag the connection, queue pushes, prompt reconnect. Access-token refresh happens only when the token is expired (or about to be), immediately before an API call — never on a schedule.
+- **Support contact in-app.** The accounting integration cards carry a "Need help? trade@jerrycanspirits.co.uk" line.
+- **QBO tier constraint.** Bills require Essentials or above — Simple Start has no accounts payable. A push to a Simple Start company fails with a feature-unavailable error, which lands in the normal failed-push flow (recorded, surfaced, retryable). The help guide should mention the tier requirement.
+- **Questionnaire submission timing.** The Intuit production questionnaire is submitted only after the sandbox end-to-end test (connect / push / revoke / reconnect) has actually been run — several answers assert it.
+- **Data handling.** Intuit data held: chart of accounts (setup picker) + created bill IDs only; tenant-scoped, never shared, never sent to any AI model, never used for training. The Claude extraction step operates solely on venue-uploaded documents, upstream of QuickBooks.
+
 ## Testing
 
 - **Unit (vitest)**: bill-builder (applied lines only, net amounts, null quantities), both provider mappers (date/reference field quirks), token-expiry check.
