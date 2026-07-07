@@ -482,6 +482,7 @@ export async function insertCocktail(
 export async function replaceIngredients(
   db: D1Database,
   cocktailId: string,
+  tradeAccountId: string,
   ingredients: Array<{
     library_ingredient_id: string
     pour_ml: number | null
@@ -491,6 +492,23 @@ export async function replaceIngredients(
     use_id: string | null
   }>,
 ): Promise<void> {
+  // Validate ownership of all supplied library ingredient ids before writing.
+  // Lines with no library link (free-text/uncosted) are excluded from the check.
+  const libIds = [...new Set(ingredients.map(i => i.library_ingredient_id).filter(id => !!id))]
+  if (libIds.length > 0) {
+    const placeholders = libIds.map((_, i) => `?${i + 2}`).join(', ')
+    const rows = await db
+      .prepare(`SELECT id FROM pouriq_ingredients_library WHERE trade_account_id = ?1 AND id IN (${placeholders})`)
+      .bind(tradeAccountId, ...libIds)
+      .all<{ id: string }>()
+    const verified = new Set((rows.results ?? []).map(r => r.id))
+    for (const id of libIds) {
+      if (!verified.has(id)) {
+        throw new Error('One or more ingredient library entries do not belong to this account')
+      }
+    }
+  }
+
   const statements: D1PreparedStatement[] = [
     db.prepare(`DELETE FROM pouriq_ingredients WHERE cocktail_id = ?1`).bind(cocktailId),
   ]

@@ -38,16 +38,6 @@ interface RecipeRow {
   purchase_qty: number
 }
 
-interface RecipeDbRow {
-  cocktail_id: string
-  library_ingredient_id: string
-  pour_ml: number | null
-  library_name: string
-  pack_size: number
-  price_p: number
-  purchase_qty: number
-}
-
 interface CountRow {
   library_ingredient_id: string
   start_count: number
@@ -102,8 +92,8 @@ async function readRecipes(
         AND i.pour_ml IS NOT NULL
     `)
     .bind(menuId)
-    .all<RecipeDbRow>()
-  return (result.results ?? []).map((r) => ({ ...r }))
+    .all<RecipeRow>()
+  return result.results ?? []
 }
 
 async function readCounts(

@@ -11,7 +11,7 @@ import {
   isConnectionReady, listAccountingConnections,
   markAccountingAuthFailure, markAccountingPushError, markAccountingPushSuccess, updateAccountingTokens,
 } from './connections'
-import { getPushForInvoiceProvider, recordPushResult } from './pushes'
+import { claimPush, getPushForInvoiceProvider, recordPushResult } from './pushes'
 import { getAccountingAdapter, type AccountingProvidersEnv } from './providers'
 import type { AccountingAdapter, AccountingConnection } from './types'
 
@@ -51,6 +51,16 @@ export async function pushInvoiceWithConnection(
 
     const adapter = getAccountingAdapter(conn.provider, env)
     if (!adapter) return 'skipped'
+
+    // Claim the (invoice_id, provider) slot before touching the provider.
+    // ON CONFLICT DO NOTHING turns the UNIQUE constraint into a mutex:
+    // only the invocation that inserts the sentinel row (changes === 1)
+    // proceeds to push. If the claim is lost and there is no prior failed
+    // row (pure race on a fresh invoice) we skip. If there IS a prior
+    // failed row — including a crash-left '__claiming__' sentinel — this
+    // invocation is the retry and is allowed to proceed.
+    const claimed = await claimPush(db, invoiceId, conn.id, conn.provider)
+    if (!claimed && existing?.status !== 'failed') return 'skipped'
 
     const invoice = await db
       .prepare(`SELECT supplier_name, invoice_number, invoice_date, created_at, prices_include_vat

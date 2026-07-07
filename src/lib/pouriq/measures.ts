@@ -98,9 +98,9 @@ function pluralise(unit: string, qty: number): string {
   return unit + 's'
 }
 
-// Format a qty number: strip trailing '.0' so "50.0" renders as "50".
+// Format a qty number: converts number to string.
 function fmtQty(qty: number): string {
-  return Number.isInteger(qty) ? String(qty) : String(qty)
+  return String(qty)
 }
 
 /**

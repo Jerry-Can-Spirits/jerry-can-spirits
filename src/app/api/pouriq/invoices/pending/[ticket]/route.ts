@@ -13,12 +13,16 @@ export async function GET(_request: Request, { params }: { params: Promise<{ tic
   if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(ticket)) {
     return new Response('Bad Request', { status: 400 })
   }
-  // Pending files are not tenant-tagged in R2; the gate is a licensed session +
-  // the unguessable upload ticket. Acceptable for a short-lived pre-commit doc.
   const { env } = await getCloudflareContext()
   const r2 = env.TRADE_DOCS as R2Bucket
   const obj = await r2.get(`pouriq-invoices/_pending/${ticket}.pdf`)
   if (!obj) return new Response('Not found', { status: 404 })
+  // Defense-in-depth: verify the uploader tenant matches the requester.
+  // Tickets are crypto.randomUUID() so guessing is infeasible, but a leaked
+  // ticket must not let another tenant stream someone else's invoice PDF.
+  if (obj.customMetadata?.tradeAccountId !== access.tradeAccountId) {
+    return new Response('Not found', { status: 404 })
+  }
   return new Response(obj.body, {
     headers: {
       'content-type': 'application/pdf',
