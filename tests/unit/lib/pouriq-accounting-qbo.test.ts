@@ -45,8 +45,8 @@ describe('createQuickBooksAdapter', () => {
       .mockResolvedValueOnce(jsonResponse({ access_token: 'new-at', refresh_token: 'new-rt', expires_in: 3600 }))
       .mockResolvedValueOnce(jsonResponse({ CompanyInfo: { CompanyName: 'Sandbox Company' } }))
     const adapter = createQuickBooksAdapter(env)
-    const result = await adapter.exchangeCodeForToken('code123', 'https://x/callback', 'realm-9')
-    expect(result.externalAccountId).toBe('realm-9')
+    const result = await adapter.exchangeCodeForToken('code123', 'https://x/callback', '9130351234567890')
+    expect(result.externalAccountId).toBe('9130351234567890')
     expect(result.externalAccountName).toBe('Sandbox Company')
     expect(fetchMock.mock.calls[0][0]).toBe('https://developer.api.intuit.com/.well-known/openid_sandbox_configuration')
     expect(fetchMock.mock.calls[1][0]).toBe(discovery.token_endpoint)
@@ -122,5 +122,20 @@ describe('createQuickBooksAdapter', () => {
     await adapter.pushBill(connection, { ...bill, amountsIncludeTax: true })
     const payload = JSON.parse(fetchMock.mock.calls[1][1].body as string)
     expect(payload.GlobalTaxCalculation).toBe('TaxInclusive')
+  })
+
+  it('rejects a callback with a non-numeric realmId', async () => {
+    const adapter = createQuickBooksAdapter(env)
+    await expect(adapter.exchangeCodeForToken('code123', 'https://x/callback', '../evil'))
+      .rejects.toThrow(/realmId/)
+  })
+
+  it('escapes backslashes and quotes in vendor lookups', async () => {
+    fetchMock
+      .mockResolvedValueOnce(jsonResponse({ QueryResponse: { Vendor: [{ Id: 'v8' }] } }))
+      .mockResolvedValueOnce(jsonResponse({ Bill: { Id: 'qbo-bill-4' } }))
+    const adapter = createQuickBooksAdapter(env)
+    await adapter.pushBill(connection, { ...bill, supplierName: "Back\\slash 'Co" })
+    expect(String(fetchMock.mock.calls[0][0])).toContain(encodeURIComponent("Back\\\\slash \\'Co"))
   })
 })

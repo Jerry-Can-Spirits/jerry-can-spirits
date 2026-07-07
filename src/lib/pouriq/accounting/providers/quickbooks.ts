@@ -91,19 +91,19 @@ export function createQuickBooksAdapter(env: QuickBooksEnv): AccountingAdapter {
   }
 
   async function query<T>(connection: AccountingConnection, q: string): Promise<T> {
-    const url = `${base}/v3/company/${connection.external_account_id}/query?query=${encodeURIComponent(q)}&minorversion=${MINOR_VERSION}`
+    const url = `${base}/v3/company/${encodeURIComponent(connection.external_account_id)}/query?query=${encodeURIComponent(q)}&minorversion=${MINOR_VERSION}`
     return await qboFetch<T>(url, undefined, connection.access_token)
   }
 
   async function resolveVendorId(connection: AccountingConnection, name: string): Promise<string> {
-    const escaped = name.replace(/'/g, "\\'")
+    const escaped = name.replace(/\\/g, '\\\\').replace(/'/g, "\\'")
     const found = await query<{ QueryResponse?: { Vendor?: Array<{ Id: string }> } }>(
       connection, `select Id from Vendor where DisplayName = '${escaped}'`,
     )
     const existing = found.QueryResponse?.Vendor?.[0]?.Id
     if (existing) return existing
     const created = await qboFetch<{ Vendor: { Id: string } }>(
-      `${base}/v3/company/${connection.external_account_id}/vendor?minorversion=${MINOR_VERSION}`,
+      `${base}/v3/company/${encodeURIComponent(connection.external_account_id)}/vendor?minorversion=${MINOR_VERSION}`,
       { method: 'POST', body: JSON.stringify({ DisplayName: name }) },
       connection.access_token,
     )
@@ -114,7 +114,7 @@ export function createQuickBooksAdapter(env: QuickBooksEnv): AccountingAdapter {
     provider: 'quickbooks',
 
     async exchangeCodeForToken(code, redirectUri, realmId): Promise<AccountingExchangeResult> {
-      if (!realmId) throw new Error('QuickBooks callback did not include a realmId')
+      if (!realmId || !/^\d+$/.test(realmId)) throw new Error('QuickBooks callback did not include a valid realmId')
       const tokens = await tokenRequest(new URLSearchParams({
         grant_type: 'authorization_code',
         code,
@@ -124,7 +124,7 @@ export function createQuickBooksAdapter(env: QuickBooksEnv): AccountingAdapter {
       let companyName: string | null = null
       try {
         const info = await qboFetch<{ CompanyInfo?: { CompanyName?: string } }>(
-          `${base}/v3/company/${realmId}/companyinfo/${realmId}?minorversion=${MINOR_VERSION}`,
+          `${base}/v3/company/${encodeURIComponent(realmId)}/companyinfo/${encodeURIComponent(realmId)}?minorversion=${MINOR_VERSION}`,
           undefined, tokens.accessToken,
         )
         companyName = info.CompanyInfo?.CompanyName ?? null
@@ -176,7 +176,7 @@ export function createQuickBooksAdapter(env: QuickBooksEnv): AccountingAdapter {
         })),
       }
       const data = await qboFetch<{ Bill?: { Id?: string } }>(
-        `${base}/v3/company/${connection.external_account_id}/bill?minorversion=${MINOR_VERSION}`,
+        `${base}/v3/company/${encodeURIComponent(connection.external_account_id)}/bill?minorversion=${MINOR_VERSION}`,
         { method: 'POST', body: JSON.stringify(payload) },
         connection.access_token,
       )
