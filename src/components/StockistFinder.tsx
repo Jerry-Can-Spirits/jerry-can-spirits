@@ -24,14 +24,6 @@ const ALL_STOCKISTS: Stockist[] = [
     type: 'independent',
   },
   {
-    id: 'the-hog-horsley',
-    name: 'The Hog',
-    address: 'Horsley Hill, Stroud GL6 0PR',
-    lat: 51.6809,
-    lng: -2.2348,
-    type: 'bar',
-  },
-  {
     id: 'the-bull-inn-newington',
     name: 'The Bull Inn',
     address: '32 High St, Newington, Sittingbourne ME9 7JP',
@@ -40,11 +32,11 @@ const ALL_STOCKISTS: Stockist[] = [
     type: 'bar',
   },
   {
-    id: 'the-galleon-bar-blackpool',
-    name: 'The Galleon Bar',
-    address: '68-70 Abingdon St, Blackpool FY1 1NH',
-    lat: 53.81999,
-    lng: -3.05285,
+    id: 'the-victory-hereford',
+    name: 'The Victory',
+    address: '88 Saint Owen St, Hereford HR1 2QD',
+    lat: 52.05380,
+    lng: -2.70820,
     type: 'bar',
   },
 ]
