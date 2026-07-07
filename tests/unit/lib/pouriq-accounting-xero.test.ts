@@ -1,5 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { createXeroAdapter } from '@/lib/pouriq/accounting/providers/xero'
+import { getAccountingAdapter, getAccountingAuthorizeUrl } from '@/lib/pouriq/accounting/providers'
 import type { AccountingConnection, NeutralBill } from '@/lib/pouriq/accounting/types'
 
 const env = { XERO_CLIENT_ID: 'id', XERO_CLIENT_SECRET: 'secret' }
@@ -41,6 +42,10 @@ describe('createXeroAdapter', () => {
     const [tokenUrl, tokenInit] = fetchMock.mock.calls[0]
     expect(tokenUrl).toBe('https://identity.xero.com/connect/token')
     expect((tokenInit.headers as Record<string, string>).Authorization).toMatch(/^Basic /)
+    const tokenBody = new URLSearchParams(tokenInit.body as string)
+    expect(tokenBody.get('grant_type')).toBe('authorization_code')
+    expect(tokenBody.get('code')).toBe('code123')
+    expect(tokenBody.get('redirect_uri')).toBe('https://x/callback')
   })
 
   it('returns empty externalAccountId plus candidates when the login holds several orgs', async () => {
@@ -114,5 +119,27 @@ describe('createXeroAdapter', () => {
     const adapter = createXeroAdapter(env)
     const options = await adapter.listTaxOptions(connection)
     expect(options).toEqual([{ code: 'INPUT2', name: '20% (VAT on Expenses)' }])
+  })
+})
+
+describe('accounting provider registry', () => {
+  it('returns null adapters and authorize URLs when env vars are missing', async () => {
+    expect(getAccountingAdapter('xero', {})).toBeNull()
+    expect(getAccountingAdapter('quickbooks', {})).toBeNull()
+    expect(await getAccountingAuthorizeUrl('xero', {}, 's', 'https://x/cb')).toBeNull()
+  })
+
+  it('returns a Xero adapter and authorize URL when credentials exist', async () => {
+    const providersEnv = { XERO_CLIENT_ID: 'id', XERO_CLIENT_SECRET: 'secret' }
+    expect(getAccountingAdapter('xero', providersEnv)?.provider).toBe('xero')
+    const url = await getAccountingAuthorizeUrl('xero', providersEnv, 'state-1', 'https://x/cb')
+    expect(url).not.toBeNull()
+    const parsed = new URL(url as string)
+    expect(parsed.origin + parsed.pathname).toBe('https://login.xero.com/identity/connect/authorize')
+    expect(parsed.searchParams.get('client_id')).toBe('id')
+    expect(parsed.searchParams.get('state')).toBe('state-1')
+    expect(parsed.searchParams.get('redirect_uri')).toBe('https://x/cb')
+    expect(parsed.searchParams.get('scope')).toBe('openid profile email accounting.transactions accounting.settings.read offline_access')
+    expect(parsed.searchParams.get('response_type')).toBe('code')
   })
 })
