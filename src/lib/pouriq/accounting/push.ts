@@ -75,20 +75,20 @@ export async function pushInvoiceToAccounting(
     })
     await markAccountingPushSuccess(db, conn.id)
   } catch (e) {
-    const message = (e as Error).message ?? 'unknown'
-    Sentry.captureException(e, {
-      tags: { feature: 'pouriq-accounting-push', provider: conn?.provider ?? 'unknown' },
-      extra: { invoiceId },
-    })
-    if (conn) {
-      try {
+    try {
+      const message = (e as Error)?.message ?? 'unknown'
+      Sentry.captureException(e, {
+        tags: { feature: 'pouriq-accounting-push', provider: conn?.provider ?? 'unknown' },
+        extra: { invoiceId },
+      })
+      if (conn) {
         await recordPushResult(db, {
           invoiceId, connectionId: conn.id, provider: conn.provider,
           status: 'failed', externalBillId: null, error: message,
         })
         await markAccountingPushError(db, conn.id, message)
-      } catch { /* swallow: push bookkeeping must never break the caller */ }
-    }
+      }
+    } catch { /* push bookkeeping must never break the caller */ }
   }
 }
 
