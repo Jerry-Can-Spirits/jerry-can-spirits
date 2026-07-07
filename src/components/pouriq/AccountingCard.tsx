@@ -48,8 +48,8 @@ export function AccountingCard({ provider, title, description, connection, avail
     const data = await res.json() as Options
     setOptions(data)
     const standard = data.taxOptions.find((t) => /20%/.test(t.name))
-    if (standard && !taxCode) setTaxCode(standard.code)
-  }, [provider, taxCode])
+    if (standard) setTaxCode((prev) => prev || standard.code)
+  }, [provider])
 
   useEffect(() => {
     if (needsSetup) void loadOptions()
@@ -77,8 +77,9 @@ export function AccountingCard({ provider, title, description, connection, avail
 
   async function disconnect() {
     if (!window.confirm(`Disconnect ${title}? Pushed bills stay in ${title}; new invoices stop syncing.`)) return
-    await fetch(`/api/pouriq/integrations/accounting/${provider}/disconnect`, { method: 'POST' })
-    router.refresh()
+    const res = await fetch(`/api/pouriq/integrations/accounting/${provider}/disconnect`, { method: 'POST' })
+    if (res.ok) router.refresh()
+    else setOptionsError('Could not disconnect. Please try again.')
   }
 
   return (
@@ -104,7 +105,7 @@ export function AccountingCard({ provider, title, description, connection, avail
         )}
       </div>
 
-      {connection && !needsSetup && (
+      {available && connection && !needsSetup && (
         <div className="mt-4 text-sm text-slate-600 space-y-1">
           <p>
             Connected to <strong className="text-slate-900">{connection.external_account_name ?? title}</strong>,
@@ -119,7 +120,7 @@ export function AccountingCard({ provider, title, description, connection, avail
         </div>
       )}
 
-      {connection && needsSetup && (
+      {available && connection && needsSetup && (
         <div className="mt-4 border-t border-slate-100 pt-4 space-y-3">
           <p className="text-sm font-medium text-slate-900">Finish setup</p>
           <p className="text-sm text-slate-500">
