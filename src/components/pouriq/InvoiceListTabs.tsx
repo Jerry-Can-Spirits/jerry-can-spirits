@@ -9,6 +9,7 @@ type Tab = 'all' | 'applied' | 'attention'
 
 interface Props {
   invoices: InvoiceRow[]
+  pushBadges?: Record<string, 'pushed' | 'failed'>
 }
 
 function formatMoney(p: number | null): string {
@@ -16,7 +17,7 @@ function formatMoney(p: number | null): string {
   return `£${(p / 100).toFixed(2)}`
 }
 
-export function InvoiceListTabs({ invoices }: Props) {
+export function InvoiceListTabs({ invoices, pushBadges }: Props) {
   const [tab, setTab] = useState<Tab>('all')
 
   const appliedCount = invoices.filter((inv) => invoiceStatus(inv) === 'applied').length
@@ -80,6 +81,12 @@ export function InvoiceListTabs({ invoices }: Props) {
                           <span className="text-[11px] px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-600">applied</span>
                         ) : (
                           <span className="text-[11px] px-2 py-0.5 rounded-full bg-amber-50 text-amber-700 border border-amber-500">needs attention</span>
+                        )}
+                        {pushBadges?.[inv.id] === 'pushed' && (
+                          <span className="ml-1 text-[11px] px-2 py-0.5 rounded-full bg-sky-50 text-sky-700 border border-sky-500">in accounts</span>
+                        )}
+                        {pushBadges?.[inv.id] === 'failed' && (
+                          <span className="ml-1 text-[11px] px-2 py-0.5 rounded-full bg-rose-50 text-rose-700 border border-rose-500">push failed</span>
                         )}
                       </td>
                     </tr>
