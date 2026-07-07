@@ -10,6 +10,10 @@ import {
   incrementTradeFailedAttempts,
   clearTradeFailedAttempts,
   TRADE_MAX_ATTEMPTS,
+  getTradeFailedAttemptsForPin,
+  incrementTradeFailedAttemptsForPin,
+  clearTradeFailedAttemptsForPin,
+  TRADE_PIN_MAX_ATTEMPTS,
 } from '@/lib/kv'
 import { createTradeSession, setTradeSessionCookie } from '@/lib/trade-portal/session'
 
@@ -46,6 +50,10 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Invalid PIN' }, { status: 400 })
   }
 
+  if ((await getTradeFailedAttemptsForPin(kv, pin)) >= TRADE_PIN_MAX_ATTEMPTS) {
+    return NextResponse.json({ error: 'Too many failed attempts. Try again in 15 minutes.' }, { status: 429 })
+  }
+
   const failedAttempts = await incrementTradeFailedAttempts(kv, ip)
   if (failedAttempts > TRADE_MAX_ATTEMPTS) {
     return NextResponse.json({ error: 'Too many failed attempts. Try again in 15 minutes.' }, { status: 429 })
@@ -56,10 +64,12 @@ export async function POST(request: Request) {
     .bind(pin)
     .first<{ id: string }>()
   if (!account) {
+    await incrementTradeFailedAttemptsForPin(kv, pin)
     return NextResponse.json({ error: 'Invalid PIN' }, { status: 401 })
   }
 
   await clearTradeFailedAttempts(kv, ip)
+  await clearTradeFailedAttemptsForPin(kv, pin)
   const sid = await createTradeSession(kv, account.id)
   await setTradeSessionCookie(sid)
   return NextResponse.json({ success: true })
