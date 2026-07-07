@@ -56,6 +56,13 @@ interface CloudflareEnv {
   SUMUP_CLIENT_ID: string;
   SUMUP_CLIENT_SECRET: string;
 
+  // Secrets — Accounting integrations (Xero + QuickBooks Online)
+  XERO_CLIENT_ID: string;
+  XERO_CLIENT_SECRET: string;
+  QUICKBOOKS_CLIENT_ID: string;
+  QUICKBOOKS_CLIENT_SECRET: string;
+  QUICKBOOKS_ENV?: string;  // 'production' to target live QBO; anything else = sandbox
+
   // Secrets — R2 presigning (S3-compatible API for presigning download URLs)
   R2_ACCESS_KEY_ID: string;
   R2_SECRET_ACCESS_KEY: string;

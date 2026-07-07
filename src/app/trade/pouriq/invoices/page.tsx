@@ -6,6 +6,8 @@ import { listInvoicesForTenant } from '@/lib/pouriq/invoices'
 import { LicenceGate } from '@/components/pouriq/LicenceGate'
 import { InvoiceListTabs } from '@/components/pouriq/InvoiceListTabs'
 import { PRIMARY_BUTTON } from '@/lib/pouriq/button-styles'
+import { listAccountingConnections, isConnectionReady } from '@/lib/pouriq/accounting/connections'
+import { getPushMapForInvoices } from '@/lib/pouriq/accounting/pushes'
 
 export const dynamic = 'force-dynamic'
 
@@ -17,6 +19,13 @@ export default async function InvoicesListPage() {
   const { env } = await getCloudflareContext()
   const db = env.DB as D1Database
   const invoices = await listInvoicesForTenant(db, access.tradeAccountId)
+
+  const accountingConnections = await listAccountingConnections(db, access.tradeAccountId)
+  const hasAccounting = accountingConnections.some(isConnectionReady)
+  const pushMap = hasAccounting ? await getPushMapForInvoices(db, invoices.map((i) => i.id)) : new Map()
+  const pushBadges = Object.fromEntries(
+    [...pushMap.entries()].map(([id, p]) => [id, p.status]),
+  ) as Record<string, 'pushed' | 'failed'>
 
   return (
     <main className="min-h-screen bg-slate-50">
@@ -38,7 +47,7 @@ export default async function InvoicesListPage() {
             No invoices yet. Drop your first one to populate the library.
           </div>
         ) : (
-          <InvoiceListTabs invoices={invoices} />
+          <InvoiceListTabs invoices={invoices} pushBadges={hasAccounting ? pushBadges : undefined} />
         )}
       </div>
     </main>

@@ -7,6 +7,9 @@ import { LicenceGate } from '@/components/pouriq/LicenceGate'
 import { DeleteInvoiceButton } from '@/components/pouriq/DeleteInvoiceButton'
 import { InvoiceDetailPanes } from '@/components/pouriq/InvoiceDetailPanes'
 import { SECONDARY_BUTTON_SM } from '@/lib/pouriq/button-styles'
+import { listAccountingConnections, isConnectionReady } from '@/lib/pouriq/accounting/connections'
+import { getPushForInvoiceProvider } from '@/lib/pouriq/accounting/pushes'
+import { AccountingPushStatus } from '@/components/pouriq/AccountingPushStatus'
 
 export const dynamic = 'force-dynamic'
 
@@ -30,6 +33,14 @@ export default async function InvoiceDetailPage({ params }: Props) {
 
   const invoice = await getInvoice(db, id, access.tradeAccountId)
   if (!invoice) notFound()
+
+  const accountingConnections = await listAccountingConnections(db, access.tradeAccountId)
+  const accountingConn = accountingConnections.find(isConnectionReady) ?? null
+  const push = accountingConn ? await getPushForInvoiceProvider(db, id, accountingConn.provider) : null
+  // Both columns are D1 datetime('now') strings in the same format, so a plain
+  // string comparison is the correct chronological test. The sweep only covers
+  // invoices committed at or after the connection was created.
+  const predatesConnection = !!accountingConn && !push && invoice.created_at < accountingConn.created_at
 
   const lines = await listInvoiceLines(db, id)
   const applied = lines.filter((l) => l.applied === 1)
@@ -65,6 +76,20 @@ export default async function InvoiceDetailPage({ params }: Props) {
             <DeleteInvoiceButton invoiceId={invoice.id} />
           </div>
         </div>
+
+        {accountingConn && (
+          <div className="mt-4">
+            <AccountingPushStatus
+              invoiceId={id}
+              provider={accountingConn.provider}
+              providerTitle={accountingConn.provider === 'xero' ? 'Xero' : 'QuickBooks'}
+              status={push?.status ?? 'pending'}
+              error={push?.error ?? null}
+              pushedAt={push?.status === 'pushed' ? push.pushed_at : null}
+              predatesConnection={predatesConnection}
+            />
+          </div>
+        )}
 
         <InvoiceDetailPanes docSrc={invoice.r2_key ? `/api/pouriq/invoices/${id}/pdf` : null}>
           {applied.length > 0 && (

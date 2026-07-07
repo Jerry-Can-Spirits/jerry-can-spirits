@@ -7,6 +7,10 @@ import { listConnections } from '@/lib/pouriq/pos/connections'
 import { countUnmatched } from '@/lib/pouriq/pos/item-map'
 import { getActiveMenu } from '@/lib/pouriq/menus'
 import { IntegrationCard } from '@/components/pouriq/IntegrationCard'
+import { listAccountingConnections } from '@/lib/pouriq/accounting/connections'
+import { getAccountingAdapter } from '@/lib/pouriq/accounting/providers'
+import { AccountingCard, type AccountingCardConnection } from '@/components/pouriq/AccountingCard'
+import type { AccountingProvider } from '@/lib/pouriq/accounting/types'
 
 export const dynamic = 'force-dynamic'
 
@@ -34,13 +38,31 @@ export default async function IntegrationsPage({ searchParams }: SearchParams) {
 
   const { env } = await getCloudflareContext()
   const db = env.DB as D1Database
-  const [connections, activeMenu, unmatchedCount] = await Promise.all([
+  const [connections, activeMenu, unmatchedCount, accountingConnections] = await Promise.all([
     listConnections(db, access.tradeAccountId),
     getActiveMenu(db, access.tradeAccountId),
     countUnmatched(db, access.tradeAccountId),
+    listAccountingConnections(db, access.tradeAccountId),
   ])
   const byProvider = new Map(connections.map((c) => [c.provider, c]))
   const activeMenuName = activeMenu?.name ?? null
+
+  const accountingByProvider = new Map(accountingConnections.map((c) => [c.provider, c]))
+  function accountingCardConnection(provider: AccountingProvider): AccountingCardConnection | null {
+    const c = accountingByProvider.get(provider)
+    if (!c) return null
+    return {
+      external_account_name: c.external_account_name,
+      default_account_code: c.default_account_code,
+      needs_setup: c.enabled === 1
+        && (c.external_account_id === '' || c.default_account_code === null || c.default_tax_code === null),
+      needs_reconnect: c.enabled === 0,
+      last_push_at: c.last_push_at,
+      last_push_error: c.last_push_error,
+    }
+  }
+  const xeroConnected = accountingByProvider.has('xero')
+  const quickbooksConnected = accountingByProvider.has('quickbooks')
 
   const sp = await searchParams
   const justConnected = sp.connected
@@ -112,6 +134,29 @@ export default async function IntegrationsPage({ searchParams }: SearchParams) {
             connection={byProvider.get('eposnow') ?? null}
             activeMenuName={activeMenuName}
             disabled
+          />
+        </div>
+
+        <h2 className="text-xl font-bold text-slate-900 mt-12 mb-2">Accounting</h2>
+        <p className="text-slate-500 text-sm mb-6">
+          Connect your accounting software and every committed invoice appears there as a draft bill, ready for your bookkeeper to approve.
+        </p>
+        <div className="space-y-4">
+          <AccountingCard
+            provider="xero"
+            title="Xero"
+            description="Committed invoices push as draft bills, coded to the account you choose."
+            connection={accountingCardConnection('xero')}
+            available={getAccountingAdapter('xero', env) !== null && !quickbooksConnected}
+            unavailableReason={quickbooksConnected ? 'One accounting connection per venue. Disconnect the other provider first.' : undefined}
+          />
+          <AccountingCard
+            provider="quickbooks"
+            title="QuickBooks Online"
+            description="Committed invoices push as draft bills. Requires QuickBooks Essentials or above (bills are not available on Simple Start)."
+            connection={accountingCardConnection('quickbooks')}
+            available={getAccountingAdapter('quickbooks', env) !== null && !xeroConnected}
+            unavailableReason={xeroConnected ? 'One accounting connection per venue. Disconnect the other provider first.' : undefined}
           />
         </div>
       </div>
