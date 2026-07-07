@@ -12,7 +12,10 @@ export const runtime = 'nodejs'
 
 interface Params { params: Promise<{ provider: string }> }
 
-export async function POST(_request: Request, { params }: Params) {
+export async function POST(request: Request, { params }: Params) {
+  if (!isAllowedOrigin(request)) {
+    return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+  }
   const access = await checkPourIqAccess()
   if (access.kind !== 'ok') {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
