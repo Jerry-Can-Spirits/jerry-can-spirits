@@ -21,6 +21,7 @@ import { receiptBottlesFromInvoiceLine } from '@/lib/pouriq/stock'
 import { recomputeDependents } from '@/lib/pouriq/prepared'
 import { netPriceP } from '@/lib/pouriq/calculations'
 import { ALL_INGREDIENT_TYPES, type IngredientType } from '@/lib/pouriq/types'
+import { pushInvoiceToAccounting } from '@/lib/pouriq/accounting/push'
 
 export const runtime = 'nodejs'
 
@@ -146,6 +147,17 @@ export async function POST(request: Request) {
   } catch (err) {
     Sentry.captureException(err, { tags: { route: 'pouriq-invoice-commit', phase: 'header' } })
     return NextResponse.json({ error: 'Could not save invoice header' }, { status: 500 })
+  }
+
+  // Record the commit-time VAT basis so a later accounting-push retry can
+  // build the bill with the right inclusive/exclusive tax flag.
+  try {
+    await db
+      .prepare(`UPDATE pouriq_invoices SET prices_include_vat = ?1 WHERE id = ?2`)
+      .bind(body.prices_include_vat === true ? 1 : 0, invoiceId)
+      .run()
+  } catch (err) {
+    Sentry.captureException(err, { tags: { route: 'pouriq-invoice-commit', phase: 'vat-basis' }, extra: { invoiceId } })
   }
 
   // 2. Process each line. Applied lines run library + invoice_line + cost_change
@@ -385,6 +397,11 @@ export async function POST(request: Request) {
     Sentry.captureException(err, { tags: { route: 'pouriq-invoice-commit', phase: 'finalise' }, extra: { invoiceId } })
     return NextResponse.json({ error: 'Could not finalise invoice. Please contact support.' }, { status: 500 })
   }
+
+  // 8. Push to the venue's connected accounting software. Best-effort and
+  //    internally non-throwing: a failed push lands in the retry queue and
+  //    must never fail the commit.
+  await pushInvoiceToAccounting(db, env, access.tradeAccountId, invoiceId)
 
   return NextResponse.json({ invoice_id: invoiceId })
 }
