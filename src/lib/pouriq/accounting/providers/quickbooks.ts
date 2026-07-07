@@ -146,7 +146,7 @@ export function createQuickBooksAdapter(env: QuickBooksEnv): AccountingAdapter {
     async listExpenseAccounts(connection) {
       const data = await query<{ QueryResponse?: { Account?: Array<{ Id: string; Name: string }> } }>(
         connection,
-        `select Id, Name from Account where AccountType in ('Expense', 'Cost of Goods Sold') and Active = true maxresults 1000`,
+        `select Id, Name from Account where AccountType in ('Expense', 'Cost of Goods Sold', 'Other Expense') and Active = true maxresults 1000`,
       )
       return (data.QueryResponse?.Account ?? []).map((a) => ({ code: a.Id, name: a.Name }))
     },

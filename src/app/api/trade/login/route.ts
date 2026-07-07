@@ -51,12 +51,12 @@ export async function POST(request: Request) {
   }
 
   if ((await getTradeFailedAttemptsForPin(kv, pin)) >= TRADE_PIN_MAX_ATTEMPTS) {
-    return NextResponse.json({ error: 'Too many failed attempts. Try again in 15 minutes.' }, { status: 429 })
+    return NextResponse.json({ error: 'Too many failed attempts. Please try again later.' }, { status: 429 })
   }
 
   const failedAttempts = await incrementTradeFailedAttempts(kv, ip)
   if (failedAttempts > TRADE_MAX_ATTEMPTS) {
-    return NextResponse.json({ error: 'Too many failed attempts. Try again in 15 minutes.' }, { status: 429 })
+    return NextResponse.json({ error: 'Too many failed attempts. Please try again later.' }, { status: 429 })
   }
 
   const account = await db

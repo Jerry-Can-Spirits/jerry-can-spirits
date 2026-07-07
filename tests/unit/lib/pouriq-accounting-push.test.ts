@@ -152,7 +152,7 @@ describe('pushInvoiceWithConnection', () => {
     const raceCfg = { pushRow: null, invoiceRow: invoiceHeader, lines: [appliedLine] }
     const raceDb = {
       prepare(sql: string) {
-        const isClaim = sql.includes("'__claiming__'")
+        const isClaim = sql.includes('DO NOTHING')
         const executor = {
           async first() { return route(sql, raceCfg) },
           async all() { return route(sql, raceCfg) },

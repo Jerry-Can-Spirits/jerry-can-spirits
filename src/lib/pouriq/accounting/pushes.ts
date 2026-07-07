@@ -1,5 +1,9 @@
 import type { AccountingProvider } from './types'
 
+/** Sentinel error value written by claimPush. A row with this error is an
+ *  in-flight claim (or a crash-left reservation) — never a real failure. */
+export const PUSH_CLAIM_SENTINEL = '__claiming__'
+
 export interface AccountingPushRow {
   id: string
   invoice_id: string
@@ -59,10 +63,10 @@ export async function claimPush(
     .prepare(`
       INSERT INTO pouriq_accounting_pushes
         (invoice_id, connection_id, provider, status, external_bill_id, error)
-      VALUES (?1, ?2, ?3, 'failed', NULL, '__claiming__')
+      VALUES (?1, ?2, ?3, 'failed', NULL, ?4)
       ON CONFLICT(invoice_id, provider) DO NOTHING
     `)
-    .bind(invoiceId, connectionId, provider)
+    .bind(invoiceId, connectionId, provider, PUSH_CLAIM_SENTINEL)
     .run()
   return result.meta.changes === 1
 }
