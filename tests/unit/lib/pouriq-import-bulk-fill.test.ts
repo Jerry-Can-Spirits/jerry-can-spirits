@@ -74,3 +74,30 @@ test('catalogue matches with the identical name still group (price once)', () =>
   const b = groupKeyFor({ extracted_name: 'peroni', inferred_type: 'beer', match: { kind: 'catalogue', catalogue_id: 'cat-peroni' } } as Parameters<typeof groupKeyFor>[0])
   expect(a).toBe(b)
 })
+
+describe('groupKeyFor with base_product', () => {
+  const cat = { kind: 'catalogue', catalogue_id: 'c-stout' }
+  it('groups two serves of the same product by base_product', () => {
+    const a = groupKeyFor({ extracted_name: 'Guinness Half', base_product: 'Guinness', inferred_type: 'beer', match: cat })
+    const b = groupKeyFor({ extracted_name: 'Guinness Pint', base_product: 'Guinness', inferred_type: 'beer', match: cat })
+    expect(a).not.toBeNull()
+    expect(a).toBe(b)
+  })
+  it('keeps different products in different groups', () => {
+    const a = groupKeyFor({ extracted_name: 'Guinness Pint', base_product: 'Guinness', inferred_type: 'beer', match: cat })
+    const b = groupKeyFor({ extracted_name: 'Peroni Pint', base_product: 'Peroni', inferred_type: 'beer', match: cat })
+    expect(a).not.toBe(b)
+  })
+  it('falls back to extracted_name when no base_product (unchanged behaviour)', () => {
+    const a = groupKeyFor({ extracted_name: 'Triple Sec', inferred_type: 'liqueur', match: { kind: 'no-match' } })
+    expect(a).toBe('name:triple sec')
+  })
+  it('allows grouping a spirit when base_product is present', () => {
+    const a = groupKeyFor({ extracted_name: 'House Gin single', base_product: 'House Gin', inferred_type: 'spirit', match: cat })
+    expect(a).toBe('name:house gin')
+  })
+  it('still excludes a measure-less spirit line (no base_product)', () => {
+    const a = groupKeyFor({ extracted_name: 'House Gin', inferred_type: 'spirit', match: cat })
+    expect(a).toBeNull()
+  })
+})
