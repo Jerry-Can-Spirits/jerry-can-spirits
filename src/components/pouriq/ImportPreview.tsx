@@ -196,6 +196,13 @@ export function ImportPreview({ menuId, drinks: extracted, libraryEntries, serve
       if (sourcePos < 0) return arr
       const plan = planBulkFill(flat, sourcePos)
       if (!plan) return arr
+      // Derive the display name for the "Priced via" indicator on target rows.
+      const sourceState = arr[drinkIdx].ingredients[ingIdx]
+      const sourceName: string =
+        sourceState.new_library?.name
+        ?? libraryEntries.find((e) => e.id === sourceState.existing_library_id)?.name
+        ?? extracted[drinkIdx].ingredients[ingIdx].base_product
+        ?? extracted[drinkIdx].ingredients[ingIdx].extracted_name
       const next = arr.map((d) => ({ ...d, ingredients: d.ingredients.slice() }))
       for (const t of plan.targets) {
         const { d, i } = coords[t]
@@ -204,6 +211,7 @@ export function ImportPreview({ menuId, drinks: extracted, libraryEntries, serve
           ...target,
           existing_library_id: plan.apply.existing_library_id,
           new_library: plan.apply.new_library ? { ...plan.apply.new_library } : undefined,
+          bulk_filled_from: sourceName,
         }
       }
       return next
@@ -348,6 +356,24 @@ export function ImportPreview({ menuId, drinks: extracted, libraryEntries, serve
                 </label>
                 {!d.skip && d.ingredients.map((_ingState, ingIdx) => {
                   const ing = extracted[idx].ingredients[ingIdx]
+                  const ingState = d.ingredients[ingIdx]
+                  const gk = groupKeyFor(ing)
+
+                  // Count how many other drink rows in the same group were bulk-filled
+                  // from this row (making it the pricing source).
+                  let sharedWithCount = 0
+                  if (gk !== null && !ingState.bulk_filled_from) {
+                    drinks.forEach((dk, di) => {
+                      if (dk.skip) return
+                      dk.ingredients.forEach((st, ii) => {
+                        if (di === idx && ii === ingIdx) return
+                        if (st.bulk_filled_from && groupKeyFor(extracted[di].ingredients[ii]) === gk) {
+                          sharedWithCount++
+                        }
+                      })
+                    })
+                  }
+
                   return (
                   <div key={ingIdx} id={`import-ing-${idx}-${ingIdx}`} className="scroll-mt-24">
                     <IngredientMatchRow
@@ -357,9 +383,10 @@ export function ImportPreview({ menuId, drinks: extracted, libraryEntries, serve
                       matchKind={ing.match.kind}
                       libraryEntries={libraryEntries}
                       serveUnits={serveUnits}
-                      state={d.ingredients[ingIdx]}
+                      state={ingState}
                       onChange={(state) => updateIngredient(idx, ingIdx, state)}
                       onResolvedCommit={() => propagateFrom(idx, ingIdx)}
+                      sharedWithCount={sharedWithCount > 0 ? sharedWithCount : undefined}
                     />
                   </div>
                   )
