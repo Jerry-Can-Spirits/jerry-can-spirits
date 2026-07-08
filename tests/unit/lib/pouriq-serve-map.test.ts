@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { SERVE_TOKEN_ML, serveToRecipeUnit, packDefaultForServe, isKnownServeToken } from '@/lib/pouriq/serve-map'
+import { SERVE_TOKEN_ML, serveToRecipeUnit, packDefaultForServe, isKnownServeToken, SERVE_TOKEN_TO_UNIT_NAME } from '@/lib/pouriq/serve-map'
 
 describe('SERVE_TOKEN_ML', () => {
   it('maps tokens to ml', () => {
@@ -31,7 +31,9 @@ describe('packDefaultForServe', () => {
     expect(packDefaultForServe('half_pint')).toEqual({ pack_format: 'keg', pack_size: 50000 })
   })
   it('gives wine a 750ml bottle', () => {
+    expect(packDefaultForServe('125ml')).toEqual({ pack_format: 'bottle', pack_size: 750 })
     expect(packDefaultForServe('175ml')).toEqual({ pack_format: 'bottle', pack_size: 750 })
+    expect(packDefaultForServe('250ml')).toEqual({ pack_format: 'bottle', pack_size: 750 })
   })
   it('gives spirit measures a 700ml bottle', () => {
     expect(packDefaultForServe('50ml')).toEqual({ pack_format: 'bottle', pack_size: 700 })
@@ -45,5 +47,14 @@ describe('isKnownServeToken', () => {
   it('recognises valid tokens and rejects others', () => {
     expect(isKnownServeToken('pint')).toBe(true)
     expect(isKnownServeToken('nonsense')).toBe(false)
+  })
+})
+
+describe('SERVE_TOKEN_TO_UNIT_NAME', () => {
+  it('maps tokens to standard unit names', () => {
+    expect(SERVE_TOKEN_TO_UNIT_NAME.pint).toBe('pint')
+    expect(SERVE_TOKEN_TO_UNIT_NAME.half_pint).toBe('half pint')
+    expect(SERVE_TOKEN_TO_UNIT_NAME['250ml']).toBe('large glass')
+    expect(SERVE_TOKEN_TO_UNIT_NAME['50ml']).toBe('ml')
   })
 })

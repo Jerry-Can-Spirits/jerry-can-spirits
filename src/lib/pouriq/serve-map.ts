@@ -31,6 +31,9 @@ const RECIPE_UNIT: Record<ServeToken, { recipe_unit: string; recipe_qty: number 
   glass: { recipe_unit: 'ml', recipe_qty: 200 },
 }
 
+export const SERVE_TOKEN_TO_UNIT_NAME: Record<ServeToken, string> =
+  Object.fromEntries(Object.entries(RECIPE_UNIT).map(([k, v]) => [k, v.recipe_unit])) as Record<ServeToken, string>
+
 export function serveToRecipeUnit(token: ServeToken): { recipe_unit: string; recipe_qty: number; pour_ml: number } {
   const u = RECIPE_UNIT[token]
   return { recipe_unit: u.recipe_unit, recipe_qty: u.recipe_qty, pour_ml: SERVE_TOKEN_ML[token] }
