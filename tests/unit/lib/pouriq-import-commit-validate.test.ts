@@ -32,3 +32,40 @@ describe('validateBody with serve fields', () => {
     expect(validateBody(b as never)).toMatch(/recipe_qty/)
   })
 })
+
+describe('validateBody with pack_format', () => {
+  it('accepts a new_library with pack_format: "keg"', () => {
+    const b = structuredClone(base) as never as { drinks: { ingredients: { new_library?: Record<string, unknown> }[] }[] }
+    b.drinks[0].ingredients[0] = {
+      new_library: {
+        name: 'Guinness Draught',
+        ingredient_type: 'beer',
+        base_unit: 'ml',
+        pack_size: 50000,
+        price_p: 12000,
+        purchase_qty: 1,
+        pack_format: 'keg',
+      },
+      pour_ml: 568,
+      unit_count: null,
+    } as never
+    expect(validateBody(b as never)).toBeNull()
+  })
+  it('rejects a new_library with pack_format as non-string', () => {
+    const b = structuredClone(base) as never as { drinks: { ingredients: { new_library?: Record<string, unknown> }[] }[] }
+    b.drinks[0].ingredients[0] = {
+      new_library: {
+        name: 'Guinness Draught',
+        ingredient_type: 'beer',
+        base_unit: 'ml',
+        pack_size: 50000,
+        price_p: 12000,
+        purchase_qty: 1,
+        pack_format: 42,
+      },
+      pour_ml: 568,
+      unit_count: null,
+    } as never
+    expect(validateBody(b as never)).toMatch(/pack_format/)
+  })
+})

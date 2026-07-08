@@ -15,6 +15,7 @@ export interface CommitIngredient {
     price_p: number
     price_includes_vat?: boolean
     purchase_qty: number
+    pack_format?: string | null
   }
   pour_ml: number | null
   unit_count: number | null
@@ -74,6 +75,9 @@ export function validateBody(body: CommitBody): string | null {
         if (!isPositiveNumber(nl.pack_size)) return `${tag}: pack_size must be a positive number`
         if (!isNonNegativeInteger(nl.price_p)) return `${tag}: price_p must be a non-negative integer`
         if (!isPositiveInteger(nl.purchase_qty)) return `${tag}: purchase_qty must be a positive integer`
+        if (nl.pack_format !== undefined && nl.pack_format !== null && typeof nl.pack_format !== 'string') {
+          return `${tag}: pack_format must be a string if provided`
+        }
       }
 
       const hasPour = ing.pour_ml !== null
