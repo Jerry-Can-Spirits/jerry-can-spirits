@@ -53,6 +53,17 @@ const PACK_FORMATS = [
   'bottle', 'can', 'keg', 'bag-in-box', 'carton', 'pouch', 'case', 'crate', 'bag', 'tub', 'box', 'other',
 ] as const
 
+type MlMeasure = { label: string; qty: number }
+const DEFAULT_ML_MEASURES: MlMeasure[] = [
+  { label: 'per 25ml', qty: 25 },
+  { label: 'per 50ml', qty: 50 },
+]
+const ML_MEASURES_BY_TYPE: Partial<Record<IngredientType, MlMeasure[]>> = {
+  wine: [{ label: 'per 125ml', qty: 125 }, { label: 'per 175ml', qty: 175 }, { label: 'per 250ml', qty: 250 }],
+  beer: [{ label: 'per half', qty: 284 }, { label: 'per pint', qty: 568 }],
+  cider: [{ label: 'per half', qty: 284 }, { label: 'per pint', qty: 568 }],
+}
+
 function FieldHelper({ children }: { children: React.ReactNode }) {
   return <p className={HELPER}>{children}</p>
 }
@@ -212,13 +223,13 @@ export function IngredientForm({ entry, usageCount = 0, impactPayload, serveUnit
       return `${fmt(usablePerBase)}/g  ·  ${fmt2(per100g)} per 100g`
     }
     // ml
-    const per25ml = usablePerBase * 25
-    const per50ml = usablePerBase * 50
+    const measures = ML_MEASURES_BY_TYPE[ingredient_type] ?? DEFAULT_ML_MEASURES
+    const perServeStr = measures.map((m) => `${fmt2(usablePerBase * m.qty)} ${m.label}`).join('  ·  ')
     if (perBase !== usablePerBase) {
-      return `${fmt(perBase)}/ml (usable ${fmt(usablePerBase)}/ml)  ·  ${fmt2(per25ml)} per 25ml  ·  ${fmt2(per50ml)} per 50ml`
+      return `${fmt(perBase)}/ml (usable ${fmt(usablePerBase)}/ml)  ·  ${perServeStr}`
     }
-    return `${fmt(perBase)}/ml  ·  ${fmt2(per25ml)} per 25ml  ·  ${fmt2(per50ml)} per 50ml`
-  }, [base_unit, price_p_live, pack_size_live, purchase_qty_live, yield_pct_live])
+    return `${fmt(perBase)}/ml  ·  ${perServeStr}`
+  }, [base_unit, ingredient_type, price_p_live, pack_size_live, purchase_qty_live, yield_pct_live])
 
   // Impact projection (uses saved price as baseline)
   const savedPriceP = entry?.price_p ?? null
@@ -391,7 +402,11 @@ export function IngredientForm({ entry, usageCount = 0, impactPayload, serveUnit
       if (toastData) {
         sessionStorage.setItem(COST_UPDATE_TOAST_KEY, JSON.stringify(toastData))
       }
-      router.push('/trade/pouriq/library')
+      if (purchaseMode === 'prepared' && entry === null) {
+        router.push(`/trade/pouriq/library/${savedId}/edit`)
+      } else {
+        router.push('/trade/pouriq/library')
+      }
       router.refresh()
     } catch (e) {
       setError((e as Error).message || 'Could not save')
@@ -636,36 +651,39 @@ export function IngredientForm({ entry, usageCount = 0, impactPayload, serveUnit
 
         {/* Prepared mode: yield unit + yield amount */}
         {purchaseMode === 'prepared' && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <div>
-              <label htmlFor="ing-yield-unit" className={LABEL}>Yield unit *</label>
-              <select
-                id="ing-yield-unit"
-                value={yieldUnit}
-                onChange={(e) => setYieldUnit(e.target.value as BaseUnit)}
-                className={INPUT}
-              >
-                <option value="ml">ml (volume)</option>
-                <option value="g">g (weight)</option>
-                <option value="each">each (count)</option>
-              </select>
-              <FieldHelper>The unit this recipe produces, e.g. ml for a syrup.</FieldHelper>
+          <>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label htmlFor="ing-yield-unit" className={LABEL}>Yield unit *</label>
+                <select
+                  id="ing-yield-unit"
+                  value={yieldUnit}
+                  onChange={(e) => setYieldUnit(e.target.value as BaseUnit)}
+                  className={INPUT}
+                >
+                  <option value="ml">ml (volume)</option>
+                  <option value="g">g (weight)</option>
+                  <option value="each">each (count)</option>
+                </select>
+                <FieldHelper>The unit this recipe produces, e.g. ml for a syrup.</FieldHelper>
+              </div>
+              <div>
+                <label htmlFor="ing-yield-amount" className={LABEL}>Yield amount *</label>
+                <input
+                  id="ing-yield-amount"
+                  type="number"
+                  step="1"
+                  min={1}
+                  value={yieldAmountStr}
+                  onChange={(e) => setYieldAmountStr(e.target.value)}
+                  className={INPUT}
+                  placeholder="e.g. 1600"
+                />
+                <FieldHelper>How much one batch makes, e.g. 1600 for a 1.6L syrup.</FieldHelper>
+              </div>
             </div>
-            <div>
-              <label htmlFor="ing-yield-amount" className={LABEL}>Yield amount *</label>
-              <input
-                id="ing-yield-amount"
-                type="number"
-                step="1"
-                min={1}
-                value={yieldAmountStr}
-                onChange={(e) => setYieldAmountStr(e.target.value)}
-                className={INPUT}
-                placeholder="e.g. 1600"
-              />
-              <FieldHelper>How much one batch makes, e.g. 1600 for a 1.6L syrup.</FieldHelper>
-            </div>
-          </div>
+            <FieldHelper>Only add ingredients you pay for. Water and other free dilution are captured by the yield.</FieldHelper>
+          </>
         )}
 
         {/* Standard mode: Price + packs bought */}
@@ -722,7 +740,9 @@ export function IngredientForm({ entry, usageCount = 0, impactPayload, serveUnit
               )}
             </div>
             <div>
-              <label htmlFor="ing-purchase-qty" className={LABEL}>Packs bought *</label>
+              <label htmlFor="ing-purchase-qty" className={LABEL}>
+                {base_unit === 'each' ? 'Number of items' : 'Packs bought'} *
+              </label>
               <input
                 id="ing-purchase-qty"
                 type="number"
@@ -734,14 +754,16 @@ export function IngredientForm({ entry, usageCount = 0, impactPayload, serveUnit
                 placeholder="1"
               />
               <FieldHelper>
-                How many packs this price covers. 1 bottle, 24 for a case, leave 1 for a single item.
+                {base_unit === 'each'
+                  ? 'How many individual items this price covers. e.g. 100 for a case of 100 lemons.'
+                  : 'How many packs this price covers. 1 bottle, 24 for a case, leave 1 for a single item.'}
               </FieldHelper>
             </div>
           </div>
         )}
 
-        {/* Quantity per pack (ml / g only; each defaults to 1 but is editable) */}
-        {purchaseMode !== 'prepared' && (
+        {/* Quantity per pack (ml / g only) */}
+        {purchaseMode !== 'prepared' && base_unit !== 'each' && (
           <div>
             {base_unit === 'ml' && (
               <>
@@ -805,24 +827,6 @@ export function IngredientForm({ entry, usageCount = 0, impactPayload, serveUnit
               </>
             )}
 
-            {base_unit === 'each' && (
-              <>
-                <label htmlFor="ing-pack-size" className={LABEL}>Items per pack</label>
-                <input
-                  id="ing-pack-size"
-                  type="number"
-                  step="1"
-                  min={1}
-                  value={pack_size_str}
-                  onChange={(e) => setPackSizeStr(e.target.value)}
-                  className={INPUT}
-                  placeholder="1"
-                />
-                <FieldHelper>
-                  How many individual items come in a pack. 1 for a single lime. 6 for a bag of 6.
-                </FieldHelper>
-              </>
-            )}
           </div>
         )}
 
@@ -1253,7 +1257,7 @@ export function IngredientForm({ entry, usageCount = 0, impactPayload, serveUnit
           <BarcodeScanner onScan={handleScan} onClose={() => setScanOpen(false)} />
         )}
 
-        <div className="flex justify-between items-center">
+        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
           {entry ? (
             <button
               type="button"
@@ -1270,7 +1274,7 @@ export function IngredientForm({ entry, usageCount = 0, impactPayload, serveUnit
             disabled={submitting}
             className={PRIMARY_BUTTON}
           >
-            {submitting ? 'Saving…' : entry ? 'Save changes' : 'Add ingredient'}
+            {submitting ? 'Saving…' : entry ? 'Save changes' : purchaseMode === 'prepared' ? 'Save and add components' : 'Add ingredient'}
           </button>
         </div>
       </form>
