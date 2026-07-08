@@ -31,6 +31,18 @@ export function BarcodeScanner({ onScan, onClose }: Props) {
 
     async function start() {
       try {
+        if (
+          typeof navigator === 'undefined' ||
+          !navigator.mediaDevices ||
+          typeof navigator.mediaDevices.getUserMedia !== 'function'
+        ) {
+          setError(
+            'Camera scanning is not supported in this browser. Scan on a phone instead, or type the barcode into the field above.'
+          )
+          setStarting(false)
+          return
+        }
+
         const mod = await import('html5-qrcode')
         if (cancelled) return
         const Html5Qrcode = mod.Html5Qrcode
@@ -100,13 +112,17 @@ export function BarcodeScanner({ onScan, onClose }: Props) {
             )
           }
         } else if (/notfound|nodevice|noavailable/.test(lower)) {
-          setError('No camera was found on this device.')
+          setError(
+            'No camera was found on this device. Scan on a phone instead, or type the barcode into the field above.'
+          )
         } else if (/notreadable|trackstart|aborted/.test(lower)) {
           setError('The camera is in use by another app or tab. Close other apps using the camera and try again.')
         } else if (/secure/.test(lower) || (typeof window !== 'undefined' && !window.isSecureContext)) {
           setError('Camera access needs HTTPS. Open this page in your normal browser (not an in-app browser like Instagram or Facebook).')
         } else {
-          setError(`Could not start camera (${name || 'unknown'}): ${msg || 'no details'}`)
+          setError(
+            'We could not open a camera. Check that camera access is allowed in your browser settings, or scan on a phone instead. You can also type the barcode into the field above.'
+          )
         }
         setStarting(false)
       }
