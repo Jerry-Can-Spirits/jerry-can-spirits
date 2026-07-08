@@ -16,6 +16,8 @@ import { matchIngredient } from '@/lib/pouriq/match'
 import { listCatalogue, matchCatalogue, adoptionName } from '@/lib/pouriq/ingredient-catalogue'
 import { splitCompoundIngredients } from '@/lib/pouriq/compound'
 import type { IngredientType } from '@/lib/pouriq/types'
+import type { ServeToken } from '@/lib/pouriq/serve-map'
+import { coerceServeToken } from '@/lib/pouriq/serve-map'
 
 export const runtime = 'nodejs'
 
@@ -27,6 +29,8 @@ type Body = TextBody | PdfBody
 
 export interface PreviewIngredient {
   extracted_name: string
+  base_product: string | null
+  serve: ServeToken | null
   raw_measurement: string
   inferred_type: IngredientType
   parsed: ReturnType<typeof parseMeasurement>
@@ -185,6 +189,8 @@ export async function POST(request: Request) {
       }
       return {
         extracted_name: i.name,
+        base_product: typeof i.base_product === 'string' && i.base_product.trim() ? i.base_product.trim() : null,
+        serve: coerceServeToken(i.serve),
         raw_measurement: i.raw_measurement,
         inferred_type: i.inferred_type,
         parsed,

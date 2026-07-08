@@ -12,6 +12,10 @@ export function isKnownServeToken(s: string): s is ServeToken {
   return (KNOWN as readonly string[]).includes(s)
 }
 
+export function coerceServeToken(raw: unknown): ServeToken | null {
+  return typeof raw === 'string' && isKnownServeToken(raw) ? raw : null
+}
+
 export const SERVE_TOKEN_ML: Record<ServeToken, number> = {
   '25ml': 25, '50ml': 50, half_pint: 284, pint: 568,
   '125ml': 125, '175ml': 175, '250ml': 250, glass: 200,

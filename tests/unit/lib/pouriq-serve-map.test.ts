@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { SERVE_TOKEN_ML, serveToRecipeUnit, packDefaultForServe, isKnownServeToken, SERVE_TOKEN_TO_UNIT_NAME } from '@/lib/pouriq/serve-map'
+import { SERVE_TOKEN_ML, serveToRecipeUnit, packDefaultForServe, isKnownServeToken, SERVE_TOKEN_TO_UNIT_NAME, coerceServeToken } from '@/lib/pouriq/serve-map'
 
 describe('SERVE_TOKEN_ML', () => {
   it('maps tokens to ml', () => {
@@ -56,5 +56,14 @@ describe('SERVE_TOKEN_TO_UNIT_NAME', () => {
     expect(SERVE_TOKEN_TO_UNIT_NAME.half_pint).toBe('half pint')
     expect(SERVE_TOKEN_TO_UNIT_NAME['250ml']).toBe('large glass')
     expect(SERVE_TOKEN_TO_UNIT_NAME['50ml']).toBe('ml')
+  })
+})
+
+describe('coerceServeToken', () => {
+  it('passes known tokens', () => { expect(coerceServeToken('pint')).toBe('pint') })
+  it('nulls unknown / non-string', () => {
+    expect(coerceServeToken('flagon')).toBeNull()
+    expect(coerceServeToken(undefined)).toBeNull()
+    expect(coerceServeToken(42)).toBeNull()
   })
 })
