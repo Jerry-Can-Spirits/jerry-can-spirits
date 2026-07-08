@@ -8,6 +8,7 @@ import { singleContainmentMatch } from '@/lib/pouriq/match'
 import { planBulkFill, groupKeyFor, type BulkFillRow } from '@/lib/pouriq/import-bulk-fill'
 import type { ParsedMeasurement, RecognisedServeUnit } from '@/lib/pouriq/measurement-parse'
 import { parsePackFormat } from '@/lib/pouriq/measures'
+import { packDefaultForServe, serveToRecipeUnit, type ServeToken } from '@/lib/pouriq/serve-map'
 import { PRIMARY_BUTTON } from '@/lib/pouriq/button-styles'
 
 const inputClass = 'w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-slate-900 text-sm focus:border-emerald-500 focus:outline-hidden'
@@ -17,6 +18,8 @@ export interface PreviewDrinkInput {
   sale_price_p: number | null
   ingredients: Array<{
     extracted_name: string
+    base_product: string | null
+    serve: ServeToken | null
     raw_measurement: string
     inferred_type: IngredientType
     parsed: ParsedMeasurement
@@ -53,13 +56,22 @@ function serveUnitFromParsed(parsed: ParsedMeasurement): { recipe_unit: Recognis
 }
 
 function initialIngredientState(input: PreviewDrinkInput['ingredients'][0], libraryEntries: IngredientLibraryRow[]): MatchRowState {
-  const pour_ml: number | null = 'pour_ml' in input.parsed ? (input.parsed.pour_ml ?? null) : null
+  // When the AI identified a serve token, prefer it for recipe serve + pour ml
+  // (e.g. "pint" is more reliable than a raw ml measurement for draught lines).
+  // Fall back to the parsed measurement (handles dash/barspoon/tsp).
+  const serveDefaults = input.serve ? serveToRecipeUnit(input.serve) : null
+
+  const pour_ml: number | null = serveDefaults
+    ? serveDefaults.pour_ml
+    : 'pour_ml' in input.parsed ? (input.parsed.pour_ml ?? null) : null
   const unit_count: number | null = 'unit_count' in input.parsed ? (input.parsed.unit_count ?? null) : null
 
   // If the measurement named a recognised serve unit (dash/barspoon/tsp),
   // default recipe_unit/recipe_qty from the parse result so the picker starts
   // on the right unit without the user needing to adjust it.
-  const { recipe_unit, recipe_qty } = serveUnitFromParsed(input.parsed)
+  const parsedServe = serveUnitFromParsed(input.parsed)
+  const recipe_unit: string | null = serveDefaults ? serveDefaults.recipe_unit : parsedServe.recipe_unit
+  const recipe_qty: number | null = serveDefaults ? serveDefaults.recipe_qty : parsedServe.recipe_qty
 
   if (input.match.kind === 'auto') {
     return {
@@ -73,14 +85,18 @@ function initialIngredientState(input: PreviewDrinkInput['ingredients'][0], libr
   if (input.match.kind === 'catalogue') {
     // Pre-stage a new library entry from the catalogue; the bar just types
     // the price. Starts price-less so it counts as "needs price" until filled.
+    // When a serve token is present (e.g. pint/half_pint) use its pack default
+    // (keg 50L) rather than the extracted name or catalogue fallback.
     const m = input.match
-    const pack = m.base_unit === 'ml' ? parsePackFormat(input.extracted_name) : null
+    const packFromServe = input.serve ? packDefaultForServe(input.serve) : null
+    const pack = !packFromServe && m.base_unit === 'ml' ? parsePackFormat(input.extracted_name) : null
     return {
       new_library: {
         name: m.name,
         ingredient_type: m.ingredient_type,
         base_unit: m.base_unit,
-        pack_size: pack?.pack_size ?? m.default_pack_size ?? (m.base_unit === 'each' ? 1 : 700),
+        pack_size: packFromServe?.pack_size ?? pack?.pack_size ?? m.default_pack_size ?? (m.base_unit === 'each' ? 1 : 700),
+        pack_format: packFromServe?.pack_format ?? null,
         price_p: null,
         price_includes_vat: false,
         purchase_qty: pack?.purchase_qty ?? 1,
