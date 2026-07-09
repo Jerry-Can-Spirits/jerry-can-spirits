@@ -2,16 +2,18 @@ import type { MatchRowState } from '@/components/pouriq/IngredientMatchRow'
 import { normalise } from '@/lib/pouriq/match'
 import type { IngredientType } from '@/lib/pouriq/types'
 
-export function groupKeyFor(input: { extracted_name: string; inferred_type: IngredientType; match: { kind: string; catalogue_id?: string } }): string | null {
-  if (input.inferred_type === 'spirit') return null
+export function groupKeyFor(input: { extracted_name: string; base_product?: string | null; inferred_type: IngredientType; match: { kind: string; catalogue_id?: string } }): string | null {
+  const base = input.base_product && input.base_product.trim() ? input.base_product : null
+  // Measure-less spirit lines stay ungrouped (today's behaviour); once a
+  // base_product is present the line is a serve of a known product and can group.
+  if (input.inferred_type === 'spirit' && !base) return null
   const m = input.match
-  // Group by the line's own (normalised) name for every groupable kind, including
-  // catalogue matches. Grouping catalogue matches by catalogue_id collapsed
-  // distinct products that share one generic entry (e.g. "Peroni" vs "Peroni
-  // Gluten Free", each Kopparberg flavour) into one name; grouping by name keeps
-  // genuinely different products separate while identical names still price once.
+  // Group by the serve-stripped product name when we have it, else the line's
+  // own name. Name-based (not catalogue_id) keeps distinct products that share
+  // one generic entry separate; the serve-strip is what lets multi-serve lines
+  // of the SAME product share a key.
   if (m.kind === 'catalogue' || m.kind === 'suggestions' || m.kind === 'no-match') {
-    return `name:${normalise(input.extracted_name)}`
+    return `name:${normalise(base ?? input.extracted_name)}`
   }
   return null
 }

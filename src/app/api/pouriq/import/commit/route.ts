@@ -9,94 +9,14 @@ import { isAllowedOrigin, isRateLimited } from '@/lib/kv'
 import { checkPourIqAccess } from '@/lib/pouriq/access'
 import { getMenu } from '@/lib/pouriq/menus'
 import { matchFieldManualSlug } from '@/lib/pouriq/field-manual-match'
-import { ALL_INGREDIENT_TYPES, type IngredientType } from '@/lib/pouriq/types'
+import { type IngredientType } from '@/lib/pouriq/types'
 import { itemTypeFromIngredients } from '@/lib/pouriq/item-type'
 import { netPriceP } from '@/lib/pouriq/calculations'
+import { validateBody, type CommitBody } from '@/lib/pouriq/import-commit-validate'
 
 export const runtime = 'nodejs'
 
 const COMMIT_RATE_LIMIT = 30 // per hour per tenant
-
-interface CommitIngredient {
-  // Either pick an existing library entry...
-  existing_library_id?: string
-  // ...or commit a new library entry inline with the drink.
-  new_library?: {
-    name: string
-    ingredient_type: IngredientType
-    base_unit: 'ml' | 'g' | 'each'
-    pack_size: number
-    price_p: number
-    price_includes_vat?: boolean
-    purchase_qty: number
-  }
-  pour_ml: number | null
-  unit_count: number | null
-}
-
-interface CommitDrink {
-  name: string
-  sale_price_p: number
-  ingredients: CommitIngredient[]
-}
-
-interface CommitBody {
-  menuId: string
-  drinks: CommitDrink[]
-}
-
-function isPositiveInteger(n: unknown): n is number {
-  return typeof n === 'number' && Number.isInteger(n) && n > 0
-}
-
-function isNonNegativeInteger(n: unknown): n is number {
-  return typeof n === 'number' && Number.isInteger(n) && n >= 0
-}
-
-function isPositiveNumber(n: unknown): n is number {
-  return typeof n === 'number' && Number.isFinite(n) && n > 0
-}
-
-// Validate the body shape and value ranges. Returns an error string or null.
-function validateBody(body: CommitBody): string | null {
-  if (!body.menuId || typeof body.menuId !== 'string') return 'Invalid menuId'
-  if (!Array.isArray(body.drinks) || body.drinks.length === 0) return 'No drinks to commit'
-
-  for (let i = 0; i < body.drinks.length; i++) {
-    const d = body.drinks[i]
-    if (!d.name || typeof d.name !== 'string' || !d.name.trim()) return `Drink ${i + 1}: name required`
-    if (!isPositiveInteger(d.sale_price_p)) return `Drink ${i + 1}: sale_price_p must be a positive integer`
-    if (!Array.isArray(d.ingredients) || d.ingredients.length === 0) {
-      return `Drink ${i + 1} (${d.name}): must have at least one ingredient`
-    }
-
-    for (let j = 0; j < d.ingredients.length; j++) {
-      const ing = d.ingredients[j]
-      const tag = `Drink ${i + 1} (${d.name}) ingredient ${j + 1}`
-
-      const hasExisting = typeof ing.existing_library_id === 'string' && ing.existing_library_id.length > 0
-      const hasNew = !!ing.new_library
-      if (hasExisting === hasNew) return `${tag}: must reference exactly one library entry`
-
-      if (hasNew && ing.new_library) {
-        const nl = ing.new_library
-        if (!nl.name || typeof nl.name !== 'string' || !nl.name.trim()) return `${tag}: new library name required`
-        if (!ALL_INGREDIENT_TYPES.includes(nl.ingredient_type)) return `${tag}: invalid ingredient_type`
-        if (!['ml', 'g', 'each'].includes(nl.base_unit)) return `${tag}: base_unit must be ml, g, or each`
-        if (!isPositiveNumber(nl.pack_size)) return `${tag}: pack_size must be a positive number`
-        if (!isNonNegativeInteger(nl.price_p)) return `${tag}: price_p must be a non-negative integer`
-        if (!isPositiveInteger(nl.purchase_qty)) return `${tag}: purchase_qty must be a positive integer`
-      }
-
-      const hasPour = ing.pour_ml !== null
-      const hasCount = ing.unit_count !== null
-      if (hasPour === hasCount) return `${tag}: must specify either pour_ml or unit_count, not both`
-      if (hasPour && !isPositiveNumber(ing.pour_ml)) return `${tag}: pour_ml must be > 0`
-      if (hasCount && !isPositiveNumber(ing.unit_count)) return `${tag}: unit_count must be > 0`
-    }
-  }
-  return null
-}
 
 export async function POST(request: Request) {
   if (!isAllowedOrigin(request)) {
@@ -190,8 +110,8 @@ export async function POST(request: Request) {
           .prepare(`
             INSERT INTO pouriq_ingredients_library
               (trade_account_id, name, ingredient_type, base_unit, pack_size, price_p,
-               price_includes_vat, price_entered_p, purchase_qty, cost_confidence)
-            VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10)
+               price_includes_vat, price_entered_p, purchase_qty, cost_confidence, pack_format)
+            VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11)
             RETURNING id
           `)
           .bind(
@@ -205,6 +125,7 @@ export async function POST(request: Request) {
             ing.new_library.price_p,
             ing.new_library.purchase_qty,
             netP > 0 ? 'set' : 'estimated',
+            ing.new_library.pack_format ?? null,
           )
           .first<{ id: string }>()
         if (!result) throw new Error('Library insert returned no id')
@@ -263,10 +184,10 @@ export async function POST(request: Request) {
           db
             .prepare(`
               INSERT INTO pouriq_ingredients
-                (cocktail_id, library_ingredient_id, pour_ml, unit_count)
-              VALUES (?1, ?2, ?3, ?4)
+                (cocktail_id, library_ingredient_id, pour_ml, unit_count, recipe_unit, recipe_qty)
+              VALUES (?1, ?2, ?3, ?4, ?5, ?6)
             `)
-            .bind(cocktailId, libraryId, ing.pour_ml, ing.unit_count),
+            .bind(cocktailId, libraryId, ing.pour_ml, ing.unit_count, ing.recipe_unit ?? null, ing.recipe_qty ?? null),
         )
       }
       await db.batch(statements)

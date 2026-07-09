@@ -30,6 +30,12 @@ export function splitCompoundIngredients<T extends { name: string; raw_measureme
     const parts = m[1].split(SEPARATOR_RE).map((p) => p.trim()).filter((p) => p.length > 0)
     if (parts.length !== 2) return [ing]
     const measure = halfMeasure(ing.raw_measurement) ?? ing.raw_measurement
-    return parts.map((p) => ({ ...ing, name: `${p} ${noun}`, raw_measurement: measure }))
+    return parts.map((p) => ({
+      ...ing,
+      name: `${p} ${noun}`,
+      raw_measurement: measure,
+      ...('base_product' in ing ? { base_product: null } : {}),
+      ...('serve' in ing ? { serve: null } : {}),
+    } as unknown as T))
   })
 }

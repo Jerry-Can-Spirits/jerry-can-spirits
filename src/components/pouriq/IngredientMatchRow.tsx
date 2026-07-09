@@ -33,6 +33,8 @@ export interface MatchRowState {
   unit_count: number | null
   recipe_unit: string | null
   recipe_qty: number | null
+  /** Product name this row's resolution was copied from during bulk-fill. */
+  bulk_filled_from?: string
 }
 
 interface Props {
@@ -47,6 +49,8 @@ interface Props {
   // Fired when this row becomes resolved (existing entry picked, or a new
   // entry's price field blurred) so the parent can bulk-fill matching rows.
   onResolvedCommit?: () => void
+  // Number of other drinks whose resolution was propagated from this row.
+  sharedWithCount?: number
 }
 
 function resolvedBaseUnit(state: MatchRowState, library: IngredientLibraryRow[]): 'ml' | 'g' | 'each' {
@@ -60,7 +64,7 @@ function resolvedBaseUnit(state: MatchRowState, library: IngredientLibraryRow[])
 export function IngredientMatchRow({
   extractedName, rawMeasurement, inferredType,
   matchKind, libraryEntries, serveUnits,
-  state, onChange, onResolvedCommit,
+  state, onChange, onResolvedCommit, sharedWithCount,
 }: Props) {
   const baseUnit = resolvedBaseUnit(state, libraryEntries)
   const selectedExisting = state.existing_library_id
@@ -107,18 +111,36 @@ export function IngredientMatchRow({
 
   return (
     <div className="border border-slate-200 rounded-lg p-3 bg-white space-y-3">
-      <div className="flex items-baseline justify-between gap-3">
+      <div className="flex items-start justify-between gap-3">
         <div>
           <p className="text-sm text-slate-900 font-medium">{extractedName}</p>
           <p className="text-xs text-slate-500 mt-1">menu: &ldquo;{rawMeasurement}&rdquo; · type: {inferredType}</p>
         </div>
-        {matchBadge}
+        <div className="flex flex-col items-end gap-1 shrink-0">
+          {matchBadge}
+          {sharedWithCount !== undefined && sharedWithCount > 0 && (
+            <span className="text-xs text-slate-500">
+              Shared with {sharedWithCount} other {sharedWithCount === 1 ? 'drink' : 'drinks'}
+            </span>
+          )}
+        </div>
       </div>
 
       {/* Match selection */}
       <div>
         <label className={labelClass}>Library entry</label>
-        {state.new_library ? (
+        {state.bulk_filled_from ? (
+          <div className="flex items-center justify-between gap-2">
+            <p className="text-xs text-slate-500">Priced via {state.bulk_filled_from}</p>
+            <button
+              type="button"
+              onClick={() => onChange({ ...state, bulk_filled_from: undefined, existing_library_id: undefined, new_library: undefined })}
+              className="shrink-0 text-xs text-slate-500 hover:text-slate-700"
+            >
+              Change
+            </button>
+          </div>
+        ) : state.new_library ? (
           <div className="space-y-2 p-3 rounded-sm border border-slate-200 bg-slate-50">
             <div className="flex items-baseline justify-between">
               <p className="text-xs text-emerald-700">Creating new library entry</p>
