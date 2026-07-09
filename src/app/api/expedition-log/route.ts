@@ -26,10 +26,46 @@ interface RequestBody {
   website?: string
 }
 
+type Env = Awaited<ReturnType<typeof getCloudflareContext>>['env']
+
+// Origins beyond our own that may call this API cross-site (the QR landing
+// platform). Comma-separated in the QR_LANDING_ORIGINS secret/var; exact match.
+function corsOrigin(request: Request, env: Env): string | null {
+  const origin = request.headers.get('origin')
+  if (!origin) return null
+  const allowed = (env.QR_LANDING_ORIGINS ?? '').split(',').map((s) => s.trim()).filter(Boolean)
+  return allowed.includes(origin) ? origin : null
+}
+
+// Cross-origin JSON POSTs preflight; without this handler the browser blocks
+// the QR landing page's submission before it ever reaches POST.
+export async function OPTIONS(request: Request) {
+  const { env } = await getCloudflareContext()
+  const origin = corsOrigin(request, env)
+  if (!origin) return new NextResponse(null, { status: 204 })
+  return new NextResponse(null, {
+    status: 204,
+    headers: {
+      'Access-Control-Allow-Origin': origin,
+      'Access-Control-Allow-Methods': 'POST, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type',
+      'Access-Control-Max-Age': '86400',
+    },
+  })
+}
+
 export async function POST(request: Request) {
-  if (!isAllowedOrigin(request)) {
+  const { env } = await getCloudflareContext()
+  const cors = corsOrigin(request, env)
+  if (!isAllowedOrigin(request) && !cors) {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
   }
+  const res = await handlePost(request, env)
+  if (cors) res.headers.set('Access-Control-Allow-Origin', cors)
+  return res
+}
+
+async function handlePost(request: Request, env: Env): Promise<NextResponse> {
   try {
     let body: RequestBody
     try {
@@ -71,8 +107,7 @@ export async function POST(request: Request) {
       }
     }
 
-    // Access Cloudflare env — needed for KV rate limiting and secrets
-    const { env } = await getCloudflareContext()
+    // env supplied by POST — needed for KV rate limiting and secrets
     const TURNSTILE_SECRET_KEY = env.TURNSTILE_SECRET_KEY
     const MAPBOX_SECRET_TOKEN = env.MAPBOX_SECRET_TOKEN
 
