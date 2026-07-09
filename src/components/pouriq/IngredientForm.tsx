@@ -775,7 +775,12 @@ export function IngredientForm({ entry, usageCount = 0, impactPayload, serveUnit
               <div className="flex items-center gap-2 mb-2">
                 <label htmlFor="ing-price" className="text-sm font-medium text-slate-700">Price paid (£) *</label>
                 {confidenceBadge && (
-                  <span className={`text-[10px] px-1.5 py-0.5 rounded-sm ${confidenceBadge.className}`}>{confidenceBadge.label}</span>
+                  <span
+                    className={`text-[10px] px-1.5 py-0.5 rounded-sm cursor-help ${confidenceBadge.className}`}
+                    title="Cost confidence. Estimated = no price yet. Set = price entered by hand. Confirmed = price came from an invoice."
+                  >
+                    Cost {confidenceBadge.label.toLowerCase()}
+                  </span>
                 )}
               </div>
               <input
