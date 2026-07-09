@@ -69,6 +69,62 @@ Running list of issues found during the manual E2E. Each becomes an amendment. S
   2. **Generic→brand resolution ("house pour"):** a generic term ("gin") should suggest the venue's library entries whose catalogue generic matches. Longer-term this is the house-pour concept — venue-level "house gin = X" so generic recipe lines cost against the designated brand, and swapping the house pour re-costs every affected drink. A real feature, not just a matcher patch.
 - **Relates to:** E1 (serve-aware import), E4 (catalogue lift on manual add), onboarding speed.
 
+### F12 — 🟠 Import: "Create new ingredient" is undiscoverable (two real users concluded it doesn't exist)
+- **Seen (Dan, twice in one run):** "Pouilly-Fumé Pierre Brevin" (wine, price extracted, no library/catalogue match) and "chocolate sauce" (Mudslide) — both times the row appeared to offer only search-library-or-skip; no visible way to create a new entry. Concluded the drink had to be skipped.
+- **Actual behaviour (code):** create-new EXISTS but only as the LAST row inside the LibrarySearchSelect dropdown ("+ Create new ingredient"), beneath up to 20 library entries in a max-h-64 scroll box (`LibrarySearchSelect.tsx` — button rendered after `matches.map`). With an empty query the user sees 20 irrelevant entries and never scrolls to the bottom; nothing on the row itself says creation is possible.
+- **Why it matters:** unmatched-but-priced lines are exactly the moment a new venue is building its library; if creation looks impossible they skip drinks and the menu imports incomplete. 2/2 discovery failure in live use.
+- **Workaround:** click into the search box, type any non-matching text — the dropdown reduces to the "+ Create new ingredient" row; it seeds from what you typed.
+- **Fix (small UI):** (1) an always-visible "Create '<extracted name>'" button on unresolved rows, calling the existing `startNewLibrary(extracted_name)` — no retyping; (2) pin the create row to the TOP of the dropdown (or make it sticky) so it's visible regardless of match count. No model change.
+- **Relates to:** F11 (both are the unmatched-row resolution UX), onboarding speed.
+
+### F13 — 🟠 Import: choice lines ("lemonade or soda") extracted as ONE compound ingredient
+- **Seen (Dan):** a cocktail offering "lemonade or soda" was extracted as a single ingredient line named "lemonade or soda", staging a create-new entry with that literal name.
+- **Why it matters:** a menu choice is a service option, not a costable ingredient; the literal entry pollutes the library and costs nothing correctly.
+- **Workaround:** on that row, pick/create just "Lemonade" (cost against the first-listed default); the choice wording belongs in the drink description.
+- **Fix:** extraction prompt rule — "X or Y" within an ingredient list = alternatives: emit the FIRST as the costed ingredient (house default) and keep the choice in the description; never emit "X or Y" as a name. (The compound splitter handles "&"; "or" is a different semantic — choose-one, not both.) Also ensure the create-new row's name field is obviously editable so users can rescue any weird extraction.
+- **Relates to:** F1 (extraction typing), compound splitting, the import design pass.
+
+### F14 — 🟠 Import: description-only drinks (mocktails) extract with zero ingredients and cannot be completed in the preview
+- **Seen (Dan):** the mocktail section lists descriptions, not ingredients. "The Bank Sunrise" extracted correctly as a drink but with NO ingredient rows — and the preview offers no way to add one, while commit requires at least one ingredient per drink. Only option: skip and rebuild manually.
+- **Why it matters:** whole menu sections (mocktails, simple serves) are written description-style; each becomes manual work, undercutting the import's time-to-value promise.
+- **Workaround:** skip in import, then Add drink manually on the menu with ingredients from the description.
+- **Fix (layered):** (1) an "Add ingredient" control per drink card in the preview so any drink can be completed in place; (2) extraction fallback — when a drink has no ingredient list, mine the DESCRIPTION for ingredients (mocktail descriptions usually name them: "orange juice, grenadine..."), flagging them as inferred for review.
+- **Relates to:** F11/F12/F13 — the import resolution UX cluster; all four belong to one design pass.
+
+### E6 — 🔵 Design question (Dan, undecided): does the standalone Serves section survive serve-aware menus?
+- **Trigger:** post-E1, the menu itself now carries "Moretti (Half)" / "(Pint)" as clickable priced drinks sharing one keg — overlapping what Serves existed for. Dan wondering whether to fold serves into menus; deliberately deferring until the POS phase of this run.
+- **What Serves actually is:** the bucket for till items no printed menu lists (hidden serves menu; unmatched mapper's "map to serve" path). Still needed for off-menu sales to have a costed home (variance correctness) — but likely as a FALLBACK inside the unmatched flow, not a peer nav section.
+- **Evidence to gather in the POS phase:** (1) do till items now map cleanly to menu drinks? (2) does anything genuinely need the serves bucket? (3) DOUBLE REPRESENTATION: if a pint exists as both menu drink and serve, what does the mapper suggest and can sales split across both (movers/variance corruption)?
+- **Early lean (held loosely):** demote, don't delete — "till items not on your menu" surfaced in the unmatched flow. End-state relates to the sellable-item model in [[project_pouriq_architecture_philosophy]].
+
+### F15 — 🟠 Ingredient→sellable gap: serve specs on an ingredient produce nothing sellable (no spec card, no menu item)
+- **Seen (Dan):** added Expedition Spiced as an ingredient with single + double serves. No spec card appears (spec cards render menu drinks; serves don't show there either), and nothing sellable exists until a drink is separately created on a menu — repeating data just entered.
+- **Why it matters:** for spirits (which change semi-frequently at a bar) this is the common path, and it's pure re-entry friction. The ingredient already holds pour sizes/costs — Pour IQ knows everything needed to sell it.
+- **Fix (Dan's proposal, agreed):** an "Add to menu" button in the add/edit-ingredient flow: pick menu (+ section), it creates one drink per serve spec ("Expedition Spiced (Single)"/"(Double)") pre-filled from what was input. User then EDITS a drink (price, section placement) instead of creating from scratch. Spec cards then come free since they render menu drinks.
+- **Relates to:** E6 — if ingredients can promote serves onto real menus this cheaply, the standalone Serves section's fallback role shrinks further. Also the sellable-item end-state in the architecture-philosophy memory.
+
+## Run 2 — Sections 0–2 sweep (2026-07-09, Dan's tracker notes)
+
+### F16 — 🟡 Nav: Dashboard never shows the emerald active state (0.4)
+- **Seen (Dan):** active nav item is emerald on every section except the Dashboard — on /trade/pouriq nothing highlights.
+- **Likely cause:** active check does a prefix match that either always-matches the root for other routes (so it's suppressed) or exact-matches a path form that differs (trailing slash). To confirm in code.
+
+### F17 — 🟡 Onboarding quickstart unreachable except by typed URL (0.8)
+- **Seen (Dan):** /trade/pouriq/onboarding loads fine but nothing links to it — "it's a physically typed address."
+- **Fix:** link it from the dashboard setup checklist (natural home) and/or the Help area of the nav.
+
+### F18 — 🟡 Barcode scan of an unknown barcode silently creates a duplicate ingredient (2.12)
+- **Seen (Dan):** scanned Expedition Spiced on phone; library already had the ingredient but WITHOUT a barcode set → scan created a NEW ingredient. After setting the barcode on the library entry, rescan matched correctly. Not strictly a bug, but a duplicate trap.
+- **Fix:** unknown barcode → offer "attach this barcode to an existing ingredient" (library search preselected) before the create-new default.
+
+### F19 — 🔵 Cost-confidence badge not findable in the UI (2.11)
+- **Seen (Dan):** couldn't locate where the estimated/set/confirmed badge sits. Verify it renders at all; if it does, it needs a more discoverable home; if it doesn't, it's dead code or an aspirational test step.
+
+### Notes (no new defects)
+- **2.4 confirmed correct math:** case £180 inc VAT = £150 net; 6 × 700ml = 4,200ml → £0.0357/ml → **£1.79 per 50ml**. Liquid packs path computes correctly; F3 was Count/each only.
+- **1.6 (Archers kept as brand):** intended when the menu lists the brand; the generic↔brand question is the F11 house-pour design item.
+- **Meta (Dan):** the E2E script itself needs a plain-English rewrite — click-by-click "do this, expect this" for the remaining phases.
+
 ## Phase 2/3 — Ingredient model & costing
 
 ### F3 — 🔴 "Items per pack" is a non-functional / misleading field for Count/each ingredients
