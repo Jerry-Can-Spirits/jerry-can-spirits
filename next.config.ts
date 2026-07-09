@@ -6,6 +6,34 @@ import { initOpenNextCloudflareForDev } from "@opennextjs/cloudflare";
 
 initOpenNextCloudflareForDev();
 
+// The full CSP, parameterised only by frame-ancestors: the site defaults to
+// 'none', but /qr/* (the Expedition Log embed) must be frameable by the QR
+// landing host, whose platform strips scripts so the interactive log is
+// served from our origin and iframed in.
+function buildCsp(frameAncestors: string): string {
+  return [
+    "default-src 'self'",
+    // 'unsafe-eval' is added in development ONLY: Next.js dev mode (HMR /
+    // Fast Refresh + eval-based source maps) requires it. NODE_ENV is
+    // 'production' for `next build`, so the deployed CSP never includes it.
+    `script-src 'self' 'unsafe-inline'${process.env.NODE_ENV !== 'production' ? " 'unsafe-eval'" : ''} https://consent.cookiebot.com https://consentcdn.cookiebot.com https://fundingchoicesmessages.google.com https://www.googletagmanager.com https://www.google-analytics.com https://analytics.google.com https://tagmanager.google.com https://static.cloudflareinsights.com https://*.klaviyo.com https://js.sentry-cdn.com https://*.sentry.io https://widget.trustpilot.com https://*.trustpilot.com https://connect.facebook.net https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://www.googletagservices.com https://tracker.metricool.com https://challenges.cloudflare.com https://analytics.ahrefs.com blob:`,
+    "script-src-elem 'self' 'unsafe-inline' https://consent.cookiebot.com https://consentcdn.cookiebot.com https://fundingchoicesmessages.google.com https://www.googletagmanager.com https://www.google-analytics.com https://tagmanager.google.com https://static.cloudflareinsights.com https://*.klaviyo.com https://widget.trustpilot.com https://*.trustpilot.com https://connect.facebook.net https://www.instagram.com https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://www.googletagservices.com https://tracker.metricool.com https://challenges.cloudflare.com https://analytics.ahrefs.com",
+    "worker-src 'self' blob:",
+    "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://*.klaviyo.com https://*.trustpilot.com https://*.cookiebot.com",
+    "style-src-elem 'self' 'unsafe-inline' https://fonts.googleapis.com https://*.klaviyo.com https://*.trustpilot.com https://*.cookiebot.com",
+    "font-src 'self' https://fonts.gstatic.com https://*.trustpilot.com data:",
+    "img-src 'self' data: https: https://imagedelivery.net blob:",
+    "media-src 'self' https:",
+    "connect-src 'self' https://*.cookiebot.com https://fundingchoicesmessages.google.com https://www.google-analytics.com https://www.googletagmanager.com https://analytics.google.com https://region1.google-analytics.com https://www.google.com https://www.google.co.uk https://*.doubleclick.net https://*.klaviyo.com https://*.kmail-lists.com https://*.shopify.com https://*.myshopify.com https://shop.jerrycanspirits.co.uk https://cdn.sanity.io https://*.sanity.io https://*.ingest.sentry.io https://*.sentry.io https://cloudflareinsights.com https://*.trustpilot.com https://www.facebook.com https://*.facebook.com https://*.facebook.net https://pagead2.googlesyndication.com https://*.googlesyndication.com https://tracker.metricool.com https://api.mapbox.com https://events.mapbox.com https://analytics.ahrefs.com wss: ws:",
+    "frame-src 'self' https://consentcdn.cookiebot.com https://*.cookiebot.com https://www.youtube.com https://www.vimeo.com https://cdn.sanity.io https://*.sanity.io https://*.trustpilot.com https://www.instagram.com https://*.instagram.com https://*.cdninstagram.com https://googleads.g.doubleclick.net https://*.googlesyndication.com https://www.googletagmanager.com https://challenges.cloudflare.com about: data:",
+    "object-src 'none'",
+    "base-uri 'self'",
+    "form-action 'self' https://manage.kmail-lists.com",
+    `frame-ancestors ${frameAncestors}`,
+    "upgrade-insecure-requests",
+  ].join('; ');
+}
+
 const nextConfig: NextConfig = {
   // Configure for Cloudflare Workers via OpenNext
   trailingSlash: true,
@@ -66,27 +94,7 @@ const nextConfig: NextConfig = {
         headers: [
           {
             key: 'Content-Security-Policy',
-            value: [
-              "default-src 'self'",
-              // 'unsafe-eval' is added in development ONLY: Next.js dev mode (HMR /
-              // Fast Refresh + eval-based source maps) requires it. NODE_ENV is
-              // 'production' for `next build`, so the deployed CSP never includes it.
-              `script-src 'self' 'unsafe-inline'${process.env.NODE_ENV !== 'production' ? " 'unsafe-eval'" : ''} https://consent.cookiebot.com https://consentcdn.cookiebot.com https://fundingchoicesmessages.google.com https://www.googletagmanager.com https://www.google-analytics.com https://analytics.google.com https://tagmanager.google.com https://static.cloudflareinsights.com https://*.klaviyo.com https://js.sentry-cdn.com https://*.sentry.io https://widget.trustpilot.com https://*.trustpilot.com https://connect.facebook.net https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://www.googletagservices.com https://tracker.metricool.com https://challenges.cloudflare.com https://analytics.ahrefs.com blob:`,
-              "script-src-elem 'self' 'unsafe-inline' https://consent.cookiebot.com https://consentcdn.cookiebot.com https://fundingchoicesmessages.google.com https://www.googletagmanager.com https://www.google-analytics.com https://tagmanager.google.com https://static.cloudflareinsights.com https://*.klaviyo.com https://widget.trustpilot.com https://*.trustpilot.com https://connect.facebook.net https://www.instagram.com https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://www.googletagservices.com https://tracker.metricool.com https://challenges.cloudflare.com https://analytics.ahrefs.com",
-              "worker-src 'self' blob:",
-              "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://*.klaviyo.com https://*.trustpilot.com https://*.cookiebot.com",
-              "style-src-elem 'self' 'unsafe-inline' https://fonts.googleapis.com https://*.klaviyo.com https://*.trustpilot.com https://*.cookiebot.com",
-              "font-src 'self' https://fonts.gstatic.com https://*.trustpilot.com data:",
-              "img-src 'self' data: https: https://imagedelivery.net blob:",
-              "media-src 'self' https:",
-              "connect-src 'self' https://*.cookiebot.com https://fundingchoicesmessages.google.com https://www.google-analytics.com https://www.googletagmanager.com https://analytics.google.com https://region1.google-analytics.com https://www.google.com https://www.google.co.uk https://*.doubleclick.net https://*.klaviyo.com https://*.kmail-lists.com https://*.shopify.com https://*.myshopify.com https://shop.jerrycanspirits.co.uk https://cdn.sanity.io https://*.sanity.io https://*.ingest.sentry.io https://*.sentry.io https://cloudflareinsights.com https://*.trustpilot.com https://www.facebook.com https://*.facebook.com https://*.facebook.net https://pagead2.googlesyndication.com https://*.googlesyndication.com https://tracker.metricool.com https://api.mapbox.com https://events.mapbox.com https://analytics.ahrefs.com wss: ws:",
-              "frame-src 'self' https://consentcdn.cookiebot.com https://*.cookiebot.com https://www.youtube.com https://www.vimeo.com https://cdn.sanity.io https://*.sanity.io https://*.trustpilot.com https://www.instagram.com https://*.instagram.com https://*.cdninstagram.com https://googleads.g.doubleclick.net https://*.googlesyndication.com https://www.googletagmanager.com https://challenges.cloudflare.com about: data:",
-              "object-src 'none'",
-              "base-uri 'self'",
-              "form-action 'self' https://manage.kmail-lists.com",
-              "frame-ancestors 'none'",
-              "upgrade-insecure-requests",
-            ].join('; '),
+            value: buildCsp("'none'"),
           },
           {
             key: 'X-DNS-Prefetch-Control',
@@ -111,6 +119,19 @@ const nextConfig: NextConfig = {
           {
             key: 'Cross-Origin-Opener-Policy',
             value: 'same-origin',
+          },
+        ],
+      },
+      // The Expedition Log embed is iframed by the QR landing page (whose
+      // platform strips scripts from its HTML module). Same CSP, but this
+      // route alone may be framed by the QR host. Listed after the global
+      // entry so this Content-Security-Policy value wins for /qr/*.
+      {
+        source: '/qr/:path*',
+        headers: [
+          {
+            key: 'Content-Security-Policy',
+            value: buildCsp("'self' https://info.qr.jerrycanspirits.co.uk"),
           },
         ],
       },
