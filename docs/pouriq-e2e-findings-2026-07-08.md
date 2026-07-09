@@ -97,6 +97,12 @@ Running list of issues found during the manual E2E. Each becomes an amendment. S
 - **Evidence to gather in the POS phase:** (1) do till items now map cleanly to menu drinks? (2) does anything genuinely need the serves bucket? (3) DOUBLE REPRESENTATION: if a pint exists as both menu drink and serve, what does the mapper suggest and can sales split across both (movers/variance corruption)?
 - **Early lean (held loosely):** demote, don't delete — "till items not on your menu" surfaced in the unmatched flow. End-state relates to the sellable-item model in [[project_pouriq_architecture_philosophy]].
 
+### F15 — 🟠 Ingredient→sellable gap: serve specs on an ingredient produce nothing sellable (no spec card, no menu item)
+- **Seen (Dan):** added Expedition Spiced as an ingredient with single + double serves. No spec card appears (spec cards render menu drinks; serves don't show there either), and nothing sellable exists until a drink is separately created on a menu — repeating data just entered.
+- **Why it matters:** for spirits (which change semi-frequently at a bar) this is the common path, and it's pure re-entry friction. The ingredient already holds pour sizes/costs — Pour IQ knows everything needed to sell it.
+- **Fix (Dan's proposal, agreed):** an "Add to menu" button in the add/edit-ingredient flow: pick menu (+ section), it creates one drink per serve spec ("Expedition Spiced (Single)"/"(Double)") pre-filled from what was input. User then EDITS a drink (price, section placement) instead of creating from scratch. Spec cards then come free since they render menu drinks.
+- **Relates to:** E6 — if ingredients can promote serves onto real menus this cheaply, the standalone Serves section's fallback role shrinks further. Also the sellable-item end-state in the architecture-philosophy memory.
+
 ## Phase 2/3 — Ingredient model & costing
 
 ### F3 — 🔴 "Items per pack" is a non-functional / misleading field for Count/each ingredients
