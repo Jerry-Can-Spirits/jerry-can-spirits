@@ -25,12 +25,12 @@ export async function GET(request: Request) {
   const [entriesRes, countRes] = await Promise.all([
     db
       .prepare(
-        `SELECT name, location, created_at FROM expedition_log WHERE batch_id = ?1 ORDER BY created_at DESC LIMIT ?2`,
+        `SELECT name, location, created_at FROM expedition_log WHERE batch_id = ?1 AND removed_at IS NULL ORDER BY created_at DESC LIMIT ?2`,
       )
       .bind(batch, limit)
       .all<{ name: string; location: string | null; created_at: string }>(),
     db
-      .prepare(`SELECT COUNT(*) AS n FROM expedition_log WHERE batch_id = ?1`)
+      .prepare(`SELECT COUNT(*) AS n FROM expedition_log WHERE batch_id = ?1 AND removed_at IS NULL`)
       .bind(batch)
       .first<{ n: number }>(),
   ])

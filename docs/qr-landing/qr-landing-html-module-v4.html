@@ -1,26 +1,21 @@
 <!--
-  Jerry Can Spirits — QR landing page HTML module v3 (2026-07-09)
-  Paste this file into the platform's CUSTOM HTML module, AND paste
-  qr-landing-script-module-v3.js into the platform's CUSTOM SCRIPT module.
-  Both are required; each is useless alone.
+  Jerry Can Spirits — QR landing page HTML module v4 (2026-07-09)
+  Paste this file into the platform's CUSTOM HTML module. No script module
+  needed: the platform strips scripts from HTML modules (which is why Expand
+  All and Turnstile never worked in v1), and Custom Script is Enterprise-only.
+  v4 is therefore 100% static markup, with the ONE interactive piece — the
+  Expedition Log (live feed + bottle registration + Turnstile) — served from
+  our own site and embedded as an iframe, where scripts run normally.
 
-  WHY THE SPLIT (v3): the platform injects Custom HTML client-side, and
-  script tags injected that way never execute (an HTML5 rule). That is why
-  Expand All and the Turnstile check never worked in v1. All JS therefore
-  lives in the Custom Script module; this file is pure markup. The inline
-  onclick / onsubmit attributes below DO work once the script module has
-  defined the jcs* globals.
+  DEPLOY REQUIREMENT: the site must be deployed with the /qr/expedition-log
+  embed page and its frame-ancestors CSP exception (the qr-embed PR).
+  No QR_LANDING_ORIGINS secret and no Turnstile changes are needed — the
+  embed is same-origin with the API on jerrycanspirits.co.uk.
 
-  DEPLOY REQUIREMENTS (one-time, on the site side)
-  1. Merge the expedition-log API PR (feed endpoint + CORS support).
-  2. npx wrangler secret put QR_LANDING_ORIGINS
-     value:  https://info.qr.jerrycanspirits.co.uk
-  3. Turnstile: jerrycanspirits.co.uk normally covers its subdomains; verify
-     the widget renders on the live page, else add info.qr.jerrycanspirits.co.uk
-     to the widget's hostnames (sitekey 0x4AAAAAACzG7GA-uDvEHCDq).
-
-  PER-BATCH EDIT: change JCS_CFG at the top of the SCRIPT module. The
-  Batch 001 values in this file are no-JS fallbacks, overridden at runtime.
+  PER-BATCH EDIT — exactly five spots, all marked "BATCH:" below
+    1. the bottled date line        2. the batch chip
+    3. the check-your-bottle link   4. the How We Make It batch row
+    5. the iframe src ?batch= parameter
 -->
 <div id="jcs-acc">
       <style>
@@ -149,16 +144,14 @@
           <div class="acc-prod-name">Expedition Spiced Rum</div>
           <div class="acc-prod-sub">
             40% Vol &middot; 700ml<br>
-            <span id="jcs-bottled-line">Bottled 09 March 2026</span>
+            <!-- BATCH: 1 of 5 — bottled date -->
+            <span>Bottled 09 March 2026</span>
           </div>
-          <div class="acc-prod-batch" id="jcs-batch-chip">Batch 001</div>
-          <a href="https://jerrycanspirits.co.uk/batch/001/" id="jcs-check-link" target="_blank" style="display:inline-block;margin-top:8px;font-size:9px;color:#b8960c;text-decoration:underline;letter-spacing:0.5px">Check your bottle &rarr;</a>
+          <!-- BATCH: 2 of 5 — batch chip -->
+          <div class="acc-prod-batch">Batch 001</div>
+          <!-- BATCH: 3 of 5 — check-your-bottle link -->
+          <a href="https://jerrycanspirits.co.uk/batch/001/" target="_blank" style="display:inline-block;margin-top:8px;font-size:9px;color:#b8960c;text-decoration:underline;letter-spacing:0.5px">Check your bottle &rarr;</a>
         </div>
-      </div>
-
-      <!-- EXPAND / COLLAPSE ALL -->
-      <div class="d-expand-bar">
-        <button type="button" class="d-expand-btn" id="jcs-expand-btn" onclick="jcsToggleAll()">Expand all</button>
       </div>
 
       <!-- ABOUT US -->
@@ -246,7 +239,8 @@
       <details>
         <summary><span class="s-title">How We Make It</span></summary>
         <div class="d-body">
-          <div class="d-row"><div class="d-lbl">Batch</div><div class="d-val" id="jcs-make-batch">Batch 001, bottled 09 March 2026</div></div>
+          <!-- BATCH: 4 of 5 — How We Make It batch row -->
+          <div class="d-row"><div class="d-lbl">Batch</div><div class="d-val">Batch 001, bottled 09 March 2026</div></div>
           <div class="d-row"><div class="d-lbl">Method</div><div class="d-val">Spices steeped, blended, and finished on bourbon oak</div></div>
           <div class="d-row"><div class="d-lbl">Batch Size</div><div class="d-val">700 bottles</div></div>
           <div class="d-row"><div class="d-lbl">Spec</div><div class="d-val">40% ABV / 700ml</div></div>
@@ -416,7 +410,6 @@
         <div class="d-body" style="padding-top:12px">
           <p class="d-share-intro">Made something good? Tag us. We share the serves we like best.</p>
           <div class="d-share-btns">
-            <button type="button" class="d-share-btn d-share-native" id="jcs-share-native" onclick="jcsNativeShare()">Share this rum</button>
             <a href="https://www.instagram.com/jerrycanspirits/" class="d-share-btn d-share-ig" target="_blank">Find us on Instagram</a>
             <a href="https://wa.me/?text=Just+opened+my+bottle+of+Expedition+Spiced+Rum.+Veteran-made+British+spiced+rum.+jerrycanspirits.co.uk" class="d-share-btn d-share-wa" target="_blank">Share on WhatsApp</a>
           </div>
@@ -432,40 +425,20 @@
         <p class="d-order-sub">Ships from the UK &middot; Secure checkout</p>
       </div>
 
-      <!-- THE EXPEDITION LOG (the Turnstile loader lives in the Custom
-           Script module; a script tag here would never execute) -->
-      <details id="jcs-log-details">
+      <!-- THE EXPEDITION LOG — served from our own site and framed in. The
+           platform strips scripts from this module, so the interactive parts
+           (live feed, bottle registration, Turnstile) run inside the iframe
+           on jerrycanspirits.co.uk, same-origin with our API. -->
+      <details>
         <summary><span class="s-title">The Expedition Log</span></summary>
-        <div class="d-body" style="padding-top:12px">
-          <div class="d-feed" id="jcs-feed" style="display:none">
-            <div class="d-feed-count" id="jcs-feed-count"></div>
-            <div id="jcs-feed-rows"></div>
-          </div>
-          <p style="font-size:11px;color:#c8b898;line-height:1.6;margin-bottom:14px">
-            Register your bottle and add your name to the record. A public log of the
-            people who were here first. Entirely optional.
-          </p>
-          <form class="d-log-form" id="jcs-log-form" onsubmit="jcsLogSubmit(event)">
-            <input type="text" class="d-log-input" name="name" placeholder="Your name" required maxlength="100" autocomplete="name">
-            <input type="text" class="d-log-input" name="location" placeholder="City, country (optional)" maxlength="100" autocomplete="off">
-            <div class="d-log-bottle">
-              <select class="d-log-input" name="bottle_type" required>
-                <option value="standard">Standard bottle</option>
-                <option value="premium">Premium bottle</option>
-                <option value="founder">Founder bottle</option>
-              </select>
-              <input type="number" class="d-log-input" name="bottle_number" placeholder="Bottle no." required min="1" step="1" inputmode="numeric">
-            </div>
-            <p style="font-size:9px;color:#8a9a8a;margin:-4px 0 0;line-height:1.4">Your bottle number is printed on the label.</p>
-            <div class="cf-turnstile" data-sitekey="0x4AAAAAACzG7GA-uDvEHCDq" data-size="compact"></div>
-            <input type="text" name="website" style="position:absolute;left:-9999px;opacity:0" tabindex="-1" autocomplete="off">
-            <button type="submit" class="d-log-btn">Join the Expedition Log</button>
-          </form>
-          <div id="jcs-log-msg" class="d-log-msg" style="display:none"></div>
-          <p style="font-size:9px;color:#8a9a8a;text-align:center;margin-top:10px;line-height:1.5">
-            Your name and location (if provided) will appear publicly at
-            <a href="https://jerrycanspirits.co.uk/expedition-log/" style="color:#b8960c" target="_blank">jerrycanspirits.co.uk/expedition-log</a>
-          </p>
+        <div class="d-body" style="padding-top:12px;padding-left:0;padding-right:0">
+          <!-- BATCH: 5 of 5 — the ?batch= parameter -->
+          <iframe
+            src="https://jerrycanspirits.co.uk/qr/expedition-log/?batch=001"
+            title="The Expedition Log"
+            style="width:100%;height:640px;border:none;display:block;background:#1a2e1a"
+            loading="lazy">
+          </iframe>
         </div>
       </details>
 
