@@ -33,6 +33,14 @@ import { PRIMARY_BUTTON, SECONDARY_BUTTON_SM } from '@/lib/pouriq/button-styles'
 type BaseUnit = 'ml' | 'g' | 'each'
 type PurchaseMode = BaseUnit | 'prepared'
 
+type CatalogueSuggestion = {
+  id: number
+  name: string
+  ingredient_type: IngredientType
+  base_unit: BaseUnit
+  default_pack_size: number | null
+}
+
 const INGREDIENT_TYPE_LABELS: Record<IngredientType, string> = {
   spirit: 'Spirit',
   liqueur: 'Liqueur',
@@ -170,6 +178,12 @@ export function IngredientForm({ entry, usageCount = 0, impactPayload, serveUnit
   const [pendingToast, setPendingToast] = useState<CostUpdateToastPayload | null>(null)
   const pendingValuesRef = useRef<LibraryEntryInput | null>(null)
 
+  // --- Catalogue name autocomplete (new ingredient only) ---
+  const [suggestions, setSuggestions] = useState<CatalogueSuggestion[]>([])
+  const [showSuggestions, setShowSuggestions] = useState(false)
+  const suggestDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const latestQueryRef = useRef<string>('')
+
   // --- Serve units ---
   const [suName, setSuName] = useState('')
   const [suQtyStr, setSuQtyStr] = useState('')
@@ -276,6 +290,43 @@ export function IngredientForm({ entry, usageCount = 0, impactPayload, serveUnit
         setScanInfo("Name, type and size came from the Pour IQ shared catalogue — sanity-check before saving.")
       }
     } catch { /* network blip — barcode field already populated */ }
+  }
+
+  function handleNameChange(value: string) {
+    setName(value)
+    setShowSuggestions(false)
+    if (entry !== null || value.length < 2) {
+      if (suggestDebounceRef.current) clearTimeout(suggestDebounceRef.current)
+      setSuggestions([])
+      return
+    }
+    if (suggestDebounceRef.current) clearTimeout(suggestDebounceRef.current)
+    const q = value
+    latestQueryRef.current = q
+    suggestDebounceRef.current = setTimeout(async () => {
+      const url = `/api/pouriq/catalogue/search?q=${encodeURIComponent(q)}&type=${ingredient_type}`
+      try {
+        const res = await fetch(url)
+        if (!res.ok) return
+        const data = await res.json() as { results: CatalogueSuggestion[] }
+        if (latestQueryRef.current !== q) return
+        setSuggestions(data.results)
+        setShowSuggestions(data.results.length > 0)
+      } catch { /* network blip */ }
+    }, 200)
+  }
+
+  function pickSuggestion(s: CatalogueSuggestion) {
+    setName(s.name)
+    setIngredientType(s.ingredient_type)
+    if (s.default_pack_size) {
+      setBaseUnit('ml')
+      setPackSizeStr(String(s.default_pack_size))
+    } else if (s.base_unit) {
+      setBaseUnit(s.base_unit)
+    }
+    setSuggestions([])
+    setShowSuggestions(false)
   }
 
   function computeBasePerUnit(): number | null {
@@ -549,16 +600,35 @@ export function IngredientForm({ entry, usageCount = 0, impactPayload, serveUnit
         )}
 
         {/* Name */}
-        <div>
+        <div className="relative">
           <label htmlFor="ing-name" className={LABEL}>Name *</label>
           <input
             id="ing-name"
             required
             value={name}
-            onChange={(e) => setName(e.target.value)}
+            onChange={(e) => handleNameChange(e.target.value)}
+            onKeyDown={(e) => { if (e.key === 'Escape') setShowSuggestions(false) }}
+            onBlur={() => { setTimeout(() => setShowSuggestions(false), 150) }}
+            autoComplete="off"
             className={INPUT}
             placeholder="e.g. Expedition Spiced Rum"
           />
+          {showSuggestions && suggestions.length > 0 && (
+            <ul className="absolute z-10 left-0 right-0 mt-1 bg-white border border-gray-200 rounded-md shadow-lg max-h-48 overflow-y-auto">
+              {suggestions.map((s) => (
+                <li key={s.id}>
+                  <button
+                    type="button"
+                    onMouseDown={() => pickSuggestion(s)}
+                    className="w-full text-left px-3 py-2 hover:bg-gray-50 flex items-center justify-between gap-2 text-sm"
+                  >
+                    <span className="font-medium text-gray-900">{s.name}</span>
+                    <span className="text-gray-500 shrink-0">{INGREDIENT_TYPE_LABELS[s.ingredient_type]}</span>
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
 
         {/* Category + Subcategory */}
