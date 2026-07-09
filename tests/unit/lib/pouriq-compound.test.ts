@@ -45,4 +45,21 @@ describe('splitCompoundIngredients', () => {
     const out = splitCompoundIngredients([{ name: 'Lime & Apple juice', raw_measurement: '50ml', inferred_type: 'juice' }])
     expect(out.every((i) => i.inferred_type === 'juice')).toBe(true)
   })
+  it('clears base_product and serve on split parts but not on passthrough', () => {
+    const compound = splitCompoundIngredients([
+      { name: 'Lime & Apple juice', raw_measurement: '50ml', base_product: 'Lime & Apple juice', serve: 'glass' },
+    ])
+    expect(compound).toHaveLength(2)
+    expect(compound[0].base_product).toBeNull()
+    expect(compound[0].serve).toBeNull()
+    expect(compound[1].base_product).toBeNull()
+    expect(compound[1].serve).toBeNull()
+    // Non-split passthrough must keep its values.
+    const passthrough = splitCompoundIngredients([
+      { name: 'Guinness', raw_measurement: 'pint', base_product: 'Guinness', serve: 'pint' },
+    ])
+    expect(passthrough).toHaveLength(1)
+    expect(passthrough[0].base_product).toBe('Guinness')
+    expect(passthrough[0].serve).toBe('pint')
+  })
 })

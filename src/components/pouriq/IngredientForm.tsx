@@ -34,7 +34,7 @@ type BaseUnit = 'ml' | 'g' | 'each'
 type PurchaseMode = BaseUnit | 'prepared'
 
 type CatalogueSuggestion = {
-  id: number
+  id: string
   name: string
   ingredient_type: IngredientType
   base_unit: BaseUnit

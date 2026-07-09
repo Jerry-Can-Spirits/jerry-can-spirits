@@ -161,19 +161,20 @@ export async function POST(request: Request) {
     sale_price_p: d.sale_price_p,
     ingredients: splitCompoundIngredients(d.ingredients).map((i): PreviewIngredient => {
       const parsed = parseMeasurement(i.raw_measurement)
-      const matched = matchIngredient(i.name, library)
+      const matchName = i.base_product?.trim() || i.name
+      const matched = matchIngredient(matchName, library)
       let match: PreviewIngredient['match']
       if (matched.kind === 'auto') {
         // The bar's own priced library entry always wins.
         match = { kind: 'auto', library_id: matched.entry.id, library_name: matched.entry.name }
       } else {
         // Not in their library — offer a shared-catalogue adoption (set price).
-        const cat = matchCatalogue(i.name, catalogue, i.inferred_type)
+        const cat = matchCatalogue(matchName, catalogue, i.inferred_type)
         if (cat) {
           match = {
             kind: 'catalogue',
             catalogue_id: cat.id,
-            name: adoptionName(i.name, cat),
+            name: adoptionName(matchName, cat),
             ingredient_type: cat.ingredient_type,
             base_unit: cat.base_unit,
             default_pack_size: cat.default_pack_size,

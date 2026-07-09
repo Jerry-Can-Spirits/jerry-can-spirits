@@ -64,7 +64,9 @@ function initialIngredientState(input: PreviewDrinkInput['ingredients'][0], libr
   const pour_ml: number | null = serveDefaults
     ? serveDefaults.pour_ml
     : 'pour_ml' in input.parsed ? (input.parsed.pour_ml ?? null) : null
-  const unit_count: number | null = 'unit_count' in input.parsed ? (input.parsed.unit_count ?? null) : null
+  const unit_count: number | null = serveDefaults
+    ? null
+    : ('unit_count' in input.parsed ? (input.parsed.unit_count ?? null) : null)
 
   // If the measurement named a recognised serve unit (dash/barspoon/tsp),
   // default recipe_unit/recipe_qty from the parse result so the picker starts
