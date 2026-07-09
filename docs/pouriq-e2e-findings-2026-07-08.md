@@ -69,6 +69,14 @@ Running list of issues found during the manual E2E. Each becomes an amendment. S
   2. **Generic→brand resolution ("house pour"):** a generic term ("gin") should suggest the venue's library entries whose catalogue generic matches. Longer-term this is the house-pour concept — venue-level "house gin = X" so generic recipe lines cost against the designated brand, and swapping the house pour re-costs every affected drink. A real feature, not just a matcher patch.
 - **Relates to:** E1 (serve-aware import), E4 (catalogue lift on manual add), onboarding speed.
 
+### F12 — 🟠 Import: "Create new ingredient" is undiscoverable (two real users concluded it doesn't exist)
+- **Seen (Dan, twice in one run):** "Pouilly-Fumé Pierre Brevin" (wine, price extracted, no library/catalogue match) and "chocolate sauce" (Mudslide) — both times the row appeared to offer only search-library-or-skip; no visible way to create a new entry. Concluded the drink had to be skipped.
+- **Actual behaviour (code):** create-new EXISTS but only as the LAST row inside the LibrarySearchSelect dropdown ("+ Create new ingredient"), beneath up to 20 library entries in a max-h-64 scroll box (`LibrarySearchSelect.tsx` — button rendered after `matches.map`). With an empty query the user sees 20 irrelevant entries and never scrolls to the bottom; nothing on the row itself says creation is possible.
+- **Why it matters:** unmatched-but-priced lines are exactly the moment a new venue is building its library; if creation looks impossible they skip drinks and the menu imports incomplete. 2/2 discovery failure in live use.
+- **Workaround:** click into the search box, type any non-matching text — the dropdown reduces to the "+ Create new ingredient" row; it seeds from what you typed.
+- **Fix (small UI):** (1) an always-visible "Create '<extracted name>'" button on unresolved rows, calling the existing `startNewLibrary(extracted_name)` — no retyping; (2) pin the create row to the TOP of the dropdown (or make it sticky) so it's visible regardless of match count. No model change.
+- **Relates to:** F11 (both are the unmatched-row resolution UX), onboarding speed.
+
 ## Phase 2/3 — Ingredient model & costing
 
 ### F3 — 🔴 "Items per pack" is a non-functional / misleading field for Count/each ingredients
