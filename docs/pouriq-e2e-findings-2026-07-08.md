@@ -103,6 +103,28 @@ Running list of issues found during the manual E2E. Each becomes an amendment. S
 - **Fix (Dan's proposal, agreed):** an "Add to menu" button in the add/edit-ingredient flow: pick menu (+ section), it creates one drink per serve spec ("Expedition Spiced (Single)"/"(Double)") pre-filled from what was input. User then EDITS a drink (price, section placement) instead of creating from scratch. Spec cards then come free since they render menu drinks.
 - **Relates to:** E6 — if ingredients can promote serves onto real menus this cheaply, the standalone Serves section's fallback role shrinks further. Also the sellable-item end-state in the architecture-philosophy memory.
 
+## Run 2 — Sections 0–2 sweep (2026-07-09, Dan's tracker notes)
+
+### F16 — 🟡 Nav: Dashboard never shows the emerald active state (0.4)
+- **Seen (Dan):** active nav item is emerald on every section except the Dashboard — on /trade/pouriq nothing highlights.
+- **Likely cause:** active check does a prefix match that either always-matches the root for other routes (so it's suppressed) or exact-matches a path form that differs (trailing slash). To confirm in code.
+
+### F17 — 🟡 Onboarding quickstart unreachable except by typed URL (0.8)
+- **Seen (Dan):** /trade/pouriq/onboarding loads fine but nothing links to it — "it's a physically typed address."
+- **Fix:** link it from the dashboard setup checklist (natural home) and/or the Help area of the nav.
+
+### F18 — 🟡 Barcode scan of an unknown barcode silently creates a duplicate ingredient (2.12)
+- **Seen (Dan):** scanned Expedition Spiced on phone; library already had the ingredient but WITHOUT a barcode set → scan created a NEW ingredient. After setting the barcode on the library entry, rescan matched correctly. Not strictly a bug, but a duplicate trap.
+- **Fix:** unknown barcode → offer "attach this barcode to an existing ingredient" (library search preselected) before the create-new default.
+
+### F19 — 🔵 Cost-confidence badge not findable in the UI (2.11)
+- **Seen (Dan):** couldn't locate where the estimated/set/confirmed badge sits. Verify it renders at all; if it does, it needs a more discoverable home; if it doesn't, it's dead code or an aspirational test step.
+
+### Notes (no new defects)
+- **2.4 confirmed correct math:** case £180 inc VAT = £150 net; 6 × 700ml = 4,200ml → £0.0357/ml → **£1.79 per 50ml**. Liquid packs path computes correctly; F3 was Count/each only.
+- **1.6 (Archers kept as brand):** intended when the menu lists the brand; the generic↔brand question is the F11 house-pour design item.
+- **Meta (Dan):** the E2E script itself needs a plain-English rewrite — click-by-click "do this, expect this" for the remaining phases.
+
 ## Phase 2/3 — Ingredient model & costing
 
 ### F3 — 🔴 "Items per pack" is a non-functional / misleading field for Count/each ingredients
