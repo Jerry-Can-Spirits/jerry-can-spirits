@@ -56,10 +56,6 @@ interface CloudflareEnv {
   SUMUP_CLIENT_ID: string;
   SUMUP_CLIENT_SECRET: string;
 
-  // QR landing page — comma-separated external origins allowed to call the
-  // expedition-log API cross-site (the QR platform's page domain)
-  QR_LANDING_ORIGINS?: string;
-
   // Secrets — Accounting integrations (Xero + QuickBooks Online)
   XERO_CLIENT_ID: string;
   XERO_CLIENT_SECRET: string;
