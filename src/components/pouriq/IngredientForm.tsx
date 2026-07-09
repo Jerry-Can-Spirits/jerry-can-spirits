@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo, useRef, useState, useTransition } from 'react'
+import { useEffect, useMemo, useRef, useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 import { ALL_INGREDIENT_TYPES, type IngredientLibraryRow, type IngredientType, type ServeUnitRow, type IngredientUseRow } from '@/lib/pouriq/types'
 import { saveLibraryEntryAction, deleteLibraryEntryAction, saveServeUnitAction, deleteServeUnitAction, addPreparedComponentAction, removePreparedComponentAction, saveIngredientUsesAction, type LibraryEntryInput } from '@/lib/pouriq/server-actions'
@@ -181,6 +181,7 @@ export function IngredientForm({ entry, usageCount = 0, impactPayload, serveUnit
   // --- Catalogue name autocomplete (new ingredient only) ---
   const [suggestions, setSuggestions] = useState<CatalogueSuggestion[]>([])
   const [showSuggestions, setShowSuggestions] = useState(false)
+  const [typeChosen, setTypeChosen] = useState(entry !== null)
   const suggestDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const latestQueryRef = useRef<string>('')
 
@@ -245,6 +246,13 @@ export function IngredientForm({ entry, usageCount = 0, impactPayload, serveUnit
     return `${fmt(perBase)}/ml  ·  ${perServeStr}`
   }, [base_unit, ingredient_type, price_p_live, pack_size_live, purchase_qty_live, yield_pct_live])
 
+  // Cleanup debounce timer on unmount
+  useEffect(() => {
+    return () => {
+      if (suggestDebounceRef.current) clearTimeout(suggestDebounceRef.current)
+    }
+  }, [])
+
   // Impact projection (uses saved price as baseline)
   const savedPriceP = entry?.price_p ?? null
   const confidenceBadge = entry ? costConfidenceBadge(entry.cost_confidence) : null
@@ -294,17 +302,17 @@ export function IngredientForm({ entry, usageCount = 0, impactPayload, serveUnit
 
   function handleNameChange(value: string) {
     setName(value)
-    setShowSuggestions(false)
     if (entry !== null || value.length < 2) {
       if (suggestDebounceRef.current) clearTimeout(suggestDebounceRef.current)
       setSuggestions([])
+      setShowSuggestions(false)
       return
     }
     if (suggestDebounceRef.current) clearTimeout(suggestDebounceRef.current)
     const q = value
     latestQueryRef.current = q
     suggestDebounceRef.current = setTimeout(async () => {
-      const url = `/api/pouriq/catalogue/search?q=${encodeURIComponent(q)}&type=${ingredient_type}`
+      const url = `/api/pouriq/catalogue/search?q=${encodeURIComponent(q)}` + (typeChosen ? `&type=${ingredient_type}` : '')
       try {
         const res = await fetch(url)
         if (!res.ok) return
@@ -319,6 +327,7 @@ export function IngredientForm({ entry, usageCount = 0, impactPayload, serveUnit
   function pickSuggestion(s: CatalogueSuggestion) {
     setName(s.name)
     setIngredientType(s.ingredient_type)
+    setTypeChosen(true)
     if (s.default_pack_size) {
       setBaseUnit('ml')
       setPackSizeStr(String(s.default_pack_size))
@@ -638,7 +647,10 @@ export function IngredientForm({ entry, usageCount = 0, impactPayload, serveUnit
             <select
               id="ing-type"
               value={ingredient_type}
-              onChange={(e) => setIngredientType(e.target.value as IngredientType)}
+              onChange={(e) => {
+                setIngredientType(e.target.value as IngredientType)
+                setTypeChosen(true)
+              }}
               className={INPUT}
             >
               {ALL_INGREDIENT_TYPES.map((t) => (
