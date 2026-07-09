@@ -24,14 +24,17 @@ export const NAV_GROUPS: NavGroup[] = [
   { label: 'Settings', items: [
     { label: 'Voice profile', href: '/trade/pouriq/settings/voice-profile' },
     { label: 'Help', href: '/trade/pouriq/help' },
+    { label: 'Quickstart', href: '/trade/pouriq/onboarding' },
   ] },
 ]
 
 // The home item matches only its exact path; every other item also matches its
-// sub-routes (e.g. /library/new highlights Ingredients).
+// sub-routes (e.g. /library/new highlights Ingredients). trailingSlash is on,
+// so pathnames arrive as /trade/pouriq/ — strip the slash before comparing.
 export function isNavActive(pathname: string, href: string): boolean {
-  if (href === HOME) return pathname === HOME
-  return pathname === href || pathname.startsWith(href + '/')
+  const path = pathname.length > 1 && pathname.endsWith('/') ? pathname.slice(0, -1) : pathname
+  if (href === HOME) return path === HOME
+  return path === href || path.startsWith(href + '/')
 }
 
 // True on the authenticated Pour IQ app (its own chrome), false on marketing

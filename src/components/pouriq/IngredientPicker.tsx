@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { ALL_INGREDIENT_TYPES, type IngredientLibraryRow, type IngredientType } from '@/lib/pouriq/types'
-import { saveLibraryEntryAction } from '@/lib/pouriq/server-actions'
+import { attachBarcodeAction, saveLibraryEntryAction } from '@/lib/pouriq/server-actions'
 import { BarcodeScanner } from '@/components/pouriq/BarcodeScanner'
 import { BOTTLE_SIZES_ML, WEIGHT_SIZES_G } from '@/lib/pouriq/measures'
 import { PRIMARY_BUTTON } from '@/lib/pouriq/button-styles'
@@ -157,6 +157,29 @@ export function IngredientPicker({ libraryEntries, selectedEntryId, onChange }: 
     }
   }
 
+  // After a scan that matched nothing, entries whose name resembles what the
+  // user is creating and that have no barcode yet — offer to attach the code
+  // to one of them instead of creating a duplicate.
+  const attachCandidates = pendingBarcode && name.trim().length >= 2
+    ? libraryEntries.filter((e) => !e.barcode && e.name.toLowerCase().includes(name.trim().toLowerCase())).slice(0, 3)
+    : []
+
+  async function handleAttach(target: IngredientLibraryRow) {
+    if (!pendingBarcode) return
+    setCreateError(null)
+    setCreating(true)
+    try {
+      await attachBarcodeAction(target.id, pendingBarcode)
+      target.barcode = pendingBarcode
+      selectEntry(target)
+      setName(''); setCostPounds(''); setPurchaseQtyStr('1'); setShowCreate(false)
+    } catch (e) {
+      setCreateError((e as Error).message || 'Could not attach barcode')
+    } finally {
+      setCreating(false)
+    }
+  }
+
   const sizePresets = base_unit === 'ml' ? BOTTLE_SIZES_ML : base_unit === 'g' ? WEIGHT_SIZES_G : null
 
   return (
@@ -190,6 +213,22 @@ export function IngredientPicker({ libraryEntries, selectedEntryId, onChange }: 
         <div className="absolute z-10 left-0 right-0 mt-1 p-4 bg-white border border-slate-200 rounded-lg shadow-lg space-y-3">
           {pendingBarcode && (
             <p className="text-xs text-emerald-700">Barcode: <span className="font-mono">{pendingBarcode}</span></p>
+          )}
+          {attachCandidates.length > 0 && (
+            <div className="rounded-lg border border-amber-300 bg-amber-50 p-2 space-y-1">
+              <p className="text-xs text-amber-800">Already in your library? Attach this barcode instead of creating a duplicate:</p>
+              {attachCandidates.map((e) => (
+                <button
+                  key={e.id}
+                  type="button"
+                  disabled={creating}
+                  onClick={() => handleAttach(e)}
+                  className="block w-full text-left text-xs text-emerald-700 hover:text-emerald-800 disabled:opacity-50"
+                >
+                  Use &ldquo;{e.name}&rdquo; and attach barcode →
+                </button>
+              ))}
+            </div>
           )}
           {prefilledFromCatalogue && (
             <p className="text-xs text-emerald-700">Name, type and size came from the Pour IQ shared catalogue — sanity-check before saving.</p>

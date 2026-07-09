@@ -427,6 +427,32 @@ export async function saveLibraryEntryAction(
   return { entryId: savedId }
 }
 
+// Attach a scanned barcode to an existing library entry — the duplicate-safe
+// alternative to creating a new ingredient when a scan doesn't match.
+export async function attachBarcodeAction(entryId: string, barcode: string): Promise<void> {
+  const { db, tradeAccountId } = await requireDb()
+  const code = barcode.trim()
+  if (!code || code.length > 64) throw new Error('Invalid barcode')
+  const existing = await getLibraryEntry(db, entryId, tradeAccountId)
+  if (!existing) throw new Error('Ingredient not found')
+  await db
+    .prepare(`UPDATE pouriq_ingredients_library SET barcode = ?1, updated_at = datetime('now') WHERE id = ?2 AND trade_account_id = ?3`)
+    .bind(code, entryId, tradeAccountId)
+    .run()
+  try {
+    const { contributeToCatalogue } = await import('./barcode-catalogue')
+    await contributeToCatalogue(db, {
+      barcode: code,
+      name: existing.name,
+      ingredient_type: existing.ingredient_type,
+      pack_size_ml: existing.base_unit === 'ml' ? existing.pack_size : null,
+      trade_account_id: tradeAccountId,
+    })
+  } catch { /* swallow — non-critical */ }
+  revalidatePath('/trade/pouriq/library')
+  revalidatePath(`/trade/pouriq/library/${entryId}/edit`)
+}
+
 export async function addPreparedComponentAction(
   preparedId: string,
   componentId: string,

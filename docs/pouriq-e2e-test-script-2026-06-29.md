@@ -182,6 +182,7 @@ The single biggest objection to onboarding software is "how long until it's set 
 | Whole-menu extract total | Sum of the 4 | | |
 | **Auto-match hit rate** | (auto-matched + catalogue-matched) ÷ total ingredient lines | higher = faster | |
 | Ingredients needing **manual creation** | Count the new entries you had to price | lower = faster | |
+
 | Avg **time per drink** to resolve/price | total review time ÷ drinks | | |
 | Invoice scan (Phase 4) | upload → committed | < ~2 min | |
 | First **stock count** for N ingredients | time to enter | | |

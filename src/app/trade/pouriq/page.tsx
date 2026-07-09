@@ -47,6 +47,9 @@ export default async function TodayDashboard() {
                 </li>
               ))}
             </ul>
+            <p className="mt-3 pt-3 border-t border-slate-100 text-xs text-slate-500">
+              New to Pour IQ? <Link href="/trade/pouriq/onboarding" className="text-emerald-700 hover:text-emerald-800">Read the quickstart guide →</Link>
+            </p>
           </section>
         )}
 
