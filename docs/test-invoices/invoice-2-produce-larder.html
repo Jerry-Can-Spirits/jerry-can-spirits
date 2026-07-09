@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Invoice GG-20882 — Garden Gate Fresh &amp; Larder</title>
+<style>
+  @page { size: A4; margin: 18mm; }
+  body { font-family: Arial, Helvetica, sans-serif; color: #1a1a1a; font-size: 12px; line-height: 1.4; }
+  .head { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 3px solid #6b3f14; padding-bottom: 12px; margin-bottom: 18px; }
+  .supplier { font-size: 20px; font-weight: bold; color: #6b3f14; }
+  .muted { color: #555; }
+  .meta td { padding: 2px 0; }
+  .meta td:first-child { color: #555; padding-right: 14px; }
+  table.lines { width: 100%; border-collapse: collapse; margin-top: 10px; }
+  table.lines th { text-align: left; border-bottom: 2px solid #333; padding: 6px 4px; font-size: 11px; text-transform: uppercase; letter-spacing: .04em; }
+  table.lines td { border-bottom: 1px solid #ddd; padding: 6px 4px; vertical-align: top; }
+  .num { text-align: right; white-space: nowrap; }
+  .totals { margin-top: 14px; width: 45%; margin-left: auto; }
+  .totals td { padding: 3px 4px; }
+  .totals .grand { border-top: 2px solid #333; font-weight: bold; font-size: 13px; }
+  .foot { margin-top: 24px; font-size: 10px; color: #666; border-top: 1px solid #ddd; padding-top: 8px; }
+</style>
+</head>
+<body>
+  <div class="head">
+    <div>
+      <div class="supplier">Garden Gate Fresh &amp; Larder</div>
+      <div class="muted">New Covent Market, Wholesale Row 12, London SW8 5EL<br>
+      VAT Reg 688 4410 22 &nbsp;·&nbsp; orders@gardengate.example &nbsp;·&nbsp; 020 7555 0199</div>
+    </div>
+    <div>
+      <table class="meta">
+        <tr><td>Invoice</td><td><strong>GG-20882</strong></td></tr>
+        <tr><td>Date</td><td>2026-07-07</td></tr>
+        <tr><td>Account</td><td>THE-TEST-BAR</td></tr>
+        <tr><td>Terms</td><td>7 days</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <table class="lines">
+    <thead>
+      <tr><th>Code</th><th>Description</th><th class="num">Qty</th><th class="num">Unit (net)</th><th class="num">Line (net)</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>LEM100</td><td>Lemons — case (approx 100)</td><td class="num">1</td><td class="num">£14.00</td><td class="num">£14.00</td></tr>
+      <tr><td>LIM140</td><td>Limes — case (approx 140)</td><td class="num">1</td><td class="num">£16.00</td><td class="num">£16.00</td></tr>
+      <tr><td>ORA072</td><td>Oranges — case (approx 72)</td><td class="num">1</td><td class="num">£18.00</td><td class="num">£18.00</td></tr>
+      <tr><td>MINT5</td><td>Fresh Mint — 500g</td><td class="num">1</td><td class="num">£6.50</td><td class="num">£6.50</td></tr>
+      <tr><td>CUC12</td><td>Cucumber — box of 12</td><td class="num">1</td><td class="num">£7.20</td><td class="num">£7.20</td></tr>
+      <tr><td>SUG25</td><td>Caster Sugar — 25kg sack</td><td class="num">1</td><td class="num">£22.00</td><td class="num">£22.00</td></tr>
+      <tr><td>SALT1</td><td>Table Salt — 1kg</td><td class="num">1</td><td class="num">£0.90</td><td class="num">£0.90</td></tr>
+      <tr><td>EGG60</td><td>Fresh Eggs — tray of 60</td><td class="num">1</td><td class="num">£9.00</td><td class="num">£9.00</td></tr>
+      <tr><td>CRM2L</td><td>Double Cream — 2L</td><td class="num">1</td><td class="num">£6.40</td><td class="num">£6.40</td></tr>
+      <tr><td>CHER1</td><td>Maraschino Cocktail Cherries — 1kg tub</td><td class="num">1</td><td class="num">£8.50</td><td class="num">£8.50</td></tr>
+      <tr><td>OLV25</td><td>Pitted Green Olives — 2.5kg tub</td><td class="num">1</td><td class="num">£12.00</td><td class="num">£12.00</td></tr>
+      <tr><td>TOR1K</td><td>Tortilla Chips — 1kg</td><td class="num">1</td><td class="num">£4.20</td><td class="num">£4.20</td></tr>
+    </tbody>
+  </table>
+
+  <table class="totals">
+    <tr><td>Subtotal (net)</td><td class="num">£124.70</td></tr>
+    <tr><td>VAT @ 20% (cream, cherries, olives)</td><td class="num">£5.38</td></tr>
+    <tr><td>Zero-rated (fresh produce, eggs, sugar, salt, chips)</td><td class="num">£0.00</td></tr>
+    <tr class="grand"><td>Total due</td><td class="num">£130.08</td></tr>
+  </table>
+
+  <div class="foot">
+    All prices shown are NET of VAT. Most food and fresh produce is zero-rated; a few processed lines carry standard-rated 20%.
+    This mixed-rate invoice is deliberate — it exercises the per-invoice VAT toggle differently from an all-20% drinks invoice. E&amp;OE.
+  </div>
+</body>
+</html>

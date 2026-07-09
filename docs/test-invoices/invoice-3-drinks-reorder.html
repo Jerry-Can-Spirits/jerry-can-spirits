@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Invoice HC-4598 — Highland &amp; Coast Drinks Co. (reorder)</title>
+<style>
+  @page { size: A4; margin: 18mm; }
+  body { font-family: Arial, Helvetica, sans-serif; color: #1a1a1a; font-size: 12px; line-height: 1.4; }
+  .head { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 3px solid #14532d; padding-bottom: 12px; margin-bottom: 18px; }
+  .supplier { font-size: 20px; font-weight: bold; color: #14532d; }
+  .muted { color: #555; }
+  .meta td { padding: 2px 0; }
+  .meta td:first-child { color: #555; padding-right: 14px; }
+  table.lines { width: 100%; border-collapse: collapse; margin-top: 10px; }
+  table.lines th { text-align: left; border-bottom: 2px solid #333; padding: 6px 4px; font-size: 11px; text-transform: uppercase; letter-spacing: .04em; }
+  table.lines td { border-bottom: 1px solid #ddd; padding: 6px 4px; vertical-align: top; }
+  .num { text-align: right; white-space: nowrap; }
+  .up { color: #b91c1c; font-size: 10px; }
+  .totals { margin-top: 14px; width: 45%; margin-left: auto; }
+  .totals td { padding: 3px 4px; }
+  .totals .grand { border-top: 2px solid #333; font-weight: bold; font-size: 13px; }
+  .foot { margin-top: 24px; font-size: 10px; color: #666; border-top: 1px solid #ddd; padding-top: 8px; }
+</style>
+</head>
+<body>
+  <div class="head">
+    <div>
+      <div class="supplier">Highland &amp; Coast Drinks Co.</div>
+      <div class="muted">Unit 7, Dockside Trade Park, Bristol BS1 6TY<br>
+      VAT Reg 421 8876 03 &nbsp;·&nbsp; accounts@highlandcoast.example &nbsp;·&nbsp; 0117 555 0142</div>
+    </div>
+    <div>
+      <table class="meta">
+        <tr><td>Invoice</td><td><strong>HC-4598</strong></td></tr>
+        <tr><td>Date</td><td>2026-07-13</td></tr>
+        <tr><td>Account</td><td>THE-TEST-BAR</td></tr>
+        <tr><td>Terms</td><td>30 days</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <table class="lines">
+    <thead>
+      <tr><th>Code</th><th>Description</th><th class="num">Qty</th><th class="num">Unit (net)</th><th class="num">Line (net)</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>SPV070</td><td>Smirnoff Red Vodka 70cl — case of 6 <span class="up">▲ was £66.00</span></td><td class="num">1</td><td class="num">£70.20</td><td class="num">£70.20</td></tr>
+      <tr><td>GIN070</td><td>Gordon's London Dry Gin 70cl — case of 6 <span class="up">▲ was £69.00</span></td><td class="num">1</td><td class="num">£73.80</td><td class="num">£73.80</td></tr>
+      <tr><td>JDN070</td><td>Jack Daniel's Old No.7 70cl — case of 6 <span class="up">▲ was £96.00</span></td><td class="num">1</td><td class="num">£102.00</td><td class="num">£102.00</td></tr>
+      <tr><td>FTT200</td><td>Fever-Tree Indian Tonic 200ml — case of 24 <span class="up">▲ was £16.80</span></td><td class="num">2</td><td class="num">£18.00</td><td class="num">£36.00</td></tr>
+      <tr><td>THG50K</td><td>Thatchers Gold Cider — 50L keg</td><td class="num">1</td><td class="num">£110.00</td><td class="num">£110.00</td></tr>
+    </tbody>
+  </table>
+
+  <table class="totals">
+    <tr><td>Subtotal (net)</td><td class="num">£392.00</td></tr>
+    <tr><td>VAT @ 20%</td><td class="num">£78.40</td></tr>
+    <tr class="grand"><td>Total due</td><td class="num">£470.40</td></tr>
+  </table>
+
+  <div class="foot">
+    All prices shown are NET of VAT. Standard-rated 20% applies to all lines. A supplier price rise has been applied to vodka, gin,
+    bourbon and tonic since invoice HC-4471. E&amp;OE.
+  </div>
+</body>
+</html>

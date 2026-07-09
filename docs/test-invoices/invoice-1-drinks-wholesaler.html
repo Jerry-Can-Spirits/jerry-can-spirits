@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Invoice HC-4471 — Highland &amp; Coast Drinks Co.</title>
+<style>
+  @page { size: A4; margin: 18mm; }
+  body { font-family: Arial, Helvetica, sans-serif; color: #1a1a1a; font-size: 12px; line-height: 1.4; }
+  .head { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 3px solid #14532d; padding-bottom: 12px; margin-bottom: 18px; }
+  .supplier { font-size: 20px; font-weight: bold; color: #14532d; }
+  .muted { color: #555; }
+  .meta td { padding: 2px 0; }
+  .meta td:first-child { color: #555; padding-right: 14px; }
+  table.lines { width: 100%; border-collapse: collapse; margin-top: 10px; }
+  table.lines th { text-align: left; border-bottom: 2px solid #333; padding: 6px 4px; font-size: 11px; text-transform: uppercase; letter-spacing: .04em; }
+  table.lines td { border-bottom: 1px solid #ddd; padding: 6px 4px; vertical-align: top; }
+  .num { text-align: right; white-space: nowrap; }
+  tfoot td { padding: 4px; }
+  .totals { margin-top: 14px; width: 45%; margin-left: auto; }
+  .totals td { padding: 3px 4px; }
+  .totals .grand { border-top: 2px solid #333; font-weight: bold; font-size: 13px; }
+  .foot { margin-top: 24px; font-size: 10px; color: #666; border-top: 1px solid #ddd; padding-top: 8px; }
+</style>
+</head>
+<body>
+  <div class="head">
+    <div>
+      <div class="supplier">Highland &amp; Coast Drinks Co.</div>
+      <div class="muted">Unit 7, Dockside Trade Park, Bristol BS1 6TY<br>
+      VAT Reg 421 8876 03 &nbsp;·&nbsp; accounts@highlandcoast.example &nbsp;·&nbsp; 0117 555 0142</div>
+    </div>
+    <div>
+      <table class="meta">
+        <tr><td>Invoice</td><td><strong>HC-4471</strong></td></tr>
+        <tr><td>Date</td><td>2026-07-06</td></tr>
+        <tr><td>Account</td><td>THE-TEST-BAR</td></tr>
+        <tr><td>Terms</td><td>30 days</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <table class="lines">
+    <thead>
+      <tr><th>Code</th><th>Description</th><th class="num">Qty</th><th class="num">Unit (net)</th><th class="num">Line (net)</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>SPV070</td><td>Smirnoff Red Vodka 70cl — case of 6</td><td class="num">1</td><td class="num">£66.00</td><td class="num">£66.00</td></tr>
+      <tr><td>GIN070</td><td>Gordon's London Dry Gin 70cl — case of 6</td><td class="num">1</td><td class="num">£69.00</td><td class="num">£69.00</td></tr>
+      <tr><td>ARC070</td><td>Archers Peach Schnapps 70cl — case of 6</td><td class="num">1</td><td class="num">£60.00</td><td class="num">£60.00</td></tr>
+      <tr><td>JDN070</td><td>Jack Daniel's Old No.7 70cl — case of 6</td><td class="num">1</td><td class="num">£96.00</td><td class="num">£96.00</td></tr>
+      <tr><td>HAV070</td><td>Havana Club Spiced 70cl — case of 6</td><td class="num">1</td><td class="num">£72.00</td><td class="num">£72.00</td></tr>
+      <tr><td>EVF050</td><td>Everleaf Forest (alcohol-free aperitif) 50cl — case of 6</td><td class="num">1</td><td class="num">£90.00</td><td class="num">£90.00</td></tr>
+      <tr><td>THG50K</td><td>Thatchers Gold Cider — 50L keg</td><td class="num">1</td><td class="num">£110.00</td><td class="num">£110.00</td></tr>
+      <tr><td>CCPMX</td><td>Coca-Cola post-mix syrup — 10L bag-in-box</td><td class="num">1</td><td class="num">£48.00</td><td class="num">£48.00</td></tr>
+      <tr><td>FTT200</td><td>Fever-Tree Indian Tonic 200ml — case of 24</td><td class="num">1</td><td class="num">£16.80</td><td class="num">£16.80</td></tr>
+      <tr><td>FSL275</td><td>Franklin &amp; Sons Lemonade 275ml — case of 12</td><td class="num">1</td><td class="num">£9.60</td><td class="num">£9.60</td></tr>
+      <tr><td>MON1L</td><td>Monin Vanilla Syrup 1L bottle</td><td class="num">2</td><td class="num">£7.20</td><td class="num">£14.40</td></tr>
+      <tr><td>PRO075</td><td>Prosecco DOC 75cl — case of 6</td><td class="num">1</td><td class="num">£42.00</td><td class="num">£42.00</td></tr>
+      <tr><td>PER330</td><td>Peroni Nastro Azzurro 330ml — case of 24</td><td class="num">2</td><td class="num">£28.80</td><td class="num">£57.60</td></tr>
+      <tr><td>RB250</td><td>Red Bull Energy 250ml — case of 24</td><td class="num">1</td><td class="num">£21.60</td><td class="num">£21.60</td></tr>
+    </tbody>
+  </table>
+
+  <table class="totals">
+    <tr><td>Subtotal (net)</td><td class="num">£773.00</td></tr>
+    <tr><td>VAT @ 20%</td><td class="num">£154.60</td></tr>
+    <tr class="grand"><td>Total due</td><td class="num">£927.60</td></tr>
+  </table>
+
+  <div class="foot">
+    All prices shown are NET of VAT. Standard-rated 20% applies to all lines on this invoice. E&amp;OE.
+    Payment to Highland &amp; Coast Drinks Co., sort 20-00-00, acc 12345678, ref HC-4471.
+  </div>
+</body>
+</html>
