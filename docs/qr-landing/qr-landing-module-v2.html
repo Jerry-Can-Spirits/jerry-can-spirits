@@ -166,10 +166,10 @@
           <div class="acc-prod-name">Expedition Spiced Rum</div>
           <div class="acc-prod-sub">
             40% Vol &middot; 700ml<br>
-            <span id="jcs-bottled-line"></span>
+            <span id="jcs-bottled-line">Bottled 09 March 2026</span>
           </div>
-          <div class="acc-prod-batch" id="jcs-batch-chip"></div>
-          <a href="#" id="jcs-check-link" target="_blank" style="display:inline-block;margin-top:8px;font-size:9px;color:#b8960c;text-decoration:underline;letter-spacing:0.5px">Check your bottle &rarr;</a>
+          <div class="acc-prod-batch" id="jcs-batch-chip">Batch 001</div>
+          <a href="https://jerrycanspirits.co.uk/batch/001/" id="jcs-check-link" target="_blank" style="display:inline-block;margin-top:8px;font-size:9px;color:#b8960c;text-decoration:underline;letter-spacing:0.5px">Check your bottle &rarr;</a>
         </div>
       </div>
 
@@ -262,7 +262,7 @@
       <details>
         <summary><span class="s-title">How We Make It</span></summary>
         <div class="d-body">
-          <div class="d-row"><div class="d-lbl">Batch</div><div class="d-val" id="jcs-make-batch"></div></div>
+          <div class="d-row"><div class="d-lbl">Batch</div><div class="d-val" id="jcs-make-batch">Batch 001, bottled 09 March 2026</div></div>
           <div class="d-row"><div class="d-lbl">Method</div><div class="d-val">Spices steeped, blended, and finished on bourbon oak</div></div>
           <div class="d-row"><div class="d-lbl">Batch Size</div><div class="d-val">700 bottles</div></div>
           <div class="d-row"><div class="d-lbl">Spec</div><div class="d-val">40% ABV / 700ml</div></div>
@@ -486,12 +486,16 @@
       </details>
 
       <script>
-      // Batch config → DOM (edit JCS_CFG at the top of this module per batch)
+      // Batch config → DOM. The HTML above carries real Batch 001 defaults so
+      // nothing is ever blank or mislinked without JS; this override from
+      // JCS_CFG is what makes the module a one-place edit per batch.
       (function(){
-        document.getElementById('jcs-bottled-line').textContent=JCS_CFG.bottled;
-        document.getElementById('jcs-batch-chip').textContent='Batch '+JCS_CFG.batch;
-        document.getElementById('jcs-check-link').href=JCS_CFG.checkUrl;
-        document.getElementById('jcs-make-batch').textContent='Batch '+JCS_CFG.batch+', '+JCS_CFG.bottled.replace(/^Bottled /,'bottled ');
+        try{
+          document.getElementById('jcs-bottled-line').textContent=JCS_CFG.bottled;
+          document.getElementById('jcs-batch-chip').textContent='Batch '+JCS_CFG.batch;
+          document.getElementById('jcs-check-link').href=JCS_CFG.checkUrl;
+          document.getElementById('jcs-make-batch').textContent='Batch '+JCS_CFG.batch+', '+JCS_CFG.bottled.replace(/^Bottled /,'bottled ');
+        }catch(e){}
       })();
 
       // Founders video: load the stream iframe only when the section first opens.
