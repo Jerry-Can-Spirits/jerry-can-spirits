@@ -10,7 +10,9 @@ import { isPourIqAppRoute } from '@/lib/pouriq/nav'
 
 export default function SiteChrome({ children }: { children: ReactNode }) {
   const pathname = usePathname()
-  if (isPourIqAppRoute(pathname)) return <>{children}</>
+  // Pour IQ has its own shell; /qr/* is iframed into the QR landing page and
+  // must render bare (no header, footer, banner, or background).
+  if (isPourIqAppRoute(pathname) || pathname.startsWith('/qr/')) return <>{children}</>
 
   return (
     <>
