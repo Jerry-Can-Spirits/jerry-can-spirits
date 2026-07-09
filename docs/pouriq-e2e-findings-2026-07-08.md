@@ -91,6 +91,12 @@ Running list of issues found during the manual E2E. Each becomes an amendment. S
 - **Fix (layered):** (1) an "Add ingredient" control per drink card in the preview so any drink can be completed in place; (2) extraction fallback — when a drink has no ingredient list, mine the DESCRIPTION for ingredients (mocktail descriptions usually name them: "orange juice, grenadine..."), flagging them as inferred for review.
 - **Relates to:** F11/F12/F13 — the import resolution UX cluster; all four belong to one design pass.
 
+### E6 — 🔵 Design question (Dan, undecided): does the standalone Serves section survive serve-aware menus?
+- **Trigger:** post-E1, the menu itself now carries "Moretti (Half)" / "(Pint)" as clickable priced drinks sharing one keg — overlapping what Serves existed for. Dan wondering whether to fold serves into menus; deliberately deferring until the POS phase of this run.
+- **What Serves actually is:** the bucket for till items no printed menu lists (hidden serves menu; unmatched mapper's "map to serve" path). Still needed for off-menu sales to have a costed home (variance correctness) — but likely as a FALLBACK inside the unmatched flow, not a peer nav section.
+- **Evidence to gather in the POS phase:** (1) do till items now map cleanly to menu drinks? (2) does anything genuinely need the serves bucket? (3) DOUBLE REPRESENTATION: if a pint exists as both menu drink and serve, what does the mapper suggest and can sales split across both (movers/variance corruption)?
+- **Early lean (held loosely):** demote, don't delete — "till items not on your menu" surfaced in the unmatched flow. End-state relates to the sellable-item model in [[project_pouriq_architecture_philosophy]].
+
 ## Phase 2/3 — Ingredient model & costing
 
 ### F3 — 🔴 "Items per pack" is a non-functional / misleading field for Count/each ingredients
