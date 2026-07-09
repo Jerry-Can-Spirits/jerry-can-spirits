@@ -77,6 +77,20 @@ Running list of issues found during the manual E2E. Each becomes an amendment. S
 - **Fix (small UI):** (1) an always-visible "Create '<extracted name>'" button on unresolved rows, calling the existing `startNewLibrary(extracted_name)` — no retyping; (2) pin the create row to the TOP of the dropdown (or make it sticky) so it's visible regardless of match count. No model change.
 - **Relates to:** F11 (both are the unmatched-row resolution UX), onboarding speed.
 
+### F13 — 🟠 Import: choice lines ("lemonade or soda") extracted as ONE compound ingredient
+- **Seen (Dan):** a cocktail offering "lemonade or soda" was extracted as a single ingredient line named "lemonade or soda", staging a create-new entry with that literal name.
+- **Why it matters:** a menu choice is a service option, not a costable ingredient; the literal entry pollutes the library and costs nothing correctly.
+- **Workaround:** on that row, pick/create just "Lemonade" (cost against the first-listed default); the choice wording belongs in the drink description.
+- **Fix:** extraction prompt rule — "X or Y" within an ingredient list = alternatives: emit the FIRST as the costed ingredient (house default) and keep the choice in the description; never emit "X or Y" as a name. (The compound splitter handles "&"; "or" is a different semantic — choose-one, not both.) Also ensure the create-new row's name field is obviously editable so users can rescue any weird extraction.
+- **Relates to:** F1 (extraction typing), compound splitting, the import design pass.
+
+### F14 — 🟠 Import: description-only drinks (mocktails) extract with zero ingredients and cannot be completed in the preview
+- **Seen (Dan):** the mocktail section lists descriptions, not ingredients. "The Bank Sunrise" extracted correctly as a drink but with NO ingredient rows — and the preview offers no way to add one, while commit requires at least one ingredient per drink. Only option: skip and rebuild manually.
+- **Why it matters:** whole menu sections (mocktails, simple serves) are written description-style; each becomes manual work, undercutting the import's time-to-value promise.
+- **Workaround:** skip in import, then Add drink manually on the menu with ingredients from the description.
+- **Fix (layered):** (1) an "Add ingredient" control per drink card in the preview so any drink can be completed in place; (2) extraction fallback — when a drink has no ingredient list, mine the DESCRIPTION for ingredients (mocktail descriptions usually name them: "orange juice, grenadine..."), flagging them as inferred for review.
+- **Relates to:** F11/F12/F13 — the import resolution UX cluster; all four belong to one design pass.
+
 ## Phase 2/3 — Ingredient model & costing
 
 ### F3 — 🔴 "Items per pack" is a non-functional / misleading field for Count/each ingredients
