@@ -641,6 +641,39 @@ export async function listIngredientServesAction(libraryIngredientId: string) {
   return listIngredientServes(db, tradeAccountId, libraryIngredientId)
 }
 
+// Promote an ingredient's serves onto a real menu as proper drinks. MOVES the
+// rows (re-parents off the hidden serves menu) rather than copying, so the
+// same pour can never exist twice and split POS sales between two homes.
+export async function addIngredientServesToMenuAction(
+  libraryIngredientId: string,
+  targetMenuId: string,
+): Promise<{ moved: number }> {
+  const { db, tradeAccountId } = await requireDb()
+  const menu = await db
+    .prepare(`SELECT 1 FROM pouriq_menus WHERE id = ?1 AND trade_account_id = ?2 AND is_serves_menu = 0`)
+    .bind(targetMenuId, tradeAccountId)
+    .first()
+  if (!menu) throw new Error('Menu not found')
+  const serves = await listIngredientServes(db, tradeAccountId, libraryIngredientId)
+  if (serves.length === 0) return { moved: 0 }
+  const posRow = await db
+    .prepare(`SELECT COALESCE(MAX(position), -1) + 1 AS next FROM pouriq_cocktails WHERE menu_id = ?1`)
+    .bind(targetMenuId)
+    .first<{ next: number }>()
+  const base = posRow?.next ?? 0
+  await db.batch(
+    serves.map((s, i) =>
+      db
+        .prepare(`UPDATE pouriq_cocktails SET menu_id = ?1, is_serve = 0, section_id = NULL, position = ?2, updated_at = datetime('now') WHERE id = ?3`)
+        .bind(targetMenuId, base + i, s.id),
+    ),
+  )
+  revalidatePath(`/trade/pouriq/${targetMenuId}`)
+  revalidatePath('/trade/pouriq/serves')
+  revalidatePath(`/trade/pouriq/library/${libraryIngredientId}/edit`)
+  return { moved: serves.length }
+}
+
 export async function receiveStockAction(libraryIngredientId: string, qtyBottles: number, receivedAtISO?: string): Promise<void> {
   const { db, tradeAccountId } = await requireDb()
   if (!Number.isFinite(qtyBottles) || qtyBottles <= 0) throw new Error('Enter a positive quantity')
