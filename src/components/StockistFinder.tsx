@@ -32,6 +32,14 @@ const ALL_STOCKISTS: Stockist[] = [
     type: 'bar',
   },
   {
+    id: 'the-retro-lounge-blackpool',
+    name: 'The Retro Lounge',
+    address: '3-5 Clifton Street, Blackpool FY1 1JD',
+    lat: 53.81877,
+    lng: -3.05310,
+    type: 'bar',
+  },
+  {
     id: 'the-victory-hereford',
     name: 'The Victory',
     address: '88 Saint Owen St, Hereford HR1 2QD',
