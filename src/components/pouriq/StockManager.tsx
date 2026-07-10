@@ -27,6 +27,7 @@ export function StockManager({ rows }: Props) {
   const [countInputs, setCountInputs] = useState<Record<string, string>>({})
   const [batchInputs, setBatchInputs] = useState<Record<string, string>>({})
   const [parInputs, setParInputs] = useState<Record<string, string>>({})
+  const [parEditing, setParEditing] = useState<Record<string, boolean>>({})
   const [error, setError] = useState<string | null>(null)
 
   if (rows.length === 0) {
@@ -70,17 +71,35 @@ export function StockManager({ rows }: Props) {
   }
 
   function handleSetPar(id: string) {
+    // Never treat an empty input as "clear" — an accidental second tap used to
+    // wipe the saved par. Clearing is its own explicit action.
     const trimmed = (parInputs[id] ?? '').trim()
-    const par = trimmed === '' ? null : parseFloat(trimmed)
-    if (par !== null && (!Number.isFinite(par) || par < 0)) return
+    if (trimmed === '') return
+    const par = parseFloat(trimmed)
+    if (!Number.isFinite(par) || par < 0) return
     setError(null)
     startTransition(async () => {
       try {
         await setParAction(id, par)
         setParInputs((prev) => { const next = { ...prev }; delete next[id]; return next })
+        setParEditing((prev) => { const next = { ...prev }; delete next[id]; return next })
         router.refresh()
       } catch (e) {
         setError((e as Error).message || 'Could not save par level.')
+      }
+    })
+  }
+
+  function handleClearPar(id: string) {
+    setError(null)
+    startTransition(async () => {
+      try {
+        await setParAction(id, null)
+        setParInputs((prev) => { const next = { ...prev }; delete next[id]; return next })
+        setParEditing((prev) => { const next = { ...prev }; delete next[id]; return next })
+        router.refresh()
+      } catch (e) {
+        setError((e as Error).message || 'Could not remove par level.')
       }
     })
   }
@@ -113,7 +132,8 @@ export function StockManager({ rows }: Props) {
           const receiveVal = receiveInputs[id] ?? ''
           const countVal = countInputs[id] ?? ''
           const batchVal = batchInputs[id] ?? ''
-          const parVal = parInputs[id] ?? (row.par_bottles != null ? String(row.par_bottles) : '')
+          const parVal = parInputs[id] ?? ''
+          const parSaveEnabled = !pending && parVal.trim() !== '' && Number.isFinite(parseFloat(parVal)) && parseFloat(parVal) >= 0
           const receiveQty = parseFloat(receiveVal)
           const countQty = parseFloat(countVal)
           const batchQty = parseFloat(batchVal)
@@ -131,6 +151,9 @@ export function StockManager({ rows }: Props) {
               <div className="mb-3">
                 <span className="text-slate-900 font-medium">{row.library_name}</span>
                 <span className="text-slate-500 text-sm ml-1">({row.pack_size}{row.base_unit === 'ml' ? 'ml' : ` ${row.base_unit}`})</span>
+                {row.par_bottles != null && (
+                  <span className="text-slate-500 text-sm ml-2">· Par {row.par_bottles}</span>
+                )}
               </div>
 
               {row.needs_opening_count ? (
@@ -206,26 +229,63 @@ export function StockManager({ rows }: Props) {
                   </button>
                 </div>
 
-                <div className="flex items-center gap-2">
-                  <input
-                    type="number"
-                    step="0.1"
-                    min={0}
-                    value={parVal}
-                    onChange={(e) => setParInputs((prev) => ({ ...prev, [id]: e.target.value }))}
-                    className={inputClass}
-                    placeholder="par"
-                    aria-label={`${row.library_name} par level`}
-                  />
-                  <button
-                    type="button"
-                    onClick={() => handleSetPar(id)}
-                    disabled={pending}
-                    className={actionButtonClass}
-                  >
-                    Set par
-                  </button>
-                </div>
+                {row.par_bottles == null || parEditing[id] ? (
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="number"
+                      step="0.1"
+                      min={0}
+                      value={parVal}
+                      onChange={(e) => setParInputs((prev) => ({ ...prev, [id]: e.target.value }))}
+                      className={inputClass}
+                      placeholder="par"
+                      aria-label={`${row.library_name} par level`}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => handleSetPar(id)}
+                      disabled={!parSaveEnabled}
+                      className={actionButtonClass}
+                    >
+                      {row.par_bottles == null ? 'Set par' : 'Save par'}
+                    </button>
+                    {row.par_bottles != null && (
+                      <>
+                        <button
+                          type="button"
+                          onClick={() => handleClearPar(id)}
+                          disabled={pending}
+                          className="text-xs text-slate-500 hover:text-rose-600"
+                        >
+                          Remove
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setParInputs((prev) => { const next = { ...prev }; delete next[id]; return next })
+                            setParEditing((prev) => { const next = { ...prev }; delete next[id]; return next })
+                          }}
+                          className="text-xs text-slate-500 hover:text-slate-700"
+                        >
+                          Cancel
+                        </button>
+                      </>
+                    )}
+                  </div>
+                ) : (
+                  <div className="flex items-center">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setParInputs((prev) => ({ ...prev, [id]: String(row.par_bottles) }))
+                        setParEditing((prev) => ({ ...prev, [id]: true }))
+                      }}
+                      className="text-xs text-slate-500 hover:text-emerald-700"
+                    >
+                      Edit par
+                    </button>
+                  </div>
+                )}
 
                 {row.is_prepared === 1 && (
                   <div className="flex flex-col gap-1">
