@@ -27,7 +27,7 @@ export function InvoicePreview({ initial, library }: Props) {
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [showAuto, setShowAuto] = useState(false)
-  const [pane, setPane] = useState<'lines' | 'doc'>('lines')
+  const [showDoc, setShowDoc] = useState(true)
   const attentionRef = useRef<HTMLDivElement>(null)
 
   const [lines, setLines] = useState<LineState[]>(() =>
@@ -232,33 +232,34 @@ export function InvoicePreview({ initial, library }: Props) {
   }
 
   return (
-    <div>
-      <div className="flex rounded-lg border border-slate-300 overflow-hidden mb-4 lg:hidden print:hidden">
-        <button
-          type="button"
-          onClick={() => setPane('doc')}
-          aria-pressed={pane === 'doc'}
-          className={`flex-1 px-4 py-2 text-sm font-medium ${pane === 'doc' ? 'bg-emerald-50 text-emerald-700' : 'text-slate-600 hover:text-slate-800 transition-colors'}`}
-        >
-          Document
-        </button>
-        <span aria-hidden="true" className="w-px bg-slate-300" />
-        <button
-          type="button"
-          onClick={() => setPane('lines')}
-          aria-pressed={pane === 'lines'}
-          className={`flex-1 px-4 py-2 text-sm font-medium ${pane === 'lines' ? 'bg-emerald-50 text-emerald-700' : 'text-slate-600 hover:text-slate-800 transition-colors'}`}
-        >
-          Lines
-        </button>
+    <div className="space-y-6">
+      {/* Document above, lines full-width below: the seven-column review table
+          needs the whole page, and a half-width pane clipped it. */}
+      <div className="print:hidden">
+        {showDoc ? (
+          <div>
+            <InvoiceDocViewer src={`/api/pouriq/invoices/pending/${initial.ticket}`} />
+            <button
+              type="button"
+              onClick={() => setShowDoc(false)}
+              className="mt-2 text-xs text-slate-500 hover:text-slate-700"
+            >
+              Hide document ▲
+            </button>
+          </div>
+        ) : (
+          <button
+            type="button"
+            onClick={() => setShowDoc(true)}
+            className="text-sm text-emerald-700 hover:text-emerald-600 underline"
+          >
+            Show original invoice ▼
+          </button>
+        )}
       </div>
 
-      <div className="lg:grid lg:grid-cols-2 lg:gap-6 lg:items-start">
-        <div className={`${pane === 'doc' ? '' : 'hidden'} lg:block print:hidden`}>
-          <InvoiceDocViewer src={`/api/pouriq/invoices/pending/${initial.ticket}`} />
-        </div>
-
-        <div className={`${pane === 'lines' ? '' : 'hidden'} lg:block space-y-6`}>
+      <div>
+        <div className="space-y-6">
           {initial.truncated && (
             <div className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
               This document was long and extraction may be incomplete. Check the last lines against the original before saving.
