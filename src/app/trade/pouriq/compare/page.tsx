@@ -151,9 +151,9 @@ export default async function ComparePage({ searchParams }: SearchParams) {
                         <th className="px-4 py-3">Drink</th>
                         <th className="px-4 py-3">A · GP</th>
                         <th className="px-4 py-3">B · GP</th>
-                        <th className="px-4 py-3">Δ GP</th>
-                        <th className="px-4 py-3">Δ Margin</th>
-                        <th className="px-4 py-3">Δ Contribution</th>
+                        <th className="px-4 py-3">GP change</th>
+                        <th className="px-4 py-3">Margin change</th>
+                        <th className="px-4 py-3">Contribution change</th>
                       </tr>
                     </thead>
                     <tbody>

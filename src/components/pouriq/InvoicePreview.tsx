@@ -137,7 +137,7 @@ export function InvoicePreview({ initial, library }: Props) {
         <th className="px-3 py-3">New price</th>
         <th className="px-3 py-3">Match</th>
         <th className="px-3 py-3">Current cost</th>
-        <th className="px-3 py-3">Δ</th>
+        <th className="px-3 py-3">Change</th>
       </tr>
     </thead>
   )
