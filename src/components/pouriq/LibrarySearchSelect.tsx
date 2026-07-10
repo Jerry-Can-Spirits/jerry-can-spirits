@@ -14,6 +14,8 @@ interface Props {
   onAdoptCatalogue?: () => void
   placeholder?: string
   initialQuery?: string
+  /** Name offered on the create row when the query is empty (e.g. the extracted menu name). */
+  createName?: string
 }
 
 export function LibrarySearchSelect({
@@ -25,6 +27,7 @@ export function LibrarySearchSelect({
   onAdoptCatalogue,
   placeholder = 'Search your library...',
   initialQuery = '',
+  createName,
 }: Props) {
   const id = useId()
   const containerRef = useRef<HTMLDivElement>(null)
@@ -83,6 +86,15 @@ export function LibrarySearchSelect({
               Adopt: {catalogueSuggestion.name} (set your price)
             </button>
           )}
+          {/* Create sits ABOVE the matches: with 20 results it was buried below
+              the scroll and users concluded creating wasn't possible. */}
+          <button
+            type="button"
+            onClick={() => { onRequestCreate(query); setOpen(false) }}
+            className="block w-full text-left px-3 py-2 text-sm font-medium text-emerald-700 hover:bg-slate-50 border-b border-slate-200"
+          >
+            + Create new ingredient{(query.trim() || createName) ? `: "${query.trim() || createName}"` : ''}
+          </button>
           {matches.map((entry) => (
             <button
               type="button"
@@ -98,13 +110,6 @@ export function LibrarySearchSelect({
               <span className="text-xs text-slate-500 ml-2">{entry.ingredient_type}</span>
             </button>
           ))}
-          <button
-            type="button"
-            onClick={() => { onRequestCreate(query); setOpen(false) }}
-            className="block w-full text-left px-3 py-2 text-sm text-emerald-700 hover:bg-slate-50 border-t border-slate-200"
-          >
-            + Create new ingredient{query.trim() ? `: "${query.trim()}"` : ''}
-          </button>
         </div>
       )}
     </div>

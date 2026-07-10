@@ -266,22 +266,32 @@ export function IngredientMatchRow({
                 </button>
               </div>
             ) : (
-              <LibrarySearchSelect
-                libraryEntries={libraryEntries}
-                inferredType={inferredType}
-                onPick={(e) => {
-                  onChange({
-                    existing_library_id: e.id,
-                    new_library: undefined,
-                    pour_ml: state.pour_ml,
-                    unit_count: state.unit_count,
-                    recipe_unit: state.recipe_unit,
-                    recipe_qty: state.recipe_qty,
-                  })
-                  onResolvedCommit?.()
-                }}
-                onRequestCreate={(q) => startNewLibrary(q)}
-              />
+              <>
+                <LibrarySearchSelect
+                  libraryEntries={libraryEntries}
+                  inferredType={inferredType}
+                  createName={extractedName}
+                  onPick={(e) => {
+                    onChange({
+                      existing_library_id: e.id,
+                      new_library: undefined,
+                      pour_ml: state.pour_ml,
+                      unit_count: state.unit_count,
+                      recipe_unit: state.recipe_unit,
+                      recipe_qty: state.recipe_qty,
+                    })
+                    onResolvedCommit?.()
+                  }}
+                  onRequestCreate={(q) => startNewLibrary(q.trim() || undefined)}
+                />
+                <button
+                  type="button"
+                  onClick={() => startNewLibrary()}
+                  className="text-xs text-emerald-700 hover:text-emerald-800"
+                >
+                  + Create &ldquo;{extractedName}&rdquo; as a new ingredient
+                </button>
+              </>
             )}
           </div>
         )}
