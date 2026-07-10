@@ -98,7 +98,7 @@ export default async function InvoiceDetailPage({ params }: Props) {
                 <h2 className="text-lg font-bold text-slate-900">Applied lines ({applied.length})</h2>
               </div>
               <div className="overflow-x-auto">
-                <table className="w-full text-sm min-w-[640px]">
+                <table className="w-full text-sm">
                   <thead className="bg-slate-50">
                     <tr className="text-left text-slate-500 text-xs uppercase tracking-widest">
                       <th className="px-4 py-3">Line</th>
@@ -129,7 +129,7 @@ export default async function InvoiceDetailPage({ params }: Props) {
                 <p className="text-xs text-slate-500 mt-1">Captured for the audit trail but did not update any library entry.</p>
               </div>
               <div className="overflow-x-auto">
-                <table className="w-full text-sm min-w-[640px]">
+                <table className="w-full text-sm">
                   <thead className="bg-slate-50">
                     <tr className="text-left text-slate-500 text-xs uppercase tracking-widest">
                       <th className="px-4 py-3">Line</th>

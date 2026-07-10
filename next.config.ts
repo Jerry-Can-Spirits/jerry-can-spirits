@@ -135,6 +135,19 @@ const nextConfig: NextConfig = {
           },
         ],
       },
+      // Invoice documents (committed PDFs + pending uploads) are shown in an
+      // inline viewer iframe beside the extracted lines. frame-ancestors 'none'
+      // from the global entry blocks even same-origin framing, so these API
+      // routes alone allow 'self'.
+      {
+        source: '/api/pouriq/invoices/:path*',
+        headers: [
+          {
+            key: 'Content-Security-Policy',
+            value: buildCsp("'self'"),
+          },
+        ],
+      },
     ]
   },
 
