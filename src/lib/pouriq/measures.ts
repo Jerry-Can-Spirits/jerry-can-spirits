@@ -9,15 +9,29 @@
 // Recognises 'x', 'X', and the unicode '×' separator; units ml/cl/l (any case).
 // Converts cl→ml (×10) and l/L→ml (×1000).
 export function parsePackFormat(name: string): { purchase_qty: number; pack_size: number } | null {
+  const toMl = (size: number, unit: string): number =>
+    unit === 'cl' ? Math.round(size * 10) : unit === 'l' ? Math.round(size * 1000) : Math.round(size)
   const m = name.match(/(\d+)\s*[xX×]\s*(\d+(?:\.\d+)?)\s*(ml|cl|l)\b/i)
-  if (!m) return null
-  const qty = parseInt(m[1], 10)
-  const size = parseFloat(m[2])
-  const unit = m[3].toLowerCase()
-  let pack_size: number
-  if (unit === 'cl') pack_size = Math.round(size * 10)
-  else if (unit === 'l') pack_size = Math.round(size * 1000)
-  else pack_size = Math.round(size)
+  if (m) {
+    const qty = parseInt(m[1], 10)
+    const pack_size = toMl(parseFloat(m[2]), m[3].toLowerCase())
+    if (!Number.isFinite(qty) || qty < 1 || !Number.isFinite(pack_size) || pack_size < 1) return null
+    return { purchase_qty: qty, pack_size }
+  }
+  // Invoice phrasings without the N×size shape: a case/pack count alongside a
+  // bare size ("70cl case of 6", "330ml 24 pack", "70cl x6"). A size alone
+  // still returns null — one bottle is not a pack. Count patterns in order:
+  // "24 pack"/"24-pack"/"24pk" first (so "6-pack of 330ml" reads 6, not 330),
+  // then "case/box/crate of 6" (rejecting "of 330ml" size false-positives),
+  // then a trailing "x6".
+  const count =
+    name.match(/\b(\d+)\s*-?\s*(?:pack|pk)\b/i) ??
+    name.match(/\b(?:case|pack|box|crate)\s+of\s+(\d+)\b(?!\s*(?:ml|cl|l)\b)/i) ??
+    name.match(/(?:^|\s)[xX×]\s*(\d+)\b/)
+  const size = name.match(/\b(\d+(?:\.\d+)?)\s*(ml|cl|l)\b/i)
+  if (!count || !size) return null
+  const qty = parseInt(count[1], 10)
+  const pack_size = toMl(parseFloat(size[1]), size[2].toLowerCase())
   if (!Number.isFinite(qty) || qty < 1 || !Number.isFinite(pack_size) || pack_size < 1) return null
   return { purchase_qty: qty, pack_size }
 }

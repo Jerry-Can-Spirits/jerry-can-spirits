@@ -118,6 +118,27 @@ describe('parsePackFormat', () => {
     expect(parsePackFormat('House Gin')).toBeNull()
     expect(parsePackFormat('')).toBeNull()
   })
+  it('parses "case of N" alongside a bare size', () => {
+    expect(parsePackFormat('Archers Peach Schnapps 70cl case of 6')).toEqual({ purchase_qty: 6, pack_size: 700 })
+    expect(parsePackFormat('Archers Peach Schnapps 70cl (Case of 6)')).toEqual({ purchase_qty: 6, pack_size: 700 })
+  })
+  it('parses "N pack" / "N-pack" alongside a bare size', () => {
+    expect(parsePackFormat('Budweiser 330ml 24 pack')).toEqual({ purchase_qty: 24, pack_size: 330 })
+    expect(parsePackFormat('Budweiser 330ml 24-pack')).toEqual({ purchase_qty: 24, pack_size: 330 })
+  })
+  it('prefers the N-pack count over "of" in "6-pack of 330ml"', () => {
+    expect(parsePackFormat('Cola 6-pack of 330ml')).toEqual({ purchase_qty: 6, pack_size: 330 })
+  })
+  it('parses a trailing "xN" alongside a bare size', () => {
+    expect(parsePackFormat('Archers Peach Schnapps 70cl x6')).toEqual({ purchase_qty: 6, pack_size: 700 })
+    expect(parsePackFormat('Gordon\'s Gin 70cl x 12')).toEqual({ purchase_qty: 12, pack_size: 700 })
+  })
+  it('returns null for a case phrase with no size to pair it with', () => {
+    expect(parsePackFormat('Archers Peach Schnapps case of 6')).toBeNull()
+  })
+  it('does not read "case of 330ml" as a count', () => {
+    expect(parsePackFormat('Mixer case of 330ml')).toBeNull()
+  })
 })
 
 describe('serveUnitsFor', () => {

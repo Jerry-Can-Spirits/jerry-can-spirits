@@ -920,7 +920,7 @@ export function IngredientForm({ entry, usageCount = 0, impactPayload, serveUnit
         {/* Pack format (standard mode only) */}
         {purchaseMode !== 'prepared' && (
           <div>
-            <label htmlFor="ing-pack-format" className={LABEL}>Pack format</label>
+            <label htmlFor="ing-pack-format" className={LABEL}>Stock take unit</label>
             <select
               id="ing-pack-format"
               value={pack_format}
@@ -933,7 +933,7 @@ export function IngredientForm({ entry, usageCount = 0, impactPayload, serveUnit
               ))}
             </select>
             <FieldHelper>
-              What it physically arrives as. We still cost on the measured quantity.
+              The unit you count during a stock take. A case of spirits is counted in bottles; a keg is counted as a keg. Never changes the cost.
             </FieldHelper>
           </div>
         )}
