@@ -10,7 +10,7 @@ import {
 import { loadImpactPayload } from '@/lib/pouriq/cost-impact-loader'
 import { listServeUnits } from '@/lib/pouriq/serve-units'
 import { listPreparedComponents } from '@/lib/pouriq/prepared'
-import { listIngredientServes } from '@/lib/pouriq/menus'
+import { listIngredientServes, listMenusForTradeAccount } from '@/lib/pouriq/menus'
 import { listIngredientUses } from '@/lib/pouriq/ingredient-uses'
 import { usableCostPerBaseUnitP } from '@/lib/pouriq/calculations'
 import { LicenceGate } from '@/components/pouriq/LicenceGate'
@@ -36,7 +36,7 @@ export default async function EditLibraryEntryPage({ params }: Props) {
   const entry = await getLibraryEntry(db, id, access.tradeAccountId)
   if (!entry) notFound()
 
-  const [usage, serveUnits, impactPayload, components, libraryEntries, ingredientServes, ingredientUses] = await Promise.all([
+  const [usage, serveUnits, impactPayload, components, libraryEntries, ingredientServes, ingredientUses, menus] = await Promise.all([
     getLibraryEntryUsage(db, id),
     listServeUnits(db, id),
     loadImpactPayload(db, id, access.tradeAccountId),
@@ -44,6 +44,7 @@ export default async function EditLibraryEntryPage({ params }: Props) {
     listLibraryEntries(db, access.tradeAccountId),
     listIngredientServes(db, access.tradeAccountId, id),
     listIngredientUses(db, id),
+    listMenusForTradeAccount(db, access.tradeAccountId),
   ])
   if (!impactPayload) notFound()
 
@@ -81,6 +82,7 @@ export default async function EditLibraryEntryPage({ params }: Props) {
           ingredientType={entry.ingredient_type}
           costPerMlNetP={costPerMlNetP}
           serves={ingredientServes}
+          menus={menus.map((m) => ({ id: m.id, name: m.name }))}
         />
 
         {byMenu.size > 0 && (

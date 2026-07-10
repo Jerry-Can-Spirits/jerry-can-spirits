@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
-import { createIngredientServeAction } from '@/lib/pouriq/server-actions'
+import { addIngredientServesToMenuAction, createIngredientServeAction } from '@/lib/pouriq/server-actions'
 import { servePresetsFor, defaultServeName, type ServePreset } from '@/lib/pouriq/serve-presets'
 import { serveGp } from '@/lib/pouriq/calculations'
 import type { IngredientType } from '@/lib/pouriq/types'
@@ -18,6 +18,7 @@ interface Props {
   ingredientType: IngredientType
   costPerMlNetP: number
   serves: IngredientServeRow[]
+  menus: Array<{ id: string; name: string }>
 }
 
 function gpColour(gp: number | null): string {
@@ -25,7 +26,7 @@ function gpColour(gp: number | null): string {
   return gp >= GP_THRESHOLD ? 'text-emerald-600' : 'text-rose-600'
 }
 
-export function IngredientServes({ libraryId, ingredientName, ingredientType, costPerMlNetP, serves }: Props) {
+export function IngredientServes({ libraryId, ingredientName, ingredientType, costPerMlNetP, serves, menus }: Props) {
   const router = useRouter()
   const [isPending, startTransition] = useTransition()
 
@@ -36,6 +37,24 @@ export function IngredientServes({ libraryId, ingredientName, ingredientType, co
   const [ml, setMl] = useState('')
   const [price, setPrice] = useState('')
   const [error, setError] = useState<string | null>(null)
+  const [targetMenuId, setTargetMenuId] = useState('')
+  const [movedInfo, setMovedInfo] = useState<string | null>(null)
+
+  function handleAddToMenu() {
+    if (!targetMenuId) return
+    const menuName = menus.find((m) => m.id === targetMenuId)?.name ?? 'the menu'
+    setError(null)
+    startTransition(async () => {
+      try {
+        const { moved } = await addIngredientServesToMenuAction(libraryId, targetMenuId)
+        setMovedInfo(`Moved ${moved} serve${moved === 1 ? '' : 's'} to ${menuName} as drinks. Set their section and check prices there.`)
+        setTargetMenuId('')
+        router.refresh()
+      } catch (e) {
+        setError((e as Error).message || 'Could not add serves to the menu.')
+      }
+    })
+  }
 
   const liveMl = parseFloat(ml || '0')
   const livePricePence = Math.round(parseFloat(price || '0') * 100)
@@ -84,6 +103,8 @@ export function IngredientServes({ libraryId, ingredientName, ingredientType, co
     <div className="bg-white rounded-xl p-6 border border-slate-200">
       <h2 className="text-lg font-bold text-slate-900 mb-4">Serves</h2>
 
+      {movedInfo && <p className="text-sm text-emerald-700 mb-4">{movedInfo}</p>}
+
       {serves.length === 0 ? (
         <p className="text-sm text-slate-500 mb-6">No serves set up yet.</p>
       ) : (
@@ -103,6 +124,31 @@ export function IngredientServes({ libraryId, ingredientName, ingredientType, co
               </div>
             )
           })}
+        </div>
+      )}
+
+      {serves.length > 0 && menus.length > 0 && (
+        <div className="mb-6 flex flex-wrap items-center gap-2">
+          <select
+            value={targetMenuId}
+            onChange={(e) => setTargetMenuId(e.target.value)}
+            aria-label="Menu to add these serves to"
+            className={`${INPUT} max-w-xs`}
+          >
+            <option value="">Put these serves on a menu…</option>
+            {menus.map((m) => <option key={m.id} value={m.id}>{m.name}</option>)}
+          </select>
+          <button
+            type="button"
+            onClick={handleAddToMenu}
+            disabled={!targetMenuId || isPending}
+            className="px-3 py-2 rounded-lg bg-emerald-50 border border-emerald-600 text-emerald-700 text-xs font-semibold hover:bg-emerald-100 disabled:opacity-40"
+          >
+            {isPending ? 'Adding…' : 'Add to menu'}
+          </button>
+          <p className="w-full text-xs text-slate-500">
+            Each serve becomes a drink on the menu (with a spec card), pre-filled from what you set here.
+          </p>
         </div>
       )}
 
