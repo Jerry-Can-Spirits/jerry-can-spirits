@@ -51,6 +51,10 @@ interface Props {
   onResolvedCommit?: () => void
   // Number of other drinks whose resolution was propagated from this row.
   sharedWithCount?: number
+  // Priced new entries staged elsewhere in the same import, offered as pick
+  // targets ("Gin" can resolve to the "Gordon's" being created three rows up).
+  stagedEntries?: Array<{ name: string; ingredient_type: IngredientType }>
+  onPickStaged?: (name: string) => void
 }
 
 function resolvedBaseUnit(state: MatchRowState, library: IngredientLibraryRow[]): 'ml' | 'g' | 'each' {
@@ -65,6 +69,7 @@ export function IngredientMatchRow({
   extractedName, rawMeasurement, inferredType,
   matchKind, libraryEntries, serveUnits,
   state, onChange, onResolvedCommit, sharedWithCount,
+  stagedEntries, onPickStaged,
 }: Props) {
   const baseUnit = resolvedBaseUnit(state, libraryEntries)
   const selectedExisting = state.existing_library_id
@@ -266,22 +271,34 @@ export function IngredientMatchRow({
                 </button>
               </div>
             ) : (
-              <LibrarySearchSelect
-                libraryEntries={libraryEntries}
-                inferredType={inferredType}
-                onPick={(e) => {
-                  onChange({
-                    existing_library_id: e.id,
-                    new_library: undefined,
-                    pour_ml: state.pour_ml,
-                    unit_count: state.unit_count,
-                    recipe_unit: state.recipe_unit,
-                    recipe_qty: state.recipe_qty,
-                  })
-                  onResolvedCommit?.()
-                }}
-                onRequestCreate={(q) => startNewLibrary(q)}
-              />
+              <>
+                <LibrarySearchSelect
+                  libraryEntries={libraryEntries}
+                  inferredType={inferredType}
+                  createName={extractedName}
+                  stagedEntries={stagedEntries}
+                  onPickStaged={onPickStaged}
+                  onPick={(e) => {
+                    onChange({
+                      existing_library_id: e.id,
+                      new_library: undefined,
+                      pour_ml: state.pour_ml,
+                      unit_count: state.unit_count,
+                      recipe_unit: state.recipe_unit,
+                      recipe_qty: state.recipe_qty,
+                    })
+                    onResolvedCommit?.()
+                  }}
+                  onRequestCreate={(q) => startNewLibrary(q.trim() || undefined)}
+                />
+                <button
+                  type="button"
+                  onClick={() => startNewLibrary()}
+                  className="text-xs text-emerald-700 hover:text-emerald-800"
+                >
+                  + Create &ldquo;{extractedName}&rdquo; as a new ingredient
+                </button>
+              </>
             )}
           </div>
         )}
