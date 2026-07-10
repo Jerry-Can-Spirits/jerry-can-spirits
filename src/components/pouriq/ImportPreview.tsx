@@ -28,6 +28,8 @@ export interface PreviewDrinkInput {
       | { kind: 'suggestions'; entries: Array<{ id: string; name: string }> }
       | { kind: 'catalogue'; catalogue_id: string; name: string; ingredient_type: IngredientType; base_unit: 'ml' | 'g' | 'each'; default_pack_size: number | null }
       | { kind: 'no-match' }
+    /** Row added by the user during review, not extracted from the menu. */
+    added?: boolean
   }>
 }
 
@@ -133,8 +135,35 @@ interface Props {
   truncated?: boolean
 }
 
+function AddIngredientInline({ onAdd }: { onAdd: (name: string) => void }) {
+  const [name, setName] = useState('')
+  return (
+    <div className="flex items-center gap-2">
+      <input
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+        onKeyDown={(e) => { if (e.key === 'Enter' && name.trim()) { e.preventDefault(); onAdd(name.trim()); setName('') } }}
+        className={inputClass}
+        placeholder="Add an ingredient this drink is missing (e.g. Orange juice)"
+        aria-label="Add ingredient name"
+      />
+      <button
+        type="button"
+        disabled={!name.trim()}
+        onClick={() => { onAdd(name.trim()); setName('') }}
+        className="shrink-0 px-3 py-2 rounded-lg bg-emerald-50 border border-emerald-600 text-emerald-700 text-xs font-semibold hover:bg-emerald-100 disabled:opacity-40"
+      >
+        Add ingredient
+      </button>
+    </div>
+  )
+}
+
 export function ImportPreview({ menuId, drinks: extracted, libraryEntries, serveUnits, truncated }: Props) {
   const router = useRouter()
+  // The extracted drinks become state so rows can be added during review
+  // (description-only drinks arrive with zero ingredients).
+  const [sources, setSources] = useState<PreviewDrinkInput[]>(() => extracted.map((d) => ({ ...d, ingredients: [...d.ingredients] })))
   const [drinks, setDrinks] = useState<DrinkState[]>(() => extracted.map((d) => initialDrinkState(d, libraryEntries)))
   const [expanded, setExpanded] = useState<Set<number>>(() => new Set([0, 1, 2]))
   const [error, setError] = useState<string | null>(null)
@@ -176,6 +205,71 @@ export function ImportPreview({ menuId, drinks: extracted, libraryEntries, serve
     }))
   }
 
+  // F14: let the reviewer complete a drink the menu described in prose. Both
+  // the source row (for names/grouping) and the match state grow in step.
+  function addIngredient(drinkIdx: number, name: string) {
+    const preselect = singleContainmentMatch(name, libraryEntries)
+    setSources((arr) => arr.map((d, i) => i !== drinkIdx ? d : {
+      ...d,
+      ingredients: [...d.ingredients, {
+        extracted_name: name,
+        base_product: null,
+        serve: null,
+        raw_measurement: 'added during review',
+        inferred_type: 'other' as IngredientType,
+        parsed: { raw: 'added during review' },
+        match: { kind: 'no-match' as const },
+        added: true,
+      }],
+    }))
+    setDrinks((arr) => arr.map((d, i) => i !== drinkIdx ? d : {
+      ...d,
+      ingredients: [...d.ingredients, {
+        existing_library_id: preselect?.id,
+        pour_ml: null,
+        unit_count: null,
+        recipe_unit: null,
+        recipe_qty: null,
+      }],
+    }))
+  }
+
+  function removeIngredient(drinkIdx: number, ingIdx: number) {
+    setSources((arr) => arr.map((d, i) => i !== drinkIdx ? d : { ...d, ingredients: d.ingredients.filter((_, j) => j !== ingIdx) }))
+    setDrinks((arr) => arr.map((d, i) => i !== drinkIdx ? d : { ...d, ingredients: d.ingredients.filter((_, j) => j !== ingIdx) }))
+  }
+
+  // F11a: staged new entries (priced, so picking one resolves the row) offered
+  // as pick targets on other rows — "Gin" can resolve to the "Gordon's" being
+  // created three drinks up. Commit dedupes staged entries by name.
+  const stagedEntries = (() => {
+    const map = new Map<string, { name: string; ingredient_type: IngredientType; new_library: NonNullable<MatchRowState['new_library']> }>()
+    drinks.forEach((d) => {
+      if (d.skip) return
+      d.ingredients.forEach((st) => {
+        if (st.new_library && newLibraryPriced(st.new_library)) {
+          const k = st.new_library.name.trim().toLowerCase()
+          if (k && !map.has(k)) map.set(k, { name: st.new_library.name, ingredient_type: st.new_library.ingredient_type, new_library: st.new_library })
+        }
+      })
+    })
+    return [...map.values()]
+  })()
+
+  function pickStaged(drinkIdx: number, ingIdx: number, stagedName: string) {
+    const staged = stagedEntries.find((s) => s.name === stagedName)
+    if (!staged) return
+    setDrinks((arr) => arr.map((d, i) => i !== drinkIdx ? d : {
+      ...d,
+      ingredients: d.ingredients.map((st, j) => j !== ingIdx ? st : {
+        ...st,
+        existing_library_id: undefined,
+        new_library: { ...staged.new_library },
+        bulk_filled_from: staged.name,
+      }),
+    }))
+  }
+
   // When a row resolves, auto-fill every other still-unresolved row for the
   // same ingredient (price/library copied; each drink keeps its own pour/unit).
   // Functional updater so it reads the just-resolved state, not a stale closure.
@@ -187,7 +281,7 @@ export function ImportPreview({ menuId, drinks: extracted, libraryEntries, serve
         if (d.skip) return
         d.ingredients.forEach((st, ii) => {
           flat.push({
-            groupKey: groupKeyFor(extracted[di].ingredients[ii]),
+            groupKey: groupKeyFor(sources[di].ingredients[ii]),
             resolved: isRowResolved(st),
             state: st,
           })
@@ -203,8 +297,8 @@ export function ImportPreview({ menuId, drinks: extracted, libraryEntries, serve
       const sourceName: string =
         sourceState.new_library?.name
         ?? libraryEntries.find((e) => e.id === sourceState.existing_library_id)?.name
-        ?? extracted[drinkIdx].ingredients[ingIdx].base_product
-        ?? extracted[drinkIdx].ingredients[ingIdx].extracted_name
+        ?? sources[drinkIdx].ingredients[ingIdx].base_product
+        ?? sources[drinkIdx].ingredients[ingIdx].extracted_name
       const next = arr.map((d) => ({ ...d, ingredients: d.ingredients.slice() }))
       for (const t of plan.targets) {
         const { d, i } = coords[t]
@@ -357,7 +451,7 @@ export function ImportPreview({ menuId, drinks: extracted, libraryEntries, serve
                   Skip this drink
                 </label>
                 {!d.skip && d.ingredients.map((_ingState, ingIdx) => {
-                  const ing = extracted[idx].ingredients[ingIdx]
+                  const ing = sources[idx].ingredients[ingIdx]
                   const ingState = d.ingredients[ingIdx]
                   const gk = groupKeyFor(ing)
 
@@ -369,7 +463,7 @@ export function ImportPreview({ menuId, drinks: extracted, libraryEntries, serve
                       if (dk.skip) return
                       dk.ingredients.forEach((st, ii) => {
                         if (di === idx && ii === ingIdx) return
-                        if (st.bulk_filled_from && groupKeyFor(extracted[di].ingredients[ii]) === gk) {
+                        if (st.bulk_filled_from && groupKeyFor(sources[di].ingredients[ii]) === gk) {
                           sharedWithCount++
                         }
                       })
@@ -389,10 +483,24 @@ export function ImportPreview({ menuId, drinks: extracted, libraryEntries, serve
                       onChange={(state) => updateIngredient(idx, ingIdx, state)}
                       onResolvedCommit={() => propagateFrom(idx, ingIdx)}
                       sharedWithCount={sharedWithCount > 0 ? sharedWithCount : undefined}
+                      stagedEntries={stagedEntries}
+                      onPickStaged={(name) => pickStaged(idx, ingIdx, name)}
                     />
+                    {ing.added && (
+                      <button
+                        type="button"
+                        onClick={() => removeIngredient(idx, ingIdx)}
+                        className="mt-1 text-xs text-slate-500 hover:text-rose-600"
+                      >
+                        Remove this added ingredient
+                      </button>
+                    )}
                   </div>
                   )
                 })}
+                {!d.skip && (
+                  <AddIngredientInline onAdd={(name) => addIngredient(idx, name)} />
+                )}
               </div>
             )}
           </div>
