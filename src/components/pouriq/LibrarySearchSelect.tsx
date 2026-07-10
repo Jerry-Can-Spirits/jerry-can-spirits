@@ -16,6 +16,9 @@ interface Props {
   initialQuery?: string
   /** Name offered on the create row when the query is empty (e.g. the extracted menu name). */
   createName?: string
+  /** Priced new entries staged elsewhere in the same import, offered as pick targets. */
+  stagedEntries?: Array<{ name: string; ingredient_type: IngredientType }>
+  onPickStaged?: (name: string) => void
 }
 
 export function LibrarySearchSelect({
@@ -28,6 +31,8 @@ export function LibrarySearchSelect({
   placeholder = 'Search your library...',
   initialQuery = '',
   createName,
+  stagedEntries,
+  onPickStaged,
 }: Props) {
   const id = useId()
   const containerRef = useRef<HTMLDivElement>(null)
@@ -95,6 +100,20 @@ export function LibrarySearchSelect({
           >
             + Create new ingredient{(query.trim() || createName) ? `: "${query.trim() || createName}"` : ''}
           </button>
+          {onPickStaged && (stagedEntries ?? [])
+            .filter((s) => !query.trim() || s.name.toLowerCase().includes(query.toLowerCase()))
+            .slice(0, 5)
+            .map((s) => (
+              <button
+                type="button"
+                key={`staged-${s.name}`}
+                onClick={() => { onPickStaged(s.name); setQuery(''); setOpen(false) }}
+                className="block w-full text-left px-3 py-2 text-sm text-slate-900 hover:bg-slate-50"
+              >
+                <span className="font-medium">{s.name}</span>
+                <span className="text-xs text-sky-600 ml-2">being created in this import</span>
+              </button>
+            ))}
           {matches.map((entry) => (
             <button
               type="button"
