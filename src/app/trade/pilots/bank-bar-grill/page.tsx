@@ -3,8 +3,8 @@ import { TradeSheetSection, TradeSheetShell } from '@/components/trade-portal/Tr
 
 export const dynamic = 'force-dynamic'
 
-const PILOT_START = 'Monday 1 June 2026'
-const PILOT_END = 'Sunday 30 August 2026'
+const PILOT_START = 'Saturday 1 August 2026'
+const PILOT_END = 'Friday 30 October 2026'
 
 export default async function BankBarGrillPilotPage() {
   await requireTradeSession()
