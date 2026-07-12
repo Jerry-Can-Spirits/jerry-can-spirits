@@ -44,12 +44,25 @@ Customer PII and payments live in Shopify (headless checkout). D1 holds batch/bo
 
 ---
 
-## Gaps (follow-up PR candidates, in rough priority order)
+## Reference implementations
 
-1. **Hash trade PINs** (shared with pour-iq — same ported code). Store a salted hash, compare in constant time; migrate existing rows on first successful login or by reissue.
-2. **Encrypt OAuth/integration tokens at rest** — port `token-crypto.ts` (AES-256-GCM, `TOKEN_ENCRYPTION_KEY`) from the pour-iq portal; QuickBooks tokens in D1 predate that hardening.
-3. **Fix the disclosure contact mismatch** — pick one address for security.txt and `/security-policy`.
-4. **Resolve Node pinning** — delete `.node-version` or align it with `.nvmrc`.
-5. **Retention and export for trade data** — the pour-iq portal's `retention.ts` sweep and export endpoint have no counterpart here.
-6. **Stale docs** — `docs/DEPENDENCIES_STATUS.md` (Nov 2025: wrong Node version, says Cloudflare Pages/`next-on-pages`, wrong CSP location) should be corrected or retired; the `public/_headers` comment claiming CSP comes from middleware is false and should be fixed alongside `docs/CSP_AUDIT.md`'s next review.
-7. **Consider** a `pnpm/npm audit` or CodeQL step in CI, and explicit data-residency pinning on D1/R2 as the pour-iq portal does (WEUR).
+Each shared control names the repo whose implementation is canonical, so fixes port rather than get reinvented and the repos cannot drift back apart. When a control ships its first implementation, name it here and in the pour-iq copy of this file in the same PR.
+
+- **Token encryption at rest** — reference: the pour-iq portal (`portal/src/lib/pouriq/token-crypto.ts`). This repo ports it.
+- **Credential (PIN) hashing** — no reference yet; unimplemented in both repos. Whichever repo ships first becomes the reference.
+- **Consent gating of third parties** — reference: this repo (Cookiebot + Consent Mode v2, per-component gating).
+- **Vulnerability disclosure** — reference: this repo (`security.txt` + `/security-policy`). Canonical contact: `security@jerrycanspirits.co.uk`.
+- **Data retention, export, and residency** — reference: the pour-iq portal (`retention.ts`, the export endpoint, WEUR pinning).
+
+---
+
+## Gaps (in rough priority order)
+
+1. **Hash trade PINs — the next PR in this repo.** The trade PINs sit in the same repo and database that hold the AWRS due-diligence records and trade applications with director ID; plaintext credential storage here is the finding a sharp trade customer's IT reviewer, or a breach post-mortem, would fixate on. Hashing, not encryption — a PIN only ever needs verifying, never reading back. Argon2/bcrypt-class, constant-time compare, migration for existing rows. (The pour-iq portal shares the finding and is sequenced there before the pilot venue's real account is created.)
+2. **Encrypt OAuth/integration tokens at rest** — port `token-crypto.ts` (AES-256-GCM, `TOKEN_ENCRYPTION_KEY`) from the pour-iq portal; QuickBooks tokens in D1 predate that hardening. The port must include a one-off backfill of existing rows: the pour-iq implementation encrypts on write only, so existing plaintext rows survive until rewritten — verified against its code, and pour-iq owes itself the same backfill check.
+3. **Resolve Node pinning** — delete `.node-version` or align it with `.nvmrc`.
+4. **Retention and export for trade data** — the pour-iq portal's `retention.ts` sweep and export endpoint have no counterpart here.
+5. **Stale docs** — `docs/DEPENDENCIES_STATUS.md` (Nov 2025: wrong Node version, says Cloudflare Pages/`next-on-pages`, wrong CSP location) should be corrected or retired; the `public/_headers` comment claiming CSP comes from middleware is false and should be fixed alongside `docs/CSP_AUDIT.md`'s next review.
+6. **Consider** a `pnpm/npm audit` or CodeQL step in CI, and explicit data-residency pinning on D1/R2 as the pour-iq portal does (WEUR).
+
+Resolved 2026-07-13: the disclosure contact mismatch — `security.txt` now names `security@jerrycanspirits.co.uk`, matching `/security-policy`; that address is canonical across both repos.
