@@ -2,7 +2,7 @@
 
 ## The Bank Bar & Grill × Jerry Can Spirits
 
-**Pilot window: Monday 1 June 2026 to Sunday 30 August 2026**
+**Pilot window: Saturday 1 August 2026 to Friday 30 October 2026**
 
 ---
 
