@@ -17,6 +17,17 @@ interface AwardItem {
 
 const pressItems: PressItem[] = [
   {
+    // Croxsons news release, July 2026 ("Enabling Jerry Can Spirits to
+    // deliver an exciting new rum") — two verbatim sentences from Josh
+    // Webster joined editorially. Swap the URL for a published article
+    // once print/online coverage lands.
+    publication: 'Josh Webster, Head of Brand, Croxsons',
+    quote:
+      'We were delighted to collaborate with Dan and Rhys to help bring Expedition Spiced to market… We enjoy working with brands that are making a difference, and it’s great to be working with one that has a cause it is passionate about.',
+    url: 'https://www.croxsons.com/',
+    date: '2026',
+  },
+  {
     publication: 'She Rises Studios',
     quote: 'Customers are fed up with faceless corporate brands. They want to meet the people behind what they\'re drinking, and hear the story of the bottle.',
     url: 'https://www.sherisesstudios.com/post/from-military-service-to-rum-making-how-we-started-before-we-were-ready',
