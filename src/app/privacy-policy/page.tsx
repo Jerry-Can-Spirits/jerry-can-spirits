@@ -161,7 +161,7 @@ export default function PrivacyPolicy() {
                 3.5 Pour IQ™
               </h2>
               <p className="text-white mb-4 leading-relaxed">
-                If you hold a Pour IQ licence, we process the cocktail menu data you enter, including cocktail names, recipes, ingredient costs, sale prices, and the resulting analyses.
+                If you hold a Pour IQ licence, we process the cocktail menu data you enter, including cocktail names, recipes, ingredient costs, sale prices, and the resulting analyses. Pour IQ now runs at <a href="https://app.pour-iq.co.uk" className="text-gold-300 underline hover:text-gold-200">app.pour-iq.co.uk</a>; its full, current privacy policy is published at <a href="https://pour-iq.co.uk/privacy-policy" className="text-gold-300 underline hover:text-gold-200">pour-iq.co.uk/privacy-policy</a> and takes precedence for platform data.
               </p>
               <p className="text-white mb-4 leading-relaxed">
                 <strong className="text-gold-300">Lawful basis.</strong> Contract performance &mdash; providing the menu analysis service your licence entitles you to.

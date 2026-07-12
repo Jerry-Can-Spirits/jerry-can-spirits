@@ -177,6 +177,20 @@ const nextConfig: NextConfig = {
         permanent: false,
         basePath: false,
       },
+      // The old Pour IQ marketing page was retired with the app code; its
+      // canonical replacement is the standalone site.
+      {
+        source: '/trade/pour-iq',
+        destination: 'https://pour-iq.co.uk',
+        permanent: true,
+        basePath: false,
+      },
+      {
+        source: '/trade/pour-iq/:path*',
+        destination: 'https://pour-iq.co.uk',
+        permanent: true,
+        basePath: false,
+      },
       // Sanity Studio moved to Sanity hosting — send old bookmarks there.
       {
         source: '/studio',

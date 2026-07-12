@@ -3,7 +3,7 @@ import { requireTradeSession } from '@/lib/trade-portal/session-check'
 import { TradeTile } from '@/components/trade-portal/TradeTile'
 import { AnnouncementBanner } from '@/components/trade-portal/AnnouncementBanner'
 import { SignOutLink } from '@/components/trade-portal/SignOutLink'
-import { PourIqWordmark } from '@/components/trade-portal/PourIqWordmark'
+import { TradePortalHeader } from '@/components/trade-portal/TradePortalHeader'
 
 export const dynamic = 'force-dynamic'
 
@@ -29,14 +29,14 @@ export default async function TradeLandingPage() {
   const hasPourIq = await hasActivePourIqLicence(db, session.tradeAccountId)
 
   return (
-    <main className="min-h-screen bg-slate-50">
+    <main className="min-h-screen bg-jerry-green-950">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-24">
         <div className="flex items-center justify-between mb-8">
-          <PourIqWordmark />
+          <TradePortalHeader />
           <SignOutLink />
         </div>
 
-        <h1 className="text-3xl md:text-4xl font-bold text-slate-900 mb-10">
+        <h1 className="text-3xl md:text-4xl font-serif font-bold text-white mb-10">
           Welcome back, {session.venue_name}.
         </h1>
 
@@ -54,7 +54,7 @@ export default async function TradeLandingPage() {
             <TradeTile
               variant="active"
               title="Pour IQ™"
-              description="Margin analysis and AI recommendations for your cocktail menu."
+              description="Menu and cost engineering for independent UK bars."
               href="https://app.pour-iq.co.uk/"
               ctaLabel="Open Pour IQ™"
             />
@@ -62,8 +62,8 @@ export default async function TradeLandingPage() {
             <TradeTile
               variant="greyed"
               title="Pour IQ™"
-              description="Margin analysis and AI recommendations for your cocktail menu."
-              learnMoreHref="/trade/pour-iq/"
+              description="Menu and cost engineering for independent UK bars."
+              learnMoreHref="https://pour-iq.co.uk"
               unavailableNote="Available as an additional service."
             />
           )}
