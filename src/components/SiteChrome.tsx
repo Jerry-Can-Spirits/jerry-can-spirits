@@ -6,7 +6,7 @@ import Header from './Header'
 import Footer from './Footer'
 import ShippingBanner from './ShippingBanner'
 import { LazyCartographicBackground } from './ClientLazy'
-import { isPourIqAppRoute } from '@/lib/pouriq/nav'
+import { isPourIqAppRoute } from '@/lib/trade-portal/nav'
 
 export default function SiteChrome({ children }: { children: ReactNode }) {
   const pathname = usePathname()

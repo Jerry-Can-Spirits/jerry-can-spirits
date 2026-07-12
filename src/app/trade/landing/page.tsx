@@ -3,7 +3,7 @@ import { requireTradeSession } from '@/lib/trade-portal/session-check'
 import { TradeTile } from '@/components/trade-portal/TradeTile'
 import { AnnouncementBanner } from '@/components/trade-portal/AnnouncementBanner'
 import { SignOutLink } from '@/components/trade-portal/SignOutLink'
-import { PourIqWordmark } from '@/components/pouriq/PourIqWordmark'
+import { PourIqWordmark } from '@/components/trade-portal/PourIqWordmark'
 
 export const dynamic = 'force-dynamic'
 
@@ -55,7 +55,7 @@ export default async function TradeLandingPage() {
               variant="active"
               title="Pour IQ™"
               description="Margin analysis and AI recommendations for your cocktail menu."
-              href="/trade/pouriq/"
+              href="https://app.pour-iq.co.uk/"
               ctaLabel="Open Pour IQ™"
             />
           ) : (
@@ -72,7 +72,7 @@ export default async function TradeLandingPage() {
               variant="active"
               title="Pour IQ™ help"
               description="A working operations guide. How to scan invoices, read margin, fix gotchas."
-              href="/trade/pouriq/help"
+              href="https://app.pour-iq.co.uk/help"
               ctaLabel="Open guide"
             />
           ) : (

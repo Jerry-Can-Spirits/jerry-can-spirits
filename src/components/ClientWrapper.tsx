@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 import AgeGate from './AgeGate';
 import { captureUtmParams } from '@/lib/utm';
-import { isPourIqAppRoute } from '@/lib/pouriq/nav';
+import { isPourIqAppRoute } from '@/lib/trade-portal/nav';
 
 interface ClientWrapperProps {
   children: React.ReactNode;
