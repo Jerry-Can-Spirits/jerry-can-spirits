@@ -13,6 +13,10 @@ interface AwardItem {
   body?: string
   year?: string
   image?: string
+  // Logos drawn for print (dark marks) sit on a white plate; medal
+  // artwork renders directly on the dark card.
+  plate?: boolean
+  url?: string
 }
 
 const pressItems: PressItem[] = [
@@ -39,23 +43,34 @@ const awardItems: AwardItem[] = [
   {
     title: 'Armed Forces Covenant Signatory',
     body: 'Committed to supporting the armed forces community.',
+    image: '/images/AFC_POSITIVE_RGB.png',
+    plate: true,
+    // Our signatory listing on GOV.UK — the public record of the pledge.
+    url: 'https://www.gov.uk/armed-forces-covenant-businesses/jerry-can-spirits-ltd',
   },
   {
     title: 'Employer Recognition Scheme',
     body: 'Bronze Award — Armed Forces Covenant Employer Recognition Scheme.',
     year: '2025',
+    image: '/images/ERS_Bronze_Banner.webp',
+    plate: true,
+    // GOV.UK publishes the ERS award-holder lists here; bronze holders
+    // have no individual pages.
+    url: 'https://www.gov.uk/government/publications/defence-employer-recognition-scheme',
   },
   {
     title: 'IWSC 2026 Bronze Medal',
     body: 'Expedition Spiced. International Wine and Spirit Competition.',
     year: '2026',
     image: 'https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/66191572-4bf8-4de0-ba4d-01aab5c20700/public',
+    url: 'https://www.iwsc.net/results/detail/172185/expedition-spiced-spiced-rum',
   },
   {
     title: 'IWSC 2026 Silver Medal',
     body: 'Expedition Spiced and cola, judged with Franklin and Sons.',
     year: '2026',
     image: 'https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/2558fe93-bdf0-458c-85d6-5de6097ed300/public',
+    url: 'https://www.iwsc.net/results/detail/172185/expedition-spiced-spiced-rum',
   },
 ]
 
@@ -115,30 +130,58 @@ export default function PressAwards() {
               Accreditations
             </h3>
             <div className="space-y-4">
-              {awardItems.map((award) => (
-                <div
-                  key={award.title}
-                  className="flex items-start gap-4 p-5 bg-jerry-green-800/20 rounded-xl border border-gold-500/20"
-                >
-                  {award.image ? (
-                    <Image
-                      src={award.image}
-                      alt={`${award.title} medal`}
-                      width={48}
-                      height={48}
-                      className="shrink-0"
-                    />
-                  ) : (
-                    <div className="w-2 h-2 rounded-full bg-gold-400 mt-2 shrink-0" />
-                  )}
-                  <div>
-                    <p className="text-white font-semibold">{award.title}</p>
-                    {award.body && (
-                      <p className="text-parchment-400 text-sm mt-1">{award.body}</p>
+              {awardItems.map((award) => {
+                const cardContent = (
+                  <>
+                    {award.image ? (
+                      award.plate ? (
+                        <span className="shrink-0 flex items-center bg-white rounded-lg p-2">
+                          <Image
+                            src={award.image}
+                            alt=""
+                            width={120}
+                            height={60}
+                            className="h-10 w-auto"
+                          />
+                        </span>
+                      ) : (
+                        <Image
+                          src={award.image}
+                          alt=""
+                          width={48}
+                          height={48}
+                          className="shrink-0"
+                        />
+                      )
+                    ) : (
+                      <div className="w-2 h-2 rounded-full bg-gold-400 mt-2 shrink-0" />
                     )}
+                    <div>
+                      <p className="text-white font-semibold">{award.title}</p>
+                      {award.body && (
+                        <p className="text-parchment-400 text-sm mt-1">{award.body}</p>
+                      )}
+                    </div>
+                  </>
+                )
+                const cardClasses =
+                  'flex items-start gap-4 p-5 bg-jerry-green-800/20 rounded-xl border border-gold-500/20'
+                return award.url ? (
+                  <Link
+                    key={award.title}
+                    href={award.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={`${cardClasses} hover:border-gold-400/40 transition-colors`}
+                  >
+                    {cardContent}
+                  </Link>
+                ) : (
+                  <div key={award.title} className={cardClasses}>
+                    {cardContent}
                   </div>
-                </div>
-              ))}
+                )
+              })}
             </div>
           </div>
 

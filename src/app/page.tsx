@@ -11,7 +11,7 @@ import WhyJerryCan from "@/components/WhyJerryCan";
 import HomepageFAQ from "@/components/HomepageFAQ";
 import ScrollReveal from "@/components/ScrollReveal";
 import PullQuoteStrip from "@/components/PullQuoteStrip";
-import PairedSocialProof from "@/components/PairedSocialProof";
+import PressAwards from "@/components/PressAwards";
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import { baseOpenGraph, OG_IMAGE } from '@/lib/og'
@@ -190,9 +190,10 @@ export default function Home() {
           <WhyJerryCan />
         </ScrollReveal>
 
-        {/* Paired social proof - Trustpilot widget + Press & Awards together */}
+        {/* Press & Awards - the Trustpilot proof lives in the pull-quote
+            strip under the hero; this section carries press and accreditations */}
         <ScrollReveal>
-          <PairedSocialProof />
+          <PressAwards />
         </ScrollReveal>
 
         {/* Order Section - the buy ask, after belief is built */}
