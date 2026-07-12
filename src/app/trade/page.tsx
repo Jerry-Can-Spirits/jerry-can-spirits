@@ -146,19 +146,19 @@ export default function TradePage() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-2xl">
             <h2 className="text-2xl font-serif font-bold text-white mb-6">
-              Pour IQ™. Margin analysis for cocktail menus.
+              Pour IQ™. Menu and cost engineering for independent UK bars.
             </h2>
             <p className="text-parchment-300 text-sm leading-relaxed mb-4">
-              An additional service for trade accounts. Drop in your cocktail menu and supplier invoices. Pour IQ™ pulls out every drink, every ingredient, and every cost.
+              Pour IQ™ scans your supplier invoices, costs every serve, and shows what each price rise does to your GP. An additional service for trade accounts.
             </p>
             <p className="text-parchment-300 text-sm leading-relaxed mb-4">
               When a supplier price moves, it shows you which drinks have slipped below your target GP. AI recommendations grounded in the Field Manual.
             </p>
             <p className="text-parchment-300 text-sm leading-relaxed mb-6">
-              No hardware. No five-figure setup. Built for the way UK bars actually run.
+              No hardware. No five-figure setup. One monthly price, no contract, cancel any time.
             </p>
             <a
-              href="/trade/pour-iq/"
+              href="https://pour-iq.co.uk"
               className="inline-flex items-center text-gold-300 hover:text-gold-400 transition-colors text-sm font-semibold border-b border-gold-500/30 hover:border-gold-400 pb-1"
             >
               Read about Pour IQ
