@@ -189,3 +189,7 @@ Strong opening lines from the brand:
 - Standards are not talked about. They are lived.
 - Most people have not found their spiced rum yet.
 - We refused artificial flavourings. Here is what we used instead.
+
+## Cross-repo sessions
+
+The sibling repo (`../pour-iq`) is granted via `additionalDirectories` in `.claude/settings.json`. The sibling's CLAUDE.md does NOT load automatically: before editing any file in the sibling repo, read its CLAUDE.md first and obey it, treating its rules as binding for any files edited there.
