@@ -229,18 +229,7 @@ After the first prominent use in a document, subsequent mentions may omit the ®
 
 ### Brand Voice
 
-**Characteristics:**
-- Adventurous yet reliable
-- Military precision meets Caribbean soul
-- British heritage with global spirit
-- Expedition-ready confidence
-- Authentic and unpretentious
-
-**Tone:**
-- Authoritative but approachable
-- Technical without being intimidating
-- Nostalgic with modern execution
-- Bold and uncompromising
+The voice and tone reference is `docs/VOICE.md`, which is binding for all customer-facing words. The summary: measured, grounded, disciplined, direct — quiet confidence, written like a founder who means it. Where any older description of the voice in this document's history conflicts with `docs/VOICE.md`, the voice document wins.
 
 ---
 

@@ -13,6 +13,17 @@ Website: jerrycanspirits.co.uk
 
 ---
 
+## The document set
+
+Four documents govern work here. This file is the working contract; read the others when their territory comes up, and treat them as binding:
+
+- `docs/VOICE.md` — voice, tone, and writing rules. **Read it before writing any customer-facing copy.** The hard rules are summarised below, but the full reference (language lists, messaging hierarchy, product facts, hooks) lives there.
+- `docs/SECURITY.md` — the security baseline: headers, CSP, secrets, consent gating, disclosure. Read it before touching anything security-relevant.
+- `docs/CONTRIBUTING.md` — the actual git workflow in detail.
+- `docs/BRAND_GUIDELINES.md` — trademark, logo, colour, and legal usage rules.
+
+---
+
 ## Technical Stack
 
 - Next.js 15 (App Router) + Sanity CMS + Shopify Storefront API + Cloudflare Pages
@@ -33,13 +44,11 @@ Website: jerrycanspirits.co.uk
 
 ## Git Workflow — Non-Negotiable
 
-Always create a feature branch before any work. Never commit directly to main.
+Trunk-based: every piece of work gets a fresh branch off up-to-date `origin/main`, ships as a PR to `main`, and merges only with CI green. Never commit directly to main; never reuse a merged branch. Full detail: `docs/CONTRIBUTING.md`.
 
 ```
-git checkout -b feat/description-of-work
+git fetch origin && git checkout -b feat/description-of-work origin/main
 ```
-
-Open a PR when the work is complete. Let CI pass before merging. The CI pipeline runs build and type checks — it must pass before anything touches main.
 
 ---
 
@@ -55,88 +64,19 @@ Open a PR when the work is complete. Let CI pass before merging. The CI pipeline
 
 ---
 
-## Brand Voice
+## Brand Voice — the hard rules
 
-Measured. Grounded. Disciplined. Direct.
-
-Quiet confidence. Nothing to prove. Not performing. Not chasing.
-
-Write like a founder who means it.
-
----
-
-## Writing Rules
+Measured. Grounded. Disciplined. Direct. Write like a founder who means it.
 
 - No em-dashes in any content.
 - No emojis in any content.
 - No exclamation marks unless in direct quoted speech.
-- No hype language: do not use grab, smash, epic, amazing, incredible, game-changer, or similar.
-- No crowd addressing: do not open with "hey guys" or any equivalent.
-- No manufactured urgency: never write "limited time offer", "only X left", or "don't miss out".
+- No hype language, no manufactured urgency, no crowd addressing.
 - No superlatives unless they can be proven.
-- One CTA per piece of content. Never more.
-- Write to one person. Never a crowd.
-- Short sentences. One idea per sentence. White space is not wasted space.
-- No padding. No filler. No throat-clearing before the point.
-- If a sentence does not add meaning, remove it.
+- One CTA per piece of content. Write to one person, never a crowd.
+- Short sentences. No padding. If a sentence does not add meaning, remove it.
 
----
-
-## Language to Use
-
-- Founding Supporter
-- Founding bottle
-- Founding Supporter pricing
-- Join the expedition
-- For those who hold themselves to a higher standard
-- Built properly
-- No shortcuts
-- Real ingredients
-- Every bottle contributes
-- Standards are not talked about. They are lived.
-
-## Language to Avoid
-
-- Buy now
-- Pre-order discount
-- Limited time
-- Only X bottles available
-- Don't miss out
-- Premium (as a standalone claim)
-- Craft (without substance behind it)
-- Our rum is premium
-
----
-
-## Messaging Hierarchy
-
-All content connects to one of these layers, in order of priority:
-
-1. Identity: For those who go further.
-2. Integrity: Built properly. No shortcuts. No hidden investors.
-3. Craft: Real ingredients. Macerated properly. No artificial flavourings.
-4. Purpose: 5% of profits support military charities.
-5. Experience: Designed for slow sipping. Engineered for reliability.
-
----
-
-## The Product
-
-- Name: Expedition Spiced
-- Base: Caribbean rum
-- Molasses: molasses
-- Maceration partner: our British partner distillery
-- Flavour profile: Vanilla, cinnamon, allspice, clove, orange peel, cassia, ginger, agave, bourbon oak
-- ABV: 40% | Volume: 700ml
-- Designed for slow sipping. Not shots. Not a mixer to forget.
-
----
-
-## What Jerry Can Spirits Is Not
-
-Not a party brand. Not a pirate brand. Not a discount brand. Not a charity brand wearing a spirit label. Not a "support the troops" novelty product. Not influencer-backed. Not competing with supermarket spiced rum.
-
-Do not write content that sounds like any of the above.
+The full voice reference — language to use and avoid, messaging hierarchy, product facts, what the brand is not, hook structure — is `docs/VOICE.md`. Read it before writing copy; do not write from this summary alone.
 
 ---
 
@@ -166,29 +106,6 @@ Only renders on cocktails where `baseSpirit === 'spiced-rum'`. Intentional — i
 - The Field Manual is the primary SEO vehicle — educational content, long-tail recipe searches.
 
 ---
-
-## Formatting Preferences (Content)
-
-- Short paragraphs. Often a single sentence.
-- Headers should be statements, not labels.
-- Avoid bullet points for body copy where prose reads better.
-
-## Hook Structure for Web and Short-Form Content
-
-Pattern interrupt first. Challenge or reveal in the opening line.
-Follow with why it matters.
-Then the identity or experience.
-Close with one clear, calm action.
-
-Strong opening lines from the brand:
-- Most spiced rum is built to be mixed. This one is built to be sipped.
-- We were offered investment. We said no.
-- Every shortcut in production ends up in the glass.
-- Craft does not automatically mean good.
-- This is not for everyone. That is intentional.
-- Standards are not talked about. They are lived.
-- Most people have not found their spiced rum yet.
-- We refused artificial flavourings. Here is what we used instead.
 
 ## Cross-repo sessions
 
