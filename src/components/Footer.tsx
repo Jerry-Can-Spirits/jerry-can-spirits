@@ -145,33 +145,26 @@ export default function Footer() {
         <div className="max-w-none mx-auto px-8 sm:px-12 lg:px-16 xl:px-20 py-16">
           <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-7 gap-8 lg:gap-16 xl:gap-20 items-start max-w-(--breakpoint-2xl) mx-auto">
             
-            {/* Column 1 - Quick Links (each group independently collapsible on mobile) */}
+            {/* Column 1 - Quick Links (each group independently collapsible
+                at every breakpoint — keeps the desktop footer short too) */}
             <div className="space-y-4">
               {quickLinkGroups.map((group) => (
                 <div key={group.label}>
-                  <div className="lg:hidden">
-                    <button
-                      onClick={() => toggleSection(group.label)}
-                      className="flex items-center justify-between w-full text-left font-serif text-base font-bold mb-2 text-parchment-100 border-b border-jerry-green-700 pb-2"
-                      style={{ color: '#fefbf5' }}
-                      aria-expanded={openSections.includes(group.label)}
-                    >
-                      {group.label}
-                      <ChevronDownIcon
-                        className={`w-4 h-4 transition-transform duration-200 ${
-                          openSections.includes(group.label) ? 'rotate-180' : ''
-                        }`}
-                      />
-                    </button>
-                  </div>
+                  <button
+                    onClick={() => toggleSection(group.label)}
+                    className="flex items-center justify-between w-full text-left font-serif text-base font-bold mb-2 text-parchment-100 border-b border-jerry-green-700 pb-2"
+                    style={{ color: '#fefbf5' }}
+                    aria-expanded={openSections.includes(group.label)}
+                  >
+                    {group.label}
+                    <ChevronDownIcon
+                      className={`w-4 h-4 transition-transform duration-200 ${
+                        openSections.includes(group.label) ? 'rotate-180' : ''
+                      }`}
+                    />
+                  </button>
 
-                  <div className="hidden lg:block">
-                    <p className="text-xs font-semibold uppercase tracking-widest text-parchment-500 mb-2 border-b border-jerry-green-700 pb-2">
-                      {group.label}
-                    </p>
-                  </div>
-
-                  <div className={`space-y-2 ${openSections.includes(group.label) ? 'block' : 'hidden lg:block'}`}>
+                  <div className={`space-y-2 ${openSections.includes(group.label) ? 'block' : 'hidden'}`}>
                     {group.links.map((link) => (
                       <Link
                         key={link.name}
