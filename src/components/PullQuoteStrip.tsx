@@ -1,4 +1,7 @@
+import Image from 'next/image'
 import Link from 'next/link'
+import { getCloudflareContext } from '@opennextjs/cloudflare'
+import { getRating } from '@/lib/ratings-cache'
 
 interface PullQuote {
   text: string
@@ -18,7 +21,16 @@ const QUOTES: PullQuote[] = [
 
 const TRUSTPILOT_URL = 'https://uk.trustpilot.com/review/jerrycanspirits.co.uk'
 
-export default function PullQuoteStrip() {
+// The white-on-transparent Trustpilot lockup already used on /reviews/.
+const TRUSTPILOT_LOGO =
+  'https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/004c8ba7-42d4-48c8-c82c-fe715eb9cc00/public'
+
+export default async function PullQuoteStrip() {
+  // Live review count cached hourly in KV by the ratings cron; renders
+  // without the number until the first fetch lands.
+  const { env } = await getCloudflareContext({ async: true })
+  const trustpilot = await getRating(env.SITE_OPS as KVNamespace, 'trustpilot')
+
   return (
     <section
       aria-label="Customer reviews"
@@ -50,10 +62,17 @@ export default function PullQuoteStrip() {
           <Link
             href={TRUSTPILOT_URL}
             target="_blank"
-            rel="noopener noreferrer"
-            className="text-xs uppercase tracking-widest text-gold-300/80 hover:text-gold-300 transition-colors"
+            rel="nofollow noopener noreferrer"
+            className="inline-flex items-center gap-2 text-xs uppercase tracking-widest text-gold-300/80 hover:text-gold-300 transition-colors"
           >
-            Read all reviews on Trustpilot →
+            Read all{trustpilot ? ` ${trustpilot.count}` : ''} reviews on
+            <Image
+              src={TRUSTPILOT_LOGO}
+              alt="Trustpilot"
+              width={90}
+              height={22}
+              className="h-5 w-auto"
+            />
           </Link>
         </div>
       </div>
