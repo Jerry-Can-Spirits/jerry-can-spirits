@@ -154,6 +154,29 @@ const nextConfig: NextConfig = {
   // Redirects for URL structure changes and removed content
   async redirects() {
     return [
+      // Pour IQ moved to its own worker at app.pour-iq.co.uk (2026-07-12);
+      // old page paths re-rooted (/trade/pouriq/menus → /menus). The API
+      // redirect keeps stale open tabs from writing to the retired JCS
+      // database. Flip to permanent once the 1 Aug pilot confirms the new
+      // deployment, then delete the src/*/pouriq code.
+      {
+        source: '/trade/pouriq',
+        destination: 'https://app.pour-iq.co.uk/',
+        permanent: false,
+        basePath: false,
+      },
+      {
+        source: '/trade/pouriq/:path*',
+        destination: 'https://app.pour-iq.co.uk/:path*',
+        permanent: false,
+        basePath: false,
+      },
+      {
+        source: '/api/pouriq/:path*',
+        destination: 'https://app.pour-iq.co.uk/api/pouriq/:path*',
+        permanent: false,
+        basePath: false,
+      },
       // Sanity Studio moved to Sanity hosting — send old bookmarks there.
       {
         source: '/studio',
