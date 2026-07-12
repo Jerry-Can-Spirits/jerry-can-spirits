@@ -11,11 +11,13 @@ This directory contains all project documentation organized by category.
 
 ### Development
 - [Component Usage Examples](./COMPONENT_USAGE_EXAMPLES.md) - How to use project components
-- [Contributing](./CONTRIBUTING.md) - Contribution guidelines
+- [Contributing](./CONTRIBUTING.md) - How work ships: branches, verification, PRs
+- [Security Baseline](./SECURITY.md) - The shared security standard and where this repo stands
 - [Dependencies Status](./DEPENDENCIES_STATUS.md) - Current package versions and status
 
 ### Brand & Design
-- [Brand Guidelines](./BRAND_GUIDELINES.md) - Visual identity, colors, typography, voice
+- [Voice and Tone](./VOICE.md) - The voice, writing rules, and messaging - binding for all copy
+- [Brand Guidelines](./BRAND_GUIDELINES.md) - Trademark, logo, colours, legal usage
 
 ### SEO & Marketing
 - [SEO Setup](./SEO_SETUP.md) - Search engine optimization configuration
