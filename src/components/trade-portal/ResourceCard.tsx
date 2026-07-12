@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { PRIMARY_BUTTON } from '@/lib/pouriq/button-styles'
+import { PRIMARY_BUTTON } from '@/lib/trade-portal/button-styles'
 import type { TradeResource } from '@/lib/trade-portal/resources'
 
 interface Props {

@@ -2,9 +2,9 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { PourIqWordmark } from '@/components/pouriq/PourIqWordmark'
-import { PRIMARY_BUTTON } from '@/lib/pouriq/button-styles'
-import { INPUT, LABEL } from '@/lib/pouriq/ui'
+import { PourIqWordmark } from '@/components/trade-portal/PourIqWordmark'
+import { PRIMARY_BUTTON } from '@/lib/trade-portal/button-styles'
+import { INPUT, LABEL } from '@/lib/trade-portal/ui'
 
 export default function TradeLoginPage() {
   const [pin, setPin] = useState('')

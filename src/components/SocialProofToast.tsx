@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { usePathname } from 'next/navigation'
-import { isPourIqAppRoute } from '@/lib/pouriq/nav'
+import { isPourIqAppRoute } from '@/lib/trade-portal/nav'
 
 interface OrderData {
   bottleCount: number

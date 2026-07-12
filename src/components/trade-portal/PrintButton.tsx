@@ -1,6 +1,6 @@
 'use client'
 
-import { SECONDARY_BUTTON } from '@/lib/pouriq/button-styles'
+import { SECONDARY_BUTTON } from '@/lib/trade-portal/button-styles'
 
 export function PrintButton({ label = 'Print or save as PDF' }: { label?: string }) {
   return (
