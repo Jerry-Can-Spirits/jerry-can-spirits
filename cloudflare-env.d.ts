@@ -37,6 +37,9 @@ interface CloudflareEnv {
   // Secrets — Trade portal
   TRADE_SESSION_SECRET: string;
   TRADE_CASE_VARIANT_ID: string;
+  // Optional so the credential code can ship dark: until the secret is
+  // set, login uses the legacy plaintext path and the hash sweep no-ops.
+  PIN_PEPPER?: string;
 
   // Secrets — Resend (trade application admin emails)
   RESEND_API_KEY: string;

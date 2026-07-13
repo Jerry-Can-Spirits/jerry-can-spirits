@@ -5,6 +5,7 @@ export * from './.open-next/worker.js';
 import openNextWorker from './.open-next/worker.js';
 import { runTradeReviewDigest } from './src/lib/scheduled-trade-review.ts';
 import { runRatingsFetch } from './src/lib/scheduled-ratings.ts';
+import { runCredentialSweep } from './src/lib/scheduled-credentials.ts';
 
 const EDGE_CACHE_PATHS = new Set([
   '/',
@@ -51,6 +52,7 @@ const worker = {
   async scheduled(event, env, ctx) {
     if (event.cron === '0 * * * *') {
       ctx.waitUntil(runRatingsFetch(env));
+      ctx.waitUntil(runCredentialSweep(env));
       return;
     }
     ctx.waitUntil(runTradeReviewDigest(env));
