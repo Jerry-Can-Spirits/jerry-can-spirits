@@ -28,7 +28,9 @@ The single source of truth is `next.config.ts` (`buildCsp()`, lines ~13–152) �
 Clean sweep — no private secrets in source. Deliberately public identifiers (GA4/Ads IDs, Klaviyo company ID, Cookiebot CBID, Trustpilot business unit id and widget tokens, AdSense publisher ID) live in components. Real secrets via Wrangler secrets and gitignored `.dev.vars`; CI injects `NEXT_PUBLIC_*` build values from GitHub secrets. Note `NEXT_SERVER_ACTIONS_ENCRYPTION_KEY` in `.env.example` must stay stable across Worker versions.
 
 ### Auth (trade portal)
-Sessions follow the baseline: `crypto.randomUUID()` sid in KV, 30-day TTL, `httpOnly`/`secure`/`lax` cookie (`src/lib/trade-portal/session.ts`), re-validated against D1 `active = 1` per request. Login (`src/app/api/trade/login/route.ts`) is rate-limited per-IP (10/hour) and per-PIN, with an origin allowlist check. **PINs are stored and compared in plaintext** in `trade_accounts.pin` — the standing violation of baseline §4.
+Sessions follow the baseline: `crypto.randomUUID()` sid in KV, 30-day TTL, `httpOnly`/`secure`/`lax` cookie (`src/lib/trade-portal/session.ts`), re-validated against D1 `active = 1` per request. Login (`src/app/api/trade/login/route.ts`) is rate-limited per-IP (10/hour) and per-PIN (keyed by a hash, never the raw PIN), with an origin allowlist check.
+
+PINs are stored hashed (`src/lib/trade-portal/credentials.ts`): HMAC-SHA-256 with the `PIN_PEPPER` Wrangler secret — so a database dump alone cannot be brute-forced, which matters more than the stretch for a low-entropy PIN — then PBKDF2-SHA-256 (600k iterations, WebCrypto-native, constant-time compare). A deterministic peppered HMAC in `pin_lookup` gives login an O(1) SELECT. Format `pin:v1:` is versioned; `pw:v1:` is reserved for the planned owner username/password model. Migration is self-healing: the hourly cron sweep hashes plaintext rows, and login upgrades any straggler on first contact. PBKDF2 rather than Argon2 is a deliberate Workers trade-off (no WASM dependency, native speed); the pepper carries the DB-dump defence, and the versioned format allows a `pin:v2` upgrade if that judgement changes.
 
 ### Third parties and consent
 Google Consent Mode v2 defaults everything to denied before any tag; Cookiebot loads in auto-blocking mode; GA4/Ads, Klaviyo, Trustpilot, Sentry Replay, and AdSense are all individually consent-gated in their components. This is the reference implementation of baseline §5.
@@ -49,7 +51,7 @@ Customer PII and payments live in Shopify (headless checkout). D1 holds batch/bo
 Each shared control names the repo whose implementation is canonical, so fixes port rather than get reinvented and the repos cannot drift back apart. When a control ships its first implementation, name it here and in the pour-iq copy of this file in the same PR.
 
 - **Token encryption at rest** — reference: the pour-iq portal (`portal/src/lib/pouriq/token-crypto.ts`). This repo ports it.
-- **Credential (PIN) hashing** — no reference yet; unimplemented in both repos. Whichever repo ships first becomes the reference.
+- **Credential (PIN) hashing** — reference: this repo (`src/lib/trade-portal/credentials.ts`, peppered HMAC + PBKDF2 with `pin_lookup` login column). The pour-iq portal carries a byte-identical copy.
 - **Consent gating of third parties** — reference: this repo (Cookiebot + Consent Mode v2, per-component gating).
 - **Vulnerability disclosure** — reference: this repo (`security.txt` + `/security-policy`). Canonical contact: `security@jerrycanspirits.co.uk`.
 - **Data retention, export, and residency** — reference: the pour-iq portal (`retention.ts`, the export endpoint, WEUR pinning).
@@ -58,7 +60,7 @@ Each shared control names the repo whose implementation is canonical, so fixes p
 
 ## Gaps (in rough priority order)
 
-1. **Hash trade PINs — the next PR in this repo.** The trade PINs sit in the same repo and database that hold the AWRS due-diligence records and trade applications with director ID; plaintext credential storage here is the finding a sharp trade customer's IT reviewer, or a breach post-mortem, would fixate on. Hashing, not encryption — a PIN only ever needs verifying, never reading back. Argon2/bcrypt-class, constant-time compare, migration for existing rows. (The pour-iq portal shares the finding and is sequenced there before the pilot venue's real account is created.)
+1. ~~**Hash trade PINs**~~ — shipped 2026-07-13 (see Auth above). Requires the `PIN_PEPPER` secret set on the Worker and migration 0070 applied; until the secret exists the code runs dark on the legacy plaintext path.
 2. **Encrypt OAuth/integration tokens at rest** — port `token-crypto.ts` (AES-256-GCM, `TOKEN_ENCRYPTION_KEY`) from the pour-iq portal; QuickBooks tokens in D1 predate that hardening. The port must include a one-off backfill of existing rows: the pour-iq implementation encrypts on write only, so existing plaintext rows survive until rewritten — verified against its code, and pour-iq owes itself the same backfill check.
 3. **Resolve Node pinning** — delete `.node-version` or align it with `.nvmrc`.
 4. **Retention and export for trade data** — the pour-iq portal's `retention.ts` sweep and export endpoint have no counterpart here.
