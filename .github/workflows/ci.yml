@@ -6,6 +6,10 @@ on:
   push:
     branches: [main, dev]
 
+# Least privilege for the GITHUB_TOKEN: CI only reads the repo.
+permissions:
+  contents: read
+
 # Supersede in-flight runs on the same ref — rapid pushes were queueing
 # full runs and starving the runner pool.
 concurrency:
