@@ -16,16 +16,35 @@ function buildCsp(frameAncestors: string): string {
     // 'unsafe-eval' is added in development ONLY: Next.js dev mode (HMR /
     // Fast Refresh + eval-based source maps) requires it. NODE_ENV is
     // 'production' for `next build`, so the deployed CSP never includes it.
-    `script-src 'self' 'unsafe-inline'${process.env.NODE_ENV !== 'production' ? " 'unsafe-eval'" : ''} https://consent.cookiebot.com https://consentcdn.cookiebot.com https://fundingchoicesmessages.google.com https://www.googletagmanager.com https://www.google-analytics.com https://analytics.google.com https://tagmanager.google.com https://static.cloudflareinsights.com https://*.klaviyo.com https://js.sentry-cdn.com https://*.sentry.io https://widget.trustpilot.com https://*.trustpilot.com https://connect.facebook.net https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://www.googletagservices.com https://tracker.metricool.com https://challenges.cloudflare.com https://analytics.ahrefs.com blob:`,
-    "script-src-elem 'self' 'unsafe-inline' https://consent.cookiebot.com https://consentcdn.cookiebot.com https://fundingchoicesmessages.google.com https://www.googletagmanager.com https://www.google-analytics.com https://tagmanager.google.com https://static.cloudflareinsights.com https://*.klaviyo.com https://widget.trustpilot.com https://*.trustpilot.com https://connect.facebook.net https://www.instagram.com https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://www.googletagservices.com https://tracker.metricool.com https://challenges.cloudflare.com https://analytics.ahrefs.com",
+    // blob: removed from script-src: Mapbox GL's only blob use is its Web
+    // Worker, governed by worker-src (below); nothing loads a <script> from a
+    // blob URL, so script-src blob: was an unused XSS surface.
+    `script-src 'self' 'unsafe-inline'${process.env.NODE_ENV !== 'production' ? " 'unsafe-eval'" : ''} https://consent.cookiebot.com https://consentcdn.cookiebot.com https://fundingchoicesmessages.google.com https://www.googletagmanager.com https://www.google-analytics.com https://analytics.google.com https://tagmanager.google.com https://static.cloudflareinsights.com https://*.klaviyo.com https://js.sentry-cdn.com https://*.sentry.io https://widget.trustpilot.com https://*.trustpilot.com https://connect.facebook.net https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://www.googletagservices.com https://tracker.metricool.com https://challenges.cloudflare.com https://analytics.ahrefs.com`,
+    // www.instagram.com removed: the site only links to Instagram profiles with
+    // plain anchors — there is no Instagram embed widget or script.
+    "script-src-elem 'self' 'unsafe-inline' https://consent.cookiebot.com https://consentcdn.cookiebot.com https://fundingchoicesmessages.google.com https://www.googletagmanager.com https://www.google-analytics.com https://tagmanager.google.com https://static.cloudflareinsights.com https://*.klaviyo.com https://widget.trustpilot.com https://*.trustpilot.com https://connect.facebook.net https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://www.googletagservices.com https://tracker.metricool.com https://challenges.cloudflare.com https://analytics.ahrefs.com",
     "worker-src 'self' blob:",
     "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://*.klaviyo.com https://*.trustpilot.com https://*.cookiebot.com",
     "style-src-elem 'self' 'unsafe-inline' https://fonts.googleapis.com https://*.klaviyo.com https://*.trustpilot.com https://*.cookiebot.com",
     "font-src 'self' https://fonts.gstatic.com https://*.trustpilot.com data:",
-    "img-src 'self' data: https: https://imagedelivery.net blob:",
+    // The https: wildcard is replaced by an explicit allowlist: the content
+    // image CDNs (mirrors images.remotePatterns) plus the analytics/ad hosts
+    // that fire <img> tracking beacons (GA4/Ads img fallback, the Facebook /tr
+    // pixel, Klaviyo/Metricool/Ahrefs) and Cookiebot/Mapbox icons. Every host
+    // is already trusted elsewhere in this policy. This closes the arbitrary-
+    // host exfiltration path an injected script had via new Image().src. If
+    // AdSense Auto ads are ever enabled, its creative CDNs must be added here.
+    "img-src 'self' data: blob: https://cdn.sanity.io https://cdn.shopify.com https://imagedelivery.net https://api.ecologi.com https://www.facebook.com https://www.google-analytics.com https://region1.google-analytics.com https://analytics.google.com https://www.google.com https://www.google.co.uk https://*.doubleclick.net https://www.googleadservices.com https://*.googlesyndication.com https://*.klaviyo.com https://tracker.metricool.com https://analytics.ahrefs.com https://*.cookiebot.com https://api.mapbox.com",
     "media-src 'self' https:",
-    "connect-src 'self' https://*.cookiebot.com https://fundingchoicesmessages.google.com https://www.google-analytics.com https://www.googletagmanager.com https://analytics.google.com https://region1.google-analytics.com https://www.google.com https://www.google.co.uk https://*.doubleclick.net https://*.klaviyo.com https://*.kmail-lists.com https://*.shopify.com https://*.myshopify.com https://shop.jerrycanspirits.co.uk https://cdn.sanity.io https://*.sanity.io https://*.ingest.sentry.io https://*.sentry.io https://cloudflareinsights.com https://*.trustpilot.com https://www.facebook.com https://*.facebook.com https://*.facebook.net https://pagead2.googlesyndication.com https://*.googlesyndication.com https://tracker.metricool.com https://api.mapbox.com https://events.mapbox.com https://analytics.ahrefs.com wss: ws:",
-    "frame-src 'self' https://consentcdn.cookiebot.com https://*.cookiebot.com https://www.youtube.com https://www.vimeo.com https://cdn.sanity.io https://*.sanity.io https://*.trustpilot.com https://www.instagram.com https://*.instagram.com https://*.cdninstagram.com https://googleads.g.doubleclick.net https://*.googlesyndication.com https://www.googletagmanager.com https://challenges.cloudflare.com about: data:",
+    // wss:/ws: removed: no browser code opens a WebSocket. Sanity live content
+    // is a no-op placeholder (sanity/lib/live.ts), Mapbox and Sentry use
+    // fetch/XHR, and no other integration uses one. Add specific WebSocket
+    // origins here if that ever changes.
+    "connect-src 'self' https://*.cookiebot.com https://fundingchoicesmessages.google.com https://www.google-analytics.com https://www.googletagmanager.com https://analytics.google.com https://region1.google-analytics.com https://www.google.com https://www.google.co.uk https://*.doubleclick.net https://*.klaviyo.com https://*.kmail-lists.com https://*.shopify.com https://*.myshopify.com https://shop.jerrycanspirits.co.uk https://cdn.sanity.io https://*.sanity.io https://*.ingest.sentry.io https://*.sentry.io https://cloudflareinsights.com https://*.trustpilot.com https://www.facebook.com https://*.facebook.com https://*.facebook.net https://pagead2.googlesyndication.com https://*.googlesyndication.com https://tracker.metricool.com https://api.mapbox.com https://events.mapbox.com https://analytics.ahrefs.com",
+    // Removed: www.vimeo.com (no Vimeo embeds, and the wrong host regardless),
+    // the Instagram hosts (profile links only, no embed iframe), and data:
+    // (no data-URI iframes). youtube/sanity/trustpilot/ads frames remain in use.
+    "frame-src 'self' https://consentcdn.cookiebot.com https://*.cookiebot.com https://www.youtube.com https://cdn.sanity.io https://*.sanity.io https://*.trustpilot.com https://googleads.g.doubleclick.net https://*.googlesyndication.com https://www.googletagmanager.com https://challenges.cloudflare.com about:",
     "object-src 'none'",
     "base-uri 'self'",
     "form-action 'self' https://manage.kmail-lists.com",
