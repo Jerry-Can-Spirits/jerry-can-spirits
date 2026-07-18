@@ -1,12 +1,29 @@
 import { describe, expect, it, vi } from 'vitest'
 
-// getTradeVariantIdSet resolves the trade catalogue from Shopify; mock that one
-// call so the test is deterministic and offline.
+// getTradeVariantIdSet resolves the trade catalogue via getProduct(handle) —
+// an exact per-handle lookup, the same call the order page renders from. Mock
+// it so the test is deterministic and offline: each TRADE_PRODUCTS handle
+// resolves to a single-variant product keyed by its handle, except the 6-bottle
+// pack, which resolves to MULTIPLE variants (the regression that the old
+// fuzzy-search resolver dropped).
 vi.mock('@/lib/shopify', () => ({
-  getProductsByHandles: vi.fn(async () => [
-    { variants: [{ id: 'gid://shopify/ProductVariant/111' }, { id: 'gid://shopify/ProductVariant/222' }] },
-    { variants: [{ id: 'gid://shopify/ProductVariant/333' }] },
-  ]),
+  getProduct: vi.fn(async (handle: string) => {
+    if (handle === 'jerry-can-spirits-expedition-pack-spiced-rum-6-bottles') {
+      return {
+        title: 'Expedition Pack',
+        images: [],
+        variants: [
+          { id: 'gid://shopify/ProductVariant/pack-1', title: '6 x 70cl', price: { amount: '210' } },
+          { id: 'gid://shopify/ProductVariant/pack-2', title: '6 x 5cl', price: { amount: '35' } },
+        ],
+      }
+    }
+    return {
+      title: handle,
+      images: [],
+      variants: [{ id: `gid://shopify/ProductVariant/${handle}`, title: 'Default', price: { amount: '10' } }],
+    }
+  }),
 }))
 
 import {
@@ -82,12 +99,27 @@ describe('per-IP ceiling (venue-safe — shared wifi)', () => {
 })
 
 describe('trade checkout guard (finding #6)', () => {
-  it('rejects a variantId that is not in the trade catalogue', async () => {
+  it('includes EVERY variant of a multi-variant trade product (6-bottle pack regression)', async () => {
     const tradeVariants = await getTradeVariantIdSet()
-    expect(tradeVariants.has('gid://shopify/ProductVariant/111')).toBe(true) // a trade SKU
-    expect(tradeVariants.has('gid://shopify/ProductVariant/333')).toBe(true)
+    // Both variants of the multi-variant pack must be orderable. The old
+    // fuzzy products(query:"handle:...") resolver dropped multi-variant and
+    // sized products entirely, blocking their orders in production.
+    expect(tradeVariants.has('gid://shopify/ProductVariant/pack-1')).toBe(true)
+    expect(tradeVariants.has('gid://shopify/ProductVariant/pack-2')).toBe(true)
+  })
+
+  it('includes the sized glassware the old guard rejected', async () => {
+    const tradeVariants = await getTradeVariantIdSet()
+    expect(tradeVariants.has('gid://shopify/ProductVariant/hiball-glass-38cl')).toBe(true)
+    expect(tradeVariants.has('gid://shopify/ProductVariant/crystal-ice-hiball-42cl')).toBe(true)
+    expect(tradeVariants.has('gid://shopify/ProductVariant/hurricane-cocktail-glass-42cl')).toBe(true)
+  })
+
+  it('still rejects a variantId that is not in the trade catalogue', async () => {
+    const tradeVariants = await getTradeVariantIdSet()
     // A real Shopify variant that is NOT on the trade portal — the checkout
-    // rejects any line whose variantId is absent from this set.
+    // rejects any line whose variantId is absent from this set (the security
+    // property must survive the fix).
     expect(tradeVariants.has('gid://shopify/ProductVariant/999999')).toBe(false)
   })
 

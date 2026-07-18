@@ -2,7 +2,7 @@
 // Canonical list of products available on the trade order portal.
 // Add new products here — prices are always fetched live from Shopify.
 
-import { getProductsByHandles } from '@/lib/shopify'
+import { getProduct } from '@/lib/shopify'
 
 export type TradeCategory = 'spirits' | 'glassware' | 'bar-tools' | 'sustainability'
 
@@ -51,17 +51,49 @@ export const TRADE_PRODUCTS: Array<{
   { handle: 'uk-tree-fund', category: 'sustainability', excludeFromDiscount: true },
 ]
 
+// Resolve every TRADE_PRODUCTS entry to its live Shopify product via
+// getProduct(handle) — an EXACT handle lookup (product(handle:)), variants
+// first: 10. This is the single source of truth for the trade catalogue: the
+// order page renders from it and the checkout guard derives its allowed set
+// from it, so a product visible in the portal is always purchasable and the two
+// cannot drift. (An earlier version resolved the guard via getProductsByHandles
+// — a fuzzy products(query:"handle:...") search built for upsell — which
+// silently dropped sized glassware and the multi-bottle pack and blocked their
+// orders.)
+export async function getTradeProducts(): Promise<TradeProduct[]> {
+  const results = await Promise.all(
+    TRADE_PRODUCTS.map(
+      async ({ handle, category, excludeFromDiscount }): Promise<TradeProduct | null> => {
+        const product = await getProduct(handle)
+        if (!product) return null
+        return {
+          handle,
+          title: product.title,
+          category,
+          featuredImage: product.images[0] ?? undefined,
+          variants: (product.variants || []).map((v) => ({
+            id: v.id,
+            title: v.title,
+            price: v.price.amount,
+          })),
+          excludeFromDiscount,
+        }
+      },
+    ),
+  )
+  return results.filter((p): p is TradeProduct => p !== null)
+}
+
 // The set of Shopify variant IDs orderable through the trade portal: every
-// variant of every TRADE_PRODUCTS product, resolved live from Shopify. This is
-// the server-side source of truth the checkout validates a submitted cart
-// against, so an authenticated trade account cannot build a cart from arbitrary
-// (non-trade) Shopify variants (finding #6). Resolved on each checkout — the
-// same one-request path the order page already uses to render the catalogue.
+// variant of every resolved trade product. The checkout validates a submitted
+// cart against this, so an authenticated account cannot build a cart from
+// arbitrary (non-trade) Shopify variants (finding #6). Derived from
+// getTradeProducts() — the exact source the order page displays.
 export async function getTradeVariantIdSet(): Promise<Set<string>> {
-  const products = await getProductsByHandles(TRADE_PRODUCTS.map((p) => p.handle))
+  const products = await getTradeProducts()
   const ids = new Set<string>()
   for (const product of products) {
-    for (const variant of product.variants ?? []) ids.add(variant.id)
+    for (const variant of product.variants) ids.add(variant.id)
   }
   return ids
 }
