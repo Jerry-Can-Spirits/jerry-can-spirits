@@ -277,22 +277,8 @@ export async function isBottleLogged(
 }
 
 // ── Trade Account Queries ─────────────────────────────────────────────
-
-export interface TradeAccount {
-  id: string;
-  pin: string;
-  discount_code: string;
-  tier: 'intro' | 'standard' | 'partner';
-  venue_name: string;
-  active: number;
-}
-
-export async function getTradeAccountByPin(
-  db: D1Database,
-  pin: string,
-): Promise<TradeAccount | null> {
-  return db
-    .prepare('SELECT * FROM trade_accounts WHERE pin = ? AND active = 1')
-    .bind(pin)
-    .first<TradeAccount>();
-}
+// getTradeAccountByPin was removed 2026-07-18 (audit finding #9): it did a
+// plaintext-PIN equality lookup (SELECT ... WHERE pin = ?) that bypassed the
+// peppered-hash scheme entirely. The login route authenticates via pin_lookup
+// + verifyPin (src/lib/trade-portal/credentials.ts). Do not reintroduce a
+// raw-PIN query here.

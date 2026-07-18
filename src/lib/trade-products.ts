@@ -2,6 +2,8 @@
 // Canonical list of products available on the trade order portal.
 // Add new products here — prices are always fetched live from Shopify.
 
+import { getProductsByHandles } from '@/lib/shopify'
+
 export type TradeCategory = 'spirits' | 'glassware' | 'bar-tools' | 'sustainability'
 
 export interface TradeProductVariant {
@@ -48,3 +50,18 @@ export const TRADE_PRODUCTS: Array<{
   { handle: 'stainless-steel-jigger', category: 'bar-tools' },
   { handle: 'uk-tree-fund', category: 'sustainability', excludeFromDiscount: true },
 ]
+
+// The set of Shopify variant IDs orderable through the trade portal: every
+// variant of every TRADE_PRODUCTS product, resolved live from Shopify. This is
+// the server-side source of truth the checkout validates a submitted cart
+// against, so an authenticated trade account cannot build a cart from arbitrary
+// (non-trade) Shopify variants (finding #6). Resolved on each checkout — the
+// same one-request path the order page already uses to render the catalogue.
+export async function getTradeVariantIdSet(): Promise<Set<string>> {
+  const products = await getProductsByHandles(TRADE_PRODUCTS.map((p) => p.handle))
+  const ids = new Set<string>()
+  for (const product of products) {
+    for (const variant of product.variants ?? []) ids.add(variant.id)
+  }
+  return ids
+}
