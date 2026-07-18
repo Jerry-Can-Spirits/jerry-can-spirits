@@ -30,8 +30,6 @@
   Cache-Control: public, max-age=86400, stale-while-revalidate=43200
 /llms.txt
   Cache-Control: public, max-age=86400, stale-while-revalidate=43200
-/ads.txt
-  Cache-Control: public, max-age=86400, stale-while-revalidate=43200
 /sitemap.xml
   Cache-Control: public, max-age=3600, stale-while-revalidate=1800
 
