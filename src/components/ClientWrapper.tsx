@@ -79,8 +79,11 @@ export default function ClientWrapper({ children }: ClientWrapperProps) {
     setIsReady(true);
   }, [pathname]);
 
-  // Bypass age gate for: verified users, legal pages, or known bots
-  const shouldBypassGate = isAgeVerified || isLegalPage || isBot || isPourIqAppRoute(pathname);
+  // Bypass age gate for: verified users, legal pages, known bots, or the
+  // dedicated /age-check route (which renders the gate itself — the overlay
+  // here would double it).
+  const isAgeCheckRoute = pathname.startsWith('/age-check');
+  const shouldBypassGate = isAgeVerified || isLegalPage || isBot || isPourIqAppRoute(pathname) || isAgeCheckRoute;
 
   return (
     <>

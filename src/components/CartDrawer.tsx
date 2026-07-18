@@ -7,7 +7,7 @@ import { useState, useEffect, useRef, useCallback } from 'react'
 import CartUpsell from './CartUpsell'
 import CarbonOffsetToggle from './CarbonOffsetToggle'
 import PresentationBoxUpsell from './PresentationBoxUpsell'
-import { appendUtmToCheckout } from '@/lib/utm'
+import { appendUtmToCheckout, gatedCheckout } from '@/lib/utm'
 import { trackEventDual } from '@/lib/meta-capi'
 
 // Helper to format price
@@ -174,9 +174,9 @@ export default function CartDrawer() {
     try {
       const url = new URL(cart.checkoutUrl)
       if (affiliateId) url.searchParams.set('dt_id', affiliateId)
-      return appendUtmToCheckout(url.toString())
+      return gatedCheckout(appendUtmToCheckout(url.toString()))
     } catch {
-      return cart.checkoutUrl
+      return gatedCheckout(cart.checkoutUrl)
     }
   }
 

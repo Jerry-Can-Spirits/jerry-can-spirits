@@ -10,7 +10,7 @@ import {
 } from '@/lib/shopify'
 import { applyReferralCode } from '@/lib/referrals'
 import type { ShopifyProductVariant, ShopifyImage } from '@/lib/shopify'
-import { appendUtmToCheckout } from '@/lib/utm'
+import { appendUtmToCheckout, gatedCheckout } from '@/lib/utm'
 import { trackEventDual } from '@/lib/meta-capi'
 
 interface ProductVariantSelectorProps {
@@ -89,7 +89,7 @@ export default function ProductVariantSelector({
       let newCart = await createCart()
       newCart = await applyReferralCode(newCart)
       const updatedCart = await shopifyAddToCart(newCart.id, selectedVariantId, quantity)
-      window.location.href = appendUtmToCheckout(updatedCart.checkoutUrl)
+      window.location.href = gatedCheckout(appendUtmToCheckout(updatedCart.checkoutUrl))
     } catch (error) {
       console.error('[BuyNow] Error:', error)
       alert('Failed to start checkout. Please try again.')
