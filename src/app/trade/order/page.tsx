@@ -1,8 +1,7 @@
 import type { Metadata } from 'next'
 import { getCloudflareContext } from '@opennextjs/cloudflare'
 import { requireTradeSession } from '@/lib/trade-portal/session-check'
-import { getProduct } from '@/lib/shopify'
-import { TRADE_PRODUCTS, type TradeProduct } from '@/lib/trade-products'
+import { getTradeProducts, type TradeProduct } from '@/lib/trade-products'
 import TradeOrderForm from '@/components/TradeOrderForm'
 
 export const metadata: Metadata = {
@@ -34,27 +33,7 @@ export default async function TradeOrderPage() {
   let fetchError: string | undefined
 
   try {
-    const results = await Promise.all(
-      TRADE_PRODUCTS.map(async ({ handle, category, excludeFromDiscount }): Promise<TradeProduct | null> => {
-        const product = await getProduct(handle)
-        if (!product) return null
-
-        return {
-          handle,
-          title: product.title,
-          category,
-          featuredImage: product.images[0] ?? undefined,
-          variants: (product.variants || []).map((v) => ({
-            id: v.id,
-            title: v.title,
-            price: v.price.amount,
-          })),
-          excludeFromDiscount,
-        }
-      })
-    )
-
-    products = results.filter((p): p is TradeProduct => p !== null)
+    products = await getTradeProducts()
 
     if (products.length === 0) {
       fetchError = 'Product catalogue unavailable. Please contact us to place your order.'
