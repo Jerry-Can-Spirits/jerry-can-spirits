@@ -19,8 +19,6 @@ export default function robots(): MetadataRoute.Robots {
         allow: '/',
         disallow,
       },
-      // Google AdSense crawler — needs unrestricted access to render pages
-      { userAgent: 'Mediapartners-Google', allow: '/' },
     ],
     sitemap: `${baseUrl}/sitemap.xml`,
   }
