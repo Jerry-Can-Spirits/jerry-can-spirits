@@ -1,8 +1,9 @@
 import { NextResponse } from 'next/server'
 import { getCloudflareContext } from '@opennextjs/cloudflare'
-import { isAllowedOrigin } from '@/lib/kv'
+import { isAllowedOrigin, isRateLimited } from '@/lib/kv'
 import { getTradeSessionCookieValue, readTradeSession } from '@/lib/trade-portal/session'
 import { createCart, addLinesToCart, applyDiscount } from '@/lib/shopify'
+import { getTradeVariantIdSet } from '@/lib/trade-products'
 
 interface CheckoutLine {
   variantId: string
@@ -80,6 +81,33 @@ export async function POST(request: Request) {
     .first<{ id: string; tier: string; discount_code: string }>()
   if (!account) {
     return NextResponse.json({ error: 'Account not found' }, { status: 401 })
+  }
+
+  // Throttle checkout creation per account — an authenticated session must not
+  // be able to spam createCart (each call hits Shopify). Keyed on the account,
+  // so it bounds a compromised session even across rotating IPs (finding #6).
+  if (await isRateLimited(kv, 'trade-checkout', account.id, 20, 600)) {
+    return NextResponse.json({ error: 'Too many orders in a short time. Please wait a moment and try again.' }, { status: 429 })
+  }
+
+  // Restrict the cart to the trade catalogue. Without this an authenticated
+  // account could build a cart from ANY Shopify variant, not just trade SKUs
+  // (finding #6). The trade variant set is the server-side source of truth;
+  // fail safe (503) if it cannot be resolved rather than allowing an unchecked
+  // cart through.
+  let tradeVariantIds: Set<string>
+  try {
+    tradeVariantIds = await getTradeVariantIdSet()
+  } catch {
+    return NextResponse.json({ error: 'Unable to validate your order right now. Please try again shortly.' }, { status: 503 })
+  }
+  if (tradeVariantIds.size === 0) {
+    return NextResponse.json({ error: 'Product catalogue unavailable. Please try again shortly.' }, { status: 503 })
+  }
+  for (const line of lines) {
+    if (!tradeVariantIds.has(line.variantId)) {
+      return NextResponse.json({ error: 'One or more items are not available on the trade portal.' }, { status: 400 })
+    }
   }
 
   try {

@@ -7,6 +7,7 @@ import { getCloudflareContext } from '@opennextjs/cloudflare'
 import {
   isAllowedOrigin,
   isRateLimited,
+  getTradeFailedAttempts,
   incrementTradeFailedAttempts,
   clearTradeFailedAttempts,
   TRADE_MAX_ATTEMPTS,
@@ -14,6 +15,9 @@ import {
   incrementTradeFailedAttemptsForPin,
   clearTradeFailedAttemptsForPin,
   TRADE_PIN_MAX_ATTEMPTS,
+  getGlobalFailedAttempts,
+  incrementGlobalFailedAttempts,
+  TRADE_GLOBAL_MAX_ATTEMPTS,
 } from '@/lib/kv'
 import { createTradeSession, setTradeSessionCookie } from '@/lib/trade-portal/session'
 import {
@@ -26,7 +30,7 @@ import {
 
 export const runtime = 'nodejs'
 
-const LOGIN_RATE_LIMIT = 10 // per hour per IP
+const LOGIN_RATE_LIMIT = 60 // per hour per IP (venue-safe request cap, matches pour-iq)
 
 interface LoginBody {
   pin?: string
@@ -44,6 +48,13 @@ export async function POST(request: Request) {
   const ip = (request.headers.get('CF-Connecting-IP') ?? request.headers.get('x-forwarded-for') ?? 'unknown').split(',')[0].trim()
   if (await isRateLimited(kv, 'trade-login', ip, LOGIN_RATE_LIMIT, 3600)) {
     return NextResponse.json({ error: 'Too many attempts. Try again later.' }, { status: 429 })
+  }
+
+  // Global failed-login velocity: the primary bound on distributed enumeration
+  // of the PIN space, checked before any per-IP / per-PIN / verify work so a
+  // spraying attacker is turned away regardless of how they distribute guesses.
+  if ((await getGlobalFailedAttempts(kv)) >= TRADE_GLOBAL_MAX_ATTEMPTS) {
+    return NextResponse.json({ error: 'Too many failed attempts. Please try again later.' }, { status: 429 })
   }
 
   let body: LoginBody
@@ -64,8 +75,10 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Too many failed attempts. Please try again later.' }, { status: 429 })
   }
 
-  const failedAttempts = await incrementTradeFailedAttempts(kv, ip)
-  if (failedAttempts > TRADE_MAX_ATTEMPTS) {
+  // Per-IP failure ceiling — check only. Incremented on a genuine failure
+  // below, never before verify, so a valid PIN never counts against the
+  // venue's shared-wifi IP (the old increment-before-verify self-DoS'd venues).
+  if ((await getTradeFailedAttempts(kv, ip)) >= TRADE_MAX_ATTEMPTS) {
     return NextResponse.json({ error: 'Too many failed attempts. Please try again later.' }, { status: 429 })
   }
 
@@ -102,7 +115,11 @@ export async function POST(request: Request) {
     }
   }
   if (!account) {
+    // Increment all three counters on a genuine failure only: per-credential,
+    // per-IP, and the global velocity bound.
     await incrementTradeFailedAttemptsForPin(kv, pinKey)
+    await incrementTradeFailedAttempts(kv, ip)
+    await incrementGlobalFailedAttempts(kv)
     return NextResponse.json({ error: 'Invalid PIN' }, { status: 401 })
   }
 
