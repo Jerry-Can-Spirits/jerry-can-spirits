@@ -64,7 +64,11 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Invalid request' }, { status: 400 })
   }
   const pin = body.pin?.trim()
-  if (!pin || pin.length < 4 || pin.length > 32) {
+  // Minimum six digits: a deliberate floor for a shared bar tablet, set on
+  // security grounds (10^6 vs 10^4). Every live account was reissued to a
+  // >=6-digit PIN before this floor shipped (2026-07-19), so no venue is locked
+  // out; new accounts must be minted at or above it. Matches the pour-iq portal.
+  if (!pin || pin.length < 6 || pin.length > 32) {
     return NextResponse.json({ error: 'Invalid PIN' }, { status: 400 })
   }
 
