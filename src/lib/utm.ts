@@ -32,3 +32,12 @@ export function appendUtmToCheckout(checkoutUrl: string): string {
     return checkoutUrl
   }
 }
+
+// Route a finished Shopify checkout URL through the first-party age gate at
+// /api/checkout, which enforces age verification server-side before handing off
+// to Shopify (a client-side navigation straight to Shopify cannot be gated).
+export function gatedCheckout(checkoutUrl: string): string {
+  // Trailing slash: next.config has trailingSlash enabled, so the un-slashed
+  // form would 308-redirect before the route runs.
+  return '/api/checkout/?to=' + encodeURIComponent(checkoutUrl)
+}

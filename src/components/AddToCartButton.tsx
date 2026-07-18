@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { useCart } from '@/contexts/CartContext'
 import { createCart, addToCart as shopifyAddToCart } from '@/lib/shopify'
-import { appendUtmToCheckout } from '@/lib/utm'
+import { appendUtmToCheckout, gatedCheckout } from '@/lib/utm'
 
 interface AddToCartButtonProps {
   variantId: string
@@ -53,7 +53,7 @@ export default function AddToCartButton({ variantId, productTitle, price, curren
         localStorage.setItem('shopify_cart_id', cartId)
       }
       const updated = await shopifyAddToCart(cartId, variantId, 1)
-      window.location.href = appendUtmToCheckout(updated.checkoutUrl)
+      window.location.href = gatedCheckout(appendUtmToCheckout(updated.checkoutUrl))
     } catch {
       setIsBuyingNow(false)
     }
