@@ -1,5 +1,24 @@
 # Content Security Policy — Audit Notes
 
+---
+
+## REOPENED 2026-07-18 — the middleware-based findings below rest on a middleware that never ran
+
+The page-level age-gate work (branch `feat/middleware-page-age-gate`) established that `middleware.ts` at the repository root **never executed**. This is a `src`-rooted Next.js project, and in that layout Next only loads middleware from `src/middleware.ts`. A root-level `middleware.ts` builds and deploys without error and silently does nothing. Relocating the file to `src/middleware.ts` made it run, verified against the OpenNext/workerd preview: the page-level age gate, the `x-is-bot` header and the Cloudflare geo cookie all fire now and none of them worked before.
+
+This invalidates every conclusion below that was reached by testing header or nonce behaviour **in middleware**, because the middleware under test was not running:
+
+- Architecture Constraint table, row "`middleware.ts` `response.headers.set()` → No": not established. The headers did not reach the browser because the middleware never executed, not because the runtime strips them. Must be re-tested now the file runs.
+- Finding 1, nonce attempts 2 and 3 (both middleware-based): both failed for the same reason, so neither is evidence of a platform limitation.
+
+Corroborating evidence that this is a misdiagnosis rather than a real ceiling: the sibling site **Pour IQ runs a nonce-based CSP on the identical stack** (Next.js 15 with `@opennextjs/cloudflare` on Cloudflare Workers). If nonce propagation were impossible on this runtime, that site could not work.
+
+**What this does and does not establish.** It is proven that the middleware was dead and the middleware-based tests were therefore invalid. It is **not** yet proven that a nonce CSP works here end to end: that requires re-implementing nonce generation in the now-live `src/middleware.ts` and confirming the nonce reaches both the CSP header and the rendered `<script>` tags on a deployed preview. Until that test is done, `'unsafe-inline'` stays in place. But it should no longer be recorded as an accepted architectural constraint: it is an **open, likely-fixable finding** pending that re-test.
+
+Owner action: re-run the nonce approach against `src/middleware.ts`, using the Pour IQ implementation as the reference, before citing any middleware-based row below as settled.
+
+---
+
 ## What CSP Does
 
 A Content Security Policy is an HTTP response header that tells the browser which sources are allowed to load resources. Each directive controls a specific resource type. If a resource doesn't match the policy, the browser blocks it.
@@ -24,7 +43,7 @@ This site deploys to **Cloudflare Workers** via `@opennextjs/cloudflare`. This i
 | Location | Works? | Notes |
 |---|---|---|
 | `next.config.ts` `headers()` | **Yes** | The only confirmed working location |
-| `middleware.ts` `response.headers.set()` | No | Headers set here do not reach the browser on this runtime |
+| `middleware.ts` `response.headers.set()` | Not established | Tested against a root `middleware.ts` that never executed (see REOPENED note at top). Re-test now the file is at `src/middleware.ts`. |
 | `public/_headers` | No for CSP | Cloudflare enforces a 2000-character line limit; our CSP exceeds it |
 
 ---
@@ -43,6 +62,8 @@ Three approaches to replace `'unsafe-inline'` with nonces or hashes were attempt
 1. Outer Worker injects `x-nonce` header → OpenNext drops custom headers at the boundary
 2. Middleware `response.headers.set('x-nonce', ...)` → doesn't reach browser on this runtime
 3. Middleware `NextResponse.next({ request: { headers } })` → does not propagate to `headers()` in server components on OpenNext + Cloudflare Workers
+
+> Attempts 2 and 3 are invalid: they were tested against a root `middleware.ts` that never executed (see REOPENED note at top). Re-test against `src/middleware.ts` before treating either as a limitation. Pour IQ runs a nonce CSP on this exact stack.
 
 **SHA-256 hashes** (hash known inline script content, add to CSP):
 - CSP spec: when any hash or nonce appears in a `script-src` source list, `'unsafe-inline'` is automatically ignored by the browser
