@@ -104,21 +104,6 @@ test.describe('Age Gate Functionality', () => {
     await expect(main).toBeVisible({ timeout: 5000 })
   })
 
-  test('SEO audit bypass parameter works', async ({ page }) => {
-    await page.goto('/?seo_audit=true')
-    await dismissCookiebot(page)
-    await page.waitForTimeout(1000)
-
-    // Content should be visible without age gate interaction
-    const main = page.locator('main')
-    await expect(main).toBeVisible()
-
-    // Age gate should not block the page (welcome heading not visible)
-    const welcomeHeading = page.getByRole('heading', { name: /WELCOME, EXPLORER/i })
-    const isVisible = await welcomeHeading.isVisible({ timeout: 1000 }).catch(() => false)
-    expect(isVisible).toBe(false)
-  })
-
   test('"No, Exit" button exists for underage users', async ({ page }) => {
     await page.goto('/')
     await dismissCookiebot(page)

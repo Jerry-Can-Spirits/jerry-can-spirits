@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
+import { AGE_COOKIE, isAgeExcludedPath, isAgeVerified } from '@/lib/age-gate'
 
 // Known SEO and search engine bot user agents
 // These bots need access to content for indexing/analysis while humans still see age gate
@@ -60,16 +61,44 @@ function isBot(userAgent: string | null): boolean {
   return BOT_USER_AGENTS.some(bot => ua.includes(bot))
 }
 
+// A top-level navigation (as opposed to an RSC/data fetch or a prefetch): the
+// browser marks it as a document, or there are no fetch-metadata headers at all
+// (a direct hit / curl). Only these are gated, so client-side data fetches are
+// never redirected.
+function isDocumentNavigation(request: NextRequest): boolean {
+  const dest = request.headers.get('sec-fetch-dest')
+  if (dest) return dest === 'document'
+  return !request.headers.has('rsc') && !request.headers.has('next-router-prefetch')
+}
+
 export function middleware(request: NextRequest) {
-  // Note: CSP inline script protection uses SHA-256 hashes (not nonces).
-  // Nonces were investigated and ruled out — NextResponse.next({ request: { headers } })
-  // does not propagate headers to server components on OpenNext + Cloudflare Workers.
-  const response = NextResponse.next()
+  // The CSP and security headers are set in next.config.ts, not here.
   const userAgent = request.headers.get('user-agent')
+  const bot = isBot(userAgent)
+
+  // Server-enforced age verification. A top-level GET to a gated path without a
+  // verified cookie is redirected to the gate before the page renders — the
+  // real enforcement the client overlay never provided. Verified users pass;
+  // search crawlers are allowed to browse for indexing (the checkout handoff is
+  // separately hard-gated in /api/checkout, cookie-only, so a spoofed crawler
+  // UA still cannot reach Shopify checkout).
+  if (
+    request.method === 'GET' &&
+    isDocumentNavigation(request) &&
+    !bot &&
+    !isAgeExcludedPath(request.nextUrl.pathname) &&
+    !isAgeVerified(request.cookies.get(AGE_COOKIE)?.value)
+  ) {
+    const gate = new URL('/age-check/', request.url)
+    gate.searchParams.set('return', request.nextUrl.pathname + request.nextUrl.search)
+    return NextResponse.redirect(gate)
+  }
+
+  const response = NextResponse.next()
 
   // Set a header to indicate if request is from a known bot
   // ClientWrapper can read this to bypass age gate for SEO crawlers
-  if (isBot(userAgent)) {
+  if (bot) {
     response.headers.set('x-is-bot', 'true')
     // Also set a cookie that client-side can read
     response.cookies.set('isBot', 'true', {
