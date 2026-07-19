@@ -139,7 +139,9 @@ export async function sendGa4Purchase(
     );
     return { sent: true };
   } catch (error) {
-    console.error(`[ga4] purchase send error for order #${order.order_number}:`, error);
+    // Constant format string (order_number passed as an argument, not
+    // interpolated) so a crafted payload value can't act as a format specifier.
+    console.error('[ga4] purchase send error for order #%s:', order.order_number, error);
     return { sent: false, reason: 'send-failed' };
   }
 }
