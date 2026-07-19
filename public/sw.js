@@ -1,4 +1,8 @@
-const CACHE_NAME = 'jerry-can-spirits-v9';
+// Bumped v9 → v10: the activate handler deletes every cache except CACHE_NAME,
+// so this bump evicts the v9 cache that Strategy 2 had poisoned (corrupted fonts
+// + stale RSC documents) from every visitor who already has it — it is the fix
+// for everyone already affected, not just a version detail.
+const CACHE_NAME = 'jerry-can-spirits-v10';
 const OFFLINE_URL = '/offline';
 
 // URLs to cache for offline access (Field Manual)
@@ -35,15 +39,23 @@ self.addEventListener('activate', (event) => {
   self.clients.claim();
 });
 
-// Helper to determine caching strategy
+// Cache-first is for genuinely static, same-origin images only. Deliberately
+// NOT:
+//  - HTML/RSC documents (the field-manual slug prefixes were here): their
+//    payloads reference deploy-specific /_next/static chunk URLs that 404 after
+//    a deploy — the exact staleness Strategy 1 was written to avoid. Caching
+//    them cache-first fought Strategy 1 and, on a failed fetch, produced the
+//    uncaught "network error response" FetchEvent. They now fall through to
+//    Strategy 3 (network-only); Next re-fetches RSC on demand.
+//  - Fonts (.woff2): self-hosted next/font WOFF2 are immutable and served from
+//    the browser's own HTTP cache. Caching them here re-served them corrupted
+//    (a decoded body kept beside a Content-Encoding header, or a 206 partial),
+//    causing the site-wide OTS font-parse failures and fallback CLS.
 function shouldCacheOffline(url) {
   const pathname = new URL(url).pathname;
   return (
-    pathname.startsWith('/field-manual/cocktails/') ||
-    pathname.startsWith('/field-manual/equipment/') ||
-    pathname.startsWith('/field-manual/ingredients/') ||
     pathname.startsWith('/_next/image') ||
-    pathname.match(/\.(jpg|jpeg|png|webp|svg|woff2)$/i)
+    pathname.match(/\.(jpg|jpeg|png|webp|svg)$/i)
   );
 }
 
@@ -148,7 +160,7 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // Strategy 2: Cache-first for images and static assets
+  // Strategy 2: Cache-first for same-origin images (see shouldCacheOffline).
   if (shouldCacheOffline(request.url)) {
     event.respondWith(
       caches.match(request).then((cachedResponse) => {
@@ -156,15 +168,26 @@ self.addEventListener('fetch', (event) => {
           return cachedResponse;
         }
 
-        return fetch(request).then((response) => {
-          if (response.ok) {
-            const responseClone = response.clone();
-            caches.open(CACHE_NAME).then((cache) => {
-              cache.put(request, responseClone);
-            });
-          }
-          return response;
-        });
+        return fetch(request)
+          .then((response) => {
+            // Only cache a complete 200 — a 206 partial would store a truncated
+            // body and re-serve it corrupted.
+            if (response.status === 200) {
+              const responseClone = response.clone();
+              caches.open(CACHE_NAME).then((cache) => {
+                cache.put(request, responseClone);
+              });
+            }
+            return response;
+          })
+          .catch(async () => {
+            // Network failed on a cache miss — never let the promise reject out
+            // of the handler (that produces an uncaught rejection and a
+            // network-error FetchEvent). Fall back to any cached copy, else a
+            // controlled error response.
+            const cached = await caches.match(request);
+            return cached || Response.error();
+          });
       })
     );
     return;
