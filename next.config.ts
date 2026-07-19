@@ -48,7 +48,7 @@ function buildCsp(frameAncestors: string): string {
     // is already trusted elsewhere in this policy. This closes the arbitrary-
     // host exfiltration path an injected script had via new Image().src. If
     // AdSense Auto ads are ever enabled, its creative CDNs must be added here.
-    "img-src 'self' data: blob: https://cdn.sanity.io https://cdn.shopify.com https://imagedelivery.net https://api.ecologi.com https://www.facebook.com https://www.google-analytics.com https://region1.google-analytics.com https://analytics.google.com https://*.analytics.google.com https://www.google.com https://www.google.co.uk https://*.doubleclick.net https://www.googleadservices.com https://pagead2.googlesyndication.com https://*.klaviyo.com https://d3k81ch9hvuctc.cloudfront.net https://tracker.metricool.com https://analytics.ahrefs.com https://*.cookiebot.com https://api.mapbox.com",
+    "img-src 'self' data: blob: https://cdn.sanity.io https://cdn.shopify.com https://imagedelivery.net https://api.ecologi.com https://www.facebook.com https://www.google-analytics.com https://region1.google-analytics.com https://analytics.google.com https://*.analytics.google.com https://www.google.com https://www.google.co.uk https://*.doubleclick.net https://www.googleadservices.com https://www.googletagmanager.com https://pagead2.googlesyndication.com https://*.klaviyo.com https://d3k81ch9hvuctc.cloudfront.net https://tracker.metricool.com https://analytics.ahrefs.com https://*.cookiebot.com https://api.mapbox.com",
     "media-src 'self' https:",
     // wss:/ws: removed: no browser code opens a WebSocket. Sanity live content
     // is a no-op placeholder (sanity/lib/live.ts), Mapbox and Sentry use
