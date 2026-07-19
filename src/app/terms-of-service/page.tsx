@@ -41,7 +41,7 @@ export const metadata: Metadata = {
 }
 
 export default function TermsOfService() {
-  const lastUpdated = '2 April 2026'
+  const lastUpdated = '19 July 2026'
 
   return (
     <>
@@ -360,7 +360,53 @@ export default function TermsOfService() {
 
             <section className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20">
               <h2 className="text-2xl font-serif font-bold text-white mb-4 pb-2 border-b border-gold-500/20">
-                14. Contact Information
+                14. Referral Scheme
+              </h2>
+
+              <div className="space-y-4 text-white leading-relaxed">
+                <p>
+                  We operate a referral scheme. After you place an order, you may receive a personal referral code to share. A person who places an order using your code receives a discount, and once that order is complete you receive a reward code of your own.
+                </p>
+
+                <div>
+                  <h3 className="text-lg font-semibold text-gold-300 mb-2">Code Terms</h3>
+                  <ul className="list-disc list-inside space-y-1 text-parchment-200 ml-4">
+                    <li>The discount is 10% off the order value</li>
+                    <li>A minimum order value of £65 applies; orders below £65 do not qualify</li>
+                    <li>Codes are valid for 90 days from the date of issue, after which they expire</li>
+                    <li>Each code is single use and limited to one per customer</li>
+                    <li>A referral code cannot be combined with other offers or discount codes; a reward code may be combined with other order, product, and shipping discounts</li>
+                    <li>Codes have no cash value and are non-transferable</li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h3 className="text-lg font-semibold text-gold-300 mb-2">Eligibility</h3>
+                  <ul className="list-disc list-inside space-y-1 text-parchment-200 ml-4">
+                    <li>Open to UK residents aged 18 or over</li>
+                    <li>Employees of Jerry Can Spirits® and their immediate families are not eligible for referral rewards</li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h3 className="text-lg font-semibold text-gold-300 mb-2">Misuse and Changes</h3>
+                  <p className="text-parchment-200">
+                    We reserve the right to amend, suspend, or withdraw the referral scheme and to change these terms at any time. We may withhold or cancel any code, and cancel any order, where we reasonably believe the scheme has been misused, including self-referral, the generation of codes by automated means, or any attempt to circumvent these terms.
+                  </p>
+                </div>
+
+                <p className="text-parchment-200">
+                  <strong className="text-gold-300">Contact:</strong> For questions about the referral scheme,{' '}
+                  <a href="mailto:legal@jerrycanspirits.co.uk" className="text-gold-300 hover:text-gold-200 underline">
+                    legal@jerrycanspirits.co.uk
+                  </a>
+                </p>
+              </div>
+            </section>
+
+            <section className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20">
+              <h2 className="text-2xl font-serif font-bold text-white mb-4 pb-2 border-b border-gold-500/20">
+                15. Contact Information
               </h2>
               <p className="text-white mb-4">
                 If you have any questions about these Terms of Service, please contact us:
