@@ -28,8 +28,9 @@ export const metadata: Metadata = {
   },
 }
 
-// Configure for Edge Runtime and dynamic rendering
-export const dynamic = 'force-dynamic'
+// ISR — pure Shopify catalogue data (no per-request state), so it edge-caches
+// and revalidates hourly instead of a live Shopify round-trip on every hit.
+export const revalidate = 3600
 
 // Helper to format price with currency symbol
 function formatPrice(amount: string, currencyCode: string): string {

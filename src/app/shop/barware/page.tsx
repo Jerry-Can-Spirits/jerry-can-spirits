@@ -33,7 +33,9 @@ export const metadata: Metadata = {
   },
 }
 
-export const dynamic = 'force-dynamic'
+// ISR — pure Shopify catalogue data (no per-request state), so it edge-caches
+// and revalidates hourly instead of a live Shopify round-trip on every hit.
+export const revalidate = 3600
 
 function formatPrice(amount: string, currencyCode: string): string {
   const symbols: Record<string, string> = { GBP: '£', USD: '$', EUR: '€' }
