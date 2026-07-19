@@ -6,6 +6,11 @@
 	"compatibility_flags": [
 		"nodejs_compat"
 	],
+	"vars": {
+		// Public GA4 measurement ID (visible in page source, not a secret).
+		// The paired GA4_API_SECRET is set via `wrangler secret put`.
+		"GA4_MEASUREMENT_ID": "G-6VJL06YBW2"
+	},
 	"assets": {
 		"directory": ".open-next/assets",
 		"binding": "ASSETS"
