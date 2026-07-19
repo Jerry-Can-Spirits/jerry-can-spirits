@@ -62,6 +62,14 @@ export default function StarRating({ slug, className = '' }: StarRatingProps) {
     widgetIdRef.current = window.turnstile.render(turnstileContainerRef.current, {
       sitekey: process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ?? '',
       appearance: 'interaction-only',
+      // Do NOT auto-run the challenge on render. Without this the widget issued
+      // a token on mount and the callback fired with the initial rating of 0,
+      // POSTing rating:0 in a reset loop (all rejected 400s), while
+      // window.turnstile.execute() below was a no-op — so a genuine star click
+      // never actually submitted. With execution:'execute' the token is only
+      // requested when execute() is called after a click: the loop stops and
+      // real ratings submit.
+      execution: 'execute',
       theme: 'dark',
       callback: (token: string) => {
         void submitRatingWithToken(pendingRatingRef.current, token)
@@ -79,6 +87,13 @@ export default function StarRating({ slug, className = '' }: StarRatingProps) {
   }
 
   const submitRatingWithToken = async (selectedRating: number, turnstileToken: string) => {
+    // Defence in depth: never POST an unset/invalid rating. With execution
+    // 'execute' the token is only requested after a click, but this guards
+    // against any stray auto-issued token firing the callback with the initial 0.
+    if (selectedRating < 1 || selectedRating > 5) {
+      setIsSubmitting(false)
+      return
+    }
     try {
       const response = await fetch('/api/ratings/', {
         method: 'POST',
