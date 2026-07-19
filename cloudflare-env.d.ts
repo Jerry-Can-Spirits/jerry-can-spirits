@@ -22,6 +22,12 @@ interface CloudflareEnv {
   SHOPIFY_ADMIN_API_TOKEN: string;
   SHOPIFY_WEBHOOK_SECRET: string;
 
+  // Secrets — GA4 Measurement Protocol (server-side purchase attribution).
+  // Server-only: never expose as NEXT_PUBLIC_. Optional so the send ships dark
+  // until both are set — sendGa4Purchase skips (logs) when either is missing.
+  GA4_MEASUREMENT_ID?: string;
+  GA4_API_SECRET?: string;
+
   // Secrets — Turnstile (bot protection)
   TURNSTILE_SECRET_KEY: string;
 

@@ -14,6 +14,7 @@ import {
   type CartAttribute,
 } from '@/lib/shopify'
 import { applyReferralCode } from '@/lib/referrals'
+import { attachStitchingAttributes } from '@/lib/analytics-stitching'
 
 interface CartContextType {
   cart: Cart | null
@@ -120,6 +121,10 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
       const updatedCart = await shopifyAddToCart(currentCart.id, variantId, quantity)
       setCart(updatedCart)
+
+      // Refresh GA4 stitching attributes onto the cart for server-side purchase
+      // attribution. Fire-and-forget: it never throws and must not delay the add.
+      void attachStitchingAttributes(updatedCart)
 
       // Open cart drawer to show item was added
       setIsCartOpen(true)
