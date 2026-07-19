@@ -11,7 +11,7 @@ This invalidates every conclusion below that was reached by testing header or no
 - Architecture Constraint table, row "`middleware.ts` `response.headers.set()` → No": not established. The headers did not reach the browser because the middleware never executed, not because the runtime strips them. Must be re-tested now the file runs.
 - Finding 1, nonce attempts 2 and 3 (both middleware-based): both failed for the same reason, so neither is evidence of a platform limitation.
 
-Corroborating evidence that this is a misdiagnosis rather than a real ceiling: the sibling site **Pour IQ runs a nonce-based CSP on the identical stack** (Next.js 15 with `@opennextjs/cloudflare` on Cloudflare Workers). If nonce propagation were impossible on this runtime, that site could not work.
+Corroborating evidence that this is a misdiagnosis rather than a real ceiling: the sibling **Pour IQ portal runs a nonce-based CSP with `'strict-dynamic'` on the identical stack** (Next.js 15 with `@opennextjs/cloudflare` on Cloudflare Workers). The nonce is generated in its `src/middleware.ts` (`script-src 'self' 'nonce-…' 'strict-dynamic'`) and verified reaching the browser at the edge. If nonce propagation were impossible on this runtime, that portal could not work, and `'strict-dynamic'` is exactly the mechanism that would cover the runtime-injected third-party scripts the hash approach below could not pre-hash.
 
 **What this does and does not establish.** It is proven that the middleware was dead and the middleware-based tests were therefore invalid. It is **not** yet proven that a nonce CSP works here end to end: that requires re-implementing nonce generation in the now-live `src/middleware.ts` and confirming the nonce reaches both the CSP header and the rendered `<script>` tags on a deployed preview. Until that test is done, `'unsafe-inline'` stays in place. But it should no longer be recorded as an accepted architectural constraint: it is an **open, likely-fixable finding** pending that re-test.
 
@@ -72,9 +72,9 @@ Three approaches to replace `'unsafe-inline'` with nonces or hashes were attempt
 
 ### Current status
 
-`'unsafe-inline'` remains. It is the realistic ceiling for this architecture.
+`'unsafe-inline'` remains. It was previously recorded as the realistic ceiling for this architecture, but that is **no longer settled** — see the REOPENED note at the top of this file. The nonce conclusions were reached while `middleware.ts` never executed, and Pour IQ runs a nonce plus `'strict-dynamic'` CSP on the identical stack, so this is an open, likely-fixable finding pending a re-test against the now-live `src/middleware.ts`, not an accepted constraint.
 
-The domain allowlist in `script-src` still limits which external scripts can execute, providing meaningful protection beyond `default-src 'self'`.
+The domain allowlist in `script-src` still limits which external scripts can execute, providing meaningful protection beyond `default-src 'self'` while `'unsafe-inline'` stands.
 
 ### What would be needed to remove it
 

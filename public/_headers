@@ -37,8 +37,10 @@
 # SECURITY HEADERS
 # =============================================================================
 
-# Security headers for all other routes
-# CSP is applied via middleware.ts — covers all Worker-handled routes (all HTML pages)
+# Security headers for static assets served directly by Cloudflare, bypassing
+# the Worker. The CSP and the full security-header set are set in
+# next.config.ts headers() for all Worker-handled routes; this file does not
+# carry the CSP and is a backup for static files only.
 /*
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
