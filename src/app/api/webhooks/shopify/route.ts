@@ -211,6 +211,18 @@ async function handleReferralConversion(
     return;
   }
 
+  // Self-referral guard: don't reward the referrer for buying with their own
+  // code (otherwise the scheme is farmable — pocket the referee discount and a
+  // fresh reward code per order). Shopify does not normalise emails, so compare
+  // trimmed and lower-cased ("Dan@" must not slip past "dan@").
+  if (
+    order.email &&
+    order.email.trim().toLowerCase() === referral.referrer_email.trim().toLowerCase()
+  ) {
+    console.log(`[webhook] orders/create #${order.order_number} — self-referral, no reward minted`);
+    return;
+  }
+
   // Create a 10% reward code for the referrer (combinable with other discounts)
   const rewardCode = `JCS-REWARD-${crypto.randomUUID().replace(/-/g, '').slice(0, 8).toUpperCase()}`;
 
