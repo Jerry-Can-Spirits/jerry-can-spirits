@@ -50,6 +50,10 @@ interface CloudflareEnv {
   // Secrets — Resend (trade application admin emails)
   RESEND_API_KEY: string;
   TRADE_APPLICATIONS_EMAIL: string;
+  // Destination for contact-form alert emails (best-effort human ping; the D1
+  // record is the durable system of record). Optional — the alert ships dark
+  // and logs if unset. Point at a monitored inbox.
+  CONTACT_ALERT_EMAIL?: string;
 
   // Secrets — Square (POS integration)
   SQUARE_APP_ID: string;

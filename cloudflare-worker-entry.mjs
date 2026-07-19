@@ -6,6 +6,7 @@ import openNextWorker from './.open-next/worker.js';
 import { runTradeReviewDigest } from './src/lib/scheduled-trade-review.ts';
 import { runRatingsFetch } from './src/lib/scheduled-ratings.ts';
 import { runCredentialSweep } from './src/lib/scheduled-credentials.ts';
+import { runContactRetentionPurge } from './src/lib/scheduled-contact-retention.ts';
 
 const EDGE_CACHE_PATHS = new Set([
   '/',
@@ -56,6 +57,7 @@ const worker = {
       return;
     }
     ctx.waitUntil(runTradeReviewDigest(env));
+    ctx.waitUntil(runContactRetentionPurge(env));
   },
 };
 

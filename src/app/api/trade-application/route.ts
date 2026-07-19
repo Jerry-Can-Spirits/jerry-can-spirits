@@ -297,6 +297,16 @@ export async function POST(request: Request) {
       const list = await r2.list({ prefix: `applications/${appId}/` })
       await Promise.all(list.objects.map((o) => r2.delete(o.key)))
     } catch { /* swallow rollback failures */ }
+    // Also roll back the D1 rows: without this, a failed upload leaves an orphan
+    // application with zero documents in the register, and the applicant's retry
+    // creates a duplicate row. Delete the review_log child first (FK), then the
+    // application. Best-effort — a rollback failure is reported, not thrown.
+    try {
+      await db.prepare('DELETE FROM trade_application_review_log WHERE trade_application_id = ?').bind(appId).run()
+      await db.prepare('DELETE FROM trade_applications WHERE id = ?').bind(appId).run()
+    } catch (rollbackErr) {
+      Sentry.captureException(rollbackErr, { tags: { route: 'trade-application', phase: 'd1-rollback' } })
+    }
     return NextResponse.json({ error: 'Upload could not be finalised. Please try again.' }, { status: 500 })
   }
 

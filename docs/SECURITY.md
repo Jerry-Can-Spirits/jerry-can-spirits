@@ -44,7 +44,7 @@ Google Consent Mode v2 defaults everything to denied before any tag; Cookiebot l
 Dependabot (npm weekly + github-actions, grouped, reviewers set). CI runs lint + typecheck and a secrets-injected build with a summary gate, then purges Cloudflare cache post-push. No audit/SAST step. Node pinning conflicts: `.nvmrc` says 24.8.0 (CI uses this), `.node-version` says 22.13.0.
 
 ### Data
-Customer PII and payments live in Shopify (headless checkout). D1 holds batch/bottle tracking, expedition log, referrals, trade accounts and applications; R2 `jerry-can-spirits-trade-docs` holds application documents with lifecycle rules (`pending/` 24h, `applications/` 30 days). The Pour IQ dataset (migrations 0015–0069) is migrating out to the `pour-iq` repo. No tenant export endpoint or automated retention sweep here.
+Customer PII and payments live in Shopify (headless checkout). D1 holds batch/bottle tracking, expedition log, referrals, trade accounts and applications, and contact form submissions (`contact_submissions` — name, email, message; no IP stored, since the honeypot + rate limiting do the abuse work at submission time). R2 `jerry-can-spirits-trade-docs` holds application documents with lifecycle rules (`pending/` 24h, `applications/` 30 days). The Pour IQ dataset (migrations 0015–0069) is migrating out to the `pour-iq` repo. **Retention:** contact form data is held for two years per the privacy policy, enforced by a weekly D1 purge (`scheduled-contact-retention.ts`, wired into the Monday cron); this is the first enforced retention sweep in this repo. No tenant export endpoint yet.
 
 ---
 
