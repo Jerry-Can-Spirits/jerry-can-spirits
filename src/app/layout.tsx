@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Script from "next/script";
+import { headers } from "next/headers";
 import { Inter, Playfair_Display, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import SiteChrome from "@/components/SiteChrome";
@@ -80,11 +81,15 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // Read the per-request nonce the middleware set (investigation branch). This
+  // headers() read is itself what forces the layout, and therefore every page,
+  // into dynamic rendering — the CWV cost being measured.
+  const nonce = (await headers()).get('x-nonce') ?? undefined
   return (
     <html lang="en-GB" className="scroll-smooth" suppressHydrationWarning>
       <head>
@@ -92,6 +97,7 @@ export default function RootLayout({
             Scroll reveal animations only hide content when JS is running,
             ensuring crawlers without JS see all content at full opacity. */}
         <script
+          nonce={nonce}
           dangerouslySetInnerHTML={{ __html: `document.documentElement.classList.add('js')` }}
         />
 

@@ -71,10 +71,44 @@ function isDocumentNavigation(request: NextRequest): boolean {
   return !request.headers.has('rsc') && !request.headers.has('next-router-prefetch')
 }
 
+function frameAncestorsFor(pathname: string): string {
+  if (pathname.startsWith('/qr/')) return "'self' https://info.qr.jerrycanspirits.co.uk"
+  if (pathname.startsWith('/api/pouriq/invoices/')) return "'self'"
+  return "'none'"
+}
+
+// INVESTIGATION (preview only, DO NOT MERGE): nonce + 'strict-dynamic' CSP,
+// modelled on the pour-iq middleware. script-src drops the host allowlist and
+// trusts a per-request nonce plus whatever a nonce'd script loads
+// (strict-dynamic); every other directive is carried over from
+// next.config.ts buildCsp() unchanged. The next.config.ts CSP header is
+// disabled on this branch so this is the only policy the browser enforces.
+function buildNonceCsp(nonce: string, frameAncestors: string): string {
+  const dev = process.env.NODE_ENV !== 'production'
+  return [
+    "default-src 'self'",
+    `script-src 'self' 'nonce-${nonce}' 'strict-dynamic'${dev ? " 'unsafe-eval'" : ''}`,
+    "worker-src 'self' blob:",
+    "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://*.klaviyo.com https://*.trustpilot.com https://*.cookiebot.com",
+    "style-src-elem 'self' 'unsafe-inline' https://fonts.googleapis.com https://*.klaviyo.com https://*.trustpilot.com https://*.cookiebot.com",
+    "font-src 'self' https://fonts.gstatic.com https://*.trustpilot.com data:",
+    "img-src 'self' data: blob: https://cdn.sanity.io https://cdn.shopify.com https://imagedelivery.net https://api.ecologi.com https://www.facebook.com https://www.google-analytics.com https://region1.google-analytics.com https://analytics.google.com https://*.analytics.google.com https://www.google.com https://www.google.co.uk https://*.doubleclick.net https://www.googleadservices.com https://pagead2.googlesyndication.com https://*.klaviyo.com https://d3k81ch9hvuctc.cloudfront.net https://tracker.metricool.com https://analytics.ahrefs.com https://*.cookiebot.com https://api.mapbox.com",
+    "media-src 'self' https:",
+    "connect-src 'self' https://*.cookiebot.com https://fundingchoicesmessages.google.com https://www.google-analytics.com https://www.googletagmanager.com https://analytics.google.com https://*.analytics.google.com https://region1.google-analytics.com https://www.google.com https://www.google.co.uk https://*.doubleclick.net https://*.klaviyo.com https://*.kmail-lists.com https://*.shopify.com https://*.myshopify.com https://shop.jerrycanspirits.co.uk https://cdn.sanity.io https://*.sanity.io https://*.ingest.sentry.io https://*.sentry.io https://cloudflareinsights.com https://*.trustpilot.com https://www.facebook.com https://*.facebook.com https://*.facebook.net https://pagead2.googlesyndication.com https://tracker.metricool.com https://api.mapbox.com https://events.mapbox.com https://analytics.ahrefs.com",
+    "frame-src 'self' https://consentcdn.cookiebot.com https://*.cookiebot.com https://www.youtube.com https://cdn.sanity.io https://*.sanity.io https://*.trustpilot.com https://googleads.g.doubleclick.net https://www.googletagmanager.com https://challenges.cloudflare.com about:",
+    "object-src 'none'",
+    "base-uri 'self'",
+    "form-action 'self' https://manage.kmail-lists.com",
+    `frame-ancestors ${frameAncestors}`,
+    "upgrade-insecure-requests",
+  ].join('; ')
+}
+
 export function middleware(request: NextRequest) {
-  // The CSP and security headers are set in next.config.ts, not here.
   const userAgent = request.headers.get('user-agent')
   const bot = isBot(userAgent)
+  const nonce = btoa(crypto.randomUUID())
+  const csp = buildNonceCsp(nonce, frameAncestorsFor(request.nextUrl.pathname))
 
   // Server-enforced age verification. A top-level GET to a gated path without a
   // verified cookie is redirected to the gate before the page renders — the
@@ -91,10 +125,18 @@ export function middleware(request: NextRequest) {
   ) {
     const gate = new URL('/age-check/', request.url)
     gate.searchParams.set('return', request.nextUrl.pathname + request.nextUrl.search)
-    return NextResponse.redirect(gate)
+    const redirect = NextResponse.redirect(gate)
+    redirect.headers.set('Content-Security-Policy', csp)
+    return redirect
   }
 
-  const response = NextResponse.next()
+  // Pass the nonce and CSP on the request so Next stamps the nonce onto every
+  // script it renders; the response CSP is what the browser enforces.
+  const requestHeaders = new Headers(request.headers)
+  requestHeaders.set('x-nonce', nonce)
+  requestHeaders.set('Content-Security-Policy', csp)
+  const response = NextResponse.next({ request: { headers: requestHeaders } })
+  response.headers.set('Content-Security-Policy', csp)
 
   // Set a header to indicate if request is from a known bot
   // ClientWrapper can read this to bypass age gate for SEO crawlers

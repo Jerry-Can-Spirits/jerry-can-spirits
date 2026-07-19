@@ -2,6 +2,60 @@
 
 ---
 
+## INVESTIGATED 2026-07-19 — nonce + strict-dynamic tested on a preview (evidence, not inference)
+
+The reopened question below was tested empirically on a branch
+(`investigate/nonce-csp-preview`) that moves the CSP into `src/middleware.ts`
+with a per-request `script-src 'self' 'nonce-<n>' 'strict-dynamic'`, built and
+served on the OpenNext/workerd preview. Findings, all measured:
+
+**1. Nonce propagation WORKS on this stack — the "impossible" conclusion is dead.**
+The per-request nonce set on the request headers by middleware is stamped onto
+every script Next renders: the CSP response header nonce and the nonce on the
+served HTML `<script>` tags were byte-identical (39 nonced scripts on the
+homepage). Scripts executed. The old finding was a misdiagnosis caused by the
+dead root-level middleware, exactly as suspected.
+
+**2. GTM, gtag and Cookiebot's `uc.js` all loaded with ZERO script-src violations**
+under `strict-dynamic`, across a sweep of home, shop collections, product pages,
+field-manual slugs, Mapbox stockists, Trustpilot reviews, contact, FAQ, age
+gate and the trade portal. `strict-dynamic` trusts the scripts these load via
+`createElement`, as designed.
+
+**3. LIMITATION — the hard case is NOT fully de-risked.** Cookiebot's banner does
+not render on a non-configured domain (localhost/preview), so its auto-blocking
+"inject the blocked trackers on consent" chain was not exercised. GTM loaded,
+but not demonstrably via Cookiebot's inject-on-consent path. The one control
+whose failure breaks the legal basis for all tracking can only be fully verified
+on a Cookiebot-configured domain — i.e. production, or a preview domain added to
+the Cookiebot dashboard first. This is the central un-closed risk.
+
+**4. CWV / caching cost — measured and real.** The `headers()` read needed to
+surface the nonce forces dynamic rendering: marketing pages that were `○ Static`
+(about, careers, ethos, faq, contact, sustainability, …) all flipped to
+`ƒ Dynamic`. On a shop this trades cheap edge-cached HTML for per-request
+rendering. (SSG content routes still rendered cleanly; the one genuinely-static
+`/shop` page broke — its framework script carries no runtime nonce — and would
+need forcing dynamic.)
+
+**Separate, pre-existing (not nonce-related):** `/field-manual/` fires a Google
+Ads beacon to `https://www.googletagmanager.com/a?id=AW-…` which `img-src` does
+not allow. This affects the current production CSP too and should be fixed
+independently (add `www.googletagmanager.com` to `img-src`).
+
+**Recommendation:** nonce + strict-dynamic is technically viable here and would
+be the stronger XSS posture, but it is not a safe merge today: the Cookiebot
+consent chain cannot be de-risked off-production, and adoption imposes a
+measurable static/edge-cache regression on a shop. Recommend either keeping
+`'unsafe-inline'` with the tightened host allowlist as the documented
+compensating control, or — if pursuing nonces — first adding a preview domain to
+the Cookiebot config and verifying the accept/decline injection chain there
+before any production merge. Decision deferred to the owner. The
+`investigate/nonce-csp-preview` branch holds the working implementation; do not
+merge it to main (CI auto-deploys).
+
+---
+
 ## REOPENED 2026-07-18 — the middleware-based findings below rest on a middleware that never ran
 
 The page-level age-gate work (branch `feat/middleware-page-age-gate`) established that `middleware.ts` at the repository root **never executed**. This is a `src`-rooted Next.js project, and in that layout Next only loads middleware from `src/middleware.ts`. A root-level `middleware.ts` builds and deploys without error and silently does nothing. Relocating the file to `src/middleware.ts` made it run, verified against the OpenNext/workerd preview: the page-level age gate, the `x-is-bot` header and the Cloudflare geo cookie all fire now and none of them worked before.
