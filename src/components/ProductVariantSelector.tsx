@@ -41,7 +41,7 @@ export default function ProductVariantSelector({
   productImages,
   currencyCode,
 }: ProductVariantSelectorProps) {
-  const { addToCart, isLoading } = useCart()
+  const { cart, addToCart, isLoading } = useCart()
   const [quantity, setQuantity] = useState(1)
   const [isBuyingNow, setIsBuyingNow] = useState(false)
 
@@ -87,9 +87,19 @@ export default function ProductVariantSelector({
     if (!selectedVariant) return
     setIsBuyingNow(true)
     try {
-      let newCart = await createCart()
-      newCart = await applyReferralCode(newCart)
-      const updatedCart = await shopifyAddToCart(newCart.id, selectedVariantId, quantity)
+      // Reuse the shopper's existing cart if they have one — creating a fresh
+      // cart here abandons anything already in their drawer and can drop them
+      // under the free-shipping threshold. Mirrors AddToCartButton. On a fresh
+      // cart the referral code is applied here; on an existing cart it was
+      // already applied when the first item was added (CartContext.addToCart).
+      let cartId = cart?.id
+      if (!cartId) {
+        let fresh = await createCart()
+        fresh = await applyReferralCode(fresh)
+        cartId = fresh.id
+        localStorage.setItem('shopify_cart_id', cartId)
+      }
+      const updatedCart = await shopifyAddToCart(cartId, selectedVariantId, quantity)
       // Await so the GA4 stitching attributes land before the hand-off to Shopify.
       await attachStitchingAttributes(updatedCart)
       window.location.href = gatedCheckout(appendUtmToCheckout(updatedCart.checkoutUrl))
