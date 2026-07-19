@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { Suspense } from 'react'
 import { client } from '@/sanity/lib/client'
 import { guidesListQuery } from '@/sanity/queries'
 import GuidesClient from './GuidesClient'
@@ -6,7 +7,9 @@ import Breadcrumbs from '@/components/Breadcrumbs'
 import StructuredData from '@/components/StructuredData'
 import { OG_IMAGE } from '@/lib/og'
 
-export const dynamic = 'force-dynamic'
+// ISR — a single Sanity list query with no per-request state, so it edge-caches
+// and revalidates hourly (the /guides/[slug] detail pages are already SSG).
+export const revalidate = 3600
 
 export const metadata: Metadata = {
   title: 'Spirits Guides & Education',
@@ -77,7 +80,12 @@ export default async function GuidesPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 mb-8">
         <Breadcrumbs items={[{ label: 'Guides' }]} />
       </div>
-      <GuidesClient guides={guides} />
+      {/* Suspense boundary so the client search/filter UI's useSearchParams
+          does not force the whole route dynamic — matches the field-manual
+          pages, which are static with the same pattern. */}
+      <Suspense>
+        <GuidesClient guides={guides} />
+      </Suspense>
     </>
   )
 }

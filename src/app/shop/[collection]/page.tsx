@@ -9,7 +9,17 @@ import AddToCartButton from '@/components/AddToCartButton'
 import ViewItemListTracker from '@/components/ViewItemListTracker'
 import { safeJsonLd } from '@/lib/jsonLd'
 
-export const dynamic = 'force-dynamic'
+// ISR — pure Shopify catalogue data (no per-request state), so these SEO
+// collection pages edge-cache and revalidate hourly instead of a live Shopify
+// round-trip on every hit.
+export const revalidate = 3600
+
+// Prerender the known collections at build so they are edge-cached SEO pages
+// rather than rendered on demand. Unknown slugs still render on demand
+// (dynamicParams defaults true) and 404 when the collection has no products.
+export function generateStaticParams() {
+  return Object.keys(CATEGORIES).map((collection) => ({ collection }))
+}
 
 const BASE_URL = 'https://jerrycanspirits.co.uk'
 
