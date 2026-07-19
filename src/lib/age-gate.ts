@@ -46,3 +46,78 @@ export function safeReturnPath(raw: string | null | undefined): string {
   if (!raw || !raw.startsWith('/') || raw.startsWith('//')) return '/'
   return raw
 }
+
+// Known SEO / search / social / validation bot user agents. Bots are allowed to
+// browse gated content for indexing (the checkout handoff is separately
+// hard-gated in /api/checkout). Single source of truth shared by
+// src/middleware.ts AND the edge-cache Worker (cloudflare-worker-entry.mjs), so
+// the two age gates can never classify a request differently — a drift here
+// would either redirect a crawler (SEO loss) or serve a human cached content
+// past the gate.
+export const BOT_USER_AGENTS = [
+  // Search engines
+  'googlebot',
+  'bingbot',
+  'msnbot', // Microsoft/Bing legacy
+  'bingpreview', // Bing link preview
+  'adidxbot', // Bing ads
+  'microsoftpreview', // Microsoft previews
+  'slurp', // Yahoo
+  'duckduckbot',
+  'baiduspider',
+  'yandexbot',
+  'facebot', // Facebook
+  'ia_archiver', // Alexa
+
+  // SEO tools
+  'semrushbot',
+  'ahrefsbot',
+  'mj12bot', // Majestic
+  'dotbot', // Moz
+  'rogerbot', // Moz
+  'screaming frog',
+  'sitebulb',
+  'deepcrawl',
+  'oncrawl',
+  'seobilitybot',
+  'serpstatbot',
+  'dataforseo',
+  'surfer bot', // SurferSEO Site Audit (exact User-Agent)
+  'surfer', // SurferSEO fallback
+
+  // Social media
+  'twitterbot',
+  'linkedinbot',
+  'pinterestbot',
+  'whatsapp',
+  'telegrambot',
+
+  // Validation tools
+  'w3c_validator',
+  'lighthouse',
+  'pagespeed',
+  'gtmetrix',
+
+  // Google services
+  'mediapartners-google',
+  'adsbot-google',
+  'apis-google',
+  'google-inspectiontool',
+]
+
+export function isBot(userAgent: string | null | undefined): boolean {
+  if (!userAgent) return false
+  const ua = userAgent.toLowerCase()
+  return BOT_USER_AGENTS.some((bot) => ua.includes(bot))
+}
+
+// A top-level navigation (the browser marks it as a document, or there are no
+// fetch-metadata headers at all — a direct hit / curl) as opposed to an RSC/data
+// fetch or a prefetch. Only these are gated, so client-side data fetches are
+// never redirected. Takes a Headers so it works for both NextRequest
+// (middleware) and the plain Request in the Worker.
+export function isDocumentNavigation(headers: Headers): boolean {
+  const dest = headers.get('sec-fetch-dest')
+  if (dest) return dest === 'document'
+  return !headers.has('rsc') && !headers.has('next-router-prefetch')
+}
