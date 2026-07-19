@@ -11,6 +11,7 @@ import {
 import { applyReferralCode } from '@/lib/referrals'
 import type { ShopifyProductVariant, ShopifyImage } from '@/lib/shopify'
 import { appendUtmToCheckout, gatedCheckout } from '@/lib/utm'
+import { attachStitchingAttributes } from '@/lib/analytics-stitching'
 import { trackEventDual } from '@/lib/meta-capi'
 
 interface ProductVariantSelectorProps {
@@ -89,6 +90,8 @@ export default function ProductVariantSelector({
       let newCart = await createCart()
       newCart = await applyReferralCode(newCart)
       const updatedCart = await shopifyAddToCart(newCart.id, selectedVariantId, quantity)
+      // Await so the GA4 stitching attributes land before the hand-off to Shopify.
+      await attachStitchingAttributes(updatedCart)
       window.location.href = gatedCheckout(appendUtmToCheckout(updatedCart.checkoutUrl))
     } catch (error) {
       console.error('[BuyNow] Error:', error)

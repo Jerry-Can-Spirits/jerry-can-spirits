@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useCart } from '@/contexts/CartContext'
 import { createCart, addToCart as shopifyAddToCart } from '@/lib/shopify'
 import { appendUtmToCheckout, gatedCheckout } from '@/lib/utm'
+import { attachStitchingAttributes } from '@/lib/analytics-stitching'
 
 interface AddToCartButtonProps {
   variantId: string
@@ -53,6 +54,8 @@ export default function AddToCartButton({ variantId, productTitle, price, curren
         localStorage.setItem('shopify_cart_id', cartId)
       }
       const updated = await shopifyAddToCart(cartId, variantId, 1)
+      // Await so the GA4 stitching attributes land before the hand-off to Shopify.
+      await attachStitchingAttributes(updated)
       window.location.href = gatedCheckout(appendUtmToCheckout(updated.checkoutUrl))
     } catch {
       setIsBuyingNow(false)

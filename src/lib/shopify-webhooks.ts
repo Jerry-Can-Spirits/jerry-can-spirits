@@ -27,10 +27,20 @@ export interface ShopifyOrder {
     last_name?: string;
   };
   fulfillment_status: string | null;
+  // subtotal_price / currency drive the GA4 purchase value (see
+  // ga4-measurement-protocol.ts). name is the customer-facing order name (#1234).
+  subtotal_price?: string;
+  currency?: string;
+  name?: string;
   line_items: {
     title: string;
     quantity: number;
     product_id: number;
+    // variant_id / price / name are on the real orders/create payload and are
+    // read for the GA4 items array; item_id keys on the variant.
+    variant_id?: number;
+    price?: string;
+    name?: string;
   }[];
   note_attributes?: {
     name: string;

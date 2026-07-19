@@ -10,6 +10,7 @@ import {
 } from '@/lib/shopify-webhooks';
 import { createDiscountCode, createReferrerRewardCode } from '@/lib/shopify-admin';
 import { generateReferralCode } from '@/lib/shopify-admin';
+import { sendGa4Purchase } from '@/lib/ga4-measurement-protocol';
 
 const KLAVIYO_API_BASE = 'https://a.klaviyo.com/api';
 const KLAVIYO_REVISION = '2024-10-15';
@@ -338,6 +339,14 @@ export async function POST(request: Request) {
         if (adminToken) {
           await handleReferralConversion(order, db, kv, adminToken, klaviyoKey);
         }
+        // Server-side GA4 purchase attribution. Never throws (a tracking
+        // failure must not 500 the webhook); skips when the storefront did not
+        // capture a client_id or consent was not granted. See ga4-measurement-protocol.ts.
+        await sendGa4Purchase(
+          order,
+          env.GA4_MEASUREMENT_ID as string | undefined,
+          env.GA4_API_SECRET as string | undefined,
+        );
         break;
       }
       case SHOPIFY_WEBHOOK_TOPICS.ORDERS_FULFILLED: {
