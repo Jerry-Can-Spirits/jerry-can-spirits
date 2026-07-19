@@ -275,8 +275,10 @@ async function handleReferralConversion(
     );
   }
 
+  // Order number + codes are enough to trace this; the referrer's email is
+  // omitted so customer PII does not land in Worker logs (no redaction/retention).
   console.log(
-    `[webhook] Referral conversion: order #${order.order_number} used code ${referralCode}, reward ${rewardCode} created for ${referral.referrer_email}`,
+    `[webhook] Referral conversion: order #${order.order_number} used code ${referralCode}, reward ${rewardCode} created`,
   );
 }
 

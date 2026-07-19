@@ -3,7 +3,19 @@ import * as Sentry from "@sentry/nextjs";
 Sentry.init({
   dsn: "https://03a3151ad7e64876b650238ef4f31ce8@o4510169918275584.ingest.de.sentry.io/4510169922404432",
 
-  tracesSampleRate: 0.2,
+  // Performance tracing is non-essential analytics telemetry: a transaction
+  // carries the full URL and is attributed to the visitor's IP at Sentry's
+  // ingest, so it needs statistics consent under PECR/UK-GDPR. Error monitoring
+  // (below, with PII scrubbing in beforeSend) is treated as strictly necessary
+  // and keeps running. tracesSampler is evaluated at each transaction start and
+  // reads the LIVE Cookiebot consent, so tracing starts when consent is granted
+  // and stops when it is withdrawn — and the pre-consent pageload (Cookiebot not
+  // yet loaded) samples at 0 and is never sent. Unlike Session Replay, tracing
+  // can be gated this way without add/remove-integration, so no listener needed.
+  tracesSampler: () => {
+    if (typeof window === 'undefined') return 0;
+    return window.Cookiebot?.consent?.statistics ? 0.2 : 0;
+  },
 
   debug: false,
 
