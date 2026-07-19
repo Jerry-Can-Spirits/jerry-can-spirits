@@ -67,6 +67,17 @@ export default function cloudflareImageLoader({
         const baseUrl = src.replace(/\/[^/]+$/, '')
         return `${baseUrl}/w=${cappedWidth},q=${quality}`
       }
+
+      if (parsed.hostname === 'cdn.shopify.com') {
+        // Shopify's image CDN resizes on `width` and auto-negotiates WebP/AVIF
+        // from the request Accept header — so appending width fixes both the
+        // oversizing (product photos were served at full native resolution into
+        // small slots) and the legacy format in one param. `set` overwrites any
+        // width from a GraphQL `transform`, giving Next a real per-deviceSize
+        // srcset. Capped to the 1600px source ceiling used in shopify.ts.
+        parsed.searchParams.set('width', Math.min(width, 1600).toString())
+        return parsed.toString()
+      }
     } catch {
       // invalid URL — fall through to return src unchanged
     }
