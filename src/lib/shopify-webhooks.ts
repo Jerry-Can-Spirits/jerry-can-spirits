@@ -73,6 +73,33 @@ export interface ShopifyProduct {
   }[];
 }
 
+// ── Idempotency ─────────────────────────────────────────────────────
+
+/**
+ * Record an order as processed, atomically. Shopify delivers orders/create
+ * at-least-once and retries on any non-2xx, so the handler's non-idempotent
+ * side effects (minting a referrer reward code, incrementing bottles-sold,
+ * sending Klaviyo emails) would double-fire on a retry or duplicate delivery.
+ *
+ * Returns true only on the FIRST delivery of an order; a duplicate/retry
+ * returns false and the caller must skip every side effect. Call this BEFORE
+ * any side effect: the row commits first, so a failure anywhere after it is
+ * safely skipped on the retry (no second reward code). Backed by
+ * webhook_processed_orders (migration 0071).
+ */
+export async function markOrderProcessed(
+  db: D1Database,
+  orderId: number | string,
+): Promise<boolean> {
+  const row = await db
+    .prepare(
+      'INSERT INTO webhook_processed_orders (order_id) VALUES (?) ON CONFLICT(order_id) DO NOTHING RETURNING order_id',
+    )
+    .bind(String(orderId))
+    .first<{ order_id: string }>();
+  return row !== null;
+}
+
 // ── Admin API ───────────────────────────────────────────────────────
 
 const SHOP_DOMAIN = 'zaeiaw-5z.myshopify.com';

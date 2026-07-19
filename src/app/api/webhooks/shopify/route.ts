@@ -4,6 +4,7 @@ import * as Sentry from '@sentry/nextjs';
 import {
   verifyWebhookSignature,
   incrementBottlesSold,
+  markOrderProcessed,
   SHOPIFY_WEBHOOK_TOPICS,
   type ShopifyOrder,
   type ShopifyProduct,
@@ -335,6 +336,15 @@ export async function POST(request: Request) {
           return NextResponse.json({ error: 'Invalid payload' }, { status: 400 });
         }
         const order = payload as ShopifyOrder;
+        // Idempotency guard — Shopify delivers at-least-once and retries on any
+        // non-2xx. Record the order first; on a duplicate/retry, skip every
+        // side effect below so we never mint a second reward code, re-increment
+        // bottles-sold, or re-send Klaviyo emails. See markOrderProcessed.
+        const firstDelivery = await markOrderProcessed(db, order.id);
+        if (!firstDelivery) {
+          console.log(`[webhook] orders/create #${order.order_number} already processed — skipping duplicate delivery`);
+          break;
+        }
         await handleOrderCreated(order, kv, adminToken, db, klaviyoKey);
         if (adminToken) {
           await handleReferralConversion(order, db, kv, adminToken, klaviyoKey);
