@@ -190,6 +190,12 @@ export default function CartUpsell() {
       <div className="grid grid-cols-2 gap-3">
         {visibleUpsells.map(({ product, availableVariants }) => {
           const currentImage = getCurrentImage(product, availableVariants)
+          // Price the SELECTED variant, not the cheapest — the dropdown can pick
+          // a dearer variant (e.g. single vs set), and showing minVariantPrice
+          // while adding the selected one charges more than displayed.
+          const currentVariant =
+            availableVariants.find((v) => v.id === selectedVariants[product.id]) ??
+            availableVariants[0]
 
           return (
             <div
@@ -256,8 +262,8 @@ export default function CartUpsell() {
                 <div className="flex items-center justify-between">
                   <span className="text-sm font-semibold text-gold-400">
                     {formatPrice(
-                      product.priceRange.minVariantPrice.amount,
-                      product.priceRange.minVariantPrice.currencyCode
+                      currentVariant?.price.amount ?? product.priceRange.minVariantPrice.amount,
+                      currentVariant?.price.currencyCode ?? product.priceRange.minVariantPrice.currencyCode
                     )}
                   </span>
                   <button
