@@ -3,19 +3,23 @@ import * as Sentry from "@sentry/nextjs";
 Sentry.init({
   dsn: "https://03a3151ad7e64876b650238ef4f31ce8@o4510169918275584.ingest.de.sentry.io/4510169922404432",
 
-  // Performance tracing is non-essential analytics telemetry: a transaction
-  // carries the full URL and is attributed to the visitor's IP at Sentry's
-  // ingest, so it needs statistics consent under PECR/UK-GDPR. Error monitoring
-  // (below, with PII scrubbing in beforeSend) is treated as strictly necessary
-  // and keeps running. tracesSampler is evaluated at each transaction start and
-  // reads the LIVE Cookiebot consent, so tracing starts when consent is granted
-  // and stops when it is withdrawn — and the pre-consent pageload (Cookiebot not
-  // yet loaded) samples at 0 and is never sent. Unlike Session Replay, tracing
-  // can be gated this way without add/remove-integration, so no listener needed.
-  tracesSampler: () => {
-    if (typeof window === 'undefined') return 0;
-    return window.Cookiebot?.consent?.statistics ? 0.2 : 0;
-  },
+  // Error reporting ONLY. Performance tracing is disabled: no tracesSampler is
+  // set, and the BrowserTracing integration is filtered out of the defaults
+  // below, so no traces are ever collected (this project uses Sentry for error
+  // reporting only and never looks at traces). This is a RUNTIME trim, not a
+  // bundle trim: on Sentry v10 the tracing CODE cannot be tree-shaken out of the
+  // client bundle — @sentry/browser barrel-exports browserTracingIntegration and
+  // @sentry/core barrel-exports the span/metrics/AI-instrumentation modules from
+  // their index, and neither __SENTRY_TRACING__ nor
+  // bundleSizeOptimizations.excludeTracing removes them (measured). The real
+  // bundle win (~135 KB) would need lazy-loading the SDK — a larger change.
+  // The filter is over the defaults (not a hand-listed array) so a default ERROR
+  // integration — breadcrumbs, global + browser-api error handlers, linked
+  // errors, dedupe, http context — can never be silently dropped; that would
+  // regress error capture, which must not happen. Session Replay is untouched
+  // (consent-gated + lazily loaded in SentryReplayConsent.tsx).
+  integrations: (defaultIntegrations) =>
+    defaultIntegrations.filter((integration) => integration.name !== 'BrowserTracing'),
 
   debug: false,
 

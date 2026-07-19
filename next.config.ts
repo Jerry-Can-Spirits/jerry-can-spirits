@@ -454,6 +454,18 @@ export default withSentryConfig(analyzedConfig, {
   // Only print logs for uploading source maps in CI
   silent: !process.env.CI,
 
+  // Error-reporting only. excludeDebugStatements drops Sentry's debug-logging
+  // code (a real, if small, saving). excludeTracing is declared for intent and
+  // future-proofing, but on Sentry v10 it does NOT remove the tracing modules
+  // from the client bundle — they are barrel-exported from the SDK index, so
+  // ~135 KB of tracing/metrics/AI-instrumentation ships regardless of config
+  // (measured). Tracing is disabled at runtime in instrumentation-client.ts; the
+  // real bundle win would need lazy-loading the SDK.
+  bundleSizeOptimizations: {
+    excludeTracing: true,
+    excludeDebugStatements: true,
+  },
+
   // For all available options, see:
   // https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/
 
