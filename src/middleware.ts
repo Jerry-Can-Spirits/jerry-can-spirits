@@ -1,75 +1,10 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
-import { AGE_COOKIE, isAgeExcludedPath, isAgeVerified } from '@/lib/age-gate'
+import { AGE_COOKIE, isAgeExcludedPath, isAgeVerified, isBot, isDocumentNavigation } from '@/lib/age-gate'
 
-// Known SEO and search engine bot user agents
-// These bots need access to content for indexing/analysis while humans still see age gate
-const BOT_USER_AGENTS = [
-  // Search engines
-  'googlebot',
-  'bingbot',
-  'msnbot',          // Microsoft/Bing legacy
-  'bingpreview',     // Bing link preview
-  'adidxbot',        // Bing ads
-  'microsoftpreview', // Microsoft previews
-  'slurp',           // Yahoo
-  'duckduckbot',
-  'baiduspider',
-  'yandexbot',
-  'facebot',         // Facebook
-  'ia_archiver',     // Alexa
-
-  // SEO tools
-  'semrushbot',
-  'ahrefsbot',
-  'mj12bot',         // Majestic
-  'dotbot',          // Moz
-  'rogerbot',        // Moz
-  'screaming frog',
-  'sitebulb',
-  'deepcrawl',
-  'oncrawl',
-  'seobilitybot',
-  'serpstatbot',
-  'dataforseo',
-  'surfer bot',      // SurferSEO Site Audit (exact User-Agent)
-  'surfer',          // SurferSEO fallback
-
-  // Social media
-  'twitterbot',
-  'linkedinbot',
-  'pinterestbot',
-  'whatsapp',
-  'telegrambot',
-
-  // Validation tools
-  'w3c_validator',
-  'lighthouse',
-  'pagespeed',
-  'gtmetrix',
-
-  // Google services
-  'mediapartners-google',
-  'adsbot-google',
-  'apis-google',
-  'google-inspectiontool',
-]
-
-function isBot(userAgent: string | null): boolean {
-  if (!userAgent) return false
-  const ua = userAgent.toLowerCase()
-  return BOT_USER_AGENTS.some(bot => ua.includes(bot))
-}
-
-// A top-level navigation (as opposed to an RSC/data fetch or a prefetch): the
-// browser marks it as a document, or there are no fetch-metadata headers at all
-// (a direct hit / curl). Only these are gated, so client-side data fetches are
-// never redirected.
-function isDocumentNavigation(request: NextRequest): boolean {
-  const dest = request.headers.get('sec-fetch-dest')
-  if (dest) return dest === 'document'
-  return !request.headers.has('rsc') && !request.headers.has('next-router-prefetch')
-}
+// Bot detection and the document-navigation test now live in @/lib/age-gate, so
+// the edge-cache Worker enforces the gate with the exact same rules (imported
+// above).
 
 export function middleware(request: NextRequest) {
   // The CSP and security headers are set in next.config.ts, not here.
@@ -84,7 +19,7 @@ export function middleware(request: NextRequest) {
   // UA still cannot reach Shopify checkout).
   if (
     request.method === 'GET' &&
-    isDocumentNavigation(request) &&
+    isDocumentNavigation(request.headers) &&
     !bot &&
     !isAgeExcludedPath(request.nextUrl.pathname) &&
     !isAgeVerified(request.cookies.get(AGE_COOKIE)?.value)
