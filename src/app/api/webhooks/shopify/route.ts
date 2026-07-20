@@ -369,7 +369,9 @@ export async function POST(request: Request) {
           try {
             await handleReferralConversion(order, db, kv, adminToken, klaviyoKey);
           } catch (err) {
-            console.error(`[webhook] referral conversion failed for order #${order.order_number} (non-fatal):`, err);
+            // Constant format string (order_number as an argument, not
+            // interpolated) so the payload value can't act as a format specifier.
+            console.error('[webhook] referral conversion failed for order #%s (non-fatal):', order.order_number, err);
             Sentry.captureException(err, { tags: { source: 'shopify-webhook', phase: 'referral-conversion' } });
           }
         }
