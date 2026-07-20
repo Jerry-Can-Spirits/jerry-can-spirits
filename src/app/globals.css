@@ -558,3 +558,13 @@
     border-radius: 0 !important;
   }
 }
+
+/* Hide Cookiebot's floating renew badge on screen. It sat bottom-left and
+   obscured the product price on mobile (bottom-right is taken by the sticky
+   add-to-cart bar). Consent can still be withdrawn via the "Cookie Preferences"
+   footer link, which calls Cookiebot.renew(). This targets only the persistent
+   widget, never the consent dialog (#CybotCookiebotDialog), so the dialog still
+   opens when renew() is called. */
+#CookiebotWidget {
+  display: none !important;
+}

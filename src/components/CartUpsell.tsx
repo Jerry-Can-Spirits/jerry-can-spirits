@@ -3,282 +3,188 @@
 import { useState, useEffect, useMemo } from 'react'
 import Image from 'next/image'
 import { useCart } from '@/contexts/CartContext'
-import { getProductsByHandles, type ShopifyProduct, type ShopifyProductVariant } from '@/lib/shopify'
+import { FREE_SHIPPING_THRESHOLD_GBP } from '@/lib/pricing'
 
-// Fallback handles if the API returns empty or fails
-const UPSELL_PRODUCT_HANDLES = [
-  'natural-slate-coaster-variants',
-  'stainless-steel-jigger-variants',
-  'jerry-can-spirits-metal-keyring',
-  'jerry-can-spirits-stainless-steel-freezable-stones',
-]
+interface CartUpsellItem {
+  title: string
+  handle: string
+  imageUrl: string | null
+  imageAlt: string
+  variantId: string
+  variantTitle?: string
+  price: number
+  currencyCode: string
+}
 
-const PAGE_SIZE = 4
-const FETCH_LIMIT = 12
-
-// Helper to format price
-function formatPrice(amount: string, currencyCode: string): string {
-  const price = parseFloat(amount)
-  const symbols: Record<string, string> = {
-    GBP: '£',
-    USD: '$',
-    EUR: '€',
-  }
+function formatPrice(price: number, currencyCode: string): string {
+  const symbols: Record<string, string> = { GBP: '£', USD: '$', EUR: '€' }
   const symbol = symbols[currencyCode] || currencyCode
   return `${symbol}${price.toFixed(2)}`
 }
 
-interface UpsellProduct {
-  product: ShopifyProduct
-  availableVariants: ShopifyProductVariant[]
-}
-
+// Shortfall-aware cross-sell. The eligible pool is curated in Sanity (cartUpsell
+// singleton, ordered by the founder); the drawer leads with whichever product
+// best bridges the gap to free UK delivery for THIS basket, then shows up to two
+// alternates. Once the basket clears the threshold it falls back to the curated
+// order and the framing softens. One scroll region only — no nested scroll.
 export default function CartUpsell() {
   const { cart, addToCart, isLoading } = useCart()
-  const [upsellProducts, setUpsellProducts] = useState<UpsellProduct[]>([])
+  const [pool, setPool] = useState<CartUpsellItem[]>([])
   const [loadingProducts, setLoadingProducts] = useState(true)
-  const [addingProductId, setAddingProductId] = useState<string | null>(null)
-  const [selectedVariants, setSelectedVariants] = useState<Record<string, string>>({})
-  const [page, setPage] = useState(0)
+  const [addingHandle, setAddingHandle] = useState<string | null>(null)
 
-  // Get handles of products already in cart
-  const cartProductHandles = cart?.lines.map(line => line.merchandise.product.handle) || []
-
-  // Memoised key: only changes when the set of product handles changes, not on quantity updates
-  const handlesKey = useMemo(() => {
-    const handles = cart?.lines.map(line => line.merchandise.product.handle) || []
-    return [...handles].sort().join(',')
-  }, [cart?.lines])
-
+  // The pool is basket-independent, so fetch it once. Selection reacts to the
+  // cart below.
   useEffect(() => {
-    async function fetchUpsellProducts() {
+    let cancelled = false
+    async function fetchPool() {
       setLoadingProducts(true)
-      setPage(0)
-
-      // Try the recommendations API first — its response now includes full
-      // variant data (including images), so we can use it directly without
-      // a second getProductsByHandles round-trip.
-      let fetched: ShopifyProduct[] | null = null
-
-      if (handlesKey) {
-        try {
-          const res = await fetch(`/api/cart-recommendations/?handles=${encodeURIComponent(handlesKey)}&limit=${FETCH_LIMIT}`)
-          if (res.ok) {
-            const data: { products: ShopifyProduct[] } = await res.json()
-            if (data.products && data.products.length > 0) {
-              fetched = data.products
-            }
-          }
-        } catch {
-          // Fall through to the hardcoded fallback below
+      try {
+        const res = await fetch('/api/cart-upsell/')
+        if (res.ok) {
+          const data: { products: CartUpsellItem[] } = await res.json()
+          if (!cancelled) setPool(data.products ?? [])
         }
+      } catch {
+        // Leave the pool empty → the section renders nothing.
+      } finally {
+        if (!cancelled) setLoadingProducts(false)
       }
+    }
+    fetchPool()
+    return () => {
+      cancelled = true
+    }
+  }, [])
 
-      // Fallback: only fetch by handle when the recommendations API returned nothing
-      if (!fetched) {
-        fetched = await getProductsByHandles(UPSELL_PRODUCT_HANDLES)
-      }
+  const cartHandles = useMemo(
+    () => new Set(cart?.lines.map((l) => l.merchandise.product.handle) ?? []),
+    [cart?.lines],
+  )
+  const subtotal = cart ? parseFloat(cart.cost.subtotalAmount.amount) : 0
 
-      const products: UpsellProduct[] = []
-      const initialSelections: Record<string, string> = {}
-
-      fetched.forEach((product) => {
-        const availableVariants = product.variants?.filter(v => v.availableForSale) || []
-        if (availableVariants.length > 0) {
-          products.push({ product, availableVariants })
-          initialSelections[product.id] = availableVariants[0].id
-        }
-      })
-
-      setUpsellProducts(products)
-      setSelectedVariants(initialSelections)
-      setLoadingProducts(false)
+  const { hero, alternates, belowThreshold, heroClears } = useMemo(() => {
+    const eligible = pool.filter((p) => !cartHandles.has(p.handle))
+    if (eligible.length === 0) {
+      return { hero: null as CartUpsellItem | null, alternates: [] as CartUpsellItem[], belowThreshold: false, heroClears: false }
     }
 
-    fetchUpsellProducts()
-  }, [handlesKey])
+    const shortfall = FREE_SHIPPING_THRESHOLD_GBP - subtotal
 
-  // Filter out products already in cart
-  const availableUpsells = upsellProducts.filter(
-    ({ product }) => !cartProductHandles.includes(product.handle)
-  )
-
-  // Paginate: show PAGE_SIZE at a time, wrap around
-  const totalPages = Math.ceil(availableUpsells.length / PAGE_SIZE)
-  const currentPage = totalPages > 0 ? page % totalPages : 0
-  const visibleUpsells = availableUpsells.slice(
-    currentPage * PAGE_SIZE,
-    currentPage * PAGE_SIZE + PAGE_SIZE
-  )
-
-  const handleReroll = () => {
-    setPage(prev => prev + 1)
-  }
-
-  const handleAddToCart = async (productId: string) => {
-    const variantId = selectedVariants[productId]
-    if (!variantId) return
-
-    setAddingProductId(productId)
-    try {
-      await addToCart(variantId, 1)
-    } finally {
-      setAddingProductId(null)
+    // Already clear of free delivery: no shortfall to bridge, so fall back to the
+    // curated order and soften the framing.
+    if (shortfall <= 0) {
+      return { hero: eligible[0], alternates: eligible.slice(1, 3), belowThreshold: false, heroClears: false }
     }
-  }
 
-  const handleVariantChange = (productId: string, variantId: string) => {
-    setSelectedVariants(prev => ({ ...prev, [productId]: variantId }))
-  }
+    // Prefer a product that CLEARS the threshold; among clearers take the
+    // cheapest (least overshoot). If nothing clears, take the closest from below
+    // (the dearest). reduce keeps the earlier item on ties, and `eligible` is in
+    // curated order, so ties break by curated order.
+    const clearers = eligible.filter((p) => p.price >= shortfall)
+    const hero =
+      clearers.length > 0
+        ? clearers.reduce((best, p) => (p.price < best.price ? p : best))
+        : eligible.reduce((best, p) => (p.price > best.price ? p : best))
+
+    const alternates = eligible.filter((p) => p.handle !== hero.handle).slice(0, 2)
+    return { hero, alternates, belowThreshold: true, heroClears: hero.price >= shortfall }
+  }, [pool, cartHandles, subtotal])
 
   if (loadingProducts) {
     return (
       <div className="py-4 border-t border-gold-500/20">
-        <div className="h-20 bg-jerry-green-800/30 rounded-lg animate-pulse" />
+        <div className="h-24 bg-jerry-green-800/30 rounded-lg animate-pulse" />
       </div>
     )
   }
 
-  if (availableUpsells.length === 0) {
-    return null
-  }
+  if (!hero) return null
 
-  const hasMultipleVariants = (variants: ShopifyProductVariant[]) => {
-    return variants.length > 1 && variants.some(v => v.title !== 'Default Title')
-  }
-
-  const getCurrentImage = (product: ShopifyProduct, variants: ShopifyProductVariant[]) => {
-    const selectedVariantId = selectedVariants[product.id]
-    const selectedVariant = variants.find(v => v.id === selectedVariantId)
-
-    if (selectedVariant?.image) {
-      return selectedVariant.image
+  const handleAdd = async (item: CartUpsellItem) => {
+    setAddingHandle(item.handle)
+    try {
+      await addToCart(item.variantId, 1)
+    } finally {
+      setAddingHandle(null)
     }
-    return product.images?.[0] || null
   }
+
+  // "Goes well with this" is fixed for the at/above-threshold state. Below the
+  // threshold the framing lives on the hero badge, and the section keeps the
+  // existing heading.
+  const sectionLabel = belowThreshold ? 'Complete Your Order' : 'Goes well with this'
 
   return (
     <div className="py-4 border-t border-gold-500/20">
-      <div className="flex items-center justify-between mb-3">
-        <h3 className="text-sm font-semibold text-gold-300 uppercase tracking-wide">
-          Complete Your Order
-        </h3>
-        {totalPages > 1 && (
+      <h3 className="text-sm font-semibold text-gold-300 uppercase tracking-wide mb-3">
+        {sectionLabel}
+      </h3>
+
+      {/* Hero — the pairing chosen for this basket */}
+      <div className="flex gap-3 rounded-lg border border-gold-500/20 bg-jerry-green-800/30 p-3">
+        <div className="relative w-20 h-20 shrink-0 rounded-md bg-jerry-green-800/20 overflow-hidden">
+          {hero.imageUrl && (
+            <Image src={hero.imageUrl} alt={hero.imageAlt} fill className="object-contain p-1" sizes="80px" />
+          )}
+        </div>
+        <div className="flex-1 min-w-0 flex flex-col">
+          {/* Only claim "Clears free delivery" when the hero actually clears it. */}
+          {belowThreshold && heroClears && (
+            <span className="self-start text-[10px] uppercase tracking-wide text-gold-300 bg-gold-500/15 border border-gold-500/30 rounded-sm px-1.5 py-0.5 mb-1">
+              Clears free delivery
+            </span>
+          )}
+          <p className="text-sm font-semibold text-white line-clamp-2 leading-tight">{hero.title}</p>
+          <p className="text-sm text-gold-400 mt-0.5">
+            {hero.variantTitle ? `${hero.variantTitle} · ` : ''}
+            {formatPrice(hero.price, hero.currencyCode)}
+          </p>
           <button
-            onClick={handleReroll}
-            className="flex items-center gap-1.5 text-xs text-parchment-300 hover:text-gold-300 transition-colors"
+            onClick={() => handleAdd(hero)}
+            disabled={isLoading || addingHandle === hero.handle}
+            aria-label={`Add ${hero.title} to basket`}
+            className="mt-2 min-h-[44px] w-full rounded-lg bg-gold-500 px-4 text-sm font-semibold text-jerry-green-900 hover:bg-gold-400 transition-colors disabled:opacity-60"
           >
-            <svg
-              className="w-3.5 h-3.5"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-              />
-            </svg>
-            Show more
+            {addingHandle === hero.handle ? 'Adding…' : 'Add'}
           </button>
-        )}
+        </div>
       </div>
 
-      {/* 2x2 Grid Layout */}
-      <div className="grid grid-cols-2 gap-3">
-        {visibleUpsells.map(({ product, availableVariants }) => {
-          const currentImage = getCurrentImage(product, availableVariants)
-          // Price the SELECTED variant, not the cheapest — the dropdown can pick
-          // a dearer variant (e.g. single vs set), and showing minVariantPrice
-          // while adding the selected one charges more than displayed.
-          const currentVariant =
-            availableVariants.find((v) => v.id === selectedVariants[product.id]) ??
-            availableVariants[0]
-
-          return (
+      {/* Alternates — a compact row, no horizontal scroll */}
+      {alternates.length > 0 && (
+        <div className="grid grid-cols-2 gap-2 mt-2">
+          {alternates.map((item) => (
             <div
-              key={product.id}
-              className="bg-jerry-green-800/30 rounded-lg border border-gold-500/20 overflow-hidden"
+              key={item.handle}
+              className="rounded-lg border border-gold-500/20 bg-jerry-green-800/20 p-2"
             >
-              {/* Product Image - updates based on selected variant */}
-              <div className="relative aspect-square bg-jerry-green-800/20">
-                {currentImage ? (
-                  <Image
-                    src={currentImage.url}
-                    alt={currentImage.altText || product.title}
-                    fill
-                    className="object-contain p-2"
-                    sizes="(max-width: 480px) 45vw, 200px"
-                  />
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center">
-                    <svg
-                      className="w-8 h-8 text-gold-500/30"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
-                      />
-                    </svg>
-                  </div>
-                )}
-              </div>
-
-              {/* Product Info */}
-              <div className="p-2 space-y-2">
-                <h4 className="text-xs font-medium text-white line-clamp-2 leading-tight">
-                  {product.title}
-                </h4>
-
-                {/* Variant Dropdown - only show if multiple variants */}
-                {hasMultipleVariants(availableVariants) && (
-                  <select
-                    id={`variant-${product.id}`}
-                    name={`variant-${product.id}`}
-                    value={selectedVariants[product.id] || ''}
-                    onChange={(e) => handleVariantChange(product.id, e.target.value)}
-                    className="w-full px-2 py-1.5 text-base bg-jerry-green-900 border border-gold-500/30 rounded-sm text-white cursor-pointer focus:outline-hidden focus:border-gold-400 focus:ring-1 focus:ring-gold-400/50"
-                    style={{ colorScheme: 'dark' }}
-                  >
-                    {availableVariants.map((variant) => (
-                      <option
-                        key={variant.id}
-                        value={variant.id}
-                        className="bg-jerry-green-900 text-white py-1"
-                      >
-                        {variant.title}
-                      </option>
-                    ))}
-                  </select>
-                )}
-
-                <div className="flex items-center justify-between">
-                  <span className="text-sm font-semibold text-gold-400">
-                    {formatPrice(
-                      currentVariant?.price.amount ?? product.priceRange.minVariantPrice.amount,
-                      currentVariant?.price.currencyCode ?? product.priceRange.minVariantPrice.currencyCode
-                    )}
-                  </span>
-                  <button
-                    onClick={() => handleAddToCart(product.id)}
-                    disabled={isLoading || addingProductId === product.id}
-                    className="px-3 min-h-[44px] bg-gold-500 hover:bg-gold-400 text-jerry-green-900 text-xs font-semibold rounded-sm transition-colors disabled:opacity-50"
-                  >
-                    {addingProductId === product.id ? '...' : 'Add'}
-                  </button>
+              <div className="flex items-center gap-2">
+                <div className="relative w-10 h-10 shrink-0 rounded bg-jerry-green-800/20 overflow-hidden">
+                  {item.imageUrl && (
+                    <Image src={item.imageUrl} alt={item.imageAlt} fill className="object-contain p-0.5" sizes="40px" />
+                  )}
+                </div>
+                <div className="min-w-0 flex-1">
+                  <p className="text-xs text-white line-clamp-1 leading-tight">{item.title}</p>
+                  <p className="text-xs text-gold-400">
+                    {item.variantTitle ? `${item.variantTitle} · ` : ''}
+                    {formatPrice(item.price, item.currencyCode)}
+                  </p>
                 </div>
               </div>
+              <button
+                onClick={() => handleAdd(item)}
+                disabled={isLoading || addingHandle === item.handle}
+                aria-label={`Add ${item.title} to basket`}
+                className="mt-2 min-h-[44px] w-full rounded bg-jerry-green-800/50 border border-gold-500/20 px-2 text-xs font-semibold text-gold-300 hover:bg-jerry-green-800 transition-colors disabled:opacity-60"
+              >
+                {addingHandle === item.handle ? 'Adding…' : 'Add'}
+              </button>
             </div>
-          )
-        })}
-      </div>
+          ))}
+        </div>
+      )}
     </div>
   )
 }

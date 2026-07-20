@@ -45,9 +45,6 @@ export default function CookiePreferencesPage() {
           <p className="text-parchment-200 leading-relaxed">
             Your cookie preferences are managed by Cookiebot. Use the button below to review or change which cookies you allow.
           </p>
-          <p className="text-parchment-300 text-sm leading-relaxed">
-            You can also click the Cookiebot icon in the bottom left of any page to update your preferences at any time.
-          </p>
           <CookiebotRenewButton />
         </div>
 

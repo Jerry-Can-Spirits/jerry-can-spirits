@@ -15,10 +15,20 @@ export const structure: StructureResolver = (S) =>
             .schemaType('tradeHelp')
             .documentId('tradeHelp'),
         ),
+      // Pin the cart upsell pool as a singleton.
+      S.listItem()
+        .title('Cart upsell pool')
+        .id('cartUpsell')
+        .child(
+          S.editor()
+            .id('cartUpsell')
+            .schemaType('cartUpsell')
+            .documentId('cartUpsell'),
+        ),
       S.divider(),
       // Everything else uses the default document-type listing, except the
-      // singleton (which is already surfaced above).
+      // singletons (already surfaced above).
       ...S.documentTypeListItems().filter(
-        (listItem) => listItem.getId() !== 'tradeHelp',
+        (listItem) => listItem.getId() !== 'tradeHelp' && listItem.getId() !== 'cartUpsell',
       ),
     ])
