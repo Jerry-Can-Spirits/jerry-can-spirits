@@ -288,7 +288,7 @@ export const productByHandleQuery = `*[_type == "product" && (slug.current == $s
   featured,
   videoUrl,
   "relatedCocktails": relatedCocktails[]->[defined(_id)]{ _id, name, slug },
-  "completeTheServe": completeTheServe[]->{ shopifyHandle },
+  completeTheServe,
   whatsIncluded[] {
     item,
     description,

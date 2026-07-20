@@ -53,7 +53,7 @@ interface SanityProduct {
   featured?: boolean
   videoUrl?: string
   relatedCocktails?: Array<{ _id: string; name: string; slug: { current: string } }>
-  completeTheServe?: Array<{ shopifyHandle?: string | null }>
+  completeTheServe?: string[]
   whatsIncluded?: Array<{
     item: string
     description?: string
@@ -296,23 +296,44 @@ export default async function ProductPage({
     throw error
   }
 
-  // Complete-the-serve pairings — curated per product in Sanity, resolved to
-  // live Shopify products for price, variant, and availability. Ordered as set
-  // in Studio (the free-delivery lander first). Non-critical: a fetch failure
-  // or an unset field degrades to no module rather than breaking the page.
+  // Complete-the-serve pairings — curated per product in Sanity as an ordered
+  // list of Shopify product handles (barware lives only in Shopify, so there is
+  // nothing to reference), resolved here to live products for price, variant,
+  // and availability. Non-critical: a fetch failure or an unset field degrades
+  // to no module rather than breaking the page.
   const serveHandles = (sanityProduct?.completeTheServe ?? [])
-    .map(p => p?.shopifyHandle)
+    .map(h => h?.trim())
     .filter((h): h is string => typeof h === 'string' && h.length > 0 && h !== handle)
 
   let completeTheServeItems: CompleteTheServeItem[] = []
   if (serveHandles.length > 0) {
     try {
-      const paired = await Promise.all(serveHandles.map(h => getProduct(h)))
+      const paired = await Promise.all(
+        serveHandles.map(async h => ({ pairHandle: h, product: await getProduct(h) })),
+      )
       completeTheServeItems = paired
-        .map((p): CompleteTheServeItem | null => {
-          if (!p || p.handle === handle) return null
-          const variant = p.variants?.find(v => v.availableForSale)
-          if (!variant) return null
+        .map(({ pairHandle, product: p }): CompleteTheServeItem | null => {
+          // A handle that resolves to nothing is almost always a typo in Studio,
+          // and a silent drop is indistinguishable from an unset field. Log it.
+          if (!p) {
+            console.warn('[complete-the-serve] handle "%s" (on %s) matched no live Shopify product — check the spelling in Studio', pairHandle, handle)
+            return null
+          }
+          if (p.handle === handle) return null
+          const available = p.variants?.filter(v => v.availableForSale) ?? []
+          const variant = available[0]
+          if (!variant) {
+            console.warn('[complete-the-serve] "%s" has no variant available for sale — skipping', pairHandle)
+            return null
+          }
+          // The module adds the FIRST available variant. For a glass with
+          // Pair/Single variants that is the Pair only if it is ordered first in
+          // Shopify — an explicit contract, not an inherited default (the same
+          // assumption caused the cart-upsell bug in #922). Log the pick on
+          // multi-variant products so a wrong one is visible, not silent.
+          if (available.length > 1) {
+            console.warn('[complete-the-serve] "%s" has %s available variants; adding "%s". Order the intended variant (e.g. the Pair) first in Shopify.', pairHandle, String(available.length), variant.title)
+          }
           return {
             title: p.title,
             handle: p.handle,
