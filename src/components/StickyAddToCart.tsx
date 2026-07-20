@@ -12,6 +12,9 @@ interface StickyAddToCartProps {
   /** True for products with more than one real variant: the sticky bar can't
       see the selector's chosen variant, so it must not add a fixed one. */
   multiVariant?: boolean
+  /** Echo the IWSC double-medal credential here on mobile, where the desktop
+      ProductAwards block near the price has scrolled out of view. */
+  awarded?: boolean
 }
 
 export default function StickyAddToCart({
@@ -21,6 +24,7 @@ export default function StickyAddToCart({
   currencyCode,
   watchElementId,
   multiVariant = false,
+  awarded = false,
 }: StickyAddToCartProps) {
   const { addToCart, isLoading } = useCart()
   const [isVisible, setIsVisible] = useState(false)
@@ -65,6 +69,11 @@ export default function StickyAddToCart({
       <div className="flex-1 min-w-0">
         <p className="text-sm font-semibold text-white truncate">{productTitle}</p>
         <p className="text-sm font-bold text-gold-400">{formatted}</p>
+        {awarded && (
+          <p className="text-[11px] font-semibold uppercase tracking-wide text-gold-400/90 truncate">
+            IWSC 2026 · Bronze &amp; Silver
+          </p>
+        )}
       </div>
       <button
         onClick={handleAdd}
