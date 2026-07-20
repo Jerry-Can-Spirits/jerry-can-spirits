@@ -133,20 +133,17 @@ export default defineType({
       title: 'Complete the Serve',
       type: 'array',
       description:
-        'Products offered on this page under "Complete the serve", shown in this order. Put the pairing that lands the basket on free UK delivery first, dearer options after. Do not pair a product with itself or like with like (no glass on a glass).',
+        'Shopify product handles offered on this page under "Complete the serve", shown in this order. Put the pairing that lands the basket on free UK delivery first, dearer options after. A handle is the last part of the Shopify product URL (Products > the product > "Search engine listing" > URL handle, or the /products/HANDLE address), e.g. hiball-glass-38cl. These are Shopify handles, not Sanity documents, because the glassware lives only in Shopify. A handle that does not match a live product is skipped and logged, so double-check spelling.',
+      // Shopify handles, not references: barware exists only in Shopify, so
+      // there is no Sanity `product` document to reference. The page resolves
+      // each handle against Shopify at render time.
       of: [
         {
-          type: 'reference',
-          to: [{type: 'product'}],
-          // Keep the current product out of its own pairing picker. The page
-          // also filters self-references at render time, so this is a Studio
-          // convenience, not the guarantee.
-          options: {
-            filter: ({document}) => ({
-              filter: '_id != $self',
-              params: {self: (document._id as string).replace(/^drafts\./, '')},
-            }),
-          },
+          type: 'string',
+          validation: (Rule) =>
+            Rule.regex(/^[a-z0-9-]+$/, {name: 'handle'}).error(
+              'Enter a Shopify product handle: lowercase letters, numbers and hyphens only, no spaces (e.g. hiball-glass-38cl).',
+            ),
         },
       ],
     }),
