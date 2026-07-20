@@ -64,7 +64,7 @@ export default async function ReferralLandingPage({
           </p>
           <ReferralCodeClient code={code} />
           <p className="text-parchment-400 text-sm mt-4">
-            10% off your first order. Single use. No minimum spend.
+            10% off your first order over £65. Single use. Valid for 90 days.
           </p>
         </div>
 
