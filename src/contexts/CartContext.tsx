@@ -136,9 +136,17 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       setIsCartOpen(true)
     } catch (error) {
       console.error('[CartContext] Error adding to cart:', error)
-      // Cart may have expired on Shopify's side — clear stale ID so next attempt creates fresh cart
-      localStorage.removeItem('shopify_cart_id')
-      setCart(null)
+      // Do NOT destroy an existing populated cart on a transient failure (a
+      // mobile timeout, a Shopify 5xx): the cart still exists on Shopify, and
+      // clearing shopify_cart_id throws away the only reference to it, making a
+      // fully-built basket unrecoverable even on refresh. Only clear when we
+      // never had a cart to lose — a fresh-cart flow that failed leaves at most
+      // an empty just-created cart. Mirrors loadCart, which deliberately keeps
+      // the id through brief outages.
+      if (!cart) {
+        localStorage.removeItem('shopify_cart_id')
+        setCart(null)
+      }
       alert('Failed to add item to cart. Please try again.')
     } finally {
       setIsLoading(false)
