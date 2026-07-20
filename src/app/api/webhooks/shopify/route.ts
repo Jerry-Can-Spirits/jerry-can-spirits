@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { revalidatePath } from 'next/cache';
 import { getCloudflareContext } from '@opennextjs/cloudflare';
 import * as Sentry from '@sentry/nextjs';
 import {
@@ -174,6 +175,23 @@ async function handleProductUpdated(product: ShopifyProduct, kv: KVNamespace) {
       updated_at: product.updated_at,
     }),
   );
+
+  // Invalidate the ISR cache so a price or availability change in Shopify
+  // propagates immediately, instead of the product and collection pages
+  // (revalidate = 3600) advertising a stale price for up to an hour — a
+  // misleading-price exposure that is acute on planned price changes. The
+  // payload doesn't tell us the product's collections, so revalidate the
+  // product page plus every collection surface it could appear on. Best-effort:
+  // a revalidation failure must not fail the webhook.
+  try {
+    revalidatePath(`/shop/product/${product.handle}`);
+    revalidatePath('/shop/spirits');
+    revalidatePath('/shop/barware');
+    revalidatePath('/shop/clothing');
+    revalidatePath('/shop/[collection]', 'page');
+  } catch (err) {
+    console.error('[webhook] revalidate failed for product %s:', product.handle, err);
+  }
 
   console.log(`[webhook] products/update "${product.handle}"`);
 }
