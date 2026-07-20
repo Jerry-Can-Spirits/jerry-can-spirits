@@ -965,6 +965,7 @@ export default async function ProductPage({
             currencyCode={stickyVariant.price.currencyCode}
             watchElementId="buy-section"
             multiVariant={multiVariant}
+            awarded={AWARDED_HANDLES.includes(handle)}
           />
         ) : null
       })()}
