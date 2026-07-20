@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import Breadcrumbs from '@/components/Breadcrumbs'
+import { FREE_SHIPPING_THRESHOLD_GBP } from '@/lib/pricing'
 import StructuredData from '@/components/StructuredData'
 import { OG_IMAGE } from '@/lib/og'
 
@@ -38,7 +39,7 @@ export default function ShippingReturns() {
         "name": "How much does shipping cost for Jerry Can Spirits?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Standard shipping costs £5.00. Orders over £100 qualify for free shipping. We currently ship throughout the United Kingdom."
+          "text": `Standard shipping costs £5.00. Orders over £${FREE_SHIPPING_THRESHOLD_GBP} qualify for free shipping. We currently ship throughout the United Kingdom.`
         }
       },
       {
@@ -131,7 +132,7 @@ export default function ShippingReturns() {
               <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20">
                 <ul className="list-disc list-inside text-white space-y-2">
                   <li><strong className="text-gold-300">Standard Shipping</strong>: £5.00</li>
-                  <li><strong className="text-gold-300">Free shipping</strong> on orders over £100</li>
+                  <li><strong className="text-gold-300">Free shipping</strong> on orders over £{FREE_SHIPPING_THRESHOLD_GBP}</li>
                 </ul>
               </div>
             </section>
@@ -291,7 +292,7 @@ export default function ShippingReturns() {
               <div className="border-b border-gold-500/10 pb-6">
                 <h3 className="text-lg font-semibold text-gold-300 mb-3">How much does shipping cost?</h3>
                 <p className="text-parchment-200 leading-relaxed">
-                  Standard shipping costs £5.00. Orders over £100 qualify for free shipping. We currently ship throughout the United Kingdom.
+                  Standard shipping costs £5.00. Orders over £{FREE_SHIPPING_THRESHOLD_GBP} qualify for free shipping. We currently ship throughout the United Kingdom.
                 </p>
               </div>
 

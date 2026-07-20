@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation'
 import Image from 'next/image'
 import { getProduct, getProducts, getSmartRecommendations, type ShopifyProduct, type ShopifyMetafield } from '@/lib/shopify'
 import { GB_SHIPPING_DETAILS } from '@/lib/shippingSchema'
+import { FREE_SHIPPING_THRESHOLD_GBP } from '@/lib/pricing'
 import ProductVariantSelector from '@/components/ProductVariantSelector'
 import BatchStockIndicator from '@/components/BatchStockIndicator'
 import ProductImageGallery from '@/components/ProductImageGallery'
@@ -580,7 +581,7 @@ export default async function ProductPage({
               <div className="mt-6 pt-6 border-t border-gold-500/10">
                 <div className="space-y-3 text-center">
                   <p className="text-sm text-parchment-400 tracking-wide">
-                    Ships for £5.00. Free over £100.
+                    Ships for £5.00. Free over £{FREE_SHIPPING_THRESHOLD_GBP}.
                   </p>
                   <p className="text-sm text-parchment-400 tracking-wide">
                     Secure checkout · Express payment available
