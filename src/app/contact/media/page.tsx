@@ -988,6 +988,7 @@ Based in the UK, Jerry Can Spirits® is a small operation run by two mates who c
                   { date: 'Q3 2025', event: 'Recipe development begins with our British partner distillery.' },
                   { date: '2025/26 Season', event: 'Worcester RFC Match Afternoon sponsorship begins.' },
                   { date: '6 April 2026', event: 'Expedition Spiced Rum official launch.' },
+                  { date: '19 June 2026', event: 'Expedition Spiced Rum wins Bronze at the IWSC 2026, and Silver in the Rum & Cola serve category.' },
                 ].map((milestone, index) => (
                   <ScrollReveal key={index} delay={(index % 3) as 0 | 1 | 2}>
                   <div className="relative pl-8 pb-10 last:pb-0">
