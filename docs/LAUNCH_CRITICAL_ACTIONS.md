@@ -66,11 +66,11 @@ Based on your meeting notes. Since you're working day shifts, this is organized 
 ### 7. **The Journey Page Updates** ⏱️ 1 hour
 **Updates needed:**
 - **Sourcing:** Change "UK sourced" → "prioritise British products"
-- **Distillation:** Update to reflect modern copper-lined steel stills (Spirit of Wales)
+- **Distillation:** No production-process claims until the new producer has produced a batch
 - **Aging:** Update copy - spiced rum ages in weeks, not years
 - **Add:** Next page button at bottom
 
-**Action Required FIRST:** Call David at Spirit of Wales to get accurate process details
+**Action Required FIRST:** Do not make production-process claims until the new producer has produced a batch
 
 ---
 
@@ -139,9 +139,9 @@ These are business tasks, not website changes:
 - ✅ Email Rob re: Letter of Intent + offer free bottle
 - ✅ Email Milton Keynes pub contact re: LOI
 - ✅ Schedule Birmingham tasting when samples arrive
-- ✅ Email Spirit of Wales re: next samples (base + 2 variants)
+- ✅ Email producer re: next samples (base + 2 variants)
 - ✅ Order boxes: 1,000 standard + 500 trade 6-packs
-- ✅ Call David (Spirit of Wales) about distillation process
+- ✅ Call producer about distillation process
 
 ---
 
@@ -155,7 +155,7 @@ These are business tasks, not website changes:
 5. ⏸️ Test Klaviyo signup after launch (10 mins) - Do AFTER launch
 
 ### Do THIS WEEK (After Launch):
-6. Update "The Journey" copy (AFTER calling David at Spirit of Wales)
+6. Update "The Journey" copy (remove former producer's process claims; make none until a batch is produced)
 7. Add Harlequin + Croxon's to Partners page
 8. Update Armed Forces Covenant page
 

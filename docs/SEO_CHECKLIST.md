@@ -19,7 +19,7 @@ Quick reference for implementing and tracking SEO improvements.
 ### New Pages
 - [x] Friends & Partners page live at `/friends`
 - [x] Already added to footer navigation
-- [x] Spirit of Wales Distillery featured
+- [x] Partners featured on Friends page
 
 ### Components Built
 - [x] Instagram feed component

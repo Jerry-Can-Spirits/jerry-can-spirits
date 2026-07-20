@@ -193,7 +193,7 @@ export const BARTENDER_GUIDES: Record<VenueSlug, BartenderGuide> = {
     what_to_say: [
       {
         scenario: 'If they ask what it is',
-        response: '"British spiced rum, Caribbean rum base. Real ingredients, macerated at a distillery in South Wales. Veteran-owned. I’d recommend it neat or over a large cube with a twist of orange."',
+        response: '"British spiced rum, Caribbean rum base. Real ingredients, produced in small batches in Britain. Veteran-owned. I’d recommend it neat or over a large cube with a twist of orange."',
       },
       {
         scenario: 'If they ask about the brand',
