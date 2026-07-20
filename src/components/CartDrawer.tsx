@@ -8,7 +8,7 @@ import CartUpsell from './CartUpsell'
 import CarbonOffsetToggle from './CarbonOffsetToggle'
 import PresentationBoxUpsell from './PresentationBoxUpsell'
 import { appendUtmToCheckout, gatedCheckout } from '@/lib/utm'
-import { REFERRAL_MIN_ORDER_GBP } from '@/lib/pricing'
+import { REFERRAL_MIN_ORDER_GBP, FREE_SHIPPING_THRESHOLD_GBP } from '@/lib/pricing'
 import { trackEventDual } from '@/lib/meta-capi'
 
 // Helper to format price
@@ -243,6 +243,34 @@ export default function CartDrawer() {
               </svg>
             </button>
           </div>
+
+          {/* Free-delivery progress — the £65 threshold is where free shipping and
+              the referral floor meet, so surface how close the basket is (a bare
+              shortfall reads as information, not an upsell — product suggestion
+              lives in the cross-sell). Sits above the fold, not in the scroll. */}
+          {cart && cart.lines.length > 0 && (() => {
+            const subtotal = parseFloat(cart.cost.subtotalAmount.amount)
+            const shortfall = FREE_SHIPPING_THRESHOLD_GBP - subtotal
+            const pct = Math.min(subtotal / FREE_SHIPPING_THRESHOLD_GBP, 1) * 100
+            return (
+              <div className="border-b border-gold-500/20 px-6 py-3">
+                <p className="text-sm text-parchment-200 mb-2">
+                  {shortfall > 0
+                    ? `£${shortfall.toFixed(2)} to go for free UK delivery`
+                    : 'Free UK delivery unlocked'}
+                </p>
+                <div
+                  className="h-1.5 rounded-full bg-jerry-green-800 overflow-hidden"
+                  role="progressbar"
+                  aria-valuemin={0}
+                  aria-valuemax={FREE_SHIPPING_THRESHOLD_GBP}
+                  aria-valuenow={Math.min(subtotal, FREE_SHIPPING_THRESHOLD_GBP)}
+                >
+                  <div className="h-full bg-gold-500 transition-all duration-500" style={{ width: `${pct}%` }} />
+                </div>
+              </div>
+            )
+          })()}
 
           {/* Cart Items */}
           <div className="flex-1 overflow-y-auto p-6">

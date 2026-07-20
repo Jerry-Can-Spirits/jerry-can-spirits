@@ -52,7 +52,10 @@ export default function ClientWrapper({ children }: ClientWrapperProps) {
       if (verifiedViaCookie || verifiedViaStorage) {
         // Ensure cookie exists for future visits
         if (!verifiedViaCookie) {
-          document.cookie = 'ageVerified=true; path=/; max-age=31536000; SameSite=Strict; Secure';
+          // SameSite=Lax (see AgeGate.tsx): the age cookie must survive a
+          // cross-site top-level navigation from a social link, or every
+          // Facebook/Instagram visitor is re-gated on entry.
+          document.cookie = 'ageVerified=true; path=/; max-age=31536000; SameSite=Lax; Secure';
         }
         setIsAgeVerified(true);
       }
