@@ -597,6 +597,19 @@ export default async function ProductPage({
                     ({unitPrice})
                   </p>
                 )}
+                {/* Wayfinding anchor to the reviews further down — deliberately
+                    NO score, count, or stars. The only rating data is a curated
+                    set of Trustpilot excerpts (lib/product-reviews.ts) with no
+                    queryable aggregate, so any number here would present a subset
+                    as a total. Do not add a count later without a real aggregate. */}
+                {productReviews.length > 0 && (
+                  <a
+                    href="#customer-reviews"
+                    className="inline-flex items-center min-h-[44px] mt-1 text-sm text-gold-300 hover:text-gold-200 underline underline-offset-2"
+                  >
+                    Customer reviews
+                  </a>
+                )}
               </div>
             </div>
 
@@ -882,7 +895,7 @@ export default async function ProductPage({
       )}
 
       {/* Customer Reviews Section */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-16">
+      <section id="customer-reviews" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-16 scroll-mt-24">
         <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
           <h2 className="text-3xl font-serif font-bold text-white mb-2">Customer Reviews</h2>
           <p className="text-parchment-300 mb-8">What people think</p>

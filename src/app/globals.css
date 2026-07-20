@@ -186,6 +186,14 @@
     text-size-adjust: 100%;
   }
 
+  /* Honour reduced-motion for the global smooth scroll (jump links like the
+     product page's "Customer reviews" anchor). */
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+
   body {
     @apply bg-parchment-50 text-jerry-green-900;
     font-family: Inter, system-ui, -apple-system, sans-serif;
