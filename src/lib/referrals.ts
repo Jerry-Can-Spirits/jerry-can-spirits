@@ -22,7 +22,14 @@ export async function applyReferralCode(cart: Cart): Promise<Cart> {
   if (!referralCode || alreadyTagged) return cart
 
   try {
-    let updated = await shopifyApplyDiscount(cart.id, [referralCode])
+    // Merge, don't replace: keep any codes already on the cart (e.g. a manually
+    // entered promo) and add the referral. cartDiscountCodesUpdate replaces the
+    // whole set, so passing only the referral would silently delete the other.
+    // Shopify then decides combinability/applicability, shown in the cart UI —
+    // no code is ever destroyed without the shopper seeing it.
+    const existing = cart.discountCodes?.map((d) => d.code) ?? []
+    const codes = existing.includes(referralCode) ? existing : [...existing, referralCode]
+    let updated = await shopifyApplyDiscount(cart.id, codes)
     updated = await shopifyUpdateCartAttributes(updated.id, [
       { key: '_referral_code', value: referralCode },
     ])

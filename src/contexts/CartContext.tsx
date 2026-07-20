@@ -15,6 +15,12 @@ import {
 } from '@/lib/shopify'
 import { applyReferralCode } from '@/lib/referrals'
 import { attachStitchingAttributes } from '@/lib/analytics-stitching'
+import { REFERRAL_MIN_ORDER_GBP } from '@/lib/pricing'
+
+// Thrown when Shopify rejects a discount code (below its minimum, expired, or
+// invalid) — distinct from a transient network failure, so the UI can surface
+// the specific reason rather than a generic "try again".
+class DiscountRejectedError extends Error {}
 
 interface CartContextType {
   cart: Cart | null
@@ -191,21 +197,31 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
     setIsLoading(true)
     try {
-      // Preserve currently-applicable codes; add new code on top
-      const existing = cart.discountCodes?.filter(d => d.applicable).map(d => d.code) ?? []
+      // Preserve ALL existing codes (not just currently-applicable ones), minus
+      // any prior copy of the code being applied, so a pending referral code
+      // sitting below its £65 minimum isn't silently dropped when a second code
+      // is added — Shopify re-evaluates them as the basket grows.
+      const existing = cart.discountCodes?.map(d => d.code).filter(c => c !== code) ?? []
       const updatedCart = await shopifyApplyDiscount(cart.id, [...existing, code])
 
-      const applicable = updatedCart.discountCodes?.some(d => d.code === code && d.applicable)
-      if (!applicable) {
-        // Remove the rejected code so it doesn't persist in the cart UI
-        const clean = updatedCart.discountCodes?.filter(d => d.applicable).map(d => d.code) ?? []
-        const cleanCart = await shopifyApplyDiscount(updatedCart.id, clean)
+      const applied = updatedCart.discountCodes?.find(d => d.code === code)
+      if (!applied?.applicable) {
+        // Remove only the just-rejected code; keep the rest.
+        const kept = updatedCart.discountCodes?.map(d => d.code).filter(c => c !== code) ?? []
+        const cleanCart = await shopifyApplyDiscount(updatedCart.id, kept)
         setCart(cleanCart)
-        throw new Error(`"${code}" is not valid for this cart.`)
+        // Specific reason: below the £65 minimum vs otherwise invalid/expired.
+        const subtotal = parseFloat(updatedCart.cost.subtotalAmount.amount)
+        const shortfall = REFERRAL_MIN_ORDER_GBP - subtotal
+        throw new DiscountRejectedError(
+          shortfall > 0
+            ? `Spend £${shortfall.toFixed(2)} more to use "${code}".`
+            : `"${code}" can't be applied to your basket — it may have expired or already been used.`,
+        )
       }
       setCart(updatedCart)
     } catch (error) {
-      if (error instanceof Error && error.message.includes('is not valid')) throw error
+      if (error instanceof DiscountRejectedError) throw error
       console.error('Error applying discount:', error)
       throw new Error('Failed to apply discount code. Please try again.')
     } finally {

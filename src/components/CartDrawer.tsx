@@ -8,6 +8,7 @@ import CartUpsell from './CartUpsell'
 import CarbonOffsetToggle from './CarbonOffsetToggle'
 import PresentationBoxUpsell from './PresentationBoxUpsell'
 import { appendUtmToCheckout, gatedCheckout } from '@/lib/utm'
+import { REFERRAL_MIN_ORDER_GBP } from '@/lib/pricing'
 import { trackEventDual } from '@/lib/meta-capi'
 
 // Helper to format price
@@ -451,23 +452,40 @@ export default function CartDrawer() {
                 {/* Show applied discounts */}
                 {cart.discountCodes && cart.discountCodes.length > 0 && (
                   <div className="mt-2 space-y-1">
-                    {cart.discountCodes.map((discount, index) => (
-                      <div key={index} className="flex items-center justify-between gap-2">
-                        <p className={`text-sm ${discount.applicable ? 'text-green-400' : 'text-red-400'}`}>
-                          <span aria-hidden="true">{discount.applicable ? '✓' : '✗'}</span>
-                          <span className="sr-only">{discount.applicable ? 'Applied: ' : 'Not applicable: '}</span>
-                          {' '}{discount.code}
-                        </p>
-                        <button
-                          onClick={() => removeDiscountCode(discount.code)}
-                          disabled={isLoading}
-                          className="text-parchment-500 hover:text-parchment-300 text-xs transition-colors disabled:opacity-50"
-                          aria-label={`Remove discount code ${discount.code}`}
-                        >
-                          Remove
-                        </button>
-                      </div>
-                    ))}
+                    {cart.discountCodes.map((discount, index) => {
+                      // When Shopify marks a code not-applicable it gives no
+                      // reason, so tell the shopper the likely one: below the
+                      // £65 minimum (the common new-referral-code case) → how
+                      // much more to spend; otherwise expired/invalid.
+                      const shortfall =
+                        REFERRAL_MIN_ORDER_GBP - parseFloat(cart.cost.subtotalAmount.amount)
+                      return (
+                        <div key={index}>
+                          <div className="flex items-center justify-between gap-2">
+                            <p className={`text-sm ${discount.applicable ? 'text-green-400' : 'text-red-400'}`}>
+                              <span aria-hidden="true">{discount.applicable ? '✓' : '✗'}</span>
+                              <span className="sr-only">{discount.applicable ? 'Applied: ' : 'Not applicable: '}</span>
+                              {' '}{discount.code}
+                            </p>
+                            <button
+                              onClick={() => removeDiscountCode(discount.code)}
+                              disabled={isLoading}
+                              className="text-parchment-500 hover:text-parchment-300 text-xs transition-colors disabled:opacity-50"
+                              aria-label={`Remove discount code ${discount.code}`}
+                            >
+                              Remove
+                            </button>
+                          </div>
+                          {!discount.applicable && (
+                            <p className="mt-0.5 text-xs text-parchment-400">
+                              {shortfall > 0
+                                ? `Spend £${shortfall.toFixed(2)} more to use this code.`
+                                : "This code can't be applied to your basket — it may have expired or already been used."}
+                            </p>
+                          )}
+                        </div>
+                      )
+                    })}
                   </div>
                 )}
               </div>

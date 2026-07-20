@@ -5,6 +5,7 @@ import { useCart } from '@/contexts/CartContext'
 import { createCart, addToCart as shopifyAddToCart } from '@/lib/shopify'
 import { appendUtmToCheckout, gatedCheckout } from '@/lib/utm'
 import { attachStitchingAttributes } from '@/lib/analytics-stitching'
+import { applyReferralCode } from '@/lib/referrals'
 
 interface AddToCartButtonProps {
   variantId: string
@@ -49,7 +50,11 @@ export default function AddToCartButton({ variantId, productTitle, price, curren
       // silently abandoned any items already in their drawer.
       let cartId = cart?.id
       if (!cartId) {
-        const fresh = await createCart()
+        let fresh = await createCart()
+        // Apply a pending referral code to the fresh cart, matching the PDP
+        // Buy-now path — otherwise a referred shopper buying straight from a
+        // card loses both the discount and the referral attribution.
+        fresh = await applyReferralCode(fresh)
         cartId = fresh.id
         localStorage.setItem('shopify_cart_id', cartId)
       }

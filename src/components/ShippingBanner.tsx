@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { detectCountry } from '@/lib/geo'
+import { FREE_SHIPPING_THRESHOLD_GBP } from '@/lib/pricing'
 
 /** Country code → shipping/compliance message config */
 interface ShippingMessage {
@@ -13,7 +14,7 @@ interface ShippingMessage {
 
 const SHIPPING_MESSAGES: Record<string, ShippingMessage> = {
   GB: {
-    text: 'Free UK shipping on orders over £100',
+    text: `Free UK shipping on orders over £${FREE_SHIPPING_THRESHOLD_GBP}`,
     detail: 'All prices include UK duty and VAT.',
   },
   US: {
