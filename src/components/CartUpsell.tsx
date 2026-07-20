@@ -269,7 +269,7 @@ export default function CartUpsell() {
                   <button
                     onClick={() => handleAddToCart(product.id)}
                     disabled={isLoading || addingProductId === product.id}
-                    className="px-2 py-1 bg-gold-500 hover:bg-gold-400 text-jerry-green-900 text-xs font-semibold rounded-sm transition-colors disabled:opacity-50"
+                    className="px-3 min-h-[44px] bg-gold-500 hover:bg-gold-400 text-jerry-green-900 text-xs font-semibold rounded-sm transition-colors disabled:opacity-50"
                   >
                     {addingProductId === product.id ? '...' : 'Add'}
                   </button>
