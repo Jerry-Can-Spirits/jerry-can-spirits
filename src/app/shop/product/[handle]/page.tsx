@@ -341,6 +341,9 @@ export default async function ProductPage({
             imageAlt: p.images?.[0]?.altText ?? p.title,
             price: formatPrice(variant.price.amount, variant.price.currencyCode),
             variantId: variant.id,
+            // Surface "Pair" etc. so a pair-priced glass doesn't read as one
+            // expensive glass. Single-variant products have no useful label.
+            variantTitle: variant.title && variant.title !== 'Default Title' ? variant.title : undefined,
           }
         })
         .filter((item): item is CompleteTheServeItem => item !== null)
@@ -348,6 +351,14 @@ export default async function ProductPage({
       console.error('Error fetching complete-the-serve pairings:', error)
     }
   }
+
+  // The "add both" action needs this product's variant, but only when it's
+  // unambiguous — a single available variant (the rum). If the product has a
+  // variant choice, we can't know which the shopper wants, so the module falls
+  // back to adding just the pairing rather than guessing (cf. #922).
+  const primaryAvailableVariants = product.variants?.filter(v => v.availableForSale) ?? []
+  const completeTheServePrimaryVariantId =
+    primaryAvailableVariants.length === 1 ? primaryAvailableVariants[0].id : null
 
   const price = formatPrice(
     product.priceRange.minVariantPrice.amount,
@@ -644,7 +655,7 @@ export default async function ProductPage({
               )}
 
               {/* Complete the serve — curated cross-sell at the decision point */}
-              <CompleteTheServe items={completeTheServeItems} />
+              <CompleteTheServe items={completeTheServeItems} primaryVariantId={completeTheServePrimaryVariantId} />
 
               {/* Trust Indicators */}
               <div className="mt-6 pt-6 border-t border-gold-500/10">
