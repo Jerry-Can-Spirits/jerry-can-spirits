@@ -361,7 +361,17 @@ export async function POST(request: Request) {
         }
         await handleOrderCreated(order, kv, adminToken, db, klaviyoKey);
         if (adminToken) {
-          await handleReferralConversion(order, db, kv, adminToken, klaviyoKey);
+          // Non-fatal: a referral-conversion failure (e.g. a transient D1 write
+          // after the reward code is already minted on Shopify) must not throw
+          // out of the handler. If it did, the webhook would 500 → Shopify
+          // retries → the idempotency guard skips everything, orphaning the live
+          // reward code AND losing the GA4 purchase send below. Log and continue.
+          try {
+            await handleReferralConversion(order, db, kv, adminToken, klaviyoKey);
+          } catch (err) {
+            console.error(`[webhook] referral conversion failed for order #${order.order_number} (non-fatal):`, err);
+            Sentry.captureException(err, { tags: { source: 'shopify-webhook', phase: 'referral-conversion' } });
+          }
         }
         // Server-side GA4 purchase attribution. Never throws (a tracking
         // failure must not 500 the webhook); skips when the storefront did not
