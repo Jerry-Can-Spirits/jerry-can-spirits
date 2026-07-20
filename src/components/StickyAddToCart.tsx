@@ -61,7 +61,7 @@ export default function StickyAddToCart({
   const formatted = `${symbols[currencyCode] || currencyCode}${parseFloat(price).toFixed(2)}`
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-40 md:hidden bg-jerry-green-900/95 backdrop-blur-sm border-t border-gold-500/20 px-4 py-3 flex items-center gap-3 safe-area-inset-bottom">
+    <div className="fixed bottom-0 left-0 right-0 z-40 md:hidden bg-jerry-green-900/95 backdrop-blur-sm border-t border-gold-500/20 px-4 pt-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))] flex items-center gap-3">
       <div className="flex-1 min-w-0">
         <p className="text-sm font-semibold text-white truncate">{productTitle}</p>
         <p className="text-sm font-bold text-gold-400">{formatted}</p>
@@ -69,7 +69,7 @@ export default function StickyAddToCart({
       <button
         onClick={handleAdd}
         disabled={isLoading || added}
-        className="shrink-0 px-4 py-2.5 bg-gold-500 hover:bg-gold-400 text-jerry-green-900 text-sm font-bold rounded-lg transition-colors disabled:opacity-60"
+        className="shrink-0 min-h-11 px-4 py-2.5 bg-gold-500 hover:bg-gold-400 text-jerry-green-900 text-sm font-bold rounded-lg transition-colors disabled:opacity-60"
       >
         {multiVariant ? 'Choose options' : added ? 'Added' : isLoading ? '...' : 'Add to Cart'}
       </button>

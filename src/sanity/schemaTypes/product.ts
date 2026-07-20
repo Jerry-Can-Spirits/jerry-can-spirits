@@ -127,6 +127,30 @@ export default defineType({
       description: 'Foods, flavors, or occasions that complement this product'
     }),
 
+    // Complete the Serve
+    defineField({
+      name: 'completeTheServe',
+      title: 'Complete the Serve',
+      type: 'array',
+      description:
+        'Products offered on this page under "Complete the serve", shown in this order. Put the pairing that lands the basket on free UK delivery first, dearer options after. Do not pair a product with itself or like with like (no glass on a glass).',
+      of: [
+        {
+          type: 'reference',
+          to: [{type: 'product'}],
+          // Keep the current product out of its own pairing picker. The page
+          // also filters self-references at render time, so this is a Studio
+          // convenience, not the guarantee.
+          options: {
+            filter: ({document}) => ({
+              filter: '_id != $self',
+              params: {self: (document._id as string).replace(/^drafts\./, '')},
+            }),
+          },
+        },
+      ],
+    }),
+
     // Professional Tip
     defineField({
       name: 'professionalTip',

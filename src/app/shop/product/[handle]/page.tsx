@@ -21,6 +21,7 @@ import ProductFAQ from '@/components/ProductFAQ'
 import WhatsIncluded from '@/components/WhatsIncluded'
 import DietaryInfo from '@/components/DietaryInfo'
 import StickyAddToCart from '@/components/StickyAddToCart'
+import CompleteTheServe, { type CompleteTheServeItem } from '@/components/CompleteTheServe'
 import { client } from '@/sanity/lib/client'
 import { productByHandleQuery } from '@/sanity/queries'
 import { OG_IMAGE } from '@/lib/og'
@@ -52,6 +53,7 @@ interface SanityProduct {
   featured?: boolean
   videoUrl?: string
   relatedCocktails?: Array<{ _id: string; name: string; slug: { current: string } }>
+  completeTheServe?: Array<{ shopifyHandle?: string | null }>
   whatsIncluded?: Array<{
     item: string
     description?: string
@@ -292,6 +294,38 @@ export default async function ProductPage({
     // retryable error state; notFound() stays reserved for a genuine !product.
     console.error('Error fetching product:', error)
     throw error
+  }
+
+  // Complete-the-serve pairings — curated per product in Sanity, resolved to
+  // live Shopify products for price, variant, and availability. Ordered as set
+  // in Studio (the free-delivery lander first). Non-critical: a fetch failure
+  // or an unset field degrades to no module rather than breaking the page.
+  const serveHandles = (sanityProduct?.completeTheServe ?? [])
+    .map(p => p?.shopifyHandle)
+    .filter((h): h is string => typeof h === 'string' && h.length > 0 && h !== handle)
+
+  let completeTheServeItems: CompleteTheServeItem[] = []
+  if (serveHandles.length > 0) {
+    try {
+      const paired = await Promise.all(serveHandles.map(h => getProduct(h)))
+      completeTheServeItems = paired
+        .map((p): CompleteTheServeItem | null => {
+          if (!p || p.handle === handle) return null
+          const variant = p.variants?.find(v => v.availableForSale)
+          if (!variant) return null
+          return {
+            title: p.title,
+            handle: p.handle,
+            imageUrl: p.images?.[0]?.url ?? null,
+            imageAlt: p.images?.[0]?.altText ?? p.title,
+            price: formatPrice(variant.price.amount, variant.price.currencyCode),
+            variantId: variant.id,
+          }
+        })
+        .filter((item): item is CompleteTheServeItem => item !== null)
+    } catch (error) {
+      console.error('Error fetching complete-the-serve pairings:', error)
+    }
   }
 
   const price = formatPrice(
@@ -587,6 +621,9 @@ export default async function ProductPage({
                   </button>
                 </div>
               )}
+
+              {/* Complete the serve — curated cross-sell at the decision point */}
+              <CompleteTheServe items={completeTheServeItems} />
 
               {/* Trust Indicators */}
               <div className="mt-6 pt-6 border-t border-gold-500/10">
