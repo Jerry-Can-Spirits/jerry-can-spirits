@@ -50,6 +50,7 @@ export default function CartDrawer() {
   const [discountCode, setDiscountCode] = useState('')
   const [isApplyingDiscount, setIsApplyingDiscount] = useState(false)
   const [discountError, setDiscountError] = useState('')
+  const [discountOpen, setDiscountOpen] = useState(false)
   const [affiliateId, setAffiliateId] = useState<string | null>(null)
 
   const drawerRef = useRef<HTMLDivElement>(null)
@@ -206,6 +207,13 @@ export default function CartDrawer() {
       setIsApplyingDiscount(false)
     }
   }
+
+  // Auto-expand the discount disclosure when it holds state: a code is applied
+  // or pending (a referral sitting below its £65 minimum stays in discountCodes),
+  // or one was just rejected. Hiding an active or failed code behind a collapsed
+  // row is worse than the old always-open field.
+  const hasDiscountState = (cart?.discountCodes?.length ?? 0) > 0 || discountError !== ''
+  const discountExpanded = discountOpen || hasDiscountState
 
   return (
     <>
@@ -485,8 +493,25 @@ export default function CartDrawer() {
                 {/* Presentation box — compact gift-context offer (per-bottle). */}
                 <PresentationBoxUpsell />
 
-                {/* Discount Code */}
+                {/* Discount Code — collapsed behind "Have a code?" unless a code is
+                    applied, pending, or rejected (then the field shows directly, so
+                    an active or failed code is never hidden). */}
                 <div>
+                  {!hasDiscountState && (
+                    <button
+                      type="button"
+                      onClick={() => setDiscountOpen((o) => !o)}
+                      aria-expanded={discountOpen}
+                      aria-controls="discount-panel"
+                      className="flex items-center justify-between w-full min-h-[44px] text-sm text-parchment-300 hover:text-parchment-200 transition-colors"
+                    >
+                      <span>Have a code?</span>
+                      <svg className={`w-4 h-4 transition-transform ${discountOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                      </svg>
+                    </button>
+                  )}
+                  <div id="discount-panel" hidden={!discountExpanded} className={hasDiscountState ? undefined : 'mt-2'}>
                   <label htmlFor="discount-code" className="block text-xs text-parchment-400 mb-1">Discount code</label>
                   <div className="flex gap-2">
                     <input
@@ -561,6 +586,7 @@ export default function CartDrawer() {
                       })}
                     </div>
                   )}
+                  </div>
                 </div>
 
                 {/* Gift Toggle */}
@@ -568,7 +594,9 @@ export default function CartDrawer() {
                   <button
                     type="button"
                     onClick={handleGiftToggle}
-                    className="flex items-center gap-3 w-full group"
+                    aria-expanded={isGift}
+                    aria-controls="gift-panel"
+                    className="flex items-center gap-3 w-full min-h-[44px] group"
                   >
                     {/* Gift icon */}
                     <svg
@@ -576,21 +604,21 @@ export default function CartDrawer() {
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
+                      aria-hidden="true"
                     >
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7" />
                     </svg>
                     <span className={`text-sm font-medium transition-colors ${isGift ? 'text-gold-300' : 'text-parchment-300 group-hover:text-parchment-200'}`}>
                       This is a gift
                     </span>
-                    {/* Pill toggle */}
-                    <div className={`ml-auto w-10 h-5 rounded-full transition-colors relative ${isGift ? 'bg-gold-500' : 'bg-jerry-green-800/50 border border-gold-500/20'}`}>
-                      <div className={`absolute top-0.5 w-4 h-4 rounded-full transition-all ${isGift ? 'right-0.5 bg-jerry-green-900' : 'left-0.5 bg-parchment-400'}`} />
-                    </div>
+                    {/* Chevron — expanded when this is a gift */}
+                    <svg className={`ml-auto w-4 h-4 text-parchment-400 transition-transform ${isGift ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
                   </button>
 
-                  {/* Gift fields (revealed when toggled) */}
-                  {isGift && (
-                    <div className="space-y-3 animate-in slide-in-from-top-2 duration-200">
+                  {/* Gift fields — the controlled panel; `hidden` collapses it. */}
+                  <div id="gift-panel" hidden={!isGift} className="space-y-3">
                       <div>
                         <label htmlFor="gift-recipient" className="block text-xs text-parchment-400 mb-1">
                           Recipient name (optional)
@@ -623,7 +651,6 @@ export default function CartDrawer() {
                         </p>
                       </div>
                     </div>
-                  )}
                 </div>
 
                 {/* Carbon Offset — plant a UK tree (+£1) */}
