@@ -17,7 +17,7 @@ import {structure} from './src/sanity/structure'
 // structure pins these as a list item; these config hooks block the
 // "Create new" affordance from the global + button and remove the
 // duplicate/delete actions so an editor can't accidentally fork them.
-const SINGLETON_TYPES = new Set(['tradeHelp'])
+const SINGLETON_TYPES = new Set(['tradeHelp', 'cartUpsell'])
 
 export default defineConfig({
   // Served at the root of the hosted Studio subdomain (jerrycanspirits.sanity.studio).
