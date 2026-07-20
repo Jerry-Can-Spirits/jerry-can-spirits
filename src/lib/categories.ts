@@ -343,7 +343,7 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
     h1: 'Bundles',
     metaTitle: 'Expedition Spiced Rum Bundles | Save When You Stock Up | Jerry Can Spirits®',
     metaDescription:
-      'Stock up on Expedition Spiced Rum and save. Same small-batch British rum, better value. Veteran-owned, pot-distilled in South Wales.',
+      'Stock up on Expedition Spiced Rum and save. Same small-batch British rum, better value. Veteran-owned, produced in small batches in Britain.',
     introBody: [
       'Stock up and save. The same Expedition Spiced Rum at better value when you order more. Caribbean rum base, molasses, real spices. Built properly, every batch.',
       'Every bottle comes from the same small batch, pot-distilled at our British partner distillery. 700 numbered bottles for general release per run. When a batch is gone, it is gone.',
