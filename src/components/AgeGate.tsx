@@ -68,7 +68,11 @@ export default function AgeGate({ onVerified }: AgeGateProps) {
       try {
         localStorage.setItem('ageVerified', 'true');
         localStorage.setItem('selectedRegion', JSON.stringify(selectedRegion));
-        document.cookie = 'ageVerified=true; path=/; max-age=31536000; SameSite=Strict; Secure';
+        // SameSite=Lax, not Strict: the cookie must be sent on cross-site
+        // top-level navigations (a tap from a Facebook/Instagram link) so a
+        // returning, already-verified visitor isn't re-gated on entry. Strict
+        // only guards CSRF on state-changing cookies; an age flag is neither.
+        document.cookie = 'ageVerified=true; path=/; max-age=31536000; SameSite=Lax; Secure';
       } catch {
         // Storage may be blocked by browser tracking prevention — proceed anyway
       }
