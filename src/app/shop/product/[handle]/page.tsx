@@ -874,6 +874,9 @@ export default async function ProductPage({
       {/* Sticky Add-to-Cart bar — mobile only, appears when buy button scrolls out of view */}
       {(() => {
         const stickyVariant = product.variants?.find(v => v.availableForSale) ?? product.variants?.[0]
+        const multiVariant =
+          (product.variants?.length ?? 0) > 1 &&
+          (product.variants?.some(v => v.title !== 'Default Title') ?? false)
         return stickyVariant ? (
           <StickyAddToCart
             variantId={stickyVariant.id}
@@ -881,6 +884,7 @@ export default async function ProductPage({
             price={stickyVariant.price.amount}
             currencyCode={stickyVariant.price.currencyCode}
             watchElementId="buy-section"
+            multiVariant={multiVariant}
           />
         ) : null
       })()}
