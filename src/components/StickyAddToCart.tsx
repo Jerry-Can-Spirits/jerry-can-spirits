@@ -9,6 +9,9 @@ interface StickyAddToCartProps {
   price: string
   currencyCode: string
   watchElementId: string
+  /** True for products with more than one real variant: the sticky bar can't
+      see the selector's chosen variant, so it must not add a fixed one. */
+  multiVariant?: boolean
 }
 
 export default function StickyAddToCart({
@@ -17,6 +20,7 @@ export default function StickyAddToCart({
   price,
   currencyCode,
   watchElementId,
+  multiVariant = false,
 }: StickyAddToCartProps) {
   const { addToCart, isLoading } = useCart()
   const [isVisible, setIsVisible] = useState(false)
@@ -35,6 +39,13 @@ export default function StickyAddToCart({
   }, [watchElementId])
 
   const handleAdd = async () => {
+    // Multi-variant products: the shopper's chosen variant lives in the
+    // selector's own state, which this bar can't read. Adding the fixed
+    // variantId would add the wrong item, so send them to the selector instead.
+    if (multiVariant) {
+      document.getElementById(watchElementId)?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+      return
+    }
     try {
       await addToCart(variantId)
       setAdded(true)
@@ -60,7 +71,7 @@ export default function StickyAddToCart({
         disabled={isLoading || added}
         className="shrink-0 px-4 py-2.5 bg-gold-500 hover:bg-gold-400 text-jerry-green-900 text-sm font-bold rounded-lg transition-colors disabled:opacity-60"
       >
-        {added ? 'Added' : isLoading ? '...' : 'Add to Cart'}
+        {multiVariant ? 'Choose options' : added ? 'Added' : isLoading ? '...' : 'Add to Cart'}
       </button>
     </div>
   )
