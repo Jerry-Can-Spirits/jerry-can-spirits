@@ -126,8 +126,8 @@ export default async function BottleDetailPage({ params }: PageProps) {
         {/* Provenance note */}
         <div className="mt-6 bg-jerry-green-800/40 border border-gold-500/10 rounded-xl p-6 text-center">
           <p className="text-parchment-400 text-sm">
-            This bottle is from {batch.name}. Every bottle carries the same exceptional liquid, crafted at
-            Spirit of Wales Distillery, Newport, South Wales.
+            This bottle is from {batch.name}. Every bottle carries the same exceptional liquid, produced in
+            small batches in Britain.
           </p>
         </div>
 
