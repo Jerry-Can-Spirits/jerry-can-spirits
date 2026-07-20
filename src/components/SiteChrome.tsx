@@ -25,11 +25,16 @@ export default function SiteChrome({ children }: { children: ReactNode }) {
         <Header />
 
         {/* Main content with proper spacing for fixed header + announcement bar.
-            flex-1 makes it fill the viewport so the footer stays pinned to the
-            bottom even while content is empty (first paint, hydration, or a
-            navigation to a route whose content is still loading) — otherwise the
-            footer flashes up under the header. */}
-        <main id="main-content" className="flex-1 pt-20" style={{ paddingTop: 'calc(5rem + var(--announcement-height, 0px))' }}>
+            flex-1 pins the footer to the bottom once the flex context is
+            established. min-h-[70svh] adds an INTRINSIC reservation that does
+            not depend on that context: on the streamed / service-worker-cached
+            path the shell can paint before the flex layout resolves, and without
+            an intrinsic min-height the footer flashes up near the top of the
+            viewport for a beat before content arrives. 70svh keeps the footer
+            below the fold on all viewports while content is pending, without
+            leaving a large gap once short content loads (flex-1 still fills the
+            rest). */}
+        <main id="main-content" className="flex-1 min-h-[70svh] pt-20" style={{ paddingTop: 'calc(5rem + var(--announcement-height, 0px))' }}>
           {children}
         </main>
 
