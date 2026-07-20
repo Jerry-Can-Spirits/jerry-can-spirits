@@ -208,6 +208,10 @@ export default async function BarwarePage() {
             const defaultVariant = variants.length === 1 && variants[0].title === 'Default Title'
               ? variants[0]
               : null
+            // "from" only when the variants actually span prices (a glass Pair vs
+            // Single). Same-priced variants — coasters — keep the bare price.
+            const hasPriceRange =
+              variants.length > 1 && new Set(variants.map(v => v.price.amount)).size > 1
             const productUrl = `/shop/product/${product.handle}`
 
             return (
@@ -237,6 +241,7 @@ export default async function BarwarePage() {
                         {product.title}
                       </h2>
                       <p className="text-lg font-serif font-bold text-gold-400">
+                        {hasPriceRange ? 'from ' : ''}
                         {formatPrice(product.priceRange.minVariantPrice.amount, product.priceRange.minVariantPrice.currencyCode)}
                       </p>
                     </div>
