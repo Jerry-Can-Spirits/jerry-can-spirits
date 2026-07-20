@@ -53,7 +53,7 @@
     "@next/eslint-plugin-next": "^15.5.20",
     "@opennextjs/cloudflare": "^1.20.1",
     "@playwright/test": "^1.61.1",
-    "@tailwindcss/postcss": "^4.3.2",
+    "@tailwindcss/postcss": "^4.3.3",
     "@tailwindcss/typography": "^0.5.20",
     "@types/node": "^24.13.3",
     "@types/react": "^19",
@@ -67,7 +67,7 @@
     "tsx": "^4.23.1",
     "typescript": "^5",
     "vitest": "^4.1.10",
-    "wrangler": "^4.110.0"
+    "wrangler": "^4.112.0"
   },
   "overrides": {
     "hosted-git-info": "^7.0.0",
