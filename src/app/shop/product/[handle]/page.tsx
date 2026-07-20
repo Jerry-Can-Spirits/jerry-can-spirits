@@ -277,10 +277,21 @@ export default async function ProductPage({
     // - Prioritizes same collection (drinks → drinks, barware → barware)
     // - Intelligent cross-sell (spirits → glasses, etc.)
     // - Scores by: collection match, availability, price similarity
-    relatedProducts = await getSmartRecommendations(product, 4)
+    // Recommendations are non-critical: a failure here must not take down a
+    // valid product page, so it degrades to no recommendations.
+    try {
+      relatedProducts = await getSmartRecommendations(product, 4)
+    } catch (error) {
+      console.error('Error fetching recommendations:', error)
+    }
   } catch (error) {
+    // A thrown error means the fetch itself failed (Shopify timeout, API
+    // error) — not that the product is absent. notFound() here would render a
+    // permanent 404 ("this product doesn't exist") for a transient blip and
+    // risk deindexing a live product. Re-throw so error.tsx renders a
+    // retryable error state; notFound() stays reserved for a genuine !product.
     console.error('Error fetching product:', error)
-    notFound()
+    throw error
   }
 
   const price = formatPrice(

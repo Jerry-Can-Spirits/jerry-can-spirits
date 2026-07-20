@@ -33,7 +33,19 @@ export default function CartDrawer() {
     removeDiscountCode,
     updateAttributes,
     isLoading,
+    loadFailed,
+    retryLoad,
   } = useCart()
+
+  const [isRetrying, setIsRetrying] = useState(false)
+  const handleRetryLoad = async () => {
+    setIsRetrying(true)
+    try {
+      await retryLoad()
+    } finally {
+      setIsRetrying(false)
+    }
+  }
 
   const [discountCode, setDiscountCode] = useState('')
   const [isApplyingDiscount, setIsApplyingDiscount] = useState(false)
@@ -274,7 +286,35 @@ export default function CartDrawer() {
 
           {/* Cart Items */}
           <div className="flex-1 overflow-y-auto p-6">
-            {!cart || cart.lines.length === 0 ? (
+            {loadFailed && !cart ? (
+              // Restore failed — do NOT show the empty state, which would imply
+              // the basket was wiped. The cart likely still exists on Shopify;
+              // offer a retry.
+              <div className="flex flex-col items-center justify-center h-full text-center space-y-4">
+                <svg
+                  className="w-16 h-16 text-gold-500/30"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 9v2m0 4h.01M12 3a9 9 0 100 18 9 9 0 000-18z"
+                  />
+                </svg>
+                <p className="text-parchment-300">We couldn&apos;t load your cart.</p>
+                <button
+                  onClick={handleRetryLoad}
+                  disabled={isRetrying}
+                  className="px-6 py-2 bg-gold-500 text-jerry-green-900 font-semibold rounded-lg hover:bg-gold-400 transition-colors disabled:opacity-60"
+                >
+                  {isRetrying ? 'Retrying…' : 'Try again'}
+                </button>
+              </div>
+            ) : !cart || cart.lines.length === 0 ? (
               <div className="flex flex-col items-center justify-center h-full text-center space-y-4">
                 <svg
                   className="w-16 h-16 text-gold-500/30"

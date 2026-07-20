@@ -26,6 +26,11 @@ interface CartContextType {
   cart: Cart | null
   isLoading: boolean
   isCartOpen: boolean
+  // True when restoring the saved cart failed after retries — distinct from a
+  // genuinely empty cart, so the drawer can offer "try again" instead of
+  // wrongly telling the shopper their basket is empty.
+  loadFailed: boolean
+  retryLoad: () => Promise<void>
   openCart: () => void
   closeCart: () => void
   addToCart: (variantId: string, quantity?: number) => Promise<void>
@@ -43,45 +48,65 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const [cart, setCart] = useState<Cart | null>(null)
   const [isLoading, setIsLoading] = useState(false)
   const [isCartOpen, setIsCartOpen] = useState(false)
+  const [loadFailed, setLoadFailed] = useState(false)
+  // Transient action failure (add/update/remove), surfaced as an aria-live
+  // toast instead of a blocking window.alert(). Null when nothing to show.
+  const [cartError, setCartError] = useState<string | null>(null)
 
   // Synchronous in-flight flag for addToCart. setIsLoading is batched by React
   // so two synchronous clicks could both pass an `if (isLoading) return` guard.
   // A ref is updated immediately and prevents the double-cart-create race.
   const addInFlightRef = useRef(false)
 
-  // Load cart from localStorage on mount
-  useEffect(() => {
-    const loadCart = async () => {
-      const cartId = localStorage.getItem('shopify_cart_id')
-      if (!cartId) return
+  // Restore the saved cart. Runs on mount and again when the shopper taps
+  // "try again" in the drawer after a load failure.
+  const loadCart = useCallback(async () => {
+    const cartId = localStorage.getItem('shopify_cart_id')
+    if (!cartId) {
+      setLoadFailed(false)
+      return
+    }
 
-      // Retry once before giving up — a single network hiccup should not orphan the cart
-      for (let attempt = 0; attempt < 2; attempt++) {
-        try {
-          const existingCart = await getCart(cartId)
-          if (existingCart) {
-            setCart(existingCart)
-          } else {
-            // Cart expired or deleted on Shopify's side — clear the stale reference
-            localStorage.removeItem('shopify_cart_id')
-          }
-          return
-        } catch (error) {
-          if (attempt === 0) {
-            await new Promise(resolve => setTimeout(resolve, 1000))
-          } else {
-            console.error('Error loading cart after retry:', error)
-            // Two consecutive throws — could be a persistent invalid cart ID, but is
-            // just as likely a transient Shopify 5xx. Leaving the cartId in place
-            // means a refresh after the outage will still find their cart;
-            // dropping it permanently empties carts during every brief outage.
-          }
+    // Retry once before giving up — a single network hiccup should not orphan the cart
+    for (let attempt = 0; attempt < 2; attempt++) {
+      try {
+        const existingCart = await getCart(cartId)
+        if (existingCart) {
+          setCart(existingCart)
+        } else {
+          // Cart expired or deleted on Shopify's side — clear the stale reference
+          localStorage.removeItem('shopify_cart_id')
+        }
+        setLoadFailed(false)
+        return
+      } catch (error) {
+        if (attempt === 0) {
+          await new Promise(resolve => setTimeout(resolve, 1000))
+        } else {
+          console.error('Error loading cart after retry:', error)
+          // Two consecutive throws — could be a persistent invalid cart ID, but is
+          // just as likely a transient Shopify 5xx. Leaving the cartId in place
+          // means a refresh after the outage will still find their cart;
+          // dropping it permanently empties carts during every brief outage.
+          // Flag the failure so the drawer shows a retry affordance rather than
+          // an "empty cart" state that implies the basket was wiped.
+          setLoadFailed(true)
         }
       }
     }
-
-    loadCart()
   }, [])
+
+  // Load cart from localStorage on mount
+  useEffect(() => {
+    loadCart()
+  }, [loadCart])
+
+  // Auto-dismiss the action-error toast so it doesn't linger.
+  useEffect(() => {
+    if (!cartError) return
+    const timer = setTimeout(() => setCartError(null), 6000)
+    return () => clearTimeout(timer)
+  }, [cartError])
 
   const openCart = useCallback(() => {
     setIsCartOpen(true)
@@ -147,7 +172,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         localStorage.removeItem('shopify_cart_id')
         setCart(null)
       }
-      alert('Failed to add item to cart. Please try again.')
+      setCartError("We couldn't add that to your cart. Please try again.")
     } finally {
       setIsLoading(false)
       addInFlightRef.current = false
@@ -163,7 +188,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       setCart(updatedCart)
     } catch (error) {
       console.error('Error updating cart:', error)
-      alert('Failed to update quantity. Please try again.')
+      setCartError("We couldn't update the quantity. Please try again.")
     } finally {
       setIsLoading(false)
     }
@@ -194,7 +219,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       }
     } catch (error) {
       console.error('Error removing item:', error)
-      alert('Failed to remove item. Please try again.')
+      setCartError("We couldn't remove that item. Please try again.")
     } finally {
       setIsLoading(false)
     }
@@ -272,6 +297,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       cart,
       isLoading,
       isCartOpen,
+      loadFailed,
+      retryLoad: loadCart,
       openCart,
       closeCart,
       addToCart,
@@ -282,10 +309,36 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       updateAttributes,
       itemCount,
     }),
-    [cart, isLoading, isCartOpen, openCart, closeCart, addToCart, updateQuantity, removeItem, applyDiscountCode, removeDiscountCode, updateAttributes, itemCount]
+    [cart, isLoading, isCartOpen, loadFailed, loadCart, openCart, closeCart, addToCart, updateQuantity, removeItem, applyDiscountCode, removeDiscountCode, updateAttributes, itemCount]
   )
 
-  return <CartContext.Provider value={value}>{children}</CartContext.Provider>
+  return (
+    <CartContext.Provider value={value}>
+      {children}
+      {/* Action-failure toast — replaces window.alert() so a failed add/update/
+          remove is announced to assistive tech and doesn't block the page.
+          Rendered at the provider so it surfaces whether or not the drawer is
+          open (a failed add can happen with the drawer closed). */}
+      {cartError && (
+        <div
+          role="alert"
+          aria-live="assertive"
+          className="fixed top-4 left-1/2 -translate-x-1/2 z-[60] w-[calc(100%-2rem)] max-w-sm flex items-start gap-3 rounded-lg border border-red-500/40 bg-jerry-green-800 px-4 py-3 shadow-lg"
+        >
+          <p className="flex-1 text-sm text-parchment-100">{cartError}</p>
+          <button
+            onClick={() => setCartError(null)}
+            aria-label="Dismiss"
+            className="shrink-0 text-parchment-400 transition-colors hover:text-parchment-100"
+          >
+            <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+      )}
+    </CartContext.Provider>
+  )
 }
 
 export function useCart() {
