@@ -108,7 +108,7 @@ export default function Home() {
         "telephone": "+44 7521 220541",
         "email": "hello@jerrycanspirits.co.uk"
       },
-      "knowsAbout": ["Premium Spiced Rum", "British Spirits", "Military Heritage", "Veteran-Owned Business", "Small-Batch Distilling", "Military Rum"],
+      "knowsAbout": ["Premium Spiced Rum", "British Spirits", "Military Heritage", "Veteran-Owned Business", "Military Rum"],
       "award": "Armed Forces Covenant Signatory"
     },
     // LocalBusiness schema for local SEO
@@ -231,7 +231,7 @@ export default function Home() {
                     We didn't set out to start a spirits company. Between us, we served 17 years in the Royal Corps of Signals. What we wanted was simple: a proper drink to share with mates - something with character, made by people who give a damn. When we couldn't find it, we decided to make it ourselves.
                   </p>
                   <p>
-                    We blend Caribbean rum and put it through the pot stills at our British partner distillery. The result? Vanilla and caramel upfront, warm spice through the middle, and a finish smooth enough to sip neat - but bold enough to hold its own in a cocktail.
+                    We blend Caribbean rum at our British partner distillery. The result? Vanilla and caramel upfront, warm spice through the middle, and a finish smooth enough to sip neat - but bold enough to hold its own in a cocktail.
                   </p>
                   <p>
                     Whether you're mixing drinks at home or just unwinding after a long week, this is rum that doesn't let you down. We built it that way on purpose.{' '}
@@ -283,7 +283,7 @@ export default function Home() {
               <ScrollReveal delay={2}>
                 <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20 text-center">
                   <h3 className="text-lg font-serif font-bold text-gold-300 mb-2">Small Batch. Properly Made.</h3>
-                  <p className="text-parchment-300 text-sm">Pot stilled at our British partner distillery. Extended copper contact. Every batch small enough to pay attention to.</p>
+                  <p className="text-parchment-300 text-sm">Made at our British partner distillery. Every batch small enough to pay attention to.</p>
                 </div>
               </ScrollReveal>
               <ScrollReveal delay={3}>

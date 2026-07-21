@@ -52,7 +52,7 @@ const faqSchema = {
       name: 'Where is Jerry Can Spirits rum made?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Our rum is distilled at our British partner distillery in the UK. We use their pot stills combined with Caribbean rum base to create our signature spirits.',
+        text: 'Our rum is made at our British partner distillery in the UK, from a Caribbean rum base.',
       },
     },
     {
@@ -63,14 +63,9 @@ const faqSchema = {
         text: 'While we prioritise UK sourcing wherever possible (local botanicals, British oak), quality rum base traditionally comes from the Caribbean where rum-making expertise originates. We use Caribbean rum as our foundation because some things simply cannot be replicated.',
       },
     },
-    {
-      '@type': 'Question',
-      name: 'What makes your distillation process different?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: 'We work with a British partner distillery whose copper pot stills provide extended vapour contact. This keeps the spirit in vapour form longer, building complex esters and flavours while creating an exceptionally smooth, soft finish.',
-      },
-    },
+    // TODO(copy-regen): the "What makes your distillation process different?"
+    // Q&A described the former partner's process (copper stills, vapour,
+    // esters) — removed per the provenance rules; regenerate with founder.
     {
       '@type': 'Question',
       name: 'Is Jerry Can Spirits a small batch rum?',
@@ -109,7 +104,7 @@ export default function Ethos() {
             <div className="relative w-full max-w-3xl mx-auto mb-8">
               <Image
                 src="/images/hero/Compass_Still.webp"
-                alt="A compass and copper pot still representing the distillation process"
+                alt="A compass and copper pot still"
                 width={1200}
                 height={600}
                 className="rounded-lg"
@@ -270,30 +265,12 @@ export default function Ethos() {
                   <h3 className="text-2xl font-serif font-bold text-white mb-4">
                     Selection: Working With the Right Distillery
                   </h3>
+                  {/* TODO(copy-regen): this section described the former partner's
+                      distillation process (copper stills, vapour contact, esters) —
+                      removed per the provenance rules; regenerate with founder. */}
                   <p className="text-parchment-300 mb-6">
-                    We work with a British partner distillery whose people take the same approach to distillation that we take to everything else. Their copper pot stills are the right tool for the job. Extended vapour contact. Proper copper interaction. No shortcuts.
+                    We work with a British partner distillery whose people take the same approach to their craft that we take to everything else. No shortcuts.
                   </p>
-
-                  {/* Details - Always Visible */}
-                  <div className="mt-6">
-                    <div className="bg-jerry-green-800/60 rounded-lg p-6">
-                      <h4 className="text-gold-300 font-semibold mb-3">The Distillery Approach</h4>
-                      <div className="text-sm text-parchment-300 space-y-4">
-                        <div>
-                          <strong className="text-gold-300">Copper-Lined Innovation</strong>
-                          <p>Extended vapour contact with copper creates multiple ester chambers, building complex flavours and a remarkably smooth finish</p>
-                        </div>
-                        <div>
-                          <strong className="text-gold-300">Master Craftsmanship</strong>
-                          <p>Expert distillers with proven knowledge in spirit development and flavour profiling</p>
-                        </div>
-                        <div>
-                          <strong className="text-gold-300">Engineering Excellence</strong>
-                          <p>The copper does the work it has been doing for centuries. Multiple vapour chambers, maximum contact time, complex esters, smooth finish.</p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
                 </div>
               </div>
 
@@ -323,8 +300,6 @@ export default function Ethos() {
                         <div>
                           <h5 className="text-gold-300 font-semibold mb-2">Traditional Foundation</h5>
                           <ul className="text-sm text-parchment-300 space-y-1">
-                            <li>• Pot distilled</li>
-                            <li>• Careful cut selection</li>
                             <li>• Time-tested methods</li>
                             <li>• Artisan attention to detail</li>
                           </ul>
