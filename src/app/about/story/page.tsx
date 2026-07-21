@@ -142,6 +142,7 @@ export default function OurStory() {
                   I served with the Royal Corps of Signals. Deployments to the Arctic and desert outposts – places where your equipment really gets put to the test. We learned to put our faith in gear that gets the job done, not in the likes of flashy new kit. The most reliable stuff is the unflashy stuff.
                 </p>
                 <p className="text-parchment-300 leading-relaxed">
+                  {/* TODO(copy-regen): "Whether you're on some grand expedition or just getting through a tough Tuesday" is the banned hedging formula; story is regeneration queue item 2, rewrite there. */}
                   Life after the military was different for all of us. We all went on to do our own thing, but we retained that same basic understanding. A piece of kit that works, a design that&apos;s functional, a product that&apos;s reliable – these are non-negotiables. Whether you&apos;re on some grand expedition or just getting through a tough Tuesday, that&apos;s what matters.
                 </p>
               </div>
@@ -424,6 +425,7 @@ export default function OurStory() {
               The Jerry Can Promise
             </h2>
             <p className="text-xl text-parchment-300 max-w-3xl mx-auto">
+              {/* TODO(copy-regen): reversal formula ("not just X, it's Y"); story is regeneration queue item 2, rewrite there. */}
               It&apos;s not just a name. It&apos;s the standard we hold ourselves to.
             </p>
           </div>

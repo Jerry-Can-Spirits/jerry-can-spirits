@@ -253,7 +253,7 @@ export default function StarRating({ slug, className = '' }: StarRatingProps) {
           {hasVoted ? (
             <div className="flex items-center gap-2">
               <span className="text-gold-300 text-sm font-medium">
-                {showThankYou ? 'Thanks for rating!' : 'You rated this cocktail'}
+                {showThankYou ? 'Thanks for rating.' : 'You rated this cocktail'}
               </span>
               {rating > 0 && (
                 <span className="text-gold-400 text-sm">

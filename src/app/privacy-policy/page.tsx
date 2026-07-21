@@ -111,7 +111,7 @@ export default function PrivacyPolicy() {
                 3.2 The Expedition Log
               </h3>
               <p className="text-white mb-3 leading-relaxed">
-                The Expedition Log is an opt-in public registry for founding supporters. When you submit an entry, we collect your name, approximate location (town or city level), bottle type, and bottle number. This information is displayed publicly on our website.
+                The Expedition Log is an opt-in public registry of the people who bought the first bottles. When you submit an entry, we collect your name, approximate location (town or city level), bottle type, and bottle number. This information is displayed publicly on our website.
               </p>
               <p className="text-white mb-3 leading-relaxed">
                 The legal basis for processing this data is your consent, given when you submit the form.

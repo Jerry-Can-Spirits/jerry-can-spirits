@@ -31,19 +31,19 @@ export function cfOgImage(idOrUrl: string, alt: string): OgImage[] {
 /** Brand-default OG: homepage hero. Used when no page-specific image exists. */
 export const OG_IMAGE: OgImage[] = cfOgImage(
   'beed84d3-c77d-4ecf-c85f-29719bdea000',
-  'Jerry Can Spirits® — Veteran-Owned British Spiced Rum',
+  'Jerry Can Spirits®: Veteran-Owned British Spiced Rum',
 )
 
 /** OG image for cocktail/Field Manual section pages. */
 export const OG_IMAGE_COCKTAIL: OgImage[] = cfOgImage(
   'images-hero-cocktail_hero-webp',
-  'Jerry Can Spirits® Field Manual — cocktail recipes',
+  'Jerry Can Spirits® Field Manual: cocktail recipes',
 )
 
 /** OG image for shop/spirits pages without a product hero. */
 export const OG_IMAGE_SPIRITS: OgImage[] = cfOgImage(
   'images-hero-compass_still-webp',
-  'Jerry Can Spirits® — small-batch British spirits',
+  'Jerry Can Spirits®: small-batch British spirits',
 )
 
 export const baseOpenGraph = {

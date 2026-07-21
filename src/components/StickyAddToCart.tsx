@@ -80,7 +80,7 @@ export default function StickyAddToCart({
         disabled={isLoading || added}
         className="shrink-0 min-h-11 px-4 py-2.5 bg-gold-500 hover:bg-gold-400 text-jerry-green-900 text-sm font-bold rounded-lg transition-colors disabled:opacity-60"
       >
-        {multiVariant ? 'Choose options' : added ? 'Added' : isLoading ? '...' : 'Add to Cart'}
+        {multiVariant ? 'Choose options' : added ? 'Added' : isLoading ? '...' : 'Add to basket'}
       </button>
     </div>
   )

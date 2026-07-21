@@ -206,7 +206,7 @@ Based in the UK, Jerry Can Spirits® is a small operation run by two mates who c
             <a href="#social-media" className="px-4 py-2 bg-jerry-green-800/60 hover:bg-jerry-green-700/60 text-parchment-200 rounded-lg text-sm font-medium transition-colors">Social Media</a>
             <a href="#company-info" className="px-4 py-2 bg-jerry-green-800/60 hover:bg-jerry-green-700/60 text-parchment-200 rounded-lg text-sm font-medium transition-colors">Company Info</a>
             <a href="#press-contacts" className="px-4 py-2 bg-jerry-green-800/60 hover:bg-jerry-green-700/60 text-parchment-200 rounded-lg text-sm font-medium transition-colors">Press Contacts</a>
-            <a href="#inquiry-form" className="px-4 py-2 bg-jerry-green-800/60 hover:bg-jerry-green-700/60 text-parchment-200 rounded-lg text-sm font-medium transition-colors">Media Inquiry</a>
+            <a href="#enquiry-form" className="px-4 py-2 bg-jerry-green-800/60 hover:bg-jerry-green-700/60 text-parchment-200 rounded-lg text-sm font-medium transition-colors">Media Enquiry</a>
             <a href="/contact/media/kit/" className="px-4 py-2 bg-gold-500 hover:bg-gold-400 text-jerry-green-900 rounded-lg text-sm font-semibold transition-colors">Download Media Kit</a>
           </div>
 
@@ -1112,9 +1112,9 @@ Based in the UK, Jerry Can Spirits® is a small operation run by two mates who c
           </section>
 
           {/* ==================== MEDIA INQUIRY FORM ==================== */}
-          <section id="inquiry-form" className="mb-16 scroll-mt-24">
+          <section id="enquiry-form" className="mb-16 scroll-mt-24">
             <h2 className="text-2xl font-serif font-bold text-parchment-50 mb-6 text-center">
-              Media Inquiry Form
+              Media Enquiry Form
             </h2>
             <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
               <form onSubmit={handleSubmit} className="space-y-6">
@@ -1168,7 +1168,7 @@ Based in the UK, Jerry Can Spirits® is a small operation run by two mates who c
                   </div>
                   <div>
                     <label htmlFor="subject" className="block text-sm font-medium text-parchment-200 mb-2">
-                      Inquiry Type *
+                      Enquiry Type *
                     </label>
                     <select
                       id="subject"
@@ -1178,14 +1178,14 @@ Based in the UK, Jerry Can Spirits® is a small operation run by two mates who c
                       onChange={handleChange}
                       className="w-full px-4 py-3 bg-jerry-green-700/50 border border-gold-500/30 rounded-lg text-parchment-50 focus:border-gold-400 focus:ring-2 focus:ring-gold-400/20 focus:outline-hidden transition-colors duration-200"
                     >
-                      <option value="">Select inquiry type</option>
+                      <option value="">Select enquiry type</option>
                       <option value="Press Release">Press Release Request</option>
                       <option value="Interview Request">Interview Request</option>
                       <option value="Product Information">Product Information</option>
                       <option value="Media Kit">Media Kit Request</option>
                       <option value="Partnership Opportunity">Partnership Opportunity</option>
                       <option value="Event Coverage">Event Coverage</option>
-                      <option value="Other">Other Media Inquiry</option>
+                      <option value="Other">Other Media Enquiry</option>
                     </select>
                   </div>
                 </div>
@@ -1202,7 +1202,7 @@ Based in the UK, Jerry Can Spirits® is a small operation run by two mates who c
                     value={formData.message}
                     onChange={handleChange}
                     className="w-full px-4 py-3 bg-jerry-green-700/50 border border-gold-500/30 rounded-lg text-parchment-50 placeholder-parchment-400 focus:border-gold-400 focus:ring-2 focus:ring-gold-400/20 focus:outline-hidden transition-colors duration-200 resize-vertical"
-                    placeholder="Please provide details about your media inquiry, including deadline requirements, publication details, and specific information needed..."
+                    placeholder="Please provide details about your media enquiry, including deadline requirements, publication details, and specific information needed..."
                   />
                 </div>
 
@@ -1213,10 +1213,10 @@ Based in the UK, Jerry Can Spirits® is a small operation run by two mates who c
                       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                       </svg>
-                      <span className="font-semibold">Media Inquiry Sent!</span>
+                      <span className="font-semibold">Media enquiry sent</span>
                     </div>
                     <p className="text-parchment-200 text-sm">
-                      Thank you for your media inquiry. Our press team will respond within 24 hours.
+                      Thank you for your media enquiry. Our press team will respond within 24 hours.
                     </p>
                   </div>
                 )}
@@ -1227,7 +1227,7 @@ Based in the UK, Jerry Can Spirits® is a small operation run by two mates who c
                       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16c-.77.833.192 2.5 1.732 2.5z" />
                       </svg>
-                      <span className="font-semibold">Inquiry Failed to Send</span>
+                      <span className="font-semibold">Enquiry failed to send</span>
                     </div>
                     <p className="text-parchment-200 text-sm">
                       {errorMessage || 'Please try again or contact us directly at press@jerrycanspirits.co.uk'}
@@ -1250,7 +1250,7 @@ Based in the UK, Jerry Can Spirits® is a small operation run by two mates who c
                       </>
                     ) : (
                       <>
-                        Submit Media Inquiry
+                        Submit Media Enquiry
                         <svg
                           className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300"
                           fill="none"

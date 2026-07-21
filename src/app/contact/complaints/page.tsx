@@ -265,7 +265,7 @@ export default function Complaints() {
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                     </svg>
-                    <span className="font-semibold">Complaint Submitted Successfully!</span>
+                    <span className="font-semibold">Complaint received</span>
                   </div>
                   <p className="text-parchment-200 text-sm">
                     Your complaint has been received and logged. Our customer service team will investigate and respond within 3-5 business days.

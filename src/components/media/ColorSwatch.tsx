@@ -36,7 +36,7 @@ export default function ColorSwatch({ name, hex, className = '' }: ColorSwatchPr
 
       {copied && (
         <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-gold-500 text-jerry-green-900 text-xs px-2 py-1 rounded-sm font-semibold whitespace-nowrap">
-          Copied!
+          Copied
         </span>
       )}
     </button>

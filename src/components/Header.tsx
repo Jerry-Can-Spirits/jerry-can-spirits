@@ -113,7 +113,7 @@ export default function Header() {
         { name: 'Sustainability', href: '/sustainability/', description: 'Recycling & local sourcing' },
         { name: 'Friends & Partners', href: '/friends/', description: 'Our trusted collaborators' },
         { name: 'Where the 5% Goes', href: '/giving/', description: 'Military charity contributions' },
-        { name: 'The Expedition Log', href: '/expedition-log/', description: 'Founding supporters' },
+        { name: 'The Expedition Log', href: '/expedition-log/', description: 'The first-bottle registry' },
         { name: 'FAQ', href: '/faq/', description: 'Common questions answered' },
       ]
     },
@@ -436,7 +436,7 @@ export default function Header() {
                   openCart()
                 }}
                 className="relative text-parchment-100 hover:text-parchment-50 p-3 transition-all duration-200 hover:scale-110"
-                aria-label="Open cart"
+                aria-label="Open basket"
               >
                 <ShoppingCartIcon className="w-5 h-5" />
                 {itemCount > 0 && (

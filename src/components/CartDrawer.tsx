@@ -249,7 +249,7 @@ export default function CartDrawer() {
               ref={closeButtonRef}
               onClick={closeCart}
               className="p-3 hover:bg-jerry-green-800/50 rounded-lg transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
-              aria-label="Close cart"
+              aria-label="Close basket"
             >
               <svg
                 className="w-6 h-6 text-parchment-300"
@@ -339,7 +339,7 @@ export default function CartDrawer() {
                     d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
                   />
                 </svg>
-                <p className="text-parchment-300">Your cart is empty</p>
+                <p className="text-parchment-300">Your basket is empty</p>
                 <Link
                   href="/shop/product/jerry-can-spirits-expedition-spiced-rum/"
                   onClick={closeCart}
@@ -578,7 +578,7 @@ export default function CartDrawer() {
                               <p className="mt-0.5 text-xs text-parchment-400">
                                 {shortfall > 0
                                   ? `Spend £${shortfall.toFixed(2)} more to use this code.`
-                                  : "This code can't be applied to your basket — it may have expired or already been used."}
+                                  : "This code can't be applied to your basket. It may have expired or already been used."}
                               </p>
                             )}
                           </div>
