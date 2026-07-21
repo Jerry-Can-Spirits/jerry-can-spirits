@@ -85,14 +85,20 @@ export default async function BatchDetailPage({ params }: PageProps) {
   const batchId = `batch-${batchNumber}`
 
   const db = await getD1()
-  const [batch, stats, cocktails, ingredients] = await Promise.all([
+  const [batch, stats, ingredients] = await Promise.all([
     getBatch(db, batchId),
     getBatchStats(db, batchId),
-    client.fetch<FeaturedCocktail[]>(featuredCocktailsQuery),
     getBatchIngredients(db, batchId),
   ])
 
   if (!batch) notFound()
+
+  // Non-essential CMS data: a Sanity outage must not 500 the passport (a page
+  // reached by scanning a bottle QR — all its real data is in D1). Degrade to no
+  // featured cocktails rather than taking the whole page down.
+  const cocktails = await client
+    .fetch<FeaturedCocktail[]>(featuredCocktailsQuery)
+    .catch(() => [] as FeaturedCocktail[])
 
   const pageUrl = `https://jerrycanspirits.co.uk/batch/${batchNumber}/`
 

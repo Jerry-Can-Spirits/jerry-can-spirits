@@ -54,25 +54,41 @@ async function isValidSanitySignature(
 // products/update handler: revalidate the specific page plus the listing
 // surfaces it can appear on, so a publish in Studio propagates in seconds
 // instead of waiting out the hour-long `revalidate = 3600` window.
-function pathsForDocument(doc: { _type?: string; slug?: string; shopifyHandle?: string }): string[] {
+// A Sanity slug is { _type: 'slug', current: string }. This webhook's projection
+// is empty (the full document is sent), so doc.slug arrives as that object, not a
+// string — tolerate both shapes so revalidation works regardless of any future
+// dashboard projection.
+function slugString(slug: unknown): string | undefined {
+  if (typeof slug === 'string') return slug;
+  if (slug && typeof slug === 'object' && typeof (slug as { current?: unknown }).current === 'string') {
+    return (slug as { current: string }).current;
+  }
+  return undefined;
+}
+
+function pathsForDocument(doc: { _type?: string; slug?: unknown; shopifyHandle?: unknown }): string[] {
+  const slug = slugString(doc.slug);
+  const handle = typeof doc.shopifyHandle === 'string' ? doc.shopifyHandle : undefined;
   switch (doc._type) {
     case 'product':
       // The PDP route param is the Shopify handle, which is the Sanity
       // product's shopifyHandle. Also refresh the listings the card sits on.
       return [
-        ...(doc.shopifyHandle ? [`/shop/product/${doc.shopifyHandle}`] : []),
+        ...(handle ? [`/shop/product/${handle}`] : []),
         '/shop/spirits',
         '/shop/barware',
         '/shop/clothing',
       ];
     case 'cocktail':
-      return [...(doc.slug ? [`/field-manual/cocktails/${doc.slug}`] : []), '/field-manual/cocktails'];
+      return [...(slug ? [`/field-manual/cocktails/${slug}`] : []), '/field-manual/cocktails'];
     case 'ingredient':
-      return [...(doc.slug ? [`/field-manual/ingredients/${doc.slug}`] : []), '/field-manual/ingredients'];
+      return [...(slug ? [`/field-manual/ingredients/${slug}`] : []), '/field-manual/ingredients'];
     case 'equipment':
-      return [...(doc.slug ? [`/field-manual/equipment/${doc.slug}`] : []), '/field-manual/equipment'];
+      return [...(slug ? [`/field-manual/equipment/${slug}`] : []), '/field-manual/equipment'];
     case 'guide':
-      return [...(doc.slug ? [`/guides/${doc.slug}`] : []), '/guides'];
+      return [...(slug ? [`/guides/${slug}`] : []), '/guides'];
+    // Empty dashboard Filter means any _type can arrive (including deletes).
+    // Unknown types produce no paths and are acknowledged with a 200 below.
     default:
       return [];
   }
@@ -113,7 +129,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Invalid payload' }, { status: 400 });
     }
 
-    const doc = payload as { _type?: string; slug?: string; shopifyHandle?: string };
+    const doc = payload as { _type?: string; slug?: unknown; shopifyHandle?: unknown };
     const paths = pathsForDocument(doc);
 
     if (paths.length === 0) {

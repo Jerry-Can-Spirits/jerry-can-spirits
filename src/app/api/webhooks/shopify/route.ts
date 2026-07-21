@@ -59,6 +59,25 @@ export const dynamic = 'force-dynamic';
 
 // ── Handlers ────────────────────────────────────────────────────────
 
+// Validate the orders/create payload shape BEFORE consuming the idempotency
+// token, so a malformed order is rejected with a 400 (no Shopify retry, no token
+// burned) rather than throwing mid-flight after the token is committed. Only the
+// fields the handler dereferences are checked; optional GA4 fields are guarded at
+// their own use sites.
+function parseShopifyOrder(p: Record<string, unknown>): ShopifyOrder | null {
+  if (typeof p.id !== 'number' || typeof p.order_number !== 'number') return null
+  if (typeof p.created_at !== 'string') return null
+  if (!Array.isArray(p.line_items) || p.line_items.length === 0) return null
+  for (const li of p.line_items) {
+    if (typeof li !== 'object' || li === null) return null
+    const l = li as Record<string, unknown>
+    if (typeof l.title !== 'string' || typeof l.quantity !== 'number' || typeof l.product_id !== 'number') {
+      return null
+    }
+  }
+  return p as unknown as ShopifyOrder
+}
+
 async function handleOrderCreated(
   order: ShopifyOrder,
   kv: KVNamespace,
@@ -363,11 +382,11 @@ export async function POST(request: Request) {
 
     switch (topic) {
       case SHOPIFY_WEBHOOK_TOPICS.ORDERS_CREATE: {
-        if (typeof p.id !== 'number' || !Array.isArray(p.line_items)) {
-          console.error('[webhook] orders/create payload missing required fields');
+        const order = parseShopifyOrder(p);
+        if (!order) {
+          console.error('[webhook] orders/create payload failed validation');
           return NextResponse.json({ error: 'Invalid payload' }, { status: 400 });
         }
-        const order = payload as ShopifyOrder;
         // Idempotency guard — Shopify delivers at-least-once and retries on any
         // non-2xx. Record the order first; on a duplicate/retry, skip every
         // side effect below so we never mint a second reward code, re-increment
@@ -377,7 +396,16 @@ export async function POST(request: Request) {
           console.log(`[webhook] orders/create #${order.order_number} already processed — skipping duplicate delivery`);
           break;
         }
-        await handleOrderCreated(order, kv, adminToken, db, klaviyoKey);
+        // The idempotency token is already committed above, so isolate these
+        // side effects: a transient failure in a non-critical step (bottles-sold
+        // Admin write, social-proof KV put) must not throw out and, via a retry
+        // the guard then skips, strand the referral + GA4 purchase below.
+        try {
+          await handleOrderCreated(order, kv, adminToken, db, klaviyoKey);
+        } catch (err) {
+          console.error('[webhook] handleOrderCreated failed for order #%s (non-fatal):', order.order_number, err);
+          Sentry.captureException(err, { tags: { source: 'shopify-webhook', phase: 'order-created' } });
+        }
         if (adminToken) {
           // Non-fatal: a referral-conversion failure (e.g. a transient D1 write
           // after the reward code is already minted on Shopify) must not throw
