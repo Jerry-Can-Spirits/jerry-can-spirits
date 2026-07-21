@@ -41,7 +41,7 @@ const faqSchema = {
       name: 'Where is Jerry Can Spirits rum made?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Our rum is distilled at our British partner distillery in the UK. We use Welsh water and source molasses locally where possible, reducing waste and supporting local producers.',
+        text: 'We work with suppliers who share our standards, and keep our supply chain as short as we sensibly can.',
       },
     },
     {
