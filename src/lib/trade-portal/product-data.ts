@@ -131,7 +131,9 @@ function makeRow(tier: PricingRow['tier'], label: string, discount_pct: number):
   const case_inc = Math.round(standard * (1 - discount_pct / 100))
   const bottle_inc = Math.round(case_inc / EXPEDITION_SPICED.case.units_per_case)
   const case_ex = Math.round(case_inc / VAT_DIVISOR)
-  const bottle_ex = Math.round(bottle_inc / VAT_DIVISOR)
+  // Derive the ex-VAT bottle from the exact inc-VAT case, not the already-rounded
+  // bottle_inc, so it doesn't compound rounding error against the case figure.
+  const bottle_ex = Math.round(case_inc / EXPEDITION_SPICED.case.units_per_case / VAT_DIVISOR)
   return {
     tier,
     label,

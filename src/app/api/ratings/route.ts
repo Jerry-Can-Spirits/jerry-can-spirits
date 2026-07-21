@@ -169,8 +169,11 @@ export async function POST(request: Request) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ secret: turnstileSecret, response: turnstileToken }),
     })
-    const tsData = await tsRes.json() as { success: boolean }
-    if (!tsData.success) {
+    if (!tsRes.ok) {
+      return NextResponse.json({ error: 'Bot check is temporarily unavailable. Please try again.' }, { status: 503 })
+    }
+    const tsData = (await tsRes.json().catch(() => null)) as { success?: unknown } | null
+    if (!tsData || tsData.success !== true) {
       return NextResponse.json({ error: 'Bot check failed.' }, { status: 400 })
     }
 

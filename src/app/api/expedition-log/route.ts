@@ -94,8 +94,11 @@ export async function POST(request: Request) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ secret: TURNSTILE_SECRET_KEY, response: turnstileToken }),
     })
-    const turnstileData = await turnstileRes.json() as { success: boolean }
-    if (!turnstileData.success) {
+    if (!turnstileRes.ok) {
+      return NextResponse.json({ error: 'Bot check is temporarily unavailable. Please try again.' }, { status: 503 })
+    }
+    const turnstileData = (await turnstileRes.json().catch(() => null)) as { success?: unknown } | null
+    if (!turnstileData || turnstileData.success !== true) {
       return NextResponse.json({ error: 'Bot check failed.' }, { status: 400 })
     }
 
