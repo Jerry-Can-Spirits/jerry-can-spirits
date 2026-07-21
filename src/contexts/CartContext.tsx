@@ -31,6 +31,10 @@ interface CartContextType {
   // wrongly telling the shopper their basket is empty.
   loadFailed: boolean
   retryLoad: () => Promise<void>
+  // Surface the provider-level failure toast from anywhere that can't set it
+  // directly (e.g. the card-level Buy it now, whose checkout hand-off happens
+  // outside addToCart). Keeps every buy path from failing silently.
+  showError: (message: string) => void
   openCart: () => void
   closeCart: () => void
   addToCart: (variantId: string, quantity?: number) => Promise<void>
@@ -292,6 +296,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     [cart]
   )
 
+  const showError = useCallback((message: string) => setCartError(message), [])
+
   const value = useMemo<CartContextType>(
     () => ({
       cart,
@@ -299,6 +305,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       isCartOpen,
       loadFailed,
       retryLoad: loadCart,
+      showError,
       openCart,
       closeCart,
       addToCart,
@@ -309,7 +316,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       updateAttributes,
       itemCount,
     }),
-    [cart, isLoading, isCartOpen, loadFailed, loadCart, openCart, closeCart, addToCart, updateQuantity, removeItem, applyDiscountCode, removeDiscountCode, updateAttributes, itemCount]
+    [cart, isLoading, isCartOpen, loadFailed, loadCart, showError, openCart, closeCart, addToCart, updateQuantity, removeItem, applyDiscountCode, removeDiscountCode, updateAttributes, itemCount]
   )
 
   return (

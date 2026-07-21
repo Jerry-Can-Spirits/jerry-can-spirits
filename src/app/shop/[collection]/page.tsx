@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { getProductsByCollection, getProduct, type ShopifyProduct } from '@/lib/shopify'
+import ShopError from '@/components/ShopError'
 import type { Metadata } from 'next'
 import Breadcrumbs from '@/components/Breadcrumbs'
 import { OG_IMAGE } from '@/lib/og'
@@ -137,29 +138,7 @@ export default async function CollectionPage({
   }
 
   if (error) {
-    return (
-      <main className="min-h-screen py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-2xl mx-auto text-center space-y-6">
-            <div className="inline-block px-4 py-2 bg-red-800/60 backdrop-blur-sm rounded-full border border-red-500/30 mb-6">
-              <span className="text-red-300 text-sm font-semibold uppercase tracking-widest">
-                Connection Error
-              </span>
-            </div>
-            <h1 className="text-4xl font-serif font-bold text-white">Shopify Connection Failed</h1>
-            <div className="bg-red-900/20 border border-red-500/30 rounded-lg p-6 text-left">
-              <p className="text-red-300 font-mono text-sm">{error}</p>
-            </div>
-            <Link
-              href="/shop/"
-              className="inline-block px-8 py-3 bg-gold-500 text-jerry-green-900 font-semibold rounded-lg hover:bg-gold-400 transition-colors"
-            >
-              Back to Shop
-            </Link>
-          </div>
-        </div>
-      </main>
-    )
+    return <ShopError />
   }
 
   if (products.length === 0) {
