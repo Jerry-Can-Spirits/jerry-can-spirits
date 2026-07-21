@@ -340,6 +340,27 @@ export async function getAllCollections(): Promise<ShopifyCollectionSummary[]> {
 
 // Fetch single product by handle
 // SECURE: Uses GraphQL variables instead of string interpolation
+// Product metafield identifiers, shared by the getProduct query below and the
+// product-page consumer, so a field can never be requested in one place and read
+// from another (the namespace-mismatch bug class). The Storefront API returns
+// ONLY the exact namespace/key pairs listed here. `specifications/volume` and
+// `specifications/pack_size` are not yet set in Shopify (probed 21 Jul 2026), so
+// their consumers fall back until those metafields are created.
+export const PRODUCT_METAFIELDS = [
+  ['specifications', 'age_statement'],
+  ['specifications', 'rum_type'],
+  ['specifications', 'distillation_method'],
+  ['specifications', 'abv'],
+  ['specifications', 'origin'],
+  ['specifications', 'region'],
+  ['specifications', 'colour'],
+  ['specifications', 'awards'],
+  ['specifications', 'volume'],
+  ['specifications', 'pack_size'],
+  ['legal', 'duty_statement'],
+  ['custom', 'pre_order_sold'],
+] as const
+
 export async function getProduct(handle: string): Promise<ShopifyProduct | null> {
   const query = `
     query GetProduct($handle: String!) {
@@ -398,18 +419,7 @@ export async function getProduct(handle: string): Promise<ShopifyProduct | null>
             }
           }
         }
-        metafields(identifiers: [
-          {namespace: "specifications", key: "age_statement"},
-          {namespace: "specifications", key: "rum_type"},
-          {namespace: "specifications", key: "distillation_method"},
-          {namespace: "specifications", key: "abv"},
-          {namespace: "specifications", key: "origin"},
-          {namespace: "specifications", key: "region"},
-          {namespace: "specifications", key: "colour"},
-          {namespace: "specifications", key: "awards"},
-          {namespace: "legal", key: "duty_statement"},
-          {namespace: "custom", key: "pre_order_sold"}
-        ]) {
+        metafields(identifiers: [${PRODUCT_METAFIELDS.map(([n, k]) => '{namespace: "' + n + '", key: "' + k + '"}').join(', ')}]) {
           namespace
           key
           value

@@ -88,7 +88,7 @@ export default function TermsOfService() {
                   <strong className="text-gold-300">Company Number:</strong> 16618770 (registered in England and Wales)
                 </p>
                 <p className="text-white mb-2">
-                  <strong className="text-gold-300">Registered Address:</strong> 167-169 Great Portland Street, Mayfair, London, W1W 5PA
+                  <strong className="text-gold-300">Registered Address:</strong> 167-169 Great Portland Street, Mayfair, London, W1W 5PF
                 </p>
                 <p className="text-white mb-2">
                   <strong className="text-gold-300">VAT Registration:</strong> GB 499 6389 03
@@ -427,7 +427,7 @@ export default function TermsOfService() {
                     <strong className="text-gold-300">Address:</strong><br />
                     Jerry Can Spirits® Ltd<br />
                     167-169 Great Portland Street<br />
-                    Mayfair, London, W1W 5PA
+                    Mayfair, London, W1W 5PF
                   </p>
                 </div>
               </div>
