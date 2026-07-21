@@ -123,7 +123,7 @@ export default function HeroSection() {
             {/* Trust Indicators */}
             <div className="pt-8 border-t border-jerry-green-700">
               <p className="text-gold-300 text-sm font-medium text-center lg:text-left">
-                Real Ingredients. No Artificial Flavouring. Veteran Owned. Distilled in Wales.
+                Real Ingredients. No Artificial Flavouring. Veteran Owned. Made in Britain.
               </p>
             </div>
           </div>

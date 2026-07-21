@@ -2,7 +2,7 @@ export default function WhyJerryCan() {
   const pillars = [
     {
       title: 'Real Ingredients',
-      description: 'Madagascan vanilla, Ceylon cinnamon, ginger, orange peel, cloves, cassia, agave, molasses. No artificial flavouring. That is what goes in. Nothing else.'
+      description: 'Madagascan vanilla, Ceylon cinnamon, ginger, orange peel, cloves, cassia, agave. No artificial flavouring. That is what goes in. Nothing else.'
     },
     {
       title: 'Veteran Heritage',

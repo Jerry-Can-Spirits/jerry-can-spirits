@@ -22,7 +22,7 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
       'Rum gifts for people who actually drink it. Expedition Spiced Rum from a veteran-owned British spirits house. Real ingredients, small batch, built properly.',
     introBody: [
       "Most rum gifts are chosen by people who don't drink rum. You can tell. Generic bottle, generic packaging, forgotten a week later.",
-      'Expedition Spiced Rum is a different kind of gift. Caribbean rum base, molasses, and a spice blend of Madagascan vanilla, Ceylon cinnamon, ginger, cassia, orange peel, and bourbon oak. Pot-distilled at our British partner distillery. 700 numbered bottles for general release. Real ingredients. Every one of them.',
+      'Expedition Spiced Rum is a different kind of gift. Caribbean rum base and a spice blend of Madagascan vanilla, Ceylon cinnamon, ginger, cassia, orange peel, and bourbon oak. Pot-distilled at our British partner distillery. 700 numbered bottles for general release. Real ingredients. Every one of them.',
       'It is built for people who take their drink seriously. The kind of person who notices the difference between something made properly and something made to a price point.',
       'Veteran-owned. No investors. No shortcuts. 5% of every sale goes to forces charities.',
       'If you are looking for a rum gift that means something. This is it.',
@@ -35,7 +35,7 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
     seoTitle: 'What Makes Expedition Spiced Rum a Proper Rum Gift',
     seoBody: [
       'A rum gift lands differently when it is chosen properly. Not a novelty bottle with a generic label. Not something grabbed from the supermarket shelf because it looked like it might be premium. Expedition Spiced Rum is a gift that says something about the person who gave it.',
-      'Caribbean rum base, molasses, and a spice blend of Madagascan vanilla, Ceylon cinnamon, ginger root, cassia bark, clove, orange peel, and bourbon oak. Pot-distilled at our British partner distillery. 700 numbered bottles for general release. Real ingredients, every one of them.',
+      'Caribbean rum base and a spice blend of Madagascan vanilla, Ceylon cinnamon, ginger root, cassia bark, clove, orange peel, and bourbon oak. Pot-distilled at our British partner distillery. 700 numbered bottles for general release. Real ingredients, every one of them.',
       'It is veteran-owned. Bootstrapped. No investors, no shortcuts. 5% of every sale goes to forces charities. This is the kind of brand people feel good about buying from. And when the person receiving it looks it up, they will understand why you chose it.',
     ],
     pillars: [
@@ -49,11 +49,11 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
     h1: 'British Spiced Rum',
     metaTitle: 'British Spiced Rum | Small Batch | Jerry Can Spirits®',
     metaDescription:
-      'Small-batch British spiced rum, pot-distilled at our British partner distillery. Real spices, no artificial flavourings. Veteran-owned, Welsh-made.',
+      'Small-batch British spiced rum, pot-distilled at our British partner distillery. Real spices, no artificial flavourings. Veteran-owned, British-made.',
     introBody: [
       'Most spiced rum is made to a formula. Base spirit, artificial flavourings, a label that leans on nostalgia. The result is consistent, inoffensive, and forgettable.',
-      'Expedition Spiced Rum is built differently. Caribbean rum base, molasses, and a hand-selected spice blend: Madagascan vanilla, Ceylon cinnamon, ginger root, cassia bark, clove, orange peel, and bourbon oak. No artificial flavourings. Nothing that does not belong there.',
-      'It is pot-distilled in Wales by our British partner distillery. 700 numbered bottles for general release per batch. When a batch is gone, that run is finished. Each batch has the kind of subtle variation that comes from doing things properly rather than at industrial scale.',
+      'Expedition Spiced Rum is built differently. Caribbean rum base and a hand-selected spice blend: Madagascan vanilla, Ceylon cinnamon, ginger root, cassia bark, clove, orange peel, and bourbon oak. No artificial flavourings. Nothing that does not belong there.',
+      'It is made in Britain by our British partner distillery. 700 numbered bottles for general release per batch. When a batch is gone, that run is finished. Each batch has the kind of subtle variation that comes from doing things properly rather than at industrial scale.',
       'We are two Royal Corps of Signals veterans. We built this because we could not find what we wanted on the shelf. 17 years of service between us, and the same standards applied here.',
       '40% ABV. 700ml. Built to be sipped, not mixed and forgotten.',
     ],
@@ -142,14 +142,14 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
       'Rum gifts for men who drink properly. Small-batch British spiced rum, real ingredients, no shortcuts. 5% of every sale to forces charities.',
     introBody: [
       'The best gifts for him are the ones he would not buy himself. Not because he does not want them. Because he has not got around to it, or because he does not feel justified spending the money on himself.',
-      'Expedition Spiced Rum sits in that category. Caribbean rum, molasses, Madagascan vanilla, Ceylon cinnamon, ginger, cassia, clove, orange peel, bourbon oak. Pot-distilled at our British partner distillery. 700 numbered bottles for general release per batch. The kind of bottle you pick up, look at, and put somewhere visible.',
+      'Expedition Spiced Rum sits in that category. Caribbean rum, Madagascan vanilla, Ceylon cinnamon, ginger, cassia, clove, orange peel, bourbon oak. Pot-distilled at our British partner distillery. 700 numbered bottles for general release per batch. The kind of bottle you pick up, look at, and put somewhere visible.',
       'It is for the man who drinks properly. Who takes his time. Who notices the difference between something built with standards and something built to a margin.',
       'Veteran-owned. No investors. 5% of every sale to forces charities. Built by people who mean it.',
     ],
     seoTitle: 'Not a Generic Gift. A Bottle Worth Noticing.',
     seoBody: [
       'The best gifts for him do not need to be explained. They communicate something clearly. Expedition Spiced Rum is a 700ml statement. The packaging is considered. The name has a story behind it. The rum inside is made properly.',
-      'Caribbean rum, molasses, Madagascan vanilla, Ceylon cinnamon, ginger, cassia, clove, orange peel, bourbon oak. Pot-distilled in Wales. 700 numbered bottles for general release per batch. Built by two Royal Corps of Signals veterans who could not find what they wanted on the shelf.',
+      'Caribbean rum, Madagascan vanilla, Ceylon cinnamon, ginger, cassia, clove, orange peel, bourbon oak. Made in Britain. 700 numbered bottles for general release per batch. Built by two Royal Corps of Signals veterans who could not find what they wanted on the shelf.',
       'He will either drink it properly and appreciate every detail of it, or he will put it somewhere visible and people will ask about it. Either outcome works.',
     ],
     pillars: [
@@ -174,14 +174,14 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
       'Rum gifts for women who take their drink seriously. Small-batch British spiced rum, real ingredients, no shortcuts. 5% of every sale to forces charities.',
     introBody: [
       'The assumption that a rum gift for her should be softer, sweeter, or less serious is wrong. Expedition Spiced Rum does not adjust for the recipient.',
-      'Caribbean rum base, molasses, Madagascan vanilla, Ceylon cinnamon, ginger, cassia, clove, orange peel, bourbon oak. Pot-distilled at our British partner distillery. 700 numbered bottles for general release per batch. The kind of bottle you pick up, look at, and put somewhere visible.',
+      'Caribbean rum base, Madagascan vanilla, Ceylon cinnamon, ginger, cassia, clove, orange peel, bourbon oak. Pot-distilled at our British partner distillery. 700 numbered bottles for general release per batch. The kind of bottle you pick up, look at, and put somewhere visible.',
       'It is for the woman who drinks properly. Who takes her time. Who would rather have one good bottle than three forgettable ones.',
       'Veteran-owned. No investors. 5% of every sale to forces charities. Built by people who mean it.',
     ],
     seoTitle: 'A Rum Gift for the Person Who Drinks Properly.',
     seoBody: [
       'Expedition Spiced Rum does not adjust for the recipient. The spice blend is the same. The distillation process is the same. The 40% ABV is the same. This is a rum built for people who take their drink seriously, regardless of who is pouring it.',
-      'Caribbean rum base, molasses, Madagascan vanilla, Ceylon cinnamon, ginger, cassia, clove, orange peel, bourbon oak. Pot-distilled at our British partner distillery. 700 numbered bottles for general release per batch. One bottle, made properly, no concessions.',
+      'Caribbean rum base, Madagascan vanilla, Ceylon cinnamon, ginger, cassia, clove, orange peel, bourbon oak. Pot-distilled at our British partner distillery. 700 numbered bottles for general release per batch. One bottle, made properly, no concessions.',
       'The best gifts are the ones the recipient would not buy for themselves. Not because they would not want it. Because they have not got around to it, or because they do not feel justified spending the money on themselves. This is that gift.',
     ],
     pillars: [
@@ -345,7 +345,7 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
     metaDescription:
       'Stock up on Expedition Spiced Rum and save. Same small-batch British rum, better value. Veteran-owned, produced in small batches in Britain.',
     introBody: [
-      'Stock up and save. The same Expedition Spiced Rum at better value when you order more. Caribbean rum base, molasses, real spices. Built properly, every batch.',
+      'Stock up and save. The same Expedition Spiced Rum at better value when you order more. Caribbean rum base, real spices. Built properly, every batch.',
       'Every bottle comes from the same small batch, pot-distilled at our British partner distillery. 700 numbered bottles for general release per run. When a batch is gone, it is gone.',
       'If you drink it regularly, this is how you stay stocked.',
     ],
@@ -369,7 +369,7 @@ const giftSetsConfig: CategoryConfig = {
   h1: 'Gift Sets',
   metaTitle: 'Gift Sets | Jerry Can Spirits®',
   metaDescription:
-    'Rum gift sets and experience bundles from Jerry Can Spirits. Veteran-owned, Welsh-distilled. Built for people who appreciate quality.',
+    'Rum gift sets and experience bundles from Jerry Can Spirits. Veteran-owned, British-made. Built for people who appreciate quality.',
   introBody: [
     'For anyone who holds themselves to a higher standard. Each gift set is built around Expedition Spiced Rum. Pot-distilled in the UK, real ingredients, no shortcuts.',
   ],
