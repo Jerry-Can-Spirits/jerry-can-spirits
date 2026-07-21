@@ -376,10 +376,12 @@ export default async function ProductPage({
   const category = getCategoryFromProductType(product.productType)
 
   // Get ABV and volume from metafields if available
-  const abvMetafield = product.metafields?.find(m => m?.namespace === 'custom' && m?.key === 'abv')
-  const volumeMetafield = product.metafields?.find(m => m?.namespace === 'custom' && m?.key === 'volume')
-  const packSizeMetafield = product.metafields?.find(m => m?.namespace === 'custom' && m?.key === 'pack_size')
-  const abv = abvMetafield?.value || '40'
+  const abvMetafield = product.metafields?.find(m => m?.namespace === 'specifications' && m?.key === 'abv')
+  const volumeMetafield = product.metafields?.find(m => m?.namespace === 'specifications' && m?.key === 'volume')
+  const packSizeMetafield = product.metafields?.find(m => m?.namespace === 'specifications' && m?.key === 'pack_size')
+  // specifications/abv is stored WITH the unit ("40%"); strip it so the JSON-LD
+  // (which appends "%") does not render "40%%", and the plain fallback still works.
+  const abv = (abvMetafield?.value || '40').replace(/%/g, '').trim()
   const volumePerBottle = volumeMetafield?.value || '700ml'
 
   // Determine pack size (for multi-packs like 6-bottle packs)
@@ -460,8 +462,10 @@ export default async function ProductPage({
       url: 'https://jerrycanspirits.co.uk',
       address: {
         '@type': 'PostalAddress',
-        addressLocality: 'Blackpool',
-        addressRegion: 'Lancashire',
+        streetAddress: '167-169 Great Portland Street',
+        addressLocality: 'London',
+        addressRegion: 'Greater London',
+        postalCode: 'W1W 5PF',
         addressCountry: 'GB',
       },
     },
