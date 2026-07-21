@@ -156,6 +156,9 @@ export default function PrivacyPolicy() {
               </p>
             </section>
 
+            {/* Pour IQ is a separate company; this disclosure is HELD until the
+                corporate separation completes (JCS Ltd is data controller for
+                licence holders until then). Remove with the separation, not before. */}
             <section className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20">
               <h2 className="text-2xl font-serif font-bold text-white mb-4 pb-2 border-b border-gold-500/20">
                 3.5 Pour IQ™
