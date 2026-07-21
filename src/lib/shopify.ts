@@ -115,6 +115,8 @@ export interface CartLine {
     product: {
       title: string;
       handle: string;
+      productType?: string;
+      tags?: string[];
     };
     image?: {
       url: string;
@@ -521,6 +523,8 @@ const CART_FIELDS = `
             product {
               title
               handle
+              productType
+              tags
             }
             image {
               url
@@ -804,34 +808,29 @@ export async function applyDiscount(cartId: string, discountCodes: string[]): Pr
   }
 }
 
-// Determine primary collection category from tags or productType
-export function detectProductCategory(product: ShopifyProduct): string | null {
-  const tags = product.tags || []
-  const productType = product.productType?.toLowerCase() || ''
+export type ProductCategory = 'spirits' | 'barware' | 'clothing' | null
 
-  // Check tags first
-  if (tags.some(tag => tag.toLowerCase().includes('drink') || tag.toLowerCase().includes('spirit') || tag.toLowerCase().includes('rum'))) {
-    return 'spirits'
-  }
-  if (tags.some(tag => tag.toLowerCase().includes('barware') || tag.toLowerCase().includes('glass'))) {
-    return 'barware'
-  }
-  if (tags.some(tag => tag.toLowerCase().includes('clothing') || tag.toLowerCase().includes('apparel'))) {
-    return 'clothing'
-  }
+// The coarse functional bucket used by the cart cross-sell (Stage 3.5): is this
+// the spirit, or an accessory? Deliberately NOT the fine SEO collections — the
+// complement rule only needs "spirit vs accessory". Tags win over productType.
+// Shared so cart lines and pool items categorise identically.
+export function resolveCategory(productType?: string, tags?: string[]): ProductCategory {
+  const t = (tags ?? []).map((x) => x.toLowerCase())
+  if (t.some((x) => x.includes('drink') || x.includes('spirit') || x.includes('rum'))) return 'spirits'
+  if (t.some((x) => x.includes('barware') || x.includes('glass'))) return 'barware'
+  if (t.some((x) => x.includes('clothing') || x.includes('apparel'))) return 'clothing'
 
-  // Fallback to productType
-  if (productType.includes('spirit') || productType.includes('drink') || productType.includes('rum')) {
-    return 'spirits'
-  }
-  if (productType.includes('barware') || productType.includes('glass')) {
-    return 'barware'
-  }
-  if (productType.includes('clothing') || productType.includes('apparel')) {
-    return 'clothing'
-  }
+  const pt = (productType ?? '').toLowerCase()
+  if (pt.includes('spirit') || pt.includes('drink') || pt.includes('rum')) return 'spirits'
+  if (pt.includes('barware') || pt.includes('glass')) return 'barware'
+  if (pt.includes('clothing') || pt.includes('apparel')) return 'clothing'
 
   return null
+}
+
+// Determine primary collection category from tags or productType
+export function detectProductCategory(product: ShopifyProduct): string | null {
+  return resolveCategory(product.productType, product.tags)
 }
 
 // Get smart product recommendations based on current product

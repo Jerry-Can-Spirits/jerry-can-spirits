@@ -4,6 +4,7 @@ import { useState, useEffect, useMemo } from 'react'
 import Image from 'next/image'
 import { useCart } from '@/contexts/CartContext'
 import { FREE_SHIPPING_THRESHOLD_GBP } from '@/lib/pricing'
+import { resolveCategory, type ProductCategory } from '@/lib/shopify'
 
 interface CartUpsellItem {
   title: string
@@ -14,6 +15,7 @@ interface CartUpsellItem {
   variantTitle?: string
   price: number
   currencyCode: string
+  category: ProductCategory
 }
 
 function formatPrice(price: number, currencyCode: string): string {
@@ -61,6 +63,15 @@ export default function CartUpsell() {
     () => new Set(cart?.lines.map((l) => l.merchandise.product.handle) ?? []),
     [cart?.lines],
   )
+  // Which coarse categories are already in the cart, so we can offer the one it
+  // lacks rather than more of the same.
+  const cartHasSpirits = useMemo(
+    () =>
+      (cart?.lines ?? []).some(
+        (l) => resolveCategory(l.merchandise.product.productType, l.merchandise.product.tags) === 'spirits',
+      ),
+    [cart?.lines],
+  )
   const subtotal = cart ? parseFloat(cart.cost.subtotalAmount.amount) : 0
 
   const { hero, alternates, belowThreshold, heroClears } = useMemo(() => {
@@ -69,27 +80,43 @@ export default function CartUpsell() {
       return { hero: null as CartUpsellItem | null, alternates: [] as CartUpsellItem[], belowThreshold: false, heroClears: false }
     }
 
+    // Category-aware complement (Stage 3.5): no spirit in the cart → lead with the
+    // spirit (the rum — the thing we most want in every basket); spirit already
+    // there → lead with an accessory (complete the serve). Fall back to the whole
+    // pool if the target category has nothing eligible.
+    const target: ProductCategory = cartHasSpirits ? 'barware' : 'spirits'
+    const inTarget = eligible.filter((p) => p.category === target)
+    const candidates = inTarget.length > 0 ? inTarget : eligible
+
+    // Alternates: the rest of the complement category first (curated order), then
+    // anything else eligible, capped at two.
+    const alternatesFor = (heroHandle: string) =>
+      [
+        ...candidates.filter((p) => p.handle !== heroHandle),
+        ...eligible.filter((p) => p.category !== target && p.handle !== heroHandle),
+      ].slice(0, 2)
+
     const shortfall = FREE_SHIPPING_THRESHOLD_GBP - subtotal
 
-    // Already clear of free delivery: no shortfall to bridge, so fall back to the
-    // curated order and soften the framing.
+    // Already clear of free delivery: no shortfall to bridge, so lead with the
+    // complement in curated order and soften the framing.
     if (shortfall <= 0) {
-      return { hero: eligible[0], alternates: eligible.slice(1, 3), belowThreshold: false, heroClears: false }
+      const hero = candidates[0]
+      return { hero, alternates: alternatesFor(hero.handle), belowThreshold: false, heroClears: false }
     }
 
-    // Prefer a product that CLEARS the threshold; among clearers take the
-    // cheapest (least overshoot). If nothing clears, take the closest from below
-    // (the dearest). reduce keeps the earlier item on ties, and `eligible` is in
-    // curated order, so ties break by curated order.
-    const clearers = eligible.filter((p) => p.price >= shortfall)
+    // Within the complement set, prefer a product that CLEARS the threshold; among
+    // clearers take the cheapest (least overshoot). If nothing clears, take the
+    // closest from below (the dearest). reduce keeps the earlier item on ties, and
+    // `candidates` is in curated order, so ties break by curated order.
+    const clearers = candidates.filter((p) => p.price >= shortfall)
     const hero =
       clearers.length > 0
         ? clearers.reduce((best, p) => (p.price < best.price ? p : best))
-        : eligible.reduce((best, p) => (p.price > best.price ? p : best))
+        : candidates.reduce((best, p) => (p.price > best.price ? p : best))
 
-    const alternates = eligible.filter((p) => p.handle !== hero.handle).slice(0, 2)
-    return { hero, alternates, belowThreshold: true, heroClears: hero.price >= shortfall }
-  }, [pool, cartHandles, subtotal])
+    return { hero, alternates: alternatesFor(hero.handle), belowThreshold: true, heroClears: hero.price >= shortfall }
+  }, [pool, cartHandles, subtotal, cartHasSpirits])
 
   if (loadingProducts) {
     return (
