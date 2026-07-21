@@ -13,6 +13,7 @@ import {
 import { createDiscountCode, createReferrerRewardCode } from '@/lib/shopify-admin';
 import { generateReferralCode } from '@/lib/shopify-admin';
 import { sendGa4Purchase } from '@/lib/ga4-measurement-protocol';
+import { sendMetaCapiPurchase } from '@/lib/meta-capi-purchase';
 
 const KLAVIYO_API_BASE = 'https://a.klaviyo.com/api';
 const KLAVIYO_REVISION = '2024-10-15';
@@ -400,6 +401,14 @@ export async function POST(request: Request) {
           order,
           env.GA4_MEASUREMENT_ID as string | undefined,
           env.GA4_API_SECRET as string | undefined,
+        );
+        // Server-side Meta CAPI purchase attribution — recovers the WebView
+        // segment where the client Pixel never fires. Marketing-consent-gated
+        // via the stamped attribute; never throws. See meta-capi-purchase.ts.
+        await sendMetaCapiPurchase(
+          order,
+          env.META_CAPI_ACCESS_TOKEN as string | undefined,
+          env.META_CAPI_TEST_CODE as string | undefined,
         );
         break;
       }
