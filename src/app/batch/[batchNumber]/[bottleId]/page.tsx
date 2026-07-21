@@ -4,7 +4,7 @@ import { notFound } from 'next/navigation'
 import Breadcrumbs from '@/components/Breadcrumbs'
 import BottleCertificate from '@/components/BottleCertificate'
 import ShareButton from '@/components/ShareButton'
-import { getD1, getBatch, type LabelType } from '@/lib/d1'
+import { getD1, getBottleByLabel, type LabelType } from '@/lib/d1'
 
 export const dynamic = 'force-dynamic'
 
@@ -67,9 +67,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   const { labelType, bottleNumber } = parsed
   const db = await getD1()
-  const batch = await getBatch(db, `batch-${batchNumber}`)
+  const bottle = await getBottleByLabel(db, `batch-${batchNumber}`, labelType, bottleNumber)
 
-  if (!batch) return { title: 'Bottle Not Found' }
+  if (!bottle) return { title: 'Bottle Not Found' }
+  const batch = bottle.batch
 
   const displayLabel = labelDisplayNames[labelType]
   return {
@@ -88,8 +89,12 @@ export default async function BottleDetailPage({ params }: PageProps) {
   const batchId = `batch-${batchNumber}`
 
   const db = await getD1()
-  const batch = await getBatch(db, batchId)
-  if (!batch) notFound()
+  // Certify only bottles that were actually produced: validate the exact bottle
+  // row, not just the batch plus a hardcoded ceiling. Mirrors the expedition-log
+  // registration API, which already rejects unproduced bottles via the same helper.
+  const bottle = await getBottleByLabel(db, batchId, labelType, bottleNumber)
+  if (!bottle) notFound()
+  const batch = bottle.batch
 
   const displayLabel = labelDisplayNames[labelType]
   const pageUrl = `https://jerrycanspirits.co.uk/batch/${batchNumber}/${bottleId}/`

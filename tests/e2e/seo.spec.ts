@@ -13,7 +13,7 @@ test.describe('SEO Meta Tags', () => {
     { url: '/', name: 'Homepage' },
     { url: '/about/story/', name: 'Story' },
     { url: '/shop/', name: 'Shop' },
-    { url: '/shop/drinks/', name: 'Drinks' },
+    { url: '/shop/spirits/', name: 'Spirits' },
     { url: '/contact/', name: 'Contact' },
     { url: '/faq/', name: 'FAQ' },
   ]

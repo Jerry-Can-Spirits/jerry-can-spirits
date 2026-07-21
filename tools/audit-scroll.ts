@@ -33,7 +33,7 @@ const CONFIG = {
   knownPaths: [
     '/',
     '/about/story/',
-    '/shop/drinks/',
+    '/shop/spirits/',
     '/field-manual/',
     '/field-manual/cocktails/',
     '/field-manual/ingredients/',

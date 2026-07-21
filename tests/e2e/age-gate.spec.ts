@@ -173,7 +173,7 @@ test.describe('Age Gate on Protected Pages', () => {
 
   const protectedPages = [
     '/shop/',
-    '/shop/drinks/',
+    '/shop/spirits/',
     '/field-manual/cocktails/',
     '/about/story/',
   ]

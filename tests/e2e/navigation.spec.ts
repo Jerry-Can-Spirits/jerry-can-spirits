@@ -111,7 +111,7 @@ test.describe('Page Load Tests', () => {
     { url: '/about/story/', name: 'Story' },
     { url: '/about/team/', name: 'Team' },
     { url: '/shop/', name: 'Shop' },
-    { url: '/shop/drinks/', name: 'Drinks' },
+    { url: '/shop/spirits/', name: 'Spirits' },
     { url: '/field-manual/', name: 'Field Manual' },
     { url: '/field-manual/cocktails/', name: 'Cocktails' },
     { url: '/contact/', name: 'Contact' },
