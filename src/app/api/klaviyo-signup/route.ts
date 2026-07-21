@@ -77,7 +77,7 @@ export async function POST(request: Request) {
     // Honeypot check
     if (website && website.trim() !== '') {
       console.log('Honeypot triggered - potential bot signup blocked')
-      return NextResponse.json({ success: true, message: 'Thank you for signing up!' })
+      return NextResponse.json({ success: true, message: 'Thank you for signing up.' })
     }
 
     // Rate limiting via KV (works across all Worker isolates)

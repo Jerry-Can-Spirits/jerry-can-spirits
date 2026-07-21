@@ -86,14 +86,14 @@ export default function AddToCartButton({ variantId, productTitle, price, curren
             : 'bg-gold-500 hover:bg-gold-400 text-jerry-green-900'
         }`}
       >
-        {addError ? 'Try again' : added ? 'Added' : isLoading ? 'Adding...' : 'Add to Cart'}
+        {addError ? 'Try again' : added ? 'Added' : isLoading ? 'Adding...' : 'Add to basket'}
       </button>
       <button
         onClick={handleBuyNow}
         disabled={busy}
         className="w-full px-4 py-2 border border-gold-500/40 hover:border-gold-400 text-gold-300 hover:text-gold-200 text-sm font-semibold rounded-lg transition-all duration-200 disabled:opacity-50"
       >
-        {isBuyingNow ? 'Going to checkout...' : 'Buy it now'}
+        {isBuyingNow ? 'Going to checkout...' : 'Order now'}
       </button>
     </div>
   )

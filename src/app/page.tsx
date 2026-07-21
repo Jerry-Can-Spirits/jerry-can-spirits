@@ -234,7 +234,8 @@ export default function Home() {
                     We blend Caribbean rum at our British partner distillery. The result? Vanilla and caramel upfront, warm spice through the middle, and a finish smooth enough to sip neat - but bold enough to hold its own in a cocktail.
                   </p>
                   <p>
-                    Whether you're mixing drinks at home or just unwinding after a long week, this is rum that doesn't let you down. We built it that way on purpose.{' '}
+                    {/* TODO(copy-regen): hedging opener cut; section rewrite with founder. */}
+                    This is rum that doesn't let you down. We built it that way on purpose.{' '}
                     <Link href="/shop/spiced-rum/" className="text-gold-300 hover:text-gold-400 underline underline-offset-2">
                       Find it in the shop.
                     </Link>

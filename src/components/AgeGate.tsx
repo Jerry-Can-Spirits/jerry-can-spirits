@@ -249,7 +249,7 @@ export default function AgeGate({ onVerified }: AgeGateProps) {
               Every Great Expedition Has Its Time
             </h3>
             <p className="text-gold-400 text-lg mb-6 leading-relaxed">
-              Join us when you're ready to embark on the adventure - we'll be here when you're of age!
+              We'll be here when you're of age.
             </p>
             <button
               ref={rejectionButtonRef}

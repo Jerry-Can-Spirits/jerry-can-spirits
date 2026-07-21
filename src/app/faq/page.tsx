@@ -40,7 +40,8 @@ const faqs = [
   },
   {
     question: "Are your products suitable for vegans?",
-    answer: "Yes! Our rum is crafted using traditional methods with no animal products in the production process, making it suitable for vegans and vegetarians."
+    // TODO(copy-regen): "crafted using traditional methods" cut (craft-without-substance).
+    answer: "Yes. Our rum has no animal products in the production process, making it suitable for vegans and vegetarians."
   },
   {
     question: "How should I store my Jerry Can Spirits rum?",
@@ -100,7 +101,7 @@ const faqs = [
   },
   {
     question: "Do you offer corporate gifts or bulk orders?",
-    answer: "Yes! We offer corporate gifting and bulk order options. For custom orders, branded packaging, or volume discounts, contact us at hello@jerrycanspirits.co.uk."
+    answer: "Yes. We offer corporate gifting and bulk order options. For custom orders, branded packaging, or volume discounts, contact us at hello@jerrycanspirits.co.uk."
   },
 ]
 

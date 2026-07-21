@@ -7,17 +7,17 @@ import Image from 'next/image'
 const HERO_IMAGES = [
   {
     src: 'https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/beed84d3-c77d-4ecf-c85f-29719bdea000/public',
-    alt: 'Expedition Spiced Rum — front',
+    alt: 'Expedition Spiced Rum, front',
     label: 'Front',
   },
   {
     src: 'https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/fffd5ce1-6411-4ab4-6c32-aacf2caa1700/public',
-    alt: 'Expedition Spiced Rum — angled',
+    alt: 'Expedition Spiced Rum, angled',
     label: 'Angled',
   },
   {
     src: 'https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/8ad4c4c5-6c38-4342-c42a-652af5529f00/public',
-    alt: 'Expedition Spiced Rum — in the field',
+    alt: 'Expedition Spiced Rum, in the field',
     label: 'In the field',
   },
 ]
@@ -93,20 +93,20 @@ export default function HeroSection() {
               </p>
             </div>
 
-            {/* CTA Buttons - Desktop */}
-            <div className="hidden sm:flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-8">
+            {/* CTA - Desktop. One CTA per piece of content (VOICE hard rule):
+                Order is the sole button; Our Story is a text link below. */}
+            <div className="hidden sm:flex flex-col gap-4 justify-center lg:justify-start mb-8">
               <Link
                 href="/shop/product/jerry-can-spirits-expedition-spiced-rum/"
-                className="bg-linear-to-r from-gold-600 to-gold-500 hover:from-gold-500 hover:to-gold-400 text-jerry-green-900 px-8 py-4 rounded-lg font-semibold uppercase tracking-wide transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 flex items-center justify-center"
+                className="bg-linear-to-r from-gold-600 to-gold-500 hover:from-gold-500 hover:to-gold-400 text-jerry-green-900 px-8 py-4 rounded-lg font-semibold uppercase tracking-wide transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 flex items-center justify-center sm:self-center lg:self-start"
               >
                 Order Now
               </Link>
-
               <Link
                 href="/about/story/"
-                className="border-2 border-gold-500 text-gold-300 hover:text-jerry-green-900 hover:bg-gold-500 px-8 py-4 rounded-lg font-semibold uppercase tracking-wide transition-all duration-300 flex items-center justify-center"
+                className="text-gold-300 hover:text-gold-400 text-sm underline underline-offset-4 transition-colors text-center lg:text-left"
               >
-                Our Story
+                Our story
               </Link>
             </div>
 
