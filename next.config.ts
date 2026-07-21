@@ -190,6 +190,9 @@ const nextConfig: NextConfig = {
   // Redirects for URL structure changes and removed content
   async redirects() {
     return [
+      // Pour IQ is a separate company; these redirects (and the privacy-policy
+      // §3.5 and terms-of-service trademark notice) are HELD until the
+      // corporate separation completes — do not remove them piecemeal.
       // Pour IQ moved to its own worker at app.pour-iq.co.uk (2026-07-12);
       // old page paths re-rooted (/trade/pouriq/menus → /menus). The API
       // redirect keeps stale open tabs from writing to the retired JCS
@@ -237,6 +240,13 @@ const nextConfig: NextConfig = {
       {
         source: '/shop/gifts-and-experience/:path*',
         destination: '/shop/gift-sets/:path*',
+        permanent: true,
+      },
+      // The Pour IQ pilot charter page was unpublished with the corporate
+      // separation (Audit 8 PR A); send the venue's bookmarks to the portal.
+      {
+        source: '/trade/pilots/:path*',
+        destination: '/trade/',
         permanent: true,
       },
       // Sanity Studio moved to Sanity hosting — send old bookmarks there.
