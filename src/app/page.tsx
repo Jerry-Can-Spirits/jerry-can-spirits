@@ -95,7 +95,7 @@ export default function Home() {
         "streetAddress": "167-169 Great Portland Street",
         "addressLocality": "London",
         "addressRegion": "Greater London",
-        "postalCode": "W1W 5PA",
+        "postalCode": "W1W 5PF",
         "addressCountry": "GB"
       },
       "sameAs": [
@@ -128,7 +128,7 @@ export default function Home() {
         "streetAddress": "167-169 Great Portland Street",
         "addressLocality": "London",
         "addressRegion": "Greater London",
-        "postalCode": "W1W 5PA",
+        "postalCode": "W1W 5PF",
         "addressCountry": "GB"
       },
       "geo": {
