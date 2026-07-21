@@ -15,7 +15,6 @@ interface SignupBody {
   firstName: string
   email: string
   interests?: string[]
-  listId?: string
   // Required consent flag — server enforces this even though the form
   // gates submission client-side, so a direct POST cannot subscribe a
   // user without explicit opt-in. UK GDPR Article 6/7 hardening.
@@ -63,10 +62,14 @@ export async function POST(request: Request) {
       firstName: rawFirstName,
       email: rawEmail,
       interests = [],
-      listId,
       marketingConsent,
       website,
     } = body
+
+    // The target list is server-controlled: a client must not be able to
+    // subscribe a validated, consented email to an arbitrary Klaviyo list. The
+    // First Pour newsletter is the only signup surface (Uu9vFn).
+    const listId = 'Uu9vFn'
 
     const firstName = rawFirstName?.trim() ?? ''
     const email = rawEmail?.trim().toLowerCase() ?? ''

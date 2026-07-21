@@ -143,11 +143,38 @@ function makeRow(tier: PricingRow['tier'], label: string, discount_pct: number):
   }
 }
 
+// Single source of truth for trade discounts, keyed by the Shopify discount code
+// (what the checkout actually applies). Confirmed in Shopify admin 21 Jul 2026:
+// all percentage codes, £100 minimum order. The PARTNER-n ladder is volume-based
+// (1 = individual bottles 5%, 2 = ~a case 10%, 3 = 2+ cases 15%); TRADE-INTRO is
+// the first-order incentive. TRADE-INTRO and TRADE-PARTNER-3 both sit at 15% by
+// intent (pending review) — mirror Shopify, do not "correct" it here.
+export const TRADE_DISCOUNT_PCT_BY_CODE = {
+  'TRADE-INTRO': 15,
+  'TRADE-PARTNER-1': 5,
+  'TRADE-PARTNER-2': 10,
+  'TRADE-PARTNER-3': 15,
+} as const
+export type TradeDiscountCode = keyof typeof TRADE_DISCOUNT_PCT_BY_CODE
+
+// Minimum order value every trade code enforces in Shopify.
+export const TRADE_MIN_ORDER_GBP = 100
+
+// Canonical tier → discount code (confirmed with Dan 21 Jul 2026). Both the
+// pricing page (PRICING_ROWS) and the order form derive their percentage from
+// TRADE_DISCOUNT_PCT_BY_CODE via this map, so the two surfaces can no longer quote
+// different numbers for the same account.
+const TRADE_CODE_BY_TIER: Record<TradeTier, TradeDiscountCode> = {
+  intro: 'TRADE-INTRO',
+  standard: 'TRADE-PARTNER-2',
+  partner: 'TRADE-PARTNER-3',
+}
+
 export const PRICING_ROWS: PricingRow[] = [
   makeRow('standard_rrp', 'Standard case price', 0),
-  makeRow('intro', 'Intro tier', 5),
-  makeRow('standard', 'Standard tier', 10),
-  makeRow('partner', 'Partner tier', 15),
+  makeRow('intro', 'Intro tier', TRADE_DISCOUNT_PCT_BY_CODE[TRADE_CODE_BY_TIER.intro]),
+  makeRow('standard', 'Standard tier', TRADE_DISCOUNT_PCT_BY_CODE[TRADE_CODE_BY_TIER.standard]),
+  makeRow('partner', 'Partner tier', TRADE_DISCOUNT_PCT_BY_CODE[TRADE_CODE_BY_TIER.partner]),
 ]
 
 export function formatPence(p: number): string {

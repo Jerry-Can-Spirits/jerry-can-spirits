@@ -24,6 +24,10 @@ export interface MetaEventBody {
   eventTime: number
   eventSourceUrl: string
   customData: Record<string, unknown>
+  // Explicit marketing-consent flag; the /api/meta/events route re-checks this
+  // before forwarding any identifiers to Meta CAPI, so client-side gating is not
+  // the only guard.
+  consent: true
 }
 
 export async function hashEmail(email: string): Promise<string> {
@@ -56,6 +60,8 @@ export function trackEventDual(
     eventTime,
     eventSourceUrl,
     customData,
+    // Reached only after the window.Cookiebot.consent.marketing gate above.
+    consent: true,
   }
 
   fetch('/api/meta/events/', {
