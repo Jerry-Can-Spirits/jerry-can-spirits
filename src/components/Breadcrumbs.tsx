@@ -18,6 +18,10 @@ export default function Breadcrumbs({ items, className = '' }: BreadcrumbsProps)
     ...items,
   ]
 
+  // trailingSlash: true — internal hrefs must end in "/" so the links and the
+  // schema item URLs don't 308-hop or mismatch the canonical.
+  const withSlash = (href: string) => (href === '/' || href.endsWith('/') ? href : `${href}/`)
+
   // Generate BreadcrumbList schema
   const breadcrumbSchema = {
     '@context': 'https://schema.org',
@@ -26,7 +30,7 @@ export default function Breadcrumbs({ items, className = '' }: BreadcrumbsProps)
       '@type': 'ListItem',
       position: index + 1,
       name: item.label,
-      item: item.href ? `https://jerrycanspirits.co.uk${item.href}` : undefined,
+      item: item.href ? `https://jerrycanspirits.co.uk${withSlash(item.href)}` : undefined,
     })),
   }
 
@@ -68,7 +72,7 @@ export default function Breadcrumbs({ items, className = '' }: BreadcrumbsProps)
                   </span>
                 ) : (
                   <Link
-                    href={item.href}
+                    href={withSlash(item.href)}
                     className="text-gold-400 hover:text-gold-300 transition-colors"
                   >
                     {item.label}

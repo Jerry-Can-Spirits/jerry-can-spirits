@@ -40,6 +40,9 @@ export interface ShopifyMoney {
 
 export interface ShopifyPriceRange {
   minVariantPrice: ShopifyMoney;
+  // Optional: only some queries fetch it. productOffer() treats an absent max as
+  // "single price" and emits a plain Offer.
+  maxVariantPrice?: ShopifyMoney;
 }
 
 export interface ShopifyMetafield {
@@ -239,6 +242,10 @@ export async function getProductsByCollection(collectionHandle: string): Promise
                   amount
                   currencyCode
                 }
+                maxVariantPrice {
+                  amount
+                  currencyCode
+                }
               }
               images(first: 1) {
                 edges {
@@ -351,6 +358,10 @@ export async function getProduct(handle: string): Promise<ShopifyProduct | null>
         }
         priceRange {
           minVariantPrice {
+            amount
+            currencyCode
+          }
+          maxVariantPrice {
             amount
             currencyCode
           }

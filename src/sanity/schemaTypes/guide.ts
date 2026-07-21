@@ -439,7 +439,7 @@ export default defineType({
           name: 'url',
           title: 'CTA URL',
           type: 'string',
-          description: 'Internal link (e.g., /shop/drinks)'
+          description: 'Internal link (e.g., /shop/spirits)'
         })
       ]
     }),

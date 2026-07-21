@@ -7,7 +7,7 @@ import Breadcrumbs from '@/components/Breadcrumbs'
 import StructuredData from '@/components/StructuredData'
 import { baseOpenGraph, OG_IMAGE } from '@/lib/og'
 import ViewItemListTracker from '@/components/ViewItemListTracker'
-import { safeJsonLd } from '@/lib/jsonLd'
+import { safeJsonLd, productOffer } from '@/lib/jsonLd'
 
 export const metadata: Metadata = {
   title: 'Expedition Gear & Apparel',
@@ -175,19 +175,13 @@ export default async function ClothingPage() {
         '@type': 'Product',
         name: product.title,
         description: product.description,
-        url: `https://jerrycanspirits.co.uk/shop/product/${product.handle}`,
+        url: `https://jerrycanspirits.co.uk/shop/product/${product.handle}/`,
         image: product.images?.[0]?.url,
         brand: {
           '@type': 'Brand',
           name: 'Jerry Can Spirits',
         },
-        offers: {
-          '@type': 'Offer',
-          price: product.priceRange.minVariantPrice.amount,
-          priceCurrency: product.priceRange.minVariantPrice.currencyCode,
-          availability: product.availableForSale ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
-          url: `https://jerrycanspirits.co.uk/shop/product/${product.handle}`,
-        },
+        offers: productOffer(product, { url: `https://jerrycanspirits.co.uk/shop/product/${product.handle}/` }),
       },
     })),
   }
@@ -254,7 +248,7 @@ export default async function ClothingPage() {
           {products.map((product: ShopifyProduct) => (
             <Link
               key={product.id}
-              href={`/shop/product/${product.handle}`}
+              href={`/shop/product/${product.handle}/`}
               className="group bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl border border-gold-500/20 overflow-hidden hover:border-gold-400/40 transition-all duration-300 hover:scale-105"
             >
               {/* Product Image */}

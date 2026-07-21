@@ -17,7 +17,7 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
 
   'rum-gifts': {
     h1: 'Rum Gifts',
-    metaTitle: 'Rum Gifts UK | Jerry Can Spirits®',
+    metaTitle: 'Rum Gifts UK',
     metaDescription:
       'Rum gifts for people who actually drink it. Expedition Spiced Rum from a veteran-owned British spirits house. Real ingredients, small batch, built properly.',
     introBody: [
@@ -47,7 +47,7 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
 
   'spiced-rum': {
     h1: 'British Spiced Rum',
-    metaTitle: 'British Spiced Rum | Small Batch | Jerry Can Spirits®',
+    metaTitle: 'British Spiced Rum | Small Batch',
     metaDescription:
       'Small-batch British spiced rum, pot-distilled at our British partner distillery. Real spices, no artificial flavourings. Veteran-owned, British-made.',
     introBody: [
@@ -73,7 +73,7 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
 
   'cocktail-making-kits': {
     h1: 'Cocktail Making Kits',
-    metaTitle: 'Cocktail Making Kits | Jerry Can Spirits®',
+    metaTitle: 'Cocktail Making Kits',
     metaDescription:
       'Cocktail making kits built for home bars. Proper bar tools paired with small-batch British spiced rum. Everything you need to make a cocktail worth drinking.',
     introBody: [
@@ -104,7 +104,7 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
 
   'bar-accessories': {
     h1: 'Bar Accessories',
-    metaTitle: 'Bar Accessories UK | Home Bar Tools | Jerry Can Spirits®',
+    metaTitle: 'Bar Accessories UK | Home Bar Tools',
     metaDescription:
       'Bar accessories for a proper home bar. Cocktail shakers, jiggers, and glassware. Built to last, selected for people who take their drinks seriously.',
     introBody: [
@@ -137,7 +137,7 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
 
   'gifts-for-him': {
     h1: 'Rum Gifts for Him',
-    metaTitle: 'Rum Gifts for Him | Jerry Can Spirits®',
+    metaTitle: 'Rum Gifts for Him',
     metaDescription:
       'Rum gifts for men who drink properly. Small-batch British spiced rum, real ingredients, no shortcuts. 5% of every sale to forces charities.',
     introBody: [
@@ -169,7 +169,7 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
 
   'gifts-for-her': {
     h1: 'Rum Gifts for Her',
-    metaTitle: 'Rum Gifts for Her | Jerry Can Spirits®',
+    metaTitle: 'Rum Gifts for Her',
     metaDescription:
       'Rum gifts for women who take their drink seriously. Small-batch British spiced rum, real ingredients, no shortcuts. 5% of every sale to forces charities.',
     introBody: [
@@ -201,7 +201,7 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
 
   'rum-glasses': {
     h1: 'Rum Glasses',
-    metaTitle: 'Rum Glasses UK | Best Glass for Rum | Jerry Can Spirits®',
+    metaTitle: 'Rum Glasses UK | Best Glass for Rum',
     metaDescription:
       'The right glass makes a difference. Rum glasses selected for Expedition Spiced Rum. Highballs to tumblers. Shop rum glassware from Jerry Can Spirits.',
     introBody: [
@@ -232,7 +232,7 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
 
   'hip-flasks': {
     h1: 'Hip Flasks',
-    metaTitle: 'Hip Flasks UK | Stainless Steel Hip Flask | Jerry Can Spirits®',
+    metaTitle: 'Hip Flasks UK | Stainless Steel Hip Flask',
     metaDescription:
       'Stainless steel hip flasks from Jerry Can Spirits. Built for the field. A proper flask that holds your drink, seals properly, and survives being carried.',
     introBody: [
@@ -257,7 +257,7 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
 
   'ice-chilling': {
     h1: 'Ice and Chilling',
-    metaTitle: 'Ice and Chilling | Spirit Stones and Chilling Accessories | Jerry Can Spirits®',
+    metaTitle: 'Ice and Chilling | Spirit Stones and Chilling Accessories',
     metaDescription:
       'Stainless steel spirit stones and chilling accessories. Keep your drink cold without diluting it. From Jerry Can Spirits.',
     introBody: [
@@ -282,7 +282,7 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
 
   'cocktail-glasses-glassware': {
     h1: 'Cocktail Glasses',
-    metaTitle: 'Cocktail Glasses UK | Highballs, Tumblers and More | Jerry Can Spirits®',
+    metaTitle: 'Cocktail Glasses UK | Highballs, Tumblers and More',
     metaDescription:
       'Cocktail glasses for the home bar. Highballs, tumblers, hurricane glasses and mixer glasses. The right vessel makes a difference.',
     introBody: [
@@ -314,7 +314,7 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
 
   'cocktail-shakers': {
     h1: 'Cocktail Shakers',
-    metaTitle: 'Cocktail Shakers UK | Stainless Steel Cocktail Shaker | Jerry Can Spirits®',
+    metaTitle: 'Cocktail Shakers UK | Stainless Steel Cocktail Shaker',
     metaDescription:
       'Stainless steel cocktail shakers for the home bar. Seals properly, chills properly, built to last. From Jerry Can Spirits.',
     introBody: [
@@ -341,7 +341,7 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
 
   bundles: {
     h1: 'Bundles',
-    metaTitle: 'Expedition Spiced Rum Bundles | Save When You Stock Up | Jerry Can Spirits®',
+    metaTitle: 'Expedition Spiced Rum Bundles | Save When You Stock Up',
     metaDescription:
       'Stock up on Expedition Spiced Rum and save. Same small-batch British rum, better value. Veteran-owned, produced in small batches in Britain.',
     introBody: [
@@ -353,7 +353,7 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
 
   'new-releases': {
     h1: 'New Releases',
-    metaTitle: 'New Releases | Jerry Can Spirits®',
+    metaTitle: 'New Releases',
     metaDescription:
       'New expressions from Jerry Can Spirits. Veteran-owned British spirits house. Small-batch, built properly, no shortcuts. Every release earns its place.',
     introBody: [
@@ -367,7 +367,7 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
 
 const giftSetsConfig: CategoryConfig = {
   h1: 'Gift Sets',
-  metaTitle: 'Gift Sets | Jerry Can Spirits®',
+  metaTitle: 'Gift Sets',
   metaDescription:
     'Rum gift sets and experience bundles from Jerry Can Spirits. Veteran-owned, British-made. Built for people who appreciate quality.',
   introBody: [
