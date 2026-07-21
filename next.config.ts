@@ -227,6 +227,18 @@ const nextConfig: NextConfig = {
         permanent: true,
         basePath: false,
       },
+      // /shop/gifts-and-experience/ was a byte-identical duplicate of
+      // /shop/gift-sets/ (each self-canonical). One canonical URL now.
+      {
+        source: '/shop/gifts-and-experience',
+        destination: '/shop/gift-sets/',
+        permanent: true,
+      },
+      {
+        source: '/shop/gifts-and-experience/:path*',
+        destination: '/shop/gift-sets/:path*',
+        permanent: true,
+      },
       // Sanity Studio moved to Sanity hosting — send old bookmarks there.
       {
         source: '/studio',
