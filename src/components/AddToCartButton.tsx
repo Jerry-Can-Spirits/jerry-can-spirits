@@ -15,7 +15,7 @@ interface AddToCartButtonProps {
 }
 
 export default function AddToCartButton({ variantId, productTitle, price, currencyCode }: AddToCartButtonProps) {
-  const { cart, addToCart, isLoading } = useCart()
+  const { cart, addToCart, isLoading, showError } = useCart()
   const [added, setAdded] = useState(false)
   const [addError, setAddError] = useState(false)
   const [isBuyingNow, setIsBuyingNow] = useState(false)
@@ -63,7 +63,10 @@ export default function AddToCartButton({ variantId, productTitle, price, curren
       await attachStitchingAttributes(updated)
       window.location.href = gatedCheckout(appendUtmToCheckout(updated.checkoutUrl))
     } catch {
+      // Never fail silently: surface the same provider-level toast the
+      // add-to-cart path uses (PR #945), so a failed Buy it now is visible.
       setIsBuyingNow(false)
+      showError("We couldn't start checkout. Please try again.")
     }
   }
 
