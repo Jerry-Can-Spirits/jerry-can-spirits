@@ -398,7 +398,7 @@ export default async function SpiritsPage() {
                   "name": "Is Jerry Can Spirits rum vegan?",
                   "acceptedAnswer": {
                     "@type": "Answer",
-                    "text": "Yes. Our Expedition Spiced Rum contains no animal products. The base is Caribbean white rum, we use molasses, and the spice blend is entirely plant-based. No honey, no animal-derived filtering agents, no animal products in production."
+                    "text": "Yes. Our Expedition Spiced Rum contains no animal products. The base is Caribbean white rum, and the spice blend is entirely plant-based. No honey, no animal-derived filtering agents, no animal products in production."
                   }
                 },
                 {
@@ -455,7 +455,7 @@ export default async function SpiritsPage() {
             <div className="border-b border-gold-500/10 pb-6">
               <h3 className="text-lg font-semibold text-gold-300 mb-3">Is Jerry Can Spirits rum vegan?</h3>
               <p className="text-parchment-200 leading-relaxed">
-                Yes. Our Expedition Spiced Rum contains no animal products. The base is Caribbean white rum, we use molasses, and the spice blend is entirely plant-based. No honey, no animal-derived filtering agents, no animal products in production.
+                Yes. Our Expedition Spiced Rum contains no animal products. The base is Caribbean white rum, and the spice blend is entirely plant-based. No honey, no animal-derived filtering agents, no animal products in production.
               </p>
             </div>
 
