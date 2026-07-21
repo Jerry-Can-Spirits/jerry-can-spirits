@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { getProduct } from '@/lib/shopify'
+import { getProduct, resolveCategory, type ProductCategory } from '@/lib/shopify'
 import { client } from '@/sanity/lib/client'
 
 // The curated pool lives on the `cartUpsell` singleton in Sanity as an ordered
@@ -17,6 +17,9 @@ interface CartUpsellItem {
   variantTitle?: string
   price: number
   currencyCode: string
+  // Coarse bucket (spirits/barware/clothing) for the category-aware complement
+  // rule — the drawer offers a category the cart doesn't already have.
+  category: ProductCategory
 }
 
 export async function GET() {
@@ -63,6 +66,7 @@ export async function GET() {
         variantTitle: variant.title && variant.title !== 'Default Title' ? variant.title : undefined,
         price: parseFloat(variant.price.amount),
         currencyCode: variant.price.currencyCode,
+        category: resolveCategory(p.productType, p.tags),
       })
     }
 
