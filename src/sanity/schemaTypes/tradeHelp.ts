@@ -9,7 +9,7 @@ export default defineType({
       name: 'title',
       title: 'Page title',
       type: 'string',
-      description: 'Shown at the top of /trade/pouriq/help',
+      description: 'Shown at the top of the Pour IQ help guide (app.pour-iq.co.uk/help)',
       initialValue: 'Pour IQ™ help',
       validation: (Rule) => Rule.required().max(80),
     }),

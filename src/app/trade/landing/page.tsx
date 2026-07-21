@@ -50,7 +50,10 @@ export default async function TradeLandingPage() {
             href="/trade/order/"
             ctaLabel="Go to orders"
           />
-          {hasPourIq ? (
+          {/* Pour IQ is a separate company: tiles render only for venues with a
+              live licence (functional navigation). The greyed upsell tiles were
+              removed as part of the corporate separation. */}
+          {hasPourIq && (
             <TradeTile
               variant="active"
               title="Pour IQ™"
@@ -58,30 +61,14 @@ export default async function TradeLandingPage() {
               href="https://app.pour-iq.co.uk/"
               ctaLabel="Open Pour IQ™"
             />
-          ) : (
-            <TradeTile
-              variant="greyed"
-              title="Pour IQ™"
-              description="Menu and cost engineering for independent UK bars."
-              learnMoreHref="https://pour-iq.co.uk"
-              unavailableNote="Available as an additional service."
-            />
           )}
-          {hasPourIq ? (
+          {hasPourIq && (
             <TradeTile
               variant="active"
               title="Pour IQ™ help"
               description="A working operations guide. How to scan invoices, read margin, fix gotchas."
               href="https://app.pour-iq.co.uk/help"
               ctaLabel="Open guide"
-            />
-          ) : (
-            <TradeTile
-              variant="greyed"
-              title="Pour IQ™ help"
-              description="A working operations guide for the Pour IQ™ platform."
-              learnMoreHref="/trade/pour-iq"
-              unavailableNote="Available with a Pour IQ™ licence."
             />
           )}
           <TradeTile

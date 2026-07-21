@@ -141,29 +141,19 @@ export default function TradePage() {
         </div>
       </section>
 
-      {/* ── Pour IQ: additional service for trade accounts ── */}
-      <section className="py-16 border-t border-gold-500/10">
+      {/* ── Pour IQ: one-line mention only (separate company). ── */}
+      <section className="py-8 border-t border-gold-500/10">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-2xl">
-            <h2 className="text-2xl font-serif font-bold text-white mb-6">
-              Pour IQ™. Menu and cost engineering for independent UK bars.
-            </h2>
-            <p className="text-parchment-300 text-sm leading-relaxed mb-4">
-              Pour IQ™ scans your supplier invoices, costs every serve, and shows what each price rise does to your GP. An additional service for trade accounts.
-            </p>
-            <p className="text-parchment-300 text-sm leading-relaxed mb-4">
-              When a supplier price moves, it shows you which drinks have slipped below your target GP. AI recommendations grounded in the Field Manual.
-            </p>
-            <p className="text-parchment-300 text-sm leading-relaxed mb-6">
-              No hardware. No five-figure setup. One monthly price, no contract, cancel any time.
-            </p>
+          {/* TODO(copy-regen): final wording of this one-line mention needs founder sign-off. */}
+          <p className="text-parchment-400 text-sm leading-relaxed">
+            Pour IQ, menu and cost engineering for independent venues, is built by our founders:{' '}
             <a
               href="https://pour-iq.co.uk"
-              className="inline-flex items-center text-gold-300 hover:text-gold-400 transition-colors text-sm font-semibold border-b border-gold-500/30 hover:border-gold-400 pb-1"
+              className="text-gold-300 hover:text-gold-400 transition-colors border-b border-gold-500/30 hover:border-gold-400"
             >
-              Read about Pour IQ
+              pour-iq.co.uk
             </a>
-          </div>
+          </p>
         </div>
       </section>
 
