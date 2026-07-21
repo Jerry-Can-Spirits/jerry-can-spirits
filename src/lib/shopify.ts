@@ -183,6 +183,7 @@ export async function getProducts(): Promise<ShopifyProduct[]> {
             title
             handle
             description
+            tags
             updatedAt
             priceRange {
               minVariantPrice {
@@ -935,7 +936,7 @@ export async function getSmartRecommendations(
     }
 
     // Available products get priority
-    if (product.availableForSale) {
+    if ((product.variants ?? []).some(v => v.availableForSale)) {
       score += 30
     }
 

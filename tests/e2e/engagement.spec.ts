@@ -34,7 +34,7 @@ const pagesToTest = [
   '/about/story/',
   '/field-manual/',
   '/field-manual/cocktails/',
-  '/shop/drinks/',
+  '/shop/spirits/',
   '/guides/',
   '/faq/',
 ]

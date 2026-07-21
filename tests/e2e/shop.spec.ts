@@ -31,8 +31,8 @@ test.describe('Shop Pages', () => {
     expect(count).toBeGreaterThan(0)
   })
 
-  test('drinks category page loads', async ({ page }) => {
-    await page.goto('/shop/drinks/')
+  test('spirits category page loads', async ({ page }) => {
+    await page.goto('/shop/spirits/')
     await dismissOverlays(page)
 
     const heading = page.getByRole('heading', { level: 1 })
@@ -57,8 +57,8 @@ test.describe('Shop Pages', () => {
 })
 
 test.describe('Product Display', () => {
-  test('drinks page shows product information', async ({ page }) => {
-    await page.goto('/shop/drinks/')
+  test('spirits page shows product information', async ({ page }) => {
+    await page.goto('/shop/spirits/')
     await dismissOverlays(page)
 
     // Look for product cards or sections
@@ -70,7 +70,7 @@ test.describe('Product Display', () => {
   })
 
   test('product pages have pricing information', async ({ page }) => {
-    await page.goto('/shop/drinks/')
+    await page.goto('/shop/spirits/')
     await dismissOverlays(page)
 
     // Check for price messaging
@@ -134,11 +134,11 @@ test.describe('Shop Navigation', () => {
     await page.goto('/shop/')
     await dismissOverlays(page)
 
-    // Navigate to drinks
-    const drinksLink = page.locator('a[href*="/shop/drinks"]').first()
-    if (await drinksLink.isVisible()) {
-      await drinksLink.click()
-      await expect(page).toHaveURL(/\/shop\/drinks/)
+    // Navigate to spirits
+    const spiritsLink = page.locator('a[href*="/shop/spirits"]').first()
+    if (await spiritsLink.isVisible()) {
+      await spiritsLink.click()
+      await expect(page).toHaveURL(/\/shop\/spirits/)
     }
 
     // Navigate back to shop
