@@ -669,7 +669,7 @@ export default function OurStory() {
             <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20">
               <h3 className="text-lg font-semibold text-white mb-3">Where is Jerry Can Spirits based?</h3>
               <p className="text-parchment-300">
-                We&apos;re based in the UK. It&apos;s a home-office operation – nothing glamorous, just us working away. Our <Link href="/shop/product/jerry-can-spirits-expedition-spiced-rum/" className="text-gold-300 hover:text-gold-400 underline">Expedition Spiced Rum</Link> is made with Caribbean rum and molasses, blended at our British partner distillery right here in Britain.
+                We&apos;re based in the UK. It&apos;s a home-office operation – nothing glamorous, just us working away. Our <Link href="/shop/product/jerry-can-spirits-expedition-spiced-rum/" className="text-gold-300 hover:text-gold-400 underline">Expedition Spiced Rum</Link> is made with Caribbean rum, blended at our British partner distillery right here in Britain.
               </p>
             </div>
 
@@ -731,7 +731,7 @@ export default function OurStory() {
                     "name": "Where is Jerry Can Spirits based?",
                     "acceptedAnswer": {
                       "@type": "Answer",
-                      "text": "We're based in the UK. It's a home-office operation – nothing glamorous, just us working away. Our Expedition Spiced Rum is made with Caribbean rum and molasses, blended right here in Britain."
+                      "text": "We're based in the UK. It's a home-office operation – nothing glamorous, just us working away. Our Expedition Spiced Rum is made with Caribbean rum, blended right here in Britain."
                     }
                   },
                   {

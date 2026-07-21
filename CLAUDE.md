@@ -4,12 +4,16 @@
 
 Jerry Can Spirits is a veteran-owned British craft spirits house. Founded by two Royal Signals veterans. Bootstrapped. No investors. No shortcuts.
 
-First expression: Expedition Spiced. Caribbean rum base. Molasses. Macerated at our British partner distillery. Real ingredients. No artificial flavourings.
+First expression: Expedition Spiced. Caribbean rum base. Macerated at our British partner distillery. Real ingredients. No artificial flavourings.
 
 Price: £35 currently; RRP rises to £45 on 1 August 2026.
 5% of profits support military charities.
 Launch date: April 6, 2026.
 Website: jerrycanspirits.co.uk
+
+## Provenance and process claims require founder sign-off
+
+Claims about where or how the rum is produced (distillation location, water source, molasses, sourcing, the named or unnamed producer) carry legal exposure and must not be added, changed, or restored without explicit founder sign-off. The approved framing is British, small batches, our British partner distillery, and Caribbean rum base. Do not assert a Welsh location, a specific water source, or that we use molasses (the Caribbean rum base is fermented upstream, before our process begins, so it describes work we do not do). When a task touches this class of copy, apply the copy discipline: remove a claim only where deletion leaves a clean, truthful sentence, otherwise stop and report rather than invent replacement copy. Run the grep in `docs/PROVENANCE_CHECKLIST.md` before shipping any copy change.
 
 ---
 

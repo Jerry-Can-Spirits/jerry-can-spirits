@@ -52,7 +52,7 @@ const faqSchema = {
       name: 'Where is Jerry Can Spirits rum made?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Our rum is distilled at our British partner distillery in the UK. We use their pot stills combined with Caribbean rum base and pure Welsh water to create our signature spirits.',
+        text: 'Our rum is distilled at our British partner distillery in the UK. We use their pot stills combined with Caribbean rum base to create our signature spirits.',
       },
     },
     {
@@ -60,7 +60,7 @@ const faqSchema = {
       name: 'Why do you use Caribbean rum in a British brand?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'While we prioritise UK sourcing wherever possible (Welsh water, local botanicals, British oak), quality rum base traditionally comes from the Caribbean where rum-making expertise originates. We use Caribbean rum as our foundation because some things simply cannot be replicated.',
+        text: 'While we prioritise UK sourcing wherever possible (local botanicals, British oak), quality rum base traditionally comes from the Caribbean where rum-making expertise originates. We use Caribbean rum as our foundation because some things simply cannot be replicated.',
       },
     },
     {
