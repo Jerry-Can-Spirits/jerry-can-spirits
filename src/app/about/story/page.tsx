@@ -13,7 +13,7 @@ const articleSchema = {
   '@context': 'https://schema.org',
   '@type': 'Article',
   headline: 'Our Story - How Two Veterans Built a British Spirits Company',
-  description: 'How two Royal Signals veterans built a craft spirits company from scratch. No shortcuts. No investors. Expedition Spiced, made with real ingredients, made in Britain.',
+  description: 'How two Royal Signals veterans built a craft spirits company from scratch. No shortcuts. No investors. Expedition Spiced, made with real ingredients in Britain.',
   url: 'https://jerrycanspirits.co.uk/about/story/',
   image: 'https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/images-hero-trail_hero-webp/public',
   author: {
@@ -40,20 +40,20 @@ const articleSchema = {
 
 export const metadata: Metadata = {
   title: "Our Story - Two Veterans Building a Spirits Company",
-  description: "How two Royal Signals veterans built a craft spirits company from scratch. No shortcuts. No investors. Expedition Spiced, made with real ingredients, made in Britain.",
+  description: "How two Royal Signals veterans built a craft spirits company from scratch. No shortcuts. No investors. Expedition Spiced, made with real ingredients in Britain.",
   alternates: {
     canonical: 'https://jerrycanspirits.co.uk/about/story/',
   },
   openGraph: {
     ...baseOpenGraph,
     title: "Our Story | Jerry Can Spirits®",
-    description: "How two Royal Signals veterans built a craft spirits company from scratch. No shortcuts. No investors. Expedition Spiced, made with real ingredients, made in Britain.",
+    description: "How two Royal Signals veterans built a craft spirits company from scratch. No shortcuts. No investors. Expedition Spiced, made with real ingredients in Britain.",
     url: 'https://jerrycanspirits.co.uk/about/story/',
   },
   twitter: {
     card: 'summary_large_image' as const,
     title: "Our Story | Jerry Can Spirits®",
-    description: "How two Royal Signals veterans built a craft spirits company from scratch. No shortcuts. No investors. Expedition Spiced, made with real ingredients, made in Britain.",
+    description: "How two Royal Signals veterans built a craft spirits company from scratch. No shortcuts. No investors. Expedition Spiced, made with real ingredients in Britain.",
     images: OG_IMAGE,
   },
   robots: {
