@@ -4,7 +4,7 @@ import {
   TradeSheetShell,
   TradeSpecGrid,
 } from '@/components/trade-portal/TradeSheetShell'
-import { EXPEDITION_SPICED, formatPence } from '@/lib/trade-portal/product-data'
+import { EXPEDITION_SPICED } from '@/lib/trade-portal/product-data'
 
 export const dynamic = 'force-dynamic'
 
@@ -15,7 +15,7 @@ export default async function ProductFactSheetPage() {
   return (
     <TradeSheetShell
       title="Product Fact Sheet"
-      eyebrow="Expedition Spiced"
+      eyebrow="Expedition Spiced Rum"
       subtitle={p.tagline}
     >
       <TradeSheetSection title="Product">
@@ -26,7 +26,6 @@ export default async function ProductFactSheetPage() {
             { label: 'Base spirit', value: p.base_spirit },
             { label: 'ABV', value: `${p.abv_percent}%` },
             { label: 'Volume', value: `${p.volume_ml}ml` },
-            { label: 'RRP (inc VAT)', value: formatPence(p.rrp_p) },
             { label: 'Country of production', value: p.country_of_production },
             { label: 'Distillery', value: p.distillery },
             { label: 'Brand owner', value: p.brand_owner },
@@ -106,7 +105,7 @@ export default async function ProductFactSheetPage() {
 
       <TradeSheetSection title="Brand">
         <p className="text-sm leading-relaxed">
-          Jerry Can Spirits is veteran-owned and bootstrapped. Founded by two Royal Signals veterans. Macerated at our British partner distillery. 5% of profits go to military charities. Expedition Spiced is the company&apos;s first release.
+          Jerry Can Spirits is veteran-owned and bootstrapped. Founded by two Royal Signals veterans. Macerated at our British partner distillery. 5% of profits go to military charities. Expedition Spiced Rum is the company&apos;s first release.
         </p>
       </TradeSheetSection>
 

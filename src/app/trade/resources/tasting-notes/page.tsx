@@ -11,7 +11,7 @@ export default async function TastingNotesPage() {
   return (
     <TradeSheetShell
       title="Tasting Notes"
-      eyebrow="Expedition Spiced"
+      eyebrow="Expedition Spiced Rum"
       subtitle={p.tagline}
     >
       <TradeSheetSection title="Character">

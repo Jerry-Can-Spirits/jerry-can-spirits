@@ -19,9 +19,11 @@ async function getOrderData() {
 
     let singleBottlesSold = 0
     let tradePacksSold = 0
-    let bottlePrice = '40'
+    // No hardcoded prices in copy: prices render from Shopify live data only.
+    // When the fetch fails, the price lines are simply not rendered.
+    let bottlePrice: string | null = null
     let bottleCompareAtPrice: string | null = null
-    let giftSetPrice = '85'
+    let giftSetPrice: string | null = null
     let giftSetCompareAtPrice: string | null = null
 
     if (bottleProduct?.variants?.[0]) {
@@ -66,9 +68,9 @@ async function getOrderData() {
   } catch {
     return {
       totalSold: null,
-      bottlePrice: '40',
+      bottlePrice: null,
       bottleCompareAtPrice: null,
-      giftSetPrice: '85',
+      giftSetPrice: null,
       giftSetCompareAtPrice: null,
     }
   }
@@ -78,7 +80,7 @@ export default async function OrderSection() {
   const { totalSold, bottlePrice, bottleCompareAtPrice, giftSetPrice, giftSetCompareAtPrice } =
     await getOrderData()
 
-  const bottleUnitPrice = (parseFloat(bottlePrice) / BOTTLE_VOLUME_LITRES).toFixed(2)
+  const bottleUnitPrice = bottlePrice ? (parseFloat(bottlePrice) / BOTTLE_VOLUME_LITRES).toFixed(2) : null
 
   return (
     <section className="py-16 bg-jerry-green-900/50">
@@ -136,10 +138,12 @@ export default async function OrderSection() {
                   <span className="text-gold-400 shrink-0">•</span>
                   <span>Individually numbered First Batch Edition bottle</span>
                 </li>
-                <li className="flex items-start gap-3">
-                  <span className="text-gold-400 shrink-0">•</span>
-                  <span>Founding batch. £{bottlePrice} per bottle.</span>
-                </li>
+                {bottlePrice && (
+                  <li className="flex items-start gap-3">
+                    <span className="text-gold-400 shrink-0">•</span>
+                    <span>£{bottlePrice} per bottle.</span>
+                  </li>
+                )}
                 <li className="flex items-start gap-3">
                   <span className="text-gold-400 shrink-0">•</span>
                   <span>Fulfilment in progress</span>
@@ -161,15 +165,19 @@ export default async function OrderSection() {
                   <span className="text-xs uppercase tracking-wider opacity-75">Standard Bottle</span>
                   <span className="text-lg">Expedition Spiced Rum</span>
                 </div>
-                <div className="text-right">
-                  <div>
-                    <span className="text-xl font-bold">£{bottlePrice}</span>
-                    {bottleCompareAtPrice && (
-                      <span className="text-sm line-through opacity-60 ml-2">£{bottleCompareAtPrice}</span>
+                {bottlePrice && (
+                  <div className="text-right">
+                    <div>
+                      <span className="text-xl font-bold">£{bottlePrice}</span>
+                      {bottleCompareAtPrice && (
+                        <span className="text-sm line-through opacity-60 ml-2">£{bottleCompareAtPrice}</span>
+                      )}
+                    </div>
+                    {bottleUnitPrice && (
+                      <span className="text-xs opacity-75">(£{bottleUnitPrice}/litre)</span>
                     )}
                   </div>
-                  <span className="text-xs opacity-75">(£{bottleUnitPrice}/litre)</span>
-                </div>
+                )}
               </Link>
 
               <Link
@@ -180,12 +188,14 @@ export default async function OrderSection() {
                   <span className="text-xs uppercase tracking-wider text-gold-300">Gift Pack</span>
                   <span className="text-lg">Bottle + Barware Set</span>
                 </div>
-                <div className="text-right">
-                  <span className="text-xl font-bold text-gold-300">£{giftSetPrice}</span>
-                  {giftSetCompareAtPrice && (
-                    <span className="text-sm line-through opacity-60 text-parchment-400 ml-2">£{giftSetCompareAtPrice}</span>
-                  )}
-                </div>
+                {giftSetPrice && (
+                  <div className="text-right">
+                    <span className="text-xl font-bold text-gold-300">£{giftSetPrice}</span>
+                    {giftSetCompareAtPrice && (
+                      <span className="text-sm line-through opacity-60 text-parchment-400 ml-2">£{giftSetCompareAtPrice}</span>
+                    )}
+                  </div>
+                )}
               </Link>
             </div>
 

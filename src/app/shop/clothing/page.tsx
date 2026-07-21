@@ -342,7 +342,7 @@ export default async function ClothingPage() {
               </div>
               <h4 className="text-lg font-semibold text-white mb-2">Gives Back</h4>
               <p className="text-parchment-300 text-sm">
-                Part of every sale supports forces charities. When you buy from us, you're helping us give back to causes we care about.
+                5% of profits supports forces charities. When you buy from us, you're helping us give back to causes we care about.
               </p>
             </div>
           </div>

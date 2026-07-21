@@ -683,13 +683,13 @@ export default async function ProductPage({
               <div className="mt-6 pt-6 border-t border-gold-500/10">
                 <div className="space-y-3 text-center">
                   <p className="text-sm text-parchment-400 tracking-wide">
-                    Ships for £5.00. Free over £{FREE_SHIPPING_THRESHOLD_GBP}.
+                    Ships for £5. Free over £{FREE_SHIPPING_THRESHOLD_GBP}.
                   </p>
                   <p className="text-sm text-parchment-400 tracking-wide">
                     Secure checkout · Express payment available
                   </p>
                   <p className="text-sm text-gold-400/80 tracking-wide">
-                    5% of every sale goes to forces charities.
+                    5% of profits goes to forces charities.
                   </p>
                   <div className="flex items-center justify-center gap-6 text-xs text-parchment-500 uppercase tracking-widest">
                     <span>SSL Secured</span>
@@ -732,7 +732,7 @@ export default async function ProductPage({
                       <svg className="w-5 h-5 text-gold-500 mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
                         <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                       </svg>
-                      <span>Part of every sale goes to forces charities - that's a promise</span>
+                      <span>5% of profits goes to forces charities - that's a promise</span>
                     </li>
                   </>
                 ) : category.trackingCategory === 'Barware' ? (
@@ -754,7 +754,7 @@ export default async function ProductPage({
                       <svg className="w-5 h-5 text-gold-500 mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
                         <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                       </svg>
-                      <span>Part of every sale goes to forces charities - that's a promise</span>
+                      <span>5% of profits goes to forces charities - that's a promise</span>
                     </li>
                   </>
                 ) : (
@@ -776,7 +776,7 @@ export default async function ProductPage({
                       <svg className="w-5 h-5 text-gold-500 mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
                         <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                       </svg>
-                      <span>Part of every sale goes to forces charities - that's a promise</span>
+                      <span>5% of profits goes to forces charities - that's a promise</span>
                     </li>
                   </>
                 )}

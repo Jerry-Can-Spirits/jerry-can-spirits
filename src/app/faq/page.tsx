@@ -91,7 +91,7 @@ const faqs = [
   // Company & Brand
   {
     question: "What is your connection to the Armed Forces?",
-    answer: "Jerry Can Spirits was founded by a former Royal Corps of Signals serviceman. We're proud supporters of the Armed Forces Covenant and donate a portion of profits to military charities.",
+    answer: "Jerry Can Spirits was founded by two Royal Corps of Signals veterans with over 17 years of combined service. We're proud supporters of the Armed Forces Covenant and donate 5% of profits to military charities.",
     hasRichAnswer: true,
   },
   {
@@ -153,7 +153,7 @@ export default function FAQPage() {
                   {faq.question === "What cocktails work best with Jerry Can Spirits rum?" ? (
                     <>Our rum is versatile and works beautifully in classic cocktails like Old Fashioned, Mai Tai, and Rum Punch. Check our <Link href="/field-manual/cocktails/" className="text-gold-300 hover:text-gold-400 underline">Field Manual</Link> for cocktail recipes.</>
                   ) : faq.question === "What is your connection to the Armed Forces?" ? (
-                    <>Jerry Can Spirits was <Link href="/about/team/dan-freeman/" className="text-gold-300 hover:text-gold-400 underline">founded by a former Royal Corps of Signals serviceman</Link>. We&apos;re proud supporters of the <Link href="/armed-forces-covenant/" className="text-gold-300 hover:text-gold-400 underline">Armed Forces Covenant</Link> and donate a portion of profits to military charities.</>
+                    <>Jerry Can Spirits was <Link href="/about/team/" className="text-gold-300 hover:text-gold-400 underline">founded by two Royal Corps of Signals veterans</Link> with over 17 years of combined service. We&apos;re proud supporters of the <Link href="/armed-forces-covenant/" className="text-gold-300 hover:text-gold-400 underline">Armed Forces Covenant</Link> and donate 5% of profits to military charities.</>
                   ) : (
                     faq.answer
                   )}

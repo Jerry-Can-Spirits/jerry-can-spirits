@@ -345,7 +345,7 @@ export default function CartDrawer() {
                   onClick={closeCart}
                   className="inline-flex items-center justify-center min-h-[44px] px-6 py-2 bg-gold-500 text-jerry-green-900 font-semibold rounded-lg hover:bg-gold-400 transition-colors"
                 >
-                  Start with Expedition Spiced
+                  Start with Expedition Spiced Rum
                 </Link>
               </div>
             ) : (

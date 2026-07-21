@@ -24,7 +24,7 @@ export function BartenderGuide({ guide, venueTitle }: Props) {
               Bartender&apos;s Guide
             </p>
             <h1 className="text-3xl md:text-4xl font-serif font-bold text-white print:text-black mb-1">
-              Expedition Spiced
+              Expedition Spiced Rum
             </h1>
             <p className="text-parchment-300 print:text-black">{venueTitle}. {guide.venue_label}.</p>
             <p className="text-parchment-400 text-sm mt-2 print:text-black">

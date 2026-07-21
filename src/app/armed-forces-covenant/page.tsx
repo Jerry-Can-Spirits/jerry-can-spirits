@@ -150,7 +150,7 @@ export default function ArmedForcesCovenant() {
                 2.1 Promoting the Armed Forces:
               </h3>
               <ul className="list-disc list-inside text-white space-y-2 mb-6">
-                <li>Proudly sharing our founder's Royal Corps of Signals service history in our brand communications and marketing materials</li>
+                <li>Proudly sharing our founders' Royal Corps of Signals service history in our brand communications and marketing materials</li>
                 <li>Using our platform to raise awareness of military service and sacrifice through authentic storytelling and content creation</li>
                 <li>Participating in Armed Forces Day celebrations and military commemoration events</li>
                 <li>Displaying Armed Forces Covenant signage prominently at our business premises and website</li>
@@ -229,7 +229,7 @@ export default function ArmedForcesCovenant() {
                 Charitable Commitment:
               </h4>
               <ul className="list-disc list-inside text-white space-y-2 mb-4">
-                <li>Donating 5% of annual net profits to vetted armed forces charities, with transparent annual reporting of contributions and impact</li>
+                <li>Donating 5% of profits to vetted armed forces charities, with transparent annual reporting of contributions and impact</li>
                 <li>Prioritising organisations supporting veteran mental health, transition services, wounded personnel, and military family welfare</li>
                 <li>Establishing long-term partnerships with 3-5 core military charities rather than dispersed one-off donations</li>
               </ul>

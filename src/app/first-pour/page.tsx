@@ -67,7 +67,7 @@ export default function FirstPourPage() {
                   </div>
                   <div className="w-12 h-0.5 bg-gold-500 mb-4" />
                   <div className="text-parchment-300 text-sm italic">
-                    A companion to Expedition Spiced
+                    A companion to Expedition Spiced Rum
                   </div>
                 </div>
               </div>

@@ -26,7 +26,7 @@ const communityPartners = [
   {
     name: "Worcester RFC Mixed Ability",
     location: "Worcester, United Kingdom",
-    description: "We sponsor Man of the Match for Worcester RFC's Mixed Ability Men's team for the 2025/26 season. Mixed Ability rugby breaks down barriers, welcoming players of all abilities to train and play together. It's grassroots sport at its best: inclusive, community-driven, and built on the idea that everyone deserves a place on the pitch. We've also supported Danny Hughes, one of our investors and a fellow veteran, on the team's tour of Belgium.",
+    description: "We sponsor Man of the Match for Worcester RFC's Mixed Ability Men's team for the 2025/26 season. Mixed Ability rugby breaks down barriers, welcoming players of all abilities to train and play together. It's grassroots sport at its best: inclusive, community-driven, and built on the idea that everyone deserves a place on the pitch. We've also supported Danny Hughes, our Armed Forces Champion and a friend of the company, on the team's tour of Belgium.",
     website: "https://worcesterrfc.rfu.club/teams/worcester-rfc-mixed-ability-men/470363/profile",
     instagram: "https://www.instagram.com/worcesterrfcma",
     facebook: "https://www.facebook.com/WorcesterRFCMA",
@@ -62,7 +62,7 @@ const partners = [
   {
     name: "Croxsons",
     location: "Crayford, United Kingdom",
-    description: "Founded in 1872, Croxsons is one of Britain's longest-established glass packaging specialists. Five generations of the same family have built it into a trusted supplier to spirits, food, and drinks producers across the UK. Every bottle of Expedition Spiced starts here. Heritage that matches the standards we hold ourselves to.",
+    description: "Founded in 1872, Croxsons is one of Britain's longest-established glass packaging specialists. Five generations of the same family have built it into a trusted supplier to spirits, food, and drinks producers across the UK. Every bottle of Expedition Spiced Rum starts here. Heritage that matches the standards we hold ourselves to.",
     website: "https://www.croxsons.com",
     speciality: "Glass Bottles & Packaging",
     logo: "https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/2483f006-f7a7-40fb-ee1e-57de23acf700/public",
@@ -80,7 +80,7 @@ const partners = [
   {
     name: "Label Apeel Limited",
     location: "Thurmaston, Leicester, United Kingdom",
-    description: "Our label manufacturer, based in Thurmaston, Leicester. Label Apeel produce labels across a wide range of industries, working with brands that hold their packaging to an exacting standard. They produce the labels on every bottle of Expedition Spiced. The label is the first thing a customer sees. It has to be right.",
+    description: "Our label manufacturer, based in Thurmaston, Leicester. Label Apeel produce labels across a wide range of industries, working with brands that hold their packaging to an exacting standard. They produce the labels on every bottle of Expedition Spiced Rum. The label is the first thing a customer sees. It has to be right.",
     website: "https://labelapeel.co.uk",
     speciality: "Label Manufacturing",
     logo: "https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/aa42e11c-95ea-47bc-f066-a0e6d8c4fd00/public",

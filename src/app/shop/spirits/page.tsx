@@ -303,7 +303,7 @@ export default async function SpiritsPage() {
                 So we made our own. Royal Corps of Signals veterans, Armed Forces Covenant signatories, and genuinely obsessed with getting this right. Every batch gets the same attention we'd give to anything that has to work.
               </p>
               <p>
-                Part of every sale goes to forces charities. Because these are our mates and it's the right thing to do. If you're buying from us, you're supporting the veteran community whether you meant to or not.
+                5% of profits goes to forces charities. Because these are our mates and it's the right thing to do. If you're buying from us, you're supporting the veteran community whether you meant to or not.
               </p>
             </div>
           </div>
@@ -347,7 +347,7 @@ export default async function SpiritsPage() {
               </div>
               <h4 className="text-lg font-semibold text-white mb-2">Gives Back</h4>
               <p className="text-parchment-300 text-sm">
-                Part of every sale supports forces charities. Armed Forces Covenant signatories. When you buy from us, you're supporting the veteran community — that's a promise.
+                5% of profits supports forces charities. Armed Forces Covenant signatories. When you buy from us, you're supporting the veteran community — that's a promise.
               </p>
             </div>
           </div>
@@ -410,7 +410,7 @@ export default async function SpiritsPage() {
                   "name": "How does buying from Jerry Can Spirits support veterans?",
                   "acceptedAnswer": {
                     "@type": "Answer",
-                    "text": "We're veteran-owned (Royal Corps of Signals, 17 years' combined service) and Armed Forces Covenant signatories. Part of every sale goes to forces charities — not because it's good marketing but because these are our community. When you buy from us, you're directly supporting veteran entrepreneurs and forces welfare."
+                    "text": "We're veteran-owned (Royal Corps of Signals, 17 years' combined service) and Armed Forces Covenant signatories. 5% of profits goes to forces charities — not because it's good marketing but because these are our community. When you buy from us, you're directly supporting veteran entrepreneurs and forces welfare."
                   }
                 }
               ]
@@ -465,7 +465,7 @@ export default async function SpiritsPage() {
             <div>
               <h3 className="text-lg font-semibold text-gold-300 mb-3">How does buying from Jerry Can Spirits support veterans?</h3>
               <p className="text-parchment-200 leading-relaxed">
-                We're veteran-owned (Royal Corps of Signals, 17 years' combined service) and Armed Forces Covenant signatories. Part of every sale goes to forces charities — not because it's good marketing but because these are our community. When you buy from us, you're directly supporting veteran entrepreneurs and forces welfare.
+                We're veteran-owned (Royal Corps of Signals, 17 years' combined service) and Armed Forces Covenant signatories. 5% of profits goes to forces charities — not because it's good marketing but because these are our community. When you buy from us, you're directly supporting veteran entrepreneurs and forces welfare.
               </p>
             </div>
           </div>

@@ -44,7 +44,7 @@ export default async function GivingPage() {
             Where the 5% Goes
           </h1>
           <p className="text-parchment-300 text-lg max-w-2xl">
-            Five percent of profits from every bottle sold goes to armed forces charities. This page is the record.
+            5% of profits goes to armed forces charities. This page is the record.
           </p>
         </div>
 
@@ -53,7 +53,7 @@ export default async function GivingPage() {
           <h2 className="text-2xl font-serif font-bold text-white mb-4">The Pledge</h2>
           <div className="space-y-4 text-parchment-300 leading-relaxed">
             <p>
-              From the first bottle sold, five percent of profits is committed to armed forces charities. Not a one-off donation. Not a marketing claim. A standing commitment, built into how we run the company.
+              From the first bottle sold, 5% of profits is committed to armed forces charities. Not a one-off donation. Not a marketing claim. A standing commitment, built into how we run the company.
             </p>
             <p>
               We launched in April 2026. We have not yet reached a profit position from which to donate. When we do, it will appear here.

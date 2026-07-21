@@ -6,7 +6,7 @@
 
 export const EXPEDITION_SPICED = {
   // Product identity
-  name: 'Expedition Spiced',
+  name: 'Expedition Spiced Rum',
   tagline: 'Caribbean soul, British craft. Veteran-owned.',
   category: 'Spiced rum',
   base_spirit: 'Caribbean rum',
@@ -66,7 +66,8 @@ export const EXPEDITION_SPICED = {
   },
 
   // Commercial
-  rrp_p: 4000, // pence, inc VAT
+  // rrp_p removed (Audit 8 PR B): no hardcoded price in copy anywhere; the RRP
+  // re-enters copy from live pricing after the 1 Aug 2026 change.
   trade_standard_case_p: 21000, // pence, inc VAT
 
   // Tasting (mirrored from contact/media/kit)

@@ -328,9 +328,9 @@ export default async function CollectionPage({
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-10">
         <div className="grid md:grid-cols-3 gap-4 mb-10">
           {[
-            { title: 'Veteran-Owned', body: 'Founded by two Royal Corps of Signals veterans. Bootstrapped, no investors, no shortcuts. The same standards we applied to kit that had to work.' },
+            { title: 'Veteran-Owned', body: 'Founded by two Royal Corps of Signals veterans. Bootstrapped, no hidden investors, no shortcuts. The same standards we applied to kit that had to work.' },
             { title: 'Real Ingredients', body: 'Every product stocked on this site is chosen because it does its job properly. No filler. Nothing that does not belong there.' },
-            { title: '5% to Forces Charities', body: 'Part of every sale goes to forces charities. Armed Forces Covenant signatories. ERS Bronze Award holders. When you buy from us, you give back.' },
+            { title: '5% to Forces Charities', body: '5% of profits goes to forces charities. Armed Forces Covenant signatories. ERS Bronze Award holders. When you buy from us, you give back.' },
           ].map((item) => (
             <div key={item.title} className="p-6 bg-jerry-green-800/30 rounded-xl border border-gold-500/10">
               <h3 className="text-base font-semibold text-gold-300 mb-2">{item.title}</h3>
