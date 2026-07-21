@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { getProductsByCollection, type ShopifyProduct } from '@/lib/shopify'
+import ShopError from '@/components/ShopError'
 import type { Metadata } from 'next'
 import Breadcrumbs from '@/components/Breadcrumbs'
 import { GB_SHIPPING_DETAILS } from '@/lib/shippingSchema'
@@ -68,47 +69,7 @@ export default async function DrinksPageTest() {
 
   // Error state - matches your Jerry Can Spirits design
   if (error) {
-    return (
-      <main className="min-h-screen py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-2xl mx-auto text-center space-y-6">
-            <div className="inline-block px-4 py-2 bg-red-800/60 backdrop-blur-sm rounded-full border border-red-500/30 mb-6">
-              <span className="text-red-300 text-sm font-semibold uppercase tracking-widest">
-                Connection Error
-              </span>
-            </div>
-
-            <h1 className="text-4xl sm:text-5xl font-serif font-bold text-white mb-6">
-              Premium British Rum Collection - Shopify Connection Failed
-            </h1>
-
-            <div className="bg-red-900/20 border border-red-500/30 rounded-lg p-6 text-left">
-              <p className="text-red-300 font-mono text-sm mb-4">
-                Error: {error}
-              </p>
-
-              <div className="space-y-2 text-parchment-300 text-sm">
-                <p className="font-semibold text-gold-300">Troubleshooting steps:</p>
-                <ol className="list-decimal list-inside space-y-1 ml-2">
-                  <li>Check your .env.local file has the correct Shopify credentials</li>
-                  <li>Verify NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN is set (e.g., "your-store.myshopify.com")</li>
-                  <li>Verify NEXT_PUBLIC_SHOPIFY_STOREFRONT_ACCESS_TOKEN is set</li>
-                  <li>Ensure you have a collection with handle "drinks" in Shopify</li>
-                  <li>Check the Storefront API access token has the correct permissions</li>
-                </ol>
-              </div>
-            </div>
-
-            <Link
-              href="/shop/"
-              className="inline-block px-8 py-3 bg-gold-500 text-jerry-green-900 font-semibold rounded-lg hover:bg-gold-400 transition-colors"
-            >
-              Back to Shop
-            </Link>
-          </div>
-        </div>
-      </main>
-    )
+    return <ShopError />
   }
 
   // Empty state - no products found
