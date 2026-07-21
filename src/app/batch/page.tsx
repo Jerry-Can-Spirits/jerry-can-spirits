@@ -67,7 +67,7 @@ export default async function BatchIndexPage() {
             Check Your Bottle
           </h1>
           <p className="text-lg text-parchment-300 max-w-2xl mx-auto leading-relaxed">
-            Every bottle of Jerry Can Spirits is tracked from distillation to your door.
+            Every bottle of Jerry Can Spirits is tracked from production to your door.
             Select a batch below to view production details, tasting notes, and look up your individual bottle.
           </p>
         </div>

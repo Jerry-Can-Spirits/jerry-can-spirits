@@ -14,13 +14,13 @@ import { safeJsonLd, productOffer, priceValidUntil } from '@/lib/jsonLd'
 
 export const metadata: Metadata = {
   title: 'British Craft Spirits | Veteran-Owned Small-Batch',
-  description: 'Veteran-owned British craft spirits, small-batch and built properly. Currently: Expedition Spiced Rum, pot-distilled in the UK, real ingredients.',
+  description: 'Veteran-owned British craft spirits, small-batch and built properly. Currently: Expedition Spiced Rum, made in Britain, real ingredients.',
   alternates: {
     canonical: 'https://jerrycanspirits.co.uk/shop/spirits/',
   },
   openGraph: {
     title: 'British Craft Spirits | Jerry Can Spirits®',
-    description: 'Veteran-owned British craft spirits, small-batch and built properly. Currently: Expedition Spiced Rum, pot-distilled in the UK, real ingredients.',
+    description: 'Veteran-owned British craft spirits, small-batch and built properly. Currently: Expedition Spiced Rum, made in Britain, real ingredients.',
     url: 'https://jerrycanspirits.co.uk/shop/spirits/',
     siteName: 'Jerry Can Spirits®',
     locale: 'en_GB',
@@ -30,7 +30,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image' as const,
     title: 'British Craft Spirits | Jerry Can Spirits®',
-    description: 'Veteran-owned British craft spirits, small-batch and built properly. Currently: Expedition Spiced Rum, pot-distilled in the UK, real ingredients.',
+    description: 'Veteran-owned British craft spirits, small-batch and built properly. Currently: Expedition Spiced Rum, made in Britain, real ingredients.',
     images: OG_IMAGE,
   },
 }
@@ -191,7 +191,7 @@ export default async function SpiritsPage() {
               Expedition Spiced Rum is built differently. Caribbean rum base and a hand-selected spice blend: Madagascan vanilla, Ceylon cinnamon, ginger root, cassia bark, clove, orange peel, and bourbon oak. No artificial flavourings. Nothing that does not belong there.
             </p>
             <p className="text-lg text-parchment-400 leading-relaxed">
-              Pot-distilled at our British partner distillery. 700 numbered bottles for general release per batch. When a batch is gone, that run is finished. Two Royal Corps of Signals veterans. 17 years of service between us. The same standards applied here.
+              Macerated at our British partner distillery. 700 numbered bottles for general release per batch. When a batch is gone, that run is finished. Two Royal Corps of Signals veterans. 17 years of service between us. The same standards applied here.
             </p>
           </div>
 
@@ -386,7 +386,7 @@ export default async function SpiritsPage() {
                   "name": "What does 'small-batch' actually mean?",
                   "acceptedAnswer": {
                     "@type": "Answer",
-                    "text": "For us, it means 700 numbered bottles for general release per batch. It's not a marketing term. When a batch sells out, that specific run is gone. We can make more, but each batch has subtle variations based on the distillation."
+                    "text": "For us, it means 700 numbered bottles for general release per batch. It's not a marketing term. When a batch sells out, that specific run is gone. We can make more, but each batch has subtle variations."
                   }
                 },
                 {
@@ -402,7 +402,7 @@ export default async function SpiritsPage() {
                   "name": "Where is Jerry Can Spirits rum made?",
                   "acceptedAnswer": {
                     "@type": "Answer",
-                    "text": "We blend and distil at our British partner distillery in the UK. The base white rum comes from the Caribbean. The distillation, blending, spicing, and bottling all happen in Britain."
+                    "text": "We blend at our British partner distillery in the UK. The base white rum comes from the Caribbean. The blending, spicing, and bottling all happen in Britain."
                   }
                 },
                 {
@@ -444,7 +444,7 @@ export default async function SpiritsPage() {
             <div className="border-b border-gold-500/10 pb-6">
               <h3 className="text-lg font-semibold text-gold-300 mb-3">What does 'small-batch' actually mean?</h3>
               <p className="text-parchment-200 leading-relaxed">
-                For us, it means 700 numbered bottles for general release per batch. It's not a marketing term. When a batch sells out, that specific run is gone. We can make more, but each batch has subtle variations based on the distillation.
+                For us, it means 700 numbered bottles for general release per batch. It's not a marketing term. When a batch sells out, that specific run is gone. We can make more, but each batch has subtle variations.
               </p>
             </div>
 
@@ -458,7 +458,7 @@ export default async function SpiritsPage() {
             <div className="border-b border-gold-500/10 pb-6">
               <h3 className="text-lg font-semibold text-gold-300 mb-3">Where is Jerry Can Spirits rum made?</h3>
               <p className="text-parchment-200 leading-relaxed">
-                We blend and distil at our British partner distillery in the UK. The base white rum comes from the Caribbean. The distillation, blending, spicing, and bottling all happen in Britain.
+                We blend at our British partner distillery in the UK. The base white rum comes from the Caribbean. The blending, spicing, and bottling all happen in Britain.
               </p>
             </div>
 

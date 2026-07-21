@@ -182,8 +182,8 @@ export default function Sustainability() {
               <div className="grid sm:grid-cols-2 gap-4 mt-6">
                 <ScrollReveal delay={0}>
                 <div className="bg-jerry-green-800/60 rounded-lg p-4">
-                  <h3 className="text-gold-300 font-semibold mb-2">UK Distillation</h3>
-                  <p className="text-sm">Distilled at our British partner distillery in the UK.</p>
+                  <h3 className="text-gold-300 font-semibold mb-2">Made in the UK</h3>
+                  <p className="text-sm">Made at our British partner distillery in the UK.</p>
                 </div>
                 </ScrollReveal>
                 <ScrollReveal delay={1}>

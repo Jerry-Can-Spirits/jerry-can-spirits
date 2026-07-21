@@ -34,7 +34,8 @@ const faqs = [
 // Comparison table data
 const comparisonData = [
   { aspect: "Batch Size", massProduced: "100,000+ litres", jerryCan: "700 for general release" },
-  { aspect: "Distillation", massProduced: "Column still", jerryCan: "Pot still" },
+  // TODO(copy-regen): the Distillation row (column still vs pot still) was a
+  // process claim about the former partner — removed per the provenance rules.
   { aspect: "Sourcing", massProduced: "Single industrial source", jerryCan: "Caribbean rum, real botanicals"},
   { aspect: "Provenance", massProduced: "Unknown", jerryCan: "British partner distillery" },
   { aspect: "Ownership", massProduced: "Corporate", jerryCan: "100% Veteran-owned" },

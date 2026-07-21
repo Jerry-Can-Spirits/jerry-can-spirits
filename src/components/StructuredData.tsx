@@ -54,7 +54,7 @@ export function OrganizationSchema() {
         alumniOf: { '@type': 'Organization', name: 'Royal Corps of Signals' },
       },
     ],
-    knowsAbout: ['Premium Rum', 'British Spirits', 'Military Heritage', 'Veteran-Owned Business', 'Small-Batch Distilling'],
+    knowsAbout: ['Premium Rum', 'British Spirits', 'Military Heritage', 'Veteran-Owned Business'],
     award: 'Armed Forces Covenant Signatory',
   }
 
