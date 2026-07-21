@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation'
 import Image from 'next/image'
 import { getProduct, getProducts, getSmartRecommendations, type ShopifyProduct, type ShopifyMetafield } from '@/lib/shopify'
 import { GB_SHIPPING_DETAILS } from '@/lib/shippingSchema'
+import { productOffer, priceValidUntil } from '@/lib/jsonLd'
 import { FREE_SHIPPING_THRESHOLD_GBP } from '@/lib/pricing'
 import ProductVariantSelector from '@/components/ProductVariantSelector'
 import BatchStockIndicator from '@/components/BatchStockIndicator'
@@ -138,7 +139,7 @@ export async function generateMetadata({
       }
     }
 
-    const displayTitle = product.title.replace(/^Jerry Can Spirits[®]?\s*/i, '')
+    const displayTitle = product.title.replace(/^Jerry Can Spirits[®]?\s*[-–—]?\s*/i, '')
     const metaTitle = product.seo?.title || displayTitle
     const metaDescription = product.seo?.description || product.description.slice(0, 155)
 
@@ -366,6 +367,10 @@ export default async function ProductPage({
   )
 
   const firstVariant = product.variants?.[0]
+  // GTIN identifies a single sellable unit. With multiple distinct variants
+  // (e.g. a glass Pair vs Single) there is no one product-level GTIN, so omit it
+  // rather than assert one variant's barcode against an aggregate price range.
+  const singleVariantGtin = (product.variants?.length ?? 0) === 1 ? firstVariant?.barcode : undefined
 
   // Get category based on product type (moved up for schema use)
   const category = getCategoryFromProductType(product.productType)
@@ -414,7 +419,7 @@ export default async function ProductPage({
     image: product.images.map(img => img.url),
     sku: handle,
     mpn: handle,
-    ...(firstVariant?.barcode && { gtin: firstVariant.barcode }),
+    ...(singleVariantGtin && { gtin: singleVariantGtin }),
     brand: {
       '@type': 'Brand',
       name: 'Jerry Can Spirits',
@@ -426,20 +431,14 @@ export default async function ProductPage({
       '@type': 'Country',
       name: 'United Kingdom',
     },
-    offers: {
-      '@type': 'Offer',
+    // Variant-aware: AggregateOffer with a genuine low/high range when variants
+    // span prices (Pair vs Single); a plain Offer otherwise. priceValidUntil is a
+    // byte-stable literal keyed to the product (Expedition's price rises 1 Aug).
+    offers: productOffer(product, {
       '@id': `https://jerrycanspirits.co.uk/shop/product/${handle}/#offer`,
-      price: product.priceRange.minVariantPrice.amount,
-      priceCurrency: product.priceRange.minVariantPrice.currencyCode,
-      availability: firstVariant?.availableForSale
-        ? 'https://schema.org/InStock'
-        : 'https://schema.org/OutOfStock',
       itemCondition: 'https://schema.org/NewCondition',
       url: `https://jerrycanspirits.co.uk/shop/product/${handle}/`,
-      // Fixed end-of-year date so the structured-data response is byte-stable
-      // across requests. Recomputing today+1y per request polluted Google
-      // Merchant Center freshness signals.
-      priceValidUntil: '2026-12-31',
+      priceValidUntil: priceValidUntil(handle),
       shippingDetails: GB_SHIPPING_DETAILS,
       hasMerchantReturnPolicy: {
         '@type': 'MerchantReturnPolicy',
@@ -454,7 +453,7 @@ export default async function ProductPage({
         name: 'Jerry Can Spirits',
         url: 'https://jerrycanspirits.co.uk',
       },
-    },
+    }),
     manufacturer: {
       '@type': 'Organization',
       name: 'Jerry Can Spirits Ltd',
@@ -519,18 +518,24 @@ export default async function ProductPage({
       {
         '@type': 'ListItem',
         position: 1,
+        name: 'Home',
+        item: 'https://jerrycanspirits.co.uk/',
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
         name: 'Shop',
         item: 'https://jerrycanspirits.co.uk/shop/',
       },
       {
         '@type': 'ListItem',
-        position: 2,
+        position: 3,
         name: category.label,
         item: `https://jerrycanspirits.co.uk${category.href}`,
       },
       {
         '@type': 'ListItem',
-        position: 3,
+        position: 4,
         name: product.title,
         item: `https://jerrycanspirits.co.uk/shop/product/${handle}/`,
       },
@@ -924,7 +929,7 @@ export default async function ProductPage({
             {relatedProducts.map((relatedProduct) => (
               <Link
                 key={relatedProduct.id}
-                href={`/shop/product/${relatedProduct.handle}`}
+                href={`/shop/product/${relatedProduct.handle}/`}
                 className="group bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl border border-gold-500/20 hover:border-gold-400/40 transition-all duration-300 overflow-hidden"
               >
                 {/* Product Image */}

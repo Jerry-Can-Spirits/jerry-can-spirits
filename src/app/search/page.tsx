@@ -66,7 +66,7 @@ async function runSearch(query: string): Promise<SearchResult[]> {
           type: 'product' as const,
           title: p.title,
           description: p.description?.substring(0, 120),
-          url: `/shop/product/${p.handle}`,
+          url: `/shop/product/${p.handle}/`,
           image: p.images[0]?.url,
           category: 'Shop',
         }))

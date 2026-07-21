@@ -154,7 +154,7 @@ export default async function OrderSection() {
             {/* CTA Buttons */}
             <div className="flex flex-col gap-4">
               <Link
-                href={`/shop/product/${BOTTLE_HANDLE}`}
+                href={`/shop/product/${BOTTLE_HANDLE}/`}
                 className="group bg-linear-to-r from-gold-600 to-gold-500 hover:from-gold-500 hover:to-gold-400 text-jerry-green-900 px-6 py-4 rounded-lg font-semibold transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-[1.02] flex items-center justify-between"
               >
                 <div className="flex flex-col">
@@ -173,7 +173,7 @@ export default async function OrderSection() {
               </Link>
 
               <Link
-                href={`/shop/product/${GIFT_SET_HANDLE}`}
+                href={`/shop/product/${GIFT_SET_HANDLE}/`}
                 className="group bg-linear-to-r from-jerry-green-700 to-jerry-green-800 hover:from-jerry-green-600 hover:to-jerry-green-700 text-white px-6 py-4 rounded-lg font-semibold transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-[1.02] flex items-center justify-between border border-gold-500/30"
               >
                 <div className="flex flex-col">

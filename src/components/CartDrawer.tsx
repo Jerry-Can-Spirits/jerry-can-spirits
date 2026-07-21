@@ -389,7 +389,7 @@ export default function CartDrawer() {
                       {/* Product Details */}
                       <div className="flex-1 min-w-0">
                         <Link
-                          href={`/shop/product/${line.merchandise.product.handle}`}
+                          href={`/shop/product/${line.merchandise.product.handle}/`}
                           onClick={closeCart}
                           className="font-semibold text-white hover:text-gold-300 transition-colors block truncate"
                         >

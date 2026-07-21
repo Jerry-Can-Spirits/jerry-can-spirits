@@ -10,7 +10,7 @@ import ScrollReveal from '@/components/ScrollReveal'
 import AddToCartButton from '@/components/AddToCartButton'
 import ViewItemListTracker from '@/components/ViewItemListTracker'
 import { OG_IMAGE } from '@/lib/og'
-import { safeJsonLd } from '@/lib/jsonLd'
+import { safeJsonLd, productOffer, priceValidUntil } from '@/lib/jsonLd'
 
 export const metadata: Metadata = {
   title: 'British Craft Spirits | Veteran-Owned Small-Batch',
@@ -129,12 +129,8 @@ export default async function SpiritsPage() {
         description: product.description || `Small-batch British craft spirits from Jerry Can Spirits.`,
         url: `https://jerrycanspirits.co.uk/shop/product/${product.handle}/`,
         image: product.images?.[0]?.url || '',
-        offers: {
-          '@type': 'Offer',
-          price: product.priceRange.minVariantPrice.amount,
-          priceCurrency: product.priceRange.minVariantPrice.currencyCode,
-          availability: product.availableForSale ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
-          priceValidUntil: new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString().split('T')[0],
+        offers: productOffer(product, {
+          priceValidUntil: priceValidUntil(product.handle),
           shippingDetails: GB_SHIPPING_DETAILS,
           hasMerchantReturnPolicy: {
             '@type': 'MerchantReturnPolicy',
@@ -144,7 +140,7 @@ export default async function SpiritsPage() {
             returnFees: 'https://schema.org/FreeReturn',
             applicableCountry: 'GB',
           },
-        },
+        }),
       },
     })),
   }
@@ -214,7 +210,7 @@ export default async function SpiritsPage() {
             // Single). Same-priced variants — coasters — keep the bare price.
             const hasPriceRange =
               variants.length > 1 && new Set(variants.map(v => v.price.amount)).size > 1
-            const productUrl = `/shop/product/${product.handle}`
+            const productUrl = `/shop/product/${product.handle}/`
 
             return (
               <ScrollReveal key={product.id} delay={(index % 4) as 0 | 1 | 2 | 3} className="h-full">

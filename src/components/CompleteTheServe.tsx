@@ -81,7 +81,7 @@ export default function CompleteTheServe({
               </div>
               <div className="min-w-0 flex-1">
                 <Link
-                  href={`/shop/product/${item.handle}`}
+                  href={`/shop/product/${item.handle}/`}
                   className="block truncate text-sm font-semibold text-white hover:text-gold-200 transition-colors"
                 >
                   {item.title}

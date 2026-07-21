@@ -243,6 +243,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.5,
     },
     {
+      url: `${baseUrl}/contact/media/kit/`,
+      lastModified: STATIC_LAST_MODIFIED,
+      changeFrequency: 'monthly',
+      priority: 0.5,
+    },
+    {
       url: `${baseUrl}/contact/complaints/`,
       lastModified: STATIC_LAST_MODIFIED,
       changeFrequency: 'monthly',
@@ -377,6 +383,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: STATIC_LAST_MODIFIED,
       changeFrequency: 'weekly',
       priority: 0.7,
+    },
+    {
+      url: `${baseUrl}/first-pour/`,
+      lastModified: STATIC_LAST_MODIFIED,
+      changeFrequency: 'monthly',
+      priority: 0.6,
     },
     // Batch pages
     {

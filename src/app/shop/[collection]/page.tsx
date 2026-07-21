@@ -8,7 +8,7 @@ import { OG_IMAGE } from '@/lib/og'
 import { CATEGORIES } from '@/lib/categories'
 import AddToCartButton from '@/components/AddToCartButton'
 import ViewItemListTracker from '@/components/ViewItemListTracker'
-import { safeJsonLd } from '@/lib/jsonLd'
+import { safeJsonLd, productOffer } from '@/lib/jsonLd'
 
 // ISR — pure Shopify catalogue data (no per-request state), so these SEO
 // collection pages edge-cache and revalidate hourly instead of a live Shopify
@@ -41,7 +41,11 @@ export async function generateMetadata({
   const { collection } = await params
   const category = CATEGORIES[collection]
 
-  const title = category?.metaTitle ?? `${slugToTitle(collection)} | Jerry Can Spirits`
+  // metaTitle carries just the page title; the layout title template appends the
+  // brand once for the document <title>. Social cards don't use that template, so
+  // the brand is added explicitly for them.
+  const title = category?.metaTitle ?? slugToTitle(collection)
+  const socialTitle = `${title} | Jerry Can Spirits®`
   const description =
     category?.metaDescription ??
     `Shop ${slugToTitle(collection)} from Jerry Can Spirits. Veteran-owned British spirits, built properly, no shortcuts.`
@@ -51,7 +55,7 @@ export async function generateMetadata({
     description,
     alternates: { canonical: `${BASE_URL}/shop/${collection}/` },
     openGraph: {
-      title,
+      title: socialTitle,
       description,
       url: `${BASE_URL}/shop/${collection}/`,
       siteName: 'Jerry Can Spirits®',
@@ -61,7 +65,7 @@ export async function generateMetadata({
     },
     twitter: {
       card: 'summary_large_image' as const,
-      title,
+      title: socialTitle,
       description,
       images: OG_IMAGE,
     },
@@ -110,18 +114,10 @@ export default async function CollectionPage({
           '@type': 'Product',
           name: p.title,
           description: p.description,
-          url: `${BASE_URL}/shop/product/${p.handle}`,
+          url: `${BASE_URL}/shop/product/${p.handle}/`,
           image: p.images?.[0]?.url,
           brand: { '@type': 'Brand', name: 'Jerry Can Spirits' },
-          offers: {
-            '@type': 'Offer',
-            price: p.priceRange.minVariantPrice.amount,
-            priceCurrency: p.priceRange.minVariantPrice.currencyCode,
-            availability: p.availableForSale
-              ? 'https://schema.org/InStock'
-              : 'https://schema.org/OutOfStock',
-            url: `${BASE_URL}/shop/product/${p.handle}`,
-          },
+          offers: productOffer(p, { url: `${BASE_URL}/shop/product/${p.handle}/` }),
         },
       })),
     },
@@ -220,7 +216,7 @@ export default async function CollectionPage({
             // Single). Same-priced variants — coasters — keep the bare price.
             const hasPriceRange =
               variants.length > 1 && new Set(variants.map(v => v.price.amount)).size > 1
-            const productUrl = `/shop/product/${product.handle}`
+            const productUrl = `/shop/product/${product.handle}/`
 
             return (
               <div

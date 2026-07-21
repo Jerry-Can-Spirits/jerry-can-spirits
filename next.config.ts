@@ -313,8 +313,10 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
       {
-        source: '/shop/drinks/:path+',
-        destination: '/shop/spirits/:path+',
+        // :path* (not :path+) so the bare "/shop/drinks/" also matches, now that
+        // the route is deleted — otherwise it would 404 instead of redirecting.
+        source: '/shop/drinks/:path*',
+        destination: '/shop/spirits/:path*',
         permanent: true,
       },
       // Affiliate/Creator collab vanity URLs (Shopify Collabs)
