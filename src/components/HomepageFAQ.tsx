@@ -35,7 +35,7 @@ const faqs = [
 const comparisonData = [
   { aspect: "Batch Size", massProduced: "100,000+ litres", jerryCan: "700 for general release" },
   { aspect: "Distillation", massProduced: "Column still", jerryCan: "Pot still" },
-  { aspect: "Sourcing", massProduced: "Single industrial source", jerryCan: "Caribbean rum, molasses, real botanicals" },
+  { aspect: "Sourcing", massProduced: "Single industrial source", jerryCan: "Caribbean rum, real botanicals"},
   { aspect: "Provenance", massProduced: "Unknown", jerryCan: "British partner distillery" },
   { aspect: "Ownership", massProduced: "Corporate", jerryCan: "100% Veteran-owned" },
 ]

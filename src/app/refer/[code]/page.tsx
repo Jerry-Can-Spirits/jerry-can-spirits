@@ -8,7 +8,7 @@ export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'Your Friend Thinks You Need Better Rum',
-  description: 'Get 10% off your first order of Jerry Can Spirits premium spiced rum. Veteran-owned, Welsh-distilled, and built for adventure.',
+  description: 'Get 10% off your first order of Jerry Can Spirits premium spiced rum. Veteran-owned, properly spiced rum.',
   robots: {
     index: false,
     follow: true,
@@ -54,7 +54,7 @@ export default async function ReferralLandingPage({
 
         <p className="text-xl text-parchment-300 max-w-xl mx-auto leading-relaxed mb-8">
           And honestly, they&apos;re probably right. Here&apos;s 10% off your first order of
-          veteran-owned, Welsh-distilled, properly spiced rum.
+          veteran-owned, properly spiced rum.
         </p>
 
         {/* Discount Code Display */}

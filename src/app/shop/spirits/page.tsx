@@ -192,7 +192,7 @@ export default async function SpiritsPage() {
               Most spiced rum is made to a formula. Base spirit, artificial flavourings, a label that leans on nostalgia. Consistent, inoffensive, and forgettable.
             </p>
             <p className="text-lg text-parchment-400 leading-relaxed">
-              Expedition Spiced Rum is built differently. Caribbean rum base, molasses, and a hand-selected spice blend: Madagascan vanilla, Ceylon cinnamon, ginger root, cassia bark, clove, orange peel, and bourbon oak. No artificial flavourings. Nothing that does not belong there.
+              Expedition Spiced Rum is built differently. Caribbean rum base and a hand-selected spice blend: Madagascan vanilla, Ceylon cinnamon, ginger root, cassia bark, clove, orange peel, and bourbon oak. No artificial flavourings. Nothing that does not belong there.
             </p>
             <p className="text-lg text-parchment-400 leading-relaxed">
               Pot-distilled at our British partner distillery. 700 numbered bottles for general release per batch. When a batch is gone, that run is finished. Two Royal Corps of Signals veterans. 17 years of service between us. The same standards applied here.

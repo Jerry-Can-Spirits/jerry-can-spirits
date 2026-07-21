@@ -168,30 +168,18 @@ export default function Sustainability() {
         <section className="py-12">
           <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
             <h2 className="text-2xl sm:text-3xl font-serif font-bold text-white mb-6">
-              Local Sourcing
+              Where it&apos;s made
             </h2>
 
             <div className="space-y-4 text-parchment-300">
               <p>
-                We work with what&apos;s close to home where we can. Our rum is distilled in Wales using Welsh water. Good ingredients, sourced to reduce waste.
+                Good ingredients, sourced to reduce waste.
               </p>
               <p>
                 It&apos;s not about slapping &quot;eco-friendly&quot; on the label. It&apos;s just how we think things should be done. Read more about <Link href="/about/story/" className="text-gold-300 hover:text-gold-400 underline">our story</Link> and the values that shape how we work.
               </p>
 
               <div className="grid sm:grid-cols-2 gap-4 mt-6">
-                <ScrollReveal delay={0}>
-                <div className="bg-jerry-green-800/60 rounded-lg p-4">
-                  <h3 className="text-gold-300 font-semibold mb-2">Welsh Water</h3>
-                  <p className="text-sm">Pure water from Wales, used in our distillation process.</p>
-                </div>
-                </ScrollReveal>
-                <ScrollReveal delay={1}>
-                <div className="bg-jerry-green-800/60 rounded-lg p-4">
-                  <h3 className="text-gold-300 font-semibold mb-2">Molasses</h3>
-                  <p className="text-sm">Sourced locally where possible, reducing waste.</p>
-                </div>
-                </ScrollReveal>
                 <ScrollReveal delay={0}>
                 <div className="bg-jerry-green-800/60 rounded-lg p-4">
                   <h3 className="text-gold-300 font-semibold mb-2">UK Distillation</h3>

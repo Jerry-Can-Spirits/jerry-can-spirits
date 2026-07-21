@@ -31,7 +31,7 @@ export function cfOgImage(idOrUrl: string, alt: string): OgImage[] {
 /** Brand-default OG: homepage hero. Used when no page-specific image exists. */
 export const OG_IMAGE: OgImage[] = cfOgImage(
   'beed84d3-c77d-4ecf-c85f-29719bdea000',
-  'Jerry Can Spirits® — Veteran-Owned British Spiced Rum, distilled in Wales',
+  'Jerry Can Spirits® — Veteran-Owned British Spiced Rum',
 )
 
 /** OG image for cocktail/Field Manual section pages. */

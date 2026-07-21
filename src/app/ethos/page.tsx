@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: 'Our Ethos - How We Make Rum | Jerry Can Spirits®',
-    description: 'The values behind Jerry Can Spirits. Built on discipline, integrity, and real ingredients. Real botanicals, Welsh-distilled, veteran-owned.',
+    description: 'The values behind Jerry Can Spirits. Built on discipline, integrity, and real ingredients. Real botanicals, British-made, veteran-owned.',
     url: 'https://jerrycanspirits.co.uk/ethos/',
     siteName: 'Jerry Can Spirits®',
     locale: 'en_GB',
@@ -25,7 +25,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image' as const,
     title: 'Our Ethos - How We Make Rum | Jerry Can Spirits®',
-    description: 'The values behind Jerry Can Spirits. Built on discipline, integrity, and real ingredients. Real botanicals, Welsh-distilled, veteran-owned.',
+    description: 'The values behind Jerry Can Spirits. Built on discipline, integrity, and real ingredients. Real botanicals, British-made, veteran-owned.',
     images: OG_IMAGE,
   },
   robots: {
@@ -209,7 +209,7 @@ export default function Ethos() {
               The Journey
             </h2>
             <p className="text-xl text-parchment-300 max-w-3xl mx-auto">
-              From the Caribbean rum base to the Welsh distillery to the bottle. Every step is deliberate. Nothing is in there by accident.
+              From the Caribbean rum base to the bottle. Every step is deliberate. Nothing is in there by accident.
             </p>
           </div>
 
@@ -240,8 +240,6 @@ export default function Ethos() {
                       <div className="bg-jerry-green-800/60 rounded-lg p-4">
                         <h4 className="text-gold-300 font-semibold mb-2">UK Sourced</h4>
                         <ul className="text-sm text-parchment-300 space-y-1">
-                          <li>• Pure Welsh water</li>
-                          <li>• Molasses</li>
                           <li>• Bourbon barrel chips</li>
                           <li>• Agave syrup</li>
                         </ul>
@@ -422,13 +420,6 @@ export default function Ethos() {
                   <div>
                     <p className="font-semibold text-gold-300">Local Sourcing</p>
                     <p className="text-sm">We try to source from the UK when we can – it makes sense for a British brand</p>
-                  </div>
-                </div>
-                <div className="flex items-start space-x-3">
-                  <div className="w-2 h-2 bg-gold-400 rounded-full mt-2 shrink-0"></div>
-                  <div>
-                    <p className="font-semibold text-gold-300">Welsh Partnership</p>
-                    <p className="text-sm">Working with our British partner distillery for our blending and production</p>
                   </div>
                 </div>
                 <div className="flex items-start space-x-3">

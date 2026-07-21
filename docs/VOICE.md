@@ -75,7 +75,6 @@ All content connects to one of these layers, in order of priority:
 
 - Name: Expedition Spiced
 - Base: Caribbean rum
-- Molasses: molasses
 - Maceration partner: our British partner distillery
 - Flavour profile: Vanilla, cinnamon, allspice, clove, orange peel, cassia, ginger, agave, bourbon oak
 - ABV: 40% | Volume: 700ml

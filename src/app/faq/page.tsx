@@ -32,7 +32,7 @@ const faqs = [
   },
   {
     question: "What type of rum do you produce?",
-    answer: "We make one product: Expedition Spiced Rum. A spiced rum, 40% ABV, pot-distilled in Wales with real botanicals. Works neat, over ice, or in cocktails."
+    answer: "We make one product: Expedition Spiced Rum. A spiced rum, 40% ABV, made in Britain with real botanicals. Works neat, over ice, or in cocktails."
   },
   {
     question: "What is the alcohol content (ABV) of your rum?",
