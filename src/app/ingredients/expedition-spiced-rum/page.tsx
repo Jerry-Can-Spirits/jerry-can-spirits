@@ -189,10 +189,6 @@ export default function ExpeditionSpicedRumIngredients() {
                 <p className="text-parchment-400 text-xs mt-1">per 700ml bottle</p>
                 <p className="text-parchment-400 text-xs">263 kcal per 100ml</p>
               </div>
-              <div>
-                <p className="text-gold-300 text-sm font-semibold uppercase tracking-wider mb-1">Origin</p>
-                <p className="text-2xl font-serif text-white">Wales, UK</p>
-              </div>
             </div>
 
             {/* Per Serve Info */}
@@ -294,7 +290,7 @@ export default function ExpeditionSpicedRumIngredients() {
                 <ul className="space-y-2">
                   <li className="flex items-start space-x-3">
                     <div className="w-2 h-2 bg-gold-400 rounded-full mt-2 shrink-0"></div>
-                    <span>Pure Welsh Water</span>
+                    <span>Pure water</span>
                   </li>
                 </ul>
               </div>
