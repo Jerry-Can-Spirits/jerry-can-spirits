@@ -391,7 +391,8 @@ export default defineType({
               name: 'shopifyHandle',
               title: 'Shopify Product Handle',
               type: 'string',
-              description: 'Product handle from Shopify (e.g., "expedition-spiced-rum")'
+              description: 'Full product handle from Shopify (e.g., "jerry-can-spirits-expedition-spiced-rum")',
+              validation: (Rule) => Rule.required(),
             }),
             defineField({
               name: 'contextNote',

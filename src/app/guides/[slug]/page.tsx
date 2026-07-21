@@ -537,7 +537,10 @@ export default async function GuidePage({ params }: PageProps) {
                 <div>
                   <h2 className="text-2xl font-serif font-bold text-gold-300 mb-6">Recommended Products</h2>
                   <div className="grid sm:grid-cols-2 gap-4">
-                    {guide.relatedProducts.map((product, index) => (
+                    {guide.relatedProducts
+                      .filter((product): product is RelatedProduct =>
+                        typeof product?.shopifyHandle === 'string' && product.shopifyHandle.trim() !== '')
+                      .map((product, index) => (
                       <Link
                         key={index}
                         href={`/shop/product/${product.shopifyHandle}/`}
