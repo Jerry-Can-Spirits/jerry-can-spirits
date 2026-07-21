@@ -35,16 +35,22 @@ function TastingNotesDisplay({ notes }: { notes: string }) {
   )
 }
 
+// Batch-1 label types. Validation is the bottles table itself (getBottleByLabel,
+// strict — Audit 7 #6): the hardcoded per-label ceilings were removed because the
+// DB row is the source of truth for what was produced. Display names fall back to
+// a capitalised label so an unexpected label_type renders rather than crashes.
+// Batch 2+ drops the label-type split for flat bottle numbering; that URL scheme
+// is designed with the batch (see the Batch-002 model notes) and is not this
+// route's concern yet.
 const validLabelTypes = new Set<LabelType>(['standard', 'premium', 'founder'])
-const labelMaxBottles: Record<LabelType, number> = {
-  standard: 700,
-  premium: 100,
-  founder: 40,
-}
-const labelDisplayNames: Record<LabelType, string> = {
+const labelDisplayNames: Partial<Record<string, string>> = {
   standard: 'Standard',
   premium: 'Premium',
   founder: 'Founder',
+}
+
+function displayNameFor(labelType: string): string {
+  return labelDisplayNames[labelType] ?? labelType.charAt(0).toUpperCase() + labelType.slice(1)
 }
 
 function parseBottleId(bottleId: string): { labelType: LabelType; bottleNumber: number } | null {
@@ -55,7 +61,7 @@ function parseBottleId(bottleId: string): { labelType: LabelType; bottleNumber: 
   const bottleNumber = parseInt(match[2], 10)
 
   if (!validLabelTypes.has(labelType)) return null
-  if (bottleNumber < 1 || bottleNumber > labelMaxBottles[labelType]) return null
+  if (bottleNumber < 1) return null
 
   return { labelType, bottleNumber }
 }
@@ -72,7 +78,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   if (!bottle) return { title: 'Bottle Not Found' }
   const batch = bottle.batch
 
-  const displayLabel = labelDisplayNames[labelType]
+  const displayLabel = displayNameFor(labelType)
   return {
     title: `${displayLabel} #${bottleNumber} — ${batch.name}`,
     description: `Certificate of authenticity for ${displayLabel} bottle #${bottleNumber} from ${batch.name}. Jerry Can Spirits — veteran-owned premium British rum.`,
@@ -96,7 +102,7 @@ export default async function BottleDetailPage({ params }: PageProps) {
   if (!bottle) notFound()
   const batch = bottle.batch
 
-  const displayLabel = labelDisplayNames[labelType]
+  const displayLabel = displayNameFor(labelType)
   const pageUrl = `https://jerrycanspirits.co.uk/batch/${batchNumber}/${bottleId}/`
 
   return (

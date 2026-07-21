@@ -13,7 +13,7 @@ import { OG_IMAGE } from '@/lib/og'
 import { productOffer, priceValidUntil } from '@/lib/jsonLd'
 
 export const metadata: Metadata = {
-  title: 'Cocktail Shaker Sets, Barware & Bar Tools',
+  title: 'Cocktail Shakers, Barware & Bar Tools',
   description: 'Cocktail shaker sets, bar tools, and glassware for crafting rum cocktails at home. Everything you need to build a proper home bar.',
   alternates: {
     canonical: 'https://jerrycanspirits.co.uk/shop/barware/',

@@ -39,7 +39,7 @@ const articleSchema = {
 }
 
 export const metadata: Metadata = {
-  title: "Our Story - Two Veterans Building a Spirits Company",
+  title: "Our Story - Two Veteran Founders",
   description: "Two Royal Signals veterans built a spirits company from scratch. No shortcuts. No hidden investors. Expedition Spiced Rum, real ingredients, made in Britain.",
   alternates: {
     canonical: 'https://jerrycanspirits.co.uk/about/story/',
