@@ -215,6 +215,8 @@ export default function TermsOfService() {
                   <li><strong>Class 33:</strong> Spirits, alcoholic beverages, rum, and related products</li>
                   <li><strong>Class 35:</strong> Retail and wholesale services in relation to alcoholic beverages</li>
                 </ul>
+                {/* Pour IQ is a separate company; this notice is HELD until the
+                    trade mark transfers with the corporate separation. */}
                 <p className="text-white mb-2 mt-4">
                   Pour IQ™ is a trade mark of Jerry Can Spirits Ltd. UK trade mark application UK00004387466 is pending registration for:
                 </p>
