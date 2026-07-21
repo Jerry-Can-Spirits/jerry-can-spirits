@@ -232,7 +232,7 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
 
   'hip-flasks': {
     h1: 'Hip Flasks',
-    metaTitle: 'Hip Flasks UK | Stainless Steel Hip Flask',
+    metaTitle: 'Stainless Steel Hip Flasks UK',
     metaDescription:
       'Stainless steel hip flasks from Jerry Can Spirits. Built for the field. A proper flask that holds your drink, seals properly, and survives being carried.',
     introBody: [
@@ -257,7 +257,7 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
 
   'ice-chilling': {
     h1: 'Ice and Chilling',
-    metaTitle: 'Ice and Chilling | Spirit Stones and Chilling Accessories',
+    metaTitle: 'Spirit Stones & Chilling Accessories',
     metaDescription:
       'Stainless steel spirit stones and chilling accessories. Keep your drink cold without diluting it. From Jerry Can Spirits.',
     introBody: [
@@ -282,7 +282,7 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
 
   'cocktail-glasses-glassware': {
     h1: 'Cocktail Glasses',
-    metaTitle: 'Cocktail Glasses UK | Highballs, Tumblers and More',
+    metaTitle: 'Cocktail Glasses & Highballs UK',
     metaDescription:
       'Cocktail glasses for the home bar. Highballs, tumblers, hurricane glasses and mixer glasses. The right vessel makes a difference.',
     introBody: [
@@ -314,7 +314,7 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
 
   'cocktail-shakers': {
     h1: 'Cocktail Shakers',
-    metaTitle: 'Cocktail Shakers UK | Stainless Steel Cocktail Shaker',
+    metaTitle: 'Stainless Steel Cocktail Shakers UK',
     metaDescription:
       'Stainless steel cocktail shakers for the home bar. Seals properly, chills properly, built to last. From Jerry Can Spirits.',
     introBody: [
@@ -341,7 +341,7 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
 
   bundles: {
     h1: 'Bundles',
-    metaTitle: 'Expedition Spiced Rum Bundles | Save When You Stock Up',
+    metaTitle: 'Spiced Rum Bundles | Stock Up & Save',
     metaDescription:
       'Stock up on Expedition Spiced Rum and save. Same small-batch British rum, better value. Veteran-owned, produced in small batches in Britain.',
     introBody: [
