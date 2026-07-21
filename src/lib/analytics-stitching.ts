@@ -14,9 +14,6 @@ import {
   STITCH_SESSION_ID,
   STITCH_GCLID,
   STITCH_CONSENT,
-  STITCH_FBP,
-  STITCH_FBC,
-  STITCH_MARKETING_CONSENT,
   CONSENT_GRANTED,
 } from './analytics-stitch-keys';
 
@@ -65,16 +62,6 @@ export function readAnalyticsConsent(): typeof CONSENT_GRANTED | 'denied' {
   return window.Cookiebot?.consent?.statistics ? CONSENT_GRANTED : 'denied';
 }
 
-/**
- * Marketing consent, for the Meta CAPI send. Meta advertising cookies are a
- * marketing purpose, so this gates on Cookiebot's marketing category — NOT the
- * statistics one GA4 uses. Read at the moment of stamping.
- */
-export function readMarketingConsent(): typeof CONSENT_GRANTED | 'denied' {
-  if (typeof window === 'undefined') return 'denied';
-  return window.Cookiebot?.consent?.marketing ? CONSENT_GRANTED : 'denied';
-}
-
 export function buildStitchingAttributes(): CartAttribute[] {
   const attrs: CartAttribute[] = [];
   const clientId = readGaClientId();
@@ -86,29 +73,10 @@ export function buildStitchingAttributes(): CartAttribute[] {
   // Always record consent so the server-side send gates on it explicitly,
   // rather than inferring it from the presence or absence of a client_id.
   attrs.push({ key: STITCH_CONSENT, value: readAnalyticsConsent() });
-
-  // Meta CAPI stitching: the _fbp/_fbc cookies (present only if the Pixel loaded
-  // under marketing consent) plus the marketing-consent gate, so the webhook can
-  // send a server-side Purchase to Meta — the leg that recovers WebView orders
-  // where the client Pixel never fired.
-  const fbp = readCookie('_fbp');
-  if (fbp) attrs.push({ key: STITCH_FBP, value: fbp });
-  const fbc = readCookie('_fbc');
-  if (fbc) attrs.push({ key: STITCH_FBC, value: fbc });
-  attrs.push({ key: STITCH_MARKETING_CONSENT, value: readMarketingConsent() });
-
   return attrs;
 }
 
-const STITCH_KEYS = new Set([
-  STITCH_CLIENT_ID,
-  STITCH_SESSION_ID,
-  STITCH_GCLID,
-  STITCH_CONSENT,
-  STITCH_FBP,
-  STITCH_FBC,
-  STITCH_MARKETING_CONSENT,
-]);
+const STITCH_KEYS = new Set([STITCH_CLIENT_ID, STITCH_SESSION_ID, STITCH_GCLID, STITCH_CONSENT]);
 
 /**
  * Stamp the stitching identifiers onto the cart, preserving any existing
