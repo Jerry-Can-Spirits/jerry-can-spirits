@@ -152,7 +152,7 @@ export async function getBatchStats(db: D1Database, batchId: string): Promise<Ba
       FROM bottles WHERE batch_id = ?`,
     )
     .bind(batchId)
-    .first<{ total: number; available: number; sold: number }>();
+    .first<{ total: number; available: number | null; sold: number | null }>();
 
   const daysAged = batch.distillation_date
     ? Math.floor(

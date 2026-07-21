@@ -146,6 +146,11 @@ export async function POST(request: Request) {
   }
   if (!payload.declaration) return badRequest('Declaration must be accepted')
 
+  const yearsTrading = Number(payload.years_trading)
+  if (!Number.isFinite(yearsTrading) || yearsTrading < 0 || yearsTrading > 200) {
+    return badRequest('Years trading must be a valid number')
+  }
+
   // --- Conditional rules ---
   if (requiresCompaniesHouse(payload.legal_structure)) {
     if (!payload.companies_house_number) return badRequest('Companies House number is required for this legal structure')
@@ -180,10 +185,18 @@ export async function POST(request: Request) {
 
   // Addresses
   if (!payload.trading_address) return badRequest('Trading address is required')
+  const tradingAddr = payload.trading_address as { line1?: unknown; town?: unknown }
+  if (typeof tradingAddr.line1 !== 'string' || tradingAddr.line1.trim() === '' || typeof tradingAddr.town !== 'string' || tradingAddr.town.trim() === '') {
+    return badRequest('A complete trading address (line 1 and town) is required')
+  }
   const tradingPc = validatePostcode(payload.trading_address.postcode)
   if (!tradingPc.ok) return badRequest(`Trading address: ${tradingPc.error}`)
   if (!payload.registered_address_same) {
     if (!payload.registered_address) return badRequest('Registered address is required')
+    const regAddr = payload.registered_address as { line1?: unknown; town?: unknown }
+    if (typeof regAddr.line1 !== 'string' || regAddr.line1.trim() === '' || typeof regAddr.town !== 'string' || regAddr.town.trim() === '') {
+      return badRequest('A complete registered address (line 1 and town) is required')
+    }
     const regPc = validatePostcode(payload.registered_address.postcode)
     if (!regPc.ok) return badRequest(`Registered address: ${regPc.error}`)
   }
@@ -225,7 +238,7 @@ export async function POST(request: Request) {
     companies_house_number: payload.companies_house_number?.trim() || null,
     vat_number: payload.vat_number?.trim() || null,
     awrs_urn: payload.awrs_urn?.trim() || null,
-    years_trading: Number(payload.years_trading),
+    years_trading: yearsTrading,
     website: payload.website?.trim() || null,
     trading_address_json: JSON.stringify(payload.trading_address),
     registered_address_json: payload.registered_address_same

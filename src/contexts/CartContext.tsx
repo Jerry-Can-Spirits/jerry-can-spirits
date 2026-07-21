@@ -208,15 +208,18 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       const updatedCart = await shopifyRemoveFromCart(cart.id, [lineId])
       setCart(updatedCart)
 
-      if (removedLine && typeof window !== 'undefined' && typeof window.gtag === 'function' && window.Cookiebot?.consent?.statistics) {
+      // Guard the money: a non-ProductVariant merchandise line has no price, so
+      // skip the event rather than send value: NaN to GA4.
+      const removedPrice = removedLine ? parseFloat(removedLine.merchandise.price?.amount ?? '') : NaN
+      if (removedLine && !Number.isNaN(removedPrice) && typeof window !== 'undefined' && typeof window.gtag === 'function' && window.Cookiebot?.consent?.statistics) {
         window.gtag('event', 'remove_from_cart', {
           currency: removedLine.merchandise.price.currencyCode,
-          value: parseFloat(removedLine.merchandise.price.amount) * removedLine.quantity,
+          value: removedPrice * removedLine.quantity,
           items: [{
             item_id: removedLine.merchandise.id.split('/').pop() ?? removedLine.merchandise.id,
             item_name: removedLine.merchandise.product.title,
             item_variant: removedLine.merchandise.title !== 'Default Title' ? removedLine.merchandise.title : undefined,
-            price: parseFloat(removedLine.merchandise.price.amount),
+            price: removedPrice,
             quantity: removedLine.quantity,
           }],
         })

@@ -78,7 +78,7 @@ export default async function ExpeditionLogPage() {
                   </div>
                   {entry.bottle_type && (
                     <p className="text-parchment-500 text-xs mt-1">
-                      {entry.bottle_type === 'standard' ? 'Batch 001' : entry.bottle_type === 'premium' ? 'Premium' : 'Founder'}
+                      {entry.bottle_type === 'standard' ? entry.batch_id.replace('batch-', 'Batch ') : entry.bottle_type === 'premium' ? 'Premium' : 'Founder'}
                       {entry.bottle_number ? ` · #${entry.bottle_number}` : ''}
                     </p>
                   )}

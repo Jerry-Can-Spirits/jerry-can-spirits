@@ -121,7 +121,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
   return {
     title: ingredient.metaTitle || `${ingredient.name} Guide`,
-    description: ingredient.metaDescription || ingredient.description.slice(0, 160),
+    description: ingredient.metaDescription || ingredient.description?.slice(0, 160),
     alternates: {
       canonical: `https://jerrycanspirits.co.uk/field-manual/ingredients/${slug}/`,
     },

@@ -134,7 +134,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     : 'cocktail'
   const spiritLabel = baseSpirit === 'cocktail' ? 'cocktail' : `${baseSpirit} cocktail`
   const variantNote = cocktail.variants?.length ? ` Includes ${cocktail.variants.length} variations.` : ''
-  const fallbackDescription = `${cocktail.description.slice(0, 110).trimEnd()}. A ${spiritLabel} recipe with step-by-step instructions from Jerry Can Spirits.${variantNote}`
+  const fallbackDescription = `${(cocktail.description ?? '').slice(0, 110).trimEnd()}. A ${spiritLabel} recipe with step-by-step instructions from Jerry Can Spirits.${variantNote}`
 
   const metaTitle = cocktail.metaTitle || `${cocktail.name} Recipe`
   const metaDescription = cocktail.metaDescription || fallbackDescription
