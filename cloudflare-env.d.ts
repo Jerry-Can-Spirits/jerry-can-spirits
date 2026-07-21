@@ -18,11 +18,6 @@ interface CloudflareEnv {
   META_FB_PAGE_ID: string;
   META_IG_ACCOUNT_ID: string;
 
-  // Secrets — Meta Conversions API (server-side Pixel events, incl. the webhook
-  // Purchase send). Optional test code routes events to Events Manager test.
-  META_CAPI_ACCESS_TOKEN: string;
-  META_CAPI_TEST_CODE?: string;
-
   // Secrets — Shopify Admin API (for webhooks, stock sync)
   SHOPIFY_ADMIN_API_TOKEN: string;
   SHOPIFY_WEBHOOK_SECRET: string;
