@@ -23,7 +23,7 @@ export default async function TradePricingPage() {
   return (
     <TradeSheetShell
       title="Trade Pricing"
-      eyebrow="Expedition Spiced"
+      eyebrow="Expedition Spiced Rum"
       subtitle={`Your account: ${session.venue_name}. Tier: ${
         viewerTier === 'intro' || viewerTier === 'standard' || viewerTier === 'partner'
           ? tierLabel(viewerTier)

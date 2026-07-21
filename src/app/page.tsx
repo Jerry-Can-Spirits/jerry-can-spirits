@@ -253,7 +253,7 @@ export default function Home() {
                     We work with what's close to home where we can. Our rum is made in Britain, in small batches. It's not about slapping 'eco-friendly' on the label. It's just how we think things should be done.
                   </p>
                   <p>
-                    We signed the Armed Forces Covenant because supporting veterans isn't a marketing angle for us - it's personal. A portion of every sale goes to forces charities. We guarantee job interviews for veterans. It's baked into how we run the company, not bolted on afterwards.
+                    We signed the Armed Forces Covenant because supporting veterans isn't a marketing angle for us - it's personal. 5% of profits goes to forces charities. We guarantee job interviews for veterans. It's baked into how we run the company, not bolted on afterwards.
                   </p>
                   <p>
                     There's a reason we named ourselves after the jerry can. It wasn't designed to look good on a shelf. It was designed to work - in the desert, in the Arctic, wherever it was needed. That's the standard we hold ourselves to. Rum that does what it's supposed to do, every single time.{' '}

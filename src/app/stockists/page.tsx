@@ -123,7 +123,7 @@ export default function StockistsPage() {
             </span>
           </div>
           <h1 className="text-4xl md:text-5xl font-serif font-bold text-white mb-4">
-            Find Expedition Spiced
+            Find Expedition Spiced Rum
           </h1>
           <p className="text-xl text-parchment-300 max-w-2xl">
             Enter your postcode to find the nearest stockist. More stockists being added regularly.
@@ -133,7 +133,7 @@ export default function StockistsPage() {
         {/* Featured Stockists */}
         <div className="mb-16">
           <h2 className="text-2xl font-serif font-bold text-white mb-6">
-            Stocking Expedition Spiced
+            Stocking Expedition Spiced Rum
           </h2>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {featuredStockists.map((stockist, index) => (

@@ -225,7 +225,7 @@ export default function StockistFinder() {
                   No stockists within 25 miles of your location.
                 </p>
                 <p className="text-parchment-500 text-sm">
-                  We are expanding our retail presence ahead of launch. If you would like to stock Expedition Spiced, get in touch via our{' '}
+                  We are expanding our retail presence ahead of launch. If you would like to stock Expedition Spiced Rum, get in touch via our{' '}
                   <a href="/contact/enquiries/" className="text-gold-400 hover:text-gold-300 underline">
                     trade enquiries
                   </a>{' '}

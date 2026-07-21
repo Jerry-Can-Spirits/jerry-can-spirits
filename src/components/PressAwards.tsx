@@ -60,14 +60,14 @@ const awardItems: AwardItem[] = [
   },
   {
     title: 'IWSC 2026 Bronze Medal',
-    body: 'Expedition Spiced. International Wine and Spirit Competition.',
+    body: 'Expedition Spiced Rum. International Wine and Spirit Competition.',
     year: '2026',
     image: 'https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/66191572-4bf8-4de0-ba4d-01aab5c20700/public',
     url: 'https://www.iwsc.net/results/detail/172185/expedition-spiced-spiced-rum',
   },
   {
     title: 'IWSC 2026 Silver Medal',
-    body: 'Expedition Spiced and cola, judged with Franklin and Sons.',
+    body: 'Expedition Spiced Rum and cola, judged with Franklin and Sons.',
     year: '2026',
     image: 'https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/2558fe93-bdf0-458c-85d6-5de6097ed300/public',
     url: 'https://www.iwsc.net/results/detail/172185/expedition-spiced-spiced-rum',

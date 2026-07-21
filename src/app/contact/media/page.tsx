@@ -164,7 +164,7 @@ Our name comes from the classic jerry can – designed in 1937 and still NATO st
 
 Based in the UK, Jerry Can Spirits® is a small operation run by two mates who care about getting it right. Whether you're an outdoors type or just fancy a decent drink, our Expedition Spiced Rum delivers honest quality and proper flavour. We're still learning and growing, but we're committed to making spirits that are worth your time.`
 
-  const socialResponsibilityStatement = `Jerry Can Spirits commits 5% of annual net profits to armed forces charities supporting veteran welfare, mental health services, and military families. This isn't marketing. It's who we are.`
+  const socialResponsibilityStatement = `Jerry Can Spirits commits 5% of profits to armed forces charities supporting veteran welfare, mental health services, and military families. This isn't marketing. It's who we are.`
 
   return (
     <main className="min-h-screen">
@@ -297,7 +297,8 @@ Based in the UK, Jerry Can Spirits® is a small operation run by two mates who c
                     { label: 'Product', value: 'Expedition Spiced Rum' },
                     { label: 'ABV', value: '40%' },
                     { label: 'Volume', value: '700ml' },
-                    { label: 'RRP', value: '£40.00' },
+                    // RRP row removed (Audit 8 PR B): no hardcoded price in copy;
+                    // re-add from live pricing after the 1 Aug 2026 change.
                     { label: 'Base Spirit', value: 'Caribbean rum' },
                     { label: 'Produced At', value: 'our British partner distillery' },
                   ].map((item) => (

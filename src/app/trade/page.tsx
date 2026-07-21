@@ -49,7 +49,7 @@ export default function TradePage() {
             For Venues That Hold Themselves to a Higher Standard
           </h1>
           <p className="text-xl text-parchment-300 max-w-2xl leading-relaxed">
-            Expedition Spiced is a British craft rum built on real ingredients and no shortcuts. This page is for bars, restaurants, and hotels who want to know what stocking it looks like in practice.
+            Expedition Spiced Rum is a British craft rum built on real ingredients and no shortcuts. This page is for bars, restaurants, and hotels who want to know what stocking it looks like in practice.
           </p>
         </div>
       </section>
@@ -74,7 +74,7 @@ export default function TradePage() {
                 Built for mixing and sipping
               </h3>
               <p className="text-parchment-300 text-sm leading-relaxed">
-                Vanilla, cinnamon, allspice, orange peel, ginger, cassia, agave, bourbon oak. Complex enough to stand alone. Structured enough to anchor a cocktail menu. Forty percent ABV.
+                Vanilla, cinnamon, allspice, orange peel, ginger, cassia, agave, bourbon oak. Complex enough to stand alone. Structured enough to anchor a cocktail menu. 40% ABV.
               </p>
             </div>
             <div>
@@ -116,7 +116,7 @@ export default function TradePage() {
             ))}
           </div>
           <p className="text-parchment-500 text-xs mt-8 max-w-2xl">
-            Spirit revenue only — based on a straight 25ml serve at realistic UK bar pricing. Many venues build Expedition Spiced into cocktails, which typically command higher serve prices. We have not factored in recipe costs for mixers, juice, or garnish, as those are yours to manage.
+            Spirit revenue only — based on a straight 25ml serve at realistic UK bar pricing. Many venues build Expedition Spiced Rum into cocktails, which typically command higher serve prices. We have not factored in recipe costs for mixers, juice, or garnish, as those are yours to manage.
           </p>
         </div>
       </section>
@@ -132,7 +132,7 @@ export default function TradePage() {
               We do not send bottles out to sit on a back shelf. When it works, it works because both sides are invested in it.
             </p>
             <p className="text-parchment-300 text-sm leading-relaxed mb-4">
-              What we have found helps: listing Expedition Spiced by name on your menu, building one serve around it, and letting us know honestly how it lands. We are not looking for a checklist. We are looking for venues that back what they stock.
+              What we have found helps: listing Expedition Spiced Rum by name on your menu, building one serve around it, and letting us know honestly how it lands. We are not looking for a checklist. We are looking for venues that back what they stock.
             </p>
             <p className="text-parchment-300 text-sm leading-relaxed">
               We are happy to help with serve suggestions, menu wording, or a visit from the founders if you are local. The people who built this are reachable. That is not something you get from a distributor.
@@ -163,7 +163,7 @@ export default function TradePage() {
           <div className="grid lg:grid-cols-2 gap-6">
             <div className="bg-jerry-green-800/40 border border-gold-500/30 rounded-xl p-8">
               <h2 className="text-xl font-serif font-bold text-white mb-2">
-                Stock Expedition Spiced
+                Stock Expedition Spiced Rum
               </h2>
               <p className="text-parchment-400 text-sm mb-6">
                 Apply for a trade account. We review and respond within three working days.

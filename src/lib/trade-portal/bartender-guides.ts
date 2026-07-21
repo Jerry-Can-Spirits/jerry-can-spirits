@@ -74,7 +74,7 @@ export const BARTENDER_GUIDES: Record<VenueSlug, BartenderGuide> = {
       {
         heading: 'Lead with this',
         name: 'Old Standard',
-        build: 'Our take on the Rum Old Fashioned. Expedition Spiced over a large ice cube, sugar, Angostura, orange peel expressed and dropped in. Full build is on the Field Manual.',
+        build: 'Our take on the Rum Old Fashioned. Expedition Spiced Rum over a large ice cube, sugar, Angostura, orange peel expressed and dropped in. Full build is on the Field Manual.',
         notes: 'This is the serve that shows what the rum actually is.',
       },
       {
@@ -85,7 +85,7 @@ export const BARTENDER_GUIDES: Record<VenueSlug, BartenderGuide> = {
       {
         heading: 'The long drink',
         name: 'Storm & Spice',
-        build: 'Our Dark & Stormy. Expedition Spiced, ginger beer, fresh lime. Built tall over cubed ice. Recipe on the Field Manual.',
+        build: 'Our Dark & Stormy. Expedition Spiced Rum, ginger beer, fresh lime. Built tall over cubed ice. Recipe on the Field Manual.',
         notes: 'Ginger beer for the traditional bite. Sub ginger ale if the guest prefers softer. Ask first.',
       },
       {
@@ -197,7 +197,7 @@ export const BARTENDER_GUIDES: Record<VenueSlug, BartenderGuide> = {
       },
       {
         scenario: 'If they ask about the brand',
-        response: '"Founded by two Royal Signals veterans. Bootstrapped, no investors. 5% of profits go to military charities. This is their first release."',
+        response: '"Founded by two Royal Signals veterans. Bootstrapped, no hidden investors. 5% of profits go to military charities. This is their first release."',
       },
       {
         scenario: 'If they’re choosing a digestif',
@@ -205,7 +205,7 @@ export const BARTENDER_GUIDES: Record<VenueSlug, BartenderGuide> = {
       },
     ],
     about:
-      'Jerry Can Spirits is veteran-owned and bootstrapped. Two Royal Signals veterans, no investors, real ingredients. Macerated at our British partner distillery. 5% of profits go to military charities. Expedition Spiced is their first release. jerrycanspirits.co.uk.',
+      'Jerry Can Spirits is veteran-owned and bootstrapped. Two Royal Signals veterans, no hidden investors, real ingredients. Macerated at our British partner distillery. 5% of profits go to military charities. Expedition Spiced Rum is their first release. jerrycanspirits.co.uk.',
   },
 }
 

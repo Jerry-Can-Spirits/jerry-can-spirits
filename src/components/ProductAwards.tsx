@@ -13,16 +13,16 @@ interface ProductAward {
 export const PRODUCT_AWARDS: ProductAward[] = [
   {
     title: 'IWSC 2026 Bronze',
-    citation: 'Expedition Spiced.',
+    citation: 'Expedition Spiced Rum.',
     image: `${CF_IMAGES}/863f3ff8-7252-477f-9627-a805f6c6a100/public`,
-    schemaText: 'IWSC 2026 Bronze Medal - Expedition Spiced',
+    schemaText: 'IWSC 2026 Bronze Medal - Expedition Spiced Rum',
     judgesNote: 'A hint of coconut leads to vibrant ginger and citrus, with gingerbread and winter spices.',
   },
   {
     title: 'IWSC 2026 Silver',
-    citation: 'Expedition Spiced and cola, judged with Franklin and Sons.',
+    citation: 'Expedition Spiced Rum and cola, judged with Franklin and Sons.',
     image: `${CF_IMAGES}/2f7661db-3571-44d1-ee15-8bbd3c3cfd00/public`,
-    schemaText: 'IWSC 2026 Silver Medal - Expedition Spiced and Cola',
+    schemaText: 'IWSC 2026 Silver Medal - Expedition Spiced Rum and Cola',
   },
 ]
 

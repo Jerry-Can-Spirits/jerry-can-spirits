@@ -14,12 +14,12 @@ export default async function DietaryStatementPage() {
   return (
     <TradeSheetShell
       title="Dietary and Allergen Statement"
-      eyebrow="Expedition Spiced"
+      eyebrow="Expedition Spiced Rum"
       subtitle={`Version ${STATEMENT_VERSION}. Issued ${STATEMENT_DATE}.`}
     >
       <TradeSheetSection title="Summary">
         <p className="text-sm leading-relaxed">
-          Expedition Spiced contains no declared allergens. It is suitable for vegan, vegetarian, gluten-free, dairy-free, and nut-free diets. No artificial flavourings, artificial colours, or essences are used at any stage of production.
+          Expedition Spiced Rum contains no declared allergens. It is suitable for vegan, vegetarian, gluten-free, dairy-free, and nut-free diets. No artificial flavourings, artificial colours, or essences are used at any stage of production.
         </p>
       </TradeSheetSection>
 

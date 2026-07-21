@@ -24,7 +24,7 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
       "Most rum gifts are chosen by people who don't drink rum. You can tell. Generic bottle, generic packaging, forgotten a week later.",
       'Expedition Spiced Rum is a different kind of gift. Caribbean rum base and a spice blend of Madagascan vanilla, Ceylon cinnamon, ginger, cassia, orange peel, and bourbon oak. Macerated at our British partner distillery. 700 numbered bottles for general release. Real ingredients. Every one of them.',
       'It is built for people who take their drink seriously. The kind of person who notices the difference between something made properly and something made to a price point.',
-      'Veteran-owned. No investors. No shortcuts. 5% of every sale goes to forces charities.',
+      'Veteran-owned. No hidden investors. No shortcuts. 5% of profits goes to forces charities.',
       'If you are looking for a rum gift that means something. This is it.',
     ],
     productHandles: [
@@ -36,12 +36,12 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
     seoBody: [
       'A rum gift lands differently when it is chosen properly. Not a novelty bottle with a generic label. Not something grabbed from the supermarket shelf because it looked like it might be premium. Expedition Spiced Rum is a gift that says something about the person who gave it.',
       'Caribbean rum base and a spice blend of Madagascan vanilla, Ceylon cinnamon, ginger root, cassia bark, clove, orange peel, and bourbon oak. Macerated at our British partner distillery. 700 numbered bottles for general release. Real ingredients, every one of them.',
-      'It is veteran-owned. Bootstrapped. No investors, no shortcuts. 5% of every sale goes to forces charities. This is the kind of brand people feel good about buying from. And when the person receiving it looks it up, they will understand why you chose it.',
+      'It is veteran-owned. Bootstrapped. No hidden investors, no shortcuts. 5% of profits goes to forces charities. This is the kind of brand people feel good about buying from. And when the person receiving it looks it up, they will understand why you chose it.',
     ],
     pillars: [
       { title: 'Arrives Ready to Gift', body: 'Clean, considered packaging that does not need wrapping to look like it was thought about. Pair with glassware or a gift pack if you want to go further.' },
       { title: 'A Rum Worth Drinking', body: 'Not a display bottle. Designed to be opened, sipped slowly, and finished properly. Caribbean rum, real spices, 40% ABV. The kind of thing people come back to.' },
-      { title: 'Veteran-Owned', body: 'Founded by two Royal Corps of Signals veterans. Armed Forces Covenant signatories. 5% of every sale supports forces charities. A purchase that gives back.' },
+      { title: 'Veteran-Owned', body: 'Founded by two Royal Corps of Signals veterans. Armed Forces Covenant signatories. 5% of profits supports forces charities. A purchase that gives back.' },
     ],
   },
 
@@ -67,7 +67,7 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
     pillars: [
       { title: 'Real Ingredients Only', body: 'Madagascan vanilla. Ceylon cinnamon. Ginger root. Cassia bark. Clove. Orange peel. Bourbon oak. No artificial flavourings. Every flavour comes from something that grew in the ground.' },
       { title: 'Small-Batch, Genuinely', body: '700 numbered bottles for general release per batch. Macerated at our British partner distillery. When it is gone, it is gone. Each batch carries subtle variation because it is made properly, not at industrial scale.' },
-      { title: 'Veteran-Made', body: 'Two Royal Corps of Signals veterans. 17 years of service between us. Armed Forces Covenant signatories. ERS Bronze Award. 5% of every sale to forces charities.' },
+      { title: 'Veteran-Made', body: 'Two Royal Corps of Signals veterans. 17 years of service between us. Armed Forces Covenant signatories. ERS Bronze Award. 5% of profits to forces charities.' },
     ],
   },
 
@@ -139,12 +139,12 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
     h1: 'Rum Gifts for Him',
     metaTitle: 'Rum Gifts for Him',
     metaDescription:
-      'Rum gifts for men who drink properly. Small-batch British spiced rum, real ingredients, no shortcuts. 5% of every sale to forces charities.',
+      'Rum gifts for men who drink properly. Small-batch British spiced rum, real ingredients, no shortcuts. 5% of profits to forces charities.',
     introBody: [
       'The best gifts for him are the ones he would not buy himself. Not because he does not want them. Because he has not got around to it, or because he does not feel justified spending the money on himself.',
       'Expedition Spiced Rum sits in that category. Caribbean rum, Madagascan vanilla, Ceylon cinnamon, ginger, cassia, clove, orange peel, bourbon oak. Macerated at our British partner distillery. 700 numbered bottles for general release per batch. The kind of bottle you pick up, look at, and put somewhere visible.',
       'It is for the man who drinks properly. Who takes his time. Who notices the difference between something built with standards and something built to a margin.',
-      'Veteran-owned. No investors. 5% of every sale to forces charities. Built by people who mean it.',
+      'Veteran-owned. No hidden investors. 5% of profits to forces charities. Built by people who mean it.',
     ],
     seoTitle: 'Not a Generic Gift. A Bottle Worth Noticing.',
     seoBody: [
@@ -154,7 +154,7 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
     ],
     pillars: [
       { title: 'A Bottle That Holds Its Own', body: 'This is not a novelty purchase. 40% ABV. Real spices. No artificial flavourings. The kind of rum you reach for when you want something worth drinking.' },
-      { title: 'Veteran-Owned', body: 'Founded by two Royal Signals veterans. No investors. No shortcuts. 5% of profits to forces charities. A purchase you can feel good about making.' },
+      { title: 'Veteran-Owned', body: 'Founded by two Royal Signals veterans. No hidden investors. No shortcuts. 5% of profits to forces charities. A purchase you can feel good about making.' },
       { title: 'Pair It Right', body: 'Neat. Over ice. With a proper mixer. All three work. Add a jigger or spirit stones if you want to give something extra alongside.' },
     ],
     productHandles: [
@@ -171,12 +171,12 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
     h1: 'Rum Gifts for Her',
     metaTitle: 'Rum Gifts for Her',
     metaDescription:
-      'Rum gifts for women who take their drink seriously. Small-batch British spiced rum, real ingredients, no shortcuts. 5% of every sale to forces charities.',
+      'Rum gifts for women who take their drink seriously. Small-batch British spiced rum, real ingredients, no shortcuts. 5% of profits to forces charities.',
     introBody: [
       'The assumption that a rum gift for her should be softer, sweeter, or less serious is wrong. Expedition Spiced Rum does not adjust for the recipient.',
       'Caribbean rum base, Madagascan vanilla, Ceylon cinnamon, ginger, cassia, clove, orange peel, bourbon oak. Macerated at our British partner distillery. 700 numbered bottles for general release per batch. The kind of bottle you pick up, look at, and put somewhere visible.',
       'It is for the woman who drinks properly. Who takes her time. Who would rather have one good bottle than three forgettable ones.',
-      'Veteran-owned. No investors. 5% of every sale to forces charities. Built by people who mean it.',
+      'Veteran-owned. No hidden investors. 5% of profits to forces charities. Built by people who mean it.',
     ],
     seoTitle: 'A Rum Gift for the Person Who Drinks Properly.',
     seoBody: [
@@ -186,7 +186,7 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
     ],
     pillars: [
       { title: 'No Adjustment for the Label', body: 'The rum is the same regardless of who is drinking it. Real ingredients, 40% ABV, no shortcuts. Designed for anyone who drinks properly.' },
-      { title: 'Veteran-Owned, Independent', body: 'Founded by two Royal Signals veterans. Bootstrapped. No investors. 5% of every sale supports forces charities.' },
+      { title: 'Veteran-Owned, Independent', body: 'Founded by two Royal Signals veterans. Bootstrapped. No hidden investors. 5% of profits supports forces charities.' },
       { title: 'One Good Bottle', body: 'Rather than three forgettable ones. A single 700ml bottle of something real, made properly, worth opening slowly.' },
     ],
     productHandles: [

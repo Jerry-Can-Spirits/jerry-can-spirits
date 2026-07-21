@@ -133,7 +133,7 @@ export default function MediaKitPage() {
                   {[
                     { label: 'ABV', value: '40%' },
                     { label: 'Volume', value: '700ml' },
-                    { label: 'RRP', value: '£40.00' },
+                    
                     { label: 'Base Spirit', value: 'Caribbean rum' },
                     { label: 'Distillery', value: 'our British partner distillery' },
                   ].map((spec) => (
