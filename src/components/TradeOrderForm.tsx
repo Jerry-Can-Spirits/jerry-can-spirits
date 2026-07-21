@@ -7,6 +7,11 @@ import {
   type TradeCategory,
   CATEGORY_LABELS,
 } from '@/lib/trade-products'
+import {
+  TRADE_DISCOUNT_PCT_BY_CODE,
+  TRADE_MIN_ORDER_GBP,
+  type TradeDiscountCode,
+} from '@/lib/trade-portal/product-data'
 
 type Stage = 'order' | 'loading'
 
@@ -19,17 +24,6 @@ const TIER_LABEL: Record<string, string> = {
   intro: 'Intro',
   standard: 'Standard',
   partner: 'Partner',
-}
-
-// Map of Shopify discount codes to their trade-price percentage. Kept here so
-// the order page can render trade prices upfront instead of waiting until
-// Shopify checkout. Source of truth is still the Shopify discount itself —
-// any drift will be visible at checkout where the venue would flag it.
-const DISCOUNT_BY_CODE: Record<string, number> = {
-  'TRADE-INTRO': 15,
-  'TRADE-PARTNER-1': 5,
-  'TRADE-PARTNER-2': 10,
-  'TRADE-PARTNER-3': 15,
 }
 
 const CATEGORY_ORDER: TradeCategory[] = ['spirits', 'glassware', 'bar-tools', 'sustainability']
@@ -54,7 +48,7 @@ export default function TradeOrderForm({ products, error: catalogueError, accoun
   const [quantities, setQuantities] = useState<Record<string, number>>({})
   const [formError, setFormError] = useState('')
 
-  const discountPercent = DISCOUNT_BY_CODE[account.discount_code] ?? 0
+  const discountPercent = TRADE_DISCOUNT_PCT_BY_CODE[account.discount_code as TradeDiscountCode] ?? 0
   // Per-product trade price. Discount-excluded items (e.g. the Ecologi
   // donation, which the Shopify discount code is scoped to skip) are
   // always returned at full price so the displayed total matches what
@@ -292,6 +286,9 @@ export default function TradeOrderForm({ products, error: catalogueError, accoun
                 Your trade discount will be applied at checkout.
               </p>
             )}
+            <p className="text-parchment-600 text-xs mb-6">
+              Minimum order £{TRADE_MIN_ORDER_GBP}.
+            </p>
 
             <p role="alert" aria-live="assertive" className="text-red-400 text-sm mb-4 min-h-5">
               {formError}

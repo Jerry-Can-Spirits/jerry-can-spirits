@@ -3,6 +3,7 @@ import { TradeSheetSection, TradeSheetShell } from '@/components/trade-portal/Tr
 import {
   EXPEDITION_SPICED,
   PRICING_ROWS,
+  TRADE_MIN_ORDER_GBP,
   formatPence,
   type TradeTier,
 } from '@/lib/trade-portal/product-data'
@@ -129,6 +130,9 @@ export default async function TradePricingPage() {
             trade@jerrycanspirits.co.uk
           </a>
           .
+        </p>
+        <p className="text-sm leading-relaxed mt-3">
+          Minimum order £{TRADE_MIN_ORDER_GBP}. Your tier discount applies automatically at checkout.
         </p>
         <p className="text-sm leading-relaxed mt-3 text-parchment-300 print:text-black/70">
           All prices shown are per case or per bottle as labelled. VAT-inclusive figures are the bold column. Ex-VAT figures are shown alongside for accounting reference. Prices subject to change with notice.

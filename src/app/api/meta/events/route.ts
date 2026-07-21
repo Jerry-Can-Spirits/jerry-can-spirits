@@ -16,6 +16,7 @@ interface IncomingBody {
   eventTime?: unknown
   eventSourceUrl?: unknown
   customData?: unknown
+  consent?: unknown
 }
 
 function isValidBody(body: IncomingBody): body is {
@@ -24,9 +25,14 @@ function isValidBody(body: IncomingBody): body is {
   eventTime: number
   eventSourceUrl: string
   customData: Record<string, unknown>
+  consent: true
 } {
   return (
-    typeof body.eventName === 'string' && body.eventName.length > 0 && body.eventName.length < 100
+    // Server-side consent gate: never forward identifiers to Meta CAPI without an
+    // explicit marketing-consent flag. The client also gates, but a client bug, a
+    // race before Cookiebot loads, or a direct POST must not leak PII.
+    body.consent === true
+    && typeof body.eventName === 'string' && body.eventName.length > 0 && body.eventName.length < 100
     && typeof body.eventID === 'string' && body.eventID.length > 0 && body.eventID.length < 100
     && typeof body.eventTime === 'number' && Number.isFinite(body.eventTime)
     && typeof body.eventSourceUrl === 'string' && body.eventSourceUrl.length < 2048
