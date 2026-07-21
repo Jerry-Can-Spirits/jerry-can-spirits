@@ -282,7 +282,7 @@ export default async function SpiritsPage() {
             </h2>
             <div className="space-y-4 text-parchment-200 leading-relaxed">
               <p>
-                Expedition Spiced Rum starts with Caribbean white rum and molasses. We blend these at our British partner distillery, pot-distilling in small batches of 700 numbered bottles for general release.
+                The base is Caribbean white rum. We blend it with real botanicals and let each one take its own time.
               </p>
               <p>
                 The flavour profile opens with Madagascan vanilla and Ceylon cinnamon, moves into warming ginger and cassia through the middle, and finishes smooth with bourbon oak and a hint of citrus. It's designed to drink neat, work in cocktails, and hold its own over ice.
