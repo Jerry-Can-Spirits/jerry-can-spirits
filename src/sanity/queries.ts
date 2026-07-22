@@ -182,7 +182,13 @@ export const ingredientBySlugQuery = `*[_type == "ingredient" && slug.current ==
   history,
   professionalTip,
   author,
-  "relatedCocktails": relatedCocktails[]->[defined(_id)]{ _id, name, slug },
+  // Manual picks first, then every cocktail whose recipe references this
+  // ingredient — derived so new cocktails appear on ingredient pages
+  // automatically. array::unique dedupes the overlap.
+  "relatedCocktails": array::unique([
+    ...coalesce(relatedCocktails[]->{ _id, name, slug }, []),
+    ...*[_type == "cocktail" && references(^._id)] | order(name asc) { _id, name, slug }
+  ]),
   "relatedIngredients": relatedIngredients[]->[defined(_id)]{ _id, name, slug }
 }`
 
@@ -260,7 +266,13 @@ export const equipmentBySlugQuery = `*[_type == "equipment" && slug.current == $
   faqs,
   author,
   videoUrl,
-  "relatedCocktails": relatedCocktails[]->[defined(_id)]{ _id, name, slug },
+  // Manual picks first, then every cocktail that references this equipment
+  // (e.g. via its glassware reference) — derived so new cocktails appear on
+  // glass pages automatically. array::unique dedupes the overlap.
+  "relatedCocktails": array::unique([
+    ...coalesce(relatedCocktails[]->{ _id, name, slug }, []),
+    ...*[_type == "cocktail" && references(^._id)] | order(name asc) { _id, name, slug }
+  ]),
   "relatedEquipment": relatedEquipment[]->[defined(_id)]{ _id, name, slug },
   "relatedIngredients": relatedIngredients[]->[defined(_id)]{ _id, name, slug }
 }`
