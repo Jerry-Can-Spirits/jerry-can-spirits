@@ -182,6 +182,11 @@ export const ingredientBySlugQuery = `*[_type == "ingredient" && slug.current ==
   history,
   professionalTip,
   author,
+  "relatedGuides": relatedGuides[defined(guide->._id)] {
+    "guide": guide->{ _id, title, slug },
+    sectionAnchor,
+    linkText
+  },
   // Manual picks first, then every cocktail whose recipe references this
   // ingredient — derived so new cocktails appear on ingredient pages
   // automatically. array::unique dedupes the overlap.
@@ -268,6 +273,11 @@ export const equipmentBySlugQuery = `*[_type == "equipment" && slug.current == $
   faqs,
   author,
   videoUrl,
+  "relatedGuides": relatedGuides[defined(guide->._id)] {
+    "guide": guide->{ _id, title, slug },
+    sectionAnchor,
+    linkText
+  },
   // Manual picks first, then every cocktail that references this equipment
   // (e.g. via its glassware reference) — derived so new cocktails appear on
   // glass pages automatically. array::unique dedupes the overlap.

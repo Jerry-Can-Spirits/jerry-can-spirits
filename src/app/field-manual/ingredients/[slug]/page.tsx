@@ -12,6 +12,7 @@ import EnlargeableProductImage from '@/components/EnlargeableProductImage'
 import FieldManualPortableText from '@/components/FieldManualPortableText'
 import StructuredData from '@/components/StructuredData'
 import RelatedCocktailsList from '@/components/RelatedCocktailsList'
+import RelatedGuidesList, { type GuideLink } from '@/components/RelatedGuidesList'
 import { OG_IMAGE_COCKTAIL } from '@/lib/og'
 
 // Types for ingredient data
@@ -75,6 +76,7 @@ interface Ingredient {
     name: string
     slug: { current: string }
   }>
+  relatedGuides?: GuideLink[]
   longDescription?: PortableTextBlock[]
   author?: string
 }
@@ -573,6 +575,14 @@ export default async function IngredientDetailPage({ params }: { params: Promise
               <div className="order-11 bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
                 <h2 className="text-2xl font-serif font-bold text-gold-300 mb-4">History & Context</h2>
                 <p className="text-parchment-300 leading-relaxed whitespace-pre-line">{ingredient.history}</p>
+              </div>
+            )}
+
+            {/* Related Technique Guides */}
+            {ingredient.relatedGuides && ingredient.relatedGuides.length > 0 && (
+              <div className="order-14 bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+                <h2 className="text-2xl font-serif font-bold text-gold-300 mb-4">From the Guides</h2>
+                <RelatedGuidesList guides={ingredient.relatedGuides} />
               </div>
             )}
 
