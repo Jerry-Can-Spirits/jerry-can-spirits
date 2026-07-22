@@ -22,7 +22,7 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
       'Rum gifts for people who actually drink it. Expedition Spiced Rum from a veteran-owned British spirits house. Real ingredients, small batch, built properly.',
     introBody: [
       "Most rum gifts are chosen by people who don't drink rum. You can tell. Generic bottle, generic packaging, forgotten a week later.",
-      'Expedition Spiced Rum is a different kind of gift. Caribbean rum base and a spice blend of Madagascan vanilla, Ceylon cinnamon, ginger, cassia, orange peel, and bourbon oak. Macerated at our British partner distillery. 700 numbered bottles for general release. Real ingredients. Every one of them.',
+      'Expedition Spiced Rum is a different kind of gift. A numbered bottle from a small British batch, Bronze at the IWSC 2026, with a Silver for the serve with Franklin and Sons cola. Real ingredients, every one of them.',
       'It is built for people who take their drink seriously. The kind of person who notices the difference between something made properly and something made to a price point.',
       'Veteran-owned. No hidden investors. No shortcuts. 5% of profits goes to forces charities.',
       'If you are looking for a rum gift that means something. This is it.',
@@ -35,7 +35,7 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
     seoTitle: 'What Makes Expedition Spiced Rum a Proper Rum Gift',
     seoBody: [
       'A rum gift lands differently when it is chosen properly. Not a novelty bottle with a generic label. Not something grabbed from the supermarket shelf because it looked like it might be premium. Expedition Spiced Rum is a gift that says something about the person who gave it.',
-      'Caribbean rum base and a spice blend of Madagascan vanilla, Ceylon cinnamon, ginger root, cassia bark, clove, orange peel, and bourbon oak. Macerated at our British partner distillery. 700 numbered bottles for general release. Real ingredients, every one of them.',
+      'Nine real botanicals, no artificial flavourings, macerated at our British partner distillery. Every bottle is numbered and traceable to its batch. The IWSC gave the rum Bronze and the cola serve Silver in 2026. Judged, not claimed.',
       'It is veteran-owned. Bootstrapped. No hidden investors, no shortcuts. 5% of profits goes to forces charities. This is the kind of brand people feel good about buying from. And when the person receiving it looks it up, they will understand why you chose it.',
     ],
     pillars: [
@@ -52,8 +52,8 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
       'Small-batch British spiced rum, macerated at our British partner distillery. Real spices, no artificial flavourings. Veteran-owned, British-made.',
     introBody: [
       'Most spiced rum is made to a formula. Base spirit, artificial flavourings, a label that leans on nostalgia. The result is consistent, inoffensive, and forgettable.',
-      'Expedition Spiced Rum is built differently. Caribbean rum base and a hand-selected spice blend: Madagascan vanilla, Ceylon cinnamon, ginger root, cassia bark, clove, orange peel, and bourbon oak. No artificial flavourings. Nothing that does not belong there.',
-      'It is made in Britain by our British partner distillery. 700 numbered bottles for general release per batch. When a batch is gone, that run is finished. Each batch has the kind of subtle variation that comes from doing things properly rather than at industrial scale.',
+      'Expedition Spiced Rum is built differently. Caribbean rum base and a hand-selected blend of nine botanicals: Madagascan vanilla, Ceylon cinnamon, allspice, ginger root, cassia bark, clove, orange peel, agave, and bourbon oak. No artificial flavourings. Nothing that does not belong there.',
+      'It is made in Britain by our British partner distillery. Batch 001 was 700 numbered bottles for general release, and every batch is a numbered, finite run: when it is gone, that run is finished. Each batch has the kind of subtle variation that comes from doing things properly rather than at industrial scale.',
       'We are two Royal Corps of Signals veterans. We built this because we could not find what we wanted on the shelf. 17 years of service between us, and the same standards applied here.',
       '40% ABV. 700ml. Built to be sipped, not mixed and forgotten.',
     ],
@@ -61,12 +61,12 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
     seoTitle: '40% ABV. 700ml. Built to Be Sipped.',
     seoBody: [
       'Expedition Spiced Rum is not designed to be mixed and forgotten. It is designed to be the reason someone stops and pays attention. The vanilla opens first. Then cinnamon. The ginger and cassia come through the middle. Bourbon oak on the finish. Nothing synthetic. Nothing that does not belong.',
-      'Our batches are macerated at our British partner distillery, 700 numbered bottles for general release at a time. That is not a marketing claim. It is a physical constraint. When a batch is sold, that specific run is finished. The next batch will be made properly, with the same care, but it will have subtle variations. That is what real small-batch means.',
+      'Our batches are macerated at our British partner distillery in limited numbers, and every bottle is numbered. That is not a marketing claim. It is a physical constraint. When a batch is sold, that specific run is finished. The next batch will be made properly, with the same care, but it will have subtle variations. That is what real small-batch means.',
       'If you have been drinking spiced rum for years and never found one you would choose over a whisky or gin, this might change that. Try it neat first. Then over one cube. Then decide what to do with the rest of the bottle.',
     ],
     pillars: [
       { title: 'Real Ingredients Only', body: 'Madagascan vanilla. Ceylon cinnamon. Ginger root. Cassia bark. Clove. Orange peel. Bourbon oak. No artificial flavourings. Every flavour comes from something that grew in the ground.' },
-      { title: 'Small-Batch, Genuinely', body: '700 numbered bottles for general release per batch. Macerated at our British partner distillery. When it is gone, it is gone. Each batch carries subtle variation because it is made properly, not at industrial scale.' },
+      { title: 'Small-Batch, Genuinely', body: 'Limited numbers per batch, every bottle numbered. Macerated at our British partner distillery. When it is gone, it is gone. Each batch carries subtle variation because it is made properly, not at industrial scale.' },
       { title: 'Veteran-Made', body: 'Two Royal Corps of Signals veterans. 17 years of service between us. Armed Forces Covenant signatories. ERS Bronze Award. 5% of profits to forces charities.' },
     ],
   },
@@ -142,14 +142,14 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
       'Rum gifts for men who drink properly. Small-batch British spiced rum, real ingredients, no shortcuts. 5% of profits to forces charities.',
     introBody: [
       'The best gifts for him are the ones he would not buy himself. Not because he does not want them. Because he has not got around to it, or because he does not feel justified spending the money on himself.',
-      'Expedition Spiced Rum sits in that category. Caribbean rum, Madagascan vanilla, Ceylon cinnamon, ginger, cassia, clove, orange peel, bourbon oak. Macerated at our British partner distillery. 700 numbered bottles for general release per batch. The kind of bottle you pick up, look at, and put somewhere visible.',
+      'Expedition Spiced Rum sits in that category. A numbered bottle from a small British batch, Bronze at the IWSC within three months of launch. The kind of bottle you pick up, look at, and put somewhere visible.',
       'It is for the man who drinks properly. Who takes his time. Who notices the difference between something built with standards and something built to a margin.',
       'Veteran-owned. No hidden investors. 5% of profits to forces charities. Built by people who mean it.',
     ],
     seoTitle: 'Not a Generic Gift. A Bottle Worth Noticing.',
     seoBody: [
       'The best gifts for him do not need to be explained. They communicate something clearly. Expedition Spiced Rum is a 700ml statement. The packaging is considered. The name has a story behind it. The rum inside is made properly.',
-      'Caribbean rum, Madagascan vanilla, Ceylon cinnamon, ginger, cassia, clove, orange peel, bourbon oak. Made in Britain. 700 numbered bottles for general release per batch. Built by two Royal Corps of Signals veterans who could not find what they wanted on the shelf.',
+      'Made in Britain from nine real botanicals, no artificial flavourings. Built by two Royal Corps of Signals veterans who could not find what they wanted on the shelf. Every bottle numbered.',
       'He will either drink it properly and appreciate every detail of it, or he will put it somewhere visible and people will ask about it. Either outcome works.',
     ],
     pillars: [
@@ -174,15 +174,15 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
       'Rum gifts for women who take their drink seriously. Small-batch British spiced rum, real ingredients, no shortcuts. 5% of profits to forces charities.',
     introBody: [
       'The assumption that a rum gift for her should be softer, sweeter, or less serious is wrong. Expedition Spiced Rum does not adjust for the recipient.',
-      'Caribbean rum base, Madagascan vanilla, Ceylon cinnamon, ginger, cassia, clove, orange peel, bourbon oak. Macerated at our British partner distillery. 700 numbered bottles for general release per batch. The kind of bottle you pick up, look at, and put somewhere visible.',
+      'Caribbean rum base, nine real botanicals, no artificial flavourings, 40% ABV. Vanilla opens first, cinnamon and ginger come through the middle, bourbon oak holds the finish.',
       'It is for the woman who drinks properly. Who takes her time. Who would rather have one good bottle than three forgettable ones.',
-      'Veteran-owned. No hidden investors. 5% of profits to forces charities. Built by people who mean it.',
+      'Veteran-owned and self-funded. 5% of profits goes to forces charities.',
     ],
     seoTitle: 'A Rum Gift for the Person Who Drinks Properly.',
     seoBody: [
       'Expedition Spiced Rum does not adjust for the recipient. The spice blend is the same. The process is the same. The 40% ABV is the same. This is a rum built for people who take their drink seriously, regardless of who is pouring it.',
-      'Caribbean rum base, Madagascan vanilla, Ceylon cinnamon, ginger, cassia, clove, orange peel, bourbon oak. Macerated at our British partner distillery. 700 numbered bottles for general release per batch. One bottle, made properly, no concessions.',
-      'The best gifts are the ones the recipient would not buy for themselves. Not because they would not want it. Because they have not got around to it, or because they do not feel justified spending the money on themselves. This is that gift.',
+      'Nine real botanicals, macerated at our British partner distillery, every bottle numbered. One bottle, made properly, no concessions.',
+      'Most rum gifts for women are picked from the softer shelf. This one is picked because it is good. That is the whole criterion.',
     ],
     pillars: [
       { title: 'No Adjustment for the Label', body: 'The rum is the same regardless of who is drinking it. Real ingredients, 40% ABV, no shortcuts. Designed for anyone who drinks properly.' },
@@ -346,7 +346,7 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
       'Stock up on Expedition Spiced Rum and save. Same small-batch British rum, better value. Veteran-owned, produced in small batches in Britain.',
     introBody: [
       'Stock up and save. The same Expedition Spiced Rum at better value when you order more. Caribbean rum base, real spices. Built properly, every batch.',
-      'Every bottle comes from the same small batch, macerated at our British partner distillery. 700 numbered bottles for general release per run. When a batch is gone, it is gone.',
+      'Every bottle in an order comes from the same numbered batch, macerated at our British partner distillery. When a batch is gone, it is gone.',
       'If you drink it regularly, this is how you stay stocked.',
     ],
   },
