@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import Image from 'next/image'
+import type { ReactNode } from 'react'
 import { getProductsByCollection, type ShopifyProduct } from '@/lib/shopify'
 import type { Metadata } from 'next'
 import Breadcrumbs from '@/components/Breadcrumbs'
@@ -13,7 +14,7 @@ import { OG_IMAGE } from '@/lib/og'
 import { safeJsonLd, productOffer, priceValidUntil } from '@/lib/jsonLd'
 
 export const metadata: Metadata = {
-  title: 'British Craft Spirits | Veteran-Owned',
+  title: 'British Craft Spirits',
   description: 'Veteran-owned British craft spirits, small-batch and built properly. Currently: Expedition Spiced Rum, made in Britain, real ingredients.',
   alternates: {
     canonical: 'https://jerrycanspirits.co.uk/shop/spirits/',
@@ -38,6 +39,42 @@ export const metadata: Metadata = {
 // ISR — pure Shopify catalogue data (no per-request state), so it edge-caches
 // and revalidates hourly instead of a live Shopify round-trip on every hit.
 export const revalidate = 3600
+
+// Single source for the spirits FAQ: the visible answers and the FAQPage
+// schema are generated from this one array (the two were previously
+// hardcoded separately). `answer` is the plain-text copy the schema emits;
+// `rich` is the rendered version with links and must say the same thing.
+const spiritsFaqs: Array<{ question: string; answer: string; rich?: ReactNode }> = [
+  {
+    question: 'What is spiced rum?',
+    answer: 'Spiced rum is rum infused with real spices and botanicals. Our Expedition Spiced Rum uses Madagascan vanilla, Ceylon cinnamon, ginger, orange peel, cloves, and cassia bark, steeped slowly in Caribbean rum and sweetened naturally with agave. Unlike artificial-tasting rums, we use real ingredients to create depth and complexity.',
+  },
+  {
+    question: 'How should I drink spiced rum?',
+    answer: 'However you like it, honestly. Expedition Spiced Rum is designed to work three ways: neat (to taste the full flavour profile), over ice (opens up as it dilutes slightly), or in cocktails (holds its character against mixers). Classic pairings include ginger beer for a Storm and Spice, cola for simplicity, or apple juice for something different. Check our Field Manual for cocktail recipes.',
+    rich: (
+      <>
+        However you like it, honestly. Expedition Spiced Rum is designed to work three ways: neat (to taste the full flavour profile), over ice (opens up as it dilutes slightly), or in cocktails (holds its character against mixers). Classic pairings include ginger beer for a Storm and Spice, cola for simplicity, or apple juice for something different. Check our <Link href="/field-manual/cocktails/" className="text-gold-400 hover:text-gold-300 underline">Field Manual</Link> for cocktail recipes.
+      </>
+    ),
+  },
+  {
+    question: "What does 'small-batch' actually mean?",
+    answer: "For us, it means limited, numbered batches: Batch 001 was 700 bottles for general release. It's not a marketing term. When a batch sells out, that specific run is gone. We can make more, but each batch has subtle variations.",
+  },
+  {
+    question: 'Is Jerry Can Spirits rum vegan?',
+    answer: 'Yes. Our Expedition Spiced Rum contains no animal products. The base is Caribbean white rum, and the spice blend is entirely plant-based. No honey, no animal-derived filtering agents, no animal products in production.',
+  },
+  {
+    question: 'Where is Jerry Can Spirits rum made?',
+    answer: 'We blend at our British partner distillery in the UK. The base white rum comes from the Caribbean. The blending, spicing, and bottling all happen in Britain.',
+  },
+  {
+    question: 'How does buying from Jerry Can Spirits support veterans?',
+    answer: "We're veteran-owned (Royal Corps of Signals, 17 years' combined service) and Armed Forces Covenant signatories. 5% of profits goes to forces charities, not because it's good marketing but because these are our community. When you buy from us, you're directly supporting veteran entrepreneurs and forces welfare.",
+  },
+]
 
 // Helper to format price with currency symbol
 function formatPrice(amount: string, currencyCode: string): string {
@@ -185,13 +222,13 @@ export default async function SpiritsPage() {
 
           <div className="max-w-3xl mx-auto space-y-4 text-left">
             <p className="text-xl text-parchment-300 leading-relaxed">
-              Most spiced rum is made to a formula. Base spirit, artificial flavourings, a label that leans on nostalgia. Consistent, inoffensive, and forgettable.
-            </p>
-            <p className="text-lg text-parchment-400 leading-relaxed">
-              Expedition Spiced Rum is built differently. Caribbean rum base and a hand-selected spice blend: Madagascan vanilla, Ceylon cinnamon, ginger root, cassia bark, clove, orange peel, and bourbon oak. No artificial flavourings. Nothing that does not belong there.
+              A spirits house starts with one bottle it can stand behind. Ours is Expedition Spiced Rum: Caribbean rum base, nine real botanicals, no artificial flavourings. Bronze at the IWSC 2026, with a Silver for the serve with Franklin and Sons cola.
             </p>
             <p className="text-lg text-parchment-400 leading-relaxed">
               Macerated at our British partner distillery in limited, numbered batches. When a batch is gone, that run is finished. Two Royal Corps of Signals veterans. 17 years of service between us. The same standards applied here.
+            </p>
+            <p className="text-lg text-parchment-400 leading-relaxed">
+              More expressions will follow as they earn their place. Nothing ships until it is right.
             </p>
           </div>
 
@@ -347,7 +384,7 @@ export default async function SpiritsPage() {
               </div>
               <h4 className="text-lg font-semibold text-white mb-2">Gives Back</h4>
               <p className="text-parchment-300 text-sm">
-                5% of profits supports forces charities. Armed Forces Covenant signatories. When you buy from us, you're supporting the veteran community — that's a promise.
+                5% of profits supports forces charities. Armed Forces Covenant signatories. When you buy from us, you're supporting the veteran community. That's a promise.
               </p>
             </div>
           </div>
@@ -364,56 +401,11 @@ export default async function SpiritsPage() {
             __html: safeJsonLd({
               "@context": "https://schema.org",
               "@type": "FAQPage",
-              "mainEntity": [
-                {
-                  "@type": "Question",
-                  "name": "What is spiced rum?",
-                  "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Spiced rum is rum infused with real spices and botanicals. Our Expedition Spiced Rum uses Madagascan vanilla, Ceylon cinnamon, ginger, orange peel, cloves, and cassia bark, steeped slowly in Caribbean rum and sweetened naturally with agave. Unlike artificial-tasting rums, we use real ingredients to create depth and complexity."
-                  }
-                },
-                {
-                  "@type": "Question",
-                  "name": "How should I drink spiced rum?",
-                  "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "However you like it, honestly. Expedition Spiced Rum is designed to work three ways: neat (to taste the full flavour profile), over ice (opens up as it dilutes slightly), or in cocktails (holds its character against mixers). Classic pairings include ginger beer for a Storm and Spice, cola for simplicity, or apple juice for something different. Check our Field Manual for cocktail recipes."
-                  }
-                },
-                {
-                  "@type": "Question",
-                  "name": "What does 'small-batch' actually mean?",
-                  "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "For us, it means limited, numbered batches: Batch 001 was 700 bottles for general release. It's not a marketing term. When a batch sells out, that specific run is gone. We can make more, but each batch has subtle variations."
-                  }
-                },
-                {
-                  "@type": "Question",
-                  "name": "Is Jerry Can Spirits rum vegan?",
-                  "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Yes. Our Expedition Spiced Rum contains no animal products. The base is Caribbean white rum, and the spice blend is entirely plant-based. No honey, no animal-derived filtering agents, no animal products in production."
-                  }
-                },
-                {
-                  "@type": "Question",
-                  "name": "Where is Jerry Can Spirits rum made?",
-                  "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "We blend at our British partner distillery in the UK. The base white rum comes from the Caribbean. The blending, spicing, and bottling all happen in Britain."
-                  }
-                },
-                {
-                  "@type": "Question",
-                  "name": "How does buying from Jerry Can Spirits support veterans?",
-                  "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "We're veteran-owned (Royal Corps of Signals, 17 years' combined service) and Armed Forces Covenant signatories. 5% of profits goes to forces charities — not because it's good marketing but because these are our community. When you buy from us, you're directly supporting veteran entrepreneurs and forces welfare."
-                  }
-                }
-              ]
+              "mainEntity": spiritsFaqs.map((faq) => ({
+                "@type": "Question",
+                "name": faq.question,
+                "acceptedAnswer": { "@type": "Answer", "text": faq.answer },
+              }))
             })
           }}
         />
@@ -427,47 +419,12 @@ export default async function SpiritsPage() {
           </p>
 
           <div className="space-y-6">
-            <div className="border-b border-gold-500/10 pb-6">
-              <h3 className="text-lg font-semibold text-gold-300 mb-3">What is spiced rum?</h3>
-              <p className="text-parchment-200 leading-relaxed">
-                Spiced rum is rum infused with real spices and botanicals. Our Expedition Spiced Rum uses Madagascan vanilla, Ceylon cinnamon, ginger, orange peel, cloves, and cassia bark, steeped slowly in Caribbean rum and sweetened naturally with agave. Unlike artificial-tasting rums, we use real ingredients to create depth and complexity.
-              </p>
-            </div>
-
-            <div className="border-b border-gold-500/10 pb-6">
-              <h3 className="text-lg font-semibold text-gold-300 mb-3">How should I drink spiced rum?</h3>
-              <p className="text-parchment-200 leading-relaxed">
-                However you like it, honestly. Expedition Spiced Rum is designed to work three ways: neat (to taste the full flavour profile), over ice (opens up as it dilutes slightly), or in cocktails (holds its character against mixers). Classic pairings include ginger beer for a Storm and Spice, cola for simplicity, or apple juice for something different. Check our <Link href="/field-manual/cocktails/" className="text-gold-400 hover:text-gold-300 underline">Field Manual</Link> for cocktail recipes.
-              </p>
-            </div>
-
-            <div className="border-b border-gold-500/10 pb-6">
-              <h3 className="text-lg font-semibold text-gold-300 mb-3">What does 'small-batch' actually mean?</h3>
-              <p className="text-parchment-200 leading-relaxed">
-                For us, it means limited, numbered batches: Batch 001 was 700 bottles for general release. It's not a marketing term. When a batch sells out, that specific run is gone. We can make more, but each batch has subtle variations.
-              </p>
-            </div>
-
-            <div className="border-b border-gold-500/10 pb-6">
-              <h3 className="text-lg font-semibold text-gold-300 mb-3">Is Jerry Can Spirits rum vegan?</h3>
-              <p className="text-parchment-200 leading-relaxed">
-                Yes. Our Expedition Spiced Rum contains no animal products. The base is Caribbean white rum, and the spice blend is entirely plant-based. No honey, no animal-derived filtering agents, no animal products in production.
-              </p>
-            </div>
-
-            <div className="border-b border-gold-500/10 pb-6">
-              <h3 className="text-lg font-semibold text-gold-300 mb-3">Where is Jerry Can Spirits rum made?</h3>
-              <p className="text-parchment-200 leading-relaxed">
-                We blend at our British partner distillery in the UK. The base white rum comes from the Caribbean. The blending, spicing, and bottling all happen in Britain.
-              </p>
-            </div>
-
-            <div>
-              <h3 className="text-lg font-semibold text-gold-300 mb-3">How does buying from Jerry Can Spirits support veterans?</h3>
-              <p className="text-parchment-200 leading-relaxed">
-                We're veteran-owned (Royal Corps of Signals, 17 years' combined service) and Armed Forces Covenant signatories. 5% of profits goes to forces charities — not because it's good marketing but because these are our community. When you buy from us, you're directly supporting veteran entrepreneurs and forces welfare.
-              </p>
-            </div>
+            {spiritsFaqs.map((faq, index) => (
+              <div key={faq.question} className={index !== spiritsFaqs.length - 1 ? 'border-b border-gold-500/10 pb-6' : ''}>
+                <h3 className="text-lg font-semibold text-gold-300 mb-3">{faq.question}</h3>
+                <p className="text-parchment-200 leading-relaxed">{faq.rich ?? faq.answer}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>

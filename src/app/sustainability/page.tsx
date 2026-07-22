@@ -2,58 +2,16 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import BackToTop from '@/components/BackToTop'
 import Breadcrumbs from '@/components/Breadcrumbs'
-import StructuredData from '@/components/StructuredData'
 import ScrollReveal from '@/components/ScrollReveal'
 import EcologiImpact from '@/components/EcologiImpact'
 import { OG_IMAGE } from '@/lib/og'
 
-// FAQ Schema for rich snippets
-const faqSchema = {
-  '@context': 'https://schema.org',
-  '@type': 'FAQPage',
-  mainEntity: [
-    {
-      '@type': 'Question',
-      name: 'How do I recycle a Jerry Can Spirits bottle?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: 'The glass bottle can be recycled in your household glass recycling bin or at a local bottle bank - just give it a quick rinse first. The cap is made from natural wood with a micro agglomerate cork seal - the cork can be composted, and the wooden top can go in garden waste or be repurposed.',
-      },
-    },
-    {
-      '@type': 'Question',
-      name: 'What is the Jerry Can Spirits bottle cap made of?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: 'Our cap is made from natural wood with a micro agglomerate cork seal. Both are natural, renewable materials. The cork can be composted, and the wooden top can go in your garden waste or be repurposed.',
-      },
-    },
-    {
-      '@type': 'Question',
-      name: 'Do I need to remove the label before recycling the bottle?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: 'No, you don\'t need to remove the label before recycling. Modern recycling facilities handle label removal during processing.',
-      },
-    },
-    {
-      '@type': 'Question',
-      name: 'Where is Jerry Can Spirits rum made?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: 'We work with suppliers who share our standards, and keep our supply chain as short as we sensibly can.',
-      },
-    },
-    {
-      '@type': 'Question',
-      name: 'Does Jerry Can Spirits have a bottle refill programme?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: 'We\'re currently exploring a bottle return and refill scheme for future batches. We\'re also working on minimising packaging and understanding our carbon footprint as we grow.',
-      },
-    },
-  ],
-}
+// The FAQPage schema this page carried was a schema-only orphan: no visible
+// Q&A renders here, which breaches Google's visible-content guideline, and
+// its "Where is Jerry Can Spirits rum made?" answer conflicted with
+// shop/spirits' answer to the identical Question name. Removed (same
+// rationale as the ethos page). If recycling FAQs are wanted, add them as
+// visible content first.
 
 export const metadata: Metadata = {
   title: "Sustainability & Recycling",
@@ -85,7 +43,6 @@ export const metadata: Metadata = {
 export default function Sustainability() {
   return (
     <main className="min-h-screen py-20">
-      <StructuredData data={faqSchema} id="sustainability-faq-schema" />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
         <Breadcrumbs
           items={[
