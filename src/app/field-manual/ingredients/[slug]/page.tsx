@@ -11,6 +11,7 @@ import Breadcrumbs from '@/components/Breadcrumbs'
 import EnlargeableProductImage from '@/components/EnlargeableProductImage'
 import FieldManualPortableText from '@/components/FieldManualPortableText'
 import StructuredData from '@/components/StructuredData'
+import RelatedCocktailsList from '@/components/RelatedCocktailsList'
 import { OG_IMAGE_COCKTAIL } from '@/lib/og'
 
 // Types for ingredient data
@@ -579,20 +580,7 @@ export default async function IngredientDetailPage({ params }: { params: Promise
             {ingredient.relatedCocktails && ingredient.relatedCocktails.length > 0 && (
               <div className="order-15 bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
                 <h2 className="text-2xl font-serif font-bold text-gold-300 mb-4">Featured In These Cocktails</h2>
-                <div className="grid sm:grid-cols-2 gap-3">
-                  {ingredient.relatedCocktails.filter(c => c?.slug?.current).map((cocktail) => (
-                    <Link
-                      key={cocktail._id}
-                      href={`/field-manual/cocktails/${cocktail.slug.current}`}
-                      className="flex items-center gap-3 p-3 bg-jerry-green-800/30 rounded-lg border border-gold-500/20 hover:bg-jerry-green-800/50 hover:border-gold-400/40 transition-all group"
-                    >
-                      <svg className="w-5 h-5 text-gold-400 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                      </svg>
-                      <span className="text-parchment-300 group-hover:text-gold-300 transition-colors">{cocktail.name}</span>
-                    </Link>
-                  ))}
-                </div>
+                <RelatedCocktailsList cocktails={ingredient.relatedCocktails} />
               </div>
             )}
 
