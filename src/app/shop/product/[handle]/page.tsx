@@ -23,6 +23,7 @@ import WhatsIncluded from '@/components/WhatsIncluded'
 import DietaryInfo from '@/components/DietaryInfo'
 import StickyAddToCart from '@/components/StickyAddToCart'
 import CompleteTheServe, { type CompleteTheServeItem } from '@/components/CompleteTheServe'
+import FindItIn from '@/components/FindItIn'
 import { client } from '@/sanity/lib/client'
 import { productByHandleQuery } from '@/sanity/queries'
 import { OG_IMAGE } from '@/lib/og'
@@ -632,6 +633,9 @@ export default async function ProductPage({
                 dangerouslySetInnerHTML={{ __html: xss(product.descriptionHtml) }}
               />
             )}
+
+            {/* Curated collection links (internal linking + wayfinding) */}
+            <FindItIn handle={handle} />
 
             {/* Live batch stock */}
             {stockRemaining !== null && handle === 'jerry-can-spirits-expedition-spiced-rum' && (

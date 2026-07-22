@@ -379,3 +379,13 @@ const giftSetsConfig: CategoryConfig = {
 // (both self-canonical — a duplicate-content defect). gift-sets is the canonical
 // URL; the old slug 308s to it in next.config.ts.
 CATEGORIES['gift-sets'] = giftSetsConfig
+
+// Invert CATEGORIES for the PDP's "Find it in" links: the virtual collection
+// pages that merchandise this product (handle-listed categories only). The
+// productHandles merchandising IS the curation, which keeps the PDP links
+// selective rather than a tag dump.
+export function categoriesForHandle(handle: string): Array<{ slug: string; title: string }> {
+  return Object.entries(CATEGORIES)
+    .filter(([, c]) => c.productHandles?.includes(handle))
+    .map(([slug, c]) => ({ slug, title: c.h1 }))
+}
