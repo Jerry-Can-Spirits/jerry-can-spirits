@@ -66,6 +66,7 @@ interface Ingredient {
   videoUrl?: string
   history?: string
   professionalTip?: string
+  faqs?: Array<{ question: string; answer: string }>
   relatedCocktails?: Array<{
     _id: string
     name: string
@@ -165,9 +166,24 @@ export default async function IngredientDetailPage({ params }: { params: Promise
     mainEntityOfPage: { '@type': 'WebPage', '@id': `https://jerrycanspirits.co.uk/field-manual/ingredients/${slug}/` },
   }
 
+  // FAQPage schema — generated from the same faqs array as the visible FAQ
+  // section below, so the two can never drift apart.
+  const faqSchema = ingredient.faqs?.length
+    ? {
+        '@context': 'https://schema.org',
+        '@type': 'FAQPage',
+        mainEntity: ingredient.faqs.map((faq) => ({
+          '@type': 'Question',
+          name: faq.question,
+          acceptedAnswer: { '@type': 'Answer', text: faq.answer },
+        })),
+      }
+    : null
+
   return (
     <main className="min-h-screen py-20">
       <StructuredData data={articleSchema} />
+      {faqSchema && <StructuredData data={faqSchema} id="ingredient-faq-schema" />}
       {/* Breadcrumb */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
         <Breadcrumbs
@@ -575,6 +591,21 @@ export default async function IngredientDetailPage({ params }: { params: Promise
               <div className="order-11 bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
                 <h2 className="text-2xl font-serif font-bold text-gold-300 mb-4">History & Context</h2>
                 <p className="text-parchment-300 leading-relaxed whitespace-pre-line">{ingredient.history}</p>
+              </div>
+            )}
+
+            {/* FAQs — single source for the visible Q&As and the FAQPage schema */}
+            {ingredient.faqs && ingredient.faqs.length > 0 && (
+              <div className="order-13 bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+                <h2 className="text-2xl font-serif font-bold text-gold-300 mb-4">Common Questions</h2>
+                <div className="space-y-4">
+                  {ingredient.faqs.map((faq) => (
+                    <div key={faq.question}>
+                      <h3 className="text-gold-400 font-semibold mb-2">{faq.question}</h3>
+                      <p className="text-parchment-300 leading-relaxed">{faq.answer}</p>
+                    </div>
+                  ))}
+                </div>
               </div>
             )}
 
