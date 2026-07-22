@@ -261,6 +261,7 @@ export const equipmentBySlugQuery = `*[_type == "equipment" && slug.current == $
   premiumOption,
   premiumLink,
   premiumImage,
+  ownProduct,
   history,
   professionalTip,
   faqs,
