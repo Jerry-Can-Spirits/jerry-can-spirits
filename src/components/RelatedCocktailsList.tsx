@@ -13,7 +13,14 @@ const VISIBLE_COUNT = 6
 // a native <details> expander — no client JS, and every link stays in the
 // server-rendered DOM for crawlers.
 export default function RelatedCocktailsList({ cocktails }: { cocktails: CocktailLink[] }) {
-  const valid = cocktails.filter((c) => c?.slug?.current)
+  // Dedupe by _id: the merged manual+derived GROQ can list the same cocktail
+  // twice (array::unique does not reliably dedupe projected objects).
+  const seen = new Set<string>()
+  const valid = cocktails.filter((c) => {
+    if (!c?.slug?.current || seen.has(c._id)) return false
+    seen.add(c._id)
+    return true
+  })
   if (valid.length === 0) return null
 
   const visible = valid.slice(0, VISIBLE_COUNT)
@@ -33,12 +40,12 @@ export default function RelatedCocktailsList({ cocktails }: { cocktails: Cocktai
   )
 
   if (hidden.length === 0) {
-    return <div className="grid sm:grid-cols-2 gap-3">{valid.map(card)}</div>
+    return <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">{valid.map(card)}</div>
   }
 
   return (
     <>
-      <div className="grid sm:grid-cols-2 gap-3">{visible.map(card)}</div>
+      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">{visible.map(card)}</div>
       <details className="group/details mt-3">
         <summary className="cursor-pointer list-none inline-flex items-center gap-2 px-4 py-2 bg-jerry-green-800/40 border border-gold-500/30 rounded-lg text-gold-300 text-sm font-semibold hover:bg-jerry-green-800/60 hover:border-gold-400/40 transition-all select-none">
           <svg className="w-4 h-4 transition-transform group-open/details:rotate-90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -47,7 +54,7 @@ export default function RelatedCocktailsList({ cocktails }: { cocktails: Cocktai
           <span className="group-open/details:hidden">Show all {valid.length} cocktails</span>
           <span className="hidden group-open/details:inline">Show fewer</span>
         </summary>
-        <div className="grid sm:grid-cols-2 gap-3 mt-3">{hidden.map(card)}</div>
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 mt-3">{hidden.map(card)}</div>
       </details>
     </>
   )
