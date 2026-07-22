@@ -13,7 +13,7 @@ import { OG_IMAGE } from '@/lib/og'
 import { safeJsonLd, productOffer, priceValidUntil } from '@/lib/jsonLd'
 
 export const metadata: Metadata = {
-  title: 'British Craft Spirits | Veteran-Owned Small-Batch',
+  title: 'British Craft Spirits | Veteran-Owned',
   description: 'Veteran-owned British craft spirits, small-batch and built properly. Currently: Expedition Spiced Rum, made in Britain, real ingredients.',
   alternates: {
     canonical: 'https://jerrycanspirits.co.uk/shop/spirits/',

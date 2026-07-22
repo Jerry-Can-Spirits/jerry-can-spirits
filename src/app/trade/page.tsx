@@ -4,7 +4,7 @@ import StructuredData from '@/components/StructuredData'
 import { baseOpenGraph } from '@/lib/og'
 
 export const metadata: Metadata = {
-  title: 'Stock Expedition Spiced Rum | Trade Enquiries',
+  title: 'Stock Expedition Spiced Rum | Trade',
   description: 'Trade pricing, serve economics and partnership information for bars, restaurants and hotels. Enquire to stock Expedition Spiced Rum.',
   alternates: {
     canonical: 'https://jerrycanspirits.co.uk/trade/',

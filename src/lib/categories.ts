@@ -375,5 +375,7 @@ const giftSetsConfig: CategoryConfig = {
   ],
 }
 
-CATEGORIES['gifts-and-experience'] = giftSetsConfig
+// /shop/gifts-and-experience/ was a byte-identical duplicate of /shop/gift-sets/
+// (both self-canonical — a duplicate-content defect). gift-sets is the canonical
+// URL; the old slug 308s to it in next.config.ts.
 CATEGORIES['gift-sets'] = giftSetsConfig

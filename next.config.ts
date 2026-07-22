@@ -230,6 +230,18 @@ const nextConfig: NextConfig = {
         permanent: true,
         basePath: false,
       },
+      // /shop/gifts-and-experience/ was a byte-identical duplicate of
+      // /shop/gift-sets/ (each self-canonical). One canonical URL now.
+      {
+        source: '/shop/gifts-and-experience',
+        destination: '/shop/gift-sets/',
+        permanent: true,
+      },
+      {
+        source: '/shop/gifts-and-experience/:path*',
+        destination: '/shop/gift-sets/:path*',
+        permanent: true,
+      },
       // The Pour IQ pilot charter page was unpublished with the corporate
       // separation (Audit 8 PR A); send the venue's bookmarks to the portal.
       {

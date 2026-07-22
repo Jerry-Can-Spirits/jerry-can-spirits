@@ -507,12 +507,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'weekly' as const,
       priority: 0.8,
     },
-    {
-      url: `${baseUrl}/shop/gifts-and-experience/`,
-      lastModified: STATIC_LAST_MODIFIED,
-      changeFrequency: 'weekly' as const,
-      priority: 0.8,
-    },
+    // /shop/gifts-and-experience/ removed: byte-identical duplicate of
+    // /shop/gift-sets/, now a 308 to it (kept in EXCLUDED_COLLECTIONS above).
   ]
 
   return [...routes, ...productUrls, ...cocktailUrls, ...equipmentUrls, ...ingredientUrls, ...guideUrls, ...batchUrls, ...dynamicCollectionUrls]

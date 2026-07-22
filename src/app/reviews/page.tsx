@@ -21,7 +21,7 @@ const TrustpilotWidget = dynamic(() => import('@/components/TrustpilotWidget'), 
 export const revalidate = 3600
 
 export const metadata: Metadata = {
-  title: "Customer Reviews | Trustpilot, Google, Yell & Trust A Veteran",
+  title: "Customer Reviews | Trustpilot & Google",
   description: "Reviews of Expedition Spiced Rum on Trustpilot, Google, Yell, and Trust A Veteran. Veteran-owned British spiced rum, no shortcuts.",
   alternates: {
     canonical: 'https://jerrycanspirits.co.uk/reviews/',
