@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import type { ReactNode } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import BackToTop from '@/components/BackToTop'
@@ -31,12 +32,64 @@ const articleSchema = {
     },
   },
   datePublished: '2025-07-31',
-  dateModified: '2026-04-06',
+  dateModified: '2026-07-22',
   mainEntityOfPage: {
     '@type': 'WebPage',
     '@id': 'https://jerrycanspirits.co.uk/about/story/',
   },
 }
+
+// Single source for the story FAQ: the visible answers and the FAQPage schema
+// are generated from this one array (the two previously drifted apart).
+// `answer` is the plain-text copy the schema emits; `rich` is the rendered
+// version with links and must say the same thing.
+const storyFaqs: Array<{ question: string; answer: string; rich?: ReactNode }> = [
+  {
+    question: 'Who owns Jerry Can Spirits?',
+    answer:
+      "Jerry Can Spirits is run by Dan and Rhys, who both served in the Royal Corps of Signals. We're self-funded and doing everything ourselves – learning as we go, making mistakes, and figuring it out along the way.",
+    rich: (
+      <>
+        Jerry Can Spirits is run by <Link href="/about/team/dan-freeman/" className="text-gold-300 hover:text-gold-400 underline">Dan</Link> and <Link href="/about/team/rhys-williams/" className="text-gold-300 hover:text-gold-400 underline">Rhys</Link>, who both served in the Royal Corps of Signals. We&apos;re self-funded and doing everything ourselves &ndash; learning as we go, making mistakes, and figuring it out along the way.
+      </>
+    ),
+  },
+  {
+    question: 'Is Jerry Can Spirits veteran owned?',
+    answer:
+      "Yes, we're British veteran owned. We both served in the Royal Corps of Signals before getting into spirits. The military taught us to appreciate kit that just works – nothing flashy, just reliable. That mindset stuck with us.",
+    rich: (
+      <>
+        Yes, we&apos;re British veteran owned. We both served in the Royal Corps of Signals before getting into spirits. The military taught us to appreciate kit that just works &ndash; nothing flashy, just reliable. That mindset stuck with us. Meet <Link href="/about/team/" className="text-gold-300 hover:text-gold-400 underline">the team</Link>.
+      </>
+    ),
+  },
+  {
+    question: 'Where is Jerry Can Spirits based?',
+    answer:
+      "We're based in the UK. It's a home-office operation – nothing glamorous, just us working away. Our Expedition Spiced Rum is made with Caribbean rum, blended at our British partner distillery right here in Britain.",
+    rich: (
+      <>
+        We&apos;re based in the UK. It&apos;s a home-office operation &ndash; nothing glamorous, just us working away. Our <Link href="/shop/product/jerry-can-spirits-expedition-spiced-rum/" className="text-gold-300 hover:text-gold-400 underline">Expedition Spiced Rum</Link> is made with Caribbean rum, blended at our British partner distillery right here in Britain.
+      </>
+    ),
+  },
+  {
+    question: 'What does the Jerry Can name mean?',
+    answer:
+      "The jerry can is the ultimate \"function over form\" design – invented in 1937 and still used today because it just works. No frills, no nonsense. That's the approach we take with our spirits. We're not trying to be flashy, we're trying to make something that's genuinely good.",
+  },
+  {
+    question: 'When was Jerry Can Spirits founded?',
+    answer:
+      "The company was founded in 2025, and Expedition Spiced Rum launched in April 2026. The idea had been kicking around for years – one of those \"we should make our own rum\" conversations that kept coming up whenever we got together. Eventually we stopped talking about it and had a go.",
+  },
+  {
+    question: 'What makes Jerry Can Spirits different?',
+    answer:
+      "Honestly? We're small and we're learning as we go. We don't have a big team or marketing department – it's just us, figuring out regulations, building relationships one at a time, and trying to make something we're proud of. When you're funding everything yourself, you care about every detail because you have to.",
+  },
+]
 
 export const metadata: Metadata = {
   title: "Our Story - Two Veteran Founders",
@@ -127,7 +180,7 @@ export default function OurStory() {
               What Service Taught Us
             </h2>
             <p className="text-xl text-parchment-300 max-w-3xl mx-auto">
-              Service with the Royal Corps of Signals took us to places where your equipment really gets put to the test. That military background shapes everything about how we approach our craft.
+              Service with the Royal Corps of Signals took us to places where your equipment really gets put to the test. Over 17 years between us, and that background shapes everything about how we approach our craft.
             </p>
           </div>
 
@@ -142,8 +195,7 @@ export default function OurStory() {
                   I served with the Royal Corps of Signals. Deployments to the Arctic and desert outposts – places where your equipment really gets put to the test. We learned to put our faith in gear that gets the job done, not in the likes of flashy new kit. The most reliable stuff is the unflashy stuff.
                 </p>
                 <p className="text-parchment-300 leading-relaxed">
-                  {/* TODO(copy-regen): "Whether you're on some grand expedition or just getting through a tough Tuesday" is the banned hedging formula; story is regeneration queue item 2, rewrite there. */}
-                  Life after the military was different for all of us. We all went on to do our own thing, but we retained that same basic understanding. A piece of kit that works, a design that&apos;s functional, a product that&apos;s reliable – these are non-negotiables. Whether you&apos;re on some grand expedition or just getting through a tough Tuesday, that&apos;s what matters.
+                  Life after the military was different for all of us. We all went on to do our own thing, but we retained that same basic understanding. A piece of kit that works, a design that&apos;s functional, a product that&apos;s reliable – these are non-negotiables. On a grand expedition or a tough Tuesday, that&apos;s what matters.
                 </p>
               </div>
             </div>
@@ -425,8 +477,7 @@ export default function OurStory() {
               The Jerry Can Promise
             </h2>
             <p className="text-xl text-parchment-300 max-w-3xl mx-auto">
-              {/* TODO(copy-regen): reversal formula ("not just X, it's Y"); story is regeneration queue item 2, rewrite there. */}
-              It&apos;s not just a name. It&apos;s the standard we hold ourselves to.
+              The jerry can set a standard: reliable, functional, built to last. We hold ourselves to it.
             </p>
           </div>
 
@@ -439,8 +490,11 @@ export default function OurStory() {
                 <p className="text-parchment-300 leading-relaxed mb-4">
                   The jerry can wasn&apos;t designed to win awards for looks – it was engineered to be reliable. As a team born of the service industry, we totally get that. Function over form, purpose over pretence.
                 </p>
+                <p className="text-parchment-300 leading-relaxed mb-4">
+                  Jerry Can Spirits is built on the same principles. When you need a drink that delivers on character and quality without compromise, that&apos;s exactly what we&apos;re engineered to do. We&apos;re a spirits house with purpose, with integrity.
+                </p>
                 <p className="text-parchment-300 leading-relaxed">
-                  Jerry Can Spirits is built on the same principles. When you need a drink that delivers on character and quality without compromise, that&apos;s exactly what we&apos;re engineered to do. We&apos;re rum with purpose, with integrity.
+                  5% of profits goes to military charities, and every bottle carries a batch number you can trace.
                 </p>
               </div>
 
@@ -481,7 +535,7 @@ export default function OurStory() {
                   Still Good, Still Unchanged
                 </h4>
                 <p className="text-parchment-300 leading-relaxed mb-4">
-                  Designed in 1937. Still up to NATO standards today. Still the go-to choice for overlanders trekking across the Sahara, sailors navigating the Atlantic, and aid workers in some of the most remote areas of the world. 88 years without a redesign and we&apos;re not done yet – when you get it right, you don&apos;t need a new version.
+                  Designed in 1937. Still up to NATO standards today. Still the go-to choice for overlanders trekking across the Sahara, sailors navigating the Atlantic, and aid workers in some of the most remote areas of the world. Nearly ninety years without a redesign and we&apos;re not done yet – when you get it right, you don&apos;t need a new version.
                 </p>
                 <p className="text-gold-300 font-semibold">
                   That&apos;s the philosophy behind every single bottle we craft.
@@ -534,7 +588,7 @@ export default function OurStory() {
                   Where We Are Currently
                 </h3>
                 <p className="text-parchment-300">
-                  Still tweaking our inaugural rum, still learning, still building. We&apos;re not yet turning a profit, but we&apos;re getting there.
+                  Launched April 2026. The first batch is shipping, the first stockists are pouring it, and the rum took Bronze at the IWSC within three months of going on sale. Still learning, still building, still not taking shortcuts.
                 </p>
               </div>
 
@@ -544,7 +598,7 @@ export default function OurStory() {
                   <ul className="space-y-2 text-parchment-300">
                     <li className="flex items-center space-x-2">
                       <span className="w-2 h-2 bg-gold-400 rounded-full"></span>
-                      <span>Perfecting our first rum – it&apos;s a work in progress</span>
+                      <span>Getting the first batch into the right hands</span>
                     </li>
                     <li className="flex items-center space-x-2">
                       <span className="w-2 h-2 bg-gold-400 rounded-full"></span>
@@ -585,6 +639,17 @@ export default function OurStory() {
               </div>
             </div>
 
+            {/* The other side of the bar — the single sanctioned Pour IQ mention
+                in customer copy (VOICE.md), framed as on-trade understanding. */}
+            <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-8 border border-gold-500/20">
+              <h3 className="text-2xl font-serif font-bold text-white mb-4">
+                The Other Side of the Bar
+              </h3>
+              <p className="text-parchment-300 leading-relaxed">
+                Along the way we built Pour IQ, menu and cost software for independent venues. Building it put us on the other side of the bar: we know what a venue&apos;s margins look like, and why a spirit has to earn its place on the rail. That understanding is in the bottle.
+              </p>
+            </div>
+
             {/* Future Vision */}
             <div className="grid lg:grid-cols-3 gap-8">
               <ScrollReveal delay={0}>
@@ -595,7 +660,7 @@ export default function OurStory() {
                 <h4 className="text-lg font-serif font-bold text-white mb-3">5-Year Vision</h4>
                 <ul className="space-y-2 text-parchment-300 text-sm text-left">
                   <li>• Build a rum worth talking about, without help from a marketing department</li>
-                  <li>• Have a range of world class rums on the market</li>
+                  <li>• Have a range of world class spirits on the market</li>
                   <li>• Have a strong retail presence – we want to be seen in the right places</li>
                   <li>• Have a loyal customer community – people who love what we do</li>
                 </ul>
@@ -649,119 +714,30 @@ export default function OurStory() {
           </div>
 
           <div className="space-y-4 max-w-4xl mx-auto">
-            <ScrollReveal>
-            <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20">
-              <h3 className="text-lg font-semibold text-white mb-3">Who owns Jerry Can Spirits?</h3>
-              <p className="text-parchment-300">
-                Jerry Can Spirits is run by <Link href="/about/team/dan-freeman/" className="text-gold-300 hover:text-gold-400 underline">Dan</Link> and <Link href="/about/team/rhys-williams/" className="text-gold-300 hover:text-gold-400 underline">Rhys</Link>, who both served in the Royal Corps of Signals. We&apos;re self-funded and doing everything ourselves – learning as we go, making mistakes, and figuring it out along the way.
-              </p>
-            </div>
-
-            </ScrollReveal>
-            <ScrollReveal delay={1}>
-            <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20">
-              <h3 className="text-lg font-semibold text-white mb-3">Is Jerry Can Spirits veteran owned?</h3>
-              <p className="text-parchment-300">
-                Yes, we&apos;re British veteran owned. We both served in the Royal Corps of Signals before getting into spirits. The military taught us to appreciate kit that just works – nothing flashy, just reliable. That mindset stuck with us. Meet <Link href="/about/team/" className="text-gold-300 hover:text-gold-400 underline">the team</Link>.
-              </p>
-            </div>
-
-            </ScrollReveal>
-            <ScrollReveal delay={2}>
-            <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20">
-              <h3 className="text-lg font-semibold text-white mb-3">Where is Jerry Can Spirits based?</h3>
-              <p className="text-parchment-300">
-                We&apos;re based in the UK. It&apos;s a home-office operation – nothing glamorous, just us working away. Our <Link href="/shop/product/jerry-can-spirits-expedition-spiced-rum/" className="text-gold-300 hover:text-gold-400 underline">Expedition Spiced Rum</Link> is made with Caribbean rum, blended at our British partner distillery right here in Britain.
-              </p>
-            </div>
-
-            </ScrollReveal>
-            <ScrollReveal>
-            <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20">
-              <h3 className="text-lg font-semibold text-white mb-3">What does the Jerry Can name mean?</h3>
-              <p className="text-parchment-300">
-                The jerry can is the ultimate &quot;function over form&quot; design – invented in 1937 and still used today because it just works. No frills, no nonsense. That&apos;s the approach we take with our spirits. We&apos;re not trying to be flashy, we&apos;re trying to make something that&apos;s genuinely good.
-              </p>
-            </div>
-
-            </ScrollReveal>
-            <ScrollReveal delay={1}>
-            <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20">
-              <h3 className="text-lg font-semibold text-white mb-3">When was Jerry Can Spirits founded?</h3>
-              <p className="text-parchment-300">
-                We launched in 2025, though the idea had been kicking around for years. It started as one of those &quot;we should make our own rum&quot; conversations that kept coming up whenever we got together. Eventually we stopped just talking about it and actually had a go.
-              </p>
-            </div>
-
-            </ScrollReveal>
-            <ScrollReveal delay={2}>
-            <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20">
-              <h3 className="text-lg font-semibold text-white mb-3">What makes Jerry Can Spirits different from other rum brands?</h3>
-              <p className="text-parchment-300">
-                Honestly? We&apos;re small and we&apos;re learning as we go. We don&apos;t have a big team or marketing department – it&apos;s just us, figuring out regulations, building relationships one at a time, and trying to make something we&apos;re proud of. When you&apos;re funding everything yourself, you care about every detail because you have to.
-              </p>
-            </div>
-            </ScrollReveal>
+            {storyFaqs.map((faq, index) => (
+              <ScrollReveal key={faq.question} delay={(index % 3) as 0 | 1 | 2}>
+                <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20">
+                  <h3 className="text-lg font-semibold text-white mb-3">{faq.question}</h3>
+                  <p className="text-parchment-300">{faq.rich ?? faq.answer}</p>
+                </div>
+              </ScrollReveal>
+            ))}
           </div>
 
-          {/* FAQ Schema Markup */}
+          {/* FAQ Schema — generated from the same storyFaqs array as the visible
+              FAQ above, so the two can never drift apart again. */}
           <script
             type="application/ld+json"
             dangerouslySetInnerHTML={{
               __html: safeJsonLd({
-                "@context": "https://schema.org",
-                "@type": "FAQPage",
-                "mainEntity": [
-                  {
-                    "@type": "Question",
-                    "name": "Who owns Jerry Can Spirits?",
-                    "acceptedAnswer": {
-                      "@type": "Answer",
-                      "text": "Jerry Can Spirits is run by Dan and Rhys, who both served in the Royal Corps of Signals. We're self-funded and doing everything ourselves – learning as we go, making mistakes, and figuring it out along the way."
-                    }
-                  },
-                  {
-                    "@type": "Question",
-                    "name": "Is Jerry Can Spirits veteran owned?",
-                    "acceptedAnswer": {
-                      "@type": "Answer",
-                      "text": "Yes, we're British veteran owned. We both served in the Royal Corps of Signals before getting into spirits. The military taught us to appreciate kit that just works – nothing flashy, just reliable. That mindset stuck with us."
-                    }
-                  },
-                  {
-                    "@type": "Question",
-                    "name": "Where is Jerry Can Spirits based?",
-                    "acceptedAnswer": {
-                      "@type": "Answer",
-                      "text": "We're based in the UK. It's a home-office operation – nothing glamorous, just us working away. Our Expedition Spiced Rum is made with Caribbean rum, blended right here in Britain."
-                    }
-                  },
-                  {
-                    "@type": "Question",
-                    "name": "What does the Jerry Can name mean?",
-                    "acceptedAnswer": {
-                      "@type": "Answer",
-                      "text": "The jerry can is the ultimate \"function over form\" design – invented in 1937 and still used today because it just works. No frills, no nonsense. That's the approach we take with our spirits."
-                    }
-                  },
-                  {
-                    "@type": "Question",
-                    "name": "When was Jerry Can Spirits founded?",
-                    "acceptedAnswer": {
-                      "@type": "Answer",
-                      "text": "We launched in 2025, though the idea had been kicking around for years. It started as one of those \"we should make our own rum\" conversations that kept coming up whenever we got together. Eventually we stopped just talking about it and actually had a go."
-                    }
-                  },
-                  {
-                    "@type": "Question",
-                    "name": "What makes Jerry Can Spirits different from other rum brands?",
-                    "acceptedAnswer": {
-                      "@type": "Answer",
-                      "text": "We're small and we're learning as we go. We don't have a big team or marketing department – it's just us, figuring out regulations, building relationships one at a time, and trying to make something we're proud of."
-                    }
-                  }
-                ]
-              })
+                '@context': 'https://schema.org',
+                '@type': 'FAQPage',
+                mainEntity: storyFaqs.map((faq) => ({
+                  '@type': 'Question',
+                  name: faq.question,
+                  acceptedAnswer: { '@type': 'Answer', text: faq.answer },
+                })),
+              }),
             }}
           />
         </section>
