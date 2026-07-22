@@ -268,6 +268,35 @@ export default defineType({
       description: 'A standout expert insight (displayed prominently)'
     }),
     defineField({
+      name: 'faqs',
+      title: 'Equipment FAQs',
+      type: 'array',
+      of: [
+        {
+          type: 'object',
+          fields: [
+            defineField({
+              name: 'question',
+              title: 'Question',
+              type: 'string',
+              validation: Rule => Rule.required()
+            }),
+            defineField({
+              name: 'answer',
+              title: 'Answer',
+              type: 'text',
+              rows: 4,
+              validation: Rule => Rule.required()
+            })
+          ],
+          preview: {
+            select: {title: 'question'}
+          }
+        }
+      ],
+      description: 'Long-tail questions about choosing and using this equipment. Rendered visibly and as FAQPage schema from the same data.'
+    }),
+    defineField({
       name: 'author',
       title: 'Author',
       type: 'string',

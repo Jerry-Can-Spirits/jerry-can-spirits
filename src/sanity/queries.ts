@@ -257,6 +257,7 @@ export const equipmentBySlugQuery = `*[_type == "equipment" && slug.current == $
   premiumImage,
   history,
   professionalTip,
+  faqs,
   author,
   videoUrl,
   "relatedCocktails": relatedCocktails[]->[defined(_id)]{ _id, name, slug },
