@@ -11,6 +11,7 @@ import Breadcrumbs from '@/components/Breadcrumbs'
 import FieldManualPortableText from '@/components/FieldManualPortableText'
 import StructuredData from '@/components/StructuredData'
 import RelatedCocktailsList from '@/components/RelatedCocktailsList'
+import RelatedGuidesList, { type GuideLink } from '@/components/RelatedGuidesList'
 import { OG_IMAGE_COCKTAIL } from '@/lib/og'
 
 // Types for equipment data
@@ -64,6 +65,7 @@ interface Equipment {
   history?: string
   professionalTip?: string
   faqs?: Array<{ question: string; answer: string }>
+  relatedGuides?: GuideLink[]
   videoUrl?: string
   relatedCocktails?: Array<{
     _id: string
@@ -526,6 +528,14 @@ export default async function EquipmentDetailPage({ params }: { params: Promise<
                     className="absolute inset-0 w-full h-full"
                   />
                 </div>
+              </div>
+            )}
+
+            {/* Related Technique Guides */}
+            {equipment.relatedGuides && equipment.relatedGuides.length > 0 && (
+              <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20 lg:max-w-4xl">
+                <h2 className="text-2xl font-serif font-bold text-gold-300 mb-4">Master the Technique</h2>
+                <RelatedGuidesList guides={equipment.relatedGuides} />
               </div>
             )}
 

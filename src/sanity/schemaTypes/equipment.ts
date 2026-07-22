@@ -357,6 +357,43 @@ export default defineType({
 
     // Related Content
     defineField({
+      name: 'relatedGuides',
+      title: 'Related Technique Guides',
+      type: 'array',
+      description: 'Guides that teach the technique this equipment enables. Use the section anchor to deep-link and the link text to override the display.',
+      of: [
+        {
+          type: 'object',
+          name: 'guideLink',
+          title: 'Guide Link',
+          fields: [
+            defineField({
+              name: 'guide',
+              title: 'Guide',
+              type: 'reference',
+              to: [{type: 'guide'}],
+              validation: Rule => Rule.required()
+            }),
+            defineField({
+              name: 'sectionAnchor',
+              title: 'Section Anchor (Optional)',
+              type: 'string',
+              description: 'Section heading to link to (e.g., "Muddling Basics"). Leave empty to link to the full guide.'
+            }),
+            defineField({
+              name: 'linkText',
+              title: 'Link Text (Optional)',
+              type: 'string',
+              description: 'Override the displayed link text. Defaults to the guide title.'
+            })
+          ],
+          preview: {
+            select: {title: 'guide.title', subtitle: 'sectionAnchor'}
+          }
+        }
+      ]
+    }),
+    defineField({
       name: 'relatedCocktails',
       title: 'Related Cocktails',
       type: 'array',
