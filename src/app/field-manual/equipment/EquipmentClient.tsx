@@ -66,12 +66,14 @@ export default function EquipmentClient({ equipment }: EquipmentClientProps) {
     return matchesCategory && matchesSearch
   })
 
-  // Get featured equipment
-  const featuredEquipment = filteredEquipment.filter(e => e.featured)
+  // The Essential Equipment section shows the first-home-bar set; the grid
+  // below shows everything else so nothing appears twice on the page.
+  const essentialEquipment = filteredEquipment.filter(e => e.essential)
+  const remainingEquipment = filteredEquipment.filter(e => !e.essential)
 
   // Paginated equipment for display
-  const visibleEquipment = filteredEquipment.slice(0, visibleCount)
-  const hasMoreEquipment = visibleCount < filteredEquipment.length
+  const visibleEquipment = remainingEquipment.slice(0, visibleCount)
+  const hasMoreEquipment = visibleCount < remainingEquipment.length
 
   // Reset pagination when filters change
   const handleCategoryChange = (category: string) => {
@@ -167,21 +169,21 @@ export default function EquipmentClient({ equipment }: EquipmentClientProps) {
 
             {/* Results count */}
             <div className="text-parchment-300 text-sm">
-              Showing <span className="text-gold-300 font-semibold">{Math.min(visibleCount, filteredEquipment.length)}</span> of <span className="text-gold-300 font-semibold">{filteredEquipment.length}</span> {filteredEquipment.length === 1 ? 'item' : 'items'}
+              Showing <span className="text-gold-300 font-semibold">{Math.min(essentialEquipment.length + visibleCount, filteredEquipment.length)}</span> of <span className="text-gold-300 font-semibold">{filteredEquipment.length}</span> {filteredEquipment.length === 1 ? 'item' : 'items'}
             </div>
           </div>
         </div>
       </section>
 
-      {/* Featured Equipment */}
-      {featuredEquipment.length > 0 && (
+      {/* Essential Equipment — the first-home-bar set */}
+      {essentialEquipment.length > 0 && (
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
           <h2 className="text-3xl font-serif font-bold text-gold-400 mb-6 flex items-center gap-2">
             <span className="text-gold-400">★</span>
             Essential Equipment
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {featuredEquipment.map((item) => (
+            {essentialEquipment.map((item) => (
               <Link
                 key={item._id}
                 href={`/field-manual/equipment/${item.slug.current}`}
@@ -231,10 +233,12 @@ export default function EquipmentClient({ equipment }: EquipmentClientProps) {
       {/* All Equipment Grid */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <h2 className="text-3xl font-serif font-bold text-white mb-6">
-          {selectedCategory === 'all' ? 'All Equipment' : categories.find(c => c.value === selectedCategory)?.label}
+          {selectedCategory === 'all'
+            ? (essentialEquipment.length > 0 ? 'The Rest of the Kit' : 'All Equipment')
+            : categories.find(c => c.value === selectedCategory)?.label}
         </h2>
 
-        {filteredEquipment.length === 0 ? (
+        {remainingEquipment.length === 0 ? (
           <div className="text-center py-16 bg-jerry-green-800/20 rounded-xl border border-gold-500/20">
             <p className="text-parchment-400 text-lg">No equipment matches your filters</p>
             <button
@@ -300,7 +304,7 @@ export default function EquipmentClient({ equipment }: EquipmentClientProps) {
         )}
 
         {/* Show More Button */}
-        {hasMoreEquipment && filteredEquipment.length > 0 && (
+        {hasMoreEquipment && remainingEquipment.length > 0 && (
           <div className="mt-10 text-center">
             <button
               onClick={handleShowMore}
@@ -308,7 +312,7 @@ export default function EquipmentClient({ equipment }: EquipmentClientProps) {
             >
               <span>Show More Equipment</span>
               <span className="text-parchment-400 text-sm">
-                ({filteredEquipment.length - visibleCount} remaining)
+                ({remainingEquipment.length - visibleCount} remaining)
               </span>
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
