@@ -57,7 +57,7 @@ export default async function GuidesPage() {
     '@context': 'https://schema.org',
     '@type': 'ItemList',
     name: 'Jerry Can Spirits Guides & Education',
-    description: 'Expert guides on cocktail techniques, rum education, and spirits knowledge.',
+    description: 'Cocktail techniques, ingredient deep-dives and home bar knowledge from the makers of Expedition Spiced Rum.',
     url: 'https://jerrycanspirits.co.uk/guides/',
     numberOfItems: guides.length,
     itemListElement: guides.map((guide, index) => ({
