@@ -65,10 +65,8 @@ export default async function FieldManualPreview() {
             Master the Classics
           </h2>
 
-          {/* TODO(copy-regen): stock copy cut (From-X-to-Y, engineered-for-perfection);
-              section rewrite with founder. */}
           <p className="text-xl text-parchment-300 max-w-3xl mx-auto leading-relaxed mb-8">
-            Explore the cocktail guide.
+            The recipes, ingredient guides and equipment notes for making a proper drink at home. Start with the classics.
           </p>
         </div>
 

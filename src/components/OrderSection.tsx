@@ -118,15 +118,12 @@ export default async function OrderSection() {
               </span>
             </div>
 
-            {/* TODO(copy-regen): the paragraph restates the heading (summary-restates
-                rule); regenerate the pair with founder. "700" is a batch-1 claim,
-                founder to confirm before it carries into new copy. */}
             <h2 className="text-3xl md:text-4xl font-serif font-bold text-white mb-6">
               First Batch. Numbered. 700 for general release.
             </h2>
 
             <p className="text-xl text-parchment-300 mb-6 leading-relaxed">
-              700 bottles for general release. Each one numbered.
+              Batch 001, shipping now. When it&apos;s gone, that run is finished.
             </p>
 
             {totalSold !== null && (
@@ -151,12 +148,9 @@ export default async function OrderSection() {
                   <span className="text-gold-400 shrink-0">•</span>
                   <span>Fulfilment in progress</span>
                 </li>
-                {/* TODO(copy-regen): "Exclusive access to limited releases" is
-                    scarcity-adjacent (banned class); replace with a concrete
-                    benefit with founder. */}
                 <li className="flex items-start gap-3">
                   <span className="text-gold-400 shrink-0">•</span>
-                  <span>Exclusive access to limited releases &amp; events</span>
+                  <span>A place in the Expedition Log, the public record of the first bottles</span>
                 </li>
               </ul>
             </div>

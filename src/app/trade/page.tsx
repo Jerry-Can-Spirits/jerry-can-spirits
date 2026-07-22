@@ -74,7 +74,7 @@ export default function TradePage() {
                 Built for mixing and sipping
               </h3>
               <p className="text-parchment-300 text-sm leading-relaxed">
-                Vanilla, cinnamon, allspice, orange peel, ginger, cassia, agave, bourbon oak. Complex enough to stand alone. Structured enough to anchor a cocktail menu. 40% ABV.
+                Vanilla, cinnamon, allspice, orange peel, ginger, cassia, agave, bourbon oak. Complex enough to stand alone. Structured enough to anchor a cocktail menu. 40% ABV. IWSC 2026: Bronze for the rum, Silver for the serve with Franklin and Sons cola. Judged, not claimed.
               </p>
             </div>
             <div>
@@ -144,7 +144,6 @@ export default function TradePage() {
       {/* ── Pour IQ: one-line mention only (separate company). ── */}
       <section className="py-8 border-t border-gold-500/10">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* TODO(copy-regen): final wording of this one-line mention needs founder sign-off. */}
           <p className="text-parchment-400 text-sm leading-relaxed">
             Pour IQ, menu and cost engineering for independent venues, is built by our founders:{' '}
             <a

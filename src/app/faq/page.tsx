@@ -40,7 +40,6 @@ const faqs = [
   },
   {
     question: "Are your products suitable for vegans?",
-    // TODO(copy-regen): "crafted using traditional methods" cut (craft-without-substance).
     answer: "Yes. Our rum has no animal products in the production process, making it suitable for vegans and vegetarians."
   },
   {
