@@ -61,6 +61,7 @@ interface Equipment {
   longDescription?: PortableTextBlock[]
   history?: string
   professionalTip?: string
+  faqs?: Array<{ question: string; answer: string }>
   videoUrl?: string
   relatedCocktails?: Array<{
     _id: string
@@ -148,9 +149,24 @@ export default async function EquipmentDetailPage({ params }: { params: Promise<
     mainEntityOfPage: { '@type': 'WebPage', '@id': `https://jerrycanspirits.co.uk/field-manual/equipment/${slug}/` },
   }
 
+  // FAQPage schema — generated from the same faqs array as the visible FAQ
+  // section below, so the two can never drift apart.
+  const faqSchema = equipment.faqs?.length
+    ? {
+        '@context': 'https://schema.org',
+        '@type': 'FAQPage',
+        mainEntity: equipment.faqs.map((faq) => ({
+          '@type': 'Question',
+          name: faq.question,
+          acceptedAnswer: { '@type': 'Answer', text: faq.answer },
+        })),
+      }
+    : null
+
   return (
     <main className="min-h-screen py-20">
       <StructuredData data={articleSchema} />
+      {faqSchema && <StructuredData data={faqSchema} id="equipment-faq-schema" />}
       {/* Breadcrumb */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
         <Breadcrumbs
@@ -449,6 +465,21 @@ export default async function EquipmentDetailPage({ params }: { params: Promise<
               <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
                 <h2 className="text-2xl font-serif font-bold text-gold-300 mb-4">History & Context</h2>
                 <p className="text-parchment-300 leading-relaxed whitespace-pre-line">{equipment.history}</p>
+              </div>
+            )}
+
+            {/* FAQs — single source for the visible Q&As and the FAQPage schema */}
+            {equipment.faqs && equipment.faqs.length > 0 && (
+              <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+                <h2 className="text-2xl font-serif font-bold text-gold-300 mb-4">Common Questions</h2>
+                <div className="space-y-4">
+                  {equipment.faqs.map((faq) => (
+                    <div key={faq.question}>
+                      <h3 className="text-gold-400 font-semibold mb-2">{faq.question}</h3>
+                      <p className="text-parchment-300 leading-relaxed">{faq.answer}</p>
+                    </div>
+                  ))}
+                </div>
               </div>
             )}
 
