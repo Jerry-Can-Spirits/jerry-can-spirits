@@ -3,7 +3,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import BackToTop from '@/components/BackToTop'
 import Breadcrumbs from '@/components/Breadcrumbs'
-import StructuredData from '@/components/StructuredData'
+
 import ScrollReveal from '@/components/ScrollReveal'
 import { OG_IMAGE } from '@/lib/og'
 
@@ -34,53 +34,16 @@ export const metadata: Metadata = {
   },
 }
 
-// FAQ Schema for rich snippets
-const faqSchema = {
-  '@context': 'https://schema.org',
-  '@type': 'FAQPage',
-  mainEntity: [
-    {
-      '@type': 'Question',
-      name: 'What values does Jerry Can Spirits stand for?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: 'Our core values are reliability (always there when you need it), function over form (beauty that serves purpose), standards (getting it right, not just good enough), precision (no shortcuts, no compromises), authenticity (honest about our craft), and "earned, not given" (quality that proves itself).',
-      },
-    },
-    {
-      '@type': 'Question',
-      name: 'Where is Jerry Can Spirits rum made?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: 'Our rum is made at our British partner distillery in the UK, from a Caribbean rum base.',
-      },
-    },
-    {
-      '@type': 'Question',
-      name: 'Why do you use Caribbean rum in a British brand?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: 'While we prioritise UK sourcing wherever possible (local botanicals, British oak), quality rum base traditionally comes from the Caribbean where rum-making expertise originates. We use Caribbean rum as our foundation because some things simply cannot be replicated.',
-      },
-    },
-    // TODO(copy-regen): the "What makes your distillation process different?"
-    // Q&A described the former partner's process (copper stills, vapour,
-    // esters) — removed per the provenance rules; regenerate with founder.
-    {
-      '@type': 'Question',
-      name: 'Is Jerry Can Spirits a small batch rum?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: 'Yes. We deliberately keep production small so we can actually pay attention to what we\'re making. We\'d rather make less rum that\'s actually good than more that\'s mediocre. No shortcuts, no compromises.',
-      },
-    },
-  ],
-}
+// No FAQPage schema here by design: its Q&As were never rendered visibly on
+// this page (against Google's visible-content guideline, and no FAQ rich
+// results are available to non-authority sites since 2023), one answer carried
+// false sourcing claims, and its "Where is Jerry Can Spirits rum made?"
+// duplicated a Question name answered differently elsewhere. Visible,
+// single-sourced FAQs live on /faq, /about/story and the product pages.
 
 export default function Ethos() {
   return (
     <main className="min-h-screen py-20">
-      <StructuredData data={faqSchema} id="ethos-faq-schema" />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
         <Breadcrumbs
           items={[
@@ -149,7 +112,7 @@ export default function Ethos() {
             {[
               {
                 value: "Reliability",
-                description: "Always there when you need it. From expedition gear to evening drinks, you can count on it."
+                description: "Always there when you need it, in the field or in the glass."
               },
               {
                 value: "Function Over Form",
@@ -222,30 +185,30 @@ export default function Ethos() {
                 </div>
                 <div className="flex-1 bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-8 border border-gold-500/20 group-hover:border-gold-400/40 transition-all duration-300">
                   <h3 className="text-2xl font-serif font-bold text-white mb-4">
-                    Sourcing: UK First Philosophy
+                    Sourcing: The Right Ingredient From the Right Place
                   </h3>
                   <p className="text-parchment-300 mb-6">
-                    We prioritise British ingredients wherever possible, from botanicals to water sources.
-                    When tradition demands specific elements, we source ethically from trusted partners who share our values.
+                    Real ingredients, sourced from where they are best. Vanilla from Madagascar, cinnamon from Ceylon, and a Caribbean rum base, because some things cannot be replicated. We work with suppliers who share our standards and keep the supply chain as short as we sensibly can.
                   </p>
 
                   {/* Details - Always Visible */}
                   <div className="mt-6">
                     <div className="grid md:grid-cols-2 gap-4">
                       <div className="bg-jerry-green-800/60 rounded-lg p-4">
-                        <h4 className="text-gold-300 font-semibold mb-2">UK Sourced</h4>
-                        <ul className="text-sm text-parchment-300 space-y-1">
-                          <li>• Bourbon barrel chips</li>
-                          <li>• Agave syrup</li>
-                        </ul>
-                      </div>
-                      <div className="bg-jerry-green-800/60 rounded-lg p-4">
-                        <h4 className="text-gold-300 font-semibold mb-2">Premium Botanicals</h4>
+                        <h4 className="text-gold-300 font-semibold mb-2">The botanicals</h4>
                         <ul className="text-sm text-parchment-300 space-y-1">
                           <li>• Madagascan vanilla pods</li>
                           <li>• Ceylon cinnamon</li>
-                          <li>• Orange peel, ginger, cloves</li>
+                          <li>• Ginger, orange peel, cloves</li>
+                          <li>• Cassia bark, allspice</li>
+                        </ul>
+                      </div>
+                      <div className="bg-jerry-green-800/60 rounded-lg p-4">
+                        <h4 className="text-gold-300 font-semibold mb-2">Base, sweetness and finish</h4>
+                        <ul className="text-sm text-parchment-300 space-y-1">
                           <li>• Caribbean rum base</li>
+                          <li>• Agave syrup</li>
+                          <li>• Bourbon barrel chips</li>
                         </ul>
                       </div>
                     </div>
@@ -265,11 +228,11 @@ export default function Ethos() {
                   <h3 className="text-2xl font-serif font-bold text-white mb-4">
                     Selection: Working With the Right Distillery
                   </h3>
-                  {/* TODO(copy-regen): this section described the former partner's
-                      distillation process (copper stills, vapour contact, esters) —
-                      removed per the provenance rules; regenerate with founder. */}
                   <p className="text-parchment-300 mb-6">
-                    We work with a British partner distillery whose people take the same approach to their craft that we take to everything else. No shortcuts.
+                    We chose our British partner distillery the way we chose everything else: on standards. Small batches, real botanicals given proper time, nothing artificial at any stage. Every batch is tasted multiple times before it leaves, and nothing ships until it is right.
+                  </p>
+                  <p className="text-parchment-300 mb-6">
+                    The day we can do it ourselves, we will. Owning our own distillery is the long-term goal, and the standard will not move when we get there.
                   </p>
                 </div>
               </div>
@@ -393,8 +356,8 @@ export default function Ethos() {
                 <div className="flex items-start space-x-3">
                   <div className="w-2 h-2 bg-gold-400 rounded-full mt-2 shrink-0"></div>
                   <div>
-                    <p className="font-semibold text-gold-300">Local Sourcing</p>
-                    <p className="text-sm">We try to source from the UK when we can – it makes sense for a British brand</p>
+                    <p className="font-semibold text-gold-300">British Packaging</p>
+                    <p className="text-sm">Bottles from Croxsons, labels from Label Apeel, cartons from Harlequin. The packaging is British-made, by partners we name</p>
                   </div>
                 </div>
                 <div className="flex items-start space-x-3">
