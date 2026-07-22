@@ -59,6 +59,7 @@ interface Ingredient {
     budget: number
     premium: number
   }
+  rrp?: number
   shelfLife?: string
   videoUrl?: string
   history?: string
@@ -300,6 +301,16 @@ export default async function IngredientDetailPage({ params }: { params: Promise
                       </div>
                     )}
                   </div>
+                </div>
+              )}
+
+              {/* RRP — named branded products with a single price */}
+              {ingredient.rrp && (
+                <div className="order-12 bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+                  <h2 className="text-xl font-serif font-bold text-gold-300 mb-4">Price</h2>
+                  <span className="inline-flex items-center px-3 py-1.5 bg-gold-500/20 border border-gold-500/30 rounded-sm text-gold-400 text-sm font-semibold">
+                    RRP £{ingredient.rrp}
+                  </span>
                 </div>
               )}
 

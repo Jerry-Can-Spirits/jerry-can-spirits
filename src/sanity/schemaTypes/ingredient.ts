@@ -368,6 +368,12 @@ export default defineType({
       ]
     }),
     defineField({
+      name: 'rrp',
+      title: 'RRP (£)',
+      type: 'number',
+      description: 'For named branded products with a single price (e.g. Jerry Can Spirits Expedition Spiced Rum, a specific Fever-Tree mixer). Use instead of Price Range, which is for generic ingredients with budget and premium versions.'
+    }),
+    defineField({
       name: 'shelfLife',
       title: 'Shelf Life',
       type: 'string',

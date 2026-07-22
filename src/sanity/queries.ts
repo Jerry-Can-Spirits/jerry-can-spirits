@@ -176,6 +176,7 @@ export const ingredientBySlugQuery = `*[_type == "ingredient" && slug.current ==
   substitutions,
   seasonality,
   priceRange,
+  rrp,
   shelfLife,
   videoUrl,
   history,
