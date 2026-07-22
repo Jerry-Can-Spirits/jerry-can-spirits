@@ -108,7 +108,7 @@ export default function EquipmentClient({ equipment }: EquipmentClientProps) {
           <div className="text-center">
             <h1 className="text-3xl font-serif font-bold text-white mb-4">Coming Soon</h1>
             <p className="text-parchment-300 mb-8">
-              Our equipment guide is being crafted. Check back soon for expert recommendations on essential bar tools.
+              Our equipment guides are on the way. Check back soon for bar tools, glassware and how to use them.
             </p>
             <Link
               href="/field-manual/"

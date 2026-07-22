@@ -548,7 +548,7 @@ export default async function EquipmentDetailPage({ params }: { params: Promise<
             )}
 
             {/* Related Equipment */}
-            {equipment.relatedEquipment && equipment.relatedEquipment.length > 0 && (
+            {equipment.relatedEquipment && equipment.relatedEquipment.some(e => e?.slug?.current) && (
               <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
                 <h2 className="text-2xl font-serif font-bold text-gold-300 mb-4">Related Equipment</h2>
                 <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
@@ -569,7 +569,7 @@ export default async function EquipmentDetailPage({ params }: { params: Promise<
             )}
 
             {/* Related Ingredients */}
-            {equipment.relatedIngredients && equipment.relatedIngredients.length > 0 && (
+            {equipment.relatedIngredients && equipment.relatedIngredients.some(i => i?.slug?.current) && (
               <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
                 <h2 className="text-2xl font-serif font-bold text-gold-300 mb-4">Related Ingredients</h2>
                 <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
