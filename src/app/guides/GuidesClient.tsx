@@ -97,7 +97,7 @@ export default function GuidesClient({ guides }: GuidesClientProps) {
           <div className="text-center">
             <h1 className="text-3xl font-serif font-bold text-white mb-4">Coming Soon</h1>
             <p className="text-parchment-300 mb-8">
-              Our spirits guides and educational content are being crafted. Check back soon for expert knowledge on cocktails, rum, and more.
+              Our spirits guides are on the way. Check back soon for cocktail techniques, ingredient guides and more.
             </p>
             <Link
               href="/"
@@ -129,7 +129,7 @@ export default function GuidesClient({ guides }: GuidesClientProps) {
           </h1>
 
           <p className="text-xl text-parchment-300 max-w-3xl mx-auto leading-relaxed">
-            Deepen your understanding of cocktails, spirits, and bartending techniques with our comprehensive guides written by industry experts.
+            Cocktail techniques, ingredient deep-dives and the knowledge to build a proper home bar. Written by the founders of an IWSC-medalled rum, not a content team.
           </p>
         </div>
       </section>

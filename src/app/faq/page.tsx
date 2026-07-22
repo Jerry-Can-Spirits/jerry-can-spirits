@@ -132,7 +132,7 @@ export default function FAQPage() {
               </span>
             </div>
             <h1 className="text-4xl md:text-5xl font-playfair font-bold text-gold-500 mb-6">
-              Got Questions?
+              Questions About Jerry Can Spirits, Answered
             </h1>
             <p className="text-xl text-parchment-200 max-w-2xl mx-auto">
               Everything you need to know about Jerry Can Spirits, how we make our spirits, and how to buy.
