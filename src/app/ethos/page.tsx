@@ -82,7 +82,7 @@ export default function Ethos() {
           </h1>
           
           <p className="text-xl text-parchment-300 max-w-3xl mx-auto leading-relaxed mb-8">
-            We&apos;re not trying to reinvent spiced rum – we just want to make it properly. Real botanicals, honest processes, and no cutting corners. Each bottle of our small batch rum is the result of genuine care about what goes in it.
+            We&apos;re not trying to reinvent spiced rum. We just want to make it properly. Real botanicals, honest processes, and no cutting corners. Each bottle of our small batch rum is the result of genuine care about what goes in it.
           </p>
 
           <div className="inline-flex items-center space-x-2 text-gold-300">
@@ -150,7 +150,7 @@ export default function Ethos() {
           <ScrollReveal>
           <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-8 border border-gold-500/20 text-center">
             <p className="text-xl text-white leading-relaxed">
-              &quot;In the military you learn to appreciate kit that just works – nothing fancy, just reliable.
+              &quot;In the military you learn to appreciate kit that just works: nothing fancy, just reliable.
               That&apos;s what we&apos;re going for with our spirits. Function over flash. Quality that actually delivers.&quot;
             </p>
             <div className="mt-6 text-gold-300 text-sm font-semibold uppercase tracking-wider">
@@ -364,7 +364,7 @@ export default function Ethos() {
                   <div className="w-2 h-2 bg-gold-400 rounded-full mt-2 shrink-0"></div>
                   <div>
                     <p className="font-semibold text-gold-300">Caribbean Rum</p>
-                    <p className="text-sm">Some things have to come from elsewhere – we use quality Caribbean rum as our base</p>
+                    <p className="text-sm">Some things have to come from elsewhere. We use quality Caribbean rum as our base.</p>
                   </div>
                 </div>
               </div>
@@ -421,7 +421,7 @@ export default function Ethos() {
               Try the Rum
             </h2>
             <p className="text-xl text-parchment-300 mb-8 max-w-2xl mx-auto">
-              Enough about us – the proof is in the bottle. Check out our <Link href="/shop/product/jerry-can-spirits-expedition-spiced-rum/" className="text-gold-300 hover:text-gold-400 underline decoration-gold-500/40 hover:decoration-gold-400 transition-colors">Expedition Spiced Rum</Link> and see what you think.
+              Enough about us. The proof is in the bottle. Check out our <Link href="/shop/product/jerry-can-spirits-expedition-spiced-rum/" className="text-gold-300 hover:text-gold-400 underline decoration-gold-500/40 hover:decoration-gold-400 transition-colors">Expedition Spiced Rum</Link> and see what you think.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center">

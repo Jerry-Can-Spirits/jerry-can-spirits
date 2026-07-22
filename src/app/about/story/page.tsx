@@ -47,47 +47,47 @@ const storyFaqs: Array<{ question: string; answer: string; rich?: ReactNode }> =
   {
     question: 'Who owns Jerry Can Spirits?',
     answer:
-      "Jerry Can Spirits is run by Dan and Rhys, who both served in the Royal Corps of Signals. We're self-funded and doing everything ourselves – learning as we go, making mistakes, and figuring it out along the way.",
+      "Jerry Can Spirits is run by Dan and Rhys, who both served in the Royal Corps of Signals. We're self-funded and doing everything ourselves: learning as we go, making mistakes, and figuring it out along the way.",
     rich: (
       <>
-        Jerry Can Spirits is run by <Link href="/about/team/dan-freeman/" className="text-gold-300 hover:text-gold-400 underline">Dan</Link> and <Link href="/about/team/rhys-williams/" className="text-gold-300 hover:text-gold-400 underline">Rhys</Link>, who both served in the Royal Corps of Signals. We&apos;re self-funded and doing everything ourselves &ndash; learning as we go, making mistakes, and figuring it out along the way.
+        Jerry Can Spirits is run by <Link href="/about/team/dan-freeman/" className="text-gold-300 hover:text-gold-400 underline">Dan</Link> and <Link href="/about/team/rhys-williams/" className="text-gold-300 hover:text-gold-400 underline">Rhys</Link>, who both served in the Royal Corps of Signals. We&apos;re self-funded and doing everything ourselves: learning as we go, making mistakes, and figuring it out along the way.
       </>
     ),
   },
   {
     question: 'Is Jerry Can Spirits veteran owned?',
     answer:
-      "Yes, we're British veteran owned. We both served in the Royal Corps of Signals before getting into spirits. The military taught us to appreciate kit that just works – nothing flashy, just reliable. That mindset stuck with us.",
+      "Yes, we're British veteran owned. We both served in the Royal Corps of Signals before getting into spirits. The military taught us to appreciate kit that just works: nothing flashy, just reliable. That mindset stuck with us.",
     rich: (
       <>
-        Yes, we&apos;re British veteran owned. We both served in the Royal Corps of Signals before getting into spirits. The military taught us to appreciate kit that just works &ndash; nothing flashy, just reliable. That mindset stuck with us. Meet <Link href="/about/team/" className="text-gold-300 hover:text-gold-400 underline">the team</Link>.
+        Yes, we&apos;re British veteran owned. We both served in the Royal Corps of Signals before getting into spirits. The military taught us to appreciate kit that just works: nothing flashy, just reliable. That mindset stuck with us. Meet <Link href="/about/team/" className="text-gold-300 hover:text-gold-400 underline">the team</Link>.
       </>
     ),
   },
   {
     question: 'Where is Jerry Can Spirits based?',
     answer:
-      "We're based in the UK. It's a home-office operation – nothing glamorous, just us working away. Our Expedition Spiced Rum is made with Caribbean rum, blended at our British partner distillery right here in Britain.",
+      "We're based in the UK. It's a home-office operation: nothing glamorous, just us working away. Our Expedition Spiced Rum is made with Caribbean rum, blended at our British partner distillery right here in Britain.",
     rich: (
       <>
-        We&apos;re based in the UK. It&apos;s a home-office operation &ndash; nothing glamorous, just us working away. Our <Link href="/shop/product/jerry-can-spirits-expedition-spiced-rum/" className="text-gold-300 hover:text-gold-400 underline">Expedition Spiced Rum</Link> is made with Caribbean rum, blended at our British partner distillery right here in Britain.
+        We&apos;re based in the UK. It&apos;s a home-office operation: nothing glamorous, just us working away. Our <Link href="/shop/product/jerry-can-spirits-expedition-spiced-rum/" className="text-gold-300 hover:text-gold-400 underline">Expedition Spiced Rum</Link> is made with Caribbean rum, blended at our British partner distillery right here in Britain.
       </>
     ),
   },
   {
     question: 'What does the Jerry Can name mean?',
     answer:
-      "The jerry can is the ultimate \"function over form\" design – invented in 1937 and still used today because it just works. No frills, no nonsense. That's the approach we take with our spirits. We're not trying to be flashy, we're trying to make something that's genuinely good.",
+      "The jerry can is the ultimate \"function over form\" design: invented in 1937 and still used today because it just works. No frills, no nonsense. That's the approach we take with our spirits. We're not trying to be flashy, we're trying to make something that's genuinely good.",
   },
   {
     question: 'When was Jerry Can Spirits founded?',
     answer:
-      "The company was founded in 2025, and Expedition Spiced Rum launched in April 2026. The idea had been kicking around for years – one of those \"we should make our own rum\" conversations that kept coming up whenever we got together. Eventually we stopped talking about it and had a go.",
+      "The company was founded in 2025, and Expedition Spiced Rum launched in April 2026. The idea had been kicking around for years: one of those \"we should make our own rum\" conversations that kept coming up whenever we got together. Eventually we stopped talking about it and had a go.",
   },
   {
     question: 'What makes Jerry Can Spirits different?',
     answer:
-      "Honestly? We're small and we're learning as we go. We don't have a big team or marketing department – it's just us, figuring out regulations, building relationships one at a time, and trying to make something we're proud of. When you're funding everything yourself, you care about every detail because you have to.",
+      "Honestly? We're small and we're learning as we go. We don't have a big team or marketing department. It's just us, figuring out regulations, building relationships one at a time, and trying to make something we're proud of. When you're funding everything yourself, you care about every detail because you have to.",
   },
 ]
 
@@ -192,10 +192,10 @@ export default function OurStory() {
                   Lessons from Service
                 </h3>
                 <p className="text-parchment-300 leading-relaxed mb-4">
-                  I served with the Royal Corps of Signals. Deployments to the Arctic and desert outposts – places where your equipment really gets put to the test. We learned to put our faith in gear that gets the job done, not in the likes of flashy new kit. The most reliable stuff is the unflashy stuff.
+                  I served with the Royal Corps of Signals. Deployments to the Arctic and desert outposts, the places where your equipment really gets put to the test. We learned to put our faith in gear that gets the job done, not in the likes of flashy new kit. The most reliable stuff is the unflashy stuff.
                 </p>
                 <p className="text-parchment-300 leading-relaxed">
-                  Life after the military was different for all of us. We all went on to do our own thing, but we retained that same basic understanding. A piece of kit that works, a design that&apos;s functional, a product that&apos;s reliable – these are non-negotiables. On a grand expedition or a tough Tuesday, that&apos;s what matters.
+                  Life after the military was different for all of us. We all went on to do our own thing, but we retained that same basic understanding. A piece of kit that works, a design that&apos;s functional, a product that&apos;s reliable. These are non-negotiables. On a grand expedition or a tough Tuesday, that&apos;s what matters.
                 </p>
               </div>
             </div>
@@ -290,7 +290,7 @@ export default function OurStory() {
               When We Stopped Talking and Started
             </h2>
             <p className="text-xl text-parchment-300 max-w-3xl mx-auto">
-              The point at which we stopped just dreaming about this and started actually doing it – with a bit of purpose to boot.
+              The point at which we stopped just dreaming about this and started actually doing it, with a bit of purpose to boot.
             </p>
           </div>
 
@@ -301,7 +301,7 @@ export default function OurStory() {
                   When Talk Turns to Action
                 </h3>
                 <p className="text-parchment-300">
-                  We&apos;d been talking about this for years, all of us. Then one day, it just clicked. If we really believed we could do something better, why were we still just talking about it? There wasn&apos;t a single eureka moment – just a growing realisation that we needed to stop jawing and get on with it.
+                  We&apos;d been talking about this for years, all of us. Then one day, it just clicked. If we really believed we could do something better, why were we still just talking about it? There wasn&apos;t a single eureka moment, just a growing realisation that we needed to stop jawing and get on with it.
                 </p>
               </div>
 
@@ -319,7 +319,7 @@ export default function OurStory() {
                   Taking the Leap
                 </h3>
                 <p className="text-parchment-300">
-                  &quot;Right, let&apos;s bloody well do it.&quot; Not some grand business plan – just a simple decision to take a chance and see where it takes us. We were going to build this properly. Together.
+                  &quot;Right, let&apos;s bloody well do it.&quot; Not some grand business plan, just a simple decision to take a chance and see where it takes us. We were going to build this properly. Together.
                 </p>
               </div>
             </div>
@@ -375,11 +375,11 @@ export default function OurStory() {
               <ul className="space-y-3 text-parchment-300 text-sm">
                 <li className="flex items-start space-x-2">
                   <span className="text-red-400 mt-1">•</span>
-                  <span>Funding entirely out of our own pockets – no safety net, no way out</span>
+                  <span>Funding entirely out of our own pockets: no safety net, no way out</span>
                 </li>
                 <li className="flex items-start space-x-2">
                   <span className="text-red-400 mt-1">•</span>
-                  <span>Figuring out complex regulations on the fly – trial and error all the way</span>
+                  <span>Figuring out complex regulations on the fly: trial and error all the way</span>
                 </li>
                 <li className="flex items-start space-x-2">
                   <span className="text-red-400 mt-1">•</span>
@@ -411,7 +411,7 @@ export default function OurStory() {
                   &quot;This isn&apos;t some corporation with a team the size of a small army behind it. This is just us, in our home office, trying to build something real.&quot;
                 </p>
                 <div className="pt-4 space-y-2">
-                  <p className="text-gold-300 text-sm">• Learning the regulations on a daily basis – and loving the challenge</p>
+                  <p className="text-gold-300 text-sm">• Learning the regulations on a daily basis, and loving the challenge</p>
                   <p className="text-gold-300 text-sm">• Our home office is the real HQ. That&apos;s just how it is.</p>
                   <p className="text-gold-300 text-sm">• Quality is the one thing we can&apos;t compromise on</p>
                 </div>
@@ -443,7 +443,7 @@ export default function OurStory() {
                 </li>
                 <li className="flex items-start space-x-2">
                   <span className="text-green-400 mt-1">•</span>
-                  <span>Building relationships one conversation at a time – they&apos;re everything</span>
+                  <span>Building relationships one conversation at a time. They&apos;re everything.</span>
                 </li>
                 <li className="flex items-start space-x-2">
                   <span className="text-green-400 mt-1">•</span>
@@ -488,7 +488,7 @@ export default function OurStory() {
                   How Did &quot;Jerry Can&quot; Come About?
                 </h3>
                 <p className="text-parchment-300 leading-relaxed mb-4">
-                  The jerry can wasn&apos;t designed to win awards for looks – it was engineered to be reliable. As a team born of the service industry, we totally get that. Function over form, purpose over pretence.
+                  The jerry can wasn&apos;t designed to win awards for looks. It was engineered to be reliable. As a team born of the service industry, we totally get that. Function over form, purpose over pretence.
                 </p>
                 <p className="text-parchment-300 leading-relaxed mb-4">
                   Jerry Can Spirits is built on the same principles. When you need a drink that delivers on character and quality without compromise, that&apos;s exactly what we&apos;re engineered to do. We&apos;re a spirits house with purpose, with integrity.
@@ -525,7 +525,7 @@ export default function OurStory() {
                   </div>
                   <div>
                     <p className="text-gold-300 font-semibold">Purpose</p>
-                    <p className="text-parchment-300 text-sm">Every single thing we make has a purpose – and we&apos;re proud of it</p>
+                    <p className="text-parchment-300 text-sm">Every single thing we make has a purpose, and we&apos;re proud of it</p>
                   </div>
                 </div>
               </div>
@@ -535,7 +535,7 @@ export default function OurStory() {
                   Still Good, Still Unchanged
                 </h4>
                 <p className="text-parchment-300 leading-relaxed mb-4">
-                  Designed in 1937. Still up to NATO standards today. Still the go-to choice for overlanders trekking across the Sahara, sailors navigating the Atlantic, and aid workers in some of the most remote areas of the world. Nearly ninety years without a redesign and we&apos;re not done yet – when you get it right, you don&apos;t need a new version.
+                  Designed in 1937. Still up to NATO standards today. Still the go-to choice for overlanders trekking across the Sahara, sailors navigating the Atlantic, and aid workers in some of the most remote areas of the world. Nearly ninety years without a redesign and we&apos;re not done yet. When you get it right, you don&apos;t need a new version.
                 </p>
                 <p className="text-gold-300 font-semibold">
                   That&apos;s the philosophy behind every single bottle we craft.
@@ -602,15 +602,15 @@ export default function OurStory() {
                     </li>
                     <li className="flex items-center space-x-2">
                       <span className="w-2 h-2 bg-gold-400 rounded-full"></span>
-                      <span>Building quality relationships – they&apos;re everything</span>
+                      <span>Building quality relationships. They&apos;re everything.</span>
                     </li>
                     <li className="flex items-center space-x-2">
                       <span className="w-2 h-2 bg-gold-400 rounded-full"></span>
-                      <span>Setting up the foundations for our brand – this is hard work</span>
+                      <span>Setting up the foundations for our brand. This is hard work.</span>
                     </li>
                     <li className="flex items-center space-x-2">
                       <span className="w-2 h-2 bg-gold-400 rounded-full"></span>
-                      <span>Learning every day – this is a business, after all</span>
+                      <span>Learning every day. This is a business, after all.</span>
                     </li>
                   </ul>
                 </div>
@@ -624,7 +624,7 @@ export default function OurStory() {
                     </li>
                     <li className="flex items-center space-x-2">
                       <span className="w-2 h-2 bg-green-400 rounded-full"></span>
-                      <span>Relationships are everything – they&apos;re worth more than any budget</span>
+                      <span>Relationships are everything. They&apos;re worth more than any budget.</span>
                     </li>
                     <li className="flex items-center space-x-2">
                       <span className="w-2 h-2 bg-green-400 rounded-full"></span>
@@ -632,7 +632,7 @@ export default function OurStory() {
                     </li>
                     <li className="flex items-center space-x-2">
                       <span className="w-2 h-2 bg-green-400 rounded-full"></span>
-                      <span>We&apos;re just getting started – and we&apos;re excited</span>
+                      <span>We&apos;re just getting started, and we&apos;re excited</span>
                     </li>
                   </ul>
                 </div>
@@ -661,8 +661,8 @@ export default function OurStory() {
                 <ul className="space-y-2 text-parchment-300 text-sm text-left">
                   <li>• Build a rum worth talking about, without help from a marketing department</li>
                   <li>• Have a range of world class spirits on the market</li>
-                  <li>• Have a strong retail presence – we want to be seen in the right places</li>
-                  <li>• Have a loyal customer community – people who love what we do</li>
+                  <li>• Have a strong retail presence. We want to be seen in the right places.</li>
+                  <li>• Have a loyal customer community: people who love what we do</li>
                 </ul>
               </div>
 
@@ -674,7 +674,7 @@ export default function OurStory() {
                 </div>
                 <h4 className="text-lg font-serif font-bold text-white mb-3">10-Year Dream</h4>
                 <ul className="space-y-2 text-parchment-300 text-sm text-left">
-                  <li>• Own our own distillery – this is the ultimate goal</li>
+                  <li>• Own our own distillery. This is the ultimate goal.</li>
                   <li>• Have a full range of spirits on offer, each one made the same way as the first</li>
                   <li>• Be known internationally. For the right reasons.</li>
                   <li>• Source responsibly. Use what&apos;s close to home where we can. Don&apos;t add to problems we can avoid.</li>
@@ -693,7 +693,7 @@ export default function OurStory() {
                 <ul className="space-y-2 text-parchment-300 text-sm text-left">
                   <li>• We proved that small can beat big</li>
                   <li>• Quality is always the top priority</li>
-                  <li>• We&apos;ve got a real story to tell – one that people will listen to</li>
+                  <li>• We&apos;ve got a real story to tell, one that people will listen to</li>
                   <li>• We&apos;ve got our own team who&apos;s made this all possible</li>
                 </ul>
               </div>
