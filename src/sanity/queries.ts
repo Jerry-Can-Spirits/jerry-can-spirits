@@ -233,6 +233,7 @@ export const equipmentBySlugQuery = `*[_type == "equipment" && slug.current == $
   name,
   slug,
   category,
+  glassType,
   description,
   metaTitle,
   metaDescription,

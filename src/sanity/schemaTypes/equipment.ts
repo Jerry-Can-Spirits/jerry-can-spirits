@@ -38,6 +38,21 @@ export default defineType({
       validation: Rule => Rule.required()
     }),
     defineField({
+      name: 'glassType',
+      title: 'Glass Type',
+      type: 'string',
+      description: 'Sub-category for glassware only. Form-based (stemware, tumblers, mugs) so it stays clean for filtering; style words like tiki belong in keywords. Shop products should use the same values for consistent filters later.',
+      options: {
+        list: [
+          {title: 'Stemware', value: 'stemware'},
+          {title: 'Tumblers & Tall Glasses', value: 'tumbler'},
+          {title: 'Mugs & Cups', value: 'mug-cup'},
+          {title: 'Serving Vessels', value: 'serving-vessel'}
+        ]
+      },
+      hidden: ({document}) => document?.category !== 'glassware'
+    }),
+    defineField({
       name: 'description',
       title: 'Description',
       type: 'text',
