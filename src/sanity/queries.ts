@@ -118,7 +118,7 @@ export const cocktailBySlugQuery = `*[_type == "cocktail" && slug.current == $sl
     sectionAnchor,
     linkText
   },
-  "relatedCocktails": relatedCocktails[]->[defined(_id)]{ _id, name, slug, description, difficulty, "image": image.asset->url, "imageAlt": image.alt }
+  "relatedCocktails": relatedCocktails[]->{ _id, name, slug, description, difficulty, "image": image.asset->url, "imageAlt": image.alt }
 }`
 
 // Sitemap query - slug + last-modified for sitemap freshness
@@ -194,7 +194,7 @@ export const ingredientBySlugQuery = `*[_type == "ingredient" && slug.current ==
     ...coalesce(relatedCocktails[]->{ _id, name, slug }, []),
     ...*[_type == "cocktail" && references(^._id)] | order(name asc) { _id, name, slug }
   ]),
-  "relatedIngredients": relatedIngredients[]->[defined(_id)]{ _id, name, slug }
+  "relatedIngredients": relatedIngredients[]->{ _id, name, slug }
 }`
 
 // Sitemap query - slug + last-modified for sitemap freshness
@@ -285,8 +285,8 @@ export const equipmentBySlugQuery = `*[_type == "equipment" && slug.current == $
     ...coalesce(relatedCocktails[]->{ _id, name, slug }, []),
     ...*[_type == "cocktail" && references(^._id)] | order(name asc) { _id, name, slug }
   ]),
-  "relatedEquipment": relatedEquipment[]->[defined(_id)]{ _id, name, slug },
-  "relatedIngredients": relatedIngredients[]->[defined(_id)]{ _id, name, slug }
+  "relatedEquipment": relatedEquipment[]->{ _id, name, slug },
+  "relatedIngredients": relatedIngredients[]->{ _id, name, slug }
 }`
 
 // Product query - matches by slug or shopifyHandle for flexible matching
@@ -313,7 +313,7 @@ export const productByHandleQuery = `*[_type == "product" && (slug.current == $s
   "imageAlt": image.alt,
   featured,
   videoUrl,
-  "relatedCocktails": relatedCocktails[]->[defined(_id)]{ _id, name, slug },
+  "relatedCocktails": relatedCocktails[]->{ _id, name, slug },
   completeTheServe,
   whatsIncluded[] {
     item,
@@ -393,8 +393,8 @@ export const guideBySlugQuery = `*[_type == "guide" && slug.current == $slug][0]
     website,
     speciality
   },
-  "relatedGuides": relatedGuides[]->[defined(_id)]{ _id, title, slug, excerpt, category },
-  "relatedCocktails": relatedCocktails[]->[defined(_id)]{ _id, name, slug },
+  "relatedGuides": relatedGuides[]->{ _id, title, slug, excerpt, category },
+  "relatedCocktails": relatedCocktails[]->{ _id, name, slug },
   relatedProducts[] {
     shopifyHandle,
     contextNote

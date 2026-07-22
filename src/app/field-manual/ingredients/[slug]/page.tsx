@@ -595,7 +595,7 @@ export default async function IngredientDetailPage({ params }: { params: Promise
             )}
 
             {/* Related Ingredients */}
-            {ingredient.relatedIngredients && ingredient.relatedIngredients.length > 0 && (
+            {ingredient.relatedIngredients && ingredient.relatedIngredients.some(r => r?.slug?.current) && (
               <div className="order-16 bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
                 <h2 className="text-2xl font-serif font-bold text-gold-300 mb-4">Often Used With</h2>
                 <div className="grid sm:grid-cols-2 gap-3">
