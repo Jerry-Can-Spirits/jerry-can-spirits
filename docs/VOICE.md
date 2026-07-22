@@ -30,14 +30,30 @@ Write like a founder who means it.
 - Short sentences. One idea per sentence. White space is not wasted space.
 - No padding. No filler. No throat-clearing before the point.
 - If a sentence does not add meaning, remove it.
+- British English. -ise endings, litre, colour.
+- Prices: £45, never £45.00. Numbers under ten in words, except measurements, percentages, and ABV.
+- The product is Expedition Spiced Rum. Always the full name on first mention on any page. Never "Expedition Spiced" alone.
+- ABV always as 40% ABV. Volume always as 700ml.
+
+---
+
+## Patterns that read as machine-written
+
+These are banned. They are how generated copy sounds.
+
+- Empty intensifiers: crafted to perfection, truly exceptional, elevate, unparalleled, meticulously, expertly.
+- Rule-of-three padding: "bold, smooth, unforgettable". If three adjectives carry no information, use zero.
+- The reversal formula: "isn't just X, it's Y". Say what it is.
+- Audience hedging: "whether you're a seasoned collector or new to rum". Write to one person. You know who.
+- Summary sentences that restate the paragraph they end.
+- "From X to Y" range constructions used as filler.
+
+The test: if the sentence would work on any competitor's site, delete it. Copy earns its place with a specific only we can claim.
 
 ---
 
 ## Language to use
 
-- Founding Supporter
-- Founding bottle
-- Founding Supporter pricing
 - Join the expedition
 - For those who hold themselves to a higher standard
 - Built properly
@@ -57,6 +73,14 @@ Write like a founder who means it.
 - Craft (without substance behind it)
 - Our rum is premium
 
+## Retired language
+
+The founding phase is over. These phrases must not appear in new copy, and any remaining instance on the site is stale and should be flagged for removal:
+
+- Founding Supporter
+- Founding bottle
+- Founding Supporter pricing
+
 ---
 
 ## Messaging hierarchy
@@ -73,12 +97,39 @@ All content connects to one of these layers, in order of priority:
 
 ## The product
 
-- Name: Expedition Spiced
+- Name: Expedition Spiced Rum
 - Base: Caribbean rum
 - Maceration partner: our British partner distillery
 - Flavour profile: Vanilla, cinnamon, allspice, clove, orange peel, cassia, ginger, agave, bourbon oak
-- ABV: 40% | Volume: 700ml
+- ABV: 40% ABV | Volume: 700ml
+- RRP: £45
 - Designed for slow sipping. Not shots. Not a mixer to forget.
+
+---
+
+## Proof points
+
+Confidence is a fact, stated plainly. These are the facts:
+
+- IWSC 2026 Bronze, Expedition Spiced Rum.
+- IWSC 2026 Silver, the serve with Franklin and Sons cola.
+- Veteran founded. Over 17 years of combined service in the Royal Corps of Signals.
+- 5% of profits to military charities.
+- Batch numbers on every bottle. Every batch traceable.
+- No artificial flavourings. Nine real botanicals, macerated.
+- RRP £45.
+
+State them once, in context. An award mentioned once is a fact. Mentioned three times on one page it becomes hype.
+
+---
+
+## Product descriptions
+
+Every description answers three questions, in this order: what is it, what does it do for you, why this one. If the third answer is missing, the description is not finished.
+
+Features are the start, not the copy. "Stainless steel jigger" is a feature. What it does for the person pouring is the copy.
+
+Accessories are part of the ritual, not add-ons. Write them as the way the rum is meant to be served. Never duplicate a description across products.
 
 ---
 
@@ -92,13 +143,14 @@ Do not write content that sounds like any of the above.
 
 ## Formatting
 
+
 - Short paragraphs. Often a single sentence.
 - Headers should be statements, not labels.
 - Avoid bullet points for body copy where prose reads better.
 
 ## Hook structure for web and short-form content
 
-Pattern interrupt first. Challenge or reveal in the opening line.
+Open with a challenge or a reveal. The first line earns the second.
 Follow with why it matters.
 Then the identity or experience.
 Close with one clear, calm action.
@@ -119,3 +171,5 @@ Strong opening lines from the brand:
 ## The sibling voice
 
 Pour IQ, the venue software built by the same company, has its own voice document (`docs/VOICE.md` in the `pour-iq` repo). The two share a spine — no hype, no filler, one CTA, write to one person — but Pour IQ speaks as software to a working venue, not as a spirits brand to a drinker. Do not write Jerry Can Spirits copy in the Pour IQ register or vice versa.
+
+Pour IQ does not appear in Jerry Can Spirits customer copy, with one exception: a single origin-story mention on the About page, framed as why the founders understand the on-trade. Any other mention is off-brand and should be removed.
