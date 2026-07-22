@@ -236,6 +236,35 @@ export default defineType({
       ]
     }),
 
+    // Our own product, when we sell this item. Rendered as an editorial
+    // sidebar card, not a sales block.
+    defineField({
+      name: 'ownProduct',
+      title: 'We Make One',
+      type: 'object',
+      description: 'Fill only when Jerry Can Spirits sells this equipment. One factual line and a link; the card stays editorial.',
+      fields: [
+        defineField({
+          name: 'name',
+          title: 'Product Name',
+          type: 'string',
+          description: 'As it appears in the shop, e.g. "Stainless Steel Cocktail Shaker"'
+        }),
+        defineField({
+          name: 'path',
+          title: 'Shop Path',
+          type: 'string',
+          description: 'Relative path, e.g. /shop/product/stainless-steel-cocktail-shaker/'
+        }),
+        defineField({
+          name: 'note',
+          title: 'One-line Note',
+          type: 'string',
+          description: 'A single factual sentence, e.g. "A 550ml three-piece in stainless steel."'
+        })
+      ]
+    }),
+
     // Care & Maintenance
     defineField({
       name: 'careInstructions',

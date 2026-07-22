@@ -46,6 +46,7 @@ interface Equipment {
   premiumOption?: string
   premiumLink?: string
   premiumImage?: { asset: { url: string }; alt?: string }
+  ownProduct?: { name?: string; path?: string; note?: string }
   author?: string
   relatedEquipment?: Array<{
     _id: string
@@ -240,6 +241,22 @@ export default async function EquipmentDetailPage({ params }: { params: Promise<
                 )}
               </div>
 
+              {/* We Make One — editorial card for equipment we sell ourselves */}
+              {equipment.ownProduct?.path && equipment.ownProduct?.name && (
+                <div className="order-2 lg:order-0 bg-linear-to-br from-gold-500/10 to-gold-600/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/30">
+                  <h3 className="text-lg font-serif font-bold text-gold-300 mb-2">We Make One</h3>
+                  {equipment.ownProduct.note && (
+                    <p className="text-parchment-300 text-sm leading-relaxed mb-3">{equipment.ownProduct.note}</p>
+                  )}
+                  <Link
+                    href={equipment.ownProduct.path}
+                    className="text-gold-300 hover:text-gold-400 underline decoration-gold-500/40 hover:decoration-gold-400 transition-colors text-sm font-semibold"
+                  >
+                    {equipment.ownProduct.name}
+                  </Link>
+                </div>
+              )}
+
               {/* Price Range - Mobile Order 11 */}
               {equipment.priceRange && (
                 <div className="order-11 lg:order-0 bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
@@ -359,6 +376,12 @@ export default async function EquipmentDetailPage({ params }: { params: Promise<
           {/* Right Column - Main Content */}
           <div className="order-1 lg:order-2 space-y-8">
 
+            {/* Usage — the two-line practical answer comes first */}
+            <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+              <h2 className="text-2xl font-serif font-bold text-gold-300 mb-4">Usage</h2>
+              <p className="text-parchment-300 leading-relaxed whitespace-pre-line">{equipment.usage}</p>
+            </div>
+
             {/* Long Description - Rich editorial content from Sanity */}
             {equipment.longDescription && equipment.longDescription.length > 0 && (
               <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
@@ -382,12 +405,6 @@ export default async function EquipmentDetailPage({ params }: { params: Promise<
                 </div>
               </div>
             )}
-
-            {/* Usage */}
-            <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
-              <h2 className="text-2xl font-serif font-bold text-gold-300 mb-4">Usage</h2>
-              <p className="text-parchment-300 leading-relaxed whitespace-pre-line">{equipment.usage}</p>
-            </div>
 
             {/* What to Look For */}
             {equipment.whatToLookFor && equipment.whatToLookFor.length > 0 && (
