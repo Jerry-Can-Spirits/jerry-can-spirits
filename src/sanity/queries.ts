@@ -181,6 +181,7 @@ export const ingredientBySlugQuery = `*[_type == "ingredient" && slug.current ==
   videoUrl,
   history,
   professionalTip,
+  faqs,
   author,
   "relatedGuides": relatedGuides[defined(guide->._id)] {
     "guide": guide->{ _id, title, slug },
