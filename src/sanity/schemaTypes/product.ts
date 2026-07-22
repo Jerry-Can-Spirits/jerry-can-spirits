@@ -43,7 +43,7 @@ export default defineType({
           type: 'text',
           rows: 4,
           description: 'What you smell when nosing the spirit',
-          validation: Rule => Rule.required()
+          validation: Rule => Rule.required().warning('Expected for spirits; leave empty on barware.')
         }),
         defineField({
           name: 'palate',
@@ -51,7 +51,7 @@ export default defineType({
           type: 'text',
           rows: 4,
           description: 'Flavors experienced when tasting',
-          validation: Rule => Rule.required()
+          validation: Rule => Rule.required().warning('Expected for spirits; leave empty on barware.')
         }),
         defineField({
           name: 'finish',
@@ -59,10 +59,13 @@ export default defineType({
           type: 'text',
           rows: 4,
           description: 'Lingering flavors and sensations after swallowing',
-          validation: Rule => Rule.required()
+          validation: Rule => Rule.required().warning('Expected for spirits; leave empty on barware.')
         })
       ],
-      validation: Rule => Rule.required()
+      // Warning, not error: barware docs (FAQs + complete-the-serve only) must
+      // remain publishable without spirits-shaped fields. The page renders each
+      // section only when its field is filled.
+      validation: Rule => Rule.required().warning('Expected for spirits; leave empty on barware.')
     }),
 
     // Production Process
@@ -72,7 +75,7 @@ export default defineType({
       type: 'text',
       rows: 5,
       description: 'Narrative description of how this product is made, emphasizing craftsmanship and quality',
-      validation: Rule => Rule.required()
+      validation: Rule => Rule.required().warning('Expected for spirits; leave empty on barware.')
     }),
 
     // Flavor Profile
@@ -88,7 +91,7 @@ export default defineType({
           type: 'array',
           of: [{type: 'string'}],
           description: 'Main flavor notes (e.g., "Vanilla", "Cinnamon", "Caramel")',
-          validation: Rule => Rule.required().min(3)
+          validation: Rule => Rule.required().min(3).warning('Expected for spirits; leave empty on barware.')
         }),
         defineField({
           name: 'strength',
@@ -102,10 +105,10 @@ export default defineType({
               {title: 'Very Bold — Intense and powerful', value: 'very-bold'}
             ]
           },
-          validation: Rule => Rule.required()
+          validation: Rule => Rule.required().warning('Expected for spirits; leave empty on barware.')
         })
       ],
-      validation: Rule => Rule.required()
+      validation: Rule => Rule.required().warning('Expected for spirits; leave empty on barware.')
     }),
 
     // Serving Suggestions
@@ -115,7 +118,7 @@ export default defineType({
       type: 'array',
       of: [{type: 'string'}],
       description: 'How to best enjoy this product (neat, on ice, in cocktails, etc.)',
-      validation: Rule => Rule.required().min(2)
+      validation: Rule => Rule.required().min(2).warning('Expected for spirits; leave empty on barware.')
     }),
 
     // Pairs With
@@ -134,9 +137,10 @@ export default defineType({
       type: 'array',
       description:
         'Shopify product handles offered on this page under "Complete the serve", shown in this order. Put the pairing that lands the basket on free UK delivery first, dearer options after. A handle is the last part of the Shopify product URL (Products > the product > "Search engine listing" > URL handle, or the /products/HANDLE address), e.g. hiball-glass-38cl. These are Shopify handles, not Sanity documents, because the glassware lives only in Shopify. A handle that does not match a live product is skipped and logged, so double-check spelling.',
-      // Shopify handles, not references: barware exists only in Shopify, so
-      // there is no Sanity `product` document to reference. The page resolves
-      // each handle against Shopify at render time.
+      // Shopify handles, not references: the storefront resolves each handle
+      // against Shopify at render time (pricing/availability live there).
+      // Barware now has light Sanity docs too, but the cross-sell stays
+      // handle-based so it never depends on a Sanity doc existing.
       of: [
         {
           type: 'string',
@@ -155,7 +159,7 @@ export default defineType({
       type: 'text',
       rows: 3,
       description: 'Expert insight or serving recommendation (displayed prominently)',
-      validation: Rule => Rule.required()
+      validation: Rule => Rule.required().warning('Expected on every product doc; the page hides the section when empty.')
     }),
 
     // History & Context
