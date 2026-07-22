@@ -33,7 +33,7 @@ const faqs = [
 
 // Comparison table data
 const comparisonData = [
-  { aspect: "Batch Size", massProduced: "100,000+ litres", jerryCan: "700 for general release" },
+  { aspect: "Batch Size", massProduced: "100,000+ litres", jerryCan: "Batch 001: 700 bottles" },
   // The Distillation comparison row (column still vs pot still) was removed
   // permanently under the provenance rules; do not reintroduce a process row.
   { aspect: "Sourcing", massProduced: "Single industrial source", jerryCan: "Caribbean rum, real botanicals"},

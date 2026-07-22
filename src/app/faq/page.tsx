@@ -28,7 +28,7 @@ const faqs = [
   // Product Information
   {
     question: "What makes Jerry Can Spirits rum unique?",
-    answer: "We make one spiced rum. It's macerated at our British partner distillery, 700 numbered bottles for general release per batch, using real botanicals and no artificial flavouring. What makes it different is that we actually give a damn about what goes in it."
+    answer: "We make one spiced rum. It's macerated at our British partner distillery in limited, numbered batches, using real botanicals and no artificial flavouring. What makes it different is that we actually give a damn about what goes in it."
   },
   {
     question: "What type of rum do you produce?",
