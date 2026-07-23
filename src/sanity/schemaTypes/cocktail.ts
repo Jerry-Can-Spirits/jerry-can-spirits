@@ -296,7 +296,7 @@ export default defineType({
           }
         }
       ],
-      validation: Rule => Rule.max(5)
+      validation: Rule => Rule.max(12)
     }),
     defineField({
       name: 'family',
