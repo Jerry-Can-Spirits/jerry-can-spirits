@@ -163,7 +163,7 @@ export default function CocktailsClient({ cocktails }: CocktailsClientProps) {
   }
 
   // Rum subtypes for "All Rum" filter
-  const rumSpirits = ['spiced-rum', 'white-rum', 'aged-rum', 'dark-rum', 'overproof-rum']
+  const rumSpirits = ['spiced-rum', 'white-rum', 'aged-rum', 'dark-rum', 'overproof-rum', 'rhum-agricole']
 
   // Helper to check spirit match
   const matchesSpiritFilter = (spirit: string | undefined, filter: string) => {
@@ -338,6 +338,7 @@ export default function CocktailsClient({ cocktails }: CocktailsClientProps) {
     { value: 'white-rum', label: 'White Rum' },
     { value: 'aged-rum', label: 'Aged Rum' },
     { value: 'dark-rum', label: 'Dark Rum' },
+    { value: 'rhum-agricole', label: 'Rhum Agricole' },
     { value: 'gin', label: 'Gin' },
     { value: 'vodka', label: 'Vodka' },
     { value: 'bourbon', label: 'Bourbon' },
