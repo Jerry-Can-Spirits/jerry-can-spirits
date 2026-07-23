@@ -106,6 +106,7 @@ export const cocktailBySlugQuery = `*[_type == "cocktail" && slug.current == $sl
   servings,
   prepTime,
   author,
+  faqs,
   tags,
   featured,
   "image": image.asset->url,
