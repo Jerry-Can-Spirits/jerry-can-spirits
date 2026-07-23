@@ -249,6 +249,13 @@ const nextConfig: NextConfig = {
         destination: '/trade/',
         permanent: true,
       },
+      // The Amaretto ingredient slug was misspelt "ameretto" from creation;
+      // corrected in Sanity (content programme), old URL forwarded.
+      {
+        source: '/field-manual/ingredients/ameretto',
+        destination: '/field-manual/ingredients/amaretto/',
+        permanent: true,
+      },
       // Sanity Studio moved to Sanity hosting — send old bookmarks there.
       {
         source: '/studio',
