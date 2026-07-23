@@ -164,6 +164,35 @@ export default defineType({
       description: 'Who wrote or verified this content (e.g., "Dan Freeman", "Jerry Can Spirits Team")'
     }),
     defineField({
+      name: 'faqs',
+      title: 'Cocktail FAQs',
+      type: 'array',
+      of: [
+        {
+          type: 'object',
+          fields: [
+            defineField({
+              name: 'question',
+              title: 'Question',
+              type: 'string',
+              validation: Rule => Rule.required()
+            }),
+            defineField({
+              name: 'answer',
+              title: 'Answer',
+              type: 'text',
+              rows: 4,
+              validation: Rule => Rule.required()
+            })
+          ],
+          preview: {
+            select: {title: 'question'}
+          }
+        }
+      ],
+      description: 'Long-tail questions about making, adapting and serving this cocktail. Rendered visibly and as FAQPage schema from the same data.'
+    }),
+    defineField({
       name: 'variants',
       title: 'Variations',
       type: 'array',

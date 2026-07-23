@@ -82,6 +82,7 @@ interface SanityCocktail {
   featured?: boolean
   image?: string
   videoUrl?: string
+  faqs?: Array<{ question: string; answer: string }>
   relatedGuides?: RelatedGuide[]
   longDescription?: PortableTextBlock[]
   keywords?: string[]
@@ -266,9 +267,24 @@ export default async function CocktailPage({ params }: PageProps) {
     }),
   }
 
+  // FAQPage schema — generated from the same faqs array as the visible FAQ
+  // section so the markup can never drift from the page content.
+  const faqSchema = cocktail.faqs?.length
+    ? {
+        '@context': 'https://schema.org',
+        '@type': 'FAQPage',
+        mainEntity: cocktail.faqs.map((faq) => ({
+          '@type': 'Question',
+          name: faq.question,
+          acceptedAnswer: { '@type': 'Answer', text: faq.answer },
+        })),
+      }
+    : null
+
   return (
     <>
       <StructuredData data={recipeSchema} />
+      {faqSchema && <StructuredData data={faqSchema} id="cocktail-faq-schema" />}
       <main className="min-h-screen py-20">
         {/* Breadcrumb */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
@@ -327,6 +343,21 @@ export default async function CocktailPage({ params }: PageProps) {
           {cocktail.longDescription && cocktail.longDescription.length > 0 && (
             <div className="mt-6 sm:mt-8 bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-4 sm:p-6 md:p-8 border border-gold-500/20">
               <FieldManualPortableText value={cocktail.longDescription} />
+            </div>
+          )}
+
+          {/* FAQs — single source for the visible Q&As and the FAQPage schema */}
+          {cocktail.faqs && cocktail.faqs.length > 0 && (
+            <div className="mt-6 sm:mt-8 bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-4 sm:p-6 md:p-8 border border-gold-500/20">
+              <h2 className="text-2xl font-serif font-bold text-white mb-6">Frequently Asked Questions</h2>
+              <div className="space-y-6">
+                {cocktail.faqs.map((faq) => (
+                  <div key={faq.question}>
+                    <h3 className="text-gold-400 font-semibold mb-2">{faq.question}</h3>
+                    <p className="text-parchment-300 leading-relaxed">{faq.answer}</p>
+                  </div>
+                ))}
+              </div>
             </div>
           )}
 
