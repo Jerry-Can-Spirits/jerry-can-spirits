@@ -266,27 +266,27 @@ export default async function IngredientDetailPage({ params }: { params: Promise
                   <h3 className="text-lg font-serif font-bold text-gold-300 mb-4">Quick Facts</h3>
                   <div className="space-y-3">
                     {ingredient.abv && (
-                      <div className="flex justify-between items-center">
-                        <span className="text-parchment-300">ABV</span>
-                        <span className="text-gold-400 font-semibold">{ingredient.abv}</span>
+                      <div className="flex justify-between items-baseline gap-6">
+                        <span className="text-parchment-300 shrink-0">ABV</span>
+                        <span className="text-gold-400 font-semibold text-right">{ingredient.abv}</span>
                       </div>
                     )}
                     {ingredient.origin && (
-                      <div className="flex justify-between items-center">
-                        <span className="text-parchment-300">Origin</span>
-                        <span className="text-gold-400 font-semibold">{ingredient.origin}</span>
+                      <div className="flex justify-between items-baseline gap-6">
+                        <span className="text-parchment-300 shrink-0">Origin</span>
+                        <span className="text-gold-400 font-semibold text-right">{ingredient.origin}</span>
                       </div>
                     )}
                     {ingredient.flavorProfile?.strength && (
-                      <div className="flex justify-between items-center">
-                        <span className="text-parchment-300">Flavour Strength</span>
-                        <span className="text-gold-400 font-semibold capitalize">{ingredient.flavorProfile.strength.replace('-', ' ')}</span>
+                      <div className="flex justify-between items-baseline gap-6">
+                        <span className="text-parchment-300 shrink-0">Flavour Strength</span>
+                        <span className="text-gold-400 font-semibold text-right capitalize">{ingredient.flavorProfile.strength.replace('-', ' ')}</span>
                       </div>
                     )}
                     {ingredient.seasonality && (
-                      <div className="flex justify-between items-center">
-                        <span className="text-parchment-300">Season</span>
-                        <span className="text-gold-400 font-semibold">{ingredient.seasonality}</span>
+                      <div className="flex justify-between items-baseline gap-6">
+                        <span className="text-parchment-300 shrink-0">Season</span>
+                        <span className="text-gold-400 font-semibold text-right">{ingredient.seasonality}</span>
                       </div>
                     )}
                   </div>
