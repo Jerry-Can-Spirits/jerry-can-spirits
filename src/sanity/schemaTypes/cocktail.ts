@@ -346,6 +346,7 @@ export default defineType({
           {title: 'Aged Rum', value: 'aged-rum'},
           {title: 'Dark Rum', value: 'dark-rum'},
           {title: 'Overproof Rum', value: 'overproof-rum'},
+          {title: 'Rhum Agricole', value: 'rhum-agricole'},
           // Other spirits
           {title: 'Vodka', value: 'vodka'},
           {title: 'Gin', value: 'gin'},
