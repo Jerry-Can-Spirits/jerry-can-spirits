@@ -34,64 +34,76 @@ Example — the Champs-Élysées garnish
 - Garnish strings do not always match a page name exactly: `Mint sprig` vs the
   page `Fresh Mint Sprig`, `nutmeg` vs `Freshly Grated Nutmeg`.
 
-## Approach: render-time linkifier
+## Approach: structured garnish field
 
-Chosen over a structured garnish field (schema change + 310-field migration +
-changed Studio editing) and over driving the section off ingredient lines
-(~80 cocktails have a garnish string but no matching lines). The linkifier keeps
-the authoring workflow unchanged (garnish stays a typed sentence) and needs no
-migration.
+**Superseded the render-time linkifier** (2026-07-25) once the new-drink
+authoring seam surfaced: a render-time linkifier links the garnish string but
+cannot create a Sanity *reference*, so a garnish page's derived "used in these
+cocktails" list (from `references()`) would not pick up new drinks whose garnish
+is only typed as text — the author would have to add a hidden garnish line as
+well. The structured field removes the seam: one authoring input creates a real
+reference, so both link directions work automatically, including for new drinks.
 
-### 1. Linkifier utility — `src/lib/linkifyGarnish.tsx`
+The render-time linkifier work is not wasted: its name→slug matching
+(`buildGarnishVocab` + the matcher) becomes the **one-time migration engine** that
+converts the 310 existing `garnish` strings into structured items.
 
-Pure function:
+### Schema — `garnishes` on the cocktail document
 
-```
-linkifyGarnish(garnish: string, vocab: GarnishVocab): React.ReactNode[]
-```
+A new array field `garnishes`, each item `{ ingredient?: reference→ingredient,
+note?: string }`:
 
-- `GarnishVocab` is an array of `{ name: string; slug: string }` entries, sorted
-  longest-name-first.
-- Scans the garnish string for vocabulary entries, matching **case-insensitively**
-  on **whole words** (word-boundary aware so `Orange` inside `Orange Slice` is not
-  matched separately, and `slice` alone is not matched).
-- Matches are **non-overlapping**, taken longest-first, left to right; already
-  consumed spans are skipped so a compound string yields multiple independent links.
-- Each match becomes a `<Link href={/field-manual/ingredients/${slug}/}>` (note the
-  trailing slash, per the repo `trailingSlash: true` convention) with the same
-  link styling used elsewhere; unmatched spans are returned as plain strings.
-- No match anywhere (e.g. the "none" strings) returns the original string as a
-  single plain node.
+- `ingredient` — the garnish's ingredient page (empty for garnishes with no page,
+  e.g. gardenia flower).
+- `note` — how it is applied ("expressed over the glass and rested on the rim").
 
-The function returns nodes (not HTML) so React handles escaping; it is a `.tsx`
-file because it produces `<Link>` elements.
+The legacy `garnish` string field is kept in the schema but set `hidden: true`
+(data preserved for reference/rollback; no longer authored). Studio editing of a
+new drink is a repeater: pick the garnish ingredient(s), add an optional note.
 
-### 2. Vocabulary + alias map
+### Migration engine — `parseGarnishItems(garnish, vocab)`
 
-- The base vocabulary is every ingredient doc's `name` (fetched `{name, "slug": slug.current}`).
+Pure function in `src/lib/linkifyGarnish.ts` returning `GarnishItem[]`
+(`{ slug?: string; note?: string }`):
+
+- Split the garnish string on separators (`,`, ` and `, ` with `) into phrases.
+- For each phrase, match the vocabulary (case-insensitive, whole-word,
+  longest-first) to find the garnish name → `slug`; the phrase minus that name,
+  trimmed, becomes the `note`. No match → `{ note: phrase }` (unlinked).
+- "None…" strings yield a single note-only item.
+
+A one-off `npx sanity exec` migration script maps every cocktail's `garnish`
+string through `parseGarnishItems`, resolves each `slug` to an ingredient
+`_id`, and writes the `garnishes` array (reference + note). It is idempotent
+(deterministic parse), prints its output for eyeball review, and does not
+overwrite a `garnishes` array that already exists. Where the parse is imperfect,
+the result is still editable in Studio.
+
+### Render
+
+`CocktailRecipeDisplay` reads `cocktail.garnishes` (resolved
+`{ note, "ingredient": ingredient->{ name, slug } }`) and renders under Glassware:
+each item shows its ingredient name as a `<Link>` (when present) followed by the
+note, items joined naturally ("A, B and C"). Falls back to the plain `garnish`
+string if `garnishes` is absent. No garnish vocabulary is needed at render time.
+
+### Vocabulary + alias map (shared by the migration)
+
+- The base vocabulary is every ingredient doc's `name` (`{name, "slug": slug.current}`).
   Matching against all ingredients, not only the `garnishes` category, lets
-  `Angostura bitters` inside `Angostura bitters pattern` link to its bitters page.
-- A small hand-curated **alias map** (in `linkifyGarnish.tsx`) covers common
-  garnish spellings that do not match a page name:
-  `mint sprig → fresh-mint-sprig`, `nutmeg → freshly-grated-nutmeg`,
-  `cherry → maraschino-cherry`, `cinnamon → ground-cinnamon` (extend as gaps appear).
-  Aliases are merged into the vocabulary as extra `{name, slug}` entries.
+  `Angostura bitters` inside `Angostura bitters pattern` resolve to its bitters page.
+- A small hand-curated **alias map** covers common garnish spellings that do not
+  match a page name: `mint sprig → fresh-mint-sprig`,
+  `nutmeg → freshly-grated-nutmeg`, `cherry → maraschino-cherry`,
+  `cinnamon → ground-cinnamon` (extend as gaps appear). Aliases are merged in only
+  when their target slug exists.
 
-### 3. Data flow
+### Remove garnishes from the Ingredients list (one-off Sanity sweep)
 
-- The cocktail page (`src/app/field-manual/cocktails/[slug]/page.tsx`, a server
-  component) fetches the vocabulary once (a small `*[_type=="ingredient"]{name, slug}`
-  query, added to the existing data fetch) and passes it as a prop to
-  `CocktailRecipeDisplay`.
-- `CocktailRecipeDisplay` line 275 renders `{linkifyGarnish(cocktail.garnish, vocab)}`
-  in place of the raw string. Empty/undefined garnish keeps its current behaviour.
-- No change to the `garnish` schema field.
-
-### 4. Remove garnishes from the Ingredients list (one-off Sanity sweep)
-
-A script (run via `npx sanity exec`, then deleted — the established pattern)
-removes garnish lines from every cocktail's `ingredients` array so garnishes live
-solely in the `garnish` field and drop out of the Recipe JSON-LD
+Now safe because reverse links come from `garnishes[].ingredient` references, not
+from ingredient lines. A script (run via `npx sanity exec`, then deleted — the
+established pattern) removes garnish lines from every cocktail's `ingredients`
+array so garnishes live solely in `garnishes` and drop out of the Recipe JSON-LD
 (`recipeIngredient`).
 
 - A line is a garnish line if its `ingredientRef` resolves to
