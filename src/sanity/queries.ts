@@ -27,6 +27,10 @@ export const cocktailsQuery = `*[_type == "cocktail"] | order(_createdAt desc) {
   difficulty,
   "glassware": glassware->{ _id, name, slug },
   garnish,
+  garnishes[] {
+    note,
+    "ingredient": ingredient->{ _id, name, "slug": slug.current }
+  },
   ingredients[] {
     name,
     amount,
@@ -81,6 +85,10 @@ export const cocktailBySlugQuery = `*[_type == "cocktail" && slug.current == $sl
   difficulty,
   "glassware": glassware->{ _id, name, slug },
   garnish,
+  garnishes[] {
+    note,
+    "ingredient": ingredient->{ _id, name, "slug": slug.current }
+  },
   ingredients[] {
     name,
     amount,

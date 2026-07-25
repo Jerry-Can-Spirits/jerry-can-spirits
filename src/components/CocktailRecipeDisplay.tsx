@@ -17,6 +17,35 @@ interface CocktailIngredient {
   }
 }
 
+// A structured garnish: a linked ingredient and/or a descriptor note.
+interface GarnishItem {
+  note?: string
+  ingredient?: { _id: string; name: string; slug: string }
+}
+
+// Render structured garnishes as "Name note, Name note and Name note", with each
+// garnish ingredient linked to its page and descriptor notes left plain.
+function renderGarnishes(items: GarnishItem[]) {
+  return items.map((item, i) => {
+    const separator = i === 0 ? '' : i === items.length - 1 ? ' and ' : ', '
+    return (
+      <span key={i}>
+        {separator}
+        {item.ingredient ? (
+          <Link
+            href={`/field-manual/ingredients/${item.ingredient.slug}/`}
+            className="text-blue-400 hover:text-blue-300 underline transition-colors"
+          >
+            {item.ingredient.name}
+          </Link>
+        ) : null}
+        {item.ingredient && item.note ? ' ' : ''}
+        {item.note}
+      </span>
+    )
+  })
+}
+
 interface CocktailVariant {
   name: string
   description: string
@@ -40,6 +69,7 @@ interface SanityCocktail {
     slug: { current: string }
   }
   garnish: string
+  garnishes?: GarnishItem[]
   note?: string
   variants?: CocktailVariant[]
   category?: string
@@ -272,7 +302,12 @@ export default function CocktailRecipeDisplay({ cocktail }: Props) {
                   'Not specified'
                 )}
               </p>
-              <p className="text-parchment-300"><strong className="text-gold-300">Garnish:</strong> {cocktail?.garnish}</p>
+              <p className="text-parchment-300">
+                <strong className="text-gold-300">Garnish:</strong>{' '}
+                {cocktail?.garnishes && cocktail.garnishes.length > 0
+                  ? renderGarnishes(cocktail.garnishes)
+                  : cocktail?.garnish}
+              </p>
             </div>
           </div>
         </div>

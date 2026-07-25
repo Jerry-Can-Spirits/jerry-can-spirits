@@ -94,9 +94,44 @@ export default defineType({
     }),
     defineField({
       name: 'garnish',
-      title: 'Garnish',
+      title: 'Garnish (legacy text)',
       type: 'string',
-      validation: Rule => Rule.required()
+      hidden: true,
+      description: 'Deprecated: superseded by the structured Garnish field below. Kept for reference.'
+    }),
+    defineField({
+      name: 'garnishes',
+      title: 'Garnish',
+      type: 'array',
+      description: 'Each garnish links to its ingredient page (leave the reference empty for a garnish with no page, e.g. a gardenia flower), with an optional note on how it is applied.',
+      of: [
+        {
+          type: 'object',
+          name: 'garnishItem',
+          title: 'Garnish',
+          fields: [
+            defineField({
+              name: 'ingredient',
+              title: 'Garnish ingredient',
+              type: 'reference',
+              to: [{ type: 'ingredient' }],
+              description: 'The garnish ingredient page. Leave empty for a garnish with no page.'
+            }),
+            defineField({
+              name: 'note',
+              title: 'Note',
+              type: 'string',
+              description: 'How it is applied, e.g. "expressed over the glass and rested on the rim".'
+            })
+          ],
+          preview: {
+            select: { title: 'ingredient.name', note: 'note' },
+            prepare({ title, note }: { title?: string; note?: string }) {
+              return { title: title || note || 'Garnish', subtitle: title ? note : '' }
+            }
+          }
+        }
+      ]
     }),
     defineField({
       name: 'ingredients',
