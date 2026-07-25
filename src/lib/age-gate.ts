@@ -71,7 +71,8 @@ export const BOT_USER_AGENTS = [
 
   // SEO tools
   'semrushbot',
-  'ahrefsbot',
+  'ahrefsbot', // Ahrefs backlink crawler
+  'ahrefssiteaudit', // Ahrefs Site Audit — a DISTINCT UA from AhrefsBot; without it the weekly audit is 307'd to the age gate
   'mj12bot', // Majestic
   'dotbot', // Moz
   'rogerbot', // Moz
