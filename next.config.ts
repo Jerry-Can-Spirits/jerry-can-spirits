@@ -242,6 +242,13 @@ const nextConfig: NextConfig = {
         destination: '/shop/gift-sets/:path*',
         permanent: true,
       },
+      // The hardcoded /sitemap-page stub (a sparse, static duplicate) was
+      // superseded by the Sanity-driven /sitemap index. One canonical sitemap.
+      {
+        source: '/sitemap-page',
+        destination: '/sitemap/',
+        permanent: true,
+      },
       // The Pour IQ pilot charter page was unpublished with the corporate
       // separation (Audit 8 PR A); send the venue's bookmarks to the portal.
       {
