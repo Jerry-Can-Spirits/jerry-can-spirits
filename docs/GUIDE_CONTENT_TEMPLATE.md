@@ -2,7 +2,11 @@
 
 ## Phase 2: Creating Your First Pillar Guide
 
-This document provides a structured template for creating SEO-optimized guides in Sanity Studio. Use this as your reference when writing "The Complete Guide to Spiced Rum" and subsequent cluster content.
+This document provides a structured template for creating SEO-optimised guides in Sanity Studio. Use this as your reference when writing "The Complete Guide to Spiced Rum" and subsequent cluster content.
+
+> **Voice and claims are governed by `docs/VOICE.md` and `CLAUDE.md`, which override anything in this template.** In particular: no em or en dashes, no exclamation marks, no empty intensifiers (discover, elevate, unlock, ultimate, meticulously), no "whether you're X or Y" crowd address, no "from X to Y" filler, no "isn't just X, it's Y" reversals, no unprovable superlatives, and no production or provenance claims about Jerry Can Spirits beyond the approved framing (British, small batches, our British partner distillery, Caribbean rum base).
+>
+> **Schema constraints that override this template's older targets:** `introduction` is a plain-text field capped at 500 characters (write a tight lead, not a 200-word essay); section `content` fields are plain text (no inline links or markdown — `**bold**` renders literally); `metaTitle` max 60 chars; `metaDescription` and `excerpt` max 160 chars each, and they must differ from each other.
 
 ---
 
@@ -31,9 +35,9 @@ The Complete Guide to Spiced Rum: History, Production & Tasting Notes
 complete-guide-to-spiced-rum
 ```
 
-#### Excerpt (160 characters max)
+#### Excerpt (160 characters max — must NOT duplicate the meta description)
 ```
-Discover everything about spiced rum: from Caribbean origins and production methods to tasting techniques and UK craft distilleries. Expert guidance for enthusiasts.
+What spiced rum is, how it is made, and how to judge quality: Caribbean origins, production methods, tasting technique and the UK craft scene.
 ```
 
 #### Meta Title (60 characters max)
@@ -55,11 +59,11 @@ spiced rum, spiced rum guide, what is spiced rum, spiced rum production, spiced 
 
 ### **Content Structure**
 
-#### Introduction (200-300 words)
-Hook readers with the appeal of spiced rum, establish your authority (veteran-owned, craft expertise), and preview what they'll learn. Address the "why should I read this?" question immediately.
+#### Introduction (300-500 characters — the schema caps this field at 500 chars)
+The introduction renders as a single lead paragraph. Open with a challenge or a reveal, state plainly what the guide covers, and stop. Depth belongs in the H2 sections below, which carry the SEO weight. (The schema validation is `min(100).max(500)` characters; do not write to a word count.)
 
 **Example Opening:**
-> Spiced rum has evolved from a Caribbean staple to a global phenomenon, yet many drinkers never venture beyond the household names. This comprehensive guide explores the world of spiced rum—from traditional production methods perfected over centuries to the innovative approaches of modern UK craft distilleries. Whether you're a curious beginner or a seasoned enthusiast, you'll discover what separates exceptional spiced rum from the ordinary, and how Britain's distilling veterans are redefining this classic spirit category.
+> Spiced rum began as a Caribbean staple and is now made worldwide, yet most drinkers never look past the household names. This guide covers how spiced rum is made, the spices that define it, and how to judge a quality bottle.
 
 ---
 
@@ -244,7 +248,7 @@ This is a separate schema field designed specifically for brand-neutral spotligh
 **Location:** Lancashire, England
 **Speciality:** Expedition-ready spiced rum crafted by military veterans
 **Description:**
-Founded by ex-servicemen Dan Freeman and Rhys Williams, Jerry Can Spirits brings military precision to small-batch rum production. Their Expedition Spiced Rum balances traditional Caribbean rum with a carefully engineered spice blend featuring vanilla, cinnamon, and nutmeg. Every bottle is quality-tested to ensure consistency—reliability engineered into every batch.
+Founded by Royal Signals veterans Dan Freeman and Rhys Williams, Jerry Can Spirits is a British craft spirits house. Expedition Spiced Rum is built on a Caribbean rum base, produced in small batches with real ingredients and no artificial flavourings. Five per cent of profits support military charities.
 **Website:** https://jerrycanspirits.co.uk
 
 #### Example Entry: Another UK Craft Distillery
