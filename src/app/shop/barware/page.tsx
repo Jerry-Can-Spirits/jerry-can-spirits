@@ -4,13 +4,12 @@ import { getProductsByCollection, type ShopifyProduct } from '@/lib/shopify'
 import ShopError from '@/components/ShopError'
 import type { Metadata } from 'next'
 import Breadcrumbs from '@/components/Breadcrumbs'
-import { GB_SHIPPING_DETAILS } from '@/lib/shippingSchema'
 import StructuredData from '@/components/StructuredData'
 import ScrollReveal from '@/components/ScrollReveal'
 import AddToCartButton from '@/components/AddToCartButton'
 import ViewItemListTracker from '@/components/ViewItemListTracker'
 import { OG_IMAGE } from '@/lib/og'
-import { productOffer, priceValidUntil } from '@/lib/jsonLd'
+import { productOffer, merchantOfferExtras } from '@/lib/jsonLd'
 
 export const metadata: Metadata = {
   title: 'Cocktail Shakers, Barware & Bar Tools',
@@ -111,18 +110,10 @@ export default async function BarwarePage() {
         description: product.description || 'Bar accessories from Jerry Can Spirits.',
         url: `https://jerrycanspirits.co.uk/shop/product/${product.handle}/`,
         image: product.images?.[0]?.url || '',
-        offers: productOffer(product, {
-          priceValidUntil: priceValidUntil(product.handle),
-          shippingDetails: GB_SHIPPING_DETAILS,
-          hasMerchantReturnPolicy: {
-            '@type': 'MerchantReturnPolicy',
-            returnPolicyCategory: 'https://schema.org/MerchantReturnFiniteReturnWindow',
-            merchantReturnDays: 14,
-            returnMethod: 'https://schema.org/ReturnByMail',
-            returnFees: 'https://schema.org/FreeReturn',
-            applicableCountry: 'GB',
-          },
-        }),
+        offers: productOffer(
+          product,
+          merchantOfferExtras(product.handle, `https://jerrycanspirits.co.uk/shop/product/${product.handle}/`),
+        ),
       },
     })),
   }
