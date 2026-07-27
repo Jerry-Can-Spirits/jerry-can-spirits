@@ -249,6 +249,19 @@ const nextConfig: NextConfig = {
         destination: '/sitemap/',
         permanent: true,
       },
+      // The hip flask's Shopify handle said 500ml while the product is 150ml;
+      // the handle was corrected in Shopify (27 Jul 2026), so the old product
+      // URL redirects to the corrected one.
+      {
+        source: '/shop/product/stainless-steel-hip-flask-500ml',
+        destination: '/shop/product/stainless-steel-hip-flask-150ml/',
+        permanent: true,
+      },
+      {
+        source: '/shop/product/stainless-steel-hip-flask-500ml/:path*',
+        destination: '/shop/product/stainless-steel-hip-flask-150ml/:path*',
+        permanent: true,
+      },
       // The Pour IQ pilot charter page was unpublished with the corporate
       // separation (Audit 8 PR A); send the venue's bookmarks to the portal.
       {

@@ -252,7 +252,7 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
       { title: 'Seals Properly', body: 'The seal is the point. A flask that leaks in your jacket pocket is a flask that failed its one job. These do not.' },
       { title: 'The Right Fill', body: 'Expedition Spiced Rum at 40% ABV carries well in a flask. The spice holds. The flavour does not collapse. Fill it and carry it with confidence.' },
     ],
-    productHandles: ['stainless-steel-hip-flask-500ml'],
+    productHandles: ['stainless-steel-hip-flask-150ml'],
   },
 
   'ice-chilling': {
