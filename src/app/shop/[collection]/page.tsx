@@ -8,7 +8,7 @@ import { OG_IMAGE } from '@/lib/og'
 import { CATEGORIES } from '@/lib/categories'
 import AddToCartButton from '@/components/AddToCartButton'
 import ViewItemListTracker from '@/components/ViewItemListTracker'
-import { safeJsonLd, productOffer } from '@/lib/jsonLd'
+import { safeJsonLd, productOffer, merchantOfferExtras, productGtin } from '@/lib/jsonLd'
 
 // ISR — pure Shopify catalogue data (no per-request state), so these SEO
 // collection pages edge-cache and revalidate hourly instead of a live Shopify
@@ -117,7 +117,8 @@ export default async function CollectionPage({
           url: `${BASE_URL}/shop/product/${p.handle}/`,
           image: p.images?.[0]?.url,
           brand: { '@type': 'Brand', name: 'Jerry Can Spirits' },
-          offers: productOffer(p, { url: `${BASE_URL}/shop/product/${p.handle}/` }),
+          ...productGtin(p.handle),
+          offers: productOffer(p, merchantOfferExtras(p.handle, `${BASE_URL}/shop/product/${p.handle}/`)),
         },
       })),
     },

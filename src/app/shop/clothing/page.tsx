@@ -7,7 +7,7 @@ import Breadcrumbs from '@/components/Breadcrumbs'
 import StructuredData from '@/components/StructuredData'
 import { baseOpenGraph, OG_IMAGE } from '@/lib/og'
 import ViewItemListTracker from '@/components/ViewItemListTracker'
-import { safeJsonLd, productOffer } from '@/lib/jsonLd'
+import { safeJsonLd, productOffer, merchantOfferExtras } from '@/lib/jsonLd'
 
 export const metadata: Metadata = {
   title: 'Expedition Gear & Apparel',
@@ -181,7 +181,10 @@ export default async function ClothingPage() {
           '@type': 'Brand',
           name: 'Jerry Can Spirits',
         },
-        offers: productOffer(product, { url: `https://jerrycanspirits.co.uk/shop/product/${product.handle}/` }),
+        offers: productOffer(
+          product,
+          merchantOfferExtras(product.handle, `https://jerrycanspirits.co.uk/shop/product/${product.handle}/`),
+        ),
       },
     })),
   }

@@ -4,7 +4,7 @@ import { notFound } from 'next/navigation'
 import Image from 'next/image'
 import { getProduct, getProducts, getSmartRecommendations, type ShopifyProduct, type ShopifyMetafield } from '@/lib/shopify'
 import { GB_SHIPPING_DETAILS } from '@/lib/shippingSchema'
-import { productOffer, priceValidUntil } from '@/lib/jsonLd'
+import { productOffer, priceValidUntil, PRICE_VALID_FROM, productGtin, MERCHANT_RETURN_POLICY } from '@/lib/jsonLd'
 import { FREE_SHIPPING_THRESHOLD_GBP } from '@/lib/pricing'
 import ProductVariantSelector from '@/components/ProductVariantSelector'
 import BatchStockIndicator from '@/components/BatchStockIndicator'
@@ -422,7 +422,7 @@ export default async function ProductPage({
     image: product.images.map(img => img.url),
     sku: handle,
     mpn: handle,
-    ...(singleVariantGtin && { gtin: singleVariantGtin }),
+    ...(singleVariantGtin ? { gtin: singleVariantGtin } : productGtin(handle)),
     brand: {
       '@type': 'Brand',
       name: 'Jerry Can Spirits',
@@ -442,15 +442,9 @@ export default async function ProductPage({
       itemCondition: 'https://schema.org/NewCondition',
       url: `https://jerrycanspirits.co.uk/shop/product/${handle}/`,
       priceValidUntil: priceValidUntil(handle),
+      validFrom: PRICE_VALID_FROM,
       shippingDetails: GB_SHIPPING_DETAILS,
-      hasMerchantReturnPolicy: {
-        '@type': 'MerchantReturnPolicy',
-        returnPolicyCategory: 'https://schema.org/MerchantReturnFiniteReturnWindow',
-        merchantReturnDays: 14,
-        returnMethod: 'https://schema.org/ReturnByMail',
-        returnFees: 'https://schema.org/FreeReturn',
-        applicableCountry: 'GB',
-      },
+      hasMerchantReturnPolicy: MERCHANT_RETURN_POLICY,
       seller: {
         '@type': 'Organization',
         name: 'Jerry Can Spirits',

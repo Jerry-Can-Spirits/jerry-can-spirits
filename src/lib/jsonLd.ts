@@ -1,4 +1,5 @@
 import type { ShopifyProduct } from './shopify'
+import { GB_SHIPPING_DETAILS } from './shippingSchema'
 
 /**
  * Serialise a JSON-LD payload safely for embedding in
@@ -24,6 +25,47 @@ export function safeJsonLd(data: unknown): string {
 // Revisit both dates after 1 August 2026.
 export function priceValidUntil(handle: string): string {
   return handle === 'jerry-can-spirits-expedition-spiced-rum' ? '2026-07-31' : '2026-12-31'
+}
+
+// The date current pricing took effect (site launch). Byte-stable literal for
+// the same Merchant-freshness reason as priceValidUntil. When Expedition's RRP
+// rises on 1 August 2026, its validFrom becomes 2026-08-01 — revisit alongside
+// the priceValidUntil dates above (split per-handle then, as priceValidUntil does).
+export const PRICE_VALID_FROM = '2026-04-06'
+
+// The 14-day GB returns policy, shared by every offer on the site. Previously
+// duplicated inline on the product, spirits and barware pages.
+export const MERCHANT_RETURN_POLICY = {
+  '@type': 'MerchantReturnPolicy',
+  returnPolicyCategory: 'https://schema.org/MerchantReturnFiniteReturnWindow',
+  merchantReturnDays: 14,
+  returnMethod: 'https://schema.org/ReturnByMail',
+  returnFees: 'https://schema.org/FreeReturn',
+  applicableCountry: 'GB',
+} as const
+
+// GS1-issued GTINs for own-brand products. Spread into Product nodes via
+// productGtin(); products without a GTIN contribute nothing.
+const GTIN_BY_HANDLE: Record<string, string> = {
+  'jerry-can-spirits-expedition-spiced-rum': '5070004142209',
+  'jerry-can-spirits-premium-gift-pack': '5070004142216',
+}
+export function productGtin(handle: string): { gtin13: string } | Record<string, never> {
+  const gtin = GTIN_BY_HANDLE[handle]
+  return gtin ? { gtin13: gtin } : {}
+}
+
+// The full merchant-listing offer field set Google Search Console expects on
+// every offer (product pages AND collection-page ItemLists): url, price
+// validity window, shipping and returns. Callers spread extra fields on top.
+export function merchantOfferExtras(handle: string, url: string): Record<string, unknown> {
+  return {
+    url,
+    priceValidUntil: priceValidUntil(handle),
+    validFrom: PRICE_VALID_FROM,
+    shippingDetails: GB_SHIPPING_DETAILS,
+    hasMerchantReturnPolicy: MERCHANT_RETURN_POLICY,
+  }
 }
 
 // Build an Offer, or an AggregateOffer when a product's variants genuinely span
