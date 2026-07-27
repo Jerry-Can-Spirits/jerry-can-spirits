@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import type { PortableTextBlock } from 'next-sanity'
 import Link from 'next/link'
 import Image from 'next/image'
 import { notFound } from 'next/navigation'
@@ -16,12 +17,14 @@ const TEAM_MEMBERS = new Set(['Dan Freeman', 'Rhys Williams'])
 // Types for guide data
 interface Subsection {
   subheading: string
-  content: string
+  content?: string
+  contentRich?: PortableTextBlock[]
 }
 
 interface Section {
   heading: string
-  content: string
+  content?: string
+  contentRich?: PortableTextBlock[]
   subsections?: Subsection[]
 }
 

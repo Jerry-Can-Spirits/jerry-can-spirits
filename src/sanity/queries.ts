@@ -380,9 +380,29 @@ export const guideBySlugQuery = `*[_type == "guide" && slug.current == $slug][0]
   sections[] {
     heading,
     content,
+    contentRich[] {
+      ...,
+      markDefs[] {
+        ...,
+        _type == "internalLink" => {
+          "docType": reference->_type,
+          "slug": reference->slug.current
+        }
+      }
+    },
     subsections[] {
       subheading,
-      content
+      content,
+      contentRich[] {
+        ...,
+        markDefs[] {
+          ...,
+          _type == "internalLink" => {
+            "docType": reference->_type,
+            "slug": reference->slug.current
+          }
+        }
+      }
     }
   },
   faqs[] {

@@ -391,6 +391,7 @@ export default defineType({
           {title: 'Rye Whiskey', value: 'rye-whiskey'},
           {title: 'Scotch', value: 'scotch'},
           {title: 'Irish Whiskey', value: 'irish-whiskey'},
+          {title: 'Welsh Whisky', value: 'welsh-whisky'},
           {title: 'Brandy', value: 'brandy'},
           {title: 'Cognac', value: 'cognac'},
           {title: 'Cachaça', value: 'cachaca'},

@@ -1,16 +1,33 @@
 'use client'
 
 import { useState } from 'react'
+import type { PortableTextBlock } from 'next-sanity'
+import GuidePortableText from './GuidePortableText'
 
 interface Subsection {
   subheading: string
-  content: string
+  content?: string
+  contentRich?: PortableTextBlock[]
 }
 
 interface Section {
   heading: string
-  content: string
+  content?: string
+  contentRich?: PortableTextBlock[]
   subsections?: Subsection[]
+}
+
+// Rich content when migrated, plain-text fallback otherwise (the portable-text
+// migration's zero-downtime contract).
+function SectionBody({ content, contentRich }: { content?: string; contentRich?: PortableTextBlock[] }) {
+  if (contentRich && contentRich.length > 0) {
+    return <GuidePortableText value={contentRich} />
+  }
+  return (
+    <p className="text-parchment-300 leading-relaxed whitespace-pre-line">
+      {content}
+    </p>
+  )
 }
 
 interface GuideSectionsProps {
@@ -41,9 +58,7 @@ export default function GuideSections({ sections, initialVisibleCount = 4 }: Gui
             {section.heading}
           </h2>
           <div className="prose prose-invert max-w-none">
-            <p className="text-parchment-300 leading-relaxed whitespace-pre-line">
-              {section.content}
-            </p>
+            <SectionBody content={section.content} contentRich={section.contentRich} />
           </div>
 
           {section.subsections && section.subsections.length > 0 && (
@@ -53,9 +68,7 @@ export default function GuideSections({ sections, initialVisibleCount = 4 }: Gui
                   <h3 className="text-xl font-serif font-bold text-gold-300 mb-4">
                     {subsection.subheading}
                   </h3>
-                  <p className="text-parchment-300 leading-relaxed whitespace-pre-line">
-                    {subsection.content}
-                  </p>
+                  <SectionBody content={subsection.content} contentRich={subsection.contentRich} />
                 </div>
               ))}
             </div>

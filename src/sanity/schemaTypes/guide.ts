@@ -138,11 +138,49 @@ export default defineType({
             }),
             defineField({
               name: 'content',
-              title: 'Content',
+              title: 'Content (legacy plain text)',
               type: 'text',
               rows: 8,
-              description: 'Section body text - use clear, factual language',
-              validation: Rule => Rule.required()
+              description: 'Legacy plain-text body. Superseded by Rich Content below; kept as the rollback source during the portable-text migration.'
+            }),
+            defineField({
+              name: 'contentRich',
+              title: 'Rich Content',
+              type: 'array',
+              description: 'Section body as rich text. Link cocktails, ingredients, equipment and other guides inline on first mention.',
+              of: [
+                {
+                  type: 'block',
+                  marks: {
+                    annotations: [
+                      {
+                        name: 'link',
+                        title: 'External link',
+                        type: 'object',
+                        fields: [defineField({ name: 'href', title: 'URL', type: 'url' })]
+                      },
+                      {
+                        name: 'internalLink',
+                        title: 'Field Manual link',
+                        type: 'object',
+                        fields: [
+                          defineField({
+                            name: 'reference',
+                            title: 'Reference',
+                            type: 'reference',
+                            to: [
+                              { type: 'cocktail' },
+                              { type: 'ingredient' },
+                              { type: 'equipment' },
+                              { type: 'guide' }
+                            ]
+                          })
+                        ]
+                      }
+                    ]
+                  }
+                }
+              ]
             }),
             defineField({
               name: 'subsections',
@@ -160,9 +198,49 @@ export default defineType({
                     }),
                     defineField({
                       name: 'content',
-                      title: 'Content',
+                      title: 'Content (legacy plain text)',
                       type: 'text',
-                      rows: 4
+                      rows: 4,
+                      description: 'Legacy plain-text body. Superseded by Rich Content below.'
+                    }),
+                    defineField({
+                      name: 'contentRich',
+                      title: 'Rich Content',
+                      type: 'array',
+                      description: 'Subsection body as rich text with inline Field Manual links.',
+                      of: [
+                        {
+                          type: 'block',
+                          marks: {
+                            annotations: [
+                              {
+                                name: 'link',
+                                title: 'External link',
+                                type: 'object',
+                                fields: [defineField({ name: 'href', title: 'URL', type: 'url' })]
+                              },
+                              {
+                                name: 'internalLink',
+                                title: 'Field Manual link',
+                                type: 'object',
+                                fields: [
+                                  defineField({
+                                    name: 'reference',
+                                    title: 'Reference',
+                                    type: 'reference',
+                                    to: [
+                                      { type: 'cocktail' },
+                                      { type: 'ingredient' },
+                                      { type: 'equipment' },
+                                      { type: 'guide' }
+                                    ]
+                                  })
+                                ]
+                              }
+                            ]
+                          }
+                        }
+                      ]
                     })
                   ],
                   preview: {
