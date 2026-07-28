@@ -262,6 +262,18 @@ const nextConfig: NextConfig = {
         destination: '/shop/product/stainless-steel-hip-flask-150ml/:path*',
         permanent: true,
       },
+      // The slate coaster's original Shopify handle; Google still crawls the
+      // old URL from memory and reports a soft 404 (GSC, 28 Jul 2026).
+      {
+        source: '/shop/product/natural-slate-coaster-variants',
+        destination: '/shop/product/natural-slate-coasters-square-or-round/',
+        permanent: true,
+      },
+      {
+        source: '/shop/product/natural-slate-coaster-variants/:path*',
+        destination: '/shop/product/natural-slate-coasters-square-or-round/:path*',
+        permanent: true,
+      },
       // The Pour IQ pilot charter page was unpublished with the corporate
       // separation (Audit 8 PR A); send the venue's bookmarks to the portal.
       {
