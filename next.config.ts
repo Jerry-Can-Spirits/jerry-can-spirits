@@ -427,16 +427,28 @@ const nextConfig: NextConfig = {
         destination: '/field-manual/cocktails/brandy-sling-cold/',
         permanent: true,
       },
-      // rum-old-fashioned has no page yet (a content gap flagged for creation);
-      // meanwhile the old URL forwards to the base Old Fashioned.
+      // The Old Standard IS the house Rum Old Fashioned. Following the Explorers
+      // Gold (rum-and-honey) pattern, its slug now carries the generic term:
+      // the-old-standard-rum-old-fashioned. The bare "rum old fashioned" search
+      // term and the old brand-only slug both resolve to it.
       {
         source: '/cocktails/rum-old-fashioned',
-        destination: '/field-manual/cocktails/old-fashioned/',
+        destination: '/field-manual/cocktails/the-old-standard-rum-old-fashioned/',
         permanent: true,
       },
       {
         source: '/field-manual/cocktails/rum-old-fashioned/:path*',
-        destination: '/field-manual/cocktails/old-fashioned/',
+        destination: '/field-manual/cocktails/the-old-standard-rum-old-fashioned/',
+        permanent: true,
+      },
+      {
+        source: '/cocktails/the-old-standard',
+        destination: '/field-manual/cocktails/the-old-standard-rum-old-fashioned/',
+        permanent: true,
+      },
+      {
+        source: '/field-manual/cocktails/the-old-standard/:path*',
+        destination: '/field-manual/cocktails/the-old-standard-rum-old-fashioned/',
         permanent: true,
       },
       // Old /cocktails/* URLs redirect to field-manual

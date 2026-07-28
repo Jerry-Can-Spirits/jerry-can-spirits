@@ -6,7 +6,7 @@
 export const TRADE_COCKTAIL_SLUGS = [
   'storm-and-spice',
   'explorers-gold-rum-and-honey',
-  'the-old-standard',
+  'the-old-standard-rum-old-fashioned',
   'jerry-can-julep',
 ] as const
 
