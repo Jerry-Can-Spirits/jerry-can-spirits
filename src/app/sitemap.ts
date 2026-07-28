@@ -242,12 +242,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'monthly',
       priority: 0.5,
     },
-    {
-      url: `${baseUrl}/contact/media/kit/`,
-      lastModified: STATIC_LAST_MODIFIED,
-      changeFrequency: 'monthly',
-      priority: 0.5,
-    },
+    // /contact/media/kit/ is intentionally omitted: it canonicalises to
+    // /contact/media/ above, so listing it put a non-canonical URL in the
+    // sitemap (Ahrefs flag). The canonical parent covers it.
     {
       url: `${baseUrl}/contact/complaints/`,
       lastModified: STATIC_LAST_MODIFIED,
