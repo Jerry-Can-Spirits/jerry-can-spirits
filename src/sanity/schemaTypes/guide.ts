@@ -141,7 +141,8 @@ export default defineType({
               title: 'Content (legacy plain text)',
               type: 'text',
               rows: 8,
-              description: 'Legacy plain-text body. Superseded by Rich Content below; kept as the rollback source during the portable-text migration.'
+              hidden: true,
+              description: 'Legacy plain-text body. Superseded by Rich Content; retained as the migration rollback source.'
             }),
             defineField({
               name: 'contentRich',
@@ -201,7 +202,8 @@ export default defineType({
                       title: 'Content (legacy plain text)',
                       type: 'text',
                       rows: 4,
-                      description: 'Legacy plain-text body. Superseded by Rich Content below.'
+                      hidden: true,
+                      description: 'Legacy plain-text body. Superseded by Rich Content.'
                     }),
                     defineField({
                       name: 'contentRich',
