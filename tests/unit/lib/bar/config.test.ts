@@ -61,6 +61,20 @@ describe('bar config', () => {
     expect(COMMON_DEFAULTS.has('cognac')).toBe(false)
   })
 
+  it('seeds the juices and syrups the recognisable classics need', () => {
+    // Cosmopolitan / Woo Woo (cranberry), Hurricane (passion fruit + grenadine),
+    // Piña Colada (pineapple) are all buildable from the defaults.
+    for (const slug of [
+      'fresh-cranberry-juice',
+      'fresh-pineapple-juice',
+      'grenadine',
+      'passion-fruit-syrup',
+      'peach-schnapps',
+    ]) {
+      expect(COMMON_DEFAULTS.has(slug)).toBe(true)
+    }
+  })
+
   it('shows branded mixers under a generic name and shelves vermouth with the wines', () => {
     expect(INGREDIENT_OVERRIDES['fever-tree-ginger-beer'].displayName).toBe('Ginger Beer')
     expect(INGREDIENT_OVERRIDES['fever-tree-premium-indian-tonic-water'].displayName).toBe('Tonic Water')
