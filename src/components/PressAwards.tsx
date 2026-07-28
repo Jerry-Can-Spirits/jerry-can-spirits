@@ -138,7 +138,7 @@ export default function PressAwards() {
                         <span className="shrink-0 flex items-center bg-white rounded-lg p-2">
                           <Image
                             src={award.image}
-                            alt=""
+                            alt={award.title}
                             width={120}
                             height={60}
                             className="h-10 w-auto"
@@ -147,7 +147,7 @@ export default function PressAwards() {
                       ) : (
                         <Image
                           src={award.image}
-                          alt=""
+                          alt={award.title}
                           width={48}
                           height={48}
                           className="shrink-0"
