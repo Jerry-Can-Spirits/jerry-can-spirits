@@ -15,7 +15,7 @@ export const CATEGORY_TO_SHELF: Record<string, ShelfId> = {
   'creme-liqueurs': 'wines-liqueurs',
   'anise-herbal': 'wines-liqueurs',
   wine: 'wines-liqueurs',
-  champagne: 'wines-liqueurs', // legacy value, safe catch
+  fortified: 'wines-liqueurs',
   mixers: 'mixers',
   fresh: 'fresh',
   bitters: 'bitters',
@@ -26,7 +26,7 @@ export const CATEGORY_TO_SHELF: Record<string, ShelfId> = {
 export const CATEGORY_TO_VESSEL: Record<string, VesselType> = {
   spirits: 'spirit',
   wine: 'wine',
-  champagne: 'wine',
+  fortified: 'wine',
   liqueurs: 'liqueur',
   'creme-liqueurs': 'liqueur',
   'anise-herbal': 'liqueur',

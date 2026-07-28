@@ -24,6 +24,7 @@ describe('bar config', () => {
     expect(shelfForCategory('creme-liqueurs')).toBe('wines-liqueurs')
     expect(shelfForCategory('anise-herbal')).toBe('wines-liqueurs')
     expect(shelfForCategory('wine')).toBe('wines-liqueurs')
+    expect(shelfForCategory('fortified')).toBe('wines-liqueurs')
     expect(shelfForCategory('mixers')).toBe('mixers')
     expect(shelfForCategory('fresh')).toBe('fresh')
     expect(shelfForCategory('bitters')).toBe('bitters')
@@ -34,6 +35,7 @@ describe('bar config', () => {
   it('maps categories to a vessel silhouette, defaulting to spirit', () => {
     expect(vesselForCategory('spirits')).toBe('spirit')
     expect(vesselForCategory('wine')).toBe('wine')
+    expect(vesselForCategory('fortified')).toBe('wine')
     expect(vesselForCategory('liqueurs')).toBe('liqueur')
     expect(vesselForCategory('fresh')).toBe('carton')
     expect(vesselForCategory('mixers')).toBe('can')
