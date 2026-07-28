@@ -32,9 +32,9 @@ export default function Footer() {
       label: 'The Brand',
       links: [
         { name: 'Home', href: '/' },
-        { name: 'Our Story', href: '/about/story' },
-        { name: 'Sustainability', href: '/sustainability' },
-        { name: 'Friends & Partners', href: '/friends' },
+        { name: 'Our Story', href: '/about/story/' },
+        { name: 'Sustainability', href: '/sustainability/' },
+        { name: 'Friends & Partners', href: '/friends/' },
         { name: 'Where the 5% Goes', href: '/giving/' },
         { name: 'The Expedition Log', href: '/expedition-log/' },
       ]
@@ -42,50 +42,50 @@ export default function Footer() {
     {
       label: 'Shop',
       links: [
-        { name: 'Expedition Spiced Rum', href: '/shop/spiced-rum' },
-        { name: 'Rum Gifts', href: '/shop/rum-gifts' },
-        { name: 'Rum Gifts for Him', href: '/shop/gifts-for-him' },
-        { name: 'Rum Gifts for Her', href: '/shop/gifts-for-her' },
-        { name: 'Cocktail Making Kits', href: '/shop/cocktail-making-kits' },
-        { name: 'Bar Accessories', href: '/shop/bar-accessories' },
-        { name: 'Rum Glasses', href: '/shop/rum-glasses' },
-        { name: 'Clothing', href: '/shop/clothing' },
-        { name: 'Browse All', href: '/shop' },
-        { name: 'Reviews', href: '/reviews' },
-        { name: 'Stockists', href: '/stockists' },
-        { name: 'Trade', href: '/trade' },
+        { name: 'Expedition Spiced Rum', href: '/shop/spiced-rum/' },
+        { name: 'Rum Gifts', href: '/shop/rum-gifts/' },
+        { name: 'Rum Gifts for Him', href: '/shop/gifts-for-him/' },
+        { name: 'Rum Gifts for Her', href: '/shop/gifts-for-her/' },
+        { name: 'Cocktail Making Kits', href: '/shop/cocktail-making-kits/' },
+        { name: 'Bar Accessories', href: '/shop/bar-accessories/' },
+        { name: 'Rum Glasses', href: '/shop/rum-glasses/' },
+        { name: 'Clothing', href: '/shop/clothing/' },
+        { name: 'Browse All', href: '/shop/' },
+        { name: 'Reviews', href: '/reviews/' },
+        { name: 'Stockists', href: '/stockists/' },
+        { name: 'Trade', href: '/trade/' },
       ]
     },
     {
       label: 'Explore',
       links: [
-        { name: 'First Pour Book', href: '/first-pour' },
-        { name: 'Field Manual', href: '/field-manual' },
-        { name: 'Guides', href: '/guides' },
-        { name: 'Ingredients', href: '/ingredients' },
-        { name: 'FAQ', href: '/faq' },
+        { name: 'First Pour Book', href: '/first-pour/' },
+        { name: 'Field Manual', href: '/field-manual/' },
+        { name: 'Guides', href: '/guides/' },
+        { name: 'Ingredients', href: '/ingredients/' },
+        { name: 'FAQ', href: '/faq/' },
       ]
     },
     {
       label: 'Company',
       links: [
-        { name: 'Contact', href: '/contact' },
-        { name: 'Careers', href: '/careers' },
-        { name: 'Site Map', href: '/sitemap' },
+        { name: 'Contact', href: '/contact/' },
+        { name: 'Careers', href: '/careers/' },
+        { name: 'Site Map', href: '/sitemap/' },
       ]
     },
   ]
 
   const footerSections = {
     legal: [
-      { name: 'Privacy Policy', href: '/privacy-policy' },
-      { name: 'Cookie Policy', href: '/cookie-policy' },
-      { name: 'Cookie Preferences', href: '/cookie-preferences' },
-      { name: 'Terms of Service', href: '/terms-of-service' },
-      { name: 'Shipping & Returns', href: '/shipping-returns' },
-      { name: 'Accessibility', href: '/accessibility' },
-      { name: 'Security Policy', href: '/security-policy' },
-      { name: 'Armed Forces Covenant', href: '/armed-forces-covenant' },
+      { name: 'Privacy Policy', href: '/privacy-policy/' },
+      { name: 'Cookie Policy', href: '/cookie-policy/' },
+      { name: 'Cookie Preferences', href: '/cookie-preferences/' },
+      { name: 'Terms of Service', href: '/terms-of-service/' },
+      { name: 'Shipping & Returns', href: '/shipping-returns/' },
+      { name: 'Accessibility', href: '/accessibility/' },
+      { name: 'Security Policy', href: '/security-policy/' },
+      { name: 'Armed Forces Covenant', href: '/armed-forces-covenant/' },
     ]
   }
 
