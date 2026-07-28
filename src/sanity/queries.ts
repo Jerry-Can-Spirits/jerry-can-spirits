@@ -487,3 +487,19 @@ export const tradeHelpQuery = `*[_type == "tradeHelp"][0]{
     body
   }
 }`
+
+// "What's in my bar" tool: compact cocktail -> ingredient-id index.
+export const barIndexQuery = `*[_type == "cocktail" && defined(slug.current)]{
+  "slug": slug.current,
+  name,
+  baseSpirit,
+  "ingredientIds": ingredients[defined(ingredientRef)].ingredientRef._ref
+}`
+
+// "What's in my bar" tool: shelvable ingredients (garnishes excluded).
+export const barIngredientsQuery = `*[_type == "ingredient" && defined(slug.current) && category != "garnishes"]{
+  "id": _id,
+  name,
+  "slug": slug.current,
+  category
+}`
