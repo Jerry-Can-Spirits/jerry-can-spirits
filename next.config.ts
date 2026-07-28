@@ -262,6 +262,20 @@ const nextConfig: NextConfig = {
         destination: '/shop/product/stainless-steel-hip-flask-150ml/:path*',
         permanent: true,
       },
+      // Sanity docs deleted with clear successors (both appeared in earlier
+      // sitemaps, so Google recrawls them): the duplicate orange-slices
+      // ingredient merged into orange-slice, and the removed
+      // californian-margarita page's nearest surviving relative.
+      {
+        source: '/field-manual/ingredients/orange-slices/:path*',
+        destination: '/field-manual/ingredients/orange-slice/',
+        permanent: true,
+      },
+      {
+        source: '/field-manual/cocktails/californian-margarita/:path*',
+        destination: '/field-manual/cocktails/margarita/',
+        permanent: true,
+      },
       // The slate coaster's original Shopify handle; Google still crawls the
       // old URL from memory and reports a soft 404 (GSC, 28 Jul 2026).
       {
