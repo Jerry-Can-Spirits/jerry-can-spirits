@@ -15,6 +15,9 @@ export const CATEGORY_TO_SHELF: Record<string, ShelfId> = {
   'creme-liqueurs': 'wines-liqueurs',
   'anise-herbal': 'wines-liqueurs',
   wine: 'wines-liqueurs',
+  // The Champagne ingredient carries its own `champagne` category; without this
+  // it would be non-shelvable and silently drop out of every sparkling cocktail.
+  champagne: 'wines-liqueurs',
   fortified: 'wines-liqueurs',
   mixers: 'mixers',
   fresh: 'fresh',
@@ -26,6 +29,7 @@ export const CATEGORY_TO_SHELF: Record<string, ShelfId> = {
 export const CATEGORY_TO_VESSEL: Record<string, VesselType> = {
   spirits: 'spirit',
   wine: 'wine',
+  champagne: 'wine',
   fortified: 'wine',
   liqueurs: 'liqueur',
   'creme-liqueurs': 'liqueur',
@@ -35,6 +39,68 @@ export const CATEGORY_TO_VESSEL: Record<string, VesselType> = {
   bitters: 'dash',
   aromatics: 'dash',
 }
+
+export interface IngredientOverride {
+  displayName?: string
+  shelf?: ShelfId
+  vessel?: VesselType
+}
+
+// Per-ingredient overrides applied by the bar tool only; the wiki ingredient
+// docs are untouched.
+// - displayName: show a branded mixer under its generic name, so nobody thinks
+//   the exact brand is required to make the drink (the cocktails reference the
+//   Fever-Tree slug, but the user just needs "ginger beer").
+// - shelf / vessel: place an ingredient on a more natural backbar shelf than its
+//   category implies. Vermouth is categorised as a mixer but belongs with the
+//   wines and liqueurs, in a wine-shaped bottle.
+export const INGREDIENT_OVERRIDES: Record<string, IngredientOverride> = {
+  'fever-tree-premium-soda-water': { displayName: 'Soda Water' },
+  'fever-tree-premium-indian-tonic-water': { displayName: 'Tonic Water' },
+  'fever-tree-madagascan-cola': { displayName: 'Cola' },
+  'fever-tree-ginger-beer': { displayName: 'Ginger Beer' },
+  'fever-tree-ginger-ale': { displayName: 'Ginger Ale' },
+  'fever-tree-premium-lemonade': { displayName: 'Lemonade' },
+  'sweet-vermouth': { shelf: 'wines-liqueurs', vessel: 'wine' },
+  'dry-vermouth': { shelf: 'wines-liqueurs', vessel: 'wine' },
+}
+
+// Quick-start bottles shown lit-ready on each shelf: the bottles a typical home
+// bar actually holds. Curated by slug rather than derived by recipe frequency,
+// which over-rewards cocktail-darlings (Benedictine, Cognac, Chartreuse) that
+// few homes stock. Everything else stays one tap away via search.
+export const COMMON_DEFAULTS: ReadonlySet<string> = new Set([
+  // Spirits
+  'gin',
+  'vodka',
+  'white-rum',
+  'dark-rum',
+  'spiced-rum',
+  'whiskey-bourbon',
+  'whisky-scotch',
+  'tequila',
+  // Wines & liqueurs
+  'triple-sec',
+  'sweet-vermouth',
+  'dry-vermouth',
+  'campari',
+  'aperol',
+  'prosecco',
+  // Mixers & syrups
+  'fever-tree-premium-soda-water',
+  'fever-tree-premium-indian-tonic-water',
+  'fever-tree-madagascan-cola',
+  'fever-tree-ginger-beer',
+  'fever-tree-ginger-ale',
+  'simple-syrup',
+  // Fresh & juice
+  'fresh-lime-juice',
+  'fresh-lemon-juice',
+  'fresh-orange-juice',
+  'fresh-mint',
+  // Bitters
+  'angostura-bitters',
+])
 
 // Every bar is assumed to have these; they never count against a match.
 // Confirm these slugs exist in Sanity before relying on them.

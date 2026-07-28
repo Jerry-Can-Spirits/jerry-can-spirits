@@ -4,7 +4,10 @@ import { buildBarData, type RawCocktail, type RawIngredient } from '@/lib/bar/bu
 const INGREDIENTS: RawIngredient[] = [
   { id: 'gin', name: 'Gin', slug: 'gin', category: 'spirits' },
   { id: 'rum', name: 'White Rum', slug: 'white-rum', category: 'spirits' },
-  { id: 'vermouth', name: 'Sweet Vermouth', slug: 'sweet-vermouth', category: 'wine' },
+  // Vermouth is categorised as a mixer in Sanity; an override shelves it with the wines.
+  { id: 'vermouth', name: 'Sweet Vermouth', slug: 'sweet-vermouth', category: 'mixers' },
+  { id: 'champ', name: 'Champagne', slug: 'champagne', category: 'champagne' },
+  { id: 'gingerbeer', name: 'Fever-Tree Ginger Beer', slug: 'fever-tree-ginger-beer', category: 'mixers' },
   { id: 'lime', name: 'Lime Juice', slug: 'lime-juice', category: 'fresh' },
   { id: 'water', name: 'Water', slug: 'water', category: 'mixers' },
   { id: 'ice', name: 'Ice', slug: 'ice', category: 'fresh' },
@@ -15,6 +18,7 @@ const COCKTAILS: RawCocktail[] = [
   { slug: 'gimlet', name: 'Gimlet', baseSpirit: 'gin', ingredientIds: ['gin', 'lime', 'water', 'ice'] },
   { slug: 'martini', name: 'Martini', baseSpirit: 'gin', ingredientIds: ['gin', 'vermouth', 'ice', 'mint', 'ghost'] },
   { slug: 'daiquiri', name: 'Daiquiri', baseSpirit: 'white-rum', ingredientIds: ['rum', 'lime'] },
+  { slug: 'french-75', name: 'French 75', baseSpirit: 'gin', ingredientIds: ['gin', 'champ', 'lime'] },
 ]
 
 describe('buildBarData', () => {
@@ -44,12 +48,30 @@ describe('buildBarData', () => {
     expect(shelves.find((s) => s.id === 'spirits')!.ingredients.map((i) => i.id).sort()).toEqual(['gin', 'rum'])
   })
 
-  it('marks the most-used ingredients per shelf as common', () => {
-    const { shelves } = buildBarData(COCKTAILS, INGREDIENTS, 1)
+  it('marks curated household staples as common, not the most-used', () => {
+    const { shelves } = buildBarData(COCKTAILS, INGREDIENTS)
     const spirits = shelves.find((s) => s.id === 'spirits')!.ingredients
-    // gin appears in 2 cocktails, rum in 1 -> gin is the single common spirit
+    // gin is a curated default; the lime-juice slug is not in the default set.
     expect(spirits.find((i) => i.id === 'gin')!.common).toBe(true)
-    expect(spirits.find((i) => i.id === 'rum')!.common).toBe(false)
+    const lime = shelves.find((s) => s.id === 'fresh')!.ingredients.find((i) => i.id === 'lime')!
+    expect(lime.common).toBe(false)
+  })
+
+  it('keeps champagne-category ingredients shelvable and in the cocktail core', () => {
+    const { index, shelves } = buildBarData(COCKTAILS, INGREDIENTS)
+    const french75 = index.find((c) => c.slug === 'french-75')!
+    expect(french75.coreIngredientIds).toContain('champ')
+    const wines = shelves.find((s) => s.id === 'wines-liqueurs')!.ingredients.map((i) => i.id)
+    expect(wines).toContain('champ')
+  })
+
+  it('applies per-ingredient overrides: generic name, and vermouth on the wines shelf', () => {
+    const { shelves } = buildBarData(COCKTAILS, INGREDIENTS)
+    const wines = shelves.find((s) => s.id === 'wines-liqueurs')!.ingredients
+    const vermouth = wines.find((i) => i.id === 'vermouth')!
+    expect(vermouth.vessel).toBe('wine')
+    const mixers = shelves.find((s) => s.id === 'mixers')!.ingredients
+    expect(mixers.find((i) => i.id === 'gingerbeer')!.name).toBe('Ginger Beer')
   })
 
   it('assigns a vessel shape to each ingredient', () => {
