@@ -89,6 +89,7 @@ export default function Header() {
       href: '/field-manual/',
       dropdown: [
         { name: 'Cocktails', href: '/field-manual/cocktails/', description: 'Classic & signature recipes' },
+        { name: "What's in my bar", href: '/field-manual/whats-in-my-bar/', description: 'What you can pour tonight' },
         { name: 'Equipment', href: '/field-manual/equipment/', description: 'Bar tools & glassware' },
         { name: 'Ingredients', href: '/field-manual/ingredients/', description: 'Quality spirits guide' },
       ]
