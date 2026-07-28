@@ -288,6 +288,78 @@ const nextConfig: NextConfig = {
         destination: '/shop/product/natural-slate-coasters-square-or-round/:path*',
         permanent: true,
       },
+      // Product handles that were renamed in Shopify; Google still recrawls the
+      // pre-rename /shop/product/ URLs from earlier sitemaps (GSC 404s, 28 Jul).
+      {
+        source: '/shop/product/jerry-can-spirits-bar-blade-bottle-opener/:path*',
+        destination: '/shop/product/bar-blade-bottle-opener/',
+        permanent: true,
+      },
+      {
+        source: '/shop/product/jerry-can-spirits-metal-keyring/:path*',
+        destination: '/shop/product/metal-logo-keyring/',
+        permanent: true,
+      },
+      {
+        source: '/shop/product/stainless-steel-jigger-variants/:path*',
+        destination: '/shop/product/stainless-steel-jigger/',
+        permanent: true,
+      },
+      {
+        source: '/shop/product/jerry-can-spirits-stainless-steel-freezable-stones/:path*',
+        destination: '/shop/product/stainless-steel-spirit-stones/',
+        permanent: true,
+      },
+      {
+        source: '/shop/product/black-500ml-stainless-steel-hip-flask/:path*',
+        destination: '/shop/product/stainless-steel-hip-flask-150ml/',
+        permanent: true,
+      },
+      // Legacy Shopify storefront path (/products/<handle>) still crawled on the
+      // apex domain. The handle maps straight onto the real product route. The
+      // one renamed handle here is redirected explicitly first to avoid a chain.
+      {
+        source: '/products/stainless-steel-hip-flask-500ml',
+        destination: '/shop/product/stainless-steel-hip-flask-150ml/',
+        permanent: true,
+      },
+      {
+        source: '/products/:handle',
+        destination: '/shop/product/:handle/',
+        permanent: true,
+      },
+      // Field Manual entries renamed since first publication (GSC 404s from old
+      // sitemaps): equipment and ingredient slug corrections to their successors.
+      {
+        source: '/field-manual/equipment/boston-shaker-set/:path*',
+        destination: '/field-manual/equipment/boston-shaker/',
+        permanent: true,
+      },
+      {
+        source: '/field-manual/equipment/cocktail-shaker/:path*',
+        destination: '/field-manual/equipment/boston-shaker/',
+        permanent: true,
+      },
+      {
+        source: '/field-manual/ingredients/jerry-can-spiced-rum/:path*',
+        destination: '/field-manual/ingredients/jerry-can-spirits-expedition-spiced-rum/',
+        permanent: true,
+      },
+      {
+        source: '/field-manual/ingredients/ginger-beer/:path*',
+        destination: '/field-manual/ingredients/fever-tree-ginger-beer/',
+        permanent: true,
+      },
+      {
+        source: '/field-manual/ingredients/club-soda/:path*',
+        destination: '/field-manual/ingredients/sparkling-water/',
+        permanent: true,
+      },
+      {
+        source: '/field-manual/ingredients/coconut-cream/:path*',
+        destination: '/field-manual/ingredients/cream-of-coconut/',
+        permanent: true,
+      },
       // The Pour IQ pilot charter page was unpublished with the corporate
       // separation (Audit 8 PR A); send the venue's bookmarks to the portal.
       {
@@ -335,6 +407,36 @@ const nextConfig: NextConfig = {
       {
         source: '/field-manual/cocktails/rum-and-honey/',
         destination: '/field-manual/cocktails/explorers-gold-rum-and-honey/',
+        permanent: true,
+      },
+      // Renamed cocktail: ca-phe-sua-da → vietnamese-iced-coffee-cocktail.
+      {
+        source: '/field-manual/cocktails/ca-phe-sua-da/:path*',
+        destination: '/field-manual/cocktails/vietnamese-iced-coffee-cocktail/',
+        permanent: true,
+      },
+      // brandy-sling was split into hot and cold serves; the classic Brandy
+      // Sling is the cold build. Both the legacy and field-manual paths resolve.
+      {
+        source: '/cocktails/brandy-sling',
+        destination: '/field-manual/cocktails/brandy-sling-cold/',
+        permanent: true,
+      },
+      {
+        source: '/field-manual/cocktails/brandy-sling/:path*',
+        destination: '/field-manual/cocktails/brandy-sling-cold/',
+        permanent: true,
+      },
+      // rum-old-fashioned has no page yet (a content gap flagged for creation);
+      // meanwhile the old URL forwards to the base Old Fashioned.
+      {
+        source: '/cocktails/rum-old-fashioned',
+        destination: '/field-manual/cocktails/old-fashioned/',
+        permanent: true,
+      },
+      {
+        source: '/field-manual/cocktails/rum-old-fashioned/:path*',
+        destination: '/field-manual/cocktails/old-fashioned/',
         permanent: true,
       },
       // Old /cocktails/* URLs redirect to field-manual
