@@ -1,4 +1,11 @@
-import { SHELVES, shelfForCategory, vesselForCategory, ASSUMED_BASIC_SLUGS } from './config'
+import {
+  SHELVES,
+  shelfForCategory,
+  vesselForCategory,
+  ASSUMED_BASIC_SLUGS,
+  COMMON_DEFAULTS,
+  INGREDIENT_OVERRIDES,
+} from './config'
 import type { BarData, BarIngredient, CocktailIndexItem, ShelfGroup } from './types'
 
 export interface RawCocktail {
@@ -15,31 +22,27 @@ export interface RawIngredient {
   category: string
 }
 
-const DEFAULT_COMMON_PER_SHELF = 8
-
-export function buildBarData(
-  cocktails: RawCocktail[],
-  ingredients: RawIngredient[],
-  commonPerShelf: number = DEFAULT_COMMON_PER_SHELF,
-): BarData {
+export function buildBarData(cocktails: RawCocktail[], ingredients: RawIngredient[]): BarData {
   const basicIds = new Set(
     ingredients.filter((i) => ASSUMED_BASIC_SLUGS.includes(i.slug)).map((i) => i.id),
   )
 
-  // Ingredients that can sit on a shelf (mapped to a shelf, not an assumed basic).
+  // Ingredients that can sit on a shelf (mapped to a shelf, not an assumed
+  // basic). Per-ingredient overrides tweak the display name, shelf or vessel.
   const shelvable: BarIngredient[] = ingredients
     .filter((i) => !basicIds.has(i.id))
     .map((i) => {
-      const shelf = shelfForCategory(i.category)
+      const override = INGREDIENT_OVERRIDES[i.slug]
+      const shelf = override?.shelf ?? shelfForCategory(i.category)
       if (!shelf) return null
       return {
         id: i.id,
-        name: i.name,
+        name: override?.displayName ?? i.name,
         slug: i.slug,
         category: i.category,
         shelf,
-        vessel: vesselForCategory(i.category),
-        common: false,
+        vessel: override?.vessel ?? vesselForCategory(i.category),
+        common: COMMON_DEFAULTS.has(i.slug),
       }
     })
     .filter((x): x is BarIngredient => x !== null)
@@ -55,24 +58,9 @@ export function buildBarData(
     coreIngredientIds: Array.from(new Set(c.ingredientIds)).filter((id) => shelvableIds.has(id)),
   }))
 
-  // Frequency: how many cocktails need each shelvable ingredient.
-  const frequency = new Map<string, number>()
-  for (const item of index) {
-    for (const id of item.coreIngredientIds) {
-      frequency.set(id, (frequency.get(id) ?? 0) + 1)
-    }
-  }
-
   const shelves: ShelfGroup[] = SHELVES.map(({ id, label }) => {
-    const members = shelvable.filter((i) => i.shelf === id)
-    const topIds = new Set(
-      [...members]
-        .sort((a, b) => (frequency.get(b.id) ?? 0) - (frequency.get(a.id) ?? 0) || a.name.localeCompare(b.name))
-        .slice(0, commonPerShelf)
-        .map((i) => i.id),
-    )
-    const ingredients = members
-      .map((i) => ({ ...i, common: topIds.has(i.id) }))
+    const ingredients = shelvable
+      .filter((i) => i.shelf === id)
       .sort((a, b) => Number(b.common) - Number(a.common) || a.name.localeCompare(b.name))
     return { id, label, ingredients }
   })

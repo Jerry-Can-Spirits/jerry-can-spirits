@@ -26,11 +26,13 @@ function BottleButton({
       type="button"
       aria-pressed={lit}
       onClick={() => onToggle(ingredient.id)}
-      className="flex w-[52px] flex-col items-center focus:outline-none focus-visible:ring-2 focus-visible:ring-gold-400 rounded"
+      className="flex w-11 flex-col items-center focus:outline-none focus-visible:ring-2 focus-visible:ring-gold-400 rounded"
     >
       <span className={`text-[8px] mb-0.5 ${lit ? 'text-gold-300' : 'text-transparent'}`} aria-hidden="true">✓</span>
       <BottleSilhouette vessel={ingredient.vessel} lit={lit} />
-      <span className={`mt-1 text-[9px] leading-tight text-center ${lit ? 'text-gold-200 font-semibold' : 'text-parchment-400/60'}`}>
+      {/* Fixed height (two lines) so multi-word labels never push their bottle
+          off the shelf line. */}
+      <span className={`mt-1 block h-[22px] overflow-hidden text-[9px] leading-tight text-center ${lit ? 'text-gold-200 font-semibold' : 'text-parchment-400/60'}`}>
         {ingredient.name}
       </span>
     </button>
@@ -52,7 +54,7 @@ export default function Backbar({ shelves, owned, onToggle, onAddRequest, extraB
         return (
           <section key={shelf.id} className="mb-6 last:mb-0">
             <h2 className="text-[10px] uppercase tracking-[0.14em] text-gold-300/85 mb-2">{shelf.label}</h2>
-            <div className="flex flex-wrap items-end gap-3 border-b-2 border-gold-500/30 pb-3">
+            <div className="flex flex-wrap items-end gap-x-1 gap-y-3 border-b-2 border-gold-500/30 pb-3">
               {shown.map((i) => (
                 <BottleButton key={i.id} ingredient={i} lit={owned.has(i.id)} onToggle={onToggle} />
               ))}

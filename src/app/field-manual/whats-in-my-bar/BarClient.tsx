@@ -68,6 +68,7 @@ export default function BarClient({ data }: { data: BarData }) {
     return allIngredients
       .filter((i) => (picker.shelf === 'all' ? true : i.shelf === picker.shelf))
       .filter((i) => (q ? i.name.toLowerCase().includes(q) : true))
+      .sort((a, b) => a.name.localeCompare(b.name))
       .slice(0, 40)
   }, [picker, allIngredients])
 
