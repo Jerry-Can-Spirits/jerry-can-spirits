@@ -10,6 +10,7 @@ const STORAGE_KEY = 'jcs:bar'
 
 export default function BarClient({ data }: { data: BarData }) {
   const [owned, setOwned] = useState<Set<string>>(new Set())
+  const [hydrated, setHydrated] = useState(false)
   const [extraByShelf, setExtraByShelf] = useState<Record<string, string[]>>({})
   const [picker, setPicker] = useState<{ shelf: ShelfId | 'all'; query: string } | null>(null)
 
@@ -21,16 +22,18 @@ export default function BarClient({ data }: { data: BarData }) {
     } catch {
       // ignore malformed storage
     }
+    setHydrated(true)
   }, [])
 
-  // Persist on change.
+  // Persist on change, once the initial load has applied.
   useEffect(() => {
+    if (!hydrated) return
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify([...owned]))
     } catch {
       // ignore write failures (private mode etc.)
     }
-  }, [owned])
+  }, [owned, hydrated])
 
   const allIngredients = useMemo<BarIngredient[]>(
     () => data.shelves.flatMap((s) => s.ingredients),
@@ -79,7 +82,7 @@ export default function BarClient({ data }: { data: BarData }) {
           Search all ingredients
         </button>
         {owned.size > 0 && (
-          <button type="button" onClick={() => setOwned(new Set())} className="text-sm text-parchment-400/70 hover:text-parchment-200">
+          <button type="button" onClick={() => { setOwned(new Set()); setExtraByShelf({}) }} className="text-sm text-parchment-400/70 hover:text-parchment-200">
             Clear my bar
           </button>
         )}
