@@ -60,7 +60,7 @@ basics counts as makeable.
 Ingredient docs carry a `category`. Shelves group them:
 
 - **Spirits** ← `spirits`
-- **Liqueurs & fortified** ← `liqueurs`, `creme-liqueurs`, `anise-herbal`, `wine`, `champagne`
+- **Wines & Liqueurs** ← `liqueurs`, `creme-liqueurs`, `anise-herbal`, `wine`, `champagne`
 - **Mixers & syrups** ← `mixers`
 - **Fresh & juice** ← `fresh`
 - **Bitters & aromatics** ← `bitters`, `aromatics`
@@ -121,6 +121,36 @@ results now; promoting it to a selection-time nudge is a later UI layer.
   (shelves stack, results below). Mobile-first per the house standard.
 - **Empty state** (nothing owned): a short prompt plus the dimmed shelves ready
   to tap; results panel invites the first pick.
+
+### Rendering — the backbar visual (code-native)
+
+The backbar is built entirely in code (CSS + inline SVG), no image assets, because
+the bottles are dynamic (any of ~194, added/removed live) and stateful (lit when
+owned, dark when not) — a baked illustration cannot do that.
+
+- **Bottle silhouettes = a small SVG shape library keyed by *vessel type*.** A
+  dozen-ish lightweight vector shapes: tall spirit bottle, wine bottle, squat
+  liqueur, juice carton, soda can, dash bottle (bitters), etc. Crisp at any size,
+  tiny, recolourable, and the shape carries the ingredient name as a label until
+  real artwork exists.
+- **Vessel-type mapping.** Each ingredient resolves to a vessel shape, derived
+  primarily from its `category` (spirits → spirit bottle, wine → wine bottle,
+  fresh → carton, mixers → bottle/can, bitters → dash bottle) with a small
+  override map for exceptions. Start with a code-side map (no schema change);
+  an optional `vesselType` field on the ingredient doc can be added later for
+  editorial control.
+- **Shelves and lighting in CSS.** Dark-wood shelf planks; one overhead spotlight
+  per slot that is **lit over owned bottles (amber glow + brightness), off over
+  the rest**. Toggling ownership switches the light — the interaction and the
+  aesthetic are the same gesture.
+- **Accessibility.** Owned state is a real button/checkbox with an `aria-pressed`
+  / checked state and a visible check, never colour-only. Spotlights, cones and
+  wood are decorative (`aria-hidden`). Keyboard operable; shelves labelled.
+- **Refinement is expected.** Bottle spacing/density (slots currently too far
+  apart), the exact silhouette shapes, and a proper wood texture are visual polish
+  to iterate during the build or in a later design pass; they do not change the
+  architecture. A designer can supply a nicer silhouette set / texture that drops
+  into the same system.
 
 ### Persistence
 
@@ -183,7 +213,10 @@ ships.
 
 ## Out of scope (later passes)
 
-- Bottle images/artwork in the slots (the layout is built to accept them).
+- Photographic bottle art / bespoke illustration in the slots (the code-native
+  SVG silhouettes are in scope; real artwork drops into the same slots later).
+- Visual polish: final silhouette shapes, bottle spacing/density, wood texture.
+- An editorial `vesselType` field on the ingredient doc (start with a code map).
 - The "C" guided nudge as a selection-time feature (engine already supports it).
 - Phase 2 SEO gateway pages (separate spec).
 - Allergen/dietary filtering (needs a dietary data layer first).
