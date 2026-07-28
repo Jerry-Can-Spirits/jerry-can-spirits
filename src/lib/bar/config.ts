@@ -68,7 +68,11 @@ export const INGREDIENT_OVERRIDES: Record<string, IngredientOverride> = {
 // Quick-start bottles shown lit-ready on each shelf: the bottles a typical home
 // bar actually holds. Curated by slug rather than derived by recipe frequency,
 // which over-rewards cocktail-darlings (Benedictine, Cognac, Chartreuse) that
-// few homes stock. Everything else stays one tap away via search.
+// few homes stock. The set is also seeded so the drinks people recognise —
+// Daiquiri, Margarita, Cosmopolitan, Long Island Iced Tea, Woo Woo, Hurricane,
+// Piña Colada — are all buildable straight from the defaults, giving a new
+// visitor an early win and a nudge toward the next bottle. Everything else stays
+// one tap away via search.
 export const COMMON_DEFAULTS: ReadonlySet<string> = new Set([
   // Spirits
   'gin',
@@ -86,6 +90,7 @@ export const COMMON_DEFAULTS: ReadonlySet<string> = new Set([
   'campari',
   'aperol',
   'prosecco',
+  'peach-schnapps',
   // Mixers & syrups
   'fever-tree-premium-soda-water',
   'fever-tree-premium-indian-tonic-water',
@@ -93,10 +98,14 @@ export const COMMON_DEFAULTS: ReadonlySet<string> = new Set([
   'fever-tree-ginger-beer',
   'fever-tree-ginger-ale',
   'simple-syrup',
+  'grenadine',
+  'passion-fruit-syrup',
   // Fresh & juice
   'fresh-lime-juice',
   'fresh-lemon-juice',
   'fresh-orange-juice',
+  'fresh-cranberry-juice',
+  'fresh-pineapple-juice',
   'fresh-mint',
   // Bitters
   'angostura-bitters',
