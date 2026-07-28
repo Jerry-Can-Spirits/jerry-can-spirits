@@ -168,7 +168,7 @@ export default async function FieldManualHome() {
 
       {/* Navigation Cards */}
       <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8 lg:items-stretch">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-2 gap-8 lg:items-stretch">
           
           {/* Cocktails Section */}
           <ScrollReveal delay={0}>
@@ -286,6 +286,36 @@ export default async function FieldManualHome() {
                   <div className="text-parchment-300">
                     • Glassware guide
                   </div>
+                </div>
+              </div>
+            </div>
+          </Link>
+          </ScrollReveal>
+
+          {/* What's in my bar Section */}
+          <ScrollReveal delay={3}>
+          <Link href="/field-manual/whats-in-my-bar/" className="group h-full">
+            <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20 hover:border-gold-400/40 transition-all duration-300 transform hover:scale-105 hover:shadow-2xl relative overflow-hidden h-full flex flex-col">
+              <div className="absolute inset-0 bg-linear-to-br from-amber-100/5 to-amber-200/10 opacity-50"></div>
+              <div className="relative z-10">
+                <div className="text-center mb-6">
+                  <div className="w-20 h-20 bg-gold-400/20 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-gold-400/30 transition-colors">
+                    <svg className="w-10 h-10 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 3h8l-1 6a4 4 0 01-6 0L8 3zM12 13v8m-4 0h8" />
+                    </svg>
+                  </div>
+                  <h3 className="text-2xl font-serif font-bold text-white mb-2">What&apos;s in my bar</h3>
+                  <div className="text-gold-300 text-sm font-semibold uppercase tracking-wider mb-4">
+                    Pour What You Have
+                  </div>
+                </div>
+                <p className="text-parchment-300 text-center mb-6 leading-relaxed">
+                  Mark the bottles you own and see which cocktails you can make now, and which you are one bottle away from.
+                </p>
+                <div className="space-y-2 text-sm text-center">
+                  <div className="text-parchment-300">• Stock your backbar</div>
+                  <div className="text-parchment-300">• Live "you can make" results</div>
+                  <div className="text-parchment-300">• Saved between visits</div>
                 </div>
               </div>
             </div>

@@ -61,6 +61,7 @@ export default function Footer() {
       links: [
         { name: 'First Pour Book', href: '/first-pour/' },
         { name: 'Field Manual', href: '/field-manual/' },
+        { name: "What's in my bar", href: '/field-manual/whats-in-my-bar/' },
         { name: 'Guides', href: '/guides/' },
         { name: 'Ingredients', href: '/ingredients/' },
         { name: 'FAQ', href: '/faq/' },
