@@ -47,7 +47,11 @@ const jetbrains = JetBrains_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL('https://jerrycanspirits.co.uk'),
   title: {
-    template: '%s | Jerry Can Spirits®',
+    // No brand suffix on child pages: Google already shows the site name and
+    // domain in the SERP, and appending " | Jerry Can Spirits®" pushed most
+    // titles past ~60 chars, causing truncation and Google-rewritten titles.
+    // The homepage keeps the brand via `default`.
+    template: '%s',
     default: 'Jerry Can Spirits® | Veteran-Owned British Rum',
   },
   keywords: "veteran-owned rum, British spirits, military heritage rum, premium rum, Royal Corps of Signals, expedition rum, small-batch spirits, craft rum, British rum, sustainable spirits",

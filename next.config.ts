@@ -347,11 +347,6 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
       {
-        source: '/field-manual/ingredients/ginger-beer/:path*',
-        destination: '/field-manual/ingredients/fever-tree-ginger-beer/',
-        permanent: true,
-      },
-      {
         source: '/field-manual/ingredients/club-soda/:path*',
         destination: '/field-manual/ingredients/sparkling-water/',
         permanent: true,
