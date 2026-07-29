@@ -1,34 +1,55 @@
 import type { CocktailIndexItem } from './types'
 
-export interface OneAway {
-  cocktail: CocktailIndexItem
+// One-away cocktails grouped by the single bottle that would unlock them, so the
+// UI can say "add X to make N more" instead of listing every near-miss flat.
+export interface OneAwayGroup {
   missingId: string
+  cocktails: CocktailIndexItem[]
+}
+
+export interface TwoAway {
+  cocktail: CocktailIndexItem
+  missingIds: string[] // exactly two
 }
 
 export interface MatchResult {
   makeable: CocktailIndexItem[]
-  oneAway: OneAway[]
+  oneAway: OneAwayGroup[]
+  twoAway: TwoAway[]
+}
+
+function byFewestThenName(a: CocktailIndexItem, b: CocktailIndexItem): number {
+  return a.coreIngredientIds.length - b.coreIngredientIds.length || a.name.localeCompare(b.name)
 }
 
 // Pure. Assumed basics are already stripped from coreIngredientIds at index build,
 // so this needs no special-casing. A cocktail with no core ingredients is makeable.
 export function match(ownedIds: Set<string>, index: CocktailIndexItem[]): MatchResult {
   const makeable: CocktailIndexItem[] = []
-  const oneAway: OneAway[] = []
+  const oneAwayById = new Map<string, CocktailIndexItem[]>()
+  const twoAway: TwoAway[] = []
 
   for (const cocktail of index) {
     const missing = cocktail.coreIngredientIds.filter((id) => !ownedIds.has(id))
     if (missing.length === 0) {
       makeable.push(cocktail)
     } else if (missing.length === 1) {
-      oneAway.push({ cocktail, missingId: missing[0] })
+      const list = oneAwayById.get(missing[0])
+      if (list) list.push(cocktail)
+      else oneAwayById.set(missing[0], [cocktail])
+    } else if (missing.length === 2) {
+      twoAway.push({ cocktail, missingIds: missing })
     }
   }
 
-  makeable.sort(
-    (a, b) => a.coreIngredientIds.length - b.coreIngredientIds.length || a.name.localeCompare(b.name),
-  )
-  oneAway.sort((a, b) => a.cocktail.name.localeCompare(b.cocktail.name))
+  makeable.sort(byFewestThenName)
 
-  return { makeable, oneAway }
+  // Biggest unlock first; missingId tiebreak keeps ordering deterministic.
+  const oneAway: OneAwayGroup[] = Array.from(oneAwayById.entries())
+    .map(([missingId, cocktails]) => ({ missingId, cocktails: cocktails.sort(byFewestThenName) }))
+    .sort((a, b) => b.cocktails.length - a.cocktails.length || a.missingId.localeCompare(b.missingId))
+
+  twoAway.sort((a, b) => byFewestThenName(a.cocktail, b.cocktail))
+
+  return { makeable, oneAway, twoAway }
 }
