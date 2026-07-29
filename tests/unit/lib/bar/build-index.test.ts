@@ -4,8 +4,8 @@ import { buildBarData, type RawCocktail, type RawIngredient } from '@/lib/bar/bu
 const INGREDIENTS: RawIngredient[] = [
   { id: 'gin', name: 'Gin', slug: 'gin', category: 'spirits' },
   { id: 'rum', name: 'White Rum', slug: 'white-rum', category: 'spirits' },
-  // Vermouth is categorised as a mixer in Sanity; an override shelves it with the wines.
-  { id: 'vermouth', name: 'Sweet Vermouth', slug: 'sweet-vermouth', category: 'mixers' },
+  // Vermouth carries the fortified category, which shelves it with the wines.
+  { id: 'vermouth', name: 'Sweet Vermouth', slug: 'sweet-vermouth', category: 'fortified' },
   { id: 'champ', name: 'Champagne', slug: 'champagne', category: 'champagne' },
   { id: 'gingerbeer', name: 'Fever-Tree Ginger Beer', slug: 'fever-tree-ginger-beer', category: 'mixers' },
   { id: 'lime', name: 'Lime Juice', slug: 'lime-juice', category: 'fresh' },
@@ -65,7 +65,7 @@ describe('buildBarData', () => {
     expect(wines).toContain('champ')
   })
 
-  it('applies per-ingredient overrides: generic name, and vermouth on the wines shelf', () => {
+  it('applies the generic-name override, and shelves fortified vermouth with the wines', () => {
     const { shelves } = buildBarData(COCKTAILS, INGREDIENTS)
     const wines = shelves.find((s) => s.id === 'wines-liqueurs')!.ingredients
     const vermouth = wines.find((i) => i.id === 'vermouth')!

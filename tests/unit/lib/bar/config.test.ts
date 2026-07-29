@@ -75,10 +75,16 @@ describe('bar config', () => {
     }
   })
 
-  it('shows branded mixers under a generic name and shelves vermouth with the wines', () => {
+  it('shows branded mixers under a generic name', () => {
     expect(INGREDIENT_OVERRIDES['fever-tree-ginger-beer'].displayName).toBe('Ginger Beer')
     expect(INGREDIENT_OVERRIDES['fever-tree-refreshingly-light-indian-tonic-water'].displayName).toBe('Tonic Water')
-    expect(INGREDIENT_OVERRIDES['sweet-vermouth'].shelf).toBe('wines-liqueurs')
-    expect(INGREDIENT_OVERRIDES['sweet-vermouth'].vessel).toBe('wine')
+  })
+
+  it('shelves fortified wine (vermouth, sherry, port) with the wines & liqueurs', () => {
+    // Vermouth now carries the correct `fortified` category, so no tool-local
+    // override is needed to place it.
+    expect(shelfForCategory('fortified')).toBe('wines-liqueurs')
+    expect(vesselForCategory('fortified')).toBe('wine')
+    expect(INGREDIENT_OVERRIDES['sweet-vermouth']).toBeUndefined()
   })
 })
