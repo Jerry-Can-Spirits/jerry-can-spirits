@@ -47,13 +47,11 @@ export interface IngredientOverride {
 }
 
 // Per-ingredient overrides applied by the bar tool only; the wiki ingredient
-// docs are untouched.
-// - displayName: show a branded mixer under its generic name, so nobody thinks
-//   the exact brand is required to make the drink (the cocktails reference the
-//   Fever-Tree slug, but the user just needs "ginger beer").
-// - shelf / vessel: place an ingredient on a more natural backbar shelf than its
-//   category implies. Vermouth is categorised as a mixer but belongs with the
-//   wines and liqueurs, in a wine-shaped bottle.
+// docs are untouched. displayName shows a branded mixer under its generic name
+// so nobody thinks the exact brand is required (the cocktails reference the
+// Fever-Tree slug, but the user just needs "ginger beer"). The shelf/vessel
+// fields remain as an escape hatch for a mis-shelved ingredient — currently
+// unused now that vermouth carries the correct `fortified` category.
 export const INGREDIENT_OVERRIDES: Record<string, IngredientOverride> = {
   'fever-tree-premium-soda-water': { displayName: 'Soda Water' },
   // The cocktails reference the "refreshingly light" tonic, not the premium one,
@@ -63,8 +61,6 @@ export const INGREDIENT_OVERRIDES: Record<string, IngredientOverride> = {
   'fever-tree-ginger-beer': { displayName: 'Ginger Beer' },
   'fever-tree-ginger-ale': { displayName: 'Ginger Ale' },
   'fever-tree-premium-lemonade': { displayName: 'Lemonade' },
-  'sweet-vermouth': { shelf: 'wines-liqueurs', vessel: 'wine' },
-  'dry-vermouth': { shelf: 'wines-liqueurs', vessel: 'wine' },
 }
 
 // Quick-start bottles shown lit-ready on each shelf: the bottles a typical home
