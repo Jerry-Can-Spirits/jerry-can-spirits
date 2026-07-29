@@ -40,27 +40,20 @@ export const CATEGORY_TO_VESSEL: Record<string, VesselType> = {
   aromatics: 'dash',
 }
 
-export interface IngredientOverride {
-  displayName?: string
-  shelf?: ShelfId
-  vessel?: VesselType
-}
-
-// Per-ingredient overrides applied by the bar tool only; the wiki ingredient
-// docs are untouched. displayName shows a branded mixer under its generic name
-// so nobody thinks the exact brand is required (the cocktails reference the
-// Fever-Tree slug, but the user just needs "ginger beer"). The shelf/vessel
-// fields remain as an escape hatch for a mis-shelved ingredient — currently
-// unused now that vermouth carries the correct `fortified` category.
-export const INGREDIENT_OVERRIDES: Record<string, IngredientOverride> = {
-  'fever-tree-premium-soda-water': { displayName: 'Soda Water' },
-  // The cocktails reference the "refreshingly light" tonic, not the premium one,
-  // so this is the slug that has to carry the generic "Tonic Water" name.
-  'fever-tree-refreshingly-light-indian-tonic-water': { displayName: 'Tonic Water' },
-  'fever-tree-madagascan-cola': { displayName: 'Cola' },
-  'fever-tree-ginger-beer': { displayName: 'Ginger Beer' },
-  'fever-tree-ginger-ale': { displayName: 'Ginger Ale' },
-  'fever-tree-premium-lemonade': { displayName: 'Lemonade' },
+// Branded soft-drink products aliased to a generic ingredient in the tool only.
+// Recipes still reference the specific product a serve intends (a signature keeps
+// its Fever-Tree pairing); the tool shows one generic bottle per mixer and treats
+// it as satisfying any of these, so owning "Ginger Beer" makes both the branded
+// serve and the generic classic. The branded key is hidden from the shelf; the
+// generic value is shown. Specialty sodas with no generic are left untouched.
+export const MIXER_ALIASES: Record<string, string> = {
+  'fever-tree-premium-soda-water': 'soda-water',
+  'fever-tree-refreshingly-light-indian-tonic-water': 'tonic-water',
+  'fever-tree-madagascan-cola': 'cola',
+  'fever-tree-ginger-beer': 'ginger-beer',
+  'fever-tree-ginger-ale': 'ginger-ale',
+  'fever-tree-premium-lemonade': 'lemonade',
+  'fever-tree-sicilian-lemonade': 'lemonade',
 }
 
 // Quick-start bottles shown lit-ready on each shelf: the bottles a typical home
@@ -90,11 +83,11 @@ export const COMMON_DEFAULTS: ReadonlySet<string> = new Set([
   'prosecco',
   'peach-schnapps',
   // Mixers & syrups
-  'fever-tree-premium-soda-water',
-  'fever-tree-refreshingly-light-indian-tonic-water',
-  'fever-tree-madagascan-cola',
-  'fever-tree-ginger-beer',
-  'fever-tree-ginger-ale',
+  'soda-water',
+  'tonic-water',
+  'cola',
+  'ginger-beer',
+  'ginger-ale',
   'simple-syrup',
   'grenadine',
   'passion-fruit-syrup',

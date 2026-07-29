@@ -5,7 +5,7 @@ import {
   vesselForCategory,
   ASSUMED_BASIC_SLUGS,
   COMMON_DEFAULTS,
-  INGREDIENT_OVERRIDES,
+  MIXER_ALIASES,
 } from '@/lib/bar/config'
 
 describe('bar config', () => {
@@ -75,16 +75,23 @@ describe('bar config', () => {
     }
   })
 
-  it('shows branded mixers under a generic name', () => {
-    expect(INGREDIENT_OVERRIDES['fever-tree-ginger-beer'].displayName).toBe('Ginger Beer')
-    expect(INGREDIENT_OVERRIDES['fever-tree-refreshingly-light-indian-tonic-water'].displayName).toBe('Tonic Water')
+  it('defaults to the generic mixers, not the branded products', () => {
+    expect(COMMON_DEFAULTS.has('ginger-beer')).toBe(true)
+    expect(COMMON_DEFAULTS.has('tonic-water')).toBe(true)
+    expect(COMMON_DEFAULTS.has('fever-tree-ginger-beer')).toBe(false)
+  })
+
+  it('aliases branded soft-drinks to a generic, consolidating lemonade variants', () => {
+    // Recipes keep the branded product; the tool treats it as the generic.
+    expect(MIXER_ALIASES['fever-tree-ginger-beer']).toBe('ginger-beer')
+    expect(MIXER_ALIASES['fever-tree-premium-lemonade']).toBe('lemonade')
+    expect(MIXER_ALIASES['fever-tree-sicilian-lemonade']).toBe('lemonade')
   })
 
   it('shelves fortified wine (vermouth, sherry, port) with the wines & liqueurs', () => {
-    // Vermouth now carries the correct `fortified` category, so no tool-local
-    // override is needed to place it.
+    // Vermouth carries the correct `fortified` category, so it is placed without
+    // any tool-local override.
     expect(shelfForCategory('fortified')).toBe('wines-liqueurs')
     expect(vesselForCategory('fortified')).toBe('wine')
-    expect(INGREDIENT_OVERRIDES['sweet-vermouth']).toBeUndefined()
   })
 })
