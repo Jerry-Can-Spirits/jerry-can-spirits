@@ -27,7 +27,7 @@ export const metadata: Metadata = {
 }
 
 export default function ShippingReturns() {
-  const lastUpdated = '25 November 2025'
+  const lastUpdated = '29 July 2026'
 
   // FAQ Schema for SEO
   const faqSchema = {
@@ -63,7 +63,7 @@ export default function ShippingReturns() {
         "name": "Can I return alcohol products?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Due to UK licensing regulations, we can only accept returns for products damaged during shipping, incorrect items sent in error, or manufacturing defects. Change of mind returns are not accepted for alcohol products. Contact us within 14 days of delivery with photos of any issues."
+          "text": "We accept returns of unopened, unused products within 14 days of delivery if you change your mind, with return postage at your own expense. We also accept returns for products damaged in transit, incorrect items, or manufacturing defects. For safety reasons, opened or consumed products cannot be returned. Contact us within 14 days of delivery."
         }
       },
       {
@@ -194,6 +194,7 @@ export default function ShippingReturns() {
                 
                 <h3 className="text-lg font-semibold text-white mb-3">Eligible for Return:</h3>
                 <ul className="list-disc list-inside text-white space-y-2 mb-6">
+                  <li>Unopened, unused products returned within 14 days (change of mind), at your own expense</li>
                   <li>Products damaged during shipping (with photographic evidence)</li>
                   <li>Incorrect items sent in error</li>
                   <li>Defective products (manufacturing defects)</li>
@@ -201,8 +202,7 @@ export default function ShippingReturns() {
 
                 <h3 className="text-lg font-semibold text-white mb-3">Not Eligible for Return:</h3>
                 <ul className="list-disc list-inside text-white space-y-2 mb-6">
-                  <li>Change of mind or personal preference</li>
-                  <li>Products opened or consumed</li>
+                  <li>Opened or consumed products, including change-of-mind returns</li>
                   <li>Items damaged by customer mishandling</li>
                 </ul>
 
@@ -313,7 +313,7 @@ export default function ShippingReturns() {
               <div className="border-b border-gold-500/10 pb-6">
                 <h3 className="text-lg font-semibold text-gold-300 mb-3">Can I return alcohol products?</h3>
                 <p className="text-parchment-200 leading-relaxed">
-                  Due to UK licensing regulations, we can only accept returns for products damaged during shipping, incorrect items sent in error, or manufacturing defects. Change of mind returns are not accepted for alcohol products. Contact us within 14 days of delivery with photos of any issues.
+                  We accept returns of unopened, unused products within 14 days of delivery if you change your mind, with return postage at your own expense. We also accept returns for products damaged in transit, incorrect items, or manufacturing defects. For safety reasons, opened or consumed products cannot be returned. Contact us within 14 days of delivery.
                 </p>
               </div>
 
