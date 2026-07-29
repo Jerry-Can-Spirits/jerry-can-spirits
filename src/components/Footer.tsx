@@ -251,7 +251,7 @@ export default function Footer() {
 
                       {/* British Veteran Owned Badge - Links to verification page */}
                       <a
-                        href="https://www.britishveteranowned.co.uk/business/jerry-can-spirits-ltd"
+                        href="https://www.britishveteranowned.co.uk/directory/jerry-can-spirits-ltd"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="block bg-white rounded-lg p-3 hover:shadow-lg transition-all duration-200 hover:scale-105 flex items-center justify-center"
