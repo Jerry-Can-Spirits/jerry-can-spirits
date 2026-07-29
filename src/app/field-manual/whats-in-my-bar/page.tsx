@@ -4,13 +4,22 @@ import { client } from '@/sanity/lib/client'
 import { barIndexQuery, barIngredientsQuery } from '@/sanity/queries'
 import { buildBarData, type RawCocktail, type RawIngredient } from '@/lib/bar/build-index'
 import Breadcrumbs from '@/components/Breadcrumbs'
+import { baseOpenGraph } from '@/lib/og'
 import BarClient from './BarClient'
+
+const description =
+  'Mark the bottles you own and see which cocktails you can make now, and which you are one bottle away from. A free tool from the Jerry Can Spirits Field Manual.'
 
 export const metadata: Metadata = {
   title: "What's in My Bar",
-  description:
-    'Mark the bottles you own and see which cocktails you can make now, and which you are one bottle away from. A free tool from the Jerry Can Spirits Field Manual.',
+  description,
   alternates: { canonical: 'https://jerrycanspirits.co.uk/field-manual/whats-in-my-bar/' },
+  openGraph: {
+    ...baseOpenGraph,
+    title: "What's in My Bar | Jerry Can Spirits®",
+    description,
+    url: 'https://jerrycanspirits.co.uk/field-manual/whats-in-my-bar/',
+  },
 }
 
 export default async function WhatsInMyBarPage() {
