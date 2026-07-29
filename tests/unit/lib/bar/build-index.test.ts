@@ -7,7 +7,9 @@ const INGREDIENTS: RawIngredient[] = [
   // Vermouth carries the fortified category, which shelves it with the wines.
   { id: 'vermouth', name: 'Sweet Vermouth', slug: 'sweet-vermouth', category: 'fortified' },
   { id: 'champ', name: 'Champagne', slug: 'champagne', category: 'champagne' },
-  { id: 'gingerbeer', name: 'Fever-Tree Ginger Beer', slug: 'fever-tree-ginger-beer', category: 'mixers' },
+  { id: 'gingerbeer', name: 'Ginger Beer', slug: 'ginger-beer', category: 'mixers' },
+  // Superseded branded product: hidden from the tool in favour of the generic.
+  { id: 'ftgb', name: 'Fever-Tree Ginger Beer', slug: 'fever-tree-ginger-beer', category: 'mixers' },
   { id: 'lime', name: 'Lime Juice', slug: 'lime-juice', category: 'fresh' },
   { id: 'water', name: 'Water', slug: 'water', category: 'mixers' },
   { id: 'ice', name: 'Ice', slug: 'ice', category: 'fresh' },
@@ -19,6 +21,8 @@ const COCKTAILS: RawCocktail[] = [
   { slug: 'martini', name: 'Martini', baseSpirit: 'gin', ingredientIds: ['gin', 'vermouth', 'ice', 'mint', 'ghost'] },
   { slug: 'daiquiri', name: 'Daiquiri', baseSpirit: 'white-rum', ingredientIds: ['rum', 'lime'] },
   { slug: 'french-75', name: 'French 75', baseSpirit: 'gin', ingredientIds: ['gin', 'champ', 'lime'] },
+  // references the branded Fever-Tree ginger beer, not the generic
+  { slug: 'mule', name: 'Mule', baseSpirit: 'rum', ingredientIds: ['rum', 'ftgb', 'lime'] },
 ]
 
 describe('buildBarData', () => {
@@ -65,13 +69,22 @@ describe('buildBarData', () => {
     expect(wines).toContain('champ')
   })
 
-  it('applies the generic-name override, and shelves fortified vermouth with the wines', () => {
+  it('shelves fortified vermouth with the wines and hides aliased branded products', () => {
     const { shelves } = buildBarData(COCKTAILS, INGREDIENTS)
     const wines = shelves.find((s) => s.id === 'wines-liqueurs')!.ingredients
-    const vermouth = wines.find((i) => i.id === 'vermouth')!
-    expect(vermouth.vessel).toBe('wine')
-    const mixers = shelves.find((s) => s.id === 'mixers')!.ingredients
-    expect(mixers.find((i) => i.id === 'gingerbeer')!.name).toBe('Ginger Beer')
+    expect(wines.find((i) => i.id === 'vermouth')!.vessel).toBe('wine')
+    const mixers = shelves.find((s) => s.id === 'mixers')!.ingredients.map((i) => i.id)
+    // the generic ginger beer shows; the branded Fever-Tree product does not
+    expect(mixers).toContain('gingerbeer')
+    expect(mixers).not.toContain('ftgb')
+  })
+
+  it('aliases a branded mixer reference to its generic in the cocktail core', () => {
+    // the Mule recipe names Fever-Tree ginger beer; owning the generic makes it
+    const { index } = buildBarData(COCKTAILS, INGREDIENTS)
+    const mule = index.find((c) => c.slug === 'mule')!
+    expect(mule.coreIngredientIds).toContain('gingerbeer')
+    expect(mule.coreIngredientIds).not.toContain('ftgb')
   })
 
   it('assigns a vessel shape to each ingredient', () => {

@@ -4,7 +4,7 @@ import {
   vesselForCategory,
   ASSUMED_BASIC_SLUGS,
   COMMON_DEFAULTS,
-  INGREDIENT_OVERRIDES,
+  MIXER_ALIASES,
 } from './config'
 import type { BarData, BarIngredient, CocktailIndexItem, ShelfGroup } from './types'
 
@@ -23,25 +23,37 @@ export interface RawIngredient {
 }
 
 export function buildBarData(cocktails: RawCocktail[], ingredients: RawIngredient[]): BarData {
-  const basicIds = new Set(
-    ingredients.filter((i) => ASSUMED_BASIC_SLUGS.includes(i.slug)).map((i) => i.id),
+  const idBySlug = new Map(ingredients.map((i) => [i.slug, i.id]))
+
+  // Branded soft-drinks (the alias keys) are hidden from the shelf in favour of
+  // their generic. Assumed basics are dropped too; they never block a match.
+  const excludedSlugs = new Set([...ASSUMED_BASIC_SLUGS, ...Object.keys(MIXER_ALIASES)])
+  const excludedIds = new Set(
+    ingredients.filter((i) => excludedSlugs.has(i.slug)).map((i) => i.id),
   )
 
-  // Ingredients that can sit on a shelf (mapped to a shelf, not an assumed
-  // basic). Per-ingredient overrides tweak the display name, shelf or vessel.
+  // Branded ingredient id -> generic ingredient id, so a recipe that references a
+  // specific product still matches when the user owns the generic bottle.
+  const aliasIds = new Map<string, string>()
+  for (const [brandedSlug, genericSlug] of Object.entries(MIXER_ALIASES)) {
+    const brandedId = idBySlug.get(brandedSlug)
+    const genericId = idBySlug.get(genericSlug)
+    if (brandedId && genericId) aliasIds.set(brandedId, genericId)
+  }
+
+  // Ingredients that can sit on a shelf (mapped to a shelf, not excluded).
   const shelvable: BarIngredient[] = ingredients
-    .filter((i) => !basicIds.has(i.id))
+    .filter((i) => !excludedIds.has(i.id))
     .map((i) => {
-      const override = INGREDIENT_OVERRIDES[i.slug]
-      const shelf = override?.shelf ?? shelfForCategory(i.category)
+      const shelf = shelfForCategory(i.category)
       if (!shelf) return null
       return {
         id: i.id,
-        name: override?.displayName ?? i.name,
+        name: i.name,
         slug: i.slug,
         category: i.category,
         shelf,
-        vessel: override?.vessel ?? vesselForCategory(i.category),
+        vessel: vesselForCategory(i.category),
         common: COMMON_DEFAULTS.has(i.slug),
       }
     })
@@ -55,7 +67,11 @@ export function buildBarData(cocktails: RawCocktail[], ingredients: RawIngredien
     slug: c.slug,
     name: c.name,
     baseSpirit: c.baseSpirit,
-    coreIngredientIds: Array.from(new Set(c.ingredientIds)).filter((id) => shelvableIds.has(id)),
+    // Alias branded soft-drinks to their generic before filtering, so owning the
+    // generic bottle satisfies a recipe that names the specific product.
+    coreIngredientIds: Array.from(
+      new Set(c.ingredientIds.map((id) => aliasIds.get(id) ?? id)),
+    ).filter((id) => shelvableIds.has(id)),
   }))
 
   const shelves: ShelfGroup[] = SHELVES.map(({ id, label }) => {
