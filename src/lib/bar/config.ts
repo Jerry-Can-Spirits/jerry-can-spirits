@@ -56,7 +56,9 @@ export interface IngredientOverride {
 //   wines and liqueurs, in a wine-shaped bottle.
 export const INGREDIENT_OVERRIDES: Record<string, IngredientOverride> = {
   'fever-tree-premium-soda-water': { displayName: 'Soda Water' },
-  'fever-tree-premium-indian-tonic-water': { displayName: 'Tonic Water' },
+  // The cocktails reference the "refreshingly light" tonic, not the premium one,
+  // so this is the slug that has to carry the generic "Tonic Water" name.
+  'fever-tree-refreshingly-light-indian-tonic-water': { displayName: 'Tonic Water' },
   'fever-tree-madagascan-cola': { displayName: 'Cola' },
   'fever-tree-ginger-beer': { displayName: 'Ginger Beer' },
   'fever-tree-ginger-ale': { displayName: 'Ginger Ale' },
@@ -93,7 +95,7 @@ export const COMMON_DEFAULTS: ReadonlySet<string> = new Set([
   'peach-schnapps',
   // Mixers & syrups
   'fever-tree-premium-soda-water',
-  'fever-tree-premium-indian-tonic-water',
+  'fever-tree-refreshingly-light-indian-tonic-water',
   'fever-tree-madagascan-cola',
   'fever-tree-ginger-beer',
   'fever-tree-ginger-ale',
