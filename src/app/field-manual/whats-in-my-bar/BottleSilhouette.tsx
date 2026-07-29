@@ -11,11 +11,24 @@ const PATHS: Record<VesselType, string> = {
   dash: 'M17,6 h6 v10 q6,2 6,10 v58 q0,6 -6,6 h-6 q-6,0 -6,-6 v-58 q0,-8 6,-10 z',
 }
 
+// Each silhouette bottoms out at a different y in the 0-110 viewBox, so without
+// a nudge the shorter-drawn vessels float above the shelf line. These offsets
+// (in rendered px, for the h-20 render) drop each vessel's base onto the plank.
+const BASELINE: Record<VesselType, number> = {
+  spirit: 3,
+  wine: 0,
+  liqueur: 8,
+  carton: 3,
+  can: 3,
+  dash: 14,
+}
+
 export default function BottleSilhouette({ vessel, lit }: { vessel: VesselType; lit: boolean }) {
   return (
     <svg
       viewBox="0 0 40 110"
       className={`h-20 w-auto transition duration-200 ${lit ? 'drop-shadow-[0_0_6px_rgba(255,205,120,0.55)]' : ''}`}
+      style={{ transform: `translateY(${BASELINE[vessel]}px)` }}
       aria-hidden="true"
     >
       <path
@@ -24,6 +37,7 @@ export default function BottleSilhouette({ vessel, lit }: { vessel: VesselType; 
         stroke="rgba(255,255,255,0.10)"
         strokeWidth="0.6"
       />
+      <rect x="13.5" y="22" width="3" height="58" rx="1.5" className={lit ? 'fill-white/40' : 'fill-transparent'} />
     </svg>
   )
 }
