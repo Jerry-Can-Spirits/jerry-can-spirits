@@ -18,6 +18,8 @@ const TrustpilotWidget = dynamic(() => import('@/components/TrustpilotWidget'), 
   ),
 })
 
+const GoogleReviewBadge = dynamic(() => import('@/components/GoogleReviewBadge'))
+
 export const revalidate = 3600
 
 export const metadata: Metadata = {
@@ -56,6 +58,8 @@ export default async function ReviewsPage() {
 
   return (
     <main className="text-parchment-100 min-h-screen">
+      {/* Google seller-rating badge (consent-gated, injected by Google) */}
+      <GoogleReviewBadge />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: safeJsonLd({
