@@ -7,18 +7,22 @@ import Backbar from './Backbar'
 import Results from './Results'
 
 const STORAGE_KEY = 'jcs:bar'
+const SPOTLIGHT_KEY = 'jcs:bar:spotlight'
 
 export default function BarClient({ data }: { data: BarData }) {
   const [owned, setOwned] = useState<Set<string>>(new Set())
   const [hydrated, setHydrated] = useState(false)
   const [extraByShelf, setExtraByShelf] = useState<Record<string, string[]>>({})
   const [picker, setPicker] = useState<{ shelf: ShelfId | 'all'; query: string } | null>(null)
+  const [beam, setBeam] = useState(0.5)
 
   // Load persisted bar on mount.
   useEffect(() => {
     try {
       const raw = localStorage.getItem(STORAGE_KEY)
       if (raw) setOwned(new Set(JSON.parse(raw) as string[]))
+      const savedBeam = localStorage.getItem(SPOTLIGHT_KEY)
+      if (savedBeam) setBeam(Number(savedBeam) || 0.5)
     } catch {
       // ignore malformed storage
     }
@@ -30,10 +34,11 @@ export default function BarClient({ data }: { data: BarData }) {
     if (!hydrated) return
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify([...owned]))
+      localStorage.setItem(SPOTLIGHT_KEY, String(beam))
     } catch {
       // ignore write failures (private mode etc.)
     }
-  }, [owned, hydrated])
+  }, [owned, beam, hydrated])
 
   const allIngredients = useMemo<BarIngredient[]>(
     () => data.shelves.flatMap((s) => s.ingredients),
@@ -91,12 +96,28 @@ export default function BarClient({ data }: { data: BarData }) {
 
       <div className="flex flex-col gap-5 md:flex-row">
         <div className="md:basis-[56%]">
+          <div className="mb-2 flex items-center gap-3">
+            <label htmlFor="bar-spotlight" className="text-[11px] uppercase tracking-wider text-parchment-400/70">
+              Spotlight
+            </label>
+            <input
+              id="bar-spotlight"
+              type="range"
+              min="0.2"
+              max="1"
+              step="0.05"
+              value={beam}
+              onChange={(e) => setBeam(Number(e.target.value))}
+              className="w-32 accent-gold-500"
+            />
+          </div>
           <Backbar
             shelves={data.shelves}
             owned={owned}
             onToggle={toggle}
             onAddRequest={(shelf) => setPicker({ shelf, query: '' })}
             extraByShelf={extraByShelf}
+            beam={beam}
           />
         </div>
         <div className="md:flex-1">
