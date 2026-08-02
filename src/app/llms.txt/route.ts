@@ -136,10 +136,6 @@ Our commitment to the military community.
 
 We build spirits with the same precision and reliability expected of military equipment: real ingredients, small batches, no shortcuts. Every bottle is expedition-ready, whether you are mixing cocktails in the field or behind the bar.
 
-## Affiliate Partnerships
-
-We participate in the Master of Malt affiliate programme for ingredient recommendations in our Field Manual. All affiliate relationships are clearly disclosed.
-
 ## Key Dates
 
 - Founded: 31 July 2025 (Black Tot Day), London, United Kingdom

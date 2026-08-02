@@ -433,14 +433,6 @@ export default async function IngredientDetailPage({ params }: { params: Promise
                     )}
                   </div>
 
-                  {/* Affiliate Disclosure */}
-                  {(ingredient.recommendedBrands.budgetLink || ingredient.recommendedBrands.premiumLink) && (
-                    <div className="mt-4 pt-4 border-t border-gold-500/20">
-                      <p className="text-parchment-400 text-xs leading-relaxed">
-                        <strong className="text-gold-300">Affiliate Disclosure:</strong> Jerry Can Spirits participates in the Master of Malt affiliate programme. If you purchase through these links, we may earn a small commission at no extra cost to you. This helps support our content and allows us to continue creating free cocktail recipes and guides. We only recommend products we genuinely believe in.
-                      </p>
-                    </div>
-                  )}
                 </div>
               )}
 

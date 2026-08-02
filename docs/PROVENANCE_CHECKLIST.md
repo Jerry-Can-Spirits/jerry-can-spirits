@@ -74,6 +74,26 @@ comment).
   copy; the founder writes it.
 - Fix structured data first.
 
+## Commercial relationships (standing position, August 2026)
+
+No affiliate programme is live. There are no affiliate links, no programme,
+and no commercial relationship with Master of Malt or any other retailer.
+
+The `budgetLink` and `premiumLink` fields on the ingredient and equipment
+schemas are retained, dormant and unpopulated, against a future decision that
+has not been taken. They are optional and cost nothing while empty. Their
+presence is not evidence of a programme.
+
+Publish no affiliate disclosure until a programme actually exists. A
+disclosure describing a relationship we do not have is as inaccurate as an
+undisclosed one that we do, and it is a statement about our commercial
+position rather than a piece of boilerplate. If a programme is ever joined,
+the disclosure goes back at the same time as the first live link, never
+before and never after.
+
+Note that `affiliate_dt_id` in the cart is unrelated: it is referral tracking
+passed to Shopify checkout, not a retailer affiliate scheme.
+
 ## Sources of recurrence
 
 `CLAUDE.md` and `docs/VOICE.md` carry the brand's product facts. If either
