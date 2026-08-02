@@ -6,6 +6,41 @@ import { initOpenNextCloudflareForDev } from "@opennextjs/cloudflare";
 
 initOpenNextCloudflareForDev();
 
+// NEXT_PUBLIC_* values are inlined at build time, so a build environment that
+// lacks them produces a bundle that compiles cleanly and then fails at
+// runtime. That happened on 2026-08-02: the Cloudflare Workers Builds
+// pipeline had no variables configured, `next build` went green, and every
+// product page 500'd because src/lib/shopify.ts throws without its
+// credentials. Nothing in the toolchain objected. This makes that state a
+// build failure instead of an outage.
+//
+// Runtime-only secrets (KLAVIYO_PRIVATE_KEY, TURNSTILE_SECRET_KEY,
+// TRADE_SESSION_SECRET) are deliberately absent: they are Worker secrets read
+// through getCloudflareContext().env, never inlined, and so are unaffected by
+// the build environment.
+const REQUIRED_BUILD_ENV = [
+  'NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN',
+  'NEXT_PUBLIC_SHOPIFY_STOREFRONT_ACCESS_TOKEN',
+  'NEXT_PUBLIC_SANITY_PROJECT_ID',
+  'NEXT_PUBLIC_SANITY_DATASET',
+  'NEXT_PUBLIC_CLOUDFLARE_ACCOUNT_HASH',
+];
+
+if (process.env.NODE_ENV === 'production') {
+  const missing = REQUIRED_BUILD_ENV.filter((name) => !process.env[name]);
+  if (missing.length > 0) {
+    throw new Error(
+      `Missing required build-time environment variables:\n` +
+        missing.map((name) => `  - ${name}`).join('\n') +
+        `\n\nThese are inlined into the bundle by next build. Without them the ` +
+        `build succeeds but product pages return 500 in production.\n` +
+        `Set them in the Cloudflare Workers Builds settings for ` +
+        `jerry-can-spirits-prod, in .github/workflows/ci.yml, or in .env.local ` +
+        `for a local build.`
+    );
+  }
+}
+
 // The full CSP, parameterised only by frame-ancestors: the site defaults to
 // 'none', but /qr/* (the Expedition Log embed) must be frameable by the QR
 // landing host, whose platform strips scripts so the interactive log is
