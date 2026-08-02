@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useRouter, usePathname, useSearchParams } from 'next/navigation'
+import { useRouter, usePathname } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
 import BackToTop from '@/components/BackToTop'
@@ -93,25 +93,32 @@ interface CocktailsClientProps {
 export default function CocktailsClient({ cocktails }: CocktailsClientProps) {
   const router = useRouter()
   const pathname = usePathname()
-  const searchParams = useSearchParams()
 
-  // Filter states — seeded from URL params
-  const [selectedFamily, setSelectedFamily] = useState<string>(
-    searchParams.get('family') ?? 'all'
-  )
-  const [selectedSpirit, setSelectedSpirit] = useState<string>(
-    searchParams.get('spirit') ?? 'all'
-  )
-  const [selectedDifficulty, setSelectedDifficulty] = useState<string>(
-    searchParams.get('difficulty') ?? 'all'
-  )
-  const [searchQuery, setSearchQuery] = useState<string>(
-    searchParams.get('q') ?? ''
-  )
+  // Filter states: defaults here, URL-seeded in the effect below.
+  // useSearchParams() in a client component bails the whole subtree out of
+  // server rendering, which left the grid absent from raw HTML for any
+  // non-JS crawler. Reading window.location after mount keeps deep links
+  // working while the first page of the grid server-renders.
+  const [selectedFamily, setSelectedFamily] = useState<string>('all')
+  const [selectedSpirit, setSelectedSpirit] = useState<string>('all')
+  const [selectedDifficulty, setSelectedDifficulty] = useState<string>('all')
+  const [searchQuery, setSearchQuery] = useState<string>('')
   const [visibleCount, setVisibleCount] = useState<number>(ITEMS_PER_PAGE)
-  const [sortBy, setSortBy] = useState<string>(
-    searchParams.get('sort') ?? 'default'
-  )
+  const [sortBy, setSortBy] = useState<string>('default')
+
+  useEffect(() => {
+    const sp = new URLSearchParams(window.location.search)
+    const family = sp.get('family')
+    const spirit = sp.get('spirit')
+    const difficulty = sp.get('difficulty')
+    const q = sp.get('q')
+    const sort = sp.get('sort')
+    if (family) setSelectedFamily(family)
+    if (spirit) setSelectedSpirit(spirit)
+    if (difficulty) setSelectedDifficulty(difficulty)
+    if (q) setSearchQuery(q)
+    if (sort) setSortBy(sort)
+  }, [])
   const [ratings, setRatings] = useState<RatingsMap>({})
   const [ratingsLoaded, setRatingsLoaded] = useState<boolean>(false)
 

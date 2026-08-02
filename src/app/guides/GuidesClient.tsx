@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
 import BackToTop from '@/components/BackToTop'
@@ -36,19 +35,16 @@ const categoryLabels: Record<string, string> = {
 const ITEMS_PER_PAGE = 12
 
 export default function GuidesClient({ guides }: GuidesClientProps) {
-  const searchParams = useSearchParams()
-  const categoryParam = searchParams.get('category')
-
-  const [selectedCategory, setSelectedCategory] = useState<string>(categoryParam || 'all')
+  // Default here, URL-seeded after mount: useSearchParams() bailed this
+  // subtree out of server rendering, hiding the guide list from raw HTML.
+  const [selectedCategory, setSelectedCategory] = useState<string>('all')
   const [searchQuery, setSearchQuery] = useState<string>('')
   const [visibleCount, setVisibleCount] = useState<number>(ITEMS_PER_PAGE)
 
-  // Update category when URL param changes
   useEffect(() => {
-    if (categoryParam) {
-      setSelectedCategory(categoryParam)
-    }
-  }, [categoryParam])
+    const category = new URLSearchParams(window.location.search).get('category')
+    if (category) setSelectedCategory(category)
+  }, [])
 
   // Filter guides
   const filteredGuides = guides.filter(guide => {
