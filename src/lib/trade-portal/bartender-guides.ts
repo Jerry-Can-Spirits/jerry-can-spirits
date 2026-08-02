@@ -69,7 +69,7 @@ export const BARTENDER_GUIDES: Record<VenueSlug, BartenderGuide> = {
     venue_slug: 'cocktail-bar',
     venue_label: 'Cocktail bar edition',
     what_it_is:
-      'A spiced rum macerated with real ingredients. Vanilla, cinnamon, allspice, clove, orange peel, cassia, ginger, agave. Finished on bourbon oak. Caribbean rum base, 40% ABV. No essences. No artificial flavourings. Macerated at our British partner distillery.',
+      'A spiced rum macerated with real ingredients. Vanilla, cinnamon, allspice, clove, orange peel, cassia, ginger, agave. Finished on bourbon oak. Caribbean rum base, 40% ABV. No essences. No artificial flavourings. Macerated by our British partner distillery.',
     serves: [
       {
         heading: 'Lead with this',
@@ -114,7 +114,7 @@ export const BARTENDER_GUIDES: Record<VenueSlug, BartenderGuide> = {
       },
     ],
     about:
-      'Jerry Can Spirits is veteran-owned and bootstrapped. Two Royal Signals veterans. Macerated at our British partner distillery. 5% of profits go to military charities. This is their first release. jerrycanspirits.co.uk.',
+      'Jerry Can Spirits is veteran-owned and bootstrapped. Two Royal Signals veterans. Macerated by our British partner distillery. 5% of profits go to military charities. This is their first release. jerrycanspirits.co.uk.',
   },
 
   nightclub: {
@@ -166,7 +166,7 @@ export const BARTENDER_GUIDES: Record<VenueSlug, BartenderGuide> = {
     venue_slug: 'hotel',
     venue_label: 'Hotel bar edition',
     what_it_is:
-      'A spiced rum macerated with real ingredients. Vanilla, cinnamon, allspice, clove, orange peel, cassia, ginger, agave, bourbon oak. Caribbean rum base, 40% ABV. No essences, no artificial flavourings. Macerated at our British partner distillery. Founded by two Royal Signals veterans. 5% of profits go to military charities.',
+      'A spiced rum macerated with real ingredients. Vanilla, cinnamon, allspice, clove, orange peel, cassia, ginger, agave, bourbon oak. Caribbean rum base, 40% ABV. No essences, no artificial flavourings. Macerated by our British partner distillery. Founded by two Royal Signals veterans. 5% of profits go to military charities.',
     serves: [
       {
         heading: 'How to serve it',
@@ -186,14 +186,14 @@ export const BARTENDER_GUIDES: Record<VenueSlug, BartenderGuide> = {
       },
     ],
     three_things: [
-      'Real ingredients, properly macerated. Made at our British partner distillery.',
+      'Real ingredients, properly macerated by our British partner distillery.',
       'Veteran-owned British brand. 5% of profits to military charities.',
       'Best appreciated neat or over a large cube. Let the spirit show.',
     ],
     what_to_say: [
       {
         scenario: 'If they ask what it is',
-        response: '"British spiced rum, Caribbean rum base. Real ingredients, produced in small batches in Britain. Veteran-owned. I’d recommend it neat or over a large cube with a twist of orange."',
+        response: '"British spiced rum, Caribbean rum base. Real ingredients, macerated in small batches by our British partner distillery. Veteran-owned. I’d recommend it neat or over a large cube with a twist of orange."',
       },
       {
         scenario: 'If they ask about the brand',
@@ -205,7 +205,7 @@ export const BARTENDER_GUIDES: Record<VenueSlug, BartenderGuide> = {
       },
     ],
     about:
-      'Jerry Can Spirits is veteran-owned and bootstrapped. Two Royal Signals veterans, no hidden investors, real ingredients. Macerated at our British partner distillery. 5% of profits go to military charities. Expedition Spiced Rum is their first release. jerrycanspirits.co.uk.',
+      'Jerry Can Spirits is veteran-owned and bootstrapped. Two Royal Signals veterans, no hidden investors, real ingredients. Macerated by our British partner distillery. 5% of profits go to military charities. Expedition Spiced Rum is their first release. jerrycanspirits.co.uk.',
   },
 }
 

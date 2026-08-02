@@ -14,13 +14,13 @@ import { safeJsonLd, productOffer, merchantOfferExtras, productGtin } from '@/li
 
 export const metadata: Metadata = {
   title: 'British Craft Spirits',
-  description: 'Veteran-owned British craft spirits, small-batch and built properly. Currently: Expedition Spiced Rum, made in Britain, real ingredients.',
+  description: 'Veteran-owned British craft spirits, small-batch and built properly. Currently: Expedition Spiced Rum, real ingredients.',
   alternates: {
     canonical: 'https://jerrycanspirits.co.uk/shop/spirits/',
   },
   openGraph: {
     title: 'British Craft Spirits | Jerry Can Spirits®',
-    description: 'Veteran-owned British craft spirits, small-batch and built properly. Currently: Expedition Spiced Rum, made in Britain, real ingredients.',
+    description: 'Veteran-owned British craft spirits, small-batch and built properly. Currently: Expedition Spiced Rum, real ingredients.',
     url: 'https://jerrycanspirits.co.uk/shop/spirits/',
     siteName: 'Jerry Can Spirits®',
     locale: 'en_GB',
@@ -30,7 +30,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image' as const,
     title: 'British Craft Spirits | Jerry Can Spirits®',
-    description: 'Veteran-owned British craft spirits, small-batch and built properly. Currently: Expedition Spiced Rum, made in Britain, real ingredients.',
+    description: 'Veteran-owned British craft spirits, small-batch and built properly. Currently: Expedition Spiced Rum, real ingredients.',
     images: OG_IMAGE,
   },
 }
@@ -214,10 +214,10 @@ export default async function SpiritsPage() {
 
           <div className="max-w-3xl mx-auto space-y-4 text-left">
             <p className="text-xl text-parchment-300 leading-relaxed">
-              A spirits house starts with one bottle it can stand behind. Ours is Expedition Spiced Rum: Caribbean rum base, nine real botanicals, no artificial flavourings. Bronze at the IWSC 2026, with a Silver for the serve with Franklin and Sons cola.
+              A spirits house starts with one bottle it can stand behind. Ours is Expedition Spiced Rum: Caribbean rum base, seven real botanicals, no artificial flavourings. Bronze at the IWSC 2026, with a Silver for the serve with Franklin and Sons cola.
             </p>
             <p className="text-lg text-parchment-400 leading-relaxed">
-              Macerated at our British partner distillery in limited, numbered batches. When a batch is gone, that run is finished. Two Royal Corps of Signals veterans. 17 years of service between us. The same standards applied here.
+              Macerated by our British partner distillery in limited, numbered batches. When a batch is gone, that run is finished. Two Royal Corps of Signals veterans. 17 years of service between us. The same standards applied here.
             </p>
             <p className="text-lg text-parchment-400 leading-relaxed">
               More expressions will follow as they earn their place. Nothing ships until it is right.

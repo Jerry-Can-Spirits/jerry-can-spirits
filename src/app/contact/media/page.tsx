@@ -300,7 +300,7 @@ Based in the UK, Jerry Can Spirits® is a small operation run by two mates who c
                     // RRP row removed (Audit 8 PR B): no hardcoded price in copy;
                     // re-add from live pricing after the 1 Aug 2026 change.
                     { label: 'Base Spirit', value: 'Caribbean rum' },
-                    { label: 'Produced At', value: 'our British partner distillery' },
+                    { label: 'Maceration Partner', value: 'our British partner distillery' },
                   ].map((item) => (
                     <div key={item.label} className="flex justify-between items-baseline border-b border-gold-500/10 pb-2">
                       <span className="text-parchment-400 text-sm">{item.label}</span>

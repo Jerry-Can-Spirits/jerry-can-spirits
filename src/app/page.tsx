@@ -23,20 +23,20 @@ export const metadata: Metadata = {
   title: {
     absolute: "Jerry Can Spirits | British Spiced Rum",
   },
-  description: "Two Royal Signals veterans, one spiced rum. Real botanicals, made in Britain. No artificial flavouring. No shortcuts. Now shipping.",
+  description: "Two Royal Signals veterans, one spiced rum. Real botanicals, small batches. No artificial flavouring. No shortcuts. Now shipping.",
   alternates: {
     canonical: "https://jerrycanspirits.co.uk/",
   },
   openGraph: {
     ...baseOpenGraph,
     title: "Jerry Can Spirits | British Spiced Rum",
-    description: "Two Royal Signals veterans, one spiced rum. Real botanicals, made in Britain. No artificial flavouring. No shortcuts. Now shipping.",
+    description: "Two Royal Signals veterans, one spiced rum. Real botanicals, small batches. No artificial flavouring. No shortcuts. Now shipping.",
     url: "https://jerrycanspirits.co.uk/",
   },
   twitter: {
     card: 'summary_large_image' as const,
     title: "Jerry Can Spirits | British Spiced Rum",
-    description: "Two Royal Signals veterans, one spiced rum. Real botanicals, made in Britain. No artificial flavouring. No shortcuts. Now shipping.",
+    description: "Two Royal Signals veterans, one spiced rum. Real botanicals, small batches. No artificial flavouring. No shortcuts. Now shipping.",
     images: OG_IMAGE,
   },
 }
@@ -218,7 +218,7 @@ export default function Home() {
                 </h2>
                 <div className="space-y-4 text-parchment-200 leading-relaxed">
                   <p>
-                    We work with what's close to home where we can. Our rum is made in Britain, in small batches. It's not about slapping 'eco-friendly' on the label. It's just how we think things should be done.
+                    We work with what's close to home where we can. Our rum is macerated by our British partner distillery, in small batches. It's not about slapping 'eco-friendly' on the label. It's just how we think things should be done.
                   </p>
                   <p>
                     We signed the Armed Forces Covenant because supporting veterans isn't a marketing angle for us - it's personal. 5% of profits goes to forces charities. We guarantee job interviews for veterans. It's baked into how we run the company, not bolted on afterwards.
@@ -245,13 +245,13 @@ export default function Home() {
               <ScrollReveal delay={1}>
                 <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20 text-center">
                   <h3 className="text-lg font-serif font-bold text-gold-300 mb-2">UK First Philosophy</h3>
-                  <p className="text-parchment-300 text-sm">Real botanicals, made in Britain</p>
+                  <p className="text-parchment-300 text-sm">Real botanicals, British small batches</p>
                 </div>
               </ScrollReveal>
               <ScrollReveal delay={2}>
                 <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20 text-center">
                   <h3 className="text-lg font-serif font-bold text-gold-300 mb-2">Small Batch. Properly Made.</h3>
-                  <p className="text-parchment-300 text-sm">Made at our British partner distillery. Every batch small enough to pay attention to.</p>
+                  <p className="text-parchment-300 text-sm">Macerated by our British partner distillery. Every batch small enough to pay attention to.</p>
                 </div>
               </ScrollReveal>
               <ScrollReveal delay={3}>

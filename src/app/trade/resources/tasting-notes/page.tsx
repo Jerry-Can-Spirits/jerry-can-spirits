@@ -17,7 +17,7 @@ export default async function TastingNotesPage() {
       <TradeSheetSection title="Character">
         <p className="text-sm leading-relaxed">{p.tasting.character}</p>
         <p className="text-sm leading-relaxed mt-2">
-          {p.abv_percent}% ABV. {p.volume_ml}ml. Caribbean rum base, macerated at {p.distillery}.
+          {p.abv_percent}% ABV. {p.volume_ml}ml. Caribbean rum base, macerated by {p.distillery}.
         </p>
       </TradeSheetSection>
 

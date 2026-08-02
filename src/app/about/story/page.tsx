@@ -14,7 +14,7 @@ const articleSchema = {
   '@context': 'https://schema.org',
   '@type': 'Article',
   headline: 'Our Story - How Two Veterans Built a British Spirits Company',
-  description: 'Two Royal Signals veterans built a spirits company from scratch. No shortcuts. No hidden investors. Expedition Spiced Rum, real ingredients, made in Britain.',
+  description: 'Two Royal Signals veterans built a spirits company from scratch. No shortcuts. No hidden investors. Expedition Spiced Rum, real ingredients, small batches, British.',
   url: 'https://jerrycanspirits.co.uk/about/story/',
   image: 'https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/images-hero-trail_hero-webp/public',
   author: {
@@ -67,10 +67,10 @@ const storyFaqs: Array<{ question: string; answer: string; rich?: ReactNode }> =
   {
     question: 'Where is Jerry Can Spirits based?',
     answer:
-      "We're based in the UK. It's a home-office operation: nothing glamorous, just us working away. Our Expedition Spiced Rum is made with Caribbean rum, blended at our British partner distillery right here in Britain.",
+      "We're based in the UK. It's a home-office operation: nothing glamorous, just us working away. Our Expedition Spiced Rum is built on Caribbean rum, macerated by our British partner distillery.",
     rich: (
       <>
-        We&apos;re based in the UK. It&apos;s a home-office operation: nothing glamorous, just us working away. Our <Link href="/shop/product/jerry-can-spirits-expedition-spiced-rum/" className="text-gold-300 hover:text-gold-400 underline">Expedition Spiced Rum</Link> is made with Caribbean rum, blended at our British partner distillery right here in Britain.
+        We&apos;re based in the UK. It&apos;s a home-office operation: nothing glamorous, just us working away. Our <Link href="/shop/product/jerry-can-spirits-expedition-spiced-rum/" className="text-gold-300 hover:text-gold-400 underline">Expedition Spiced Rum</Link> is built on Caribbean rum, macerated by our British partner distillery.
       </>
     ),
   },
@@ -93,20 +93,20 @@ const storyFaqs: Array<{ question: string; answer: string; rich?: ReactNode }> =
 
 export const metadata: Metadata = {
   title: "Our Story - Two Veteran Founders",
-  description: "Two Royal Signals veterans built a spirits company from scratch. No shortcuts. No hidden investors. Expedition Spiced Rum, real ingredients, made in Britain.",
+  description: "Two Royal Signals veterans built a spirits company from scratch. No shortcuts. No hidden investors. Expedition Spiced Rum, real ingredients, small batches, British.",
   alternates: {
     canonical: 'https://jerrycanspirits.co.uk/about/story/',
   },
   openGraph: {
     ...baseOpenGraph,
     title: "Our Story | Jerry Can Spirits®",
-    description: "Two Royal Signals veterans built a spirits company from scratch. No shortcuts. No hidden investors. Expedition Spiced Rum, real ingredients, made in Britain.",
+    description: "Two Royal Signals veterans built a spirits company from scratch. No shortcuts. No hidden investors. Expedition Spiced Rum, real ingredients, small batches, British.",
     url: 'https://jerrycanspirits.co.uk/about/story/',
   },
   twitter: {
     card: 'summary_large_image' as const,
     title: "Our Story | Jerry Can Spirits®",
-    description: "Two Royal Signals veterans built a spirits company from scratch. No shortcuts. No hidden investors. Expedition Spiced Rum, real ingredients, made in Britain.",
+    description: "Two Royal Signals veterans built a spirits company from scratch. No shortcuts. No hidden investors. Expedition Spiced Rum, real ingredients, small batches, British.",
     images: OG_IMAGE,
   },
   robots: {
