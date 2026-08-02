@@ -74,7 +74,10 @@ export interface ShopifyProduct {
   variants?: ShopifyProductVariant[];
   tags?: string[];
   productType?: string;
-  vendor?: string;
+  // Deliberately not fetched. Shopify's vendor field carries the fulfilment
+  // partner's name, nothing on the site reads it, and an unused value sitting
+  // in every product payload is how a future component picks it up by accident.
+  // Brand/manufacturer/seller in the JSON-LD are hardcoded to Jerry Can Spirits.
   availableForSale?: boolean;
   updatedAt?: string;
   metafields?: ShopifyMetafield[];
@@ -371,7 +374,6 @@ export async function getProduct(handle: string): Promise<ShopifyProduct | null>
         description
         descriptionHtml
         productType
-        vendor
         tags
         availableForSale
         seo {
