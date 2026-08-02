@@ -278,7 +278,7 @@ export default function ExpeditionSpicedRumIngredients() {
                 <ul className="space-y-2">
                   <li className="flex items-start space-x-3">
                     <div className="w-2 h-2 bg-gold-400 rounded-full mt-2 shrink-0"></div>
-                    <span>Pure water</span>
+                    <span>Water</span>
                   </li>
                 </ul>
               </div>

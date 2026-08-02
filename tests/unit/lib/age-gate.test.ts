@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { NextRequest } from 'next/server'
-import { isBot } from '@/lib/age-gate'
+import { isAgeExcludedPath, isBot } from '@/lib/age-gate'
 import { middleware } from '@/middleware'
 
 // Real user-agent strings as each crawler sends them, so a substring drift in
@@ -101,6 +101,43 @@ describe('middleware age gate — AI crawler access', () => {
       const res = middleware(gatedRequest(ua))
       expect(res.status).toBe(307)
       expect(res.headers.get('location')).toContain('/age-check/')
+    }
+  })
+})
+
+// Static files in public/ never reach the middleware, so a crawler file served
+// from there looks exempt whether or not it is actually in EXCLUDED_EXACT. The
+// moment it becomes a route the gate starts 307ing it, which is what happened
+// to /llms.txt. These pin the exemption itself rather than the current serving
+// mechanism, so converting any of them to a route stays safe.
+describe('crawler-facing paths are never age-gated', () => {
+  const CRAWLER_PATHS = [
+    '/robots.txt',
+    '/sitemap.xml',
+    '/llms.txt',
+    '/manifest.json',
+    '/.well-known/security.txt',
+  ]
+
+  for (const path of CRAWLER_PATHS) {
+    it(`${path} is not redirected for an unverified browser`, () => {
+      const res = middleware(
+        new NextRequest(`https://jerrycanspirits.co.uk${path}`, {
+          headers: {
+            'user-agent':
+              'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0 Safari/537.36',
+            'sec-fetch-dest': 'document',
+          },
+        })
+      )
+      expect(res.status).not.toBe(307)
+      expect(res.headers.get('location')).toBeNull()
+    })
+  }
+
+  it('isAgeExcludedPath covers every crawler path', () => {
+    for (const path of CRAWLER_PATHS) {
+      expect(isAgeExcludedPath(path)).toBe(true)
     }
   })
 })

@@ -67,12 +67,51 @@ sugarcane or molasses"); editorial content about unrelated third parties
 (Penderyn, Welsh gin); or a non-claim identifier (a schema field, a code
 comment).
 
+## Known acceptable hits (reviewed, do not re-investigate)
+
+These trip the grep every time and have been ruled on. Leave them alone.
+
+- `Pontyclun, South Wales` on `/friends/` — Harlequin Print Group, our
+  packaging supplier. The town coincides with the former producer's; the
+  company is unrelated and the entry is a legitimate supplier credit.
+- `The packaging is British-made, by partners we name` on `/ethos/` — true,
+  scoped to packaging rather than the rum, and the suppliers are named on the
+  same page.
+- `Rum is distilled from sugarcane or molasses` in the homepage FAQ — a fact
+  about the category, not a claim about ours.
+- `England and Wales` in the terms of service — legal jurisdiction.
+- `Essentials in Distilling (CIBD)` on the team page — a founder's
+  qualification, not a production claim.
+- `British Distillers Alliance` on `/friends/` — trade body membership.
+- `Own our own distillery` on `/about/story/` — a stated future ambition,
+  explicitly not a present claim.
+
 ## Rule when a hit is a real claim
 
 - Remove the claim where deletion leaves a clean, truthful sentence.
 - Stop and report where deletion breaks the sentence. Do not invent replacement
   copy; the founder writes it.
 - Fix structured data first.
+
+## Commercial relationships (standing position, August 2026)
+
+No affiliate programme is live. There are no affiliate links, no programme,
+and no commercial relationship with Master of Malt or any other retailer.
+
+The `budgetLink` and `premiumLink` fields on the ingredient and equipment
+schemas are retained, dormant and unpopulated, against a future decision that
+has not been taken. They are optional and cost nothing while empty. Their
+presence is not evidence of a programme.
+
+Publish no affiliate disclosure until a programme actually exists. A
+disclosure describing a relationship we do not have is as inaccurate as an
+undisclosed one that we do, and it is a statement about our commercial
+position rather than a piece of boilerplate. If a programme is ever joined,
+the disclosure goes back at the same time as the first live link, never
+before and never after.
+
+Note that `affiliate_dt_id` in the cart is unrelated: it is referral tracking
+passed to Shopify checkout, not a retailer affiliate scheme.
 
 ## Sources of recurrence
 

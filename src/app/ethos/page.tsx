@@ -67,7 +67,7 @@ export default function Ethos() {
             <div className="relative w-full max-w-3xl mx-auto mb-8">
               <Image
                 src="/images/hero/Compass_Still.webp"
-                alt="A compass and copper pot still"
+                alt="A copper alembic, brass compass and antique maps on a wooden table"
                 width={1200}
                 height={600}
                 className="rounded-lg"

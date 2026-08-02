@@ -66,8 +66,8 @@ const spiritsFaqs: Array<{ question: string; answer: string; rich?: ReactNode }>
     answer: 'Yes. Our Expedition Spiced Rum contains no animal products. The base is Caribbean white rum, and the spice blend is entirely plant-based. No honey, no animal-derived filtering agents, no animal products in production.',
   },
   {
-    question: 'Where is Jerry Can Spirits rum made?',
-    answer: 'We blend at our British partner distillery in the UK. The base white rum comes from the Caribbean. The blending, spicing, and bottling all happen in Britain.',
+    question: 'What goes into Expedition Spiced Rum?',
+    answer: 'A Caribbean white rum base, macerated by our British partner distillery with seven real spices, two natural sweeteners, and bourbon oak for maturation. No artificial flavourings.',
   },
   {
     question: 'How does buying from Jerry Can Spirits support veterans?',
