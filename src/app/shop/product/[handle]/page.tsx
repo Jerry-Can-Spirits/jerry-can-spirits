@@ -229,14 +229,9 @@ export default async function ProductPage({
     // Sanity slug is typically the handle without the brand prefix
     const slug = handle.replace('jerry-can-spirits-', '')
 
-    const TRADE_PACK_HANDLE = 'jerry-can-spirits-expedition-pack-spiced-rum-6-bottles'
-
-    const [shopifyProduct, sanityData, tradePackProduct] = await Promise.all([
+    const [shopifyProduct, sanityData] = await Promise.all([
       getProduct(handle),
       client.fetch(productByHandleQuery, { slug, handle }).catch(() => null),
-      handle === 'jerry-can-spirits-expedition-spiced-rum'
-        ? getProduct(TRADE_PACK_HANDLE)
-        : Promise.resolve(null),
     ])
 
     product = shopifyProduct
