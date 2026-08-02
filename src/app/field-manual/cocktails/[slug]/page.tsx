@@ -12,8 +12,14 @@ import ShareButton from '@/components/ShareButton'
 import StarRating from '@/components/StarRating'
 import Breadcrumbs from '@/components/Breadcrumbs'
 import { notFound } from 'next/navigation'
+import { getCloudflareContext } from '@opennextjs/cloudflare'
 import { sanityOgUrl } from '@/sanity/lib/image'
 import { OG_IMAGE_COCKTAIL } from '@/lib/og'
+
+// Hourly ISR: the old ratings lookup was an HTTP fetch with an hourly cache,
+// which also refreshed the page. The direct KV read below has no cache of its
+// own, so the page keeps the same freshness cadence explicitly.
+export const revalidate = 3600
 
 // Types for cocktail data
 interface CocktailIngredient {
@@ -170,27 +176,30 @@ export default async function CocktailPage({ params }: PageProps) {
     notFound()
   }
 
-  // Fetch real ratings from Cloudflare KV
+  // Fetch real ratings via the KV binding directly. The previous HTTP call
+  // from the Worker to its own production API was slower, failure-prone, and
+  // challenged by Cloudflare's bot rules, which silently suppressed every
+  // rating. The emit rule is unchanged: only a genuine average with at least
+  // one submission, never a seed or default.
   let aggregateRating: Record<string, unknown> | undefined
   try {
-    const ratingsRes = await fetch(
-      `https://jerrycanspirits.co.uk/api/ratings?slug=${cocktail.slug.current}`,
-      { next: { revalidate: 3600 } }
-    )
-    if (ratingsRes.ok) {
-      const ratingsData = await ratingsRes.json() as { count: number; average: number }
-      if (ratingsData.count >= 1) {
-        aggregateRating = {
-          "@type": "AggregateRating",
-          "ratingValue": ratingsData.average.toString(),
-          "ratingCount": ratingsData.count.toString(),
-          "bestRating": "5",
-          "worstRating": "1"
-        }
+    const { env } = getCloudflareContext()
+    const kv = (env as { COCKTAIL_RATINGS?: KVNamespace }).COCKTAIL_RATINGS
+    const ratingsData = kv
+      ? await kv.get<{ count: number; average: number }>(`cocktail:${cocktail.slug.current}`, 'json')
+      : null
+    if (ratingsData && ratingsData.count >= 1) {
+      aggregateRating = {
+        "@type": "AggregateRating",
+        "ratingValue": ratingsData.average.toString(),
+        "ratingCount": ratingsData.count.toString(),
+        "bestRating": "5",
+        "worstRating": "1"
       }
     }
   } catch {
-    // Ratings unavailable — omit aggregateRating rather than show fake data
+    // No Cloudflare context during build-time prerender: omit the block.
+    // Regeneration inside the Worker has the binding and emits it.
   }
 
   // Use Sanity prepTime if set, otherwise derive from difficulty
