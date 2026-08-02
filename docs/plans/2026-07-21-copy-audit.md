@@ -1,3 +1,5 @@
+> HISTORICAL DRAFT. Contains superseded provenance claims. Do not use as a source for copy. See docs/PROVENANCE_CHECKLIST.md.
+
 # Copy, voice, and conversion-language audit — Jerry Can Spirits
 
 Date: 2026-07-21. Reporting audit only: nothing was rewritten. Copy is

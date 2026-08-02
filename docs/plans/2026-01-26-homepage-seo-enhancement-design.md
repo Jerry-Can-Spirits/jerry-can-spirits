@@ -1,3 +1,5 @@
+> HISTORICAL DRAFT. Contains superseded provenance claims. Do not use as a source for copy. See docs/PROVENANCE_CHECKLIST.md.
+
 # Homepage SEO Enhancement Design
 
 **Date:** 2026-01-26
