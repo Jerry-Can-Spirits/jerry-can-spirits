@@ -4,6 +4,8 @@ import { client } from '@/sanity/lib/client'
 import { equipmentListQuery } from '@/sanity/queries'
 import EquipmentClient from './EquipmentClient'
 import Breadcrumbs from '@/components/Breadcrumbs'
+import StructuredData from '@/components/StructuredData'
+import HubIndex from '@/components/HubIndex'
 import { OG_IMAGE } from '@/lib/og'
 
 export const metadata: Metadata = {
@@ -35,9 +37,28 @@ export default async function EquipmentPage() {
   // Only fetches fields needed for preview cards (not full usage/tips/specifications)
   const equipment = await client.fetch(equipmentListQuery, {}, { next: { revalidate: 3600 } })
 
+  // ItemList of URL references only; the full Article schema lives on each
+  // equipment page. Publisher references the site-wide #organization node.
+  const itemListSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: 'Jerry Can Spirits Equipment Guides',
+    description: 'Bar equipment guides: shakers, strainers, measures, glassware and tools.',
+    url: 'https://jerrycanspirits.co.uk/field-manual/equipment/',
+    publisher: { '@id': 'https://jerrycanspirits.co.uk/#organization' },
+    numberOfItems: equipment.length,
+    itemListElement: equipment.map((item: { name: string; slug: { current: string } }, index: number) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      name: item.name,
+      url: `https://jerrycanspirits.co.uk/field-manual/equipment/${item.slug.current}/`,
+    })),
+  }
+
   // Pass data to Client Component for interactive UI
   return (
     <>
+      <StructuredData data={itemListSchema} id="equipment-itemlist-schema" />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 mb-8">
         <Breadcrumbs
           items={[
@@ -67,6 +88,13 @@ export default async function EquipmentPage() {
       <Suspense>
         <EquipmentClient equipment={equipment} />
       </Suspense>
+      <HubIndex
+        heading={`All ${equipment.length} equipment guides, A to Z`}
+        items={equipment.map((e: { name: string; slug: { current: string } }) => ({
+          name: e.name,
+          href: `/field-manual/equipment/${e.slug.current}/`,
+        }))}
+      />
     </>
   )
 }

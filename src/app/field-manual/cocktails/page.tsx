@@ -3,6 +3,7 @@ import { Suspense } from 'react'
 import { client } from '@/sanity/lib/client'
 import { cocktailsListQuery } from '@/sanity/queries'
 import CocktailsClient from './CocktailsClient'
+import HubIndex from '@/components/HubIndex'
 import Breadcrumbs from '@/components/Breadcrumbs'
 import StructuredData from '@/components/StructuredData'
 import { OG_IMAGE } from '@/lib/og'
@@ -60,6 +61,7 @@ export default async function CocktailsPage() {
     name: 'Jerry Can Spirits Cocktail Recipes',
     description: 'Rum cocktail recipes from classic serves to signature creations.',
     url: 'https://jerrycanspirits.co.uk/field-manual/cocktails/',
+    publisher: { '@id': 'https://jerrycanspirits.co.uk/#organization' },
     numberOfItems: cocktails.length,
     itemListElement: cocktails.map((cocktail, index) => ({
       '@type': 'ListItem',
@@ -102,6 +104,10 @@ export default async function CocktailsPage() {
       <Suspense>
         <CocktailsClient cocktails={cocktails} />
       </Suspense>
+      <HubIndex
+        heading={`All ${cocktails.length} cocktails, A to Z`}
+        items={cocktails.map((c) => ({ name: c.name, href: `/field-manual/cocktails/${c.slug.current}/` }))}
+      />
     </>
   )
 }
