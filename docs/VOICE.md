@@ -116,12 +116,12 @@ Confidence is a fact, stated plainly. These are the facts:
 - Veteran founded. Over 17 years of combined service in the Royal Corps of Signals.
 - 5% of profits to military charities.
 - Batch numbers on every bottle. Every batch traceable.
-- No artificial flavourings. Seven real botanicals, macerated.
+- No artificial flavourings. Seven real spices, two natural sweeteners, and bourbon oak for maturation. Macerated by our British partner distillery.
 - RRP £45.
 
 State them once, in context. An award mentioned once is a fact. Mentioned three times on one page it becomes hype.
 
-Seven is the botanical count, as grouped on the ingredients page. The nine-item flavour profile includes agave and bourbon oak, which are sweetening and maturation, not botanicals. The two lists are different on purpose; never conflate them.
+The ingredient grouping above is the standing formulation and matches the ingredients page exactly: seven spices (Madagascan vanilla, Ceylon cinnamon, Peruvian ginger, Spanish orange peel, Sri Lankan cloves, Guatemalan allspice, Indonesian cassia bark), two sweeteners (Mexican agave syrup, Sussex glucose syrup), bourbon barrel chips for maturation. Never state a bare "botanicals" count; count-only phrasing is what produced the seven/eight/nine confusion. The flavour profile describes taste and is a different list; never conflate the two.
 
 ---
 
