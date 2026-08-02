@@ -4,7 +4,7 @@ import { notFound } from 'next/navigation'
 import Image from 'next/image'
 import { getProduct, getProducts, getSmartRecommendations, type ShopifyProduct, type ShopifyMetafield } from '@/lib/shopify'
 import { GB_SHIPPING_DETAILS } from '@/lib/shippingSchema'
-import { productOffer, priceValidUntil, PRICE_VALID_FROM, productGtin, MERCHANT_RETURN_POLICY } from '@/lib/jsonLd'
+import { productOffer, priceValidUntil, PRICE_VALID_FROM, productGtin, MERCHANT_RETURN_POLICY, ORG_REF } from '@/lib/jsonLd'
 import { FREE_SHIPPING_THRESHOLD_GBP } from '@/lib/pricing'
 import ProductVariantSelector from '@/components/ProductVariantSelector'
 import ProductImageGallery from '@/components/ProductImageGallery'
@@ -414,25 +414,9 @@ export default async function ProductPage({
       validFrom: PRICE_VALID_FROM,
       shippingDetails: GB_SHIPPING_DETAILS,
       hasMerchantReturnPolicy: MERCHANT_RETURN_POLICY,
-      seller: {
-        '@type': 'Organization',
-        name: 'Jerry Can Spirits',
-        url: 'https://jerrycanspirits.co.uk',
-      },
+      seller: ORG_REF,
     }),
-    manufacturer: {
-      '@type': 'Organization',
-      name: 'Jerry Can Spirits Ltd',
-      url: 'https://jerrycanspirits.co.uk',
-      address: {
-        '@type': 'PostalAddress',
-        streetAddress: '167-169 Great Portland Street',
-        addressLocality: 'London',
-        addressRegion: 'Greater London',
-        postalCode: 'W1W 5PF',
-        addressCountry: 'GB',
-      },
-    },
+    manufacturer: ORG_REF,
     ...(AWARDED_HANDLES.includes(handle) && {
       award: PRODUCT_AWARDS.map((a) => a.schemaText),
     }),

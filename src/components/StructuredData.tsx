@@ -1,4 +1,4 @@
-import { safeJsonLd } from '@/lib/jsonLd'
+import { safeJsonLd, ORG_ID, ORG_REF, WEBSITE_ID, personId, personRef, authorRefFor } from '@/lib/jsonLd'
 
 interface StructuredDataProps {
   data: Record<string, unknown> | Record<string, unknown>[]
@@ -31,7 +31,7 @@ export function OrganizationSchema() {
     // Stable node identity so other schemas (hub ItemLists now, everything
     // else when the item-4 entity graph lands) reference this one node by
     // @id instead of inlining anonymous Organization copies.
-    '@id': 'https://jerrycanspirits.co.uk/#organization',
+    '@id': ORG_ID,
     name: 'Jerry Can Spirits',
     legalName: 'Jerry Can Spirits Ltd',
     url: 'https://jerrycanspirits.co.uk',
@@ -51,23 +51,57 @@ export function OrganizationSchema() {
       'https://www.facebook.com/jerrycanspirits',
       'https://www.instagram.com/jerrycanspirits',
     ],
-    founders: [
-      {
-        '@type': 'Person',
-        name: 'Dan Freeman',
-        alumniOf: { '@type': 'Organization', name: 'Royal Corps of Signals' },
-      },
-      {
-        '@type': 'Person',
-        name: 'Rhys Williams',
-        alumniOf: { '@type': 'Organization', name: 'Royal Corps of Signals' },
-      },
-    ],
+    // Carried over from the home page's duplicate Organization node when that
+    // was removed, so consolidating the graph loses nothing.
+    contactPoint: {
+      '@type': 'ContactPoint',
+      contactType: 'Customer Service',
+      telephone: '+44 7521 220541',
+      email: 'hello@jerrycanspirits.co.uk',
+    },
+    // References, not copies: the full Person definitions are emitted once by
+    // FounderSchemas below. `founder` is the current schema.org property;
+    // `founders` is its superseded alias, so only `founder` is emitted.
+    founder: FOUNDERS.map((f) => personRef(f.slug)),
     knowsAbout: ['Premium Rum', 'British Spirits', 'Military Heritage', 'Veteran-Owned Business'],
     award: 'Armed Forces Covenant Signatory',
   }
 
   return <StructuredData data={schema} id="organization-schema" />
+}
+
+// The founders, defined once site-wide. Every other reference to them is an
+// @id pointer. Sanity `person` documents are the editorial source for bios and
+// sameAs; until those are populated the canonical facts live here, matching
+// what the team pages already state.
+const FOUNDERS = [
+  {
+    slug: 'dan-freeman',
+    name: 'Dan Freeman',
+    jobTitle: 'Founder & Director',
+  },
+  {
+    slug: 'rhys-williams',
+    name: 'Rhys Williams',
+    jobTitle: 'Co-Founder & Director',
+  },
+] as const
+
+export function FounderSchemas() {
+  const schema = FOUNDERS.map((f) => ({
+    '@context': 'https://schema.org',
+    '@type': 'Person',
+    '@id': personId(f.slug),
+    name: f.name,
+    jobTitle: f.jobTitle,
+    url: `https://jerrycanspirits.co.uk/about/team/${f.slug}/`,
+    worksFor: ORG_REF,
+    // A genuinely different organisation, so this one stays a real object
+    // rather than an @id reference into our own graph.
+    alumniOf: { '@type': 'Organization', name: 'Royal Corps of Signals, British Army' },
+  }))
+
+  return <StructuredData data={schema} id="founder-schema" />
 }
 
 // Website Schema. No SearchAction: Google retired the sitelinks search box
@@ -78,8 +112,10 @@ export function WebsiteSchema() {
   const schema = {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
+    '@id': WEBSITE_ID,
     name: 'Jerry Can Spirits',
     url: 'https://jerrycanspirits.co.uk',
+    publisher: ORG_REF,
   }
 
   return <StructuredData data={schema} id="website-schema" />
@@ -103,7 +139,7 @@ export function ArticleSchema({
   url,
   publishedAt,
   updatedAt,
-  author = 'Jerry Can Spirits',
+  author,
   imageUrl,
   wordCount
 }: ArticleSchemaProps) {
@@ -115,20 +151,11 @@ export function ArticleSchema({
     url: url,
     datePublished: publishedAt,
     dateModified: updatedAt || publishedAt,
-    author: {
-      '@type': 'Organization',
-      name: author,
-      url: 'https://jerrycanspirits.co.uk'
-    },
-    publisher: {
-      '@type': 'Organization',
-      name: 'Jerry Can Spirits',
-      url: 'https://jerrycanspirits.co.uk',
-      logo: {
-        '@type': 'ImageObject',
-        url: 'https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/images-logo-webp/public'
-      }
-    },
+    // A named author resolves to that Person's node; anything else is the
+    // Organization. Editorial written by a founder carries their credentials;
+    // curated reference material is correctly attributed to the company.
+    author: authorRefFor(author),
+    publisher: ORG_REF,
     ...(imageUrl && {
       image: {
         '@type': 'ImageObject',

@@ -15,6 +15,7 @@ import PressAwards from "@/components/PressAwards";
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import { baseOpenGraph, OG_IMAGE } from '@/lib/og'
+import { BASE_URL } from '@/lib/jsonLd'
 
 export const revalidate = 60
 
@@ -53,84 +54,20 @@ export default function Home() {
     }
   )
 
-  // Structured data for SEO
+  // Structured data for SEO.
+  //
+  // The Organization and WebSite nodes that used to live here were byte-for-byte
+  // duplicates of the ones the root layout already emits on every page, so this
+  // page shipped two of each and a consumer had no way to know they described
+  // one company. Both are now defined once in the layout; the home page adds
+  // only what is specific to it. No LocalBusiness node: it asserts a physical
+  // premises customers can visit, which a DTC brand does not have, and a street
+  // address in structured data sits too close to implying place of production.
   const structuredData = [
-    // Organization schema
-    {
-      "@context": "https://schema.org",
-      "@type": "Organization",
-      "name": "Jerry Can Spirits",
-      "url": "https://jerrycanspirits.co.uk",
-      "logo": "https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/images-logo-webp/public",
-      "description": "Veteran-owned British craft spirits with authentic military heritage. Founded by Royal Corps of Signals veterans. Small-batch spirits engineered for reliability, designed for adventure.",
-      "foundingDate": "2025",
-      "founders": [
-        {
-          "@type": "Person",
-          "name": "Dan Freeman",
-          "alumniOf": {
-            "@type": "Organization",
-            "name": "Royal Corps of Signals"
-          },
-          "hasOccupation": {
-            "@type": "Occupation",
-            "name": "British Armed Forces Veteran"
-          }
-        },
-        {
-          "@type": "Person",
-          "name": "Rhys Williams",
-          "alumniOf": {
-            "@type": "Organization",
-            "name": "Royal Corps of Signals"
-          },
-          "hasOccupation": {
-            "@type": "Occupation",
-            "name": "British Armed Forces Veteran"
-          }
-        }
-      ],
-      "address": {
-        "@type": "PostalAddress",
-        "streetAddress": "167-169 Great Portland Street",
-        "addressLocality": "London",
-        "addressRegion": "Greater London",
-        "postalCode": "W1W 5PF",
-        "addressCountry": "GB"
-      },
-      "sameAs": [
-        "https://www.facebook.com/jerrycanspirits",
-        "https://www.instagram.com/jerrycanspirits"
-      ],
-      "contactPoint": {
-        "@type": "ContactPoint",
-        "contactType": "Customer Service",
-        "telephone": "+44 7521 220541",
-        "email": "hello@jerrycanspirits.co.uk"
-      },
-      "knowsAbout": ["Premium Spiced Rum", "British Spirits", "Military Heritage", "Veteran-Owned Business", "Military Rum"],
-      "award": "Armed Forces Covenant Signatory"
-    },
-    // No LocalBusiness node: it asserts a physical premises customers can
-    // visit, which a DTC brand does not have, and a street address in
-    // structured data sits too close to implying place of production.
-    // Organization + WebSite is the correct pairing for this site.
-    // Website schema
-    {
-      "@context": "https://schema.org",
-      "@type": "WebSite",
-      "name": "Jerry Can Spirits",
-      "url": "https://jerrycanspirits.co.uk",
-      "description": "Veteran-owned British craft spirits - Engineered for reliability, designed for adventure. Expedition Ready.",
-      "publisher": {
-        "@type": "Organization",
-        "name": "Jerry Can Spirits"
-      }
-    },
-    // Brand schema
     {
       "@context": "https://schema.org",
       "@type": "Brand",
+      "@id": `${BASE_URL}/#brand`,
       "name": "Jerry Can Spirits",
       "logo": "https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/images-logo-webp/public",
       "slogan": "Engineered for reliability, designed for adventure",
@@ -199,7 +136,7 @@ export default function Home() {
                     We didn't set out to start a spirits company. Between us, we served 17 years in the Royal Corps of Signals. What we wanted was simple: a proper drink to share with mates - something with character, made by people who give a damn. When we couldn't find it, we decided to make it ourselves.
                   </p>
                   <p>
-                    We blend Caribbean rum at our British partner distillery. The result? Vanilla and caramel upfront, warm spice through the middle, and a finish smooth enough to sip neat - but bold enough to hold its own in a cocktail.
+                    Caribbean rum, macerated by our British partner distillery. The result? Vanilla and caramel upfront, warm spice through the middle, and a finish smooth enough to sip neat - but bold enough to hold its own in a cocktail.
                   </p>
                   <p>
                     Mixing drinks or unwinding after a long week, this is rum that doesn't let you down. We built it that way on purpose.{' '}

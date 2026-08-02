@@ -15,6 +15,7 @@ import { notFound } from 'next/navigation'
 import { getCloudflareContext } from '@opennextjs/cloudflare'
 import { sanityOgUrl } from '@/sanity/lib/image'
 import { OG_IMAGE_COCKTAIL } from '@/lib/og'
+import { ORG_REF } from '@/lib/jsonLd'
 
 // Hourly ISR: the old ratings lookup was an HTTP fetch with an hourly cache,
 // which also refreshed the page. The direct KV read below has no cache of its
@@ -247,19 +248,11 @@ export default async function CocktailPage({ params }: PageProps) {
       "url": `https://jerrycanspirits.co.uk/field-manual/cocktails/${slug}/#step-${index + 1}`,
       "image": sanityOgUrl(cocktail.image) || "https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/images-logo-webp/public"
     })) || [],
-    "author": {
-      "@type": cocktail.author && cocktail.author !== 'Jerry Can Spirits' ? "Person" : "Organization",
-      "name": cocktail.author || "Jerry Can Spirits",
-      "url": "https://jerrycanspirits.co.uk"
-    },
-    "publisher": {
-      "@type": "Organization",
-      "name": "Jerry Can Spirits",
-      "logo": {
-        "@type": "ImageObject",
-        "url": "https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/images-logo-webp/public"
-      }
-    },
+    // Always the Organization. These are curated classics we did not write, so
+    // claiming authorship of the Bee's Knees would be false. The previous
+    // conditional also emitted a Person whose url pointed at our own site.
+    "author": ORG_REF,
+    "publisher": ORG_REF,
     "datePublished": cocktail._createdAt,
     "prepTime": prepTime,
     "totalTime": prepTime,

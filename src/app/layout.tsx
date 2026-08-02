@@ -8,7 +8,7 @@ import { LazyCartDrawer, LazySocialProofToast } from "@/components/ClientLazy";
 import ServiceWorkerRegistration from "@/components/ServiceWorkerRegistration";
 import InstallPrompt from "@/components/InstallPrompt";
 import { CartProvider } from "@/contexts/CartContext";
-import { OrganizationSchema, WebsiteSchema } from "@/components/StructuredData";
+import { OrganizationSchema, WebsiteSchema, FounderSchemas } from "@/components/StructuredData";
 import FacebookPixel, { PixelPageView } from "@/components/FacebookPixel";
 import GoogleTag from "@/components/GoogleTag";
 import KlaviyoScript from "@/components/KlaviyoScript";
@@ -151,6 +151,7 @@ export default function RootLayout({
         <InstallPrompt />
         <OrganizationSchema />
         <WebsiteSchema />
+        <FounderSchemas />
         <FacebookPixel />
         <PixelPageView />
         <GoogleTag />

@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import StructuredData from '@/components/StructuredData'
 import { baseOpenGraph } from '@/lib/og'
+import { ORG_REF } from '@/lib/jsonLd'
 
 // WebPage schema for terms of service
 const webPageSchema = {
@@ -9,11 +10,7 @@ const webPageSchema = {
   name: 'Terms of Service',
   description: 'Jerry Can Spirits® Terms of Service and conditions of use. Legal terms governing the use of our website and purchase of our premium spirits.',
   url: 'https://jerrycanspirits.co.uk/terms-of-service/',
-  publisher: {
-    '@type': 'Organization',
-    name: 'Jerry Can Spirits',
-    url: 'https://jerrycanspirits.co.uk',
-  },
+  publisher: ORG_REF,
   inLanguage: 'en-GB',
   isPartOf: {
     '@type': 'WebSite',

@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import Image from 'next/image'
 import { baseOpenGraph } from '@/lib/og'
-import { safeJsonLd } from '@/lib/jsonLd'
+import { safeJsonLd, ORG_REF } from '@/lib/jsonLd'
 
 export const metadata: Metadata = {
   title: 'Armed Forces Covenant',
@@ -28,20 +28,8 @@ const articleSchema = {
   description: 'Veteran-owned British spirits company, committed to the Armed Forces Covenant. Supporting serving personnel, veterans, and their families.',
   url: 'https://jerrycanspirits.co.uk/armed-forces-covenant/',
   image: 'https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/images-afc_banner__png_-png/public',
-  author: {
-    '@type': 'Organization',
-    name: 'Jerry Can Spirits',
-    url: 'https://jerrycanspirits.co.uk',
-  },
-  publisher: {
-    '@type': 'Organization',
-    name: 'Jerry Can Spirits',
-    url: 'https://jerrycanspirits.co.uk',
-    logo: {
-      '@type': 'ImageObject',
-      url: 'https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/images-logo-webp/public',
-    },
-  },
+  author: ORG_REF,
+  publisher: ORG_REF,
   datePublished: '2025-09-16',
   dateModified: '2025-09-16',
   mainEntityOfPage: {

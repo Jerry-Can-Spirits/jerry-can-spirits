@@ -5,6 +5,7 @@ import CartographicBackground from '@/components/CartographicBackground'
 import Breadcrumbs from '@/components/Breadcrumbs'
 import StructuredData from '@/components/StructuredData'
 import { OG_IMAGE } from '@/lib/og'
+import { ORG_REF } from '@/lib/jsonLd'
 
 // Person schema for co-founder profile
 const personSchema = {
@@ -14,11 +15,7 @@ const personSchema = {
   jobTitle: 'Co-Founder & Director',
   url: 'https://jerrycanspirits.co.uk/about/team/rhys-williams/',
   description: 'Royal Signals veteran, Formula One telecommunications specialist, and co-founder of Jerry Can Spirits.',
-  worksFor: {
-    '@type': 'Organization',
-    name: 'Jerry Can Spirits',
-    url: 'https://jerrycanspirits.co.uk',
-  },
+  worksFor: ORG_REF,
   alumniOf: {
     '@type': 'Organization',
     name: 'Royal Corps of Signals, British Army',

@@ -18,6 +18,51 @@ export function safeJsonLd(data: unknown): string {
   return JSON.stringify(data).replace(/</g, '\\u003c')
 }
 
+/**
+ * The entity graph.
+ *
+ * Every page previously inlined its own anonymous copy of the Organization
+ * (five to seven per page), so a consumer had no way to know they described
+ * one company rather than several. These are the canonical node identities:
+ * the full definitions live once each, in the root layout, and every other
+ * reference is an @id pointer to them.
+ *
+ * Use ORG_REF / WEBSITE_REF / personRef() wherever a schema needs an author,
+ * publisher, seller, manufacturer, founder or employer. Never re-inline a
+ * Jerry Can Spirits Organization object.
+ *
+ * Not covered by this: `alumniOf: Royal Corps of Signals`. That is a genuinely
+ * different organisation and stays inline.
+ */
+export const BASE_URL = 'https://jerrycanspirits.co.uk'
+export const ORG_ID = `${BASE_URL}/#organization`
+export const WEBSITE_ID = `${BASE_URL}/#website`
+
+export const ORG_REF = { '@id': ORG_ID } as const
+export const WEBSITE_REF = { '@id': WEBSITE_ID } as const
+
+// Founders are identified by the slug of their team page, so the @id is stable
+// and dereferenceable: .../about/team/dan-freeman/#person
+export function personId(slug: string): string {
+  return `${BASE_URL}/about/team/${slug}/#person`
+}
+export function personRef(slug: string): { '@id': string } {
+  return { '@id': personId(slug) }
+}
+
+// Name -> team-page slug, for the guide author field which stores a display
+// name. Anything not listed is not a known person and falls back to the
+// Organization as author.
+export const TEAM_SLUGS: Record<string, string> = {
+  'Dan Freeman': 'dan-freeman',
+  'Rhys Williams': 'rhys-williams',
+}
+
+export function authorRefFor(name: string | null | undefined): { '@id': string } {
+  const slug = name ? TEAM_SLUGS[name] : undefined
+  return slug ? personRef(slug) : ORG_REF
+}
+
 // Twelve months out, computed when the page builds or regenerates, so the
 // offer can never carry an expired date. The previous hardcoded literals went
 // stale the day the Expedition Spiced Rum RRP changed, and an expired

@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import StructuredData from '@/components/StructuredData'
 import { baseOpenGraph } from '@/lib/og'
+import { ORG_REF } from '@/lib/jsonLd'
 
 // WebPage schema for cookie policy
 const webPageSchema = {
@@ -9,11 +10,7 @@ const webPageSchema = {
   name: 'Cookie Policy',
   description: 'Learn about how Jerry Can Spirits uses cookies to enhance your browsing experience and protect your privacy. Manage your cookie preferences.',
   url: 'https://jerrycanspirits.co.uk/cookie-policy/',
-  publisher: {
-    '@type': 'Organization',
-    name: 'Jerry Can Spirits',
-    url: 'https://jerrycanspirits.co.uk',
-  },
+  publisher: ORG_REF,
   inLanguage: 'en-GB',
   isPartOf: {
     '@type': 'WebSite',

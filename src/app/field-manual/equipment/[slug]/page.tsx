@@ -13,6 +13,7 @@ import StructuredData from '@/components/StructuredData'
 import RelatedCocktailsList from '@/components/RelatedCocktailsList'
 import RelatedGuidesList, { type GuideLink } from '@/components/RelatedGuidesList'
 import { OG_IMAGE_COCKTAIL } from '@/lib/og'
+import { ORG_REF } from '@/lib/jsonLd'
 
 // Types for equipment data
 interface Equipment {
@@ -144,12 +145,8 @@ export default async function EquipmentDetailPage({ params }: { params: Promise<
     description: equipment.description,
     image: equipment.image ? urlFor(equipment.image).url() : undefined,
     datePublished: equipment._createdAt,
-    author: { '@type': 'Organization', name: 'Jerry Can Spirits', url: 'https://jerrycanspirits.co.uk' },
-    publisher: {
-      '@type': 'Organization',
-      name: 'Jerry Can Spirits',
-      logo: { '@type': 'ImageObject', url: 'https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/images-logo-webp/public' },
-    },
+    author: ORG_REF,
+    publisher: ORG_REF,
     mainEntityOfPage: { '@type': 'WebPage', '@id': `https://jerrycanspirits.co.uk/field-manual/equipment/${slug}/` },
   }
 
