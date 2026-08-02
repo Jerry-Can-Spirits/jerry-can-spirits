@@ -191,6 +191,14 @@ const nextConfig: NextConfig = {
   // Redirects for URL structure changes and removed content
   async redirects() {
     return [
+      // The orphaned pre-launch bottle passport presented batch-001 origin
+      // information as general brand fact. Superseded by the batch pages;
+      // any printed QR code pointing at it lands on the batch 001 page.
+      {
+        source: '/passport.html',
+        destination: '/batch/001/',
+        permanent: true,
+      },
       // Pour IQ is a separate company; these redirects (and the privacy-policy
       // §3.5 and terms-of-service trademark notice) are HELD until the
       // corporate separation completes — do not remove them piecemeal.
