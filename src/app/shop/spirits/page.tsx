@@ -46,7 +46,7 @@ export const revalidate = 3600
 const spiritsFaqs: Array<{ question: string; answer: string; rich?: ReactNode }> = [
   {
     question: 'What is spiced rum?',
-    answer: 'Spiced rum is rum infused with real spices and botanicals. Our Expedition Spiced Rum uses Madagascan vanilla, Ceylon cinnamon, ginger, orange peel, cloves, and cassia bark, steeped slowly in Caribbean rum and sweetened naturally with agave. Unlike artificial-tasting rums, we use real ingredients to create depth and complexity.',
+    answer: 'Spiced rum is rum macerated with real spices. Our Expedition Spiced Rum uses seven: Madagascan vanilla, Ceylon cinnamon, Peruvian ginger, Spanish orange peel, Sri Lankan cloves, Guatemalan allspice and Indonesian cassia bark, macerated in Caribbean rum and sweetened naturally with Mexican agave. Unlike artificial-tasting rums, we use real ingredients to create depth and complexity.',
   },
   {
     question: 'How should I drink spiced rum?',
@@ -59,7 +59,7 @@ const spiritsFaqs: Array<{ question: string; answer: string; rich?: ReactNode }>
   },
   {
     question: "What does 'small-batch' actually mean?",
-    answer: "For us, it means limited, numbered batches: Batch 001 was 700 bottles for general release. It's not a marketing term. When a batch sells out, that specific run is gone. We can make more, but each batch has subtle variations.",
+    answer: "For us, it means small, numbered batches. It's not a marketing term. When a batch sells out, that specific run is gone. We can make more, but each batch has subtle variations.",
   },
   {
     question: 'Is Jerry Can Spirits rum vegan?',
@@ -214,7 +214,7 @@ export default async function SpiritsPage() {
 
           <div className="max-w-3xl mx-auto space-y-4 text-left">
             <p className="text-xl text-parchment-300 leading-relaxed">
-              A spirits house starts with one bottle it can stand behind. Ours is Expedition Spiced Rum: Caribbean rum base, seven real botanicals, no artificial flavourings. Bronze at the IWSC 2026, with a Silver for the serve with Franklin and Sons cola.
+              A spirits house starts with one bottle it can stand behind. Ours is Expedition Spiced Rum: Caribbean rum base: seven real spices, two natural sweeteners, and bourbon oak for maturation. No artificial flavourings. Bronze at the IWSC 2026, with a Silver for the serve with Franklin and Sons cola.
             </p>
             <p className="text-lg text-parchment-400 leading-relaxed">
               Macerated by our British partner distillery in limited, numbered batches. When a batch is gone, that run is finished. Two Royal Corps of Signals veterans. 17 years of service between us. The same standards applied here.

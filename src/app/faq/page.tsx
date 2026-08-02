@@ -32,7 +32,7 @@ const faqs = [
   },
   {
     question: "What type of rum do you produce?",
-    answer: "We make one product: Expedition Spiced Rum. A spiced rum, 40% ABV, macerated with real botanicals by our British partner distillery. Works neat, over ice, or in cocktails."
+    answer: "We make one product: Expedition Spiced Rum. A spiced rum, 40% ABV, macerated with real spices by our British partner distillery. Works neat, over ice, or in cocktails."
   },
   {
     question: "What is the alcohol content (ABV) of your rum?",

@@ -23,7 +23,7 @@ export const BARTENDER_GUIDES: Record<VenueSlug, BartenderGuide> = {
     venue_slug: 'pub',
     venue_label: 'Traditional pub edition',
     what_it_is:
-      'A spiced rum macerated with real ingredients. Vanilla, cinnamon, allspice, clove, orange peel, cassia, ginger, agave, bourbon oak. Caribbean rum base, 40% ABV. No artificial flavourings, no essences. Properly built, not factory-flavoured.',
+      'A spiced rum macerated with seven real spices: vanilla, cinnamon, allspice, clove, orange peel, cassia, ginger. Sweetened with agave, finished on bourbon oak. Caribbean rum base, 40% ABV. No artificial flavourings, no essences. Properly built, not factory-flavoured.',
     serves: [
       {
         heading: 'Your default serve',
@@ -69,7 +69,7 @@ export const BARTENDER_GUIDES: Record<VenueSlug, BartenderGuide> = {
     venue_slug: 'cocktail-bar',
     venue_label: 'Cocktail bar edition',
     what_it_is:
-      'A spiced rum macerated with real ingredients. Vanilla, cinnamon, allspice, clove, orange peel, cassia, ginger, agave. Finished on bourbon oak. Caribbean rum base, 40% ABV. No essences. No artificial flavourings. Macerated by our British partner distillery.',
+      'A spiced rum macerated with seven real spices: vanilla, cinnamon, allspice, clove, orange peel, cassia, ginger. Sweetened with agave. Finished on bourbon oak. Caribbean rum base, 40% ABV. No essences. No artificial flavourings. Macerated by our British partner distillery.',
     serves: [
       {
         heading: 'Lead with this',

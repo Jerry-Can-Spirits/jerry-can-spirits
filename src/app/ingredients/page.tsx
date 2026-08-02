@@ -35,7 +35,7 @@ const products = [
   {
     name: 'Expedition Spiced Rum',
     slug: 'expedition-spiced-rum',
-    description: 'Our flagship spiced rum. Caribbean rum base infused with Madagascan vanilla, Ceylon cinnamon, ginger, orange peel, cloves, allspice, cassia bark, agave, and glucose syrup.',
+    description: 'Our flagship spiced rum. Caribbean rum base: seven real spices, two natural sweeteners, and bourbon oak for maturation.',
     bottle: '700ml',
     alcohol: '40%',
   },

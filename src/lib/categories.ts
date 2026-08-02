@@ -35,7 +35,7 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
     seoTitle: 'What Makes Expedition Spiced Rum a Proper Rum Gift',
     seoBody: [
       'A rum gift lands differently when it is chosen properly. Not a novelty bottle with a generic label. Not something grabbed from the supermarket shelf because it looked like it might be premium. Expedition Spiced Rum is a gift that says something about the person who gave it.',
-      'Seven real botanicals, no artificial flavourings, macerated by our British partner distillery. Every bottle is numbered and traceable to its batch. The IWSC gave the rum Bronze and the cola serve Silver in 2026. Judged, not claimed.',
+      'Seven real spices, two natural sweeteners, and bourbon oak for maturation. No artificial flavourings, macerated by our British partner distillery. Every bottle is numbered and traceable to its batch. The IWSC gave the rum Bronze and the cola serve Silver in 2026. Judged, not claimed.',
       'It is veteran-owned. Bootstrapped. No hidden investors, no shortcuts. 5% of profits goes to forces charities. This is the kind of brand people feel good about buying from. And when the person receiving it looks it up, they will understand why you chose it.',
     ],
     pillars: [
@@ -52,8 +52,8 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
       'Small-batch British spiced rum, macerated by our British partner distillery. Real spices, no artificial flavourings. Veteran-owned, British.',
     introBody: [
       'Most spiced rum is made to a formula. Base spirit, artificial flavourings, a label that leans on nostalgia. The result is consistent, inoffensive, and forgettable.',
-      'Expedition Spiced Rum is built differently. Caribbean rum base and a hand-selected blend of seven botanicals: Madagascan vanilla, Ceylon cinnamon, allspice, ginger root, cassia bark, clove, and orange peel. No artificial flavourings. Nothing that does not belong there.',
-      'It is macerated by our British partner distillery. Batch 001 was 700 numbered bottles for general release, and every batch is a numbered, finite run: when it is gone, that run is finished. Each batch has the kind of subtle variation that comes from doing things properly rather than at industrial scale.',
+      'Expedition Spiced Rum is built differently. Caribbean rum base and a hand-selected blend of seven real spices: Madagascan vanilla, Ceylon cinnamon, Guatemalan allspice, Peruvian ginger, Indonesian cassia bark, Sri Lankan cloves, and Spanish orange peel. No artificial flavourings. Nothing that does not belong there.',
+      'It is macerated by our British partner distillery. Every batch is a numbered, finite run: when it is gone, that run is finished. Each batch has the kind of subtle variation that comes from doing things properly rather than at industrial scale.',
       'We are two Royal Corps of Signals veterans. We built this because we could not find what we wanted on the shelf. 17 years of service between us, and the same standards applied here.',
       '40% ABV. 700ml. Built to be sipped, not mixed and forgotten.',
     ],
@@ -149,7 +149,7 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
     seoTitle: 'Not a Generic Gift. A Bottle Worth Noticing.',
     seoBody: [
       'The best gifts for him do not need to be explained. They communicate something clearly. Expedition Spiced Rum is a 700ml statement. The packaging is considered. The name has a story behind it. The rum inside is made properly.',
-      'Seven real botanicals, no artificial flavourings, macerated by our British partner distillery. Built by two Royal Corps of Signals veterans who could not find what they wanted on the shelf. Every bottle numbered.',
+      'Seven real spices, two natural sweeteners, and bourbon oak for maturation. Macerated by our British partner distillery. Built by two Royal Corps of Signals veterans who could not find what they wanted on the shelf. Every bottle numbered.',
       'He will either drink it properly and appreciate every detail of it, or he will put it somewhere visible and people will ask about it. Either outcome works.',
     ],
     pillars: [
@@ -174,14 +174,14 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
       'Rum gifts for women who take their drink seriously. Small-batch British spiced rum, real ingredients, no shortcuts. 5% of profits to forces charities.',
     introBody: [
       'The assumption that a rum gift for her should be softer, sweeter, or less serious is wrong. Expedition Spiced Rum does not adjust for the recipient.',
-      'Caribbean rum base, seven real botanicals, no artificial flavourings, 40% ABV. Vanilla opens first, cinnamon and ginger come through the middle, bourbon oak holds the finish.',
+      'Caribbean rum base: seven real spices, two natural sweeteners, and bourbon oak for maturation. 40% ABV. Vanilla opens first, cinnamon and ginger come through the middle, bourbon oak holds the finish.',
       'It is for the woman who drinks properly. Who takes her time. Who would rather have one good bottle than three forgettable ones.',
       'Veteran-owned and self-funded. 5% of profits goes to forces charities.',
     ],
     seoTitle: 'A Rum Gift for the Person Who Drinks Properly.',
     seoBody: [
       'Expedition Spiced Rum does not adjust for the recipient. The spice blend is the same. The process is the same. The 40% ABV is the same. This is a rum built for people who take their drink seriously, regardless of who is pouring it.',
-      'Seven real botanicals, macerated by our British partner distillery, every bottle numbered. One bottle, made properly, no concessions.',
+      'Seven real spices, two natural sweeteners, and bourbon oak for maturation. Macerated by our British partner distillery, every bottle numbered. One bottle, made properly, no concessions.',
       'Most rum gifts for women are picked from the softer shelf. This one is picked because it is good. That is the whole criterion.',
     ],
     pillars: [
