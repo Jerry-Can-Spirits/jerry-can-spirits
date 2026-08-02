@@ -1,0 +1,268 @@
+{
+  "version": 2,
+  "notes": "Fixed question set for the monthly AI citation eval. Edit freely: the runner reads ids, so keep ids stable when rewording, and only add new ids for genuinely new questions. target_url is the page we would want cited; null where no single page owns the answer. Band e is the control set: we do not expect citations there today.",
+  "questions": [
+    {
+      "id": "a01",
+      "band": "brand-direct",
+      "question": "Who makes Expedition Spiced Rum?",
+      "target_url": "https://jerrycanspirits.co.uk/about/story/"
+    },
+    {
+      "id": "a02",
+      "band": "brand-direct",
+      "question": "What is in Expedition Spiced Rum?",
+      "target_url": "https://jerrycanspirits.co.uk/ingredients/expedition-spiced-rum/"
+    },
+    {
+      "id": "a03",
+      "band": "brand-direct",
+      "question": "Where is Expedition Spiced Rum made?",
+      "target_url": null,
+      "notes": "No page on the site answers this directly, deliberately. That vacuum is why the engines keep assembling an answer of their own. Highest-risk question in the set: pre-deploy readings returned pot-distilled in Wales."
+    },
+    {
+      "id": "a04",
+      "band": "brand-direct",
+      "question": "Has Jerry Can Spirits won any awards for its rum?",
+      "target_url": "https://jerrycanspirits.co.uk/shop/product/jerry-can-spirits-expedition-spiced-rum/"
+    },
+    {
+      "id": "a05",
+      "band": "brand-direct",
+      "question": "What ABV is Expedition Spiced Rum and what does a bottle cost?",
+      "target_url": "https://jerrycanspirits.co.uk/shop/product/jerry-can-spirits-expedition-spiced-rum/"
+    },
+    {
+      "id": "a06",
+      "band": "brand-direct",
+      "question": "Is Jerry Can Spirits a veteran-owned company?",
+      "target_url": "https://jerrycanspirits.co.uk/about/story/"
+    },
+    {
+      "id": "a07",
+      "band": "brand-direct",
+      "question": "Is Expedition Spiced Rum vegan and gluten free?",
+      "target_url": "https://jerrycanspirits.co.uk/faq/"
+    },
+    {
+      "id": "a08",
+      "band": "brand-direct",
+      "question": "Does Jerry Can Spirits donate any of its profits to charity?",
+      "target_url": "https://jerrycanspirits.co.uk/giving/"
+    },
+    {
+      "id": "a09",
+      "band": "brand-direct",
+      "question": "Which spirits brands are veteran owned?",
+      "target_url": "https://jerrycanspirits.co.uk/about/story/",
+      "notes": "Moved out of the control set: we are likely to appear here already via Trust a Veteran and the Armed Forces Covenant footprint, which makes it a poor control but a good brand-direct probe."
+    },
+    {
+      "id": "a10",
+      "band": "brand-direct",
+      "question": "Is Expedition Spiced Rum Welsh?",
+      "target_url": null,
+      "notes": "Factual-flag trap. Invites the stale association directly so we can watch it clear. No page answers this; a correct answer is British small batches with no place claim."
+    },
+    {
+      "id": "a11",
+      "band": "brand-direct",
+      "question": "How much does a bottle of Expedition Spiced Rum cost?",
+      "target_url": "https://jerrycanspirits.co.uk/shop/product/jerry-can-spirits-expedition-spiced-rum/",
+      "notes": "Isolated from a05 on purpose: Shopify still shows GBP 35 against the GBP 45 RRP, so a wrong price in an engine may trace to a feed rather than the page."
+    },
+    {
+      "id": "b01",
+      "band": "category",
+      "question": "What is the difference between dark rum and spiced rum?",
+      "target_url": "https://jerrycanspirits.co.uk/guides/dark-rum-vs-spiced-rum/"
+    },
+    {
+      "id": "b02",
+      "band": "category",
+      "question": "Where is spiced rum made?",
+      "target_url": "https://jerrycanspirits.co.uk/guides/where-is-spiced-rum-made/",
+      "notes": "High risk for factual_flags, not ordinary category content: engines conflate it with a03, and this is the guide that until this week featured the former producer."
+    },
+    {
+      "id": "b03",
+      "band": "category",
+      "question": "What is Black Tot Day and why does it matter in rum history?",
+      "target_url": "https://jerrycanspirits.co.uk/guides/black-tot-day/"
+    },
+    {
+      "id": "b04",
+      "band": "category",
+      "question": "What is the difference between rum, rhum and ron?",
+      "target_url": "https://jerrycanspirits.co.uk/guides/rum-rhum-or-ron/"
+    },
+    {
+      "id": "b05",
+      "band": "category",
+      "question": "How do you read a rum label and what do the claims on it actually mean?",
+      "target_url": "https://jerrycanspirits.co.uk/guides/how-to-read-a-rum-label/"
+    },
+    {
+      "id": "b06",
+      "band": "category",
+      "question": "What is the difference between ABV and proof?",
+      "target_url": "https://jerrycanspirits.co.uk/guides/abv-vs-proof-explained/"
+    },
+    {
+      "id": "b07",
+      "band": "category",
+      "question": "How do you taste rum properly?",
+      "target_url": "https://jerrycanspirits.co.uk/guides/how-to-taste-rum/"
+    },
+    {
+      "id": "b08",
+      "band": "category",
+      "question": "Is British rum any good, and who is making it?",
+      "target_url": "https://jerrycanspirits.co.uk/guides/british-rum-renaissance/"
+    },
+    {
+      "id": "b09",
+      "band": "category",
+      "question": "What glassware do I actually need for making cocktails at home?",
+      "target_url": "https://jerrycanspirits.co.uk/guides/glassware-guide/"
+    },
+    {
+      "id": "b10",
+      "band": "category",
+      "question": "What do I need to set up a home bar from scratch?",
+      "target_url": "https://jerrycanspirits.co.uk/guides/essential-home-bar-setup/"
+    },
+    {
+      "id": "c01",
+      "band": "ingredient-technique",
+      "question": "When should you shake a cocktail and when should you stir it?",
+      "target_url": "https://jerrycanspirits.co.uk/guides/stirring-vs-shaking/"
+    },
+    {
+      "id": "c02",
+      "band": "ingredient-technique",
+      "question": "How long should you shake a cocktail for?",
+      "target_url": "https://jerrycanspirits.co.uk/guides/how-to-shake-cocktail/"
+    },
+    {
+      "id": "c03",
+      "band": "ingredient-technique",
+      "question": "What ratio do you use to make simple syrup for cocktails?",
+      "target_url": "https://jerrycanspirits.co.uk/field-manual/ingredients/simple-syrup/"
+    },
+    {
+      "id": "c04",
+      "band": "ingredient-technique",
+      "question": "Does it matter if you use fresh lemon juice in cocktails instead of bottled?",
+      "target_url": "https://jerrycanspirits.co.uk/field-manual/ingredients/fresh-lemon-juice/"
+    },
+    {
+      "id": "c05",
+      "band": "ingredient-technique",
+      "question": "What is demerara syrup and when should you use it instead of simple syrup?",
+      "target_url": "https://jerrycanspirits.co.uk/field-manual/ingredients/demerara-syrup/"
+    },
+    {
+      "id": "c06",
+      "band": "ingredient-technique",
+      "question": "How do you make honey syrup for cocktails?",
+      "target_url": "https://jerrycanspirits.co.uk/field-manual/ingredients/honey-syrup/"
+    },
+    {
+      "id": "c07",
+      "band": "ingredient-technique",
+      "question": "What does Angostura bitters actually do in a cocktail?",
+      "target_url": "https://jerrycanspirits.co.uk/field-manual/ingredients/angostura-bitters/"
+    },
+    {
+      "id": "c08",
+      "band": "ingredient-technique",
+      "question": "What is the difference between white rum and aged rum in cocktails?",
+      "target_url": "https://jerrycanspirits.co.uk/field-manual/ingredients/white-rum/"
+    },
+    {
+      "id": "c09",
+      "band": "ingredient-technique",
+      "question": "What does Campari taste like and what do you mix it with?",
+      "target_url": "https://jerrycanspirits.co.uk/field-manual/ingredients/campari/"
+    },
+    {
+      "id": "c10",
+      "band": "ingredient-technique",
+      "question": "How do you express an orange peel over a drink and why?",
+      "target_url": "https://jerrycanspirits.co.uk/field-manual/ingredients/orange-peel/"
+    },
+    {
+      "id": "c11",
+      "band": "ingredient-technique",
+      "question": "What is maraschino liqueur and what cocktails use it?",
+      "target_url": "https://jerrycanspirits.co.uk/field-manual/ingredients/maraschino-liqueur/"
+    },
+    {
+      "id": "c12",
+      "band": "ingredient-technique",
+      "question": "How do you garnish a cocktail properly?",
+      "target_url": "https://jerrycanspirits.co.uk/guides/garnishing-like-a-pro/"
+    },
+    {
+      "id": "d01",
+      "band": "cocktail",
+      "question": "What is the proper recipe for a Daiquiri?",
+      "target_url": "https://jerrycanspirits.co.uk/field-manual/cocktails/daiquiri/"
+    },
+    {
+      "id": "d02",
+      "band": "cocktail",
+      "question": "How do you make a proper Old Fashioned?",
+      "target_url": "https://jerrycanspirits.co.uk/field-manual/cocktails/old-fashioned/"
+    },
+    {
+      "id": "d03",
+      "band": "cocktail",
+      "question": "How do you make a Whiskey Sour with egg white?",
+      "target_url": "https://jerrycanspirits.co.uk/field-manual/cocktails/whiskey-sour/"
+    },
+    {
+      "id": "d04",
+      "band": "cocktail",
+      "question": "What is a Storm and Spice cocktail?",
+      "target_url": "https://jerrycanspirits.co.uk/field-manual/cocktails/storm-and-spice/",
+      "notes": "House serve, our own content rather than a classic."
+    },
+    {
+      "id": "d05",
+      "band": "cocktail",
+      "question": "What goes in a Painkiller cocktail?",
+      "target_url": "https://jerrycanspirits.co.uk/field-manual/cocktails/painkiller/"
+    },
+    {
+      "id": "e01",
+      "band": "competitive-control",
+      "question": "What is the best spiced rum in the UK?",
+      "target_url": null,
+      "notes": "Control. Not expected to cite us today."
+    },
+    {
+      "id": "e02",
+      "band": "competitive-control",
+      "question": "I like Kraken. Which other UK rum brands should I try?",
+      "target_url": null,
+      "notes": "Control. Replaces the veteran-owned question, which was too likely to cite us. No expectation of a citation today."
+    },
+    {
+      "id": "e03",
+      "band": "competitive-control",
+      "question": "Which British distilleries make the best rum?",
+      "target_url": null,
+      "notes": "Control."
+    },
+    {
+      "id": "e04",
+      "band": "competitive-control",
+      "question": "What is the best rum to mix with cola?",
+      "target_url": null,
+      "notes": "Control. The IWSC Silver serve is exactly this drink, so a future citation here would be meaningful."
+    }
+  ]
+}

@@ -22,7 +22,8 @@
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
     "test:e2e:report": "playwright show-report",
-    "indexnow": "tsx scripts/submit-indexnow.ts"
+    "indexnow": "tsx scripts/submit-indexnow.ts",
+    "citation-eval": "tsx scripts/citation-eval/run.ts"
   },
   "dependencies": {
     "@headlessui/react": "^2.2.10",
@@ -47,6 +48,7 @@
     "xss": "^1.0.15"
   },
   "devDependencies": {
+    "@anthropic-ai/sdk": "^0.115.0",
     "@cloudflare/workers-types": "^4.20260702.1",
     "@eslint/eslintrc": "^3",
     "@next/bundle-analyzer": "^16.2.12",
