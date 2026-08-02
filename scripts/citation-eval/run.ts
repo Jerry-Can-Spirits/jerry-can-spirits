@@ -375,7 +375,15 @@ async function main() {
   const readings: Reading[] = []
   for (const q of questions) {
     const row: Reading[] = []
-    for (const c of calls) row.push(await c.fn(q))
+    // Honour the `live` flag the banner already reports. Without this an engine
+    // announced as SKIPPED still ran and wrote one error record per question,
+    // so a run with a single configured key emitted three times the rows it had
+    // data for — 152 of the 228 rows in the 2 Aug baseline are those stubs, and
+    // they read as genuine null results rather than absent engines.
+    for (const c of calls) {
+      if (!c.live) continue
+      row.push(await c.fn(q))
+    }
     row.push(askGoogleStub(q))
     for (const r of row) {
       readings.push(r)
