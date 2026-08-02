@@ -104,6 +104,23 @@ export const BOT_USER_AGENTS = [
   'adsbot-google',
   'apis-google',
   'google-inspectiontool',
+
+  // AI answer engines and assistants. robots.txt has invited these since
+  // launch, but until they were listed here the gate 307'd every one of them
+  // to /age-check/, so no answer engine had a single page of ours to cite.
+  // Same legal posture as the search crawlers above: bots may read gated
+  // content for indexing; the checkout handoff stays hard-gated in
+  // /api/checkout regardless of UA.
+  'oai-searchbot', // ChatGPT search retrieval index
+  'chatgpt-user', // ChatGPT fetching a page for a live user question
+  'gptbot', // OpenAI training crawler
+  'claude-searchbot', // Claude search retrieval index
+  'claudebot', // Anthropic training crawler
+  'perplexitybot', // Perplexity retrieval
+  'ccbot', // Common Crawl — corpus feeding many models
+  'meta-externalagent', // Meta / Llama training
+  'applebot', // Siri and Apple Intelligence (substring also covers Applebot-Extended)
+  'applebot-extended', // robots-only token in practice; listed defensively
 ]
 
 export function isBot(userAgent: string | null | undefined): boolean {

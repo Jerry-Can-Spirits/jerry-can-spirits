@@ -19,6 +19,10 @@ export default function robots(): MetadataRoute.Robots {
         allow: '/',
         disallow,
       },
+      // ByteDance's training crawler: aggressive request rates and no
+      // answer-engine surface that serves our market. Every other AI crawler
+      // is welcomed (and passes the age gate via BOT_USER_AGENTS).
+      { userAgent: 'Bytespider', disallow: '/' },
     ],
     sitemap: `${baseUrl}/sitemap.xml`,
   }

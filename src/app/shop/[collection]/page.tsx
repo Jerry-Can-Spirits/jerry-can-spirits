@@ -118,7 +118,7 @@ export default async function CollectionPage({
           image: p.images?.[0]?.url,
           brand: { '@type': 'Brand', name: 'Jerry Can Spirits' },
           ...productGtin(p.handle),
-          offers: productOffer(p, merchantOfferExtras(p.handle, `${BASE_URL}/shop/product/${p.handle}/`)),
+          offers: productOffer(p, merchantOfferExtras(`${BASE_URL}/shop/product/${p.handle}/`)),
         },
       })),
     },

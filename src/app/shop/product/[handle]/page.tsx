@@ -441,7 +441,7 @@ export default async function ProductPage({
       '@id': `https://jerrycanspirits.co.uk/shop/product/${handle}/#offer`,
       itemCondition: 'https://schema.org/NewCondition',
       url: `https://jerrycanspirits.co.uk/shop/product/${handle}/`,
-      priceValidUntil: priceValidUntil(handle),
+      priceValidUntil: priceValidUntil(),
       validFrom: PRICE_VALID_FROM,
       shippingDetails: GB_SHIPPING_DETAILS,
       hasMerchantReturnPolicy: MERCHANT_RETURN_POLICY,
