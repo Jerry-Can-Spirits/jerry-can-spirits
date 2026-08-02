@@ -32,7 +32,7 @@ const faqSchema = {
       name: 'What is Expedition Spiced Rum made from?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Expedition Spiced Rum is made with Caribbean rum, Madagascan vanilla pods, Ceylon cinnamon, ginger, orange peel, cloves, allspice, cassia bark, agave syrup, and glucose syrup for natural sweetness. It\'s rested on bourbon barrel chips and blended at our British partner distillery. We never use artificial sweeteners, colours, flavourings, or additives.',
+        text: 'Expedition Spiced Rum is made with Caribbean rum and seven real spices: Madagascan vanilla pods, Ceylon cinnamon, Peruvian ginger, Spanish orange peel, Sri Lankan cloves, Guatemalan allspice and Indonesian cassia bark, with Mexican agave syrup and Sussex glucose syrup for natural sweetness. It\'s rested on bourbon barrel chips for maturation, macerated by our British partner distillery. We never use artificial sweeteners, colours, flavourings, or additives.',
       },
     },
     {

@@ -27,7 +27,7 @@ export default async function BrandStoryPage() {
 
       <TradeSheetSection title="What we make">
         <p className="text-sm leading-relaxed mb-3">
-          Expedition Spiced Rum, the first release, is a Caribbean-base spiced rum macerated by our British partner distillery. 40% ABV. 700ml. Vegan, gluten-free, no declared allergens. Real botanicals: Madagascan vanilla, Ceylon cinnamon, ginger, orange peel, clove, allspice, cassia bark. Sweetened with agave. Rested on bourbon barrel chips. No essences, no artificial flavourings.
+          Expedition Spiced Rum, the first release, is a Caribbean-base spiced rum macerated by our British partner distillery. 40% ABV. 700ml. Vegan, gluten-free, no declared allergens. Seven real spices: Madagascan vanilla, Ceylon cinnamon, Peruvian ginger, Spanish orange peel, Sri Lankan cloves, Guatemalan allspice, Indonesian cassia bark. Two natural sweeteners: Mexican agave syrup and Sussex glucose syrup. Rested on bourbon barrel chips for maturation. No essences, no artificial flavourings.
         </p>
         <p className="text-sm leading-relaxed">
           Full specification is on the Product Fact Sheet. Tasting notes are on the Tasting Notes resource. Both available in the trade resources section.

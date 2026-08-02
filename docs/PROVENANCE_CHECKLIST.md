@@ -13,11 +13,17 @@ without founder sign-off.
 - Caribbean rum base
 - "macerated by our British partner distillery" is the only approved production
   formulation. Not "at". Not "blended". Not any other verb.
-- The botanical count is seven: Madagascan vanilla, Ceylon cinnamon, ginger,
-  orange peel, cloves, allspice, cassia bark (as grouped on the ingredients
-  page, which the bottle QR points to). The nine-item flavour profile in
-  VOICE.md adds agave and bourbon oak; those are sweetening and maturation,
-  not botanicals. Never conflate the two lists.
+- The standing ingredient formulation: "seven real spices, two natural
+  sweeteners, and bourbon oak for maturation" (as grouped on the ingredients
+  page, which the bottle QR points to). When listing individually: Madagascan
+  vanilla, Ceylon cinnamon, Peruvian ginger, Spanish orange peel, Sri Lankan
+  cloves, Guatemalan allspice, Indonesian cassia bark; Mexican agave syrup and
+  Sussex glucose syrup; bourbon barrel chips. Never state a bare "botanicals"
+  count; count-only phrasing produced the seven/eight/nine confusion. The
+  flavour profile in VOICE.md describes taste; never conflate the lists.
+- No bottle count in brand-level copy. Counts are batch attributes: a batch
+  page may state its own figure, past tense, scoped to that batch. Brand copy
+  says "small, numbered batches" and stops there.
 
 ## Banned constructions (about our rum)
 
