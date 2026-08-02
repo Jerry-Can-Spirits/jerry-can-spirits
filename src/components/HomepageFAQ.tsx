@@ -13,7 +13,7 @@ const faqs = [
   },
   {
     question: "What's the difference between spiced rum and dark rum?",
-    answer: "Dark rum gets its colour and flavour from aging in barrels - you'll taste molasses, oak, and dried fruit. Spiced rum like ours is infused with botanicals after distillation, giving you Madagascan vanilla, Ceylon cinnamon, and warming ginger upfront. Dark rum is typically sipped; spiced rum is more versatile for mixing."
+    answer: "Dark rum gets its colour and flavour from aging in barrels - you'll taste molasses, oak, and dried fruit. Spiced rum like ours is macerated with botanicals, giving you Madagascan vanilla, Ceylon cinnamon, and warming ginger upfront. Dark rum is typically sipped; spiced rum is more versatile for mixing."
   },
   {
     question: "How should I drink spiced rum?",

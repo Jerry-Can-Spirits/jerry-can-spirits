@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: 'Our Ethos - How We Make Rum | Jerry Can Spirits®',
-    description: 'The values behind Jerry Can Spirits. Built on discipline, integrity, and real ingredients. Real botanicals, British-made, veteran-owned.',
+    description: 'The values behind Jerry Can Spirits. Built on discipline, integrity, and real ingredients. Real botanicals, British, veteran-owned.',
     url: 'https://jerrycanspirits.co.uk/ethos/',
     siteName: 'Jerry Can Spirits®',
     locale: 'en_GB',
@@ -25,7 +25,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image' as const,
     title: 'Our Ethos - How We Make Rum | Jerry Can Spirits®',
-    description: 'The values behind Jerry Can Spirits. Built on discipline, integrity, and real ingredients. Real botanicals, British-made, veteran-owned.',
+    description: 'The values behind Jerry Can Spirits. Built on discipline, integrity, and real ingredients. Real botanicals, British, veteran-owned.',
     images: OG_IMAGE,
   },
   robots: {

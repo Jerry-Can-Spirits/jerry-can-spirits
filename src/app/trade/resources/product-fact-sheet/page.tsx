@@ -105,7 +105,7 @@ export default async function ProductFactSheetPage() {
 
       <TradeSheetSection title="Brand">
         <p className="text-sm leading-relaxed">
-          Jerry Can Spirits is veteran-owned and bootstrapped. Founded by two Royal Signals veterans. Macerated at our British partner distillery. 5% of profits go to military charities. Expedition Spiced Rum is the company&apos;s first release.
+          Jerry Can Spirits is veteran-owned and bootstrapped. Founded by two Royal Signals veterans. Macerated by our British partner distillery. 5% of profits go to military charities. Expedition Spiced Rum is the company&apos;s first release.
         </p>
       </TradeSheetSection>
 

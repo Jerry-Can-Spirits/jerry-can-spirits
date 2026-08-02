@@ -28,11 +28,11 @@ const faqs = [
   // Product Information
   {
     question: "What makes Jerry Can Spirits rum unique?",
-    answer: "We make one spiced rum. It's macerated at our British partner distillery in limited, numbered batches, using real botanicals and no artificial flavouring. What makes it different is that we actually give a damn about what goes in it."
+    answer: "We make one spiced rum. It's macerated by our British partner distillery in limited, numbered batches, using real botanicals and no artificial flavouring. What makes it different is that we actually give a damn about what goes in it."
   },
   {
     question: "What type of rum do you produce?",
-    answer: "We make one product: Expedition Spiced Rum. A spiced rum, 40% ABV, made in Britain with real botanicals. Works neat, over ice, or in cocktails."
+    answer: "We make one product: Expedition Spiced Rum. A spiced rum, 40% ABV, macerated with real botanicals by our British partner distillery. Works neat, over ice, or in cocktails."
   },
   {
     question: "What is the alcohol content (ABV) of your rum?",

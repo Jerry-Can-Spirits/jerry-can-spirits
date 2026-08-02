@@ -68,7 +68,7 @@ export default function WhyJerryCan() {
 
           <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20 text-center">
             <div className="text-3xl font-bold text-gold-300 mb-2">UK</div>
-            <div className="text-parchment-400 text-sm uppercase tracking-wide">Made in Britain</div>
+            <div className="text-parchment-400 text-sm uppercase tracking-wide">British Small Batch</div>
           </div>
 
           <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20 text-center">
