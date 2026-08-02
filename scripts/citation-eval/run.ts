@@ -33,6 +33,9 @@ const FACTUAL_FLAGS: Array<{ flag: string; pattern: RegExp }> = [
   { flag: 'wrong-botanical-count', pattern: /\b(eight|nine|ten|8|9|10)\s+(real\s+)?botanicals/i },
   { flag: 'bare-botanical-count', pattern: /\b(seven|7)\s+(real\s+)?botanicals/i },
   { flag: '700-bottles', pattern: /700\s+(numbered\s+)?bottles/i },
+  // Time-dependent: £35 was the correct price until the rise to £45 on
+  // 3 August 2026. A reading taken before that date flags a true answer as
+  // stale, which is why the first automated run is scheduled after the change.
   { flag: 'price-35', pattern: /£\s?35(\.00)?\b/i },
   { flag: 'named-producer', pattern: /custom\s+spirit\s+co/i },
 ]
@@ -45,6 +48,8 @@ type QuestionSpec = {
   notes?: string
 }
 
+type Mode = 'retrieval' | 'training'
+
 type Reading = {
   timestamp: string
   question_id: string
@@ -52,6 +57,7 @@ type Reading = {
   question: string
   target_url: string | null
   engine: string
+  mode: Mode
   model: string | null
   cited: boolean | null
   urls: string[]
@@ -72,6 +78,14 @@ function hostOf(url: string): string {
   }
 }
 
+// Exact host or a true subdomain. A bare endsWith() would also match
+// `evil-jerrycanspirits.co.uk`, which in a measurement tool means a lookalike
+// domain silently counts as us being cited.
+function isOurs(url: string): boolean {
+  const h = hostOf(url)
+  return h === OUR_DOMAIN || h.endsWith(`.${OUR_DOMAIN}`)
+}
+
 function flagsIn(text: string | null): string[] {
   if (!text) return []
   return FACTUAL_FLAGS.filter((f) => f.pattern.test(text)).map((f) => f.flag)
@@ -81,8 +95,8 @@ function flagsIn(text: string | null): string[] {
 // Null when we are not cited at all.
 function analyse(urls: string[], text: string | null, q: QuestionSpec, base: Partial<Reading>): Reading {
   const unique = [...new Set(urls.filter(Boolean))]
-  const ours = unique.filter((u) => hostOf(u).endsWith(OUR_DOMAIN))
-  const idx = unique.findIndex((u) => hostOf(u).endsWith(OUR_DOMAIN))
+  const ours = unique.filter(isOurs)
+  const idx = unique.findIndex(isOurs)
   return {
     timestamp: new Date().toISOString(),
     question_id: q.id,
@@ -90,12 +104,13 @@ function analyse(urls: string[], text: string | null, q: QuestionSpec, base: Par
     question: q.question,
     target_url: q.target_url,
     engine: base.engine!,
+    mode: base.mode!,
     model: base.model ?? null,
     cited: ours.length > 0,
     urls: unique,
     our_urls: ours,
     position: idx >= 0 ? idx + 1 : null,
-    competitors: [...new Set(unique.filter((u) => !hostOf(u).endsWith(OUR_DOMAIN)).map(hostOf))].filter(Boolean),
+    competitors: [...new Set(unique.filter((u) => !isOurs(u)).map(hostOf))].filter(Boolean),
     answer_text: text,
     factual_flags: flagsIn(text),
     error: base.error ?? null,
@@ -103,7 +118,7 @@ function analyse(urls: string[], text: string | null, q: QuestionSpec, base: Par
   }
 }
 
-function errored(q: QuestionSpec, engine: string, message: string): Reading {
+function errored(q: QuestionSpec, engine: string, mode: Mode, message: string): Reading {
   return {
     timestamp: new Date().toISOString(),
     question_id: q.id,
@@ -111,6 +126,7 @@ function errored(q: QuestionSpec, engine: string, message: string): Reading {
     question: q.question,
     target_url: q.target_url,
     engine,
+    mode,
     model: null,
     cited: null,
     urls: [],
@@ -125,17 +141,23 @@ function errored(q: QuestionSpec, engine: string, message: string): Reading {
 }
 
 // --- ChatGPT: Responses API with the hosted web_search tool ----------------
-async function askChatGPT(q: QuestionSpec): Promise<Reading> {
+async function askChatGPT(q: QuestionSpec, mode: Mode): Promise<Reading> {
   const key = process.env.OPENAI_API_KEY
   const model = process.env.OPENAI_MODEL || 'gpt-5'
-  if (!key) return errored(q, 'chatgpt', 'OPENAI_API_KEY not set')
+  if (!key) return errored(q, 'chatgpt', mode, 'OPENAI_API_KEY not set')
   try {
     const res = await fetch('https://api.openai.com/v1/responses', {
       method: 'POST',
       headers: { authorization: `Bearer ${key}`, 'content-type': 'application/json' },
-      body: JSON.stringify({ model, input: q.question, tools: [{ type: 'web_search' }] }),
+      // retrieval = hosted web_search; training = no tools, so the model answers
+      // from what it learned rather than what it can look up now.
+      body: JSON.stringify({
+        model,
+        input: q.question,
+        ...(mode === 'retrieval' ? { tools: [{ type: 'web_search' }] } : {}),
+      }),
     })
-    if (!res.ok) return errored(q, 'chatgpt', `HTTP ${res.status}: ${(await res.text()).slice(0, 200)}`)
+    if (!res.ok) return errored(q, 'chatgpt', mode, `HTTP ${res.status}: ${(await res.text()).slice(0, 200)}`)
     const data = (await res.json()) as Record<string, unknown>
     // Citations arrive as url_citation annotations on output_text content parts.
     const urls: string[] = []
@@ -149,19 +171,19 @@ async function askChatGPT(q: QuestionSpec): Promise<Reading> {
       Object.values(o).forEach(walk)
     }
     walk(data.output)
-    return analyse(urls, text || String(data.output_text ?? '') || null, q, { engine: 'chatgpt', model })
+    return analyse(urls, text || String(data.output_text ?? '') || null, q, { engine: 'chatgpt', mode, model })
   } catch (e) {
-    return errored(q, 'chatgpt', String(e).slice(0, 200))
+    return errored(q, 'chatgpt', mode, String(e).slice(0, 200))
   }
 }
 
 // --- Claude: Messages API with the web_search server tool ------------------
 // web_search_20260209 is the current variant (dynamic filtering). Do not also
 // declare code_execution: a second execution environment confuses the model.
-async function askClaude(q: QuestionSpec): Promise<Reading> {
+async function askClaude(q: QuestionSpec, mode: Mode): Promise<Reading> {
   const key = process.env.ANTHROPIC_API_KEY
   const model = process.env.ANTHROPIC_MODEL || 'claude-opus-5'
-  if (!key) return errored(q, 'claude', 'ANTHROPIC_API_KEY not set')
+  if (!key) return errored(q, 'claude', mode, 'ANTHROPIC_API_KEY not set')
   try {
     const client = new Anthropic({ apiKey: key })
     let messages: Anthropic.MessageParam[] = [{ role: 'user', content: q.question }]
@@ -172,14 +194,16 @@ async function askClaude(q: QuestionSpec): Promise<Reading> {
       response = await client.messages.create({
         model,
         max_tokens: 4096,
-        tools: [{ type: 'web_search_20260209', name: 'web_search' }],
+        ...(mode === 'retrieval'
+          ? { tools: [{ type: 'web_search_20260209' as const, name: 'web_search' as const }] }
+          : {}),
         messages,
       })
       if (response.stop_reason !== 'pause_turn') break
       messages = [...messages, { role: 'assistant', content: response.content }]
     }
-    if (!response) return errored(q, 'claude', 'no response')
-    if (response.stop_reason === 'refusal') return errored(q, 'claude', 'refusal')
+    if (!response) return errored(q, 'claude', mode, 'no response')
+    if (response.stop_reason === 'refusal') return errored(q, 'claude', mode, 'refusal')
 
     const urls: string[] = []
     let text = ''
@@ -198,33 +222,35 @@ async function askClaude(q: QuestionSpec): Promise<Reading> {
         }
       }
     }
-    return analyse(urls, text || null, q, { engine: 'claude', model })
+    return analyse(urls, text || null, q, { engine: 'claude', mode, model })
   } catch (e) {
-    return errored(q, 'claude', String(e).slice(0, 200))
+    return errored(q, 'claude', mode, String(e).slice(0, 200))
   }
 }
 
 // --- Perplexity: chat/completions, citations in search_results -------------
+// sonar models search by default, so every reading here is retrieval. There is
+// no training-only mode to log; pretending otherwise would invent a data point.
 async function askPerplexity(q: QuestionSpec): Promise<Reading> {
   const key = process.env.PERPLEXITY_API_KEY
   const model = process.env.PERPLEXITY_MODEL || 'sonar'
-  if (!key) return errored(q, 'perplexity', 'PERPLEXITY_API_KEY not set')
+  if (!key) return errored(q, 'perplexity', 'retrieval', 'PERPLEXITY_API_KEY not set')
   try {
     const res = await fetch('https://api.perplexity.ai/chat/completions', {
       method: 'POST',
       headers: { authorization: `Bearer ${key}`, 'content-type': 'application/json' },
       body: JSON.stringify({ model, messages: [{ role: 'user', content: q.question }] }),
     })
-    if (!res.ok) return errored(q, 'perplexity', `HTTP ${res.status}: ${(await res.text()).slice(0, 200)}`)
+    if (!res.ok) return errored(q, 'perplexity', 'retrieval', `HTTP ${res.status}: ${(await res.text()).slice(0, 200)}`)
     const data = (await res.json()) as {
       choices?: Array<{ message?: { content?: string } }>
       citations?: string[]
       search_results?: Array<{ url?: string }>
     }
     const urls = [...(data.citations ?? []), ...(data.search_results ?? []).map((r) => r.url ?? '')]
-    return analyse(urls, data.choices?.[0]?.message?.content ?? null, q, { engine: 'perplexity', model })
+    return analyse(urls, data.choices?.[0]?.message?.content ?? null, q, { engine: 'perplexity', mode: 'retrieval', model })
   } catch (e) {
-    return errored(q, 'perplexity', String(e).slice(0, 200))
+    return errored(q, 'perplexity', 'retrieval', String(e).slice(0, 200))
   }
 }
 
@@ -242,6 +268,7 @@ function askGoogleStub(q: QuestionSpec): Reading {
     question: q.question,
     target_url: q.target_url,
     engine: 'google-ai-mode',
+    mode: 'retrieval',
     model: null,
     cited: null,
     urls: [],
@@ -262,7 +289,9 @@ function previousRunFile(currentFile: string): string | null {
   try {
     const current = currentFile.split(/[\\/]/).pop()
     const files = readdirSync(RESULTS_DIR)
-      .filter((f) => f.endsWith('.jsonl') && !f.startsWith('baseline') && f !== current)
+      .filter(
+        (f) => f.endsWith('.jsonl') && !f.startsWith('baseline') && !f.startsWith('partial-') && f !== current
+      )
       .sort()
     return files.length ? join(RESULTS_DIR, files[files.length - 1]) : null
   } catch {
@@ -277,60 +306,82 @@ function loadReadings(file: string): Reading[] {
     .map((l) => JSON.parse(l) as Reading)
 }
 
+// Reported per mode, never collapsed. A flag clearing in retrieval while it
+// persists in training is the expected and informative pattern: retrieval is
+// what the crawler work changed and should move within weeks; training is what
+// the model learned and only changes with the next model generation. One
+// combined number hides exactly the signal worth having.
 function diff(current: Reading[], previous: Reading[]): void {
-  const key = (r: Reading) => `${r.question_id}:${r.engine}`
+  const key = (r: Reading) => `${r.question_id}:${r.engine}:${r.mode}`
   const prev = new Map(previous.map((r) => [key(r), r]))
-  const newlyCited: string[] = []
-  const newlyLost: string[] = []
-  const flagsCleared: string[] = []
-  const flagsAppeared: string[] = []
 
-  for (const r of current) {
-    const p = prev.get(key(r))
-    if (!p) continue
-    if (r.cited === true && p.cited === false) newlyCited.push(`${key(r)} → ${r.our_urls[0] ?? ''}`)
-    if (r.cited === false && p.cited === true) newlyLost.push(key(r))
-    for (const f of p.factual_flags) if (!r.factual_flags.includes(f)) flagsCleared.push(`${key(r)}: ${f}`)
-    for (const f of r.factual_flags) if (!p.factual_flags.includes(f)) flagsAppeared.push(`${key(r)}: ${f}`)
-  }
+  for (const mode of ['retrieval', 'training'] as Mode[]) {
+    const newlyCited: string[] = []
+    const newlyLost: string[] = []
+    const flagsCleared: string[] = []
+    const flagsAppeared: string[] = []
 
-  const section = (title: string, items: string[]) => {
-    console.log(`\n${title} (${items.length})`)
-    for (const i of items) console.log(`  ${i}`)
+    for (const r of current.filter((x) => x.mode === mode)) {
+      const p = prev.get(key(r))
+      if (!p) continue
+      const label = `${r.question_id}:${r.engine}`
+      if (r.cited === true && p.cited === false) newlyCited.push(`${label} → ${r.our_urls[0] ?? ''}`)
+      if (r.cited === false && p.cited === true) newlyLost.push(label)
+      for (const f of p.factual_flags) if (!r.factual_flags.includes(f)) flagsCleared.push(`${label}: ${f}`)
+      for (const f of r.factual_flags) if (!p.factual_flags.includes(f)) flagsAppeared.push(`${label}: ${f}`)
+    }
+
+    const section = (title: string, items: string[]) => {
+      console.log(`  ${title} (${items.length})`)
+      for (const i of items) console.log(`    ${i}`)
+    }
+    console.log(`\n--- ${mode.toUpperCase()} ---`)
+    section('Newly cited', newlyCited)
+    section('Newly lost', newlyLost)
+    section('Factual flags CLEARED', flagsCleared)
+    section('Factual flags NEWLY APPEARING', flagsAppeared)
   }
-  console.log('\n=== DIFF vs previous run ===')
-  section('Newly cited', newlyCited)
-  section('Newly lost', newlyLost)
-  section('Factual flags CLEARED', flagsCleared)
-  section('Factual flags NEWLY APPEARING', flagsAppeared)
 }
 
 async function main() {
+  // Load .env.local if present, same as scripts/submit-indexnow.ts. Shell
+  // exports still win, so either route works.
+  try {
+    const dotenv = await import('dotenv')
+    dotenv.config({ path: '.env.local' })
+  } catch {
+    // dotenv not installed: rely on shell-exported vars
+  }
   mkdirSync(RESULTS_DIR, { recursive: true })
   const spec = JSON.parse(readFileSync(join(HERE, 'questions.json'), 'utf8')) as { questions: QuestionSpec[] }
   const questions = spec.questions
   const stamp = new Date().toISOString().replace(/[:.]/g, '-')
   const outFile = join(RESULTS_DIR, `${stamp}.jsonl`)
 
-  const engines = [
-    { name: 'chatgpt', fn: askChatGPT, live: !!process.env.OPENAI_API_KEY },
-    { name: 'claude', fn: askClaude, live: !!process.env.ANTHROPIC_API_KEY },
-    { name: 'perplexity', fn: askPerplexity, live: !!process.env.PERPLEXITY_API_KEY },
+  // Engines that support both modes are asked twice per question: once able to
+  // search (retrieval) and once not (training).
+  const calls: Array<{ label: string; live: boolean; fn: (q: QuestionSpec) => Promise<Reading> }> = [
+    { label: 'chatgpt/retrieval', live: !!process.env.OPENAI_API_KEY, fn: (q) => askChatGPT(q, 'retrieval') },
+    { label: 'chatgpt/training', live: !!process.env.OPENAI_API_KEY, fn: (q) => askChatGPT(q, 'training') },
+    { label: 'claude/retrieval', live: !!process.env.ANTHROPIC_API_KEY, fn: (q) => askClaude(q, 'retrieval') },
+    { label: 'claude/training', live: !!process.env.ANTHROPIC_API_KEY, fn: (q) => askClaude(q, 'training') },
+    { label: 'perplexity/retrieval', live: !!process.env.PERPLEXITY_API_KEY, fn: askPerplexity },
   ]
   console.log('Engines:')
-  for (const e of engines) console.log(`  ${e.name}: ${e.live ? 'live' : 'SKIPPED (no key)'}`)
+  for (const c of calls) console.log(`  ${c.label}: ${c.live ? 'live' : 'SKIPPED (no key)'}`)
+  console.log('  perplexity/training: N/A — sonar searches by default, no training-only mode exists')
   console.log('  google-ai-mode: STUB (no public API — record manually)\n')
 
   const readings: Reading[] = []
   for (const q of questions) {
     const row: Reading[] = []
-    for (const e of engines) row.push(await e.fn(q))
+    for (const c of calls) row.push(await c.fn(q))
     row.push(askGoogleStub(q))
     for (const r of row) {
       readings.push(r)
       appendFileSync(outFile, JSON.stringify(r) + '\n')
     }
-    const cited = row.filter((r) => r.cited).map((r) => r.engine)
+    const cited = row.filter((r) => r.cited).map((r) => `${r.engine}/${r.mode[0]}`)
     const flags = [...new Set(row.flatMap((r) => r.factual_flags))]
     console.log(
       `${q.id} [${q.band}] cited: ${cited.length ? cited.join(',') : 'none'}${flags.length ? `  FLAGS: ${flags.join(',')}` : ''}`
@@ -338,15 +389,19 @@ async function main() {
   }
 
   const live = readings.filter((r) => !r.stub && r.error === null)
-  const citedCount = live.filter((r) => r.cited).length
-  const flagged = live.filter((r) => r.factual_flags.length)
   console.log(`\n=== SUMMARY ===`)
   console.log(`readings: ${live.length} live (+${readings.filter((r) => r.stub).length} stubs)`)
-  console.log(`cited: ${citedCount}/${live.length}`)
-  console.log(`readings carrying a factual flag: ${flagged.length}`)
-  const byFlag: Record<string, number> = {}
-  for (const r of flagged) for (const f of r.factual_flags) byFlag[f] = (byFlag[f] || 0) + 1
-  if (Object.keys(byFlag).length) console.log('flag counts:', JSON.stringify(byFlag))
+  // Split by mode: retrieval measures what the crawler work changed, training
+  // measures what the models already learned. Averaging them is meaningless.
+  for (const mode of ['retrieval', 'training'] as Mode[]) {
+    const rows = live.filter((r) => r.mode === mode)
+    if (!rows.length) continue
+    const flagged = rows.filter((r) => r.factual_flags.length)
+    const byFlag: Record<string, number> = {}
+    for (const r of flagged) for (const f of r.factual_flags) byFlag[f] = (byFlag[f] || 0) + 1
+    console.log(`\n  ${mode}: cited ${rows.filter((r) => r.cited).length}/${rows.length}, flagged ${flagged.length}`)
+    if (Object.keys(byFlag).length) console.log(`  ${mode} flag counts:`, JSON.stringify(byFlag))
+  }
 
   const prevFile = previousRunFile(outFile)
   if (prevFile) {
