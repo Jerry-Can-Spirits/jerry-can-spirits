@@ -416,7 +416,10 @@ export const guideBySlugQuery = `*[_type == "guide" && slug.current == $slug][0]
       cells
     }
   },
-  featuredDistilleries[] {
+  // Partner values (former-partner, current-partner) are excluded at the
+  // query layer, not the render layer: the data never reaches the template,
+  // so a future refactor cannot expose a commercial relationship publicly.
+  "featuredDistilleries": featuredDistilleries[!defined(relationship) || relationship == "editorial"] {
     name,
     location,
     description,

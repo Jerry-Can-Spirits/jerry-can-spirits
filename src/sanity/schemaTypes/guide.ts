@@ -408,7 +408,24 @@ export default defineType({
               title: 'Description',
               type: 'text',
               rows: 3,
-              description: 'Brief factual description of the distillery'
+              description: 'Brief factual description of the distillery',
+              // An editorial feature must stand on its own: the moment a
+              // description mentions our brand it is asserting a relationship,
+              // which is how a present-tense partnership claim ended up in this
+              // field once before. Warning, not error, so Studio flags it for a
+              // human decision instead of hard-blocking.
+              validation: Rule =>
+                Rule.custom((desc, context) => {
+                  const rel = (context.parent as { relationship?: string } | undefined)?.relationship
+                  if (
+                    typeof desc === 'string' &&
+                    /jerry can|expedition spiced/i.test(desc) &&
+                    (!rel || rel === 'editorial')
+                  ) {
+                    return 'Editorial distillery features must not reference Jerry Can Spirits or Expedition Spiced Rum. If there is a real relationship, set the relationship field instead of writing it into the description.'
+                  }
+                  return true
+                }).warning()
             }),
             defineField({
               name: 'website',
@@ -420,6 +437,26 @@ export default defineType({
               title: 'Speciality',
               type: 'string',
               description: 'What they\'re known for (e.g., "Botanical Rum", "Navy Strength")'
+            }),
+            // Distinguishes "distillery we are writing about" from "distillery
+            // we work or worked with". Partner values are Studio-internal
+            // records: the guide-page query filters them out at the data layer
+            // (see guideBySlugQuery), so they can never render publicly and a
+            // future template refactor cannot accidentally expose them.
+            defineField({
+              name: 'relationship',
+              title: 'Relationship to Jerry Can Spirits',
+              type: 'string',
+              initialValue: 'editorial',
+              validation: Rule => Rule.required(),
+              options: {
+                layout: 'radio',
+                list: [
+                  { title: 'Editorial feature (no commercial relationship)', value: 'editorial' },
+                  { title: 'Former production partner (never rendered)', value: 'former-partner' },
+                  { title: 'Current partner (never rendered)', value: 'current-partner' },
+                ],
+              },
             })
           ],
           preview: {
