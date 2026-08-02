@@ -29,7 +29,11 @@ const EXCLUDED_PREFIXES = [
 
 // Exact paths (no sub-tree): the trade landing itself, and the crawler files
 // that search engines must fetch without a gate.
-const EXCLUDED_EXACT = ['/trade', '/robots.txt', '/sitemap.xml', '/manifest.webmanifest']
+// /llms.txt joined this list when it moved from a static file in public/ to a
+// generated route. Static assets never reached the middleware; a route does,
+// so without the exemption every fetch of it was answered with a 307 to the
+// age gate.
+const EXCLUDED_EXACT = ['/trade', '/robots.txt', '/sitemap.xml', '/manifest.webmanifest', '/llms.txt']
 
 export function isAgeExcludedPath(pathname: string): boolean {
   if (EXCLUDED_EXACT.includes(pathname)) return true
