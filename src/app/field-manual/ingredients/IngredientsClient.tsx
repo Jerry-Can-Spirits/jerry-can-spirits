@@ -1,7 +1,7 @@
 'use client'
 
-import { useState } from 'react'
-import { useRouter, usePathname, useSearchParams } from 'next/navigation'
+import { useState, useEffect } from 'react'
+import { useRouter, usePathname } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
 import BackToTop from '@/components/BackToTop'
@@ -35,15 +35,20 @@ const ITEMS_PER_PAGE = 16
 export default function IngredientsClient({ ingredients }: IngredientsClientProps) {
   const router = useRouter()
   const pathname = usePathname()
-  const searchParams = useSearchParams()
 
-  const [selectedCategory, setSelectedCategory] = useState<string>(
-    searchParams.get('category') ?? 'all'
-  )
-  const [searchQuery, setSearchQuery] = useState<string>(
-    searchParams.get('q') ?? ''
-  )
+  // Defaults here, URL-seeded after mount: useSearchParams() bailed this
+  // subtree out of server rendering, hiding the grid from raw HTML.
+  const [selectedCategory, setSelectedCategory] = useState<string>('all')
+  const [searchQuery, setSearchQuery] = useState<string>('')
   const [visibleCount, setVisibleCount] = useState<number>(ITEMS_PER_PAGE)
+
+  useEffect(() => {
+    const sp = new URLSearchParams(window.location.search)
+    const category = sp.get('category')
+    const q = sp.get('q')
+    if (category) setSelectedCategory(category)
+    if (q) setSearchQuery(q)
+  }, [])
 
   const updateURL = (category: string, q: string) => {
     const sp = new URLSearchParams()

@@ -4,6 +4,8 @@ import { client } from '@/sanity/lib/client'
 import { ingredientsListQuery } from '@/sanity/queries'
 import IngredientsClient from './IngredientsClient'
 import Breadcrumbs from '@/components/Breadcrumbs'
+import StructuredData from '@/components/StructuredData'
+import HubIndex from '@/components/HubIndex'
 import { OG_IMAGE } from '@/lib/og'
 
 export const metadata: Metadata = {
@@ -35,9 +37,28 @@ export default async function IngredientsPage() {
   // Only fetches fields needed for preview cards (not full usage/tips/storage)
   const ingredients = await client.fetch(ingredientsListQuery, {}, { next: { revalidate: 3600 } })
 
+  // ItemList of URL references only; the full Article schema lives on each
+  // ingredient page. Publisher references the site-wide #organization node.
+  const itemListSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: 'Jerry Can Spirits Ingredient Guides',
+    description: 'Cocktail ingredient guides: spirits, liqueurs, bitters, mixers, fresh ingredients and garnishes.',
+    url: 'https://jerrycanspirits.co.uk/field-manual/ingredients/',
+    publisher: { '@id': 'https://jerrycanspirits.co.uk/#organization' },
+    numberOfItems: ingredients.length,
+    itemListElement: ingredients.map((item: { name: string; slug: { current: string } }, index: number) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      name: item.name,
+      url: `https://jerrycanspirits.co.uk/field-manual/ingredients/${item.slug.current}/`,
+    })),
+  }
+
   // Pass data to Client Component for interactive UI
   return (
     <>
+      <StructuredData data={itemListSchema} id="ingredients-itemlist-schema" />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 mb-8">
         <Breadcrumbs
           items={[
@@ -67,6 +88,13 @@ export default async function IngredientsPage() {
       <Suspense>
         <IngredientsClient ingredients={ingredients} />
       </Suspense>
+      <HubIndex
+        heading={`All ${ingredients.length} ingredients, A to Z`}
+        items={ingredients.map((i: { name: string; slug: { current: string } }) => ({
+          name: i.name,
+          href: `/field-manual/ingredients/${i.slug.current}/`,
+        }))}
+      />
     </>
   )
 }

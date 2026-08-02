@@ -64,6 +64,7 @@ export default function Footer() {
         { name: "What's in my bar", href: '/field-manual/whats-in-my-bar/' },
         { name: 'Guides', href: '/guides/' },
         { name: 'Ingredients', href: '/ingredients/' },
+        { name: 'Batch Tracker', href: '/batch/' },
         { name: 'FAQ', href: '/faq/' },
       ]
     },

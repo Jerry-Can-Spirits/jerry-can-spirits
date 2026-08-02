@@ -28,6 +28,10 @@ export function OrganizationSchema() {
   const schema = {
     '@context': 'https://schema.org',
     '@type': 'Organization',
+    // Stable node identity so other schemas (hub ItemLists now, everything
+    // else when the item-4 entity graph lands) reference this one node by
+    // @id instead of inlining anonymous Organization copies.
+    '@id': 'https://jerrycanspirits.co.uk/#organization',
     name: 'Jerry Can Spirits',
     legalName: 'Jerry Can Spirits Ltd',
     url: 'https://jerrycanspirits.co.uk',

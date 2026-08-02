@@ -4,6 +4,7 @@ import { client } from '@/sanity/lib/client'
 import { guidesListQuery } from '@/sanity/queries'
 import GuidesClient from './GuidesClient'
 import Breadcrumbs from '@/components/Breadcrumbs'
+import HubIndex from '@/components/HubIndex'
 import StructuredData from '@/components/StructuredData'
 import { OG_IMAGE } from '@/lib/og'
 
@@ -52,24 +53,24 @@ export default async function GuidesPage() {
   // Fetch guides server-side using optimized list query
   const guides: GuideListItem[] = await client.fetch(guidesListQuery)
 
-  // Build ItemList schema for article collection
+  // Build ItemList schema for article collection. URL references only, not
+  // inlined Article objects: the full Article schema lives on each guide page,
+  // and inlined copies invite incomplete-markup validation errors. Publisher
+  // references the site-wide #organization node by @id rather than inlining
+  // another anonymous copy.
   const itemListSchema = {
     '@context': 'https://schema.org',
     '@type': 'ItemList',
     name: 'Jerry Can Spirits Guides & Education',
     description: 'Cocktail techniques, ingredient deep-dives and home bar knowledge from the makers of Expedition Spiced Rum.',
     url: 'https://jerrycanspirits.co.uk/guides/',
+    publisher: { '@id': 'https://jerrycanspirits.co.uk/#organization' },
     numberOfItems: guides.length,
     itemListElement: guides.map((guide, index) => ({
       '@type': 'ListItem',
       position: index + 1,
-      item: {
-        '@type': 'Article',
-        name: guide.title,
-        url: `https://jerrycanspirits.co.uk/guides/${guide.slug.current}/`,
-        description: guide.excerpt || `${guide.title} - spirits guide`,
-        image: guide.heroImage || '',
-      },
+      name: guide.title,
+      url: `https://jerrycanspirits.co.uk/guides/${guide.slug.current}/`,
     })),
   }
 
@@ -109,6 +110,10 @@ export default async function GuidesPage() {
       <Suspense>
         <GuidesClient guides={guides} />
       </Suspense>
+      <HubIndex
+        heading={`All ${guides.length} guides, A to Z`}
+        items={guides.map((g) => ({ name: g.title, href: `/guides/${g.slug.current}/` }))}
+      />
     </>
   )
 }
