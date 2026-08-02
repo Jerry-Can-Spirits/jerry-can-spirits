@@ -6,7 +6,13 @@ import OrderProgressBar from './OrderProgressBar'
 const BOTTLE_HANDLE = 'jerry-can-spirits-expedition-spiced-rum'
 const GIFT_SET_HANDLE = 'jerry-can-spirits-premium-gift-pack'
 const TRADE_PACK_HANDLE = 'jerry-can-spirits-expedition-pack-spiced-rum-6-bottles'
-const TOTAL_BOTTLES = 700
+// Bottles in Batch 001. Internal only: it drives how full the progress bar
+// renders and is never displayed, because batch sizes and bottle counts are
+// not published. Bottles are drawn from one physical pool but sold as three
+// SKUs, so remaining stock is the sum of all three.
+const BATCH_BOTTLES = 840
+const BOTTLES_PER_GIFT_PACK = 1
+const BOTTLES_PER_CASE = 6
 const BOTTLE_VOLUME_LITRES = 0.7
 
 async function getOrderData() {
@@ -17,8 +23,13 @@ async function getOrderData() {
       getProduct(TRADE_PACK_HANDLE),
     ])
 
-    let singleBottlesSold = 0
-    let tradePacksSold = 0
+    // Remaining bottles, summed across every SKU that draws on the batch.
+    // Previously this read a `custom.pre_order_sold` metafield in preference
+    // to live stock. Those metafields still hold the figures from the
+    // pre-order campaign, so the bar was frozen at that moment and no sale
+    // since had moved it; gift packs were never counted at all. Live
+    // inventory is the only source now.
+    let bottlesRemaining: number | null = null
     // No hardcoded prices in copy: prices render from Shopify live data only.
     // When the fetch fails, the price lines are simply not rendered.
     let bottlePrice: string | null = null
@@ -33,24 +44,11 @@ async function getOrderData() {
         ? parseFloat(variant.compareAtPrice.amount).toFixed(0)
         : null
 
-      const preorderSoldMeta = bottleProduct.metafields?.find(
-        (m: { namespace: string; key: string; value: string } | null) =>
-          m?.namespace === 'custom' && m?.key === 'pre_order_sold'
-      )
-      if (preorderSoldMeta?.value) {
-        singleBottlesSold = parseInt(preorderSoldMeta.value, 10)
-      } else if (variant.quantityAvailable !== undefined) {
-        singleBottlesSold = Math.max(0, TOTAL_BOTTLES - variant.quantityAvailable)
-      }
-    }
-
-    if (tradePackProduct?.metafields) {
-      const tradePackSoldMeta = tradePackProduct.metafields.find(
-        (m: { namespace: string; key: string; value: string } | null) =>
-          m?.namespace === 'custom' && m?.key === 'pre_order_sold'
-      )
-      if (tradePackSoldMeta?.value) {
-        tradePacksSold = parseInt(tradePackSoldMeta.value, 10)
+      if (variant.quantityAvailable !== undefined) {
+        bottlesRemaining =
+          variant.quantityAvailable +
+          (giftSetProduct?.variants?.[0]?.quantityAvailable ?? 0) * BOTTLES_PER_GIFT_PACK +
+          (tradePackProduct?.variants?.[0]?.quantityAvailable ?? 0) * BOTTLES_PER_CASE
       }
     }
 
@@ -62,12 +60,15 @@ async function getOrderData() {
         : null
     }
 
-    const totalSold = singleBottlesSold + tradePacksSold * 6
+    const percentageClaimed =
+      bottlesRemaining === null
+        ? null
+        : Math.round(((BATCH_BOTTLES - bottlesRemaining) / BATCH_BOTTLES) * 100)
 
-    return { totalSold, bottlePrice, bottleCompareAtPrice, giftSetPrice, giftSetCompareAtPrice }
+    return { percentageClaimed, bottlePrice, bottleCompareAtPrice, giftSetPrice, giftSetCompareAtPrice }
   } catch {
     return {
-      totalSold: null,
+      percentageClaimed: null,
       bottlePrice: null,
       bottleCompareAtPrice: null,
       giftSetPrice: null,
@@ -77,7 +78,7 @@ async function getOrderData() {
 }
 
 export default async function OrderSection() {
-  const { totalSold, bottlePrice, bottleCompareAtPrice, giftSetPrice, giftSetCompareAtPrice } =
+  const { percentageClaimed, bottlePrice, bottleCompareAtPrice, giftSetPrice, giftSetCompareAtPrice } =
     await getOrderData()
 
   const bottleUnitPrice = bottlePrice ? (parseFloat(bottlePrice) / BOTTLE_VOLUME_LITRES).toFixed(2) : null
@@ -105,7 +106,7 @@ export default async function OrderSection() {
               </div>
 
               <div className="absolute bottom-6 left-6 bg-jerry-green-700/80 backdrop-blur-sm text-gold-300 px-4 py-2 rounded-full text-sm font-semibold uppercase tracking-wide border border-gold-500/30 shadow-lg">
-                700 for general release
+                Limited general release
               </div>
             </div>
           </div>
@@ -119,15 +120,15 @@ export default async function OrderSection() {
             </div>
 
             <h2 className="text-3xl md:text-4xl font-serif font-bold text-white mb-6">
-              First Batch. Numbered. 700 for general release.
+              First Batch. Numbered. Limited general release.
             </h2>
 
             <p className="text-xl text-parchment-300 mb-6 leading-relaxed">
               Batch 001, shipping now. When it&apos;s gone, that run is finished.
             </p>
 
-            {totalSold !== null && (
-              <OrderProgressBar sold={totalSold} total={TOTAL_BOTTLES} />
+            {percentageClaimed !== null && (
+              <OrderProgressBar percentageClaimed={percentageClaimed} />
             )}
 
             {/* Benefits List */}
@@ -212,7 +213,7 @@ export default async function OrderSection() {
               <div className="bg-jerry-green-800/30 rounded-lg p-4 border border-gold-500/10">
                 <div className="grid grid-cols-3 gap-4 text-center">
                   <div>
-                    <div className="text-gold-300 font-bold text-lg">700</div>
+                    <div className="text-gold-300 font-bold text-lg">Limited</div>
                     <div className="text-parchment-400 text-xs uppercase tracking-wide">General Release</div>
                   </div>
                   <div>
