@@ -18,13 +18,15 @@ export function safeJsonLd(data: unknown): string {
   return JSON.stringify(data).replace(/</g, '\\u003c')
 }
 
-// Expedition's headline price rises to £45 on 1 August 2026, so its structured
-// data must not claim the current price is valid past then. Everything else uses
-// a stable year-end date. A literal (not today+1y) keeps the JSON-LD byte-stable
-// across requests rather than polluting Google Merchant freshness signals.
-// Revisit both dates after 1 August 2026.
-export function priceValidUntil(handle: string): string {
-  return handle === 'jerry-can-spirits-expedition-spiced-rum' ? '2026-07-31' : '2026-12-31'
+// Twelve months out, computed when the page builds or regenerates, so the
+// offer can never carry an expired date. The previous hardcoded literals went
+// stale the day the Expedition Spiced Rum RRP changed, and an expired
+// priceValidUntil can suppress the price in the Product rich result. ISR
+// refreshes the date on each regeneration; it never needs revisiting.
+export function priceValidUntil(): string {
+  const d = new Date()
+  d.setFullYear(d.getFullYear() + 1)
+  return d.toISOString().slice(0, 10)
 }
 
 // The date current pricing took effect (site launch). Byte-stable literal for
@@ -58,10 +60,10 @@ export function productGtin(handle: string): { gtin13: string } | Record<string,
 // The full merchant-listing offer field set Google Search Console expects on
 // every offer (product pages AND collection-page ItemLists): url, price
 // validity window, shipping and returns. Callers spread extra fields on top.
-export function merchantOfferExtras(handle: string, url: string): Record<string, unknown> {
+export function merchantOfferExtras(url: string): Record<string, unknown> {
   return {
     url,
-    priceValidUntil: priceValidUntil(handle),
+    priceValidUntil: priceValidUntil(),
     validFrom: PRICE_VALID_FROM,
     shippingDetails: GB_SHIPPING_DETAILS,
     hasMerchantReturnPolicy: MERCHANT_RETURN_POLICY,

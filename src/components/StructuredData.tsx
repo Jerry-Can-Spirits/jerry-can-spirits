@@ -1,4 +1,3 @@
-import Script from 'next/script'
 import { safeJsonLd } from '@/lib/jsonLd'
 
 interface StructuredDataProps {
@@ -6,9 +5,15 @@ interface StructuredDataProps {
   id?: string
 }
 
+// A plain <script> tag, NOT next/script: next/script injects after hydration,
+// which left every schema routed through this component (Recipe, Product,
+// Article, Organization, WebSite, FAQPage) absent from the server HTML. AI
+// crawlers do not execute JavaScript, so they saw none of it; Google only saw
+// it on the deferred render pass. A plain tag is server-rendered into the raw
+// response, which is the documented safe delivery for JSON-LD.
 export default function StructuredData({ data, id = 'structured-data' }: StructuredDataProps) {
   return (
-    <Script
+    <script
       id={id}
       type="application/ld+json"
       dangerouslySetInnerHTML={{
@@ -61,21 +66,16 @@ export function OrganizationSchema() {
   return <StructuredData data={schema} id="organization-schema" />
 }
 
-// Website Schema
+// Website Schema. No SearchAction: Google retired the sitelinks search box
+// (its only consumer) in 2024, and the action's target (/search) is disallowed
+// in robots.txt — advertising a search endpoint crawlers are told not to fetch
+// was self-contradictory.
 export function WebsiteSchema() {
   const schema = {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
     name: 'Jerry Can Spirits',
     url: 'https://jerrycanspirits.co.uk',
-    potentialAction: {
-      '@type': 'SearchAction',
-      target: {
-        '@type': 'EntryPoint',
-        urlTemplate: 'https://jerrycanspirits.co.uk/search?q={search_term_string}',
-      },
-      'query-input': 'required name=search_term_string',
-    },
   }
 
   return <StructuredData data={schema} id="website-schema" />

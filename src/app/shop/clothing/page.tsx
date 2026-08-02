@@ -183,7 +183,7 @@ export default async function ClothingPage() {
         },
         offers: productOffer(
           product,
-          merchantOfferExtras(product.handle, `https://jerrycanspirits.co.uk/shop/product/${product.handle}/`),
+          merchantOfferExtras(`https://jerrycanspirits.co.uk/shop/product/${product.handle}/`),
         ),
       },
     })),

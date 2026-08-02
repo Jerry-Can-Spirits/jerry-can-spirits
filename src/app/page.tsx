@@ -111,42 +111,10 @@ export default function Home() {
       "knowsAbout": ["Premium Spiced Rum", "British Spirits", "Military Heritage", "Veteran-Owned Business", "Military Rum"],
       "award": "Armed Forces Covenant Signatory"
     },
-    // LocalBusiness schema for local SEO
-    {
-      "@context": "https://schema.org",
-      "@type": "LocalBusiness",
-      "@id": "https://jerrycanspirits.co.uk/#business",
-      "name": "Jerry Can Spirits",
-      "image": "https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/images-logo-webp/public",
-      "url": "https://jerrycanspirits.co.uk",
-      "telephone": "+44 7521 220541",
-      "email": "hello@jerrycanspirits.co.uk",
-      "priceRange": "££",
-      "description": "Veteran-owned British spirits company. Founded by Royal Corps of Signals veterans. Expedition Spiced Rum, produced at our British partner distillery.",
-      "address": {
-        "@type": "PostalAddress",
-        "streetAddress": "167-169 Great Portland Street",
-        "addressLocality": "London",
-        "addressRegion": "Greater London",
-        "postalCode": "W1W 5PF",
-        "addressCountry": "GB"
-      },
-      "geo": {
-        "@type": "GeoCoordinates",
-        "latitude": 51.5197,
-        "longitude": -0.1437
-      },
-      "sameAs": [
-        "https://www.facebook.com/jerrycanspirits",
-        "https://www.instagram.com/jerrycanspirits"
-      ],
-      "currenciesAccepted": "GBP",
-      "paymentAccepted": "Credit Card, Debit Card, PayPal",
-      "areaServed": {
-        "@type": "Country",
-        "name": "United Kingdom"
-      }
-    },
+    // No LocalBusiness node: it asserts a physical premises customers can
+    // visit, which a DTC brand does not have, and a street address in
+    // structured data sits too close to implying place of production.
+    // Organization + WebSite is the correct pairing for this site.
     // Website schema
     {
       "@context": "https://schema.org",

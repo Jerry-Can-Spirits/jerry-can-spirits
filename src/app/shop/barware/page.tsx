@@ -112,7 +112,7 @@ export default async function BarwarePage() {
         image: product.images?.[0]?.url || '',
         offers: productOffer(
           product,
-          merchantOfferExtras(product.handle, `https://jerrycanspirits.co.uk/shop/product/${product.handle}/`),
+          merchantOfferExtras(`https://jerrycanspirits.co.uk/shop/product/${product.handle}/`),
         ),
       },
     })),
