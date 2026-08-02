@@ -1,3 +1,5 @@
+> HISTORICAL DRAFT. Contains superseded provenance claims. Do not use as a source for copy. See docs/PROVENANCE_CHECKLIST.md.
+
 # Meta Description Audit Implementation Plan
 
 > **For Claude:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task.

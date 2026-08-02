@@ -486,7 +486,7 @@ expedition-spiced-rum
 ```
 **Context Note:**
 ```
-Our Expedition Spiced Rum is distilled in Wales at our British partner distillery, making it genuinely Welsh-made. It provides an alternative base spirit for those who prefer rum to whisky during St David's Day celebrations.
+Expedition Spiced Rum is built on Caribbean rum, macerated by our British partner distillery with seven real botanicals. It provides an alternative base spirit for those who prefer rum to whisky during St David's Day celebrations.
 ```
 
 ---
@@ -495,7 +495,7 @@ Our Expedition Spiced Rum is distilled in Wales at our British partner distiller
 
 **CTA Text:**
 ```
-Explore Our Welsh-Made Rum
+Explore Expedition Spiced Rum
 ```
 
 **CTA URL:**

@@ -116,10 +116,12 @@ Confidence is a fact, stated plainly. These are the facts:
 - Veteran founded. Over 17 years of combined service in the Royal Corps of Signals.
 - 5% of profits to military charities.
 - Batch numbers on every bottle. Every batch traceable.
-- No artificial flavourings. Nine real botanicals, macerated.
+- No artificial flavourings. Seven real botanicals, macerated.
 - RRP £45.
 
 State them once, in context. An award mentioned once is a fact. Mentioned three times on one page it becomes hype.
+
+Seven is the botanical count, as grouped on the ingredients page. The nine-item flavour profile includes agave and bourbon oak, which are sweetening and maturation, not botanicals. The two lists are different on purpose; never conflate them.
 
 ---
 

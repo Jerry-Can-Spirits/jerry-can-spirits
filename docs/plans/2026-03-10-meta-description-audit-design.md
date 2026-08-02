@@ -1,3 +1,5 @@
+> HISTORICAL DRAFT. Contains superseded provenance claims. Do not use as a source for copy. See docs/PROVENANCE_CHECKLIST.md.
+
 # Meta Description Audit: Design Document
 
 **Date:** 2026-03-10

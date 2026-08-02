@@ -9,30 +9,57 @@ without founder sign-off.
 
 ## Approved framing (safe to use)
 
-- British, small batches, our British partner distillery
-- Caribbean rum base; macerated or blended at our British partner distillery
+- British, small batches
+- Caribbean rum base
+- "macerated by our British partner distillery" is the only approved production
+  formulation. Not "at". Not "blended". Not any other verb.
+- The botanical count is seven: Madagascan vanilla, Ceylon cinnamon, ginger,
+  orange peel, cloves, allspice, cassia bark (as grouped on the ingredients
+  page, which the bottle QR points to). The nine-item flavour profile in
+  VOICE.md adds agave and bourbon oak; those are sweetening and maturation,
+  not botanicals. Never conflate the two lists.
 
-## Do not assert
+## Banned constructions (about our rum)
 
-- A Welsh location: "distilled in Wales", "Welsh-distilled", "Welsh water"
+- made at, made in, produced at, produced in, blended at
+- distilled, distilled in, pot still, pot-distilled, column still
+- molasses as a claim about our rum. The Caribbean rum base is fermented
+  upstream, before our process begins, so a molasses claim describes work we
+  do not do.
+- British-made
+- A Welsh location: "distilled in Wales", "Welsh-distilled", "Welsh water",
+  "Welsh-made"
 - Any specific water source ("Pure Welsh Water", "spring water", and the like)
-- That we use molasses. The Caribbean rum base is fermented upstream, before our
-  process begins, so a molasses claim describes work we do not do.
-- The former producer, its name, or its location
-- Any production-location claim beyond "British" until the current partner has
-  produced a batch
+- Any named producer in the present tense
+- Any production-location claim beyond "British"
+
+## Spirit of Wales Distillery (standing commercial decision, August 2026)
+
+The former producer is not to appear anywhere in customer-facing content. Not
+as an editorial feature, not as a production credit, not as a link, not in an
+image caption or alt text. This is not open to interpretation. The same applies
+to its brand names (Steeltown, Dragon's Breath) in any context that concerns us.
+
+## Batch pages
+
+Batch-level pages (/batch/...) carry the batch number, bottling information and
+botanicals. No producer, no place. Brand-level copy uses the approved
+formulation only.
 
 ## The grep
 
-Run from the repo root. Structured data (JSON-LD) is the priority: it is
-machine-readable and the most consequential place for an unverifiable claim.
+Run from the repo root before shipping any copy change. Structured data
+(JSON-LD) is the priority: it is machine-readable and the most consequential
+place for an unverifiable claim.
 
-    rg -n -i "molasses|welsh|wales|newport|pontyclun|distilled in wales|welsh water|spring water" src
+    rg -n -i "molasses|welsh|wales|newport|brecon|steeltown|dragon|spirit of wales|pontyclun|distill|pot.still|made at|made in|produced at|produced in|blended at|british-made|spring water" src public
 
 Read every hit. A hit is acceptable only if it is: the approved framing above;
-the legal "England and Wales" jurisdiction in the terms of service; a generic rum
-fact ("rum is distilled from sugarcane or molasses"); or a non-claim identifier
-(a `distillation_date` field, a Sanity schema field, a code comment).
+the legal "England and Wales" jurisdiction in the terms of service; a generic
+rum fact about the category or another producer ("rum is distilled from
+sugarcane or molasses"); editorial content about unrelated third parties
+(Penderyn, Welsh gin); or a non-claim identifier (a schema field, a code
+comment).
 
 ## Rule when a hit is a real claim
 
@@ -43,6 +70,11 @@ fact ("rum is distilled from sugarcane or molasses"); or a non-claim identifier
 
 ## Sources of recurrence
 
-`CLAUDE.md` and `docs/VOICE.md` carry the brand's product facts. If either lists
-molasses or a Welsh provenance as a fact, every new copy task will reintroduce
-it. Keep both aligned with the approved framing above.
+`CLAUDE.md` and `docs/VOICE.md` carry the brand's product facts. If either
+lists molasses, a Welsh provenance, or a botanical count other than seven as a
+fact, every new copy task will reintroduce it. Keep both aligned with this
+checklist.
+
+`docs/guides-published/` and `docs/plans/` contain historical drafts. Never
+source copy from them. Files known to contain superseded provenance claims
+carry a warning header pointing back to this checklist.

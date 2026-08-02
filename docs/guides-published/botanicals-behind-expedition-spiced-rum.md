@@ -491,7 +491,7 @@ expedition-spiced-rum
 ```
 **Context Note:**
 ```
-Expedition Spiced Rum features every botanical described in this guide, steeped in Caribbean rum at our British partner distillery. See the full ingredient list on our ingredients page or order a bottle to taste these botanicals for yourself.
+Caribbean rum, macerated with seven real botanicals by our British partner distillery. See the full ingredient list on our ingredients page or order a bottle to taste these botanicals for yourself.
 ```
 
 ---
