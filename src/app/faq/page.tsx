@@ -96,7 +96,7 @@ const faqs = [
   },
   {
     question: "Can I visit your distillery?",
-    answer: "Jerry Can Spirits works with a British partner distillery to produce our spirits. Contact us at hello@jerrycanspirits.co.uk for any production enquiries."
+    answer: "Expedition Spiced Rum is macerated by our British partner distillery. Contact us at hello@jerrycanspirits.co.uk for any production enquiries."
   },
   {
     question: "Do you offer corporate gifts or bulk orders?",
