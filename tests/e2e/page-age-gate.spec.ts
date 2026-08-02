@@ -60,3 +60,26 @@ test.describe('Page-level age gate (middleware)', () => {
     expect(status).toBe(200)
   })
 })
+
+// The files that exist for crawlers must answer 200 with no age cookie. These
+// pin the response, not the serving mechanism: /llms.txt moved from a static
+// file in public/ to a route and started 307ing to the gate, because static
+// assets bypass the middleware entirely and a route does not. /manifest.json
+// is in the same position today — static, and therefore exempt by accident
+// rather than by the exclusion list until that was corrected.
+test.describe('crawler-facing files are never age-gated', () => {
+  const CRAWLER_PATHS = [
+    '/robots.txt',
+    '/sitemap.xml',
+    '/llms.txt',
+    '/manifest.json',
+    '/.well-known/security.txt',
+  ]
+
+  for (const path of CRAWLER_PATHS) {
+    test(`${path} returns 200 without an age cookie`, async ({ request }) => {
+      const res = await request.get(path, { maxRedirects: 0 })
+      expect(res.status()).toBe(200)
+    })
+  }
+})

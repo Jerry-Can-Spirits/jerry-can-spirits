@@ -292,13 +292,14 @@ export default async function ProductPage({
             console.warn('[complete-the-serve] "%s" has no variant available for sale — skipping', pairHandle)
             return null
           }
-          // The module adds the FIRST available variant. For a glass with
-          // Pair/Single variants that is the Pair only if it is ordered first in
-          // Shopify — an explicit contract, not an inherited default (the same
-          // assumption caused the cart-upsell bug in #922). Log the pick on
-          // multi-variant products so a wrong one is visible, not silent.
+          // The module adds the FIRST available variant, so Shopify's variant
+          // order is the contract (the same assumption caused the cart-upsell
+          // bug in #922). Record which variant that resolved to on multi-variant
+          // products, so a wrong pick is visible rather than silent. This is an
+          // audit line, not a fault: it fires on every multi-variant product
+          // even when the order is exactly right, so it is info, not warn.
           if (available.length > 1) {
-            console.warn('[complete-the-serve] "%s" has %s available variants; adding "%s". Order the intended variant (e.g. the Pair) first in Shopify.', pairHandle, String(available.length), variant.title)
+            console.info('[complete-the-serve] "%s": added "%s", first of %s available variants in Shopify order.', pairHandle, variant.title, String(available.length))
           }
           return {
             title: p.title,

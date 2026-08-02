@@ -51,11 +51,13 @@ export async function GET() {
         console.warn('[cart-upsell] "%s" has no variant available for sale — skipping', handle)
         continue
       }
-      // Add the FIRST available variant. For a glass with Pair/Single that is the
-      // Pair only if it's ordered first in Shopify — an explicit contract, not a
-      // silent assumption (the class of bug from #922/#948). Log the pick.
+      // Add the FIRST available variant, so Shopify's variant order is the
+      // contract (the class of bug from #922/#948). Record which variant that
+      // resolved to. This is an audit line, not a fault: it fires on every
+      // multi-variant product even when the order is exactly right, so it is
+      // info, not warn.
       if (available.length > 1) {
-        console.warn('[cart-upsell] "%s" has %s available variants; using "%s" (first available). Order the intended variant (e.g. the Pair) first in Shopify.', handle, String(available.length), variant.title)
+        console.info('[cart-upsell] "%s": using "%s", first of %s available variants in Shopify order.', handle, variant.title, String(available.length))
       }
       products.push({
         title: p.title,

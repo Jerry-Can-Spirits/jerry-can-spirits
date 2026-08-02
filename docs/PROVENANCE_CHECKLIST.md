@@ -67,6 +67,25 @@ sugarcane or molasses"); editorial content about unrelated third parties
 (Penderyn, Welsh gin); or a non-claim identifier (a schema field, a code
 comment).
 
+## Known acceptable hits (reviewed, do not re-investigate)
+
+These trip the grep every time and have been ruled on. Leave them alone.
+
+- `Pontyclun, South Wales` on `/friends/` — Harlequin Print Group, our
+  packaging supplier. The town coincides with the former producer's; the
+  company is unrelated and the entry is a legitimate supplier credit.
+- `The packaging is British-made, by partners we name` on `/ethos/` — true,
+  scoped to packaging rather than the rum, and the suppliers are named on the
+  same page.
+- `Rum is distilled from sugarcane or molasses` in the homepage FAQ — a fact
+  about the category, not a claim about ours.
+- `England and Wales` in the terms of service — legal jurisdiction.
+- `Essentials in Distilling (CIBD)` on the team page — a founder's
+  qualification, not a production claim.
+- `British Distillers Alliance` on `/friends/` — trade body membership.
+- `Own our own distillery` on `/about/story/` — a stated future ambition,
+  explicitly not a present claim.
+
 ## Rule when a hit is a real claim
 
 - Remove the claim where deletion leaves a clean, truthful sentence.
