@@ -7,7 +7,7 @@ import Breadcrumbs from '@/components/Breadcrumbs'
 import StructuredData from '@/components/StructuredData'
 import ScrollReveal from '@/components/ScrollReveal'
 import { baseOpenGraph, OG_IMAGE } from '@/lib/og'
-import { safeJsonLd } from '@/lib/jsonLd'
+import { safeJsonLd, ORG_REF } from '@/lib/jsonLd'
 
 // Article schema for the story page
 const articleSchema = {
@@ -17,20 +17,8 @@ const articleSchema = {
   description: 'Two Royal Signals veterans built a spirits company from scratch. No shortcuts. No hidden investors. Expedition Spiced Rum, real ingredients, small batches, British.',
   url: 'https://jerrycanspirits.co.uk/about/story/',
   image: 'https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/images-hero-trail_hero-webp/public',
-  author: {
-    '@type': 'Organization',
-    name: 'Jerry Can Spirits',
-    url: 'https://jerrycanspirits.co.uk',
-  },
-  publisher: {
-    '@type': 'Organization',
-    name: 'Jerry Can Spirits',
-    url: 'https://jerrycanspirits.co.uk',
-    logo: {
-      '@type': 'ImageObject',
-      url: 'https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/images-logo-webp/public',
-    },
-  },
+  author: ORG_REF,
+  publisher: ORG_REF,
   datePublished: '2025-07-31',
   dateModified: '2026-07-22',
   mainEntityOfPage: {

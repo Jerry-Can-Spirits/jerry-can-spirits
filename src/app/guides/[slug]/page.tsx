@@ -11,6 +11,7 @@ import StructuredData from '@/components/StructuredData'
 import ShareButton from '@/components/ShareButton'
 import GuideSections from '@/components/GuideSections'
 import { OG_IMAGE } from '@/lib/og'
+import { ORG_REF, authorRefFor } from '@/lib/jsonLd'
 
 const TEAM_MEMBERS = new Set(['Dan Freeman', 'Rhys Williams'])
 
@@ -191,25 +192,11 @@ export default async function GuidePage({ params }: PageProps) {
     headline: guide.title,
     description: guide.excerpt,
     image: guide.heroImage,
-    author: TEAM_MEMBERS.has(guide.author ?? '')
-      ? {
-          '@type': 'Person',
-          name: guide.author,
-          url: `https://jerrycanspirits.co.uk/about/team/${guide.author!.toLowerCase().replace(/\s+/g, '-')}/`,
-        }
-      : {
-          '@type': 'Organization',
-          name: 'Jerry Can Spirits',
-          url: 'https://jerrycanspirits.co.uk',
-        },
-    publisher: {
-      '@type': 'Organization',
-      name: 'Jerry Can Spirits',
-      logo: {
-        '@type': 'ImageObject',
-        url: 'https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/images-logo-webp/public'
-      }
-    },
+    // Long-form editorial: a named author resolves to that person's node, so
+    // the credentials attach to the writing. Anything unattributed falls back
+    // to the Organization rather than inventing a byline.
+    author: authorRefFor(guide.author),
+    publisher: ORG_REF,
     datePublished: guide.publishedAt || new Date().toISOString(),
     dateModified: guide.updatedAt || guide.publishedAt || new Date().toISOString(),
     mainEntityOfPage: `https://jerrycanspirits.co.uk/guides/${guide.slug.current}`

@@ -6,6 +6,7 @@ import Breadcrumbs from '@/components/Breadcrumbs'
 import ScrollReveal from '@/components/ScrollReveal'
 import { baseOpenGraph } from '@/lib/og'
 import { safeJsonLd } from '@/lib/jsonLd'
+import { ORG_REF } from '@/lib/jsonLd'
 
 export const metadata: Metadata = {
   title: "Friends & Partners",
@@ -205,12 +206,7 @@ export default function FriendsPage() {
           "postalCode": "WR3 8ZF"
         }
       },
-      "sponsor": {
-        "@type": "Organization",
-        "name": "Jerry Can Spirits",
-        "url": "https://jerrycanspirits.co.uk",
-        "description": "Veteran-owned British spirits company. Man of the Match sponsor for the 2025/26 season."
-      }
+      "sponsor": ORG_REF
     }
   ]
 

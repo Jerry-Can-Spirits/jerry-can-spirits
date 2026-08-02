@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import StructuredData from '@/components/StructuredData'
 import { baseOpenGraph } from '@/lib/og'
+import { ORG_REF } from '@/lib/jsonLd'
 
 // WebPage schema for security policy
 const webPageSchema = {
@@ -9,11 +10,7 @@ const webPageSchema = {
   name: 'Security Policy',
   description: 'Jerry Can Spirits® security vulnerability disclosure policy. How to report security issues and our commitment to protecting your data.',
   url: 'https://jerrycanspirits.co.uk/security-policy/',
-  publisher: {
-    '@type': 'Organization',
-    name: 'Jerry Can Spirits',
-    url: 'https://jerrycanspirits.co.uk',
-  },
+  publisher: ORG_REF,
   inLanguage: 'en-GB',
   isPartOf: {
     '@type': 'WebSite',

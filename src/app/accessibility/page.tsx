@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import StructuredData from '@/components/StructuredData'
 import { baseOpenGraph } from '@/lib/og'
+import { ORG_REF } from '@/lib/jsonLd'
 
 // WebPage schema for accessibility statement
 const webPageSchema = {
@@ -9,11 +10,7 @@ const webPageSchema = {
   name: 'Accessibility Statement',
   description: 'Jerry Can Spirits accessibility statement and commitment to providing an inclusive web experience for all users, including those with disabilities.',
   url: 'https://jerrycanspirits.co.uk/accessibility/',
-  publisher: {
-    '@type': 'Organization',
-    name: 'Jerry Can Spirits',
-    url: 'https://jerrycanspirits.co.uk',
-  },
+  publisher: ORG_REF,
   inLanguage: 'en-GB',
   isPartOf: {
     '@type': 'WebSite',
