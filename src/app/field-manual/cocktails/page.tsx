@@ -61,7 +61,6 @@ export default async function CocktailsPage() {
     name: 'Jerry Can Spirits Cocktail Recipes',
     description: 'Rum cocktail recipes from classic serves to signature creations.',
     url: 'https://jerrycanspirits.co.uk/field-manual/cocktails/',
-    publisher: { '@id': 'https://jerrycanspirits.co.uk/#organization' },
     numberOfItems: cocktails.length,
     itemListElement: cocktails.map((cocktail, index) => ({
       '@type': 'ListItem',
