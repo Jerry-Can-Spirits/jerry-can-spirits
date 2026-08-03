@@ -38,14 +38,16 @@ export default async function EquipmentPage() {
   const equipment = await client.fetch(equipmentListQuery, {}, { next: { revalidate: 3600 } })
 
   // ItemList of URL references only; the full Article schema lives on each
-  // equipment page. Publisher references the site-wide #organization node.
+  // equipment page. No publisher here: ItemList extends Intangible, not
+  // CreativeWork, so publisher is not a valid property and Ahrefs flagged it
+  // as a schema.org validation error. The Organization is already tied to the
+  // site by the WebSite node's publisher, emitted on every page.
   const itemListSchema = {
     '@context': 'https://schema.org',
     '@type': 'ItemList',
     name: 'Jerry Can Spirits Equipment Guides',
     description: 'Bar equipment guides: shakers, strainers, measures, glassware and tools.',
     url: 'https://jerrycanspirits.co.uk/field-manual/equipment/',
-    publisher: { '@id': 'https://jerrycanspirits.co.uk/#organization' },
     numberOfItems: equipment.length,
     itemListElement: equipment.map((item: { name: string; slug: { current: string } }, index: number) => ({
       '@type': 'ListItem',
