@@ -55,16 +55,17 @@ export default async function GuidesPage() {
 
   // Build ItemList schema for article collection. URL references only, not
   // inlined Article objects: the full Article schema lives on each guide page,
-  // and inlined copies invite incomplete-markup validation errors. Publisher
-  // references the site-wide #organization node by @id rather than inlining
-  // another anonymous copy.
+  // and inlined copies invite incomplete-markup validation errors. No
+  // publisher here: ItemList extends Intangible, not CreativeWork, so
+  // publisher is not a valid property and Ahrefs flagged it as a schema.org
+  // validation error. The Organization is already tied to the site by the
+  // WebSite node's publisher, emitted on every page.
   const itemListSchema = {
     '@context': 'https://schema.org',
     '@type': 'ItemList',
     name: 'Jerry Can Spirits Guides & Education',
     description: 'Cocktail techniques, ingredient deep-dives and home bar knowledge from the makers of Expedition Spiced Rum.',
     url: 'https://jerrycanspirits.co.uk/guides/',
-    publisher: { '@id': 'https://jerrycanspirits.co.uk/#organization' },
     numberOfItems: guides.length,
     itemListElement: guides.map((guide, index) => ({
       '@type': 'ListItem',
