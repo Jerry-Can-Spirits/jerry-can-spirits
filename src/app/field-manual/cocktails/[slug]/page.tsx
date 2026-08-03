@@ -15,7 +15,7 @@ import { notFound } from 'next/navigation'
 import { getCloudflareContext } from '@opennextjs/cloudflare'
 import { sanityOgUrl } from '@/sanity/lib/image'
 import { OG_IMAGE_COCKTAIL } from '@/lib/og'
-import { ORG_REF } from '@/lib/jsonLd'
+import { ORG_REF, authorRefFor } from '@/lib/jsonLd'
 
 // Hourly ISR: the old ratings lookup was an HTTP fetch with an hourly cache,
 // which also refreshed the page. The direct KV read below has no cache of its
@@ -248,10 +248,14 @@ export default async function CocktailPage({ params }: PageProps) {
       "url": `https://jerrycanspirits.co.uk/field-manual/cocktails/${slug}/#step-${index + 1}`,
       "image": sanityOgUrl(cocktail.image) || "https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/images-logo-webp/public"
     })) || [],
-    // Always the Organization. These are curated classics we did not write, so
-    // claiming authorship of the Bee's Knees would be false. The previous
-    // conditional also emitted a Person whose url pointed at our own site.
-    "author": ORG_REF,
+    // Resolved, not hardcoded. Curated classics carry "Jerry Can Spirits" and
+    // resolve to the Organization, because claiming authorship of the Bee's
+    // Knees would be false. Our own creations name their author, and only a
+    // name in TEAM_SLUGS resolves to a Person node; anything else falls back
+    // to the Organization, so an unrecognised value can never invent a byline.
+    // Hardcoding this meant the visible "Recipe by" line and the structured
+    // data disagreed the moment a house recipe was attributed to a person.
+    "author": authorRefFor(cocktail.author),
     "publisher": ORG_REF,
     "datePublished": cocktail._createdAt,
     "prepTime": prepTime,
