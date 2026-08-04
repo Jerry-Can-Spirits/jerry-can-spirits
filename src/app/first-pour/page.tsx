@@ -6,7 +6,7 @@ import { baseOpenGraph, OG_IMAGE } from '@/lib/og'
 
 export const metadata: Metadata = {
   title: 'First Pour | The Jerry Can Spirits Companion Book',
-  description: 'A free companion book from Jerry Can Spirits. How the rum is built, how to drink it properly, and the first cocktails to try. Enter your email and we will send it over.',
+  description: 'A free companion book from Jerry Can Spirits. How the rum is built, how to drink it properly, and the first cocktails to try. Enter your email to get it.',
   alternates: {
     canonical: 'https://jerrycanspirits.co.uk/first-pour/',
   },

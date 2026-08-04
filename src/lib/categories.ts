@@ -17,7 +17,7 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
 
   'rum-gifts': {
     h1: 'Rum Gifts',
-    metaTitle: 'Rum Gifts UK',
+    metaTitle: 'Rum Gifts UK: Veteran-Owned British Spirits',
     metaDescription:
       'Rum gifts for people who actually drink it. Expedition Spiced Rum from a veteran-owned British spirits house. Real ingredients, small batch, built properly.',
     introBody: [
@@ -353,7 +353,7 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
 
   'new-releases': {
     h1: 'New Releases',
-    metaTitle: 'New Releases',
+    metaTitle: 'New Releases: Latest Rum, Barware and Glassware',
     metaDescription:
       'New expressions from Jerry Can Spirits. Veteran-owned British spirits house. Small-batch, built properly, no shortcuts. Every release earns its place.',
     introBody: [
@@ -367,7 +367,7 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
 
 const giftSetsConfig: CategoryConfig = {
   h1: 'Gift Sets',
-  metaTitle: 'Gift Sets',
+  metaTitle: 'Rum Gift Sets: Bottle and Barware Bundles',
   metaDescription:
     'Rum gift sets and experience bundles from Jerry Can Spirits. Veteran-owned, British. Built for people who appreciate quality.',
   introBody: [
