@@ -14,7 +14,7 @@ const articleSchema = {
   '@context': 'https://schema.org',
   '@type': 'Article',
   headline: 'Our Story - How Two Veterans Built a British Spirits Company',
-  description: 'Two Royal Signals veterans built a spirits company from scratch. No shortcuts. No hidden investors. Expedition Spiced Rum, real ingredients, small batches, British.',
+  description: 'Two Royal Signals veterans built a spirits company from scratch. No shortcuts, no hidden investors. Expedition Spiced Rum: real ingredients, small batches.',
   url: 'https://jerrycanspirits.co.uk/about/story/',
   image: 'https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/images-hero-trail_hero-webp/public',
   author: ORG_REF,
@@ -81,20 +81,20 @@ const storyFaqs: Array<{ question: string; answer: string; rich?: ReactNode }> =
 
 export const metadata: Metadata = {
   title: "Our Story - Two Veteran Founders",
-  description: "Two Royal Signals veterans built a spirits company from scratch. No shortcuts. No hidden investors. Expedition Spiced Rum, real ingredients, small batches, British.",
+  description: "Two Royal Signals veterans built a spirits company from scratch. No shortcuts, no hidden investors. Expedition Spiced Rum: real ingredients, small batches.",
   alternates: {
     canonical: 'https://jerrycanspirits.co.uk/about/story/',
   },
   openGraph: {
     ...baseOpenGraph,
     title: "Our Story | Jerry Can Spirits®",
-    description: "Two Royal Signals veterans built a spirits company from scratch. No shortcuts. No hidden investors. Expedition Spiced Rum, real ingredients, small batches, British.",
+    description: "Two Royal Signals veterans built a spirits company from scratch. No shortcuts, no hidden investors. Expedition Spiced Rum: real ingredients, small batches.",
     url: 'https://jerrycanspirits.co.uk/about/story/',
   },
   twitter: {
     card: 'summary_large_image' as const,
     title: "Our Story | Jerry Can Spirits®",
-    description: "Two Royal Signals veterans built a spirits company from scratch. No shortcuts. No hidden investors. Expedition Spiced Rum, real ingredients, small batches, British.",
+    description: "Two Royal Signals veterans built a spirits company from scratch. No shortcuts, no hidden investors. Expedition Spiced Rum: real ingredients, small batches.",
     images: OG_IMAGE,
   },
   robots: {
