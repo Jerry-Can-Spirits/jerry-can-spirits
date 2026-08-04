@@ -595,7 +595,7 @@ Based in the UK, Jerry Can Spirits® is a small operation run by two mates who c
                   <p className="text-parchment-300 text-sm mb-4">Used for all headings and display text</p>
                   <div className="border-t border-gold-500/20 pt-4">
                     <p className="text-2xl font-serif text-parchment-100">Engineered for Adventure</p>
-                    <p className="text-xl font-serif text-parchment-200 mt-1">Premium British Craft Rum</p>
+                    <p className="text-xl font-serif text-parchment-200 mt-1">Premium British Craft Spirits</p>
                   </div>
                 </div>
 

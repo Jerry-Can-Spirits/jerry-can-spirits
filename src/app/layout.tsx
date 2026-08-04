@@ -52,7 +52,7 @@ export const metadata: Metadata = {
     // titles past ~60 chars, causing truncation and Google-rewritten titles.
     // The homepage keeps the brand via `default`.
     template: '%s',
-    default: 'Jerry Can Spirits® | Veteran-Owned British Rum',
+    default: 'Jerry Can Spirits® | Veteran-Owned British Spirits',
   },
   keywords: "veteran-owned rum, British spirits, military heritage rum, premium rum, Royal Corps of Signals, expedition rum, small-batch spirits, craft rum, British rum, sustainable spirits",
   authors: [{ name: "Jerry Can Spirits®" }],

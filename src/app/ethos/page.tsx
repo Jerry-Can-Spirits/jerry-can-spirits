@@ -8,13 +8,13 @@ import ScrollReveal from '@/components/ScrollReveal'
 import { OG_IMAGE } from '@/lib/og'
 
 export const metadata: Metadata = {
-  title: "Our Ethos - How We Make Rum",
+  title: "Our Ethos - How We Build Spirits",
   description: "The values behind Jerry Can Spirits. Built on discipline, integrity, and real ingredients. Madagascan vanilla, Ceylon cinnamon, real botanicals. Veteran-owned.",
   alternates: {
     canonical: 'https://jerrycanspirits.co.uk/ethos/',
   },
   openGraph: {
-    title: 'Our Ethos - How We Make Rum | Jerry Can Spirits®',
+    title: 'Our Ethos - How We Build Spirits | Jerry Can Spirits®',
     description: 'The values behind Jerry Can Spirits. Built on discipline, integrity, and real ingredients. Real botanicals, British, veteran-owned.',
     url: 'https://jerrycanspirits.co.uk/ethos/',
     siteName: 'Jerry Can Spirits®',
@@ -24,7 +24,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image' as const,
-    title: 'Our Ethos - How We Make Rum | Jerry Can Spirits®',
+    title: 'Our Ethos - How We Build Spirits | Jerry Can Spirits®',
     description: 'The values behind Jerry Can Spirits. Built on discipline, integrity, and real ingredients. Real botanicals, British, veteran-owned.',
     images: OG_IMAGE,
   },

@@ -32,7 +32,7 @@ Write like a founder who means it.
 - If a sentence does not add meaning, remove it.
 - British English. -ise endings, litre, colour.
 - Prices: £45, never £45.00. Numbers under ten in words, except measurements, percentages, and ABV.
-- The product is Expedition Spiced Rum. Always the full name on first mention on any page. Never "Expedition Spiced" alone.
+- Expedition is the range. Expedition Spiced Rum is the current expression. Always the full expression name on first mention on any page; never "Expedition Spiced" alone. "Expedition" unqualified refers to the range, not to a product.
 - ABV always as 40% ABV. Volume always as 700ml.
 
 ---
@@ -89,21 +89,24 @@ All content connects to one of these layers, in order of priority:
 
 1. Identity: For those who go further.
 2. Integrity: Built properly. No shortcuts. No hidden investors.
-3. Craft: Real ingredients. Macerated properly. No artificial flavourings.
+3. Craft: Real ingredients. Process chosen for the spirit, never for speed. No artificial flavourings.
 4. Purpose: 5% of profits support military charities.
 5. Experience: Designed for slow sipping. Engineered for reliability.
 
 ---
 
-## The product
+## The current expression
 
-- Name: Expedition Spiced Rum
+**Expedition Spiced Rum**
+
 - Base: Caribbean rum
 - Maceration partner: our British partner distillery
 - Flavour profile: Vanilla, cinnamon, allspice, clove, orange peel, cassia, ginger, agave, bourbon oak
 - ABV: 40% ABV | Volume: 700ml
 - RRP: £45
 - Designed for slow sipping. Not shots. Not a mixer to forget.
+
+Each expression gets its own block in this form. Facts that hold across the range live in Proof points, not here.
 
 ---
 
@@ -131,7 +134,19 @@ Every description answers three questions, in this order: what is it, what does 
 
 Features are the start, not the copy. "Stainless steel jigger" is a feature. What it does for the person pouring is the copy.
 
-Accessories are part of the ritual, not add-ons. Write them as the way the rum is meant to be served. Never duplicate a description across products.
+Accessories are part of the ritual, not add-ons. Write them as the way the spirit is meant to be served. Never duplicate a description across products.
+
+---
+
+## Range language
+
+Jerry Can Spirits is a British spirits house. Expedition Spiced Rum is its first expression, not its definition.
+
+**Survives a second product:** British spirits house · our first expression · the current expression · the Expedition range · we make spirits
+
+**Does not:** we make rum · a rum brand · a British rum company · "our rum" standing in for the company · any structure implying one product is the whole business
+
+"Our rum" is correct when it means the liquid. It is wrong when it means us.
 
 ---
 

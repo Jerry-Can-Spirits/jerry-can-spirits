@@ -130,7 +130,7 @@ export default function OurStory() {
             <div className="relative w-full max-w-2xl mx-auto h-48 sm:h-64 md:h-80 lg:h-96 rounded-lg overflow-hidden border border-gold-500/20 mb-8 shadow-2xl">
               <Image
                 src="/images/hero/Trail_Hero.webp"
-                alt="Jerry Can Spirits - Veteran-owned British rum with military heritage"
+                alt="Jerry Can Spirits - Veteran-owned British spirits with military heritage"
                 fill
                 className="object-cover"
                 sizes="(max-width: 768px) 100vw, 672px"
