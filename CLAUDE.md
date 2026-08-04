@@ -6,6 +6,8 @@ Jerry Can Spirits is a veteran-owned British craft spirits house. Founded by two
 
 First expression: Expedition Spiced. Caribbean rum base. Macerated by our British partner distillery. Real ingredients. No artificial flavourings.
 
+Jerry Can Spirits is a **spirits house, not a rum brand**. Expedition is the range; Expedition Spiced Rum is the current expression. Write the company as a British spirits house whose first expression is a rum — never as "a rum brand", "we make rum", or "our rum" standing in for the company. "Our rum" is correct for the liquid and wrong for the business. Full range-language rules are in `docs/VOICE.md`.
+
 Price: £35 currently; RRP rises to £45 on 3 August 2026.
 5% of profits support military charities.
 Launch date: April 6, 2026.

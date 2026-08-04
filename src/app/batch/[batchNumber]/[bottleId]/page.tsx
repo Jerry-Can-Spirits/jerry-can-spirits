@@ -81,7 +81,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const displayLabel = displayNameFor(labelType)
   return {
     title: `${displayLabel} #${bottleNumber} — ${batch.name}`,
-    description: `Certificate of authenticity for ${displayLabel} bottle #${bottleNumber} from ${batch.name}. Jerry Can Spirits — veteran-owned premium British rum.`,
+    description: `Certificate of authenticity for ${displayLabel} bottle #${bottleNumber} from ${batch.name}. Jerry Can Spirits, veteran-owned premium British spirits.`,
     robots: { index: false, follow: true },
   }
 }

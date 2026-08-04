@@ -37,7 +37,7 @@ export async function GET() {
 
   const body = `# Jerry Can Spirits
 
-> Veteran-owned British craft rum. Engineered for reliability, designed for adventure.
+> Veteran-owned British craft spirits. Engineered for reliability, designed for adventure.
 
 ## Company Overview
 
