@@ -80,6 +80,31 @@ breaks at runtime. `next.config.ts` asserts the required ones for that reason.
 Runtime secrets read through `getCloudflareContext().env` live on the Worker
 and survive reconnection; the two sets are not interchangeable.
 
+## Check the check
+
+Four distinct failure modes on this project have shared one shape: something
+reported success while being wrong. A green Workers Build with no environment
+variables. A cache-busted URL returning fresh content while every real visitor
+got a stale price. A test that passed because the exemption it asserted was
+never removed. A link audit that read rendered text and missed the same link
+held in a structured field.
+
+The only defence that has worked is verifying the verification: check what the
+check actually measured, not merely that it passed.
+
+**Scripts run in this order: typecheck, dry run, execute.** `scripts/` is
+typechecked by the build, so a script that runs correctly can still break CI.
+Worse, running before typechecking means a script that would fail the build has
+already written to production Sanity. Any script touching more than a handful
+of documents needs a dry-run mode that prints every intended edit and writes
+nothing without an explicit flag.
+
+**Branch discipline.** After pushing a branch and opening a PR, any further
+work starts a new branch off `main`. PRs here are merged within minutes, so
+pushing a follow-up commit to a branch whose PR has already merged silently
+orphans it. That has happened four times; each time the work was recoverable
+only because someone noticed.
+
 ## Copy and content
 
 Customer-facing words follow `docs/VOICE.md`. Trademark, logo, and colour usage follow `docs/BRAND_GUIDELINES.md`. Security-relevant changes follow `docs/SECURITY.md`.
