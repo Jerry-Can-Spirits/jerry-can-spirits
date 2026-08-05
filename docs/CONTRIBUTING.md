@@ -99,11 +99,12 @@ already written to production Sanity. Any script touching more than a handful
 of documents needs a dry-run mode that prints every intended edit and writes
 nothing without an explicit flag.
 
-**Branch discipline.** After pushing a branch and opening a PR, any further
-work starts a new branch off `main`. PRs here are merged within minutes, so
-pushing a follow-up commit to a branch whose PR has already merged silently
-orphans it. That has happened four times; each time the work was recoverable
-only because someone noticed.
+**The branch rule under Starting work is the same failure.** Pushing a
+follow-up commit to a branch whose PR has already merged orphans it silently:
+the push succeeds, the commit exists, and nothing is on `main`. That has now
+happened four times, and the rule forbidding it was already written here each
+time. Before pushing a follow-up, check whether the PR has merged rather than
+assuming it has not.
 
 ## Copy and content
 
