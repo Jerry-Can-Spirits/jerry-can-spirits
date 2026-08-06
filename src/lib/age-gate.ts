@@ -83,7 +83,13 @@ export const BOT_USER_AGENTS = [
   'duckduckbot',
   'baiduspider',
   'yandexbot',
-  'facebot', // Facebook
+  'facebot', // Facebook, legacy token
+  // facebookexternalhit is the crawler that builds the link preview when a URL
+  // is shared on Facebook, Messenger, Instagram or WhatsApp. Gated, it renders
+  // the age-check page as the preview, so every shared link looks broken.
+  // Measured over seven days of Worker logs: 44 requests redirected, 42 served.
+  'facebookexternalhit',
+  'meta-externalads', // Meta ads crawler; 17 redirected in the same window
   'ia_archiver', // Alexa
 
   // SEO tools
