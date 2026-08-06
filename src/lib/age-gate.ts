@@ -109,12 +109,23 @@ export const BOT_USER_AGENTS = [
   'surfer bot', // SurferSEO Site Audit (exact User-Agent)
   'surfer', // SurferSEO fallback
 
-  // Social media
+  // Social media and messaging link previews. Each of these fetches a page to
+  // build the card shown when someone shares a URL. Gated, the card renders the
+  // age-check page instead of the product or recipe, so a share looks broken.
+  // Audited against current published lists after facebookexternalhit was found
+  // missing; the eight below had never been considered.
   'twitterbot',
   'linkedinbot',
   'pinterestbot',
+  'pinterest/', // Pinterest's other UA: "Pinterest/0.2", distinct from pinterestbot
   'whatsapp',
   'telegrambot',
+  'slackbot', // covers Slackbot and Slackbot-LinkExpanding
+  'discordbot',
+  'redditbot',
+  'skypeuripreview',
+  'mastodon',
+  'cardyb', // Bluesky's link-card fetcher, "Bluesky Cardyb/1.1"
 
   // Validation tools
   'w3c_validator',
