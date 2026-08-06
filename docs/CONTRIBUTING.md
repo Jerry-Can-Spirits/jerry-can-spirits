@@ -99,6 +99,22 @@ already written to production Sanity. Any script touching more than a handful
 of documents needs a dry-run mode that prints every intended edit and writes
 nothing without an explicit flag.
 
+**Verify the query before reporting a surprising result.** A guide titled *The
+Rise of English Whisky* was measured as containing zero occurrences of
+"English". The extraction had silently returned one word, and the zero was an
+artefact of the query rather than a fact about the guide. Its absurdity was the
+only signal. Where a result would be surprising if true, confirm the
+measurement works before reporting what it found.
+
+**Prefer checks that fail when the thing they verify is absent.** Of the
+failures listed here, only the middleware exclusion test could not have slipped
+through, because removing the exemption makes the test fail. A check that
+passes whether or not the feature exists is not evidence of anything.
+
+**Measurements are labelled MEASURED or ASSUMED.** An inference reported in the
+same register as a measurement is indistinguishable from one. If a number is
+assumed, say what would confirm it.
+
 **The branch rule under Starting work is the same failure.** Pushing a
 follow-up commit to a branch whose PR has already merged orphans it silently:
 the push succeeds, the commit exists, and nothing is on `main`. That has now
