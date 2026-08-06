@@ -201,44 +201,43 @@ export default async function EquipmentDetailPage({ params }: { params: Promise<
           {/* Left Column - Image and Sticky Info */}
           <div className="order-2 lg:order-1">
             <div className="lg:sticky lg:top-24 space-y-6">
-              {/* Image Section - Mobile Order 1 */}
-              <div className="order-1 bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
-                {equipment.image ? (
-                  <div className="relative aspect-square bg-jerry-green-800/20 rounded-lg overflow-hidden">
-                    <Image
-                      src={urlFor(equipment.image).url()}
-                      alt={equipment.image?.alt || equipment.name}
-                      fill
-                      className="object-cover"
-                      sizes="(max-width: 1024px) 100vw, 50vw"
-                      priority
-                    />
-                  </div>
-                ) : (
-                  <div className="aspect-square bg-jerry-green-800/20 rounded-lg flex items-center justify-center">
-                    <div className="text-center">
-                      <div className="w-24 h-24 bg-gold-400/20 rounded-full flex items-center justify-center mx-auto mb-6">
-                        <svg className="w-12 h-12 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                        </svg>
-                      </div>
-                      <p className="text-parchment-300">Image coming soon</p>
+              {/* Image and badge panel. Half the equipment documents have no
+                  image, and the template used to fill the gap with a framed
+                  "Image coming soon" placeholder sitting directly beneath the
+                  opening paragraph — the copy an answer engine lifts. A text
+                  page reads fine without an image, so when there is nothing to
+                  put in the panel the panel itself is not rendered: guarding
+                  only the image would leave an empty bordered box in its place.
+                  The essential badge shares the panel, so it keeps the panel
+                  alive on its own. */}
+              {(equipment.image || equipment.essential) && (
+                <div className="order-1 bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
+                  {equipment.image && (
+                    <div className="relative aspect-square bg-jerry-green-800/20 rounded-lg overflow-hidden">
+                      <Image
+                        src={urlFor(equipment.image).url()}
+                        alt={equipment.image?.alt || equipment.name}
+                        fill
+                        className="object-cover"
+                        sizes="(max-width: 1024px) 100vw, 50vw"
+                        priority
+                      />
                     </div>
-                  </div>
-                )}
+                  )}
 
-                {equipment.essential && (
-                  <div className="mt-6 p-4 bg-gold-500/10 border border-gold-500/30 rounded-lg">
-                    <div className="flex items-center gap-3">
-                      <span className="text-2xl">★</span>
-                      <div>
-                        <h3 className="text-gold-300 font-semibold">Essential Equipment</h3>
-                        <p className="text-parchment-300 text-sm">Recommended for every home bar</p>
+                  {equipment.essential && (
+                    <div className={`${equipment.image ? 'mt-6 ' : ''}p-4 bg-gold-500/10 border border-gold-500/30 rounded-lg`}>
+                      <div className="flex items-center gap-3">
+                        <span className="text-2xl">★</span>
+                        <div>
+                          <h3 className="text-gold-300 font-semibold">Essential Equipment</h3>
+                          <p className="text-parchment-300 text-sm">Recommended for every home bar</p>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                )}
-              </div>
+                  )}
+                </div>
+              )}
 
               {/* We Make One — editorial card for equipment we sell ourselves */}
               {equipment.ownProduct?.path && equipment.ownProduct?.name && (
