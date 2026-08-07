@@ -73,6 +73,16 @@ in the dashboard, or retry immediately after a `main` deploy and before the
 next preview build. Do not "fix" it by deploying the latest version — that
 version is a preview branch.
 
+**Crawler measurement has a permanent ceiling.** The zone is on the Pro Website
+plan, so Bot Management is unavailable and `cf.verifiedBotCategory` is empty on
+every request. Crawler traffic can only be attributed by user-agent plus
+`cf.asn` / `cf.asOrganization`, and user-agents are trivially spoofed: a
+7-day sample contained requests carrying `meta-externalagent` from Google Cloud
+probing for `/.gitconfig`. Report such measurements as UA-and-ASN attribution,
+never as verified. The data lives in Workers Logs, reachable at
+`POST /accounts/{account}/workers/observability/telemetry/query` with the
+standard API token; zone analytics needs a scope the token does not have.
+
 **Build variables live on the trigger, not the Worker.** Reconnecting the Git
 integration creates fresh triggers with no variables, and `NEXT_PUBLIC_*`
 values are inlined at build time, so the build stays green and the deploy

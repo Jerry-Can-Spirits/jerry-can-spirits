@@ -141,3 +141,38 @@ describe('crawler-facing paths are never age-gated', () => {
     }
   })
 })
+
+// Social link-preview crawlers. facebookexternalhit builds the preview card
+// shown when a URL is shared on Facebook, Messenger, Instagram or WhatsApp.
+// Gated, it renders the age-check page as the preview and every shared link
+// looks broken. Seven days of Worker logs showed 44 of its requests redirected
+// to the gate, against 42 served, right up to the day this was written.
+describe('social link-preview crawlers reach content', () => {
+  const SOCIAL: Record<string, string> = {
+    facebookexternalhit: 'facebookexternalhit/1.1 (+http://www.facebook.com/externalhit_uatext.php)',
+    'meta-externalads': 'meta-externalads/1.1 (+https://developers.facebook.com/docs/sharing/webmasters/crawler)',
+    'meta-externalagent': 'meta-externalagent/1.1 (+https://developers.facebook.com/docs/sharing/webmasters/crawler)',
+    slackbot: 'Slackbot 1.0 (+https://api.slack.com/robots)',
+    'slackbot-linkexpanding': 'Slackbot-LinkExpanding 1.0 (+https://api.slack.com/robots)',
+    discordbot: 'Mozilla/5.0 (compatible; Discordbot/2.0; +https://discordapp.com)',
+    pinterestbot: 'Mozilla/5.0 (compatible; Pinterestbot/1.0; +http://www.pinterest.com/bot.html)',
+    'pinterest-0.2': 'Pinterest/0.2 (+http://www.pinterest.com/bot.html)',
+    redditbot: 'Mozilla/5.0 (compatible; redditbot/1.0; +http://www.reddit.com/feedback)',
+    telegrambot: 'TelegramBot (like TwitterBot)',
+    whatsapp: 'WhatsApp/2.23.20.0',
+    skypeuripreview: 'SkypeUriPreview Preview/0.5',
+    mastodon: 'Mastodon/4.2.0 (http.rb/5.1.1; +https://mastodon.social/)',
+    bluesky: 'Bluesky Cardyb/1.1',
+    twitterbot: 'Twitterbot/1.0',
+    linkedinbot: 'LinkedInBot/1.0 (compatible; Mozilla/5.0; Apache-HttpClient +http://www.linkedin.com)',
+  }
+
+  for (const [name, ua] of Object.entries(SOCIAL)) {
+    it(`${name} is not redirected to the age gate`, () => {
+      expect(isBot(ua), `${name} missing from BOT_USER_AGENTS`).toBe(true)
+      const res = middleware(gatedRequest(ua))
+      expect(res.status).not.toBe(307)
+      expect(res.headers.get('location')).toBeNull()
+    })
+  }
+})
