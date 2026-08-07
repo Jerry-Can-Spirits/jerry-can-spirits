@@ -167,7 +167,7 @@ export const ingredientBySlugQuery = `*[_type == "ingredient" && slug.current ==
   // Styles of this ingredient: the reverse of the typed parent reference.
   // Sub-selected here so a parent page costs one query rather than two, and
   // so an ingredient with no styles costs nothing at all.
-  "subTypes": *[_type == "ingredient" && parent._ref == ^._id] | order(name asc) { _id, name, slug },
+  "subTypes": *[_type == "ingredient" && parent._ref == ^._id] | order(coalesce(displayOrder, 9999) asc, name asc) { _id, name, slug },
   _id,
   _createdAt,
   name,

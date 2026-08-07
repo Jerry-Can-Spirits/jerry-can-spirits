@@ -514,6 +514,14 @@ export default defineType({
         })
     }),
     defineField({
+      name: 'displayOrder',
+      title: 'Display Order',
+      type: 'number',
+      description:
+        'Position in the "Styles of" list on the parent page. Lower comes first. Leave empty and it falls back to alphabetical, which is right for most families — set it only where reading order matters, as it does for whisky, where alphabetical leads with Islay and Penderyn, the two most obscure entries.',
+      validation: Rule => Rule.integer().min(0)
+    }),
+    defineField({
       name: 'relatedIngredients',
       title: 'Related Ingredients',
       type: 'array',
