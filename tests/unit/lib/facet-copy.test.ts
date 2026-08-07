@@ -72,10 +72,53 @@ describe('the sub-type split', () => {
 })
 
 describe('the copy store', () => {
-  it('is empty until copy is approved, and a missing entry renders no intro', () => {
-    // The template must never generate filler for a facet nobody has written.
-    expect(Object.keys(FACET_COPY)).toHaveLength(0)
-    expect(copyFor('spirit', 'whiskey')).toBeUndefined()
+  it('holds an entry for every indexable facet except the duplicate', () => {
+    // 19 indexable facets, 18 written. mocktails is deliberately absent: it
+    // describes the same ten drinks as non-alcoholic and canonicalises to it,
+    // so a second introduction would be the duplication the canonical resolves.
+    expect(Object.keys(FACET_COPY)).toHaveLength(18)
+    expect(copyFor('style', 'mocktails')).toBeUndefined()
+    expect(copyFor('spirit', 'non-alcoholic')).toBeDefined()
+  })
+
+  it('renders no introduction for a facet nobody has written', () => {
+    // The template must never generate filler.
+    expect(copyFor('style', 'swizzles')).toBeUndefined()
+  })
+
+  it('gives every entry all four fields', () => {
+    for (const [key, copy] of Object.entries(FACET_COPY)) {
+      expect(copy.h1, `${key} h1`).toBeTruthy()
+      expect(copy.title, `${key} title`).toBeTruthy()
+      expect(copy.description, `${key} description`).toBeTruthy()
+      expect(copy.intro, `${key} intro`).toBeTruthy()
+    }
+  })
+
+  it('keeps every H1 free of a count, which is the reason it is its own field', () => {
+    for (const [key, copy] of Object.entries(FACET_COPY)) {
+      expect(copy.h1, `${key} h1 carries a token`).not.toMatch(/\{/)
+    }
+  })
+
+  it('uses no em-dash and no exclamation mark anywhere in the copy', () => {
+    // VOICE.md, enforced rather than remembered. Comments in this file are
+    // house style and are not copy; these are the strings readers see.
+    for (const [key, copy] of Object.entries(FACET_COPY)) {
+      for (const [field, value] of Object.entries(copy)) {
+        expect(value, `${key}.${field} contains an em-dash`).not.toContain('—')
+        expect(value, `${key}.${field} contains an exclamation mark`).not.toContain('!')
+      }
+    }
+  })
+
+  it('opens every introduction with the source of the fact', () => {
+    // "This Field Manual holds ..." is what makes the first sentence
+    // unliftable: it is a claim about this site's data, not about cocktails in
+    // general, so it cannot be pasted onto a competitor.
+    for (const [key, copy] of Object.entries(FACET_COPY)) {
+      expect(copy.intro, `${key} intro`).toMatch(/^This Field Manual holds \{recipes\}/)
+    }
   })
 })
 
@@ -131,5 +174,47 @@ describe('rendered sentences', () => {
       expect(out, `count ${count} produced "${out}"`).not.toMatch(/\b1 recipes\b/)
       expect(out).not.toMatch(/\b(?!1\b)\d+ recipe\b/)
     }
+  })
+})
+
+describe('an unmapped sub-type', () => {
+  it('renders human-readable rather than as a raw slug', () => {
+    // The day someone tags a new sub-type, this is what appears in live copy
+    // on every page using {split}. A hyphenated slug in prose is the failure.
+    expect(renderSplit([{ member: 'navy-rum', count: 1 }])).toBe('1 navy rum')
+    expect(renderSplit([{ member: 'navy-rum', count: 1 }])).not.toContain('-')
+  })
+
+  it('still prefers an explicit label where one exists', () => {
+    expect(renderSplit([{ member: 'rye-whiskey', count: 22 }])).toBe('22 rye')
+  })
+})
+
+describe('{styles}', () => {
+  it('counts the sub-types that hold something', () => {
+    const split = [
+      { member: 'white-rum', count: 19 },
+      { member: 'dark-rum', count: 13 },
+      { member: 'navy-rum', count: 0 },
+    ]
+    expect(renderCopy('{styles} styles', { count: 32, split })).toBe('2 styles')
+  })
+
+  it('keeps a meta inside the ceiling where {split} would not', () => {
+    // MEASURED: the same sentence with {split} renders at 188 characters.
+    const split = [
+      { member: 'white-rum', count: 19 },
+      { member: 'dark-rum', count: 13 },
+      { member: 'aged-rum', count: 10 },
+      { member: 'spiced-rum', count: 8 },
+      { member: 'overproof-rum', count: 2 },
+      { member: 'rhum-agricole', count: 1 },
+      { member: 'cachaca', count: 1 },
+    ]
+    const meta = renderCopy(
+      '{recipes} built on rum across {styles} styles. Which rum you reach for changes the drink more than which bottle.',
+      { count: 54, split }
+    )
+    expect(meta.length).toBeLessThan(155)
   })
 })

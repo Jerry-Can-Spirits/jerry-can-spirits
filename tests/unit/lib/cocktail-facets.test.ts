@@ -6,6 +6,8 @@ import {
   SPIRIT_ROLLUPS,
   STANDALONE_SPIRITS,
   canonicalFor,
+  duplicateTarget,
+  headingFor,
   facetForBaseSpirit,
   facetPath,
   hasSubTypes,
@@ -174,16 +176,53 @@ describe('robots and titles', () => {
   it('noindexes a thin facet but keeps following its links', () => {
     // The cocktail links are real and worth crawling even when the listing
     // page should not rank.
-    expect(robotsFor({ value: 'flips', count: 1, isRollup: false })).toEqual({ index: false, follow: true })
-    expect(robotsFor({ value: 'sours', count: 85, isRollup: false })).toEqual({ index: true, follow: true })
+    expect(robotsFor({ kind: 'style', value: 'flips', count: 1, isRollup: false })).toEqual({ index: false, follow: true })
+    expect(robotsFor({ kind: 'style', value: 'sours', count: 85, isRollup: false })).toEqual({ index: true, follow: true })
   })
 
   it('gives every page a distinct title', () => {
-    expect(titleFor({ label: 'Sours' }, 1)).toBe('Sours Cocktails')
-    expect(titleFor({ label: 'Sours' }, 2)).toBe('Sours Cocktails, page 2')
+    expect(titleFor({ kind: 'style', label: 'Sours' }, 1)).toBe('Sours')
+    expect(titleFor({ kind: 'style', label: 'Sours' }, 2)).toBe('Sours, page 2')
   })
 
   it('uses no em-dash in a title, which is customer-facing copy', () => {
-    expect(titleFor({ label: 'Rum' }, 3)).not.toContain('\u2014')
+    expect(titleFor({ kind: 'spirit', label: 'Rum' }, 3)).not.toContain('—')
+  })
+
+})
+
+describe('duplicate facets', () => {
+  const mocktails = { kind: 'style' as const, value: 'mocktails', count: 10, isRollup: false }
+
+  it('canonicalises a duplicate to the facet it duplicates, not to the hub', () => {
+    // MEASURED: all ten mocktails are also tagged non-alcoholic. The other page
+    // is the better answer, not a broader one.
+    expect(canonicalFor(mocktails)).toBe('/field-manual/cocktails/spirit/non-alcoholic/')
+  })
+
+  it('noindexes a duplicate whatever its count, but keeps following its links', () => {
+    // It clears the floor at 10 and is still not indexed, because the issue is
+    // duplication rather than thinness. The recipes are real either way.
+    expect(isIndexable(mocktails)).toBe(true)
+    expect(robotsFor(mocktails)).toEqual({ index: false, follow: true })
+  })
+
+  it('leaves every other facet alone', () => {
+    const sours = { kind: 'style' as const, value: 'sours', count: 85, isRollup: false }
+    expect(duplicateTarget('style', 'sours')).toBeNull()
+    expect(canonicalFor(sours)).toBe('/field-manual/cocktails/style/sours/')
+  })
+})
+
+describe('the fallback heading', () => {
+  it('does not append the noun to a style, which already names a family', () => {
+    // Otherwise the 13 facets without written copy render "Mocktails
+    // Cocktails" and "Flips Cocktails". They are noindexed, not unreachable.
+    expect(headingFor({ kind: 'style', label: 'Mocktails' })).toBe('Mocktails')
+    expect(headingFor({ kind: 'style', label: 'Flips' })).toBe('Flips')
+  })
+
+  it('appends it to a spirit, which is an ingredient rather than a family', () => {
+    expect(headingFor({ kind: 'spirit', label: 'Rum' })).toBe('Rum Cocktails')
   })
 })

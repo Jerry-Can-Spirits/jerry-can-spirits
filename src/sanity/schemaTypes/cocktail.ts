@@ -402,6 +402,7 @@ export default defineType({
           {title: 'Sherry', value: 'sherry'},
           {title: 'Champagne', value: 'champagne'},
           // Other
+          {title: 'Beer', value: 'beer'},
           {title: 'Liqueur', value: 'liqueur'},
           {title: 'Multiple Spirits', value: 'multiple'},
           {title: 'Non-Alcoholic', value: 'non-alcoholic'}
