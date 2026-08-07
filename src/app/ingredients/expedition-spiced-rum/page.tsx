@@ -64,7 +64,7 @@ const faqSchema = {
       name: 'What is rum spiced with?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Spiced rum is made by infusing rum with spices and botanicals. Our Expedition Spiced Rum uses Madagascan vanilla pods, Ceylon cinnamon, allspice, cloves, orange peel, cassia bark, and ginger. We sweeten naturally with agave and glucose syrup, then rest on bourbon barrel chips for added depth. Every brand uses different spice blends — ours focuses on real ingredients with no artificial flavourings.',
+        text: 'Spiced rum is rum with spices and botanicals added after distillation. Ours is macerated with Madagascan vanilla pods, Ceylon cinnamon, allspice, cloves, orange peel, cassia bark, and ginger. We sweeten naturally with agave and glucose syrup, then rest on bourbon barrel chips for added depth. Every brand uses a different blend. Ours focuses on real ingredients with no artificial flavourings.',
       },
     },
     {
@@ -152,7 +152,7 @@ export default function ExpeditionSpicedRumIngredients() {
           </h1>
 
           <p className="text-xl text-parchment-300 max-w-3xl mx-auto leading-relaxed">
-            No secrets. No gimmicks. Here&apos;s exactly what our spiced rum is made with — every spice, every ingredient, every detail.
+            No secrets. No gimmicks. Here&apos;s exactly what our spiced rum is made with.
           </p>
         </div>
       </section>
@@ -360,7 +360,7 @@ export default function ExpeditionSpicedRumIngredients() {
               <div>
                 <h3 className="text-gold-300 font-semibold text-lg mb-2">Finish</h3>
                 <p className="text-parchment-300 leading-relaxed">
-                  Long, warming, and elegantly dry. Oak tannins linger alongside vanilla, winter spice, and a final flicker of ginger. Clean, refined, and crafted for sipping.
+                  Long, warming, and elegantly dry. Oak tannins linger alongside vanilla, winter spice, and a final flicker of ginger. Clean. Refined and built for sipping.
                 </p>
               </div>
             </div>
