@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { EQUIPMENT_CATEGORY_ORDER, EQUIPMENT_CATEGORY_TITLES, categoryTitle } from '@/lib/category-order'
 import { useRouter, usePathname } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -80,6 +81,22 @@ export default function EquipmentClient({ equipment }: EquipmentClientProps) {
   const visibleEquipment = remainingEquipment.slice(0, visibleCount)
   const hasMoreEquipment = visibleCount < remainingEquipment.length
 
+  // Totals per category across the whole filtered set, so a heading reports
+  // the size of its group rather than of the slice currently rendered.
+  const categoryTotals = remainingEquipment.reduce<Map<string, number>>((m, i) => m.set(i.category, (m.get(i.category) ?? 0) + 1), new Map())
+
+  // Already sorted by category rank then name in GROQ, so grouping is a scan.
+  // A reader and a crawler see the same order because the server decided it.
+  const groups = visibleEquipment.reduce<Array<{ category: string; items: typeof visibleEquipment }>>(
+    (acc, item) => {
+      const last = acc[acc.length - 1]
+      if (last && last.category === item.category) last.items.push(item)
+      else acc.push({ category: item.category, items: [item] })
+      return acc
+    },
+    []
+  )
+
   // Reset pagination when filters change
   const handleCategoryChange = (category: string) => {
     setSelectedCategory(category)
@@ -97,15 +114,11 @@ export default function EquipmentClient({ equipment }: EquipmentClientProps) {
     setVisibleCount(prev => prev + ITEMS_PER_PAGE)
   }
 
-  // Categories for filter tabs
+  // From the same list as the headings and the sort, in the same order, so a
+  // tab cannot outlive the category it filters to.
   const categories = [
     { value: 'all', label: 'All Equipment' },
-    { value: 'shaking', label: 'Shaking & Mixing' },
-    { value: 'straining', label: 'Straining' },
-    { value: 'measuring', label: 'Measuring' },
-    { value: 'glassware', label: 'Glassware' },
-    { value: 'tools', label: 'Bar Tools' },
-    { value: 'garnish', label: 'Garnish Tools' }
+    ...EQUIPMENT_CATEGORY_ORDER.map((value) => ({ value, label: categoryTitle(EQUIPMENT_CATEGORY_TITLES, value) })),
   ]
 
   if (equipment.length === 0) {
@@ -259,8 +272,20 @@ export default function EquipmentClient({ equipment }: EquipmentClientProps) {
             </button>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {visibleEquipment.map((item) => (
+          <div className="space-y-12">
+            {groups.map((group) => (
+              <section key={group.category} aria-labelledby={`category-${group.category}`}>
+                {/* The heading is what makes the grouping legible. Without it
+                    the page was ordered by category and looked unordered. */}
+                <h2
+                  id={`category-${group.category}`}
+                  className="text-2xl font-serif font-bold text-gold-300 mb-6 pb-3 border-b border-gold-500/20"
+                >
+                  {categoryTitle(EQUIPMENT_CATEGORY_TITLES, group.category)}
+                  <span className="ml-3 text-sm font-sans font-normal text-parchment-400">{categoryTotals.get(group.category) ?? group.items.length}</span>
+                </h2>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {group.items.map((item) => (
               <Link
                 key={item._id}
                 href={`/field-manual/equipment/${item.slug.current}`}
@@ -304,6 +329,9 @@ export default function EquipmentClient({ equipment }: EquipmentClientProps) {
                   </div>
                 </div>
               </Link>
+            ))}
+                </div>
+              </section>
             ))}
           </div>
         )}

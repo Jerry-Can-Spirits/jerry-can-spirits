@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { INGREDIENT_CATEGORY_ORDER, INGREDIENT_CATEGORY_TITLES, categoryTitle } from '@/lib/category-order'
 import { useRouter, usePathname } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -11,7 +12,7 @@ interface Ingredient {
   _id: string
   name: string
   slug: { current: string }
-  category: 'spirits' | 'liqueurs' | 'creme-liqueurs' | 'anise-herbal' | 'aromatics' | 'wine' | 'fortified' | 'bitters' | 'mixers' | 'fresh' | 'garnishes'
+  category: string
   description: string
   usage: string
   topTips: string[]
@@ -75,6 +76,23 @@ export default function IngredientsClient({ ingredients }: IngredientsClientProp
   const visibleIngredients = filteredIngredients.slice(0, visibleCount)
   const hasMoreIngredients = visibleCount < filteredIngredients.length
 
+  // Totals per category across the whole filtered set, so a heading reports
+  // the size of its group rather than of the slice currently rendered.
+  const categoryTotals = filteredIngredients.reduce<Map<string, number>>((m, i) => m.set(i.category, (m.get(i.category) ?? 0) + 1), new Map())
+
+  // The list arrives from GROQ already sorted by category rank then name, so
+  // grouping is a scan rather than a re-sort: the order a reader sees is the
+  // order the server decided, and a crawler sees the same one.
+  const groups = visibleIngredients.reduce<Array<{ category: string; items: typeof visibleIngredients }>>(
+    (acc, item) => {
+      const last = acc[acc.length - 1]
+      if (last && last.category === item.category) last.items.push(item)
+      else acc.push({ category: item.category, items: [item] })
+      return acc
+    },
+    []
+  )
+
   // Reset pagination when filters change
   const handleCategoryChange = (category: string) => {
     setSelectedCategory(category)
@@ -92,20 +110,17 @@ export default function IngredientsClient({ ingredients }: IngredientsClientProp
     setVisibleCount(prev => prev + ITEMS_PER_PAGE)
   }
 
-  // Categories for filter tabs
+  // Filter tabs come from the same list as the headings and the sort, in the
+  // same order. Hand-maintaining them is how a tab for a category no document
+  // has survives: crème-liqueurs and anise-herbal were folded into liqueurs,
+  // and a hardcoded tab for either would filter to an empty page and look like
+  // a page with nothing in it.
   const categories = [
     { value: 'all', label: 'All Ingredients' },
-    { value: 'spirits', label: 'Spirits' },
-    { value: 'liqueurs', label: 'Liqueurs' },
-    { value: 'creme-liqueurs', label: 'Crème Liqueurs' },
-    { value: 'anise-herbal', label: 'Anise & Herbal Liqueurs' },
-    { value: 'aromatics', label: 'Aromatics & Essences' },
-    { value: 'wine', label: 'Wine & Champagne' },
-    { value: 'fortified', label: 'Fortified Wine' },
-    { value: 'bitters', label: 'Bitters' },
-    { value: 'mixers', label: 'Mixers' },
-    { value: 'fresh', label: 'Fresh Ingredients' },
-    { value: 'garnishes', label: 'Garnishes' }
+    ...INGREDIENT_CATEGORY_ORDER.map((value) => ({
+      value,
+      label: categoryTitle(INGREDIENT_CATEGORY_TITLES, value),
+    })),
   ]
 
   if (ingredients.length === 0) {
@@ -255,8 +270,26 @@ export default function IngredientsClient({ ingredients }: IngredientsClientProp
             </button>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {visibleIngredients.map((item) => (
+          <div className="space-y-12">
+            {groups.map((group) => (
+              <section key={group.category} aria-labelledby={`category-${group.category}`}>
+                {/* The heading is what makes the grouping legible. Without it
+                    the page was ordered by category and looked unordered,
+                    because nothing on screen said where one group ended. */}
+                <h2
+                  id={`category-${group.category}`}
+                  className="text-2xl font-serif font-bold text-gold-300 mb-6 pb-3 border-b border-gold-500/20"
+                >
+                  {categoryTitle(INGREDIENT_CATEGORY_TITLES, group.category)}
+                  {/* The count is of the whole category, not of the slice
+                      currently shown. Showing the slice would read as "Spirits
+                      16" on a page with 35 spirits. */}
+                  <span className="ml-3 text-sm font-sans font-normal text-parchment-400">
+                    {categoryTotals.get(group.category) ?? group.items.length}
+                  </span>
+                </h2>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {group.items.map((item) => (
               <Link
                 key={item._id}
                 href={`/field-manual/ingredients/${item.slug.current}`}
@@ -293,6 +326,9 @@ export default function IngredientsClient({ ingredients }: IngredientsClientProp
                   </div>
                 </div>
               </Link>
+            ))}
+                </div>
+              </section>
             ))}
           </div>
         )}
