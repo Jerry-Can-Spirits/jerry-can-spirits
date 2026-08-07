@@ -92,12 +92,15 @@ and survive reconnection; the two sets are not interchangeable.
 
 ## Check the check
 
-Four distinct failure modes on this project have shared one shape: something
-reported success while being wrong. A green Workers Build with no environment
-variables. A cache-busted URL returning fresh content while every real visitor
-got a stale price. A test that passed because the exemption it asserted was
-never removed. A link audit that read rendered text and missed the same link
-held in a structured field.
+**Every failure recorded here is a check that measured its input instead of its
+output.** That is the whole section. What follows are worked examples, kept
+because the shape is easy to recognise afterwards and almost invisible at the
+time.
+
+A green Workers Build with no environment variables. A cache-busted URL
+returning fresh content while every real visitor got a stale price. A test that
+passed because the exemption it asserted was never removed. A link audit that
+read rendered text and missed the same link held in a structured field.
 
 The only defence that has worked is verifying the verification: check what the
 check actually measured, not merely that it passed.
@@ -121,9 +124,61 @@ failures listed here, only the middleware exclusion test could not have slipped
 through, because removing the exemption makes the test fail. A check that
 passes whether or not the feature exists is not evidence of anything.
 
+**Rule files are the first place to change a formulation, not the last.** The
+standing ingredient formulation was retired from eleven places, and three of
+them were `CLAUDE.md`, `docs/VOICE.md` and this checklist's companion. Those
+three are why it kept coming back: a rule file carrying the wrong version
+teaches it to every later session, which then propagates it faithfully into new
+copy. Change the rule files first, then the code, then the content.
+
+**A rule that looks arbitrary usually encodes a decision.** `isIndexable`
+exempted spirit rollups from the ten-cocktail floor, which read as an
+inconsistency and was rewritten into a single uniform rule. It was not an
+inconsistency: a rollup earns its page by answering a head term, not by
+clearing a count. The test caught it. Before simplifying a rule into something
+tidier, find out why it is shaped the way it is.
+
+**Verify the rendered output, not the source.** Token tests passed while the
+page title read "1 Recipes by Style" and the intro read "1 recipe ... are built
+on whiskey". Reading the rendered strings instead of the templates also caught
+a meta at 188 characters against a 155 ceiling, a description reading "built on
+brandy: 11 cognac and 10 brandy", and thirteen pages headed "Mocktails
+Cocktails". A component correct in isolation can still produce a wrong sentence.
+
+**Use word-boundary matching by default on content screens.** A check for
+alcoholic ingredients in the non-alcoholic recipes flagged Shirley Temple,
+because the pattern matched "ale" inside "Ginger Ale". The ingredient
+vocabulary is full of short words living inside longer ones: gin in ginger,
+rum in rumtopf, port in porter.
+
+**Word boundaries do not save you from a word with two meanings.** Mapping
+equipment pages to guides by word frequency proposed linking the Blender page
+to a distillery history, because Joy Spence is Appleton's master blender, and
+the Bitters Bottle page to a paragraph about the size of the Angostura label.
+Both matched cleanly on a word boundary and neither was about the object. Only
+reading the surrounding sentence catches that.
+
+**A guide that uses an item is not coverage of it.** The same mapping ranked
+recipe guides above the glassware guide for every glass, because a recipe says
+"strain into a rocks glass" and an explanation says it once. Frequency will
+always rank usage above explanation. Rank by whether the subject of the
+document is the thing.
+
 **Measurements are labelled MEASURED or ASSUMED.** An inference reported in the
 same register as a measurement is indistinguishable from one. If a number is
 assumed, say what would confirm it.
+
+The label applies to existence claims as much as to counts. "There are no facet
+tests" was reported without looking in `tests/unit/lib/`, where twenty-five
+were; "the meta renders at about 150 characters" was an estimate of a string
+that was actually 188. Both would have been caught by asking which of the two
+words applied.
+
+**Two more instances have their own sections**, because they are standing
+conditions rather than habits: *Cloudflare deployment gotchas* above, where a
+build reports success and the deploy is broken, and *Known limitations* below,
+where crawler attribution cannot be verified from inside the Worker and so any
+crawler measurement carries a ceiling that must be stated with the result.
 
 **The branch rule under Starting work is the same failure.** Pushing a
 follow-up commit to a branch whose PR has already merged orphans it silently:
