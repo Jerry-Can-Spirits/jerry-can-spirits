@@ -21,12 +21,16 @@ export const INDEXABLE_MIN_COCKTAILS = 10
 export const NEVER_INDEXED = new Set(['multiple', 'other', 'liqueur'])
 
 /**
- * Spirit rollups. The `baseSpirit` field fragments categories that readers and
- * search engines treat as one: rum is split five ways and whiskey four, so the
- * site has no page for either head term despite holding 53 and 74 cocktails.
+ * Spirit facets. The `baseSpirit` field fragments categories that readers and
+ * search engines treat as one: rum is split seven ways and whiskey five, so the
+ * site had no page for either head term despite holding 54 and 74 cocktails.
  *
  * All six are equals sharing one template. Nothing here is specific to rum, so
  * a vodka expression needs no new code.
+ *
+ * `members` drives the orienting section: a facet covering more than one
+ * baseSpirit explains its sub-types and links down to each, and a facet
+ * covering exactly one has nothing to explain.
  *
  * Whiskey takes the "e" in its slug and covers Scotch and Japanese, which are
  * correctly spelled without it. The rollup page explains why both are right.
@@ -46,6 +50,52 @@ export const SPIRIT_ROLLUPS: Record<string, { label: string; members: string[] }
   brandy: { label: 'Brandy', members: ['cognac', 'brandy'] },
 }
 
+/**
+ * Raw baseSpirit values that earn a page without belonging to a rollup.
+ *
+ * These are not rollups and are not treated as such: they carry no head-term
+ * exemption and must clear the floor like any other raw facet. They are listed
+ * only because they would otherwise be unreachable, sitting outside all six
+ * rollups. MEASURED: champagne 12, non-alcoholic 11.
+ */
+export const STANDALONE_SPIRITS: Record<string, { label: string; member: string }> = {
+  champagne: { label: 'Champagne', member: 'champagne' },
+  'non-alcoholic': { label: 'Non-Alcoholic', member: 'non-alcoholic' },
+}
+
+/** Every spirit facet slug that gets a page, rollups and standalones alike. */
+export const SPIRIT_FACETS: Record<string, { label: string; members: string[]; isRollup: boolean }> = {
+  ...Object.fromEntries(
+    Object.entries(SPIRIT_ROLLUPS).map(([slug, v]) => [slug, { ...v, isRollup: true }])
+  ),
+  ...Object.fromEntries(
+    Object.entries(STANDALONE_SPIRITS).map(([slug, v]) => [
+      slug,
+      { label: v.label, members: [v.member], isRollup: false },
+    ])
+  ),
+}
+
+/** Human labels for the raw baseSpirit values inside a rollup. */
+export const MEMBER_LABELS: Record<string, string> = {
+  'white-rum': 'White rum',
+  'dark-rum': 'Dark rum',
+  'aged-rum': 'Aged rum',
+  'spiced-rum': 'Spiced rum',
+  'overproof-rum': 'Overproof rum',
+  'rhum-agricole': 'Rhum agricole',
+  cachaca: 'Cachaça',
+  bourbon: 'Bourbon',
+  'rye-whiskey': 'Rye whiskey',
+  scotch: 'Scotch',
+  'irish-whiskey': 'Irish whiskey',
+  'welsh-whisky': 'Welsh whisky',
+  tequila: 'Tequila',
+  mezcal: 'Mezcal',
+  cognac: 'Cognac',
+  brandy: 'Brandy',
+}
+
 export type FacetKind = 'style' | 'spirit'
 
 export interface Facet {
@@ -56,8 +106,10 @@ export interface Facet {
   label: string
   /** How many cocktails it holds */
   count: number
-  /** True when this is a rollup rather than a raw baseSpirit value */
+  /** True for the six spirit rollups. False for styles and standalone spirits. */
   isRollup: boolean
+  /** The raw baseSpirit values a spirit facet covers. Empty for a style. */
+  members: string[]
 }
 
 /** Title case a slug: "old-fashioneds" -> "Old Fashioneds" */
@@ -71,8 +123,11 @@ export function labelFor(value: string): string {
 /**
  * The indexability rule, in one place.
  *
- * Rollups are always indexable when they hold anything, because they exist
- * precisely to answer the head term and are never thin by construction.
+ * Rollups are indexable whenever they hold anything, because they exist
+ * precisely to answer the head term and are never thin by construction. A
+ * standalone spirit carries no such exemption: champagne and non-alcoholic are
+ * raw values that earn a page by clearing the floor, and would lose it if they
+ * stopped clearing it.
  */
 export function isIndexable(facet: Pick<Facet, 'value' | 'count' | 'isRollup'>): boolean {
   if (NEVER_INDEXED.has(facet.value)) return false
@@ -80,12 +135,25 @@ export function isIndexable(facet: Pick<Facet, 'value' | 'count' | 'isRollup'>):
   return facet.count >= INDEXABLE_MIN_COCKTAILS
 }
 
-/** Which rollup, if any, a raw baseSpirit belongs to. */
+/** Which rollup, if any, a raw baseSpirit belongs to. Standalones are not rollups. */
 export function rollupFor(baseSpirit: string): string | null {
   for (const [slug, { members }] of Object.entries(SPIRIT_ROLLUPS)) {
     if (members.includes(baseSpirit)) return slug
   }
   return null
+}
+
+/** Which spirit facet, if any, a raw baseSpirit belongs to, rollup or standalone. */
+export function facetForBaseSpirit(baseSpirit: string): string | null {
+  for (const [slug, { members }] of Object.entries(SPIRIT_FACETS)) {
+    if (members.includes(baseSpirit)) return slug
+  }
+  return null
+}
+
+/** True when a facet covers more than one baseSpirit and so has styles to explain. */
+export function hasSubTypes(facet: Pick<Facet, 'members'>): boolean {
+  return facet.members.length > 1
 }
 
 export function facetPath(kind: FacetKind, value: string, page = 1): string {
@@ -107,4 +175,24 @@ export function pageCount(total: number): number {
 export function canonicalFor(facet: Pick<Facet, 'kind' | 'value' | 'count' | 'isRollup'>, page = 1): string {
   if (!isIndexable(facet)) return '/field-manual/cocktails/'
   return facetPath(facet.kind, facet.value, page)
+}
+
+/**
+ * robots directive for a facet page.
+ *
+ * A non-indexable facet is still followed: its cocktail links are real and
+ * worth crawling even when the listing page itself should not rank.
+ */
+export function robotsFor(facet: Pick<Facet, 'value' | 'count' | 'isRollup'>): { index: boolean; follow: boolean } {
+  return { index: isIndexable(facet), follow: true }
+}
+
+/**
+ * Page title. Pages 2+ are distinguished so no two pages share a title.
+ * Comma rather than a dash: em-dashes are banned by VOICE.md, and a title is
+ * customer-facing copy like any other.
+ */
+export function titleFor(facet: Pick<Facet, 'label'>, page = 1): string {
+  const base = `${facet.label} Cocktails`
+  return page > 1 ? `${base}, page ${page}` : base
 }
