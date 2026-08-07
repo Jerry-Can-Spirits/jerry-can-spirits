@@ -15,6 +15,17 @@ import RelatedCocktailsList from '@/components/RelatedCocktailsList'
 import RelatedGuidesList, { type GuideLink } from '@/components/RelatedGuidesList'
 import { OG_IMAGE_COCKTAIL } from '@/lib/og'
 import { ORG_REF } from '@/lib/jsonLd'
+import { subTypesOf } from '@/lib/ingredient-families'
+
+interface SubType {
+  _id: string
+  name: string
+  slug: { current: string }
+}
+
+// Sub-types are ordered by the family map, not alphabetically, so the list
+// reads in the order a drinker would meet them rather than by spelling.
+const subTypesQuery = `*[_type == "ingredient" && slug.current in $slugs]{ _id, name, slug }`
 
 // Types for ingredient data
 interface Ingredient {
@@ -150,6 +161,15 @@ export default async function IngredientDetailPage({ params }: { params: Promise
   }
 
   const videoId = ingredient.videoUrl ? getYouTubeVideoId(ingredient.videoUrl) : null
+
+  // Sub-types are fetched only for the six parent pages, so every other
+  // ingredient costs no extra query.
+  const subTypeSlugs = subTypesOf(slug)
+  const subTypes = subTypeSlugs.length
+    ? (await client.fetch<SubType[]>(subTypesQuery, { slugs: subTypeSlugs })).sort(
+        (a, b) => subTypeSlugs.indexOf(a.slug.current) - subTypeSlugs.indexOf(b.slug.current)
+      )
+    : []
 
   const articleSchema = {
     '@context': 'https://schema.org',
@@ -595,6 +615,31 @@ export default async function IngredientDetailPage({ params }: { params: Promise
             )}
 
             {/* Related Cocktails */}
+            {/* Styles of this ingredient. Only the six parent pages have
+                sub-types, and every other ingredient renders nothing at all
+                here — no heading, no panel, no reserved space. */}
+            {subTypes.length > 0 && (
+              <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+                <h2 className="text-2xl font-serif font-bold text-gold-300 mb-4">
+                  Styles of {ingredient.name.toLowerCase()}
+                </h2>
+                <div className="grid sm:grid-cols-2 gap-3">
+                  {subTypes.map((subType) => (
+                    <Link
+                      key={subType._id}
+                      href={`/field-manual/ingredients/${subType.slug.current}/`}
+                      className="flex items-center gap-3 p-3 bg-jerry-green-800/30 rounded-lg border border-gold-500/20 hover:bg-jerry-green-800/50 hover:border-gold-400/40 transition-all group"
+                    >
+                      <svg className="w-5 h-5 text-gold-400 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                      </svg>
+                      <span className="text-parchment-300 group-hover:text-gold-300 transition-colors">{subType.name}</span>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            )}
+
             {ingredient.relatedCocktails && ingredient.relatedCocktails.length > 0 && (
               <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
                 <h2 className="text-2xl font-serif font-bold text-gold-300 mb-4">Featured In These Cocktails</h2>
