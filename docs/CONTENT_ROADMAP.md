@@ -31,6 +31,35 @@ Master list of content to create in Sanity CMS. Guides, pillar articles, cluster
 ### Seasonal/Occasion
 - (Most seasonal guides already published)
 
+### Measured gaps, not wishes
+
+These come from reading all 55 guides in full and asking which library pages
+they actually cover. Every count here is MEASURED. They are listed as gaps
+rather than filled, because an empty related-guides field is an honest record
+and a padded one teaches readers the links are not worth following.
+
+**Glassware: 27 pages resting on one guide.** Of 72 equipment documents, 59 had
+no guide link. Ten now have one, and the glassware ones all point at the single
+`glassware-guide`. There is no second document explaining glasses anywhere in
+the library.
+
+This is worth writing because the search intent is real and specific: "what
+glass for a negroni", "coupe vs martini glass", "do I need a nick and nora".
+Those are questions with short, answerable, high-intent answers, and we hold 27
+glassware pages with nothing editorial behind them. One guide per glass family
+would cover it: stemmed versus stemless, tumblers, tall glasses, and the
+single-purpose glasses worth owning against the ones that are not.
+
+**Tools: 21 pages.** Better served than glassware, since
+`barware-worth-investing-in`, `essential-home-bar-setup` and
+`complete-guide-cocktail-making` between them cover the core kit. The gap is
+the second tier: strainers as a category, the difference between a Hawthorne
+and a julep, and when a fine strainer earns its place.
+
+**Five spirit families still have no long-form guide**, logged previously and
+unchanged: whisky is the starkest at 74 cocktails, seven sub-types, a parent
+page and one tangentially related guide.
+
 ---
 
 ## Pillar Articles (Comprehensive Hub Pages)
