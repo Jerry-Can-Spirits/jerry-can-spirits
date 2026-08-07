@@ -165,7 +165,7 @@ export default function MediaKitPage() {
                   <div>
                     <h4 className="text-xs font-bold text-gold-600 uppercase tracking-wider">Nose</h4>
                     <p className="text-xs text-jerry-green-700 leading-relaxed">
-                      Warm Madagascan vanilla leads with a rich, creamy softness, followed by Ceylon cinnamon and toasted bourbon oak, lifted by bright orange peel with clove and allspice in the background.
+                      Warm Madagascan vanilla leads with a rich, creamy softness, followed by Ceylon cinnamon and toasted oak, lifted by bright orange peel with clove and allspice in the background.
                     </p>
                   </div>
                   <div>

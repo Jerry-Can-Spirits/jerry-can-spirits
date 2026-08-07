@@ -32,7 +32,7 @@ const faqSchema = {
       name: 'What is Expedition Spiced Rum made from?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Expedition Spiced Rum is made with Caribbean rum and seven real spices: Madagascan vanilla pods, Ceylon cinnamon, Peruvian ginger, Spanish orange peel, Sri Lankan cloves, Guatemalan allspice and Indonesian cassia bark, with Mexican agave syrup and Sussex glucose syrup for natural sweetness. It\'s rested on bourbon barrel chips for maturation, macerated by our British partner distillery. We never use artificial sweeteners, colours, flavourings, or additives.',
+        text: 'Expedition Spiced Rum is made with Caribbean rum and seven real spices: Madagascan vanilla pods, Ceylon cinnamon, Peruvian ginger, Spanish orange peel, Sri Lankan cloves, Guatemalan allspice and Indonesian cassia bark, with Mexican agave syrup and Sussex glucose syrup for natural sweetness. It\'s rested on bourbon barrel chips for depth, macerated by our British partner distillery. We never use artificial sweeteners, colours, flavourings, or additives.',
       },
     },
     {
@@ -40,7 +40,7 @@ const faqSchema = {
       name: 'What does Expedition Spiced Rum taste like?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'On the nose, warm Madagascan vanilla leads with a rich, creamy softness, followed by Ceylon cinnamon and toasted bourbon oak, lifted by bright orange peel with clove and allspice in the background. The palate is silky and naturally sweet on entry thanks to agave, with ginger heat and cassia bark developing into layered baking spices. The finish is long, warming, and elegantly dry with oak tannins, vanilla, and a flicker of ginger.',
+        text: 'On the nose, warm Madagascan vanilla leads with a rich, creamy softness, followed by Ceylon cinnamon and toasted oak, lifted by bright orange peel with clove and allspice in the background. The palate is silky and naturally sweet on entry thanks to agave, with ginger heat and cassia bark developing into layered baking spices. The finish is long, warming, and elegantly dry with oak tannins, vanilla, and a flicker of ginger.',
       },
     },
     {
@@ -72,7 +72,7 @@ const faqSchema = {
       name: 'What spices are in Expedition Spiced Rum?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Expedition Spiced Rum is made with Madagascan vanilla pods, Ceylon cinnamon, allspice, cloves, orange peel, cassia bark, ginger, agave syrup, and glucose syrup. It is matured with bourbon barrel chips for added depth.',
+        text: 'Expedition Spiced Rum is made with Madagascan vanilla pods, Ceylon cinnamon, allspice, cloves, orange peel, cassia bark, ginger, agave syrup, and glucose syrup. It is rested on bourbon barrel chips for added depth.',
       },
     },
   ],
@@ -130,7 +130,7 @@ export default function ExpeditionSpicedRumIngredients() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
         <Breadcrumbs
           items={[
-            { label: 'Ingredients', href: '/ingredients' },
+            { label: 'What’s In It', href: '/ingredients' },
             { label: 'Expedition Spiced Rum' },
           ]}
         />
@@ -148,7 +148,7 @@ export default function ExpeditionSpicedRumIngredients() {
           <h1 className="text-4xl sm:text-5xl font-serif font-bold text-white mb-6">
             Expedition Spiced Rum
             <br />
-            <span className="text-gold-300">Ingredients</span>
+            <span className="text-gold-300">What’s In It</span>
           </h1>
 
           <p className="text-xl text-parchment-300 max-w-3xl mx-auto leading-relaxed">
@@ -261,9 +261,9 @@ export default function ExpeditionSpicedRumIngredients() {
                 </ul>
               </div>
 
-              {/* Maturation */}
+              {/* Oak */}
               <div className="border-b border-gold-500/20 pb-6">
-                <h3 className="text-lg font-semibold text-gold-300 mb-3">Maturation</h3>
+                <h3 className="text-lg font-semibold text-gold-300 mb-3">Oak</h3>
                 <ul className="space-y-2">
                   <li className="flex items-start space-x-3">
                     <div className="w-2 h-2 bg-gold-400 rounded-full mt-2 shrink-0"></div>
@@ -348,7 +348,7 @@ export default function ExpeditionSpicedRumIngredients() {
               <div>
                 <h3 className="text-gold-300 font-semibold text-lg mb-2">Nose</h3>
                 <p className="text-parchment-300 leading-relaxed">
-                  Warm Madagascan vanilla leads with a rich, creamy softness. Ceylon cinnamon and toasted bourbon oak add warmth and structure, lifted by bright orange peel. Clove and allspice sit in the background, adding depth and a subtle spice complexity.
+                  Warm Madagascan vanilla leads with a rich, creamy softness. Ceylon cinnamon and toasted oak add warmth and structure, lifted by bright orange peel. Clove and allspice sit in the background, adding depth and a subtle spice complexity.
                 </p>
               </div>
               <div>
@@ -369,7 +369,7 @@ export default function ExpeditionSpicedRumIngredients() {
             <div className="mt-8 pt-6 border-t border-gold-500/20">
               <h3 className="text-gold-300 font-semibold text-lg mb-2">Character</h3>
               <p className="text-parchment-300 leading-relaxed italic">
-                A modern, naturally sweetened spiced rum with bright citrus highs, creamy vanilla depth, and a bourbon&#8209;barrel backbone.
+                A modern, naturally sweetened spiced rum with bright citrus highs, creamy vanilla depth, and an oak backbone.
                 <br />
                 Smooth enough to sip neat. Capable enough to stand up in cocktails.
               </p>

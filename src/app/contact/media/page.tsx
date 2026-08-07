@@ -341,7 +341,7 @@ Based in the UK, Jerry Can Spirits® is a small operation run by two mates who c
                   <div>
                     <h4 className="text-gold-300 font-semibold mb-2">Nose</h4>
                     <p className="text-parchment-200 text-sm leading-relaxed">
-                      Warm Madagascan vanilla leads with a rich, creamy softness, followed by Ceylon cinnamon and toasted bourbon oak, lifted by bright orange peel with clove and allspice in the background.
+                      Warm Madagascan vanilla leads with a rich, creamy softness, followed by Ceylon cinnamon and toasted oak, lifted by bright orange peel with clove and allspice in the background.
                     </p>
                   </div>
                   <div>
