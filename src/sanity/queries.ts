@@ -1,3 +1,5 @@
+import { categoryRank, parentFirstRank, INGREDIENT_CATEGORY_ORDER, EQUIPMENT_CATEGORY_ORDER } from '@/lib/category-order'
+
 // GROQ queries for fetching data from Sanity
 
 // Sitemap query - slug + last-modified for sitemap freshness
@@ -137,7 +139,7 @@ export const cocktailBySlugQuery = `*[_type == "cocktail" && slug.current == $sl
 export const ingredientsSitemapQuery = `*[_type == "ingredient" && defined(slug.current)] { slug, _updatedAt }`
 
 // Optimized listing query - only fetches fields needed for preview cards
-export const ingredientsListQuery = `*[_type == "ingredient"] | order(category asc, name asc) {
+export const ingredientsListQuery = `*[_type == "ingredient"] | order(${categoryRank(INGREDIENT_CATEGORY_ORDER)} asc, ${parentFirstRank()} asc, name asc) {
   _id,
   name,
   slug,
@@ -149,7 +151,7 @@ export const ingredientsListQuery = `*[_type == "ingredient"] | order(category a
 }`
 
 // Full query - fetches all fields for listing pages with more detail
-export const ingredientsQuery = `*[_type == "ingredient"] | order(category asc, name asc) {
+export const ingredientsQuery = `*[_type == "ingredient"] | order(${categoryRank(INGREDIENT_CATEGORY_ORDER)} asc, ${parentFirstRank()} asc, name asc) {
   _id,
   name,
   slug,
@@ -218,7 +220,7 @@ export const ingredientBySlugQuery = `*[_type == "ingredient" && slug.current ==
 export const equipmentSitemapQuery = `*[_type == "equipment" && defined(slug.current)] { slug, _updatedAt }`
 
 // Optimized listing query - only fetches fields needed for preview cards
-export const equipmentListQuery = `*[_type == "equipment"] | order(category asc, name asc) {
+export const equipmentListQuery = `*[_type == "equipment"] | order(${categoryRank(EQUIPMENT_CATEGORY_ORDER)} asc, name asc) {
   _id,
   name,
   slug,
@@ -231,7 +233,7 @@ export const equipmentListQuery = `*[_type == "equipment"] | order(category asc,
 }`
 
 // Full query - fetches all fields for listing pages with more detail
-export const equipmentQuery = `*[_type == "equipment"] | order(category asc, name asc) {
+export const equipmentQuery = `*[_type == "equipment"] | order(${categoryRank(EQUIPMENT_CATEGORY_ORDER)} asc, name asc) {
   _id,
   name,
   slug,

@@ -25,16 +25,19 @@ export default defineType({
       name: 'category',
       title: 'Category',
       type: 'string',
+      // Listed in the order they appear on the hub, so the Studio and the site
+      // agree. Crème Liqueurs and Anise & Herbal Liqueurs were folded into
+      // Liqueurs: four documents each against a 279-document corpus, both
+      // subdivisions of a group that already existed, and both would have
+      // rendered as top-level headings alongside their own parent group.
       options: {
         list: [
           {title: 'Spirits', value: 'spirits'},
           {title: 'Liqueurs', value: 'liqueurs'},
-          {title: 'Crème Liqueurs', value: 'creme-liqueurs'},
-          {title: 'Anise & Herbal Liqueurs', value: 'anise-herbal'},
-          {title: 'Aromatics & Essences', value: 'aromatics'},
-          {title: 'Wine & Champagne', value: 'wine'},
           {title: 'Fortified Wine', value: 'fortified'},
           {title: 'Bitters', value: 'bitters'},
+          {title: 'Wine & Champagne', value: 'wine'},
+          {title: 'Aromatics & Essences', value: 'aromatics'},
           {title: 'Mixers', value: 'mixers'},
           {title: 'Fresh Ingredients', value: 'fresh'},
           {title: 'Garnishes', value: 'garnishes'}
