@@ -15,17 +15,12 @@ import RelatedCocktailsList from '@/components/RelatedCocktailsList'
 import RelatedGuidesList, { type GuideLink } from '@/components/RelatedGuidesList'
 import { OG_IMAGE_COCKTAIL } from '@/lib/og'
 import { ORG_REF } from '@/lib/jsonLd'
-import { subTypesOf } from '@/lib/ingredient-families'
 
 interface SubType {
   _id: string
   name: string
   slug: { current: string }
 }
-
-// Sub-types are ordered by the family map, not alphabetically, so the list
-// reads in the order a drinker would meet them rather than by spelling.
-const subTypesQuery = `*[_type == "ingredient" && slug.current in $slugs]{ _id, name, slug }`
 
 // Types for ingredient data
 interface Ingredient {
@@ -89,6 +84,7 @@ interface Ingredient {
     name: string
     slug: { current: string }
   }>
+  subTypes?: SubType[]
   relatedGuides?: GuideLink[]
   longDescription?: PortableTextBlock[]
   author?: string
@@ -162,14 +158,9 @@ export default async function IngredientDetailPage({ params }: { params: Promise
 
   const videoId = ingredient.videoUrl ? getYouTubeVideoId(ingredient.videoUrl) : null
 
-  // Sub-types are fetched only for the six parent pages, so every other
-  // ingredient costs no extra query.
-  const subTypeSlugs = subTypesOf(slug)
-  const subTypes = subTypeSlugs.length
-    ? (await client.fetch<SubType[]>(subTypesQuery, { slugs: subTypeSlugs })).sort(
-        (a, b) => subTypeSlugs.indexOf(a.slug.current) - subTypeSlugs.indexOf(b.slug.current)
-      )
-    : []
+  // The reverse of the typed parent reference, resolved by the same query that
+  // fetched the ingredient. Empty for anything that is not a parent.
+  const subTypes = ingredient.subTypes ?? []
 
   const articleSchema = {
     '@context': 'https://schema.org',

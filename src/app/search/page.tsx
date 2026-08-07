@@ -6,6 +6,8 @@ import { client } from '@/sanity/lib/client'
 import { getProducts } from '@/lib/shopify'
 import { searchStaticPages, type SearchResult } from '@/lib/search-content'
 import Breadcrumbs from '@/components/Breadcrumbs'
+import SearchResultsTracker from '@/components/SearchResultsTracker'
+import { matchClause } from '@/lib/search-fields'
 
 interface PageProps {
   searchParams: Promise<{ q?: string }>
@@ -76,7 +78,7 @@ async function runSearch(query: string): Promise<SearchResult[]> {
   // Sanity cocktails
   try {
     const cocktails = await client.fetch<Array<{ name: string; slug: { current: string }; description: string; category?: string; image?: string }>>(
-      `*[_type == "cocktail" && (name match $t || description match $t)] | order(_createdAt desc) [0...10] { name, slug, description, category, "image": image.asset->url }`,
+      `*[_type == "cocktail" && (${matchClause('cocktail', 't')})] | order(_createdAt desc) [0...10] { name, slug, description, category, "image": image.asset->url }`,
       { t: sanityTerm }
     )
     add(cocktails.map(c => ({
@@ -92,7 +94,7 @@ async function runSearch(query: string): Promise<SearchResult[]> {
   // Sanity ingredients
   try {
     const ingredients = await client.fetch<Array<{ name: string; slug: { current: string }; description: string; category?: string; image?: string }>>(
-      `*[_type == "ingredient" && (name match $t || description match $t || usage match $t)] | order(_createdAt desc) [0...10] { name, slug, description, category, "image": image.asset->url }`,
+      `*[_type == "ingredient" && (${matchClause('ingredient', 't')})] | order(_createdAt desc) [0...10] { name, slug, description, category, "image": image.asset->url }`,
       { t: sanityTerm }
     )
     add(ingredients.map(i => ({
@@ -108,7 +110,7 @@ async function runSearch(query: string): Promise<SearchResult[]> {
   // Sanity equipment
   try {
     const equipment = await client.fetch<Array<{ name: string; slug: { current: string }; description: string; category?: string; image?: string }>>(
-      `*[_type == "equipment" && (name match $t || description match $t || usage match $t)] | order(_createdAt desc) [0...10] { name, slug, description, category, "image": image.asset->url }`,
+      `*[_type == "equipment" && (${matchClause('equipment', 't')})] | order(_createdAt desc) [0...10] { name, slug, description, category, "image": image.asset->url }`,
       { t: sanityTerm }
     )
     add(equipment.map(e => ({
@@ -124,7 +126,7 @@ async function runSearch(query: string): Promise<SearchResult[]> {
   // Sanity guides
   try {
     const guides = await client.fetch<Array<{ title: string; slug: { current: string }; excerpt: string; category?: string; image?: string }>>(
-      `*[_type == "guide" && (title match $t || excerpt match $t)] | order(publishedAt desc) [0...10] { title, slug, excerpt, category, "image": heroImage.asset->url }`,
+      `*[_type == "guide" && (${matchClause('guide', 't')})] | order(publishedAt desc) [0...10] { title, slug, excerpt, category, "image": heroImage.asset->url }`,
       { t: sanityTerm }
     )
     add(guides.map(g => ({
@@ -148,6 +150,7 @@ export default async function SearchPage({ searchParams }: PageProps) {
 
   return (
     <main className="min-h-screen py-20">
+      {query && <SearchResultsTracker query={query} resultCount={results.length} />}
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <Breadcrumbs items={[{ label: 'Search' }]} />
 
