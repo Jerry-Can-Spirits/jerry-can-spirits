@@ -32,8 +32,16 @@ export const NEVER_INDEXED = new Set(['multiple', 'other', 'liqueur'])
  * baseSpirit explains its sub-types and links down to each, and a facet
  * covering exactly one has nothing to explain.
  *
- * Whiskey takes the "e" in its slug and covers Scotch and Japanese, which are
- * correctly spelled without it. The rollup page explains why both are right.
+ * Whiskey takes the "e" in its slug and covers Scotch, which is correctly
+ * spelled without it. The rollup page explains why both spellings are right.
+ *
+ * An earlier version of this comment also claimed Japanese. MEASURED: there is
+ * no Japanese member and no cocktail with a Japanese base spirit. A comment
+ * claiming coverage the data does not have is a fact waiting to become copy.
+ *
+ * Not every base spirit gets a facet. multiple (20) and liqueur (18) are in
+ * NEVER_INDEXED. sherry (5) and vermouth (1) sit below the floor and so have no
+ * page: that is the floor working, not an omission.
  */
 export const SPIRIT_ROLLUPS: Record<string, { label: string; members: string[] }> = {
   rum: {
@@ -94,6 +102,29 @@ export const MEMBER_LABELS: Record<string, string> = {
   mezcal: 'Mezcal',
   cognac: 'Cognac',
   brandy: 'Brandy',
+}
+
+/**
+ * Short labels for use inside a sentence, where the link labels above would be
+ * wrongly capitalised. Proper nouns keep their capital: "27 bourbon, 14 Scotch".
+ */
+export const MEMBER_SHORT: Record<string, string> = {
+  "white-rum": "white rum",
+  "dark-rum": "dark rum",
+  "aged-rum": "aged rum",
+  "spiced-rum": "spiced rum",
+  "overproof-rum": "overproof",
+  "rhum-agricole": "rhum agricole",
+  cachaca: "cachaça",
+  bourbon: "bourbon",
+  "rye-whiskey": "rye",
+  scotch: "Scotch",
+  "irish-whiskey": "Irish",
+  "welsh-whisky": "Welsh",
+  tequila: "tequila",
+  mezcal: "mezcal",
+  cognac: "cognac",
+  brandy: "brandy",
 }
 
 export type FacetKind = 'style' | 'spirit'
@@ -193,6 +224,19 @@ export function robotsFor(facet: Pick<Facet, 'value' | 'count' | 'isRollup'>): {
  * customer-facing copy like any other.
  */
 export function titleFor(facet: Pick<Facet, 'label'>, page = 1): string {
+  const base = `${facet.label} Cocktails`
+  return page > 1 ? `${base}, page ${page}` : base
+}
+
+/**
+ * The H1, which carries no count.
+ *
+ * Separate from the title tag so the two can differ: the title tag earns a
+ * click in a results list and a number helps it, while the H1 names the page a
+ * reader has already arrived on. Deriving both from one helper meant they could
+ * never differ, which is why this exists.
+ */
+export function headingFor(facet: Pick<Facet, 'label'>, page = 1): string {
   const base = `${facet.label} Cocktails`
   return page > 1 ? `${base}, page ${page}` : base
 }
