@@ -154,7 +154,19 @@ export async function generateMetadata({
         title: `${metaTitle} | Jerry Can Spirits®`,
         description: metaDescription,
         url: `https://jerrycanspirits.co.uk/shop/product/${handle}/`,
-        images: product.images.length > 0 ? [product.images[0].url] : OG_IMAGE,
+        // Shopify's altText on these images is "… - Image 1", a numbering
+        // artefact rather than a description, and it is what a screen reader
+        // announces. The product title describes what is actually pictured.
+        images:
+          product.images.length > 0 ? [{ url: product.images[0].url, alt: product.title }] : OG_IMAGE,
+        // Stays "website" against better judgement: this is a product page and
+        // og:type should say so, but "product" is not in Next's OpenGraph union
+        // and both routes past it fail. Casting it through openGraph.type
+        // compiles and then breaks the render — the flagship product page fell
+        // out of the build with a Server Components error. Passing it through
+        // `other` builds fine and emits <meta name="og:type">, where OpenGraph
+        // requires property=, so every parser ignores it: a change that looks
+        // done and does nothing. Revisit when Next widens the union.
         type: 'website',
         siteName: 'Jerry Can Spirits®',
       },
