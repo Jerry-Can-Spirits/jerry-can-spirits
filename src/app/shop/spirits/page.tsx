@@ -67,7 +67,7 @@ const spiritsFaqs: Array<{ question: string; answer: string; rich?: ReactNode }>
   },
   {
     question: 'What goes into Expedition Spiced Rum?',
-    answer: 'A Caribbean white rum base, macerated by our British partner distillery with seven real spices, two natural sweeteners, and bourbon oak for maturation. No artificial flavourings.',
+    answer: 'A Caribbean white rum base, macerated by our British partner distillery with seven real spices, two natural sweeteners, and bourbon oak. No artificial flavourings.',
   },
   {
     question: 'How does buying from Jerry Can Spirits support veterans?',
@@ -214,7 +214,7 @@ export default async function SpiritsPage() {
 
           <div className="max-w-3xl mx-auto space-y-4 text-left">
             <p className="text-xl text-parchment-300 leading-relaxed">
-              A spirits house starts with one bottle it can stand behind. Ours is Expedition Spiced Rum: Caribbean rum base: seven real spices, two natural sweeteners, and bourbon oak for maturation. No artificial flavourings. Bronze at the IWSC 2026, with a Silver for the serve with Franklin and Sons cola.
+              A spirits house starts with one bottle it can stand behind. Ours is Expedition Spiced Rum: Caribbean rum base: seven real spices, two natural sweeteners, and bourbon oak. No artificial flavourings. Bronze at the IWSC 2026, with a Silver for the serve with Franklin and Sons cola.
             </p>
             <p className="text-lg text-parchment-400 leading-relaxed">
               Macerated by our British partner distillery in limited, numbered batches. When a batch is gone, that run is finished. Two Royal Corps of Signals veterans. 17 years of service between us. The same standards applied here.

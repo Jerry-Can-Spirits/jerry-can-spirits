@@ -55,7 +55,7 @@ Jerry Can Spirits is a veteran-owned British craft spirits company, registered i
 
 ### Our Spirits
 
-We make small-batch British spirits engineered for reliability and designed for adventure. Our current expression is Expedition Spiced Rum: a Caribbean rum base with seven real spices, two natural sweeteners, and bourbon oak for maturation, macerated by our British partner distillery in small, numbered batches.
+We make small-batch British spirits engineered for reliability and designed for adventure. Our current expression is Expedition Spiced Rum: a Caribbean rum base with seven real spices, two natural sweeteners, and bourbon oak, macerated by our British partner distillery in small, numbered batches.
 
 ### Field Manual (Free Educational Content)
 
