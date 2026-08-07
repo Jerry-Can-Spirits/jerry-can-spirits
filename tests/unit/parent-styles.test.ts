@@ -15,6 +15,7 @@
  */
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { renderToStaticMarkup } from 'react-dom/server'
+import { ingredientBySlugQuery } from '@/sanity/queries'
 
 const fetchMock = vi.fn()
 
@@ -26,15 +27,17 @@ vi.mock('@/sanity/lib/image', () => ({
   urlFor: () => ({ url: () => 'https://cdn.sanity.io/images/stub.jpg' }),
 }))
 
-// Ordered as the query returns them, by name ascending.
+// Ordered as the query returns them: by displayOrder, then name. Whisky is
+// populated, so this is reading order rather than alphabetical — alphabetical
+// would lead with Islay and Penderyn, the two most obscure entries.
 const WHISKY_SUB_TYPES = [
-  { _id: '1', name: 'Islay Scotch Whisky', slug: { current: 'islay-scotch-whisky' } },
-  { _id: '2', name: 'Penderyn Welsh Whisky', slug: { current: 'penderyn' } },
-  { _id: '3', name: 'Whiskey (Bourbon)', slug: { current: 'whiskey-bourbon' } },
-  { _id: '4', name: 'Whiskey (Irish)', slug: { current: 'whiskey-irish' } },
-  { _id: '5', name: 'Whiskey (Rye)', slug: { current: 'whiskey-rye' } },
-  { _id: '6', name: 'Whisky (Japanese)', slug: { current: 'whisky-japanese' } },
-  { _id: '7', name: 'Whisky (Scotch)', slug: { current: 'whisky-scotch' } },
+  { _id: '1', name: 'Whiskey (Bourbon)', slug: { current: 'whiskey-bourbon' } },
+  { _id: '2', name: 'Whiskey (Irish)', slug: { current: 'whiskey-irish' } },
+  { _id: '3', name: 'Whiskey (Rye)', slug: { current: 'whiskey-rye' } },
+  { _id: '4', name: 'Whisky (Scotch)', slug: { current: 'whisky-scotch' } },
+  { _id: '5', name: 'Whisky (Japanese)', slug: { current: 'whisky-japanese' } },
+  { _id: '6', name: 'Islay Scotch Whisky', slug: { current: 'islay-scotch-whisky' } },
+  { _id: '7', name: 'Penderyn Welsh Whisky', slug: { current: 'penderyn' } },
 ]
 
 function ingredientDoc(name: string, slug: string, subTypes?: typeof WHISKY_SUB_TYPES) {
@@ -85,6 +88,13 @@ describe('Styles of {parent}', () => {
     const html = await render('whisky')
     const positions = WHISKY_SUB_TYPES.map((s) => html.indexOf(`/field-manual/ingredients/${s.slug.current}"`))
     expect(positions).toEqual([...positions].sort((a, b) => a - b))
+  })
+
+  it('asks Sanity for reading order, falling back to alphabetical', async () => {
+    // The order is applied by the query, not by the template, so the assertion
+    // has to be on the query. Without displayOrder the whisky page leads with
+    // Islay Scotch and Penderyn Welsh, its two most obscure entries.
+    expect(ingredientBySlugQuery).toContain('order(coalesce(displayOrder, 9999) asc, name asc)')
   })
 
   it('renders nothing at all for an ingredient with no sub-types', async () => {

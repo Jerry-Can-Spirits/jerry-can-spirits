@@ -132,6 +132,80 @@ happened four times, and the rule forbidding it was already written here each
 time. Before pushing a follow-up, check whether the PR has merged rather than
 assuming it has not.
 
+**Dump the raw data before forming a theory about it.** A preview-crawler
+audit reported fourteen missing user agents that were already present. Three
+attempts went into explaining the fourteen before anyone looked at the raw
+match output, which showed the cause immediately: a `307'd` inside a comment
+had opened a phantom string and swallowed the rest of the pattern. Time spent
+theorising about a surprising number is wasted until the number is known to be
+real. Print what the check actually saw, then reason about it.
+
+**Fixing a defect in one call site is not fixing the defect.** #1079 widened
+the guide search clause in `/api/search` from four fields to twenty-four, and
+left `/search` — the canonical, indexable surface — with its own duplicate
+implementation still matching four. The defect was reported, understood and
+half-fixed in the same session. Before closing a fix, search for every consumer
+of the thing being fixed; a second call site is the normal case, not the
+exception.
+
+**A clause that has never matched anything looks exactly like a correct clause
+over empty data.** Two lived in the search queries for as long as they have
+existed. The cocktail query matched `category`, which cocktails do not have.
+The guide query matched `introduction`, which is portable text, where `match`
+never matches. Both returned nothing, forever, and nothing about them looked
+wrong. Test a query clause against input known to match it, or it is not known
+to work.
+
+**A measurement that cannot see the thing it measures returns empty and looks
+like an answer.** Site search was invisible to GA4 whatever the configuration,
+because most searching happens in a modal that fetches results without
+navigating, so no `?q=` pageview was ever produced. Reaching for the
+parameter-based report would have shown almost no searches and been read as
+"nobody searches" rather than "the instrument does not reach". Before trusting
+a measurement, establish that a positive result could have reached it.
+
+## Dependency overrides
+
+The `overrides` block in `package.json` pins transitive dependencies past known
+advisories. It took the repo from 27 advisories to 0 in #1013 and then decayed
+to 21 without anything changing in this codebase: four of the pinned versions
+had themselves become vulnerable, `brace-expansion` pinned to exactly `5.0.8`
+inside an advisory covering `4.0.0 - 5.0.8`. A pin is a snapshot of what was
+safe on the day it was written.
+
+**Re-check monthly, and after any batch of Dependabot merges.** Run:
+
+```bash
+npm audit --package-lock-only
+```
+
+**Against the committed lockfile, never a local tree.** A local `node_modules`
+drifts: this one had `sanity` 6.6.0 installed against a declared `^6.8.0` and
+reported different numbers from CI. An audit of a tree nobody deploys is the
+same false negative as every other failure in the section above.
+
+Fix by raising the override floor to the patched version within the existing
+major. `npm audit fix --force` is not the tool: asked to fix these, it proposed
+downgrading `sanity` from the declared `^6.8.0` to `5.20.0` and moving `next`
+from 15 to 16, neither of which is a security fix.
+
+## Known limitations
+
+**Ingredient families are two levels deep.** A sub-type has one `parent`, and a
+parent has styles. Islay is a style of Scotch, which is a style of whisky, and
+the schema cannot express that: Islay is filed directly under whisky. Adding
+depth would mean a recursive query and a breadcrumb that can vary in length,
+for one document. Left deliberately.
+
+**Crawler attribution is user agent plus ASN, permanently.** `cf.verifiedBotCategory`
+needs Bot Management, which is not on the Pro plan, so a request claiming to be
+Googlebot cannot be verified as Googlebot from inside the Worker. Attribution
+combines the declared user agent with `cf.asn` and `cf.asOrganization`, which is
+strong enough to tell a real crawler from a spoofing scraper in aggregate and
+not strong enough to trust per request. Any measurement of crawler behaviour
+carries that ceiling; do not report it as though the identification were
+verified.
+
 ## Copy and content
 
 Customer-facing words follow `docs/VOICE.md`. Trademark, logo, and colour usage follow `docs/BRAND_GUIDELINES.md`. Security-relevant changes follow `docs/SECURITY.md`.
