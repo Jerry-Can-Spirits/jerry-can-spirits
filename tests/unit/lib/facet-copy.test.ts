@@ -78,3 +78,58 @@ describe('the copy store', () => {
     expect(copyFor('spirit', 'whiskey')).toBeUndefined()
   })
 })
+
+/**
+ * The tests above check tokens. These check sentences.
+ *
+ * That distinction is the finding: every token test passed while the rendered
+ * title read "1 Recipes by Style" and the intro read "1 recipe ... are built on
+ * whiskey". A check that measures the component rather than the output is the
+ * same failure shape as every other verification failure on this project.
+ *
+ * These assert on the finished string at the counts where grammar breaks.
+ */
+describe('rendered sentences', () => {
+  const TITLE = 'Whiskey Cocktails: {recipes} by Style'
+  const INTRO = 'This Field Manual holds {recipes} built on whiskey: {split}.'
+
+  it('reads correctly at a count of one', () => {
+    const ctx = { count: 1, split: [{ member: 'bourbon', count: 1 }] }
+    expect(renderCopy(TITLE, ctx)).toBe('Whiskey Cocktails: 1 recipe by Style')
+    expect(renderCopy(INTRO, ctx)).toBe('This Field Manual holds 1 recipe built on whiskey: 1 bourbon.')
+  })
+
+  it('reads correctly at a count of two', () => {
+    const ctx = {
+      count: 2,
+      split: [
+        { member: 'bourbon', count: 1 },
+        { member: 'scotch', count: 1 },
+      ],
+    }
+    expect(renderCopy(TITLE, ctx)).toBe('Whiskey Cocktails: 2 recipes by Style')
+    expect(renderCopy(INTRO, ctx)).toBe('This Field Manual holds 2 recipes built on whiskey: 1 bourbon and 1 Scotch.')
+  })
+
+  it('drops a sub-type that has emptied out of the finished sentence', () => {
+    const ctx = {
+      count: 27,
+      split: [
+        { member: 'bourbon', count: 27 },
+        { member: 'welsh-whisky', count: 0 },
+      ],
+    }
+    const out = renderCopy(INTRO, ctx)
+    expect(out).toBe('This Field Manual holds 27 recipes built on whiskey: 27 bourbon.')
+    expect(out).not.toContain('0 ')
+    expect(out).not.toContain('and .')
+  })
+
+  it('never produces a singular number with a plural noun', () => {
+    for (const count of [1, 2, 74]) {
+      const out = renderCopy(TITLE, { count, split: [{ member: 'bourbon', count }] })
+      expect(out, `count ${count} produced "${out}"`).not.toMatch(/\b1 recipes\b/)
+      expect(out).not.toMatch(/\b(?!1\b)\d+ recipe\b/)
+    }
+  })
+})
