@@ -22,6 +22,7 @@
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
     "test:e2e:report": "playwright show-report",
+    "verify:live": "tsx scripts/verify-live-routes.ts",
     "indexnow": "tsx scripts/submit-indexnow.ts",
     "citation-eval": "tsx scripts/citation-eval/run.ts"
   },

@@ -12,6 +12,7 @@ import {
   hasSubTypes,
   headingFor,
   isIndexable,
+  isValidPage,
   pageCount,
   titleFor,
   type FacetKind,
@@ -47,7 +48,7 @@ export default async function CocktailFacetPage({
   if (!facet) notFound()
 
   const pages = pageCount(facet.count)
-  if (page < 1 || page > pages) notFound()
+  if (!isValidPage(page, facet.count)) notFound()
 
   const [cocktails, searchIndex, memberCounts] = await Promise.all([
     getFacetCocktails(facet, page),

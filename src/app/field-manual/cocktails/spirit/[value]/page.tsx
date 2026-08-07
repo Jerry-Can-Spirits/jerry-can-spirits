@@ -8,15 +8,15 @@ const KIND = 'spirit' as const
 
 export const revalidate = 3600
 
-// Only the facets that exist are generated, and dynamicParams is off, so any
-// other value 404s rather than rendering an empty listing for any string
-// someone types.
+// Only the facets that exist are generated. An unknown value still 404s, but
+// the 404 comes from notFound() in CocktailFacetPage rather than from the
+// router. See the style route for why dynamicParams must stay true.
 export async function generateStaticParams() {
   const facets = await getFacets(KIND)
   return facets.map((f) => ({ value: f.value }))
 }
 
-export const dynamicParams = false
+export const dynamicParams = true
 
 export async function generateMetadata({ params }: { params: Promise<{ value: string }> }): Promise<Metadata> {
   const { value } = await params

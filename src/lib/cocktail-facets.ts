@@ -220,6 +220,20 @@ export function pageCount(total: number): number {
 }
 
 /**
+ * Whether a requested page number is real for a facet of this size.
+ *
+ * Number.isInteger comes first and is the point of the function. The page
+ * number reaches the route as a string, so /page/abc/ arrives as NaN, and every
+ * comparison against NaN is false: a bounds-only check passes it straight
+ * through to an empty grid under a real-looking URL. That path was unreachable
+ * while dynamicParams was false and became reachable when it had to be turned
+ * on for the pages to serve at all.
+ */
+export function isValidPage(page: number, count: number): boolean {
+  return Number.isInteger(page) && page >= 1 && page <= pageCount(count)
+}
+
+/**
  * Canonical URL for any facet page.
  *
  * Page 1 and pages 2+ are each self-canonical: later pages carry distinct
