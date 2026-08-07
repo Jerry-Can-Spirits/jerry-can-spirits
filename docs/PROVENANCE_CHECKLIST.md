@@ -113,6 +113,29 @@ before and never after.
 Note that `affiliate_dt_id` in the cart is unrelated: it is referral tracking
 passed to Shopify checkout, not a retailer affiliate scheme.
 
+## Surfaces the sweep must cover
+
+A copy correction is not finished when the page that reported it is fixed.
+The same sentence is usually duplicated into surfaces nobody is looking at,
+and those surfaces are read by exactly the people least able to check them.
+
+Sweep all of these, every time:
+
+- The page reported, and any other page carrying the same sentence.
+- **The media kit and press materials** — `src/app/contact/media/page.tsx`
+  and `src/app/contact/media/kit/page.tsx`. Journalists copy press material
+  verbatim, so a stale claim there outlives the correction and comes back
+  attributed to us. This has now happened twice: the tasting note said
+  "toasted bourbon oak" in the media kit after the site had been corrected.
+- **The trade portal** — `src/lib/trade-portal/product-data.ts` and
+  `src/app/trade/resources/`. Trade buyers receive fact sheets as documents;
+  a wrong fact there is quoted in a listing and cannot be edited afterwards.
+- **Structured data** — FAQPage and Product JSON-LD. Machine-facing, so a
+  wrong word is quoted back by answer engines with no context.
+- **`src/lib/search-content.ts`** — titles and descriptions surfaced by site
+  search.
+- **`src/app/llms.txt/route.ts`** — written specifically for machine readers.
+
 ## Sources of recurrence
 
 `CLAUDE.md` and `docs/VOICE.md` carry the brand's product facts. If either

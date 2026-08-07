@@ -48,7 +48,7 @@ export default function IngredientsIndex() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
         <Breadcrumbs
           items={[
-            { label: 'Ingredients' },
+            { label: 'What’s In It' },
           ]}
         />
       </div>
@@ -65,7 +65,7 @@ export default function IngredientsIndex() {
           <h1 className="text-4xl sm:text-5xl font-serif font-bold text-white mb-6">
             Product
             <br />
-            <span className="text-gold-300">Ingredients</span>
+            <span className="text-gold-300">What’s In It</span>
           </h1>
 
           <p className="text-xl text-parchment-300 max-w-3xl mx-auto leading-relaxed">

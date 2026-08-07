@@ -159,15 +159,15 @@ export async function generateMetadata({
         // announces. The product title describes what is actually pictured.
         images:
           product.images.length > 0 ? [{ url: product.images[0].url, alt: product.title }] : OG_IMAGE,
-        // Stays "website" against better judgement: this is a product page and
-        // og:type should say so, but "product" is not in Next's OpenGraph union
-        // and both routes past it fail. Casting it through openGraph.type
-        // compiles and then breaks the render — the flagship product page fell
-        // out of the build with a Server Components error. Passing it through
-        // `other` builds fine and emits <meta name="og:type">, where OpenGraph
-        // requires property=, so every parser ignores it: a change that looks
-        // done and does nothing. Revisit when Next widens the union.
-        type: 'website',
+        // og:type is emitted from the page component instead of here, as a
+        // <meta property="og:type" content="product"> that React hoists into
+        // <head>. "product" is a real OpenGraph type but not one Next models,
+        // and both routes through the Metadata API fail: casting it through
+        // this field compiles and then breaks the render, taking the page out
+        // of the build, and passing it through `other` emits name= where
+        // OpenGraph requires property=, which every parser ignores. Leaving it
+        // unset here means Next emits no og:type of its own, so the hoisted
+        // tag is the only one and they cannot contradict each other.
         siteName: 'Jerry Can Spirits®',
       },
       twitter: {
@@ -504,6 +504,10 @@ export default async function ProductPage({
 
   return (
     <main className="min-h-screen py-20">
+      {/* Hoisted into <head> by React. See generateMetadata for why og:type
+          cannot be set through the Metadata API for a value outside Next's
+          OpenGraph union. */}
+      <meta property="og:type" content="product" />
       <StructuredData data={productSchema} id="product-schema" />
       <StructuredData data={breadcrumbSchema} id="breadcrumb-schema" />
       <ProductPageTracking

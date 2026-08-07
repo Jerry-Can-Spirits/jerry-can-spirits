@@ -212,7 +212,7 @@ export default function Sustainability() {
               href="/ingredients/"
               className="inline-flex items-center justify-center space-x-2 bg-gold-500 hover:bg-gold-400 text-jerry-green-900 px-8 py-4 rounded-lg font-semibold transition-all duration-300"
             >
-              <span>View Ingredients</span>
+              <span>What’s In It</span>
             </Link>
           </div>
         </section>
