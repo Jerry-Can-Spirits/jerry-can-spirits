@@ -10,12 +10,14 @@ import {
   MEMBER_LABELS,
   facetPath,
   hasSubTypes,
+  headingFor,
   isIndexable,
   pageCount,
   titleFor,
   type FacetKind,
 } from '@/lib/cocktail-facets'
 import { getFacet, getFacetCocktails, getFacetSearchIndex, getMemberCounts } from '@/lib/facet-data'
+import { copyFor, renderCopy } from '@/lib/facet-copy'
 
 /**
  * One template for every facet page: eleven styles, six spirit rollups and two
@@ -53,6 +55,14 @@ export default async function CocktailFacetPage({
     getMemberCounts(facet),
   ])
 
+  const copy = copyFor(facet.kind, facet.value)
+  // Tokens resolve against the same counts the grid below is built from, so
+  // the prose cannot disagree with the page it sits on.
+  const ctx = { count: facet.count, split: memberCounts }
+  // Introduction on page 1 only. Page 3 is the same facet, not a new subject,
+  // and repeating the intro would duplicate it across every paginated URL.
+  const intro = page === 1 && copy?.intro ? renderCopy(copy.intro, ctx) : null
+
   const indexable = isIndexable(facet)
   const showOrientingSection = hasSubTypes(facet) && memberCounts.length > 1 && page === 1
 
@@ -86,11 +96,25 @@ export default async function CocktailFacetPage({
       </div>
 
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-10">
-        <h1 className="text-4xl sm:text-5xl font-serif font-bold text-white mb-4">{titleFor(facet, page)}</h1>
+        <h1 className="text-4xl sm:text-5xl font-serif font-bold text-white mb-4">
+          {copy?.h1 && page === 1 ? copy.h1 : headingFor(facet, page)}
+        </h1>
         <p className="text-parchment-400">
           {facet.count} {facet.count === 1 ? 'recipe' : 'recipes'}
           {pages > 1 ? `, page ${page} of ${pages}` : ''}
         </p>
+
+        {/* Rendered only where approved copy exists. A facet nobody has written
+            gets its heading and its grid and nothing invented in between. */}
+        {intro && (
+          <div className="mt-6 max-w-3xl space-y-4">
+            {intro.split(/\n\s*\n/).map((para, i) => (
+              <p key={i} className="text-parchment-300 leading-relaxed">
+                {para}
+              </p>
+            ))}
+          </div>
+        )}
       </section>
 
       {/* The orienting section. Every facet covering more than one base spirit

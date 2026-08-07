@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import CocktailFacetPage from '@/components/CocktailFacetPage'
-import { getFacets } from '@/lib/facet-data'
+import { getFacets, getMemberCounts } from '@/lib/facet-data'
+import { copyFor, renderCopy } from '@/lib/facet-copy'
 import { canonicalFor, pageCount, robotsFor, titleFor } from '@/lib/cocktail-facets'
 
 const KIND = 'spirit' as const
