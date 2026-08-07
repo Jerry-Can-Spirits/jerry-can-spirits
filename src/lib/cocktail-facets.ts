@@ -124,7 +124,7 @@ export const MEMBER_SHORT: Record<string, string> = {
   tequila: "tequila",
   mezcal: "mezcal",
   cognac: "cognac",
-  brandy: "brandy",
+  brandy: "other brandy",
 }
 
 export type FacetKind = 'style' | 'spirit'
@@ -187,6 +187,29 @@ export function hasSubTypes(facet: Pick<Facet, 'members'>): boolean {
   return facet.members.length > 1
 }
 
+/**
+ * Facets that describe the same drinks as another facet.
+ *
+ * MEASURED: every one of the ten cocktails in the mocktails family is also
+ * tagged non-alcoholic, and after the Michelada correction the two sets are
+ * identical. Two indexable pages listing the same ten recipes compete with
+ * each other and split whatever authority either would have earned.
+ *
+ * The duplicate keeps its URL, its grid and its links. It is noindexed and
+ * canonicalises to the page it duplicates, which is what canonical is for. A
+ * reader with the link still gets the drinks.
+ *
+ * non-alcoholic is the survivor rather than mocktails: it is the growing query,
+ * and "mocktail" carries a diminutive the category has spent years shedding.
+ */
+export const DUPLICATE_OF: Record<string, { kind: FacetKind; value: string }> = {
+  'style:mocktails': { kind: 'spirit', value: 'non-alcoholic' },
+}
+
+export function duplicateTarget(kind: FacetKind, value: string): { kind: FacetKind; value: string } | null {
+  return DUPLICATE_OF[`${kind}:${value}`] ?? null
+}
+
 export function facetPath(kind: FacetKind, value: string, page = 1): string {
   const base = `/field-manual/cocktails/${kind}/${value}/`
   return page > 1 ? `${base}page/${page}/` : base
@@ -204,6 +227,11 @@ export function pageCount(total: number): number {
  * Non-indexable facets canonicalise up to the unfiltered hub instead.
  */
 export function canonicalFor(facet: Pick<Facet, 'kind' | 'value' | 'count' | 'isRollup'>, page = 1): string {
+  // A duplicate points at the facet it duplicates rather than at the hub: the
+  // drinks are the same, so the other page is the better answer, not a broader
+  // one. Page 1 of the target, because page 3 of a duplicate has no counterpart.
+  const dupe = duplicateTarget(facet.kind, facet.value)
+  if (dupe) return facetPath(dupe.kind, dupe.value)
   if (!isIndexable(facet)) return '/field-manual/cocktails/'
   return facetPath(facet.kind, facet.value, page)
 }
@@ -214,7 +242,12 @@ export function canonicalFor(facet: Pick<Facet, 'kind' | 'value' | 'count' | 'is
  * A non-indexable facet is still followed: its cocktail links are real and
  * worth crawling even when the listing page itself should not rank.
  */
-export function robotsFor(facet: Pick<Facet, 'value' | 'count' | 'isRollup'>): { index: boolean; follow: boolean } {
+export function robotsFor(
+  facet: Pick<Facet, 'kind' | 'value' | 'count' | 'isRollup'>
+): { index: boolean; follow: boolean } {
+  // A duplicate is never indexed, whatever its count. Its links are still
+  // followed, because they lead to the same real recipes.
+  if (duplicateTarget(facet.kind, facet.value)) return { index: false, follow: true }
   return { index: isIndexable(facet), follow: true }
 }
 
@@ -223,9 +256,21 @@ export function robotsFor(facet: Pick<Facet, 'value' | 'count' | 'isRollup'>): {
  * Comma rather than a dash: em-dashes are banned by VOICE.md, and a title is
  * customer-facing copy like any other.
  */
-export function titleFor(facet: Pick<Facet, 'label'>, page = 1): string {
-  const base = `${facet.label} Cocktails`
+export function titleFor(facet: Pick<Facet, 'label' | 'kind'>, page = 1): string {
+  const base = baseHeading(facet)
   return page > 1 ? `${base}, page ${page}` : base
+}
+
+/**
+ * A style label is already the name of a family, so appending the noun gives
+ * "Mocktails Cocktails" and "Flips Cocktails". A spirit label is an
+ * ingredient and needs it: "Rum" alone does not name a page.
+ *
+ * Written copy overrides this on the 18 facets that have it. This is what the
+ * other 13 render, and they are reachable even though they are noindexed.
+ */
+function baseHeading(facet: Pick<Facet, 'label' | 'kind'>): string {
+  return facet.kind === 'style' ? facet.label : `${facet.label} Cocktails`
 }
 
 /**
@@ -236,7 +281,7 @@ export function titleFor(facet: Pick<Facet, 'label'>, page = 1): string {
  * reader has already arrived on. Deriving both from one helper meant they could
  * never differ, which is why this exists.
  */
-export function headingFor(facet: Pick<Facet, 'label'>, page = 1): string {
-  const base = `${facet.label} Cocktails`
+export function headingFor(facet: Pick<Facet, 'label' | 'kind'>, page = 1): string {
+  const base = baseHeading(facet)
   return page > 1 ? `${base}, page ${page}` : base
 }
