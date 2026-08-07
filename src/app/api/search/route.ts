@@ -4,6 +4,7 @@ import { isRateLimited } from '@/lib/kv'
 import { getProducts } from '@/lib/shopify'
 import { client } from '@/sanity/lib/client'
 import { searchStaticPages, type SearchResult } from '@/lib/search-content'
+import { matchClause } from '@/lib/search-fields'
 
 const SEARCH_RATE_LIMIT = 20
 
@@ -46,12 +47,18 @@ interface SanityGuide {
 }
 
 // Static searchable pages
-// Sanity search queries
-const cocktailsSearchQuery = `*[_type == "cocktail" && (
-  name match $searchTerm ||
-  description match $searchTerm ||
-  category match $searchTerm
-)] | order(_createdAt desc) [0...10] {
+// Sanity search queries.
+//
+// The match clauses are built from SEARCHABLE_PATHS rather than written here,
+// because written here is how they went stale: each type matched three or four
+// top-level fields, which MEASURED to 56,269 of the corpus's 527,058 words. For
+// guides it was 2.2% — the entire section and subsection tree, every FAQ and
+// every comparison table were unsearchable, so a phrase read in a guide could
+// not be found by searching for it.
+//
+// The projections are unchanged: only the filter widened, so each result still
+// carries exactly the fields the UI renders.
+const cocktailsSearchQuery = `*[_type == "cocktail" && (${matchClause('cocktail')})] | order(_createdAt desc) [0...10] {
   _id,
   name,
   slug,
@@ -60,27 +67,7 @@ const cocktailsSearchQuery = `*[_type == "cocktail" && (
   "image": image.asset->url
 }`
 
-const equipmentSearchQuery = `*[_type == "equipment" && (
-  name match $searchTerm ||
-  description match $searchTerm ||
-  usage match $searchTerm ||
-  category match $searchTerm
-)] | order(_createdAt desc) [0...10] {
-  _id,
-  name,
-  slug,
-  description,
-  usage,
-  category,
-  "image": image.asset->url
-}`
-
-const ingredientsSearchQuery = `*[_type == "ingredient" && (
-  name match $searchTerm ||
-  description match $searchTerm ||
-  usage match $searchTerm ||
-  category match $searchTerm
-)] | order(_createdAt desc) [0...10] {
+const equipmentSearchQuery = `*[_type == "equipment" && (${matchClause('equipment')})] | order(_createdAt desc) [0...10] {
   _id,
   name,
   slug,
@@ -90,12 +77,17 @@ const ingredientsSearchQuery = `*[_type == "ingredient" && (
   "image": image.asset->url
 }`
 
-const guidesSearchQuery = `*[_type == "guide" && (
-  title match $searchTerm ||
-  excerpt match $searchTerm ||
-  introduction match $searchTerm ||
-  category match $searchTerm
-)] | order(publishedAt desc) [0...10] {
+const ingredientsSearchQuery = `*[_type == "ingredient" && (${matchClause('ingredient')})] | order(_createdAt desc) [0...10] {
+  _id,
+  name,
+  slug,
+  description,
+  usage,
+  category,
+  "image": image.asset->url
+}`
+
+const guidesSearchQuery = `*[_type == "guide" && (${matchClause('guide')})] | order(publishedAt desc) [0...10] {
   _id,
   title,
   slug,
