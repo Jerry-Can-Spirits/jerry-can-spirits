@@ -218,44 +218,43 @@ export default async function IngredientDetailPage({ params }: { params: Promise
           <div className="order-2 lg:order-1">
             <div className="lg:sticky lg:top-24 space-y-6">
 
-              {/* Main Image */}
-              <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
-                {ingredient.image ? (
-                  <div className="relative aspect-square bg-transparent rounded-lg overflow-hidden">
-                    <Image
-                      src={urlFor(ingredient.image).url()}
-                      alt={ingredient.image?.alt || ingredient.name}
-                      fill
-                      className="object-contain mix-blend-multiply p-4"
-                      sizes="(max-width: 1024px) 100vw, 45vw"
-                      priority
-                    />
-                  </div>
-                ) : (
-                  <div className="aspect-square bg-jerry-green-800/20 rounded-lg flex items-center justify-center">
-                    <div className="text-center">
-                      <div className="w-24 h-24 bg-gold-400/20 rounded-full flex items-center justify-center mx-auto mb-6">
-                        <svg className="w-12 h-12 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                        </svg>
-                      </div>
-                      <p className="text-parchment-300">Image coming soon</p>
+              {/* Image and badge panel. Over half the ingredient documents have
+                  no image, and the template used to fill the gap with a framed
+                  "Image coming soon" placeholder sitting directly beneath the
+                  opening paragraph — the copy an answer engine lifts. A text
+                  page reads fine without an image, so when there is nothing to
+                  put in the panel the panel itself is not rendered: guarding
+                  only the image would leave an empty bordered box in its place.
+                  The featured badge shares the panel, so it keeps the panel
+                  alive on its own. */}
+              {(ingredient.image || ingredient.featured) && (
+                <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+                  {ingredient.image && (
+                    <div className="relative aspect-square bg-transparent rounded-lg overflow-hidden">
+                      <Image
+                        src={urlFor(ingredient.image).url()}
+                        alt={ingredient.image?.alt || ingredient.name}
+                        fill
+                        className="object-contain mix-blend-multiply p-4"
+                        sizes="(max-width: 1024px) 100vw, 45vw"
+                        priority
+                      />
                     </div>
-                  </div>
-                )}
+                  )}
 
-                {ingredient.featured && (
-                  <div className="mt-4 p-3 bg-gold-500/10 border border-gold-500/30 rounded-lg">
-                    <div className="flex items-center gap-2">
-                      <span className="text-xl">★</span>
-                      <div>
-                        <h3 className="text-gold-300 font-semibold text-sm">Essential Ingredient</h3>
-                        <p className="text-parchment-300 text-xs">A staple for any well-stocked bar</p>
+                  {ingredient.featured && (
+                    <div className={`${ingredient.image ? 'mt-4 ' : ''}p-3 bg-gold-500/10 border border-gold-500/30 rounded-lg`}>
+                      <div className="flex items-center gap-2">
+                        <span className="text-xl">★</span>
+                        <div>
+                          <h3 className="text-gold-300 font-semibold text-sm">Essential Ingredient</h3>
+                          <p className="text-parchment-300 text-xs">A staple for any well-stocked bar</p>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                )}
-              </div>
+                  )}
+                </div>
+              )}
 
               {/* Quick Facts */}
               {(ingredient.abv || ingredient.origin || ingredient.flavorProfile?.strength) && (
