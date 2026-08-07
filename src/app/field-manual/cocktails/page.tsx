@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { Suspense } from 'react'
+import Link from 'next/link'
 import { client } from '@/sanity/lib/client'
 import { cocktailsListQuery } from '@/sanity/queries'
 import CocktailsClient from './CocktailsClient'
@@ -7,6 +8,8 @@ import HubIndex from '@/components/HubIndex'
 import Breadcrumbs from '@/components/Breadcrumbs'
 import StructuredData from '@/components/StructuredData'
 import { OG_IMAGE } from '@/lib/og'
+import { getFacets } from '@/lib/facet-data'
+import { facetPath, isSelfCanonical, type Facet } from '@/lib/cocktail-facets'
 
 export const metadata: Metadata = {
   title: 'Cocktail Recipes',
@@ -55,11 +58,48 @@ function truncateOnWord(text: string, max: number): string {
   return (lastSpace > 0 ? cut.slice(0, lastSpace) : cut).trimEnd()
 }
 
+// The filter controls above are client state: they rewrite query strings and
+// leave no URL a crawler can follow, which is why the facet pages sat with zero
+// inbound links after they shipped. This block is the crawlable counterpart,
+// server-rendered into the HTML, ordered by count rather than alphabetically
+// because the largest families are the ones worth entering first.
+function FacetLinks({ heading, facets }: { heading: string; facets: Facet[] }) {
+  if (facets.length === 0) return null
+  return (
+    <section aria-label={heading} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-4 mb-12">
+      <h2 className="text-2xl font-serif font-bold text-white mb-6">{heading}</h2>
+      <ul className="flex flex-wrap gap-3">
+        {facets.map((facet) => (
+          <li key={facet.value}>
+            <Link
+              href={facetPath(facet.kind, facet.value)}
+              className="inline-flex items-center gap-2 px-4 py-2 bg-jerry-green-800/30 rounded-lg border border-gold-500/20 text-parchment-300 hover:bg-jerry-green-800/50 hover:border-gold-400/40 hover:text-gold-300 transition-all"
+            >
+              {facet.label}
+              <span className="text-parchment-400 text-sm">{facet.count}</span>
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )
+}
+
 // This is now a Server Component - data fetching happens server-side
 export default async function CocktailsPage() {
   // Fetch cocktails server-side using optimized list query
   // Only fetches fields needed for preview cards (not full ingredients/instructions)
-  const fetched: CocktailListItem[] = await client.fetch(cocktailsListQuery, {}, { next: { revalidate: 3600 } })
+  const [fetched, styleFacets, spiritFacets] = await Promise.all([
+    client.fetch<CocktailListItem[]>(cocktailsListQuery, {}, { next: { revalidate: 3600 } }),
+    getFacets('style'),
+    getFacets('spirit'),
+  ])
+
+  // Only the self-canonical facets. Linking a thin facet that canonicalises to
+  // this very page, or the mocktails duplicate that canonicalises to
+  // non-alcoholic, would advertise URLs that disclaim themselves.
+  const linkableStyles = styleFacets.filter((f) => isSelfCanonical(f))
+  const linkableSpirits = spiritFacets.filter((f) => isSelfCanonical(f))
 
   // The card clamps description to three lines (line-clamp-3), roughly 150
   // characters, but the mean description is 1,002. The rest was serialised
@@ -129,6 +169,8 @@ export default async function CocktailsPage() {
       <Suspense>
         <CocktailsClient cocktails={cocktails} />
       </Suspense>
+      <FacetLinks heading="Cocktails by style" facets={linkableStyles} />
+      <FacetLinks heading="Cocktails by spirit" facets={linkableSpirits} />
       <HubIndex
         heading={`All ${cocktails.length} cocktails, A to Z`}
         items={cocktails.map((c) => ({ name: c.name, href: `/field-manual/cocktails/${c.slug.current}/` }))}

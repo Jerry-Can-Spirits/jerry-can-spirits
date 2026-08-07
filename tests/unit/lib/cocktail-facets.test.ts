@@ -12,6 +12,7 @@ import {
   facetPath,
   hasSubTypes,
   isIndexable,
+  isSelfCanonical,
   isValidPage,
   labelFor,
   pageCount,
@@ -145,6 +146,42 @@ describe('canonicals', () => {
     const flips = { kind: 'style' as const, value: 'flips', count: 1, isRollup: false }
     expect(canonicalFor(flips)).toBe('/field-manual/cocktails/')
     expect(canonicalFor(flips, 2)).toBe('/field-manual/cocktails/')
+  })
+})
+
+describe('which facets are worth linking to', () => {
+  const sours = { kind: 'style' as const, value: 'sours', count: 85, isRollup: false }
+  const flips = { kind: 'style' as const, value: 'flips', count: 1, isRollup: false }
+  const mocktails = { kind: 'style' as const, value: 'mocktails', count: 10, isRollup: false }
+
+  it('advertises a facet whose own URL is its canonical', () => {
+    expect(isSelfCanonical(sours)).toBe(true)
+    expect(isSelfCanonical(sours, 3)).toBe(true)
+  })
+
+  it('does not advertise a thin facet, which canonicalises to the hub', () => {
+    // A sitemap entry or hub link pointing at a URL that disclaims itself is a
+    // contradiction. The page still exists and is still followed.
+    expect(isSelfCanonical(flips)).toBe(false)
+  })
+
+  it('does not advertise a duplicate, which canonicalises to the facet it duplicates', () => {
+    // mocktails clears the count floor and is still not advertised, because the
+    // issue is duplication rather than thinness.
+    expect(isIndexable(mocktails)).toBe(true)
+    expect(isSelfCanonical(mocktails)).toBe(false)
+  })
+
+  it('agrees with canonicalFor by construction, at every page', () => {
+    // The point of the helper: it asks canonicalFor rather than re-deciding.
+    // If canonicalFor changes, this follows it instead of contradicting it.
+    for (const facet of [sours, flips, mocktails]) {
+      for (const page of [1, 2, 5]) {
+        expect(isSelfCanonical(facet, page)).toBe(
+          canonicalFor(facet, page) === facetPath(facet.kind, facet.value, page)
+        )
+      }
+    }
   })
 })
 
