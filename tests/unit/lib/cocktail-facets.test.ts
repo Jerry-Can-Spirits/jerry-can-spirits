@@ -51,6 +51,19 @@ describe('spirit rollups', () => {
     expect(rollupFor('champagne')).toBeNull()
   })
 
+  it('covers every gin style, and deliberately excludes sloe gin', () => {
+    // Sloe gin is a liqueur at 15-30% doing a modifier's job, and two of its
+    // four cocktails contain no gin at all: Charlie Chaplin is sloe gin,
+    // apricot and lime, and Slow Comfortable Screw is vodka-based. A reader
+    // holding a bottle of gin cannot make either, which is the test the gin
+    // facet has to pass. It is related to gin on the ingredient side, via
+    // parent, which is where that relationship is true.
+    for (const s of ['gin', 'london-dry-gin', 'old-tom-gin', 'plymouth-gin', 'navy-strength-gin']) {
+      expect(rollupFor(s)).toBe('gin')
+    }
+    expect(rollupFor('sloe-gin')).toBeNull()
+  })
+
   it('treats all six rollups as equals — none is special-cased', () => {
     expect(Object.keys(SPIRIT_ROLLUPS).sort()).toEqual(['brandy', 'gin', 'rum', 'tequila', 'vodka', 'whiskey'])
   })
@@ -231,11 +244,20 @@ describe('the orienting section', () => {
     expect(hasSubTypes({ members: SPIRIT_ROLLUPS.whiskey.members })).toBe(true)
   })
 
+  it('shows for gin, which gained styles in the sub-type pass', () => {
+    // This assertion used to read `false`, with the comment "Gin is a rollup of
+    // one". That was accurate and is no longer: London Dry, Old Tom, Plymouth
+    // and Navy Strength are now members, so the orienting section switches on
+    // by itself. The change of expectation IS the taxonomy change being
+    // recorded, not a broken test being repaired.
+    expect(hasSubTypes({ members: SPIRIT_ROLLUPS.gin.members })).toBe(true)
+  })
+
   it('does not show where there is nothing to explain', () => {
-    // Gin is a rollup of one, and a style has no members at all. A heading
-    // reading "what counts as gin here" over a single entry is noise.
-    expect(hasSubTypes({ members: SPIRIT_ROLLUPS.gin.members })).toBe(false)
+    // A style facet has no members at all. A heading reading "what counts as
+    // sours here" over an empty list is noise.
     expect(hasSubTypes({ members: [] })).toBe(false)
+    expect(hasSubTypes({ members: SPIRIT_ROLLUPS.vodka.members })).toBe(false)
   })
 })
 

@@ -52,7 +52,17 @@ export const SPIRIT_ROLLUPS: Record<string, { label: string; members: string[] }
     label: 'Whiskey',
     members: ['bourbon', 'rye-whiskey', 'scotch', 'irish-whiskey', 'welsh-whisky'],
   },
-  gin: { label: 'Gin', members: ['gin'] },
+  // "gin" stays a member alongside the styles. Unlike rum, where every cocktail
+  // names a sub-type, 47 of 72 gin recipes name only "gin" (MEASURED, 7 Aug
+  // 2026), and they need somewhere true to sit until a recipe pass gives them a
+  // style. Sloe gin is not here: it is a liqueur at 15-30% doing a modifier's
+  // job, and two of its four cocktails contain no gin at all. It carries a
+  // parent of Gin on the ingredient side, which is where that relationship is
+  // true, without putting undrinkable-with-gin recipes on the gin page.
+  gin: {
+    label: 'Gin',
+    members: ['gin', 'london-dry-gin', 'old-tom-gin', 'plymouth-gin', 'navy-strength-gin'],
+  },
   vodka: { label: 'Vodka', members: ['vodka'] },
   tequila: { label: 'Tequila', members: ['tequila', 'mezcal'] },
   brandy: { label: 'Brandy', members: ['cognac', 'brandy'] },
@@ -93,6 +103,11 @@ export const MEMBER_LABELS: Record<string, string> = {
   'overproof-rum': 'Overproof rum',
   'rhum-agricole': 'Rhum agricole',
   cachaca: 'Cachaça',
+  gin: 'Gin',
+  'london-dry-gin': 'London Dry gin',
+  'old-tom-gin': 'Old Tom gin',
+  'plymouth-gin': 'Plymouth gin',
+  'navy-strength-gin': 'Navy Strength gin',
   bourbon: 'Bourbon',
   'rye-whiskey': 'Rye whiskey',
   scotch: 'Scotch',
@@ -116,6 +131,14 @@ export const MEMBER_SHORT: Record<string, string> = {
   "overproof-rum": "overproof",
   "rhum-agricole": "rhum agricole",
   cachaca: "cachaça",
+  // Style names keep their capitals in prose: "18 London Dry, 5 Old Tom".
+  // "gin" alone stays lower case — it is the absence of a named style, not a
+  // style called Gin.
+  gin: "unspecified",
+  "london-dry-gin": "London Dry",
+  "old-tom-gin": "Old Tom",
+  "plymouth-gin": "Plymouth",
+  "navy-strength-gin": "Navy Strength",
   bourbon: "bourbon",
   "rye-whiskey": "rye",
   scotch: "Scotch",

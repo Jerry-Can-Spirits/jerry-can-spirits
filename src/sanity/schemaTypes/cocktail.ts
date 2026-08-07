@@ -385,7 +385,15 @@ export default defineType({
           {title: 'Rhum Agricole', value: 'rhum-agricole'},
           // Other spirits
           {title: 'Vodka', value: 'vodka'},
+          // Gin sub-types. "Gin" stays for the recipes that name no style: 47 of
+          // 72 say only "gin", and inventing a style for them would be a claim
+          // the recipe does not make. Sloe gin is deliberately absent — it is a
+          // liqueur, not a gin, and lives under liqueurs with a parent of Gin.
           {title: 'Gin', value: 'gin'},
+          {title: 'London Dry Gin', value: 'london-dry-gin'},
+          {title: 'Old Tom Gin', value: 'old-tom-gin'},
+          {title: 'Plymouth Gin', value: 'plymouth-gin'},
+          {title: 'Navy Strength Gin', value: 'navy-strength-gin'},
           {title: 'Tequila', value: 'tequila'},
           {title: 'Mezcal', value: 'mezcal'},
           {title: 'Bourbon', value: 'bourbon'},
