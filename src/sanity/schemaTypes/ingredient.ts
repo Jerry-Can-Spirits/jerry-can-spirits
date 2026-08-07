@@ -490,6 +490,30 @@ export default defineType({
       description: 'Cocktails that use this ingredient'
     }),
     defineField({
+      name: 'parent',
+      title: 'Parent Ingredient',
+      type: 'reference',
+      to: [{type: 'ingredient'}],
+      description:
+        'The broader ingredient this is a style of — bourbon’s parent is whisky, fino’s is sherry. Setting it lists this page under "Styles of" on the parent. Leave empty for an ingredient that is not a style of something else, which is most of them.',
+      // The parent belongs here and nowhere else. It used to live in
+      // relatedIngredients alongside sibling and association links, which made
+      // the three indistinguishable: sweet-vermouth was referenced by fifteen
+      // ingredients including gin, Aperol and Campari, so reversing that field
+      // to find styles would have listed them as vermouths.
+      validation: Rule =>
+        Rule.custom((value, context) => {
+          const self = (context.document as {_id?: string} | undefined)?._id
+          const ref = (value as {_ref?: string} | undefined)?._ref
+          if (!ref || !self) return true
+          // Drafts and published documents share an id beyond the prefix.
+          if (ref.replace(/^drafts\./, '') === self.replace(/^drafts\./, '')) {
+            return 'An ingredient cannot be a style of itself.'
+          }
+          return true
+        })
+    }),
+    defineField({
       name: 'relatedIngredients',
       title: 'Related Ingredients',
       type: 'array',
@@ -499,7 +523,8 @@ export default defineType({
           to: [{type: 'ingredient'}]
         }
       ],
-      description: 'Ingredients often used together with this one'
+      description:
+        'Ingredients often used together with this one, and sibling styles. Not the parent — that has its own field above, so the two cannot drift apart.'
     }),
     defineField({
       name: 'relatedEquipment',

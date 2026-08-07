@@ -7,6 +7,7 @@ import { MagnifyingGlassIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import Link from 'next/link'
 import Image from 'next/image'
 import type { SearchResult } from '@/lib/search-content'
+import { trackSearch } from '@/lib/track-search'
 
 interface SearchModalProps {
   isOpen: boolean
@@ -62,7 +63,9 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
       try {
         const response = await fetch(`/api/search?q=${encodeURIComponent(query)}`)
         const data = await response.json() as { results?: SearchResult[] }
-        setResults((data.results ?? []).slice(0, 12))
+        const found = (data.results ?? []).slice(0, 12)
+        setResults(found)
+        trackSearch(query.trim(), found.length)
       } catch (error) {
         console.error('Search error:', error)
         setResults([])
