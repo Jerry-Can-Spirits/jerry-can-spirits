@@ -83,6 +83,20 @@ never as verified. The data lives in Workers Logs, reachable at
 `POST /accounts/{account}/workers/observability/telemetry/query` with the
 standard API token; zone analytics needs a scope the token does not have.
 
+**`dynamicParams = false` 404s every page it is meant to serve.** The site
+configures no incremental cache (`open-next.config.ts` is
+`defineCloudflareConfig({})`, and both deploy logs read *"Incremental cache does
+not need populating"*), so nothing is served from one: every response carries
+`x-nextjs-cache: MISS` and re-renders at the edge. Routes with
+`dynamicParams = true` do not notice, because a miss falls through to an
+on-demand render. With `dynamicParams = false`, Next serves only what it can
+confirm was prerendered, that confirmation is unreachable, and the route 404s
+for everyone. Forty-five facet pages shipped that way in #1088 and stayed dead
+through #1090. Keep `dynamicParams` true on this platform and enforce the
+unknown-value 404 inside the component with `notFound()`. Note what that moves:
+guards the router used to make unreachable are now reachable, so a page number
+arriving as `NaN` needs its own check.
+
 **Build variables live on the trigger, not the Worker.** Reconnecting the Git
 integration creates fresh triggers with no variables, and `NEXT_PUBLIC_*`
 values are inlined at build time, so the build stays green and the deploy
@@ -104,6 +118,19 @@ read rendered text and missed the same link held in a structured field.
 
 The only defence that has worked is verifying the verification: check what the
 check actually measured, not merely that it passed.
+
+**A local production server is not the deployed artefact.** The facet routes
+were verified by building and serving them with `next start`, which reads
+prerendered HTML off local disk. Production runs
+`npx opennextjs-cloudflare build` and serves from a Worker, and there the same
+45 pages returned 404 to every visitor. Nothing objected: `next build` listed
+the pages, the deploy log said *Success*, and the routes 404'd for two days
+across three merges. `npm run build` is `next build` only, so no local command
+in this repo exercises what ships. After any deploy that introduces routes, run
+`npm run verify:live`, which fetches production and asserts the status of one
+URL per route family. `--base=https://jerry-can-spirits-prod.dan-a98.workers.dev`
+measures the Worker directly, which is the instrument to use when Cloudflare is
+challenging requests to the apex domain.
 
 **Scripts run in this order: typecheck, dry run, execute.** `scripts/` is
 typechecked by the build, so a script that runs correctly can still break CI.

@@ -12,6 +12,7 @@ import {
   facetPath,
   hasSubTypes,
   isIndexable,
+  isValidPage,
   labelFor,
   pageCount,
   robotsFor,
@@ -98,6 +99,35 @@ describe('paths and pagination', () => {
     expect(pageCount(85)).toBe(Math.ceil(85 / FACET_PAGE_SIZE))
     expect(pageCount(FACET_PAGE_SIZE)).toBe(1)
     expect(pageCount(0)).toBe(1)
+  })
+})
+
+describe('the page-number guard', () => {
+  // 85 cocktails at 24 a page is four pages.
+  const SOURS = 85
+
+  it('accepts every page that exists', () => {
+    for (const n of [1, 2, 3, 4]) expect(isValidPage(n, SOURS)).toBe(true)
+  })
+
+  it('rejects a page past the end and a page before the start', () => {
+    expect(isValidPage(5, SOURS)).toBe(false)
+    expect(isValidPage(0, SOURS)).toBe(false)
+    expect(isValidPage(-1, SOURS)).toBe(false)
+  })
+
+  it('rejects a page number that is not a number at all', () => {
+    // /page/abc/ reaches the route as Number('abc'), which is NaN. Every
+    // comparison against NaN is false, so a bounds-only check returns true here
+    // and renders an empty grid at a URL that looks real. This is the case the
+    // guard exists for, and it is reachable only because dynamicParams had to
+    // be turned on for the facet pages to serve at all.
+    expect(isValidPage(Number('abc'), SOURS)).toBe(false)
+    expect(isValidPage(NaN, SOURS)).toBe(false)
+  })
+
+  it('rejects a fractional page', () => {
+    expect(isValidPage(Number('2.5'), SOURS)).toBe(false)
   })
 })
 

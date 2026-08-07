@@ -8,15 +8,22 @@ const KIND = 'style' as const
 
 export const revalidate = 3600
 
-// Only the facets that exist are generated, and dynamicParams is off, so any
-// other value 404s rather than rendering an empty listing for any string
-// someone types.
+// Only the facets that exist are generated. An unknown value still 404s, but
+// the 404 comes from notFound() in CocktailFacetPage rather than from the
+// router.
 export async function generateStaticParams() {
   const facets = await getFacets(KIND)
   return facets.map((f) => ({ value: f.value }))
 }
 
-export const dynamicParams = false
+// Must stay true on Cloudflare. open-next.config.ts configures no incremental
+// cache, so nothing is served from one: every response carries
+// x-nextjs-cache: MISS and re-renders at the edge. dynamicParams = false makes
+// Next serve only what it can confirm was prerendered, that confirmation is
+// unreachable, and all 45 facet pages 404 in production while `next start`
+// serves them from local disk. Shipped that way in #1088 and stayed broken
+// through #1090.
+export const dynamicParams = true
 
 export async function generateMetadata({ params }: { params: Promise<{ value: string }> }): Promise<Metadata> {
   const { value } = await params
