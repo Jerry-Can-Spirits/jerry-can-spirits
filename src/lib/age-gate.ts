@@ -83,7 +83,13 @@ export const BOT_USER_AGENTS = [
   'duckduckbot',
   'baiduspider',
   'yandexbot',
-  'facebot', // Facebook
+  'facebot', // Facebook, legacy token
+  // facebookexternalhit is the crawler that builds the link preview when a URL
+  // is shared on Facebook, Messenger, Instagram or WhatsApp. Gated, it renders
+  // the age-check page as the preview, so every shared link looks broken.
+  // Measured over seven days of Worker logs: 44 requests redirected, 42 served.
+  'facebookexternalhit',
+  'meta-externalads', // Meta ads crawler; 17 redirected in the same window
   'ia_archiver', // Alexa
 
   // SEO tools
@@ -103,12 +109,23 @@ export const BOT_USER_AGENTS = [
   'surfer bot', // SurferSEO Site Audit (exact User-Agent)
   'surfer', // SurferSEO fallback
 
-  // Social media
+  // Social media and messaging link previews. Each of these fetches a page to
+  // build the card shown when someone shares a URL. Gated, the card renders the
+  // age-check page instead of the product or recipe, so a share looks broken.
+  // Audited against current published lists after facebookexternalhit was found
+  // missing; the eight below had never been considered.
   'twitterbot',
   'linkedinbot',
   'pinterestbot',
+  'pinterest/', // Pinterest's other UA: "Pinterest/0.2", distinct from pinterestbot
   'whatsapp',
   'telegrambot',
+  'slackbot', // covers Slackbot and Slackbot-LinkExpanding
+  'discordbot',
+  'redditbot',
+  'skypeuripreview',
+  'mastodon',
+  'cardyb', // Bluesky's link-card fetcher, "Bluesky Cardyb/1.1"
 
   // Validation tools
   'w3c_validator',
