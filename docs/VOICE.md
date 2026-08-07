@@ -119,7 +119,7 @@ Confidence is a fact, stated plainly. These are the facts:
 - Veteran founded. Over 17 years of combined service in the Royal Corps of Signals.
 - 5% of profits to military charities.
 - Batch numbers on every bottle. Every batch traceable.
-- No artificial flavourings. Seven real spices, two natural sweeteners, and bourbon oak for maturation. Macerated by our British partner distillery.
+- No artificial flavourings. Seven real spices, two natural sweeteners, and bourbon oak. Macerated by our British partner distillery.
 - RRP £45.
 
 State them once, in context. An award mentioned once is a fact. Mentioned three times on one page it becomes hype.

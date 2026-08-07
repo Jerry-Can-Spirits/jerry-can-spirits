@@ -116,7 +116,12 @@ export default function ProductImageGallery({
             >
               <Image
                 src={image.url}
-                alt={image.altText || `${productTitle} - Image ${index + 1}`}
+                // No "- Image 2" fallback. A screen reader announced the
+                // position of the file rather than what was in it, which is
+                // worse than the product name alone: it reads as information
+                // and carries none. Real descriptions live on the images in
+                // Shopify; this is only what shows if one is missing.
+                alt={image.altText || productTitle}
                 fill
                 loading="lazy"
                 className="object-contain"

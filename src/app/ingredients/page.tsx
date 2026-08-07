@@ -35,7 +35,7 @@ const products = [
   {
     name: 'Expedition Spiced Rum',
     slug: 'expedition-spiced-rum',
-    description: 'Our flagship spiced rum. Caribbean rum base: seven real spices, two natural sweeteners, and bourbon oak for maturation.',
+    description: 'Our flagship spiced rum. Caribbean rum base: seven real spices, two natural sweeteners, and bourbon oak.',
     bottle: '700ml',
     alcohol: '40%',
   },

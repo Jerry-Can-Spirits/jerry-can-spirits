@@ -14,7 +14,7 @@ without founder sign-off.
 - "macerated by our British partner distillery" is the only approved production
   formulation. Not "at". Not "blended". Not any other verb.
 - The standing ingredient formulation: "seven real spices, two natural
-  sweeteners, and bourbon oak for maturation" (as grouped on the ingredients
+  sweeteners, and bourbon oak" (as grouped on the ingredients
   page, which the bottle QR points to). When listing individually: Madagascan
   vanilla, Ceylon cinnamon, Peruvian ginger, Spanish orange peel, Sri Lankan
   cloves, Guatemalan allspice, Indonesian cassia bark; Mexican agave syrup and
@@ -45,6 +45,47 @@ The former producer is not to appear anywhere in customer-facing content. Not
 as an editorial feature, not as a production credit, not as a link, not in an
 image caption or alt text. This is not open to interpretation. The same applies
 to its brand names (Steeltown, Dragon's Breath) in any context that concerns us.
+
+**The carve-out (added August 2026).** The policy governs *what we say*. It does
+not extend to a printed label from a concluded production run stating a legally
+required fact. Batch 001 was produced at Spirit of Wales; the label identifying
+the producer is accurate for the bottle it is on, and naming the producer is a
+legal requirement rather than a marketing claim we chose to make. The policy
+exists to stop us advertising a former partner. It was never meant to make a
+legally required statement on our own bottle unpublishable.
+
+What follows from that:
+
+- Do not retouch or alter a label in product photography. Editing a legal
+  production statement in a photograph is a worse problem than publishing it.
+- Do not photograph the producer line into new customer-facing imagery. Where a
+  shot makes it legible, remove or reframe the shot, not the label.
+- Batch 001 stock, its labels, and any legal or regulatory document are outside
+  this policy entirely.
+
+**This rule cannot be enforced by the grep.** In August 2026 the product page
+was publishing a 1600px photograph of the side label reading "Produced in Wales
+by Spirit of Wales Distillery for Jerry Can Spirits Ltd". Every text sweep had
+been clean because the claim was in pixels. When product photography changes,
+look at the images.
+
+**Retired form: "bourbon oak for maturation".** Superseded August 2026 and not
+to be reintroduced. The oak is chips macerated with the botanicals, not a cask
+the spirit sits in, so "for maturation" was the inaccurate part of an otherwise
+approved sentence. The formulation is now "seven real spices, two natural
+sweeteners, and bourbon oak".
+
+## Next print run
+
+Copy corrected on the site that is still printed on Batch 001 labels. No action
+on existing stock: the label is accurate for what it is, and the site is the
+surface that can be right now.
+
+- `Bottle_Story` back label — "notes of toasted bourbon oak". The site says
+  "toasted oak", because chips are not cask maturation.
+- `Bottle_Story` back label — "Clean, refined, and crafted for sipping". The
+  site says "Clean. Refined and built for sipping", because craft without
+  substance is on the avoid list.
 
 ## Batch pages
 
