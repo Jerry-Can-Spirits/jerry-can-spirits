@@ -60,6 +60,12 @@ interface SanityCocktail {
   name: string
   slug: { current: string }
   description: string
+  recipeSource?: {
+    authority: 'iba' | 'diffords' | 'pdt' | 'death-and-co' | 'savoy' | 'house'
+    note?: string
+  }
+  houseVariation?: string
+  sourceCheckedAt?: string
   difficulty: 'novice' | 'wayfinder' | 'trailblazer'
   ingredients: CocktailIngredient[]
   instructions: string[]
@@ -383,6 +389,17 @@ export default function CocktailRecipeDisplay({ cocktail }: Props) {
               </div>
             ))}
           </div>
+
+          {/* Where we depart from the published specification. Shown only for
+              a house recipe, and only on the base recipe rather than on a
+              variant, which has its own note. States the change and the reason
+              and stops there. */}
+          {activeVariant < 0 && cocktail?.recipeSource?.authority === 'house' && cocktail?.houseVariation && (
+            <div className="mt-6 sm:mt-8 p-4 sm:p-6 bg-jerry-green-800/40 rounded-lg border border-gold-500/20">
+              <h3 className="text-gold-300 font-semibold mb-2">Our version</h3>
+              <p className="text-parchment-300 leading-relaxed whitespace-pre-line">{cocktail.houseVariation}</p>
+            </div>
+          )}
 
           {(currentRecipe.note || (activeVariant >= 0 && cocktail?.variants?.[activeVariant]?.note)) && (
             <div className="mt-6 sm:mt-8 p-4 sm:p-6 bg-jerry-green-800/40 rounded-lg border border-gold-500/20">

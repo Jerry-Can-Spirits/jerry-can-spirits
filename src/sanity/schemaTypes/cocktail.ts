@@ -1,4 +1,5 @@
 import {defineField, defineType} from 'sanity'
+import {validateHouseVariation} from '../../lib/recipe-source'
 
 export default defineType({
   name: 'cocktail',
@@ -551,6 +552,58 @@ export default defineType({
         }
       ],
       description: 'Similar or complementary cocktails to show alongside this one'
+    }),
+    defineField({
+      name: 'recipeSource',
+      title: 'Recipe Source',
+      type: 'object',
+      description:
+        'Where this specification comes from. Recording it lets a reader judge the recipe, and lets us tell a considered house choice apart from a transcription error.',
+      fields: [
+        defineField({
+          name: 'authority',
+          title: 'Authority',
+          type: 'string',
+          options: {
+            list: [
+              {title: 'IBA', value: 'iba'},
+              {title: "Difford's Guide", value: 'diffords'},
+              {title: 'PDT Cocktail Book', value: 'pdt'},
+              {title: 'Death & Co', value: 'death-and-co'},
+              {title: 'The Savoy Cocktail Book', value: 'savoy'},
+              {title: 'House specification', value: 'house'}
+            ]
+          },
+          validation: Rule => Rule.required()
+        }),
+        defineField({
+          name: 'note',
+          title: 'Note (optional)',
+          type: 'string',
+          description: 'Edition, page, or which of several published versions this follows.'
+        })
+      ]
+    }),
+    defineField({
+      name: 'houseVariation',
+      title: 'House Variation',
+      type: 'text',
+      rows: 2,
+      description:
+        'Required when the authority is House specification. One sentence: what we do differently and why. "We use demerara syrup rather than simple. It suits the rum." No apologising for the choice.',
+      validation: Rule =>
+        Rule.custom((value, context) =>
+          validateHouseVariation(
+            (context.parent as {recipeSource?: {authority?: string}} | undefined)?.recipeSource?.authority,
+            value as string | undefined
+          )
+        )
+    }),
+    defineField({
+      name: 'sourceCheckedAt',
+      title: 'Source Last Checked',
+      type: 'date',
+      description: 'When the recipe was last verified against its source. Ages, so it is worth recording.'
     })
   ],
   preview: {
