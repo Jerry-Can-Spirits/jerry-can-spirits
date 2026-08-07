@@ -7,6 +7,8 @@ import { cocktailBySlugQuery, cocktailsSitemapQuery } from '@/sanity/queries'
 import BackToTop from '@/components/BackToTop'
 import StructuredData from '@/components/StructuredData'
 import CocktailRecipeDisplay from '@/components/CocktailRecipeDisplay'
+import { getFacets } from '@/lib/facet-data'
+import { facetForBaseSpirit, facetPath, headingFor, isSelfCanonical } from '@/lib/cocktail-facets'
 import FieldManualPortableText from '@/components/FieldManualPortableText'
 import ShareButton from '@/components/ShareButton'
 import StarRating from '@/components/StarRating'
@@ -228,6 +230,20 @@ export default async function CocktailPage({ params }: PageProps) {
   const recipeCategory = cocktail.family
     ? cocktail.family.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')
     : 'Cocktail'
+
+  // The two facet pages this recipe belongs to. 348 cocktail pages linking up
+  // to the family and the spirit they sit in is the internal linking the facet
+  // pages shipped without: they had no inbound links from anywhere on the site.
+  //
+  // baseSpirit is mapped through facetForBaseSpirit because the raw value is a
+  // sub-type: a white-rum cocktail belongs to the rum facet, and there is no
+  // /spirit/white-rum/ page to link to.
+  const [styleFacets, spiritFacets] = await Promise.all([getFacets('style'), getFacets('spirit')])
+  const spiritFacetValue = cocktail.baseSpirit ? facetForBaseSpirit(cocktail.baseSpirit) : null
+  const facetLinks = [
+    styleFacets.find((f) => f.value === cocktail.family),
+    spiritFacets.find((f) => f.value === spiritFacetValue),
+  ].filter((f): f is NonNullable<typeof f> => Boolean(f) && isSelfCanonical(f!))
 
   // Recipe Schema for SEO (Google Rich Snippets)
   const recipeSchema: Record<string, unknown> = {
@@ -493,6 +509,26 @@ export default async function CocktailPage({ params }: PageProps) {
                         <p className="text-parchment-400 text-sm mt-1 line-clamp-2">{related.description}</p>
                       )}
                     </div>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* The family and the spirit this recipe sits in. A reader who came
+              for one sour is the reader most likely to want the other 84. */}
+          {facetLinks.length > 0 && (
+            <div className="mt-6 sm:mt-8 bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-4 sm:p-6 border border-gold-500/20">
+              <h3 className="text-xl font-serif font-bold text-gold-300 mb-4">Where this one sits</h3>
+              <div className="flex flex-wrap gap-3">
+                {facetLinks.map((facet) => (
+                  <Link
+                    key={`${facet.kind}:${facet.value}`}
+                    href={facetPath(facet.kind, facet.value)}
+                    className="inline-flex items-center gap-2 px-4 py-2 bg-jerry-green-800/30 rounded-lg border border-gold-500/20 text-parchment-300 hover:bg-jerry-green-800/50 hover:border-gold-400/40 hover:text-gold-300 transition-all"
+                  >
+                    {headingFor(facet)}
+                    <span className="text-parchment-400 text-sm">{facet.count}</span>
                   </Link>
                 ))}
               </div>

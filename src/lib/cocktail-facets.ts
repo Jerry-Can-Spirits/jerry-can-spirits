@@ -251,6 +251,27 @@ export function canonicalFor(facet: Pick<Facet, 'kind' | 'value' | 'count' | 'is
 }
 
 /**
+ * Whether a facet page is worth linking to and listing in the sitemap.
+ *
+ * Defined as "its own URL is its canonical" rather than as a second opinion
+ * about thresholds, so it cannot drift from canonicalFor. A thin facet
+ * canonicalises to the hub and a duplicate canonicalises to the facet it
+ * duplicates; neither should be advertised, because a sitemap entry or a hub
+ * link pointing at a URL that disclaims itself is a contradiction. Both stay
+ * reachable through their own grids and stay `follow`.
+ *
+ * The sitemap, the hub link blocks and the cross-links on every cocktail page
+ * all ask this one question, so the three cannot disagree about which pages
+ * exist to be found.
+ */
+export function isSelfCanonical(
+  facet: Pick<Facet, 'kind' | 'value' | 'count' | 'isRollup'>,
+  page = 1
+): boolean {
+  return canonicalFor(facet, page) === facetPath(facet.kind, facet.value, page)
+}
+
+/**
  * robots directive for a facet page.
  *
  * A non-indexable facet is still followed: its cocktail links are real and

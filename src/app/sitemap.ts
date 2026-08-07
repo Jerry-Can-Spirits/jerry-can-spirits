@@ -8,6 +8,8 @@ import {
   guidesSitemapQuery
 } from '@/sanity/queries'
 import { getD1, getAllBatches } from '@/lib/d1'
+import { getFacets } from '@/lib/facet-data'
+import { facetPath, isSelfCanonical, pageCount } from '@/lib/cocktail-facets'
 
 // Regenerate the sitemap at most once per hour. force-dynamic produced a
 // fresh "lastModified" on every Googlebot fetch, which Google treats as a
@@ -97,6 +99,32 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     changeFrequency: 'weekly' as const,
     priority: 0.9, // High priority for SEO-focused content
   }))
+
+  // Facet pages: cocktails by style and by spirit, plus their later pages.
+  //
+  // Only the self-canonical ones. A thin facet canonicalises to the hub and the
+  // mocktails duplicate canonicalises to non-alcoholic, and listing a URL that
+  // disclaims itself is the same fault as /contact/media/kit/ below. Later pages
+  // are listed because each is self-canonical and carries recipes page 1 does
+  // not, so omitting them would hide real content from the crawl.
+  let facetUrls: MetadataRoute.Sitemap = []
+  try {
+    const [styleFacets, spiritFacets] = await Promise.all([getFacets('style'), getFacets('spirit')])
+    facetUrls = [...styleFacets, ...spiritFacets]
+      .filter((facet) => isSelfCanonical(facet))
+      .flatMap((facet) =>
+        Array.from({ length: pageCount(facet.count) }, (_, i) => i + 1).map((page) => ({
+          url: `${baseUrl}${facetPath(facet.kind, facet.value, page)}`,
+          lastModified: STATIC_LAST_MODIFIED,
+          changeFrequency: 'weekly' as const,
+          // Below a cocktail (0.7): a facet is a route to recipes rather than
+          // the thing being searched for.
+          priority: 0.6,
+        }))
+      )
+  } catch (error) {
+    console.error('Error building facet URLs for sitemap:', error)
+  }
 
   // Fetch dynamic collection URLs — excludes pages already hardcoded above and redirected slugs.
   // Any collection in this set that is also a static route would appear twice in the sitemap.
@@ -508,5 +536,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // /shop/gift-sets/, now a 308 to it (kept in EXCLUDED_COLLECTIONS above).
   ]
 
-  return [...routes, ...productUrls, ...cocktailUrls, ...equipmentUrls, ...ingredientUrls, ...guideUrls, ...batchUrls, ...dynamicCollectionUrls]
+  return [...routes, ...productUrls, ...cocktailUrls, ...facetUrls, ...equipmentUrls, ...ingredientUrls, ...guideUrls, ...batchUrls, ...dynamicCollectionUrls]
 }
