@@ -5,6 +5,7 @@ import { useRouter, usePathname } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
 import BackToTop from '@/components/BackToTop'
+import { facetForBaseSpirit } from '@/lib/cocktail-facets'
 
 // Ratings type
 interface RatingsMap {
@@ -86,11 +87,26 @@ const tagLabels: Record<string, string> = {
 // Pagination settings
 const ITEMS_PER_PAGE = 16
 
-interface CocktailsClientProps {
-  cocktails: SanityCocktail[]
+/** A facet page that exists for a filter value, passed down from the server. */
+export interface FacetLink {
+  label: string
+  count: number
+  href: string
 }
 
-export default function CocktailsClient({ cocktails }: CocktailsClientProps) {
+interface CocktailsClientProps {
+  cocktails: SanityCocktail[]
+  /** Keyed by family value, e.g. "sours". Only self-canonical facets appear. */
+  styleFacetLinks?: Record<string, FacetLink>
+  /** Keyed by spirit FACET value, e.g. "rum" — not by raw baseSpirit. */
+  spiritFacetLinks?: Record<string, FacetLink>
+}
+
+export default function CocktailsClient({
+  cocktails,
+  styleFacetLinks = {},
+  spiritFacetLinks = {},
+}: CocktailsClientProps) {
   const router = useRouter()
   const pathname = usePathname()
 
@@ -243,6 +259,27 @@ export default function CocktailsClient({ cocktails }: CocktailsClientProps) {
   // Paginated cocktails for display
   const visibleCocktails = sortedCocktails.slice(0, visibleCount)
   const hasMoreCocktails = visibleCount < sortedCocktails.length
+
+  // The facet pages for whatever is currently selected.
+  //
+  // These chips filter in place, which is what keeps family, spirit, difficulty
+  // and sort combinable. That also means they never navigate, so a reader who
+  // picks Sours has no way of discovering that a written Sours page exists. This
+  // is the bridge between the two.
+  //
+  // The spirit lookup goes through facetForBaseSpirit because the chips carry
+  // raw sub-types: picking White Rum should offer the rum facet, since no
+  // /spirit/white-rum/ page exists. "all-rum" is the hub's own grouping and maps
+  // to the same facet.
+  const activeStyleFacet = selectedFamily !== 'all' ? styleFacetLinks[selectedFamily] : undefined
+  const activeSpiritFacetValue =
+    selectedSpirit === 'all'
+      ? null
+      : selectedSpirit === 'all-rum'
+        ? 'rum'
+        : facetForBaseSpirit(selectedSpirit)
+  const activeSpiritFacet = activeSpiritFacetValue ? spiritFacetLinks[activeSpiritFacetValue] : undefined
+  const activeFacets = [activeStyleFacet, activeSpiritFacet].filter(Boolean) as FacetLink[]
 
   // Helper to render star rating display
   const renderStars = (average: number, count: number) => {
@@ -483,6 +520,28 @@ export default function CocktailsClient({ cocktails }: CocktailsClientProps) {
                 ))}
               </div>
             </div>
+
+            {/* The full page for whatever is selected. Only shown when a facet
+                page actually exists for it: a thin family has no page worth
+                sending anyone to, and the mocktails duplicate canonicalises
+                elsewhere. The count is the whole facet, not the filtered view,
+                which is why it is labelled as the full page rather than as
+                these results. */}
+            {activeFacets.length > 0 && (
+              <div className="flex flex-wrap items-center gap-3 p-4 bg-jerry-green-800/30 rounded-lg border border-gold-500/20">
+                <span className="text-parchment-300 text-sm">These have their own pages</span>
+                {activeFacets.map((facet) => (
+                  <Link
+                    key={facet.href}
+                    href={facet.href}
+                    className="inline-flex items-center gap-2 px-4 py-2 bg-gold-500/20 border border-gold-500/40 text-gold-300 rounded-lg hover:bg-gold-500/30 transition-colors text-sm font-semibold"
+                  >
+                    {facet.label}
+                    <span className="text-parchment-400 font-normal">{facet.count}</span>
+                  </Link>
+                ))}
+              </div>
+            )}
 
             {/* Results count and Sort */}
             <div className="flex flex-wrap items-center justify-between gap-4">

@@ -9,7 +9,7 @@ import Breadcrumbs from '@/components/Breadcrumbs'
 import StructuredData from '@/components/StructuredData'
 import { OG_IMAGE } from '@/lib/og'
 import { getFacets } from '@/lib/facet-data'
-import { facetPath, isSelfCanonical, type Facet } from '@/lib/cocktail-facets'
+import { facetPath, headingFor, isSelfCanonical, type Facet } from '@/lib/cocktail-facets'
 
 export const metadata: Metadata = {
   title: 'Cocktail Recipes',
@@ -101,6 +101,17 @@ export default async function CocktailsPage() {
   const linkableStyles = styleFacets.filter((f) => isSelfCanonical(f))
   const linkableSpirits = spiritFacets.filter((f) => isSelfCanonical(f))
 
+  // The same set, keyed for the filter chips. The chips filter in place rather
+  // than navigating, so without this a reader who selects Sours never learns the
+  // Sours page exists.
+  const toLinkMap = (facets: Facet[]) =>
+    Object.fromEntries(
+      facets.map((f) => [
+        f.value,
+        { label: headingFor(f), count: f.count, href: facetPath(f.kind, f.value) },
+      ])
+    )
+
   // The card clamps description to three lines (line-clamp-3), roughly 150
   // characters, but the mean description is 1,002. The rest was serialised
   // into the flight payload purely to be hidden by CSS: description alone was
@@ -167,7 +178,11 @@ export default async function CocktailsPage() {
         </div>
       </section>
       <Suspense>
-        <CocktailsClient cocktails={cocktails} />
+        <CocktailsClient
+          cocktails={cocktails}
+          styleFacetLinks={toLinkMap(linkableStyles)}
+          spiritFacetLinks={toLinkMap(linkableSpirits)}
+        />
       </Suspense>
       <FacetLinks heading="Cocktails by style" facets={linkableStyles} />
       <FacetLinks heading="Cocktails by spirit" facets={linkableSpirits} />
