@@ -23,9 +23,10 @@ Claims about commercial relationships are the same class of claim. **No affiliat
 
 ## The document set
 
-Four documents govern work here. This file is the working contract; read the others when their territory comes up, and treat them as binding:
+Five documents govern work here. This file is the working contract; read the others when their territory comes up, and treat them as binding:
 
 - `docs/VOICE.md` — voice, tone, and writing rules. **Read it before writing any customer-facing copy.** The hard rules are summarised below, but the full reference (language lists, messaging hierarchy, product facts, hooks) lives there.
+- `docs/COCKTAIL_CONTENT_STANDARD.md` — the cocktail-page specification: what each section is for, how long it should be, and what never to do. **Read it before writing or editing any cocktail page.** Its first rule is the one most often broken: write about the drink, never about the page.
 - `docs/SECURITY.md` — the security baseline: headers, CSP, secrets, consent gating, disclosure. Read it before touching anything security-relevant.
 - `docs/CONTRIBUTING.md` — the actual git workflow in detail.
 - `docs/BRAND_GUIDELINES.md` — trademark, logo, colour, and legal usage rules.

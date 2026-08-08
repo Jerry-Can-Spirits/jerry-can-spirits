@@ -4,6 +4,21 @@ This document is binding for all customer-facing words: website copy, email, soc
 
 Trademark, logo, colour, and legal usage rules live in `docs/BRAND_GUIDELINES.md`. Where that document and this one disagree on voice, this one wins.
 
+Two content types carry their own specification under this document, because
+"consistent structure, individual personality" needs the structure written
+down: `docs/COCKTAIL_CONTENT_STANDARD.md` for cocktail pages and
+`docs/GUIDE_CONTENT_TEMPLATE.md` for guides. Read the relevant one before
+writing or editing that kind of page. Where either disagrees with this file on
+voice, this file wins.
+
+**Write about the drink, never about the page.** The rule generalises: write
+about the subject, never about the site's own structure. A page that discusses
+its own existence, its sources, its place in an internal list, or the CMS it
+lives in has changed subject without noticing. Measured on 8 August 2026, the
+cocktail corpus carried 69 references to a "doc", 67 to "this page", 12
+crediting a competitor as the authority, and 5 to a private working list.
+`scripts/audit-formulaic-copy.ts` counts these; run it after any copy pass.
+
 ---
 
 ## The voice
