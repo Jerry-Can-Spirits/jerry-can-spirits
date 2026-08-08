@@ -64,6 +64,18 @@ describe('spirit rollups', () => {
     expect(rollupFor('sloe-gin')).toBeNull()
   })
 
+  it('excludes genever for the opposite reason to sloe gin', () => {
+    // Genever passes the class test that sloe gin fails: it is a base spirit at
+    // full strength doing a base spirit's job. It fails on direction instead.
+    // Gin descends FROM genever, so filing it as a style of gin is backwards.
+    //
+    // Excluding it costs the reader nothing: John Collins is the genever build
+    // and Tom Collins is the London Dry build of the same drink, so the gin
+    // page still carries the version someone holding gin can actually make.
+    expect(rollupFor('genever')).toBeNull()
+    expect(facetForBaseSpirit('genever')).toBeNull()
+  })
+
   it('treats all six rollups as equals — none is special-cased', () => {
     expect(Object.keys(SPIRIT_ROLLUPS).sort()).toEqual(['brandy', 'gin', 'rum', 'tequila', 'vodka', 'whiskey'])
   })
