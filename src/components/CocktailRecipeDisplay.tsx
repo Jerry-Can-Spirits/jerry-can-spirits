@@ -4,6 +4,7 @@ import { useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import type { PortableTextBlock } from 'next-sanity'
+import { recipeSourceLine } from '@/lib/recipe-source'
 
 // Types for cocktail data
 interface CocktailIngredient {
@@ -195,6 +196,12 @@ export default function CocktailRecipeDisplay({ cocktail }: Props) {
   const currentRecipe = activeVariant >= 0 && cocktail?.variants
     ? cocktail.variants[activeVariant]
     : cocktail
+
+  const sourceLine = recipeSourceLine(
+    cocktail?.recipeSource?.authority,
+    cocktail?.recipeSource?.note,
+    cocktail?.sourceCheckedAt
+  )
 
   return (
     <div className="space-y-6 sm:space-y-8">
@@ -399,6 +406,16 @@ export default function CocktailRecipeDisplay({ cocktail }: Props) {
               <h3 className="text-gold-300 font-semibold mb-2">Our version</h3>
               <p className="text-parchment-300 leading-relaxed whitespace-pre-line">{cocktail.houseVariation}</p>
             </div>
+          )}
+
+          {/* Where the specification came from, and when it was last verified
+              against it. Shown only on the base recipe, and only where an
+              authority is actually recorded: the line is absent rather than
+              apologetic on a page nobody has checked yet. Attribution is the
+              honest half of publishing someone else's spec, and the checked
+              date is the part a competitor will not bother with. */}
+          {activeVariant < 0 && sourceLine && (
+            <p className="mt-4 text-parchment-500 text-sm">{sourceLine}</p>
           )}
 
           {(currentRecipe.note || (activeVariant >= 0 && cocktail?.variants?.[activeVariant]?.note)) && (
