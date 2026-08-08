@@ -51,6 +51,8 @@ const FORBIDDEN: Array<{ label: string; re: RegExp }> = [
 ]
 
 interface Faq { question?: string; answer?: string }
+interface Ing { name?: string; amount?: string; description?: string | null; ref?: string | null }
+interface RecipeSource { authority?: string; note?: string }
 interface Block { _type?: string; style?: string; children?: Array<{ text?: string }> }
 
 /**
@@ -70,6 +72,10 @@ interface C {
   longDescription: Block[] | null
   faqs: Faq[] | null
   relatedCount: number
+  ingredientDetail: Ing[] | null
+  recipeSource: RecipeSource | null
+  houseVariation: string | null
+  sourceCheckedAt: string | null
 }
 
 function blockText(blocks: Block[] | null): string {
@@ -86,7 +92,9 @@ async function main() {
       name, "slug": slug.current, description, note, instructions, flavorProfile,
       longDescription[]{ _type, style, children[]{ text } },
       faqs[]{ question, answer },
-      "relatedCount": count(relatedCocktails)
+      "relatedCount": count(relatedCocktails),
+      "ingredientDetail": ingredients[]{ name, amount, description, "ref": ingredientRef->name },
+      recipeSource, houseVariation, sourceCheckedAt
     } | order(name asc)
   `)
 
@@ -135,7 +143,37 @@ async function main() {
       if (f.re.test(prose)) add(`1  forbidden phrasing: ${f.label}`, c.name)
     }
 
-    const selfRef = (prose.match(SELF_REF) ?? []).length
+    // Section 4. The Blackthorn taught this: the notes were never missing, they
+    // were in the wrong register. "The hedgerow in the whiskey's chair" is a
+    // filled field that answers none of section 4's questions, so a check for
+    // an EMPTY field would have found nothing wrong with any of them.
+    const ings = c.ingredientDetail ?? []
+    const noDesc = ings.filter((i) => !i.description?.trim()).length
+    if (noDesc) add(`4  ingredient notes missing`, `${c.name} (${noDesc} of ${ings.length})`)
+    const thinDesc = ings.filter((i) => {
+      const n = words(i.description)
+      return n > 0 && n < 15
+    }).length
+    if (thinDesc) add(`4  ingredient notes under 15 words`, `${c.name} (${thinDesc} of ${ings.length})`)
+    const noRef = ings.filter((i) => !i.ref).length
+    if (noRef) add(`14 ingredient not linked to its guide`, `${c.name} (${noRef} of ${ings.length})`)
+
+    // Attribution. Section 8 asks for honest sourcing, and these fields are
+    // where it belongs rather than in the prose, which is where it used to sit
+    // as "Difford's canonised the pairing".
+    if (!c.recipeSource?.authority) add(`8  no recipe source recorded`, c.name)
+    else if (c.recipeSource.authority === 'house' && !c.houseVariation?.trim()) {
+      add(`8  house recipe with no houseVariation (renders nothing)`, c.name)
+    }
+    if (c.houseVariation?.trim() && c.recipeSource?.authority !== 'house') {
+      add(`8  houseVariation set but authority is not house (never renders)`, c.name)
+    }
+
+    // Self-reference is scored across ingredient notes and FAQ questions too:
+    // the Blackthorn had "chair" sitting in an ingredient note, where none of
+    // the earlier sweeps were looking.
+    const allProse = [prose, ...ings.map((i) => i.description ?? ''), ...faqs.map((f) => f.question ?? '')].join(' ')
+    const selfRef = (allProse.match(SELF_REF) ?? []).length
     if (selfRef) add(`0  SELF-REFERENCE (writes about the page, not the drink)`, `${c.name} (${selfRef})`)
   }
 
