@@ -394,6 +394,13 @@ export default defineType({
           {title: 'Old Tom Gin', value: 'old-tom-gin'},
           {title: 'Plymouth Gin', value: 'plymouth-gin'},
           {title: 'Navy Strength Gin', value: 'navy-strength-gin'},
+          // Genever stands alone rather than joining the gin styles above. It
+          // passes the class test easily — a base spirit at full strength doing
+          // a base spirit's job, unlike sloe gin — but fails on direction: gin
+          // descends from genever, so filing it as a style of gin is backwards.
+          // The Old Tom page already puts it correctly, as "the missing link
+          // between Dutch genever and London Dry".
+          {title: 'Genever', value: 'genever'},
           {title: 'Tequila', value: 'tequila'},
           {title: 'Mezcal', value: 'mezcal'},
           {title: 'Bourbon', value: 'bourbon'},
