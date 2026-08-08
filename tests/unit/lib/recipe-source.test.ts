@@ -48,6 +48,24 @@ describe('the attribution line', () => {
     expect(recipeSourceLine('house', null, null)).toBe('Source: our own specification.')
   })
 
+  it('distinguishes a brand’s specification from our own', () => {
+    // A Dark 'n' Stormy is a Gosling trademark and a Painkiller is a Pusser's
+    // trademark. Filing either as "house" would claim authorship of a drink we
+    // did not create, which is the opposite of what this field is for.
+    expect(recipeSourceLine('brand', "Gosling's Black Seal", null)).toBe(
+      "Source: the producer's own specification (Gosling's Black Seal)."
+    )
+    expect(recipeSourceLine('house', null, null)).toBe('Source: our own specification.')
+  })
+
+  it('renders the book citations added for the rewrite pass', () => {
+    // The Monte Carlo is preserved in Embury and there was previously nowhere
+    // to record it, so a verified attribution fell on the floor.
+    expect(recipeSourceLine('embury', null, null)).toBe("Source: Embury's The Fine Art of Mixing Drinks.")
+    expect(recipeSourceLine('thomas', null, null)).toBe("Source: Jerry Thomas's Bar-Tender's Guide.")
+    expect(recipeSourceLine('waldorf', null, null)).toBe('Source: The Old Waldorf-Astoria Bar Book.')
+  })
+
   it('has a label for every authority the schema offers', () => {
     // A new entry in RECIPE_AUTHORITIES with no label renders nothing at all,
     // which would look like a page with no source rather than a bug.
