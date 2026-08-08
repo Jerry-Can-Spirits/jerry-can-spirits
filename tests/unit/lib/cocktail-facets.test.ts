@@ -7,6 +7,10 @@ import {
   STANDALONE_SPIRITS,
   canonicalFor,
   duplicateTarget,
+  facetFilterOptions,
+  filterFacetIndex,
+  isFiltering,
+  type FacetIndexItem,
   headingFor,
   facetForBaseSpirit,
   facetPath,
@@ -207,6 +211,71 @@ describe('which facets are worth linking to', () => {
         )
       }
     }
+  })
+})
+
+describe('the facet page filters', () => {
+  // A style facet: one family, several spirits, several difficulties.
+  const SOURS: FacetIndexItem[] = [
+    { n: 'Whiskey Sour', s: 'whiskey-sour', b: 'bourbon', d: 'novice' },
+    { n: 'Gin Sour', s: 'gin-sour', b: 'london-dry-gin', d: 'novice' },
+    { n: 'White Lady', s: 'white-lady', b: 'london-dry-gin', d: 'wayfinder' },
+    { n: 'Ramos Gin Fizz', s: 'ramos-gin-fizz', b: 'london-dry-gin', d: 'trailblazer' },
+    { n: 'Daiquiri', s: 'daiquiri', b: 'white-rum', d: 'novice' },
+    { n: 'Orphan', s: 'orphan', b: null, d: null },
+  ]
+
+  it('filters by name, case insensitively', () => {
+    expect(filterFacetIndex(SOURS, { q: 'gin' }).map((i) => i.s)).toEqual(['gin-sour', 'ramos-gin-fizz'])
+    expect(filterFacetIndex(SOURS, { q: 'WHITE' }).map((i) => i.s)).toEqual(['white-lady'])
+  })
+
+  it('filters by base spirit', () => {
+    expect(filterFacetIndex(SOURS, { spirit: 'london-dry-gin' })).toHaveLength(3)
+  })
+
+  it('filters by difficulty', () => {
+    expect(filterFacetIndex(SOURS, { difficulty: 'novice' })).toHaveLength(3)
+  })
+
+  it('combines every filter, which is the whole point of porting them here', () => {
+    // The hub could do spirit AND difficulty AND search together; the facet
+    // page could only do search. That gap is why sending a reader from the hub
+    // to a facet page was a downgrade.
+    const out = filterFacetIndex(SOURS, { q: 'gin', spirit: 'london-dry-gin', difficulty: 'novice' })
+    expect(out.map((i) => i.s)).toEqual(['gin-sour'])
+  })
+
+  it('excludes a cocktail with no value rather than passing it through', () => {
+    // Absent is not a match. A listing that quietly includes unknowns under a
+    // specific filter is lying about what it did.
+    expect(filterFacetIndex(SOURS, { spirit: 'london-dry-gin' }).some((i) => i.s === 'orphan')).toBe(false)
+    expect(filterFacetIndex(SOURS, { difficulty: 'novice' }).some((i) => i.s === 'orphan')).toBe(false)
+  })
+
+  it('returns everything when nothing is filtering', () => {
+    expect(filterFacetIndex(SOURS, {})).toHaveLength(SOURS.length)
+    expect(filterFacetIndex(SOURS, { q: '   ' })).toHaveLength(SOURS.length)
+  })
+
+  it('knows when a filter is active, ignoring whitespace', () => {
+    expect(isFiltering({})).toBe(false)
+    expect(isFiltering({ q: '   ' })).toBe(false)
+    expect(isFiltering({ q: 'gin' })).toBe(true)
+    expect(isFiltering({ spirit: 'bourbon' })).toBe(true)
+    expect(isFiltering({ difficulty: 'novice' })).toBe(true)
+  })
+
+  it('offers only the options this facet actually contains, most common first', () => {
+    // A family holding no trailblazers must not offer the control, and a
+    // cocktail with no value contributes no option at all.
+    expect(facetFilterOptions(SOURS, 'b')).toEqual([
+      { value: 'london-dry-gin', count: 3 },
+      { value: 'bourbon', count: 1 },
+      { value: 'white-rum', count: 1 },
+    ])
+    expect(facetFilterOptions(SOURS, 'd')[0]).toEqual({ value: 'novice', count: 3 })
+    expect(facetFilterOptions([{ n: 'x', s: 'x' }], 'b')).toEqual([])
   })
 })
 

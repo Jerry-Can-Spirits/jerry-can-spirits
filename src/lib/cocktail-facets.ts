@@ -166,6 +166,67 @@ export interface Facet {
   members: string[]
 }
 
+/** One cocktail in a facet's client-side index. Short keys: this ships to the browser. */
+export interface FacetIndexItem {
+  /** name */
+  n: string
+  /** slug */
+  s: string
+  /** baseSpirit */
+  b?: string | null
+  /** difficulty */
+  d?: string | null
+}
+
+export interface FacetFilterState {
+  q?: string
+  spirit?: string | null
+  difficulty?: string | null
+}
+
+/** True when any filter is narrowing the list. */
+export function isFiltering(state: FacetFilterState): boolean {
+  return Boolean(state.q?.trim() || state.spirit || state.difficulty)
+}
+
+/**
+ * Filter a facet's index by name, base spirit and difficulty.
+ *
+ * Pure, and here rather than inside the component, because the facet page had
+ * only a name search while the hub had spirit, difficulty and sort. That gap is
+ * the reason the hub's chips could not be made to navigate: sending a reader to
+ * a facet page cost them two filters.
+ *
+ * A cocktail with no baseSpirit or difficulty is excluded when that filter is
+ * active rather than passed through. Absent is not a match, and a listing that
+ * quietly includes unknowns under a specific filter is lying about what it did.
+ */
+export function filterFacetIndex(index: FacetIndexItem[], state: FacetFilterState): FacetIndexItem[] {
+  const q = state.q?.trim().toLowerCase() ?? ''
+  return index.filter((item) => {
+    if (q && !item.n.toLowerCase().includes(q)) return false
+    if (state.spirit && item.b !== state.spirit) return false
+    if (state.difficulty && item.d !== state.difficulty) return false
+    return true
+  })
+}
+
+/** The filter options that actually occur in this facet, most common first. */
+export function facetFilterOptions(
+  index: FacetIndexItem[],
+  key: 'b' | 'd'
+): Array<{ value: string; count: number }> {
+  const counts = new Map<string, number>()
+  for (const item of index) {
+    const v = item[key]
+    if (!v) continue
+    counts.set(v, (counts.get(v) ?? 0) + 1)
+  }
+  return [...counts.entries()]
+    .map(([value, count]) => ({ value, count }))
+    .sort((a, b) => b.count - a.count || a.value.localeCompare(b.value))
+}
+
 /** Title case a slug: "old-fashioneds" -> "Old Fashioneds" */
 export function labelFor(value: string): string {
   return value
