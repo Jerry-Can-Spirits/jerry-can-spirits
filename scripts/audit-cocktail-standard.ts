@@ -104,6 +104,13 @@ async function main() {
     fail.get(rule)!.push(name)
   }
 
+  // Counted and reported, but kept out of the compliance verdict.
+  const notes = new Map<string, string[]>()
+  const info = (rule: string, name: string) => {
+    if (!notes.has(rule)) notes.set(rule, [])
+    notes.get(rule)!.push(name)
+  }
+
   for (const c of rows) {
     const d = words(c.description)
     if (d < 150 || d > 200) add(`3  description outside 150-200 words`, `${c.name} (${d})`)
@@ -161,7 +168,13 @@ async function main() {
     // Attribution. Section 8 asks for honest sourcing, and these fields are
     // where it belongs rather than in the prose, which is where it used to sit
     // as "Difford's canonised the pairing".
-    if (!c.recipeSource?.authority) add(`8  no recipe source recorded`, c.name)
+    // Informational, not a failure. Dan's instruction is to leave the field
+    // unset unless a specification was actually checked, so an absent source
+    // is the rule working rather than a defect. Gating "compliant" on it made
+    // every rewritten page permanently non-compliant for doing the right
+    // thing. The two states below ARE defects, because both mean a field was
+    // filled in and renders nothing.
+    if (!c.recipeSource?.authority) info(`no recipe source recorded (not a defect)`, c.name)
     else if (c.recipeSource.authority === 'house' && !c.houseVariation?.trim()) {
       add(`8  house recipe with no houseVariation (renders nothing)`, c.name)
     }
@@ -181,6 +194,12 @@ async function main() {
 
   const clean = rows.filter((c) => ![...fail.values()].some((names) => names.some((n) => n.startsWith(c.name))))
   console.log(`FULLY COMPLIANT ON THE MEASURABLE RULES: ${clean.length} of ${rows.length}\n`)
+
+  if (notes.size) {
+    console.log('=== FOR INFORMATION, NOT COUNTED AS FAILURES ===')
+    for (const [rule, names] of notes) console.log(`${String(names.length).padStart(4)}  ${rule}`)
+    console.log()
+  }
 
   console.log('=== FAILURES BY RULE ===')
   for (const [rule, names] of [...fail.entries()].sort((a, b) => b[1].length - a[1].length)) {
