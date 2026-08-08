@@ -586,7 +586,17 @@ export default defineType({
               {title: "Difford's Guide", value: 'diffords'},
               {title: 'PDT Cocktail Book', value: 'pdt'},
               {title: 'Death & Co', value: 'death-and-co'},
-              {title: 'The Savoy Cocktail Book', value: 'savoy'},
+              {title: 'The Savoy Cocktail Book (Craddock, 1930)', value: 'savoy'},
+              {title: "Jerry Thomas's Bar-Tender's Guide (1862)", value: 'thomas'},
+              {title: 'The Fine Art of Mixing Drinks (Embury, 1948)', value: 'embury'},
+              {title: 'The Old Waldorf-Astoria Bar Book (Crockett)', value: 'waldorf'},
+              {title: 'The Joy of Mixology (Regan)', value: 'regan'},
+              // Separate from House. A Dark 'n' Stormy is a Gosling trademark
+              // whose registered spec names Black Seal, and a Painkiller is a
+              // Pusser's trademark. Filing those as House would claim
+              // authorship of a drink we did not create. Put the brand in the
+              // note field.
+              {title: "Brand's own published specification", value: 'brand'},
               {title: 'House specification', value: 'house'}
             ]
           },

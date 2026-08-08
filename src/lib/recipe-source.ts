@@ -2,7 +2,33 @@
 // without loading the Studio, which pulls in CSS that a node test runner
 // cannot import.
 
-export const RECIPE_AUTHORITIES = ['iba', 'diffords', 'pdt', 'death-and-co', 'savoy', 'house'] as const
+/**
+ * Where a specification can come from.
+ *
+ * Extended on 8 August 2026. The first list had six entries and could not
+ * record real citations found while rewriting: the Monte Carlo is preserved in
+ * Embury and there was nowhere to say so, which meant a verified attribution
+ * fell on the floor.
+ *
+ * `brand` is separate from `house` and matters. A Dark 'n' Stormy is a Gosling
+ * Brothers trademark whose registered specification names Black Seal; a
+ * Painkiller is a Pusser's trademark. Those are somebody else's published
+ * specification, not ours, and recording them as `house` would claim authorship
+ * of a drink we did not create.
+ */
+export const RECIPE_AUTHORITIES = [
+  'iba',
+  'diffords',
+  'pdt',
+  'death-and-co',
+  'savoy',
+  'thomas',
+  'embury',
+  'waldorf',
+  'regan',
+  'brand',
+  'house',
+] as const
 
 export type RecipeAuthority = (typeof RECIPE_AUTHORITIES)[number]
 
@@ -34,6 +60,13 @@ export const AUTHORITY_LABELS: Record<RecipeAuthority, string> = {
   pdt: 'the PDT Cocktail Book',
   'death-and-co': 'Death & Co',
   savoy: 'The Savoy Cocktail Book',
+  thomas: "Jerry Thomas's Bar-Tender's Guide",
+  embury: "Embury's The Fine Art of Mixing Drinks",
+  waldorf: 'The Old Waldorf-Astoria Bar Book',
+  regan: "Gary Regan's The Joy of Mixology",
+  // Deliberately vague about which brand, because the note field carries that
+  // and the sentence reads badly with a company name dropped into it.
+  brand: "the producer's own specification",
   house: 'our own specification',
 }
 
