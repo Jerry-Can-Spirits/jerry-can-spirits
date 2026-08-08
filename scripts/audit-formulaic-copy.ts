@@ -57,8 +57,13 @@ interface Doc {
 }
 
 async function main() {
+  // Ingredients and equipment carry the same tics: the Tia Maria, Hot Sauce,
+  // Whole Milk and Green Ginger Wine pages all held CMS vocabulary. Scanning
+  // cocktails alone reported 4 "Dan's list" hits where there were 5.
   const docs = await client.fetch<Doc[]>(`
-    *[_type == "cocktail"]{ name, "slug": slug.current, description, longDescription, note, history }
+    *[_type in ["cocktail","ingredient","equipment","guide"]]{
+      name, "slug": slug.current, description, longDescription, note, history
+    }
   `)
   console.log(`Scanned ${docs.length} cocktails.\n`)
 
@@ -124,6 +129,11 @@ async function main() {
   // only so many ways to describe a shake. Evaluative constructions are the
   // crutch. These patterns isolate the second kind.
   const TICS: Array<{ label: string; re: RegExp }> = [
+    // CMS vocabulary. Cleared to zero on 8 Aug 2026 (71 spans). Kept here so a
+    // regression shows up as a number rather than being noticed by a reader.
+    { label: 'doc / docs (CMS vocabulary)', re: /\b(doc|docs)\b/gi },
+    { label: "Dan's list (internal artefact)", re: /\bdan[’']s list\b/gi },
+    { label: 'Difford (competitor as authority)', re: /\bdifford/gi },
     { label: 'one of the most / oldest / few / best', re: /\bone of the (most|oldest|few|best|greatest|finest)\b/gi },
     { label: 'from first sip to last', re: /\bfrom first sip to last\b/gi },
     { label: 'serve it to those who', re: /\bserve it to those who\b/gi },
