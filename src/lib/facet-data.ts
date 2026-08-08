@@ -4,6 +4,7 @@ import {
   SPIRIT_FACETS,
   labelFor,
   type Facet,
+  type FacetIndexItem,
   type FacetKind,
 } from '@/lib/cocktail-facets'
 
@@ -116,16 +117,20 @@ export async function getFacetCocktails(facet: Facet, page: number): Promise<Fac
  * corpus this is roughly 25 kB, against roughly 340 kB for the same list with
  * card fields attached.
  */
-export async function getFacetSearchIndex(facet: Facet): Promise<Array<{ n: string; s: string }>> {
+export async function getFacetSearchIndex(facet: Facet): Promise<FacetIndexItem[]> {
+  // baseSpirit and difficulty ride along so the page can filter on them without
+  // a second request. Two short strings per cocktail against a name and a slug
+  // already being sent; the alternative is shipping the card data, which is the
+  // payload this index exists to avoid.
+  const projection = `{ "n": name, "s": slug.current, "b": baseSpirit, "d": difficulty }`
   if (facet.kind === 'style') {
-    return client.fetch(`*[_type == "cocktail" && family == $value] | order(name asc) { "n": name, "s": slug.current }`, {
+    return client.fetch(`*[_type == "cocktail" && family == $value] | order(name asc) ${projection}`, {
       value: facet.value,
     })
   }
-  return client.fetch(
-    `*[_type == "cocktail" && baseSpirit in $members] | order(name asc) { "n": name, "s": slug.current }`,
-    { members: facet.members }
-  )
+  return client.fetch(`*[_type == "cocktail" && baseSpirit in $members] | order(name asc) ${projection}`, {
+    members: facet.members,
+  })
 }
 
 /** The raw baseSpirit values inside a spirit facet, with counts, for the orienting section. */
