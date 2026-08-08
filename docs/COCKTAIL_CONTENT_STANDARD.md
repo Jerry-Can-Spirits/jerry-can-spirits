@@ -18,6 +18,63 @@ them; run it after any copy pass.
 
 ---
 
+## 0. The gold standard: Storm & Spice
+
+**`/field-manual/cocktails/storm-and-spice/` is the reference page.** When a rule
+here and that page disagree, the page wins and this document is wrong. Read it
+before writing or editing any cocktail page.
+
+Every number below was re-derived from it on 8 August 2026. The earlier
+figures were guesses, and the exemplar failed four of them: a description of
+182 words against a stated 100-180, an Expert Tip of 150 against a stated
+50-100, and FAQ answers of 37, 48 and 38 against a stated 50-100. A standard
+its own best example cannot pass is measuring the wrong thing. An audit run
+against those numbers reported 348 of 349 pages failing on FAQ length alone,
+which was the ruler being wrong rather than the corpus.
+
+### What the page actually does
+
+**No self-reference at all.** Nine hundred words without one mention of this
+Manual, a page, a chair, a shelf or a slot. This is the largest single
+difference between it and the weaker pages, and it is the rule in the preamble
+above.
+
+**Plain declarative sentences carrying one idea each.** "The ginger beer is the
+same. The result is not." "The heat is not a problem. It is the point." The
+weaker register writes literary prose *about* a drink; this writes useful prose
+*for* the person making one. Where a sentence stacks three metaphors, it has
+changed register.
+
+**A whole section explaining why the drink works.** "Why Spiced Rum Works Here"
+argues that the ginger picks up the clove and cinnamon from the rum, so "the
+spice feels woven in rather than added on top". That is architecture, in the
+sense of section 9, not another description of the recipe.
+
+**Structure that earns the length.** Five headings, each with a separate job:
+Where It Comes From, Why Spiced Rum Works Here, The Float, Ginger Beer Not
+Ginger Ale, Ice.
+
+**History hedged where it is uncertain.** "A sailor *reportedly* held up the
+drink..." and "The history behind it is genuine."
+
+**The product present because it is the drink**, not because the page is
+selling. Expedition Spiced Rum is the subject of the comparison with Gosling's,
+which is the honest reason to name it.
+
+### The two registers
+
+The corpus contains two kinds of writing. The first was written a page at a
+time and mostly carries a photograph. The second was generated in bulk and
+mostly does not. MEASURED 8 August 2026 across 349 cocktails: pages with an
+image average 0.54 self-referential phrases and 61% carry none; pages without
+average 1.51 and only 29% carry none.
+
+That makes an image a useful **prior** and a poor filter: 37 pages with images
+still self-refer, and 73 without images are already clean. Order the work by
+measured self-reference, not by whether a photograph exists.
+
+---
+
 ## 1. The overall voice
 
 Every cocktail page should sound like it was written by **the same knowledgeable bartender who has actually made the drink**, not by an SEO writer, recipe database or AI.
@@ -80,7 +137,9 @@ It should answer:
 
 ### Length
 
-Approximately **100–180 words**.
+Approximately **150–200 words**, in two or three paragraphs. Storm & Spice is
+182 across three: what the drink is and why the spice works, then the origin,
+then the technique in one line.
 
 ### Rules
 
@@ -212,11 +271,16 @@ Good subjects include:
 
 ### Length
 
-Usually **50–100 words**.
+**100–160 words, in two or three short paragraphs, one insight each.** Storm &
+Spice runs 150 across three: pour the ginger beer first and float the rum, watch
+it settle before stirring, and use the fiercest ginger beer you can find because
+a timid one makes a timid drink.
 
 ### Rule
 
-**One strong insight is better than three mediocre tips.**
+**One strong insight is better than three mediocre tips.** Three genuine ones,
+each given its own paragraph and its own reason, is better still. What is
+forbidden is padding to reach three.
 
 ---
 
@@ -311,7 +375,11 @@ The Blood & Sand page demonstrates this particularly well by separating what is 
 
 ### Length
 
-Typically **400–800 words**, depending on how much there genuinely is to say.
+Typically **450–650 words across four or five headed sections**, depending on
+how much there genuinely is to say. Storm & Spice is 547 across five.
+
+The sectioning matters more than the total. Five headings each doing a
+different job is the shape; one long unheaded essay of the same length is not.
 
 A famous cocktail with a complicated history can justify more.
 
@@ -392,7 +460,10 @@ for every cocktail with only the names changed.
 
 The questions should reflect what is actually interesting or commonly misunderstood about that particular drink.
 
-Answers should generally be **50–100 words**.
+Answers should generally be **35–60 words**. Storm & Spice runs 37, 48 and 38.
+An FAQ answer is the short version on purpose: the long-form section is where
+the argument goes, and a 90-word answer is usually the long description
+repeating itself, which section 16 forbids.
 
 ---
 
