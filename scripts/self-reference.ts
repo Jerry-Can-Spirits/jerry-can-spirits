@@ -38,6 +38,13 @@ const PATTERNS = [
   String.raw`\bits pages?\b`,
   String.raw`\bearn(?:s|ed|ing)? (?:its|the) \w+`,
   String.raw`\bone page (?:over|away)\b`,
+  // "in the Field Manual" was the only shape caught until 9 August 2026, when
+  // the Tequila Sunrise turned up publishing "the Field Manual's standing
+  // argument in its brightest colours" and scoring zero. The possessive is the
+  // same sentence about the page, so the name itself is the pattern; the
+  // exception is a link to the section, which reads "the Field Manual" with no
+  // claim attached and is how the site's own navigation refers to it.
+  String.raw`\b(?:this|the|our) Field Manual['’]s\b`,
   String.raw`\bin (?:this|the) Field Manual\b`,
 ]
 
