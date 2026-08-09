@@ -24,6 +24,30 @@ describe('the self-reference detector', () => {
     expect(selfReferences("this Field Manual's position")).toEqual(["this Field Manual's"])
   })
 
+  it('catches the page talking about itself in the first person', () => {
+    // MEASURED 9 August 2026: section 0's most literal breach, and the only
+    // shape nothing was looking for.
+    expect(selfReferences('this page keeps the cloud')).toEqual(['this page'])
+    expect(selfReferences('This site recommends the comparison')).toEqual(['This site'])
+    expect(selfReferences('beyond the scope of this entry')).toEqual(['this entry'])
+  })
+
+  it('catches a reference to our own documents', () => {
+    // "Whole milk, by the doc's law" names a source the reader cannot see.
+    expect(selfReferences('Whole milk, by the doc’s law')).toEqual(['the doc’s'])
+    expect(selfReferences('per the new doc')).toEqual(['the new doc'])
+    expect(selfReferences('the guide specifies ginger beer')).toEqual(['the guide'])
+  })
+
+  it('leaves the idiom and an outside guide alone', () => {
+    expect(selfReferences('the moment cream approaches, turn the page')).toEqual([])
+    // Not self-reference, and not endorsed either: naming an authority in the
+    // prose is an attribution defect, because that belongs in recipeSource.
+    // The attribution pass moves it and removes the sentence. This detector
+    // must not claim the hit, or the two passes fight over the same words.
+    expect(selfReferences('canonised in Difford’s Guide')).toEqual([])
+  })
+
   it('leaves a bare mention of the section alone', () => {
     // The site's own navigation calls it that. Naming it is not the defect;
     // placing the drink inside it, or giving it opinions, is.

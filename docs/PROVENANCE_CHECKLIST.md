@@ -154,6 +154,11 @@ These trip the grep every time and have been ruled on. Leave them alone.
 - Storm & Spice's description in Sanity, "the molasses-heavy depth of Bermudian
   black rum" — the molasses is attributed to Gosling's and explicitly
   contrasted with ours in the same sentence.
+- The Dragon's Breath cocktail in Sanity — a house serve of Penderyn, honey
+  syrup and ginger beer. It collides with the former producer's brand name and
+  is unrelated to it: they produce a spirit under that name, we publish a
+  recipe. Ruled acceptable by the founder on 9 August 2026. The brand-name rule
+  above still governs any reference to their product.
 
 ## Rule when a hit is a real claim
 
