@@ -43,7 +43,13 @@ const FORBIDDEN: Array<{ label: string; re: RegExp }> = [
   { label: 'perfect for', re: /\bperfect for\b/i },
   { label: "whether you're", re: /\bwhether you[’']re\b/i },
   { label: 'tantalising', re: /\btantalis|\btantaliz/i },
-  { label: 'indulge', re: /\bindulge/i },
+  // MEASURED 9 August 2026: all six hits on a bare /\bindulge/ were the noun
+  // or the adjective doing real work — "as much daily infrastructure as
+  // indulgence in an unheated country", "the garnish is not an indulgence on
+  // this one". None was the construction the rule exists for. Same call as the
+  // two meanings of shelf in scripts/self-reference.ts: the banned thing is the
+  // brochure verb pointed at the reader, not the English word.
+  { label: 'indulge in/your', re: /\bindulge\s+(?:in|your)\b|^indulge\b/im },
   { label: 'embark', re: /\bembark/i },
   { label: 'elevate your', re: /\belevate your\b/i },
   { label: 'seasoned mixologist', re: /\bmixologist\b/i },

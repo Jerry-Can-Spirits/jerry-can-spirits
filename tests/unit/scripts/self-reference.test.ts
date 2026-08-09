@@ -16,6 +16,20 @@ describe('the self-reference detector', () => {
     expect(selfReferences('the Banana Calling one page over')).toEqual(['one page over'])
   })
 
+  it('catches the possessive, not only "in the Field Manual"', () => {
+    // MEASURED 9 August 2026: the Tequila Sunrise published "the Field
+    // Manual's standing argument in its brightest colours" and scored zero,
+    // because the only Field Manual pattern required the preposition.
+    expect(selfReferences('the Field Manual’s standing argument')).toEqual(['the Field Manual’s'])
+    expect(selfReferences("this Field Manual's position")).toEqual(["this Field Manual's"])
+  })
+
+  it('leaves a bare mention of the section alone', () => {
+    // The site's own navigation calls it that. Naming it is not the defect;
+    // placing the drink inside it, or giving it opinions, is.
+    expect(selfReferences('the Field Manual covers 348 drinks')).toEqual([])
+  })
+
   it('counts every occurrence, not one per page', () => {
     // An earlier extractor reported one match per span and two "doc" mentions
     // in the same paragraph survived a sweep that claimed to have cleaned it.
