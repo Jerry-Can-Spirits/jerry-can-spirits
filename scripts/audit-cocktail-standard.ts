@@ -81,8 +81,14 @@ function blockText(blocks: Block[] | null): string {
 }
 
 async function main() {
+  // Drafts are excluded. The site client reads perspective: 'published', so a
+  // draft is invisible to a visitor, and scoring one inflates the corpus with
+  // a page nobody can read. Worse, the queue would eventually send a rewrite
+  // to it: work written into a document the live site never fetches. Tiki Sour
+  // had a stale draft from 22 July superseded by a publish on 25 July, which
+  // is how this surfaced.
   const rows = await client.fetch<C[]>(`
-    *[_type == "cocktail"]{
+    *[_type == "cocktail" && !(_id in path("drafts.**"))]{
       name, "slug": slug.current, description, note, instructions, flavorProfile,
       longDescription[]{ _type, style, children[]{ text } },
       faqs[]{ question, answer },

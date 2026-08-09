@@ -132,6 +132,11 @@ const key = (id: string, p: string, i: number) => `${id.replace(/[^a-z0-9]/gi, '
 const words = (s: string) => s.trim().split(/\s+/).filter(Boolean).length
 
 async function apply(r: Rewrite) {
+  // Ids are copied by hand out of the queue dump, and the site reads
+  // perspective: 'published'. A rewrite committed to a draft is a page of work
+  // no visitor ever sees, and nothing else here would notice.
+  if (r.id.startsWith('drafts.')) throw new Error(`${r.id} is a draft — the live site would never read it`)
+
   const doc = await client.fetch<{ ingredients: Array<{ _key: string; name: string }> } | null>(
     `*[_id == $id][0]{ ingredients[]{ _key, name } }`,
     { id: r.id }
