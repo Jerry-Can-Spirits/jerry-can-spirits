@@ -108,6 +108,28 @@ sugarcane or molasses"); editorial content about unrelated third parties
 (Penderyn, Welsh gin); or a non-claim identifier (a schema field, a code
 comment).
 
+## The Sanity sweep
+
+**The grep above searches the repo. Field Manual content is not in the repo.**
+
+Cocktails, ingredients, equipment and guides live in Sanity, which means every
+provenance sweep ever run has covered a fraction of the published words. On
+9 August 2026 The Old Standard was found publishing "the rum's Caribbean base
+and Welsh molasses foundation" in an ingredient note: a Welsh production
+location and a molasses claim, two banned constructions in six words, live on
+the site and invisible to the grep because the grep does not look there.
+
+That is the same failure as the label photograph above. The claim was outside
+the surface being searched.
+
+    npx sanity exec scripts/audit-provenance-claims.ts --with-user-token
+
+Run it alongside the grep, before shipping any copy change. It sorts hits into
+two tiers: a banned construction in a sentence that also refers to our rum,
+which is a claim until proven otherwise, and everything else, which is almost
+entirely category facts and third parties. It exits non-zero when tier one is
+not empty.
+
 ## Known acceptable hits (reviewed, do not re-investigate)
 
 These trip the grep every time and have been ruled on. Leave them alone.
@@ -126,6 +148,12 @@ These trip the grep every time and have been ruled on. Leave them alone.
 - `British Distillers Alliance` on `/friends/` — trade body membership.
 - `Own our own distillery` on `/about/story/` — a stated future ambition,
   explicitly not a present claim.
+- Hot Buttered Rum's brown sugar note in Sanity, "the rum's own molasses
+  character" — the drink is built on generic dark rum, so this is a category
+  fact. Trips tier one of the Sanity sweep on the phrase "the rum's".
+- Storm & Spice's description in Sanity, "the molasses-heavy depth of Bermudian
+  black rum" — the molasses is attributed to Gosling's and explicitly
+  contrasted with ours in the same sentence.
 
 ## Rule when a hit is a real claim
 
