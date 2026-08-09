@@ -15,6 +15,7 @@
  * checked, which for these is nowhere, so it stays unset.
  */
 import { getCliClient } from 'sanity/cli'
+import { selfReferences } from './self-reference'
 
 const client = getCliClient()
 const WRITE = process.argv.includes('--write')
@@ -130,9 +131,6 @@ Express the orange twist over the surface before dropping it in. The oil lifts t
 const key = (id: string, p: string, i: number) => `${id.replace(/[^a-z0-9]/gi, '').slice(-8)}${p}${String(i).padStart(2, '0')}`
 const words = (s: string) => s.trim().split(/\s+/).filter(Boolean).length
 
-const SELF_REF =
-  /\b(this|the) Manual\b|\bchairs?\b|\bshel(f|ves)\b|\bits pages?\b|\bearn(s|ed|ing)? (its|the) \w+|\bin (this|the) Field Manual\b/gi
-
 async function apply(r: Rewrite) {
   const doc = await client.fetch<{ ingredients: Array<{ _key: string; name: string }> } | null>(
     `*[_id == $id][0]{ ingredients[]{ _key, name } }`,
@@ -179,12 +177,13 @@ async function apply(r: Rewrite) {
 
   const ld = r.sections.reduce((n, [h, b]) => n + words(h) + words(b), 0)
   const all = [r.description, r.note, ...r.sections.flat(), ...r.faqs.flat(), ...Object.values(r.ingredientNotes)].join(' ')
-  const selfRef = (all.match(SELF_REF) ?? []).length
+  const hits = selfReferences(all)
+  const selfRef = hits.length
 
   console.log(`  ${r.name}`)
   console.log(`    description ${words(r.description)}w | tip ${words(r.note)}w | long ${ld}w / ${r.sections.length} sections`)
   console.log(`    faqs ${r.faqs.map(([, a]) => words(a)).join(', ')} | flavour ${r.flavorProfile.length} | self-ref ${selfRef}`)
-  if (selfRef) console.log(`    !! SELF-REFERENCE IN NEW COPY: ${(all.match(SELF_REF) ?? []).join(', ')}`)
+  if (selfRef) console.log(`    !! SELF-REFERENCE IN NEW COPY: ${hits.join(', ')}`)
 
   if (WRITE) {
     await client
