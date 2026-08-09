@@ -41,6 +41,10 @@ describe('the self-reference detector', () => {
 
   it('leaves the idiom and an outside guide alone', () => {
     expect(selfReferences('the moment cream approaches, turn the page')).toEqual([])
+    // Not self-reference, and not endorsed either: naming an authority in the
+    // prose is an attribution defect, because that belongs in recipeSource.
+    // The attribution pass moves it and removes the sentence. This detector
+    // must not claim the hit, or the two passes fight over the same words.
     expect(selfReferences('canonised in Difford’s Guide')).toEqual([])
   })
 
