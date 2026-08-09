@@ -28,6 +28,7 @@
  * Read-only. Writes nothing.
  */
 import { getCliClient } from 'sanity/cli'
+import { selfReferences } from './self-reference'
 
 const client = getCliClient()
 const VERBOSE = process.argv.includes('--verbose')
@@ -55,13 +56,6 @@ interface Ing { name?: string; amount?: string; description?: string | null; ref
 interface RecipeSource { authority?: string; note?: string }
 interface Block { _type?: string; style?: string; children?: Array<{ text?: string }> }
 
-/**
- * Section 0's largest rule, and the one Storm & Spice keeps absolutely: no
- * self-reference. Nine hundred words without one mention of this Manual, a
- * page, a chair, a shelf or a slot.
- */
-const SELF_REF =
-  /\b(this|the) Manual\b|\bchairs?\b|\bshel(f|ves)\b|\bits pages?\b|\bearn(s|ed|ing)? (its|the) \w+|\bone (page|shelf) (over|away)\b|\bin (this|the) Field Manual\b/gi
 interface C {
   name: string
   slug: string
@@ -186,7 +180,7 @@ async function main() {
     // the Blackthorn had "chair" sitting in an ingredient note, where none of
     // the earlier sweeps were looking.
     const allProse = [prose, ...ings.map((i) => i.description ?? ''), ...faqs.map((f) => f.question ?? '')].join(' ')
-    const selfRef = (allProse.match(SELF_REF) ?? []).length
+    const selfRef = selfReferences(allProse).length
     if (selfRef) add(`0  SELF-REFERENCE (writes about the page, not the drink)`, `${c.name} (${selfRef})`)
   }
 
