@@ -36,8 +36,11 @@ const blockText = (b: Block[] | null) =>
     .join(' ')
 
 async function main() {
+  // Drafts excluded: the site reads perspective: 'published', so a rewrite
+  // applied to a draft would never reach a visitor. See the same guard in
+  // audit-cocktail-standard.ts.
   const rows = await client.fetch<C[]>(`
-    *[_type == "cocktail"]{
+    *[_type == "cocktail" && !(_id in path("drafts.**"))]{
       _id, name, "slug": slug.current, description, note, instructions, flavorProfile,
       "glassware": glassware, baseSpirit,
       longDescription[]{ _type, style, children[]{ text } },
