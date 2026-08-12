@@ -10,7 +10,58 @@ import {
   formatCheckedDate,
   recipeSourceLine,
   validateHouseVariation,
+  validateRecipeSourceInput,
 } from '@/lib/recipe-source'
+
+/**
+ * The attribution sweep writes these fields from a script, so the Studio's own
+ * validation never runs. Every case below fails silently on the page rather
+ * than at the point of writing, which is why the script has to catch it.
+ */
+describe('validating a provenance edit made from a script', () => {
+  it('accepts a checked attribution', () => {
+    expect(validateRecipeSourceInput({ authority: 'savoy', note: '1930 edition, p.94' })).toBe(true)
+  })
+
+  it('rejects an authority the renderer has no label for', () => {
+    // recipeSourceLine returns null for an unknown authority, so the page shows
+    // no source at all and looks exactly like one nobody has checked.
+    expect(validateRecipeSourceInput({ authority: 'craddock' })).toContain('not a recipe authority')
+  })
+
+  it('rejects a house specification that does not say what is different', () => {
+    expect(validateRecipeSourceInput({ authority: 'house' })).toBe(
+      'A house specification must say what is different and why.'
+    )
+  })
+
+  it('rejects a variation set against a published specification', () => {
+    // The "Our version" block renders only when the authority is house, so this
+    // writes a paragraph no reader will ever see.
+    expect(
+      validateRecipeSourceInput({ authority: 'iba', houseVariation: 'We use demerara syrup.' })
+    ).toContain('renders only on a house specification')
+  })
+
+  it('rejects a date that is not a real day', () => {
+    // new Date('2026-02-31') rolls forward to 3 March rather than failing, so a
+    // typo would be stored and then rendered as a date nobody typed.
+    expect(validateRecipeSourceInput({ authority: 'iba', checkedAt: '2026-02-31' })).toContain(
+      'not a YYYY-MM-DD calendar date'
+    )
+    expect(validateRecipeSourceInput({ authority: 'iba', checkedAt: '2026-02-28' })).toBe(true)
+    expect(validateRecipeSourceInput({ authority: 'iba', checkedAt: '8 August 2026' })).toContain(
+      'not a YYYY-MM-DD calendar date'
+    )
+  })
+
+  it('accepts 29 February in a leap year and rejects it otherwise', () => {
+    expect(validateRecipeSourceInput({ authority: 'iba', checkedAt: '2028-02-29' })).toBe(true)
+    expect(validateRecipeSourceInput({ authority: 'iba', checkedAt: '2026-02-29' })).toContain(
+      'not a YYYY-MM-DD calendar date'
+    )
+  })
+})
 
 describe('the attribution line', () => {
   it('names the source and the date it was checked', () => {
