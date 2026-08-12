@@ -47,6 +47,14 @@ interface Patch {
   sourceCheckedAt?: string
   /** Ingredient name -> replacement note. */
   ingredientNotes?: Record<string, string>
+  /**
+   * Ingredient name -> replacement amount.
+   *
+   * Added for the IBA verification, where a page's copy is right and its
+   * measures are not. Patched by _key like the notes, so the ingredient's
+   * guide reference and its position in the recipe survive the change.
+   */
+  ingredientAmounts?: Record<string, string>
   /** Existing FAQ question -> replacement answer. */
   faqAnswers?: Record<string, string>
   /** Existing FAQ question -> replacement question, applied after faqAnswers. */
@@ -237,7 +245,7 @@ const words = (s: string | null | undefined) => (s ? s.trim().split(/\s+/).filte
 interface Span { _key: string; _type: string; text?: string; marks?: string[] }
 interface Block { _key: string; _type: string; style?: string; children?: Span[]; markDefs?: unknown[] }
 interface Faq { _key: string; _type?: string; question?: string; answer?: string }
-interface Ing { _key: string; name?: string; description?: string | null }
+interface Ing { _key: string; name?: string; amount?: string | null; description?: string | null }
 interface Doc {
   description: string | null
   note: string | null
@@ -305,13 +313,19 @@ async function apply(p: Patch) {
     if (p.sourceCheckedAt !== undefined) set.sourceCheckedAt = p.sourceCheckedAt
   }
 
-  // Ingredient notes are patched by _key so refs and amounts survive.
-  if (p.ingredientNotes) {
+  // Ingredient notes and amounts are patched by _key so refs and position survive.
+  if (p.ingredientNotes || p.ingredientAmounts) {
     const byName = new Map((doc.ingredients ?? []).map((i) => [i.name ?? '', i._key]))
-    for (const [name, note] of Object.entries(p.ingredientNotes)) {
+    const address = (name: string) => {
       const k = byName.get(name)
       if (!k) throw new Error(`${p.name}: no ingredient named "${name}"`)
-      set[`ingredients[_key=="${k}"].description`] = note
+      return k
+    }
+    for (const [name, note] of Object.entries(p.ingredientNotes ?? {})) {
+      set[`ingredients[_key=="${address(name)}"].description`] = note
+    }
+    for (const [name, amount] of Object.entries(p.ingredientAmounts ?? {})) {
+      set[`ingredients[_key=="${address(name)}"].amount`] = amount
     }
   }
 
@@ -388,6 +402,17 @@ async function apply(p: Patch) {
   const checkedAt = (set.sourceCheckedAt as string | undefined) ?? doc.sourceCheckedAt
 
   console.log(`  ${p.name}`)
+  // The whole recipe, whenever a measure moves: a spec change is the one edit
+  // here that alters what a reader pours, so it is shown rather than counted.
+  if (p.ingredientAmounts) {
+    for (const ing of doc.ingredients ?? []) {
+      const next = p.ingredientAmounts[ing.name ?? '']
+      const was = ing.amount ?? ''
+      console.log(
+        `      ${next ? `${was.padStart(8)} -> ${next.padEnd(10)}` : `${was.padStart(8)}${' '.repeat(14)}`}${ing.name}`
+      )
+    }
+  }
   console.log(`    description ${desc}w | tip ${tip}w | long ${ld}w / ${headings} sections`)
   console.log(
     `    faqs ${finalFaqs.map((f) => words(f.answer)).join(', ')} | thin ing notes ${thin}/${ingNotes.length} | self-ref ${hits.length}`
