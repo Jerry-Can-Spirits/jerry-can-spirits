@@ -55,6 +55,28 @@ interface Patch {
    * guide reference and its position in the recipe survive the change.
    */
   ingredientAmounts?: Record<string, string>
+  /**
+   * Ingredient lines to add.
+   *
+   * Seven of the first twenty-six pages checked against the IBA differ from the
+   * official specification by a whole ingredient rather than a measure: the
+   * Bee's Knees was missing the orange juice the IBA lists, the Clover Club
+   * carried a dry vermouth it does not.
+   *
+   * `after` places the line, because the order of a recipe is meaningful — the
+   * defining spirit is written first and a reader follows the list down. `ref`
+   * is an ingredient guide slug resolved at run time, so a payload never
+   * carries a document id copied by hand.
+   */
+  addIngredients?: Array<{
+    name: string
+    amount: string
+    description: string
+    ref?: string
+    after?: string
+  }>
+  /** Ingredient names to remove, addressed exactly as the recipe writes them. */
+  removeIngredients?: string[]
   /** Existing FAQ question -> replacement answer. */
   faqAnswers?: Record<string, string>
   /** Existing FAQ question -> replacement question, applied after faqAnswers. */
@@ -383,19 +405,72 @@ async function apply(p: Patch) {
     if (p.sourceCheckedAt !== undefined) set.sourceCheckedAt = p.sourceCheckedAt
   }
 
-  // Ingredient notes and amounts are patched by _key so refs and position survive.
-  if (p.ingredientNotes || p.ingredientAmounts) {
-    const byName = new Map((doc.ingredients ?? []).map((i) => [i.name ?? '', i._key]))
+  // The recipe after every ingredient-level change, whether or not it is
+  // written wholesale below. The band report and the self-reference scan both
+  // read it, so a note arriving with a new line is counted like any other.
+  let ingredients = (doc.ingredients ?? []).map((i) => ({ ...i }))
+  const structural = Boolean(p.addIngredients?.length || p.removeIngredients?.length)
+
+  if (p.ingredientNotes || p.ingredientAmounts || structural) {
     const address = (name: string) => {
-      const k = byName.get(name)
-      if (!k) throw new Error(`${p.name}: no ingredient named "${name}"`)
-      return k
+      const hit = ingredients.find((i) => (i.name ?? '') === name)
+      if (!hit) throw new Error(`${p.name}: no ingredient named "${name}"`)
+      return hit
     }
-    for (const [name, note] of Object.entries(p.ingredientNotes ?? {})) {
-      set[`ingredients[_key=="${address(name)}"].description`] = note
+
+    for (const name of p.removeIngredients ?? []) {
+      const hit = address(name)
+      ingredients = ingredients.filter((i) => i !== hit)
     }
-    for (const [name, amount] of Object.entries(p.ingredientAmounts ?? {})) {
-      set[`ingredients[_key=="${address(name)}"].amount`] = amount
+
+    for (const [name, note] of Object.entries(p.ingredientNotes ?? {})) address(name).description = note
+    for (const [name, amount] of Object.entries(p.ingredientAmounts ?? {})) address(name).amount = amount
+
+    if (p.addIngredients?.length) {
+      // Guide slugs are resolved here rather than carried as ids in the
+      // payload, so a wrong link fails by name instead of pointing silently at
+      // the wrong document.
+      const slugs = p.addIngredients.map((a) => a.ref).filter(Boolean) as string[]
+      const guides = slugs.length
+        ? await client.fetch<Array<{ _id: string; slug: string }>>(
+            `*[_type == "ingredient" && slug.current in $slugs && !(_id in path("drafts.**"))]{ _id, "slug": slug.current }`,
+            { slugs }
+          )
+        : []
+      const guideId = new Map(guides.map((g) => [g.slug, g._id]))
+
+      p.addIngredients.forEach((add, i) => {
+        if (ingredients.some((x) => (x.name ?? '') === add.name)) {
+          throw new Error(`${p.name}: already has an ingredient named "${add.name}"`)
+        }
+        if (add.ref && !guideId.has(add.ref)) {
+          throw new Error(`${p.name}: no ingredient guide with slug "${add.ref}"`)
+        }
+        const line = {
+          _key: key(p.id, 'ni', i),
+          _type: 'cocktailIngredient',
+          name: add.name,
+          amount: add.amount,
+          description: add.description,
+          ...(add.ref ? { ingredientRef: { _type: 'reference', _ref: guideId.get(add.ref) } } : {}),
+        } as Ing
+        const at = add.after ? ingredients.indexOf(address(add.after)) + 1 : ingredients.length
+        ingredients.splice(at, 0, line)
+      })
+    }
+
+    if (structural) {
+      // A whole-array write, because a key-path set cannot insert or delete.
+      set.ingredients = ingredients
+    } else {
+      // Otherwise patch by _key, which leaves every untouched line alone and
+      // cannot clobber a concurrent edit elsewhere in the recipe.
+      for (const [name, note] of Object.entries(p.ingredientNotes ?? {})) {
+        set[`ingredients[_key=="${address(name)._key}"].description`] = note
+      }
+      for (const [name, amount] of Object.entries(p.ingredientAmounts ?? {})) {
+        set[`ingredients[_key=="${address(name)._key}"].amount`] = amount
+      }
     }
   }
 
@@ -454,7 +529,7 @@ async function apply(p: Patch) {
   const desc = words((set.description as string | undefined) ?? doc.description)
   const tip = words((set.note as string | undefined) ?? doc.note)
 
-  const ingNotes = (doc.ingredients ?? []).map((i) => p.ingredientNotes?.[i.name ?? ''] ?? i.description ?? '')
+  const ingNotes = ingredients.map((i) => i.description ?? '')
   const thin = ingNotes.filter((n) => words(n) < 15).length
   const all = [
     (set.description as string) ?? doc.description ?? '',
@@ -472,15 +547,25 @@ async function apply(p: Patch) {
   const checkedAt = (set.sourceCheckedAt as string | undefined) ?? doc.sourceCheckedAt
 
   console.log(`  ${p.name}`)
-  // The whole recipe, whenever a measure moves: a spec change is the one edit
-  // here that alters what a reader pours, so it is shown rather than counted.
-  if (p.ingredientAmounts) {
-    for (const ing of doc.ingredients ?? []) {
-      const next = p.ingredientAmounts[ing.name ?? '']
-      const was = ing.amount ?? ''
-      console.log(
-        `      ${next ? `${was.padStart(8)} -> ${next.padEnd(10)}` : `${was.padStart(8)}${' '.repeat(14)}`}${ing.name}`
-      )
+  // The whole recipe, whenever it changes: a spec change is the one edit here
+  // that alters what a reader pours, so it is shown rather than counted. Lines
+  // removed are printed too, because a disappearing ingredient is the easiest
+  // change to make by accident and the hardest to spot afterwards.
+  if (p.ingredientAmounts || structural) {
+    const before = new Map((doc.ingredients ?? []).map((i) => [i.name ?? '', i.amount ?? '']))
+    for (const ing of ingredients) {
+      const was = before.get(ing.name ?? '')
+      const now = ing.amount ?? ''
+      const label =
+        was === undefined
+          ? `${'ADDED'.padStart(8)} -> ${now.padEnd(12)}`
+          : was === now
+            ? `${was.padStart(8)}${' '.repeat(16)}`
+            : `${was.padStart(8)} -> ${now.padEnd(12)}`
+      console.log(`      ${label}${ing.name}`)
+    }
+    for (const name of p.removeIngredients ?? []) {
+      console.log(`      ${(before.get(name) ?? '').padStart(8)} -> ${'REMOVED'.padEnd(12)}${name}`)
     }
   }
   console.log(`    description ${desc}w | tip ${tip}w | long ${ld}w / ${headings} sections`)
