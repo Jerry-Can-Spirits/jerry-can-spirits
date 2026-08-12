@@ -48,6 +48,65 @@ export function validateHouseVariation(
 }
 
 /**
+ * A real calendar date, checked in UTC.
+ *
+ * `new Date('2026-02-31')` rolls forward to 3 March rather than failing, so a
+ * typo in a checked-on date would be stored and then rendered as a date nobody
+ * typed. Parsed in UTC for the same reason formatCheckedDate is: a local-time
+ * check gives different answers either side of Greenwich.
+ */
+function isCalendarDate(iso: string): boolean {
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso.trim())
+  if (!m) return false
+  const year = Number(m[1])
+  const month = Number(m[2])
+  const day = Number(m[3])
+  if (month < 1 || month > 12 || day < 1) return false
+  return day <= new Date(Date.UTC(year, month, 0)).getUTCDate()
+}
+
+export interface RecipeSourceInput {
+  authority: string
+  note?: string
+  houseVariation?: string
+  checkedAt?: string
+}
+
+/**
+ * Every rule the Studio enforces on a provenance edit, in one call.
+ *
+ * The attribution sweep sets these fields from a script rather than by hand in
+ * the Studio, which means the Studio's own validation never runs. Each way of
+ * getting it wrong fails silently on the page rather than at the point of
+ * writing: an authority outside the list renders no source line at all,
+ * a house specification with no variation renders an empty "Our version" block,
+ * and a variation set against any other authority renders nothing anywhere.
+ * A script that writes all 348 pages should fail on the first one instead.
+ */
+export function validateRecipeSourceInput(input: RecipeSourceInput): true | string {
+  if (!RECIPE_AUTHORITIES.includes(input.authority as RecipeAuthority)) {
+    return `"${input.authority}" is not a recipe authority. One of: ${RECIPE_AUTHORITIES.join(', ')}.`
+  }
+
+  const house = validateHouseVariation(input.authority, input.houseVariation)
+  if (house !== true) return house
+
+  if (input.authority !== 'house' && input.houseVariation?.trim()) {
+    return 'houseVariation renders only on a house specification. Put the edition or page in the note instead.'
+  }
+
+  if (input.note !== undefined && !input.note.trim()) {
+    return 'A note that is present must say something. Leave it off instead.'
+  }
+
+  if (input.checkedAt !== undefined && !isCalendarDate(input.checkedAt)) {
+    return `"${input.checkedAt}" is not a YYYY-MM-DD calendar date.`
+  }
+
+  return true
+}
+
+/**
  * Display names, written to sit inside "Source: ...".
  *
  * Deliberately not the Studio's dropdown titles. "House specification" is right

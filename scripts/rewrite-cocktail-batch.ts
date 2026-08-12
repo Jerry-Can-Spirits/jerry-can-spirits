@@ -16,6 +16,11 @@
  */
 import { getCliClient } from 'sanity/cli'
 import { selfReferences } from './self-reference'
+import {
+  recipeSourceLine,
+  validateRecipeSourceInput,
+  type RecipeAuthority,
+} from '../src/lib/recipe-source'
 
 const client = getCliClient()
 const WRITE = process.argv.includes('--write')
@@ -33,6 +38,16 @@ interface Rewrite {
   /** [heading, body] in order. Body paragraphs split on blank lines. */
   sections: Array<[string, string]>
   faqs: Array<[string, string]>
+  /**
+   * Provenance, and optional. Set only where a specification was actually
+   * checked against the source: an authority guessed at is worse than an
+   * authority absent, because the line exists to say someone looked.
+   */
+  recipeSource?: { authority: RecipeAuthority; note?: string }
+  /** Required when the authority is house, and meaningless anywhere else. */
+  houseVariation?: string
+  /** YYYY-MM-DD. */
+  sourceCheckedAt?: string
 }
 
 const BATCHES: Record<number, Rewrite[]> = {
@@ -185,10 +200,34 @@ async function apply(r: Rewrite) {
   const hits = selfReferences(all)
   const selfRef = hits.length
 
+  const source: Record<string, unknown> = {}
+  if (r.recipeSource || r.houseVariation !== undefined || r.sourceCheckedAt !== undefined) {
+    const verdict = validateRecipeSourceInput({
+      authority: r.recipeSource?.authority ?? '',
+      note: r.recipeSource?.note,
+      houseVariation: r.houseVariation,
+      checkedAt: r.sourceCheckedAt,
+    })
+    if (verdict !== true) throw new Error(`${r.name}: ${verdict}`)
+
+    if (r.recipeSource) {
+      source.recipeSource = {
+        _type: 'object',
+        authority: r.recipeSource.authority,
+        ...(r.recipeSource.note ? { note: r.recipeSource.note } : {}),
+      }
+    }
+    if (r.houseVariation !== undefined) source.houseVariation = r.houseVariation
+    if (r.sourceCheckedAt !== undefined) source.sourceCheckedAt = r.sourceCheckedAt
+  }
+
   console.log(`  ${r.name}`)
   console.log(`    description ${words(r.description)}w | tip ${words(r.note)}w | long ${ld}w / ${r.sections.length} sections`)
   console.log(`    faqs ${r.faqs.map(([, a]) => words(a)).join(', ')} | flavour ${r.flavorProfile.length} | self-ref ${selfRef}`)
   if (selfRef) console.log(`    !! SELF-REFERENCE IN NEW COPY: ${hits.join(', ')}`)
+  if (r.recipeSource) {
+    console.log(`    ${recipeSourceLine(r.recipeSource.authority, r.recipeSource.note, r.sourceCheckedAt)}`)
+  }
 
   if (WRITE) {
     await client
@@ -201,6 +240,7 @@ async function apply(r: Rewrite) {
         longDescription,
         faqs,
         ...ingredientPatch,
+        ...source,
       })
       .commit()
   }
