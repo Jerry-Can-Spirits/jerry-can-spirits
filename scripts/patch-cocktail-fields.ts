@@ -238,6 +238,76 @@ It scales by simple multiplication, which is the other half of the point. A jug 
   ],
 }
 
+/**
+ * Numbers as this copy writes them.
+ *
+ * The Black Russian's page argued a 50:25 ratio in five places and the measure
+ * was changed without them, because the check for it looked for the digits "25"
+ * and the copy says "twenty-five". Prose here spells numbers out as a rule, so
+ * a digit search is the one search guaranteed to miss.
+ */
+const SPELLED: Record<string, string> = {
+  '2.5': 'two and a half',
+  '5': 'five',
+  '7.5': 'seven and a half',
+  '10': 'ten',
+  '12.5': 'twelve and a half',
+  '15': 'fifteen',
+  '20': 'twenty',
+  '22': 'twenty-two',
+  '22.5': 'twenty-two and a half',
+  '25': 'twenty-five',
+  '30': 'thirty',
+  '35': 'thirty-five',
+  '37.5': 'thirty-seven and a half',
+  '40': 'forty',
+  '45': 'forty-five',
+  '50': 'fifty',
+  '52.5': 'fifty-two and a half',
+  '60': 'sixty',
+  '75': 'seventy-five',
+  '90': 'ninety',
+  '100': 'a hundred',
+  '120': 'a hundred and twenty',
+}
+
+/**
+ * Escape every regex metacharacter, not just the dot.
+ *
+ * The first version escaped "." alone, which is the only metacharacter these
+ * terms actually contain. CodeQL was right to flag it anyway: an escape that
+ * handles one character and not the backslash is the shape that breaks the
+ * moment the input widens, and the next number word added here is not going to
+ * come with a review of this line.
+ */
+const escapeRegex = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+
+/**
+ * Sentences that cite a measure which is about to change.
+ *
+ * Advisory: a hit is not always a problem — "thirty seconds" is a shake time,
+ * not a pour — so the sentences are printed for reading rather than counted as
+ * a failure. The point is that nothing silently ships contradicting its own
+ * recipe again.
+ */
+function measureEchoes(prose: string, amounts: Record<string, string>, ingredients: Ing[]): string[] {
+  const numbers = new Set<string>()
+  for (const ing of ingredients) {
+    if (!(ing.name ?? '') || !(ing.name! in amounts)) continue
+    const m = /^(\d+(?:\.\d+)?)/.exec((ing.amount ?? '').trim())
+    if (m) numbers.add(m[1])
+  }
+  if (!numbers.size) return []
+
+  const terms = [...numbers].flatMap((n) => [n, SPELLED[n]].filter(Boolean) as string[])
+  const pattern = new RegExp(`\\b(?:${terms.map(escapeRegex).join('|')})\\b`, 'i')
+
+  return prose
+    .split(/(?<=[.!?])\s+/)
+    .map((s) => s.trim())
+    .filter((s) => s && pattern.test(s))
+}
+
 const key = (id: string, p: string, i: number) =>
   `${id.replace(/[^a-z0-9]/gi, '').slice(-8)}${p}${String(i).padStart(2, '0')}`
 const words = (s: string | null | undefined) => (s ? s.trim().split(/\s+/).filter(Boolean).length : 0)
@@ -418,6 +488,14 @@ async function apply(p: Patch) {
     `    faqs ${finalFaqs.map((f) => words(f.answer)).join(', ')} | thin ing notes ${thin}/${ingNotes.length} | self-ref ${hits.length}`
   )
   if (hits.length) console.log(`    !! SELF-REFERENCE: ${hits.join(', ')}`)
+
+  if (p.ingredientAmounts) {
+    const echoes = measureEchoes(all, p.ingredientAmounts, doc.ingredients ?? [])
+    if (echoes.length) {
+      console.log(`    !! ${echoes.length} sentence(s) cite a measure that is changing:`)
+      for (const s of echoes) console.log(`       ${s}`)
+    }
+  }
   // Printed rather than counted: the source line is the one field whose value
   // is a claim about the outside world, so it is worth reading before it ships.
   if (authority) console.log(`    ${recipeSourceLine(authority, sourceNote, checkedAt)}`)
