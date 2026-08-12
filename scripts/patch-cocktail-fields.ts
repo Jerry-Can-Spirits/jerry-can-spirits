@@ -272,6 +272,17 @@ const SPELLED: Record<string, string> = {
 }
 
 /**
+ * Escape every regex metacharacter, not just the dot.
+ *
+ * The first version escaped "." alone, which is the only metacharacter these
+ * terms actually contain. CodeQL was right to flag it anyway: an escape that
+ * handles one character and not the backslash is the shape that breaks the
+ * moment the input widens, and the next number word added here is not going to
+ * come with a review of this line.
+ */
+const escapeRegex = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+
+/**
  * Sentences that cite a measure which is about to change.
  *
  * Advisory: a hit is not always a problem — "thirty seconds" is a shake time,
@@ -289,7 +300,7 @@ function measureEchoes(prose: string, amounts: Record<string, string>, ingredien
   if (!numbers.size) return []
 
   const terms = [...numbers].flatMap((n) => [n, SPELLED[n]].filter(Boolean) as string[])
-  const pattern = new RegExp(`\\b(?:${terms.map((t) => t.replace(/[.]/g, '\\.')).join('|')})\\b`, 'i')
+  const pattern = new RegExp(`\\b(?:${terms.map(escapeRegex).join('|')})\\b`, 'i')
 
   return prose
     .split(/(?<=[.!?])\s+/)
