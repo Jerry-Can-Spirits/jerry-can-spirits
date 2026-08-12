@@ -18,6 +18,11 @@
  */
 import { getCliClient } from 'sanity/cli'
 import { selfReferences } from './self-reference'
+import {
+  recipeSourceLine,
+  validateRecipeSourceInput,
+  type RecipeAuthority,
+} from '../src/lib/recipe-source'
 
 const client = getCliClient()
 const WRITE = process.argv.includes('--write')
@@ -30,6 +35,16 @@ interface Patch {
   note?: string
   flavorProfile?: string[]
   instructions?: string[]
+  /**
+   * Provenance. Set only where a specification was actually checked against the
+   * source: the line exists to say someone looked, so an authority guessed at is
+   * worse than an authority absent.
+   */
+  recipeSource?: { authority: RecipeAuthority; note?: string }
+  /** Required when the authority is house, and meaningless anywhere else. */
+  houseVariation?: string
+  /** YYYY-MM-DD. */
+  sourceCheckedAt?: string
   /** Ingredient name -> replacement note. */
   ingredientNotes?: Record<string, string>
   /** Existing FAQ question -> replacement answer. */
@@ -231,6 +246,9 @@ interface Doc {
   longDescription: Block[] | null
   faqs: Faq[] | null
   ingredients: Ing[] | null
+  recipeSource: { authority?: string; note?: string } | null
+  houseVariation: string | null
+  sourceCheckedAt: string | null
 }
 
 const blockText = (b: Block[]) =>
@@ -250,7 +268,8 @@ async function apply(p: Patch) {
   if (p.id.startsWith('drafts.')) throw new Error(`${p.id} is a draft — the live site would never read it`)
 
   const doc = await client.fetch<Doc | null>(
-    `*[_id == $id][0]{ description, note, flavorProfile, instructions, longDescription, faqs, ingredients }`,
+    `*[_id == $id][0]{ description, note, flavorProfile, instructions, longDescription, faqs, ingredients,
+      recipeSource, houseVariation, sourceCheckedAt }`,
     { id: p.id }
   )
   if (!doc) throw new Error(`${p.id} not found`)
@@ -261,6 +280,30 @@ async function apply(p: Patch) {
   if (p.note !== undefined) set.note = p.note
   if (p.flavorProfile !== undefined) set.flavorProfile = p.flavorProfile
   if (p.instructions !== undefined) set.instructions = p.instructions
+
+  // Provenance is validated against the effective document — the patch merged
+  // over what is already stored — because setting an authority of house on a
+  // page that already carries its variation is legitimate, and so is adding a
+  // checked date to an authority set on an earlier run.
+  if (p.recipeSource || p.houseVariation !== undefined || p.sourceCheckedAt !== undefined) {
+    const verdict = validateRecipeSourceInput({
+      authority: p.recipeSource?.authority ?? doc.recipeSource?.authority ?? '',
+      note: p.recipeSource?.note,
+      houseVariation: p.houseVariation ?? doc.houseVariation ?? undefined,
+      checkedAt: p.sourceCheckedAt,
+    })
+    if (verdict !== true) throw new Error(`${p.name}: ${verdict}`)
+
+    if (p.recipeSource) {
+      set.recipeSource = {
+        _type: 'object',
+        authority: p.recipeSource.authority,
+        ...(p.recipeSource.note ? { note: p.recipeSource.note } : {}),
+      }
+    }
+    if (p.houseVariation !== undefined) set.houseVariation = p.houseVariation
+    if (p.sourceCheckedAt !== undefined) set.sourceCheckedAt = p.sourceCheckedAt
+  }
 
   // Ingredient notes are patched by _key so refs and amounts survive.
   if (p.ingredientNotes) {
@@ -338,12 +381,21 @@ async function apply(p: Patch) {
   ].join(' ')
   const hits = selfReferences(all)
 
+  const authority =
+    (set.recipeSource as { authority?: string } | undefined)?.authority ?? doc.recipeSource?.authority
+  const sourceNote =
+    (set.recipeSource as { note?: string } | undefined)?.note ?? doc.recipeSource?.note
+  const checkedAt = (set.sourceCheckedAt as string | undefined) ?? doc.sourceCheckedAt
+
   console.log(`  ${p.name}`)
   console.log(`    description ${desc}w | tip ${tip}w | long ${ld}w / ${headings} sections`)
   console.log(
     `    faqs ${finalFaqs.map((f) => words(f.answer)).join(', ')} | thin ing notes ${thin}/${ingNotes.length} | self-ref ${hits.length}`
   )
   if (hits.length) console.log(`    !! SELF-REFERENCE: ${hits.join(', ')}`)
+  // Printed rather than counted: the source line is the one field whose value
+  // is a claim about the outside world, so it is worth reading before it ships.
+  if (authority) console.log(`    ${recipeSourceLine(authority, sourceNote, checkedAt)}`)
 
   if (WRITE) await client.patch(p.id).set(set).commit()
 }
