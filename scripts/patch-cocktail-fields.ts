@@ -96,6 +96,28 @@ interface Patch {
   sectionHeadings?: Record<string, string>
   /** New [heading, body] sections appended to the long description. */
   addSections?: Array<[string, string]>
+  /**
+   * Variant name -> ingredient name -> replacement amount.
+   *
+   * A variant that is the same drink prepared differently should track the
+   * base: a Frozen Daiquiri sweetened with syrup while the base takes sugar
+   * reads as drift rather than intent. A variant that is genuinely another
+   * drink — the Hemingway Daiquiri — keeps its own specification and is not
+   * listed here.
+   *
+   * Throws on a name that matches more than one variant, because a page can
+   * carry two variants with the same name and silently patching one of them is
+   * worse than failing.
+   */
+  variantAmounts?: Record<string, Record<string, string>>
+  /**
+   * Variant names carried more than once: keeps the first, drops the rest.
+   *
+   * The Manhattan listed two variants both called "Perfect Manhattan" with
+   * different measures. The dry run prints every variant so the survivor can be
+   * checked before the write rather than trusted to ordering.
+   */
+  dedupeVariants?: string[]
 }
 
 const BATCHES: Record<number, Patch[]> = {
@@ -358,6 +380,7 @@ interface Doc {
   recipeSource: { authority?: string; note?: string } | null
   houseVariation: string | null
   sourceCheckedAt: string | null
+  variants: Array<{ name?: string; ingredients?: Ing[] }> | null
 }
 
 const blockText = (b: Block[]) =>
@@ -378,7 +401,7 @@ async function apply(p: Patch) {
 
   const doc = await client.fetch<Doc | null>(
     `*[_id == $id][0]{ description, note, flavorProfile, instructions, longDescription, faqs, ingredients,
-      recipeSource, houseVariation, sourceCheckedAt }`,
+      recipeSource, houseVariation, sourceCheckedAt, variants }`,
     { id: p.id }
   )
   if (!doc) throw new Error(`${p.id} not found`)
@@ -481,6 +504,27 @@ async function apply(p: Patch) {
         set[`ingredients[_key=="${address(name)._key}"].amount`] = amount
       }
     }
+  }
+
+  let variants = (doc.variants ?? []).map((v) => ({ ...v, ingredients: (v.ingredients ?? []).map((i) => ({ ...i })) }))
+  if (p.variantAmounts || p.dedupeVariants) {
+    for (const name of p.dedupeVariants ?? []) {
+      const hits = variants.filter((v) => (v.name ?? '') === name)
+      if (hits.length < 2) throw new Error(`${p.name}: "${name}" is not carried more than once`)
+      variants = variants.filter((v) => (v.name ?? '') !== name || v === hits[0])
+    }
+
+    for (const [name, amounts] of Object.entries(p.variantAmounts ?? {})) {
+      const hits = variants.filter((v) => (v.name ?? '') === name)
+      if (!hits.length) throw new Error(`${p.name}: no variant named "${name}"`)
+      if (hits.length > 1) throw new Error(`${p.name}: "${name}" matches ${hits.length} variants`)
+      for (const [ing, amount] of Object.entries(amounts)) {
+        const line = (hits[0].ingredients ?? []).find((i) => (i.name ?? '') === ing)
+        if (!line) throw new Error(`${p.name}: variant "${name}" has no ingredient named "${ing}"`)
+        line.amount = amount
+      }
+    }
+    set.variants = variants
   }
 
   let faqs = (doc.faqs ?? []).map((f) => ({ ...f }))
@@ -590,6 +634,16 @@ async function apply(p: Patch) {
     `    faqs ${finalFaqs.map((f) => words(f.answer)).join(', ')} | thin ing notes ${thin}/${ingNotes.length} | self-ref ${hits.length}`
   )
   if (hits.length) console.log(`    !! SELF-REFERENCE: ${hits.join(', ')}`)
+
+  // Every surviving variant, whenever any of them change: a dedupe keeps the
+  // first match, and which one that is should be read rather than trusted.
+  if (p.variantAmounts || p.dedupeVariants) {
+    console.log(`    variants after the patch:`)
+    for (const v of variants) {
+      const recipe = (v.ingredients ?? []).map((i) => `${i.amount} ${i.name}`).join(', ')
+      console.log(`      ${v.name}: ${recipe}`)
+    }
+  }
 
   if (p.ingredientAmounts) {
     const echoes = measureEchoes(all, p.ingredientAmounts, doc.ingredients ?? [])
