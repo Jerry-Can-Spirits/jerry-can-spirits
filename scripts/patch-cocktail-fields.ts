@@ -126,6 +126,7 @@ interface Patch {
    * carry two variants with the same name and silently patching one of them is
    * worse than failing.
    */
+  variantAmounts?: Record<string, Record<string, string>>
   /**
    * Variations to add.
    *
@@ -149,7 +150,6 @@ interface Patch {
     difficulty: 'novice' | 'wayfinder' | 'trailblazer'
     ingredients: Array<{ name: string; amount: string; ref?: string }>
   }>
-  variantAmounts?: Record<string, Record<string, string>>
   /**
    * Variant names carried more than once: keeps the first, drops the rest.
    *
