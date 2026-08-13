@@ -143,13 +143,27 @@ interface Patch {
    *
    * `ref` is an ingredient guide slug resolved at run time, exactly as it is
    * for `addIngredients`.
+   *
+   * `instructions` is required by the schema and was missed on the first three
+   * variants written through here, which left them invalid in the Studio. It
+   * is a required field on this type for that reason: a variant with its own
+   * measures needs its own method, or it is not a recipe.
+   *
+   * `note` is the Special Note box, and it is where the history goes — what
+   * makes this a variant rather than a mistake.
    */
   addVariants?: Array<{
     name: string
     description: string
     difficulty: 'novice' | 'wayfinder' | 'trailblazer'
     ingredients: Array<{ name: string; amount: string; ref?: string }>
+    instructions: string[]
+    note?: string
   }>
+  /** Variant name -> replacement method. */
+  variantInstructions?: Record<string, string[]>
+  /** Variant name -> replacement Special Note. */
+  variantNotes?: Record<string, string>
   /**
    * Variant names carried more than once: keeps the first, drops the rest.
    *
@@ -460,7 +474,7 @@ interface Doc {
   recipeSource: { authority?: string; note?: string } | null
   houseVariation: string | null
   sourceCheckedAt: string | null
-  variants: Array<{ name?: string; ingredients?: Ing[] }> | null
+  variants: Array<{ name?: string; ingredients?: Ing[]; instructions?: string[]; note?: string }> | null
 }
 
 const blockText = (b: Block[]) =>
@@ -596,7 +610,7 @@ async function apply(p: Patch) {
   }
 
   let variants = (doc.variants ?? []).map((v) => ({ ...v, ingredients: (v.ingredients ?? []).map((i) => ({ ...i })) }))
-  if (p.variantAmounts || p.dedupeVariants || p.addVariants) {
+  if (p.variantAmounts || p.dedupeVariants || p.addVariants || p.variantInstructions || p.variantNotes) {
     for (const name of p.dedupeVariants ?? []) {
       const hits = variants.filter((v) => (v.name ?? '') === name)
       if (hits.length < 2) throw new Error(`${p.name}: "${name}" is not carried more than once`)
@@ -614,6 +628,19 @@ async function apply(p: Patch) {
       }
     }
 
+    const addressVariant = (name: string) => {
+      const hits = variants.filter((v) => (v.name ?? '') === name)
+      if (!hits.length) throw new Error(`${p.name}: no variant named "${name}"`)
+      if (hits.length > 1) throw new Error(`${p.name}: "${name}" matches ${hits.length} variants`)
+      return hits[0]
+    }
+    for (const [name, steps] of Object.entries(p.variantInstructions ?? {})) {
+      addressVariant(name).instructions = steps
+    }
+    for (const [name, note] of Object.entries(p.variantNotes ?? {})) {
+      addressVariant(name).note = note
+    }
+
     if (p.addVariants?.length) {
       const slugs = p.addVariants.flatMap((v) => v.ingredients.map((i) => i.ref).filter(Boolean)) as string[]
       const guides = slugs.length
@@ -628,12 +655,17 @@ async function apply(p: Patch) {
         if (variants.some((v) => (v.name ?? '') === add.name)) {
           throw new Error(`${p.name}: already has a variant named "${add.name}"`)
         }
+        if (!add.instructions.length) {
+          throw new Error(`${p.name}: variant "${add.name}" needs at least one instruction`)
+        }
         variants.push({
           _key: key(p.id, 'nv', i),
           _type: 'variant',
           name: add.name,
           description: add.description,
           difficulty: add.difficulty,
+          instructions: add.instructions,
+          ...(add.note ? { note: add.note } : {}),
           ingredients: add.ingredients.map((ing, j) => {
             if (ing.ref && !guideId.has(ing.ref)) {
               throw new Error(`${p.name}: no ingredient guide with slug "${ing.ref}"`)
@@ -762,11 +794,16 @@ async function apply(p: Patch) {
 
   // Every surviving variant, whenever any of them change: a dedupe keeps the
   // first match, and which one that is should be read rather than trusted.
-  if (p.variantAmounts || p.dedupeVariants || p.addVariants) {
+  if (p.variantAmounts || p.dedupeVariants || p.addVariants || p.variantInstructions || p.variantNotes) {
     console.log(`    variants after the patch:`)
     for (const v of variants) {
       const recipe = (v.ingredients ?? []).map((i) => `${i.amount} ${i.name}`).join(', ')
       console.log(`      ${v.name}: ${recipe}`)
+      // The schema requires a method and the Studio rejects a variant without
+      // one. Three shipped that way before this line existed.
+      const steps = v.instructions?.length ?? 0
+      console.log(`        ${steps} instruction(s)${v.note ? ', special note set' : ', NO SPECIAL NOTE'}`)
+      if (!steps) console.log(`        !! INVALID: the schema requires at least one instruction`)
     }
   }
 
