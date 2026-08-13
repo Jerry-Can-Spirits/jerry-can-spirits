@@ -85,6 +85,15 @@ interface Patch {
   addFaqs?: Array<[string, string]>
   /** Existing section heading -> replacement body. Paragraphs split on blank lines. */
   sections?: Record<string, string>
+  /**
+   * Existing section heading -> replacement heading, applied after `sections`.
+   *
+   * A heading can assert the thing the section argues, and then a spec change
+   * makes the title itself wrong: the Margarita carried "Why the Lime Measure
+   * Is High" while the official recipe takes the lime below the liqueur. No
+   * rewrite of the body can fix a heading that contradicts it.
+   */
+  sectionHeadings?: Record<string, string>
   /** New [heading, body] sections appended to the long description. */
   addSections?: Array<[string, string]>
 }
@@ -498,7 +507,7 @@ async function apply(p: Patch) {
   }
 
   let long = (doc.longDescription ?? []).map((b) => ({ ...b }))
-  if (p.sections || p.addSections) {
+  if (p.sections || p.addSections || p.sectionHeadings) {
     for (const [heading, body] of Object.entries(p.sections ?? {})) {
       const at = long.findIndex(
         (b) => /^h[23]$/.test(b.style ?? '') && (b.children ?? []).map((c) => c.text ?? '').join('') === heading
@@ -519,6 +528,14 @@ async function apply(p: Patch) {
       })
       long.push(...bodyBlocks(p.id, `n${i}`, body))
     })
+    // Headings last, so a `sections` entry can still address the old title.
+    for (const [from, to] of Object.entries(p.sectionHeadings ?? {})) {
+      const at = long.findIndex(
+        (b) => /^h[23]$/.test(b.style ?? '') && (b.children ?? []).map((c) => c.text ?? '').join('') === from
+      )
+      if (at === -1) throw new Error(`${p.name}: no section headed "${from}"`)
+      long[at] = { ...long[at], children: [{ ...(long[at].children ?? [])[0], text: to }] }
+    }
     set.longDescription = long
   }
 
