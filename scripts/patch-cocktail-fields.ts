@@ -353,6 +353,46 @@ const SPELLED: Record<string, string> = {
 const escapeRegex = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
 
 /**
+ * Sentences that name an ingredient which is about to leave the recipe.
+ *
+ * The measure echo searches numbers, and every miss so far has been a word.
+ * Removing the Clover Club's dry vermouth left an Expert Tip that still said
+ * "Do not forget the vermouth"; removing the Paloma's grapefruit juice left an
+ * FAQ still listing it; the Penicillin kept describing a honey-ginger syrup it
+ * no longer used. Five of the twenty pages whose recipes changed shipped that
+ * way, and reading them afterwards found only three.
+ *
+ * The name is matched without its qualifiers, so "Fresh Lime Juice" also finds
+ * a bare "lime" — noisier, and the noise is the point: a page that mentions an
+ * ingredient it no longer contains is worth a look either way.
+ */
+function nameEchoes(prose: string, removed: string[]): Array<{ term: string; sentence: string }> {
+  if (!removed.length) return []
+
+  const terms = removed.flatMap((name) => {
+    const bare = name
+      .replace(/\b(fresh|dry|white|blended|aged|simple|plain|single|malt|juice|syrup|whisky|whiskey)\b/gi, ' ')
+      .replace(/\s+/g, ' ')
+      .trim()
+    return [name, bare].filter((t) => t.length > 3)
+  })
+
+  const out: Array<{ term: string; sentence: string }> = []
+  const sentences = prose
+    .split(/(?<=[.!?])\s+/)
+    .map((s) => s.trim())
+    .filter(Boolean)
+
+  for (const term of [...new Set(terms)]) {
+    const pattern = new RegExp(`\\b${escapeRegex(term)}\\b`, 'i')
+    for (const sentence of sentences) {
+      if (pattern.test(sentence) && !out.some((o) => o.sentence === sentence)) out.push({ term, sentence })
+    }
+  }
+  return out
+}
+
+/**
  * Sentences that cite a measure which is about to change.
  *
  * Advisory: a hit is not always a problem — "thirty seconds" is a shake time,
@@ -681,6 +721,14 @@ async function apply(p: Patch) {
     if (echoes.length) {
       console.log(`    !! ${echoes.length} sentence(s) cite a measure that is changing:`)
       for (const s of echoes) console.log(`       ${s}`)
+    }
+  }
+
+  if (p.removeIngredients?.length) {
+    const named = nameEchoes(all, p.removeIngredients)
+    if (named.length) {
+      console.log(`    !! ${named.length} sentence(s) still name an ingredient being removed:`)
+      for (const n of named) console.log(`       [${n.term}] ${n.sentence}`)
     }
   }
   // Printed rather than counted: the source line is the one field whose value
