@@ -126,6 +126,29 @@ interface Patch {
    * carry two variants with the same name and silently patching one of them is
    * worse than failing.
    */
+  /**
+   * Variations to add.
+   *
+   * The IBA pass keeps arriving at the same shape: the official specification
+   * is one drink and the page has been arguing for another. Where the page is
+   * right about why, the answer is not to delete its argument but to demote it
+   * — the official build becomes the recipe, and the version the page prefers
+   * becomes a variation with its own measures.
+   *
+   * The Vesper is the case that needed it. The official build takes 7.5ml of
+   * Lillet Blanc; ours took 22.5ml of Cocchi Americano, on the sound grounds
+   * that Lillet was reformulated in 1986 and Cocchi is closer to what Fleming
+   * wrote. Both belong on the page.
+   *
+   * `ref` is an ingredient guide slug resolved at run time, exactly as it is
+   * for `addIngredients`.
+   */
+  addVariants?: Array<{
+    name: string
+    description: string
+    difficulty: 'novice' | 'wayfinder' | 'trailblazer'
+    ingredients: Array<{ name: string; amount: string; ref?: string }>
+  }>
   variantAmounts?: Record<string, Record<string, string>>
   /**
    * Variant names carried more than once: keeps the first, drops the rest.
@@ -573,7 +596,7 @@ async function apply(p: Patch) {
   }
 
   let variants = (doc.variants ?? []).map((v) => ({ ...v, ingredients: (v.ingredients ?? []).map((i) => ({ ...i })) }))
-  if (p.variantAmounts || p.dedupeVariants) {
+  if (p.variantAmounts || p.dedupeVariants || p.addVariants) {
     for (const name of p.dedupeVariants ?? []) {
       const hits = variants.filter((v) => (v.name ?? '') === name)
       if (hits.length < 2) throw new Error(`${p.name}: "${name}" is not carried more than once`)
@@ -589,6 +612,42 @@ async function apply(p: Patch) {
         if (!line) throw new Error(`${p.name}: variant "${name}" has no ingredient named "${ing}"`)
         line.amount = amount
       }
+    }
+
+    if (p.addVariants?.length) {
+      const slugs = p.addVariants.flatMap((v) => v.ingredients.map((i) => i.ref).filter(Boolean)) as string[]
+      const guides = slugs.length
+        ? await client.fetch<Array<{ _id: string; slug: string }>>(
+            `*[_type == "ingredient" && slug.current in $slugs && !(_id in path("drafts.**"))]{ _id, "slug": slug.current }`,
+            { slugs }
+          )
+        : []
+      const guideId = new Map(guides.map((g) => [g.slug, g._id]))
+
+      p.addVariants.forEach((add, i) => {
+        if (variants.some((v) => (v.name ?? '') === add.name)) {
+          throw new Error(`${p.name}: already has a variant named "${add.name}"`)
+        }
+        variants.push({
+          _key: key(p.id, 'nv', i),
+          _type: 'variant',
+          name: add.name,
+          description: add.description,
+          difficulty: add.difficulty,
+          ingredients: add.ingredients.map((ing, j) => {
+            if (ing.ref && !guideId.has(ing.ref)) {
+              throw new Error(`${p.name}: no ingredient guide with slug "${ing.ref}"`)
+            }
+            return {
+              _key: key(p.id, `nv${i}i`, j),
+              _type: 'variantIngredient',
+              name: ing.name,
+              amount: ing.amount,
+              ...(ing.ref ? { ingredientRef: { _type: 'reference', _ref: guideId.get(ing.ref) } } : {}),
+            }
+          }),
+        } as (typeof variants)[number])
+      })
     }
     set.variants = variants
   }
@@ -703,7 +762,7 @@ async function apply(p: Patch) {
 
   // Every surviving variant, whenever any of them change: a dedupe keeps the
   // first match, and which one that is should be read rather than trusted.
-  if (p.variantAmounts || p.dedupeVariants) {
+  if (p.variantAmounts || p.dedupeVariants || p.addVariants) {
     console.log(`    variants after the patch:`)
     for (const v of variants) {
       const recipe = (v.ingredients ?? []).map((i) => `${i.amount} ${i.name}`).join(', ')
