@@ -45,6 +45,15 @@ interface Patch {
   houseVariation?: string
   /** YYYY-MM-DD. */
   sourceCheckedAt?: string
+  /**
+   * Ingredient guide slug for the spirit the drink is known for.
+   *
+   * Normally derived in bulk by scripts/set-cocktail-metadata.ts, which only
+   * fills the field where it is empty. Set here when a specification changes
+   * what the drink is built on: the official Penicillin names Lagavulin 16
+   * rather than any Islay malt, and the featured spirit should follow.
+   */
+  featuredSpirit?: string
   /** Ingredient name -> replacement note. */
   ingredientNotes?: Record<string, string>
   /**
@@ -351,10 +360,10 @@ const escapeRegex = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
  * a failure. The point is that nothing silently ships contradicting its own
  * recipe again.
  */
-function measureEchoes(prose: string, amounts: Record<string, string>, ingredients: Ing[]): string[] {
+function measureEchoes(prose: string, changed: Set<string>, ingredients: Ing[]): string[] {
   const numbers = new Set<string>()
   for (const ing of ingredients) {
-    if (!(ing.name ?? '') || !(ing.name! in amounts)) continue
+    if (!(ing.name ?? '') || !changed.has(ing.name!)) continue
     const m = /^(\d+(?:\.\d+)?)/.exec((ing.amount ?? '').trim())
     if (m) numbers.add(m[1])
   }
@@ -443,6 +452,15 @@ async function apply(p: Patch) {
     }
     if (p.houseVariation !== undefined) set.houseVariation = p.houseVariation
     if (p.sourceCheckedAt !== undefined) set.sourceCheckedAt = p.sourceCheckedAt
+  }
+
+  if (p.featuredSpirit) {
+    const ref = await client.fetch<string | null>(
+      `*[_type == "ingredient" && slug.current == $slug && !(_id in path("drafts.**"))][0]._id`,
+      { slug: p.featuredSpirit }
+    )
+    if (!ref) throw new Error(`${p.name}: no ingredient guide with slug "${p.featuredSpirit}"`)
+    set.featuredSpirit = { _type: 'reference', _ref: ref }
   }
 
   // The recipe after every ingredient-level change, whether or not it is
@@ -653,8 +671,13 @@ async function apply(p: Patch) {
     }
   }
 
-  if (p.ingredientAmounts) {
-    const echoes = measureEchoes(all, p.ingredientAmounts, doc.ingredients ?? [])
+  // Removals are searched as well as changes. The Paloma dropped 90ml of
+  // grapefruit juice and 10ml of syrup and the check said nothing, because it
+  // only looked at ingredients being re-measured — while the Expert Tip spent
+  // half its length calibrating the syrup that had just gone.
+  if (p.ingredientAmounts || p.removeIngredients) {
+    const changed = new Set([...Object.keys(p.ingredientAmounts ?? {}), ...(p.removeIngredients ?? [])])
+    const echoes = measureEchoes(all, changed, doc.ingredients ?? [])
     if (echoes.length) {
       console.log(`    !! ${echoes.length} sentence(s) cite a measure that is changing:`)
       for (const s of echoes) console.log(`       ${s}`)
