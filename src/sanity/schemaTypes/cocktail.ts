@@ -206,6 +206,15 @@ export default defineType({
       of: [
         {
           type: 'object',
+          // Named to match the guide schema, which has always called this
+          // 'faq'. Without a name the array member is anonymous, so every
+          // item carrying _type: 'faq' — 229 of the 348 cocktails, and
+          // everything the copy-pass appliers wrote — showed in the Studio as
+          // "Item of type faq not valid for this list" while rendering
+          // correctly on the site, because the page reads question and answer
+          // and never looks at the type.
+          name: 'faq',
+          title: 'FAQ',
           fields: [
             defineField({
               name: 'question',

@@ -405,6 +405,9 @@ export default defineType({
       of: [
         {
           type: 'object',
+          // Named to match the guide and cocktail schemas. See cocktail.ts.
+          name: 'faq',
+          title: 'FAQ',
           fields: [
             defineField({
               name: 'question',
