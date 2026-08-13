@@ -74,6 +74,14 @@ interface Patch {
     description: string
     ref?: string
     after?: string
+    /**
+     * Insert at the top of the recipe rather than appending.
+     *
+     * Needed where the line being added is the base spirit: the Mai Tai's
+     * official build splits its rum in two, and removing the single 60ml line
+     * left nothing to sit `after`, so both halves landed below the syrup.
+     */
+    atStart?: boolean
   }>
   /** Ingredient names to remove, addressed exactly as the recipe writes them. */
   removeIngredients?: string[]
@@ -486,7 +494,7 @@ async function apply(p: Patch) {
           description: add.description,
           ...(add.ref ? { ingredientRef: { _type: 'reference', _ref: guideId.get(add.ref) } } : {}),
         } as Ing
-        const at = add.after ? ingredients.indexOf(address(add.after)) + 1 : ingredients.length
+        const at = add.atStart ? 0 : add.after ? ingredients.indexOf(address(add.after)) + 1 : ingredients.length
         ingredients.splice(at, 0, line)
       })
     }
