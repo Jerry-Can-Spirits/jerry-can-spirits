@@ -12,9 +12,10 @@
  * loudly instead of writing nothing — the failure mode that let the Clover Club
  * ship an instruction naming an ingredient it no longer had.
  *
- * The dry run prints the bands from scripts/audit-reference-standard.ts and any
- * self-reference, so a page cannot pass review by being long enough while
- * writing about itself.
+ * The dry run prints the bands from scripts/audit-reference-standard.ts, any
+ * self-reference, and any breach of the docs/VOICE.md hard rules, so a page
+ * cannot pass review by being long enough while writing about itself or in the
+ * wrong voice.
  *
  * Transient. Reset with `git checkout -- scripts/patch-reference-fields.ts`.
  *
@@ -23,6 +24,7 @@
  */
 import { getCliClient } from 'sanity/cli'
 import { selfReferences } from './self-reference'
+import { voiceBreaches, voiceReviews } from './voice-rules'
 
 const client = getCliClient()
 const WRITE = process.argv.includes('--write')
@@ -72,6 +74,13 @@ const BATCHES: Record<number, Patch[]> = {
 const key = (id: string, p: string, i: number) =>
   `${id.replace(/[^a-z0-9]/gi, '').slice(-8)}${p}${String(i).padStart(2, '0')}`
 const words = (s: string | null | undefined) => (s ? s.trim().split(/\s+/).filter(Boolean).length : 0)
+
+/** "em-dash ×6" rather than six identical lines. */
+const tally = (hits: string[]) => {
+  const counts = new Map<string, number>()
+  for (const h of hits) counts.set(h, (counts.get(h) ?? 0) + 1)
+  return [...counts].map(([h, n]) => (n > 1 ? `${h} ×${n}` : h))
+}
 
 interface Span { _key: string; _type: string; text?: string; marks?: string[] }
 interface Block { _key: string; _type: string; style?: string; children?: Span[]; markDefs?: unknown[] }
@@ -219,6 +228,7 @@ async function apply(p: Patch) {
     finalDescription,
     finalUsage,
     p.storage ?? doc.storage,
+    ...(p.topTips ?? p.tips ?? []),
     blockText(blocks),
     ...faqs.flatMap((f) => [f.question, f.answer]),
   ]
@@ -226,6 +236,11 @@ async function apply(p: Patch) {
     .join('\n\n')
   const self = selfReferences(prose)
   if (self.length) console.log(`    !! SELF-REFERENCE: ${self.join(' | ')}`)
+
+  const breaches = voiceBreaches(prose)
+  if (breaches.length) console.log(`    !! VOICE: ${tally(breaches).join(' | ')}`)
+  const reviews = voiceReviews(prose)
+  if (reviews.length) console.log(`    ?? CHECK: ${tally(reviews).join(' | ')}`)
 
   if (WRITE && Object.keys(set).length) await client.patch(p.id).set(set).commit()
 }
