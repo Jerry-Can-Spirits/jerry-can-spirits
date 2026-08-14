@@ -8,8 +8,15 @@ const INGREDIENTS: RawIngredient[] = [
   { id: 'vermouth', name: 'Sweet Vermouth', slug: 'sweet-vermouth', category: 'fortified' },
   { id: 'champ', name: 'Champagne', slug: 'champagne', category: 'champagne' },
   { id: 'gingerbeer', name: 'Ginger Beer', slug: 'ginger-beer', category: 'mixers' },
-  // Superseded branded product: hidden from the tool in favour of the generic.
-  { id: 'ftgb', name: 'Fever-Tree Ginger Beer', slug: 'fever-tree-ginger-beer', category: 'mixers' },
+  // Branded product, hidden from the tool in favour of the generic it names as
+  // its parent. The relationship comes from Sanity rather than a list in config.
+  {
+    id: 'ftgb',
+    name: 'Fever-Tree Ginger Beer',
+    slug: 'fever-tree-ginger-beer',
+    category: 'mixers',
+    parentSlug: 'ginger-beer',
+  },
   { id: 'lime', name: 'Lime Juice', slug: 'lime-juice', category: 'fresh' },
   { id: 'water', name: 'Water', slug: 'water', category: 'mixers' },
   { id: 'ice', name: 'Ice', slug: 'ice', category: 'fresh' },
@@ -77,6 +84,45 @@ describe('buildBarData', () => {
     // the generic ginger beer shows; the branded Fever-Tree product does not
     expect(mixers).toContain('gingerbeer')
     expect(mixers).not.toContain('ftgb')
+  })
+
+  it('does not alias a mixer whose parent is a grouping rather than a generic', () => {
+    // Eighteen syrups name Syrups as their parent. That is a shelf grouping,
+    // not a substitution: orgeat is not maple syrup, and a Trinidad Sour is not
+    // makeable by anyone holding any syrup. Only the parents on the
+    // interchangeable list collapse.
+    const ingredients = [
+      { id: 'syrups', name: 'Syrups', slug: 'syrups', category: 'mixers' },
+      { id: 'orgeat', name: 'Orgeat Syrup', slug: 'orgeat-syrup', category: 'mixers', parentSlug: 'syrups' },
+      { id: 'maple', name: 'Maple Syrup', slug: 'maple-syrup', category: 'mixers', parentSlug: 'syrups' },
+    ]
+    const cocktails = [
+      { slug: 'trinidad-sour', name: 'Trinidad Sour', baseSpirit: 'rye-whiskey', ingredientIds: ['orgeat'] },
+    ]
+    const { shelves, index } = buildBarData(cocktails, ingredients)
+    const mixers = shelves.find((s) => s.id === 'mixers')!.ingredients.map((i) => i.id)
+    expect(mixers).toContain('orgeat')
+    expect(mixers).toContain('maple')
+    // the recipe still asks for orgeat specifically, not "a syrup"
+    expect(index[0].coreIngredientIds).toEqual(['orgeat'])
+  })
+
+  it('does not alias a spirit that names a parent, only mixers', () => {
+    // Old Tom Gin sits under Gin for taxonomy. Aliasing it would make the tool
+    // answer a different question — that any gin substitutes for any other —
+    // so the parent is read for mixers alone and the spirit stays on the shelf.
+    const ingredients = [
+      { id: 'gin', name: 'Gin', slug: 'gin', category: 'spirits' },
+      { id: 'oldtom', name: 'Old Tom Gin', slug: 'old-tom-gin', category: 'spirits', parentSlug: 'gin' },
+    ]
+    const cocktails = [
+      { slug: 'martinez', name: 'Martinez', baseSpirit: 'gin', ingredientIds: ['oldtom'] },
+    ]
+    const { shelves, index } = buildBarData(cocktails, ingredients)
+    const spirits = shelves.find((s) => s.id === 'spirits')!.ingredients.map((i) => i.id)
+    expect(spirits).toContain('oldtom')
+    // and the recipe still asks for the specific gin rather than the parent
+    expect(index[0].coreIngredientIds).toEqual(['oldtom'])
   })
 
   it('aliases a branded mixer reference to its generic in the cocktail core', () => {

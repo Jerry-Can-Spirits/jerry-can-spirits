@@ -40,21 +40,30 @@ export const CATEGORY_TO_VESSEL: Record<string, VesselType> = {
   aromatics: 'dash',
 }
 
-// Branded soft-drink products aliased to a generic ingredient in the tool only.
-// Recipes still reference the specific product a serve intends (a signature keeps
-// its Fever-Tree pairing); the tool shows one generic bottle per mixer and treats
-// it as satisfying any of these, so owning "Ginger Beer" makes both the branded
-// serve and the generic classic. The branded key is hidden from the shelf; the
-// generic value is shown. Specialty sodas with no generic are left untouched.
-export const MIXER_ALIASES: Record<string, string> = {
-  'fever-tree-premium-soda-water': 'soda-water',
-  'fever-tree-refreshingly-light-indian-tonic-water': 'tonic-water',
-  'fever-tree-madagascan-cola': 'cola',
-  'fever-tree-ginger-beer': 'ginger-beer',
-  'fever-tree-ginger-ale': 'ginger-ale',
-  'fever-tree-premium-lemonade': 'lemonade',
-  'fever-tree-sicilian-lemonade': 'lemonade',
-}
+// Parents that mean "any of these will do".
+//
+// A branded soda names its generic as parent — Fever-Tree Premium Soda Water
+// under Soda Water — and owning the generic genuinely satisfies a recipe that
+// named the brand. The tool hides the brand and matches on the generic.
+//
+// A parent is not always that relationship. Eighteen syrups name Syrups as
+// their parent, which is a shelf grouping rather than a substitution: orgeat is
+// not maple syrup, and treating a Trinidad Sour as makeable by anyone holding
+// any syrup would be wrong. Spirits carry the same grouping — London Dry under
+// Gin — for the same reason.
+//
+// So the rule is a short list of parents that ARE drop-in generics, rather than
+// a long list of the products beneath them. A new Fever-Tree tonic parented to
+// Tonic Water is handled the day it is parented, with no change here.
+export const INTERCHANGEABLE_MIXER_PARENTS: ReadonlySet<string> = new Set([
+  'soda-water',
+  'tonic-water',
+  'cola',
+  'lemonade',
+  'ginger-ale',
+  'ginger-beer',
+  'grapefruit-soda',
+])
 
 // Quick-start bottles shown lit-ready on each shelf: the bottles a typical home
 // bar actually holds. Curated by slug rather than derived by recipe frequency,

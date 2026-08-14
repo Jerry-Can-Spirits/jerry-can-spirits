@@ -3,8 +3,8 @@ import {
   shelfForCategory,
   vesselForCategory,
   ASSUMED_BASIC_SLUGS,
+  INTERCHANGEABLE_MIXER_PARENTS,
   COMMON_DEFAULTS,
-  MIXER_ALIASES,
 } from './config'
 import type { BarData, BarIngredient, CocktailIndexItem, ShelfGroup } from './types'
 
@@ -20,26 +20,42 @@ export interface RawIngredient {
   name: string
   slug: string
   category: string
+  /** The generic this is a brand of, where one is set. */
+  parentSlug?: string | null
 }
 
 export function buildBarData(cocktails: RawCocktail[], ingredients: RawIngredient[]): BarData {
   const idBySlug = new Map(ingredients.map((i) => [i.slug, i.id]))
 
-  // Branded soft-drinks (the alias keys) are hidden from the shelf in favour of
-  // their generic. Assumed basics are dropped too; they never block a match.
-  const excludedSlugs = new Set([...ASSUMED_BASIC_SLUGS, ...Object.keys(MIXER_ALIASES)])
-  const excludedIds = new Set(
-    ingredients.filter((i) => excludedSlugs.has(i.slug)).map((i) => i.id),
+  // A branded mixer is one that names a generic as its parent — Fever-Tree
+  // Premium Soda Water under Soda Water, and so on. That relationship lives in
+  // Sanity rather than in a list here, so a product added next year is handled
+  // the day it is parented instead of the day somebody remembers this file.
+  //
+  // Restricted to mixers on purpose. Spirits carry the same parent field for
+  // taxonomy — London Dry Gin under Gin — and aliasing those would quietly make
+  // the tool answer a different question, treating any gin as any other.
+  const aliasedMixers = ingredients.filter(
+    (i) =>
+      i.category === 'mixers' &&
+      i.parentSlug &&
+      INTERCHANGEABLE_MIXER_PARENTS.has(i.parentSlug) &&
+      idBySlug.has(i.parentSlug),
   )
 
   // Branded ingredient id -> generic ingredient id, so a recipe that references a
   // specific product still matches when the user owns the generic bottle.
-  const aliasIds = new Map<string, string>()
-  for (const [brandedSlug, genericSlug] of Object.entries(MIXER_ALIASES)) {
-    const brandedId = idBySlug.get(brandedSlug)
-    const genericId = idBySlug.get(genericSlug)
-    if (brandedId && genericId) aliasIds.set(brandedId, genericId)
-  }
+  const aliasIds = new Map<string, string>(
+    aliasedMixers.map((i) => [i.id, idBySlug.get(i.parentSlug as string) as string]),
+  )
+
+  // Branded mixers are hidden from the shelf in favour of their generic. Assumed
+  // basics are dropped too; they never block a match.
+  const basics = new Set(ASSUMED_BASIC_SLUGS)
+  const excludedIds = new Set([
+    ...ingredients.filter((i) => basics.has(i.slug)).map((i) => i.id),
+    ...aliasIds.keys(),
+  ])
 
   // Ingredients that can sit on a shelf (mapped to a shelf, not excluded).
   const shelvable: BarIngredient[] = ingredients
