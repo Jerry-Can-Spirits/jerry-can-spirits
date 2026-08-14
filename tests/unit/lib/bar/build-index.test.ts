@@ -107,10 +107,10 @@ describe('buildBarData', () => {
     expect(index[0].coreIngredientIds).toEqual(['orgeat'])
   })
 
-  it('does not alias a spirit that names a parent, only mixers', () => {
-    // Old Tom Gin sits under Gin for taxonomy. Aliasing it would make the tool
-    // answer a different question — that any gin substitutes for any other —
-    // so the parent is read for mixers alone and the spirit stays on the shelf.
+  it('collapses gin styles into gin, so owning any gin makes a gin drink', () => {
+    // Nobody buys London Dry and Old Tom so they can make a Tom Collins
+    // correctly. The recipe still names the style it wants; the tool matches at
+    // the family level.
     const ingredients = [
       { id: 'gin', name: 'Gin', slug: 'gin', category: 'spirits' },
       { id: 'oldtom', name: 'Old Tom Gin', slug: 'old-tom-gin', category: 'spirits', parentSlug: 'gin' },
@@ -120,9 +120,26 @@ describe('buildBarData', () => {
     ]
     const { shelves, index } = buildBarData(cocktails, ingredients)
     const spirits = shelves.find((s) => s.id === 'spirits')!.ingredients.map((i) => i.id)
-    expect(spirits).toContain('oldtom')
-    // and the recipe still asks for the specific gin rather than the parent
-    expect(index[0].coreIngredientIds).toEqual(['oldtom'])
+    expect(spirits).toContain('gin')
+    expect(spirits).not.toContain('oldtom')
+    expect(index[0].coreIngredientIds).toEqual(['gin'])
+  })
+
+  it('does not collapse sloe gin into gin, because it is a liqueur', () => {
+    // Sloe Gin names Gin as its parent on the grounds that it is made from gin.
+    // Collapsing it would tell someone holding London Dry that they can make a
+    // Sloe Gin Fizz, so the categories have to agree before anything collapses.
+    const ingredients = [
+      { id: 'gin', name: 'Gin', slug: 'gin', category: 'spirits' },
+      { id: 'sloe', name: 'Sloe Gin', slug: 'sloe-gin', category: 'liqueurs', parentSlug: 'gin' },
+    ]
+    const cocktails = [
+      { slug: 'sloe-gin-fizz', name: 'Sloe Gin Fizz', baseSpirit: 'gin', ingredientIds: ['sloe'] },
+    ]
+    const { shelves, index } = buildBarData(cocktails, ingredients)
+    const wines = shelves.find((s) => s.id === 'wines-liqueurs')!.ingredients.map((i) => i.id)
+    expect(wines).toContain('sloe')
+    expect(index[0].coreIngredientIds).toEqual(['sloe'])
   })
 
   it('aliases a branded mixer reference to its generic in the cocktail core', () => {
