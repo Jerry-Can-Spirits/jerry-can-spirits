@@ -54,7 +54,7 @@ const EXEMPLARS: Record<string, string[]> = {
     'cocchi-americano',
     'lagavulin-16',
   ],
-  equipment: [],
+  equipment: ['bar-blade'],
 }
 
 interface Block {
@@ -96,6 +96,7 @@ interface Measured {
   tips: number
   storage: number
   faqs: number
+  faqAnswers: number[]
   shortFaqs: number
   selfRefs: string[]
 }
@@ -122,6 +123,7 @@ function measure(doc: Doc): Measured {
     tips: (doc.topTips ?? doc.tips ?? []).length,
     storage: words(doc.storage),
     faqs: faqAnswers.length,
+    faqAnswers,
     shortFaqs: faqAnswers.filter((n) => n < 30).length,
     selfRefs: selfReferences(prose),
   }
@@ -161,6 +163,7 @@ async function main() {
     console.log(stat('storage', set.map((m) => m.storage)))
     console.log(stat('top tips', set.map((m) => m.tips)))
     console.log(stat('faqs', set.map((m) => m.faqs)))
+    console.log(stat('faq answers', set.flatMap((m) => m.faqAnswers)))
     const selfRef = set.filter((m) => m.selfRefs.length)
     console.log(`\n  self-reference: ${selfRef.length} of ${set.length} exemplars carry any.`)
     return

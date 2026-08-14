@@ -66,7 +66,8 @@ MEASURED across the seventeen exemplars, 14 August 2026:
 | Usage | 34 | 46 | 51 | **30–65** |
 | Storage | 22 | 37 | 46 | — |
 | Top tips | 3 | 3 | 3 | **3** |
-| FAQs | 4 | 4 | 4 | **4**, answers 35–60w |
+| FAQs | 4 | 4 | 4 | **4** |
+| FAQ answers | 31 | 41 | 51 | **30–55** |
 
 Floors sit at or below the lowest exemplar deliberately. A band that fails the
 page it was derived from is measuring the wrong thing.
@@ -114,7 +115,13 @@ profile already carry it, and a third pass reads as padding.
 
 ## 6. FAQs
 
-Four, answers 35–60 words, each answering a question somebody would type.
+Four, answers 30–55 words, each answering a question somebody would type.
+
+That band was asserted at 35–60 in the first draft of this document, carried
+over from the cocktail standard rather than measured. Two exemplar answers run
+to 31 words, so the band would have failed the pages it was derived from — the
+same error, in the same document, one section after warning against it. It is
+an easy mistake because a carried-over number feels like a derived one.
 
 **"What is X?" is a legitimate first FAQ and a poor second one.** The remaining
 three should be the objections and confusions: *Does Cynar taste like
@@ -153,5 +160,10 @@ there is no flavour profile. The section shape becomes:
 3. **Using it properly** — the technique people get wrong
 4. **Care and lifespan** — why the good one lasts
 
-No exemplar equipment page exists yet. The first one written to this standard
-becomes it, and section 1 should be updated to name it.
+**`/field-manual/equipment/bar-blade/` is the equipment exemplar**, written
+14 August 2026. Read it before editing any other equipment page.
+
+It is a useful first one because a bar blade is a piece of flat steel with no
+mechanism, which leaves nowhere to hide: there is no origin story, no producer
+and no tasting note, so 434 words have to come from what the thing does and how
+it fails. If that page can carry the band, a shaker or a jigger certainly can.
