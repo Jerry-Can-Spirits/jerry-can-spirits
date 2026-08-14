@@ -60,6 +60,17 @@ interface Draft {
   tags?: string[]
   flavorProfile: string[]
   recipeSource: { authority: RecipeAuthority; note?: string }
+  /**
+   * Required when the authority is house, and meaningless anywhere else.
+   *
+   * The fourteen IBA officials this script was written for were all attributed
+   * to a published specification, so the field never came up. A house serve has
+   * no outside authority to cite — what it has is a reason, and the validator
+   * rejects a house attribution without one. A recipe that differs from every
+   * published version and says nothing about why reads as a transcription error
+   * rather than a decision.
+   */
+  houseVariation?: string
   /** YYYY-MM-DD. */
   sourceCheckedAt: string
 }
@@ -126,7 +137,11 @@ async function main() {
   ])
 
   for (const draft of COCKTAILS) {
-    const valid = validateRecipeSourceInput({ ...draft.recipeSource, checkedAt: draft.sourceCheckedAt })
+    const valid = validateRecipeSourceInput({
+      ...draft.recipeSource,
+      houseVariation: draft.houseVariation,
+      checkedAt: draft.sourceCheckedAt,
+    })
     if (valid !== true) throw new Error(`${draft.name}: ${valid}`)
 
     const doc = {
@@ -174,6 +189,7 @@ async function main() {
       ...(draft.tags ? { tags: draft.tags } : {}),
       flavorProfile: draft.flavorProfile,
       recipeSource: { _type: 'object', ...draft.recipeSource },
+      ...(draft.houseVariation ? { houseVariation: draft.houseVariation } : {}),
       sourceCheckedAt: draft.sourceCheckedAt,
     }
 
