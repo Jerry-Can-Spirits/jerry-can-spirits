@@ -5,7 +5,6 @@ import {
   vesselForCategory,
   ASSUMED_BASIC_SLUGS,
   COMMON_DEFAULTS,
-  MIXER_ALIASES,
 } from '@/lib/bar/config'
 
 describe('bar config', () => {
@@ -79,13 +78,6 @@ describe('bar config', () => {
     expect(COMMON_DEFAULTS.has('ginger-beer')).toBe(true)
     expect(COMMON_DEFAULTS.has('tonic-water')).toBe(true)
     expect(COMMON_DEFAULTS.has('fever-tree-ginger-beer')).toBe(false)
-  })
-
-  it('aliases branded soft-drinks to a generic, consolidating lemonade variants', () => {
-    // Recipes keep the branded product; the tool treats it as the generic.
-    expect(MIXER_ALIASES['fever-tree-ginger-beer']).toBe('ginger-beer')
-    expect(MIXER_ALIASES['fever-tree-premium-lemonade']).toBe('lemonade')
-    expect(MIXER_ALIASES['fever-tree-sicilian-lemonade']).toBe('lemonade')
   })
 
   it('shelves fortified wine (vermouth, sherry, port) with the wines & liqueurs', () => {

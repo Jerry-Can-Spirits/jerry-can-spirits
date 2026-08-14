@@ -513,5 +513,6 @@ export const barIngredientsQuery = `*[_type == "ingredient" && defined(slug.curr
   "id": _id,
   name,
   "slug": slug.current,
-  category
+  category,
+  "parentSlug": parent->slug.current
 }`
