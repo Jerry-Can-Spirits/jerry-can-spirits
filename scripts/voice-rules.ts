@@ -32,8 +32,13 @@ const BREACHES: Rule[] = [
   // The emoji planes, plus the dingbats and misc-symbols blocks that carry
   // the ones people actually type.
   { label: 'emoji', pattern: String.raw`[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}\u{FE0F}]` },
-  // VOICE.md "Hard rules": the named hype list.
-  { label: 'hype word', pattern: String.raw`\b(?:grab|smash|epic|amazing|incredible|game-?changer)\b` },
+  // VOICE.md "Hard rules": the named hype list, minus the noun sense of smash.
+  { label: 'hype word', pattern: String.raw`\b(?:grab|epic|amazing|incredible|game-?changer)\b` },
+  // A Smash is a drink family. "Juleps and smashes", "a smash, a swizzle, a
+  // cobbler" and the Whiskey Smash are all the noun, and the bare word flagged
+  // every one of them on the Julep Cup page. VOICE.md means the hype senses:
+  // the transitive verb and the adjective.
+  { label: 'hype word', pattern: String.raw`\bsmash(?:es|ed)?\s+(?:it|them|your|their)\b|\bsmashing\b` },
   // VOICE.md "Patterns that read as machine-written". The reversal formula and
   // the empty intensifiers, which are the two that survive paraphrase.
   { label: 'reversal formula', pattern: String.raw`\b(?:is|are|was|were)n['’]?t just\b|\bis not just\b` },
