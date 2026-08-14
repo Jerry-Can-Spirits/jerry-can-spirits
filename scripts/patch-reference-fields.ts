@@ -108,7 +108,7 @@ async function apply(p: Patch) {
   // Long description: replace bodies by heading, rename headings, append new
   // sections. Rebuilt as a whole array because a heading's body is a run of
   // sibling blocks rather than one addressable field.
-  let blocks = (doc.longDescription ?? []).map((b) => ({ ...b }))
+  const blocks = (doc.longDescription ?? []).map((b) => ({ ...b }))
   if (p.sections || p.sectionHeadings || p.addSections) {
     const headingIndex = (heading: string) => {
       const i = blocks.findIndex(
