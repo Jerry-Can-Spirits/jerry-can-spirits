@@ -38,6 +38,17 @@ interface Patch {
   /** Ingredients call these top tips; equipment calls them tips. */
   topTips?: string[]
   tips?: string[]
+  /**
+   * Replaces the whole long description with [heading, body] sections.
+   *
+   * For pages with nothing to address by heading. All 72 equipment pages carry
+   * two or three unheaded paragraphs and no h2 at all, so `sections` has no
+   * anchor to work from and `addSections` would leave the old body stranded
+   * above the new ones. Rebuilding is the honest operation there.
+   *
+   * Also clears the empty trailing blocks several equipment pages carry.
+   */
+  longDescription?: Array<[string, string]>
   /** Existing section heading -> replacement body. Paragraphs split on blank lines. */
   sections?: Record<string, string>
   /** Existing section heading -> replacement heading, applied after `sections`. */
@@ -108,7 +119,25 @@ async function apply(p: Patch) {
   // Long description: replace bodies by heading, rename headings, append new
   // sections. Rebuilt as a whole array because a heading's body is a run of
   // sibling blocks rather than one addressable field.
-  const blocks = (doc.longDescription ?? []).map((b) => ({ ...b }))
+  let blocks = (doc.longDescription ?? []).map((b) => ({ ...b }))
+
+  if (p.longDescription) {
+    if (p.sections || p.sectionHeadings || p.addSections) {
+      throw new Error(`${p.name}: longDescription replaces the body, so it cannot be combined with sections`)
+    }
+    blocks = p.longDescription.flatMap(([heading, body], i) => [
+      {
+        _key: key(p.id, 'lh', i),
+        _type: 'block',
+        style: 'h2',
+        markDefs: [],
+        children: [{ _key: key(p.id, 'lhs', i), _type: 'span', text: heading, marks: [] }],
+      } as Block,
+      ...bodyBlocks(p.id, `l${i}`, body),
+    ])
+    set.longDescription = blocks
+  }
+
   if (p.sections || p.sectionHeadings || p.addSections) {
     const headingIndex = (heading: string) => {
       const i = blocks.findIndex(
