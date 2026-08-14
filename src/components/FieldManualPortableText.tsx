@@ -1,5 +1,6 @@
 import { PortableText } from 'next-sanity'
 import type { PortableTextBlock, PortableTextComponents } from 'next-sanity'
+import { blockPlainText, headingSlug } from '@/lib/sanity-text'
 
 // Sanity authors are trusted, but defence-in-depth: a Sanity account
 // compromise must not mean clickable javascript: URIs across the Field Manual.
@@ -26,8 +27,15 @@ const components: PortableTextComponents = {
       // two H1s in source order (Lighthouse / a11y will flag it).
       <div className="text-2xl font-serif font-bold text-gold-300 mt-10 mb-4 first:mt-0">{children}</div>
     ),
-    h2: ({ children }) => (
-      <h2 className="text-2xl font-serif font-bold text-gold-300 mt-10 mb-4 first:mt-0">{children}</h2>
+    // Anchored so the contents rail can link to it. scroll-mt clears the
+    // sticky header, which would otherwise sit over the heading you jumped to.
+    h2: ({ children, value }) => (
+      <h2
+        id={headingSlug(blockPlainText(value))}
+        className="text-2xl font-serif font-bold text-gold-300 mt-10 mb-4 first:mt-0 scroll-mt-24"
+      >
+        {children}
+      </h2>
     ),
     h3: ({ children }) => (
       <h3 className="text-xl font-serif font-bold text-gold-400 mt-8 mb-3 first:mt-0">{children}</h3>

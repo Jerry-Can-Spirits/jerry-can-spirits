@@ -72,8 +72,44 @@ interface PortableTextSpan {
 
 interface PortableTextBlockish {
   _type?: string
+  style?: string
   children?: PortableTextSpan[]
   markDefs?: Array<Record<string, unknown>>
+}
+
+/**
+ * The anchor id for a heading, derived from its text.
+ *
+ * Shared by FieldManualPortableText, which stamps the id onto the rendered
+ * heading, and the contents rail, which links to it. Both must agree, so
+ * neither owns it.
+ */
+export function headingSlug(text: string): string {
+  return text
+    .toLowerCase()
+    .replace(/['’]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+}
+
+/** The plain text of one portable-text block. */
+export function blockPlainText(block: { children?: PortableTextSpan[] }): string {
+  return (block.children ?? []).map((c) => c.text ?? '').join('')
+}
+
+export interface ExtractedHeading {
+  text: string
+  slug: string
+}
+
+/** The H2 headings of a portable-text body, in document order. */
+export function extractHeadings(value: unknown): ExtractedHeading[] {
+  if (!Array.isArray(value)) return []
+  return (value as PortableTextBlockish[])
+    .filter((b) => b?._type === 'block' && b.style === 'h2')
+    .map((b) => blockPlainText(b))
+    .filter((text) => text.trim().length > 0)
+    .map((text) => ({ text, slug: headingSlug(text) }))
 }
 
 function isPortableTextArray(value: unknown): value is PortableTextBlockish[] {

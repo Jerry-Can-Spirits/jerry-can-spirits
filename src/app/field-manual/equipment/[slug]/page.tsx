@@ -12,6 +12,8 @@ import FieldManualPortableText from '@/components/FieldManualPortableText'
 import StructuredData from '@/components/StructuredData'
 import RelatedCocktailsList from '@/components/RelatedCocktailsList'
 import RelatedGuidesList, { type GuideLink } from '@/components/RelatedGuidesList'
+import ReferenceContents from '@/components/ReferenceContents'
+import { extractHeadings } from '@/lib/sanity-text'
 import { OG_IMAGE_COCKTAIL } from '@/lib/og'
 import { ORG_REF } from '@/lib/jsonLd'
 
@@ -138,6 +140,16 @@ export default async function EquipmentDetailPage({ params }: { params: Promise<
 
   const videoId = equipment.videoUrl ? getYouTubeVideoId(equipment.videoUrl) : null
 
+  // Usage and the questions bracket the body sections, which is the order they
+  // appear in. Only headings that exist on this page are listed.
+  const contents = [
+    { text: 'Usage', slug: 'usage' },
+    ...extractHeadings(equipment.longDescription),
+    ...(equipment.faqs && equipment.faqs.length > 0
+      ? [{ text: 'Common Questions', slug: 'common-questions' }]
+      : []),
+  ]
+
   const articleSchema = {
     '@context': 'https://schema.org',
     '@type': 'Article',
@@ -197,10 +209,15 @@ export default async function EquipmentDetailPage({ params }: { params: Promise<
           </p>
         </div>
 
-        <div className="flex flex-col lg:grid lg:grid-cols-2 gap-12 items-start">
+        {/* items-start keeps the mobile stack as it was. On lg the left column
+            must stretch to the row height or its sticky child has nowhere to
+            travel: the rail scrolled away after its own height and left the
+            gutter empty for the rest of the page. */}
+        <div className="flex flex-col lg:grid lg:grid-cols-2 gap-12 items-start lg:items-stretch">
           {/* Left Column - Image and Sticky Info */}
           <div className="order-2 lg:order-1">
             <div className="lg:sticky lg:top-24 space-y-6">
+              <ReferenceContents items={contents} />
               {/* Image and badge panel. Half the equipment documents have no
                   image, and the template used to fill the gap with a framed
                   "Image coming soon" placeholder sitting directly beneath the
@@ -376,7 +393,7 @@ export default async function EquipmentDetailPage({ params }: { params: Promise<
 
             {/* Usage — the two-line practical answer comes first */}
             <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
-              <h2 className="text-2xl font-serif font-bold text-gold-300 mb-4">Usage</h2>
+              <h2 id="usage" className="text-2xl font-serif font-bold text-gold-300 mb-4 scroll-mt-24">Usage</h2>
               <p className="text-parchment-300 leading-relaxed whitespace-pre-line">{equipment.usage}</p>
             </div>
 
@@ -494,7 +511,7 @@ export default async function EquipmentDetailPage({ params }: { params: Promise<
             {/* FAQs — single source for the visible Q&As and the FAQPage schema */}
             {equipment.faqs && equipment.faqs.length > 0 && (
               <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
-                <h2 className="text-2xl font-serif font-bold text-gold-300 mb-4">Common Questions</h2>
+                <h2 id="common-questions" className="text-2xl font-serif font-bold text-gold-300 mb-4 scroll-mt-24">Common Questions</h2>
                 <div className="space-y-4">
                   {equipment.faqs.map((faq) => (
                     <div key={faq.question}>
