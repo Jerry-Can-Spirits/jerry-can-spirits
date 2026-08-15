@@ -41,6 +41,18 @@ interface Patch {
   topTips?: string[]
   tips?: string[]
   /**
+   * The prose fields outside the standard's bands.
+   *
+   * scripts/audit-reference-standard.ts measures description, usage, the long
+   * description and the FAQs, so the equipment rewrite covered those and left
+   * these alone. They still hold their original copy, which on eight pages
+   * states a capacity in ounces that contradicts the millilitres in the
+   * rewritten description on the same page.
+   */
+  history?: string
+  professionalTip?: string
+  whatToLookFor?: string[]
+  /**
    * Replaces the whole long description with [heading, body] sections.
    *
    * For pages with nothing to address by heading. All 72 equipment pages carry
@@ -123,6 +135,9 @@ async function apply(p: Patch) {
   if (p.storage !== undefined) set.storage = p.storage
   if (p.topTips !== undefined) set.topTips = p.topTips
   if (p.tips !== undefined) set.tips = p.tips
+  if (p.history !== undefined) set.history = p.history
+  if (p.professionalTip !== undefined) set.professionalTip = p.professionalTip
+  if (p.whatToLookFor !== undefined) set.whatToLookFor = p.whatToLookFor
   if (p.flavorProfile !== undefined) set.flavorProfile = p.flavorProfile
 
   // Long description: replace bodies by heading, rename headings, append new
@@ -229,6 +244,9 @@ async function apply(p: Patch) {
     finalUsage,
     p.storage ?? doc.storage,
     ...(p.topTips ?? p.tips ?? []),
+    ...(p.whatToLookFor ?? []),
+    p.history,
+    p.professionalTip,
     blockText(blocks),
     ...faqs.flatMap((f) => [f.question, f.answer]),
   ]
