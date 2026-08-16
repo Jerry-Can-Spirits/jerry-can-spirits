@@ -38,7 +38,7 @@ export const metadata: Metadata = {
 }
 
 export default function TermsOfService() {
-  const lastUpdated = '19 July 2026'
+  const lastUpdated = '16 August 2026'
 
   return (
     <>
@@ -215,7 +215,7 @@ export default function TermsOfService() {
                 {/* Pour IQ is a separate company; this notice is HELD until the
                     trade mark transfers with the corporate separation. */}
                 <p className="text-white mb-2 mt-4">
-                  Pour IQ™ is a trade mark of Jerry Can Spirits Ltd. UK trade mark application UK00004387466 is pending registration for:
+                  Pour IQ™ is a registered trademark (UK00004387466) of Jerry Can Spirits Ltd for:
                 </p>
                 <ul className="list-disc list-inside text-white space-y-1 ml-4 mb-3">
                   <li><strong>Class 9:</strong> Computer software for the hospitality industry, including software for cost, menu, and recipe analysis</li>
