@@ -490,16 +490,6 @@ export const adjacentGuidesQuery = `{
   }
 }`
 
-// Pour IQ™ help guide — singleton document fetch.
-export const tradeHelpQuery = `*[_type == "tradeHelp"][0]{
-  title,
-  intro,
-  sections[] {
-    title,
-    body
-  }
-}`
-
 // "What's in my bar" tool: compact cocktail -> ingredient-id index.
 export const barIndexQuery = `*[_type == "cocktail" && defined(slug.current)]{
   "slug": slug.current,

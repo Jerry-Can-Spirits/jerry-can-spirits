@@ -38,7 +38,7 @@ export const metadata: Metadata = {
 }
 
 export default function PrivacyPolicy() {
-  const lastUpdated = new Date('2026-05-12').toLocaleDateString('en-GB', {
+  const lastUpdated = new Date('2026-08-16').toLocaleDateString('en-GB', {
     year: 'numeric',
     month: 'long',
     day: 'numeric'
@@ -153,30 +153,17 @@ export default function PrivacyPolicy() {
               </p>
             </section>
 
-            {/* Pour IQ is a separate company; this disclosure is HELD until the
-                corporate separation completes (JCS Ltd is data controller for
-                licence holders until then). Remove with the separation, not before. */}
+            {/* Pour IQ is a separate product with its own privacy policy, which
+                is the authoritative one for platform data. This section is a
+                signpost only: duplicating the disclosures here lets the two
+                drift apart, and the Pour IQ policy is the more complete of the
+                two. JCS Ltd remains the data controller named there. */}
             <section className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20">
               <h2 className="text-2xl font-serif font-bold text-white mb-4 pb-2 border-b border-gold-500/20">
                 3.5 Pour IQ™
               </h2>
-              <p className="text-white mb-4 leading-relaxed">
-                If you hold a Pour IQ licence, we process the cocktail menu data you enter, including cocktail names, recipes, ingredient costs, sale prices, and the resulting analyses. Pour IQ now runs at <a href="https://app.pour-iq.co.uk" className="text-gold-300 underline hover:text-gold-200">app.pour-iq.co.uk</a>; its full, current privacy policy is published at <a href="https://pour-iq.co.uk/privacy-policy" className="text-gold-300 underline hover:text-gold-200">pour-iq.co.uk/privacy-policy</a> and takes precedence for platform data.
-              </p>
-              <p className="text-white mb-4 leading-relaxed">
-                <strong className="text-gold-300">Lawful basis.</strong> Contract performance &mdash; providing the menu analysis service your licence entitles you to.
-              </p>
-              <p className="text-white mb-4 leading-relaxed">
-                <strong className="text-gold-300">Recipients.</strong> Cocktail menu data is sent to Anthropic PBC (United States) for AI-powered analysis. Anthropic does not train its models on API data per their commercial terms. Menus and analyses are stored in Cloudflare D1 (United Kingdom and European Union regions). Pour IQ data is strictly per-tenant &mdash; never shared between trade customers.
-              </p>
-              <p className="text-white mb-4 leading-relaxed">
-                <strong className="text-gold-300">Retention.</strong> Menu and analysis data is retained for the lifetime of your Pour IQ licence and for two years after cancellation, then deleted. Individual menus can be deleted at any time from within Pour IQ. Scanned supplier invoice PDFs and their extracted line-item data are retained on the same schedule. This aligns with HMRC&rsquo;s six-year VAT-records requirement.
-              </p>
-              <p className="text-white mb-4 leading-relaxed">
-                <strong className="text-gold-300">International transfers.</strong> Data sent to Anthropic in the United States is protected under the UK Extension to the EU-US Data Privacy Framework (the UK-US Data Bridge). Anthropic is self-certified under that framework.
-              </p>
               <p className="text-white leading-relaxed">
-                <strong className="text-gold-300">Your rights.</strong> You can request access, correction, or deletion of your Pour IQ data by emailing <a href="mailto:hello@jerrycanspirits.co.uk" className="text-gold-300 underline hover:text-gold-200">hello@jerrycanspirits.co.uk</a>.
+                If your venue holds a Pour IQ licence, that processing is covered by the Pour IQ privacy policy at <a href="https://pour-iq.co.uk/privacy-policy" className="text-gold-300 underline hover:text-gold-200">pour-iq.co.uk/privacy-policy</a>, which is the authoritative record for platform data.
               </p>
             </section>
 
@@ -244,7 +231,6 @@ export default function PrivacyPolicy() {
                 <li><strong className="text-gold-300">Shopify:</strong> Checkout, order processing, and customer accounts (Canada with global infrastructure) &mdash; Standard Contractual Clauses and UK-US Data Bridge</li>
                 <li><strong className="text-gold-300">Klaviyo:</strong> Email marketing platform (United Kingdom and United States regions) &mdash; UK adequacy regulations and Standard Contractual Clauses</li>
                 <li><strong className="text-gold-300">Resend:</strong> Transactional email delivery for trade application notifications (United States, with EU sending region) &mdash; Standard Contractual Clauses</li>
-                <li><strong className="text-gold-300">Anthropic PBC:</strong> AI analysis provider for Pour IQ (United States) &mdash; UK-US Data Bridge. Does not train models on API data.</li>
                 <li><strong className="text-gold-300">Sanity:</strong> Headless CMS hosting Field Manual content (United States with EU regions) &mdash; Standard Contractual Clauses</li>
                 <li><strong className="text-gold-300">Google Analytics / Google Ads:</strong> Website analytics and conversion tracking (USA) &mdash; UK-US Data Bridge and Google Ads Data Processing Terms</li>
                 <li><strong className="text-gold-300">Meta (Facebook) Pixel and Conversions API:</strong> Advertising and conversion tracking (USA) &mdash; UK-US Data Bridge and Standard Contractual Clauses</li>
@@ -335,7 +321,7 @@ export default function PrivacyPolicy() {
                 10.2 UK-US Data Bridge
               </h3>
               <p className="text-white mb-4 leading-relaxed">
-                For US providers self-certified under the UK Extension to the EU-US Data Privacy Framework, we rely on the UK-US Data Bridge. This currently applies to Anthropic (Pour IQ AI analysis), Google (Analytics and Ads), and Meta (Pixel and Conversions API).
+                For US providers self-certified under the UK Extension to the EU-US Data Privacy Framework, we rely on the UK-US Data Bridge. This currently applies to Google (Analytics and Ads) and Meta (Pixel and Conversions API).
               </p>
 
               <h3 className="text-xl font-serif font-semibold text-white mt-6 mb-3">
