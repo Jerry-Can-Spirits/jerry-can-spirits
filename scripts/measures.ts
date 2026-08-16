@@ -25,7 +25,7 @@
 const SPOON_MEASURES = [2.5, 5, 10, 15, 20]
 
 /**
- * One, one and a half, and two ounces.
+ * The ounce family: a quarter, three quarters, one, one and a half, and two.
  *
  * Accepted rather than converted, on Dan's ruling of 12 August 2026. MEASURED
  * across 349 cocktails: 30ml appears 141 times, 60ml 129 and 45ml 108, against
@@ -34,10 +34,29 @@ const SPOON_MEASURES = [2.5, 5, 10, 15, 20]
  * drinks — a 60ml Old Fashioned served as 50ml — to fix a pour a 25ml jigger
  * reads as "one and a bit" either way.
  *
- * What is left is the genuinely odd: 22ml, which is a truncation of the 22.5ml
- * that three quarters of an ounce actually converts to, plus 7.5, 35 and 40.
+ * 7.5 and 22.5 joined them on Dan's ruling of 16 August 2026, because the
+ * original list was the same argument applied inconsistently: a quarter and
+ * three quarters of an ounce are the same family as one and two, and rejecting
+ * them left 31 of our own IBA-attributed pages failing our own pourability
+ * test. MEASURED: every one of the 14 attributed pages carrying 22.5ml is a
+ * New Era drink specified in three-quarter ounces — the Last Word and Naked
+ * and Famous are four equal parts of it — so the measure is the recipe rather
+ * than a conversion artefact.
+ *
+ * What is left is the genuinely odd: 35, 40 and 52.5.
  */
-const OUNCE_MEASURES = [30, 45, 60]
+const OUNCE_MEASURES = [7.5, 22.5, 30, 45, 60]
+
+/**
+ * The other jigger on the shelf: 20ml one end, 40ml the other.
+ *
+ * 20ml is already accepted above and appears 77 times, so rejecting 40 was
+ * rejecting the same jigger's other end. MEASURED 2026-08-16: all 18 uses are
+ * a base spirit in a modern recipe written in metric — the Banana Calling, the
+ * London Calling, the Raspberry Lynchburg. Fixing them would mean rewriting
+ * eighteen real recipes to correct a pour that is one mark on a common jigger.
+ */
+const METRIC_JIGGER_MEASURES = [20, 40]
 
 /** The mark inside a UK jigger, so every multiple of it can be poured. */
 const JIGGER_STEP = 12.5
@@ -58,6 +77,7 @@ export function isPourable(ml: number): boolean {
   if (ml <= 0) return false
   if (SPOON_MEASURES.some((v) => close(v, ml))) return true
   if (OUNCE_MEASURES.some((v) => close(v, ml))) return true
+  if (METRIC_JIGGER_MEASURES.some((v) => close(v, ml))) return true
   const remainder = ml % JIGGER_STEP
   return close(remainder, 0) || close(remainder, JIGGER_STEP)
 }
