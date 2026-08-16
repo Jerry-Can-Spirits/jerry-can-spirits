@@ -33,6 +33,8 @@ import { getCliClient } from 'sanity/cli'
 
 const client = getCliClient()
 const ONLY = process.argv.find((a) => a.startsWith('--slug='))?.split('=')[1]
+/** The editorial scan is advisory and noisy, so it is off unless asked for. */
+const PROSE = process.argv.includes('--prose')
 
 interface IngredientDoc {
   _id: string
@@ -63,8 +65,62 @@ interface Doc {
   longDescription: Block[] | null
   faqs: Array<{ question?: string; answer?: string }> | null
   ingredients: Line[] | null
-  variants: Array<{ name?: string; ingredients?: Line[] }> | null
+  /**
+   * The garnish is part of the drink and lives in its own field.
+   *
+   * Without it the method's "garnish with a maraschino cherry" reads as a pour
+   * of maraschino liqueur the recipe does not list, and "fresh mint" on a
+   * Julep reads as a missing ingredient. Seven of the first seventeen faults
+   * reported were this.
+   */
+  garnishLines: Line[] | null
+  variants: Array<{ name?: string; ingredients?: Line[]; instructions?: string[] | null }> | null
 }
+
+/**
+ * One recipe and the method that builds it.
+ *
+ * The page carries several. Until 16 August 2026 this audit pooled the main
+ * recipe's ingredients with every variant's into a single owned set, so a
+ * method could name anything any variant contained and pass. The Sazerac was
+ * built on rye in its method while its recipe listed cognac, and the audit read
+ * it as owned because the page carries a Rye Sazerac variant. Variant methods
+ * were not fetched at all, so a variation has never had its own build checked.
+ *
+ * A build owns its own lines and nothing else.
+ */
+interface Build {
+  label: string
+  /** Checked both ways: the method must name these, and may name only these. */
+  lines: Line[]
+  /** Owned but not orphan-checked. A method need not name every garnish. */
+  alsoOwns: Line[]
+  instructions: string[]
+}
+
+/**
+ * Accent- and apostrophe-insensitive.
+ *
+ * Bénédictine in the recipe and benedictine in the method is one ingredient,
+ * and so is Peychaud’s against Peychaud's. Both were reported as missing until
+ * the folding went in.
+ */
+const fold = (s: string) =>
+  s
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')
+    .replace(/['’`]/g, '')
+    .toLowerCase()
+
+/**
+ * A method that pours the list without naming it.
+ *
+ * "Add everything except the garnish to a shaker" is complete instruction and
+ * leaves every line unnamed, which the orphan check would otherwise report as
+ * eight missing ingredients.
+ */
+const CATCHALL =
+  /\b(?:all (?:of )?the ingredients|all ingredients|everything (?:else|but|except)?|remaining ingredients|the rest)\b/i
 
 /**
  * Names that match everything and mean nothing. A page saying "sugar" or "ice"
@@ -238,17 +294,13 @@ async function main() {
       name, "slug": slug.current, description, note, instructions, longDescription,
       faqs[]{ question, answer },
       ingredients[]{ name, amount, description, "refId": ingredientRef._ref },
-      variants[]{ name, ingredients[]{ name, "refId": ingredientRef._ref } }
+      "garnishLines": garnishes[]{ "name": ingredient->name, "refId": ingredient._ref },
+      variants[]{ name, instructions, ingredients[]{ name, description, "refId": ingredientRef._ref } }
     } | order(name asc)`
   )
 
-  const flagged: Array<{ doc: Doc; hits: Hit[] }> = []
-  const unusedLines: Array<{ doc: Doc; names: string[] }> = []
-  let notes = 0
-
-  for (const doc of docs) {
-    const lines = [...(doc.ingredients ?? []), ...(doc.variants ?? []).flatMap((v) => v.ingredients ?? [])]
-
+  /** What a set of recipe lines owns: the ids, and every name for them. */
+  const ownership = (lines: Line[]) => {
     // Ownership walks up to the parent and back down to its children, so a
     // recipe calling for a specific bottle owns the category it belongs to.
     const owned = new Set<string>()
@@ -259,7 +311,6 @@ async function main() {
         for (const child of children.get(id) ?? []) owned.add(child)
       }
     }
-
     const ownedTerms = new Set<string>()
     for (const line of lines) {
       for (const term of [(line.name ?? '').toLowerCase(), bare(line.name ?? '')]) {
@@ -275,9 +326,100 @@ async function main() {
       ownedTerms.add(ing.name.toLowerCase())
       ownedTerms.add(bare(ing.name))
     }
+    return { owned, ownedTerms }
+  }
+
+  interface Fault {
+    doc: Doc
+    build: string
+    kind: 'names' | 'orphan'
+    detail: string
+    line?: string
+  }
+  const faults: Fault[] = []
+  const flagged: Array<{ doc: Doc; hits: Hit[] }> = []
+  let notes = 0
+
+  for (const doc of docs) {
+    // The garnish belongs to every build on the page: a variation states its
+    // own measures, not its own cherry.
+    const garnish = doc.garnishLines ?? []
+    const builds: Build[] = [
+      {
+        label: 'recipe',
+        lines: doc.ingredients ?? [],
+        alsoOwns: garnish,
+        instructions: doc.instructions ?? [],
+      },
+      ...(doc.variants ?? []).map((v) => ({
+        label: `variation: ${v.name ?? '?'}`,
+        lines: v.ingredients ?? [],
+        alsoOwns: garnish,
+        instructions: v.instructions ?? [],
+      })),
+    ]
+
+    // Each build is judged against its own lines. A method may only name what
+    // its own recipe contains.
+    for (const build of builds) {
+      const { owned, ownedTerms } = ownership([...build.lines, ...build.alsoOwns])
+      const method = build.instructions.join(' ')
+      const foldedMethod = fold(method)
+
+      for (const [i, step] of build.instructions.entries()) {
+        for (const [term, ids] of vocabulary) {
+          if (ownedTerms.has(term)) continue
+          if ([...ids].some((id) => owned.has(id))) continue
+          if ([...ownedTerms].some((t) => new RegExp(`\\b${escapeRegex(term)}\\b`).test(t))) continue
+          const mention = new RegExp(
+            `(?<!-)\\b${escapeRegex(term)}\\b(?!-)(?!\\s+(?:flute|glass|coupe|saucer|shelf|bottle))`,
+            'i'
+          )
+          if (!mention.test(step)) continue
+          faults.push({
+            doc,
+            build: build.label,
+            kind: 'names',
+            detail: term,
+            line: `step ${i + 1}: ${step}`,
+          })
+        }
+      }
+
+      // The other half of the same question: a line the method never tells you
+      // what to do with. Skipped where the method pours the list wholesale.
+      if (!CATCHALL.test(method)) {
+        for (const line of build.lines) {
+          const name = line.name ?? ''
+          if (!name.trim()) continue
+          // Synonyms count: a recipe listing Simple Syrup and a method calling
+          // for sugar syrup is one ingredient under two names.
+          const group = synonymOf.get(name.toLowerCase()) ?? synonymOf.get(bare(name))
+          const forms = [name, bare(name), ...(group !== undefined ? SYNONYMS[group] : [])]
+            .filter(Boolean)
+            .map(fold)
+          const words = forms
+            .flatMap((f) => f.replace(/[(),']/g, ' ').split(/\s+/))
+            .filter((w) => w && !TOO_GENERIC.has(w) && w.length > 2)
+          const named =
+            forms.some((f) => foldedMethod.includes(f)) || words.some((w) => foldedMethod.includes(w))
+          if (!named) {
+            faults.push({ doc, build: build.label, kind: 'orphan', detail: name })
+          }
+        }
+      }
+    }
+
+    if (!PROSE) continue
+
+    const { owned, ownedTerms } = ownership([
+      ...(doc.ingredients ?? []),
+      ...(doc.variants ?? []).flatMap((v) => v.ingredients ?? []),
+    ])
 
     const hits: Hit[] = []
     for (const passage of passages(doc)) {
+      if (passage.field.startsWith('instruction')) continue
       for (const sentence of sentencesOf(passage.text)) {
         for (const [term, ids] of vocabulary) {
           if (ownedTerms.has(term)) continue
@@ -307,27 +449,37 @@ async function main() {
       }
     }
     if (hits.length) flagged.push({ doc, hits })
-
-    // The other half of the same question: a line in the recipe that the method
-    // never tells you what to do with.
-    const method = [
-      ...(doc.instructions ?? []),
-      ...(doc.longDescription ?? []).flatMap((b) => (b.children ?? []).map((c) => c.text ?? '')),
-    ]
-      .join(' ')
-      .toLowerCase()
-    const orphans = (doc.ingredients ?? [])
-      .map((l) => l.name ?? '')
-      .filter((name) => {
-        const term = bare(name) || name.toLowerCase()
-        return term.length > 3 && !method.includes(term) && !method.includes(name.toLowerCase())
-      })
-    if (orphans.length) unusedLines.push({ doc, names: orphans })
   }
 
-  console.log(`Checked ${docs.length} cocktails against ${vocabulary.size} ingredient terms.\n`)
+  const builds = docs.reduce((n, d) => n + 1 + (d.variants ?? []).length, 0)
+  console.log(`Checked ${docs.length} cocktails, ${builds} builds, against ${vocabulary.size} ingredient terms.\n`)
 
-  console.log('=== PROSE NAMES AN INGREDIENT THE RECIPE DOES NOT HAVE ===\n')
+  console.log('=== METHOD AND RECIPE DISAGREE ===\n')
+  const byDoc = new Map<string, Fault[]>()
+  for (const f of faults) byDoc.set(f.doc.slug, [...(byDoc.get(f.doc.slug) ?? []), f])
+  for (const [slug, list] of byDoc) {
+    console.log(`${list[0].doc.name}  (${slug})`)
+    for (const f of list) {
+      if (f.kind === 'names') {
+        console.log(`   [${f.build}] method names "${f.detail}", which the recipe does not list`)
+        console.log(`      ${f.line}`)
+      } else {
+        console.log(`   [${f.build}] "${f.detail}" is listed but the method never names it`)
+      }
+    }
+    console.log('')
+  }
+  const names = faults.filter((f) => f.kind === 'names').length
+  const orphans = faults.filter((f) => f.kind === 'orphan').length
+  console.log(`${byDoc.size} of ${docs.length} pages. ${names} method(s) name a missing ingredient, ${orphans} line(s) unused.`)
+
+  if (!PROSE) {
+    console.log('\nEditorial prose was not scanned. Pass -- --prose for the advisory list.')
+    return
+  }
+
+  console.log('\n=== ADVISORY: EDITORIAL PROSE NAMES AN ABSENT INGREDIENT ===')
+  console.log('Mostly legitimate. Comparisons, history and flavour notes name other drinks by design.\n')
   for (const { doc, hits } of flagged) {
     console.log(`${doc.name}  (${doc.slug})`)
     for (const hit of hits) {
@@ -336,12 +488,8 @@ async function main() {
     }
     console.log('')
   }
-  console.log(`${flagged.length} of ${docs.length} pages flagged, ${flagged.reduce((n, f) => n + f.hits.length, 0)} sentence(s).`)
-  console.log(`${notes} further mention(s) read as history, comparison or substitution, and are not listed.\n`)
-
-  console.log('=== RECIPE LINE NEVER NAMED IN THE METHOD ===\n')
-  for (const { doc, names } of unusedLines) console.log(`  ${doc.name.padEnd(34)} ${names.join(', ')}`)
-  console.log(`\n${unusedLines.length} of ${docs.length} pages carry a line the method never mentions.`)
+  console.log(`${flagged.length} page(s), ${flagged.reduce((n, f) => n + f.hits.length, 0)} sentence(s).`)
+  console.log(`${notes} further mention(s) read as history, comparison or substitution.`)
 }
 
 main().catch((e) => {
