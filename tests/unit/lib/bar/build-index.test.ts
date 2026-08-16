@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { buildBarData, type RawCocktail, type RawIngredient } from '@/lib/bar/build-index'
+import { match } from '@/lib/bar/match-engine'
 
 const INGREDIENTS: RawIngredient[] = [
   { id: 'gin', name: 'Gin', slug: 'gin', category: 'spirits' },
@@ -154,5 +155,40 @@ describe('buildBarData', () => {
     const { shelves } = buildBarData(COCKTAILS, INGREDIENTS)
     const lime = shelves.find((s) => s.id === 'fresh')!.ingredients.find((i) => i.id === 'lime')!
     expect(lime.vessel).toBe('carton')
+  })
+})
+
+describe('interchangeable families', () => {
+  const FAMILY: RawIngredient[] = [
+    { id: 'rum', name: 'Rum', slug: 'rum', category: 'spirits' },
+    { id: 'dark', name: 'Dark Rum', slug: 'dark-rum', category: 'spirits', parentSlug: 'rum' },
+    { id: 'gos', name: "Gosling's Black Seal", slug: 'goslings-black-seal', category: 'spirits', parentSlug: 'dark-rum' },
+    // A liqueur made from rum. Names rum as its parent and is not a rum.
+    { id: 'falernum', name: 'Falernum', slug: 'falernum', category: 'liqueurs', parentSlug: 'rum' },
+    { id: 'ginger', name: 'Ginger Beer', slug: 'ginger-beer', category: 'mixers' },
+  ]
+  const DRINKS: RawCocktail[] = [
+    { slug: 'dns', name: "Dark 'n' Stormy", baseSpirit: 'dark-rum', ingredientIds: ['gos', 'ginger'] },
+    { slug: 'corn', name: "Corn n' Oil", baseSpirit: 'dark-rum', ingredientIds: ['dark', 'falernum'] },
+  ]
+
+  it('lets any rum answer for a recipe naming a specific one', () => {
+    const { index, implies } = buildBarData(DRINKS, FAMILY)
+    const owned = new Set(['dark', 'ginger'])
+    const { makeable } = match(owned, index, implies)
+    // The recipe names Gosling's; the shelf holds dark rum. That is a drink.
+    expect(makeable.map((c) => c.slug)).toContain('dns')
+  })
+
+  it('does not let a rum answer for a liqueur made from rum', () => {
+    const { index, implies } = buildBarData(DRINKS, FAMILY)
+    const { makeable } = match(new Set(['dark']), index, implies)
+    // Falernum is a liqueur. Owning dark rum is not owning falernum.
+    expect(makeable.map((c) => c.slug)).not.toContain('corn')
+  })
+
+  it('leaves ingredients outside a family alone', () => {
+    const { implies } = buildBarData(DRINKS, FAMILY)
+    expect(implies.ginger).toBeUndefined()
   })
 })
