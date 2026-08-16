@@ -4,6 +4,7 @@ import {
   vesselForCategory,
   ASSUMED_BASIC_SLUGS,
   INTERCHANGEABLE_PARENTS,
+  INTERCHANGEABLE_FAMILIES,
   COMMON_DEFAULTS,
 } from './config'
 import type { BarData, BarIngredient, CocktailIndexItem, ShelfGroup } from './types'
@@ -62,6 +63,16 @@ export function buildBarData(cocktails: RawCocktail[], ingredients: RawIngredien
     ...aliasIds.keys(),
   ])
 
+  // The shelf asks what is in the cupboard, not what the recipe deserves.
+  //
+  // "Fresh Lime Juice" is right on a Daiquiri page and wrong on a shelf label:
+  // somebody holding a bottle of Funkin reads it as a bottle they do not have
+  // and leaves it unticked, losing every drink that needs lime. The recipe still
+  // says fresh, because in a Daiquiri it matters. Checked across the corpus: all
+  // twelve names starting "Fresh" shorten without colliding with another
+  // ingredient, and the shorter label fits the shelf better besides.
+  const shelfLabel = (name: string) => name.replace(/^Fresh\s+/i, '')
+
   // Ingredients that can sit on a shelf (mapped to a shelf, not excluded).
   const shelvable: BarIngredient[] = ingredients
     .filter((i) => !excludedIds.has(i.id))
@@ -70,7 +81,7 @@ export function buildBarData(cocktails: RawCocktail[], ingredients: RawIngredien
       if (!shelf) return null
       return {
         id: i.id,
-        name: i.name,
+        name: shelfLabel(i.name),
         slug: i.slug,
         category: i.category,
         shelf,
@@ -95,6 +106,42 @@ export function buildBarData(cocktails: RawCocktail[], ingredients: RawIngredien
     ).filter((id) => shelvableIds.has(id)),
   }))
 
+  // Within an interchangeable family, owning one bottle answers for all of
+  // them. Membership is the parent chain up to a family root, so a bottle only
+  // joins if the data says what it is a kind of.
+  // The category has to hold the whole way up. Falernum is a liqueur that names
+  // rum as its parent because it is made from rum, and Sloe Gin does the same
+  // under Gin: without this guard a bottle of dark rum would answer for the
+  // falernum in a Corn n' Oil.
+  const rootOf = (ing: RawIngredient): string | null => {
+    const seen = new Set<string>()
+    let current: RawIngredient | undefined = ing
+    while (current) {
+      if (current.category !== ing.category) return null
+      if (INTERCHANGEABLE_FAMILIES.has(current.slug)) return current.slug
+      if (!current.parentSlug || seen.has(current.slug)) return null
+      seen.add(current.slug)
+      current = bySlug.get(current.parentSlug)
+    }
+    return null
+  }
+
+  const families = new Map<string, string[]>()
+  for (const ing of ingredients) {
+    if (!shelvableIds.has(ing.id)) continue
+    const root = rootOf(ing)
+    if (!root) continue
+    families.set(root, [...(families.get(root) ?? []), ing.id])
+  }
+
+  const implies: Record<string, string[]> = {}
+  for (const members of families.values()) {
+    for (const id of members) {
+      const others = members.filter((other) => other !== id)
+      if (others.length) implies[id] = others
+    }
+  }
+
   const shelves: ShelfGroup[] = SHELVES.map(({ id, label }) => {
     const ingredients = shelvable
       .filter((i) => i.shelf === id)
@@ -102,5 +149,5 @@ export function buildBarData(cocktails: RawCocktail[], ingredients: RawIngredien
     return { id, label, ingredients }
   })
 
-  return { index, shelves }
+  return { index, shelves, implies }
 }

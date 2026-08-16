@@ -73,6 +73,24 @@ export const INTERCHANGEABLE_PARENTS: ReadonlySet<string> = new Set([
   'gin',
 ])
 
+// Families where any bottle answers for any other, named by the slug at the top
+// of the tree. Membership is the parent chain below that root, so a new rum
+// added with a parent joins without a change here.
+//
+// This is a decision about the question the tool is answering. A Dark 'n'
+// Stormy names Gosling's because the name is Gosling's trademark, and the
+// recipe page says so. Almost nobody stands in their kitchen and clicks
+// Gosling's: they click dark rum, ginger beer and lime, and they pour the rum
+// they own. Holding the tool to the brand would answer a question no one asked
+// and hide a drink they can plainly make.
+//
+// The same reasoning covers rye against bourbon. They are not interchangeable
+// in a Manhattan and the page will say so; at home, on a Tuesday, the bottle on
+// the shelf wins. Vermouth is deliberately absent: sweet and dry are not two
+// versions of one thing, and a Martini poured with sweet vermouth is a
+// different drink rather than a near miss.
+export const INTERCHANGEABLE_FAMILIES: ReadonlySet<string> = new Set(['rum', 'whisky'])
+
 // Quick-start bottles shown lit-ready on each shelf: the bottles a typical home
 // bar actually holds. Curated by slug rather than derived by recipe frequency,
 // which over-rewards cocktail-darlings (Benedictine, Cognac, Chartreuse) that

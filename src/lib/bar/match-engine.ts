@@ -22,15 +22,36 @@ function byFewestThenName(a: CocktailIndexItem, b: CocktailIndexItem): number {
   return a.coreIngredientIds.length - b.coreIngredientIds.length || a.name.localeCompare(b.name)
 }
 
+/**
+ * The bottles a bar answers for, which is more than the bottles it holds.
+ *
+ * A shelf with dark rum on it answers a recipe naming Gosling's, because the
+ * person standing in front of it is going to pour their own rum whatever the
+ * label on the recipe says.
+ */
+export function satisfiedBy(
+  ownedIds: Set<string>,
+  implies: Record<string, string[]> = {},
+): Set<string> {
+  const out = new Set(ownedIds)
+  for (const id of ownedIds) for (const other of implies[id] ?? []) out.add(other)
+  return out
+}
+
 // Pure. Assumed basics are already stripped from coreIngredientIds at index build,
 // so this needs no special-casing. A cocktail with no core ingredients is makeable.
-export function match(ownedIds: Set<string>, index: CocktailIndexItem[]): MatchResult {
+export function match(
+  ownedIds: Set<string>,
+  index: CocktailIndexItem[],
+  implies: Record<string, string[]> = {},
+): MatchResult {
+  const satisfied = satisfiedBy(ownedIds, implies)
   const makeable: CocktailIndexItem[] = []
   const oneAwayById = new Map<string, CocktailIndexItem[]>()
   const twoAway: TwoAway[] = []
 
   for (const cocktail of index) {
-    const missing = cocktail.coreIngredientIds.filter((id) => !ownedIds.has(id))
+    const missing = cocktail.coreIngredientIds.filter((id) => !satisfied.has(id))
     if (missing.length === 0) {
       makeable.push(cocktail)
     } else if (missing.length === 1) {

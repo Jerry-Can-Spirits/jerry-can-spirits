@@ -42,6 +42,33 @@ const RULES: Array<{ match: RegExp; parent: string }> = [
   { match: /grapefruit soda/i, parent: 'grapefruit-soda' },
 ]
 
+/**
+ * Spirits placed by hand, because the right parent is not in the name.
+ *
+ * A keyword rule cannot know that Gosling's Black Seal is a dark rum or that
+ * Lagavulin 16 is an Islay Scotch, and guessing at a spirit's family is worse
+ * than leaving it parentless.
+ *
+ * These matter beyond tidiness. The bar tool treats rum and whisky as
+ * interchangeable families, so a shelf holding dark rum answers a recipe naming
+ * Gosling's. Membership is the parent chain, so a rum with no parent sits
+ * outside the family and its drinks stay unmakeable however much rum you own.
+ * Six of the fourteen rums were in exactly that state.
+ */
+const SPIRIT_PARENTS: Record<string, string> = {
+  'demerara-rum': 'dark-rum',
+  'goslings-black-seal': 'dark-rum',
+  'pussers-rum': 'dark-rum',
+  'gold-rum': 'rum',
+  'jamaican-rum': 'rum',
+  'rhum-agricole': 'rum',
+  'bacardi-carta-blanca': 'white-rum',
+  'jerry-can-spirits-expedition-spiced-rum': 'spiced-rum',
+  'jack-daniels-tennessee-whiskey': 'whisky',
+  'lagavulin-16': 'islay-scotch-whisky',
+  'vanilla-vodka': 'vodka',
+}
+
 interface Doc {
   _id: string
   name: string
@@ -108,6 +135,41 @@ async function main() {
     for (const d of unmatched) console.log(`  ${d.name}`)
   }
 
+  // The curated spirit pass. Same job, different evidence: these are placed by
+  // hand because no keyword in the name says what family they belong to.
+  const spiritSlugs = Object.keys(SPIRIT_PARENTS)
+  const parentSlugsWanted = [...new Set(Object.values(SPIRIT_PARENTS))]
+  const spiritDocs = await client.fetch<Array<Doc & { slug: string }>>(
+    `*[_type == "ingredient" && slug.current in $slugs && !(_id in path("drafts.**"))]{
+      _id, name, "slug": slug.current, "parentName": parent->name
+    } | order(name asc)`,
+    { slugs: spiritSlugs }
+  )
+  const wanted = await client.fetch<Array<{ _id: string; slug: string; name: string }>>(
+    `*[_type == "ingredient" && slug.current in $slugs && !(_id in path("drafts.**"))]{
+      _id, "slug": slug.current, name
+    }`,
+    { slugs: parentSlugsWanted }
+  )
+  const wantedId = new Map(wanted.map((w) => [w.slug, w._id]))
+  const wantedName = new Map(wanted.map((w) => [w.slug, w.name]))
+
+  const spiritPlanned: Array<{ doc: Doc; parent: string }> = []
+  for (const doc of spiritDocs) {
+    if (doc.parentName) continue
+    const parent = SPIRIT_PARENTS[doc.slug]
+    if (!wantedId.has(parent)) {
+      console.log(`\nNo page for parent "${parent}", so ${doc.name} stays parentless.`)
+      continue
+    }
+    spiritPlanned.push({ doc, parent })
+  }
+
+  console.log(`\nSPIRITS TO SET (${spiritPlanned.length}):`)
+  for (const { doc, parent } of spiritPlanned) {
+    console.log(`  ${doc.name.padEnd(45)} -> ${wantedName.get(parent)}`)
+  }
+
   if (!WRITE) {
     console.log('\nDRY RUN. Nothing written. Pass --write to execute.')
     return
@@ -116,7 +178,10 @@ async function main() {
   for (const { doc, parent } of planned) {
     await client.patch(doc._id).set({ parent: { _type: 'reference', _ref: genericId.get(parent) } }).commit()
   }
-  console.log(`\nWRITTEN. ${planned.length} product(s) parented.`)
+  for (const { doc, parent } of spiritPlanned) {
+    await client.patch(doc._id).set({ parent: { _type: 'reference', _ref: wantedId.get(parent) } }).commit()
+  }
+  console.log(`\nWRITTEN. ${planned.length} product(s) and ${spiritPlanned.length} spirit(s) parented.`)
 }
 
 main().catch((e) => {

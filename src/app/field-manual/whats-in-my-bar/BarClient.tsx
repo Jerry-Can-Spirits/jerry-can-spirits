@@ -46,7 +46,10 @@ export default function BarClient({ data }: { data: BarData }) {
   )
   const nameById = useMemo(() => new Map(allIngredients.map((i) => [i.id, i.name])), [allIngredients])
 
-  const result = useMemo(() => match(owned, data.index), [owned, data.index])
+  const result = useMemo(
+    () => match(owned, data.index, data.implies),
+    [owned, data.index, data.implies],
+  )
 
   function toggle(id: string) {
     setOwned((prev) => {

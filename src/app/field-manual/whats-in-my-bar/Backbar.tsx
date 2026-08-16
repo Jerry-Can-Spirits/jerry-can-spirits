@@ -116,7 +116,7 @@ export default function Backbar({ shelves, owned, onToggle, onAddRequest, extraB
                 {/* Downlights recessed into the underside of the shelf above. */}
                 <div className="relative z-[2] flex justify-center gap-2 bg-gradient-to-b from-black/40 to-transparent pt-[7px] pb-0.5">
                   {row.map((cell) => (
-                    <span key={cell.kind === 'bottle' ? cell.ing.id : 'add'} className="flex w-[54px] justify-center">
+                    <span key={cell.kind === 'bottle' ? cell.ing.id : 'add'} className="flex w-[64px] justify-center">
                       {cell.kind === 'bottle' && (
                         <span className="h-[6px] w-[13px] rounded-full transition" style={downlight(owned.has(cell.ing.id), beam)} />
                       )}
@@ -134,12 +134,12 @@ export default function Backbar({ shelves, owned, onToggle, onAddRequest, extraB
                         aria-pressed={owned.has(cell.ing.id)}
                         aria-label={cell.ing.name}
                         onClick={() => onToggle(cell.ing.id)}
-                        className="relative flex h-20 w-[54px] items-end justify-center rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-gold-400"
+                        className="relative flex h-20 w-[64px] items-end justify-center rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-gold-400"
                       >
                         {owned.has(cell.ing.id) && (
                           <span
                             aria-hidden="true"
-                            className="pointer-events-none absolute -top-[7px] left-1/2 z-0 h-[88px] w-[58px] -translate-x-1/2"
+                            className="pointer-events-none absolute -top-[7px] left-1/2 z-0 h-[88px] w-[68px] -translate-x-1/2"
                             style={beamCone(beam)}
                           />
                         )}
@@ -156,7 +156,7 @@ export default function Backbar({ shelves, owned, onToggle, onAddRequest, extraB
                         type="button"
                         onClick={() => onAddRequest(shelf.id)}
                         aria-label={`Add to ${shelf.label}`}
-                        className="flex h-20 w-[54px] items-center justify-center rounded text-parchment-400/70 hover:text-gold-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold-400"
+                        className="flex h-20 w-[64px] items-center justify-center rounded text-parchment-400/70 hover:text-gold-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold-400"
                       >
                         <span className="flex h-14 w-8 items-center justify-center rounded border border-dotted border-white/25 text-lg">
                           +
@@ -174,7 +174,7 @@ export default function Backbar({ shelves, owned, onToggle, onAddRequest, extraB
                     {row.map((cell) => (
                       <span
                         key={cell.kind === 'bottle' ? cell.ing.id : 'add'}
-                        className={`flex h-[22px] w-[54px] items-center justify-center overflow-hidden text-center text-[10px] leading-[1.1] ${
+                        className={`flex h-[30px] w-[64px] items-center justify-center text-center hyphens-auto break-words text-[10px] leading-[1.1] ${
                           cell.kind === 'bottle' && owned.has(cell.ing.id)
                             ? 'font-semibold text-gold-200'
                             : 'text-parchment-300/40'
