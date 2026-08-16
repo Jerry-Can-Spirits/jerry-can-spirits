@@ -275,7 +275,7 @@ export default function FriendsPage() {
                             <div className="relative flex items-center justify-center w-40 h-40 shrink-0">
                               <Image
                                 src={partner.badge as string}
-                                alt={`${partner.name} — trees planted`}
+                                alt={`${partner.name} badge showing the number of trees Jerry Can Spirits has planted`}
                                 width={160}
                                 height={160}
                                 className="object-contain"

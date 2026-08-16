@@ -50,7 +50,7 @@ export const SPIRIT_ROLLUPS: Record<string, { label: string; members: string[] }
   },
   whiskey: {
     label: 'Whiskey',
-    members: ['bourbon', 'rye-whiskey', 'scotch', 'irish-whiskey', 'welsh-whisky'],
+    members: ['bourbon', 'tennessee-whiskey', 'rye-whiskey', 'scotch', 'irish-whiskey', 'welsh-whisky'],
   },
   // "gin" stays a member alongside the styles. Unlike rum, where every cocktail
   // names a sub-type, 47 of 72 gin recipes name only "gin" (MEASURED, 7 Aug
@@ -109,6 +109,7 @@ export const MEMBER_LABELS: Record<string, string> = {
   'plymouth-gin': 'Plymouth gin',
   'navy-strength-gin': 'Navy Strength gin',
   bourbon: 'Bourbon',
+  'tennessee-whiskey': 'Tennessee whiskey',
   'rye-whiskey': 'Rye whiskey',
   scotch: 'Scotch',
   'irish-whiskey': 'Irish whiskey',
@@ -140,6 +141,7 @@ export const MEMBER_SHORT: Record<string, string> = {
   "plymouth-gin": "Plymouth",
   "navy-strength-gin": "Navy Strength",
   bourbon: "bourbon",
+  "tennessee-whiskey": "Tennessee",
   "rye-whiskey": "rye",
   scotch: "Scotch",
   "irish-whiskey": "Irish",
