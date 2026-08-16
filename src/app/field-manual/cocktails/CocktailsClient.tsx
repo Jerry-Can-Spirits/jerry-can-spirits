@@ -386,6 +386,7 @@ export default function CocktailsClient({
     { value: 'gin', label: 'Gin' },
     { value: 'vodka', label: 'Vodka' },
     { value: 'bourbon', label: 'Bourbon' },
+    { value: 'tennessee-whiskey', label: 'Tennessee Whiskey' },
     { value: 'rye-whiskey', label: 'Rye Whiskey' },
     { value: 'scotch', label: 'Scotch' },
     { value: 'tequila', label: 'Tequila' },
