@@ -211,7 +211,7 @@ export const FACET_COPY: Record<string, FacetCopy> = {
     h1: 'Fizzes',
     title: 'Fizz Cocktails: {recipes} to make',
     description:
-      '{recipes} in the fizz family. A sour, shaken hard, topped with soda and served short without ice.',
+      '{recipes} in the fizz family. A sour, shaken hard, topped with soda and served short without ice. The shake is what separates it from a Collins.',
     intro:
       'This Field Manual holds {recipes} in the fizz family. A fizz is a sour shaken hard and topped with soda, served short in a small glass with no ice in it.\n\nThe absence of ice is the whole point and the reason a fizz is drunk quickly. Shaking does the chilling and the dilution before the drink reaches the glass, so there is nothing left to keep it cold. A gin fizz with egg white becomes a silver fizz, with the yolk a golden one, and with both a royal. The Ramos asks for twelve minutes of shaking and a cream and citrus emulsion that separates if you stop early.',
   },
@@ -219,7 +219,7 @@ export const FACET_COPY: Record<string, FacetCopy> = {
     h1: 'Non-Alcoholic Cocktails',
     title: 'Non-Alcoholic Cocktails: {recipes} to make',
     description:
-      '{recipes} built without alcohol. Bitterness, acid and texture doing the work the spirit used to do.',
+      '{recipes} built without alcohol. Bitterness, acid and texture doing the work the spirit used to do. The technique is unchanged; only the bottle is.',
     intro:
       'This Field Manual holds {recipes} built without alcohol. Removing the spirit removes three things at once: bitterness, viscosity and the burn that tells your mouth a drink has arrived. A good one replaces all three rather than leaving juice in a nice glass.\n\nBitterness is the one most often missed. Non-alcoholic bitters, strong tea, grapefruit pith or a bitter soda give the drink somewhere to end, and without it a mix of juices tastes flat however good the fruit is. Acid does the lifting a spirit’s heat would otherwise do, so these recipes lean harder on citrus and vinegar than their alcoholic equivalents. Texture is the hardest to replace: a syrup, an egg white or a shrub gives the drink weight, and a Seedlip-style distillate brings aroma without body.',
   },
@@ -227,7 +227,7 @@ export const FACET_COPY: Record<string, FacetCopy> = {
     h1: 'Collins',
     title: 'Collins Cocktails: {recipes} to make',
     description:
-      '{recipes} in the collins family. A sour lengthened with soda, built tall over ice and served with a straw.',
+      '{recipes} in the collins family. A sour lengthened with soda, built tall over ice and served with a straw. Long, low in strength and built in the glass.',
     intro:
       'This Field Manual holds {recipes} in the collins family. A collins is a sour lengthened with soda water: spirit, lemon, sugar and bubbles, built tall over ice. It is a Tom Collins whatever the spirit, and the name changes with it.\n\nThe soda is what separates it from a fizz, which is shaken and served short. A collins is built in the glass and stays long, so the ice matters more than the shake: fill the glass and the drink stays cold without watering, half-fill it and it is thin by the second mouthful. Lemon is standard, lime makes it sharper, and the sugar comes down as the citrus goes up.',
   },
