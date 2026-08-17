@@ -33,7 +33,10 @@ export async function generateMetadata({
 
   return {
     title: titleFor(facet, page),
-    description: `${facet.label} cocktail recipes from the Jerry Can Spirits Field Manual, page ${page} of ${pageCount(facet.count)}.`,
+    // Ahrefs measured the old one-clause version at 74 to 78 characters, short
+    // of the 110 a description needs to earn its space in a result. The count
+    // and what a reader gets are worth the extra clause.
+    description: `${facet.count} ${facet.label.toLowerCase()} cocktail recipes, page ${page} of ${pageCount(facet.count)} from the Jerry Can Spirits Field Manual. Measures, method and the reasoning behind each.`,
     // Self-canonical: page 2 carries recipes page 1 does not, so pointing it at
     // page 1 would ask Google to drop real content.
     alternates: { canonical: `https://jerrycanspirits.co.uk${canonicalFor(facet, page)}` },
