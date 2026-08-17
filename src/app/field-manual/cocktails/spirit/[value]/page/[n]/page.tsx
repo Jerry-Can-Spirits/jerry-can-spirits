@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import CocktailFacetPage from '@/components/CocktailFacetPage'
 import { getFacets } from '@/lib/facet-data'
 import { canonicalFor, pageCount, robotsFor, titleFor } from '@/lib/cocktail-facets'
+import { OG_IMAGE_COCKTAIL, baseOpenGraph } from '@/lib/og'
 
 const KIND = 'spirit' as const
 
@@ -40,6 +41,15 @@ export async function generateMetadata({
     // Self-canonical: page 2 carries recipes page 1 does not, so pointing it at
     // page 1 would ask Google to drop real content.
     alternates: { canonical: `https://jerrycanspirits.co.uk${canonicalFor(facet, page)}` },
+    // og:url is required by the Open Graph protocol and was absent, which is
+    // why the crawl reported these cards invalid while every other attribute
+    // was present. Title and description are left to resolve from the fields
+    // above rather than restated here.
+    openGraph: {
+      ...baseOpenGraph,
+      url: `https://jerrycanspirits.co.uk${canonicalFor(facet, page)}`,
+      images: OG_IMAGE_COCKTAIL,
+    },
     robots: robotsFor(facet),
   }
 }
