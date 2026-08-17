@@ -49,10 +49,10 @@
     "xss": "^1.0.15"
   },
   "devDependencies": {
-    "@anthropic-ai/sdk": "^0.115.0",
+    "@anthropic-ai/sdk": "^0.117.1",
     "@cloudflare/workers-types": "^4.20260702.1",
     "@eslint/eslintrc": "^3",
-    "@next/bundle-analyzer": "^16.3.0",
+    "@next/bundle-analyzer": "^16.3.1",
     "@next/eslint-plugin-next": "^15.5.23",
     "@opennextjs/cloudflare": "^1.20.2",
     "@playwright/test": "^1.62.1",
@@ -61,16 +61,16 @@
     "@types/node": "^24.13.3",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "esbuild": "^0.28.1",
+    "esbuild": "^0.28.2",
     "eslint": "^9",
     "eslint-config-next": "15.5.23",
     "eslint-plugin-react-hooks": "^5.2.0",
     "postcss": "^8.5.26",
     "tailwindcss": "^4.3.1",
-    "tsx": "^4.23.10",
+    "tsx": "^4.23.12",
     "typescript": "^5",
     "vitest": "^4.1.10",
-    "wrangler": "^4.119.0"
+    "wrangler": "^4.123.0"
   },
   "overrides": {
     "hosted-git-info": "^7.0.0",
