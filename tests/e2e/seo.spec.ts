@@ -202,8 +202,22 @@ test.describe('Page Performance Indicators', () => {
       links.map(link => link.getAttribute('href'))
     )
 
-    // Should preconnect to fonts at minimum
-    const hasGoogleFonts = hrefs.some(h => h?.includes('fonts.googleapis.com') || h?.includes('fonts.gstatic.com'))
+    // Should preconnect to fonts at minimum.
+    //
+    // Matched on the parsed hostname rather than with includes(). A substring
+    // test passes for https://evil.example/?x=fonts.googleapis.com, which is
+    // what CodeQL flags as incomplete URL sanitization, and a preconnect to an
+    // attacker-controlled origin is exactly the thing this assertion should
+    // fail on rather than wave through.
+    const FONT_ORIGINS = new Set(['fonts.googleapis.com', 'fonts.gstatic.com'])
+    const hasGoogleFonts = hrefs.some(h => {
+      if (!h) return false
+      try {
+        return FONT_ORIGINS.has(new URL(h, 'https://jerrycanspirits.co.uk').hostname)
+      } catch {
+        return false
+      }
+    })
     expect(hasGoogleFonts).toBe(true)
   })
 })
