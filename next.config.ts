@@ -320,6 +320,16 @@ const nextConfig: NextConfig = {
         destination: '/field-manual/cocktails/margarita/',
         permanent: true,
       },
+      // Fever-Tree discontinued their Smoky Ginger Ale: it is absent from
+      // their gingers range and the product URL 404s (checked 17 Aug 2026),
+      // so the ingredient doc was deleted rather than left describing a
+      // bottle nobody can buy. Nearest surviving relative is their standard
+      // ginger ale, which shares the same three-ginger blend.
+      {
+        source: '/field-manual/ingredients/fever-tree-smoky-ginger-ale/:path*',
+        destination: '/field-manual/ingredients/fever-tree-ginger-ale/',
+        permanent: true,
+      },
       // The slate coaster's original Shopify handle; Google still crawls the
       // old URL from memory and reports a soft 404 (GSC, 28 Jul 2026).
       {
