@@ -6,20 +6,37 @@
  * copy pass, so the batch review knows what it is looking for rather than
  * discovering each tic 349 times.
  *
- * Two measurements:
+ * Three measurements:
  *
  * 1. REPEATED PHRASES. Every 5-word sequence that appears in three or more
  *    DIFFERENT cocktails. A phrase repeated across documents is a template;
  *    one repeated inside a single document is emphasis.
  *
- * 2. NEAR-DUPLICATE DESCRIPTIONS. Jaccard similarity over word trigrams. Two
+ * 2. REPEATED SENTENCES. A whole sentence appearing verbatim in two or more
+ *    different documents. Two is enough here where it is not enough for a
+ *    phrase: five words can coincide, a whole sentence is copy-paste.
+ *
+ * 3. NEAR-DUPLICATE DESCRIPTIONS. Jaccard similarity over word trigrams. Two
  *    descriptions sharing most of their trigrams are the same paragraph with
  *    the nouns swapped.
+ *
+ * MEASUREMENT DEFECT FIXED 2026-08-17. Phrases were counted over the whole
+ * document as one joined string, so an n-gram could span the end of one block
+ * and the start of the next. Every heading therefore fused to the paragraph
+ * beneath it and the top of the report measured the page template rather than
+ * the writing: "where it comes from the" appeared 51 times and "how to serve
+ * it shaken" 50, which are two headings counted over and over. Phrases are now
+ * built inside a passage and never across one, and headings are excluded
+ * outright, because "How to Serve It" repeats by design.
+ *
+ * The second measurement exists because the first could not see the defect
+ * that prompted this: Alaska and Bijou carried "Stir for the full 30 to 40
+ * seconds" verbatim, and at two documents it sat under the phrase threshold.
  *
  * Read-only. Writes nothing.
  */
 import { getCliClient } from 'sanity/cli'
-import { extractText } from '../src/lib/sanity-text'
+import { blockPlainText, extractText } from '../src/lib/sanity-text'
 
 const client = getCliClient()
 
@@ -56,6 +73,43 @@ interface Doc {
   history: string | null
 }
 
+interface Block {
+  _type?: string
+  style?: string
+  children?: Array<{ text?: string }>
+}
+
+/**
+ * A document as the passages a reader meets, rather than one joined string.
+ *
+ * A phrase that spans the end of one block and the start of the next is not a
+ * phrase anybody wrote, and counting them made the page template the loudest
+ * finding in the report. Headings are dropped entirely: they repeat across the
+ * corpus by design and say nothing about the prose.
+ */
+function passages(d: Doc): string[] {
+  const out: string[] = []
+  for (const field of [d.description, d.note, d.history]) {
+    if (field?.trim()) out.push(field)
+  }
+  for (const block of (d.longDescription as Block[] | null) ?? []) {
+    if (block?._type !== 'block' || /^h[1-6]$/.test(block.style ?? '')) continue
+    const text = blockPlainText(block)
+    if (text.trim()) out.push(text)
+  }
+  return out
+}
+
+/** Sentences of at least this many words. Shorter ones coincide too easily. */
+const SENTENCE_MIN_WORDS = 6
+
+function sentences(passage: string): string[] {
+  return passage
+    .split(/(?<=[.!?])\s+/)
+    .map((s) => norm(s))
+    .filter((s) => s.split(' ').filter(Boolean).length >= SENTENCE_MIN_WORDS)
+}
+
 async function main() {
   // Ingredients and equipment carry the same tics: the Tia Maria, Hot Sauce,
   // Whole Milk and Green Ginger Wine pages all held CMS vocabulary. Scanning
@@ -69,6 +123,7 @@ async function main() {
 
   // ---- 1. Repeated phrases across documents -------------------------------
   const phraseDocs = new Map<string, Set<string>>()
+  const sentenceDocs = new Map<string, Set<string>>()
   const bodies = new Map<string, string>()
 
   for (const d of docs) {
@@ -85,8 +140,18 @@ async function main() {
       continue
     }
     bodies.set(d.name, norm(text))
-    const words = norm(text).split(' ').filter(Boolean)
-    for (const g of new Set(ngrams(words, NGRAM))) {
+
+    // Per passage, never across one. See the note on passages() above.
+    const seen = new Set<string>()
+    for (const passage of passages(d)) {
+      const words = norm(passage).split(' ').filter(Boolean)
+      for (const g of ngrams(words, NGRAM)) seen.add(g)
+      for (const s of sentences(passage)) {
+        if (!sentenceDocs.has(s)) sentenceDocs.set(s, new Set())
+        sentenceDocs.get(s)!.add(d.name)
+      }
+    }
+    for (const g of seen) {
       if (!phraseDocs.has(g)) phraseDocs.set(g, new Set())
       phraseDocs.get(g)!.add(d.name)
     }
@@ -103,7 +168,24 @@ async function main() {
     console.log(`       ${[...set].slice(0, 6).join(', ')}${set.size > 6 ? `, +${set.size - 6}` : ''}`)
   }
 
-  // ---- 2. Near-duplicate descriptions --------------------------------------
+  // ---- 2. Sentences repeated across documents ------------------------------
+  //
+  // Two documents is the threshold, against three for phrases. A five-word run
+  // can coincide; a whole sentence appearing twice is a paste. This is the
+  // measurement that finds the Alaska and Bijou case, which the phrase list
+  // could not reach.
+  const repeatedSentences = [...sentenceDocs.entries()]
+    .filter(([, set]) => set.size >= 2)
+    .sort((a, b) => b[1].size - a[1].size || b[0].length - a[0].length)
+
+  console.log(`\n\n=== SENTENCES APPEARING VERBATIM IN 2+ DIFFERENT DOCUMENTS ===`)
+  console.log(`${repeatedSentences.length} distinct sentences\n`)
+  for (const [sentence, set] of repeatedSentences.slice(0, 40)) {
+    console.log(`  ${String(set.size).padStart(3)}  "${sentence}"`)
+    console.log(`       ${[...set].slice(0, 6).join(', ')}${set.size > 6 ? `, +${set.size - 6}` : ''}`)
+  }
+
+  // ---- 3. Near-duplicate descriptions --------------------------------------
   const shingles = new Map<string, Set<string>>()
   for (const d of docs) {
     if (!d.description) continue
@@ -122,7 +204,7 @@ async function main() {
   }
   pairs.sort((x, y) => y.score - x.score)
 
-  // ---- 3. Named tics --------------------------------------------------------
+  // ---- 4. Named tics --------------------------------------------------------
   //
   // The n-gram list mixes two very different things. Serving method repeats
   // ("double strained into a chilled coupe") are technical accuracy: there are
