@@ -3,6 +3,7 @@ import CocktailFacetPage from '@/components/CocktailFacetPage'
 import { getFacets, getMemberCounts } from '@/lib/facet-data'
 import { copyFor, renderCopy } from '@/lib/facet-copy'
 import { canonicalFor, robotsFor, titleFor } from '@/lib/cocktail-facets'
+import { OG_IMAGE_COCKTAIL, baseOpenGraph } from '@/lib/og'
 
 const KIND = 'style' as const
 
@@ -42,6 +43,14 @@ export async function generateMetadata({ params }: { params: Promise<{ value: st
       ? renderCopy(copy.description, ctx)
       : `${facet.count} ${facet.label.toLowerCase()} cocktail recipes from the Jerry Can Spirits Field Manual.`,
     alternates: { canonical: `https://jerrycanspirits.co.uk${canonicalFor(facet)}` },
+    // og:url is required by the Open Graph protocol and was absent, which is
+    // why the crawl reported these cards invalid while every other attribute
+    // was present. Title and description resolve from the fields above.
+    openGraph: {
+      ...baseOpenGraph,
+      url: `https://jerrycanspirits.co.uk${canonicalFor(facet)}`,
+      images: OG_IMAGE_COCKTAIL,
+    },
     robots: robotsFor(facet),
   }
 }
