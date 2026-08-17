@@ -413,6 +413,7 @@ export default defineType({
           {title: 'Tequila', value: 'tequila'},
           {title: 'Mezcal', value: 'mezcal'},
           {title: 'Bourbon', value: 'bourbon'},
+          {title: 'Tennessee Whiskey', value: 'tennessee-whiskey'},
           {title: 'Rye Whiskey', value: 'rye-whiskey'},
           {title: 'Scotch', value: 'scotch'},
           {title: 'Irish Whiskey', value: 'irish-whiskey'},
