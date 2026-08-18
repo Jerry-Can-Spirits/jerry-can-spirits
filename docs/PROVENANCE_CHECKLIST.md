@@ -46,6 +46,15 @@ as an editorial feature, not as a production credit, not as a link, not in an
 image caption or alt text. This is not open to interpretation. The same applies
 to its brand names (Steeltown, Dragon's Breath) in any context that concerns us.
 
+**Read to the end of this rule before acting on the brand names.** "In any
+context that concerns us" is doing real work in that sentence, and read as a
+blanket ban on the words it produces the wrong answer. Our own Dragon's Breath
+cocktail is ruled acceptable and is listed under Known acceptable hits below, as
+is the Penderyn ingredient page: a third party's Welsh location is a fact about
+them, not a provenance claim about our rum. Two separate sessions have reached
+this paragraph, stopped, and proposed renaming a house serve that the founder
+had already cleared.
+
 **The carve-out (added August 2026).** The policy governs *what we say*. It does
 not extend to a printed label from a concluded production run stating a legally
 required fact. Batch 001 was produced at Spirit of Wales; the label identifying
@@ -158,7 +167,24 @@ These trip the grep every time and have been ruled on. Leave them alone.
   syrup and ginger beer. It collides with the former producer's brand name and
   is unrelated to it: they produce a spirit under that name, we publish a
   recipe. Ruled acceptable by the founder on 9 August 2026. The brand-name rule
-  above still governs any reference to their product.
+  above still governs any reference to their product. Reaffirmed 18 August 2026
+  with the founder's reasoning recorded: several Dragon's Breath drinks exist in
+  canon on wildly different recipes, the name is not ownable, and ours is more
+  likely to take search traffic from the former producer than to send them any.
+- The Penderyn Welsh Whisky ingredient page, and the Welsh Gold and Snowdonia
+  Sour serves built on it. Penderyn is an unrelated third-party distillery, and
+  its Welsh location and hill water are facts about Penderyn. The banned
+  constructions concern *our* rum's provenance; they do not make Wales an
+  unmentionable word.
+
+**The Sanity sweep now carries its own allow-list.** `ALLOWED` in
+`scripts/audit-provenance-claims.ts` holds the exempt sentences in full, so the
+sweep exits zero on a clean run instead of failing permanently and teaching
+everyone to ignore it. That list is keyed on the exact sentence: edit an exempt
+sentence and it returns to tier one for review, and an entry matching nothing is
+reported as stale rather than left standing. This document holds the reasoning;
+the script holds the text. Adding an entry is a founder decision, and the two
+should be updated together.
 
 ## Rule when a hit is a real claim
 

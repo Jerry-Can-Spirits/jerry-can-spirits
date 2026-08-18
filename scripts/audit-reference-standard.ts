@@ -20,6 +20,7 @@
  *       ...add -- --list=20 to cap the report.
  */
 import { getCliClient } from 'sanity/cli'
+import { BANDS, FAQ_ANSWER_FLOOR } from './reference-bands'
 import { selfReferences } from './self-reference'
 
 const client = getCliClient()
@@ -124,7 +125,7 @@ function measure(doc: Doc): Measured {
     storage: words(doc.storage),
     faqs: faqAnswers.length,
     faqAnswers,
-    shortFaqs: faqAnswers.filter((n) => n < 30).length,
+    shortFaqs: faqAnswers.filter((n) => n < FAQ_ANSWER_FLOOR).length,
     selfRefs: selfReferences(prose),
   }
 }
@@ -167,22 +168,6 @@ async function main() {
     const selfRef = set.filter((m) => m.selfRefs.length)
     console.log(`\n  self-reference: ${selfRef.length} of ${set.length} exemplars carry any.`)
     return
-  }
-
-  // Bands, derived by --derive on 14 August 2026 across 17 exemplar ingredient
-  // pages and recorded here so the audit and the written standard cannot drift
-  // apart. Each floor sits at or below the lowest exemplar rather than at a
-  // round number: the cocktail standard was first written with asserted bands
-  // its own best page failed on three counts out of four, and an audit against
-  // a wrong ruler reports the corpus failing when it is the ruler that is bent.
-  //
-  // Measured: description 35-53, long 349-422, sections 4, usage 34-51, faqs 4.
-  const BANDS = {
-    description: [35, 60] as const,
-    long: [330, 450] as const,
-    sections: [4, 5] as const,
-    usage: [30, 65] as const,
-    faqs: [4, 6] as const,
   }
 
   const measured = docs.map(measure)

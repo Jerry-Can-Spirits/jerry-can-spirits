@@ -23,6 +23,7 @@
  *       ...add --write to execute.
  */
 import { getCliClient } from 'sanity/cli'
+import { BANDS, FAQ_ANSWER_FLOOR } from './reference-bands'
 import { selfReferences } from './self-reference'
 import { voiceBreaches, voiceReviews } from './voice-rules'
 
@@ -234,10 +235,14 @@ async function apply(p: Patch) {
     `    description ${words(finalDescription)}w | usage ${words(finalUsage)}w | long ${long}w / ${sections} sections`
   )
   console.log(`    faqs ${answers.join(', ') || 'none'}`)
-  const thin = answers.filter((n) => n < 30).length
-  if (thin) console.log(`    !! ${thin} FAQ answer(s) under 30 words`)
-  if (long < 330) console.log(`    !! long description under band (330w)`)
-  if (sections < 4) console.log(`    !! ${sections} sections, band is 4`)
+  const thin = answers.filter((n) => n < FAQ_ANSWER_FLOOR).length
+  if (thin) console.log(`    !! ${thin} FAQ answer(s) under ${FAQ_ANSWER_FLOOR} words`)
+  if (words(finalDescription) < BANDS.description[0])
+    console.log(`    !! description under band (${BANDS.description[0]}w)`)
+  if (words(finalUsage) < BANDS.usage[0]) console.log(`    !! usage under band (${BANDS.usage[0]}w)`)
+  if (long < BANDS.long[0]) console.log(`    !! long description under band (${BANDS.long[0]}w)`)
+  if (sections < BANDS.sections[0]) console.log(`    !! ${sections} sections, band is ${BANDS.sections[0]}`)
+  if (faqs.length < BANDS.faqs[0]) console.log(`    !! ${faqs.length} faqs, band is ${BANDS.faqs[0]}`)
 
   const prose = [
     finalDescription,
