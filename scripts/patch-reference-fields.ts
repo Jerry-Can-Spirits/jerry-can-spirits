@@ -1,10 +1,12 @@
 /**
  * Patch named fields on an ingredient or equipment page, leaving the rest alone.
  *
- * The counterpart to scripts/patch-cocktail-fields.ts, which has carried every
- * cocktail copy pass and has no equivalent on the reference side. 282 of 298
- * ingredient pages and all 72 equipment pages miss at least one band of the
- * standard, and single-purpose fix scripts cannot carry a pass that size.
+ * The counterpart to scripts/patch-cocktail-fields.ts, which had carried every
+ * cocktail copy pass and had no equivalent on the reference side. When this was
+ * written, 282 of 298 ingredient pages and all 72 equipment pages missed at
+ * least one band of the standard, and single-purpose fix scripts cannot carry a
+ * pass that size. It carried all 297 ingredient pages to standard over August
+ * 2026 and is kept for the next one.
  *
  * Everything is addressed by content rather than by index: FAQ answers by their
  * existing question, section bodies by their existing heading. An address that
@@ -12,10 +14,11 @@
  * loudly instead of writing nothing — the failure mode that let the Clover Club
  * ship an instruction naming an ingredient it no longer had.
  *
- * The dry run prints the bands from scripts/audit-reference-standard.ts, any
- * self-reference, and any breach of the docs/VOICE.md hard rules, so a page
- * cannot pass review by being long enough while writing about itself or in the
- * wrong voice.
+ * The dry run measures a draft against scripts/reference-bands.ts, the same
+ * module scripts/audit-reference-standard.ts imports, so a draft is judged by
+ * the ruler that will judge it once published. It also reports self-reference
+ * and any breach of the docs/VOICE.md hard rules, so a page cannot pass review
+ * by being long enough while writing about itself or in the wrong voice.
  *
  * Transient. Reset with `git checkout -- scripts/patch-reference-fields.ts`.
  *
