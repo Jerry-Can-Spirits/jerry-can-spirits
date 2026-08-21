@@ -81,6 +81,17 @@ interface Patch {
   addFaqs?: Array<[string, string]>
   /** Ingredients only. Replaces the whole object. */
   flavorProfile?: { primary: string[]; strength: string; tasting: string }
+  /**
+   * Ingredients only. Replaces the whole object, so both tiers are always
+   * stated together.
+   *
+   * `null` on a tier clears it, which is how a single-answer ingredient is
+   * expressed. Angostura and Campari have one producer and the answer for lime
+   * juice is a ripe lime, so filling both tiers printed the same pick twice on
+   * 34 pages. A lone entry renders as "Recommended" rather than as the cheap
+   * option. Clearing both would leave the block empty, and throws.
+   */
+  recommendedBrands?: { budget: string | null; premium: string | null }
 }
 
 const BATCHES: Record<number, Patch[]> = {
@@ -143,6 +154,14 @@ async function apply(p: Patch) {
   if (p.professionalTip !== undefined) set.professionalTip = p.professionalTip
   if (p.whatToLookFor !== undefined) set.whatToLookFor = p.whatToLookFor
   if (p.flavorProfile !== undefined) set.flavorProfile = p.flavorProfile
+  if (p.recommendedBrands !== undefined) {
+    const { budget, premium } = p.recommendedBrands
+    if (!budget && !premium) throw new Error(`${p.name}: recommendedBrands would be empty`)
+    const brands: Record<string, string> = {}
+    if (budget) brands.budget = budget
+    if (premium) brands.premium = premium
+    set.recommendedBrands = brands
+  }
 
   // Long description: replace bodies by heading, rename headings, append new
   // sections. Rebuilt as a whole array because a heading's body is a run of
@@ -247,6 +266,18 @@ async function apply(p: Patch) {
   if (sections < BANDS.sections[0]) console.log(`    !! ${sections} sections, band is ${BANDS.sections[0]}`)
   if (faqs.length < BANDS.faqs[0]) console.log(`    !! ${faqs.length} faqs, band is ${BANDS.faqs[0]}`)
 
+  if (p.recommendedBrands) {
+    const { budget, premium } = p.recommendedBrands
+    console.log(`    brands (${budget && premium ? 'two tiers' : 'single "Recommended"'})`)
+    for (const [tier, text] of [['budget', budget], ['premium', premium]] as const) {
+      if (!text) continue
+      console.log(`      ${tier}: ${text}`)
+      // The schema asks for "Brand: the reason". A pick with no reason is the
+      // thing this pass exists to remove, so say so rather than write it twice.
+      if (!text.includes(':')) console.log(`      !! ${tier} names a brand with no reason`)
+    }
+  }
+
   const prose = [
     finalDescription,
     finalUsage,
@@ -255,6 +286,8 @@ async function apply(p: Patch) {
     ...(p.whatToLookFor ?? []),
     p.history,
     p.professionalTip,
+    p.recommendedBrands?.budget,
+    p.recommendedBrands?.premium,
     blockText(blocks),
     ...faqs.flatMap((f) => [f.question, f.answer]),
   ]

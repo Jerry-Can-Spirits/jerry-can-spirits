@@ -101,19 +101,19 @@ export default defineType({
       title: 'Recommended Brands',
       type: 'object',
       description:
-        'Editorial picks, not a shop. Write each as "Brand: the reason", e.g. "Hayman\'s Old Tom: the modern benchmark". No prices and no links: prices go stale unowned, and a link would need a commercial relationship we do not have.',
+        'Editorial picks, not a shop. Write each as "Brand: the reason", e.g. "Hayman\'s Old Tom: the modern benchmark". No prices and no links: prices go stale unowned, and a link would need a commercial relationship we do not have. Where there is no real split, fill ONE field and leave the other empty; the page then shows a single "Recommended" line instead of printing the same pick twice.',
       fields: [
         defineField({
           name: 'budget',
           title: 'Budget Choice',
           type: 'string',
-          description: 'The everyday bottle, and why it is the one to reach for.'
+          description: 'The everyday bottle, and why it is the one to reach for. Leave empty if the ingredient has one obvious answer at any price.'
         }),
         defineField({
           name: 'premium',
           title: 'Premium Choice',
           type: 'string',
-          description: 'The one worth paying up for, and what the money buys.'
+          description: 'The one worth paying up for, and what the money buys. Leave empty if there is no meaningful step up, as with a single-producer bottle or fresh fruit.'
         })
       ]
     }),

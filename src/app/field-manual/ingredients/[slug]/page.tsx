@@ -340,26 +340,43 @@ export default async function IngredientDetailPage({ params }: { params: Promise
                 </div>
               )}
 
-              {/* Recommended Brands */}
-              {ingredient.recommendedBrands && (ingredient.recommendedBrands.budget || ingredient.recommendedBrands.premium) && (
-                <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
-                  <h2 className="text-xl font-serif font-bold text-gold-300 mb-4">Recommended Brands</h2>
-                  <div className="space-y-4">
-                    {ingredient.recommendedBrands.budget && (
-                      <div className="p-3 bg-jerry-green-800/30 rounded-lg border border-gold-500/20">
-                        <p className="text-green-400 font-semibold mb-1 text-xs">Budget Choice</p>
-                        <p className="text-parchment-300 text-sm">{ingredient.recommendedBrands.budget}</p>
-                      </div>
-                    )}
-                    {ingredient.recommendedBrands.premium && (
-                      <div className="p-3 bg-jerry-green-800/30 rounded-lg border border-gold-500/20">
-                        <p className="text-gold-400 font-semibold mb-1 text-xs">Premium Choice</p>
-                        <p className="text-parchment-300 text-sm">{ingredient.recommendedBrands.premium}</p>
-                      </div>
-                    )}
+              {/* Recommended Brands.
+                  Plenty of ingredients have no budget/premium split to make:
+                  Angostura and Campari have one producer, and the answer for
+                  lime juice is a ripe lime rather than a brand. Filling both
+                  tiers there meant printing the same pick twice. A lone entry
+                  is therefore shown as "Recommended" rather than mislabelled
+                  as the cheap option. */}
+              {ingredient.recommendedBrands && (ingredient.recommendedBrands.budget || ingredient.recommendedBrands.premium) && (() => {
+                const { budget, premium } = ingredient.recommendedBrands
+                const sole = budget && premium ? null : budget || premium
+                return (
+                  <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+                    <h2 className="text-xl font-serif font-bold text-gold-300 mb-4">
+                      {sole ? 'Recommended Brand' : 'Recommended Brands'}
+                    </h2>
+                    <div className="space-y-4">
+                      {sole ? (
+                        <div className="p-3 bg-jerry-green-800/30 rounded-lg border border-gold-500/20">
+                          <p className="text-gold-400 font-semibold mb-1 text-xs">Recommended</p>
+                          <p className="text-parchment-300 text-sm">{sole}</p>
+                        </div>
+                      ) : (
+                        <>
+                          <div className="p-3 bg-jerry-green-800/30 rounded-lg border border-gold-500/20">
+                            <p className="text-green-400 font-semibold mb-1 text-xs">Budget Choice</p>
+                            <p className="text-parchment-300 text-sm">{budget}</p>
+                          </div>
+                          <div className="p-3 bg-jerry-green-800/30 rounded-lg border border-gold-500/20">
+                            <p className="text-gold-400 font-semibold mb-1 text-xs">Premium Choice</p>
+                            <p className="text-parchment-300 text-sm">{premium}</p>
+                          </div>
+                        </>
+                      )}
+                    </div>
                   </div>
-                </div>
-              )}
+                )
+              })()}
 
               {/* Storage & Handling */}
               {(ingredient.storage || ingredient.shelfLife) && (
