@@ -103,6 +103,14 @@ All rich editorial content goes in the `longDescription` portable text field in 
 ### Cocktail Keywords (JSON-LD)
 The `keywords` field in each cocktail document is a `string[]`. It is fetched and merged into the Recipe structured data. Enter natural search terms, not slugs. The code also appends `name`, `family`, and `baseSpirit` automatically. Do not enter raw tag values.
 
+### Allergens
+An ingredient page has to name an allergen a reader could not guess from the
+page's own title: almond in orgeat, anchovy in Worcestershire sauce, celery
+seed in a celery salt rim. `scripts/audit-allergens.ts` holds the register and
+checks it against published prose; run it after any ingredient content change.
+Allergens that follow from what the ingredient plainly is (egg in egg white,
+sulphites in sherry) are tracked but deliberately not repeated on every page.
+
 ### "Need the Rum?" CTA
 Only renders on cocktails where `baseSpirit === 'spiced-rum'`. Intentional — it is inaccurate on non-Jerry Can cocktails.
 
