@@ -73,13 +73,26 @@ interface Ours {
   ing: Array<{ name: string; amount: string | null }> | null
 }
 
+/**
+ * Entities are replaced in one pass, not one call each.
+ *
+ * Unescaping &amp; before the others turns "&amp;nbsp;" into "&nbsp;" and the
+ * next replace then eats it, so a literal entity in the source silently becomes
+ * a space. CodeQL flags the chained form as double-unescaping and it is right.
+ */
+const ENTITIES: Record<string, string> = {
+  '&nbsp;': ' ',
+  '&amp;': '&',
+  '&#8217;': '’',
+  '&rsquo;': '’',
+  '&#8211;': '-',
+  '&ndash;': '-',
+}
+
 const decode = (s: string) =>
   s
     .replace(/<[^>]+>/g, ' ')
-    .replace(/&nbsp;/g, ' ')
-    .replace(/&amp;/g, '&')
-    .replace(/&#8217;|&rsquo;/g, '’')
-    .replace(/&#8211;|&ndash;/g, '-')
+    .replace(/&(?:nbsp|amp|rsquo|ndash|#8217|#8211);/g, (m) => ENTITIES[m] ?? m)
     .replace(/\s+/g, ' ')
     .trim()
 
@@ -92,9 +105,26 @@ function section(html: string, heading: string): string {
   return block ? block[1] : ''
 }
 
+/**
+ * Ingredient lines, splitting list items that ran together at the source.
+ *
+ * The Three Dots and a Dash page publishes "7.5 ml Allspice Saint Elizabeth15
+ * ml Fresh Lime Juice" as a single <li>: two ingredients with no separator.
+ * Read whole, the measure at the front is 7.5ml and the name at the end is
+ * Fresh Lime Juice, which is how this script came to report that our 15ml of
+ * lime contradicted the IBA. It does not. A new measure appearing mid-string
+ * with no space before it starts a new line.
+ *
+ * The lookbehind excludes digits deliberately. Allowing any non-space split
+ * "15 ml" between the 1 and the 5, which turned every measure in the corpus
+ * into a 5ml divergence and produced a report claiming 216 of them.
+ */
 function ibaIngredients(html: string): string[] {
   const block = section(html, 'Ingredients')
-  return [...block.matchAll(/<li>([\s\S]*?)<\/li>/g)].map((m) => decode(m[1])).filter(Boolean)
+  return [...block.matchAll(/<li>([\s\S]*?)<\/li>/g)]
+    .flatMap((m) => decode(m[1]).split(/(?<=[^\s\d.,])(?=\d+(?:[.,]\d+)?\s*ml\b)/i))
+    .map((s) => s.trim())
+    .filter(Boolean)
 }
 
 function fetchPage(slug: string): string | null {
