@@ -36,20 +36,12 @@ interface Equipment {
   image?: { asset: { url: string }; alt?: string }
   featured: boolean
   // Enhanced fields
-  priceRange?: {
-    budget: number
-    premium: number
-  }
   whatToLookFor?: string[]
   commonMistakes?: string[]
   careInstructions?: string[] | string  // Support both old (string) and new (array) format
   lifespan?: string[] | string  // Support both old (string) and new (array) format
   budgetAlternative?: string
-  budgetLink?: string
-  budgetImage?: { asset: { url: string }; alt?: string }
   premiumOption?: string
-  premiumLink?: string
-  premiumImage?: { asset: { url: string }; alt?: string }
   ownProduct?: { name?: string; path?: string; note?: string }
   author?: string
   relatedEquipment?: Array<{
@@ -272,72 +264,21 @@ export default async function EquipmentDetailPage({ params }: { params: Promise<
                 </div>
               )}
 
-              {/* Price Range - Mobile Order 11 */}
-              {equipment.priceRange && (
-                <div className="order-11 lg:order-0 bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
-                  <h3 className="text-lg font-serif font-bold text-gold-300 mb-4">Price Guide</h3>
-                  <div className="space-y-3">
-                    <div className="flex justify-between items-center">
-                      <span className="text-parchment-300">Budget Option</span>
-                      <span className="text-green-400 font-semibold">£{equipment.priceRange.budget}</span>
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <span className="text-parchment-300">Premium Option</span>
-                      <span className="text-gold-400 font-semibold">£{equipment.priceRange.premium}</span>
-                    </div>
-                  </div>
-                </div>
-              )}
-
               {/* Alternatives - Mobile Order 12 */}
               {(equipment.budgetAlternative || equipment.premiumOption) && (
                 <div className="order-12 lg:order-0 bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
                   <h3 className="text-lg font-serif font-bold text-gold-300 mb-4">Alternatives</h3>
                   <div className="space-y-4">
                     {equipment.budgetAlternative && (
-                      <div className="flex items-start gap-3">
-                        {equipment.budgetImage && (
-                          <Image
-                            src={urlFor(equipment.budgetImage).url()}
-                            alt={equipment.budgetImage.alt || equipment.budgetAlternative}
-                            width={56}
-                            height={56}
-                            className="w-14 h-14 object-cover rounded-lg shrink-0"
-                          />
-                        )}
-                        <div>
-                          <p className="text-green-400 font-semibold text-sm mb-1">Budget Alternative</p>
-                          {equipment.budgetLink ? (
-                            <a href={equipment.budgetLink} target="_blank" rel="noopener noreferrer" className="text-parchment-300 hover:text-parchment-200 underline transition-colors">
-                              {equipment.budgetAlternative}
-                            </a>
-                          ) : (
-                            <p className="text-parchment-300">{equipment.budgetAlternative}</p>
-                          )}
-                        </div>
+                      <div>
+                        <p className="text-green-400 font-semibold text-sm mb-1">Budget Alternative</p>
+                        <p className="text-parchment-300">{equipment.budgetAlternative}</p>
                       </div>
                     )}
                     {equipment.premiumOption && (
-                      <div className="flex items-start gap-3">
-                        {equipment.premiumImage && (
-                          <Image
-                            src={urlFor(equipment.premiumImage).url()}
-                            alt={equipment.premiumImage.alt || equipment.premiumOption}
-                            width={56}
-                            height={56}
-                            className="w-14 h-14 object-cover rounded-lg shrink-0"
-                          />
-                        )}
-                        <div>
-                          <p className="text-gold-400 font-semibold text-sm mb-1">Premium Option</p>
-                          {equipment.premiumLink ? (
-                            <a href={equipment.premiumLink} target="_blank" rel="noopener noreferrer" className="text-parchment-300 hover:text-parchment-200 underline transition-colors">
-                              {equipment.premiumOption}
-                            </a>
-                          ) : (
-                            <p className="text-parchment-300">{equipment.premiumOption}</p>
-                          )}
-                        </div>
+                      <div>
+                        <p className="text-gold-400 font-semibold text-sm mb-1">Premium Option</p>
+                        <p className="text-parchment-300">{equipment.premiumOption}</p>
                       </div>
                     )}
                   </div>

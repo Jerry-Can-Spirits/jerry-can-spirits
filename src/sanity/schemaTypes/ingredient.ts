@@ -100,90 +100,20 @@ export default defineType({
       name: 'recommendedBrands',
       title: 'Recommended Brands',
       type: 'object',
+      description:
+        'Editorial picks, not a shop. Write each as "Brand: the reason", e.g. "Hayman\'s Old Tom: the modern benchmark". No prices and no links: prices go stale unowned, and a link would need a commercial relationship we do not have.',
       fields: [
         defineField({
           name: 'budget',
           title: 'Budget Choice',
           type: 'string',
-          description: 'Recommended budget brand name'
-        }),
-        defineField({
-          name: 'budgetLink',
-          title: 'Budget Choice Link',
-          type: 'url',
-          description: 'Master of Malt affiliate link for budget option'
-        }),
-        defineField({
-          name: 'budgetNutrition',
-          title: 'Budget Choice - Nutrition',
-          type: 'object',
-          description: 'Nutritional information for budget brand',
-          fields: [
-            defineField({
-              name: 'calories',
-              title: 'Calories (kcal)',
-              type: 'number',
-              description: 'Energy content in kilocalories'
-            }),
-            defineField({
-              name: 'unit',
-              title: 'Per Unit',
-              type: 'string',
-              options: {
-                list: [
-                  {title: 'per 100ml', value: 'per 100ml'},
-                  {title: 'per 100g', value: 'per 100g'},
-                  {title: 'per piece', value: 'per piece'},
-                  {title: 'per serving', value: 'per serving'},
-                  {title: 'per shot (25ml)', value: 'per shot (25ml)'},
-                  {title: 'per dash', value: 'per dash'}
-                ]
-              },
-              description: 'Unit of measurement for the calorie value'
-            })
-          ]
+          description: 'The everyday bottle, and why it is the one to reach for.'
         }),
         defineField({
           name: 'premium',
           title: 'Premium Choice',
           type: 'string',
-          description: 'Recommended premium brand name'
-        }),
-        defineField({
-          name: 'premiumLink',
-          title: 'Premium Choice Link',
-          type: 'url',
-          description: 'Master of Malt affiliate link for premium option'
-        }),
-        defineField({
-          name: 'premiumNutrition',
-          title: 'Premium Choice - Nutrition',
-          type: 'object',
-          description: 'Nutritional information for premium brand',
-          fields: [
-            defineField({
-              name: 'calories',
-              title: 'Calories (kcal)',
-              type: 'number',
-              description: 'Energy content in kilocalories'
-            }),
-            defineField({
-              name: 'unit',
-              title: 'Per Unit',
-              type: 'string',
-              options: {
-                list: [
-                  {title: 'per 100ml', value: 'per 100ml'},
-                  {title: 'per 100g', value: 'per 100g'},
-                  {title: 'per piece', value: 'per piece'},
-                  {title: 'per serving', value: 'per serving'},
-                  {title: 'per shot (25ml)', value: 'per shot (25ml)'},
-                  {title: 'per dash', value: 'per dash'}
-                ]
-              },
-              description: 'Unit of measurement for the calorie value'
-            })
-          ]
+          description: 'The one worth paying up for, and what the money buys.'
         })
       ]
     }),
@@ -203,54 +133,6 @@ export default defineType({
         hotspot: true
       },
       description: 'Main product image (or budget option if using separate images)',
-      fields: [
-        defineField({
-          name: 'alt',
-          title: 'Alt Text',
-          type: 'string',
-          description: 'Describe what is visible in the image. Used for accessibility and SEO.',
-        })
-      ],
-      preview: {
-        select: {
-          imageUrl: 'asset.url',
-          title: 'asset.originalFilename',
-        }
-      }
-    }),
-    defineField({
-      name: 'budgetImage',
-      title: 'Budget Option Image',
-      type: 'image',
-      options: {
-        storeOriginalFilename: true,
-        hotspot: true
-      },
-      description: 'Image for budget brand recommendation (optional - leave empty to use main image)',
-      fields: [
-        defineField({
-          name: 'alt',
-          title: 'Alt Text',
-          type: 'string',
-          description: 'Describe what is visible in the image. Used for accessibility and SEO.',
-        })
-      ],
-      preview: {
-        select: {
-          imageUrl: 'asset.url',
-          title: 'asset.originalFilename',
-        }
-      }
-    }),
-    defineField({
-      name: 'premiumImage',
-      title: 'Premium Option Image',
-      type: 'image',
-      options: {
-        storeOriginalFilename: true,
-        hotspot: true
-      },
-      description: 'Image for premium brand recommendation (optional - leave empty to use main image)',
       fields: [
         defineField({
           name: 'alt',
@@ -351,30 +233,10 @@ export default defineType({
 
     // Buying Guide
     defineField({
-      name: 'priceRange',
-      title: 'Price Range',
-      type: 'object',
-      description: 'Expected price range for this ingredient',
-      fields: [
-        defineField({
-          name: 'budget',
-          title: 'Budget Option (£)',
-          type: 'number',
-          description: 'Typical budget price in GBP'
-        }),
-        defineField({
-          name: 'premium',
-          title: 'Premium Option (£)',
-          type: 'number',
-          description: 'Typical premium price in GBP'
-        })
-      ]
-    }),
-    defineField({
       name: 'rrp',
       title: 'RRP (£)',
       type: 'number',
-      description: 'For named branded products with a single price (e.g. Jerry Can Spirits Expedition Spiced Rum, a specific Fever-Tree mixer). Use instead of Price Range, which is for generic ingredients with budget and premium versions.'
+      description: 'The published RRP of a single named product. Ours is the only price we control, so this is the only price the Field Manual states.'
     }),
     defineField({
       name: 'shelfLife',

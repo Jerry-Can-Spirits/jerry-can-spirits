@@ -138,8 +138,9 @@ interface WalkResult {
 
 // True when a value holds at least one string a reader could see, anywhere
 // inside it. This is what separates "the field is absent, or holds no copy" —
-// priceRange is two numbers, and silence about it is correct — from "the field
-// holds prose and we got nothing out of it", which is the failure this module
+// flavorProfile.strength is a single enum value, and silence about it is
+// correct — from "the field holds prose and we got nothing out of it", the
+// failure this module
 // exists to catch. Deliberately independent of walk(): it reads the raw
 // document, so it still reports the truth when walk() is the thing that broke.
 function containsProse(value: unknown): boolean {

@@ -161,26 +161,6 @@ export default defineType({
 
     // Buying Guide Section
     defineField({
-      name: 'priceRange',
-      title: 'Price Range',
-      type: 'object',
-      description: 'Expected price range for this equipment',
-      fields: [
-        defineField({
-          name: 'budget',
-          title: 'Budget Option (£)',
-          type: 'number',
-          description: 'Typical budget price in GBP'
-        }),
-        defineField({
-          name: 'premium',
-          title: 'Premium Option (£)',
-          type: 'number',
-          description: 'Typical premium price in GBP'
-        })
-      ]
-    }),
-    defineField({
       name: 'whatToLookFor',
       title: 'What to Look For',
       type: 'array',
@@ -203,52 +183,10 @@ export default defineType({
       description: 'Cheaper alternative or workaround (e.g., "Mason jar with lid")'
     }),
     defineField({
-      name: 'budgetLink',
-      title: 'Budget Alternative Link',
-      type: 'url',
-      description: 'Affiliate or product link for the budget alternative'
-    }),
-    defineField({
-      name: 'budgetImage',
-      title: 'Budget Alternative Image',
-      type: 'image',
-      options: {hotspot: true},
-      description: 'Image for the budget alternative (optional)',
-      fields: [
-        defineField({
-          name: 'alt',
-          title: 'Alt Text',
-          type: 'string',
-          description: 'Describe what is visible in the image. Used for accessibility and SEO.',
-        })
-      ]
-    }),
-    defineField({
       name: 'premiumOption',
       title: 'Premium Option',
       type: 'string',
-      description: 'Recommended premium brand/model'
-    }),
-    defineField({
-      name: 'premiumLink',
-      title: 'Premium Option Link',
-      type: 'url',
-      description: 'Affiliate or product link for the premium option'
-    }),
-    defineField({
-      name: 'premiumImage',
-      title: 'Premium Option Image',
-      type: 'image',
-      options: {hotspot: true},
-      description: 'Image for the premium option (optional)',
-      fields: [
-        defineField({
-          name: 'alt',
-          title: 'Alt Text',
-          type: 'string',
-          description: 'Describe what is visible in the image. Used for accessibility and SEO.',
-        })
-      ]
+      description: 'The one worth paying up for, and what the money buys. Editorial pick, not a shop: no price and no link.'
     }),
 
     // Our own product, when we sell this item. Rendered as an editorial

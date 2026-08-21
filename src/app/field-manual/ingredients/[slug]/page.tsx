@@ -8,7 +8,6 @@ import { ingredientBySlugQuery, ingredientsSitemapQuery } from '@/sanity/queries
 import { urlFor } from '@/sanity/lib/image'
 import BackToTop from '@/components/BackToTop'
 import Breadcrumbs from '@/components/Breadcrumbs'
-import EnlargeableProductImage from '@/components/EnlargeableProductImage'
 import FieldManualPortableText from '@/components/FieldManualPortableText'
 import StructuredData from '@/components/StructuredData'
 import RelatedCocktailsList from '@/components/RelatedCocktailsList'
@@ -38,22 +37,10 @@ interface Ingredient {
   topTips: string[]
   recommendedBrands?: {
     budget?: string
-    budgetLink?: string
-    budgetNutrition?: {
-      calories: number
-      unit: string
-    }
     premium?: string
-    premiumLink?: string
-    premiumNutrition?: {
-      calories: number
-      unit: string
-    }
   }
   storage?: string
   image?: { asset: { url: string }; alt?: string }
-  budgetImage?: { asset: { url: string }; alt?: string }
-  premiumImage?: { asset: { url: string }; alt?: string }
   featured: boolean
   // Enhanced fields
   flavorProfile?: {
@@ -66,10 +53,6 @@ interface Ingredient {
   productionMethod?: string
   substitutions?: string[]
   seasonality?: string
-  priceRange?: {
-    budget: number
-    premium: number
-  }
   rrp?: number
   shelfLife?: string
   videoUrl?: string
@@ -364,102 +347,17 @@ export default async function IngredientDetailPage({ params }: { params: Promise
                   <div className="space-y-4">
                     {ingredient.recommendedBrands.budget && (
                       <div className="p-3 bg-jerry-green-800/30 rounded-lg border border-gold-500/20">
-                        <div className="flex gap-3 items-start">
-                          {/* Text Content - Left */}
-                          <div className="flex-1 min-w-0">
-                            <p className="text-green-400 font-semibold mb-1 text-xs">Budget Choice</p>
-                            <p className="text-parchment-300 mb-2 text-sm">{ingredient.recommendedBrands.budget}</p>
-                            {/* Price & Calories Info */}
-                            {(ingredient.priceRange?.budget || ingredient.recommendedBrands.budgetNutrition) && (
-                              <div className="mb-3 flex flex-wrap gap-2">
-                                {ingredient.priceRange?.budget && (
-                                  <span className="inline-flex items-center px-2 py-1 bg-green-500/20 border border-green-500/30 rounded-sm text-green-400 text-xs font-semibold">
-                                    ~£{ingredient.priceRange.budget}
-                                  </span>
-                                )}
-                                {ingredient.recommendedBrands.budgetNutrition && (
-                                  <span className="inline-flex items-center px-2 py-1 bg-jerry-green-800/40 border border-gold-500/10 rounded-sm text-parchment-400 text-xs">
-                                    <span className="text-gold-400 font-semibold">{ingredient.recommendedBrands.budgetNutrition.calories} kcal</span>&nbsp;{ingredient.recommendedBrands.budgetNutrition.unit}
-                                  </span>
-                                )}
-                              </div>
-                            )}
-                            {ingredient.recommendedBrands.budgetLink && (
-                              <a
-                                href={ingredient.recommendedBrands.budgetLink}
-                                target="_blank"
-                                rel="noopener noreferrer sponsored"
-                                className="inline-flex items-center gap-1 px-3 py-1.5 bg-green-500/20 border border-green-500/40 text-green-300 rounded-lg hover:bg-green-500/30 transition-all text-xs font-semibold"
-                              >
-                                Order
-                                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                                </svg>
-                              </a>
-                            )}
-                          </div>
-
-                          {/* Image - Right Aligned */}
-                          {ingredient.budgetImage && (
-                            <EnlargeableProductImage
-                              src={urlFor(ingredient.budgetImage).url()}
-                              alt={ingredient.budgetImage?.alt || `${ingredient.recommendedBrands.budget} - Budget Choice`}
-                              productName={ingredient.recommendedBrands.budget || 'Budget Choice'}
-                            />
-                          )}
-                        </div>
+                        <p className="text-green-400 font-semibold mb-1 text-xs">Budget Choice</p>
+                        <p className="text-parchment-300 text-sm">{ingredient.recommendedBrands.budget}</p>
                       </div>
                     )}
                     {ingredient.recommendedBrands.premium && (
                       <div className="p-3 bg-jerry-green-800/30 rounded-lg border border-gold-500/20">
-                        <div className="flex gap-3 items-start">
-                          {/* Text Content - Left */}
-                          <div className="flex-1 min-w-0">
-                            <p className="text-gold-400 font-semibold mb-1 text-xs">Premium Choice</p>
-                            <p className="text-parchment-300 mb-2 text-sm">{ingredient.recommendedBrands.premium}</p>
-                            {/* Price & Calories Info */}
-                            {(ingredient.priceRange?.premium || ingredient.recommendedBrands.premiumNutrition) && (
-                              <div className="mb-3 flex flex-wrap gap-2">
-                                {ingredient.priceRange?.premium && (
-                                  <span className="inline-flex items-center px-2 py-1 bg-gold-500/20 border border-gold-500/30 rounded-sm text-gold-400 text-xs font-semibold">
-                                    ~£{ingredient.priceRange.premium}
-                                  </span>
-                                )}
-                                {ingredient.recommendedBrands.premiumNutrition && (
-                                  <span className="inline-flex items-center px-2 py-1 bg-jerry-green-800/40 border border-gold-500/10 rounded-sm text-parchment-400 text-xs">
-                                    <span className="text-gold-400 font-semibold">{ingredient.recommendedBrands.premiumNutrition.calories} kcal</span>&nbsp;{ingredient.recommendedBrands.premiumNutrition.unit}
-                                  </span>
-                                )}
-                              </div>
-                            )}
-                            {ingredient.recommendedBrands.premiumLink && (
-                              <a
-                                href={ingredient.recommendedBrands.premiumLink}
-                                target="_blank"
-                                rel="noopener noreferrer sponsored"
-                                className="inline-flex items-center gap-1 px-3 py-1.5 bg-gold-500/20 border border-gold-500/40 text-gold-300 rounded-lg hover:bg-gold-500/30 transition-all text-xs font-semibold"
-                              >
-                                Order
-                                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                                </svg>
-                              </a>
-                            )}
-                          </div>
-
-                          {/* Image - Right Aligned */}
-                          {ingredient.premiumImage && (
-                            <EnlargeableProductImage
-                              src={urlFor(ingredient.premiumImage).url()}
-                              alt={ingredient.premiumImage?.alt || `${ingredient.recommendedBrands.premium} - Premium Choice`}
-                              productName={ingredient.recommendedBrands.premium || 'Premium Choice'}
-                            />
-                          )}
-                        </div>
+                        <p className="text-gold-400 font-semibold mb-1 text-xs">Premium Choice</p>
+                        <p className="text-parchment-300 text-sm">{ingredient.recommendedBrands.premium}</p>
                       </div>
                     )}
                   </div>
-
                 </div>
               )}
 
