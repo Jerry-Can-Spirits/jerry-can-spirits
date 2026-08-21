@@ -25,18 +25,32 @@ describe('what a household jigger can pour', () => {
     expect([30, 45, 60].every(isPourable)).toBe(true)
   })
 
-  it('rejects the measures that are neither an ounce nor a jigger pour', () => {
-    // 22ml is a truncation of the 22.5ml that three quarters of an ounce
-    // actually converts to, and the corpus carries both.
+  it('accepts a quarter and three quarters of an ounce', () => {
+    // Dan's ruling of 16 August 2026, which closed an inconsistency: the policy
+    // took 30, 45 and 60 as one, one and a half and two ounces, then rejected
+    // 7.5 and 22.5, which are a quarter and three quarters of the same ounce.
+    // That left 31 of our own IBA-attributed pages failing our own test.
+    expect([7.5, 22.5].every(isPourable)).toBe(true)
+  })
+
+  it('accepts both ends of the 20/40 jigger', () => {
+    // Same ruling, same inconsistency. 20ml was already accepted and appears 77
+    // times; 40 is the other end of the jigger it is marked on.
+    expect([20, 40].every(isPourable)).toBe(true)
+  })
+
+  it('rejects what is left, which is the genuinely odd', () => {
+    // 22ml converts from nothing: three quarters of an ounce is 22.18ml, which
+    // rounds to 22.5, and this was truncated somewhere upstream. It stays
+    // unpourable so the repair keeps finding it if it recurs.
     expect(isPourable(22)).toBe(false)
-    expect(isPourable(22.5)).toBe(false)
-    expect(isPourable(7.5)).toBe(false)
-    expect(isPourable(40)).toBe(false)
+    expect(isPourable(35)).toBe(false)
+    expect(isPourable(52.5)).toBe(false)
   })
 
   it('leaves jug quantities alone', () => {
     // A 330ml can and a 300ml punch measure are poured from the container.
-    expect(awkward([300, 330, 22.5])).toEqual([22.5])
+    expect(awkward([300, 330, 22])).toEqual([22])
   })
 })
 
@@ -58,25 +72,26 @@ describe('reading an amount string', () => {
 })
 
 describe('scaling a recipe onto the jigger', () => {
-  it('turns three equal ounce measures into three jigger measures', () => {
-    // Dan's case: 3 × 22.5ml is 3 × 25ml with the drink scaled by a ninth.
-    const [k] = scaleOptions([22.5, 22.5, 22.5])
-    expect(k).toBeCloseTo(25 / 22.5, 6)
+  it('leaves a recipe alone when every line already pours', () => {
+    // Three quarters of an ounce is the recipe in a New Era drink rather than a
+    // conversion artefact — the Last Word and the Naked and Famous are four
+    // equal parts of it — so since the 16 August ruling this needs no rescuing.
+    expect(scaleOptions([22.5, 22.5, 22.5])[0]).toBe(1)
+    expect(scaleOptions([45, 22.5])[0]).toBe(1)
   })
 
-  it('keeps the ratios when the measures differ', () => {
-    // 45 + 22.5 is a two-to-one split, and stays one at 50 + 25.
-    const [k] = scaleOptions([45, 22.5])
-    expect(45 * k).toBeCloseTo(50, 6)
-    expect(22.5 * k).toBeCloseTo(25, 6)
-  })
-
-  it('scales up to the jigger rather than down to a spoon', () => {
-    // Four measures of 22ml are marginally closer to 20 than to 25, and
-    // nearest-to-unchanged alone sent the Naked and Famous back as four 20ml
-    // pours. 22 becomes 25.
+  it('repairs a truncated measure rather than inflating the drink', () => {
+    // 22 is a truncation of 22.5, so the nearest pourable value is the number it
+    // was truncated from. Scaling it to 25 would correct a typo by making the
+    // drink an eighth larger.
     const [k] = scaleOptions([22, 22, 22, 22])
-    expect(22 * k).toBeCloseTo(25, 6)
+    expect(22 * k).toBeCloseTo(22.5, 6)
+  })
+
+  it('scales a genuinely odd measure onto the nearest pourable one', () => {
+    // 35ml is neither an ounce measure nor a mark on either jigger.
+    const [k] = scaleOptions([35])
+    expect(35 * k).toBeCloseTo(37.5, 6)
   })
 
   it('prefers the factor that moves the drink least, once direction is settled', () => {
@@ -85,18 +100,16 @@ describe('scaling a recipe onto the jigger', () => {
   })
 
   it('offers nothing when one factor cannot clear every line', () => {
-    // 22.5 wants a ninth added and 15 is already pourable; the factor that
-    // fixes the first breaks the second, and no other lands both.
-    expect(scaleOptions([22.5, 15, 5])).toEqual([])
+    // 35 wants scaling up and 20 is already pourable. Every factor that lands
+    // the first takes the second off a mark, and none lands both.
+    expect(scaleOptions([35, 20])).toEqual([])
   })
 
   it('does not rescue a recipe by changing how much is in the glass', () => {
-    // An Aviation is 45ml gin with 7.5ml liqueurs, and the only factor that
-    // lands every line is a third larger. That is a bigger drink, not the same
-    // drink measured differently, so it is reported as a decision instead.
-    expect(scaleOptions([45, 15, 15, 7.5])).toEqual([])
-
-    for (const k of scaleOptions([22.5, 45])) {
+    // Scaling is honest only while it changes nothing a drinker can taste. A
+    // factor outside 0.8 to 1.25 is a bigger or smaller drink, not the same one
+    // measured differently, so it is reported as a decision instead.
+    for (const k of scaleOptions([35, 52.5])) {
       expect(k).toBeGreaterThanOrEqual(0.8)
       expect(k).toBeLessThanOrEqual(1.25)
     }
