@@ -806,7 +806,7 @@ export default async function ProductPage({
                   <p className="text-parchment-300 text-sm">View the complete ingredient list, allergen info, and sourcing details.</p>
                 </div>
                 <Link
-                  href={`/ingredients/${getIngredientsSlug(handle)}`}
+                  href={`/ingredients/${getIngredientsSlug(handle)}/`}
                   className="inline-flex items-center gap-2 bg-jerry-green-800 hover:bg-jerry-green-700 text-parchment-50 px-5 py-2.5 rounded-lg font-semibold border border-gold-500/30 hover:border-gold-500/60 transition-all duration-300 self-start sm:self-auto shrink-0"
                 >
                   <span>View Ingredients</span>

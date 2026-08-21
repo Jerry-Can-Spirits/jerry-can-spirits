@@ -174,7 +174,7 @@ export default function GuidesClient({ guides }: GuidesClientProps) {
             {pillarGuides.map((guide) => (
               <Link
                 key={guide._id}
-                href={`/guides/${guide.slug.current}`}
+                href={`/guides/${guide.slug.current}/`}
                 className="group bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl border border-gold-500/30 overflow-hidden hover:border-gold-400/60 transition-all duration-300 hover:scale-[1.02] hover:shadow-xl"
               >
                 {guide.heroImage && (
@@ -228,7 +228,7 @@ export default function GuidesClient({ guides }: GuidesClientProps) {
             {featuredGuides.map((guide) => (
               <Link
                 key={guide._id}
-                href={`/guides/${guide.slug.current}`}
+                href={`/guides/${guide.slug.current}/`}
                 className="group bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl border border-gold-500/30 overflow-hidden hover:border-gold-400/60 transition-all duration-300 hover:scale-105"
               >
                 {guide.heroImage && (
@@ -293,7 +293,7 @@ export default function GuidesClient({ guides }: GuidesClientProps) {
             {visibleRegularGuides.map((guide) => (
               <Link
                 key={guide._id}
-                href={`/guides/${guide.slug.current}`}
+                href={`/guides/${guide.slug.current}/`}
                 className="group bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl border border-gold-500/20 overflow-hidden hover:border-gold-400/40 transition-all duration-300 hover:scale-105"
               >
                 {guide.heroImage && (

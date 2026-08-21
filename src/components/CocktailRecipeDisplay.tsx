@@ -306,7 +306,7 @@ export default function CocktailRecipeDisplay({ cocktail }: Props) {
                 <strong className="text-gold-300">Glassware:</strong>{' '}
                 {cocktail?.glassware ? (
                   <Link
-                    href={`/field-manual/equipment/${cocktail.glassware.slug.current}`}
+                    href={`/field-manual/equipment/${cocktail.glassware.slug.current}/`}
                     className="text-blue-400 hover:text-blue-300 underline transition-colors"
                   >
                     {cocktail.glassware.name}
@@ -360,7 +360,7 @@ export default function CocktailRecipeDisplay({ cocktail }: Props) {
                 <div className="grow">
                   {ingredient.ingredientRef ? (
                     <Link
-                      href={`/field-manual/ingredients/${ingredient.ingredientRef.slug.current}`}
+                      href={`/field-manual/ingredients/${ingredient.ingredientRef.slug.current}/`}
                       className="font-semibold text-blue-400 hover:text-blue-300 underline decoration-dotted underline-offset-2 transition-colors"
                       title={`Learn more about ${ingredient.name}`}
                     >

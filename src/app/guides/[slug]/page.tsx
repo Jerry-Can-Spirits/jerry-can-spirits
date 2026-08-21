@@ -310,7 +310,7 @@ export default async function GuidePage({ params }: PageProps) {
               <ShareButton
                 title={`${guide.title} | Jerry Can Spirits`}
                 text={`Check out this guide: ${guide.title}`}
-                url={`https://jerrycanspirits.co.uk/guides/${guide.slug.current}`}
+                url={`https://jerrycanspirits.co.uk/guides/${guide.slug.current}/`}
                 buttonText="Share Guide"
               />
             </div>
@@ -507,7 +507,7 @@ export default async function GuidePage({ params }: PageProps) {
                     {guide.relatedCocktails.filter(c => c?.slug?.current).map((cocktail) => (
                       <Link
                         key={cocktail._id}
-                        href={`/field-manual/cocktails/${cocktail.slug.current}`}
+                        href={`/field-manual/cocktails/${cocktail.slug.current}/`}
                         className="flex items-center gap-3 p-4 bg-jerry-green-800/30 rounded-lg border border-gold-500/20 hover:bg-jerry-green-800/50 hover:border-gold-400/40 transition-all group"
                       >
                         <svg className="w-5 h-5 text-gold-400 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -563,7 +563,7 @@ export default async function GuidePage({ params }: PageProps) {
                     {guide.relatedGuides.filter(g => g?.slug?.current).map((relatedGuide) => (
                       <Link
                         key={relatedGuide._id}
-                        href={`/guides/${relatedGuide.slug.current}`}
+                        href={`/guides/${relatedGuide.slug.current}/`}
                         className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20 hover:border-gold-400/40 transition-all group"
                       >
                         <span className="px-2 py-1 bg-jerry-green-800/60 border border-gold-500/20 text-gold-300 rounded-sm text-xs font-semibold">
@@ -607,7 +607,7 @@ export default async function GuidePage({ params }: PageProps) {
               <div className="grid sm:grid-cols-2 gap-4">
                 {adjacentGuides.prev ? (
                   <Link
-                    href={`/guides/${adjacentGuides.prev.slug.current}`}
+                    href={`/guides/${adjacentGuides.prev.slug.current}/`}
                     className="group bg-jerry-green-800/30 rounded-lg p-4 border border-gold-500/20 hover:bg-jerry-green-800/50 hover:border-gold-400/40 transition-all"
                   >
                     <div className="flex items-center gap-2 text-parchment-400 text-sm mb-2">
@@ -625,7 +625,7 @@ export default async function GuidePage({ params }: PageProps) {
                 )}
                 {adjacentGuides.next ? (
                   <Link
-                    href={`/guides/${adjacentGuides.next.slug.current}`}
+                    href={`/guides/${adjacentGuides.next.slug.current}/`}
                     className="group bg-jerry-green-800/30 rounded-lg p-4 border border-gold-500/20 hover:bg-jerry-green-800/50 hover:border-gold-400/40 transition-all text-right"
                   >
                     <div className="flex items-center justify-end gap-2 text-parchment-400 text-sm mb-2">
