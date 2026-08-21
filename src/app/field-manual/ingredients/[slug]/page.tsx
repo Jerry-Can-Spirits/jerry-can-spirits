@@ -663,7 +663,7 @@ export default async function IngredientDetailPage({ params }: { params: Promise
                   {ingredient.relatedIngredients.filter(r => r?.slug?.current).map((related) => (
                     <Link
                       key={related._id}
-                      href={`/field-manual/ingredients/${related.slug.current}`}
+                      href={`/field-manual/ingredients/${related.slug.current}/`}
                       className="flex items-center gap-3 p-3 bg-jerry-green-800/30 rounded-lg border border-gold-500/20 hover:bg-jerry-green-800/50 hover:border-gold-400/40 transition-all group"
                     >
                       <svg className="w-5 h-5 text-gold-400 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">

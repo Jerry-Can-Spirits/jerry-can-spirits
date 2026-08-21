@@ -335,7 +335,7 @@ export default async function CocktailPage({ params }: PageProps) {
             <ShareButton
               title={`${cocktail.name} Recipe | Jerry Can Spirits`}
               text={`Check out this ${cocktail.name} recipe from Jerry Can Spirits!`}
-              url={`https://jerrycanspirits.co.uk/field-manual/cocktails/${cocktail.slug.current}`}
+              url={`https://jerrycanspirits.co.uk/field-manual/cocktails/${cocktail.slug.current}/`}
             />
           </div>
         </div>

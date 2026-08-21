@@ -93,7 +93,7 @@ export default function TeamPage() {
           {teamMembers.map((member) => (
             <Link
               key={member.slug}
-              href={`/about/team/${member.slug}`}
+              href={`/about/team/${member.slug}/`}
               className="group bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20 hover:border-gold-500/40 transition-all hover:transform hover:-translate-y-1"
             >
               {/* Photo */}

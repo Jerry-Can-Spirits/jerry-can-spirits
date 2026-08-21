@@ -82,7 +82,7 @@ export default function IngredientsIndex() {
             {products.map((product) => (
               <Link
                 key={product.slug}
-                href={`/ingredients/${product.slug}`}
+                href={`/ingredients/${product.slug}/`}
                 className="block bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20 hover:border-gold-500/40 transition-all duration-300 group"
               >
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">

@@ -62,7 +62,7 @@ export default async function TradeCocktailsListPage() {
             {cocktails.map((c) => (
               <Link
                 key={c._id}
-                href={`/trade/resources/cocktails/${c.slug}`}
+                href={`/trade/resources/cocktails/${c.slug}/`}
                 className="group bg-jerry-green-800/40 backdrop-blur-sm rounded-xl overflow-hidden border border-gold-500/20 hover:border-gold-400/50 transition-colors"
                 prefetch={false}
               >

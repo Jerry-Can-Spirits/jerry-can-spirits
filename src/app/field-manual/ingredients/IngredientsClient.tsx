@@ -206,7 +206,7 @@ export default function IngredientsClient({ ingredients }: IngredientsClientProp
             {featuredIngredients.map((item) => (
               <Link
                 key={item._id}
-                href={`/field-manual/ingredients/${item.slug.current}`}
+                href={`/field-manual/ingredients/${item.slug.current}/`}
                 className="group bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl border border-gold-500/30 overflow-hidden hover:border-gold-400/60 transition-all duration-300 hover:scale-105 hover:shadow-xl"
               >
                 {/* Image */}
@@ -292,7 +292,7 @@ export default function IngredientsClient({ ingredients }: IngredientsClientProp
             {group.items.map((item) => (
               <Link
                 key={item._id}
-                href={`/field-manual/ingredients/${item.slug.current}`}
+                href={`/field-manual/ingredients/${item.slug.current}/`}
                 className="group bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl border border-gold-500/20 overflow-hidden hover:border-gold-400/40 transition-all duration-300 hover:scale-105"
               >
                 {/* Image */}
