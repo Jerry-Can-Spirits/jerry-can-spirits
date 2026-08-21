@@ -18,9 +18,18 @@
  * description of the object. They describe the object and stop.
  *
  * FOURTEEN OF THIRTY-SEVEN. The rest were not written because they were not
- * seen: the session ran out of room to load more images. The script reports
- * how many remain rather than leaving the gap silent, and a second pass should
- * finish them the same way, by looking.
+ * seen: the session ran out of room to load more images. The script names the
+ * ones still missing rather than leaving the gap silent, and a second pass
+ * should finish them the same way, by looking.
+ *
+ * TO FINISH THE REST, run this with --urls to print a curl line per outstanding
+ * image, then look at each one before writing its entry. Two traps:
+ *
+ *   Save them as .jpg. The Sanity CDN serves JPEG even when the asset URL ends
+ *   in .webp, and an image saved under the wrong extension is rejected unread.
+ *
+ *   There is a ceiling on how many images one session can load, which is what
+ *   stopped this pass at fourteen. Work in small batches.
  *
  * Entries are keyed on slug. An unknown slug throws rather than writing
  * nothing, and so does a page with no image, since alt text on an absent
@@ -93,11 +102,20 @@ async function main() {
     console.log(`    now: "${ALT[s]}"`)
   }
 
-  const remaining = await client.fetch<Array<{ name: string }>>(
-    `*[_type == "equipment" && defined(image.asset) && !defined(image.alt)]{ name } | order(name asc)`
+  const remaining = await client.fetch<Array<{ name: string; slug: string; url: string }>>(
+    `*[_type == "equipment" && defined(image.asset) && !defined(image.alt)]{
+      name, "slug": slug.current, "url": image.asset->url
+    } | order(name asc)`
   )
   console.log(`\n${remaining.length} equipment image(s) still have no alt text:`)
   console.log(`  ${remaining.map((r) => r.name).join(', ') || 'none'}`)
+
+  if (process.argv.includes('--urls')) {
+    console.log('\n=== FETCH THESE, LOOK AT THEM, THEN WRITE THEIR ENTRIES ===')
+    for (const r of remaining) {
+      console.log(`curl -s -o "${r.slug}.jpg" "${r.url}?w=320&fm=jpg&q=80"`)
+    }
+  }
 
   if (!WRITE) {
     console.log('\nDRY RUN. Nothing written. Pass --write to execute.')
