@@ -41,7 +41,25 @@ import { execFileSync } from 'child_process'
 import { htmlToText } from './html-text'
 
 const SITEMAP = 'https://franklinandsons.co.uk/recipes-sitemap.xml'
+
+/**
+ * The mixers themselves, which the serves cannot be written without.
+ *
+ * Nineteen of the twenty-four Franklin products named across the 59 recipes
+ * have no ingredient page on this site, so they have to be created before the
+ * cocktails can reference them. Writing those pages from memory would mean
+ * inventing flavour claims about a real product, which is the defect that put
+ * unproven process claims on our own pages earlier this year. This pulls the
+ * producer's own published description instead.
+ *
+ * It deliberately does NOT try to read the nutrition panel. Our existing
+ * Franklin tonic page cites 7.9g of sugar per 100ml, and a figure like that has
+ * to come off the label rather than out of a regex over marketing copy.
+ */
+const PRODUCT_SITEMAP = 'https://franklinandsons.co.uk/product-sitemap.xml'
+
 const JSON_OUT = process.argv.includes('--json')
+const PRODUCTS = process.argv.includes('--products')
 
 interface Serve {
   url: string
@@ -83,7 +101,67 @@ function name(html: string): string {
   return m ? htmlToText(m[1]) : ''
 }
 
+/**
+ * Text that means a match has swallowed the page furniture rather than the copy.
+ *
+ * The first version of this took the first <p> containing "Franklin & Sons" and
+ * reported 34 of 34 products read successfully. Every one of them was the site
+ * navigation — "Menu Menu Our Range Tonic & Mixers Soft Drinks..." — because a
+ * greedy match had run from an early paragraph straight through the header, and
+ * a minimum-length check passes easily on junk that long.
+ *
+ * A guard that only measures length cannot tell copy from navigation. This
+ * names the furniture instead, so the failure is loud.
+ */
+const FURNITURE = /Menu Menu|Our Range|Cocktail Finder|Newsletter|Privacy Overview|\.st0\{/
+
+/**
+ * A product's name and the producer's own description of it.
+ *
+ * Every one of these pages opens with a sentence of the form "Franklin & Sons
+ * <product> is blended with...", so the description is the paragraph that
+ * begins with the brand rather than merely mentions it somewhere.
+ */
+function products(): void {
+  const urls = [...get(PRODUCT_SITEMAP).matchAll(/<loc>([^<]*\/product\/[^<]+)<\/loc>/g)].map((m) => m[1])
+  const found: Array<{ url: string; name: string; description: string }> = []
+  const thin: string[] = []
+
+  for (const url of urls) {
+    const html = get(url)
+    const name = /<h1[^>]*>([\s\S]*?)<\/h1>/.exec(html)
+
+    // Every <p> on the page, shortest-first matching, then the one that opens
+    // with the brand. Searching for a single paragraph by regex is what let the
+    // navigation through.
+    const description =
+      [...html.matchAll(/<p[^>]*>((?:(?!<\/?p[ >])[\s\S])*?)<\/p>/g)]
+        .map((m) => htmlToText(m[1]))
+        .find((text) => /^Franklin & Sons\b/.test(text) && text.length >= 80 && !FURNITURE.test(text)) ?? ''
+
+    if (!name || !description) {
+      thin.push(`${url} (name: ${name ? htmlToText(name[1]) : 'none'}, no opening description found)`)
+    } else {
+      found.push({ url, name: htmlToText(name[1]), description })
+    }
+  }
+
+  if (JSON_OUT) {
+    console.log(JSON.stringify(found, null, 2))
+    return
+  }
+
+  console.log(`${urls.length} product URLs; ${found.length} with a usable description.\n`)
+  found.forEach((p) => console.log(`  ${p.name}\n    ${p.description.slice(0, 200)}\n`))
+  if (thin.length) {
+    console.log(`${thin.length} had nothing worth reading:`)
+    thin.forEach((t) => console.log(`  ${t}`))
+  }
+}
+
 async function main() {
+  if (PRODUCTS) return products()
+
   const sitemap = get(SITEMAP)
   const urls = [...sitemap.matchAll(/<loc>([^<]*\/recipes\/[^<]+)<\/loc>/g)].map((m) => m[1])
 
