@@ -8,7 +8,7 @@
  * so a future one cannot pass review by looking reasonable.
  */
 import { describe, it, expect } from 'vitest'
-import { decodeEntities, htmlToText } from '../../../scripts/html-text'
+import { ENTITIES, decodeEntities, htmlToText } from '../../../scripts/html-text'
 
 describe('decodeEntities', () => {
   it('decodes the entities these pages actually use', () => {
@@ -41,5 +41,27 @@ describe('htmlToText', () => {
 
   it('still does not double-unescape once tags are involved', () => {
     expect(htmlToText('<p>&amp;nbsp;</p>')).toBe('&nbsp;')
+  })
+})
+
+/**
+ * Added after the map and the matching pattern drifted apart. Four entities
+ * were added to the lookup on 22 August and none of them decoded, because the
+ * pattern was a separate hand-written alternation that still listed the
+ * original eleven. Franklin & Sons run on WordPress, so every product title
+ * came back as "Rhubarb &#038; Hibiscus".
+ *
+ * The pattern is now built from the lookup's keys. This asserts the property
+ * that made the bug possible in the first place.
+ */
+describe('the entity pattern and the lookup cannot drift', () => {
+  it('decodes every entity the lookup claims to know', () => {
+    for (const [entity, decoded] of Object.entries(ENTITIES)) {
+      expect(decodeEntities(`x${entity}y`), `${entity} did not decode`).toBe(`x${decoded}y`)
+    }
+  })
+
+  it('decodes the numeric ampersand WordPress emits', () => {
+    expect(htmlToText('<h1>Rhubarb &#038; Hibiscus Tonic Water</h1>')).toBe('Rhubarb & Hibiscus Tonic Water')
   })
 })

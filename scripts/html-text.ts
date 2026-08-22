@@ -14,9 +14,16 @@
  * pass here and why there is now only one of them to get wrong.
  */
 
-const ENTITIES: Record<string, string> = {
+export const ENTITIES: Record<string, string> = {
   '&nbsp;': ' ',
   '&amp;': '&',
+  // WordPress emits the ampersand in numeric form. Franklin & Sons run on it,
+  // so every one of their product titles came back as "Rhubarb &#038; Hibiscus"
+  // until this was added.
+  '&#038;': '&',
+  '&#8216;': '‘',
+  '&#8220;': '“',
+  '&#8221;': '”',
   '&quot;': '"',
   '&#39;': '’',
   '&apos;': '’',
@@ -28,7 +35,24 @@ const ENTITIES: Record<string, string> = {
   '&mdash;': '-',
 }
 
-const ENTITY_RE = /&(?:nbsp|amp|quot|apos|rsquo|ndash|mdash|#39|#8217|#8211|#8212);/g
+/**
+ * Built from the keys above rather than written out again.
+ *
+ * It was a hand-written alternation until 22 August, when four entities were
+ * added to the map and every one of them kept coming through undecoded: the
+ * pattern still only matched the original eleven. Two hand-maintained copies of
+ * one list, and the same failure the recipe-authority picker had that morning.
+ *
+ * Longest first, so `&#8217;` cannot be partly consumed by a shorter pattern
+ * that happens to share a prefix.
+ */
+const ENTITY_RE = new RegExp(
+  Object.keys(ENTITIES)
+    .sort((a, b) => b.length - a.length)
+    .map((e) => e.replace(/[&#;]/g, '\\$&'))
+    .join('|'),
+  'g'
+)
 
 /** Decode the entities we actually meet, in a single pass. */
 export function decodeEntities(s: string): string {
