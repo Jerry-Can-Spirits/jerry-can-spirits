@@ -1,5 +1,5 @@
 import {defineField, defineType} from 'sanity'
-import {validateHouseVariation} from '../../lib/recipe-source'
+import {AUTHORITY_OPTIONS, validateHouseVariation} from '../../lib/recipe-source'
 
 export default defineType({
   name: 'cocktail',
@@ -590,32 +590,15 @@ export default defineType({
           name: 'authority',
           title: 'Authority',
           type: 'string',
+          // Derived from RECIPE_AUTHORITIES rather than listed again here. This
+          // was a hand-kept second copy until 22 August 2026, and it had already
+          // fallen behind: `berry` was added to the tuple, typechecked, and
+          // never appeared in this dropdown. Each option's reasoning — why there
+          // is no Don the Beachcomber, why a published serve is not the same
+          // claim as a brand's own specification — lives beside the value it
+          // explains in src/lib/recipe-source.ts.
           options: {
-            list: [
-              {title: 'IBA', value: 'iba'},
-              {title: "Difford's Guide", value: 'diffords'},
-              {title: 'PDT Cocktail Book', value: 'pdt'},
-              {title: 'Death & Co', value: 'death-and-co'},
-              {title: 'The Savoy Cocktail Book (Craddock, 1930)', value: 'savoy'},
-              {title: "Jerry Thomas's Bar-Tender's Guide (1862)", value: 'thomas'},
-              {title: 'The Fine Art of Mixing Drinks (Embury, 1948)', value: 'embury'},
-              {title: 'The Old Waldorf-Astoria Bar Book (Crockett)', value: 'waldorf'},
-              {title: 'The Joy of Mixology (Regan)', value: 'regan'},
-              // Donn Beach never published; he coded his recipes and took most
-              // of them with him. What we call his specs were reconstructed by
-              // Jeff Berry from interviews and salvaged notebooks. There is no
-              // "Don the Beachcomber" option on purpose: it would credit the
-              // man who hid the recipe rather than the one who found it. Put
-              // the book in the note field.
-              {title: "Beachbum Berry's reconstructions", value: 'berry'},
-              // Separate from House. A Dark 'n' Stormy is a Gosling trademark
-              // whose registered spec names Black Seal, and a Painkiller is a
-              // Pusser's trademark. Filing those as House would claim
-              // authorship of a drink we did not create. Put the brand in the
-              // note field.
-              {title: "Brand's own published specification", value: 'brand'},
-              {title: 'House specification', value: 'house'}
-            ]
+            list: [...AUTHORITY_OPTIONS]
           },
           validation: Rule => Rule.required()
         }),
