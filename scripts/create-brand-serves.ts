@@ -126,7 +126,18 @@ function blocks(sections: ServeSection[], slug: string) {
   ])
 }
 
-function check(serve: Serve, existing: Map<string, string>, checkedAt: string): string[] {
+/**
+ * `existing` is what is already in the dataset and `linkable` is that plus the
+ * slugs in this batch. They are deliberately separate: a batch slug must not
+ * count as a collision with itself, but it must count as a valid link target,
+ * and collapsing the two makes every serve in the batch fail as a duplicate.
+ */
+function check(
+  serve: Serve,
+  existing: Map<string, string>,
+  linkable: Map<string, string>,
+  checkedAt: string
+): string[] {
   const problems: string[] = []
   const fail = (m: string) => problems.push(`${serve.slug}: ${m}`)
 
@@ -169,14 +180,33 @@ function check(serve: Serve, existing: Map<string, string>, checkedAt: string): 
   if (selfRef) fail(`prose refers to itself: "${selfRef[0]}"`)
 
   for (const slug of serve.relatedSlugs) {
-    if (!existing.has(slug)) fail(`related cocktail "${slug}" does not exist`)
+    if (!linkable.has(slug)) fail(`related cocktail "${slug}" does not exist`)
   }
+
+  if (serve.relatedSlugs.includes(serve.slug)) fail('is listed as its own related cocktail')
 
   return problems
 }
 
-function build(serve: Serve, existing: Map<string, string>, checkedAt: string) {
+/**
+ * Document ids for the batch, assigned before anything is written.
+ *
+ * Serves in one batch legitimately reference each other — the two spritzes
+ * built on the same soda are each other's most useful "you might also like" —
+ * and a reference needs an id that does not exist yet. Naming the documents up
+ * front rather than letting Sanity assign ids means the whole batch can be
+ * resolved and written in a single transaction.
+ *
+ * Derived from the slug so a re-run after a failure targets the same documents
+ * instead of creating a second copy of each.
+ */
+function batchIds(serves: Serve[]): Map<string, string> {
+  return new Map(serves.map((s) => [s.slug, `cocktail-${s.slug}`]))
+}
+
+function build(serve: Serve, linkable: Map<string, string>, ids: Map<string, string>, checkedAt: string) {
   return {
+    _id: ids.get(serve.slug)!,
     _type: 'cocktail',
     name: serve.name,
     slug: { _type: 'slug', current: serve.slug },
@@ -217,7 +247,7 @@ function build(serve: Serve, existing: Map<string, string>, checkedAt: string) {
     relatedCocktails: serve.relatedSlugs.map((slug) => ({
       _key: key(serve.slug, slug),
       _type: 'reference',
-      _ref: existing.get(slug)!,
+      _ref: linkable.get(slug)!,
     })),
     recipeSource: { _type: 'object', authority: 'brand-serve', note: serve.producer },
     sourceCheckedAt: checkedAt,
@@ -234,7 +264,10 @@ async function main() {
   )
   const existing = new Map(rows.map((r) => [r.slug, r._id]))
 
-  const problems = SERVES.flatMap((s) => check(s, existing, checkedAt))
+  const ids = batchIds(SERVES)
+  const linkable = new Map([...existing, ...ids])
+
+  const problems = SERVES.flatMap((s) => check(s, existing, linkable, checkedAt))
   if (problems.length) {
     console.error(`${problems.length} problem(s). Nothing written.\n`)
     problems.forEach((p) => console.error(`  ${p}`))
@@ -250,7 +283,7 @@ async function main() {
   }
 
   let tx = client.transaction()
-  for (const serve of SERVES) tx = tx.create(build(serve, existing, checkedAt))
+  for (const serve of SERVES) tx = tx.create(build(serve, linkable, ids, checkedAt))
   await tx.commit()
 
   SERVES.forEach((s) => console.log(`  created ${s.slug}`))
