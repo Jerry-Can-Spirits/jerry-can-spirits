@@ -10,6 +10,7 @@ import AddToCartButton from '@/components/AddToCartButton'
 import ViewItemListTracker from '@/components/ViewItemListTracker'
 import { OG_IMAGE } from '@/lib/og'
 import { productOffer, merchantOfferExtras } from '@/lib/jsonLd'
+import { formatPrice } from '@/lib/format-price'
 
 export const metadata: Metadata = {
   title: 'Cocktail Shakers, Barware & Bar Tools',
@@ -38,10 +39,6 @@ export const metadata: Metadata = {
 // and revalidates hourly instead of a live Shopify round-trip on every hit.
 export const revalidate = 3600
 
-function formatPrice(amount: string, currencyCode: string): string {
-  const symbols: Record<string, string> = { GBP: '£', USD: '$', EUR: '€' }
-  return `${symbols[currencyCode] || currencyCode}${parseFloat(amount).toFixed(2)}`
-}
 
 const SUB_CATEGORIES = [
   { label: 'Bar Accessories', href: '/shop/bar-accessories/' },

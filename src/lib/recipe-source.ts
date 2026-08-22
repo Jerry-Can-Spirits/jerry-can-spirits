@@ -26,6 +26,22 @@ export const RECIPE_AUTHORITIES = [
   'embury',
   'waldorf',
   'regan',
+  /**
+   * Added 22 August 2026, before the tiki attribution work rather than during
+   * it, so the credit goes to the right person from the first page.
+   *
+   * Donn Beach never published. He coded his recipes deliberately: numbered
+   * mixes, unlabelled bottles, staff who each knew a fragment. Every
+   * specification we now call his was reconstructed by Jeff Berry from
+   * interviews and salvaged notebooks and published in Sippin' Safari and
+   * Potions of the Caribbean.
+   *
+   * So there is no `donn-beach` authority and there should not be one. A Zombie
+   * or a Navy Grog attributed to Don the Beachcomber credits the man who hid
+   * the recipe rather than the one who recovered it. The note carries which
+   * book; the label says whose work it is.
+   */
+  'berry',
   'brand',
   'house',
 ] as const
@@ -123,6 +139,9 @@ export const AUTHORITY_LABELS: Record<RecipeAuthority, string> = {
   embury: "Embury's The Fine Art of Mixing Drinks",
   waldorf: 'The Old Waldorf-Astoria Bar Book',
   regan: "Gary Regan's The Joy of Mixology",
+  // "Reconstructions" rather than a book title, because that is what they are
+  // and the distinction is the whole reason this authority exists.
+  berry: "Beachbum Berry's reconstructions",
   // Deliberately vague about which brand, because the note field carries that
   // and the sentence reads badly with a company name dropped into it.
   brand: "the producer's own specification",

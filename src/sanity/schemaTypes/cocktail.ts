@@ -601,6 +601,13 @@ export default defineType({
               {title: 'The Fine Art of Mixing Drinks (Embury, 1948)', value: 'embury'},
               {title: 'The Old Waldorf-Astoria Bar Book (Crockett)', value: 'waldorf'},
               {title: 'The Joy of Mixology (Regan)', value: 'regan'},
+              // Donn Beach never published; he coded his recipes and took most
+              // of them with him. What we call his specs were reconstructed by
+              // Jeff Berry from interviews and salvaged notebooks. There is no
+              // "Don the Beachcomber" option on purpose: it would credit the
+              // man who hid the recipe rather than the one who found it. Put
+              // the book in the note field.
+              {title: "Beachbum Berry's reconstructions", value: 'berry'},
               // Separate from House. A Dark 'n' Stormy is a Gosling trademark
               // whose registered spec names Black Seal, and a Painkiller is a
               // Pusser's trademark. Filing those as House would claim

@@ -3,20 +3,11 @@
 import { useState, useEffect, useMemo } from 'react'
 import { useCart } from '@/contexts/CartContext'
 import { getProduct, type ShopifyProduct } from '@/lib/shopify'
+import { formatPrice } from '@/lib/format-price'
 
 const BOX_HANDLE = 'jerry-can-spirits-expedition-spiced-rum-presentation-box'
 const RUM_HANDLE = 'jerry-can-spirits-expedition-spiced-rum'
 
-function formatPrice(amount: string, currencyCode: string): string {
-  const price = parseFloat(amount)
-  const symbols: Record<string, string> = {
-    GBP: '£',
-    USD: '$',
-    EUR: '€',
-  }
-  const symbol = symbols[currencyCode] || currencyCode
-  return `${symbol}${price.toFixed(2)}`
-}
 
 export default function PresentationBoxUpsell() {
   const { cart, addToCart, isLoading } = useCart()
