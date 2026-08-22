@@ -43,6 +43,30 @@ export const RECIPE_AUTHORITIES = [
    */
   'berry',
   'brand',
+  /**
+   * Added 22 August 2026 for the Fever-Tree serves, rather than filing them
+   * under `brand`.
+   *
+   * `brand` means the brand is the drink. A Painkiller is a Pusser's trademark;
+   * a Dark 'n' Stormy is a Gosling one whose registered specification names
+   * Black Seal. You cannot make the drink and leave the brand out.
+   *
+   * A published serve is a different claim. Fever-Tree suggesting 150ml of
+   * their ginger ale over 50ml of whisky is a serve suggestion for their
+   * product, not a drink they invented — the whisky highball predates the
+   * company by a century. Filing those as `brand` would quietly restate
+   * "Pusser's owns the Painkiller" as "Fever-Tree owns the whisky ginger",
+   * and the label is the only thing a reader has to tell the two apart.
+   *
+   * It also keeps the commercial reading straight, and that is deliberate
+   * policy rather than caution. The Field Manual carries serves from any
+   * producer who publishes them — Fever-Tree first, Franklin & Sons next — so a
+   * reader picking a mixer is choosing rather than being routed. We hold no
+   * exclusivity with any of them. This label credits the source of a
+   * specification and claims nothing else, which is what lets the same page
+   * type carry two competitors without either one looking endorsed.
+   */
+  'brand-serve',
   'house',
 ] as const
 
@@ -145,8 +169,44 @@ export const AUTHORITY_LABELS: Record<RecipeAuthority, string> = {
   // Deliberately vague about which brand, because the note field carries that
   // and the sentence reads badly with a company name dropped into it.
   brand: "the producer's own specification",
+  // "Serve" rather than "specification", carrying the whole distinction in one
+  // word: the producer published how to pour their product, they did not invent
+  // the drink.
+  'brand-serve': "the producer's own published serve",
   house: 'our own specification',
 }
+
+/**
+ * The Studio dropdown, derived rather than hand-copied.
+ *
+ * These titles used to live in src/sanity/schemaTypes/cocktail.ts as a second
+ * list of the same authorities. Nothing kept the two in step: adding an entry
+ * to RECIPE_AUTHORITIES typechecked, passed tests, rendered correctly on the
+ * page, and silently did not appear in the picker, so the only way to set the
+ * new authority was a script. `berry` shipped that way on 22 August.
+ *
+ * Record<RecipeAuthority, string> is what fixes it. A new authority with no
+ * title here is a type error, and the list below cannot fall behind the tuple
+ * because it is built from it.
+ */
+const PICKER_TITLES: Record<RecipeAuthority, string> = {
+  iba: 'IBA',
+  diffords: "Difford's Guide",
+  pdt: 'PDT Cocktail Book',
+  'death-and-co': 'Death & Co',
+  savoy: 'The Savoy Cocktail Book (Craddock, 1930)',
+  thomas: "Jerry Thomas's Bar-Tender's Guide (1862)",
+  embury: 'The Fine Art of Mixing Drinks (Embury, 1948)',
+  waldorf: 'The Old Waldorf-Astoria Bar Book (Crockett)',
+  regan: 'The Joy of Mixology (Regan)',
+  berry: "Beachbum Berry's reconstructions",
+  brand: "Brand's own published specification",
+  'brand-serve': "Brand's published serve suggestion",
+  house: 'House specification',
+}
+
+export const AUTHORITY_OPTIONS: ReadonlyArray<{ title: string; value: RecipeAuthority }> =
+  RECIPE_AUTHORITIES.map((value) => ({ title: PICKER_TITLES[value], value }))
 
 const MONTHS = [
   'January', 'February', 'March', 'April', 'May', 'June',
