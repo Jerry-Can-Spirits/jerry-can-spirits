@@ -65,3 +65,35 @@ describe('the entity pattern and the lookup cannot drift', () => {
     expect(htmlToText('<h1>Rhubarb &#038; Hibiscus Tonic Water</h1>')).toBe('Rhubarb & Hibiscus Tonic Water')
   })
 })
+
+/**
+ * CodeQL flagged the first repair of the drift bug: it built the pattern by
+ * escaping and joining the map's keys, and the escaper covered `&`, `#` and `;`
+ * — none of which are regex metacharacters — while missing backslash, which is.
+ *
+ * There is no dynamic pattern now, so there is nothing to escape. These assert
+ * the property that made the finding matter: content the decoder does not
+ * recognise, including regex metacharacters, must survive untouched.
+ */
+describe('input is never treated as a pattern', () => {
+  // String.raw throughout. Written with ordinary quotes first, these asserted
+  // nothing: '\t' and '\f' in "C:\path\to\file" are a tab and a formfeed, so
+  // both sides of the comparison were the same backslash-free string and the
+  // test passed without ever seeing one.
+  it('passes backslashes and metacharacters through unchanged', () => {
+    expect(decodeEntities(String.raw`C:\path\to\file`)).toBe(String.raw`C:\path\to\file`)
+    expect(decodeEntities(String.raw`a.*+?^${'$'}{}()|[]b`)).toBe(String.raw`a.*+?^${'$'}{}()|[]b`)
+  })
+
+  it('leaves an entity-shaped string it does not know alone', () => {
+    expect(decodeEntities('&notanentity;')).toBe('&notanentity;')
+    expect(decodeEntities('&;')).toBe('&;')
+    expect(decodeEntities(String.raw`&\;`)).toBe(String.raw`&\;`)
+  })
+
+  it('still decodes real entities either side of a backslash', () => {
+    expect(htmlToText(String.raw`<p>Rhubarb &#038; Hibiscus \ Tonic</p>`)).toBe(
+      String.raw`Rhubarb & Hibiscus \ Tonic`
+    )
+  })
+})
