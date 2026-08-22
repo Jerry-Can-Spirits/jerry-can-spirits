@@ -27,6 +27,7 @@ import { client } from '@/sanity/lib/client'
 import { productByHandleQuery } from '@/sanity/queries'
 import { OG_IMAGE } from '@/lib/og'
 import type { Metadata } from 'next'
+import { formatPrice } from '@/lib/format-price'
 
 export const revalidate = 3600
 
@@ -185,18 +186,6 @@ export async function generateMetadata({
 }
 
 // Helper to format price with currency symbol
-function formatPrice(amount: string, currencyCode: string): string {
-  const price = parseFloat(amount)
-
-  const symbols: Record<string, string> = {
-    GBP: '£',
-    USD: '$',
-    EUR: '€',
-  }
-
-  const symbol = symbols[currencyCode] || currencyCode
-  return `${symbol}${price.toFixed(2)}`
-}
 
 // Helper to calculate and format unit price (price per litre) for PMO compliance
 function calculateUnitPrice(priceAmount: string, volumeStr: string, currencyCode: string): string | null {
