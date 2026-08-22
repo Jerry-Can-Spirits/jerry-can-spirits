@@ -5,6 +5,7 @@ import Image from 'next/image'
 import { useCart } from '@/contexts/CartContext'
 import { FREE_SHIPPING_THRESHOLD_GBP } from '@/lib/pricing'
 import { resolveCategory, type ProductCategory } from '@/lib/shopify'
+import { formatPrice } from '@/lib/format-price'
 
 interface CartUpsellItem {
   title: string
@@ -18,11 +19,6 @@ interface CartUpsellItem {
   category: ProductCategory
 }
 
-function formatPrice(price: number, currencyCode: string): string {
-  const symbols: Record<string, string> = { GBP: '£', USD: '$', EUR: '€' }
-  const symbol = symbols[currencyCode] || currencyCode
-  return `${symbol}${price.toFixed(2)}`
-}
 
 // Shortfall-aware cross-sell. The eligible pool is curated in Sanity (cartUpsell
 // singleton, ordered by the founder); the drawer leads with whichever product

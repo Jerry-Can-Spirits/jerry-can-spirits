@@ -11,6 +11,7 @@ import AddToCartButton from '@/components/AddToCartButton'
 import ViewItemListTracker from '@/components/ViewItemListTracker'
 import { OG_IMAGE } from '@/lib/og'
 import { safeJsonLd, productOffer, merchantOfferExtras, productGtin } from '@/lib/jsonLd'
+import { formatPrice } from '@/lib/format-price'
 
 export const metadata: Metadata = {
   title: 'British Craft Spirits',
@@ -76,18 +77,6 @@ const spiritsFaqs: Array<{ question: string; answer: string; rich?: ReactNode }>
 ]
 
 // Helper to format price with currency symbol
-function formatPrice(amount: string, currencyCode: string): string {
-  const price = parseFloat(amount)
-
-  const symbols: Record<string, string> = {
-    GBP: '£',
-    USD: '$',
-    EUR: '€',
-  }
-
-  const symbol = symbols[currencyCode] || currencyCode
-  return `${symbol}${price.toFixed(2)}`
-}
 
 export default async function SpiritsPage() {
   let products: ShopifyProduct[] = []

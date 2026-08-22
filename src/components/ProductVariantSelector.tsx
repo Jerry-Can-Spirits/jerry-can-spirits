@@ -13,6 +13,7 @@ import type { ShopifyProductVariant, ShopifyImage } from '@/lib/shopify'
 import { appendUtmToCheckout, gatedCheckout } from '@/lib/utm'
 import { attachStitchingAttributes } from '@/lib/analytics-stitching'
 import { trackEventDual } from '@/lib/meta-capi'
+import { formatPrice } from '@/lib/format-price'
 
 interface ProductVariantSelectorProps {
   variants: ShopifyProductVariant[]
@@ -23,16 +24,6 @@ interface ProductVariantSelectorProps {
 }
 
 // Helper to format price
-function formatPrice(amount: string, currencyCode: string): string {
-  const price = parseFloat(amount)
-  const symbols: Record<string, string> = {
-    GBP: '£',
-    USD: '$',
-    EUR: '€',
-  }
-  const symbol = symbols[currencyCode] || currencyCode
-  return `${symbol}${price.toFixed(2)}`
-}
 
 export default function ProductVariantSelector({
   variants,

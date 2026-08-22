@@ -12,6 +12,7 @@ import {
   TRADE_MIN_ORDER_GBP,
   type TradeDiscountCode,
 } from '@/lib/trade-portal/product-data'
+import { formatPrice } from '@/lib/format-price'
 
 type Stage = 'order' | 'loading'
 
@@ -28,10 +29,6 @@ const TIER_LABEL: Record<string, string> = {
 
 const CATEGORY_ORDER: TradeCategory[] = ['spirits', 'glassware', 'bar-tools', 'sustainability']
 
-function formatPrice(amount: string | number): string {
-  const value = typeof amount === 'string' ? parseFloat(amount) : amount
-  return `£${value.toFixed(2)}`
-}
 
 interface TradeOrderFormProps {
   products: TradeProduct[]

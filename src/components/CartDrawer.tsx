@@ -10,18 +10,9 @@ import PresentationBoxUpsell from './PresentationBoxUpsell'
 import { appendUtmToCheckout, gatedCheckout } from '@/lib/utm'
 import { REFERRAL_MIN_ORDER_GBP, FREE_SHIPPING_THRESHOLD_GBP } from '@/lib/pricing'
 import { trackEventDual } from '@/lib/meta-capi'
+import { formatPrice } from '@/lib/format-price'
 
 // Helper to format price
-function formatPrice(amount: string, currencyCode: string): string {
-  const price = parseFloat(amount)
-  const symbols: Record<string, string> = {
-    GBP: '£',
-    USD: '$',
-    EUR: '€',
-  }
-  const symbol = symbols[currencyCode] || currencyCode
-  return `${symbol}${price.toFixed(2)}`
-}
 
 export default function CartDrawer() {
   const {
