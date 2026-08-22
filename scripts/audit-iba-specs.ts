@@ -48,6 +48,7 @@ import { execFileSync } from 'child_process'
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs'
 import { join } from 'path'
 import { tmpdir } from 'os'
+import { htmlToText } from './html-text'
 
 const client = getCliClient()
 const CACHE = join(tmpdir(), 'iba-specs')
@@ -73,28 +74,10 @@ interface Ours {
   ing: Array<{ name: string; amount: string | null }> | null
 }
 
-/**
- * Entities are replaced in one pass, not one call each.
- *
- * Unescaping &amp; before the others turns "&amp;nbsp;" into "&nbsp;" and the
- * next replace then eats it, so a literal entity in the source silently becomes
- * a space. CodeQL flags the chained form as double-unescaping and it is right.
- */
-const ENTITIES: Record<string, string> = {
-  '&nbsp;': ' ',
-  '&amp;': '&',
-  '&#8217;': '’',
-  '&rsquo;': '’',
-  '&#8211;': '-',
-  '&ndash;': '-',
-}
-
-const decode = (s: string) =>
-  s
-    .replace(/<[^>]+>/g, ' ')
-    .replace(/&(?:nbsp|amp|rsquo|ndash|#8217|#8211);/g, (m) => ENTITIES[m] ?? m)
-    .replace(/\s+/g, ' ')
-    .trim()
+// Was a local decoder until the same double-unescaping fault was written a
+// second time in scripts/fetch-fever-tree-serves.ts, hours after this one was
+// corrected. Shared so there is one of them to get wrong.
+const decode = htmlToText
 
 /** The block following an <h4> with this heading. */
 function section(html: string, heading: string): string {
