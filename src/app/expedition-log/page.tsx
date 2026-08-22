@@ -3,6 +3,7 @@ import { getD1, getExpeditionLogEntries } from '@/lib/d1'
 import ExpeditionLogForm from '@/components/ExpeditionLogForm'
 import ExpeditionLogMapClient from '@/components/ExpeditionLogMapClient'
 import { baseOpenGraph } from '@/lib/og'
+import { CURRENT_BATCH_ID } from '@/lib/d1'
 
 export const dynamic = 'force-dynamic'
 
@@ -96,7 +97,7 @@ export default async function ExpeditionLogPage() {
           <p className="text-parchment-300 text-sm mb-6">
             If you bought a bottle and want to be on the record, add your name.
           </p>
-          <ExpeditionLogForm batchId="batch-001" />
+          <ExpeditionLogForm batchId={CURRENT_BATCH_ID} />
         </div>
 
       </div>

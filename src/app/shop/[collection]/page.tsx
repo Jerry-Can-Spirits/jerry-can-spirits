@@ -9,6 +9,7 @@ import { CATEGORIES } from '@/lib/categories'
 import AddToCartButton from '@/components/AddToCartButton'
 import ViewItemListTracker from '@/components/ViewItemListTracker'
 import { safeJsonLd, productOffer, merchantOfferExtras, productGtin } from '@/lib/jsonLd'
+import { formatPrice } from '@/lib/format-price'
 
 // ISR — pure Shopify catalogue data (no per-request state), so these SEO
 // collection pages edge-cache and revalidate hourly instead of a live Shopify
@@ -24,10 +25,6 @@ export function generateStaticParams() {
 
 const BASE_URL = 'https://jerrycanspirits.co.uk'
 
-function formatPrice(amount: string, currencyCode: string): string {
-  const symbols: Record<string, string> = { GBP: '£', USD: '$', EUR: '€' }
-  return `${symbols[currencyCode] || currencyCode}${parseFloat(amount).toFixed(2)}`
-}
 
 function slugToTitle(slug: string): string {
   return slug.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')

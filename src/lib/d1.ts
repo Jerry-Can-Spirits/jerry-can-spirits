@@ -8,6 +8,18 @@
 
 import { getCloudflareContext } from '@opennextjs/cloudflare';
 
+/**
+ * The batch the Expedition Log is currently taking entries against.
+ *
+ * There is one batch, so the log page had this written into its markup. That is
+ * fine until there are two, at which point the page keeps quietly enrolling
+ * buyers of the new bottle into the old batch, and nothing fails to say so.
+ *
+ * Named here rather than there so the next batch is a one-line change in the
+ * module that owns batch data, instead of a search through the markup.
+ */
+export const CURRENT_BATCH_ID = 'batch-001';
+
 // ── Types ───────────────────────────────────────────────────────────
 
 export interface Batch {

@@ -8,6 +8,7 @@ import StructuredData from '@/components/StructuredData'
 import { baseOpenGraph, OG_IMAGE } from '@/lib/og'
 import ViewItemListTracker from '@/components/ViewItemListTracker'
 import { safeJsonLd, productOffer, merchantOfferExtras } from '@/lib/jsonLd'
+import { formatPrice } from '@/lib/format-price'
 
 export const metadata: Metadata = {
   title: 'Expedition Gear & Apparel',
@@ -34,19 +35,6 @@ export const metadata: Metadata = {
 export const revalidate = 3600
 
 // Helper to format price with currency symbol
-function formatPrice(amount: string, currencyCode: string): string {
-  const price = parseFloat(amount)
-
-  // Currency symbols
-  const symbols: Record<string, string> = {
-    GBP: '£',
-    USD: '$',
-    EUR: '€',
-  }
-
-  const symbol = symbols[currencyCode] || currencyCode
-  return `${symbol}${price.toFixed(2)}`
-}
 
 export default async function ClothingPage() {
   let products: ShopifyProduct[] = []
