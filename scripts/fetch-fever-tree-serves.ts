@@ -30,6 +30,7 @@
  *      ...add --json to emit machine-readable output instead of a summary.
  */
 import { execFileSync } from 'child_process'
+import { htmlToText } from './html-text'
 
 const SITEMAP = 'https://fever-tree.com/sitemaps/en-gb-sitemap.xml'
 const JSON_OUT = process.argv.includes('--json')
@@ -48,13 +49,7 @@ function get(url: string): string {
   })
 }
 
-const strip = (s: string) =>
-  s
-    .replace(/<[^>]+>/g, ' ')
-    .replace(/&amp;/g, '&')
-    .replace(/&#39;|&rsquo;/g, '’')
-    .replace(/\s+/g, ' ')
-    .trim()
+const strip = htmlToText
 
 /** The Recipe node from any JSON-LD block on the page. */
 function recipeNode(html: string): Record<string, unknown> | null {
