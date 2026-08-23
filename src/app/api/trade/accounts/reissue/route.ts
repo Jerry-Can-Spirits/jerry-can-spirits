@@ -23,6 +23,8 @@ import { NextResponse } from 'next/server'
 import { getCloudflareContext } from '@opennextjs/cloudflare'
 import { hashPin, pinLookupKey } from '@/lib/trade-portal/credentials'
 import { insertReviewLog } from '@/lib/trade-applications'
+import { pushApplicationToSharePoint } from '@/lib/sharepoint/push'
+import type { GraphEnv } from '@/lib/sharepoint/graph'
 
 export const runtime = 'nodejs'
 
@@ -113,6 +115,10 @@ export async function POST(request: Request) {
       notes: `PIN reissued for account ${accountId} ("${account.venue_name}"). The previous PIN stopped working at this point.`,
       created_at: new Date().toISOString(),
     })
+  }
+
+  if (account.application_id) {
+    await pushApplicationToSharePoint(db, e as GraphEnv, env.SITE_OPS as KVNamespace, account.application_id)
   }
 
   return NextResponse.json({

@@ -19,6 +19,8 @@ import { NextResponse } from 'next/server'
 import * as Sentry from '@sentry/nextjs'
 import { getCloudflareContext } from '@opennextjs/cloudflare'
 import { runApplicationChecks } from '@/lib/verification/store'
+import { pushApplicationToSharePoint } from '@/lib/sharepoint/push'
+import type { GraphEnv } from '@/lib/sharepoint/graph'
 import { isAllowedOrigin, isRateLimited } from '@/lib/kv'
 import { emailDomainAcceptsMail } from '@/lib/email-validation'
 import { detectAllowedMime, extensionForMime, type AllowedMime } from '@/lib/validators/file-magic-bytes'
@@ -325,9 +327,15 @@ export async function POST(request: Request) {
         trading_postcode: payload.trading_address?.postcode ?? null,
       },
       env as unknown as { COMPANIES_HOUSE_API_KEY?: string },
-    ).catch((err) => {
-      Sentry.captureException(err, { tags: { route: 'trade-application', stage: 'verification' } })
-    }),
+    )
+      .catch((err) => {
+        Sentry.captureException(err, { tags: { route: 'trade-application', stage: 'verification' } })
+      })
+      // After the checks, so the row carries their outcome rather than arriving
+      // empty and being corrected a second later.
+      .then(() =>
+        pushApplicationToSharePoint(db, env as unknown as GraphEnv, kv, appId),
+      ),
   )
 
   // Move R2 objects from pending/ to applications/{appId}/
