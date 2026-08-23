@@ -30,9 +30,23 @@ export function graphConfigured(env: GraphEnv): boolean {
   return Boolean(env.MS_TENANT_ID && env.MS_CLIENT_ID && env.MS_CLIENT_SECRET && env.SHAREPOINT_SITE_ID)
 }
 
-export async function getGraphToken(env: GraphEnv, kv: KVNamespace): Promise<string> {
-  const cached = await kv.get(TOKEN_KV_KEY)
-  if (cached) return cached
+/**
+ * A Graph token, cached in KV.
+ *
+ * Passing `fresh` skips and clears the cache. This exists because of a real
+ * hour lost: Sites.Selected was consented in Entra and every call kept
+ * returning 401, because the Worker was still presenting a token minted before
+ * the grant. A permission change does not invalidate an already-issued token,
+ * so the cache has to be cleared or waited out — and at the time that looks
+ * exactly like the consent not having worked.
+ */
+export async function getGraphToken(env: GraphEnv, kv: KVNamespace, fresh = false): Promise<string> {
+  if (fresh) {
+    await kv.delete(TOKEN_KV_KEY)
+  } else {
+    const cached = await kv.get(TOKEN_KV_KEY)
+    if (cached) return cached
+  }
 
   const body = new URLSearchParams({
     client_id: env.MS_CLIENT_ID!,

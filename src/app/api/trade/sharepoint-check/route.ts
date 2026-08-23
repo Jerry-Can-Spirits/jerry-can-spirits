@@ -20,6 +20,7 @@ import { NextResponse } from 'next/server'
 import { getCloudflareContext } from '@opennextjs/cloudflare'
 import { GRAPH, getGraphToken, graphConfigured, graphFetch, type GraphEnv } from '@/lib/sharepoint/graph'
 import { pushApplicationToSharePoint } from '@/lib/sharepoint/push'
+import { ensureKeyColumn } from '@/lib/sharepoint/trade-list'
 
 export const runtime = 'nodejs'
 
@@ -57,8 +58,11 @@ export async function GET(request: Request) {
 
   const kv = env.SITE_OPS as KVNamespace
   try {
-    const token = await getGraphToken(e, kv)
-    report.token = 'acquired'
+    // Always a fresh token here. A stale one is the single most confusing
+    // failure this integration has, and a diagnostic that reproduces the
+    // confusion it exists to resolve is worse than useless.
+    const token = await getGraphToken(e, kv, true)
+    report.token = 'acquired (fresh)'
 
     const site = await graphFetch(token, `${GRAPH}/sites/${e.SHAREPOINT_SITE_ID}?$select=displayName,webUrl`)
     report.site = site.ok ? await site.json() : { status: site.status, body: (await site.text()).slice(0, 400) }
@@ -100,14 +104,32 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Not found' }, { status: 404 })
   }
 
-  let body: { application_id?: string }
+  let body: { application_id?: string; action?: string }
   try {
-    body = (await request.json()) as { application_id?: string }
+    body = (await request.json()) as { application_id?: string; action?: string }
   } catch {
     return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 })
   }
+
+  if (body.action === 'add-key-column') {
+    try {
+      const result = await ensureKeyColumn(e, env.SITE_OPS as KVNamespace)
+      return NextResponse.json({ ok: true, ...result })
+    } catch (err) {
+      return NextResponse.json(
+        { ok: false, error: err instanceof Error ? err.message : String(err) },
+        { status: 500 },
+      )
+    }
+  }
+
   const applicationId = body.application_id?.trim()
-  if (!applicationId) return NextResponse.json({ error: 'application_id is required' }, { status: 400 })
+  if (!applicationId) {
+    return NextResponse.json(
+      { error: 'application_id, or action: "add-key-column", is required' },
+      { status: 400 },
+    )
+  }
 
   // throwOnError so the caller sees the Graph message rather than the silent
   // swallow the production path uses.
