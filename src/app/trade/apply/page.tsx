@@ -126,7 +126,6 @@ export default function TradeApplyPage() {
     if (n === 4) {
       if (!data.expected_initial_volume) e.expected_initial_volume = 'Required'
       if (!data.expected_monthly_volume) e.expected_monthly_volume = 'Required'
-      if (!data.payment_terms_pref) e.payment_terms_pref = 'Required'
     }
     return e
   }
@@ -186,7 +185,9 @@ export default function TradeApplyPage() {
         director_id_ticket: data.director_id_file!.ticket,
         expected_initial_volume: data.expected_initial_volume,
         expected_monthly_volume: data.expected_monthly_volume,
-        payment_terms_pref: data.payment_terms_pref,
+        // Always pro-forma: the trade portal is pay-before-delivery, so the
+        // question was removed rather than answered. See types.ts.
+        payment_terms_pref: 'Pro-forma',
         how_heard: data.how_heard || undefined,
         notes: data.notes || undefined,
         declaration: data.declaration,

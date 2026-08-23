@@ -98,8 +98,28 @@ export const INITIAL_STATE: ApplicationFormState = {
 
 export const LEGAL_STRUCTURES = ['Sole Trader', 'Partnership', 'Ltd', 'LLP', 'PLC', 'CIC', 'Charity', 'Other']
 export const BUSINESS_TYPES = ['Pub/Bar', 'Restaurant', 'Hotel', 'Club', 'Off-licence', 'Wholesaler', 'Distributor', 'Other']
-export const VOLUMES = ['<12 bottles', '12–36', '36–72', '72–144', '144+']
-export const PAYMENT_TERMS = ['Pro-forma', '14 days', '30 days']
+/**
+ * Order sizes, rewritten 23 August 2026 to match what venues actually order.
+ *
+ * The first set started at "<12 bottles" and ran to "144+", which was a guess
+ * made before anyone had ordered anything. In practice most venues take a
+ * single bottle to try it and the largest order so far has been six, so every
+ * real answer fell into the bottom option and the other four described a trade
+ * that does not exist yet.
+ *
+ * A scale whose first bucket holds every genuine response is not measuring
+ * anything. This one splits where the actual variation is and keeps a single
+ * open-ended bucket at the top rather than four empty ones.
+ */
+export const VOLUMES = ['1 bottle', '2–5 bottles', '6–11 bottles', '12–35 bottles', '36+ bottles']
+
+// PAYMENT_TERMS removed 23 August 2026. The trade portal is pay-before-delivery
+// and there are no credit terms to prefer, so the question offered a choice
+// that did not exist and set an expectation the order form then refused. The
+// column is NOT NULL and still records 'Pro-forma', which is the truth for
+// every account. Reintroduce the question if credit is ever offered — and note
+// that credit terms are one of the things AWRS due diligence looks at, so the
+// assessment would need to come back with it.
 
 export const STRUCTURES_REQUIRING_CH = new Set(['Ltd', 'LLP', 'PLC', 'CIC', 'Charity'])
 export const TYPES_REQUIRING_AWRS = new Set(['Wholesaler', 'Distributor'])

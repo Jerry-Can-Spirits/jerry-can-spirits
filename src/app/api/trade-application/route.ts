@@ -143,7 +143,6 @@ export async function POST(request: Request) {
     // in a drawer at home, not behind the till.
     [payload.expected_initial_volume, 'Expected initial volume'],
     [payload.expected_monthly_volume, 'Expected monthly volume'],
-    [payload.payment_terms_pref, 'Payment terms preference'],
   ]
   for (const [val, label] of required) {
     if (val === undefined || val === null || val === '') return badRequest(`${label} is required`)
@@ -275,7 +274,9 @@ export async function POST(request: Request) {
     psc_json: payload.psc && payload.psc.length > 0 ? JSON.stringify(payload.psc) : null,
     expected_initial_volume: payload.expected_initial_volume,
     expected_monthly_volume: payload.expected_monthly_volume,
-    payment_terms_pref: payload.payment_terms_pref,
+    // Recorded as pro-forma for every account, which is the truth. The
+    // column is NOT NULL and the question no longer exists.
+    payment_terms_pref: payload.payment_terms_pref || 'Pro-forma',
     how_heard: payload.how_heard?.trim() || null,
     notes: payload.notes?.trim() || null,
     marketing_opt_in: payload.marketing_opt_in ? 1 : 0,
