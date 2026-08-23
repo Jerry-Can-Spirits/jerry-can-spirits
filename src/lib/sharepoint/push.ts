@@ -58,8 +58,15 @@ export async function pushApplicationToSharePoint(
   env: GraphEnv,
   kv: KVNamespace,
   applicationId: string,
-): Promise<void> {
-  if (!graphConfigured(env)) return
+  // The diagnostic route passes throwOnError so it can report the actual Graph
+  // message. Production callers keep the swallow: a venue's application must not
+  // fail because Microsoft is having an afternoon.
+  opts: { throwOnError?: boolean } = {},
+): Promise<{ action: string; skipped: string[] } | void> {
+  if (!graphConfigured(env)) {
+    if (opts.throwOnError) throw new Error('Graph is not configured; check the four MS_* secrets.')
+    return
+  }
 
   try {
     const app = await db
@@ -71,7 +78,10 @@ export async function pushApplicationToSharePoint(
       )
       .bind(applicationId)
       .first<ApplicationRow>()
-    if (!app) return
+    if (!app) {
+      if (opts.throwOnError) throw new Error(`No application ${applicationId}`)
+      return
+    }
 
     const account = await db
       .prepare(`SELECT id, tier, discount_code FROM trade_accounts WHERE application_id = ?1`)
@@ -115,8 +125,9 @@ export async function pushApplicationToSharePoint(
       submittedAt: app.submitted_at,
     }
 
-    await pushTradeVenue(env, kv, record)
+    return await pushTradeVenue(env, kv, record)
   } catch (err) {
     Sentry.captureException(err, { tags: { integration: 'sharepoint', applicationId } })
+    if (opts.throwOnError) throw err
   }
 }

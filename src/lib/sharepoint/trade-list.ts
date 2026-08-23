@@ -23,38 +23,19 @@
 
 import { GRAPH, getGraphToken, graphConfigured, graphFetch, type GraphEnv } from './graph'
 
-const LIST_NAME = 'Trade Accounts'
-const LIST_KV_KEY = 'sharepoint:trade-list-id'
-
 /**
- * Columns, created once if the list does not exist.
+ * The list to write into, by its URL name or display name.
  *
- * Text throughout rather than choice or lookup columns. A choice column that
- * disagrees with the application's actual value rejects the write, and the
- * values here come from a form that changes — business types and volume bands
- * have both been rewritten already. A rejected push that loses an audit record
- * is a worse outcome than a column that permits an unexpected string.
+ * It writes to a list that already exists and never creates one. The first
+ * version created "Trade Accounts" if it was absent, which was wrong twice
+ * over: a customer register already existed and was the natural home, and a
+ * silent create means a failure and a success both end with "there is a list
+ * somewhere" and no way to tell which happened.
+ *
+ * Override with SHAREPOINT_LIST if the list is ever renamed.
  */
-const COLUMNS: Array<{ name: string; text: Record<string, unknown> }> = [
-  { name: 'ApplicationId', text: {} },
-  { name: 'AccountId', text: {} },
-  { name: 'Status', text: {} },
-  { name: 'LegalEntity', text: {} },
-  { name: 'CompanyNumber', text: {} },
-  { name: 'LegalStructure', text: {} },
-  { name: 'BusinessType', text: {} },
-  { name: 'ContactName', text: {} },
-  { name: 'ContactEmail', text: {} },
-  { name: 'ContactPhone', text: {} },
-  { name: 'TradingAddress', text: {} },
-  { name: 'LicensingAuthority', text: {} },
-  { name: 'Tier', text: {} },
-  { name: 'DiscountCode', text: {} },
-  { name: 'Verification', text: { allowMultipleLines: true } },
-  { name: 'Documents', text: {} },
-  { name: 'SubmittedAt', text: {} },
-  { name: 'LastPushed', text: {} },
-]
+const DEFAULT_LIST = 'CustomerRegister'
+const LIST_KV_PREFIX = 'sharepoint:list-id:'
 
 export interface TradeVenueRecord {
   applicationId: string
@@ -77,39 +58,54 @@ export interface TradeVenueRecord {
   submittedAt?: string | null
 }
 
-async function findOrCreateList(token: string, siteId: string, kv: KVNamespace): Promise<string> {
-  const cached = await kv.get(LIST_KV_KEY)
-  if (cached) return cached
+/**
+ * Resolve the list by name, and its column names alongside it.
+ *
+ * The columns matter because this writes into a list somebody else built. A
+ * PATCH naming a field the list does not have is rejected outright, taking the
+ * whole row with it — so the push only ever sends fields that exist, and says
+ * in the error which ones it had to drop.
+ */
+async function resolveList(
+  token: string,
+  siteId: string,
+  listName: string,
+  kv: KVNamespace,
+): Promise<{ id: string; columns: Set<string> }> {
+  const cacheKey = `${LIST_KV_PREFIX}${listName}`
+  let listId = await kv.get(cacheKey)
 
-  const existing = await graphFetch(
-    token,
-    `${GRAPH}/sites/${siteId}/lists?$filter=displayName eq '${LIST_NAME}'`,
-  )
-  if (existing.ok) {
-    const json = (await existing.json()) as { value?: Array<{ id: string }> }
-    const hit = json.value?.[0]
-    if (hit) {
-      await kv.put(LIST_KV_KEY, hit.id)
-      return hit.id
+  if (!listId) {
+    // `name` is the URL segment (CustomerRegister); `displayName` is what shows
+    // in the UI (Customer Register). People give whichever they are looking at.
+    const res = await graphFetch(token, `${GRAPH}/sites/${siteId}/lists?$select=id,name,displayName`)
+    if (!res.ok) {
+      const detail = await res.text().catch(() => '')
+      throw new Error(`Could not list SharePoint lists (${res.status}). ${detail.slice(0, 300)}`)
     }
+    const json = (await res.json()) as { value?: Array<{ id: string; name: string; displayName: string }> }
+    const wanted = listName.toLowerCase().replace(/\s+/g, '')
+    const hit = json.value?.find(
+      (l) =>
+        l.name?.toLowerCase().replace(/\s+/g, '') === wanted ||
+        l.displayName?.toLowerCase().replace(/\s+/g, '') === wanted,
+    )
+    if (!hit) {
+      const available = (json.value ?? []).map((l) => l.displayName).join(', ')
+      throw new Error(`No SharePoint list called "${listName}". Available: ${available}`)
+    }
+    listId = hit.id
+    await kv.put(cacheKey, listId)
   }
 
-  const created = await graphFetch(token, `${GRAPH}/sites/${siteId}/lists`, {
-    method: 'POST',
-    body: JSON.stringify({
-      displayName: LIST_NAME,
-      list: { template: 'genericList' },
-      columns: COLUMNS.map((c) => ({ name: c.name, text: c.text })),
-    }),
-  })
-  if (!created.ok) {
-    const detail = await created.text().catch(() => '')
-    throw new Error(`Could not create the ${LIST_NAME} list (${created.status}). ${detail.slice(0, 300)}`)
+  const colRes = await graphFetch(token, `${GRAPH}/sites/${siteId}/lists/${listId}/columns?$select=name`)
+  const columns = new Set<string>()
+  if (colRes.ok) {
+    const json = (await colRes.json()) as { value?: Array<{ name: string }> }
+    for (const c of json.value ?? []) columns.add(c.name)
   }
 
-  const json = (await created.json()) as { id: string }
-  await kv.put(LIST_KV_KEY, json.id)
-  return json.id
+  return { id: listId, columns }
 }
 
 function fields(record: TradeVenueRecord): Record<string, string> {
@@ -155,12 +151,33 @@ export async function pushTradeVenue(
   env: GraphEnv,
   kv: KVNamespace,
   record: TradeVenueRecord,
-): Promise<void> {
-  if (!graphConfigured(env)) return
+): Promise<{ action: 'created' | 'updated'; skipped: string[] }> {
+  if (!graphConfigured(env)) throw new Error('Graph is not configured; check the four MS_* secrets.')
 
   const token = await getGraphToken(env, kv)
   const siteId = env.SHAREPOINT_SITE_ID!
-  const listId = await findOrCreateList(token, siteId, kv)
+  const listName = env.SHAREPOINT_LIST || DEFAULT_LIST
+  const { id: listId, columns } = await resolveList(token, siteId, listName, kv)
+
+  const all = fields(record)
+  // Title always exists on a SharePoint list. Everything else has to be there.
+  const send: Record<string, string> = {}
+  const skipped: string[] = []
+  for (const [key, value] of Object.entries(all)) {
+    if (key === 'Title' || columns.size === 0 || columns.has(key)) send[key] = value
+    else skipped.push(key)
+  }
+
+  // Matching on our own key column only works if the list has one. Without it
+  // there is no way to tell one venue's row from another's, so the push refuses
+  // rather than appending a duplicate on every status change.
+  if (columns.size > 0 && !columns.has('ApplicationId')) {
+    throw new Error(
+      `The "${listName}" list has no ApplicationId column, so rows cannot be matched and every update ` +
+        `would append a duplicate. Add a single line of text column named ApplicationId. ` +
+        `Columns found: ${[...columns].join(', ')}`,
+    )
+  }
 
   const search = await graphFetch(
     token,
@@ -174,19 +191,20 @@ export async function pushTradeVenue(
     itemId = json.value?.[0]?.id ?? null
   }
 
-  const body = JSON.stringify(itemId ? fields(record) : { fields: fields(record) })
   const res = itemId
     ? await graphFetch(token, `${GRAPH}/sites/${siteId}/lists/${listId}/items/${itemId}/fields`, {
         method: 'PATCH',
-        body,
+        body: JSON.stringify(send),
       })
     : await graphFetch(token, `${GRAPH}/sites/${siteId}/lists/${listId}/items`, {
         method: 'POST',
-        body,
+        body: JSON.stringify({ fields: send }),
       })
 
   if (!res.ok) {
     const detail = await res.text().catch(() => '')
-    throw new Error(`SharePoint push failed (${res.status}). ${detail.slice(0, 300)}`)
+    throw new Error(`SharePoint push failed (${res.status}). ${detail.slice(0, 400)}`)
   }
+
+  return { action: itemId ? 'updated' : 'created', skipped }
 }

@@ -22,6 +22,8 @@ export interface GraphEnv {
   MS_CLIENT_ID?: string
   MS_CLIENT_SECRET?: string
   SHAREPOINT_SITE_ID?: string
+  /** List name or URL segment. Defaults to CustomerRegister. */
+  SHAREPOINT_LIST?: string
 }
 
 export function graphConfigured(env: GraphEnv): boolean {
