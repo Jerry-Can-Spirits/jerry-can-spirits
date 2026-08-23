@@ -110,8 +110,9 @@ export interface TradeVenueRecord {
   discountCode?: string | null
   /** Joined verification summaries, newest first. Goes in CustomerNotes. */
   verification?: string | null
-  /** True only when a check ran and left nothing to follow up. */
-  dueDiligenceComplete?: boolean
+  premisesLicenceNumber?: string | null
+  personalLicenceNumber?: string | null
+  dpsName?: string | null
   submittedAt?: string | null
 }
 
@@ -289,11 +290,6 @@ ${record.verification}` : null,
     // Every account is pay-before-delivery; the question was removed from the
     // form because there were no credit terms to prefer.
     CustPaymentTerms: 'Prepay',
-    // A status, not a place for evidence — that goes in CustomerNotes.
-    // "Complete" only when a check ran and raised nothing to follow up. The
-    // first venue is Required - Pending, correctly: Companies House contradicted
-    // three declared fields and its licence details are still outstanding.
-    AWRSDueDiligence: record.dueDiligenceComplete ? 'Complete' : 'Required - Pending',
   }
 
   const optional: Array<[string, string | null | undefined]> = [
@@ -304,6 +300,12 @@ ${record.verification}` : null,
     ['CustomerPhone', record.contactPhone],
     ['CustomerAddress', record.tradingAddress],
     ['CustomerRegion', record.region ? REGION[record.region] : null],
+    // Licensing details, if the register has columns for them. In CustomerNotes
+    // they cannot be filtered on; as columns they make a chase queue — a view
+    // of "DPS is empty" is the nearest thing to one that exists.
+    ['PremisesLicenceNumber', record.premisesLicenceNumber],
+    ['PersonalLicenceNumber', record.personalLicenceNumber],
+    ['DPSName', record.dpsName],
   ]
   for (const [key, value] of optional) {
     if (value !== null && value !== undefined && value !== '') out[key] = value
@@ -331,6 +333,28 @@ export async function pushTradeVenue(
   const { id: listId, columns } = await resolveList(token, siteId, listName, kv)
 
   const all = fields(record)
+
+  /**
+   * Fields the automation sets once and then leaves alone.
+   *
+   * AWRSDueDiligence is a judgement, not a computation. Under AWRS the
+   * obligation is a risk assessment made by a person — the first venue's
+   * "25 years trading" against a 2023 incorporation was accepted as a rough
+   * figure, and no rule could have made that call.
+   *
+   * Two things were wrong with deriving it. The verification table is
+   * append-only because that is what makes it evidence, so a single historical
+   * mismatch would have blocked "Complete" permanently no matter what was
+   * afterwards resolved. And writing it on every push meant a human marking a
+   * venue Complete would have it silently reverted on the next status change or
+   * PIN reissue — worse than never setting it at all.
+   *
+   * So it is seeded on creation and never touched again.
+   */
+  const SEED_ONLY: Record<string, string> = {
+    AWRSDueDiligence: 'Required - Pending',
+  }
+
   const send: Record<string, string> = {}
   const skipped: string[] = []
 
@@ -390,6 +414,16 @@ export async function pushTradeVenue(
     itemId = json.value?.[0]?.id ?? null
   }
 
+  // Seed-only fields go in on creation and are never sent on an update, so a
+  // human decision recorded in SharePoint survives every later push.
+  const create: Record<string, string> = { ...send }
+  if (!itemId) {
+    for (const [key, value] of Object.entries(SEED_ONLY)) {
+      const col = columns.get(key)
+      if (col && !col.readOnly) create[key] = value
+    }
+  }
+
   const res = itemId
     ? await graphFetch(token, `${GRAPH}/sites/${siteId}/lists/${listId}/items/${itemId}/fields`, {
         method: 'PATCH',
@@ -397,7 +431,7 @@ export async function pushTradeVenue(
       })
     : await graphFetch(token, `${GRAPH}/sites/${siteId}/lists/${listId}/items`, {
         method: 'POST',
-        body: JSON.stringify({ fields: send }),
+        body: JSON.stringify({ fields: create }),
       })
 
   if (!res.ok) {
