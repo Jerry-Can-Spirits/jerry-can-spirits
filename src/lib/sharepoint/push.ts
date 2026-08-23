@@ -41,6 +41,7 @@ interface VerificationRow {
   outcome: string
   summary: string | null
   checked_at: string
+  response_json: string | null
 }
 
 function formatAddress(json: string | null): string | null {
@@ -90,7 +91,7 @@ export async function pushApplicationToSharePoint(
 
     const checks = await db
       .prepare(
-        `SELECT source, outcome, summary, checked_at
+        `SELECT source, outcome, summary, checked_at, response_json
          FROM trade_application_verifications
          WHERE trade_application_id = ?1
          ORDER BY checked_at DESC`,
@@ -100,6 +101,20 @@ export async function pushApplicationToSharePoint(
 
     // Newest first, one line each. This is the column an auditor reads, so it
     // carries the date and the verdict before the detail.
+    // The ONS region, lifted from the stored postcode check rather than looked
+    // up again. It is already in the evidence; re-fetching it would be a second
+    // call for a fact we wrote down.
+    let region: string | null = null
+    for (const c of checks.results ?? []) {
+      if (c.source === 'postcode' && c.outcome === 'match' && c.response_json) {
+        try {
+          const raw = JSON.parse(c.response_json) as { result?: { region?: string } }
+          region = raw.result?.region ?? null
+        } catch { /* leave null */ }
+        break
+      }
+    }
+
     const verification =
       (checks.results ?? [])
         .map((c) => `${c.checked_at.slice(0, 10)} — ${c.source} — ${c.outcome}${c.summary ? `: ${c.summary}` : ''}`)
@@ -118,6 +133,7 @@ export async function pushApplicationToSharePoint(
       contactPhone: app.contact_phone,
       tradingAddress: formatAddress(app.trading_address_json),
       licensingAuthority: app.licensing_authority,
+      region,
       accountId: account?.id ?? null,
       tier: account?.tier ?? null,
       discountCode: account?.discount_code ?? null,
