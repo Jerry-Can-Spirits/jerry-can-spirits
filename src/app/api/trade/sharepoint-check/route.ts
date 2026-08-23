@@ -79,11 +79,35 @@ export async function GET(request: Request) {
           l.displayName?.toLowerCase().replace(/\s+/g, '') === wanted,
       )
       if (hit) {
-        const cols = await graphFetch(token, `${GRAPH}/sites/${e.SHAREPOINT_SITE_ID}/lists/${hit.id}/columns?$select=name,displayName`)
+        // Types and constraints, not just names. Names alone were not enough:
+        // a push failed with a bare 400 because a value can be rejected for
+        // being the wrong type, an unlisted choice, too long for a single line
+        // of text, or read-only — and the name tells you none of that.
+        const cols = await graphFetch(token, `${GRAPH}/sites/${e.SHAREPOINT_SITE_ID}/lists/${hit.id}/columns`)
         report.target_list = hit.displayName
-        report.columns = cols.ok
-          ? ((await cols.json()) as { value?: Array<{ name: string }> }).value?.map((c) => c.name)
-          : { status: cols.status }
+        if (cols.ok) {
+          const json = (await cols.json()) as {
+            value?: Array<Record<string, unknown>>
+          }
+          report.columns = (json.value ?? [])
+            .filter((c) => !String(c.name ?? '').startsWith('_'))
+            .map((c) => {
+              const kind = ['text', 'choice', 'dateTime', 'number', 'boolean', 'lookup', 'personOrGroup', 'currency', 'hyperlinkOrPicture', 'calculated']
+                .find((k) => c[k] !== undefined) ?? 'unknown'
+              const text = c.text as { maxLength?: number; allowMultipleLines?: boolean } | undefined
+              const choice = c.choice as { choices?: string[] } | undefined
+              return {
+                name: c.name,
+                kind,
+                readOnly: c.readOnly === true,
+                required: c.required === true,
+                ...(text ? { multiline: text.allowMultipleLines === true, maxLength: text.maxLength } : {}),
+                ...(choice ? { choices: choice.choices } : {}),
+              }
+            })
+        } else {
+          report.columns = { status: cols.status }
+        }
       } else {
         report.target_list = `NOT FOUND (looking for "${e.SHAREPOINT_LIST || 'CustomerRegister'}")`
       }

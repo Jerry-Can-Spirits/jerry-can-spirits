@@ -38,6 +38,15 @@ const DEFAULT_LIST = 'CustomerRegister'
 const LIST_KV_PREFIX = 'sharepoint:list-id:'
 const KEY_COLUMN = 'ApplicationId'
 
+interface ColumnInfo {
+  readOnly: boolean
+  isText: boolean
+  isChoice: boolean
+  choices?: string[]
+  /** Single-line text only. Multi-line has no practical cap. */
+  maxLength?: number
+}
+
 /**
  * Create the ApplicationId column if the register has no key.
  *
@@ -115,7 +124,7 @@ async function resolveList(
   siteId: string,
   listName: string,
   kv: KVNamespace,
-): Promise<{ id: string; columns: Set<string> }> {
+): Promise<{ id: string; columns: Map<string, ColumnInfo> }> {
   const cacheKey = `${LIST_KV_PREFIX}${listName}`
   let listId = await kv.get(cacheKey)
 
@@ -142,11 +151,30 @@ async function resolveList(
     await kv.put(cacheKey, listId)
   }
 
-  const colRes = await graphFetch(token, `${GRAPH}/sites/${siteId}/lists/${listId}/columns?$select=name`)
-  const columns = new Set<string>()
+  // Types and constraints, not just names. A push failed with a bare 400
+  // because names alone say nothing about what a column will accept: a value
+  // can be refused for being an unlisted choice, longer than a single line of
+  // text permits, or written to a read-only field, and all three look the same
+  // from outside.
+  const colRes = await graphFetch(token, `${GRAPH}/sites/${siteId}/lists/${listId}/columns`)
+  const columns = new Map<string, ColumnInfo>()
   if (colRes.ok) {
-    const json = (await colRes.json()) as { value?: Array<{ name: string }> }
-    for (const c of json.value ?? []) columns.add(c.name)
+    const json = (await colRes.json()) as { value?: Array<Record<string, unknown>> }
+    for (const c of json.value ?? []) {
+      const name = String(c.name ?? '')
+      if (!name) continue
+      const text = c.text as { maxLength?: number; allowMultipleLines?: boolean } | undefined
+      const choice = c.choice as { choices?: string[] } | undefined
+      columns.set(name, {
+        readOnly: c.readOnly === true,
+        // Only text columns take a free string. Anything else needs a value in
+        // its own shape, and guessing at that is how rows get rejected.
+        isText: text !== undefined,
+        isChoice: choice !== undefined,
+        choices: choice?.choices,
+        maxLength: text?.allowMultipleLines ? undefined : text?.maxLength,
+      })
+    }
   }
 
   return { id: listId, columns }
@@ -232,12 +260,40 @@ export async function pushTradeVenue(
   const { id: listId, columns } = await resolveList(token, siteId, listName, kv)
 
   const all = fields(record)
-  // Title always exists on a SharePoint list. Everything else has to be there.
   const send: Record<string, string> = {}
   const skipped: string[] = []
+
   for (const [key, value] of Object.entries(all)) {
-    if (key === 'Title' || columns.size === 0 || columns.has(key)) send[key] = value
-    else skipped.push(key)
+    if (key === 'Title') {
+      send[key] = value.slice(0, 255)
+      continue
+    }
+    const col = columns.get(key)
+    if (!col) {
+      skipped.push(`${key} (no such column)`)
+      continue
+    }
+    if (col.readOnly) {
+      skipped.push(`${key} (read-only)`)
+      continue
+    }
+    // A choice column rejects anything not on its list, taking the whole row
+    // with it. Better to drop one field than lose the record.
+    if (col.isChoice) {
+      if (col.choices?.some((c) => c.toLowerCase() === value.toLowerCase())) {
+        send[key] = col.choices.find((c) => c.toLowerCase() === value.toLowerCase())!
+      } else {
+        skipped.push(`${key} ("${value}" is not one of: ${col.choices?.join(', ') ?? 'unknown'})`)
+      }
+      continue
+    }
+    if (!col.isText) {
+      skipped.push(`${key} (not a text column)`)
+      continue
+    }
+    // Single-line text has a hard cap and silently fails the whole write when
+    // exceeded. The evidence column is the one that overflows.
+    send[key] = col.maxLength ? value.slice(0, col.maxLength) : value
   }
 
   // Matching on our own key column only works if the list has one. Without it
