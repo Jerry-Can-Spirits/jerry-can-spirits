@@ -134,6 +134,13 @@ export async function pushApplicationToSharePoint(
       tradingAddress: formatAddress(app.trading_address_json),
       licensingAuthority: app.licensing_authority,
       region,
+      onsRegion: region,
+      // Complete only when a check actually ran and nothing was left to chase.
+      // A mismatch means Companies House disagreed with something declared, and
+      // that is precisely when due diligence is not finished.
+      dueDiligenceComplete:
+        (checks.results ?? []).some((c) => c.source === 'companies_house' && c.outcome === 'match') &&
+        !(checks.results ?? []).some((c) => c.outcome === 'mismatch' || c.outcome === 'error'),
       accountId: account?.id ?? null,
       tier: account?.tier ?? null,
       discountCode: account?.discount_code ?? null,

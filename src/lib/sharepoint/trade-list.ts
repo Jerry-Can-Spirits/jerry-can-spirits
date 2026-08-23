@@ -101,13 +101,17 @@ export interface TradeVenueRecord {
   contactPhone?: string | null
   tradingAddress?: string | null
   licensingAuthority?: string | null
-  /** ONS region from the trading postcode, for CustomerRegion. */
+  /** ONS region from the trading postcode, mapped onto CustomerRegion. */
   region?: string | null
+  /** The exact ONS region, recorded in notes so the coarse bucket hides nothing. */
+  onsRegion?: string | null
   accountId?: string | null
   tier?: string | null
   discountCode?: string | null
-  /** Joined verification summaries, newest first. */
+  /** Joined verification summaries, newest first. Goes in CustomerNotes. */
   verification?: string | null
+  /** True only when a check ran and left nothing to follow up. */
+  dueDiligenceComplete?: boolean
   submittedAt?: string | null
 }
 
@@ -198,6 +202,65 @@ async function resolveList(
  * order data, this system holds none, and writing a blank over something
  * somebody filled in by hand is how an automated sync earns its reputation.
  */
+/**
+ * The register's vocabularies, which are not the form's.
+ *
+ * These maps exist because the two systems were designed independently and
+ * both are right for their own purpose. The form asks a venue what they are in
+ * their own words; the register files them for sales and compliance. Writing
+ * the form's value straight into a choice column would be rejected and take
+ * the whole row with it.
+ */
+const CUSTOMER_TYPE: Record<string, string> = {
+  'Pub/Bar': 'On-Trade (Pub/Bar)',
+  Restaurant: 'On-Trade (Restaurant)',
+  // A hotel and a club both sell for on-premises consumption, which is what
+  // On-Trade means, and neither has a bucket of its own.
+  Hotel: 'On-Trade (Pub/Bar)',
+  Club: 'On-Trade (Pub/Bar)',
+  'Off-licence': 'Off-Trade (Shop)',
+  Wholesaler: 'Wholesaler',
+  Distributor: 'Distributor',
+}
+
+/**
+ * ONS statistical regions onto the register's sales regions.
+ *
+ * Two are genuine judgement calls rather than lookups, and are marked as such:
+ * Yorkshire and East of England have no bucket of their own. The exact ONS
+ * region is always written into CustomerNotes as well, so the coarse bucket
+ * never hides the real answer.
+ */
+const REGION: Record<string, string> = {
+  London: 'London',
+  'South East': 'South East',
+  'South West': 'South West',
+  'North West': 'North West',
+  'North East': 'North East',
+  'West Midlands': 'Midlands',
+  'East Midlands': 'Midlands',
+  Wales: 'Wales',
+  Scotland: 'Scotland',
+  'Northern Ireland': 'Northern Ireland',
+  // Judgement calls. Both are northern or eastern England with no exact match.
+  'Yorkshire and The Humber': 'North East',
+  'East of England': 'South East',
+}
+
+/**
+ * Application status onto the register's lifecycle.
+ *
+ * A venue that has applied but has no account is a Prospect. One with a live
+ * account is Active. Nothing here ever writes Inactive or Do Not Contact —
+ * those are decisions a person makes, and an automated sync should not be able
+ * to mark a customer as do-not-contact.
+ */
+const CUSTOMER_STATUS: Record<string, string> = {
+  pending: 'Prospect',
+  approved: 'Active',
+  active: 'Active',
+}
+
 function fields(record: TradeVenueRecord): Record<string, string> {
   const notes = [
     record.legalEntity ? `Legal entity: ${record.legalEntity}` : null,
@@ -208,6 +271,10 @@ function fields(record: TradeVenueRecord): Record<string, string> {
     record.discountCode ? `Discount code: ${record.discountCode}` : null,
     record.accountId ? `Trade account: ${record.accountId}` : null,
     record.submittedAt ? `Applied: ${record.submittedAt.slice(0, 10)}` : null,
+    record.onsRegion ? `ONS region: ${record.onsRegion}` : null,
+    record.verification ? `
+Due diligence checks:
+${record.verification}` : null,
     // Where the documents are. Not a link: R2 serves them through URLs that
     // expire after a week by design, so a stored link would rot.
     `Documents: R2 jerry-can-spirits-trade-docs, applications/${record.applicationId}/`,
@@ -218,21 +285,25 @@ function fields(record: TradeVenueRecord): Record<string, string> {
   const out: Record<string, string> = {
     Title: record.tradingName,
     ApplicationId: record.applicationId,
-    CustomerStatus: record.status,
     CustomerNotes: notes,
-    // Every account is pro-forma; the question was removed from the form
-    // because the portal is pay-before-delivery.
-    CustPaymentTerms: 'Pro-forma',
+    // Every account is pay-before-delivery; the question was removed from the
+    // form because there were no credit terms to prefer.
+    CustPaymentTerms: 'Prepay',
+    // A status, not a place for evidence — that goes in CustomerNotes.
+    // "Complete" only when a check ran and raised nothing to follow up. The
+    // first venue is Required - Pending, correctly: Companies House contradicted
+    // three declared fields and its licence details are still outstanding.
+    AWRSDueDiligence: record.dueDiligenceComplete ? 'Complete' : 'Required - Pending',
   }
 
   const optional: Array<[string, string | null | undefined]> = [
-    ['CustomerType', record.businessType],
+    ['CustomerStatus', CUSTOMER_STATUS[record.status?.toLowerCase() ?? '']],
+    ['CustomerType', record.businessType ? CUSTOMER_TYPE[record.businessType] : null],
     ['ContactName', record.contactName],
     ['CustomerEmail', record.contactEmail],
     ['CustomerPhone', record.contactPhone],
     ['CustomerAddress', record.tradingAddress],
-    ['CustomerRegion', record.region],
-    ['AWRSDueDiligence', record.verification],
+    ['CustomerRegion', record.region ? REGION[record.region] : null],
   ]
   for (const [key, value] of optional) {
     if (value !== null && value !== undefined && value !== '') out[key] = value
