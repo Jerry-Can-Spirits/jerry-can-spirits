@@ -1,10 +1,17 @@
 'use client'
 
+import { useState } from 'react'
 import type { ApplicationFormState, Psc } from './types'
 import {
   LEGAL_STRUCTURES, BUSINESS_TYPES,
   STRUCTURES_REQUIRING_CH, TYPES_REQUIRING_AWRS,
 } from './types'
+
+type LookupState =
+  | { status: 'idle' }
+  | { status: 'looking' }
+  | { status: 'missing' }
+  | { status: 'found'; name: string; statusText: string; registered: string | null }
 
 interface Props {
   data: ApplicationFormState
@@ -19,6 +26,51 @@ export function StepBusinessOwnership({ data, errors, onChange }: Props) {
   const showCh = STRUCTURES_REQUIRING_CH.has(data.legal_structure)
   const showAwrs = TYPES_REQUIRING_AWRS.has(data.business_type)
   const showPsc = ['Ltd', 'LLP', 'PLC', 'CIC'].includes(data.legal_structure)
+
+  const [lookup, setLookup] = useState<LookupState>({ status: 'idle' })
+
+  /**
+   * Fill the legal entity name from Companies House, on blur.
+   *
+   * It only fills a blank field. Overwriting something the applicant typed
+   * would be worse than leaving it wrong: they would not see it happen, and a
+   * silent correction is not a correction anyone agreed to. Where the two
+   * differ, the difference is recorded as a verification flag on submission and
+   * a person decides.
+   *
+   * A failed lookup is never an error the applicant has to resolve. The field
+   * stays as typed and the form carries on.
+   */
+  async function runCompanyLookup(value: string) {
+    const number = value.trim()
+    if (!number) {
+      setLookup({ status: 'idle' })
+      return
+    }
+    setLookup({ status: 'looking' })
+    try {
+      const res = await fetch(`/api/trade/lookup?company=${encodeURIComponent(number)}`)
+      const json = (await res.json()) as {
+        found?: boolean
+        company_name?: string
+        company_status?: string
+        registered_office_address?: string | null
+      }
+      if (!json.found || !json.company_name) {
+        setLookup({ status: 'missing' })
+        return
+      }
+      setLookup({
+        status: 'found',
+        name: json.company_name,
+        statusText: json.company_status ?? 'unknown status',
+        registered: json.registered_office_address ?? null,
+      })
+      if (!data.legal_entity_name.trim()) onChange('legal_entity_name', json.company_name)
+    } catch {
+      setLookup({ status: 'idle' })
+    }
+  }
 
   function updatePsc(index: number, key: keyof Psc, value: string) {
     const next = [...data.psc]
@@ -66,10 +118,26 @@ export function StepBusinessOwnership({ data, errors, onChange }: Props) {
       </div>
 
       {showCh && (
-        <Field id="companies_house_number" label="Companies House number" required error={errors.companies_house_number}>
+        <Field
+          id="companies_house_number"
+          label="Companies House number"
+          required
+          error={errors.companies_house_number}
+          hint={
+            lookup.status === 'looking'
+              ? 'Checking Companies House…'
+              : lookup.status === 'found'
+                ? `${lookup.name} — ${lookup.statusText}${lookup.registered ? `, registered at ${lookup.registered}` : ''}`
+                : lookup.status === 'missing'
+                  ? 'No company found with that number. Check it, or carry on and we will confirm it with you.'
+                  : 'Eight digits. We will look it up and fill in the rest.'
+          }
+        >
           <input id="companies_house_number" className={inputClass} aria-required="true"
             placeholder="e.g. 12345678" maxLength={8}
-            value={data.companies_house_number} onChange={(e) => onChange('companies_house_number', e.target.value.toUpperCase())} />
+            value={data.companies_house_number}
+            onChange={(e) => onChange('companies_house_number', e.target.value.toUpperCase())}
+            onBlur={(e) => void runCompanyLookup(e.target.value)} />
         </Field>
       )}
 

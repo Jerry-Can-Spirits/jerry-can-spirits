@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import { FileUpload } from './FileUpload'
 import type { ApplicationFormState, Address } from './types'
 import { TYPES_REQUIRING_LICENCE } from './types'
@@ -15,9 +16,35 @@ const labelClass = 'block text-sm font-medium text-parchment-200 mb-2'
 
 export function StepPremises({ data, errors, onChange }: Props) {
   const showLicensing = TYPES_REQUIRING_LICENCE.has(data.business_type)
+  const [areaHint, setAreaHint] = useState<string | null>(null)
+
+  /**
+   * Suggest the licensing authority from the trading postcode.
+   *
+   * The first real application gave "hereford council" for what is Herefordshire
+   * Council. The venue's own postcode resolves the administrative area with no
+   * ambiguity, which narrows three hundred-odd authorities to one candidate.
+   *
+   * It suggests rather than fills, and the reason is in lib/verification/postcode.ts:
+   * ONS gives the area, not the council's legal name, and no suffix rule turns
+   * one into the other for Bristol City Council, Cheshire West and Chester
+   * Council and Durham County Council alike. Writing a guessed name into the
+   * field would swap a wrong answer for a more official-looking wrong answer.
+   */
+  async function suggestAuthority(postcode: string) {
+    if (!postcode.trim()) return
+    try {
+      const res = await fetch(`/api/trade/lookup?postcode=${encodeURIComponent(postcode)}`)
+      const json = (await res.json()) as { found?: boolean; area?: string }
+      setAreaHint(json.found && json.area ? json.area : null)
+    } catch {
+      setAreaHint(null)
+    }
+  }
 
   function updateAddress(which: 'trading_address' | 'registered_address', field: keyof Address, value: string) {
     onChange(which, { ...data[which], [field]: value })
+    if (which === 'trading_address' && field === 'postcode') void suggestAuthority(value)
   }
 
   return (
@@ -62,7 +89,26 @@ export function StepPremises({ data, errors, onChange }: Props) {
               <label htmlFor="licensing_authority" className={labelClass}>Issuing local authority</label>
               <input id="licensing_authority" className={inputClass}
                 value={data.licensing_authority} onChange={(e) => onChange('licensing_authority', e.target.value)} />
-              <p className="mt-1 text-xs text-parchment-400">It&rsquo;s on your premises licence, and it&rsquo;s the council rather than the town.</p>
+              {areaHint ? (
+                <p className="mt-1 text-xs text-parchment-400">
+                  Your postcode is in <span className="text-parchment-200">{areaHint}</span>
+                  {!data.licensing_authority.trim() && (
+                    <>
+                      {' '}&mdash;{' '}
+                      <button
+                        type="button"
+                        className="underline text-gold-300 hover:text-gold-400"
+                        onClick={() => onChange('licensing_authority', `${areaHint} Council`)}
+                      >
+                        use &ldquo;{areaHint} Council&rdquo;
+                      </button>
+                    </>
+                  )}
+                  . Check it against your premises licence &mdash; some councils are named differently.
+                </p>
+              ) : (
+                <p className="mt-1 text-xs text-parchment-400">It&rsquo;s on your premises licence, and it&rsquo;s the council rather than the town.</p>
+              )}
               {errors.licensing_authority && <p role="alert" className="mt-1 text-sm text-red-300">{errors.licensing_authority}</p>}
             </div>
           </div>

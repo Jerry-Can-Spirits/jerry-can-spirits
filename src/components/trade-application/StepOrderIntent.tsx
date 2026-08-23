@@ -1,7 +1,7 @@
 'use client'
 
 import type { ApplicationFormState } from './types'
-import { VOLUMES, PAYMENT_TERMS } from './types'
+import { VOLUMES } from './types'
 
 interface Props {
   data: ApplicationFormState
@@ -34,16 +34,6 @@ export function StepOrderIntent({ data, errors, onChange }: Props) {
           </select>
           {errors.expected_monthly_volume && <p role="alert" className="mt-1 text-sm text-red-300">{errors.expected_monthly_volume}</p>}
         </div>
-      </div>
-
-      <div>
-        <label htmlFor="payment_terms_pref" className={labelClass}>Payment terms preference *</label>
-        <select id="payment_terms_pref" className={inputClass} aria-required="true"
-          value={data.payment_terms_pref} onChange={(e) => onChange('payment_terms_pref', e.target.value)}>
-          <option value="">Select</option>
-          {PAYMENT_TERMS.map((p) => <option key={p} value={p}>{p}</option>)}
-        </select>
-        {errors.payment_terms_pref && <p role="alert" className="mt-1 text-sm text-red-300">{errors.payment_terms_pref}</p>}
       </div>
 
       <div>
