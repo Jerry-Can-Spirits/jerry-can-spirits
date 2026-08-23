@@ -28,6 +28,9 @@ interface ApplicationRow {
   trading_address_json: string | null
   status: string | null
   submitted_at: string | null
+  premises_licence_number: string | null
+  personal_licence_number: string | null
+  dps_name: string | null
 }
 
 interface AccountRow {
@@ -74,7 +77,8 @@ export async function pushApplicationToSharePoint(
       .prepare(
         `SELECT id, trading_name, legal_entity_name, legal_structure, business_type,
                 companies_house_number, licensing_authority, contact_name, contact_email,
-                contact_phone, trading_address_json, status, submitted_at
+                contact_phone, trading_address_json, status, submitted_at,
+                premises_licence_number, personal_licence_number, dps_name
          FROM trade_applications WHERE id = ?1`,
       )
       .bind(applicationId)
@@ -135,12 +139,9 @@ export async function pushApplicationToSharePoint(
       licensingAuthority: app.licensing_authority,
       region,
       onsRegion: region,
-      // Complete only when a check actually ran and nothing was left to chase.
-      // A mismatch means Companies House disagreed with something declared, and
-      // that is precisely when due diligence is not finished.
-      dueDiligenceComplete:
-        (checks.results ?? []).some((c) => c.source === 'companies_house' && c.outcome === 'match') &&
-        !(checks.results ?? []).some((c) => c.outcome === 'mismatch' || c.outcome === 'error'),
+      premisesLicenceNumber: app.premises_licence_number,
+      personalLicenceNumber: app.personal_licence_number,
+      dpsName: app.dps_name,
       accountId: account?.id ?? null,
       tier: account?.tier ?? null,
       discountCode: account?.discount_code ?? null,
