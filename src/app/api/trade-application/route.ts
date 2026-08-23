@@ -18,13 +18,14 @@
 import { NextResponse } from 'next/server'
 import * as Sentry from '@sentry/nextjs'
 import { getCloudflareContext } from '@opennextjs/cloudflare'
+import { runApplicationChecks } from '@/lib/verification/store'
 import { isAllowedOrigin, isRateLimited } from '@/lib/kv'
 import { emailDomainAcceptsMail } from '@/lib/email-validation'
 import { detectAllowedMime, extensionForMime, type AllowedMime } from '@/lib/validators/file-magic-bytes'
 import {
   validateEmail, validatePostcode, validatePhone,
   validateCompaniesHouse, validateAwrsUrn, validateVat,
-  requiresPremisesLicence, requiresAwrs, requiresCompaniesHouse,
+  requiresAwrs, requiresCompaniesHouse,
 } from '@/lib/validators/trade-application'
 import { insertTradeApplication, insertReviewLog, type TradeApplicationInsert } from '@/lib/trade-applications'
 import { presignR2GetUrl } from '@/lib/r2-presign'
@@ -101,7 +102,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
   }
 
-  const { env } = await getCloudflareContext()
+  const { env, ctx } = await getCloudflareContext()
   const kv = env.SITE_OPS as KVNamespace
   const db = env.DB as D1Database
   const r2 = env.TRADE_DOCS as R2Bucket
@@ -136,7 +137,10 @@ export async function POST(request: Request) {
     [payload.contact_email, 'Contact email'],
     [payload.contact_phone, 'Contact phone'],
     [payload.director_name, 'Director name'],
-    [payload.director_id_ticket, 'Director ID upload'],
+    // Director ID upload is collected but no longer required to submit. The
+    // first real applicant was working the bar and did not have it to hand,
+    // which is the ordinary case rather than the exception — the document lives
+    // in a drawer at home, not behind the till.
     [payload.expected_initial_volume, 'Expected initial volume'],
     [payload.expected_monthly_volume, 'Expected monthly volume'],
     [payload.payment_terms_pref, 'Payment terms preference'],
@@ -166,13 +170,28 @@ export async function POST(request: Request) {
     const vat = validateVat(payload.vat_number)
     if (!vat.ok) return badRequest(vat.error)
   }
-  if (requiresPremisesLicence(payload.business_type)) {
-    if (!payload.premises_licence_number) return badRequest('Premises licence number is required')
-    if (!payload.licensing_authority) return badRequest('Issuing local authority is required')
-    if (!payload.dps_name) return badRequest('Designated Premises Supervisor is required')
-    if (!payload.personal_licence_number) return badRequest('Personal licence number is required')
-    if (!payload.premises_licence_ticket) return badRequest('Premises licence upload is required')
-  }
+  // Licensing details are collected but no longer block submission.
+  //
+  // WHY THIS WAS RELAXED. These were mandatory and the first real application
+  // still produced "Megan" as a personal licence number, "Duran" as a DPS, and
+  // "hereford council" as the issuing authority. Requiring a field proves
+  // somebody typed something into it. It does not make the contents true, and
+  // the compliance weight these were carrying was never real: AWRS due
+  // diligence is about alcohol duty fraud in the supply chain, and a premises
+  // licence number is not among the checks Excise Notice 2002 asks for.
+  //
+  // What replaced them is verification. A company number is checked against
+  // Companies House and a trading postcode against the ONS district, both
+  // recorded as evidence. Two identifiers that verify themselves are worth more
+  // than five free-text boxes nobody reads.
+  //
+  // The practical case is the same one: the bar manager filled this in during a
+  // shift, without the documents to hand, and a form that refuses to submit
+  // gets abandoned rather than completed. A venue in the register with a gap in
+  // it can be chased. A venue that gave up at step two cannot.
+  //
+  // Anything still missing at approval is a question for a human, which is what
+  // the review log and the profile-completion nudge are for.
 
   // --- Format validation ---
   const emailCheck = validateEmail(payload.contact_email)
@@ -281,6 +300,34 @@ export async function POST(request: Request) {
     Sentry.captureException(err, { tags: { route: 'trade-application' } })
     return NextResponse.json({ error: 'We could not save your application. Please try again.' }, { status: 500 })
   }
+
+  // Due diligence checks, recorded against the application.
+  //
+  // Deliberately after the insert and deliberately not awaited into the
+  // response: this is our compliance evidence, not a gate on the applicant.
+  // Two external lookups would add seconds to a form submission, and a venue
+  // filling this in on a phone behind a bar should not wait on Companies House
+  // to tell them their application went through.
+  //
+  // Failures inside runApplicationChecks are recorded as verification rows
+  // rather than thrown, so a check that could not run leaves a trace instead of
+  // a hole. The catch here is the backstop for the recording itself failing.
+  ctx.waitUntil(
+    runApplicationChecks(
+      db,
+      appId,
+      {
+        companies_house_number: payload.companies_house_number ?? null,
+        legal_structure: payload.legal_structure ?? null,
+        legal_entity_name: payload.legal_entity_name ?? null,
+        years_trading: Number.isFinite(yearsTrading) ? yearsTrading : null,
+        trading_postcode: payload.trading_address?.postcode ?? null,
+      },
+      env as unknown as { COMPANIES_HOUSE_API_KEY?: string },
+    ).catch((err) => {
+      Sentry.captureException(err, { tags: { route: 'trade-application', stage: 'verification' } })
+    }),
+  )
 
   // Move R2 objects from pending/ to applications/{appId}/
   async function moveTicket(ticket: string, name: string, mime: AllowedMime): Promise<string> {
