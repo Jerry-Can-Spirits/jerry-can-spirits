@@ -54,11 +54,13 @@ export function StepContact({ data, errors, onChange }: Props) {
 
       <FileUpload
         id="director_id_file"
-        label="Photo ID of director or owner (passport or driving licence)"
-        required
+        label="Photo ID of director or owner (optional)"
         value={data.director_id_file}
         onChange={(v) => onChange('director_id_file', v)}
       />
+      <p className="mt-1 text-xs text-parchment-400">
+        Passport or driving licence. Send it later if it isn&rsquo;t to hand &mdash; we&rsquo;ll need it before your first order.
+      </p>
       {errors.director_id_file && <p role="alert" className="mt-1 text-sm text-red-300">{errors.director_id_file}</p>}
     </div>
   )

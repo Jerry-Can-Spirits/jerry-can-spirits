@@ -9,7 +9,7 @@ import { StepContact } from '@/components/trade-application/StepContact'
 import { StepOrderIntent } from '@/components/trade-application/StepOrderIntent'
 import {
   INITIAL_STATE, type ApplicationFormState,
-  STRUCTURES_REQUIRING_CH, TYPES_REQUIRING_AWRS, TYPES_REQUIRING_LICENCE,
+  STRUCTURES_REQUIRING_CH, TYPES_REQUIRING_AWRS,
 } from '@/components/trade-application/types'
 
 const TOTAL_STEPS = 4
@@ -99,13 +99,19 @@ export default function TradeApplyPage() {
         if (!r.town.trim()) e.registered_town = 'Required'
         if (!UK_POSTCODE_RE.test(r.postcode.trim())) e.registered_postcode = 'Invalid UK postcode'
       }
-      if (TYPES_REQUIRING_LICENCE.has(data.business_type)) {
-        if (!data.premises_licence_number.trim()) e.premises_licence_number = 'Required'
-        if (!data.licensing_authority.trim()) e.licensing_authority = 'Required'
-        if (!data.dps_name.trim()) e.dps_name = 'Required'
-        if (!data.personal_licence_number.trim()) e.personal_licence_number = 'Required'
-        if (!data.premises_licence_file) e.premises_licence_file = 'Upload required'
-      }
+      // Licensing details are asked for but no longer block the step.
+      //
+      // These were required and the first real application still arrived with
+      // "Megan" as a personal licence number and "Duran" as a DPS, because the
+      // bar manager filled it in mid-shift without the paperwork to hand. A
+      // required field proves someone typed into it, nothing more, and the
+      // compliance weight it was carrying was never real: AWRS due diligence
+      // covers duty fraud in the supply chain, and a premises licence number is
+      // not one of the checks Excise Notice 2002 asks for.
+      //
+      // What carries it now is verification — a company number checked against
+      // Companies House, a postcode against the ONS district — recorded as
+      // evidence on submission. Anything still blank is chased afterwards.
     }
     if (n === 3) {
       if (!data.contact_name.trim()) e.contact_name = 'Required'
@@ -113,7 +119,9 @@ export default function TradeApplyPage() {
       if (!EMAIL_RE.test(data.contact_email)) e.contact_email = 'Invalid email'
       if (!data.contact_phone.trim()) e.contact_phone = 'Required'
       if (!data.director_name.trim()) e.director_name = 'Required'
-      if (!data.director_id_file) e.director_id_file = 'Upload required'
+      // The director's ID lives in a drawer at home, not behind the till. The
+      // first applicant did not have it during a shift, which is the ordinary
+      // case rather than the exception.
     }
     if (n === 4) {
       if (!data.expected_initial_volume) e.expected_initial_volume = 'Required'

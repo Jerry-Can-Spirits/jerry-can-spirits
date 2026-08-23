@@ -46,41 +46,47 @@ export function StepPremises({ data, errors, onChange }: Props) {
       {showLicensing && (
         <div className="border border-gold-500/20 rounded-lg p-5 bg-jerry-green-900/30 space-y-6">
           <h3 className="text-sm font-medium text-parchment-100">Premises licensing</h3>
+          <p className="text-sm text-parchment-300">
+            You can add these later. If you don&rsquo;t have the details to hand, carry on and finish
+            your application &mdash; we&rsquo;ll ask for them before your first order.
+          </p>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label htmlFor="premises_licence_number" className={labelClass}>Premises licence number *</label>
-              <input id="premises_licence_number" className={inputClass} aria-required="true"
+              <label htmlFor="premises_licence_number" className={labelClass}>Premises licence number</label>
+              <input id="premises_licence_number" className={inputClass}
                 value={data.premises_licence_number} onChange={(e) => onChange('premises_licence_number', e.target.value)} />
               {errors.premises_licence_number && <p role="alert" className="mt-1 text-sm text-red-300">{errors.premises_licence_number}</p>}
             </div>
             <div>
-              <label htmlFor="licensing_authority" className={labelClass}>Issuing local authority *</label>
-              <input id="licensing_authority" className={inputClass} aria-required="true"
+              <label htmlFor="licensing_authority" className={labelClass}>Issuing local authority</label>
+              <input id="licensing_authority" className={inputClass}
                 value={data.licensing_authority} onChange={(e) => onChange('licensing_authority', e.target.value)} />
+              <p className="mt-1 text-xs text-parchment-400">It&rsquo;s on your premises licence, and it&rsquo;s the council rather than the town.</p>
               {errors.licensing_authority && <p role="alert" className="mt-1 text-sm text-red-300">{errors.licensing_authority}</p>}
             </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label htmlFor="dps_name" className={labelClass}>Designated Premises Supervisor *</label>
-              <input id="dps_name" className={inputClass} aria-required="true"
+              <label htmlFor="dps_name" className={labelClass}>Designated Premises Supervisor</label>
+              <input id="dps_name" className={inputClass}
                 value={data.dps_name} onChange={(e) => onChange('dps_name', e.target.value)} />
+              <p className="mt-1 text-xs text-parchment-400">Usually the landlord. Full name.</p>
               {errors.dps_name && <p role="alert" className="mt-1 text-sm text-red-300">{errors.dps_name}</p>}
             </div>
             <div>
-              <label htmlFor="personal_licence_number" className={labelClass}>Personal licence number *</label>
-              <input id="personal_licence_number" className={inputClass} aria-required="true"
+              <label htmlFor="personal_licence_number" className={labelClass}>Personal licence number</label>
+              <input id="personal_licence_number" className={inputClass}
                 value={data.personal_licence_number} onChange={(e) => onChange('personal_licence_number', e.target.value)} />
+              <p className="mt-1 text-xs text-parchment-400">The licence number itself, not the holder&rsquo;s name.</p>
               {errors.personal_licence_number && <p role="alert" className="mt-1 text-sm text-red-300">{errors.personal_licence_number}</p>}
             </div>
           </div>
 
           <FileUpload
             id="premises_licence_file"
-            label="Copy of premises licence"
-            required
+            label="Copy of premises licence (optional)"
             value={data.premises_licence_file}
             onChange={(v) => onChange('premises_licence_file', v)}
           />
