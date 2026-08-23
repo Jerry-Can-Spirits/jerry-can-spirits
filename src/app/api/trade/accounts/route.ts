@@ -29,6 +29,8 @@ import { NextResponse } from 'next/server'
 import { getCloudflareContext } from '@opennextjs/cloudflare'
 import { hashPin, pinLookupKey } from '@/lib/trade-portal/credentials'
 import { insertReviewLog } from '@/lib/trade-applications'
+import { pushApplicationToSharePoint } from '@/lib/sharepoint/push'
+import type { GraphEnv } from '@/lib/sharepoint/graph'
 
 export const runtime = 'nodejs'
 
@@ -186,6 +188,11 @@ export async function POST(request: Request) {
     notes: `Provisioned trade account ${account.id} (${tier}, ${discountCode}) as "${venueName}".`,
     created_at: now,
   })
+
+  // Mirror to SharePoint. Awaited rather than deferred because provisioning is
+  // an admin action with no venue waiting on the response, and a row that
+  // silently failed to update would be a compliance record quietly going stale.
+  await pushApplicationToSharePoint(db, e as GraphEnv, env.SITE_OPS as KVNamespace, applicationId)
 
   return NextResponse.json({
     account_id: account.id,
