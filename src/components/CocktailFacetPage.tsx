@@ -130,16 +130,29 @@ export default async function CocktailFacetPage({
             </h2>
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
               {memberCounts.map(({ member, count }) => (
-                <Link
+                <a
                   key={member}
-                  href={`/field-manual/cocktails/?spirit=${member}`}
+                  // A fragment, not a URL.
+                  //
+                  // This used to point at /field-manual/cocktails/?spirit=<value>:
+                  // the full 376-cocktail index, 94kB, filtered in the browser
+                  // after loading. Six of those turned up in the August crawl
+                  // as slow pages, about 560kB fetched to reach a view that
+                  // already existed on the page the reader was standing on. The
+                  // FacetFilter below offers the same values, because both it
+                  // and this section are derived from the facet's own contents.
+                  //
+                  // The fragment applies that filter in place. No navigation,
+                  // nothing fetched, and crawlers ignore fragments so no URL is
+                  // created to crawl.
+                  href={`#spirit=${encodeURIComponent(member)}`}
                   className="flex items-center justify-between gap-3 p-3 bg-jerry-green-800/30 rounded-lg border border-gold-500/20 hover:bg-jerry-green-800/50 hover:border-gold-400/40 transition-all group"
                 >
                   <span className="text-parchment-300 group-hover:text-gold-300 transition-colors">
                     {MEMBER_LABELS[member] ?? member}
                   </span>
                   <span className="text-parchment-400 text-sm shrink-0">{count}</span>
-                </Link>
+                </a>
               ))}
             </div>
           </div>
