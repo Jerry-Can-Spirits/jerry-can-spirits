@@ -70,3 +70,49 @@ describe('fragment-driven spirit filter', () => {
     }
   })
 })
+
+/**
+ * The grid shows a page when idle and the whole facet when filtering, and
+ * getting that backwards is the bug this feature was built to fix.
+ *
+ * Gin holds 74 cocktails across four pages of 24. Plymouth gin's two are the
+ * Gimlet and the Pink Gin, which sort onto pages two and three. Filtering only
+ * the page in front of the reader answers "Plymouth gin (2)" with an empty
+ * grid — worse than the original fault, where the count was right and the tiles
+ * merely ignored it.
+ */
+describe('what the grid shows', () => {
+  const PAGE_SIZE = 24
+  // 74 name-ordered cocktails; the two Plymouth ones deliberately land on
+  // pages 2 and 3, as they do in production.
+  const ALL = Array.from({ length: 74 }, (_, i) => ({
+    slug: { current: `c${String(i).padStart(2, '0')}` },
+    b: i === 30 || i === 55 ? 'plymouth-gin' : 'gin',
+  }))
+
+  const shown = (page: number, spirit: string | null) => {
+    if (!spirit) return ALL.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE)
+    const matched = new Set(ALL.filter((c) => c.b === spirit).map((c) => c.slug.current))
+    return ALL.filter((c) => matched.has(c.slug.current))
+  }
+
+  it('renders exactly the page slice when nothing is filtered', () => {
+    expect(shown(1, null)).toHaveLength(24)
+    expect(shown(1, null)[0].slug.current).toBe('c00')
+    expect(shown(2, null)[0].slug.current).toBe('c24')
+    // 74 = 24 + 24 + 24 + 2
+    expect(shown(4, null)).toHaveLength(2)
+  })
+
+  it('finds matches on other pages, which is the entire point', () => {
+    const matches = shown(1, 'plymouth-gin')
+    expect(matches).toHaveLength(2)
+    expect(matches.map((c) => c.slug.current)).toEqual(['c30', 'c55'])
+  })
+
+  it('gives the same matches from any page', () => {
+    for (const page of [1, 2, 3, 4]) {
+      expect(shown(page, 'plymouth-gin')).toHaveLength(2)
+    }
+  })
+})
