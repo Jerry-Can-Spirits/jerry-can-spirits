@@ -133,6 +133,24 @@ export default async function CocktailFacetPage({
                 <Link
                   key={member}
                   href={`/field-manual/cocktails/?spirit=${member}`}
+                  // A rollup member has no facet page of its own — plymouth-gin
+                  // lives inside the gin facet — so this filtered view of the
+                  // index is the only place it can point.
+                  //
+                  // nofollow because the destination is 94kB of the full index
+                  // filtered in the browser, it already canonicalises back to
+                  // the clean URL, and it is not in the sitemap. A crawler
+                  // following it fetches the whole catalogue to reach a page
+                  // Google will never index. Six of these appeared in the
+                  // August audit as slow pages, roughly 560kB of crawl for no
+                  // unique content.
+                  //
+                  // The reader keeps the link, because "Plymouth gin (4)" is
+                  // worth being able to open. Filtering in place rather than
+                  // navigating would be better still and is the real fix; the
+                  // page already renders a client-side FacetFilter that could
+                  // take a preset.
+                  rel="nofollow"
                   className="flex items-center justify-between gap-3 p-3 bg-jerry-green-800/30 rounded-lg border border-gold-500/20 hover:bg-jerry-green-800/50 hover:border-gold-400/40 transition-all group"
                 >
                   <span className="text-parchment-300 group-hover:text-gold-300 transition-colors">
