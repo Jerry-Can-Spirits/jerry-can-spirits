@@ -244,6 +244,19 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'monthly',
       priority: 0.7,
     },
+    {
+      // Absent until 24 August 2026, and the only indexable page the crawl
+      // found missing. It carries 951 internal links, which is more than any
+      // other page in the Field Manual, so it was being found despite the
+      // sitemap rather than because of it.
+      //
+      // Priority matches the Field Manual index: it is a tool rather than an
+      // article, and the thing a visitor is most likely to come back for.
+      url: `${baseUrl}/field-manual/whats-in-my-bar/`,
+      lastModified: STATIC_LAST_MODIFIED,
+      changeFrequency: 'weekly',
+      priority: 0.9,
+    },
     // Guides pages
     {
       url: `${baseUrl}/guides/`,

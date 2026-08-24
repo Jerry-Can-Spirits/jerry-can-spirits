@@ -160,7 +160,7 @@ export default function PrivacyPolicy() {
                 two. JCS Ltd remains the data controller named there. */}
             <section className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20">
               <h2 className="text-2xl font-serif font-bold text-white mb-4 pb-2 border-b border-gold-500/20">
-                3.5 Pour IQ™
+                3.5 Pour IQ®
               </h2>
               <p className="text-white leading-relaxed">
                 If your venue holds a Pour IQ licence, that processing is covered by the Pour IQ privacy policy at <a href="https://pour-iq.co.uk/privacy-policy" className="text-gold-300 underline hover:text-gold-200">pour-iq.co.uk/privacy-policy</a>, which is the authoritative record for platform data.

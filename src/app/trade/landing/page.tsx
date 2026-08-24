@@ -56,16 +56,16 @@ export default async function TradeLandingPage() {
           {hasPourIq && (
             <TradeTile
               variant="active"
-              title="Pour IQ™"
+              title="Pour IQ®"
               description="Menu and cost engineering for independent UK bars."
               href="https://app.pour-iq.co.uk/"
-              ctaLabel="Open Pour IQ™"
+              ctaLabel="Open Pour IQ"
             />
           )}
           {hasPourIq && (
             <TradeTile
               variant="active"
-              title="Pour IQ™ help"
+              title="Pour IQ help"
               description="A working operations guide. How to scan invoices, read margin, fix gotchas."
               href="https://app.pour-iq.co.uk/help"
               ctaLabel="Open guide"
