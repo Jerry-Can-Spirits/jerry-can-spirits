@@ -14,20 +14,22 @@ import {
 import type { FacetCocktail } from '@/lib/facet-data'
 
 /**
- * In-page filter over a facet's cocktails: name, base spirit and difficulty.
+ * A facet's cocktails, filtered in place by name, base spirit and difficulty.
  *
- * Takes a name/slug/spirit/difficulty index rather than the card data. A filter
- * needs something to match against and somewhere to go; descriptions and image
- * URLs would multiply the payload for no benefit, and the cards for the current
- * page are already rendered server-side above.
+ * It owns the cards as well as the controls. They used to be rendered by the
+ * server below this component and ignored the filter entirely: selecting
+ * "Plymouth gin (2)" gave a count of two above a grid of twenty-four unrelated
+ * drinks, with the matches listed separately as small name chips. Two
+ * representations of one answer, and the wrong one was the prominent one.
  *
- * The spirit and difficulty controls exist because the hub had them and this
- * page did not, which is what made sending a reader here a downgrade. It also
- * filters across the WHOLE facet rather than the 24 cards on this page, so on
- * an 85-recipe family it reaches recipes the grid has paginated away.
+ * It takes the WHOLE facet, not one page. Gin holds 74 across four pages of 24
+ * and Plymouth gin's two sort onto pages two and three, so filtering the cards
+ * in front of the reader would have found neither. The index always worked this
+ * way, which is why the count was right while the grid was not.
  *
- * Renders results only while something is filtering, so it never duplicates the
- * grid underneath.
+ * Idle renders exactly the page slice the server used to, so the first paint
+ * and the markup a crawler sees are unchanged, and the pagination passed as
+ * children is left alone.
  */
 
 const DIFFICULTY_LABELS: Record<string, string> = {
@@ -67,6 +69,7 @@ export default function FacetFilter({
   cocktails,
   page,
   pageSize,
+  children,
 }: {
   index: FacetIndexItem[]
   label: string
@@ -74,6 +77,19 @@ export default function FacetFilter({
   cocktails: FacetCocktail[]
   page: number
   pageSize: number
+  /**
+   * The pagination, rendered by the server and passed through.
+   *
+   * It is hidden while a filter is active, because the filter already searches
+   * every page: page links beside "2 of 74 matches across every page" offer to
+   * navigate away from a complete answer and lose it on arrival.
+   *
+   * Passed as children rather than rebuilt here so the links stay server-
+   * rendered. The first paint is unfiltered, so a crawler sees the full set of
+   * page links exactly as before — they are the crawlable route to recipes deep
+   * in a facet and must not become client-only.
+   */
+  children?: React.ReactNode
 }) {
   const [query, setQuery] = useState('')
   const [spirit, setSpirit] = useState<string | null>(null)
@@ -131,10 +147,26 @@ export default function FacetFilter({
       })()
     : cocktails.slice((page - 1) * pageSize, page * pageSize)
 
-  // Options come from the facet's own contents, so a family holding no
-  // trailblazers never offers the control.
-  const spirits = facetFilterOptions(index, 'b')
-  const difficulties = facetFilterOptions(index, 'd')
+  /**
+   * Counts that answer "how many if I click this", not "how many exist".
+   *
+   * Each control is counted against the index filtered by the *other* controls,
+   * so with Plymouth gin selected the difficulty chips describe those two
+   * drinks rather than all 74. Counting both against the unfiltered index was
+   * the original behaviour and it lied in a specific way: "Novice 29" beside a
+   * grid of two, where clicking it could only ever yield one or zero.
+   *
+   * A control is never counted against itself. Doing so would collapse it to
+   * the single option already chosen and remove any way to change your mind.
+   */
+  const spirits = facetFilterOptions(
+    filterFacetIndex(index, { q: query, spirit: null, difficulty }),
+    'b'
+  )
+  const difficulties = facetFilterOptions(
+    filterFacetIndex(index, { q: query, spirit, difficulty: null }),
+    'd'
+  )
 
   const toggle = (current: string | null, value: string) => (current === value ? null : value)
 
@@ -154,7 +186,10 @@ export default function FacetFilter({
         />
       </div>
 
-      {spirits.length > 1 && (
+      {/* Shown while a selection is active even if only one option survives the
+        * other filters: the control is the only way to clear it, and hiding it
+        * would strand the reader on a filter they cannot undo. */}
+      {(spirits.length > 1 || spirit) && (
         <div>
           <h3 className="text-sm font-semibold text-gold-300 mb-3 uppercase tracking-wider">Base Spirit</h3>
           <div className="flex flex-wrap gap-2">
@@ -168,7 +203,7 @@ export default function FacetFilter({
         </div>
       )}
 
-      {difficulties.length > 1 && (
+      {(difficulties.length > 1 || difficulty) && (
         <div>
           <h3 className="text-sm font-semibold text-gold-300 mb-3 uppercase tracking-wider">Difficulty Level</h3>
           <div className="flex flex-wrap gap-2">
@@ -237,6 +272,8 @@ export default function FacetFilter({
           ))}
         </div>
       )}
+
+      {!filtering && children}
     </div>
   )
 }
