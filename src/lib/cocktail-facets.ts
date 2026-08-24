@@ -377,8 +377,19 @@ export function robotsFor(
  * Comma rather than a dash: em-dashes are banned by VOICE.md, and a title is
  * customer-facing copy like any other.
  */
-export function titleFor(facet: Pick<Facet, 'label' | 'kind'>, page = 1): string {
-  const base = baseHeading(facet)
+export function titleFor(
+  facet: Pick<Facet, 'label' | 'kind'>,
+  page = 1,
+  // The curated title, where a facet has one.
+  //
+  // Page 1 already resolved written copy before falling back to baseHeading;
+  // the paginated route did not, so a facet with a carefully written title had
+  // it silently replaced by its bare label from page 2 onwards. Ahrefs flagged
+  // Sours pages 2, 3 and 4 as "title too short" — "Sours, page 2" is thirteen
+  // characters — while page 1 was fine, which is the shape of that bug.
+  written?: string,
+): string {
+  const base = written?.trim() || baseHeading(facet)
   return page > 1 ? `${base}, page ${page}` : base
 }
 

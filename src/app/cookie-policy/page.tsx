@@ -20,7 +20,7 @@ const webPageSchema = {
 }
 
 export const metadata: Metadata = {
-  title: "Cookie Policy",
+  title: "Cookie Policy: The Cookies We Set and Why",
   description: "Learn about how Jerry Can Spirits uses cookies to enhance your browsing experience and protect your privacy. Manage your cookie preferences.",
   alternates: {
     canonical: 'https://jerrycanspirits.co.uk/cookie-policy/',

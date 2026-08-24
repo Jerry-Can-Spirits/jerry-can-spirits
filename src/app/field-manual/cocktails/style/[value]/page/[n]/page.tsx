@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import CocktailFacetPage from '@/components/CocktailFacetPage'
-import { getFacets } from '@/lib/facet-data'
+import { getFacets, getMemberCounts } from '@/lib/facet-data'
+import { copyFor, renderCopy } from '@/lib/facet-copy'
 import { canonicalFor, pageCount, robotsFor, titleFor } from '@/lib/cocktail-facets'
 import { OG_IMAGE_COCKTAIL, baseOpenGraph } from '@/lib/og'
 
@@ -32,8 +33,16 @@ export async function generateMetadata({
   const facet = (await getFacets(KIND)).find((f) => f.value === value)
   if (!facet) return { title: 'Not Found' }
 
+  // The curated title, resolved the same way page 1 resolves it. Without this a
+  // facet with written copy lost it from page 2 onwards and fell back to its
+  // bare label, which is why Ahrefs flagged "Sours, page 2" as too short while
+  // page 1 was fine.
+  const copy = copyFor(KIND, value)
+  const ctx = { count: facet.count, split: await getMemberCounts(facet) }
+  const written = copy?.title ? renderCopy(copy.title, ctx) : undefined
+
   return {
-    title: titleFor(facet, page),
+    title: titleFor(facet, page, written),
     // Ahrefs measured the old one-clause version at 76 to 85 characters, short
     // of the 110 a description needs to earn its space in a result. The count
     // and what a reader gets are worth the extra clause.
