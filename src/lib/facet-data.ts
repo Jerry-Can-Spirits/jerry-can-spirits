@@ -26,6 +26,7 @@ export interface FacetCocktail {
   image?: string
   family?: string
   baseSpirit?: string
+  difficulty?: string
 }
 
 const CARD_PROJECTION = `{
@@ -35,8 +36,46 @@ const CARD_PROJECTION = `{
   description,
   family,
   baseSpirit,
+  difficulty,
   "image": image.asset->url
 }`
+
+/**
+ * Every cocktail in a facet, not one page of them.
+ *
+ * The cards filter client-side, and the filter covers the whole facet rather
+ * than the visible page. Gin holds 74 across four pages of 24; Plymouth gin's
+ * two drinks are the Gimlet and the Pink Gin, which sort onto pages two and
+ * three. Filtering only the page in front of the reader would have answered
+ * "Plymouth gin (2)" with an empty grid.
+ *
+ * Descriptions are truncated before they cross to the client, the same saving
+ * the cocktails index already makes: on that page description alone was 350kB
+ * of a 457kB payload. Here it is the difference between roughly 20kB and
+ * something worth arguing about.
+ */
+export async function getFacetAllCocktails(facet: Facet): Promise<FacetCocktail[]> {
+  const cards =
+    facet.kind === 'style'
+      ? await client.fetch<FacetCocktail[]>(
+          `*[_type == "cocktail" && family == $value] | order(name asc) ${CARD_PROJECTION}`,
+          { value: facet.value }
+        )
+      : await client.fetch<FacetCocktail[]>(
+          `*[_type == "cocktail" && baseSpirit in $members] | order(name asc) ${CARD_PROJECTION}`,
+          { members: facet.members }
+        )
+
+  return cards.map((c) => ({ ...c, description: truncateOnWord(c.description, 180) }))
+}
+
+/** Cut at a word boundary so a clamped card never ends mid-word. */
+function truncateOnWord(text: string, max: number): string {
+  if (!text || text.length <= max) return text
+  const cut = text.slice(0, max)
+  const lastSpace = cut.lastIndexOf(' ')
+  return (lastSpace > 0 ? cut.slice(0, lastSpace) : cut).trimEnd()
+}
 
 /** Every style facet with its count, including the ones below the floor. */
 export async function getStyleFacets(): Promise<Facet[]> {

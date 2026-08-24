@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import {
   MEMBER_LABELS,
   facetFilterOptions,
@@ -10,6 +11,7 @@ import {
   labelFor,
   type FacetIndexItem,
 } from '@/lib/cocktail-facets'
+import type { FacetCocktail } from '@/lib/facet-data'
 
 /**
  * In-page filter over a facet's cocktails: name, base spirit and difficulty.
@@ -59,7 +61,20 @@ function Chip({
   )
 }
 
-export default function FacetFilter({ index, label }: { index: FacetIndexItem[]; label: string }) {
+export default function FacetFilter({
+  index,
+  label,
+  cocktails,
+  page,
+  pageSize,
+}: {
+  index: FacetIndexItem[]
+  label: string
+  /** Every cocktail in the facet, name-ordered. Not one page of them. */
+  cocktails: FacetCocktail[]
+  page: number
+  pageSize: number
+}) {
   const [query, setQuery] = useState('')
   const [spirit, setSpirit] = useState<string | null>(null)
   const [difficulty, setDifficulty] = useState<string | null>(null)
@@ -100,6 +115,21 @@ export default function FacetFilter({ index, label }: { index: FacetIndexItem[];
   const state = { q: query, spirit, difficulty }
   const filtering = isFiltering(state)
   const matches = filtering ? filterFacetIndex(index, state) : []
+
+  /**
+   * What the grid shows.
+   *
+   * Idle renders the same slice the server used to, so the first paint and the
+   * markup a crawler sees are unchanged and pagination keeps working. Filtering
+   * renders matches from the whole facet, ordered by the index rather than by
+   * the card list, so the order the filter reports is the order shown.
+   */
+  const shown = filtering
+    ? (() => {
+        const bySlug = new Map(cocktails.map((c) => [c.slug.current, c]))
+        return matches.map((m) => bySlug.get(m.s)).filter((c): c is FacetCocktail => Boolean(c))
+      })()
+    : cocktails.slice((page - 1) * pageSize, page * pageSize)
 
   // Options come from the facet's own contents, so a family holding no
   // trailblazers never offers the control.
@@ -157,31 +187,54 @@ export default function FacetFilter({ index, label }: { index: FacetIndexItem[];
       )}
 
       {filtering && (
-        <div>
-          <p className="text-parchment-400 text-sm mb-3">
-            {matches.length} of {index.length} {matches.length === 1 ? 'match' : 'matches'}
-          </p>
-          {matches.length === 0 ? (
-            <p className="text-parchment-300">No cocktail in this list matches that.</p>
-          ) : (
-            <ul className="flex flex-wrap gap-2">
-              {matches.slice(0, 60).map((m) => (
-                <li key={m.s}>
-                  <Link
-                    href={`/field-manual/cocktails/${m.s}/`}
-                    className="inline-block px-3 py-2 bg-jerry-green-800/40 border border-gold-500/20 rounded-lg text-parchment-300 hover:text-gold-300 hover:border-gold-400/40 transition-colors text-sm"
-                  >
-                    {m.n}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          )}
-          {matches.length > 60 && (
-            <p className="text-parchment-400 text-sm mt-3">
-              Showing the first 60. Narrow the filter to see the rest.
-            </p>
-          )}
+        <p className="text-parchment-400 text-sm">
+          {matches.length} of {index.length} {matches.length === 1 ? 'match' : 'matches'}
+          {matches.length > 0 && ' across every page'}
+        </p>
+      )}
+
+      {/* The cards, filtered.
+        *
+        * They used to be rendered by the server below this component and did
+        * not react to the filter at all: selecting "Plymouth gin (2)" gave a
+        * count of two above a grid still showing twenty-four unrelated drinks.
+        * The filter listed matching names as small chips instead, which was a
+        * second, worse representation of the same answer.
+        *
+        * Idle shows the current page, exactly the slice the server used to
+        * render, so the markup a crawler sees is unchanged. Filtering searches
+        * the whole facet rather than the visible page — gin runs to 74 across
+        * four pages and Plymouth gin's two sort onto pages two and three, so
+        * filtering the page in front of the reader would have found neither. */}
+      {shown.length === 0 ? (
+        <p className="text-parchment-300">No cocktail in this list matches that.</p>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {shown.map((c) => (
+            <Link
+              key={c._id}
+              href={`/field-manual/cocktails/${c.slug.current}/`}
+              className="group bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl border border-gold-500/20 overflow-hidden hover:border-gold-400/40 transition-all duration-300"
+            >
+              {c.image && (
+                <div className="relative aspect-4/3 bg-jerry-green-800/20">
+                  <Image
+                    src={c.image}
+                    alt={c.name}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                  />
+                </div>
+              )}
+              <div className="p-6 space-y-3">
+                <h3 className="text-xl font-serif font-bold text-white group-hover:text-gold-300 transition-colors">
+                  {c.name}
+                </h3>
+                <p className="text-parchment-300 text-sm leading-relaxed line-clamp-3">{c.description}</p>
+              </div>
+            </Link>
+          ))}
         </div>
       )}
     </div>

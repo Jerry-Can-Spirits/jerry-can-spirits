@@ -1,5 +1,4 @@
 import Link from 'next/link'
-import Image from 'next/image'
 import { notFound } from 'next/navigation'
 import Breadcrumbs from '@/components/Breadcrumbs'
 import BackToTop from '@/components/BackToTop'
@@ -17,7 +16,7 @@ import {
   titleFor,
   type FacetKind,
 } from '@/lib/cocktail-facets'
-import { getFacet, getFacetCocktails, getFacetSearchIndex, getMemberCounts } from '@/lib/facet-data'
+import { getFacet, getFacetAllCocktails, getFacetSearchIndex, getMemberCounts } from '@/lib/facet-data'
 import { copyFor, renderCopy } from '@/lib/facet-copy'
 
 /**
@@ -51,7 +50,7 @@ export default async function CocktailFacetPage({
   if (!isValidPage(page, facet.count)) notFound()
 
   const [cocktails, searchIndex, memberCounts] = await Promise.all([
-    getFacetCocktails(facet, page),
+    getFacetAllCocktails(facet),
     getFacetSearchIndex(facet),
     getMemberCounts(facet),
   ])
@@ -67,12 +66,19 @@ export default async function CocktailFacetPage({
   const indexable = isIndexable(facet)
   const showOrientingSection = hasSubTypes(facet) && memberCounts.length > 1 && page === 1
 
+  // The slice this URL is about. `cocktails` now holds the whole facet, because
+  // the filter searches across every page, so the schema has to say which of
+  // them this page actually lists. Describing all 74 on each of four pages
+  // would tell a crawler the same list four times and put every position at the
+  // wrong number.
+  const pageCocktails = cocktails.slice((page - 1) * FACET_PAGE_SIZE, page * FACET_PAGE_SIZE)
+
   const itemListSchema = {
     '@context': 'https://schema.org',
     '@type': 'ItemList',
     name: titleFor(facet, page),
-    numberOfItems: cocktails.length,
-    itemListElement: cocktails.map((c, i) => ({
+    numberOfItems: pageCocktails.length,
+    itemListElement: pageCocktails.map((c, i) => ({
       '@type': 'ListItem',
       position: (page - 1) * FACET_PAGE_SIZE + i + 1,
       url: `https://jerrycanspirits.co.uk/field-manual/cocktails/${c.slug.current}/`,
@@ -160,39 +166,13 @@ export default async function CocktailFacetPage({
       )}
 
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <FacetFilter index={searchIndex} label={facet.label} />
-
-        {cocktails.length === 0 ? (
-          <p className="text-parchment-300">Nothing here yet.</p>
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {cocktails.map((c) => (
-              <Link
-                key={c._id}
-                href={`/field-manual/cocktails/${c.slug.current}/`}
-                className="group bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl border border-gold-500/20 overflow-hidden hover:border-gold-400/40 transition-all duration-300"
-              >
-                {c.image && (
-                  <div className="relative aspect-4/3 bg-jerry-green-800/20">
-                    <Image
-                      src={c.image}
-                      alt={c.name}
-                      fill
-                      className="object-cover"
-                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-                    />
-                  </div>
-                )}
-                <div className="p-6 space-y-3">
-                  <h3 className="text-xl font-serif font-bold text-white group-hover:text-gold-300 transition-colors">
-                    {c.name}
-                  </h3>
-                  <p className="text-parchment-300 text-sm leading-relaxed line-clamp-3">{c.description}</p>
-                </div>
-              </Link>
-            ))}
-          </div>
-        )}
+        <FacetFilter
+          index={searchIndex}
+          label={facet.label}
+          cocktails={cocktails}
+          page={page}
+          pageSize={FACET_PAGE_SIZE}
+        />
 
         {/* Every page links to every other, rather than Previous and Next
             alone. With sequential links only, page 4 was reachable solely
