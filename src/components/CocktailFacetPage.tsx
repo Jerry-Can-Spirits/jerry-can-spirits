@@ -130,34 +130,29 @@ export default async function CocktailFacetPage({
             </h2>
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
               {memberCounts.map(({ member, count }) => (
-                <Link
+                <a
                   key={member}
-                  href={`/field-manual/cocktails/?spirit=${member}`}
-                  // A rollup member has no facet page of its own — plymouth-gin
-                  // lives inside the gin facet — so this filtered view of the
-                  // index is the only place it can point.
+                  // A fragment, not a URL.
                   //
-                  // nofollow because the destination is 94kB of the full index
-                  // filtered in the browser, it already canonicalises back to
-                  // the clean URL, and it is not in the sitemap. A crawler
-                  // following it fetches the whole catalogue to reach a page
-                  // Google will never index. Six of these appeared in the
-                  // August audit as slow pages, roughly 560kB of crawl for no
-                  // unique content.
+                  // This used to point at /field-manual/cocktails/?spirit=<value>:
+                  // the full 376-cocktail index, 94kB, filtered in the browser
+                  // after loading. Six of those turned up in the August crawl
+                  // as slow pages, about 560kB fetched to reach a view that
+                  // already existed on the page the reader was standing on. The
+                  // FacetFilter below offers the same values, because both it
+                  // and this section are derived from the facet's own contents.
                   //
-                  // The reader keeps the link, because "Plymouth gin (4)" is
-                  // worth being able to open. Filtering in place rather than
-                  // navigating would be better still and is the real fix; the
-                  // page already renders a client-side FacetFilter that could
-                  // take a preset.
-                  rel="nofollow"
+                  // The fragment applies that filter in place. No navigation,
+                  // nothing fetched, and crawlers ignore fragments so no URL is
+                  // created to crawl.
+                  href={`#spirit=${encodeURIComponent(member)}`}
                   className="flex items-center justify-between gap-3 p-3 bg-jerry-green-800/30 rounded-lg border border-gold-500/20 hover:bg-jerry-green-800/50 hover:border-gold-400/40 transition-all group"
                 >
                   <span className="text-parchment-300 group-hover:text-gold-300 transition-colors">
                     {MEMBER_LABELS[member] ?? member}
                   </span>
                   <span className="text-parchment-400 text-sm shrink-0">{count}</span>
-                </Link>
+                </a>
               ))}
             </div>
           </div>

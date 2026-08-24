@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import {
   MEMBER_LABELS,
@@ -63,6 +63,39 @@ export default function FacetFilter({ index, label }: { index: FacetIndexItem[];
   const [query, setQuery] = useState('')
   const [spirit, setSpirit] = useState<string | null>(null)
   const [difficulty, setDifficulty] = useState<string | null>(null)
+
+  /**
+   * Apply a base spirit named in the URL fragment, as #spirit=plymouth-gin.
+   *
+   * The orienting section above a rollup page lists the spirits it covers, and
+   * used to link each one to /field-manual/cocktails/?spirit=<value> — the full
+   * 376-cocktail index, 94kB, filtered in the browser after loading. Six of
+   * those URLs turned up in the August crawl as slow pages, roughly 560kB
+   * fetched to reach a view that already existed on the page the reader had
+   * just left: the chips below offer exactly the same values, because both are
+   * derived from this facet's own contents.
+   *
+   * A fragment does the same job with no navigation. Crawlers ignore fragments
+   * entirely, so no URL is created and nothing is fetched.
+   *
+   * hashchange as well as mount, because clicking one of those links while
+   * already on the page changes the fragment without remounting anything.
+   */
+  useEffect(() => {
+    const applyFromHash = () => {
+      const match = /^#spirit=(.+)$/.exec(window.location.hash)
+      if (!match) return
+      const value = decodeURIComponent(match[1])
+      // Only values this facet actually holds. A stale or hand-typed fragment
+      // should leave the page as it is rather than filtering to nothing.
+      if (!index.some((item) => item.b === value)) return
+      setSpirit(value)
+      document.getElementById('facet-filter')?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    }
+    applyFromHash()
+    window.addEventListener('hashchange', applyFromHash)
+    return () => window.removeEventListener('hashchange', applyFromHash)
+  }, [index])
 
   const state = { q: query, spirit, difficulty }
   const filtering = isFiltering(state)
