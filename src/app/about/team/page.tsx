@@ -6,7 +6,7 @@ import Breadcrumbs from '@/components/Breadcrumbs'
 import { OG_IMAGE } from '@/lib/og'
 
 export const metadata: Metadata = {
-  title: 'Meet the Team',
+  title: 'Meet the Team Behind Jerry Can Spirits',
   description: 'Meet Dan and Rhys, the Royal Signals veterans behind Jerry Can Spirits. Two mates who decided to stop talking about it and actually have a go.',
   alternates: {
     canonical: 'https://jerrycanspirits.co.uk/about/team/',

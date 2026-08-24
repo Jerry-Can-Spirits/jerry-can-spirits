@@ -3,7 +3,7 @@ import StructuredData from '@/components/StructuredData'
 import { OG_IMAGE } from '@/lib/og'
 
 export const metadata: Metadata = {
-  title: "Contact Us",
+  title: "Contact Jerry Can Spirits: Orders, Trade and Press",
   description: "Get in touch with Jerry Can Spirits. Questions about our rum, press and media enquiries, or just want to know more. We're here.",
   alternates: {
     canonical: "https://jerrycanspirits.co.uk/contact/",
