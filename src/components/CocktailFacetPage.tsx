@@ -172,59 +172,59 @@ export default async function CocktailFacetPage({
           cocktails={cocktails}
           page={page}
           pageSize={FACET_PAGE_SIZE}
-        />
-
-        {/* Every page links to every other, rather than Previous and Next
-            alone. With sequential links only, page 4 was reachable solely
-            through page 3 through page 2: one internal link each, and a crawl
-            depth to match. That matters here more than on most paginated
-            listings, because the hub renders its first sixteen recipes and then
-            loads the rest on click, so these pages are the crawlable route to
-            the recipes deep in a facet. Numbering them puts every page one
-            click from the first. The counts are small enough (four pages at the
-            widest) that a full list needs no windowing. */}
-        {pages > 1 && (
-          <nav className="mt-12 flex flex-wrap items-center justify-center gap-3" aria-label="Pagination">
-            {page > 1 && (
-              <Link
-                href={facetPath(facet.kind, facet.value, page - 1)}
-                rel="prev"
-                className="px-5 py-3 bg-gold-500/20 border border-gold-500/40 text-gold-300 rounded-lg hover:bg-gold-500/30 transition-colors font-semibold"
-              >
-                Previous
-              </Link>
-            )}
-            {Array.from({ length: pages }, (_, i) => i + 1).map((n) =>
-              n === page ? (
-                <span
-                  key={n}
-                  aria-current="page"
-                  className="px-4 py-3 bg-gold-500/40 border border-gold-400/60 text-gold-200 rounded-lg font-semibold"
-                >
-                  {n}
-                </span>
-              ) : (
+        >
+          {/* Every page links to every other, rather than Previous and Next
+              alone. With sequential links only, page 4 was reachable solely
+              through page 3 through page 2: one internal link each, and a crawl
+              depth to match. That matters here more than on most paginated
+              listings, because the hub renders its first sixteen recipes and then
+              loads the rest on click, so these pages are the crawlable route to
+              the recipes deep in a facet. Numbering them puts every page one
+              click from the first. The counts are small enough (four pages at the
+              widest) that a full list needs no windowing. */}
+          {pages > 1 && (
+            <nav className="mt-12 flex flex-wrap items-center justify-center gap-3" aria-label="Pagination">
+              {page > 1 && (
                 <Link
-                  key={n}
-                  href={facetPath(facet.kind, facet.value, n)}
-                  aria-label={`Page ${n} of ${pages}`}
-                  className="px-4 py-3 bg-jerry-green-800/30 border border-gold-500/20 text-parchment-300 rounded-lg hover:bg-jerry-green-800/50 hover:text-gold-300 transition-colors font-semibold"
+                  href={facetPath(facet.kind, facet.value, page - 1)}
+                  rel="prev"
+                  className="px-5 py-3 bg-gold-500/20 border border-gold-500/40 text-gold-300 rounded-lg hover:bg-gold-500/30 transition-colors font-semibold"
                 >
-                  {n}
+                  Previous
                 </Link>
-              )
-            )}
-            {page < pages && (
-              <Link
-                href={facetPath(facet.kind, facet.value, page + 1)}
-                rel="next"
-                className="px-5 py-3 bg-gold-500/20 border border-gold-500/40 text-gold-300 rounded-lg hover:bg-gold-500/30 transition-colors font-semibold"
-              >
-                Next
-              </Link>
-            )}
-          </nav>
-        )}
+              )}
+              {Array.from({ length: pages }, (_, i) => i + 1).map((n) =>
+                n === page ? (
+                  <span
+                    key={n}
+                    aria-current="page"
+                    className="px-4 py-3 bg-gold-500/40 border border-gold-400/60 text-gold-200 rounded-lg font-semibold"
+                  >
+                    {n}
+                  </span>
+                ) : (
+                  <Link
+                    key={n}
+                    href={facetPath(facet.kind, facet.value, n)}
+                    aria-label={`Page ${n} of ${pages}`}
+                    className="px-4 py-3 bg-jerry-green-800/30 border border-gold-500/20 text-parchment-300 rounded-lg hover:bg-jerry-green-800/50 hover:text-gold-300 transition-colors font-semibold"
+                  >
+                    {n}
+                  </Link>
+                )
+              )}
+              {page < pages && (
+                <Link
+                  href={facetPath(facet.kind, facet.value, page + 1)}
+                  rel="next"
+                  className="px-5 py-3 bg-gold-500/20 border border-gold-500/40 text-gold-300 rounded-lg hover:bg-gold-500/30 transition-colors font-semibold"
+                >
+                  Next
+                </Link>
+              )}
+            </nav>
+          )}
+        </FacetFilter>
 
         <div className="mt-12 pt-6">
           <Link

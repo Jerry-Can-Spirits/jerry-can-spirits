@@ -12,7 +12,7 @@
  * client component, which is a real cost and the reason these assertions matter.
  */
 import { describe, it, expect } from 'vitest'
-import { facetFilterOptions, type FacetIndexItem } from '@/lib/cocktail-facets'
+import { facetFilterOptions, filterFacetIndex, type FacetIndexItem } from '@/lib/cocktail-facets'
 
 /** Exactly the logic in FacetFilter's hash effect. */
 function spiritFromHash(hash: string, index: FacetIndexItem[]): string | null {
@@ -114,5 +114,53 @@ describe('what the grid shows', () => {
     for (const page of [1, 2, 3, 4]) {
       expect(shown(page, 'plymouth-gin')).toHaveLength(2)
     }
+  })
+})
+
+/**
+ * Chip counts answer "how many if I click this", not "how many exist".
+ *
+ * Each control is counted against the index filtered by the *other* controls.
+ * Counting against the unfiltered index was the original behaviour and it lied
+ * in a specific way: "Novice 29" sitting beside a grid of two Plymouth gin
+ * drinks, where clicking Novice could only ever yield one or zero.
+ *
+ * Counting a control against itself is the opposite mistake and worse — it
+ * collapses to the single option already chosen, so there is no way back.
+ */
+describe('chip counts', () => {
+  const spiritOptions = (q: string, difficulty: string | null) =>
+    facetFilterOptions(filterFacetIndex(GIN, { q, spirit: null, difficulty }), 'b')
+  const difficultyOptions = (q: string, spirit: string | null) =>
+    facetFilterOptions(filterFacetIndex(GIN, { q, spirit, difficulty: null }), 'd')
+
+  it('narrows the difficulty counts to the selected spirit', () => {
+    // Plymouth gin holds one drink, a novice one.
+    const opts = difficultyOptions('', 'plymouth-gin')
+    expect(opts).toHaveLength(1)
+    expect(opts[0]).toEqual({ value: 'novice', count: 1 })
+  })
+
+  it('narrows the spirit counts to the selected difficulty', () => {
+    // Only gin and genever hold a wayfinder drink.
+    const values = spiritOptions('', 'wayfinder').map((o) => o.value)
+    expect(values).toContain('gin')
+    expect(values).toContain('genever')
+    expect(values).not.toContain('plymouth-gin')
+  })
+
+  it('never counts a control against itself, so a choice can be changed', () => {
+    // With Plymouth gin selected, the spirit chips still offer every spirit
+    // available under the other filters. Counting spirit against spirit would
+    // leave Plymouth gin alone on screen and no way back to London Dry.
+    const values = spiritOptions('', null).map((o) => o.value)
+    expect(values.length).toBeGreaterThan(1)
+    expect(values).toContain('old-tom-gin')
+  })
+
+  it('reflects the search box as well as the chips', () => {
+    // "Collins" is the Tom Collins, an old-tom-gin drink.
+    const values = spiritOptions('collins', null).map((o) => o.value)
+    expect(values).toEqual(['old-tom-gin'])
   })
 })
