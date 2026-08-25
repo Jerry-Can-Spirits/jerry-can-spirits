@@ -8,7 +8,7 @@ First expression: Expedition Spiced. Caribbean rum base. Macerated by our Britis
 
 Jerry Can Spirits is a **spirits house, not a rum brand**. Expedition is the range; Expedition Spiced Rum is the current expression. Write the company as a British spirits house whose first expression is a rum — never as "a rum brand", "we make rum", or "our rum" standing in for the company. "Our rum" is correct for the liquid and wrong for the business. Full range-language rules are in `docs/VOICE.md`.
 
-Price: £35 currently; RRP rises to £45 on 3 August 2026.
+Price: £40. £45 was trialled and did not work; the price came back to £40 on 25 August 2026 for a week, framed as a community challenge, with 50 bottles sold treated as proof that £40 is the right price. This line records what the price is — never quote it in code or copy. Every surface reads the price live from Shopify (Audit 8 PR B removed `rrp_p`; PR #1206 removed `trade_standard_case_p` after it drifted £18 a case behind the shop).
 5% of profits support military charities.
 Launch date: April 6, 2026.
 Website: jerrycanspirits.co.uk
