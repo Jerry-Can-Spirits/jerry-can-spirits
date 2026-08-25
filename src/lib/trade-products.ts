@@ -38,10 +38,11 @@ export const TRADE_PRODUCTS: Array<{
   excludeFromDiscount?: boolean
 }> = [
   { handle: 'jerry-can-spirits-expedition-pack-spiced-rum-6-bottles', category: 'spirits' },
-  // Single bottle for low-volume trade accounts. Excluded from trade
-  // discount codes — the margin doesn't support discounting at single-unit
-  // volume, and most venues claim the VAT back regardless.
-  { handle: 'jerry-can-spirits-expedition-spiced-rum', category: 'spirits', excludeFromDiscount: true },
+  // Single bottle for low-volume trade accounts. Covered by the trade discount
+  // like everything else. It used to be excluded, which together with the old
+  // £100 minimum meant a venue buying one or two bottles, which is most first
+  // orders, never reached a discount at all.
+  { handle: 'jerry-can-spirits-expedition-spiced-rum', category: 'spirits' },
   { handle: 'crystal-ice-hiball-42cl', category: 'glassware' },
   { handle: 'hiball-glass-38cl', category: 'glassware' },
   { handle: 'club-ice-tumbler-26cl', category: 'glassware' },
