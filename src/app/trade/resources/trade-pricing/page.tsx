@@ -3,72 +3,52 @@ import { TradeSheetSection, TradeSheetShell } from '@/components/trade-portal/Tr
 import {
   EXPEDITION_SPICED,
   PRICING_ROWS,
-  TRADE_MIN_ORDER_GBP,
+  TRADE_DISCOUNT_PCT,
   formatPence,
-  type TradeTier,
 } from '@/lib/trade-portal/product-data'
 
 export const dynamic = 'force-dynamic'
 
-function tierLabel(tier: TradeTier): string {
-  if (tier === 'intro') return 'Intro'
-  if (tier === 'standard') return 'Standard'
-  return 'Partner'
-}
-
 export default async function TradePricingPage() {
   const session = await requireTradeSession()
-  const viewerTier = session.tier as TradeTier | string
 
   return (
     <TradeSheetShell
       title="Trade Pricing"
       eyebrow="Expedition Spiced Rum"
-      subtitle={`Your account: ${session.venue_name}. Tier: ${
-        viewerTier === 'intro' || viewerTier === 'standard' || viewerTier === 'partner'
-          ? tierLabel(viewerTier)
-          : viewerTier
-      }.`}
+      // No tier in the subtitle. Every account is on the same rate, so naming a
+      // tier here would imply a price it no longer sets.
+      subtitle={`Your account: ${session.venue_name}.`}
     >
       <TradeSheetSection title="Per case (6 × 700ml)">
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
               <tr className="text-left text-parchment-400 print:text-black/70 border-b border-gold-500/30 print:border-black/40">
-                <th className="py-2 pr-4 font-medium">Tier</th>
+                <th className="py-2 pr-4 font-medium">Price</th>
                 <th className="py-2 pr-4 font-medium">Discount</th>
-                <th className="py-2 pr-4 font-medium text-right">Case (inc VAT)</th>
-                <th className="py-2 font-medium text-right">Case (ex VAT)</th>
+                <th className="py-2 pr-4 font-medium text-right">Case (ex VAT)</th>
+                <th className="py-2 font-medium text-right">Case (inc VAT)</th>
               </tr>
             </thead>
             <tbody>
-              {PRICING_ROWS.map((row) => {
-                const isViewerTier = row.tier === viewerTier
-                return (
-                  <tr
-                    key={row.tier}
-                    className={`border-b border-gold-500/15 print:border-black/30 ${
-                      isViewerTier ? 'bg-gold-500/10 print:bg-transparent' : ''
-                    }`}
-                  >
-                    <td className="py-2 pr-4">
-                      {row.label}
-                      {isViewerTier && (
-                        <span className="ml-2 text-xs text-gold-300 print:text-black/70 uppercase tracking-widest">
-                          your tier
-                        </span>
-                      )}
-                    </td>
-                    <td className="py-2 pr-4">
-                      {row.discount_pct > 0 ? `${row.discount_pct}% off` : '—'}
-                    </td>
-                    <td className="py-2 pr-4 text-right font-medium">{formatPence(row.case_inc_vat_p)}</td>
-                    <td className="py-2 text-right text-parchment-300 print:text-black/70">
-                      {formatPence(row.case_ex_vat_p)}
-                    </td>
-                  </tr>
-                )
-              })}
+              {PRICING_ROWS.map((row) => (
+                <tr
+                  key={row.key}
+                  className={`border-b border-gold-500/15 print:border-black/30 ${
+                    row.key === 'trade' ? 'bg-gold-500/10 print:bg-transparent' : ''
+                  }`}
+                >
+                  <td className="py-2 pr-4">{row.label}</td>
+                  <td className="py-2 pr-4">
+                    {row.discount_pct > 0 ? `${row.discount_pct}% off` : '—'}
+                  </td>
+                  <td className="py-2 pr-4 text-right font-medium">{formatPence(row.case_ex_vat_p)}</td>
+                  <td className="py-2 text-right text-parchment-300 print:text-black/70">
+                    {formatPence(row.case_inc_vat_p)}
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>
@@ -79,29 +59,26 @@ export default async function TradePricingPage() {
           <table className="w-full text-sm">
             <thead>
               <tr className="text-left text-parchment-400 print:text-black/70 border-b border-gold-500/30 print:border-black/40">
-                <th className="py-2 pr-4 font-medium">Tier</th>
-                <th className="py-2 pr-4 font-medium text-right">Bottle (inc VAT)</th>
-                <th className="py-2 font-medium text-right">Bottle (ex VAT)</th>
+                <th className="py-2 pr-4 font-medium">Price</th>
+                <th className="py-2 pr-4 font-medium text-right">Bottle (ex VAT)</th>
+                <th className="py-2 font-medium text-right">Bottle (inc VAT)</th>
               </tr>
             </thead>
             <tbody>
-              {PRICING_ROWS.map((row) => {
-                const isViewerTier = row.tier === viewerTier
-                return (
-                  <tr
-                    key={row.tier}
-                    className={`border-b border-gold-500/15 print:border-black/30 ${
-                      isViewerTier ? 'bg-gold-500/10 print:bg-transparent' : ''
-                    }`}
-                  >
-                    <td className="py-2 pr-4">{row.label}</td>
-                    <td className="py-2 pr-4 text-right font-medium">{formatPence(row.bottle_inc_vat_p)}</td>
-                    <td className="py-2 text-right text-parchment-300 print:text-black/70">
-                      {formatPence(row.bottle_ex_vat_p)}
-                    </td>
-                  </tr>
-                )
-              })}
+              {PRICING_ROWS.map((row) => (
+                <tr
+                  key={row.key}
+                  className={`border-b border-gold-500/15 print:border-black/30 ${
+                    row.key === 'trade' ? 'bg-gold-500/10 print:bg-transparent' : ''
+                  }`}
+                >
+                  <td className="py-2 pr-4">{row.label}</td>
+                  <td className="py-2 pr-4 text-right font-medium">{formatPence(row.bottle_ex_vat_p)}</td>
+                  <td className="py-2 text-right text-parchment-300 print:text-black/70">
+                    {formatPence(row.bottle_inc_vat_p)}
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>
@@ -125,17 +102,20 @@ export default async function TradePricingPage() {
           <a href="/trade/order/" className="underline text-gold-300 print:text-black">
             /trade/order
           </a>
-          . For bespoke arrangements, larger volumes, or questions about your tier, contact{' '}
+          . For bespoke arrangements, larger volumes, or questions about your account, contact{' '}
           <a href="mailto:trade@jerrycanspirits.co.uk" className="underline text-gold-300 print:text-black">
             trade@jerrycanspirits.co.uk
           </a>
           .
         </p>
         <p className="text-sm leading-relaxed mt-3">
-          Minimum order £{TRADE_MIN_ORDER_GBP}. Your tier discount applies automatically at checkout.
+          Your {TRADE_DISCOUNT_PCT}% trade discount applies automatically at checkout, on every product and at
+          any quantity. There is no minimum order.
         </p>
         <p className="text-sm leading-relaxed mt-3 text-parchment-300 print:text-black/70">
-          All prices shown are per case or per bottle as labelled. VAT-inclusive figures are the bold column. Ex-VAT figures are shown alongside for accounting reference. Prices subject to change with notice.
+          All prices shown are per case or per bottle as labelled. Ex-VAT figures are the bold column, to compare
+          against your other suppliers. VAT-inclusive figures are shown alongside, and are what the checkout will
+          charge. Prices subject to change with notice.
         </p>
       </TradeSheetSection>
     </TradeSheetShell>

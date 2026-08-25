@@ -110,13 +110,14 @@ export const EXPEDITION_SPICED = {
   },
 } as const
 
-// Trade pricing tiers. The tier names match the `tier` column on
-// trade_accounts (migration 0013). Discount percentages confirmed by brand
-// owner: intro 5%, standard 10%, partner 15%, all on the standard case price.
+// Account tiers. The names match the `tier` column on trade_accounts (migration
+// 0013). Tiers no longer set price — since migration 0075 every venue is on one
+// flat rate — but the column is kept because it still records which accounts are
+// the large ones, which nothing else does.
 export type TradeTier = 'intro' | 'standard' | 'partner'
 
 export interface PricingRow {
-  tier: TradeTier | 'standard_rrp'
+  key: 'rrp' | 'trade'
   label: string
   discount_pct: number
   case_inc_vat_p: number
@@ -127,7 +128,7 @@ export interface PricingRow {
 
 const VAT_DIVISOR = 1.2
 
-function makeRow(tier: PricingRow['tier'], label: string, discount_pct: number): PricingRow {
+function makeRow(key: PricingRow['key'], label: string, discount_pct: number): PricingRow {
   const standard = EXPEDITION_SPICED.trade_standard_case_p
   const case_inc = Math.round(standard * (1 - discount_pct / 100))
   const bottle_inc = Math.round(case_inc / EXPEDITION_SPICED.case.units_per_case)
@@ -136,7 +137,7 @@ function makeRow(tier: PricingRow['tier'], label: string, discount_pct: number):
   // bottle_inc, so it doesn't compound rounding error against the case figure.
   const bottle_ex = Math.round(case_inc / EXPEDITION_SPICED.case.units_per_case / VAT_DIVISOR)
   return {
-    tier,
+    key,
     label,
     discount_pct,
     case_inc_vat_p: case_inc,
@@ -146,38 +147,30 @@ function makeRow(tier: PricingRow['tier'], label: string, discount_pct: number):
   }
 }
 
-// Single source of truth for trade discounts, keyed by the Shopify discount code
-// (what the checkout actually applies). Confirmed in Shopify admin 21 Jul 2026:
-// all percentage codes, £100 minimum order. The PARTNER-n ladder is volume-based
-// (1 = individual bottles 5%, 2 = ~a case 10%, 3 = 2+ cases 15%); TRADE-INTRO is
-// the first-order incentive. TRADE-INTRO and TRADE-PARTNER-3 both sit at 15% by
-// intent (pending review) — mirror Shopify, do not "correct" it here.
+// The single trade discount, applied to every account whatever its tier
+// (confirmed with Dan 25 Aug 2026). It replaces the TRADE-INTRO /
+// TRADE-PARTNER-1/2/3 ladder, which priced small orders out of a discount
+// altogether: every code carried a £100 minimum and none of them covered the
+// single bottle, so a one- or two-bottle order — most first orders — reached no
+// discount at all while the pricing sheet quoted it a tier rate.
+//
+// TRADE10 has no minimum and covers the single bottle. It mirrors the live
+// Shopify code: change both together or neither. The old ladder's percentages
+// were already drifting from Shopify in this file, which is the other reason
+// there is now only one number to keep in step.
+export const TRADE_DISCOUNT_CODE = 'TRADE10' as const
+export const TRADE_DISCOUNT_PCT = 10
+
 export const TRADE_DISCOUNT_PCT_BY_CODE = {
-  'TRADE-INTRO': 15,
-  'TRADE-PARTNER-1': 5,
-  'TRADE-PARTNER-2': 10,
-  'TRADE-PARTNER-3': 15,
+  [TRADE_DISCOUNT_CODE]: TRADE_DISCOUNT_PCT,
 } as const
 export type TradeDiscountCode = keyof typeof TRADE_DISCOUNT_PCT_BY_CODE
 
-// Minimum order value every trade code enforces in Shopify.
-export const TRADE_MIN_ORDER_GBP = 100
-
-// Canonical tier → discount code (confirmed with Dan 21 Jul 2026). Both the
-// pricing page (PRICING_ROWS) and the order form derive their percentage from
-// TRADE_DISCOUNT_PCT_BY_CODE via this map, so the two surfaces can no longer quote
-// different numbers for the same account.
-const TRADE_CODE_BY_TIER: Record<TradeTier, TradeDiscountCode> = {
-  intro: 'TRADE-INTRO',
-  standard: 'TRADE-PARTNER-2',
-  partner: 'TRADE-PARTNER-3',
-}
-
+// Two rows, not four: with one rate there is no ladder to show, and a table of
+// four identical percentages invites the reader to hunt for a difference.
 export const PRICING_ROWS: PricingRow[] = [
-  makeRow('standard_rrp', 'Standard case price', 0),
-  makeRow('intro', 'Intro tier', TRADE_DISCOUNT_PCT_BY_CODE[TRADE_CODE_BY_TIER.intro]),
-  makeRow('standard', 'Standard tier', TRADE_DISCOUNT_PCT_BY_CODE[TRADE_CODE_BY_TIER.standard]),
-  makeRow('partner', 'Partner tier', TRADE_DISCOUNT_PCT_BY_CODE[TRADE_CODE_BY_TIER.partner]),
+  makeRow('rrp', 'Standard case price', 0),
+  makeRow('trade', 'Your trade price', TRADE_DISCOUNT_PCT),
 ]
 
 export function formatPence(p: number): string {

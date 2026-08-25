@@ -9,7 +9,6 @@ import {
 } from '@/lib/trade-products'
 import {
   TRADE_DISCOUNT_PCT_BY_CODE,
-  TRADE_MIN_ORDER_GBP,
   type TradeDiscountCode,
 } from '@/lib/trade-portal/product-data'
 import { formatPrice } from '@/lib/format-price'
@@ -283,10 +282,6 @@ export default function TradeOrderForm({ products, error: catalogueError, accoun
                 Your trade discount will be applied at checkout.
               </p>
             )}
-            <p className="text-parchment-600 text-xs mb-6">
-              Minimum order £{TRADE_MIN_ORDER_GBP}.
-            </p>
-
             <p role="alert" aria-live="assertive" className="text-red-400 text-sm mb-4 min-h-5">
               {formError}
             </p>

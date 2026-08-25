@@ -14,7 +14,7 @@
 
 -- ── 1. Demo trade account ───────────────────────────────────────────────
 INSERT INTO trade_accounts (pin, discount_code, tier, venue_name)
-VALUES ('58471209', 'TRADE-PARTNER-3', 'partner', 'Pour IQ Demo Venue');
+VALUES ('58471209', 'TRADE10', 'partner', 'Pour IQ Demo Venue');
 
 -- ── 2. Non-expiring Pour IQ pilot licence ───────────────────────────────
 INSERT INTO pouriq_subscriptions (trade_account_id, licence_type, valid_until, price_paid_p, notes)

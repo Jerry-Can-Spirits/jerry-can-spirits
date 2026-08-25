@@ -1,0 +1,21 @@
+-- Point every trade account at the single flat discount code.
+--
+-- The tiered ladder (TRADE-INTRO 15%, TRADE-PARTNER-1/2/3 at 5/10/15%) is
+-- retired in favour of one rate for every venue: TRADE10, 10% off, no minimum
+-- order.
+--
+-- The ladder priced small orders out of a discount altogether. Every code
+-- carried a £100 minimum and none of them covered the single bottle, so a venue
+-- buying one or two — which is most first orders, and the pattern several
+-- accounts have settled into — never reached a discount at all while being
+-- shown a tier rate on the pricing sheet. Four codes for what is now one number
+-- is also drift waiting to happen: the tier comment in product-data.ts had
+-- already been wrong about intro for over a month.
+--
+-- `tier` is deliberately left alone. It no longer sets price, but it still
+-- records which accounts are the large ones, and rewriting it would lose that
+-- for nothing.
+--
+-- Apply with: wrangler d1 execute jerry-can-spirits-db --remote --file=migrations/0075_trade_flat_discount.sql
+
+UPDATE trade_accounts SET discount_code = 'TRADE10';
