@@ -32,17 +32,23 @@ export const CATEGORY_LABELS: Record<TradeCategory, string> = {
   sustainability: 'Give Back',
 }
 
+// The two rum SKUs by name, because the pricing sheet has to single them out to
+// quote a case price and a bottle price. Exported so the sheet cannot hold its
+// own copy of a handle and drift from this list.
+export const EXPEDITION_CASE_HANDLE = 'jerry-can-spirits-expedition-pack-spiced-rum-6-bottles'
+export const EXPEDITION_BOTTLE_HANDLE = 'jerry-can-spirits-expedition-spiced-rum'
+
 export const TRADE_PRODUCTS: Array<{
   handle: string
   category: TradeCategory
   excludeFromDiscount?: boolean
 }> = [
-  { handle: 'jerry-can-spirits-expedition-pack-spiced-rum-6-bottles', category: 'spirits' },
+  { handle: EXPEDITION_CASE_HANDLE, category: 'spirits' },
   // Single bottle for low-volume trade accounts. Covered by the trade discount
   // like everything else. It used to be excluded, which together with the old
   // £100 minimum meant a venue buying one or two bottles, which is most first
   // orders, never reached a discount at all.
-  { handle: 'jerry-can-spirits-expedition-spiced-rum', category: 'spirits' },
+  { handle: EXPEDITION_BOTTLE_HANDLE, category: 'spirits' },
   { handle: 'crystal-ice-hiball-42cl', category: 'glassware' },
   { handle: 'hiball-glass-38cl', category: 'glassware' },
   { handle: 'club-ice-tumbler-26cl', category: 'glassware' },
