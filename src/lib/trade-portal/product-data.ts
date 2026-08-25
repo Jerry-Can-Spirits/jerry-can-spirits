@@ -66,9 +66,11 @@ export const EXPEDITION_SPICED = {
   },
 
   // Commercial
-  // rrp_p removed (Audit 8 PR B): no hardcoded price in copy anywhere; the RRP
-  // re-enters copy from live pricing after the 1 Aug 2026 change.
-  trade_standard_case_p: 21000, // pence, inc VAT
+  // No price lives here. rrp_p went in Audit 8 PR B; trade_standard_case_p
+  // followed it once it was found to have drifted £18 a case behind the shop,
+  // quoting £210 while Shopify charged £228 for the same six bottles. The trade
+  // sheet now reads both the case and the bottle price live from Shopify, which
+  // is the source the order page charges from, so the two cannot disagree.
 
   // Tasting (mirrored from contact/media/kit)
   tasting: {
@@ -116,35 +118,52 @@ export const EXPEDITION_SPICED = {
 // the large ones, which nothing else does.
 export type TradeTier = 'intro' | 'standard' | 'partner'
 
-export interface PricingRow {
+// One price as the sheet shows it: list and trade, ex and inc VAT.
+//
+// Built from whatever price is passed in rather than from a constant. The
+// constant this replaced had drifted £18 a case behind Shopify before anyone
+// noticed, and a trade sheet that undercuts the checkout is worse than no sheet.
+export interface PriceRow {
   key: 'rrp' | 'trade'
   label: string
   discount_pct: number
-  case_inc_vat_p: number
-  bottle_inc_vat_p: number
-  case_ex_vat_p: number
-  bottle_ex_vat_p: number
+  inc_vat_p: number
+  ex_vat_p: number
 }
 
 const VAT_DIVISOR = 1.2
 
-function makeRow(key: PricingRow['key'], label: string, discount_pct: number): PricingRow {
-  const standard = EXPEDITION_SPICED.trade_standard_case_p
-  const case_inc = Math.round(standard * (1 - discount_pct / 100))
-  const bottle_inc = Math.round(case_inc / EXPEDITION_SPICED.case.units_per_case)
-  const case_ex = Math.round(case_inc / VAT_DIVISOR)
-  // Derive the ex-VAT bottle from the exact inc-VAT case, not the already-rounded
-  // bottle_inc, so it doesn't compound rounding error against the case figure.
-  const bottle_ex = Math.round(case_inc / EXPEDITION_SPICED.case.units_per_case / VAT_DIVISOR)
+function makeRow(
+  key: PriceRow['key'],
+  label: string,
+  discount_pct: number,
+  baseIncVatP: number,
+): PriceRow {
+  const inc = Math.round(baseIncVatP * (1 - discount_pct / 100))
   return {
     key,
     label,
     discount_pct,
-    case_inc_vat_p: case_inc,
-    bottle_inc_vat_p: bottle_inc,
-    case_ex_vat_p: case_ex,
-    bottle_ex_vat_p: bottle_ex,
+    inc_vat_p: inc,
+    // Derived from the rounded inc-VAT figure rather than the raw base, so the
+    // two columns of a row always describe the same penny.
+    ex_vat_p: Math.round(inc / VAT_DIVISOR),
   }
+}
+
+// The two rows the sheet shows for any product: what it lists at, and what this
+// account pays.
+export function priceRows(baseIncVatP: number): PriceRow[] {
+  return [
+    makeRow('rrp', 'List price', 0, baseIncVatP),
+    makeRow('trade', 'Your trade price', TRADE_DISCOUNT_PCT, baseIncVatP),
+  ]
+}
+
+// '228.00', as Shopify returns a money amount, to 22800 pence. Rounded rather
+// than truncated: a float that lands on 227.99999 must not lose a penny.
+export function toPence(amount: string): number {
+  return Math.round(parseFloat(amount) * 100)
 }
 
 // The single trade discount, applied to every account whatever its tier
@@ -165,13 +184,6 @@ export const TRADE_DISCOUNT_PCT_BY_CODE = {
   [TRADE_DISCOUNT_CODE]: TRADE_DISCOUNT_PCT,
 } as const
 export type TradeDiscountCode = keyof typeof TRADE_DISCOUNT_PCT_BY_CODE
-
-// Two rows, not four: with one rate there is no ladder to show, and a table of
-// four identical percentages invites the reader to hunt for a difference.
-export const PRICING_ROWS: PricingRow[] = [
-  makeRow('rrp', 'Standard case price', 0),
-  makeRow('trade', 'Your trade price', TRADE_DISCOUNT_PCT),
-]
 
 export function formatPence(p: number): string {
   return `£${(p / 100).toFixed(2)}`
