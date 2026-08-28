@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import StructuredData from '@/components/StructuredData'
 import { baseOpenGraph } from '@/lib/og'
 import { ORG_REF } from '@/lib/jsonLd'
+import { REFERRAL_MIN_ORDER_LABEL } from '@/lib/pricing'
 
 // WebPage schema for terms of service
 const webPageSchema = {
@@ -371,7 +372,7 @@ export default function TermsOfService() {
                   <h3 className="text-lg font-semibold text-gold-300 mb-2">Code Terms</h3>
                   <ul className="list-disc list-inside space-y-1 text-parchment-200 ml-4">
                     <li>The discount is 10% off the order value</li>
-                    <li>A minimum order value of £65 applies; orders below £65 do not qualify</li>
+                    <li>A minimum order value of {REFERRAL_MIN_ORDER_LABEL} applies; orders below {REFERRAL_MIN_ORDER_LABEL} do not qualify</li>
                     <li>Codes are valid for 90 days from the date of issue, after which they expire</li>
                     <li>Each code is single use and limited to one per customer</li>
                     <li>A referral code cannot be combined with other offers or discount codes; a reward code may be combined with other order, product, and shipping discounts</li>
