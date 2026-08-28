@@ -19,6 +19,7 @@ import {
   STITCH_SESSION_ID,
   STITCH_CONSENT,
   CONSENT_GRANTED,
+  normaliseGaSessionId,
 } from './analytics-stitch-keys';
 
 const GA4_ENDPOINT = 'https://www.google-analytics.com/mp/collect';
@@ -54,7 +55,10 @@ export function buildPurchaseEvent(order: ShopifyOrder): BuiltPurchase {
     return { skip: 'consent-declined' };
   }
 
-  const sessionId = noteAttribute(order, STITCH_SESSION_ID);
+  // Normalised again here, not just at the storefront: carts stamped before
+  // the GS2 cookie fix carry the whole "s<id>$o<count>$…" blob in this
+  // attribute, and those carts keep converting for days after a deploy.
+  const sessionId = normaliseGaSessionId(noteAttribute(order, STITCH_SESSION_ID));
 
   // value: the item subtotal, excluding shipping. UK prices are VAT-inclusive,
   // so this is the VAT-inclusive product revenue the customer paid for goods.
