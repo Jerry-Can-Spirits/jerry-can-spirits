@@ -1,5 +1,12 @@
 export type Pillar = { title: string; body: string }
 
+export type CategoryFaq = { question: string; answer: string }
+
+// A customer's words, verbatim from the review, quoted in paragraphs. The
+// attribution follows the site convention: no names, source labelled honestly
+// (invited reviews carry Trustpilot's verified status, organic ones do not).
+export type CategoryTestimonial = { quote: string[]; attribution: string }
+
 export type CategoryConfig = {
   h1: string
   metaTitle: string
@@ -9,6 +16,11 @@ export type CategoryConfig = {
   seoTitle?: string
   seoBody?: string[]
   pillars?: Pillar[]
+  testimonial?: CategoryTestimonial
+  // Rendered on the page and emitted as FAQPage structured data. Answers are
+  // copy: no prices or thresholds in them, ever — they live in a config file
+  // and would drift exactly the way every hardcoded number here has.
+  faqs?: CategoryFaq[]
 }
 
 export const CATEGORIES: Record<string, CategoryConfig> = {
@@ -42,6 +54,37 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
       { title: 'Arrives Ready to Gift', body: 'Clean, considered packaging that does not need wrapping to look like it was thought about. Pair with glassware or a gift pack if you want to go further.' },
       { title: 'A Rum Worth Drinking', body: 'Not a display bottle. Designed to be opened, sipped slowly, and finished properly. Caribbean rum, real spices, 40% ABV. The kind of thing people come back to.' },
       { title: 'Veteran-Owned', body: 'Founded by two Royal Corps of Signals veterans. Armed Forces Covenant signatories. 5% of profits supports forces charities. A purchase that gives back.' },
+    ],
+    // Verbatim sentences from a wedding-gift review on Trustpilot, excerpted
+    // with the reviewer's more personal passages left out. Organic review, so
+    // per the attribution convention it is not labelled "verified".
+    testimonial: {
+      quote: [
+        'A few weeks before my wedding, I came across your brand and was immediately drawn to the military background and values behind it. As a former military family, the story resonated with me, and I decided to order seven bottles of rum as gifts for my best man and a group of close friends.',
+        'I presented the bottles to them during my wedding celebrations, and the reaction was incredible. What I expected to be a simple thank-you gift turned into a genuinely emotional moment.',
+        'The quality of the presentation, the service, and the product itself were all first class, but more importantly, your brand helped create a memory that I know none of us will forget.',
+      ],
+      attribution: 'Customer review · Trustpilot',
+    },
+    faqs: [
+      {
+        question: 'Can I send it straight to the person?',
+        answer:
+          'Yes. Enter their address at checkout. One thing worth knowing: every delivery is age-verified, so the person receiving it must be 18 or over and may be asked to show photo ID to the courier.',
+      },
+      {
+        question: 'Can I add a gift message?',
+        answer: 'Yes. Mark the order as a gift in the cart and add your message there.',
+      },
+      {
+        question: 'How long does delivery take?',
+        answer: 'Once dispatched, orders typically arrive within three to five business days, anywhere in the UK.',
+      },
+      {
+        question: 'Does it arrive gift-ready?',
+        answer:
+          'The bottle is considered enough to hand over as it is. If you want to go further, there is a presentation box made for it, and the gift pack pairs the bottle with barware.',
+      },
     ],
   },
 
