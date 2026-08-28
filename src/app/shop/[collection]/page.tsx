@@ -131,6 +131,20 @@ export default async function CollectionPage({
     ],
   }
 
+  // FAQPage only where the category actually renders FAQs on the page —
+  // structured data must describe visible content or it is a mixed signal.
+  const faqSchema = category?.faqs?.length
+    ? {
+        '@context': 'https://schema.org',
+        '@type': 'FAQPage',
+        mainEntity: category.faqs.map((faq) => ({
+          '@type': 'Question',
+          name: faq.question,
+          acceptedAnswer: { '@type': 'Answer', text: faq.answer },
+        })),
+      }
+    : null
+
   if (error) {
     return <ShopError />
   }
@@ -176,6 +190,12 @@ export default async function CollectionPage({
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: safeJsonLd(breadcrumbSchema) }}
       />
+      {faqSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: safeJsonLd(faqSchema) }}
+        />
+      )}
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
         <Breadcrumbs items={[{ label: 'Shop', href: '/shop' }, { label: h1 }]} />
@@ -286,6 +306,30 @@ export default async function CollectionPage({
         </div>
       </section>
 
+      {/* A customer's own words, where the category has them. Placed straight
+          after the products: on a gift page the question is "does this land
+          well as a gift", and only someone who gave one can answer it. */}
+      {category?.testimonial && (
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-16">
+          <figure className="max-w-3xl mx-auto">
+            <span aria-hidden="true" className="block text-6xl text-gold-400/80 leading-none font-serif mb-4">
+              &ldquo;
+            </span>
+            <blockquote className="space-y-4">
+              {category.testimonial.quote.map((para) => (
+                <p key={para.slice(0, 40)} className="text-lg sm:text-xl text-parchment-50 font-serif leading-relaxed">
+                  {para}
+                </p>
+              ))}
+            </blockquote>
+            <figcaption className="mt-6 text-xs uppercase tracking-widest text-gold-300 font-semibold">
+              <span aria-hidden="true" className="text-gold-400 mr-2 tracking-widest">★★★★★</span>
+              {category.testimonial.attribution}
+            </figcaption>
+          </figure>
+        </section>
+      )}
+
       {/* Category-specific SEO content */}
       {(category?.seoTitle || category?.pillars) && (
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-16 space-y-10">
@@ -319,6 +363,24 @@ export default async function CollectionPage({
               </div>
             </div>
           )}
+        </section>
+      )}
+
+      {/* Category FAQs — the practical questions this category's buyer has
+          before checkout. Mirrored as FAQPage structured data above. */}
+      {category?.faqs && category.faqs.length > 0 && (
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-16">
+          <div className="max-w-3xl mx-auto">
+            <h2 className="text-2xl font-serif font-bold text-white mb-8">Before you order.</h2>
+            <div className="space-y-6">
+              {category.faqs.map((faq) => (
+                <div key={faq.question} className="border-b border-gold-500/15 pb-6">
+                  <h3 className="text-gold-300 font-semibold mb-2">{faq.question}</h3>
+                  <p className="text-parchment-300 leading-relaxed">{faq.answer}</p>
+                </div>
+              ))}
+            </div>
+          </div>
         </section>
       )}
 
