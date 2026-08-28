@@ -113,10 +113,12 @@ export default function HeroSection() {
               </Link>
             </div>
 
-            {/* Trust Indicators */}
+            {/* Trust Indicators. Numbered bottles moved here from the pill
+                badge that used to float over the bottle image — the pill
+                wrapped badly at that text length and was removed. */}
             <div className="pt-8 border-t border-jerry-green-700">
               <p className="text-gold-300 text-sm font-medium text-center lg:text-left">
-                Real Ingredients. No Artificial Flavouring. Veteran Owned. Small Batches.
+                Real Ingredients. No Artificial Flavouring. Veteran Owned. Numbered Small Batches.
               </p>
             </div>
           </div>
@@ -155,11 +157,6 @@ export default function HeroSection() {
                 <div aria-live="polite" aria-atomic="true" className="sr-only">
                   {`Image ${activeIndex + 1} of ${HERO_IMAGES.length}: ${HERO_IMAGES[activeIndex].label}`}
                 </div>
-              </div>
-
-              {/* Floating Badges */}
-              <div className="absolute top-6 left-6 bg-linear-to-r from-gold-600 to-gold-500 text-jerry-green-900 px-4 py-2 rounded-full text-sm font-semibold uppercase tracking-wide shadow-lg">
-                Numbered. 700 for general release.
               </div>
 
               {/* Prev/Next arrows — mobile only; signifier for swipe gesture */}

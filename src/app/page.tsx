@@ -1,12 +1,10 @@
 import ReactDOM from 'react-dom';
 import HeroSection from "@/components/HeroSection";
-import HomepageExpeditionMap from "@/components/HomepageExpeditionMap";
 import StructuredData from "@/components/StructuredData";
 import ScrollToHash from "@/components/ScrollToHash";
 import OrderSection from "@/components/OrderSection";
 import FounderStorySnippet from "@/components/FounderStorySnippet";
 import SupportingOurForces from "@/components/SupportingOurForces";
-import FieldManualPreview from "@/components/FieldManualPreview";
 import WhyJerryCan from "@/components/WhyJerryCan";
 import HomepageFAQ from "@/components/HomepageFAQ";
 import ScrollReveal from "@/components/ScrollReveal";
@@ -101,12 +99,6 @@ export default function Home() {
           <WhyJerryCan />
         </ScrollReveal>
 
-        {/* Press & Awards - the Trustpilot proof lives in the pull-quote
-            strip under the hero; this section carries press and accreditations */}
-        <ScrollReveal>
-          <PressAwards />
-        </ScrollReveal>
-
         {/* Order Section - the buy ask, after belief is built */}
         <ScrollReveal>
           <OrderSection />
@@ -117,12 +109,15 @@ export default function Home() {
           <SupportingOurForces />
         </ScrollReveal>
 
-        {/* Expedition log map - community */}
-        <HomepageExpeditionMap />
-
-        {/* Field Manual Preview - content engagement */}
+        {/* Press & accreditations - reassurance tier, after the pledge. The
+            Trustpilot proof lives in the pull-quote strip; the IWSC medals in
+            the MedalBar. The expedition map and Field Manual preview that
+            followed were homepage detours from the one CTA and moved off the
+            page in the restructure (see docs/plans/2026-08-28). The Field
+            Manual keeps its place in the nav; the map lives on at
+            /expedition-log/. */}
         <ScrollReveal>
-          <FieldManualPreview />
+          <PressAwards />
         </ScrollReveal>
 
         {/* FAQ - objection handling before final CTA */}
