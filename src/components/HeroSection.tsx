@@ -68,30 +68,23 @@ export default function HeroSection() {
               </span>
             </div>
 
-            {/* Headline */}
+            {/* Headline — the proposition, award first. The medal detail and
+                judges' note live in the MedalBar directly under the hero; the
+                proof is stated once in full there, per VOICE ("an award
+                mentioned once is a fact"). */}
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-serif font-bold text-parchment-50 mb-6 leading-tight">
               <span className="relative" style={{ color: '#fefbf5' }}>
-                Veteran-Owned British Spirits
+                Two IWSC medals. First year. First bottle.
                 <span className="absolute -bottom-2 left-0 w-full h-1 bg-linear-to-r from-gold-500 to-gold-300 rounded-full"></span>
               </span>
               <br />
-              <span className="text-gold-300 text-3xl sm:text-4xl lg:text-5xl block mt-4">Built Without Compromise</span>
+              <span className="text-gold-300 text-3xl sm:text-4xl lg:text-5xl block mt-4">Expedition Spiced Rum.</span>
             </h1>
 
             {/* Description */}
             <p className="text-xl text-parchment-200 mb-8 leading-relaxed max-w-xl mx-auto lg:mx-0">
               Between us, we served 17 years in the Royal Signals. We wanted a proper drink to share with mates. Something with character, made by people who give a damn. We couldn't find it. So we made it ourselves.
             </p>
-
-            {/* Now Shipping */}
-            <div className="mb-8 p-6 bg-jerry-green-800/40 backdrop-blur-sm rounded-xl border border-gold-500/20">
-              <div className="text-gold-300 text-sm font-semibold uppercase tracking-widest mb-2 text-center">
-                Now Shipping
-              </div>
-              <p className="text-parchment-200 text-center text-sm">
-                Numbered first batch. 700 for general release.
-              </p>
-            </div>
 
             {/* CTA - Desktop. One CTA per piece of content (VOICE hard rule):
                 Order is the sole button; Our Story is a text link below. */}

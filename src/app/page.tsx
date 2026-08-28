@@ -12,6 +12,7 @@ import HomepageFAQ from "@/components/HomepageFAQ";
 import ScrollReveal from "@/components/ScrollReveal";
 import PullQuoteStrip from "@/components/PullQuoteStrip";
 import PressAwards from "@/components/PressAwards";
+import MedalBar from "@/components/MedalBar";
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import { baseOpenGraph, OG_IMAGE } from '@/lib/og'
@@ -24,20 +25,20 @@ export const metadata: Metadata = {
   title: {
     absolute: "Jerry Can Spirits | British Spiced Rum",
   },
-  description: "Two Royal Signals veterans, one spiced rum. Real botanicals, small batches. No artificial flavouring. No shortcuts. Now shipping.",
+  description: "Two Royal Signals veterans, two IWSC medals in year one. Expedition Spiced Rum: real ingredients, small batches, no shortcuts. Now shipping.",
   alternates: {
     canonical: "https://jerrycanspirits.co.uk/",
   },
   openGraph: {
     ...baseOpenGraph,
     title: "Jerry Can Spirits | British Spiced Rum",
-    description: "Two Royal Signals veterans, one spiced rum. Real botanicals, small batches. No artificial flavouring. No shortcuts. Now shipping.",
+    description: "Two Royal Signals veterans, two IWSC medals in year one. Expedition Spiced Rum: real ingredients, small batches, no shortcuts. Now shipping.",
     url: "https://jerrycanspirits.co.uk/",
   },
   twitter: {
     card: 'summary_large_image' as const,
     title: "Jerry Can Spirits | British Spiced Rum",
-    description: "Two Royal Signals veterans, one spiced rum. Real botanicals, small batches. No artificial flavouring. No shortcuts. Now shipping.",
+    description: "Two Royal Signals veterans, two IWSC medals in year one. Expedition Spiced Rum: real ingredients, small batches, no shortcuts. Now shipping.",
     images: OG_IMAGE,
   },
 }
@@ -81,6 +82,11 @@ export default function Home() {
       <StructuredData data={structuredData} />
       <div>
         <HeroSection />
+
+        {/* Proof bar - the hero headline makes the two-medals claim; this
+            states the fact once in full, judges' note included, linked to the
+            IWSC listing. The only place on the page the medals are detailed. */}
+        <MedalBar />
 
         {/* Pull-quote strip - instant social proof under the hero */}
         <PullQuoteStrip />
