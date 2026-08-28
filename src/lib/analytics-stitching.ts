@@ -15,6 +15,7 @@ import {
   STITCH_GCLID,
   STITCH_CONSENT,
   CONSENT_GRANTED,
+  normaliseGaSessionId,
 } from './analytics-stitch-keys';
 
 // The GA4 session cookie name is _ga_<container>, i.e. the measurement id with
@@ -41,14 +42,18 @@ export function readGaClientId(): string | undefined {
 }
 
 /**
- * session_id from the _ga_<container> cookie. Format
- * GS1.1.<session_id>.<session_count>.<...> — session_id is the third segment.
+ * session_id from the _ga_<container> cookie.
+ *
+ * The third dot-segment holds the session id in both cookie generations, but
+ * not in the same shape: GS1 puts the bare digits there, GS2 puts its entire
+ * $-delimited payload there ("s<id>$o<count>$…") because it uses no further
+ * dots. normaliseGaSessionId handles both; see its comment for the bug the
+ * old parts[2] shortcut caused.
  */
 export function readGaSessionId(): string | undefined {
   const raw = readCookie(GA4_SESSION_COOKIE);
   if (!raw) return undefined;
-  const parts = raw.split('.');
-  return parts[2] || undefined;
+  return normaliseGaSessionId(raw.split('.')[2]);
 }
 
 /**
