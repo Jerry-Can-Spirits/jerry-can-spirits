@@ -76,15 +76,15 @@ export default async function PullQuoteStrip() {
             href={TRUSTPILOT_URL}
             target="_blank"
             rel="nofollow noopener noreferrer"
-            className="inline-flex items-center gap-2 text-xs uppercase tracking-widest text-gold-300/80 hover:text-gold-300 transition-colors"
+            className="inline-flex items-center gap-3 text-sm uppercase tracking-widest text-gold-300/80 hover:text-gold-300 transition-colors"
           >
             Read all{trustpilot ? ` ${trustpilot.count}` : ''} reviews on
             <Image
               src={TRUSTPILOT_LOGO}
               alt="Trustpilot"
-              width={90}
-              height={22}
-              className="h-5 w-auto"
+              width={180}
+              height={44}
+              className="h-10 w-auto"
             />
           </Link>
         </div>
