@@ -118,7 +118,7 @@ All content connects to one of these layers, in order of priority:
 - Maceration partner: our British partner distillery
 - Flavour profile: Vanilla, cinnamon, allspice, clove, orange peel, cassia, ginger, agave, bourbon oak
 - ABV: 40% ABV | Volume: 700ml
-- RRP: £45
+- RRP: £40
 - Designed for slow sipping. Not shots. Not a mixer to forget.
 
 Each expression gets its own block in this form. Facts that hold across the range live in Proof points, not here.
@@ -135,7 +135,7 @@ Confidence is a fact, stated plainly. These are the facts:
 - 5% of profits to military charities.
 - Batch numbers on every bottle. Every batch traceable.
 - No artificial flavourings. Seven real spices, two natural sweeteners, and bourbon oak. Macerated by our British partner distillery.
-- RRP £45.
+- RRP £40. The price is read live from Shopify everywhere on the site; never hardcode it in copy.
 
 State them once, in context. An award mentioned once is a fact. Mentioned three times on one page it becomes hype.
 
