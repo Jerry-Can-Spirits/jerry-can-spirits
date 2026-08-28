@@ -65,6 +65,14 @@ export default function Header() {
   // Navigation structure. All hrefs use trailing slashes to match
   // next.config.ts trailingSlash:true — without them every click
   // triggers a 308 redirect that adds the slash.
+  //
+  // Five items, selling first, Field Manual last — the restructure order
+  // (docs/plans/2026-08-28-proposition-and-site-restructure.md). Reviews,
+  // Stockists, Contact and the About long tail moved to the footer, which
+  // already carried almost all of them: a header item asks every visitor to
+  // consider leaving the buy path, and the homepage now makes the case those
+  // pages used to be fetched for. Guides folded into the Field Manual
+  // dropdown. No page was deleted.
   const navigation: NavigationItem[] = [
     {
       name: 'Shop',
@@ -81,8 +89,19 @@ export default function Header() {
         { name: 'Browse All', href: '/shop/', description: 'All collections' },
       ]
     },
-    { name: 'Reviews', href: '/reviews/' },
-    { name: 'Stockists', href: '/stockists/' },
+    // Straight to the bottle: the one product a first-time visitor came for,
+    // one click from anywhere.
+    { name: 'Our Rum', href: '/shop/product/jerry-can-spirits-expedition-spiced-rum/' },
+    {
+      name: 'Our Story',
+      href: '/about/story/',
+      dropdown: [
+        { name: 'Our Story', href: '/about/story/', description: 'Brand heritage & mission' },
+        { name: 'Meet the Team', href: '/about/team/', description: 'The veterans behind the brand' },
+        { name: 'Where the 5% Goes', href: '/giving/', description: 'Military charity contributions' },
+        { name: 'FAQ', href: '/faq/', description: 'Common questions answered' },
+      ]
+    },
     { name: 'Trade', href: '/trade/' },
     {
       name: 'Field Manual',
@@ -92,39 +111,7 @@ export default function Header() {
         { name: "What's in my bar", href: '/field-manual/whats-in-my-bar/', description: 'What you can pour tonight' },
         { name: 'Equipment', href: '/field-manual/equipment/', description: 'Bar tools & glassware' },
         { name: 'Ingredients', href: '/field-manual/ingredients/', description: 'Quality spirits guide' },
-      ]
-    },
-    {
-      name: 'Guides',
-      href: '/guides/',
-      dropdown: [
-        { name: 'Rum Guides', href: '/guides/?category=rum-guides', description: 'Complete rum education' },
-        { name: 'Cocktail Guides', href: '/guides/?category=cocktail-techniques', description: 'Techniques & tutorials' },
-        { name: 'Spirits Education', href: '/guides/?category=spirits-education', description: 'Knowledge & insights' },
-        { name: 'Seasonal & Occasions', href: '/guides/?category=seasonal-occasions', description: 'Holiday & event drinks' },
-        { name: 'Browse All Guides', href: '/guides/', description: 'View the full collection' },
-      ]
-    },
-    {
-      name: 'About',
-      dropdown: [
-        { name: 'Our Story', href: '/about/story/', description: 'Brand heritage & mission' },
-        { name: 'Meet the Team', href: '/about/team/', description: 'The veterans behind the brand' },
-        { name: 'Ethos', href: '/ethos/', description: 'Values & craftsmanship' },
-        { name: 'Sustainability', href: '/sustainability/', description: 'Recycling & local sourcing' },
-        { name: 'Friends & Partners', href: '/friends/', description: 'Our trusted collaborators' },
-        { name: 'Where the 5% Goes', href: '/giving/', description: 'Military charity contributions' },
-        { name: 'The Expedition Log', href: '/expedition-log/', description: 'The first-bottle registry' },
-        { name: 'FAQ', href: '/faq/', description: 'Common questions answered' },
-      ]
-    },
-    {
-      name: 'Contact',
-      href: '/contact/',
-      dropdown: [
-        { name: 'General Enquiries', href: '/contact/enquiries/', description: 'Get in touch' },
-        { name: 'Media', href: '/contact/media/', description: 'Press & partnerships' },
-        { name: 'Complaints', href: '/contact/complaints/', description: 'Customer service' },
+        { name: 'Guides', href: '/guides/', description: 'Long-form articles & techniques' },
       ]
     },
   ]
