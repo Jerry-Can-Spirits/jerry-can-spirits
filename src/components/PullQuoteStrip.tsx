@@ -8,13 +8,26 @@ interface PullQuote {
   attribution: string
 }
 
+// Verbatim from Trustpilot, chosen one per theme the reviews actually praise:
+// quality, the bottle, service, and repeat purchase (behaviour, not opinion).
+// Attribution is honest to the source: reviews from purchase invitations carry
+// Trustpilot's own "verified" status; organic reviews do not, so they are
+// captioned as customer reviews rather than borrowing the label.
 const QUOTES: PullQuote[] = [
   {
     text: "A cut above. Don't discuss top end rum without mentioning Expedition Spiced.",
+    attribution: 'Customer review · Trustpilot',
+  },
+  {
+    text: 'A wonderfully designed bottle, with quality rum.',
     attribution: 'Verified customer · Trustpilot',
   },
   {
-    text: "You can really see the work that's gone behind this beautiful drink.",
+    text: 'Great product and excellent communication when I had a question about delivery.',
+    attribution: 'Verified customer · Trustpilot',
+  },
+  {
+    text: 'Really smooth with a great taste. Bought another two bottles immediately.',
     attribution: 'Verified customer · Trustpilot',
   },
 ]
