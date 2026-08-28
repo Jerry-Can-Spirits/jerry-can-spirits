@@ -48,9 +48,13 @@ export default async function ExpeditionLogPage() {
           </p>
         </div>
 
-        {/* Map */}
+        {/* Map. The className is the map's height: the client component puts
+            it on the container and fills it with h-full, so without one the
+            map rendered at zero pixels — present on this page since launch,
+            visible never. Taller than the old homepage instance had it; on
+            the log's own page the map is the exhibit, not a teaser. */}
         <div className="mb-12">
-          <ExpeditionLogMapClient entries={entries} />
+          <ExpeditionLogMapClient entries={entries} className="w-full h-96 sm:h-[32rem] rounded-xl" />
         </div>
 
         {/* Entry list */}
