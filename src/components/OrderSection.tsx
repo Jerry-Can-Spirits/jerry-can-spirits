@@ -1,35 +1,23 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { getProduct } from '@/lib/shopify'
-import OrderProgressBar from './OrderProgressBar'
 
 const BOTTLE_HANDLE = 'jerry-can-spirits-expedition-spiced-rum'
 const GIFT_SET_HANDLE = 'jerry-can-spirits-premium-gift-pack'
-const TRADE_PACK_HANDLE = 'jerry-can-spirits-expedition-pack-spiced-rum-6-bottles'
-// Bottles in Batch 001. Internal only: it drives how full the progress bar
-// renders and is never displayed, because batch sizes and bottle counts are
-// not published. Bottles are drawn from one physical pool but sold as three
-// SKUs, so remaining stock is the sum of all three.
-const BATCH_BOTTLES = 840
-const BOTTLES_PER_GIFT_PACK = 1
-const BOTTLES_PER_CASE = 6
 const BOTTLE_VOLUME_LITRES = 0.7
 
+// The batch progress bar that used to render here is gone, and with it the
+// three-SKU stock arithmetic that fed it. It could not fill honestly: batch
+// sizes are not published, stock moves through channels the storefront cannot
+// see, and a bar that misreports scarcity is worse than none (it read as
+// broken on the live page, which is how it left).
 async function getOrderData() {
   try {
-    const [bottleProduct, giftSetProduct, tradePackProduct] = await Promise.all([
+    const [bottleProduct, giftSetProduct] = await Promise.all([
       getProduct(BOTTLE_HANDLE),
       getProduct(GIFT_SET_HANDLE),
-      getProduct(TRADE_PACK_HANDLE),
     ])
 
-    // Remaining bottles, summed across every SKU that draws on the batch.
-    // Previously this read a `custom.pre_order_sold` metafield in preference
-    // to live stock. Those metafields still hold the figures from the
-    // pre-order campaign, so the bar was frozen at that moment and no sale
-    // since had moved it; gift packs were never counted at all. Live
-    // inventory is the only source now.
-    let bottlesRemaining: number | null = null
     // No hardcoded prices in copy: prices render from Shopify live data only.
     // When the fetch fails, the price lines are simply not rendered.
     let bottlePrice: string | null = null
@@ -43,13 +31,6 @@ async function getOrderData() {
       bottleCompareAtPrice = variant.compareAtPrice
         ? parseFloat(variant.compareAtPrice.amount).toFixed(0)
         : null
-
-      if (variant.quantityAvailable !== undefined) {
-        bottlesRemaining =
-          variant.quantityAvailable +
-          (giftSetProduct?.variants?.[0]?.quantityAvailable ?? 0) * BOTTLES_PER_GIFT_PACK +
-          (tradePackProduct?.variants?.[0]?.quantityAvailable ?? 0) * BOTTLES_PER_CASE
-      }
     }
 
     if (giftSetProduct?.variants?.[0]) {
@@ -60,15 +41,9 @@ async function getOrderData() {
         : null
     }
 
-    const percentageClaimed =
-      bottlesRemaining === null
-        ? null
-        : Math.round(((BATCH_BOTTLES - bottlesRemaining) / BATCH_BOTTLES) * 100)
-
-    return { percentageClaimed, bottlePrice, bottleCompareAtPrice, giftSetPrice, giftSetCompareAtPrice }
+    return { bottlePrice, bottleCompareAtPrice, giftSetPrice, giftSetCompareAtPrice }
   } catch {
     return {
-      percentageClaimed: null,
       bottlePrice: null,
       bottleCompareAtPrice: null,
       giftSetPrice: null,
@@ -78,7 +53,7 @@ async function getOrderData() {
 }
 
 export default async function OrderSection() {
-  const { percentageClaimed, bottlePrice, bottleCompareAtPrice, giftSetPrice, giftSetCompareAtPrice } =
+  const { bottlePrice, bottleCompareAtPrice, giftSetPrice, giftSetCompareAtPrice } =
     await getOrderData()
 
   const bottleUnitPrice = bottlePrice ? (parseFloat(bottlePrice) / BOTTLE_VOLUME_LITRES).toFixed(2) : null
@@ -126,10 +101,6 @@ export default async function OrderSection() {
             <p className="text-xl text-parchment-300 mb-6 leading-relaxed">
               Batch 001, shipping now. When it&apos;s gone, that run is finished.
             </p>
-
-            {percentageClaimed !== null && (
-              <OrderProgressBar percentageClaimed={percentageClaimed} />
-            )}
 
             {/* Benefits List */}
             <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20 mb-8">
