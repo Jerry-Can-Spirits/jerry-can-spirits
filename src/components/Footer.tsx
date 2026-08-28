@@ -33,6 +33,8 @@ export default function Footer() {
       links: [
         { name: 'Home', href: '/' },
         { name: 'Our Story', href: '/about/story/' },
+        { name: 'Meet the Team', href: '/about/team/' },
+        { name: 'Ethos', href: '/ethos/' },
         { name: 'Sustainability', href: '/sustainability/' },
         { name: 'Friends & Partners', href: '/friends/' },
         { name: 'Where the 5% Goes', href: '/giving/' },
