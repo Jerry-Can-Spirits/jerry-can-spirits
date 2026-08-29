@@ -13,12 +13,6 @@ import { TRUSTPILOT_LOGO } from '@/lib/trustpilot-assets'
 
 const CF_IMG = 'https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ'
 
-const TrustpilotWidget = dynamic(() => import('@/components/TrustpilotWidget'), {
-  loading: () => (
-    <div className="h-[52px] bg-jerry-green-800/50 rounded-lg animate-pulse" />
-  ),
-})
-
 const GoogleReviewBadge = dynamic(() => import('@/components/GoogleReviewBadge'))
 
 export const revalidate = 3600
@@ -132,24 +126,26 @@ export default async function ReviewsPage() {
                 />
               </a>
             </div>
-            {/* Consenting visitors get the live official TrustBox; the ~half
-                who decline marketing cookies get the same facts from the KV
-                ratings cache instead of nothing. Same pattern as the Google
-                section below, which has always rendered server-side. */}
-            <TrustpilotWidget
-              templateId="5419b6a8b0d04a076446a9ad"
-              height="24px"
-              width="100%"
-              theme="dark"
-              token="a1e45713-88d1-4731-9a5b-f2fffed8a4d0"
-              minReviewCount="10"
-              styleAlignment="center"
-              fallback={
-                trustpilot ? (
-                  <RatingRow rating={trustpilot.rating} count={trustpilot.count} platform="trustpilot" />
-                ) : undefined
-              }
-            />
+            {/* The KV-cached TrustScore with the official star art, rendered
+                server-side for every visitor. This replaced the consent-gated
+                TrustBox: the widget needed Trustpilot's script, the script
+                needed marketing consent, and the result was two code paths
+                showing the same hourly fact to different halves of the
+                audience. One rating, everyone sees it, no script. */}
+            {trustpilot ? (
+              <RatingRow rating={trustpilot.rating} count={trustpilot.count} platform="trustpilot" />
+            ) : (
+              <p className="text-center text-sm">
+                <a
+                  href="https://uk.trustpilot.com/review/jerrycanspirits.co.uk"
+                  target="_blank"
+                  rel="nofollow noopener noreferrer"
+                  className="text-gold-300 hover:text-gold-400 transition-colors underline"
+                >
+                  Read our reviews on Trustpilot
+                </a>
+              </p>
+            )}
           </div>
         </ScrollReveal>
         <ScrollReveal delay={1}>
