@@ -2,6 +2,11 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { getCloudflareContext } from '@opennextjs/cloudflare'
 import { getRating } from '@/lib/ratings-cache'
+import { TRUSTPILOT_LOGO as TRUSTPILOT_LOGOS } from '@/lib/trustpilot-assets'
+
+// The official green-star lockup for dark grounds, from the shared assets
+// module so every surface renders the same mark.
+const TRUSTPILOT_LOGO = TRUSTPILOT_LOGOS.onDark
 
 interface PullQuote {
   text: string
@@ -33,10 +38,6 @@ const QUOTES: PullQuote[] = [
 ]
 
 const TRUSTPILOT_URL = 'https://uk.trustpilot.com/review/jerrycanspirits.co.uk'
-
-// The white-on-transparent Trustpilot lockup already used on /reviews/.
-const TRUSTPILOT_LOGO =
-  'https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/004c8ba7-42d4-48c8-c82c-fe715eb9cc00/public'
 
 export default async function PullQuoteStrip() {
   // Live review count cached hourly in KV by the ratings cron; renders

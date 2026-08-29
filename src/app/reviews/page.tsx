@@ -9,6 +9,7 @@ import { safeJsonLd } from '@/lib/jsonLd'
 import { getCloudflareContext } from '@opennextjs/cloudflare'
 import { getRating } from '@/lib/ratings-cache'
 import { RatingRow } from '@/components/RatingRow'
+import { TRUSTPILOT_LOGO } from '@/lib/trustpilot-assets'
 
 const CF_IMG = 'https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ'
 
@@ -116,7 +117,7 @@ export default async function ReviewsPage() {
                 rel="nofollow noopener noreferrer"
               >
                 <Image
-                  src={`${CF_IMG}/004c8ba7-42d4-48c8-c82c-fe715eb9cc00/public`}
+                  src={TRUSTPILOT_LOGO.onDark}
                   alt="Trustpilot"
                   width={160}
                   height={40}
