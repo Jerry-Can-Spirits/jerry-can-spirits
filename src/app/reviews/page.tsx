@@ -25,14 +25,18 @@ export const revalidate = 3600
 
 export const metadata: Metadata = {
   title: "Customer Reviews | Trustpilot & Google",
-  description: "Reviews of Expedition Spiced Rum on Trustpilot, Google, Yell, and Trust A Veteran. Veteran-owned British spiced rum, no shortcuts.",
+  // Trustpilot and Google only: the platforms that actually hold reviews.
+  // The page used to name Yell and Trust A Veteran too, which held none, and
+  // a reviews page claiming reviews that do not exist is a claim like any
+  // other. Trust A Veteran keeps its full entry on /friends/.
+  description: "Reviews of Expedition Spiced Rum on Trustpilot and Google. Veteran-owned British spiced rum, no shortcuts.",
   alternates: {
     canonical: 'https://jerrycanspirits.co.uk/reviews/',
   },
   openGraph: {
     ...baseOpenGraph,
-    title: "Jerry Can Spirits Reviews | Trustpilot, Google, Yell & Trust A Veteran",
-    description: "Reviews of Expedition Spiced Rum on Trustpilot, Google, Yell, and Trust A Veteran. Veteran-owned British spiced rum, no shortcuts.",
+    title: "Jerry Can Spirits Reviews | Trustpilot & Google",
+    description: "Reviews of Expedition Spiced Rum on Trustpilot and Google. Veteran-owned British spiced rum, no shortcuts.",
     url: 'https://jerrycanspirits.co.uk/reviews/',
   },
 }
@@ -101,13 +105,16 @@ export default async function ReviewsPage() {
             Jerry Can Spirits Reviews
           </h1>
           <p className="text-lg text-parchment-300 max-w-2xl mx-auto">
-            What people say after they&apos;ve poured it. Reviews left on Trustpilot, Google, Yell, and Trust A Veteran.
+            What people say after they&apos;ve poured it. Reviews left on Trustpilot and Google.
           </p>
         </ScrollReveal>
       </section>
 
-      {/* Trustpilot Section */}
+      {/* The two platforms that hold reviews, side by side. Yell held none
+          and is gone; Trust A Veteran held none either and keeps its full
+          partner entry on /friends/ instead of a claim-shaped card here. */}
       <section className="max-w-5xl mx-auto px-6 pb-12">
+        <div className="grid md:grid-cols-2 gap-6 items-start">
         <ScrollReveal>
           <div className="bg-jerry-green-800/40 border border-gold-500/20 rounded-xl p-8">
             <div className="text-center mb-6">
@@ -145,11 +152,7 @@ export default async function ReviewsPage() {
             />
           </div>
         </ScrollReveal>
-      </section>
-
-      {/* Google Reviews Section */}
-      <section className="max-w-5xl mx-auto px-6 pb-12">
-        <ScrollReveal>
+        <ScrollReveal delay={1}>
           <div className="bg-jerry-green-800/40 border border-gold-500/20 rounded-xl p-8">
             <div className="text-center mb-6">
               <a
@@ -179,68 +182,7 @@ export default async function ReviewsPage() {
             )}
           </div>
         </ScrollReveal>
-      </section>
-
-      {/* Yell Reviews Section */}
-      <section className="max-w-5xl mx-auto px-6 pb-12">
-        <ScrollReveal>
-          <div className="bg-jerry-green-800/40 border border-gold-500/20 rounded-xl p-8">
-            <div className="text-center mb-6">
-              <a
-                href="https://www.yell.com/biz/jerry-can-spirits-ltd-london-11012967/"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <Image
-                  src={`${CF_IMG}/9fb15cc3-4b8a-483b-f77b-b73002d59700/public`}
-                  alt="Yell"
-                  width={120}
-                  height={35}
-                  className="mx-auto mb-3 hover:opacity-80 transition-opacity"
-                />
-              </a>
-              <a
-                href="https://www.yell.com/biz/jerry-can-spirits-ltd-london-11012967/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-sm text-gold-300 hover:text-gold-400 transition-colors underline"
-              >
-                View on Yell
-              </a>
-            </div>
-          </div>
-        </ScrollReveal>
-      </section>
-
-      {/* Trust A Veteran Reviews Section */}
-      <section className="max-w-5xl mx-auto px-6 pb-12">
-        <ScrollReveal>
-          <div className="bg-jerry-green-800/40 border border-gold-500/20 rounded-xl p-8">
-            <div className="text-center mb-6">
-              <a
-                href="https://www.trustaveteran.com/"
-                target="_blank"
-                rel="nofollow noopener noreferrer"
-              >
-                <Image
-                  src="/images/partners/trust-a-veteran.png"
-                  alt="Trust A Veteran"
-                  width={160}
-                  height={40}
-                  className="mx-auto mb-3 hover:opacity-80 transition-opacity"
-                />
-              </a>
-              <a
-                href="https://www.trustaveteran.com/"
-                target="_blank"
-                rel="nofollow noopener noreferrer"
-                className="text-sm text-gold-300 hover:text-gold-400 transition-colors underline"
-              >
-                View on Trust A Veteran
-              </a>
-            </div>
-          </div>
-        </ScrollReveal>
+        </div>
       </section>
 
       {/* Leave a Review CTA */}
@@ -272,28 +214,6 @@ export default async function ReviewsPage() {
                 className="inline-flex items-center gap-2 bg-gold-500 hover:bg-gold-600 text-jerry-green-900 font-semibold px-6 py-3 rounded-lg transition-colors"
               >
                 Review on Google
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                </svg>
-              </a>
-              <a
-                href="https://www.yell.com/biz/jerry-can-spirits-ltd-london-11012967/#reviews"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 bg-[#FED900] hover:bg-[#CAB010] text-jerry-green-900 font-semibold px-6 py-3 rounded-lg transition-colors"
-              >
-                Review on Yell
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                </svg>
-              </a>
-              <a
-                href="https://www.trustaveteran.com/"
-                target="_blank"
-                rel="nofollow noopener noreferrer"
-                className="inline-flex items-center gap-2 bg-jerry-green-800/60 hover:bg-jerry-green-800 text-gold-300 font-semibold px-6 py-3 rounded-lg border border-gold-500/30 transition-colors"
-              >
-                Review on Trust A Veteran
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                 </svg>
