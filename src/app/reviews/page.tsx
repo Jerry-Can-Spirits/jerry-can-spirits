@@ -39,7 +39,10 @@ export const metadata: Metadata = {
 export default async function ReviewsPage() {
   const { env } = await getCloudflareContext({ async: true })
   const kv = env.SITE_OPS as KVNamespace
-  const google = await getRating(kv, 'google')
+  const [google, trustpilot] = await Promise.all([
+    getRating(kv, 'google'),
+    getRating(kv, 'trustpilot'),
+  ])
 
   const aggregateRating = google
     ? {
@@ -121,6 +124,10 @@ export default async function ReviewsPage() {
                 />
               </a>
             </div>
+            {/* Consenting visitors get the live official TrustBox; the ~half
+                who decline marketing cookies get the same facts from the KV
+                ratings cache instead of nothing. Same pattern as the Google
+                section below, which has always rendered server-side. */}
             <TrustpilotWidget
               templateId="5419b6a8b0d04a076446a9ad"
               height="24px"
@@ -129,6 +136,11 @@ export default async function ReviewsPage() {
               token="a1e45713-88d1-4731-9a5b-f2fffed8a4d0"
               minReviewCount="10"
               styleAlignment="center"
+              fallback={
+                trustpilot ? (
+                  <RatingRow rating={trustpilot.rating} count={trustpilot.count} platform="trustpilot" />
+                ) : undefined
+              }
             />
           </div>
         </ScrollReveal>
