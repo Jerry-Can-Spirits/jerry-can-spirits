@@ -27,6 +27,7 @@ export const TRUSTPILOT_LOGO = {
 // drawn stars and the new asset gets added here.
 const TRUSTPILOT_STARS: Record<string, string> = {
   '4.5': `${CF_IMG}/965706cd-27c4-43a6-4d7b-5ea5c4f25100/public`,
+  '5.0': `${CF_IMG}/6c4e7196-983e-4042-41f9-ab4c700bcd00/public`,
 }
 
 /** The official star image for a rating, or undefined when we hold no art
