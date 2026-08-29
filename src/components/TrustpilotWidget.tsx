@@ -16,6 +16,15 @@ interface TrustpilotWidgetProps {
   name?: string
   minReviewCount?: string
   styleAlignment?: 'left' | 'center' | 'right'
+  /**
+   * Rendered while marketing consent is absent, in place of the widget.
+   * Roughly half of visitors decline, and they were shown nothing: the
+   * TrustBox needs Trustpilot's script, the script needs consent, and the
+   * component returned null. A server-rendered fallback (cached stars from
+   * KV, a plain link) shows the same facts to everyone; consenting visitors
+   * get the live official widget in its place.
+   */
+  fallback?: React.ReactNode
 }
 
 export default function TrustpilotWidget({
@@ -31,6 +40,7 @@ export default function TrustpilotWidget({
   name,
   minReviewCount,
   styleAlignment,
+  fallback,
 }: TrustpilotWidgetProps) {
   const ref = useRef<HTMLDivElement>(null)
   const [hasConsent, setHasConsent] = useState(false)
@@ -71,7 +81,7 @@ export default function TrustpilotWidget({
     loadWidget()
   }, [hasConsent, templateId, businessUnitId, sku, name])
 
-  if (!hasConsent) return null
+  if (!hasConsent) return <>{fallback ?? null}</>
 
   const dataAttributes: Record<string, string | undefined> = {
     'data-locale': locale,
