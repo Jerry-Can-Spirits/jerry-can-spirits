@@ -5,7 +5,7 @@ import Image from 'next/image'
 import { getProduct, getProducts, getSmartRecommendations, type ShopifyProduct, type ShopifyMetafield } from '@/lib/shopify'
 import { GB_SHIPPING_DETAILS } from '@/lib/shippingSchema'
 import { productOffer, priceValidUntil, PRICE_VALID_FROM, productGtin, MERCHANT_RETURN_POLICY, ORG_REF } from '@/lib/jsonLd'
-import { FREE_SHIPPING_THRESHOLD_GBP } from '@/lib/pricing'
+import { FREE_SHIPPING_THRESHOLD_GBP, STANDARD_SHIPPING_LABEL } from '@/lib/pricing'
 import ProductVariantSelector from '@/components/ProductVariantSelector'
 import ProductImageGallery from '@/components/ProductImageGallery'
 import StructuredData from '@/components/StructuredData'
@@ -574,18 +574,13 @@ export default async function ProductPage({
             {/* IWSC 2026 medals */}
             {AWARDED_HANDLES.includes(handle) && <ProductAwards />}
 
-            {/* Description */}
-            {product.descriptionHtml && (
-              <div
-                className="prose prose-invert max-w-none prose-headings:font-serif prose-headings:text-gold-300 prose-p:text-parchment-200 prose-p:leading-relaxed prose-strong:text-white prose-li:text-parchment-200 prose-a:text-blue-400 prose-a:underline prose-a:underline-offset-2 prose-a:hover:text-blue-300"
-                dangerouslySetInnerHTML={{ __html: xss(product.descriptionHtml) }}
-              />
-            )}
-
-            {/* Curated collection links (internal linking + wayfinding) */}
-            <FindItIn handle={handle} />
-
-            {/* Variant Selector & Add to Cart */}
+            {/* Variant Selector & Add to Cart.
+                Deliberately ABOVE the description: most arrivals here came to
+                buy (brand searches, ad clicks, the homepage CTA), and the full
+                description pushed the button screens down on mobile. Title,
+                price, medals, buy; the persuasion follows for whoever needs
+                it. The collection links sit below too — they were exit ramps
+                above the one action this page exists for. */}
             <div id="buy-section" className="pt-6">
               {product.variants && product.variants.length > 0 ? (
                 product.variants.some(v => v.availableForSale) ? (
@@ -627,7 +622,7 @@ export default async function ProductPage({
               <div className="mt-6 pt-6 border-t border-gold-500/10">
                 <div className="space-y-3 text-center">
                   <p className="text-sm text-parchment-400 tracking-wide">
-                    Ships for £5. Free over £{FREE_SHIPPING_THRESHOLD_GBP}.
+                    Ships for {STANDARD_SHIPPING_LABEL}. Free over £{FREE_SHIPPING_THRESHOLD_GBP}.
                   </p>
                   <p className="text-sm text-parchment-400 tracking-wide">
                     Secure checkout · Express payment available
@@ -646,6 +641,17 @@ export default async function ProductPage({
               </div>
 
             </div>
+
+            {/* Description */}
+            {product.descriptionHtml && (
+              <div
+                className="prose prose-invert max-w-none prose-headings:font-serif prose-headings:text-gold-300 prose-p:text-parchment-200 prose-p:leading-relaxed prose-strong:text-white prose-li:text-parchment-200 prose-a:text-blue-400 prose-a:underline prose-a:underline-offset-2 prose-a:hover:text-blue-300"
+                dangerouslySetInnerHTML={{ __html: xss(product.descriptionHtml) }}
+              />
+            )}
+
+            {/* Curated collection links (internal linking + wayfinding) */}
+            <FindItIn handle={handle} />
 
             {/* Product Features/Highlights - Category-specific content */}
             <div className="pt-6 border-t border-gold-500/20">
@@ -672,12 +678,6 @@ export default async function ProductPage({
                       </svg>
                       <span>Limited numbers per batch. Every one numbered. No reprints.</span>
                     </li>
-                    <li className="flex items-start gap-3">
-                      <svg className="w-5 h-5 text-gold-500 mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                      </svg>
-                      <span>5% of profits goes to forces charities - that's a promise</span>
-                    </li>
                   </>
                 ) : category.trackingCategory === 'Barware' ? (
                   // Barware-specific features
@@ -694,12 +694,6 @@ export default async function ProductPage({
                       </svg>
                       <span>Built to last - we're not interested in selling throwaway items</span>
                     </li>
-                    <li className="flex items-start gap-3">
-                      <svg className="w-5 h-5 text-gold-500 mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                      </svg>
-                      <span>5% of profits goes to forces charities - that's a promise</span>
-                    </li>
                   </>
                 ) : (
                   // Clothing-specific features
@@ -715,12 +709,6 @@ export default async function ProductPage({
                         <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                       </svg>
                       <span>Quality fabrics that last - we wear these too</span>
-                    </li>
-                    <li className="flex items-start gap-3">
-                      <svg className="w-5 h-5 text-gold-500 mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                      </svg>
-                      <span>5% of profits goes to forces charities - that's a promise</span>
                     </li>
                   </>
                 )}
@@ -765,6 +753,30 @@ export default async function ProductPage({
           {/* Production Process */}
           {sanityProduct?.process && (
             <ProductProcess process={sanityProduct.process} />
+          )}
+
+          {/* The founders. The restructure's product page carries a story
+              block the way the reference sites carry a maker's bio: the
+              people are part of what is being bought. Spirits only. */}
+          {isSpirit && (
+            <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+              <h3 className="text-xl font-serif font-bold text-white mb-3">Made by the people who drink it.</h3>
+              <div className="space-y-3 text-parchment-200 leading-relaxed">
+                <p>
+                  Jerry Can Spirits is two Royal Corps of Signals veterans with 17 years of service between
+                  them. They wanted a proper drink to share with mates, could not find it, and built it instead.
+                </p>
+                <p>
+                  No investors. No shortcuts. 5% of profits goes to forces charities.
+                </p>
+              </div>
+              <Link
+                href="/about/story/"
+                className="inline-flex items-center gap-2 mt-4 text-gold-300 hover:text-gold-200 underline underline-offset-2"
+              >
+                Read the story
+              </Link>
+            </div>
           )}
 
           {/* Duty Paid Statement */}
