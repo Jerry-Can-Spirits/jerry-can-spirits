@@ -23,6 +23,42 @@ export type CategoryConfig = {
   faqs?: CategoryFaq[]
 }
 
+// FAQ answers shared across categories. One definition per fact, because
+// these are policy statements (age verification, delivery, returns) that must
+// not drift apart between pages the way every duplicated fact on this site
+// eventually has. All verified against the shipping page and the cart's gift
+// flow; none carries a price or threshold.
+const FAQ_SEND_DIRECT: CategoryFaq = {
+  question: 'Can I send it straight to the person?',
+  answer:
+    'Yes. Enter their address at checkout. One thing worth knowing: every delivery is age-verified, so the person receiving it must be 18 or over and may be asked to show photo ID to the courier.',
+}
+const FAQ_GIFT_MESSAGE: CategoryFaq = {
+  question: 'Can I add a gift message?',
+  answer: 'Yes. Mark the order as a gift in the cart and add your message there.',
+}
+const FAQ_DELIVERY_TIME: CategoryFaq = {
+  question: 'How long does delivery take?',
+  answer: 'Once dispatched, orders typically arrive within three to five business days, anywhere in the UK.',
+}
+const FAQ_GIFT_READY: CategoryFaq = {
+  question: 'Does it arrive gift-ready?',
+  answer:
+    'The bottle is considered enough to hand over as it is. If you want to go further, there is a presentation box made for it, and the gift pack pairs the bottle with barware.',
+}
+const FAQ_BREAKAGE: CategoryFaq = {
+  question: 'What if it arrives broken?',
+  answer:
+    'Tell us at support@jerrycanspirits.co.uk with your order number and a photo, and we arrange a replacement or a full refund. Glass damaged in transit is our problem, not yours.',
+}
+const FAQ_RETURNS: CategoryFaq = {
+  question: 'Can I return it if it is not right?',
+  answer:
+    'Unopened and unused items can be returned within 14 days of delivery if you change your mind, with return postage at your own expense. Damaged or incorrect items are replaced or refunded.',
+}
+
+const GIFT_FAQS: CategoryFaq[] = [FAQ_SEND_DIRECT, FAQ_GIFT_MESSAGE, FAQ_DELIVERY_TIME, FAQ_GIFT_READY]
+
 export const CATEGORIES: Record<string, CategoryConfig> = {
 
   // ── SEO category pages (handle-based product fetching) ──────────────────
@@ -66,26 +102,7 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
       ],
       attribution: 'Customer review · Trustpilot',
     },
-    faqs: [
-      {
-        question: 'Can I send it straight to the person?',
-        answer:
-          'Yes. Enter their address at checkout. One thing worth knowing: every delivery is age-verified, so the person receiving it must be 18 or over and may be asked to show photo ID to the courier.',
-      },
-      {
-        question: 'Can I add a gift message?',
-        answer: 'Yes. Mark the order as a gift in the cart and add your message there.',
-      },
-      {
-        question: 'How long does delivery take?',
-        answer: 'Once dispatched, orders typically arrive within three to five business days, anywhere in the UK.',
-      },
-      {
-        question: 'Does it arrive gift-ready?',
-        answer:
-          'The bottle is considered enough to hand over as it is. If you want to go further, there is a presentation box made for it, and the gift pack pairs the bottle with barware.',
-      },
-    ],
+    faqs: GIFT_FAQS,
   },
 
   'spiced-rum': {
@@ -111,6 +128,27 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
       { title: 'Real Ingredients Only', body: 'Madagascan vanilla. Ceylon cinnamon. Ginger root. Cassia bark. Clove. Orange peel. Bourbon oak. No artificial flavourings. Every flavour comes from something that grew in the ground.' },
       { title: 'Small-Batch, Genuinely', body: 'Limited numbers per batch, every bottle numbered. Macerated by our British partner distillery. When it is gone, it is gone. Each batch carries subtle variation because it is made properly, not at industrial scale.' },
       { title: 'Veteran-Made', body: 'Two Royal Corps of Signals veterans. 17 years of service between us. Armed Forces Covenant signatories. ERS Bronze Award. 5% of profits to forces charities.' },
+    ],
+    testimonial: {
+      quote: [
+        "This is the best spiced rum I have tried (and I have tried a lot!), and in the top 10 of my favourite rums. It doesn't have the sweetness of most spiced rum drinks and is more like a rum with spice rather than spiced rum.",
+        "There's no burn like you get with most spirits, Expedition is silky smooth. Fantastic quality, fantastic customer service.",
+      ],
+      attribution: 'Verified customer · Trustpilot',
+    },
+    faqs: [
+      {
+        question: 'Neat or with a mixer?',
+        answer:
+          'Try it neat first, then over one large cube. It holds its own in a mixer too; the house long serve is ginger beer with a squeeze of fresh lime.',
+      },
+      {
+        question: 'What does the bottle number mean?',
+        answer:
+          'Every bottle carries its batch number and its own number within that batch. Batches are finite runs; when one is sold, that run is finished.',
+      },
+      FAQ_SEND_DIRECT,
+      FAQ_DELIVERY_TIME,
     ],
   },
 
@@ -143,6 +181,9 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
       'bar-blade-bottle-opener',
       'stainless-steel-spirit-stones',
     ],
+    // No gift-ready FAQ here: that answer describes the bottle and its
+    // presentation box, and this collection leads with the pack and tools.
+    faqs: [FAQ_SEND_DIRECT, FAQ_GIFT_MESSAGE, FAQ_DELIVERY_TIME],
   },
 
   'bar-accessories': {
@@ -176,6 +217,16 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
       'crystal-ice-hiball-42cl',
       'hiball-glass-38cl',
     ],
+    // The slate coaster review: a bottle broke in transit and the customer's
+    // review is about how that was handled. On a page of breakables, how we
+    // handle breakage is the proof that matters.
+    testimonial: {
+      quote: [
+        "A lovely gesture for a broken bottle. One of my 6 didn't survive transit. That was replaced immediately. Nice one chaps.",
+      ],
+      attribution: 'Verified customer · Trustpilot',
+    },
+    faqs: [FAQ_BREAKAGE, FAQ_RETURNS, FAQ_DELIVERY_TIME],
   },
 
   'gifts-for-him': {
@@ -208,6 +259,13 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
       'stainless-steel-spirit-stones',
       'crystal-ice-hiball-42cl',
     ],
+    testimonial: {
+      quote: [
+        'Ordered for hubbys birthday, and he is over the moon with it. Kept everyone in the loop with any issues they had.',
+      ],
+      attribution: 'Verified customer · Trustpilot',
+    },
+    faqs: GIFT_FAQS,
   },
 
   'gifts-for-her': {
@@ -232,6 +290,9 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
       { title: 'Veteran-Owned, Independent', body: 'Founded by two Royal Signals veterans. Bootstrapped. No hidden investors. 5% of profits supports forces charities.' },
       { title: 'One Good Bottle', body: 'Rather than three forgettable ones. A single 700ml bottle of something real, made properly, worth opening slowly.' },
     ],
+    // No testimonial: no review in the corpus describes this gift direction,
+    // and borrowing one from another page would be decoration, not proof.
+    faqs: GIFT_FAQS,
     productHandles: [
       'jerry-can-spirits-expedition-spiced-rum',
       'jerry-can-spirits-premium-gift-pack',
@@ -270,6 +331,18 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
       'club-ice-tumbler-26cl',
       'hurricane-cocktail-glass-42cl',
       'contemporary-mixer-glass-31cl',
+    ],
+    testimonial: {
+      quote: ['Great for cocktails. Nice Jerrycan logo too!'],
+      attribution: 'Verified customer · Trustpilot',
+    },
+    faqs: [
+      {
+        question: 'Are the glasses sold singly or in pairs?',
+        answer: 'It varies by glass. Where both options exist, the product page lists a single and a pair.',
+      },
+      FAQ_BREAKAGE,
+      FAQ_DELIVERY_TIME,
     ],
   },
 

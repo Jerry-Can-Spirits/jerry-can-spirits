@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { getCloudflareContext } from '@opennextjs/cloudflare'
 import { getRating } from '@/lib/ratings-cache'
 import { TRUSTPILOT_LOGO as TRUSTPILOT_LOGOS } from '@/lib/trustpilot-assets'
+import { RatingRow } from '@/components/RatingRow'
 
 // The official green-star lockup for dark grounds, from the shared assets
 // module so every surface renders the same mark.
@@ -73,13 +74,19 @@ export default async function PullQuoteStrip() {
           ))}
         </div>
         <div className="mt-10 text-center">
+          {/* The TrustScore itself, official star art, for every visitor.
+              The score and count live here, so the link below carries
+              neither: one fact, stated once. */}
+          {trustpilot && (
+            <RatingRow rating={trustpilot.rating} count={trustpilot.count} platform="trustpilot" />
+          )}
           <Link
             href={TRUSTPILOT_URL}
             target="_blank"
             rel="nofollow noopener noreferrer"
             className="inline-flex items-center gap-3 text-sm uppercase tracking-widest text-gold-300/80 hover:text-gold-300 transition-colors"
           >
-            Read all{trustpilot ? ` ${trustpilot.count}` : ''} reviews on
+            Read them all on
             <Image
               src={TRUSTPILOT_LOGO}
               alt="Trustpilot"
