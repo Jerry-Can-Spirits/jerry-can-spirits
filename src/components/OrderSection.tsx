@@ -1,6 +1,12 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { getProduct } from '@/lib/shopify'
+import { CURRENT_BATCH_ID } from '@/lib/d1'
+
+// 'batch-001' -> '001'. The same constant the Expedition Log runs on, so
+// when the next batch ships, bumping CURRENT_BATCH_ID updates this copy in
+// the same commit instead of leaving "Batch 001" asserted here forever.
+const BATCH_NUMBER = CURRENT_BATCH_ID.replace('batch-', '')
 
 const BOTTLE_HANDLE = 'jerry-can-spirits-expedition-spiced-rum'
 const GIFT_SET_HANDLE = 'jerry-can-spirits-premium-gift-pack'
@@ -76,56 +82,37 @@ export default async function OrderSection() {
                 />
               </div>
 
-              <div className="absolute top-6 right-6 bg-linear-to-r from-gold-600 to-gold-500 text-jerry-green-900 px-4 py-2 rounded-full text-sm font-semibold uppercase tracking-wide shadow-lg">
-                First Batch Edition
-              </div>
-
-              <div className="absolute bottom-6 left-6 bg-jerry-green-700/80 backdrop-blur-sm text-gold-300 px-4 py-2 rounded-full text-sm font-semibold uppercase tracking-wide border border-gold-500/30 shadow-lg">
-                Limited general release
-              </div>
             </div>
           </div>
 
-          {/* Right Column - Content */}
+          {/* Right Column - Content.
+              Reworked with the restructure: the "Order Now" badge, the
+              floating pills on the image, the benefits card and the stats
+              grid all restated facts the heading, the buttons and the trust
+              line already carry — five ornaments saying "limited" and
+              "veteran" around one buy ask. What remains is the claim, two
+              facts the buttons cannot carry, the buttons, and one trust
+              line. The batch number derives from CURRENT_BATCH_ID rather
+              than being asserted here forever. */}
           <div className="order-1 lg:order-2">
-            <div className="inline-block px-4 py-2 bg-jerry-green-800/60 backdrop-blur-sm rounded-full border border-gold-500/30 mb-6">
-              <span className="text-gold-300 text-sm font-semibold uppercase tracking-widest">
-                Order Now
-              </span>
-            </div>
-
             <h2 className="text-3xl md:text-4xl font-serif font-bold text-white mb-6">
               First Batch. Numbered. Limited general release.
             </h2>
 
             <p className="text-xl text-parchment-300 mb-6 leading-relaxed">
-              Batch 001, shipping now. When it&apos;s gone, that run is finished.
+              Batch {BATCH_NUMBER}, shipping now. When it&apos;s gone, that run is finished.
             </p>
 
-            {/* Benefits List */}
-            <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20 mb-8">
-              <h3 className="text-gold-300 font-semibold mb-4">What You Get:</h3>
-              <ul className="space-y-3 text-parchment-200">
-                <li className="flex items-start gap-3">
-                  <span className="text-gold-400 shrink-0">•</span>
-                  <span>Individually numbered First Batch Edition bottle</span>
-                </li>
-                {bottlePrice && (
-                  <li className="flex items-start gap-3">
-                    <span className="text-gold-400 shrink-0">•</span>
-                    <span>£{bottlePrice} per bottle.</span>
-                  </li>
-                )}
-                <li className="flex items-start gap-3">
-                  <span className="text-gold-400 shrink-0">•</span>
-                  <span>Fulfilment in progress</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <span className="text-gold-400 shrink-0">•</span>
-                  <span>A place in the Expedition Log, the public record of the first bottles</span>
-                </li>
-              </ul>
-            </div>
+            <ul className="space-y-2 text-parchment-200 mb-8">
+              <li className="flex items-start gap-3">
+                <span className="text-gold-400 shrink-0">•</span>
+                <span>An individually numbered First Batch Edition bottle</span>
+              </li>
+              <li className="flex items-start gap-3">
+                <span className="text-gold-400 shrink-0">•</span>
+                <span>A place in the Expedition Log, the public record of the first bottles</span>
+              </li>
+            </ul>
 
             {/* CTA Buttons */}
             <div className="flex flex-col gap-4">
@@ -181,22 +168,6 @@ export default async function OrderSection() {
                 <span>Small-Batch Craft</span>
               </div>
 
-              <div className="bg-jerry-green-800/30 rounded-lg p-4 border border-gold-500/10">
-                <div className="grid grid-cols-3 gap-4 text-center">
-                  <div>
-                    <div className="text-gold-300 font-bold text-lg">Limited</div>
-                    <div className="text-parchment-400 text-xs uppercase tracking-wide">General Release</div>
-                  </div>
-                  <div>
-                    <div className="text-gold-300 font-bold text-lg">1st</div>
-                    <div className="text-parchment-400 text-xs uppercase tracking-wide">Batch Edition</div>
-                  </div>
-                  <div>
-                    <div className="text-gold-300 font-bold text-lg">UK</div>
-                    <div className="text-parchment-400 text-xs uppercase tracking-wide">Veteran-Owned</div>
-                  </div>
-                </div>
-              </div>
             </div>
           </div>
         </div>
