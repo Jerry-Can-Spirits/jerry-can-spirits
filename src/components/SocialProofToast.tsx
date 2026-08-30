@@ -52,7 +52,11 @@ export default function SocialProofToast() {
     <div
       role="status"
       aria-live="polite"
-      className={`fixed bottom-4 left-4 right-4 sm:right-auto sm:max-w-sm z-40 rounded-lg border border-gold-500/20 bg-jerry-green-800 p-4 shadow-xl ${
+      // bottom-24, not bottom-4: the Klaviyo First Pour teaser tab owns the
+      // bottom-left corner on every page and sat on top of this toast. The
+      // toast rides one lane above it. Bottom-right is not an escape - the
+      // BackToTop button lives there on long pages.
+      className={`fixed bottom-24 left-4 right-4 sm:right-auto sm:max-w-sm z-40 rounded-lg border border-gold-500/20 bg-jerry-green-800 p-4 shadow-xl ${
         dismissing ? 'toast-fade-out' : 'toast-slide-in'
       }`}
     >
