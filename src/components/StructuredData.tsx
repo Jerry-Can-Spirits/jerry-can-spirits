@@ -64,7 +64,15 @@ export function OrganizationSchema() {
     // `founders` is its superseded alias, so only `founder` is emitted.
     founder: FOUNDERS.map((f) => personRef(f.slug)),
     knowsAbout: ['Premium Rum', 'British Spirits', 'Military Heritage', 'Veteran-Owned Business'],
-    award: 'Armed Forces Covenant Signatory',
+    // The same precise medal wording as ProductAwards' schemaText: the Silver
+    // is the Rum & Cola serve, never the spirit. One string each, categories
+    // named, so a machine can never paraphrase us into an overclaim.
+    award: [
+      'IWSC 2026 Silver Medal - Expedition Spiced Rum and Cola',
+      'IWSC 2026 Bronze Medal - Expedition Spiced Rum',
+      'Armed Forces Covenant Signatory',
+      'Employer Recognition Scheme Bronze Award 2025',
+    ],
   }
 
   return <StructuredData data={schema} id="organization-schema" />
