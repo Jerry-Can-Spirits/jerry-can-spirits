@@ -66,7 +66,8 @@ export default function Footer() {
         { name: "What's in my bar", href: '/field-manual/whats-in-my-bar/' },
         { name: 'Guides', href: '/guides/' },
         { name: 'What’s In It', href: '/ingredients/' },
-        { name: 'Batch Tracker', href: '/batch/' },
+        // The page's own h1 — one name for one thing, in customer language.
+        { name: 'Check Your Bottle', href: '/batch/' },
         { name: 'FAQ', href: '/faq/' },
       ]
     },
