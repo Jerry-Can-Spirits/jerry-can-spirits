@@ -11,23 +11,17 @@ const API_VERSION = '2025-10';
 const GRAPHQL_URL = `https://${SHOP_DOMAIN}/admin/api/${API_VERSION}/graphql.json`;
 
 // ── Referral code terms (single source of truth — tune here) ────────
-// The referral minimum order value and the free-shipping threshold are
-// deliberately aligned at the same value (£65) so both incentives drive the
-// same basket size (bottle plus accessory) rather than competing: a £45
-// Expedition Spiced bottle plus a ~£19 accessory clears both. The free-shipping
-// threshold is configured separately and must NOT be changed here — keep this
-// value in step with it. Both terms below are applied to every code minted.
-const REFERRAL_MIN_ORDER_GBP = 65;
+// No minimum order value, deliberately (ruled 31 Aug 2026). Referral codes
+// carried a £65 minimum from #918, which the £40 price broke twice over: a
+// bottle plus a glass no longer cleared it, and WELCOME10 — handed to any
+// popup visitor — has no minimum, so a referred friend got a worse deal than
+// a stranger. The reward is a thank-you and carries no conditions. Driving
+// bigger baskets is the free-shipping threshold's job alone.
 const REFERRAL_CODE_EXPIRY_DAYS = 90;
 
 // Shopify DiscountCodeBasicInput.endsAt — a fixed window from mint time.
 function referralEndsAt(): string {
   return new Date(Date.now() + REFERRAL_CODE_EXPIRY_DAYS * 24 * 60 * 60 * 1000).toISOString();
-}
-
-// Shopify DiscountCodeBasicInput.minimumRequirement — order subtotal floor.
-function referralMinimumRequirement() {
-  return { subtotal: { greaterThanOrEqualToSubtotal: REFERRAL_MIN_ORDER_GBP.toFixed(2) } };
 }
 
 // ── Referral Code Generation ────────────────────────────────────────
@@ -98,7 +92,6 @@ export async function createDiscountCode(
         value: { percentage: 0.10 },
         items: { all: true },
       },
-      minimumRequirement: referralMinimumRequirement(),
       customerSelection: { all: true },
     },
   };
@@ -174,7 +167,6 @@ export async function createReferrerRewardCode(
         value: { percentage: 0.10 },
         items: { all: true },
       },
-      minimumRequirement: referralMinimumRequirement(),
       customerSelection: { all: true },
       combinesWith: {
         orderDiscounts: true,

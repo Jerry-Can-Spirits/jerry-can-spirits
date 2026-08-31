@@ -15,7 +15,6 @@ import {
 } from '@/lib/shopify'
 import { applyReferralCode } from '@/lib/referrals'
 import { attachStitchingAttributes } from '@/lib/analytics-stitching'
-import { REFERRAL_MIN_ORDER_GBP } from '@/lib/pricing'
 
 // Thrown when Shopify rejects a discount code (below its minimum, expired, or
 // invalid) — distinct from a transient network failure, so the UI can surface
@@ -238,9 +237,9 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     setIsLoading(true)
     try {
       // Preserve ALL existing codes (not just currently-applicable ones), minus
-      // any prior copy of the code being applied, so a pending referral code
-      // sitting below its £65 minimum isn't silently dropped when a second code
-      // is added — Shopify re-evaluates them as the basket grows.
+      // any prior copy of the code being applied, so a pending code isn't
+      // silently dropped when a second code is added — Shopify re-evaluates
+      // them as the basket changes.
       const existing = cart.discountCodes?.map(d => d.code).filter(c => c !== code) ?? []
       const updatedCart = await shopifyApplyDiscount(cart.id, [...existing, code])
 
@@ -250,13 +249,12 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         const kept = updatedCart.discountCodes?.map(d => d.code).filter(c => c !== code) ?? []
         const cleanCart = await shopifyApplyDiscount(updatedCart.id, kept)
         setCart(cleanCart)
-        // Specific reason: below the £65 minimum vs otherwise invalid/expired.
-        const subtotal = parseFloat(updatedCart.cost.subtotalAmount.amount)
-        const shortfall = REFERRAL_MIN_ORDER_GBP - subtotal
+        // No shortfall guess any more: since referral codes stopped minting
+        // with a £65 minimum (ruled 31 Aug 2026), no code of ours carries
+        // one, and "spend £X more" against an expired code on a small basket
+        // was about to become the wrong explanation every time.
         throw new DiscountRejectedError(
-          shortfall > 0
-            ? `Spend £${shortfall.toFixed(2)} more to use "${code}".`
-            : `"${code}" can't be applied to your basket — it may have expired or already been used.`,
+          `"${code}" can't be applied to your basket — it may have expired or already been used.`,
         )
       }
       setCart(updatedCart)

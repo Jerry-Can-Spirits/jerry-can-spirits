@@ -34,7 +34,7 @@ describe('createReferrerRewardCode', () => {
   })
 })
 
-describe('referral code terms — £65 minimum order value and 90-day expiry', () => {
+describe('referral code terms — no minimum order value, 90-day expiry', () => {
   let fetchSpy: ReturnType<typeof vi.spyOn>
 
   beforeEach(() => {
@@ -62,18 +62,18 @@ describe('referral code terms — £65 minimum order value and 90-day expiry', (
     return JSON.parse(init.body as string).variables.input
   }
 
-  it('the shared referral code carries a £65 minimum order value', async () => {
+  // The £65 minimum was removed by ruling on 31 Aug 2026: the £40 price broke
+  // its basket arithmetic, and WELCOME10 (no minimum) meant a referred friend
+  // got a worse deal than a popup visitor. These tests pin the ABSENCE — a
+  // minimum quietly reappearing in a mint input is the regression they catch.
+  it('the shared referral code carries no minimum order value', async () => {
     await createDiscountCode('JCS-REF-TEST1234', 'test-admin-token')
-    expect(sentInput().minimumRequirement).toEqual({
-      subtotal: { greaterThanOrEqualToSubtotal: '65.00' },
-    })
+    expect(sentInput().minimumRequirement).toBeUndefined()
   })
 
-  it('the referrer reward code carries the same £65 minimum order value', async () => {
+  it('the referrer reward code carries no minimum order value', async () => {
     await createReferrerRewardCode('JCS-REWARD-TEST1234', 'test-admin-token')
-    expect(sentInput().minimumRequirement).toEqual({
-      subtotal: { greaterThanOrEqualToSubtotal: '65.00' },
-    })
+    expect(sentInput().minimumRequirement).toBeUndefined()
   })
 
   it('both codes expire ~90 days from mint (endsAt is set)', async () => {
@@ -84,13 +84,4 @@ describe('referral code terms — £65 minimum order value and 90-day expiry', (
     expect(Math.round(days)).toBe(90)
   })
 
-  it('the minted floor rejects an order below £65 and accepts at or above it', async () => {
-    await createDiscountCode('JCS-REF-TEST1234', 'test-admin-token')
-    // Shopify's minimumRequirement.subtotal.greaterThanOrEqualToSubtotal: an
-    // order below the floor is rejected, at or above is accepted.
-    const floor = Number(sentInput().minimumRequirement.subtotal.greaterThanOrEqualToSubtotal)
-    expect(64.99 >= floor).toBe(false) // rejected
-    expect(65.00 >= floor).toBe(true) // accepted (at the threshold)
-    expect(84.0 >= floor).toBe(true) // accepted (bottle + accessory basket)
-  })
 })
