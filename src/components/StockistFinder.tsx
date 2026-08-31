@@ -47,6 +47,15 @@ const ALL_STOCKISTS: Stockist[] = [
     lng: -2.70820,
     type: 'bar',
   },
+  {
+    id: 'the-lichfield-vaults-hereford',
+    name: 'The Lichfield Vaults',
+    address: '11 Church St, Hereford HR1 2LR',
+    // Coordinates from postcodes.io for HR1 2LR.
+    lat: 52.055546,
+    lng: -2.716291,
+    type: 'bar',
+  },
 ]
 
 const UK_CENTER: [number, number] = [54.5, -2.5]
