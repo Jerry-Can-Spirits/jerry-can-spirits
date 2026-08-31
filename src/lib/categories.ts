@@ -117,7 +117,13 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
       'We are two Royal Corps of Signals veterans. We built this because we could not find what we wanted on the shelf. 17 years of service between us, and the same standards applied here.',
       '40% ABV. 700ml. Built to be sipped, not mixed and forgotten.',
     ],
-    productHandles: ['jerry-can-spirits-expedition-spiced-rum'],
+    productHandles: [
+      'jerry-can-spirits-expedition-spiced-rum',
+      // The six-bottle pack, sold to customers as well as trade (Dan,
+      // 31 Aug 2026). The product page always said so; the collections
+      // just never listed it.
+      'jerry-can-spirits-expedition-pack-spiced-rum-6-bottles',
+    ],
     seoTitle: '40% ABV. 700ml. Built to Be Sipped.',
     seoBody: [
       'Expedition Spiced Rum is not designed to be mixed and forgotten. It is designed to be the reason someone stops and pays attention. The vanilla opens first. Then cinnamon. The ginger and cassia come through the middle. Bourbon oak on the finish. Nothing synthetic. Nothing that does not belong.',
