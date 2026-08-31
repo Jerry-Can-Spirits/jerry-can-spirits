@@ -182,7 +182,12 @@ export default function TradeApplyPage() {
         contact_email: data.contact_email,
         contact_phone: data.contact_phone,
         director_name: data.director_name,
-        director_id_ticket: data.director_id_file!.ticket,
+        // Optional since the first real applicant: the document lives in a
+        // drawer at home, not behind the till. The old non-null assertion here
+        // threw before the request was even sent when the upload was skipped,
+        // which surfaced as the generic could-not-submit error with nothing in
+        // any log.
+        director_id_ticket: data.director_id_file?.ticket,
         expected_initial_volume: data.expected_initial_volume,
         expected_monthly_volume: data.expected_monthly_volume,
         // Always pro-forma: the trade portal is pay-before-delivery, so the
