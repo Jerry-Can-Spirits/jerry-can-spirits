@@ -8,7 +8,7 @@ import CartUpsell from './CartUpsell'
 import CarbonOffsetToggle from './CarbonOffsetToggle'
 import PresentationBoxUpsell from './PresentationBoxUpsell'
 import { appendUtmToCheckout, gatedCheckout } from '@/lib/utm'
-import { REFERRAL_MIN_ORDER_GBP, FREE_SHIPPING_THRESHOLD_GBP } from '@/lib/pricing'
+import { FREE_SHIPPING_THRESHOLD_GBP } from '@/lib/pricing'
 import { trackEventDual } from '@/lib/meta-capi'
 import { formatPrice } from '@/lib/format-price'
 
@@ -200,7 +200,7 @@ export default function CartDrawer() {
   }
 
   // Auto-expand the discount disclosure when it holds state: a code is applied
-  // or pending (a referral sitting below its £65 minimum stays in discountCodes),
+  // or pending (a not-currently-applicable code stays in discountCodes),
   // or one was just rejected. Hiding an active or failed code behind a collapsed
   // row is worse than the old always-open field.
   const hasDiscountState = (cart?.discountCodes?.length ?? 0) > 0 || discountError !== ''
@@ -542,12 +542,6 @@ export default function CartDrawer() {
                   {cart.discountCodes && cart.discountCodes.length > 0 && (
                     <div className="mt-2 space-y-1">
                       {cart.discountCodes.map((discount, index) => {
-                        // When Shopify marks a code not-applicable it gives no
-                        // reason, so tell the shopper the likely one: below the
-                        // £65 minimum (the common new-referral-code case) → how
-                        // much more to spend; otherwise expired/invalid.
-                        const shortfall =
-                          REFERRAL_MIN_ORDER_GBP - parseFloat(cart.cost.subtotalAmount.amount)
                         return (
                           <div key={index}>
                             <div className="flex items-center justify-between gap-2">
@@ -566,10 +560,12 @@ export default function CartDrawer() {
                               </button>
                             </div>
                             {!discount.applicable && (
+                              // No shortfall guess: no code of ours mints with
+                              // a minimum any more (ruled 31 Aug 2026), so
+                              // "spend more" was about to become the wrong
+                              // explanation for every rejection.
                               <p className="mt-0.5 text-xs text-parchment-400">
-                                {shortfall > 0
-                                  ? `Spend £${shortfall.toFixed(2)} more to use this code.`
-                                  : "This code can't be applied to your basket. It may have expired or already been used."}
+                                This code can&apos;t be applied to your basket. It may have expired or already been used.
                               </p>
                             )}
                           </div>
