@@ -92,7 +92,29 @@ const featuredStockists = [
     location: 'Hereford, Herefordshire',
     schemaType: 'BarOrPub' as const,
   },
+  {
+    name: 'The Lichfield Vaults',
+    address: '11 Church St, Hereford HR1 2LR',
+    streetAddress: '11 Church St',
+    addressLocality: 'Hereford',
+    postalCode: 'HR1 2LR',
+    description: 'A traditional pub tucked away on Church Street in Hereford city centre, a minute from the Cathedral and High Town. Wood panelling, coal fires in winter, a large decked seating area outside, and a welcome that makes everyone part of the family. Dogs on leads welcome.',
+    website: 'https://www.lichfieldvaultshereford.co.uk/',
+    logo: 'https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/11f2d5c4-842c-42d2-436f-9f8f6738de00/public',
+    type: 'Pub',
+    location: 'Hereford, Herefordshire',
+    schemaType: 'BarOrPub' as const,
+  },
 ]
+
+// Sorted by location, then name: regional clustering with zero UI. Both
+// Blackpool venues sit together, both Hereford venues sit together, and any
+// future addition files itself. A filter control is deliberately absent at
+// this count — the postcode finder below the cards is already the
+// find-it-near-me tool; revisit a filter somewhere past a dozen stockists.
+featuredStockists.sort(
+  (a, b) => a.location.localeCompare(b.location) || a.name.localeCompare(b.name),
+)
 
 const stockistSchema = featuredStockists.map((stockist) => ({
   '@context': 'https://schema.org',
