@@ -82,7 +82,9 @@ interface SubmitPayload {
   contact_email: string
   contact_phone: string
   director_name: string
-  director_id_ticket: string
+  // Optional: the upload is collected when the applicant has the document to
+  // hand, and chased during review when not. See the note in the required list.
+  director_id_ticket?: string
   // Step 4
   expected_initial_volume: string
   expected_monthly_volume: string
@@ -234,8 +236,15 @@ export async function POST(request: Request) {
     return { object: fresh, mime }
   }
 
-  const directorIdResolved = await resolveTicket(payload.director_id_ticket)
-  if (!directorIdResolved) return badRequest('Director ID upload is invalid or expired. Please re-upload.')
+  // Same optional pattern as the premises licence below. This line used to
+  // resolve unconditionally and reject on failure, which quietly kept the
+  // director ID mandatory after the required list stopped listing it: the
+  // optionality change had been made in one layer of three.
+  let directorIdResolved: { object: R2ObjectBody, mime: AllowedMime } | null = null
+  if (payload.director_id_ticket) {
+    directorIdResolved = await resolveTicket(payload.director_id_ticket)
+    if (!directorIdResolved) return badRequest('Director ID upload is invalid or expired. Please re-upload.')
+  }
 
   let premisesLicenceResolved: { object: R2ObjectBody, mime: AllowedMime } | null = null
   if (payload.premises_licence_ticket) {
@@ -352,10 +361,12 @@ export async function POST(request: Request) {
     return targetKey
   }
 
-  let directorIdKey: string
+  let directorIdKey: string | null = null
   let premisesLicenceKey: string | null = null
   try {
-    directorIdKey = await moveTicket(payload.director_id_ticket, 'director-id', directorIdResolved.mime)
+    if (directorIdResolved) {
+      directorIdKey = await moveTicket(payload.director_id_ticket!, 'director-id', directorIdResolved.mime)
+    }
     if (premisesLicenceResolved) {
       premisesLicenceKey = await moveTicket(payload.premises_licence_ticket!, 'premises-licence', premisesLicenceResolved.mime)
     }
@@ -384,14 +395,16 @@ export async function POST(request: Request) {
   let directorIdUrl = ''
   let premisesLicenceUrl: string | null = null
   try {
-    directorIdUrl = await presignR2GetUrl({
-      accountId: env.R2_ACCOUNT_ID,
-      accessKeyId: env.R2_ACCESS_KEY_ID,
-      secretAccessKey: env.R2_SECRET_ACCESS_KEY,
-      bucket: 'jerry-can-spirits-trade-docs',
-      key: directorIdKey,
-      expiresInSeconds: expires,
-    })
+    if (directorIdKey) {
+      directorIdUrl = await presignR2GetUrl({
+        accountId: env.R2_ACCOUNT_ID,
+        accessKeyId: env.R2_ACCESS_KEY_ID,
+        secretAccessKey: env.R2_SECRET_ACCESS_KEY,
+        bucket: 'jerry-can-spirits-trade-docs',
+        key: directorIdKey,
+        expiresInSeconds: expires,
+      })
+    }
     if (premisesLicenceKey) {
       premisesLicenceUrl = await presignR2GetUrl({
         accountId: env.R2_ACCOUNT_ID,
@@ -575,7 +588,7 @@ function renderAdminEmailText(args: EmailRenderArgs): string {
     `Submitted: ${args.submittedAt}`,
     `Next review: ${args.nextReview.split('T')[0]}`,
     '',
-    `Director ID: ${args.directorIdUrl || 'link unavailable — pull from R2'}`,
+    `Director ID: ${args.directorIdUrl || 'not uploaded at application — chase during review (or link expired; check R2)'}`,
     args.premisesLicenceUrl ? `Premises licence: ${args.premisesLicenceUrl}` : '',
     '',
     '— Business —',
