@@ -81,7 +81,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const displayLabel = displayNameFor(labelType)
   return {
     title: `${displayLabel} #${bottleNumber} — ${batch.name}`,
-    description: `Certificate of authenticity for ${displayLabel} bottle #${bottleNumber} from ${batch.name}. Jerry Can Spirits, veteran-owned premium British spirits.`,
+    // "Production record", not "certificate of authenticity": a lookup by
+    // number proves the bottle was produced, not who holds it. The honest
+    // claim until the per-bottle QR scheme (batch 002) gives each bottle an
+    // unguessable route of its own.
+    description: `The production record for ${displayLabel} bottle #${bottleNumber} from ${batch.name}. Jerry Can Spirits, veteran-owned British spirits.`,
     robots: { index: false, follow: true },
   }
 }
@@ -95,7 +99,7 @@ export default async function BottleDetailPage({ params }: PageProps) {
   const batchId = `batch-${batchNumber}`
 
   const db = await getD1()
-  // Certify only bottles that were actually produced: validate the exact bottle
+  // Render only bottles that were actually produced: validate the exact bottle
   // row, not just the batch plus a hardcoded ceiling. Mirrors the expedition-log
   // registration API, which already rejects unproduced bottles via the same helper.
   const bottle = await getBottleByLabel(db, batchId, labelType, bottleNumber)
@@ -142,8 +146,19 @@ export default async function BottleDetailPage({ params }: PageProps) {
           </p>
         </div>
 
-        {/* Actions */}
+        {/* Actions. The Expedition Log link is the page's real purpose until
+            the per-bottle QR scheme lands: looking a number up proves the
+            bottle exists; registering it in the log is the genuine, opt-in
+            act of provenance an owner can perform today. Without it this page
+            was a dead end. */}
         <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
+          <Link
+            href="/expedition-log/"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-gold-500 hover:bg-gold-400 text-jerry-green-900 font-semibold rounded-lg transition-colors"
+          >
+            Add it to the Expedition Log
+          </Link>
+
           <ShareButton
             title={`${displayLabel} #${bottleNumber} — ${batch.name}`}
             text={`Check out my bottle of Jerry Can Spirits — ${displayLabel} #${bottleNumber} from ${batch.name}`}
