@@ -106,7 +106,17 @@ export default async function OrderSection() {
             <ul className="space-y-2 text-parchment-200 mb-8">
               <li className="flex items-start gap-3">
                 <span className="text-gold-400 shrink-0">•</span>
-                <span>An individually numbered First Batch Edition bottle</span>
+                <span>
+                  An individually numbered First Batch Edition bottle.{' '}
+                  {/* The claim links to its evidence: the batch tracker holds
+                      the production record and per-bottle lookup for all 840. */}
+                  <Link
+                    href={`/batch/${BATCH_NUMBER}/`}
+                    className="text-gold-300 hover:text-gold-200 underline underline-offset-2"
+                  >
+                    See the batch record
+                  </Link>
+                </span>
               </li>
               <li className="flex items-start gap-3">
                 <span className="text-gold-400 shrink-0">•</span>
