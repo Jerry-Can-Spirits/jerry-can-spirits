@@ -84,7 +84,7 @@ function buildCsp(frameAncestors: string): string {
     // is already trusted elsewhere in this policy. This closes the arbitrary-
     // host exfiltration path an injected script had via new Image().src. If
     // AdSense Auto ads are ever enabled, its creative CDNs must be added here.
-    "img-src 'self' data: blob: https://cdn.sanity.io https://cdn.shopify.com https://imagedelivery.net https://api.ecologi.com https://www.facebook.com https://www.google-analytics.com https://region1.google-analytics.com https://analytics.google.com https://*.analytics.google.com https://www.google.com https://www.google.co.uk https://www.gstatic.com https://*.doubleclick.net https://www.googleadservices.com https://www.googletagmanager.com https://pagead2.googlesyndication.com https://*.klaviyo.com https://d3k81ch9hvuctc.cloudfront.net https://tracker.metricool.com https://analytics.ahrefs.com https://*.cookiebot.com https://api.mapbox.com",
+    "img-src 'self' data: blob: https://i.ytimg.com https://cdn.sanity.io https://cdn.shopify.com https://imagedelivery.net https://api.ecologi.com https://www.facebook.com https://www.google-analytics.com https://region1.google-analytics.com https://analytics.google.com https://*.analytics.google.com https://www.google.com https://www.google.co.uk https://www.gstatic.com https://*.doubleclick.net https://www.googleadservices.com https://www.googletagmanager.com https://pagead2.googlesyndication.com https://*.klaviyo.com https://d3k81ch9hvuctc.cloudfront.net https://tracker.metricool.com https://analytics.ahrefs.com https://*.cookiebot.com https://api.mapbox.com",
     "media-src 'self' https:",
     // wss:/ws: removed: no browser code opens a WebSocket. Sanity live content
     // is a no-op placeholder (sanity/lib/live.ts), Mapbox and Sentry use
@@ -97,7 +97,7 @@ function buildCsp(frameAncestors: string): string {
     // Removed: www.vimeo.com (no Vimeo embeds, and the wrong host regardless),
     // the Instagram hosts (profile links only, no embed iframe), and data:
     // (no data-URI iframes). youtube/sanity/trustpilot/ads frames remain in use.
-    "frame-src 'self' https://consentcdn.cookiebot.com https://*.cookiebot.com https://www.youtube.com https://cdn.sanity.io https://*.sanity.io https://*.trustpilot.com https://googleads.g.doubleclick.net https://www.googletagmanager.com https://www.google.com https://challenges.cloudflare.com about:",
+    "frame-src 'self' https://consentcdn.cookiebot.com https://*.cookiebot.com https://www.youtube.com https://www.youtube-nocookie.com https://cdn.sanity.io https://*.sanity.io https://*.trustpilot.com https://googleads.g.doubleclick.net https://www.googletagmanager.com https://www.google.com https://challenges.cloudflare.com about:",
     "object-src 'none'",
     "base-uri 'self'",
     "form-action 'self' https://manage.kmail-lists.com",
@@ -614,6 +614,10 @@ const nextConfig: NextConfig = {
       {
         protocol: 'https',
         hostname: 'api.ecologi.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'i.ytimg.com', // YouTube thumbnails for click-to-play video facades
       },
     ],
     formats: ['image/webp', 'image/avif'],

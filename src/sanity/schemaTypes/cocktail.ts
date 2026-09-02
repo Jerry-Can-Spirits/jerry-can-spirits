@@ -517,8 +517,15 @@ export default defineType({
       name: 'videoUrl',
       title: 'Video URL',
       type: 'url',
-      description: 'YouTube or other video URL for this cocktail recipe. Improves Google Recipe rich result eligibility.',
+      description: 'YouTube URL for this cocktail recipe. Renders as a click-to-play video on the page and feeds the Recipe schema VideoObject.',
       validation: Rule => Rule.uri({ scheme: ['https'] })
+    }),
+    defineField({
+      name: 'videoUploadDate',
+      title: 'Video upload date',
+      type: 'date',
+      description: 'The date the video was published on YouTube. Required by Google for the video rich result; without it the VideoObject omits uploadDate.',
+      hidden: ({ document }) => !document?.videoUrl,
     }),
     defineField({
       name: 'relatedGuides',
