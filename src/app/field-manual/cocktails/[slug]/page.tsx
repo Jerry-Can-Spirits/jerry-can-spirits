@@ -7,6 +7,8 @@ import { cocktailBySlugQuery, cocktailsSitemapQuery } from '@/sanity/queries'
 import BackToTop from '@/components/BackToTop'
 import StructuredData from '@/components/StructuredData'
 import CocktailRecipeDisplay from '@/components/CocktailRecipeDisplay'
+import CocktailVideo from '@/components/CocktailVideo'
+import { youtubeId, youtubeThumbnail, youtubeEmbedUrl } from '@/lib/youtube'
 import { getFacets } from '@/lib/facet-data'
 import { facetForBaseSpirit, facetPath, headingFor, isSelfCanonical } from '@/lib/cocktail-facets'
 import FieldManualPortableText from '@/components/FieldManualPortableText'
@@ -91,6 +93,7 @@ interface SanityCocktail {
   featured?: boolean
   image?: string
   videoUrl?: string
+  videoUploadDate?: string
   faqs?: Array<{ question: string; answer: string }>
   relatedGuides?: RelatedGuide[]
   longDescription?: PortableTextBlock[]
@@ -279,12 +282,20 @@ export default async function CocktailPage({ params }: PageProps) {
     "recipeYield": recipeYield,
     ...(aggregateRating && { aggregateRating }),
     ...(cookingMethod && cookingMethod.length > 0 && { cookingMethod: cookingMethod.join(', ') }),
-    ...(cocktail.videoUrl && {
+    // The VideoObject describes the click-to-play embed rendered below the
+    // recipe — schema for visible content only. thumbnailUrl and uploadDate
+    // are Google's required VideoObject fields; without them the old
+    // bare-contentUrl version was ineligible for the rich result it existed
+    // to earn. Everything derives from the same videoUrl the embed uses.
+    ...(cocktail.videoUrl && youtubeId(cocktail.videoUrl) && {
       video: {
         "@type": "VideoObject",
         "name": `How to make ${cocktail.name}`,
         "description": cocktail.description,
         "contentUrl": cocktail.videoUrl,
+        "embedUrl": youtubeEmbedUrl(youtubeId(cocktail.videoUrl)!),
+        "thumbnailUrl": youtubeThumbnail(youtubeId(cocktail.videoUrl)!),
+        ...(cocktail.videoUploadDate && { "uploadDate": cocktail.videoUploadDate }),
       }
     }),
   }
@@ -343,6 +354,10 @@ export default async function CocktailPage({ params }: PageProps) {
         <div className="max-w-4xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8">
           {/* Recipe Display Component (Client-side for interactivity) */}
           <CocktailRecipeDisplay cocktail={cocktail} />
+
+          {/* The video the Recipe schema's VideoObject describes. Click-to-
+              play: nothing loads from YouTube until the visitor presses play. */}
+          {cocktail.videoUrl && <CocktailVideo url={cocktail.videoUrl} name={cocktail.name} />}
 
           {/* Flavour Profile */}
           {cocktail.flavorProfile && cocktail.flavorProfile.length > 0 && (

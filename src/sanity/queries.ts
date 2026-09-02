@@ -281,6 +281,7 @@ export const equipmentBySlugQuery = `*[_type == "equipment" && slug.current == $
   faqs,
   author,
   videoUrl,
+  videoUploadDate,
   "relatedGuides": relatedGuides[defined(guide->._id)] {
     "guide": guide->{ _id, title, slug },
     sectionAnchor,
