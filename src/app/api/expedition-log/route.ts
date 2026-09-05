@@ -126,8 +126,10 @@ export async function POST(request: Request) {
     let location_lng: number | null = null
     if (location && MAPBOX_SECRET_TOKEN) {
       try {
+        // Proximity bias toward the UK rather than a hard country filter:
+        // a hard filter force-matched foreign addresses to the wrong UK place.
         const geoRes = await fetch(
-          `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(location)}.json?country=gb&limit=1&access_token=${MAPBOX_SECRET_TOKEN}`,
+          `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(location)}.json?proximity=-2.5,54.2&limit=1&access_token=${MAPBOX_SECRET_TOKEN}`,
         )
         const geoData = await geoRes.json() as { features?: Array<{ geometry: { coordinates: unknown[] } }> }
         const coords = geoData.features?.[0]?.geometry?.coordinates
@@ -136,6 +138,8 @@ export async function POST(request: Request) {
           location_lat = coords[1]
         } else if (!geoRes.ok) {
           console.error('Mapbox geocoding non-OK response:', geoRes.status, await geoRes.text().catch(() => ''))
+        } else {
+          console.error('Mapbox geocoding returned no usable result for location:', location)
         }
       } catch (err) {
         console.error('Mapbox geocoding failed (non-blocking):', err)
