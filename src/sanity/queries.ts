@@ -125,6 +125,7 @@ export const cocktailBySlugQuery = `*[_type == "cocktail" && slug.current == $sl
   "image": image.asset->url,
   "imageAlt": image.alt,
   videoUrl,
+  videoUploadDate,
   flavorProfile,
   "featuredSpirit": featuredSpirit->{ _id, name, slug, description, "image": image.asset->url, "imageAlt": image.alt },
   relatedGuides[defined(guide->._id)] {
