@@ -11,7 +11,7 @@ interface ContactMethod {
   value: string
   link: string
   description: string
-  href?: string
+  href?: string | null
   cta?: string
 }
 
