@@ -5,7 +5,17 @@ import Link from 'next/link'
 import { useNewsletterSignup } from '@/hooks/useNewsletterSignup'
 import Breadcrumbs from '@/components/Breadcrumbs'
 
-const contactMethods = [
+interface ContactMethod {
+  icon: string
+  label: string
+  value: string
+  link: string
+  description: string
+  href?: string
+  cta?: string
+}
+
+const contactMethods: ContactMethod[] = [
   {
     icon: 'email',
     label: 'General Enquiries',
@@ -29,6 +39,9 @@ const contactMethods = [
     link: 'mailto:press@jerrycanspirits.co.uk',
     description: 'Media enquiries, interviews, and press assets.',
     href: '/contact/media/',
+    // The media centre is a full resource (brand assets, fact sheet,
+    // downloadable kit), not just a form, so its card says so.
+    cta: 'Assets & media centre',
   },
   {
     icon: 'complaints',
@@ -114,7 +127,7 @@ export default function Contact() {
                   </p>
                   {method.href && (
                     <p className="mt-4 text-gold-300 text-xs font-semibold uppercase tracking-widest group-hover:text-gold-200 transition-colors">
-                      Use form →
+                      {method.cta ?? 'Use form'} →
                     </p>
                   )}
                 </>
@@ -128,10 +141,10 @@ export default function Contact() {
                   {CardContent}
                   <Link
                     href={method.href}
-                    aria-label={`${method.label}: use contact form`}
+                    aria-label={`${method.label}: ${method.cta ?? 'use contact form'}`}
                     className="absolute inset-0 rounded-xl focus:outline-hidden focus:ring-2 focus:ring-gold-400"
                   >
-                    <span className="sr-only">Use form</span>
+                    <span className="sr-only">{method.cta ?? 'Use form'}</span>
                   </Link>
                 </div>
               ) : (
