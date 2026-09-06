@@ -99,6 +99,8 @@ export default function Header() {
         { name: 'Our Story', href: '/about/story/', description: 'Brand heritage & mission' },
         { name: 'Meet the Team', href: '/about/team/', description: 'The veterans behind the brand' },
         { name: 'Where the 5% Goes', href: '/giving/', description: 'Military charity contributions' },
+        { name: 'The Expedition Log', href: '/expedition-log/', description: 'Where the bottles end up' },
+        { name: 'Press & Media', href: '/contact/media/', description: 'Media centre & brand assets' },
         { name: 'FAQ', href: '/faq/', description: 'Common questions answered' },
       ]
     },
@@ -405,7 +407,16 @@ export default function Header() {
 
             {/* Right Side Actions */}
             <div className="flex items-center space-x-4">
-              
+
+              {/* Contact: a utility destination, not a brand pillar, so it
+                  lives with the actions rather than as a sixth primary. */}
+              <Link
+                href="/contact/"
+                className="hidden md:block text-parchment-100 hover:text-parchment-50 text-sm font-medium transition-colors duration-200"
+              >
+                Contact
+              </Link>
+
               {/* Search */}
               <button
                 ref={searchButtonRef}
@@ -551,6 +562,19 @@ export default function Header() {
               </div>
             ))}
             
+            {/* Contact: mirrors the desktop utility link, which is hidden on
+                mobile, so the destination stays one tap away everywhere. */}
+            <Link
+              href="/contact/"
+              className="block text-parchment-100 hover:text-parchment-50 py-3 font-medium transition-colors duration-200"
+              onClick={() => {
+                setIsMobileMenuOpen(false)
+                trackMenuClick('Mobile > Contact')
+              }}
+            >
+              Contact
+            </Link>
+
             {/* Mobile CTA */}
             <div className="pt-4 border-t border-jerry-green-600/20">
               <Link
