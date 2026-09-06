@@ -75,6 +75,7 @@ export default function Footer() {
       label: 'Company',
       links: [
         { name: 'Contact', href: '/contact/' },
+        { name: 'Press & Media', href: '/contact/media/' },
         { name: 'Careers', href: '/careers/' },
         { name: 'Site Map', href: '/sitemap/' },
       ]
