@@ -21,14 +21,17 @@ interface AwardItem {
 
 const pressItems: PressItem[] = [
   {
-    // Croxsons news release, July 2026 ("Enabling Jerry Can Spirits to
-    // deliver an exciting new rum") — two verbatim sentences from Josh
-    // Webster joined editorially. Swap the URL for a published article
-    // once print/online coverage lands.
-    publication: 'Josh Webster, Head of Brand, Croxsons',
+    // The Croxsons release ran in Brewing & Beverage Industries Business
+    // (Showcase: Containers, p14) — the published coverage the placeholder
+    // Croxsons card anticipated. The quote is Dan's own words from the
+    // article; the piece's "pot-distilled" line is the magazine's error and
+    // must never be quoted here (maceration is the only production claim).
+    // Flipsnack player URL is permanent to the issue, unlike the rotating
+    // /read-the-latest-issue/ page.
+    publication: 'Brewing & Beverage Industries Business',
     quote:
-      'We were delighted to collaborate with Dan and Rhys to help bring Expedition Spiced to market… We enjoy working with brands that are making a difference, and it’s great to be working with one that has a cause it is passionate about.',
-    url: 'https://www.croxsons.com/',
+      'After more than a decade in the British Army, we decided to make the kind of rum we actually wanted to drink - no shortcuts, no gimmicks.',
+    url: 'https://player.flipsnack.com/index.html?hash=Nzc1Q0Y4NjZBRUQrdnU1eTM1cDd0OQ==',
     date: '2026',
   },
   {
