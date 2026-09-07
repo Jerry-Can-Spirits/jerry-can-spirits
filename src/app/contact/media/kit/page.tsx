@@ -194,7 +194,7 @@ export default function MediaKitPage() {
               <div className="flex gap-4">
                 <div className="w-20 h-20 relative shrink-0 rounded-lg overflow-hidden">
                   <Image
-                    src="/images/team/Dan_Headshot.jpg"
+                    src="https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/1a3a3fdd-fdd8-482c-2088-660df51c6c00/public"
                     alt="Dan Freeman"
                     fill
                     className="object-cover"
