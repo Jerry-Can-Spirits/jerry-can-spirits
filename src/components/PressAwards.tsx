@@ -92,22 +92,25 @@ export default function PressAwards() {
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+        <div className="space-y-12">
 
-          {/* Press */}
+          {/* Press: a horizontal snap-scroll row. With three cards it fills
+              the width and reads as static on desktop; on mobile it swipes.
+              As coverage grows, new entries in pressItems scroll — no layout
+              change needed. */}
           {pressItems.length > 0 && (
             <div className="space-y-6">
               <h3 className="text-sm font-semibold uppercase tracking-widest text-gold-400 border-b border-gold-500/20 pb-3">
                 Press
               </h3>
-              <div className="space-y-6">
+              <div className="flex gap-6 overflow-x-auto snap-x snap-mandatory pb-4">
                 {pressItems.map((item) => (
                   <Link
                     key={item.publication}
                     href={item.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group block p-6 bg-jerry-green-800/20 rounded-xl border border-gold-500/20 hover:border-gold-400/40 transition-colors"
+                    className="group snap-start shrink-0 w-[85%] sm:w-[420px] lg:shrink lg:flex-1 lg:min-w-[300px] p-6 bg-jerry-green-800/20 rounded-xl border border-gold-500/20 hover:border-gold-400/40 transition-colors"
                   >
                     <p className="text-parchment-200 text-lg leading-relaxed mb-4 italic">
                       &ldquo;{item.quote}&rdquo;
@@ -131,7 +134,7 @@ export default function PressAwards() {
             <h3 className="text-sm font-semibold uppercase tracking-widest text-gold-400 border-b border-gold-500/20 pb-3">
               Accreditations
             </h3>
-            <div className="space-y-4">
+            <div className="grid sm:grid-cols-2 gap-4">
               {awardItems.map((award) => {
                 const cardContent = (
                   <>
