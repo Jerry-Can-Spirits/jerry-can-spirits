@@ -87,6 +87,8 @@ export default function Header() {
         { name: 'Rum Glasses', href: '/shop/rum-glasses/', description: 'The right glass makes a difference' },
         { name: 'Clothing', href: '/shop/clothing/', description: 'Expedition apparel' },
         { name: 'Browse All', href: '/shop/', description: 'All collections' },
+        { name: 'Stockists', href: '/stockists/', description: 'Find us near you' },
+        { name: 'Reviews', href: '/reviews/', description: 'What customers say' },
       ]
     },
     // Straight to the bottle: the one product a first-time visitor came for,
