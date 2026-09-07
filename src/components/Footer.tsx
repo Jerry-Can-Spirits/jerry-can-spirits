@@ -91,6 +91,7 @@ export default function Footer() {
       label: 'Company',
       links: [
         { name: 'Contact', href: '/contact/' },
+        { name: 'Complaints', href: '/contact/complaints/' },
         { name: 'Careers', href: '/careers/' },
         { name: 'Site Map', href: '/sitemap/' },
       ]
