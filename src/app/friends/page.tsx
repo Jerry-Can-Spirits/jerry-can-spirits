@@ -68,6 +68,8 @@ const brandAmbassadors = [
     website: "https://tmscreations.com/",
     speciality: "Workshop Pens, Apparel & Man Bar Builds",
     logo: "https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/1e187fa3-d9ad-45ae-984e-98529fddb200/public",
+    // The supplied artwork is the white logo, so it needs a dark plate.
+    darkLogo: true,
   },
 ]
 
@@ -543,7 +545,7 @@ export default function FriendsPage() {
                     className="bg-jerry-green-800/20 border border-gold-500/20 rounded-lg p-6 hover:border-gold-500/40 transition-all"
                   >
                     <div className="flex items-center justify-center mb-4">
-                      <div className="relative w-28 h-28 rounded-full overflow-hidden border-2 border-gold-500/30 bg-white shrink-0">
+                      <div className={`relative w-28 h-28 rounded-full overflow-hidden border-2 border-gold-500/30 shrink-0 ${'darkLogo' in ambassador && ambassador.darkLogo ? 'bg-jerry-green-900' : 'bg-white'}`}>
                         <Image
                           src={ambassador.logo}
                           alt={`${ambassador.name} logo`}
