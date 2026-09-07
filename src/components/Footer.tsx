@@ -26,21 +26,9 @@ export default function Footer() {
     }
   }
 
-  // Footer link sections grouped for scannability (Miller's Law)
+  // Footer accordions mirror the five header titles, so the same label
+  // means the same territory everywhere. Company is the utility tail.
   const quickLinkGroups = [
-    {
-      label: 'The Brand',
-      links: [
-        { name: 'Home', href: '/' },
-        { name: 'Our Story', href: '/about/story/' },
-        { name: 'Meet the Team', href: '/about/team/' },
-        { name: 'Ethos', href: '/ethos/' },
-        { name: 'Sustainability', href: '/sustainability/' },
-        { name: 'Friends & Partners', href: '/friends/' },
-        { name: 'Where the 5% Goes', href: '/giving/' },
-        { name: 'The Expedition Log', href: '/expedition-log/' },
-      ]
-    },
     {
       label: 'Shop',
       links: [
@@ -53,29 +41,56 @@ export default function Footer() {
         { name: 'Rum Glasses', href: '/shop/rum-glasses/' },
         { name: 'Clothing', href: '/shop/clothing/' },
         { name: 'Browse All', href: '/shop/' },
-        { name: 'Reviews', href: '/reviews/' },
         { name: 'Stockists', href: '/stockists/' },
-        { name: 'Trade', href: '/trade/' },
+        { name: 'Reviews', href: '/reviews/' },
       ]
     },
     {
-      label: 'Explore',
+      label: 'Our Rum',
       links: [
-        { name: 'First Pour Book', href: '/first-pour/' },
-        { name: 'Field Manual', href: '/field-manual/' },
-        { name: "What's in my bar", href: '/field-manual/whats-in-my-bar/' },
-        { name: 'Guides', href: '/guides/' },
+        { name: 'Expedition Spiced Rum', href: '/shop/product/jerry-can-spirits-expedition-spiced-rum/' },
         { name: 'What’s In It', href: '/ingredients/' },
         // The page's own h1 — one name for one thing, in customer language.
         { name: 'Check Your Bottle', href: '/batch/' },
+      ]
+    },
+    {
+      label: 'Our Story',
+      links: [
+        { name: 'Our Story', href: '/about/story/' },
+        { name: 'Meet the Team', href: '/about/team/' },
+        { name: 'Ethos', href: '/ethos/' },
+        { name: 'Sustainability', href: '/sustainability/' },
+        { name: 'Friends & Partners', href: '/friends/' },
+        { name: 'Where the 5% Goes', href: '/giving/' },
+        { name: 'The Expedition Log', href: '/expedition-log/' },
+        { name: 'Press & Media', href: '/contact/media/' },
+        { name: 'First Pour Book', href: '/first-pour/' },
         { name: 'FAQ', href: '/faq/' },
+      ]
+    },
+    {
+      label: 'Trade',
+      links: [
+        { name: 'Trade Portal', href: '/trade/' },
+        { name: 'Apply for an Account', href: '/trade/apply/' },
+      ]
+    },
+    {
+      label: 'Field Manual',
+      links: [
+        { name: 'Field Manual', href: '/field-manual/' },
+        { name: 'Cocktails', href: '/field-manual/cocktails/' },
+        { name: "What's in my bar", href: '/field-manual/whats-in-my-bar/' },
+        { name: 'Equipment', href: '/field-manual/equipment/' },
+        { name: 'Ingredients', href: '/field-manual/ingredients/' },
+        { name: 'Guides', href: '/guides/' },
       ]
     },
     {
       label: 'Company',
       links: [
         { name: 'Contact', href: '/contact/' },
-        { name: 'Press & Media', href: '/contact/media/' },
         { name: 'Careers', href: '/careers/' },
         { name: 'Site Map', href: '/sitemap/' },
       ]

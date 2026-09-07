@@ -101,6 +101,7 @@ export default function Header() {
         { name: 'Our Story', href: '/about/story/', description: 'Brand heritage & mission' },
         { name: 'Meet the Team', href: '/about/team/', description: 'The veterans behind the brand' },
         { name: 'Where the 5% Goes', href: '/giving/', description: 'Military charity contributions' },
+        { name: 'Friends & Partners', href: '/friends/', description: 'The people we build with' },
         { name: 'The Expedition Log', href: '/expedition-log/', description: 'Where the bottles end up' },
         { name: 'Press & Media', href: '/contact/media/', description: 'Media centre & brand assets' },
         { name: 'FAQ', href: '/faq/', description: 'Common questions answered' },
