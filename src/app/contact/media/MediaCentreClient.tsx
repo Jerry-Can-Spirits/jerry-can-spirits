@@ -502,10 +502,11 @@ Based in the UK, Jerry Can Spirits® is a small operation run by two mates who c
                 <DownloadCard
                   title="Dan Freeman"
                   description="Co-founder headshot for editorial use. Credit: Jerry Can Spirits."
-                  previewImage="/images/team/Dan_Headshot.jpg"
+                  previewImage="https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/1a3a3fdd-fdd8-482c-2088-660df51c6c00/public"
                   previewAlt="Dan Freeman, Co-Founder & Director"
                   formats={[
-                    { label: 'JPG', url: '/images/team/Dan_Headshot.jpg' },
+                    { label: 'PNG', url: '/api/media-download/?id=1a3a3fdd-fdd8-482c-2088-660df51c6c00&format=png&filename=dan-freeman-headshot.png' },
+                    { label: 'JPG', url: '/api/media-download/?id=1a3a3fdd-fdd8-482c-2088-660df51c6c00&format=jpeg&filename=dan-freeman-headshot.jpg' },
                   ]}
                 />
                 <DownloadCard
@@ -851,7 +852,7 @@ Based in the UK, Jerry Can Spirits® is a small operation run by two mates who c
                   <div className="flex flex-col items-center text-center gap-4">
                     <div className="relative w-40 h-40 rounded-xl overflow-hidden border-2 border-gold-500/30">
                       <Image
-                        src="/images/team/Dan_Headshot.jpg"
+                        src="https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/1a3a3fdd-fdd8-482c-2088-660df51c6c00/public"
                         alt="Dan Freeman - Co-Founder & Director, Jerry Can Spirits®"
                         fill
                         className="object-cover"
