@@ -58,6 +58,19 @@ const communityPartners = [
   },
 ]
 
+// Brand ambassadors - people who take the brand with them and speak in
+// their own words. Distinct from trade partners and sponsorships.
+const brandAmbassadors = [
+  {
+    name: "TMS Creations",
+    location: "United Kingdom",
+    description: "TMS Creations is a veteran-owned workshop building custom pens, hard-wearing apparel, and man bar builds that earn their place in your everyday kit. Bob Lovell of TMS Creations is our first brand ambassador, taking Jerry Can Spirits with him and speaking about it in his own words.",
+    website: "https://tmscreations.com/",
+    speciality: "Workshop Pens, Apparel & Man Bar Builds",
+    logo: "https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/1e187fa3-d9ad-45ae-984e-98529fddb200/public",
+  },
+]
+
 // Partner data - Add your partners here
 const partners = [
   {
@@ -141,7 +154,7 @@ export default function FriendsPage() {
       "mainEntity": {
         "@type": "ItemList",
         "name": "Jerry Can Spirits Partners",
-        "numberOfItems": partners.length + communityPartners.length,
+        "numberOfItems": partners.length + communityPartners.length + brandAmbassadors.length,
         "itemListElement": [
           ...partners.map((partner, index) => ({
             "@type": "ListItem",
@@ -158,6 +171,16 @@ export default function FriendsPage() {
             "position": partners.length + index + 1,
             "item": {
               "@type": "SportsOrganization",
+              "name": partner.name,
+              "url": partner.website,
+              "description": partner.description,
+            }
+          })),
+          ...brandAmbassadors.map((partner, index) => ({
+            "@type": "ListItem",
+            "position": partners.length + communityPartners.length + index + 1,
+            "item": {
+              "@type": "Organization",
               "name": partner.name,
               "url": partner.website,
               "description": partner.description,
@@ -500,6 +523,60 @@ export default function FriendsPage() {
                       </a>
                     </div>
                   ))}
+              </div>
+            </div>
+          )}
+
+          {/* Brand Ambassadors */}
+          {brandAmbassadors.length > 0 && (
+            <div className="mb-16">
+              <h2 className="text-3xl font-playfair font-bold text-gold-500 mb-4 text-center">
+                Brand Ambassadors
+              </h2>
+              <p className="text-parchment-300 text-center max-w-2xl mx-auto mb-8">
+                Ambassadors take Jerry Can Spirits with them and speak about it in their own words. More will follow.
+              </p>
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {brandAmbassadors.map((ambassador, index) => (
+                  <div
+                    key={index}
+                    className="bg-jerry-green-800/20 border border-gold-500/20 rounded-lg p-6 hover:border-gold-500/40 transition-all"
+                  >
+                    <div className="flex items-center justify-center mb-4">
+                      <div className="relative w-28 h-28 rounded-full overflow-hidden border-2 border-gold-500/30 bg-white shrink-0">
+                        <Image
+                          src={ambassador.logo}
+                          alt={`${ambassador.name} logo`}
+                          fill
+                          className="object-contain p-3"
+                        />
+                      </div>
+                    </div>
+                    <h3 className="text-xl font-playfair font-bold text-gold-400 mb-1">
+                      {ambassador.name}
+                    </h3>
+                    <p className="text-gold-500/80 text-sm mb-1">
+                      {ambassador.location}
+                    </p>
+                    <p className="text-gold-500/80 text-sm mb-3">
+                      {ambassador.speciality}
+                    </p>
+                    <p className="text-parchment-200 text-sm mb-4 leading-relaxed">
+                      {ambassador.description}
+                    </p>
+                    <a
+                      href={ambassador.website}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 px-3 py-1.5 bg-gold-500/20 text-gold-400 text-sm font-medium rounded-lg hover:bg-gold-500/30 border border-gold-500/30 transition-colors"
+                    >
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                      </svg>
+                      Website
+                    </a>
+                  </div>
+                ))}
               </div>
             </div>
           )}
