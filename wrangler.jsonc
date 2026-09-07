@@ -51,6 +51,14 @@
 			//   applications/ → delete after 30 days
 			"binding": "TRADE_DOCS",
 			"bucket_name": "jerry-can-spirits-trade-docs"
+		},
+		{
+			// OpenNext incremental cache: stores regenerated ISR pages so
+			// expired long-tail pages serve from cache instead of paying a
+			// full origin render on every request (Ahrefs flagged 2-3s TTFB
+			// for AI crawlers on exactly those pages).
+			"binding": "NEXT_INC_CACHE_R2_BUCKET",
+			"bucket_name": "jerry-can-spirits-inc-cache"
 		}
 	],
 	"triggers": {

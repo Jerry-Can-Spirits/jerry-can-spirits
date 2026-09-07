@@ -16,10 +16,11 @@ const ALLOWED_IMAGE_IDS = new Set([
   'images-british-veteran-owned-logo-black-png',
   'images-afc_banner__png_-png',
   '4e7099a3-a0cb-48a5-d489-edd3d4bca100',
-  // IWSC 2026 medal artwork (licensed) and founder headshot
+  // IWSC 2026 medal artwork (licensed) and founder headshots
   '2f7661db-3571-44d1-ee15-8bbd3c3cfd00',
   '863f3ff8-7252-477f-9627-a805f6c6a100',
   'bcacb452-4f56-4676-b4c8-ac6afa7c1e00',
+  '1a3a3fdd-fdd8-482c-2088-660df51c6c00',
 ])
 
 const ALLOWED_FORMATS = new Set(['png', 'jpeg', 'webp'])
