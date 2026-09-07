@@ -222,6 +222,7 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
       'stainless-steel-spirit-stones',
       'crystal-ice-hiball-42cl',
       'hiball-glass-38cl',
+      'metal-logo-keyring',
     ],
     // The slate coaster review: a bottle broke in transit and the customer's
     // review is about how that was handled. On a page of breakables, how we
