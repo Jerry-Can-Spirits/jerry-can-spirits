@@ -158,26 +158,30 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   //
   // During Cloudflare's `next build` (static prerender) the D1 binding does
   // not point at the production database, so the `batches` table is missing
-  // and the query throws. This is harmless: the prerendered sitemap omits
-  // batches at build time, and the next runtime regeneration (within an
-  // hour via `revalidate`) picks them up against the real DB. Suppress that
-  // specific expected error to keep build logs clean; surface anything else.
-  let batchUrls: MetadataRoute.Sitemap = []
+  // and the query throws. The prerendered sitemap therefore omits batches,
+  // and it was assumed the next runtime regeneration (within an hour via
+  // `revalidate`) would add them. It did not: the Ahrefs crawl of 14 Sep 2026
+  // found /batch/001/ absent a week after the last deploy. So the batches
+  // that exist are listed here as well, and the D1 result is merged on top.
+  // Add each new batch to this list when it lands.
+  const KNOWN_BATCH_IDS = ['001']
+  let batchIds: string[] = []
   try {
     const db = await getD1()
     const batches = await getAllBatches(db)
-    batchUrls = batches.map((batch) => ({
-      url: `${baseUrl}/batch/${batch.id.replace('batch-', '')}/`,
-      lastModified: STATIC_LAST_MODIFIED,
-      changeFrequency: 'monthly' as const,
-      priority: 0.6,
-    }))
+    batchIds = batches.map((batch) => batch.id.replace('batch-', ''))
   } catch (error) {
     const msg = error instanceof Error ? error.message : String(error)
     if (!msg.includes('no such table')) {
       console.error('Error fetching batches for sitemap:', error)
     }
   }
+  const batchUrls: MetadataRoute.Sitemap = Array.from(new Set([...KNOWN_BATCH_IDS, ...batchIds])).map((id) => ({
+    url: `${baseUrl}/batch/${id}/`,
+    lastModified: STATIC_LAST_MODIFIED,
+    changeFrequency: 'monthly' as const,
+    priority: 0.6,
+  }))
 
   // Define all static routes with priorities and change frequencies
   // All URLs include trailing slash to match trailingSlash: true config
