@@ -295,7 +295,14 @@ export default async function CocktailPage({ params }: PageProps) {
         "contentUrl": cocktail.videoUrl,
         "embedUrl": youtubeEmbedUrl(youtubeId(cocktail.videoUrl)!),
         "thumbnailUrl": youtubeThumbnail(youtubeId(cocktail.videoUrl)!),
-        ...(cocktail.videoUploadDate && { "uploadDate": cocktail.videoUploadDate }),
+        // The Studio field is a date, so it arrives as YYYY-MM-DD. Google reads
+        // uploadDate as ISO 8601 and warns without a time zone (seen in the
+        // live test on 18 Sep 2026), so a bare date is pinned to midnight UTC.
+        ...(cocktail.videoUploadDate && {
+          "uploadDate": /^\d{4}-\d{2}-\d{2}$/.test(cocktail.videoUploadDate)
+            ? `${cocktail.videoUploadDate}T00:00:00+00:00`
+            : cocktail.videoUploadDate,
+        }),
       }
     }),
   }
