@@ -79,6 +79,9 @@ export default async function CollectionPage({
 
   const h1 = category?.h1 ?? slugToTitle(collection)
   const introBody = category?.introBody ?? []
+  const relatedLinks = (category?.relatedLinks ?? []).filter(
+    (link) => link.href !== `/shop/${collection}/`,
+  )
 
   let products: ShopifyProduct[] = []
   let error: string | null = null
@@ -219,6 +222,20 @@ export default async function CollectionPage({
               </p>
             ))}
           </div>
+        )}
+
+        {relatedLinks.length > 0 && (
+          <nav aria-label="Related pages" className="max-w-3xl mx-auto text-sm text-parchment-400">
+            <span className="mr-2">Also see:</span>
+            {relatedLinks.map((link, i) => (
+              <span key={link.href}>
+                {i > 0 && <span aria-hidden="true" className="mx-2 text-gold-500/50">·</span>}
+                <Link href={link.href} className="text-gold-300 hover:text-gold-200 underline decoration-dotted transition-colors">
+                  {link.label}
+                </Link>
+              </span>
+            ))}
+          </nav>
         )}
 
       </section>

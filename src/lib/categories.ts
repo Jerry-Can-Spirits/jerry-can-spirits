@@ -21,7 +21,23 @@ export type CategoryConfig = {
   // copy: no prices or thresholds in them, ever — they live in a config file
   // and would drift exactly the way every hardcoded number here has.
   faqs?: CategoryFaq[]
+  // Cross-links inside a cluster of pages that answer the same intent (the
+  // four gift pages and the gifting guide). Rendered under the intro. The
+  // page's own URL is dropped at render, so one shared list serves the cluster
+  // and adding a page means editing one array.
+  relatedLinks?: Array<{ label: string; href: string }>
 }
+
+// The gift cluster: three shop pages, the gift-sets page and the guide that
+// supports them. Search treats these as one topic; linking them the same way
+// tells it which pages belong together.
+const GIFT_CLUSTER_LINKS = [
+  { label: 'Rum gifts', href: '/shop/rum-gifts/' },
+  { label: 'Gift sets', href: '/shop/gift-sets/' },
+  { label: 'Gifts for him', href: '/shop/gifts-for-him/' },
+  { label: 'Gifts for her', href: '/shop/gifts-for-her/' },
+  { label: 'How to choose a rum gift', href: '/guides/how-to-choose-a-rum-gift/' },
+]
 
 // FAQ answers shared across categories. One definition per fact, because
 // these are policy statements (age verification, delivery, returns) that must
@@ -103,6 +119,7 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
       attribution: 'Customer review · Trustpilot',
     },
     faqs: GIFT_FAQS,
+    relatedLinks: GIFT_CLUSTER_LINKS,
   },
 
   'spiced-rum': {
@@ -273,6 +290,7 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
       attribution: 'Verified customer · Trustpilot',
     },
     faqs: GIFT_FAQS,
+    relatedLinks: GIFT_CLUSTER_LINKS,
   },
 
   'gifts-for-her': {
@@ -300,6 +318,7 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
     // No testimonial: no review in the corpus describes this gift direction,
     // and borrowing one from another page would be decoration, not proof.
     faqs: GIFT_FAQS,
+    relatedLinks: GIFT_CLUSTER_LINKS,
     productHandles: [
       'jerry-can-spirits-expedition-spiced-rum',
       'jerry-can-spirits-premium-gift-pack',
@@ -488,14 +507,42 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
   },
 }
 
+// Three ways to give the one expression. The ladder is bottle, boxed bottle,
+// gift pack, in that order, and it is curated by handle rather than read from
+// the Shopify collection, which holds only the pack. More sets arrive with
+// the display boxes for the next expressions (Dan, 18 Sep 2026); until then
+// the page describes exactly what exists.
 const giftSetsConfig: CategoryConfig = {
-  h1: 'Gift Sets',
-  metaTitle: 'Rum Gift Sets: Bottle and Barware Bundles',
+  h1: 'Rum Gift Sets',
+  metaTitle: 'Rum Gift Sets: Bottle, Boxed Bottle or the Full Pack',
   metaDescription:
-    'Rum gift sets and experience bundles from Jerry Can Spirits. Veteran-owned, British. Built for people who appreciate quality.',
+    'Rum gift sets built around Expedition Spiced Rum: the bottle alone, boxed, or the gift pack with glass, jigger and coaster. Veteran-owned and British.',
   introBody: [
-    'For anyone who holds themselves to a higher standard. Each gift set is built around Expedition Spiced Rum. British small batches, real ingredients, no shortcuts.',
+    'Three ways to give Expedition Spiced Rum. The bottle on its own. The bottle in its presentation box. Or the gift pack, which adds the glass from the cola serve, a 25ml and 50ml jigger and a slate coaster, in a branded box.',
+    'Every set starts with the same rum. Caribbean rum base, seven real spices, two natural sweeteners, and bourbon oak, macerated by our British partner distillery. 40% ABV, 700ml, every bottle numbered.',
+    'Pick the size of the gesture. The rum does the rest.',
   ],
+  productHandles: [
+    'jerry-can-spirits-expedition-spiced-rum',
+    'jerry-can-spirits-expedition-spiced-rum-presentation-box',
+    'jerry-can-spirits-premium-gift-pack',
+  ],
+  seoTitle: 'Which Set to Give',
+  seoBody: [
+    'The bottle alone suits someone who already has a home bar and a glass they like. It is considered enough to hand over as it is. The label, the numbered batch and the weight of the bottle do the work.',
+    'The presentation box is for when the bottle will sit on a table or under a tree before it is opened. It is sized for the 700ml bottle and turns it into a gift without wrapping paper.',
+    'The gift pack is the complete first pour. The Crystal ICE hiball is the glass the Silver serve with Franklin and Sons cola was judged in at the IWSC 2026. The jigger measures the 25ml and 50ml every cocktail recipe is written in. The coaster is natural slate. Someone who owns none of those things opens the box and can make the serve that evening.',
+  ],
+  pillars: [
+    { title: 'Built Around One Rum', body: 'Every set contains the same 700ml bottle at 40% ABV. Seven real spices, no artificial flavourings. The set changes what comes with it, never what is in it.' },
+    { title: 'Ready to Hand Over', body: 'The box and the pack are designed to be given as they arrive. Add a gift message in the cart, or send it straight to the person.' },
+    { title: 'Every Bottle Contributes', body: 'Veteran-owned and self-funded. 5% of profits goes to forces charities, whichever set you choose.' },
+  ],
+  // No testimonial: no review in the corpus is about a set rather than the
+  // bottle, and borrowing the wedding review from the rum gifts page would
+  // put the same words on two pages.
+  faqs: GIFT_FAQS,
+  relatedLinks: GIFT_CLUSTER_LINKS,
 }
 
 // /shop/gifts-and-experience/ was a byte-identical duplicate of /shop/gift-sets/
