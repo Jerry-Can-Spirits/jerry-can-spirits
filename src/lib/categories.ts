@@ -49,10 +49,9 @@ const FAQ_SEND_DIRECT: CategoryFaq = {
   answer:
     'Yes. Enter their address at checkout. One thing worth knowing: every delivery is age-verified, so the person receiving it must be 18 or over and may be asked to show photo ID to the courier.',
 }
-const FAQ_GIFT_MESSAGE: CategoryFaq = {
-  question: 'Can I add a gift message?',
-  answer: 'Yes. Mark the order as a gift in the cart and add your message there.',
-}
+// No gift-message FAQ: the cart captures a message and it is visible in
+// Shopify, but nothing prints it or puts it in the parcel (Dan, 18 Sep 2026).
+// Promising it on the page would describe a mechanism that does not exist.
 const FAQ_DELIVERY_TIME: CategoryFaq = {
   question: 'How long does delivery take?',
   answer: 'Once dispatched, orders typically arrive within three to five business days, anywhere in the UK.',
@@ -73,7 +72,7 @@ const FAQ_RETURNS: CategoryFaq = {
     'Unopened and unused items can be returned within 14 days of delivery if you change your mind, with return postage at your own expense. Damaged or incorrect items are replaced or refunded.',
 }
 
-const GIFT_FAQS: CategoryFaq[] = [FAQ_SEND_DIRECT, FAQ_GIFT_MESSAGE, FAQ_DELIVERY_TIME, FAQ_GIFT_READY]
+const GIFT_FAQS: CategoryFaq[] = [FAQ_SEND_DIRECT, FAQ_DELIVERY_TIME, FAQ_GIFT_READY]
 
 export const CATEGORIES: Record<string, CategoryConfig> = {
 
@@ -206,7 +205,7 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
     ],
     // No gift-ready FAQ here: that answer describes the bottle and its
     // presentation box, and this collection leads with the pack and tools.
-    faqs: [FAQ_SEND_DIRECT, FAQ_GIFT_MESSAGE, FAQ_DELIVERY_TIME],
+    faqs: [FAQ_SEND_DIRECT, FAQ_DELIVERY_TIME],
   },
 
   'bar-accessories': {
@@ -535,7 +534,7 @@ const giftSetsConfig: CategoryConfig = {
   ],
   pillars: [
     { title: 'Built Around One Rum', body: 'Every set contains the same 700ml bottle at 40% ABV. Seven real spices, no artificial flavourings. The set changes what comes with it, never what is in it.' },
-    { title: 'Ready to Hand Over', body: 'The box and the pack are designed to be given as they arrive. Add a gift message in the cart, or send it straight to the person.' },
+    { title: 'Ready to Hand Over', body: 'The box and the pack are designed to be given as they arrive. Hand it over yourself, or send it straight to the person.' },
     { title: 'Every Bottle Contributes', body: 'Veteran-owned and self-funded. 5% of profits goes to forces charities, whichever set you choose.' },
   ],
   // No testimonial: no review in the corpus is about a set rather than the
