@@ -5,6 +5,7 @@ interface CloudflareEnv {
 
   // D1 Database
   DB: D1Database;
+  NEXT_TAG_CACHE_D1: D1Database;
 
   // Secrets — Klaviyo
   KLAVIYO_PRIVATE_KEY: string;
