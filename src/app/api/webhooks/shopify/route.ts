@@ -203,10 +203,13 @@ async function handleProductUpdated(product: ShopifyProduct, kv: KVNamespace) {
   // product page plus every collection surface it could appear on. Best-effort:
   // a revalidation failure must not fail the webhook.
   try {
-    revalidatePath(`/shop/product/${product.handle}`);
-    revalidatePath('/shop/spirits');
-    revalidatePath('/shop/barware');
-    revalidatePath('/shop/clothing');
+    // Trailing slashes: the cached page's tag is its rendered path, and with
+    // trailingSlash on that ends in `/`. A path without it writes a tag that
+    // matches no page (see the Sanity hook for the history).
+    revalidatePath(`/shop/product/${product.handle}/`);
+    revalidatePath('/shop/spirits/');
+    revalidatePath('/shop/barware/');
+    revalidatePath('/shop/clothing/');
     revalidatePath('/shop/[collection]', 'page');
   } catch (err) {
     console.error('[webhook] revalidate failed for product %s:', product.handle, err);

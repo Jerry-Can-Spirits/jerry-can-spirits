@@ -48,7 +48,7 @@ Five documents govern work here. This file is the working contract; read the oth
 - Product FAQ is stored in Shopify metafields, not in code
 - Cache headers are set in both `public/_headers` (Cloudflare edge) and `next.config.ts`
 - `longDescription` portable text is rendered via `src/components/FieldManualPortableText.tsx`
-- `trailingSlash: true`: every internal link and JSON-LD URL must end in `/` (e.g. `/shop/product/<handle>/`, `/shop/<collection>/`) or it 308-redirects and wastes crawl budget
+- `trailingSlash: true`: every internal link and JSON-LD URL must end in `/` (e.g. `/shop/product/<handle>/`, `/shop/<collection>/`) or it 308-redirects and wastes crawl budget. The same applies to `revalidatePath`: a cached page's tag is its rendered path with the slash, so `revalidatePath('/guides')` matches nothing and `revalidatePath('/guides/')` refreshes the page (the `'/shop/[collection]', 'page'` form is the exception; route-pattern tags carry no slash)
 
 ---
 

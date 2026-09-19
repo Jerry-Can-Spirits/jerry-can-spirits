@@ -66,6 +66,11 @@ function slugString(slug: unknown): string | undefined {
   return undefined;
 }
 
+// Every path ends in `/`. Next tags a cached page with its rendered path, and
+// with trailingSlash on that is `_N_T_/guides/<slug>/`; revalidatePath writes
+// the tag exactly as spelled here. Without the slash the two never match,
+// which is how this hook returned 200 for months while refreshing nothing
+// (found 19 Sep 2026 by reading the cached object's tags out of R2).
 function pathsForDocument(doc: { _type?: string; slug?: unknown; shopifyHandle?: unknown }): string[] {
   const slug = slugString(doc.slug);
   const handle = typeof doc.shopifyHandle === 'string' ? doc.shopifyHandle : undefined;
@@ -74,19 +79,19 @@ function pathsForDocument(doc: { _type?: string; slug?: unknown; shopifyHandle?:
       // The PDP route param is the Shopify handle, which is the Sanity
       // product's shopifyHandle. Also refresh the listings the card sits on.
       return [
-        ...(handle ? [`/shop/product/${handle}`] : []),
-        '/shop/spirits',
-        '/shop/barware',
-        '/shop/clothing',
+        ...(handle ? [`/shop/product/${handle}/`] : []),
+        '/shop/spirits/',
+        '/shop/barware/',
+        '/shop/clothing/',
       ];
     case 'cocktail':
-      return [...(slug ? [`/field-manual/cocktails/${slug}`] : []), '/field-manual/cocktails'];
+      return [...(slug ? [`/field-manual/cocktails/${slug}/`] : []), '/field-manual/cocktails/'];
     case 'ingredient':
-      return [...(slug ? [`/field-manual/ingredients/${slug}`] : []), '/field-manual/ingredients'];
+      return [...(slug ? [`/field-manual/ingredients/${slug}/`] : []), '/field-manual/ingredients/'];
     case 'equipment':
-      return [...(slug ? [`/field-manual/equipment/${slug}`] : []), '/field-manual/equipment'];
+      return [...(slug ? [`/field-manual/equipment/${slug}/`] : []), '/field-manual/equipment/'];
     case 'guide':
-      return [...(slug ? [`/guides/${slug}`] : []), '/guides'];
+      return [...(slug ? [`/guides/${slug}/`] : []), '/guides/'];
     // Empty dashboard Filter means any _type can arrive (including deletes).
     // Unknown types produce no paths and are acknowledged with a 200 below.
     default:
