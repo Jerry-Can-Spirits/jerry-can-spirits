@@ -9,7 +9,7 @@
     "dev": "next dev",
     "dev:legacy": "next dev",
     "dev:turbo": "next dev --turbopack",
-    "build": "next build",
+    "build": "node -e \"require('fs').rmSync('.next/cache/fetch-cache',{recursive:true,force:true})\" && next build",
     "build:turbo": "next build --turbopack",
     "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
     "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
