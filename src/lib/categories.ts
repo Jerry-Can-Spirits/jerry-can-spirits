@@ -369,6 +369,13 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
       FAQ_BREAKAGE,
       FAQ_DELIVERY_TIME,
     ],
+    // The collection sells the glasses; the equipment page answers which one
+    // and why. Search asks the question far more often than it asks for a shop.
+    relatedLinks: [
+      { label: 'Which glass for rum', href: '/field-manual/equipment/rum-glass/' },
+      { label: 'Glassware guide', href: '/guides/glassware-guide/' },
+      { label: 'Cocktail glasses', href: '/shop/cocktail-glasses-glassware/' },
+    ],
   },
 
   'hip-flasks': {
