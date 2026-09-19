@@ -82,12 +82,18 @@ export const PRICE_VALID_FROM = '2026-04-06'
 
 // The 14-day GB returns policy, shared by every offer on the site. Previously
 // duplicated inline on the product, spirits and barware pages.
+//
+// returnFees follows the shipping page, which is the policy: a change-of-mind
+// return is unopened, within 14 days, with return postage at the customer's
+// expense. It was declared FreeReturn, which described a policy we do not
+// have; damaged or incorrect items are replaced or refunded, which is not a
+// return fee decision and does not make returns free in general.
 export const MERCHANT_RETURN_POLICY = {
   '@type': 'MerchantReturnPolicy',
   returnPolicyCategory: 'https://schema.org/MerchantReturnFiniteReturnWindow',
   merchantReturnDays: 14,
   returnMethod: 'https://schema.org/ReturnByMail',
-  returnFees: 'https://schema.org/FreeReturn',
+  returnFees: 'https://schema.org/ReturnFeesCustomerResponsibility',
   applicableCountry: 'GB',
 } as const
 
