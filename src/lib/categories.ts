@@ -172,6 +172,14 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
       FAQ_SEND_DIRECT,
       FAQ_DELIVERY_TIME,
     ],
+    // The category page sells the rum; these answer what spiced rum is. The
+    // generic queries land here and on the guide, and neither linked the other.
+    relatedLinks: [
+      { label: 'What is spiced rum', href: '/guides/complete-guide-spiced-rum/' },
+      { label: 'Dark rum vs spiced rum', href: '/guides/dark-rum-vs-spiced-rum/' },
+      { label: 'The botanicals', href: '/guides/botanicals-behind-expedition-spiced-rum/' },
+      { label: 'Every ingredient', href: '/ingredients/expedition-spiced-rum/' },
+    ],
   },
 
   'cocktail-making-kits': {
