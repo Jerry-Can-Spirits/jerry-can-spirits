@@ -6,6 +6,7 @@ import { createCart, addToCart as shopifyAddToCart } from '@/lib/shopify'
 import { appendUtmToCheckout, gatedCheckout } from '@/lib/utm'
 import { attachStitchingAttributes } from '@/lib/analytics-stitching'
 import { applyReferralCode } from '@/lib/referrals'
+import { trackAddedToCart } from '@/lib/klaviyo-onsite'
 
 interface AddToCartButtonProps {
   variantId: string
@@ -59,6 +60,9 @@ export default function AddToCartButton({ variantId, productTitle, price, curren
         localStorage.setItem('shopify_cart_id', cartId)
       }
       const updated = await shopifyAddToCart(cartId, variantId, 1)
+      // Klaviyo sees this add too, or a Buy-now shopper who bounces at checkout
+      // never enters the abandoned-cart flow.
+      trackAddedToCart(updated, variantId)
       // Await so the GA4 stitching attributes land before the hand-off to Shopify.
       await attachStitchingAttributes(updated)
       window.location.href = gatedCheckout(appendUtmToCheckout(updated.checkoutUrl))
