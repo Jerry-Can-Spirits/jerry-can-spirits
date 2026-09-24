@@ -2,21 +2,28 @@
 
 import { useEffect } from 'react';
 import { trackEventDual } from '@/lib/meta-capi';
+import { trackViewedProduct } from '@/lib/klaviyo-onsite';
 
 interface ProductPageTrackingProps {
   productId: string;
   productName: string;
+  handle: string;
   price: string;
   currency: string;
   category?: string;
+  imageUrl?: string;
+  compareAtPrice?: string | null;
 }
 
 export default function ProductPageTracking({
   productId,
   productName,
+  handle,
   price,
   currency,
   category,
+  imageUrl,
+  compareAtPrice,
 }: ProductPageTrackingProps) {
   useEffect(() => {
     const payload = {
@@ -48,7 +55,19 @@ export default function ProductPageTracking({
         }],
       });
     }
-  }, [productId, productName, price, currency, category]);
+
+    // Klaviyo Viewed Product — the browse-abandonment trigger a headless
+    // store has to send itself. Consent-gated inside trackViewedProduct.
+    trackViewedProduct({
+      id: productId,
+      title: productName,
+      handle,
+      price,
+      productType: category,
+      imageUrl,
+      compareAtPrice,
+    });
+  }, [productId, productName, handle, price, currency, category, imageUrl, compareAtPrice]);
 
   return null;
 }

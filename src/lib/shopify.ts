@@ -119,6 +119,7 @@ export interface CartLine {
     id: string;
     title: string;
     product: {
+      id: string;
       title: string;
       handle: string;
       productType?: string;
@@ -162,8 +163,11 @@ interface CartLineEdge {
       id: string;
       title: string;
       product: {
+        id: string;
         title: string;
         handle: string;
+        productType?: string;
+        tags?: string[];
       };
       image?: {
         url: string;
@@ -545,6 +549,7 @@ const CART_FIELDS = `
             id
             title
             product {
+              id
               title
               handle
               productType
