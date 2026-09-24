@@ -3,6 +3,7 @@ import Link from 'next/link'
 import StructuredData from '@/components/StructuredData'
 import ScrollReveal from '@/components/ScrollReveal'
 import { baseOpenGraph, OG_IMAGE } from '@/lib/og'
+import { DELIVERY_PROMISE_SENTENCE } from '@/lib/delivery'
 
 export const metadata: Metadata = {
   title: "Frequently Asked Questions",
@@ -50,7 +51,7 @@ const faqs = [
   // Ordering & Shipping
   {
     question: "How long does shipping take?",
-    answer: "UK orders are typically dispatched within 1-2 business days and arrive within 3-5 business days via Royal Mail. You'll receive tracking information once your order ships."
+    answer: `${DELIVERY_PROMISE_SENTENCE} Delivery is by Royal Mail Tracked 48 and you receive the tracking link once your order ships.`
   },
   {
     question: "Do you ship internationally?",

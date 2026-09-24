@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Breadcrumbs from '@/components/Breadcrumbs'
+import { DELIVERY_WINDOW_LABEL } from '@/lib/delivery'
 
 export default function Complaints() {
   const [formData, setFormData] = useState({
@@ -117,7 +118,7 @@ export default function Complaints() {
                 <h3 className="font-semibold text-parchment-200 mb-2">Shipping & Delivery</h3>
                 <ul className="space-y-1 text-parchment-300">
                   <li>• Check tracking information first</li>
-                  <li>• Allow 3-5 business days for delivery</li>
+                  <li>• Allow {DELIVERY_WINDOW_LABEL} from dispatch</li>
                   <li>• Contact us if package appears lost</li>
                 </ul>
               </div>
