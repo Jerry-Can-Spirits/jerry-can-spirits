@@ -2,6 +2,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { client } from '@/sanity/lib/client'
 import { homepageServesQuery, HOMEPAGE_SERVE_SLUGS } from '@/sanity/queries'
+import ScrollRow from '@/components/ScrollRow'
 
 interface Serve {
   name: string
@@ -48,12 +49,14 @@ export default async function RumServesTeaser() {
             Three serves built on Expedition Spiced Rum, measured in 25ml and 50ml, written up in the Field Manual.
           </p>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-          {serves.map((serve) => (
+        <ScrollRow
+          ariaLabel="Serves built on the rum"
+          cols="md:grid-cols-3"
+          items={serves.map((serve) => (
             <Link
               key={serve.slug.current}
               href={`/field-manual/cocktails/${serve.slug.current}/`}
-              className="group rounded-xl border border-gold-500/20 hover:border-gold-400/40 bg-jerry-green-900/40 overflow-hidden transition-colors"
+              className="group block h-full rounded-xl border border-gold-500/20 hover:border-gold-400/40 bg-jerry-green-900/40 overflow-hidden transition-colors"
             >
               {serve.image && (
                 <div className="relative aspect-[4/3]">
@@ -63,7 +66,7 @@ export default async function RumServesTeaser() {
                     fill
                     loading="lazy"
                     className="object-cover group-hover:scale-105 transition-transform duration-500"
-                    sizes="(max-width: 640px) 100vw, 33vw"
+                    sizes="(max-width: 768px) 80vw, 33vw"
                   />
                 </div>
               )}
@@ -74,7 +77,7 @@ export default async function RumServesTeaser() {
               </div>
             </Link>
           ))}
-        </div>
+        />
         <div className="mt-10 text-center">
           <Link href="/field-manual/cocktails/" className="text-gold-300 hover:text-gold-200 underline underline-offset-4 text-sm font-semibold">
             Every serve, in the Field Manual

@@ -53,7 +53,6 @@ export default function FounderStorySnippet() {
                   fill
                   className="object-cover"
                   sizes="(max-width: 1024px) 100vw, 50vw"
-                  priority
                 />
               </div>
 

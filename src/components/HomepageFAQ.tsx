@@ -82,44 +82,61 @@ export default function HomepageFAQ() {
           </p>
         </div>
 
-        {/* FAQ Grid */}
-        <div className="grid md:grid-cols-2 gap-6 mb-16">
+        {/* FAQ: each question opens on tap. Six full answers stacked on a
+            phone put a screen and a half between the serves and the closing
+            ask; the schema above still carries every answer for search. */}
+        <div className="grid md:grid-cols-2 gap-4 md:gap-6 mb-16 items-start">
           {faqs.map((faq, index) => (
-            <div
+            <details
               key={index}
-              className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20"
+              className="group bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl border border-gold-500/20 open:border-gold-400/40"
             >
-              <h3 className="text-lg font-serif font-bold text-gold-300 mb-3">
-                {faq.question}
-              </h3>
-              <p className="text-parchment-200 leading-relaxed">
-                {faq.answer}
-              </p>
-              {faq.link && (
-                <Link
-                  href={faq.link.href}
-                  className="inline-block mt-4 text-gold-400 hover:text-gold-300 transition-colors text-sm font-medium underline underline-offset-2"
+              <summary className="flex items-center justify-between gap-4 p-5 sm:p-6 cursor-pointer list-none [&::-webkit-details-marker]:hidden min-h-[44px]">
+                <h3 className="text-lg font-serif font-bold text-gold-300">
+                  {faq.question}
+                </h3>
+                <svg
+                  className="w-5 h-5 shrink-0 text-gold-400 transition-transform duration-200 group-open:rotate-180"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
                 >
-                  {faq.link.text}
-                </Link>
-              )}
-            </div>
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </summary>
+              <div className="px-5 sm:px-6 pb-5 sm:pb-6">
+                <p className="text-parchment-200 leading-relaxed">
+                  {faq.answer}
+                </p>
+                {faq.link && (
+                  <Link
+                    href={faq.link.href}
+                    className="inline-block mt-4 text-gold-400 hover:text-gold-300 transition-colors text-sm font-medium underline underline-offset-2"
+                  >
+                    {faq.link.text}
+                  </Link>
+                )}
+              </div>
+            </details>
           ))}
         </div>
 
         {/* Comparison Table */}
-        <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
+        {/* Tighter cells on a phone so all three columns fit inside the
+            card instead of the third being clipped at its edge. */}
+        <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-4 sm:p-8 border border-gold-500/20">
           <h3 className="text-2xl font-serif font-bold text-white mb-6 text-center">
             Mass-Produced vs Craft Rum
           </h3>
 
           <div className="overflow-x-auto">
-            <table className="w-full">
+            <table className="w-full text-sm sm:text-base">
               <thead>
                 <tr className="border-b border-gold-500/30">
-                  <th className="text-left py-4 px-4 text-parchment-300 font-medium">Aspect</th>
-                  <th className="text-left py-4 px-4 text-parchment-400 font-medium">Mass-Produced</th>
-                  <th className="text-left py-4 px-4 text-gold-300 font-medium bg-gold-500/5 border-l border-gold-500/20 rounded-tr-lg">Jerry Can Spirits</th>
+                  <th className="text-left py-3 px-2 sm:py-4 sm:px-4 text-parchment-300 font-medium">Aspect</th>
+                  <th className="text-left py-3 px-2 sm:py-4 sm:px-4 text-parchment-400 font-medium">Mass-Produced</th>
+                  <th className="text-left py-3 px-2 sm:py-4 sm:px-4 text-gold-300 font-medium bg-gold-500/5 border-l border-gold-500/20 rounded-tr-lg">Jerry Can Spirits</th>
                 </tr>
               </thead>
               <tbody>
@@ -128,9 +145,9 @@ export default function HomepageFAQ() {
                     key={index}
                     className={index !== comparisonData.length - 1 ? "border-b border-gold-500/10" : ""}
                   >
-                    <td className="py-4 px-4 text-parchment-200 font-medium">{row.aspect}</td>
-                    <td className="py-4 px-4 text-parchment-400">{row.massProduced}</td>
-                    <td className={`py-4 px-4 text-gold-300 bg-gold-500/5 border-l border-gold-500/20${index === comparisonData.length - 1 ? ' rounded-br-lg' : ''}`}>{row.jerryCan}</td>
+                    <td className="py-3 px-2 sm:py-4 sm:px-4 text-parchment-200 font-medium">{row.aspect}</td>
+                    <td className="py-3 px-2 sm:py-4 sm:px-4 text-parchment-400">{row.massProduced}</td>
+                    <td className={`py-3 px-2 sm:py-4 sm:px-4 text-gold-300 bg-gold-500/5 border-l border-gold-500/20${index === comparisonData.length - 1 ? ' rounded-br-lg' : ''}`}>{row.jerryCan}</td>
                   </tr>
                 ))}
               </tbody>

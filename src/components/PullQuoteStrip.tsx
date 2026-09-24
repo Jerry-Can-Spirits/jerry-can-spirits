@@ -4,6 +4,7 @@ import { getCloudflareContext } from '@opennextjs/cloudflare'
 import { getRating } from '@/lib/ratings-cache'
 import { TRUSTPILOT_LOGO as TRUSTPILOT_LOGOS } from '@/lib/trustpilot-assets'
 import { RatingRow } from '@/components/RatingRow'
+import ScrollRow from '@/components/ScrollRow'
 
 // The official green-star lockup for dark grounds, from the shared assets
 // module so every surface renders the same mark.
@@ -52,9 +53,11 @@ export default async function PullQuoteStrip() {
       className="border-t border-b border-gold-500/20 bg-jerry-green-900/60 py-14 sm:py-16"
     >
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-10 sm:gap-12">
-          {QUOTES.map((quote, index) => (
-            <figure key={index} className="relative">
+        <ScrollRow
+          ariaLabel="Customer reviews"
+          cols="md:grid-cols-2 md:gap-x-12 md:gap-y-10"
+          items={QUOTES.map((quote, index) => (
+            <figure key={index} className="relative h-full">
               <span
                 aria-hidden="true"
                 className="block text-5xl text-gold-400/80 leading-none font-serif mb-2"
@@ -72,7 +75,7 @@ export default async function PullQuoteStrip() {
               </figcaption>
             </figure>
           ))}
-        </div>
+        />
         <div className="mt-10 text-center">
           {/* The TrustScore itself, official star art, for every visitor.
               The score and count live here, so the link below carries
