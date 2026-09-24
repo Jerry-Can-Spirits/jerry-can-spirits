@@ -136,6 +136,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // SEO category pages hardcoded as static routes above
     'rum-gifts', 'spiced-rum', 'cocktail-making-kits', 'bar-accessories',
     'gifts-for-him', 'gifts-for-her', 'rum-glasses', 'hip-flasks',
+    'gifts-under-20', 'gifts-under-50', 'gifts-under-100',
     'ice-chilling', 'cocktail-glasses-glassware', 'cocktail-shakers',
     'new-releases', 'bundles', 'gift-sets', 'gifts-and-experience',
   ])
@@ -467,6 +468,24 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // SEO category pages
     {
       url: `${baseUrl}/shop/rum-gifts/`,
+      lastModified: STATIC_LAST_MODIFIED,
+      changeFrequency: 'weekly' as const,
+      priority: 0.9,
+    },
+    {
+      url: `${baseUrl}/shop/gifts-under-20/`,
+      lastModified: STATIC_LAST_MODIFIED,
+      changeFrequency: 'weekly' as const,
+      priority: 0.9,
+    },
+    {
+      url: `${baseUrl}/shop/gifts-under-50/`,
+      lastModified: STATIC_LAST_MODIFIED,
+      changeFrequency: 'weekly' as const,
+      priority: 0.9,
+    },
+    {
+      url: `${baseUrl}/shop/gifts-under-100/`,
       lastModified: STATIC_LAST_MODIFIED,
       changeFrequency: 'weekly' as const,
       priority: 0.9,
