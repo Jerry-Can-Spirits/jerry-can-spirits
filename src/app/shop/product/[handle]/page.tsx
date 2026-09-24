@@ -13,7 +13,7 @@ import ProductPageTracking from '@/components/ProductPageTracking'
 import ProductSpecifications from '@/components/ProductSpecifications'
 import ProductAwards, { PRODUCT_AWARDS, AWARDED_HANDLES } from '@/components/ProductAwards'
 import ProductReviews from '@/components/ProductReviews'
-import { getProductReviews, normaliseReviews, type SanityReviewDoc } from '@/lib/product-reviews'
+import { normaliseReviews, type SanityReviewDoc } from '@/lib/product-reviews'
 import TastingNotes from '@/components/TastingNotes'
 import ProductProcess from '@/components/ProductProcess'
 import DutyPaidStatement from '@/components/DutyPaidStatement'
@@ -372,9 +372,8 @@ export default async function ProductPage({
   // Determine if this is a spirit/alcohol product
   const isSpirit = category.trackingCategory === 'Spirits'
 
-  // Curated review quotes from Sanity; the hardcoded list is the fallback
-  // until the migration has run (empty = placeholder).
-  const productReviews = sanityReviews.length > 0 ? sanityReviews : getProductReviews(handle)
+  // Curated review quotes from Sanity (empty = placeholder).
+  const productReviews = sanityReviews
 
   // Ways to buy: the other formats of the same liquid, priced live. Only the
   // rum family has formats; every other product gets an empty list and no
