@@ -7,6 +7,16 @@ import { runTradeReviewDigest } from './src/lib/scheduled-trade-review.ts';
 import { runRatingsFetch } from './src/lib/scheduled-ratings.ts';
 import { runCredentialSweep } from './src/lib/scheduled-credentials.ts';
 import { runContactRetentionPurge } from './src/lib/scheduled-contact-retention.ts';
+import { edgeCacheKeyUrl } from './src/lib/edge-cache.ts';
+
+// The Cache API needs a Request; src/lib/edge-cache.ts decides what to key on
+// and why.
+function edgeCacheKey(request, url, env) {
+  return new Request(edgeCacheKeyUrl(url, env), {
+    method: 'GET',
+    headers: request.headers,
+  });
+}
 
 // Edge-cached paths, with the TTL each one can tolerate.
 //
@@ -45,7 +55,8 @@ const worker = {
       // first paint, see src/lib/age-gate.ts), so the cached HTML is the same
       // for everyone and needs no gate ahead of the lookup.
       const cache = caches.default;
-      const cachedResponse = await cache.match(request);
+      const key = edgeCacheKey(request, url, env);
+      const cachedResponse = await cache.match(key);
 
       if (cachedResponse) {
         const headers = new Headers(cachedResponse.headers);
@@ -71,7 +82,7 @@ const worker = {
         // (uncached) visitor still gets them.
         headers.delete('set-cookie');
         ctx.waitUntil(
-          cache.put(request, new Response(cloned.body, { status: cloned.status, headers }))
+          cache.put(key, new Response(cloned.body, { status: cloned.status, headers }))
         );
       }
 
