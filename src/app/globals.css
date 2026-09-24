@@ -7,7 +7,8 @@
      5. Reusable utility classes (.btn-primary, .h-15, .scrollbar-hide)
      6. Decorative backgrounds (cartography variants)
      7. Stockist map popup
-     8. Print rules, scoped to the .print-region opt-in */
+     8. Print rules, scoped to the .print-region opt-in
+     9. Age gate before hydration */
 
 @import '../styles/animations.css';
 @import 'tailwindcss';
@@ -575,4 +576,16 @@
    opens when renew() is called. */
 #CookiebotWidget {
   display: none !important;
+}
+
+/* 9. Age gate before hydration. The inline script in app/layout.tsx marks
+   <html data-age-verified> for verified visitors and listed crawlers before
+   first paint. Every page carries the gate markup; this hides it for them,
+   and holds the page still behind it for everyone else until React takes
+   over and the gate manages scroll itself. */
+html[data-age-verified] .age-gate {
+  display: none;
+}
+html:not([data-age-verified]) body:has(.age-gate) {
+  overflow: hidden;
 }

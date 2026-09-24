@@ -5,7 +5,8 @@ import AgeGate from '@/components/AgeGate'
 import { AGE_COOKIE, AGE_COOKIE_VALUE } from '@/lib/age-gate'
 
 // Renders the existing full-screen AgeGate (copy and design unchanged) on the
-// gate route. Two client concerns the server page cannot handle:
+// gate route, kept for links that predate the in-page overlay (shared
+// /age-check/?return= URLs). Two client concerns the server page cannot handle:
 //  - Auto-bounce: an already-verified visitor arriving via an external link has
 //    the SameSite=Strict cookie withheld from the server request, but JS can
 //    still read it — so send them straight on with no re-prompt.

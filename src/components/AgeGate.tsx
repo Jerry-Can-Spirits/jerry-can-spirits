@@ -4,7 +4,8 @@ import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import CartographicBackground from './CartographicBackground';
-import { getCachedCountry, detectCountry } from '@/lib/geo';
+import { detectCountry } from '@/lib/geo';
+import { AGE_VERIFIED_ATTR } from '@/lib/age-gate';
 
 const regions = [
   { code: 'GB', name: 'United Kingdom', minAge: 18 },
@@ -20,15 +21,18 @@ const regions = [
 ];
 
 interface AgeGateProps {
-  onVerified: () => void;
+  onVerified?: () => void;
 }
 
+// Rendered into every gated page's HTML, so an unverified visitor sees the
+// gate in the first paint with no JavaScript needed. The inline script in
+// app/layout.tsx has already marked <html data-age-verified> for anyone who
+// need not see it, and globals.css hides the gate on that; the mount effect
+// below then unmounts it. The region starts at the first entry on both server
+// and client (a cached country would differ between the two and break
+// hydration); detectCountry() corrects it, cache-first, once mounted.
 export default function AgeGate({ onVerified }: AgeGateProps) {
-  const detectedCode = getCachedCountry();
-  const defaultRegion =
-    regions.find((r) => r.code === detectedCode) || regions[0];
-
-  const [selectedRegion, setSelectedRegion] = useState(defaultRegion);
+  const [selectedRegion, setSelectedRegion] = useState(regions[0]);
   const [isVisible, setIsVisible] = useState(true);
   const [showRejectionMessage, setShowRejectionMessage] = useState(false);
 
@@ -37,6 +41,12 @@ export default function AgeGate({ onVerified }: AgeGateProps) {
   const rejectionButtonRef = useRef<HTMLButtonElement>(null)
 
   useEffect(() => {
+    // Already decided before paint: verified visitor or listed crawler.
+    if (document.documentElement.hasAttribute(AGE_VERIFIED_ATTR)) {
+      setIsVisible(false);
+      return;
+    }
+
     // Prevent body scrolling when age gate is visible
     document.body.style.overflow = 'hidden';
 
@@ -76,8 +86,9 @@ export default function AgeGate({ onVerified }: AgeGateProps) {
       } catch {
         // Storage may be blocked by browser tracking prevention — proceed anyway
       }
+      document.documentElement.setAttribute(AGE_VERIFIED_ATTR, '');
       setIsVisible(false);
-      onVerified();
+      onVerified?.();
     } else {
       // Show branded rejection message
       setShowRejectionMessage(true);
@@ -128,7 +139,7 @@ export default function AgeGate({ onVerified }: AgeGateProps) {
       aria-labelledby="agegate-heading"
       aria-describedby="agegate-desc"
       tabIndex={-1}
-      className="fixed inset-0 z-9999 bg-jerry-green-900 overflow-hidden focus:outline-hidden"
+      className="age-gate fixed inset-0 z-9999 bg-jerry-green-900 overflow-hidden focus:outline-hidden"
       style={{ height: '100vh', width: '100vw' }}
     >
       {/* Real Cartographic Background */}
@@ -147,10 +158,8 @@ export default function AgeGate({ onVerified }: AgeGateProps) {
           alt="Jerry Can Spirits Expedition Spiced Rum bottle"
           fill
           className="object-cover object-right"
-          priority
           quality={65}
           sizes="100vw"
-          fetchPriority="high"
         />
       </div>
 
@@ -166,7 +175,6 @@ export default function AgeGate({ onVerified }: AgeGateProps) {
                 width={150}
                 height={150}
                 className="w-full h-full"
-                priority
               />
             </div>
           </div>

@@ -1,10 +1,18 @@
 import { describe, expect, it } from 'vitest'
 import { NextRequest } from 'next/server'
-import { isAgeExcludedPath, isBot, productHandleFromReturnPath } from '@/lib/age-gate'
+import {
+  AGE_VERIFIED_ATTR,
+  BOT_USER_AGENTS,
+  CLIENT_ONLY_BOT_PATTERNS,
+  ageGateInlineScript,
+  isAgeExcludedPath,
+  isBot,
+  productHandleFromReturnPath,
+} from '@/lib/age-gate'
 import { middleware } from '@/middleware'
 
 // Real user-agent strings as each crawler sends them, so a substring drift in
-// BOT_USER_AGENTS fails here rather than silently 307ing a crawler in
+// BOT_USER_AGENTS fails here rather than silently gating a crawler in
 // production.
 const AI_CRAWLER_UAS: Record<string, string> = {
   'OAI-SearchBot':
@@ -72,36 +80,104 @@ describe('isBot — age-gate bot allowlist', () => {
 })
 
 describe('middleware age gate — AI crawler access', () => {
-  // robots.txt has always invited AI crawlers; this asserts the gate lets each
-  // one reach gated content (no 307 to /age-check/). If an entry drops out of
-  // BOT_USER_AGENTS, the affected engine loses the entire site again.
+  // robots.txt has always invited AI crawlers; this asserts each one reaches
+  // gated content and is recognised (the isBot cookie is what the inline gate
+  // script honours). If an entry drops out of BOT_USER_AGENTS, the affected
+  // engine sees the gate overlay in its rendered snapshot.
   for (const [name, ua] of Object.entries(AI_CRAWLER_UAS)) {
-    it(`passes ${name} through to gated content`, () => {
+    it(`passes ${name} through to gated content, flagged as a bot`, () => {
       const res = middleware(gatedRequest(ua))
       expect(res.status).toBe(200)
       expect(res.headers.get('location')).toBeNull()
+      expect(res.headers.get('x-is-bot')).toBe('true')
     })
   }
 
-  it('still 307s an unverified browser to the age gate', () => {
+  it('does not redirect an unverified browser: the gate is the overlay in the page', () => {
     const res = middleware(
       gatedRequest(
         'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0 Safari/537.36'
       )
     )
-    expect(res.status).toBe(307)
-    expect(res.headers.get('location')).toContain('/age-check/')
+    expect(res.status).toBe(200)
+    expect(res.headers.get('location')).toBeNull()
+    expect(res.headers.get('x-is-bot')).toBeNull()
   })
 
-  it('still 307s unlisted crawlers (Bytespider, curl)', () => {
+  it('does not flag unlisted crawlers (Bytespider, curl) as bots', () => {
     for (const ua of [
       'Mozilla/5.0 (Linux; Android 5.0) AppleWebKit/537.36 (KHTML, like Gecko) Mobile Safari/537.36 (compatible; Bytespider; spider-feedback@bytedance.com)',
       'curl/8.9.1',
     ]) {
       const res = middleware(gatedRequest(ua))
-      expect(res.status).toBe(307)
-      expect(res.headers.get('location')).toContain('/age-check/')
+      expect(res.status).toBe(200)
+      expect(res.headers.get('x-is-bot')).toBeNull()
     }
+  })
+})
+
+// The inline script is the gate's decision, run before first paint. It is a
+// string built at render time, so run it against a stand-in document and
+// check what it marks. A false negative shows a verified visitor the gate; a
+// false positive shows a minor the content.
+describe('ageGateInlineScript — the before-paint decision', () => {
+  const CHROME =
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0 Safari/537.36'
+
+  function run({ cookie = '', ua = CHROME, stored = null as string | null } = {}) {
+    const attrs: Record<string, string> = {}
+    const document = { cookie, documentElement: { setAttribute: (k: string, v: string) => { attrs[k] = v } } }
+    new Function('document', 'navigator', 'localStorage', ageGateInlineScript())(
+      document,
+      { userAgent: ua },
+      { getItem: () => stored },
+    )
+    return AGE_VERIFIED_ATTR in attrs
+  }
+
+  it('marks a visitor with the verified cookie', () => {
+    expect(run({ cookie: 'detectedCountry=GB; ageVerified=true' })).toBe(true)
+  })
+
+  it('does not mark an unverified browser', () => {
+    expect(run()).toBe(false)
+    expect(run({ cookie: 'ageVerified=false' })).toBe(false)
+    expect(run({ cookie: 'xageVerified=true' })).toBe(false)
+  })
+
+  it('marks a visitor verified before the cookie existed (localStorage only)', () => {
+    expect(run({ stored: 'true' })).toBe(true)
+  })
+
+  it('marks a request the middleware flagged as a bot', () => {
+    expect(run({ cookie: 'isBot=true' })).toBe(true)
+  })
+
+  it('marks every listed crawler and auditor by user agent', () => {
+    for (const ua of [...Object.values(AI_CRAWLER_UAS), 'Chrome-Lighthouse', 'Mozilla/5.0 (compatible; Googlebot/2.1)']) {
+      expect(run({ ua }), ua).toBe(true)
+    }
+  })
+
+  it('compiles every bot pattern into the script, escaped', () => {
+    const script = ageGateInlineScript()
+    for (const p of [...BOT_USER_AGENTS, ...CLIENT_ONLY_BOT_PATTERNS]) {
+      expect(run({ ua: `Mozilla/5.0 (${p})` }), p).toBe(true)
+    }
+    expect(script).toContain('pinterest\\/')
+  })
+
+  it('survives a browser that throws on storage access', () => {
+    const attrs: Record<string, string> = {}
+    const document = { cookie: '', documentElement: { setAttribute: (k: string, v: string) => { attrs[k] = v } } }
+    expect(() =>
+      new Function('document', 'navigator', 'localStorage', ageGateInlineScript())(
+        document,
+        { userAgent: CHROME },
+        { getItem: () => { throw new Error('blocked') } },
+      ),
+    ).not.toThrow()
+    expect(AGE_VERIFIED_ATTR in attrs).toBe(false)
   })
 })
 
@@ -120,7 +196,7 @@ describe('crawler-facing paths are never age-gated', () => {
   ]
 
   for (const path of CRAWLER_PATHS) {
-    it(`${path} is not redirected for an unverified browser`, () => {
+    it(`${path} is served to an unverified browser`, () => {
       const res = middleware(
         new NextRequest(`https://jerrycanspirits.co.uk${path}`, {
           headers: {

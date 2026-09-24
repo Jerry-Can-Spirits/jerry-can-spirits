@@ -4,6 +4,7 @@ import { Inter, Playfair_Display, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import SiteChrome from "@/components/SiteChrome";
 import ClientWrapper from "@/components/ClientWrapper";
+import { ageGateInlineScript } from "@/lib/age-gate";
 import { LazyCartDrawer, LazySocialProofToast } from "@/components/ClientLazy";
 import ServiceWorkerRegistration from "@/components/ServiceWorkerRegistration";
 import InstallPrompt from "@/components/InstallPrompt";
@@ -92,6 +93,12 @@ export default function RootLayout({
   return (
     <html lang="en-GB" className="scroll-smooth" suppressHydrationWarning>
       <head>
+        {/* Age gate, decided before first paint: a verified visitor or a listed
+            crawler gets data-age-verified on <html>, which hides the gate that
+            every page carries (globals.css, AgeGate.tsx). The bot list has one
+            source, src/lib/age-gate.ts. */}
+        <script dangerouslySetInnerHTML={{ __html: ageGateInlineScript() }} />
+
         {/* Synchronous JS detection — sets html.js before CSS is applied.
             Scroll reveal animations only hide content when JS is running,
             ensuring crawlers without JS see all content at full opacity. */}
