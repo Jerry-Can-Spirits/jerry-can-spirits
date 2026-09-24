@@ -87,29 +87,31 @@ export default function Home() {
       <div>
         <HeroSection />
 
-        {/* Every purchasable product with its price, straight after the hero,
-            so a first visit sees the whole range and what a first order can
-            start at without leaving the page (restructure, 24 Sep 2026). */}
-        <HomepageProductGrid />
-
-        {/* Proof bar - the hero headline makes the two-medals claim; this
-            states the fact once in full, judges' note included, linked to the
-            IWSC listing. The only place on the page the medals are detailed. */}
+        {/* Proof bar, directly under the hero whose headline makes the
+            two-medals claim: states the fact once in full, judges' note
+            included, linked to the IWSC listing, so the prices in the rows
+            below land with the proof already seen. The only place on the
+            page the medals are detailed. */}
         <MedalBar />
 
-        {/* Founder story - story leads, builds belief */}
-        <ScrollReveal>
-          <FounderStorySnippet />
-        </ScrollReveal>
+        {/* Every purchasable product with its price, so a first visit sees
+            the whole range and what a first order can start at without
+            leaving the page (restructure, 24 Sep 2026). */}
+        <HomepageProductGrid />
+
+        {/* Reviews, straight after the ask: the pull-quote strip and the
+            live TrustScore. Proof sits next to the prices, not after the
+            story (funnel order, 24 Sep 2026). */}
+        <PullQuoteStrip />
 
         {/* Why Jerry Can - value proposition */}
         <ScrollReveal>
           <WhyJerryCan />
         </ScrollReveal>
 
-        {/* Order Section - the buy ask, after belief is built */}
+        {/* Founder story - builds belief */}
         <ScrollReveal>
-          <OrderSection />
+          <FounderStorySnippet />
         </ScrollReveal>
 
         {/* Supporting our forces - pledge */}
@@ -123,10 +125,6 @@ export default function Home() {
           <PressAwards />
         </ScrollReveal>
 
-        {/* Reviews - the pull-quote strip and live TrustScore, after the story
-            has been told and the accreditations shown. */}
-        <PullQuoteStrip />
-
         {/* Three serves built on the rum, linking to the Field Manual. The
             library preview and the expedition map were removed on 28 Aug 2026
             as detours from the one CTA (docs/plans/2026-08-28); this narrower
@@ -137,8 +135,16 @@ export default function Home() {
           <RumServesTeaser />
         </ScrollReveal>
 
-        {/* FAQ - objection handling before final CTA */}
+        {/* FAQ - objection handling before the final CTA */}
         <HomepageFAQ />
+
+        {/* The closing ask: the numbered batch and the two ways to buy it,
+            after every objection has been handled. It sat between the story
+            and the pledge as a second buy block until 24 Sep 2026; the shop
+            rows now carry the first ask, so this is the last word. */}
+        <ScrollReveal>
+          <OrderSection />
+        </ScrollReveal>
 
         {/* SEO-Rich Content Section - kept for crawlers, lowest priority */}
         <section className="py-16 bg-jerry-green-900/50">
@@ -189,33 +195,9 @@ export default function Home() {
               </ScrollReveal>
             </div>
 
-            {/* Key Features Grid */}
-            <div className="mt-12 grid md:grid-cols-4 gap-6">
-              <ScrollReveal delay={0}>
-                <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20 text-center">
-                  <h3 className="text-lg font-serif font-bold text-gold-300 mb-2">17+ Years Service</h3>
-                  <p className="text-parchment-300 text-sm">Royal Corps of Signals veterans who built their rum the same way they approached everything else. Carefully, without shortcuts.</p>
-                </div>
-              </ScrollReveal>
-              <ScrollReveal delay={1}>
-                <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20 text-center">
-                  <h3 className="text-lg font-serif font-bold text-gold-300 mb-2">UK First Philosophy</h3>
-                  <p className="text-parchment-300 text-sm">Real botanicals, British small batches</p>
-                </div>
-              </ScrollReveal>
-              <ScrollReveal delay={2}>
-                <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20 text-center">
-                  <h3 className="text-lg font-serif font-bold text-gold-300 mb-2">Small Batch. Properly Made.</h3>
-                  <p className="text-parchment-300 text-sm">Macerated by our British partner distillery. Every batch small enough to pay attention to.</p>
-                </div>
-              </ScrollReveal>
-              <ScrollReveal delay={3}>
-                <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20 text-center">
-                  <h3 className="text-lg font-serif font-bold text-gold-300 mb-2">Forces Covenant</h3>
-                  <p className="text-parchment-300 text-sm">Supporting veterans and military charities with every bottle sold</p>
-                </div>
-              </ScrollReveal>
-            </div>
+            {/* The four feature tiles that followed these two cards went on
+                24 Sep 2026: each restated a Why Jerry Can pillar or the
+                pledge, a screen higher, in fewer words. */}
           </div>
         </section>
 

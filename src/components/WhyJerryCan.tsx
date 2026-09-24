@@ -1,3 +1,9 @@
+import ScrollRow from '@/components/ScrollRow'
+
+// The three pillars, swipeable on a phone. The four stat tiles that sat
+// under them ("700 General Release", "2026 April Launch") went on 24 Sep
+// 2026: two were stale after launch and the other two are stated elsewhere
+// on the page, so the section ends on the pillars.
 export default function WhyJerryCan() {
   const pillars = [
     {
@@ -18,7 +24,7 @@ export default function WhyJerryCan() {
     <section className="py-16 bg-jerry-green-900/30">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="text-center mb-16">
+        <div className="text-center mb-12">
           <div className="inline-block px-4 py-2 bg-jerry-green-800/60 backdrop-blur-sm rounded-full border border-gold-500/30 mb-6">
             <span className="text-gold-300 text-sm font-semibold uppercase tracking-widest">
               The Standard We Work To
@@ -35,47 +41,23 @@ export default function WhyJerryCan() {
         </div>
 
         {/* Three Pillars */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {pillars.map((pillar, index) => (
+        <ScrollRow
+          ariaLabel="Why Jerry Can"
+          cols="md:grid-cols-3"
+          items={pillars.map((pillar) => (
             <div
-              key={index}
-              className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20 hover:border-gold-400/40 transition-all duration-300 group hover:scale-105"
+              key={pillar.title}
+              className="h-full bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20 hover:border-gold-400/40 transition-colors duration-300"
             >
-              {/* Title */}
               <h3 className="text-2xl font-serif font-bold text-white mb-4">
                 {pillar.title}
               </h3>
-
-              {/* Description */}
               <p className="text-parchment-300 leading-relaxed">
                 {pillar.description}
               </p>
             </div>
           ))}
-        </div>
-
-        {/* Supporting Badges */}
-        <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-6">
-          <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20 text-center">
-            <div className="text-3xl font-bold text-gold-300 mb-2">700</div>
-            <div className="text-parchment-400 text-sm uppercase tracking-wide">General Release</div>
-          </div>
-
-          <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20 text-center">
-            <div className="text-3xl font-bold text-gold-300 mb-2">100%</div>
-            <div className="text-parchment-400 text-sm uppercase tracking-wide">Veteran Owned</div>
-          </div>
-
-          <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20 text-center">
-            <div className="text-3xl font-bold text-gold-300 mb-2">UK</div>
-            <div className="text-parchment-400 text-sm uppercase tracking-wide">British Small Batch</div>
-          </div>
-
-          <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20 text-center">
-            <div className="text-3xl font-bold text-gold-300 mb-2">2026</div>
-            <div className="text-parchment-400 text-sm uppercase tracking-wide">April Launch</div>
-          </div>
-        </div>
+        />
       </div>
     </section>
   )

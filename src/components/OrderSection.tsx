@@ -68,8 +68,11 @@ export default async function OrderSection() {
     <section className="py-16 bg-jerry-green-900/50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
-          {/* Left Column - Product Image */}
-          <div className="order-2 lg:order-1">
+          {/* Left Column - Product Image. Desktop only: as the closing ask
+              the bottle has been on the page three times by here, and on a
+              phone this sat below the buttons as five hundred pixels of
+              picture after the last thing to tap. */}
+          <div className="hidden lg:block lg:order-1">
             <div className="relative bg-linear-to-br from-jerry-green-800 to-jerry-green-900 rounded-2xl overflow-hidden shadow-2xl border border-gold-500/20">
               <div className="aspect-4/5 flex items-center justify-center p-8">
                 <Image
