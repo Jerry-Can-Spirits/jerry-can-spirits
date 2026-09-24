@@ -6,6 +6,7 @@ import type { Metadata } from 'next'
 import Breadcrumbs from '@/components/Breadcrumbs'
 import { OG_IMAGE } from '@/lib/og'
 import { CATEGORIES } from '@/lib/categories'
+import { applyPriceBand } from '@/lib/price-band'
 import AddToCartButton from '@/components/AddToCartButton'
 import ViewItemListTracker from '@/components/ViewItemListTracker'
 import { safeJsonLd, productOffer, merchantOfferExtras, productGtin } from '@/lib/jsonLd'
@@ -95,6 +96,12 @@ export default async function CollectionPage({
     }
   } catch (e) {
     error = e instanceof Error ? e.message : 'Unknown error'
+  }
+
+  // Gift pages by budget: the band is a guard on the live price, not a trust
+  // in the handle list. See lib/price-band.ts.
+  if (category?.maxPrice !== undefined) {
+    products = applyPriceBand(products, category.maxPrice)
   }
 
   // CollectionPage wrapping the product ItemList — the fuller pattern AI

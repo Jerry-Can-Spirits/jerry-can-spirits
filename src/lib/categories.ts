@@ -1,4 +1,5 @@
 import { DELIVERY_PROMISE_SENTENCE } from './delivery'
+import { GIFT_BANDS, giftBandLabel, giftBandSlug, type GiftBand } from './price-band'
 
 export type Pillar = { title: string; body: string }
 
@@ -28,6 +29,10 @@ export type CategoryConfig = {
   // page's own URL is dropped at render, so one shared list serves the cluster
   // and adding a page means editing one array.
   relatedLinks?: Array<{ label: string; href: string }>
+  // Gift pages by budget: keep only products priced at or under this, and
+  // order them from the top of the band down. Applied at render by
+  // lib/price-band.ts. Inclusive.
+  maxPrice?: number
 }
 
 // The gift cluster: three shop pages, the gift-sets page and the guide that
@@ -35,6 +40,7 @@ export type CategoryConfig = {
 // tells it which pages belong together.
 const GIFT_CLUSTER_LINKS = [
   { label: 'Rum gifts', href: '/shop/rum-gifts/' },
+  ...GIFT_BANDS.map((max) => ({ label: `Under £${max}`, href: `/shop/${giftBandSlug(max)}/` })),
   { label: 'Gift sets', href: '/shop/gift-sets/' },
   { label: 'Gifts for him', href: '/shop/gifts-for-him/' },
   { label: 'Gifts for her', href: '/shop/gifts-for-her/' },
@@ -75,6 +81,39 @@ const FAQ_RETURNS: CategoryFaq = {
 }
 
 const GIFT_FAQS: CategoryFaq[] = [FAQ_SEND_DIRECT, FAQ_DELIVERY_TIME, FAQ_GIFT_READY]
+
+// The barware and glassware that sits inside the smallest band. Glass singles
+// are made to order and untracked in Shopify; they are in stock.
+const UNDER_20_HANDLES = [
+  'stainless-steel-hip-flask-150ml',
+  'crystal-ice-hiball-42cl',
+  'stainless-steel-cocktail-shaker',
+  'club-ice-tumbler-26cl',
+  'original-handled-drinking-jam-jar-46cl',
+  'stainless-steel-jigger',
+  'stainless-steel-spirit-stones',
+  'hurricane-cocktail-glass-42cl',
+  'hiball-glass-38cl',
+  'contemporary-mixer-glass-31cl',
+  'natural-slate-coasters-square-or-round',
+  'bar-blade-bottle-opener',
+  'metal-logo-keyring',
+]
+
+// A gift band page. The band value is the single source for the slug, the
+// heading and the render-time guard, so the three cannot disagree.
+function giftBand(
+  max: GiftBand,
+  content: Pick<CategoryConfig, 'metaTitle' | 'metaDescription' | 'introBody' | 'productHandles'>,
+): CategoryConfig {
+  return {
+    h1: giftBandLabel(max),
+    maxPrice: max,
+    faqs: GIFT_FAQS,
+    relatedLinks: GIFT_CLUSTER_LINKS,
+    ...content,
+  }
+}
 
 export const CATEGORIES: Record<string, CategoryConfig> = {
 
@@ -337,6 +376,48 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
       'crystal-ice-hiball-42cl',
     ],
   },
+
+
+  // ── Gift pages by budget ──────────────────────────────────────────────────
+  // Explicit handle lists, like every other category page, plus maxPrice as a
+  // guard the page applies at render (lib/price-band.ts): a product whose live
+  // price drifts above the band drops off rather than sitting under a heading
+  // it no longer fits. Bands nest, so the under-£50 page carries the under-£20
+  // set too and leads with the fullest gift the budget buys. Under is
+  // inclusive: a £20 flask is an under-£20 gift.
+  'gifts-under-20': giftBand(20, {
+    metaTitle: 'Rum Gifts Under £20: Barware and Glassware',
+    metaDescription:
+      'Small gifts for someone who drinks rum properly. Jiggers, glasses, spirit stones and bar tools from a veteran-owned British spirits house. Age-verified delivery.',
+    introBody: [
+      'A small gift for someone who drinks rum properly. Every piece here earns its place at the pour: the jigger that measures every Field Manual build, the glass the award serve was judged in, the bar blade that opens the ginger beer.',
+      'Nothing here is a novelty. It is the kit the serves were built around, chosen because it does the job and keeps doing it.',
+      'Add a bottle and the whole order travels together. Every delivery is age-verified at the door, so it can go straight to them.',
+    ],
+    productHandles: UNDER_20_HANDLES,
+  }),
+  'gifts-under-50': giftBand(50, {
+    metaTitle: 'Rum Gifts Under £50: The Bottle and the Glassware',
+    metaDescription:
+      'Expedition Spiced Rum, or a pair of the glasses its serves were built for. Veteran-owned British spirits, real ingredients, IWSC 2026 medals. Age-verified delivery.',
+    introBody: [
+      'This is the budget that buys the bottle. Expedition Spiced Rum: Caribbean rum, seven real spices, two natural sweeteners and bourbon oak, Bronze at the IWSC 2026 within three months of launch. Numbered, and built to be sipped.',
+      'Or the glassware the serves were designed in. A pair of the Crystal ICE hiballs is the Silver-medal serve, ready to pour. A pair of Club ICE tumblers is the Old Standard.',
+      'Everything from the smaller budget is here too, from the fullest gift this one buys down to the smallest.',
+    ],
+    productHandles: ['jerry-can-spirits-expedition-spiced-rum', ...UNDER_20_HANDLES],
+  }),
+  'gifts-under-100': giftBand(100, {
+    metaTitle: 'Rum Gifts Under £100: The Gift Pack',
+    metaDescription:
+      'The Premium Gift Pack: Expedition Spiced Rum with the hiball, jigger and coaster to serve it properly, boxed. Veteran-owned British spirits. Age-verified delivery.',
+    introBody: [
+      'The Premium Gift Pack is the complete first pour: the bottle, the Crystal ICE hiball from the Silver-medal serve, the 25ml and 50ml jigger and a slate coaster, in a branded box. Nothing to add. Open it and pour.',
+      'Or build your own from the range below: the bottle, then the glasses and tools that suit the way they drink.',
+      'Every bottle is numbered and traceable to its batch. Veteran-owned, no hidden investors, 5% of profits to forces charities.',
+    ],
+    productHandles: ['jerry-can-spirits-premium-gift-pack', 'jerry-can-spirits-expedition-spiced-rum', ...UNDER_20_HANDLES],
+  }),
 
   'rum-glasses': {
     h1: 'Rum Glasses',
