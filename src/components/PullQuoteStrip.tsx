@@ -13,6 +13,11 @@ const TRUSTPILOT_LOGO = TRUSTPILOT_LOGOS.onDark
 interface PullQuote {
   text: string
   attribution: string
+  // The score the reviewer actually left. Until 24 Sep 2026 every quote here
+  // rendered a fixed five-star row; when Dan's Trustpilot export arrived, two
+  // of the four turned out to be four-star reviews. A star row is a claim
+  // about what someone gave us, so it is carried per quote and never assumed.
+  stars: 4 | 5
 }
 
 // Verbatim from Trustpilot, chosen one per theme the reviews actually praise:
@@ -22,20 +27,29 @@ interface PullQuote {
 // captioned as customer reviews rather than borrowing the label.
 const QUOTES: PullQuote[] = [
   {
-    text: "A cut above. Don't discuss top end rum without mentioning Expedition Spiced.",
+    // Was "A cut above. Don't discuss top end rum without mentioning
+    // Expedition Spiced." — a sentence the reviewer never wrote, stitched
+    // from two halves of one of theirs, with "a cut above" moved off the
+    // bottle and label it described and onto the rum. These are their own
+    // opening words instead (excerpts may be trimmed, never reworded).
+    text: 'Absolutely special flavour. Nothing on the market tastes like this.',
     attribution: 'Customer review · Trustpilot',
+    stars: 5,
   },
   {
     text: 'A wonderfully designed bottle, with quality rum.',
     attribution: 'Verified customer · Trustpilot',
+    stars: 4,
   },
   {
     text: 'Great product and excellent communication when I had a question about delivery.',
     attribution: 'Verified customer · Trustpilot',
+    stars: 4,
   },
   {
     text: 'Really smooth with a great taste. Bought another two bottles immediately.',
     attribution: 'Verified customer · Trustpilot',
+    stars: 5,
   },
 ]
 
@@ -68,8 +82,10 @@ export default async function PullQuoteStrip() {
                 {quote.text}
               </blockquote>
               <figcaption className="text-xs uppercase tracking-widest text-gold-300 font-semibold">
-                <span aria-hidden="true" className="text-gold-400 mr-2 tracking-widest">
-                  ★★★★★
+                <span className="mr-2 tracking-widest">
+                  <span aria-hidden="true" className="text-gold-400">{'★'.repeat(quote.stars)}</span>
+                  <span aria-hidden="true" className="text-gold-500/25">{'★'.repeat(5 - quote.stars)}</span>
+                  <span className="sr-only">{quote.stars} out of 5 stars. </span>
                 </span>
                 {quote.attribution}
               </figcaption>
