@@ -21,7 +21,7 @@ export default async function HomepageProductGrid() {
   if (rows.length === 0) return null
 
   return (
-    <section className="py-16 bg-jerry-green-900/30" aria-labelledby="shop-grid-heading">
+    <section className="py-16 band-light" aria-labelledby="shop-grid-heading">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-10">
           <h2 id="shop-grid-heading" className="text-3xl md:text-4xl font-serif font-bold text-white">
