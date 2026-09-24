@@ -179,7 +179,10 @@ interface CartLineEdge {
   };
 }
 
-// Fetch all products
+// Fetch all products. Carries productType, availability and the first few
+// variants, the same shape as a collection fetch, so the homepage rows can
+// tell a spirit from a glass and offer add-to-basket rather than "View".
+// (Until 24 Sep 2026 it did not, and the homepage's spirits row was empty.)
 export async function getProducts(): Promise<ShopifyProduct[]> {
   const query = `
     query GetProducts {
@@ -191,6 +194,8 @@ export async function getProducts(): Promise<ShopifyProduct[]> {
             handle
             description
             tags
+            productType
+            availableForSale
             updatedAt
             priceRange {
               minVariantPrice {
@@ -203,6 +208,19 @@ export async function getProducts(): Promise<ShopifyProduct[]> {
                 node {
                   url
                   altText
+                }
+              }
+            }
+            variants(first: 3) {
+              edges {
+                node {
+                  id
+                  title
+                  availableForSale
+                  price {
+                    amount
+                    currencyCode
+                  }
                 }
               }
             }
@@ -223,6 +241,7 @@ export async function getProducts(): Promise<ShopifyProduct[]> {
     return data.products.edges.map((edge: ProductEdge) => ({
       ...edge.node,
       images: edge.node.images.edges.map((img: ImageEdge) => img.node),
+      variants: edge.node.variants?.edges.map((v: VariantEdge) => v.node) ?? [],
     }));
   } catch (error) {
     console.error('Error fetching products:', error);
