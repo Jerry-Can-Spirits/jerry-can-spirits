@@ -45,13 +45,12 @@ export async function GET() {
         timestamp: typeof data.timestamp === 'number' ? data.timestamp : 0,
       }
 
-      const allOurs = entry.titles.every((t) =>
-        t.toLowerCase().includes('jerry can') ||
-        t.toLowerCase().includes('expedition')
-      )
-      if (!allOurs) continue
-
-      totalBottles += entry.bottleCount ?? entry.titles.length
+      // bottleCount is the whole answer: the webhook counts bottles per
+      // product, so barware and the presentation box are already zero. The
+      // title test that used to sit here required every item in the order to
+      // be ours, so buying a bottle and a glass together contributed nothing,
+      // and the titles.length fallback counted line items as bottles.
+      totalBottles += entry.bottleCount ?? 0
     }
 
     if (totalBottles === 0) {
