@@ -663,7 +663,12 @@ html:not([data-age-verified]) body:has(.age-gate) {
    its own. */
 .band-light :is(
   [class*='from-parchment-'],
-  [class*='from-gold-'],
+  /* Only the faded gold washes panels are built from, never the solid
+     gradient the primary buy button uses: that one stays gold. The slash is
+     what tells them apart, because an alpha suffix carries one. */
+  [class*='from-gold-400/'],
+  [class*='from-gold-500/'],
+  [class*='from-gold-600/'],
   [class*='bg-jerry-green-'],
   [class*='from-jerry-green-']
 ) {

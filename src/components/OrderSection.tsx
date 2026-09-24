@@ -10,8 +10,10 @@ import SectionHeading from '@/components/SectionHeading'
 const BATCH_NUMBER = CURRENT_BATCH_ID.replace('batch-', '')
 
 const BOTTLE_HANDLE = 'jerry-can-spirits-expedition-spiced-rum'
+const SIX_PACK_HANDLE = 'jerry-can-spirits-expedition-pack-spiced-rum-6-bottles'
 const GIFT_SET_HANDLE = 'jerry-can-spirits-premium-gift-pack'
 const BOTTLE_VOLUME_LITRES = 0.7
+const BOTTLES_IN_CASE = 6
 
 // The batch progress bar that used to render here is gone, and with it the
 // three-SKU stock arithmetic that fed it. It could not fill honestly: batch
@@ -20,8 +22,9 @@ const BOTTLE_VOLUME_LITRES = 0.7
 // broken on the live page, which is how it left).
 async function getOrderData() {
   try {
-    const [bottleProduct, giftSetProduct] = await Promise.all([
+    const [bottleProduct, sixPackProduct, giftSetProduct] = await Promise.all([
       getProduct(BOTTLE_HANDLE),
+      getProduct(SIX_PACK_HANDLE),
       getProduct(GIFT_SET_HANDLE),
     ])
 
@@ -29,6 +32,8 @@ async function getOrderData() {
     // When the fetch fails, the price lines are simply not rendered.
     let bottlePrice: string | null = null
     let bottleCompareAtPrice: string | null = null
+    let sixPackPrice: string | null = null
+    let sixPackCompareAtPrice: string | null = null
     let giftSetPrice: string | null = null
     let giftSetCompareAtPrice: string | null = null
 
@@ -36,6 +41,14 @@ async function getOrderData() {
       const variant = bottleProduct.variants[0]
       bottlePrice = parseFloat(variant.price.amount).toFixed(0)
       bottleCompareAtPrice = variant.compareAtPrice
+        ? parseFloat(variant.compareAtPrice.amount).toFixed(0)
+        : null
+    }
+
+    if (sixPackProduct?.variants?.[0]) {
+      const variant = sixPackProduct.variants[0]
+      sixPackPrice = parseFloat(variant.price.amount).toFixed(0)
+      sixPackCompareAtPrice = variant.compareAtPrice
         ? parseFloat(variant.compareAtPrice.amount).toFixed(0)
         : null
     }
@@ -48,11 +61,13 @@ async function getOrderData() {
         : null
     }
 
-    return { bottlePrice, bottleCompareAtPrice, giftSetPrice, giftSetCompareAtPrice }
+    return { bottlePrice, bottleCompareAtPrice, sixPackPrice, sixPackCompareAtPrice, giftSetPrice, giftSetCompareAtPrice }
   } catch {
     return {
       bottlePrice: null,
       bottleCompareAtPrice: null,
+      sixPackPrice: null,
+      sixPackCompareAtPrice: null,
       giftSetPrice: null,
       giftSetCompareAtPrice: null,
     }
@@ -60,10 +75,15 @@ async function getOrderData() {
 }
 
 export default async function OrderSection() {
-  const { bottlePrice, bottleCompareAtPrice, giftSetPrice, giftSetCompareAtPrice } =
+  const { bottlePrice, bottleCompareAtPrice, sixPackPrice, sixPackCompareAtPrice, giftSetPrice, giftSetCompareAtPrice } =
     await getOrderData()
 
   const bottleUnitPrice = bottlePrice ? (parseFloat(bottlePrice) / BOTTLE_VOLUME_LITRES).toFixed(2) : null
+  // Per litre across the case, the same basis the bottle above it is priced
+  // on, so the two figures can be read against each other.
+  const sixPackUnitPrice = sixPackPrice
+    ? (parseFloat(sixPackPrice) / (BOTTLE_VOLUME_LITRES * BOTTLES_IN_CASE)).toFixed(2)
+    : null
 
   return (
     <section className="py-16 band-light">
@@ -148,6 +168,29 @@ export default async function OrderSection() {
                     </div>
                     {bottleUnitPrice && (
                       <span className="text-xs opacity-75">(£{bottleUnitPrice}/litre)</span>
+                    )}
+                  </div>
+                )}
+              </Link>
+
+              <Link
+                href={`/shop/product/${SIX_PACK_HANDLE}/`}
+                className="group bg-linear-to-r from-jerry-green-700 to-jerry-green-800 hover:from-jerry-green-600 hover:to-jerry-green-700 text-white px-6 py-4 rounded-lg font-semibold transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-[1.02] flex items-center justify-between border border-gold-500/30"
+              >
+                <div className="flex flex-col">
+                  <span className="text-xs uppercase tracking-wider text-gold-300">Six Bottles</span>
+                  <span className="text-lg">Expedition Pack</span>
+                </div>
+                {sixPackPrice && (
+                  <div className="text-right">
+                    <div>
+                      <span className="text-xl font-bold text-gold-300">£{sixPackPrice}</span>
+                      {sixPackCompareAtPrice && (
+                        <span className="text-sm line-through opacity-60 text-parchment-400 ml-2">£{sixPackCompareAtPrice}</span>
+                      )}
+                    </div>
+                    {sixPackUnitPrice && (
+                      <span className="text-xs text-parchment-400">(£{sixPackUnitPrice}/litre)</span>
                     )}
                   </div>
                 )}
