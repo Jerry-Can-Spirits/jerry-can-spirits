@@ -13,7 +13,7 @@ import ProductPageTracking from '@/components/ProductPageTracking'
 import ProductSpecifications from '@/components/ProductSpecifications'
 import ProductAwards, { PRODUCT_AWARDS, AWARDED_HANDLES } from '@/components/ProductAwards'
 import ProductReviews from '@/components/ProductReviews'
-import { getProductReviews } from '@/lib/product-reviews'
+import { getProductReviews, normaliseReviews, type SanityReviewDoc } from '@/lib/product-reviews'
 import TastingNotes from '@/components/TastingNotes'
 import ProductProcess from '@/components/ProductProcess'
 import DutyPaidStatement from '@/components/DutyPaidStatement'
@@ -28,7 +28,7 @@ import TrustStrip from '@/components/TrustStrip'
 import RecognitionRow from '@/components/RecognitionRow'
 import { formatsForHandle } from '@/lib/product-formats'
 import { client } from '@/sanity/lib/client'
-import { productByHandleQuery } from '@/sanity/queries'
+import { productByHandleQuery, productReviewsQuery } from '@/sanity/queries'
 import { OG_IMAGE } from '@/lib/og'
 import type { Metadata } from 'next'
 import { formatPrice } from '@/lib/format-price'
@@ -228,19 +228,22 @@ export default async function ProductPage({
   let product: ShopifyProduct | null = null
   let relatedProducts: ShopifyProduct[] = []
   let sanityProduct: SanityProduct | null = null
+  let sanityReviews: ReturnType<typeof normaliseReviews> = []
 
   try {
     // Fetch Shopify product and Sanity product data in parallel
     // Sanity slug is typically the handle without the brand prefix
     const slug = handle.replace('jerry-can-spirits-', '')
 
-    const [shopifyProduct, sanityData] = await Promise.all([
+    const [shopifyProduct, sanityData, reviewDocs] = await Promise.all([
       getProduct(handle),
       client.fetch(productByHandleQuery, { slug, handle }).catch(() => null),
+      client.fetch<SanityReviewDoc[]>(productReviewsQuery, { handle }).catch(() => [] as SanityReviewDoc[]),
     ])
 
     product = shopifyProduct
     sanityProduct = sanityData
+    sanityReviews = normaliseReviews(reviewDocs)
 
     if (!product) {
       notFound()
@@ -369,8 +372,9 @@ export default async function ProductPage({
   // Determine if this is a spirit/alcohol product
   const isSpirit = category.trackingCategory === 'Spirits'
 
-  // Curated Trustpilot review excerpts for this product (empty = placeholder)
-  const productReviews = getProductReviews(handle)
+  // Curated review quotes from Sanity; the hardcoded list is the fallback
+  // until the migration has run (empty = placeholder).
+  const productReviews = sanityReviews.length > 0 ? sanityReviews : getProductReviews(handle)
 
   // Ways to buy: the other formats of the same liquid, priced live. Only the
   // rum family has formats; every other product gets an empty list and no
