@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { NextRequest } from 'next/server'
-import { isAgeExcludedPath, isBot } from '@/lib/age-gate'
+import { isAgeExcludedPath, isBot, productHandleFromReturnPath } from '@/lib/age-gate'
 import { middleware } from '@/middleware'
 
 // Real user-agent strings as each crawler sends them, so a substring drift in
@@ -165,6 +165,11 @@ describe('social link-preview crawlers reach content', () => {
     bluesky: 'Bluesky Cardyb/1.1',
     twitterbot: 'Twitterbot/1.0',
     linkedinbot: 'LinkedInBot/1.0 (compatible; Mozilla/5.0; Apache-HttpClient +http://www.linkedin.com)',
+    // Link checkers and unfurlers, added 24 Sep 2026 after Klaviyo was measured 307ing.
+    klaviyo: 'Klaviyo/1.0',
+    embedly: 'Mozilla/5.0 (compatible; Embedly/0.2; +http://support.embed.ly/)',
+    bitlybot: 'bitlybot/3.0 (+http://bit.ly/)',
+    'google-pagerenderer': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/W.X.Y.Z Safari/537.36 Google-PageRenderer Google (+https://developers.google.com/+/web/snippet/)',
   }
 
   for (const [name, ua] of Object.entries(SOCIAL)) {
@@ -175,4 +180,22 @@ describe('social link-preview crawlers reach content', () => {
       expect(res.headers.get('location')).toBeNull()
     })
   }
+})
+
+describe('productHandleFromReturnPath — the product behind a gated visit', () => {
+  it('extracts the handle from a product return path, with or without query and hash', () => {
+    expect(productHandleFromReturnPath('/shop/product/jerry-can-spirits-expedition-spiced-rum/')).toBe('jerry-can-spirits-expedition-spiced-rum')
+    expect(productHandleFromReturnPath('/shop/product/hiball-glass-38cl/?utm_source=klaviyo')).toBe('hiball-glass-38cl')
+    expect(productHandleFromReturnPath('/shop/product/hiball-glass-38cl/#reviews')).toBe('hiball-glass-38cl')
+    expect(productHandleFromReturnPath('/shop/product/hiball-glass-38cl')).toBe('hiball-glass-38cl')
+  })
+
+  it('returns null for anything that is not a product page', () => {
+    expect(productHandleFromReturnPath('/')).toBeNull()
+    expect(productHandleFromReturnPath('/shop/rum-gifts/')).toBeNull()
+    expect(productHandleFromReturnPath('/shop/product/')).toBeNull()
+    expect(productHandleFromReturnPath('/shop/product/Bad Handle/')).toBeNull()
+    expect(productHandleFromReturnPath('/shop/product/x/y/')).toBeNull()
+    expect(productHandleFromReturnPath('/field-manual/cocktails/mojito/')).toBeNull()
+  })
 })
