@@ -8,7 +8,8 @@ import guide from './schemaTypes/guide'
 import tradeHelp from './schemaTypes/tradeHelp'
 import cartUpsell from './schemaTypes/cartUpsell'
 import person from './schemaTypes/person'
+import review from './schemaTypes/review'
 
 export const schema: { types: SchemaTypeDefinition[] } = {
-  types: [cocktail, ingredient, equipment, product, guide, tradeHelp, cartUpsell, person],
+  types: [cocktail, ingredient, equipment, product, guide, tradeHelp, cartUpsell, person, review],
 }
