@@ -13,7 +13,6 @@ import PressAwards from "@/components/PressAwards";
 import MedalBar from "@/components/MedalBar";
 import HomepageProductGrid from "@/components/HomepageProductGrid";
 import RumServesTeaser from "@/components/RumServesTeaser";
-import Link from 'next/link'
 import type { Metadata } from 'next'
 import { baseOpenGraph, OG_IMAGE } from '@/lib/og'
 import { BASE_URL } from '@/lib/jsonLd'
@@ -146,60 +145,14 @@ export default function Home() {
           <OrderSection />
         </ScrollReveal>
 
-        {/* SEO-Rich Content Section - kept for crawlers, lowest priority */}
-        <section className="py-16 band-dark">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid lg:grid-cols-2 gap-12">
-              <ScrollReveal>
-              <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
-                <h2 className="text-3xl font-serif font-bold text-white mb-6">
-                  Why We Started Making Rum
-                </h2>
-                <div className="space-y-4 text-parchment-200 leading-relaxed">
-                  <p>
-                    We didn't set out to start a spirits company. Between us, we served 17 years in the Royal Corps of Signals. What we wanted was simple: a proper drink to share with mates - something with character, made by people who give a damn. When we couldn't find it, we decided to make it ourselves.
-                  </p>
-                  <p>
-                    Caribbean rum, macerated by our British partner distillery. The result? Vanilla and caramel upfront, warm spice through the middle, and a finish smooth enough to sip neat - but bold enough to hold its own in a cocktail.
-                  </p>
-                  <p>
-                    Mixing drinks or unwinding after a long week, this is rum that doesn't let you down. We built it that way on purpose.{' '}
-                    <Link href="/shop/spiced-rum/" className="text-gold-300 hover:text-gold-400 underline underline-offset-2">
-                      Find it in the shop.
-                    </Link>
-                  </p>
-                </div>
-              </div>
-              </ScrollReveal>
-
-              <ScrollReveal delay={1}>
-              <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
-                <h2 className="text-3xl font-serif font-bold text-white mb-6">
-                  Why We Do It This Way
-                </h2>
-                <div className="space-y-4 text-parchment-200 leading-relaxed">
-                  <p>
-                    We work with what's close to home where we can. Our rum is macerated by our British partner distillery, in small batches. It's not about slapping 'eco-friendly' on the label. It's just how we think things should be done.
-                  </p>
-                  <p>
-                    We signed the Armed Forces Covenant because supporting veterans isn't a marketing angle for us - it's personal. 5% of profits goes to forces charities. We guarantee job interviews for veterans. It's baked into how we run the company, not bolted on afterwards.
-                  </p>
-                  <p>
-                    There's a reason we named ourselves after the jerry can. It wasn't designed to look good on a shelf. It was designed to work - in the desert, in the Arctic, wherever it was needed. That's the standard we hold ourselves to. Rum that does what it's supposed to do, every single time.{' '}
-                    <Link href="/shop/" className="text-gold-300 hover:text-gold-400 underline underline-offset-2">
-                      Browse the shop.
-                    </Link>
-                  </p>
-                </div>
-              </div>
-              </ScrollReveal>
-            </div>
-
-            {/* The four feature tiles that followed these two cards went on
-                24 Sep 2026: each restated a Why Jerry Can pillar or the
-                pledge, a screen higher, in fewer words. */}
-          </div>
-        </section>
+        {/* The two prose cards that closed this page went on 24 Sep 2026.
+            Checked against every page that could have taken them: the origin,
+            the production line and the tasting notes were all already on
+            /shop/spiced-rum/ in fuller form, the jerry can name is in the Why
+            Jerry Can section a few screens up and again on /about/story/, and
+            the close-to-home sourcing is on /ethos/. The one thing the site
+            said nowhere else, the Armed Forces Covenant signature, moved to
+            /ethos/ rather than being lost. */}
 
       </div>
     </>

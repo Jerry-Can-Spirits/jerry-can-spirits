@@ -337,7 +337,7 @@ export default function Ethos() {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-12">
+          <div className="grid md:grid-cols-2 gap-12 items-start">
             {/* UK Focus */}
             <ScrollReveal>
             <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-8 border border-gold-500/20 h-full">
@@ -409,6 +409,33 @@ export default function Ethos() {
                   </div>
                 </div>
               </div>
+            </div>
+            </ScrollReveal>
+
+            {/* The Covenant, moved here from the foot of the homepage on
+                24 Sep 2026. This page sets out how we make the rum and what
+                we hold ourselves to, and said nothing about the one
+                commitment that is a signature rather than a preference. */}
+            <ScrollReveal delay={2}>
+            <div className="md:col-span-2 bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-8 border border-gold-500/20">
+              <div className="text-center mb-6">
+                <div className="w-16 h-16 bg-gold-400/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <svg className="w-8 h-8 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                  </svg>
+                </div>
+                <h3 className="text-2xl font-serif font-bold text-white mb-4">
+                  The Armed Forces Covenant
+                </h3>
+              </div>
+              <p className="text-parchment-200 leading-relaxed max-w-3xl mx-auto text-center">
+                We signed the Armed Forces Covenant because supporting veterans isn&apos;t a marketing angle for us - it&apos;s personal. 5% of profits goes to forces charities. We guarantee job interviews for veterans. It&apos;s baked into how we run the company, not bolted on afterwards.
+              </p>
+              <p className="text-center mt-6">
+                <Link href="/armed-forces-covenant/" className="text-gold-300 hover:text-gold-200 underline underline-offset-2 font-semibold">
+                  Read our full pledges
+                </Link>
+              </p>
             </div>
             </ScrollReveal>
           </div>
