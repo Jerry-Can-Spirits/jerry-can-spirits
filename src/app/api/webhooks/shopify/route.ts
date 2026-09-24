@@ -211,6 +211,8 @@ async function handleProductUpdated(product: ShopifyProduct, kv: KVNamespace) {
     revalidatePath('/shop/barware/');
     revalidatePath('/shop/clothing/');
     revalidatePath('/shop/[collection]', 'page');
+    // The homepage grid shows every product's price (24 Sep 2026).
+    revalidatePath('/');
   } catch (err) {
     console.error('[webhook] revalidate failed for product %s:', product.handle, err);
   }
