@@ -39,7 +39,7 @@ describe('rum formats', () => {
       'jerry-can-spirits-expedition-pack-spiced-rum-6-bottles',
       'jerry-can-spirits-premium-gift-pack',
     ])
-    expect(RUM_FORMATS.map((f) => f.label)).toEqual(['Bottle', 'Six-pack', 'Gift pack'])
+    expect(RUM_FORMATS.map((f) => f.label)).toEqual(['Bottle', 'Six bottles', 'Gift pack'])
   })
 
   it('shows the family on every member page and nothing elsewhere', () => {
