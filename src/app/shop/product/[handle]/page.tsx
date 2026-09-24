@@ -531,9 +531,12 @@ export default async function ProductPage({
       <ProductPageTracking
         productId={product.id}
         productName={product.title}
+        handle={product.handle}
         price={product.priceRange.minVariantPrice.amount}
         currency={product.priceRange.minVariantPrice.currencyCode}
         category={category.trackingCategory}
+        imageUrl={product.images[0]?.url}
+        compareAtPrice={product.variants?.[0]?.compareAtPrice?.amount ?? null}
       />
 
       {/* Breadcrumb */}

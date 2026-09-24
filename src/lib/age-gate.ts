@@ -64,6 +64,16 @@ export function safeReturnPath(raw: string | null | undefined): string {
   return raw
 }
 
+// The product a gated visitor was heading for, if the return target is a
+// product page. The gate route uses it to carry that product's title, image
+// and description in its own metadata, so an unfurler that is not on the bot
+// list still shows the product rather than the site default. Handles are
+// Shopify's: lowercase letters, digits and hyphens.
+export function productHandleFromReturnPath(returnPath: string): string | null {
+  const m = /^\/shop\/product\/([a-z0-9-]+)\/?(?:[?#].*)?$/.exec(returnPath)
+  return m ? m[1] : null
+}
+
 // Known SEO / search / social / validation bot user agents. Bots are allowed to
 // browse gated content for indexing (the checkout handoff is separately
 // hard-gated in /api/checkout). Single source of truth shared by
@@ -126,6 +136,15 @@ export const BOT_USER_AGENTS = [
   'skypeuripreview',
   'mastodon',
   'cardyb', // Bluesky's link-card fetcher, "Bluesky Cardyb/1.1"
+  // Link checkers and unfurlers that fetch a URL on a person's behalf. Klaviyo
+  // checks and previews the links in campaigns and flows; measured live on
+  // 24 Sep 2026 it was 307'd to the gate. None of these tokens appears in a
+  // human browser's user agent, which is the test for adding one: an in-app
+  // browser token (Snapchat, Viber) would let a person past the gate.
+  'klaviyo',
+  'embedly',
+  'bitlybot',
+  'google-pagerenderer', // Google Chat and Docs link previews
 
   // Validation tools
   'w3c_validator',

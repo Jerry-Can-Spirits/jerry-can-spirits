@@ -15,6 +15,7 @@ import {
 } from '@/lib/shopify'
 import { applyReferralCode } from '@/lib/referrals'
 import { attachStitchingAttributes } from '@/lib/analytics-stitching'
+import { trackAddedToCart } from '@/lib/klaviyo-onsite'
 
 // Thrown when Shopify rejects a discount code (below its minimum, expired, or
 // invalid) — distinct from a transient network failure, so the UI can surface
@@ -159,6 +160,10 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       // Refresh GA4 stitching attributes onto the cart for server-side purchase
       // attribution. Fire-and-forget: it never throws and must not delay the add.
       void attachStitchingAttributes(updatedCart)
+
+      // Klaviyo Added to Cart, the abandoned-cart trigger a headless cart has to
+      // send itself. Consent-gated inside; never throws.
+      trackAddedToCart(updatedCart, variantId)
 
       // Open cart drawer to show item was added
       setIsCartOpen(true)
