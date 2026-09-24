@@ -64,7 +64,7 @@ export default async function HomepageProductGrid() {
         <div className="mt-10 text-center">
           <Link
             href="/shop/"
-            className="inline-flex items-center min-h-[44px] px-6 py-2 border border-gold-500/40 hover:border-gold-400 text-gold-300 hover:text-gold-200 text-sm font-semibold rounded-lg transition-colors"
+            className="inline-flex items-center min-h-[44px] px-6 py-3 bg-jerry-green-800 text-gold-300 hover:text-gold-200 text-sm font-semibold rounded-lg transition-colors"
           >
             Browse the whole shop
           </Link>

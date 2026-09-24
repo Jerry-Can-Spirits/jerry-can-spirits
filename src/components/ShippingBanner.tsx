@@ -73,7 +73,7 @@ export default function ShippingBanner() {
   }
 
   return (
-    <div className="bg-jerry-green-800/80 border-t border-gold-400/20 text-gold-300 text-xs sm:text-sm">
+    <div className="bg-jerry-green-800 border-t border-gold-400/20 text-gold-300 text-xs sm:text-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2.5">
         <div className="flex items-center justify-between gap-3">
           <div className="flex-1 text-center">
