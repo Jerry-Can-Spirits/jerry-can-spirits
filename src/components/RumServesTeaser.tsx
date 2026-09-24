@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { client } from '@/sanity/lib/client'
 import { homepageServesQuery, HOMEPAGE_SERVE_SLUGS } from '@/sanity/queries'
 import ScrollRow from '@/components/ScrollRow'
+import SectionHeading from '@/components/SectionHeading'
 
 interface Serve {
   name: string
@@ -41,14 +42,13 @@ export default async function RumServesTeaser() {
   return (
     <section className="py-16 band-light" aria-labelledby="serves-heading">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-10">
-          <h2 id="serves-heading" className="text-3xl md:text-4xl font-serif font-bold text-white">
-            What to make with it.
-          </h2>
-          <p className="mt-3 text-parchment-300 max-w-2xl mx-auto">
-            Three serves built on Expedition Spiced Rum, measured in 25ml and 50ml, written up in the Field Manual.
-          </p>
-        </div>
+        <SectionHeading
+          eyebrow="From the Field Manual"
+          id="serves-heading"
+          intro="Three serves built on Expedition Spiced Rum, measured in 25ml and 50ml, written up in the Field Manual."
+        >
+          What to make with it.
+        </SectionHeading>
         <ScrollRow
           ariaLabel="Serves built on the rum"
           cols="md:grid-cols-3"

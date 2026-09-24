@@ -2,6 +2,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { getProduct } from '@/lib/shopify'
 import { CURRENT_BATCH_ID } from '@/lib/d1'
+import SectionHeading from '@/components/SectionHeading'
 
 // 'batch-001' -> '001'. The same constant the Expedition Log runs on, so
 // when the next batch ships, bumping CURRENT_BATCH_ID updates this copy in
@@ -98,9 +99,9 @@ export default async function OrderSection() {
               line. The batch number derives from CURRENT_BATCH_ID rather
               than being asserted here forever. */}
           <div className="order-1 lg:order-2">
-            <h2 className="text-3xl md:text-4xl font-serif font-bold text-white mb-6">
+            <SectionHeading eyebrow="Order" align="left">
               First Batch. Numbered. Limited general release.
-            </h2>
+            </SectionHeading>
 
             <p className="text-xl text-parchment-300 mb-6 leading-relaxed">
               Batch {BATCH_NUMBER}, shipping now. When it&apos;s gone, that run is finished.
