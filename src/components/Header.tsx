@@ -66,48 +66,60 @@ export default function Header() {
   // next.config.ts trailingSlash:true — without them every click
   // triggers a 308 redirect that adds the slash.
   //
-  // Five items, selling first, Field Manual last — the restructure order
-  // (docs/plans/2026-08-28-proposition-and-site-restructure.md). Reviews,
-  // Stockists, Contact and the About long tail moved to the footer, which
-  // already carried almost all of them: a header item asks every visitor to
-  // consider leaving the buy path, and the homepage now makes the case those
-  // pages used to be fetched for. Guides folded into the Field Manual
-  // dropdown. No page was deleted.
+  // Five items, selling first, Field Manual and Trade last (the restructure
+  // order in docs/plans/2026-08-28-proposition-and-site-restructure.md,
+  // revised 24 Sep 2026). Shop and Gifts are the two reasons people arrive,
+  // for themselves or for someone else, so gifting gets its own item with
+  // the budget pages under it instead of three lines inside Shop. Our Rum
+  // carries the bottle and the story behind it: those pages exist to sell
+  // the bottle, so they sit under it rather than as an item of their own.
+  // Reviews, Stockists, Contact and the About long tail live in the footer.
+  // Clothing is a coming-soon page and earns a slot when there is something
+  // to buy. No page was deleted.
   const navigation: NavigationItem[] = [
     {
       name: 'Shop',
       href: '/shop/',
       dropdown: [
         { name: 'Expedition Spiced Rum', href: '/shop/spiced-rum/', description: 'Small-batch British rum, real spices' },
-        { name: 'Rum Gifts', href: '/shop/rum-gifts/', description: 'Gifts for people who drink properly' },
-        { name: 'Rum Gifts for Him', href: '/shop/gifts-for-him/', description: 'Gift ideas for men' },
-        { name: 'Rum Gifts for Her', href: '/shop/gifts-for-her/', description: 'Gift ideas for women' },
         { name: 'Cocktail Making Kits', href: '/shop/cocktail-making-kits/', description: 'Bar tools & spiced rum' },
         { name: 'Bar Accessories', href: '/shop/bar-accessories/', description: 'Shakers, jiggers, glassware' },
         { name: 'Rum Glasses', href: '/shop/rum-glasses/', description: 'The right glass makes a difference' },
-        { name: 'Clothing', href: '/shop/clothing/', description: 'Expedition apparel' },
         { name: 'Browse All', href: '/shop/', description: 'All collections' },
         { name: 'Stockists', href: '/stockists/', description: 'Find us near you' },
         { name: 'Reviews', href: '/reviews/', description: 'What customers say' },
       ]
     },
-    // Straight to the bottle: the one product a first-time visitor came for,
-    // one click from anywhere.
-    { name: 'Our Rum', href: '/shop/product/jerry-can-spirits-expedition-spiced-rum/' },
     {
-      name: 'Our Story',
-      href: '/about/story/',
+      name: 'Gifts',
+      href: '/shop/rum-gifts/',
       dropdown: [
+        { name: 'Rum Gifts', href: '/shop/rum-gifts/', description: 'Gifts for people who drink properly' },
+        { name: 'Under £20', href: '/shop/gifts-under-20/', description: 'Barware and glassware' },
+        { name: 'Under £50', href: '/shop/gifts-under-50/', description: 'The bottle, or the glasses' },
+        { name: 'Under £100', href: '/shop/gifts-under-100/', description: 'The gift pack' },
+        { name: 'Gift Sets', href: '/shop/gift-sets/', description: 'Boxed and ready to give' },
+        { name: 'Rum Gifts for Him', href: '/shop/gifts-for-him/', description: 'Gift ideas for men' },
+        { name: 'Rum Gifts for Her', href: '/shop/gifts-for-her/', description: 'Gift ideas for women' },
+        { name: 'How to Choose a Rum Gift', href: '/guides/how-to-choose-a-rum-gift/', description: 'A short guide' },
+      ]
+    },
+    // The bottle first, one click from anywhere, with the story behind it
+    // underneath.
+    {
+      name: 'Our Rum',
+      href: '/shop/product/jerry-can-spirits-expedition-spiced-rum/',
+      dropdown: [
+        { name: 'Expedition Spiced Rum', href: '/shop/product/jerry-can-spirits-expedition-spiced-rum/', description: 'The bottle' },
+        { name: 'What’s In It', href: '/ingredients/', description: 'Every ingredient, named' },
+        { name: 'Check Your Bottle', href: '/batch/', description: 'Look up your batch' },
         { name: 'Our Story', href: '/about/story/', description: 'Brand heritage & mission' },
         { name: 'Meet the Team', href: '/about/team/', description: 'The veterans behind the brand' },
         { name: 'Where the 5% Goes', href: '/giving/', description: 'Military charity contributions' },
-        { name: 'Friends & Partners', href: '/friends/', description: 'The people we build with' },
         { name: 'The Expedition Log', href: '/expedition-log/', description: 'Where the bottles end up' },
-        { name: 'Press & Media', href: '/contact/media/', description: 'Media centre & brand assets' },
         { name: 'FAQ', href: '/faq/', description: 'Common questions answered' },
       ]
     },
-    { name: 'Trade', href: '/trade/' },
     {
       name: 'Field Manual',
       href: '/field-manual/',
@@ -119,6 +131,7 @@ export default function Header() {
         { name: 'Guides', href: '/guides/', description: 'Long-form articles & techniques' },
       ]
     },
+    { name: 'Trade', href: '/trade/' },
   ]
 
   // Scroll behavior with improved smoothness - optimised to reduce re-renders
