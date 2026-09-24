@@ -1,9 +1,10 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import StructuredData from '@/components/StructuredData'
-import ScrollReveal from '@/components/ScrollReveal'
 import { baseOpenGraph, OG_IMAGE } from '@/lib/og'
 import { DELIVERY_PROMISE_SENTENCE } from '@/lib/delivery'
+import FAQAccordion from '@/components/FAQAccordion'
+import type { ReactNode } from 'react'
 
 export const metadata: Metadata = {
   title: "Frequently Asked Questions",
@@ -105,6 +106,16 @@ const faqs = [
   },
 ]
 
+// The two answers that carry links. Everything else in `faqs` is plain text.
+const RICH_ANSWERS: Record<string, ReactNode> = {
+  "What cocktails work best with Jerry Can Spirits rum?": (
+    <>Our rum is versatile and works beautifully in classic cocktails like Old Fashioned, Mai Tai, and Rum Punch. Check our <Link href="/field-manual/cocktails/" className="text-gold-300 hover:text-gold-400 underline">Field Manual</Link> for cocktail recipes.</>
+  ),
+  "What is your connection to the Armed Forces?": (
+    <>Jerry Can Spirits was <Link href="/about/team/" className="text-gold-300 hover:text-gold-400 underline">founded by two Royal Corps of Signals veterans</Link> with over 17 years of combined service. We&apos;re proud supporters of the <Link href="/armed-forces-covenant/" className="text-gold-300 hover:text-gold-400 underline">Armed Forces Covenant</Link> and donate 5% of profits to military charities.</>
+  ),
+}
+
 export default function FAQPage() {
   // FAQ Schema for SEO
   const faqSchema = {
@@ -141,28 +152,13 @@ export default function FAQPage() {
           </div>
 
           {/* FAQ List */}
-          <div className="space-y-6">
-            {faqs.map((faq, index) => (
-              <ScrollReveal key={index} delay={(index % 3) as 0 | 1 | 2}>
-              <div
-                className="bg-jerry-green-800/20 border border-gold-500/20 rounded-lg p-6 hover:border-gold-500/40 transition-colors"
-              >
-                <h2 className="text-xl font-semibold text-gold-400 mb-3">
-                  {faq.question}
-                </h2>
-                <p className="text-parchment-200 leading-relaxed">
-                  {faq.question === "What cocktails work best with Jerry Can Spirits rum?" ? (
-                    <>Our rum is versatile and works beautifully in classic cocktails like Old Fashioned, Mai Tai, and Rum Punch. Check our <Link href="/field-manual/cocktails/" className="text-gold-300 hover:text-gold-400 underline">Field Manual</Link> for cocktail recipes.</>
-                  ) : faq.question === "What is your connection to the Armed Forces?" ? (
-                    <>Jerry Can Spirits was <Link href="/about/team/" className="text-gold-300 hover:text-gold-400 underline">founded by two Royal Corps of Signals veterans</Link> with over 17 years of combined service. We&apos;re proud supporters of the <Link href="/armed-forces-covenant/" className="text-gold-300 hover:text-gold-400 underline">Armed Forces Covenant</Link> and donate 5% of profits to military charities.</>
-                  ) : (
-                    faq.answer
-                  )}
-                </p>
-              </div>
-              </ScrollReveal>
-            ))}
-          </div>
+          <FAQAccordion
+            headingLevel="h2"
+            items={faqs.map((faq) => ({
+              question: faq.question,
+              answer: RICH_ANSWERS[faq.question] ?? faq.answer,
+            }))}
+          />
 
           {/* CTA */}
           <div className="mt-16 text-center p-8 bg-jerry-green-800/20 border border-gold-500/20 rounded-lg">

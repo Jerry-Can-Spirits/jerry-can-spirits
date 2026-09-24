@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { safeJsonLd } from '@/lib/jsonLd'
+import FAQAccordion from '@/components/FAQAccordion'
 
 // FAQ data with internal linking opportunities
 const faqs = [
@@ -82,44 +83,29 @@ export default function HomepageFAQ() {
           </p>
         </div>
 
-        {/* FAQ: each question opens on tap. Six full answers stacked on a
-            phone put a screen and a half between the serves and the closing
-            ask; the schema above still carries every answer for search. */}
-        <div className="grid md:grid-cols-2 gap-4 md:gap-6 mb-16 items-start">
-          {faqs.map((faq, index) => (
-            <details
-              key={index}
-              className="group bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl border border-gold-500/20 open:border-gold-400/40"
-            >
-              <summary className="flex items-center justify-between gap-4 p-5 sm:p-6 cursor-pointer list-none [&::-webkit-details-marker]:hidden min-h-[44px]">
-                <h3 className="text-lg font-serif font-bold text-gold-300">
-                  {faq.question}
-                </h3>
-                <svg
-                  className="w-5 h-5 shrink-0 text-gold-400 transition-transform duration-200 group-open:rotate-180"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  aria-hidden="true"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
-              </summary>
-              <div className="px-5 sm:px-6 pb-5 sm:pb-6">
-                <p className="text-parchment-200 leading-relaxed">
+        {/* Each question opens on tap. Six full answers stacked on a phone put
+            a screen and a half between the serves and the closing ask; the
+            schema above still carries every answer for search. */}
+        <div className="mb-16">
+          <FAQAccordion
+            columns={2}
+            items={faqs.map((faq) => ({
+              question: faq.question,
+              answer: (
+                <>
                   {faq.answer}
-                </p>
-                {faq.link && (
-                  <Link
-                    href={faq.link.href}
-                    className="inline-block mt-4 text-gold-400 hover:text-gold-300 transition-colors text-sm font-medium underline underline-offset-2"
-                  >
-                    {faq.link.text}
-                  </Link>
-                )}
-              </div>
-            </details>
-          ))}
+                  {faq.link && (
+                    <Link
+                      href={faq.link.href}
+                      className="block mt-4 text-gold-400 hover:text-gold-300 transition-colors text-sm font-medium underline underline-offset-2"
+                    >
+                      {faq.link.text}
+                    </Link>
+                  )}
+                </>
+              ),
+            }))}
+          />
         </div>
 
         {/* Comparison Table */}

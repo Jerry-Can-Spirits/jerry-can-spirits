@@ -1,4 +1,5 @@
 import { safeJsonLd } from '@/lib/jsonLd'
+import FAQAccordion from '@/components/FAQAccordion'
 
 interface FAQ {
   question: string
@@ -42,21 +43,7 @@ export default function ProductFAQ({ faqs, productName }: ProductFAQProps) {
         Common questions about {productName}
       </p>
 
-      <div className="space-y-6">
-        {faqs.map((faq, index) => (
-          <div
-            key={index}
-            className="border-b border-gold-500/10 pb-6 last:border-0 last:pb-0"
-          >
-            <h3 className="text-lg font-semibold text-gold-300 mb-3">
-              {faq.question}
-            </h3>
-            <p className="text-parchment-200 leading-relaxed">
-              {faq.answer}
-            </p>
-          </div>
-        ))}
-      </div>
+      <FAQAccordion items={faqs} />
     </section>
   )
 }

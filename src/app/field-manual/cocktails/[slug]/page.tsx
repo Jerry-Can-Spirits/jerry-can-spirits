@@ -20,6 +20,7 @@ import { getCloudflareContext } from '@opennextjs/cloudflare'
 import { sanityOgUrl } from '@/sanity/lib/image'
 import { OG_IMAGE_COCKTAIL } from '@/lib/og'
 import { ORG_REF, authorRefFor } from '@/lib/jsonLd'
+import FAQAccordion from '@/components/FAQAccordion'
 
 // Hourly ISR: the old ratings lookup was an HTTP fetch with an hourly cache,
 // which also refreshed the page. The direct KV read below has no cache of its
@@ -451,14 +452,7 @@ export default async function CocktailPage({ params }: PageProps) {
           {cocktail.faqs && cocktail.faqs.length > 0 && (
             <div className="mt-6 sm:mt-8 bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-4 sm:p-6 md:p-8 border border-gold-500/20">
               <h2 className="text-2xl font-serif font-bold text-white mb-6">Frequently Asked Questions</h2>
-              <div className="space-y-6">
-                {cocktail.faqs.map((faq) => (
-                  <div key={faq.question}>
-                    <h3 className="text-gold-400 font-semibold mb-2">{faq.question}</h3>
-                    <p className="text-parchment-300 leading-relaxed">{faq.answer}</p>
-                  </div>
-                ))}
-              </div>
+              <FAQAccordion items={cocktail.faqs} />
             </div>
           )}
 

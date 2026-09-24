@@ -11,6 +11,7 @@ import AddToCartButton from '@/components/AddToCartButton'
 import ViewItemListTracker from '@/components/ViewItemListTracker'
 import { safeJsonLd, productOffer, merchantOfferExtras, productGtin } from '@/lib/jsonLd'
 import { formatPrice } from '@/lib/format-price'
+import FAQAccordion from '@/components/FAQAccordion'
 
 // ISR — pure Shopify catalogue data (no per-request state), so these SEO
 // collection pages edge-cache and revalidate hourly instead of a live Shopify
@@ -396,14 +397,7 @@ export default async function CollectionPage({
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-16">
           <div className="max-w-3xl mx-auto">
             <h2 className="text-2xl font-serif font-bold text-white mb-8">Before you order.</h2>
-            <div className="space-y-6">
-              {category.faqs.map((faq) => (
-                <div key={faq.question} className="border-b border-gold-500/15 pb-6">
-                  <h3 className="text-gold-300 font-semibold mb-2">{faq.question}</h3>
-                  <p className="text-parchment-300 leading-relaxed">{faq.answer}</p>
-                </div>
-              ))}
-            </div>
+            <FAQAccordion items={category.faqs} />
           </div>
         </section>
       )}
