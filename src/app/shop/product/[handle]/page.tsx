@@ -2,7 +2,7 @@ import xss from 'xss'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import Image from 'next/image'
-import { getProduct, getProducts, getSmartRecommendations, type ShopifyProduct, type ShopifyMetafield } from '@/lib/shopify'
+import { getProduct, getProducts, getProductsByHandles, getSmartRecommendations, type ShopifyProduct, type ShopifyMetafield } from '@/lib/shopify'
 import { GB_SHIPPING_DETAILS } from '@/lib/shippingSchema'
 import { productOffer, priceValidUntil, PRICE_VALID_FROM, productGtin, MERCHANT_RETURN_POLICY, ORG_REF } from '@/lib/jsonLd'
 import { FREE_SHIPPING_THRESHOLD_GBP, STANDARD_SHIPPING_LABEL } from '@/lib/pricing'
@@ -23,6 +23,10 @@ import DietaryInfo from '@/components/DietaryInfo'
 import StickyAddToCart from '@/components/StickyAddToCart'
 import CompleteTheServe, { type CompleteTheServeItem } from '@/components/CompleteTheServe'
 import FindItIn from '@/components/FindItIn'
+import ProductFormats, { type ProductFormatOption } from '@/components/ProductFormats'
+import TrustStrip from '@/components/TrustStrip'
+import RecognitionRow from '@/components/RecognitionRow'
+import { formatsForHandle } from '@/lib/product-formats'
 import { client } from '@/sanity/lib/client'
 import { productByHandleQuery } from '@/sanity/queries'
 import { OG_IMAGE } from '@/lib/og'
@@ -368,6 +372,31 @@ export default async function ProductPage({
   // Curated Trustpilot review excerpts for this product (empty = placeholder)
   const productReviews = getProductReviews(handle)
 
+  // Ways to buy: the other formats of the same liquid, priced live. Only the
+  // rum family has formats; every other product gets an empty list and no
+  // strip. Non-critical: a failed sibling fetch degrades to the current
+  // product alone, which ProductFormats renders as nothing.
+  const formats = formatsForHandle(handle)
+  let formatOptions: ProductFormatOption[] = []
+  if (formats.length > 0) {
+    let siblings: ShopifyProduct[] = []
+    try {
+      siblings = await getProductsByHandles(formats.map((f) => f.handle).filter((h) => h !== handle))
+    } catch (error) {
+      console.error('Error fetching product formats:', error)
+    }
+    formatOptions = formats.flatMap((f) => {
+      const p = f.handle === handle ? product : siblings.find((s) => s.handle === f.handle)
+      if (!p) return []
+      return [{
+        ...f,
+        price: p.priceRange.minVariantPrice.amount,
+        currencyCode: p.priceRange.minVariantPrice.currencyCode,
+        availableForSale: p.availableForSale ?? p.variants?.some((v) => v.availableForSale) ?? true,
+      }]
+    })
+  }
+
   // Detect if this is a mixed bundle (gift pack with barware) - no unit pricing for bundles
   const isBundle = handle.includes('gift') || product.title.toLowerCase().includes('gift')
 
@@ -574,6 +603,8 @@ export default async function ProductPage({
               </div>
             </div>
 
+            <ProductFormats options={formatOptions} currentHandle={handle} />
+
             {/* IWSC 2026 medals */}
             {AWARDED_HANDLES.includes(handle) && <ProductAwards />}
 
@@ -621,26 +652,15 @@ export default async function ProductPage({
               {/* Complete the serve — curated cross-sell at the decision point */}
               <CompleteTheServe items={completeTheServeItems} primaryVariantId={completeTheServePrimaryVariantId} />
 
-              {/* Trust Indicators */}
-              <div className="mt-6 pt-6 border-t border-gold-500/10">
-                <div className="space-y-3 text-center">
-                  <p className="text-sm text-parchment-400 tracking-wide">
-                    Ships for {STANDARD_SHIPPING_LABEL}. Free over £{FREE_SHIPPING_THRESHOLD_GBP}.
-                  </p>
-                  <p className="text-sm text-parchment-400 tracking-wide">
-                    Secure checkout · Express payment available
-                  </p>
-                  <p className="text-sm text-gold-400/80 tracking-wide">
-                    5% of profits goes to forces charities.
-                  </p>
-                  <div className="flex items-center justify-center gap-6 text-xs text-parchment-500 uppercase tracking-widest">
-                    <span>SSL Secured</span>
-                    <span className="text-gold-500/30">•</span>
-                    <span>Shop Pay</span>
-                    <span className="text-gold-500/30">•</span>
-                    <span>Data Protected</span>
-                  </div>
-                </div>
+              {/* Trust strip and accreditations. The IWSC tile only appears where
+                  ProductAwards does not, so the medal is stated once per page. */}
+              <div className="mt-6 pt-6 border-t border-gold-500/10 space-y-4">
+                <TrustStrip showIwsc={!AWARDED_HANDLES.includes(handle)} />
+                <RecognitionRow />
+                <p className="text-center text-sm text-parchment-400 tracking-wide">
+                  Ships for {STANDARD_SHIPPING_LABEL}. Free over £{FREE_SHIPPING_THRESHOLD_GBP}. Secure checkout, express payment available.
+                  {AWARDED_HANDLES.includes(handle) ? '' : ' 5% of profits goes to forces charities.'}
+                </p>
               </div>
 
             </div>

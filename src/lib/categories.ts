@@ -1,3 +1,5 @@
+import { DELIVERY_PROMISE_SENTENCE } from './delivery'
+
 export type Pillar = { title: string; body: string }
 
 export type CategoryFaq = { question: string; answer: string }
@@ -54,7 +56,7 @@ const FAQ_SEND_DIRECT: CategoryFaq = {
 // Promising it on the page would describe a mechanism that does not exist.
 const FAQ_DELIVERY_TIME: CategoryFaq = {
   question: 'How long does delivery take?',
-  answer: 'Once dispatched, orders typically arrive within three to five business days, anywhere in the UK.',
+  answer: `${DELIVERY_PROMISE_SENTENCE} Anywhere in the UK.`,
 }
 const FAQ_GIFT_READY: CategoryFaq = {
   question: 'Does it arrive gift-ready?',

@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import Breadcrumbs from '@/components/Breadcrumbs'
 import { FREE_SHIPPING_THRESHOLD_GBP, STANDARD_SHIPPING_LABEL } from '@/lib/pricing'
+import { DELIVERY_PROMISE_SENTENCE } from '@/lib/delivery'
 import StructuredData from '@/components/StructuredData'
 import { OG_IMAGE } from '@/lib/og'
 
@@ -123,7 +124,7 @@ export default function ShippingReturns() {
                 UK Shipping
               </h2>
               <p className="text-white mb-4 leading-relaxed">
-                We currently ship throughout the United Kingdom. Once dispatched, orders typically arrive within 3-5 business days.
+                We currently ship throughout the United Kingdom. {DELIVERY_PROMISE_SENTENCE}
               </p>
 
               <h3 className="text-xl font-serif font-semibold text-gold-300 mt-6 mb-3">
