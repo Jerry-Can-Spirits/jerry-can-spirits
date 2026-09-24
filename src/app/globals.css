@@ -589,3 +589,72 @@ html[data-age-verified] .age-gate {
 html:not([data-age-verified]) body:has(.age-gate) {
   overflow: hidden;
 }
+
+/* 10. Light bands.
+   Every section used to be jerry-green-900 at 30 to 60 percent alpha over the
+   same green, so the page read as one unbroken slab and the eye had nothing
+   to mark progress against while scrolling. A light band breaks it up.
+
+   The contours continue across the join. This layer uses the same artwork as
+   the fixed one behind the dark sections, inked dark instead of gold, and
+   background-attachment: fixed positions it against the viewport rather than
+   the element, so both are showing the same part of the same hillside at the
+   same moment. On iOS, where that attachment is treated as scroll, each band
+   falls back to its own crop of the same map: still real ground, still no
+   repeating tile, just not continuous across the boundary.
+
+   The rules below exist because every section inside a band is written for a
+   dark ground. Rather than fork each component, the band restates the colour
+   families they draw from. They match on the family rather than on each
+   utility, so a component reaching for a new shade of the same thing is
+   carried without anyone having to remember this file. */
+.band-light {
+  background-color: #e8e6df;
+  background-image: url('/images/topography-ink.svg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  color: #1a442e;
+}
+
+.band-light :is(.text-white, [class*='text-parchment-']) {
+  color: #3d4a43;
+}
+.band-light :is(h1, h2, h3, h4, .font-bold, .font-semibold):is(.text-white, [class*='text-parchment-']) {
+  color: #163b28;
+}
+.band-light [class*='text-gold-'] {
+  color: #a4560a;
+}
+
+/* Panels are a pale wash on the dark ground. On a light one they have to be
+   lighter than what surrounds them, not darker. */
+.band-light :is(
+  [class*='bg-jerry-green-'],
+  [class*='from-parchment-'],
+  [class*='from-gold-'],
+  [class*='bg-gold-500/'],
+  [class*='bg-gold-600/']
+) {
+  background-image: none;
+  background-color: rgba(255, 255, 255, 0.6);
+}
+.band-light :is([class*='border-gold-'], [class*='border-jerry-green-']) {
+  border-color: rgba(26, 68, 46, 0.16);
+}
+.band-light [class*='hover:border-gold-']:hover {
+  border-color: rgba(26, 68, 46, 0.34);
+}
+.band-light [class*='divide-gold-'] > * + * {
+  border-color: rgba(26, 68, 46, 0.16);
+}
+
+/* Two things keep their own colour: the buy button, and any logo sitting on
+   the white plate it was given for contrast on the dark ground. */
+.band-light :is([class~='bg-gold-500'], [class~='bg-gold-600']) {
+  background-color: #f59e0b;
+  color: #163b28;
+}
+.band-light .bg-white {
+  background-color: #ffffff;
+}
