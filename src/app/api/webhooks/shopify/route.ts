@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { revalidatePath } from 'next/cache';
 import { getCloudflareContext } from '@opennextjs/cloudflare';
 import * as Sentry from '@sentry/nextjs';
+import { countBottles } from '@/lib/product-formats';
 import {
   verifyWebhookSignature,
   incrementBottlesSold,
@@ -98,7 +99,15 @@ async function handleOrderCreated(
     return;
   }
 
-  const bottleCount = jcsItems.reduce((sum, item) => sum + item.quantity, 0);
+  // Bottles, not line items. Summing quantity made a six-pack "1 bottle" in
+  // the social-proof toast, while the presentation box and the Bar Blade each
+  // counted as one because the filter above matches on the product title.
+  const bottleCount = countBottles(order.line_items);
+  if (bottleCount === 0) {
+    console.warn(
+      `[webhook] orders/create #${order.order_number} counted 0 bottles from ${jcsItems.length} of our items — a product may be missing from BOTTLES_PER_UNIT`,
+    );
+  }
 
   const country =
     order.shipping_address?.country_code ||
