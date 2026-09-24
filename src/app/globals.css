@@ -661,7 +661,12 @@ html:not([data-age-verified]) body:has(.age-gate) {
    cream is barely a card, and the brand colour does the work instead. The
    island restores the dark-ground tokens, so the text inside flips back on
    its own. */
-.band-light :is([class*='from-parchment-'], [class*='bg-jerry-green-'], [class*='from-jerry-green-']) {
+.band-light :is(
+  [class*='from-parchment-'],
+  [class*='from-gold-'],
+  [class*='bg-jerry-green-'],
+  [class*='from-jerry-green-']
+) {
   background-image: none;
   background-color: #1e5337;
 
