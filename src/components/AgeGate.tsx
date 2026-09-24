@@ -1,11 +1,16 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useLayoutEffect, useRef } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import CartographicBackground from './CartographicBackground';
 import { detectCountry } from '@/lib/geo';
-import { AGE_VERIFIED_ATTR } from '@/lib/age-gate';
+import { AGE_VERIFIED_ATTR, AGE_VERIFIED_GLOBAL } from '@/lib/age-gate';
+
+// Before paint, not after. The gate has to go while React is still committing,
+// or a verified visitor watches it appear and disappear on every navigation.
+// useEffect on the server is a no-op and warns, so fall back there.
+const useBeforePaint = typeof window === 'undefined' ? useEffect : useLayoutEffect;
 
 const regions = [
   { code: 'GB', name: 'United Kingdom', minAge: 18 },
@@ -26,11 +31,11 @@ interface AgeGateProps {
 
 // Rendered into every gated page's HTML, so an unverified visitor sees the
 // gate in the first paint with no JavaScript needed. The inline script in
-// app/layout.tsx has already marked <html data-age-verified> for anyone who
-// need not see it, and globals.css hides the gate on that; the mount effect
-// below then unmounts it. The region starts at the first entry on both server
-// and client (a cached country would differ between the two and break
-// hydration); detectCountry() corrects it, cache-first, once mounted.
+// app/layout.tsx has already decided for anyone who need not see it, and
+// globals.css hides the gate for the first paint; the layout effect below
+// unmounts it before the next one. The region starts at the first entry on
+// both server and client (a cached country would differ between the two and
+// break hydration); detectCountry() corrects it, cache-first, once mounted.
 export default function AgeGate({ onVerified }: AgeGateProps) {
   const [selectedRegion, setSelectedRegion] = useState(regions[0]);
   const [isVisible, setIsVisible] = useState(true);
@@ -40,12 +45,19 @@ export default function AgeGate({ onVerified }: AgeGateProps) {
   const enterButtonRef = useRef<HTMLButtonElement>(null)
   const rejectionButtonRef = useRef<HTMLButtonElement>(null)
 
-  useEffect(() => {
-    // Already decided before paint: verified visitor or listed crawler.
-    if (document.documentElement.hasAttribute(AGE_VERIFIED_ATTR)) {
+  // Already decided before paint: verified visitor or listed crawler. Read the
+  // window flag, not the <html> attribute — React has just stripped that while
+  // hydrating. Put it back first, so the CSS keeps the gate hidden through the
+  // render this schedules and there is nothing to see either way.
+  useBeforePaint(() => {
+    if ((window as unknown as Record<string, unknown>)[AGE_VERIFIED_GLOBAL]) {
+      document.documentElement.setAttribute(AGE_VERIFIED_ATTR, '');
       setIsVisible(false);
-      return;
     }
+  }, []);
+
+  useEffect(() => {
+    if ((window as unknown as Record<string, unknown>)[AGE_VERIFIED_GLOBAL]) return;
 
     // Prevent body scrolling when age gate is visible
     document.body.style.overflow = 'hidden';
@@ -87,6 +99,7 @@ export default function AgeGate({ onVerified }: AgeGateProps) {
         // Storage may be blocked by browser tracking prevention — proceed anyway
       }
       document.documentElement.setAttribute(AGE_VERIFIED_ATTR, '');
+      (window as unknown as Record<string, unknown>)[AGE_VERIFIED_GLOBAL] = true;
       setIsVisible(false);
       onVerified?.();
     } else {

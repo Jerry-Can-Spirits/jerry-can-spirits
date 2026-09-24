@@ -61,8 +61,19 @@ export function isAgeVerified(cookieValue: string | undefined): boolean {
 }
 
 // Set on <html> before first paint when the visitor is verified or a listed
-// crawler; globals.css hides the gate markup on it, AgeGate.tsx unmounts on it.
+// crawler, so globals.css can hide the gate markup for the first paint.
+//
+// It does not survive hydration. React reconciles <html> to exactly the props
+// the root layout renders and drops everything else, so this attribute (and
+// the 'js' class the scroll-reveal script adds beside it) is gone the moment
+// React attaches. That is what made the gate reappear on every refresh for a
+// verified visitor: the attribute was set, stripped, and then read back as
+// absent. So the decision is also recorded on window, which React cannot
+// touch, and AgeGate reads that.
 export const AGE_VERIFIED_ATTR = 'data-age-verified'
+
+/** Where the inline script records its decision for AgeGate to read. */
+export const AGE_VERIFIED_GLOBAL = '__jcsAgeVerified'
 
 // Browser-side additions to BOT_USER_AGENTS: performance auditors, which
 // should measure the page rather than the gate, and the generic fallbacks the
@@ -86,6 +97,10 @@ export const CLIENT_ONLY_BOT_PATTERNS = [
 // unverified one never sees the content flash. Verified means the cookie, the
 // localStorage flag (older visitors verified before the cookie existed), the
 // isBot cookie the middleware sets, or a user agent on the bot lists.
+//
+// It records the answer twice: the <html> attribute for the CSS, which only
+// has to last until hydration, and the window flag for AgeGate, which has to
+// last afterwards (see AGE_VERIFIED_ATTR).
 export function ageGateInlineScript(): string {
   const escape = (p: string) => p.replace(/[.*+?^${}()|[\]\\/]/g, '\\$&')
   const bots = [...BOT_USER_AGENTS, ...CLIENT_ONLY_BOT_PATTERNS].map(escape).join('|')
@@ -94,7 +109,8 @@ export function ageGateInlineScript(): string {
     `if(/(?:^|; )${AGE_COOKIE}=${AGE_COOKIE_VALUE}(?:;|$)/.test(c)` +
     `||localStorage.getItem('${AGE_COOKIE}')==='${AGE_COOKIE_VALUE}'` +
     '||/(?:^|; )isBot=true(?:;|$)/.test(c)' +
-    `||/${bots}/i.test(u))document.documentElement.setAttribute('${AGE_VERIFIED_ATTR}','')` +
+    `||/${bots}/i.test(u)){document.documentElement.setAttribute('${AGE_VERIFIED_ATTR}','');` +
+    `window.${AGE_VERIFIED_GLOBAL}=true}` +
     '}catch(e){}})()'
   )
 }
