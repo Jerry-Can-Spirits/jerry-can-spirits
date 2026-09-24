@@ -78,7 +78,7 @@ const awardItems: AwardItem[] = [
 
 export default function PressAwards() {
   return (
-    <section className="py-16 bg-jerry-green-900/30">
+    <section className="py-16 band-dark">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         <div className="text-center mb-12">

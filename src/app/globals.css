@@ -590,71 +590,100 @@ html:not([data-age-verified]) body:has(.age-gate) {
   overflow: hidden;
 }
 
-/* 10. Light bands.
-   Every section used to be jerry-green-900 at 30 to 60 percent alpha over the
-   same green, so the page read as one unbroken slab and the eye had nothing
-   to mark progress against while scrolling. A light band breaks it up.
 
-   The contours continue across the join. This layer uses the same artwork as
-   the fixed one behind the dark sections, inked dark instead of gold, and
-   background-attachment: fixed positions it against the viewport rather than
-   the element, so both are showing the same part of the same hillside at the
-   same moment. On iOS, where that attachment is treated as scroll, each band
-   falls back to its own crop of the same map: still real ground, still no
-   repeating tile, just not continuous across the boundary.
+/* 10. Bands.
+   Every section used to be jerry-green-900 at 30 to 60 percent alpha over a
+   fixed background, so the whole page was one green with the contours dimly
+   behind it and nothing to mark progress against while scrolling. A section
+   is now one thing or the other: `band-dark` or `band-light`. Both paint
+   their own ground and carry their own copy of the contours, so there is no
+   alpha soup left to tune.
 
-   The rules below exist because every section inside a band is written for a
-   dark ground. Rather than fork each component, the band restates the colour
-   families they draw from. They match on the family rather than on each
-   utility, so a component reaching for a new shade of the same thing is
-   carried without anyone having to remember this file. */
+   The contours run through the joins. Both bands use background-attachment:
+   fixed, which positions the artwork against the viewport rather than the
+   element, so every band is showing the same part of the same hillside at
+   the same moment and a line leaving one section arrives in the next. On
+   iOS, where that attachment is treated as scroll, each band falls back to
+   its own crop: still real ground, still no repeating tile, just not
+   continuous across the boundary.
+
+   A light band re-points the colour tokens rather than restating utilities.
+   Tailwind compiles `text-parchment-300` to `color: var(--color-parchment-300)`,
+   so moving the variable moves every utility that draws on it: text, borders,
+   gradients, hovers, and any shade a component reaches for later without
+   anyone having to remember this file. */
+.band-dark,
+.band-light {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+.band-dark {
+  background-color: #1a442e;
+  background-image: url('/images/topography.svg');
+}
+
 .band-light {
   background-color: #e8e6df;
   background-image: url('/images/topography-ink.svg');
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed;
-  color: #1a442e;
-}
-
-.band-light :is(.text-white, [class*='text-parchment-']) {
-  color: #3d4a43;
-}
-.band-light :is(h1, h2, h3, h4, .font-bold, .font-semibold):is(.text-white, [class*='text-parchment-']) {
   color: #163b28;
-}
-.band-light [class*='text-gold-'] {
-  color: #a4560a;
+
+  /* Ink, in descending weight. What was near-white is now near-black. */
+  --color-white: #163b28;
+  --color-parchment-50: #163b28;
+  --color-parchment-100: #1e3529;
+  --color-parchment-200: #3d4a43;
+  --color-parchment-300: #3d4a43;
+  --color-parchment-400: #56625b;
+  --color-parchment-500: #6b7770;
+
+  /* Gold reads as washed-out yellow on cream, so the accent shades become a
+     dark amber. Measured, not picked: #7d4106 is 6.4:1 against the band and
+     still 4.6:1 where a contour line runs under it, so it passes AA wherever
+     it lands. The first try, #a4560a, was 4.3:1 on the clean band and 3.1:1
+     over a line, which is why the contours on a light band are drawn lighter
+     than the gold ones on a dark one. 500 and above are left alone: those are
+     the solid buy buttons, and the one thing that must not change colour is
+     the thing people click. */
+  --color-gold-200: #7d4106;
+  --color-gold-300: #7d4106;
+  --color-gold-400: #7d4106;
+
+  /* Hairlines that were pale gold on dark need to be dark on light. The
+     green tokens are deliberately left alone: anything reaching for them is
+     drawing a green thing, and a green thing on cream should stay green. */
+  --color-gold-500: #8a6a2a;
 }
 
-/* Panels are a pale wash on the dark ground. On a light one they have to be
-   lighter than what surrounds them, not darker. */
-.band-light :is(
-  [class*='bg-jerry-green-'],
-  [class*='from-parchment-'],
-  [class*='from-gold-'],
-  [class*='bg-gold-500/'],
-  [class*='bg-gold-600/']
-) {
+/* Panels inside a light band go green rather than white: a white card on
+   cream is barely a card, and the brand colour does the work instead. The
+   island restores the dark-ground tokens, so the text inside flips back on
+   its own. */
+.band-light :is([class*='from-parchment-'], [class*='bg-jerry-green-'], [class*='from-jerry-green-']) {
   background-image: none;
-  background-color: rgba(255, 255, 255, 0.6);
-}
-.band-light :is([class*='border-gold-'], [class*='border-jerry-green-']) {
-  border-color: rgba(26, 68, 46, 0.16);
-}
-.band-light [class*='hover:border-gold-']:hover {
-  border-color: rgba(26, 68, 46, 0.34);
-}
-.band-light [class*='divide-gold-'] > * + * {
-  border-color: rgba(26, 68, 46, 0.16);
+  background-color: #1e5337;
+
+  --color-white: #fefdfb;
+  --color-parchment-50: #fefdfb;
+  --color-parchment-100: #fcf9f3;
+  --color-parchment-200: #f7f1e3;
+  --color-parchment-300: #f1e7d0;
+  --color-parchment-400: #e9d8b7;
+  --color-parchment-500: #dfc396;
+  --color-gold-200: #fde68a;
+  --color-gold-300: #fcd34d;
+  --color-gold-400: #fbbf24;
+  --color-gold-500: #f59e0b;
+  --color-jerry-green-700: #236842;
+  --color-jerry-green-800: #1e5337;
+  color: #fefdfb;
 }
 
-/* Two things keep their own colour: the buy button, and any logo sitting on
-   the white plate it was given for contrast on the dark ground. */
-.band-light :is([class~='bg-gold-500'], [class~='bg-gold-600']) {
-  background-color: #f59e0b;
-  color: #163b28;
-}
-.band-light .bg-white {
+/* The logo plates are white on purpose, for contrast against whatever they
+   sit on. They stay white on both. */
+.band-light .bg-white,
+.band-dark .bg-white {
   background-color: #ffffff;
 }
