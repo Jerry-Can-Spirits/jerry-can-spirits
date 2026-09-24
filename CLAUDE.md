@@ -45,8 +45,8 @@ Five documents govern work here. This file is the working contract; read the oth
 ### Key Architecture Decisions
 - Checkout is on Shopify's domain (headless) — not Next.js
 - Field Manual content (cocktails, ingredients, equipment) lives in Sanity CMS
-- Product FAQ is stored in Shopify metafields, not in code
-- Cache headers are set in both `public/_headers` (Cloudflare edge) and `next.config.ts`
+- FAQs live in Sanity, on the document they belong to: the `faqs` array on `product`, and the same field on cocktails, ingredients, equipment and guides. `FAQAccordion` renders them all; `ProductFAQ` wraps it to add the FAQPage JSON-LD. Not Shopify metafields, which this file claimed until 2026-09-24 although the July SEO audit had already recorded the correction.
+- Caching is four layers, not two. Response headers come from `next.config.ts` and `public/_headers`. The Worker keeps its own edge cache (`cloudflare-worker-entry.mjs` with `src/lib/edge-cache.ts`), keyed on the build id since 2026-09-24 because a URL-keyed entry survived a deploy and served HTML naming a stylesheet that no longer existed. Under those, OpenNext holds an R2 incremental cache and a D1 tag cache (`open-next.config.ts`, #1252). When something serves stale, work out which of the four before changing any of them.
 - `longDescription` portable text is rendered via `src/components/FieldManualPortableText.tsx`
 - `trailingSlash: true`: every internal link and JSON-LD URL must end in `/` (e.g. `/shop/product/<handle>/`, `/shop/<collection>/`) or it 308-redirects and wastes crawl budget. The same applies to `revalidatePath`: a cached page's tag is its rendered path with the slash, so `revalidatePath('/guides')` matches nothing and `revalidatePath('/guides/')` refreshes the page (the `'/shop/[collection]', 'page'` form is the exception; route-pattern tags carry no slash)
 

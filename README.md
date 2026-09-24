@@ -29,7 +29,7 @@ Comprehensive project documentation is available in the [`/docs`](./docs) direct
 
 ### Prerequisites
 
-- Node.js 22.13.0 (see `.node-version`)
+- Node.js 24.12.0 (`.nvmrc` and `.node-version` agree, and `package.json` engines requires it)
 - npm
 
 ### Installation
@@ -39,7 +39,7 @@ Comprehensive project documentation is available in the [`/docs`](./docs) direct
 npm install
 
 # Set up environment variables (copy from a colleague or the project's secret store)
-cp .env.local.example .env.local
+cp .env.example .env.local
 
 # Run the development server
 npm run dev

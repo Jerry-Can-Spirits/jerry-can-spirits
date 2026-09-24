@@ -1,8 +1,13 @@
 # Shopify Integration Setup Guide
 
-## Current Status: 95% Complete ✅
+## Status
 
-Your Next.js site is **fully integrated** with Shopify. The code is complete and working. You just need to configure your Shopify store properly.
+The shop went live on 6 April 2026 and the integration described here is done.
+Steps 1, 2, 4 and 6 to 8 are still the reference for how the store is
+configured. Steps 3 and 5 are about standing up pre-orders before launch and
+are kept as a record of how it was set up, not as work to do.
+
+Corrected 2026-09-24: the first collection's handle is `spirits`, not `drinks`.
 
 ---
 
@@ -44,11 +49,15 @@ NEXT_PUBLIC_SHOPIFY_STOREFRONT_ACCESS_TOKEN=your_storefront_access_token
 
 Your site expects **3 collections** with specific handles:
 
-### Collection 1: Drinks (Premium Rum)
-- **Handle:** `drinks` (exactly this, lowercase)
+### Collection 1: Spirits
+- **Handle:** `spirits` (exactly this, lowercase)
 - **Collection Type:** Manual
 - **Visibility:** Online Store
 - **Description:** "Premium British rum from Jerry Can Spirits"
+
+This handle is what `src/app/shop/spirits/page.tsx` asks for. The doc said
+`drinks` until 2026-09-24; there has never been a `drinks` collection or a
+`/shop/drinks` route.
 
 ### Collection 2: Barware
 - **Handle:** `barware` (exactly this, lowercase)
@@ -65,7 +74,7 @@ Your site expects **3 collections** with specific handles:
 **How to Create:**
 1. Shopify Admin → Products → Collections
 2. Click "Create collection"
-3. Enter title (e.g., "Drinks")
+3. Enter title (e.g., "Spirits")
 4. Click "Edit SEO" → Set handle to exact name above
 5. Save
 
@@ -102,7 +111,7 @@ For your April 2026 launch, you'll want to set up pre-order products.
    - Price: Set your pre-order price
    - Inventory: Set to 0 (or use app to override)
    - **Tags:** Add `pre-order`, `drinks`, `rum`, `spiced`
-   - **Collections:** Add to "Drinks" collection
+   - **Collections:** Add to "Spirits" collection
 
 2. **Allow Overselling (Manual Method):**
    - Click product → Variants
@@ -138,7 +147,7 @@ Your site checks `availableForSale` from Shopify. Make sure:
    - OR set quantity > 0 with tracking on
 
 **To Test:**
-- Create a test product in "Drinks" collection
+- Create a test product in "Spirits" collection
 - Set availability to "Active"
 - Add product image
 - Save
@@ -155,8 +164,8 @@ Your site checks `availableForSale` from Shopify. Make sure:
    ```
 
 2. **Visit pages:**
-   - `http://localhost:3000/shop/drinks`
-   - Should show products from your "drinks" collection
+   - `http://localhost:3000/shop/spirits`
+   - Should show products from your "spirits" collection
    - If you see "No Products Found" → Check collection handle and product visibility
 
 3. **Test Add to Cart:**
@@ -172,8 +181,8 @@ Your site checks `availableForSale` from Shopify. Make sure:
 
 ### Production Testing:
 
-After deploying to Cloudflare Pages:
-1. Visit `https://jerrycanspirits.co.uk/shop/drinks`
+After deploying (the site runs as a Cloudflare Worker via OpenNext, not Pages):
+1. Visit `https://jerrycanspirits.co.uk/shop/spirits`
 2. Verify products load
 3. Test add-to-cart
 4. Test checkout flow
@@ -240,7 +249,7 @@ After deploying to Cloudflare Pages:
 ### End-to-End Test:
 
 1. **Add Pre-Order Product to Cart**
-   - jerrycanspirits.co.uk/shop/drinks
+   - jerrycanspirits.co.uk/shop/spirits
    - Click product → Add to Cart
 
 2. **Review Cart**
@@ -270,10 +279,10 @@ After deploying to Cloudflare Pages:
 
 ## Common Issues & Fixes
 
-### Issue: "No Products Found" on /shop/drinks
+### Issue: "No Products Found" on /shop/spirits
 
 **Fix:**
-- Check collection handle is exactly `drinks` (lowercase)
+- Check collection handle is exactly `spirits` (lowercase)
 - Verify product is in the collection
 - Check product status is "Active"
 - Verify Online Store sales channel is enabled
@@ -342,9 +351,9 @@ After deploying to Cloudflare Pages:
 
 **Immediate (This Week):**
 - [ ] Verify `.env.local` has correct Shopify credentials
-- [ ] Create 3 collections (drinks, barware, clothing)
-- [ ] Add 1 test product to "drinks" collection
-- [ ] Test locally: `npm run dev` → visit `/shop/drinks`
+- [ ] Create 3 collections (spirits, barware, clothing)
+- [ ] Add 1 test product to "spirits" collection
+- [ ] Test locally: `npm run dev` → visit `/shop/spirits`
 - [ ] Test add-to-cart and checkout flow
 
 **Before Launch (January-March 2026):**

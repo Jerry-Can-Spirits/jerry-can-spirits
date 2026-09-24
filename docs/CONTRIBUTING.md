@@ -83,19 +83,25 @@ never as verified. The data lives in Workers Logs, reachable at
 `POST /accounts/{account}/workers/observability/telemetry/query` with the
 standard API token; zone analytics needs a scope the token does not have.
 
-**`dynamicParams = false` 404s every page it is meant to serve.** The site
-configures no incremental cache (`open-next.config.ts` is
-`defineCloudflareConfig({})`, and both deploy logs read *"Incremental cache does
-not need populating"*), so nothing is served from one: every response carries
-`x-nextjs-cache: MISS` and re-renders at the edge. Routes with
-`dynamicParams = true` do not notice, because a miss falls through to an
-on-demand render. With `dynamicParams = false`, Next serves only what it can
-confirm was prerendered, that confirmation is unreachable, and the route 404s
-for everyone. Forty-five facet pages shipped that way in #1088 and stayed dead
-through #1090. Keep `dynamicParams` true on this platform and enforce the
+**`dynamicParams = false` 404s every page it is meant to serve.** Forty-five
+facet pages shipped that way in #1088 and stayed dead through #1090. With
+`dynamicParams = false`, Next serves only what it can confirm was prerendered;
+that confirmation was unreachable, so the route 404d for everyone. Routes with
+`dynamicParams = true` did not notice, because a miss falls through to an
+on-demand render. Keep `dynamicParams` true on this platform and enforce the
 unknown-value 404 inside the component with `notFound()`. Note what that moves:
 guards the router used to make unreachable are now reachable, so a page number
 arriving as `NaN` needs its own check.
+
+The reason that confirmation was unreachable has since changed, and the rule
+has not been re-tested against the new arrangement. When this was found the
+site configured no incremental cache at all: `open-next.config.ts` was
+`defineCloudflareConfig({})`, both deploy logs read *"Incremental cache does not
+need populating"*, and every response carried `x-nextjs-cache: MISS`. Since
+#1252 there is a real one, an R2 incremental cache behind a regional cache,
+a D1 tag cache and `enableCacheInterception`. Treat the rule as the safe
+default rather than a proven consequence, and if you have cause to revisit it,
+measure it rather than reasoning from this paragraph.
 
 **Build variables live on the trigger, not the Worker.** Reconnecting the Git
 integration creates fresh triggers with no variables, and `NEXT_PUBLIC_*`
