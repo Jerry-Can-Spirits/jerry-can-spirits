@@ -521,7 +521,7 @@ export default function Footer() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="border-t border-jerry-green-700 bg-jerry-green-950/50">
+        <div className="border-t border-jerry-green-700 bg-jerry-green-950">
           <div className="max-w-none mx-auto px-8 sm:px-12 lg:px-16 xl:px-20 py-6">
             <div className="max-w-(--breakpoint-2xl) mx-auto">
             <div className="flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0">

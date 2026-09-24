@@ -63,10 +63,15 @@ export default async function PullQuoteStrip() {
 
   return (
     <section
-      aria-label="Customer reviews"
-      className="border-t border-b border-gold-500/20 bg-jerry-green-900/60 py-14 sm:py-16"
+      aria-labelledby="reviews-heading"
+      className="border-t border-b border-gold-500/20 band-dark py-14 sm:py-16"
     >
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-10">
+          <h2 id="reviews-heading" className="text-3xl md:text-4xl font-serif font-bold text-white">
+            What people say.
+          </h2>
+        </div>
         <ScrollRow
           ariaLabel="Customer reviews"
           cols="md:grid-cols-2 md:gap-x-12 md:gap-y-10"

@@ -22,7 +22,7 @@ export default function MedalBar() {
   const judgesNote = PRODUCT_AWARDS.find((award) => award.judgesNote)?.judgesNote
 
   return (
-    <section aria-label="IWSC 2026 results" className="bg-jerry-green-900/60 border-y border-gold-500/20">
+    <section aria-label="IWSC 2026 results" className="band-dark border-y border-gold-500/20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex flex-col lg:flex-row items-center gap-6 lg:gap-12">
           <div className="flex flex-col sm:flex-row items-center gap-6 sm:gap-10 shrink-0">

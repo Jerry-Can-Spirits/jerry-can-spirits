@@ -65,7 +65,7 @@ export default async function OrderSection() {
   const bottleUnitPrice = bottlePrice ? (parseFloat(bottlePrice) / BOTTLE_VOLUME_LITRES).toFixed(2) : null
 
   return (
-    <section className="py-16 bg-jerry-green-900/50">
+    <section className="py-16 band-light">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Left Column - Product Image. Desktop only: as the closing ask

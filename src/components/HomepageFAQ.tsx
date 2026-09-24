@@ -58,7 +58,7 @@ export default function HomepageFAQ() {
   }
 
   return (
-    <section className="py-16 bg-jerry-green-900/50 overflow-x-hidden">
+    <section className="py-16 band-dark overflow-x-hidden">
       {/* FAQ Schema markup */}
       <script
         type="application/ld+json"
