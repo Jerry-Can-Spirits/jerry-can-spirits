@@ -483,66 +483,62 @@ export async function getProduct(handle: string): Promise<ShopifyProduct | null>
 }
 
 // Fetch multiple products by handle in a single GraphQL call (used by CartUpsell)
-export async function getProductsByHandles(handles: string[]): Promise<ShopifyProduct[]> {
-  if (handles.length === 0) return []
-
-  const queryFilter = handles.map(h => `handle:${h}`).join(' OR ')
-  const query = `
-    query GetProductsByHandles($query: String!, $first: Int!) {
-      products(first: $first, query: $query) {
-        edges {
-          node {
-            id
-            title
-            handle
-            priceRange {
-              minVariantPrice {
-                amount
-                currencyCode
-              }
-            }
-            images(first: 1) {
-              edges {
-                node {
-                  url
-                  altText
-                }
-              }
-            }
-            variants(first: 10) {
-              edges {
-                node {
-                  id
-                  title
-                  price {
-                    amount
-                    currencyCode
-                  }
-                  availableForSale
-                  image {
-                    url
-                    altText
-                  }
-                }
-              }
-            }
-          }
+/**
+ * Build the aliased query that fetches several products by handle at once.
+ *
+ * Exported so the test can read it, because the shape is the whole point. The
+ * previous version asked `products(query: "handle:a OR handle:b")`, which the
+ * Storefront API does not honour. Measured against the live shop on 24 Sep
+ * 2026: that filter returned the entire catalogue in store order, quoted or
+ * not, so asking for two products handed back whichever two come first. The
+ * rum's six-pack sits sixteenth, which is why it never appeared under "Ways
+ * to buy" on any page but its own.
+ */
+export function productsByHandlesQuery(handles: string[]): string {
+  const fields = `
+    id
+    title
+    handle
+    priceRange { minVariantPrice { amount currencyCode } }
+    images(first: 1) { edges { node { url altText } } }
+    variants(first: 10) {
+      edges {
+        node {
+          id
+          title
+          price { amount currencyCode }
+          availableForSale
+          image { url altText }
         }
       }
     }
   `
+  // JSON.stringify escapes each handle into a GraphQL string literal. Handles
+  // are Shopify's own slugs, but this is still a query built from data.
+  const aliases = handles
+    .map((h, i) => `  p${i}: product(handle: ${JSON.stringify(h)}) {${fields}  }`)
+    .join('\n')
+  return `query GetProductsByHandles {\n${aliases}\n}`
+}
+
+export async function getProductsByHandles(handles: string[]): Promise<ShopifyProduct[]> {
+  if (handles.length === 0) return []
 
   try {
-    const { data, errors } = await getClient().request(query, {
-      variables: { query: queryFilter, first: handles.length },
-    })
+    const { data, errors } = await getClient().request(productsByHandlesQuery(handles))
     if (errors) throw new Error('Failed to fetch products by handles')
-    return data.products.edges.map((edge: ProductEdge) => ({
-      ...edge.node,
-      images: edge.node.images.edges.map((img: ImageEdge) => img.node),
-      variants: edge.node.variants?.edges.map((v: VariantEdge) => v.node) ?? [],
-      metafields: [],
-    }))
+    // One alias per handle, in the order asked for. A handle that does not
+    // resolve comes back null and is dropped, rather than shifting the rest.
+    const byAlias = data as Record<string, ProductEdge['node'] | null>
+    return handles
+      .map((_, i) => byAlias[`p${i}`])
+      .filter((node): node is ProductEdge['node'] => Boolean(node))
+      .map((node) => ({
+        ...node,
+        images: node.images.edges.map((img: ImageEdge) => img.node),
+        variants: node.variants?.edges.map((v: VariantEdge) => v.node) ?? [],
+        metafields: [],
+      }))
   } catch (error) {
     console.error('Error fetching products by handles:', error)
     return []

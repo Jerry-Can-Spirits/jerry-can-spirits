@@ -21,8 +21,8 @@ export const RUM_FORMATS: ProductFormat[] = [
   },
   {
     handle: 'jerry-can-spirits-expedition-pack-spiced-rum-6-bottles',
-    label: 'Six-pack',
-    note: 'Six bottles, one case',
+    label: 'Six bottles',
+    note: 'One case',
   },
   {
     handle: 'jerry-can-spirits-premium-gift-pack',
