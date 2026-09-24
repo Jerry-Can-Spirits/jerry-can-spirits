@@ -118,6 +118,12 @@ adopted: the choose-your-number mechanic.
 Primary nav: **Shop · Our Rum · Our Story · Trade · Field Manual** — five
 items, selling first, Field Manual last.
 
+Revised 24 September 2026, once the gift budget pages existed: **Shop ·
+Gifts · Our Rum · Field Manual · Trade**. Gifts takes the gift pages out of
+the Shop dropdown; Our Story folds under Our Rum, with the long tail
+(Ethos, Sustainability, Friends, Press, First Pour) in a footer-only About
+group. Clothing leaves the nav until there is something to buy.
+
 - /ethos/, /sustainability/, /giving/ → one reassurance destination (fold
   into the story page or a single "what we stand for" page). Three pages,
   one job.

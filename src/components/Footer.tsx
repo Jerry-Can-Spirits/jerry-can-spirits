@@ -26,23 +26,34 @@ export default function Footer() {
     }
   }
 
-  // Footer accordions mirror the five header titles, so the same label
-  // means the same territory everywhere. Company is the utility tail.
+  // Footer accordions mirror the header, so the same label means the same
+  // territory everywhere: the five header items with their dropdown links,
+  // then About for the long tail the header no longer carries, then Company
+  // as the utility tail.
   const quickLinkGroups = [
     {
       label: 'Shop',
       links: [
         { name: 'Expedition Spiced Rum', href: '/shop/spiced-rum/' },
-        { name: 'Rum Gifts', href: '/shop/rum-gifts/' },
-        { name: 'Rum Gifts for Him', href: '/shop/gifts-for-him/' },
-        { name: 'Rum Gifts for Her', href: '/shop/gifts-for-her/' },
         { name: 'Cocktail Making Kits', href: '/shop/cocktail-making-kits/' },
         { name: 'Bar Accessories', href: '/shop/bar-accessories/' },
         { name: 'Rum Glasses', href: '/shop/rum-glasses/' },
-        { name: 'Clothing', href: '/shop/clothing/' },
         { name: 'Browse All', href: '/shop/' },
         { name: 'Stockists', href: '/stockists/' },
         { name: 'Reviews', href: '/reviews/' },
+      ]
+    },
+    {
+      label: 'Gifts',
+      links: [
+        { name: 'Rum Gifts', href: '/shop/rum-gifts/' },
+        { name: 'Under £20', href: '/shop/gifts-under-20/' },
+        { name: 'Under £50', href: '/shop/gifts-under-50/' },
+        { name: 'Under £100', href: '/shop/gifts-under-100/' },
+        { name: 'Gift Sets', href: '/shop/gift-sets/' },
+        { name: 'Rum Gifts for Him', href: '/shop/gifts-for-him/' },
+        { name: 'Rum Gifts for Her', href: '/shop/gifts-for-her/' },
+        { name: 'How to Choose a Rum Gift', href: '/guides/how-to-choose-a-rum-gift/' },
       ]
     },
     {
@@ -52,28 +63,11 @@ export default function Footer() {
         { name: 'What’s In It', href: '/ingredients/' },
         // The page's own h1 — one name for one thing, in customer language.
         { name: 'Check Your Bottle', href: '/batch/' },
-      ]
-    },
-    {
-      label: 'Our Story',
-      links: [
         { name: 'Our Story', href: '/about/story/' },
         { name: 'Meet the Team', href: '/about/team/' },
-        { name: 'Ethos', href: '/ethos/' },
-        { name: 'Sustainability', href: '/sustainability/' },
-        { name: 'Friends & Partners', href: '/friends/' },
         { name: 'Where the 5% Goes', href: '/giving/' },
         { name: 'The Expedition Log', href: '/expedition-log/' },
-        { name: 'Press & Media', href: '/contact/media/' },
-        { name: 'First Pour Book', href: '/first-pour/' },
         { name: 'FAQ', href: '/faq/' },
-      ]
-    },
-    {
-      label: 'Trade',
-      links: [
-        { name: 'Trade Portal', href: '/trade/' },
-        { name: 'Apply for an Account', href: '/trade/apply/' },
       ]
     },
     {
@@ -85,6 +79,23 @@ export default function Footer() {
         { name: 'Equipment', href: '/field-manual/equipment/' },
         { name: 'Ingredients', href: '/field-manual/ingredients/' },
         { name: 'Guides', href: '/guides/' },
+      ]
+    },
+    {
+      label: 'Trade',
+      links: [
+        { name: 'Trade Portal', href: '/trade/' },
+        { name: 'Apply for an Account', href: '/trade/apply/' },
+      ]
+    },
+    {
+      label: 'About',
+      links: [
+        { name: 'Ethos', href: '/ethos/' },
+        { name: 'Sustainability', href: '/sustainability/' },
+        { name: 'Friends & Partners', href: '/friends/' },
+        { name: 'Press & Media', href: '/contact/media/' },
+        { name: 'First Pour Book', href: '/first-pour/' },
       ]
     },
     {
