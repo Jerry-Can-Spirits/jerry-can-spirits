@@ -1,8 +1,11 @@
-// Server-enforced age verification — shared rules so middleware, /api/checkout
-// and /age-check cannot drift apart. The cookie itself is set client-side by
-// AgeGate.tsx (non-HttpOnly, so the browser can set it and the server can read
-// it); this module only reads and reasons about it, it does not change how it
-// is set.
+// Age verification, shared rules. The page gate is an overlay in every page's
+// HTML (components/AgeGate.tsx), decided before first paint by the inline
+// script this module builds (ageGateInlineScript, placed by app/layout.tsx):
+// the same HTML serves everyone, so pages cache at the edge and unfurl for
+// link previews without a redirect hop. The middleware only classifies bots;
+// /api/checkout enforces the cookie, which is the hard gate. The cookie itself
+// is set client-side by AgeGate.tsx (non-HttpOnly, so the browser can set it
+// and the server can read it); this module only reads and reasons about it.
 
 export const AGE_COOKIE = 'ageVerified'
 export const AGE_COOKIE_VALUE = 'true'
@@ -55,6 +58,45 @@ export function isAgeExcludedPath(pathname: string): boolean {
 
 export function isAgeVerified(cookieValue: string | undefined): boolean {
   return cookieValue === AGE_COOKIE_VALUE
+}
+
+// Set on <html> before first paint when the visitor is verified or a listed
+// crawler; globals.css hides the gate markup on it, AgeGate.tsx unmounts on it.
+export const AGE_VERIFIED_ATTR = 'data-age-verified'
+
+// Browser-side additions to BOT_USER_AGENTS: performance auditors, which
+// should measure the page rather than the gate, and the generic fallbacks the
+// client-side check has always carried. Never used server-side, where a bare
+// "bot" would match too much.
+export const CLIENT_ONLY_BOT_PATTERNS = [
+  'lighthouse',
+  'chrome-lighthouse',
+  'pagespeed',
+  'gtmetrix',
+  'headlesschrome',
+  'phantomjs',
+  'prerender',
+  'crawl',
+  'spider',
+  'bot',
+]
+
+// The synchronous script app/layout.tsx places first in <head>. It runs before
+// any CSS applies, so a verified visitor never sees the gate flash and an
+// unverified one never sees the content flash. Verified means the cookie, the
+// localStorage flag (older visitors verified before the cookie existed), the
+// isBot cookie the middleware sets, or a user agent on the bot lists.
+export function ageGateInlineScript(): string {
+  const escape = (p: string) => p.replace(/[.*+?^${}()|[\]\\/]/g, '\\$&')
+  const bots = [...BOT_USER_AGENTS, ...CLIENT_ONLY_BOT_PATTERNS].map(escape).join('|')
+  return (
+    '(function(){try{var c=document.cookie,u=navigator.userAgent;' +
+    `if(/(?:^|; )${AGE_COOKIE}=${AGE_COOKIE_VALUE}(?:;|$)/.test(c)` +
+    `||localStorage.getItem('${AGE_COOKIE}')==='${AGE_COOKIE_VALUE}'` +
+    '||/(?:^|; )isBot=true(?:;|$)/.test(c)' +
+    `||/${bots}/i.test(u))document.documentElement.setAttribute('${AGE_VERIFIED_ATTR}','')` +
+    '}catch(e){}})()'
+  )
 }
 
 // Return targets must be same-origin absolute paths. Reject external URLs and

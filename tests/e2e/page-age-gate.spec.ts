@@ -1,72 +1,68 @@
 import { test, expect, APIRequestContext } from '@playwright/test'
 
-// The page-level age gate, enforced in src/middleware.ts: a top-level GET to a
-// gated path without a verified cookie is redirected to /age-check before the
-// page renders. Middleware only runs on the OpenNext/workerd preview (or a real
-// deploy), not `next start`, so playwright.config points the webServer at the
-// preview. Requests carry no sec-fetch-dest / rsc headers, so the middleware
-// treats them as top-level document navigations, exactly what the gate targets.
+// The page-level age gate is an overlay carried in every gated page's HTML and
+// decided before first paint by the inline script in app/layout.tsx (see
+// src/lib/age-gate.ts). Nothing is redirected: the same HTML serves verified and
+// unverified visitors, crawlers included. These pin that, and the paths that
+// must never carry a gate at all. The browser-level behaviour (the overlay
+// appears, "Yes, Enter" dismisses it) is in age-gate.spec.ts.
 const GOOGLEBOT = 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)'
 const VERIFIED = { cookie: 'ageVerified=true' }
-const isRedirect = (s: number) => [301, 302, 307, 308].includes(s)
+const GATE_HEADING = 'WELCOME, EXPLORER'
 
 async function hop(request: APIRequestContext, path: string, headers: Record<string, string> = {}) {
   const res = await request.get(path, { maxRedirects: 0, headers })
-  return { status: res.status(), loc: res.headers()['location'] ?? '' }
+  return { status: res.status(), loc: res.headers()['location'] ?? '', body: await res.text() }
 }
 
-test.describe('Page-level age gate (middleware)', () => {
-  test('unverified content page redirects to the gate with a return path', async ({ request }) => {
-    const { status, loc } = await hop(request, '/shop/')
-    expect(isRedirect(status)).toBe(true)
-    expect(loc).toContain('/age-check')
-    expect(decodeURIComponent(loc)).toContain('/shop/') // the return path, so the visitor lands back where they were
-  })
-
-  test('verified visitor is not gated', async ({ request }) => {
-    const { status } = await hop(request, '/shop/', VERIFIED)
+test.describe('Page-level age gate (overlay in the page)', () => {
+  test('unverified content page is served with the gate in its HTML', async ({ request }) => {
+    const { status, loc, body } = await hop(request, '/shop/')
     expect(status).toBe(200)
+    expect(loc).toBe('')
+    expect(body).toContain(GATE_HEADING)
+    expect(body).toContain('data-age-verified') // the inline script that decides before paint
   })
 
-  test('search crawler is allowed through to index, no cookie needed', async ({ request }) => {
-    const { status } = await hop(request, '/shop/', { 'user-agent': GOOGLEBOT })
+  test('verified visitor gets the same page, not a redirect', async ({ request }) => {
+    const { status, loc } = await hop(request, '/shop/', VERIFIED)
     expect(status).toBe(200)
+    expect(loc).toBe('')
   })
 
-  test('the gate route does not redirect to itself (no loop)', async ({ request }) => {
+  test('search crawler is served the content, flagged as a bot', async ({ request }) => {
+    const res = await request.get('/shop/', { maxRedirects: 0, headers: { 'user-agent': GOOGLEBOT } })
+    expect(res.status()).toBe(200)
+    expect(res.headers()['x-is-bot']).toBe('true')
+  })
+
+  test('the legacy gate route still answers', async ({ request }) => {
     const { status } = await hop(request, '/age-check/')
     expect(status).toBe(200)
   })
 
-  // Excluded paths must never be redirected to the gate. Getting this wrong
-  // either breaks indexing (robots/sitemap) or the law (a minor may read the
-  // legal pages, and the trade portal has its own auth).
-  const excluded = ['/robots.txt', '/sitemap.xml', '/privacy-policy/', '/terms-of-service/', '/cookie-policy/']
+  // These paths must never carry the gate. Getting this wrong either breaks
+  // indexing (robots/sitemap) or the law (a minor may read the legal pages, and
+  // the trade portal has its own auth).
+  const excluded = ['/privacy-policy/', '/terms-of-service/', '/cookie-policy/']
   for (const path of excluded) {
-    test(`not gated: ${path}`, async ({ request }) => {
-      const { status, loc } = await hop(request, path)
-      expect(loc).not.toContain('/age-check')
-      expect(status).toBeLessThan(400)
+    test(`no gate on ${path}`, async ({ request }) => {
+      const { status, body } = await hop(request, path)
+      expect(status).toBe(200)
+      expect(body).not.toContain(GATE_HEADING)
     })
   }
 
-  test('API routes are not gated by middleware', async ({ request }) => {
-    // /api/geo is a plain GET data route: middleware excludes /api/ wholesale, so
-    // the Shopify webhook, cart and search endpoints are never redirected to the
-    // gate. (/api/checkout enforces verification itself; that is covered in
-    // checkout-age-gate.spec.ts.)
+  test('API routes are untouched', async ({ request }) => {
+    // /api/geo is a plain GET data route. (/api/checkout enforces verification
+    // itself; that is covered in checkout-age-gate.spec.ts.)
     const { status, loc } = await hop(request, '/api/geo/')
-    expect(loc).not.toContain('/age-check')
+    expect(loc).toBe('')
     expect(status).toBe(200)
   })
 })
 
-// The files that exist for crawlers must answer 200 with no age cookie. These
-// pin the response, not the serving mechanism: /llms.txt moved from a static
-// file in public/ to a route and started 307ing to the gate, because static
-// assets bypass the middleware entirely and a route does not. /manifest.json
-// is in the same position today — static, and therefore exempt by accident
-// rather than by the exclusion list until that was corrected.
+// The files that exist for crawlers must answer 200 with no age cookie.
 test.describe('crawler-facing files are never age-gated', () => {
   const CRAWLER_PATHS = [
     '/robots.txt',

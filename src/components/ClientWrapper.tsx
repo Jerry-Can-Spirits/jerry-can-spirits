@@ -1,75 +1,46 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 import AgeGate from './AgeGate';
 import { captureUtmParams } from '@/lib/utm';
 import { isPourIqAppRoute } from '@/lib/trade-portal/nav';
+import { AGE_COOKIE, AGE_COOKIE_VALUE } from '@/lib/age-gate';
 
 interface ClientWrapperProps {
   children: React.ReactNode;
 }
 
-// Known bot user agents - check client-side as fallback
-const BOT_PATTERNS = [
-  'googlebot', 'bingbot', 'slurp', 'duckduckbot', 'baiduspider', 'yandexbot',
-  'facebot', 'ia_archiver', 'semrushbot', 'ahrefsbot', 'mj12bot', 'dotbot',
-  'rogerbot', 'screaming frog', 'sitebulb', 'deepcrawl', 'oncrawl', 'seobilitybot',
-  'serpstatbot', 'dataforseo', 'surfer bot', 'surfer', 'twitterbot', 'linkedinbot', 'pinterestbot',
-  'whatsapp', 'telegrambot', 'w3c_validator', 'lighthouse', 'pagespeed', 'gtmetrix',
-  'mediapartners-google', 'adsbot-google', 'apis-google', 'google-inspectiontool',
-  'chrome-lighthouse', 'headlesschrome', 'phantomjs', 'prerender', 'crawl', 'spider', 'bot'
-];
-
-// Check if the request is from a known bot
-function checkIsBot(): boolean {
-  if (typeof window === 'undefined') return false;
-
-  const ua = navigator.userAgent.toLowerCase();
-  return BOT_PATTERNS.some(pattern => ua.includes(pattern));
-}
-
+// Whether a visitor sees the gate is decided before first paint by the inline
+// script in app/layout.tsx (cookie, storage, bot list) and acted on by
+// AgeGate.tsx. This wrapper only decides which routes carry the gate at all.
 export default function ClientWrapper({ children }: ClientWrapperProps) {
-  const [isReady, setIsReady] = useState(false);
-  const [isAgeVerified, setIsAgeVerified] = useState(false);
-  const [isBot, setIsBot] = useState(false);
   const pathname = usePathname();
-
-  const handleAgeVerification = () => {
-    setIsAgeVerified(true);
-  };
 
   // Legal pages that should be accessible without age verification
   // Use startsWith to handle both with and without trailing slashes
   const legalPages = ['/terms-of-service', '/privacy-policy', '/cookie-policy'];
   const isLegalPage = legalPages.some(page => pathname.startsWith(page));
 
-  // Check verification status via cookie and localStorage
   useEffect(() => {
     try {
-      const verifiedViaCookie = document.cookie.includes('ageVerified=true');
-      const verifiedViaStorage = localStorage.getItem('ageVerified') === 'true';
-      if (verifiedViaCookie || verifiedViaStorage) {
-        // Ensure cookie exists for future visits
-        if (!verifiedViaCookie) {
-          // SameSite=Lax (see AgeGate.tsx): the age cookie must survive a
-          // cross-site top-level navigation from a social link, or every
-          // Facebook/Instagram visitor is re-gated on entry.
-          document.cookie = 'ageVerified=true; path=/; max-age=31536000; SameSite=Lax; Secure';
-        }
-        setIsAgeVerified(true);
+      // A visitor verified before the cookie existed has only the localStorage
+      // flag. /api/checkout reads the cookie, so restore it. SameSite=Lax (see
+      // AgeGate.tsx): it must survive a cross-site top-level navigation from a
+      // social link, or every Facebook/Instagram visitor is re-gated on entry.
+      if (
+        !document.cookie.includes(`${AGE_COOKIE}=${AGE_COOKIE_VALUE}`) &&
+        localStorage.getItem(AGE_COOKIE) === AGE_COOKIE_VALUE
+      ) {
+        document.cookie = 'ageVerified=true; path=/; max-age=31536000; SameSite=Lax; Secure';
       }
     } catch {
       // Storage may be blocked by browser tracking prevention
     }
 
-    const botDetected = checkIsBot();
-    const urlParams = new URLSearchParams(window.location.search);
-    if (botDetected) setIsBot(true);
-
     // Preserve affiliate tracking parameters (dt_id for Shopify Collabs)
     try {
-      const dtId = urlParams.get('dt_id');
+      const dtId = new URLSearchParams(window.location.search).get('dt_id');
       if (dtId) {
         sessionStorage.setItem('affiliate_dt_id', dtId);
       }
@@ -78,22 +49,17 @@ export default function ClientWrapper({ children }: ClientWrapperProps) {
     }
 
     captureUtmParams();
-
-    setIsReady(true);
   }, [pathname]);
 
-  // Bypass age gate for: verified users, legal pages, known bots, or the
-  // dedicated /age-check route (which renders the gate itself — the overlay
-  // here would double it).
-  const isAgeCheckRoute = pathname.startsWith('/age-check');
-  const shouldBypassGate = isAgeVerified || isLegalPage || isBot || isPourIqAppRoute(pathname) || isAgeCheckRoute;
+  // No gate on legal pages (a minor may read them), the trade portal (its own
+  // auth, B2B) or the /age-check route, which renders the gate itself for
+  // links that predate the overlay.
+  const carriesGate =
+    !isLegalPage && !isPourIqAppRoute(pathname) && !pathname.startsWith('/age-check');
 
   return (
     <>
-      {/* Only show age gate after client-side check completes to prevent flash */}
-      {isReady && !shouldBypassGate && (
-        <AgeGate onVerified={handleAgeVerification} />
-      )}
+      {carriesGate && <AgeGate />}
       {/* Always render children - crawlers see the content in DOM */}
       {children}
     </>

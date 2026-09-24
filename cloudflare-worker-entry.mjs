@@ -7,21 +7,6 @@ import { runTradeReviewDigest } from './src/lib/scheduled-trade-review.ts';
 import { runRatingsFetch } from './src/lib/scheduled-ratings.ts';
 import { runCredentialSweep } from './src/lib/scheduled-credentials.ts';
 import { runContactRetentionPurge } from './src/lib/scheduled-contact-retention.ts';
-import {
-  AGE_COOKIE,
-  isAgeExcludedPath,
-  isAgeVerified,
-  isBot,
-  isDocumentNavigation,
-} from './src/lib/age-gate.ts';
-
-// Read a cookie off a plain Request (the Worker has no NextRequest.cookies API).
-function readCookie(request, name) {
-  const header = request.headers.get('cookie');
-  if (!header) return undefined;
-  const match = header.match(new RegExp('(?:^|;\\s*)' + name + '=([^;]*)'));
-  return match ? decodeURIComponent(match[1]) : undefined;
-}
 
 // Edge-cached paths, with the TTL each one can tolerate.
 //
@@ -56,23 +41,9 @@ const worker = {
     const url = new URL(request.url);
 
     if (request.method === 'GET' && EDGE_CACHE_TTL.has(url.pathname)) {
-      // Enforce the age gate BEFORE the cache lookup. The edge cache is keyed by
-      // URL only, so without this a warm-cached page would be served to an
-      // unverified visitor — bypassing the src/middleware.ts redirect entirely.
-      // Uses the SAME shared helpers as the middleware, so the two gates cannot
-      // diverge. All six edge-cached paths are gated (none is age-excluded), so
-      // after this only bots and age-verified visitors reach the cache below.
-      if (
-        isDocumentNavigation(request.headers) &&
-        !isBot(request.headers.get('user-agent')) &&
-        !isAgeExcludedPath(url.pathname) &&
-        !isAgeVerified(readCookie(request, AGE_COOKIE))
-      ) {
-        const gate = new URL('/age-check/', request.url);
-        gate.searchParams.set('return', url.pathname + url.search);
-        return Response.redirect(gate.toString(), 307);
-      }
-
+      // The age gate is an overlay inside the page (decided client-side before
+      // first paint, see src/lib/age-gate.ts), so the cached HTML is the same
+      // for everyone and needs no gate ahead of the lookup.
       const cache = caches.default;
       const cachedResponse = await cache.match(request);
 

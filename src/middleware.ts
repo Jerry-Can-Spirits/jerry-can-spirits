@@ -1,38 +1,23 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
-import { AGE_COOKIE, isAgeExcludedPath, isAgeVerified, isBot, isDocumentNavigation } from '@/lib/age-gate'
+import { isBot } from '@/lib/age-gate'
 
-// Bot detection and the document-navigation test now live in @/lib/age-gate, so
-// the edge-cache Worker enforces the gate with the exact same rules (imported
-// above).
+// The age gate is an overlay in every page's HTML, decided before first paint
+// by the inline script from @/lib/age-gate (see app/layout.tsx). Nothing is
+// redirected here any more: the same HTML serves verified and unverified
+// visitors alike, so it caches at the edge and unfurls for link previews. The
+// checkout handoff stays hard-gated in /api/checkout, cookie-only, so a
+// spoofed crawler UA still cannot reach Shopify checkout.
 
 export function middleware(request: NextRequest) {
   // The CSP and security headers are set in next.config.ts, not here.
   const userAgent = request.headers.get('user-agent')
   const bot = isBot(userAgent)
 
-  // Server-enforced age verification. A top-level GET to a gated path without a
-  // verified cookie is redirected to the gate before the page renders — the
-  // real enforcement the client overlay never provided. Verified users pass;
-  // search crawlers are allowed to browse for indexing (the checkout handoff is
-  // separately hard-gated in /api/checkout, cookie-only, so a spoofed crawler
-  // UA still cannot reach Shopify checkout).
-  if (
-    request.method === 'GET' &&
-    isDocumentNavigation(request.headers) &&
-    !bot &&
-    !isAgeExcludedPath(request.nextUrl.pathname) &&
-    !isAgeVerified(request.cookies.get(AGE_COOKIE)?.value)
-  ) {
-    const gate = new URL('/age-check/', request.url)
-    gate.searchParams.set('return', request.nextUrl.pathname + request.nextUrl.search)
-    return NextResponse.redirect(gate)
-  }
-
   const response = NextResponse.next()
 
-  // Set a header to indicate if request is from a known bot
-  // ClientWrapper can read this to bypass age gate for SEO crawlers
+  // Set a header to indicate if request is from a known bot. The inline age
+  // gate script reads the cookie and skips the gate for crawlers.
   if (bot) {
     response.headers.set('x-is-bot', 'true')
     // Also set a cookie that client-side can read
