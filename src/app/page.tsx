@@ -11,12 +11,18 @@ import ScrollReveal from "@/components/ScrollReveal";
 import PullQuoteStrip from "@/components/PullQuoteStrip";
 import PressAwards from "@/components/PressAwards";
 import MedalBar from "@/components/MedalBar";
+import HomepageProductGrid from "@/components/HomepageProductGrid";
+import RumServesTeaser from "@/components/RumServesTeaser";
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import { baseOpenGraph, OG_IMAGE } from '@/lib/og'
 import { BASE_URL } from '@/lib/jsonLd'
 
-export const revalidate = 60
+// Hourly, like the shop pages. The grid below fetches every product, and the
+// products/update webhook revalidates this path the moment a price or
+// availability changes, so a shorter window bought nothing but Storefront
+// calls.
+export const revalidate = 3600
 
 
 export const metadata: Metadata = {
@@ -81,13 +87,15 @@ export default function Home() {
       <div>
         <HeroSection />
 
+        {/* Every purchasable product with its price, straight after the hero,
+            so a first visit sees the whole range and what a first order can
+            start at without leaving the page (restructure, 24 Sep 2026). */}
+        <HomepageProductGrid />
+
         {/* Proof bar - the hero headline makes the two-medals claim; this
             states the fact once in full, judges' note included, linked to the
             IWSC listing. The only place on the page the medals are detailed. */}
         <MedalBar />
-
-        {/* Pull-quote strip - instant social proof under the hero */}
-        <PullQuoteStrip />
 
         {/* Founder story - story leads, builds belief */}
         <ScrollReveal>
@@ -110,14 +118,23 @@ export default function Home() {
         </ScrollReveal>
 
         {/* Press & accreditations - reassurance tier, after the pledge. The
-            Trustpilot proof lives in the pull-quote strip; the IWSC medals in
-            the MedalBar. The expedition map and Field Manual preview that
-            followed were homepage detours from the one CTA and moved off the
-            page in the restructure (see docs/plans/2026-08-28). The Field
-            Manual keeps its place in the nav; the map lives on at
-            /expedition-log/. */}
+            IWSC medals live in the MedalBar. */}
         <ScrollReveal>
           <PressAwards />
+        </ScrollReveal>
+
+        {/* Reviews - the pull-quote strip and live TrustScore, after the story
+            has been told and the accreditations shown. */}
+        <PullQuoteStrip />
+
+        {/* Three serves built on the rum, linking to the Field Manual. The
+            library preview and the expedition map were removed on 28 Aug 2026
+            as detours from the one CTA (docs/plans/2026-08-28); this narrower
+            version was reinstated on 24 Sep 2026 because a visitor this far
+            down is asking what they would do with the bottle. The map lives
+            on at /expedition-log/. */}
+        <ScrollReveal>
+          <RumServesTeaser />
         </ScrollReveal>
 
         {/* FAQ - objection handling before final CTA */}

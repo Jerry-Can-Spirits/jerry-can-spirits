@@ -452,6 +452,22 @@ export const featuredCocktailsQuery = `*[_type == "cocktail" && baseSpirit == "S
   "imageAlt": image.alt
 }`
 
+// The three serves the homepage shows, chosen by hand (Dan, 24 Sep 2026):
+// the rum's own serves, not the newest or the featured. Order is kept by the
+// component, not the query.
+export const HOMEPAGE_SERVE_SLUGS = [
+  'explorers-gold-rum-and-honey',
+  'storm-and-spice',
+  'the-old-standard-rum-old-fashioned',
+]
+export const homepageServesQuery = `*[_type == "cocktail" && slug.current in $slugs] {
+  name,
+  slug,
+  description,
+  "image": image.asset->url,
+  "imageAlt": image.alt
+}`
+
 // Count queries for Field Manual stats
 export const fieldManualCountsQuery = `{
   "cocktails": count(*[_type == "cocktail"]),

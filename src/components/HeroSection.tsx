@@ -43,7 +43,7 @@ export default function HeroSection() {
   }
 
   return (
-    <section className="relative overflow-hidden min-h-screen">
+    <section className="relative overflow-hidden min-h-[70vh]">
 
       {/* Subtle animated gradients */}
       <div className="absolute inset-0 opacity-10">
@@ -57,7 +57,7 @@ export default function HeroSection() {
 
       <div className="relative w-full px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
         <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center min-h-[70vh] sm:min-h-[80vh]">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center min-h-[60vh] sm:min-h-[70vh]">
 
           {/* Content */}
           <div className="text-center lg:text-left order-2 lg:order-1">
