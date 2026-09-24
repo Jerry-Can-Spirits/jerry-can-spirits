@@ -12,6 +12,7 @@ import ShareButton from '@/components/ShareButton'
 import GuideSections from '@/components/GuideSections'
 import { OG_IMAGE } from '@/lib/og'
 import { ORG_REF, authorRefFor } from '@/lib/jsonLd'
+import FAQAccordion from '@/components/FAQAccordion'
 
 const TEAM_MEMBERS = new Set(['Dan Freeman', 'Rhys Williams'])
 
@@ -476,21 +477,7 @@ export default async function GuidePage({ params }: PageProps) {
           {guide.faqs && guide.faqs.length > 0 && (
             <div id="faqs" className="mt-16 scroll-mt-24">
               <h2 className="text-3xl font-serif font-bold text-white mb-8">Frequently Asked Questions</h2>
-              <div className="space-y-4">
-                {guide.faqs.map((faq, index) => (
-                  <div
-                    key={index}
-                    className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20"
-                  >
-                    <h3 className="text-lg font-serif font-bold text-gold-300 mb-3">
-                      {faq.question}
-                    </h3>
-                    <p className="text-parchment-300 leading-relaxed">
-                      {faq.answer}
-                    </p>
-                  </div>
-                ))}
-              </div>
+              <FAQAccordion items={guide.faqs} />
             </div>
           )}
 

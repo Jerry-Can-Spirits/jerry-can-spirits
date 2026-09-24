@@ -12,6 +12,7 @@ import ViewItemListTracker from '@/components/ViewItemListTracker'
 import { OG_IMAGE } from '@/lib/og'
 import { safeJsonLd, productOffer, merchantOfferExtras, productGtin } from '@/lib/jsonLd'
 import { formatPrice } from '@/lib/format-price'
+import FAQAccordion from '@/components/FAQAccordion'
 
 export const metadata: Metadata = {
   title: 'British Craft Spirits',
@@ -402,14 +403,9 @@ export default async function SpiritsPage() {
             Straight answers about our rum
           </p>
 
-          <div className="space-y-6">
-            {spiritsFaqs.map((faq, index) => (
-              <div key={faq.question} className={index !== spiritsFaqs.length - 1 ? 'border-b border-gold-500/10 pb-6' : ''}>
-                <h3 className="text-lg font-semibold text-gold-300 mb-3">{faq.question}</h3>
-                <p className="text-parchment-200 leading-relaxed">{faq.rich ?? faq.answer}</p>
-              </div>
-            ))}
-          </div>
+          <FAQAccordion
+            items={spiritsFaqs.map((faq) => ({ question: faq.question, answer: faq.rich ?? faq.answer }))}
+          />
         </div>
       </section>
 

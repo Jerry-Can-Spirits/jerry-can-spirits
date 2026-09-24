@@ -8,6 +8,7 @@ import StructuredData from '@/components/StructuredData'
 import ScrollReveal from '@/components/ScrollReveal'
 import { baseOpenGraph, OG_IMAGE } from '@/lib/og'
 import { safeJsonLd, ORG_REF } from '@/lib/jsonLd'
+import FAQAccordion from '@/components/FAQAccordion'
 
 // Article schema for the story page
 const articleSchema = {
@@ -701,15 +702,10 @@ export default function OurStory() {
             </p>
           </div>
 
-          <div className="space-y-4 max-w-4xl mx-auto">
-            {storyFaqs.map((faq, index) => (
-              <ScrollReveal key={faq.question} delay={(index % 3) as 0 | 1 | 2}>
-                <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20">
-                  <h3 className="text-lg font-semibold text-white mb-3">{faq.question}</h3>
-                  <p className="text-parchment-300">{faq.rich ?? faq.answer}</p>
-                </div>
-              </ScrollReveal>
-            ))}
+          <div className="max-w-4xl mx-auto">
+            <FAQAccordion
+              items={storyFaqs.map((faq) => ({ question: faq.question, answer: faq.rich ?? faq.answer }))}
+            />
           </div>
 
           {/* FAQ Schema — generated from the same storyFaqs array as the visible

@@ -16,6 +16,7 @@ import ReferenceContents from '@/components/ReferenceContents'
 import { extractHeadings } from '@/lib/sanity-text'
 import { OG_IMAGE_COCKTAIL } from '@/lib/og'
 import { ORG_REF } from '@/lib/jsonLd'
+import FAQAccordion from '@/components/FAQAccordion'
 
 // Types for equipment data
 interface Equipment {
@@ -453,14 +454,7 @@ export default async function EquipmentDetailPage({ params }: { params: Promise<
             {equipment.faqs && equipment.faqs.length > 0 && (
               <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
                 <h2 id="common-questions" className="text-2xl font-serif font-bold text-gold-300 mb-4 scroll-mt-24">Common Questions</h2>
-                <div className="space-y-4">
-                  {equipment.faqs.map((faq) => (
-                    <div key={faq.question}>
-                      <h3 className="text-gold-400 font-semibold mb-2">{faq.question}</h3>
-                      <p className="text-parchment-300 leading-relaxed">{faq.answer}</p>
-                    </div>
-                  ))}
-                </div>
+                <FAQAccordion items={equipment.faqs} />
               </div>
             )}
 
