@@ -468,6 +468,20 @@ export const homepageServesQuery = `*[_type == "cocktail" && slug.current in $sl
   "imageAlt": image.alt
 }`
 
+// Curated review quotes for one product page. Editor order first, then
+// newest; lib/product-reviews.ts validates the shape before render.
+export const productReviewsQuery = `*[_type == "review" && $handle in products] | order(order asc, _createdAt desc) {
+  _id,
+  _createdAt,
+  quote,
+  author,
+  rating,
+  date,
+  source,
+  sourceUrl,
+  order
+}`
+
 // Count queries for Field Manual stats
 export const fieldManualCountsQuery = `{
   "cocktails": count(*[_type == "cocktail"]),

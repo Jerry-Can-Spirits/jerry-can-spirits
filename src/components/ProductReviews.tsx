@@ -1,6 +1,9 @@
 import type { ProductReview } from '@/lib/product-reviews'
 
-const TRUSTPILOT_PROFILE = 'https://uk.trustpilot.com/review/jerrycanspirits.co.uk'
+const PROFILES = {
+  trustpilot: { label: 'Trustpilot', href: 'https://uk.trustpilot.com/review/jerrycanspirits.co.uk' },
+  google: { label: 'Google', href: '/reviews/' },
+} as const
 
 function Stars({ rating }: { rating: number }) {
   return (
@@ -21,6 +24,10 @@ function Stars({ rating }: { rating: number }) {
 }
 
 export default function ProductReviews({ reviews }: { reviews: ProductReview[] }) {
+  // Trustpilot first, Google only when a quoted review came from there.
+  const sources = (['trustpilot', 'google'] as const).filter((s) =>
+    reviews.some((r) => (r.source ?? 'trustpilot') === s),
+  )
   return (
     <div>
       <div className="grid sm:grid-cols-2 gap-4">
@@ -36,21 +43,34 @@ export default function ProductReviews({ reviews }: { reviews: ProductReview[] }
             <figcaption className="text-sm text-parchment-400">
               <span className="text-parchment-200 font-medium">{r.author}</span>
               {r.date && <span> · {r.date}</span>}
+              {r.sourceUrl && (
+                <span>
+                  {' · '}
+                  <a href={r.sourceUrl} target="_blank" rel="noopener noreferrer" className="text-gold-300 hover:text-gold-200 underline">
+                    {PROFILES[r.source ?? 'trustpilot'].label}
+                  </a>
+                </span>
+              )}
             </figcaption>
           </figure>
         ))}
       </div>
       <p className="text-xs text-parchment-500 mt-6">
         Reviews from{' '}
-        <a
-          href={TRUSTPILOT_PROFILE}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-gold-300 hover:text-gold-200 underline"
-        >
-          Trustpilot
-        </a>
-        . A selection of verified customer reviews.
+        {sources.map((s, i) => (
+          <span key={s}>
+            {i > 0 && ' and '}
+            <a
+              href={PROFILES[s].href}
+              target={s === 'google' ? undefined : '_blank'}
+              rel={s === 'google' ? undefined : 'noopener noreferrer'}
+              className="text-gold-300 hover:text-gold-200 underline"
+            >
+              {PROFILES[s].label}
+            </a>
+          </span>
+        ))}
+        . A selection of customer reviews, quoted as written.
       </p>
     </div>
   )
