@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import Image from 'next/image'
+import SectionHeading from '@/components/SectionHeading'
 
 export default function FounderStorySnippet() {
   return (
@@ -8,15 +9,9 @@ export default function FounderStorySnippet() {
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Left Column - Content */}
           <div>
-            <div className="inline-block px-4 py-2 bg-jerry-green-800/60 backdrop-blur-sm rounded-full border border-gold-500/30 mb-6">
-              <span className="text-gold-300 text-sm font-semibold uppercase tracking-widest">
-                Our Story
-              </span>
-            </div>
-
-            <h2 className="text-3xl md:text-4xl font-serif font-bold text-white mb-6">
+            <SectionHeading eyebrow="Our Story" align="left">
               From Signals to Spirits
-            </h2>
+            </SectionHeading>
 
             <div className="space-y-4 text-parchment-200 text-lg leading-relaxed">
               <p>

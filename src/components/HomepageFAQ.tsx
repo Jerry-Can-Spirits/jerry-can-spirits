@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { safeJsonLd } from '@/lib/jsonLd'
 import FAQAccordion from '@/components/FAQAccordion'
+import SectionHeading from '@/components/SectionHeading'
 
 // FAQ data with internal linking opportunities
 const faqs = [
@@ -66,22 +67,12 @@ export default function HomepageFAQ() {
       />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section Header */}
-        <div className="text-center mb-12">
-          <div className="inline-block px-4 py-2 bg-jerry-green-800/60 backdrop-blur-sm rounded-full border border-gold-500/30 mb-6">
-            <span className="text-gold-300 text-sm font-semibold uppercase tracking-widest">
-              Common Questions
-            </span>
-          </div>
-
-          <h2 className="text-3xl md:text-4xl font-serif font-bold text-white mb-4">
-            Everything You Need to Know
-          </h2>
-
-          <p className="text-xl text-parchment-300 max-w-3xl mx-auto leading-relaxed">
-            New to spiced rum or just curious about who we are? Here are the questions we get asked most.
-          </p>
-        </div>
+        <SectionHeading
+          eyebrow="Common Questions"
+          intro="New to spiced rum or just curious about who we are? Here are the questions we get asked most."
+        >
+          Everything You Need to Know
+        </SectionHeading>
 
         {/* Each question opens on tap. Six full answers stacked on a phone put
             a screen and a half between the serves and the closing ask; the

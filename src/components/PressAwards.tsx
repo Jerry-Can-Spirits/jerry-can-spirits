@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import Image from 'next/image'
+import SectionHeading from '@/components/SectionHeading'
 
 interface PressItem {
   publication: string
@@ -81,16 +82,7 @@ export default function PressAwards() {
     <section className="py-16 band-dark">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-        <div className="text-center mb-12">
-          <div className="inline-block px-4 py-2 bg-jerry-green-800/60 backdrop-blur-sm rounded-full border border-gold-500/30 mb-6">
-            <span className="text-gold-300 text-sm font-semibold uppercase tracking-widest">
-              Recognition
-            </span>
-          </div>
-          <h2 className="text-3xl md:text-4xl font-serif font-bold text-white">
-            As Seen In
-          </h2>
-        </div>
+        <SectionHeading eyebrow="Recognition">As Seen In</SectionHeading>
 
         <div className="space-y-12">
 

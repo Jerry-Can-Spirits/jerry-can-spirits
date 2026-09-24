@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import ScrollRow from '@/components/ScrollRow'
+import SectionHeading from '@/components/SectionHeading'
 
 // The four pledges, as data so the row can swipe on a phone (24 Sep 2026)
 // rather than stack four full cards between the story and the reviews.
@@ -35,20 +36,12 @@ export default function SupportingOurForces() {
   return (
     <section className="py-16 band-light">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section Header */}
-        <div className="text-center mb-12">
-          <div className="inline-block px-4 py-2 bg-jerry-green-800/60 backdrop-blur-sm rounded-full border border-gold-500/30 mb-6">
-            <span className="text-gold-300 text-sm font-semibold uppercase tracking-widest">
-              Our Commitment
-            </span>
-          </div>
-          <h2 className="text-3xl md:text-4xl font-serif font-bold text-white mb-4">
-            Supporting Those Who Serve
-          </h2>
-          <p className="text-parchment-300 text-lg max-w-2xl mx-auto">
-            As veterans ourselves, supporting the Armed Forces community isn't just a pledge - it's personal.
-          </p>
-        </div>
+        <SectionHeading
+          eyebrow="Our Commitment"
+          intro="As veterans ourselves, supporting the Armed Forces community isn't just a pledge - it's personal."
+        >
+          Supporting Those Who Serve
+        </SectionHeading>
 
         {/* Commitments */}
         <div className="mb-12">

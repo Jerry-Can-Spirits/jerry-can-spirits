@@ -5,6 +5,7 @@ import { getRating } from '@/lib/ratings-cache'
 import { TRUSTPILOT_LOGO as TRUSTPILOT_LOGOS } from '@/lib/trustpilot-assets'
 import { RatingRow } from '@/components/RatingRow'
 import ScrollRow from '@/components/ScrollRow'
+import SectionHeading from '@/components/SectionHeading'
 
 // The official green-star lockup for dark grounds, from the shared assets
 // module so every surface renders the same mark.
@@ -67,11 +68,9 @@ export default async function PullQuoteStrip() {
       className="border-t border-b border-gold-500/20 band-dark py-14 sm:py-16"
     >
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-10">
-          <h2 id="reviews-heading" className="text-3xl md:text-4xl font-serif font-bold text-white">
-            What people say.
-          </h2>
-        </div>
+        <SectionHeading eyebrow="Reviews" id="reviews-heading">
+          What people say.
+        </SectionHeading>
         <ScrollRow
           ariaLabel="Customer reviews"
           cols="md:grid-cols-2 md:gap-x-12 md:gap-y-10"

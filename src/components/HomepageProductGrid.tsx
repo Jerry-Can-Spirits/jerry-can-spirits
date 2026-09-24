@@ -2,6 +2,7 @@ import Link from 'next/link'
 import ProductCard from '@/components/ProductCard'
 import { getProducts } from '@/lib/shopify'
 import { homepageProductRows } from '@/lib/homepage-products'
+import SectionHeading from '@/components/SectionHeading'
 
 // Every purchasable product with its live price, straight after the hero, in
 // three rows that scroll sideways: the rum, the glassware, the tools. A row
@@ -23,14 +24,13 @@ export default async function HomepageProductGrid() {
   return (
     <section className="py-16 band-light" aria-labelledby="shop-grid-heading">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-10">
-          <h2 id="shop-grid-heading" className="text-3xl md:text-4xl font-serif font-bold text-white">
-            Everything in the shop.
-          </h2>
-          <p className="mt-3 text-parchment-300 max-w-2xl mx-auto">
-            The bottle, the glassware its serves were built in, and the tools for making them. A first order can start small.
-          </p>
-        </div>
+        <SectionHeading
+          eyebrow="The Range"
+          id="shop-grid-heading"
+          intro="The bottle, the glassware its serves were built in, and the tools for making them. A first order can start small."
+        >
+          Everything in the shop.
+        </SectionHeading>
 
         <div className="space-y-12">
           {rows.map((row, r) => (

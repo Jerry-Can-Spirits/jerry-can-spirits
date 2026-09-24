@@ -1,4 +1,5 @@
 import ScrollRow from '@/components/ScrollRow'
+import SectionHeading from '@/components/SectionHeading'
 
 // The three pillars, swipeable on a phone. The four stat tiles that sat
 // under them ("700 General Release", "2026 April Launch") went on 24 Sep
@@ -23,22 +24,12 @@ export default function WhyJerryCan() {
   return (
     <section className="py-16 band-light">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section Header */}
-        <div className="text-center mb-12">
-          <div className="inline-block px-4 py-2 bg-jerry-green-800/60 backdrop-blur-sm rounded-full border border-gold-500/30 mb-6">
-            <span className="text-gold-300 text-sm font-semibold uppercase tracking-widest">
-              The Standard We Work To
-            </span>
-          </div>
-
-          <h2 className="text-3xl md:text-4xl font-serif font-bold text-white mb-4">
-            Why Jerry Can?
-          </h2>
-
-          <p className="text-xl text-parchment-300 max-w-3xl mx-auto leading-relaxed">
-            Named after a piece of kit that was designed to work, not to look good on a shelf. That's our standard.
-          </p>
-        </div>
+        <SectionHeading
+          eyebrow="The Standard We Work To"
+          intro="Named after a piece of kit that was designed to work, not to look good on a shelf. That's our standard."
+        >
+          Why Jerry Can?
+        </SectionHeading>
 
         {/* Three Pillars */}
         <ScrollRow
