@@ -35,8 +35,8 @@ export default defineType({
       name: 'rating',
       title: 'Rating',
       type: 'number',
-      description: 'Stars as left on the platform, 1 to 5.',
-      validation: (Rule) => Rule.required().integer().min(1).max(5),
+      description: 'Stars as left on the platform, 1 to 5. Leave blank if you do not know; the quote shows without stars.',
+      validation: (Rule) => Rule.integer().min(1).max(5),
     }),
     defineField({
       name: 'date',

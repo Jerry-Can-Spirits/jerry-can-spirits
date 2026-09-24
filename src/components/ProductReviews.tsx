@@ -23,6 +23,10 @@ function Stars({ rating }: { rating: number }) {
   )
 }
 
+// Enough to make the case without turning the page into a review site; the
+// footer link carries the rest. Editor order decides which eight.
+const MAX_SHOWN = 8
+
 export default function ProductReviews({ reviews }: { reviews: ProductReview[] }) {
   // Trustpilot first, Google only when a quoted review came from there.
   const sources = (['trustpilot', 'google'] as const).filter((s) =>
@@ -31,12 +35,12 @@ export default function ProductReviews({ reviews }: { reviews: ProductReview[] }
   return (
     <div>
       <div className="grid sm:grid-cols-2 gap-4">
-        {reviews.map((r, i) => (
+        {reviews.slice(0, MAX_SHOWN).map((r, i) => (
           <figure
             key={`${r.author}-${i}`}
             className="bg-jerry-green-800/30 border border-gold-500/20 rounded-xl p-5 flex flex-col"
           >
-            <Stars rating={r.rating} />
+            {r.rating !== undefined && <Stars rating={r.rating} />}
             <blockquote className="text-parchment-200 leading-relaxed mt-3 mb-4 flex-1">
               &ldquo;{r.quote}&rdquo;
             </blockquote>

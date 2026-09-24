@@ -19,7 +19,7 @@ export type ReviewSource = 'trustpilot' | 'google'
 export interface ProductReview {
   quote: string
   author: string
-  rating: number // 1–5, as left on the platform
+  rating?: number // 1–5, as left on the platform; absent when not recorded
   date?: string
   source?: ReviewSource
   sourceUrl?: string
@@ -42,16 +42,17 @@ const SOURCES: ReadonlySet<string> = new Set(['trustpilot', 'google'])
 
 /**
  * Sanity is edited by hand, so this is the line of defence: anything with a
- * rating outside 1 to 5, an empty quote or author, or an unknown source is
- * dropped rather than rendered wrong. Editor `order` first, then newest.
+ * rating outside 1 to 5 (when one is set), an empty quote or author, or an
+ * unknown source is dropped rather than rendered wrong. Editor `order`
+ * first, then newest.
  */
 export function normaliseReviews(docs: SanityReviewDoc[]): ProductReview[] {
   return docs
     .map((d, i) => ({ d, i }))
     .filter(({ d }) => {
-      const rating = d.rating ?? NaN
+      const rating = d.rating
       return (
-        Number.isInteger(rating) && rating >= 1 && rating <= 5 &&
+        (rating === undefined || rating === null || (Number.isInteger(rating) && rating >= 1 && rating <= 5)) &&
         typeof d.quote === 'string' && d.quote.trim().length > 0 &&
         typeof d.author === 'string' && d.author.trim().length > 0 &&
         (d.source === undefined || SOURCES.has(d.source))
@@ -68,7 +69,7 @@ export function normaliseReviews(docs: SanityReviewDoc[]): ProductReview[] {
     .map(({ d }) => ({
       quote: d.quote!.trim(),
       author: d.author!.trim(),
-      rating: d.rating!,
+      ...(d.rating ? { rating: d.rating } : {}),
       ...(d.date ? { date: d.date } : {}),
       source: d.source ?? 'trustpilot',
       ...(d.sourceUrl ? { sourceUrl: d.sourceUrl } : {}),

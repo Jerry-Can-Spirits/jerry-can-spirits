@@ -28,6 +28,11 @@ describe('normaliseReviews', () => {
     expect(r).toEqual({ quote: 'Really impressed with this.', author: 'Tom', rating: 5, date: 'June 2026', source: 'trustpilot', sourceUrl: 'https://uk.trustpilot.com/reviews/abc' })
   })
 
+  it('keeps a review with no rating, without inventing one', () => {
+    const [r] = normaliseReviews([doc({ rating: undefined })])
+    expect(r).not.toHaveProperty('rating')
+  })
+
   it('drops reviews with an invalid rating, an empty quote or an unknown source', () => {
     expect(normaliseReviews([doc({ rating: 0 }), doc({ rating: 6 }), doc({ rating: 4.5 })])).toEqual([])
     expect(normaliseReviews([doc({ quote: '   ' })])).toEqual([])
