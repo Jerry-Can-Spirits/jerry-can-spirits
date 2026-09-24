@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { NextRequest } from 'next/server'
 import {
   AGE_VERIFIED_ATTR,
+  AGE_VERIFIED_GLOBAL,
   BOT_USER_AGENTS,
   CLIENT_ONLY_BOT_PATTERNS,
   ageGateInlineScript,
@@ -124,16 +125,31 @@ describe('ageGateInlineScript — the before-paint decision', () => {
   const CHROME =
     'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0 Safari/537.36'
 
-  function run({ cookie = '', ua = CHROME, stored = null as string | null } = {}) {
+  function decide({ cookie = '', ua = CHROME, stored = null as string | null } = {}) {
     const attrs: Record<string, string> = {}
     const document = { cookie, documentElement: { setAttribute: (k: string, v: string) => { attrs[k] = v } } }
-    new Function('document', 'navigator', 'localStorage', ageGateInlineScript())(
+    const win: Record<string, unknown> = {}
+    new Function('document', 'navigator', 'localStorage', 'window', ageGateInlineScript())(
       document,
       { userAgent: ua },
       { getItem: () => stored },
+      win,
     )
-    return AGE_VERIFIED_ATTR in attrs
+    return { attr: AGE_VERIFIED_ATTR in attrs, global: win[AGE_VERIFIED_GLOBAL] === true }
   }
+
+  function run(opts?: Parameters<typeof decide>[0]) {
+    const { attr, global } = decide(opts)
+    // The two must never disagree: the attribute drives the first paint and
+    // the window flag drives everything after hydration strips it.
+    expect(attr).toBe(global)
+    return attr
+  }
+
+  it('records the decision on window too, because <html> does not survive hydration', () => {
+    expect(decide({ cookie: 'ageVerified=true' })).toEqual({ attr: true, global: true })
+    expect(decide()).toEqual({ attr: false, global: false })
+  })
 
   it('marks a visitor with the verified cookie', () => {
     expect(run({ cookie: 'detectedCountry=GB; ageVerified=true' })).toBe(true)
@@ -171,10 +187,11 @@ describe('ageGateInlineScript — the before-paint decision', () => {
     const attrs: Record<string, string> = {}
     const document = { cookie: '', documentElement: { setAttribute: (k: string, v: string) => { attrs[k] = v } } }
     expect(() =>
-      new Function('document', 'navigator', 'localStorage', ageGateInlineScript())(
+      new Function('document', 'navigator', 'localStorage', 'window', ageGateInlineScript())(
         document,
         { userAgent: CHROME },
         { getItem: () => { throw new Error('blocked') } },
+        {},
       ),
     ).not.toThrow()
     expect(AGE_VERIFIED_ATTR in attrs).toBe(false)
