@@ -16,9 +16,12 @@ export default function SiteChrome({ children }: { children: ReactNode }) {
 
   return (
     <>
-      {/* Unified Cartographic Background */}
+      {/* The ground behind every page: real contours, no map furniture.
+          The compass and the coordinate pins stay on the pages that use this
+          as a feature rather than a backdrop (the age gate, the team pages);
+          repeated behind every section they were noise. */}
       <div className="print:hidden">
-        <LazyCartographicBackground opacity={0.75} showCoordinates={true} showCompass={true} className="fixed inset-0 z-0 pointer-events-none" />
+        <LazyCartographicBackground opacity={0.75} showCoordinates={false} showCompass={false} className="fixed inset-0 z-0 pointer-events-none" />
       </div>
 
       <div className="relative z-10 flex min-h-screen flex-col">

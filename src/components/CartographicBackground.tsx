@@ -49,121 +49,110 @@ const storyCoordinates: Coordinate[] = [
   return { lat, lng, x, y }
 })
 
+// The ground behind every page.
+//
+// The contours used to be hand-drawn: a dozen Q-curves and a couple of
+// ellipses, with a square grid over them and invented spot heights reading
+// "1,203m". They read as wallpaper because they were. They are now real
+// ground, contoured at 25 metre intervals from SRTM 30m elevation data over
+// the Pen y Fan horseshoe, which is where anyone who trained in the Beacons
+// walked (public domain, NASA; the generator lives outside the repo).
+//
+// The artwork is a static file rather than inline paths, so the browser
+// caches it once for the whole site and none of it lands in the JS bundle.
+// Nothing names the place: it is a pattern, not a claim about where the rum
+// is made.
+//
+// The scale bar went with the old drawing. The background is cropped to
+// whatever shape the viewport is, so any distance it claimed was wrong.
 export default function CartographicBackground({
   opacity = 0.1,
   showCoordinates = true,
   showCompass = true,
-  className = "absolute inset-0"
+  className = 'absolute inset-0',
 }: CartographicBackgroundProps) {
   return (
     <div className={className} style={{ opacity }}>
-      {/* Contour Lines SVG */}
-      <svg
-        className="absolute inset-0 w-full h-full"
-        viewBox="0 0 1200 800"
-        xmlns="http://www.w3.org/2000/svg"
-        preserveAspectRatio="xMidYMid slice"
-      >
-        <defs>
-          <linearGradient id="contourGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#f59e0b" stopOpacity="0.6" />
-            <stop offset="50%" stopColor="#6b705c" stopOpacity="0.4" />
-            <stop offset="100%" stopColor="#f59e0b" stopOpacity="0.6" />
-          </linearGradient>
-          <pattern id="topoPattern" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
-            <circle cx="20" cy="20" r="1" fill="#f59e0b" fillOpacity="0.3" />
-            <circle cx="10" cy="10" r="0.5" fill="#6b705c" fillOpacity="0.2" />
-            <circle cx="30" cy="30" r="0.5" fill="#6b705c" fillOpacity="0.2" />
-          </pattern>
-        </defs>
+      <div className="absolute inset-0 bg-[#2a3421]" />
+      <div
+        className="absolute inset-0"
+        style={{
+          backgroundImage: 'url(/images/topography.svg)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+        }}
+      />
 
-        <rect width="100%" height="100%" fill="#2a3421" />
-        <rect width="100%" height="100%" fill="url(#topoPattern)" />
-
-        <g stroke="url(#contourGradient)" strokeWidth="0.5" fill="none">
-          <path d="M50,200 Q200,180 350,200 Q500,220 650,200 Q800,180 950,200" />
-          <path d="M80,180 Q200,160 320,180 Q480,200 620,180 Q780,160 920,180" />
-          <path d="M110,160 Q200,140 290,160 Q460,180 590,160 Q750,140 890,160" />
-          <path d="M100,400 Q300,420 500,400 Q700,380 900,400" />
-          <path d="M120,420 Q300,440 480,420 Q680,400 880,420" />
-          <path d="M140,440 Q300,460 460,440 Q660,420 860,440" />
-          <path d="M50,600 Q150,580 250,600 Q400,620 550,600 Q700,580 850,600" />
-          <path d="M80,620 Q180,600 280,620 Q430,640 580,620 Q730,600 880,620" />
-          <ellipse cx="200" cy="500" rx="40" ry="25" />
-          <ellipse cx="180" cy="510" rx="25" ry="15" />
-          <ellipse cx="700" cy="350" rx="30" ry="20" />
-          <ellipse cx="690" cy="340" rx="15" ry="10" />
-        </g>
-
-        <g stroke="#6b705c" strokeWidth="0.4" strokeOpacity="0.45" fill="none">
-          {[...Array(12)].map((_, i) => (
-            <line key={`v${i}`} x1={i * 100} y1="0" x2={i * 100} y2="800" />
-          ))}
-          {[...Array(8)].map((_, i) => (
-            <line key={`h${i}`} x1="0" y1={i * 100} x2="1200" y2={i * 100} />
-          ))}
-        </g>
-
-        {showCompass && (
-          <g transform="translate(100,200)" opacity="0.4">
-            <circle cx="0" cy="0" r="30" stroke="#f59e0b" strokeWidth="1" fill="none" />
-            <circle cx="0" cy="0" r="15" stroke="#f59e0b" strokeWidth="0.5" fill="none" />
-            <path d="M0,-25 L3,-15 L0,-10 L-3,-15 Z" fill="#f59e0b" />
-            <path d="M0,25 L3,15 L0,10 L-3,15 Z" fill="#6b705c" />
-            <path d="M25,0 L15,3 L10,0 L15,-3 Z" fill="#6b705c" />
-            <path d="M-25,0 L-15,3 L-10,0 L-15,-3 Z" fill="#6b705c" />
-            <text x="0" y="-35" textAnchor="middle" fontSize="8" fill="#f59e0b" fontWeight="bold">N</text>
-          </g>
-        )}
-
-        <g transform="translate(1000,700)" opacity="0.4">
-          <line x1="0" y1="0" x2="100" y2="0" stroke="#f59e0b" strokeWidth="2" />
-          <line x1="0" y1="-3" x2="0" y2="3" stroke="#f59e0b" strokeWidth="1" />
-          <line x1="50" y1="-3" x2="50" y2="3" stroke="#f59e0b" strokeWidth="1" />
-          <line x1="100" y1="-3" x2="100" y2="3" stroke="#f59e0b" strokeWidth="1" />
-          <text x="50" y="-8" textAnchor="middle" fontSize="6" fill="#f59e0b">100km</text>
-        </g>
-
-        {showCoordinates && storyCoordinates.map((coord, index) => (
-          <g key={index} transform={`translate(${(coord.x / 100) * 1200},${(coord.y / 100) * 800})`}>
-            <circle cx="0" cy="0" r="3" fill="#f59e0b" opacity="0.8" />
-            <circle cx="0" cy="0" r="6" stroke="#f59e0b" strokeWidth="0.5" fill="none" opacity="0.6" />
-            <g opacity="0.9">
-              <rect x="10" y="-12" width="80" height="20" rx="3" fill="#2a3421" fillOpacity="0.95" stroke="#f59e0b" strokeWidth="0.5" strokeOpacity="0.6" />
-              <text x="15" y="-5" fontSize="7" fill="#f59e0b" fontFamily="monospace" fontWeight="bold" stroke="#2a3421" strokeWidth="0.3">
-                {coord.lat}
-              </text>
-              <text x="15" y="3" fontSize="7" fill="#f59e0b" fontFamily="monospace" fontWeight="bold" stroke="#2a3421" strokeWidth="0.3">
-                {coord.lng}
+      {(showCompass || showCoordinates) && (
+        <svg
+          className="absolute inset-0 w-full h-full"
+          viewBox="0 0 1200 800"
+          xmlns="http://www.w3.org/2000/svg"
+          preserveAspectRatio="xMidYMid slice"
+          role="presentation"
+        >
+          {showCompass && (
+            <g transform="translate(100,200)" opacity="0.4">
+              <circle cx="0" cy="0" r="30" stroke="#f59e0b" strokeWidth="1" fill="none" />
+              <circle cx="0" cy="0" r="15" stroke="#f59e0b" strokeWidth="0.5" fill="none" />
+              <path d="M0,-25 L3,-15 L0,-10 L-3,-15 Z" fill="#f59e0b" />
+              <path d="M0,25 L3,15 L0,10 L-3,15 Z" fill="#6b705c" />
+              <path d="M25,0 L15,3 L10,0 L15,-3 Z" fill="#6b705c" />
+              <path d="M-25,0 L-15,3 L-10,0 L-15,-3 Z" fill="#6b705c" />
+              <text x="0" y="-35" textAnchor="middle" fontSize="8" fill="#f59e0b" fontWeight="bold">
+                N
               </text>
             </g>
-          </g>
-        ))}
+          )}
 
-        <g fontSize="4" fill="#6b705c" opacity="0.3" fontFamily="monospace">
-          <text x="150" y="550">24</text>
-          <text x="200" y="580">31</text>
-          <text x="250" y="560">18</text>
-          <text x="300" y="590">42</text>
-          <text x="450" y="570">27</text>
-          <text x="500" y="600">35</text>
-          <text x="650" y="580">29</text>
-          <text x="700" y="610">38</text>
-        </g>
-
-        <g stroke="#f59e0b" strokeWidth="1" strokeDasharray="3,2" fill="none" opacity="0.4">
-          <path d="M200,500 Q400,300 700,350 Q900,400 1000,200" />
-          <path d="M100,600 Q300,400 600,450 Q800,500 950,300" />
-        </g>
-
-        <g fontSize="5" fill="#f59e0b" opacity="0.4" fontFamily="monospace">
-          <text x="200" y="170">▲ 847m</text>
-          <text x="400" y="150">▲ 1,203m</text>
-          <text x="700" y="160">▲ 923m</text>
-          <text x="300" y="450">▼ -12m</text>
-          <text x="600" y="470">▼ -8m</text>
-        </g>
-      </svg>
+          {showCoordinates &&
+            storyCoordinates.map((coord, index) => (
+              <g key={index} transform={`translate(${(coord.x / 100) * 1200},${(coord.y / 100) * 800})`}>
+                <circle cx="0" cy="0" r="3" fill="#f59e0b" opacity="0.8" />
+                <circle cx="0" cy="0" r="6" stroke="#f59e0b" strokeWidth="0.5" fill="none" opacity="0.6" />
+                <g opacity="0.9">
+                  <rect
+                    x="10"
+                    y="-12"
+                    width="80"
+                    height="20"
+                    rx="3"
+                    fill="#2a3421"
+                    fillOpacity="0.95"
+                    stroke="#f59e0b"
+                    strokeWidth="0.5"
+                    strokeOpacity="0.6"
+                  />
+                  <text
+                    x="15"
+                    y="-5"
+                    fontSize="7"
+                    fill="#f59e0b"
+                    fontFamily="monospace"
+                    fontWeight="bold"
+                    stroke="#2a3421"
+                    strokeWidth="0.3"
+                  >
+                    {coord.lat}
+                  </text>
+                  <text
+                    x="15"
+                    y="3"
+                    fontSize="7"
+                    fill="#f59e0b"
+                    fontFamily="monospace"
+                    fontWeight="bold"
+                    stroke="#2a3421"
+                    strokeWidth="0.3"
+                  >
+                    {coord.lng}
+                  </text>
+                </g>
+              </g>
+            ))}
+        </svg>
+      )}
     </div>
   )
 }
