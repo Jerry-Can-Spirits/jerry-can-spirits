@@ -6,6 +6,7 @@ import IngredientsClient from './IngredientsClient'
 import Breadcrumbs from '@/components/Breadcrumbs'
 import StructuredData from '@/components/StructuredData'
 import HubIndex from '@/components/HubIndex'
+import SectionHeading from '@/components/SectionHeading'
 import { OG_IMAGE } from '@/lib/og'
 
 export const metadata: Metadata = {
@@ -61,30 +62,24 @@ export default async function IngredientsPage() {
   return (
     <>
       <StructuredData data={itemListSchema} id="ingredients-itemlist-schema" />
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 mb-8">
-        <Breadcrumbs
-          items={[
-            { label: 'Field Manual', href: '/field-manual' },
-            { label: 'Ingredients' },
-          ]}
-        />
-      </div>
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
-        <div className="text-center mb-12">
-          <div className="inline-block px-4 py-2 bg-jerry-green-800/60 backdrop-blur-sm rounded-full border border-gold-500/30 mb-6">
-            <span className="text-gold-300 text-sm font-semibold uppercase tracking-widest">
-              Premium Ingredients
-            </span>
-          </div>
-          <h1 className="text-4xl sm:text-6xl font-serif font-bold text-white mb-6">
+      <section className="band-dark pt-20 pb-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <Breadcrumbs
+            items={[
+              { label: 'Field Manual', href: '/field-manual' },
+              { label: 'Ingredients' },
+            ]}
+            className="mb-8"
+          />
+          <SectionHeading
+            as="h1"
+            eyebrow="Premium Ingredients"
+            intro="Every great cocktail starts with quality ingredients. Discover our carefully curated selection of spirits, mixers, and fresh components that elevate your home bar."
+          >
             Quality Components
             <br />
             <span className="text-gold-300">Exceptional Results</span>
-          </h1>
-          <p className="text-xl text-parchment-300 max-w-3xl mx-auto leading-relaxed">
-            Every great cocktail starts with quality ingredients. Discover our carefully curated selection
-            of spirits, mixers, and fresh components that elevate your home bar.
-          </p>
+          </SectionHeading>
         </div>
       </section>
       <Suspense>

@@ -6,6 +6,7 @@ import EquipmentClient from './EquipmentClient'
 import Breadcrumbs from '@/components/Breadcrumbs'
 import StructuredData from '@/components/StructuredData'
 import HubIndex from '@/components/HubIndex'
+import SectionHeading from '@/components/SectionHeading'
 import { OG_IMAGE } from '@/lib/og'
 
 export const metadata: Metadata = {
@@ -61,30 +62,24 @@ export default async function EquipmentPage() {
   return (
     <>
       <StructuredData data={itemListSchema} id="equipment-itemlist-schema" />
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 mb-8">
-        <Breadcrumbs
-          items={[
-            { label: 'Field Manual', href: '/field-manual' },
-            { label: 'Equipment' },
-          ]}
-        />
-      </div>
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
-        <div className="text-center mb-12">
-          <div className="inline-block px-4 py-2 bg-jerry-green-800/60 backdrop-blur-sm rounded-full border border-gold-500/30 mb-6">
-            <span className="text-gold-300 text-sm font-semibold uppercase tracking-widest">
-              Essential Barware
-            </span>
-          </div>
-          <h1 className="text-4xl sm:text-6xl font-serif font-bold text-white mb-6">
+      <section className="band-dark pt-20 pb-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <Breadcrumbs
+            items={[
+              { label: 'Field Manual', href: '/field-manual' },
+              { label: 'Equipment' },
+            ]}
+            className="mb-8"
+          />
+          <SectionHeading
+            as="h1"
+            eyebrow="Essential Barware"
+            intro="Professional-grade equipment doesn't require professional budgets. Discover the essential tools that transform good ingredients into exceptional cocktails."
+          >
             Tools of the Trade
             <br />
             <span className="text-gold-300">Engineered for Excellence</span>
-          </h1>
-          <p className="text-xl text-parchment-300 max-w-3xl mx-auto leading-relaxed">
-            Professional-grade equipment doesn&apos;t require professional budgets. Discover the essential tools
-            that transform good ingredients into exceptional cocktails.
-          </p>
+          </SectionHeading>
         </div>
       </section>
       <Suspense>
