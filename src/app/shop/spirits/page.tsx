@@ -13,6 +13,8 @@ import { OG_IMAGE } from '@/lib/og'
 import { safeJsonLd, productOffer, merchantOfferExtras, productGtin } from '@/lib/jsonLd'
 import { formatPrice } from '@/lib/format-price'
 import FAQAccordion from '@/components/FAQAccordion'
+import ScrollRow from '@/components/ScrollRow'
+import SectionHeading from '@/components/SectionHeading'
 
 export const metadata: Metadata = {
   title: 'British Craft Spirits',
@@ -176,53 +178,43 @@ export default async function SpiritsPage() {
   const currency = products[0]?.priceRange.minVariantPrice.currencyCode ?? 'GBP'
 
   return (
-    <main className="min-h-screen py-20">
+    <main>
       <ViewItemListTracker listId="spirits" listName="Spirits" currency={currency} items={trackerItems} />
       <StructuredData data={breadcrumbSchema} id="spirits-breadcrumb-schema" />
       <StructuredData data={itemListSchema} id="spirits-itemlist-schema" />
-      {/* Breadcrumb */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
+      {/* The hero and the product grid share the opening dark band; the
+          category copy, the questions and the sign-up then alternate. */}
+      <section className="band-dark pt-20 pb-16">
+       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <Breadcrumbs
           items={[
             { label: 'Shop', href: '/shop' },
             { label: 'Spirits' },
           ]}
+          className="mb-8"
         />
-      </div>
 
-      {/* Page Header */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
-        <div className="text-center mb-12">
-          <div className="inline-block px-4 py-2 bg-jerry-green-800/60 backdrop-blur-sm rounded-full border border-gold-500/30 mb-6">
-            <span className="text-gold-300 text-sm font-semibold uppercase tracking-widest">
-              Veteran-Owned
-            </span>
-          </div>
+        <SectionHeading as="h1" eyebrow="Veteran-Owned">
+          British Craft Spirits
+          <br />
+          <span className="text-gold-300">Small-Batch, Built Properly</span>
+        </SectionHeading>
 
-          <h1 className="text-4xl sm:text-6xl font-serif font-bold text-white mb-6">
-            British Craft Spirits
-            <br />
-            <span className="text-gold-300">Small-Batch, Built Properly</span>
-          </h1>
-
-          <div className="max-w-3xl mx-auto space-y-4 text-left">
-            <p className="text-xl text-parchment-300 leading-relaxed">
-              A spirits house starts with one bottle it can stand behind. Ours is Expedition Spiced Rum: Caribbean rum base: seven real spices, two natural sweeteners, and bourbon oak. No artificial flavourings. Bronze at the IWSC 2026, with a Silver for the serve with Franklin and Sons cola.
-            </p>
-            <p className="text-lg text-parchment-400 leading-relaxed">
-              Macerated by our British partner distillery in limited, numbered batches. When a batch is gone, that run is finished. Two Royal Corps of Signals veterans. 17 years of service between us. The same standards applied here.
-            </p>
-            <p className="text-lg text-parchment-400 leading-relaxed">
-              More expressions will follow as they earn their place. Nothing ships until it is right.
-            </p>
-          </div>
-
+        <div className="max-w-3xl mx-auto space-y-4 text-left">
+          <p className="text-xl text-parchment-300 leading-relaxed">
+            A spirits house starts with one bottle it can stand behind. Ours is Expedition Spiced Rum: Caribbean rum base: seven real spices, two natural sweeteners, and bourbon oak. No artificial flavourings. Bronze at the IWSC 2026, with a Silver for the serve with Franklin and Sons cola.
+          </p>
+          <p className="text-lg text-parchment-400 leading-relaxed">
+            Macerated by our British partner distillery in limited, numbered batches. When a batch is gone, that run is finished. Two Royal Corps of Signals veterans. 17 years of service between us. The same standards applied here.
+          </p>
+          <p className="text-lg text-parchment-400 leading-relaxed">
+            More expressions will follow as they earn their place. Nothing ships until it is right.
+          </p>
         </div>
-      </section>
 
-      {/* Products Grid */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
+        {/* A shop grid stays a grid: two-up on a phone is how people browse a
+            range, and a sideways row would hide most of it. */}
+        <div className="mt-12 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
           {products.map((product: ShopifyProduct, index: number) => {
             const variants = product.variants ?? []
             const defaultVariant = variants.length === 1 && variants[0].title === 'Default Title'
@@ -288,10 +280,12 @@ export default async function SpiritsPage() {
             )
           })}
         </div>
+       </div>
       </section>
 
       {/* About Our Spirits — SEO Content Section */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-20">
+      <section className="band-light py-16">
+       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid lg:grid-cols-2 gap-12 mb-16">
           <ScrollReveal>
           <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20 h-full">
@@ -334,51 +328,57 @@ export default async function SpiritsPage() {
 
         {/* What You're Getting */}
         <ScrollReveal>
-        <div className="bg-linear-to-br from-gold-500/10 to-gold-600/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20 mb-16">
+        <div className="bg-linear-to-br from-gold-500/10 to-gold-600/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
           <h3 className="text-2xl font-serif font-bold text-gold-300 mb-6 text-center">
             What You're Actually Getting
           </h3>
-          <div className="grid md:grid-cols-3 gap-6">
-            <div className="text-center">
-              <div className="w-16 h-16 bg-gold-400/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg className="w-8 h-8 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
-                </svg>
-              </div>
-              <h4 className="text-lg font-semibold text-white mb-2">Veteran-Made</h4>
-              <p className="text-parchment-300 text-sm">
-                Built by Royal Corps of Signals veterans who spent 17 years between them learning that "good enough" isn't. Same standards we applied to kit that had to work, now applied to spirits.
-              </p>
-            </div>
-            <div className="text-center">
-              <div className="w-16 h-16 bg-gold-400/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg className="w-8 h-8 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
-                </svg>
-              </div>
-              <h4 className="text-lg font-semibold text-white mb-2">Properly Small-Batch</h4>
-              <p className="text-parchment-300 text-sm">
-                Limited numbers per batch, every bottle numbered. Not a marketing line. When a batch is gone, it's gone.
-              </p>
-            </div>
-            <div className="text-center">
-              <div className="w-16 h-16 bg-gold-400/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg className="w-8 h-8 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                </svg>
-              </div>
-              <h4 className="text-lg font-semibold text-white mb-2">Gives Back</h4>
-              <p className="text-parchment-300 text-sm">
-                5% of profits supports forces charities. Armed Forces Covenant signatories. When you buy from us, you're supporting the veteran community. That's a promise.
-              </p>
-            </div>
-          </div>
+          <ScrollRow
+            ariaLabel="What You're Actually Getting"
+            cols="md:grid-cols-3"
+            items={[
+              <div key="veteran-made" className="h-full text-center">
+                <div className="w-16 h-16 bg-gold-400/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <svg className="w-8 h-8 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
+                  </svg>
+                </div>
+                <h4 className="text-lg font-semibold text-white mb-2">Veteran-Made</h4>
+                <p className="text-parchment-300 text-sm">
+                  Built by Royal Corps of Signals veterans who spent 17 years between them learning that "good enough" isn't. Same standards we applied to kit that had to work, now applied to spirits.
+                </p>
+              </div>,
+              <div key="properly-small-batch" className="h-full text-center">
+                <div className="w-16 h-16 bg-gold-400/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <svg className="w-8 h-8 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+                  </svg>
+                </div>
+                <h4 className="text-lg font-semibold text-white mb-2">Properly Small-Batch</h4>
+                <p className="text-parchment-300 text-sm">
+                  Limited numbers per batch, every bottle numbered. Not a marketing line. When a batch is gone, it's gone.
+                </p>
+              </div>,
+              <div key="gives-back" className="h-full text-center">
+                <div className="w-16 h-16 bg-gold-400/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <svg className="w-8 h-8 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                  </svg>
+                </div>
+                <h4 className="text-lg font-semibold text-white mb-2">Gives Back</h4>
+                <p className="text-parchment-300 text-sm">
+                  5% of profits supports forces charities. Armed Forces Covenant signatories. When you buy from us, you're supporting the veteran community. That's a promise.
+                </p>
+              </div>,
+            ]}
+          />
         </div>
         </ScrollReveal>
+       </div>
       </section>
 
       {/* FAQ Section */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-20">
+      <section className="band-dark py-16">
+       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* FAQ Schema */}
         <script
           type="application/ld+json"
@@ -407,10 +407,12 @@ export default async function SpiritsPage() {
             items={spiritsFaqs.map((faq) => ({ question: faq.question, answer: faq.rich ?? faq.answer }))}
           />
         </div>
+       </div>
       </section>
 
       {/* CTA Section */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-20">
+      <section className="band-light py-16">
+       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-12 border border-gold-500/20 text-center">
           <h2 className="text-3xl font-serif font-bold text-white mb-4">
             Try It Yourself
@@ -425,6 +427,7 @@ export default async function SpiritsPage() {
             Join the List
           </Link>
         </div>
+       </div>
       </section>
     </main>
   )

@@ -5,6 +5,8 @@ import BackToTop from '@/components/BackToTop'
 import Breadcrumbs from '@/components/Breadcrumbs'
 
 import ScrollReveal from '@/components/ScrollReveal'
+import ScrollRow from '@/components/ScrollRow'
+import SectionHeading from '@/components/SectionHeading'
 import { OG_IMAGE } from '@/lib/og'
 
 export const metadata: Metadata = {
@@ -43,107 +45,107 @@ export const metadata: Metadata = {
 
 export default function Ethos() {
   return (
-    <main className="min-h-screen py-20">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
-        <Breadcrumbs
-          items={[
-            { label: 'Our Ethos' },
-          ]}
-        />
-      </div>
-
+    <main>
       {/* Hero Section - Compass & Copper */}
-      <section className="relative min-h-[80vh] flex items-center justify-center overflow-hidden">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          {/* Hero Imagery Placeholder */}
-          <div className="mb-12 relative">
-            <div className="inline-block px-4 py-2 bg-jerry-green-800/60 backdrop-blur-sm rounded-full border border-gold-500/30 mb-6">
-              <span className="text-gold-300 text-sm font-semibold uppercase tracking-widest">
-                Our Ethos
-              </span>
-            </div>
-            
-            {/* Compass & Copper Visual */}
-            <div className="relative w-full max-w-3xl mx-auto mb-8">
-              <Image
-                src="/images/hero/Compass_Still.webp"
-                alt="A copper alembic, brass compass and antique maps on a wooden table"
-                width={1200}
-                height={600}
-                className="rounded-lg"
-              />
-            </div>
-          </div>
+      <section className="band-dark pt-20 pb-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <Breadcrumbs
+            items={[
+              { label: 'Our Ethos' },
+            ]}
+            className="mb-8"
+          />
 
-          <h1 className="text-4xl sm:text-6xl font-serif font-bold text-white mb-6">
+          <SectionHeading
+            as="h1"
+            eyebrow="Our Ethos"
+            intro={
+              <>
+                We&apos;re not trying to reinvent spiced rum. We just want to make it properly. Real botanicals, honest processes, and no cutting corners. Each bottle of our small batch rum is the result of genuine care about what goes in it.
+              </>
+            }
+          >
             Built by Experience.
             <br />
             <span className="text-gold-300">Made Without Shortcuts.</span>
-          </h1>
-          
-          <p className="text-xl text-parchment-300 max-w-3xl mx-auto leading-relaxed mb-8">
-            We&apos;re not trying to reinvent spiced rum. We just want to make it properly. Real botanicals, honest processes, and no cutting corners. Each bottle of our small batch rum is the result of genuine care about what goes in it.
-          </p>
+          </SectionHeading>
 
-          <div className="inline-flex items-center space-x-2 text-gold-300">
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-            </svg>
-            <span className="text-sm font-semibold uppercase tracking-wider">Our Journey</span>
+          {/* Compass & Copper Visual */}
+          <div className="relative w-full max-w-3xl mx-auto mb-8">
+            <Image
+              src="/images/hero/Compass_Still.webp"
+              alt="A copper alembic, brass compass and antique maps on a wooden table"
+              width={1200}
+              height={600}
+              className="rounded-lg"
+            />
+          </div>
+
+          <div className="text-center">
+            <div className="inline-flex items-center space-x-2 text-gold-300">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+              </svg>
+              <span className="text-sm font-semibold uppercase tracking-wider">Our Journey</span>
+            </div>
           </div>
         </div>
       </section>
 
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        
-        {/* Section 1: Our Values */}
-        <section className="py-20">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-serif font-bold text-white mb-6">
-              Our Values
-            </h2>
-            <p className="text-xl text-parchment-300 max-w-3xl mx-auto">
-              The things that matter to us when we&apos;re making spirits.
-            </p>
-          </div>
+      {/* Section 1: Our Values */}
+      <section className="band-light py-16">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <SectionHeading
+            intro={
+              <>
+                The things that matter to us when we&apos;re making spirits.
+              </>
+            }
+          >
+            Our Values
+          </SectionHeading>
 
           {/* Unified Values Grid */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
-            {[
-              {
-                value: "Reliability",
-                description: "Always there when you need it, in the field or in the glass."
-              },
-              {
-                value: "Function Over Form",
-                description: "Beauty that serves purpose. Every detail engineered to perform."
-              },
-              {
-                value: "Standards",
-                description: "We hold ourselves to one standard: get it right. Not good enough. Right. That applies to every ingredient, every batch, every bottle."
-              },
-              {
-                value: "Precision",
-                description: "Getting it right the first time. No shortcuts, no compromises."
-              },
-              {
-                value: "Authenticity",
-                description: "Honest about our craft, transparent about our process, genuine in our commitments."
-              },
-              {
-                value: "Earned, Not Given",
-                description: "Quality that proves itself. The drink at the end of the journey you've actually taken."
-              }
-            ].map((item, index) => (
-              <ScrollReveal key={index} delay={(index % 3) as 0 | 1 | 2}>
-                <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20 hover:border-gold-400/40 transition-all duration-300 group h-full">
-                  <div className="mb-4">
-                    <h3 className="text-xl font-serif font-bold text-gold-300 mb-3">{item.value}</h3>
-                    <p className="text-parchment-300 leading-relaxed">{item.description}</p>
+          <div className="mb-16">
+            <ScrollRow
+              ariaLabel="Our values"
+              cols="md:grid-cols-2 lg:grid-cols-3"
+              items={[
+                {
+                  value: "Reliability",
+                  description: "Always there when you need it, in the field or in the glass."
+                },
+                {
+                  value: "Function Over Form",
+                  description: "Beauty that serves purpose. Every detail engineered to perform."
+                },
+                {
+                  value: "Standards",
+                  description: "We hold ourselves to one standard: get it right. Not good enough. Right. That applies to every ingredient, every batch, every bottle."
+                },
+                {
+                  value: "Precision",
+                  description: "Getting it right the first time. No shortcuts, no compromises."
+                },
+                {
+                  value: "Authenticity",
+                  description: "Honest about our craft, transparent about our process, genuine in our commitments."
+                },
+                {
+                  value: "Earned, Not Given",
+                  description: "Quality that proves itself. The drink at the end of the journey you've actually taken."
+                }
+              ].map((item, index) => (
+                <ScrollReveal key={index} delay={(index % 3) as 0 | 1 | 2} className="h-full">
+                  <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20 hover:border-gold-400/40 transition-all duration-300 group h-full">
+                    <div className="mb-4">
+                      <h3 className="text-xl font-serif font-bold text-gold-300 mb-3">{item.value}</h3>
+                      <p className="text-parchment-300 leading-relaxed">{item.description}</p>
+                    </div>
                   </div>
-                </div>
-              </ScrollReveal>
-            ))}
+                </ScrollReveal>
+              ))}
+            />
           </div>
 
           {/* Philosophy Quote */}
@@ -158,24 +160,21 @@ export default function Ethos() {
             </div>
           </div>
           </ScrollReveal>
-        </section>
+        </div>
+      </section>
 
-        {/* Section 2: The Journey (Process Timeline) */}
-        <section className="py-20">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-serif font-bold text-white mb-6">
-              The Journey
-            </h2>
-            <p className="text-xl text-parchment-300 max-w-3xl mx-auto">
-              From the Caribbean rum base to the bottle. Every step is deliberate. Nothing is in there by accident.
-            </p>
-          </div>
+      {/* Section 2: The Journey (Process Timeline) */}
+      <section className="band-dark py-16">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <SectionHeading intro="From the Caribbean rum base to the bottle. Every step is deliberate. Nothing is in there by accident.">
+            The Journey
+          </SectionHeading>
 
           {/* Process Timeline */}
           <div className="relative">
             {/* Timeline Line */}
             <div className="absolute left-8 top-0 bottom-0 w-px bg-linear-to-b from-gold-400 via-gold-500 to-gold-600"></div>
-            
+
             <div className="space-y-12">
               {/* Sourcing */}
               <ScrollReveal direction="left">
@@ -254,7 +253,7 @@ export default function Ethos() {
                     Agave syrup adds natural sweetness, and bourbon barrel chips layer in soft oak and warmth. See our{' '}
                     <Link href="/ingredients/expedition-spiced-rum/" className="text-gold-300 hover:text-gold-400 underline">full ingredients list</Link>.
                   </p>
-                  
+
                   {/* Details - Always Visible */}
                   <div className="mt-6">
                     <div className="bg-jerry-green-800/60 rounded-lg p-6">
@@ -324,18 +323,15 @@ export default function Ethos() {
             </ScrollReveal>
             </div>
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* Section 3: The Commitment */}
-        <section className="py-20">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-serif font-bold text-white mb-6">
-              Our Commitments
-            </h2>
-            <p className="text-xl text-parchment-300 max-w-3xl mx-auto">
-              The principles that guide how we make our spiced rum. No compromises.
-            </p>
-          </div>
+      {/* Section 3: The Commitment */}
+      <section className="band-light py-16">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <SectionHeading intro="The principles that guide how we make our spiced rum. No compromises.">
+            Our Commitments
+          </SectionHeading>
 
           <div className="grid md:grid-cols-2 gap-12 items-start">
             {/* UK Focus */}
@@ -439,17 +435,22 @@ export default function Ethos() {
             </div>
             </ScrollReveal>
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* CTA Section */}
-        <section className="py-20 text-center">
-          <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-12 border border-gold-500/20">
-            <h2 className="text-3xl sm:text-4xl font-serif font-bold text-white mb-6">
+      {/* CTA Section */}
+      <section className="band-dark py-16">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-12 border border-gold-500/20 text-center">
+            <SectionHeading
+              intro={
+                <>
+                  Enough about us. The proof is in the bottle. Check out our <Link href="/shop/product/jerry-can-spirits-expedition-spiced-rum/" className="text-gold-300 hover:text-gold-400 underline decoration-gold-500/40 hover:decoration-gold-400 transition-colors">Expedition Spiced Rum</Link> and see what you think.
+                </>
+              }
+            >
               Try the Rum
-            </h2>
-            <p className="text-xl text-parchment-300 mb-8 max-w-2xl mx-auto">
-              Enough about us. The proof is in the bottle. Check out our <Link href="/shop/product/jerry-can-spirits-expedition-spiced-rum/" className="text-gold-300 hover:text-gold-400 underline decoration-gold-500/40 hover:decoration-gold-400 transition-colors">Expedition Spiced Rum</Link> and see what you think.
-            </p>
+            </SectionHeading>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
@@ -473,9 +474,8 @@ export default function Ethos() {
               </Link>
             </div>
           </div>
-        </section>
-
-      </div>
+        </div>
+      </section>
 
       {/* Back to Top Button */}
       <BackToTop />
