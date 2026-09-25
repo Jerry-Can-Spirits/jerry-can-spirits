@@ -718,6 +718,65 @@ html:not([data-age-verified]) body:has(.age-gate) {
   background-color: #10281c;
 }
 
+/* Editorial rendered through Tailwind Typography's invert variant (the
+   guide bodies, the product description, the founder bios) sets its own
+   colour variables, which the token re-pointing above never reaches, so on a
+   light band it came out near-white on cream. That is why the guide body
+   was still the largest single wall of green on the site after the band
+   rollout (25 Sep 2026). Point the prose variables at the same inks the
+   band uses, so a prose block can sit on light like anything else. */
+.band-light .prose-invert {
+  --tw-prose-body: #3d4a43;
+  --tw-prose-headings: #163b28;
+  --tw-prose-lead: #3d4a43;
+  --tw-prose-links: #7d4106;
+  --tw-prose-bold: #163b28;
+  --tw-prose-counters: #56625b;
+  --tw-prose-bullets: #8a6a2a;
+  --tw-prose-hr: #8a6a2a;
+  --tw-prose-quotes: #163b28;
+  --tw-prose-quote-borders: #8a6a2a;
+  --tw-prose-captions: #56625b;
+  --tw-prose-code: #163b28;
+  --tw-prose-pre-code: #fefdfb;
+  --tw-prose-pre-bg: #1e5337;
+  --tw-prose-th-borders: #8a6a2a;
+  --tw-prose-td-borders: #dfc396;
+}
+
+/* The status colours: red for a warning, green for a budget pick or a good
+   sign, amber and yellow for a badge. Chosen against green, and the reason
+   any panel carrying one had to stay on a dark band. The same treatment
+   as the gold: darker on cream, measured to pass AA over a contour line,
+   and restored inside an island where the ground is green again. */
+.band-light {
+  --color-red-400: #9b1c1c;
+  --color-red-300: #9b1c1c;
+  --color-green-400: #166534;
+  --color-green-300: #166534;
+  --color-amber-300: #92400e;
+  --color-amber-400: #92400e;
+  --color-yellow-400: #854d0e;
+  --color-yellow-300: #854d0e;
+}
+.band-light :is(
+  [class*='from-parchment-'],
+  [class*='from-gold-400/'],
+  [class*='from-gold-500/'],
+  [class*='from-gold-600/'],
+  [class*='bg-jerry-green-'],
+  [class*='from-jerry-green-']
+) {
+  --color-red-400: #f87171;
+  --color-red-300: #fca5a5;
+  --color-green-400: #4ade80;
+  --color-green-300: #86efac;
+  --color-amber-300: #fcd34d;
+  --color-amber-400: #fbbf24;
+  --color-yellow-400: #facc15;
+  --color-yellow-300: #fde047;
+}
+
 /* The logo plates are white on purpose, for contrast against whatever they
    sit on. They stay white on both. */
 .band-light .bg-white,
