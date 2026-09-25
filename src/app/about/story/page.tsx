@@ -6,6 +6,8 @@ import BackToTop from '@/components/BackToTop'
 import Breadcrumbs from '@/components/Breadcrumbs'
 import StructuredData from '@/components/StructuredData'
 import ScrollReveal from '@/components/ScrollReveal'
+import ScrollRow from '@/components/ScrollRow'
+import SectionHeading from '@/components/SectionHeading'
 import { baseOpenGraph, OG_IMAGE } from '@/lib/og'
 import { safeJsonLd, ORG_REF } from '@/lib/jsonLd'
 import FAQAccordion from '@/components/FAQAccordion'
@@ -106,72 +108,64 @@ export const metadata: Metadata = {
 
 export default function OurStory() {
   return (
-    <main className="min-h-screen py-20">
+    <main>
       <StructuredData data={articleSchema} id="story-article-schema" />
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
-        <Breadcrumbs
-          items={[
-            { label: 'About', href: '/about/story' },
-            { label: 'Our Story' },
-          ]}
-        />
-      </div>
 
       {/* Hero Section */}
-      <section className="relative min-h-[80vh] flex items-center justify-center overflow-hidden">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="mb-12 relative">
-            <div className="inline-block px-4 py-2 bg-jerry-green-800/60 backdrop-blur-sm rounded-full border border-gold-500/30 mb-6">
-              <span className="text-gold-300 text-sm font-semibold uppercase tracking-widest">
-                Our Story
-              </span>
-            </div>
+      <section className="band-dark pt-20 pb-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <Breadcrumbs
+            items={[
+              { label: 'About', href: '/about/story' },
+              { label: 'Our Story' },
+            ]}
+            className="mb-8"
+          />
 
-            {/* Story Hero Image */}
-            <div className="relative w-full max-w-2xl mx-auto h-48 sm:h-64 md:h-80 lg:h-96 rounded-lg overflow-hidden border border-gold-500/20 mb-8 shadow-2xl">
-              <Image
-                src="/images/hero/Trail_Hero.webp"
-                alt="Jerry Can Spirits - Veteran-owned British spirits with military heritage"
-                fill
-                className="object-cover"
-                sizes="(max-width: 768px) 100vw, 672px"
-                priority
-              />
-              <div className="absolute inset-0 bg-linear-to-t from-jerry-green-900/60 to-transparent" />
-            </div>
-          </div>
-
-          <h1 className="text-4xl sm:text-6xl font-serif font-bold text-white mb-6">
+          <SectionHeading
+            as="h1"
+            eyebrow="Our Story"
+            intro={
+              <>
+                We served. We got out. We wanted a proper drink and couldn&apos;t find one. So we made it ourselves. No grand plan. Just a decision to get on with it.
+              </>
+            }
+          >
             Two Veterans. One Decision.
             <br />
             <span className="text-gold-300">No Shortcuts.</span>
-          </h1>
+          </SectionHeading>
 
-          <p className="text-xl text-parchment-300 max-w-3xl mx-auto leading-relaxed mb-8">
-            We served. We got out. We wanted a proper drink and couldn&apos;t find one. So we made it ourselves. No grand plan. Just a decision to get on with it.
-          </p>
+          {/* Story Hero Image */}
+          <div className="relative w-full max-w-2xl mx-auto h-48 sm:h-64 md:h-80 lg:h-96 rounded-lg overflow-hidden border border-gold-500/20 mb-8 shadow-2xl">
+            <Image
+              src="/images/hero/Trail_Hero.webp"
+              alt="Jerry Can Spirits - Veteran-owned British spirits with military heritage"
+              fill
+              className="object-cover"
+              sizes="(max-width: 768px) 100vw, 672px"
+              priority
+            />
+            <div className="absolute inset-0 bg-linear-to-t from-jerry-green-900/60 to-transparent" />
+          </div>
 
-          <div className="inline-flex items-center space-x-2 text-gold-300">
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-            </svg>
-            <span className="text-sm font-semibold uppercase tracking-wider">Our Journey</span>
+          <div className="text-center">
+            <div className="inline-flex items-center space-x-2 text-gold-300">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+              </svg>
+              <span className="text-sm font-semibold uppercase tracking-wider">Our Journey</span>
+            </div>
           </div>
         </div>
       </section>
 
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-
-        {/* Section 1: From the Trenches to Adventure */}
-        <section className="py-20">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-serif font-bold text-white mb-6">
-              What Service Taught Us
-            </h2>
-            <p className="text-xl text-parchment-300 max-w-3xl mx-auto">
-              Service with the Royal Corps of Signals took us to places where your equipment really gets put to the test. Over 17 years between us, and that background shapes everything about how we approach our craft.
-            </p>
-          </div>
+      {/* Section 1: From the Trenches to Adventure */}
+      <section className="band-light py-16">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <SectionHeading intro="Service with the Royal Corps of Signals took us to places where your equipment really gets put to the test. Over 17 years between us, and that background shapes everything about how we approach our craft.">
+            What Service Taught Us
+          </SectionHeading>
 
           <div className="grid md:grid-cols-2 gap-8 sm:gap-12 items-center mb-12 sm:mb-16">
             {/* Story Content */}
@@ -224,7 +218,7 @@ export default function OurStory() {
           </div>
 
           {/* The Idea That Wouldn't Die */}
-          <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-12 border border-gold-500/20">
+          <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 sm:p-12 border border-gold-500/20">
             <div className="text-center mb-8">
               <h3 className="text-2xl font-serif font-bold text-white mb-4">
                 The Idea That Wouldn&apos;t Die
@@ -239,49 +233,54 @@ export default function OurStory() {
                 That was the phrase that kept coming up, over and over, every time we got together to chat. Every shared experience, every conversation, every passing minute. There was this nagging feeling that someone ought to have a go at engineering rum, with the same kind of precision we brought to everything else. That we could leave the pirates and palm trees behind and craft something that was truly worth drinking.
               </p>
 
-              <div className="grid md:grid-cols-3 gap-6 mt-8">
-                <ScrollReveal delay={0}>
-                  <div className="text-center">
-                    <div className="w-12 h-12 bg-gold-400/20 rounded-full flex items-center justify-center mx-auto mb-3">
-                      <span className="text-gold-400 text-xl font-bold">1</span>
-                    </div>
-                    <p className="text-gold-300 font-semibold mb-2">What We&apos;re All About</p>
-                    <p className="text-parchment-300 text-sm">Designing rum with purpose and integrity to begin with</p>
-                  </div>
-                </ScrollReveal>
-                <ScrollReveal delay={1}>
-                  <div className="text-center">
-                    <div className="w-12 h-12 bg-gold-400/20 rounded-full flex items-center justify-center mx-auto mb-3">
-                      <span className="text-gold-400 text-xl font-bold">2</span>
-                    </div>
-                    <p className="text-gold-300 font-semibold mb-2">What We&apos;re Making</p>
-                    <p className="text-parchment-300 text-sm">Rum that does what it&apos;s supposed to. Made properly. Worth drinking.</p>
-                  </div>
-                </ScrollReveal>
-                <ScrollReveal delay={2}>
-                  <div className="text-center">
-                    <div className="w-12 h-12 bg-gold-400/20 rounded-full flex items-center justify-center mx-auto mb-3">
-                      <span className="text-gold-400 text-xl font-bold">3</span>
-                    </div>
-                    <p className="text-gold-300 font-semibold mb-2">Our Slogan</p>
-                    <p className="text-parchment-300 text-sm">&quot;Rum that earns its place on the shelf&quot;</p>
-                  </div>
-                </ScrollReveal>
+              <div className="mt-8">
+                <ScrollRow
+                  ariaLabel="What we set out to do"
+                  cols="md:grid-cols-3"
+                  items={[
+                    <ScrollReveal key="about" delay={0} className="h-full">
+                      <div className="h-full text-center">
+                        <div className="w-12 h-12 bg-gold-400/20 rounded-full flex items-center justify-center mx-auto mb-3">
+                          <span className="text-gold-400 text-xl font-bold">1</span>
+                        </div>
+                        <p className="text-gold-300 font-semibold mb-2">What We&apos;re All About</p>
+                        <p className="text-parchment-300 text-sm">Designing rum with purpose and integrity to begin with</p>
+                      </div>
+                    </ScrollReveal>,
+                    <ScrollReveal key="making" delay={1} className="h-full">
+                      <div className="h-full text-center">
+                        <div className="w-12 h-12 bg-gold-400/20 rounded-full flex items-center justify-center mx-auto mb-3">
+                          <span className="text-gold-400 text-xl font-bold">2</span>
+                        </div>
+                        <p className="text-gold-300 font-semibold mb-2">What We&apos;re Making</p>
+                        <p className="text-parchment-300 text-sm">Rum that does what it&apos;s supposed to. Made properly. Worth drinking.</p>
+                      </div>
+                    </ScrollReveal>,
+                    <ScrollReveal key="slogan" delay={2} className="h-full">
+                      <div className="h-full text-center">
+                        <div className="w-12 h-12 bg-gold-400/20 rounded-full flex items-center justify-center mx-auto mb-3">
+                          <span className="text-gold-400 text-xl font-bold">3</span>
+                        </div>
+                        <p className="text-gold-300 font-semibold mb-2">Our Slogan</p>
+                        <p className="text-parchment-300 text-sm">&quot;Rum that earns its place on the shelf&quot;</p>
+                      </div>
+                    </ScrollReveal>,
+                  ]}
+                />
               </div>
             </div>
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* Section 2: Turning Dreams into Reality */}
-        <section className="py-20">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-serif font-bold text-white mb-6">
-              When We Stopped Talking and Started
-            </h2>
-            <p className="text-xl text-parchment-300 max-w-3xl mx-auto">
-              The point at which we stopped just dreaming about this and started actually doing it, with a bit of purpose to boot.
-            </p>
-          </div>
+      {/* Sections 2 and 3 share a dark band: the status colours in section 3
+          (red-400 / green-400) were chosen for a dark ground. */}
+      <section className="band-dark py-16">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Section 2: Turning Dreams into Reality */}
+          <SectionHeading intro="The point at which we stopped just dreaming about this and started actually doing it, with a bit of purpose to boot.">
+            When We Stopped Talking and Started
+          </SectionHeading>
 
           <div className="grid lg:grid-cols-2 gap-8 sm:gap-12 lg:gap-16 items-center">
             <div className="space-y-6 sm:space-y-8">
@@ -335,140 +334,136 @@ export default function OurStory() {
               </blockquote>
             </div>
           </div>
-        </section>
 
-        {/* Section 3: Building Something from Scratch */}
-        <section className="py-20">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-serif font-bold text-white mb-6">
+          {/* Section 3: Building Something from Scratch */}
+          <div className="mt-20">
+            <SectionHeading intro="The gritty reality of bootstrapping a business yourself: stuck in a home office, learning as you go, and somehow building something you can be proud of.">
               Building Something from Scratch
-            </h2>
-            <p className="text-xl text-parchment-300 max-w-3xl mx-auto">
-              The gritty reality of bootstrapping a business yourself: stuck in a home office, learning as you go, and somehow building something you can be proud of.
-            </p>
-          </div>
+            </SectionHeading>
 
-          <div className="grid md:grid-cols-3 gap-8 mb-16">
-            {/* The Hard Bits */}
-            <ScrollReveal delay={0}>
-            <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20 h-full">
-              <div className="text-center mb-6">
-                <div className="w-16 h-16 bg-red-400/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <svg className="w-8 h-8 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                </div>
-                <h3 className="text-xl font-serif font-bold text-white mb-4">The Hard Bits</h3>
-              </div>
+            <div className="mb-16">
+              <ScrollRow
+                ariaLabel="Building from scratch"
+                cols="md:grid-cols-3"
+                items={[
+                  /* The Hard Bits */
+                  <ScrollReveal key="hard-bits" delay={0} className="h-full">
+                    <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20 h-full">
+                      <div className="text-center mb-6">
+                        <div className="w-16 h-16 bg-red-400/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                          <svg className="w-8 h-8 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                          </svg>
+                        </div>
+                        <h3 className="text-xl font-serif font-bold text-white mb-4">The Hard Bits</h3>
+                      </div>
 
-              <ul className="space-y-3 text-parchment-300 text-sm">
-                <li className="flex items-start space-x-2">
-                  <span className="text-red-400 mt-1">•</span>
-                  <span>Funding entirely out of our own pockets: no safety net, no way out</span>
-                </li>
-                <li className="flex items-start space-x-2">
-                  <span className="text-red-400 mt-1">•</span>
-                  <span>Figuring out complex regulations on the fly: trial and error all the way</span>
-                </li>
-                <li className="flex items-start space-x-2">
-                  <span className="text-red-400 mt-1">•</span>
-                  <span>Building a whole business from the ground up, solo</span>
-                </li>
-                <li className="flex items-start space-x-2">
-                  <span className="text-red-400 mt-1">•</span>
-                  <span>Finding reliable suppliers and partners when nobody knows who you are</span>
-                </li>
-              </ul>
+                      <ul className="space-y-3 text-parchment-300 text-sm">
+                        <li className="flex items-start space-x-2">
+                          <span className="text-red-400 mt-1">•</span>
+                          <span>Funding entirely out of our own pockets: no safety net, no way out</span>
+                        </li>
+                        <li className="flex items-start space-x-2">
+                          <span className="text-red-400 mt-1">•</span>
+                          <span>Figuring out complex regulations on the fly: trial and error all the way</span>
+                        </li>
+                        <li className="flex items-start space-x-2">
+                          <span className="text-red-400 mt-1">•</span>
+                          <span>Building a whole business from the ground up, solo</span>
+                        </li>
+                        <li className="flex items-start space-x-2">
+                          <span className="text-red-400 mt-1">•</span>
+                          <span>Finding reliable suppliers and partners when nobody knows who you are</span>
+                        </li>
+                      </ul>
+                    </div>
+                  </ScrollReveal>,
+
+                  /* The Reality Check */
+                  <ScrollReveal key="reality-check" delay={1} className="h-full">
+                    <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20 h-full">
+                      <div className="text-center mb-6">
+                        <div className="w-16 h-16 bg-gold-400/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                          <svg className="w-8 h-8 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
+                          </svg>
+                        </div>
+                        <h3 className="text-xl font-serif font-bold text-white mb-4">The Reality Check</h3>
+                      </div>
+
+                      <div className="space-y-3">
+                        <p className="text-parchment-300 text-sm text-center italic mb-4">
+                          &quot;This isn&apos;t some corporation with a team the size of a small army behind it. This is just us, in our home office, trying to build something real.&quot;
+                        </p>
+                        <div className="pt-4 space-y-2">
+                          <p className="text-gold-300 text-sm">• Learning the regulations on a daily basis, and loving the challenge</p>
+                          <p className="text-gold-300 text-sm">• Our home office is the real HQ. That&apos;s just how it is.</p>
+                          <p className="text-gold-300 text-sm">• Quality is the one thing we can&apos;t compromise on</p>
+                        </div>
+                      </div>
+                    </div>
+                  </ScrollReveal>,
+
+                  /* The School of Hard Knocks */
+                  <ScrollReveal key="hard-knocks" delay={2} className="h-full">
+                    <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20 h-full">
+                      <div className="text-center mb-6">
+                        <div className="w-16 h-16 bg-green-400/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                          <svg className="w-8 h-8 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                          </svg>
+                        </div>
+                        <h3 className="text-xl font-serif font-bold text-white mb-4">The School of Hard Knocks</h3>
+                      </div>
+
+                      <ul className="space-y-3 text-parchment-300 text-sm">
+                        <li className="flex items-start space-x-2">
+                          <span className="text-green-400 mt-1">•</span>
+                          <span>Every obstacle is a chance to learn something new</span>
+                        </li>
+                        <li className="flex items-start space-x-2">
+                          <span className="text-green-400 mt-1">•</span>
+                          <span>The same standards in the business as in the bottle. No cutting corners.</span>
+                        </li>
+                        <li className="flex items-start space-x-2">
+                          <span className="text-green-400 mt-1">•</span>
+                          <span>Building relationships one conversation at a time. They&apos;re everything.</span>
+                        </li>
+                        <li className="flex items-start space-x-2">
+                          <span className="text-green-400 mt-1">•</span>
+                          <span>Quality doesn&apos;t need a big budget to deliver</span>
+                        </li>
+                      </ul>
+                    </div>
+                  </ScrollReveal>,
+                ]}
+              />
             </div>
 
+            {/* David vs the Goliaths */}
+            <ScrollReveal>
+            <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20 text-center">
+              <h3 className="text-2xl font-serif font-bold text-white mb-6">
+                David vs the Goliaths
+              </h3>
+              <p className="text-lg text-parchment-300 leading-relaxed max-w-4xl mx-auto mb-6">
+                We&apos;re not trying to compete with the marketing budgets of massive corporations with teams of marketing gurus. We&apos;re competing on authenticity, on care, on the kind of attention to detail that only comes when you genuinely care about every single thing you do. When you&apos;re living off your own savings, when you&apos;re figuring out regulations as you go, when you&apos;re building every single relationship from scratch, you simply can&apos;t afford to cut corners. Read more about <Link href="/ethos/" className="text-gold-300 hover:text-gold-400 underline">our values</Link>.
+              </p>
+              <div className="text-gold-300 text-sm font-semibold uppercase tracking-wider">
+                Small team. No safety net. No compromise. Because we can&apos;t afford to.
+              </div>
+            </div>
             </ScrollReveal>
-
-            {/* The Reality Check */}
-            <ScrollReveal delay={1}>
-            <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20 h-full">
-              <div className="text-center mb-6">
-                <div className="w-16 h-16 bg-gold-400/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <svg className="w-8 h-8 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
-                  </svg>
-                </div>
-                <h3 className="text-xl font-serif font-bold text-white mb-4">The Reality Check</h3>
-              </div>
-
-              <div className="space-y-3">
-                <p className="text-parchment-300 text-sm text-center italic mb-4">
-                  &quot;This isn&apos;t some corporation with a team the size of a small army behind it. This is just us, in our home office, trying to build something real.&quot;
-                </p>
-                <div className="pt-4 space-y-2">
-                  <p className="text-gold-300 text-sm">• Learning the regulations on a daily basis, and loving the challenge</p>
-                  <p className="text-gold-300 text-sm">• Our home office is the real HQ. That&apos;s just how it is.</p>
-                  <p className="text-gold-300 text-sm">• Quality is the one thing we can&apos;t compromise on</p>
-                </div>
-              </div>
-            </div>
-
-            </ScrollReveal>
-
-            {/* The School of Hard Knocks */}
-            <ScrollReveal delay={2}>
-            <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20 h-full">
-              <div className="text-center mb-6">
-                <div className="w-16 h-16 bg-green-400/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <svg className="w-8 h-8 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                  </svg>
-                </div>
-                <h3 className="text-xl font-serif font-bold text-white mb-4">The School of Hard Knocks</h3>
-              </div>
-
-              <ul className="space-y-3 text-parchment-300 text-sm">
-                <li className="flex items-start space-x-2">
-                  <span className="text-green-400 mt-1">•</span>
-                  <span>Every obstacle is a chance to learn something new</span>
-                </li>
-                <li className="flex items-start space-x-2">
-                  <span className="text-green-400 mt-1">•</span>
-                  <span>The same standards in the business as in the bottle. No cutting corners.</span>
-                </li>
-                <li className="flex items-start space-x-2">
-                  <span className="text-green-400 mt-1">•</span>
-                  <span>Building relationships one conversation at a time. They&apos;re everything.</span>
-                </li>
-                <li className="flex items-start space-x-2">
-                  <span className="text-green-400 mt-1">•</span>
-                  <span>Quality doesn&apos;t need a big budget to deliver</span>
-                </li>
-              </ul>
-            </div>
-            </ScrollReveal>
           </div>
+        </div>
+      </section>
 
-          {/* David vs the Goliaths */}
-          <ScrollReveal>
-          <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20 text-center">
-            <h3 className="text-2xl font-serif font-bold text-white mb-6">
-              David vs the Goliaths
-            </h3>
-            <p className="text-lg text-parchment-300 leading-relaxed max-w-4xl mx-auto mb-6">
-              We&apos;re not trying to compete with the marketing budgets of massive corporations with teams of marketing gurus. We&apos;re competing on authenticity, on care, on the kind of attention to detail that only comes when you genuinely care about every single thing you do. When you&apos;re living off your own savings, when you&apos;re figuring out regulations as you go, when you&apos;re building every single relationship from scratch, you simply can&apos;t afford to cut corners. Read more about <Link href="/ethos/" className="text-gold-300 hover:text-gold-400 underline">our values</Link>.
-            </p>
-            <div className="text-gold-300 text-sm font-semibold uppercase tracking-wider">
-              Small team. No safety net. No compromise. Because we can&apos;t afford to.
-            </div>
-          </div>
-          </ScrollReveal>
-        </section>
-
-        {/* Section 4: The Jerry Can Promise */}
-        <section className="py-20">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-serif font-bold text-white mb-6">
-              The Jerry Can Promise
-            </h2>
-            <p className="text-xl text-parchment-300 max-w-3xl mx-auto">
-              The jerry can set a standard: reliable, functional, built to last. We hold ourselves to it.
-            </p>
-          </div>
+      {/* Section 4: The Jerry Can Promise */}
+      <section className="band-light py-16">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <SectionHeading intro="The jerry can set a standard: reliable, functional, built to last. We hold ourselves to it.">
+            The Jerry Can Promise
+          </SectionHeading>
 
           <div className="grid lg:grid-cols-2 gap-8 sm:gap-12 lg:gap-16 items-center">
             <div>
@@ -556,18 +551,22 @@ export default function OurStory() {
               </blockquote>
             </div>
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* Section 5: The Vision */}
-        <section className="py-20">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-serif font-bold text-white mb-6">
-              The Vision
-            </h2>
-            <p className="text-xl text-parchment-300 max-w-3xl mx-auto">
-              Where we&apos;re headed. Honest about where we are now. Clear about where we want to go.
-            </p>
-          </div>
+      {/* Section 5: The Vision. Dark: the green-400 dots in "What We Know So
+          Far" were chosen for a dark ground. */}
+      <section className="band-dark py-16">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <SectionHeading
+            intro={
+              <>
+                Where we&apos;re headed. Honest about where we are now. Clear about where we want to go.
+              </>
+            }
+          >
+            The Vision
+          </SectionHeading>
 
           <div className="space-y-16">
             {/* Current Status */}
@@ -640,67 +639,66 @@ export default function OurStory() {
             </div>
 
             {/* Future Vision */}
-            <div className="grid lg:grid-cols-3 gap-8">
-              <ScrollReveal delay={0}>
-              <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20 text-center h-full">
-                <div className="w-16 h-16 bg-gold-400/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <span className="text-gold-400 text-xl font-bold">5Y</span>
-                </div>
-                <h4 className="text-lg font-serif font-bold text-white mb-3">5-Year Vision</h4>
-                <ul className="space-y-2 text-parchment-300 text-sm text-left">
-                  <li>• Build a rum worth talking about, without help from a marketing department</li>
-                  <li>• Have a range of world class spirits on the market</li>
-                  <li>• Have a strong retail presence. We want to be seen in the right places.</li>
-                  <li>• Have a loyal customer community: people who love what we do</li>
-                </ul>
-              </div>
-
-              </ScrollReveal>
-              <ScrollReveal delay={1}>
-              <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20 text-center h-full">
-                <div className="w-16 h-16 bg-gold-400/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <span className="text-gold-400 text-xl font-bold">10Y</span>
-                </div>
-                <h4 className="text-lg font-serif font-bold text-white mb-3">10-Year Dream</h4>
-                <ul className="space-y-2 text-parchment-300 text-sm text-left">
-                  <li>• Own our own distillery. This is the ultimate goal.</li>
-                  <li>• Have a full range of spirits on offer, each one made the same way as the first</li>
-                  <li>• Be known internationally. For the right reasons.</li>
-                  <li>• Source responsibly. Use what&apos;s close to home where we can. Don&apos;t add to problems we can avoid.</li>
-                </ul>
-              </div>
-
-              </ScrollReveal>
-              <ScrollReveal delay={2}>
-              <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20 text-center h-full">
-                <div className="w-16 h-16 bg-gold-400/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <svg className="w-8 h-8 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                  </svg>
-                </div>
-                <h4 className="text-lg font-serif font-bold text-white mb-3">The Legacy</h4>
-                <ul className="space-y-2 text-parchment-300 text-sm text-left">
-                  <li>• We proved that small can beat big</li>
-                  <li>• Quality is always the top priority</li>
-                  <li>• We&apos;ve got a real story to tell, one that people will listen to</li>
-                  <li>• We&apos;ve got our own team who&apos;s made this all possible</li>
-                </ul>
-              </div>
-              </ScrollReveal>
-            </div>
+            <ScrollRow
+              ariaLabel="The vision"
+              cols="md:grid-cols-3"
+              items={[
+                <ScrollReveal key="5y" delay={0} className="h-full">
+                  <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20 text-center h-full">
+                    <div className="w-16 h-16 bg-gold-400/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <span className="text-gold-400 text-xl font-bold">5Y</span>
+                    </div>
+                    <h4 className="text-lg font-serif font-bold text-white mb-3">5-Year Vision</h4>
+                    <ul className="space-y-2 text-parchment-300 text-sm text-left">
+                      <li>• Build a rum worth talking about, without help from a marketing department</li>
+                      <li>• Have a range of world class spirits on the market</li>
+                      <li>• Have a strong retail presence. We want to be seen in the right places.</li>
+                      <li>• Have a loyal customer community: people who love what we do</li>
+                    </ul>
+                  </div>
+                </ScrollReveal>,
+                <ScrollReveal key="10y" delay={1} className="h-full">
+                  <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20 text-center h-full">
+                    <div className="w-16 h-16 bg-gold-400/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <span className="text-gold-400 text-xl font-bold">10Y</span>
+                    </div>
+                    <h4 className="text-lg font-serif font-bold text-white mb-3">10-Year Dream</h4>
+                    <ul className="space-y-2 text-parchment-300 text-sm text-left">
+                      <li>• Own our own distillery. This is the ultimate goal.</li>
+                      <li>• Have a full range of spirits on offer, each one made the same way as the first</li>
+                      <li>• Be known internationally. For the right reasons.</li>
+                      <li>• Source responsibly. Use what&apos;s close to home where we can. Don&apos;t add to problems we can avoid.</li>
+                    </ul>
+                  </div>
+                </ScrollReveal>,
+                <ScrollReveal key="legacy" delay={2} className="h-full">
+                  <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20 text-center h-full">
+                    <div className="w-16 h-16 bg-gold-400/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <svg className="w-8 h-8 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                      </svg>
+                    </div>
+                    <h4 className="text-lg font-serif font-bold text-white mb-3">The Legacy</h4>
+                    <ul className="space-y-2 text-parchment-300 text-sm text-left">
+                      <li>• We proved that small can beat big</li>
+                      <li>• Quality is always the top priority</li>
+                      <li>• We&apos;ve got a real story to tell, one that people will listen to</li>
+                      <li>• We&apos;ve got our own team who&apos;s made this all possible</li>
+                    </ul>
+                  </div>
+                </ScrollReveal>,
+              ]}
+            />
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* FAQ Section with Schema */}
-        <section className="py-20">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-serif font-bold text-white mb-6">
-              Frequently Asked Questions
-            </h2>
-            <p className="text-xl text-parchment-300 max-w-3xl mx-auto">
-              Common questions about Jerry Can Spirits and our story.
-            </p>
-          </div>
+      {/* FAQ Section with Schema */}
+      <section className="band-light py-16">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <SectionHeading intro="Common questions about Jerry Can Spirits and our story.">
+            Frequently Asked Questions
+          </SectionHeading>
 
           <div className="max-w-4xl mx-auto">
             <FAQAccordion
@@ -724,17 +722,22 @@ export default function OurStory() {
               }),
             }}
           />
-        </section>
+        </div>
+      </section>
 
-        {/* CTA Section */}
-        <section className="py-20 text-center">
-          <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-12 border border-gold-500/20">
-            <h2 className="text-3xl sm:text-4xl font-serif font-bold text-white mb-6">
+      {/* CTA Section */}
+      <section className="band-dark py-16">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-12 border border-gold-500/20 text-center">
+            <SectionHeading
+              intro={
+                <>
+                  We&apos;re just getting started. Join us as we build genuinely good rum for people who expect quality and don&apos;t accept shortcuts. Having veterans behind the scenes means every bottle is made to a standard we&apos;d stake our name on.
+                </>
+              }
+            >
               Be Part of Our Story
-            </h2>
-            <p className="text-xl text-parchment-300 mb-8 max-w-3xl mx-auto">
-              We&apos;re just getting started. Join us as we build genuinely good rum for people who expect quality and don&apos;t accept shortcuts. Having veterans behind the scenes means every bottle is made to a standard we&apos;d stake our name on.
-            </p>
+            </SectionHeading>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
               <Link
@@ -762,9 +765,8 @@ export default function OurStory() {
               <p>Follow our journey from home office to distillery</p>
             </div>
           </div>
-        </section>
-
-      </div>
+        </div>
+      </section>
 
       {/* Back to Top Button */}
       <BackToTop />

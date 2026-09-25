@@ -34,7 +34,9 @@ const RESERVED_SPACE = 'aspect-square'
 // badge and no quick facts it must render completely empty — an opening tag
 // followed immediately by its closing tag. This is the assertion that catches a
 // guard placed on the image alone, which would leave the bordered panel behind.
-const EMPTY_SIDEBAR = '<div class="lg:sticky lg:top-24 space-y-6"></div>'
+// The column is no longer sticky: the band it sits in is too short for a
+// rail to travel (the pages were re-cut into bands on 25 Sep 2026).
+const EMPTY_SIDEBAR = '<div class="order-2 lg:order-1 space-y-6"></div>'
 
 async function renderPage(
   mod: { default: (props: { params: Promise<{ slug: string }> }) => Promise<React.ReactElement> },

@@ -4,6 +4,7 @@ import Breadcrumbs from '@/components/Breadcrumbs'
 import { CATEGORIES } from '@/lib/categories'
 import { baseOpenGraph, OG_IMAGE } from '@/lib/og'
 import { safeJsonLd } from '@/lib/jsonLd'
+import SectionHeading from '@/components/SectionHeading'
 
 export const dynamic = 'force-static'
 
@@ -80,38 +81,40 @@ export default function ShopPage() {
   const allItems = curatedItems
 
   return (
-    <main className="min-h-screen py-20">
+    <main>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: safeJsonLd(breadcrumbSchema) }}
       />
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
-        <Breadcrumbs items={[{ label: 'Shop' }]} />
-      </div>
 
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
-        <div className="text-center mb-12">
-          <div className="inline-block px-4 py-2 bg-jerry-green-800/60 backdrop-blur-sm rounded-full border border-gold-500/30 mb-6">
-            <span className="text-gold-300 text-sm font-semibold uppercase tracking-widest">
-              All Collections
-            </span>
-          </div>
-          <h1 className="text-4xl sm:text-6xl font-serif font-bold text-white mb-6">
-            Browse the Shop
-          </h1>
-          <p className="text-parchment-300 text-lg max-w-2xl mx-auto">
-            Find what you are looking for. Each collection is built around a purpose.
-          </p>
-        </div>
+      {/* The page heading opens on dark; the collection tiles are navigation,
+          not products, so they take the light band that follows as a row of
+          green islands. */}
+      <section className="band-dark pt-20 pb-16">
+       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <Breadcrumbs items={[{ label: 'Shop' }]} className="mb-8" />
+
+        <SectionHeading
+          as="h1"
+          eyebrow="All Collections"
+          intro="Find what you are looking for. Each collection is built around a purpose."
+        >
+          Browse the Shop
+        </SectionHeading>
+       </div>
       </section>
 
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+      <section className="band-light py-16">
+       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Twenty tiles is an index, not a row: two-up on a phone so the
+            whole shop is a few thumb-scrolls, rather than twenty swipes
+            sideways. The same reason the product grids stay grids. */}
+        <ul aria-label="All Collections" className="grid grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
           {allItems.map((item) => (
+            <li key={item.handle}>
             <Link
-              key={item.handle}
               href={`/shop/${item.handle}/`}
-              className="group p-6 bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl border border-gold-500/20 hover:border-gold-400/40 transition-all duration-300 hover:scale-105"
+              className="group block h-full p-6 bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl border border-gold-500/20 hover:border-gold-400/40 transition-all duration-300 hover:scale-105"
             >
               <h2 className="text-lg font-serif font-bold text-white group-hover:text-gold-300 transition-colors">
                 {item.title}
@@ -125,8 +128,10 @@ export default function ShopPage() {
                 Browse →
               </span>
             </Link>
+            </li>
           ))}
-        </div>
+        </ul>
+       </div>
       </section>
     </main>
   )

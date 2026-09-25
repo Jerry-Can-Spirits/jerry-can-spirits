@@ -117,18 +117,6 @@ export default async function CocktailFacetPage({
           >
             {copy?.h1 && page === 1 ? copy.h1 : headingFor(facet, page)}
           </SectionHeading>
-
-          {/* Rendered only where approved copy exists. A facet nobody has written
-              gets its heading and its grid and nothing invented in between. */}
-          {intro && (
-            <div className="max-w-3xl space-y-4">
-              {intro.split(/\n\s*\n/).map((para, i) => (
-                <p key={i} className="text-parchment-300 leading-relaxed">
-                  {para}
-                </p>
-              ))}
-            </div>
-          )}
         </div>
       </section>
 
@@ -140,9 +128,25 @@ export default async function CocktailFacetPage({
           The page's light band. The member links sit straight on the cream
           rather than inside a panel: in a light band the panel and the links
           would both turn solid green and the links would vanish into it. */}
-      {showOrientingSection && (
+      {(intro || showOrientingSection) && (
         <section className="band-light py-12">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            {/* The approved intro copy, rendered only where it exists. A facet
+                nobody has written gets its heading and its grid and nothing
+                invented in between. It shares the light band with the
+                orienting links, so a facet with copy but no sub-types still
+                gets a light band (Dan, 25 Sep 2026). */}
+            {intro && (
+              <div className={`max-w-3xl mx-auto space-y-4${showOrientingSection ? ' mb-10' : ''}`}>
+                {intro.split(/\n\s*\n/).map((para, i) => (
+                  <p key={i} className="text-parchment-300 leading-relaxed">
+                    {para}
+                  </p>
+                ))}
+              </div>
+            )}
+            {showOrientingSection && (
+            <>
             <h2 className="text-2xl font-serif font-bold text-gold-300 mb-6">
               What counts as {facet.label.toLowerCase()} here
             </h2>
@@ -175,6 +179,8 @@ export default async function CocktailFacetPage({
                 </a>
               ))}
             />
+            </>
+            )}
           </div>
         </section>
       )}

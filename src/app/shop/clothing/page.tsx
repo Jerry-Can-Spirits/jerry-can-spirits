@@ -9,6 +9,8 @@ import { baseOpenGraph, OG_IMAGE } from '@/lib/og'
 import ViewItemListTracker from '@/components/ViewItemListTracker'
 import { safeJsonLd, productOffer, merchantOfferExtras } from '@/lib/jsonLd'
 import { formatPrice } from '@/lib/format-price'
+import ScrollRow from '@/components/ScrollRow'
+import SectionHeading from '@/components/SectionHeading'
 
 export const metadata: Metadata = {
   title: 'Expedition Gear & Apparel',
@@ -187,55 +189,46 @@ export default async function ClothingPage() {
 
   // Success state - products loaded from Shopify
   return (
-    <main className="min-h-screen py-20">
+    <main>
       <ViewItemListTracker listId="clothing" listName="Expedition Gear" currency={currency} items={trackerItems} />
       <StructuredData data={breadcrumbSchema} id="clothing-breadcrumb-schema" />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: safeJsonLd(clothingSchema) }}
       />
-      {/* Breadcrumb */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
+      {/* The hero and the product grid share the opening dark band; the
+          category copy and the sign-up then alternate. */}
+      <section className="band-dark pt-20 pb-16">
+       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <Breadcrumbs
           items={[
             { label: 'Shop', href: '/shop' },
             { label: 'Expedition Gear' },
           ]}
+          className="mb-8"
         />
-      </div>
 
-      {/* Page Header */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
-        <div className="text-center mb-12">
-          <div className="inline-block px-4 py-2 bg-jerry-green-800/60 backdrop-blur-sm rounded-full border border-gold-500/30 mb-6">
-            <span className="text-gold-300 text-sm font-semibold uppercase tracking-widest">
-              Expedition Gear
-            </span>
-          </div>
+        <SectionHeading
+          as="h1"
+          eyebrow="Expedition Gear"
+          intro="Quality apparel and accessories built for expedition. From the streets to the summit, gear that performs."
+        >
+          Gear Up
+          <br />
+          <span className="text-gold-300">Adventure Awaits</span>
+        </SectionHeading>
 
-          <h1 className="text-4xl sm:text-6xl font-serif font-bold text-white mb-6">
-            Gear Up
-            <br />
-            <span className="text-gold-300">Adventure Awaits</span>
-          </h1>
-
-          <p className="text-xl text-parchment-300 max-w-3xl mx-auto leading-relaxed">
-            Quality apparel and accessories built for expedition. From the streets to the summit, gear that performs.
-          </p>
-
-          {/* Shopify Connection Success Indicator */}
-          <div className="mt-6 inline-flex items-center gap-2 px-4 py-2 bg-green-800/20 border border-green-500/30 rounded-lg">
-            <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
-            <span className="text-green-300 text-sm font-medium">
-              {products.length} {products.length === 1 ? 'product' : 'products'} loaded from Shopify
-            </span>
-          </div>
+        {/* Shopify Connection Success Indicator */}
+        <div className="flex w-fit mx-auto items-center gap-2 px-4 py-2 bg-green-800/20 border border-green-500/30 rounded-lg">
+          <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
+          <span className="text-green-300 text-sm font-medium">
+            {products.length} {products.length === 1 ? 'product' : 'products'} loaded from Shopify
+          </span>
         </div>
-      </section>
 
-      {/* Products Grid */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
+        {/* A shop grid stays a grid: two-up on a phone is how people browse a
+            range, and a sideways row would hide most of it. */}
+        <div className="mt-12 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
           {products.map((product: ShopifyProduct) => (
             <Link
               key={product.id}
@@ -294,54 +287,62 @@ export default async function ClothingPage() {
             </Link>
           ))}
         </div>
+       </div>
       </section>
 
       {/* What You're Getting */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-20">
+      <section className="band-light py-16">
+       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="bg-linear-to-br from-gold-500/10 to-gold-600/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
           <h3 className="text-2xl font-serif font-bold text-gold-300 mb-6 text-center">
             What You're Actually Getting
           </h3>
-          <div className="grid md:grid-cols-3 gap-6">
-            <div className="text-center">
-              <div className="w-16 h-16 bg-gold-400/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg className="w-8 h-8 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
-                </svg>
-              </div>
-              <h4 className="text-lg font-semibold text-white mb-2">Wear the Brand</h4>
-              <p className="text-parchment-300 text-sm">
-                Comfortable gear you will actually want to put on. Designed by us, for people who appreciate good rum and no-nonsense kit.
-              </p>
-            </div>
-            <div className="text-center">
-              <div className="w-16 h-16 bg-gold-400/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg className="w-8 h-8 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
-                </svg>
-              </div>
-              <h4 className="text-lg font-semibold text-white mb-2">Built to Last</h4>
-              <p className="text-parchment-300 text-sm">
-                Quality materials, proper stitching. Not fast fashion - clothing that holds up wash after wash.
-              </p>
-            </div>
-            <div className="text-center">
-              <div className="w-16 h-16 bg-gold-400/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg className="w-8 h-8 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                </svg>
-              </div>
-              <h4 className="text-lg font-semibold text-white mb-2">Gives Back</h4>
-              <p className="text-parchment-300 text-sm">
-                5% of profits supports forces charities. When you buy from us, you're helping us give back to causes we care about.
-              </p>
-            </div>
-          </div>
+          <ScrollRow
+            ariaLabel="What You're Actually Getting"
+            cols="md:grid-cols-3"
+            items={[
+              <div key="wear-the-brand" className="h-full text-center">
+                <div className="w-16 h-16 bg-gold-400/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <svg className="w-8 h-8 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
+                  </svg>
+                </div>
+                <h4 className="text-lg font-semibold text-white mb-2">Wear the Brand</h4>
+                <p className="text-parchment-300 text-sm">
+                  Comfortable gear you will actually want to put on. Designed by us, for people who appreciate good rum and no-nonsense kit.
+                </p>
+              </div>,
+              <div key="built-to-last" className="h-full text-center">
+                <div className="w-16 h-16 bg-gold-400/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <svg className="w-8 h-8 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+                  </svg>
+                </div>
+                <h4 className="text-lg font-semibold text-white mb-2">Built to Last</h4>
+                <p className="text-parchment-300 text-sm">
+                  Quality materials, proper stitching. Not fast fashion - clothing that holds up wash after wash.
+                </p>
+              </div>,
+              <div key="gives-back" className="h-full text-center">
+                <div className="w-16 h-16 bg-gold-400/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <svg className="w-8 h-8 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                  </svg>
+                </div>
+                <h4 className="text-lg font-semibold text-white mb-2">Gives Back</h4>
+                <p className="text-parchment-300 text-sm">
+                  5% of profits supports forces charities. When you buy from us, you're helping us give back to causes we care about.
+                </p>
+              </div>,
+            ]}
+          />
         </div>
+       </div>
       </section>
 
       {/* CTA Section */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12">
+      <section className="band-dark py-16">
+       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-12 border border-gold-500/20 text-center">
           <h2 className="text-3xl font-serif font-bold text-white mb-4">
             Join the Expedition
@@ -356,6 +357,7 @@ export default async function ClothingPage() {
             Get Early Access
           </Link>
         </div>
+       </div>
       </section>
     </main>
   )
