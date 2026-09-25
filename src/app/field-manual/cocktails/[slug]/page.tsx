@@ -21,6 +21,8 @@ import { sanityOgUrl } from '@/sanity/lib/image'
 import { OG_IMAGE_COCKTAIL } from '@/lib/og'
 import { ORG_REF, authorRefFor } from '@/lib/jsonLd'
 import FAQAccordion from '@/components/FAQAccordion'
+import ScrollRow from '@/components/ScrollRow'
+import SectionHeading from '@/components/SectionHeading'
 
 // Hourly ISR: the old ratings lookup was an HTTP fetch with an hourly cache,
 // which also refreshed the page. The direct KV read below has no cache of its
@@ -322,11 +324,36 @@ export default async function CocktailPage({ params }: PageProps) {
       }
     : null
 
+  // Five bands, cut by weight rather than by kind: the recipe, the story, how
+  // to make it, where to go next, and the rating. The first cut grouped by
+  // kind and put the recipe, the video and the whole editorial in one dark
+  // band, so most of the page was still a wall of green with two afterthoughts
+  // on cream at the bottom (Dan, 25 Sep 2026, on the Singapore Sling), and a
+  // cocktail with no spirit link and no questions never got a light band at
+  // all. Each band now opens with a heading so it reads as a section, and each
+  // optional band is painted only when it has something in it.
+  const hasStory = Boolean(
+    (cocktail.longDescription && cocktail.longDescription.length > 0) ||
+      (cocktail.flavorProfile && cocktail.flavorProfile.length > 0),
+  )
+  const hasMakeIt = Boolean(
+    cocktail.videoUrl ||
+      cocktail.featuredSpirit ||
+      cocktail.baseSpirit === 'spiced-rum' ||
+      (cocktail.relatedGuides && cocktail.relatedGuides.length > 0),
+  )
+  const hasMore = Boolean(
+    (cocktail.faqs && cocktail.faqs.length > 0) ||
+      (cocktail.relatedCocktails && cocktail.relatedCocktails.length > 0) ||
+      facetLinks.length > 0,
+  )
+
   return (
     <>
       <StructuredData data={recipeSchema} />
       {faqSchema && <StructuredData data={faqSchema} id="cocktail-faq-schema" />}
-      <main className="min-h-screen py-20">
+      <main>
+       <section className="band-dark pt-20 pb-12">
         {/* Breadcrumb */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
           <Breadcrumbs
@@ -362,10 +389,13 @@ export default async function CocktailPage({ params }: PageProps) {
         <div className="max-w-4xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8">
           {/* Recipe Display Component (Client-side for interactivity) */}
           <CocktailRecipeDisplay cocktail={cocktail} />
+        </div>
+       </section>
 
-          {/* The video the Recipe schema's VideoObject describes. Click-to-
-              play: nothing loads from YouTube until the visitor presses play. */}
-          {cocktail.videoUrl && <CocktailVideo url={cocktail.videoUrl} name={cocktail.name} />}
+       {hasStory && (
+       <section className="band-light py-12">
+        <div className="max-w-4xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8">
+          <SectionHeading eyebrow="The story">Behind the {cocktail.name}</SectionHeading>
 
           {/* Flavour Profile */}
           {cocktail.flavorProfile && cocktail.flavorProfile.length > 0 && (
@@ -390,6 +420,18 @@ export default async function CocktailPage({ params }: PageProps) {
               <FieldManualPortableText value={cocktail.longDescription} />
             </div>
           )}
+        </div>
+       </section>
+       )}
+
+       {hasMakeIt && (
+       <section className="band-dark py-12">
+        <div className="max-w-4xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8">
+          <SectionHeading eyebrow="Make it">Make it at home</SectionHeading>
+
+          {/* The video the Recipe schema's VideoObject describes. Click-to-
+              play: nothing loads from YouTube until the visitor presses play. */}
+          {cocktail.videoUrl && <CocktailVideo url={cocktail.videoUrl} name={cocktail.name} />}
 
           {/* Featured Spirit — links to ingredient guide when set */}
           {cocktail.featuredSpirit && (
@@ -448,14 +490,6 @@ export default async function CocktailPage({ params }: PageProps) {
             </div>
           </div>}
 
-          {/* FAQs — single source for the visible Q&As and the FAQPage schema */}
-          {cocktail.faqs && cocktail.faqs.length > 0 && (
-            <div className="mt-6 sm:mt-8 bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-4 sm:p-6 md:p-8 border border-gold-500/20">
-              <h2 className="text-2xl font-serif font-bold text-white mb-6">Frequently Asked Questions</h2>
-              <FAQAccordion items={cocktail.faqs} />
-            </div>
-          )}
-
           {/* Related Technique Guides */}
           {cocktail.relatedGuides && cocktail.relatedGuides.length > 0 && (
             <div className="mt-6 sm:mt-8 bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-4 sm:p-6 border border-gold-500/20">
@@ -497,17 +531,35 @@ export default async function CocktailPage({ params }: PageProps) {
               </div>
             </div>
           )}
+        </div>
+       </section>
+       )}
+
+       {hasMore && (
+       <section className="band-light py-12">
+        <div className="max-w-4xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8">
+          <SectionHeading eyebrow="Go further">More to explore</SectionHeading>
+
+          {/* FAQs — single source for the visible Q&As and the FAQPage schema */}
+          {cocktail.faqs && cocktail.faqs.length > 0 && (
+            <div className="mt-6 sm:mt-8 bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-4 sm:p-6 md:p-8 border border-gold-500/20">
+              <h2 className="text-2xl font-serif font-bold text-white mb-6">Frequently Asked Questions</h2>
+              <FAQAccordion items={cocktail.faqs} />
+            </div>
+          )}
 
           {/* Related Cocktails */}
           {cocktail.relatedCocktails && cocktail.relatedCocktails.length > 0 && (
             <div className="mt-6 sm:mt-8 bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-4 sm:p-6 border border-gold-500/20">
               <h3 className="text-xl font-serif font-bold text-gold-300 mb-4">You Might Also Like</h3>
-              <div className="grid sm:grid-cols-2 gap-4">
-                {cocktail.relatedCocktails.filter(r => r?.slug?.current).map((related) => (
+              <ScrollRow
+                ariaLabel="Related cocktails"
+                cols="md:grid-cols-2"
+                items={cocktail.relatedCocktails.filter(r => r?.slug?.current).map((related) => (
                   <Link
                     key={related._id}
                     href={`/field-manual/cocktails/${related.slug.current}/`}
-                    className="flex items-start gap-4 p-4 bg-jerry-green-800/30 rounded-lg border border-gold-500/20 hover:bg-jerry-green-800/50 hover:border-gold-400/40 transition-all group"
+                    className="h-full flex items-start gap-4 p-4 bg-jerry-green-800/30 rounded-lg border border-gold-500/20 hover:bg-jerry-green-800/50 hover:border-gold-400/40 transition-all group"
                   >
                     {related.image && (
                       <Image
@@ -527,7 +579,7 @@ export default async function CocktailPage({ params }: PageProps) {
                     </div>
                   </Link>
                 ))}
-              </div>
+              />
             </div>
           )}
 
@@ -557,13 +609,16 @@ export default async function CocktailPage({ params }: PageProps) {
               Recipe by {cocktail.author}
             </p>
           )}
+        </div>
+       </section>
+       )}
+
+       <section className="band-dark py-12">
+        <div className="max-w-4xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8">
+          <SectionHeading eyebrow="Rate it">Enjoyed This Recipe?</SectionHeading>
 
           {/* Rating & Share CTA */}
-          <div className="mt-6 sm:mt-8 bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-4 sm:p-6 md:p-8 border border-gold-500/20 text-center">
-            <h3 className="text-2xl font-serif font-bold text-white mb-4">
-              Enjoyed This Recipe?
-            </h3>
-
+          <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-4 sm:p-6 md:p-8 border border-gold-500/20 text-center">
             {/* Star Rating */}
             <div className="mb-6 flex justify-center">
               <StarRating slug={cocktail.slug.current} />
@@ -583,6 +638,7 @@ export default async function CocktailPage({ params }: PageProps) {
             </Link>
           </div>
         </div>
+       </section>
 
         {/* Back to Top Button */}
         <BackToTop />
