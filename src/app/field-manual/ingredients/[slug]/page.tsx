@@ -17,6 +17,7 @@ import { extractHeadings } from '@/lib/sanity-text'
 import { OG_IMAGE_COCKTAIL } from '@/lib/og'
 import { ORG_REF } from '@/lib/jsonLd'
 import FAQAccordion from '@/components/FAQAccordion'
+import ScrollRow from '@/components/ScrollRow'
 
 interface SubType {
   _id: string
@@ -184,10 +185,19 @@ export default async function IngredientDetailPage({ params }: { params: Promise
       }
     : null
 
+  // The page is three bands, as on the cocktail page: the hero and its
+  // practical panels on dark, the background reading and questions on light,
+  // the related reading on dark. The light band is optional content, so it is
+  // only painted when there is something to put in it.
+  const hasMore = Boolean(
+    ingredient.productionMethod || ingredient.history || videoId || (ingredient.faqs && ingredient.faqs.length > 0),
+  )
+
   return (
-    <main className="min-h-screen py-20">
+    <main>
       <StructuredData data={articleSchema} />
       {faqSchema && <StructuredData data={faqSchema} id="ingredient-faq-schema" />}
+      <section className="band-dark pt-20 pb-12">
       {/* Breadcrumb */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
         <Breadcrumbs
@@ -200,7 +210,7 @@ export default async function IngredientDetailPage({ params }: { params: Promise
       </div>
 
       {/* Hero Section - 2 Column Layout */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* Header - full width, above the grid */}
         <div className="mb-8">
@@ -473,11 +483,15 @@ export default async function IngredientDetailPage({ params }: { params: Promise
 
           </div>
         </div>
+      </div>
+      </section>
 
-        {/* Full-width tail — editorial and related content. Kept outside the
-            two-column grid so a long right column never leaves the left
-            column hanging empty. */}
-        <div className="mt-12 space-y-8">
+      {/* Full-width tail — editorial and related content. Kept outside the
+          two-column grid so a long right column never leaves the left
+          column hanging empty. */}
+      {hasMore && (
+      <section className="band-light py-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
             {/* Production Method */}
             {ingredient.productionMethod && (
               <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
@@ -522,7 +536,12 @@ export default async function IngredientDetailPage({ params }: { params: Promise
                 <FAQAccordion items={ingredient.faqs} />
               </div>
             )}
+        </div>
+      </section>
+      )}
 
+      <section className="band-dark py-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
             {/* Related Technique Guides */}
             {ingredient.relatedGuides && ingredient.relatedGuides.length > 0 && (
               <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
@@ -540,12 +559,14 @@ export default async function IngredientDetailPage({ params }: { params: Promise
                 <h2 className="text-2xl font-serif font-bold text-gold-300 mb-4">
                   Styles of {ingredient.name.toLowerCase()}
                 </h2>
-                <div className="grid sm:grid-cols-2 gap-3">
-                  {subTypes.map((subType) => (
+                <ScrollRow
+                  ariaLabel={`Styles of ${ingredient.name.toLowerCase()}`}
+                  cols="md:grid-cols-2"
+                  items={subTypes.map((subType) => (
                     <Link
                       key={subType._id}
                       href={`/field-manual/ingredients/${subType.slug.current}/`}
-                      className="flex items-center gap-3 p-3 bg-jerry-green-800/30 rounded-lg border border-gold-500/20 hover:bg-jerry-green-800/50 hover:border-gold-400/40 transition-all group"
+                      className="h-full flex items-center gap-3 p-3 bg-jerry-green-800/30 rounded-lg border border-gold-500/20 hover:bg-jerry-green-800/50 hover:border-gold-400/40 transition-all group"
                     >
                       <svg className="w-5 h-5 text-gold-400 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
@@ -553,7 +574,7 @@ export default async function IngredientDetailPage({ params }: { params: Promise
                       <span className="text-parchment-300 group-hover:text-gold-300 transition-colors">{subType.name}</span>
                     </Link>
                   ))}
-                </div>
+                />
               </div>
             )}
 
@@ -568,12 +589,14 @@ export default async function IngredientDetailPage({ params }: { params: Promise
             {ingredient.relatedIngredients && ingredient.relatedIngredients.some(r => r?.slug?.current) && (
               <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
                 <h2 className="text-2xl font-serif font-bold text-gold-300 mb-4">Often Used With</h2>
-                <div className="grid sm:grid-cols-2 gap-3">
-                  {ingredient.relatedIngredients.filter(r => r?.slug?.current).map((related) => (
+                <ScrollRow
+                  ariaLabel="Often used with"
+                  cols="md:grid-cols-2"
+                  items={ingredient.relatedIngredients.filter(r => r?.slug?.current).map((related) => (
                     <Link
                       key={related._id}
                       href={`/field-manual/ingredients/${related.slug.current}/`}
-                      className="flex items-center gap-3 p-3 bg-jerry-green-800/30 rounded-lg border border-gold-500/20 hover:bg-jerry-green-800/50 hover:border-gold-400/40 transition-all group"
+                      className="h-full flex items-center gap-3 p-3 bg-jerry-green-800/30 rounded-lg border border-gold-500/20 hover:bg-jerry-green-800/50 hover:border-gold-400/40 transition-all group"
                     >
                       <svg className="w-5 h-5 text-gold-400 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
@@ -581,7 +604,7 @@ export default async function IngredientDetailPage({ params }: { params: Promise
                       <span className="text-parchment-300 group-hover:text-gold-300 transition-colors">{related.name}</span>
                     </Link>
                   ))}
-                </div>
+                />
               </div>
             )}
 
