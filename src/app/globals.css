@@ -691,6 +691,33 @@ html:not([data-age-verified]) body:has(.age-gate) {
   color: #fefdfb;
 }
 
+/* A green thing inside an island: a chip, a secondary button, a nested
+   panel. The island rule above matches those too and repainted them the
+   island colour, so they vanished into their parent. Seen on the friends
+   page, 25 Sep 2026: two secondary buttons showed only their gold hairline,
+   and hover did nothing. One shade darker keeps them a distinct shape, and
+   hover goes darker still, so the button still answers the pointer. */
+.band-light :is(
+  [class*='from-parchment-'],
+  [class*='from-gold-400/'],
+  [class*='from-gold-500/'],
+  [class*='from-gold-600/'],
+  [class*='bg-jerry-green-'],
+  [class*='from-jerry-green-']
+) :is([class*='bg-jerry-green-'], [class*='from-jerry-green-']) {
+  background-color: #163b28;
+}
+.band-light :is(
+  [class*='from-parchment-'],
+  [class*='from-gold-400/'],
+  [class*='from-gold-500/'],
+  [class*='from-gold-600/'],
+  [class*='bg-jerry-green-'],
+  [class*='from-jerry-green-']
+) :is([class*='bg-jerry-green-'], [class*='from-jerry-green-']):hover {
+  background-color: #10281c;
+}
+
 /* The logo plates are white on purpose, for contrast against whatever they
    sit on. They stay white on both. */
 .band-light .bg-white,
