@@ -1,8 +1,9 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import Image from 'next/image'
-import CartographicBackground from '@/components/CartographicBackground'
 import Breadcrumbs from '@/components/Breadcrumbs'
+import ScrollRow from '@/components/ScrollRow'
+import SectionHeading from '@/components/SectionHeading'
 import { OG_IMAGE } from '@/lib/og'
 
 export const metadata: Metadata = {
@@ -32,7 +33,24 @@ export const metadata: Metadata = {
   },
 }
 
-const teamMembers = [
+interface TeamMember {
+  name: string
+  role: string
+  /** Set once the person has a bio page under /about/team/. Without one the card does not link. */
+  slug?: string
+  service?: string
+  rank?: string
+  specialty?: string
+  quote?: string
+  /** Cloudflare Images delivery URL. Absent until a photo has been supplied; the card shows its own placeholder. */
+  image?: string
+}
+
+// Two of these are placeholders, added 25 Sep 2026 so the cards exist to be
+// filled in rather than built from scratch when the details and photos
+// arrive. Nothing about either person is stated beyond the name, because
+// nothing else has been confirmed with them yet.
+const teamMembers: TeamMember[] = [
   {
     name: 'Dan Freeman',
     role: 'Founder & Director',
@@ -53,139 +71,180 @@ const teamMembers = [
     quote: 'That passion has now become a business.',
     image: 'https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/bcacb452-4f56-4676-b4c8-ac6afa7c1e00/public',
   },
+  {
+    name: 'Josh Acklam',
+    role: 'Details to follow.',
+  },
+  {
+    name: 'Joshua Sisson',
+    role: 'Details to follow.',
+  },
 ]
+
+function TeamCard({ member }: { member: TeamMember }) {
+  const body = (
+    <>
+      {/* Photo */}
+      <div className="mb-6 relative">
+        {member.image ? (
+          <div className="aspect-3/4 relative rounded-lg overflow-hidden border border-gold-500/20">
+            <Image
+              src={member.image}
+              alt={`${member.name} - ${member.role}`}
+              fill
+              className="object-cover object-top"
+              sizes="(max-width: 640px) 80vw, (max-width: 1024px) 50vw, 25vw"
+              priority
+            />
+          </div>
+        ) : (
+          <>
+            <div className="aspect-3/4 bg-linear-to-br from-jerry-green-700/50 to-jerry-green-900/50 rounded-lg flex items-center justify-center border border-gold-500/20">
+              <svg className="w-24 h-24 text-gold-500/30" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
+              </svg>
+            </div>
+            <div className="absolute top-2 right-2 px-3 py-1 bg-gold-500/90 backdrop-blur-sm rounded-full">
+              <span className="text-jerry-green-900 text-xs font-semibold">Photo Coming Soon</span>
+            </div>
+          </>
+        )}
+      </div>
+
+      {/* Name & Role */}
+      <div className="mb-4">
+        <h3 className="text-2xl font-serif font-bold text-white mb-1 group-hover:text-gold-300 transition-colors">
+          {member.name}
+        </h3>
+        <p className="text-gold-400 font-semibold">{member.role}</p>
+      </div>
+
+      {/* Military Service */}
+      {member.service && (
+        <div className="mb-4 pb-4 border-b border-gold-500/20">
+          <div className="flex items-center gap-2 text-sm text-parchment-300 mb-1">
+            <svg className="w-4 h-4 text-gold-500" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+              <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z" />
+            </svg>
+            <span>{member.service}</span>
+          </div>
+          {member.rank && (
+            <div className="flex items-center gap-2 text-sm text-parchment-300">
+              <svg className="w-4 h-4 text-gold-500" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                <path fillRule="evenodd" d="M6 6V5a3 3 0 013-3h2a3 3 0 013 3v1h2a2 2 0 012 2v3.57A22.952 22.952 0 0110 13a22.95 22.95 0 01-8-1.43V8a2 2 0 012-2h2zm2-1a1 1 0 011-1h2a1 1 0 011 1v1H8V5zm1 5a1 1 0 011-1h.01a1 1 0 110 2H10a1 1 0 01-1-1z" clipRule="evenodd" />
+                <path d="M2 13.692V16a2 2 0 002 2h12a2 2 0 002-2v-2.308A24.974 24.974 0 0110 15c-2.796 0-5.487-.46-8-1.308z" />
+              </svg>
+              <span>{member.rank}{member.specialty ? ` · ${member.specialty}` : ''}</span>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Quote */}
+      {member.quote && (
+        <blockquote className="italic text-parchment-400 text-sm">
+          &ldquo;{member.quote}&rdquo;
+        </blockquote>
+      )}
+
+      {/* Read More Arrow */}
+      {member.slug && (
+        <div className="mt-6 flex items-center gap-2 text-gold-300 font-semibold group-hover:gap-3 transition-all">
+          <span>Read Full Bio</span>
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+          </svg>
+        </div>
+      )}
+    </>
+  )
+
+  // The card ground is island-matched, so inside the light band it becomes
+  // the solid green panel and its text flips back to the dark-ground tokens.
+  const cardClass =
+    'block h-full bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20'
+
+  if (!member.slug) {
+    return <div className={cardClass}>{body}</div>
+  }
+  return (
+    <Link
+      href={`/about/team/${member.slug}/`}
+      className={`group ${cardClass} hover:border-gold-500/40 transition-all hover:transform hover:-translate-y-1`}
+    >
+      {body}
+    </Link>
+  )
+}
 
 export default function TeamPage() {
   return (
-    <main className="relative min-h-screen py-20">
-      {/* Cartographic Background */}
-      <div className="fixed inset-0 z-0">
-        <CartographicBackground opacity={0.15} showCoordinates={true} showCompass={true} />
-      </div>
-
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <Breadcrumbs
-          items={[
-            { label: 'About', href: '/about/story' },
-            { label: 'Team' },
-          ]}
-          className="mb-8"
-        />
-
-        {/* Header */}
-        <div className="text-center mb-16">
-          <div className="inline-block px-4 py-2 bg-jerry-green-800/60 backdrop-blur-sm rounded-full border border-gold-500/30 mb-6">
-            <span className="text-gold-300 text-sm font-semibold uppercase tracking-widest">
-              The Squad
-            </span>
-          </div>
-          <h1 className="text-4xl sm:text-6xl font-serif font-bold text-white mb-6">
+    <main>
+      {/* Header */}
+      <section className="band-dark pt-20 pb-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <Breadcrumbs
+            items={[
+              { label: 'About', href: '/about/story' },
+              { label: 'Team' },
+            ]}
+            className="mb-8"
+          />
+          <SectionHeading
+            as="h1"
+            eyebrow="The Squad"
+            intro={
+              <>
+                We both served in the Royal Signals before deciding to have a crack at building a spirits company.
+                Read more about <Link href="/about/story/" className="text-gold-300 hover:text-gold-400 underline">how we got here</Link>.
+              </>
+            }
+          >
             Meet the Team
-          </h1>
-          <p className="text-xl text-parchment-300 max-w-3xl mx-auto leading-relaxed">
-            We both served in the Royal Signals before deciding to have a crack at building a spirits company.
-            Read more about <Link href="/about/story/" className="text-gold-300 hover:text-gold-400 underline">how we got here</Link>.
-          </p>
+          </SectionHeading>
         </div>
+      </section>
 
-        {/* Team Grid */}
-        <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-          {teamMembers.map((member) => (
-            <Link
-              key={member.slug}
-              href={`/about/team/${member.slug}/`}
-              className="group bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20 hover:border-gold-500/40 transition-all hover:transform hover:-translate-y-1"
-            >
-              {/* Photo */}
-              <div className="mb-6 relative">
-                {member.image ? (
-                  <div className="aspect-3/4 relative rounded-lg overflow-hidden border border-gold-500/20">
-                    <Image
-                      src={member.image}
-                      alt={`${member.name} - ${member.role}`}
-                      fill
-                      className="object-cover object-top"
-                      sizes="(max-width: 768px) 100vw, 50vw"
-                      priority
-                    />
-                  </div>
-                ) : (
-                  <>
-                    <div className="aspect-3/4 bg-linear-to-br from-jerry-green-700/50 to-jerry-green-900/50 rounded-lg flex items-center justify-center border border-gold-500/20">
-                      <svg className="w-24 h-24 text-gold-500/30" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
-                      </svg>
-                    </div>
-                    {/* Photo Coming Soon Badge */}
-                    <div className="absolute top-2 right-2 px-3 py-1 bg-gold-500/90 backdrop-blur-sm rounded-full">
-                      <span className="text-jerry-green-900 text-xs font-semibold">Photo Coming Soon</span>
-                    </div>
-                  </>
-                )}
-              </div>
+      {/* Team */}
+      <section className="band-light py-16" aria-labelledby="team-heading">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <SectionHeading id="team-heading" eyebrow="Who We Are">
+            The Team
+          </SectionHeading>
+          <ScrollRow
+            ariaLabel="The Jerry Can Spirits team"
+            cols="md:grid-cols-2 lg:grid-cols-4"
+            items={teamMembers.map((member) => (
+              <TeamCard key={member.name} member={member} />
+            ))}
+          />
+        </div>
+      </section>
 
-              {/* Name & Role */}
-              <div className="mb-4">
-                <h2 className="text-2xl font-serif font-bold text-white mb-1 group-hover:text-gold-300 transition-colors">
-                  {member.name}
-                </h2>
-                <p className="text-gold-400 font-semibold">{member.role}</p>
-              </div>
-
-              {/* Military Service */}
-              <div className="mb-4 pb-4 border-b border-gold-500/20">
-                <div className="flex items-center gap-2 text-sm text-parchment-300 mb-1">
-                  <svg className="w-4 h-4 text-gold-500" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z" />
+      {/* Mission Statement */}
+      <section className="band-dark py-16">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="bg-linear-to-br from-gold-500/10 to-gold-600/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
+            <div className="flex items-start gap-4">
+              <div className="shrink-0">
+                <div className="w-12 h-12 bg-gold-500/20 rounded-full flex items-center justify-center">
+                  <svg className="w-6 h-6 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
                   </svg>
-                  <span>{member.service}</span>
-                </div>
-                <div className="flex items-center gap-2 text-sm text-parchment-300">
-                  <svg className="w-4 h-4 text-gold-500" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M6 6V5a3 3 0 013-3h2a3 3 0 013 3v1h2a2 2 0 012 2v3.57A22.952 22.952 0 0110 13a22.95 22.95 0 01-8-1.43V8a2 2 0 012-2h2zm2-1a1 1 0 011-1h2a1 1 0 011 1v1H8V5zm1 5a1 1 0 011-1h.01a1 1 0 110 2H10a1 1 0 01-1-1z" clipRule="evenodd" />
-                    <path d="M2 13.692V16a2 2 0 002 2h12a2 2 0 002-2v-2.308A24.974 24.974 0 0110 15c-2.796 0-5.487-.46-8-1.308z" />
-                  </svg>
-                  <span>{member.rank} · {member.specialty}</span>
                 </div>
               </div>
-
-              {/* Quote */}
-              <blockquote className="italic text-parchment-400 text-sm">
-                "{member.quote}"
-              </blockquote>
-
-              {/* Read More Arrow */}
-              <div className="mt-6 flex items-center gap-2 text-gold-300 font-semibold group-hover:gap-3 transition-all">
-                <span>Read Full Bio</span>
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                </svg>
+              <div>
+                <h2 className="text-2xl font-serif font-bold text-gold-300 mb-3">What We&apos;re About</h2>
+                <p className="text-parchment-200 leading-relaxed">
+                  We reckon there&apos;s room for smaller brands that actually care about what they make. We&apos;re not trying
+                  to compete with the big corporations – we&apos;re just trying to make spirits we&apos;re proud of and build something
+                  real along the way. Check out our <Link href="/shop/spirits/" className="text-gold-300 hover:text-gold-400 underline decoration-gold-500/40 hover:decoration-gold-400 transition-colors">Expedition Spiced Rum</Link> to see what we&apos;ve been working on.
+                </p>
               </div>
-            </Link>
-          ))}
-        </div>
-
-        {/* Mission Statement */}
-        <div className="mt-16 max-w-4xl mx-auto bg-linear-to-br from-gold-500/10 to-gold-600/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
-          <div className="flex items-start gap-4">
-            <div className="shrink-0">
-              <div className="w-12 h-12 bg-gold-500/20 rounded-full flex items-center justify-center">
-                <svg className="w-6 h-6 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-                </svg>
-              </div>
-            </div>
-            <div>
-              <h3 className="text-2xl font-serif font-bold text-gold-300 mb-3">What We&apos;re About</h3>
-              <p className="text-parchment-200 leading-relaxed">
-                We reckon there&apos;s room for smaller brands that actually care about what they make. We&apos;re not trying
-                to compete with the big corporations – we&apos;re just trying to make spirits we&apos;re proud of and build something
-                real along the way. Check out our <Link href="/shop/spirits/" className="text-gold-300 hover:text-gold-400 underline decoration-gold-500/40 hover:decoration-gold-400 transition-colors">Expedition Spiced Rum</Link> to see what we&apos;ve been working on.
-              </p>
             </div>
           </div>
         </div>
-      </div>
+      </section>
     </main>
   )
 }
