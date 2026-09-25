@@ -4,6 +4,8 @@ import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { useNewsletterSignup } from '@/hooks/useNewsletterSignup'
 import Breadcrumbs from '@/components/Breadcrumbs'
+import ScrollRow from '@/components/ScrollRow'
+import SectionHeading from '@/components/SectionHeading'
 
 interface ContactMethod {
   icon: string
@@ -62,29 +64,26 @@ export default function Contact() {
   }, [])
 
   return (
-    <main className="min-h-screen">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
-        <Breadcrumbs items={[{ label: 'Contact' }]} />
-      </div>
+    <main>
+      <section className="band-dark pt-20 pb-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <Breadcrumbs items={[{ label: 'Contact' }]} className="mb-8" />
+          <SectionHeading
+            as="h1"
+            eyebrow="Get in Touch"
+            intro="We are a small team. Use the right channel and we will come back to you."
+          >
+            Contact Us
+          </SectionHeading>
+        </div>
+      </section>
 
-      <section className="relative py-20 lg:py-32 overflow-hidden">
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <div className="inline-block px-4 py-2 bg-jerry-green-800/60 backdrop-blur-sm rounded-full border border-gold-500/30 mb-6">
-              <span className="text-gold-300 text-sm font-semibold uppercase tracking-widest">
-                Get in Touch
-              </span>
-            </div>
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-serif font-bold text-parchment-50 mb-6">
-              Contact Us
-            </h1>
-            <p className="text-xl text-parchment-200 max-w-3xl mx-auto leading-relaxed">
-              We are a small team. Use the right channel and we will come back to you.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-20">
-            {contactMethods.map((method) => {
+      <section className="band-light py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <ScrollRow
+            ariaLabel="Ways to contact us"
+            cols="md:grid-cols-2 lg:grid-cols-4"
+            items={contactMethods.map((method) => {
               const CardContent = (
                 <>
                   <div className="w-16 h-16 bg-linear-to-br from-gold-500 to-gold-600 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
@@ -136,7 +135,7 @@ export default function Contact() {
               return method.href ? (
                 <div
                   key={method.label}
-                  className="group relative bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20 text-center hover:border-gold-400/40 transition-all duration-300 hover:scale-105"
+                  className="group relative h-full bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20 text-center hover:border-gold-400/40 transition-all duration-300 hover:scale-105"
                 >
                   {CardContent}
                   <Link
@@ -150,15 +149,19 @@ export default function Contact() {
               ) : (
                 <div
                   key={method.label}
-                  className="group bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20 text-center"
+                  className="group h-full bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20 text-center"
                 >
                   {CardContent}
                 </div>
               )
             })}
-          </div>
+          />
+        </div>
+      </section>
 
-          <div className="max-w-2xl mx-auto mb-20">
+      <section className="band-dark py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-2xl mx-auto">
             <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20 text-center">
               <h2 className="text-2xl font-serif font-bold text-parchment-50 mb-4">Follow Us</h2>
               <div className="flex justify-center space-x-4">
@@ -191,15 +194,11 @@ export default function Contact() {
       </section>
 
       {mounted && !isLoading && !hasSignedUp && (
-        <section className="relative py-20 overflow-hidden">
-          <div className="absolute inset-0 bg-linear-to-r from-jerry-green-800/20 to-jerry-green-700/20" />
-          <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h2 className="text-3xl sm:text-4xl font-serif font-bold text-parchment-50 mb-6">
+        <section className="band-light py-16">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <SectionHeading intro="Get the First Pour companion book. The short guide to drinking our rum properly.">
               Stay Connected
-            </h2>
-            <p className="text-xl text-parchment-200 mb-8 max-w-2xl mx-auto leading-relaxed">
-              Get the First Pour companion book. The short guide to drinking our rum properly.
-            </p>
+            </SectionHeading>
             <Link
               href="/first-pour/"
               className="group bg-linear-to-r from-gold-600 to-gold-500 hover:from-gold-500 hover:to-gold-400 text-jerry-green-900 px-8 py-4 rounded-lg font-semibold uppercase tracking-wide transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 flex items-center justify-center gap-2 mx-auto w-fit"

@@ -35,7 +35,13 @@ export default function SectionHeading({
   as?: 'h1' | 'h2'
 }) {
   const centred = align === 'center'
-  const size = Tag === 'h1' ? 'text-4xl sm:text-6xl' : 'text-3xl md:text-4xl'
+  const hero = Tag === 'h1'
+  const size = hero ? 'text-4xl sm:text-6xl' : 'text-3xl md:text-4xl'
+  // A page's opening paragraph is a size up and a column wider than a
+  // section's. The hand-rolled heroes were all text-xl max-w-3xl, and moving
+  // them onto this component had quietly shrunk every one of them to the
+  // section size (Dan, 25 Sep 2026: look at hero sizing).
+  const introSize = hero ? 'text-xl max-w-3xl' : 'text-lg max-w-2xl'
   return (
     <div className={centred ? 'text-center mb-10' : 'mb-6'}>
       {eyebrow && (
@@ -52,8 +58,8 @@ export default function SectionHeading({
 
       {intro && (
         <p
-          className={`mt-4 text-lg text-parchment-300 leading-relaxed${
-            centred ? ' max-w-2xl mx-auto' : ''
+          className={`mt-4 ${introSize} text-parchment-300 leading-relaxed${
+            centred ? ' mx-auto' : ''
           }`}
         >
           {intro}

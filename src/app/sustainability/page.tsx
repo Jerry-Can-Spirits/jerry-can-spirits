@@ -4,6 +4,7 @@ import BackToTop from '@/components/BackToTop'
 import Breadcrumbs from '@/components/Breadcrumbs'
 import ScrollReveal from '@/components/ScrollReveal'
 import EcologiImpact from '@/components/EcologiImpact'
+import SectionHeading from '@/components/SectionHeading'
 import { OG_IMAGE } from '@/lib/og'
 
 // The FAQPage schema this page carried was a schema-only orphan: no visible
@@ -42,40 +43,36 @@ export const metadata: Metadata = {
 
 export default function Sustainability() {
   return (
-    <main className="min-h-screen py-20">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
-        <Breadcrumbs
-          items={[
-            { label: 'Sustainability' },
-          ]}
-        />
-      </div>
-
+    <main>
       {/* Hero Section */}
-      <section className="relative py-16">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="inline-block px-4 py-2 bg-jerry-green-800/60 backdrop-blur-sm rounded-full border border-gold-500/30 mb-6">
-            <span className="text-gold-300 text-sm font-semibold uppercase tracking-widest">
-              Sustainability
-            </span>
-          </div>
-
-          <h1 className="text-4xl sm:text-5xl font-serif font-bold text-white mb-6">
+      <section className="band-dark pt-20 pb-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
+          <Breadcrumbs
+            items={[
+              { label: 'Sustainability' },
+            ]}
+          />
+        </div>
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <SectionHeading
+            as="h1"
+            eyebrow="Sustainability"
+            intro={
+              <>
+                We&apos;re not perfect, but we&apos;re trying to do things properly. Here&apos;s how we approach sustainability and what you can do with your bottle when it&apos;s empty.
+              </>
+            }
+          >
             Made to Last,
             <br />
             <span className="text-gold-300">Built to Return</span>
-          </h1>
-
-          <p className="text-xl text-parchment-300 max-w-3xl mx-auto leading-relaxed">
-            We&apos;re not perfect, but we&apos;re trying to do things properly. Here&apos;s how we approach sustainability and what you can do with your bottle when it&apos;s empty.
-          </p>
+          </SectionHeading>
         </div>
       </section>
 
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-
-        {/* Recycling Section */}
-        <section className="py-12">
+      {/* Recycling Section */}
+      <section className="band-light py-16">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
             <h2 className="text-2xl sm:text-3xl font-serif font-bold text-white mb-6">
               Recycling Your Bottle
@@ -119,11 +116,13 @@ export default function Sustainability() {
               </ScrollReveal>
             </div>
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* Local Sourcing */}
-        <section className="py-12">
-          <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
+      {/* Local Sourcing */}
+      <section className="band-dark py-16">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20 mb-12">
             <h2 className="text-2xl sm:text-3xl font-serif font-bold text-white mb-6">
               Where it&apos;s made
             </h2>
@@ -152,10 +151,8 @@ export default function Sustainability() {
               </div>
             </div>
           </div>
-        </section>
 
-        {/* Carbon Offsetting — live Ecologi stats */}
-        <section className="py-12">
+          {/* Carbon Offsetting — live Ecologi stats */}
           <EcologiImpact />
           <p className="mt-6 text-parchment-400 text-sm text-center">
             Every order plants a tree automatically. You can also{' '}
@@ -164,11 +161,13 @@ export default function Sustainability() {
             </Link>
             {' '}to fund planting closer to home.
           </p>
-        </section>
+        </div>
+      </section>
 
-        {/* Future Plans */}
-        <section className="py-12">
-          <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
+      {/* Future Plans */}
+      <section className="band-light py-16">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20 mb-12">
             <h2 className="text-2xl sm:text-3xl font-serif font-bold text-white mb-6">
               What We&apos;re Working On
             </h2>
@@ -197,10 +196,8 @@ export default function Sustainability() {
               </p>
             </div>
           </div>
-        </section>
 
-        {/* CTA */}
-        <section className="py-12 text-center">
+          {/* CTA */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
               href="/ethos/"
@@ -215,9 +212,8 @@ export default function Sustainability() {
               <span>What’s In It</span>
             </Link>
           </div>
-        </section>
-
-      </div>
+        </div>
+      </section>
 
       <BackToTop />
     </main>

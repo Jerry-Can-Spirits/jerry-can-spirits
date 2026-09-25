@@ -4,6 +4,8 @@ import Image from 'next/image'
 import StructuredData from '@/components/StructuredData'
 import Breadcrumbs from '@/components/Breadcrumbs'
 import ScrollReveal from '@/components/ScrollReveal'
+import ScrollRow from '@/components/ScrollRow'
+import SectionHeading from '@/components/SectionHeading'
 import { baseOpenGraph } from '@/lib/og'
 import { safeJsonLd } from '@/lib/jsonLd'
 import { ORG_REF } from '@/lib/jsonLd'
@@ -238,53 +240,57 @@ export default function FriendsPage() {
   return (
     <>
       <StructuredData data={structuredData} />
-      <main className="min-h-screen py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Breadcrumb */}
-          <div className="mb-8">
+      <main>
+        {/* Header */}
+        <section className="band-dark pt-20 pb-16">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            {/* Breadcrumb */}
             <Breadcrumbs
               items={[
                 { label: 'Friends & Partners' },
               ]}
+              className="mb-8"
             />
-          </div>
 
-          {/* Header */}
-          <div className="text-center mb-16">
-            <div className="inline-block px-4 py-2 bg-jerry-green-800/60 backdrop-blur-sm rounded-full border border-gold-500/30 mb-6">
-              <span className="text-gold-300 text-sm font-semibold uppercase tracking-widest">
-                Community & Partnerships
-              </span>
-            </div>
-            <h1 className="text-4xl md:text-6xl font-playfair font-bold text-gold-500 mb-6">
+            <SectionHeading
+              as="h1"
+              eyebrow="Community & Partnerships"
+              intro={
+                <>
+                  Good rum doesn&apos;t happen in isolation. These are the people who help make Jerry Can Spirits what it is. Distilleries, suppliers, collaborators. Each one chosen carefully.
+                </>
+              }
+            >
               Friends of Jerry Can Spirits
-            </h1>
-            <p className="text-xl text-parchment-200 max-w-3xl mx-auto leading-relaxed">
-              Good rum doesn&apos;t happen in isolation. These are the people who help make Jerry Can Spirits what it is. Distilleries, suppliers, collaborators. Each one chosen carefully.
-            </p>
-          </div>
+            </SectionHeading>
 
-          {/* Mission Statement */}
-          <div className="mb-20 max-w-4xl mx-auto">
-            <div className="bg-jerry-green-800/20 border border-gold-500/30 rounded-lg p-8">
-              <h2 className="text-2xl font-playfair font-bold text-gold-400 mb-4">
-                Why Partnerships Matter
-              </h2>
-              <p className="text-parchment-200 leading-relaxed mb-4">
-                We&apos;re a small team. We rely on good partners to make this work. From our distilling partner to Harlequin who sort our packaging, every partner contributes something we couldn&apos;t do alone.
-              </p>
-              <p className="text-parchment-200 leading-relaxed">
-                If you&apos;re a supplier, distillery, or business that shares how we think, <Link href="/contact/" className="text-gold-500 hover:text-gold-400 underline">get in touch</Link>.
-              </p>
+            {/* Mission Statement */}
+            <div className="max-w-4xl mx-auto">
+              <div className="bg-jerry-green-800/20 border border-gold-500/30 rounded-lg p-8">
+                <SectionHeading
+                  intro={
+                    <>
+                      We&apos;re a small team. We rely on good partners to make this work. From our distilling partner to Harlequin who sort our packaging, every partner contributes something we couldn&apos;t do alone.
+                    </>
+                  }
+                >
+                  Why Partnerships Matter
+                </SectionHeading>
+                <p className="text-parchment-200 leading-relaxed text-center max-w-2xl mx-auto">
+                  If you&apos;re a supplier, distillery, or business that shares how we think, <Link href="/contact/" className="text-gold-500 hover:text-gold-400 underline">get in touch</Link>.
+                </p>
+              </div>
             </div>
           </div>
+        </section>
 
-          {/* Featured Partners */}
-          {partners.filter(p => p.featured).length > 0 && (
-            <div className="mb-16">
-              <h2 className="text-3xl font-playfair font-bold text-gold-500 mb-8 text-center">
+        {/* Featured Partners */}
+        {partners.filter(p => p.featured).length > 0 && (
+          <section className="band-light py-16">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <SectionHeading>
                 Featured Partners
-              </h2>
+              </SectionHeading>
               <div className="grid grid-cols-1 gap-8">
                 {partners
                   .filter(partner => partner.featured)
@@ -322,7 +328,7 @@ export default function FriendsPage() {
                         <div>
                           <div className="flex flex-wrap items-start justify-between gap-4 mb-4">
                             <div>
-                              <h3 className="text-2xl font-playfair font-bold text-gold-400 mb-2">
+                              <h3 className="text-2xl font-serif font-bold text-gold-400 mb-2">
                                 {partner.name}
                               </h3>
                               <p className="text-gold-500/80 text-sm mb-1">
@@ -361,66 +367,225 @@ export default function FriendsPage() {
                   ))}
               </div>
             </div>
-          )}
+          </section>
+        )}
 
-          {/* Community & Grassroots */}
-          {communityPartners.length > 0 && (
-            <div className="mb-16">
-              <h2 className="text-3xl font-playfair font-bold text-gold-500 mb-4 text-center">
-                Community & Grassroots
-              </h2>
-              <p className="text-parchment-300 text-center max-w-2xl mx-auto mb-8">
-                Beyond our trade partnerships, we back the people and organisations that matter to us. As a veteran-owned business, community isn&apos;t a marketing angle. It&apos;s just what we do.
-              </p>
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {communityPartners.map((partner, index) => (
-                  <div
-                    key={index}
-                    className="bg-jerry-green-800/20 border border-gold-500/20 rounded-lg p-6 hover:border-gold-500/40 transition-all"
+        {/* The people: community partners, the wider partner list and the
+            ambassadors share one dark band. */}
+        <section className="band-dark py-16">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="space-y-16">
+              {/* Community & Grassroots */}
+              {communityPartners.length > 0 && (
+                <div>
+                  <SectionHeading
+                    intro={
+                      <>
+                        Beyond our trade partnerships, we back the people and organisations that matter to us. As a veteran-owned business, community isn&apos;t a marketing angle. It&apos;s just what we do.
+                      </>
+                    }
                   >
-                    {/* Logo / Headshot */}
-                    {'circular' in partner && partner.circular ? (
-                      <div className="flex items-center justify-center mb-4">
-                        <div className="relative w-28 h-28 rounded-full overflow-hidden border-2 border-gold-500/30 shrink-0">
-                          <Image
-                            src={partner.logo}
-                            alt={partner.name}
-                            fill
-                            className="object-cover"
-                          />
+                    Community & Grassroots
+                  </SectionHeading>
+                  <ScrollRow
+                    ariaLabel="Community and grassroots partners"
+                    cols="md:grid-cols-2 lg:grid-cols-3"
+                    items={communityPartners.map((partner, index) => (
+                      <div
+                        key={index}
+                        className="h-full bg-jerry-green-800/20 border border-gold-500/20 rounded-lg p-6 hover:border-gold-500/40 transition-all"
+                      >
+                        {/* Logo / Headshot */}
+                        {'circular' in partner && partner.circular ? (
+                          <div className="flex items-center justify-center mb-4">
+                            <div className="relative w-28 h-28 rounded-full overflow-hidden border-2 border-gold-500/30 shrink-0">
+                              <Image
+                                src={partner.logo}
+                                alt={partner.name}
+                                fill
+                                className="object-cover"
+                              />
+                            </div>
+                          </div>
+                        ) : (
+                          <div className="flex items-center justify-center mb-4">
+                            <div className="relative w-28 h-28 rounded-full overflow-hidden border-2 border-gold-500/30 bg-white shrink-0">
+                              <Image
+                                src={partner.logo}
+                                alt={`${partner.name} logo`}
+                                fill
+                                className="object-contain p-3"
+                              />
+                            </div>
+                          </div>
+                        )}
+
+                        <h3 className="text-xl font-serif font-bold text-gold-400 mb-1">
+                          {partner.name}
+                        </h3>
+                        <p className="text-gold-500/80 text-sm mb-1">
+                          {partner.location}
+                        </p>
+                        <p className="text-gold-500/80 text-sm mb-3">
+                          {partner.speciality}
+                        </p>
+                        <p className="text-parchment-200 text-sm mb-4 leading-relaxed">
+                          {partner.description}
+                        </p>
+
+                        {/* Links */}
+                        <div className="flex flex-wrap gap-2">
+                          {partner.website && (
+                            <a
+                              href={partner.website}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-1 px-3 py-1.5 bg-gold-500/20 text-gold-400 text-sm font-medium rounded-lg hover:bg-gold-500/30 border border-gold-500/30 transition-colors"
+                            >
+                              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                              </svg>
+                              Website
+                            </a>
+                          )}
+                          {partner.facebook && (
+                            <a
+                              href={partner.facebook}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-1 px-3 py-1.5 bg-jerry-green-800/40 text-parchment-300 text-sm font-medium rounded-lg hover:bg-jerry-green-800/60 border border-gold-500/20 transition-colors"
+                              aria-label={`${partner.name} on Facebook`}
+                            >
+                              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                              </svg>
+                              Facebook
+                            </a>
+                          )}
+                          {partner.instagram && (
+                            <a
+                              href={partner.instagram}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-1 px-3 py-1.5 bg-jerry-green-800/40 text-parchment-300 text-sm font-medium rounded-lg hover:bg-jerry-green-800/60 border border-gold-500/20 transition-colors"
+                              aria-label={`${partner.name} on Instagram`}
+                            >
+                              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.067.06 1.407.06 4.123v.08c0 2.643-.012 2.987-.06 4.043-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.067.048-1.407.06-4.123.06h-.08c-2.643 0-2.987-.012-4.043-.06-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.047-1.024-.06-1.379-.06-3.808v-.63c0-2.43.013-2.784.06-3.808.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 015.45 2.525c.636-.247 1.363-.416 2.427-.465C8.901 2.013 9.256 2 11.685 2h.63zm-.081 1.802h-.468c-2.456 0-2.784.011-3.807.058-.975.045-1.504.207-1.857.344-.467.182-.8.398-1.15.748-.35.35-.566.683-.748 1.15-.137.353-.3.882-.344 1.857-.047 1.023-.058 1.351-.058 3.807v.468c0 2.456.011 2.784.058 3.807.045.975.207 1.504.344 1.857.182.466.399.8.748 1.15.35.35.683.566 1.15.748.353.137.882.3 1.857.344 1.054.048 1.37.058 4.041.058h.08c2.597 0 2.917-.01 3.96-.058.976-.045 1.505-.207 1.858-.344.466-.182.8-.398 1.15-.748.35-.35.566-.683.748-1.15.137-.353.3-.882.344-1.857.048-1.055.058-1.37.058-4.041v-.08c0-2.597-.01-2.917-.058-3.96-.045-.976-.207-1.505-.344-1.858a3.097 3.097 0 00-.748-1.15 3.098 3.098 0 00-1.15-.748c-.353-.137-.882-.3-1.857-.344-1.023-.047-1.351-.058-3.807-.058zM12 6.865a5.135 5.135 0 110 10.27 5.135 5.135 0 010-10.27zm0 1.802a3.333 3.333 0 100 6.666 3.333 3.333 0 000-6.666zm5.338-3.205a1.2 1.2 0 110 2.4 1.2 1.2 0 010-2.4z"/>
+                              </svg>
+                              Instagram
+                            </a>
+                          )}
+                          {'youtube' in partner && partner.youtube && (
+                            <a
+                              href={partner.youtube}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-1 px-3 py-1.5 bg-jerry-green-800/40 text-parchment-300 text-sm font-medium rounded-lg hover:bg-jerry-green-800/60 border border-gold-500/20 transition-colors"
+                              aria-label={`${partner.name} on YouTube`}
+                            >
+                              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                              </svg>
+                              YouTube
+                            </a>
+                          )}
                         </div>
                       </div>
-                    ) : (
-                      <div className="flex items-center justify-center mb-4">
-                        <div className="relative w-28 h-28 rounded-full overflow-hidden border-2 border-gold-500/30 bg-white shrink-0">
-                          <Image
-                            src={partner.logo}
-                            alt={`${partner.name} logo`}
-                            fill
-                            className="object-contain p-3"
-                          />
+                    ))}
+                  />
+                </div>
+              )}
+
+              {/* All Partners */}
+              {partners.filter(p => !p.featured).length > 0 && (
+                <div>
+                  <SectionHeading>
+                    Our Partners
+                  </SectionHeading>
+                  <ScrollRow
+                    ariaLabel="Our partners"
+                    cols="md:grid-cols-2 lg:grid-cols-3"
+                    items={partners
+                      .filter(partner => !partner.featured)
+                      .map((partner, index) => (
+                        <div
+                          key={index}
+                          className="h-full bg-jerry-green-800/20 border border-gold-500/20 rounded-lg p-6 hover:border-gold-500/40 transition-all"
+                        >
+                          {/* Logo */}
+                          <div className="flex items-center justify-center bg-white rounded-lg p-4 mb-4 border border-gold-500/20 h-32">
+                            <div className="relative w-full h-full">
+                              <Image
+                                src={partner.logo}
+                                alt={`${partner.name} logo`}
+                                fill
+                                className="object-contain"
+                              />
+                            </div>
+                          </div>
+
+                          <h3 className="text-xl font-serif font-bold text-gold-400 mb-2">
+                            {partner.name}
+                          </h3>
+                          <p className="text-gold-500/80 text-sm mb-3">
+                            {partner.location}
+                          </p>
+                          <p className="text-parchment-200 text-sm mb-4 leading-relaxed line-clamp-3">
+                            {partner.description}
+                          </p>
+                          <a
+                            href={partner.website}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-block w-full text-center px-4 py-2 bg-gold-500/20 text-gold-400 font-semibold rounded-lg hover:bg-gold-500/30 border border-gold-500/30 transition-colors"
+                          >
+                            Visit Website
+                          </a>
                         </div>
-                      </div>
-                    )}
+                      ))}
+                  />
+                </div>
+              )}
 
-                    <h3 className="text-xl font-playfair font-bold text-gold-400 mb-1">
-                      {partner.name}
-                    </h3>
-                    <p className="text-gold-500/80 text-sm mb-1">
-                      {partner.location}
-                    </p>
-                    <p className="text-gold-500/80 text-sm mb-3">
-                      {partner.speciality}
-                    </p>
-                    <p className="text-parchment-200 text-sm mb-4 leading-relaxed">
-                      {partner.description}
-                    </p>
-
-                    {/* Links */}
-                    <div className="flex flex-wrap gap-2">
-                      {partner.website && (
+              {/* Brand Ambassadors */}
+              {brandAmbassadors.length > 0 && (
+                <div>
+                  <SectionHeading intro="Ambassadors take Jerry Can Spirits with them and speak about it in their own words. More will follow.">
+                    Brand Ambassadors
+                  </SectionHeading>
+                  <ScrollRow
+                    ariaLabel="Brand ambassadors"
+                    cols="md:grid-cols-2 lg:grid-cols-3"
+                    items={brandAmbassadors.map((ambassador, index) => (
+                      <div
+                        key={index}
+                        className="h-full bg-jerry-green-800/20 border border-gold-500/20 rounded-lg p-6 hover:border-gold-500/40 transition-all"
+                      >
+                        <div className="flex items-center justify-center mb-4">
+                          <div className={`relative w-28 h-28 rounded-full overflow-hidden border-2 border-gold-500/30 shrink-0 ${'darkLogo' in ambassador && ambassador.darkLogo ? 'bg-jerry-green-900' : 'bg-white'}`}>
+                            <Image
+                              src={ambassador.logo}
+                              alt={`${ambassador.name} logo`}
+                              fill
+                              className="object-contain p-3"
+                            />
+                          </div>
+                        </div>
+                        <h3 className="text-xl font-serif font-bold text-gold-400 mb-1">
+                          {ambassador.name}
+                        </h3>
+                        <p className="text-gold-500/80 text-sm mb-1">
+                          {ambassador.location}
+                        </p>
+                        <p className="text-gold-500/80 text-sm mb-3">
+                          {ambassador.speciality}
+                        </p>
+                        <p className="text-parchment-200 text-sm mb-4 leading-relaxed">
+                          {ambassador.description}
+                        </p>
                         <a
-                          href={partner.website}
+                          href={ambassador.website}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="inline-flex items-center gap-1 px-3 py-1.5 bg-gold-500/20 text-gold-400 text-sm font-medium rounded-lg hover:bg-gold-500/30 border border-gold-500/30 transition-colors"
@@ -430,323 +595,189 @@ export default function FriendsPage() {
                           </svg>
                           Website
                         </a>
-                      )}
-                      {partner.facebook && (
-                        <a
-                          href={partner.facebook}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1 px-3 py-1.5 bg-jerry-green-800/40 text-parchment-300 text-sm font-medium rounded-lg hover:bg-jerry-green-800/60 border border-gold-500/20 transition-colors"
-                          aria-label={`${partner.name} on Facebook`}
-                        >
-                          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-                          </svg>
-                          Facebook
-                        </a>
-                      )}
-                      {partner.instagram && (
-                        <a
-                          href={partner.instagram}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1 px-3 py-1.5 bg-jerry-green-800/40 text-parchment-300 text-sm font-medium rounded-lg hover:bg-jerry-green-800/60 border border-gold-500/20 transition-colors"
-                          aria-label={`${partner.name} on Instagram`}
-                        >
-                          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.067.06 1.407.06 4.123v.08c0 2.643-.012 2.987-.06 4.043-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.067.048-1.407.06-4.123.06h-.08c-2.643 0-2.987-.012-4.043-.06-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.047-1.024-.06-1.379-.06-3.808v-.63c0-2.43.013-2.784.06-3.808.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 015.45 2.525c.636-.247 1.363-.416 2.427-.465C8.901 2.013 9.256 2 11.685 2h.63zm-.081 1.802h-.468c-2.456 0-2.784.011-3.807.058-.975.045-1.504.207-1.857.344-.467.182-.8.398-1.15.748-.35.35-.566.683-.748 1.15-.137.353-.3.882-.344 1.857-.047 1.023-.058 1.351-.058 3.807v.468c0 2.456.011 2.784.058 3.807.045.975.207 1.504.344 1.857.182.466.399.8.748 1.15.35.35.683.566 1.15.748.353.137.882.3 1.857.344 1.054.048 1.37.058 4.041.058h.08c2.597 0 2.917-.01 3.96-.058.976-.045 1.505-.207 1.858-.344.466-.182.8-.398 1.15-.748.35-.35.566-.683.748-1.15.137-.353.3-.882.344-1.857.048-1.055.058-1.37.058-4.041v-.08c0-2.597-.01-2.917-.058-3.96-.045-.976-.207-1.505-.344-1.858a3.097 3.097 0 00-.748-1.15 3.098 3.098 0 00-1.15-.748c-.353-.137-.882-.3-1.857-.344-1.023-.047-1.351-.058-3.807-.058zM12 6.865a5.135 5.135 0 110 10.27 5.135 5.135 0 010-10.27zm0 1.802a3.333 3.333 0 100 6.666 3.333 3.333 0 000-6.666zm5.338-3.205a1.2 1.2 0 110 2.4 1.2 1.2 0 010-2.4z"/>
-                          </svg>
-                          Instagram
-                        </a>
-                      )}
-                      {'youtube' in partner && partner.youtube && (
-                        <a
-                          href={partner.youtube}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1 px-3 py-1.5 bg-jerry-green-800/40 text-parchment-300 text-sm font-medium rounded-lg hover:bg-jerry-green-800/60 border border-gold-500/20 transition-colors"
-                          aria-label={`${partner.name} on YouTube`}
-                        >
-                          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
-                          </svg>
-                          YouTube
-                        </a>
-                      )}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* All Partners */}
-          {partners.filter(p => !p.featured).length > 0 && (
-            <div className="mb-16">
-              <h2 className="text-3xl font-playfair font-bold text-gold-500 mb-8 text-center">
-                Our Partners
-              </h2>
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {partners
-                  .filter(partner => !partner.featured)
-                  .map((partner, index) => (
-                    <div
-                      key={index}
-                      className="bg-jerry-green-800/20 border border-gold-500/20 rounded-lg p-6 hover:border-gold-500/40 transition-all"
-                    >
-                      {/* Logo */}
-                      <div className="flex items-center justify-center bg-white rounded-lg p-4 mb-4 border border-gold-500/20 h-32">
-                        <div className="relative w-full h-full">
-                          <Image
-                            src={partner.logo}
-                            alt={`${partner.name} logo`}
-                            fill
-                            className="object-contain"
-                          />
-                        </div>
                       </div>
-
-                      <h3 className="text-xl font-playfair font-bold text-gold-400 mb-2">
-                        {partner.name}
-                      </h3>
-                      <p className="text-gold-500/80 text-sm mb-3">
-                        {partner.location}
-                      </p>
-                      <p className="text-parchment-200 text-sm mb-4 leading-relaxed line-clamp-3">
-                        {partner.description}
-                      </p>
-                      <a
-                        href={partner.website}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-block w-full text-center px-4 py-2 bg-gold-500/20 text-gold-400 font-semibold rounded-lg hover:bg-gold-500/30 border border-gold-500/30 transition-colors"
-                      >
-                        Visit Website
-                      </a>
-                    </div>
-                  ))}
-              </div>
-            </div>
-          )}
-
-          {/* Brand Ambassadors */}
-          {brandAmbassadors.length > 0 && (
-            <div className="mb-16">
-              <h2 className="text-3xl font-playfair font-bold text-gold-500 mb-4 text-center">
-                Brand Ambassadors
-              </h2>
-              <p className="text-parchment-300 text-center max-w-2xl mx-auto mb-8">
-                Ambassadors take Jerry Can Spirits with them and speak about it in their own words. More will follow.
-              </p>
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {brandAmbassadors.map((ambassador, index) => (
-                  <div
-                    key={index}
-                    className="bg-jerry-green-800/20 border border-gold-500/20 rounded-lg p-6 hover:border-gold-500/40 transition-all"
-                  >
-                    <div className="flex items-center justify-center mb-4">
-                      <div className={`relative w-28 h-28 rounded-full overflow-hidden border-2 border-gold-500/30 shrink-0 ${'darkLogo' in ambassador && ambassador.darkLogo ? 'bg-jerry-green-900' : 'bg-white'}`}>
-                        <Image
-                          src={ambassador.logo}
-                          alt={`${ambassador.name} logo`}
-                          fill
-                          className="object-contain p-3"
-                        />
-                      </div>
-                    </div>
-                    <h3 className="text-xl font-playfair font-bold text-gold-400 mb-1">
-                      {ambassador.name}
-                    </h3>
-                    <p className="text-gold-500/80 text-sm mb-1">
-                      {ambassador.location}
-                    </p>
-                    <p className="text-gold-500/80 text-sm mb-3">
-                      {ambassador.speciality}
-                    </p>
-                    <p className="text-parchment-200 text-sm mb-4 leading-relaxed">
-                      {ambassador.description}
-                    </p>
-                    <a
-                      href={ambassador.website}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1 px-3 py-1.5 bg-gold-500/20 text-gold-400 text-sm font-medium rounded-lg hover:bg-gold-500/30 border border-gold-500/30 transition-colors"
-                    >
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                      </svg>
-                      Website
-                    </a>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Become a Friend CTA */}
-          <div className="mt-20 text-center p-12 bg-linear-to-br from-jerry-green-800/30 to-jerry-green-900/30 border border-gold-500/30 rounded-lg">
-            <h3 className="text-3xl font-playfair font-bold text-gold-500 mb-4">
-              Become a Friend of Jerry Can Spirits
-            </h3>
-            <p className="text-parchment-200 mb-8 max-w-2xl mx-auto leading-relaxed">
-              We work with businesses and people who build things properly. Distilleries, suppliers, content creators. If what you do aligns with how we think, we&apos;re interested.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link
-                href="/contact/"
-                className="inline-block px-8 py-3 bg-gold-500 text-jerry-green-900 font-semibold rounded-lg hover:bg-gold-400 transition-colors"
-              >
-                Get In Touch
-              </Link>
-              <a
-                href="mailto:hello@jerrycanspirits.co.uk"
-                className="inline-block px-8 py-3 bg-jerry-green-800/40 text-gold-400 font-semibold rounded-lg hover:bg-jerry-green-800/60 border border-gold-500/30 transition-colors"
-              >
-                Email Us Directly
-              </a>
+                    ))}
+                  />
+                </div>
+              )}
             </div>
           </div>
+        </section>
 
-          {/* Partnership Benefits Section */}
-          <div className="mt-16 grid md:grid-cols-3 gap-6 mb-16">
-            <ScrollReveal delay={0}>
-              <div className="text-center p-6 bg-jerry-green-800/10 border border-gold-500/20 rounded-lg h-full">
-                <h4 className="text-lg font-semibold text-gold-400 mb-2">
-                  Community Growth
-                </h4>
-                <p className="text-parchment-300 text-sm">
-                  We bring an audience that already cares about quality. That&apos;s useful for the right partners.
-                </p>
+        {/* Joining: the invitation and what a partner gets from it. */}
+        <section className="band-light py-16">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            {/* Become a Friend CTA */}
+            <div className="text-center p-12 bg-linear-to-br from-jerry-green-800/30 to-jerry-green-900/30 border border-gold-500/30 rounded-lg mb-16">
+              <SectionHeading
+                intro={
+                  <>
+                    We work with businesses and people who build things properly. Distilleries, suppliers, content creators. If what you do aligns with how we think, we&apos;re interested.
+                  </>
+                }
+              >
+                Become a Friend of Jerry Can Spirits
+              </SectionHeading>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Link
+                  href="/contact/"
+                  className="inline-block px-8 py-3 bg-gold-500 text-jerry-green-900 font-semibold rounded-lg hover:bg-gold-400 transition-colors"
+                >
+                  Get In Touch
+                </Link>
+                <a
+                  href="mailto:hello@jerrycanspirits.co.uk"
+                  className="inline-block px-8 py-3 bg-jerry-green-800/40 text-gold-400 font-semibold rounded-lg hover:bg-jerry-green-800/60 border border-gold-500/30 transition-colors"
+                >
+                  Email Us Directly
+                </a>
               </div>
-            </ScrollReveal>
-            <ScrollReveal delay={1}>
-              <div className="text-center p-6 bg-jerry-green-800/10 border border-gold-500/20 rounded-lg h-full">
-                <h4 className="text-lg font-semibold text-gold-400 mb-2">
-                  Shared Success
-                </h4>
-                <p className="text-parchment-300 text-sm">
-                  A small community. Better when we support each other.
-                </p>
-              </div>
-            </ScrollReveal>
-            <ScrollReveal delay={2}>
-              <div className="text-center p-6 bg-jerry-green-800/10 border border-gold-500/20 rounded-lg h-full">
-                <h4 className="text-lg font-semibold text-gold-400 mb-2">
-                  Quality Recognition
-                </h4>
-                <p className="text-parchment-300 text-sm">
-                  Good work deserves to be seen. We use our platform to spotlight partners we believe in.
-                </p>
-              </div>
-            </ScrollReveal>
-          </div>
+            </div>
 
-          {/* FAQ Section */}
-          <div className="mb-16">
-            {/* FAQ Schema */}
-            <script
-              type="application/ld+json"
-              dangerouslySetInnerHTML={{
-                __html: safeJsonLd({
-                  "@context": "https://schema.org",
-                  "@type": "FAQPage",
-                  "mainEntity": [
-                    {
-                      "@type": "Question",
-                      "name": "How can I become a Jerry Can Spirits partner?",
-                      "acceptedAnswer": {
-                        "@type": "Answer",
-                        "text": "Get in touch via our contact page or email partnerships@jerrycanspirits.co.uk. Our approach to partnerships is shaped by the founders' military service and values, ensuring we work with those who share our dedication and integrity. We're interested in working with distilleries, suppliers, and businesses that share our commitment to quality. We'll have a chat about what we're both looking for and see if there's a fit."
-                      }
-                    },
-                    {
-                      "@type": "Question",
-                      "name": "What kind of partners is Jerry Can Spirits looking for?",
-                      "acceptedAnswer": {
-                        "@type": "Answer",
-                        "text": "We work with a range of partners - from distilleries who help with production to packaging suppliers, barware manufacturers, and premium mixer brands. We're always interested in hearing from businesses that share our values: quality over shortcuts, and honest straight-talking over corporate waffle."
-                      }
-                    },
-                    {
-                      "@type": "Question",
-                      "name": "Does Jerry Can Spirits support veteran-owned businesses?",
-                      "acceptedAnswer": {
-                        "@type": "Answer",
-                        "text": "Being veteran-owned ourselves, we're naturally keen to support other veteran businesses where we can. We also value and support reservists as part of our commitment to the armed forces community. If you're a veteran running a business that might complement what we do, we'd particularly like to hear from you."
-                      }
-                    },
-                    {
-                      "@type": "Question",
-                      "name": "Can I stock Jerry Can Spirits products in my shop or bar?",
-                      "acceptedAnswer": {
-                        "@type": "Answer",
-                        "text": "We're always interested in talking to retailers, bars, and restaurants about stocking our products. Contact us at partnerships@jerrycanspirits.co.uk with details about your venue and what you're looking for. We're happy to discuss wholesale arrangements and support for your venue."
-                      }
-                    }
-                  ]
-                })
-              }}
+            {/* Partnership Benefits Section */}
+            <ScrollRow
+              ariaLabel="Partnership benefits"
+              cols="md:grid-cols-3"
+              items={[
+                <ScrollReveal key="growth" delay={0} className="h-full">
+                  <div className="text-center p-6 bg-jerry-green-800/10 border border-gold-500/20 rounded-lg h-full">
+                    <h4 className="text-lg font-semibold text-gold-400 mb-2">
+                      Community Growth
+                    </h4>
+                    <p className="text-parchment-300 text-sm">
+                      We bring an audience that already cares about quality. That&apos;s useful for the right partners.
+                    </p>
+                  </div>
+                </ScrollReveal>,
+                <ScrollReveal key="success" delay={1} className="h-full">
+                  <div className="text-center p-6 bg-jerry-green-800/10 border border-gold-500/20 rounded-lg h-full">
+                    <h4 className="text-lg font-semibold text-gold-400 mb-2">
+                      Shared Success
+                    </h4>
+                    <p className="text-parchment-300 text-sm">
+                      A small community. Better when we support each other.
+                    </p>
+                  </div>
+                </ScrollReveal>,
+                <ScrollReveal key="recognition" delay={2} className="h-full">
+                  <div className="text-center p-6 bg-jerry-green-800/10 border border-gold-500/20 rounded-lg h-full">
+                    <h4 className="text-lg font-semibold text-gold-400 mb-2">
+                      Quality Recognition
+                    </h4>
+                    <p className="text-parchment-300 text-sm">
+                      Good work deserves to be seen. We use our platform to spotlight partners we believe in.
+                    </p>
+                  </div>
+                </ScrollReveal>,
+              ]}
             />
+          </div>
+        </section>
 
-            <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
-              <h2 className="text-3xl font-playfair font-bold text-gold-500 mb-2 text-center">
-                Partnership Questions
-              </h2>
-              <p className="text-parchment-300 mb-8 text-center">
-                Common questions about working with us
-              </p>
+        {/* Questions */}
+        <section className="band-dark py-16">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            {/* FAQ Section */}
+            <div className="mb-16">
+              {/* FAQ Schema */}
+              <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{
+                  __html: safeJsonLd({
+                    "@context": "https://schema.org",
+                    "@type": "FAQPage",
+                    "mainEntity": [
+                      {
+                        "@type": "Question",
+                        "name": "How can I become a Jerry Can Spirits partner?",
+                        "acceptedAnswer": {
+                          "@type": "Answer",
+                          "text": "Get in touch via our contact page or email partnerships@jerrycanspirits.co.uk. Our approach to partnerships is shaped by the founders' military service and values, ensuring we work with those who share our dedication and integrity. We're interested in working with distilleries, suppliers, and businesses that share our commitment to quality. We'll have a chat about what we're both looking for and see if there's a fit."
+                        }
+                      },
+                      {
+                        "@type": "Question",
+                        "name": "What kind of partners is Jerry Can Spirits looking for?",
+                        "acceptedAnswer": {
+                          "@type": "Answer",
+                          "text": "We work with a range of partners - from distilleries who help with production to packaging suppliers, barware manufacturers, and premium mixer brands. We're always interested in hearing from businesses that share our values: quality over shortcuts, and honest straight-talking over corporate waffle."
+                        }
+                      },
+                      {
+                        "@type": "Question",
+                        "name": "Does Jerry Can Spirits support veteran-owned businesses?",
+                        "acceptedAnswer": {
+                          "@type": "Answer",
+                          "text": "Being veteran-owned ourselves, we're naturally keen to support other veteran businesses where we can. We also value and support reservists as part of our commitment to the armed forces community. If you're a veteran running a business that might complement what we do, we'd particularly like to hear from you."
+                        }
+                      },
+                      {
+                        "@type": "Question",
+                        "name": "Can I stock Jerry Can Spirits products in my shop or bar?",
+                        "acceptedAnswer": {
+                          "@type": "Answer",
+                          "text": "We're always interested in talking to retailers, bars, and restaurants about stocking our products. Contact us at partnerships@jerrycanspirits.co.uk with details about your venue and what you're looking for. We're happy to discuss wholesale arrangements and support for your venue."
+                        }
+                      }
+                    ]
+                  })
+                }}
+              />
 
-              <div className="space-y-6 max-w-3xl mx-auto">
-                <div className="border-b border-gold-500/10 pb-6">
-                  <h3 className="text-lg font-semibold text-gold-300 mb-3">How can I become a Jerry Can Spirits partner?</h3>
-                  <p className="text-parchment-200 leading-relaxed">
-                    Get in touch via our <Link href="/contact/" className="text-gold-400 hover:text-gold-300 underline">contact page</Link> or email <a href="mailto:partnerships@jerrycanspirits.co.uk" className="text-gold-400 hover:text-gold-300 underline">partnerships@jerrycanspirits.co.uk</a>. Our approach to partnerships is shaped by the founders&apos; military service and values, ensuring we work with those who share our dedication and integrity. We&apos;re interested in working with distilleries, suppliers, and businesses that share our commitment to quality. We&apos;ll have a chat about what we&apos;re both looking for and see if there&apos;s a fit.
-                  </p>
-                </div>
+              <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
+                <SectionHeading intro="Common questions about working with us">
+                  Partnership Questions
+                </SectionHeading>
 
-                <div className="border-b border-gold-500/10 pb-6">
-                  <h3 className="text-lg font-semibold text-gold-300 mb-3">What kind of partners is Jerry Can Spirits looking for?</h3>
-                  <p className="text-parchment-200 leading-relaxed">
-                    We work with a range of partners – from distilleries who help with production to packaging suppliers, barware manufacturers, and premium mixer brands. We&apos;re always interested in hearing from businesses that share our values: quality over shortcuts, and honest straight-talking over corporate waffle.
-                  </p>
-                </div>
+                <div className="space-y-6 max-w-3xl mx-auto">
+                  <div className="border-b border-gold-500/10 pb-6">
+                    <h3 className="text-lg font-semibold text-gold-300 mb-3">How can I become a Jerry Can Spirits partner?</h3>
+                    <p className="text-parchment-200 leading-relaxed">
+                      Get in touch via our <Link href="/contact/" className="text-gold-400 hover:text-gold-300 underline">contact page</Link> or email <a href="mailto:partnerships@jerrycanspirits.co.uk" className="text-gold-400 hover:text-gold-300 underline">partnerships@jerrycanspirits.co.uk</a>. Our approach to partnerships is shaped by the founders&apos; military service and values, ensuring we work with those who share our dedication and integrity. We&apos;re interested in working with distilleries, suppliers, and businesses that share our commitment to quality. We&apos;ll have a chat about what we&apos;re both looking for and see if there&apos;s a fit.
+                    </p>
+                  </div>
 
-                <div className="border-b border-gold-500/10 pb-6">
-                  <h3 className="text-lg font-semibold text-gold-300 mb-3">Does Jerry Can Spirits support veteran-owned businesses?</h3>
-                  <p className="text-parchment-200 leading-relaxed">
-                    Being veteran-owned ourselves, we&apos;re naturally keen to support other veteran businesses where we can. We also value and support reservists as part of our commitment to the armed forces community. If you&apos;re a veteran running a business that might complement what we do, we&apos;d particularly like to hear from you.
-                  </p>
-                </div>
+                  <div className="border-b border-gold-500/10 pb-6">
+                    <h3 className="text-lg font-semibold text-gold-300 mb-3">What kind of partners is Jerry Can Spirits looking for?</h3>
+                    <p className="text-parchment-200 leading-relaxed">
+                      We work with a range of partners – from distilleries who help with production to packaging suppliers, barware manufacturers, and premium mixer brands. We&apos;re always interested in hearing from businesses that share our values: quality over shortcuts, and honest straight-talking over corporate waffle.
+                    </p>
+                  </div>
 
-                <div>
-                  <h3 className="text-lg font-semibold text-gold-300 mb-3">Can I stock Jerry Can Spirits products in my shop or bar?</h3>
-                  <p className="text-parchment-200 leading-relaxed">
-                    We&apos;re always interested in talking to retailers, bars, and restaurants about stocking our products. Contact us at <a href="mailto:partnerships@jerrycanspirits.co.uk" className="text-gold-400 hover:text-gold-300 underline">partnerships@jerrycanspirits.co.uk</a> with details about your venue and what you&apos;re looking for. We&apos;re happy to discuss wholesale arrangements and support for your venue.
-                  </p>
+                  <div className="border-b border-gold-500/10 pb-6">
+                    <h3 className="text-lg font-semibold text-gold-300 mb-3">Does Jerry Can Spirits support veteran-owned businesses?</h3>
+                    <p className="text-parchment-200 leading-relaxed">
+                      Being veteran-owned ourselves, we&apos;re naturally keen to support other veteran businesses where we can. We also value and support reservists as part of our commitment to the armed forces community. If you&apos;re a veteran running a business that might complement what we do, we&apos;d particularly like to hear from you.
+                    </p>
+                  </div>
+
+                  <div>
+                    <h3 className="text-lg font-semibold text-gold-300 mb-3">Can I stock Jerry Can Spirits products in my shop or bar?</h3>
+                    <p className="text-parchment-200 leading-relaxed">
+                      We&apos;re always interested in talking to retailers, bars, and restaurants about stocking our products. Contact us at <a href="mailto:partnerships@jerrycanspirits.co.uk" className="text-gold-400 hover:text-gold-300 underline">partnerships@jerrycanspirits.co.uk</a> with details about your venue and what you&apos;re looking for. We&apos;re happy to discuss wholesale arrangements and support for your venue.
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
 
-          {/* Next Step CTA */}
-          <div className="text-center p-12 bg-jerry-green-800/20 border border-gold-500/20 rounded-lg">
-            <h3 className="text-2xl font-playfair font-bold text-gold-500 mb-4">
-              More Questions?
-            </h3>
-            <p className="text-parchment-200 mb-6 max-w-2xl mx-auto">
-              Learn more about Jerry Can Spirits, our products, and how we work in our general FAQ section
-            </p>
-            <Link
-              href="/faq/"
-              className="inline-flex items-center justify-center space-x-2 bg-gold-500 hover:bg-gold-400 text-jerry-green-900 px-8 py-4 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105"
-            >
-              <span>View All FAQs</span>
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-              </svg>
-            </Link>
+            {/* Next Step CTA */}
+            <div className="text-center p-12 bg-jerry-green-800/20 border border-gold-500/20 rounded-lg">
+              <SectionHeading intro="Learn more about Jerry Can Spirits, our products, and how we work in our general FAQ section">
+                More Questions?
+              </SectionHeading>
+              <Link
+                href="/faq/"
+                className="inline-flex items-center justify-center space-x-2 bg-gold-500 hover:bg-gold-400 text-jerry-green-900 px-8 py-4 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105"
+              >
+                <span>View All FAQs</span>
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
+              </Link>
+            </div>
           </div>
-        </div>
+        </section>
       </main>
     </>
   )
