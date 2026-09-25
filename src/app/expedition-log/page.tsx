@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { getD1, getExpeditionLogEntries } from '@/lib/d1'
 import ExpeditionLogForm from '@/components/ExpeditionLogForm'
 import ExpeditionLogMapClient from '@/components/ExpeditionLogMapClient'
+import SectionHeading from '@/components/SectionHeading'
 import { baseOpenGraph } from '@/lib/og'
 import { CURRENT_BATCH_ID } from '@/lib/d1'
 
@@ -30,35 +31,30 @@ export default async function ExpeditionLogPage() {
     console.error('[expedition-log] D1 query failed:', err)
   }
   return (
-    <main className="min-h-screen py-20">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-
-        {/* Header */}
-        <div className="text-center mb-12 pb-8 border-b border-gold-500/30">
-          <div className="inline-block px-4 py-2 bg-jerry-green-800/60 backdrop-blur-sm rounded-full border border-gold-500/30 mb-6">
-            <span className="text-gold-300 text-sm font-semibold uppercase tracking-widest">
-              The Expedition Log
-            </span>
-          </div>
-          <h1 className="text-4xl sm:text-5xl font-serif font-bold text-white mb-4">
+    <main>
+      {/* Header */}
+      <section className="band-dark pt-20 pb-16">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <SectionHeading
+            as="h1"
+            eyebrow="The Expedition Log"
+            intro="A record of the people who carried the first bottles. Opt-in — each entry is a choice."
+          >
             The Expedition Log
-          </h1>
-          <p className="text-parchment-300 leading-relaxed max-w-xl mx-auto">
-            A record of the people who carried the first bottles. Opt-in — each entry is a choice.
-          </p>
-        </div>
+          </SectionHeading>
 
-        {/* Map. The className is the map's height: the client component puts
-            it on the container and fills it with h-full, so without one the
-            map rendered at zero pixels — present on this page since launch,
-            visible never. Taller than the old homepage instance had it; on
-            the log's own page the map is the exhibit, not a teaser. */}
-        <div className="mb-12">
+          {/* Map. The className is the map's height: the client component puts
+              it on the container and fills it with h-full, so without one the
+              map rendered at zero pixels — present on this page since launch,
+              visible never. Taller than the old homepage instance had it; on
+              the log's own page the map is the exhibit, not a teaser. */}
           <ExpeditionLogMapClient entries={entries} className="w-full h-96 sm:h-[32rem] rounded-xl" />
         </div>
+      </section>
 
-        {/* Entry list */}
-        <div className="mb-16">
+      {/* Entry list */}
+      <section className="band-light py-16">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           {entries.length > 0 ? (
             <div className="space-y-4">
               {entries.map((entry) => (
@@ -94,17 +90,20 @@ export default async function ExpeditionLogPage() {
             <p className="text-parchment-500 text-sm">No entries yet. Be the first.</p>
           )}
         </div>
+      </section>
 
-        {/* Form section */}
-        <div className="bg-jerry-green-800/40 backdrop-blur-sm border border-gold-500/20 rounded-xl p-6">
-          <h2 className="text-2xl font-serif font-bold text-white mb-2">Join the Log</h2>
-          <p className="text-parchment-300 text-sm mb-6">
-            If you bought a bottle and want to be on the record, add your name.
-          </p>
-          <ExpeditionLogForm batchId={CURRENT_BATCH_ID} />
+      {/* Form section */}
+      <section className="band-dark py-16">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="bg-jerry-green-800/40 backdrop-blur-sm border border-gold-500/20 rounded-xl p-6">
+            <h2 className="text-2xl font-serif font-bold text-white mb-2">Join the Log</h2>
+            <p className="text-parchment-300 text-sm mb-6">
+              If you bought a bottle and want to be on the record, add your name.
+            </p>
+            <ExpeditionLogForm batchId={CURRENT_BATCH_ID} />
+          </div>
         </div>
-
-      </div>
+      </section>
     </main>
   )
 }
