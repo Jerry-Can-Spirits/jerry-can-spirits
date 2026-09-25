@@ -3,6 +3,7 @@ import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
 import Breadcrumbs from '@/components/Breadcrumbs'
+import SectionHeading from '@/components/SectionHeading'
 import ScrollReveal from '@/components/ScrollReveal'
 import { baseOpenGraph } from '@/lib/og'
 import { safeJsonLd } from '@/lib/jsonLd'
@@ -59,7 +60,7 @@ export default async function ReviewsPage() {
     : undefined
 
   return (
-    <main className="text-parchment-100 min-h-screen">
+    <main className="text-parchment-100">
       {/* Google seller-rating badge (consent-gated, injected by Google) */}
       <GoogleReviewBadge />
       <script
@@ -88,26 +89,28 @@ export default async function ReviewsPage() {
           },
         }) }}
       />
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
-        <Breadcrumbs items={[{ label: 'Reviews' }]} />
-      </div>
-
       {/* Hero Section */}
-      <section className="max-w-4xl mx-auto px-6 pt-12 pb-8 text-center">
-        <ScrollReveal>
-          <h1 className="font-serif text-4xl md:text-5xl font-bold text-parchment-50 mb-4">
-            Jerry Can Spirits Reviews
-          </h1>
-          <p className="text-lg text-parchment-300 max-w-2xl mx-auto">
-            What people say after they&apos;ve poured it. Reviews left on Trustpilot and Google.
-          </p>
-        </ScrollReveal>
+      <section className="band-dark pt-20 pb-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
+          <Breadcrumbs items={[{ label: 'Reviews' }]} />
+        </div>
+        <div className="max-w-4xl mx-auto px-6">
+          <ScrollReveal>
+            <SectionHeading
+              as="h1"
+              intro={<>What people say after they&apos;ve poured it. Reviews left on Trustpilot and Google.</>}
+            >
+              Jerry Can Spirits Reviews
+            </SectionHeading>
+          </ScrollReveal>
+        </div>
       </section>
 
       {/* The two platforms that hold reviews, side by side. Yell held none
           and is gone; Trust A Veteran held none either and keeps its full
           partner entry on /friends/ instead of a claim-shaped card here. */}
-      <section className="max-w-5xl mx-auto px-6 pb-12">
+      <section className="band-light py-16">
+        <div className="max-w-5xl mx-auto px-6">
         <div className="grid md:grid-cols-2 gap-6 items-start">
         <ScrollReveal>
           <div className="bg-jerry-green-800/40 border border-gold-500/20 rounded-xl p-8">
@@ -179,10 +182,14 @@ export default async function ReviewsPage() {
           </div>
         </ScrollReveal>
         </div>
+        </div>
       </section>
 
-      {/* Leave a Review CTA */}
-      <section className="max-w-4xl mx-auto px-6 pb-16">
+      {/* Leave a Review CTA. Trustpilot's button is its brand green, a raw
+          hex the band tokens cannot re-point, so its label is pinned to a
+          fixed white rather than the token that goes near-black on light. */}
+      <section className="band-dark py-16">
+        <div className="max-w-4xl mx-auto px-6">
         <ScrollReveal>
           <div className="bg-linear-to-r from-jerry-green-800 to-jerry-green-800/60 border border-gold-500/30 rounded-xl p-8 text-center">
             <h2 className="font-serif text-2xl font-bold text-parchment-50 mb-3">
@@ -196,7 +203,7 @@ export default async function ReviewsPage() {
                 href="https://www.trustpilot.com/evaluate/jerrycanspirits.co.uk"
                 target="_blank"
                 rel="nofollow noopener noreferrer"
-                className="inline-flex items-center gap-2 bg-[#00b67a] hover:bg-[#009567] text-white font-semibold px-6 py-3 rounded-lg transition-colors"
+                className="inline-flex items-center gap-2 bg-[#00b67a] hover:bg-[#009567] text-[#ffffff] font-semibold px-6 py-3 rounded-lg transition-colors"
               >
                 Review on Trustpilot
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -217,23 +224,24 @@ export default async function ReviewsPage() {
             </div>
           </div>
         </ScrollReveal>
-      </section>
 
-      {/* Internal Links */}
-      <section className="max-w-4xl mx-auto px-6 pb-16 text-center flex items-center justify-center gap-6">
-        <Link
-          href="/shop/"
-          className="text-gold-300 hover:text-gold-400 transition-colors underline"
-        >
-          Browse our collection
-        </Link>
-        <span className="text-gold-500/30">|</span>
-        <Link
-          href="/about/story/"
-          className="text-gold-300 hover:text-gold-400 transition-colors underline"
-        >
-          Our story
-        </Link>
+        {/* Internal Links */}
+        <div className="mt-16 text-center flex items-center justify-center gap-6">
+          <Link
+            href="/shop/"
+            className="text-gold-300 hover:text-gold-400 transition-colors underline"
+          >
+            Browse our collection
+          </Link>
+          <span className="text-gold-500/30">|</span>
+          <Link
+            href="/about/story/"
+            className="text-gold-300 hover:text-gold-400 transition-colors underline"
+          >
+            Our story
+          </Link>
+        </div>
+        </div>
       </section>
     </main>
   )

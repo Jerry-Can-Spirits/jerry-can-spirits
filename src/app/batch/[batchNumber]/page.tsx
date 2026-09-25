@@ -7,6 +7,8 @@ import BatchDetails from '@/components/BatchDetails'
 import BatchIngredients from '@/components/BatchIngredients'
 import BottleLookup from '@/components/BottleLookup'
 import ShareButton from '@/components/ShareButton'
+import ScrollRow from '@/components/ScrollRow'
+import SectionHeading from '@/components/SectionHeading'
 import { getD1, getBatch, getBatchStats, getBatchIngredients } from '@/lib/d1'
 import { client } from '@/sanity/lib/client'
 import { featuredCocktailsQuery } from '@/sanity/queries'
@@ -103,30 +105,30 @@ export default async function BatchDetailPage({ params }: PageProps) {
   const pageUrl = `https://jerrycanspirits.co.uk/batch/${batchNumber}/`
 
   return (
-    <main className="min-h-screen py-20">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Breadcrumbs */}
-        <div className="mb-8">
-          <Breadcrumbs
-            items={[
-              { label: 'Check Your Bottle', href: '/batch/' },
-              { label: `Batch ${batchNumber}` },
-            ]}
-          />
-        </div>
-
-        {/* Header */}
-        <div className="mb-8">
-          <div className="flex flex-wrap items-center gap-4 mb-4">
-            <h1 className="text-3xl sm:text-4xl font-serif font-bold text-white">
-              {batch.name}
-            </h1>
-            {statusBadge(batch.status)}
+    <main>
+      {/* The passport on dark: the status pill's amber, emerald and red have
+          no light-band tokens, and the bottle lookup's field is a green panel
+          inside a green panel, which only reads on the dark ground. */}
+      <section className="band-dark pt-20 pb-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Breadcrumbs */}
+          <div className="mb-8">
+            <Breadcrumbs
+              items={[
+                { label: 'Check Your Bottle', href: '/batch/' },
+                { label: `Batch ${batchNumber}` },
+              ]}
+            />
           </div>
+
+          {/* Header */}
+          <SectionHeading as="h1" intro={statusBadge(batch.status)}>
+            {batch.name}
+          </SectionHeading>
 
           {/* Stats row */}
           {stats && (
-            <div className="flex flex-wrap gap-6">
+            <div className="flex flex-wrap justify-center gap-6 mb-16">
               <div className="flex items-baseline gap-2">
                 <span className="text-gold-400 text-2xl font-bold">{stats.total_bottles}</span>
                 <span className="text-parchment-500 text-sm">bottles</span>
@@ -143,94 +145,98 @@ export default async function BatchDetailPage({ params }: PageProps) {
               </div>
             </div>
           )}
-        </div>
 
-        {/* Two-column layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16">
-          {/* Main content */}
-          <div className="lg:col-span-2">
-            <BatchDetails batch={batch} stats={stats} />
-            {ingredients.length > 0 && (
-              <div className="mt-8">
-                <BatchIngredients ingredients={ingredients} />
+          {/* Two-column layout */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {/* Main content */}
+            <div className="lg:col-span-2">
+              <BatchDetails batch={batch} stats={stats} />
+              {ingredients.length > 0 && (
+                <div className="mt-8">
+                  <BatchIngredients ingredients={ingredients} />
+                </div>
+              )}
+            </div>
+
+            {/* Sidebar */}
+            <div className="space-y-6">
+              <BottleLookup batchNumber={batchNumber} />
+
+              <div className="flex gap-4">
+                <ShareButton
+                  title={batch.name}
+                  text={`Check out ${batch.name} from Jerry Can Spirits`}
+                  url={pageUrl}
+                  buttonText="Share This Batch"
+                />
               </div>
-            )}
-          </div>
-
-          {/* Sidebar */}
-          <div className="space-y-6">
-            <BottleLookup batchNumber={batchNumber} />
-
-            <div className="flex gap-4">
-              <ShareButton
-                title={batch.name}
-                text={`Check out ${batch.name} from Jerry Can Spirits`}
-                url={pageUrl}
-                buttonText="Share This Batch"
-              />
             </div>
           </div>
         </div>
+      </section>
 
-        {/* Featured Cocktails */}
-        {cocktails && cocktails.length > 0 && (
-          <section className="mb-16">
-            <h2 className="text-2xl font-serif font-bold text-white mb-6">
-              Cocktails to Try with This Batch
-            </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {cocktails.map((cocktail) => (
-                <Link
-                  key={cocktail._id}
-                  href={`/field-manual/cocktails/${cocktail.slug.current}/`}
-                  className="group block bg-jerry-green-800/60 backdrop-blur-sm border border-gold-500/20 rounded-xl overflow-hidden hover:border-gold-500/40 transition-all duration-300"
-                >
-                  {cocktail.image && (
-                    <div className="aspect-4/3 relative overflow-hidden">
-                      <Image
-                        src={cocktail.image}
-                        alt={cocktail.name}
-                        fill
-                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-                        className="object-cover group-hover:scale-105 transition-transform duration-300"
-                      />
+      <section className="band-light py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Featured Cocktails */}
+          {cocktails && cocktails.length > 0 && (
+            <section className="mb-16">
+              <SectionHeading>Cocktails to Try with This Batch</SectionHeading>
+              <ScrollRow
+                ariaLabel="Cocktails to Try with This Batch"
+                cols="md:grid-cols-2 lg:grid-cols-4"
+                items={cocktails.map((cocktail) => (
+                  <Link
+                    key={cocktail._id}
+                    href={`/field-manual/cocktails/${cocktail.slug.current}/`}
+                    className="group block h-full bg-jerry-green-800/60 backdrop-blur-sm border border-gold-500/20 rounded-xl overflow-hidden hover:border-gold-500/40 transition-all duration-300"
+                  >
+                    {cocktail.image && (
+                      <div className="aspect-4/3 relative overflow-hidden">
+                        <Image
+                          src={cocktail.image}
+                          alt={cocktail.name}
+                          fill
+                          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                          className="object-cover group-hover:scale-105 transition-transform duration-300"
+                        />
+                      </div>
+                    )}
+                    <div className="p-4">
+                      <h3 className="text-white font-semibold group-hover:text-gold-300 transition-colors mb-1">
+                        {cocktail.name}
+                      </h3>
+                      {cocktail.description && (
+                        <p className="text-parchment-400 text-sm line-clamp-2">{cocktail.description}</p>
+                      )}
+                      {cocktail.difficulty && (
+                        <span className="inline-block mt-2 text-xs text-gold-400 uppercase tracking-wider">
+                          {cocktail.difficulty}
+                        </span>
+                      )}
                     </div>
-                  )}
-                  <div className="p-4">
-                    <h3 className="text-white font-semibold group-hover:text-gold-300 transition-colors mb-1">
-                      {cocktail.name}
-                    </h3>
-                    {cocktail.description && (
-                      <p className="text-parchment-400 text-sm line-clamp-2">{cocktail.description}</p>
-                    )}
-                    {cocktail.difficulty && (
-                      <span className="inline-block mt-2 text-xs text-gold-400 uppercase tracking-wider">
-                        {cocktail.difficulty}
-                      </span>
-                    )}
-                  </div>
-                </Link>
-              ))}
-            </div>
-          </section>
-        )}
+                  </Link>
+                ))}
+              />
+            </section>
+          )}
 
-        {/* Shop CTA */}
-        <section className="text-center py-12 bg-jerry-green-800/40 backdrop-blur-sm border border-gold-500/20 rounded-xl">
-          <h2 className="text-2xl font-serif font-bold text-white mb-4">
-            Get Your Own Bottle
-          </h2>
-          <p className="text-parchment-300 mb-6 max-w-lg mx-auto">
-            Expedition Spiced Rum — crafted by veterans, blended with real botanicals, and ready for adventure.
-          </p>
-          <Link
-            href="/shop/"
-            className="inline-flex items-center gap-2 px-8 py-3 bg-gold-500 hover:bg-gold-400 text-jerry-green-900 font-semibold rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg"
-          >
-            Shop Now
-          </Link>
-        </section>
-      </div>
+          {/* Shop CTA */}
+          <section className="text-center py-12 bg-jerry-green-800/40 backdrop-blur-sm border border-gold-500/20 rounded-xl">
+            <h2 className="text-2xl font-serif font-bold text-white mb-4">
+              Get Your Own Bottle
+            </h2>
+            <p className="text-parchment-300 mb-6 max-w-lg mx-auto">
+              Expedition Spiced Rum — crafted by veterans, blended with real botanicals, and ready for adventure.
+            </p>
+            <Link
+              href="/shop/"
+              className="inline-flex items-center gap-2 px-8 py-3 bg-gold-500 hover:bg-gold-400 text-jerry-green-900 font-semibold rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg"
+            >
+              Shop Now
+            </Link>
+          </section>
+        </div>
+      </section>
     </main>
   )
 }

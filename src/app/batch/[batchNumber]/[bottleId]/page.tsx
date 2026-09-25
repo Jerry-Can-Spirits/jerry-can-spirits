@@ -110,73 +110,81 @@ export default async function BottleDetailPage({ params }: PageProps) {
   const pageUrl = `https://jerrycanspirits.co.uk/batch/${batchNumber}/${bottleId}/`
 
   return (
-    <main className="min-h-screen py-20">
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Breadcrumbs */}
-        <div className="mb-8">
-          <Breadcrumbs
-            items={[
-              { label: 'Check Your Bottle', href: '/batch/' },
-              { label: `Batch ${batchNumber}`, href: `/batch/${batchNumber}/` },
-              { label: `${displayLabel} #${bottleNumber}` },
-            ]}
-          />
-        </div>
-
-        {/* Certificate */}
-        <BottleCertificate
-          batch={batch}
-          bottleNumber={bottleNumber}
-          labelType={labelType}
-        />
-
-        {/* Tasting Notes */}
-        {batch.tasting_notes && (
-          <div className="mt-8 bg-jerry-green-800/60 backdrop-blur-sm border border-gold-500/20 rounded-xl p-6">
-            <h2 className="text-xl font-serif font-bold text-white mb-3">Tasting Notes</h2>
-            <TastingNotesDisplay notes={batch.tasting_notes} />
+    <main>
+      {/* The certificate's status badge is amber for an ageing batch, which
+          has no light-band token, so the certificate stays on dark. */}
+      <section className="band-dark pt-20 pb-16">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Breadcrumbs */}
+          <div className="mb-8">
+            <Breadcrumbs
+              items={[
+                { label: 'Check Your Bottle', href: '/batch/' },
+                { label: `Batch ${batchNumber}`, href: `/batch/${batchNumber}/` },
+                { label: `${displayLabel} #${bottleNumber}` },
+              ]}
+            />
           </div>
-        )}
 
-        {/* Provenance note */}
-        <div className="mt-6 bg-jerry-green-800/40 border border-gold-500/10 rounded-xl p-6 text-center">
-          <p className="text-parchment-400 text-sm">
-            This bottle is from {batch.name}. Every bottle carries the same exceptional liquid, macerated in
-            small batches by our British partner distillery.
-          </p>
-        </div>
-
-        {/* Actions. The Expedition Log link is the page's real purpose until
-            the per-bottle QR scheme lands: looking a number up proves the
-            bottle exists; registering it in the log is the genuine, opt-in
-            act of provenance an owner can perform today. Without it this page
-            was a dead end. */}
-        <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
-          <Link
-            href="/expedition-log/"
-            className="inline-flex items-center gap-2 px-6 py-3 bg-gold-500 hover:bg-gold-400 text-jerry-green-900 font-semibold rounded-lg transition-colors"
-          >
-            Add it to the Expedition Log
-          </Link>
-
-          <ShareButton
-            title={`${displayLabel} #${bottleNumber} — ${batch.name}`}
-            text={`Check out my bottle of Jerry Can Spirits — ${displayLabel} #${bottleNumber} from ${batch.name}`}
-            url={pageUrl}
-            buttonText="Share My Bottle"
+          {/* Certificate */}
+          <BottleCertificate
+            batch={batch}
+            bottleNumber={bottleNumber}
+            labelType={labelType}
           />
-
-          <Link
-            href={`/batch/${batchNumber}/`}
-            className="inline-flex items-center gap-2 px-6 py-3 bg-jerry-green-700/60 hover:bg-jerry-green-700 text-parchment-300 hover:text-white border border-gold-500/20 hover:border-gold-500/30 font-medium rounded-lg transition-all duration-300"
-          >
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-            </svg>
-            Back to Batch
-          </Link>
         </div>
-      </div>
+      </section>
+
+      <section className="band-light py-16">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Tasting Notes */}
+          {batch.tasting_notes && (
+            <div className="bg-jerry-green-800/60 backdrop-blur-sm border border-gold-500/20 rounded-xl p-6">
+              <h2 className="text-xl font-serif font-bold text-white mb-3">Tasting Notes</h2>
+              <TastingNotesDisplay notes={batch.tasting_notes} />
+            </div>
+          )}
+
+          {/* Provenance note */}
+          <div className="mt-6 bg-jerry-green-800/40 border border-gold-500/10 rounded-xl p-6 text-center">
+            <p className="text-parchment-400 text-sm">
+              This bottle is from {batch.name}. Every bottle carries the same exceptional liquid, macerated in
+              small batches by our British partner distillery.
+            </p>
+          </div>
+
+          {/* Actions. The Expedition Log link is the page's real purpose until
+              the per-bottle QR scheme lands: looking a number up proves the
+              bottle exists; registering it in the log is the genuine, opt-in
+              act of provenance an owner can perform today. Without it this page
+              was a dead end. */}
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
+            <Link
+              href="/expedition-log/"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-gold-500 hover:bg-gold-400 text-jerry-green-900 font-semibold rounded-lg transition-colors"
+            >
+              Add it to the Expedition Log
+            </Link>
+
+            <ShareButton
+              title={`${displayLabel} #${bottleNumber} — ${batch.name}`}
+              text={`Check out my bottle of Jerry Can Spirits — ${displayLabel} #${bottleNumber} from ${batch.name}`}
+              url={pageUrl}
+              buttonText="Share My Bottle"
+            />
+
+            <Link
+              href={`/batch/${batchNumber}/`}
+              className="inline-flex items-center gap-2 px-6 py-3 bg-jerry-green-700/60 hover:bg-jerry-green-700 text-parchment-300 hover:text-white border border-gold-500/20 hover:border-gold-500/30 font-medium rounded-lg transition-all duration-300"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              </svg>
+              Back to Batch
+            </Link>
+          </div>
+        </div>
+      </section>
     </main>
   )
 }

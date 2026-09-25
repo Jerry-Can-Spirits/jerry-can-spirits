@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import SectionHeading from '@/components/SectionHeading'
 import CookiebotRenewButton from '@/components/CookiebotRenewButton'
 import { baseOpenGraph } from '@/lib/og'
 
@@ -20,9 +21,9 @@ export const metadata: Metadata = {
 
 export default function CookiePreferencesPage() {
   return (
-    <main className="min-h-screen py-20">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="mb-12">
+    <main>
+      <section className="band-dark pt-20 pb-16">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <Link
             href="/"
             className="inline-flex items-center gap-2 text-gold-300 hover:text-gold-200 mb-6 transition-colors"
@@ -33,41 +34,42 @@ export default function CookiePreferencesPage() {
             Back to Home
           </Link>
 
-          <h1 className="text-4xl sm:text-5xl font-serif font-bold text-parchment-50 mb-4">
+          <SectionHeading as="h1" intro="Manage your cookie settings and privacy preferences.">
             Cookie Preferences
-          </h1>
-          <p className="text-xl text-parchment-200">
-            Manage your cookie settings and privacy preferences.
-          </p>
+          </SectionHeading>
         </div>
+      </section>
 
-        <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20 space-y-6">
-          <p className="text-parchment-200 leading-relaxed">
-            Your cookie preferences are managed by Cookiebot. Use the button below to review or change which cookies you allow.
-          </p>
-          <CookiebotRenewButton />
-        </div>
+      <section className="band-light py-16">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20 space-y-6">
+            <p className="text-parchment-200 leading-relaxed">
+              Your cookie preferences are managed by Cookiebot. Use the button below to review or change which cookies you allow.
+            </p>
+            <CookiebotRenewButton />
+          </div>
 
-        <div className="mt-8 p-6 bg-jerry-green-800/20 backdrop-blur-sm rounded-xl border border-gold-500/10">
-          <h3 className="text-lg font-serif font-bold text-parchment-50 mb-3">
-            Further Information
-          </h3>
-          <div className="flex flex-wrap gap-4">
-            <Link
-              href="/cookie-policy/"
-              className="text-gold-300 hover:text-gold-200 underline text-sm transition-colors"
-            >
-              Cookie Policy
-            </Link>
-            <Link
-              href="/privacy-policy/"
-              className="text-gold-300 hover:text-gold-200 underline text-sm transition-colors"
-            >
-              Privacy Policy
-            </Link>
+          <div className="mt-8 p-6 bg-jerry-green-800/20 backdrop-blur-sm rounded-xl border border-gold-500/10">
+            <h3 className="text-lg font-serif font-bold text-parchment-50 mb-3">
+              Further Information
+            </h3>
+            <div className="flex flex-wrap gap-4">
+              <Link
+                href="/cookie-policy/"
+                className="text-gold-300 hover:text-gold-200 underline text-sm transition-colors"
+              >
+                Cookie Policy
+              </Link>
+              <Link
+                href="/privacy-policy/"
+                className="text-gold-300 hover:text-gold-200 underline text-sm transition-colors"
+              >
+                Privacy Policy
+              </Link>
+            </div>
           </div>
         </div>
-      </div>
+      </section>
     </main>
   )
 }

@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import Breadcrumbs from '@/components/Breadcrumbs'
+import SectionHeading from '@/components/SectionHeading'
 import StructuredData from '@/components/StructuredData'
 import BatchCard from '@/components/BatchCard'
 import { getD1, getAllBatches, getBatchStats } from '@/lib/d1'
@@ -47,44 +48,47 @@ export default async function BatchIndexPage() {
   }
 
   return (
-    <main className="min-h-screen py-20">
+    <main>
       <StructuredData data={itemListSchema} id="batch-list-schema" />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Breadcrumbs */}
-        <div className="mb-8">
-          <Breadcrumbs items={[{ label: 'Check Your Bottle' }]} />
-        </div>
-
-        {/* Header */}
-        <div className="text-center mb-12">
-          <div className="inline-block px-4 py-2 bg-jerry-green-800/60 backdrop-blur-sm rounded-full border border-gold-500/30 mb-6">
-            <span className="text-gold-300 text-sm font-semibold uppercase tracking-widest">
-              Batch Tracker
-            </span>
+      {/* One band. The batch cards carry the amber, emerald and red status
+          pills, which have no light-band tokens, so the grid stays on the
+          hero's dark ground rather than opening a light band of its own. */}
+      <section className="band-dark pt-20 pb-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Breadcrumbs */}
+          <div className="mb-8">
+            <Breadcrumbs items={[{ label: 'Check Your Bottle' }]} />
           </div>
-          <h1 className="text-4xl sm:text-5xl font-serif font-bold text-white mb-4">
+
+          {/* Header */}
+          <SectionHeading
+            as="h1"
+            eyebrow="Batch Tracker"
+            intro={
+              <>
+                Every bottle of Jerry Can Spirits is tracked from production to your door.
+                Select a batch below to view production details, tasting notes, and look up your individual bottle.
+              </>
+            }
+          >
             Check Your Bottle
-          </h1>
-          <p className="text-lg text-parchment-300 max-w-2xl mx-auto leading-relaxed">
-            Every bottle of Jerry Can Spirits is tracked from production to your door.
-            Select a batch below to view production details, tasting notes, and look up your individual bottle.
-          </p>
-        </div>
+          </SectionHeading>
 
-        {/* Batch Grid */}
-        {batchesWithStats.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {batchesWithStats.map(({ batch, stats }) => (
-              <BatchCard key={batch.id} batch={batch} stats={stats} />
-            ))}
-          </div>
-        ) : (
-          <div className="text-center py-16">
-            <p className="text-parchment-400 text-lg">No batches available yet. Check back soon.</p>
-          </div>
-        )}
-      </div>
+          {/* Batch Grid */}
+          {batchesWithStats.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {batchesWithStats.map(({ batch, stats }) => (
+                <BatchCard key={batch.id} batch={batch} stats={stats} />
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-16">
+              <p className="text-parchment-400 text-lg">No batches available yet. Check back soon.</p>
+            </div>
+          )}
+        </div>
+      </section>
     </main>
   )
 }

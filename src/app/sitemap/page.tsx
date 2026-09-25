@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import Breadcrumbs from '@/components/Breadcrumbs'
+import SectionHeading from '@/components/SectionHeading'
 import { client } from '@/sanity/lib/client'
 import { baseOpenGraph } from '@/lib/og'
 import {
@@ -139,120 +140,128 @@ export default async function SitemapPage() {
   )
 
   return (
-    <main className="min-h-screen py-20">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
-        <Breadcrumbs items={[{ label: 'Site Map' }]} />
-      </div>
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
-        <div className="inline-block px-4 py-2 bg-jerry-green-800/60 backdrop-blur-sm rounded-full border border-gold-500/30 mb-6">
-          <span className="text-gold-300 text-sm font-semibold uppercase tracking-widest">
-            Site Map
-          </span>
+    <main>
+      <section className="band-dark pt-20 pb-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
+          <Breadcrumbs items={[{ label: 'Site Map' }]} />
         </div>
-        <h1 className="text-4xl sm:text-5xl font-serif font-bold text-white mb-4">
-          Every Page. One Place.
-        </h1>
-        <p className="text-parchment-300 text-lg">
-          A complete index of the Jerry Can Spirits website.
-        </p>
-      </div>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <SectionHeading as="h1" eyebrow="Site Map" intro="A complete index of the Jerry Can Spirits website.">
+            Every Page. One Place.
+          </SectionHeading>
+        </div>
+      </section>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
+      {/* The index alternates by weight: the short site and shop lists, the
+          long cocktail list on its own, the categorised ingredients and
+          equipment together, the guides to close. */}
+      <section className="band-light py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
+          {/* Static pages */}
+          <SitemapSection title="The Expedition">
+            <LinkGrid items={staticPages} />
+          </SitemapSection>
 
-        {/* Static pages */}
-        <SitemapSection title="The Expedition">
-          <LinkGrid items={staticPages} />
-        </SitemapSection>
+          {/* Shop collections */}
+          <SitemapSection title="Shop — Collections">
+            <LinkGrid items={shopPages} />
+          </SitemapSection>
 
-        {/* Shop collections */}
-        <SitemapSection title="Shop — Collections">
-          <LinkGrid items={shopPages} />
-        </SitemapSection>
+          {/* Shop SEO category pages */}
+          <SitemapSection title="Shop — Categories">
+            <LinkGrid items={shopCategoryPages} />
+          </SitemapSection>
+        </div>
+      </section>
 
-        {/* Shop SEO category pages */}
-        <SitemapSection title="Shop — Categories">
-          <LinkGrid items={shopCategoryPages} />
-        </SitemapSection>
+      <section className="band-dark py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Cocktails */}
+          <SitemapSection title={`Field Manual — Cocktails (${cocktails.length})`}>
+            <LinkGrid
+              items={sortedCocktails.map((c) => ({
+                href: `/field-manual/cocktails/${c.slug.current}/`,
+                label: c.name ?? c.slug.current,
+              }))}
+            />
+          </SitemapSection>
+        </div>
+      </section>
 
-        {/* Cocktails */}
-        <SitemapSection title={`Field Manual — Cocktails (${cocktails.length})`}>
-          <LinkGrid
-            items={sortedCocktails.map((c) => ({
-              href: `/field-manual/cocktails/${c.slug.current}/`,
-              label: c.name ?? c.slug.current,
-            }))}
-          />
-        </SitemapSection>
+      <section className="band-light py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
+          {/* Ingredients by category */}
+          <SitemapSection title={`Field Manual — Ingredients (${ingredients.length})`}>
+            <div className="space-y-8">
+              {Object.entries(ingredientsByCategory)
+                .sort(([a], [b]) => a.localeCompare(b))
+                .map(([category, items]) => (
+                  <div key={category}>
+                    <h3 className="text-sm font-semibold text-gold-400 uppercase tracking-widest mb-3">
+                      {category}
+                    </h3>
+                    <LinkGrid
+                      items={[...items]
+                        .sort((a, b) => (a.name ?? '').localeCompare(b.name ?? ''))
+                        .map((i) => ({
+                          href: `/field-manual/ingredients/${i.slug.current}/`,
+                          label: i.name ?? i.slug.current,
+                        }))}
+                    />
+                  </div>
+                ))}
+            </div>
+          </SitemapSection>
 
-        {/* Ingredients by category */}
-        <SitemapSection title={`Field Manual — Ingredients (${ingredients.length})`}>
-          <div className="space-y-8">
-            {Object.entries(ingredientsByCategory)
-              .sort(([a], [b]) => a.localeCompare(b))
-              .map(([category, items]) => (
-                <div key={category}>
-                  <h3 className="text-sm font-semibold text-gold-400 uppercase tracking-widest mb-3">
-                    {category}
-                  </h3>
-                  <LinkGrid
-                    items={[...items]
-                      .sort((a, b) => (a.name ?? '').localeCompare(b.name ?? ''))
-                      .map((i) => ({
-                        href: `/field-manual/ingredients/${i.slug.current}/`,
-                        label: i.name ?? i.slug.current,
+          {/* Equipment by category */}
+          <SitemapSection title={`Field Manual — Equipment (${equipment.length})`}>
+            <div className="space-y-8">
+              {Object.entries(equipmentByCategory)
+                .sort(([a], [b]) => a.localeCompare(b))
+                .map(([category, items]) => (
+                  <div key={category}>
+                    <h3 className="text-sm font-semibold text-gold-400 uppercase tracking-widest mb-3">
+                      {category}
+                    </h3>
+                    <LinkGrid
+                      items={[...items]
+                        .sort((a, b) => (a.name ?? '').localeCompare(b.name ?? ''))
+                        .map((e) => ({
+                          href: `/field-manual/equipment/${e.slug.current}/`,
+                          label: e.name ?? e.slug.current,
+                        }))}
+                    />
+                  </div>
+                ))}
+            </div>
+          </SitemapSection>
+        </div>
+      </section>
+
+      <section className="band-dark py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Guides by category */}
+          <SitemapSection title={`Guides (${guides.length})`}>
+            <div className="space-y-8">
+              {Object.entries(guidesByCategory)
+                .sort(([a], [b]) => a.localeCompare(b))
+                .map(([category, items]) => (
+                  <div key={category}>
+                    <h3 className="text-sm font-semibold text-gold-400 uppercase tracking-widest mb-3">
+                      {categoryLabels[category] ?? category}
+                    </h3>
+                    <LinkGrid
+                      items={items.map((g) => ({
+                        href: `/guides/${g.slug.current}/`,
+                        label: g.title ?? g.slug.current,
                       }))}
-                  />
-                </div>
-              ))}
-          </div>
-        </SitemapSection>
-
-        {/* Equipment by category */}
-        <SitemapSection title={`Field Manual — Equipment (${equipment.length})`}>
-          <div className="space-y-8">
-            {Object.entries(equipmentByCategory)
-              .sort(([a], [b]) => a.localeCompare(b))
-              .map(([category, items]) => (
-                <div key={category}>
-                  <h3 className="text-sm font-semibold text-gold-400 uppercase tracking-widest mb-3">
-                    {category}
-                  </h3>
-                  <LinkGrid
-                    items={[...items]
-                      .sort((a, b) => (a.name ?? '').localeCompare(b.name ?? ''))
-                      .map((e) => ({
-                        href: `/field-manual/equipment/${e.slug.current}/`,
-                        label: e.name ?? e.slug.current,
-                      }))}
-                  />
-                </div>
-              ))}
-          </div>
-        </SitemapSection>
-
-        {/* Guides by category */}
-        <SitemapSection title={`Guides (${guides.length})`}>
-          <div className="space-y-8">
-            {Object.entries(guidesByCategory)
-              .sort(([a], [b]) => a.localeCompare(b))
-              .map(([category, items]) => (
-                <div key={category}>
-                  <h3 className="text-sm font-semibold text-gold-400 uppercase tracking-widest mb-3">
-                    {categoryLabels[category] ?? category}
-                  </h3>
-                  <LinkGrid
-                    items={items.map((g) => ({
-                      href: `/guides/${g.slug.current}/`,
-                      label: g.title ?? g.slug.current,
-                    }))}
-                  />
-                </div>
-              ))}
-          </div>
-        </SitemapSection>
-
-      </div>
+                    />
+                  </div>
+                ))}
+            </div>
+          </SitemapSection>
+        </div>
+      </section>
     </main>
   )
 }
