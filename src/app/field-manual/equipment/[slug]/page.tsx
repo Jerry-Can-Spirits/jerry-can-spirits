@@ -17,6 +17,7 @@ import { extractHeadings } from '@/lib/sanity-text'
 import { OG_IMAGE_COCKTAIL } from '@/lib/og'
 import { ORG_REF } from '@/lib/jsonLd'
 import FAQAccordion from '@/components/FAQAccordion'
+import ScrollRow from '@/components/ScrollRow'
 
 // Types for equipment data
 interface Equipment {
@@ -169,10 +170,23 @@ export default async function EquipmentDetailPage({ params }: { params: Promise<
       }
     : null
 
+  // The page is three bands, as on the cocktail page: the hero and its
+  // practical panels on dark, the specifications, background reading and
+  // questions on light, the related reading on dark. The light band is
+  // optional content, so it is only painted when there is something to put
+  // in it.
+  const hasMore = Boolean(
+    (equipment.specifications && (equipment.specifications.material || equipment.specifications.capacity || equipment.specifications.details)) ||
+      equipment.history ||
+      (equipment.faqs && equipment.faqs.length > 0) ||
+      videoId,
+  )
+
   return (
-    <main className="min-h-screen py-20">
+    <main>
       <StructuredData data={articleSchema} />
       {faqSchema && <StructuredData data={faqSchema} id="equipment-faq-schema" />}
+      <section className="band-dark pt-20 pb-12">
       {/* Breadcrumb */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
         <Breadcrumbs
@@ -185,7 +199,7 @@ export default async function EquipmentDetailPage({ params }: { params: Promise<
       </div>
 
       {/* Hero Section */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* Header - full width, above the grid */}
         <div className="mb-8">
@@ -408,40 +422,48 @@ export default async function EquipmentDetailPage({ params }: { params: Promise<
               </div>
             )}
 
+          </div>
+        </div>
+      </div>
+      </section>
+
+      {/* Full-width tail — editorial and related content. Kept outside the
+          two-column grid so a long cocktail list never leaves the left
+          column hanging empty. */}
+      {hasMore && (
+      <section className="band-light py-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
             {/* Specifications */}
             {equipment.specifications && (equipment.specifications.material || equipment.specifications.capacity || equipment.specifications.details) && (
               <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
                 <h2 className="text-2xl font-serif font-bold text-gold-300 mb-4">Specifications</h2>
-                <div className="grid md:grid-cols-3 gap-4">
-                  {equipment.specifications.material && (
-                    <div className="p-4 bg-jerry-green-800/30 rounded-lg border border-gold-500/20">
-                      <p className="text-gold-400 font-semibold mb-1">Material</p>
-                      <p className="text-parchment-300 text-sm">{equipment.specifications.material}</p>
-                    </div>
-                  )}
-                  {equipment.specifications.capacity && (
-                    <div className="p-4 bg-jerry-green-800/30 rounded-lg border border-gold-500/20">
-                      <p className="text-gold-400 font-semibold mb-1">Capacity</p>
-                      <p className="text-parchment-300 text-sm">{equipment.specifications.capacity}</p>
-                    </div>
-                  )}
-                  {equipment.specifications.details && (
-                    <div className="p-4 bg-jerry-green-800/30 rounded-lg border border-gold-500/20">
-                      <p className="text-gold-400 font-semibold mb-1">Details</p>
-                      <p className="text-parchment-300 text-sm">{equipment.specifications.details}</p>
-                    </div>
-                  )}
-                </div>
+                <ScrollRow
+                  ariaLabel="Specifications"
+                  cols="md:grid-cols-3"
+                  items={[
+                    equipment.specifications.material && (
+                      <div className="h-full p-4 bg-jerry-green-800/30 rounded-lg border border-gold-500/20">
+                        <p className="text-gold-400 font-semibold mb-1">Material</p>
+                        <p className="text-parchment-300 text-sm">{equipment.specifications.material}</p>
+                      </div>
+                    ),
+                    equipment.specifications.capacity && (
+                      <div className="h-full p-4 bg-jerry-green-800/30 rounded-lg border border-gold-500/20">
+                        <p className="text-gold-400 font-semibold mb-1">Capacity</p>
+                        <p className="text-parchment-300 text-sm">{equipment.specifications.capacity}</p>
+                      </div>
+                    ),
+                    equipment.specifications.details && (
+                      <div className="h-full p-4 bg-jerry-green-800/30 rounded-lg border border-gold-500/20">
+                        <p className="text-gold-400 font-semibold mb-1">Details</p>
+                        <p className="text-parchment-300 text-sm">{equipment.specifications.details}</p>
+                      </div>
+                    ),
+                  ].filter(Boolean)}
+                />
               </div>
             )}
 
-          </div>
-        </div>
-
-        {/* Full-width tail — editorial and related content. Kept outside the
-            two-column grid so a long cocktail list never leaves the left
-            column hanging empty. */}
-        <div className="mt-12 space-y-8">
             {/* History */}
             {equipment.history && (
               <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
@@ -478,7 +500,12 @@ export default async function EquipmentDetailPage({ params }: { params: Promise<
                 </div>
               </div>
             )}
+        </div>
+      </section>
+      )}
 
+      <section className="band-dark py-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
             {/* Related Technique Guides */}
             {equipment.relatedGuides && equipment.relatedGuides.length > 0 && (
               <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20 lg:max-w-4xl">
@@ -499,12 +526,14 @@ export default async function EquipmentDetailPage({ params }: { params: Promise<
             {equipment.relatedEquipment && equipment.relatedEquipment.some(e => e?.slug?.current) && (
               <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
                 <h2 className="text-2xl font-serif font-bold text-gold-300 mb-4">Related Equipment</h2>
-                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                  {equipment.relatedEquipment.filter(e => e?.slug?.current).map((item) => (
+                <ScrollRow
+                  ariaLabel="Related equipment"
+                  cols="md:grid-cols-2 lg:grid-cols-3"
+                  items={equipment.relatedEquipment.filter(e => e?.slug?.current).map((item) => (
                     <Link
                       key={item._id}
                       href={`/field-manual/equipment/${item.slug.current}/`}
-                      className="flex items-center gap-3 p-3 bg-jerry-green-800/30 rounded-lg border border-gold-500/20 hover:bg-jerry-green-800/50 hover:border-gold-400/40 transition-all group"
+                      className="h-full flex items-center gap-3 p-3 bg-jerry-green-800/30 rounded-lg border border-gold-500/20 hover:bg-jerry-green-800/50 hover:border-gold-400/40 transition-all group"
                     >
                       <svg className="w-5 h-5 text-gold-400 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -512,7 +541,7 @@ export default async function EquipmentDetailPage({ params }: { params: Promise<
                       <span className="text-parchment-300 group-hover:text-gold-300 transition-colors">{item.name}</span>
                     </Link>
                   ))}
-                </div>
+                />
               </div>
             )}
 
@@ -520,12 +549,14 @@ export default async function EquipmentDetailPage({ params }: { params: Promise<
             {equipment.relatedIngredients && equipment.relatedIngredients.some(i => i?.slug?.current) && (
               <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
                 <h2 className="text-2xl font-serif font-bold text-gold-300 mb-4">Related Ingredients</h2>
-                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                  {equipment.relatedIngredients.filter(i => i?.slug?.current).map((item) => (
+                <ScrollRow
+                  ariaLabel="Related ingredients"
+                  cols="md:grid-cols-2 lg:grid-cols-3"
+                  items={equipment.relatedIngredients.filter(i => i?.slug?.current).map((item) => (
                     <Link
                       key={item._id}
                       href={`/field-manual/ingredients/${item.slug.current}/`}
-                      className="flex items-center gap-3 p-3 bg-jerry-green-800/30 rounded-lg border border-gold-500/20 hover:bg-jerry-green-800/50 hover:border-gold-400/40 transition-all group"
+                      className="h-full flex items-center gap-3 p-3 bg-jerry-green-800/30 rounded-lg border border-gold-500/20 hover:bg-jerry-green-800/50 hover:border-gold-400/40 transition-all group"
                     >
                       <svg className="w-5 h-5 text-gold-400 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
@@ -533,7 +564,7 @@ export default async function EquipmentDetailPage({ params }: { params: Promise<
                       <span className="text-parchment-300 group-hover:text-gold-300 transition-colors">{item.name}</span>
                     </Link>
                   ))}
-                </div>
+                />
               </div>
             )}
 

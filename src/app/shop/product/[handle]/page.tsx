@@ -18,6 +18,7 @@ import TastingNotes from '@/components/TastingNotes'
 import ProductProcess from '@/components/ProductProcess'
 import DutyPaidStatement from '@/components/DutyPaidStatement'
 import ProductFAQ from '@/components/ProductFAQ'
+import ScrollRow from '@/components/ScrollRow'
 import WhatsIncluded from '@/components/WhatsIncluded'
 import DietaryInfo from '@/components/DietaryInfo'
 import StickyAddToCart from '@/components/StickyAddToCart'
@@ -524,7 +525,7 @@ export default async function ProductPage({
   }
 
   return (
-    <main className="min-h-screen py-20">
+    <main>
       {/* Hoisted into <head> by React. See generateMetadata for why og:type
           cannot be set through the Metadata API for a value outside Next's
           OpenGraph union. */}
@@ -542,6 +543,11 @@ export default async function ProductPage({
         compareAtPrice={product.variants?.[0]?.compareAtPrice?.amount ?? null}
       />
 
+      {/* Four bands: the buy box on dark, the specifications and questions on
+          light, the reviews on dark, the recommendations on light. The
+          description at the top renders through prose-invert, whose colours
+          the light band cannot re-point, so it must stay on dark. */}
+      <section className="band-dark pt-20 pb-16">
       {/* Breadcrumb */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
         <nav className="text-sm text-parchment-400 flex items-center gap-2">
@@ -767,10 +773,12 @@ export default async function ProductPage({
           </div>
         </div>
       </section>
+      </section>
 
       {/* Product Details & Tasting Notes - Spirits only */}
       {(product.metafields || sanityProduct) && (
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-16 space-y-8">
+        <section className="band-light py-16">
+         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
           {/* Product Specifications - Only for spirits (drink-specific fields) */}
           {isSpirit && product.metafields && product.metafields.length > 0 && (
             <ProductSpecifications
@@ -893,11 +901,13 @@ export default async function ProductPage({
           {sanityProduct?.faqs && sanityProduct.faqs.length > 0 && (
             <ProductFAQ faqs={sanityProduct.faqs} productName={product.title} />
           )}
+         </div>
         </section>
       )}
 
       {/* Customer Reviews Section */}
-      <section id="customer-reviews" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-16 scroll-mt-24">
+      <section id="customer-reviews" className="band-dark py-16 scroll-mt-24">
+       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
           <h2 className="text-3xl font-serif font-bold text-white mb-2">Customer Reviews</h2>
           <p className="text-parchment-300 mb-8">What people think</p>
@@ -916,18 +926,22 @@ export default async function ProductPage({
             </div>
           )}
         </div>
+       </div>
       </section>
 
       {/* Related Products Section */}
       {relatedProducts.length > 0 && (
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-16">
+        <section className="band-light py-16">
+         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl font-serif font-bold text-white mb-8">Worth Looking At</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {relatedProducts.map((relatedProduct) => (
+          <ScrollRow
+            ariaLabel="Related products"
+            cols="md:grid-cols-2 lg:grid-cols-4"
+            items={relatedProducts.map((relatedProduct) => (
               <Link
                 key={relatedProduct.id}
                 href={`/shop/product/${relatedProduct.handle}/`}
-                className="group bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl border border-gold-500/20 hover:border-gold-400/40 transition-all duration-300 overflow-hidden"
+                className="group block h-full bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl border border-gold-500/20 hover:border-gold-400/40 transition-all duration-300 overflow-hidden"
               >
                 {/* Product Image */}
                 {relatedProduct.images.length > 0 && (
@@ -962,7 +976,8 @@ export default async function ProductPage({
                 </div>
               </Link>
             ))}
-          </div>
+          />
+         </div>
         </section>
       )}
 

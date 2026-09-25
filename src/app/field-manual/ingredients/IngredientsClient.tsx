@@ -6,6 +6,7 @@ import { useRouter, usePathname } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
 import BackToTop from '@/components/BackToTop'
+import ScrollRow from '@/components/ScrollRow'
 
 // Types for ingredient data
 interface Ingredient {
@@ -145,9 +146,12 @@ export default function IngredientsClient({ ingredients }: IngredientsClientProp
   }
 
   return (
-    <main className="min-h-screen pb-20">
-      {/* Filters Section */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
+    <main>
+      {/* Filters Section. Continues the hero's dark band; the featured row
+          below is the page's light band and the category grids return to
+          dark, so a long listing has somewhere to mark progress against. */}
+      <section className="band-dark pb-12">
+       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
           <div className="space-y-6">
             {/* Search Bar */}
@@ -193,21 +197,25 @@ export default function IngredientsClient({ ingredients }: IngredientsClientProp
             </div>
           </div>
         </div>
+       </div>
       </section>
 
       {/* Featured Ingredients */}
       {featuredIngredients.length > 0 && (
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
+        <section className="band-light py-12">
+         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl font-serif font-bold text-gold-400 mb-6 flex items-center gap-2">
             <span className="text-gold-400">★</span>
             Essential Ingredients
           </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {featuredIngredients.map((item) => (
+          <ScrollRow
+            ariaLabel="Essential ingredients"
+            cols="md:grid-cols-2 lg:grid-cols-4"
+            items={featuredIngredients.map((item) => (
               <Link
                 key={item._id}
                 href={`/field-manual/ingredients/${item.slug.current}/`}
-                className="group bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl border border-gold-500/30 overflow-hidden hover:border-gold-400/60 transition-all duration-300 hover:scale-105 hover:shadow-xl"
+                className="group block h-full bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl border border-gold-500/30 overflow-hidden hover:border-gold-400/60 transition-all duration-300 hover:scale-105 hover:shadow-xl"
               >
                 {/* Image */}
                 {item.image && (
@@ -244,12 +252,14 @@ export default function IngredientsClient({ ingredients }: IngredientsClientProp
                 </div>
               </Link>
             ))}
-          </div>
+          />
+         </div>
         </section>
       )}
 
       {/* All Ingredients Grid */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="band-dark py-12">
+       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <h2 className="text-3xl font-serif font-bold text-white mb-6">
           {selectedCategory === 'all' ? 'All Ingredients' : categories.find(c => c.value === selectedCategory)?.label}
         </h2>
@@ -288,12 +298,14 @@ export default function IngredientsClient({ ingredients }: IngredientsClientProp
                     {categoryTotals.get(group.category) ?? group.items.length}
                   </span>
                 </h2>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {group.items.map((item) => (
+                <ScrollRow
+                  ariaLabel={categoryTitle(INGREDIENT_CATEGORY_TITLES, group.category)}
+                  cols="md:grid-cols-2 lg:grid-cols-4"
+                  items={group.items.map((item) => (
               <Link
                 key={item._id}
                 href={`/field-manual/ingredients/${item.slug.current}/`}
-                className="group bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl border border-gold-500/20 overflow-hidden hover:border-gold-400/40 transition-all duration-300 hover:scale-105"
+                className="group block h-full bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl border border-gold-500/20 overflow-hidden hover:border-gold-400/40 transition-all duration-300 hover:scale-105"
               >
                 {/* Image */}
                 {item.image && (
@@ -327,7 +339,7 @@ export default function IngredientsClient({ ingredients }: IngredientsClientProp
                 </div>
               </Link>
             ))}
-                </div>
+                />
               </section>
             ))}
           </div>
@@ -350,6 +362,7 @@ export default function IngredientsClient({ ingredients }: IngredientsClientProp
             </button>
           </div>
         )}
+       </div>
       </section>
 
       {/* Back to Top Button */}
