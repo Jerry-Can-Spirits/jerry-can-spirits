@@ -11,6 +11,8 @@ import ViewItemListTracker from '@/components/ViewItemListTracker'
 import { OG_IMAGE } from '@/lib/og'
 import { productOffer, merchantOfferExtras } from '@/lib/jsonLd'
 import { formatPrice } from '@/lib/format-price'
+import ScrollRow from '@/components/ScrollRow'
+import SectionHeading from '@/components/SectionHeading'
 
 export const metadata: Metadata = {
   title: 'Cocktail Shakers, Barware & Bar Tools',
@@ -124,32 +126,26 @@ export default async function BarwarePage() {
   const currency = products[0]?.priceRange.minVariantPrice.currencyCode ?? 'GBP'
 
   return (
-    <main className="min-h-screen py-20">
+    <main>
       <ViewItemListTracker listId="barware" listName="Barware" currency={currency} items={trackerItems} />
       <StructuredData data={breadcrumbSchema} id="barware-breadcrumb-schema" />
       <StructuredData data={itemListSchema} id="barware-itemlist-schema" />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
-        <Breadcrumbs items={[{ label: 'Shop', href: '/shop' }, { label: 'Barware' }]} />
-      </div>
+      {/* The hero, the sub-category links and the product grid share the
+          opening dark band; the category copy and the sign-up then alternate. */}
+      <section className="band-dark pt-20 pb-16">
+       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <Breadcrumbs items={[{ label: 'Shop', href: '/shop' }, { label: 'Barware' }]} className="mb-8" />
 
-      {/* Page Header */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
-        <div className="text-center mb-8">
-          <div className="inline-block px-4 py-2 bg-jerry-green-800/60 backdrop-blur-sm rounded-full border border-gold-500/30 mb-6">
-            <span className="text-gold-300 text-sm font-semibold uppercase tracking-widest">
-              Bar Accessories
-            </span>
-          </div>
-          <h1 className="text-4xl sm:text-6xl font-serif font-bold text-white mb-6">
-            Barware
-            <br />
-            <span className="text-gold-300">Built to Work</span>
-          </h1>
-          <p className="text-xl text-parchment-300 max-w-3xl mx-auto leading-relaxed">
-            Tools selected for function. A shaker that seals. A jigger that measures. Glassware that holds a drink the way it was designed to be held. No shortcuts.
-          </p>
-        </div>
+        <SectionHeading
+          as="h1"
+          eyebrow="Bar Accessories"
+          intro="Tools selected for function. A shaker that seals. A jigger that measures. Glassware that holds a drink the way it was designed to be held. No shortcuts."
+        >
+          Barware
+          <br />
+          <span className="text-gold-300">Built to Work</span>
+        </SectionHeading>
 
         {/* Sub-category navigation */}
         <div className="flex flex-wrap justify-center gap-2">
@@ -163,11 +159,10 @@ export default async function BarwarePage() {
             </Link>
           ))}
         </div>
-      </section>
 
-      {/* Products Grid */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
+        {/* A shop grid stays a grid: two-up on a phone is how people browse a
+            range, and a sideways row would hide most of it. */}
+        <div className="mt-12 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
           {products.map((product: ShopifyProduct, index: number) => {
             const variants = product.variants ?? []
             const defaultVariant = variants.length === 1 && variants[0].title === 'Default Title'
@@ -233,27 +228,31 @@ export default async function BarwarePage() {
             )
           })}
         </div>
+       </div>
       </section>
 
       {/* SEO Content */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-20 space-y-10">
+      <section className="band-light py-16">
+       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
         <ScrollReveal>
           <div className="bg-linear-to-br from-gold-500/10 to-gold-600/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
             <h2 className="text-2xl font-serif font-bold text-gold-300 mb-8 text-center">
               How to Build a Home Bar That Works
             </h2>
-            <div className="grid md:grid-cols-3 gap-6">
-              {[
+            <ScrollRow
+              ariaLabel="How to Build a Home Bar That Works"
+              cols="md:grid-cols-3"
+              items={[
                 { title: 'Start With the Shaker', body: 'The shaker is the foundation. It has one job: seal and chill. A stainless steel cobbler shaker does both without failing. No chrome plating to peel, no plastic seal to split.' },
                 { title: 'Measure Accurately', body: 'A jigger is not optional. Guessing volumes produces inconsistent drinks. Measure in 25ml and 50ml and every cocktail comes out the same way, every time.' },
                 { title: 'Choose the Right Glass', body: 'Shape affects how a drink tastes. A highball for long drinks. A rocks glass for spirits over ice. The right vessel changes how the aroma reaches you and how quickly the drink warms.' },
               ].map((item) => (
-                <div key={item.title} className="text-center">
+                <div key={item.title} className="h-full text-center">
                   <h3 className="text-lg font-semibold text-white mb-2">{item.title}</h3>
                   <p className="text-parchment-300 text-sm leading-relaxed">{item.body}</p>
                 </div>
               ))}
-            </div>
+            />
           </div>
         </ScrollReveal>
 
@@ -293,10 +292,12 @@ export default async function BarwarePage() {
             </div>
           </div>
         </ScrollReveal>
+       </div>
       </section>
 
       {/* CTA */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
+      <section className="band-dark py-16">
+       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-12 border border-gold-500/20 text-center">
           <h2 className="text-3xl font-serif font-bold text-white mb-4">
             Join the Expedition
@@ -311,6 +312,7 @@ export default async function BarwarePage() {
             Join the List
           </Link>
         </div>
+       </div>
       </section>
     </main>
   )
