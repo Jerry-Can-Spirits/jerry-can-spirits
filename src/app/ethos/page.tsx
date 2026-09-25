@@ -95,7 +95,7 @@ export default function Ethos() {
       {/* Section 1: Our Values */}
       <section className="band-light py-16">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <SectionHeading
+          <SectionHeading eyebrow="The Principles"
             intro={
               <>
                 The things that matter to us when we&apos;re making spirits.
@@ -166,7 +166,7 @@ export default function Ethos() {
       {/* Section 2: The Journey (Process Timeline) */}
       <section className="band-dark py-16">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <SectionHeading intro="From the Caribbean rum base to the bottle. Every step is deliberate. Nothing is in there by accident.">
+          <SectionHeading eyebrow="The Timeline" intro="From the Caribbean rum base to the bottle. Every step is deliberate. Nothing is in there by accident.">
             The Journey
           </SectionHeading>
 
@@ -335,7 +335,7 @@ export default function Ethos() {
       {/* Section 3: The Commitment */}
       <section className="band-light py-16">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <SectionHeading intro="The principles that guide how we make our spiced rum. No compromises.">
+          <SectionHeading eyebrow="The Pledges" intro="The principles that guide how we make our spiced rum. No compromises.">
             Our Commitments
           </SectionHeading>
 
@@ -448,7 +448,7 @@ export default function Ethos() {
       <section className="band-dark py-16">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-12 border border-gold-500/20 text-center">
-            <SectionHeading
+            <SectionHeading eyebrow="The Proof"
               intro={
                 <>
                   Enough about us. The proof is in the bottle. Check out our <Link href="/shop/product/jerry-can-spirits-expedition-spiced-rum/" className="text-gold-300 hover:text-gold-400 underline decoration-gold-500/40 hover:decoration-gold-400 transition-colors">Expedition Spiced Rum</Link> and see what you think.
