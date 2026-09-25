@@ -13,6 +13,7 @@ import GuideSections from '@/components/GuideSections'
 import { OG_IMAGE } from '@/lib/og'
 import { ORG_REF, authorRefFor } from '@/lib/jsonLd'
 import FAQAccordion from '@/components/FAQAccordion'
+import ScrollRow from '@/components/ScrollRow'
 
 const TEAM_MEMBERS = new Set(['Dan Freeman', 'Rhys Williams'])
 
@@ -217,12 +218,29 @@ export default async function GuidePage({ params }: PageProps) {
     }))
   } : null
 
+  // The page is four bands: the guide itself on dark, the distilleries and
+  // questions on light, the related reading on dark, the closing links on
+  // light. The body is rendered as prose-invert, whose colours a light
+  // band's token re-pointing does not reach, so everything up to the last
+  // comparison table stays on dark. The two middle bands are optional
+  // content, so each is only painted when there is something to put in it.
+  const hasMore = Boolean(
+    (guide.featuredDistilleries && guide.featuredDistilleries.length > 0) ||
+    (guide.faqs && guide.faqs.length > 0),
+  )
+  const hasRelated = Boolean(
+    (guide.relatedCocktails && guide.relatedCocktails.length > 0) ||
+    (guide.relatedGuides && guide.relatedGuides.length > 0) ||
+    (guide.relatedProducts && guide.relatedProducts.length > 0),
+  )
+
   return (
     <>
       <StructuredData data={articleSchema} id="article-schema" />
       {faqSchema && <StructuredData data={faqSchema} id="faq-schema" />}
 
-      <main className="min-h-screen py-20">
+      <main>
+       <section className="band-dark pt-20 pb-12">
         {/* Breadcrumb */}
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
           <Breadcrumbs
@@ -429,10 +447,15 @@ export default async function GuidePage({ params }: PageProps) {
               ))}
             </div>
           )}
+        </article>
+       </section>
 
+       {hasMore && (
+       <section className="band-light py-12">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
           {/* Featured Distilleries */}
           {guide.featuredDistilleries && guide.featuredDistilleries.length > 0 && (
-            <div className="mt-16">
+            <div>
               <h2 className="text-3xl font-serif font-bold text-white mb-8">Featured UK Distilleries</h2>
               <div className="grid sm:grid-cols-2 gap-6">
                 {guide.featuredDistilleries.map((distillery, index) => (
@@ -475,27 +498,31 @@ export default async function GuidePage({ params }: PageProps) {
 
           {/* FAQs */}
           {guide.faqs && guide.faqs.length > 0 && (
-            <div id="faqs" className="mt-16 scroll-mt-24">
+            <div id="faqs" className="scroll-mt-24">
               <h2 className="text-3xl font-serif font-bold text-white mb-8">Frequently Asked Questions</h2>
               <FAQAccordion items={guide.faqs} />
             </div>
           )}
+        </div>
+       </section>
+       )}
 
-          {/* Related Content */}
-          {((guide.relatedCocktails && guide.relatedCocktails.length > 0) ||
-            (guide.relatedGuides && guide.relatedGuides.length > 0) ||
-            (guide.relatedProducts && guide.relatedProducts.length > 0)) && (
-            <div className="mt-16 space-y-12">
+       {/* Related Content */}
+       {hasRelated && (
+       <section className="band-dark py-12">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
               {/* Related Cocktails */}
               {guide.relatedCocktails && guide.relatedCocktails.length > 0 && (
                 <div>
                   <h2 className="text-2xl font-serif font-bold text-gold-300 mb-6">Try These Cocktails</h2>
-                  <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {guide.relatedCocktails.filter(c => c?.slug?.current).map((cocktail) => (
+                  <ScrollRow
+                    ariaLabel="Try these cocktails"
+                    cols="md:grid-cols-2 lg:grid-cols-3"
+                    items={guide.relatedCocktails.filter(c => c?.slug?.current).map((cocktail) => (
                       <Link
                         key={cocktail._id}
                         href={`/field-manual/cocktails/${cocktail.slug.current}/`}
-                        className="flex items-center gap-3 p-4 bg-jerry-green-800/30 rounded-lg border border-gold-500/20 hover:bg-jerry-green-800/50 hover:border-gold-400/40 transition-all group"
+                        className="h-full flex items-center gap-3 p-4 bg-jerry-green-800/30 rounded-lg border border-gold-500/20 hover:bg-jerry-green-800/50 hover:border-gold-400/40 transition-all group"
                       >
                         <svg className="w-5 h-5 text-gold-400 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -505,7 +532,7 @@ export default async function GuidePage({ params }: PageProps) {
                         </span>
                       </Link>
                     ))}
-                  </div>
+                  />
                 </div>
               )}
 
@@ -513,15 +540,17 @@ export default async function GuidePage({ params }: PageProps) {
               {guide.relatedProducts && guide.relatedProducts.length > 0 && (
                 <div>
                   <h2 className="text-2xl font-serif font-bold text-gold-300 mb-6">Recommended Products</h2>
-                  <div className="grid sm:grid-cols-2 gap-4">
-                    {guide.relatedProducts
+                  <ScrollRow
+                    ariaLabel="Recommended products"
+                    cols="md:grid-cols-2"
+                    items={guide.relatedProducts
                       .filter((product): product is RelatedProduct =>
                         typeof product?.shopifyHandle === 'string' && product.shopifyHandle.trim() !== '')
                       .map((product, index) => (
                       <Link
                         key={index}
                         href={`/shop/product/${product.shopifyHandle}/`}
-                        className="flex items-center gap-4 p-4 bg-jerry-green-800/30 rounded-lg border border-gold-500/20 hover:bg-jerry-green-800/50 hover:border-gold-400/40 transition-all group"
+                        className="h-full flex items-center gap-4 p-4 bg-jerry-green-800/30 rounded-lg border border-gold-500/20 hover:bg-jerry-green-800/50 hover:border-gold-400/40 transition-all group"
                       >
                         <div className="w-10 h-10 bg-gold-500/20 rounded-full flex items-center justify-center shrink-0">
                           <svg className="w-5 h-5 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -538,7 +567,7 @@ export default async function GuidePage({ params }: PageProps) {
                         </div>
                       </Link>
                     ))}
-                  </div>
+                  />
                 </div>
               )}
 
@@ -546,12 +575,14 @@ export default async function GuidePage({ params }: PageProps) {
               {guide.relatedGuides && guide.relatedGuides.length > 0 && (
                 <div>
                   <h2 className="text-2xl font-serif font-bold text-gold-300 mb-6">Continue Reading</h2>
-                  <div className="grid sm:grid-cols-2 gap-6">
-                    {guide.relatedGuides.filter(g => g?.slug?.current).map((relatedGuide) => (
+                  <ScrollRow
+                    ariaLabel="Continue reading"
+                    cols="md:grid-cols-2"
+                    items={guide.relatedGuides.filter(g => g?.slug?.current).map((relatedGuide) => (
                       <Link
                         key={relatedGuide._id}
                         href={`/guides/${relatedGuide.slug.current}/`}
-                        className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20 hover:border-gold-400/40 transition-all group"
+                        className="block h-full bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20 hover:border-gold-400/40 transition-all group"
                       >
                         <span className="px-2 py-1 bg-jerry-green-800/60 border border-gold-500/20 text-gold-300 rounded-sm text-xs font-semibold">
                           {categoryLabels[relatedGuide.category] || relatedGuide.category}
@@ -564,15 +595,18 @@ export default async function GuidePage({ params }: PageProps) {
                         </p>
                       </Link>
                     ))}
-                  </div>
+                  />
                 </div>
               )}
-            </div>
-          )}
+        </div>
+       </section>
+       )}
 
+       <section className="band-light py-12">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
           {/* Call to Action */}
           {guide.callToAction && guide.callToAction.text && (
-            <div className="mt-16 bg-linear-to-br from-gold-500/10 to-gold-600/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/30 text-center">
+            <div className="bg-linear-to-br from-gold-500/10 to-gold-600/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/30 text-center">
               <h3 className="text-2xl font-serif font-bold text-white mb-4">
                 Ready to Get Started?
               </h3>
@@ -590,8 +624,7 @@ export default async function GuidePage({ params }: PageProps) {
 
           {/* Previous/Next Navigation */}
           {(adjacentGuides.prev || adjacentGuides.next) && (
-            <div className="mt-12 pt-8 border-t border-gold-500/20">
-              <div className="grid sm:grid-cols-2 gap-4">
+            <div className="grid sm:grid-cols-2 gap-4">
                 {adjacentGuides.prev ? (
                   <Link
                     href={`/guides/${adjacentGuides.prev.slug.current}/`}
@@ -628,12 +661,11 @@ export default async function GuidePage({ params }: PageProps) {
                 ) : (
                   <div />
                 )}
-              </div>
             </div>
           )}
 
           {/* Back to Guides */}
-          <div className="mt-6 text-center">
+          <div className="text-center">
             <Link
               href="/guides/"
               className="inline-flex items-center gap-2 px-6 py-3 text-gold-300 hover:text-gold-400 transition-colors"
@@ -644,7 +676,8 @@ export default async function GuidePage({ params }: PageProps) {
               View All Guides
             </Link>
           </div>
-        </article>
+        </div>
+       </section>
 
         <BackToTop />
       </main>

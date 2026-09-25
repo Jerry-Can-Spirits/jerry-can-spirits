@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import BackToTop from '@/components/BackToTop'
+import ScrollRow from '@/components/ScrollRow'
 
 interface Guide {
   _id: string
@@ -108,12 +109,15 @@ export default function GuidesClient({ guides }: GuidesClientProps) {
   }
 
   return (
-    <main className="min-h-screen pb-20">
+    <main>
       {/* Hero (with the page <h1>) is rendered server-side in page.tsx so it
           appears in the static HTML; only the interactive filters/grid live
           in this client component. */}
-      {/* Filters Section */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
+      {/* Filters Section. Continues the hero's dark band; the pillar row
+          below is the page's light band and the guide grids return to
+          dark, so a long listing has somewhere to mark progress against. */}
+      <section className="band-dark pb-12">
+       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
           <div className="space-y-6">
             {/* Search Bar */}
@@ -159,23 +163,27 @@ export default function GuidesClient({ guides }: GuidesClientProps) {
             </div>
           </div>
         </div>
+       </div>
       </section>
 
       {/* Pillar Guides */}
       {pillarGuides.length > 0 && (
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
+        <section className="band-light py-12">
+         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl font-serif font-bold text-gold-400 mb-6 flex items-center gap-2">
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
             </svg>
             Comprehensive Guides
           </h2>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {pillarGuides.map((guide) => (
+          <ScrollRow
+            ariaLabel="Comprehensive guides"
+            cols="md:grid-cols-2"
+            items={pillarGuides.map((guide) => (
               <Link
                 key={guide._id}
                 href={`/guides/${guide.slug.current}/`}
-                className="group bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl border border-gold-500/30 overflow-hidden hover:border-gold-400/60 transition-all duration-300 hover:scale-[1.02] hover:shadow-xl"
+                className="group block h-full bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl border border-gold-500/30 overflow-hidden hover:border-gold-400/60 transition-all duration-300 hover:scale-[1.02] hover:shadow-xl"
               >
                 {guide.heroImage && (
                   <div className="relative aspect-21/9 bg-jerry-green-800/20">
@@ -213,23 +221,27 @@ export default function GuidesClient({ guides }: GuidesClientProps) {
                 </div>
               </Link>
             ))}
-          </div>
+          />
+         </div>
         </section>
       )}
 
       {/* Featured Guides */}
       {featuredGuides.length > 0 && (
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
+        <section className="band-dark py-12">
+         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl font-serif font-bold text-gold-400 mb-6 flex items-center gap-2">
             <span className="text-gold-400">&#9733;</span>
             Featured Guides
           </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {featuredGuides.map((guide) => (
+          <ScrollRow
+            ariaLabel="Featured guides"
+            cols="md:grid-cols-2 lg:grid-cols-3"
+            items={featuredGuides.map((guide) => (
               <Link
                 key={guide._id}
                 href={`/guides/${guide.slug.current}/`}
-                className="group bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl border border-gold-500/30 overflow-hidden hover:border-gold-400/60 transition-all duration-300 hover:scale-105"
+                className="group block h-full bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl border border-gold-500/30 overflow-hidden hover:border-gold-400/60 transition-all duration-300 hover:scale-105"
               >
                 {guide.heroImage && (
                   <div className="relative aspect-video bg-jerry-green-800/20">
@@ -264,12 +276,14 @@ export default function GuidesClient({ guides }: GuidesClientProps) {
                 </div>
               </Link>
             ))}
-          </div>
+          />
+         </div>
         </section>
       )}
 
       {/* All Guides */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="band-dark py-12">
+       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <h2 className="text-3xl font-serif font-bold text-white mb-6">
           {selectedCategory === 'all' ? 'All Guides' : categoryLabels[selectedCategory] || 'Guides'}
         </h2>
@@ -289,12 +303,14 @@ export default function GuidesClient({ guides }: GuidesClientProps) {
             </button>
           </div>
         ) : regularGuides.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {visibleRegularGuides.map((guide) => (
+          <ScrollRow
+            ariaLabel="Guides"
+            cols="md:grid-cols-2 lg:grid-cols-3"
+            items={visibleRegularGuides.map((guide) => (
               <Link
                 key={guide._id}
                 href={`/guides/${guide.slug.current}/`}
-                className="group bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl border border-gold-500/20 overflow-hidden hover:border-gold-400/40 transition-all duration-300 hover:scale-105"
+                className="group block h-full bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl border border-gold-500/20 overflow-hidden hover:border-gold-400/40 transition-all duration-300 hover:scale-105"
               >
                 {guide.heroImage && (
                   <div className="relative aspect-video bg-jerry-green-800/20">
@@ -326,7 +342,7 @@ export default function GuidesClient({ guides }: GuidesClientProps) {
                 </div>
               </Link>
             ))}
-          </div>
+          />
         ) : null}
 
         {/* Show More Button */}
@@ -346,6 +362,7 @@ export default function GuidesClient({ guides }: GuidesClientProps) {
             </button>
           </div>
         )}
+       </div>
       </section>
 
       <BackToTop />
