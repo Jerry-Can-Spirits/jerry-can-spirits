@@ -5,6 +5,8 @@ import Image from 'next/image'
 import { ColorSwatch, DownloadCard, BoilerplateText, ImageGallery, SocialPresence } from '@/components/media'
 import Breadcrumbs from '@/components/Breadcrumbs'
 import ScrollReveal from '@/components/ScrollReveal'
+import ScrollRow from '@/components/ScrollRow'
+import SectionHeading from '@/components/SectionHeading'
 
 export default function MediaCentreClient({ rrp }: { rrp: string | null }) {
   const [formData, setFormData] = useState({
@@ -167,33 +169,24 @@ Based in the UK, Jerry Can Spirits® is a small operation run by two mates who c
   const socialResponsibilityStatement = `Jerry Can Spirits commits 5% of profits to armed forces charities supporting veteran welfare, mental health services, and military families. This isn't marketing. It's who we are.`
 
   return (
-    <main className="min-h-screen">
-      {/* Breadcrumb */}
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
-        <Breadcrumbs
-          items={[
-            { label: 'Contact', href: '/contact' },
-            { label: 'Media' },
-          ]}
-        />
-      </div>
-
-      {/* Page Hero */}
-      <section className="relative py-20 lg:py-32 overflow-hidden">
-        <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <div className="inline-block px-4 py-2 bg-jerry-green-800/60 backdrop-blur-sm rounded-full border border-gold-500/30 mb-6">
-              <span className="text-gold-300 text-sm font-semibold uppercase tracking-widest">
-                Media & Press
-              </span>
-            </div>
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-serif font-bold text-parchment-50 mb-6">
-              Media Centre
-            </h1>
-            <p className="text-xl text-parchment-200 max-w-3xl mx-auto leading-relaxed">
-              Brand assets, company information, and resources for journalists, content creators, and media professionals covering Jerry Can Spirits®.
-            </p>
-          </div>
+    <main>
+      {/* Page Hero. The quick links and the brand section share its band. */}
+      <section className="band-dark pt-20 pb-16">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <Breadcrumbs
+            items={[
+              { label: 'Contact', href: '/contact' },
+              { label: 'Media' },
+            ]}
+            className="mb-8"
+          />
+          <SectionHeading
+            as="h1"
+            eyebrow="Media & Press"
+            intro="Brand assets, company information, and resources for journalists, content creators, and media professionals covering Jerry Can Spirits®."
+          >
+            Media Centre
+          </SectionHeading>
 
           {/* Quick Links */}
           <div className="flex flex-wrap justify-center gap-4 mb-16">
@@ -211,13 +204,10 @@ Based in the UK, Jerry Can Spirits® is a small operation run by two mates who c
           </div>
 
           {/* ==================== OUR BRAND SECTION ==================== */}
-          <section id="our-brand" className="mb-20 scroll-mt-24">
-            <h2 className="text-3xl font-serif font-bold text-parchment-50 text-center mb-4">
+          <section id="our-brand" className="scroll-mt-24">
+            <SectionHeading intro="The essence of Jerry Can Spirits®: our story, values, and what drives us.">
               Our Brand
-            </h2>
-            <p className="text-parchment-300 text-center mb-12 max-w-2xl mx-auto">
-              The essence of Jerry Can Spirits®: our story, values, and what drives us.
-            </p>
+            </SectionHeading>
 
             {/* Tagline */}
             <div className="text-center mb-12">
@@ -262,31 +252,34 @@ Based in the UK, Jerry Can Spirits® is a small operation run by two mates who c
                 </svg>
                 Brand Values
               </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {brandValues.map((value, index) => (
-                  <ScrollReveal key={value.name} delay={(index % 2) as 0 | 1}>
+              <ScrollRow
+                ariaLabel="Brand values"
+                cols="md:grid-cols-2"
+                items={brandValues.map((value, index) => (
+                  <ScrollReveal key={value.name} delay={(index % 2) as 0 | 1} className="h-full">
                   <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20 h-full">
                     <h4 className="text-gold-300 font-semibold text-lg mb-2">{value.name}</h4>
                     <p className="text-parchment-200 text-sm leading-relaxed">{value.description}</p>
                   </div>
                   </ScrollReveal>
                 ))}
-              </div>
+              />
               <div className="mt-4 flex gap-4">
                 <a href="/ethos/" className="text-gold-300 hover:text-gold-200 text-sm font-medium underline transition-colors">Our ethos</a>
                 <a href="/sustainability/" className="text-gold-300 hover:text-gold-200 text-sm font-medium underline transition-colors">Sustainability</a>
               </div>
             </div>
           </section>
+        </div>
+      </section>
 
-          {/* ==================== PRODUCT FACT SHEET ==================== */}
-          <section id="product-spec" className="mb-20 scroll-mt-24">
-            <h2 className="text-3xl font-serif font-bold text-parchment-50 text-center mb-4">
+      {/* ==================== PRODUCT FACT SHEET ==================== */}
+      <section className="band-light py-16">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <section id="product-spec" className="scroll-mt-24">
+            <SectionHeading intro="Key product details for Expedition Spiced Rum.">
               Product Fact Sheet
-            </h2>
-            <p className="text-parchment-300 text-center mb-12 max-w-2xl mx-auto">
-              Key product details for Expedition Spiced Rum.
-            </p>
+            </SectionHeading>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
               {/* Specs */}
@@ -376,15 +369,16 @@ Based in the UK, Jerry Can Spirits® is a small operation run by two mates who c
               </div>
             </div>
           </section>
+        </div>
+      </section>
 
-          {/* ==================== BRAND ASSETS SECTION ==================== */}
-          <section id="brand-assets" className="mb-20 scroll-mt-24">
-            <h2 className="text-3xl font-serif font-bold text-parchment-50 text-center mb-4">
+      {/* ==================== BRAND ASSETS SECTION ==================== */}
+      <section className="band-dark py-16">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <section id="brand-assets" className="mb-16 scroll-mt-24">
+            <SectionHeading intro="Download official logos, view our brand colors, and explore our typography. Please follow our brand guidelines when using these assets.">
               Brand Assets
-            </h2>
-            <p className="text-parchment-300 text-center mb-12 max-w-2xl mx-auto">
-              Download official logos, view our brand colors, and explore our typography. Please follow our brand guidelines when using these assets.
-            </p>
+            </SectionHeading>
 
             {/* Logo Downloads */}
             <div className="mb-16">
@@ -394,132 +388,158 @@ Based in the UK, Jerry Can Spirits® is a small operation run by two mates who c
                 </svg>
                 Logo Downloads
               </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <DownloadCard
-                  title="Primary Logo"
-                  description="Main brand logo for light/neutral backgrounds"
-                  previewImage="/images/Logo.webp"
-                  previewAlt="Jerry Can Spirits® Primary Logo"
-                  darkBackground={true}
-                  formats={[
-                    { label: 'PNG', url: '/media-kit/logos/Jerry%20Can%20Spirits%20Logo.png' },
-                    { label: 'JPG', url: '/api/media-download/?id=images-logo-webp&format=jpeg&filename=jerry-can-spirits-logo.jpg' },
-                    { label: 'WebP', url: '/api/media-download/?id=images-logo-webp&format=webp&filename=jerry-can-spirits-logo.webp' },
-                  ]}
-                />
-                <DownloadCard
-                  title="Footer/Etched Logo"
-                  description="Etched variant for dark backgrounds"
-                  previewImage="/images/logo-etch.webp"
-                  previewAlt="Jerry Can Spirits® Etched Logo"
-                  darkBackground={true}
-                  formats={[
-                    { label: 'PNG', url: '/api/media-download/?id=images-logo-etch-webp&format=png&filename=jerry-can-spirits-logo-etch.png' },
-                    { label: 'JPG', url: '/api/media-download/?id=images-logo-etch-webp&format=jpeg&filename=jerry-can-spirits-logo-etch.jpg' },
-                    { label: 'WebP', url: '/api/media-download/?id=images-logo-etch-webp&format=webp&filename=jerry-can-spirits-logo-etch.webp' },
-                  ]}
-                />
-                <DownloadCard
-                  title="British Veteran Owned (Standard)"
-                  description="Certification badge - standard colors"
-                  previewImage="/images/British-Veteran-Owned-Logo-Standard.png"
-                  previewAlt="British Veteran Owned Logo"
-                  darkBackground={false}
-                  formats={[
-                    { label: 'PNG', url: '/api/media-download/?id=images-british-veteran-owned-logo-standard-png&format=png&filename=british-veteran-owned-standard.png' },
-                    { label: 'JPG', url: '/api/media-download/?id=images-british-veteran-owned-logo-standard-png&format=jpeg&filename=british-veteran-owned-standard.jpg' },
-                    { label: 'WebP', url: '/api/media-download/?id=images-british-veteran-owned-logo-standard-png&format=webp&filename=british-veteran-owned-standard.webp' },
-                  ]}
-                />
-                <DownloadCard
-                  title="British Veteran Owned (White)"
-                  description="Certification badge - white variant"
-                  previewImage="/images/British-Veteran-Owned-Logo-White.png"
-                  previewAlt="British Veteran Owned Logo White"
-                  darkBackground={true}
-                  formats={[
-                    { label: 'PNG', url: '/api/media-download/?id=images-british-veteran-owned-logo-white-png&format=png&filename=british-veteran-owned-white.png' },
-                    { label: 'JPG', url: '/api/media-download/?id=images-british-veteran-owned-logo-white-png&format=jpeg&filename=british-veteran-owned-white.jpg' },
-                    { label: 'WebP', url: '/api/media-download/?id=images-british-veteran-owned-logo-white-png&format=webp&filename=british-veteran-owned-white.webp' },
-                  ]}
-                />
-                <DownloadCard
-                  title="British Veteran Owned (Black)"
-                  description="Certification badge - black variant"
-                  previewImage="/images/British-Veteran-Owned-Logo-Black.png"
-                  previewAlt="British Veteran Owned Logo Black"
-                  darkBackground={false}
-                  formats={[
-                    { label: 'PNG', url: '/api/media-download/?id=images-british-veteran-owned-logo-black-png&format=png&filename=british-veteran-owned-black.png' },
-                    { label: 'JPG', url: '/api/media-download/?id=images-british-veteran-owned-logo-black-png&format=jpeg&filename=british-veteran-owned-black.jpg' },
-                    { label: 'WebP', url: '/api/media-download/?id=images-british-veteran-owned-logo-black-png&format=webp&filename=british-veteran-owned-black.webp' },
-                  ]}
-                />
-                <DownloadCard
-                  title="Armed Forces Covenant"
-                  description="AFC signatory badge"
-                  previewImage="/images/AFC_Banner__PNG_.png"
-                  previewAlt="Armed Forces Covenant Banner"
-                  darkBackground={false}
-                  formats={[
-                    { label: 'PNG', url: '/api/media-download/?id=images-afc_banner__png_-png&format=png&filename=armed-forces-covenant.png' },
-                    { label: 'JPG', url: '/api/media-download/?id=images-afc_banner__png_-png&format=jpeg&filename=armed-forces-covenant.jpg' },
-                    { label: 'WebP', url: '/api/media-download/?id=images-afc_banner__png_-png&format=webp&filename=armed-forces-covenant.webp' },
-                  ]}
-                />
-                <DownloadCard
-                  title="Trust A Veteran"
-                  description="Trust A Veteran membership logo"
-                  previewImage="/images/partners/trust-a-veteran.png"
-                  previewAlt="Trust A Veteran Logo"
-                  darkBackground={false}
-                  formats={[
-                    { label: 'PNG', url: '/api/media-download/?id=4e7099a3-a0cb-48a5-d489-edd3d4bca100&format=png&filename=trust-a-veteran.png' },
-                    { label: 'JPG', url: '/api/media-download/?id=4e7099a3-a0cb-48a5-d489-edd3d4bca100&format=jpeg&filename=trust-a-veteran.jpg' },
-                    { label: 'WebP', url: '/api/media-download/?id=4e7099a3-a0cb-48a5-d489-edd3d4bca100&format=webp&filename=trust-a-veteran.webp' },
-                  ]}
-                />
-                <DownloadCard
-                  title="IWSC 2026 Silver Medal"
-                  description="Awarded to Expedition Spiced Rum and cola, judged with Franklin and Sons. Artwork used under IWSC licence."
-                  previewImage="https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/2f7661db-3571-44d1-ee15-8bbd3c3cfd00/public"
-                  previewAlt="IWSC 2026 Silver Medal"
-                  formats={[
-                    { label: 'PNG', url: '/api/media-download/?id=2f7661db-3571-44d1-ee15-8bbd3c3cfd00&format=png&filename=iwsc-2026-silver-rum-and-cola.png' },
-                    { label: 'JPG', url: '/api/media-download/?id=2f7661db-3571-44d1-ee15-8bbd3c3cfd00&format=jpeg&filename=iwsc-2026-silver-rum-and-cola.jpg' },
-                  ]}
-                />
-                <DownloadCard
-                  title="IWSC 2026 Bronze Medal"
-                  description="Awarded to Expedition Spiced Rum. Artwork used under IWSC licence."
-                  previewImage="https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/863f3ff8-7252-477f-9627-a805f6c6a100/public"
-                  previewAlt="IWSC 2026 Bronze Medal"
-                  formats={[
-                    { label: 'PNG', url: '/api/media-download/?id=863f3ff8-7252-477f-9627-a805f6c6a100&format=png&filename=iwsc-2026-bronze-expedition-spiced.png' },
-                    { label: 'JPG', url: '/api/media-download/?id=863f3ff8-7252-477f-9627-a805f6c6a100&format=jpeg&filename=iwsc-2026-bronze-expedition-spiced.jpg' },
-                  ]}
-                />
-                <DownloadCard
-                  title="Dan Freeman"
-                  description="Co-founder headshot for editorial use. Credit: Jerry Can Spirits."
-                  previewImage="https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/1a3a3fdd-fdd8-482c-2088-660df51c6c00/public"
-                  previewAlt="Dan Freeman, Co-Founder & Director"
-                  formats={[
-                    { label: 'PNG', url: '/api/media-download/?id=1a3a3fdd-fdd8-482c-2088-660df51c6c00&format=png&filename=dan-freeman-headshot.png' },
-                    { label: 'JPG', url: '/api/media-download/?id=1a3a3fdd-fdd8-482c-2088-660df51c6c00&format=jpeg&filename=dan-freeman-headshot.jpg' },
-                  ]}
-                />
-                <DownloadCard
-                  title="Rhys Williams"
-                  description="Co-founder headshot for editorial use. Credit: Jerry Can Spirits."
-                  previewImage="https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/bcacb452-4f56-4676-b4c8-ac6afa7c1e00/public"
-                  previewAlt="Rhys Williams, Co-Founder & Director"
-                  formats={[
-                    { label: 'PNG', url: '/api/media-download/?id=bcacb452-4f56-4676-b4c8-ac6afa7c1e00&format=png&filename=rhys-williams-headshot.png' },
-                    { label: 'JPG', url: '/api/media-download/?id=bcacb452-4f56-4676-b4c8-ac6afa7c1e00&format=jpeg&filename=rhys-williams-headshot.jpg' },
-                  ]}
-                />
-              </div>
+              <ScrollRow
+                ariaLabel="Logo downloads"
+                cols="md:grid-cols-2 lg:grid-cols-3"
+                items={[
+                <div key="Primary Logo" className="grid h-full">
+                  <DownloadCard
+                    title="Primary Logo"
+                    description="Main brand logo for light/neutral backgrounds"
+                    previewImage="/images/Logo.webp"
+                    previewAlt="Jerry Can Spirits® Primary Logo"
+                    darkBackground={true}
+                    formats={[
+                      { label: 'PNG', url: '/media-kit/logos/Jerry%20Can%20Spirits%20Logo.png' },
+                      { label: 'JPG', url: '/api/media-download/?id=images-logo-webp&format=jpeg&filename=jerry-can-spirits-logo.jpg' },
+                      { label: 'WebP', url: '/api/media-download/?id=images-logo-webp&format=webp&filename=jerry-can-spirits-logo.webp' },
+                    ]}
+                  />
+                </div>,
+                <div key="Footer/Etched Logo" className="grid h-full">
+                  <DownloadCard
+                    title="Footer/Etched Logo"
+                    description="Etched variant for dark backgrounds"
+                    previewImage="/images/logo-etch.webp"
+                    previewAlt="Jerry Can Spirits® Etched Logo"
+                    darkBackground={true}
+                    formats={[
+                      { label: 'PNG', url: '/api/media-download/?id=images-logo-etch-webp&format=png&filename=jerry-can-spirits-logo-etch.png' },
+                      { label: 'JPG', url: '/api/media-download/?id=images-logo-etch-webp&format=jpeg&filename=jerry-can-spirits-logo-etch.jpg' },
+                      { label: 'WebP', url: '/api/media-download/?id=images-logo-etch-webp&format=webp&filename=jerry-can-spirits-logo-etch.webp' },
+                    ]}
+                  />
+                </div>,
+                <div key="British Veteran Owned (Standard)" className="grid h-full">
+                  <DownloadCard
+                    title="British Veteran Owned (Standard)"
+                    description="Certification badge - standard colors"
+                    previewImage="/images/British-Veteran-Owned-Logo-Standard.png"
+                    previewAlt="British Veteran Owned Logo"
+                    darkBackground={false}
+                    formats={[
+                      { label: 'PNG', url: '/api/media-download/?id=images-british-veteran-owned-logo-standard-png&format=png&filename=british-veteran-owned-standard.png' },
+                      { label: 'JPG', url: '/api/media-download/?id=images-british-veteran-owned-logo-standard-png&format=jpeg&filename=british-veteran-owned-standard.jpg' },
+                      { label: 'WebP', url: '/api/media-download/?id=images-british-veteran-owned-logo-standard-png&format=webp&filename=british-veteran-owned-standard.webp' },
+                    ]}
+                  />
+                </div>,
+                <div key="British Veteran Owned (White)" className="grid h-full">
+                  <DownloadCard
+                    title="British Veteran Owned (White)"
+                    description="Certification badge - white variant"
+                    previewImage="/images/British-Veteran-Owned-Logo-White.png"
+                    previewAlt="British Veteran Owned Logo White"
+                    darkBackground={true}
+                    formats={[
+                      { label: 'PNG', url: '/api/media-download/?id=images-british-veteran-owned-logo-white-png&format=png&filename=british-veteran-owned-white.png' },
+                      { label: 'JPG', url: '/api/media-download/?id=images-british-veteran-owned-logo-white-png&format=jpeg&filename=british-veteran-owned-white.jpg' },
+                      { label: 'WebP', url: '/api/media-download/?id=images-british-veteran-owned-logo-white-png&format=webp&filename=british-veteran-owned-white.webp' },
+                    ]}
+                  />
+                </div>,
+                <div key="British Veteran Owned (Black)" className="grid h-full">
+                  <DownloadCard
+                    title="British Veteran Owned (Black)"
+                    description="Certification badge - black variant"
+                    previewImage="/images/British-Veteran-Owned-Logo-Black.png"
+                    previewAlt="British Veteran Owned Logo Black"
+                    darkBackground={false}
+                    formats={[
+                      { label: 'PNG', url: '/api/media-download/?id=images-british-veteran-owned-logo-black-png&format=png&filename=british-veteran-owned-black.png' },
+                      { label: 'JPG', url: '/api/media-download/?id=images-british-veteran-owned-logo-black-png&format=jpeg&filename=british-veteran-owned-black.jpg' },
+                      { label: 'WebP', url: '/api/media-download/?id=images-british-veteran-owned-logo-black-png&format=webp&filename=british-veteran-owned-black.webp' },
+                    ]}
+                  />
+                </div>,
+                <div key="Armed Forces Covenant" className="grid h-full">
+                  <DownloadCard
+                    title="Armed Forces Covenant"
+                    description="AFC signatory badge"
+                    previewImage="/images/AFC_Banner__PNG_.png"
+                    previewAlt="Armed Forces Covenant Banner"
+                    darkBackground={false}
+                    formats={[
+                      { label: 'PNG', url: '/api/media-download/?id=images-afc_banner__png_-png&format=png&filename=armed-forces-covenant.png' },
+                      { label: 'JPG', url: '/api/media-download/?id=images-afc_banner__png_-png&format=jpeg&filename=armed-forces-covenant.jpg' },
+                      { label: 'WebP', url: '/api/media-download/?id=images-afc_banner__png_-png&format=webp&filename=armed-forces-covenant.webp' },
+                    ]}
+                  />
+                </div>,
+                <div key="Trust A Veteran" className="grid h-full">
+                  <DownloadCard
+                    title="Trust A Veteran"
+                    description="Trust A Veteran membership logo"
+                    previewImage="/images/partners/trust-a-veteran.png"
+                    previewAlt="Trust A Veteran Logo"
+                    darkBackground={false}
+                    formats={[
+                      { label: 'PNG', url: '/api/media-download/?id=4e7099a3-a0cb-48a5-d489-edd3d4bca100&format=png&filename=trust-a-veteran.png' },
+                      { label: 'JPG', url: '/api/media-download/?id=4e7099a3-a0cb-48a5-d489-edd3d4bca100&format=jpeg&filename=trust-a-veteran.jpg' },
+                      { label: 'WebP', url: '/api/media-download/?id=4e7099a3-a0cb-48a5-d489-edd3d4bca100&format=webp&filename=trust-a-veteran.webp' },
+                    ]}
+                  />
+                </div>,
+                <div key="IWSC 2026 Silver Medal" className="grid h-full">
+                  <DownloadCard
+                    title="IWSC 2026 Silver Medal"
+                    description="Awarded to Expedition Spiced Rum and cola, judged with Franklin and Sons. Artwork used under IWSC licence."
+                    previewImage="https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/2f7661db-3571-44d1-ee15-8bbd3c3cfd00/public"
+                    previewAlt="IWSC 2026 Silver Medal"
+                    formats={[
+                      { label: 'PNG', url: '/api/media-download/?id=2f7661db-3571-44d1-ee15-8bbd3c3cfd00&format=png&filename=iwsc-2026-silver-rum-and-cola.png' },
+                      { label: 'JPG', url: '/api/media-download/?id=2f7661db-3571-44d1-ee15-8bbd3c3cfd00&format=jpeg&filename=iwsc-2026-silver-rum-and-cola.jpg' },
+                    ]}
+                  />
+                </div>,
+                <div key="IWSC 2026 Bronze Medal" className="grid h-full">
+                  <DownloadCard
+                    title="IWSC 2026 Bronze Medal"
+                    description="Awarded to Expedition Spiced Rum. Artwork used under IWSC licence."
+                    previewImage="https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/863f3ff8-7252-477f-9627-a805f6c6a100/public"
+                    previewAlt="IWSC 2026 Bronze Medal"
+                    formats={[
+                      { label: 'PNG', url: '/api/media-download/?id=863f3ff8-7252-477f-9627-a805f6c6a100&format=png&filename=iwsc-2026-bronze-expedition-spiced.png' },
+                      { label: 'JPG', url: '/api/media-download/?id=863f3ff8-7252-477f-9627-a805f6c6a100&format=jpeg&filename=iwsc-2026-bronze-expedition-spiced.jpg' },
+                    ]}
+                  />
+                </div>,
+                <div key="Dan Freeman" className="grid h-full">
+                  <DownloadCard
+                    title="Dan Freeman"
+                    description="Co-founder headshot for editorial use. Credit: Jerry Can Spirits."
+                    previewImage="https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/1a3a3fdd-fdd8-482c-2088-660df51c6c00/public"
+                    previewAlt="Dan Freeman, Co-Founder & Director"
+                    formats={[
+                      { label: 'PNG', url: '/api/media-download/?id=1a3a3fdd-fdd8-482c-2088-660df51c6c00&format=png&filename=dan-freeman-headshot.png' },
+                      { label: 'JPG', url: '/api/media-download/?id=1a3a3fdd-fdd8-482c-2088-660df51c6c00&format=jpeg&filename=dan-freeman-headshot.jpg' },
+                    ]}
+                  />
+                </div>,
+                <div key="Rhys Williams" className="grid h-full">
+                  <DownloadCard
+                    title="Rhys Williams"
+                    description="Co-founder headshot for editorial use. Credit: Jerry Can Spirits."
+                    previewImage="https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/bcacb452-4f56-4676-b4c8-ac6afa7c1e00/public"
+                    previewAlt="Rhys Williams, Co-Founder & Director"
+                    formats={[
+                      { label: 'PNG', url: '/api/media-download/?id=bcacb452-4f56-4676-b4c8-ac6afa7c1e00&format=png&filename=rhys-williams-headshot.png' },
+                      { label: 'JPG', url: '/api/media-download/?id=bcacb452-4f56-4676-b4c8-ac6afa7c1e00&format=jpeg&filename=rhys-williams-headshot.jpg' },
+                    ]}
+                  />
+                </div>,
+                ]}
+              />
               <p className="text-parchment-400 text-sm mt-4 text-center">
                 Need SVG or EPS? Contact <a href="mailto:press@jerrycanspirits.co.uk" className="text-gold-300 hover:text-gold-200 underline">press@jerrycanspirits.co.uk</a>
               </p>
@@ -587,37 +607,41 @@ Based in the UK, Jerry Can Spirits® is a small operation run by two mates who c
               </h3>
               <p className="text-parchment-300 text-sm mb-6">Click any colour to copy its hex code to clipboard.</p>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                {/* Jerry Green */}
-                <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
-                  <h4 className="text-parchment-50 font-semibold mb-4">Jerry Green (Primary)</h4>
-                  <div className="flex justify-around">
-                    {jerryGreenColors.map((color) => (
-                      <ColorSwatch key={color.hex} name={color.name} hex={color.hex} />
-                    ))}
-                  </div>
-                </div>
+              <ScrollRow
+                ariaLabel="Brand colour palette"
+                cols="md:grid-cols-3"
+                items={[
+                  // Jerry Green
+                  <div key="jerry-green" className="h-full bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+                    <h4 className="text-parchment-50 font-semibold mb-4">Jerry Green (Primary)</h4>
+                    <div className="flex justify-around">
+                      {jerryGreenColors.map((color) => (
+                        <ColorSwatch key={color.hex} name={color.name} hex={color.hex} />
+                      ))}
+                    </div>
+                  </div>,
 
-                {/* Gold */}
-                <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
-                  <h4 className="text-parchment-50 font-semibold mb-4">Gold (Accent)</h4>
-                  <div className="flex justify-around">
-                    {goldColors.map((color) => (
-                      <ColorSwatch key={color.hex} name={color.name} hex={color.hex} />
-                    ))}
-                  </div>
-                </div>
+                  // Gold
+                  <div key="gold" className="h-full bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+                    <h4 className="text-parchment-50 font-semibold mb-4">Gold (Accent)</h4>
+                    <div className="flex justify-around">
+                      {goldColors.map((color) => (
+                        <ColorSwatch key={color.hex} name={color.name} hex={color.hex} />
+                      ))}
+                    </div>
+                  </div>,
 
-                {/* Parchment */}
-                <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
-                  <h4 className="text-parchment-50 font-semibold mb-4">Parchment (Text)</h4>
-                  <div className="flex justify-around">
-                    {parchmentColors.map((color) => (
-                      <ColorSwatch key={color.hex} name={color.name} hex={color.hex} />
-                    ))}
-                  </div>
-                </div>
-              </div>
+                  // Parchment
+                  <div key="parchment" className="h-full bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+                    <h4 className="text-parchment-50 font-semibold mb-4">Parchment (Text)</h4>
+                    <div className="flex justify-around">
+                      {parchmentColors.map((color) => (
+                        <ColorSwatch key={color.hex} name={color.name} hex={color.hex} />
+                      ))}
+                    </div>
+                  </div>,
+                ]}
+              />
             </div>
 
             {/* Typography */}
@@ -655,22 +679,23 @@ Based in the UK, Jerry Can Spirits® is a small operation run by two mates who c
           </section>
 
           {/* ==================== TONE OF VOICE SECTION ==================== */}
-          <section id="tone-of-voice" className="mb-20 scroll-mt-24">
-            <h2 className="text-3xl font-serif font-bold text-parchment-50 text-center mb-4">
+          <section id="tone-of-voice" className="mb-16 scroll-mt-24">
+            <SectionHeading intro="How we speak is as important as how we look. Our tone reflects our brand personality in every piece of communication.">
               Tone of Voice
-            </h2>
-            <p className="text-parchment-300 text-center mb-12 max-w-2xl mx-auto">
-              How we speak is as important as how we look. Our tone reflects our brand personality in every piece of communication.
-            </p>
+            </SectionHeading>
 
             {/* Voice Characteristics */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
-              {voiceCharacteristics.map((char) => (
-                <div key={char.name} className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
-                  <h4 className="text-gold-300 font-semibold text-lg mb-2">{char.name}</h4>
-                  <p className="text-parchment-200 text-sm leading-relaxed">{char.description}</p>
-                </div>
-              ))}
+            <div className="mb-12">
+              <ScrollRow
+                ariaLabel="Voice characteristics"
+                cols="md:grid-cols-2"
+                items={voiceCharacteristics.map((char) => (
+                  <div key={char.name} className="h-full bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+                    <h4 className="text-gold-300 font-semibold text-lg mb-2">{char.name}</h4>
+                    <p className="text-parchment-200 text-sm leading-relaxed">{char.description}</p>
+                  </div>
+                ))}
+              />
             </div>
 
             {/* Writing Guidelines */}
@@ -718,28 +743,31 @@ Based in the UK, Jerry Can Spirits® is a small operation run by two mates who c
           </section>
 
           {/* ==================== PHOTOGRAPHY GUIDELINES SECTION ==================== */}
-          <section id="photography" className="mb-20 scroll-mt-24">
-            <h2 className="text-3xl font-serif font-bold text-parchment-50 text-center mb-4">
+          <section id="photography" className="scroll-mt-24">
+            <SectionHeading intro="Photography is a powerful tool for conveying our brand personality. All imagery should feel authentic, warm, and true to our values.">
               Photography Guidelines
-            </h2>
-            <p className="text-parchment-300 text-center mb-12 max-w-2xl mx-auto">
-              Photography is a powerful tool for conveying our brand personality. All imagery should feel authentic, warm, and true to our values.
-            </p>
+            </SectionHeading>
 
             {/* Photography Style */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-              <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
-                <h4 className="text-gold-300 font-semibold text-lg mb-2">Authentic & Natural</h4>
-                <p className="text-parchment-200 text-sm leading-relaxed">Photography should feel genuine and unforced. We prefer natural light and documentary-style imagery over heavily staged or artificial shots.</p>
-              </div>
-              <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
-                <h4 className="text-gold-300 font-semibold text-lg mb-2">Warm & Inviting</h4>
-                <p className="text-parchment-200 text-sm leading-relaxed">Images should have warmth, both in colour temperature and mood. Cold, clinical imagery doesn&apos;t represent our brand.</p>
-              </div>
-              <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
-                <h4 className="text-gold-300 font-semibold text-lg mb-2">Quality Without Pretension</h4>
-                <p className="text-parchment-200 text-sm leading-relaxed">Our imagery should convey quality and craftsmanship without feeling pretentious or exclusive. We&apos;re premium but approachable.</p>
-              </div>
+            <div className="mb-12">
+              <ScrollRow
+                ariaLabel="Photography style"
+                cols="md:grid-cols-3"
+                items={[
+                  <div key="authentic" className="h-full bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+                    <h4 className="text-gold-300 font-semibold text-lg mb-2">Authentic & Natural</h4>
+                    <p className="text-parchment-200 text-sm leading-relaxed">Photography should feel genuine and unforced. We prefer natural light and documentary-style imagery over heavily staged or artificial shots.</p>
+                  </div>,
+                  <div key="warm" className="h-full bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+                    <h4 className="text-gold-300 font-semibold text-lg mb-2">Warm & Inviting</h4>
+                    <p className="text-parchment-200 text-sm leading-relaxed">Images should have warmth, both in colour temperature and mood. Cold, clinical imagery doesn&apos;t represent our brand.</p>
+                  </div>,
+                  <div key="quality" className="h-full bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+                    <h4 className="text-gold-300 font-semibold text-lg mb-2">Quality Without Pretension</h4>
+                    <p className="text-parchment-200 text-sm leading-relaxed">Our imagery should convey quality and craftsmanship without feeling pretentious or exclusive. We&apos;re premium but approachable.</p>
+                  </div>,
+                ]}
+              />
             </div>
 
             {/* Photography Do's and Don'ts */}
@@ -770,15 +798,16 @@ Based in the UK, Jerry Can Spirits® is a small operation run by two mates who c
               </div>
             </div>
           </section>
+        </div>
+      </section>
 
-          {/* ==================== PRODUCT IMAGES SECTION ==================== */}
-          <section id="product-images" className="mb-20 scroll-mt-24">
-            <h2 className="text-3xl font-serif font-bold text-parchment-50 text-center mb-4">
+      {/* ==================== PRODUCT IMAGES SECTION ==================== */}
+      <section className="band-light py-16">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <section id="product-images" className="scroll-mt-24">
+            <SectionHeading intro="High-resolution product photography for press use.">
               Product Images
-            </h2>
-            <p className="text-parchment-300 text-center mb-12 max-w-2xl mx-auto">
-              High-resolution product photography for press use.
-            </p>
+            </SectionHeading>
             <ImageGallery images={[
               {
                 src: 'https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/beed84d3-c77d-4ecf-c85f-29719bdea000/public',
@@ -812,15 +841,16 @@ Based in the UK, Jerry Can Spirits® is a small operation run by two mates who c
               },
             ]} />
           </section>
+        </div>
+      </section>
 
-          {/* ==================== COMPANY INFORMATION SECTION ==================== */}
-          <section id="company-info" className="mb-20 scroll-mt-24">
-            <h2 className="text-3xl font-serif font-bold text-parchment-50 text-center mb-4">
+      {/* ==================== COMPANY INFORMATION SECTION ==================== */}
+      <section className="band-dark py-16">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <section id="company-info" className="scroll-mt-24">
+            <SectionHeading intro="Ready-to-use company descriptions and key facts for your coverage.">
               Company Information
-            </h2>
-            <p className="text-parchment-300 text-center mb-12 max-w-2xl mx-auto">
-              Ready-to-use company descriptions and key facts for your coverage.
-            </p>
+            </SectionHeading>
 
             {/* Boilerplate Text */}
             <div className="mb-12">
@@ -969,60 +999,66 @@ Based in the UK, Jerry Can Spirits® is a small operation run by two mates who c
               </div>
             </div>
           </section>
+        </div>
+      </section>
 
-          {/* ==================== AWARDS & ACCREDITATIONS ==================== */}
-          <section id="awards" className="mb-20 scroll-mt-24">
-            <h2 className="text-3xl font-serif font-bold text-parchment-50 text-center mb-4">
+      {/* ==================== AWARDS & ACCREDITATIONS ==================== */}
+      <section className="band-light py-16">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <section id="awards" className="scroll-mt-24">
+            <SectionHeading intro="Recognition and commitments that reflect our values.">
               Awards & Accreditations
-            </h2>
-            <p className="text-parchment-300 text-center mb-12 max-w-2xl mx-auto">
-              Recognition and commitments that reflect our values.
-            </p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              <ScrollReveal delay={0}>
-              <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20 h-full">
-                <h3 className="text-lg font-serif font-bold text-gold-300 mb-2">Armed Forces Covenant</h3>
-                <p className="text-parchment-200 text-sm leading-relaxed mb-3">
-                  Signatory to the Armed Forces Covenant, pledging support for the armed forces community, veterans, and their families.
-                </p>
-                <a href="/armed-forces-covenant/" className="text-gold-300 hover:text-gold-200 text-xs font-medium underline transition-colors">Read our commitment</a>
-              </div>
-              </ScrollReveal>
-              <ScrollReveal delay={1}>
-              <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20 h-full">
-                <h3 className="text-lg font-serif font-bold text-gold-300 mb-2">ERS Bronze Award</h3>
-                <p className="text-parchment-200 text-sm leading-relaxed">
-                  Employer Recognition Scheme Bronze Award from the Ministry of Defence for our commitment to supporting the armed forces community.
-                </p>
-              </div>
-              </ScrollReveal>
-              <ScrollReveal delay={0}>
-              <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20 h-full">
-                <h3 className="text-lg font-serif font-bold text-gold-300 mb-2">British Veteran Owned</h3>
-                <p className="text-parchment-200 text-sm leading-relaxed">
-                  Certified British Veteran Owned business, verified and recognised for our military heritage and veteran leadership.
-                </p>
-              </div>
-              </ScrollReveal>
-              <ScrollReveal delay={1}>
-              <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20 h-full">
-                <h3 className="text-lg font-serif font-bold text-gold-300 mb-2">Worcester RFC MA Sponsor</h3>
-                <p className="text-parchment-200 text-sm leading-relaxed">
-                  Official Match Afternoon sponsor for Worcester RFC during the 2025/26 season, supporting grassroots community rugby.
-                </p>
-              </div>
-              </ScrollReveal>
-            </div>
+            </SectionHeading>
+            <ScrollRow
+              ariaLabel="Awards and accreditations"
+              cols="md:grid-cols-2"
+              items={[
+                <ScrollReveal key="afc" className="h-full" delay={0}>
+                <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20 h-full">
+                  <h3 className="text-lg font-serif font-bold text-gold-300 mb-2">Armed Forces Covenant</h3>
+                  <p className="text-parchment-200 text-sm leading-relaxed mb-3">
+                    Signatory to the Armed Forces Covenant, pledging support for the armed forces community, veterans, and their families.
+                  </p>
+                  <a href="/armed-forces-covenant/" className="text-gold-300 hover:text-gold-200 text-xs font-medium underline transition-colors">Read our commitment</a>
+                </div>
+                </ScrollReveal>,
+                <ScrollReveal key="ers" className="h-full" delay={1}>
+                <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20 h-full">
+                  <h3 className="text-lg font-serif font-bold text-gold-300 mb-2">ERS Bronze Award</h3>
+                  <p className="text-parchment-200 text-sm leading-relaxed">
+                    Employer Recognition Scheme Bronze Award from the Ministry of Defence for our commitment to supporting the armed forces community.
+                  </p>
+                </div>
+                </ScrollReveal>,
+                <ScrollReveal key="bvo" className="h-full" delay={0}>
+                <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20 h-full">
+                  <h3 className="text-lg font-serif font-bold text-gold-300 mb-2">British Veteran Owned</h3>
+                  <p className="text-parchment-200 text-sm leading-relaxed">
+                    Certified British Veteran Owned business, verified and recognised for our military heritage and veteran leadership.
+                  </p>
+                </div>
+                </ScrollReveal>,
+                <ScrollReveal key="worcester-rfc" className="h-full" delay={1}>
+                <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20 h-full">
+                  <h3 className="text-lg font-serif font-bold text-gold-300 mb-2">Worcester RFC MA Sponsor</h3>
+                  <p className="text-parchment-200 text-sm leading-relaxed">
+                    Official Match Afternoon sponsor for Worcester RFC during the 2025/26 season, supporting grassroots community rugby.
+                  </p>
+                </div>
+                </ScrollReveal>,
+              ]}
+            />
           </section>
+        </div>
+      </section>
 
-          {/* ==================== BRAND MILESTONES ==================== */}
-          <section id="milestones" className="mb-20 scroll-mt-24">
-            <h2 className="text-3xl font-serif font-bold text-parchment-50 text-center mb-4">
+      {/* ==================== BRAND MILESTONES ==================== */}
+      <section className="band-dark py-16">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <section id="milestones" className="scroll-mt-24">
+            <SectionHeading intro="Key moments in the Jerry Can Spirits journey.">
               Brand Milestones
-            </h2>
-            <p className="text-parchment-300 text-center mb-12 max-w-2xl mx-auto">
-              Key moments in the Jerry Can Spirits journey.
-            </p>
+            </SectionHeading>
             <div className="max-w-2xl mx-auto">
               <div className="relative border-l-2 border-gold-500/30 ml-4">
                 {[
@@ -1045,15 +1081,20 @@ Based in the UK, Jerry Can Spirits® is a small operation run by two mates who c
               </div>
             </div>
           </section>
+        </div>
+      </section>
 
-          {/* ==================== TARGET AUDIENCE ==================== */}
-          <section id="audience" className="mb-20 scroll-mt-24">
-            <h2 className="text-3xl font-serif font-bold text-parchment-50 text-center mb-4">
+      {/* ==================== TARGET AUDIENCE ==================== */}
+      <section className="band-light py-16">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <section id="audience" className="scroll-mt-24">
+            <SectionHeading intro={
+              <>
+                Who we&apos;re building for and early traction.
+              </>
+            }>
               Target Audience & Pre-Launch Stats
-            </h2>
-            <p className="text-parchment-300 text-center mb-12 max-w-2xl mx-auto">
-              Who we&apos;re building for and early traction.
-            </p>
+            </SectionHeading>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 md:p-8 border border-gold-500/20">
                 <h3 className="text-lg font-serif font-bold text-parchment-50 mb-3">Target Audience</h3>
@@ -1068,23 +1109,32 @@ Based in the UK, Jerry Can Spirits® is a small operation run by two mates who c
               </div>
             </div>
           </section>
+        </div>
+      </section>
 
-          {/* ==================== SOCIAL MEDIA PRESENCE ==================== */}
-          <section id="social-media" className="mb-20 scroll-mt-24">
-            <h2 className="text-3xl font-serif font-bold text-parchment-50 text-center mb-4">
+      {/* ==================== SOCIAL MEDIA PRESENCE ==================== */}
+      <section className="band-dark py-16">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <section id="social-media" className="scroll-mt-24">
+            <SectionHeading intro={
+              <>
+                Find us across social media. We&apos;re @jerrycanspirits everywhere.
+              </>
+            }>
               Social Media Presence
-            </h2>
-            <p className="text-parchment-300 text-center mb-12 max-w-2xl mx-auto">
-              Find us across social media. We&apos;re @jerrycanspirits everywhere.
-            </p>
+            </SectionHeading>
             <SocialPresence />
           </section>
+        </div>
+      </section>
 
-          {/* ==================== PRESS CONTACTS SECTION ==================== */}
-          <section id="press-contacts" className="mb-20 scroll-mt-24">
-            <h2 className="text-3xl font-serif font-bold text-parchment-50 text-center mb-12">
+      {/* ==================== PRESS CONTACTS SECTION ==================== */}
+      <section className="band-light py-16">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <section id="press-contacts" className="mb-16 scroll-mt-24">
+            <SectionHeading>
               Press Contacts
-            </h2>
+            </SectionHeading>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {pressContacts.map((contact) => (
                 <div
@@ -1109,7 +1159,7 @@ Based in the UK, Jerry Can Spirits® is a small operation run by two mates who c
           </section>
 
           {/* Media Kit CTA */}
-          <div className="mb-20 text-center">
+          <div className="text-center">
             <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20 inline-block">
               <h3 className="text-xl font-serif font-bold text-parchment-50 mb-3">Need a quick overview?</h3>
               <p className="text-parchment-300 text-sm mb-4 max-w-md">
@@ -1126,9 +1176,13 @@ Based in the UK, Jerry Can Spirits® is a small operation run by two mates who c
               </a>
             </div>
           </div>
+        </div>
+      </section>
 
-          {/* ==================== LATEST NEWS SECTION ==================== */}
-          <section className="mb-20">
+      {/* ==================== LATEST NEWS SECTION ==================== */}
+      <section className="band-dark py-16">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <section>
             <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
               <h2 className="text-2xl font-serif font-bold text-parchment-50 mb-6 text-center">
                 Latest News & Press Releases
@@ -1151,12 +1205,16 @@ Based in the UK, Jerry Can Spirits® is a small operation run by two mates who c
               </div>
             </div>
           </section>
+        </div>
+      </section>
 
-          {/* ==================== MEDIA INQUIRY FORM ==================== */}
-          <section id="enquiry-form" className="mb-16 scroll-mt-24">
-            <h2 className="text-2xl font-serif font-bold text-parchment-50 mb-6 text-center">
+      {/* ==================== MEDIA INQUIRY FORM ==================== */}
+      <section className="band-light py-16">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <section id="enquiry-form" className="scroll-mt-24">
+            <SectionHeading>
               Media Enquiry Form
-            </h2>
+            </SectionHeading>
             <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -1307,101 +1365,109 @@ Based in the UK, Jerry Can Spirits® is a small operation run by two mates who c
               </form>
             </div>
           </section>
+        </div>
+      </section>
 
-          {/* ==================== MEDIA GUIDELINES ==================== */}
-          <section className="mt-16">
-            <h2 className="text-2xl font-serif font-bold text-parchment-50 mb-6 text-center">
+      {/* ==================== MEDIA GUIDELINES ==================== */}
+      <section className="band-dark py-16">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <section>
+            <SectionHeading>
               Media Guidelines
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <ScrollReveal delay={0}>
-              <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20 h-full">
-                <h3 className="text-lg font-serif font-bold text-parchment-50 mb-3">
-                  Brand Usage
-                </h3>
-                <ul className="space-y-2 text-parchment-200 text-sm">
-                  <li className="flex items-start gap-2">
-                    <span className="text-gold-400 mt-0.5">•</span>
-                    Please use official brand assets only
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-gold-400 mt-0.5">•</span>
-                    Maintain brand colours and typography
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-gold-400 mt-0.5">•</span>
-                    Do not alter or distort logos
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-gold-400 mt-0.5">•</span>
-                    Respect minimum size requirements
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-gold-400 mt-0.5">•</span>
-                    Use ® symbol on first mention
-                  </li>
-                </ul>
-              </div>
-              </ScrollReveal>
-              <ScrollReveal delay={1}>
-              <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20 h-full">
-                <h3 className="text-lg font-serif font-bold text-parchment-50 mb-3">
-                  Content Standards
-                </h3>
-                <ul className="space-y-2 text-parchment-200 text-sm">
-                  <li className="flex items-start gap-2">
-                    <span className="text-gold-400 mt-0.5">•</span>
-                    Factual and accurate reporting
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-gold-400 mt-0.5">•</span>
-                    Responsible alcohol coverage
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-gold-400 mt-0.5">•</span>
-                    Include appropriate age disclaimers
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-gold-400 mt-0.5">•</span>
-                    Credit Jerry Can Spirits® in features
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-gold-400 mt-0.5">•</span>
-                    Contact us for approval on major pieces
-                  </li>
-                </ul>
-              </div>
-              </ScrollReveal>
-              <ScrollReveal delay={2}>
-              <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20 h-full">
-                <h3 className="text-lg font-serif font-bold text-parchment-50 mb-3">
-                  Legal Requirements
-                </h3>
-                <ul className="space-y-2 text-parchment-200 text-sm">
-                  <li className="flex items-start gap-2">
-                    <span className="text-gold-400 mt-0.5">•</span>
-                    Include responsible drinking messaging
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-gold-400 mt-0.5">•</span>
-                    Use correct trademark notation (®)
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-gold-400 mt-0.5">•</span>
-                    Comply with ASA &amp; Portman Group guidelines
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-gold-400 mt-0.5">•</span>
-                    Never depict individuals under 25 in advertising
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-gold-400 mt-0.5">•</span>
-                    Never promote excessive consumption
-                  </li>
-                </ul>
-              </div>
-              </ScrollReveal>
-            </div>
+            </SectionHeading>
+            <ScrollRow
+              ariaLabel="Media guidelines"
+              cols="md:grid-cols-3"
+              items={[
+                <ScrollReveal key="brand-usage" className="h-full" delay={0}>
+                <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20 h-full">
+                  <h3 className="text-lg font-serif font-bold text-parchment-50 mb-3">
+                    Brand Usage
+                  </h3>
+                  <ul className="space-y-2 text-parchment-200 text-sm">
+                    <li className="flex items-start gap-2">
+                      <span className="text-gold-400 mt-0.5">•</span>
+                      Please use official brand assets only
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-gold-400 mt-0.5">•</span>
+                      Maintain brand colours and typography
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-gold-400 mt-0.5">•</span>
+                      Do not alter or distort logos
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-gold-400 mt-0.5">•</span>
+                      Respect minimum size requirements
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-gold-400 mt-0.5">•</span>
+                      Use ® symbol on first mention
+                    </li>
+                  </ul>
+                </div>
+                </ScrollReveal>,
+                <ScrollReveal key="content-standards" className="h-full" delay={1}>
+                <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20 h-full">
+                  <h3 className="text-lg font-serif font-bold text-parchment-50 mb-3">
+                    Content Standards
+                  </h3>
+                  <ul className="space-y-2 text-parchment-200 text-sm">
+                    <li className="flex items-start gap-2">
+                      <span className="text-gold-400 mt-0.5">•</span>
+                      Factual and accurate reporting
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-gold-400 mt-0.5">•</span>
+                      Responsible alcohol coverage
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-gold-400 mt-0.5">•</span>
+                      Include appropriate age disclaimers
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-gold-400 mt-0.5">•</span>
+                      Credit Jerry Can Spirits® in features
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-gold-400 mt-0.5">•</span>
+                      Contact us for approval on major pieces
+                    </li>
+                  </ul>
+                </div>
+                </ScrollReveal>,
+                <ScrollReveal key="legal" className="h-full" delay={2}>
+                <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20 h-full">
+                  <h3 className="text-lg font-serif font-bold text-parchment-50 mb-3">
+                    Legal Requirements
+                  </h3>
+                  <ul className="space-y-2 text-parchment-200 text-sm">
+                    <li className="flex items-start gap-2">
+                      <span className="text-gold-400 mt-0.5">•</span>
+                      Include responsible drinking messaging
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-gold-400 mt-0.5">•</span>
+                      Use correct trademark notation (®)
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-gold-400 mt-0.5">•</span>
+                      Comply with ASA &amp; Portman Group guidelines
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-gold-400 mt-0.5">•</span>
+                      Never depict individuals under 25 in advertising
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-gold-400 mt-0.5">•</span>
+                      Never promote excessive consumption
+                    </li>
+                  </ul>
+                </div>
+                </ScrollReveal>,
+              ]}
+            />
           </section>
         </div>
       </section>
