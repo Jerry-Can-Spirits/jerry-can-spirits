@@ -18,6 +18,7 @@ import { OG_IMAGE_COCKTAIL } from '@/lib/og'
 import { ORG_REF } from '@/lib/jsonLd'
 import FAQAccordion from '@/components/FAQAccordion'
 import ScrollRow from '@/components/ScrollRow'
+import SectionHeading from '@/components/SectionHeading'
 
 interface SubType {
   _id: string
@@ -145,11 +146,12 @@ export default async function IngredientDetailPage({ params }: { params: Promise
 
   const videoId = ingredient.videoUrl ? getYouTubeVideoId(ingredient.videoUrl) : null
 
-  // Usage and the questions bracket the body sections, which is the order they
-  // appear in. Only headings that exist on this page are listed.
+  // The sections in the order they appear on the page: the editorial headings
+  // on the light band, then Usage, then the questions. Only headings that
+  // exist on this page are listed.
   const contents = [
-    { text: 'Usage', slug: 'usage' },
     ...extractHeadings(ingredient.longDescription),
+    { text: 'Usage', slug: 'usage' },
     ...(ingredient.faqs && ingredient.faqs.length > 0
       ? [{ text: 'Common Questions', slug: 'common-questions' }]
       : []),
@@ -185,13 +187,112 @@ export default async function IngredientDetailPage({ params }: { params: Promise
       }
     : null
 
-  // The page is three bands, as on the cocktail page: the hero and its
-  // practical panels on dark, the background reading and questions on light,
-  // the related reading on dark. The light band is optional content, so it is
-  // only painted when there is something to put in it.
-  const hasMore = Boolean(
-    ingredient.productionMethod || ingredient.history || videoId || (ingredient.faqs && ingredient.faqs.length > 0),
+  // Five bands, cut by weight rather than by kind, as on the cocktail page:
+  // the hero, what the ingredient is, how to use it, where to go next, and
+  // what to make with it. The first cut put the hero and a two-column stack
+  // of nine panels in one dark band, so most of the page was still one dark
+  // stretch with a thin light band at the tail. Each band now opens with a
+  // heading so it reads as a section, and each optional band is painted only
+  // when it has something in it. Usage is a required field, so the band it
+  // opens always renders and the two light bands can never touch.
+  const hasAbout = Boolean(
+    (ingredient.longDescription && ingredient.longDescription.length > 0) ||
+      (ingredient.flavorProfile && (ingredient.flavorProfile.primary || ingredient.flavorProfile.tasting)) ||
+      ingredient.rrp,
   )
+  const hasMore = Boolean(
+    (ingredient.faqs && ingredient.faqs.length > 0) ||
+      videoId ||
+      (ingredient.relatedGuides && ingredient.relatedGuides.length > 0) ||
+      subTypes.length > 0,
+  )
+
+  // The secondary reference, folded. It stays on the page and in the DOM, but
+  // behind a question you tap, so the band it sits in reads as the practical
+  // answer rather than a wall of panels.
+  const referenceItems = [
+    // Substitutions
+    ingredient.substitutions && ingredient.substitutions.length > 0 && {
+      question: 'Possible Substitutions',
+      answer: (
+        <ul className="space-y-3">
+          {ingredient.substitutions.map((sub, index) => (
+            <li key={index} className="flex items-start gap-3">
+              <svg className="w-5 h-5 text-gold-400 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+              </svg>
+              <span className="text-parchment-300 leading-relaxed">{sub}</span>
+            </li>
+          ))}
+        </ul>
+      ),
+    },
+
+    // Recommended Brands.
+    // Plenty of ingredients have no budget/premium split to make: Angostura
+    // and Campari have one producer, and the answer for lime juice is a ripe
+    // lime rather than a brand. Filling both tiers there meant printing the
+    // same pick twice. A lone entry is therefore shown as "Recommended"
+    // rather than mislabelled as the cheap option.
+    ingredient.recommendedBrands && (ingredient.recommendedBrands.budget || ingredient.recommendedBrands.premium) && (() => {
+      const { budget, premium } = ingredient.recommendedBrands
+      const sole = budget && premium ? null : budget || premium
+      return {
+        question: sole ? 'Recommended Brand' : 'Recommended Brands',
+        answer: (
+          <div className="space-y-4">
+            {sole ? (
+              <div className="p-3 bg-jerry-green-800/30 rounded-lg border border-gold-500/20">
+                <p className="text-gold-400 font-semibold mb-1 text-xs">Recommended</p>
+                <p className="text-parchment-300 text-sm">{sole}</p>
+              </div>
+            ) : (
+              <>
+                <div className="p-3 bg-jerry-green-800/30 rounded-lg border border-gold-500/20">
+                  <p className="text-green-400 font-semibold mb-1 text-xs">Budget Choice</p>
+                  <p className="text-parchment-300 text-sm">{budget}</p>
+                </div>
+                <div className="p-3 bg-jerry-green-800/30 rounded-lg border border-gold-500/20">
+                  <p className="text-gold-400 font-semibold mb-1 text-xs">Premium Choice</p>
+                  <p className="text-parchment-300 text-sm">{premium}</p>
+                </div>
+              </>
+            )}
+          </div>
+        ),
+      }
+    })(),
+
+    // Storage & Handling
+    (ingredient.storage || ingredient.shelfLife) && {
+      question: 'Storage & Handling',
+      answer: (
+        <div className="space-y-3">
+          {ingredient.storage && (
+            <p className="text-parchment-300 leading-relaxed text-sm whitespace-pre-line">{ingredient.storage}</p>
+          )}
+          {ingredient.shelfLife && (
+            <div className="p-3 bg-jerry-green-800/30 rounded-lg border border-gold-500/20">
+              <p className="text-gold-400 font-semibold text-xs mb-1">Shelf Life</p>
+              <p className="text-parchment-300 text-xs">{ingredient.shelfLife}</p>
+            </div>
+          )}
+        </div>
+      ),
+    },
+
+    // Production Method
+    ingredient.productionMethod && {
+      question: 'Production Method',
+      answer: <p className="text-parchment-300 leading-relaxed whitespace-pre-line">{ingredient.productionMethod}</p>,
+    },
+
+    // History/Context
+    ingredient.history && {
+      question: 'History & Context',
+      answer: <p className="text-parchment-300 leading-relaxed whitespace-pre-line">{ingredient.history}</p>,
+    },
+  ].filter((item): item is Extract<typeof item, { question: string }> => Boolean(item))
 
   return (
     <main>
@@ -229,17 +330,10 @@ export default async function IngredientDetailPage({ params }: { params: Promise
           </p>
         </div>
 
-        {/* items-start keeps the mobile stack as it was. On lg the left column
-            must stretch to the row height or its sticky child has nowhere to
-            travel: the rail scrolled away after its own height and left the
-            gutter empty for the rest of the page. */}
-        <div className="flex flex-col lg:grid lg:grid-cols-2 gap-12 items-start lg:items-stretch">
+        <div className="flex flex-col lg:grid lg:grid-cols-2 gap-12 items-start">
 
-          {/* Left Column - Image and Sticky Info */}
-          <div className="order-2 lg:order-1">
-            <div className="lg:sticky lg:top-24 space-y-6">
-              <ReferenceContents items={contents} />
-
+          {/* Left Column - Image */}
+          <div className="order-2 lg:order-1 space-y-6">
               {/* Image and badge panel. Over half the ingredient documents have
                   no image, and the template used to fill the gap with a framed
                   "Image coming soon" placeholder sitting directly beneath the
@@ -277,6 +371,11 @@ export default async function IngredientDetailPage({ params }: { params: Promise
                   )}
                 </div>
               )}
+          </div>
+
+          {/* Right Column - Contents and Quick Facts */}
+          <div className="order-1 lg:order-2 space-y-6">
+              <ReferenceContents items={contents} />
 
               {/* Quick Facts */}
               {(ingredient.abv || ingredient.origin || ingredient.flavorProfile?.strength) && (
@@ -310,118 +409,56 @@ export default async function IngredientDetailPage({ params }: { params: Promise
                   </div>
                 </div>
               )}
-
-              {/* Flavour Profile */}
-              {ingredient.flavorProfile && (ingredient.flavorProfile.primary || ingredient.flavorProfile.tasting) && (
-                <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
-                  <h2 className="text-xl font-serif font-bold text-gold-300 mb-4">Flavour Profile</h2>
-                  <div className="space-y-4">
-                    {ingredient.flavorProfile.primary && ingredient.flavorProfile.primary.length > 0 && (
-                      <div>
-                        <h3 className="text-gold-400 font-semibold mb-3 text-sm">Primary Flavours</h3>
-                        <div className="flex flex-wrap gap-2">
-                          {ingredient.flavorProfile.primary.map((flavor, index) => (
-                            <span
-                              key={index}
-                              className="px-3 py-1 bg-gold-500/20 border border-gold-500/40 text-gold-300 rounded-full text-sm font-semibold"
-                            >
-                              {flavor}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                    {ingredient.flavorProfile.tasting && (
-                      <div>
-                        <h3 className="text-gold-400 font-semibold mb-2 text-sm">Tasting Notes</h3>
-                        <p className="text-parchment-300 leading-relaxed text-sm">{ingredient.flavorProfile.tasting}</p>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              )}
-
-              {/* RRP — named branded products with a single price */}
-              {ingredient.rrp && (
-                <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
-                  <h2 className="text-xl font-serif font-bold text-gold-300 mb-4">Price</h2>
-                  <span className="inline-flex items-center px-3 py-1.5 bg-gold-500/20 border border-gold-500/30 rounded-sm text-gold-400 text-sm font-semibold">
-                    RRP £{ingredient.rrp}
-                  </span>
-                </div>
-              )}
-
-              {/* Recommended Brands.
-                  Plenty of ingredients have no budget/premium split to make:
-                  Angostura and Campari have one producer, and the answer for
-                  lime juice is a ripe lime rather than a brand. Filling both
-                  tiers there meant printing the same pick twice. A lone entry
-                  is therefore shown as "Recommended" rather than mislabelled
-                  as the cheap option. */}
-              {ingredient.recommendedBrands && (ingredient.recommendedBrands.budget || ingredient.recommendedBrands.premium) && (() => {
-                const { budget, premium } = ingredient.recommendedBrands
-                const sole = budget && premium ? null : budget || premium
-                return (
-                  <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
-                    <h2 className="text-xl font-serif font-bold text-gold-300 mb-4">
-                      {sole ? 'Recommended Brand' : 'Recommended Brands'}
-                    </h2>
-                    <div className="space-y-4">
-                      {sole ? (
-                        <div className="p-3 bg-jerry-green-800/30 rounded-lg border border-gold-500/20">
-                          <p className="text-gold-400 font-semibold mb-1 text-xs">Recommended</p>
-                          <p className="text-parchment-300 text-sm">{sole}</p>
-                        </div>
-                      ) : (
-                        <>
-                          <div className="p-3 bg-jerry-green-800/30 rounded-lg border border-gold-500/20">
-                            <p className="text-green-400 font-semibold mb-1 text-xs">Budget Choice</p>
-                            <p className="text-parchment-300 text-sm">{budget}</p>
-                          </div>
-                          <div className="p-3 bg-jerry-green-800/30 rounded-lg border border-gold-500/20">
-                            <p className="text-gold-400 font-semibold mb-1 text-xs">Premium Choice</p>
-                            <p className="text-parchment-300 text-sm">{premium}</p>
-                          </div>
-                        </>
-                      )}
-                    </div>
-                  </div>
-                )
-              })()}
-
-              {/* Storage & Handling */}
-              {(ingredient.storage || ingredient.shelfLife) && (
-                <div className="p-6 bg-jerry-green-800/40 rounded-xl border border-gold-500/20">
-                  <div className="flex items-start gap-3">
-                    <svg className="w-5 h-5 text-gold-400 shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    <div className="flex-1 space-y-3">
-                      <h3 className="text-gold-300 font-semibold">Storage & Handling</h3>
-                      {ingredient.storage && (
-                        <p className="text-parchment-300 leading-relaxed text-sm whitespace-pre-line">{ingredient.storage}</p>
-                      )}
-                      {ingredient.shelfLife && (
-                        <div className="p-3 bg-jerry-green-800/30 rounded-lg border border-gold-500/20">
-                          <p className="text-gold-400 font-semibold text-xs mb-1">Shelf Life</p>
-                          <p className="text-parchment-300 text-xs">{ingredient.shelfLife}</p>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
           </div>
+        </div>
+      </div>
+      </section>
 
-          {/* Right Column - Main Content */}
-          <div className="order-1 lg:order-2 space-y-8">
+      {hasAbout && (
+      <section className="band-light py-12">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <SectionHeading eyebrow="The ingredient">About {ingredient.name}</SectionHeading>
 
-            {/* Usage — the practical answer comes first */}
-            <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
-              <h2 id="usage" className="text-2xl font-serif font-bold text-gold-300 mb-4 scroll-mt-24">Usage</h2>
-              <p className="text-parchment-300 leading-relaxed whitespace-pre-line">{ingredient.usage}</p>
-            </div>
+          <div className="space-y-8">
+            {/* Flavour Profile */}
+            {ingredient.flavorProfile && (ingredient.flavorProfile.primary || ingredient.flavorProfile.tasting) && (
+              <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+                <h2 className="text-xl font-serif font-bold text-gold-300 mb-4">Flavour Profile</h2>
+                <div className="space-y-4">
+                  {ingredient.flavorProfile.primary && ingredient.flavorProfile.primary.length > 0 && (
+                    <div>
+                      <h3 className="text-gold-400 font-semibold mb-3 text-sm">Primary Flavours</h3>
+                      <div className="flex flex-wrap gap-2">
+                        {ingredient.flavorProfile.primary.map((flavor, index) => (
+                          <span
+                            key={index}
+                            className="px-3 py-1 bg-gold-500/20 border border-gold-500/40 text-gold-300 rounded-full text-sm font-semibold"
+                          >
+                            {flavor}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                  {ingredient.flavorProfile.tasting && (
+                    <div>
+                      <h3 className="text-gold-400 font-semibold mb-2 text-sm">Tasting Notes</h3>
+                      <p className="text-parchment-300 leading-relaxed text-sm">{ingredient.flavorProfile.tasting}</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {/* RRP — named branded products with a single price */}
+            {ingredient.rrp && (
+              <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+                <h2 className="text-xl font-serif font-bold text-gold-300 mb-4">Price</h2>
+                <span className="inline-flex items-center px-3 py-1.5 bg-gold-500/20 border border-gold-500/30 rounded-sm text-gold-400 text-sm font-semibold">
+                  RRP £{ingredient.rrp}
+                </span>
+              </div>
+            )}
 
             {/* Long Description - Rich editorial content from Sanity */}
             {ingredient.longDescription && ingredient.longDescription.length > 0 && (
@@ -429,6 +466,21 @@ export default async function IngredientDetailPage({ params }: { params: Promise
                 <FieldManualPortableText value={ingredient.longDescription} />
               </div>
             )}
+          </div>
+        </div>
+      </section>
+      )}
+
+      <section className="band-dark py-12">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <SectionHeading eyebrow="Using it">Using {ingredient.name}</SectionHeading>
+
+          <div className="space-y-8">
+            {/* Usage — the practical answer comes first */}
+            <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+              <h2 id="usage" className="text-2xl font-serif font-bold text-gold-300 mb-4 scroll-mt-24">Usage</h2>
+              <p className="text-parchment-300 leading-relaxed whitespace-pre-line">{ingredient.usage}</p>
+            </div>
 
             {/* Professional Tip Callout */}
             {ingredient.professionalTip && (
@@ -464,47 +516,23 @@ export default async function IngredientDetailPage({ params }: { params: Promise
               </div>
             )}
 
-            {/* Substitutions */}
-            {ingredient.substitutions && ingredient.substitutions.length > 0 && (
-              <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
-                <h2 className="text-2xl font-serif font-bold text-gold-300 mb-4">Possible Substitutions</h2>
-                <ul className="space-y-3">
-                  {ingredient.substitutions.map((sub, index) => (
-                    <li key={index} className="flex items-start gap-3">
-                      <svg className="w-5 h-5 text-gold-400 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
-                      </svg>
-                      <span className="text-parchment-300 leading-relaxed">{sub}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-
+            {/* Substitutions, brands, storage, production and history, folded */}
+            {referenceItems.length > 0 && <FAQAccordion items={referenceItems} />}
           </div>
         </div>
-      </div>
       </section>
 
-      {/* Full-width tail — editorial and related content. Kept outside the
-          two-column grid so a long right column never leaves the left
-          column hanging empty. */}
       {hasMore && (
       <section className="band-light py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
-            {/* Production Method */}
-            {ingredient.productionMethod && (
-              <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
-                <h2 className="text-2xl font-serif font-bold text-gold-300 mb-4">Production Method</h2>
-                <p className="text-parchment-300 leading-relaxed whitespace-pre-line">{ingredient.productionMethod}</p>
-              </div>
-            )}
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <SectionHeading eyebrow="Go further">More to explore</SectionHeading>
 
-            {/* History/Context */}
-            {ingredient.history && (
+          <div className="space-y-8">
+            {/* FAQs — single source for the visible Q&As and the FAQPage schema */}
+            {ingredient.faqs && ingredient.faqs.length > 0 && (
               <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
-                <h2 className="text-2xl font-serif font-bold text-gold-300 mb-4">History & Context</h2>
-                <p className="text-parchment-300 leading-relaxed whitespace-pre-line">{ingredient.history}</p>
+                <h2 id="common-questions" className="text-2xl font-serif font-bold text-gold-300 mb-4 scroll-mt-24">Common Questions</h2>
+                <FAQAccordion items={ingredient.faqs} />
               </div>
             )}
 
@@ -529,19 +557,6 @@ export default async function IngredientDetailPage({ params }: { params: Promise
               </div>
             )}
 
-            {/* FAQs — single source for the visible Q&As and the FAQPage schema */}
-            {ingredient.faqs && ingredient.faqs.length > 0 && (
-              <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
-                <h2 id="common-questions" className="text-2xl font-serif font-bold text-gold-300 mb-4 scroll-mt-24">Common Questions</h2>
-                <FAQAccordion items={ingredient.faqs} />
-              </div>
-            )}
-        </div>
-      </section>
-      )}
-
-      <section className="band-dark py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
             {/* Related Technique Guides */}
             {ingredient.relatedGuides && ingredient.relatedGuides.length > 0 && (
               <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
@@ -550,7 +565,6 @@ export default async function IngredientDetailPage({ params }: { params: Promise
               </div>
             )}
 
-            {/* Related Cocktails */}
             {/* Styles of this ingredient. Only the six parent pages have
                 sub-types, and every other ingredient renders nothing at all
                 here — no heading, no panel, no reserved space. */}
@@ -577,7 +591,17 @@ export default async function IngredientDetailPage({ params }: { params: Promise
                 />
               </div>
             )}
+          </div>
+        </div>
+      </section>
+      )}
 
+      <section className="band-dark py-12">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <SectionHeading eyebrow="Make something">Made with {ingredient.name}</SectionHeading>
+
+          <div className="space-y-8">
+            {/* Related Cocktails */}
             {ingredient.relatedCocktails && ingredient.relatedCocktails.length > 0 && (
               <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
                 <h2 className="text-2xl font-serif font-bold text-gold-300 mb-4">Featured In These Cocktails</h2>
@@ -627,6 +651,7 @@ export default async function IngredientDetailPage({ params }: { params: Promise
                 Back to Ingredients Guide
               </Link>
             </div>
+          </div>
         </div>
       </section>
 
