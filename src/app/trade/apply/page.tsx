@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 import Breadcrumbs from '@/components/Breadcrumbs'
+import { identifyKlaviyo } from '@/lib/klaviyo-onsite'
 import { StepProgress } from '@/components/trade-application/StepProgress'
 import { StepBusinessOwnership } from '@/components/trade-application/StepBusinessOwnership'
 import { StepPremises } from '@/components/trade-application/StepPremises'
@@ -207,6 +208,7 @@ export default function TradeApplyPage() {
       if (res.ok) {
         setStatus('success')
         sessionStorage.removeItem(STORAGE_KEY)
+        identifyKlaviyo(data.contact_email, data.contact_name)
       } else {
         let msg = ''
         try {

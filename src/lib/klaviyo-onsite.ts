@@ -201,3 +201,29 @@ export function trackAddedToCart(cart: Cart, addedVariantId: string, w: KlaviyoW
   if (!payload) return false
   return pushKlaviyo(['track', 'Added to Cart', payload], w)
 }
+
+/**
+ * Tell the onsite SDK who this browser belongs to. Call after a form on this
+ * site has accepted an email address.
+ *
+ * Klaviyo keeps onsite events only for a profile it can already name, and it
+ * learns a browser's profile from a click in one of its emails or a submission
+ * of one of its own forms. Our forms post to our API instead, which creates
+ * the profile server-side but tells the browser nothing. Measured 25 Sep 2026:
+ * every Viewed Product event this site had ever produced belonged to one
+ * profile, the founder's, because his browser had once clicked a Klaviyo
+ * email and nobody else's had. Without this call the browse-abandonment and
+ * added-to-cart flows only ever reach people who arrived from an email.
+ *
+ * Same consent gate as every other call here. This never sends email consent:
+ * that is decided server-side from the form's checkbox, and identifying a
+ * browser for onsite tracking is a separate act governed by cookie consent.
+ */
+export function identifyKlaviyo(email: string, firstName?: string, w: KlaviyoWindow | undefined = browserWindow()): boolean {
+  const address = email.trim()
+  if (!address) return false
+  const props: Record<string, string> = { $email: address }
+  const name = firstName?.trim()
+  if (name) props.$first_name = name
+  return pushKlaviyo(['identify', props], w)
+}

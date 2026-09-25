@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { identifyKlaviyo } from '@/lib/klaviyo-onsite'
 
 interface TradeFormData {
   name: string
@@ -54,6 +55,7 @@ export default function TradeEnquiryForm() {
       if (response.ok) {
         setSubmitStatus('success')
         setErrorMessage('')
+        identifyKlaviyo(formData.email, formData.name)
         setFormData({ name: '', email: '', venueName: '', venueType: '', covers: '', message: '' })
       } else {
         // Surface the API's specific error (e.g. "That email domain does not

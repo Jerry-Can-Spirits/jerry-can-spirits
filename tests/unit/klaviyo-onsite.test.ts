@@ -12,6 +12,7 @@ import { describe, it, expect, vi } from 'vitest'
 import {
   addedToCartPayload,
   hasKlaviyoConsent,
+  identifyKlaviyo,
   pushKlaviyo,
   trackAddedToCart,
   trackViewedProduct,
@@ -193,5 +194,40 @@ describe('track helpers', () => {
   it('is safe with no window at all', () => {
     expect(trackViewedProduct(rum, undefined)).toBe(false)
     expect(trackAddedToCart(cart(), 'gid://shopify/ProductVariant/56168995193209', undefined)).toBe(false)
+  })
+})
+
+/**
+ * Identify is what makes the two events above count for anyone who signed up
+ * on this site rather than clicking through from an email. Klaviyo keeps
+ * onsite events only for a browser it can attach to a profile.
+ */
+describe('identifyKlaviyo', () => {
+  it('queues an identify call in the field names Klaviyo reads', () => {
+    const w = win({ marketing: true })
+    expect(identifyKlaviyo('  Alex@Example.com ', ' Alex ', w)).toBe(true)
+    expect(w.pushed).toHaveLength(1)
+    expect(w.pushed[0][0]).toBe('identify')
+    expect(w.pushed[0][1]).toEqual({ $email: 'Alex@Example.com', $first_name: 'Alex' })
+  })
+
+  it('omits the first name when there is not one, rather than sending an empty string', () => {
+    const w = win({ marketing: true })
+    identifyKlaviyo('alex@example.com', '', w)
+    expect(w.pushed[0][1]).toEqual({ $email: 'alex@example.com' })
+  })
+
+  it('sends nothing for an empty address', () => {
+    const w = win({ marketing: true })
+    expect(identifyKlaviyo('   ', 'Alex', w)).toBe(false)
+    expect(w.pushed).toHaveLength(0)
+  })
+
+  it('respects the same consent gate as the events', () => {
+    const w = win({ marketing: false }, true)
+    const spy = vi.spyOn(w.klaviyo!, 'push')
+    expect(identifyKlaviyo('alex@example.com', 'Alex', w)).toBe(false)
+    expect(spy).not.toHaveBeenCalled()
+    expect(identifyKlaviyo('alex@example.com', 'Alex', undefined)).toBe(false)
   })
 })

@@ -694,18 +694,68 @@ async function fireKlaviyoEvent(args: {
       },
     },
   }
-  await fetch(`${KLAVIYO_API_BASE}/events/`, {
+  const eventRes = await fetch(`${KLAVIYO_API_BASE}/events/`, {
     method: 'POST',
     headers: commonHeaders,
     body: JSON.stringify(eventPayload),
   })
+  if (!eventRes.ok) {
+    // The acknowledgement flow hangs off this event. A rejected post used to
+    // vanish: nothing read the response, so the applicant simply never heard
+    // from us and nobody knew.
+    Sentry.captureMessage(`Klaviyo event rejected: ${eventRes.status} ${await eventRes.text()}`, {
+      tags: { route: 'trade-application', phase: 'klaviyo-event' },
+    })
+  }
 
-  // 3. Subscribe to trade list if opted in
-  if (args.marketingOptIn && profileId && args.listId) {
-    await fetch(`${KLAVIYO_API_BASE}/lists/${args.listId}/relationships/profiles/`, {
-      method: 'POST',
-      headers: commonHeaders,
-      body: JSON.stringify({ data: [{ type: 'profile', id: profileId }] }),
+  // 3. Subscribe to the trade list if opted in.
+  if (!args.marketingOptIn) return
+  if (!args.listId) {
+    Sentry.captureMessage('KLAVIYO_TRADE_LIST_ID is not set; a trade opt-in was dropped', {
+      tags: { route: 'trade-application', phase: 'klaviyo-list' },
+    })
+    return
+  }
+  if (!profileId) {
+    // The profile existed already and the lookup for its id came back empty,
+    // usually an address the search allowlist above refuses. The applicant
+    // ticked the box, so this is a lost subscription, not a non-event.
+    Sentry.captureMessage('Trade opt-in dropped: profile id could not be resolved', {
+      tags: { route: 'trade-application', phase: 'klaviyo-list' },
+    })
+    return
+  }
+
+  // A subscription job, not a list membership. Until 25 Sep 2026 this posted
+  // to /lists/{id}/relationships/profiles/, which puts the profile on the list
+  // but records no consent, so Klaviyo shows it as "Never Subscribed" and will
+  // not email it. Every trade opt-in since launch landed that way. The
+  // newsletter route had always done this correctly; this mirrors it.
+  const subscriptionRes = await fetch(`${KLAVIYO_API_BASE}/profile-subscription-bulk-create-jobs/`, {
+    method: 'POST',
+    headers: commonHeaders,
+    body: JSON.stringify({
+      data: {
+        type: 'profile-subscription-bulk-create-job',
+        attributes: {
+          profiles: {
+            data: [{
+              type: 'profile',
+              id: profileId,
+              attributes: {
+                email: args.contactEmail,
+                subscriptions: { email: { marketing: { consent: 'SUBSCRIBED' } } },
+              },
+            }],
+          },
+        },
+        relationships: { list: { data: { type: 'list', id: args.listId } } },
+      },
+    }),
+  })
+  if (!subscriptionRes.ok) {
+    Sentry.captureMessage(`Klaviyo trade subscription rejected: ${subscriptionRes.status} ${await subscriptionRes.text()}`, {
+      tags: { route: 'trade-application', phase: 'klaviyo-list' },
     })
   }
 }

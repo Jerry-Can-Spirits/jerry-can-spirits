@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { identifyKlaviyo } from '@/lib/klaviyo-onsite'
 
 const FIRST_POUR_LIST_ID = 'Uu9vFn'
 
@@ -35,6 +36,9 @@ export default function FirstPourSignup() {
       if (res.ok) {
         setStatus('success')
         setErrorMessage('')
+        // The server has the profile; the browser still needs telling whose it
+        // is, or this visitor's product views and basket adds are discarded.
+        identifyKlaviyo(email, firstName)
       } else {
         let serverError = ''
         try {
