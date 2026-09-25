@@ -18,6 +18,7 @@ import { OG_IMAGE_COCKTAIL } from '@/lib/og'
 import { ORG_REF } from '@/lib/jsonLd'
 import FAQAccordion from '@/components/FAQAccordion'
 import ScrollRow from '@/components/ScrollRow'
+import SectionHeading from '@/components/SectionHeading'
 
 // Types for equipment data
 interface Equipment {
@@ -134,15 +135,20 @@ export default async function EquipmentDetailPage({ params }: { params: Promise<
 
   const videoId = equipment.videoUrl ? getYouTubeVideoId(equipment.videoUrl) : null
 
-  // Usage and the questions bracket the body sections, which is the order they
-  // appear in. Only headings that exist on this page are listed.
+  // The sections in the order they appear on the page: the editorial headings
+  // on the light band, then Usage, then the questions. Only headings that
+  // exist on this page are listed.
   const contents = [
-    { text: 'Usage', slug: 'usage' },
     ...extractHeadings(equipment.longDescription),
+    { text: 'Usage', slug: 'usage' },
     ...(equipment.faqs && equipment.faqs.length > 0
       ? [{ text: 'Common Questions', slug: 'common-questions' }]
       : []),
   ]
+
+  // The name with its article, for the band headings. A tool already called
+  // "The ..." keeps its own.
+  const theName = /^the\b/i.test(equipment.name) ? equipment.name : `the ${equipment.name}`
 
   const articleSchema = {
     '@context': 'https://schema.org',
@@ -170,17 +176,107 @@ export default async function EquipmentDetailPage({ params }: { params: Promise<
       }
     : null
 
-  // The page is three bands, as on the cocktail page: the hero and its
-  // practical panels on dark, the specifications, background reading and
-  // questions on light, the related reading on dark. The light band is
-  // optional content, so it is only painted when there is something to put
-  // in it.
-  const hasMore = Boolean(
-    (equipment.specifications && (equipment.specifications.material || equipment.specifications.capacity || equipment.specifications.details)) ||
-      equipment.history ||
-      (equipment.faqs && equipment.faqs.length > 0) ||
-      videoId,
+  // Five bands, cut by weight rather than by kind, as on the cocktail page:
+  // the hero, what the tool is, how to use it, where to go next, and what to
+  // make with it. The first cut put the hero and a two-column stack of ten
+  // panels in one dark band, so most of the page was still one dark stretch
+  // with a thin light band at the tail. Each band now opens with a heading so
+  // it reads as a section, and each optional band is painted only when it has
+  // something in it. Usage is a required field, so the band it opens always
+  // renders and the two light bands can never touch.
+  const hasAbout = Boolean(
+    (equipment.longDescription && equipment.longDescription.length > 0) ||
+      (equipment.ownProduct?.path && equipment.ownProduct?.name),
   )
+  const hasMore = Boolean(
+    (equipment.faqs && equipment.faqs.length > 0) ||
+      videoId ||
+      (equipment.relatedGuides && equipment.relatedGuides.length > 0),
+  )
+
+  // The secondary reference, folded. It stays on the page and in the DOM, but
+  // behind a question you tap, so the band it sits in reads as the practical
+  // answer rather than a wall of panels.
+  const referenceItems = [
+    // Specifications
+    equipment.specifications && (equipment.specifications.material || equipment.specifications.capacity || equipment.specifications.details) && {
+      question: 'Specifications',
+      answer: (
+        <ScrollRow
+          ariaLabel="Specifications"
+          cols="md:grid-cols-3"
+          items={[
+            equipment.specifications.material && (
+              <div className="h-full p-4 bg-jerry-green-800/30 rounded-lg border border-gold-500/20">
+                <p className="text-gold-400 font-semibold mb-1">Material</p>
+                <p className="text-parchment-300 text-sm">{equipment.specifications.material}</p>
+              </div>
+            ),
+            equipment.specifications.capacity && (
+              <div className="h-full p-4 bg-jerry-green-800/30 rounded-lg border border-gold-500/20">
+                <p className="text-gold-400 font-semibold mb-1">Capacity</p>
+                <p className="text-parchment-300 text-sm">{equipment.specifications.capacity}</p>
+              </div>
+            ),
+            equipment.specifications.details && (
+              <div className="h-full p-4 bg-jerry-green-800/30 rounded-lg border border-gold-500/20">
+                <p className="text-gold-400 font-semibold mb-1">Details</p>
+                <p className="text-parchment-300 text-sm">{equipment.specifications.details}</p>
+              </div>
+            ),
+          ].filter(Boolean)}
+        />
+      ),
+    },
+
+    // Care & Maintenance
+    (equipment.careInstructions || equipment.lifespan) && {
+      question: 'Care & Maintenance',
+      answer: (
+        <div className="space-y-4">
+          {equipment.careInstructions && (
+            <div>
+              <h3 className="text-gold-400 font-semibold mb-4">Care Instructions</h3>
+              {Array.isArray(equipment.careInstructions) ? (
+                <ul className="space-y-4">
+                  {equipment.careInstructions.map((instruction, index) => (
+                    <li key={index} className="pl-4 border-l-2 border-gold-500/30">
+                      <span className="text-parchment-300 leading-relaxed block">{instruction}</span>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="text-parchment-300 leading-relaxed">{equipment.careInstructions}</p>
+              )}
+            </div>
+          )}
+          {equipment.lifespan && (
+            <div className="p-4 bg-jerry-green-800/30 rounded-lg border border-gold-500/20">
+              <p className="text-gold-400 font-semibold mb-3">Expected Lifespan</p>
+              {Array.isArray(equipment.lifespan) ? (
+                <ul className="space-y-2">
+                  {equipment.lifespan.map((span, index) => (
+                    <li key={index} className="flex items-start gap-2">
+                      <span className="text-gold-400 mt-1">•</span>
+                      <span className="text-parchment-300">{span}</span>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="text-parchment-300">{equipment.lifespan}</p>
+              )}
+            </div>
+          )}
+        </div>
+      ),
+    },
+
+    // History
+    equipment.history && {
+      question: 'History & Context',
+      answer: <p className="text-parchment-300 leading-relaxed whitespace-pre-line">{equipment.history}</p>,
+    },
+  ].filter((item): item is Extract<typeof item, { question: string }> => Boolean(item))
 
   return (
     <main>
@@ -216,15 +312,9 @@ export default async function EquipmentDetailPage({ params }: { params: Promise<
           </p>
         </div>
 
-        {/* items-start keeps the mobile stack as it was. On lg the left column
-            must stretch to the row height or its sticky child has nowhere to
-            travel: the rail scrolled away after its own height and left the
-            gutter empty for the rest of the page. */}
-        <div className="flex flex-col lg:grid lg:grid-cols-2 gap-12 items-start lg:items-stretch">
-          {/* Left Column - Image and Sticky Info */}
-          <div className="order-2 lg:order-1">
-            <div className="lg:sticky lg:top-24 space-y-6">
-              <ReferenceContents items={contents} />
+        <div className="flex flex-col lg:grid lg:grid-cols-2 gap-12 items-start">
+          {/* Left Column - Image */}
+          <div className="order-2 lg:order-1 space-y-6">
               {/* Image and badge panel. Half the equipment documents have no
                   image, and the template used to fill the gap with a framed
                   "Image coming soon" placeholder sitting directly beneath the
@@ -262,96 +352,37 @@ export default async function EquipmentDetailPage({ params }: { params: Promise<
                   )}
                 </div>
               )}
-
-              {/* We Make One — editorial card for equipment we sell ourselves */}
-              {equipment.ownProduct?.path && equipment.ownProduct?.name && (
-                <div className="order-2 lg:order-0 bg-linear-to-br from-gold-500/10 to-gold-600/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/30">
-                  <h3 className="text-lg font-serif font-bold text-gold-300 mb-2">We Make One</h3>
-                  {equipment.ownProduct.note && (
-                    <p className="text-parchment-300 text-sm leading-relaxed mb-3">{equipment.ownProduct.note}</p>
-                  )}
-                  <Link
-                    href={equipment.ownProduct.path}
-                    className="text-gold-300 hover:text-gold-400 underline decoration-gold-500/40 hover:decoration-gold-400 transition-colors text-sm font-semibold"
-                  >
-                    {equipment.ownProduct.name}
-                  </Link>
-                </div>
-              )}
-
-              {/* Alternatives - Mobile Order 12 */}
-              {(equipment.budgetAlternative || equipment.premiumOption) && (
-                <div className="order-12 lg:order-0 bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
-                  <h3 className="text-lg font-serif font-bold text-gold-300 mb-4">Alternatives</h3>
-                  <div className="space-y-4">
-                    {equipment.budgetAlternative && (
-                      <div>
-                        <p className="text-green-400 font-semibold text-sm mb-1">Budget Alternative</p>
-                        <p className="text-parchment-300">{equipment.budgetAlternative}</p>
-                      </div>
-                    )}
-                    {equipment.premiumOption && (
-                      <div>
-                        <p className="text-gold-400 font-semibold text-sm mb-1">Premium Option</p>
-                        <p className="text-parchment-300">{equipment.premiumOption}</p>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              )}
-
-              {/* Care & Maintenance - Mobile Order 10, Desktop here */}
-              {(equipment.careInstructions || equipment.lifespan) && (
-                <div className="order-10 lg:order-0 bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
-                  <h2 className="text-2xl font-serif font-bold text-gold-300 mb-4">Care & Maintenance</h2>
-                  <div className="space-y-4">
-                    {equipment.careInstructions && (
-                      <div>
-                        <h3 className="text-gold-400 font-semibold mb-4">Care Instructions</h3>
-                        {Array.isArray(equipment.careInstructions) ? (
-                          <ul className="space-y-4">
-                            {equipment.careInstructions.map((instruction, index) => (
-                              <li key={index} className="pl-4 border-l-2 border-gold-500/30">
-                                <span className="text-parchment-300 leading-relaxed block">{instruction}</span>
-                              </li>
-                            ))}
-                          </ul>
-                        ) : (
-                          <p className="text-parchment-300 leading-relaxed">{equipment.careInstructions}</p>
-                        )}
-                      </div>
-                    )}
-                    {equipment.lifespan && (
-                      <div className="p-4 bg-jerry-green-800/30 rounded-lg border border-gold-500/20">
-                        <p className="text-gold-400 font-semibold mb-3">Expected Lifespan</p>
-                        {Array.isArray(equipment.lifespan) ? (
-                          <ul className="space-y-2">
-                            {equipment.lifespan.map((span, index) => (
-                              <li key={index} className="flex items-start gap-2">
-                                <span className="text-gold-400 mt-1">•</span>
-                                <span className="text-parchment-300">{span}</span>
-                              </li>
-                            ))}
-                          </ul>
-                        ) : (
-                          <p className="text-parchment-300">{equipment.lifespan}</p>
-                        )}
-                      </div>
-                    )}
-                  </div>
-                </div>
-              )}
-            </div>
           </div>
 
-          {/* Right Column - Main Content */}
-          <div className="order-1 lg:order-2 space-y-8">
+          {/* Right Column - Contents */}
+          <div className="order-1 lg:order-2 space-y-6">
+              <ReferenceContents items={contents} />
+          </div>
+        </div>
+      </div>
+      </section>
 
-            {/* Usage — the two-line practical answer comes first */}
-            <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
-              <h2 id="usage" className="text-2xl font-serif font-bold text-gold-300 mb-4 scroll-mt-24">Usage</h2>
-              <p className="text-parchment-300 leading-relaxed whitespace-pre-line">{equipment.usage}</p>
-            </div>
+      {hasAbout && (
+      <section className="band-light py-12">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <SectionHeading eyebrow="The tool">About {theName}</SectionHeading>
+
+          <div className="space-y-8">
+            {/* We Make One — editorial card for equipment we sell ourselves */}
+            {equipment.ownProduct?.path && equipment.ownProduct?.name && (
+              <div className="order-2 lg:order-0 bg-linear-to-br from-gold-500/10 to-gold-600/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/30">
+                <h3 className="text-lg font-serif font-bold text-gold-300 mb-2">We Make One</h3>
+                {equipment.ownProduct.note && (
+                  <p className="text-parchment-300 text-sm leading-relaxed mb-3">{equipment.ownProduct.note}</p>
+                )}
+                <Link
+                  href={equipment.ownProduct.path}
+                  className="text-gold-300 hover:text-gold-400 underline decoration-gold-500/40 hover:decoration-gold-400 transition-colors text-sm font-semibold"
+                >
+                  {equipment.ownProduct.name}
+                </Link>
+              </div>
+            )}
 
             {/* Long Description - Rich editorial content from Sanity */}
             {equipment.longDescription && equipment.longDescription.length > 0 && (
@@ -359,6 +390,21 @@ export default async function EquipmentDetailPage({ params }: { params: Promise<
                 <FieldManualPortableText value={equipment.longDescription} />
               </div>
             )}
+          </div>
+        </div>
+      </section>
+      )}
+
+      <section className="band-dark py-12">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <SectionHeading eyebrow="Using it">Using {theName}</SectionHeading>
+
+          <div className="space-y-8">
+            {/* Usage — the two-line practical answer comes first */}
+            <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+              <h2 id="usage" className="text-2xl font-serif font-bold text-gold-300 mb-4 scroll-mt-24">Usage</h2>
+              <p className="text-parchment-300 leading-relaxed whitespace-pre-line">{equipment.usage}</p>
+            </div>
 
             {/* Professional Tip */}
             {equipment.professionalTip && (
@@ -422,56 +468,41 @@ export default async function EquipmentDetailPage({ params }: { params: Promise<
               </div>
             )}
 
+            {/* Alternatives. On the dark band with the other buying advice:
+                its budget tier is picked out in green, which is a dark-ground
+                colour. */}
+            {(equipment.budgetAlternative || equipment.premiumOption) && (
+              <div className="order-12 lg:order-0 bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+                <h3 className="text-lg font-serif font-bold text-gold-300 mb-4">Alternatives</h3>
+                <div className="space-y-4">
+                  {equipment.budgetAlternative && (
+                    <div>
+                      <p className="text-green-400 font-semibold text-sm mb-1">Budget Alternative</p>
+                      <p className="text-parchment-300">{equipment.budgetAlternative}</p>
+                    </div>
+                  )}
+                  {equipment.premiumOption && (
+                    <div>
+                      <p className="text-gold-400 font-semibold text-sm mb-1">Premium Option</p>
+                      <p className="text-parchment-300">{equipment.premiumOption}</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {/* Specifications, care and history, folded */}
+            {referenceItems.length > 0 && <FAQAccordion items={referenceItems} />}
           </div>
         </div>
-      </div>
       </section>
 
-      {/* Full-width tail — editorial and related content. Kept outside the
-          two-column grid so a long cocktail list never leaves the left
-          column hanging empty. */}
       {hasMore && (
       <section className="band-light py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
-            {/* Specifications */}
-            {equipment.specifications && (equipment.specifications.material || equipment.specifications.capacity || equipment.specifications.details) && (
-              <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
-                <h2 className="text-2xl font-serif font-bold text-gold-300 mb-4">Specifications</h2>
-                <ScrollRow
-                  ariaLabel="Specifications"
-                  cols="md:grid-cols-3"
-                  items={[
-                    equipment.specifications.material && (
-                      <div className="h-full p-4 bg-jerry-green-800/30 rounded-lg border border-gold-500/20">
-                        <p className="text-gold-400 font-semibold mb-1">Material</p>
-                        <p className="text-parchment-300 text-sm">{equipment.specifications.material}</p>
-                      </div>
-                    ),
-                    equipment.specifications.capacity && (
-                      <div className="h-full p-4 bg-jerry-green-800/30 rounded-lg border border-gold-500/20">
-                        <p className="text-gold-400 font-semibold mb-1">Capacity</p>
-                        <p className="text-parchment-300 text-sm">{equipment.specifications.capacity}</p>
-                      </div>
-                    ),
-                    equipment.specifications.details && (
-                      <div className="h-full p-4 bg-jerry-green-800/30 rounded-lg border border-gold-500/20">
-                        <p className="text-gold-400 font-semibold mb-1">Details</p>
-                        <p className="text-parchment-300 text-sm">{equipment.specifications.details}</p>
-                      </div>
-                    ),
-                  ].filter(Boolean)}
-                />
-              </div>
-            )}
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <SectionHeading eyebrow="Go further">More to explore</SectionHeading>
 
-            {/* History */}
-            {equipment.history && (
-              <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
-                <h2 className="text-2xl font-serif font-bold text-gold-300 mb-4">History & Context</h2>
-                <p className="text-parchment-300 leading-relaxed whitespace-pre-line">{equipment.history}</p>
-              </div>
-            )}
-
+          <div className="space-y-8">
             {/* FAQs — single source for the visible Q&As and the FAQPage schema */}
             {equipment.faqs && equipment.faqs.length > 0 && (
               <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
@@ -500,12 +531,7 @@ export default async function EquipmentDetailPage({ params }: { params: Promise<
                 </div>
               </div>
             )}
-        </div>
-      </section>
-      )}
 
-      <section className="band-dark py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
             {/* Related Technique Guides */}
             {equipment.relatedGuides && equipment.relatedGuides.length > 0 && (
               <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20 lg:max-w-4xl">
@@ -513,7 +539,16 @@ export default async function EquipmentDetailPage({ params }: { params: Promise<
                 <RelatedGuidesList guides={equipment.relatedGuides} />
               </div>
             )}
+          </div>
+        </div>
+      </section>
+      )}
 
+      <section className="band-dark py-12">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <SectionHeading eyebrow="Make something">Made with {theName}</SectionHeading>
+
+          <div className="space-y-8">
             {/* Related Cocktails */}
             {equipment.relatedCocktails && equipment.relatedCocktails.length > 0 && (
               <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
@@ -587,6 +622,7 @@ export default async function EquipmentDetailPage({ params }: { params: Promise<
                 Back to Equipment Guide
               </Link>
             </div>
+          </div>
         </div>
       </section>
 

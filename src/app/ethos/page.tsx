@@ -302,20 +302,26 @@ export default function Ethos() {
                   <div className="mt-6">
                     <div className="bg-jerry-green-800/60 rounded-lg p-6">
                       <h4 className="text-gold-300 font-semibold mb-3">Planned Barrel Selection</h4>
-                      <div className="grid md:grid-cols-3 gap-4 text-sm text-parchment-300">
-                        <div>
-                          <strong className="text-gold-300">American Oak</strong>
-                          <p>Vanilla, caramel, and spice development</p>
-                        </div>
-                        <div>
-                          <strong className="text-gold-300">European Oak</strong>
-                          <p>Rich tannins and complex fruit notes</p>
-                        </div>
-                        <div>
-                          <strong className="text-gold-300">Special Finishes</strong>
-                          <p>Port, sherry, and wine cask innovations</p>
-                        </div>
-                      </div>
+                      <ScrollRow
+                        ariaLabel="Planned barrel selection"
+                        cols="md:grid-cols-3"
+                        bleed={false}
+                        itemClassName="text-sm text-parchment-300"
+                        items={[
+                          <div key="american-oak" className="h-full">
+                            <strong className="text-gold-300">American Oak</strong>
+                            <p>Vanilla, caramel, and spice development</p>
+                          </div>,
+                          <div key="european-oak" className="h-full">
+                            <strong className="text-gold-300">European Oak</strong>
+                            <p>Rich tannins and complex fruit notes</p>
+                          </div>,
+                          <div key="special-finishes" className="h-full">
+                            <strong className="text-gold-300">Special Finishes</strong>
+                            <p>Port, sherry, and wine cask innovations</p>
+                          </div>,
+                        ]}
+                      />
                     </div>
                   </div>
                 </div>

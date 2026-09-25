@@ -1,5 +1,7 @@
 import type { Metadata } from 'next'
 import Image from 'next/image'
+import ScrollRow from '@/components/ScrollRow'
+import SectionHeading from '@/components/SectionHeading'
 import StockistFinder from '@/components/StockistFinder'
 import StructuredData from '@/components/StructuredData'
 import { baseOpenGraph, OG_IMAGE } from '@/lib/og'
@@ -133,35 +135,33 @@ const stockistSchema = featuredStockists.map((stockist) => ({
 
 export default function StockistsPage() {
   return (
-    <main className="min-h-screen py-20">
+    <main>
       <StructuredData data={stockistSchema} />
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-        {/* Header */}
-        <div className="mb-12">
-          <div className="inline-block px-4 py-2 bg-jerry-green-800/60 backdrop-blur-sm rounded-full border border-gold-500/30 mb-6">
-            <span className="text-gold-300 text-sm font-semibold uppercase tracking-widest">
-              Stockists
-            </span>
-          </div>
-          <h1 className="text-4xl md:text-5xl font-serif font-bold text-white mb-4">
+      {/* Header */}
+      <section className="band-dark pt-20 pb-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <SectionHeading
+            as="h1"
+            eyebrow="Stockists"
+            intro="Enter your postcode to find the nearest stockist. More stockists being added regularly."
+          >
             Find Expedition Spiced Rum
-          </h1>
-          <p className="text-xl text-parchment-300 max-w-2xl">
-            Enter your postcode to find the nearest stockist. More stockists being added regularly.
-          </p>
+          </SectionHeading>
         </div>
+      </section>
 
-        {/* Featured Stockists */}
-        <div className="mb-16">
-          <h2 className="text-2xl font-serif font-bold text-white mb-6">
-            Stocking Expedition Spiced Rum
-          </h2>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {featuredStockists.map((stockist, index) => (
+      {/* Featured Stockists */}
+      <section className="band-light py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <SectionHeading>Stocking Expedition Spiced Rum</SectionHeading>
+          <ScrollRow
+            ariaLabel="Venues stocking Expedition Spiced Rum"
+            cols="md:grid-cols-2 lg:grid-cols-3"
+            items={featuredStockists.map((stockist, index) => (
               <div
                 key={stockist.name}
-                className="bg-jerry-green-800/20 border border-gold-500/20 rounded-xl p-6 hover:border-gold-500/40 transition-all"
+                className="h-full bg-jerry-green-800/20 border border-gold-500/20 rounded-xl p-6 hover:border-gold-500/40 transition-all"
               >
                 <div className="flex items-center justify-center bg-white rounded-lg p-2 mb-5 h-24 border border-gold-500/10">
                   <div className="relative w-full h-full">
@@ -207,34 +207,37 @@ export default function StockistsPage() {
                 </div>
               </div>
             ))}
-          </div>
+          />
         </div>
+      </section>
 
-        {/* Finder */}
-        <div className="mb-16">
-          <h2 className="text-2xl font-serif font-bold text-white mb-6">
-            Search by postcode
-          </h2>
+      {/* Finder */}
+      <section className="band-dark py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <SectionHeading>Search by postcode</SectionHeading>
           <StockistFinder />
         </div>
+      </section>
 
-        {/* Trade enquiries */}
-        <div className="p-8 bg-jerry-green-800/20 rounded-xl border border-gold-500/20 max-w-2xl">
-          <h2 className="text-xl font-serif font-bold text-white mb-3">
-            Interested in stocking us?
-          </h2>
-          <p className="text-parchment-300 text-sm leading-relaxed mb-6">
-            We work with independent retailers, bars, and restaurants who hold themselves to the same standard we do. If that is you, we would like to hear from you.
-          </p>
-          <a
-            href="/trade/"
-            className="inline-flex items-center px-6 py-3 bg-gold-500 text-jerry-green-900 font-bold rounded-lg hover:bg-gold-400 transition-colors text-sm"
-          >
-            Trade Enquiries
-          </a>
+      {/* Trade enquiries */}
+      <section className="band-light py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="p-8 bg-jerry-green-800/20 rounded-xl border border-gold-500/20 max-w-2xl mx-auto">
+            <h2 className="text-xl font-serif font-bold text-white mb-3">
+              Interested in stocking us?
+            </h2>
+            <p className="text-parchment-300 text-sm leading-relaxed mb-6">
+              We work with independent retailers, bars, and restaurants who hold themselves to the same standard we do. If that is you, we would like to hear from you.
+            </p>
+            <a
+              href="/trade/"
+              className="inline-flex items-center px-6 py-3 bg-gold-500 text-jerry-green-900 font-bold rounded-lg hover:bg-gold-400 transition-colors text-sm"
+            >
+              Trade Enquiries
+            </a>
+          </div>
         </div>
-
-      </div>
+      </section>
     </main>
   )
 }

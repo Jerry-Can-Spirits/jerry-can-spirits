@@ -4,6 +4,7 @@ import Breadcrumbs from '@/components/Breadcrumbs'
 import { FREE_SHIPPING_THRESHOLD_GBP, STANDARD_SHIPPING_LABEL } from '@/lib/pricing'
 import { DELIVERY_PROMISE_SENTENCE } from '@/lib/delivery'
 import StructuredData from '@/components/StructuredData'
+import SectionHeading from '@/components/SectionHeading'
 import { OG_IMAGE } from '@/lib/og'
 
 export const metadata: Metadata = {
@@ -87,38 +88,30 @@ export default function ShippingReturns() {
   }
 
   return (
-    <main className="min-h-screen py-20">
+    <main>
       <StructuredData data={faqSchema} id="shipping-faq-schema" />
 
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Breadcrumb */}
-        <div className="mb-8">
+      {/* Header */}
+      <section className="band-dark pt-20 pb-12">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <Breadcrumbs
             items={[
               { label: 'Shipping & Returns' },
             ]}
+            className="mb-8"
           />
-        </div>
-
-        {/* Header */}
-        <div className="text-center mb-12 pb-8 border-b border-gold-500/30">
-          <div className="inline-block px-4 py-2 bg-jerry-green-800/60 backdrop-blur-sm rounded-full border border-gold-500/30 mb-6">
-            <span className="text-gold-300 text-sm font-semibold uppercase tracking-widest">
-              Legal
-            </span>
-          </div>
-          <h1 className="text-4xl sm:text-5xl font-serif font-bold text-white mb-4">
+          <SectionHeading as="h1" eyebrow="Legal">
             Shipping & Returns
-          </h1>
-          <p className="text-parchment-300 text-sm">
+          </SectionHeading>
+          <p className="text-parchment-300 text-sm text-center">
             Last updated: {lastUpdated}
           </p>
         </div>
+      </section>
 
-        {/* Content */}
-        <div className="max-w-none">
+      <section className="band-light py-12">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="space-y-8">
-            
             <section className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20">
               <h2 className="text-2xl font-serif font-bold text-white mb-4 pb-2 border-b border-gold-500/20">
                 UK Shipping
@@ -137,7 +130,13 @@ export default function ShippingReturns() {
                 </ul>
               </div>
             </section>
+          </div>
+        </div>
+      </section>
 
+      <section className="band-dark py-12">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="space-y-8">
             <section className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20">
               <h2 className="text-2xl font-serif font-bold text-white mb-4 pb-2 border-b border-gold-500/20">
                 Age Verification
@@ -183,7 +182,13 @@ export default function ShippingReturns() {
                 with your order number and photos of any damage.
               </p>
             </section>
+          </div>
+        </div>
+      </section>
 
+      <section className="band-light py-12">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="space-y-8">
             <section className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20">
               <h2 className="text-2xl font-serif font-bold text-white mb-4 pb-2 border-b border-gold-500/20">
                 Returns Policy
@@ -192,7 +197,7 @@ export default function ShippingReturns() {
                 <p className="text-white mb-4">
                   Due to the nature of alcohol products and UK licensing regulations, we have specific return conditions:
                 </p>
-                
+
                 <h3 className="text-lg font-semibold text-white mb-3">Eligible for Return:</h3>
                 <ul className="list-disc list-inside text-white space-y-2 mb-6">
                   <li>Unopened, unused products returned within 14 days (change of mind), at your own expense</li>
@@ -237,7 +242,13 @@ export default function ShippingReturns() {
                 </div>
               </div>
             </section>
+          </div>
+        </div>
+      </section>
 
+      <section className="band-dark py-12">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="space-y-8">
             <section className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20">
               <h2 className="text-2xl font-serif font-bold text-white mb-4 pb-2 border-b border-gold-500/20">
                 Exchange Policy
@@ -275,78 +286,77 @@ export default function ShippingReturns() {
                 </div>
               </div>
             </section>
-
           </div>
-        </div>
 
-        {/* FAQ Section */}
-        <div className="mt-12">
-          <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
-            <h2 className="text-3xl font-serif font-bold text-white mb-2 text-center">
-              Frequently Asked Questions
-            </h2>
-            <p className="text-parchment-400 mb-8 text-center">
-              Quick answers about shipping and returns
-            </p>
+          {/* FAQ Section */}
+          <div className="mt-12">
+            <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
+              <h2 className="text-3xl font-serif font-bold text-white mb-2 text-center">
+                Frequently Asked Questions
+              </h2>
+              <p className="text-parchment-400 mb-8 text-center">
+                Quick answers about shipping and returns
+              </p>
 
-            <div className="space-y-6 max-w-3xl mx-auto">
-              <div className="border-b border-gold-500/10 pb-6">
-                <h3 className="text-lg font-semibold text-gold-300 mb-3">How much does shipping cost?</h3>
-                <p className="text-parchment-200 leading-relaxed">
-                  Standard shipping costs {STANDARD_SHIPPING_LABEL}. Orders over £{FREE_SHIPPING_THRESHOLD_GBP} qualify for free shipping. We currently ship throughout the United Kingdom.
-                </p>
-              </div>
+              <div className="space-y-6 max-w-3xl mx-auto">
+                <div className="border-b border-gold-500/10 pb-6">
+                  <h3 className="text-lg font-semibold text-gold-300 mb-3">How much does shipping cost?</h3>
+                  <p className="text-parchment-200 leading-relaxed">
+                    Standard shipping costs {STANDARD_SHIPPING_LABEL}. Orders over £{FREE_SHIPPING_THRESHOLD_GBP} qualify for free shipping. We currently ship throughout the United Kingdom.
+                  </p>
+                </div>
 
-              <div className="border-b border-gold-500/10 pb-6">
-                <h3 className="text-lg font-semibold text-gold-300 mb-3">Do you ship internationally?</h3>
-                <p className="text-parchment-200 leading-relaxed">
-                  We currently only ship within the United Kingdom. We&apos;re working on expanding our delivery network – <Link href="/first-pour/" className="text-gold-400 hover:text-gold-300 underline">join our mailing list</Link> to be notified when we ship to your country.
-                </p>
-              </div>
+                <div className="border-b border-gold-500/10 pb-6">
+                  <h3 className="text-lg font-semibold text-gold-300 mb-3">Do you ship internationally?</h3>
+                  <p className="text-parchment-200 leading-relaxed">
+                    We currently only ship within the United Kingdom. We&apos;re working on expanding our delivery network – <Link href="/first-pour/" className="text-gold-400 hover:text-gold-300 underline">join our mailing list</Link> to be notified when we ship to your country.
+                  </p>
+                </div>
 
-              <div className="border-b border-gold-500/10 pb-6">
-                <h3 className="text-lg font-semibold text-gold-300 mb-3">Why do I need to show ID for alcohol delivery?</h3>
-                <p className="text-parchment-200 leading-relaxed">
-                  UK law requires age verification for all alcohol deliveries. The recipient must be 18 or older and present valid photo ID to the courier. If no one is available to verify age, the package will be returned.
-                </p>
-              </div>
+                <div className="border-b border-gold-500/10 pb-6">
+                  <h3 className="text-lg font-semibold text-gold-300 mb-3">Why do I need to show ID for alcohol delivery?</h3>
+                  <p className="text-parchment-200 leading-relaxed">
+                    UK law requires age verification for all alcohol deliveries. The recipient must be 18 or older and present valid photo ID to the courier. If no one is available to verify age, the package will be returned.
+                  </p>
+                </div>
 
-              <div className="border-b border-gold-500/10 pb-6">
-                <h3 className="text-lg font-semibold text-gold-300 mb-3">Can I return alcohol products?</h3>
-                <p className="text-parchment-200 leading-relaxed">
-                  We accept returns of unopened, unused products within 14 days of delivery if you change your mind, with return postage at your own expense. We also accept returns for products damaged in transit, incorrect items, or manufacturing defects. For safety reasons, opened or consumed products cannot be returned. Contact us within 14 days of delivery.
-                </p>
-              </div>
+                <div className="border-b border-gold-500/10 pb-6">
+                  <h3 className="text-lg font-semibold text-gold-300 mb-3">Can I return alcohol products?</h3>
+                  <p className="text-parchment-200 leading-relaxed">
+                    We accept returns of unopened, unused products within 14 days of delivery if you change your mind, with return postage at your own expense. We also accept returns for products damaged in transit, incorrect items, or manufacturing defects. For safety reasons, opened or consumed products cannot be returned. Contact us within 14 days of delivery.
+                  </p>
+                </div>
 
-              <div className="border-b border-gold-500/10 pb-6">
-                <h3 className="text-lg font-semibold text-gold-300 mb-3">How long do refunds take?</h3>
-                <p className="text-parchment-200 leading-relaxed">
-                  Once we receive your returned items, refunds are processed within 5-7 business days. Credit/debit cards take 3-5 business days, PayPal takes 1-2 business days, and bank transfers take 3-5 business days to appear.
-                </p>
-              </div>
+                <div className="border-b border-gold-500/10 pb-6">
+                  <h3 className="text-lg font-semibold text-gold-300 mb-3">How long do refunds take?</h3>
+                  <p className="text-parchment-200 leading-relaxed">
+                    Once we receive your returned items, refunds are processed within 5-7 business days. Credit/debit cards take 3-5 business days, PayPal takes 1-2 business days, and bank transfers take 3-5 business days to appear.
+                  </p>
+                </div>
 
-              <div>
-                <h3 className="text-lg font-semibold text-gold-300 mb-3">What happens if my package is damaged or lost?</h3>
-                <p className="text-parchment-200 leading-relaxed">
-                  Contact us immediately at <a href="mailto:support@jerrycanspirits.co.uk" className="text-gold-400 hover:text-gold-300 underline">support@jerrycanspirits.co.uk</a> with your order number and photos of any damage. We&apos;ll arrange a replacement or full refund for damaged or lost shipments.
-                </p>
+                <div>
+                  <h3 className="text-lg font-semibold text-gold-300 mb-3">What happens if my package is damaged or lost?</h3>
+                  <p className="text-parchment-200 leading-relaxed">
+                    Contact us immediately at <a href="mailto:support@jerrycanspirits.co.uk" className="text-gold-400 hover:text-gold-300 underline">support@jerrycanspirits.co.uk</a> with your order number and photos of any damage. We&apos;ll arrange a replacement or full refund for damaged or lost shipments.
+                  </p>
+                </div>
               </div>
             </div>
           </div>
-        </div>
 
-        {/* Footer */}
-        <div className="mt-12 p-8 bg-jerry-green-800/40 backdrop-blur-sm rounded-xl border border-gold-500/20 text-center">
-          <p className="text-parchment-300 text-sm mb-4">
-            <strong className="text-gold-300">
-              This shipping and returns policy was last updated on {lastUpdated}.
-            </strong>
-          </p>
-          <p className="text-parchment-400 text-xs">
-            This policy applies to all orders placed on jerrycanspirits.co.uk and does not affect your statutory rights.
-          </p>
+          {/* Footer */}
+          <div className="mt-12 p-8 bg-jerry-green-800/40 backdrop-blur-sm rounded-xl border border-gold-500/20 text-center">
+            <p className="text-parchment-300 text-sm mb-4">
+              <strong className="text-gold-300">
+                This shipping and returns policy was last updated on {lastUpdated}.
+              </strong>
+            </p>
+            <p className="text-parchment-400 text-xs">
+              This policy applies to all orders placed on jerrycanspirits.co.uk and does not affect your statutory rights.
+            </p>
+          </div>
         </div>
-      </div>
+      </section>
     </main>
   )
 }

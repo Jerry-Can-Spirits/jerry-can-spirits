@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import BackToTop from '@/components/BackToTop'
 import Breadcrumbs from '@/components/Breadcrumbs'
+import SectionHeading from '@/components/SectionHeading'
 import StructuredData from '@/components/StructuredData'
 import { baseOpenGraph, OG_IMAGE } from '@/lib/og'
 import { safeJsonLd, ORG_REF } from '@/lib/jsonLd'
@@ -121,46 +122,37 @@ const articleSchema = {
 
 export default function ExpeditionSpicedRumIngredients() {
   return (
-    <main className="min-h-screen py-20">
+    <main>
       <StructuredData data={faqSchema} id="ingredients-faq-schema" />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: safeJsonLd(articleSchema) }}
       />
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
-        <Breadcrumbs
-          items={[
-            { label: 'What’s In It', href: '/ingredients' },
-            { label: 'Expedition Spiced Rum' },
-          ]}
-        />
-      </div>
 
-      {/* Hero Section */}
-      <section className="relative py-16">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="inline-block px-4 py-2 bg-jerry-green-800/60 backdrop-blur-sm rounded-full border border-gold-500/30 mb-6">
-            <span className="text-gold-300 text-sm font-semibold uppercase tracking-widest">
-              What Is Rum Spiced With?
-            </span>
-          </div>
-
-          <h1 className="text-4xl sm:text-5xl font-serif font-bold text-white mb-6">
+      {/* Hero Section. The product facts sit with it: the energy-per-serve
+          tiles are a green panel inside a green panel, which only reads on
+          the dark ground. */}
+      <section className="band-dark pt-20 pb-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
+          <Breadcrumbs
+            items={[
+              { label: 'What’s In It', href: '/ingredients' },
+              { label: 'Expedition Spiced Rum' },
+            ]}
+          />
+        </div>
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <SectionHeading
+            as="h1"
+            eyebrow="What Is Rum Spiced With?"
+            intro={<>No secrets. No gimmicks. Here&apos;s exactly what our spiced rum is made with.</>}
+          >
             Expedition Spiced Rum
             <br />
             <span className="text-gold-300">What’s In It</span>
-          </h1>
+          </SectionHeading>
 
-          <p className="text-xl text-parchment-300 max-w-3xl mx-auto leading-relaxed">
-            No secrets. No gimmicks. Here&apos;s exactly what our spiced rum is made with.
-          </p>
-        </div>
-      </section>
-
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-
-        {/* Product Info */}
-        <section className="py-12">
+          {/* Product Info */}
           <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
             <div className="grid sm:grid-cols-4 gap-6 text-center mb-8">
               <div>
@@ -194,10 +186,12 @@ export default function ExpeditionSpicedRumIngredients() {
               </div>
             </div>
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* Ingredients List */}
-        <section className="py-12">
+      {/* Ingredients List */}
+      <section className="band-light py-16">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
             <h2 className="text-2xl sm:text-3xl font-serif font-bold text-white mb-6">
               What Our Rum Is Spiced With
@@ -291,10 +285,14 @@ export default function ExpeditionSpicedRumIngredients() {
               </p>
             </div>
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* Allergen Info */}
-        <section className="py-12">
+      {/* The allergen ticks are text-green-400, which has no light-band
+          token, so this band stays dark. */}
+      <section className="band-dark py-16">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+          {/* Allergen Info */}
           <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
             <h2 className="text-2xl sm:text-3xl font-serif font-bold text-white mb-6">
               Allergen Information
@@ -335,10 +333,8 @@ export default function ExpeditionSpicedRumIngredients() {
               </p>
             </div>
           </div>
-        </section>
 
-        {/* Tasting Notes */}
-        <section className="py-12">
+          {/* Tasting Notes */}
           <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
             <h2 className="text-2xl sm:text-3xl font-serif font-bold text-white mb-6">
               Tasting Notes
@@ -375,10 +371,8 @@ export default function ExpeditionSpicedRumIngredients() {
               </p>
             </div>
           </div>
-        </section>
 
-        {/* Our Promise */}
-        <section className="py-12">
+          {/* Our Promise */}
           <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20 text-center">
             <h2 className="text-2xl sm:text-3xl font-serif font-bold text-white mb-4">
               Our Promise
@@ -391,10 +385,12 @@ export default function ExpeditionSpicedRumIngredients() {
               Every bottle is made with the same care as the one before it.
             </p>
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* Try It in a Cocktail */}
-        <section className="py-12">
+      <section className="band-light py-16">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+          {/* Try It in a Cocktail */}
           <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20 text-center">
             <h2 className="text-2xl sm:text-3xl font-serif font-bold text-white mb-4">
               Try It in a Cocktail
@@ -412,10 +408,8 @@ export default function ExpeditionSpicedRumIngredients() {
               </svg>
             </Link>
           </div>
-        </section>
 
-        {/* CTA */}
-        <section className="py-12 text-center">
+          {/* CTA */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
               href="/shop/product/jerry-can-spirits-expedition-spiced-rum/"
@@ -430,9 +424,8 @@ export default function ExpeditionSpicedRumIngredients() {
               <span>Sustainability</span>
             </Link>
           </div>
-        </section>
-
-      </div>
+        </div>
+      </section>
 
       <BackToTop />
     </main>

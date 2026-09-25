@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import Breadcrumbs from '@/components/Breadcrumbs'
+import SectionHeading from '@/components/SectionHeading'
 import { baseOpenGraph } from '@/lib/og'
 
 export const metadata: Metadata = {
@@ -22,36 +23,29 @@ export const metadata: Metadata = {
 
 export default function Careers() {
   return (
-    <main className="min-h-screen py-20">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Breadcrumb */}
-        <div className="mb-8">
+    <main>
+      {/* Header */}
+      <section className="band-dark pt-20 pb-12">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <Breadcrumbs
             items={[
               { label: 'Careers' },
             ]}
+            className="mb-8"
           />
-        </div>
-
-        {/* Header */}
-        <div className="text-center mb-12 pb-8 border-b border-gold-500/30">
-          <div className="inline-block px-4 py-2 bg-jerry-green-800/60 backdrop-blur-sm rounded-full border border-gold-500/30 mb-6">
-            <span className="text-gold-300 text-sm font-semibold uppercase tracking-widest">
-              Careers
-            </span>
-          </div>
-          <h1 className="text-4xl sm:text-5xl font-serif font-bold text-white mb-4">
+          <SectionHeading
+            as="h1"
+            eyebrow="Careers"
+            intro="A small team making spirits we're proud of"
+          >
             Work With Us
-          </h1>
-          <p className="text-parchment-300 text-lg">
-            A small team making spirits we're proud of
-          </p>
+          </SectionHeading>
         </div>
+      </section>
 
-        {/* Content */}
-        <div className="max-w-none">
+      <section className="band-light py-12">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="space-y-8">
-
             <section className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-8 border border-gold-500/20 text-center">
               <div className="max-w-2xl mx-auto">
                 <div className="mb-6">
@@ -123,7 +117,13 @@ export default function Careers() {
                 </div>
               </div>
             </section>
+          </div>
+        </div>
+      </section>
 
+      <section className="band-dark py-12">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="space-y-8">
             <section className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20">
               <h2 className="text-2xl font-serif font-bold text-white mb-4 pb-2 border-b border-gold-500/20">
                 Stay Connected
@@ -167,26 +167,25 @@ export default function Careers() {
                 </p>
               </div>
             </section>
+          </div>
 
+          {/* Footer CTA */}
+          <div className="mt-12 p-8 bg-linear-to-r from-jerry-green-800/60 to-gold-900/40 backdrop-blur-sm rounded-xl border border-gold-500/30 text-center">
+            <h3 className="text-2xl font-serif font-bold text-white mb-4">
+              Questions About Careers?
+            </h3>
+            <p className="text-parchment-300 mb-6">
+              We're happy to answer any questions about working at Jerry Can Spirits®
+            </p>
+            <a
+              href="mailto:careers@jerrycanspirits.co.uk"
+              className="inline-block px-8 py-3 bg-gold-500 hover:bg-gold-600 text-jerry-green-900 font-semibold rounded-lg transition-colors duration-200"
+            >
+              Email Us
+            </a>
           </div>
         </div>
-
-        {/* Footer CTA */}
-        <div className="mt-12 p-8 bg-linear-to-r from-jerry-green-800/60 to-gold-900/40 backdrop-blur-sm rounded-xl border border-gold-500/30 text-center">
-          <h3 className="text-2xl font-serif font-bold text-white mb-4">
-            Questions About Careers?
-          </h3>
-          <p className="text-parchment-300 mb-6">
-            We're happy to answer any questions about working at Jerry Can Spirits®
-          </p>
-          <a
-            href="mailto:careers@jerrycanspirits.co.uk"
-            className="inline-block px-8 py-3 bg-gold-500 hover:bg-gold-600 text-jerry-green-900 font-semibold rounded-lg transition-colors duration-200"
-          >
-            Email Us
-          </a>
-        </div>
-      </div>
+      </section>
     </main>
   )
 }

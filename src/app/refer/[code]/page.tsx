@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import SectionHeading from '@/components/SectionHeading'
 import { redirect } from 'next/navigation'
 import { getCloudflareContext } from '@opennextjs/cloudflare'
 import ReferralCodeClient from './ReferralCodeClient'
@@ -38,50 +39,54 @@ export default async function ReferralLandingPage({
   }
 
   return (
-    <main className="min-h-screen py-20">
-      <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <div className="inline-block px-4 py-2 bg-jerry-green-800/60 backdrop-blur-sm rounded-full border border-gold-500/30 mb-6">
-          <span className="text-gold-300 text-sm font-semibold uppercase tracking-widest">
-            Referral Reward
-          </span>
+    <main>
+      <section className="band-dark pt-20 pb-16">
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
+          <SectionHeading
+            as="h1"
+            eyebrow="Referral Reward"
+            intro={
+              <>
+                And honestly, they&apos;re probably right. Here&apos;s 10% off your first order of
+                veteran-owned, properly spiced rum.
+              </>
+            }
+          >
+            Your Friend Thinks You
+            <br />
+            <span className="text-gold-300">Need Better Rum</span>
+          </SectionHeading>
         </div>
+      </section>
 
-        <h1 className="text-4xl sm:text-5xl font-serif font-bold text-white mb-6">
-          Your Friend Thinks You
-          <br />
-          <span className="text-gold-300">Need Better Rum</span>
-        </h1>
+      <section className="band-light py-16">
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          {/* Discount Code Display */}
+          <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-8 border border-gold-500/30 mb-8">
+            <p className="text-parchment-400 text-sm uppercase tracking-wider mb-3">
+              Your discount code
+            </p>
+            <ReferralCodeClient code={code} />
+            <p className="text-parchment-400 text-sm mt-4">
+              10% off your first order. Single use. Valid for 90 days.
+            </p>
+          </div>
 
-        <p className="text-xl text-parchment-300 max-w-xl mx-auto leading-relaxed mb-8">
-          And honestly, they&apos;re probably right. Here&apos;s 10% off your first order of
-          veteran-owned, properly spiced rum.
-        </p>
+          <Link
+            href="/shop/spirits/"
+            className="inline-flex items-center justify-center space-x-2 bg-gold-500 hover:bg-gold-400 text-jerry-green-900 px-8 py-4 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105"
+          >
+            <span>Browse Our Rum</span>
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            </svg>
+          </Link>
 
-        {/* Discount Code Display */}
-        <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-8 border border-gold-500/30 mb-8">
-          <p className="text-parchment-400 text-sm uppercase tracking-wider mb-3">
-            Your discount code
-          </p>
-          <ReferralCodeClient code={code} />
-          <p className="text-parchment-400 text-sm mt-4">
-            10% off your first order. Single use. Valid for 90 days.
+          <p className="text-parchment-500 text-xs mt-8">
+            The code will be saved automatically. It&apos;ll be applied at checkout.
           </p>
         </div>
-
-        <Link
-          href="/shop/spirits/"
-          className="inline-flex items-center justify-center space-x-2 bg-gold-500 hover:bg-gold-400 text-jerry-green-900 px-8 py-4 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105"
-        >
-          <span>Browse Our Rum</span>
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-          </svg>
-        </Link>
-
-        <p className="text-parchment-500 text-xs mt-8">
-          The code will be saved automatically. It&apos;ll be applied at checkout.
-        </p>
-      </div>
+      </section>
     </main>
   )
 }

@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import SectionHeading from '@/components/SectionHeading'
 import Image from 'next/image'
 import { baseOpenGraph } from '@/lib/og'
 import { safeJsonLd, ORG_REF } from '@/lib/jsonLd'
@@ -43,76 +44,71 @@ export default function ArmedForcesCovenant() {
   const lastUpdated = '16 September 2025'
 
   return (
-    <main className="min-h-screen py-20">
+    <main>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: safeJsonLd(articleSchema) }}
       />
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
-        <div className="text-center mb-12 pb-8 border-b border-gold-500/30">
-          <div className="inline-block px-4 py-2 bg-jerry-green-800/60 backdrop-blur-sm rounded-full border border-gold-500/30 mb-6">
-            <span className="text-gold-300 text-sm font-semibold uppercase tracking-widest">
-              Our Commitment
-            </span>
-          </div>
-          <h1 className="text-4xl sm:text-5xl font-serif font-bold text-white mb-4">
+      {/* Header */}
+      <section className="band-dark pt-20 pb-12">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <SectionHeading as="h1" eyebrow="Our Commitment">
             Armed Forces Covenant
-          </h1>
-          <p className="text-parchment-300 text-sm">
+          </SectionHeading>
+          <p className="text-parchment-300 text-sm text-center">
             Last updated: {lastUpdated}
           </p>
-        </div>
 
-        {/* AFC Banner */}
-        <div className="mb-12 flex justify-center">
-          <div className="bg-white rounded-lg p-6 shadow-lg max-w-2xl w-full">
-            <Image
-              src="/images/AFC_Banner__PNG_.png"
-              alt="Armed Forces Covenant - We proudly support those who serve"
-              width={800}
-              height={200}
-              className="w-full h-auto"
-              priority
-            />
+          {/* AFC Banner */}
+          <div className="mb-12 flex justify-center">
+            <div className="bg-white rounded-lg p-6 shadow-lg max-w-2xl w-full">
+              <Image
+                src="/images/AFC_Banner__PNG_.png"
+                alt="Armed Forces Covenant - We proudly support those who serve"
+                width={800}
+                height={200}
+                className="w-full h-auto"
+                priority
+              />
+            </div>
           </div>
-        </div>
 
-        {/* ERS Bronze Award Recognition */}
-        <div className="mb-12">
-          <div className="bg-linear-to-br from-gold-500/10 to-gold-600/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/30">
-            <div className="flex flex-col md:flex-row gap-6 items-center">
-              <div className="shrink-0">
-                <div className="bg-white rounded-lg p-4 shadow-lg">
-                  <Image
-                    src="/images/ERS_Bronze_Banner.webp"
-                    alt="Defence Employer Recognition Scheme Bronze Award"
-                    width={300}
-                    height={100}
-                    className="w-full h-auto max-w-xs"
-                    priority
-                  />
+          {/* ERS Bronze Award Recognition */}
+          <div className="mb-12">
+            <div className="bg-linear-to-br from-gold-500/10 to-gold-600/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/30">
+              <div className="flex flex-col md:flex-row gap-6 items-center">
+                <div className="shrink-0">
+                  <div className="bg-white rounded-lg p-4 shadow-lg">
+                    <Image
+                      src="/images/ERS_Bronze_Banner.webp"
+                      alt="Defence Employer Recognition Scheme Bronze Award"
+                      width={300}
+                      height={100}
+                      className="w-full h-auto max-w-xs"
+                      priority
+                    />
+                  </div>
                 </div>
-              </div>
-              <div className="flex-1">
-                <h2 className="text-2xl font-serif font-bold text-gold-300 mb-4">
-                  Bronze Award Recognition
-                </h2>
-                <p className="text-white leading-relaxed mb-4">
-                  We are proud to have been awarded <strong>Bronze</strong> status in the Ministry of Defence's <strong>Employer Recognition Scheme (ERS)</strong>. This award recognises our commitment to supporting the Armed Forces community through our business practices, employment policies, and community engagement.
-                </p>
-                <p className="text-parchment-200 leading-relaxed text-sm">
-                  The ERS Bronze Award acknowledges employers who pledge their support to the Armed Forces community and demonstrate this through specific practices. While we're at the beginning of our journey, this recognition affirms our genuine commitment to upholding the principles of the Armed Forces Covenant as we grow.
-                </p>
+                <div className="flex-1">
+                  <h2 className="text-2xl font-serif font-bold text-gold-300 mb-4">
+                    Bronze Award Recognition
+                  </h2>
+                  <p className="text-white leading-relaxed mb-4">
+                    We are proud to have been awarded <strong>Bronze</strong> status in the Ministry of Defence's <strong>Employer Recognition Scheme (ERS)</strong>. This award recognises our commitment to supporting the Armed Forces community through our business practices, employment policies, and community engagement.
+                  </p>
+                  <p className="text-parchment-200 leading-relaxed text-sm">
+                    The ERS Bronze Award acknowledges employers who pledge their support to the Armed Forces community and demonstrate this through specific practices. While we're at the beginning of our journey, this recognition affirms our genuine commitment to upholding the principles of the Armed Forces Covenant as we grow.
+                  </p>
+                </div>
               </div>
             </div>
           </div>
         </div>
+      </section>
 
-        {/* Content */}
-        <div className="max-w-none">
+      <section className="band-light py-12">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="space-y-8">
-
             <section className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20">
               <h2 className="text-2xl font-serif font-bold text-white mb-4 pb-2 border-b border-gold-500/20">
                 Section 1: Principles of The Armed Forces Covenant
@@ -258,7 +254,13 @@ export default function ArmedForcesCovenant() {
                 <li>Leading by example in demonstrating how authentic military heritage can drive positive social impact</li>
               </ul>
             </section>
+          </div>
+        </div>
+      </section>
 
+      <section className="band-dark py-12">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="space-y-8">
             <section className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20">
               <h2 className="text-2xl font-serif font-bold text-white mb-4 pb-2 border-b border-gold-500/20">
                 2.2 Transparency and Accountability
@@ -297,19 +299,18 @@ export default function ArmedForcesCovenant() {
                 <li>Direct engagement at military community events</li>
               </ul>
             </section>
+          </div>
 
+          {/* Footer */}
+          <div className="mt-12 p-8 bg-jerry-green-800/40 backdrop-blur-sm rounded-xl border border-gold-500/20 text-center">
+            <p className="text-parchment-300 text-sm">
+              <strong className="text-gold-300">
+                This Armed Forces Covenant was established on {establishedDate} and represents our unwavering commitment to supporting the military community.
+              </strong>
+            </p>
           </div>
         </div>
-
-        {/* Footer */}
-        <div className="mt-12 p-8 bg-jerry-green-800/40 backdrop-blur-sm rounded-xl border border-gold-500/20 text-center">
-          <p className="text-parchment-300 text-sm">
-            <strong className="text-gold-300">
-              This Armed Forces Covenant was established on {establishedDate} and represents our unwavering commitment to supporting the military community.
-            </strong>
-          </p>
-        </div>
-      </div>
+      </section>
     </main>
   )
 }

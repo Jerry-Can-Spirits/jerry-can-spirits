@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Breadcrumbs from '@/components/Breadcrumbs'
+import SectionHeading from '@/components/SectionHeading'
 
 export default function GeneralEnquiries() {
   const [formData, setFormData] = useState({
@@ -73,35 +74,30 @@ export default function GeneralEnquiries() {
   }
 
   return (
-    <main className="min-h-screen">
-      {/* Breadcrumb */}
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
-        <Breadcrumbs
-          items={[
-            { label: 'Contact', href: '/contact' },
-            { label: 'General Enquiries' },
-          ]}
-        />
-      </div>
-
+    <main>
       {/* Page Hero */}
-      <section className="relative py-20 lg:py-32 overflow-hidden">
-        <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <div className="inline-block px-4 py-2 bg-jerry-green-800/60 backdrop-blur-sm rounded-full border border-gold-500/30 mb-6">
-              <span className="text-gold-300 text-sm font-semibold uppercase tracking-widest">
-                General Enquiries
-              </span>
-            </div>
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-serif font-bold text-parchment-50 mb-6">
-              Get in Touch
-            </h1>
-            <p className="text-xl text-parchment-200 max-w-3xl mx-auto leading-relaxed">
-              Have a question about our spirits, need product information, or want to know more about Jerry Can Spirits? We will get back to you within 24 hours.
-            </p>
-          </div>
+      <section className="band-dark pt-20 pb-16">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <Breadcrumbs
+            items={[
+              { label: 'Contact', href: '/contact' },
+              { label: 'General Enquiries' },
+            ]}
+            className="mb-8"
+          />
+          <SectionHeading
+            as="h1"
+            eyebrow="General Enquiries"
+            intro="Have a question about our spirits, need product information, or want to know more about Jerry Can Spirits? We will get back to you within 24 hours."
+          >
+            Get in Touch
+          </SectionHeading>
+        </div>
+      </section>
 
-          {/* Contact Form */}
+      {/* Contact Form */}
+      <section className="band-light py-16">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -237,9 +233,13 @@ export default function GeneralEnquiries() {
               </div>
             </form>
           </div>
+        </div>
+      </section>
 
-          {/* Alternative Contact Methods */}
-          <div className="mt-12 text-center">
+      {/* Alternative Contact Methods */}
+      <section className="band-dark py-16">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center">
             <p className="text-parchment-300 mb-4">
               Prefer to contact us directly?
             </p>

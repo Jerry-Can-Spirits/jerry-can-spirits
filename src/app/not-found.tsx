@@ -1,5 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import ScrollRow from '@/components/ScrollRow'
+import SectionHeading from '@/components/SectionHeading'
 
 export const metadata: Metadata = {
   title: '404 - Page Not Found',
@@ -45,25 +47,24 @@ const suggestedPages = [
 
 export default function NotFound() {
   return (
-    <main className="min-h-screen py-20">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-
-        {/* Hero */}
-        <section className="py-16 text-center">
-          <p className="text-gold-300 text-sm font-semibold uppercase tracking-widest mb-4">
-            404 - Page Not Found
-          </p>
-
-          <h1 className="text-4xl sm:text-5xl font-serif font-bold text-white mb-6">
+    <main>
+      {/* Hero */}
+      <section className="band-dark pt-20 pb-16">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <SectionHeading
+            as="h1"
+            eyebrow="404 - Page Not Found"
+            intro={
+              <>
+                The page you&apos;re looking for has been moved, removed, or never existed.
+                Let&apos;s get you back on track.
+              </>
+            }
+          >
             Lost on the
             <br />
             <span className="text-gold-300">Expedition?</span>
-          </h1>
-
-          <p className="text-xl text-parchment-300 max-w-2xl mx-auto leading-relaxed mb-8">
-            The page you&apos;re looking for has been moved, removed, or never existed.
-            Let&apos;s get you back on track.
-          </p>
+          </SectionHeading>
 
           <Link
             href="/"
@@ -71,20 +72,22 @@ export default function NotFound() {
           >
             Back to Base Camp
           </Link>
-        </section>
+        </div>
+      </section>
 
-        {/* Suggested Pages */}
-        <section className="py-12">
-          <h2 className="text-2xl font-serif font-bold text-white mb-8 text-center">
-            Where to next?
-          </h2>
+      {/* Suggested Pages */}
+      <section className="band-light py-16">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <SectionHeading>Where to next?</SectionHeading>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {suggestedPages.map((page) => (
+          <ScrollRow
+            ariaLabel="Where to next?"
+            cols="md:grid-cols-2 lg:grid-cols-3"
+            items={suggestedPages.map((page) => (
               <Link
                 key={page.href}
                 href={page.href}
-                className="block bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20 hover:border-gold-500/40 transition-all duration-300 group"
+                className="block h-full bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20 hover:border-gold-500/40 transition-all duration-300 group"
               >
                 <h3 className="text-lg font-semibold text-white group-hover:text-gold-300 transition-colors mb-2">
                   {page.name}
@@ -94,11 +97,13 @@ export default function NotFound() {
                 </p>
               </Link>
             ))}
-          </div>
-        </section>
+          />
+        </div>
+      </section>
 
-        {/* Search Prompt */}
-        <section className="py-12 text-center">
+      {/* Search Prompt */}
+      <section className="band-dark py-16">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
             <p className="text-parchment-300 mb-2">
               Looking for something specific?
@@ -107,9 +112,8 @@ export default function NotFound() {
               Use the search icon in the navigation bar or press <kbd className="px-2 py-1 bg-jerry-green-700 rounded-sm text-parchment-200 text-xs font-mono">Ctrl+K</kbd> to search the site.
             </p>
           </div>
-        </section>
-
-      </div>
+        </div>
+      </section>
     </main>
   )
 }

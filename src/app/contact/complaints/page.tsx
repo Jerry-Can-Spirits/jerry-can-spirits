@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Breadcrumbs from '@/components/Breadcrumbs'
+import SectionHeading from '@/components/SectionHeading'
 import { DELIVERY_WINDOW_LABEL } from '@/lib/delivery'
 
 export default function Complaints() {
@@ -80,36 +81,31 @@ export default function Complaints() {
   }
 
   return (
-    <main className="min-h-screen">
-      {/* Breadcrumb */}
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
-        <Breadcrumbs
-          items={[
-            { label: 'Contact', href: '/contact' },
-            { label: 'Complaints' },
-          ]}
-        />
-      </div>
-
+    <main>
       {/* Page Hero */}
-      <section className="relative py-20 lg:py-32 overflow-hidden">
-        <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <div className="inline-block px-4 py-2 bg-jerry-green-800/60 backdrop-blur-sm rounded-full border border-gold-500/30 mb-6">
-              <span className="text-gold-300 text-sm font-semibold uppercase tracking-widest">
-                Customer Service
-              </span>
-            </div>
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-serif font-bold text-parchment-50 mb-6">
-              Complaints & Issues
-            </h1>
-            <p className="text-xl text-parchment-200 max-w-3xl mx-auto leading-relaxed">
-              If something is not right, tell us. We will investigate and get back to you within 24 hours.
-            </p>
-          </div>
+      <section className="band-dark pt-20 pb-16">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <Breadcrumbs
+            items={[
+              { label: 'Contact', href: '/contact' },
+              { label: 'Complaints' },
+            ]}
+            className="mb-8"
+          />
+          <SectionHeading
+            as="h1"
+            eyebrow="Customer Service"
+            intro="If something is not right, tell us. We will investigate and get back to you within 24 hours."
+          >
+            Complaints & Issues
+          </SectionHeading>
+        </div>
+      </section>
 
-          {/* Quick Resolution Section */}
-          <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20 mb-8">
+      {/* Quick Resolution Section */}
+      <section className="band-light py-16">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
             <h2 className="text-xl font-serif font-bold text-parchment-50 mb-4">
               Common Issues & Quick Solutions
             </h2>
@@ -132,8 +128,12 @@ export default function Complaints() {
               </div>
             </div>
           </div>
+        </div>
+      </section>
 
-          {/* Complaint Form */}
+      {/* Complaint Form */}
+      <section className="band-dark py-16">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
             <h2 className="text-2xl font-serif font-bold text-parchment-50 mb-6">
               Submit a Complaint
@@ -318,9 +318,13 @@ export default function Complaints() {
               </div>
             </form>
           </div>
+        </div>
+      </section>
 
-          {/* Contact Information */}
-          <div className="mt-12 text-center">
+      {/* Contact Information */}
+      <section className="band-light py-16">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center">
             <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
               <h3 className="text-lg font-serif font-bold text-parchment-50 mb-4">
                 Need Immediate Assistance?
