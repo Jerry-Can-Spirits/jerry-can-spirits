@@ -12,10 +12,10 @@
 // them without remapping. Product IDs are the numeric Shopify IDs, which is
 // what the Klaviyo catalogue sync keys on.
 //
-// Consent: KlaviyoScript loads the SDK only after Cookiebot marketing or
-// statistics consent. The send helper applies the same test and drops the
-// event otherwise, so nothing is queued for a visitor who declined. Events for
-// a visitor Klaviyo cannot identify are discarded on its side, which is
+// Consent: KlaviyoScript loads the SDK only after Cookiebot marketing
+// consent. The send helper applies the same test and drops the event
+// otherwise, so nothing is queued for a visitor who declined. Events for a
+// visitor Klaviyo cannot identify are discarded on its side, which is
 // expected: flows attach to known profiles only.
 import { BASE_URL } from './jsonLd'
 import type { Cart, CartLine } from './shopify'
@@ -101,10 +101,14 @@ function categories(productType?: string): string[] {
   return productType ? [productType] : []
 }
 
-/** Same rule as KlaviyoScript: marketing or statistics consent. */
+/**
+ * Same rule as KlaviyoScript: Cookiebot marketing consent, and only that.
+ * Klaviyo is a marketing vendor and the cookie policy lists it as one, so
+ * statistics consent does not cover it. Was marketing-or-statistics until
+ * 25 Sep 2026.
+ */
 export function hasKlaviyoConsent(w: KlaviyoWindow | undefined): boolean {
-  const c = w?.Cookiebot?.consent
-  return Boolean(c?.marketing || c?.statistics)
+  return Boolean(w?.Cookiebot?.consent?.marketing)
 }
 
 /** Queues an onsite call if consent is present and the SDK or its stub exists. */
