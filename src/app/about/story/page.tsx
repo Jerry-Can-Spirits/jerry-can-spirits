@@ -163,7 +163,7 @@ export default function OurStory() {
       {/* Section 1: From the Trenches to Adventure */}
       <section className="band-light py-16">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <SectionHeading intro="Service with the Royal Corps of Signals took us to places where your equipment really gets put to the test. Over 17 years between us, and that background shapes everything about how we approach our craft.">
+          <SectionHeading eyebrow="The Background" intro="Service with the Royal Corps of Signals took us to places where your equipment really gets put to the test. Over 17 years between us, and that background shapes everything about how we approach our craft.">
             What Service Taught Us
           </SectionHeading>
 
@@ -278,7 +278,7 @@ export default function OurStory() {
       <section className="band-dark py-16">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Section 2: Turning Dreams into Reality */}
-          <SectionHeading intro="The point at which we stopped just dreaming about this and started actually doing it, with a bit of purpose to boot.">
+          <SectionHeading eyebrow="The Decision" intro="The point at which we stopped just dreaming about this and started actually doing it, with a bit of purpose to boot.">
             When We Stopped Talking and Started
           </SectionHeading>
 
@@ -337,7 +337,7 @@ export default function OurStory() {
 
           {/* Section 3: Building Something from Scratch */}
           <div className="mt-20">
-            <SectionHeading intro="The gritty reality of bootstrapping a business yourself: stuck in a home office, learning as you go, and somehow building something you can be proud of.">
+            <SectionHeading eyebrow="The Build" intro="The gritty reality of bootstrapping a business yourself: stuck in a home office, learning as you go, and somehow building something you can be proud of.">
               Building Something from Scratch
             </SectionHeading>
 
@@ -461,7 +461,7 @@ export default function OurStory() {
       {/* Section 4: The Jerry Can Promise */}
       <section className="band-light py-16">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <SectionHeading intro="The jerry can set a standard: reliable, functional, built to last. We hold ourselves to it.">
+          <SectionHeading eyebrow="The Standard" intro="The jerry can set a standard: reliable, functional, built to last. We hold ourselves to it.">
             The Jerry Can Promise
           </SectionHeading>
 
@@ -558,7 +558,7 @@ export default function OurStory() {
           Far" were chosen for a dark ground. */}
       <section className="band-dark py-16">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <SectionHeading
+          <SectionHeading eyebrow="Where Next"
             intro={
               <>
                 Where we&apos;re headed. Honest about where we are now. Clear about where we want to go.
@@ -696,7 +696,7 @@ export default function OurStory() {
       {/* FAQ Section with Schema */}
       <section className="band-light py-16">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <SectionHeading intro="Common questions about Jerry Can Spirits and our story.">
+          <SectionHeading eyebrow="Questions" intro="Common questions about Jerry Can Spirits and our story.">
             Frequently Asked Questions
           </SectionHeading>
 
@@ -729,7 +729,7 @@ export default function OurStory() {
       <section className="band-dark py-16">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-12 border border-gold-500/20 text-center">
-            <SectionHeading
+            <SectionHeading eyebrow="Join Us"
               intro={
                 <>
                   We&apos;re just getting started. Join us as we build genuinely good rum for people who expect quality and don&apos;t accept shortcuts. Having veterans behind the scenes means every bottle is made to a standard we&apos;d stake our name on.

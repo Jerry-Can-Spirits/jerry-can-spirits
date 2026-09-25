@@ -267,7 +267,7 @@ export default function FriendsPage() {
             {/* Mission Statement */}
             <div className="max-w-4xl mx-auto">
               <div className="bg-jerry-green-800/20 border border-gold-500/30 rounded-lg p-8">
-                <SectionHeading
+                <SectionHeading eyebrow="Working Together"
                   intro={
                     <>
                       We&apos;re a small team. We rely on good partners to make this work. From our distilling partner to Harlequin who sort our packaging, every partner contributes something we couldn&apos;t do alone.
@@ -288,7 +288,7 @@ export default function FriendsPage() {
         {partners.filter(p => p.featured).length > 0 && (
           <section className="band-light py-16">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-              <SectionHeading>
+              <SectionHeading eyebrow="The Partners">
                 Featured Partners
               </SectionHeading>
               <div className="grid grid-cols-1 gap-8">
@@ -378,7 +378,7 @@ export default function FriendsPage() {
               {/* Community & Grassroots */}
               {communityPartners.length > 0 && (
                 <div>
-                  <SectionHeading
+                  <SectionHeading eyebrow="The Community"
                     intro={
                       <>
                         Beyond our trade partnerships, we back the people and organisations that matter to us. As a veteran-owned business, community isn&apos;t a marketing angle. It&apos;s just what we do.
@@ -500,7 +500,7 @@ export default function FriendsPage() {
               {/* All Partners */}
               {partners.filter(p => !p.featured).length > 0 && (
                 <div>
-                  <SectionHeading>
+                  <SectionHeading eyebrow="The Wider Circle">
                     Our Partners
                   </SectionHeading>
                   <ScrollRow
@@ -551,7 +551,7 @@ export default function FriendsPage() {
               {/* Brand Ambassadors */}
               {brandAmbassadors.length > 0 && (
                 <div>
-                  <SectionHeading intro="Ambassadors take Jerry Can Spirits with them and speak about it in their own words. More will follow.">
+                  <SectionHeading eyebrow="The Ambassadors" intro="Ambassadors take Jerry Can Spirits with them and speak about it in their own words. More will follow.">
                     Brand Ambassadors
                   </SectionHeading>
                   <ScrollRow
@@ -609,7 +609,7 @@ export default function FriendsPage() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             {/* Become a Friend CTA */}
             <div className="text-center p-12 bg-linear-to-br from-jerry-green-800/30 to-jerry-green-900/30 border border-gold-500/30 rounded-lg mb-16">
-              <SectionHeading
+              <SectionHeading eyebrow="Join Us"
                 intro={
                   <>
                     We work with businesses and people who build things properly. Distilleries, suppliers, content creators. If what you do aligns with how we think, we&apos;re interested.
@@ -725,7 +725,7 @@ export default function FriendsPage() {
               />
 
               <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
-                <SectionHeading intro="Common questions about working with us">
+                <SectionHeading eyebrow="Questions" intro="Common questions about working with us">
                   Partnership Questions
                 </SectionHeading>
 
@@ -763,7 +763,7 @@ export default function FriendsPage() {
 
             {/* Next Step CTA */}
             <div className="text-center p-12 bg-jerry-green-800/20 border border-gold-500/20 rounded-lg">
-              <SectionHeading intro="Learn more about Jerry Can Spirits, our products, and how we work in our general FAQ section">
+              <SectionHeading eyebrow="More Help" intro="Learn more about Jerry Can Spirits, our products, and how we work in our general FAQ section">
                 More Questions?
               </SectionHeading>
               <Link
