@@ -5,6 +5,9 @@ import { client } from '@/sanity/lib/client'
 import { fieldManualCountsQuery } from '@/sanity/queries'
 import Breadcrumbs from '@/components/Breadcrumbs'
 import ScrollReveal from '@/components/ScrollReveal'
+import SectionHeading from '@/components/SectionHeading'
+import ScrollRow from '@/components/ScrollRow'
+import FAQAccordion from '@/components/FAQAccordion'
 import { baseOpenGraph, OG_IMAGE } from '@/lib/og'
 import { safeJsonLd } from '@/lib/jsonLd'
 
@@ -12,6 +15,78 @@ import { safeJsonLd } from '@/lib/jsonLd'
 function roundDownToTen(n: number): number {
   return Math.floor(n / 10) * 10
 }
+
+// One list feeds both the accordion and the FAQPage schema, so the answers a
+// reader sees and the answers a crawler reads cannot drift. An answer is a
+// run of plain text, links and emphasised words; the schema flattens the runs
+// to text. A link may carry the wording the schema uses where its anchor text
+// alone would not name the destination.
+type AnswerRun = string | { text: string; href?: string; strong?: true; schemaText?: string }
+
+const faqs: { question: string; answer: AnswerRun[] }[] = [
+  {
+    question: 'Is the Field Manual free?',
+    answer: [
+      'Yes, completely free. All recipes, equipment guides, and ingredient information are available without signing up or paying anything. We built it to help people make better drinks - selling rum is our business, not selling content.',
+    ],
+  },
+  {
+    question: 'Do I need to buy Jerry Can rum to use the recipes?',
+    answer: [
+      "No. While we'd love you to try ",
+      { text: 'our rum', href: '/shop/spirits/' },
+      ', every recipe works with any quality spirit in that category. We include notes on what to look for in substitutes when relevant. The Field Manual is useful whether you buy from us or not.',
+    ],
+  },
+  {
+    question: 'What equipment do I need to start making cocktails?',
+    answer: [
+      "At minimum: a jigger (or measuring cup), something to stir with, and glasses. A shaker helps but isn't essential for many drinks. Our ",
+      { text: 'equipment section', href: '/field-manual/equipment/' },
+      ' has a starter kit guide that covers what to buy first and what can wait.',
+    ],
+  },
+  {
+    question: 'How are cocktail difficulty ratings determined?',
+    answer: [
+      'Based on technique required and ingredient accessibility. ',
+      { text: 'Novice', strong: true },
+      ' means minimal technique and common ingredients - anyone can make these. ',
+      { text: 'Wayfinder', strong: true },
+      ' involves shaking, straining, or a specialty ingredient or two. ',
+      { text: 'Trailblazer', strong: true },
+      ' includes advanced techniques or multiple specialty ingredients.',
+    ],
+  },
+  {
+    question: 'Can I suggest a cocktail or ingredient to add?',
+    answer: [
+      "Yes - we're always expanding the Field Manual. ",
+      { text: 'Get in touch', href: '/contact/', schemaText: 'Get in touch through our contact page' },
+      ' with suggestions. We prioritise recipes that work well at home with accessible ingredients.',
+    ],
+  },
+]
+
+const answerText = (runs: AnswerRun[]) =>
+  runs.map((run) => (typeof run === 'string' ? run : run.schemaText ?? run.text)).join('')
+
+const answerNode = (runs: AnswerRun[]) =>
+  runs.map((run, i) => {
+    if (typeof run === 'string') return run
+    if (run.href) {
+      return (
+        <Link key={i} href={run.href} className="text-gold-400 hover:text-gold-300 underline">
+          {run.text}
+        </Link>
+      )
+    }
+    return (
+      <strong key={i} className="text-gold-400">
+        {run.text}
+      </strong>
+    )
+  })
 
 export const metadata: Metadata = {
   title: "Field Manual - Cocktail Recipes & Bar Guides",
@@ -38,55 +113,45 @@ export default async function FieldManualHome() {
   const counts = await client.fetch<{ cocktails: number; ingredients: number; equipment: number }>(fieldManualCountsQuery, {}, { next: { revalidate: 3600 } })
 
   return (
-    <main className="min-h-screen py-20">
-      {/* Breadcrumb */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
-        <Breadcrumbs
-          items={[
-            { label: 'Field Manual' },
-          ]}
-        />
-      </div>
+    <main>
+      {/* Hero Section. Breadcrumbs, title, image and the stats strip share
+          the page's first dark band; the strip overlaps the image's foot. */}
+      <section className="band-dark pt-20 pb-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <Breadcrumbs
+            items={[
+              { label: 'Field Manual' },
+            ]}
+            className="mb-8"
+          />
 
-      {/* Hero Section */}
-      <section className="relative min-h-[80vh] flex items-center justify-center overflow-hidden">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="mb-12 relative">
-            <div className="inline-block px-4 py-2 bg-jerry-green-800/60 backdrop-blur-sm rounded-full border border-gold-500/30 mb-6">
-              <span className="text-gold-300 text-sm font-semibold uppercase tracking-widest">
-                Field Manual
-              </span>
-            </div>
-            
-            {/* Hero Image */}
-            <div className="relative w-full max-w-4xl mx-auto h-48 sm:h-64 md:h-80 lg:h-96 rounded-lg overflow-hidden border border-gold-500/20 mb-8 shadow-2xl">
-              <Image
-                src="/images/hero/Cocktail_Hero.webp"
-                alt="Jerry Can Spirits Field Manual - Cocktail Guide"
-                fill
-                className="object-cover"
-                sizes="(max-width: 768px) 100vw, 896px"
-                priority
-              />
-              <div className="absolute inset-0 bg-linear-to-t from-jerry-green-900/60 to-transparent" />
-            </div>
-          </div>
-
-          <h1 className="text-4xl sm:text-6xl font-serif font-bold text-white mb-6">
+          <SectionHeading
+            as="h1"
+            eyebrow="Field Manual"
+            intro="Everything you need to make proper cocktails at home. Recipes that actually work, equipment recommendations that won't bankrupt you, and ingredient guides written in plain English. We built this because most cocktail resources are either gatekeeping nonsense or trying to sell you something. This one's free - we just want you to make great drinks."
+          >
             The Cocktail Guide
             <br />
             <span className="text-gold-300">From First Pour to Proper Drink</span>
-          </h1>
-          
-          <p className="text-xl text-parchment-300 max-w-3xl mx-auto leading-relaxed mb-8">
-            Everything you need to make proper cocktails at home. Recipes that actually work, equipment recommendations that won't bankrupt you, and ingredient guides written in plain English. We built this because most cocktail resources are either gatekeeping nonsense or trying to sell you something. This one's free - we just want you to make great drinks.
-          </p>
+          </SectionHeading>
+
+          {/* Hero Image */}
+          <div className="relative w-full max-w-4xl mx-auto h-48 sm:h-64 md:h-80 lg:h-96 rounded-lg overflow-hidden border border-gold-500/20 shadow-2xl">
+            <Image
+              src="/images/hero/Cocktail_Hero.webp"
+              alt="Jerry Can Spirits Field Manual - Cocktail Guide"
+              fill
+              className="object-cover"
+              sizes="(max-width: 768px) 100vw, 896px"
+              priority
+            />
+            <div className="absolute inset-0 bg-linear-to-t from-jerry-green-900/60 to-transparent" />
+          </div>
         </div>
-      </section>
 
       {/* Stats Banner */}
       <ScrollReveal>
-      <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 -mt-8 mb-8 relative z-10">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 -mt-8 relative z-10">
         <div className="bg-linear-to-r from-jerry-green-800/80 via-jerry-green-700/80 to-jerry-green-800/80 backdrop-blur-sm rounded-xl border border-gold-500/30 py-6 px-8">
           <div className="grid grid-cols-3 divide-x divide-gold-500/30">
             <div className="text-center px-4">
@@ -109,15 +174,17 @@ export default async function FieldManualHome() {
             </div>
           </div>
         </div>
-      </section>
+      </div>
       </ScrollReveal>
+      </section>
 
-      {/* Philosophy Section */}
-      <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
+      {/* Philosophy Section and the companion book: the first light band. */}
+      <section className="band-light py-12">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
         <div className="text-center">
-          <h2 className="text-2xl sm:text-3xl font-serif font-bold text-white mb-6">
+          <SectionHeading>
             Great Drinks, <span className="text-gold-300">Without the Gatekeeping</span>
-          </h2>
+          </SectionHeading>
           <div className="space-y-4 text-parchment-300 leading-relaxed">
             <p>
               You don't need a cocktail certification or a shelf full of obscure spirits to make exceptional drinks at home.
@@ -133,10 +200,10 @@ export default async function FieldManualHome() {
             </p>
           </div>
         </div>
-      </section>
+      </div>
 
       {/* First Pour Companion Book */}
-      <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <Link
           href="/first-pour/"
           className="group block bg-linear-to-r from-jerry-green-800/60 to-jerry-green-800/40 border border-gold-500/30 rounded-xl p-6 sm:p-8 hover:border-gold-400/50 transition-colors"
@@ -164,15 +231,20 @@ export default async function FieldManualHome() {
             </div>
           </div>
         </Link>
+      </div>
       </section>
 
-      {/* Navigation Cards */}
-      <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid sm:grid-cols-2 lg:grid-cols-2 gap-8 lg:items-stretch">
+      {/* Navigation Cards: back to dark. */}
+      <section className="band-dark py-12">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <ScrollRow
+          ariaLabel="Field Manual sections"
+          cols="md:grid-cols-2"
+          items={[
           
-          {/* Cocktails Section */}
-          <ScrollReveal delay={0}>
-          <Link href="/field-manual/cocktails/" className="group h-full">
+          /* Cocktails Section */
+          <ScrollReveal key="cocktails" delay={0} className="h-full">
+          <Link href="/field-manual/cocktails/" className="group block h-full">
             <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20 hover:border-gold-400/40 transition-all duration-300 transform hover:scale-105 hover:shadow-2xl relative overflow-hidden h-full flex flex-col">
               {/* Parchment texture */}
               <div className="absolute inset-0 bg-linear-to-br from-amber-100/5 to-amber-200/10 opacity-50"></div>
@@ -208,12 +280,11 @@ export default async function FieldManualHome() {
               </div>
             </div>
           </Link>
+          </ScrollReveal>,
 
-          </ScrollReveal>
-
-          {/* Ingredients Section */}
-          <ScrollReveal delay={1}>
-          <Link href="/field-manual/ingredients/" className="group h-full">
+          /* Ingredients Section */
+          <ScrollReveal key="ingredients" delay={1} className="h-full">
+          <Link href="/field-manual/ingredients/" className="group block h-full">
             <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20 hover:border-gold-400/40 transition-all duration-300 transform hover:scale-105 hover:shadow-2xl relative overflow-hidden h-full flex flex-col">
               {/* Parchment texture */}
               <div className="absolute inset-0 bg-linear-to-br from-amber-100/5 to-amber-200/10 opacity-50"></div>
@@ -249,12 +320,11 @@ export default async function FieldManualHome() {
               </div>
             </div>
           </Link>
+          </ScrollReveal>,
 
-          </ScrollReveal>
-
-          {/* Equipment Section */}
-          <ScrollReveal delay={2}>
-          <Link href="/field-manual/equipment/" className="group h-full">
+          /* Equipment Section */
+          <ScrollReveal key="equipment" delay={2} className="h-full">
+          <Link href="/field-manual/equipment/" className="group block h-full">
             <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20 hover:border-gold-400/40 transition-all duration-300 transform hover:scale-105 hover:shadow-2xl relative overflow-hidden h-full flex flex-col">
               {/* Parchment texture */}
               <div className="absolute inset-0 bg-linear-to-br from-amber-100/5 to-amber-200/10 opacity-50"></div>
@@ -290,11 +360,11 @@ export default async function FieldManualHome() {
               </div>
             </div>
           </Link>
-          </ScrollReveal>
+          </ScrollReveal>,
 
-          {/* What's in my bar Section */}
-          <ScrollReveal delay={3}>
-          <Link href="/field-manual/whats-in-my-bar/" className="group h-full">
+          /* What's in my bar Section */
+          <ScrollReveal key="whats-in-my-bar" delay={3} className="h-full">
+          <Link href="/field-manual/whats-in-my-bar/" className="group block h-full">
             <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20 hover:border-gold-400/40 transition-all duration-300 transform hover:scale-105 hover:shadow-2xl relative overflow-hidden h-full flex flex-col">
               <div className="absolute inset-0 bg-linear-to-br from-amber-100/5 to-amber-200/10 opacity-50"></div>
               <div className="relative z-10">
@@ -320,11 +390,17 @@ export default async function FieldManualHome() {
               </div>
             </div>
           </Link>
-          </ScrollReveal>
-        </div>
+          </ScrollReveal>,
+          ]}
+        />
+      </div>
+      </section>
 
-        {/* Call to Action */}
-        <div className="text-center mt-16">
+      {/* Call to Action: a light band of its own, so the difficulty table
+          and the FAQ that follow return to dark. */}
+      <section className="band-light py-12">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center">
           <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20 relative overflow-hidden">
             <div className="absolute inset-0 bg-linear-to-br from-amber-100/5 to-amber-200/10 opacity-50"></div>
             <div className="relative z-10">
@@ -340,11 +416,14 @@ export default async function FieldManualHome() {
             </div>
           </div>
         </div>
+      </div>
       </section>
 
-      {/* Difficulty Comparison Table */}
+      {/* Difficulty Comparison Table and the FAQ: the closing dark band. The
+          difficulty colours are read against dark ground, so they stay here. */}
+      <section className="band-dark py-12">
       <ScrollReveal>
-      <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
           <h2 className="text-2xl sm:text-3xl font-serif font-bold text-white mb-2 text-center">
             Cocktail Difficulty Levels
@@ -445,109 +524,37 @@ export default async function FieldManualHome() {
             Start with Novice recipes and work your way up as you get comfortable with the basics.
           </p>
         </div>
-      </section>
+      </div>
       </ScrollReveal>
 
       {/* FAQ Section */}
-      <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        {/* FAQ Schema */}
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mt-16">
+        {/* FAQ Schema, from the same list the accordion renders. */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: safeJsonLd({
               "@context": "https://schema.org",
               "@type": "FAQPage",
-              "mainEntity": [
-                {
-                  "@type": "Question",
-                  "name": "Is the Field Manual free?",
-                  "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Yes, completely free. All recipes, equipment guides, and ingredient information are available without signing up or paying anything. We built it to help people make better drinks - selling rum is our business, not selling content."
-                  }
-                },
-                {
-                  "@type": "Question",
-                  "name": "Do I need to buy Jerry Can rum to use the recipes?",
-                  "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "No. While we'd love you to try our rum, every recipe works with any quality spirit in that category. We include notes on what to look for in substitutes when relevant. The Field Manual is useful whether you buy from us or not."
-                  }
-                },
-                {
-                  "@type": "Question",
-                  "name": "What equipment do I need to start making cocktails?",
-                  "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "At minimum: a jigger (or measuring cup), something to stir with, and glasses. A shaker helps but isn't essential for many drinks. Our equipment section has a starter kit guide that covers what to buy first and what can wait."
-                  }
-                },
-                {
-                  "@type": "Question",
-                  "name": "How are cocktail difficulty ratings determined?",
-                  "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Based on technique required and ingredient accessibility. Novice means minimal technique and common ingredients - anyone can make these. Wayfinder involves shaking, straining, or a specialty ingredient or two. Trailblazer includes advanced techniques or multiple specialty ingredients."
-                  }
-                },
-                {
-                  "@type": "Question",
-                  "name": "Can I suggest a cocktail or ingredient to add?",
-                  "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Yes - we're always expanding the Field Manual. Get in touch through our contact page with suggestions. We prioritise recipes that work well at home with accessible ingredients."
-                  }
+              "mainEntity": faqs.map((faq) => ({
+                "@type": "Question",
+                "name": faq.question,
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": answerText(faq.answer)
                 }
-              ]
+              }))
             })
           }}
         />
 
-        <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
-          <h2 className="text-3xl font-serif font-bold text-white mb-2">
-            Questions About the Field Manual
-          </h2>
-          <p className="text-parchment-400 mb-8">
-            What people usually want to know
-          </p>
-
-          <div className="space-y-6">
-            <div className="border-b border-gold-500/10 pb-6">
-              <h3 className="text-lg font-semibold text-gold-300 mb-3">Is the Field Manual free?</h3>
-              <p className="text-parchment-200 leading-relaxed">
-                Yes, completely free. All recipes, equipment guides, and ingredient information are available without signing up or paying anything. We built it to help people make better drinks - selling rum is our business, not selling content.
-              </p>
-            </div>
-
-            <div className="border-b border-gold-500/10 pb-6">
-              <h3 className="text-lg font-semibold text-gold-300 mb-3">Do I need to buy Jerry Can rum to use the recipes?</h3>
-              <p className="text-parchment-200 leading-relaxed">
-                No. While we'd love you to try <Link href="/shop/spirits/" className="text-gold-400 hover:text-gold-300 underline">our rum</Link>, every recipe works with any quality spirit in that category. We include notes on what to look for in substitutes when relevant. The Field Manual is useful whether you buy from us or not.
-              </p>
-            </div>
-
-            <div className="border-b border-gold-500/10 pb-6">
-              <h3 className="text-lg font-semibold text-gold-300 mb-3">What equipment do I need to start making cocktails?</h3>
-              <p className="text-parchment-200 leading-relaxed">
-                At minimum: a jigger (or measuring cup), something to stir with, and glasses. A shaker helps but isn't essential for many drinks. Our <Link href="/field-manual/equipment/" className="text-gold-400 hover:text-gold-300 underline">equipment section</Link> has a starter kit guide that covers what to buy first and what can wait.
-              </p>
-            </div>
-
-            <div className="border-b border-gold-500/10 pb-6">
-              <h3 className="text-lg font-semibold text-gold-300 mb-3">How are cocktail difficulty ratings determined?</h3>
-              <p className="text-parchment-200 leading-relaxed">
-                Based on technique required and ingredient accessibility. <strong className="text-gold-400">Novice</strong> means minimal technique and common ingredients - anyone can make these. <strong className="text-gold-400">Wayfinder</strong> involves shaking, straining, or a specialty ingredient or two. <strong className="text-gold-400">Trailblazer</strong> includes advanced techniques or multiple specialty ingredients.
-              </p>
-            </div>
-
-            <div>
-              <h3 className="text-lg font-semibold text-gold-300 mb-3">Can I suggest a cocktail or ingredient to add?</h3>
-              <p className="text-parchment-200 leading-relaxed">
-                Yes - we're always expanding the Field Manual. <Link href="/contact/" className="text-gold-400 hover:text-gold-300 underline">Get in touch</Link> with suggestions. We prioritise recipes that work well at home with accessible ingredients.
-              </p>
-            </div>
-          </div>
-        </div>
+        <SectionHeading intro="What people usually want to know">
+          Questions About the Field Manual
+        </SectionHeading>
+        <FAQAccordion
+          items={faqs.map((faq) => ({ question: faq.question, answer: answerNode(faq.answer) }))}
+        />
+      </div>
       </section>
     </main>
   )

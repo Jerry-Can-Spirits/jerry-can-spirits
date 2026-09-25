@@ -5,6 +5,7 @@ import { useRouter, usePathname } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
 import BackToTop from '@/components/BackToTop'
+import ScrollRow from '@/components/ScrollRow'
 import { facetForBaseSpirit } from '@/lib/cocktail-facets'
 
 // Ratings type
@@ -408,6 +409,13 @@ export default function CocktailsClient({
     { value: 'trailblazer', label: 'Trailblazer' }
   ]
 
+  // Named once: the heading over the grid and the row's own label.
+  const listHeading = selectedFamily === 'all' && selectedSpirit === 'all'
+    ? 'All Cocktails'
+    : selectedFamily !== 'all'
+      ? families.find(f => f.value === selectedFamily)?.label
+      : spirits.find(s => s.value === selectedSpirit)?.label
+
   if (cocktails.length === 0) {
     return (
       <main className="min-h-screen py-20">
@@ -430,9 +438,12 @@ export default function CocktailsClient({
   }
 
   return (
-    <main className="min-h-screen pb-20">
-      {/* Filters Section */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
+    <main>
+      {/* Filters Section. Continues the hero's dark band; the featured row
+          below is the page's light band and the full grid returns to dark,
+          so a long listing has somewhere to mark progress against. */}
+      <section className="band-dark pb-12">
+       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
           <div className="space-y-6">
             {/* Search Bar */}
@@ -583,21 +594,25 @@ export default function CocktailsClient({
             </div>
           </div>
         </div>
+       </div>
       </section>
 
       {/* Featured Cocktails */}
       {featuredCocktails.length > 0 && (
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
+        <section className="band-light py-12">
+         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl font-serif font-bold text-gold-400 mb-6 flex items-center gap-2">
             <span className="text-gold-400">★</span>
             Featured Cocktails
           </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {featuredCocktails.map((cocktail) => (
+          <ScrollRow
+            ariaLabel="Featured cocktails"
+            cols="md:grid-cols-2 lg:grid-cols-4"
+            items={featuredCocktails.map((cocktail) => (
               <Link
                 key={cocktail._id}
                 href={`/field-manual/cocktails/${cocktail.slug.current}/`}
-                className="group bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl border border-gold-500/30 overflow-hidden hover:border-gold-400/60 transition-all duration-300 hover:scale-105 hover:shadow-xl"
+                className="group block h-full bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl border border-gold-500/30 overflow-hidden hover:border-gold-400/60 transition-all duration-300 hover:scale-105 hover:shadow-xl"
               >
                 {/* Image */}
                 {cocktail.image && (
@@ -672,18 +687,16 @@ export default function CocktailsClient({
                 </div>
               </Link>
             ))}
-          </div>
+          />
+         </div>
         </section>
       )}
 
       {/* All Cocktails Grid */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="band-dark py-12">
+       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <h2 className="text-3xl font-serif font-bold text-white mb-6">
-          {selectedFamily === 'all' && selectedSpirit === 'all'
-            ? 'All Cocktails'
-            : selectedFamily !== 'all'
-              ? families.find(f => f.value === selectedFamily)?.label
-              : spirits.find(s => s.value === selectedSpirit)?.label}
+          {listHeading}
         </h2>
 
         {filteredCocktails.length === 0 ? (
@@ -704,12 +717,14 @@ export default function CocktailsClient({
             </button>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {visibleCocktails.map((cocktail) => (
+          <ScrollRow
+            ariaLabel={listHeading}
+            cols="md:grid-cols-2 lg:grid-cols-4"
+            items={visibleCocktails.map((cocktail) => (
               <Link
                 key={cocktail._id}
                 href={`/field-manual/cocktails/${cocktail.slug.current}/`}
-                className="group bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl border border-gold-500/20 overflow-hidden hover:border-gold-400/40 transition-all duration-300 hover:scale-105"
+                className="group block h-full bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl border border-gold-500/20 overflow-hidden hover:border-gold-400/40 transition-all duration-300 hover:scale-105"
               >
                 {/* Image */}
                 {cocktail.image && (
@@ -781,7 +796,7 @@ export default function CocktailsClient({
                 </div>
               </Link>
             ))}
-          </div>
+          />
         )}
 
         {/* Show More Button */}
@@ -801,6 +816,7 @@ export default function CocktailsClient({
             </button>
           </div>
         )}
+       </div>
       </section>
 
       {/* Back to Top Button */}

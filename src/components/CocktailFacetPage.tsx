@@ -4,6 +4,8 @@ import Breadcrumbs from '@/components/Breadcrumbs'
 import BackToTop from '@/components/BackToTop'
 import StructuredData from '@/components/StructuredData'
 import FacetFilter from '@/components/FacetFilter'
+import ScrollRow from '@/components/ScrollRow'
+import SectionHeading from '@/components/SectionHeading'
 import {
   FACET_PAGE_SIZE,
   MEMBER_LABELS,
@@ -87,55 +89,67 @@ export default async function CocktailFacetPage({
   }
 
   return (
-    <main className="min-h-screen py-20">
+    <main>
       {/* ItemList only when the page is indexable: describing a page to a
           crawler that has been told not to index it is a mixed signal. */}
       {indexable && <StructuredData data={itemListSchema} id="facet-itemlist" />}
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
-        <Breadcrumbs
-          items={[
-            { label: 'Field Manual', href: '/field-manual' },
-            { label: 'Cocktails', href: '/field-manual/cocktails' },
-            { label: facet.label },
-          ]}
-        />
-      </div>
+      <section className="band-dark pt-20 pb-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <Breadcrumbs
+            items={[
+              { label: 'Field Manual', href: '/field-manual' },
+              { label: 'Cocktails', href: '/field-manual/cocktails' },
+              { label: facet.label },
+            ]}
+            className="mb-8"
+          />
 
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-10">
-        <h1 className="text-4xl sm:text-5xl font-serif font-bold text-white mb-4">
-          {copy?.h1 && page === 1 ? copy.h1 : headingFor(facet, page)}
-        </h1>
-        <p className="text-parchment-400">
-          {facet.count} {facet.count === 1 ? 'recipe' : 'recipes'}
-          {pages > 1 ? `, page ${page} of ${pages}` : ''}
-        </p>
+          <SectionHeading
+            as="h1"
+           
+            intro={
+              <>
+                {facet.count} {facet.count === 1 ? 'recipe' : 'recipes'}
+                {pages > 1 ? `, page ${page} of ${pages}` : ''}
+              </>
+            }
+          >
+            {copy?.h1 && page === 1 ? copy.h1 : headingFor(facet, page)}
+          </SectionHeading>
 
-        {/* Rendered only where approved copy exists. A facet nobody has written
-            gets its heading and its grid and nothing invented in between. */}
-        {intro && (
-          <div className="mt-6 max-w-3xl space-y-4">
-            {intro.split(/\n\s*\n/).map((para, i) => (
-              <p key={i} className="text-parchment-300 leading-relaxed">
-                {para}
-              </p>
-            ))}
-          </div>
-        )}
+          {/* Rendered only where approved copy exists. A facet nobody has written
+              gets its heading and its grid and nothing invented in between. */}
+          {intro && (
+            <div className="max-w-3xl space-y-4">
+              {intro.split(/\n\s*\n/).map((para, i) => (
+                <p key={i} className="text-parchment-300 leading-relaxed">
+                  {para}
+                </p>
+              ))}
+            </div>
+          )}
+        </div>
       </section>
 
       {/* The orienting section. Every facet covering more than one base spirit
           explains what it covers and links down to each, so a reader who
           arrived on "whiskey" can reach bourbon or rye without going back to
-          the index. Page 1 only: it is orientation, not pagination. */}
+          the index. Page 1 only: it is orientation, not pagination.
+
+          The page's light band. The member links sit straight on the cream
+          rather than inside a panel: in a light band the panel and the links
+          would both turn solid green and the links would vanish into it. */}
       {showOrientingSection && (
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
-          <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
-            <h2 className="text-2xl font-serif font-bold text-gold-300 mb-4">
+        <section className="band-light py-12">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 className="text-2xl font-serif font-bold text-gold-300 mb-6">
               What counts as {facet.label.toLowerCase()} here
             </h2>
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
-              {memberCounts.map(({ member, count }) => (
+            <ScrollRow
+              ariaLabel={`What counts as ${facet.label.toLowerCase()} here`}
+              cols="md:grid-cols-2 lg:grid-cols-3"
+              items={memberCounts.map(({ member, count }) => (
                 <a
                   key={member}
                   // A fragment, not a URL.
@@ -152,7 +166,7 @@ export default async function CocktailFacetPage({
                   // nothing fetched, and crawlers ignore fragments so no URL is
                   // created to crawl.
                   href={`#spirit=${encodeURIComponent(member)}`}
-                  className="flex items-center justify-between gap-3 p-3 bg-jerry-green-800/30 rounded-lg border border-gold-500/20 hover:bg-jerry-green-800/50 hover:border-gold-400/40 transition-all group"
+                  className="flex h-full items-center justify-between gap-3 p-3 bg-jerry-green-800/30 rounded-lg border border-gold-500/20 hover:bg-jerry-green-800/50 hover:border-gold-400/40 transition-all group"
                 >
                   <span className="text-parchment-300 group-hover:text-gold-300 transition-colors">
                     {MEMBER_LABELS[member] ?? member}
@@ -160,12 +174,13 @@ export default async function CocktailFacetPage({
                   <span className="text-parchment-400 text-sm shrink-0">{count}</span>
                 </a>
               ))}
-            </div>
+            />
           </div>
         </section>
       )}
 
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="band-dark py-12">
+       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <FacetFilter
           index={searchIndex}
           label={facet.label}
@@ -234,6 +249,7 @@ export default async function CocktailFacetPage({
             All cocktails
           </Link>
         </div>
+       </div>
       </section>
 
       <BackToTop />
