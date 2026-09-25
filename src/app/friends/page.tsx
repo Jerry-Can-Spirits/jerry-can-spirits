@@ -291,81 +291,80 @@ export default function FriendsPage() {
               <SectionHeading>
                 Featured Partners
               </SectionHeading>
-              <div className="grid grid-cols-1 gap-8">
-                {partners
+              {/* Cards, two across on desktop and a swipe on a phone. These
+                  were seven full-width rows, one band of 2,100 pixels that
+                  held most of the page (Dan, 25 Sep 2026: break them out). */}
+              <ScrollRow
+                ariaLabel="Featured partners"
+                cols="md:grid-cols-2"
+                items={partners
                   .filter(partner => partner.featured)
                   .map((partner, index) => (
-                    <ScrollReveal key={index}>
+                    <ScrollReveal key={index} className="h-full">
                     <div
-                      className="bg-jerry-green-800/20 border border-gold-500/30 rounded-lg p-8 hover:border-gold-500/50 transition-all"
+                      className="h-full flex flex-col bg-jerry-green-800/20 border border-gold-500/30 rounded-lg p-6 sm:p-8 hover:border-gold-500/50 transition-all"
                     >
-                      <div className="grid md:grid-cols-[200px_1fr] gap-6">
-                        {/* Logo */}
-                        <div className="flex items-center justify-center">
-                          {'badge' in partner && partner.badge ? (
-                            <div className="relative flex items-center justify-center w-40 h-40 shrink-0">
-                              <Image
-                                src={partner.badge as string}
-                                alt={`${partner.name} badge showing the number of trees Jerry Can Spirits has planted`}
-                                width={160}
-                                height={160}
-                                className="object-contain"
-                              />
-                            </div>
-                          ) : (
-                            <div className="relative w-40 h-40 rounded-full overflow-hidden border-2 border-gold-500/30 bg-white shrink-0">
-                              <Image
-                                src={partner.logo}
-                                alt={`${partner.name} logo`}
-                                fill
-                                className="object-contain p-4"
-                              />
-                            </div>
-                          )}
-                        </div>
-
-                        {/* Partner Info */}
-                        <div>
-                          <div className="flex flex-wrap items-start justify-between gap-4 mb-4">
-                            <div>
-                              <h3 className="text-2xl font-serif font-bold text-gold-400 mb-2">
-                                {partner.name}
-                              </h3>
-                              <p className="text-gold-500/80 text-sm mb-1">
-                                {partner.location}
-                              </p>
-                              <p className="text-gold-500/80 text-sm">
-                                {partner.speciality}
-                              </p>
-                            </div>
-                            <div className="flex flex-wrap gap-2">
-                              <a
-                                href={partner.website}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="inline-block px-6 py-2 bg-gold-500 text-jerry-green-900 font-semibold rounded-lg hover:bg-gold-400 transition-colors"
-                              >
-                                Visit Website
-                              </a>
-                              {'shopUrl' in partner && partner.shopUrl && (
-                                <Link
-                                  href={partner.shopUrl as string}
-                                  className="inline-block px-6 py-2 bg-jerry-green-800/60 text-gold-300 font-semibold rounded-lg hover:bg-jerry-green-800 border border-gold-500/30 transition-colors"
-                                >
-                                  {'shopUrlLabel' in partner ? partner.shopUrlLabel as string : 'Shop'}
-                                </Link>
-                              )}
-                            </div>
+                      {/* Logo */}
+                      <div className="flex items-center justify-center mb-6">
+                        {'badge' in partner && partner.badge ? (
+                          <div className="relative flex items-center justify-center w-40 h-40 shrink-0">
+                            <Image
+                              src={partner.badge as string}
+                              alt={`${partner.name} badge showing the number of trees Jerry Can Spirits has planted`}
+                              width={160}
+                              height={160}
+                              className="object-contain"
+                            />
                           </div>
-                          <p className="text-parchment-200 leading-relaxed">
-                            {partner.description}
-                          </p>
-                        </div>
+                        ) : (
+                          <div className="relative w-40 h-40 rounded-full overflow-hidden border-2 border-gold-500/30 bg-white shrink-0">
+                            <Image
+                              src={partner.logo}
+                              alt={`${partner.name} logo`}
+                              fill
+                              className="object-contain p-4"
+                            />
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Partner Info */}
+                      <div className="mb-4">
+                        <h3 className="text-2xl font-serif font-bold text-gold-400 mb-2">
+                          {partner.name}
+                        </h3>
+                        <p className="text-gold-500/80 text-sm mb-1">
+                          {partner.location}
+                        </p>
+                        <p className="text-gold-500/80 text-sm">
+                          {partner.speciality}
+                        </p>
+                      </div>
+                      <p className="text-parchment-200 leading-relaxed flex-1">
+                        {partner.description}
+                      </p>
+                      <div className="flex flex-wrap gap-2 mt-6">
+                        <a
+                          href={partner.website}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-block px-6 py-2 bg-gold-500 text-jerry-green-900 font-semibold rounded-lg hover:bg-gold-400 transition-colors"
+                        >
+                          Visit Website
+                        </a>
+                        {'shopUrl' in partner && partner.shopUrl && (
+                          <Link
+                            href={partner.shopUrl as string}
+                            className="inline-block px-6 py-2 bg-jerry-green-800/60 text-gold-300 font-semibold rounded-lg hover:bg-jerry-green-800 border border-gold-500/30 transition-colors"
+                          >
+                            {'shopUrlLabel' in partner ? partner.shopUrlLabel as string : 'Shop'}
+                          </Link>
+                        )}
                       </div>
                     </div>
                     </ScrollReveal>
                   ))}
-              </div>
+              />
             </div>
           </section>
         )}
