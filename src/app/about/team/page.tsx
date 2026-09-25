@@ -48,8 +48,9 @@ interface TeamMember {
 
 // Two of these are placeholders, added 25 Sep 2026 so the cards exist to be
 // filled in rather than built from scratch when the details and photos
-// arrive. Nothing about either person is stated beyond the name, because
-// nothing else has been confirmed with them yet.
+// arrive. Josh Acklam's is still a placeholder: nothing beyond the name has
+// been confirmed. Joshua Sisson's role, bio and quote arrived the same day
+// and his page exists; service, rank and photo are still to come.
 const teamMembers: TeamMember[] = [
   {
     name: 'Dan Freeman',
@@ -77,7 +78,11 @@ const teamMembers: TeamMember[] = [
   },
   {
     name: 'Joshua Sisson',
-    role: 'Details to follow.',
+    role: 'Head of Sales',
+    slug: 'joshua-sisson',
+    // The opening line of his quote on the bio page; the card has room for one
+    // sentence, the page carries all four.
+    quote: 'I believe in Jerry Can Spirits because I believe in the product.',
   },
 ]
 
