@@ -12,6 +12,8 @@ import ViewItemListTracker from '@/components/ViewItemListTracker'
 import { safeJsonLd, productOffer, merchantOfferExtras, productGtin } from '@/lib/jsonLd'
 import { formatPrice } from '@/lib/format-price'
 import FAQAccordion from '@/components/FAQAccordion'
+import ScrollRow from '@/components/ScrollRow'
+import SectionHeading from '@/components/SectionHeading'
 
 // ISR — pure Shopify catalogue data (no per-request state), so these SEO
 // collection pages edge-cache and revalidate hourly instead of a live Shopify
@@ -191,7 +193,7 @@ export default async function CollectionPage({
   const currency = products[0]?.priceRange.minVariantPrice.currencyCode ?? 'GBP'
 
   return (
-    <main className="min-h-screen py-20">
+    <main>
       <ViewItemListTracker listId={collection} listName={h1} currency={currency} items={trackerItems} />
       <script
         type="application/ld+json"
@@ -208,19 +210,16 @@ export default async function CollectionPage({
         />
       )}
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
-        <Breadcrumbs items={[{ label: 'Shop', href: '/shop' }, { label: h1 }]} />
-      </div>
+      {/* The hero and the product grid share the opening dark band; the
+          testimonial, the category copy, the questions and the trust strip
+          then alternate, each only when the category has it. */}
+      <section className="band-dark pt-20 pb-16">
+       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <Breadcrumbs items={[{ label: 'Shop', href: '/shop' }, { label: h1 }]} className="mb-8" />
 
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
-        <div className="text-center mb-8">
-          <div className="inline-block px-4 py-2 bg-jerry-green-800/60 backdrop-blur-sm rounded-full border border-gold-500/30 mb-6">
-            <span className="text-gold-300 text-sm font-semibold uppercase tracking-widest">
-              {h1}
-            </span>
-          </div>
-          <h1 className="text-4xl sm:text-6xl font-serif font-bold text-white mb-6">{h1}</h1>
-        </div>
+        <SectionHeading as="h1" eyebrow={h1}>
+          {h1}
+        </SectionHeading>
 
         {introBody.length > 0 && (
           <div className="max-w-3xl mx-auto mb-8 space-y-4">
@@ -246,10 +245,9 @@ export default async function CollectionPage({
           </nav>
         )}
 
-      </section>
-
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
+        {/* A shop grid stays a grid: two-up on a phone is how people browse a
+            range, and a sideways row would hide most of it. */}
+        <div className="mt-12 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
           {products.map((product) => {
             const variants = product.variants ?? []
             const defaultVariant = variants.length === 1 && variants[0].title === 'Default Title'
@@ -329,13 +327,15 @@ export default async function CollectionPage({
             )
           })}
         </div>
+       </div>
       </section>
 
       {/* A customer's own words, where the category has them. Placed straight
           after the products: on a gift page the question is "does this land
           well as a gift", and only someone who gave one can answer it. */}
       {category?.testimonial && (
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-16">
+        <section className="band-light py-16">
+         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <figure className="max-w-3xl mx-auto">
             <span aria-hidden="true" className="block text-6xl text-gold-400/80 leading-none font-serif mb-4">
               &ldquo;
@@ -352,12 +352,14 @@ export default async function CollectionPage({
               {category.testimonial.attribution}
             </figcaption>
           </figure>
+         </div>
         </section>
       )}
 
       {/* Category-specific SEO content */}
       {(category?.seoTitle || category?.pillars) && (
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-16 space-y-10">
+        <section className="band-dark py-16">
+         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
           {category.pillars && (
             <div className="bg-linear-to-br from-gold-500/10 to-gold-600/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
               {category.seoTitle && (
@@ -365,14 +367,16 @@ export default async function CollectionPage({
                   {category.seoTitle}
                 </h2>
               )}
-              <div className="grid md:grid-cols-3 gap-6">
-                {category.pillars.map((pillar) => (
-                  <div key={pillar.title} className="text-center">
+              <ScrollRow
+                ariaLabel={category.seoTitle ?? h1}
+                cols="md:grid-cols-3"
+                items={category.pillars.map((pillar) => (
+                  <div key={pillar.title} className="h-full text-center">
                     <h3 className="text-lg font-semibold text-white mb-2">{pillar.title}</h3>
                     <p className="text-parchment-300 text-sm leading-relaxed">{pillar.body}</p>
                   </div>
                 ))}
-              </div>
+              />
             </div>
           )}
 
@@ -388,33 +392,41 @@ export default async function CollectionPage({
               </div>
             </div>
           )}
+         </div>
         </section>
       )}
 
       {/* Category FAQs — the practical questions this category's buyer has
           before checkout. Mirrored as FAQPage structured data above. */}
       {category?.faqs && category.faqs.length > 0 && (
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-16">
+        <section className="band-light py-16">
+         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl mx-auto">
             <h2 className="text-2xl font-serif font-bold text-white mb-8">Before you order.</h2>
             <FAQAccordion items={category.faqs} />
           </div>
+         </div>
         </section>
       )}
 
       {/* Universal brand trust section */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-10">
-        <div className="grid md:grid-cols-3 gap-4 mb-10">
-          {[
+      <section className="band-dark py-16">
+       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="mb-10">
+        <ScrollRow
+          ariaLabel="Why buy from Jerry Can Spirits"
+          cols="md:grid-cols-3"
+          items={[
             { title: 'Veteran-Owned', body: 'Founded by two Royal Corps of Signals veterans. Bootstrapped, no hidden investors, no shortcuts. The same standards we applied to kit that had to work.' },
             { title: 'Real Ingredients', body: 'Every product stocked on this site is chosen because it does its job properly. No filler. Nothing that does not belong there.' },
             { title: '5% to Forces Charities', body: '5% of profits goes to forces charities. Armed Forces Covenant signatories. ERS Bronze Award holders. When you buy from us, you give back.' },
           ].map((item) => (
-            <div key={item.title} className="p-6 bg-jerry-green-800/30 rounded-xl border border-gold-500/10">
+            <div key={item.title} className="h-full p-6 bg-jerry-green-800/30 rounded-xl border border-gold-500/10">
               <h3 className="text-base font-semibold text-gold-300 mb-2">{item.title}</h3>
               <p className="text-parchment-400 text-sm leading-relaxed">{item.body}</p>
             </div>
           ))}
+        />
         </div>
 
         <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-12 border border-gold-500/20 text-center">
@@ -429,6 +441,7 @@ export default async function CollectionPage({
             Join the List
           </Link>
         </div>
+       </div>
       </section>
     </main>
   )
