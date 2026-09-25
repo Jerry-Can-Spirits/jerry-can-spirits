@@ -88,6 +88,12 @@ export default async function OrderSection() {
   return (
     <section className="py-16 band-light">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Centred above both columns, like every other section heading on
+            the page. */}
+        <SectionHeading eyebrow="Order">
+          First Batch. Numbered. Limited general release.
+        </SectionHeading>
+
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Left Column - Product Image. Desktop only: as the closing ask
               the bottle has been on the page three times by here, and on a
@@ -119,10 +125,6 @@ export default async function OrderSection() {
               line. The batch number derives from CURRENT_BATCH_ID rather
               than being asserted here forever. */}
           <div className="order-1 lg:order-2">
-            <SectionHeading eyebrow="Order" align="left">
-              First Batch. Numbered. Limited general release.
-            </SectionHeading>
-
             <p className="text-xl text-parchment-300 mb-6 leading-relaxed">
               Batch {BATCH_NUMBER}, shipping now. When it&apos;s gone, that run is finished.
             </p>

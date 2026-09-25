@@ -6,12 +6,17 @@ export default function FounderStorySnippet() {
   return (
     <section className="py-16 band-dark">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Centred above both columns, like every other section heading on
+            the page. It sat inside the text column, left-aligned, so two of
+            the nine headings lined up differently from the rest (Dan, 25 Sep
+            2026). */}
+        <SectionHeading eyebrow="Our Story">
+          From Signals to Spirits
+        </SectionHeading>
+
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Left Column - Content */}
           <div>
-            <SectionHeading eyebrow="Our Story" align="left">
-              From Signals to Spirits
-            </SectionHeading>
 
             <div className="space-y-4 text-parchment-200 text-lg leading-relaxed">
               <p>
