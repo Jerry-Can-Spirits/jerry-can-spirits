@@ -17,6 +17,7 @@ export default function SectionHeading({
   intro,
   id,
   align = 'center',
+  as: Tag = 'h2',
 }: {
   /** Short label above the heading. Every section on a page should have one or none. */
   eyebrow?: string
@@ -26,8 +27,15 @@ export default function SectionHeading({
   id?: string
   /** Left for a section whose heading sits in one column of a two-column layout. */
   align?: 'center' | 'left'
+  /**
+   * h1 for the heading that opens a page, so a page header shares this
+   * markup instead of hand-rolling the same pill and title (every page did,
+   * 51 copies at the 25 Sep 2026 count). Sized up to match the heroes.
+   */
+  as?: 'h1' | 'h2'
 }) {
   const centred = align === 'center'
+  const size = Tag === 'h1' ? 'text-4xl sm:text-6xl' : 'text-3xl md:text-4xl'
   return (
     <div className={centred ? 'text-center mb-10' : 'mb-6'}>
       {eyebrow && (
@@ -38,9 +46,9 @@ export default function SectionHeading({
         </div>
       )}
 
-      <h2 id={id} className="text-3xl md:text-4xl font-serif font-bold text-white">
+      <Tag id={id} className={`${size} font-serif font-bold text-white`}>
         {children}
-      </h2>
+      </Tag>
 
       {intro && (
         <p
