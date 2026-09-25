@@ -8,12 +8,17 @@ import { useEffect, useState } from 'react';
  * Company ID: T8pKVn
  *
  * GDPR Compliance:
- * - Only loads Klaviyo scripts after marketing/statistics consent is given
+ * - Only loads Klaviyo scripts after Cookiebot marketing consent is given
  * - Listens for Cookiebot consent events
  * - Does NOT load any scripts until consent is granted
  *
- * Note: Klaviyo is used for email marketing forms and tracking.
- * Cookies set by Klaviyo require explicit consent under GDPR.
+ * Marketing consent alone, not statistics. Klaviyo is an email marketing
+ * vendor, its onsite cookie exists to attach a browser to a marketing
+ * profile, and the cookie policy lists it under Marketing. Until 25 Sep 2026
+ * this also loaded on statistics-only consent, so a visitor who accepted
+ * analytics and declined marketing was tracked by a marketing tool anyway.
+ * The same rule lives in hasKlaviyoConsent in src/lib/klaviyo-onsite.ts and
+ * the two must not drift.
  */
 
 declare global {
@@ -44,8 +49,7 @@ export default function KlaviyoScript() {
     // Check if Cookiebot consent already exists
     const checkExistingConsent = () => {
       if (typeof window !== 'undefined' && window.Cookiebot?.consent) {
-        // Klaviyo needs marketing consent for tracking, statistics for analytics
-        if (window.Cookiebot.consent.marketing || window.Cookiebot.consent.statistics) {
+        if (window.Cookiebot.consent.marketing) {
           setHasConsent(true);
           return true;
         }
@@ -58,7 +62,7 @@ export default function KlaviyoScript() {
 
     // Listen for Cookiebot consent acceptance
     const handleAccept = () => {
-      if (window.Cookiebot?.consent?.marketing || window.Cookiebot?.consent?.statistics) {
+      if (window.Cookiebot?.consent?.marketing) {
         setHasConsent(true);
       }
     };

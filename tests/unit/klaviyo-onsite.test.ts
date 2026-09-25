@@ -145,9 +145,10 @@ describe('consent gating, the same rule as the script loader', () => {
     expect(w.pushed).toHaveLength(1)
   })
 
-  it('sends with statistics consent alone', () => {
+  it('refuses statistics consent alone: Klaviyo is a marketing vendor', () => {
     const w = win({ statistics: true, marketing: false })
-    expect(pushKlaviyo(['track', 'x', {}], w)).toBe(true)
+    expect(pushKlaviyo(['track', 'x', {}], w)).toBe(false)
+    expect(w.pushed).toHaveLength(0)
   })
 
   it('drops the event with no consent, with consent declined, and with no SDK', () => {
@@ -159,9 +160,10 @@ describe('consent gating, the same rule as the script loader', () => {
     expect(pushKlaviyo(['track', 'x', {}], undefined)).toBe(false)
   })
 
-  it('reports consent from either flag', () => {
+  it('reports consent from the marketing flag only', () => {
     expect(hasKlaviyoConsent(win({ marketing: true }))).toBe(true)
-    expect(hasKlaviyoConsent(win({ statistics: true }))).toBe(true)
+    expect(hasKlaviyoConsent(win({ marketing: true, statistics: false }))).toBe(true)
+    expect(hasKlaviyoConsent(win({ statistics: true }))).toBe(false)
     expect(hasKlaviyoConsent(win({}))).toBe(false)
     expect(hasKlaviyoConsent(undefined)).toBe(false)
   })
@@ -176,7 +178,7 @@ describe('track helpers', () => {
   })
 
   it('Added to Cart queues one event named exactly as Klaviyo expects', () => {
-    const w = win({ statistics: true })
+    const w = win({ marketing: true })
     expect(trackAddedToCart(cart(), 'gid://shopify/ProductVariant/56168995193209', w)).toBe(true)
     expect(w.pushed).toHaveLength(1)
     expect(w.pushed[0][0]).toBe('track')
