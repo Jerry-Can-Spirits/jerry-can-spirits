@@ -7,6 +7,7 @@ import CocktailsClient from './CocktailsClient'
 import HubIndex from '@/components/HubIndex'
 import Breadcrumbs from '@/components/Breadcrumbs'
 import StructuredData from '@/components/StructuredData'
+import SectionHeading from '@/components/SectionHeading'
 import { OG_IMAGE } from '@/lib/og'
 import { getFacets } from '@/lib/facet-data'
 import { facetPath, headingFor, isSelfCanonical, type Facet } from '@/lib/cocktail-facets'
@@ -66,7 +67,7 @@ function truncateOnWord(text: string, max: number): string {
 function FacetLinks({ heading, facets }: { heading: string; facets: Facet[] }) {
   if (facets.length === 0) return null
   return (
-    <section aria-label={heading} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-4 mb-12">
+    <section aria-label={heading} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <h2 className="text-2xl font-serif font-bold text-white mb-6">{heading}</h2>
       <ul className="flex flex-wrap gap-3">
         {facets.map((facet) => (
@@ -151,30 +152,24 @@ export default async function CocktailsPage() {
   return (
     <>
       <StructuredData data={itemListSchema} id="cocktails-itemlist-schema" />
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 mb-8">
-        <Breadcrumbs
-          items={[
-            { label: 'Field Manual', href: '/field-manual' },
-            { label: 'Cocktails' },
-          ]}
-        />
-      </div>
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
-        <div className="text-center mb-12">
-          <div className="inline-block px-4 py-2 bg-jerry-green-800/60 backdrop-blur-sm rounded-full border border-gold-500/30 mb-6">
-            <span className="text-gold-300 text-sm font-semibold uppercase tracking-widest">
-              Cocktail Collection
-            </span>
-          </div>
-          <h1 className="text-4xl sm:text-6xl font-serif font-bold text-white mb-6">
+      <section className="band-dark pt-20 pb-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <Breadcrumbs
+            items={[
+              { label: 'Field Manual', href: '/field-manual' },
+              { label: 'Cocktails' },
+            ]}
+            className="mb-8"
+          />
+          <SectionHeading
+            as="h1"
+            eyebrow="Cocktail Collection"
+            intro="Each cocktail is carefully crafted to highlight quality spirits and balanced flavours. Start with the classics, then explore our signature variations designed for the modern explorer."
+          >
             Master the Classics
             <br />
             <span className="text-gold-300">Engineer New Adventures</span>
-          </h1>
-          <p className="text-xl text-parchment-300 max-w-3xl mx-auto leading-relaxed">
-            Each cocktail is carefully crafted to highlight quality spirits and balanced flavours.
-            Start with the classics, then explore our signature variations designed for the modern explorer.
-          </p>
+          </SectionHeading>
         </div>
       </section>
       <Suspense>
@@ -184,8 +179,14 @@ export default async function CocktailsPage() {
           spiritFacetLinks={toLinkMap(linkableSpirits)}
         />
       </Suspense>
-      <FacetLinks heading="Cocktails by style" facets={linkableStyles} />
-      <FacetLinks heading="Cocktails by spirit" facets={linkableSpirits} />
+      {/* The listing above ends on a dark band, so the crawlable facet links
+          take the light one: the chips are green islands on cream. */}
+      {(linkableStyles.length > 0 || linkableSpirits.length > 0) && (
+        <section className="band-light py-12 space-y-12">
+          <FacetLinks heading="Cocktails by style" facets={linkableStyles} />
+          <FacetLinks heading="Cocktails by spirit" facets={linkableSpirits} />
+        </section>
+      )}
       <HubIndex
         heading={`All ${cocktails.length} cocktails, A to Z`}
         items={cocktails.map((c) => ({ name: c.name, href: `/field-manual/cocktails/${c.slug.current}/` }))}
