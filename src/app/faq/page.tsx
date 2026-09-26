@@ -4,6 +4,7 @@ import StructuredData from '@/components/StructuredData'
 import { baseOpenGraph, OG_IMAGE } from '@/lib/og'
 import { DELIVERY_PROMISE_SENTENCE } from '@/lib/delivery'
 import FAQAccordion from '@/components/FAQAccordion'
+import SectionHeading from '@/components/SectionHeading'
 import type { ReactNode } from 'react'
 
 export const metadata: Metadata = {
@@ -134,23 +135,24 @@ export default function FAQPage() {
   return (
     <>
       <StructuredData data={faqSchema} />
-      <main className="min-h-screen py-20">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Header */}
-          <div className="text-center mb-16">
-            <div className="inline-block px-4 py-2 bg-jerry-green-800/60 backdrop-blur-sm rounded-full border border-gold-500/30 mb-6">
-              <span className="text-gold-300 text-sm font-semibold uppercase tracking-widest">
-                Frequently Asked Questions
-              </span>
-            </div>
-            <h1 className="text-4xl md:text-5xl font-playfair font-bold text-gold-500 mb-6">
+      <main>
+        {/* The one page the band rollout missed (Jade, 25 Sep 2026: the
+            questions looked a different green). Header on dark, the questions
+            on light, the contact panel on dark, like every other page. */}
+        <section className="band-dark pt-20 pb-12">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <SectionHeading
+              as="h1"
+              eyebrow="Frequently Asked Questions"
+              intro="Everything you need to know about Jerry Can Spirits, how we make our spirits, and how to buy."
+            >
               Questions About Jerry Can Spirits, Answered
-            </h1>
-            <p className="text-xl text-parchment-200 max-w-2xl mx-auto">
-              Everything you need to know about Jerry Can Spirits, how we make our spirits, and how to buy.
-            </p>
+            </SectionHeading>
           </div>
+        </section>
 
+        <section className="band-light py-12">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* FAQ List */}
           <FAQAccordion
             headingLevel="h2"
@@ -160,9 +162,14 @@ export default function FAQPage() {
             }))}
           />
 
+          </div>
+        </section>
+
+        <section className="band-dark py-12">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* CTA */}
-          <div className="mt-16 text-center p-8 bg-jerry-green-800/20 border border-gold-500/20 rounded-lg">
-            <h3 className="text-2xl font-playfair font-bold text-gold-500 mb-4">
+          <div className="text-center p-8 bg-jerry-green-800/20 border border-gold-500/20 rounded-lg">
+            <h3 className="text-2xl font-serif font-bold text-gold-300 mb-4">
               Still Have Questions?
             </h3>
             <p className="text-parchment-200 mb-6">
@@ -175,7 +182,8 @@ export default function FAQPage() {
               Contact Us
             </a>
           </div>
-        </div>
+          </div>
+        </section>
       </main>
     </>
   )

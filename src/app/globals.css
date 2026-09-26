@@ -660,7 +660,13 @@ html:not([data-age-verified]) body:has(.age-gate) {
 /* Panels inside a light band go green rather than white: a white card on
    cream is barely a card, and the brand colour does the work instead. The
    island restores the dark-ground tokens, so the text inside flips back on
-   its own. */
+   its own.
+
+   A gradient that fades to transparent is not a panel. It is the wash laid
+   over a photo so a caption can sit on it, and it matched here too: on the
+   story page and the guides listing every such photo was painted over with a
+   solid green box (Jade, 25 Sep 2026: "supposed to be an image here?"). Any
+   gradient ending in to-transparent is left alone, in every rule below. */
 .band-light :is(
   [class*='from-parchment-'],
   /* Only the faded gold washes panels are built from, never the solid
@@ -670,7 +676,7 @@ html:not([data-age-verified]) body:has(.age-gate) {
   [class*='from-gold-500/'],
   [class*='from-gold-600/'],
   [class*='bg-jerry-green-'],
-  [class*='from-jerry-green-']
+  [class*='from-jerry-green-']:not([class*='to-transparent'])
 ) {
   background-image: none;
   background-color: #1e5337;
@@ -703,8 +709,8 @@ html:not([data-age-verified]) body:has(.age-gate) {
   [class*='from-gold-500/'],
   [class*='from-gold-600/'],
   [class*='bg-jerry-green-'],
-  [class*='from-jerry-green-']
-) :is([class*='bg-jerry-green-'], [class*='from-jerry-green-']) {
+  [class*='from-jerry-green-']:not([class*='to-transparent'])
+) :is([class*='bg-jerry-green-'], [class*='from-jerry-green-']:not([class*='to-transparent'])) {
   background-color: #163b28;
 }
 .band-light :is(
@@ -713,8 +719,8 @@ html:not([data-age-verified]) body:has(.age-gate) {
   [class*='from-gold-500/'],
   [class*='from-gold-600/'],
   [class*='bg-jerry-green-'],
-  [class*='from-jerry-green-']
-) :is([class*='bg-jerry-green-'], [class*='from-jerry-green-']):hover {
+  [class*='from-jerry-green-']:not([class*='to-transparent'])
+) :is([class*='bg-jerry-green-'], [class*='from-jerry-green-']:not([class*='to-transparent'])):hover {
   background-color: #10281c;
 }
 
@@ -765,7 +771,7 @@ html:not([data-age-verified]) body:has(.age-gate) {
   [class*='from-gold-500/'],
   [class*='from-gold-600/'],
   [class*='bg-jerry-green-'],
-  [class*='from-jerry-green-']
+  [class*='from-jerry-green-']:not([class*='to-transparent'])
 ) {
   --color-red-400: #f87171;
   --color-red-300: #fca5a5;
