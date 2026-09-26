@@ -4,6 +4,7 @@ import Image from 'next/image'
 import Breadcrumbs from '@/components/Breadcrumbs'
 import SectionHeading from '@/components/SectionHeading'
 import StructuredData from '@/components/StructuredData'
+import FAQAccordion, { type FAQAccordionItem } from '@/components/FAQAccordion'
 import { OG_IMAGE } from '@/lib/og'
 import { ORG_REF } from '@/lib/jsonLd'
 
@@ -50,6 +51,102 @@ export const metadata: Metadata = {
     follow: true,
   },
 }
+
+// Ask Dan. His answers, given 26 Sep 2026, in his words: the edits are
+// punctuation, one "SKUs" to "products", and "the Captain Morgan phase" to
+// "the supermarket spiced rum phase" so no competitor is named, which the
+// voice rules ask for. It sits in the column beside his facts, where a single
+// panel left the band mostly empty.
+const askDan: { group: string; items: FAQAccordionItem[] }[] = [
+  {
+    group: 'The story',
+    items: [
+      {
+        question: 'What was the hardest transition from military life to civilian life?',
+        answer: 'The costs of everything going up took a little getting used to. The army provides highly subsidised housing, so paying full whack was and still is a shock to the system.',
+      },
+      {
+        question: 'What did you get wrong in the first year?',
+        answer: 'Loads. The main one was not accounting for a marketing budget at all when we first raised the initial capital.',
+      },
+      {
+        question: 'Is there a moment when it stopped feeling like a hobby?',
+        answer: 'It still feels a little like a side hustle at the moment. We want to scale and grow so this becomes our full-time work, but it takes time.',
+      },
+    ],
+  },
+  {
+    group: 'The why',
+    items: [
+      {
+        question: 'What does "pride in your kit" mean to you?',
+        answer: 'It is made to a standard I accept. We are not driven by profit to the point of lowering our standards to allow compromise in our drinks.',
+      },
+      {
+        question: 'Who do you make the rum for?',
+        answer: 'People who have already been through the supermarket spiced rum phase. They have tried a few, they want something with character, made by people rather than corporations, and they want something that tastes really good.',
+      },
+    ],
+  },
+  {
+    group: 'The drinks',
+    items: [
+      {
+        question: 'How do you take your spirits?',
+        answer: 'All of the above. Depends on the situation and the time.',
+      },
+      {
+        question: 'What is your go-to serve?',
+        answer: (
+          <>
+            At home, a <Link href="/field-manual/cocktails/rum-and-coke/" className="text-gold-300 hover:text-gold-400 underline">rum and cola</Link>, loads of ice, ideally with Franklin &amp; Sons cola. Out, cocktails are a staple for me.
+          </>
+        ),
+      },
+      {
+        question: 'Desert island bottle, any spirit?',
+        answer: 'I would be daft if I did not say Expedition Spiced Rum. Got to back ourselves.',
+      },
+      {
+        question: 'What is in your bar at home?',
+        answer: 'I love tiki culture, so lots of different rums: aged, spiced, dark and light. I always have sugar syrup, grenadine and plenty of juice in the fridge.',
+      },
+      {
+        question: 'Which cocktail should a beginner try first?',
+        answer: (
+          <>
+            An <Link href="/field-manual/cocktails/old-fashioned/" className="text-gold-300 hover:text-gold-400 underline">Old Fashioned</Link> or similar. Sugar, bitters, spirit. Difficult to go too far wrong, and you get to really taste what the spirit is about.
+          </>
+        ),
+      },
+      {
+        question: 'Is spiced rum only for mixing?',
+        answer: 'Spiced rum is such a varied spirit. Some are just for mixing, undoubtedly, but some make amazing spirit-first drinks, or work really well in an Old Fashioned. There are thousands out there. It is all about finding the one that works for you.',
+      },
+    ],
+  },
+  {
+    group: 'The person',
+    items: [
+      {
+        question: 'What does a normal working day look like now?',
+        answer: 'I work a day job to fund Jerry Can Spirits. I finish, come home, make dinner and feed the dogs, then spend around two hours working through emails, making the decisions that come out of them, and working on the website behind the scenes.',
+      },
+      {
+        question: 'What is in your workflow right now?',
+        answer: 'Budgeting for Batch 2, getting ideas ready for new products, and starting ideas for the Christmas period.',
+      },
+      {
+        question: 'Best piece of advice you were ever given?',
+        answer: 'Never ask anybody to do something you are not prepared to do yourself.',
+      },
+      {
+        question: 'One piece of advice for a veteran thinking about starting a business?',
+        answer: 'At some point you have to stop planning and thinking and just go for it. It is hard work, but it is really enjoyable.',
+      },
+    ],
+  },
+]
 
 export default function DanFreemanPage() {
   return (
@@ -174,22 +271,23 @@ export default function DanFreemanPage() {
                   </p>
                 </div>
 
-                {/* In his words. Moved up from the story band so the column
-                    beside the facts is not one short panel and a stretch of
-                    empty green; the story band keeps its three panels. */}
-                <div className="bg-linear-to-br from-gold-500/10 to-gold-600/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
-                  <div className="flex items-start gap-4">
-                    <div className="shrink-0">
-                      <svg className="w-8 h-8 text-gold-400" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z" clipRule="evenodd" />
-                      </svg>
-                    </div>
-                    <blockquote className="flex-1">
-                      <p className="text-xl text-parchment-100 italic leading-relaxed mb-4">
-                        "Jerry Can Spirits matters to me because we built it ourselves, from scratch, without shortcuts. No outside agenda. No corporate brief. Just two blokes who wanted a proper drink and decided to make one."
-                      </p>
-                      <cite className="text-gold-400 font-semibold not-italic">Dan Freeman</cite>
-                    </blockquote>
+                {/* Ask Dan: fills the column beside the facts. Closed by
+                    default, so fifteen answers take the space of a short list
+                    and open one at a time. */}
+                <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+                  <h2 className="text-2xl font-serif font-bold text-white mb-6 flex items-center gap-2">
+                    <svg className="w-6 h-6 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    Ask Dan
+                  </h2>
+                  <div className="space-y-6">
+                    {askDan.map((section) => (
+                      <div key={section.group}>
+                        <p className="text-gold-300 text-sm font-semibold uppercase tracking-widest mb-3">{section.group}</p>
+                        <FAQAccordion items={section.items} />
+                      </div>
+                    ))}
                   </div>
                 </div>
               </div>
@@ -235,6 +333,23 @@ export default function DanFreemanPage() {
               <p className="text-parchment-200 leading-relaxed">
                 The military taught him to pay attention to details and plan things properly, which comes in handy when you&apos;re trying to build something from nothing. His approach is pretty simple: make something you&apos;re proud of, and don&apos;t cut corners.
               </p>
+            </div>
+
+            {/* Personal Quote */}
+            <div className="bg-linear-to-br from-gold-500/10 to-gold-600/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
+              <div className="flex items-start gap-4">
+                <div className="shrink-0">
+                  <svg className="w-8 h-8 text-gold-400" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z" clipRule="evenodd" />
+                  </svg>
+                </div>
+                <blockquote className="flex-1">
+                  <p className="text-xl text-parchment-100 italic leading-relaxed mb-4">
+                    "Jerry Can Spirits matters to me because we built it ourselves, from scratch, without shortcuts. No outside agenda. No corporate brief. Just two blokes who wanted a proper drink and decided to make one."
+                  </p>
+                  <cite className="text-gold-400 font-semibold not-italic">Dan Freeman</cite>
+                </blockquote>
+              </div>
             </div>
 
           </div>
