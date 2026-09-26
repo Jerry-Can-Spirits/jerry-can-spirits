@@ -46,6 +46,36 @@ export default function Header() {
   const triggerRefs = useRef<Map<string, HTMLElement>>(new Map())
   const dropdownRefs = useRef<Map<string, HTMLDivElement>>(new Map())
 
+  // Whether the pointer can hover. On a tablet wide enough to show this nav
+  // it cannot, and the hover handlers below were still wired: a tap fired
+  // the emulated mouseenter and opened the menu, and the tap that should
+  // have closed it navigated instead, because the trigger is a link. Nothing
+  // closed on a tap elsewhere either. Jade, 25 Sep 2026: pressing Shop
+  // again does not close it. Without hover the trigger toggles and a tap
+  // outside closes, the same as the phone menu.
+  const [hoverCapable, setHoverCapable] = useState(true)
+  useEffect(() => {
+    const query = window.matchMedia('(hover: hover) and (pointer: fine)')
+    const update = () => setHoverCapable(query.matches)
+    update()
+    query.addEventListener('change', update)
+    return () => query.removeEventListener('change', update)
+  }, [])
+
+  // A tap or click outside an open menu closes it.
+  useEffect(() => {
+    if (!activeDropdown) return
+    const close = (e: PointerEvent) => {
+      const target = e.target as Node
+      const trigger = triggerRefs.current.get(activeDropdown)
+      const menu = dropdownRefs.current.get(activeDropdown)
+      if (trigger?.contains(target) || menu?.contains(target)) return
+      setActiveDropdown(null)
+    }
+    document.addEventListener('pointerdown', close)
+    return () => document.removeEventListener('pointerdown', close)
+  }, [activeDropdown])
+
   // Steering Law: delayed close prevents accidental dismissal during diagonal movement
   const handleNavEnter = (name: string) => {
     if (dropdownCloseTimer.current) {
@@ -322,8 +352,8 @@ export default function Header() {
                 <div 
                   key={item.name} 
                   className="relative group"
-                  onMouseEnter={() => item.dropdown && handleNavEnter(item.name)}
-                  onMouseLeave={() => item.dropdown && handleNavLeave()}
+                  onMouseEnter={() => hoverCapable && item.dropdown && handleNavEnter(item.name)}
+                  onMouseLeave={() => hoverCapable && item.dropdown && handleNavLeave()}
                 >
                   {item.href ? (
                     <Link
@@ -335,7 +365,16 @@ export default function Header() {
                       className={`flex items-center space-x-1 whitespace-nowrap text-parchment-100 hover:text-parchment-50 px-3 py-2 text-sm font-semibold uppercase tracking-wide transition-all duration-200 hover:scale-105 relative focus:outline-hidden focus:ring-2 focus:ring-gold-400 rounded ${
                         activeDropdown === item.name ? 'text-parchment-50' : ''
                       }`}
-                      onClick={() => trackMenuClick(item.name)}
+                      onClick={(e) => {
+                        // No hover: the first tap opens, the next closes. The
+                        // hub itself is reachable from inside the menu.
+                        if (!hoverCapable && item.dropdown) {
+                          e.preventDefault()
+                          setActiveDropdown(activeDropdown === item.name ? null : item.name)
+                          return
+                        }
+                        trackMenuClick(item.name)
+                      }}
                       onKeyDown={(e) => handleTriggerKeyDown(e, item)}
                       aria-expanded={item.dropdown ? activeDropdown === item.name : undefined}
                       aria-haspopup={item.dropdown ? 'menu' : undefined}
@@ -383,8 +422,8 @@ export default function Header() {
                           ? 'opacity-100 visible translate-y-0'
                           : 'opacity-0 invisible -translate-y-2'
                       }`}
-                      onMouseEnter={() => handleNavEnter(item.name)}
-                      onMouseLeave={() => handleNavLeave()}
+                      onMouseEnter={() => hoverCapable && handleNavEnter(item.name)}
+                      onMouseLeave={() => hoverCapable && handleNavLeave()}
                     >
                       <div
                         role="menu"
