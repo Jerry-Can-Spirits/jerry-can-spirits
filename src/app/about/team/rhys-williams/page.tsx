@@ -118,11 +118,15 @@ export default function RhysWilliamsPage() {
                   </div>
                   <div>
                     <p className="text-gold-400 font-semibold mb-1">Favourite Spirit</p>
-                    <p className="text-parchment-200">Spiced Rum</p>
+                    <p className="text-parchment-200">
+                      <Link href="/field-manual/ingredients/spiced-rum/" className="hover:text-gold-300 underline decoration-gold-500/40 hover:decoration-gold-400 transition-colors">Spiced Rum</Link>
+                    </p>
                   </div>
                   <div>
                     <p className="text-gold-400 font-semibold mb-1">Signature Cocktail</p>
-                    <p className="text-parchment-200">Mojito</p>
+                    <p className="text-parchment-200">
+                      <Link href="/field-manual/cocktails/mojito/" className="hover:text-gold-300 underline decoration-gold-500/40 hover:decoration-gold-400 transition-colors">Mojito</Link>
+                    </p>
                   </div>
                 </div>
               </div>
