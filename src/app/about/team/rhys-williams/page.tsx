@@ -110,7 +110,7 @@ export default function RhysWilliamsPage() {
                   <div>
                     <p className="text-gold-400 font-semibold mb-1">Service</p>
                     <p className="text-parchment-200">Royal Signals</p>
-                    <p className="text-parchment-300 text-xs">2011 – 2016 (5 years)</p>
+                    <p className="text-parchment-300 text-xs">2011 - 2016 (5 years)</p>
                   </div>
                   <div>
                     <p className="text-gold-400 font-semibold mb-1">Trade</p>
@@ -132,9 +132,10 @@ export default function RhysWilliamsPage() {
               </div>
             </div>
 
-            {/* Right Column - where the story starts */}
+            {/* Right Column - where the story starts. Two panels here so the
+                column is as tall as the photo and the facts beside it. */}
             <div className="lg:col-span-2">
-              <div className="prose prose-invert max-w-none">
+              <div className="prose prose-invert max-w-none space-y-6">
                 {/* Military Background */}
                 <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
                   <h2 className="text-2xl font-serif font-bold text-white mb-4 flex items-center gap-2">
@@ -146,6 +147,25 @@ export default function RhysWilliamsPage() {
                   <p className="text-parchment-200 leading-relaxed">
                     I began my career in the British Army, serving with the Royal Signals as an Installation Technician from 2011 to 2016. During that time, I developed a deep understanding of critical communications, infrastructure deployment, and working under pressure in demanding environments.
                   </p>
+                </div>
+
+                {/* In his words: the line from his story, pulled out so the
+                    column beside the facts is not one panel and empty green.
+                    The story band keeps all three of its panels. */}
+                <div className="bg-linear-to-br from-gold-500/10 to-gold-600/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
+                  <div className="flex items-start gap-4">
+                    <div className="shrink-0">
+                      <svg className="w-8 h-8 text-gold-400" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z" clipRule="evenodd" />
+                      </svg>
+                    </div>
+                    <blockquote className="flex-1">
+                      <p className="text-xl text-parchment-100 italic leading-relaxed mb-4">
+                        "That passion has now become a business."
+                      </p>
+                      <cite className="text-gold-400 font-semibold not-italic">Rhys Williams</cite>
+                    </blockquote>
+                  </div>
                 </div>
               </div>
             </div>
