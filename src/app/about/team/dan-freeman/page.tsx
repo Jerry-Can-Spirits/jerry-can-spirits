@@ -128,11 +128,15 @@ export default function DanFreemanPage() {
                   </div>
                   <div>
                     <p className="text-gold-400 font-semibold mb-1">Favourite Spirit</p>
-                    <p className="text-parchment-200">Spiced Rum</p>
+                    <p className="text-parchment-200">
+                      <Link href="/field-manual/ingredients/jerry-can-spirits-expedition-spiced-rum/" className="hover:text-gold-300 underline decoration-gold-500/40 hover:decoration-gold-400 transition-colors">Expedition Spiced Rum</Link>
+                    </p>
                   </div>
                   <div>
                     <p className="text-gold-400 font-semibold mb-1">Signature Cocktail</p>
-                    <p className="text-parchment-200">Zombie</p>
+                    <p className="text-parchment-200">
+                      <Link href="/field-manual/cocktails/zombie/" className="hover:text-gold-300 underline decoration-gold-500/40 hover:decoration-gold-400 transition-colors">Zombie</Link>
+                    </p>
                   </div>
                 </div>
               </div>
