@@ -13,6 +13,7 @@ import StructuredData from '@/components/StructuredData'
 import RelatedCocktailsList from '@/components/RelatedCocktailsList'
 import RelatedGuidesList, { type GuideLink } from '@/components/RelatedGuidesList'
 import ReferenceContents from '@/components/ReferenceContents'
+import SectionNav, { type SectionNavItem } from '@/components/SectionNav'
 import { extractHeadings } from '@/lib/sanity-text'
 import { OG_IMAGE_COCKTAIL } from '@/lib/og'
 import { ORG_REF } from '@/lib/jsonLd'
@@ -414,8 +415,19 @@ export default async function IngredientDetailPage({ params }: { params: Promise
       </div>
       </section>
 
+      {/* Pinned under the header through every band below, on a phone too,
+          which the contents rail in the first band never was. */}
+      <SectionNav
+        items={[
+          hasAbout && { id: 'about', label: 'About' },
+          { id: 'using', label: 'Using it' },
+          hasMore && { id: 'explore', label: 'More to explore' },
+          { id: 'made-with', label: 'Made with' },
+        ].filter((i): i is SectionNavItem => Boolean(i))}
+      />
+
       {hasAbout && (
-      <section className="band-light py-12">
+      <section id="about" className="band-light py-12 scroll-mt-36">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeading eyebrow="The ingredient">About {ingredient.name}</SectionHeading>
 
@@ -471,7 +483,7 @@ export default async function IngredientDetailPage({ params }: { params: Promise
       </section>
       )}
 
-      <section className="band-dark py-12">
+      <section id="using" className="band-dark py-12 scroll-mt-36">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeading eyebrow="Using it">Using {ingredient.name}</SectionHeading>
 
@@ -523,7 +535,7 @@ export default async function IngredientDetailPage({ params }: { params: Promise
       </section>
 
       {hasMore && (
-      <section className="band-light py-12">
+      <section id="explore" className="band-light py-12 scroll-mt-36">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeading eyebrow="Go further">More to explore</SectionHeading>
 
@@ -596,7 +608,7 @@ export default async function IngredientDetailPage({ params }: { params: Promise
       </section>
       )}
 
-      <section className="band-dark py-12">
+      <section id="made-with" className="band-dark py-12 scroll-mt-36">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeading eyebrow="Make something">Made with {ingredient.name}</SectionHeading>
 
