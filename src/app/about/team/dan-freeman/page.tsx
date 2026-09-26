@@ -174,20 +174,23 @@ export default function DanFreemanPage() {
                   </p>
                 </div>
 
-                {/* The Journey */}
-                <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
-                  <h2 className="text-2xl font-serif font-bold text-white mb-4 flex items-center gap-2">
-                    <svg className="w-6 h-6 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                    </svg>
-                    The Journey to Jerry Can Spirits
-                  </h2>
-                  <p className="text-parchment-200 leading-relaxed mb-4">
-                    The idea of making rum had been coming up for years, one of those conversations that kept happening whenever Dan and <Link href="/about/team/rhys-williams/" className="text-gold-300 hover:text-gold-400 underline">Rhys</Link> got together. In July 2025, Dan decided to stop just talking about it and actually have a go. Having tried well over 100 different rums and genuinely loving the stuff, it felt like the right time to create <Link href="/shop/product/jerry-can-spirits-expedition-spiced-rum/" className="text-gold-300 hover:text-gold-400 underline">something worth drinking</Link>.
-                  </p>
-                  <p className="text-parchment-200 leading-relaxed">
-                    Since then, it&apos;s been a lot of learning: getting the Essentials in Distilling qualification from the Chartered Institute of Brewers and Distillers, sorting out the personal alcohol licence, navigating HMRC for AWRS approval. The usual stuff you have to figure out when you&apos;re starting from scratch. Read more about <Link href="/about/story/" className="text-gold-300 hover:text-gold-400 underline">how we got here</Link>.
-                  </p>
+                {/* In his words. Moved up from the story band so the column
+                    beside the facts is not one short panel and a stretch of
+                    empty green; the story band keeps its three panels. */}
+                <div className="bg-linear-to-br from-gold-500/10 to-gold-600/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
+                  <div className="flex items-start gap-4">
+                    <div className="shrink-0">
+                      <svg className="w-8 h-8 text-gold-400" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z" clipRule="evenodd" />
+                      </svg>
+                    </div>
+                    <blockquote className="flex-1">
+                      <p className="text-xl text-parchment-100 italic leading-relaxed mb-4">
+                        "Jerry Can Spirits matters to me because we built it ourselves, from scratch, without shortcuts. No outside agenda. No corporate brief. Just two blokes who wanted a proper drink and decided to make one."
+                      </p>
+                      <cite className="text-gold-400 font-semibold not-italic">Dan Freeman</cite>
+                    </blockquote>
+                  </div>
                 </div>
               </div>
             </div>
@@ -201,6 +204,22 @@ export default function DanFreemanPage() {
           <SectionHeading eyebrow="The story">Behind Dan</SectionHeading>
 
           <div className="prose prose-invert max-w-none space-y-6">
+            {/* The Journey */}
+            <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+              <h2 className="text-2xl font-serif font-bold text-white mb-4 flex items-center gap-2">
+                <svg className="w-6 h-6 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+                The Journey to Jerry Can Spirits
+              </h2>
+              <p className="text-parchment-200 leading-relaxed mb-4">
+                The idea of making rum had been coming up for years, one of those conversations that kept happening whenever Dan and <Link href="/about/team/rhys-williams/" className="text-gold-300 hover:text-gold-400 underline">Rhys</Link> got together. In July 2025, Dan decided to stop just talking about it and actually have a go. Having tried well over 100 different rums and genuinely loving the stuff, it felt like the right time to create <Link href="/shop/product/jerry-can-spirits-expedition-spiced-rum/" className="text-gold-300 hover:text-gold-400 underline">something worth drinking</Link>.
+              </p>
+              <p className="text-parchment-200 leading-relaxed">
+                Since then, it&apos;s been a lot of learning: getting the Essentials in Distilling qualification from the Chartered Institute of Brewers and Distillers, sorting out the personal alcohol licence, navigating HMRC for AWRS approval. The usual stuff you have to figure out when you&apos;re starting from scratch. Read more about <Link href="/about/story/" className="text-gold-300 hover:text-gold-400 underline">how we got here</Link>.
+              </p>
+            </div>
+
             {/* Role & Expertise */}
             <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
               <h2 className="text-2xl font-serif font-bold text-white mb-4 flex items-center gap-2">
@@ -218,22 +237,6 @@ export default function DanFreemanPage() {
               </p>
             </div>
 
-            {/* Personal Quote */}
-            <div className="bg-linear-to-br from-gold-500/10 to-gold-600/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
-              <div className="flex items-start gap-4">
-                <div className="shrink-0">
-                  <svg className="w-8 h-8 text-gold-400" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z" clipRule="evenodd" />
-                  </svg>
-                </div>
-                <blockquote className="flex-1">
-                  <p className="text-xl text-parchment-100 italic leading-relaxed mb-4">
-                    "Jerry Can Spirits matters to me because we built it ourselves, from scratch, without shortcuts. No outside agenda. No corporate brief. Just two blokes who wanted a proper drink and decided to make one."
-                  </p>
-                  <cite className="text-gold-400 font-semibold not-italic">Dan Freeman</cite>
-                </blockquote>
-              </div>
-            </div>
           </div>
         </div>
       </section>

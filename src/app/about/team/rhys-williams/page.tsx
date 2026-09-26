@@ -145,20 +145,23 @@ export default function RhysWilliamsPage() {
                   </p>
                 </div>
 
-                {/* Post-Military Career */}
-                <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
-                  <h2 className="text-2xl font-serif font-bold text-white mb-4 flex items-center gap-2">
-                    <svg className="w-6 h-6 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                    </svg>
-                    Life After the Army
-                  </h2>
-                  <p className="text-parchment-200 leading-relaxed mb-4">
-                    After leaving, I transitioned into motorsport, working in onboard communications for Formula One. This role took me around the world, operating at the sharp end of high-performance, time-critical telecommunications where failure simply isn&apos;t an option.
-                  </p>
-                  <p className="text-parchment-200 leading-relaxed">
-                    Today, I manage telecommunications at large-scale live events, including festivals and major sporting occasions, overseeing complex temporary networks that keep events connected, safe, and operational.
-                  </p>
+                {/* In his words: the line from his story, pulled out so the
+                    column beside the facts is not one panel and empty green.
+                    The story band keeps all three of its panels. */}
+                <div className="bg-linear-to-br from-gold-500/10 to-gold-600/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
+                  <div className="flex items-start gap-4">
+                    <div className="shrink-0">
+                      <svg className="w-8 h-8 text-gold-400" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z" clipRule="evenodd" />
+                      </svg>
+                    </div>
+                    <blockquote className="flex-1">
+                      <p className="text-xl text-parchment-100 italic leading-relaxed mb-4">
+                        "That passion has now become a business."
+                      </p>
+                      <cite className="text-gold-400 font-semibold not-italic">Rhys Williams</cite>
+                    </blockquote>
+                  </div>
                 </div>
               </div>
             </div>
@@ -172,6 +175,22 @@ export default function RhysWilliamsPage() {
           <SectionHeading eyebrow="The story">Behind Rhys</SectionHeading>
 
           <div className="prose prose-invert max-w-none space-y-6">
+            {/* Post-Military Career */}
+            <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+              <h2 className="text-2xl font-serif font-bold text-white mb-4 flex items-center gap-2">
+                <svg className="w-6 h-6 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+                Life After the Army
+              </h2>
+              <p className="text-parchment-200 leading-relaxed mb-4">
+                After leaving, I transitioned into motorsport, working in onboard communications for Formula One. This role took me around the world, operating at the sharp end of high-performance, time-critical telecommunications where failure simply isn&apos;t an option.
+              </p>
+              <p className="text-parchment-200 leading-relaxed">
+                Today, I manage telecommunications at large-scale live events, including festivals and major sporting occasions, overseeing complex temporary networks that keep events connected, safe, and operational.
+              </p>
+            </div>
+
             {/* Passion for Spirits */}
             <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
               <h2 className="text-2xl font-serif font-bold text-white mb-4 flex items-center gap-2">
