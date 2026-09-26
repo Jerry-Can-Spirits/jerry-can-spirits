@@ -155,9 +155,12 @@ export default function DanFreemanPage() {
               </div>
             </div>
 
-            {/* Right Column - where the story starts */}
+            {/* Right Column - where the story starts. Two panels here, not
+                one: the photo, the facts and the fun fact make the left
+                column tall, and a single panel beside them left most of the
+                band empty (Dan, 26 Sep 2026). */}
             <div className="lg:col-span-2">
-              <div className="prose prose-invert max-w-none">
+              <div className="prose prose-invert max-w-none space-y-6">
                 {/* Military Background */}
                 <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
                   <h2 className="text-2xl font-serif font-bold text-white mb-4 flex items-center gap-2">
@@ -167,7 +170,23 @@ export default function DanFreemanPage() {
                     Military Service
                   </h2>
                   <p className="text-parchment-200 leading-relaxed">
-                    Dan served in the Royal Signals for 12 years (2012-2024), working in communications and information systems. He deployed to the Falklands, Afghanistan, and Estonia, with exercises across Europe and the US. Nothing heroic – just the usual soldiering.
+                    Dan served in the Royal Signals for 12 years (2012-2024), working in communications and information systems. He deployed to the Falklands, Afghanistan, and Estonia, with exercises across Europe and the US. Nothing heroic. Just the usual soldiering.
+                  </p>
+                </div>
+
+                {/* The Journey */}
+                <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+                  <h2 className="text-2xl font-serif font-bold text-white mb-4 flex items-center gap-2">
+                    <svg className="w-6 h-6 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    </svg>
+                    The Journey to Jerry Can Spirits
+                  </h2>
+                  <p className="text-parchment-200 leading-relaxed mb-4">
+                    The idea of making rum had been coming up for years, one of those conversations that kept happening whenever Dan and <Link href="/about/team/rhys-williams/" className="text-gold-300 hover:text-gold-400 underline">Rhys</Link> got together. In July 2025, Dan decided to stop just talking about it and actually have a go. Having tried well over 100 different rums and genuinely loving the stuff, it felt like the right time to create <Link href="/shop/product/jerry-can-spirits-expedition-spiced-rum/" className="text-gold-300 hover:text-gold-400 underline">something worth drinking</Link>.
+                  </p>
+                  <p className="text-parchment-200 leading-relaxed">
+                    Since then, it&apos;s been a lot of learning: getting the Essentials in Distilling qualification from the Chartered Institute of Brewers and Distillers, sorting out the personal alcohol licence, navigating HMRC for AWRS approval. The usual stuff you have to figure out when you&apos;re starting from scratch. Read more about <Link href="/about/story/" className="text-gold-300 hover:text-gold-400 underline">how we got here</Link>.
                   </p>
                 </div>
               </div>
@@ -182,22 +201,6 @@ export default function DanFreemanPage() {
           <SectionHeading eyebrow="The story">Behind Dan</SectionHeading>
 
           <div className="prose prose-invert max-w-none space-y-6">
-            {/* The Journey */}
-            <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
-              <h2 className="text-2xl font-serif font-bold text-white mb-4 flex items-center gap-2">
-                <svg className="w-6 h-6 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                </svg>
-                The Journey to Jerry Can Spirits
-              </h2>
-              <p className="text-parchment-200 leading-relaxed mb-4">
-                The idea of making rum had been coming up for years – one of those conversations that kept happening whenever Dan and <Link href="/about/team/rhys-williams/" className="text-gold-300 hover:text-gold-400 underline">Rhys</Link> got together. In July 2025, Dan decided to stop just talking about it and actually have a go. Having tried well over 100 different rums and genuinely loving the stuff, it felt like the right time to create <Link href="/shop/product/jerry-can-spirits-expedition-spiced-rum/" className="text-gold-300 hover:text-gold-400 underline">something worth drinking</Link>.
-              </p>
-              <p className="text-parchment-200 leading-relaxed">
-                Since then, it&apos;s been a lot of learning – getting the Essentials in Distilling qualification from the Chartered Institute of Brewers and Distillers, sorting out the personal alcohol licence, navigating HMRC for AWRS approval. The usual stuff you have to figure out when you&apos;re starting from scratch. Read more about <Link href="/about/story/" className="text-gold-300 hover:text-gold-400 underline">how we got here</Link>.
-              </p>
-            </div>
-
             {/* Role & Expertise */}
             <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
               <h2 className="text-2xl font-serif font-bold text-white mb-4 flex items-center gap-2">
@@ -208,7 +211,7 @@ export default function DanFreemanPage() {
                 Role at Jerry Can Spirits
               </h2>
               <p className="text-parchment-200 leading-relaxed mb-4">
-                Since leaving the forces, Dan&apos;s been doing a bit of everything – operations, finance, legal compliance, building the website, SEO, product development. When you&apos;re a small outfit, you end up wearing a lot of hats.
+                Since leaving the forces, Dan&apos;s been doing a bit of everything: operations, finance, legal compliance, building the website, SEO, product development. When you&apos;re a small outfit, you end up wearing a lot of hats.
               </p>
               <p className="text-parchment-200 leading-relaxed">
                 The military taught him to pay attention to details and plan things properly, which comes in handy when you&apos;re trying to build something from nothing. His approach is pretty simple: make something you&apos;re proud of, and don&apos;t cut corners.
@@ -227,7 +230,7 @@ export default function DanFreemanPage() {
                   <p className="text-xl text-parchment-100 italic leading-relaxed mb-4">
                     "Jerry Can Spirits matters to me because we built it ourselves, from scratch, without shortcuts. No outside agenda. No corporate brief. Just two blokes who wanted a proper drink and decided to make one."
                   </p>
-                  <cite className="text-gold-400 font-semibold not-italic">— Dan Freeman</cite>
+                  <cite className="text-gold-400 font-semibold not-italic">Dan Freeman</cite>
                 </blockquote>
               </div>
             </div>

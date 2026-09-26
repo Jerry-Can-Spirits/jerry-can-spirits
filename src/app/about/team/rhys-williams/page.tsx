@@ -110,7 +110,7 @@ export default function RhysWilliamsPage() {
                   <div>
                     <p className="text-gold-400 font-semibold mb-1">Service</p>
                     <p className="text-parchment-200">Royal Signals</p>
-                    <p className="text-parchment-300 text-xs">2011 – 2016 (5 years)</p>
+                    <p className="text-parchment-300 text-xs">2011 - 2016 (5 years)</p>
                   </div>
                   <div>
                     <p className="text-gold-400 font-semibold mb-1">Trade</p>
@@ -128,9 +128,10 @@ export default function RhysWilliamsPage() {
               </div>
             </div>
 
-            {/* Right Column - where the story starts */}
+            {/* Right Column - where the story starts. Two panels here so the
+                column is as tall as the photo and the facts beside it. */}
             <div className="lg:col-span-2">
-              <div className="prose prose-invert max-w-none">
+              <div className="prose prose-invert max-w-none space-y-6">
                 {/* Military Background */}
                 <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
                   <h2 className="text-2xl font-serif font-bold text-white mb-4 flex items-center gap-2">
@@ -141,6 +142,22 @@ export default function RhysWilliamsPage() {
                   </h2>
                   <p className="text-parchment-200 leading-relaxed">
                     I began my career in the British Army, serving with the Royal Signals as an Installation Technician from 2011 to 2016. During that time, I developed a deep understanding of critical communications, infrastructure deployment, and working under pressure in demanding environments.
+                  </p>
+                </div>
+
+                {/* Post-Military Career */}
+                <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+                  <h2 className="text-2xl font-serif font-bold text-white mb-4 flex items-center gap-2">
+                    <svg className="w-6 h-6 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    </svg>
+                    Life After the Army
+                  </h2>
+                  <p className="text-parchment-200 leading-relaxed mb-4">
+                    After leaving, I transitioned into motorsport, working in onboard communications for Formula One. This role took me around the world, operating at the sharp end of high-performance, time-critical telecommunications where failure simply isn&apos;t an option.
+                  </p>
+                  <p className="text-parchment-200 leading-relaxed">
+                    Today, I manage telecommunications at large-scale live events, including festivals and major sporting occasions, overseeing complex temporary networks that keep events connected, safe, and operational.
                   </p>
                 </div>
               </div>
@@ -155,22 +172,6 @@ export default function RhysWilliamsPage() {
           <SectionHeading eyebrow="The story">Behind Rhys</SectionHeading>
 
           <div className="prose prose-invert max-w-none space-y-6">
-            {/* Post-Military Career */}
-            <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
-              <h2 className="text-2xl font-serif font-bold text-white mb-4 flex items-center gap-2">
-                <svg className="w-6 h-6 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                </svg>
-                Life After the Army
-              </h2>
-              <p className="text-parchment-200 leading-relaxed mb-4">
-                After leaving, I transitioned into motorsport, working in onboard communications for Formula One. This role took me around the world, operating at the sharp end of high-performance, time-critical telecommunications where failure simply isn&apos;t an option.
-              </p>
-              <p className="text-parchment-200 leading-relaxed">
-                Today, I manage telecommunications at large-scale live events, including festivals and major sporting occasions, overseeing complex temporary networks that keep events connected, safe, and operational.
-              </p>
-            </div>
-
             {/* Passion for Spirits */}
             <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
               <h2 className="text-2xl font-serif font-bold text-white mb-4 flex items-center gap-2">
