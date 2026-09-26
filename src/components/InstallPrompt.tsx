@@ -2,6 +2,34 @@
 
 import { useState, useEffect } from 'react'
 
+const DISMISSED_KEY = 'pwa-install-dismissed'
+
+function readDismissal(): Date | null {
+  for (const store of [localStorage, sessionStorage]) {
+    try {
+      const value = store.getItem(DISMISSED_KEY)
+      if (value) {
+        const date = new Date(value)
+        if (!Number.isNaN(date.getTime())) return date
+      }
+    } catch {
+      // Storage unavailable; try the next one.
+    }
+  }
+  return null
+}
+
+function writeDismissal() {
+  const now = new Date().toISOString()
+  for (const store of [localStorage, sessionStorage]) {
+    try {
+      store.setItem(DISMISSED_KEY, now)
+    } catch {
+      // Storage unavailable; the in-memory state already hides the prompt.
+    }
+  }
+}
+
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>
   userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }>
@@ -23,11 +51,12 @@ export default function InstallPrompt() {
     const isIOSDevice = /iPad|iPhone|iPod/.test(navigator.userAgent) && !('MSStream' in window)
     setIsIOS(isIOSDevice)
 
-    // Check if user previously dismissed
-    const dismissed = localStorage.getItem('pwa-install-dismissed')
+    // Check if user previously dismissed. Storage can be unavailable (a
+    // private tab, a browser with site data blocked); read it defensively,
+    // and treat a session-level dismissal as enough to keep quiet.
+    const dismissed = readDismissal()
     if (dismissed) {
-      const dismissedDate = new Date(dismissed)
-      const daysSinceDismissed = (Date.now() - dismissedDate.getTime()) / (1000 * 60 * 60 * 24)
+      const daysSinceDismissed = (Date.now() - dismissed.getTime()) / (1000 * 60 * 60 * 24)
 
       // Don't show again for 30 days after dismissal
       if (daysSinceDismissed < 30) {
@@ -78,10 +107,16 @@ export default function InstallPrompt() {
     setShowPrompt(false)
   }
 
+  // Hide first, record second. The record used to come first, and where
+  // storage throws (a private tab, site data blocked) the click died on the
+  // write and the prompt stayed on screen, which read as "Not Now does
+  // nothing" (Jade, 25 Sep 2026). The record goes to session storage as well,
+  // so a browser that refuses the durable one still stays quiet for the
+  // visit.
   const handleDismiss = () => {
-    localStorage.setItem('pwa-install-dismissed', new Date().toISOString())
     setShowPrompt(false)
     setShowIOSPrompt(false)
+    writeDismissal()
   }
 
   // iOS Install Instructions Banner
