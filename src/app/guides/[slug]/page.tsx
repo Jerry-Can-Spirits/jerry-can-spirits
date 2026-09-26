@@ -14,6 +14,7 @@ import { OG_IMAGE } from '@/lib/og'
 import { ORG_REF, authorRefFor } from '@/lib/jsonLd'
 import FAQAccordion from '@/components/FAQAccordion'
 import ScrollRow from '@/components/ScrollRow'
+import SectionHeading from '@/components/SectionHeading'
 
 const TEAM_MEMBERS = new Set(['Dan Freeman', 'Rhys Williams'])
 
@@ -218,12 +219,18 @@ export default async function GuidePage({ params }: PageProps) {
     }))
   } : null
 
-  // The page is four bands: the guide itself on dark, the distilleries and
-  // questions on light, the related reading on dark, the closing links on
-  // light. The body is rendered as prose-invert, whose colours a light
-  // band's token re-pointing does not reach, so everything up to the last
-  // comparison table stays on dark. The two middle bands are optional
-  // content, so each is only painted when there is something to put in it.
+  // Five bands, cut by weight: the header, the guide itself, the distilleries
+  // and questions, the related rows, and the closing links. The body is
+  // rendered as prose-invert, and until globals.css pointed Typography's
+  // variables at the band inks it could not sit on light, so everything up
+  // to the last comparison table stayed on dark and most of the page was
+  // still a wall of green. Each band now opens with a heading so it reads
+  // as a section, and each optional band is painted only when it has
+  // something in it.
+  const hasBody = Boolean(
+    (guide.sections && guide.sections.length > 0) ||
+    (guide.comparisonTables && guide.comparisonTables.length > 0),
+  )
   const hasMore = Boolean(
     (guide.featuredDistilleries && guide.featuredDistilleries.length > 0) ||
     (guide.faqs && guide.faqs.length > 0),
@@ -369,8 +376,14 @@ export default async function GuidePage({ params }: PageProps) {
           </nav>
         )}
 
+       </section>
+
+       {hasBody && (
+       <section className="band-light py-12">
         {/* Main Content Sections */}
         <article className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <SectionHeading eyebrow="The guide">What you need to know</SectionHeading>
+
           {guide.sections && (
             <GuideSections
               sections={guide.sections}
@@ -449,10 +462,14 @@ export default async function GuidePage({ params }: PageProps) {
           )}
         </article>
        </section>
+       )}
 
        {hasMore && (
-       <section className="band-light py-12">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
+       <section className="band-dark py-12">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <SectionHeading eyebrow="Go further">More to explore</SectionHeading>
+
+          <div className="space-y-16">
           {/* Featured Distilleries */}
           {guide.featuredDistilleries && guide.featuredDistilleries.length > 0 && (
             <div>
@@ -503,14 +520,18 @@ export default async function GuidePage({ params }: PageProps) {
               <FAQAccordion items={guide.faqs} />
             </div>
           )}
+          </div>
         </div>
        </section>
        )}
 
        {/* Related Content */}
        {hasRelated && (
-       <section className="band-dark py-12">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+       <section className="band-light py-12">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <SectionHeading eyebrow="Make something">Put it to use</SectionHeading>
+
+          <div className="space-y-12">
               {/* Related Cocktails */}
               {guide.relatedCocktails && guide.relatedCocktails.length > 0 && (
                 <div>
@@ -598,12 +619,16 @@ export default async function GuidePage({ params }: PageProps) {
                   />
                 </div>
               )}
+          </div>
         </div>
        </section>
        )}
 
-       <section className="band-light py-12">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+       <section className="band-dark py-12">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <SectionHeading eyebrow="Keep reading">Where next</SectionHeading>
+
+          <div className="space-y-12">
           {/* Call to Action */}
           {guide.callToAction && guide.callToAction.text && (
             <div className="bg-linear-to-br from-gold-500/10 to-gold-600/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/30 text-center">
@@ -675,6 +700,7 @@ export default async function GuidePage({ params }: PageProps) {
               </svg>
               View All Guides
             </Link>
+          </div>
           </div>
         </div>
        </section>
