@@ -247,6 +247,12 @@ export default function RhysWilliamsPage() {
             >
               <span>Meet Dan</span>
             </Link>
+            <Link
+              href="/about/team/joshua-sisson/"
+              className="inline-flex items-center gap-2 bg-jerry-green-800 hover:bg-jerry-green-700 text-parchment-50 px-6 py-3 rounded-lg font-semibold border-2 border-gold-500/30 hover:border-gold-500/60 transition-all duration-300"
+            >
+              <span>Meet Josh</span>
+            </Link>
           </div>
         </div>
       </section>
