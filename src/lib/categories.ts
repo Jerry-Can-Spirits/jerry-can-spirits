@@ -388,7 +388,7 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
   'gifts-under-20': giftBand(20, {
     metaTitle: 'Rum Gifts Under £20: Barware and Glassware',
     metaDescription:
-      'Small gifts for someone who drinks rum properly. Jiggers, glasses, spirit stones and bar tools from a veteran-owned British spirits house. Age-verified delivery.',
+      'Small gifts for someone who drinks rum properly. Jiggers, glasses, spirit stones and bar tools from a veteran-owned British spirits house.',
     introBody: [
       'A small gift for someone who drinks rum properly. Every piece here earns its place at the pour: the jigger that measures every Field Manual build, the glass the award serve was judged in, the bar blade that opens the ginger beer.',
       'Nothing here is a novelty. It is the kit the serves were built around, chosen because it does the job and keeps doing it.',
@@ -399,7 +399,7 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
   'gifts-under-50': giftBand(50, {
     metaTitle: 'Rum Gifts Under £50: The Bottle and the Glassware',
     metaDescription:
-      'Expedition Spiced Rum, or a pair of the glasses its serves were built for. Veteran-owned British spirits, real ingredients, IWSC 2026 medals. Age-verified delivery.',
+      'Expedition Spiced Rum, or a pair of the glasses its serves were built for. Veteran-owned British spirits, real ingredients, IWSC 2026 medals.',
     introBody: [
       'This is the budget that buys the bottle. Expedition Spiced Rum: Caribbean rum, seven real spices, two natural sweeteners and bourbon oak, Bronze at the IWSC 2026 within three months of launch. Numbered, and built to be sipped.',
       'Or the glassware the serves were designed in. A pair of the Crystal ICE hiballs is the Silver-medal serve, ready to pour. A pair of Club ICE tumblers is the Old Standard.',
@@ -410,7 +410,7 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
   'gifts-under-100': giftBand(100, {
     metaTitle: 'Rum Gifts Under £100: The Gift Pack',
     metaDescription:
-      'The Premium Gift Pack: Expedition Spiced Rum with the hiball, jigger and coaster to serve it properly, boxed. Veteran-owned British spirits. Age-verified delivery.',
+      'The Premium Gift Pack: Expedition Spiced Rum with the hiball, jigger and coaster to serve it properly, boxed. Veteran-owned British spirits.',
     introBody: [
       'The Premium Gift Pack is the complete first pour: the bottle, the Crystal ICE hiball from the Silver-medal serve, the 25ml and 50ml jigger and a slate coaster, in a branded box. Nothing to add. Open it and pour.',
       'Or build your own from the range below: the bottle, then the glasses and tools that suit the way they drink.',
