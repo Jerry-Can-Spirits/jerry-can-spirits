@@ -5,6 +5,7 @@ import Breadcrumbs from '@/components/Breadcrumbs'
 import SectionHeading from '@/components/SectionHeading'
 import StructuredData from '@/components/StructuredData'
 import FAQAccordion, { type FAQAccordionItem } from '@/components/FAQAccordion'
+import TeamMeetRow from '@/components/TeamMeetRow'
 import { OG_IMAGE } from '@/lib/og'
 import { ORG_REF } from '@/lib/jsonLd'
 
@@ -360,34 +361,7 @@ export default function DanFreemanPage() {
         </div>
       </section>
 
-      {/* Where to next */}
-      <section className="band-dark py-16">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-wrap justify-center gap-4">
-            <Link
-              href="/about/story/"
-              className="inline-flex items-center gap-2 bg-gold-500 hover:bg-gold-400 text-jerry-green-900 px-6 py-3 rounded-lg font-semibold transition-all duration-300 hover:scale-105"
-            >
-              <span>Read Our Story</span>
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-              </svg>
-            </Link>
-            <Link
-              href="/about/team/rhys-williams/"
-              className="inline-flex items-center gap-2 bg-jerry-green-800 hover:bg-jerry-green-700 text-parchment-50 px-6 py-3 rounded-lg font-semibold border-2 border-gold-500/30 hover:border-gold-500/60 transition-all duration-300"
-            >
-              <span>Meet Rhys</span>
-            </Link>
-            <Link
-              href="/about/team/joshua-sisson/"
-              className="inline-flex items-center gap-2 bg-jerry-green-800 hover:bg-jerry-green-700 text-parchment-50 px-6 py-3 rounded-lg font-semibold border-2 border-gold-500/30 hover:border-gold-500/60 transition-all duration-300"
-            >
-              <span>Meet Josh</span>
-            </Link>
-          </div>
-        </div>
-      </section>
+      <TeamMeetRow current="dan-freeman" />
     </main>
   )
 }

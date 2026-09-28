@@ -46,11 +46,11 @@ interface TeamMember {
   image?: string
 }
 
-// Two of these are placeholders, added 25 Sep 2026 so the cards exist to be
-// filled in rather than built from scratch when the details and photos
-// arrive. Josh Acklam's is still a placeholder: nothing beyond the name has
-// been confirmed. Joshua Sisson's role, bio and quote arrived the same day
-// and his page exists; service, rank and photo are still to come.
+// Placeholders exist so the cards and pages are filled in rather than built
+// from scratch when the details and photos arrive. Josh Acklam (25 Sep 2026)
+// and Danny Hughes (28 Sep) have pages with nothing beyond the name
+// confirmed. Joshua Sisson's role, bio and quote arrived 25 Sep; service,
+// rank and photo are still to come.
 const teamMembers: TeamMember[] = [
   {
     name: 'Dan Freeman',
@@ -75,6 +75,7 @@ const teamMembers: TeamMember[] = [
   {
     name: 'Josh Acklam',
     role: 'Details to follow.',
+    slug: 'josh-acklam',
   },
   {
     name: 'Joshua Sisson',
@@ -83,6 +84,11 @@ const teamMembers: TeamMember[] = [
     // The opening line of his quote on the bio page; the card has room for one
     // sentence, the page carries all four.
     quote: 'I believe in Jerry Can Spirits because I believe in the product.',
+  },
+  {
+    name: 'Danny Hughes',
+    role: 'Details to follow.',
+    slug: 'danny-hughes',
   },
 ]
 

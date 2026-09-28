@@ -56,6 +56,8 @@ async function getAllUrls(sanity: ReturnType<typeof createClient>): Promise<stri
     '/about/team/dan-freeman/',
     '/about/team/rhys-williams/',
     '/about/team/joshua-sisson/',
+    '/about/team/josh-acklam/',
+    '/about/team/danny-hughes/',
     '/ethos/',
     '/faq/',
     '/reviews/',
