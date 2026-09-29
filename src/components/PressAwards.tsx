@@ -102,7 +102,7 @@ export default function PressAwards() {
                     href={item.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group snap-start shrink-0 w-[85%] sm:w-[420px] lg:shrink lg:flex-1 lg:min-w-[300px] p-6 bg-jerry-green-800/20 rounded-xl border border-gold-500/20 hover:border-gold-400/40 transition-colors"
+                    className="group snap-start shrink-0 w-[85%] sm:w-[420px] lg:shrink lg:flex-1 lg:min-w-[300px] p-6 bg-jerry-green-800/40 backdrop-blur-sm rounded-xl border border-gold-500/20 hover:border-gold-400/40 transition-colors"
                   >
                     <p className="text-parchment-200 text-lg leading-relaxed mb-4 italic">
                       &ldquo;{item.quote}&rdquo;
@@ -162,7 +162,7 @@ export default function PressAwards() {
                   </>
                 )
                 const cardClasses =
-                  'flex items-start gap-4 p-5 bg-jerry-green-800/20 rounded-xl border border-gold-500/20'
+                  'flex items-start gap-4 p-5 bg-jerry-green-800/40 backdrop-blur-sm rounded-xl border border-gold-500/20'
                 return award.url ? (
                   <Link
                     key={award.title}
