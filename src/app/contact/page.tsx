@@ -117,7 +117,7 @@ export default function Contact() {
                   </h3>
                   <a
                     href={method.link}
-                    className="relative z-10 inline-block text-gold-300 hover:text-gold-200 font-medium mb-3 transition-colors duration-200 underline decoration-2"
+                    className="relative z-10 inline-block max-w-full [overflow-wrap:anywhere] text-gold-300 hover:text-gold-200 font-medium mb-3 transition-colors duration-200 underline decoration-2"
                   >
                     {method.value}
                   </a>
