@@ -47,8 +47,10 @@ export default function FindItIn({ handle }: { handle: string }) {
   const reading = READING[handle] ?? []
   if (categories.length === 0 && reading.length === 0) return null
 
+  // The panel is here rather than on the page so that a product with nothing
+  // to link renders nothing, not an empty card.
   return (
-    <div className="space-y-2">
+    <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20 space-y-2">
       {categories.length > 0 && (
         <LinkRow lead="Find it in:" links={categories.map((c) => ({ label: c.title, href: `/shop/${c.slug}/` }))} />
       )}

@@ -19,6 +19,7 @@ import ProductProcess from '@/components/ProductProcess'
 import DutyPaidStatement from '@/components/DutyPaidStatement'
 import ProductFAQ from '@/components/ProductFAQ'
 import ScrollRow from '@/components/ScrollRow'
+import SectionHeading from '@/components/SectionHeading'
 import WhatsIncluded from '@/components/WhatsIncluded'
 import DietaryInfo from '@/components/DietaryInfo'
 import StickyAddToCart from '@/components/StickyAddToCart'
@@ -543,10 +544,9 @@ export default async function ProductPage({
         compareAtPrice={product.variants?.[0]?.compareAtPrice?.amount ?? null}
       />
 
-      {/* Four bands: the buy box on dark, the specifications and questions on
-          light, the reviews on dark, the recommendations on light. The
-          description at the top renders through prose-invert, whose colours
-          the light band cannot re-point, so it must stay on dark. */}
+      {/* Five bands: the buy box on dark, the story on light, the
+          specifications and questions on dark, the reviews on light, the
+          recommendations on dark. */}
       <section className="band-dark pt-20 pb-16">
       {/* Breadcrumb */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
@@ -577,7 +577,8 @@ export default async function ProductPage({
             <ProductImageGallery images={product.images} productTitle={product.title} />
           </div>
 
-          {/* Product Info */}
+          {/* The decision column: title, price, ways to buy, medals, buy. The
+              persuasion follows in the band below. */}
           <div className="space-y-6">
             <div>
               <h1 className="text-4xl sm:text-5xl font-serif font-bold text-white mb-4">
@@ -664,55 +665,40 @@ export default async function ProductPage({
 
               {/* Complete the serve — curated cross-sell at the decision point */}
               <CompleteTheServe items={completeTheServeItems} primaryVariantId={completeTheServePrimaryVariantId} />
-
-              {/* Trust strip and accreditations. The IWSC tile only appears where
-                  ProductAwards does not, so the medal is stated once per page. */}
-              <div className="mt-6 pt-6 border-t border-gold-500/10 space-y-4">
-                <TrustStrip showIwsc={!AWARDED_HANDLES.includes(handle)} />
-                <RecognitionRow />
-                <p className="text-center text-sm text-parchment-400 tracking-wide">
-                  Ships for {STANDARD_SHIPPING_LABEL}. Free over £{FREE_SHIPPING_THRESHOLD_GBP}. Secure checkout, express payment available.
-                  {AWARDED_HANDLES.includes(handle) ? '' : ' 5% of profits goes to forces charities.'}
-                </p>
-              </div>
-
             </div>
+          </div>
+        </div>
+      </section>
+      </section>
 
+      {/* The persuasion: the description beside what you are getting and where
+          else it lives, then the reasons to trust the button. It used to sit
+          in the buy column under the button, which made that column three
+          times the height of the gallery. */}
+      <section className="band-light py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <SectionHeading eyebrow="The story">What you are buying</SectionHeading>
+
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12 lg:items-start">
             {/* Description */}
             {product.descriptionHtml && (
               <div
-                className="prose prose-invert max-w-none prose-headings:font-serif prose-headings:text-gold-300 prose-p:text-parchment-200 prose-p:leading-relaxed prose-strong:text-white prose-li:text-parchment-200 prose-a:text-blue-400 prose-a:underline prose-a:underline-offset-2 prose-a:hover:text-blue-300"
+                className="lg:col-span-2 prose prose-invert max-w-none prose-headings:font-serif prose-headings:text-gold-300 prose-p:text-parchment-200 prose-p:leading-relaxed prose-strong:text-white prose-li:text-parchment-200 prose-a:underline prose-a:underline-offset-2"
                 dangerouslySetInnerHTML={{ __html: xss(product.descriptionHtml) }}
               />
             )}
 
-            {/* Curated collection links (internal linking + wayfinding) */}
-            <FindItIn handle={handle} />
-
-            {/* Product Features/Highlights - Category-specific content */}
-            <div className="pt-6 border-t border-gold-500/20">
-              <h3 className="text-lg font-semibold text-gold-300 mb-4">What You're Getting</h3>
-              <ul className="space-y-2 text-parchment-300">
-                {isSpirit ? (
-                  // Spirits-specific features
-                  <>
-                    <li className="flex items-start gap-3">
-                      <svg className="w-5 h-5 text-gold-500 mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                      </svg>
-                      <span>Made by veterans who actually drink what they make</span>
-                    </li>
-                    <li className="flex items-start gap-3">
-                      <svg className="w-5 h-5 text-gold-500 mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                      </svg>
-                      <span>Macerated by our British partner distillery - proper craft, not factory production</span>
-                    </li>
-                    <li className="flex items-start gap-3">
-                      <svg className="w-5 h-5 text-gold-500 mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                      </svg>
-                      <span>
+            <div className="space-y-6">
+              {/* Product Features/Highlights - Category-specific content */}
+              <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+                <h3 className="text-lg font-semibold text-gold-300 mb-4">What You're Getting</h3>
+                <ul className="list-disc pl-5 space-y-2 text-parchment-300">
+                  {isSpirit ? (
+                    // Spirits-specific features
+                    <>
+                      <li>Made by veterans who actually drink what they make</li>
+                      <li>Macerated by our British partner distillery - proper craft, not factory production</li>
+                      <li>
                         Limited numbers per batch. Every one numbered. No reprints.{' '}
                         {/* Traceable is a claim; the batch tracker is its
                             evidence, with the production record and a
@@ -723,66 +709,60 @@ export default async function ProductPage({
                         >
                           Check your bottle
                         </Link>
-                      </span>
-                    </li>
-                  </>
-                ) : category.trackingCategory === 'Barware' ? (
-                  // Barware-specific features
-                  <>
-                    <li className="flex items-start gap-3">
-                      <svg className="w-5 h-5 text-gold-500 mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                      </svg>
-                      <span>Hand-picked by our founder - only items we'd use ourselves</span>
-                    </li>
-                    <li className="flex items-start gap-3">
-                      <svg className="w-5 h-5 text-gold-500 mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                      </svg>
-                      <span>Built to last - we're not interested in selling throwaway items</span>
-                    </li>
-                  </>
-                ) : (
-                  // Clothing-specific features
-                  <>
-                    <li className="flex items-start gap-3">
-                      <svg className="w-5 h-5 text-gold-500 mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                      </svg>
-                      <span>Wear the brand you believe in. Made by people who do this for real.</span>
-                    </li>
-                    <li className="flex items-start gap-3">
-                      <svg className="w-5 h-5 text-gold-500 mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                      </svg>
-                      <span>Quality fabrics that last - we wear these too</span>
-                    </li>
-                  </>
-                )}
-              </ul>
-            </div>
+                      </li>
+                    </>
+                  ) : category.trackingCategory === 'Barware' ? (
+                    // Barware-specific features
+                    <>
+                      <li>Hand-picked by our founder - only items we'd use ourselves</li>
+                      <li>Built to last - we're not interested in selling throwaway items</li>
+                    </>
+                  ) : (
+                    // Clothing-specific features
+                    <>
+                      <li>Wear the brand you believe in. Made by people who do this for real.</li>
+                      <li>Quality fabrics that last - we wear these too</li>
+                    </>
+                  )}
+                </ul>
+              </div>
 
-            {/* Back to Shop Link */}
-            <div className="pt-6">
-              <Link
-                href={category.href}
-                className="inline-flex items-center gap-2 text-gold-300 hover:text-gold-400 transition-colors"
-              >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                </svg>
-                Back to {category.label}
-              </Link>
+              {/* Curated collection links (internal linking + wayfinding) */}
+              <FindItIn handle={handle} />
             </div>
           </div>
+
+          {/* Trust strip and accreditations. The IWSC tile only appears where
+              ProductAwards does not, so the medal is stated once per page. */}
+          <div className="mt-12 pt-8 border-t border-gold-500/20 space-y-4">
+            <TrustStrip showIwsc={!AWARDED_HANDLES.includes(handle)} />
+            <RecognitionRow />
+            <p className="text-center text-sm text-parchment-400 tracking-wide">
+              Ships for {STANDARD_SHIPPING_LABEL}. Free over £{FREE_SHIPPING_THRESHOLD_GBP}. Secure checkout, express payment available.
+              {AWARDED_HANDLES.includes(handle) ? '' : ' 5% of profits goes to forces charities.'}
+            </p>
+          </div>
+
+          {/* Back to Shop Link */}
+          <div className="pt-6">
+            <Link
+              href={category.href}
+              className="inline-flex items-center gap-2 text-gold-300 hover:text-gold-400 transition-colors"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              </svg>
+              Back to {category.label}
+            </Link>
+          </div>
         </div>
-      </section>
       </section>
 
       {/* Product Details & Tasting Notes - Spirits only */}
       {(product.metafields || sanityProduct) && (
-        <section className="band-light py-16">
+        <section className="band-dark py-16">
          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+          <SectionHeading eyebrow="The detail">Specifications and tasting notes</SectionHeading>
           {/* Product Specifications - Only for spirits (drink-specific fields) */}
           {isSpirit && product.metafields && product.metafields.length > 0 && (
             <ProductSpecifications
@@ -910,19 +890,15 @@ export default async function ProductPage({
       )}
 
       {/* Customer Reviews Section */}
-      <section id="customer-reviews" className="band-dark py-16 scroll-mt-24">
+      <section id="customer-reviews" className="band-light py-16 scroll-mt-24">
        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <SectionHeading eyebrow="The proof" intro="What people think">Customer Reviews</SectionHeading>
         <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
-          <h2 className="text-3xl font-serif font-bold text-white mb-2">Customer Reviews</h2>
-          <p className="text-parchment-300 mb-8">What people think</p>
 
           {productReviews.length > 0 ? (
             <ProductReviews reviews={productReviews} />
           ) : (
             <div className="text-center py-12">
-              <svg className="w-16 h-16 text-gold-500/30 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
-              </svg>
               <h3 className="text-xl font-serif font-bold text-gold-300 mb-2">Reviews Coming Soon</h3>
               <p className="text-parchment-300 max-w-md mx-auto">
                 We only launched in April 2026. Reviews are just coming in. Come back soon.
@@ -935,9 +911,9 @@ export default async function ProductPage({
 
       {/* Related Products Section */}
       {relatedProducts.length > 0 && (
-        <section className="band-light py-16">
+        <section className="band-dark py-16">
          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-serif font-bold text-white mb-8">Worth Looking At</h2>
+          <SectionHeading eyebrow="Go further">Worth Looking At</SectionHeading>
           <ScrollRow
             ariaLabel="Related products"
             cols="md:grid-cols-2 lg:grid-cols-4"
