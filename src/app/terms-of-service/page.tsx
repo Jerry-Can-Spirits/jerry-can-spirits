@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import type { Metadata } from 'next'
 import StructuredData from '@/components/StructuredData'
 import SectionHeading from '@/components/SectionHeading'
@@ -112,7 +113,17 @@ export default function TermsOfService() {
                   3. Age Restrictions
                 </h2>
                 <div className="bg-red-900/40 backdrop-blur-sm rounded-lg p-6 border border-red-600/30">
-                  <h3 className="text-lg font-semibold text-red-200 mb-2">18+ Only</h3>
+                  <div className="flex items-center gap-3 mb-2">
+                    {/* Portman Group 18+ symbol, reversed-out version for the dark panel. Licensed artwork, hosted with the other logos. */}
+                    <Image
+                      src="https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/a62441f1-45f0-4d95-a7c1-ad38802a6e00/public"
+                      alt="18+"
+                      width={40}
+                      height={40}
+                      className="w-10 h-10 shrink-0"
+                    />
+                    <h3 className="text-lg font-semibold text-red-200">18+ Only</h3>
+                  </div>
                   <p className="text-red-100 mb-2">
                     You must be 18 years or older to access this website and purchase our products. By using this site, you warrant that you are of legal drinking age in your jurisdiction.
                   </p>
