@@ -109,6 +109,41 @@ jobs:
           path: .next
           retention-days: 7
 
+      # The smoke test. `next build` passing says nothing about whether the
+      # Worker bundle loads on Cloudflare's runtime: on 28 Sep 2026 a dependency
+      # bump built green, deployed, and every /api/ route (checkout included)
+      # returned 500 for eighteen hours. So the same job bundles the Worker the
+      # way the deploy does, runs it on workerd locally, and hits the routes a
+      # customer depends on. See scripts/smoke.mjs.
+      - name: Bundle the Worker (OpenNext)
+        run: npx opennextjs-cloudflare build --skipNextBuild
+        env:
+          NEXT_PUBLIC_SANITY_PROJECT_ID: 5mtjmb0t
+          NEXT_PUBLIC_SANITY_DATASET: production
+          NEXT_PUBLIC_CLOUDFLARE_ACCOUNT_HASH: T4IfqPfa6E-8YtW8Lo02gQ
+          NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN: ${{ secrets.NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN }}
+          NEXT_PUBLIC_SHOPIFY_STOREFRONT_ACCESS_TOKEN: ${{ secrets.NEXT_PUBLIC_SHOPIFY_STOREFRONT_ACCESS_TOKEN }}
+          NEXT_PUBLIC_MAPBOX_TOKEN: ${{ secrets.NEXT_PUBLIC_MAPBOX_TOKEN }}
+          NEXT_PUBLIC_TURNSTILE_SITE_KEY: ${{ secrets.NEXT_PUBLIC_TURNSTILE_SITE_KEY }}
+
+      - name: Start the Worker locally
+        # Placeholder secrets: the webhook routes only need a value to exist so
+        # they reach their signature check and answer 401 rather than 500.
+        run: |
+          printf 'SHOPIFY_WEBHOOK_SECRET=ci-smoke-placeholder\nSANITY_WEBHOOK_SECRET=ci-smoke-placeholder\n' > .dev.vars
+          (npx opennextjs-cloudflare preview -- --port 8787 > worker-preview.log 2>&1 &)
+          for i in $(seq 1 90); do
+            if curl -s -o /dev/null http://localhost:8787/api/geo/; then echo "worker up after ${i} tries"; break; fi
+            sleep 2
+          done
+
+      - name: Smoke the local Worker
+        run: node scripts/smoke.mjs http://localhost:8787
+
+      - name: Worker log on failure
+        if: failure()
+        run: tail -n 200 worker-preview.log || true
+
   # Summary job — required status check for branch protection
   ci:
     name: CI
@@ -139,3 +174,18 @@ jobs:
             -H "Authorization: Bearer ${{ secrets.CF_API_TOKEN }}" \
             -H "Content-Type: application/json" \
             --data '{"purge_everything":true}'
+
+      # What shipped has to answer. Same script as the PR gate, against the
+      # live site, once the deploy has had its three minutes.
+      - name: Checkout code
+        uses: actions/checkout@v7
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+
+      - name: Smoke the live site
+        run: node scripts/smoke.mjs https://jerrycanspirits.co.uk
+        env:
+          SMOKE_TOKEN: ${{ secrets.SMOKE_TOKEN }}

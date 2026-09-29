@@ -1,0 +1,37 @@
+name: Smoke (live site)
+
+# Every fifteen minutes, hit the routes a customer depends on and fail if any
+# is broken. A failed run emails the committer of this file; it is meant to
+# post to the 2iC Teams channel once that webhook exists. See scripts/smoke.mjs
+# for what is checked and why (the 18-hour API outage of 28-29 Sep 2026).
+
+on:
+  schedule:
+    - cron: '*/15 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: smoke-production
+  cancel-in-progress: false
+
+jobs:
+  smoke:
+    name: Live site answers
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+
+      - name: Smoke the live site
+        run: node scripts/smoke.mjs https://jerrycanspirits.co.uk
+        env:
+          SMOKE_TOKEN: ${{ secrets.SMOKE_TOKEN }}
