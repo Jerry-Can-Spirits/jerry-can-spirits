@@ -42,7 +42,7 @@ export default function FAQAccordion({
       {items.map((item, i) => (
         <details
           key={i}
-          className="group bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl border border-gold-500/20 open:border-gold-400/40"
+          className="panel-green group bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl border border-gold-500/20 open:border-gold-400/40"
         >
           <summary className="flex items-center justify-between gap-4 p-5 sm:p-6 cursor-pointer list-none [&::-webkit-details-marker]:hidden min-h-[44px]">
             <Heading className="text-lg font-serif font-bold text-gold-300">{item.question}</Heading>

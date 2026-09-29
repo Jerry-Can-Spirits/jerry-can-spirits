@@ -783,6 +783,123 @@ html:not([data-age-verified]) body:has(.age-gate) {
   --color-yellow-300: #fde047;
 }
 
+/* Panels inside a dark band go parchment: the inverse of the island rule
+   above, so a panel is always the opposite tone of its band. The translucent
+   green panels this replaces read as a slightly darker smudge over the
+   contours (the As Seen In cards on the homepage looked like empty outlines,
+   Dan, 29 Sep 2026); a parchment panel with green ink is a card.
+
+   Only translucent greens are matched, the ones carrying an alpha slash.
+   A solid green (a secondary button, a chip) is a green thing and stays
+   green, and inside a parchment panel it gets the dark-ground tokens back
+   so its text stays light.
+
+   `panel-green` opts a panel out and keeps it as it was. The FAQ accordions
+   carry it: six cream accordions on green would be louder than the
+   questions deserve (Dan, 29 Sep 2026). Remove the class and they flip
+   like everything else. */
+.band-dark :is(
+  [class*='from-parchment-'],
+  [class*='from-gold-400/'],
+  [class*='from-gold-500/'],
+  [class*='from-gold-600/'],
+  [class*='bg-jerry-green-700/'],
+  [class*='bg-jerry-green-800/'],
+  [class*='bg-jerry-green-900/'],
+  [class*='from-jerry-green-']:not([class*='to-transparent'])
+):not(.panel-green):not(.panel-green *) {
+  background-image: none;
+  background-color: #ece9e0;
+  color: #163b28;
+
+  --color-white: #163b28;
+  --color-parchment-50: #163b28;
+  --color-parchment-100: #1e3529;
+  --color-parchment-200: #3d4a43;
+  --color-parchment-300: #3d4a43;
+  --color-parchment-400: #56625b;
+  --color-parchment-500: #6b7770;
+  --color-gold-200: #7d4106;
+  --color-gold-300: #7d4106;
+  --color-gold-400: #7d4106;
+  /* gold-500 is left alone here: the solid buy buttons inside a panel stay
+     gold, and their green text is what reads on it. */
+  --color-red-400: #9b1c1c;
+  --color-red-300: #9b1c1c;
+  --color-green-400: #166534;
+  --color-green-300: #166534;
+  --color-amber-300: #92400e;
+  --color-amber-400: #92400e;
+  --color-yellow-400: #854d0e;
+  --color-yellow-300: #854d0e;
+
+  --tw-prose-body: #3d4a43;
+  --tw-prose-headings: #163b28;
+  --tw-prose-lead: #3d4a43;
+  --tw-prose-links: #7d4106;
+  --tw-prose-bold: #163b28;
+  --tw-prose-counters: #56625b;
+  --tw-prose-bullets: #8a6a2a;
+  --tw-prose-hr: #8a6a2a;
+  --tw-prose-quotes: #163b28;
+  --tw-prose-quote-borders: #8a6a2a;
+  --tw-prose-captions: #56625b;
+  --tw-prose-code: #163b28;
+  --tw-prose-pre-code: #fefdfb;
+  --tw-prose-pre-bg: #1e5337;
+  --tw-prose-th-borders: #8a6a2a;
+  --tw-prose-td-borders: #dfc396;
+}
+
+/* A translucent panel inside a parchment panel: one shade deeper, so a
+   nested box (a fact list, a form field, a pull quote) keeps its edge. */
+.band-dark :is(
+  [class*='from-parchment-'],
+  [class*='from-gold-400/'],
+  [class*='from-gold-500/'],
+  [class*='from-gold-600/'],
+  [class*='bg-jerry-green-700/'],
+  [class*='bg-jerry-green-800/'],
+  [class*='bg-jerry-green-900/'],
+  [class*='from-jerry-green-']:not([class*='to-transparent'])
+):not(.panel-green):not(.panel-green *) :is(
+  [class*='from-parchment-'],
+  [class*='bg-jerry-green-700/'],
+  [class*='bg-jerry-green-800/'],
+  [class*='bg-jerry-green-900/'],
+  [class*='from-jerry-green-']:not([class*='to-transparent'])
+) {
+  background-image: none;
+  background-color: #dfdbcf;
+}
+
+/* A solid green thing inside a parchment panel keeps its green and gets the
+   dark-ground tokens back, so a secondary button or a chip still reads. */
+.band-dark :is(
+  [class*='from-parchment-'],
+  [class*='from-gold-400/'],
+  [class*='from-gold-500/'],
+  [class*='from-gold-600/'],
+  [class*='bg-jerry-green-700/'],
+  [class*='bg-jerry-green-800/'],
+  [class*='bg-jerry-green-900/'],
+  [class*='from-jerry-green-']:not([class*='to-transparent'])
+):not(.panel-green):not(.panel-green *) :is(
+  [class*='bg-jerry-green-']:not([class*='bg-jerry-green-700/']):not([class*='bg-jerry-green-800/']):not([class*='bg-jerry-green-900/'])
+) {
+  color: #fefdfb;
+  --color-white: #fefdfb;
+  --color-parchment-50: #fefdfb;
+  --color-parchment-100: #fcf9f3;
+  --color-parchment-200: #f7f1e3;
+  --color-parchment-300: #f1e7d0;
+  --color-parchment-400: #e9d8b7;
+  --color-parchment-500: #dfc396;
+  --color-gold-200: #fde68a;
+  --color-gold-300: #fcd34d;
+  --color-gold-400: #fbbf24;
+}
+
 /* The logo plates are white on purpose, for contrast against whatever they
    sit on. They stay white on both. */
 .band-light .bg-white,
