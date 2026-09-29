@@ -102,17 +102,17 @@ export default function PressAwards() {
                     href={item.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group snap-start shrink-0 w-[85%] sm:w-[420px] lg:shrink lg:flex-1 lg:min-w-[300px] p-6 bg-jerry-green-800/40 backdrop-blur-sm rounded-xl border border-gold-500/20 hover:border-gold-400/40 transition-colors"
+                    className="group snap-start shrink-0 w-[85%] sm:w-[420px] lg:shrink lg:flex-1 lg:min-w-[300px] p-6 bg-parchment-100 rounded-xl border border-parchment-300 hover:border-gold-500 transition-colors"
                   >
-                    <p className="text-parchment-200 text-lg leading-relaxed mb-4 italic">
+                    <p className="text-jerry-green-900 text-lg leading-relaxed mb-4 italic">
                       &ldquo;{item.quote}&rdquo;
                     </p>
                     <div className="flex items-center justify-between">
-                      <span className="text-gold-300 font-semibold text-sm group-hover:text-gold-200 transition-colors">
+                      <span className="text-jerry-green-700 font-semibold text-sm group-hover:text-jerry-green-900 transition-colors">
                         {item.publication}
                       </span>
                       {item.date && (
-                        <span className="text-parchment-500 text-xs">{item.date}</span>
+                        <span className="text-jerry-green-700/70 text-xs">{item.date}</span>
                       )}
                     </div>
                   </Link>
@@ -151,25 +151,25 @@ export default function PressAwards() {
                         />
                       )
                     ) : (
-                      <div className="w-2 h-2 rounded-full bg-gold-400 mt-2 shrink-0" />
+                      <div className="w-2 h-2 rounded-full bg-gold-600 mt-2 shrink-0" />
                     )}
                     <div>
-                      <p className="text-white font-semibold">{award.title}</p>
+                      <p className="text-jerry-green-900 font-semibold">{award.title}</p>
                       {award.body && (
-                        <p className="text-parchment-400 text-sm mt-1">{award.body}</p>
+                        <p className="text-jerry-green-800 text-sm mt-1">{award.body}</p>
                       )}
                     </div>
                   </>
                 )
                 const cardClasses =
-                  'flex items-start gap-4 p-5 bg-jerry-green-800/40 backdrop-blur-sm rounded-xl border border-gold-500/20'
+                  'flex items-start gap-4 p-5 bg-parchment-100 rounded-xl border border-parchment-300'
                 return award.url ? (
                   <Link
                     key={award.title}
                     href={award.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className={`${cardClasses} hover:border-gold-400/40 transition-colors`}
+                    className={`${cardClasses} hover:border-gold-500 transition-colors`}
                   >
                     {cardContent}
                   </Link>
