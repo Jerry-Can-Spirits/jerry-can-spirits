@@ -139,10 +139,7 @@ export default function RhysWilliamsPage() {
               <div className="prose prose-invert max-w-none space-y-6">
                 {/* Military Background */}
                 <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
-                  <h2 className="text-2xl font-serif font-bold text-white mb-4 flex items-center gap-2">
-                    <svg className="w-6 h-6 text-gold-400" fill="currentColor" viewBox="0 0 20 20">
-                      <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z" />
-                    </svg>
+                  <h2 className="text-2xl font-serif font-bold text-white mb-4">
                     Military Service
                   </h2>
                   <p className="text-parchment-200 leading-relaxed">
@@ -154,19 +151,12 @@ export default function RhysWilliamsPage() {
                     column beside the facts is not one panel and empty green.
                     The story band keeps all three of its panels. */}
                 <div className="bg-linear-to-br from-gold-500/10 to-gold-600/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
-                  <div className="flex items-start gap-4">
-                    <div className="shrink-0">
-                      <svg className="w-8 h-8 text-gold-400" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z" clipRule="evenodd" />
-                      </svg>
-                    </div>
-                    <blockquote className="flex-1">
-                      <p className="text-xl text-parchment-100 italic leading-relaxed mb-4">
-                        "That passion has now become a business."
-                      </p>
-                      <cite className="text-gold-400 font-semibold not-italic">Rhys Williams</cite>
-                    </blockquote>
-                  </div>
+                  <blockquote>
+                    <p className="text-xl text-parchment-100 italic leading-relaxed mb-4">
+                      "That passion has now become a business."
+                    </p>
+                    <cite className="text-gold-400 font-semibold not-italic">Rhys Williams</cite>
+                  </blockquote>
                 </div>
               </div>
             </div>
@@ -182,10 +172,7 @@ export default function RhysWilliamsPage() {
           <div className="prose prose-invert max-w-none space-y-6">
             {/* Post-Military Career */}
             <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
-              <h2 className="text-2xl font-serif font-bold text-white mb-4 flex items-center gap-2">
-                <svg className="w-6 h-6 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                </svg>
+              <h2 className="text-2xl font-serif font-bold text-white mb-4">
                 Life After the Army
               </h2>
               <p className="text-parchment-200 leading-relaxed mb-4">
@@ -198,10 +185,7 @@ export default function RhysWilliamsPage() {
 
             {/* Passion for Spirits */}
             <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
-              <h2 className="text-2xl font-serif font-bold text-white mb-4 flex items-center gap-2">
-                <svg className="w-6 h-6 text-gold-400" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clipRule="evenodd" />
-                </svg>
+              <h2 className="text-2xl font-serif font-bold text-white mb-4">
                 A Passion for Making Alcohol
               </h2>
               <p className="text-parchment-200 leading-relaxed mb-4">
@@ -214,11 +198,7 @@ export default function RhysWilliamsPage() {
 
             {/* Jerry Can Spirits */}
             <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
-              <h2 className="text-2xl font-serif font-bold text-white mb-4 flex items-center gap-2">
-                <svg className="w-6 h-6 text-gold-400" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M6 6V5a3 3 0 013-3h2a3 3 0 013 3v1h2a2 2 0 012 2v3.57A22.952 22.952 0 0110 13a22.95 22.95 0 01-8-1.43V8a2 2 0 012-2h2zm2-1a1 1 0 011-1h2a1 1 0 011 1v1H8V5zm1 5a1 1 0 011-1h.01a1 1 0 110 2H10a1 1 0 01-1-1z" clipRule="evenodd" />
-                  <path d="M2 13.692V16a2 2 0 002 2h12a2 2 0 002-2v-2.308A24.974 24.974 0 0110 15c-2.796 0-5.487-.46-8-1.308z" />
-                </svg>
+              <h2 className="text-2xl font-serif font-bold text-white mb-4">
                 Jerry Can Spirits
               </h2>
               <p className="text-parchment-200 leading-relaxed">

@@ -30,11 +30,8 @@ export default function RelatedCocktailsList({ cocktails }: { cocktails: Cocktai
     <Link
       key={cocktail._id}
       href={`/field-manual/cocktails/${cocktail.slug.current}/`}
-      className="flex items-center gap-3 p-3 bg-jerry-green-800/30 rounded-lg border border-gold-500/20 hover:bg-jerry-green-800/50 hover:border-gold-400/40 transition-all group"
+      className="block p-3 bg-jerry-green-800/30 rounded-lg border border-gold-500/20 hover:bg-jerry-green-800/50 hover:border-gold-400/40 transition-all group"
     >
-      <svg className="w-5 h-5 text-gold-400 shrink-0 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-      </svg>
       <span className="text-parchment-300 group-hover:text-gold-300 transition-colors">{cocktail.name}</span>
     </Link>
   )

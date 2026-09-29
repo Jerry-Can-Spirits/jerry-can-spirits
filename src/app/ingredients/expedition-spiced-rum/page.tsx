@@ -302,31 +302,11 @@ export default function ExpeditionSpicedRumIngredients() {
               <p className="mb-4">
                 Our Expedition Spiced Rum contains no major allergens. It is:
               </p>
-              <ul className="grid sm:grid-cols-2 gap-2">
-                <li className="flex items-center space-x-3">
-                  <svg className="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
-                  <span>Gluten-free</span>
-                </li>
-                <li className="flex items-center space-x-3">
-                  <svg className="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
-                  <span>Dairy-free</span>
-                </li>
-                <li className="flex items-center space-x-3">
-                  <svg className="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
-                  <span>Nut-free</span>
-                </li>
-                <li className="flex items-center space-x-3">
-                  <svg className="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
-                  <span>Vegan-friendly</span>
-                </li>
+              <ul className="list-disc pl-5 grid sm:grid-cols-2 gap-2">
+                <li>Gluten-free</li>
+                <li>Dairy-free</li>
+                <li>Nut-free</li>
+                <li>Vegan-friendly</li>
               </ul>
               <p className="mt-6 text-sm text-parchment-400">
                 If you have specific dietary concerns, please <Link href="/contact/" className="text-gold-300 hover:text-gold-400 underline">contact us</Link> before purchasing.

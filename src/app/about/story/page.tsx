@@ -150,12 +150,7 @@ export default function OurStory() {
           </div>
 
           <div className="text-center">
-            <div className="inline-flex items-center space-x-2 text-gold-300">
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-              </svg>
-              <span className="text-sm font-semibold uppercase tracking-wider">Our Journey</span>
-            </div>
+            <span className="inline-block text-gold-300 text-sm font-semibold uppercase tracking-wider">Our Journey</span>
           </div>
         </div>
       </section>
@@ -314,11 +309,6 @@ export default function OurStory() {
 
             <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-8 border border-gold-500/20">
               <div className="text-center mb-8">
-                <div className="w-24 h-24 bg-gold-400/20 rounded-full flex items-center justify-center mx-auto mb-6">
-                  <svg className="w-12 h-12 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15.59 14.37a6 6 0 01-5.84 7.38v-4.8m5.84-2.58a14.98 14.98 0 006.16-12.12A14.98 14.98 0 009.631 8.41m5.96 5.96a14.926 14.926 0 01-5.841 2.58m-.119-8.54a6 6 0 00-7.381 5.84h4.8m2.581-5.84a14.927 14.927 0 00-2.58 5.84m2.58-5.84a14.927 14.927 0 015.84 2.58m-2.58 5.84a14.927 14.927 0 002.58 5.84" />
-                  </svg>
-                </div>
                 <h3 className="text-2xl font-serif font-bold text-white mb-4">
                   The Leap
                 </h3>
@@ -350,11 +340,6 @@ export default function OurStory() {
                   <ScrollReveal key="hard-bits" delay={0} className="h-full">
                     <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20 h-full">
                       <div className="text-center mb-6">
-                        <div className="w-16 h-16 bg-red-400/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                          <svg className="w-8 h-8 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                          </svg>
-                        </div>
                         <h3 className="text-xl font-serif font-bold text-white mb-4">The Hard Bits</h3>
                       </div>
 
@@ -383,11 +368,6 @@ export default function OurStory() {
                   <ScrollReveal key="reality-check" delay={1} className="h-full">
                     <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20 h-full">
                       <div className="text-center mb-6">
-                        <div className="w-16 h-16 bg-gold-400/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                          <svg className="w-8 h-8 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
-                          </svg>
-                        </div>
                         <h3 className="text-xl font-serif font-bold text-white mb-4">The Reality Check</h3>
                       </div>
 
@@ -408,11 +388,6 @@ export default function OurStory() {
                   <ScrollReveal key="hard-knocks" delay={2} className="h-full">
                     <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20 h-full">
                       <div className="text-center mb-6">
-                        <div className="w-16 h-16 bg-green-400/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                          <svg className="w-8 h-8 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                          </svg>
-                        </div>
                         <h3 className="text-xl font-serif font-bold text-white mb-4">The School of Hard Knocks</h3>
                       </div>
 
@@ -673,11 +648,6 @@ export default function OurStory() {
                 </ScrollReveal>,
                 <ScrollReveal key="legacy" delay={2} className="h-full">
                   <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20 text-center h-full">
-                    <div className="w-16 h-16 bg-gold-400/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                      <svg className="w-8 h-8 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                      </svg>
-                    </div>
                     <h4 className="text-lg font-serif font-bold text-white mb-3">The Legacy</h4>
                     <ul className="space-y-2 text-parchment-300 text-sm text-left">
                       <li>• We proved that small can beat big</li>
