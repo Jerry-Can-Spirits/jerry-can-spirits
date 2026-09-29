@@ -133,20 +133,9 @@ function TeamCard({ member }: { member: TeamMember }) {
       {/* Military Service */}
       {member.service && (
         <div className="mb-4 pb-4 border-b border-gold-500/20">
-          <div className="flex items-center gap-2 text-sm text-parchment-300 mb-1">
-            <svg className="w-4 h-4 text-gold-500" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
-              <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z" />
-            </svg>
-            <span>{member.service}</span>
-          </div>
+          <div className="text-sm text-parchment-300 mb-1">{member.service}</div>
           {member.rank && (
-            <div className="flex items-center gap-2 text-sm text-parchment-300">
-              <svg className="w-4 h-4 text-gold-500" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
-                <path fillRule="evenodd" d="M6 6V5a3 3 0 013-3h2a3 3 0 013 3v1h2a2 2 0 012 2v3.57A22.952 22.952 0 0110 13a22.95 22.95 0 01-8-1.43V8a2 2 0 012-2h2zm2-1a1 1 0 011-1h2a1 1 0 011 1v1H8V5zm1 5a1 1 0 011-1h.01a1 1 0 110 2H10a1 1 0 01-1-1z" clipRule="evenodd" />
-                <path d="M2 13.692V16a2 2 0 002 2h12a2 2 0 002-2v-2.308A24.974 24.974 0 0110 15c-2.796 0-5.487-.46-8-1.308z" />
-              </svg>
-              <span>{member.rank}{member.specialty ? ` · ${member.specialty}` : ''}</span>
-            </div>
+            <div className="text-sm text-parchment-300">{member.rank}{member.specialty ? ` · ${member.specialty}` : ''}</div>
           )}
         </div>
       )}
@@ -236,23 +225,12 @@ export default function TeamPage() {
       <section className="band-dark py-16">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="bg-linear-to-br from-gold-500/10 to-gold-600/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
-            <div className="flex items-start gap-4">
-              <div className="shrink-0">
-                <div className="w-12 h-12 bg-gold-500/20 rounded-full flex items-center justify-center">
-                  <svg className="w-6 h-6 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-                  </svg>
-                </div>
-              </div>
-              <div>
-                <h2 className="text-2xl font-serif font-bold text-gold-300 mb-3">What We&apos;re About</h2>
-                <p className="text-parchment-200 leading-relaxed">
-                  We reckon there&apos;s room for smaller brands that actually care about what they make. We&apos;re not trying
-                  to compete with the big corporations – we&apos;re just trying to make spirits we&apos;re proud of and build something
-                  real along the way. Check out our <Link href="/shop/spirits/" className="text-gold-300 hover:text-gold-400 underline decoration-gold-500/40 hover:decoration-gold-400 transition-colors">Expedition Spiced Rum</Link> to see what we&apos;ve been working on.
-                </p>
-              </div>
-            </div>
+            <h2 className="text-2xl font-serif font-bold text-gold-300 mb-3">What We&apos;re About</h2>
+            <p className="text-parchment-200 leading-relaxed">
+              We reckon there&apos;s room for smaller brands that actually care about what they make. We&apos;re not trying
+              to compete with the big corporations – we&apos;re just trying to make spirits we&apos;re proud of and build something
+              real along the way. Check out our <Link href="/shop/spirits/" className="text-gold-300 hover:text-gold-400 underline decoration-gold-500/40 hover:decoration-gold-400 transition-colors">Expedition Spiced Rum</Link> to see what we&apos;ve been working on.
+            </p>
           </div>
         </div>
       </section>

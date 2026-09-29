@@ -216,14 +216,9 @@ export default async function IngredientDetailPage({ params }: { params: Promise
     ingredient.substitutions && ingredient.substitutions.length > 0 && {
       question: 'Possible Substitutions',
       answer: (
-        <ul className="space-y-3">
+        <ul className="list-disc pl-5 space-y-3">
           {ingredient.substitutions.map((sub, index) => (
-            <li key={index} className="flex items-start gap-3">
-              <svg className="w-5 h-5 text-gold-400 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
-              </svg>
-              <span className="text-parchment-300 leading-relaxed">{sub}</span>
-            </li>
+            <li key={index} className="text-parchment-300 leading-relaxed">{sub}</li>
           ))}
         </ul>
       ),
@@ -497,17 +492,8 @@ export default async function IngredientDetailPage({ params }: { params: Promise
             {/* Professional Tip Callout */}
             {ingredient.professionalTip && (
               <div className="bg-linear-to-br from-gold-500/10 to-gold-600/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/30">
-                <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 bg-gold-500/20 rounded-full flex items-center justify-center shrink-0">
-                    <svg className="w-5 h-5 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-                    </svg>
-                  </div>
-                  <div>
-                    <h3 className="text-gold-300 font-serif font-bold text-lg mb-2">Pro Tip</h3>
-                    <p className="text-parchment-300 leading-relaxed whitespace-pre-line">{ingredient.professionalTip}</p>
-                  </div>
-                </div>
+                <h3 className="text-gold-300 font-serif font-bold text-lg mb-2">Pro Tip</h3>
+                <p className="text-parchment-300 leading-relaxed whitespace-pre-line">{ingredient.professionalTip}</p>
               </div>
             )}
 
@@ -551,10 +537,7 @@ export default async function IngredientDetailPage({ params }: { params: Promise
             {/* Video Tutorial */}
             {videoId && (
               <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
-                <h2 className="text-2xl font-serif font-bold text-gold-300 mb-4 flex items-center gap-2">
-                  <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
-                  </svg>
+                <h2 className="text-2xl font-serif font-bold text-gold-300 mb-4">
                   Video Guide
                 </h2>
                 <div className="relative aspect-video rounded-lg overflow-hidden bg-jerry-green-800/20">
@@ -592,11 +575,8 @@ export default async function IngredientDetailPage({ params }: { params: Promise
                     <Link
                       key={subType._id}
                       href={`/field-manual/ingredients/${subType.slug.current}/`}
-                      className="h-full flex items-center gap-3 p-3 bg-jerry-green-800/30 rounded-lg border border-gold-500/20 hover:bg-jerry-green-800/50 hover:border-gold-400/40 transition-all group"
+                      className="h-full block p-3 bg-jerry-green-800/30 rounded-lg border border-gold-500/20 hover:bg-jerry-green-800/50 hover:border-gold-400/40 transition-all group"
                     >
-                      <svg className="w-5 h-5 text-gold-400 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                      </svg>
                       <span className="text-parchment-300 group-hover:text-gold-300 transition-colors">{subType.name}</span>
                     </Link>
                   ))}
@@ -632,11 +612,8 @@ export default async function IngredientDetailPage({ params }: { params: Promise
                     <Link
                       key={related._id}
                       href={`/field-manual/ingredients/${related.slug.current}/`}
-                      className="h-full flex items-center gap-3 p-3 bg-jerry-green-800/30 rounded-lg border border-gold-500/20 hover:bg-jerry-green-800/50 hover:border-gold-400/40 transition-all group"
+                      className="h-full block p-3 bg-jerry-green-800/30 rounded-lg border border-gold-500/20 hover:bg-jerry-green-800/50 hover:border-gold-400/40 transition-all group"
                     >
-                      <svg className="w-5 h-5 text-gold-400 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                      </svg>
                       <span className="text-parchment-300 group-hover:text-gold-300 transition-colors">{related.name}</span>
                     </Link>
                   ))}

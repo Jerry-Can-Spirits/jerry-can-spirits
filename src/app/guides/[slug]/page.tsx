@@ -543,11 +543,8 @@ export default async function GuidePage({ params }: PageProps) {
                       <Link
                         key={cocktail._id}
                         href={`/field-manual/cocktails/${cocktail.slug.current}/`}
-                        className="h-full flex items-center gap-3 p-4 bg-jerry-green-800/30 rounded-lg border border-gold-500/20 hover:bg-jerry-green-800/50 hover:border-gold-400/40 transition-all group"
+                        className="h-full block p-4 bg-jerry-green-800/30 rounded-lg border border-gold-500/20 hover:bg-jerry-green-800/50 hover:border-gold-400/40 transition-all group"
                       >
-                        <svg className="w-5 h-5 text-gold-400 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                        </svg>
                         <span className="text-parchment-300 group-hover:text-gold-300 transition-colors font-semibold">
                           {cocktail.name}
                         </span>
@@ -571,13 +568,8 @@ export default async function GuidePage({ params }: PageProps) {
                       <Link
                         key={index}
                         href={`/shop/product/${product.shopifyHandle}/`}
-                        className="h-full flex items-center gap-4 p-4 bg-jerry-green-800/30 rounded-lg border border-gold-500/20 hover:bg-jerry-green-800/50 hover:border-gold-400/40 transition-all group"
+                        className="h-full block p-4 bg-jerry-green-800/30 rounded-lg border border-gold-500/20 hover:bg-jerry-green-800/50 hover:border-gold-400/40 transition-all group"
                       >
-                        <div className="w-10 h-10 bg-gold-500/20 rounded-full flex items-center justify-center shrink-0">
-                          <svg className="w-5 h-5 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-                          </svg>
-                        </div>
                         <div>
                           <span className="text-white group-hover:text-gold-300 transition-colors font-semibold block">
                             {product.shopifyHandle.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
@@ -693,11 +685,8 @@ export default async function GuidePage({ params }: PageProps) {
           <div className="text-center">
             <Link
               href="/guides/"
-              className="inline-flex items-center gap-2 px-6 py-3 text-gold-300 hover:text-gold-400 transition-colors"
+              className="inline-block px-6 py-3 text-gold-300 hover:text-gold-400 transition-colors"
             >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 10h16M4 14h16M4 18h16" />
-              </svg>
               View All Guides
             </Link>
           </div>

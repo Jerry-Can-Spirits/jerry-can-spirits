@@ -8,7 +8,6 @@ import ScrollRow from '@/components/ScrollRow'
 import SectionHeading from '@/components/SectionHeading'
 
 interface ContactMethod {
-  icon: string
   label: string
   value: string
   link: string
@@ -19,7 +18,6 @@ interface ContactMethod {
 
 const contactMethods: ContactMethod[] = [
   {
-    icon: 'email',
     label: 'General Enquiries',
     value: 'hello@jerrycanspirits.co.uk',
     link: 'mailto:hello@jerrycanspirits.co.uk',
@@ -27,7 +25,6 @@ const contactMethods: ContactMethod[] = [
     href: '/contact/enquiries/',
   },
   {
-    icon: 'partnership',
     label: 'Partnerships',
     value: 'partnerships@jerrycanspirits.co.uk',
     link: 'mailto:partnerships@jerrycanspirits.co.uk',
@@ -35,7 +32,6 @@ const contactMethods: ContactMethod[] = [
     href: null,
   },
   {
-    icon: 'press',
     label: 'Press & Media',
     value: 'press@jerrycanspirits.co.uk',
     link: 'mailto:press@jerrycanspirits.co.uk',
@@ -46,7 +42,6 @@ const contactMethods: ContactMethod[] = [
     cta: 'Assets & media centre',
   },
   {
-    icon: 'complaints',
     label: 'Complaints',
     value: 'complaints@jerrycanspirits.co.uk',
     link: 'mailto:complaints@jerrycanspirits.co.uk',
@@ -86,32 +81,6 @@ export default function Contact() {
             items={contactMethods.map((method) => {
               const CardContent = (
                 <>
-                  <div className="w-16 h-16 bg-linear-to-br from-gold-500 to-gold-600 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
-                    {method.icon === 'email' && (
-                      <svg className="w-8 h-8 text-jerry-green-900" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                        <rect x="2" y="4" width="20" height="16" rx="2" />
-                        <path d="m22 7-10 5L2 7" />
-                      </svg>
-                    )}
-                    {method.icon === 'partnership' && (
-                      <svg className="w-8 h-8 text-jerry-green-900" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
-                        <circle cx="9" cy="7" r="4" />
-                        <path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" />
-                      </svg>
-                    )}
-                    {method.icon === 'press' && (
-                      <svg className="w-8 h-8 text-jerry-green-900" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                        <path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8l-6 6v14a2 2 0 0 0 2 2z" />
-                        <path d="M14 2v6h6M3 15h18M3 19h18" />
-                      </svg>
-                    )}
-                    {method.icon === 'complaints' && (
-                      <svg className="w-8 h-8 text-jerry-green-900" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-                      </svg>
-                    )}
-                  </div>
                   <h3 className="text-xl font-serif font-bold text-parchment-50 mb-2">
                     {method.label}
                   </h3>

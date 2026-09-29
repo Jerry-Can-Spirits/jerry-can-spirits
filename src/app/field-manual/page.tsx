@@ -251,11 +251,6 @@ export default async function FieldManualHome() {
               
               <div className="relative z-10">
                 <div className="text-center mb-6">
-                  <div className="w-20 h-20 bg-gold-400/20 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-gold-400/30 transition-colors">
-                    <svg className="w-10 h-10 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M5 12h14M12 5l7 7-7 7" />
-                    </svg>
-                  </div>
                   <h3 className="text-2xl font-serif font-bold text-white mb-2">Cocktails</h3>
                   <div className="text-gold-300 text-sm font-semibold uppercase tracking-wider mb-4">
                     Recipes That Work
@@ -291,11 +286,6 @@ export default async function FieldManualHome() {
               
               <div className="relative z-10">
                 <div className="text-center mb-6">
-                  <div className="w-20 h-20 bg-gold-400/20 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-gold-400/30 transition-colors">
-                    <svg className="w-10 h-10 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
-                    </svg>
-                  </div>
                   <h3 className="text-2xl font-serif font-bold text-white mb-2">Ingredients</h3>
                   <div className="text-gold-300 text-sm font-semibold uppercase tracking-wider mb-4">
                     What Goes In
@@ -331,11 +321,6 @@ export default async function FieldManualHome() {
               
               <div className="relative z-10">
                 <div className="text-center mb-6">
-                  <div className="w-20 h-20 bg-gold-400/20 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-gold-400/30 transition-colors">
-                    <svg className="w-10 h-10 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
-                    </svg>
-                  </div>
                   <h3 className="text-2xl font-serif font-bold text-white mb-2">Equipment</h3>
                   <div className="text-gold-300 text-sm font-semibold uppercase tracking-wider mb-4">
                     Tools of the Trade
@@ -369,11 +354,6 @@ export default async function FieldManualHome() {
               <div className="absolute inset-0 bg-linear-to-br from-amber-100/5 to-amber-200/10 opacity-50"></div>
               <div className="relative z-10">
                 <div className="text-center mb-6">
-                  <div className="w-20 h-20 bg-gold-400/20 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-gold-400/30 transition-colors">
-                    <svg className="w-10 h-10 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 3h8l-1 6a4 4 0 01-6 0L8 3zM12 13v8m-4 0h8" />
-                    </svg>
-                  </div>
                   <h3 className="text-2xl font-serif font-bold text-white mb-2">What&apos;s in my bar</h3>
                   <div className="text-gold-300 text-sm font-semibold uppercase tracking-wider mb-4">
                     Pour What You Have

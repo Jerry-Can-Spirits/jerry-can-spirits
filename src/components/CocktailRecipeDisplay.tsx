@@ -420,19 +420,12 @@ export default function CocktailRecipeDisplay({ cocktail }: Props) {
 
           {(currentRecipe.note || (activeVariant >= 0 && cocktail?.variants?.[activeVariant]?.note)) && (
             <div className="mt-6 sm:mt-8 p-4 sm:p-6 bg-jerry-green-800/40 rounded-lg border border-gold-500/20">
-              <div className="flex items-start space-x-3">
-                <svg className="w-6 h-6 text-gold-400 shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                <div>
-                  <h4 className="text-gold-300 font-semibold mb-2">Expert Tip</h4>
-                  <p className="text-parchment-300 leading-relaxed whitespace-pre-line">
-                    {activeVariant >= 0 && cocktail?.variants?.[activeVariant]?.note
-                      ? cocktail.variants[activeVariant].note
-                      : currentRecipe.note}
-                  </p>
-                </div>
-              </div>
+              <h4 className="text-gold-300 font-semibold mb-2">Expert Tip</h4>
+              <p className="text-parchment-300 leading-relaxed whitespace-pre-line">
+                {activeVariant >= 0 && cocktail?.variants?.[activeVariant]?.note
+                  ? cocktail.variants[activeVariant].note
+                  : currentRecipe.note}
+              </p>
             </div>
           )}
         </div>
