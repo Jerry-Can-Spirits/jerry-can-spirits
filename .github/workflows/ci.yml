@@ -90,8 +90,12 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-nextjs-${{ hashFiles('package-lock.json') }}-
 
-      - name: Build project
-        run: npm run build
+      # One build, the way the deploy does it: OpenNext runs `next build` itself
+      # (standalone output, which the smoke test's Worker bundle needs) and then
+      # bundles the Worker. The fetch cache is cleared first exactly as
+      # `npm run build` does.
+      - name: Build project and bundle the Worker (OpenNext)
+        run: node -e "require('fs').rmSync('.next/cache/fetch-cache',{recursive:true,force:true})" && npx opennextjs-cloudflare build
         env:
           NEXT_TELEMETRY_DISABLED: 1
           NEXT_PUBLIC_SANITY_PROJECT_ID: 5mtjmb0t
@@ -112,20 +116,9 @@ jobs:
       # The smoke test. `next build` passing says nothing about whether the
       # Worker bundle loads on Cloudflare's runtime: on 28 Sep 2026 a dependency
       # bump built green, deployed, and every /api/ route (checkout included)
-      # returned 500 for eighteen hours. So the same job bundles the Worker the
-      # way the deploy does, runs it on workerd locally, and hits the routes a
-      # customer depends on. See scripts/smoke.mjs.
-      - name: Bundle the Worker (OpenNext)
-        run: npx opennextjs-cloudflare build --skipNextBuild
-        env:
-          NEXT_PUBLIC_SANITY_PROJECT_ID: 5mtjmb0t
-          NEXT_PUBLIC_SANITY_DATASET: production
-          NEXT_PUBLIC_CLOUDFLARE_ACCOUNT_HASH: T4IfqPfa6E-8YtW8Lo02gQ
-          NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN: ${{ secrets.NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN }}
-          NEXT_PUBLIC_SHOPIFY_STOREFRONT_ACCESS_TOKEN: ${{ secrets.NEXT_PUBLIC_SHOPIFY_STOREFRONT_ACCESS_TOKEN }}
-          NEXT_PUBLIC_MAPBOX_TOKEN: ${{ secrets.NEXT_PUBLIC_MAPBOX_TOKEN }}
-          NEXT_PUBLIC_TURNSTILE_SITE_KEY: ${{ secrets.NEXT_PUBLIC_TURNSTILE_SITE_KEY }}
-
+      # returned 500 for eighteen hours. So the same job runs the bundle built
+      # above on workerd locally and hits the routes a customer depends on.
+      # See scripts/smoke.mjs.
       - name: Start the Worker locally
         # Placeholder secrets: the webhook routes only need a value to exist so
         # they reach their signature check and answer 401 rather than 500.
