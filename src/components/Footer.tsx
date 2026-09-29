@@ -220,9 +220,40 @@ export default function Footer() {
                   Drink Responsibly
                 </p>
                 <div className="space-y-4 text-base text-parchment-300">
+                  {/* Portman Group responsibility symbols, reversed-out versions for
+                      the dark footer. Licensed artwork hosted on Cloudflare Images
+                      with the other logos. Each symbol's meaning is in its alt text
+                      and in the lines beneath. */}
+                  <div className="flex items-center gap-3">
+                    <Image
+                      src="https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/a62441f1-45f0-4d95-a7c1-ad38802a6e00/public"
+                      alt="18+"
+                      width={44}
+                      height={44}
+                      className="w-11 h-11"
+                      loading="lazy"
+                    />
+                    <Image
+                      src="https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/22c58acc-46c2-4895-a423-5d8a1d11f900/public"
+                      alt="Avoid alcohol if pregnant"
+                      width={44}
+                      height={44}
+                      className="w-11 h-11"
+                      loading="lazy"
+                    />
+                    <Image
+                      src="https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/82ffe59b-7947-4cf7-75cf-2324012be400/public"
+                      alt="Do not drink and drive"
+                      width={44}
+                      height={44}
+                      className="w-11 h-11"
+                      loading="lazy"
+                    />
+                  </div>
                   <p>Must be 18+ to purchase alcohol</p>
                   <p>Please drink responsibly</p>
                   <p>Avoid alcohol if pregnant</p>
+                  <p className="text-sm text-parchment-400">The UK Chief Medical Officers recommend adults do not regularly drink more than 14 units per week.</p>
 
                   {/* Drinkaware Logo */}
                   <div className="mt-2">
