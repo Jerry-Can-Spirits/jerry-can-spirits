@@ -413,7 +413,7 @@ export async function getProduct(handle: string): Promise<ShopifyProduct | null>
             currencyCode
           }
         }
-        images(first: 5) {
+        images(first: 12) {
           edges {
             node {
               url(transform: { maxWidth: 1600 })
