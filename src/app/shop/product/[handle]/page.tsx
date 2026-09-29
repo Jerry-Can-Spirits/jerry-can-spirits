@@ -569,9 +569,13 @@ export default async function ProductPage({
 
       {/* Product Details */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
-          {/* Product Image Gallery */}
-          <ProductImageGallery images={product.images} productTitle={product.title} />
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 lg:items-start">
+          {/* Product Image Gallery. Sticky on desktop: the buy column is three
+              times taller than the gallery, and without this the left half of
+              the page was empty green below the thumbnails. */}
+          <div className="lg:sticky lg:top-24">
+            <ProductImageGallery images={product.images} productTitle={product.title} />
+          </div>
 
           {/* Product Info */}
           <div className="space-y-6">
