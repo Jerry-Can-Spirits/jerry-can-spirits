@@ -683,7 +683,7 @@ export default async function ProductPage({
             {/* Description */}
             {product.descriptionHtml && (
               <div
-                className="lg:col-span-2 prose prose-invert max-w-none prose-headings:font-serif prose-headings:text-gold-300 prose-p:text-parchment-200 prose-p:leading-relaxed prose-strong:text-white prose-li:text-parchment-200 prose-a:text-blue-400 prose-a:underline prose-a:underline-offset-2 prose-a:hover:text-blue-300"
+                className="lg:col-span-2 prose prose-invert max-w-none prose-headings:font-serif prose-headings:text-gold-300 prose-p:text-parchment-200 prose-p:leading-relaxed prose-strong:text-white prose-li:text-parchment-200 prose-a:underline prose-a:underline-offset-2"
                 dangerouslySetInnerHTML={{ __html: xss(product.descriptionHtml) }}
               />
             )}
@@ -762,6 +762,7 @@ export default async function ProductPage({
       {(product.metafields || sanityProduct) && (
         <section className="band-dark py-16">
          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+          <SectionHeading eyebrow="The detail">Specifications and tasting notes</SectionHeading>
           {/* Product Specifications - Only for spirits (drink-specific fields) */}
           {isSpirit && product.metafields && product.metafields.length > 0 && (
             <ProductSpecifications
@@ -891,9 +892,8 @@ export default async function ProductPage({
       {/* Customer Reviews Section */}
       <section id="customer-reviews" className="band-light py-16 scroll-mt-24">
        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <SectionHeading eyebrow="The proof" intro="What people think">Customer Reviews</SectionHeading>
         <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
-          <h2 className="text-3xl font-serif font-bold text-white mb-2">Customer Reviews</h2>
-          <p className="text-parchment-300 mb-8">What people think</p>
 
           {productReviews.length > 0 ? (
             <ProductReviews reviews={productReviews} />
@@ -913,7 +913,7 @@ export default async function ProductPage({
       {relatedProducts.length > 0 && (
         <section className="band-dark py-16">
          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-serif font-bold text-white mb-8">Worth Looking At</h2>
+          <SectionHeading eyebrow="Go further">Worth Looking At</SectionHeading>
           <ScrollRow
             ariaLabel="Related products"
             cols="md:grid-cols-2 lg:grid-cols-4"
