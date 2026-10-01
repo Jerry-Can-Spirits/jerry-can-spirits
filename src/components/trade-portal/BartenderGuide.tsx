@@ -9,7 +9,7 @@ interface Props {
 
 export function BartenderGuide({ guide, venueTitle }: Props) {
   return (
-    <main className="min-h-screen bg-jerry-green-950 print:bg-white print:min-h-0">
+    <section className="band-dark min-h-screen print:bg-white print:bg-none print:min-h-0">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-24 print:px-0 print:pt-0 print:pb-0 print:max-w-full">
         <div className="flex flex-wrap items-center justify-between gap-3 mb-8 print:hidden">
           <Link href="/trade/resources" className="text-sm text-parchment-400 hover:text-parchment-200">
@@ -77,7 +77,7 @@ export function BartenderGuide({ guide, venueTitle }: Props) {
           </Section>
         </article>
       </div>
-    </main>
+    </section>
   )
 }
 

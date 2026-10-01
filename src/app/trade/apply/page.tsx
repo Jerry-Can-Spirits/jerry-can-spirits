@@ -228,7 +228,7 @@ export default function TradeApplyPage() {
 
   if (status === 'success') {
     return (
-      <main className="min-h-screen">
+      <section className="band-dark min-h-screen">
         <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-32">
           <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20 text-center">
             <h1 className="text-2xl font-serif font-bold text-parchment-50 mb-3">Application received</h1>
@@ -236,12 +236,12 @@ export default function TradeApplyPage() {
             <p className="text-parchment-300 text-sm">Check your inbox (and junk folder) for confirmation.</p>
           </div>
         </div>
-      </main>
+      </section>
     )
   }
 
   return (
-    <main className="min-h-screen">
+    <section className="band-dark min-h-screen">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
         <Breadcrumbs items={[
           { label: 'Trade', href: '/trade' },
@@ -310,6 +310,6 @@ export default function TradeApplyPage() {
           </div>
         </div>
       </section>
-    </main>
+    </section>
   )
 }
