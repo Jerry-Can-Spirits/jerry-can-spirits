@@ -355,9 +355,20 @@ export async function pushTradeVenue(
    * PIN reissue — worse than never setting it at all.
    *
    * So it is seeded on creation and never touched again.
+   *
+   * The seed depends on what the venue is (column re-cut 1 Oct 2026). The
+   * column records OUR due diligence on the customer, not theirs on us: a
+   * retailer needs none beyond the licence details already on the row, while
+   * a customer that wholesales alcohol must itself be AWRS approved, and
+   * supplying one that is not is the offence HMRC polices. So a pub, a
+   * restaurant or a shop is seeded as not required, and a wholesaler or
+   * distributor as a URN still to verify on the HMRC lookup.
    */
   const SEED_ONLY: Record<string, string> = {
-    AWRSDueDiligence: 'Required - Pending',
+    AWRSDueDiligence:
+      record.businessType === 'Wholesaler' || record.businessType === 'Distributor'
+        ? 'Wholesaler - URN to verify'
+        : 'Retailer - not required',
   }
 
   const send: Record<string, string> = {}
