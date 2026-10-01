@@ -7,10 +7,7 @@ import {
   type TradeCategory,
   CATEGORY_LABELS,
 } from '@/lib/trade-products'
-import {
-  TRADE_DISCOUNT_PCT_BY_CODE,
-  type TradeDiscountCode,
-} from '@/lib/trade-portal/product-data'
+import { toPence, tradePricePence, tradeRule } from '@/lib/trade-portal/product-data'
 import { formatPrice } from '@/lib/format-price'
 
 type Stage = 'order' | 'loading'
@@ -44,13 +41,13 @@ export default function TradeOrderForm({ products, error: catalogueError, accoun
   const [quantities, setQuantities] = useState<Record<string, number>>({})
   const [formError, setFormError] = useState('')
 
-  const discountPercent = TRADE_DISCOUNT_PCT_BY_CODE[account.discount_code as TradeDiscountCode] ?? 0
+  const rule = tradeRule(account.discount_code)
   // Per-product trade price. Discount-excluded items (e.g. the Ecologi
-  // donation, which the Shopify discount code is scoped to skip) are
-  // always returned at full price so the displayed total matches what
-  // the venue will actually pay at Shopify checkout.
-  const tradePrice = (fullPrice: string, excluded: boolean): number =>
-    excluded ? parseFloat(fullPrice) : parseFloat(fullPrice) * (1 - discountPercent / 100)
+  // donation, which the Shopify discount code is scoped to skip) and products
+  // an amount-off rule does not name are always returned at full price so the
+  // displayed total matches what the venue will actually pay at Shopify checkout.
+  const tradePrice = (fullPrice: string, excluded: boolean, handle: string): number =>
+    excluded ? parseFloat(fullPrice) : tradePricePence(rule, toPence(fullPrice), handle) / 100
 
   const setQuantity = (variantId: string, value: number) => {
     setQuantities((prev) => ({ ...prev, [variantId]: Math.max(0, Math.min(99, value)) }))
@@ -62,7 +59,7 @@ export default function TradeOrderForm({ products, error: catalogueError, accoun
   const runningTotal = products.reduce((sum, p) => {
     const excluded = p.excludeFromDiscount ?? false
     return sum + p.variants.reduce(
-      (vsum, v) => vsum + tradePrice(v.price, excluded) * (quantities[v.id] ?? 0),
+      (vsum, v) => vsum + tradePrice(v.price, excluded, p.handle) * (quantities[v.id] ?? 0),
       0,
     )
   }, 0)
@@ -156,10 +153,10 @@ export default function TradeOrderForm({ products, error: catalogueError, accoun
         </div>
       ) : (
         <form onSubmit={handleOrder} className="bg-jerry-green-800/60 backdrop-blur-sm border border-gold-500/20 rounded-xl p-8 space-y-10">
-          {discountPercent > 0 && (
+          {rule && (
             <div className="bg-gold-500/10 border border-gold-500/30 rounded-lg p-4">
               <p className="text-gold-300 text-sm">
-                <span className="font-semibold">{discountPercent}% trade discount applied.</span>{' '}
+                <span className="font-semibold">{rule.summary} applied.</span>{' '}
                 <span className="text-parchment-300">
                   Prices below already reflect your rate. Discount is applied automatically at checkout.
                 </span>
@@ -179,7 +176,6 @@ export default function TradeOrderForm({ products, error: catalogueError, accoun
                   {categoryProducts.map((product) => {
                     const isMultiVariant = product.variants.length > 1 || product.variants[0]?.title !== 'Default Title'
                     const isExcluded = product.excludeFromDiscount ?? false
-                    const showTradePrice = discountPercent > 0 && !isExcluded
 
                     return (
                       <div key={product.handle}>
@@ -203,6 +199,8 @@ export default function TradeOrderForm({ products, error: catalogueError, accoun
                         <div className={isMultiVariant ? 'pl-16' : ''}>
                           {product.variants.map((variant) => {
                             const qty = quantities[variant.id] ?? 0
+                            const price = tradePrice(variant.price, isExcluded, product.handle)
+                            const showTradePrice = price < parseFloat(variant.price)
 
                             return (
                               <div
@@ -215,14 +213,14 @@ export default function TradeOrderForm({ products, error: catalogueError, accoun
                                   )}
                                   {showTradePrice ? (
                                     <p className="text-parchment-500 text-xs">
-                                      <span className="text-gold-300 font-semibold">{formatPrice(tradePrice(variant.price, isExcluded))}</span>
+                                      <span className="text-gold-300 font-semibold">{formatPrice(price)}</span>
                                       <span className="text-parchment-600 line-through ml-2">{formatPrice(variant.price)}</span>
                                       <span className="ml-1">each</span>
                                     </p>
                                   ) : (
                                     <p className="text-parchment-500 text-xs">
                                       {formatPrice(variant.price)} each
-                                      {discountPercent > 0 && isExcluded && (
+                                      {rule && (
                                         <span className="ml-2 text-parchment-600 italic">(no trade discount)</span>
                                       )}
                                     </p>
@@ -263,7 +261,7 @@ export default function TradeOrderForm({ products, error: catalogueError, accoun
             <div className="flex items-baseline justify-between mb-1">
               <p className="text-parchment-500 text-xs uppercase tracking-widest">Order total</p>
               <div className="text-right">
-                {discountPercent > 0 && fullTotal > 0 && (
+                {rule && runningTotal < fullTotal && (
                   <p className="text-parchment-600 text-xs line-through">
                     {formatPrice(fullTotal)}
                   </p>
@@ -273,9 +271,9 @@ export default function TradeOrderForm({ products, error: catalogueError, accoun
                 </p>
               </div>
             </div>
-            {discountPercent > 0 && fullTotal > 0 ? (
+            {rule && runningTotal < fullTotal ? (
               <p className="text-parchment-600 text-xs mb-6">
-                You save {formatPrice(fullTotal - runningTotal)} ({discountPercent}% off). Discount applied automatically at checkout.
+                You save {formatPrice(fullTotal - runningTotal)}{rule.kind === 'percent' ? ` (${rule.percent}% off)` : ''}. Discount applied automatically at checkout.
               </p>
             ) : (
               <p className="text-parchment-600 text-xs mb-6">

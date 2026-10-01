@@ -127,6 +127,8 @@ export interface PriceRow {
   key: 'rrp' | 'trade'
   label: string
   discount_pct: number
+  /** What the Discount column prints: "10% off", "£48.00 off", or "—". */
+  discount_label: string
   inc_vat_p: number
   ex_vat_p: number
 }
@@ -136,27 +138,39 @@ const VAT_DIVISOR = 1.2
 function makeRow(
   key: PriceRow['key'],
   label: string,
+  incVatP: number,
   discount_pct: number,
-  baseIncVatP: number,
+  discount_label: string,
 ): PriceRow {
-  const inc = Math.round(baseIncVatP * (1 - discount_pct / 100))
   return {
     key,
     label,
     discount_pct,
-    inc_vat_p: inc,
+    discount_label,
+    inc_vat_p: incVatP,
     // Derived from the rounded inc-VAT figure rather than the raw base, so the
     // two columns of a row always describe the same penny.
-    ex_vat_p: Math.round(inc / VAT_DIVISOR),
+    ex_vat_p: Math.round(incVatP / VAT_DIVISOR),
   }
 }
 
 // The two rows the sheet shows for any product: what it lists at, and what this
-// account pays.
-export function priceRows(baseIncVatP: number): PriceRow[] {
+// account pays. The handle decides whether an amount-off rule covers the
+// product at all; without one, no discount is shown, because a sheet that
+// promises a price checkout will not honour is the fault this file exists to
+// prevent.
+export function priceRows(
+  baseIncVatP: number,
+  rule: TradeDiscountRule | null = TRADE_DISCOUNT_RULES[TRADE_DISCOUNT_CODE],
+  handle?: string,
+): PriceRow[] {
+  const tradeP = tradePricePence(rule, baseIncVatP, handle)
+  const off = baseIncVatP - tradeP
+  const pct = rule?.kind === 'percent' ? rule.percent : baseIncVatP > 0 ? Math.round((off / baseIncVatP) * 100) : 0
+  const label = off <= 0 ? '—' : rule?.kind === 'percent' ? `${rule.percent}% off` : `${formatPence(off)} off`
   return [
-    makeRow('rrp', 'List price', 0, baseIncVatP),
-    makeRow('trade', 'Your trade price', TRADE_DISCOUNT_PCT, baseIncVatP),
+    makeRow('rrp', 'List price', baseIncVatP, 0, '—'),
+    makeRow('trade', 'Your trade price', tradeP, off <= 0 ? 0 : pct, label),
   ]
 }
 
@@ -180,10 +194,49 @@ export function toPence(amount: string): number {
 export const TRADE_DISCOUNT_CODE = 'TRADE10' as const
 export const TRADE_DISCOUNT_PCT = 10
 
-export const TRADE_DISCOUNT_PCT_BY_CODE = {
-  [TRADE_DISCOUNT_CODE]: TRADE_DISCOUNT_PCT,
-} as const
-export type TradeDiscountCode = keyof typeof TRADE_DISCOUNT_PCT_BY_CODE
+// How a Shopify discount code prices the portal, so the order form and the
+// pricing sheet show what checkout will charge. Each entry mirrors a live code:
+// change both together or neither. `summary` is the phrase the order form
+// prints as "<summary> applied."
+export type TradeDiscountRule =
+  | { code: string; kind: 'percent'; percent: number; summary: string }
+  | { code: string; kind: 'amountOff'; pencePerItem: number; handles: readonly string[]; summary: string }
+
+export const TRADE_DISCOUNT_RULES: Record<string, TradeDiscountRule> = {
+  [TRADE_DISCOUNT_CODE]: {
+    code: TRADE_DISCOUNT_CODE,
+    kind: 'percent',
+    percent: TRADE_DISCOUNT_PCT,
+    summary: `${TRADE_DISCOUNT_PCT}% trade discount`,
+  },
+  // A bespoke case price agreed with one venue (1 Oct 2026): £48 off each
+  // six-bottle case, so a £228 case is £180, £150 ex VAT, £25 a bottle. The
+  // Shopify code is a fixed amount scoped to the case product, because the
+  // percentage that gets there (21.0526%) lands a penny out. Single bottles and
+  // barware go through at list price, and the portal says so.
+  TRADECASE150: {
+    code: 'TRADECASE150',
+    kind: 'amountOff',
+    pencePerItem: 4800,
+    handles: ['jerry-can-spirits-expedition-pack-spiced-rum-6-bottles'],
+    summary: 'Case price of £180 (£150 ex VAT)',
+  },
+}
+
+/** The pricing rule for an account's discount code, or null for an unknown code. */
+export function tradeRule(code: string | null | undefined): TradeDiscountRule | null {
+  return code ? (TRADE_DISCOUNT_RULES[code] ?? null) : null
+}
+
+// What a product costs this account, in pence inc VAT. An amount-off rule only
+// applies to the handles it names; without a handle it is treated as not
+// covered, so a caller that cannot say what it is pricing never shows a cut.
+export function tradePricePence(rule: TradeDiscountRule | null, baseIncVatP: number, handle?: string): number {
+  if (!rule) return baseIncVatP
+  if (rule.kind === 'percent') return Math.round(baseIncVatP * (1 - rule.percent / 100))
+  if (handle === undefined || !rule.handles.includes(handle)) return baseIncVatP
+  return Math.max(0, baseIncVatP - rule.pencePerItem)
+}
 
 export function formatPence(p: number): string {
   return `£${(p / 100).toFixed(2)}`

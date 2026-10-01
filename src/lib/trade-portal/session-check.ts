@@ -6,6 +6,7 @@ export interface TradeSessionContext {
   tradeAccountId: string
   venue_name: string
   tier: string
+  discount_code: string
 }
 
 /**
@@ -27,9 +28,9 @@ export async function requireTradeSession(): Promise<TradeSessionContext> {
   if (!session) redirect('/trade/login')
 
   const account = await db
-    .prepare(`SELECT venue_name, tier FROM trade_accounts WHERE id = ?1 AND active = 1`)
+    .prepare(`SELECT venue_name, tier, discount_code FROM trade_accounts WHERE id = ?1 AND active = 1`)
     .bind(session.tradeAccountId)
-    .first<{ venue_name: string; tier: string }>()
+    .first<{ venue_name: string; tier: string; discount_code: string }>()
 
   if (!account) redirect('/trade/login')
 
@@ -37,5 +38,6 @@ export async function requireTradeSession(): Promise<TradeSessionContext> {
     tradeAccountId: session.tradeAccountId,
     venue_name: account.venue_name,
     tier: account.tier,
+    discount_code: account.discount_code,
   }
 }
