@@ -8,7 +8,10 @@
  * the only thing left that can put the two out of step.
  */
 import { describe, it, expect } from 'vitest'
-import { priceRows, toPence, TRADE_DISCOUNT_PCT } from '@/lib/trade-portal/product-data'
+import { priceRows, toPence, tradePricePence, tradeRule, TRADE_DISCOUNT_PCT } from '@/lib/trade-portal/product-data'
+
+const CASE = 'jerry-can-spirits-expedition-pack-spiced-rum-6-bottles'
+const BOTTLE = 'jerry-can-spirits-expedition-spiced-rum'
 
 describe('toPence', () => {
   it('converts a Shopify money amount', () => {
@@ -41,8 +44,40 @@ describe('priceRows', () => {
     expect(list.ex_vat_p).toBe(19000)
 
     expect(trade.discount_pct).toBe(TRADE_DISCOUNT_PCT)
+    expect(trade.discount_label).toBe('10% off')
     expect(trade.inc_vat_p).toBe(20520)
     expect(trade.ex_vat_p).toBe(17100)
+  })
+
+  it('quotes a bespoke case price as a fixed amount off, exactly', () => {
+    // TRADECASE150: £48 off each case, so £228 becomes £180 and £150 ex VAT,
+    // which is the £25 a bottle that was agreed. A percentage cannot land on
+    // this figure (21.0526%), which is why the rule is an amount and the test
+    // pins the pennies.
+    const [list, trade] = priceRows(22800, tradeRule('TRADECASE150'), CASE)
+    expect(list.inc_vat_p).toBe(22800)
+    expect(trade.inc_vat_p).toBe(18000)
+    expect(trade.ex_vat_p).toBe(15000)
+    expect(trade.discount_pct).toBe(21)
+    expect(trade.discount_label).toBe('£48.00 off')
+  })
+
+  it('shows no discount on a product an amount-off rule does not cover', () => {
+    // The Shopify code is scoped to the case, so a single bottle goes through
+    // at list. The sheet must not promise otherwise.
+    const [list, trade] = priceRows(4000, tradeRule('TRADECASE150'), BOTTLE)
+    expect(trade.inc_vat_p).toBe(list.inc_vat_p)
+    expect(trade.discount_pct).toBe(0)
+    expect(trade.discount_label).toBe('—')
+    // And without a handle the rule is treated as not covering the product.
+    expect(tradePricePence(tradeRule('TRADECASE150'), 22800)).toBe(22800)
+  })
+
+  it('treats an unknown code as no discount rather than guessing', () => {
+    expect(tradeRule('NOT-A-CODE')).toBeNull()
+    expect(tradeRule(null)).toBeNull()
+    const [list, trade] = priceRows(22800, tradeRule('NOT-A-CODE'), CASE)
+    expect(trade.inc_vat_p).toBe(list.inc_vat_p)
   })
 
   it('quotes list and trade for a single bottle', () => {

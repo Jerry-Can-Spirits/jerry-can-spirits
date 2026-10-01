@@ -8,11 +8,12 @@ import {
 } from '@/lib/trade-products'
 import {
   EXPEDITION_SPICED,
-  TRADE_DISCOUNT_PCT,
   formatPence,
   priceRows,
   toPence,
+  tradeRule,
   type PriceRow,
+  type TradeDiscountRule,
 } from '@/lib/trade-portal/product-data'
 
 export const dynamic = 'force-dynamic'
@@ -58,7 +59,7 @@ function PriceTable({ rows, unit }: { rows: PriceRow[]; unit: string }) {
               }`}
             >
               <td className="py-2 pr-4">{row.label}</td>
-              <td className="py-2 pr-4">{row.discount_pct > 0 ? `${row.discount_pct}% off` : '—'}</td>
+              <td className="py-2 pr-4">{row.discount_label}</td>
               <td className="py-2 pr-4 text-right font-medium">{formatPence(row.ex_vat_p)}</td>
               <td className="py-2 text-right text-parchment-300 print:text-black/70">
                 {formatPence(row.inc_vat_p)}
@@ -81,15 +82,25 @@ function PriceUnavailable() {
   )
 }
 
+/** The sentence under Ordering that says how this account's rate is applied. */
+function rateSentence(rule: TradeDiscountRule | null): string {
+  if (!rule) return 'Your trade rate is applied automatically at checkout. There is no minimum order.'
+  if (rule.kind === 'percent') {
+    return `Your ${rule.percent}% trade discount applies automatically at checkout, on every product and at any quantity. There is no minimum order.`
+  }
+  return `Your case price is applied automatically at checkout, on every case and at any quantity. Single bottles and barware are at list price. There is no minimum order.`
+}
+
 export default async function TradePricingPage() {
   const session = await requireTradeSession()
   const products = await getTradeProducts()
+  const rule = tradeRule(session.discount_code)
 
   const casePence = priceOf(products, EXPEDITION_CASE_HANDLE)
   const bottlePence = priceOf(products, EXPEDITION_BOTTLE_HANDLE)
 
-  const caseRows = casePence === null ? null : priceRows(casePence)
-  const bottleRows = bottlePence === null ? null : priceRows(bottlePence)
+  const caseRows = casePence === null ? null : priceRows(casePence, rule, EXPEDITION_CASE_HANDLE)
+  const bottleRows = bottlePence === null ? null : priceRows(bottlePence, rule, EXPEDITION_BOTTLE_HANDLE)
 
   // What a bottle works out at inside a case, which is the figure a venue
   // actually compares against the single-bottle price when deciding what to buy.
@@ -145,10 +156,7 @@ export default async function TradePricingPage() {
           </a>
           .
         </p>
-        <p className="text-sm leading-relaxed mt-3">
-          Your {TRADE_DISCOUNT_PCT}% trade discount applies automatically at checkout, on every product and at
-          any quantity. There is no minimum order.
-        </p>
+        <p className="text-sm leading-relaxed mt-3">{rateSentence(rule)}</p>
         <p className="text-sm leading-relaxed mt-3 text-parchment-300 print:text-black/70">
           Prices are read live from the shop, so this sheet always matches what checkout will charge. Ex-VAT
           figures are the bold column, to compare against your other suppliers. VAT-inclusive figures are shown
