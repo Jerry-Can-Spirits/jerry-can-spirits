@@ -236,6 +236,45 @@ export function tradeRule(code: string | null | undefined): TradeDiscountRule | 
   return code ? (TRADE_DISCOUNT_RULES[code] ?? null) : null
 }
 
+/** The discount columns on a trade_accounts row (migration 0079). */
+export interface AccountDiscountRow {
+  discount_code: string
+  discount_kind?: string | null
+  discount_value?: number | null
+  discount_handles?: string | null
+}
+
+/**
+ * The pricing rule for an account, from the rule stored on its row.
+ *
+ * Since migration 0079 the kind and value live on the account and the code is
+ * the venue's own (VICTORY15, SAXTYS180), so a new venue needs no entry in the
+ * table above. A row with no stored rule falls back to that table, which still
+ * describes the shared codes.
+ */
+export function ruleForAccount(a: AccountDiscountRow): TradeDiscountRule | null {
+  if (a.discount_kind === 'percent' && a.discount_value) {
+    return { code: a.discount_code, kind: 'percent', percent: a.discount_value, summary: `${a.discount_value}% trade discount` }
+  }
+  if (a.discount_kind === 'amountOff' && a.discount_value) {
+    let handles: string[] = []
+    try {
+      const parsed: unknown = JSON.parse(a.discount_handles ?? '[]')
+      if (Array.isArray(parsed)) handles = parsed.filter((h): h is string => typeof h === 'string')
+    } catch {
+      handles = []
+    }
+    return {
+      code: a.discount_code,
+      kind: 'amountOff',
+      pencePerItem: a.discount_value,
+      handles,
+      summary: `${formatPence(a.discount_value)} off each case`,
+    }
+  }
+  return tradeRule(a.discount_code)
+}
+
 // What a product costs this account, in pence inc VAT. An amount-off rule only
 // applies to the handles it names; without a handle it is treated as not
 // covered, so a caller that cannot say what it is pricing never shows a cut.

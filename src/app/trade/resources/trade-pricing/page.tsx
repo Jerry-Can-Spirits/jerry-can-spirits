@@ -11,7 +11,7 @@ import {
   formatPence,
   priceRows,
   toPence,
-  tradeRule,
+  ruleForAccount,
   type PriceRow,
   type TradeDiscountRule,
 } from '@/lib/trade-portal/product-data'
@@ -94,7 +94,7 @@ function rateSentence(rule: TradeDiscountRule | null): string {
 export default async function TradePricingPage() {
   const session = await requireTradeSession()
   const products = await getTradeProducts()
-  const rule = tradeRule(session.discount_code)
+  const rule = ruleForAccount(session)
 
   const casePence = priceOf(products, EXPEDITION_CASE_HANDLE)
   const bottlePence = priceOf(products, EXPEDITION_BOTTLE_HANDLE)

@@ -7,7 +7,7 @@ import {
   type TradeCategory,
   CATEGORY_LABELS,
 } from '@/lib/trade-products'
-import { toPence, tradePricePence, tradeRule } from '@/lib/trade-portal/product-data'
+import { toPence, tradePricePence, type TradeDiscountRule } from '@/lib/trade-portal/product-data'
 import { formatPrice } from '@/lib/format-price'
 
 type Stage = 'order' | 'loading'
@@ -32,16 +32,16 @@ interface TradeOrderFormProps {
   account: {
     venue_name: string
     tier: string
-    discount_code: string
   }
+  /** The account's pricing rule, resolved on the server from its row. */
+  rule: TradeDiscountRule | null
 }
 
-export default function TradeOrderForm({ products, error: catalogueError, account }: TradeOrderFormProps) {
+export default function TradeOrderForm({ products, error: catalogueError, account, rule }: TradeOrderFormProps) {
   const [stage, setStage] = useState<Stage>('order')
   const [quantities, setQuantities] = useState<Record<string, number>>({})
   const [formError, setFormError] = useState('')
 
-  const rule = tradeRule(account.discount_code)
   // Per-product trade price. Discount-excluded items (e.g. the Ecologi
   // donation, which the Shopify discount code is scoped to skip) and products
   // an amount-off rule does not name are always returned at full price so the

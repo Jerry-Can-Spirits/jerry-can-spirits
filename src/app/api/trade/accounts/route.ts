@@ -31,6 +31,13 @@ import { hashPin, pinLookupKey } from '@/lib/trade-portal/credentials'
 import { insertReviewLog } from '@/lib/trade-applications'
 import { pushApplicationToSharePoint } from '@/lib/sharepoint/push'
 import type { GraphEnv } from '@/lib/sharepoint/graph'
+import {
+  mintTradeDiscountCode,
+  specFromRequest,
+  specToColumns,
+  variantIdsFor,
+  venueCodeFor,
+} from '@/lib/trade-portal/discount-codes'
 
 export const runtime = 'nodejs'
 
@@ -42,7 +49,14 @@ const PIN_DIGITS = 8
 interface Body {
   application_id?: string
   tier?: string
+  /** A code that already exists in Shopify. Either this or `discount`. */
   discount_code?: string
+  /**
+   * The deal, from which the venue's own Shopify code is minted: a percentage
+   * off the trade catalogue, or a case price inc VAT (SAXTYS180). Either this
+   * or `discount_code`.
+   */
+  discount?: { percent?: number; case_price_inc_vat?: number }
   venue_name?: string
 }
 
@@ -106,17 +120,42 @@ export async function POST(request: Request) {
 
   const applicationId = body.application_id?.trim()
   const tier = body.tier?.trim()
-  const discountCode = body.discount_code?.trim()
+  let discountCode = body.discount_code?.trim()
   const venueName = body.venue_name?.trim()
 
   if (!applicationId) return NextResponse.json({ error: 'application_id is required' }, { status: 400 })
   if (!tier || !TIERS.has(tier)) {
     return NextResponse.json({ error: `tier must be one of ${[...TIERS].join(', ')}` }, { status: 400 })
   }
-  if (!discountCode) return NextResponse.json({ error: 'discount_code is required' }, { status: 400 })
+  if (!discountCode && !body.discount) {
+    return NextResponse.json({ error: 'discount ({percent} or {case_price_inc_vat}) or discount_code is required' }, { status: 400 })
+  }
   if (!venueName) return NextResponse.json({ error: 'venue_name is required' }, { status: 400 })
 
   const db = e.DB
+  const adminToken = (env as unknown as { SHOPIFY_ADMIN_API_TOKEN?: string }).SHOPIFY_ADMIN_API_TOKEN
+
+  // The venue's own code, minted from the deal. Done before the account row
+  // exists so a Shopify failure leaves nothing half-provisioned.
+  let columns: { kind: string; value: number; handles: string | null } | null = null
+  if (!discountCode && body.discount) {
+    if (!adminToken) return NextResponse.json({ error: 'SHOPIFY_ADMIN_API_TOKEN is not set; pass discount_code instead' }, { status: 503 })
+    const parsed = await specFromRequest(body.discount)
+    if ('error' in parsed) return NextResponse.json({ error: parsed.error }, { status: 400 })
+    try {
+      const minted = await mintTradeDiscountCode(
+        adminToken,
+        venueCodeFor(venueName, parsed.spec, parsed.caseListP),
+        parsed.spec,
+        variantIdsFor(parsed.spec, parsed.products),
+      )
+      discountCode = minted.code
+      columns = specToColumns(parsed.spec)
+    } catch (err) {
+      return NextResponse.json({ error: err instanceof Error ? err.message : String(err) }, { status: 502 })
+    }
+  }
+  if (!discountCode) return NextResponse.json({ error: 'No discount code' }, { status: 400 })
 
   const application = await db
     .prepare(`SELECT id, trading_name, status FROM trade_applications WHERE id = ?1`)
@@ -166,10 +205,10 @@ export async function POST(request: Request) {
 
   const account = await db
     .prepare(
-      `INSERT INTO trade_accounts (pin, pin_lookup, discount_code, tier, venue_name, active, application_id)
-       VALUES (?1, ?2, ?3, ?4, ?5, 1, ?6) RETURNING id`,
+      `INSERT INTO trade_accounts (pin, pin_lookup, discount_code, tier, venue_name, active, application_id, discount_kind, discount_value, discount_handles)
+       VALUES (?1, ?2, ?3, ?4, ?5, 1, ?6, ?7, ?8, ?9) RETURNING id`,
     )
-    .bind(hashed, lookup, discountCode, tier, venueName, applicationId)
+    .bind(hashed, lookup, discountCode, tier, venueName, applicationId, columns?.kind ?? null, columns?.value ?? null, columns?.handles ?? null)
     .first<{ id: string }>()
   if (!account) {
     return NextResponse.json({ error: 'Account insert returned no id' }, { status: 500 })
