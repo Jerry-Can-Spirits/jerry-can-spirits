@@ -42,7 +42,7 @@ export default async function TradeCocktailsListPage() {
   const cocktails = await fetchTradeCocktails()
 
   return (
-    <main className="min-h-screen">
+    <section className="band-dark min-h-screen">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-24">
         <Link href="/trade/resources" className="text-sm text-parchment-400 hover:text-parchment-200">
           ← Trade resources
@@ -91,6 +91,6 @@ export default async function TradeCocktailsListPage() {
           </div>
         )}
       </div>
-    </main>
+    </section>
   )
 }

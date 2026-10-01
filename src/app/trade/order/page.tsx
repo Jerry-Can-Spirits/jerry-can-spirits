@@ -43,7 +43,7 @@ export default async function TradeOrderPage() {
   }
 
   return (
-    <main className="min-h-screen py-16">
+    <section className="band-dark min-h-screen py-16">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="inline-block px-4 py-2 bg-jerry-green-800/60 backdrop-blur-sm rounded-full border border-gold-500/30 mb-6">
           <span className="text-gold-300 text-sm font-semibold uppercase tracking-widest">
@@ -66,6 +66,6 @@ export default async function TradeOrderPage() {
           }}
         />
       </div>
-    </main>
+    </section>
   )
 }

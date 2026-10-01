@@ -35,7 +35,7 @@ export default function TradeLoginPage() {
   }
 
   return (
-    <main className="min-h-screen bg-jerry-green-950">
+    <section className="band-dark min-h-screen">
       <div className="max-w-md mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-24">
         <div className="mb-8">
           <TradePortalHeader />
@@ -74,6 +74,6 @@ export default function TradeLoginPage() {
           <a href="/trade/apply/" className="text-gold-300 hover:text-gold-400 underline">Apply for one</a>
         </p>
       </div>
-    </main>
+    </section>
   )
 }

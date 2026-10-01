@@ -9,7 +9,7 @@ export default async function TradeResourcesPage() {
   await requireTradeSession()
 
   return (
-    <main className="min-h-screen">
+    <section className="band-dark min-h-screen">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-24">
         <Link href="/trade/landing" className="text-sm text-parchment-400 hover:text-parchment-200">← Trade Hub</Link>
         <div className="inline-block px-4 py-2 bg-jerry-green-800/60 backdrop-blur-sm rounded-full border border-gold-500/30 mt-3 mb-6">
@@ -30,6 +30,6 @@ export default async function TradeResourcesPage() {
           </div>
         )}
       </div>
-    </main>
+    </section>
   )
 }

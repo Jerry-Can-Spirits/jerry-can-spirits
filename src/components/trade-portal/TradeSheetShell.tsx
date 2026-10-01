@@ -12,8 +12,8 @@ interface Props {
 export function TradeSheetShell({ title, eyebrow, subtitle, children, tone = 'dark' }: Props) {
   const isLight = tone === 'light'
   return (
-    <main
-      className={`group min-h-screen print:bg-white print:min-h-0 ${isLight ? 'bg-slate-50' : 'bg-jerry-green-950'}`}
+    <section
+      className={`group min-h-screen print:bg-white print:bg-none print:min-h-0 ${isLight ? 'band-light' : 'band-dark'}`}
       data-tone={tone}
     >
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-24 print:px-0 print:pt-0 print:pb-0 print:max-w-full">
@@ -48,7 +48,7 @@ export function TradeSheetShell({ title, eyebrow, subtitle, children, tone = 'da
           {children}
         </article>
       </div>
-    </main>
+    </section>
   )
 }
 
