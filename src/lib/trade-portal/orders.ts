@@ -32,7 +32,7 @@ const YEAR_MS = 365 * 24 * 60 * 60 * 1000
 export interface TradeAttribution {
   accountId: string
   applicationId: string | null
-  by: 'attribute' | 'discount_code'
+  by: 'attribute' | 'discount_code' | 'email'
 }
 
 function toPence(amount: string | number | undefined): number {
@@ -64,14 +64,19 @@ export function exVatSubtotalPence(order: Pick<ShopifyOrder, 'subtotal_price' | 
 /**
  * Which trade account placed this order.
  *
- * The cart attribute is the key and wins when present. Orders from before the
- * attribute existed are matched by discount code, but only when exactly one
- * active account carries that code: TRADE10 is shared, so it never matches,
- * and a shared match would credit the wrong venue, which is worse than none.
+ * The cart attribute is the key and wins when present. Without it, the order
+ * is matched by discount code, then by email, each only when exactly one
+ * active account fits: TRADE10 is shared, so it never matches on code, and a
+ * shared match would credit the wrong venue, which is worse than none.
+ *
+ * Email matters more than it looks. The first day's orders showed venues
+ * typing their code into the public shop rather than using the portal, which
+ * leaves no stamp; the order email against the application's contact email
+ * is then the only thing that says whose order it was.
  */
 export async function attributeTradeOrder(
   db: D1Database,
-  order: Pick<ShopifyOrder, 'note_attributes' | 'discount_codes'>,
+  order: Pick<ShopifyOrder, 'note_attributes' | 'discount_codes' | 'email'>,
 ): Promise<TradeAttribution | null> {
   const stamped = tradeAccountIdFromAttributes(order)
   if (stamped) {
@@ -90,6 +95,19 @@ export async function attributeTradeOrder(
       .all<{ id: string; application_id: string | null }>()
     const matches = rows.results ?? []
     if (matches.length === 1) return { accountId: matches[0].id, applicationId: matches[0].application_id, by: 'discount_code' }
+  }
+  const email = order.email?.trim().toLowerCase()
+  if (email) {
+    const rows = await db
+      .prepare(
+        `SELECT a.id, a.application_id FROM trade_accounts a
+         JOIN trade_applications p ON p.id = a.application_id
+         WHERE a.active = 1 AND lower(p.contact_email) = ?1`,
+      )
+      .bind(email)
+      .all<{ id: string; application_id: string | null }>()
+    const matches = rows.results ?? []
+    if (matches.length === 1) return { accountId: matches[0].id, applicationId: matches[0].application_id, by: 'email' }
   }
   return null
 }
@@ -187,18 +205,27 @@ export async function syncTradeOrder(env: OrdersEnv, order: ShopifyOrder): Promi
  * Daily: recompute every ordering account's figures and push them, so the
  * twelve-month value falls as orders age out, not only when a new one lands.
  */
-export async function refreshTradeOrderStats(env: OrdersEnv): Promise<void> {
-  if (!graphConfigured(env)) return
+export async function refreshTradeOrderStats(
+  env: OrdersEnv,
+): Promise<{ accounts: number; updated: number; failed: string[] }> {
+  const summary = { accounts: 0, updated: 0, failed: [] as string[] }
+  if (!graphConfigured(env)) return summary
   const accounts = await env.DB.prepare(
     `SELECT DISTINCT a.id, a.application_id FROM trade_orders o JOIN trade_accounts a ON a.id = o.trade_account_id WHERE a.application_id IS NOT NULL`,
   ).all<{ id: string; application_id: string }>()
   for (const a of accounts.results ?? []) {
+    summary.accounts++
     try {
       const stats = await statsFor(env.DB, a.id)
-      if (stats) await pushTradeOrderStats(env, env.SITE_OPS, a.application_id, stats)
+      if (stats) {
+        const r = await pushTradeOrderStats(env, env.SITE_OPS, a.application_id, stats)
+        if (r.updated) summary.updated++
+      }
     } catch (err) {
+      summary.failed.push(a.id)
       console.error('[trade-orders] refresh failed for account %s:', a.id, err)
       Sentry.captureException(err, { tags: { integration: 'sharepoint', phase: 'trade-order-refresh' } })
     }
   }
+  return summary
 }

@@ -21,6 +21,7 @@ import { getCloudflareContext } from '@opennextjs/cloudflare'
 import { GRAPH, getGraphToken, graphConfigured, graphFetch, type GraphEnv } from '@/lib/sharepoint/graph'
 import { pushApplicationToSharePoint } from '@/lib/sharepoint/push'
 import { ensureKeyColumn } from '@/lib/sharepoint/trade-list'
+import { refreshTradeOrderStats } from '@/lib/trade-portal/orders'
 
 export const runtime = 'nodejs'
 
@@ -135,6 +136,13 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 })
   }
 
+  // Recompute every ordering venue's figures and write them to the register
+  // now, rather than waiting for the 06:30 cron. Used after a backfill.
+  if (body.action === 'refresh-order-stats') {
+    const summary = await refreshTradeOrderStats({ ...e, SITE_OPS: env.SITE_OPS as KVNamespace })
+    return NextResponse.json({ ok: summary.failed.length === 0, ...summary }, { status: summary.failed.length ? 500 : 200 })
+  }
+
   if (body.action === 'add-key-column') {
     try {
       const result = await ensureKeyColumn(e, env.SITE_OPS as KVNamespace)
@@ -150,7 +158,7 @@ export async function POST(request: Request) {
   const applicationId = body.application_id?.trim()
   if (!applicationId) {
     return NextResponse.json(
-      { error: 'application_id, or action: "add-key-column", is required' },
+      { error: 'application_id, or action: "add-key-column" | "refresh-order-stats", is required' },
       { status: 400 },
     )
   }

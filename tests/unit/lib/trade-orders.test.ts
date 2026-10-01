@@ -89,9 +89,26 @@ describe('attributeTradeOrder', () => {
     ).resolves.toBeNull()
   })
 
+  it('falls back to the application contact email when nothing else fits', async () => {
+    // A venue typing TRADE10 into the public shop leaves no stamp and a shared
+    // code; the order email against the application is the only link left.
+    const { db } = mockDb({
+      all: (sql, args) => {
+        if (sql.includes('contact_email') && args[0] === 'meg@example.com') return [{ id: 'acc3', application_id: 'app3' }]
+        if (args[0] === 'TRADE10') return [{ id: 'a', application_id: 'x' }, { id: 'b', application_id: 'y' }]
+        return []
+      },
+    })
+    await expect(
+      attributeTradeOrder(db, { email: 'Meg@Example.com', discount_codes: [{ code: 'TRADE10', amount: '1', type: 'percentage' }] }),
+    ).resolves.toEqual({ accountId: 'acc3', applicationId: 'app3', by: 'email' })
+  })
+
   it('returns null for a retail order', async () => {
     const { db } = mockDb({})
-    await expect(attributeTradeOrder(db, { note_attributes: [], discount_codes: [] })).resolves.toBeNull()
+    await expect(
+      attributeTradeOrder(db, { note_attributes: [], discount_codes: [], email: 'someone@example.com' }),
+    ).resolves.toBeNull()
   })
 })
 
