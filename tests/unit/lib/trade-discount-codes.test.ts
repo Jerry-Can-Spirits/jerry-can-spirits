@@ -20,11 +20,11 @@ describe('venueCodeStem', () => {
 })
 
 describe('venueCodeFor', () => {
-  it('reads as the venue and its deal', () => {
-    expect(venueCodeFor('The Victory', { kind: 'percent', percent: 15 })).toBe('VICTORY15')
-    // £228 list less £48 off is the £180 case the pub was promised.
-    expect(venueCodeFor('Saxtys', { kind: 'amountOff', pencePerItem: 4800, handles: [CASE] }, 22800)).toBe('SAXTYS180')
-    expect(venueCodeFor('Saxtys', { kind: 'amountOff', pencePerItem: 4800, handles: [CASE] })).toBe('SAXTYSCASE')
+  it('names the venue and nothing about the deal', () => {
+    // The code shows at checkout and on every order email, so it says whose
+    // it is and keeps the price to the account (Dan, 1 Oct 2026).
+    expect(venueCodeFor('The Victory')).toBe('VICTORY-TRADE')
+    expect(venueCodeFor('Saxtys')).toBe('SAXTYS-TRADE')
   })
 })
 

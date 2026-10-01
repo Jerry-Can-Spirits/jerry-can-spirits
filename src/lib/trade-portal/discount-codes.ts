@@ -3,8 +3,8 @@
 // Why per venue rather than one shared TRADE10 (Dan, 1 Oct 2026): a leaked
 // code names its leaker, one venue can be switched off without touching the
 // rest, and an order carrying the code is that venue's order with nothing
-// else to check. The code is the venue's name and its deal, VICTORY15 or
-// SAXTYS180, so it reads on an order and looks wrong anywhere it should not be.
+// else to check. The code is the venue's name, SAXTYS-TRADE, so it reads on
+// an order and looks wrong anywhere it should not be.
 //
 // Shopify B2B would do this natively and needs Shopify Plus, which is not a
 // serious option for this store.
@@ -63,15 +63,14 @@ export function venueCodeStem(venueName: string): string {
 }
 
 /**
- * The code for a venue and a deal: stem plus the percentage, or stem plus the
- * case price in whole pounds (SAXTYS180). An amount-off rule without a known
- * case price gets CASE as its suffix rather than a number that might be wrong.
+ * The venue's code: SAXTYS-TRADE. The deal is deliberately not in the name
+ * (Dan, 1 Oct 2026): the venue sees the code at checkout and on every order
+ * email, and "your trade code" reads better than a number, while a leaked
+ * code still names its venue. The rule stays on the account, so the same
+ * code can carry a changed deal.
  */
-export function venueCodeFor(venueName: string, spec: DiscountSpec, caseListIncVatP?: number): string {
-  const stem = venueCodeStem(venueName)
-  if (spec.kind === 'percent') return `${stem}${spec.percent}`
-  if (caseListIncVatP === undefined) return `${stem}CASE`
-  return `${stem}${Math.round((caseListIncVatP - spec.pencePerItem) / 100)}`
+export function venueCodeFor(venueName: string): string {
+  return `${venueCodeStem(venueName)}-TRADE`
 }
 
 /** The variants a code is scoped to, mirroring what the portal will show. */

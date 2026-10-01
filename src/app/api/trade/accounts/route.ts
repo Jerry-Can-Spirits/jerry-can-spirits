@@ -145,7 +145,7 @@ export async function POST(request: Request) {
     try {
       const minted = await mintTradeDiscountCode(
         adminToken,
-        venueCodeFor(venueName, parsed.spec, parsed.caseListP),
+        venueCodeFor(venueName),
         parsed.spec,
         variantIdsFor(parsed.spec, parsed.products),
       )

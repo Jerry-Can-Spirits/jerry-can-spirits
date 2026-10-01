@@ -18,8 +18,8 @@ import { getCloudflareContext } from '@opennextjs/cloudflare'
 import { insertReviewLog } from '@/lib/trade-applications'
 import { pushApplicationToSharePoint } from '@/lib/sharepoint/push'
 import type { GraphEnv } from '@/lib/sharepoint/graph'
-import { EXPEDITION_CASE_HANDLE, getTradeProducts } from '@/lib/trade-products'
-import { ruleForAccount, toPence } from '@/lib/trade-portal/product-data'
+import { getTradeProducts } from '@/lib/trade-products'
+import { ruleForAccount } from '@/lib/trade-portal/product-data'
 import {
   deactivateTradeDiscountCode,
   mintTradeDiscountCode,
@@ -84,12 +84,11 @@ export async function POST(request: Request) {
 
   // The deal: the request's, or the one already on the row.
   let spec: DiscountSpec
-  let caseListP: number
   let products: Awaited<ReturnType<typeof getTradeProducts>>
   if (body.discount) {
     const parsed = await specFromRequest(body.discount)
     if ('error' in parsed) return NextResponse.json({ error: parsed.error }, { status: 400 })
-    ;({ spec, caseListP, products } = parsed)
+    ;({ spec, products } = parsed)
   } else {
     const rule = ruleForAccount(account)
     if (!rule) {
@@ -97,15 +96,13 @@ export async function POST(request: Request) {
     }
     spec = rule.kind === 'percent' ? { kind: 'percent', percent: rule.percent } : { kind: 'amountOff', pencePerItem: rule.pencePerItem, handles: [...rule.handles] }
     products = await getTradeProducts()
-    const caseAmount = products.find((p) => p.handle === EXPEDITION_CASE_HANDLE)?.variants[0]?.price
-    caseListP = caseAmount ? toPence(caseAmount) : 0
   }
 
   let minted: { code: string; id: string }
   try {
     minted = await mintTradeDiscountCode(
       e.SHOPIFY_ADMIN_API_TOKEN,
-      venueCodeFor(account.venue_name, spec, caseListP || undefined),
+      venueCodeFor(account.venue_name),
       spec,
       variantIdsFor(spec, products),
     )
