@@ -92,6 +92,16 @@ describe('priceRows', () => {
     expect(trade.ex_vat_p).toBe(3000)
   })
 
+  it('quotes a 15% account from its own code', () => {
+    const [, trade] = priceRows(22800, tradeRule('TRADE15'), CASE)
+    expect(trade.discount_pct).toBe(15)
+    expect(trade.discount_label).toBe('15% off')
+    expect(trade.inc_vat_p).toBe(19380)
+    expect(trade.ex_vat_p).toBe(16150)
+    const [, bottle] = priceRows(4000, tradeRule('TRADE15'), BOTTLE)
+    expect(bottle.inc_vat_p).toBe(3400)
+  })
+
   it('derives ex VAT from the rounded inc-VAT figure, not the raw base', () => {
     // Both columns of a row must describe the same penny. Dividing the
     // unrounded base by 1.2 can land a penny away from inc / 1.2, and a sheet
