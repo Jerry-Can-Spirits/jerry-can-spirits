@@ -209,6 +209,14 @@ export const TRADE_DISCOUNT_RULES: Record<string, TradeDiscountRule> = {
     percent: TRADE_DISCOUNT_PCT,
     summary: `${TRADE_DISCOUNT_PCT}% trade discount`,
   },
+  // A 15% rate agreed with one venue (1 Oct 2026). Same scope as TRADE10:
+  // bottle, case and barware, no minimum. Mirrors the Shopify code TRADE15.
+  TRADE15: {
+    code: 'TRADE15',
+    kind: 'percent',
+    percent: 15,
+    summary: '15% trade discount',
+  },
   // A bespoke case price agreed with one venue (1 Oct 2026): £48 off each
   // six-bottle case, so a £228 case is £180, £150 ex VAT, £25 a bottle. The
   // Shopify code is a fixed amount scoped to the case product, because the
