@@ -2,8 +2,9 @@ import { NextResponse } from 'next/server'
 import { getCloudflareContext } from '@opennextjs/cloudflare'
 import { isAllowedOrigin, isRateLimited } from '@/lib/kv'
 import { getTradeSessionCookieValue, readTradeSession } from '@/lib/trade-portal/session'
-import { createCart, addLinesToCart, applyDiscount } from '@/lib/shopify'
+import { createCart, addLinesToCart, applyDiscount, updateCartAttributes } from '@/lib/shopify'
 import { getTradeVariantIdSet } from '@/lib/trade-products'
+import { TRADE_ACCOUNT_ATTRIBUTE } from '@/lib/trade-portal/orders'
 
 interface CheckoutLine {
   variantId: string
@@ -113,6 +114,10 @@ export async function POST(request: Request) {
   try {
     const cart = await createCart()
     const cartWithItems = await addLinesToCart(cart.id, lines)
+    // Stamp the account on the cart. Shopify copies it onto the order, which
+    // is how the orders/create webhook credits the venue in the Customer
+    // Register. The leading underscore keeps it off the checkout page.
+    await updateCartAttributes(cart.id, [{ key: TRADE_ACCOUNT_ATTRIBUTE, value: account.id }])
     const cartWithDiscount = account.discount_code
       ? await applyDiscount(cartWithItems.id, [account.discount_code])
       : cartWithItems

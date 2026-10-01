@@ -14,6 +14,7 @@ import {
 import { createDiscountCode, createReferrerRewardCode } from '@/lib/shopify-admin';
 import { generateReferralCode } from '@/lib/shopify-admin';
 import { sendGa4Purchase } from '@/lib/ga4-measurement-protocol';
+import { syncTradeOrder } from '@/lib/trade-portal/orders';
 
 const KLAVIYO_API_BASE = 'https://a.klaviyo.com/api';
 const KLAVIYO_REVISION = '2024-10-15';
@@ -420,6 +421,10 @@ export async function POST(request: Request) {
           console.error('[webhook] handleOrderCreated failed for order #%s (non-fatal):', order.order_number, err);
           Sentry.captureException(err, { tags: { source: 'shopify-webhook', phase: 'order-created' } });
         }
+        // A trade order is recorded against its account and the Customer
+        // Register's order figures are refreshed. A retail order is a no-op.
+        // Never throws (see syncTradeOrder).
+        await syncTradeOrder(env as unknown as Parameters<typeof syncTradeOrder>[0], order);
         if (adminToken) {
           // Non-fatal: a referral-conversion failure (e.g. a transient D1 write
           // after the reward code is already minted on Shopify) must not throw

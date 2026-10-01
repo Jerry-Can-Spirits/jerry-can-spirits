@@ -106,6 +106,8 @@ export interface TradeVenueRecord {
   /** The exact ONS region, recorded in notes so the coarse bucket hides nothing. */
   onsRegion?: string | null
   accountId?: string | null
+  /** What the account was provisioned as, which is the pub's own name. */
+  venueName?: string | null
   tier?: string | null
   discountCode?: string | null
   /** Joined verification summaries, newest first. Goes in CustomerNotes. */
@@ -306,6 +308,9 @@ ${record.verification}` : null,
     ['PremisesLicenceNumber', record.premisesLicenceNumber],
     ['PersonalLicenceNumber', record.personalLicenceNumber],
     ['DPSName', record.dpsName],
+    // Title stays the trading name as applied; the venue name is what the
+    // account was provisioned as and what the pub calls itself (Dan, 1 Oct 2026).
+    ['VenueName', record.venueName],
   ]
   for (const [key, value] of optional) {
     if (value !== null && value !== undefined && value !== '') out[key] = value
@@ -440,4 +445,90 @@ export async function pushTradeVenue(
   }
 
   return { action: itemId ? 'updated' : 'created', skipped }
+}
+
+export interface TradeOrderStats {
+  orderCount: number
+  /** Pence ex VAT, after discount, before shipping, all time. */
+  totalExVatP: number
+  /** The same, orders in the last 365 days. */
+  last12MonthsExVatP: number
+  firstOrderAt: string
+  lastOrderAt: string
+}
+
+/**
+ * Write a venue's order figures onto its register row.
+ *
+ * These are the columns pushTradeVenue deliberately never touches, because it
+ * has no order data. This does, from trade_orders (migration 0078), so it is
+ * the one writer: FirstOrderDate, LastOrderDate, OrderCount, OrderTotalExVat
+ * and Last12MonthsExVat, plus Status flipped to Active, since a venue that has
+ * ordered is no longer a prospect. Only columns the list actually has are
+ * sent; a missing one is skipped and named, not fatal.
+ *
+ * Nothing is written when there is no row to write to. A venue that ordered
+ * without a register row is a mirror failure to fix at the source, and
+ * creating a bare row here would hide it.
+ */
+export async function pushTradeOrderStats(
+  env: GraphEnv,
+  kv: KVNamespace,
+  applicationId: string,
+  stats: TradeOrderStats,
+): Promise<{ updated: boolean; skipped: string[] }> {
+  if (!graphConfigured(env)) throw new Error('Graph is not configured; check the four MS_* secrets.')
+  const token = await getGraphToken(env, kv)
+  const siteId = env.SHAREPOINT_SITE_ID!
+  const listName = env.SHAREPOINT_LIST || DEFAULT_LIST
+  const { id: listId, columns } = await resolveList(token, siteId, listName, kv)
+
+  const wanted: Record<string, string | number> = {
+    FirstOrderDate: stats.firstOrderAt,
+    LastOrderDate: stats.lastOrderAt,
+    OrderCount: stats.orderCount,
+    OrderTotalExVat: stats.totalExVatP / 100,
+    Last12MonthsExVat: stats.last12MonthsExVatP / 100,
+    CustomerStatus: 'Active',
+  }
+  const send: Record<string, string | number> = {}
+  const skipped: string[] = []
+  for (const [key, value] of Object.entries(wanted)) {
+    const col = columns.get(key)
+    if (!col || col.readOnly) {
+      skipped.push(`${key} (${col ? 'read-only' : 'no such column'})`)
+      continue
+    }
+    if (col.isChoice && !col.choices?.includes(String(value))) {
+      skipped.push(`${key} ("${value}" is not a choice)`)
+      continue
+    }
+    send[key] = value
+  }
+
+  const search = await graphFetch(
+    token,
+    `${GRAPH}/sites/${siteId}/lists/${listId}/items?$select=id&$filter=fields/${KEY_COLUMN} eq '${applicationId}'`,
+    { headers: { Prefer: 'HonorNonIndexedQueriesWarningMayFailRandomly' } },
+  )
+  if (!search.ok) {
+    const detail = await search.text().catch(() => '')
+    throw new Error(`SharePoint lookup failed (${search.status}). ${detail.slice(0, 300)}`)
+  }
+  const found = (await search.json()) as { value?: Array<{ id: string }> }
+  const itemId = found.value?.[0]?.id
+  if (!itemId) {
+    console.warn(`[sharepoint] no register row for application ${applicationId}; order figures not written`)
+    return { updated: false, skipped }
+  }
+
+  const res = await graphFetch(token, `${GRAPH}/sites/${siteId}/lists/${listId}/items/${itemId}/fields`, {
+    method: 'PATCH',
+    body: JSON.stringify(send),
+  })
+  if (!res.ok) {
+    const detail = await res.text().catch(() => '')
+    throw new Error(`SharePoint order figures push failed (${res.status}). ${detail.slice(0, 400)}`)
+  }
+  return { updated: true, skipped }
 }

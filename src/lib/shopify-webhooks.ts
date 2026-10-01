@@ -41,6 +41,9 @@ export interface ShopifyOrder {
     variant_id?: number;
     price?: string;
     name?: string;
+    // Per-line tax after discounts. Trade order figures are ex VAT and derive
+    // from these (see lib/trade-portal/orders.ts).
+    tax_lines?: { price: string }[];
   }[];
   note_attributes?: {
     name: string;
