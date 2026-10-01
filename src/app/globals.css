@@ -758,8 +758,15 @@ html:not([data-age-verified]) body:has(.age-gate) {
 .band-light {
   --color-red-400: #9b1c1c;
   --color-red-300: #9b1c1c;
+  /* The paler reds are the form-error and legal-warning text, and emerald
+     is a separate palette from green used by the batch status pills. Both
+     were missed, so they stayed pale on a pale tint (Dan, 1 Oct 2026). */
+  --color-red-200: #9b1c1c;
+  --color-red-100: #9b1c1c;
   --color-green-400: #166534;
   --color-green-300: #166534;
+  --color-emerald-400: #166534;
+  --color-emerald-300: #166534;
   --color-amber-300: #92400e;
   --color-amber-400: #92400e;
   --color-yellow-400: #854d0e;
@@ -826,8 +833,15 @@ html:not([data-age-verified]) body:has(.age-gate) {
      gold, and their green text is what reads on it. */
   --color-red-400: #9b1c1c;
   --color-red-300: #9b1c1c;
+  /* The paler reds are the form-error and legal-warning text, and emerald
+     is a separate palette from green used by the batch status pills. Both
+     were missed, so they stayed pale on a pale tint (Dan, 1 Oct 2026). */
+  --color-red-200: #9b1c1c;
+  --color-red-100: #9b1c1c;
   --color-green-400: #166534;
   --color-green-300: #166534;
+  --color-emerald-400: #166534;
+  --color-emerald-300: #166534;
   --color-amber-300: #92400e;
   --color-amber-400: #92400e;
   --color-yellow-400: #854d0e;
