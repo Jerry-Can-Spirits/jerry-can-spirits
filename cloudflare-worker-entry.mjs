@@ -7,6 +7,7 @@ import { runTradeReviewDigest } from './src/lib/scheduled-trade-review.ts';
 import { runRatingsFetch } from './src/lib/scheduled-ratings.ts';
 import { runCredentialSweep } from './src/lib/scheduled-credentials.ts';
 import { runContactRetentionPurge } from './src/lib/scheduled-contact-retention.ts';
+import { refreshTradeOrderStats } from './src/lib/trade-portal/orders.ts';
 import { edgeCacheKeyUrl } from './src/lib/edge-cache.ts';
 
 // The Cache API needs a Request; src/lib/edge-cache.ts decides what to key on
@@ -96,6 +97,12 @@ const worker = {
     if (event.cron === '0 * * * *') {
       ctx.waitUntil(runRatingsFetch(env));
       ctx.waitUntil(runCredentialSweep(env));
+      return;
+    }
+    // Daily: the Customer Register's last-twelve-months value decays as orders
+    // age out, which only a scheduled recompute can do.
+    if (event.cron === '30 6 * * *') {
+      ctx.waitUntil(refreshTradeOrderStats(env));
       return;
     }
     ctx.waitUntil(runTradeReviewDigest(env));

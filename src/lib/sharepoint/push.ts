@@ -35,6 +35,7 @@ interface ApplicationRow {
 
 interface AccountRow {
   id: string
+  venue_name: string | null
   tier: string | null
   discount_code: string | null
 }
@@ -89,7 +90,7 @@ export async function pushApplicationToSharePoint(
     }
 
     const account = await db
-      .prepare(`SELECT id, tier, discount_code FROM trade_accounts WHERE application_id = ?1`)
+      .prepare(`SELECT id, venue_name, tier, discount_code FROM trade_accounts WHERE application_id = ?1`)
       .bind(applicationId)
       .first<AccountRow>()
 
@@ -143,6 +144,7 @@ export async function pushApplicationToSharePoint(
       personalLicenceNumber: app.personal_licence_number,
       dpsName: app.dps_name,
       accountId: account?.id ?? null,
+      venueName: account?.venue_name ?? null,
       tier: account?.tier ?? null,
       discountCode: account?.discount_code ?? null,
       verification,
