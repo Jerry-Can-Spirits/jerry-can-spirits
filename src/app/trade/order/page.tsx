@@ -3,6 +3,7 @@ import { getCloudflareContext } from '@opennextjs/cloudflare'
 import { requireTradeSession } from '@/lib/trade-portal/session-check'
 import { getTradeProducts, type TradeProduct } from '@/lib/trade-products'
 import TradeOrderForm from '@/components/TradeOrderForm'
+import { ruleForAccount } from '@/lib/trade-portal/product-data'
 
 export const metadata: Metadata = {
   title: 'Trade Order Portal',
@@ -17,12 +18,22 @@ export default async function TradeOrderPage() {
   const { env } = await getCloudflareContext()
   const db = env.DB as D1Database
 
-  // Re-fetch the row to get the discount_code that the verify endpoint used
-  // to return inline. Cheap query and lets us pass everything the form needs.
+  // Re-fetch the row for the pricing rule. Cheap query and lets us pass
+  // everything the form needs.
   const account = await db
-    .prepare(`SELECT venue_name, tier, discount_code FROM trade_accounts WHERE id = ?1 AND active = 1`)
+    .prepare(
+      `SELECT venue_name, tier, discount_code, discount_kind, discount_value, discount_handles
+       FROM trade_accounts WHERE id = ?1 AND active = 1`,
+    )
     .bind(session.tradeAccountId)
-    .first<{ venue_name: string; tier: string; discount_code: string }>()
+    .first<{
+      venue_name: string
+      tier: string
+      discount_code: string
+      discount_kind: string | null
+      discount_value: number | null
+      discount_handles: string | null
+    }>()
 
   if (!account) {
     // Shouldn't reach here — requireTradeSession already validated active = 1 — but be defensive.
@@ -59,11 +70,8 @@ export default async function TradeOrderPage() {
         <TradeOrderForm
           products={products}
           error={fetchError}
-          account={{
-            venue_name: account.venue_name,
-            tier: account.tier,
-            discount_code: account.discount_code,
-          }}
+          account={{ venue_name: account.venue_name, tier: account.tier }}
+          rule={ruleForAccount(account)}
         />
       </div>
     </section>

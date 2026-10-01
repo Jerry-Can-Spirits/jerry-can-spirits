@@ -40,6 +40,34 @@ export function generateReferralCode(email: string): string {
   return `JCS-${prefix}-${random}`;
 }
 
+// ── Generic Admin GraphQL call ──────────────────────────────────────
+
+/**
+ * One Admin GraphQL request. Throws on transport failure and on top-level
+ * GraphQL errors; userErrors inside a mutation payload are the caller's to
+ * read, because what counts as an error differs by mutation.
+ */
+export async function adminGraphql<T>(
+  adminToken: string,
+  query: string,
+  variables: Record<string, unknown>,
+): Promise<T> {
+  const res = await fetch(GRAPHQL_URL, {
+    method: 'POST',
+    headers: { 'X-Shopify-Access-Token': adminToken, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ query, variables }),
+  });
+  if (!res.ok) {
+    throw new Error(`Shopify GraphQL request failed: ${res.status} ${(await res.text()).slice(0, 300)}`);
+  }
+  const json = (await res.json()) as { data?: T; errors?: { message: string }[] };
+  if (json.errors?.length) {
+    throw new Error(`Shopify GraphQL error: ${json.errors.map((e) => e.message).join(', ')}`);
+  }
+  if (!json.data) throw new Error('Shopify GraphQL returned no data');
+  return json.data;
+}
+
 // ── GraphQL response types ──────────────────────────────────────────
 
 interface DiscountUserError {
