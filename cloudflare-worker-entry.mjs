@@ -47,9 +47,29 @@ function swrFor(ttl) {
   return ttl <= 60 ? 0 : 86400;
 }
 
+// MTA-STS policy for jerrycanspirits.co.uk (NCSC email security pass, 2 Oct
+// 2026). Receiving mail servers that support MTA-STS fetch this over HTTPS
+// from the mta-sts subdomain and then refuse to deliver to us over an
+// unencrypted or mis-certificated connection. It starts in testing mode:
+// nothing is refused, but failures are reported to security@ through the
+// TLS-RPT record, and the mode moves to enforce once a few weeks of reports
+// are clean. The id in the _mta-sts DNS record is bumped whenever this text
+// changes, because that is what tells senders to re-fetch it.
+const MTA_STS_HOST = 'mta-sts.jerrycanspirits.co.uk';
+const MTA_STS_POLICY = 'version: STSv1\nmode: testing\nmx: *.mail.protection.outlook.com\nmax_age: 604800\n';
+
 const worker = {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
+
+    if (url.hostname === MTA_STS_HOST) {
+      if (url.pathname === '/.well-known/mta-sts.txt') {
+        return new Response(MTA_STS_POLICY, {
+          headers: { 'Content-Type': 'text/plain; charset=utf-8', 'Cache-Control': 'public, max-age=3600' },
+        });
+      }
+      return new Response('Not found', { status: 404 });
+    }
 
     if (request.method === 'GET' && EDGE_CACHE_TTL.has(url.pathname)) {
       // The age gate is an overlay inside the page (decided client-side before
