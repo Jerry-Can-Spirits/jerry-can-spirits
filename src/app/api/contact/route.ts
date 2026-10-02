@@ -62,8 +62,12 @@ async function buildEmailIdentityCookie(email: string, request: Request): Promis
   return `jcs_em=${hashed}; HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=7776000`
 }
 
-// Verified Resend sender (also used by the trade-application route).
-const FROM_EMAIL = 'hello@jerrycanspirits.co.uk'
+// The Resend-verified sending domain, the same one the trade-application
+// route uses. Resend signs mail for send.jerrycanspirits.co.uk only; sending
+// as hello@ on the bare domain left these alerts without a DKIM signature of
+// ours, so DMARC had nothing to align and they could land in junk (NCSC email
+// pass, 2 Oct 2026). Reply-To is the customer, so replies still reach them.
+const FROM_EMAIL = 'Jerry Can Spirits <contact@send.jerrycanspirits.co.uk>'
 
 interface ContactNotifyData {
   name: string
