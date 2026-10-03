@@ -3,6 +3,7 @@ import Link from 'next/link'
 import AddToCartButton from '@/components/AddToCartButton'
 import { formatPrice } from '@/lib/format-price'
 import type { ShopifyProduct } from '@/lib/shopify'
+import { displayProductTitle } from '@/lib/product-title'
 
 // The one product card. Until this file existed the collection pages and the
 // product page's related grid each hand-rolled their own, so a change to how
@@ -39,7 +40,7 @@ export default function ProductCard({ product, priority = false }: { product: Sh
         </div>
         <div className="p-3 sm:p-4 lg:p-6 pb-0 space-y-2 flex-1">
           <h3 className="text-base sm:text-lg font-serif font-bold text-white group-hover:text-gold-300 transition-colors line-clamp-2">
-            {product.title}
+            {displayProductTitle(product.title)}
           </h3>
           <p className="text-lg font-serif font-bold text-gold-400">
             {hasPriceRange ? 'from ' : ''}
@@ -51,7 +52,7 @@ export default function ProductCard({ product, priority = false }: { product: Sh
         {defaultVariant && defaultVariant.availableForSale ? (
           <AddToCartButton
             variantId={defaultVariant.id}
-            productTitle={product.title}
+            productTitle={displayProductTitle(product.title)}
             price={defaultVariant.price.amount}
             currencyCode={defaultVariant.price.currencyCode}
           />

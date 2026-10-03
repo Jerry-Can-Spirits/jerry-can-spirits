@@ -7,9 +7,12 @@ interface ShareButtonProps {
   text: string
   url: string
   buttonText?: string
+  /** 'ghost' where the page has a buy control that should be the only gold
+   *  button on the first screen (Audit B, 3 Oct 2026). */
+  variant?: 'primary' | 'ghost'
 }
 
-export default function ShareButton({ title, text, url, buttonText = 'Share' }: ShareButtonProps) {
+export default function ShareButton({ title, text, url, buttonText = 'Share', variant = 'primary' }: ShareButtonProps) {
   const [showShareMenu, setShowShareMenu] = useState(false)
   const [copied, setCopied] = useState(false)
 
@@ -61,7 +64,11 @@ export default function ShareButton({ title, text, url, buttonText = 'Share' }: 
       {/* Main Share Button */}
       <button
         onClick={handleNativeShare}
-        className="inline-flex items-center gap-2 px-6 py-3 bg-gold-500 hover:bg-gold-400 text-jerry-green-900 font-semibold rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg"
+        className={
+          variant === 'ghost'
+            ? 'inline-flex items-center gap-2 px-6 py-3 bg-jerry-green-800/40 border border-gold-500/20 text-gold-300 font-semibold rounded-lg hover:bg-jerry-green-800/60 hover:border-gold-400/40 transition-all duration-300'
+            : 'inline-flex items-center gap-2 px-6 py-3 bg-gold-500 hover:bg-gold-400 text-jerry-green-900 font-semibold rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg'
+        }
       >
         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />

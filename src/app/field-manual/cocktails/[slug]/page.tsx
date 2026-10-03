@@ -22,6 +22,12 @@ import { OG_IMAGE_COCKTAIL } from '@/lib/og'
 import { ORG_REF, authorRefFor } from '@/lib/jsonLd'
 import FAQAccordion from '@/components/FAQAccordion'
 import ScrollRow from '@/components/ScrollRow'
+import BottleStrip from '@/components/BottleStrip'
+import { getProduct } from '@/lib/shopify'
+import { formatPrice } from '@/lib/format-price'
+import { displayProductTitle } from '@/lib/product-title'
+
+const EXPEDITION_HANDLE = 'jerry-can-spirits-expedition-spiced-rum'
 import SectionHeading from '@/components/SectionHeading'
 
 // Hourly ISR: the old ratings lookup was an HTTP fetch with an hourly cache,
@@ -332,6 +338,13 @@ export default async function CocktailPage({ params }: PageProps) {
   // cocktail with no spirit link and no questions never got a light band at
   // all. Each band now opens with a heading so it reads as a section, and each
   // optional band is painted only when it has something in it.
+  // The bottle at the top of the recipe rather than nine screens down (Audit
+  // B, 3 Oct 2026). Fetched only where the recipe calls for spiced rum; on
+  // any other spirit a strip would be a substitution claim, and the range
+  // rule (3 Oct) says never that.
+  const bottle = cocktail.baseSpirit === 'spiced-rum' ? await getProduct(EXPEDITION_HANDLE) : null
+  const bottleVariant = bottle?.variants?.find((v) => v.availableForSale) ?? bottle?.variants?.[0]
+
   const hasStory = Boolean(
     (cocktail.longDescription && cocktail.longDescription.length > 0) ||
       (cocktail.flavorProfile && cocktail.flavorProfile.length > 0),
@@ -382,11 +395,23 @@ export default async function CocktailPage({ params }: PageProps) {
               title={`${cocktail.name} Recipe | Jerry Can Spirits`}
               text={`Check out this ${cocktail.name} recipe from Jerry Can Spirits!`}
               url={`https://jerrycanspirits.co.uk/field-manual/cocktails/${cocktail.slug.current}/`}
+              variant="ghost"
             />
           </div>
         </div>
 
         <div className="max-w-4xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8">
+          {bottle && bottleVariant && (
+            <BottleStrip
+              variantId={bottleVariant.id}
+              productId={bottle.id}
+              title={displayProductTitle(bottle.title)}
+              price={formatPrice(bottleVariant.price.amount, bottleVariant.price.currencyCode)}
+              priceAmount={bottleVariant.price.amount}
+              currencyCode={bottleVariant.price.currencyCode}
+              href={`/shop/product/${bottle.handle}/`}
+            />
+          )}
           {/* Recipe Display Component (Client-side for interactivity) */}
           <CocktailRecipeDisplay cocktail={cocktail} />
         </div>

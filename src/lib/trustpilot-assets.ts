@@ -30,6 +30,14 @@ const TRUSTPILOT_STARS: Record<string, string> = {
   '5.0': `${CF_IMG}/6c4e7196-983e-4042-41f9-ab4c700bcd00/public`,
 }
 
+// The public TrustScore and review count as Trustpilot shows them on the
+// profile. They are Trustpilot's figures, stated as such beside the product
+// page's "Customer reviews" link (Audit B, 3 Oct 2026). They are not an
+// on-site aggregate and must never feed JSON-LD. Checked by hand on the date
+// given; update all three together, monthly with the scorecard.
+export const TRUSTPILOT_PROFILE_URL = 'https://uk.trustpilot.com/review/jerrycanspirits.co.uk'
+export const TRUSTPILOT_PUBLIC = { score: '4.6', reviews: 34, checked: '2026-10-03' } as const
+
 /** The official star image for a rating, or undefined when we hold no art
  *  for its half-star rounding. */
 export function trustpilotStarImage(rating: number): string | undefined {

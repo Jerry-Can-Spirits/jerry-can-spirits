@@ -15,6 +15,7 @@ import { formatPrice } from '@/lib/format-price'
 import FAQAccordion from '@/components/FAQAccordion'
 import ScrollRow from '@/components/ScrollRow'
 import SectionHeading from '@/components/SectionHeading'
+import { displayProductTitle } from '@/lib/product-title'
 
 export const metadata: Metadata = {
   title: 'British Craft Spirits',
@@ -262,7 +263,7 @@ export default async function SpiritsPage() {
                     {defaultVariant && defaultVariant.availableForSale ? (
                       <AddToCartButton
                         variantId={defaultVariant.id}
-                        productTitle={product.title}
+                        productTitle={displayProductTitle(product.title)}
                         price={defaultVariant.price.amount}
                         currencyCode={defaultVariant.price.currencyCode}
                       />

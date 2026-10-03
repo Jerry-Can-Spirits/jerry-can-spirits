@@ -24,5 +24,7 @@ export const PRICE_UNAVAILABLE = '—'
 export function formatPrice(amount: string | number | null | undefined, currencyCode = 'GBP'): string {
   const value = typeof amount === 'number' ? amount : parseFloat(amount ?? '')
   if (!Number.isFinite(value)) return PRICE_UNAVAILABLE
-  return `${SYMBOLS[currencyCode] ?? currencyCode}${value.toFixed(2)}`
+  // VOICE: "£45, never £45.00". Pence only when there are pence.
+  const digits = Number.isInteger(value) ? value.toFixed(0) : value.toFixed(2)
+  return `${SYMBOLS[currencyCode] ?? currencyCode}${digits}`
 }

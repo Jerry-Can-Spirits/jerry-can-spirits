@@ -11,6 +11,7 @@ import { safeJsonLd, productOffer, merchantOfferExtras } from '@/lib/jsonLd'
 import { formatPrice } from '@/lib/format-price'
 import ScrollRow from '@/components/ScrollRow'
 import SectionHeading from '@/components/SectionHeading'
+import { displayProductTitle } from '@/lib/product-title'
 
 export const metadata: Metadata = {
   title: 'Expedition Gear & Apparel',
@@ -249,7 +250,7 @@ export default async function ClothingPage() {
               {/* Product Details */}
               <div className="p-3 sm:p-4 lg:p-6 space-y-2 sm:space-y-3">
                 <h2 className="text-base sm:text-lg lg:text-xl font-serif font-bold text-white group-hover:text-gold-300 transition-colors line-clamp-2">
-                  {product.title}
+                  {displayProductTitle(product.title)}
                 </h2>
 
                 <div className="flex items-center justify-between pt-1 sm:pt-2">

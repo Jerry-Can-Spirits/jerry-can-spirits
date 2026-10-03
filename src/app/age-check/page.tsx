@@ -6,6 +6,7 @@ import { AGE_COOKIE, isAgeVerified, productHandleFromReturnPath, safeReturnPath 
 import { getProduct } from '@/lib/shopify'
 import { OG_IMAGE } from '@/lib/og'
 import AgeCheckGate from './AgeCheckGate'
+import { displayProductTitle } from '@/lib/product-title'
 
 // The gate is a redirect target, not a destination — keep it out of the index.
 const ROBOTS = { index: false, follow: false }
@@ -39,7 +40,7 @@ export async function generateMetadata({
   }
   if (!product) return { robots: ROBOTS }
 
-  const displayTitle = product.title.replace(/^Jerry Can Spirits[®]?\s*[-–—]?\s*/i, '')
+  const displayTitle = displayProductTitle(product.title)
   const title = `${product.seo?.title || displayTitle} | Jerry Can Spirits®`
   const description = product.seo?.description || product.description.slice(0, 155)
   const url = `https://jerrycanspirits.co.uk/shop/product/${handle}/`
