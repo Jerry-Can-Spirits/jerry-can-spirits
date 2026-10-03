@@ -120,6 +120,19 @@ const featuredStockists = [
     location: 'Hereford, Herefordshire',
     schemaType: 'BarOrPub' as const,
   },
+  {
+    name: 'Underground Alt',
+    address: '168-170 Promenade, Blackpool FY1 1RE',
+    streetAddress: '168-170 Promenade',
+    addressLocality: 'Blackpool',
+    postalCode: 'FY1 1RE',
+    description: 'Alternative bar and club on the Promenade, open from the evening. Rock and alternative music, late nights, and a crowd that comes for both.',
+    website: 'https://www.undergroundalt.rocks/',
+    logo: 'https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/7b18d7e7-1a42-4c4a-4252-b07d64963900/public',
+    type: 'Bar & Club',
+    location: 'Blackpool, Lancashire',
+    schemaType: 'BarOrPub' as const,
+  },
 ]
 
 // Sorted by location, then name: regional clustering with zero UI. Both
