@@ -13,14 +13,16 @@ import {
   STRUCTURES_REQUIRING_CH, TYPES_REQUIRING_AWRS,
 } from '@/components/trade-application/types'
 
-const TOTAL_STEPS = 4
+// Two steps, not four. The licence numbers, the supervisor and the uploads
+// are asked for after approval, before the first order, where the paperwork
+// is to hand (Audit B, 3 Oct 2026). The backend already treats them as
+// optional; the form now does too.
+const TOTAL_STEPS = 2
 const STORAGE_KEY = 'trade-application-draft'
 
 const STEP_HEADINGS = [
-  'Business & ownership',
-  'Premises & licensing',
-  'Primary contact & director',
-  'Order intent & declaration',
+  'Your business and who to talk to',
+  'What you expect to order',
 ]
 
 const UK_POSTCODE_RE = /^[A-Z]{1,2}\d[A-Z\d]?\s*\d[A-Z]{2}$/i
@@ -89,7 +91,7 @@ export default function TradeApplyPage() {
         else if (!AWRS_URN_RE.test(data.awrs_urn)) e.awrs_urn = 'Invalid format'
       }
     }
-    if (n === 2) {
+    if (n === 1) {
       const addr = data.trading_address
       if (!addr.line1.trim()) e.trading_line1 = 'Required'
       if (!addr.town.trim()) e.trading_town = 'Required'
@@ -114,7 +116,7 @@ export default function TradeApplyPage() {
       // Companies House, a postcode against the ONS district — recorded as
       // evidence on submission. Anything still blank is chased afterwards.
     }
-    if (n === 3) {
+    if (n === 1) {
       if (!data.contact_name.trim()) e.contact_name = 'Required'
       if (!data.contact_role.trim()) e.contact_role = 'Required'
       if (!EMAIL_RE.test(data.contact_email)) e.contact_email = 'Invalid email'
@@ -124,7 +126,7 @@ export default function TradeApplyPage() {
       // first applicant did not have it during a shift, which is the ordinary
       // case rather than the exception.
     }
-    if (n === 4) {
+    if (n === 2) {
       if (!data.expected_initial_volume) e.expected_initial_volume = 'Required'
       if (!data.expected_monthly_volume) e.expected_monthly_volume = 'Required'
     }
@@ -147,7 +149,7 @@ export default function TradeApplyPage() {
   }
 
   async function handleSubmit() {
-    const e = validateStep(4)
+    const e = validateStep(2)
     if (!data.declaration) e.declaration = 'You must accept the declaration to submit'
     if (Object.keys(e).length > 0) {
       setErrors(e)
@@ -257,7 +259,7 @@ export default function TradeApplyPage() {
             </div>
             <h1 className="text-3xl sm:text-4xl font-serif font-bold text-parchment-50 mb-3">Apply for a Trade Account</h1>
             <p className="text-parchment-300 max-w-xl mx-auto">
-              Four short steps. We review and respond within three working days.
+              Two short steps. We review and respond within three working days, and ask for licence details before your first order.
             </p>
           </div>
 
@@ -274,10 +276,14 @@ export default function TradeApplyPage() {
               </div>
             )}
 
-            {step === 1 && <StepBusinessOwnership data={data} errors={errors} onChange={setField} />}
-            {step === 2 && <StepPremises data={data} errors={errors} onChange={setField} />}
-            {step === 3 && <StepContact data={data} errors={errors} onChange={setField} />}
-            {step === 4 && <StepOrderIntent data={data} errors={errors} onChange={setField} />}
+            {step === 1 && (
+              <div className="space-y-8">
+                <StepBusinessOwnership data={data} errors={errors} onChange={setField} />
+                <StepPremises data={data} errors={errors} onChange={setField} addressOnly />
+                <StepContact data={data} errors={errors} onChange={setField} />
+              </div>
+            )}
+            {step === 2 && <StepOrderIntent data={data} errors={errors} onChange={setField} />}
 
             {status === 'error' && (
               <div role="alert" className="mt-6 bg-red-600/20 border border-red-500/30 rounded-lg p-4 text-sm text-red-200">

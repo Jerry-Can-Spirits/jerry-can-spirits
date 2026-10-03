@@ -222,8 +222,13 @@ async function sendKlaviyoNotification(
 // Alert a human that a submission arrived, via Resend. Best-effort and
 // ships dark: the D1 row is the durable record, so if CONTACT_ALERT_EMAIL /
 // RESEND_API_KEY are unset the alert is skipped and logged, not fatal.
+// Trade enquiries go to the inbox that owns trade, not the general one. A
+// wholesale enquiry sat in hello@ for eleven days in September because nobody
+// was watching it there (Audit A finding 3, 3 Oct 2026).
+const TRADE_ENQUIRY_EMAIL = 'partnerships@jerrycanspirits.co.uk'
+
 async function sendContactAlert(env: CloudflareEnv, data: ContactNotifyData): Promise<void> {
-  const to = env.CONTACT_ALERT_EMAIL
+  const to = data.formType === 'trade' ? TRADE_ENQUIRY_EMAIL : env.CONTACT_ALERT_EMAIL
   const apiKey = env.RESEND_API_KEY as string | undefined
   if (!to || !apiKey) {
     console.warn('[contact] CONTACT_ALERT_EMAIL/RESEND_API_KEY not configured — skipping alert')
@@ -250,7 +255,10 @@ async function sendContactAlert(env: CloudflareEnv, data: ContactNotifyData): Pr
     from: FROM_EMAIL,
     to,
     replyTo: data.email, // replying to the alert emails the customer back
-    subject: `[${data.formType}] Contact form — ${data.name}`,
+    subject:
+      data.formType === 'trade'
+        ? `Trade enquiry: ${data.venueName || data.name}`
+        : `[${data.formType}] Contact form — ${data.name}`,
     html,
     text,
   })

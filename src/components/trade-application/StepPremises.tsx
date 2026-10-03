@@ -9,13 +9,17 @@ interface Props {
   data: ApplicationFormState
   errors: Record<string, string>
   onChange: <K extends keyof ApplicationFormState>(key: K, value: ApplicationFormState[K]) => void
+  /** Addresses only. The licensing block is asked for after approval, where
+   *  it belongs (Audit B, 3 Oct 2026: the form was thirty fields over four
+   *  steps for a bar manager filling it in mid-shift). */
+  addressOnly?: boolean
 }
 
 const inputClass = 'w-full px-4 py-3 bg-jerry-green-700/50 border border-gold-500/30 rounded-lg text-parchment-50 placeholder-parchment-400 focus:border-gold-400 focus:ring-2 focus:ring-gold-400/20 focus:outline-hidden transition-colors duration-200'
 const labelClass = 'block text-sm font-medium text-parchment-200 mb-2'
 
-export function StepPremises({ data, errors, onChange }: Props) {
-  const showLicensing = TYPES_REQUIRING_LICENCE.has(data.business_type)
+export function StepPremises({ data, errors, onChange, addressOnly = false }: Props) {
+  const showLicensing = !addressOnly && TYPES_REQUIRING_LICENCE.has(data.business_type)
   const [areaHint, setAreaHint] = useState<string | null>(null)
 
   /**
