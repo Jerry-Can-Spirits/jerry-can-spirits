@@ -107,6 +107,19 @@ const featuredStockists = [
     location: 'Hereford, Herefordshire',
     schemaType: 'BarOrPub' as const,
   },
+  {
+    name: 'Saxtys',
+    address: '33 Widemarsh St, Hereford HR4 9EA',
+    streetAddress: '33 Widemarsh St',
+    addressLocality: 'Hereford',
+    postalCode: 'HR4 9EA',
+    description: 'Independent cocktail bar, restaurant and club on Widemarsh Street, in the centre of Hereford since 1977. Four bars across the building, a steakhouse restaurant, and a late-night club.',
+    website: 'https://saxtys.co.uk/',
+    logo: 'https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/596d2515-d7f5-4ac3-79d6-bdb9479ae400/public',
+    type: 'Cocktail Bar',
+    location: 'Hereford, Herefordshire',
+    schemaType: 'BarOrPub' as const,
+  },
 ]
 
 // Sorted by location, then name: regional clustering with zero UI. Both
