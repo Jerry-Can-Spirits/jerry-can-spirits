@@ -6,6 +6,7 @@ import { useCart } from '@/contexts/CartContext'
 import { FREE_SHIPPING_THRESHOLD_GBP } from '@/lib/pricing'
 import { resolveCategory, type ProductCategory } from '@/lib/shopify'
 import { formatPrice } from '@/lib/format-price'
+import { trackSiteEvent } from '@/components/GoogleTag'
 
 interface CartUpsellItem {
   title: string
@@ -113,6 +114,12 @@ export default function CartUpsell() {
 
     return { hero, alternates: alternatesFor(hero.handle), belowThreshold: true, heroClears: hero.price >= shortfall }
   }, [pool, cartHandles, subtotal, cartHasSpirits])
+
+  // One event when a product is offered, so the silent case (a challenged or
+  // failed pool fetch, Audit B finding 1) shows up in GA4 as its absence.
+  useEffect(() => {
+    if (hero) trackSiteEvent('cart_upsell_rendered', { handle: hero.handle, below_threshold: belowThreshold })
+  }, [hero, belowThreshold])
 
   if (loadingProducts) {
     return (
