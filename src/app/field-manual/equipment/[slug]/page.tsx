@@ -311,6 +311,24 @@ export default async function EquipmentDetailPage({ params }: { params: Promise<
           <p className="text-xl text-parchment-300 leading-relaxed whitespace-pre-line">
             {equipment.description}
           </p>
+          {/* The shop sells the thing this page describes. The sherry glass
+              page took 178 search clicks in a quarter and linked to no shop
+              page (Audit A, 3 Oct 2026). Glassware points at the rum glasses
+              collection, tools at bar accessories; garnish has nothing to sell. */}
+          {equipment.category === 'glassware' && (
+            <p className="mt-4">
+              <Link href="/shop/rum-glasses/" className="inline-flex min-h-11 items-center text-gold-300 underline underline-offset-4 hover:text-gold-200">
+                Shop rum glasses
+              </Link>
+            </p>
+          )}
+          {['shaking', 'straining', 'measuring', 'tools'].includes(equipment.category) && (
+            <p className="mt-4">
+              <Link href="/shop/bar-accessories/" className="inline-flex min-h-11 items-center text-gold-300 underline underline-offset-4 hover:text-gold-200">
+                Shop bar accessories
+              </Link>
+            </p>
+          )}
         </div>
 
         <div className="flex flex-col lg:grid lg:grid-cols-2 gap-12 items-start">

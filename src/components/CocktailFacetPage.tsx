@@ -6,6 +6,7 @@ import StructuredData from '@/components/StructuredData'
 import FacetFilter from '@/components/FacetFilter'
 import ScrollRow from '@/components/ScrollRow'
 import SectionHeading from '@/components/SectionHeading'
+import HouseSpiritCard from '@/components/HouseSpiritCard'
 import {
   FACET_PAGE_SIZE,
   MEMBER_LABELS,
@@ -117,6 +118,12 @@ export default async function CocktailFacetPage({
           >
             {copy?.h1 && page === 1 ? copy.h1 : headingFor(facet, page)}
           </SectionHeading>
+          {/* The one facet about the spirit the house makes carries the range
+              card. The template stays one template: this is a condition on
+              data, not a special page. */}
+          {facet.kind === 'spirit' && facet.value === 'rum' && page === 1 && (
+            <HouseSpiritCard className="mx-auto mt-8 max-w-3xl" />
+          )}
         </div>
       </section>
 

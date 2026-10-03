@@ -7,6 +7,7 @@ import Breadcrumbs from '@/components/Breadcrumbs'
 import HubIndex from '@/components/HubIndex'
 import StructuredData from '@/components/StructuredData'
 import SectionHeading from '@/components/SectionHeading'
+import HouseSpiritCard from '@/components/HouseSpiritCard'
 import { OG_IMAGE } from '@/lib/og'
 
 // ISR — a single Sanity list query with no per-request state, so it edge-caches
@@ -96,6 +97,7 @@ export default async function GuidesPage() {
             <br />
             <span className="text-gold-300">& Education</span>
           </SectionHeading>
+          <HouseSpiritCard className="mx-auto mt-8 max-w-3xl" />
         </div>
       </section>
       {/* Suspense boundary so the client search/filter UI's useSearchParams

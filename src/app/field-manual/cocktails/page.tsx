@@ -8,6 +8,7 @@ import HubIndex from '@/components/HubIndex'
 import Breadcrumbs from '@/components/Breadcrumbs'
 import StructuredData from '@/components/StructuredData'
 import SectionHeading from '@/components/SectionHeading'
+import HouseSpiritCard from '@/components/HouseSpiritCard'
 import { OG_IMAGE } from '@/lib/og'
 import { getFacets } from '@/lib/facet-data'
 import { facetPath, headingFor, isSelfCanonical, type Facet } from '@/lib/cocktail-facets'
@@ -170,6 +171,7 @@ export default async function CocktailsPage() {
             <br />
             <span className="text-gold-300">Engineer New Adventures</span>
           </SectionHeading>
+          <HouseSpiritCard className="mx-auto mt-8 max-w-3xl" />
         </div>
       </section>
       <Suspense>

@@ -7,6 +7,7 @@ import Breadcrumbs from '@/components/Breadcrumbs'
 import StructuredData from '@/components/StructuredData'
 import HubIndex from '@/components/HubIndex'
 import SectionHeading from '@/components/SectionHeading'
+import HouseSpiritCard from '@/components/HouseSpiritCard'
 import { OG_IMAGE } from '@/lib/og'
 
 export const metadata: Metadata = {
@@ -80,6 +81,7 @@ export default async function EquipmentPage() {
             <br />
             <span className="text-gold-300">Engineered for Excellence</span>
           </SectionHeading>
+          <HouseSpiritCard className="mx-auto mt-8 max-w-3xl" />
         </div>
       </section>
       <Suspense>

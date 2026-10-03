@@ -33,6 +33,13 @@ export type CategoryConfig = {
   // order them from the top of the band down. Applied at render by
   // lib/price-band.ts. Inclusive.
   maxPrice?: number
+  // Products above the intro. A gift buyer decides on the picture and the
+  // price, then reads; on the gift pages the grid sat under three paragraphs
+  // (Audit B, 3 Oct 2026).
+  productsFirst?: boolean
+  // The range card after the grid, where the collection is the serve for the
+  // bottle rather than the bottle itself (glassware, bar tools).
+  houseSpiritCard?: boolean
 }
 
 // The gift cluster: three shop pages, the gift-sets page and the guide that
@@ -160,6 +167,7 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
     },
     faqs: GIFT_FAQS,
     relatedLinks: GIFT_CLUSTER_LINKS,
+    productsFirst: true,
   },
 
   'spiced-rum': {
@@ -259,14 +267,15 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
 
   'bar-accessories': {
     h1: 'Bar Accessories',
+    houseSpiritCard: true,
     metaTitle: 'Bar Accessories UK | Home Bar Tools',
     metaDescription:
       'Bar accessories for a proper home bar. Cocktail shakers, jiggers, and glassware. Built to last, selected for people who take their drinks seriously.',
+    // One paragraph that answers the search ("home bar accessories", position
+    // 10.5 on 1,264 impressions a quarter, Audit A, 3 Oct 2026). The long
+    // version lives in the SEO body below the grid.
     introBody: [
-      'A home bar does not need to be complicated. It needs the right tools, used correctly.',
-      'The bar accessories here are chosen for function. A cocktail shaker that seals properly. A jigger that measures accurately. Glassware that holds a drink the way it was designed to be held.',
-      'These are not decorative. They are equipment. The same logic applies here as with Expedition Spiced Rum. Built properly. No shortcuts.',
-      'Whether you are building a home bar from scratch or replacing something that has seen better days, start with tools that will not let you down. The Field Manual has everything you need to know about using them properly.',
+      'A shaker that seals, a jigger marked in 25ml and 50ml, a blade for the ginger beer, and the glass to serve it in. Everything here is used behind our own bar and referenced in the Field Manual, so the recipe and the tool are never far apart.',
     ],
     seoTitle: 'How to Build a Home Bar That Actually Works',
     seoBody: [
@@ -339,10 +348,12 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
     },
     faqs: GIFT_FAQS,
     relatedLinks: GIFT_CLUSTER_LINKS,
+    productsFirst: true,
   },
 
   'gifts-for-her': {
     h1: 'Rum Gifts for Her',
+    productsFirst: true,
     metaTitle: 'Rum Gifts for Her',
     metaDescription:
       'Rum gifts for women who take their drink seriously. Small-batch British spiced rum, real ingredients, no shortcuts. 5% of profits to forces charities.',
@@ -421,14 +432,15 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
 
   'rum-glasses': {
     h1: 'Rum Glasses',
+    houseSpiritCard: true,
     metaTitle: 'Rum Glasses UK | Best Glass for Rum',
     metaDescription:
       'The right glass makes a difference. Rum glasses selected for Expedition Spiced Rum. Highballs to tumblers. Shop rum glassware from Jerry Can Spirits.',
+    // One paragraph that answers the search ("rum glasses uk", position 11.8
+    // on 1,467 impressions a quarter, Audit A, 3 Oct 2026): which glass for
+    // which pour. The long version moved to the SEO body below the grid.
     introBody: [
-      'The glass matters. Not in a fussy way. In a practical way. The right shape concentrates the nose, holds temperature correctly, and changes how the liquid moves when you drink it.',
-      'For rum drunk neat or with a single cube, a highball or rocks glass is not decoration. It affects dilution, presentation, and how the drink behaves over time.',
-      'Expedition Spiced Rum is designed to be sipped slowly. The vanilla and cinnamon open up as it warms slightly in the glass. The ginger and cassia come through in the middle. The bourbon oak holds through to the finish. None of that happens properly in the wrong vessel.',
-      'The glassware here is selected with that in mind. Proper rum glasses, for people who drink rum properly.',
+      'Neat or over one large cube: a tumbler, so the nose sits close and the ice melts slowly. The Storm and Spice or any long serve: a highball, which keeps the ginger beer lively and gives the lime room. A stirred cocktail: a mixer glass to build it and a rocks glass to serve it. Every glass here is chosen for Expedition Spiced Rum and sold singly or as a pair.',
     ],
     seoTitle: 'The Right Glass Changes the Drink',
     seoBody: [

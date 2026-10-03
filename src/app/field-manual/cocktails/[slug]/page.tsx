@@ -23,6 +23,7 @@ import { ORG_REF, authorRefFor } from '@/lib/jsonLd'
 import FAQAccordion from '@/components/FAQAccordion'
 import ScrollRow from '@/components/ScrollRow'
 import BottleStrip from '@/components/BottleStrip'
+import HouseSpiritCard from '@/components/HouseSpiritCard'
 import { getProduct } from '@/lib/shopify'
 import { formatPrice } from '@/lib/format-price'
 import { displayProductTitle } from '@/lib/product-title'
@@ -344,6 +345,12 @@ export default async function CocktailPage({ params }: PageProps) {
   // rule (3 Oct) says never that.
   const bottle = cocktail.baseSpirit === 'spiced-rum' ? await getProduct(EXPEDITION_HANDLE) : null
   const bottleVariant = bottle?.variants?.find((v) => v.availableForSale) ?? bottle?.variants?.[0]
+  // Any other rum cocktail gets the range card under the recipe: what the
+  // house makes, with no claim about this drink. Not a substitution.
+  const isOtherRumCocktail =
+    !bottle &&
+    ((cocktail.baseSpirit ?? '').endsWith('rum') ||
+      (cocktail.ingredients ?? []).some((i) => /\brum\b/i.test(i.name ?? '')))
 
   const hasStory = Boolean(
     (cocktail.longDescription && cocktail.longDescription.length > 0) ||
@@ -414,6 +421,7 @@ export default async function CocktailPage({ params }: PageProps) {
           )}
           {/* Recipe Display Component (Client-side for interactivity) */}
           <CocktailRecipeDisplay cocktail={cocktail} />
+          {isOtherRumCocktail && <HouseSpiritCard className="mt-8" />}
         </div>
        </section>
 
