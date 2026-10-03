@@ -1,6 +1,5 @@
 'use client'
 
-import { FileUpload } from './FileUpload'
 import type { ApplicationFormState } from './types'
 
 interface Props {
@@ -50,18 +49,10 @@ export function StepContact({ data, errors, onChange }: Props) {
         <input id="director_name" className={inputClass} aria-required="true"
           value={data.director_name} onChange={(e) => onChange('director_name', e.target.value)} />
         {errors.director_name && <p role="alert" className="mt-1 text-sm text-red-300">{errors.director_name}</p>}
+        {/* The photo ID upload that sat here is asked for after approval,
+            with the licence details, before the first order (Audit B, 3 Oct
+            2026). The field stays in state so the API contract is unchanged. */}
       </div>
-
-      <FileUpload
-        id="director_id_file"
-        label="Photo ID of director or owner (optional)"
-        value={data.director_id_file}
-        onChange={(v) => onChange('director_id_file', v)}
-      />
-      <p className="mt-1 text-xs text-parchment-400">
-        Passport or driving licence. Send it later if it isn&rsquo;t to hand &mdash; we&rsquo;ll need it before your first order.
-      </p>
-      {errors.director_id_file && <p role="alert" className="mt-1 text-sm text-red-300">{errors.director_id_file}</p>}
     </div>
   )
 }
