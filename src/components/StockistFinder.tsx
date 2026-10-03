@@ -35,8 +35,25 @@ const ALL_STOCKISTS: Stockist[] = [
     id: 'the-retro-lounge-blackpool',
     name: 'The Retro Lounge',
     address: '3-5 Clifton Street, Blackpool FY1 1JD',
-    lat: 53.81877,
-    lng: -3.05310,
+    // Clifton Street itself (OpenStreetMap); the previous pair sat a street east.
+    lat: 53.8188257,
+    lng: -3.0537418,
+    type: 'bar',
+  },
+  {
+    id: 'underground-alt-blackpool',
+    name: 'Underground Alt',
+    address: '168-170 Promenade, Blackpool FY1 1RE',
+    lat: 53.8201632,
+    lng: -3.0553166,
+    type: 'bar',
+  },
+  {
+    id: 'which-craft-tap-room-blackpool',
+    name: 'Which Craft Tap Room',
+    address: '1 Birley Street, Blackpool FY1 1EG',
+    lat: 53.8180739,
+    lng: -3.0536098,
     type: 'bar',
   },
   {
@@ -54,6 +71,14 @@ const ALL_STOCKISTS: Stockist[] = [
     // Coordinates from postcodes.io for HR1 2LR.
     lat: 52.055546,
     lng: -2.716291,
+    type: 'bar',
+  },
+  {
+    id: 'saxtys-hereford',
+    name: 'Saxtys',
+    address: '33 Widemarsh St, Hereford HR4 9EA',
+    lat: 52.0574211,
+    lng: -2.7163352,
     type: 'bar',
   },
 ]
