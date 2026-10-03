@@ -92,6 +92,19 @@ export function trackAddToCart(
   }
 }
 
+/**
+ * A site event for GA4, consent-gated like the rest. The names are the
+ * measurement plan from Audit B (3 Oct 2026): hero_order_now,
+ * cocktail_bottle_click, cart_upsell_rendered, shipping_cutoff_seen. Checkout
+ * is already begin_checkout. GA4 is a half-sample behind Cookiebot, so these
+ * read direction, not totals; Shopify's checkout columns are the ground truth.
+ */
+export function trackSiteEvent(name: string, params: Record<string, unknown> = {}) {
+  if (typeof window !== 'undefined' && typeof window.gtag === 'function' && window.Cookiebot?.consent?.statistics) {
+    window.gtag('event', name, params)
+  }
+}
+
 // Extend Window interface for TypeScript
 declare global {
   interface Window {

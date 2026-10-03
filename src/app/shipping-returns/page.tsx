@@ -4,6 +4,7 @@ import Link from 'next/link'
 import Breadcrumbs from '@/components/Breadcrumbs'
 import { FREE_SHIPPING_THRESHOLD_GBP, STANDARD_SHIPPING_LABEL } from '@/lib/pricing'
 import { DELIVERY_PROMISE_SENTENCE } from '@/lib/delivery'
+import ChristmasCutoffLine from '@/components/ChristmasCutoffLine'
 import StructuredData from '@/components/StructuredData'
 import SectionHeading from '@/components/SectionHeading'
 import { OG_IMAGE } from '@/lib/og'
@@ -120,6 +121,8 @@ export default function ShippingReturns() {
               <p className="text-white mb-4 leading-relaxed">
                 We currently ship throughout the United Kingdom. {DELIVERY_PROMISE_SENTENCE}
               </p>
+              {/* The Christmas last order date, December only (lib/delivery.ts). */}
+              <ChristmasCutoffLine surface="shipping" className="text-gold-300 font-semibold mb-4 leading-relaxed" />
 
               <h3 className="text-xl font-serif font-semibold text-gold-300 mt-6 mb-3">
                 Shipping Rates

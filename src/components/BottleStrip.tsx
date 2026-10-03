@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { useCart } from '@/contexts/CartContext'
-import { trackAddToCart } from '@/components/GoogleTag'
+import { trackAddToCart, trackSiteEvent } from '@/components/GoogleTag'
 import { trackEventDual } from '@/lib/meta-capi'
 
 // The bottle at the top of a recipe that calls for it. One line, one button,
@@ -20,6 +20,8 @@ interface BottleStripProps {
   priceAmount: string
   currencyCode: string
   href: string
+  /** The cocktail's slug, for the GA4 event. */
+  slug: string
 }
 
 export default function BottleStrip({
@@ -30,11 +32,13 @@ export default function BottleStrip({
   priceAmount,
   currencyCode,
   href,
+  slug,
 }: BottleStripProps) {
   const { addToCart, isLoading } = useCart()
   const [added, setAdded] = useState(false)
 
   const handleAdd = async () => {
+    trackSiteEvent('cocktail_bottle_click', { slug, action: 'add' })
     trackEventDual('AddToCart', {
       content_name: title,
       content_ids: [variantId.split('/').pop() ?? variantId],

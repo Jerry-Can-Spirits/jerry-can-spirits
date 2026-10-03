@@ -3,85 +3,19 @@
 import dynamic from 'next/dynamic'
 import { useState, useEffect } from 'react'
 import type { Stockist } from './StockistMap'
+import { STOCKISTS } from '@/lib/stockists'
 
 const StockistMap = dynamic(() => import('./StockistMap'), { ssr: false })
 
-const ALL_STOCKISTS: Stockist[] = [
-  {
-    id: 'the-bank-blackpool',
-    name: 'The Bank Bar & Grill',
-    address: '28 Corporation St, Blackpool FY1 1EJ',
-    lat: 53.81795,
-    lng: -3.05376,
-    type: 'bar',
-  },
-  {
-    id: 'spin-the-black-circle-worcester',
-    name: 'Spin the Black Circle',
-    address: '19-21 Pump Street, Worcester WR1 2QX',
-    lat: 52.19093,
-    lng: -2.21937,
-    type: 'independent',
-  },
-  {
-    id: 'the-bull-inn-newington',
-    name: 'The Bull Inn',
-    address: '32 High St, Newington, Sittingbourne ME9 7JP',
-    lat: 51.3519,
-    lng: 0.6676,
-    type: 'bar',
-  },
-  {
-    id: 'the-retro-lounge-blackpool',
-    name: 'The Retro Lounge',
-    address: '3-5 Clifton Street, Blackpool FY1 1JD',
-    // Clifton Street itself (OpenStreetMap); the previous pair sat a street east.
-    lat: 53.8188257,
-    lng: -3.0537418,
-    type: 'bar',
-  },
-  {
-    id: 'underground-alt-blackpool',
-    name: 'Underground Alt',
-    address: '168-170 Promenade, Blackpool FY1 1RE',
-    lat: 53.8201632,
-    lng: -3.0553166,
-    type: 'bar',
-  },
-  {
-    id: 'which-craft-tap-room-blackpool',
-    name: 'Which Craft Tap Room',
-    address: '1 Birley Street, Blackpool FY1 1EG',
-    lat: 53.8180739,
-    lng: -3.0536098,
-    type: 'bar',
-  },
-  {
-    id: 'the-victory-hereford',
-    name: 'The Victory',
-    address: '88 Saint Owen St, Hereford HR1 2QD',
-    lat: 52.05380,
-    lng: -2.70820,
-    type: 'bar',
-  },
-  {
-    id: 'the-lichfield-vaults-hereford',
-    name: 'The Lichfield Vaults',
-    address: '11 Church St, Hereford HR1 2LR',
-    // Coordinates from postcodes.io for HR1 2LR.
-    lat: 52.055546,
-    lng: -2.716291,
-    type: 'bar',
-  },
-  {
-    id: 'saxtys-hereford',
-    name: 'Saxtys',
-    address: '33 Widemarsh St, Hereford HR4 9EA',
-    lat: 52.0574211,
-    lng: -2.7163352,
-    type: 'bar',
-  },
-]
+// One list for cards and pins: lib/stockists.ts.
+const ALL_STOCKISTS: Stockist[] = STOCKISTS.map((s) => ({
+  id: s.id,
+  name: s.name,
+  address: s.address,
+  lat: s.lat,
+  lng: s.lng,
+  type: s.mapType,
+}))
 
 const UK_CENTER: [number, number] = [54.5, -2.5]
 const UK_ZOOM = 6

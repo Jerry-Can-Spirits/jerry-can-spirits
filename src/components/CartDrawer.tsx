@@ -11,6 +11,7 @@ import { appendUtmToCheckout, gatedCheckout } from '@/lib/utm'
 import { FREE_SHIPPING_THRESHOLD_GBP } from '@/lib/pricing'
 import { trackEventDual } from '@/lib/meta-capi'
 import { formatPrice } from '@/lib/format-price'
+import ChristmasCutoffLine from '@/components/ChristmasCutoffLine'
 import { displayProductTitle } from '@/lib/product-title'
 
 // Helper to format price
@@ -282,6 +283,8 @@ export default function CartDrawer() {
                 >
                   <div className="h-full bg-gold-500 transition-all duration-500" style={{ width: `${pct}%` }} />
                 </div>
+                {/* December only, once the date is set in lib/delivery.ts. */}
+                <ChristmasCutoffLine surface="cart" className="mt-2 text-xs font-semibold text-gold-300" />
               </div>
             )
           })()}

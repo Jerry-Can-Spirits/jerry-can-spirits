@@ -68,11 +68,11 @@ const spiritsFaqs: Array<{ question: string; answer: string; rich?: ReactNode }>
   },
   {
     question: 'Is Jerry Can Spirits rum vegan?',
-    answer: 'Yes. Our Expedition Spiced Rum contains no animal products. The base is Caribbean white rum, and the spice blend is entirely plant-based. No honey, no animal-derived filtering agents, no animal products in production.',
+    answer: 'Yes. Our Expedition Spiced Rum contains no animal products. The base is Caribbean rum, and the spice blend is entirely plant-based. No honey, no animal-derived filtering agents, no animal products in production.',
   },
   {
     question: 'What goes into Expedition Spiced Rum?',
-    answer: 'A Caribbean white rum base, macerated by our British partner distillery with seven real spices, two natural sweeteners, and bourbon oak. No artificial flavourings.',
+    answer: 'A Caribbean rum base, macerated by our British partner distillery with seven real spices, two natural sweeteners, and bourbon oak. No artificial flavourings.',
   },
   {
     question: 'How does buying from Jerry Can Spirits support veterans?',
@@ -295,7 +295,7 @@ export default async function SpiritsPage() {
             </h2>
             <div className="space-y-4 text-parchment-200 leading-relaxed">
               <p>
-                The base is Caribbean white rum. We blend it with real botanicals and let each one take its own time.
+                The base is Caribbean rum. We macerate it with real botanicals and let each one take its own time.
               </p>
               <p>
                 The flavour profile opens with Madagascan vanilla and Ceylon cinnamon, moves into warming ginger and cassia through the middle, and finishes smooth with bourbon oak and a hint of citrus. It's designed to drink neat, work in cocktails, and hold its own over ice.

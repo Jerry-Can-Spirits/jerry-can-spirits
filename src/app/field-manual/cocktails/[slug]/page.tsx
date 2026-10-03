@@ -417,6 +417,7 @@ export default async function CocktailPage({ params }: PageProps) {
               priceAmount={bottleVariant.price.amount}
               currencyCode={bottleVariant.price.currencyCode}
               href={`/shop/product/${bottle.handle}/`}
+              slug={cocktail.slug.current}
             />
           )}
           {/* Recipe Display Component (Client-side for interactivity) */}

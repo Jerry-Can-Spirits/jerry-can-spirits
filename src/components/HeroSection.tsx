@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
+import { trackSiteEvent } from '@/components/GoogleTag'
 
 const HERO_IMAGES = [
   {
@@ -89,6 +90,7 @@ export default function HeroSection({ price }: HeroSectionProps) {
             <div className="mb-6 sm:mb-8">
               <Link
                 href="/shop/product/jerry-can-spirits-expedition-spiced-rum/"
+                onClick={() => trackSiteEvent('hero_order_now')}
                 className="w-full sm:w-auto bg-linear-to-r from-gold-600 to-gold-500 hover:from-gold-500 hover:to-gold-400 text-jerry-green-900 px-8 py-4 rounded-lg font-semibold tracking-wide transition-all duration-300 shadow-lg hover:shadow-xl sm:hover:scale-105 inline-flex items-center justify-center"
               >
                 Order now
