@@ -27,6 +27,8 @@ import CompleteTheServe, { type CompleteTheServeItem } from '@/components/Comple
 import FindItIn from '@/components/FindItIn'
 import ProductFormats, { type ProductFormatOption } from '@/components/ProductFormats'
 import TrustStrip from '@/components/TrustStrip'
+import { displayProductTitle } from '@/lib/product-title'
+import { TRUSTPILOT_PROFILE_URL, TRUSTPILOT_PUBLIC } from '@/lib/trustpilot-assets'
 import RecognitionRow from '@/components/RecognitionRow'
 import { formatsForHandle } from '@/lib/product-formats'
 import { client } from '@/sanity/lib/client'
@@ -146,7 +148,7 @@ export async function generateMetadata({
       }
     }
 
-    const displayTitle = product.title.replace(/^Jerry Can Spirits[®]?\s*[-–—]?\s*/i, '')
+    const displayTitle = displayProductTitle(product.title)
     const metaTitle = product.seo?.title || displayTitle
     const metaDescription = product.seo?.description || product.description.slice(0, 155)
 
@@ -563,7 +565,7 @@ export default async function ProductPage({
           <svg className="w-4 h-4 text-gold-500/50 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
           </svg>
-          <span className="text-gold-300">{product.title}</span>
+          <span className="text-gold-300">{displayProductTitle(product.title)}</span>
         </nav>
       </div>
 
@@ -574,7 +576,7 @@ export default async function ProductPage({
               times taller than the gallery, and without this the left half of
               the page was empty green below the thumbnails. */}
           <div className="lg:sticky lg:top-24">
-            <ProductImageGallery images={product.images} productTitle={product.title} />
+            <ProductImageGallery images={product.images} productTitle={displayProductTitle(product.title)} />
           </div>
 
           {/* The decision column: title, price, ways to buy, medals, buy. The
@@ -582,7 +584,7 @@ export default async function ProductPage({
           <div className="space-y-6">
             <div>
               <h1 className="text-4xl sm:text-5xl font-serif font-bold text-white mb-4">
-                {product.title}
+                {displayProductTitle(product.title)}
               </h1>
               <div>
                 <div className="flex items-baseline gap-4">
@@ -607,12 +609,24 @@ export default async function ProductPage({
                     queryable aggregate, so any number here would present a subset
                     as a total. Do not add a count later without a real aggregate. */}
                 {productReviews.length > 0 && (
-                  <a
-                    href="#customer-reviews"
-                    className="inline-flex items-center min-h-[44px] mt-1 text-sm text-gold-300 hover:text-gold-200 underline underline-offset-2"
-                  >
-                    Customer reviews
-                  </a>
+                  <p className="flex flex-wrap items-center gap-x-3 mt-1 text-sm">
+                    <a
+                      href="#customer-reviews"
+                      className="inline-flex items-center min-h-[44px] text-gold-300 hover:text-gold-200 underline underline-offset-2"
+                    >
+                      Customer reviews
+                    </a>
+                    {/* Trustpilot's own figure, attributed to Trustpilot. Not an
+                        on-site aggregate; see lib/trustpilot-assets.ts. */}
+                    <a
+                      href={TRUSTPILOT_PROFILE_URL}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center min-h-[44px] text-parchment-300 hover:text-gold-200"
+                    >
+                      {TRUSTPILOT_PUBLIC.score} on Trustpilot from {TRUSTPILOT_PUBLIC.reviews} reviews
+                    </a>
+                  </p>
                 )}
               </div>
             </div>
@@ -634,7 +648,7 @@ export default async function ProductPage({
                 product.variants.some(v => v.availableForSale) ? (
                   <ProductVariantSelector
                     variants={product.variants}
-                    productTitle={product.title}
+                    productTitle={displayProductTitle(product.title)}
                     productId={product.id}
                     productImages={product.images}
                     currencyCode={product.priceRange.minVariantPrice.currencyCode}
@@ -970,7 +984,7 @@ export default async function ProductPage({
         return stickyVariant ? (
           <StickyAddToCart
             variantId={stickyVariant.id}
-            productTitle={product.title}
+            productTitle={displayProductTitle(product.title)}
             price={stickyVariant.price.amount}
             currencyCode={stickyVariant.price.currencyCode}
             watchElementId="buy-section"

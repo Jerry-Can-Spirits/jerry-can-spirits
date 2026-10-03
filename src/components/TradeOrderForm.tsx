@@ -9,6 +9,7 @@ import {
 } from '@/lib/trade-products'
 import { toPence, tradePricePence, type TradeDiscountRule } from '@/lib/trade-portal/product-data'
 import { formatPrice } from '@/lib/format-price'
+import { displayProductTitle } from '@/lib/product-title'
 
 type Stage = 'order' | 'loading'
 
@@ -192,7 +193,7 @@ export default function TradeOrderForm({ products, error: catalogueError, accoun
                               />
                             </div>
                           )}
-                          <p className="text-white text-sm font-semibold">{product.title}</p>
+                          <p className="text-white text-sm font-semibold">{displayProductTitle(product.title)}</p>
                         </div>
 
                         {/* Variant rows */}

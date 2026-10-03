@@ -13,6 +13,7 @@ import { productOffer, merchantOfferExtras } from '@/lib/jsonLd'
 import { formatPrice } from '@/lib/format-price'
 import ScrollRow from '@/components/ScrollRow'
 import SectionHeading from '@/components/SectionHeading'
+import { displayProductTitle } from '@/lib/product-title'
 
 export const metadata: Metadata = {
   title: 'Cocktail Shakers, Barware & Bar Tools',
@@ -210,7 +211,7 @@ export default async function BarwarePage() {
                     {defaultVariant && defaultVariant.availableForSale ? (
                       <AddToCartButton
                         variantId={defaultVariant.id}
-                        productTitle={product.title}
+                        productTitle={displayProductTitle(product.title)}
                         price={defaultVariant.price.amount}
                         currencyCode={defaultVariant.price.currencyCode}
                       />

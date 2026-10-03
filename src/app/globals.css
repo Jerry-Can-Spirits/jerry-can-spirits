@@ -920,3 +920,75 @@ html:not([data-age-verified]) body:has(.age-gate) {
 .band-dark .bg-white {
   background-color: #ffffff;
 }
+
+/* Cookiebot on phones. The admin template is a bottom bar on desktop and a
+   full-screen multilevel dialog on phones with no option to change it, and
+   the full-screen version sat over the age gate's Enter button (Audit B,
+   3 Oct 2026). The dialog is injected into our page, so this restyles it
+   into a bottom sheet: title, Accept and Reject side by side, and "Show details" for the toggles. "Save preferences" only appears
+   once the details tab is open, because with the toggles hidden it would
+   mean the same as Reject. Ids are Cookiebot's own and stable across its
+   v2 dialog. */
+@media (max-width: 639px) {
+  #CybotCookiebotDialog {
+    top: auto !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    max-width: none !important;
+    height: auto !important;
+    max-height: 40vh !important;
+    transform: none !important;
+    border-radius: 16px 16px 0 0 !important;
+  }
+  #CybotCookiebotDialogHeader,
+  #CybotCookiebotDialogBodyLevelWrapper {
+    display: none !important;
+  }
+  /* The paragraph goes; the title and "Show details" carry the meaning, and
+     the sheet has to end above the gate's Enter button at 548px. */
+  #CybotCookiebotDialogBodyContentText {
+    display: none !important;
+  }
+  #CybotCookiebotDialog:not(:has(#CybotCookiebotDialogTabContentDetails:not(.CybotCookiebotDialogHide)))
+    #CybotCookiebotDialogBodyLevelButtonLevelOptinAllowallSelection {
+    display: none !important;
+  }
+  #CybotCookiebotDialog:has(#CybotCookiebotDialogTabContentDetails:not(.CybotCookiebotDialogHide)) {
+    max-height: 88vh !important;
+  }
+  /* Tight padding, so the sheet ends above the age gate's buttons. */
+  #CybotCookiebotDialog .CybotCookiebotDialogContentWrapper,
+  #CybotCookiebotDialogBody,
+  #CybotCookiebotDialogBodyContent,
+  #CybotCookiebotDialogFooter,
+  #CybotCookiebotDialogFooter .CybotCookiebotScrollArea {
+    padding: 6px 16px !important;
+  }
+  #CybotCookiebotDialogBodyContentTitle {
+    margin: 0 !important;
+  }
+  #CybotCookiebotDialogBody .CybotCookiebotScrollContainer {
+    min-height: 0 !important;
+    height: auto !important;
+  }
+  #CybotCookiebotDialogBodyContent .CybotCookiebotFader {
+    display: none !important;
+  }
+  #CybotCookiebotDialogBodyEdgeMoreDetails {
+    min-height: 36px !important;
+    margin: 0 !important;
+  }
+  #CybotCookiebotDialogBodyButtonsWrapper {
+    flex-direction: row !important;
+    gap: 8px;
+  }
+  #CybotCookiebotDialogBodyButtonsWrapper .CybotCookiebotDialogBodyButton {
+    flex: 1 1 0 !important;
+    width: auto !important;
+    margin: 0 !important;
+    min-height: 44px;
+    padding: 10px 8px !important;
+  }
+}

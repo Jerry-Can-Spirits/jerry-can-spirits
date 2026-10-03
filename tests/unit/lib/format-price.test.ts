@@ -10,26 +10,30 @@ import { describe, it, expect } from 'vitest'
 import { formatPrice, PRICE_UNAVAILABLE } from '@/lib/format-price'
 
 describe('formatPrice', () => {
-  it('formats a string amount to two places', () => {
-    expect(formatPrice('35', 'GBP')).toBe('£35.00')
+  // VOICE: "£45, never £45.00". Pence appear only when there are pence.
+  it('formats a string amount, pence only when there are pence', () => {
+    expect(formatPrice('35', 'GBP')).toBe('£35')
     expect(formatPrice('35.5', 'GBP')).toBe('£35.50')
+    expect(formatPrice('1.99', 'GBP')).toBe('£1.99')
+    expect(formatPrice('40.00', 'GBP')).toBe('£40')
   })
 
   it('formats a number amount, which CartUpsell passes', () => {
-    expect(formatPrice(20, 'GBP')).toBe('£20.00')
+    expect(formatPrice(20, 'GBP')).toBe('£20')
+    expect(formatPrice(22.5, 'GBP')).toBe('£22.50')
   })
 
   it('defaults to sterling, which TradeOrderForm relied on by hardcoding it', () => {
-    expect(formatPrice('45')).toBe('£45.00')
+    expect(formatPrice('45')).toBe('£45')
   })
 
   it('knows the three currencies the shop uses', () => {
-    expect(formatPrice('10', 'USD')).toBe('$10.00')
-    expect(formatPrice('10', 'EUR')).toBe('€10.00')
+    expect(formatPrice('10', 'USD')).toBe('$10')
+    expect(formatPrice('10', 'EUR')).toBe('€10')
   })
 
   it('falls back to the code for a currency it does not know', () => {
-    expect(formatPrice('10', 'JPY')).toBe('JPY10.00')
+    expect(formatPrice('10', 'JPY')).toBe('JPY10')
   })
 
   // The whole point.
@@ -41,5 +45,6 @@ describe('formatPrice', () => {
 
   it('does not turn an unparseable price into zero', () => {
     expect(formatPrice(undefined)).not.toBe('£0.00')
+    expect(formatPrice(undefined)).not.toBe('£0')
   })
 })

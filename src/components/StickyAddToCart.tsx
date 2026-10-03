@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { useCart } from '@/contexts/CartContext'
+import { formatPrice } from '@/lib/format-price'
 
 interface StickyAddToCartProps {
   variantId: string
@@ -61,8 +62,7 @@ export default function StickyAddToCart({
 
   if (!isVisible) return null
 
-  const symbols: Record<string, string> = { GBP: '£', USD: '$', EUR: '€' }
-  const formatted = `${symbols[currencyCode] || currencyCode}${parseFloat(price).toFixed(2)}`
+  const formatted = formatPrice(price, currencyCode)
 
   return (
     <div className="fixed bottom-0 left-0 right-0 z-40 md:hidden bg-jerry-green-900/95 backdrop-blur-sm border-t border-gold-500/20 px-4 pt-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))] flex items-center gap-3">

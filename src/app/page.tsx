@@ -16,6 +16,8 @@ import RumServesTeaser from "@/components/RumServesTeaser";
 import type { Metadata } from 'next'
 import { baseOpenGraph, OG_IMAGE } from '@/lib/og'
 import { BASE_URL } from '@/lib/jsonLd'
+import { getProduct } from '@/lib/shopify'
+import { formatPrice } from '@/lib/format-price'
 
 // Hourly, like the shop pages. The grid below fetches every product, and the
 // products/update webhook revalidates this path the moment a price or
@@ -46,7 +48,13 @@ export const metadata: Metadata = {
   },
 }
 
-export default function Home() {
+export default async function Home() {
+  // The hero states the price, read live like every other surface (never
+  // hardcoded: CLAUDE.md). The products/update webhook revalidates this path.
+  const bottle = await getProduct('jerry-can-spirits-expedition-spiced-rum')
+  const heroPrice = bottle
+    ? formatPrice(bottle.priceRange.minVariantPrice.amount, bottle.priceRange.minVariantPrice.currencyCode)
+    : null
   const HERO_BASE = 'https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/beed84d3-c77d-4ecf-c85f-29719bdea000'
   ReactDOM.preload(
     `${HERO_BASE}/w=1200,q=75`,
@@ -84,7 +92,7 @@ export default function Home() {
       <ScrollToHash />
       <StructuredData data={structuredData} />
       <div>
-        <HeroSection />
+        <HeroSection price={heroPrice} />
 
         {/* Proof bar, directly under the hero whose headline makes the
             two-medals claim: states the fact once in full, judges' note

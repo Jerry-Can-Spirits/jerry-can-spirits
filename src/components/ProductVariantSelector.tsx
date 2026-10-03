@@ -4,14 +4,7 @@ import { useState } from 'react'
 import Image from 'next/image'
 import { useCart } from '@/contexts/CartContext'
 import { trackAddToCart } from '@/components/GoogleTag'
-import {
-  createCart,
-  addToCart as shopifyAddToCart,
-} from '@/lib/shopify'
-import { applyReferralCode } from '@/lib/referrals'
 import type { ShopifyProductVariant, ShopifyImage } from '@/lib/shopify'
-import { appendUtmToCheckout, gatedCheckout } from '@/lib/utm'
-import { attachStitchingAttributes } from '@/lib/analytics-stitching'
 import { trackEventDual } from '@/lib/meta-capi'
 import { formatPrice } from '@/lib/format-price'
 
@@ -32,9 +25,8 @@ export default function ProductVariantSelector({
   productImages,
   currencyCode,
 }: ProductVariantSelectorProps) {
-  const { cart, addToCart, isLoading } = useCart()
+  const { addToCart, isLoading } = useCart()
   const [quantity, setQuantity] = useState(1)
-  const [isBuyingNow, setIsBuyingNow] = useState(false)
 
   // Find first available variant
   const availableVariants = variants.filter(v => v.availableForSale)
@@ -72,34 +64,6 @@ export default function ProductVariantSelector({
     )
 
     await addToCart(selectedVariantId, quantity)
-  }
-
-  const handleBuyNow = async () => {
-    if (!selectedVariant) return
-    setIsBuyingNow(true)
-    try {
-      // Reuse the shopper's existing cart if they have one — creating a fresh
-      // cart here abandons anything already in their drawer and can drop them
-      // under the free-shipping threshold. Mirrors AddToCartButton. On a fresh
-      // cart the referral code is applied here; on an existing cart it was
-      // already applied when the first item was added (CartContext.addToCart).
-      let cartId = cart?.id
-      if (!cartId) {
-        let fresh = await createCart()
-        fresh = await applyReferralCode(fresh)
-        cartId = fresh.id
-        localStorage.setItem('shopify_cart_id', cartId)
-      }
-      const updatedCart = await shopifyAddToCart(cartId, selectedVariantId, quantity)
-      // Await so the GA4 stitching attributes land before the hand-off to Shopify.
-      await attachStitchingAttributes(updatedCart)
-      window.location.href = gatedCheckout(appendUtmToCheckout(updatedCart.checkoutUrl))
-    } catch (error) {
-      console.error('[BuyNow] Error:', error)
-      alert('Failed to start checkout. Please try again.')
-    } finally {
-      setIsBuyingNow(false)
-    }
   }
 
   if (!selectedVariant) {
@@ -237,7 +201,10 @@ export default function ProductVariantSelector({
         </div>
       </div>
 
-      {/* Add to Cart Button */}
+      {/* The one call to action. The ghost "Order now" that sat under it went
+          straight to Shopify and so skipped the drawer, its free-delivery
+          nudge and its cross-sell (Audit B, 3 Oct 2026). Checkout is the
+          drawer's job. */}
       <button
         onClick={handleAddToCart}
         disabled={isLoading || !selectedVariant.availableForSale}
@@ -274,25 +241,6 @@ export default function ProductVariantSelector({
             </svg>
             Add to basket
           </>
-        )}
-      </button>
-
-      {/* Buy it now */}
-      <button
-        onClick={handleBuyNow}
-        disabled={isBuyingNow || isLoading || !selectedVariant.availableForSale}
-        className="w-full px-8 py-4 bg-transparent border border-gold-500/40 text-gold-300 font-semibold rounded-lg hover:border-gold-400 hover:text-gold-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-      >
-        {isBuyingNow ? (
-          <>
-            <svg className="animate-spin h-5 w-5" fill="none" viewBox="0 0 24 24">
-              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-            </svg>
-            Taking you to checkout...
-          </>
-        ) : (
-          'Order now'
         )}
       </button>
     </div>

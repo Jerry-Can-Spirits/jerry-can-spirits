@@ -11,6 +11,7 @@ import { appendUtmToCheckout, gatedCheckout } from '@/lib/utm'
 import { FREE_SHIPPING_THRESHOLD_GBP } from '@/lib/pricing'
 import { trackEventDual } from '@/lib/meta-capi'
 import { formatPrice } from '@/lib/format-price'
+import { displayProductTitle } from '@/lib/product-title'
 
 // Helper to format price
 
@@ -269,7 +270,7 @@ export default function CartDrawer() {
               <div className="border-b border-gold-500/20 px-6 py-3 shrink-0">
                 <p className="text-sm text-parchment-200 mb-2" aria-live="polite">
                   {shortfall > 0
-                    ? `£${shortfall.toFixed(2)} to go for free UK delivery`
+                    ? `${formatPrice(shortfall)} to go for free UK delivery`
                     : 'Free UK delivery unlocked'}
                 </p>
                 <div
@@ -384,7 +385,7 @@ export default function CartDrawer() {
                           onClick={closeCart}
                           className="font-semibold text-white hover:text-gold-300 transition-colors block truncate"
                         >
-                          {line.merchandise.product.title}
+                          {displayProductTitle(line.merchandise.product.title)}
                         </Link>
                         {line.merchandise.title !== 'Default Title' && (
                           <p className="text-sm text-parchment-400 truncate">
