@@ -20,6 +20,7 @@ import { ORG_REF } from '@/lib/jsonLd'
 import FAQAccordion from '@/components/FAQAccordion'
 import ScrollRow from '@/components/ScrollRow'
 import SectionHeading from '@/components/SectionHeading'
+import HouseSpiritCard from '@/components/HouseSpiritCard'
 
 interface SubType {
   _id: string
@@ -407,6 +408,12 @@ export default async function IngredientDetailPage({ params }: { params: Promise
               )}
           </div>
         </div>
+
+        {/* On a rum ingredient, the range card: what the house makes, with no
+            claim about the ingredient on this page. Audit A, 3 Oct 2026: none
+            of the 311 ingredient pages linked to the shop, including the one
+            for the house spirit itself. */}
+        {/\brum\b/i.test(ingredient.name) && <HouseSpiritCard className="mt-10 max-w-3xl" />}
       </div>
       </section>
 
