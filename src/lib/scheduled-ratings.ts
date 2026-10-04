@@ -22,10 +22,19 @@ export async function runRatingsFetch(env: RatingsEnv): Promise<void> {
 async function fetchAndStoreGoogle(env: RatingsEnv): Promise<void> {
   if (!env.GOOGLE_MAPS_API_KEY || !GOOGLE_PLACE_ID) return
 
-  const url = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${GOOGLE_PLACE_ID}&fields=rating,user_ratings_total&key=${env.GOOGLE_MAPS_API_KEY}`
+  // Places API (New). Google no longer enables the older Places API on new
+  // projects, so the key created on 4 October 2026 can only call this one.
+  // The key travels in a header and the field mask names exactly the two
+  // fields we read, which also keeps the call on the cheapest SKU.
+  const url = `https://places.googleapis.com/v1/places/${GOOGLE_PLACE_ID}`
   let res: Response
   try {
-    res = await fetch(url)
+    res = await fetch(url, {
+      headers: {
+        'X-Goog-Api-Key': env.GOOGLE_MAPS_API_KEY,
+        'X-Goog-FieldMask': 'rating,userRatingCount',
+      },
+    })
   } catch (err) {
     console.error('Google Places fetch threw', err)
     return
@@ -34,17 +43,14 @@ async function fetchAndStoreGoogle(env: RatingsEnv): Promise<void> {
     console.error('Google Places fetch failed', res.status)
     return
   }
-  const data = await res.json() as {
-    status: string
-    result?: { rating?: number; user_ratings_total?: number }
-  }
-  if (data.status !== 'OK' || data.result?.rating == null) {
-    console.error('Google Places response unusable', data.status)
+  const data = await res.json() as { rating?: number; userRatingCount?: number }
+  if (data.rating == null) {
+    console.error('Google Places response unusable')
     return
   }
   await writeRating(env.SITE_OPS, 'google', {
-    rating: Math.round(data.result.rating * 10) / 10,
-    count: data.result.user_ratings_total ?? 0,
+    rating: Math.round(data.rating * 10) / 10,
+    count: data.userRatingCount ?? 0,
   })
 }
 

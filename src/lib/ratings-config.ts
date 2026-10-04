@@ -1,16 +1,12 @@
-// Public identifier (not a secret) for the live ratings cron job. Filled in
-// once after the operator has looked up the value via the Place ID Finder
-// at developers.google.com/maps/documentation/places/web-service/place-id.
-// Until the constant is a non-empty string, the Google fetcher
-// short-circuits and writes nothing, and the /reviews/ page renders as it
-// does today.
-//
-// To find the right business in the Place ID Finder, search for the name
-// associated with the existing Google Maps shortlink
-// https://g.page/r/CdkZacM6VKi-EAE (Jerry Can Spirits Ltd). Copy the
-// Place ID from the finder result.
+// Public identifier (not a secret) for the live ratings cron job. The
+// Business Profile is a pure service-area listing with no public address, so
+// the Place ID Finder cannot see it. Found on 4 October 2026 with a Places
+// API (New) Text Search for "Jerry Can Spirits" with
+// includePureServiceAreaBusinesses set to true. If the constant is ever
+// emptied, the Google fetcher short-circuits and writes nothing, and the
+// /reviews/ page renders without a Google rating.
 
-export const GOOGLE_PLACE_ID = ''
+export const GOOGLE_PLACE_ID = 'ChIJwUvSTHgfii8R2RlpwzpUqL4'
 
 // Public Trustpilot business unit id for jerrycanspirits.co.uk — the same
 // identifier the TrustBox embeds ship to every browser (see the default in
