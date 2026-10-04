@@ -13,12 +13,12 @@
 // errors, and that is logged.
 
 import { NextRequest, NextResponse } from 'next/server'
-import * as Sentry from '@sentry/nextjs'
+import { captureServerError } from '@/lib/server-error-capture'
 import { AGE_COOKIE, isAgeVerified } from '@/lib/age-gate'
 
 const STORE_HOST = process.env.NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN
 
-export function GET(request: NextRequest) {
+export async function GET(request: NextRequest) {
   const verified = isAgeVerified(request.cookies.get(AGE_COOKIE)?.value)
 
   // Unverified: normal flow. Send to the gate, come back here after verifying
@@ -38,7 +38,7 @@ export function GET(request: NextRequest) {
   try {
     target = new URL(to)
   } catch {
-    Sentry.captureException(new Error('Age-gated checkout: unparseable destination'), {
+    await captureServerError(new Error('Age-gated checkout: unparseable destination'), {
       tags: { source: 'age-checkout' },
       extra: { to: to.slice(0, 200) },
     })
@@ -48,7 +48,7 @@ export function GET(request: NextRequest) {
   // Only ever redirect to our own Shopify store over HTTPS. This never trips
   // for the real checkout URL; a mismatch is an attack or a bug.
   if (target.protocol !== 'https:' || !STORE_HOST || target.host !== STORE_HOST) {
-    Sentry.captureException(new Error('Age-gated checkout: rejected non-Shopify destination'), {
+    await captureServerError(new Error('Age-gated checkout: rejected non-Shopify destination'), {
       tags: { source: 'age-checkout' },
       extra: { host: target.host },
     })

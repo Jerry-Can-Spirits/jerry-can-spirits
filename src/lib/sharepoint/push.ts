@@ -10,7 +10,7 @@
 // reconciles on the next status change, because a venue's application must not
 // fail because Microsoft is having an afternoon.
 
-import * as Sentry from '@sentry/nextjs'
+import { captureServerError } from '@/lib/server-error-capture'
 import { pushTradeVenue, type TradeVenueRecord } from './trade-list'
 import { graphConfigured, type GraphEnv } from './graph'
 
@@ -153,7 +153,7 @@ export async function pushApplicationToSharePoint(
 
     return await pushTradeVenue(env, kv, record)
   } catch (err) {
-    Sentry.captureException(err, { tags: { integration: 'sharepoint', applicationId } })
+    await captureServerError(err, { tags: { integration: 'sharepoint', applicationId } })
     if (opts.throwOnError) throw err
   }
 }
