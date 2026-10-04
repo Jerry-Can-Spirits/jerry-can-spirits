@@ -43,12 +43,15 @@ npx wrangler d1 time-travel restore jerry-can-spirits-db --timestamp=2026-12-01T
 
 The first command prints the bookmark it would use; the second applies it. Everything written after that moment is lost, so take a fresh export first (below) if any of it is wanted.
 
-**From the weekly export, any age up to eight weeks.** GitHub, Actions, the Backups workflow, pick the run, download `d1-jerry-can-spirits-db-<run>`. Then:
+**From the weekly export, any age up to eight weeks.** GitHub, Actions, the Backups workflow, pick the run, download `d1-jerry-can-spirits-db-<run>`. The file is encrypted, because this repository is public and anyone with a GitHub account can download its artefacts. The passphrase is `BACKUP_PASSPHRASE` in 1Password. Then:
 
 ```
+openssl enc -d -aes-256-cbc -pbkdf2 -iter 600000 -in d1-jerry-can-spirits-db.sql.gz.enc -out d1-jerry-can-spirits-db.sql.gz
 gunzip d1-jerry-can-spirits-db.sql.gz
 npx wrangler d1 execute jerry-can-spirits-db --remote --file=d1-jerry-can-spirits-db.sql
 ```
+
+The first command asks for the passphrase.
 
 The export is a full dump with `CREATE TABLE` statements, so it goes into an empty database, not over a live one. To recover single rows, open the file and copy the `INSERT` lines for the rows that matter into a smaller file, then run that.
 
@@ -60,7 +63,11 @@ npx wrangler d1 export jerry-can-spirits-db --remote --output=backup.sql
 
 ## 3. Restore the Sanity dataset
 
-GitHub, Actions, the Backups workflow, pick the run, download `sanity-production-<run>`. It is a tarball of every document and asset.
+GitHub, Actions, the Backups workflow, pick the run, download `sanity-production-<run>`. It is an encrypted tarball of every document and asset, about 200 MB. Decrypt it with the same passphrase:
+
+```
+openssl enc -d -aes-256-cbc -pbkdf2 -iter 600000 -in sanity-production.tar.gz.enc -out sanity-production.tar.gz
+```
 
 To bring back a few documents, import into a scratch dataset and copy from there with a script; do not import over production. To replace the whole of production (the dataset was emptied or every cocktail was overwritten):
 
