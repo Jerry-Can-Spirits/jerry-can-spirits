@@ -1,0 +1,89 @@
+name: Backups
+
+# Weekly copies of the two stores nothing else backs up: the production D1
+# database (trade applications, accounts, orders, referral codes) and the Sanity
+# dataset (the whole Field Manual). Until this existed the only recovery for D1
+# was Cloudflare's 30-day point-in-time restore and Sanity had nothing at all
+# (Audit E, 4 Oct 2026). Each run keeps its files as workflow artefacts for
+# eight weeks. Restoring from them is in docs/runbooks/2026-10-04-rollback-and-restore.md.
+#
+# Secrets: CLOUDFLARE_D1_BACKUP_TOKEN (an API token with D1 Edit on this
+# account and nothing else) and SANITY_AUTH_TOKEN (a Sanity robot token with
+# the Viewer role). The account id and project id are public identifiers.
+
+on:
+  schedule:
+    - cron: '0 3 * * 0'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  d1:
+    name: D1 export
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci --ignore-scripts
+
+      - name: Export the production database
+        run: |
+          npx wrangler d1 export jerry-can-spirits-db --remote --output=d1-jerry-can-spirits-db.sql
+          gzip d1-jerry-can-spirits-db.sql
+          ls -l d1-jerry-can-spirits-db.sql.gz
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_D1_BACKUP_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: a986a3fd3a89126982400fd746a65b7a
+
+      - name: Keep the export
+        uses: actions/upload-artifact@v7
+        with:
+          name: d1-jerry-can-spirits-db-${{ github.run_id }}
+          path: d1-jerry-can-spirits-db.sql.gz
+          retention-days: 56
+          if-no-files-found: error
+
+  sanity:
+    name: Sanity export
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci --ignore-scripts
+
+      - name: Export the production dataset
+        run: |
+          npx sanity dataset export production sanity-production.tar.gz --overwrite
+          ls -l sanity-production.tar.gz
+        env:
+          SANITY_AUTH_TOKEN: ${{ secrets.SANITY_AUTH_TOKEN }}
+          NEXT_PUBLIC_SANITY_PROJECT_ID: 5mtjmb0t
+          NEXT_PUBLIC_SANITY_DATASET: production
+
+      - name: Keep the export
+        uses: actions/upload-artifact@v7
+        with:
+          name: sanity-production-${{ github.run_id }}
+          path: sanity-production.tar.gz
+          retention-days: 56
+          if-no-files-found: error
