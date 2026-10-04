@@ -64,6 +64,12 @@ production to unblock something. The `*` trigger runs `wrangler versions
 upload`, the `main` trigger runs `wrangler deploy`; only the second one should
 ever be what users get.
 
+**Rolling back is a dashboard action, not a pull request.** Cloudflare keeps
+every version; Deployments, previous row, Rollback puts the last good one back
+in seconds. Then open the revert PR so `main` matches what is live. The steps,
+and how to restore D1 or Sanity from the weekly backups, are in
+`docs/runbooks/2026-10-04-rollback-and-restore.md`.
+
 **Secret edits are blocked while an undeployed version is newer than the
 deployed one.** Because preview builds upload versions without deploying them,
 `wrangler secret put` and `wrangler secret delete` fail with error 10215:

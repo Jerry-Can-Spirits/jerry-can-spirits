@@ -12,10 +12,14 @@
 // live site after each deploy, and on a timer.
 //
 // Exit code 1 on any failure. A 5xx anywhere is always a failure, whatever the
-// route expected.
+// route expected. A request that never reaches the server (DNS, a reset, a
+// timeout) is tried once more after a pause, because a runner-side blip on
+// 3 Oct 2026 failed a scheduled run in 88 ms and emailed about it; a page that
+// answers wrongly is never retried, because a wrong answer is the finding.
 
 const base = (process.argv[2] || 'https://jerrycanspirits.co.uk').replace(/\/$/, '')
 const timeoutMs = 20_000
+const retryAfterMs = 3_000
 
 // Requests carry the age-verified cookie so the server age gate (which 307s
 // any browser without it) lets the pages through. Against the live site the
@@ -30,14 +34,37 @@ const headers = {
   ...(process.env.SMOKE_TOKEN ? { 'X-JCS-Smoke': process.env.SMOKE_TOKEN } : {}),
 }
 
+// The stylesheet the page names has to exist. On 24 Sep 2026 a deploy left
+// the edge cache serving a homepage whose stylesheet the new build had
+// deleted, so the page rendered unstyled while every status code was 200.
+async function stylesheetLoads(text) {
+  const match = text.match(/<link[^>]+rel="stylesheet"[^>]+href="([^"]+)"/) || text.match(/<link[^>]+href="([^"]+\.css[^"]*)"[^>]+rel="stylesheet"/)
+  if (!match) return 'no stylesheet link in the page'
+  const href = match[1].startsWith('http') ? match[1] : base + match[1]
+  const res = await fetch(href, { headers })
+  return res.status === 200 ? null : `stylesheet ${match[1]} answered ${res.status}`
+}
+
 // expect: the statuses that mean "working". Anything else fails. 5xx always fails.
+// assert: given the body, returns a reason to fail or null.
 const checks = [
   // Pages: prerendered, but the render path still has to work.
-  { name: 'home', method: 'GET', path: '/', expect: [200] },
+  { name: 'home', method: 'GET', path: '/', expect: [200], assert: stylesheetLoads },
   { name: 'shop', method: 'GET', path: '/shop/', expect: [200] },
-  { name: 'product page', method: 'GET', path: '/shop/product/jerry-can-spirits-expedition-spiced-rum/', expect: [200] },
+  // The product page has to carry a price read live from Shopify and the
+  // Product structured data; a page that renders but shows no price is a
+  // page nobody can buy from, and the status would still be 200.
+  {
+    name: 'product page',
+    method: 'GET',
+    path: '/shop/product/jerry-can-spirits-expedition-spiced-rum/',
+    expect: [200],
+    assert: (text) =>
+      !/£\d/.test(text) ? 'no price on the page' : !text.includes('"@type":"Product"') ? 'no Product structured data' : null,
+  },
   { name: 'cocktail page', method: 'GET', path: '/field-manual/cocktails/mojito/', expect: [200] },
   { name: 'team page', method: 'GET', path: '/about/team/', expect: [200] },
+  { name: 'trade login page', method: 'GET', path: '/trade/login/', expect: [200] },
 
   // API reads.
   { name: 'api geo', method: 'GET', path: '/api/geo/', expect: [200] },
@@ -57,35 +84,57 @@ const checks = [
   { name: 'api contact (empty)', method: 'POST', path: '/api/contact/', body: '{}', expect: [400, 401, 422] },
   { name: 'api klaviyo signup (empty)', method: 'POST', path: '/api/klaviyo-signup/', body: '{}', expect: [400, 401, 422] },
   { name: 'api trade application (empty)', method: 'POST', path: '/api/trade-application/', body: '{}', expect: [400, 401, 422] },
+  { name: 'api trade login (empty)', method: 'POST', path: '/api/trade/login/', body: '{}', expect: [400, 401, 422] },
+  { name: 'api trade checkout (empty)', method: 'POST', path: '/api/trade/checkout/', body: '{}', expect: [400, 401, 422] },
   { name: 'api shopify webhook (unsigned)', method: 'POST', path: '/api/webhooks/shopify/', body: '{}', expect: [400, 401] },
   { name: 'api sanity webhook (unsigned)', method: 'POST', path: '/api/webhooks/sanity/', body: '{}', expect: [400, 401] },
 ]
 
-async function run(check) {
+async function request(check) {
   const controller = new AbortController()
   const timer = setTimeout(() => controller.abort(), timeoutMs)
-  const started = Date.now()
   try {
-    const res = await fetch(base + check.path, {
+    return await fetch(base + check.path, {
       method: check.method,
       headers: check.body ? { ...headers, 'Content-Type': 'application/json' } : headers,
       body: check.body,
       redirect: check.redirect || 'follow',
       signal: controller.signal,
     })
-    const ms = Date.now() - started
-    const ok = check.expect.includes(res.status) && res.status < 500
-    let detail = ''
-    if (!ok) {
-      const text = (await res.text().catch(() => '')).replace(/\s+/g, ' ').slice(0, 160)
-      detail = ` (expected ${check.expect.join('/')}) ${text}`
-    }
-    return { ok, line: `${ok ? 'ok  ' : 'FAIL'} ${String(res.status).padEnd(4)} ${String(ms).padStart(5)}ms  ${check.method.padEnd(4)} ${check.path}${detail}` }
-  } catch (err) {
-    return { ok: false, line: `FAIL ----  ${String(Date.now() - started).padStart(5)}ms  ${check.method.padEnd(4)} ${check.path} (${err.name === 'AbortError' ? 'timed out' : err.message})` }
   } finally {
     clearTimeout(timer)
   }
+}
+
+async function run(check) {
+  const started = Date.now()
+  let res
+  try {
+    res = await request(check)
+  } catch (first) {
+    await new Promise((resolve) => setTimeout(resolve, retryAfterMs))
+    try {
+      res = await request(check)
+    } catch (err) {
+      const why = err.name === 'AbortError' ? 'timed out' : err.message
+      return { ok: false, line: `FAIL ----  ${String(Date.now() - started).padStart(5)}ms  ${check.method.padEnd(4)} ${check.path} (${why}, twice; first: ${first.name === 'AbortError' ? 'timed out' : first.message})` }
+    }
+  }
+  const ms = Date.now() - started
+  let ok = check.expect.includes(res.status) && res.status < 500
+  let detail = ''
+  if (!ok) {
+    const text = (await res.text().catch(() => '')).replace(/\s+/g, ' ').slice(0, 160)
+    detail = ` (expected ${check.expect.join('/')}) ${text}`
+  } else if (check.assert) {
+    const text = await res.text().catch(() => '')
+    const reason = await check.assert(text)
+    if (reason) {
+      ok = false
+      detail = ` (${reason})`
+    }
+  }
+  return { ok, line: `${ok ? 'ok  ' : 'FAIL'} ${String(res.status).padEnd(4)} ${String(ms).padStart(5)}ms  ${check.method.padEnd(4)} ${check.path}${detail}` }
 }
 
 console.log(`smoke: ${base}`)
