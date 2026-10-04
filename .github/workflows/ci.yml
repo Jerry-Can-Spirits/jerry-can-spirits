@@ -2,9 +2,9 @@ name: CI
 
 on:
   pull_request:
-    branches: [main, dev]
+    branches: [main]
   push:
-    branches: [main, dev]
+    branches: [main]
 
 # Least privilege for the GITHUB_TOKEN: CI only reads the repo.
 permissions:
@@ -182,3 +182,9 @@ jobs:
         run: node scripts/smoke.mjs https://jerrycanspirits.co.uk
         env:
           SMOKE_TOKEN: ${{ secrets.SMOKE_TOKEN }}
+
+      - name: Tell the Teams channel
+        if: failure()
+        run: bash scripts/notify-teams.sh "Post-deploy smoke failed" "The deploy that just went live is not answering on a route a customer depends on. Roll back from the Deployments page first (docs/runbooks/2026-10-04-rollback-and-restore.md), then look." "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+        env:
+          TEAMS_WEBHOOK_URL: ${{ secrets.TEAMS_WEBHOOK_URL }}
