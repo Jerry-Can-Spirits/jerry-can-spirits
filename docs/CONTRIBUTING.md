@@ -50,6 +50,19 @@ feat: homepage trust signals and desktop footer accordions
 The second Trustpilot section duplicated the pull-quote strip's job...
 ```
 
+## December change freeze
+
+Approved by the directors on 4 October 2026 for the 2026 season. Soft freeze
+from Friday 20 November: last planned merges land by then. Hard freeze from
+Friday 27 November 18:00 to Monday 4 January 09:00: nothing merges to main
+except a defect that stops a customer buying or paying, a security patch for
+an exploited vulnerability (single package, never a group), the Christmas
+last-order date and its copy, or a legal change. Dependabot PRs stay open and
+are merged one at a time in the first week of January. Every merge in the
+window follows the checklist in
+ section 4. The plain-language
+version is JCS-OPS-GUI-004 Website Change Control Guide on SharePoint.
+
 ## Hotfixes
 
 Same flow, no shortcuts: branch off `origin/main`, PR, CI green, squash merge. The pipeline is fast enough that bypassing it never pays.
