@@ -60,7 +60,7 @@ an exploited vulnerability (single package, never a group), the Christmas
 last-order date and its copy, or a legal change. Dependabot PRs stay open and
 are merged one at a time in the first week of January. Every merge in the
 window follows the checklist in
- section 4. The plain-language
+`docs/runbooks/2026-10-04-rollback-and-restore.md` section 4. The plain-language
 version is JCS-OPS-GUI-004 Website Change Control Guide on SharePoint.
 
 ## Hotfixes
