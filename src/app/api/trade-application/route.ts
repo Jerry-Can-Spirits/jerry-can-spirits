@@ -16,7 +16,7 @@
 // From address is hardcoded to hello@jerrycanspirits.co.uk (existing verified Resend sender).
 
 import { NextResponse } from 'next/server'
-import * as Sentry from '@sentry/nextjs'
+import { captureServerError, captureServerMessage } from '@/lib/server-error-capture'
 import { getCloudflareContext } from '@opennextjs/cloudflare'
 import { runApplicationChecks } from '@/lib/verification/store'
 import { pushApplicationToSharePoint } from '@/lib/sharepoint/push'
@@ -309,7 +309,7 @@ export async function POST(request: Request) {
       created_at: submittedAtIso,
     })
   } catch (err) {
-    Sentry.captureException(err, { tags: { route: 'trade-application' } })
+    await captureServerError(err, { tags: { route: 'trade-application' } })
     return NextResponse.json({ error: 'We could not save your application. Please try again.' }, { status: 500 })
   }
 
@@ -337,9 +337,7 @@ export async function POST(request: Request) {
       },
       env as unknown as { COMPANIES_HOUSE_API_KEY?: string },
     )
-      .catch((err) => {
-        Sentry.captureException(err, { tags: { route: 'trade-application', stage: 'verification' } })
-      })
+      .catch((err) => captureServerError(err, { tags: { route: 'trade-application', stage: 'verification' } }))
       // After the checks, so the row carries their outcome rather than arriving
       // empty and being corrected a second later.
       .then(() =>
@@ -372,7 +370,7 @@ export async function POST(request: Request) {
     }
   } catch (err) {
     // Roll back: best-effort delete of any partial uploads under this appId
-    Sentry.captureException(err, { tags: { route: 'trade-application', phase: 'r2-move' } })
+    await captureServerError(err, { tags: { route: 'trade-application', phase: 'r2-move' } })
     try {
       const list = await r2.list({ prefix: `applications/${appId}/` })
       await Promise.all(list.objects.map((o) => r2.delete(o.key)))
@@ -385,7 +383,7 @@ export async function POST(request: Request) {
       await db.prepare('DELETE FROM trade_application_review_log WHERE trade_application_id = ?').bind(appId).run()
       await db.prepare('DELETE FROM trade_applications WHERE id = ?').bind(appId).run()
     } catch (rollbackErr) {
-      Sentry.captureException(rollbackErr, { tags: { route: 'trade-application', phase: 'd1-rollback' } })
+      await captureServerError(rollbackErr, { tags: { route: 'trade-application', phase: 'd1-rollback' } })
     }
     return NextResponse.json({ error: 'Upload could not be finalised. Please try again.' }, { status: 500 })
   }
@@ -416,7 +414,7 @@ export async function POST(request: Request) {
       })
     }
   } catch (err) {
-    Sentry.captureException(err, { tags: { route: 'trade-application', phase: 'r2-presign' } })
+    await captureServerError(err, { tags: { route: 'trade-application', phase: 'r2-presign' } })
     // Continue without URLs — admin email will include the application ID; founder can pull files manually
   }
 
@@ -469,10 +467,10 @@ export async function POST(request: Request) {
       ],
     })
     if (!result.ok) {
-      Sentry.captureMessage(`Resend send failed: ${result.error}`, { tags: { route: 'trade-application' } })
+      await captureServerMessage(`Resend send failed: ${result.error}`, { tags: { route: 'trade-application' } })
     }
   } catch (err) {
-    Sentry.captureException(err, { tags: { route: 'trade-application', phase: 'resend' } })
+    await captureServerError(err, { tags: { route: 'trade-application', phase: 'resend' } })
   }
 
   // --- Klaviyo event (non-sensitive props only) ---
@@ -491,7 +489,7 @@ export async function POST(request: Request) {
       listId: env.KLAVIYO_TRADE_LIST_ID,
     })
   } catch (err) {
-    Sentry.captureException(err, { tags: { route: 'trade-application', phase: 'klaviyo' } })
+    await captureServerError(err, { tags: { route: 'trade-application', phase: 'klaviyo' } })
   }
 
   return NextResponse.json({ success: true, applicationId: appId })
@@ -703,7 +701,7 @@ async function fireKlaviyoEvent(args: {
     // The acknowledgement flow hangs off this event. A rejected post used to
     // vanish: nothing read the response, so the applicant simply never heard
     // from us and nobody knew.
-    Sentry.captureMessage(`Klaviyo event rejected: ${eventRes.status} ${await eventRes.text()}`, {
+    await captureServerMessage(`Klaviyo event rejected: ${eventRes.status} ${await eventRes.text()}`, {
       tags: { route: 'trade-application', phase: 'klaviyo-event' },
     })
   }
@@ -711,7 +709,7 @@ async function fireKlaviyoEvent(args: {
   // 3. Subscribe to the trade list if opted in.
   if (!args.marketingOptIn) return
   if (!args.listId) {
-    Sentry.captureMessage('KLAVIYO_TRADE_LIST_ID is not set; a trade opt-in was dropped', {
+    await captureServerMessage('KLAVIYO_TRADE_LIST_ID is not set; a trade opt-in was dropped', {
       tags: { route: 'trade-application', phase: 'klaviyo-list' },
     })
     return
@@ -720,7 +718,7 @@ async function fireKlaviyoEvent(args: {
     // The profile existed already and the lookup for its id came back empty,
     // usually an address the search allowlist above refuses. The applicant
     // ticked the box, so this is a lost subscription, not a non-event.
-    Sentry.captureMessage('Trade opt-in dropped: profile id could not be resolved', {
+    await captureServerMessage('Trade opt-in dropped: profile id could not be resolved', {
       tags: { route: 'trade-application', phase: 'klaviyo-list' },
     })
     return
@@ -754,7 +752,7 @@ async function fireKlaviyoEvent(args: {
     }),
   })
   if (!subscriptionRes.ok) {
-    Sentry.captureMessage(`Klaviyo trade subscription rejected: ${subscriptionRes.status} ${await subscriptionRes.text()}`, {
+    await captureServerMessage(`Klaviyo trade subscription rejected: ${subscriptionRes.status} ${await subscriptionRes.text()}`, {
       tags: { route: 'trade-application', phase: 'klaviyo-list' },
     })
   }

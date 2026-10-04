@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import * as Sentry from '@sentry/nextjs'
+import { captureServerError, captureServerMessage } from '@/lib/server-error-capture'
 import { getCloudflareContext } from '@opennextjs/cloudflare'
 import { isAllowedOrigin, isRateLimited } from '@/lib/kv'
 
@@ -60,7 +60,7 @@ export async function POST(request: Request) {
   const kv = env.SITE_OPS as KVNamespace
 
   if (!accessToken) {
-    Sentry.captureMessage('META_CAPI_ACCESS_TOKEN not set', 'error')
+    await captureServerMessage('META_CAPI_ACCESS_TOKEN not set', { level: 'error' })
     return NextResponse.json({ ok: true })
   }
 
@@ -133,13 +133,13 @@ export async function POST(request: Request) {
     )
     if (!res.ok) {
       const text = await res.text().catch(() => '')
-      Sentry.captureMessage('Meta CAPI rejected event', {
+      await captureServerMessage('Meta CAPI rejected event', {
         level: 'warning',
         extra: { status: res.status, response: text.slice(0, 500), eventName: raw.eventName, eventID: raw.eventID },
       })
     }
   } catch (err) {
-    Sentry.captureException(err, {
+    await captureServerError(err, {
       tags: { source: 'meta-capi' },
       extra: { eventName: raw.eventName, eventID: raw.eventID },
     })

@@ -17,7 +17,7 @@
 // old export) the fallback divides by 1.2, which is right for everything the
 // trade catalogue sells.
 
-import * as Sentry from '@sentry/nextjs'
+import { captureServerError } from '@/lib/server-error-capture'
 import type { ShopifyOrder } from '@/lib/shopify-webhooks'
 import { countBottles } from '@/lib/product-formats'
 import { graphConfigured, type GraphEnv } from '@/lib/sharepoint/graph'
@@ -197,7 +197,7 @@ export async function syncTradeOrder(env: OrdersEnv, order: ShopifyOrder): Promi
     if (stats) await pushTradeOrderStats(env, env.SITE_OPS, attribution.applicationId, stats)
   } catch (err) {
     console.error('[trade-orders] sync failed for order #%s (non-fatal):', order.order_number, err)
-    Sentry.captureException(err, { tags: { integration: 'sharepoint', phase: 'trade-order-sync' } })
+    await captureServerError(err, { tags: { integration: 'sharepoint', phase: 'trade-order-sync' } })
   }
 }
 
@@ -224,7 +224,7 @@ export async function refreshTradeOrderStats(
     } catch (err) {
       summary.failed.push(a.id)
       console.error('[trade-orders] refresh failed for account %s:', a.id, err)
-      Sentry.captureException(err, { tags: { integration: 'sharepoint', phase: 'trade-order-refresh' } })
+      await captureServerError(err, { tags: { integration: 'sharepoint', phase: 'trade-order-refresh' } })
     }
   }
   return summary

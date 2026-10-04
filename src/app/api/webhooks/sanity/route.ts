@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { revalidatePath } from 'next/cache';
 import { getCloudflareContext } from '@opennextjs/cloudflare';
-import * as Sentry from '@sentry/nextjs';
+import { captureServerError } from '@/lib/server-error-capture';
 
 export const dynamic = 'force-dynamic';
 
@@ -163,7 +163,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ revalidated: true, paths });
   } catch (error) {
     console.error('[sanity-webhook] Handler error:', error);
-    Sentry.captureException(error, { tags: { source: 'sanity-webhook' } });
+    await captureServerError(error, { tags: { source: 'sanity-webhook' } });
     return NextResponse.json({ error: 'Webhook handler failed' }, { status: 500 });
   }
 }

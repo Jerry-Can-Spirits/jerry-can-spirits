@@ -3,6 +3,9 @@ import * as Sentry from "@sentry/nextjs";
 Sentry.init({
   dsn: "https://03a3151ad7e64876b650238ef4f31ce8@o4510169918275584.ingest.de.sentry.io/4510169922404432",
 
+  // So an issue can be read against the deploy that produced it.
+  environment: process.env.NODE_ENV === "production" ? "production" : "development",
+
   // Error reporting ONLY. Performance tracing is disabled: no tracesSampler is
   // set, and the BrowserTracing integration is filtered out of the defaults
   // below, so no traces are ever collected (this project uses Sentry for error

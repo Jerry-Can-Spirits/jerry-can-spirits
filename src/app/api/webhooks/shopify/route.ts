@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { revalidatePath } from 'next/cache';
 import { getCloudflareContext } from '@opennextjs/cloudflare';
-import * as Sentry from '@sentry/nextjs';
+import { captureServerError } from '@/lib/server-error-capture';
 import { countBottles } from '@/lib/product-formats';
 import {
   verifyWebhookSignature,
@@ -419,7 +419,7 @@ export async function POST(request: Request) {
           await handleOrderCreated(order, kv, adminToken, db, klaviyoKey);
         } catch (err) {
           console.error('[webhook] handleOrderCreated failed for order #%s (non-fatal):', order.order_number, err);
-          Sentry.captureException(err, { tags: { source: 'shopify-webhook', phase: 'order-created' } });
+          await captureServerError(err, { tags: { source: 'shopify-webhook', phase: 'order-created' } });
         }
         // A trade order is recorded against its account and the Customer
         // Register's order figures are refreshed. A retail order is a no-op.
@@ -437,7 +437,7 @@ export async function POST(request: Request) {
             // Constant format string (order_number as an argument, not
             // interpolated) so the payload value can't act as a format specifier.
             console.error('[webhook] referral conversion failed for order #%s (non-fatal):', order.order_number, err);
-            Sentry.captureException(err, { tags: { source: 'shopify-webhook', phase: 'referral-conversion' } });
+            await captureServerError(err, { tags: { source: 'shopify-webhook', phase: 'referral-conversion' } });
           }
         }
         // Server-side GA4 purchase attribution. Never throws (a tracking
@@ -478,7 +478,7 @@ export async function POST(request: Request) {
     // hiccup, etc.) that we genuinely want retried. Sentry capture stays
     // for visibility.
     console.error('[webhook] Handler error:', error);
-    Sentry.captureException(error, { tags: { source: 'shopify-webhook' } });
+    await captureServerError(error, { tags: { source: 'shopify-webhook' } });
     return NextResponse.json({ error: 'Webhook handler failed' }, { status: 500 });
   }
 }

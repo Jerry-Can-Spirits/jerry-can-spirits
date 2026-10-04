@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import * as Sentry from '@sentry/nextjs'
+import { captureServerError } from '@/lib/server-error-capture'
 import { requireTradeSession } from '@/lib/trade-portal/session-check'
 import { TRADE_COCKTAIL_SLUGS } from '@/lib/trade-portal/cocktail-cards'
 import { client as sanityClient } from '@/sanity/lib/client'
@@ -27,7 +27,7 @@ async function fetchTradeCocktails(): Promise<CocktailListItem[]> {
     const orderIndex = new Map<string, number>(slugs.map((s, i) => [s, i]))
     return [...results].sort((a, b) => (orderIndex.get(a.slug) ?? 0) - (orderIndex.get(b.slug) ?? 0))
   } catch (err) {
-    Sentry.captureException(err, { tags: { route: 'trade-cocktails', phase: 'sanity-fetch' } })
+    await captureServerError(err, { tags: { route: 'trade-cocktails', phase: 'sanity-fetch' } })
     return []
   }
 }

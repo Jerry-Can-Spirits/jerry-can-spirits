@@ -1,5 +1,5 @@
 import { notFound } from 'next/navigation'
-import * as Sentry from '@sentry/nextjs'
+import { captureServerError } from '@/lib/server-error-capture'
 import { requireTradeSession } from '@/lib/trade-portal/session-check'
 import { isTradeCocktailSlug } from '@/lib/trade-portal/cocktail-cards'
 import { CocktailCard, type CocktailCardData } from '@/components/trade-portal/CocktailCard'
@@ -20,7 +20,7 @@ async function fetchCocktail(slug: string): Promise<SanityCocktail | null> {
   try {
     return await sanityClient.fetch<SanityCocktail | null>(cocktailBySlugQuery, { slug })
   } catch (err) {
-    Sentry.captureException(err, {
+    await captureServerError(err, {
       tags: { route: 'trade-cocktail-card', phase: 'sanity-fetch' },
       extra: { slug },
     })
