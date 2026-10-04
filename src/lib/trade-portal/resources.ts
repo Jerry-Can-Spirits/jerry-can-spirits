@@ -67,6 +67,13 @@ export const TRADE_RESOURCES: TradeResource[] = [
   },
   {
     kind: 'page',
+    slug: 'serve-economics',
+    title: 'Serve Economics',
+    description: 'What a 50ml pour costs at your trade rate, what the four house serves cost built, and the gross profit at £8, £9 and £10. Single bottle and by the case.',
+    href: '/trade/resources/serve-economics',
+  },
+  {
+    kind: 'page',
     slug: 'cocktail-cards',
     title: 'Cocktail Recipe Cards',
     description: 'House serves on printable cards. Storm & Spice, Explorers Gold, The Old Standard, Jerry Can Julep. Glass, ingredients, method, variants.',
