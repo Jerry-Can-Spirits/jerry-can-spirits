@@ -48,21 +48,51 @@ interface SentryEvent {
 
 // Same scrub as the browser config: an email or a token in an error message
 // must not reach Sentry.
-const emailRegex = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g
+// Error text can carry request data, so both scans are linear: no regular
+// expression that backtracks over the input (CodeQL js/polynomial-redos).
+const MAX_TEXT = 4_000
 const secretRegex = /(access_token|api_key|secret|token|password|authorization|bearer)[=:\s]+['"]?[a-zA-Z0-9_\-.]+['"]?/gi
 
+function looksLikeEmail(token: string): boolean {
+  const at = token.indexOf('@')
+  return at > 0 && token.indexOf('.', at) > at + 1
+}
+
 export function scrub(text: string): string {
-  return text.replace(emailRegex, '[email]').replace(secretRegex, '$1=[redacted]')
+  const bounded = text.slice(0, MAX_TEXT)
+  const words = bounded.split(/(\s+)/).map((t) => (looksLikeEmail(t) ? '[email]' : t))
+  return words.join('').replace(secretRegex, '$1=[redacted]')
+}
+
+// One V8 stack line: "    at fn (file:line:col)" or "    at file:line:col".
+function parseFrame(line: string): Frame | null {
+  const s = line.trim()
+  if (!s.startsWith('at ')) return null
+  let rest = s.slice(3)
+  let fn = '<anonymous>'
+  if (rest.endsWith(')')) {
+    const open = rest.lastIndexOf('(')
+    if (open > 0) {
+      fn = rest.slice(0, open).trim() || fn
+      rest = rest.slice(open + 1, -1)
+    }
+  }
+  const colSep = rest.lastIndexOf(':')
+  const lineSep = colSep > 0 ? rest.lastIndexOf(':', colSep - 1) : -1
+  if (lineSep <= 0) return null
+  const lineno = Number(rest.slice(lineSep + 1, colSep))
+  const colno = Number(rest.slice(colSep + 1))
+  if (!Number.isInteger(lineno) || !Number.isInteger(colno)) return null
+  return { function: fn, filename: rest.slice(0, lineSep), lineno, colno }
 }
 
 // V8 stack lines, oldest frame last; Sentry wants oldest first.
 export function parseStack(stack: string | undefined): Frame[] {
   if (!stack) return []
   const frames: Frame[] = []
-  for (const line of stack.split('\n')) {
-    const m = line.match(/^\s*at\s+(?:(.+?)\s+\()?(.+?):(\d+):(\d+)\)?\s*$/)
-    if (!m) continue
-    frames.push({ function: m[1] || '<anonymous>', filename: m[2], lineno: Number(m[3]), colno: Number(m[4]) })
+  for (const line of stack.slice(0, MAX_TEXT * 4).split('\n')) {
+    const frame = parseFrame(line)
+    if (frame) frames.push(frame)
   }
   return frames.reverse()
 }

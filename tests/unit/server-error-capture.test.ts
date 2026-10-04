@@ -26,6 +26,17 @@ describe('scrub', () => {
       'Resend rejected [email] with token=[redacted]',
     )
   })
+
+  it('leaves package names alone', () => {
+    expect(scrub("Cannot find module '@opennextjs/cloudflare'")).toBe("Cannot find module '@opennextjs/cloudflare'")
+  })
+
+  it('stays quick on hostile input', () => {
+    const started = Date.now()
+    scrub('%'.repeat(50_000) + '@' + '.'.repeat(50_000))
+    parseStack('at ' + '  '.repeat(50_000) + ':1:1')
+    expect(Date.now() - started).toBeLessThan(200)
+  })
 })
 
 describe('parseStack', () => {
