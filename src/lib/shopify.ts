@@ -60,6 +60,7 @@ export interface ShopifyProductVariant {
   availableForSale: boolean;
   quantityAvailable?: number;
   barcode?: string | null;
+  sku?: string | null;
   image?: ShopifyImage | null;
 }
 
@@ -437,6 +438,7 @@ export async function getProduct(handle: string): Promise<ShopifyProduct | null>
               availableForSale
               quantityAvailable
               barcode
+              sku
               image {
                 url
                 altText
