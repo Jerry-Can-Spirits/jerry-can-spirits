@@ -349,6 +349,11 @@ export default async function ProductPage({
   // (e.g. a glass Pair vs Single) there is no one product-level GTIN, so omit it
   // rather than assert one variant's barcode against an aggregate price range.
   const singleVariantGtin = (product.variants?.length ?? 0) === 1 ? firstVariant?.barcode : undefined
+  // Google's merchant listings cap a SKU at 50 characters and two handles are
+  // longer (Search Console, 4 Oct 2026). A single-variant product carries its
+  // Shopify SKU; anything else falls back to the handle, cut to the limit.
+  const singleVariantSku = (product.variants?.length ?? 0) === 1 ? firstVariant?.sku : undefined
+  const schemaSku = singleVariantSku || handle.slice(0, 50)
 
   // Get category based on product type (moved up for schema use)
   const category = getCategoryFromProductType(product.productType)
@@ -422,7 +427,7 @@ export default async function ProductPage({
     name: product.title,
     description: product.description,
     image: product.images.map(img => img.url),
-    sku: handle,
+    sku: schemaSku,
     mpn: handle,
     ...(singleVariantGtin ? { gtin: singleVariantGtin } : productGtin(handle)),
     brand: {
