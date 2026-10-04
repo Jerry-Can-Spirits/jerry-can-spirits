@@ -1,7 +1,7 @@
 name: Smoke (live site)
 
 # Every fifteen minutes, hit the routes a customer depends on and fail if any
-# is broken. A failed run posts to the 2iC Teams channel through the
+# is broken. A failed run posts to the 2iC channel in Teams through the
 # TEAMS_WEBHOOK_URL secret (a Teams Workflows "post to a channel when a webhook
 # request is received" flow); without that secret it only emails the committer
 # of this file. See scripts/smoke.mjs for what is checked and why (the 18-hour

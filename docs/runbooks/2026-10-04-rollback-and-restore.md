@@ -8,11 +8,11 @@ Rehearse the Worker rollback once in a quiet hour before the Christmas window, s
 
 ## 1. Roll back the Worker (minutes, no code)
 
-Cloudflare keeps every version of the Worker. Switching back is instant and needs no build.
+Cloudflare keeps every version of the Worker. Switching back is instant and needs no build. Rehearsed on 4 October 2026: three minutes from opening the dashboard to the smoke test passing on the restored version.
 
 1. Cloudflare dashboard, account Jerry Can Spirits, Workers and Pages, `jerry-can-spirits-prod`.
-2. Deployments tab. The top row is live. The row beneath it is what was live before.
-3. On the previous row, open the menu and choose Rollback. Confirm.
+2. Deployments tab, not Version History. The top row is live. The row beneath it is what was live before. Version History also lists every preview build uploaded from a pull request branch, so its previous row can be code that never merged; the rehearsal rolled back to one of those by mistake, harmlessly that day.
+3. On the previous row, open the three-dot menu and choose Rollback. Confirm.
 4. In a private window, load the homepage, a product page and `/api/geo/`. Then run the smoke test from a terminal:
 
    ```
@@ -20,6 +20,7 @@ Cloudflare keeps every version of the Worker. Switching back is instant and need
    ```
 
 5. Open the revert pull request so `main` matches what is live. Until it merges, the next merge to `main` will deploy the broken code again, so do this before anything else merges.
+6. To go forward again once the fix has merged, or to undo a rollback made in error: find the newer version in the same tab, three-dot menu, Promote, confirm. Rollback only appears on versions older than the live one; Promote is the same action in the other direction.
 
 From a terminal instead of the dashboard:
 

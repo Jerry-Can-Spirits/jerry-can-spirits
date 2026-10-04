@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# Post a short card to the 2iC Teams channel. Used by the smoke workflows when
+# Post a short card to the 2iC channel in Teams (a Workflows webhook, created
+# 4 Oct 2026). Used by the smoke workflows when
 # a run fails, so a broken route is seen within fifteen minutes rather than
 # when someone next looks at email (the 28 Sep 2026 outage ran for eighteen
 # hours with nobody told).
