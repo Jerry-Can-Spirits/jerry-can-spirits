@@ -141,7 +141,6 @@ export default async function BarwarePage() {
         <SectionHeading
           as="h1"
           eyebrow="Bar Accessories"
-          intro="Tools selected for function. A shaker that seals. A jigger that measures. Glassware that holds a drink the way it was designed to be held. No shortcuts."
         >
           Barware
           <br />
@@ -229,6 +228,10 @@ export default async function BarwarePage() {
             )
           })}
         </div>
+
+        <p className="max-w-3xl mx-auto mt-12 text-parchment-300 text-lg leading-relaxed">
+          Tools selected for function. A shaker that seals. A jigger that measures. Glassware that holds a drink the way it was designed to be held. No shortcuts.
+        </p>
        </div>
       </section>
 

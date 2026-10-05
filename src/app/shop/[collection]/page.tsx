@@ -85,9 +85,10 @@ export default async function CollectionPage({
 
   const h1 = category?.h1 ?? slugToTitle(collection)
   const introBody = category?.introBody ?? []
-  // Gift pages show the products before the copy (Audit B, 3 Oct 2026). Done
-  // with flex order so the markup, the schema and the tracker stay in one shape.
-  const productsFirst = category?.productsFirst === true
+  // Every collection page shows the products before the copy: a buyer decides
+  // on the picture and the price, then reads (Audit B, 3 Oct 2026; extended
+  // from the gift pages to every collection on 5 Oct). Done with flex order so
+  // the markup, the schema and the tracker stay in one shape.
   const relatedLinks = (category?.relatedLinks ?? []).filter(
     (link) => link.href !== `/shop/${collection}/`,
   )
@@ -117,7 +118,7 @@ export default async function CollectionPage({
   const collectionPageSchema = {
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
-    name: `Jerry Can Spirits — ${h1}`,
+    name: `Jerry Can Spirits: ${h1}`,
     url: `${BASE_URL}/shop/${collection}/`,
     mainEntity: {
       '@type': 'ItemList',
@@ -219,7 +220,7 @@ export default async function CollectionPage({
           testimonial, the category copy, the questions and the trust strip
           then alternate, each only when the category has it. */}
       <section className="band-dark pt-20 pb-16">
-       <div className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8${productsFirst ? ' flex flex-col' : ''}`}>
+       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col">
         <Breadcrumbs items={[{ label: 'Shop', href: '/shop' }, { label: h1 }]} className="mb-8" />
 
         <SectionHeading as="h1" eyebrow={h1}>
@@ -227,7 +228,7 @@ export default async function CollectionPage({
         </SectionHeading>
 
         {introBody.length > 0 && (
-          <div className={`max-w-3xl mx-auto space-y-4 ${productsFirst ? 'order-2 mt-12 mb-4 w-full' : 'mb-8'}`}>
+          <div className="max-w-3xl mx-auto space-y-4 order-2 mt-12 mb-4 w-full">
             {introBody.map((para) => (
               <p key={para.slice(0, 40)} className="text-parchment-300 text-lg leading-relaxed">
                 {para}
@@ -237,7 +238,7 @@ export default async function CollectionPage({
         )}
 
         {relatedLinks.length > 0 && (
-          <nav aria-label="Related pages" className={`max-w-3xl mx-auto text-sm text-parchment-400${productsFirst ? ' order-3 w-full' : ''}`}>
+          <nav aria-label="Related pages" className="max-w-3xl mx-auto text-sm text-parchment-400 order-3 w-full">
             <span className="mr-2">Also see:</span>
             {relatedLinks.map((link, i) => (
               <span key={link.href}>
@@ -252,7 +253,7 @@ export default async function CollectionPage({
 
         {/* A shop grid stays a grid: two-up on a phone is how people browse a
             range, and a sideways row would hide most of it. */}
-        <div className={`grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8 ${productsFirst ? 'order-1 mt-6' : 'mt-12'}`}>
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8 order-1 mt-6">
           {products.map((product) => {
             const variants = product.variants ?? []
             const defaultVariant = variants.length === 1 && variants[0].title === 'Default Title'
@@ -334,7 +335,7 @@ export default async function CollectionPage({
         </div>
 
         {/* Glassware and tools are the serve; the bottle is what they serve. */}
-        {category?.houseSpiritCard && <HouseSpiritCard className="mx-auto mt-12 w-full max-w-3xl" />}
+        {category?.houseSpiritCard && <HouseSpiritCard className="order-4 mx-auto mt-12 w-full max-w-3xl" />}
        </div>
       </section>
 
