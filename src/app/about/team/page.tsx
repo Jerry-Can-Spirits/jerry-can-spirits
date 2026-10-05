@@ -48,8 +48,7 @@ interface TeamMember {
 
 // Placeholders exist so the cards and pages are filled in rather than built
 // from scratch when the details and photos arrive. Danny Hughes (28 Sep 2026)
-// has a page with nothing beyond the name
-// confirmed. Joshua Sisson's role, bio and quote arrived 25 Sep; service,
+// has a page with his role confirmed and the bio still to come. Joshua Sisson's role, bio and quote arrived 25 Sep; service,
 // rank and photo are still to come.
 const teamMembers: TeamMember[] = [
   {
@@ -82,7 +81,7 @@ const teamMembers: TeamMember[] = [
   },
   {
     name: 'Danny Hughes',
-    role: 'Details to follow.',
+    role: 'Armed Forces Champion',
     slug: 'danny-hughes',
   },
 ]
