@@ -7,28 +7,29 @@ import TeamMeetRow from '@/components/TeamMeetRow'
 import { OG_IMAGE } from '@/lib/og'
 import { ORG_REF } from '@/lib/jsonLd'
 
-// Placeholder page, 28 Sep 2026: the route, links and sitemap entry exist so
-// the bio drops in when it arrives. Only the name is confirmed; role, bio,
-// quote and photo are still to come. Fill the schema's jobTitle, the
-// eyebrow, the quick facts and the panel together.
+// Placeholder page, 28 Sep 2026. The role and the description come from his
+// role appointment letter (5 Oct 2026); bio, quote and photo are still to
+// come. Fill the schema's description and the panel together.
 const personSchema = {
   '@context': 'https://schema.org',
   '@type': 'Person',
   name: 'Danny Hughes',
+  jobTitle: 'Armed Forces Champion',
   url: 'https://jerrycanspirits.co.uk/about/team/danny-hughes/',
   worksFor: ORG_REF,
 }
 
-const DESCRIPTION = 'Danny Hughes is part of the team at Jerry Can Spirits. Full profile to follow.'
+const DESCRIPTION =
+  'Meet Danny Hughes, Armed Forces Champion. The focal point for the Armed Forces community at Jerry Can Spirits and keeper of our Covenant commitments.'
 
 export const metadata: Metadata = {
-  title: 'Danny Hughes',
+  title: 'Danny Hughes - Armed Forces Champion',
   description: DESCRIPTION,
   alternates: {
     canonical: 'https://jerrycanspirits.co.uk/about/team/danny-hughes/',
   },
   openGraph: {
-    title: 'Danny Hughes | Jerry Can Spirits®',
+    title: 'Danny Hughes - Armed Forces Champion | Jerry Can Spirits®',
     description: DESCRIPTION,
     url: 'https://jerrycanspirits.co.uk/about/team/danny-hughes',
     siteName: 'Jerry Can Spirits®',
@@ -38,7 +39,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image' as const,
-    title: 'Danny Hughes | Jerry Can Spirits®',
+    title: 'Danny Hughes - Armed Forces Champion | Jerry Can Spirits®',
     description: DESCRIPTION,
     images: OG_IMAGE,
   },
@@ -98,7 +99,7 @@ export default function DannyHughesPage() {
                 <div className="space-y-3 text-sm">
                   <div>
                     <p className="text-gold-400 font-semibold mb-1">Role</p>
-                    <p className="text-parchment-200">Details to follow.</p>
+                    <p className="text-parchment-200">Armed Forces Champion</p>
                   </div>
                 </div>
               </div>
