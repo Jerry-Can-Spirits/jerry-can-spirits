@@ -44,21 +44,6 @@ export default async function ReviewsPage() {
     getRating(kv, 'trustpilot'),
   ])
 
-  const aggregateRating = google
-    ? {
-        '@type': 'AggregateRating',
-        'ratingValue': google.rating.toFixed(1),
-        'reviewCount': google.count.toString(),
-        'bestRating': '5',
-        'worstRating': '1',
-        'itemReviewed': {
-          '@type': 'Product',
-          'name': 'Expedition Spiced Rum',
-          'url': 'https://jerrycanspirits.co.uk/shop/product/jerry-can-spirits-expedition-spiced-rum/',
-        },
-      }
-    : undefined
-
   return (
     <main className="text-parchment-100">
       {/* Google seller-rating badge (consent-gated, injected by Google) */}
@@ -69,7 +54,10 @@ export default async function ReviewsPage() {
           '@context': 'https://schema.org',
           '@type': 'WebPage',
           name: 'Jerry Can Spirits Reviews',
-          description: 'Customer reviews of Jerry Can Spirits Expedition Spiced Rum on Trustpilot, Google and Yell.',
+          // No aggregateRating: these ratings are collected on Trustpilot and
+          // Google, and Google does not allow ratings from other sites to be
+          // marked up as the page's own.
+          description: 'Reviews of Expedition Spiced Rum on Trustpilot and Google.',
           url: 'https://jerrycanspirits.co.uk/reviews/',
           isPartOf: {
             '@type': 'WebSite',
@@ -83,9 +71,7 @@ export default async function ReviewsPage() {
             sameAs: [
               'https://www.trustpilot.com/review/jerrycanspirits.co.uk',
               'https://www.yell.com/biz/jerry-can-spirits-ltd-london-11012967/',
-              'https://www.trustaveteran.com/',
             ],
-            ...(aggregateRating ? { aggregateRating } : {}),
           },
         }) }}
       />
