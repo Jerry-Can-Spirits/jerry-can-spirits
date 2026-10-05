@@ -7,7 +7,6 @@ const TEAM = [
   { slug: 'dan-freeman', label: 'Meet Dan' },
   { slug: 'rhys-williams', label: 'Meet Rhys' },
   { slug: 'joshua-sisson', label: 'Meet Joshua Sisson' },
-  { slug: 'josh-acklam', label: 'Meet Josh Acklam' },
   { slug: 'danny-hughes', label: 'Meet Danny' },
 ]
 
