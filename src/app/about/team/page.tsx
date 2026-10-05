@@ -47,9 +47,8 @@ interface TeamMember {
 }
 
 // Placeholders exist so the cards and pages are filled in rather than built
-// from scratch when the details and photos arrive. Josh Acklam (25 Sep 2026)
-// and Danny Hughes (28 Sep) have pages with nothing beyond the name
-// confirmed. Joshua Sisson's role, bio and quote arrived 25 Sep; service,
+// from scratch when the details and photos arrive. Danny Hughes (28 Sep 2026)
+// has a page with his role confirmed and the bio still to come. Joshua Sisson's role, bio and quote arrived 25 Sep; service,
 // rank and photo are still to come.
 const teamMembers: TeamMember[] = [
   {
@@ -73,11 +72,6 @@ const teamMembers: TeamMember[] = [
     image: 'https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/bcacb452-4f56-4676-b4c8-ac6afa7c1e00/public',
   },
   {
-    name: 'Josh Acklam',
-    role: 'Details to follow.',
-    slug: 'josh-acklam',
-  },
-  {
     name: 'Joshua Sisson',
     role: 'Head of Sales',
     slug: 'joshua-sisson',
@@ -87,7 +81,7 @@ const teamMembers: TeamMember[] = [
   },
   {
     name: 'Danny Hughes',
-    role: 'Details to follow.',
+    role: 'Armed Forces Champion',
     slug: 'danny-hughes',
   },
 ]

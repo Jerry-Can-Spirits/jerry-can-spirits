@@ -506,6 +506,12 @@ const nextConfig: NextConfig = {
         destination: '/field-manual/cocktails/:slug*',
         permanent: true,
       },
+      // Team bio withdrawn 5 Oct 2026; the address goes to the team page.
+      {
+        source: '/about/team/josh-acklam',
+        destination: '/about/team/',
+        permanent: true,
+      },
       // Old /notify page (removed - redirect to homepage)
       {
         source: '/notify',
