@@ -4,16 +4,12 @@ import ScrollRow from '@/components/ScrollRow'
 import SectionHeading from '@/components/SectionHeading'
 import StructuredData from '@/components/StructuredData'
 import { baseOpenGraph } from '@/lib/og'
-import { getProduct } from '@/lib/shopify'
-import { formatPrice } from '@/lib/format-price'
 
-// Standard trade terms, stated on the page so a bar manager can answer "what
-// does a case cost" in the first screen (Audit A finding 3, Audit B finding 8,
-// 3 Oct 2026). The price is the shop price less ten per cent, read live, so
-// it cannot drift from the bottle; volume pricing is by quote.
-const TRADE_DISCOUNT = 0.1
-const BOTTLES_PER_CASE = 6
-const VAT = 1.2
+// The first screen answers the questions a bar manager asks first, without
+// publishing the trade price: on 5 Oct 2026 Dan took the figures off the
+// public page, where customers and competitors read them too. Prices are sent
+// on request and shown in full in the trade portal (resources: Trade Pricing,
+// Serve Economics) once an account is open.
 
 export const metadata: Metadata = {
   title: 'Stock Expedition Spiced Rum | Trade',
@@ -44,19 +40,7 @@ const tradeSchema = {
   },
 }
 
-export default async function TradePage() {
-  const bottle = await getProduct('jerry-can-spirits-expedition-spiced-rum')
-  const shopPence = bottle ? Math.round(parseFloat(bottle.priceRange.minVariantPrice.amount) * 100) : null
-  const currency = bottle?.priceRange.minVariantPrice.currencyCode ?? 'GBP'
-  const tradeBottleP = shopPence !== null ? Math.round(shopPence * (1 - TRADE_DISCOUNT)) : null
-  const terms =
-    tradeBottleP !== null
-      ? {
-          bottle: formatPrice(tradeBottleP / 100, currency),
-          bottleExVat: formatPrice(Math.round(tradeBottleP / VAT) / 100, currency),
-          caseOf: formatPrice((tradeBottleP * BOTTLES_PER_CASE) / 100, currency),
-        }
-      : null
+export default function TradePage() {
 
   return (
     <main>
@@ -68,31 +52,29 @@ export default async function TradePage() {
           <SectionHeading
             as="h1"
             eyebrow="Trade"
-            intro="Expedition Spiced Rum is a British craft rum built on real ingredients and no shortcuts. This page is for bars, restaurants, and hotels who want to know what stocking it looks like in practice."
+            intro="Expedition Spiced Rum is the first expression from a British spirits house: a Caribbean rum base, seven real spices, two natural sweeteners and bourbon oak. This page is for bars, restaurants and hotels who want to know what stocking it looks like in practice."
           >
             For Venues That Hold Themselves to a Higher Standard
           </SectionHeading>
 
-          {terms && (
-            <div className="max-w-2xl mx-auto mt-8">
-              <div className="grid gap-4 sm:grid-cols-3">
-                {[
-                  { label: 'Trade price', value: terms.bottle, note: `a bottle, VAT included (${terms.bottleExVat} ex VAT)` },
-                  { label: 'By the case', value: terms.caseOf, note: `for ${BOTTLES_PER_CASE} bottles, VAT included` },
-                  { label: 'Dispatch', value: '3 to 5 days', note: 'working days from payment, carriage at cost' },
-                ].map((stat) => (
-                  <div key={stat.label} className="bg-jerry-green-800/40 border border-gold-500/30 rounded-xl p-5">
-                    <p className="text-parchment-500 text-xs uppercase tracking-widest mb-2">{stat.label}</p>
-                    <p className="text-white text-2xl font-serif font-bold mb-1">{stat.value}</p>
-                    <p className="text-parchment-400 text-xs">{stat.note}</p>
-                  </div>
-                ))}
-              </div>
-              <p className="text-parchment-400 text-sm mt-4 text-center">
-                Ten per cent under the shop price, pro forma on a first order. Volume pricing by quote.
-              </p>
+          <div className="max-w-2xl mx-auto mt-8">
+            <div className="grid gap-4 sm:grid-cols-3">
+              {[
+                { label: 'Trade pricing', value: 'On request', note: 'ask through the form below; we reply within two working days' },
+                { label: 'By the case', value: '6 bottles', note: '700ml, 40% ABV, single bottles too' },
+                { label: 'Dispatch', value: '3 to 5 days', note: 'working days from payment, carriage at cost' },
+              ].map((stat) => (
+                <div key={stat.label} className="bg-jerry-green-800/40 border border-gold-500/30 rounded-xl p-5">
+                  <p className="text-parchment-500 text-xs uppercase tracking-widest mb-2">{stat.label}</p>
+                  <p className="text-white text-2xl font-serif font-bold mb-1">{stat.value}</p>
+                  <p className="text-parchment-400 text-xs">{stat.note}</p>
+                </div>
+              ))}
             </div>
-          )}
+            <p className="text-parchment-400 text-sm mt-4 text-center">
+              Your prices sit in the trade portal once your account is open, with the serve costs worked out. Pro forma on a first order. Volume pricing by quote.
+            </p>
+          </div>
         </div>
       </section>
 
