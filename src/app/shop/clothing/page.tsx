@@ -193,20 +193,11 @@ export default async function ClothingPage() {
         <SectionHeading
           as="h1"
           eyebrow="Expedition Gear"
-          intro="Quality apparel and accessories built for expedition. From the streets to the summit, gear that performs."
         >
           Gear Up
           <br />
           <span className="text-gold-300">Adventure Awaits</span>
         </SectionHeading>
-
-        {/* Shopify Connection Success Indicator */}
-        <div className="flex w-fit mx-auto items-center gap-2 px-4 py-2 bg-green-800/20 border border-green-500/30 rounded-lg">
-          <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
-          <span className="text-green-300 text-sm font-medium">
-            {products.length} {products.length === 1 ? 'product' : 'products'} loaded from Shopify
-          </span>
-        </div>
 
         {/* A shop grid stays a grid: two-up on a phone is how people browse a
             range, and a sideways row would hide most of it. */}
@@ -269,6 +260,10 @@ export default async function ClothingPage() {
             </Link>
           ))}
         </div>
+
+        <p className="max-w-3xl mx-auto mt-12 text-parchment-300 text-lg leading-relaxed">
+          Apparel and accessories built to the same standard as the rum. Gear that gets worn, not kept for best.
+        </p>
        </div>
       </section>
 
@@ -292,7 +287,7 @@ export default async function ClothingPage() {
               <div key="built-to-last" className="h-full text-center">
                 <h4 className="text-lg font-semibold text-white mb-2">Built to Last</h4>
                 <p className="text-parchment-300 text-sm">
-                  Quality materials, proper stitching. Not fast fashion - clothing that holds up wash after wash.
+                  Quality materials, proper stitching. Not fast fashion. Clothing that holds up wash after wash.
                 </p>
               </div>,
               <div key="gives-back" className="h-full text-center">
@@ -315,7 +310,7 @@ export default async function ClothingPage() {
             Join the Expedition
           </h2>
           <p className="text-parchment-300 mb-6 max-w-2xl mx-auto">
-            Sign up for exclusive access to limited releases, expedition updates, and special offers.
+            Sign up for new releases, expedition updates and offers.
           </p>
           <Link
             href="/first-pour/"

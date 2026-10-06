@@ -33,10 +33,6 @@ export type CategoryConfig = {
   // order them from the top of the band down. Applied at render by
   // lib/price-band.ts. Inclusive.
   maxPrice?: number
-  // Products above the intro. A gift buyer decides on the picture and the
-  // price, then reads; on the gift pages the grid sat under three paragraphs
-  // (Audit B, 3 Oct 2026).
-  productsFirst?: boolean
   // The range card after the grid, where the collection is the serve for the
   // bottle rather than the bottle itself (glassware, bar tools).
   houseSpiritCard?: boolean
@@ -167,7 +163,6 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
     },
     faqs: GIFT_FAQS,
     relatedLinks: GIFT_CLUSTER_LINKS,
-    productsFirst: true,
   },
 
   'spiced-rum': {
@@ -196,7 +191,7 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
       'If you have been drinking spiced rum for years and never found one you would choose over a whisky or gin, this might change that. Try it neat first. Then over one cube. Then decide what to do with the rest of the bottle.',
     ],
     pillars: [
-      { title: 'Real Ingredients Only', body: 'Madagascan vanilla. Ceylon cinnamon. Ginger root. Cassia bark. Clove. Orange peel. Bourbon oak. No artificial flavourings. Every flavour comes from something that grew in the ground.' },
+      { title: 'Real Ingredients Only', body: 'Seven real spices, two natural sweeteners, and bourbon oak. No artificial flavourings. Every flavour comes from something real.' },
       { title: 'Small-Batch, Genuinely', body: 'Limited numbers per batch, every bottle numbered. Macerated by our British partner distillery. When it is gone, it is gone. Each batch carries subtle variation because it is made properly, not at industrial scale.' },
       { title: 'Veteran-Made', body: 'Two Royal Corps of Signals veterans. 17 years of service between us. Armed Forces Covenant signatories. ERS Bronze Award. 5% of profits to forces charities.' },
     ],
@@ -348,12 +343,10 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
     },
     faqs: GIFT_FAQS,
     relatedLinks: GIFT_CLUSTER_LINKS,
-    productsFirst: true,
   },
 
   'gifts-for-her': {
     h1: 'Rum Gifts for Her',
-    productsFirst: true,
     metaTitle: 'Rum Gifts for Her',
     metaDescription:
       'Rum gifts for women who take their drink seriously. Small-batch British spiced rum, real ingredients, no shortcuts. 5% of profits to forces charities.',
@@ -403,7 +396,7 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
     introBody: [
       'A small gift for someone who drinks rum properly. Every piece here earns its place at the pour: the jigger that measures every Field Manual build, the glass the award serve was judged in, the bar blade that opens the ginger beer.',
       'Nothing here is a novelty. It is the kit the serves were built around, chosen because it does the job and keeps doing it.',
-      'Add a bottle and the whole order travels together. Every delivery is age-verified at the door, so it can go straight to them.',
+      'Every delivery is age-verified at the door, so it can go straight to them.',
     ],
     productHandles: UNDER_20_HANDLES,
   }),
@@ -414,7 +407,7 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
     introBody: [
       'This is the budget that buys the bottle. Expedition Spiced Rum: Caribbean rum, seven real spices, two natural sweeteners and bourbon oak, Bronze at the IWSC 2026 within three months of launch. Numbered, and built to be sipped.',
       'Or the glassware the serves were designed in. A pair of the Crystal ICE hiballs is the Silver-medal serve, ready to pour. A pair of Club ICE tumblers is the Old Standard.',
-      'Everything from the smaller budget is here too, from the fullest gift this one buys down to the smallest.',
+      'Or something smaller: the jigger, the spirit stones, a single glass. The kit the serves are built around.',
     ],
     productHandles: ['jerry-can-spirits-expedition-spiced-rum', ...UNDER_20_HANDLES],
   }),
@@ -424,7 +417,7 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
       'The Premium Gift Pack: Expedition Spiced Rum with the hiball, jigger and coaster to serve it properly, boxed. Veteran-owned British spirits.',
     introBody: [
       'The Premium Gift Pack is the complete first pour: the bottle, the Crystal ICE hiball from the Silver-medal serve, the 25ml and 50ml jigger and a slate coaster, in a branded box. Nothing to add. Open it and pour.',
-      'Or build your own from the range below: the bottle, then the glasses and tools that suit the way they drink.',
+      'Or build your own: the bottle, then the glasses and tools that suit the way they drink.',
       'Every bottle is numbered and traceable to its batch. Veteran-owned, no hidden investors, 5% of profits to forces charities.',
     ],
     productHandles: ['jerry-can-spirits-premium-gift-pack', 'jerry-can-spirits-expedition-spiced-rum', ...UNDER_20_HANDLES],
@@ -440,7 +433,7 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
     // on 1,467 impressions a quarter, Audit A, 3 Oct 2026): which glass for
     // which pour. The long version moved to the SEO body below the grid.
     introBody: [
-      'Neat or over one large cube: a tumbler, so the nose sits close and the ice melts slowly. The Storm and Spice or any long serve: a highball, which keeps the ginger beer lively and gives the lime room. A stirred cocktail: a mixer glass to build it and a rocks glass to serve it. Every glass here is chosen for Expedition Spiced Rum and sold singly or as a pair.',
+      'Neat or over one large cube: a tumbler, so the nose sits close and the ice melts slowly. The Storm and Spice or any long serve: a highball, which keeps the ginger beer lively and gives the lime room. A stirred cocktail: a mixer glass to build it and a rocks glass to serve it. Every glass here is chosen for Expedition Spiced Rum.',
     ],
     seoTitle: 'The Right Glass Changes the Drink',
     seoBody: [
@@ -488,19 +481,19 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
       'Stainless steel hip flasks from Jerry Can Spirits. Built for the field. A proper flask that holds your drink, seals properly, and survives being carried.',
     introBody: [
       'A hip flask should do one thing without failing. Hold your drink, seal properly, and survive being in a jacket pocket.',
-      'The flasks here are stainless steel. No chrome plating to flake. No lining to crack. Built to the same standard as everything else we stock.',
+      'The flask here is stainless steel. No chrome plating to flake. No lining to crack. Built to the same standard as everything else we stock.',
       'Fill it with Expedition Spiced Rum. Put it in your pocket. That is the idea.',
       'Veteran-owned. No shortcuts.',
     ],
     seoTitle: 'Built for the Field. Built to Last.',
     seoBody: [
       'A hip flask is a simple object with one job. It has to seal. It has to survive being sat on, carried in a pack, or pulled out in the field. Chrome-plated flasks flake. Lined flasks crack. Stainless steel does neither.',
-      'These flasks are built to the same standard as everything else we stock. No concessions to appearance over function. Fill it, pocket it, forget it is there until you need it.',
+      'This flask is built to the same standard as everything else we stock. No concessions to appearance over function. Fill it, pocket it, forget it is there until you need it.',
       'Expedition Spiced Rum in a stainless steel flask. That is a proper combination.',
     ],
     pillars: [
       { title: 'Stainless Steel', body: 'No plating to flake. No lining to crack. A material chosen because it does the job without failing, not because it is cheaper to make.' },
-      { title: 'Seals Properly', body: 'The seal is the point. A flask that leaks in your jacket pocket is a flask that failed its one job. These do not.' },
+      { title: 'Seals Properly', body: 'The seal is the point. A flask that leaks in your jacket pocket is a flask that failed its one job. This one does not.' },
       { title: 'The Right Fill', body: 'Expedition Spiced Rum at 40% ABV carries well in a flask. The spice holds. The flavour does not collapse. Fill it and carry it with confidence.' },
     ],
     productHandles: ['stainless-steel-hip-flask-150ml'],
@@ -515,7 +508,6 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
       'Ice dilutes. That is not always what you want.',
       'Spirit stones chill your drink without adding water. Stainless steel, reusable, and chilled in the freezer. The temperature drops. The flavour stays.',
       'For Expedition Spiced Rum sipped slowly, this is the right way to serve it.',
-      'This range will grow. More chilling and serving accessories to follow.',
     ],
     seoTitle: 'Cold Drink. Full Flavour.',
     seoBody: [
@@ -597,7 +589,7 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
       'Stock up on Expedition Spiced Rum and save. Same small-batch British rum, better value. Veteran-owned, macerated by our British partner distillery.',
     introBody: [
       'Stock up and save. The same Expedition Spiced Rum at better value when you order more. Caribbean rum base, real spices. Built properly, every batch.',
-      'Every bottle in an order comes from the same numbered batch, macerated by our British partner distillery. When a batch is gone, it is gone.',
+      'Every bottle is numbered and traceable to its batch, macerated by our British partner distillery. When a batch is gone, it is gone.',
       'If you drink it regularly, this is how you stay stocked.',
     ],
   },
@@ -608,7 +600,7 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
     metaDescription:
       'New expressions from Jerry Can Spirits. Veteran-owned British spirits house. Small-batch, built properly, no shortcuts. Every release earns its place.',
     introBody: [
-      'Every new expression starts from the same place. Real ingredients. No artificial flavourings. Macerated in small batches at our British partner distillery.',
+      'Every new expression starts from the same place. Real ingredients. No artificial flavourings. Macerated in small batches by our British partner distillery.',
       'Expedition Spiced Rum was the first. What comes next is built on the same principles. Nothing ships until it is right.',
       'Sign up below to hear about new releases before they go public.',
     ],

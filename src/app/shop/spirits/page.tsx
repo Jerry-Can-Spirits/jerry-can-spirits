@@ -148,7 +148,7 @@ export default async function SpiritsPage() {
   const itemListSchema = {
     '@context': 'https://schema.org',
     '@type': 'ItemList',
-    name: 'Jerry Can Spirits — Our Spirits',
+    name: 'Jerry Can Spirits: Our Spirits',
     description: 'Small-batch British craft spirits from veteran-owned Jerry Can Spirits.',
     url: 'https://jerrycanspirits.co.uk/shop/spirits/',
     numberOfItems: products.length,
@@ -200,18 +200,6 @@ export default async function SpiritsPage() {
           <br />
           <span className="text-gold-300">Small-Batch, Built Properly</span>
         </SectionHeading>
-
-        <div className="max-w-3xl mx-auto space-y-4 text-left">
-          <p className="text-xl text-parchment-300 leading-relaxed">
-            A spirits house starts with one bottle it can stand behind. Ours is Expedition Spiced Rum: Caribbean rum base: seven real spices, two natural sweeteners, and bourbon oak. No artificial flavourings. Bronze at the IWSC 2026, with a Silver for the serve with Franklin and Sons cola.
-          </p>
-          <p className="text-lg text-parchment-400 leading-relaxed">
-            Macerated by our British partner distillery in limited, numbered batches. When a batch is gone, that run is finished. Two Royal Corps of Signals veterans. 17 years of service between us. The same standards applied here.
-          </p>
-          <p className="text-lg text-parchment-400 leading-relaxed">
-            More expressions will follow as they earn their place. Nothing ships until it is right.
-          </p>
-        </div>
 
         {/* A shop grid stays a grid: two-up on a phone is how people browse a
             range, and a sideways row would hide most of it. */}
@@ -281,6 +269,18 @@ export default async function SpiritsPage() {
             )
           })}
         </div>
+
+        <div className="max-w-3xl mx-auto mt-12 space-y-4 text-left">
+          <p className="text-xl text-parchment-300 leading-relaxed">
+            A spirits house starts with one bottle it can stand behind. Ours is Expedition Spiced Rum: a Caribbean rum base with seven real spices, two natural sweeteners, and bourbon oak. No artificial flavourings. Bronze at the IWSC 2026, with a Silver for the serve with Franklin and Sons cola.
+          </p>
+          <p className="text-lg text-parchment-400 leading-relaxed">
+            Macerated by our British partner distillery in limited, numbered batches. When a batch is gone, that run is finished. Two Royal Corps of Signals veterans. 17 years of service between us. The same standards applied here.
+          </p>
+          <p className="text-lg text-parchment-400 leading-relaxed">
+            More expressions will follow as they earn their place. Nothing ships until it is right.
+          </p>
+        </div>
        </div>
       </section>
 
@@ -295,13 +295,13 @@ export default async function SpiritsPage() {
             </h2>
             <div className="space-y-4 text-parchment-200 leading-relaxed">
               <p>
-                The base is Caribbean rum. We macerate it with real botanicals and let each one take its own time.
+                The base is Caribbean rum, macerated by our British partner distillery with seven real spices, two natural sweeteners, and bourbon oak.
               </p>
               <p>
                 The flavour profile opens with Madagascan vanilla and Ceylon cinnamon, moves into warming ginger and cassia through the middle, and finishes smooth with bourbon oak and a hint of citrus. It's designed to drink neat, work in cocktails, and hold its own over ice.
               </p>
               <p>
-                We're not trying to be everything to everyone. This is spiced rum made by people who actually drink it — with 17 years of military service between us, we know what a proper drink should taste like at the end of a long day.
+                We're not trying to be everything to everyone. This is spiced rum made by people who actually drink it. With 17 years of military service between us, we know what a proper drink should taste like at the end of a long day.
               </p>
             </div>
           </div>
@@ -404,7 +404,7 @@ export default async function SpiritsPage() {
             Try It Yourself
           </h2>
           <p className="text-parchment-300 mb-6 max-w-2xl mx-auto">
-            Join our mailing list for batch release updates, cocktail recipes from the Field Manual, and the occasional story from the road. No spam — just news when there's news.
+            Join our mailing list for batch release updates, cocktail recipes from the Field Manual, and the occasional story from the road. No spam. Just news when there's news.
           </p>
           <Link
             href="/first-pour/"
