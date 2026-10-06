@@ -32,11 +32,12 @@ updates:
     ignore:
       - dependency-name: "*"
         update-types: ["version-update:semver-major"]
-      # 10.75.3 returns 500 from every /api/ route on Workers (the 28 Sep
-      # outage, isolated 5 Oct 2026). Later releases still come through and
-      # face the CI smoke test.
+      # 10.75.2 and 10.75.3 both return 500 from every /api/ route on Workers
+      # (the 28 Sep outage; isolated 5 Oct 2026, 10.75.2 confirmed by CI on #1374).
+      # 10.75.1 is untested and skipped as a precaution. Later
+      # releases still come through and face the CI smoke test.
       - dependency-name: "@sentry/nextjs"
-        versions: ["10.75.3"]
+        versions: ["10.75.1", "10.75.2", "10.75.3"]
 
   # Enable version updates for GitHub Actions
   - package-ecosystem: "github-actions"
