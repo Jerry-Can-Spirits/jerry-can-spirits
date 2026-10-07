@@ -133,11 +133,22 @@ export interface CartLine {
     price: ShopifyMoney;
     compareAtPrice?: ShopifyMoney;
   };
+  attributes?: CartAttribute[];
 }
 
 export interface CartAttribute {
   key: string;
   value: string;
+}
+
+/** A cart mutation Shopify refused, carrying its message for the buyer. */
+export class CartUserError extends Error {
+  code: string | null;
+  constructor(message: string, code: string | null) {
+    super(message);
+    this.name = 'CartUserError';
+    this.code = code;
+  }
 }
 
 export interface Cart {
@@ -561,6 +572,10 @@ const CART_FIELDS = `
       node {
         id
         quantity
+        attributes {
+          key
+          value
+        }
         merchandise {
           ... on ProductVariant {
             id
@@ -643,12 +658,21 @@ export async function createCart(): Promise<Cart> {
 }
 
 // Add item to cart
-export async function addToCart(cartId: string, variantId: string, quantity: number = 1): Promise<Cart> {
+export async function addToCart(
+  cartId: string,
+  variantId: string,
+  quantity: number = 1,
+  attributes: CartAttribute[] = [],
+): Promise<Cart> {
   const query = `
     mutation AddToCart($cartId: ID!, $lines: [CartLineInput!]!) {
       cartLinesAdd(cartId: $cartId, lines: $lines) {
         cart {
           ${CART_FIELDS}
+        }
+        userErrors {
+          code
+          message
         }
       }
     }
@@ -660,6 +684,7 @@ export async function addToCart(cartId: string, variantId: string, quantity: num
       {
         merchandiseId: variantId,
         quantity,
+        ...(attributes.length > 0 ? { attributes } : {}),
       },
     ],
   };
@@ -670,6 +695,13 @@ export async function addToCart(cartId: string, variantId: string, quantity: num
     if (errors) {
       console.error('GraphQL Errors:', errors);
       throw new Error('Failed to add to cart');
+    }
+
+    // Shopify refuses a gift card line with bad recipient details here
+    // (GIFT_CARD_RECIPIENT_INVALID, API 2026-01); pass its words through.
+    const userErrors: Array<{ code: string | null; message: string }> = data?.cartLinesAdd?.userErrors ?? []
+    if (userErrors.length > 0) {
+      throw new CartUserError(userErrors[0].message, userErrors[0].code)
     }
 
     if (!data?.cartLinesAdd?.cart) {

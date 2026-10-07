@@ -41,3 +41,17 @@ export function christmasCutoffLine(now = new Date()): string | null {
   })
   return `Order by ${DISPATCH_CUTOFF_LABEL} on ${day} for delivery before Christmas`
 }
+
+/**
+ * After the last order date and up to Christmas Eve, the post can no longer
+ * make it but a scheduled gift card can. Null outside that window or while the
+ * date is unset. The gift card must be live before the date is set.
+ */
+export function christmasGiftCardLine(now = new Date()): string | null {
+  const { lastOrderDate } = CHRISTMAS_CUTOFF
+  if (!lastOrderDate) return null
+  const today = now.toISOString().slice(0, 10)
+  const christmasEve = `${lastOrderDate.slice(0, 4)}-12-24`
+  if (today <= lastOrderDate || today > christmasEve) return null
+  return 'Too late for the post. Not for a gift card. Choose Christmas Day and it arrives that morning.'
+}

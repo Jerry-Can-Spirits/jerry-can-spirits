@@ -7,6 +7,8 @@ import { GB_SHIPPING_DETAILS } from '@/lib/shippingSchema'
 import { productOffer, priceValidUntil, PRICE_VALID_FROM, productGtin, MERCHANT_RETURN_POLICY, ORG_REF } from '@/lib/jsonLd'
 import { FREE_SHIPPING_THRESHOLD_GBP, STANDARD_SHIPPING_LABEL } from '@/lib/pricing'
 import ProductVariantSelector from '@/components/ProductVariantSelector'
+import GiftCardForm from '@/components/GiftCardForm'
+import { isGiftCardProductType } from '@/lib/gift-card'
 import ProductImageGallery from '@/components/ProductImageGallery'
 import StructuredData from '@/components/StructuredData'
 import ProductPageTracking from '@/components/ProductPageTracking'
@@ -87,6 +89,9 @@ interface SanityProduct {
 function getCategoryFromProductType(productType?: string): { label: string; href: string; trackingCategory: string } {
   const type = (productType || '').toLowerCase()
 
+  if (isGiftCardProductType(productType)) {
+    return { label: 'Gift Sets', href: '/shop/gift-sets/', trackingCategory: 'Gift Card' }
+  }
   if (type.includes('spirit') || type.includes('rum') || type.includes('alcohol') || type.includes('drink')) {
     return { label: 'Spirits', href: '/shop/spirits/', trackingCategory: 'Spirits' }
   }
@@ -380,6 +385,8 @@ export default async function ProductPage({
 
   // Determine if this is a spirit/alcohol product
   const isSpirit = category.trackingCategory === 'Spirits'
+  // A gift card is emailed, never shipped: no delivery, returns, cross-sell or quick-add.
+  const isGiftCard = isGiftCardProductType(product.productType)
 
   // Curated review quotes from Sanity (empty = placeholder).
   const productReviews = sanityReviews
@@ -436,7 +443,7 @@ export default async function ProductPage({
       url: 'https://jerrycanspirits.co.uk',
       logo: 'https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/images-logo-webp/public',
     },
-    category: isSpirit ? 'Food & Beverages > Beverages > Alcoholic Beverages > Spirits > Rum' : 'Home & Garden > Kitchen & Dining > Barware',
+    category: isGiftCard ? 'Arts & Entertainment > Party & Celebration > Gift Giving > Gift Cards & Certificates' : isSpirit ? 'Food & Beverages > Beverages > Alcoholic Beverages > Spirits > Rum' : 'Home & Garden > Kitchen & Dining > Barware',
     countryOfOrigin: {
       '@type': 'Country',
       name: 'United Kingdom',
@@ -450,8 +457,7 @@ export default async function ProductPage({
       url: `https://jerrycanspirits.co.uk/shop/product/${handle}/`,
       priceValidUntil: priceValidUntil(),
       validFrom: PRICE_VALID_FROM,
-      shippingDetails: GB_SHIPPING_DETAILS,
-      hasMerchantReturnPolicy: MERCHANT_RETURN_POLICY,
+      ...(isGiftCard ? {} : { shippingDetails: GB_SHIPPING_DETAILS, hasMerchantReturnPolicy: MERCHANT_RETURN_POLICY }),
       seller: ORG_REF,
     }),
     manufacturer: ORG_REF,
@@ -651,6 +657,14 @@ export default async function ProductPage({
             <div id="buy-section" className="pt-6">
               {product.variants && product.variants.length > 0 ? (
                 product.variants.some(v => v.availableForSale) ? (
+                  isGiftCard ? (
+                    <GiftCardForm
+                      variants={product.variants}
+                      productTitle={displayProductTitle(product.title)}
+                      productId={product.id}
+                      currencyCode={product.priceRange.minVariantPrice.currencyCode}
+                    />
+                  ) : (
                   <ProductVariantSelector
                     variants={product.variants}
                     productTitle={displayProductTitle(product.title)}
@@ -658,6 +672,7 @@ export default async function ProductPage({
                     productImages={product.images}
                     currencyCode={product.priceRange.minVariantPrice.currencyCode}
                   />
+                  )
                 ) : (
                   <div className="space-y-4">
                     <button
@@ -683,7 +698,9 @@ export default async function ProductPage({
               )}
 
               {/* Complete the serve — curated cross-sell at the decision point */}
-              <CompleteTheServe items={completeTheServeItems} primaryVariantId={completeTheServePrimaryVariantId} />
+              {!isGiftCard && (
+                <CompleteTheServe items={completeTheServeItems} primaryVariantId={completeTheServePrimaryVariantId} />
+              )}
             </div>
           </div>
         </div>
@@ -708,7 +725,7 @@ export default async function ProductPage({
             )}
 
             <div className="space-y-6">
-              {/* Product Features/Highlights - Category-specific content */}
+              {!isGiftCard && (
               <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
                 <h3 className="text-lg font-semibold text-gold-300 mb-4">What You're Getting</h3>
                 <ul className="list-disc pl-5 space-y-2 text-parchment-300">
@@ -745,6 +762,7 @@ export default async function ProductPage({
                   )}
                 </ul>
               </div>
+              )}
 
               {/* Curated collection links (internal linking + wayfinding) */}
               <FindItIn handle={handle} />
@@ -757,7 +775,9 @@ export default async function ProductPage({
             <TrustStrip showIwsc={!AWARDED_HANDLES.includes(handle)} />
             <RecognitionRow />
             <p className="text-center text-sm text-parchment-400 tracking-wide">
-              Ships for {STANDARD_SHIPPING_LABEL}. Free over £{FREE_SHIPPING_THRESHOLD_GBP}. Secure checkout, express payment available.
+              {isGiftCard
+                ? 'Sent by email. Secure checkout, express payment available.'
+                : `Ships for ${STANDARD_SHIPPING_LABEL}. Free over £${FREE_SHIPPING_THRESHOLD_GBP}. Secure checkout, express payment available.`}
               {AWARDED_HANDLES.includes(handle) ? '' : ' 5% of profits goes to forces charities.'}
             </p>
           </div>
@@ -986,7 +1006,7 @@ export default async function ProductPage({
         const multiVariant =
           (product.variants?.length ?? 0) > 1 &&
           (product.variants?.some(v => v.title !== 'Default Title') ?? false)
-        return stickyVariant ? (
+        return stickyVariant && !isGiftCard ? (
           <StickyAddToCart
             variantId={stickyVariant.id}
             productTitle={displayProductTitle(product.title)}

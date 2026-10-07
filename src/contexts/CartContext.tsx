@@ -10,6 +10,7 @@ import {
   applyDiscount as shopifyApplyDiscount,
   updateCartAttributes as shopifyUpdateCartAttributes,
   getCart,
+  CartUserError,
   type Cart,
   type CartAttribute,
 } from '@/lib/shopify'
@@ -37,7 +38,9 @@ interface CartContextType {
   showError: (message: string) => void
   openCart: () => void
   closeCart: () => void
-  addToCart: (variantId: string, quantity?: number) => Promise<void>
+  // Resolves true once the line is in the cart. Line attributes carry a gift
+  // card's recipient; most callers pass none.
+  addToCart: (variantId: string, quantity?: number, attributes?: CartAttribute[]) => Promise<boolean>
   updateQuantity: (lineId: string, quantity: number) => Promise<void>
   removeItem: (lineId: string) => Promise<void>
   applyDiscountCode: (code: string) => Promise<void>
@@ -136,11 +139,11 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     setIsCartOpen(false)
   }, [])
 
-  const addToCart = useCallback(async (variantId: string, quantity: number = 1) => {
+  const addToCart = useCallback(async (variantId: string, quantity: number = 1, attributes: CartAttribute[] = []) => {
     // Guard against concurrent calls — two synchronous clicks would read the same
     // cart snapshot and create two separate Shopify carts. The ref is set
     // immediately, before React batches the setIsLoading state update.
-    if (addInFlightRef.current) return
+    if (addInFlightRef.current) return false
     addInFlightRef.current = true
     setIsLoading(true)
     try {
@@ -154,7 +157,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
       currentCart = await applyReferralCode(currentCart)
 
-      const updatedCart = await shopifyAddToCart(currentCart.id, variantId, quantity)
+      const updatedCart = await shopifyAddToCart(currentCart.id, variantId, quantity, attributes)
       setCart(updatedCart)
 
       // Refresh GA4 stitching attributes onto the cart for server-side purchase
@@ -167,6 +170,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
       // Open cart drawer to show item was added
       setIsCartOpen(true)
+      return true
     } catch (error) {
       console.error('[CartContext] Error adding to cart:', error)
       // Do NOT destroy an existing populated cart on a transient failure (a
@@ -180,7 +184,12 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         localStorage.removeItem('shopify_cart_id')
         setCart(null)
       }
-      setCartError("We couldn't add that to your cart. Please try again.")
+      setCartError(
+        error instanceof CartUserError
+          ? error.message
+          : "We couldn't add that to your cart. Please try again."
+      )
+      return false
     } finally {
       setIsLoading(false)
       addInFlightRef.current = false
