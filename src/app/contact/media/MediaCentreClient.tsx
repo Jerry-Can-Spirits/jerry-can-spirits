@@ -1147,37 +1147,8 @@ Based in the UK, Jerry Can Spirits® is a small operation run by two mates who c
         </div>
       </section>
 
-      {/* ==================== LATEST NEWS SECTION ==================== */}
-      <section className="band-dark py-16">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <section>
-            <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
-              <h2 className="text-2xl font-serif font-bold text-parchment-50 mb-6 text-center">
-                Latest News & Press Releases
-              </h2>
-              <div className="text-center">
-                <div className="bg-jerry-green-700/40 rounded-lg p-6 border border-gold-500/20">
-                  <p className="text-parchment-200 mb-4">
-                    We&apos;re a new brand, so press releases and news will be added here as we grow. Follow us on social media for the latest updates.
-                  </p>
-                  <p className="text-parchment-300 text-sm">
-                    Media professionals can subscribe to our press updates by contacting{' '}
-                    <a
-                      href="mailto:press@jerrycanspirits.co.uk?subject=Press Updates Subscription"
-                      className="text-gold-300 hover:text-gold-200 underline transition-colors duration-200"
-                    >
-                      press@jerrycanspirits.co.uk
-                    </a>
-                  </p>
-                </div>
-              </div>
-            </div>
-          </section>
-        </div>
-      </section>
-
       {/* ==================== MEDIA INQUIRY FORM ==================== */}
-      <section className="band-light py-16">
+      <section className="band-dark py-16">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <section id="enquiry-form" className="scroll-mt-24">
             <SectionHeading>
@@ -1337,7 +1308,7 @@ Based in the UK, Jerry Can Spirits® is a small operation run by two mates who c
       </section>
 
       {/* ==================== MEDIA GUIDELINES ==================== */}
-      <section className="band-dark py-16">
+      <section className="band-light py-16">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <section>
             <SectionHeading>
