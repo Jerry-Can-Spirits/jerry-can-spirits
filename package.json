@@ -70,7 +70,7 @@
     "tsx": "^4.23.15",
     "typescript": "^5",
     "vitest": "^4.1.11",
-    "wrangler": "^4.147.0"
+    "wrangler": "^4.148.0"
   },
   "overrides": {
     "hosted-git-info": "^7.0.0",

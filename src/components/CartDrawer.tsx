@@ -13,6 +13,7 @@ import { trackEventDual } from '@/lib/meta-capi'
 import { formatPrice } from '@/lib/format-price'
 import ChristmasCutoffLine from '@/components/ChristmasCutoffLine'
 import { displayProductTitle } from '@/lib/product-title'
+import { giftCardLineSummary } from '@/lib/gift-card'
 
 // Helper to format price
 
@@ -393,6 +394,11 @@ export default function CartDrawer() {
                         {line.merchandise.title !== 'Default Title' && (
                           <p className="text-sm text-parchment-400 truncate">
                             {line.merchandise.title}
+                          </p>
+                        )}
+                        {giftCardLineSummary(line.attributes, new Date()) && (
+                          <p className="text-sm text-parchment-300 truncate">
+                            {giftCardLineSummary(line.attributes, new Date())}
                           </p>
                         )}
                         <div className="flex items-baseline gap-2 mt-1">
