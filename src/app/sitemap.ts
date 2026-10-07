@@ -471,12 +471,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'weekly',
       priority: 0.8,
     },
-    {
-      url: `${baseUrl}/shop/clothing/`,
-      lastModified: STATIC_LAST_MODIFIED,
-      changeFrequency: 'weekly',
-      priority: 0.8,
-    },
     // SEO category pages
     {
       url: `${baseUrl}/shop/rum-gifts/`,

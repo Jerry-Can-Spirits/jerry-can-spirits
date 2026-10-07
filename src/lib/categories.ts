@@ -592,6 +592,9 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
       'Every bottle is numbered and traceable to its batch, macerated by our British partner distillery. When a batch is gone, it is gone.',
       'If you drink it regularly, this is how you stay stocked.',
     ],
+    // No 'bundles' collection exists in Shopify, so the page reads the pack by
+    // handle; without this it rendered empty.
+    productHandles: ['jerry-can-spirits-expedition-pack-spiced-rum-6-bottles'],
   },
 
   'new-releases': {

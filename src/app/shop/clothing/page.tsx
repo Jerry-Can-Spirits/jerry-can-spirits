@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { notFound } from 'next/navigation'
 import Image from 'next/image'
 import { getProductsByCollection, type ShopifyProduct } from '@/lib/shopify'
 import ShopError from '@/components/ShopError'
@@ -55,71 +56,10 @@ export default async function ClothingPage() {
     return <ShopError />
   }
 
-  // Empty state - show coming soon message
+  // No clothing is on sale, so the page is not found rather than a
+  // "coming soon" placeholder. It returns once the collection has products.
   if (products.length === 0) {
-    return (
-      <main className="min-h-screen py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-2xl mx-auto text-center space-y-6">
-            {/* Breadcrumb */}
-            <div className="mb-8">
-              <Breadcrumbs
-                items={[
-                  { label: 'Shop', href: '/shop' },
-                  { label: 'Expedition Gear' },
-                ]}
-              />
-            </div>
-
-            <div className="inline-block px-4 py-2 bg-jerry-green-800/60 backdrop-blur-sm rounded-full border border-gold-500/30 mb-6">
-              <span className="text-gold-300 text-sm font-semibold uppercase tracking-widest">
-                Shopify Connected ✓
-              </span>
-            </div>
-
-            <h1 className="text-4xl sm:text-5xl font-serif font-bold text-white mb-6">
-              Expedition Gear Coming Soon
-            </h1>
-
-            <p className="text-xl text-parchment-200">
-              Adventure-ready apparel and branded merchandise for the modern explorer. Quality gear
-              that performs wherever your journey takes you.
-            </p>
-
-            <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20 text-left mt-8">
-              <p className="text-parchment-300 text-sm mb-4 font-semibold">
-                What's Coming:
-              </p>
-              <ul className="space-y-2 text-parchment-300 text-sm ml-2">
-                <li className="flex items-start gap-3">
-                  <span className="text-gold-500 mt-0.5">✓</span>
-                  <span>Premium branded apparel and accessories</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <span className="text-gold-500 mt-0.5">✓</span>
-                  <span>Adventure-tested materials and designs</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <span className="text-gold-500 mt-0.5">✓</span>
-                  <span>Limited edition expedition collectibles</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <span className="text-gold-500 mt-0.5">✓</span>
-                  <span>Perfect for adventurers and enthusiasts alike</span>
-                </li>
-              </ul>
-            </div>
-
-            <Link
-              href="/first-pour/"
-              className="inline-block px-8 py-3 bg-gold-500 text-jerry-green-900 font-semibold rounded-lg hover:bg-gold-400 transition-colors mt-8"
-            >
-              Get Notified at Launch
-            </Link>
-          </div>
-        </div>
-      </main>
-    )
+    notFound()
   }
 
   const breadcrumbSchema = {

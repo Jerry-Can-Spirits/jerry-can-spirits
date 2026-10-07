@@ -51,7 +51,6 @@ const CURATED_HANDLES: Array<{ handle: string; title?: string; description?: str
   { handle: 'new-releases' },
   { handle: 'spirits', title: 'Spirits', description: 'Expedition Spiced Rum. 40% ABV, 700ml, veteran-owned.' },
   { handle: 'barware', title: 'Barware', description: 'Professional bar tools and glassware for the home bar.' },
-  { handle: 'clothing', title: 'Clothing', description: 'Expedition apparel built for the field.' },
 ]
 
 function titleFromHandle(handle: string): string {
