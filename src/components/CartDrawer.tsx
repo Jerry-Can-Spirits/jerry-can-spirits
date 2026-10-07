@@ -13,7 +13,7 @@ import { trackEventDual } from '@/lib/meta-capi'
 import { formatPrice } from '@/lib/format-price'
 import ChristmasCutoffLine from '@/components/ChristmasCutoffLine'
 import { displayProductTitle } from '@/lib/product-title'
-import { giftCardLineSummary } from '@/lib/gift-card'
+import { giftCardLineSummary, isGiftCardProductType } from '@/lib/gift-card'
 
 // Helper to format price
 
@@ -391,7 +391,10 @@ export default function CartDrawer() {
                         >
                           {displayProductTitle(line.merchandise.product.title)}
                         </Link>
-                        {line.merchandise.title !== 'Default Title' && (
+                        {/* A gift card's variant title is its amount ("£25.00"), which the
+                            price beside it already shows. */}
+                        {line.merchandise.title !== 'Default Title' &&
+                          !isGiftCardProductType(line.merchandise.product.productType) && (
                           <p className="text-sm text-parchment-400 truncate">
                             {line.merchandise.title}
                           </p>
