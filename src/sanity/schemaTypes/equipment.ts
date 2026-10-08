@@ -63,7 +63,7 @@ export default defineType({
       name: 'longDescription',
       title: 'Long Description',
       type: 'array',
-      of: [{type: 'block'}],
+      of: [{type: 'block'}, {type: 'comparisonTable'}],
       description: 'Rich editorial body — supports headings, bold, lists and inline links'
     }),
     defineField({
@@ -283,6 +283,12 @@ export default defineType({
       title: 'Author',
       type: 'string',
       description: 'Who wrote or verified this content (e.g., "Dan Freeman", "Jerry Can Spirits Team")'
+    }),
+    defineField({
+      name: 'updatedAt',
+      title: 'Last Updated',
+      type: 'datetime',
+      description: 'Set only when the content materially changes. Shown on the page as "Updated <date>" and used as the structured-data modified date.'
     }),
 
     // Video Content

@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { PortableText } from 'next-sanity'
 import type { PortableTextBlock, PortableTextComponents } from 'next-sanity'
+import ComparisonTable, { type ComparisonTableData } from '@/components/ComparisonTable'
 
 // Renders guide section bodies (`contentRich`). Extends the Field Manual
 // portable-text treatment with the `internalLink` annotation, whose reference
@@ -33,6 +34,13 @@ const INTERNAL_ROUTES: Record<string, (slug: string) => string> = {
 }
 
 const components: PortableTextComponents = {
+  types: {
+    comparisonTable: ({ value }) => (
+      <div className="my-8 first:mt-0 last:mb-0">
+        <ComparisonTable {...(value as ComparisonTableData)} />
+      </div>
+    ),
+  },
   block: {
     normal: ({ children }) => (
       <p className="text-parchment-300 leading-relaxed mb-5 last:mb-0">{children}</p>

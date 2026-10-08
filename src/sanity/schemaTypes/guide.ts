@@ -180,7 +180,8 @@ export default defineType({
                       }
                     ]
                   }
-                }
+                },
+                { type: 'comparisonTable' }
               ]
             }),
             defineField({
@@ -241,7 +242,8 @@ export default defineType({
                               }
                             ]
                           }
-                        }
+                        },
+                        { type: 'comparisonTable' }
                       ]
                     })
                   ],

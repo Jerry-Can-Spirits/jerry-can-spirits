@@ -78,6 +78,7 @@ interface Ingredient {
   relatedGuides?: GuideLink[]
   longDescription?: PortableTextBlock[]
   author?: string
+  updatedAt?: string
 }
 
 const categoryConfig: Record<string, string> = {
@@ -170,6 +171,7 @@ export default async function IngredientDetailPage({ params }: { params: Promise
     description: ingredient.description,
     image: ingredient.image ? urlFor(ingredient.image).url() : undefined,
     datePublished: ingredient._createdAt,
+    dateModified: ingredient.updatedAt,
     author: ORG_REF,
     publisher: ORG_REF,
     mainEntityOfPage: { '@type': 'WebPage', '@id': `https://jerrycanspirits.co.uk/field-manual/ingredients/${slug}/` },
@@ -633,9 +635,17 @@ export default async function IngredientDetailPage({ params }: { params: Promise
             )}
 
             {/* Author byline */}
-            {ingredient.author && (
+            {(ingredient.author || ingredient.updatedAt) && (
               <p className="text-parchment-500 text-sm text-right">
-                Guide by {ingredient.author}
+                {ingredient.author && <>Guide by {ingredient.author}</>}
+                {ingredient.author && ingredient.updatedAt && <> · </>}
+                {ingredient.updatedAt && (
+                  <>Updated {new Date(ingredient.updatedAt).toLocaleDateString('en-GB', {
+                    day: 'numeric',
+                    month: 'long',
+                    year: 'numeric'
+                  })}</>
+                )}
               </p>
             )}
 

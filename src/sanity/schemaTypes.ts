@@ -9,7 +9,8 @@ import tradeHelp from './schemaTypes/tradeHelp'
 import cartUpsell from './schemaTypes/cartUpsell'
 import person from './schemaTypes/person'
 import review from './schemaTypes/review'
+import comparisonTable from './schemaTypes/comparisonTable'
 
 export const schema: { types: SchemaTypeDefinition[] } = {
-  types: [cocktail, ingredient, equipment, product, guide, tradeHelp, cartUpsell, person, review],
+  types: [cocktail, ingredient, equipment, product, guide, tradeHelp, cartUpsell, person, review, comparisonTable],
 }
