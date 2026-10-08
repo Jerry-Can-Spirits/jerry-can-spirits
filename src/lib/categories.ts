@@ -61,8 +61,8 @@ const FAQ_SEND_DIRECT: CategoryFaq = {
   answer:
     'Yes. Enter their address at checkout. One thing worth knowing: every delivery is age-verified, so the person receiving it must be 18 or over and may be asked to show photo ID to the courier.',
 }
-// No gift-message FAQ: the cart captures a message and it is visible in
-// Shopify, but nothing prints it or puts it in the parcel (Dan, 18 Sep 2026).
+// No gift-message FAQ: nothing prints a message or puts it in the parcel
+// (Dan, 18 Sep 2026), and the cart stopped asking for one on 8 Oct 2026.
 // Promising it on the page would describe a mechanism that does not exist.
 const FAQ_DELIVERY_TIME: CategoryFaq = {
   question: 'How long does delivery take?',
