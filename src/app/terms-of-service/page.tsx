@@ -40,7 +40,7 @@ export const metadata: Metadata = {
 }
 
 export default function TermsOfService() {
-  const lastUpdated = '31 August 2026'
+  const lastUpdated = '8 October 2026'
 
   return (
     <>
@@ -197,6 +197,13 @@ export default function TermsOfService() {
                 </p>
                 <p className="text-white">
                   This does not affect your statutory rights in respect of faulty, damaged, or incorrectly dispatched goods, which are covered under the Consumer Rights Act 2015.
+                </p>
+
+                <h3 className="text-xl font-serif font-semibold text-white mt-6 mb-3">
+                  5.5 Subscriptions
+                </h3>
+                <p className="text-white">
+                  Subscribe and save sends a bottle of Expedition Spiced Rum every one, two or three months, at the subscription price shown when you subscribe. You pay for each delivery when it is dispatched, from the card you subscribed with. There is no minimum term: you can skip a delivery, pause, change how often it arrives, or cancel at any time from your account, up to the day the next payment is taken. If the price changes, we will email you at least 14 days before the next payment, and you can cancel before it applies. If we cannot supply the rum, we will pause your subscription and tell you by email; you will never be charged for a delivery we cannot make. Our returns policy applies to every delivery, and every delivery is age-verified at the door.
                 </p>
               </section>
             </div>
