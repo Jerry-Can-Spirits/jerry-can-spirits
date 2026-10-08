@@ -3,7 +3,7 @@
 import { useCart } from '@/contexts/CartContext'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useState, useEffect, useRef, useCallback } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import CartUpsell from './CartUpsell'
 import CarbonOffsetToggle from './CarbonOffsetToggle'
 import PresentationBoxUpsell from './PresentationBoxUpsell'
@@ -25,7 +25,6 @@ export default function CartDrawer() {
     updateQuantity,
     applyDiscountCode,
     removeDiscountCode,
-    updateAttributes,
     isLoading,
     loadFailed,
     retryLoad,
@@ -50,83 +49,6 @@ export default function CartDrawer() {
   const drawerRef = useRef<HTMLDivElement>(null)
   const closeButtonRef = useRef<HTMLButtonElement>(null)
   const triggerRef = useRef<HTMLElement | null>(null)
-
-  // Gift state
-  const [isGift, setIsGift] = useState(false)
-  const [giftMessage, setGiftMessage] = useState('')
-  const [giftRecipient, setGiftRecipient] = useState('')
-  const debounceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
-
-  // Cancel any pending gift-attribute sync if the drawer unmounts. Without
-  // this, a debounced setTimeout would still fire and update an attribute on
-  // a cart the user may have already abandoned.
-  useEffect(() => {
-    return () => {
-      if (debounceTimerRef.current) {
-        clearTimeout(debounceTimerRef.current)
-        debounceTimerRef.current = null
-      }
-    }
-  }, [])
-
-  // Hydrate gift state from cart attributes on load
-  useEffect(() => {
-    if (!cart?.attributes) return
-    const attrs = cart.attributes
-    const giftAttr = attrs.find(a => a.key === '_gift')
-    const msgAttr = attrs.find(a => a.key === '_gift_message')
-    const recipientAttr = attrs.find(a => a.key === '_gift_recipient')
-
-    if (giftAttr?.value === 'true') {
-      setIsGift(true)
-      setGiftMessage(msgAttr?.value || '')
-      setGiftRecipient(recipientAttr?.value || '')
-    }
-  }, [cart?.attributes])
-
-  // Debounced sync of gift attributes to Shopify
-  const syncGiftAttributes = useCallback((gift: boolean, message: string, recipient: string) => {
-    if (debounceTimerRef.current) {
-      clearTimeout(debounceTimerRef.current)
-    }
-    debounceTimerRef.current = setTimeout(() => {
-      updateAttributes([
-        { key: '_gift', value: gift ? 'true' : '' },
-        { key: '_gift_message', value: gift ? message : '' },
-        { key: '_gift_recipient', value: gift ? recipient : '' },
-      ])
-    }, 800)
-  }, [updateAttributes])
-
-  // Flush pending debounce immediately (called before checkout)
-  const flushGiftAttributes = useCallback(() => {
-    if (debounceTimerRef.current) {
-      clearTimeout(debounceTimerRef.current)
-      debounceTimerRef.current = null
-    }
-    return updateAttributes([
-      { key: '_gift', value: isGift ? 'true' : '' },
-      { key: '_gift_message', value: isGift ? giftMessage : '' },
-      { key: '_gift_recipient', value: isGift ? giftRecipient : '' },
-    ])
-  }, [updateAttributes, isGift, giftMessage, giftRecipient])
-
-  const handleGiftToggle = () => {
-    const newVal = !isGift
-    setIsGift(newVal)
-    syncGiftAttributes(newVal, giftMessage, giftRecipient)
-  }
-
-  const handleGiftMessageChange = (value: string) => {
-    if (value.length > 200) return
-    setGiftMessage(value)
-    syncGiftAttributes(isGift, value, giftRecipient)
-  }
-
-  const handleGiftRecipientChange = (value: string) => {
-    setGiftRecipient(value)
-    syncGiftAttributes(isGift, giftMessage, value)
-  }
 
   // Focus management: save trigger, move focus into drawer on open, restore on close
   useEffect(() => {
@@ -603,70 +525,6 @@ export default function CartDrawer() {
                   </div>
                 </div>
 
-                {/* Gift Toggle */}
-                <div className="space-y-3">
-                  <button
-                    type="button"
-                    onClick={handleGiftToggle}
-                    aria-expanded={isGift}
-                    aria-controls="gift-panel"
-                    className="flex items-center gap-3 w-full min-h-[44px] group"
-                  >
-                    {/* Gift icon */}
-                    <svg
-                      className={`w-5 h-5 transition-colors ${isGift ? 'text-gold-400' : 'text-parchment-400 group-hover:text-parchment-300'}`}
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                      aria-hidden="true"
-                    >
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7" />
-                    </svg>
-                    <span className={`text-sm font-medium transition-colors ${isGift ? 'text-gold-300' : 'text-parchment-300 group-hover:text-parchment-200'}`}>
-                      This is a gift
-                    </span>
-                    {/* Chevron — expanded when this is a gift */}
-                    <svg className={`ml-auto w-4 h-4 text-parchment-400 transition-transform ${isGift ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                    </svg>
-                  </button>
-
-                  {/* Gift fields — the controlled panel; `hidden` collapses it. */}
-                  <div id="gift-panel" hidden={!isGift} className="space-y-3">
-                      <div>
-                        <label htmlFor="gift-recipient" className="block text-xs text-parchment-400 mb-1">
-                          Recipient name (optional)
-                        </label>
-                        <input
-                          type="text"
-                          id="gift-recipient"
-                          name="gift-recipient"
-                          value={giftRecipient}
-                          onChange={(e) => handleGiftRecipientChange(e.target.value)}
-                          placeholder="Who is this for?"
-                          className="w-full px-4 py-2 bg-jerry-green-800/50 border border-gold-500/20 rounded-lg text-white placeholder-parchment-400 focus:outline-hidden focus:border-gold-400 text-base"
-                        />
-                      </div>
-                      <div>
-                        <label htmlFor="gift-message" className="block text-xs text-parchment-400 mb-1">
-                          Gift message
-                        </label>
-                        <textarea
-                          id="gift-message"
-                          name="gift-message"
-                          value={giftMessage}
-                          onChange={(e) => handleGiftMessageChange(e.target.value)}
-                          placeholder="Add a personal message..."
-                          rows={3}
-                          className="w-full px-4 py-2 bg-jerry-green-800/50 border border-gold-500/20 rounded-lg text-white placeholder-parchment-400 focus:outline-hidden focus:border-gold-400 text-base resize-none"
-                        />
-                        <p className="text-xs text-parchment-500 text-right mt-1">
-                          {giftMessage.length}/200
-                        </p>
-                      </div>
-                    </div>
-                </div>
-
                 {/* Carbon Offset — plant a UK tree (+£1) */}
                 <CarbonOffsetToggle />
 
@@ -714,14 +572,7 @@ export default function CartDrawer() {
               {/* Main Checkout Button */}
               <a
                 href={getCheckoutUrl()}
-                onClick={(e) => {
-                  // Flush any pending gift attribute updates before checkout
-                  if (isGift && debounceTimerRef.current) {
-                    e.preventDefault()
-                    flushGiftAttributes().then(() => {
-                      window.location.href = getCheckoutUrl()
-                    })
-                  }
+                onClick={() => {
                   // Track InitiateCheckout via Meta Pixel + CAPI (consent-gated inside trackEventDual)
                   trackEventDual('InitiateCheckout', {
                     content_ids: cart.lines.map(line => line.merchandise.id.split('/').pop() ?? line.merchandise.id),
