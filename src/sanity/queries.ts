@@ -346,11 +346,15 @@ export const productByHandleQuery = `*[_type == "product" && (slug.current == $s
   }
 }`
 
+// Guides whose URL 301s to another guide (next.config.ts redirects). Their
+// Sanity docs are kept, so every guide listing filters them out.
+const REDIRECTED_GUIDE_FILTER = `!(slug.current in ["how-to-shake-cocktail"])`
+
 // Sitemap query - slug + last-modified for sitemap freshness
-export const guidesSitemapQuery = `*[_type == "guide" && defined(slug.current)] { slug, _updatedAt }`
+export const guidesSitemapQuery = `*[_type == "guide" && defined(slug.current) && ${REDIRECTED_GUIDE_FILTER}] { slug, _updatedAt }`
 
 // Optimized listing query - only fetches fields needed for preview cards
-export const guidesListQuery = `*[_type == "guide"] | order(publishedAt desc, _createdAt desc) {
+export const guidesListQuery = `*[_type == "guide" && ${REDIRECTED_GUIDE_FILTER}] | order(publishedAt desc, _createdAt desc) {
   _id,
   title,
   slug,
@@ -494,7 +498,7 @@ export const fieldManualCountsQuery = `{
 
 // Adjacent guides query for prev/next navigation
 export const adjacentGuidesQuery = `{
-  "prev": *[_type == "guide" && (
+  "prev": *[_type == "guide" && ${REDIRECTED_GUIDE_FILTER} && (
     publishedAt < $currentDate ||
     (publishedAt == $currentDate && _createdAt < $currentCreatedAt)
   )] | order(publishedAt desc, _createdAt desc)[0] {
@@ -503,7 +507,7 @@ export const adjacentGuidesQuery = `{
     slug,
     category
   },
-  "next": *[_type == "guide" && (
+  "next": *[_type == "guide" && ${REDIRECTED_GUIDE_FILTER} && (
     publishedAt > $currentDate ||
     (publishedAt == $currentDate && _createdAt > $currentCreatedAt)
   )] | order(publishedAt asc, _createdAt asc)[0] {

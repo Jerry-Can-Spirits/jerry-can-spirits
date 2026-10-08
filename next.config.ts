@@ -330,6 +330,15 @@ const nextConfig: NextConfig = {
         destination: '/field-manual/ingredients/fever-tree-ginger-ale/',
         permanent: true,
       },
+      // The shaking guide was merged into the shaken-or-stirred guide (8 Oct
+      // 2026): the two competed and the shaking guide was crawled but not
+      // indexed. Its Sanity doc is kept; REDIRECTED_GUIDE_FILTER in
+      // src/sanity/queries.ts keeps it out of the sitemap and listings.
+      {
+        source: '/guides/how-to-shake-cocktail/:path*',
+        destination: '/guides/stirring-vs-shaking/',
+        permanent: true,
+      },
       // The slate coaster's original Shopify handle; Google still crawls the
       // old URL from memory and reports a soft 404 (GSC, 28 Jul 2026).
       {
