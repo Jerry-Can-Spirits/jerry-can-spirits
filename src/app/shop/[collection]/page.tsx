@@ -16,6 +16,7 @@ import ScrollRow from '@/components/ScrollRow'
 import SectionHeading from '@/components/SectionHeading'
 import HouseSpiritCard from '@/components/HouseSpiritCard'
 import { displayProductTitle } from '@/lib/product-title'
+import { isGiftCardProductType } from '@/lib/gift-card'
 
 // ISR — pure Shopify catalogue data (no per-request state), so these SEO
 // collection pages edge-cache and revalidate hourly instead of a live Shopify
@@ -30,6 +31,17 @@ export function generateStaticParams() {
 }
 
 const BASE_URL = 'https://jerrycanspirits.co.uk'
+
+// A gift card is sent by email and is not returnable, so its offer carries no
+// shipping or returns details, matching its product page.
+function collectionOfferExtras(p: ShopifyProduct): Record<string, unknown> {
+  const extras = merchantOfferExtras(`${BASE_URL}/shop/product/${p.handle}/`)
+  if (isGiftCardProductType(p.productType)) {
+    delete extras.shippingDetails
+    delete extras.hasMerchantReturnPolicy
+  }
+  return extras
+}
 
 
 function slugToTitle(slug: string): string {
@@ -134,7 +146,7 @@ export default async function CollectionPage({
           image: p.images?.[0]?.url,
           brand: { '@type': 'Brand', name: 'Jerry Can Spirits' },
           ...productGtin(p.handle),
-          offers: productOffer(p, merchantOfferExtras(`${BASE_URL}/shop/product/${p.handle}/`)),
+          offers: productOffer(p, collectionOfferExtras(p)),
         },
       })),
     },

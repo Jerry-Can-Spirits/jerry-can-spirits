@@ -138,6 +138,7 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
       'jerry-can-spirits-expedition-spiced-rum',
       'jerry-can-spirits-premium-gift-pack',
       'jerry-can-spirits-expedition-spiced-rum-presentation-box',
+      'jerry-can-spirits-gift-card',
     ],
     seoTitle: 'What Makes Expedition Spiced Rum a Proper Rum Gift',
     seoBody: [
@@ -334,6 +335,7 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
       'stainless-steel-jigger',
       'stainless-steel-spirit-stones',
       'crystal-ice-hiball-42cl',
+      'jerry-can-spirits-gift-card',
     ],
     testimonial: {
       quote: [
@@ -378,6 +380,7 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
       'stainless-steel-jigger',
       'stainless-steel-spirit-stones',
       'crystal-ice-hiball-42cl',
+      'jerry-can-spirits-gift-card',
     ],
   },
 
@@ -409,7 +412,7 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
       'Or the glassware the serves were designed in. A pair of the Crystal ICE hiballs is the Silver-medal serve, ready to pour. A pair of Club ICE tumblers is the Old Standard.',
       'Or something smaller: the jigger, the spirit stones, a single glass. The kit the serves are built around.',
     ],
-    productHandles: ['jerry-can-spirits-expedition-spiced-rum', ...UNDER_20_HANDLES],
+    productHandles: ['jerry-can-spirits-expedition-spiced-rum', ...UNDER_20_HANDLES, 'jerry-can-spirits-gift-card'],
   }),
   'gifts-under-100': giftBand(100, {
     metaTitle: 'Rum Gifts Under £100: The Gift Pack',
@@ -420,7 +423,7 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
       'Or build your own: the bottle, then the glasses and tools that suit the way they drink.',
       'Every bottle is numbered and traceable to its batch. Veteran-owned, no hidden investors, 5% of profits to forces charities.',
     ],
-    productHandles: ['jerry-can-spirits-premium-gift-pack', 'jerry-can-spirits-expedition-spiced-rum', ...UNDER_20_HANDLES],
+    productHandles: ['jerry-can-spirits-premium-gift-pack', 'jerry-can-spirits-expedition-spiced-rum', ...UNDER_20_HANDLES, 'jerry-can-spirits-gift-card'],
   }),
 
   'rum-glasses': {
