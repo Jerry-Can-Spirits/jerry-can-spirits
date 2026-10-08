@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation'
 import Header from './Header'
 import Footer from './Footer'
 import ShippingBanner from './ShippingBanner'
+import FirstPourBlock from './FirstPourBlock'
 import { LazyCartographicBackground } from './ClientLazy'
 import { isPourIqAppRoute } from '@/lib/trade-portal/nav'
 
@@ -40,6 +41,8 @@ export default function SiteChrome({ children }: { children: ReactNode }) {
         <main id="main-content" className="flex-1 min-h-[70svh] pt-20" style={{ paddingTop: 'calc(5rem + var(--announcement-height, 0px))' }}>
           {children}
         </main>
+
+        <FirstPourBlock />
 
         <div className="print:hidden">
           <ShippingBanner />
