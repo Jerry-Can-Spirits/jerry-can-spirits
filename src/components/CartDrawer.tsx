@@ -404,14 +404,28 @@ export default function CartDrawer() {
                             {giftCardLineSummary(line.attributes, new Date())}
                           </p>
                         )}
+                        {/* A subscription line: Shopify's own plan name, and the
+                            subscription price per bottle against the shop price. */}
+                        {line.sellingPlanAllocation && (
+                          <p className="text-sm text-parchment-300 truncate">
+                            {line.sellingPlanAllocation.sellingPlan.name}
+                          </p>
+                        )}
                         <div className="flex items-baseline gap-2 mt-1">
                           <p className="text-gold-400 font-semibold">
                             {formatPrice(
-                              line.merchandise.price.amount,
+                              line.sellingPlanAllocation && line.cost
+                                ? parseFloat(line.cost.totalAmount.amount) / line.quantity
+                                : line.merchandise.price.amount,
                               line.merchandise.price.currencyCode
                             )}
                           </p>
-                          {line.merchandise.compareAtPrice &&
+                          {line.sellingPlanAllocation && line.cost && (
+                            <p className="text-parchment-500 text-sm line-through">
+                              {formatPrice(line.merchandise.price.amount, line.merchandise.price.currencyCode)}
+                            </p>
+                          )}
+                          {!line.sellingPlanAllocation && line.merchandise.compareAtPrice &&
                             parseFloat(line.merchandise.compareAtPrice.amount) > parseFloat(line.merchandise.price.amount) && (
                             <p className="text-parchment-500 text-sm line-through">
                               {formatPrice(

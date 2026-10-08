@@ -103,6 +103,9 @@ export default function Footer() {
       label: 'Company',
       links: [
         { name: 'Contact', href: '/contact/' },
+        // Shopify customer accounts: orders, and managing a subscription. The
+        // site had no route to it until subscriptions arrived (8 Oct 2026).
+        { name: 'Your Account', href: 'https://shopify.com/93314711929/account' },
         { name: 'Complaints', href: '/contact/complaints/' },
         { name: 'Careers', href: '/careers/' },
         { name: 'Site Map', href: '/sitemap/' },

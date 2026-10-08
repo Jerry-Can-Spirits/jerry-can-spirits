@@ -4,7 +4,7 @@ import { useState } from 'react'
 import Image from 'next/image'
 import { useCart } from '@/contexts/CartContext'
 import { trackAddToCart } from '@/components/GoogleTag'
-import type { ShopifyProductVariant, ShopifyImage } from '@/lib/shopify'
+import type { ShopifyProductVariant, ShopifyImage, ShopifySellingPlanGroup } from '@/lib/shopify'
 import { trackEventDual } from '@/lib/meta-capi'
 import { formatPrice } from '@/lib/format-price'
 
@@ -14,6 +14,8 @@ interface ProductVariantSelectorProps {
   productId: string
   productImages: ShopifyImage[]
   currencyCode: string
+  /** Subscription plans, when the product is sold on subscription. */
+  sellingPlanGroups?: ShopifySellingPlanGroup[]
 }
 
 // Helper to format price
@@ -24,6 +26,7 @@ export default function ProductVariantSelector({
   productId,
   productImages,
   currencyCode,
+  sellingPlanGroups = [],
 }: ProductVariantSelectorProps) {
   const { addToCart, isLoading } = useCart()
   const [quantity, setQuantity] = useState(1)
@@ -35,6 +38,19 @@ export default function ProductVariantSelector({
   )
 
   const selectedVariant = variants.find(v => v.id === selectedVariantId)
+
+  // Subscribe and save (Shopify Subscriptions, 8 Oct 2026). One group, one plan
+  // per delivery interval; every 2 months is the default, the middle choice.
+  const planGroup = sellingPlanGroups[0]
+  const plans = planGroup?.sellingPlans ?? []
+  const [buyMode, setBuyMode] = useState<'once' | 'subscribe'>('once')
+  const [planId, setPlanId] = useState(plans[1]?.id ?? plans[0]?.id)
+  const subscriptionPrice = selectedVariant?.sellingPlanAllocations
+    ?.find((a) => a.sellingPlan.id === planId)
+    ?.priceAdjustments[0]?.price.amount
+  const canSubscribe = plans.length > 0 && subscriptionPrice !== undefined
+  const subscribing = canSubscribe && buyMode === 'subscribe'
+  const unitPrice = subscribing ? subscriptionPrice! : selectedVariant?.price.amount ?? '0'
   const hasMultipleVariants = variants.length > 1 && variants.some(v => v.title !== 'Default Title')
 
   // Get current image (variant image if available, else first product image)
@@ -47,7 +63,7 @@ export default function ProductVariantSelector({
       content_name: productTitle,
       content_ids: [selectedVariantId.split('/').pop() ?? selectedVariantId],
       content_type: 'product',
-      value: parseFloat(selectedVariant.price.amount) * quantity,
+      value: parseFloat(unitPrice) * quantity,
       currency: currencyCode,
     }
 
@@ -58,12 +74,12 @@ export default function ProductVariantSelector({
     trackAddToCart(
       productId,
       productTitle,
-      parseFloat(selectedVariant.price.amount),
+      parseFloat(unitPrice),
       currencyCode,
       quantity
     )
 
-    await addToCart(selectedVariantId, quantity)
+    await addToCart(selectedVariantId, quantity, [], subscribing ? planId : undefined)
   }
 
   if (!selectedVariant) {
@@ -139,6 +155,75 @@ export default function ProductVariantSelector({
             </div>
           )}
         </div>
+      )}
+
+      {/* How you buy: one bottle, or the same bottle on a schedule. */}
+      {canSubscribe && (
+        <fieldset className="space-y-3">
+          <legend className="block text-sm font-semibold text-gold-300 mb-2">How you buy</legend>
+          <label
+            className={`flex items-center justify-between gap-3 min-h-11 rounded-lg border px-4 py-3 cursor-pointer transition-colors ${
+              buyMode === 'once' ? 'border-gold-400 bg-jerry-green-800/40' : 'border-gold-500/20 hover:border-gold-400/50'
+            }`}
+          >
+            <span className="flex items-center gap-3">
+              <input
+                type="radio"
+                name="buy-mode"
+                checked={buyMode === 'once'}
+                onChange={() => setBuyMode('once')}
+                className="h-4 w-4 accent-gold-500"
+              />
+              <span className="font-semibold text-white">One-time purchase</span>
+            </span>
+            <span className="font-serif font-bold text-gold-400">{formatPrice(selectedVariant.price.amount, currencyCode)}</span>
+          </label>
+          <div
+            className={`rounded-lg border px-4 py-3 transition-colors ${
+              subscribing ? 'border-gold-400 bg-jerry-green-800/40' : 'border-gold-500/20 hover:border-gold-400/50'
+            }`}
+          >
+            <label className="flex items-center justify-between gap-3 min-h-11 cursor-pointer">
+              <span className="flex items-center gap-3">
+                <input
+                  type="radio"
+                  name="buy-mode"
+                  checked={buyMode === 'subscribe'}
+                  onChange={() => setBuyMode('subscribe')}
+                  className="h-4 w-4 accent-gold-500"
+                />
+                <span className="font-semibold text-white">{planGroup.name}</span>
+              </span>
+              <span className="text-right">
+                <span className="font-serif font-bold text-gold-400">{formatPrice(subscriptionPrice, currencyCode)}</span>{' '}
+                <span className="text-sm text-parchment-400 line-through">{formatPrice(selectedVariant.price.amount, currencyCode)}</span>
+              </span>
+            </label>
+            {subscribing && (
+              <div className="mt-3 space-y-3">
+                <div role="radiogroup" aria-label="Delivery frequency" className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                  {plans.map((plan) => (
+                    <button
+                      key={plan.id}
+                      type="button"
+                      role="radio"
+                      aria-checked={plan.id === planId}
+                      onClick={() => setPlanId(plan.id)}
+                      className={`min-h-11 rounded-md border px-3 py-2 text-sm transition-colors ${
+                        plan.id === planId
+                          ? 'border-gold-400 bg-gold-500 text-jerry-green-900 font-semibold'
+                          : 'border-gold-500/30 text-parchment-200 hover:border-gold-400'
+                      }`}
+                    >
+                      {plan.options[0]?.value ?? plan.name}
+                    </button>
+                  ))}
+                </div>
+                <p className="text-sm text-parchment-300">Skip, pause or cancel any time from your account.</p>
+              </div>
+            )}
+          </div>
+        </fieldset>
       )}
 
       {/* Quantity Selector */}
