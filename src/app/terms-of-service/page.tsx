@@ -177,7 +177,7 @@ export default function TermsOfService() {
                 <ul className="list-disc list-inside text-white space-y-2 mb-4">
                   <li>All orders are subject to acceptance and availability</li>
                   <li>We reserve the right to refuse or cancel any order</li>
-                  <li>Prices are subject to change without notice</li>
+                  <li>Prices are subject to change without notice, except for subscriptions, where 5.5 applies</li>
                   <li>Payment must be received before dispatch</li>
                 </ul>
 
@@ -193,7 +193,7 @@ export default function TermsOfService() {
                   5.4 Consumer Contracts Regulations 2013
                 </h3>
                 <p className="text-white mb-4">
-                  As a UK consumer purchasing online, you have rights under the Consumer Contracts (Information, Cancellation and Additional Charges) Regulations 2013. However, under Regulation 28(3)(c), the right to cancel does not apply to goods that are liable to deteriorate or expire rapidly, which includes sealed alcoholic beverages. Accordingly, we do not accept change-of-mind returns on alcohol products once an order has been dispatched.
+                  As a UK consumer purchasing online, you have rights under the Consumer Contracts (Information, Cancellation and Additional Charges) Regulations 2013. If you change your mind, you can return unopened, unused products within 14 days of delivery, with return postage at your own expense. See our <a href="/shipping-returns/" className="text-gold-300 hover:text-gold-200 underline">Shipping & Returns</a> policy for how to return an item.
                 </p>
                 <p className="text-white">
                   This does not affect your statutory rights in respect of faulty, damaged, or incorrectly dispatched goods, which are covered under the Consumer Rights Act 2015.
