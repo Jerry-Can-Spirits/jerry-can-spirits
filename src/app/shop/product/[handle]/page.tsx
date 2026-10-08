@@ -928,7 +928,9 @@ export default async function ProductPage({
         </section>
       )}
 
-      {/* Customer Reviews Section */}
+      {/* Customer Reviews Section. A gift card shows it only once it has
+          reviews: "Reviews Coming Soon" would never come true for a card. */}
+      {(!isGiftCard || productReviews.length > 0) && (
       <section id="customer-reviews" className="band-light py-16 scroll-mt-24">
        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <SectionHeading eyebrow="The proof" intro="What people think">Customer Reviews</SectionHeading>
@@ -947,6 +949,7 @@ export default async function ProductPage({
         </div>
        </div>
       </section>
+      )}
 
       {/* Related Products Section */}
       {relatedProducts.length > 0 && (
