@@ -798,7 +798,7 @@ export default async function ProductPage({
       </section>
 
       {/* Product Details & Tasting Notes - Spirits only */}
-      {(product.metafields || sanityProduct) && (
+      {!isGiftCard && (product.metafields || sanityProduct) && (
         <section className="band-dark py-16">
          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
           <SectionHeading eyebrow="The detail">Specifications and tasting notes</SectionHeading>
