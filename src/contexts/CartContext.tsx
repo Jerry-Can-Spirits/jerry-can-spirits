@@ -40,7 +40,7 @@ interface CartContextType {
   closeCart: () => void
   // Resolves true once the line is in the cart. Line attributes carry a gift
   // card's recipient; most callers pass none.
-  addToCart: (variantId: string, quantity?: number, attributes?: CartAttribute[]) => Promise<boolean>
+  addToCart: (variantId: string, quantity?: number, attributes?: CartAttribute[], sellingPlanId?: string) => Promise<boolean>
   updateQuantity: (lineId: string, quantity: number) => Promise<void>
   removeItem: (lineId: string) => Promise<void>
   applyDiscountCode: (code: string) => Promise<void>
@@ -139,7 +139,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     setIsCartOpen(false)
   }, [])
 
-  const addToCart = useCallback(async (variantId: string, quantity: number = 1, attributes: CartAttribute[] = []) => {
+  const addToCart = useCallback(async (variantId: string, quantity: number = 1, attributes: CartAttribute[] = [], sellingPlanId?: string) => {
     // Guard against concurrent calls — two synchronous clicks would read the same
     // cart snapshot and create two separate Shopify carts. The ref is set
     // immediately, before React batches the setIsLoading state update.
@@ -157,7 +157,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
       currentCart = await applyReferralCode(currentCart)
 
-      const updatedCart = await shopifyAddToCart(currentCart.id, variantId, quantity, attributes)
+      const updatedCart = await shopifyAddToCart(currentCart.id, variantId, quantity, attributes, sellingPlanId)
       setCart(updatedCart)
 
       // Refresh GA4 stitching attributes onto the cart for server-side purchase

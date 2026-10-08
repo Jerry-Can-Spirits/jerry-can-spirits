@@ -671,6 +671,7 @@ export default async function ProductPage({
                     productId={product.id}
                     productImages={product.images}
                     currencyCode={product.priceRange.minVariantPrice.currencyCode}
+                    sellingPlanGroups={product.sellingPlanGroups}
                   />
                   )
                 ) : (

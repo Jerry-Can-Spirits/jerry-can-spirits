@@ -40,7 +40,7 @@ export const metadata: Metadata = {
 }
 
 export default function TermsOfService() {
-  const lastUpdated = '31 August 2026'
+  const lastUpdated = '8 October 2026'
 
   return (
     <>
@@ -177,7 +177,7 @@ export default function TermsOfService() {
                 <ul className="list-disc list-inside text-white space-y-2 mb-4">
                   <li>All orders are subject to acceptance and availability</li>
                   <li>We reserve the right to refuse or cancel any order</li>
-                  <li>Prices are subject to change without notice</li>
+                  <li>Prices are subject to change without notice, except for subscriptions, where 5.5 applies</li>
                   <li>Payment must be received before dispatch</li>
                 </ul>
 
@@ -193,10 +193,17 @@ export default function TermsOfService() {
                   5.4 Consumer Contracts Regulations 2013
                 </h3>
                 <p className="text-white mb-4">
-                  As a UK consumer purchasing online, you have rights under the Consumer Contracts (Information, Cancellation and Additional Charges) Regulations 2013. However, under Regulation 28(3)(c), the right to cancel does not apply to goods that are liable to deteriorate or expire rapidly, which includes sealed alcoholic beverages. Accordingly, we do not accept change-of-mind returns on alcohol products once an order has been dispatched.
+                  As a UK consumer purchasing online, you have rights under the Consumer Contracts (Information, Cancellation and Additional Charges) Regulations 2013. If you change your mind, you can return unopened, unused products within 14 days of delivery, with return postage at your own expense. See our <a href="/shipping-returns/" className="text-gold-300 hover:text-gold-200 underline">Shipping & Returns</a> policy for how to return an item.
                 </p>
                 <p className="text-white">
                   This does not affect your statutory rights in respect of faulty, damaged, or incorrectly dispatched goods, which are covered under the Consumer Rights Act 2015.
+                </p>
+
+                <h3 className="text-xl font-serif font-semibold text-white mt-6 mb-3">
+                  5.5 Subscriptions
+                </h3>
+                <p className="text-white">
+                  Subscribe and save sends a bottle of Expedition Spiced Rum every one, two or three months, at the subscription price shown when you subscribe. You pay for each delivery when it is dispatched, from the card you subscribed with. There is no minimum term: you can skip a delivery, pause, change how often it arrives, or cancel at any time from your account, up to the day the next payment is taken. If the price changes, we will email you at least 14 days before the next payment, and you can cancel before it applies. If we cannot supply the rum, we will pause your subscription and tell you by email; you will never be charged for a delivery we cannot make. Our returns policy applies to every delivery, and every delivery is age-verified at the door.
                 </p>
               </section>
             </div>

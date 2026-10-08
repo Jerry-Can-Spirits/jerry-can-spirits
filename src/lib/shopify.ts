@@ -62,6 +62,26 @@ export interface ShopifyProductVariant {
   barcode?: string | null;
   sku?: string | null;
   image?: ShopifyImage | null;
+  /** Subscription prices for this variant, one per selling plan. */
+  sellingPlanAllocations?: ShopifySellingPlanAllocation[];
+}
+
+// Subscriptions (Shopify Subscriptions app, 8 Oct 2026). A product sold on
+// subscription carries selling plan groups; each plan is one delivery interval.
+export interface ShopifySellingPlan {
+  id: string;
+  name: string;
+  options: { name: string; value: string }[];
+}
+
+export interface ShopifySellingPlanGroup {
+  name: string;
+  sellingPlans: ShopifySellingPlan[];
+}
+
+export interface ShopifySellingPlanAllocation {
+  sellingPlan: { id: string };
+  priceAdjustments: { price: ShopifyMoney }[];
 }
 
 export interface ShopifyProduct {
@@ -83,6 +103,7 @@ export interface ShopifyProduct {
   updatedAt?: string;
   metafields?: ShopifyMetafield[];
   seo?: { title: string; description: string };
+  sellingPlanGroups?: ShopifySellingPlanGroup[];
 }
 
 export interface ShopifyCollection {
@@ -134,6 +155,10 @@ export interface CartLine {
     compareAtPrice?: ShopifyMoney;
   };
   attributes?: CartAttribute[];
+  /** Set when the line is a subscription. */
+  sellingPlanAllocation?: { sellingPlan: { id: string; name: string } } | null;
+  /** What the line actually costs, after a subscription discount. */
+  cost?: { totalAmount: ShopifyMoney };
 }
 
 export interface CartAttribute {
@@ -454,6 +479,24 @@ export async function getProduct(handle: string): Promise<ShopifyProduct | null>
                 url
                 altText
               }
+              sellingPlanAllocations(first: 10) {
+                nodes {
+                  sellingPlan { id }
+                  priceAdjustments { price { amount currencyCode } }
+                }
+              }
+            }
+          }
+        }
+        sellingPlanGroups(first: 3) {
+          nodes {
+            name
+            sellingPlans(first: 10) {
+              nodes {
+                id
+                name
+                options { name value }
+              }
             }
           }
         }
@@ -486,7 +529,13 @@ export async function getProduct(handle: string): Promise<ShopifyProduct | null>
     return {
       ...data.product,
       images: data.product.images.edges.map((edge: ImageEdge) => edge.node),
-      variants: data.product.variants.edges.map((edge: VariantEdge) => edge.node),
+      variants: data.product.variants.edges.map((edge: VariantEdge) => ({
+        ...edge.node,
+        sellingPlanAllocations: (edge.node as unknown as { sellingPlanAllocations?: { nodes: ShopifySellingPlanAllocation[] } }).sellingPlanAllocations?.nodes ?? [],
+      })),
+      sellingPlanGroups: (data.product.sellingPlanGroups?.nodes ?? []).map(
+        (g: { name: string; sellingPlans: { nodes: ShopifySellingPlan[] } }) => ({ name: g.name, sellingPlans: g.sellingPlans.nodes }),
+      ),
       metafields: data.product.metafields || [],
     };
   } catch (error) {
@@ -576,6 +625,18 @@ const CART_FIELDS = `
           key
           value
         }
+        sellingPlanAllocation {
+          sellingPlan {
+            id
+            name
+          }
+        }
+        cost {
+          totalAmount {
+            amount
+            currencyCode
+          }
+        }
         merchandise {
           ... on ProductVariant {
             id
@@ -663,6 +724,7 @@ export async function addToCart(
   variantId: string,
   quantity: number = 1,
   attributes: CartAttribute[] = [],
+  sellingPlanId?: string,
 ): Promise<Cart> {
   const query = `
     mutation AddToCart($cartId: ID!, $lines: [CartLineInput!]!) {
@@ -685,6 +747,7 @@ export async function addToCart(
         merchandiseId: variantId,
         quantity,
         ...(attributes.length > 0 ? { attributes } : {}),
+        ...(sellingPlanId ? { sellingPlanId } : {}),
       },
     ],
   };
