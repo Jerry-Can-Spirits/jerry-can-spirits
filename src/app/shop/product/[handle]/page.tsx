@@ -917,6 +917,14 @@ export default async function ProductPage({
               ) : (
                 <p className="text-parchment-300 text-sm">Classic cocktails and exclusive recipes from the Field Manual.</p>
               )}
+              {/* Opens What's in my bar with the rum added to the visitor's own
+                  bar, so the answer is what they can pour with what they have. */}
+              <Link
+                href="/field-manual/whats-in-my-bar/?add=jerry-can-spirits-expedition-spiced-rum"
+                className="inline-flex items-center gap-2 mt-4 min-h-11 text-gold-300 hover:text-gold-200 underline underline-offset-2"
+              >
+                See what you can make with it
+              </Link>
             </div>
           )}
 
