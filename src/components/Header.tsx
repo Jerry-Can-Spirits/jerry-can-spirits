@@ -205,6 +205,12 @@ export default function Header() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
+  // SectionNav pins itself under the header, so it needs to know when the
+  // header slides away on scroll and when it comes back.
+  useEffect(() => {
+    window.dispatchEvent(new CustomEvent('jcs:header-visibility', { detail: showHeader }))
+  }, [showHeader])
+
   // Keep ref in sync with state so scroll handler doesn't need isMobileMenuOpen in its dep array
   useEffect(() => {
     isMobileMenuOpenRef.current = isMobileMenuOpen
