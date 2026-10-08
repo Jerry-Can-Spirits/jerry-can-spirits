@@ -400,7 +400,7 @@ export default async function CocktailPage({ params }: PageProps) {
 
             <ShareButton
               title={`${cocktail.name} Recipe | Jerry Can Spirits`}
-              text={`Check out this ${cocktail.name} recipe from Jerry Can Spirits!`}
+              text={`Check out this ${cocktail.name} recipe from Jerry Can Spirits.`}
               url={`https://jerrycanspirits.co.uk/field-manual/cocktails/${cocktail.slug.current}/`}
               variant="ghost"
             />
@@ -645,25 +645,12 @@ export default async function CocktailPage({ params }: PageProps) {
         <div className="max-w-4xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8">
           <SectionHeading eyebrow="Rate it">Enjoyed This Recipe?</SectionHeading>
 
-          {/* Rating & Share CTA */}
+          {/* Rating. The collection link that sat under it was a second CTA,
+              and the page already opens with one (content review, 8 Oct 2026). */}
           <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-4 sm:p-6 md:p-8 border border-gold-500/20 text-center">
-            {/* Star Rating */}
-            <div className="mb-6 flex justify-center">
+            <div className="flex justify-center">
               <StarRating slug={cocktail.slug.current} />
             </div>
-
-            <p className="text-parchment-300 mb-6">
-              Explore our full collection of cocktails and discover your next favorite
-            </p>
-            <Link
-              href="/field-manual/cocktails/"
-              className="inline-flex items-center gap-2 px-8 py-4 bg-gold-500 hover:bg-gold-400 text-jerry-green-900 font-semibold rounded-lg transition-all duration-300 transform hover:scale-105"
-            >
-              <span>Browse All Cocktails</span>
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-              </svg>
-            </Link>
           </div>
         </div>
        </section>
