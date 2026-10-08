@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 export interface SectionNavItem {
   /** The id on the band's <section>, which carries scroll-mt so it lands below this strip. */
@@ -34,6 +34,17 @@ export default function SectionNav({
 }) {
   const [active, setActive] = useState<string | null>(null)
   const [headerShown, setHeaderShown] = useState(true)
+  const listRef = useRef<HTMLUListElement>(null)
+
+  // On a phone the strip scrolls sideways; keep the highlighted link in view
+  // without moving the page (scrollIntoView would scroll vertically too).
+  useEffect(() => {
+    const list = listRef.current
+    const link = active ? list?.querySelector<HTMLElement>(`a[href="#${active}"]`) : null
+    if (!list || !link || list.scrollWidth <= list.clientWidth) return
+    const li = link.parentElement as HTMLElement
+    list.scrollTo({ left: li.offsetLeft - (list.clientWidth - li.offsetWidth) / 2, behavior: 'smooth' })
+  }, [active])
 
   useEffect(() => {
     const onVisibility = (e: Event) => setHeaderShown((e as CustomEvent<boolean>).detail)
@@ -76,13 +87,16 @@ export default function SectionNav({
       }}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <ul className="flex gap-2 overflow-x-auto py-3 -mx-4 px-4 sm:-mx-6 sm:px-6 lg:mx-0 lg:px-0 lg:justify-center">
+        <ul
+          ref={listRef}
+          className="flex gap-1.5 overflow-x-auto py-2 -mx-4 px-4 sm:gap-2 sm:py-3 sm:-mx-6 sm:px-6 lg:mx-0 lg:px-0 lg:justify-center [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        >
           {items.map((item) => (
             <li key={item.id} className="shrink-0">
               <a
                 href={`#${item.id}`}
                 aria-current={active === item.id ? 'true' : undefined}
-                className={`inline-block px-4 py-1.5 rounded-full border text-sm font-semibold whitespace-nowrap transition-colors ${
+                className={`inline-block px-3 py-1 rounded-full border text-xs font-semibold sm:px-4 sm:py-1.5 sm:text-sm whitespace-nowrap transition-colors ${
                   active === item.id
                     ? 'bg-gold-500/20 text-gold-300 border-gold-500/40'
                     : 'bg-jerry-green-800/40 text-parchment-300 border-gold-500/20 hover:text-gold-300 hover:border-gold-500/40'
