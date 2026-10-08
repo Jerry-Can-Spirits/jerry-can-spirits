@@ -235,7 +235,7 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
       'Cocktail making kits built for home bars. Proper bar tools paired with small-batch British spiced rum. Everything you need to make a cocktail worth drinking.',
     introBody: [
       'A cocktail making kit is only as good as what comes with it. Cheap tools and a bottle of something unmemorable is not a gift. It is a collection of items in a box.',
-      'The barware here is selected for the same reason we selected every ingredient in Expedition Spiced Rum: because it has to work. Cocktail shakers, strainers, jiggers, mixing glasses. Tools that do their job properly and last.',
+      'The barware here is chosen for the same reason as every ingredient in Expedition Spiced Rum: it has to work. A shaker that seals, a jigger marked in millilitres, a bar blade for the bottle tops. Tools that do their job properly and last.',
       'Pair them with Expedition Spiced Rum, macerated with real spices by our British partner distillery, no artificial flavourings. Everything needed to make a proper drink at home. A Rum Old Fashioned. A proper sour. The Field Manual has the recipes.',
       'Good cocktails do not require talent. They require the right equipment and a spirit worth using. Both are here.',
     ],
@@ -398,7 +398,7 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
     metaDescription:
       'Small gifts for someone who drinks rum properly. Jiggers, glasses, spirit stones and bar tools from a veteran-owned British spirits house.',
     introBody: [
-      'A small gift for someone who drinks rum properly. Every piece here earns its place at the pour: the jigger that measures every Field Manual build, the glass the award serve was judged in, the bar blade that opens the ginger beer.',
+      'A small gift for someone who drinks rum properly. Every piece here gets used at the pour: the jigger that measures every Field Manual build, the hiball for the cola serve, the bar blade that opens the ginger beer.',
       'Nothing here is a novelty. It is the kit the serves were built around, chosen because it does the job and keeps doing it.',
       'Every delivery is age-verified at the door, so it can go straight to them.',
     ],
@@ -639,7 +639,7 @@ const giftSetsConfig: CategoryConfig = {
   seoBody: [
     'The bottle alone suits someone who already has a home bar and a glass they like. It is considered enough to hand over as it is. The label, the numbered batch and the weight of the bottle do the work.',
     'The presentation box is for when the bottle will sit on a table or under a tree before it is opened. It is sized for the 700ml bottle and turns it into a gift without wrapping paper.',
-    'The gift pack is the complete first pour. The Crystal ICE hiball is the glass the Silver serve with Franklin and Sons cola was judged in at the IWSC 2026. The jigger measures the 25ml and 50ml every cocktail recipe is written in. The coaster is natural slate. Someone who owns none of those things opens the box and can make the serve that evening.',
+    'The gift pack is the complete first pour. The Crystal ICE hiball holds the cola serve that took Silver at the IWSC 2026, built over ice at home. The jigger measures the 25ml and 50ml every cocktail recipe is written in. The coaster is natural slate. Someone who owns none of those things opens the box and can make the serve that evening.',
   ],
   pillars: [
     { title: 'Built Around One Rum', body: 'Every set contains the same 700ml bottle at 40% ABV. Seven real spices, no artificial flavourings. The set changes what comes with it, never what is in it.' },
