@@ -31,7 +31,7 @@ export const metadata: Metadata = {
 }
 
 export default function ShippingReturns() {
-  const lastUpdated = '29 July 2026'
+  const lastUpdated = '8 October 2026'
 
   // FAQ Schema for SEO
   const faqSchema = {
@@ -200,7 +200,7 @@ export default function ShippingReturns() {
               </h2>
               <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20">
                 <p className="text-white mb-4">
-                  Due to the nature of alcohol products and UK licensing regulations, we have specific return conditions:
+                  Returns are accepted on these conditions:
                 </p>
 
                 <h3 className="text-lg font-semibold text-white mb-3">Eligible for Return:</h3>
@@ -221,7 +221,7 @@ export default function ShippingReturns() {
                 <ol className="list-decimal list-inside text-white space-y-2">
                   <li>Contact us within 14 days of delivery</li>
                   <li>Provide order number and reason for return</li>
-                  <li>Await return authorisation — return shipping is at the customer's expense</li>
+                  <li>Await return authorisation. Return shipping is at the customer's expense</li>
                   <li>Return items in original, unopened condition</li>
                   <li>Refunds processed within 5-7 business days after receipt</li>
                 </ol>

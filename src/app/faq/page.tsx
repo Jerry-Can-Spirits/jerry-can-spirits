@@ -71,7 +71,7 @@ const faqs = [
   // Returns & Customer Service
   {
     question: "What is your returns policy?",
-    answer: "Unopened bottles can be returned within 14 days of delivery for a refund. Due to alcohol licensing laws, we cannot accept returns of opened bottles unless faulty. Contact hello@jerrycanspirits.co.uk to initiate a return."
+    answer: "Unopened bottles can be returned within 14 days of delivery for a refund, with return postage at your own expense. We cannot accept returns of opened bottles unless they are faulty. Contact hello@jerrycanspirits.co.uk to initiate a return."
   },
   {
     question: "What if my bottle arrives damaged?",
