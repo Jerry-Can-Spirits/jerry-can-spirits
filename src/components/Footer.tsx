@@ -53,6 +53,7 @@ export default function Footer() {
         { name: 'Gift Sets', href: '/shop/gift-sets/' },
         { name: 'Rum Gifts for Him', href: '/shop/gifts-for-him/' },
         { name: 'Rum Gifts for Her', href: '/shop/gifts-for-her/' },
+        { name: 'Corporate and Regimental Gifts', href: '/corporate-gifts/' },
         { name: 'How to Choose a Rum Gift', href: '/guides/how-to-choose-a-rum-gift/' },
       ]
     },

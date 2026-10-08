@@ -47,6 +47,7 @@ const GIFT_CLUSTER_LINKS = [
   { label: 'Gift sets', href: '/shop/gift-sets/' },
   { label: 'Gifts for him', href: '/shop/gifts-for-him/' },
   { label: 'Gifts for her', href: '/shop/gifts-for-her/' },
+  { label: 'Corporate and regimental gifts', href: '/corporate-gifts/' },
   { label: 'How to choose a rum gift', href: '/guides/how-to-choose-a-rum-gift/' },
 ]
 

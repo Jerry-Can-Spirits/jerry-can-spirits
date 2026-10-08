@@ -131,6 +131,7 @@ export default function Header() {
         { name: 'Gift Sets', href: '/shop/gift-sets/', description: 'Boxed and ready to give' },
         { name: 'Rum Gifts for Him', href: '/shop/gifts-for-him/', description: 'Gift ideas for men' },
         { name: 'Rum Gifts for Her', href: '/shop/gifts-for-her/', description: 'Gift ideas for women' },
+        { name: 'Corporate and Regimental Gifts', href: '/corporate-gifts/', description: 'Twelve bottles or more, one invoice' },
         { name: 'How to Choose a Rum Gift', href: '/guides/how-to-choose-a-rum-gift/', description: 'A short guide' },
       ]
     },

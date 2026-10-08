@@ -1,8 +1,11 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Breadcrumbs from '@/components/Breadcrumbs'
 import SectionHeading from '@/components/SectionHeading'
+
+// ?subject=corporate (from /corporate-gifts/) preselects the subject.
+const SUBJECT_PARAMS: Record<string, string> = { corporate: 'Corporate Enquiries' }
 
 export default function GeneralEnquiries() {
   const [formData, setFormData] = useState({
@@ -11,6 +14,11 @@ export default function GeneralEnquiries() {
     subject: '',
     message: ''
   })
+
+  useEffect(() => {
+    const subject = SUBJECT_PARAMS[new URLSearchParams(window.location.search).get('subject') ?? '']
+    if (subject) setFormData((d) => (d.subject ? d : { ...d, subject }))
+  }, [])
 
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle')
