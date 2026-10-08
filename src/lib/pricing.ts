@@ -19,6 +19,15 @@ export const FREE_SHIPPING_THRESHOLD_GBP = 35;
 // three places on the shipping page, including inside the JSON-LD answer text.
 export const STANDARD_SHIPPING_GBP = 5;
 
+// Corporate and regimental orders (Dan, 8 Oct 2026): per-bottle prices by
+// quantity, invoiced from a Shopify draft order. Both tiers stay above the
+// trade six-pack rate (about £32.40 a bottle), so a venue is never undercut.
+export const CORPORATE_MIN_BOTTLES = 12;
+export const CORPORATE_TIERS = [
+  { minBottles: 12, maxBottles: 23, priceGbp: 34 },
+  { minBottles: 24, maxBottles: null, priceGbp: 33 },
+] as const;
+
 // Formatted for copy, e.g. "£35".
 export const FREE_SHIPPING_THRESHOLD_LABEL = `£${FREE_SHIPPING_THRESHOLD_GBP}`;
 // Formatted for copy, e.g. "£5.00".

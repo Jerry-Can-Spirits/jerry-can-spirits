@@ -103,7 +103,7 @@ const faqs = [
   },
   {
     question: "Do you offer corporate gifts or bulk orders?",
-    answer: "Yes. We offer corporate gifting and bulk order options. For custom orders, branded packaging, or volume discounts, contact us at hello@jerrycanspirits.co.uk."
+    answer: "Yes. Orders of twelve bottles or more are priced per bottle, delivered to one address and paid by invoice. See corporate and regimental gifts."
   },
 ]
 
@@ -114,6 +114,9 @@ const RICH_ANSWERS: Record<string, ReactNode> = {
   ),
   "What is your connection to the Armed Forces?": (
     <>Jerry Can Spirits was <Link href="/about/team/" className="text-gold-300 hover:text-gold-400 underline">founded by two Royal Corps of Signals veterans</Link> with over 17 years of combined service. We&apos;re proud supporters of the <Link href="/armed-forces-covenant/" className="text-gold-300 hover:text-gold-400 underline">Armed Forces Covenant</Link> and donate 5% of profits to military charities.</>
+  ),
+  "Do you offer corporate gifts or bulk orders?": (
+    <>Yes. Orders of twelve bottles or more are priced per bottle, delivered to one address and paid by invoice. See <Link href="/corporate-gifts/" className="text-gold-300 hover:text-gold-400 underline">corporate and regimental gifts</Link>.</>
   ),
 }
 
