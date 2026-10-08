@@ -22,6 +22,8 @@ export interface SectionNavItem {
  * The offset matches the fixed header plus the announcement bar, the same
  * calculation SiteChrome pads <main> by. Sections it points at carry
  * scroll-mt-36 so an anchor lands below the header and this strip together.
+ * The header hides on scroll down, so the strip moves up into its place
+ * rather than leaving a header-sized gap above it (Dan, 8 Oct 2026).
  */
 export default function SectionNav({
   items,
@@ -31,6 +33,13 @@ export default function SectionNav({
   ariaLabel?: string
 }) {
   const [active, setActive] = useState<string | null>(null)
+  const [headerShown, setHeaderShown] = useState(true)
+
+  useEffect(() => {
+    const onVisibility = (e: Event) => setHeaderShown((e as CustomEvent<boolean>).detail)
+    window.addEventListener('jcs:header-visibility', onVisibility)
+    return () => window.removeEventListener('jcs:header-visibility', onVisibility)
+  }, [])
 
   useEffect(() => {
     const targets = items
@@ -59,8 +68,12 @@ export default function SectionNav({
   return (
     <nav
       aria-label={ariaLabel}
-      className="sticky z-30 band-dark border-y border-gold-500/20 print:hidden"
-      style={{ top: 'calc(5rem + var(--announcement-height, 0px))' }}
+      className="sticky z-30 band-dark border-y border-gold-500/20 transition-[top] duration-300 ease-out print:hidden"
+      style={{
+        top: headerShown
+          ? 'calc(5rem + var(--announcement-height, 0px))'
+          : 'var(--announcement-height, 0px)',
+      }}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <ul className="flex gap-2 overflow-x-auto py-3 -mx-4 px-4 sm:-mx-6 sm:px-6 lg:mx-0 lg:px-0 lg:justify-center">
