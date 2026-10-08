@@ -573,7 +573,35 @@ export default function Header() {
           <div className="bg-jerry-green-800/95 backdrop-blur-lg border-t border-jerry-green-600/20 px-4 py-6 space-y-4">
             {navigation.map((item) => (
               <div key={item.name}>
-                {item.dropdown ? (
+                {/* A heading with a page works as on desktop: the name goes to
+                    the page (the Field Manual hub was unreachable on mobile),
+                    and the arrow beside it opens the dropdown (Dan, 8 Oct 2026). */}
+                {item.dropdown && item.href ? (
+                  <div className="flex items-center justify-between">
+                    <Link
+                      href={item.href}
+                      className="flex-1 text-parchment-100 hover:text-parchment-50 py-3 text-lg font-medium transition-colors duration-200"
+                      onClick={() => {
+                        setIsMobileMenuOpen(false)
+                        setMobileOpenSections([])
+                        trackMenuClick(`Mobile > ${item.name}`)
+                      }}
+                    >
+                      {item.name}
+                    </Link>
+                    <button
+                      className="flex items-center justify-center w-11 h-11 -mr-2 text-parchment-100 hover:text-parchment-50 transition-colors duration-200"
+                      onClick={() => setMobileOpenSections(prev =>
+                        prev.includes(item.name) ? prev.filter(n => n !== item.name) : [...prev, item.name]
+                      )}
+                      aria-expanded={mobileOpenSections.includes(item.name)}
+                      aria-controls={`mobile-menu-${item.name.toLowerCase().replace(/\s+/g, '-')}`}
+                      aria-label={`${item.name} links`}
+                    >
+                      <ChevronDownIcon className={`w-5 h-5 transition-transform duration-200 ${mobileOpenSections.includes(item.name) ? 'rotate-180' : ''}`} />
+                    </button>
+                  </div>
+                ) : item.dropdown ? (
                   <button
                     className="flex items-center justify-between w-full text-parchment-100 hover:text-parchment-50 py-3 text-lg font-medium transition-colors duration-200"
                     onClick={() => setMobileOpenSections(prev =>
@@ -598,7 +626,10 @@ export default function Header() {
                   </Link>
                 )}
                 {item.dropdown && mobileOpenSections.includes(item.name) && (
-                  <div className="ml-2 border-l border-jerry-green-700/50 pl-4 pb-2">
+                  <div
+                    id={`mobile-menu-${item.name.toLowerCase().replace(/\s+/g, '-')}`}
+                    className="ml-2 border-l border-jerry-green-700/50 pl-4 pb-2"
+                  >
                     {item.dropdown.map((subItem) => (
                       <Link
                         key={subItem.name}
