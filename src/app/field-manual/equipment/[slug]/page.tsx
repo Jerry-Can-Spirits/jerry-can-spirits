@@ -48,6 +48,7 @@ interface Equipment {
   premiumOption?: string
   ownProduct?: { name?: string; path?: string; note?: string }
   author?: string
+  updatedAt?: string
   relatedEquipment?: Array<{
     _id: string
     name: string
@@ -185,6 +186,7 @@ export default async function EquipmentDetailPage({ params }: { params: Promise<
     description: equipment.description,
     image: equipment.image ? urlFor(equipment.image).url() : undefined,
     datePublished: equipment._createdAt,
+    dateModified: equipment.updatedAt,
     author: ORG_REF,
     publisher: ORG_REF,
     mainEntityOfPage: { '@type': 'WebPage', '@id': `https://jerrycanspirits.co.uk/field-manual/equipment/${slug}/` },
@@ -634,9 +636,17 @@ export default async function EquipmentDetailPage({ params }: { params: Promise<
             )}
 
             {/* Author byline */}
-            {equipment.author && (
+            {(equipment.author || equipment.updatedAt) && (
               <p className="text-parchment-500 text-sm text-right">
-                Guide by {equipment.author}
+                {equipment.author && <>Guide by {equipment.author}</>}
+                {equipment.author && equipment.updatedAt && <> · </>}
+                {equipment.updatedAt && (
+                  <>Updated {new Date(equipment.updatedAt).toLocaleDateString('en-GB', {
+                    day: 'numeric',
+                    month: 'long',
+                    year: 'numeric'
+                  })}</>
+                )}
               </p>
             )}
 

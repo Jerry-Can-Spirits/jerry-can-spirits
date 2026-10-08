@@ -119,6 +119,7 @@ export const cocktailBySlugQuery = `*[_type == "cocktail" && slug.current == $sl
   servings,
   prepTime,
   author,
+  updatedAt,
   faqs,
   tags,
   featured,
@@ -199,6 +200,7 @@ export const ingredientBySlugQuery = `*[_type == "ingredient" && slug.current ==
   professionalTip,
   faqs,
   author,
+  updatedAt,
   "relatedGuides": relatedGuides[defined(guide->._id)] {
     "guide": guide->{ _id, title, slug },
     sectionAnchor,
@@ -281,6 +283,7 @@ export const equipmentBySlugQuery = `*[_type == "equipment" && slug.current == $
   professionalTip,
   faqs,
   author,
+  updatedAt,
   videoUrl,
   videoUploadDate,
   "relatedGuides": relatedGuides[defined(guide->._id)] {

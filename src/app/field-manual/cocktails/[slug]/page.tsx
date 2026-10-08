@@ -91,6 +91,7 @@ interface SanityCocktail {
   servings?: string
   prepTime?: string
   author?: string
+  updatedAt?: string
   featuredSpirit?: {
     _id: string
     name: string
@@ -287,6 +288,7 @@ export default async function CocktailPage({ params }: PageProps) {
     "author": authorRefFor(cocktail.author),
     "publisher": ORG_REF,
     "datePublished": cocktail._createdAt,
+    "dateModified": cocktail.updatedAt,
     "prepTime": prepTime,
     "totalTime": prepTime,
     "recipeYield": recipeYield,
@@ -632,9 +634,17 @@ export default async function CocktailPage({ params }: PageProps) {
           )}
 
           {/* Author byline */}
-          {cocktail.author && (
+          {(cocktail.author || cocktail.updatedAt) && (
             <p className="mt-4 text-parchment-500 text-sm text-right">
-              Recipe by {cocktail.author}
+              {cocktail.author && <>Recipe by {cocktail.author}</>}
+              {cocktail.author && cocktail.updatedAt && <> · </>}
+              {cocktail.updatedAt && (
+                <>Updated {new Date(cocktail.updatedAt).toLocaleDateString('en-GB', {
+                  day: 'numeric',
+                  month: 'long',
+                  year: 'numeric'
+                })}</>
+              )}
             </p>
           )}
         </div>

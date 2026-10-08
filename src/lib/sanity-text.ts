@@ -112,11 +112,15 @@ export function extractHeadings(value: unknown): ExtractedHeading[] {
     .map((text) => ({ text, slug: headingSlug(text) }))
 }
 
+// A rich text body may hold custom blocks (a comparisonTable) between its text
+// blocks. It is still portable text: the text blocks are read as such and the
+// custom blocks are walked by shape.
 function isPortableTextArray(value: unknown): value is PortableTextBlockish[] {
   return (
     Array.isArray(value) &&
     value.length > 0 &&
-    value.every((b) => typeof b === 'object' && b !== null && (b as PortableTextBlockish)._type === 'block')
+    value.every((b) => typeof b === 'object' && b !== null && typeof (b as PortableTextBlockish)._type === 'string') &&
+    value.some((b) => (b as PortableTextBlockish)._type === 'block')
   )
 }
 
@@ -174,7 +178,11 @@ function walk(value: unknown, path: string, out: WalkResult): void {
   }
 
   if (isPortableTextArray(value)) {
-    for (const block of value) {
+    for (const [i, block] of value.entries()) {
+      if (block._type !== 'block') {
+        walk(block, `${path}[${i}]`, out)
+        continue
+      }
       for (const child of block.children ?? []) {
         if (typeof child.text === 'string' && child.text.trim()) out.text.push(child.text)
       }

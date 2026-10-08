@@ -139,6 +139,30 @@ describe('extractText', () => {
   it('stays silent about an object of pure numbers rather than calling it broken', () => {
     expect(() => extractText({ _type: 'x', priceRange: { budget: 8, premium: 22 } })).not.toThrow()
   })
+
+  it('reads an inline table inside portable text without taking block styles or mark keys as copy', () => {
+    const { text, words } = extractText({
+      _type: 'equipment',
+      longDescription: [
+        {
+          _type: 'block',
+          _key: 'b1',
+          style: 'normal',
+          markDefs: [],
+          children: [{ _type: 'span', _key: 's1', text: 'Pick by volume.', marks: ['strong'] }],
+        },
+        {
+          _type: 'comparisonTable',
+          _key: 't1',
+          caption: 'Shaker types',
+          headers: ['Type', 'Seal'],
+          rows: [{ _type: 'row', _key: 'r1', cells: ['Boston', 'Tight'] }],
+        },
+      ],
+    })
+    expect(text).toBe('Pick by volume. Shaker types Type Seal Boston Tight')
+    expect(words).toBe(9)
+  })
 })
 
 describe('present but empty is an error', () => {

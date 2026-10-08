@@ -1,5 +1,6 @@
 import { PortableText } from 'next-sanity'
 import type { PortableTextBlock, PortableTextComponents } from 'next-sanity'
+import ComparisonTable, { type ComparisonTableData } from '@/components/ComparisonTable'
 import { blockPlainText, headingSlug } from '@/lib/sanity-text'
 
 // Sanity authors are trusted, but defence-in-depth: a Sanity account
@@ -20,6 +21,13 @@ function safeLinkHref(href: string): string {
 }
 
 const components: PortableTextComponents = {
+  types: {
+    comparisonTable: ({ value }) => (
+      <div className="my-8 first:mt-0 last:mb-0">
+        <ComparisonTable {...(value as ComparisonTableData)} />
+      </div>
+    ),
+  },
   block: {
     h1: ({ children }) => (
       // The page already owns the canonical <h1>. If a Sanity author starts

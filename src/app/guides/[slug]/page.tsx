@@ -15,6 +15,7 @@ import { ORG_REF, authorRefFor } from '@/lib/jsonLd'
 import FAQAccordion from '@/components/FAQAccordion'
 import ScrollRow from '@/components/ScrollRow'
 import SectionHeading from '@/components/SectionHeading'
+import ComparisonTable, { type ComparisonTableData } from '@/components/ComparisonTable'
 
 const TEAM_MEMBERS = new Set(['Dan Freeman', 'Rhys Williams'])
 
@@ -35,16 +36,6 @@ interface Section {
 interface FAQ {
   question: string
   answer: string
-}
-
-interface TableRow {
-  cells: string[]
-}
-
-interface ComparisonTable {
-  caption: string
-  headers: string[]
-  rows: TableRow[]
 }
 
 interface Distillery {
@@ -92,7 +83,7 @@ interface Guide {
   introduction: string
   sections: Section[]
   faqs?: FAQ[]
-  comparisonTables?: ComparisonTable[]
+  comparisonTables?: ComparisonTableData[]
   featuredDistilleries?: Distillery[]
   relatedGuides?: RelatedGuide[]
   relatedCocktails?: RelatedCocktail[]
@@ -200,8 +191,8 @@ export default async function GuidePage({ params }: PageProps) {
     // to the Organization rather than inventing a byline.
     author: authorRefFor(guide.author),
     publisher: ORG_REF,
-    datePublished: guide.publishedAt || new Date().toISOString(),
-    dateModified: guide.updatedAt || guide.publishedAt || new Date().toISOString(),
+    datePublished: guide.publishedAt || guide._createdAt,
+    dateModified: guide.updatedAt || guide.publishedAt || guide._createdAt,
     mainEntityOfPage: `https://jerrycanspirits.co.uk/guides/${guide.slug.current}`
   }
 
@@ -395,68 +386,7 @@ export default async function GuidePage({ params }: PageProps) {
           {guide.comparisonTables && guide.comparisonTables.length > 0 && (
             <div className="mt-16 space-y-12">
               {guide.comparisonTables.map((table, index) => (
-                <div key={index} className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20 overflow-hidden">
-                  <h3 className="text-2xl font-serif font-bold text-gold-300 mb-6">
-                    {table.caption}
-                  </h3>
-
-                  {/* Mobile Card View */}
-                  <div className="md:hidden space-y-4">
-                    {table.rows.map((row, rowIndex) => (
-                      <div
-                        key={rowIndex}
-                        className="bg-jerry-green-800/30 rounded-lg p-4 border border-gold-500/10"
-                      >
-                        <h4 className="text-white font-semibold text-lg mb-3">
-                          {row.cells[0]}
-                        </h4>
-                        <div className="space-y-2">
-                          {table.headers.slice(1).map((header, headerIndex) => (
-                            <div key={headerIndex} className="flex justify-between items-center text-sm">
-                              <span className="text-gold-400">{header}</span>
-                              <span className="text-parchment-300">{row.cells[headerIndex + 1]}</span>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-
-                  {/* Desktop Table View */}
-                  <div className="hidden md:block overflow-x-auto">
-                    <table className="w-full">
-                      <thead>
-                        <tr className="border-b border-gold-500/30">
-                          {table.headers.map((header, headerIndex) => (
-                            <th
-                              key={headerIndex}
-                              className="px-4 py-3 text-left text-gold-300 font-semibold text-sm uppercase tracking-wider"
-                            >
-                              {header}
-                            </th>
-                          ))}
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {table.rows.map((row, rowIndex) => (
-                          <tr
-                            key={rowIndex}
-                            className="border-b border-gold-500/10 hover:bg-jerry-green-800/20 transition-colors"
-                          >
-                            {row.cells.map((cell, cellIndex) => (
-                              <td
-                                key={cellIndex}
-                                className={`px-4 py-3 text-parchment-300 ${cellIndex === 0 ? 'font-semibold text-white' : ''}`}
-                              >
-                                {cell}
-                              </td>
-                            ))}
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
+                <ComparisonTable key={index} {...table} />
               ))}
             </div>
           )}
