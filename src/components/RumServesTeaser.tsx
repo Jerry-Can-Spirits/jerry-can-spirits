@@ -78,9 +78,12 @@ export default async function RumServesTeaser() {
             </Link>
           ))}
         />
-        <div className="mt-10 text-center">
+        <div className="mt-10 flex flex-col items-center gap-3 sm:flex-row sm:justify-center sm:gap-8 text-center">
           <Link href="/field-manual/cocktails/" className="text-gold-300 hover:text-gold-200 underline underline-offset-4 text-sm font-semibold">
             Every serve, in the Field Manual
+          </Link>
+          <Link href="/field-manual/whats-in-my-bar/?add=jerry-can-spirits-expedition-spiced-rum" className="text-gold-300 hover:text-gold-200 underline underline-offset-4 text-sm font-semibold">
+            See what you can make with what you have
           </Link>
         </div>
       </div>
