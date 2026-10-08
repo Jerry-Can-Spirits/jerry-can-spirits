@@ -382,7 +382,7 @@ export default async function GuidePage({ params }: PageProps) {
        <section className="band-light py-12">
         {/* Main Content Sections */}
         <article className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <SectionHeading eyebrow="The guide">What you need to know</SectionHeading>
+          <SectionHeading eyebrow="The guide">Start here.</SectionHeading>
 
           {guide.sections && (
             <GuideSections
@@ -467,7 +467,7 @@ export default async function GuidePage({ params }: PageProps) {
        {hasMore && (
        <section className="band-dark py-12">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <SectionHeading eyebrow="Go further">More to explore</SectionHeading>
+          <SectionHeading eyebrow="Go further">Before you ask.</SectionHeading>
 
           <div className="space-y-16">
           {/* Featured Distilleries */}
@@ -529,7 +529,7 @@ export default async function GuidePage({ params }: PageProps) {
        {hasRelated && (
        <section className="band-light py-12">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <SectionHeading eyebrow="Make something">Put it to use</SectionHeading>
+          <SectionHeading eyebrow="Make something">Put it to use.</SectionHeading>
 
           <div className="space-y-12">
               {/* Related Cocktails */}
@@ -618,15 +618,12 @@ export default async function GuidePage({ params }: PageProps) {
 
        <section className="band-dark py-12">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <SectionHeading eyebrow="Keep reading">Where next</SectionHeading>
+          <SectionHeading eyebrow="Keep reading">Take it further.</SectionHeading>
 
           <div className="space-y-12">
           {/* Call to Action */}
           {guide.callToAction && guide.callToAction.text && (
             <div className="bg-linear-to-br from-gold-500/10 to-gold-600/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/30 text-center">
-              <h3 className="text-2xl font-serif font-bold text-white mb-4">
-                Ready to Get Started?
-              </h3>
               <Link
                 href={guide.callToAction.url || '/shop'}
                 className="inline-flex items-center gap-2 px-8 py-4 bg-gold-500 hover:bg-gold-400 text-jerry-green-900 font-semibold rounded-lg transition-all duration-300 transform hover:scale-105"

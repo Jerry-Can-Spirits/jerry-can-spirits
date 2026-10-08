@@ -82,6 +82,24 @@ const categoryConfig = {
   garnish: 'Garnish Tools'
 }
 
+// The shop link under the header, only where the shop sells the thing the
+// page describes. Every glassware page used to say "Shop rum glasses", the
+// sherry glass included, and every tool page "Shop bar accessories" (content
+// review, 8 Oct 2026). Anything the shop does not stock gets the Field Manual.
+const SHOP_LINKS: Record<string, { href: string; label: string }> = {
+  'rum-glass': { href: '/shop/rum-glasses/', label: 'Shop rum glasses' },
+  'rocks-glass': { href: '/shop/cocktail-glasses-glassware/', label: 'Shop cocktail glasses' },
+  'highball-glass': { href: '/shop/cocktail-glasses-glassware/', label: 'Shop cocktail glasses' },
+  'hurricane-glass': { href: '/shop/cocktail-glasses-glassware/', label: 'Shop cocktail glasses' },
+  'drinking-jam-jar': { href: '/shop/cocktail-glasses-glassware/', label: 'Shop cocktail glasses' },
+  'cobbler-shaker': { href: '/shop/cocktail-shakers/', label: 'Shop cocktail shakers' },
+  jigger: { href: '/shop/bar-accessories/', label: 'Shop bar accessories' },
+  'bar-blade': { href: '/shop/bar-accessories/', label: 'Shop bar accessories' },
+  'hip-flask': { href: '/shop/hip-flasks/', label: 'Shop hip flasks' },
+  'spirit-stones': { href: '/shop/ice-chilling/', label: 'Shop ice and chilling' },
+}
+const FIELD_MANUAL_LINK = { href: '/field-manual/equipment/', label: 'See all bar equipment' }
+
 // Extract YouTube video ID from URL
 function getYouTubeVideoId(url: string): string | null {
   const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/
@@ -150,6 +168,15 @@ export default async function EquipmentDetailPage({ params }: { params: Promise<
   // The name with its article, for the band headings. A tool already called
   // "The ..." keeps its own.
   const theName = /^the\b/i.test(equipment.name) ? equipment.name : `the ${equipment.name}`
+
+  const shopLink = SHOP_LINKS[equipment.slug.current] ?? FIELD_MANUAL_LINK
+
+  // The January template lists (what to look for, common mistakes, care,
+  // lifespan, history) predate the hand-written body and contradict it in
+  // places: the sherry glass tips say a white wine glass will do, its common
+  // mistakes say it will not (content review, 8 Oct 2026). Where the body exists
+  // the lists are not rendered. The data stays in Sanity.
+  const showLegacyLists = !(equipment.longDescription && equipment.longDescription.length > 0)
 
   const articleSchema = {
     '@context': 'https://schema.org',
@@ -231,7 +258,7 @@ export default async function EquipmentDetailPage({ params }: { params: Promise<
     },
 
     // Care & Maintenance
-    (equipment.careInstructions || equipment.lifespan) && {
+    showLegacyLists && (equipment.careInstructions || equipment.lifespan) && {
       question: 'Care & Maintenance',
       answer: (
         <div className="space-y-4">
@@ -273,7 +300,7 @@ export default async function EquipmentDetailPage({ params }: { params: Promise<
     },
 
     // History
-    equipment.history && {
+    showLegacyLists && equipment.history && {
       question: 'History & Context',
       answer: <p className="text-parchment-300 leading-relaxed whitespace-pre-line">{equipment.history}</p>,
     },
@@ -311,24 +338,11 @@ export default async function EquipmentDetailPage({ params }: { params: Promise<
           <p className="text-xl text-parchment-300 leading-relaxed whitespace-pre-line">
             {equipment.description}
           </p>
-          {/* The shop sells the thing this page describes. The sherry glass
-              page took 178 search clicks in a quarter and linked to no shop
-              page (Audit A, 3 Oct 2026). Glassware points at the rum glasses
-              collection, tools at bar accessories; garnish has nothing to sell. */}
-          {equipment.category === 'glassware' && (
-            <p className="mt-4">
-              <Link href="/shop/rum-glasses/" className="inline-flex min-h-11 items-center text-gold-300 underline underline-offset-4 hover:text-gold-200">
-                Shop rum glasses
-              </Link>
-            </p>
-          )}
-          {['shaking', 'straining', 'measuring', 'tools'].includes(equipment.category) && (
-            <p className="mt-4">
-              <Link href="/shop/bar-accessories/" className="inline-flex min-h-11 items-center text-gold-300 underline underline-offset-4 hover:text-gold-200">
-                Shop bar accessories
-              </Link>
-            </p>
-          )}
+          <p className="mt-4">
+            <Link href={shopLink.href} className="inline-flex min-h-11 items-center text-gold-300 underline underline-offset-4 hover:text-gold-200">
+              {shopLink.label}
+            </Link>
+          </p>
         </div>
 
         <div className="flex flex-col lg:grid lg:grid-cols-2 gap-12 items-start">
@@ -445,7 +459,7 @@ export default async function EquipmentDetailPage({ params }: { params: Promise<
             )}
 
             {/* What to Look For */}
-            {equipment.whatToLookFor && equipment.whatToLookFor.length > 0 && (
+            {showLegacyLists && equipment.whatToLookFor && equipment.whatToLookFor.length > 0 && (
               <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
                 <h2 className="text-2xl font-serif font-bold text-gold-300 mb-4">What to Look For</h2>
                 <ul className="space-y-4">
@@ -459,7 +473,7 @@ export default async function EquipmentDetailPage({ params }: { params: Promise<
             )}
 
             {/* Common Mistakes */}
-            {equipment.commonMistakes && equipment.commonMistakes.length > 0 && (
+            {showLegacyLists && equipment.commonMistakes && equipment.commonMistakes.length > 0 && (
               <div className="bg-linear-to-br from-red-500/10 to-red-600/5 backdrop-blur-sm rounded-xl p-6 border border-red-500/20">
                 <h2 className="text-2xl font-serif font-bold text-red-400 mb-4">Common Mistakes to Avoid</h2>
                 <ul className="space-y-4">
