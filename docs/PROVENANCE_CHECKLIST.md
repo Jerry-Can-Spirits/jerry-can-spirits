@@ -160,9 +160,6 @@ These trip the grep every time and have been ruled on. Leave them alone.
 - Hot Buttered Rum's brown sugar note in Sanity, "the rum's own molasses
   character" — the drink is built on generic dark rum, so this is a category
   fact. Trips tier one of the Sanity sweep on the phrase "the rum's".
-- Storm & Spice's description in Sanity, "the molasses-heavy depth of Bermudian
-  black rum" — the molasses is attributed to Gosling's and explicitly
-  contrasted with ours in the same sentence.
 - The Dragon's Breath cocktail in Sanity — a house serve of Penderyn, honey
   syrup and ginger beer. It collides with the former producer's brand name and
   is unrelated to it: they produce a spirit under that name, we publish a

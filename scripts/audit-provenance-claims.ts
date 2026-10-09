@@ -51,7 +51,7 @@ const OURS = /\bexpedition\b|\bjerry can\b|\bour rum\b|\bthe rum's\b|\bwe (disti
  * Tier-1 sentences reviewed by hand and judged not to be claims about our rum.
  *
  * WHY AN ALLOW-LIST AT ALL. Without one this sweep exits non-zero on every run,
- * because two sentences trip it permanently and legitimately. A check that is
+ * because legitimate sentences trip it permanently and legitimately. A check that is
  * always red is a check nobody reads, and that is precisely how The Old
  * Standard published "Welsh molasses foundation" for months: the sweeps that
  * would have shown it were already failing for reasons everybody had learned to
@@ -66,12 +66,6 @@ const OURS = /\bexpedition\b|\bjerry can\b|\bour rum\b|\bthe rum's\b|\bwe (disti
  * Adding an entry is a founder decision, the same as the claim itself.
  */
 const ALLOWED: Array<{ doc: string; why: string; sentence: string }> = [
-  {
-    doc: 'Storm & Spice',
-    why: 'Molasses describes the Bermudian black rum of the original, explicitly contrasted with ours in the same sentence.',
-    sentence:
-      'Where the original relies on the molasses-heavy depth of Bermudian black rum, this version uses Jerry Can Spirits Expedition Spiced Rum, bringing vanilla, cinnamon, and clove to the party.',
-  },
   {
     doc: 'Sugar Cane Juice',
     why: "The sentence is a Ti' Punch spec, so \"the rum\" is the Jamaican rum the drink calls for, not ours.",
