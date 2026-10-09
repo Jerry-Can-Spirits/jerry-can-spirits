@@ -34,7 +34,8 @@ const TRUSTPILOT_STARS: Record<string, string> = {
 // profile. They are Trustpilot's figures, stated as such beside the product
 // page's "Customer reviews" link (Audit B, 3 Oct 2026). They are not an
 // on-site aggregate and must never feed JSON-LD. Checked by hand on the date
-// given; update all three together, monthly with the scorecard.
+// given. The product page reads the scheduled KV figure first and falls back
+// to these only when KV is empty; update all three together, monthly.
 export const TRUSTPILOT_PROFILE_URL = 'https://uk.trustpilot.com/review/jerrycanspirits.co.uk'
 export const TRUSTPILOT_PUBLIC = { score: '4.6', reviews: 34, checked: '2026-10-03' } as const
 
