@@ -31,6 +31,8 @@ import ProductFormats, { type ProductFormatOption } from '@/components/ProductFo
 import TrustStrip from '@/components/TrustStrip'
 import { displayProductTitle } from '@/lib/product-title'
 import { TRUSTPILOT_PROFILE_URL, TRUSTPILOT_PUBLIC } from '@/lib/trustpilot-assets'
+import { getCloudflareContext } from '@opennextjs/cloudflare'
+import { getRating } from '@/lib/ratings-cache'
 import RecognitionRow from '@/components/RecognitionRow'
 import { formatsForHandle } from '@/lib/product-formats'
 import { client } from '@/sanity/lib/client'
@@ -228,12 +230,26 @@ function calculateUnitPrice(priceAmount: string, volumeStr: string, currencyCode
   return `${symbol}${pricePerLitre.toFixed(2)}/litre`
 }
 
+// The same scheduled Trustpilot figure the reviews page shows, so the two never
+// disagree. The hand-checked constant is only the fallback when KV has nothing.
+async function trustpilotSummary(): Promise<{ score: string; reviews: number }> {
+  try {
+    const { env } = await getCloudflareContext({ async: true })
+    const live = await getRating(env.SITE_OPS as KVNamespace, 'trustpilot')
+    if (live) return { score: live.rating.toFixed(1), reviews: live.count }
+  } catch {
+    // Fall through to the hand-checked figure.
+  }
+  return { score: TRUSTPILOT_PUBLIC.score, reviews: TRUSTPILOT_PUBLIC.reviews }
+}
+
 export default async function ProductPage({
   params
 }: {
   params: Promise<{ handle: string }>
 }) {
   const { handle } = await params
+  const trustpilot = await trustpilotSummary()
   let product: ShopifyProduct | null = null
   let relatedProducts: ShopifyProduct[] = []
   let sanityProduct: SanityProduct | null = null
@@ -635,7 +651,7 @@ export default async function ProductPage({
                       rel="noopener noreferrer"
                       className="inline-flex items-center min-h-[44px] text-parchment-300 hover:text-gold-200"
                     >
-                      {TRUSTPILOT_PUBLIC.score} on Trustpilot from {TRUSTPILOT_PUBLIC.reviews} reviews
+                      {trustpilot.score} on Trustpilot from {trustpilot.reviews} reviews
                     </a>
                   </p>
                 )}
