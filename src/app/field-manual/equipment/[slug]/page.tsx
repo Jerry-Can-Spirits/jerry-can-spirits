@@ -182,7 +182,7 @@ export default async function EquipmentDetailPage({ params }: { params: Promise<
   const articleSchema = {
     '@context': 'https://schema.org',
     '@type': 'Article',
-    headline: `${equipment.name} — Field Manual`,
+    headline: `${equipment.name} | Field Manual`,
     description: equipment.description,
     image: equipment.image ? urlFor(equipment.image).url() : undefined,
     datePublished: equipment._createdAt,

@@ -167,7 +167,7 @@ export default async function IngredientDetailPage({ params }: { params: Promise
   const articleSchema = {
     '@context': 'https://schema.org',
     '@type': 'Article',
-    headline: `${ingredient.name} — Field Manual`,
+    headline: `${ingredient.name} | Field Manual`,
     description: ingredient.description,
     image: ingredient.image ? urlFor(ingredient.image).url() : undefined,
     datePublished: ingredient._createdAt,
