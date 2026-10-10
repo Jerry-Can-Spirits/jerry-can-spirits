@@ -35,7 +35,7 @@ function renderGarnishes(items: GarnishItem[]) {
         {item.ingredient ? (
           <Link
             href={`/field-manual/ingredients/${item.ingredient.slug}/`}
-            className="text-blue-400 hover:text-blue-300 underline transition-colors"
+            className="text-gold-300 hover:text-gold-200 underline decoration-dotted underline-offset-2 hover:decoration-solid transition-colors"
           >
             {item.ingredient.name}
           </Link>
@@ -307,7 +307,7 @@ export default function CocktailRecipeDisplay({ cocktail }: Props) {
                 {cocktail?.glassware ? (
                   <Link
                     href={`/field-manual/equipment/${cocktail.glassware.slug.current}/`}
-                    className="text-blue-400 hover:text-blue-300 underline transition-colors"
+                    className="text-gold-300 hover:text-gold-200 underline decoration-dotted underline-offset-2 hover:decoration-solid transition-colors"
                   >
                     {cocktail.glassware.name}
                   </Link>
@@ -361,7 +361,7 @@ export default function CocktailRecipeDisplay({ cocktail }: Props) {
                   {ingredient.ingredientRef ? (
                     <Link
                       href={`/field-manual/ingredients/${ingredient.ingredientRef.slug.current}/`}
-                      className="font-semibold text-blue-400 hover:text-blue-300 underline decoration-dotted underline-offset-2 transition-colors"
+                      className="font-semibold text-gold-300 hover:text-gold-200 underline decoration-dotted underline-offset-2 hover:decoration-solid transition-colors"
                       title={`Learn more about ${ingredient.name}`}
                     >
                       {ingredient.name}

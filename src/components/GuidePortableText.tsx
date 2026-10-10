@@ -68,7 +68,7 @@ const components: PortableTextComponents = {
           href={href}
           target={isExternal ? '_blank' : undefined}
           rel={isExternal ? 'noopener noreferrer' : undefined}
-          className="text-blue-400 hover:text-blue-300 underline decoration-dotted transition-colors"
+          className="text-gold-300 hover:text-gold-200 underline decoration-dotted underline-offset-2 hover:decoration-solid transition-colors"
         >
           {children}
         </a>
@@ -87,7 +87,7 @@ const components: PortableTextComponents = {
       return (
         <Link
           href={route}
-          className="text-blue-400 hover:text-blue-300 underline decoration-dotted transition-colors"
+          className="text-gold-300 hover:text-gold-200 underline decoration-dotted underline-offset-2 hover:decoration-solid transition-colors"
         >
           {children}
         </Link>

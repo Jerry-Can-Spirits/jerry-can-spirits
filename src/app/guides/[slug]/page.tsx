@@ -372,7 +372,7 @@ export default async function GuidePage({ params }: PageProps) {
        {hasBody && (
        <section className="band-light py-12">
         {/* Main Content Sections */}
-        <article className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <article className="ground-plain max-w-4xl mx-auto px-4 py-10 sm:px-8 sm:rounded-2xl lg:px-12">
           <SectionHeading eyebrow="The guide">Start here.</SectionHeading>
 
           {guide.sections && (

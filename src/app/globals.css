@@ -750,6 +750,14 @@ html:not([data-age-verified]) body:has(.age-gate) {
   --tw-prose-td-borders: #dfc396;
 }
 
+/* Long reading on a light band. Body text over the contours reads less well
+   than on a plain ground (Dan, 10 Oct 2026), so a guide's article sits on the
+   band colour with the lines left at its edges. Short blocks inside it go
+   green as islands, as they do anywhere on a light band. */
+.band-light .ground-plain {
+  background-color: #e8e6df;
+}
+
 /* The status colours: red for a warning, green for a budget pick or a good
    sign, amber and yellow for a badge. Chosen against green, and the reason
    any panel carrying one had to stay on a dark band. The same treatment

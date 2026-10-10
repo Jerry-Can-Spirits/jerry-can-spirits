@@ -58,7 +58,7 @@ export default function SectionHeading({
 
       {intro && (
         <p
-          className={`mt-4 ${introSize} text-parchment-300 leading-relaxed${
+          className={`mt-4 ${introSize} text-parchment-300 font-medium leading-relaxed${
             centred ? ' mx-auto' : ''
           }`}
         >
