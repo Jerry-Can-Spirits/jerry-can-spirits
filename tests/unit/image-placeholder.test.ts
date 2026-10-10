@@ -24,11 +24,13 @@ vi.mock('@/sanity/lib/image', () => ({
   urlFor: () => ({ url: () => 'https://cdn.sanity.io/images/stub.jpg' }),
 }))
 
-// The class that reserves the square of layout space for the image. It appears
-// exactly once in each template, on the image container itself, so its presence
-// in the markup of an imageless page is the reserved-empty-space failure. The
-// panel's own gradient classes are shared with other cards and cannot be used.
-const RESERVED_SPACE = 'aspect-square'
+// The class that reserves layout space for the image. It appears exactly once in
+// each template, on the image container itself, so its presence in the markup of
+// an imageless page is the reserved-empty-space failure. The panel's own gradient
+// classes are shared with other cards and cannot be used. Equipment images are
+// 4:3 from 10 Oct 2026, matching the equipment cards and the cocktail house style.
+const INGREDIENT_RESERVED_SPACE = 'aspect-square'
+const EQUIPMENT_RESERVED_SPACE = 'aspect-4/3'
 
 // The sidebar column that holds the panel. On a document with no image, no
 // badge and no quick facts it must render completely empty — an opening tag
@@ -83,7 +85,7 @@ describe('ingredient page image placeholder', () => {
     const html = await renderPage(mod, 'test-ingredient')
 
     expect(html).not.toContain('Image coming soon')
-    expect(html).not.toContain(RESERVED_SPACE)
+    expect(html).not.toContain(INGREDIENT_RESERVED_SPACE)
     expect(html).toContain(EMPTY_SIDEBAR)
   })
 
@@ -92,7 +94,7 @@ describe('ingredient page image placeholder', () => {
     const mod = await import('@/app/field-manual/ingredients/[slug]/page')
     const html = await renderPage(mod, 'test-ingredient')
 
-    expect(html).toContain(RESERVED_SPACE)
+    expect(html).toContain(INGREDIENT_RESERVED_SPACE)
     expect(html).toContain('cdn.sanity.io')
     expect(html).not.toContain('Image coming soon')
   })
@@ -118,7 +120,7 @@ describe('equipment page image placeholder', () => {
     const html = await renderPage(mod, 'test-equipment')
 
     expect(html).not.toContain('Image coming soon')
-    expect(html).not.toContain(RESERVED_SPACE)
+    expect(html).not.toContain(EQUIPMENT_RESERVED_SPACE)
     expect(html).toContain(EMPTY_SIDEBAR)
   })
 
@@ -127,7 +129,7 @@ describe('equipment page image placeholder', () => {
     const mod = await import('@/app/field-manual/equipment/[slug]/page')
     const html = await renderPage(mod, 'test-equipment')
 
-    expect(html).toContain(RESERVED_SPACE)
+    expect(html).toContain(EQUIPMENT_RESERVED_SPACE)
     expect(html).toContain('cdn.sanity.io')
     expect(html).not.toContain('Image coming soon')
   })
