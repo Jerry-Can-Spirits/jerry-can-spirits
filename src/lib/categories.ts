@@ -437,11 +437,11 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
     // on 1,467 impressions a quarter, Audit A, 3 Oct 2026): which glass for
     // which pour. The long version moved to the SEO body below the grid.
     introBody: [
-      'Neat or over one large cube: a tumbler, so the nose sits close and the ice melts slowly. The Storm and Spice or any long serve: a highball, which keeps the ginger beer lively and gives the lime room. A muddled or short mixed drink: the mixer glass, wide enough to muddle in. Every glass here is chosen for Expedition Spiced Rum.',
+      'Neat or over one large cube: a tumbler, so the nose sits close and the ice melts slowly. The Storm and Spice or any long serve: a highball, which keeps the ginger beer lively and gives the lime room. A muddled or short mixed drink: the contemporary tumbler, wide enough to muddle in. Every glass here is chosen for Expedition Spiced Rum.',
     ],
     seoTitle: 'The Right Glass Changes the Drink',
     seoBody: [
-      'A highball holds carbonation longer and gives a rum and mixer room to breathe. A rocks glass concentrates the nose on a neat pour. A mixer glass gives a muddled drink room to work. These are not arbitrary distinctions. They affect what you taste and how the drink develops.',
+      'A highball holds carbonation longer and gives a rum and mixer room to breathe. A rocks glass concentrates the nose on a neat pour. A wide tumbler gives a muddled drink room to work. These are not arbitrary distinctions. They affect what you taste and how the drink develops.',
       'Expedition Spiced Rum opens with vanilla and cinnamon. The ginger and cassia come through the middle. The bourbon oak holds to the finish. The right glass gives each of those notes space to arrive on their own terms.',
       'The glassware here is chosen for the drinks you are likely to make with it. Not for how it photographs on a shelf.',
     ],
@@ -531,7 +531,7 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
     h1: 'Cocktail Glasses',
     metaTitle: 'Cocktail Glasses & Highballs UK',
     metaDescription:
-      'Cocktail glasses for the home bar. Highballs, tumblers, hurricane glasses and mixer glasses. The right vessel makes a difference.',
+      'Cocktail glasses for the home bar. Highballs, tumblers and hurricane glasses. The right vessel makes a difference.',
     introBody: [
       'The right glass changes how a drink behaves. Not as a rule for its own sake. Shape affects temperature, dilution, and how the aroma reaches you.',
       'A highball holds carbonation better. A tumbler lets a spirit open up. A hurricane glass is built for layered cocktails. Each one has a reason.',
@@ -541,7 +541,7 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
     seoTitle: 'Every Glass Here Has a Reason',
     seoBody: [
       'Glassware is not just a vessel. The shape of the glass affects how aroma reaches you, how quickly the drink warms, how carbonation holds, and how ice behaves. A highball is tall because it keeps a longer pour cold and holds carbonation against a mixer. A tumbler is wide because it lets a neat spirit breathe.',
-      'The glasses in this collection are selected for the drinks you are actually likely to make. Highballs for long drinks. Tumblers for spirits over ice. Hurricane glasses for layered cocktails. Mixer glasses for muddled and short mixed drinks.',
+      'The glasses in this collection are selected for the drinks you are actually likely to make. Highballs for long drinks. Tumblers for spirits over ice. Hurricane glasses for layered cocktails. Wide tumblers for muddled and short mixed drinks.',
       'Nothing here is decorative. Everything has a job to do.',
     ],
     pillars: [
