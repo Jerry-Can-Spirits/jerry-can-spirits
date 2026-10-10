@@ -13,7 +13,10 @@ export const FACET_PAGE_SIZE = 24
 // page still exists and still renders — it is reachable by filtering — but it
 // is noindexed, because a page listing three recipes is thin whatever is
 // written around it. A floor, not a ceiling: promote on search evidence.
-export const INDEXABLE_MIN_COCKTAILS = 10
+// Lowered from 10 to 5 on 10 Oct 2026, when the Long Island family moved out
+// of Collins into Iced Teas (7). Every style page that clears 5 carries a
+// written introduction in facet-copy.ts; a new one must too.
+export const INDEXABLE_MIN_COCKTAILS = 5
 
 // Never indexable regardless of count. These are not queries anyone types.
 // `multiple` means "no single base spirit", `other` is a bucket, and `liqueur`
@@ -40,8 +43,9 @@ export const NEVER_INDEXED = new Set(['multiple', 'other', 'liqueur'])
  * claiming coverage the data does not have is a fact waiting to become copy.
  *
  * Not every base spirit gets a facet. multiple (20) and liqueur (18) are in
- * NEVER_INDEXED. sherry (5) and vermouth (1) sit below the floor and so have no
- * page: that is the floor working, not an omission.
+ * NEVER_INDEXED. sherry (5) and vermouth (1) are modifiers, not bases a reader
+ * searches by, and are not standalones, so they have no page: that is a
+ * choice, not an omission.
  */
 export const SPIRIT_ROLLUPS: Record<string, { label: string; members: string[] }> = {
   rum: {
