@@ -35,6 +35,13 @@ describe('validating a provenance edit made from a script', () => {
     )
   })
 
+  it('rejects a creator specification that does not name the creator', () => {
+    expect(validateRecipeSourceInput({ authority: 'creator' })).toContain('must name the creator')
+    expect(
+      validateRecipeSourceInput({ authority: 'creator', note: 'Paul Harrington, Cocktail (1998)' })
+    ).toBe(true)
+  })
+
   it('rejects a variation set against a published specification', () => {
     // The "Our version" block renders only when the authority is house, so this
     // writes a paragraph no reader will ever see.

@@ -42,6 +42,16 @@ export const RECIPE_AUTHORITIES = [
    * book; the label says whose work it is.
    */
   'berry',
+  /**
+   * Added 10 October 2026 for the Jasmine, where the drink is matched to the
+   * recipe its creator published (Paul Harrington, 1998) and none of the books
+   * above is the source.
+   *
+   * A named person rather than a book, so the note must carry who and where:
+   * validateRecipeSourceInput refuses a creator specification without one. A
+   * bare "its creator's specification" would claim a credit without making it.
+   */
+  'creator',
   'brand',
   /**
    * Added 22 August 2026 for the Fever-Tree serves, rather than filing them
@@ -135,6 +145,10 @@ export function validateRecipeSourceInput(input: RecipeSourceInput): true | stri
     return 'houseVariation renders only on a house specification. Put the edition or page in the note instead.'
   }
 
+  if (input.authority === 'creator' && !input.note?.trim()) {
+    return "A creator's specification must name the creator and where they published it, in the note."
+  }
+
   if (input.note !== undefined && !input.note.trim()) {
     return 'A note that is present must say something. Leave it off instead.'
   }
@@ -166,6 +180,7 @@ export const AUTHORITY_LABELS: Record<RecipeAuthority, string> = {
   // "Reconstructions" rather than a book title, because that is what they are
   // and the distinction is the whole reason this authority exists.
   berry: "Beachbum Berry's reconstructions",
+  creator: "its creator's published specification",
   // Deliberately vague about which brand, because the note field carries that
   // and the sentence reads badly with a company name dropped into it.
   brand: "the producer's own specification",
@@ -200,6 +215,7 @@ const PICKER_TITLES: Record<RecipeAuthority, string> = {
   waldorf: 'The Old Waldorf-Astoria Bar Book (Crockett)',
   regan: 'The Joy of Mixology (Regan)',
   berry: "Beachbum Berry's reconstructions",
+  creator: "Creator's published specification (name and source in the note)",
   brand: "Brand's own published specification",
   'brand-serve': "Brand's published serve suggestion",
   house: 'House specification',

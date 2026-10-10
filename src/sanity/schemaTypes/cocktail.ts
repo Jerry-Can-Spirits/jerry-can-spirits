@@ -642,7 +642,14 @@ export default defineType({
           name: 'note',
           title: 'Note (optional)',
           type: 'string',
-          description: 'Edition, page, or which of several published versions this follows.'
+          description: 'Edition, page, or which of several published versions this follows. Required for a creator specification: who, and where they published it.',
+          validation: Rule =>
+            Rule.custom((note: string | undefined, context) => {
+              const authority = (context.parent as {authority?: string} | undefined)?.authority
+              return authority === 'creator' && !note?.trim()
+                ? 'Name the creator and where they published the recipe.'
+                : true
+            })
         })
       ]
     }),
