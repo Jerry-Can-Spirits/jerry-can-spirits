@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import type { BarData, BarIngredient, ShelfId } from '@/lib/bar/types'
 import { match } from '@/lib/bar/match-engine'
+import { foldedTo } from '@/lib/bar/config'
 import Backbar from './Backbar'
 import Results from './Results'
 import ShareButton from '@/components/ShareButton'
@@ -36,6 +37,8 @@ export default function BarClient({ data }: { data: BarData }) {
   const nameById = useMemo(() => new Map(allIngredients.map((i) => [i.id, i.name])), [allIngredients])
   const byId = useMemo(() => new Map(allIngredients.map((i) => [i.id, i])), [allIngredients])
   const idBySlug = useMemo(() => new Map(allIngredients.map((i) => [i.slug, i.id])), [allIngredients])
+  // A saved bar may hold the id of a page since folded into its parent.
+  const unfold = (ids: string[]) => [...new Set(ids.map((id) => foldedTo(id, idBySlug) ?? id))]
 
   // Owned bottles that are not on a shelf by default still need to stand on one.
   function pinExtras(ids: Iterable<string>) {
@@ -58,7 +61,7 @@ export default function BarClient({ data }: { data: BarData }) {
     let saved: string[] = []
     try {
       const raw = localStorage.getItem(STORAGE_KEY)
-      if (raw) saved = JSON.parse(raw) as string[]
+      if (raw) saved = unfold(JSON.parse(raw) as string[])
       const savedBeam = localStorage.getItem(SPOTLIGHT_KEY)
       if (savedBeam) setBeam(Number(savedBeam) || 0.5)
     } catch {
@@ -68,7 +71,7 @@ export default function BarClient({ data }: { data: BarData }) {
 
     const params = new URLSearchParams(window.location.search)
     const fromSlugs = (key: string) =>
-      (params.get(key) ?? '').split(',').map((s) => idBySlug.get(s.trim())).filter((id): id is string => !!id)
+      (params.get(key) ?? '').split(',').map((s) => idBySlug.get(s.trim()) ?? foldedTo(s.trim(), idBySlug)).filter((id): id is string => !!id)
     const shared = fromSlugs(SHARE_PARAM)
     const added = fromSlugs(ADD_PARAM)
 
@@ -129,7 +132,7 @@ export default function BarClient({ data }: { data: BarData }) {
   function backToMyBar() {
     let saved: string[] = []
     try {
-      saved = JSON.parse(localStorage.getItem(STORAGE_KEY) ?? '[]') as string[]
+      saved = unfold(JSON.parse(localStorage.getItem(STORAGE_KEY) ?? '[]') as string[])
     } catch {
       // ignore malformed storage
     }

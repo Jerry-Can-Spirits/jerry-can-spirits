@@ -141,6 +141,23 @@ export const COMMON_DEFAULTS: ReadonlySet<string> = new Set([
 // Confirm these slugs exist in Sanity before relying on them.
 export const ASSUMED_BASIC_SLUGS: string[] = ['water', 'ice', 'hot-water']
 
+// Ingredient pages folded into a parent page (ingredient programme P4b, 10 Oct
+// 2026) that a saved bar (stored by Sanity id) or a shared link (by slug) may
+// still name. Only these two ever stood on a shelf; the other folded pages were
+// garnishes, which the tool never lists.
+export const FOLDED_BAR_INGREDIENTS: Readonly<Record<string, string>> = {
+  'pineapple-chunks': 'pineapple',
+  '532542de-8727-491a-9b5c-105ca1bc7b11': 'pineapple',
+  'red-chilli-pepper': 'chilli',
+  'ingredient-red-chilli-pepper': 'chilli',
+}
+
+/** The id of the page a folded slug or id now lives on, if it was folded. */
+export function foldedTo(key: string, idBySlug: ReadonlyMap<string, string>): string | undefined {
+  const parent = FOLDED_BAR_INGREDIENTS[key]
+  return parent ? idBySlug.get(parent) : undefined
+}
+
 export function shelfForCategory(category: string): ShelfId | null {
   return CATEGORY_TO_SHELF[category] ?? null
 }
