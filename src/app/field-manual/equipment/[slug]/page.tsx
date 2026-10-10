@@ -362,7 +362,7 @@ export default async function EquipmentDetailPage({ params }: { params: Promise<
               {(equipment.image || equipment.essential) && (
                 <div className="order-1 bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
                   {equipment.image && (
-                    <div className="relative aspect-square bg-jerry-green-800/20 rounded-lg overflow-hidden">
+                    <div className="relative aspect-4/3 bg-jerry-green-800/20 rounded-lg overflow-hidden">
                       <Image
                         src={urlFor(equipment.image).url()}
                         alt={equipment.image?.alt || equipment.name}
