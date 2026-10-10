@@ -10,7 +10,7 @@ import CocktailRecipeDisplay from '@/components/CocktailRecipeDisplay'
 import CocktailVideo from '@/components/CocktailVideo'
 import { youtubeId, youtubeThumbnail, youtubeEmbedUrl } from '@/lib/youtube'
 import { getFacets } from '@/lib/facet-data'
-import { facetForBaseSpirit, facetPath, headingFor, isSelfCanonical } from '@/lib/cocktail-facets'
+import { facetForBaseSpirit, facetPath, headingFor, isSelfCanonical, NEVER_INDEXED } from '@/lib/cocktail-facets'
 import FieldManualPortableText from '@/components/FieldManualPortableText'
 import ShareButton from '@/components/ShareButton'
 import StarRating from '@/components/StarRating'
@@ -90,6 +90,7 @@ interface SanityCocktail {
   baseSpirit?: string
   servings?: string
   prepTime?: string
+  totalTime?: string
   author?: string
   updatedAt?: string
   featuredSpirit?: {
@@ -224,18 +225,29 @@ export default async function CocktailPage({ params }: PageProps) {
   const prepTime = cocktail.prepTime || prepTimeMap[cocktail.difficulty] || 'PT5M'
   const recipeYield = cocktail.servings || '1 cocktail'
 
-  // Derive cookingMethod from tags
-  const methodTags = ['shaken', 'stirred', 'built', 'frozen', 'hot']
-  const cookingMethod = cocktail.tags
-    ?.filter(tag => methodTags.includes(tag))
-    .map(tag => tag.charAt(0).toUpperCase() + tag.slice(1))
+  // Derive cookingMethod from tags. Frozen and hot describe the serve, so they
+  // map to the method that produces it rather than reading as a method.
+  const methodFor: Record<string, string> = {
+    shaken: 'Shaken',
+    stirred: 'Stirred',
+    built: 'Built',
+    blended: 'Blended',
+    frozen: 'Blended',
+    hot: 'Heated',
+  }
+  const cookingMethod = [
+    ...new Set(cocktail.tags?.map((tag) => methodFor[tag]).filter(Boolean)),
+  ]
 
   // Build keywords from actual data
   const keywordParts = [
     cocktail.name,
     cocktail.baseSpirit?.includes('rum') ? 'rum cocktail' : null,
     cocktail.family?.replace(/-/g, ' '),
-    cocktail.baseSpirit?.replace(/-/g, ' '),
+    // "multiple" and "liqueur" are buckets, not terms anyone searches.
+    cocktail.baseSpirit && !NEVER_INDEXED.has(cocktail.baseSpirit)
+      ? cocktail.baseSpirit.replace(/-/g, ' ')
+      : null,
     ...(cocktail.keywords || []),
   ].filter(Boolean)
   const keywords = [...new Set(keywordParts)].join(', ')
@@ -267,7 +279,8 @@ export default async function CocktailPage({ params }: PageProps) {
     "description": cocktail.description,
     "image": sanityOgUrl(cocktail.image) || "https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/images-logo-webp/public",
     "recipeCategory": recipeCategory,
-    "recipeCuisine": "British",
+    // No recipeCuisine: it was "British" on all 376, including the Margarita
+    // and the Caipirinha. An optional field left out is better than a wrong one.
     "keywords": keywords,
     "recipeIngredient": cocktail.ingredients?.map(i => `${i.amount} ${i.name}`) || [],
     "recipeInstructions": cocktail.instructions?.map((instruction, index) => ({
@@ -290,7 +303,9 @@ export default async function CocktailPage({ params }: PageProps) {
     "datePublished": cocktail._createdAt,
     "dateModified": cocktail.updatedAt,
     "prepTime": prepTime,
-    "totalTime": prepTime,
+    // Infusions, overnight chills and an ice cone frozen ahead take longer
+    // than the prep; everything else is ready when it is made.
+    "totalTime": cocktail.totalTime || prepTime,
     "recipeYield": recipeYield,
     ...(aggregateRating && { aggregateRating }),
     ...(cookingMethod && cookingMethod.length > 0 && { cookingMethod: cookingMethod.join(', ') }),

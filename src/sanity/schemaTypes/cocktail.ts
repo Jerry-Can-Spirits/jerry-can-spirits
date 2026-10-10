@@ -1,6 +1,44 @@
 import {defineField, defineType} from 'sanity'
 import {AUTHORITY_OPTIONS, validateHouseVariation} from '../../lib/recipe-source'
 
+const COCKTAIL_TAG_OPTIONS = [
+  // Strength / Style. Strength means the drink in the glass, not the
+  // units: low-abv is weak after dilution (spritzes, highballs, long
+  // drinks), high-abv is a stirred spirit-forward drink or about three
+  // UK units and up. Spirit-forward means no citrus and no mixer.
+  {title: 'High-ABV', value: 'high-abv'},
+  {title: 'Low-ABV', value: 'low-abv'},
+  {title: 'Spirit-Forward', value: 'spirit-forward'},
+  {title: 'Multi-Spirit', value: 'multi-spirit'},
+  // Method. These feed the Recipe schema's cookingMethod, so every
+  // cocktail needs at least one and each must match its instructions.
+  {title: 'Built', value: 'built'},
+  {title: 'Shaken', value: 'shaken'},
+  {title: 'Stirred', value: 'stirred'},
+  {title: 'Blended', value: 'blended'},
+  // Format / Serve. Frozen is a blended drink served as a slush.
+  {title: 'Long Drink', value: 'long-drink'},
+  {title: 'Batchable', value: 'batchable'},
+  {title: 'Shot', value: 'shot'},
+  {title: 'Hot', value: 'hot'},
+  {title: 'Frozen', value: 'frozen'},
+  // Context / Occasion
+  {title: 'Party', value: 'party'},
+  {title: 'Brunch', value: 'brunch'},
+  {title: 'Aperitif', value: 'aperitif'},
+  {title: 'After-Dinner', value: 'after-dinner'},
+  {title: 'Digestif', value: 'digestif'},
+  {title: 'Celebratory', value: 'celebratory'},
+  {title: 'Late Night', value: 'late-night'},
+  {title: 'Tiki', value: 'tiki'},
+  // Flavour
+  {title: 'Bitter', value: 'bitter'},
+  // Special
+  {title: 'Caffeinated', value: 'caffeinated'},
+  {title: 'Classic', value: 'classic'}
+]
+const COCKTAIL_TAGS = COCKTAIL_TAG_OPTIONS.map((o) => o.value)
+
 export default defineType({
   name: 'cocktail',
   title: 'Cocktail',
@@ -69,6 +107,12 @@ export default defineType({
       title: 'Prep Time',
       type: 'string',
       description: 'Prep time in ISO 8601 format for Google Recipe structured data (e.g., "PT5M" = 5 min, "PT10M" = 10 min)'
+    }),
+    defineField({
+      name: 'totalTime',
+      title: 'Total Time',
+      type: 'string',
+      description: 'Only when the recipe waits beyond the prep: an infusion, an overnight chill, ice frozen ahead. ISO 8601 (e.g., "PT4H"). Left empty, total time equals prep time.'
     }),
     defineField({
       name: 'difficulty',
@@ -456,39 +500,17 @@ export default defineType({
       type: 'array',
       of: [{type: 'string'}],
       options: {
-        list: [
-          // Strength / Style
-          {title: 'High-ABV', value: 'high-abv'},
-          {title: 'Low-ABV', value: 'low-abv'},
-          {title: 'Sessionable', value: 'sessionable'},
-          {title: 'Spirit-Forward', value: 'spirit-forward'},
-          {title: 'Multi-Spirit', value: 'multi-spirit'},
-          // Format / Serve
-          {title: 'Long Drink', value: 'long-drink'},
-          {title: 'Built', value: 'built'},
-          {title: 'Shaken', value: 'shaken'},
-          {title: 'Stirred', value: 'stirred'},
-          {title: 'Batchable', value: 'batchable'},
-          {title: 'Shot', value: 'shot'},
-          {title: 'Hot', value: 'hot'},
-          {title: 'Frozen', value: 'frozen'},
-          // Context / Occasion
-          {title: 'Party', value: 'party'},
-          {title: 'Brunch', value: 'brunch'},
-          {title: 'Aperitif', value: 'aperitif'},
-          {title: 'After-Dinner', value: 'after-dinner'},
-          {title: 'Digestif', value: 'digestif'},
-          {title: 'Celebratory', value: 'celebratory'},
-          {title: 'Late Night', value: 'late-night'},
-          {title: 'Tiki', value: 'tiki'},
-          // Flavour
-          {title: 'Bitter', value: 'bitter'},
-          // Special
-          {title: 'Caffeinated', value: 'caffeinated'},
-          {title: 'Classic', value: 'classic'}
-        ],
+        list: COCKTAIL_TAG_OPTIONS,
         layout: 'grid'
       },
+      // A free-typed tag shows on the page and in search with no definition
+      // behind it. The 10 Oct 2026 audit found 49 one-offs (savoury, argentine,
+      // pebble-ice), so only the listed values are accepted.
+      validation: Rule =>
+        Rule.custom((tags?: string[]) => {
+          const unknown = (tags || []).filter((t) => !COCKTAIL_TAGS.includes(t))
+          return unknown.length ? `Not a listed tag: ${unknown.join(', ')}` : true
+        }),
       description: 'Select multiple tags to help categorise this cocktail'
     }),
     defineField({
