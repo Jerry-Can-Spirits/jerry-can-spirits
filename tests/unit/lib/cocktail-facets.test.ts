@@ -97,6 +97,7 @@ describe('indexability', () => {
     // A page listing one recipe is thin whatever is written around it.
     expect(isIndexable(raw('cobblers', 1))).toBe(false)
     expect(isIndexable(raw('slings', 3))).toBe(false)
+    expect(isIndexable(raw('swizzles', INDEXABLE_MIN_COCKTAILS - 1))).toBe(false)
   })
 
   it('never indexes the junk facets regardless of count', () => {
@@ -310,11 +311,12 @@ describe('standalone spirit facets', () => {
     expect(facetForBaseSpirit('white-rum')).toBe('rum')
   })
 
-  it('exposes 19 indexable facets at current counts', () => {
-    // 11 styles at or above the floor, 6 rollups, 2 standalones.
-    const styles = [85, 43, 41, 26, 20, 19, 19, 16, 13, 11, 10]
+  it('exposes 25 indexable facets at current counts', () => {
+    // 17 styles at or above the floor (other, at 10, is never indexed), 6
+    // rollups, 2 standalones. Counts as of the Iced Teas move, 10 Oct 2026.
+    const styles = [89, 52, 43, 26, 21, 21, 20, 16, 12, 10, 8, 7, 6, 6, 5, 5, 5]
     const indexableStyles = styles.filter((c) => isIndexable({ value: 'x', count: c, isRollup: false }))
-    expect(indexableStyles).toHaveLength(11)
+    expect(indexableStyles).toHaveLength(17)
     expect(Object.keys(SPIRIT_FACETS)).toHaveLength(8)
   })
 })

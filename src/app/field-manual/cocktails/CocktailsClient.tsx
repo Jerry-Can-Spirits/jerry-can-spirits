@@ -357,6 +357,7 @@ export default function CocktailsClient({
     { value: 'mules', label: 'Mules' },
     { value: 'fizzes', label: 'Fizzes' },
     { value: 'collins', label: 'Collins' },
+    { value: 'iced-teas', label: 'Iced Teas' },
     { value: 'tiki', label: 'Tiki' },
     { value: 'slings', label: 'Slings' },
     { value: 'punches', label: 'Punches' },

@@ -231,6 +231,54 @@ export const FACET_COPY: Record<string, FacetCopy> = {
     intro:
       'This Field Manual holds {recipes} in the collins family. A collins is a sour lengthened with soda water: spirit, lemon, sugar and bubbles, built tall over ice. It is a Tom Collins whatever the spirit, and the name changes with it.\n\nThe soda is what separates it from a fizz, which is shaken and served short. A collins is built in the glass and stays long, so the ice matters more than the shake: fill the glass and the drink stays cold without watering, half-fill it and it is thin by the second mouthful. Lemon is standard, lime makes it sharper, and the sugar comes down as the citrus goes up.',
   },
+  'style:iced-teas': {
+    h1: 'Iced Teas',
+    title: 'Long Island Iced Tea Variations: {recipes} to make',
+    description:
+      '{recipes} in the iced tea family. Small equal pours of several white spirits, citrus and a topper, built tall over ice. There is no tea in any of them.',
+    intro:
+      'This Field Manual holds {recipes} in the iced tea family. Each one starts from the Long Island Iced Tea: small equal pours of several white spirits, usually vodka, gin, white rum and tequila with triple sec, lengthened with citrus and a topper. The cola gives the original the colour of iced tea, and there is no tea in it or in any of the others.\n\nThe variations change the topper and a liqueur, and the colour changes with them. Midori and lemonade turn it green, blue curaçao turns it blue, and Chambord turns it purple. The strength barely moves. Five 15ml pours at 40% is three UK units before anything else goes in, more than our Martini or our Margarita, and the long build hides it.',
+  },
+  'style:spritz': {
+    h1: 'Spritz',
+    title: 'Spritz Cocktails: {recipes} to make',
+    description:
+      '{recipes} in the spritz family. A bitter or a liqueur lengthened with sparkling wine and soda, built over ice in a wine glass.',
+    intro:
+      'This Field Manual holds {recipes} in the spritz family. A spritz is a bitter or a liqueur lengthened with sparkling wine and a splash of soda, built over ice in a wine glass and drunk before a meal.\n\nThe usual frame is three parts prosecco, two of the bitter and one of soda, and the bitter decides the drink. Aperol keeps it light and orange. Campari makes it drier and stronger, about 2.5 UK units in our Spritz al Bitter. Elderflower, limoncello and fruit liqueurs follow the same build and come out sweeter. Pour the wine down the side and stir once, because every extra turn of the spoon is carbonation leaving the glass.',
+  },
+  'style:toddies': {
+    h1: 'Toddies',
+    title: 'Hot Toddy and Hot Drink Recipes: {recipes} to make',
+    description:
+      '{recipes} in the toddy family. Spirit, sugar and hot water, with lemon and spice as the usual additions. Served hot, never boiled.',
+    intro:
+      'This Field Manual holds {recipes} in the toddy family. A toddy is spirit, sugar and hot water, with lemon and spice as the usual additions. Jerry Thomas printed the sling in 1862 as the same drink with nutmeg grated on top, and the hot drinks here all grew from that frame.\n\nHeat is the technique. Warm the glass or mug first, use water just off the boil and never boil anything with spirit in it. Butter, cream and coffee change the texture without changing the build: a Hot Buttered Rum and an Irish Coffee are both a sweetened spirit made long with something hot. The water also stretches the drink, so a toddy tastes milder than the spirit in it would suggest.',
+  },
+  'style:shots-shooters': {
+    h1: 'Shots & Shooters',
+    title: 'Shots and Shooters: {recipes} to make',
+    description:
+      '{recipes} in the shots family. Small measures drunk in one, where the build is about order and temperature.',
+    intro:
+      'This Field Manual holds {recipes} in the shots family. A shot is drunk in one, so the measures are small and the build is about order rather than balance.\n\nLayered shots depend on density: the heaviest liqueur goes in first and each lighter one is poured slowly over the back of a spoon so it sits on the one below. Get the order wrong and the layers mix. Small does not mean weak. A B-52 is three 15ml pours and about 1.2 UK units, and two or three of them is a strong drink taken quickly, which is the case for pacing them.',
+  },
+  'style:smashes': {
+    h1: 'Smashes',
+    title: 'Smash Cocktails: {recipes} to make',
+    description:
+      '{recipes} in the smash family. Spirit, sugar, fresh herbs and citrus, muddled and served over crushed ice.',
+    intro:
+      'This Field Manual holds {recipes} in the smash family. A smash is spirit, sugar and fresh herbs, usually mint, with citrus muddled in, shaken or churned and served over crushed ice. Jerry Thomas printed it in 1862 as a julep on a small plan; the muddled lemon came later.\n\nThe muddle is where it goes right or wrong. Press citrus firmly to release the juice and the oil in the peel, and press herbs gently, because torn and bruised leaves turn bitter. The base can be anything that stands up to mint and lemon: whiskey in a Whiskey Smash, gin and basil in a Gin Basil Smash, rum in ours. Fine strain it if you want the leaves out of the glass.',
+  },
+  'style:mules': {
+    h1: 'Mules',
+    title: 'Mule Cocktails: {recipes} to make',
+    description:
+      '{recipes} in the mule family. Spirit, lime and ginger beer over ice, the Moscow Mule frame with the base changed.',
+    intro:
+      'This Field Manual holds {recipes} in the mule family. A mule is spirit, lime and ginger beer over ice: the Moscow Mule frame with the base changed, so tequila makes a Mexican Mule and Irish whiskey a Dublin Mule.\n\nThe ginger beer does most of the work, so choose one with real heat, and keep the lime fresh. Build it in the glass and stir once. Copper mugs are traditional; if you use one, choose a mug lined with stainless steel or nickel, because lime juice is acidic and bare copper should not hold it. Ginger beer under 0.5% ABV adds nothing worth counting, so the units are the spirit\'s alone.',
+  },
   'style:negronis': {
     h1: 'Negronis',
     title: 'Negroni Cocktails: {recipes} to make',

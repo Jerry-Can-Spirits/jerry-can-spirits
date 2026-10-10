@@ -73,10 +73,14 @@ describe('the sub-type split', () => {
 
 describe('the copy store', () => {
   it('holds an entry for every indexable facet except the duplicate', () => {
-    // 19 indexable facets, 18 written. mocktails is deliberately absent: it
+    // 25 indexable facets, 24 written. mocktails is deliberately absent: it
     // describes the same ten drinks as non-alcoholic and canonicalises to it,
     // so a second introduction would be the duplication the canonical resolves.
-    expect(Object.keys(FACET_COPY)).toHaveLength(18)
+    // The floor dropped to 5 on 10 Oct 2026; these six cleared it then.
+    expect(Object.keys(FACET_COPY)).toHaveLength(24)
+    for (const style of ['iced-teas', 'spritz', 'toddies', 'shots-shooters', 'smashes', 'mules']) {
+      expect(copyFor('style', style)).toBeDefined()
+    }
     expect(copyFor('style', 'mocktails')).toBeUndefined()
     expect(copyFor('spirit', 'non-alcoholic')).toBeDefined()
   })

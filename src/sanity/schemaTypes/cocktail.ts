@@ -364,6 +364,7 @@ export default defineType({
           {title: 'Mules', value: 'mules'},
           {title: 'Fizzes', value: 'fizzes'},
           {title: 'Collins', value: 'collins'},
+          {title: 'Iced Teas', value: 'iced-teas'},
           {title: 'Tiki', value: 'tiki'},
           {title: 'Slings', value: 'slings'},
           {title: 'Punches', value: 'punches'},
