@@ -231,6 +231,14 @@ export const FACET_COPY: Record<string, FacetCopy> = {
     intro:
       'This Field Manual holds {recipes} in the collins family. A collins is a sour lengthened with soda water: spirit, lemon, sugar and bubbles, built tall over ice. It is a Tom Collins whatever the spirit, and the name changes with it.\n\nThe soda is what separates it from a fizz, which is shaken and served short. A collins is built in the glass and stays long, so the ice matters more than the shake: fill the glass and the drink stays cold without watering, half-fill it and it is thin by the second mouthful. Lemon is standard, lime makes it sharper, and the sugar comes down as the citrus goes up.',
   },
+  'style:iced-teas': {
+    h1: 'Iced Teas',
+    title: 'Long Island Iced Tea Variations: {recipes} to make',
+    description:
+      '{recipes} in the iced tea family. Small equal pours of several white spirits, citrus and a topper, built tall over ice. There is no tea in any of them.',
+    intro:
+      'This Field Manual holds {recipes} in the iced tea family. Each one starts from the Long Island Iced Tea: small equal pours of several white spirits, usually vodka, gin, white rum and tequila with triple sec, lengthened with citrus and a topper. The cola gives the original the colour of iced tea, and there is no tea in it or in any of the others.\n\nThe variations change the topper and a liqueur, and the colour changes with them. Midori and lemonade turn it green, blue curaçao turns it blue, and Chambord turns it purple. The strength barely moves. Five 15ml pours at 40% is three UK units before anything else goes in, more than our Martini or our Margarita, and the long build hides it.',
+  },
   'style:negronis': {
     h1: 'Negronis',
     title: 'Negroni Cocktails: {recipes} to make',

@@ -76,7 +76,11 @@ describe('the copy store', () => {
     // 19 indexable facets, 18 written. mocktails is deliberately absent: it
     // describes the same ten drinks as non-alcoholic and canonicalises to it,
     // so a second introduction would be the duplication the canonical resolves.
-    expect(Object.keys(FACET_COPY)).toHaveLength(18)
+    // iced-teas is the one entry below the indexable line: seven drinks, but
+    // every Long Island page links up to it and the intro is what explains the
+    // family to a reader arriving from one of them.
+    expect(Object.keys(FACET_COPY)).toHaveLength(19)
+    expect(copyFor('style', 'iced-teas')).toBeDefined()
     expect(copyFor('style', 'mocktails')).toBeUndefined()
     expect(copyFor('spirit', 'non-alcoholic')).toBeDefined()
   })
