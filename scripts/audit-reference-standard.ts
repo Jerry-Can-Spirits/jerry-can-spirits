@@ -1,62 +1,58 @@
 /**
- * Measure ingredient and equipment pages against the reference standard.
+ * Measure ingredient and equipment pages against the reference standard,
+ * docs/REFERENCE_CONTENT_STANDARD.md.
  *
- * The cocktail corpus has scripts/audit-cocktail-standard.ts and a written
- * specification to check against. The 297 ingredient and 72 equipment pages
- * have neither, which is why nobody noticed that 275 of them carry a long
- * description under the length the cocktail pages hold.
+ * The standard is the one the cocktail pass (9 to 10 October 2026) and the
+ * equipment pass (all 73 pages, 10 October) worked to: six to ten FAQs, one
+ * inline comparison table, a visible updated date, metas inside the lengths
+ * Google shows, and on ingredients the structured facts that recipes and the
+ * allergen line read.
  *
- * Runs in two modes, because the lesson from COCKTAIL_CONTENT_STANDARD.md is
- * that a band asserted from memory is usually wrong — the first cocktail
- * standard failed its own exemplar on three counts out of four:
+ * Runs in two modes, because a band asserted from memory is usually wrong: the
+ * first cocktail standard failed its own exemplar on three counts out of four.
  *
- *   --derive   Print the distribution across a named set of exemplar slugs, so
- *              the bands in the written standard come from pages that exist.
- *   (default)  Report every page that misses a band, worst first.
+ *   --derive   Print the distribution across the exemplars, so the bands in
+ *              scripts/reference-bands.ts come from pages that exist.
+ *              Equipment: the whole corpus. Ingredient: pass the slugs of the
+ *              first P5 rewrite batches with --slugs=a,b,c.
+ *   (default)  Report every page that misses a rule, worst first.
+ *
+ * Read-only. Writes nothing.
  *
  * Run:  npx sanity exec scripts/audit-reference-standard.ts --with-user-token
- *       ...add -- --derive to print the exemplar distribution instead.
  *       ...add -- --type=equipment to audit equipment rather than ingredients.
- *       ...add -- --list=20 to cap the report.
+ *       ...add -- --derive (and for ingredients --slugs=...) for the distribution.
+ *       ...add -- --list=20 to cap the report (0 for all).
  */
 import { getCliClient } from 'sanity/cli'
-import { BANDS, FAQ_ANSWER_FLOOR } from './reference-bands'
+import {
+  bandsFor,
+  FAQ_ANSWER_FLOOR,
+  FAQ_COUNT,
+  META_DESCRIPTION_MAX,
+  META_TITLE_MAX,
+} from './reference-bands'
 import { selfReferences } from './self-reference'
 
 const client = getCliClient()
+const arg = (name: string) => process.argv.find((a) => a.startsWith(`--${name}=`))?.split('=')[1]
 const DERIVE = process.argv.includes('--derive')
-const TYPE = process.argv.find((a) => a.startsWith('--type='))?.split('=')[1] ?? 'ingredient'
-const LIST = Number(process.argv.find((a) => a.startsWith('--list='))?.split('=')[1] ?? '25')
+const TYPE = arg('type') ?? 'ingredient'
+const LIST = Number(arg('list') ?? '25')
+const SLUGS = arg('slugs')?.split(',').filter(Boolean)
 
 /**
- * Pages written to the current standard, used to derive the bands.
- *
- * All were written on 13 and 14 August 2026 against the cocktail standard's
- * register. They are the exemplars in the sense section 0 of that document
- * means: where a band here and these pages disagree, the pages win.
+ * Exemplars when --slugs is not given. Every equipment page was rewritten to
+ * the standard on 10 October 2026, so the corpus is the exemplar. No ingredient
+ * page is written to it yet: derive those from the first P5 batches by slug.
  */
-const EXEMPLARS: Record<string, string[]> = {
-  ingredient: [
-    'cynar',
-    'frangelico',
-    'grappa',
-    'chamomile-cordial',
-    'tabasco',
-    'donns-mix',
-    'jamaican-rum',
-    'demerara-rum',
-    'gold-rum',
-    'pernod',
-    'palo-cortado',
-    'cuban-aguardiente',
-    'sugar-cane-juice',
-    'grapefruit-soda',
-    'kina-lillet',
-    'cocchi-americano',
-    'lagavulin-16',
-  ],
-  equipment: ['bar-blade'],
+const EXEMPLARS: Record<string, 'all' | string[]> = {
+  equipment: 'all',
+  ingredient: [],
 }
+
+/** Alcoholic categories that keep for years once opened; everything else needs a keeping time. */
+const SHELF_STABLE = new Set(['spirit', 'spirit-drink', 'liqueur'])
 
 interface Block {
   _type: string
@@ -71,9 +67,16 @@ interface Doc {
   longDescription: Block[] | null
   usage: string | null
   storage: string | null
-  topTips: string[] | null
-  tips: string[] | null
+  tips: number | null
   faqs: Array<{ question?: string; answer?: string }> | null
+  metaTitle: string | null
+  metaDescription: string | null
+  updatedAt: string | null
+  legalCategory: string | null
+  allergens: number | null
+  allergensReviewed: boolean | null
+  keepsFor: string | null
+  prep: boolean
 }
 
 const words = (s: string | null | undefined) => (s ? s.trim().split(/\s+/).filter(Boolean).length : 0)
@@ -84,21 +87,20 @@ const blockText = (blocks: Block[] | null) =>
     .map((b) => (b.children ?? []).map((c) => c.text ?? '').join(''))
     .join(' ')
 
-const headings = (blocks: Block[] | null) =>
-  (blocks ?? []).filter((b) => b._type === 'block' && /^h\d$/.test(b.style ?? '')).length
-
 interface Measured {
   name: string
   slug: string
   description: number
   long: number
   sections: number
+  tables: number
   usage: number
   tips: number
-  storage: number
   faqs: number
   faqAnswers: number[]
-  shortFaqs: number
+  metaTitle: number
+  metaDescription: number
+  doc: Doc
   selfRefs: string[]
 }
 
@@ -119,87 +121,132 @@ function measure(doc: Doc): Measured {
     slug: doc.slug,
     description: words(doc.description),
     long: words(blockText(doc.longDescription)),
-    sections: headings(doc.longDescription),
+    sections: (doc.longDescription ?? []).filter((b) => b._type === 'block' && /^h\d$/.test(b.style ?? '')).length,
+    tables: (doc.longDescription ?? []).filter((b) => b._type === 'comparisonTable').length,
     usage: words(doc.usage),
-    tips: (doc.topTips ?? doc.tips ?? []).length,
-    storage: words(doc.storage),
+    tips: doc.tips ?? 0,
     faqs: faqAnswers.length,
     faqAnswers,
-    shortFaqs: faqAnswers.filter((n) => n < FAQ_ANSWER_FLOOR).length,
+    metaTitle: doc.metaTitle?.trim().length ?? 0,
+    metaDescription: doc.metaDescription?.trim().length ?? 0,
+    doc,
     selfRefs: selfReferences(prose),
   }
 }
 
+interface Miss {
+  rule: string
+  text: string
+}
+
+function misses(m: Measured): Miss[] {
+  const out: Miss[] = []
+  const add = (rule: string, text = rule) => out.push({ rule, text })
+  const bands = bandsFor(TYPE)
+  const band = (label: string, n: number, [lo, hi]: readonly [number, number], unit = 'w') => {
+    if (n < lo || n > hi) add(`${label} outside ${lo}-${hi}`, `${label} ${n}${unit} (${lo}-${hi})`)
+  }
+  band('description', m.description, bands.description)
+  band('long', m.long, bands.long)
+  band('sections', m.sections, bands.sections, '')
+  band('usage', m.usage, bands.usage)
+  band('faqs', m.faqs, FAQ_COUNT, '')
+  const thin = m.faqAnswers.filter((n) => n < FAQ_ANSWER_FLOOR).length
+  if (thin) add(`faq answer under ${FAQ_ANSWER_FLOOR}w`, `${thin} faq answer(s) under ${FAQ_ANSWER_FLOOR}w`)
+  if (m.tables !== 1) add('not exactly one comparison table', `${m.tables} comparison tables (1)`)
+  if (!m.doc.updatedAt) add('no updatedAt')
+  if (!m.metaTitle) add('no metaTitle')
+  else if (m.metaTitle > META_TITLE_MAX)
+    add(`metaTitle over ${META_TITLE_MAX}`, `metaTitle ${m.metaTitle} chars (${META_TITLE_MAX})`)
+  if (!m.metaDescription) add('no metaDescription')
+  else if (m.metaDescription > META_DESCRIPTION_MAX)
+    add(`metaDescription over ${META_DESCRIPTION_MAX}`, `metaDescription ${m.metaDescription} chars (${META_DESCRIPTION_MAX})`)
+
+  if (TYPE === 'ingredient') {
+    const d = m.doc
+    if (!d.legalCategory) add('no legalCategory')
+    if ((d.allergens ?? 0) > 0 && !d.allergensReviewed) add('allergens not reviewed')
+    const perishable = d.prep || !SHELF_STABLE.has(d.legalCategory ?? '')
+    if (perishable && !d.keepsFor?.trim()) add('no keepsFor')
+  }
+
+  if (m.selfRefs.length) add('self-reference', `self-ref: ${m.selfRefs.join(', ')}`)
+  return out
+}
+
 const stat = (label: string, ns: number[]) => {
-  if (!ns.length) return `  ${label.padEnd(14)} no data`
+  if (!ns.length) return `  ${label.padEnd(16)} no data`
   const sorted = [...ns].sort((a, b) => a - b)
   const median = sorted[Math.floor(sorted.length / 2)]
-  const mean = Math.round(ns.reduce((a, b) => a + b, 0) / ns.length)
-  return `  ${label.padEnd(14)} min ${String(sorted[0]).padStart(4)}   median ${String(median).padStart(4)}   mean ${String(mean).padStart(4)}   max ${String(sorted[sorted.length - 1]).padStart(4)}`
+  const p10 = sorted[Math.floor((sorted.length - 1) * 0.1)]
+  const p90 = sorted[Math.floor((sorted.length - 1) * 0.9)]
+  const cols = [
+    `min ${String(sorted[0]).padStart(4)}`,
+    `p10 ${String(p10).padStart(4)}`,
+    `median ${String(median).padStart(4)}`,
+    `p90 ${String(p90).padStart(4)}`,
+    `max ${String(sorted[sorted.length - 1]).padStart(4)}`,
+  ]
+  return `  ${label.padEnd(16)} ${cols.join('   ')}`
 }
 
 async function main() {
   const docs = await client.fetch<Doc[]>(
     `*[_type == $type && !(_id in path("drafts.**")) && defined(slug.current)]{
-      name, "slug": slug.current, description, longDescription, usage, storage, topTips, tips,
-      faqs[]{ question, answer }
+      name, "slug": slug.current, description, longDescription[]{ _type, style, children[]{ text } },
+      usage, storage, "tips": count(coalesce(topTips, tips)), faqs[]{ question, answer },
+      metaTitle, metaDescription, updatedAt, legalCategory, "allergens": count(allergens),
+      allergensReviewed, keepsFor, "prep": defined(prep)
     } | order(name asc)`,
     { type: TYPE }
   )
 
-  const exemplarSlugs = new Set(EXEMPLARS[TYPE] ?? [])
-
   if (DERIVE) {
-    const set = docs.filter((d) => exemplarSlugs.has(d.slug)).map(measure)
+    const listed = SLUGS ?? EXEMPLARS[TYPE] ?? []
+    const set = docs.filter((d) => listed === 'all' || listed.includes(d.slug)).map(measure)
     if (!set.length) {
-      console.log(`No exemplars listed for "${TYPE}". Add slugs to EXEMPLARS first.`)
+      console.log(`No exemplars for "${TYPE}". Pass -- --slugs=a,b,c (the first P5 rewrite batches).`)
       return
     }
     console.log(`Distribution across ${set.length} exemplar ${TYPE} page(s).`)
-    console.log('Bands in the written standard should come from these numbers.\n')
+    console.log('Bands in scripts/reference-bands.ts should come from these numbers.\n')
     console.log(stat('description', set.map((m) => m.description)))
     console.log(stat('long', set.map((m) => m.long)))
     console.log(stat('sections', set.map((m) => m.sections)))
+    console.log(stat('tables', set.map((m) => m.tables)))
     console.log(stat('usage', set.map((m) => m.usage)))
-    console.log(stat('storage', set.map((m) => m.storage)))
-    console.log(stat('top tips', set.map((m) => m.tips)))
+    console.log(stat('tips', set.map((m) => m.tips)))
     console.log(stat('faqs', set.map((m) => m.faqs)))
     console.log(stat('faq answers', set.flatMap((m) => m.faqAnswers)))
+    console.log(stat('meta title', set.map((m) => m.metaTitle)))
+    console.log(stat('meta description', set.map((m) => m.metaDescription)))
     const selfRef = set.filter((m) => m.selfRefs.length)
     console.log(`\n  self-reference: ${selfRef.length} of ${set.length} exemplars carry any.`)
     return
   }
 
-  const measured = docs.map(measure)
-  const failing = measured
-    .map((m) => {
-      const misses: string[] = []
-      if (m.description < BANDS.description[0]) misses.push(`description ${m.description}w`)
-      if (m.long < BANDS.long[0]) misses.push(`long ${m.long}w`)
-      if (m.sections < BANDS.sections[0]) misses.push(`${m.sections} sections`)
-      if (m.usage < BANDS.usage[0]) misses.push(`usage ${m.usage}w`)
-      if (m.faqs < BANDS.faqs[0]) misses.push(`${m.faqs} faqs`)
-      if (m.shortFaqs) misses.push(`${m.shortFaqs} thin faq answer(s)`)
-      if (m.selfRefs.length) misses.push(`self-ref: ${m.selfRefs.join(', ')}`)
-      return { m, misses }
-    })
+  const failing = docs
+    .map(measure)
+    .map((m) => ({ m, misses: misses(m) }))
     .filter((r) => r.misses.length)
     .sort((a, b) => b.misses.length - a.misses.length || a.m.long - b.m.long)
 
   console.log(`Checked ${docs.length} ${TYPE} page(s) against the reference standard.\n`)
-  console.log(`${failing.length} miss at least one band.`)
+  console.log(`${failing.length} miss at least one rule.`)
   console.log(`${docs.length - failing.length} are at standard.\n`)
 
-  const atStandard = measured.filter((m) => exemplarSlugs.has(m.slug))
-  if (atStandard.length) {
-    console.log(`(${atStandard.length} exemplar page(s) excluded from the worst-first ordering below.)\n`)
+  const tally = new Map<string, number>()
+  for (const { misses: ms } of failing) {
+    for (const { rule } of ms) tally.set(rule, (tally.get(rule) ?? 0) + 1)
   }
+  for (const [rule, n] of [...tally].sort((a, b) => b[1] - a[1])) console.log(`  ${String(n).padStart(4)}  ${rule}`)
+  if (tally.size) console.log('')
 
-  for (const { m, misses } of failing.slice(0, LIST || failing.length)) {
+  for (const { m, misses: ms } of failing.slice(0, LIST || failing.length)) {
     console.log(`  ${m.name}  (${m.slug})`)
-    console.log(`     ${misses.join(' | ')}`)
+    console.log(`     ${ms.map((x) => x.text).join(' | ')}`)
   }
-  if (failing.length > LIST) console.log(`\n  ...and ${failing.length - LIST} more. Pass -- --list=0 for all.`)
+  if (LIST && failing.length > LIST) console.log(`\n  ...and ${failing.length - LIST} more. Pass -- --list=0 for all.`)
 }
 
 main().catch((e) => {

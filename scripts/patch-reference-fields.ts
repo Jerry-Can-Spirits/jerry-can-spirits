@@ -26,7 +26,7 @@
  *       ...add --write to execute.
  */
 import { getCliClient } from 'sanity/cli'
-import { BANDS, FAQ_ANSWER_FLOOR } from './reference-bands'
+import { bandsFor, FAQ_ANSWER_FLOOR, FAQ_COUNT } from './reference-bands'
 import { selfReferences } from './self-reference'
 import { voiceBreaches, voiceReviews } from './voice-rules'
 
@@ -232,6 +232,7 @@ async function apply(p: Patch) {
   const long = words(blockText(blocks))
   const sections = blocks.filter((b) => /^h\d$/.test(b.style ?? '')).length
   const answers = faqs.map((f) => words(f.answer))
+  const BANDS = bandsFor(doc._type)
 
   console.log(`  ${doc.name}  (${doc._type})`)
   console.log(
@@ -245,7 +246,7 @@ async function apply(p: Patch) {
   if (words(finalUsage) < BANDS.usage[0]) console.log(`    !! usage under band (${BANDS.usage[0]}w)`)
   if (long < BANDS.long[0]) console.log(`    !! long description under band (${BANDS.long[0]}w)`)
   if (sections < BANDS.sections[0]) console.log(`    !! ${sections} sections, band is ${BANDS.sections[0]}`)
-  if (faqs.length < BANDS.faqs[0]) console.log(`    !! ${faqs.length} faqs, band is ${BANDS.faqs[0]}`)
+  if (faqs.length < FAQ_COUNT[0]) console.log(`    !! ${faqs.length} faqs, band is ${FAQ_COUNT[0]}`)
 
   const prose = [
     finalDescription,
