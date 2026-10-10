@@ -4,6 +4,9 @@
 // values keep the fixture legible.
 //
 // Regenerate when the schema gains a field that no existing document has.
+// Until then, add it by hand: the ingredient Facts fields (abvPercent through
+// prep and substitutes, 10 Oct 2026) were added to the first ingredient ahead of
+// the data that fills them, and the retired recommendedBrands and rrp removed.
 export const CORPUS_SAMPLES: Record<string, Array<Record<string, unknown>>> = {
   "guide": [
     {
@@ -897,6 +900,33 @@ export const CORPUS_SAMPLES: Record<string, Array<Record<string, unknown>>> = {
       "_type": "ingredient",
       "_updatedAt": "2026-08-05T20:40:30Z",
       "abv": "Typically 35–40%",
+      "abvNote": "Bottlings run 35 to",
+      "abvPercent": 40,
+      "allergenNote": "Recipes change; check the",
+      "allergens": ["sulphites"],
+      "allergensReviewed": true,
+      "keepsFor": "Years once opened",
+      "legalCategory": "spirit-drink",
+      "legalNote": "Sold as a spirit",
+      "prep": {
+        "foodSafety": "Sterilise the bottle",
+        "ingredients": ["200g caster sugar"],
+        "keepsFor": "Two weeks refrigerated",
+        "method": ["Stir until dissolved"],
+        "ratio": "1:1 by weight",
+        "yield": "About 300ml"
+      },
+      "substitutes": [
+        {
+          "_key": "sub001",
+          "_type": "substitute",
+          "ingredient": {
+            "_ref": "d6ced5af-8af8-4362-8b1e-f787ab8a2f14",
+            "_type": "reference"
+          },
+          "note": "Add a pinch of"
+        }
+      ],
       "budgetImage": {
         "_type": "image",
         "asset": {
@@ -990,10 +1020,6 @@ export const CORPUS_SAMPLES: Record<string, Array<Record<string, unknown>>> = {
       },
       "productionMethod": "Produced by infusing rum",
       "professionalTip": "Great spiced rum enhances",
-      "recommendedBrands": {
-        "budget": "Captain Morgan Original Spiced",
-        "premium": "Jerry Can Spirits Expedition"
-      },
       "relatedCocktails": [
         {
           "_key": "190dccd6664f",
@@ -1208,7 +1234,6 @@ export const CORPUS_SAMPLES: Record<string, Array<Record<string, unknown>>> = {
           "_type": "reference"
         }
       ],
-      "rrp": 45,
       "seasonality": "Year-round",
       "shelfLife": "Indefinite when stored sealed",
       "slug": {

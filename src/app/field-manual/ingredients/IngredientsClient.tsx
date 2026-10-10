@@ -17,10 +17,6 @@ interface Ingredient {
   description: string
   usage: string
   topTips: string[]
-  recommendedBrands?: {
-    budget?: string
-    premium?: string
-  }
   storage?: string
   image?: string
   imageAlt?: string

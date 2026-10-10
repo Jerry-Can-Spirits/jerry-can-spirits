@@ -167,3 +167,38 @@ It is a useful first one because a bar blade is a piece of flat steel with no
 mechanism, which leaves nowhere to hide: there is no origin story, no producer
 and no tasting note, so 434 words have to come from what the thing does and how
 it fails. If that page can carry the band, a shaker or a jigger certainly can.
+
+## 10. Structured facts (ingredients)
+
+Added 10 October 2026 (ingredient programme, phase P1). These fields sit in the
+**Facts** fieldset in Studio. They hold one figure or one fixed value each, so
+recipes and pages can rely on them instead of parsing prose. The page renders
+nothing for a field that is unset. The full rewrite of this standard is a
+separate step; this section only records the fields.
+
+| Field | Type | What goes in it |
+|---|---|---|
+| `abvPercent` | number, 0 to 100, one decimal | The single figure the Field Manual uses, including for UK units in recipes. 0 for a non-alcoholic ingredient. Shown as "40% ABV". |
+| `abvNote` | string | Any range or variation, e.g. "Bottlings run 15 to 18%". Shown under the figure. |
+| `legalCategory` | string, fixed list | spirit, spirit drink, liqueur, wine, fortified wine, aromatised wine, beer, cider, non-alcoholic, food, other. "Other" is not printed. |
+| `legalNote` | string | A short qualification shown with the category. |
+| `allergens` | array of strings, the UK 14 | celery, cereals containing gluten, crustaceans, eggs, fish, lupin, milk, molluscs, mustard, tree nuts, peanuts, sesame, soya, sulphites. Rendered as "Contains: ..." in the facts panel. Sulphites go here, not in prose. |
+| `allergensReviewed` | boolean | Tick once checked. Unticked, the page says nothing about allergens. Ticked with an empty list, it says "None of the 14 listed allergens". |
+| `allergenNote` | string | Follows the allergen line. On a branded product: "Recipes change; check the bottle". |
+| `storage` | text | Where and how to keep it. Now shown in the facts panel. |
+| `keepsFor` | string | How long it keeps once opened or made. Replaces `shelfLife`. |
+| `substitutes` | array of { ingredient reference, note } | Rendered as links to the other page, with the note after. Replaces `substitutions`. |
+| `prep` | object | Homemade items only: `ratio`, `ingredients[]`, `method[]`, `yield`, `keepsFor`, `foodSafety`. Rendered as a "House Recipe" block under Usage. Needs both ingredients and a method. |
+
+Prose warnings about allergens stay only for the surprising cases (almond,
+anchovy, celery, barley), as section "Allergens" in `CLAUDE.md` describes.
+
+**Deprecated, still rendered until the data migration:** `abv` (string,
+superseded by `abvPercent` and `abvNote`), `shelfLife` (superseded by
+`keepsFor`) and `substitutions` (superseded by `substitutes`). The page prefers
+the new field and falls back to the old one.
+
+**Removed:** `recommendedBrands` (`budget`, `premium`) and `rrp`. They were
+built for an affiliate scheme that never ran. No stored price is rendered
+anywhere; the shop is the price source. Brand picks, where a reader needs one,
+belong in the prose under section 7.

@@ -21,6 +21,7 @@ import FAQAccordion from '@/components/FAQAccordion'
 import ScrollRow from '@/components/ScrollRow'
 import SectionHeading from '@/components/SectionHeading'
 import HouseSpiritCard from '@/components/HouseSpiritCard'
+import { allergenLine, formatAbv, legalCategoryLabel } from '@/lib/ingredient-facts'
 
 interface SubType {
   _id: string
@@ -40,10 +41,6 @@ interface Ingredient {
   metaDescription?: string
   usage: string
   topTips: string[]
-  recommendedBrands?: {
-    budget?: string
-    premium?: string
-  }
   storage?: string
   image?: { asset: { url: string }; alt?: string }
   featured: boolean
@@ -58,8 +55,27 @@ interface Ingredient {
   productionMethod?: string
   substitutions?: string[]
   seasonality?: string
-  rrp?: number
   shelfLife?: string
+  abvPercent?: number
+  abvNote?: string
+  legalCategory?: string
+  legalNote?: string
+  allergens?: string[]
+  allergensReviewed?: boolean
+  allergenNote?: string
+  keepsFor?: string
+  substitutes?: Array<{
+    note?: string
+    ingredient: { _id: string; name: string; slug: { current: string } }
+  }>
+  prep?: {
+    ratio?: string
+    ingredients?: string[]
+    method?: string[]
+    yield?: string
+    keepsFor?: string
+    foodSafety?: string
+  }
   videoUrl?: string
   history?: string
   professionalTip?: string
@@ -149,12 +165,36 @@ export default async function IngredientDetailPage({ params }: { params: Promise
 
   const videoId = ingredient.videoUrl ? getYouTubeVideoId(ingredient.videoUrl) : null
 
+  const prep = ingredient.prep
+  const hasPrep = Boolean(prep && (prep.ingredients?.length || prep.method?.length))
+
+  // The facts panel, one row per field that is set. The structured fields win;
+  // the loose legacy ones (abv, shelfLife) still show until the data migration
+  // copies them across, so no page loses a fact in the meantime.
+  const abvFigure = formatAbv(ingredient.abvPercent)
+  const legalLabel = legalCategoryLabel(ingredient.legalCategory)
+  const facts: Array<{ label: string; value: string; note?: string; capitalize?: boolean }> = []
+  if (abvFigure) facts.push({ label: 'ABV', value: abvFigure, note: ingredient.abvNote })
+  else if (ingredient.abv || ingredient.abvNote) facts.push({ label: 'ABV', value: (ingredient.abv || ingredient.abvNote) as string })
+  if (legalLabel) facts.push({ label: 'Legal category', value: legalLabel, note: ingredient.legalNote })
+  else if (ingredient.legalNote) facts.push({ label: 'Legal category', value: ingredient.legalNote })
+  if (ingredient.origin) facts.push({ label: 'Origin', value: ingredient.origin })
+  if (ingredient.flavorProfile?.strength) {
+    facts.push({ label: 'Flavour Strength', value: ingredient.flavorProfile.strength.replace('-', ' '), capitalize: true })
+  }
+  if (ingredient.seasonality) facts.push({ label: 'Season', value: ingredient.seasonality })
+  const keepsFor = ingredient.keepsFor || ingredient.shelfLife
+  if (keepsFor) facts.push({ label: 'Keeps for', value: keepsFor })
+  const allergens = allergenLine(ingredient)
+  const hasFacts = facts.length > 0 || Boolean(ingredient.storage) || Boolean(allergens)
+
   // The sections in the order they appear on the page: the editorial headings
   // on the light band, then Usage, then the questions. Only headings that
   // exist on this page are listed.
   const contents = [
     ...extractHeadings(ingredient.longDescription),
     { text: 'Usage', slug: 'usage' },
+    ...(hasPrep ? [{ text: 'House Recipe', slug: 'house-recipe' }] : []),
     ...(ingredient.faqs && ingredient.faqs.length > 0
       ? [{ text: 'Common Questions', slug: 'common-questions' }]
       : []),
@@ -201,8 +241,7 @@ export default async function IngredientDetailPage({ params }: { params: Promise
   // opens always renders and the two light bands can never touch.
   const hasAbout = Boolean(
     (ingredient.longDescription && ingredient.longDescription.length > 0) ||
-      (ingredient.flavorProfile && (ingredient.flavorProfile.primary || ingredient.flavorProfile.tasting)) ||
-      ingredient.rrp,
+      (ingredient.flavorProfile && (ingredient.flavorProfile.primary || ingredient.flavorProfile.tasting)),
   )
   const hasMore = Boolean(
     (ingredient.faqs && ingredient.faqs.length > 0) ||
@@ -215,70 +254,38 @@ export default async function IngredientDetailPage({ params }: { params: Promise
   // behind a question you tap, so the band it sits in reads as the practical
   // answer rather than a wall of panels.
   const referenceItems = [
-    // Substitutions
-    ingredient.substitutions && ingredient.substitutions.length > 0 && {
-      question: 'Possible Substitutions',
-      answer: (
-        <ul className="list-disc pl-5 space-y-3">
-          {ingredient.substitutions.map((sub, index) => (
-            <li key={index} className="text-parchment-300 leading-relaxed">{sub}</li>
-          ))}
-        </ul>
-      ),
-    },
-
-    // Recommended Brands.
-    // Plenty of ingredients have no budget/premium split to make: Angostura
-    // and Campari have one producer, and the answer for lime juice is a ripe
-    // lime rather than a brand. Filling both tiers there meant printing the
-    // same pick twice. A lone entry is therefore shown as "Recommended"
-    // rather than mislabelled as the cheap option.
-    ingredient.recommendedBrands && (ingredient.recommendedBrands.budget || ingredient.recommendedBrands.premium) && (() => {
-      const { budget, premium } = ingredient.recommendedBrands
-      const sole = budget && premium ? null : budget || premium
-      return {
-        question: sole ? 'Recommended Brand' : 'Recommended Brands',
-        answer: (
-          <div className="space-y-4">
-            {sole ? (
-              <div className="p-3 bg-jerry-green-800/30 rounded-lg border border-gold-500/20">
-                <p className="text-gold-400 font-semibold mb-1 text-xs">Recommended</p>
-                <p className="text-parchment-300 text-sm">{sole}</p>
-              </div>
-            ) : (
-              <>
-                <div className="p-3 bg-jerry-green-800/30 rounded-lg border border-gold-500/20">
-                  <p className="text-green-400 font-semibold mb-1 text-xs">Budget Choice</p>
-                  <p className="text-parchment-300 text-sm">{budget}</p>
-                </div>
-                <div className="p-3 bg-jerry-green-800/30 rounded-lg border border-gold-500/20">
-                  <p className="text-gold-400 font-semibold mb-1 text-xs">Premium Choice</p>
-                  <p className="text-parchment-300 text-sm">{premium}</p>
-                </div>
-              </>
-            )}
-          </div>
-        ),
-      }
-    })(),
-
-    // Storage & Handling
-    (ingredient.storage || ingredient.shelfLife) && {
-      question: 'Storage & Handling',
-      answer: (
-        <div className="space-y-3">
-          {ingredient.storage && (
-            <p className="text-parchment-300 leading-relaxed text-sm whitespace-pre-line">{ingredient.storage}</p>
-          )}
-          {ingredient.shelfLife && (
-            <div className="p-3 bg-jerry-green-800/30 rounded-lg border border-gold-500/20">
-              <p className="text-gold-400 font-semibold text-xs mb-1">Shelf Life</p>
-              <p className="text-parchment-300 text-xs">{ingredient.shelfLife}</p>
-            </div>
-          )}
-        </div>
-      ),
-    },
+    // Substitutes: linked pages where the structured field is set, the legacy
+    // strings until the migration fills it. Storage and keeping moved to the
+    // facts panel.
+    ingredient.substitutes && ingredient.substitutes.length > 0
+      ? {
+          question: 'Possible Substitutions',
+          answer: (
+            <ul className="list-disc pl-5 space-y-3">
+              {ingredient.substitutes.map((sub) => (
+                <li key={sub.ingredient._id} className="text-parchment-300 leading-relaxed">
+                  <Link
+                    href={`/field-manual/ingredients/${sub.ingredient.slug.current}/`}
+                    className="text-gold-300 hover:text-gold-400 underline"
+                  >
+                    {sub.ingredient.name}
+                  </Link>
+                  {sub.note && <>: {sub.note}</>}
+                </li>
+              ))}
+            </ul>
+          ),
+        }
+      : ingredient.substitutions && ingredient.substitutions.length > 0 && {
+          question: 'Possible Substitutions',
+          answer: (
+            <ul className="list-disc pl-5 space-y-3">
+              {ingredient.substitutions.map((sub, index) => (
+                <li key={index} className="text-parchment-300 leading-relaxed">{sub}</li>
+              ))}
+            </ul>
+          ),
+        },
 
     // Production Method
     ingredient.productionMethod && {
@@ -377,32 +384,29 @@ export default async function IngredientDetailPage({ params }: { params: Promise
               <ReferenceContents items={contents} />
 
               {/* Quick Facts */}
-              {(ingredient.abv || ingredient.origin || ingredient.flavorProfile?.strength) && (
+              {hasFacts && (
                 <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
                   <h3 className="text-lg font-serif font-bold text-gold-300 mb-4">Quick Facts</h3>
                   <div className="space-y-3">
-                    {ingredient.abv && (
-                      <div className="flex justify-between items-baseline gap-6">
-                        <span className="text-parchment-300 shrink-0">ABV</span>
-                        <span className="text-gold-400 font-semibold text-right">{ingredient.abv}</span>
+                    {facts.map((fact) => (
+                      <div key={fact.label} className="flex justify-between items-baseline gap-6">
+                        <span className="text-parchment-300 shrink-0">{fact.label}</span>
+                        <span className="text-right">
+                          <span className={`text-gold-400 font-semibold${fact.capitalize ? ' capitalize' : ''}`}>{fact.value}</span>
+                          {fact.note && <span className="block text-parchment-400 text-xs mt-1">{fact.note}</span>}
+                        </span>
+                      </div>
+                    ))}
+                    {ingredient.storage && (
+                      <div>
+                        <span className="block text-parchment-300">Storage</span>
+                        <p className="text-parchment-400 text-sm leading-relaxed whitespace-pre-line mt-1">{ingredient.storage}</p>
                       </div>
                     )}
-                    {ingredient.origin && (
-                      <div className="flex justify-between items-baseline gap-6">
-                        <span className="text-parchment-300 shrink-0">Origin</span>
-                        <span className="text-gold-400 font-semibold text-right">{ingredient.origin}</span>
-                      </div>
-                    )}
-                    {ingredient.flavorProfile?.strength && (
-                      <div className="flex justify-between items-baseline gap-6">
-                        <span className="text-parchment-300 shrink-0">Flavour Strength</span>
-                        <span className="text-gold-400 font-semibold text-right capitalize">{ingredient.flavorProfile.strength.replace('-', ' ')}</span>
-                      </div>
-                    )}
-                    {ingredient.seasonality && (
-                      <div className="flex justify-between items-baseline gap-6">
-                        <span className="text-parchment-300 shrink-0">Season</span>
-                        <span className="text-gold-400 font-semibold text-right">{ingredient.seasonality}</span>
+                    {allergens && (
+                      <div>
+                        <span className="block text-parchment-300">Allergens</span>
+                        <p className="text-gold-400 text-sm font-semibold leading-relaxed mt-1">{allergens}</p>
                       </div>
                     )}
                   </div>
@@ -466,16 +470,6 @@ export default async function IngredientDetailPage({ params }: { params: Promise
               </div>
             )}
 
-            {/* RRP — named branded products with a single price */}
-            {ingredient.rrp && (
-              <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
-                <h2 className="text-xl font-serif font-bold text-gold-300 mb-4">Price</h2>
-                <span className="inline-flex items-center px-3 py-1.5 bg-gold-500/20 border border-gold-500/30 rounded-sm text-gold-400 text-sm font-semibold">
-                  RRP £{ingredient.rrp}
-                </span>
-              </div>
-            )}
-
             {/* Long Description - Rich editorial content from Sanity */}
             {ingredient.longDescription && ingredient.longDescription.length > 0 && (
               <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
@@ -497,6 +491,55 @@ export default async function IngredientDetailPage({ params }: { params: Promise
               <h2 id="usage" className="text-2xl font-serif font-bold text-gold-300 mb-4 scroll-mt-24">Usage</h2>
               <p className="text-parchment-300 leading-relaxed whitespace-pre-line">{ingredient.usage}</p>
             </div>
+
+            {/* House recipe: only on something made at home */}
+            {prep && hasPrep && (
+              <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+                <h2 id="house-recipe" className="text-2xl font-serif font-bold text-gold-300 mb-4 scroll-mt-24">House Recipe</h2>
+                <div className="space-y-5">
+                  {(prep.ratio || prep.yield || prep.keepsFor) && (
+                    <div className="space-y-2">
+                      {[
+                        ['Ratio', prep.ratio],
+                        ['Makes', prep.yield],
+                        ['Keeps for', prep.keepsFor],
+                      ].filter(([, value]) => value).map(([label, value]) => (
+                        <div key={label} className="flex justify-between items-baseline gap-6">
+                          <span className="text-parchment-300 shrink-0">{label}</span>
+                          <span className="text-gold-400 font-semibold text-right">{value}</span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                  {prep.ingredients && prep.ingredients.length > 0 && (
+                    <div>
+                      <h3 className="text-gold-400 font-semibold mb-2 text-sm">Ingredients</h3>
+                      <ul className="list-disc pl-5 space-y-1">
+                        {prep.ingredients.map((item, index) => (
+                          <li key={index} className="text-parchment-300 leading-relaxed">{item}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                  {prep.method && prep.method.length > 0 && (
+                    <div>
+                      <h3 className="text-gold-400 font-semibold mb-2 text-sm">Method</h3>
+                      <ol className="list-decimal pl-5 space-y-2">
+                        {prep.method.map((step, index) => (
+                          <li key={index} className="text-parchment-300 leading-relaxed">{step}</li>
+                        ))}
+                      </ol>
+                    </div>
+                  )}
+                  {prep.foodSafety && (
+                    <div>
+                      <h3 className="text-gold-400 font-semibold mb-2 text-sm">Food safety</h3>
+                      <p className="text-parchment-300 leading-relaxed text-sm whitespace-pre-line">{prep.foodSafety}</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
 
             {/* Professional Tip Callout */}
             {ingredient.professionalTip && (
@@ -523,7 +566,7 @@ export default async function IngredientDetailPage({ params }: { params: Promise
               </div>
             )}
 
-            {/* Substitutions, brands, storage, production and history, folded */}
+            {/* Substitutions, production and history, folded */}
             {referenceItems.length > 0 && <FAQAccordion items={referenceItems} />}
           </div>
         </div>
