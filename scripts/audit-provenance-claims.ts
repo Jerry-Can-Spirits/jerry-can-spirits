@@ -65,14 +65,7 @@ const OURS = /\bexpedition\b|\bjerry can\b|\bour rum\b|\bthe rum's\b|\bwe (disti
  *
  * Adding an entry is a founder decision, the same as the claim itself.
  */
-const ALLOWED: Array<{ doc: string; why: string; sentence: string }> = [
-  {
-    doc: 'Sugar Cane Juice',
-    why: "The sentence is a Ti' Punch spec, so \"the rum\" is the Jamaican rum the drink calls for, not ours.",
-    sentence:
-      "Cane juice at the same measure lengthens it, adds a green note that meets the rum's molasses from the other direction, and keeps the whole thing drier than the ingredient list suggests.",
-  },
-]
+const ALLOWED: Array<{ doc: string; why: string; sentence: string }> = []
 
 const normalise = (s: string) => s.replace(/\s+/g, ' ').trim()
 const allowedFor = (doc: string, sentence: string) =>
