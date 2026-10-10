@@ -90,6 +90,7 @@ interface SanityCocktail {
   baseSpirit?: string
   servings?: string
   prepTime?: string
+  totalTime?: string
   author?: string
   updatedAt?: string
   featuredSpirit?: {
@@ -302,7 +303,9 @@ export default async function CocktailPage({ params }: PageProps) {
     "datePublished": cocktail._createdAt,
     "dateModified": cocktail.updatedAt,
     "prepTime": prepTime,
-    "totalTime": prepTime,
+    // Infusions, overnight chills and an ice cone frozen ahead take longer
+    // than the prep; everything else is ready when it is made.
+    "totalTime": cocktail.totalTime || prepTime,
     "recipeYield": recipeYield,
     ...(aggregateRating && { aggregateRating }),
     ...(cookingMethod && cookingMethod.length > 0 && { cookingMethod: cookingMethod.join(', ') }),

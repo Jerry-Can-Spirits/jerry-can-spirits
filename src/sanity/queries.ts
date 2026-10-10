@@ -118,6 +118,7 @@ export const cocktailBySlugQuery = `*[_type == "cocktail" && slug.current == $sl
   baseSpirit,
   servings,
   prepTime,
+  totalTime,
   author,
   updatedAt,
   faqs,

@@ -109,6 +109,12 @@ export default defineType({
       description: 'Prep time in ISO 8601 format for Google Recipe structured data (e.g., "PT5M" = 5 min, "PT10M" = 10 min)'
     }),
     defineField({
+      name: 'totalTime',
+      title: 'Total Time',
+      type: 'string',
+      description: 'Only when the recipe waits beyond the prep: an infusion, an overnight chill, ice frozen ahead. ISO 8601 (e.g., "PT4H"). Left empty, total time equals prep time.'
+    }),
+    defineField({
       name: 'difficulty',
       title: 'Difficulty Level',
       type: 'string',
