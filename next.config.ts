@@ -106,6 +106,33 @@ function buildCsp(frameAncestors: string): string {
   ].join('; ');
 }
 
+// Folded branded mixer ingredient slug -> the generic parent it redirects to.
+const FOLDED_MIXER_INGREDIENTS: Record<string, string> = {
+  'fever-tree-mexican-lime-soda': 'lemon-lime-soda',
+  'fever-tree-pink-grapefruit-soda': 'grapefruit-soda',
+  'fever-tree-premium-indian-tonic-water': 'tonic-water',
+  'fever-tree-premium-soda-water': 'soda-water',
+  'fever-tree-refreshingly-light-indian-tonic-water': 'tonic-water',
+  'fever-tree-refreshingly-light-sweet-rhubarb-and-raspberry-tonic-water': 'tonic-water',
+  'franklin-sons-1886-original-lemonade': 'lemonade',
+  'franklin-sons-1886-soda-water': 'soda-water',
+  'franklin-sons-brewed-ginger-beer': 'ginger-beer',
+  'franklin-sons-elderflower-cucumber-tonic-water': 'tonic-water',
+  'franklin-sons-grapefruit-bergamot-tonic-water': 'tonic-water',
+  'franklin-sons-indian-tonic-water': 'tonic-water',
+  'franklin-sons-original-ginger-ale': 'ginger-ale',
+  'franklin-sons-original-mallorcan-tonic-water': 'tonic-water',
+  'franklin-sons-pineapple-almond-soda': 'soda-water',
+  'franklin-sons-pink-grapefruit-soda': 'grapefruit-soda',
+  'franklin-sons-premium-light-tonic-water': 'tonic-water',
+  'franklin-sons-rhubarb-hibiscus-tonic-water': 'tonic-water',
+  'franklin-sons-rose-lemonade': 'lemonade',
+  'franklin-sons-rosemary-black-olive-tonic-water': 'tonic-water',
+  'franklin-sons-sicilian-lemon-tonic-water': 'tonic-water',
+  'franklin-sons-spring-rhubarb-lemonade': 'lemonade',
+  'franklin-sons-yuzu-soda': 'lemon-lime-soda',
+};
+
 const nextConfig: NextConfig = {
   // Configure for Cloudflare Workers via OpenNext
   trailingSlash: true,
@@ -330,6 +357,22 @@ const nextConfig: NextConfig = {
         destination: '/field-manual/ingredients/fever-tree-ginger-ale/',
         permanent: true,
       },
+      // Branded mixer pages folded into their generic parents (ingredient
+      // programme P4, 10 Oct 2026): no recipe uses them and search demand is
+      // small, or the producer no longer makes them. Their Sanity docs are
+      // deleted once these redirects are live.
+      ...Object.entries(FOLDED_MIXER_INGREDIENTS).flatMap(([slug, parent]) => [
+        {
+          source: `/field-manual/ingredients/${slug}`,
+          destination: `/field-manual/ingredients/${parent}/`,
+          permanent: true,
+        },
+        {
+          source: `/field-manual/ingredients/${slug}/:path*`,
+          destination: `/field-manual/ingredients/${parent}/`,
+          permanent: true,
+        },
+      ]),
       // The shaking guide was merged into the shaken-or-stirred guide (8 Oct
       // 2026): the two competed and the shaking guide was crawled but not
       // indexed. Its Sanity doc is kept; REDIRECTED_GUIDE_FILTER in
