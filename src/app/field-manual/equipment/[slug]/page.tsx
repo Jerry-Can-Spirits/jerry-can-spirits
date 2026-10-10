@@ -170,7 +170,11 @@ export default async function EquipmentDetailPage({ params }: { params: Promise<
   // "The ..." keeps its own.
   const theName = /^the\b/i.test(equipment.name) ? equipment.name : `the ${equipment.name}`
 
-  const shopLink = SHOP_LINKS[equipment.slug.current] ?? FIELD_MANUAL_LINK
+  // A page with a "We make one" card already has its shop link, to the exact
+  // product. A second, category-level link under the header made two calls to
+  // action on one page (equipment pass, 10 Oct 2026), so the card wins.
+  const hasOwnProduct = Boolean(equipment.ownProduct?.path && equipment.ownProduct?.name)
+  const shopLink = hasOwnProduct ? FIELD_MANUAL_LINK : (SHOP_LINKS[equipment.slug.current] ?? FIELD_MANUAL_LINK)
 
   // The January template lists (what to look for, common mistakes, care,
   // lifespan, history) predate the hand-written body and contradict it in
