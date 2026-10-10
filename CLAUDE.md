@@ -95,7 +95,7 @@ The full voice reference — language to use and avoid, messaging hierarchy, pro
 The Field Manual is the brand's cocktail and ingredient education hub. Three content types:
 
 - **Cocktails** — recipe pages with structured data (Recipe schema), ratings, related guides
-- **Ingredients** — detail pages with flavour profiles, recommended brands, substitutions
+- **Ingredients** — detail pages with flavour profiles, structured facts (strength, legal category, allergens, keeping), house prep and substitutes
 - **Equipment** — bar tool guides with specifications, care instructions, related cocktails
 
 All rich editorial content goes in the `longDescription` portable text field in Sanity Studio. This renders via `FieldManualPortableText` using `next-sanity`'s `PortableText`. Use H2, H3, H4 headings — all are styled. H1 is suppressed (renders as H2 visually).

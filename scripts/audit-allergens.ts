@@ -139,13 +139,6 @@ const REGISTER: Entry[] = [
     declaredBy: /egg/i,
   },
   {
-    page: 'Franklin & Sons Brewed Ginger Beer',
-    allergen: 'cereals containing gluten',
-    basis: 'Fermented malted barley extract, plus barley malt and hops. Verified against the maker’s published ingredients, August 2026.',
-    surprising: true,
-    declaredBy: /barley|malt|gluten/i,
-  },
-  {
     page: 'Franklin & Sons 1886 Original Cola',
     allergen: 'cereals containing gluten',
     basis: 'Barley malt extract; the maker declares gluten. Verified August 2026.',
