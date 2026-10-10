@@ -30,6 +30,18 @@ function SectionBody({ content, contentRich }: { content?: string; contentRich?:
   )
 }
 
+// A subsection short enough to read as a definition. When every one in a
+// section is, the cards sit two to a row; a longer one keeps the full width.
+const SHORT_SUBSECTION = 500
+
+function subsectionLength({ content, contentRich }: Subsection): number {
+  if (!contentRich || contentRich.length === 0) return content?.length ?? 0
+  return contentRich.reduce((n, block) => {
+    const children = (block as { children?: { text?: string }[] }).children ?? []
+    return n + children.reduce((m, child) => m + (child.text?.length ?? 0), 0)
+  }, 0)
+}
+
 interface GuideSectionsProps {
   sections: Section[]
   initialVisibleCount?: number
@@ -62,10 +74,16 @@ export default function GuideSections({ sections, initialVisibleCount = 4 }: Gui
           </div>
 
           {section.subsections && section.subsections.length > 0 && (
-            <div className="mt-8 space-y-8">
+            <div
+              className={`mt-8 grid gap-4 ${
+                section.subsections.every((s) => subsectionLength(s) <= SHORT_SUBSECTION)
+                  ? 'md:grid-cols-2'
+                  : ''
+              }`}
+            >
               {section.subsections.map((subsection, subIndex) => (
-                <div key={subIndex} className="pl-6 border-l-2 border-gold-500/30">
-                  <h3 className="text-xl font-serif font-bold text-gold-300 mb-4">
+                <div key={subIndex} className="rounded-xl bg-jerry-green-800 border border-gold-500/20 p-6">
+                  <h3 className="text-xl font-serif font-bold text-gold-300 mb-3">
                     {subsection.subheading}
                   </h3>
                   <SectionBody content={subsection.content} contentRich={subsection.contentRich} />
