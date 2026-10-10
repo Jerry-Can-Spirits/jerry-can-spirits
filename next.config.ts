@@ -133,6 +133,36 @@ const FOLDED_MIXER_INGREDIENTS: Record<string, string> = {
   'franklin-sons-yuzu-soda': 'lemon-lime-soda',
 };
 
+// Folded ingredient part (a cut or form of one ingredient) -> the whole
+// ingredient page that now carries it.
+const FOLDED_PART_INGREDIENTS: Record<string, string> = {
+  'lemon-twist': 'lemon',
+  'lemon-peel': 'lemon',
+  'lemon-wheel': 'lemon',
+  'lemon-slice': 'lemon',
+  'lemon-wedge': 'lemon',
+  'lime-twist': 'lime',
+  'lime-wedge': 'lime',
+  'lime-wheel': 'lime',
+  'grapefruit-twist': 'grapefruit',
+  'grapefruit-wheel': 'grapefruit',
+  'grapefruit-slice': 'grapefruit',
+  'orange-peel': 'orange',
+  'orange-twist': 'orange',
+  'orange-slice': 'orange',
+  'orange-wheel': 'orange',
+  'orange-wedge': 'orange',
+  'fresh-mint-sprig': 'fresh-mint',
+  'mint-leaf': 'fresh-mint',
+  'pineapple-wedge': 'pineapple',
+  'pineapple-chunks': 'pineapple',
+  'apple-slice': 'apple',
+  'red-chilli-pepper': 'chilli',
+  'ground-clove': 'cloves',
+  'cinnamon-stick': 'cinnamon',
+  'ground-cinnamon': 'cinnamon',
+};
+
 const nextConfig: NextConfig = {
   // Configure for Cloudflare Workers via OpenNext
   trailingSlash: true,
@@ -335,11 +365,12 @@ const nextConfig: NextConfig = {
       },
       // Sanity docs deleted with clear successors (both appeared in earlier
       // sitemaps, so Google recrawls them): the duplicate orange-slices
-      // ingredient merged into orange-slice, and the removed
+      // ingredient merged into orange-slice (itself folded into orange in
+      // P4b, so this points straight at orange), and the removed
       // californian-margarita page's nearest surviving relative.
       {
         source: '/field-manual/ingredients/orange-slices/:path*',
-        destination: '/field-manual/ingredients/orange-slice/',
+        destination: '/field-manual/ingredients/orange/',
         permanent: true,
       },
       {
@@ -360,8 +391,10 @@ const nextConfig: NextConfig = {
       // Branded mixer pages folded into their generic parents (ingredient
       // programme P4, 10 Oct 2026): no recipe uses them and search demand is
       // small, or the producer no longer makes them. Their Sanity docs are
-      // deleted once these redirects are live.
-      ...Object.entries(FOLDED_MIXER_INGREDIENTS).flatMap(([slug, parent]) => [
+      // deleted once these redirects are live. Ingredient parts (cuts and
+      // forms: twists, wedges, sprigs, ground spice) folded into the whole
+      // ingredient page follow the same pattern (P4b, 10 Oct 2026).
+      ...Object.entries({ ...FOLDED_MIXER_INGREDIENTS, ...FOLDED_PART_INGREDIENTS }).flatMap(([slug, parent]) => [
         {
           source: `/field-manual/ingredients/${slug}`,
           destination: `/field-manual/ingredients/${parent}/`,
