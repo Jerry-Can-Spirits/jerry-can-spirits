@@ -275,3 +275,58 @@ export function recipeSourceLine(
     .filter(Boolean)
     .join(' ')
 }
+
+/**
+ * The cuisine of the place a drink was created, for the Recipe schema's
+ * recipeCuisine. Added 11 October 2026, after Search Console began reporting
+ * the field missing.
+ *
+ * It was once "British" on all 376 recipes, the Margarita and the Caipirinha
+ * included, and was removed rather than left wrong. The list holds only the
+ * values the data needed when it came back. A tiki drink created in Hollywood
+ * is American: tiki is a style, not a cuisine. Caribbean is used only where
+ * the place has no clean adjective of its own (the British Virgin Islands,
+ * Martinique). There is no "International": Google's guidance names regions
+ * and nothing else, and a drink with no single documented origin is left
+ * empty.
+ */
+export const RECIPE_CUISINES = [
+  'American',
+  'Argentine',
+  'Australian',
+  'Belgian',
+  'Bermudian',
+  'Brazilian',
+  'British',
+  'Canadian',
+  'Caribbean',
+  'Cuban',
+  'Egyptian',
+  'Emirati',
+  'French',
+  'German',
+  'Irish',
+  'Italian',
+  'Jamaican',
+  'Japanese',
+  'Kenyan',
+  'Malaysian',
+  'Mexican',
+  'Peruvian',
+  'Puerto Rican',
+  'Singaporean',
+  'Vietnamese',
+] as const
+
+export type RecipeCuisine = (typeof RECIPE_CUISINES)[number]
+
+/**
+ * The recipeCuisine entry for the Recipe JSON-LD, or nothing. An unset or
+ * unrecognised value yields an empty object, so the field is omitted rather
+ * than published wrong.
+ */
+export function recipeCuisineField(value: string | undefined | null): { recipeCuisine?: RecipeCuisine } {
+  return value && (RECIPE_CUISINES as readonly string[]).includes(value)
+    ? { recipeCuisine: value as RecipeCuisine }
+    : {}
+}

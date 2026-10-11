@@ -84,6 +84,7 @@ export const cocktailBySlugQuery = `*[_type == "cocktail" && slug.current == $sl
   recipeSource,
   houseVariation,
   sourceCheckedAt,
+  recipeCuisine,
   metaTitle,
   metaDescription,
   keywords,

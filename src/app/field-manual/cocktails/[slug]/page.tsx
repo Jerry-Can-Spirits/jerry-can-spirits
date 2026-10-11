@@ -20,6 +20,7 @@ import { getCloudflareContext } from '@opennextjs/cloudflare'
 import { sanityOgUrl } from '@/sanity/lib/image'
 import { OG_IMAGE_COCKTAIL } from '@/lib/og'
 import { ORG_REF, authorRefFor } from '@/lib/jsonLd'
+import { recipeCuisineField } from '@/lib/recipe-source'
 import FAQAccordion from '@/components/FAQAccordion'
 import ScrollRow from '@/components/ScrollRow'
 import BottleStrip from '@/components/BottleStrip'
@@ -93,6 +94,7 @@ interface SanityCocktail {
   totalTime?: string
   author?: string
   updatedAt?: string
+  recipeCuisine?: string
   featuredSpirit?: {
     _id: string
     name: string
@@ -279,8 +281,11 @@ export default async function CocktailPage({ params }: PageProps) {
     "description": cocktail.description,
     "image": sanityOgUrl(cocktail.image) || "https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/images-logo-webp/public",
     "recipeCategory": recipeCategory,
-    // No recipeCuisine: it was "British" on all 376, including the Margarita
-    // and the Caipirinha. An optional field left out is better than a wrong one.
+    // The cuisine of the place the drink was created, from its sourced
+    // history, omitted when the origin is unknown or disputed between
+    // countries. It was once "British" on all 376, the Margarita and the
+    // Caipirinha included: an optional field left out beats a wrong one.
+    ...recipeCuisineField(cocktail.recipeCuisine),
     "keywords": keywords,
     "recipeIngredient": cocktail.ingredients?.map(i => `${i.amount} ${i.name}`) || [],
     "recipeInstructions": cocktail.instructions?.map((instruction, index) => ({

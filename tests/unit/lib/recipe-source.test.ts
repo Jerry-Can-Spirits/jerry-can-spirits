@@ -7,7 +7,9 @@ import { describe, it, expect } from 'vitest'
 import {
   AUTHORITY_LABELS,
   RECIPE_AUTHORITIES,
+  RECIPE_CUISINES,
   formatCheckedDate,
+  recipeCuisineField,
   recipeSourceLine,
   validateHouseVariation,
   validateRecipeSourceInput,
@@ -166,5 +168,36 @@ describe('the house variation rule', () => {
 
   it('does not require one for a published source', () => {
     expect(validateHouseVariation('iba', undefined)).toBe(true)
+  })
+})
+
+/**
+ * recipeCuisine is spread into the Recipe JSON-LD. The failure it guards
+ * against is the old one: a value published on a page whose origin nobody
+ * documented, so an unset or unlisted value must produce no key at all.
+ */
+describe('recipeCuisineField', () => {
+  it('emits recipeCuisine when a listed value is set', () => {
+    expect({ name: 'Margarita', ...recipeCuisineField('Mexican') }).toEqual({
+      name: 'Margarita',
+      recipeCuisine: 'Mexican',
+    })
+  })
+
+  it('omits the key entirely when unset', () => {
+    for (const value of [undefined, null, '']) {
+      const schema = { name: 'Boston Trash Can', ...recipeCuisineField(value) }
+      expect(schema).toEqual({ name: 'Boston Trash Can' })
+      expect('recipeCuisine' in schema).toBe(false)
+    }
+  })
+
+  it('omits a value that is not on the list', () => {
+    expect(recipeCuisineField('International')).toEqual({})
+    expect(recipeCuisineField('Tiki')).toEqual({})
+  })
+
+  it('lists each cuisine once', () => {
+    expect(new Set(RECIPE_CUISINES).size).toBe(RECIPE_CUISINES.length)
   })
 })

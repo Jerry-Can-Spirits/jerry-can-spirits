@@ -1,5 +1,5 @@
 import {defineField, defineType} from 'sanity'
-import {AUTHORITY_OPTIONS, validateHouseVariation} from '../../lib/recipe-source'
+import {AUTHORITY_OPTIONS, RECIPE_CUISINES, validateHouseVariation} from '../../lib/recipe-source'
 
 const COCKTAIL_TAG_OPTIONS = [
   // Strength / Style. Strength means the drink in the glass, not the
@@ -680,6 +680,16 @@ export default defineType({
       title: 'Source Last Checked',
       type: 'date',
       description: 'When the recipe was last verified against its source. Ages, so it is worth recording.'
+    }),
+    defineField({
+      name: 'recipeCuisine',
+      title: 'Recipe Cuisine',
+      type: 'string',
+      description:
+        'The cuisine of the place the drink was created, from its sourced history. Feeds the Recipe structured data. Leave empty if the origin is unknown or disputed between countries.',
+      options: {
+        list: [...RECIPE_CUISINES]
+      }
     })
   ],
   preview: {
