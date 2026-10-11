@@ -31,6 +31,8 @@ Five documents govern work here. This file is the working contract; read the oth
 - `docs/CONTRIBUTING.md` — the actual git workflow in detail.
 - `docs/BRAND_GUIDELINES.md` — trademark, logo, colour, and legal usage rules.
 
+**This repo is public, so new working documents do not go in it.** New design specs, implementation plans, audits, briefs and batch notes (including anything a planning or brainstorming skill would write to `docs/superpowers/` or `docs/plans/`) go in the private workspace at `C:\Users\dan\JCS-ops\` (plans in `JCS-ops\plans\`, audits in `JCS-ops\audits\`). The few plans already in `docs/plans/` and `docs/superpowers/` stay as records; `docs/` otherwise holds only the standing references the site is built and written against. Nothing with customer, pricing, credential or partner detail is ever committed here.
+
 ---
 
 ## Technical Stack
