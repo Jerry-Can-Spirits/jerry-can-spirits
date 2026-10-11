@@ -162,8 +162,6 @@ Quick reference for implementing and tracking SEO improvements.
 ## 📞 Resources
 
 **Documentation**
-- Full setup guide: `SEO_SETUP.md`
-- Component examples: `COMPONENT_USAGE_EXAMPLES.md`
 - What's new: `WHATS_NEW.md`
 
 **External Resources**

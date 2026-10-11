@@ -17,11 +17,8 @@ A premium spirits brand website built with Next.js, Sanity CMS, and Shopify inte
 
 Comprehensive project documentation is available in the [`/docs`](./docs) directory:
 
-- [Component Usage](./docs/COMPONENT_USAGE_EXAMPLES.md) - Component patterns and examples
 - [Contributing](./docs/CONTRIBUTING.md) - Contribution guidelines
-- [Dependencies](./docs/DEPENDENCIES_STATUS.md) - Dependency status and notes
 - [Brand Guidelines](./docs/BRAND_GUIDELINES.md) - Visual identity and brand voice
-- [SEO Setup](./docs/SEO_SETUP.md) - SEO configuration and tooling
 - [SEO Checklist](./docs/SEO_CHECKLIST.md) - SEO audit checklist
 - [Security (CSP)](./docs/CSP_AUDIT.md) - Content Security Policy findings and accepted risks
 
