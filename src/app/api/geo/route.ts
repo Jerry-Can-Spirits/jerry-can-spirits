@@ -4,8 +4,8 @@ export const dynamic = 'force-dynamic'
 
 /**
  * Returns the visitor's country code from Cloudflare geo headers.
- * Deliberately cookie-free: clients cache the result in sessionStorage
- * (src/lib/geo.ts) so no pre-consent cookie is ever set.
+ * Deliberately cookie-free, and clients store nothing (src/lib/geo.ts), so
+ * the age gate and shipping banner set no pre-consent cookie or storage.
  */
 export async function GET(request: Request) {
   const country =

@@ -97,7 +97,8 @@ export default function BarClient({ data }: { data: BarData }) {
     if (!hydrated || viewingShared) return
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify([...owned]))
-      localStorage.setItem(SPOTLIGHT_KEY, String(beam))
+      // The slider position is a UI preference: kept only with Preferences consent.
+      if (window.Cookiebot?.consent?.preferences) localStorage.setItem(SPOTLIGHT_KEY, String(beam))
     } catch {
       // ignore write failures (private mode etc.)
     }

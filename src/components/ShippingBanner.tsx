@@ -61,7 +61,7 @@ export default function ShippingBanner() {
       return
     }
 
-    // sessionStorage cache first, then geo API (cookie-free)
+    // Geo API: no cookie, no storage
     detectCountry().then((country) => setMessage(getShippingMessage(country)))
   }, [])
 

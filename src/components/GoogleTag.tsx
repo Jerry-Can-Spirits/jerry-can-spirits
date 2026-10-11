@@ -1,49 +1,60 @@
 'use client';
 
-import Script from 'next/script';
+import { useEffect } from 'react';
+
+const GA4_ID = 'G-6VJL06YBW2';
+const ADS_ID = 'AW-17823586670';
+
+const configured = new Set<string>();
 
 /**
  * Google Tag (gtag.js) for Google Ads and Google Analytics
  *
  * Tag IDs:
- * - G-6VJL06YBW2: Google Analytics 4
- * - AW-17823586670: Google Ads Conversion Tracking
+ * - G-6VJL06YBW2: Google Analytics 4 (statistics consent)
+ * - AW-17823586670: Google Ads Conversion Tracking (marketing consent)
  *
+ * gtag.js is not requested at all until Cookiebot reports the matching
+ * consent. Loaded under denied Consent Mode it still wrote _gcl_ls before
+ * consent, via the first-party tag gateway path /0djc/ that the tag calls
+ * (configured at the zone, not in this repo; Cookiebot scan, 10 Oct 2026). The Consent Mode defaults in app/layout.tsx still run first.
  * Enhanced conversions enabled for better conversion matching.
- * Consent Mode v2 defaults configured for Cookiebot integration.
  */
 export default function GoogleTag() {
-  return (
-    <>
-      {/* Google tag (gtag.js) */}
-      <Script
-        src="https://www.googletagmanager.com/gtag/js?id=AW-17823586670"
-        strategy="lazyOnload"
-      />
-      <Script
-        id="google-tag-config"
-        strategy="lazyOnload"
-        dangerouslySetInnerHTML={{
-          __html: `
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
+  useEffect(() => {
+    const load = () => {
+      const consent = window.Cookiebot?.consent;
+      const ids = [consent?.statistics ? GA4_ID : null, consent?.marketing ? ADS_ID : null].filter(
+        (id): id is string => id !== null && !configured.has(id)
+      );
+      if (ids.length === 0) return;
 
-            // Google Analytics 4
-            gtag('config', 'G-6VJL06YBW2', {
-              page_path: window.location.pathname,
-              send_page_view: false,
-            });
+      if (configured.size === 0) {
+        window.gtag('js', new Date());
+        const script = document.createElement('script');
+        script.src = `https://www.googletagmanager.com/gtag/js?id=${ids[0]}`;
+        script.async = true;
+        document.head.appendChild(script);
+      }
 
-            // Google Ads with Enhanced Conversions
-            gtag('config', 'AW-17823586670', {
-              'allow_enhanced_conversions': true
-            });
-          `,
-        }}
-      />
-    </>
-  );
+      for (const id of ids) {
+        configured.add(id);
+        window.gtag(
+          'config',
+          id,
+          id === GA4_ID
+            ? { page_path: window.location.pathname, send_page_view: false }
+            : { allow_enhanced_conversions: true }
+        );
+      }
+    };
+
+    load();
+    window.addEventListener('CookiebotOnAccept', load);
+    return () => window.removeEventListener('CookiebotOnAccept', load);
+  }, []);
+
+  return null;
 }
 
 /**
