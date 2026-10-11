@@ -163,6 +163,12 @@ export default defineType({
               description: 'The garnish ingredient page. Leave empty for a garnish with no page.'
             }),
             defineField({
+              name: 'label',
+              title: 'Label',
+              type: 'string',
+              description: 'The text shown as the link, e.g. "Lime wheel". Leave empty to show the ingredient\'s name.'
+            }),
+            defineField({
               name: 'note',
               title: 'Note',
               type: 'string',
@@ -170,8 +176,9 @@ export default defineType({
             })
           ],
           preview: {
-            select: { title: 'ingredient.name', note: 'note' },
-            prepare({ title, note }: { title?: string; note?: string }) {
+            select: { label: 'label', name: 'ingredient.name', note: 'note' },
+            prepare({ label, name, note }: { label?: string; name?: string; note?: string }) {
+              const title = label || name
               return { title: title || note || 'Garnish', subtitle: title ? note : '' }
             }
           }

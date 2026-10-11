@@ -18,17 +18,22 @@ interface CocktailIngredient {
   }
 }
 
-// A structured garnish: a linked ingredient and/or a descriptor note.
+// A structured garnish: a linked ingredient and/or a descriptor note. The label
+// is the whole garnish phrase ("Lime wheel"); when set it replaces the
+// ingredient name as the link text.
 interface GarnishItem {
+  label?: string
   note?: string
   ingredient?: { _id: string; name: string; slug: string }
 }
 
-// Render structured garnishes as "Name note, Name note and Name note", with each
-// garnish ingredient linked to its page and descriptor notes left plain.
-function renderGarnishes(items: GarnishItem[]) {
+// Render structured garnishes as "Label note, Label note and Label note", with
+// each garnish's label (or ingredient name) linked to its ingredient page and
+// notes left plain.
+export function renderGarnishes(items: GarnishItem[]) {
   return items.map((item, i) => {
     const separator = i === 0 ? '' : i === items.length - 1 ? ' and ' : ', '
+    const text = item.label || item.ingredient?.name
     return (
       <span key={i}>
         {separator}
@@ -37,10 +42,12 @@ function renderGarnishes(items: GarnishItem[]) {
             href={`/field-manual/ingredients/${item.ingredient.slug}/`}
             className="text-gold-300 hover:text-gold-200 underline decoration-dotted underline-offset-2 hover:decoration-solid transition-colors"
           >
-            {item.ingredient.name}
+            {text}
           </Link>
-        ) : null}
-        {item.ingredient && item.note ? ' ' : ''}
+        ) : (
+          text
+        )}
+        {text && item.note ? ' ' : ''}
         {item.note}
       </span>
     )
