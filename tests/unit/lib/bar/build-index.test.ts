@@ -192,3 +192,38 @@ describe('interchangeable families', () => {
     expect(implies.ginger).toBeUndefined()
   })
 })
+
+describe('interchangeable groups', () => {
+  const WATERS: RawIngredient[] = [
+    { id: 'gin', name: 'Gin', slug: 'gin', category: 'spirits' },
+    { id: 'soda', name: 'Soda Water', slug: 'soda-water', category: 'mixers' },
+    { id: 'sparkling', name: 'Sparkling Water', slug: 'sparkling-water', category: 'mixers' },
+    { id: 'ftsoda', name: 'Fever-Tree Soda Water', slug: 'fever-tree-soda-water', category: 'mixers', parentSlug: 'soda-water' },
+    { id: 'tonic', name: 'Tonic Water', slug: 'tonic-water', category: 'mixers' },
+  ]
+  const HIGHBALLS: RawCocktail[] = [
+    { slug: 'rickey', name: 'Gin Rickey', baseSpirit: 'gin', ingredientIds: ['gin', 'soda'] },
+    { slug: 'spritz', name: 'Gin Spritz', baseSpirit: 'gin', ingredientIds: ['gin', 'sparkling'] },
+    { slug: 'branded', name: 'Branded Highball', baseSpirit: 'gin', ingredientIds: ['gin', 'ftsoda'] },
+    { slug: 'gt', name: 'Gin and Tonic', baseSpirit: 'gin', ingredientIds: ['gin', 'tonic'] },
+  ]
+
+  it('lets sparkling water answer for a recipe naming soda water, including a branded one', () => {
+    const { index, implies } = buildBarData(HIGHBALLS, WATERS)
+    const { makeable } = match(new Set(['gin', 'sparkling']), index, implies)
+    expect(makeable.map((c) => c.slug).sort()).toEqual(['branded', 'rickey', 'spritz'])
+  })
+
+  it('lets soda water answer for a recipe naming sparkling water', () => {
+    const { index, implies } = buildBarData(HIGHBALLS, WATERS)
+    const { makeable } = match(new Set(['gin', 'soda']), index, implies)
+    expect(makeable.map((c) => c.slug).sort()).toEqual(['branded', 'rickey', 'spritz'])
+  })
+
+  it('keeps both pages on the shelf and leaves other mixers alone', () => {
+    const { shelves, implies } = buildBarData(HIGHBALLS, WATERS)
+    const mixers = shelves.find((s) => s.id === 'mixers')!.ingredients.map((i) => i.id)
+    expect(mixers).toEqual(expect.arrayContaining(['soda', 'sparkling']))
+    expect(implies.tonic).toBeUndefined()
+  })
+})
