@@ -97,7 +97,7 @@ const worker = {
           `public, max-age=${ttl}, s-maxage=${ttl}` + (swr ? `, stale-while-revalidate=${swr}` : '')
         );
         // Cloudflare's Cache API rejects cache.put() on a response carrying
-        // Set-Cookie (middleware sets detectedCountry/isBot), which is why this
+        // Set-Cookie (middleware sets isBot for crawlers), which is why this
         // edge cache barely populated. Strip it from the CACHED copy only — the
         // original response returned below keeps its cookies, so the first
         // (uncached) visitor still gets them.

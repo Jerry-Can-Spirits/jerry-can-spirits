@@ -35,7 +35,7 @@ interface AgeGateProps {
 // globals.css hides the gate for the first paint; the layout effect below
 // unmounts it before the next one. The region starts at the first entry on
 // both server and client (a cached country would differ between the two and
-// break hydration); detectCountry() corrects it, cache-first, once mounted.
+// break hydration); detectCountry() corrects it once mounted.
 export default function AgeGate({ onVerified }: AgeGateProps) {
   const [selectedRegion, setSelectedRegion] = useState(regions[0]);
   const [isVisible, setIsVisible] = useState(true);
@@ -62,7 +62,7 @@ export default function AgeGate({ onVerified }: AgeGateProps) {
     // Prevent body scrolling when age gate is visible
     document.body.style.overflow = 'hidden';
 
-    // Auto-detect region via sessionStorage cache or geo API
+    // Auto-detect region via the geo API (stores nothing)
     detectCountry().then((country) => {
       if (country) {
         const detected = regions.find((r) => r.code === country);

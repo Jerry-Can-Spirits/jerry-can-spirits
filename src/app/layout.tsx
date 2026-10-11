@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Script from "next/script";
 import { Inter, Playfair_Display, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import SiteChrome from "@/components/SiteChrome";
@@ -106,24 +105,31 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: `document.documentElement.classList.add('js')` }}
         />
 
-        {/* Google Consent Mode v2 Defaults - runs after interactive, before any Google tags fire */}
-        {/* Cookiebot will update these values when user gives consent */}
-        <Script
+        {/* Consent first, before any third-party script: the Consent Mode v2
+            defaults, then Cookiebot's uc.js, both as plain parser-blocking tags
+            (the 10 Oct 2026 scan flagged scripts loading before Cookiebot when
+            both ran afterInteractive). Blocking mode is manual: auto-blocking
+            rewrites the page's inline scripts, which broke React hydration
+            (error #418 on every page, live too) and, loaded this early, wiped
+            the banner during the client re-render. Every third party gates
+            itself on Cookiebot consent in its own component instead. The
+            trade-off is LCP: uc.js now blocks the parser for one request to
+            consent.cookiebot.com (it was deferred until after hydration for
+            LCP). Cookiebot updates the defaults on consent; the Google tag
+            itself loads only after consent (GoogleTag.tsx). */}
+        <script
           id="google-consent-defaults"
-          strategy="afterInteractive"
           dangerouslySetInnerHTML={{
             __html: `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag("consent","default",{ad_personalization:"denied",ad_storage:"denied",ad_user_data:"denied",analytics_storage:"denied",functionality_storage:"denied",personalization_storage:"denied",security_storage:"granted"});gtag("set","ads_data_redaction",true);gtag("set","url_passthrough",false);`,
           }}
         />
-
-        {/* Cookiebot Consent Management - loads after page interactive for better LCP */}
-        {/* Tracking is already blocked by default consent settings above */}
-        <Script
+        {/* eslint-disable-next-line @next/next/no-sync-scripts -- consent state must exist before any other script runs */}
+        <script
           id="Cookiebot"
           src="https://consent.cookiebot.com/uc.js"
           data-cbid="ac4fd2fb-f5c7-435e-a8fb-2fe80936e682"
-          data-blockingmode="auto"
-          strategy="afterInteractive"
+          data-blockingmode="manual"
+          type="text/javascript"
         />
 
         <link rel="manifest" href="/manifest.json" />
