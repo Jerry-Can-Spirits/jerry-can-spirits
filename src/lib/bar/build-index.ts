@@ -5,6 +5,7 @@ import {
   ASSUMED_BASIC_SLUGS,
   INTERCHANGEABLE_PARENTS,
   INTERCHANGEABLE_FAMILIES,
+  INTERCHANGEABLE_GROUPS,
   COMMON_DEFAULTS,
 } from './config'
 import type { BarData, BarIngredient, CocktailIndexItem, ShelfGroup } from './types'
@@ -132,6 +133,10 @@ export function buildBarData(cocktails: RawCocktail[], ingredients: RawIngredien
     const root = rootOf(ing)
     if (!root) continue
     families.set(root, [...(families.get(root) ?? []), ing.id])
+  }
+  for (const group of INTERCHANGEABLE_GROUPS) {
+    const members = group.map((slug) => idBySlug.get(slug)).filter((id): id is string => !!id && shelvableIds.has(id))
+    if (members.length > 1) families.set(group.join('|'), members)
   }
 
   const implies: Record<string, string[]> = {}

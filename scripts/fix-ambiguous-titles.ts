@@ -46,7 +46,7 @@ const TITLES: Record<string, { next: string; why: string }> = {
     next: 'Granulated Sugar: When Crystals Beat Syrup',
     why: 'there are separate caster, demerara and powdered sugar pages',
   },
-  'cherry-liqueur-cherry-brandy-style': {
+  'cherry-brandy': {
     next: 'Cherry Brandy Liqueur Guide: the Dark Cherry',
     why: 'separates it from the Maraschino Liqueur and Maraschino Cherry pages',
   },

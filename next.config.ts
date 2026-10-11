@@ -486,7 +486,12 @@ const nextConfig: NextConfig = {
       },
       {
         source: '/field-manual/ingredients/club-soda/:path*',
-        destination: '/field-manual/ingredients/sparkling-water/',
+        destination: '/field-manual/ingredients/soda-water/',
+        permanent: true,
+      },
+      {
+        source: '/field-manual/ingredients/cherry-liqueur-cherry-brandy-style/:path*',
+        destination: '/field-manual/ingredients/cherry-brandy/',
         permanent: true,
       },
       {

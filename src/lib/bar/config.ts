@@ -91,6 +91,12 @@ export const INTERCHANGEABLE_PARENTS: ReadonlySet<string> = new Set([
 // different drink rather than a near miss.
 export const INTERCHANGEABLE_FAMILIES: ReadonlySet<string> = new Set(['rum', 'whisky'])
 
+// Pages that answer for each other with no parent between them. Soda water and
+// sparkling water are two pages because the liquids differ (soda water carries
+// added mineral salts), but in a highball either bottle does the job, so a bar
+// holding one can make a recipe that names the other (decision of 11 Oct 2026).
+export const INTERCHANGEABLE_GROUPS: ReadonlyArray<readonly string[]> = [['soda-water', 'sparkling-water']]
+
 // Quick-start bottles shown lit-ready on each shelf: the bottles a typical home
 // bar actually holds. Curated by slug rather than derived by recipe frequency,
 // which over-rewards cocktail-darlings (Benedictine, Cognac, Chartreuse) that
@@ -150,6 +156,9 @@ export const FOLDED_BAR_INGREDIENTS: Readonly<Record<string, string>> = {
   '532542de-8727-491a-9b5c-105ca1bc7b11': 'pineapple',
   'red-chilli-pepper': 'chilli',
   'ingredient-red-chilli-pepper': 'chilli',
+  // Renamed rather than folded (11 Oct 2026): the id is unchanged, so only a
+  // shared link naming the old slug needs the alias.
+  'cherry-liqueur-cherry-brandy-style': 'cherry-brandy',
 }
 
 /** The id of the page a folded slug or id now lives on, if it was folded. */
