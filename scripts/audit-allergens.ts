@@ -56,7 +56,21 @@ const ALL = process.argv.includes('--all')
 const COVERAGE = process.argv.includes('--coverage')
 
 /** The 14 allergens declarable in the UK, as far as they reach a cocktail. */
-type Allergen = 'celery' | 'cereals containing gluten' | 'eggs' | 'fish' | 'milk' | 'nuts' | 'soybeans' | 'sulphites'
+type Allergen =
+  | 'celery'
+  | 'cereals containing gluten'
+  | 'crustaceans'
+  | 'eggs'
+  | 'fish'
+  | 'lupin'
+  | 'milk'
+  | 'molluscs'
+  | 'mustard'
+  | 'nuts'
+  | 'peanuts'
+  | 'sesame'
+  | 'soybeans'
+  | 'sulphites'
 
 interface Base {
   /** Page name, exactly as it appears in Sanity. */
@@ -165,6 +179,13 @@ const REGISTER: Entry[] = [
     basis: 'Malted barley, commonly with maize alongside it.',
     surprising: true,
     declaredBy: /barley|malt|gluten/i,
+  },
+  {
+    page: 'Pickle Brine',
+    allergen: 'mustard',
+    basis: "Mustard seed on most UK gherkin and dill pickle labels: Tesco gherkins, Mrs Elswood, Freshona, Krakus dill cucumbers and Sainsbury's, via Open Food Facts. Tesco cornichons carry none. Verified October 2026.",
+    surprising: true,
+    declaredBy: /mustard/i,
   },
 
   // --- Expected. Tracked for completeness; the page need not spell it out. ---
