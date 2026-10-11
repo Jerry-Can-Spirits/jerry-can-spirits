@@ -1,4 +1,6 @@
 import { describe, expect, it } from 'vitest'
+import { readFileSync } from 'fs'
+import { resolve } from 'path'
 import { NextRequest } from 'next/server'
 import {
   AGE_VERIFIED_ATTR,
@@ -290,5 +292,33 @@ describe('productHandleFromReturnPath — the product behind a gated visit', () 
     expect(productHandleFromReturnPath('/shop/product/Bad Handle/')).toBeNull()
     expect(productHandleFromReturnPath('/shop/product/x/y/')).toBeNull()
     expect(productHandleFromReturnPath('/field-manual/cocktails/mojito/')).toBeNull()
+  })
+})
+
+// The Cookiebot banner is a bottom bar on desktop and sat over the gate's
+// "Yes, Enter" button at 1280x720 (found in #1420's test run). globals.css
+// keeps the dialog hidden while an unverified visitor has the gate up and
+// nothing else: a verified visitor is marked before first paint by the inline
+// script, so the attribute is present and the banner shows at once. The rule
+// is keyed on the same attribute the inline script sets, so a rename here
+// fails this test rather than silently unhiding the banner.
+describe('Cookiebot dialog waits behind the age gate', () => {
+  const css = readFileSync(resolve('src/app/globals.css'), 'utf8')
+
+  it('hides #CybotCookiebotDialog only while the gate is up for an unverified visitor', () => {
+    const rule = new RegExp(
+      `html:not\\(\\[${AGE_VERIFIED_ATTR}\\]\\)\\s+body:has\\(\\.age-gate\\)\\s+#CybotCookiebotDialog\\s*\\{([^}]*)\\}`,
+    ).exec(css)
+    expect(rule, 'rule missing from globals.css').not.toBeNull()
+    expect(rule![1]).toMatch(/display:\s*none\s*!important/)
+  })
+
+  it('does not hide the dialog by any broader selector', () => {
+    // A bare #CybotCookiebotDialog { display: none } would hide the banner for
+    // everyone; only the persistent widget (#CookiebotWidget) is hidden outright.
+    // A bare selector starts its line or follows a comma or brace; the gate
+    // rule above is a descendant selector, so its id sits mid-line.
+    const bare = /(^|[,}])\s*#CybotCookiebotDialog\s*\{[^}]*display:\s*none/m.exec(css)
+    expect(bare).toBeNull()
   })
 })
