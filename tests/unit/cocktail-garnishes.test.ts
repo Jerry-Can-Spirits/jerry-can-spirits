@@ -15,41 +15,48 @@ function html(items: Parameters<typeof renderGarnishes>[0]) {
   return renderToStaticMarkup(createElement(Fragment, null, renderGarnishes(items)))
 }
 
-function text(items: Parameters<typeof renderGarnishes>[0]) {
-  return html(items).replace(/<[^>]+>/g, '')
+// The anchor as rendered, read from a single-item render so the expected
+// strings below do not restate the link's classes or href normalisation.
+function link(ingredient: typeof lime, linkText: string) {
+  const out = html([{ label: linkText, ingredient }])
+  expect(out.startsWith('<span><a ')).toBe(true)
+  expect(out.endsWith(`>${linkText}</a></span>`)).toBe(true)
+  return out.slice('<span>'.length, -'</span>'.length)
 }
 
 describe('renderGarnishes', () => {
   it('links the whole label to the ingredient page', () => {
     const out = html([{ label: 'Lime wheel', ingredient: lime }])
-    expect(out).toMatch(/<a [^>]*href="\/field-manual\/ingredients\/lime\/?"[^>]*>Lime wheel<\/a>/)
+    expect(out).toContain('href="/field-manual/ingredients/lime')
+    expect(out).toContain('>Lime wheel</a>')
+    expect(out).not.toContain('>Lime</a>')
   })
 
   it('falls back to the ingredient name when there is no label', () => {
-    const out = html([{ ingredient: raspberries }])
-    expect(out).toMatch(/<a [^>]*>Raspberries<\/a>/)
+    expect(html([{ ingredient: raspberries }])).toBe(`<span>${link(raspberries, 'Raspberries')}</span>`)
   })
 
   it('leaves the note as plain text after the link', () => {
-    const out = html([{ label: 'Orange twist', note: 'expressed over the glass', ingredient: orange }])
-    expect(out).toMatch(/<a [^>]*>Orange twist<\/a> expressed over the glass/)
-    expect(text([{ label: 'Orange twist', note: 'expressed over the glass', ingredient: orange }])).toBe(
-      'Orange twist expressed over the glass'
+    expect(html([{ label: 'Orange twist', note: 'expressed over the glass', ingredient: orange }])).toBe(
+      `<span>${link(orange, 'Orange twist')} expressed over the glass</span>`
     )
   })
 
   it('joins items with commas and a final "and"', () => {
-    expect(text([{ label: 'Lime wheel', ingredient: lime }, { ingredient: raspberries }])).toBe(
-      'Lime wheel and Raspberries'
+    const limeWheel = link(lime, 'Lime wheel')
+    const orangeTwist = link(orange, 'Orange twist')
+    const rasp = link(raspberries, 'Raspberries')
+    expect(html([{ label: 'Lime wheel', ingredient: lime }, { ingredient: raspberries }])).toBe(
+      `<span>${limeWheel}</span><span> and ${rasp}</span>`
     )
     expect(
-      text([{ label: 'Lime wheel', ingredient: lime }, { label: 'Orange twist', ingredient: orange }, { ingredient: raspberries }])
-    ).toBe('Lime wheel, Orange twist and Raspberries')
+      html([{ label: 'Lime wheel', ingredient: lime }, { label: 'Orange twist', ingredient: orange }, { ingredient: raspberries }])
+    ).toBe(`<span>${limeWheel}</span><span>, ${orangeTwist}</span><span> and ${rasp}</span>`)
   })
 
   it('prints an unlinked garnish as plain text, label then note', () => {
     expect(html([{ note: 'gardenia flower' }])).toBe('<span>gardenia flower</span>')
     expect(html([{ label: 'Paper umbrella' }])).toBe('<span>Paper umbrella</span>')
-    expect(text([{ label: 'Gardenia', note: 'tucked into the ice' }])).toBe('Gardenia tucked into the ice')
+    expect(html([{ label: 'Gardenia', note: 'tucked into the ice' }])).toBe('<span>Gardenia tucked into the ice</span>')
   })
 })
