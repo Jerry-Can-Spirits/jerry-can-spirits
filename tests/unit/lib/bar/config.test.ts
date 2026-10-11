@@ -95,11 +95,16 @@ describe('folded bar ingredients', () => {
     ['pineapple', 'ingredient-pineapple'],
     ['chilli', 'ingredient-chilli'],
     ['gin', 'ingredient-gin'],
+    ['cherry-brandy', 'ingredient-cherry-brandy'],
   ])
 
   it('resolves a folded slug from a shared link to the parent id', () => {
     expect(foldedTo('pineapple-chunks', idBySlug)).toBe('ingredient-pineapple')
     expect(foldedTo('red-chilli-pepper', idBySlug)).toBe('ingredient-chilli')
+  })
+
+  it('resolves the old cherry brandy slug from a shared link to the renamed page', () => {
+    expect(foldedTo('cherry-liqueur-cherry-brandy-style', idBySlug)).toBe('ingredient-cherry-brandy')
   })
 
   it('resolves a folded id from a saved bar to the parent id', () => {
