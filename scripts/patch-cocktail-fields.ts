@@ -48,9 +48,9 @@ interface Patch {
   /**
    * Ingredient guide slug for the spirit the drink is known for.
    *
-   * Normally derived in bulk by scripts/set-cocktail-metadata.ts, which only
-   * fills the field where it is empty. Set here when a specification changes
-   * what the drink is built on: the official Penicillin names Lagavulin 16
+   * Normally derived in bulk by the one-run set-cocktail-metadata sweep (since
+   * removed), which only filled the field where it was empty. Set here when a
+   * specification changes what the drink is built on: the official Penicillin names Lagavulin 16
    * rather than any Islay malt, and the featured spirit should follow.
    */
   featuredSpirit?: string

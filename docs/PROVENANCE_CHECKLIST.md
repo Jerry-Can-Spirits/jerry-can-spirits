@@ -240,6 +240,6 @@ lists molasses, a Welsh provenance, or a botanical count other than seven as a
 fact, every new copy task will reintroduce it. Keep both aligned with this
 checklist.
 
-`docs/guides-published/` and `docs/plans/` contain historical drafts. Never
+`docs/plans/` contains historical drafts. Never
 source copy from them. Files known to contain superseded provenance claims
 carry a warning header pointing back to this checklist.

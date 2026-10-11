@@ -82,3 +82,6 @@ pre-*.sql
 # Sanity Studio build output (deployed via `sanity deploy`, not committed)
 dist/
 .sanity/
+
+# Office lock files
+~$*

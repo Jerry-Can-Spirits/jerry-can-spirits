@@ -4,9 +4,9 @@
  * WHY IT EXISTS. The Franklin & Sons serves reference twelve products that have
  * no page here, and a cocktail cannot link an ingredient that does not exist.
  * Fever-Tree's pages were already built, so this gap only appeared with the
- * second producer — and there will be a third. scripts/create-brand-ingredients.ts
- * is the nearest existing tool and is spirit-shaped, one-shot, and hard-codes
- * its three brands; mixers carry a different field set entirely.
+ * second producer — and there will be a third. The nearest earlier tool, a
+ * create-brand-ingredients script since removed, was spirit-shaped, one-shot,
+ * and hard-coded its three brands; mixers carry a different field set entirely.
  *
  * THE GUARD THAT MATTERS MOST HERE IS THE BOILERPLATE ONE. Producer copy is
  * where the facts come from — cinchona bark named on the label rather than
