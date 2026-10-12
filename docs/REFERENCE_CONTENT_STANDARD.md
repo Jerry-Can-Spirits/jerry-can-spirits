@@ -155,8 +155,12 @@ Article schema, as on guides (`docs/GUIDE_CONTENT_TEMPLATE.md`). A fact about
 another brand's product, or about the law, is also linked or named on the
 claim itself. Primary sources first: the legislation, the producer, the
 standards body. A secondary source carries a note saying what it is
-("retailer listing", "trade report"). A keeping time is cited from the
-producer's label or site, or phrased as our guidance.
+("retailer listing", "trade report"). A keeping time is our guidance unless
+a source is given. `keepsFor` and `prep.keepsFor` are always ours: the facts
+panel and the house recipe label them "Our keeping time" (decided 12 October
+2026). A producer's own figure, when cited, goes in the long description with
+a link to the producer's label or site, never in `keepsFor`. In any other
+plain field, phrase a keeping time as ours ("we keep an open bottle for ...").
 
 **Consistency with our recipes.** Name a cocktail only if its recipe
 references this page (`*[_type=="cocktail" && references($id)]`). Technique
@@ -189,7 +193,7 @@ restate them in a form that can drift.
 | `allergens` | The UK 14. Sulphites go here, not in prose. |
 | `allergensReviewed` | Ticked whenever allergens are set, and on a checked page with none. Unticked, the page prints no allergen line. |
 | `allergenNote` | Branded products: "Recipes change; check the bottle". |
-| `storage`, `keepsFor` | `keepsFor` set on anything perishable: everything except spirits, spirit drinks and liqueurs, and every house preparation. |
+| `storage`, `keepsFor` | `keepsFor` set on anything perishable: everything except spirits, spirit drinks and liqueurs, and every house preparation. It is our guidance and renders as "Our keeping time"; a producer's figure goes in the long description with a link (section 6). |
 | `substitutes` | References, each with a note on the swap. |
 | `prep` | House recipes only. Ratios and keeping times come from the house prep rules (decision 4) and the chart on the `syrup` page. |
 
