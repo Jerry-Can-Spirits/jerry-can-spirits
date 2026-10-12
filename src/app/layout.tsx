@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, Playfair_Display, JetBrains_Mono } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 import SiteChrome from "@/components/SiteChrome";
 import ClientWrapper from "@/components/ClientWrapper";
@@ -105,17 +106,20 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: `document.documentElement.classList.add('js')` }}
         />
 
-        {/* Consent first, before any third-party script: the Consent Mode v2
-            defaults, then Cookiebot's uc.js, both as plain parser-blocking tags
-            (the 10 Oct 2026 scan flagged scripts loading before Cookiebot when
-            both ran afterInteractive). Blocking mode is manual: auto-blocking
-            rewrites the page's inline scripts, which broke React hydration
-            (error #418 on every page, live too) and, loaded this early, wiped
-            the banner during the client re-render. Every third party gates
-            itself on Cookiebot consent in its own component instead. The
-            trade-off is LCP: uc.js now blocks the parser for one request to
-            consent.cookiebot.com (it was deferred until after hydration for
-            LCP). Cookiebot updates the defaults on consent; the Google tag
+        {/* Consent before any third-party script. The Consent Mode v2 defaults
+            are a plain synchronous tag: every category denied before any tag
+            can run. Cookiebot's uc.js is a next/script afterInteractive, which
+            loads it from an effect after React's hydration commit. It must not
+            run earlier: as a synchronous tag (11 Oct 2026) it inserted
+            #CybotCookiebotDialog as the first child of <body> before React
+            hydrated; React matched that div against Next's hidden metadata div,
+            failed with #418 and regenerated the tree, which on production
+            sometimes deleted the banner (on dev, always). Nothing third-party
+            runs ahead of it: every tracker waits for Cookiebot consent in its
+            own component (blocking mode is manual; auto-blocking rewrote the
+            page's inline scripts and broke hydration on every page), and
+            Cookiebot fires CookiebotOnAccept on load for a visitor with prior
+            consent. Cookiebot updates the defaults on consent; the Google tag
             itself loads only after consent (GoogleTag.tsx). */}
         <script
           id="google-consent-defaults"
@@ -123,13 +127,12 @@ export default function RootLayout({
             __html: `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag("consent","default",{ad_personalization:"denied",ad_storage:"denied",ad_user_data:"denied",analytics_storage:"denied",functionality_storage:"denied",personalization_storage:"denied",security_storage:"granted"});gtag("set","ads_data_redaction",true);gtag("set","url_passthrough",false);`,
           }}
         />
-        {/* eslint-disable-next-line @next/next/no-sync-scripts -- consent state must exist before any other script runs */}
-        <script
+        <Script
           id="Cookiebot"
           src="https://consent.cookiebot.com/uc.js"
           data-cbid="ac4fd2fb-f5c7-435e-a8fb-2fe80936e682"
           data-blockingmode="manual"
-          type="text/javascript"
+          strategy="afterInteractive"
         />
 
         <link rel="manifest" href="/manifest.json" />
