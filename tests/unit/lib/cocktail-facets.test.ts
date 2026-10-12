@@ -19,6 +19,8 @@ import {
   isSelfCanonical,
   isValidPage,
   labelFor,
+  matchesSpiritChip,
+  parseSpiritParams,
   pageCount,
   robotsFor,
   rollupFor,
@@ -396,5 +398,60 @@ describe('the fallback heading', () => {
 
   it('appends it to a spirit, which is an ingredient rather than a family', () => {
     expect(headingFor({ kind: 'spirit', label: 'Rum' })).toBe('Rum Cocktails')
+  })
+})
+
+describe('hub spirit chips', () => {
+  it('Gin covers every gin style and nothing that is not a gin', () => {
+    for (const b of ['gin', 'london-dry-gin', 'old-tom-gin', 'plymouth-gin', 'navy-strength-gin']) {
+      expect(matchesSpiritChip('gin', b)).toBe(true)
+    }
+    // Genever is gin's ancestor, not a style of it; sloe gin is a liqueur.
+    expect(matchesSpiritChip('gin', 'genever')).toBe(false)
+    expect(matchesSpiritChip('gin', 'sloe-gin')).toBe(false)
+    expect(matchesSpiritChip('gin', 'liqueur')).toBe(false)
+  })
+
+  it('Whiskey covers every whiskey and whisky member', () => {
+    for (const b of ['bourbon', 'rye-whiskey', 'scotch', 'irish-whiskey', 'welsh-whisky', 'japanese-whisky', 'tennessee-whiskey']) {
+      expect(matchesSpiritChip('whiskey', b)).toBe(true)
+    }
+    expect(matchesSpiritChip('whiskey', 'brandy')).toBe(false)
+    expect(matchesSpiritChip('whiskey', 'multiple')).toBe(false)
+  })
+
+  it('Rum covers overproof, agricole and cachaça as well as the common styles', () => {
+    for (const b of ['white-rum', 'dark-rum', 'aged-rum', 'spiced-rum', 'overproof-rum', 'rhum-agricole', 'cachaca']) {
+      expect(matchesSpiritChip('rum', b)).toBe(true)
+    }
+    expect(matchesSpiritChip('rum', 'gin')).toBe(false)
+    expect(matchesSpiritChip('rum', 'liqueur')).toBe(false)
+  })
+
+  it('a chip outside the rollups matches only itself', () => {
+    expect(matchesSpiritChip('genever', 'genever')).toBe(true)
+    expect(matchesSpiritChip('genever', 'gin')).toBe(false)
+    expect(matchesSpiritChip('champagne', 'champagne')).toBe(true)
+    expect(matchesSpiritChip('gin', undefined)).toBe(false)
+  })
+})
+
+describe('hub spirit query string', () => {
+  it('reads ?spirit=gin as the whole gin rollup', () => {
+    expect(parseSpiritParams('gin', null)).toEqual({ spirit: 'gin', subtype: null })
+  })
+
+  it('keeps a sub-type only when it belongs to the parent', () => {
+    expect(parseSpiritParams('gin', 'old-tom-gin')).toEqual({ spirit: 'gin', subtype: 'old-tom-gin' })
+    expect(parseSpiritParams('gin', 'gin')).toEqual({ spirit: 'gin', subtype: 'gin' })
+    expect(parseSpiritParams('gin', 'bourbon')).toEqual({ spirit: 'gin', subtype: null })
+  })
+
+  it('resolves links from before the rollup chips', () => {
+    expect(parseSpiritParams('all-rum', null)).toEqual({ spirit: 'rum', subtype: null })
+    expect(parseSpiritParams('bourbon', null)).toEqual({ spirit: 'whiskey', subtype: 'bourbon' })
+    expect(parseSpiritParams('white-rum', null)).toEqual({ spirit: 'rum', subtype: 'white-rum' })
+    expect(parseSpiritParams('champagne', null)).toEqual({ spirit: 'champagne', subtype: null })
+    expect(parseSpiritParams(null, null)).toEqual({ spirit: 'all', subtype: null })
   })
 })

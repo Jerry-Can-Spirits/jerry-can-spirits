@@ -6,7 +6,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import BackToTop from '@/components/BackToTop'
 import ScrollRow from '@/components/ScrollRow'
-import { facetForBaseSpirit } from '@/lib/cocktail-facets'
+import { MEMBER_LABELS, SPIRIT_ROLLUPS, matchesSpiritChip, parseSpiritParams } from '@/lib/cocktail-facets'
 
 // Ratings type
 interface RatingsMap {
@@ -118,6 +118,7 @@ export default function CocktailsClient({
   // working while the first page of the grid server-renders.
   const [selectedFamily, setSelectedFamily] = useState<string>('all')
   const [selectedSpirit, setSelectedSpirit] = useState<string>('all')
+  const [selectedSubtype, setSelectedSubtype] = useState<string | null>(null)
   const [selectedDifficulty, setSelectedDifficulty] = useState<string>('all')
   const [searchQuery, setSearchQuery] = useState<string>('')
   const [visibleCount, setVisibleCount] = useState<number>(ITEMS_PER_PAGE)
@@ -126,12 +127,13 @@ export default function CocktailsClient({
   useEffect(() => {
     const sp = new URLSearchParams(window.location.search)
     const family = sp.get('family')
-    const spirit = sp.get('spirit')
+    const spirit = parseSpiritParams(sp.get('spirit'), sp.get('subtype'))
     const difficulty = sp.get('difficulty')
     const q = sp.get('q')
     const sort = sp.get('sort')
     if (family) setSelectedFamily(family)
-    if (spirit) setSelectedSpirit(spirit)
+    setSelectedSpirit(spirit.spirit)
+    setSelectedSubtype(spirit.subtype)
     if (difficulty) setSelectedDifficulty(difficulty)
     if (q) setSearchQuery(q)
     if (sort) setSortBy(sort)
@@ -139,10 +141,11 @@ export default function CocktailsClient({
   const [ratings, setRatings] = useState<RatingsMap>({})
   const [ratingsLoaded, setRatingsLoaded] = useState<boolean>(false)
 
-  const updateURL = (family: string, spirit: string, difficulty: string, q: string, sort: string) => {
+  const updateURL = (family: string, spirit: string, subtype: string | null, difficulty: string, q: string, sort: string) => {
     const sp = new URLSearchParams()
     if (family !== 'all') sp.set('family', family)
     if (spirit !== 'all') sp.set('spirit', spirit)
+    if (subtype) sp.set('subtype', subtype)
     if (difficulty !== 'all') sp.set('difficulty', difficulty)
     if (q) sp.set('q', q)
     if (sort !== 'default') sp.set('sort', sort)
@@ -186,14 +189,11 @@ export default function CocktailsClient({
     }
   }
 
-  // Rum subtypes for "All Rum" filter
-  const rumSpirits = ['spiced-rum', 'white-rum', 'aged-rum', 'dark-rum', 'overproof-rum', 'rhum-agricole']
-
-  // Helper to check spirit match
+  // A parent chip covers its whole rollup; a sub-type matches only itself.
   const matchesSpiritFilter = (spirit: string | undefined, filter: string) => {
     if (filter === 'all') return true
-    if (filter === 'all-rum') return rumSpirits.includes(spirit || '')
-    return spirit === filter
+    if (selectedSubtype) return spirit === selectedSubtype
+    return matchesSpiritChip(filter, spirit)
   }
 
   // Bi-directional faceted filtering - each filter affects all others
@@ -228,8 +228,9 @@ export default function CocktailsClient({
     return matchesFamily && matchesDifficulty
   })
   const availableSpirits = new Set(cocktailsForSpiritOptions.map(c => c.baseSpirit).filter(Boolean))
-  // Check if any rum types are available for "All Rum" option
-  const hasAnyRum = rumSpirits.some(rum => availableSpirits.has(rum))
+  // The selected parent's sub-types, in rollup order, as a second row. Only
+  // when there is a choice to make: Vodka has one member and no second row.
+  const subtypeOptions = (SPIRIT_ROLLUPS[selectedSpirit]?.members ?? []).filter(m => availableSpirits.has(m))
 
   // Available difficulties = difficulties in cocktails matching family + spirit + search
   const cocktailsForDifficultyOptions = searchFilteredCocktails.filter(cocktail => {
@@ -268,18 +269,12 @@ export default function CocktailsClient({
   // picks Sours has no way of discovering that a written Sours page exists. This
   // is the bridge between the two.
   //
-  // The spirit lookup goes through facetForBaseSpirit because the chips carry
-  // raw sub-types: picking White Rum should offer the rum facet, since no
-  // /spirit/white-rum/ page exists. "all-rum" is the hub's own grouping and maps
-  // to the same facet.
+  // The top-level spirit chips carry facet values (a rollup such as "rum", or a
+  // raw value such as "champagne"), so the lookup is direct. A sub-type keeps
+  // its parent's facet: picking White Rum still offers the rum page, since no
+  // /spirit/white-rum/ page exists.
   const activeStyleFacet = selectedFamily !== 'all' ? styleFacetLinks[selectedFamily] : undefined
-  const activeSpiritFacetValue =
-    selectedSpirit === 'all'
-      ? null
-      : selectedSpirit === 'all-rum'
-        ? 'rum'
-        : facetForBaseSpirit(selectedSpirit)
-  const activeSpiritFacet = activeSpiritFacetValue ? spiritFacetLinks[activeSpiritFacetValue] : undefined
+  const activeSpiritFacet = selectedSpirit !== 'all' ? spiritFacetLinks[selectedSpirit] : undefined
   const activeFacets = [activeStyleFacet, activeSpiritFacet].filter(Boolean) as FacetLink[]
 
   // Helper to render star rating display
@@ -316,31 +311,40 @@ export default function CocktailsClient({
   const handleFamilyChange = (family: string) => {
     setSelectedFamily(family)
     setVisibleCount(ITEMS_PER_PAGE)
-    updateURL(family, selectedSpirit, selectedDifficulty, searchQuery, sortBy)
+    updateURL(family, selectedSpirit, selectedSubtype, selectedDifficulty, searchQuery, sortBy)
   }
 
+  // Choosing a parent, including the one already chosen, clears its sub-type.
   const handleSpiritChange = (spirit: string) => {
     setSelectedSpirit(spirit)
+    setSelectedSubtype(null)
     setVisibleCount(ITEMS_PER_PAGE)
-    updateURL(selectedFamily, spirit, selectedDifficulty, searchQuery, sortBy)
+    updateURL(selectedFamily, spirit, null, selectedDifficulty, searchQuery, sortBy)
+  }
+
+  const handleSubtypeChange = (subtype: string) => {
+    const next = selectedSubtype === subtype ? null : subtype
+    setSelectedSubtype(next)
+    setVisibleCount(ITEMS_PER_PAGE)
+    updateURL(selectedFamily, selectedSpirit, next, selectedDifficulty, searchQuery, sortBy)
   }
 
   const handleDifficultyChange = (difficulty: string) => {
     setSelectedDifficulty(difficulty)
     setVisibleCount(ITEMS_PER_PAGE)
-    updateURL(selectedFamily, selectedSpirit, difficulty, searchQuery, sortBy)
+    updateURL(selectedFamily, selectedSpirit, selectedSubtype, difficulty, searchQuery, sortBy)
   }
 
   const handleSearchChange = (query: string) => {
     setSearchQuery(query)
     setVisibleCount(ITEMS_PER_PAGE)
-    updateURL(selectedFamily, selectedSpirit, selectedDifficulty, query, sortBy)
+    updateURL(selectedFamily, selectedSpirit, selectedSubtype, selectedDifficulty, query, sortBy)
   }
 
   const handleSortChange = (sort: string) => {
     setSortBy(sort)
     setVisibleCount(ITEMS_PER_PAGE)
-    updateURL(selectedFamily, selectedSpirit, selectedDifficulty, searchQuery, sort)
+    updateURL(selectedFamily, selectedSpirit, selectedSubtype, selectedDifficulty, searchQuery, sort)
   }
 
   const handleShowMore = () => {
@@ -376,28 +380,13 @@ export default function CocktailsClient({
     { value: 'other', label: 'Other' }
   ]
 
-  // Base spirits for filter tabs
+  // Base spirits for filter tabs. The parents come from SPIRIT_ROLLUPS, the
+  // same source as the /spirit/ pages; their sub-types appear as a second row
+  // once a parent is chosen. Genever stands alone: it is not a style of gin.
   const spirits = [
     { value: 'all', label: 'All Spirits' },
-    { value: 'all-rum', label: 'All Rum' },
-    { value: 'spiced-rum', label: 'Spiced Rum' },
-    { value: 'white-rum', label: 'White Rum' },
-    { value: 'aged-rum', label: 'Aged Rum' },
-    { value: 'dark-rum', label: 'Dark Rum' },
-    { value: 'rhum-agricole', label: 'Rhum Agricole' },
-    { value: 'gin', label: 'Gin' },
-    { value: 'vodka', label: 'Vodka' },
-    { value: 'bourbon', label: 'Bourbon' },
-    { value: 'tennessee-whiskey', label: 'Tennessee Whiskey' },
-    { value: 'rye-whiskey', label: 'Rye Whiskey' },
-    { value: 'scotch', label: 'Scotch' },
-    { value: 'irish-whiskey', label: 'Irish Whiskey' },
-    { value: 'welsh-whisky', label: 'Welsh Whisky' },
-    { value: 'japanese-whisky', label: 'Japanese Whisky' },
-    { value: 'tequila', label: 'Tequila' },
-    { value: 'brandy', label: 'Brandy' },
-    { value: 'cognac', label: 'Cognac' },
-    { value: 'cachaca', label: 'Cachaça' },
+    ...Object.entries(SPIRIT_ROLLUPS).map(([value, { label }]) => ({ value, label })),
+    { value: 'genever', label: 'Genever' },
     { value: 'sherry', label: 'Sherry' },
     { value: 'vermouth', label: 'Vermouth' },
     { value: 'champagne', label: 'Champagne' },
@@ -418,7 +407,9 @@ export default function CocktailsClient({
     ? 'All Cocktails'
     : selectedFamily !== 'all'
       ? families.find(f => f.value === selectedFamily)?.label
-      : spirits.find(s => s.value === selectedSpirit)?.label
+      : selectedSubtype
+        ? MEMBER_LABELS[selectedSubtype]
+        : spirits.find(s => s.value === selectedSpirit)?.label
 
   if (cocktails.length === 0) {
     return (
@@ -496,8 +487,10 @@ export default function CocktailsClient({
                 {spirits
                   .filter(spirit => {
                     if (spirit.value === 'all') return true
-                    if (spirit.value === 'all-rum') return hasAnyRum
-                    return availableSpirits.has(spirit.value)
+                    const rollup = SPIRIT_ROLLUPS[spirit.value]
+                    return rollup
+                      ? rollup.members.some(m => availableSpirits.has(m))
+                      : availableSpirits.has(spirit.value)
                   })
                   .map((spirit) => (
                   <button
@@ -513,6 +506,24 @@ export default function CocktailsClient({
                   </button>
                 ))}
               </div>
+              {(subtypeOptions.length > 1 || selectedSubtype) && (
+                <div className="flex flex-wrap gap-2 mt-3 pl-3 border-l border-gold-500/20">
+                  {subtypeOptions.map((subtype) => (
+                    <button
+                      key={subtype}
+                      onClick={() => handleSubtypeChange(subtype)}
+                      aria-pressed={selectedSubtype === subtype}
+                      className={`px-3 py-2 rounded-lg text-sm font-semibold transition-all duration-300 ${
+                        selectedSubtype === subtype
+                          ? 'bg-gold-500/20 text-gold-300 border border-gold-500/40'
+                          : 'bg-jerry-green-800/40 text-parchment-300 border border-gold-500/20 hover:bg-jerry-green-800/60'
+                      }`}
+                    >
+                      {MEMBER_LABELS[subtype] ?? subtype}
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
 
             {/* Difficulty Filter */}
@@ -710,10 +721,11 @@ export default function CocktailsClient({
               onClick={() => {
                 setSelectedFamily('all')
                 setSelectedSpirit('all')
+                setSelectedSubtype(null)
                 setSelectedDifficulty('all')
                 setSearchQuery('')
                 setVisibleCount(ITEMS_PER_PAGE)
-                updateURL('all', 'all', 'all', '', sortBy)
+                updateURL('all', 'all', null, 'all', '', sortBy)
               }}
               className="mt-4 px-6 py-3 bg-gold-500/20 border border-gold-500/40 text-gold-300 rounded-lg hover:bg-gold-500/30 transition-colors"
             >

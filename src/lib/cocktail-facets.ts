@@ -275,6 +275,42 @@ export function facetForBaseSpirit(baseSpirit: string): string | null {
   return null
 }
 
+/**
+ * Whether a cocktail falls under one of the hub's top-level spirit chips.
+ *
+ * A rollup chip covers every member, the same set its /spirit/ page lists: the
+ * Gin chip used to match the raw value "gin" alone and showed the ten recipes
+ * that name no style, missing the 57 London Dry drinks. Any other chip is a raw
+ * baseSpirit and matches only itself, which keeps genever and the sloe gin
+ * liqueurs out of Gin.
+ */
+export function matchesSpiritChip(chip: string, baseSpirit: string | null | undefined): boolean {
+  if (!baseSpirit) return false
+  const rollup = SPIRIT_ROLLUPS[chip]
+  return rollup ? rollup.members.includes(baseSpirit) : chip === baseSpirit
+}
+
+/**
+ * Read the hub's spirit filter from its query string.
+ *
+ * Two values because "gin" names both the rollup and the recipes that name no
+ * style. ?spirit=gin is the whole rollup, as old links expect; the sub-type is
+ * a second parameter. Links from before the rollup chips still resolve:
+ * ?spirit=all-rum is Rum, and a raw sub-type such as ?spirit=bourbon opens
+ * Whiskey with Bourbon selected.
+ */
+export function parseSpiritParams(
+  spirit: string | null,
+  subtype: string | null
+): { spirit: string; subtype: string | null } {
+  if (!spirit) return { spirit: 'all', subtype: null }
+  if (spirit === 'all-rum') return { spirit: 'rum', subtype: null }
+  const rollup = SPIRIT_ROLLUPS[spirit]
+  if (rollup) return { spirit, subtype: subtype && rollup.members.includes(subtype) ? subtype : null }
+  const parent = rollupFor(spirit)
+  return parent ? { spirit: parent, subtype: spirit } : { spirit, subtype: null }
+}
+
 /** True when a facet covers more than one baseSpirit and so has styles to explain. */
 export function hasSubTypes(facet: Pick<Facet, 'members'>): boolean {
   return facet.members.length > 1
