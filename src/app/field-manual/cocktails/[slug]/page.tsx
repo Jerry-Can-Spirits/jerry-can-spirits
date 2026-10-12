@@ -364,8 +364,10 @@ export default async function CocktailPage({ params }: PageProps) {
   // The bottle at the top of the recipe rather than nine screens down (Audit
   // B, 3 Oct 2026). Fetched only where the recipe calls for spiced rum; on
   // any other spirit a strip would be a substitution claim, and the range
-  // rule (3 Oct) says never that.
-  const bottle = cocktail.baseSpirit === 'spiced-rum' ? await getProduct(EXPEDITION_HANDLE) : null
+  // rule (3 Oct) says never that. The recipe stands without the strip, so a
+  // Shopify failure that outlasts the fetch retries drops it, not the page.
+  const bottle =
+    cocktail.baseSpirit === 'spiced-rum' ? await getProduct(EXPEDITION_HANDLE).catch(() => null) : null
   const bottleVariant = bottle?.variants?.find((v) => v.availableForSale) ?? bottle?.variants?.[0]
   // Any other rum cocktail gets the range card under the recipe: what the
   // house makes, with no claim about this drink. Not a substitution.

@@ -18,7 +18,11 @@ interface HouseSpiritCardProps {
 }
 
 export default async function HouseSpiritCard({ className = '' }: HouseSpiritCardProps) {
-  const products = (await Promise.all(HOUSE_SPIRIT_HANDLES.map((h) => getProduct(h)))).filter(
+  // The card is an aside on pages that stand without it, so a Shopify failure
+  // that outlasts the fetch retries drops the card rather than the page.
+  const products = (
+    await Promise.all(HOUSE_SPIRIT_HANDLES.map((h) => getProduct(h).catch(() => null)))
+  ).filter(
     (p): p is NonNullable<typeof p> => p !== null,
   )
   if (products.length === 0) return null

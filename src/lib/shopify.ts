@@ -1,4 +1,5 @@
 import { createStorefrontApiClient } from '@shopify/storefront-api-client';
+import { isGraphQLMutation, rejectTransientStatus, withRetry } from '@/lib/fetch-retry';
 
 // Lazy initialization of Shopify Storefront API client
 // This prevents build-time errors when env vars aren't available
@@ -17,10 +18,18 @@ function getClient() {
       storeDomain,
       apiVersion: '2026-01',
       publicAccessToken: accessToken,
+      // Transient failures are retried here rather than with the client's own
+      // `retries` option, which waits a flat second, ignores 502 and 504, and
+      // would resend cart mutations. A mutation keeps its single attempt: a
+      // resent addToCart after a lost response adds the line twice.
       customFetchApi: (url, init) => {
-        const controller = new AbortController()
-        const timer = setTimeout(() => controller.abort(), 8000)
-        return fetch(url, { ...init, signal: controller.signal }).finally(() => clearTimeout(timer))
+        const timedFetch = () => {
+          const controller = new AbortController()
+          const timer = setTimeout(() => controller.abort(), 8000)
+          return fetch(url, { ...init, signal: controller.signal }).finally(() => clearTimeout(timer))
+        }
+        if (isGraphQLMutation(init?.body)) return timedFetch()
+        return withRetry(() => timedFetch().then(rejectTransientStatus))
       },
     });
   }
