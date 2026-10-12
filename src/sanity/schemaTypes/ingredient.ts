@@ -197,7 +197,7 @@ export default defineType({
       title: 'Keeps for',
       type: 'string',
       fieldset: 'facts',
-      description: 'How long it keeps once opened or made, e.g. "One month refrigerated". Replaces Shelf Life.'
+      description: 'Our guidance on how long it keeps once opened or made, e.g. "One month refrigerated". The page labels it "Our keeping time". A producer\'s own figure goes in the long description, with a link. Replaces Shelf Life.'
     }),
     defineField({
       name: 'substitutes',
@@ -277,7 +277,7 @@ export default defineType({
           name: 'keepsFor',
           title: 'Keeps for',
           type: 'string',
-          description: 'e.g. "Two weeks refrigerated"'
+          description: 'Our guidance, labelled "Our keeping time" on the page, e.g. "Two weeks refrigerated"'
         }),
         defineField({
           name: 'foodSafety',

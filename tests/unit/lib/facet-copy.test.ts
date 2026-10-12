@@ -9,6 +9,7 @@
  */
 import { describe, it, expect } from 'vitest'
 import { renderCopy, renderSplit, FACET_COPY, copyFor } from '@/lib/facet-copy'
+import { SPIRIT_FACETS } from '@/lib/cocktail-facets'
 
 describe('count tokens', () => {
   it('fills the total', () => {
@@ -222,19 +223,123 @@ describe('{styles}', () => {
     expect(meta.length).toBeLessThan(155)
   })
 
-  it('keeps the whiskey meta inside the ceiling with Japanese whisky in the split', () => {
-    // MEASURED 12 Oct 2026: seven members, one of them Japanese, renders at 154.
-    const split = [
-      { member: 'bourbon', count: 24 },
-      { member: 'rye-whiskey', count: 22 },
-      { member: 'scotch', count: 16 },
-      { member: 'irish-whiskey', count: 8 },
-      { member: 'tennessee-whiskey', count: 3 },
-      { member: 'welsh-whisky', count: 3 },
-      { member: 'japanese-whisky', count: 1 },
-    ]
-    const meta = renderCopy(FACET_COPY['spirit:whiskey'].description ?? '', { count: 77, split })
-    expect(meta).toContain('and 1 Japanese.')
-    expect(meta.length).toBeLessThan(155)
+})
+
+describe('{top}', () => {
+  const split = [
+    { member: 'scotch', count: 16 },
+    { member: 'bourbon', count: 24 },
+    { member: 'japanese-whisky', count: 1 },
+    { member: 'rye-whiskey', count: 22 },
+    { member: 'irish-whiskey', count: 0 },
+  ]
+
+  it('names the three largest sub-types, largest first, whatever order they arrive in', () => {
+    expect(renderCopy('{top}', { count: 63, split })).toBe('24 bourbon, 22 rye and 16 Scotch')
+  })
+
+  it('names fewer when fewer hold something', () => {
+    expect(renderCopy('{top}', { count: 24, split: [{ member: 'bourbon', count: 24 }, { member: 'scotch', count: 0 }] })).toBe(
+      '24 bourbon'
+    )
+  })
+})
+
+/**
+ * Every written meta and title, rendered at real counts, against the ceilings.
+ *
+ * MEASURED 12 Oct 2026 from the published dataset (377 cocktails). The whiskey
+ * meta used {split} then and rendered at 154 of 155 with seven sub-types, so
+ * the next sub-type would have pushed it over and nothing would have said so.
+ * The headroom case renders every facet at 999 recipes, every configured
+ * member at 99 and one extra unmapped member besides, so a facet that grows
+ * or gains a sub-type fails here before it fails in search results.
+ */
+describe('every facet inside the ceilings', () => {
+  const FAMILY_COUNTS: Record<string, number> = {
+    sours: 91, highballs: 52, martinis: 43, 'old-fashioneds': 26, punches: 20, manhattans: 20, tiki: 19,
+    fizzes: 16, negronis: 12, spritz: 8, 'iced-teas': 7, toddies: 6, 'shots-shooters': 6, smashes: 5,
+    mules: 5, collins: 5,
+  }
+  const BASE_COUNTS: Record<string, number> = {
+    bourbon: 24, 'tennessee-whiskey': 3, 'rye-whiskey': 22, scotch: 16, 'irish-whiskey': 8, 'welsh-whisky': 3,
+    'japanese-whisky': 1, 'london-dry-gin': 57, gin: 10, 'old-tom-gin': 5, 'plymouth-gin': 2, vodka: 39,
+    'dark-rum': 14, 'white-rum': 20, 'aged-rum': 12, 'spiced-rum': 9, 'overproof-rum': 2, 'rhum-agricole': 1,
+    cachaca: 2, tequila: 19, mezcal: 7, cognac: 12, brandy: 12, champagne: 12, 'non-alcoholic': 10,
+  }
+
+  function todayContext(key: string) {
+    const [kind, value] = key.split(':')
+    if (kind === 'style') return { count: FAMILY_COUNTS[value] ?? 0 }
+    const members = SPIRIT_FACETS[value]?.members ?? []
+    const split = members
+      .map((member) => ({ member, count: BASE_COUNTS[member] ?? 0 }))
+      .filter((m) => m.count > 0)
+      .sort((a, b) => b.count - a.count)
+    return { count: split.reduce((sum, m) => sum + m.count, 0), split: members.length > 1 ? split : [] }
+  }
+
+  function headroomContext(key: string) {
+    const [kind, value] = key.split(':')
+    const members = kind === 'spirit' ? SPIRIT_FACETS[value]?.members ?? [] : []
+    const split = members.length > 1 ? [...members, 'another-sub-type'].map((member) => ({ member, count: 99 })) : []
+    return { count: 999, split }
+  }
+
+  it('has a measured count for every facet with written copy', () => {
+    for (const key of Object.keys(FACET_COPY)) {
+      expect(todayContext(key).count, `${key} has no count`).toBeGreaterThan(0)
+    }
+  })
+
+  for (const [label, contextFor] of [
+    ['today', todayContext],
+    ['with headroom', headroomContext],
+  ] as const) {
+    it(`keeps every meta description at 155 characters or fewer ${label}`, () => {
+      for (const [key, copy] of Object.entries(FACET_COPY)) {
+        const meta = renderCopy(copy.description ?? '', contextFor(key))
+        expect(meta.length, `${key}: "${meta}"`).toBeLessThanOrEqual(155)
+      }
+    })
+
+    it(`keeps every title at 60 characters or fewer ${label}`, () => {
+      for (const [key, copy] of Object.entries(FACET_COPY)) {
+        const title = renderCopy(copy.title ?? '', contextFor(key))
+        expect(title.length, `${key}: "${title}"`).toBeLessThanOrEqual(60)
+      }
+    })
+  }
+
+  it('renders the whiskey meta from its three largest sub-types', () => {
+    const meta = renderCopy(FACET_COPY['spirit:whiskey'].description ?? '', todayContext('spirit:whiskey'))
+    expect(meta).toBe(
+      '77 recipes built on whiskey, led by 24 bourbon, 22 rye and 16 Scotch. Bourbon, rye and Scotch are not interchangeable.'
+    )
+  })
+})
+
+describe('claims the copy no longer makes', () => {
+  // Citation sweep, 12 Oct 2026: plain strings cannot carry a link, so a
+  // checkable claim with no named source comes out rather than going uncited.
+  const removed = [
+    /Jack Daniel/,
+    /charcoal/,
+    /by law/,
+    /the law separates/,
+    /1950s/,
+    /oldest/,
+    /appellation/,
+    /defined by absence/,
+  ]
+
+  it('carries none of the uncited claims the sweep found', () => {
+    for (const [key, copy] of Object.entries(FACET_COPY)) {
+      for (const [field, value] of Object.entries(copy)) {
+        for (const pattern of removed) {
+          expect(value, `${key}.${field} matches ${pattern}`).not.toMatch(pattern)
+        }
+      }
+    }
   })
 })

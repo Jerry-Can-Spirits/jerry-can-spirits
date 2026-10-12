@@ -20,6 +20,7 @@ import { MEMBER_SHORT } from '@/lib/cocktail-facets'
  *   {count}    74            the facet total
  *   {recipes}  74 recipes    total, with the noun agreeing: "1 recipe"
  *   {split}    27 bourbon, 22 rye, 14 Scotch, 8 Irish and 3 Welsh
+ *   {top}      27 bourbon, 22 rye and 14 Scotch: the three largest, for a meta
  *
  * {split} renders the whole breakdown rather than one token per sub-type, for
  * two reasons. A sub-type that falls to zero disappears from the sentence
@@ -90,6 +91,10 @@ export function renderCopy(template: string, ctx: CopyContext): string {
     // ceiling and grows with every sub-type added, where {styles} is a fixed
     // cost. Use {split} in a meta only where members are 3 or fewer.
     .replace(/\{styles\}/g, String((ctx.split ?? []).filter((s) => s.count > 0).length))
+    // {top} where a meta names sub-types and the list can grow. MEASURED
+    // 12 Oct 2026: the whiskey meta with {split} reached 154 of 155 at seven
+    // members, so one more would have broken it. Three names is a fixed cost.
+    .replace(/\{top\}/g, renderSplit([...(ctx.split ?? [])].sort((a, b) => b.count - a.count).filter((s) => s.count > 0).slice(0, 3)))
     .replace(/\{split\}/g, renderSplit(ctx.split))
 }
 
@@ -109,9 +114,9 @@ export const FACET_COPY: Record<string, FacetCopy> = {
     h1: 'Whiskey Cocktails',
     title: 'Whiskey Cocktails: {recipes} by style',
     description:
-      '{recipes} built on whiskey: {split}. Bourbon, rye and Scotch are not interchangeable.',
+      '{recipes} built on whiskey, led by {top}. Bourbon, rye and Scotch are not interchangeable.',
     intro:
-      'This Field Manual holds {recipes} built on whiskey: {split}. The spelling follows the country. Irish and American distillers write whiskey, Scotch writes whisky, and this page uses one word for all of them.\n\nThey are not interchangeable. Bourbon is sweet and broad, and it fills out a drink that needs body, which is why an Old Fashioned built on bourbon tastes rounder than the same drink built on rye. Tennessee whiskey is made much the same way and then filtered through sugar maple charcoal before it is barrelled, which softens it and is why Jack Daniel’s is not sold as a bourbon. Rye is drier and peppery, and it keeps its edge against sweet vermouth, which is what a Manhattan is asking for. Scotch carries smoke or sea salt depending on where it was made, and a peated bottle will take over anything delicate. Irish whiskey is lighter than either American style and suits a long drink or a hot one.',
+      'This Field Manual holds {recipes} built on whiskey: {split}. The spelling follows the country. Irish and American distillers write whiskey, Scotch writes whisky, and this page uses one word for all of them.\n\nThey are not interchangeable. Bourbon is sweet and broad, and it fills out a drink that needs body, which is why an Old Fashioned built on bourbon tastes rounder than the same drink built on rye. Rye is drier and peppery, and it keeps its edge against sweet vermouth, which is what a Manhattan is asking for. Scotch carries smoke or sea salt depending on where it was made, and a peated bottle will take over anything delicate. Irish whiskey is lighter than either American style and suits a long drink or a hot one.',
   },
   'style:sours': {
     h1: 'Sours',
@@ -127,7 +132,7 @@ export const FACET_COPY: Record<string, FacetCopy> = {
     description:
       '{recipes} built on gin. A botanical spirit that holds its shape against citrus and vermouth instead of stepping back.',
     intro:
-      'This Field Manual holds {recipes} built on gin, the second largest spirit group here after whiskey. Gin is a neutral spirit redistilled with botanicals, juniper first by law. That botanical load is why gin holds its shape against citrus and vermouth where vodka steps back.\n\nThe style of gin changes the drink more than the brand does. A London dry is juniper-forward and dry, and it is what a martini and a negroni assume. A contemporary gin leads with citrus or florals instead, which suits a collins or a spritz where the gin is the loudest thing in the glass. Old Tom is sweeter and predates both, and a Tom Collins was built for it.',
+      'This Field Manual holds {recipes} built on gin, the second largest spirit group here after whiskey. Gin is a neutral spirit flavoured with juniper and other botanicals. That botanical load is why gin holds its shape against citrus and vermouth where vodka steps back.\n\nThe style of gin changes the drink more than the brand does. A London dry is juniper-forward and dry, and it is what a martini and a negroni assume. A contemporary gin leads with citrus or florals instead, which suits a collins or a spritz where the gin is the loudest thing in the glass. Old Tom is sweeter and predates both, and a Tom Collins was built for it.',
   },
   'spirit:rum': {
     h1: 'Rum Cocktails',
@@ -143,7 +148,7 @@ export const FACET_COPY: Record<string, FacetCopy> = {
     description:
       '{recipes} in the martini family. A spirit and an aromatised wine, stirred and served up. The ratio is the whole argument.',
     intro:
-      'This Field Manual holds {recipes} in the martini family. A martini is a spirit and an aromatised wine, stirred with ice and served without any. Everything else about it is contested.\n\nThe ratio moved across a century and never settled. Early specifications were close to equal parts gin and vermouth; the dry martini of the 1950s cut the vermouth to a rinse. Both are on this page. Gin and vodka behave differently in it: gin leaves botanicals to argue with the vermouth, vodka leaves texture and temperature to carry the drink. A dirty martini adds olive brine, which makes it a three-ingredient drink whatever the menu calls it.',
+      'This Field Manual holds {recipes} in the martini family. A martini is a spirit and an aromatised wine, stirred with ice and served without any. Everything else about it is contested.\n\nThe ratio has never settled. Some specifications are close to equal parts gin and vermouth; a dry martini cuts the vermouth to a rinse. Both are on this page. Gin and vodka behave differently in it: gin leaves botanicals to argue with the vermouth, vodka leaves texture and temperature to carry the drink. A dirty martini adds olive brine, which makes it a three-ingredient drink whatever the menu calls it.',
   },
   'style:highballs': {
     h1: 'Highballs',
@@ -159,7 +164,7 @@ export const FACET_COPY: Record<string, FacetCopy> = {
     description:
       '{recipes} built on vodka. A spirit chosen for what it does not add, which changes what everything else has to do.',
     intro:
-      'This Field Manual holds {recipes} built on vodka. Vodka is distilled to strip character rather than to build it, which makes it the one spirit here defined by absence.\n\nThat absence is the reason to reach for it. In an espresso martini or a bloody mary the vodka carries strength and texture and lets coffee, or tomato and spice, do the work where gin would argue with both. In a moscow mule it lets ginger lead. The trade is that a vodka drink has nowhere to hide: with no botanicals to cover a thin mixer or warm ice, the build and the temperature are the whole drink.',
+      'This Field Manual holds {recipes} built on vodka. Vodka is distilled to strip character rather than to build it, so it is chosen for what it does not add.\n\nThat absence is the reason to reach for it. In an espresso martini or a bloody mary the vodka carries strength and texture and lets coffee, or tomato and spice, do the work where gin would argue with both. In a moscow mule it lets ginger lead. The trade is that a vodka drink has nowhere to hide: with no botanicals to cover a thin mixer or warm ice, the build and the temperature are the whole drink.',
   },
   'style:old-fashioneds': {
     h1: 'Old Fashioneds',
@@ -167,21 +172,21 @@ export const FACET_COPY: Record<string, FacetCopy> = {
     description:
       '{recipes} in the old fashioned family. Spirit, sugar, bitters and ice, and nothing else that is not doing a job.',
     intro:
-      'This Field Manual holds {recipes} in the old fashioned family. The build is spirit, sugar, bitters and ice, stirred in the glass. It is the oldest surviving cocktail specification and the definition of the word before the word meant anything else.\n\nWhat changes is the spirit and the sugar. Bourbon and sugar makes the version most people picture; rye and demerara makes a drier one with more spine. Swap the whiskey for rum or tequila and the build holds. The bitters are not decoration, they are the seasoning that stops the sugar reading as sweet, which is why leaving them out gives you whiskey and water.',
+      'This Field Manual holds {recipes} in the old fashioned family. The build is spirit, sugar, bitters and ice, stirred in the glass.\n\nWhat changes is the spirit and the sugar. Bourbon and sugar makes the version most people picture; rye and demerara makes a drier one with more spine. Swap the whiskey for rum or tequila and the build holds. The bitters are not decoration, they are the seasoning that stops the sugar reading as sweet, which is why leaving them out gives you whiskey and water.',
   },
   'spirit:tequila': {
     h1: 'Tequila Cocktails',
     title: 'Tequila Cocktails: {recipes} by style',
     description: '{recipes} built on agave: {split}. The difference is smoke, and it decides the drink.',
     intro:
-      'This Field Manual holds {recipes} built on agave: {split}. Both are made from agave and the law separates them by region and species, but in a glass the difference is smoke.\n\nTequila is steamed, which keeps the agave clean and vegetal, and it is what a margarita and a paloma are built around. Mezcal is roasted in a pit, and the smoke that comes with it will take over a drink built for tequila unless the recipe expects it. Swapping one for the other is not a substitution, it is a different drink. A blanco keeps the agave forward where a reposado puts oak in front of it.',
+      'This Field Manual holds {recipes} built on agave: {split}. Both are made from agave, but in a glass the difference is smoke.\n\nTequila is steamed, which keeps the agave clean and vegetal, and it is what a margarita and a paloma are built around. Mezcal is roasted in a pit, and the smoke that comes with it will take over a drink built for tequila unless the recipe expects it. Swapping one for the other is not a substitution, it is a different drink. A blanco keeps the agave forward where a reposado puts oak in front of it.',
   },
   'spirit:brandy': {
     h1: 'Brandy Cocktails',
     title: 'Brandy Cocktails: {recipes} by style',
-    description: '{recipes} built on brandy: {split}. Grape spirit, aged in oak, and the oldest base in the book.',
+    description: '{recipes} built on brandy: {split}. Distilled from fruit, usually grapes, and aged in oak.',
     intro:
-      'This Field Manual holds {recipes} built on brandy: {split}. Brandy is distilled from fruit, usually grapes, and aged in oak. It is the base of the oldest drinks here.\n\nCognac is brandy from one region under strict rules, and its weight suits a sidecar or a sazerac where the spirit has to carry sugar and citrus without thinning. Brandy without the appellation covers everything from Spanish solera to apple brandy, and the range is wide enough that the bottle matters more than the category. Age is the reliable guide: the longer it sat in oak, the better it holds a stirred drink and the less it wants shaking.',
+      'This Field Manual holds {recipes} built on brandy: {split}. Brandy is distilled from fruit, usually grapes, and aged in oak.\n\nCognac’s weight suits a sidecar or a sazerac where the spirit has to carry sugar and citrus without thinning. Other brandy covers everything from Spanish solera to apple brandy, and the range is wide enough that the bottle matters more than the category. Age is the reliable guide: the longer it sat in oak, the better it holds a stirred drink and the less it wants shaking.',
   },
   'style:manhattans': {
     h1: 'Manhattans',

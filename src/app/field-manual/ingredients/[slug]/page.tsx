@@ -187,7 +187,7 @@ export default async function IngredientDetailPage({ params }: { params: Promise
   }
   if (ingredient.seasonality) facts.push({ label: 'Season', value: ingredient.seasonality })
   const keepsFor = ingredient.keepsFor || ingredient.shelfLife
-  if (keepsFor) facts.push({ label: 'Keeps for', value: keepsFor })
+  if (keepsFor) facts.push({ label: 'Our keeping time', value: keepsFor })
   const allergens = allergenLine(ingredient)
   const hasFacts = facts.length > 0 || Boolean(ingredient.storage) || Boolean(allergens)
 
@@ -509,7 +509,7 @@ export default async function IngredientDetailPage({ params }: { params: Promise
                       {[
                         ['Ratio', prep.ratio],
                         ['Makes', prep.yield],
-                        ['Keeps for', prep.keepsFor],
+                        ['Our keeping time', prep.keepsFor],
                       ].filter(([, value]) => value).map(([label, value]) => (
                         <div key={label} className="flex justify-between items-baseline gap-6">
                           <span className="text-parchment-300 shrink-0">{label}</span>
