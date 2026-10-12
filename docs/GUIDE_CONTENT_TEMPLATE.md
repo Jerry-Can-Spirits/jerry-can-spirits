@@ -270,6 +270,18 @@ Founded by Royal Signals veterans Dan Freeman and Rhys Williams, Jerry Can Spiri
 
 ---
 
+### **Sources**
+
+Every guide lists every source it relies on in the `sources` field. Each entry is the publisher, the page or document title, the URL and the date it was read; the guide renders them as a numbered list at its foot and cites them in the Article schema.
+
+- List external sources only. Our own pages and our own dataset are not sources.
+- A fact about another brand's product, or about the law, must also be linked or named on the claim itself, not only in the list. The reader should not have to hunt for it.
+- Prefer primary sources: the legislation, the producer, the standards body.
+- A secondary source carries a note saying what it is: "retailer listing", "trade report", "Wikipedia", "reproduction of EU 2019/787". If the primary is missing, the note says why (e.g. "retailer listing; brand publishes no UK ABV").
+- Check every URL answers before saving it.
+
+---
+
 ### **Related Content Linking**
 
 #### Related Guides (Add after creating cluster content)

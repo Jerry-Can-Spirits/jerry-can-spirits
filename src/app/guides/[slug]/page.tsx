@@ -17,6 +17,8 @@ import FAQAccordion from '@/components/FAQAccordion'
 import ScrollRow from '@/components/ScrollRow'
 import SectionHeading from '@/components/SectionHeading'
 import ComparisonTable, { type ComparisonTableData } from '@/components/ComparisonTable'
+import Sources from '@/components/Sources'
+import { listableSources, sourceCitations, type Source } from '@/lib/sources'
 
 const TEAM_MEMBERS = new Set(['Dan Freeman', 'Rhys Williams'])
 
@@ -86,6 +88,7 @@ interface Guide {
   faqs?: FAQ[]
   comparisonTables?: ComparisonTableData[]
   featuredDistilleries?: Distillery[]
+  sources?: Partial<Source>[] | null
   relatedGuides?: RelatedGuide[]
   relatedCocktails?: RelatedCocktail[]
   relatedProducts?: RelatedProduct[]
@@ -170,6 +173,8 @@ export default async function GuidePage({ params }: PageProps) {
     currentCreatedAt: guide._createdAt
   })
 
+  const sources = listableSources(guide.sources)
+
   // Article structured data
   const articleSchema = {
     '@context': 'https://schema.org',
@@ -184,7 +189,8 @@ export default async function GuidePage({ params }: PageProps) {
     publisher: ORG_REF,
     datePublished: guide.publishedAt || guide._createdAt,
     dateModified: guide.updatedAt || guide.publishedAt || guide._createdAt,
-    mainEntityOfPage: `https://jerrycanspirits.co.uk/guides/${guide.slug.current}`
+    mainEntityOfPage: `https://jerrycanspirits.co.uk/guides/${guide.slug.current}`,
+    ...(sources.length > 0 && { citation: sourceCitations(sources) }),
   }
 
   // FAQ structured data
@@ -215,7 +221,8 @@ export default async function GuidePage({ params }: PageProps) {
   )
   const hasMore = Boolean(
     (guide.featuredDistilleries && guide.featuredDistilleries.length > 0) ||
-    (guide.faqs && guide.faqs.length > 0),
+    (guide.faqs && guide.faqs.length > 0) ||
+    sources.length > 0,
   )
   const hasRelated = Boolean(
     (guide.relatedCocktails && guide.relatedCocktails.length > 0) ||
@@ -441,6 +448,8 @@ export default async function GuidePage({ params }: PageProps) {
               <FAQAccordion items={guide.faqs} />
             </div>
           )}
+
+          <Sources sources={sources} />
           </div>
         </div>
        </section>
