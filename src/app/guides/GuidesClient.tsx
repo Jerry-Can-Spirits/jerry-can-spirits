@@ -5,6 +5,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import BackToTop from '@/components/BackToTop'
 import ScrollRow from '@/components/ScrollRow'
+import { GUIDE_CATEGORY_TITLES } from '@/lib/category-order'
 
 interface Guide {
   _id: string
@@ -21,16 +22,6 @@ interface Guide {
 
 interface GuidesClientProps {
   guides: Guide[]
-}
-
-const categoryLabels: Record<string, string> = {
-  'spirits-education': 'Spirits Education',
-  'rum-guides': 'Rum Guides',
-  'cocktail-techniques': 'Cocktail Techniques',
-  'buying-guides': 'Buying Guides',
-  'uk-craft-spirits': 'UK Craft Spirits',
-  'industry-insights': 'Industry Insights',
-  'seasonal-occasions': 'Seasonal & Occasions'
 }
 
 const ITEMS_PER_PAGE = 12
@@ -81,10 +72,13 @@ export default function GuidesClient({ guides }: GuidesClientProps) {
     setVisibleCount(prev => prev + ITEMS_PER_PAGE)
   }
 
-  // Get unique categories from guides
+  // Only categories with a guide in them: the per-spirit values exist ahead
+  // of their pillars, and an empty filter is a dead chip.
   const categories = [
     { value: 'all', label: 'All Guides' },
-    ...Object.entries(categoryLabels).map(([value, label]) => ({ value, label }))
+    ...Object.entries(GUIDE_CATEGORY_TITLES)
+      .filter(([value]) => guides.some(g => g.category === value))
+      .map(([value, label]) => ({ value, label }))
   ]
 
   if (guides.length === 0) {
@@ -200,7 +194,7 @@ export default function GuidesClient({ guides }: GuidesClientProps) {
                 <div className="p-8">
                   <div className="flex items-center gap-2 mb-3">
                     <span className="px-3 py-1 bg-jerry-green-800/60 border border-gold-500/20 text-gold-300 rounded-full text-xs font-semibold">
-                      {categoryLabels[guide.category] || guide.category}
+                      {GUIDE_CATEGORY_TITLES[guide.category] || guide.category}
                     </span>
                   </div>
                   <h3 className="text-2xl font-serif font-bold text-white group-hover:text-gold-300 transition-colors mb-3">
@@ -256,7 +250,7 @@ export default function GuidesClient({ guides }: GuidesClientProps) {
                 )}
                 <div className="p-6">
                   <span className="px-2 py-1 bg-jerry-green-800/60 border border-gold-500/20 text-gold-300 rounded-sm text-xs font-semibold">
-                    {categoryLabels[guide.category] || guide.category}
+                    {GUIDE_CATEGORY_TITLES[guide.category] || guide.category}
                   </span>
                   <h3 className="text-xl font-serif font-bold text-white group-hover:text-gold-300 transition-colors mt-3 mb-2">
                     {guide.title}
@@ -282,7 +276,7 @@ export default function GuidesClient({ guides }: GuidesClientProps) {
       <section className="band-dark py-12">
        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <h2 className="text-3xl font-serif font-bold text-white mb-6">
-          {selectedCategory === 'all' ? 'All Guides' : categoryLabels[selectedCategory] || 'Guides'}
+          {selectedCategory === 'all' ? 'All Guides' : GUIDE_CATEGORY_TITLES[selectedCategory] || 'Guides'}
         </h2>
 
         {filteredGuides.length === 0 ? (
@@ -322,7 +316,7 @@ export default function GuidesClient({ guides }: GuidesClientProps) {
                 )}
                 <div className="p-6">
                   <span className="px-2 py-1 bg-jerry-green-800/60 border border-gold-500/20 text-gold-300 rounded-sm text-xs font-semibold">
-                    {categoryLabels[guide.category] || guide.category}
+                    {GUIDE_CATEGORY_TITLES[guide.category] || guide.category}
                   </span>
                   <h3 className="text-xl font-serif font-bold text-white group-hover:text-gold-300 transition-colors mt-3 mb-2">
                     {guide.title}

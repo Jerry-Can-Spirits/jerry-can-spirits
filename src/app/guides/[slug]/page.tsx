@@ -12,6 +12,7 @@ import ShareButton from '@/components/ShareButton'
 import GuideSections from '@/components/GuideSections'
 import { OG_IMAGE } from '@/lib/og'
 import { ORG_REF, authorRefFor } from '@/lib/jsonLd'
+import { GUIDE_CATEGORY_TITLES } from '@/lib/category-order'
 import FAQAccordion from '@/components/FAQAccordion'
 import ScrollRow from '@/components/ScrollRow'
 import SectionHeading from '@/components/SectionHeading'
@@ -119,16 +120,6 @@ export async function generateStaticParams() {
 }
 
 export const dynamicParams = true
-
-const categoryLabels: Record<string, string> = {
-  'spirits-education': 'Spirits Education',
-  'rum-guides': 'Rum Guides',
-  'cocktail-techniques': 'Cocktail Techniques',
-  'buying-guides': 'Buying Guides',
-  'uk-craft-spirits': 'UK Craft Spirits',
-  'industry-insights': 'Industry Insights',
-  'seasonal-occasions': 'Seasonal & Occasions'
-}
 
 // Convert heading to URL-friendly slug for anchor links
 function slugify(text: string): string {
@@ -267,7 +258,7 @@ export default async function GuidePage({ params }: PageProps) {
 
           <div className="flex flex-wrap items-center gap-3 mb-4">
             <span className="px-3 py-1 bg-jerry-green-800/60 border border-gold-500/30 text-gold-300 rounded-full text-sm font-semibold">
-              {categoryLabels[guide.category] || guide.category}
+              {GUIDE_CATEGORY_TITLES[guide.category] || guide.category}
             </span>
             {guide.isPillar && (
               <span className="px-3 py-1 bg-gold-500/20 border border-gold-500/40 text-gold-300 rounded-full text-sm font-semibold">
@@ -528,7 +519,7 @@ export default async function GuidePage({ params }: PageProps) {
                         className="block h-full bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20 hover:border-gold-400/40 transition-all group"
                       >
                         <span className="px-2 py-1 bg-jerry-green-800/60 border border-gold-500/20 text-gold-300 rounded-sm text-xs font-semibold">
-                          {categoryLabels[relatedGuide.category] || relatedGuide.category}
+                          {GUIDE_CATEGORY_TITLES[relatedGuide.category] || relatedGuide.category}
                         </span>
                         <h3 className="text-lg font-serif font-bold text-white group-hover:text-gold-300 transition-colors mt-3 mb-2">
                           {relatedGuide.title}

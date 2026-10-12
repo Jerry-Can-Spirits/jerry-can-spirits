@@ -4,6 +4,7 @@ import Breadcrumbs from '@/components/Breadcrumbs'
 import SectionHeading from '@/components/SectionHeading'
 import { client } from '@/sanity/lib/client'
 import { baseOpenGraph } from '@/lib/og'
+import { GUIDE_CATEGORY_TITLES } from '@/lib/category-order'
 import {
   cocktailsListQuery,
   ingredientsListQuery,
@@ -111,16 +112,6 @@ const shopCategoryPages = [
   { label: 'Cocktail Glasses & Glassware', href: '/shop/cocktail-glasses-glassware/' },
   { label: 'Cocktail Shakers', href: '/shop/cocktail-shakers/' },
 ]
-
-const categoryLabels: Record<string, string> = {
-  'spirits-education': 'Spirits Education',
-  'rum-guides': 'Rum Guides',
-  'cocktail-techniques': 'Cocktail Techniques',
-  'buying-guides': 'Buying Guides',
-  'uk-craft-spirits': 'UK Craft Spirits',
-  'industry-insights': 'Industry Insights',
-  'seasonal-occasions': 'Seasonal & Occasions',
-}
 
 export default async function SitemapPage() {
   const [cocktails, ingredients, equipment, guides] = await Promise.all([
@@ -247,7 +238,7 @@ export default async function SitemapPage() {
                 .map(([category, items]) => (
                   <div key={category}>
                     <h3 className="text-sm font-semibold text-gold-400 uppercase tracking-widest mb-3">
-                      {categoryLabels[category] ?? category}
+                      {GUIDE_CATEGORY_TITLES[category] ?? category}
                     </h3>
                     <LinkGrid
                       items={items.map((g) => ({

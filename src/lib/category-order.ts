@@ -59,6 +59,27 @@ export const EQUIPMENT_CATEGORY_TITLES: Record<string, string> = {
   garnish: 'Garnish Tools',
 }
 
+// Guide categories, in the order the hub filter shows them. One source for
+// the Studio schema, the hub filter, the guide page badge and the site map,
+// which each carried their own copy of the list until the per-spirit values
+// were added (12 Oct 2026). A pillar spirit gets its own value following the
+// rum-guides pattern; spirits-education stays for cross-spirit explainers.
+export const GUIDE_CATEGORY_TITLES: Record<string, string> = {
+  'spirits-education': 'Spirits education',
+  'rum-guides': 'Rum guides',
+  'gin-guides': 'Gin guides',
+  'vodka-guides': 'Vodka guides',
+  'whisky-guides': 'Whisky guides',
+  'tequila-mezcal-guides': 'Tequila and mezcal guides',
+  'brandy-cognac-guides': 'Brandy and Cognac guides',
+  'liqueur-aperitivo-guides': 'Liqueur and aperitivo guides',
+  'cocktail-techniques': 'Cocktail techniques',
+  'buying-guides': 'Buying guides',
+  'uk-craft-spirits': 'UK craft spirits',
+  'industry-insights': 'Industry insights',
+  'seasonal-occasions': 'Seasonal & occasions',
+}
+
 /**
  * A GROQ expression ranking a document by its category, for use in an order
  * clause. Anything not listed sorts last rather than first, so a category
