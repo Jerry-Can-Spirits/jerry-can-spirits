@@ -149,6 +149,15 @@ Hedge what is uncertain ("usually 150 to 180ml", "generally attributed to").
 Never invent a manufacturer's figure. Cut unsourced superlatives: oldest,
 first, best, most popular, iconic, "one of the most".
 
+**Sources on the page.** Every page lists the external sources it relies on
+in its `sources` field, which renders after the FAQs and is cited in the
+Article schema, as on guides (`docs/GUIDE_CONTENT_TEMPLATE.md`). A fact about
+another brand's product, or about the law, is also linked or named on the
+claim itself. Primary sources first: the legislation, the producer, the
+standards body. A secondary source carries a note saying what it is
+("retailer listing", "trade report"). A keeping time is cited from the
+producer's label or site, or phrased as our guidance.
+
 **Consistency with our recipes.** Name a cocktail only if its recipe
 references this page (`*[_type=="cocktail" && references($id)]`). Technique
 lines match the library standard (shake hard 10 to 12 seconds; stir 20 to 30,

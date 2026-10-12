@@ -210,6 +210,7 @@ export const ingredientBySlugQuery = `*[_type == "ingredient" && slug.current ==
   history,
   professionalTip,
   faqs,
+  sources[]{title, publisher, url, accessed, note},
   author,
   updatedAt,
   "relatedGuides": relatedGuides[defined(guide->._id)] {
@@ -293,6 +294,7 @@ export const equipmentBySlugQuery = `*[_type == "equipment" && slug.current == $
   history,
   professionalTip,
   faqs,
+  sources[]{title, publisher, url, accessed, note},
   author,
   updatedAt,
   videoUrl,
