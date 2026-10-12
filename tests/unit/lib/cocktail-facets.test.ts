@@ -35,7 +35,7 @@ describe('spirit rollups', () => {
 
   it('covers whiskey across both spellings', () => {
     // Irish and American take the "e", Scotch and Japanese do not. One rollup, one slug.
-    for (const s of ['bourbon', 'rye-whiskey', 'scotch', 'irish-whiskey', 'welsh-whisky']) {
+    for (const s of ['bourbon', 'rye-whiskey', 'scotch', 'irish-whiskey', 'welsh-whisky', 'japanese-whisky']) {
       expect(rollupFor(s)).toBe('whiskey')
     }
   })
