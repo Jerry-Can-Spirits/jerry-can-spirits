@@ -38,9 +38,10 @@ export const NEVER_INDEXED = new Set(['multiple', 'other', 'liqueur'])
  * Whiskey takes the "e" in its slug and covers Scotch, which is correctly
  * spelled without it. The rollup page explains why both spellings are right.
  *
- * An earlier version of this comment also claimed Japanese. MEASURED: there is
- * no Japanese member and no cocktail with a Japanese base spirit. A comment
- * claiming coverage the data does not have is a fact waiting to become copy.
+ * Japanese whisky joined as a member on 12 Oct 2026, when the Mizuwari moved
+ * off scotch. An earlier version of this comment claimed Japanese before any
+ * member or cocktail existed: a comment claiming coverage the data does not
+ * have is a fact waiting to become copy.
  *
  * Not every base spirit gets a facet. multiple (20) and liqueur (18) are in
  * NEVER_INDEXED. sherry (5) and vermouth (1) are modifiers, not bases a reader
@@ -54,7 +55,7 @@ export const SPIRIT_ROLLUPS: Record<string, { label: string; members: string[] }
   },
   whiskey: {
     label: 'Whiskey',
-    members: ['bourbon', 'tennessee-whiskey', 'rye-whiskey', 'scotch', 'irish-whiskey', 'welsh-whisky'],
+    members: ['bourbon', 'tennessee-whiskey', 'rye-whiskey', 'scotch', 'irish-whiskey', 'welsh-whisky', 'japanese-whisky'],
   },
   // "gin" stays a member alongside the styles. Unlike rum, where every cocktail
   // names a sub-type, 47 of 72 gin recipes name only "gin" (MEASURED, 7 Aug
@@ -118,6 +119,7 @@ export const MEMBER_LABELS: Record<string, string> = {
   scotch: 'Scotch',
   'irish-whiskey': 'Irish whiskey',
   'welsh-whisky': 'Welsh whisky',
+  'japanese-whisky': 'Japanese whisky',
   tequila: 'Tequila',
   mezcal: 'Mezcal',
   cognac: 'Cognac',
@@ -150,6 +152,7 @@ export const MEMBER_SHORT: Record<string, string> = {
   scotch: "Scotch",
   "irish-whiskey": "Irish",
   "welsh-whisky": "Welsh",
+  "japanese-whisky": "Japanese",
   tequila: "tequila",
   mezcal: "mezcal",
   cognac: "cognac",
