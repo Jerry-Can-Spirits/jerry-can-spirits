@@ -590,6 +590,25 @@ const nextConfig: NextConfig = {
         destination: '/field-manual/cocktails/the-old-standard-rum-old-fashioned/',
         permanent: true,
       },
+      // The Spiced Rum Mule became the Pack Mule, the house mule on Expedition
+      // Spiced Rum, when the Jamaican Mule took the generic drink (12 Oct 2026).
+      // Both slash forms, plus the legacy /cocktails/ path so the catch-all
+      // below does not produce a two-hop chain.
+      {
+        source: '/cocktails/spiced-rum-mule',
+        destination: '/field-manual/cocktails/pack-mule/',
+        permanent: true,
+      },
+      {
+        source: '/field-manual/cocktails/spiced-rum-mule',
+        destination: '/field-manual/cocktails/pack-mule/',
+        permanent: true,
+      },
+      {
+        source: '/field-manual/cocktails/spiced-rum-mule/:path*',
+        destination: '/field-manual/cocktails/pack-mule/',
+        permanent: true,
+      },
       // Old /cocktails/* URLs redirect to field-manual
       {
         source: '/cocktails/:slug*',
