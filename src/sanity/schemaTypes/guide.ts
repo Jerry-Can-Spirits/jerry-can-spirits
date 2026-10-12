@@ -464,6 +464,15 @@ export default defineType({
       ]
     }),
 
+    // Sources
+    defineField({
+      name: 'sources',
+      title: 'Sources',
+      type: 'array',
+      description: 'Every external source the guide relies on, shown at the foot of the guide and cited in the Article schema. Prefer primary sources; a secondary one (retailer listing, trade report, reproduction) says so in its note.',
+      of: [{type: 'source'}]
+    }),
+
     // Related Content
     defineField({
       name: 'relatedGuides',

@@ -444,6 +444,7 @@ export const guideBySlugQuery = `*[_type == "guide" && slug.current == $slug][0]
     website,
     speciality
   },
+  sources[]{title, publisher, url, accessed, note},
   "relatedGuides": relatedGuides[]->{ _id, title, slug, excerpt, category },
   "relatedCocktails": relatedCocktails[]->{ _id, name, slug },
   relatedProducts[] {
