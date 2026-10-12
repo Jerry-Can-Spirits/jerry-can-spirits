@@ -476,6 +476,7 @@ export default defineType({
           {title: 'Scotch', value: 'scotch'},
           {title: 'Irish Whiskey', value: 'irish-whiskey'},
           {title: 'Welsh Whisky', value: 'welsh-whisky'},
+          {title: 'Japanese Whisky', value: 'japanese-whisky'},
           {title: 'Brandy', value: 'brandy'},
           {title: 'Cognac', value: 'cognac'},
           {title: 'Cachaça', value: 'cachaca'},

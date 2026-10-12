@@ -221,4 +221,20 @@ describe('{styles}', () => {
     )
     expect(meta.length).toBeLessThan(155)
   })
+
+  it('keeps the whiskey meta inside the ceiling with Japanese whisky in the split', () => {
+    // MEASURED 12 Oct 2026: seven members, one of them Japanese, renders at 154.
+    const split = [
+      { member: 'bourbon', count: 24 },
+      { member: 'rye-whiskey', count: 22 },
+      { member: 'scotch', count: 16 },
+      { member: 'irish-whiskey', count: 8 },
+      { member: 'tennessee-whiskey', count: 3 },
+      { member: 'welsh-whisky', count: 3 },
+      { member: 'japanese-whisky', count: 1 },
+    ]
+    const meta = renderCopy(FACET_COPY['spirit:whiskey'].description ?? '', { count: 77, split })
+    expect(meta).toContain('and 1 Japanese.')
+    expect(meta.length).toBeLessThan(155)
+  })
 })
