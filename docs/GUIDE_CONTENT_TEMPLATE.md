@@ -27,8 +27,10 @@ This document provides a structured template for creating SEO-optimised guides i
 
 #### Title
 ```
-The Complete Guide to Spiced Rum: History, Production & Tasting Notes
+What is spiced rum? What it is made from, its taste and types
 ```
+
+**Title convention (all guides, applied to the live set on 12 October 2026):** sentence case, no trailing full stop. Proper nouns, brands, places, spirit GIs (Cognac, Champagne) and named cocktails or events keep their capitals; "rum", "gin" and "whisky" mid-title are lowercase unless part of a name (Foursquare Rum Distillery). The stored `title` is also the breadcrumb, the card heading, the share text and the Article `headline`, which is why the full stop stays out of the data. `metaTitle` is the search-result string and keeps the site-wide SERP convention (title case, as on every cocktail, ingredient and equipment page).
 
 #### Slug
 ```

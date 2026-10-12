@@ -1,4 +1,5 @@
 import {defineField, defineType} from 'sanity'
+import {GUIDE_CATEGORY_TITLES} from '../../lib/category-order'
 
 export default defineType({
   name: 'guide',
@@ -10,7 +11,7 @@ export default defineType({
       name: 'title',
       title: 'Title',
       type: 'string',
-      description: 'Guide title (H1) - should be clear and descriptive',
+      description: 'Guide title (H1). Sentence case, no full stop; proper nouns, brands, places and GIs keep their capitals. Also the breadcrumb, card, share and schema headline.',
       validation: Rule => Rule.required().max(80)
     }),
     defineField({
@@ -62,15 +63,7 @@ export default defineType({
       title: 'Category',
       type: 'string',
       options: {
-        list: [
-          {title: 'Spirits Education', value: 'spirits-education'},
-          {title: 'Rum Guides', value: 'rum-guides'},
-          {title: 'Cocktail Techniques', value: 'cocktail-techniques'},
-          {title: 'Buying Guides', value: 'buying-guides'},
-          {title: 'UK Craft Spirits', value: 'uk-craft-spirits'},
-          {title: 'Industry Insights', value: 'industry-insights'},
-          {title: 'Seasonal & Occasions', value: 'seasonal-occasions'}
-        ]
+        list: Object.entries(GUIDE_CATEGORY_TITLES).map(([value, title]) => ({title, value}))
       },
       validation: Rule => Rule.required()
     }),
@@ -588,7 +581,7 @@ export default defineType({
 
       return {
         title: `${prefix}${title}`,
-        subtitle: category ? category.replace('-', ' ').replace(/\b\w/g, (l: string) => l.toUpperCase()) : ''
+        subtitle: category ? GUIDE_CATEGORY_TITLES[category] ?? category : ''
       }
     }
   }
