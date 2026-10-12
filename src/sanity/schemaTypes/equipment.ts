@@ -279,6 +279,13 @@ export default defineType({
       description: 'Long-tail questions about choosing and using this equipment. Rendered visibly and as FAQPage schema from the same data.'
     }),
     defineField({
+      name: 'sources',
+      title: 'Sources',
+      type: 'array',
+      description: 'Every external source the page relies on, shown after the FAQs and cited in the Article schema. Prefer primary sources; a secondary one (retailer listing, trade report, reproduction) says so in its note.',
+      of: [{type: 'source'}]
+    }),
+    defineField({
       name: 'author',
       title: 'Author',
       type: 'string',

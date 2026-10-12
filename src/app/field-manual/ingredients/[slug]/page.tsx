@@ -22,6 +22,8 @@ import ScrollRow from '@/components/ScrollRow'
 import SectionHeading from '@/components/SectionHeading'
 import HouseSpiritCard from '@/components/HouseSpiritCard'
 import { allergenLine, formatAbv, legalCategoryLabel } from '@/lib/ingredient-facts'
+import Sources from '@/components/Sources'
+import { listableSources, sourceCitations, type Source } from '@/lib/sources'
 
 interface SubType {
   _id: string
@@ -80,6 +82,7 @@ interface Ingredient {
   history?: string
   professionalTip?: string
   faqs?: Array<{ question: string; answer: string }>
+  sources?: Partial<Source>[] | null
   relatedCocktails?: Array<{
     _id: string
     name: string
@@ -204,6 +207,8 @@ export default async function IngredientDetailPage({ params }: { params: Promise
   // fetched the ingredient. Empty for anything that is not a parent.
   const subTypes = ingredient.subTypes ?? []
 
+  const sources = listableSources(ingredient.sources)
+
   const articleSchema = {
     '@context': 'https://schema.org',
     '@type': 'Article',
@@ -215,6 +220,7 @@ export default async function IngredientDetailPage({ params }: { params: Promise
     author: ORG_REF,
     publisher: ORG_REF,
     mainEntityOfPage: { '@type': 'WebPage', '@id': `https://jerrycanspirits.co.uk/field-manual/ingredients/${slug}/` },
+    ...(sources.length > 0 && { citation: sourceCitations(sources) }),
   }
 
   // FAQPage schema — generated from the same faqs array as the visible FAQ
@@ -245,6 +251,7 @@ export default async function IngredientDetailPage({ params }: { params: Promise
   )
   const hasMore = Boolean(
     (ingredient.faqs && ingredient.faqs.length > 0) ||
+      sources.length > 0 ||
       videoId ||
       (ingredient.relatedGuides && ingredient.relatedGuides.length > 0) ||
       subTypes.length > 0,
@@ -585,6 +592,8 @@ export default async function IngredientDetailPage({ params }: { params: Promise
                 <FAQAccordion items={ingredient.faqs} />
               </div>
             )}
+
+            <Sources sources={sources} />
 
             {/* Video Tutorial */}
             {videoId && (

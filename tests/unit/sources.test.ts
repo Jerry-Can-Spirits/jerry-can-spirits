@@ -1,12 +1,25 @@
 /**
- * A guide lists its sources so the reader can check what it says. The list
- * must read the accessed date as the day it was stored, wherever the server
- * runs, and must vanish rather than render an empty heading when there is
- * nothing to list.
+ * Guides, ingredients and equipment list their sources so the reader can
+ * check what they say. The list must read the accessed date as the day it was
+ * stored, wherever the server runs, and must vanish rather than render an
+ * empty heading when there is nothing to list. The page tests render the real
+ * ingredient and equipment pages with a stubbed Sanity fetch, as
+ * ingredient-facts.test.ts does.
  */
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { renderToStaticMarkup } from 'react-dom/server'
 import Sources from '@/components/Sources'
 import { formatAccessed, listableSources, sourceCitations, type Source } from '@/lib/sources'
+
+const fetchMock = vi.fn()
+
+vi.mock('@/sanity/lib/client', () => ({
+  client: { fetch: (...args: unknown[]) => fetchMock(...args) },
+}))
+
+vi.mock('@/sanity/lib/image', () => ({
+  urlFor: () => ({ url: () => 'https://cdn.sanity.io/images/stub.jpg' }),
+}))
 
 const IBA: Source = {
   title: 'Negroni',
@@ -66,5 +79,71 @@ describe('sourceCitations', () => {
         publisher: { '@type': 'Organization', name: 'IBA' },
       },
     ])
+  })
+})
+
+const FAQ = [{ question: 'How long does it keep?', answer: 'An answer that stands in for the real one.' }]
+
+const pages = [
+  {
+    type: 'ingredient',
+    path: '@/app/field-manual/ingredients/[slug]/page',
+    doc: {
+      _id: 'ingredient-stub',
+      _createdAt: '2026-01-01T00:00:00Z',
+      name: 'Test Ingredient',
+      slug: { current: 'test-ingredient' },
+      category: 'liqueurs',
+      description: 'A description that stands in for the opening paragraph.',
+      usage: 'Used in testing.',
+      topTips: [],
+      featured: false,
+    },
+  },
+  {
+    type: 'equipment',
+    path: '@/app/field-manual/equipment/[slug]/page',
+    doc: {
+      _id: 'equipment-stub',
+      _createdAt: '2026-01-01T00:00:00Z',
+      name: 'Test Equipment',
+      slug: { current: 'test-equipment' },
+      category: 'essential',
+      description: 'A description that stands in for the opening paragraph.',
+      usage: 'Used in testing.',
+      essential: false,
+    },
+  },
+] as const
+
+async function renderPage(path: string, doc: Record<string, unknown>) {
+  fetchMock.mockResolvedValue(doc)
+  const mod = path.includes('ingredients')
+    ? await import('@/app/field-manual/ingredients/[slug]/page')
+    : await import('@/app/field-manual/equipment/[slug]/page')
+  const element = await mod.default({ params: Promise.resolve({ slug: 'test' }) })
+  return renderToStaticMarkup(element)
+}
+
+describe.each(pages)('the $type page', ({ path, doc }) => {
+  beforeEach(() => {
+    fetchMock.mockReset()
+  })
+
+  it('lists its sources after the FAQs and cites them in the Article schema', async () => {
+    const html = await renderPage(path, { ...doc, faqs: FAQ, sources: [IBA] })
+    expect(html).toContain('Sources.</h2>')
+    expect(html).toContain('href="https://iba-world.com/negroni/"')
+    expect(html).toContain('accessed 12 October 2026')
+    expect(html.indexOf('Sources.</h2>')).toBeGreaterThan(html.indexOf('Common Questions'))
+    expect(html).toContain('"citation":[{"@type":"CreativeWork","name":"Negroni"')
+  })
+
+  it('renders no heading and no citation when it has none', async () => {
+    for (const sources of [undefined, null, []]) {
+      const html = await renderPage(path, { ...doc, faqs: FAQ, sources })
+      expect(html).not.toContain('Sources.</h2>')
+      expect(html).not.toContain('"citation"')
+    }
   })
 })

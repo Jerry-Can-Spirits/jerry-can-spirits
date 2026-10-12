@@ -20,6 +20,8 @@ import { ORG_REF } from '@/lib/jsonLd'
 import FAQAccordion from '@/components/FAQAccordion'
 import ScrollRow from '@/components/ScrollRow'
 import SectionHeading from '@/components/SectionHeading'
+import Sources from '@/components/Sources'
+import { listableSources, sourceCitations, type Source } from '@/lib/sources'
 
 // Types for equipment data
 interface Equipment {
@@ -65,6 +67,7 @@ interface Equipment {
   history?: string
   professionalTip?: string
   faqs?: Array<{ question: string; answer: string }>
+  sources?: Partial<Source>[] | null
   relatedGuides?: GuideLink[]
   videoUrl?: string
   relatedCocktails?: Array<{
@@ -183,6 +186,8 @@ export default async function EquipmentDetailPage({ params }: { params: Promise<
   // the lists are not rendered. The data stays in Sanity.
   const showLegacyLists = !(equipment.longDescription && equipment.longDescription.length > 0)
 
+  const sources = listableSources(equipment.sources)
+
   const articleSchema = {
     '@context': 'https://schema.org',
     '@type': 'Article',
@@ -194,6 +199,7 @@ export default async function EquipmentDetailPage({ params }: { params: Promise<
     author: ORG_REF,
     publisher: ORG_REF,
     mainEntityOfPage: { '@type': 'WebPage', '@id': `https://jerrycanspirits.co.uk/field-manual/equipment/${slug}/` },
+    ...(sources.length > 0 && { citation: sourceCitations(sources) }),
   }
 
   // FAQPage schema — generated from the same faqs array as the visible FAQ
@@ -224,6 +230,7 @@ export default async function EquipmentDetailPage({ params }: { params: Promise<
   )
   const hasMore = Boolean(
     (equipment.faqs && equipment.faqs.length > 0) ||
+      sources.length > 0 ||
       videoId ||
       (equipment.relatedGuides && equipment.relatedGuides.length > 0),
   )
@@ -551,6 +558,8 @@ export default async function EquipmentDetailPage({ params }: { params: Promise<
                 <FAQAccordion items={equipment.faqs} />
               </div>
             )}
+
+            <Sources sources={sources} />
 
             {/* Video Tutorial */}
             {videoId && (
