@@ -589,6 +589,16 @@ html[data-age-verified] .age-gate {
 html:not([data-age-verified]) body:has(.age-gate) {
   overflow: hidden;
 }
+/* The consent banner waits behind the gate. Cookiebot's desktop template is a
+   bottom bar about 300px tall, and at 1280x720 it sat over the gate's
+   "Yes, Enter" button (#1420's test run); no layout of the gate clears it
+   there without scrolling the gate. So while an unverified visitor has the
+   gate up the dialog is hidden, and it shows the moment the gate unmounts.
+   A verified visitor is marked before first paint by the inline script, so
+   for them this never matches and the banner is not delayed. */
+html:not([data-age-verified]) body:has(.age-gate) #CybotCookiebotDialog {
+  display: none !important;
+}
 
 
 /* 10. Bands.

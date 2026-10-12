@@ -39,7 +39,7 @@ Five documents govern work here. This file is the working contract; read the oth
 
 - Next.js 15 (App Router) + Sanity CMS + Shopify Storefront API, deployed as a Cloudflare Worker via OpenNext (`@opennextjs/cloudflare`; see `wrangler.jsonc`, `open-next.config.ts`)
 - Tailwind CSS, TypeScript. Runs on the Cloudflare Workers runtime (workerd, Node-compat; routes use `runtime = 'nodejs'`), not the Next.js Edge runtime
-- Cookiebot for GDPR consent management (auto-blocking mode)
+- Cookiebot for GDPR consent management (manual blocking mode: every tracker gates itself on Cookiebot consent in its own component)
 - GA4 + Google Ads via window.gtag() with Consent Mode v2
 - Sentry for error tracking
 - All third-party trackers are consent-gated via CookiebotOnAccept events
