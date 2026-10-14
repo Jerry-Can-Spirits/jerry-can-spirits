@@ -9,7 +9,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { renderToStaticMarkup } from 'react-dom/server'
 import Sources from '@/components/Sources'
-import { formatAccessed, listableSources, sourceCitations, type Source } from '@/lib/sources'
+import { checkedLine, formatAccessed, listableSources, sourceCitations, type Source } from '@/lib/sources'
 
 const fetchMock = vi.fn()
 
@@ -82,6 +82,26 @@ describe('sourceCitations', () => {
   })
 })
 
+describe('checkedLine', () => {
+  it('gives one date when every source was checked the same day', () => {
+    expect(checkedLine([IBA, { ...IBA, url: 'https://iba-world.com/americano/' }])).toBe(
+      'Correct as of 12 October 2026.',
+    )
+  })
+
+  it('gives the span when sources were checked on different days', () => {
+    expect(checkedLine([{ ...IBA, accessed: '2026-11-03' }, IBA])).toBe(
+      'Checked between 12 October and 3 November 2026.',
+    )
+  })
+
+  it('keeps both years when the span crosses a year', () => {
+    expect(checkedLine([IBA, { ...IBA, accessed: '2027-01-05' }])).toBe(
+      'Checked between 12 October 2026 and 5 January 2027.',
+    )
+  })
+})
+
 const FAQ = [{ question: 'How long does it keep?', answer: 'An answer that stands in for the real one.' }]
 
 const pages = [
@@ -134,7 +154,8 @@ describe.each(pages)('the $type page', ({ path, doc }) => {
     const html = await renderPage(path, { ...doc, faqs: FAQ, sources: [IBA] })
     expect(html).toContain('Sources.</h2>')
     expect(html).toContain('href="https://iba-world.com/negroni/"')
-    expect(html).toContain('accessed 12 October 2026')
+    expect(html).toContain('Correct as of 12 October 2026.')
+    expect(html).not.toContain('accessed')
     expect(html.indexOf('Sources.</h2>')).toBeGreaterThan(html.indexOf('Common Questions'))
     expect(html).toContain('"citation":[{"@type":"CreativeWork","name":"Negroni"')
   })

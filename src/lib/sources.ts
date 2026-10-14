@@ -20,6 +20,20 @@ export function formatAccessed(date: string): string {
   })
 }
 
+// One line above the list instead of a date on every entry. A single day
+// reads "Correct as of"; mixed days give the span, so an older check is
+// never presented as fresher than it is.
+export function checkedLine(sources: Source[]): string {
+  const days = [...new Set(sources.map((s) => s.accessed))].sort()
+  if (days.length === 0) return ''
+  const first = days[0]
+  const last = days[days.length - 1]
+  if (first === last) return `Correct as of ${formatAccessed(first)}.`
+  const from = formatAccessed(first)
+  const sameYear = first.slice(0, 4) === last.slice(0, 4)
+  return `Checked between ${sameYear ? from.replace(/ \d{4}$/, '') : from} and ${formatAccessed(last)}.`
+}
+
 // The schema requires every field, but a draft published mid-edit or a
 // script write can still leave one out. An entry the reader cannot follow is
 // not a source, so it is dropped rather than rendered half-formed.

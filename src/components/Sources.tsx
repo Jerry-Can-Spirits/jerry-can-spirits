@@ -1,4 +1,4 @@
-import { formatAccessed, type Source } from '@/lib/sources'
+import { checkedLine, type Source } from '@/lib/sources'
 
 // The foot-of-page source list. Every checkable fact on the page, above all
 // about another brand's product or the law, should be one the reader can
@@ -8,7 +8,8 @@ export default function Sources({ sources }: { sources: Source[] }) {
 
   return (
     <div id="sources" className="scroll-mt-24">
-      <h2 className="text-3xl font-serif font-bold text-white mb-8">Sources.</h2>
+      <h2 className="text-3xl font-serif font-bold text-white mb-3">Sources.</h2>
+      <p className="text-sm text-parchment-400 mb-6">{checkedLine(sources)}</p>
       <ol className="rounded-xl bg-jerry-green-800 border border-gold-500/20 p-6 space-y-3 list-decimal list-outside pl-10 marker:text-gold-400 text-sm text-parchment-300 leading-relaxed">
         {sources.map((source, index) => (
           <li key={index} className="pl-1">
@@ -24,7 +25,7 @@ export default function Sources({ sources }: { sources: Source[] }) {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
               </svg>
             </a>
-            &rdquo;, accessed {formatAccessed(source.accessed)}
+            &rdquo;
             {source.note ? ` (${source.note})` : ''}.
           </li>
         ))}
