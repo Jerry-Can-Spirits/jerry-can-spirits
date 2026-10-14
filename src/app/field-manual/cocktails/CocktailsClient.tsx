@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { Fragment, useState, useEffect } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -228,7 +228,7 @@ export default function CocktailsClient({
     return matchesFamily && matchesDifficulty
   })
   const availableSpirits = new Set(cocktailsForSpiritOptions.map(c => c.baseSpirit).filter(Boolean))
-  // The selected parent's sub-types, in rollup order, as a second row. Only
+  // The selected parent's sub-types, in rollup order, as a row under it. Only
   // when there is a choice to make: Vodka has one member and no second row.
   const subtypeOptions = (SPIRIT_ROLLUPS[selectedSpirit]?.members ?? []).filter(m => availableSpirits.has(m))
 
@@ -381,8 +381,8 @@ export default function CocktailsClient({
   ]
 
   // Base spirits for filter tabs. The parents come from SPIRIT_ROLLUPS, the
-  // same source as the /spirit/ pages; their sub-types appear as a second row
-  // once a parent is chosen. Genever stands alone: it is not a style of gin.
+  // same source as the /spirit/ pages; their sub-types appear as a row directly
+  // after the chosen parent. Genever stands alone: it is not a style of gin.
   const spirits = [
     { value: 'all', label: 'All Spirits' },
     ...Object.entries(SPIRIT_ROLLUPS).map(([value, { label }]) => ({ value, label })),
@@ -493,37 +493,43 @@ export default function CocktailsClient({
                       : availableSpirits.has(spirit.value)
                   })
                   .map((spirit) => (
-                  <button
-                    key={spirit.value}
-                    onClick={() => handleSpiritChange(spirit.value)}
-                    className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-300 ${
-                      selectedSpirit === spirit.value
-                        ? 'bg-gold-500/20 text-gold-300 border border-gold-500/40'
-                        : 'bg-jerry-green-800/40 text-parchment-300 border border-gold-500/20 hover:bg-jerry-green-800/60'
-                    }`}
-                  >
-                    {spirit.label}
-                  </button>
-                ))}
-              </div>
-              {(subtypeOptions.length > 1 || selectedSubtype) && (
-                <div className="flex flex-wrap gap-2 mt-3 pl-3 border-l border-gold-500/20">
-                  {subtypeOptions.map((subtype) => (
+                  <Fragment key={spirit.value}>
                     <button
-                      key={subtype}
-                      onClick={() => handleSubtypeChange(subtype)}
-                      aria-pressed={selectedSubtype === subtype}
-                      className={`px-3 py-2 rounded-lg text-sm font-semibold transition-all duration-300 ${
-                        selectedSubtype === subtype
+                      id={`spirit-chip-${spirit.value}`}
+                      onClick={() => handleSpiritChange(spirit.value)}
+                      className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-300 ${
+                        selectedSpirit === spirit.value
                           ? 'bg-gold-500/20 text-gold-300 border border-gold-500/40'
                           : 'bg-jerry-green-800/40 text-parchment-300 border border-gold-500/20 hover:bg-jerry-green-800/60'
                       }`}
                     >
-                      {MEMBER_LABELS[subtype] ?? subtype}
+                      {spirit.label}
                     </button>
-                  ))}
-                </div>
-              )}
+                    {selectedSpirit === spirit.value && (subtypeOptions.length > 1 || selectedSubtype) && (
+                      <div
+                        role="group"
+                        aria-labelledby={`spirit-chip-${spirit.value}`}
+                        className="basis-full flex flex-wrap gap-2 pl-3 border-l border-gold-500/20"
+                      >
+                        {subtypeOptions.map((subtype) => (
+                          <button
+                            key={subtype}
+                            onClick={() => handleSubtypeChange(subtype)}
+                            aria-pressed={selectedSubtype === subtype}
+                            className={`px-3 py-2 rounded-lg text-sm font-semibold transition-all duration-300 ${
+                              selectedSubtype === subtype
+                                ? 'bg-gold-500/20 text-gold-300 border border-gold-500/40'
+                                : 'bg-jerry-green-800/40 text-parchment-300 border border-gold-500/20 hover:bg-jerry-green-800/60'
+                            }`}
+                          >
+                            {MEMBER_LABELS[subtype] ?? subtype}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </Fragment>
+                ))}
+              </div>
             </div>
 
             {/* Difficulty Filter */}
