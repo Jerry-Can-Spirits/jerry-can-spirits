@@ -1,4 +1,5 @@
 import {defineField, defineType} from 'sanity'
+import {imageCreditField} from './imageCredit'
 
 export default defineType({
   name: 'equipment',
@@ -147,7 +148,8 @@ export default defineType({
           title: 'Alt Text',
           type: 'string',
           description: 'Describe what is visible in the image. Used for accessibility and SEO.',
-        })
+        }),
+        imageCreditField,
       ]
     }),
     defineField({

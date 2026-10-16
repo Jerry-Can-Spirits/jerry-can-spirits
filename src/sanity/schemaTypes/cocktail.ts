@@ -1,5 +1,6 @@
 import {defineField, defineType} from 'sanity'
 import {AUTHORITY_OPTIONS, RECIPE_CUISINES, validateHouseVariation} from '../../lib/recipe-source'
+import {imageCreditField} from './imageCredit'
 
 const COCKTAIL_TAG_OPTIONS = [
   // Strength / Style. Strength means the drink in the glass, not the
@@ -547,7 +548,8 @@ export default defineType({
           title: 'Alt Text',
           type: 'string',
           description: 'Describe what is visible in the image — the glass, garnish, colour, setting. Used for accessibility and SEO.',
-        })
+        }),
+        imageCreditField,
       ]
     }),
     defineField({

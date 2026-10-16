@@ -9,9 +9,10 @@ import BackToTop from '@/components/BackToTop'
 import Breadcrumbs from '@/components/Breadcrumbs'
 import StructuredData from '@/components/StructuredData'
 import ShareButton from '@/components/ShareButton'
-import GuideSections from '@/components/GuideSections'
+import GuideSections, { type GuideSectionImage } from '@/components/GuideSections'
+import ImageCredit from '@/components/ImageCredit'
 import { OG_IMAGE } from '@/lib/og'
-import { ORG_REF, authorRefFor } from '@/lib/jsonLd'
+import { ORG_REF, authorRefFor, imageWithCredit } from '@/lib/jsonLd'
 import { GUIDE_CATEGORY_TITLES } from '@/lib/category-order'
 import FAQAccordion from '@/components/FAQAccordion'
 import ScrollRow from '@/components/ScrollRow'
@@ -31,6 +32,7 @@ interface Subsection {
 
 interface Section {
   heading: string
+  image?: GuideSectionImage | null
   content?: string
   contentRich?: PortableTextBlock[]
   subsections?: Subsection[]
@@ -94,6 +96,7 @@ interface Guide {
   relatedProducts?: RelatedProduct[]
   heroImage?: string
   heroImageAlt?: string
+  heroImageCredit?: string
   callToAction?: {
     text: string
     url: string
@@ -181,7 +184,7 @@ export default async function GuidePage({ params }: PageProps) {
     '@type': 'Article',
     headline: guide.title,
     description: guide.excerpt,
-    image: guide.heroImage,
+    image: imageWithCredit(guide.heroImage, guide.heroImageCredit),
     // Long-form editorial: a named author resolves to that person's node, so
     // the credentials attach to the writing. Anything unattributed falls back
     // to the Organization rather than inventing a byline.
@@ -250,17 +253,20 @@ export default async function GuidePage({ params }: PageProps) {
         {/* Hero Section */}
         <header className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
           {guide.heroImage && (
-            <div className="relative aspect-video sm:aspect-2/1 lg:aspect-21/9 rounded-xl overflow-hidden mb-8">
-              <Image
-                src={guide.heroImage}
-                alt={guide.heroImageAlt || guide.title}
-                fill
-                className="object-cover object-center"
-                sizes="(max-width: 640px) 100vw, (max-width: 896px) 100vw, 896px"
-                priority
-              />
-              <div className="absolute inset-0 bg-linear-to-t from-jerry-green-900/80 via-jerry-green-900/20 to-transparent" />
-            </div>
+            <figure className="mb-8">
+              <div className="relative aspect-video sm:aspect-2/1 lg:aspect-21/9 rounded-xl overflow-hidden">
+                <Image
+                  src={guide.heroImage}
+                  alt={guide.heroImageAlt || guide.title}
+                  fill
+                  className="object-cover object-center"
+                  sizes="(max-width: 640px) 100vw, (max-width: 896px) 100vw, 896px"
+                  priority
+                />
+                <div className="absolute inset-0 bg-linear-to-t from-jerry-green-900/80 via-jerry-green-900/20 to-transparent" />
+              </div>
+              <ImageCredit credit={guide.heroImageCredit} />
+            </figure>
           )}
 
           <div className="flex flex-wrap items-center gap-3 mb-4">

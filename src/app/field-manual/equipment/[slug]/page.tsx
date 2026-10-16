@@ -16,7 +16,8 @@ import ReferenceContents from '@/components/ReferenceContents'
 import SectionNav, { type SectionNavItem } from '@/components/SectionNav'
 import { extractHeadings } from '@/lib/sanity-text'
 import { OG_IMAGE_COCKTAIL } from '@/lib/og'
-import { ORG_REF } from '@/lib/jsonLd'
+import { ORG_REF, imageWithCredit } from '@/lib/jsonLd'
+import ImageCredit from '@/components/ImageCredit'
 import FAQAccordion from '@/components/FAQAccordion'
 import ScrollRow from '@/components/ScrollRow'
 import SectionHeading from '@/components/SectionHeading'
@@ -39,7 +40,7 @@ interface Equipment {
     details?: string
   }
   tips: string[]
-  image?: { asset: { url: string }; alt?: string }
+  image?: { asset: { url: string }; alt?: string; credit?: string }
   featured: boolean
   // Enhanced fields
   whatToLookFor?: string[]
@@ -193,7 +194,7 @@ export default async function EquipmentDetailPage({ params }: { params: Promise<
     '@type': 'Article',
     headline: `${equipment.name} | Field Manual`,
     description: equipment.description,
-    image: equipment.image ? urlFor(equipment.image).url() : undefined,
+    image: imageWithCredit(equipment.image ? urlFor(equipment.image).url() : undefined, equipment.image?.credit),
     datePublished: equipment._createdAt,
     dateModified: equipment.updatedAt,
     author: ORG_REF,
@@ -373,16 +374,19 @@ export default async function EquipmentDetailPage({ params }: { params: Promise<
               {(equipment.image || equipment.essential) && (
                 <div className="order-1 bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-8 border border-gold-500/20">
                   {equipment.image && (
-                    <div className="relative aspect-4/3 bg-jerry-green-800/20 rounded-lg overflow-hidden">
-                      <Image
-                        src={urlFor(equipment.image).url()}
-                        alt={equipment.image?.alt || equipment.name}
-                        fill
-                        className="object-cover"
-                        sizes="(max-width: 1024px) 100vw, 50vw"
-                        priority
-                      />
-                    </div>
+                    <figure>
+                      <div className="relative aspect-4/3 bg-jerry-green-800/20 rounded-lg overflow-hidden">
+                        <Image
+                          src={urlFor(equipment.image).url()}
+                          alt={equipment.image?.alt || equipment.name}
+                          fill
+                          className="object-cover"
+                          sizes="(max-width: 1024px) 100vw, 50vw"
+                          priority
+                        />
+                      </div>
+                      <ImageCredit credit={equipment.image.credit} />
+                    </figure>
                   )}
 
                   {equipment.essential && (
