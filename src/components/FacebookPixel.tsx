@@ -2,7 +2,7 @@
 
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { trackEventDual } from '@/lib/meta-capi';
+import { clearMetaCookies, ensureMetaCookies, hashExternalId, trackEventDual } from '@/lib/meta-capi';
 
 const FB_PIXEL_ID = '825009767240821';
 
@@ -31,7 +31,8 @@ export default function FacebookPixel() {
       if (window.fbq) {
         window.fbq('consent', 'revoke');
       }
-      // Best-effort: clear the hashed-email identity cookie when consent is revoked.
+      clearMetaCookies(document);
+      // Best-effort: clear the identity cookies when consent is revoked.
       fetch('/api/meta/clear-identity/', { method: 'POST', keepalive: true }).catch(() => {});
       setHasConsent(false);
     };
@@ -64,15 +65,26 @@ export default function FacebookPixel() {
     }
 
     window.fbq!('consent', 'grant');
-    window.fbq!('init', FB_PIXEL_ID);
-    // Initial PageView routed through dual-fire so it gets an eventID and CAPI mirror.
-    trackEventDual('PageView');
 
-    const script = document.createElement('script');
-    script.src = 'https://connect.facebook.net/en_US/fbevents.js';
-    script.async = true;
-    script.onload = () => setIsLoaded(true);
-    document.head.appendChild(script);
+    let cancelled = false;
+    const externalId = ensureMetaCookies(document, window.location);
+    hashExternalId(externalId).then((hashedExternalId) => {
+      if (cancelled || !window.Cookiebot?.consent?.marketing) return;
+      // Same hashed external_id as the CAPI leg, so pixel and server match.
+      window.fbq!('init', FB_PIXEL_ID, { external_id: hashedExternalId });
+      // Initial PageView routed through dual-fire so it gets an eventID and CAPI mirror.
+      trackEventDual('PageView');
+
+      const script = document.createElement('script');
+      script.src = 'https://connect.facebook.net/en_US/fbevents.js';
+      script.async = true;
+      script.onload = () => setIsLoaded(true);
+      document.head.appendChild(script);
+    });
+
+    return () => {
+      cancelled = true;
+    };
   }, [hasConsent, isLoaded]);
 
   return null;
