@@ -1,5 +1,6 @@
 import {defineField, defineType} from 'sanity'
 import {GUIDE_CATEGORY_TITLES} from '../../lib/category-order'
+import {imageCreditField} from './imageCredit'
 
 export default defineType({
   name: 'guide',
@@ -128,6 +129,28 @@ export default defineType({
               title: 'Heading (H2)',
               type: 'string',
               validation: Rule => Rule.required()
+            }),
+            defineField({
+              name: 'image',
+              title: 'Section image',
+              type: 'image',
+              options: {
+                hotspot: true,
+              },
+              description: 'Optional. Shown under the section heading, before the body.',
+              fields: [
+                defineField({
+                  name: 'alt',
+                  title: 'Alt Text',
+                  type: 'string',
+                  description: 'Describe what is visible in the image. Used for accessibility and SEO.',
+                  validation: Rule => Rule.custom((alt, context) => {
+                    const parent = context.parent as { asset?: unknown } | undefined
+                    return parent?.asset && !alt?.trim() ? 'Alt text is required when an image is set.' : true
+                  })
+                }),
+                imageCreditField,
+              ]
             }),
             defineField({
               name: 'content',
@@ -541,7 +564,8 @@ export default defineType({
           title: 'Alt Text',
           type: 'string',
           description: 'Describe what is visible in the image. Used for accessibility and SEO.',
-        })
+        }),
+        imageCreditField,
       ]
     }),
 

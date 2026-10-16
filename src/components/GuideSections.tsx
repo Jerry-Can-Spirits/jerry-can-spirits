@@ -2,7 +2,9 @@
 
 import { useState } from 'react'
 import type { PortableTextBlock } from 'next-sanity'
+import Image from 'next/image'
 import GuidePortableText from './GuidePortableText'
+import ImageCredit from './ImageCredit'
 
 interface Subsection {
   subheading: string
@@ -10,8 +12,16 @@ interface Subsection {
   contentRich?: PortableTextBlock[]
 }
 
+export interface GuideSectionImage {
+  url?: string | null
+  alt?: string | null
+  credit?: string | null
+  dimensions?: { width: number; height: number } | null
+}
+
 interface Section {
   heading: string
+  image?: GuideSectionImage | null
   content?: string
   contentRich?: PortableTextBlock[]
   subsections?: Subsection[]
@@ -69,6 +79,20 @@ export default function GuideSections({ sections, initialVisibleCount = 4 }: Gui
           <h2 className="text-3xl font-serif font-bold text-white mb-6">
             {section.heading}
           </h2>
+          {section.image?.url && (
+            <figure className="mb-6">
+              <Image
+                src={section.image.url}
+                alt={section.image.alt || section.heading}
+                width={section.image.dimensions?.width ?? 1600}
+                height={section.image.dimensions?.height ?? 1067}
+                className="w-auto h-auto max-w-full max-h-128 rounded-xl"
+                sizes="(max-width: 896px) 100vw, 896px"
+                loading="lazy"
+              />
+              <ImageCredit credit={section.image.credit} />
+            </figure>
+          )}
           <div className="prose prose-invert max-w-none">
             <SectionBody content={section.content} contentRich={section.contentRich} />
           </div>

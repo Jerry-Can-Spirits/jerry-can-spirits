@@ -129,6 +129,7 @@ export const cocktailBySlugQuery = `*[_type == "cocktail" && slug.current == $sl
   featured,
   "image": image.asset->url,
   "imageAlt": image.alt,
+  "imageCredit": image.credit,
   videoUrl,
   videoUploadDate,
   flavorProfile,
@@ -399,6 +400,7 @@ export const guideBySlugQuery = `*[_type == "guide" && slug.current == $slug][0]
   introduction,
   sections[] {
     heading,
+    "image": image{ alt, credit, "url": asset->url, "dimensions": asset->metadata.dimensions{ width, height } },
     content,
     contentRich[] {
       ...,
@@ -455,6 +457,7 @@ export const guideBySlugQuery = `*[_type == "guide" && slug.current == $slug][0]
   },
   "heroImage": heroImage.asset->url,
   "heroImageAlt": heroImage.alt,
+  "heroImageCredit": heroImage.credit,
   callToAction {
     text,
     url
