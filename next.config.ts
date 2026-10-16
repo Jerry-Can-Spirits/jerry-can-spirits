@@ -167,6 +167,19 @@ const nextConfig: NextConfig = {
   // Configure for Cloudflare Workers via OpenNext
   trailingSlash: true,
 
+  // Which Sentry environment this build reports as, inlined into client and
+  // server code. Workers Builds sets WORKERS_CI and WORKERS_CI_BRANCH; any
+  // other build (next dev, a local npm run preview) is local and sends
+  // nothing (instrumentation-client.ts, src/lib/server-error-capture.ts).
+  env: {
+    SENTRY_ENVIRONMENT:
+      process.env.WORKERS_CI === '1'
+        ? process.env.WORKERS_CI_BRANCH === 'main'
+          ? 'production'
+          : 'preview'
+        : 'local',
+  },
+
   // Ensure minification is enabled (default in production, but explicit for clarity)
   productionBrowserSourceMaps: false, // Disable source maps to reduce bundle size
 

@@ -103,6 +103,16 @@ function ingest(dsn: string): { url: string; key: string } {
   return { url: `${u.protocol}//${u.host}/api/${projectId}/envelope/`, key: u.username }
 }
 
+// Set at build time in next.config.ts: production for a Workers Builds build
+// of main, preview for any other branch, local for everything else. A local
+// `npm run preview` is a production build on a real Worker runtime, so
+// NODE_ENV could not tell it apart: on 12 Oct 2026 one reported
+// "META_CAPI_ACCESS_TOKEN not set" nine times (Sentry JAVASCRIPT-NEXTJS-4N)
+// against a secret that exists in production. Local runs now send nothing.
+export function sentryEnvironment(): string {
+  return process.env.SENTRY_ENVIRONMENT || 'local'
+}
+
 function eventId(): string {
   return crypto.randomUUID().replace(/-/g, '')
 }
@@ -145,7 +155,7 @@ export function buildEvent(
     timestamp: Date.now() / 1000,
     platform: 'javascript',
     level: context.level ?? (input.message ? 'info' : 'error'),
-    environment: process.env.NODE_ENV === 'production' ? 'production' : 'development',
+    environment: sentryEnvironment(),
     release: version,
     tags: { runtime: 'worker', ...stringTags(context.tags) },
     extra: context.extra,
@@ -185,6 +195,7 @@ async function send(event: SentryEvent, fetchImpl: typeof fetch = fetch): Promis
 }
 
 function dispatch(event: SentryEvent): Promise<void> {
+  if (event.environment === 'local') return Promise.resolve()
   const { waitUntil } = worker()
   const p = send(event)
   if (waitUntil) {

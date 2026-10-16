@@ -22,39 +22,59 @@ const configured = new Set<string>();
  */
 export default function GoogleTag() {
   useEffect(() => {
-    const load = () => {
-      const consent = window.Cookiebot?.consent;
-      const ids = [consent?.statistics ? GA4_ID : null, consent?.marketing ? ADS_ID : null].filter(
-        (id): id is string => id !== null && !configured.has(id)
-      );
-      if (ids.length === 0) return;
-
-      if (configured.size === 0) {
-        window.gtag('js', new Date());
-        const script = document.createElement('script');
-        script.src = `https://www.googletagmanager.com/gtag/js?id=${ids[0]}`;
-        script.async = true;
-        document.head.appendChild(script);
-      }
-
-      for (const id of ids) {
-        configured.add(id);
-        window.gtag(
-          'config',
-          id,
-          id === GA4_ID
-            ? { page_path: window.location.pathname, send_page_view: false }
-            : { allow_enhanced_conversions: true }
-        );
-      }
-    };
-
-    load();
-    window.addEventListener('CookiebotOnAccept', load);
-    return () => window.removeEventListener('CookiebotOnAccept', load);
+    loadGoogleTag();
+    window.addEventListener('CookiebotOnAccept', loadGoogleTag);
+    return () => window.removeEventListener('CookiebotOnAccept', loadGoogleTag);
   }, []);
 
   return null;
+}
+
+export function loadGoogleTag(): void {
+  const consent = window.Cookiebot?.consent;
+  const ids = [consent?.statistics ? GA4_ID : null, consent?.marketing ? ADS_ID : null].filter(
+    (id): id is string => id !== null && !configured.has(id)
+  );
+  if (ids.length === 0) return;
+
+  ensureGtag();
+
+  if (configured.size === 0) {
+    window.gtag('js', new Date());
+    const script = document.createElement('script');
+    script.src = `https://www.googletagmanager.com/gtag/js?id=${ids[0]}`;
+    script.async = true;
+    document.head.appendChild(script);
+  }
+
+  for (const id of ids) {
+    configured.add(id);
+    window.gtag(
+      'config',
+      id,
+      id === GA4_ID
+        ? { page_path: window.location.pathname, send_page_view: false }
+        : { allow_enhanced_conversions: true }
+    );
+  }
+}
+
+/**
+ * The Consent Mode defaults script in app/layout.tsx defines the global gtag
+ * stub before anything else runs. Where that stub was missing, window.gtag
+ * threw "is not a function" from loadGoogleTag (Sentry JAVASCRIPT-NEXTJS-4P,
+ * Oct 2026). This defines the same queueing stub, so a call waits in dataLayer
+ * for gtag.js to replay instead of throwing. It loads and sends nothing.
+ */
+export function ensureGtag(): void {
+  window.dataLayer = window.dataLayer || [];
+  if (typeof window.gtag !== 'function') {
+    window.gtag = function gtag() {
+      // gtag.js replays Arguments objects from dataLayer, not arrays.
+      // eslint-disable-next-line prefer-rest-params
+      window.dataLayer.push(arguments);
+    };
+  }
 }
 
 /**
