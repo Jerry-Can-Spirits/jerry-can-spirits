@@ -5,6 +5,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import type { PortableTextBlock } from 'next-sanity'
 import { recipeSourceLine } from '@/lib/recipe-source'
+import ImageCredit from './ImageCredit'
 
 // Types for cocktail data
 interface CocktailIngredient {
@@ -91,6 +92,7 @@ interface SanityCocktail {
   featured?: boolean
   image?: string
   imageAlt?: string
+  imageCredit?: string
   longDescription?: PortableTextBlock[]
 }
 
@@ -217,7 +219,7 @@ export default function CocktailRecipeDisplay({ cocktail }: Props) {
         <div className="absolute inset-0 bg-linear-to-br from-amber-100/5 to-amber-200/10 opacity-50"></div>
         <div className="relative z-10">
           {cocktail?.image && (
-            <div className="mb-6">
+            <figure className="mb-6">
               <Image
                 src={cocktail.image}
                 alt={cocktail.imageAlt || `${cocktail.name} cocktail recipe - Jerry Can Spirits`}
@@ -227,7 +229,8 @@ export default function CocktailRecipeDisplay({ cocktail }: Props) {
                 sizes="(max-width: 768px) 100vw, 800px"
                 priority
               />
-            </div>
+              <ImageCredit credit={cocktail.imageCredit} />
+            </figure>
           )}
           <div className="mb-6">
             {/* Title row with difficulty badge */}

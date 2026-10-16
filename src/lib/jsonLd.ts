@@ -63,6 +63,17 @@ export function authorRefFor(name: string | null | undefined): { '@id': string }
   return slug ? personRef(slug) : ORG_REF
 }
 
+// A credited image becomes an ImageObject carrying the credit as creditText;
+// an uncredited one stays a plain URL, so pages without a credit are unchanged.
+export function imageWithCredit<T extends string | undefined>(
+  url: T,
+  credit: string | null | undefined
+): T | { '@type': 'ImageObject'; url: string; contentUrl: string; creditText: string } {
+  const text = credit?.trim()
+  if (!url || !text) return url
+  return { '@type': 'ImageObject', url, contentUrl: url, creditText: text }
+}
+
 // Twelve months out, computed when the page builds or regenerates, so the
 // offer can never carry an expired date. The previous hardcoded literals went
 // stale the day the Expedition Spiced Rum RRP changed, and an expired

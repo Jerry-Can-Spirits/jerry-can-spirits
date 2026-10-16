@@ -16,7 +16,8 @@ import ReferenceContents from '@/components/ReferenceContents'
 import SectionNav, { type SectionNavItem } from '@/components/SectionNav'
 import { extractHeadings } from '@/lib/sanity-text'
 import { OG_IMAGE_COCKTAIL } from '@/lib/og'
-import { ORG_REF } from '@/lib/jsonLd'
+import { ORG_REF, imageWithCredit } from '@/lib/jsonLd'
+import ImageCredit from '@/components/ImageCredit'
 import FAQAccordion from '@/components/FAQAccordion'
 import ScrollRow from '@/components/ScrollRow'
 import SectionHeading from '@/components/SectionHeading'
@@ -44,7 +45,7 @@ interface Ingredient {
   usage: string
   topTips: string[]
   storage?: string
-  image?: { asset: { url: string }; alt?: string }
+  image?: { asset: { url: string }; alt?: string; credit?: string }
   featured: boolean
   // Enhanced fields
   flavorProfile?: {
@@ -214,7 +215,7 @@ export default async function IngredientDetailPage({ params }: { params: Promise
     '@type': 'Article',
     headline: `${ingredient.name} | Field Manual`,
     description: ingredient.description,
-    image: ingredient.image ? urlFor(ingredient.image).url() : undefined,
+    image: imageWithCredit(ingredient.image ? urlFor(ingredient.image).url() : undefined, ingredient.image?.credit),
     datePublished: ingredient._createdAt,
     dateModified: ingredient.updatedAt,
     author: ORG_REF,
@@ -359,16 +360,19 @@ export default async function IngredientDetailPage({ params }: { params: Promise
               {(ingredient.image || ingredient.featured) && (
                 <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
                   {ingredient.image && (
-                    <div className="relative aspect-square bg-transparent rounded-lg overflow-hidden">
-                      <Image
-                        src={urlFor(ingredient.image).url()}
-                        alt={ingredient.image?.alt || ingredient.name}
-                        fill
-                        className="object-contain mix-blend-multiply p-4"
-                        sizes="(max-width: 1024px) 100vw, 45vw"
-                        priority
-                      />
-                    </div>
+                    <figure>
+                      <div className="relative aspect-square bg-transparent rounded-lg overflow-hidden">
+                        <Image
+                          src={urlFor(ingredient.image).url()}
+                          alt={ingredient.image?.alt || ingredient.name}
+                          fill
+                          className="object-contain mix-blend-multiply p-4"
+                          sizes="(max-width: 1024px) 100vw, 45vw"
+                          priority
+                        />
+                      </div>
+                      <ImageCredit credit={ingredient.image.credit} />
+                    </figure>
                   )}
 
                   {ingredient.featured && (

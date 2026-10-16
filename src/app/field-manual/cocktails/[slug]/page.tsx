@@ -19,7 +19,7 @@ import { notFound } from 'next/navigation'
 import { getCloudflareContext } from '@opennextjs/cloudflare'
 import { sanityOgUrl } from '@/sanity/lib/image'
 import { OG_IMAGE_COCKTAIL } from '@/lib/og'
-import { ORG_REF, authorRefFor } from '@/lib/jsonLd'
+import { ORG_REF, authorRefFor, imageWithCredit } from '@/lib/jsonLd'
 import { recipeCuisineField } from '@/lib/recipe-source'
 import FAQAccordion from '@/components/FAQAccordion'
 import ScrollRow from '@/components/ScrollRow'
@@ -106,6 +106,7 @@ interface SanityCocktail {
   tags?: string[]
   featured?: boolean
   image?: string
+  imageCredit?: string
   videoUrl?: string
   videoUploadDate?: string
   faqs?: Array<{ question: string; answer: string }>
@@ -279,7 +280,7 @@ export default async function CocktailPage({ params }: PageProps) {
     "@type": "Recipe",
     "name": cocktail.name,
     "description": cocktail.description,
-    "image": sanityOgUrl(cocktail.image) || "https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/images-logo-webp/public",
+    "image": imageWithCredit(sanityOgUrl(cocktail.image) || "https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/images-logo-webp/public", cocktail.imageCredit),
     "recipeCategory": recipeCategory,
     // The cuisine of the place the drink was created, from its sourced
     // history, omitted when the origin is unknown or disputed between

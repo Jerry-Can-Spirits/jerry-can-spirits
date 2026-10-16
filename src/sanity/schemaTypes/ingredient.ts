@@ -1,5 +1,6 @@
 import {defineField, defineType} from 'sanity'
 import {ALLERGENS, LEGAL_CATEGORIES} from '../../lib/ingredient-facts'
+import {imageCreditField} from './imageCredit'
 
 export default defineType({
   name: 'ingredient',
@@ -312,7 +313,8 @@ export default defineType({
           title: 'Alt Text',
           type: 'string',
           description: 'Describe what is visible in the image. Used for accessibility and SEO.',
-        })
+        }),
+        imageCreditField,
       ],
       preview: {
         select: {
