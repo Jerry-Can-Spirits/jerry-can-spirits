@@ -18,6 +18,7 @@ vi.mock('@opennextjs/cloudflare', () => ({
 
 afterEach(() => {
   vi.unstubAllGlobals()
+  vi.unstubAllEnvs()
 })
 
 describe('scrub', () => {
@@ -97,6 +98,7 @@ describe('envelope', () => {
 
 describe('captureServerError', () => {
   it('posts the envelope to the project ingest URL with the key in the auth header', async () => {
+    vi.stubEnv('SENTRY_ENVIRONMENT', 'production')
     const fetchMock = vi.fn().mockResolvedValue(new Response(null, { status: 200 }))
     vi.stubGlobal('fetch', fetchMock)
     await captureServerError(new Error('boom'), { tags: { source: 'test' } })
@@ -108,7 +110,22 @@ describe('captureServerError', () => {
     expect(String(init.body)).toContain('"source":"test"')
   })
 
+  it('sends nothing from a local build, which is what reported 4N', async () => {
+    vi.stubEnv('SENTRY_ENVIRONMENT', '')
+    const fetchMock = vi.fn().mockResolvedValue(new Response(null, { status: 200 }))
+    vi.stubGlobal('fetch', fetchMock)
+    await captureServerMessage('META_CAPI_ACCESS_TOKEN not set', { level: 'error' })
+    await captureServerError(new Error('boom'))
+    expect(fetchMock).not.toHaveBeenCalled()
+  })
+
+  it('labels a deployed build with its environment', () => {
+    vi.stubEnv('SENTRY_ENVIRONMENT', 'preview')
+    expect(buildEvent({ message: 'm' }, {}).environment).toBe('preview')
+  })
+
   it('never rejects when the send fails', async () => {
+    vi.stubEnv('SENTRY_ENVIRONMENT', 'production')
     vi.stubGlobal('fetch', vi.fn().mockRejectedValue(new Error('network down')))
     const quiet = vi.spyOn(console, 'error').mockImplementation(() => {})
     await expect(captureServerError(new Error('boom'))).resolves.toBeUndefined()

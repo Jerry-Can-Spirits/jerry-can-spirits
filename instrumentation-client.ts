@@ -3,8 +3,11 @@ import * as Sentry from "@sentry/nextjs";
 Sentry.init({
   dsn: "https://03a3151ad7e64876b650238ef4f31ce8@o4510169918275584.ingest.de.sentry.io/4510169922404432",
 
-  // So an issue can be read against the deploy that produced it.
-  environment: process.env.NODE_ENV === "production" ? "production" : "development",
+  // So an issue can be read against the deploy that produced it. Set at build
+  // time in next.config.ts; a local build (next dev, npm run preview) reports
+  // nothing, so it cannot raise issues against the production project.
+  environment: process.env.SENTRY_ENVIRONMENT,
+  enabled: process.env.SENTRY_ENVIRONMENT !== "local",
 
   // Error reporting ONLY. Performance tracing is disabled: no tracesSampler is
   // set, and the BrowserTracing integration is filtered out of the defaults
@@ -36,7 +39,18 @@ Sentry.init({
     /reader is undefined/i,
     /chrome-extension:\/\//i,
     /moz-extension:\/\//i,
+    // No first-party code reads another frame (src has no contentWindow,
+    // contentDocument, window.parent or window.top), so this SecurityError is
+    // always a third-party script or extension probing a cross-origin frame
+    // it does not own (Sentry JAVASCRIPT-NEXTJS-3Z).
+    /Blocked a frame with origin/,
   ],
+
+  // Errors thrown inside Cookiebot's own scripts (uc.js and the cbid-pathed
+  // dialog code on consent.cookiebot.com / consentcdn.cookiebot.com) are not
+  // ours to fix. Sentry JAVASCRIPT-NEXTJS-48 is its calcFadeState reading
+  // parentNode of a dialog node no longer in the document.
+  denyUrls: [/https:\/\/consent(cdn)?\.cookiebot\.com\//],
 
   beforeSend(event) {
     if (event.exception?.values) {

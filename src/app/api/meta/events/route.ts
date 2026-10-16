@@ -2,6 +2,18 @@ import { NextResponse } from 'next/server'
 import { captureServerError, captureServerMessage } from '@/lib/server-error-capture'
 import { getCloudflareContext } from '@opennextjs/cloudflare'
 import { isAllowedOrigin, isRateLimited } from '@/lib/kv'
+import {
+  EXTERNAL_ID_COOKIE,
+  EXTERNAL_ID_MAX_AGE,
+  EXTERNAL_ID_PATTERN,
+  FBC_COOKIE,
+  FBP_COOKIE,
+  FBP_FBC_MAX_AGE,
+  FB_ID_PATTERN,
+  fbclidFromUrl,
+  hashExternalId,
+  readCookie,
+} from '@/lib/meta-capi'
 
 export const runtime = 'nodejs'
 
@@ -40,13 +52,13 @@ function isValidBody(body: IncomingBody): body is {
   )
 }
 
-function readCookie(cookieHeader: string | null, name: string): string | undefined {
-  if (!cookieHeader) return undefined
-  for (const part of cookieHeader.split(';')) {
-    const [k, ...v] = part.trim().split('=')
-    if (k === name) return v.join('=')
-  }
-  return undefined
+function validCookie(cookieHeader: string | null, name: string, pattern: RegExp): string | undefined {
+  const value = readCookie(cookieHeader, name)
+  return value && pattern.test(value) ? value : undefined
+}
+
+function refreshCookie(name: string, value: string, maxAge: number): string {
+  return `${name}=${value}; Path=/; Max-Age=${maxAge}; SameSite=Lax; Secure`
 }
 
 export async function POST(request: Request) {
@@ -91,8 +103,13 @@ export async function POST(request: Request) {
     : raw.eventTime
 
   const cookieHeader = request.headers.get('cookie')
-  const fbp = readCookie(cookieHeader, '_fbp')
-  const fbc = readCookie(cookieHeader, '_fbc')
+  const fbp = validCookie(cookieHeader, FBP_COOKIE, FB_ID_PATTERN)
+  const fbcCookie = validCookie(cookieHeader, FBC_COOKIE, FB_ID_PATTERN)
+  // No _fbc cookie but the page URL carries a fbclid: Meta's documented
+  // server-side form, subdomain index 1 and the time first observed.
+  const fbclid = fbcCookie ? undefined : fbclidFromUrl(raw.eventSourceUrl)
+  const fbc = fbcCookie ?? (fbclid ? `fb.1.${Date.now()}.${fbclid}` : undefined)
+  const externalId = validCookie(cookieHeader, EXTERNAL_ID_COOKIE, EXTERNAL_ID_PATTERN)
   const em = readCookie(cookieHeader, 'jcs_em')
   const userAgent = request.headers.get('user-agent') ?? undefined
 
@@ -101,6 +118,7 @@ export async function POST(request: Request) {
     client_user_agent: userAgent,
     fbp,
     fbc,
+    external_id: externalId ? [await hashExternalId(externalId)] : undefined,
     em: em ? [em] : undefined,
   }
   for (const key of Object.keys(userData)) {
@@ -145,5 +163,11 @@ export async function POST(request: Request) {
     })
   }
 
-  return NextResponse.json({ ok: true })
+  // Re-issue the consented identity cookies from the server so they keep their
+  // full lifetime; browsers cap script-written cookies (Safari: seven days).
+  const response = NextResponse.json({ ok: true })
+  if (fbp) response.headers.append('Set-Cookie', refreshCookie(FBP_COOKIE, fbp, FBP_FBC_MAX_AGE))
+  if (fbcCookie) response.headers.append('Set-Cookie', refreshCookie(FBC_COOKIE, fbcCookie, FBP_FBC_MAX_AGE))
+  if (externalId) response.headers.append('Set-Cookie', refreshCookie(EXTERNAL_ID_COOKIE, externalId, EXTERNAL_ID_MAX_AGE))
+  return response
 }

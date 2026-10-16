@@ -3,6 +3,10 @@ import * as Sentry from "@sentry/nextjs";
 Sentry.init({
   dsn: "https://03a3151ad7e64876b650238ef4f31ce8@o4510169918275584.ingest.de.sentry.io/4510169922404432",
 
+  // Set at build time in next.config.ts; a local build sends nothing.
+  environment: process.env.SENTRY_ENVIRONMENT,
+  enabled: process.env.SENTRY_ENVIRONMENT !== "local",
+
   // Sample 20% of transactions in production to reduce overhead
   tracesSampleRate: 0.2,
 
