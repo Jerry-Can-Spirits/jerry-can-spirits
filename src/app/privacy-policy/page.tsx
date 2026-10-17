@@ -39,7 +39,7 @@ export const metadata: Metadata = {
 }
 
 export default function PrivacyPolicy() {
-  const lastUpdated = new Date('2026-08-16').toLocaleDateString('en-GB', {
+  const lastUpdated = new Date('2026-10-17').toLocaleDateString('en-GB', {
     year: 'numeric',
     month: 'long',
     day: 'numeric'
@@ -113,9 +113,13 @@ export default function PrivacyPolicy() {
                   Your location is passed to Mapbox to place your entry on the map. Mapbox&apos;s privacy policy is available at{' '}
                   <a href="https://www.mapbox.com/legal/privacy" target="_blank" rel="noopener noreferrer" className="text-gold-300 hover:text-gold-200 underline">mapbox.com/legal/privacy</a>.
                 </p>
-                <p className="text-white leading-relaxed">
+                <p className="text-white mb-3 leading-relaxed">
                   To have your entry removed, email{' '}
                   <a href="mailto:support@jerrycanspirits.co.uk" className="text-gold-300 hover:text-gold-200 underline">support@jerrycanspirits.co.uk</a>. We will remove it within 7 days.
+                </p>
+                <p className="text-white leading-relaxed">
+                  <strong className="text-gold-300">Where every bottle went.</strong> The Expedition Log page also shows a map of where Batch 001 bottles have been delivered, by town and postcode district in the UK and by town and country elsewhere (for example FY1, Blackpool, or Brussels, Belgium). For each order we keep the country, the postcode district for UK orders, the town, the number of bottles, the order date and the Shopify order reference, so the record can be corrected if an order is cancelled or refunded. We do not publish or store names, street addresses, full postcodes or email addresses for this purpose. The lawful basis is our legitimate interest in showing where the batch has gone. The record is kept for as long as the map is published. If you would rather your order did not appear, email{' '}
+                  <a href="mailto:support@jerrycanspirits.co.uk" className="text-gold-300 hover:text-gold-200 underline">support@jerrycanspirits.co.uk</a> and we will remove it within 7 days.
                 </p>
 
                 <h3 className="text-xl font-serif font-semibold text-white mt-6 mb-3">
@@ -264,6 +268,7 @@ export default function PrivacyPolicy() {
                 </h2>
                 <ul className="list-disc list-inside text-white space-y-2">
                   <li><strong className="text-gold-300">Expedition Log Entries:</strong> Until you request removal by emailing support@jerrycanspirits.co.uk</li>
+                  <li><strong className="text-gold-300">Bottle Map Records:</strong> Country, postcode district (UK orders), town, bottle count and order date, for as long as the map is published or until you ask for your order to be removed</li>
                   <li><strong className="text-gold-300">Newsletter Subscribers:</strong> Until you unsubscribe or 3 years of inactivity</li>
                   <li><strong className="text-gold-300">Contact Form Data:</strong> 2 years for customer service purposes</li>
                   <li><strong className="text-gold-300">Analytics Data:</strong> 14 months (Google Analytics setting)</li>

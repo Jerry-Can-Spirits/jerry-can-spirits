@@ -15,6 +15,7 @@ import { createDiscountCode, createReferrerRewardCode } from '@/lib/shopify-admi
 import { generateReferralCode } from '@/lib/shopify-admin';
 import { sendGa4Purchase } from '@/lib/ga4-measurement-protocol';
 import { syncTradeOrder } from '@/lib/trade-portal/orders';
+import { deleteBottleMapRow, recordBottleMapOrder } from '@/lib/bottle-map-d1';
 
 const KLAVIYO_API_BASE = 'https://a.klaviyo.com/api';
 const KLAVIYO_REVISION = '2024-10-15';
@@ -425,6 +426,10 @@ export async function POST(request: Request) {
         // Register's order figures are refreshed. A retail order is a no-op.
         // Never throws (see syncTradeOrder).
         await syncTradeOrder(env as unknown as Parameters<typeof syncTradeOrder>[0], order);
+        // Where every bottle went: one row of district, town, country and
+        // bottle count for a retail order; nothing for trade, test or
+        // cancelled orders. Never throws (see recordBottleMapOrder).
+        await recordBottleMapOrder(db, order);
         if (adminToken) {
           // Non-fatal: a referral-conversion failure (e.g. a transient D1 write
           // after the reward code is already minted on Shopify) must not throw
@@ -456,6 +461,17 @@ export async function POST(request: Request) {
           return NextResponse.json({ error: 'Invalid payload' }, { status: 400 });
         }
         await handleOrderFulfilled(payload as ShopifyOrder, kv);
+        break;
+      }
+      case SHOPIFY_WEBHOOK_TOPICS.ORDERS_CANCELLED: {
+        if (typeof p.id !== 'number') {
+          console.error('[webhook] orders/cancelled payload missing required fields');
+          return NextResponse.json({ error: 'Invalid payload' }, { status: 400 });
+        }
+        // A cancelled order leaves the bottle map. Idempotent: deleting a row
+        // that is not there is a no-op.
+        await deleteBottleMapRow(db, p.id);
+        console.log(`[webhook] orders/cancelled ${p.id} removed from bottle map`);
         break;
       }
       case SHOPIFY_WEBHOOK_TOPICS.PRODUCTS_UPDATE: {

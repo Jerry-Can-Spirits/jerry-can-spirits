@@ -31,8 +31,15 @@ function edgeCacheKey(request, url, env) {
 //
 // The Field Manual hubs render Sanity content and no prices, so an hour is
 // fine and the on-demand revalidation webhook covers publishes.
+//
+// The bottle map aggregate is a D1 GROUP BY over every retail order; an hour
+// behind is what the design accepts (JCS-ops plan of 17 Oct 2026). Cloudflare
+// does not cache a Worker response on its headers alone, so it is listed here,
+// under both spellings the trailing-slash redirect can leave it at.
 const EDGE_CACHE_TTL = new Map([
   ['/', 60],
+  ['/api/bottle-map', 3600],
+  ['/api/bottle-map/', 3600],
   ['/offline', 3600],
   ['/field-manual', 3600],
   ['/field-manual/cocktails', 3600],
