@@ -28,6 +28,7 @@ const EXCLUDED_PREFIXES = [
   '/terms-of-service',
   '/privacy-policy',
   '/cookie-policy',
+  '/community-guidelines',
 ]
 
 // Exact paths (no sub-tree): the trade landing itself, and the crawler files

@@ -10,14 +10,14 @@ export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'The Expedition Log',
-  description: 'A public record of the people who bought the first bottles. Names, places, and notes from the field.',
+  description: 'A public record of the people who bought the first bottles. Names, places, and bottle numbers.',
   alternates: {
     canonical: 'https://jerrycanspirits.co.uk/expedition-log/',
   },
   openGraph: {
     ...baseOpenGraph,
     title: 'The Expedition Log | Jerry Can Spirits®',
-    description: 'A public record of the people who bought the first bottles. Names, places, and notes from the field.',
+    description: 'A public record of the people who bought the first bottles. Names, places, and bottle numbers.',
     url: 'https://jerrycanspirits.co.uk/expedition-log/',
   },
 }

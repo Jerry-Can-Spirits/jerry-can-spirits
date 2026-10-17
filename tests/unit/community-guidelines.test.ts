@@ -17,6 +17,7 @@ vi.mock('next/image', () => ({ default: () => null }))
 const { default: CommunityGuidelines, metadata } = await import('@/app/community-guidelines/page')
 const { default: TermsOfService } = await import('@/app/terms-of-service/page')
 const { default: Footer } = await import('@/components/Footer')
+const { isAgeExcludedPath } = await import('@/lib/age-gate')
 
 describe('Community Guidelines page', () => {
   const html = renderToStaticMarkup(createElement(CommunityGuidelines))
@@ -47,6 +48,17 @@ describe('links to the guidelines', () => {
     expect(tos).toBeGreaterThan(-1)
     expect(guidelines).toBeGreaterThan(tos)
     expect(html.slice(tos, guidelines)).not.toMatch(/href="\/(?!terms-of-service\/)/)
+  })
+
+  it('the footer links Threads, which the guidelines name', () => {
+    const html = renderToStaticMarkup(createElement(Footer))
+    expect(html).toContain('href="https://www.threads.com/@jerrycanspirits"')
+    expect(html).toContain('aria-label="Follow us on Threads"')
+  })
+
+  it('is readable without the age gate, like the other policy pages', () => {
+    expect(isAgeExcludedPath('/community-guidelines/')).toBe(true)
+    expect(isAgeExcludedPath('/community-guidelines')).toBe(true)
   })
 
   it('Terms of Service clause 4.3 links the guidelines and carries the new date', () => {
