@@ -100,8 +100,7 @@ export default async function BottleDetailPage({ params }: PageProps) {
 
   const db = await getD1()
   // Render only bottles that were actually produced: validate the exact bottle
-  // row, not just the batch plus a hardcoded ceiling. Mirrors the expedition-log
-  // registration API, which already rejects unproduced bottles via the same helper.
+  // row, not just the batch plus a hardcoded ceiling.
   const bottle = await getBottleByLabel(db, batchId, labelType, bottleNumber)
   if (!bottle) notFound()
   const batch = bottle.batch
@@ -153,17 +152,14 @@ export default async function BottleDetailPage({ params }: PageProps) {
             </p>
           </div>
 
-          {/* Actions. The Expedition Log link is the page's real purpose until
-              the per-bottle QR scheme lands: looking a number up proves the
-              bottle exists; registering it in the log is the genuine, opt-in
-              act of provenance an owner can perform today. Without it this page
-              was a dead end. */}
+          {/* Actions. Looking a number up proves the bottle exists; the
+              Expedition Log shows where the rest of the batch went. */}
           <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
             <Link
               href="/expedition-log/"
               className="inline-flex items-center gap-2 px-6 py-3 bg-gold-500 hover:bg-gold-400 text-jerry-green-900 font-semibold rounded-lg transition-colors"
             >
-              Add it to the Expedition Log
+              See where the bottles went
             </Link>
 
             <ShareButton
