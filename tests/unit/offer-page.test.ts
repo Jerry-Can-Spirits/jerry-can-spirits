@@ -48,6 +48,19 @@ vi.mock('@/sanity/lib/client', () => ({
   },
 }))
 
+vi.mock('@opennextjs/cloudflare', () => ({
+  getCloudflareContext: async () => ({
+    env: {
+      SITE_OPS: {
+        get: async (key: string) =>
+          key === 'rating:trustpilot'
+            ? { rating: 4.7, count: 37, fetchedAt: '2026-10-17T12:00:00Z', source: 'trustpilot' }
+            : null,
+      },
+    },
+  }),
+}))
+
 vi.mock('next/image', () => ({ default: () => null }))
 vi.mock('@/contexts/CartContext', () => ({
   useCart: () => ({ addToCart: async () => true, isLoading: false }),
@@ -86,6 +99,17 @@ describe('/offer/', () => {
     expect(html).toContain('Age-verified at your door.')
     expect(html).toContain('18+ only. Please enjoy responsibly.')
     expect(html).toContain('href="https://www.drinkaware.co.uk"')
+  })
+
+  it('states the live Trustpilot score above the button and the IWSC medals under the hero', async () => {
+    const { html } = await renderPage()
+    expect(html).toContain('4.7 / 5')
+    expect(html).toContain('37 reviews on Trustpilot')
+    expect(html.indexOf('reviews on Trustpilot')).toBeLessThan(html.indexOf('<button'))
+    expect(html).toContain('aria-label="IWSC 2026 results"')
+    expect(html).toContain('IWSC 2026 Bronze')
+    expect(html).toContain('IWSC 2026 Silver')
+    expect(html).toContain('href="https://www.iwsc.net/results/detail/172185/expedition-spiced-spiced-rum"')
   })
 
   it('quotes three reviews as written and no more', async () => {

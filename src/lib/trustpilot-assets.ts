@@ -31,13 +31,14 @@ const TRUSTPILOT_STARS: Record<string, string> = {
 }
 
 // The public TrustScore and review count as Trustpilot shows them on the
-// profile. They are Trustpilot's figures, stated as such beside the product
-// page's "Customer reviews" link (Audit B, 3 Oct 2026). They are not an
-// on-site aggregate and must never feed JSON-LD. Checked by hand on the date
-// given. The product page reads the scheduled KV figure first and falls back
-// to these only when KV is empty; update all three together, monthly.
+// profile. They are Trustpilot's figures, stated as such (Audit B, 3 Oct
+// 2026). They are not an on-site aggregate and must never feed JSON-LD.
+// Checked by hand on the date given against the trustbox-data endpoint the
+// ratings cron reads. Nothing renders this directly: getTrustpilotScore() in
+// trustpilot-score.ts reads the scheduled KV figure first and falls back to
+// these only when KV is empty; update all three together, monthly.
 export const TRUSTPILOT_PROFILE_URL = 'https://uk.trustpilot.com/review/jerrycanspirits.co.uk'
-export const TRUSTPILOT_PUBLIC = { score: '4.6', reviews: 34, checked: '2026-10-03' } as const
+export const TRUSTPILOT_PUBLIC = { rating: 4.7, reviews: 37, checked: '2026-10-17' } as const
 
 /** The official star image for a rating, or undefined when we hold no art
  *  for its half-star rounding. */

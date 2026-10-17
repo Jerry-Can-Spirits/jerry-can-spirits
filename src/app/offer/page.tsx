@@ -5,13 +5,16 @@ import { getProduct } from '@/lib/shopify'
 import { BOTTLE_HANDLE, GIFT_BOXED_HANDLE, remainingBottles } from '@/lib/batch-stock'
 import { GUARANTEE_COPY, OFFER_HEADLINE, OFFER_LINE, PROOF_LINES } from '@/lib/october-offer'
 import { normaliseReviews, type SanityReviewDoc } from '@/lib/product-reviews'
+import { getTrustpilotScore } from '@/lib/trustpilot-score'
 import { client } from '@/sanity/lib/client'
 import { productReviewsQuery } from '@/sanity/queries'
 import BatchCount from '@/components/BatchCount'
+import MedalBar from '@/components/MedalBar'
 import OfferAddToCart from '@/components/OfferAddToCart'
 import { OfferCountdown, OfferLine } from '@/components/OctoberOffer'
 import ProductPageTracking from '@/components/ProductPageTracking'
 import ProductReviews from '@/components/ProductReviews'
+import { RatingRow } from '@/components/RatingRow'
 import { displayProductTitle } from '@/lib/product-title'
 
 // The ad landing page for the October offer (brief of 17 Oct 2026, angle C1):
@@ -28,10 +31,11 @@ export const metadata: Metadata = {
 }
 
 export default async function OfferPage() {
-  const [giftBoxed, bottle, reviewDocs] = await Promise.all([
+  const [giftBoxed, bottle, reviewDocs, trustpilot] = await Promise.all([
     getProduct(GIFT_BOXED_HANDLE),
     getProduct(BOTTLE_HANDLE).catch(() => null),
     client.fetch<SanityReviewDoc[]>(productReviewsQuery, { handle: BOTTLE_HANDLE }).catch(() => [] as SanityReviewDoc[]),
+    getTrustpilotScore(),
   ])
 
   if (!giftBoxed) notFound()
@@ -87,6 +91,10 @@ export default async function OfferPage() {
                 ))}
               </ul>
 
+              {/* The TrustScore, from the same helper as every other surface,
+                  so the landing page and the product page cannot disagree. */}
+              <RatingRow rating={trustpilot.rating} count={trustpilot.count} platform="trustpilot" />
+
               <div className="space-y-3 pt-2">
                 <OfferAddToCart
                   variantId={variant.id}
@@ -102,6 +110,9 @@ export default async function OfferPage() {
           </div>
         </div>
       </section>
+
+      {/* The medals in full, as the homepage states them under its hero. */}
+      <MedalBar />
 
       {reviews.length > 0 && (
         <section className="band-light py-16">

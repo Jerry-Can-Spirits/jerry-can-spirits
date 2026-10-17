@@ -1,8 +1,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import { getCloudflareContext } from '@opennextjs/cloudflare'
-import { getRating } from '@/lib/ratings-cache'
 import { TRUSTPILOT_LOGO as TRUSTPILOT_LOGOS } from '@/lib/trustpilot-assets'
+import { getTrustpilotScore } from '@/lib/trustpilot-score'
 import { RatingRow } from '@/components/RatingRow'
 import ScrollRow from '@/components/ScrollRow'
 import SectionHeading from '@/components/SectionHeading'
@@ -57,10 +56,9 @@ const QUOTES: PullQuote[] = [
 const TRUSTPILOT_URL = 'https://uk.trustpilot.com/review/jerrycanspirits.co.uk'
 
 export default async function PullQuoteStrip() {
-  // Live review count cached hourly in KV by the ratings cron; renders
-  // without the number until the first fetch lands.
-  const { env } = await getCloudflareContext({ async: true })
-  const trustpilot = await getRating(env.SITE_OPS as KVNamespace, 'trustpilot')
+  // The TrustScore from the one helper every surface reads: the hourly KV
+  // figure, or the hand-checked constant until the first fetch lands.
+  const trustpilot = await getTrustpilotScore()
 
   return (
     <section
@@ -100,9 +98,7 @@ export default async function PullQuoteStrip() {
           {/* The TrustScore itself, official star art, for every visitor.
               The score and count live here, so the link below carries
               neither: one fact, stated once. */}
-          {trustpilot && (
-            <RatingRow rating={trustpilot.rating} count={trustpilot.count} platform="trustpilot" />
-          )}
+          <RatingRow rating={trustpilot.rating} count={trustpilot.count} platform="trustpilot" />
           <Link
             href={TRUSTPILOT_URL}
             target="_blank"
