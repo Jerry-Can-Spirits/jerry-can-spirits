@@ -1,8 +1,8 @@
 /**
  * Backfill and reconcile the bottle_map table from Shopify.
  *
- * Pages through every order created since --since (default 2026-04-01, the
- * week of launch) with the Admin GraphQL API, applies the same rules as the
+ * Pages through every order created since --since (default 2026-01-01; the
+ * first orders are from January 2026) with the Admin GraphQL API, applies the same rules as the
  * orders/create webhook (src/lib/bottle-map.ts) and reports what the table
  * should hold. Writes nothing unless told to.
  *
@@ -67,7 +67,7 @@ const WRITE = flag('write')
 const PRUNE = flag('prune')
 const SQL_OUT = option('sql-out')
 const CSV = option('csv')
-const SINCE = option('since') ?? '2026-04-01'
+const SINCE = option('since') ?? '2026-01-01'
 
 if (!/^\d{4}-\d{2}-\d{2}$/.test(SINCE)) {
   console.error('--since must be YYYY-MM-DD')
@@ -188,7 +188,9 @@ function wrangler(argv: string[]): string {
 }
 
 function d1Query<T>(sql: string): T[] {
-  const out = wrangler(['d1', 'execute', D1_NAME, '--remote', '--json', '--command', JSON.stringify(sql)])
+  // One line: a newline inside a shell argument crashes wrangler on Windows
+  // (libuv assertion in src\win\async.c) before the query is sent.
+  const out = wrangler(['d1', 'execute', D1_NAME, '--remote', '--json', '--command', JSON.stringify(sql.replace(/\s+/g, ' '))])
   const start = out.indexOf('[')
   const parsed = JSON.parse(out.slice(start)) as { results: T[] }[]
   return parsed[0]?.results ?? []

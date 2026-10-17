@@ -133,7 +133,14 @@ describe('countBottlesBySku', () => {
       expect(sku, id).toBeDefined()
       expect(BOTTLES_PER_SKU[sku], sku).toBe(bottles)
     }
-    expect(Object.keys(BOTTLES_PER_SKU).sort()).toEqual(Object.values(skuById).sort())
+    const legacy = ['RUM-SPICED-001', 'RUM-SPICED-003', 'JCS-GIFTPACK-SPICED']
+    expect(Object.keys(BOTTLES_PER_SKU).sort()).toEqual([...Object.values(skuById), ...legacy].sort())
+  })
+
+  it('counts the SKUs the products carried before July 2026', () => {
+    expect(countBottlesBySku([li('RUM-SPICED-001', 2), li('JCS-EXP-BOX-01')])).toBe(2)
+    expect(countBottlesBySku([li('RUM-SPICED-003')])).toBe(6)
+    expect(countBottlesBySku([li('JCS-GIFTPACK-SPICED')])).toBe(1)
   })
 
   it('counts the formats by SKU and quantity, and nothing for the box or barware', () => {
