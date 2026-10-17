@@ -1,9 +1,10 @@
-// The rum is one liquid sold four ways. The product pages for those four were
+// The rum is one liquid sold several ways. The product pages for those four were
 // siblings that never mentioned each other except through an algorithmic
 // "worth looking at" grid at the bottom, so a visitor on the bottle page had
 // no way to see the six-pack existed without leaving. This is the family and
-// the order the formats are shown in, from the entry price up. The
-// presentation box is not a format: it is an add-on the cart offers once the
+// the order the formats are shown in, from the entry price up. The bottle
+// and box together is a format (gift boxed); the presentation box on its own
+// is not: it is an add-on the cart offers once the
 // bottle is in it (PresentationBoxUpsell), and it stays there.
 export interface ProductFormat {
   handle: string
@@ -18,6 +19,11 @@ export const RUM_FORMATS: ProductFormat[] = [
     handle: 'jerry-can-spirits-expedition-spiced-rum',
     label: 'Bottle',
     note: '700ml, 40% ABV',
+  },
+  {
+    handle: 'expedition-spiced-rum-gift-boxed',
+    label: 'Gift boxed',
+    note: 'The bottle in its presentation box',
   },
   {
     handle: 'jerry-can-spirits-expedition-pack-spiced-rum-6-bottles',
@@ -52,6 +58,17 @@ export const BOTTLES_PER_UNIT: Record<number, number> = {
   15224531845497: 1, // jerry-can-spirits-premium-gift-pack
   // Not bottles, and previously counted as one each by the title match:
   // 15489763017081 presentation box, 15245613269369 bar blade.
+  //
+  // Deliberately absent: 15828640039289 expedition-spiced-rum-gift-boxed. It
+  // is a Shopify fixed bundle, and an order for a bundle carries its component
+  // lines (the bottle above and the presentation box), grouped under the
+  // bundle, never a line for the bundle itself. The bottle is already counted
+  // here; adding the bundle would count every gift-boxed sale twice.
+}
+
+/** Formats sold as a Shopify fixed bundle, counted through their component lines. */
+export const BUNDLE_FORMATS: Record<string, number[]> = {
+  'expedition-spiced-rum-gift-boxed': [15224526569849, 15489763017081],
 }
 
 /** Bottles of rum in a set of order line items. */
