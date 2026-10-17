@@ -6,14 +6,14 @@ test.describe('Expedition Log page', () => {
     await expect(page.getByRole('heading', { level: 1 })).toContainText('The Expedition Log')
   })
 
-  test('form is present on expedition log page', async ({ page }) => {
+  test('the log takes no submissions', async ({ page }) => {
     await page.goto('/expedition-log/')
-    await expect(page.locator('form')).toBeVisible()
-    await expect(page.locator('input[name="name"]')).toBeVisible()
+    await expect(page.locator('form')).toHaveCount(0)
   })
 
-  test('expedition log form appears on batch detail page', async ({ page }) => {
+  test('batch detail page links to the map instead of a form', async ({ page }) => {
     await page.goto('/batch/001/')
-    await expect(page.locator('input[name="name"]')).toBeVisible()
+    await expect(page.locator('input[name="name"]')).toHaveCount(0)
+    await expect(page.getByRole('link', { name: 'See the map' })).toBeVisible()
   })
 })
