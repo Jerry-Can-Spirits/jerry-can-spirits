@@ -90,6 +90,18 @@ const staticPages = [
   { label: 'Media & Press', href: '/contact/media/' },
 ]
 
+// The footer's legal column, so the index is complete.
+const legalPages = [
+  { label: 'Privacy Policy', href: '/privacy-policy/' },
+  { label: 'Cookie Policy', href: '/cookie-policy/' },
+  { label: 'Cookie Preferences', href: '/cookie-preferences/' },
+  { label: 'Terms of Service', href: '/terms-of-service/' },
+  { label: 'Community Guidelines', href: '/community-guidelines/' },
+  { label: 'Shipping & Returns', href: '/shipping-returns/' },
+  { label: 'Accessibility', href: '/accessibility/' },
+  { label: 'Complaints', href: '/contact/complaints/' },
+]
+
 const shopPages = [
   { label: 'Browse All Collections', href: '/shop/' },
   { label: 'Spirits', href: '/shop/spirits/' },
@@ -160,6 +172,11 @@ export default async function SitemapPage() {
           {/* Shop SEO category pages */}
           <SitemapSection title="Shop — Categories">
             <LinkGrid items={shopCategoryPages} />
+          </SitemapSection>
+
+          {/* Legal and policy pages */}
+          <SitemapSection title="Legal & Policies">
+            <LinkGrid items={legalPages} />
           </SitemapSection>
         </div>
       </section>

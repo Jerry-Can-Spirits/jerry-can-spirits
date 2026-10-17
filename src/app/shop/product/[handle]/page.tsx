@@ -237,6 +237,11 @@ export default async function ProductPage({
   params: Promise<{ handle: string }>
 }) {
   const { handle } = await params
+  // The gift-boxed bundle is the bottle in its box, under its own Shopify
+  // handle. Everything written about the liquid (Sanity content, reviews,
+  // medals, the ingredients page) belongs to the bottle's handle.
+  const contentHandle = handle === 'expedition-spiced-rum-gift-boxed' ? 'jerry-can-spirits-expedition-spiced-rum' : handle
+  const awarded = AWARDED_HANDLES.includes(contentHandle)
   const trustpilot = await getTrustpilotScore()
   let product: ShopifyProduct | null = null
   let relatedProducts: ShopifyProduct[] = []
@@ -246,12 +251,12 @@ export default async function ProductPage({
   try {
     // Fetch Shopify product and Sanity product data in parallel
     // Sanity slug is typically the handle without the brand prefix
-    const slug = handle.replace('jerry-can-spirits-', '')
+    const slug = contentHandle.replace('jerry-can-spirits-', '')
 
     const [shopifyProduct, sanityData, reviewDocs] = await Promise.all([
       getProduct(handle),
-      client.fetch(productByHandleQuery, { slug, handle }).catch(() => null),
-      client.fetch<SanityReviewDoc[]>(productReviewsQuery, { handle }).catch(() => [] as SanityReviewDoc[]),
+      client.fetch(productByHandleQuery, { slug, handle: contentHandle }).catch(() => null),
+      client.fetch<SanityReviewDoc[]>(productReviewsQuery, { handle: contentHandle }).catch(() => [] as SanityReviewDoc[]),
     ])
 
     product = shopifyProduct
@@ -473,7 +478,7 @@ export default async function ProductPage({
       seller: ORG_REF,
     }),
     manufacturer: ORG_REF,
-    ...(AWARDED_HANDLES.includes(handle) && {
+    ...(awarded && {
       award: PRODUCT_AWARDS.map((a) => a.schemaText),
     }),
     // Additional properties for spirits
@@ -658,7 +663,7 @@ export default async function ProductPage({
             <ProductFormats options={formatOptions} currentHandle={handle} />
 
             {/* IWSC 2026 medals */}
-            {AWARDED_HANDLES.includes(handle) && <ProductAwards />}
+            {awarded && <ProductAwards />}
 
             {/* Variant Selector & Add to Cart.
                 Deliberately ABOVE the description: most arrivals here came to
@@ -786,13 +791,13 @@ export default async function ProductPage({
           {/* Trust strip and accreditations. The IWSC tile only appears where
               ProductAwards does not, so the medal is stated once per page. */}
           <div className="mt-12 pt-8 border-t border-gold-500/20 space-y-4">
-            <TrustStrip showIwsc={!AWARDED_HANDLES.includes(handle)} />
+            <TrustStrip showIwsc={!awarded} />
             <RecognitionRow />
             <p className="text-center text-sm text-parchment-400 tracking-wide">
               {isGiftCard
                 ? 'Sent by email. Secure checkout, express payment available.'
                 : `Ships for ${STANDARD_SHIPPING_LABEL}. Free over £${FREE_SHIPPING_THRESHOLD_GBP}. Secure checkout, express payment available.`}
-              {AWARDED_HANDLES.includes(handle) ? '' : ' 5% of profits goes to forces charities.'}
+              {awarded ? '' : ' 5% of profits goes to forces charities.'}
             </p>
           </div>
 
@@ -889,7 +894,7 @@ export default async function ProductPage({
                   <p className="text-parchment-300 text-sm">View the complete ingredient list, allergen info, and sourcing details.</p>
                 </div>
                 <Link
-                  href={`/ingredients/${getIngredientsSlug(handle)}/`}
+                  href={`/ingredients/${getIngredientsSlug(contentHandle)}/`}
                   className="inline-flex items-center gap-2 bg-jerry-green-800 hover:bg-jerry-green-700 text-parchment-50 px-5 py-2.5 rounded-lg font-semibold border border-gold-500/30 hover:border-gold-500/60 transition-all duration-300 self-start sm:self-auto shrink-0"
                 >
                   <span>View Ingredients</span>
@@ -1039,7 +1044,7 @@ export default async function ProductPage({
             currencyCode={stickyVariant.price.currencyCode}
             watchElementId="buy-section"
             multiVariant={multiVariant}
-            awarded={AWARDED_HANDLES.includes(handle)}
+            awarded={awarded}
           />
         ) : null
       })()}

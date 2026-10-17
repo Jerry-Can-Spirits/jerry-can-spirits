@@ -104,22 +104,15 @@ export default function PrivacyPolicy() {
                   3.2 The Expedition Log
                 </h3>
                 <p className="text-white mb-3 leading-relaxed">
-                  The Expedition Log is an opt-in public registry of the people who bought the first bottles. When you submit an entry, we collect your name, approximate location (town or city level), bottle type, and bottle number. This information is displayed publicly on our website.
+                  The Expedition Log is a map of where Batch 001 bottles have been delivered, by town and postcode district in the UK and by town and country elsewhere (for example FY1, Blackpool, or Brussels, Belgium). For each order we keep the country, the postcode district for UK orders, the town, the number of bottles, the order date and the Shopify order reference, so the record can be corrected if an order is cancelled or refunded. We do not publish or store names, street addresses, full postcodes or email addresses for this purpose. The lawful basis is our legitimate interest in showing where the batch has gone. The record is kept for as long as the map is published. If you would rather your order did not appear, email{' '}
+                  <a href="mailto:support@jerrycanspirits.co.uk" className="text-gold-300 hover:text-gold-200 underline">support@jerrycanspirits.co.uk</a> and we will remove it within 7 days.
                 </p>
                 <p className="text-white mb-3 leading-relaxed">
-                  The legal basis for processing this data is your consent, given when you submit the form.
-                </p>
-                <p className="text-white mb-3 leading-relaxed">
-                  Your location is passed to Mapbox to place your entry on the map. Mapbox&apos;s privacy policy is available at{' '}
+                  The map is drawn by Mapbox, which loads only with your consent to analytics cookies. Mapbox&apos;s privacy policy is available at{' '}
                   <a href="https://www.mapbox.com/legal/privacy" target="_blank" rel="noopener noreferrer" className="text-gold-300 hover:text-gold-200 underline">mapbox.com/legal/privacy</a>.
                 </p>
-                <p className="text-white mb-3 leading-relaxed">
-                  To have your entry removed, email{' '}
-                  <a href="mailto:support@jerrycanspirits.co.uk" className="text-gold-300 hover:text-gold-200 underline">support@jerrycanspirits.co.uk</a>. We will remove it within 7 days.
-                </p>
                 <p className="text-white leading-relaxed">
-                  <strong className="text-gold-300">Where every bottle went.</strong> The Expedition Log page also shows a map of where Batch 001 bottles have been delivered, by town and postcode district in the UK and by town and country elsewhere (for example FY1, Blackpool, or Brussels, Belgium). For each order we keep the country, the postcode district for UK orders, the town, the number of bottles, the order date and the Shopify order reference, so the record can be corrected if an order is cancelled or refunded. We do not publish or store names, street addresses, full postcodes or email addresses for this purpose. The lawful basis is our legitimate interest in showing where the batch has gone. The record is kept for as long as the map is published. If you would rather your order did not appear, email{' '}
-                  <a href="mailto:support@jerrycanspirits.co.uk" className="text-gold-300 hover:text-gold-200 underline">support@jerrycanspirits.co.uk</a> and we will remove it within 7 days.
+                  Until 17 October 2026 the Expedition Log also carried an opt-in registry of names, locations and bottle numbers. Those entries are no longer published and have been deleted.
                 </p>
 
                 <h3 className="text-xl font-serif font-semibold text-white mt-6 mb-3">
@@ -247,7 +240,7 @@ export default function PrivacyPolicy() {
                   <li><strong className="text-gold-300">Google Analytics / Google Ads:</strong> Website analytics and conversion tracking (USA) &mdash; UK-US Data Bridge and Google Ads Data Processing Terms</li>
                   <li><strong className="text-gold-300">Meta (Facebook) Pixel and Conversions API:</strong> Advertising and conversion tracking (USA) &mdash; UK-US Data Bridge and Standard Contractual Clauses</li>
                   <li><strong className="text-gold-300">Metricool:</strong> Social media and content analytics (Spain/EU) &mdash; GDPR-compliant</li>
-                  <li><strong className="text-gold-300">Mapbox:</strong> Map rendering and location geocoding for the Expedition Log (USA) &mdash; Standard Contractual Clauses</li>
+                  <li><strong className="text-gold-300">Mapbox:</strong> Map rendering for the Expedition Log (USA) &mdash; Standard Contractual Clauses</li>
                   <li><strong className="text-gold-300">Cloudflare:</strong> Website hosting, CDN, R2 file storage, D1 database, Turnstile bot protection (United Kingdom and European Union edge regions for our services) &mdash; GDPR-compliant with Data Processing Addendum</li>
                   <li><strong className="text-gold-300">Trustpilot:</strong> Customer review platform (Denmark/USA) &mdash; Standard Contractual Clauses</li>
                   <li><strong className="text-gold-300">Sentry:</strong> Error monitoring and performance tracking (USA) &mdash; Standard Contractual Clauses</li>
@@ -267,7 +260,6 @@ export default function PrivacyPolicy() {
                   7. Data Retention
                 </h2>
                 <ul className="list-disc list-inside text-white space-y-2">
-                  <li><strong className="text-gold-300">Expedition Log Entries:</strong> Until you request removal by emailing support@jerrycanspirits.co.uk</li>
                   <li><strong className="text-gold-300">Bottle Map Records:</strong> Country, postcode district (UK orders), town, bottle count and order date, for as long as the map is published or until you ask for your order to be removed</li>
                   <li><strong className="text-gold-300">Newsletter Subscribers:</strong> Until you unsubscribe or 3 years of inactivity</li>
                   <li><strong className="text-gold-300">Contact Form Data:</strong> 2 years for customer service purposes</li>
