@@ -3,6 +3,7 @@ import { revalidatePath } from 'next/cache';
 import { getCloudflareContext } from '@opennextjs/cloudflare';
 import { captureServerError } from '@/lib/server-error-capture';
 import { countBottles } from '@/lib/product-formats';
+import { COUNTED_HANDLES } from '@/lib/batch-stock';
 import {
   verifyWebhookSignature,
   incrementBottlesSold,
@@ -223,6 +224,13 @@ async function handleProductUpdated(product: ShopifyProduct, kv: KVNamespace) {
     revalidatePath('/shop/[collection]', 'page');
     // The homepage grid shows every product's price (24 Sep 2026).
     revalidatePath('/');
+    // The bottle's stock count is shown on the bottle, on the gift-boxed
+    // bundle (whose stock is the bottle's) and on the offer landing page, so
+    // a change to either product refreshes all three.
+    if (COUNTED_HANDLES.includes(product.handle)) {
+      for (const h of COUNTED_HANDLES) revalidatePath(`/shop/product/${h}/`);
+      revalidatePath('/offer/');
+    }
   } catch (err) {
     console.error('[webhook] revalidate failed for product %s:', product.handle, err);
   }
