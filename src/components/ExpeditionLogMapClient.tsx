@@ -3,10 +3,11 @@
 import dynamic from 'next/dynamic'
 import { useEffect, useRef, useState } from 'react'
 import type { ExpeditionLogEntry } from '@/lib/d1'
+import type { BottleMapPoint } from '@/lib/bottle-map'
 
 const ExpeditionLogMap = dynamic(() => import('./ExpeditionLogMap'), { ssr: false })
 
-export default function ExpeditionLogMapClient({ entries, className }: { entries: ExpeditionLogEntry[], className?: string }) {
+export default function ExpeditionLogMapClient({ entries, points, className }: { entries: ExpeditionLogEntry[], points: BottleMapPoint[], className?: string }) {
   const containerRef = useRef<HTMLDivElement>(null)
   const [isVisible, setIsVisible] = useState(false)
   const [hasConsent, setHasConsent] = useState(false)
@@ -46,7 +47,7 @@ export default function ExpeditionLogMapClient({ entries, className }: { entries
   return (
     <div ref={containerRef} className={className}>
       {isVisible && hasConsent
-        ? <ExpeditionLogMap entries={entries} className="w-full h-full" />
+        ? <ExpeditionLogMap entries={entries} points={points} className="w-full h-full" />
         : <div className="w-full h-full rounded-xl bg-jerry-green-900/60 border border-gold-500/10 flex items-center justify-center">
             {isVisible && !hasConsent && (
               <p className="text-parchment-500 text-sm text-center px-4">

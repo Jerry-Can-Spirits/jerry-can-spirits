@@ -9,6 +9,9 @@
 export const SHOPIFY_WEBHOOK_TOPICS = {
   ORDERS_CREATE: 'orders/create',
   ORDERS_FULFILLED: 'orders/fulfilled',
+  // Not subscribed in Shopify admin yet; when it is, the handler removes the
+  // order's bottle_map row (src/lib/bottle-map-d1.ts).
+  ORDERS_CANCELLED: 'orders/cancelled',
   PRODUCTS_UPDATE: 'products/update',
 } as const;
 
@@ -25,8 +28,16 @@ export interface ShopifyOrder {
   customer?: {
     first_name?: string;
     last_name?: string;
+    // "a, b" on the REST payload, a list on GraphQL (see bottle-map.ts).
+    tags?: string | string[];
   };
   fulfillment_status: string | null;
+  // Read by the bottle map (src/lib/bottle-map.ts): test orders, cancelled or
+  // refunded orders and anything tagged for the trade are never mapped.
+  test?: boolean;
+  cancelled_at?: string | null;
+  financial_status?: string | null;
+  tags?: string | string[];
   // subtotal_price / currency drive the GA4 purchase value (see
   // ga4-measurement-protocol.ts). name is the customer-facing order name (#1234).
   subtotal_price?: string;
@@ -57,6 +68,10 @@ export interface ShopifyOrder {
   shipping_address?: {
     country_code: string;
     country: string;
+    // city and zip feed the bottle map; only the town and, in the UK, the
+    // outward code are ever stored.
+    city?: string | null;
+    zip?: string | null;
   } | null;
   billing_address?: {
     country_code: string;
