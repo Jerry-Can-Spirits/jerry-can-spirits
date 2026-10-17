@@ -137,6 +137,7 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
     ],
     productHandles: [
       'jerry-can-spirits-expedition-spiced-rum',
+      'expedition-spiced-rum-gift-boxed',
       'jerry-can-spirits-premium-gift-pack',
       'jerry-can-spirits-expedition-spiced-rum-presentation-box',
       'jerry-can-spirits-gift-card',
@@ -331,6 +332,7 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
     ],
     productHandles: [
       'jerry-can-spirits-expedition-spiced-rum',
+      'expedition-spiced-rum-gift-boxed',
       'jerry-can-spirits-premium-gift-pack',
       'jerry-can-spirits-expedition-spiced-rum-presentation-box',
       'stainless-steel-jigger',
@@ -376,6 +378,7 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
     relatedLinks: GIFT_CLUSTER_LINKS,
     productHandles: [
       'jerry-can-spirits-expedition-spiced-rum',
+      'expedition-spiced-rum-gift-boxed',
       'jerry-can-spirits-premium-gift-pack',
       'jerry-can-spirits-expedition-spiced-rum-presentation-box',
       'stainless-steel-jigger',
@@ -413,7 +416,7 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
       'Or the glassware the serves were designed in. A pair of the Crystal ICE hiballs is the Silver-medal serve, ready to pour. A pair of Club ICE tumblers is the Old Standard.',
       'Or something smaller: the jigger, the spirit stones, a single glass. The kit the serves are built around.',
     ],
-    productHandles: ['jerry-can-spirits-expedition-spiced-rum', ...UNDER_20_HANDLES, 'jerry-can-spirits-gift-card'],
+    productHandles: ['jerry-can-spirits-expedition-spiced-rum', 'expedition-spiced-rum-gift-boxed', ...UNDER_20_HANDLES, 'jerry-can-spirits-gift-card'],
   }),
   'gifts-under-100': giftBand(100, {
     metaTitle: 'Rum Gifts Under £100: The Gift Pack',
@@ -424,7 +427,7 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
       'Or build your own: the bottle, then the glasses and tools that suit the way they drink.',
       'Every bottle is numbered and traceable to its batch. Veteran-owned, no hidden investors, 5% of profits to forces charities.',
     ],
-    productHandles: ['jerry-can-spirits-premium-gift-pack', 'jerry-can-spirits-expedition-spiced-rum', ...UNDER_20_HANDLES, 'jerry-can-spirits-gift-card'],
+    productHandles: ['jerry-can-spirits-premium-gift-pack', 'jerry-can-spirits-expedition-spiced-rum', 'expedition-spiced-rum-gift-boxed', ...UNDER_20_HANDLES, 'jerry-can-spirits-gift-card'],
   }),
 
   'rum-glasses': {
@@ -632,6 +635,7 @@ const giftSetsConfig: CategoryConfig = {
   ],
   productHandles: [
     'jerry-can-spirits-expedition-spiced-rum',
+    'expedition-spiced-rum-gift-boxed',
     'jerry-can-spirits-expedition-spiced-rum-presentation-box',
     'jerry-can-spirits-premium-gift-pack',
   ],

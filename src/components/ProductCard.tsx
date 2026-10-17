@@ -15,6 +15,12 @@ export default function ProductCard({ product, priority = false }: { product: Sh
   const variants = product.variants ?? []
   const defaultVariant = variants.length === 1 && variants[0].title === 'Default Title' ? variants[0] : null
   const hasPriceRange = variants.length > 1 && new Set(variants.map((v) => v.price.amount)).size > 1
+  // A sale price on the one variant shows with the usual price struck through,
+  // as the product page and the cart drawer already do.
+  const compareAt =
+    defaultVariant?.compareAtPrice && parseFloat(defaultVariant.compareAtPrice.amount) > parseFloat(defaultVariant.price.amount)
+      ? defaultVariant.compareAtPrice
+      : null
   const productUrl = `/shop/product/${product.handle}/`
 
   return (
@@ -45,6 +51,11 @@ export default function ProductCard({ product, priority = false }: { product: Sh
           <p className="text-lg font-serif font-bold text-gold-400">
             {hasPriceRange ? 'from ' : ''}
             {formatPrice(product.priceRange.minVariantPrice.amount, product.priceRange.minVariantPrice.currencyCode)}
+            {compareAt && (
+              <span className="ml-2 text-sm font-normal text-parchment-400 line-through">
+                {formatPrice(compareAt.amount, compareAt.currencyCode)}
+              </span>
+            )}
           </p>
         </div>
       </Link>

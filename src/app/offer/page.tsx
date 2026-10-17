@@ -6,6 +6,7 @@ import { BOTTLE_HANDLE, GIFT_BOXED_HANDLE, remainingBottles } from '@/lib/batch-
 import { GUARANTEE_COPY, OFFER_HEADLINE, OFFER_LINE, PROOF_LINES } from '@/lib/october-offer'
 import { normaliseReviews, type SanityReviewDoc } from '@/lib/product-reviews'
 import { getTrustpilotScore } from '@/lib/trustpilot-score'
+import { formatPrice } from '@/lib/format-price'
 import { client } from '@/sanity/lib/client'
 import { productReviewsQuery } from '@/sanity/queries'
 import BatchCount from '@/components/BatchCount'
@@ -79,6 +80,18 @@ export default async function OfferPage() {
               <h1 className="text-4xl sm:text-5xl font-serif font-bold text-white">{OFFER_HEADLINE}</h1>
 
               <OfferLine />
+
+              {/* The live price, so the figure a customer sees here is the one
+                  Shopify charges. The usual price is struck through while the
+                  variant carries a compare-at price. */}
+              <p className="text-3xl font-serif font-bold text-gold-400">
+                {formatPrice(variant.price.amount, variant.price.currencyCode)}
+                {variant.compareAtPrice && parseFloat(variant.compareAtPrice.amount) > parseFloat(variant.price.amount) && (
+                  <span className="ml-3 text-lg font-normal text-parchment-400 line-through">
+                    {formatPrice(variant.compareAtPrice.amount, variant.compareAtPrice.currencyCode)}
+                  </span>
+                )}
+              </p>
 
               <BatchCount count={remainingBottles(bottle)} />
 

@@ -17,6 +17,8 @@ import SectionHeading from '@/components/SectionHeading'
 import HouseSpiritCard from '@/components/HouseSpiritCard'
 import { displayProductTitle } from '@/lib/product-title'
 import { isGiftCardProductType } from '@/lib/gift-card'
+import { GIFT_BOXED_HANDLE } from '@/lib/batch-stock'
+import { OFFER_HEADLINE, offerLive } from '@/lib/october-offer'
 
 // ISR — pure Shopify catalogue data (no per-request state), so these SEO
 // collection pages edge-cache and revalidate hourly instead of a live Shopify
@@ -246,6 +248,16 @@ export default async function CollectionPage({
                 {para}
               </p>
             ))}
+            {/* The October offer, on every page that lists the gift-boxed
+                bottle, while it runs. The page revalidates hourly, so the line
+                goes within the hour of the offer ending. */}
+            {category?.productHandles?.includes(GIFT_BOXED_HANDLE) && offerLive(Date.now()) && (
+              <p className="text-lg leading-relaxed">
+                <Link href="/offer/" className="text-gold-300 hover:text-gold-200 underline underline-offset-2">
+                  {OFFER_HEADLINE}
+                </Link>
+              </p>
+            )}
           </div>
         )}
 
