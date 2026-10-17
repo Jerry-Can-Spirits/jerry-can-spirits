@@ -11,6 +11,7 @@ import { getCloudflareContext } from '@opennextjs/cloudflare'
 import { getRating } from '@/lib/ratings-cache'
 import { RatingRow } from '@/components/RatingRow'
 import { TRUSTPILOT_LOGO } from '@/lib/trustpilot-assets'
+import { getTrustpilotScore } from '@/lib/trustpilot-score'
 
 const CF_IMG = 'https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ'
 
@@ -41,7 +42,7 @@ export default async function ReviewsPage() {
   const kv = env.SITE_OPS as KVNamespace
   const [google, trustpilot] = await Promise.all([
     getRating(kv, 'google'),
-    getRating(kv, 'trustpilot'),
+    getTrustpilotScore(),
   ])
 
   return (
@@ -121,20 +122,7 @@ export default async function ReviewsPage() {
                 needed marketing consent, and the result was two code paths
                 showing the same hourly fact to different halves of the
                 audience. One rating, everyone sees it, no script. */}
-            {trustpilot ? (
-              <RatingRow rating={trustpilot.rating} count={trustpilot.count} platform="trustpilot" />
-            ) : (
-              <p className="text-center text-sm">
-                <a
-                  href="https://uk.trustpilot.com/review/jerrycanspirits.co.uk"
-                  target="_blank"
-                  rel="nofollow noopener noreferrer"
-                  className="text-gold-300 hover:text-gold-400 transition-colors underline"
-                >
-                  Read our reviews on Trustpilot
-                </a>
-              </p>
-            )}
+            <RatingRow rating={trustpilot.rating} count={trustpilot.count} platform="trustpilot" />
           </div>
         </ScrollReveal>
         <ScrollReveal delay={1}>
