@@ -9,7 +9,7 @@
  */
 import { describe, expect, it } from 'vitest'
 import { DELIVERY_PROMISE, DELIVERY_PROMISE_SENTENCE, DELIVERY_WINDOW_LABEL, DISPATCH_CUTOFF_LABEL } from '@/lib/delivery'
-import { BOTTLES_PER_UNIT, RUM_FORMATS, countBottles, formatsForHandle } from '@/lib/product-formats'
+import { BOTTLES_PER_UNIT, BUNDLE_FORMATS, RUM_FORMATS, countBottles, formatsForHandle } from '@/lib/product-formats'
 
 describe('delivery promise', () => {
   it('reads order by 3pm, delivered in 1 to 2 working days', () => {
@@ -33,13 +33,14 @@ describe('delivery promise', () => {
 })
 
 describe('rum formats', () => {
-  it('lists bottle, six-pack and gift pack in that order', () => {
+  it('lists bottle, gift boxed, six-pack and gift pack in that order', () => {
     expect(RUM_FORMATS.map((f) => f.handle)).toEqual([
       'jerry-can-spirits-expedition-spiced-rum',
+      'expedition-spiced-rum-gift-boxed',
       'jerry-can-spirits-expedition-pack-spiced-rum-6-bottles',
       'jerry-can-spirits-premium-gift-pack',
     ])
-    expect(RUM_FORMATS.map((f) => f.label)).toEqual(['Bottle', 'Six bottles', 'Gift pack'])
+    expect(RUM_FORMATS.map((f) => f.label)).toEqual(['Bottle', 'Gift boxed', 'Six bottles', 'Gift pack'])
   })
 
   it('shows the family on every member page and nothing elsewhere', () => {
@@ -89,8 +90,19 @@ describe('countBottles', () => {
       15224531845497: 'jerry-can-spirits-premium-gift-pack',
     }
     for (const format of RUM_FORMATS) {
+      // A fixed bundle never appears as an order line: its components do.
+      if (BUNDLE_FORMATS[format.handle]) {
+        expect(countBottles(BUNDLE_FORMATS[format.handle].map((id) => li(id))), format.handle).toBe(1)
+        continue
+      }
       const id = Number(Object.keys(handleById).find((k) => handleById[Number(k)] === format.handle))
       expect(BOTTLES_PER_UNIT[id], format.handle).toBeGreaterThan(0)
     }
+  })
+
+  it('counts a gift-boxed order once, through its bottle line', () => {
+    // An order for the bundle carries the bottle and the box as component lines.
+    expect(countBottles([li(15224526569849), li(15489763017081)])).toBe(1)
+    expect(BOTTLES_PER_UNIT[15828640039289]).toBeUndefined()
   })
 })
