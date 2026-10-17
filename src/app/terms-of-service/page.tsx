@@ -162,7 +162,7 @@ export default function TermsOfService() {
                   4.3 Content You Share With Us
                 </h3>
                 <p className="text-white mb-4">
-                  If you post to our social media accounts, tag or mention us, or submit an entry to the Expedition Log, our{' '}
+                  If you post to our social media accounts, or tag or mention us, our{' '}
                   <a href="/community-guidelines/" className="text-gold-300 hover:text-gold-200 underline">Community Guidelines</a>{' '}
                   apply. We may remove content that breaks them. We reshare your content only with your permission.
                 </p>
