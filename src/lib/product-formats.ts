@@ -84,7 +84,12 @@ export const BOTTLES_PER_SKU: Record<string, number> = {
   'JCSES7040-DP': 1, // jerry-can-spirits-expedition-spiced-rum
   'JCSES7040-DP-X6': 6, // jerry-can-spirits-expedition-pack-spiced-rum-6-bottles
   'RUM-SPICED-002': 1, // jerry-can-spirits-premium-gift-pack
-  // Zero, so absent: SKU-1109 presentation box, and the barware.
+  // The SKUs the same three products carried until July 2026. Orders in a
+  // Shopify export keep the SKU as sold, so these outnumber the current ones.
+  'RUM-SPICED-001': 1, // the bottle
+  'RUM-SPICED-003': 6, // the six-bottle pack
+  'JCS-GIFTPACK-SPICED': 1, // the premium gift pack
+  // Zero, so absent: SKU-1109 and JCS-EXP-BOX-01 presentation box, and the barware.
 }
 
 /**
