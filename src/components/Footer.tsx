@@ -119,6 +119,7 @@ export default function Footer() {
       { name: 'Cookie Policy', href: '/cookie-policy/' },
       { name: 'Cookie Preferences', href: '/cookie-preferences/' },
       { name: 'Terms of Service', href: '/terms-of-service/' },
+      { name: 'Community Guidelines', href: '/community-guidelines/' },
       { name: 'Shipping & Returns', href: '/shipping-returns/' },
       { name: 'Accessibility', href: '/accessibility/' },
       { name: 'Security Policy', href: '/security-policy/' },

@@ -212,6 +212,9 @@ export default function ExpeditionLogForm({ batchId }: Props) {
           By submitting, your name and location will appear publicly on the Expedition Log.{' '}
           <Link href="/privacy-policy/" className="underline hover:text-parchment-400 transition-colors">
             Privacy policy.
+          </Link>{' '}
+          <Link href="/community-guidelines/" className="underline hover:text-parchment-400 transition-colors">
+            Community guidelines.
           </Link>
         </p>
         {status === 'error' && (

@@ -38,7 +38,7 @@ export default async function ExpeditionLogPage() {
           <SectionHeading
             as="h1"
             eyebrow="The Expedition Log"
-            intro="A record of the people who carried the first bottles. Opt-in — each entry is a choice."
+            intro="A record of the people who carried the first bottles. Opt-in. Each entry is a choice."
           >
             The Expedition Log
           </SectionHeading>

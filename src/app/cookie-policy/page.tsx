@@ -39,7 +39,7 @@ export const metadata: Metadata = {
 }
 
 export default function CookiePolicy() {
-  const lastUpdated = '2 April 2026'
+  const lastUpdated = '17 October 2026'
 
   return (
     <>
@@ -176,6 +176,9 @@ export default function CookiePolicy() {
                          className="text-gold-300 hover:text-gold-200 underline">
                         View Meta's Privacy Policy
                       </a>
+                    </p>
+                    <p className="text-white mt-2">
+                      When you accept marketing cookies we also set a first-party cookie, jcs_eid, holding a random identifier. We send it to Meta only in hashed form, so that Meta can match the visits it records in your browser with the same visits our server reports. It expires after one year, and we delete it if you withdraw consent.
                     </p>
                   </div>
 

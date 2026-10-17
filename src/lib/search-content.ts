@@ -54,6 +54,7 @@ export const STATIC_SEARCH_PAGES: SearchResult[] = [
   // Legal
   { type: 'page', title: 'Privacy Policy', description: 'How we protect and handle your personal data', url: '/privacy-policy/', category: 'Legal', keywords: 'GDPR data personal information protection' },
   { type: 'page', title: 'Terms of Service', description: 'Terms and conditions for using our website and services', url: '/terms-of-service/', category: 'Legal', keywords: 'terms conditions agreement legal' },
+  { type: 'page', title: 'Community Guidelines', description: 'These guidelines cover what you share with us.', url: '/community-guidelines/', category: 'Legal', keywords: 'community guidelines social media rules posts comments moderation report' },
   { type: 'page', title: 'Cookie Policy', description: 'How we use cookies on our website', url: '/cookie-policy/', category: 'Legal', keywords: 'cookies tracking consent preferences' },
   { type: 'page', title: 'Shipping & Returns', description: 'Delivery information and returns policy', url: '/shipping-returns/', category: 'Legal', keywords: 'delivery postage refund exchange send' },
   { type: 'page', title: 'Security Policy', description: 'How we keep your information secure', url: '/security-policy/', category: 'Legal', keywords: 'security safe protection' },
