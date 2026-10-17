@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { formatPrice } from '@/lib/format-price'
 import type { ProductFormat } from '@/lib/product-formats'
+import FormatPreselect from '@/components/FormatPreselect'
 
 export interface ProductFormatOption extends ProductFormat {
   price: string
@@ -42,6 +43,7 @@ export default function ProductFormats({ options, currentHandle }: { options: Pr
               ) : (
                 <Link
                   href={`/shop/product/${o.handle}/`}
+                  data-format={o.handle}
                   className="block h-full rounded-lg border border-gold-500/30 hover:border-gold-400 bg-jerry-green-900/40 px-3 py-2 transition-colors"
                 >
                   {inner}
@@ -51,6 +53,7 @@ export default function ProductFormats({ options, currentHandle }: { options: Pr
           )
         })}
       </ul>
+      <FormatPreselect handles={options.filter((o) => o.handle !== currentHandle).map((o) => o.handle)} />
     </div>
   )
 }

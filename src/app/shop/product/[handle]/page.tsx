@@ -35,6 +35,8 @@ import { getCloudflareContext } from '@opennextjs/cloudflare'
 import { getRating } from '@/lib/ratings-cache'
 import RecognitionRow from '@/components/RecognitionRow'
 import { formatsForHandle } from '@/lib/product-formats'
+import { BOTTLE_HANDLE, COUNTED_HANDLES, remainingBottles } from '@/lib/batch-stock'
+import BatchCount from '@/components/BatchCount'
 import { client } from '@/sanity/lib/client'
 import { productByHandleQuery, productReviewsQuery } from '@/sanity/queries'
 import { OG_IMAGE } from '@/lib/og'
@@ -432,6 +434,14 @@ export default async function ProductPage({
     })
   }
 
+  // Bottles of Batch 001 left, on the bottle and on the gift-boxed bundle whose
+  // stock is the bottle's. Non-critical: a failed bottle fetch hides the line.
+  let remaining: number | undefined
+  if (COUNTED_HANDLES.includes(handle)) {
+    const bottle = handle === BOTTLE_HANDLE ? product : await getProduct(BOTTLE_HANDLE).catch(() => null)
+    remaining = remainingBottles(bottle)
+  }
+
   // Detect if this is a mixed bundle (gift pack with barware) - no unit pricing for bundles
   const isBundle = handle.includes('gift') || product.title.toLowerCase().includes('gift')
 
@@ -630,6 +640,7 @@ export default async function ProductPage({
                     ({unitPrice})
                   </p>
                 )}
+                <BatchCount count={remaining} />
                 {/* Wayfinding anchor to the reviews further down — deliberately
                     NO score, count, or stars. The only rating data is a curated
                     set of Trustpilot excerpts (lib/product-reviews.ts) with no
