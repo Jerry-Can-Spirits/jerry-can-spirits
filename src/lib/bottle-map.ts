@@ -59,10 +59,19 @@ export function outwardCode(zip: string | null | undefined): string | null {
 const SMALL_WORDS = new Set(['upon', 'on', 'under', 'in', 'by', 'the', 'le', 'de', 'la', 'cum', 'and', 'of'])
 const TOWN_MAX = 60
 
-/** The shipping city as a label: trimmed, title-cased, or null when empty. */
+// A customer sometimes types their postcode into the city field ("Sa12 6Dt").
+// A full postcode is never stored or shown, so such a town is dropped.
+const UK_POSTCODE = /\b[A-Z]{1,2}\d[A-Z\d]?\s*\d[A-Z]{2}\b/i
+
+/** True when the text carries a full UK postcode, or is numbers rather than a name. */
+export function looksLikePostcode(text: string): boolean {
+  return UK_POSTCODE.test(text) || !/\p{L}{3}/u.test(text)
+}
+
+/** The shipping city as a label: trimmed, title-cased, or null when empty or a postcode. */
 export function titleCaseTown(city: string | null | undefined): string | null {
   const trimmed = city?.trim().replace(/\s+/g, ' ') ?? ''
-  if (!trimmed) return null
+  if (!trimmed || looksLikePostcode(trimmed)) return null
   const cased = trimmed
     .toLowerCase()
     .replace(/\p{L}[\p{L}']*/gu, (word, offset: number) =>
@@ -199,9 +208,11 @@ interface Bucket {
 
 /** "FY1, Blackpool: 3 bottles", "Brussels, Belgium: 1 bottle", "Belgium: 2 bottles". Dan's format, 17 Oct 2026. */
 export function bottleDotLabel(point: Pick<BottleMapPoint, 'outward_code' | 'town' | 'country' | 'bottles'>): string {
+  // Guarded again at read time, so a row written before the check is still safe.
+  const town = point.town && !looksLikePostcode(point.town) ? point.town : null
   const place = point.outward_code
-    ? [point.outward_code, point.town].filter(Boolean).join(', ')
-    : [point.town, countryName(point.country)].filter(Boolean).join(', ')
+    ? [point.outward_code, town].filter(Boolean).join(', ')
+    : [town, countryName(point.country)].filter(Boolean).join(', ')
   return `${place}: ${point.bottles} ${point.bottles === 1 ? 'bottle' : 'bottles'}`
 }
 

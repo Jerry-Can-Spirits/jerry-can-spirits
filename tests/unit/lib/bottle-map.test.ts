@@ -94,6 +94,15 @@ describe('titleCaseTown and townKey', () => {
     expect(titleCaseTown(null)).toBeNull()
   })
 
+  it('is null for a postcode or a number typed as the town', () => {
+    expect(titleCaseTown('Sa12 6Dt')).toBeNull()
+    expect(titleCaseTown('Port Talbot SA12 6DT')).toBeNull()
+    expect(titleCaseTown('SW1A1AA')).toBeNull()
+    expect(titleCaseTown('123')).toBeNull()
+    expect(titleCaseTown('Port Talbot')).toBe('Port Talbot')
+    expect(titleCaseTown('Bo\'ness')).toBe('Bo\'ness')
+  })
+
   it('looks towns up without case or accents', () => {
     expect(townKey('Liège')).toBe('liege')
     expect(townKey('  BRUSSELS ')).toBe('brussels')
@@ -265,6 +274,8 @@ describe('copy', () => {
     expect(bottleDotLabel({ outward_code: 'FY1', town: 'Blackpool', country: 'GB', bottles: 3 })).toBe('FY1, Blackpool: 3 bottles')
     expect(bottleDotLabel({ outward_code: 'FY4', town: 'Blackpool', country: 'GB', bottles: 1 })).toBe('FY4, Blackpool: 1 bottle')
     expect(bottleDotLabel({ outward_code: 'FY4', town: null, country: 'GB', bottles: 2 })).toBe('FY4: 2 bottles')
+    // A postcode typed into the city field never reaches the label.
+    expect(bottleDotLabel({ outward_code: 'SA12', town: 'Sa12 6Dt', country: 'GB', bottles: 1 })).toBe('SA12: 1 bottle')
     expect(bottleDotLabel({ outward_code: null, town: 'Brussels', country: 'BE', bottles: 1 })).toBe('Brussels, Belgium: 1 bottle')
     expect(bottleDotLabel({ outward_code: null, town: null, country: 'BE', bottles: 2 })).toBe('Belgium: 2 bottles')
     expect(countryName('US')).toBe('United States')
