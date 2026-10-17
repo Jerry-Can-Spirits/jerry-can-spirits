@@ -40,7 +40,7 @@ export const metadata: Metadata = {
 }
 
 export default function TermsOfService() {
-  const lastUpdated = '8 October 2026'
+  const lastUpdated = '17 October 2026'
 
   return (
     <>
@@ -156,6 +156,15 @@ export default function TermsOfService() {
                 </h3>
                 <p className="text-white mb-4">
                   If you create an account, you are responsible for maintaining the confidentiality of your login credentials and for all activities that occur under your account.
+                </p>
+
+                <h3 className="text-xl font-serif font-semibold text-white mt-6 mb-3">
+                  4.3 Content You Share With Us
+                </h3>
+                <p className="text-white mb-4">
+                  If you post to our social media accounts, tag or mention us, or submit an entry to the Expedition Log, our{' '}
+                  <a href="/community-guidelines/" className="text-gold-300 hover:text-gold-200 underline">Community Guidelines</a>{' '}
+                  apply. We may remove content that breaks them. We reshare your content only with your permission.
                 </p>
               </section>
 
