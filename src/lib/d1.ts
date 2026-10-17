@@ -246,48 +246,6 @@ export async function getCharityContributions(
   return result.results;
 }
 
-// ── Expedition Log Queries ────────────────────────────────────────────
-
-export interface ExpeditionLogEntry {
-  id: string;
-  batch_id: string;
-  name: string;
-  location: string | null;
-  location_lat: number | null;
-  location_lng: number | null;
-  bottle_type: string | null;
-  bottle_number: number | null;
-  created_at: string;
-}
-
-export async function getExpeditionLogEntries(db: D1Database): Promise<ExpeditionLogEntry[]> {
-  const result = await db
-    .prepare(
-      `SELECT id, batch_id, name, location, location_lat, location_lng, bottle_type, bottle_number, created_at
-       FROM expedition_log
-       WHERE removed_at IS NULL
-       ORDER BY created_at DESC
-       LIMIT 500`,
-    )
-    .all<ExpeditionLogEntry>();
-  return result.results;
-}
-
-export async function isBottleLogged(
-  db: D1Database,
-  batchId: string,
-  bottleType: string,
-  bottleNumber: number,
-): Promise<boolean> {
-  const result = await db
-    .prepare(
-      'SELECT id FROM expedition_log WHERE batch_id = ? AND bottle_type = ? AND bottle_number = ? AND removed_at IS NULL LIMIT 1',
-    )
-    .bind(batchId, bottleType, bottleNumber)
-    .first();
-  return result !== null;
-}
-
 // ── Trade Account Queries ─────────────────────────────────────────────
 // getTradeAccountByPin was removed 2026-07-18 (audit finding #9): it did a
 // plaintext-PIN equality lookup (SELECT ... WHERE pin = ?) that bypassed the
