@@ -75,3 +75,30 @@ export const BUNDLE_FORMATS: Record<string, number[]> = {
 export function countBottles(lineItems: Array<{ product_id: number; quantity: number }>): number {
   return lineItems.reduce((sum, li) => sum + (BOTTLES_PER_UNIT[li.product_id] ?? 0) * li.quantity, 0)
 }
+
+// The same count keyed by SKU, for Shopify's orders export, which carries
+// SKUs and no product ids (scripts/backfill-bottle-map.ts --csv). The webhook
+// keeps to product ids above: a SKU has already been renamed once, and a
+// renamed SKU here would silently stop counting.
+export const BOTTLES_PER_SKU: Record<string, number> = {
+  'JCSES7040-DP': 1, // jerry-can-spirits-expedition-spiced-rum
+  'JCSES7040-DP-X6': 6, // jerry-can-spirits-expedition-pack-spiced-rum-6-bottles
+  'RUM-SPICED-002': 1, // jerry-can-spirits-premium-gift-pack
+  // Zero, so absent: SKU-1109 presentation box, and the barware.
+}
+
+/**
+ * The gift-boxed bundle's own SKU. In an export its line may sit beside the
+ * bottle and box component lines or stand alone; either way the order holds
+ * one bottle per unit.
+ */
+export const GIFT_BOXED_SKU = 'JCSES-GIFTSET'
+
+/** Bottles of rum in an export's line items, counted by SKU. */
+export function countBottlesBySku(lineItems: Array<{ sku?: string | null; quantity: number }>): number {
+  const hasBottleLine = lineItems.some((li) => li.sku === 'JCSES7040-DP')
+  return lineItems.reduce((sum, li) => {
+    if (li.sku === GIFT_BOXED_SKU) return hasBottleLine ? sum : sum + li.quantity
+    return sum + (BOTTLES_PER_SKU[li.sku ?? ''] ?? 0) * li.quantity
+  }, 0)
+}

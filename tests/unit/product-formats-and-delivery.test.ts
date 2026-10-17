@@ -9,7 +9,16 @@
  */
 import { describe, expect, it } from 'vitest'
 import { DELIVERY_PROMISE, DELIVERY_PROMISE_SENTENCE, DELIVERY_WINDOW_LABEL, DISPATCH_CUTOFF_LABEL } from '@/lib/delivery'
-import { BOTTLES_PER_UNIT, BUNDLE_FORMATS, RUM_FORMATS, countBottles, formatsForHandle } from '@/lib/product-formats'
+import {
+  BOTTLES_PER_SKU,
+  BOTTLES_PER_UNIT,
+  BUNDLE_FORMATS,
+  GIFT_BOXED_SKU,
+  RUM_FORMATS,
+  countBottles,
+  countBottlesBySku,
+  formatsForHandle,
+} from '@/lib/product-formats'
 
 describe('delivery promise', () => {
   it('reads order by 3pm, delivered in 1 to 2 working days', () => {
@@ -104,5 +113,41 @@ describe('countBottles', () => {
     // An order for the bundle carries the bottle and the box as component lines.
     expect(countBottles([li(15224526569849), li(15489763017081)])).toBe(1)
     expect(BOTTLES_PER_UNIT[15828640039289]).toBeUndefined()
+  })
+})
+
+// The orders export carries SKUs and no product ids, so the CSV back-fill
+// counts by SKU. The two tables must agree, or the back-fill and the webhook
+// would count the same order differently.
+describe('countBottlesBySku', () => {
+  const li = (sku: string | null, quantity = 1) => ({ sku, quantity })
+  const skuById: Record<number, string> = {
+    15224526569849: 'JCSES7040-DP',
+    15320931172729: 'JCSES7040-DP-X6',
+    15224531845497: 'RUM-SPICED-002',
+  }
+
+  it('has a SKU entry, with the same count, for every product id', () => {
+    for (const [id, bottles] of Object.entries(BOTTLES_PER_UNIT)) {
+      const sku = skuById[Number(id)]
+      expect(sku, id).toBeDefined()
+      expect(BOTTLES_PER_SKU[sku], sku).toBe(bottles)
+    }
+    expect(Object.keys(BOTTLES_PER_SKU).sort()).toEqual(Object.values(skuById).sort())
+  })
+
+  it('counts the formats by SKU and quantity, and nothing for the box or barware', () => {
+    expect(countBottlesBySku([li('JCSES7040-DP-X6')])).toBe(6)
+    expect(countBottlesBySku([li('JCSES7040-DP', 2), li('RUM-SPICED-002')])).toBe(3)
+    expect(countBottlesBySku([li('SKU-1109'), li('JCS-FIXTURE-BLADE', 3), li(null), li('')])).toBe(0)
+    expect(countBottlesBySku([])).toBe(0)
+  })
+
+  it('counts a gift-boxed order once, whether the export shows its components or the bundle alone', () => {
+    expect(GIFT_BOXED_SKU).toBe('JCSES-GIFTSET')
+    expect(countBottlesBySku([li(GIFT_BOXED_SKU), li('JCSES7040-DP'), li('SKU-1109')])).toBe(1)
+    expect(countBottlesBySku([li(GIFT_BOXED_SKU)])).toBe(1)
+    expect(countBottlesBySku([li(GIFT_BOXED_SKU, 2)])).toBe(2)
+    expect(BOTTLES_PER_SKU[GIFT_BOXED_SKU]).toBeUndefined()
   })
 })

@@ -172,6 +172,15 @@ describe('bottleMapRowFromOrder', () => {
     expect(bottleMapRowFromOrder(order({ line_items: [li(BAR_BLADE), li(BOX)] }), false).skip).toBe('no_bottles')
   })
 
+  it('takes the bottle count from the caller when the lines carry no product ids', () => {
+    // The CSV back-fill counts by SKU; every other rule still applies.
+    const noIds = order({ line_items: [{ title: '', product_id: 0, quantity: 1, sku: 'JCSES7040-DP-X6' }] })
+    expect(bottleMapRowFromOrder(noIds, false, 6).row?.bottles).toBe(6)
+    expect(bottleMapRowFromOrder(noIds, false, 0).skip).toBe('no_bottles')
+    expect(bottleMapRowFromOrder(noIds, false).skip).toBe('no_bottles')
+    expect(bottleMapRowFromOrder({ ...noIds, cancelled_at: '2026-06-02T10:00:00Z' }, false, 6).skip).toBe('cancelled')
+  })
+
   it('keeps the town null when the city is blank', () => {
     const d = bottleMapRowFromOrder(order({ shipping_address: { country_code: 'GB', country: '', city: ' ', zip: 'FY1 1AA' } }), false)
     expect(d.row?.town).toBeNull()
