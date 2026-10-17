@@ -120,9 +120,15 @@ const EXCLUDED_FINANCIAL_STATUS = new Set(['refunded', 'voided'])
 
 /**
  * The row an order contributes, or why it contributes nothing. Pure: the
- * caller decides whether the order is a trade order (that needs D1).
+ * caller decides whether the order is a trade order (that needs D1), and may
+ * supply the bottle count when the line items carry no product ids (the CSV
+ * back-fill counts by SKU).
  */
-export function bottleMapRowFromOrder(order: ShopifyOrder, isTrade: boolean): BottleMapDecision {
+export function bottleMapRowFromOrder(
+  order: ShopifyOrder,
+  isTrade: boolean,
+  bottles: number = countBottles(order.line_items),
+): BottleMapDecision {
   if (order.test) return { skip: 'test' }
   if (order.cancelled_at) return { skip: 'cancelled' }
   if (order.financial_status && EXCLUDED_FINANCIAL_STATUS.has(order.financial_status.toLowerCase())) {
@@ -136,7 +142,6 @@ export function bottleMapRowFromOrder(order: ShopifyOrder, isTrade: boolean): Bo
     outward_code = outwardCode(order.shipping_address?.zip)
     if (!outward_code) return { skip: 'no_outward_code' }
   }
-  const bottles = countBottles(order.line_items)
   if (bottles === 0) return { skip: 'no_bottles' }
   return {
     row: {

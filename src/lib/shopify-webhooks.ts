@@ -52,6 +52,9 @@ export interface ShopifyOrder {
     variant_id?: number;
     price?: string;
     name?: string;
+    // On the real payload and on an orders export; the bottle map's CSV
+    // back-fill counts by it (see product-formats.ts).
+    sku?: string | null;
     // Per-line tax after discounts. Trade order figures are ex VAT and derive
     // from these (see lib/trade-portal/orders.ts).
     tax_lines?: { price: string }[];

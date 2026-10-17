@@ -19,9 +19,20 @@
  *   # write the SQL to a file instead of executing it
  *   SHOPIFY_ADMIN_API_TOKEN=... npx tsx scripts/backfill-bottle-map.ts --sql-out=bottle-map.sql
  *
+ *   # from a Shopify admin orders export instead of the API: no token needed.
+ *   # Shopify admin → Orders → Export → Export: All orders → Export as: Plain
+ *   # CSV file; the file arrives by download or email. Dry run, then --write.
+ *   npx tsx scripts/backfill-bottle-map.ts --csv="C:\Users\dan\Downloads\orders_export_1.csv"
+ *   npx tsx scripts/backfill-bottle-map.ts --csv="C:\Users\dan\Downloads\orders_export_1.csv" --write
+ *
  * The token comes from the environment only (the Worker secret of the same
  * name; `node --env-file=.dev.vars --import tsx scripts/backfill-bottle-map.ts`
- * also works). Orders older than 60 days need the read_all_orders scope.
+ * also works). Orders older than 60 days need the read_all_orders scope, which
+ * the store's custom app cannot be granted, so the first back-fill and any
+ * full reconcile run from the export. --csv replaces the fetch only: --since,
+ * --write, --prune, --sql-out and the report are the same in both modes.
+ * Bottles are counted by SKU in CSV mode (BOTTLES_PER_SKU), by product id from
+ * the API. Delete the export after the run: it holds customer data.
  *
  * Trade exclusion mirrors attributeTradeOrder: order ids already recorded in
  * trade_orders, the _trade_account_id cart attribute, a discount code unique
@@ -32,12 +43,14 @@
  */
 
 import { spawnSync } from 'node:child_process'
-import { mkdtempSync, writeFileSync } from 'node:fs'
+import { mkdtempSync, readFileSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { bottleMapRowFromOrder, type BottleMapRow, type BottleMapSkip } from '../src/lib/bottle-map'
+import { countBottlesBySku } from '../src/lib/product-formats'
 import type { ShopifyOrder } from '../src/lib/shopify-webhooks'
 import { TRADE_ACCOUNT_ATTRIBUTE } from '../src/lib/trade-portal/orders'
+import { ordersFromShopifyExport } from './shopify-orders-csv'
 
 const SHOP_DOMAIN = 'zaeiaw-5z.myshopify.com'
 const API_VERSION = '2025-10'
@@ -53,6 +66,7 @@ const option = (name: string) => args.find((a) => a.startsWith(`--${name}=`))?.s
 const WRITE = flag('write')
 const PRUNE = flag('prune')
 const SQL_OUT = option('sql-out')
+const CSV = option('csv')
 const SINCE = option('since') ?? '2026-04-01'
 
 if (!/^\d{4}-\d{2}-\d{2}$/.test(SINCE)) {
@@ -65,8 +79,8 @@ if (PRUNE && !WRITE && !SQL_OUT) {
 }
 
 const token = process.env.SHOPIFY_ADMIN_API_TOKEN
-if (!token) {
-  console.error('SHOPIFY_ADMIN_API_TOKEN is not set')
+if (!token && !CSV) {
+  console.error('SHOPIFY_ADMIN_API_TOKEN is not set (or pass --csv=<orders export>)')
   process.exit(1)
 }
 
@@ -243,15 +257,26 @@ function pruneSql(keep: BottleMapRow[]): string {
 // ── Main ────────────────────────────────────────────────────────────
 
 async function main() {
-  console.log(`fetching orders since ${SINCE}...`)
-  const orders = await fetchOrders(token!)
-  console.log(`${orders.length} orders fetched`)
+  let orders: ShopifyOrder[]
+  let csvRows = 0
+  if (CSV) {
+    const parsed = ordersFromShopifyExport(readFileSync(CSV, 'utf8'))
+    csvRows = parsed.rows
+    orders = parsed.orders
+    console.log(`${CSV}: ${csvRows} rows, ${orders.length} orders`)
+  } else {
+    console.log(`fetching orders since ${SINCE}...`)
+    orders = (await fetchOrders(token!)).map(toWebhookOrder)
+    console.log(`${orders.length} orders fetched`)
+  }
 
   console.log('loading trade accounts from D1...')
   const lookup = loadTradeLookup()
 
   const rows: BottleMapRow[] = []
-  const skipped: Record<BottleMapSkip, number> = {
+  // The API query already applies --since; the export holds every order.
+  const skipped: Record<BottleMapSkip | 'before_since', number> = {
+    before_since: 0,
     test: 0,
     cancelled: 0,
     refunded: 0,
@@ -260,15 +285,27 @@ async function main() {
     no_outward_code: 0,
     no_bottles: 0,
   }
-  for (const o of orders) {
-    const order = toWebhookOrder(o)
-    const decision = bottleMapRowFromOrder(order, isTradeOrder(order, lookup))
+  for (const order of orders) {
+    if (order.created_at.slice(0, 10) < SINCE) {
+      skipped.before_since++
+      continue
+    }
+    const bottles = CSV ? countBottlesBySku(order.line_items) : undefined
+    const decision = bottleMapRowFromOrder(order, isTradeOrder(order, lookup), bottles)
     if (decision.skip) skipped[decision.skip]++
     else rows.push(decision.row)
   }
 
   console.log('\nskipped:')
   for (const [reason, n] of Object.entries(skipped)) console.log(`  ${reason.padEnd(16)} ${n}`)
+  if (CSV) {
+    const excluded = Object.values(skipped).reduce((a, b) => a + b, 0)
+    const reasons = Object.entries(skipped)
+      .filter(([, n]) => n > 0)
+      .map(([reason, n]) => `${reason} ${n}`)
+      .join(', ')
+    console.log(`\nSource: CSV ${CSV}, ${csvRows} rows, ${orders.length} orders, ${excluded} excluded${reasons ? ` (${reasons})` : ''}`)
+  }
 
   // UK rows by district; rows abroad by country, the map's own fallback.
   const byPlace = new Map<string, { bottles: number; orders: number; towns: Map<string, number> }>()
