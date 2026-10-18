@@ -19,7 +19,7 @@ import { syncTradeOrder } from '@/lib/trade-portal/orders';
 import { deleteBottleMapRow, recordBottleMapOrder } from '@/lib/bottle-map-d1';
 
 const KLAVIYO_API_BASE = 'https://a.klaviyo.com/api';
-const KLAVIYO_REVISION = '2024-10-15';
+const KLAVIYO_REVISION = '2026-10-15';
 
 async function fireKlaviyoEvent(
   klaviyoKey: string,

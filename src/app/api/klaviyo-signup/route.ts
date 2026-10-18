@@ -108,7 +108,7 @@ export async function POST(request: Request) {
       Authorization: `Klaviyo-API-Key ${KLAVIYO_PRIVATE_KEY}`,
       'Content-Type': 'application/json',
       Accept: 'application/json',
-      revision: '2024-10-15',
+      revision: '2026-10-15',
     }
 
     // Create or update profile in Klaviyo
