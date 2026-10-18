@@ -1,5 +1,5 @@
 /**
- * Guides, ingredients and equipment list their sources so the reader can
+ * Guides, ingredients, equipment and cocktails list their sources so the reader can
  * check what they say. The list must read the accessed date as the day it was
  * stored, wherever the server runs, and must vanish rather than render an
  * empty heading when there is nothing to list. The page tests render the real

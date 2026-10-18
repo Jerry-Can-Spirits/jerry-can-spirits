@@ -626,6 +626,13 @@ export default defineType({
       description: 'Similar or complementary cocktails to show alongside this one'
     }),
     defineField({
+      name: 'sources',
+      title: 'Sources',
+      type: 'array',
+      description: 'Every external source the page relies on for its history and brand claims (the recipe itself is covered by Recipe Source), shown after the FAQs and cited in the Recipe schema. Prefer primary sources; a secondary one says so in its note.',
+      of: [{type: 'source'}]
+    }),
+    defineField({
       name: 'recipeSource',
       title: 'Recipe Source',
       type: 'object',
