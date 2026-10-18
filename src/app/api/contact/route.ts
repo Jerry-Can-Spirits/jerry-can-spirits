@@ -133,7 +133,7 @@ async function sendKlaviyoNotification(
     Authorization: `Klaviyo-API-Key ${klaviyoKey}`,
     'Content-Type': 'application/json',
     Accept: 'application/json',
-    revision: '2024-10-15',
+    revision: '2026-10-15',
   }
 
   // Create/update the profile (the event auto-creates one too, but we own the
