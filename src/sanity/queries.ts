@@ -82,6 +82,7 @@ export const cocktailBySlugQuery = `*[_type == "cocktail" && slug.current == $sl
   slug,
   description,
   recipeSource,
+  sources[]{title, publisher, url, accessed, note},
   houseVariation,
   sourceCheckedAt,
   recipeCuisine,

@@ -22,6 +22,8 @@ import { OG_IMAGE_COCKTAIL } from '@/lib/og'
 import { ORG_REF, authorRefFor, imageWithCredit } from '@/lib/jsonLd'
 import { recipeCuisineField } from '@/lib/recipe-source'
 import FAQAccordion from '@/components/FAQAccordion'
+import Sources from '@/components/Sources'
+import { listableSources, sourceCitations, type Source } from '@/lib/sources'
 import ScrollRow from '@/components/ScrollRow'
 import BottleStrip from '@/components/BottleStrip'
 import HouseSpiritCard from '@/components/HouseSpiritCard'
@@ -110,6 +112,7 @@ interface SanityCocktail {
   videoUrl?: string
   videoUploadDate?: string
   faqs?: Array<{ question: string; answer: string }>
+  sources?: (Partial<Source> | null)[]
   relatedGuides?: RelatedGuide[]
   longDescription?: PortableTextBlock[]
   keywords?: string[]
@@ -274,8 +277,13 @@ export default async function CocktailPage({ params }: PageProps) {
     spiritFacets.find((f) => f.value === spiritFacetValue),
   ].filter((f): f is NonNullable<typeof f> => Boolean(f) && isSelfCanonical(f!))
 
+  // The page's sources for its history and brand claims; the recipe's own
+  // authority is recipeSource. Listed after the FAQs and cited in the schema.
+  const sources = listableSources(cocktail.sources)
+
   // Recipe Schema for SEO (Google Rich Snippets)
   const recipeSchema: Record<string, unknown> = {
+    ...(sources.length > 0 && { citation: sourceCitations(sources) }),
     "@context": "https://schema.org",
     "@type": "Recipe",
     "name": cocktail.name,
@@ -389,6 +397,7 @@ export default async function CocktailPage({ params }: PageProps) {
   )
   const hasMore = Boolean(
     (cocktail.faqs && cocktail.faqs.length > 0) ||
+      sources.length > 0 ||
       (cocktail.relatedCocktails && cocktail.relatedCocktails.length > 0) ||
       facetLinks.length > 0,
   )
@@ -598,6 +607,12 @@ export default async function CocktailPage({ params }: PageProps) {
             <div className="mt-6 sm:mt-8 bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-4 sm:p-6 md:p-8 border border-gold-500/20">
               <h2 className="text-2xl font-serif font-bold text-white mb-6">Frequently Asked Questions</h2>
               <FAQAccordion items={cocktail.faqs} />
+            </div>
+          )}
+
+          {sources.length > 0 && (
+            <div className="mt-6 sm:mt-8 bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-4 sm:p-6 md:p-8 border border-gold-500/20">
+              <Sources sources={sources} />
             </div>
           )}
 
