@@ -421,8 +421,9 @@ const nextConfig: NextConfig = {
       ]),
       // The shaking guide was merged into the shaken-or-stirred guide (8 Oct
       // 2026): the two competed and the shaking guide was crawled but not
-      // indexed. Its Sanity doc is kept; REDIRECTED_GUIDE_FILTER in
-      // src/sanity/queries.ts keeps it out of the sitemap and listings.
+      // indexed. Its Sanity doc was deleted and nothing on the site links to
+      // it (checked 19 Oct 2026); the redirect stays for the old URL's
+      // external links and Google's index.
       {
         source: '/guides/how-to-shake-cocktail/:path*',
         destination: '/guides/stirring-vs-shaking/',
