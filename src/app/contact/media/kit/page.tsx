@@ -94,7 +94,7 @@ export default function MediaKitPage() {
                   { name: 'Reliability', desc: 'We deliver consistently. Colleagues, customers, and partners can count on us.' },
                   { name: 'Authenticity', desc: 'No pretence, no marketing fluff. Two mates who care about making good spirits.' },
                   { name: 'Quality', desc: 'Function over form. Genuinely good, not just fancy-looking.' },
-                  { name: 'Community', desc: '5% of profits to armed forces charities. This isn\'t marketing — it\'s who we are.' },
+                  { name: 'Community', desc: '5% of profits to Combat Stress. This isn\'t marketing — it\'s who we are.' },
                 ].map((v) => (
                   <div key={v.name} className="border border-jerry-green-200 rounded-lg p-3">
                     <h3 className="text-sm font-bold text-jerry-green-900">{v.name}</h3>

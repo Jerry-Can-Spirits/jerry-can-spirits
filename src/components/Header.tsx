@@ -146,7 +146,7 @@ export default function Header() {
         { name: 'Check Your Bottle', href: '/batch/', description: 'Look up your batch' },
         { name: 'Our Story', href: '/about/story/', description: 'Brand heritage & mission' },
         { name: 'Meet the Team', href: '/about/team/', description: 'The veterans behind the brand' },
-        { name: 'Where the 5% Goes', href: '/giving/', description: 'Military charity contributions' },
+        { name: 'Where the 5% Goes', href: '/giving/', description: 'Combat Stress contributions' },
         { name: 'The Expedition Log', href: '/expedition-log/', description: 'Where the bottles end up' },
         { name: 'FAQ', href: '/faq/', description: 'Common questions answered' },
       ]

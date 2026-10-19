@@ -411,7 +411,7 @@ export default function Ethos() {
                 </h3>
               </div>
               <p className="text-parchment-200 leading-relaxed max-w-3xl mx-auto text-center">
-                We signed the Armed Forces Covenant because supporting veterans isn&apos;t a marketing angle for us - it&apos;s personal. 5% of profits goes to forces charities. We guarantee job interviews for veterans. It&apos;s baked into how we run the company, not bolted on afterwards.
+                We signed the Armed Forces Covenant because supporting veterans isn&apos;t a marketing angle for us - it&apos;s personal. 5% of our profits go to Combat Stress, the veterans&apos; mental health charity. We guarantee job interviews for veterans. It&apos;s baked into how we run the company, not bolted on afterwards.
               </p>
               <p className="text-center mt-6">
                 <Link href="/armed-forces-covenant/" className="text-gold-300 hover:text-gold-200 underline underline-offset-2 font-semibold">

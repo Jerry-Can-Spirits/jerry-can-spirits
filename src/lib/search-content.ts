@@ -21,7 +21,7 @@ export const STATIC_SEARCH_PAGES: SearchResult[] = [
   { type: 'page', title: 'Reviews', description: 'Customer reviews and testimonials for Expedition Spiced Rum', url: '/reviews/', category: 'About', keywords: 'testimonials ratings customer feedback opinions stars' },
   { type: 'page', title: 'Careers', description: 'Job opportunities and careers at Jerry Can Spirits', url: '/careers/', category: 'About', keywords: 'jobs work employment vacancy hiring join apply' },
   { type: 'page', title: 'Batch Tracker', description: 'Track your bottle provenance with our digital product passport', url: '/batch/', category: 'About', keywords: 'QR code batch number bottle tracking scan provenance digital passport' },
-  { type: 'page', title: 'Where the 5% Goes', description: 'How Jerry Can Spirits supports military charities through every bottle sold', url: '/giving/', category: 'About', keywords: 'charity donation military veterans armed forces 5 percent profit giving back support' },
+  { type: 'page', title: 'Where the 5% Goes', description: 'How Jerry Can Spirits supports Combat Stress through every bottle sold', url: '/giving/', category: 'About', keywords: 'charity donation combat stress military veterans armed forces 5 percent profit giving back support' },
   { type: 'page', title: 'The Expedition Log', description: 'Where every bottle has gone, by postcode district', url: '/expedition-log/', category: 'About', keywords: 'map where bottles went delivered postcode district batch expedition log record' },
   // Resources
   { type: 'page', title: 'Field Manual', description: 'Cocktail recipes, bar equipment guides and ingredient information', url: '/field-manual/', category: 'Resources', keywords: 'bartending mixing drinks guide how to spirits' },

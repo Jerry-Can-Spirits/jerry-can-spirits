@@ -120,7 +120,7 @@ export default function TradePage() {
               </div>,
               <div key="charities" className="h-full">
                 <h3 className="text-gold-400 text-sm font-semibold uppercase tracking-widest mb-3">
-                  5% to military charities
+                  5% to Combat Stress
                 </h3>
                 <p className="text-parchment-300 text-sm leading-relaxed">
                   Every bottle sold contributes to veterans&apos; causes. Something your customers can feel good about ordering, and something worth putting on a menu card.

@@ -8,6 +8,7 @@ import ScrollRow from '@/components/ScrollRow'
 import SectionHeading from '@/components/SectionHeading'
 import { baseOpenGraph } from '@/lib/og'
 import { safeJsonLd } from '@/lib/jsonLd'
+import { CHARITY_DESCRIPTION, CHARITY_LOGO, CHARITY_LOGO_ALT, CHARITY_NAME, CHARITY_STATEMENT_FULL, CHARITY_WEBSITE } from '@/lib/charity'
 import { ORG_REF } from '@/lib/jsonLd'
 
 export const metadata: Metadata = {
@@ -26,6 +27,15 @@ export const metadata: Metadata = {
 
 // Community partners - Grassroots sponsorships and community support
 const communityPartners = [
+  {
+    name: CHARITY_NAME,
+    location: "United Kingdom",
+    description: `${CHARITY_STATEMENT_FULL} ${CHARITY_DESCRIPTION}`,
+    website: CHARITY_WEBSITE,
+    speciality: "Our Charity Partner",
+    logo: CHARITY_LOGO.primaryLight,
+    logoAlt: CHARITY_LOGO_ALT,
+  },
   {
     name: "Worcester RFC Mixed Ability",
     location: "Worcester, United Kingdom",
@@ -174,7 +184,7 @@ export default function FriendsPage() {
             "@type": "ListItem",
             "position": partners.length + index + 1,
             "item": {
-              "@type": "SportsOrganization",
+              "@type": partner.name === CHARITY_NAME ? "NGO" : "SportsOrganization",
               "name": partner.name,
               "url": partner.website,
               "description": partner.description,
@@ -412,7 +422,7 @@ export default function FriendsPage() {
                             <div className="relative w-28 h-28 rounded-full overflow-hidden border-2 border-gold-500/30 bg-white shrink-0">
                               <Image
                                 src={partner.logo}
-                                alt={`${partner.name} logo`}
+                                alt={partner.logoAlt ?? `${partner.name} logo`}
                                 fill
                                 className="object-contain p-3"
                               />

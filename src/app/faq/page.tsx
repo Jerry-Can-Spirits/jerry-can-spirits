@@ -1,3 +1,4 @@
+import { CHARITY_STATEMENT_FULL } from '@/lib/charity'
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import StructuredData from '@/components/StructuredData'
@@ -94,7 +95,7 @@ const faqs = [
   // Company & Brand
   {
     question: "What is your connection to the Armed Forces?",
-    answer: "Jerry Can Spirits was founded by two Royal Corps of Signals veterans with over 17 years of combined service. We're proud supporters of the Armed Forces Covenant and donate 5% of profits to military charities.",
+    answer: "Jerry Can Spirits was founded by two Royal Corps of Signals veterans with over 17 years of combined service. We're proud supporters of the Armed Forces Covenant. 5% of our profits go to Combat Stress, a registered charity in England and Wales (206002) and Scotland (SC038828).",
     hasRichAnswer: true,
   },
   {
@@ -113,7 +114,7 @@ const RICH_ANSWERS: Record<string, ReactNode> = {
     <>Our rum is versatile and works beautifully in classic cocktails like Old Fashioned, Mai Tai, and Rum Punch. Check our <Link href="/field-manual/cocktails/" className="text-gold-300 hover:text-gold-400 underline">Field Manual</Link> for cocktail recipes.</>
   ),
   "What is your connection to the Armed Forces?": (
-    <>Jerry Can Spirits was <Link href="/about/team/" className="text-gold-300 hover:text-gold-400 underline">founded by two Royal Corps of Signals veterans</Link> with over 17 years of combined service. We&apos;re proud supporters of the <Link href="/armed-forces-covenant/" className="text-gold-300 hover:text-gold-400 underline">Armed Forces Covenant</Link> and donate 5% of profits to military charities.</>
+    <>Jerry Can Spirits was <Link href="/about/team/" className="text-gold-300 hover:text-gold-400 underline">founded by two Royal Corps of Signals veterans</Link> with over 17 years of combined service. We&apos;re proud supporters of the <Link href="/armed-forces-covenant/" className="text-gold-300 hover:text-gold-400 underline">Armed Forces Covenant</Link>. {CHARITY_STATEMENT_FULL}</>
   ),
   "Do you offer corporate gifts or bulk orders?": (
     <>Yes. Orders of twelve bottles or more are priced per bottle, delivered to one address and paid by invoice. See <Link href="/corporate-gifts/" className="text-gold-300 hover:text-gold-400 underline">corporate and regimental gifts</Link>.</>

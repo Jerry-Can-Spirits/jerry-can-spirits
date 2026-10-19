@@ -1,3 +1,5 @@
+import Link from 'next/link'
+import { CHARITY_STATEMENT_SHORT } from '@/lib/charity'
 import { DELIVERY_PROMISE } from '@/lib/delivery'
 import ChristmasCutoffLine from '@/components/ChristmasCutoffLine'
 
@@ -11,7 +13,7 @@ function tiles(showIwsc: boolean): string[] {
   return [
     'Veteran owned',
     DELIVERY_PROMISE,
-    showIwsc ? 'IWSC 2026 medals' : '5% of profits to forces charities',
+    showIwsc ? 'IWSC 2026 medals' : CHARITY_STATEMENT_SHORT,
     'Reply and a founder answers',
   ]
 }
@@ -21,7 +23,13 @@ export default function TrustStrip({ showIwsc }: { showIwsc: boolean }) {
     <ul className="grid grid-cols-2 sm:grid-cols-4 gap-3" aria-label="Why buy from us">
       {tiles(showIwsc).map((label) => (
         <li key={label} className="flex items-center rounded-lg border border-gold-500/15 bg-jerry-green-900/40 px-3 py-2.5 text-sm leading-snug text-parchment-200">
-          {label}
+          {label === CHARITY_STATEMENT_SHORT ? (
+            <Link href="/giving/" className="underline decoration-gold-500/40 underline-offset-2 hover:text-gold-300">
+              {label}
+            </Link>
+          ) : (
+            label
+          )}
         </li>
       ))}
       {/* December only, and only once the date is set in lib/delivery.ts. */}

@@ -132,7 +132,7 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
       "Most rum gifts are chosen by people who don't drink rum. You can tell. Generic bottle, generic packaging, forgotten a week later.",
       'Expedition Spiced Rum is a different kind of gift. A numbered bottle from a small British batch, Bronze at the IWSC 2026, with a Silver for the serve with Franklin and Sons cola. Real ingredients, every one of them.',
       'It is built for people who take their drink seriously. The kind of person who notices the difference between something made properly and something made to a price point.',
-      'Veteran-owned. No hidden investors. No shortcuts. 5% of profits goes to forces charities.',
+      'Veteran-owned. No hidden investors. No shortcuts. 5% of profits goes to Combat Stress.',
       'If you are looking for a rum gift that means something. This is it.',
     ],
     productHandles: [
@@ -146,12 +146,12 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
     seoBody: [
       'A rum gift lands differently when it is chosen properly. Not a novelty bottle with a generic label. Not something grabbed from the supermarket shelf because it looked like it might be premium. Expedition Spiced Rum is a gift that says something about the person who gave it.',
       'Seven real spices, two natural sweeteners, and bourbon oak. No artificial flavourings, macerated by our British partner distillery. Every bottle is numbered and traceable to its batch. The IWSC gave the rum Bronze and the cola serve Silver in 2026. Judged, not claimed.',
-      'It is veteran-owned. Bootstrapped. No hidden investors, no shortcuts. 5% of profits goes to forces charities. This is the kind of brand people feel good about buying from. And when the person receiving it looks it up, they will understand why you chose it.',
+      'It is veteran-owned. Bootstrapped. No hidden investors, no shortcuts. 5% of profits goes to Combat Stress. This is the kind of brand people feel good about buying from. And when the person receiving it looks it up, they will understand why you chose it.',
     ],
     pillars: [
       { title: 'Arrives Ready to Gift', body: 'Clean, considered packaging that does not need wrapping to look like it was thought about. Pair with glassware or a gift pack if you want to go further.' },
       { title: 'A Rum Worth Drinking', body: 'Not a display bottle. Designed to be opened, sipped slowly, and finished properly. Caribbean rum, real spices, 40% ABV. The kind of thing people come back to.' },
-      { title: 'Veteran-Owned', body: 'Founded by two Royal Corps of Signals veterans. Armed Forces Covenant signatories. 5% of profits supports forces charities. A purchase that gives back.' },
+      { title: 'Veteran-Owned', body: 'Founded by two Royal Corps of Signals veterans. Armed Forces Covenant signatories. 5% of profits supports Combat Stress. A purchase that gives back.' },
     ],
     // Verbatim sentences from a wedding-gift review on Trustpilot, excerpted
     // with the reviewer's more personal passages left out. Organic review, so
@@ -196,7 +196,7 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
     pillars: [
       { title: 'Real Ingredients Only', body: 'Seven real spices, two natural sweeteners, and bourbon oak. No artificial flavourings. Every flavour comes from something real.' },
       { title: 'Small-Batch, Genuinely', body: 'Limited numbers per batch, every bottle numbered. Macerated by our British partner distillery. When it is gone, it is gone. Each batch carries subtle variation because it is made properly, not at industrial scale.' },
-      { title: 'Veteran-Made', body: 'Two Royal Corps of Signals veterans. 17 years of service between us. Armed Forces Covenant signatories. ERS Bronze Award. 5% of profits to forces charities.' },
+      { title: 'Veteran-Made', body: 'Two Royal Corps of Signals veterans. 17 years of service between us. Armed Forces Covenant signatories. ERS Bronze Award. 5% of profits to Combat Stress.' },
     ],
     testimonial: {
       quote: [
@@ -312,12 +312,12 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
     h1: 'Rum Gifts for Him',
     metaTitle: 'Rum Gifts for Him',
     metaDescription:
-      'Rum gifts for men who drink properly. Small-batch British spiced rum, real ingredients, no shortcuts. 5% of profits to forces charities.',
+      'Rum gifts for men who drink properly. Small-batch British spiced rum, real ingredients, no shortcuts. 5% of profits to Combat Stress.',
     introBody: [
       'The best gifts for him are the ones he would not buy himself. Not because he does not want them. Because he has not got around to it, or because he does not feel justified spending the money on himself.',
       'Expedition Spiced Rum sits in that category. A numbered bottle from a small British batch, Bronze at the IWSC within three months of launch. The kind of bottle you pick up, look at, and put somewhere visible.',
       'It is for the man who drinks properly. Who takes his time. Who notices the difference between something built with standards and something built to a margin.',
-      'Veteran-owned. No hidden investors. 5% of profits to forces charities. Built by people who mean it.',
+      'Veteran-owned. No hidden investors. 5% of profits to Combat Stress. Built by people who mean it.',
     ],
     seoTitle: 'Not a Generic Gift. A Bottle Worth Noticing.',
     seoBody: [
@@ -327,7 +327,7 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
     ],
     pillars: [
       { title: 'A Bottle That Holds Its Own', body: 'This is not a novelty purchase. 40% ABV. Real spices. No artificial flavourings. The kind of rum you reach for when you want something worth drinking.' },
-      { title: 'Veteran-Owned', body: 'Founded by two Royal Signals veterans. No hidden investors. No shortcuts. 5% of profits to forces charities. A purchase you can feel good about making.' },
+      { title: 'Veteran-Owned', body: 'Founded by two Royal Signals veterans. No hidden investors. No shortcuts. 5% of profits to Combat Stress. A purchase you can feel good about making.' },
       { title: 'Pair It Right', body: 'Neat. Over ice. With a proper mixer. All three work. Add a jigger or spirit stones if you want to give something extra alongside.' },
     ],
     productHandles: [
@@ -354,12 +354,12 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
     h1: 'Rum Gifts for Her',
     metaTitle: 'Rum Gifts for Her',
     metaDescription:
-      'Rum gifts for women who take their drink seriously. Small-batch British spiced rum, real ingredients, no shortcuts. 5% of profits to forces charities.',
+      'Rum gifts for women who take their drink seriously. Small-batch British spiced rum, real ingredients, no shortcuts. 5% of profits to Combat Stress.',
     introBody: [
       'The assumption that a rum gift for her should be softer, sweeter, or less serious is wrong. Expedition Spiced Rum does not adjust for the recipient.',
       'Caribbean rum base: seven real spices, two natural sweeteners, and bourbon oak. 40% ABV. Vanilla opens first, cinnamon and ginger come through the middle, bourbon oak holds the finish.',
       'It is for the woman who drinks properly. Who takes her time. Who would rather have one good bottle than three forgettable ones.',
-      'Veteran-owned and self-funded. 5% of profits goes to forces charities.',
+      'Veteran-owned and self-funded. 5% of profits goes to Combat Stress.',
     ],
     seoTitle: 'A Rum Gift for the Person Who Drinks Properly.',
     seoBody: [
@@ -369,7 +369,7 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
     ],
     pillars: [
       { title: 'No Adjustment for the Label', body: 'The rum is the same regardless of who is drinking it. Real ingredients, 40% ABV, no shortcuts. Designed for anyone who drinks properly.' },
-      { title: 'Veteran-Owned, Independent', body: 'Founded by two Royal Signals veterans. Bootstrapped. No hidden investors. 5% of profits supports forces charities.' },
+      { title: 'Veteran-Owned, Independent', body: 'Founded by two Royal Signals veterans. Bootstrapped. No hidden investors. 5% of profits supports Combat Stress.' },
       { title: 'One Good Bottle', body: 'Rather than three forgettable ones. A single 700ml bottle of something real, made properly, worth opening slowly.' },
     ],
     // No testimonial: no review in the corpus describes this gift direction,
@@ -425,7 +425,7 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
     introBody: [
       'The Premium Gift Pack is the complete first pour: the bottle, the Crystal ICE hiball from the Silver-medal serve, the 25ml and 50ml jigger and a slate coaster, in a branded box. Nothing to add. Open it and pour.',
       'Or build your own: the bottle, then the glasses and tools that suit the way they drink.',
-      'Every bottle is numbered and traceable to its batch. Veteran-owned, no hidden investors, 5% of profits to forces charities.',
+      'Every bottle is numbered and traceable to its batch. Veteran-owned, no hidden investors, 5% of profits to Combat Stress.',
     ],
     productHandles: ['jerry-can-spirits-premium-gift-pack', 'jerry-can-spirits-expedition-spiced-rum', 'expedition-spiced-rum-gift-boxed', ...UNDER_20_HANDLES, 'jerry-can-spirits-gift-card'],
   }),
@@ -648,7 +648,7 @@ const giftSetsConfig: CategoryConfig = {
   pillars: [
     { title: 'Built Around One Rum', body: 'Every set contains the same 700ml bottle at 40% ABV. Seven real spices, no artificial flavourings. The set changes what comes with it, never what is in it.' },
     { title: 'Ready to Hand Over', body: 'The box and the pack are designed to be given as they arrive. Hand it over yourself, or send it straight to the person.' },
-    { title: 'Every Bottle Contributes', body: 'Veteran-owned and self-funded. 5% of profits goes to forces charities, whichever set you choose.' },
+    { title: 'Every Bottle Contributes', body: 'Veteran-owned and self-funded. 5% of profits goes to Combat Stress, whichever set you choose.' },
   ],
   // No testimonial: no review in the corpus is about a set rather than the
   // bottle, and borrowing the wedding review from the rum gifts page would

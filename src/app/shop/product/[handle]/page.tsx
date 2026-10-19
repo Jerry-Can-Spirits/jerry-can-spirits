@@ -1,3 +1,4 @@
+import { CHARITY_STATEMENT_FULL } from '@/lib/charity'
 import xss from 'xss'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
@@ -797,7 +798,7 @@ export default async function ProductPage({
               {isGiftCard
                 ? 'Sent by email. Secure checkout, express payment available.'
                 : `Ships for ${STANDARD_SHIPPING_LABEL}. Free over £${FREE_SHIPPING_THRESHOLD_GBP}. Secure checkout, express payment available.`}
-              {awarded ? '' : ' 5% of profits goes to forces charities.'}
+              {awarded ? '' : ` ${CHARITY_STATEMENT_FULL}`}
             </p>
           </div>
 
@@ -854,7 +855,7 @@ export default async function ProductPage({
                   them. They wanted a proper drink to share with mates, could not find it, and built it instead.
                 </p>
                 <p>
-                  No investors. No shortcuts. 5% of profits goes to forces charities.
+                  No investors. No shortcuts. 5% of profits goes to Combat Stress.
                 </p>
               </div>
               <Link

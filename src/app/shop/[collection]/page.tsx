@@ -452,7 +452,7 @@ export default async function CollectionPage({
           items={[
             { title: 'Veteran-Owned', body: 'Founded by two Royal Corps of Signals veterans. Bootstrapped, no hidden investors, no shortcuts. The same standards we applied to kit that had to work.' },
             { title: 'Real Ingredients', body: 'Every product stocked on this site is chosen because it does its job properly. No filler. Nothing that does not belong there.' },
-            { title: '5% to Forces Charities', body: '5% of profits goes to forces charities. Armed Forces Covenant signatories. ERS Bronze Award holders. When you buy from us, you give back.' },
+            { title: '5% to Combat Stress', body: '5% of profits goes to Combat Stress. Armed Forces Covenant signatories. ERS Bronze Award holders. When you buy from us, you give back.' },
           ].map((item) => (
             <div key={item.title} className="h-full p-6 bg-jerry-green-800/30 rounded-xl border border-gold-500/10">
               <h3 className="text-base font-semibold text-gold-300 mb-2">{item.title}</h3>

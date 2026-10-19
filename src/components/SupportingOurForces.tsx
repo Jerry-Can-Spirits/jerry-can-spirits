@@ -2,6 +2,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import ScrollRow from '@/components/ScrollRow'
 import SectionHeading from '@/components/SectionHeading'
+import { CHARITY_LOGO, CHARITY_LOGO_ALT, CHARITY_WEBSITE } from '@/lib/charity'
 
 // The four pledges, as data so the row can swipe on a phone (24 Sep 2026)
 // rather than stack four full cards between the story and the reviews.
@@ -9,7 +10,8 @@ const commitments = [
   {
     figure: '5%',
     label: 'Of Profits',
-    body: 'Donated annually to vetted armed forces charities supporting mental health, housing & transition services',
+    body: "Donated annually to Combat Stress, the veterans' mental health charity",
+    href: '/giving/',
   },
   {
     figure: '10% Off',
@@ -51,7 +53,15 @@ export default function SupportingOurForces() {
               >
                 <h3 className="text-2xl font-serif font-bold text-gold-300 mb-2">{c.figure}</h3>
                 <p className="text-white font-semibold mb-2">{c.label}</p>
-                <p className="text-parchment-300 text-sm">{c.body}</p>
+                <p className="text-parchment-300 text-sm">
+                  {c.href ? (
+                    <Link href={c.href} className="underline decoration-gold-500/40 underline-offset-2 hover:text-gold-300">
+                      {c.body}
+                    </Link>
+                  ) : (
+                    c.body
+                  )}
+                </p>
               </div>
             ))}
           />
@@ -88,6 +98,20 @@ export default function SupportingOurForces() {
                 className="h-12 w-auto"
               />
             </div>
+            <a
+              href={CHARITY_WEBSITE}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-white rounded-lg p-3 shadow-lg"
+            >
+              <Image
+                src={CHARITY_LOGO.primaryLight}
+                alt={CHARITY_LOGO_ALT}
+                width={120}
+                height={110}
+                className="h-12 w-auto"
+              />
+            </a>
           </div>
 
           {/* CTA */}
