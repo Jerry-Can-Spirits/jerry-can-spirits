@@ -136,7 +136,7 @@ export default function MediaCentreClient({ rrp }: { rrp: string | null }) {
     },
     {
       name: 'Community',
-      description: 'We support the armed forces community that shaped us. 5% of profits go to military charities.'
+      description: 'We support the armed forces community that shaped us. 5% of profits go to Combat Stress.'
     },
   ]
 
@@ -166,7 +166,7 @@ Our name comes from the classic jerry can – designed in 1937 and still NATO st
 
 Based in the UK, Jerry Can Spirits® is a small operation run by two mates who care about getting it right. Whether you're an outdoors type or just fancy a decent drink, our Expedition Spiced Rum delivers honest quality and proper flavour. We're still learning and growing, but we're committed to making spirits that are worth your time.`
 
-  const socialResponsibilityStatement = `Jerry Can Spirits commits 5% of profits to armed forces charities supporting veteran welfare, mental health services, and military families. This isn't marketing. It's who we are.`
+  const socialResponsibilityStatement = `Jerry Can Spirits commits 5% of profits to Combat Stress, a registered charity in England and Wales (206002) and Scotland (SC038828). This isn't marketing. It's who we are.`
 
   return (
     <main>

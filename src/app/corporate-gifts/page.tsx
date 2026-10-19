@@ -148,7 +148,7 @@ export default function CorporateGiftsPage() {
           <SectionHeading eyebrow="For units and messes">For the mess as much as the office.</SectionHeading>
           <p className="max-w-2xl mx-auto text-center text-parchment-200 leading-relaxed">
             Dining out nights, leaving gifts, the prize table at the unit charity night. Jerry Can Spirits was
-            founded by two Royal Corps of Signals veterans, and 5% of profits goes to forces charities, whatever
+            founded by two Royal Corps of Signals veterans, and 5% of profits goes to Combat Stress, whatever
             the size of the order.
           </p>
         </div>

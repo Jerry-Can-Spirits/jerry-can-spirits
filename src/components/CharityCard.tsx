@@ -12,7 +12,7 @@ export default function CharityCard({ charity }: CharityCardProps) {
         <div className="relative h-20 w-full mb-4">
           <Image
             src={charity.logo_url}
-            alt={charity.name}
+            alt={`In support of ${charity.name}`}
             fill
             className="object-contain"
             sizes="(max-width: 768px) 100vw, 50vw"

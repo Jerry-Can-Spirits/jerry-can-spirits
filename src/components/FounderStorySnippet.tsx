@@ -28,7 +28,7 @@ export default function FounderStorySnippet() {
               </p>
 
               <p>
-                We support the Armed Forces Covenant and donate to forces charities because it matters to us personally. This isn't a marketing angle. It's just how we run the company.
+                We support the Armed Forces Covenant and donate to Combat Stress because it matters to us personally. This isn't a marketing angle. It's just how we run the company.
               </p>
             </div>
 

@@ -1,3 +1,4 @@
+import { CHARITY_STATEMENT_FULL } from '@/lib/charity'
 import { requireTradeSession } from '@/lib/trade-portal/session-check'
 import { TradeSheetSection, TradeSheetShell } from '@/components/trade-portal/TradeSheetShell'
 
@@ -51,7 +52,7 @@ export default async function BrandStoryPage() {
           <div>
             <p className="font-serif text-lg text-white print:text-black mb-1">Purpose</p>
             <p className="text-sm leading-relaxed">
-              Every bottle contributes. 5% of profits go to UK military charities. The standard is the same whether one bottle moves or a thousand.
+              Every bottle contributes. 5% of profits go to Combat Stress. The standard is the same whether one bottle moves or a thousand.
             </p>
           </div>
         </div>
@@ -76,7 +77,7 @@ export default async function BrandStoryPage() {
 
       <TradeSheetSection title="Military commitment">
         <p className="text-sm leading-relaxed">
-          Jerry Can Spirits is a signatory of the Armed Forces Covenant and a holder of the ERS Bronze Award. 5% of profits go to UK military charities. These commitments are public record, not marketing claims. Stocking venues can communicate this support to their guests with full provenance.
+          Jerry Can Spirits is a signatory of the Armed Forces Covenant and a holder of the ERS Bronze Award. {CHARITY_STATEMENT_FULL} These commitments are public record, not marketing claims. Stocking venues can communicate this support to their guests with full provenance.
         </p>
       </TradeSheetSection>
 

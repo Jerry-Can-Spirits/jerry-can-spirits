@@ -4,6 +4,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { ChevronDownIcon } from '@heroicons/react/24/outline'
+import { CHARITY_LOGO, CHARITY_LOGO_ALT, CHARITY_STATEMENT_FULL, CHARITY_WEBSITE } from '@/lib/charity'
 
 export default function Footer() {
   const [openSections, setOpenSections] = useState<string[]>([])
@@ -355,6 +356,28 @@ export default function Footer() {
                           loading="lazy"
                         />
                     </Link>
+
+                    {/* Combat Stress, the charity behind the 5%. Red-and-white wide version for the dark footer. */}
+                    <div className="space-y-2">
+                      <a
+                        href={CHARITY_WEBSITE}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-block hover:opacity-80 transition-opacity duration-200"
+                        onClick={() => trackFooterClick('Combat Stress Logo', 'Combat Stress Website')}
+                      >
+                        <Image
+                          src={CHARITY_LOGO.wideDark}
+                          alt={CHARITY_LOGO_ALT}
+                          width={1366}
+                          height={472}
+                          className="h-12 w-auto"
+                          sizes="140px"
+                          loading="lazy"
+                        />
+                      </a>
+                      <p className="text-sm text-parchment-400">{CHARITY_STATEMENT_FULL}</p>
+                    </div>
                   </div>
                 </div>
               </div>

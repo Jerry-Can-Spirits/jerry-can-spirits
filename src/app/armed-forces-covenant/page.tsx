@@ -3,6 +3,7 @@ import SectionHeading from '@/components/SectionHeading'
 import Image from 'next/image'
 import { baseOpenGraph } from '@/lib/og'
 import { safeJsonLd, ORG_REF } from '@/lib/jsonLd'
+import { CHARITY_LOGO, CHARITY_LOGO_ALT, CHARITY_STATEMENT_FULL, CHARITY_WEBSITE } from '@/lib/charity'
 
 export const metadata: Metadata = {
   title: 'Armed Forces Covenant',
@@ -212,10 +213,21 @@ export default function ArmedForcesCovenant() {
               <h4 className="text-lg font-serif font-medium text-gold-300 mt-6 mb-3">
                 Charitable Commitment:
               </h4>
+              <div className="mb-4 inline-block rounded-lg bg-white p-3 shadow-lg">
+                <a href={CHARITY_WEBSITE} target="_blank" rel="noopener noreferrer" className="block">
+                  <Image
+                    src={CHARITY_LOGO.primaryLight}
+                    alt={CHARITY_LOGO_ALT}
+                    width={120}
+                    height={110}
+                    className="h-16 w-auto"
+                  />
+                </a>
+              </div>
               <ul className="list-disc list-inside text-white space-y-2 mb-4">
-                <li>Donating 5% of profits to vetted armed forces charities, with transparent annual reporting of contributions and impact</li>
+                <li>{CHARITY_STATEMENT_FULL} Transparent annual reporting of contributions and impact.</li>
                 <li>Prioritising organisations supporting veteran mental health, transition services, wounded personnel, and military family welfare</li>
-                <li>Establishing long-term partnerships with 3-5 core military charities rather than dispersed one-off donations</li>
+                <li>Building a long-term partnership with Combat Stress rather than dispersed one-off donations</li>
               </ul>
 
               <h4 className="text-lg font-serif font-medium text-gold-300 mt-6 mb-3">

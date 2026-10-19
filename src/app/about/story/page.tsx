@@ -453,7 +453,7 @@ export default function OurStory() {
                   Jerry Can Spirits is built on the same principles. When you need a drink that delivers on character and quality without compromise, that&apos;s exactly what we&apos;re engineered to do. We&apos;re a spirits house with purpose, with integrity.
                 </p>
                 <p className="text-parchment-300 leading-relaxed">
-                  5% of profits goes to military charities, and every bottle carries a batch number you can trace.
+                  5% of profits goes to Combat Stress, the veterans&apos; mental health charity, and every bottle carries a batch number you can trace.
                 </p>
               </div>
 
