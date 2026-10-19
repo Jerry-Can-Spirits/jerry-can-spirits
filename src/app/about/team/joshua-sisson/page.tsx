@@ -15,12 +15,18 @@ const PHOTO = 'https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/2d4ac61a-0e68-46
 const HEADSHOT = 'https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/2d4ac61a-0e68-460d-895f-839bc7c69b00/trim=25;98;542;20'
 
 // His answers to the Head of Sales question set (19 Oct 2026), in his words,
-// spelling and number style tidied only. The "how is it made" answer is held
-// back: it describes our production process, which needs the approved wording.
+// spelling and number style tidied only. The "how is it made" answer is put
+// into the approved production wording (Dan, 19 Oct): the process is
+// "macerated by our British partner distillery", never "we macerate".
 const askJosh: { group: string; items: FAQAccordionItem[] }[] = [
   {
     group: 'Selling',
     items: [
+      {
+        question: 'What is the first thing a bar asks you?',
+        answer:
+          'The first question I generally get asked by bars is, “How is your rum made?” Expedition Spiced Rum starts with a Caribbean rum base, macerated in small batches by our British partner distillery with seven real spices, including Madagascan vanilla, cinnamon, ginger, orange peel and cloves. Two natural sweeteners balance it, and bourbon oak gives it its smooth, warming character. The finished rum is 40% ABV, made with real ingredients and no artificial flavourings.',
+      },
       {
         question: 'What is the hardest objection you hear, and how do you answer it?',
         answer:
@@ -220,6 +226,15 @@ export default function JoshuaSissonPage() {
                     <p className="text-parchment-300 text-xs">If a bar can’t deliver on that, it isn’t the bar for me.</p>
                   </div>
                 </div>
+              </div>
+
+              {/* Fun Fact, as on Dan's page. A placeholder until his own
+                  arrives (Dan, 19 Oct). */}
+              <div className="bg-linear-to-br from-gold-500/10 to-gold-600/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
+                <p className="text-gold-300 font-semibold text-sm mb-1">Did You Know?</p>
+                <p className="text-parchment-300 text-sm">
+                  Joshua used to own and operate an ice cream van.
+                </p>
               </div>
             </div>
 
