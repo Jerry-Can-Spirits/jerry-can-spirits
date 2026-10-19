@@ -228,12 +228,12 @@ export default function JoshuaSissonPage() {
                 </div>
               </div>
 
-              {/* Fun Fact, as on Dan's page. A placeholder until his own
-                  arrives (Dan, 19 Oct). */}
+              {/* Fun Fact, as on Dan's page. The one emoji on the site, by
+                  Dan's say-so (19 Oct 2026): it is the team's running joke. */}
               <div className="bg-linear-to-br from-gold-500/10 to-gold-600/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
                 <p className="text-gold-300 font-semibold text-sm mb-1">Did You Know?</p>
                 <p className="text-parchment-300 text-sm">
-                  Joshua used to own and operate an ice cream van.
+                  Ever since a run-in with 100 tiny plastic ducks, Joshua has had an irrational hatred of ducks. <span role="img" aria-label="duck">🦆</span>
                 </p>
               </div>
             </div>
