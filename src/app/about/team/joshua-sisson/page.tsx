@@ -4,6 +4,7 @@ import Image from 'next/image'
 import Breadcrumbs from '@/components/Breadcrumbs'
 import SectionHeading from '@/components/SectionHeading'
 import StructuredData from '@/components/StructuredData'
+import FAQAccordion, { type FAQAccordionItem } from '@/components/FAQAccordion'
 import TeamMeetRow from '@/components/TeamMeetRow'
 import { OG_IMAGE } from '@/lib/og'
 import { ORG_REF } from '@/lib/jsonLd'
@@ -12,6 +13,94 @@ const PHOTO = 'https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/2d4ac61a-0e68-46
 // A square head-and-shoulders crop of the same full-length photo, cut by
 // Cloudflare Images (trim=top;right;bottom;left in source pixels, 318x767).
 const HEADSHOT = 'https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/2d4ac61a-0e68-460d-895f-839bc7c69b00/trim=25;98;542;20'
+
+// His answers to the Head of Sales question set (19 Oct 2026), in his words,
+// spelling and number style tidied only. The "how is it made" answer is held
+// back: it describes our production process, which needs the approved wording.
+const askJosh: { group: string; items: FAQAccordionItem[] }[] = [
+  {
+    group: 'Selling',
+    items: [
+      {
+        question: 'What is the hardest objection you hear, and how do you answer it?',
+        answer:
+          'The hardest objection I generally hear is the price, especially when bars compare us to larger, established rum brands. I explain that we’re a small, veteran-owned business producing a quality spiced rum using real ingredients, while also giving back to the veteran community. However, I’ve learnt that persistence is key. I’ve secured far more sales by returning to bars two or three times, building relationships and demonstrating our passion for the product than I have on my first visit. We’re also willing to negotiate and offer competitive deals, but the best deals come from building strong, mutually beneficial relationships. We want to see that a bar is genuinely willing to work with us, support the brand and grow alongside us. Ultimately, it’s about creating long-term partnerships rather than simply making a one-off sale.',
+      },
+      {
+        question: 'What happens the moment someone tastes it for the first time?',
+        answer:
+          'Generally, people are blown away by the flavour, and everyone always goes in for a second or third taste. It’s very rare we get any negative feedback, but all feedback is welcome and taken on board for the next batches, or even the next spirit we make.',
+      },
+      {
+        question: 'What makes a venue a good fit, and when do you walk away?',
+        answer:
+          'For me, a good venue is one that values quality, supports independent brands and is willing to build a genuine working relationship with us. It’s not necessarily about how big or busy the venue is, but whether they believe in our product, appreciate our veteran-owned ethos and are willing to give Jerry Can Spirits a real opportunity. As for walking away from a sale, I don’t give up easily. I’m a firm believer in persistence, and sometimes it takes several visits to build that trust. However, if a venue is only interested in driving the price down without offering any commitment or willingness to work together, then sometimes it’s better to walk away. I’d rather build ten strong, lasting partnerships than chase twenty one-off sales that don’t benefit either side.',
+      },
+      {
+        question: 'Independent bar or big chain: which is harder to get into?',
+        answer:
+          'Difficult to say, as most of my sales have been to independent bars. Large chains tend to tie themselves to a few spirit brands across all their bars and build big profits. At Jerry Can Spirits, we aim to deliver a trusted product over making big bucks.',
+      },
+    ],
+  },
+  {
+    group: 'The trade',
+    items: [
+      {
+        question: 'What do bar staff need from a brand that most brands don’t give them?',
+        answer:
+          'Bar staff need more than just a bottle on the shelf. They need support, product knowledge, tastings and a genuine relationship with the brand. I believe if staff understand and enjoy our rum, they’re far more likely to recommend it. It’s about building relationships, not just making sales.',
+      },
+      {
+        question: 'How should a bar serve it?',
+        answer:
+          'I always give three options: on its own with ice, with cola, or with ginger beer. I find these three work best, and most if not all people find their favourite from there.',
+      },
+      {
+        question: 'What is the best thing a venue has done with it that you didn’t expect?',
+        answer:
+          'Posting it on social media is a big win for us, but the Imperial pub in Hereford has since used our rum as prizes in their weekly quiz, which really gives us the exposure a small-batch brand like ours needs.',
+      },
+    ],
+  },
+  {
+    group: 'The drinks',
+    items: [
+      {
+        question: 'What do you drink when you’re off the clock?',
+        answer: 'Cider, lager, red wine and, without a doubt, our own Expedition Spiced Rum.',
+      },
+      {
+        question: 'One cocktail every home bar should be able to make?',
+        answer: 'A Snowball. Nice and simple, and yet I have had some awful ones in the past. Sorry, Uncle Mick.',
+      },
+      {
+        question: 'Neat, on ice or mixed: how do you take Expedition Spiced Rum?',
+        answer:
+          'As with my sales to bars, I always give three options: on its own, with cola or with ginger beer. I prefer a quick one on the rocks, but if I’m having a few, I’ll have it with ginger beer.',
+      },
+    ],
+  },
+  {
+    group: 'The person',
+    items: [
+      {
+        question: 'Best sales lesson you ever learned the hard way?',
+        answer:
+          'Don’t take everyone’s first response as gospel. Sometimes showing loyalty and commitment is a big win, and then they tend to warm to you.',
+      },
+      {
+        question: 'What does a good week look like for you?',
+        answer: 'Off work, with family and friends. I enjoy being out in nature and, of course, a good spiced rum.',
+      },
+      {
+        question: 'What would you tell someone starting their first sales job?',
+        answer:
+          'Be confident in what you are selling. You can never know too much about your product or the area of sales you’re working in. And a no isn’t forever, just not now. Never fail to try again.',
+      },
+    ],
+  },
+]
 
 // Person schema. Only what has been confirmed: name, role, photo and the
 // company. Service history and the rest are added as they arrive.
@@ -112,12 +201,40 @@ export default function JoshuaSissonPage() {
                     <p className="text-gold-400 font-semibold mb-1">Role</p>
                     <p className="text-parchment-200">Head of Sales</p>
                   </div>
+                  <div>
+                    <p className="text-gold-400 font-semibold mb-1">Based</p>
+                    <p className="text-parchment-200">Hereford, Herefordshire</p>
+                    <p className="text-parchment-300 text-xs">Covers UK trade sales on request</p>
+                  </div>
+                  <div>
+                    <p className="text-gold-400 font-semibold mb-1">Background</p>
+                    <p className="text-parchment-200">Mental health and criminal justice</p>
+                  </div>
+                  <div>
+                    <p className="text-gold-400 font-semibold mb-1">Favourite Spirit</p>
+                    <p className="text-parchment-200">Irish whiskey, Redbreast 18</p>
+                  </div>
+                  <div>
+                    <p className="text-gold-400 font-semibold mb-1">Signature Cocktail</p>
+                    <p className="text-parchment-200">Mojito</p>
+                    <p className="text-parchment-300 text-xs">If a bar can’t deliver on that, it isn’t the bar for me.</p>
+                  </div>
                 </div>
               </div>
             </div>
 
-            {/* Right column: the bio, in his words */}
-            <div className="lg:col-span-2">
+            {/* Right column: how he came in, the bio and Ask Josh, in his words */}
+            <div className="lg:col-span-2 space-y-6">
+              <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 sm:p-8 border border-gold-500/20 space-y-5">
+                <h2 className="text-2xl font-serif font-bold text-white">How I Got Here</h2>
+                <p className="text-parchment-200 leading-relaxed">
+                  I initially got involved with Jerry Can Spirits as an investor, but my passion for the brand, its veteran-owned roots and what it stands for naturally led me into a role in sales, helping grow the business and get our rum out there.
+                </p>
+                <p className="text-parchment-200 leading-relaxed">
+                  I joined because I believed in my mates, their vision and the ethos behind the brand. I wanted to be part of something meaningful and help turn their passion into a successful business.
+                </p>
+              </div>
+
               <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 sm:p-8 border border-gold-500/20 space-y-5">
                 <h2 className="text-2xl font-serif font-bold text-white">Why Jerry Can Spirits Matters to Me</h2>
                 <p className="text-parchment-200 leading-relaxed">
@@ -135,6 +252,20 @@ export default function JoshuaSissonPage() {
                 <p className="text-parchment-200 leading-relaxed">
                   I’m proud to represent a company that has been built from the ground up. There’s something exciting about being there at the beginning, knowing that every new stockist, every tasting and every person who recommends our rum is another step forward.
                 </p>
+              </div>
+
+              {/* Ask Josh: closed by default, so thirteen answers take the
+                  space of a short list, as on Dan's page. */}
+              <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 sm:p-8 border border-gold-500/20">
+                <h2 className="text-2xl font-serif font-bold text-white mb-6">Ask Josh</h2>
+                <div className="space-y-6">
+                  {askJosh.map((section) => (
+                    <div key={section.group}>
+                      <p className="text-gold-300 text-sm font-semibold uppercase tracking-widest mb-3">{section.group}</p>
+                      <FAQAccordion items={section.items} />
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
