@@ -65,7 +65,14 @@ export default function cloudflareImageLoader({
       if (parsed.hostname === 'imagedelivery.net') {
         const cappedWidth = Math.min(width, 1200)
         const baseUrl = src.replace(/\/[^/]+$/, '')
-        return `${baseUrl}/w=${cappedWidth},q=${quality}`
+        // A flexible-variant last segment (trim=…, fit=…) is a crop chosen on
+        // purpose; keep its options and set only width and quality. A named
+        // variant (/public) carries no options and is replaced outright.
+        const last = src.slice(baseUrl.length + 1)
+        const kept = last.includes('=')
+          ? last.split(',').filter((opt) => !/^(w|width|q|quality)=/.test(opt))
+          : []
+        return `${baseUrl}/${[...kept, `w=${cappedWidth}`, `q=${quality}`].join(',')}`
       }
 
       if (parsed.hostname === 'cdn.shopify.com') {
