@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import Image from 'next/image'
 import Breadcrumbs from '@/components/Breadcrumbs'
 import SectionHeading from '@/components/SectionHeading'
 import StructuredData from '@/components/StructuredData'
@@ -7,14 +8,17 @@ import TeamMeetRow from '@/components/TeamMeetRow'
 import { OG_IMAGE } from '@/lib/og'
 import { ORG_REF } from '@/lib/jsonLd'
 
-// Person schema. Only what has been confirmed: name, role and the company.
-// Service history, photo and the rest are added as they arrive.
+const PHOTO = 'https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/2d4ac61a-0e68-460d-895f-839bc7c69b00/public'
+
+// Person schema. Only what has been confirmed: name, role, photo and the
+// company. Service history and the rest are added as they arrive.
 const personSchema = {
   '@context': 'https://schema.org',
   '@type': 'Person',
   name: 'Joshua Sisson',
   jobTitle: 'Head of Sales',
   url: 'https://jerrycanspirits.co.uk/about/team/joshua-sisson/',
+  image: PHOTO,
   description: 'Head of Sales at Jerry Can Spirits.',
   worksFor: ORG_REF,
 }
@@ -81,19 +85,19 @@ export default function JoshuaSissonPage() {
           </SectionHeading>
 
           <div className="grid lg:grid-cols-3 gap-12">
-            {/* Left column: photo slot and quick facts */}
+            {/* Left column: photo and quick facts */}
             <div className="lg:col-span-1 space-y-6">
-              {/* No photo has been supplied yet. The same treatment the team
-                  card uses, so the two match until one arrives. */}
-              <div className="relative">
-                <div className="aspect-square bg-linear-to-br from-jerry-green-700/50 to-jerry-green-900/50 rounded-xl flex items-center justify-center border border-gold-500/20">
-                  <svg className="w-24 h-24 text-gold-500/30" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
-                    <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
-                  </svg>
-                </div>
-                <div className="absolute top-2 right-2 px-3 py-1 bg-gold-500/90 backdrop-blur-sm rounded-full">
-                  <span className="text-jerry-green-900 text-xs font-semibold">Photo Coming Soon</span>
-                </div>
+              {/* A full-length photo, so the square crop anchors to the top
+                  to keep his face in frame. */}
+              <div className="relative aspect-square rounded-xl overflow-hidden border border-gold-500/20">
+                <Image
+                  src={PHOTO}
+                  alt="Joshua Sisson - Head of Sales at Jerry Can Spirits"
+                  fill
+                  className="object-cover object-top"
+                  sizes="(max-width: 1024px) 100vw, 33vw"
+                  priority
+                />
               </div>
 
               <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">

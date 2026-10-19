@@ -78,6 +78,7 @@ const teamMembers: TeamMember[] = [
     // The opening line of his quote on the bio page; the card has room for one
     // sentence, the page carries all four.
     quote: 'I believe in Jerry Can Spirits because I believe in the product.',
+    image: 'https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/2d4ac61a-0e68-460d-895f-839bc7c69b00/public',
   },
   {
     name: 'Danny Hughes',
