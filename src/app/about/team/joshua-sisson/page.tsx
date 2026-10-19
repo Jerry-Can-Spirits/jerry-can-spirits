@@ -9,6 +9,9 @@ import { OG_IMAGE } from '@/lib/og'
 import { ORG_REF } from '@/lib/jsonLd'
 
 const PHOTO = 'https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/2d4ac61a-0e68-460d-895f-839bc7c69b00/public'
+// A square head-and-shoulders crop of the same full-length photo, cut by
+// Cloudflare Images (trim=top;right;bottom;left in source pixels, 318x767).
+const HEADSHOT = 'https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/2d4ac61a-0e68-460d-895f-839bc7c69b00/trim=25;98;542;20'
 
 // Person schema. Only what has been confirmed: name, role, photo and the
 // company. Service history and the rest are added as they arrive.
@@ -87,14 +90,14 @@ export default function JoshuaSissonPage() {
           <div className="grid lg:grid-cols-3 gap-12">
             {/* Left column: photo and quick facts */}
             <div className="lg:col-span-1 space-y-6">
-              {/* A full-length photo, so the square crop anchors to the top
-                  to keep his face in frame. */}
+              {/* The headshot crop: the full-length photo would show only his
+                  chest in a square. */}
               <div className="relative aspect-square rounded-xl overflow-hidden border border-gold-500/20">
                 <Image
-                  src={PHOTO}
+                  src={HEADSHOT}
                   alt="Joshua Sisson - Head of Sales at Jerry Can Spirits"
                   fill
-                  className="object-cover object-top"
+                  className="object-cover"
                   sizes="(max-width: 1024px) 100vw, 33vw"
                   priority
                 />
