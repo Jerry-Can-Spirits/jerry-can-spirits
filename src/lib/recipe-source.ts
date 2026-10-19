@@ -26,6 +26,11 @@ export const RECIPE_AUTHORITIES = [
   'embury',
   'waldorf',
   'regan',
+  // Added 19 October 2026 for the citation sweep: Baker's The Gentleman's
+  // Companion (1939) for the Hotel Nacional, and Crockett's Old Waldorf Bar
+  // Days (1931), a different book from the 1935 Bar Book under 'waldorf'.
+  'baker',
+  'crockett',
   /**
    * Added 22 August 2026, before the tiki attribution work rather than during
    * it, so the credit goes to the right person from the first page.
@@ -177,6 +182,8 @@ export const AUTHORITY_LABELS: Record<RecipeAuthority, string> = {
   embury: "Embury's The Fine Art of Mixing Drinks",
   waldorf: 'The Old Waldorf-Astoria Bar Book',
   regan: "Gary Regan's The Joy of Mixology",
+  baker: "Baker's The Gentleman's Companion",
+  crockett: "Crockett's Old Waldorf Bar Days",
   // "Reconstructions" rather than a book title, because that is what they are
   // and the distinction is the whole reason this authority exists.
   berry: "Beachbum Berry's reconstructions",
@@ -212,8 +219,10 @@ const PICKER_TITLES: Record<RecipeAuthority, string> = {
   savoy: 'The Savoy Cocktail Book (Craddock, 1930)',
   thomas: "Jerry Thomas's Bar-Tender's Guide (1862)",
   embury: 'The Fine Art of Mixing Drinks (Embury, 1948)',
-  waldorf: 'The Old Waldorf-Astoria Bar Book (Crockett)',
+  waldorf: 'The Old Waldorf-Astoria Bar Book (Crockett, 1935)',
   regan: 'The Joy of Mixology (Regan)',
+  baker: "The Gentleman's Companion (Baker, 1939)",
+  crockett: 'Old Waldorf Bar Days (Crockett, 1931)',
   berry: "Beachbum Berry's reconstructions",
   creator: "Creator's published specification (name and source in the note)",
   brand: "Brand's own published specification",
