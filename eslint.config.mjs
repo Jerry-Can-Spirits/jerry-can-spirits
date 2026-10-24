@@ -1,13 +1,5 @@
-import { dirname } from "path";
-import { fileURLToPath } from "url";
-import { FlatCompat } from "@eslint/eslintrc";
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-});
+import nextVitals from "eslint-config-next/core-web-vitals";
+import nextTs from "eslint-config-next/typescript";
 
 const eslintConfig = [
   {
@@ -24,7 +16,8 @@ const eslintConfig = [
       "next-env.d.ts",
     ],
   },
-  ...compat.extends("next/core-web-vitals", "next/typescript"),
+  ...nextVitals,
+  ...nextTs,
   {
     // Plain CommonJS Node utility scripts
     files: ["scripts/**/*.js"],
@@ -38,6 +31,11 @@ const eslintConfig = [
       "@next/next/no-html-link-for-pages": "off",
       "@typescript-eslint/no-unused-vars": "warn",
       "@next/next/no-img-element": "warn",
+      // New in eslint-config-next 16 (react-hooks v7). They flag 28 existing
+      // patterns; warn until those components are refactored on their own.
+      "react-hooks/set-state-in-effect": "warn",
+      "react-hooks/purity": "warn",
+      "react-hooks/refs": "warn",
     },
   },
 ];
