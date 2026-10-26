@@ -49,7 +49,7 @@
     "xss": "^1.0.15"
   },
   "devDependencies": {
-    "@anthropic-ai/sdk": "^0.135.0",
+    "@anthropic-ai/sdk": "^0.137.0",
     "@cloudflare/workers-types": "^4.20260702.1",
     "@eslint/eslintrc": "^3",
     "@next/bundle-analyzer": "^16.4.2",
@@ -70,7 +70,7 @@
     "tsx": "^4.23.15",
     "typescript": "^5",
     "vitest": "^4.1.12",
-    "wrangler": "^4.151.0"
+    "wrangler": "^4.152.0"
   },
   "overrides": {
     "hosted-git-info": "^7.0.0",
