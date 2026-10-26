@@ -404,7 +404,9 @@ export default async function ProductPage({
   const descriptionHtml = product.descriptionHtml ?? ''
   const sizeGuideAt = isClothing ? descriptionHtml.search(/<p><strong>Size guide<\/strong><\/p>/i) : -1
   const storyHtml = sizeGuideAt > 0 ? descriptionHtml.slice(0, sizeGuideAt) : descriptionHtml
-  const sizeGuideHtml = sizeGuideAt > 0 ? descriptionHtml.slice(sizeGuideAt) : null
+  // Gelato pads the tables apart with empty <p><br><br></p> paragraphs; drop them.
+  const sizeGuideHtml =
+    sizeGuideAt > 0 ? descriptionHtml.slice(sizeGuideAt).replace(/<p>(?:\s*<br\s*\/?>\s*)+<\/p>/gi, '') : null
 
   // Curated review quotes from Sanity (empty = placeholder).
   const productReviews = sanityReviews
@@ -835,9 +837,12 @@ export default async function ProductPage({
           <SectionHeading eyebrow="The detail">
             {isClothing ? 'Size guide and care' : 'Specifications and tasting notes'}
           </SectionHeading>
+          {/* A parchment panel: the tables read against a flat ground, not
+              the contour pattern, and the panel keeps them to a sensible width
+              instead of stretching nine columns across the band. */}
           {sizeGuideHtml && (
             <div
-              className="prose prose-invert max-w-none prose-strong:text-gold-300 prose-th:text-white prose-td:text-parchment-200 prose-table:text-sm"
+              className="prose max-w-4xl rounded-xl bg-parchment-100 p-6 sm:p-8 prose-strong:text-jerry-green-900 prose-th:text-jerry-green-900 prose-td:text-jerry-green-800 prose-table:my-4 prose-table:text-sm [&_table]:w-auto [&_th]:px-4 [&_td]:px-4 [&_th]:py-2 [&_td]:py-2"
               dangerouslySetInnerHTML={{ __html: xss(sizeGuideHtml) }}
             />
           )}
