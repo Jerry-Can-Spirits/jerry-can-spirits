@@ -116,6 +116,7 @@ export default function Header() {
         { name: 'Bar Accessories', href: '/shop/bar-accessories/', description: 'Shakers, jiggers, glassware' },
         { name: 'Rum Glasses', href: '/shop/rum-glasses/', description: 'The right glass makes a difference' },
         { name: 'Expedition Gear & Apparel', href: '/shop/clothing/', description: 'T-shirts, printed to order' },
+        { name: 'New Releases', href: '/shop/new-releases/', description: 'The latest from the range' },
         { name: 'Browse All', href: '/shop/', description: 'All collections' },
         { name: 'Stockists', href: '/stockists/', description: 'Find us near you' },
         { name: 'Reviews', href: '/reviews/', description: 'What customers say' },
