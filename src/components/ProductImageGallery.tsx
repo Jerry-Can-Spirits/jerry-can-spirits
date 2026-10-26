@@ -2,6 +2,7 @@
 
 import { useState, useRef } from 'react'
 import Image from 'next/image'
+import ImageLightbox from './ImageLightbox'
 
 interface ProductImage {
   url: string
@@ -18,6 +19,7 @@ export default function ProductImageGallery({
   productTitle,
 }: ProductImageGalleryProps) {
   const [selectedImageIndex, setSelectedImageIndex] = useState(0)
+  const [lightboxOpen, setLightboxOpen] = useState(false)
   const touchStartXRef = useRef<number | null>(null)
 
   const handleTouchStart = (e: React.TouchEvent) => {
@@ -60,20 +62,40 @@ export default function ProductImageGallery({
 
   return (
     <div className="space-y-3 sm:space-y-4">
+      <ImageLightbox
+        images={images}
+        startIndex={selectedImageIndex}
+        open={lightboxOpen}
+        onClose={() => setLightboxOpen(false)}
+        productTitle={productTitle}
+      />
       {/* Main Image */}
       <div
         className="relative aspect-square sm:aspect-4/3 lg:aspect-square bg-jerry-green-800/20 rounded-xl overflow-hidden border border-gold-500/20"
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
       >
+        {/* The image itself opens the lightbox; the badge gives the same
+            action a visible, keyboard-reachable control. */}
         <Image
           src={selectedImage.url}
           alt={selectedImage.altText || productTitle}
           fill
-          className="object-contain"
+          className="object-contain cursor-zoom-in"
           sizes="(max-width: 768px) 100vw, 50vw"
           priority={selectedImageIndex === 0}
+          onClick={() => setLightboxOpen(true)}
         />
+        <button
+          type="button"
+          onClick={() => setLightboxOpen(true)}
+          aria-label="Zoom in on this image"
+          className="absolute right-2 bottom-2 z-10 p-2 bg-jerry-green-900/60 backdrop-blur-sm rounded-full border border-gold-500/20 text-parchment-300 hover:text-white"
+        >
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-4.35-4.35M11 8v6m-3-3h6m6 0a8 8 0 11-16 0 8 8 0 0116 0z" />
+          </svg>
+        </button>
 
         {images.length > 1 && (
           <>
