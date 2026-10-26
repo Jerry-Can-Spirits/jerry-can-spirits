@@ -102,7 +102,7 @@ function getCategoryFromProductType(productType?: string): { label: string; href
   if (type.includes('barware') || type.includes('glass') || type.includes('bar')) {
     return { label: 'Barware', href: '/shop/barware/', trackingCategory: 'Barware' }
   }
-  if (type.includes('cloth') || type.includes('apparel') || type.includes('merch')) {
+  if (type.includes('cloth') || type.includes('apparel') || type.includes('merch') || type.includes('print material')) {
     return { label: 'Clothing', href: '/shop/clothing/', trackingCategory: 'Clothing' }
   }
 
