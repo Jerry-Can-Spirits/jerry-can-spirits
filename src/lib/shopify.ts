@@ -467,7 +467,7 @@ export async function getProduct(handle: string): Promise<ShopifyProduct | null>
             }
           }
         }
-        variants(first: 10) {
+        variants(first: 100) {
           edges {
             node {
               id
@@ -973,7 +973,8 @@ export function resolveCategory(productType?: string, tags?: string[]): ProductC
   const pt = (productType ?? '').toLowerCase()
   if (pt.includes('spirit') || pt.includes('drink') || pt.includes('rum')) return 'spirits'
   if (pt.includes('barware') || pt.includes('glass')) return 'barware'
-  if (pt.includes('clothing') || pt.includes('apparel')) return 'clothing'
+  // Gelato creates print-on-demand garments with productType "Print Material".
+  if (pt.includes('clothing') || pt.includes('apparel') || pt.includes('print material')) return 'clothing'
 
   return null
 }

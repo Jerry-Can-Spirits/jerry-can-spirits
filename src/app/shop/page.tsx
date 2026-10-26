@@ -51,6 +51,7 @@ const CURATED_HANDLES: Array<{ handle: string; title?: string; description?: str
   { handle: 'new-releases' },
   { handle: 'spirits', title: 'Spirits', description: 'Expedition Spiced Rum. 40% ABV, 700ml, veteran-owned.' },
   { handle: 'barware', title: 'Barware', description: 'Professional bar tools and glassware for the home bar.' },
+  { handle: 'clothing', title: 'Expedition Gear & Apparel', description: 'Original Jerry Can Spirits designs on T-shirts and expedition gear, printed to order.' },
 ]
 
 function titleFromHandle(handle: string): string {
