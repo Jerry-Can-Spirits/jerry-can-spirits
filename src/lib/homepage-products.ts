@@ -1,4 +1,4 @@
-import type { ShopifyProduct } from './shopify'
+import { resolveCategory, type ShopifyProduct } from './shopify'
 import { CATEGORIES } from './categories'
 
 // What the homepage shop section shows: every purchasable product with its
@@ -14,14 +14,21 @@ import { CATEGORIES } from './categories'
 //  - the rum leads: bottle, gift pack, six-pack, cheapest first. Then the
 //    glassware the serves were built in, then the tools, each cheapest first.
 //    Glassware is whatever the two glass collections list, so the homepage
-//    cannot disagree with the shop about what a glass is.
+//    cannot disagree with the shop about what a glass is;
+//  - apparel gets its own row, after the tools, but only once there is a
+//    range to scroll: a row of one garment looks like a mistake, so the row
+//    stays off the page until APPAREL_ROW_MIN pieces are on sale (Dan, 26 Oct
+//    2026). A garment is never shown as a tool in the meantime; the clothing
+//    shop page and the dropdown carry it until then.
 export const HOMEPAGE_EXCLUDED_HANDLES = [
   'uk-tree-fund',
   'jerry-can-spirits-expedition-spiced-rum-presentation-box',
 ]
 
+export const APPAREL_ROW_MIN = 3
+
 export interface HomepageRow {
-  key: 'rum' | 'glassware' | 'tools'
+  key: 'rum' | 'glassware' | 'tools' | 'apparel'
   title: string
   blurb: string
   href: string
@@ -50,8 +57,10 @@ const byPrice = (a: ShopifyProduct, b: ShopifyProduct) => price(a) - price(b)
 export function homepageProductRows(products: ShopifyProduct[]): HomepageRow[] {
   const eligible = products.filter((p) => !HOMEPAGE_EXCLUDED_HANDLES.includes(p.handle) && forSale(p))
   const rum = eligible.filter((p) => p.productType === 'Spirits')
+  const isApparel = (p: ShopifyProduct) => resolveCategory(p.productType, p.tags) === 'clothing'
   const glassware = eligible.filter((p) => p.productType !== 'Spirits' && GLASSWARE_HANDLES.has(p.handle))
-  const tools = eligible.filter((p) => p.productType !== 'Spirits' && !GLASSWARE_HANDLES.has(p.handle))
+  const apparel = eligible.filter((p) => p.productType !== 'Spirits' && !GLASSWARE_HANDLES.has(p.handle) && isApparel(p))
+  const tools = eligible.filter((p) => p.productType !== 'Spirits' && !GLASSWARE_HANDLES.has(p.handle) && !isApparel(p))
 
   const rows: HomepageRow[] = [
     {
@@ -78,6 +87,14 @@ export function homepageProductRows(products: ShopifyProduct[]): HomepageRow[] {
       cta: 'All bar tools',
       products: tools.sort(byPrice),
     },
+    {
+      key: 'apparel',
+      title: 'Apparel.',
+      blurb: 'Original designs, printed to order.',
+      href: '/shop/clothing/',
+      cta: 'All apparel',
+      products: apparel.sort(byPrice),
+    },
   ]
-  return rows.filter((r) => r.products.length > 0)
+  return rows.filter((r) => r.products.length >= (r.key === 'apparel' ? APPAREL_ROW_MIN : 1))
 }

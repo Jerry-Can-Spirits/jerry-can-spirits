@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Image from 'next/image'
+import ImageLightbox from './ImageLightbox'
 import { useCart } from '@/contexts/CartContext'
 import { trackAddToCart } from '@/components/GoogleTag'
 import type { ShopifyProductVariant, ShopifyImage, ShopifySellingPlanGroup } from '@/lib/shopify'
@@ -33,6 +34,7 @@ export default function ProductVariantSelector({
 
   // Find first available variant
   const availableVariants = variants.filter(v => v.availableForSale)
+  const [variantZoomOpen, setVariantZoomOpen] = useState(false)
   const [selectedVariantId, setSelectedVariantId] = useState(
     availableVariants[0]?.id || variants[0]?.id
   )
@@ -99,15 +101,29 @@ export default function ProductVariantSelector({
     <div className="space-y-6">
       {/* Variant Image - only show if variant has specific image */}
       {hasMultipleVariants && currentImage && selectedVariant.image && (
-        <div className="relative aspect-square w-32 bg-jerry-green-800/20 rounded-lg overflow-hidden border border-gold-500/20">
-          <Image
-            src={currentImage.url}
-            alt={currentImage.altText || `${productTitle} - ${selectedVariant.title}`}
-            fill
-            className="object-contain p-2"
-            sizes="128px"
+        <>
+          <button
+            type="button"
+            onClick={() => setVariantZoomOpen(true)}
+            aria-label={`Zoom in on ${selectedVariant.title}`}
+            className="relative block aspect-square w-32 bg-jerry-green-800/20 rounded-lg overflow-hidden border border-gold-500/20 cursor-zoom-in hover:border-gold-400/40"
+          >
+            <Image
+              src={currentImage.url}
+              alt={currentImage.altText || `${productTitle} - ${selectedVariant.title}`}
+              fill
+              className="object-contain p-2"
+              sizes="128px"
+            />
+          </button>
+          <ImageLightbox
+            images={[{ url: currentImage.url, altText: currentImage.altText ?? null }]}
+            startIndex={0}
+            open={variantZoomOpen}
+            onClose={() => setVariantZoomOpen(false)}
+            productTitle={`${productTitle} - ${selectedVariant.title}`}
           />
-        </div>
+        </>
       )}
 
       {/* Variant Selector */}

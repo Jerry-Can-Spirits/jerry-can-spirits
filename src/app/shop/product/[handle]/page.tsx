@@ -842,7 +842,7 @@ export default async function ProductPage({
               instead of stretching nine columns across the band. */}
           {sizeGuideHtml && (
             <div
-              className="prose max-w-4xl rounded-xl bg-parchment-100 p-6 sm:p-8 prose-strong:text-jerry-green-900 prose-th:text-jerry-green-900 prose-td:text-jerry-green-800 prose-table:my-4 prose-table:text-sm [&_table]:w-auto [&_th]:px-4 [&_td]:px-4 [&_th]:py-2 [&_td]:py-2"
+              className="prose max-w-4xl mx-auto rounded-xl bg-parchment-100 p-6 sm:p-8 prose-strong:text-jerry-green-900 prose-th:text-jerry-green-900 prose-td:text-jerry-green-800 prose-table:my-4 prose-table:text-sm [&_table]:w-auto [&_th]:px-4 [&_td]:px-4 [&_th]:py-2 [&_td]:py-2"
               dangerouslySetInnerHTML={{ __html: xss(sizeGuideHtml) }}
             />
           )}
