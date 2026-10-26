@@ -5,7 +5,8 @@ import { homepageProductRows } from '@/lib/homepage-products'
 import SectionHeading from '@/components/SectionHeading'
 
 // Every purchasable product with its live price, straight after the hero, in
-// three rows that scroll sideways: the rum, the glassware, the tools. A row
+// rows that scroll sideways: the rum, the glassware, the tools, and the
+// apparel once there is enough of it (see homepage-products.ts). A row
 // shows a card and the edge of the next one on a phone, which is the cue to
 // swipe; on a desktop the row scrolls where it overflows the page width.
 // One Storefront call, cached by the page's revalidate and refreshed by the
@@ -20,6 +21,7 @@ export default async function HomepageProductGrid() {
     console.error('[HomepageProductGrid] fetch failed:', error)
   }
   if (rows.length === 0) return null
+  const hasApparel = rows.some((row) => row.key === 'apparel')
 
   return (
     <section className="py-16 band-light" aria-labelledby="shop-grid-heading">
@@ -27,7 +29,11 @@ export default async function HomepageProductGrid() {
         <SectionHeading
           eyebrow="The Range"
           id="shop-grid-heading"
-          intro="The bottle, the glassware its serves were built in, and the tools for making them. A first order can start small."
+          intro={
+            hasApparel
+              ? 'The bottle, the glassware its serves were built in, the tools for making them, and something to wear. A first order can start small.'
+              : 'The bottle, the glassware its serves were built in, and the tools for making them. A first order can start small.'
+          }
         >
           Everything in the shop.
         </SectionHeading>

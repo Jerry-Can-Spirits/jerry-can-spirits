@@ -5,10 +5,11 @@
  * price, the rum first and never buried. So the rule is pinned: the spirits
  * row leads cheapest first, glassware is whatever the glass collections list,
  * everything else is a tool, accessories and the tree fund never appear,
- * nothing unavailable appears, and an empty row is dropped.
+ * nothing unavailable appears, an empty row is dropped, and apparel gets a
+ * row of its own only once there are APPAREL_ROW_MIN pieces to scroll.
  */
 import { describe, expect, it } from 'vitest'
-import { homepageProductRows } from '@/lib/homepage-products'
+import { APPAREL_ROW_MIN, homepageProductRows } from '@/lib/homepage-products'
 import type { ShopifyProduct } from '@/lib/shopify'
 
 function p(handle: string, amount: string, productType: string, available = true): ShopifyProduct {
@@ -81,6 +82,20 @@ describe('homepageProductRows', () => {
     for (const row of homepageProductRows(catalogue)) {
       expect(row.href).toMatch(/^\/shop\/[a-z-]+\/$/)
     }
+  })
+
+  it('keeps a lone garment off the homepage rather than calling it a tool', () => {
+    const rows = homepageProductRows([...catalogue, p('explorers-inventory-t-shirt', '25.00', 'Apparel')])
+    expect(rows.map((r) => r.key)).toEqual(['rum', 'glassware', 'tools'])
+    expect(rows.flatMap((r) => r.products.map((x) => x.handle))).not.toContain('explorers-inventory-t-shirt')
+  })
+
+  it('adds the apparel row, cheapest first, once there is a range of it', () => {
+    const garments = Array.from({ length: APPAREL_ROW_MIN }, (_, i) => p(`garment-${i}`, String(30 - i), i === 0 ? 'Print Material' : 'Apparel'))
+    const rows = homepageProductRows([...catalogue, ...garments])
+    expect(rows.map((r) => r.key)).toEqual(['rum', 'glassware', 'tools', 'apparel'])
+    expect(handles(rows, 'apparel')).toEqual(['garment-2', 'garment-1', 'garment-0'])
+    expect(rows.find((r) => r.key === 'apparel')?.href).toBe('/shop/clothing/')
   })
 
   it('treats a product with no variants and no availability flag as for sale', () => {
