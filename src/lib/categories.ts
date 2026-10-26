@@ -339,6 +339,7 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
       'stainless-steel-spirit-stones',
       'crystal-ice-hiball-42cl',
       'jerry-can-spirits-gift-card',
+      'explorers-inventory-t-shirt',
     ],
     testimonial: {
       quote: [
@@ -385,6 +386,7 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
       'stainless-steel-spirit-stones',
       'crystal-ice-hiball-42cl',
       'jerry-can-spirits-gift-card',
+      'explorers-inventory-t-shirt',
     ],
   },
 
@@ -416,7 +418,7 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
       'Or the glassware the serves were designed in. A pair of the Crystal ICE hiballs is the Silver-medal serve, ready to pour. A pair of Club ICE tumblers is the Old Standard.',
       'Or something smaller: the jigger, the spirit stones, a single glass. The kit the serves are built around.',
     ],
-    productHandles: ['jerry-can-spirits-expedition-spiced-rum', 'expedition-spiced-rum-gift-boxed', ...UNDER_20_HANDLES, 'jerry-can-spirits-gift-card'],
+    productHandles: ['jerry-can-spirits-expedition-spiced-rum', 'expedition-spiced-rum-gift-boxed', ...UNDER_20_HANDLES, 'jerry-can-spirits-gift-card', 'explorers-inventory-t-shirt'],
   }),
   'gifts-under-100': giftBand(100, {
     metaTitle: 'Rum Gifts Under £100: The Gift Pack',
@@ -427,7 +429,7 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
       'Or build your own: the bottle, then the glasses and tools that suit the way they drink.',
       'Every bottle is numbered and traceable to its batch. Veteran-owned, no hidden investors, 5% of profits to Combat Stress.',
     ],
-    productHandles: ['jerry-can-spirits-premium-gift-pack', 'jerry-can-spirits-expedition-spiced-rum', 'expedition-spiced-rum-gift-boxed', ...UNDER_20_HANDLES, 'jerry-can-spirits-gift-card'],
+    productHandles: ['jerry-can-spirits-premium-gift-pack', 'jerry-can-spirits-expedition-spiced-rum', 'expedition-spiced-rum-gift-boxed', ...UNDER_20_HANDLES, 'jerry-can-spirits-gift-card', 'explorers-inventory-t-shirt'],
   }),
 
   'rum-glasses': {
@@ -614,7 +616,7 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
       'Expedition Spiced Rum was the first. What comes next is built on the same principles. Nothing ships until it is right.',
       'Sign up below to hear about new releases before they go public.',
     ],
-    productHandles: ['jerry-can-spirits-expedition-spiced-rum'],
+    productHandles: ['jerry-can-spirits-expedition-spiced-rum', 'explorers-inventory-t-shirt'],
   },
 }
 

@@ -397,6 +397,14 @@ export default async function ProductPage({
   const isSpirit = category.trackingCategory === 'Spirits'
   // A gift card is emailed, never shipped: no delivery, returns, cross-sell or quick-add.
   const isGiftCard = isGiftCardProductType(product.productType)
+  const isClothing = category.trackingCategory === 'Clothing'
+  // Gelato puts the size guide and care tables after the narrative in the
+  // description. Split them out so the story section keeps the story and the
+  // tables sit on the dark band below, where they read.
+  const descriptionHtml = product.descriptionHtml ?? ''
+  const sizeGuideAt = isClothing ? descriptionHtml.search(/<p><strong>Size guide<\/strong><\/p>/i) : -1
+  const storyHtml = sizeGuideAt > 0 ? descriptionHtml.slice(0, sizeGuideAt) : descriptionHtml
+  const sizeGuideHtml = sizeGuideAt > 0 ? descriptionHtml.slice(sizeGuideAt) : null
 
   // Curated review quotes from Sanity (empty = placeholder).
   const productReviews = sanityReviews
@@ -737,10 +745,10 @@ export default async function ProductPage({
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12 lg:items-start">
             {/* Description */}
-            {product.descriptionHtml && (
+            {storyHtml && (
               <div
                 className="lg:col-span-2 prose prose-invert max-w-none prose-headings:font-serif prose-headings:text-gold-300 prose-p:text-parchment-200 prose-p:leading-relaxed prose-strong:text-white prose-li:text-parchment-200 prose-a:underline prose-a:underline-offset-2"
-                dangerouslySetInnerHTML={{ __html: xss(product.descriptionHtml) }}
+                dangerouslySetInnerHTML={{ __html: xss(storyHtml) }}
               />
             )}
 
@@ -776,8 +784,9 @@ export default async function ProductPage({
                   ) : (
                     // Clothing-specific features
                     <>
-                      <li>Wear the brand you believe in. Made by people who do this for real.</li>
-                      <li>Quality fabrics that last - we wear these too</li>
+                      <li>An original Jerry Can Spirits design</li>
+                      <li>Printed to order, so nothing is made that nobody wanted</li>
+                      <li>Size guide and care instructions below</li>
                     </>
                   )}
                 </ul>
@@ -817,11 +826,21 @@ export default async function ProductPage({
         </div>
       </section>
 
-      {/* Product Details & Tasting Notes - Spirits only */}
-      {!isGiftCard && (product.metafields || sanityProduct) && (
+      {/* Product details: specifications and tasting notes for spirits; for
+          clothing, the size guide and care tables lifted out of the
+          description, since a T-shirt has no tasting notes. */}
+      {!isGiftCard && (isClothing ? !!sizeGuideHtml : !!(product.metafields || sanityProduct)) && (
         <section className="band-dark py-16">
          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
-          <SectionHeading eyebrow="The detail">Specifications and tasting notes</SectionHeading>
+          <SectionHeading eyebrow="The detail">
+            {isClothing ? 'Size guide and care' : 'Specifications and tasting notes'}
+          </SectionHeading>
+          {sizeGuideHtml && (
+            <div
+              className="prose prose-invert max-w-none prose-strong:text-gold-300 prose-th:text-white prose-td:text-parchment-200 prose-table:text-sm"
+              dangerouslySetInnerHTML={{ __html: xss(sizeGuideHtml) }}
+            />
+          )}
           {/* Product Specifications - Only for spirits (drink-specific fields) */}
           {isSpirit && product.metafields && product.metafields.length > 0 && (
             <ProductSpecifications

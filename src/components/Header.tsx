@@ -104,8 +104,8 @@ export default function Header() {
   // carries the bottle and the story behind it: those pages exist to sell
   // the bottle, so they sit under it rather than as an item of their own.
   // Reviews, Stockists, Contact and the About long tail live in the footer.
-  // Clothing is a coming-soon page and earns a slot when there is something
-  // to buy. No page was deleted.
+  // Apparel earned its slot on 26 Oct 2026 with the first T-shirt; before
+  // that it was a coming-soon page. No page was deleted.
   const navigation: NavigationItem[] = [
     {
       name: 'Shop',
@@ -115,6 +115,7 @@ export default function Header() {
         { name: 'Cocktail Making Kits', href: '/shop/cocktail-making-kits/', description: 'Bar tools & spiced rum' },
         { name: 'Bar Accessories', href: '/shop/bar-accessories/', description: 'Shakers, jiggers, glassware' },
         { name: 'Rum Glasses', href: '/shop/rum-glasses/', description: 'The right glass makes a difference' },
+        { name: 'Expedition Gear & Apparel', href: '/shop/clothing/', description: 'T-shirts, printed to order' },
         { name: 'Browse All', href: '/shop/', description: 'All collections' },
         { name: 'Stockists', href: '/stockists/', description: 'Find us near you' },
         { name: 'Reviews', href: '/reviews/', description: 'What customers say' },
