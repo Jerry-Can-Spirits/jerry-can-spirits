@@ -13,6 +13,7 @@ import { formatPrice } from '@/lib/format-price'
 import ScrollRow from '@/components/ScrollRow'
 import SectionHeading from '@/components/SectionHeading'
 import { displayProductTitle } from '@/lib/product-title'
+import { CHARITY_STATEMENT_FULL } from '@/lib/charity'
 
 export const metadata: Metadata = {
   title: 'Expedition Gear & Apparel',
@@ -224,16 +225,16 @@ export default async function ClothingPage() {
                   Comfortable gear you will actually want to put on. Designed by us, for people who appreciate good rum and no-nonsense kit.
                 </p>
               </div>,
-              <div key="built-to-last" className="h-full text-center">
-                <h4 className="text-lg font-semibold text-white mb-2">Built to Last</h4>
+              <div key="printed-to-order" className="h-full text-center">
+                <h4 className="text-lg font-semibold text-white mb-2">Printed to Order</h4>
                 <p className="text-parchment-300 text-sm">
-                  Quality materials, proper stitching. Not fast fashion. Clothing that holds up wash after wash.
+                  Nothing is printed until you order it. No warehouse pile, and nothing made that nobody wanted.
                 </p>
               </div>,
               <div key="gives-back" className="h-full text-center">
                 <h4 className="text-lg font-semibold text-white mb-2">Gives Back</h4>
                 <p className="text-parchment-300 text-sm">
-                  5% of profits supports Combat Stress. When you buy from us, you're helping us give back to causes we care about.
+                  {CHARITY_STATEMENT_FULL}
                 </p>
               </div>,
             ]}
