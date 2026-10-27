@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { revalidatePath } from 'next/cache';
 import { getCloudflareContext } from '@opennextjs/cloudflare';
 import { captureServerError } from '@/lib/server-error-capture';
+import { submitToIndexNow } from '@/lib/indexnow';
 
 export const dynamic = 'force-dynamic';
 
@@ -160,6 +161,8 @@ export async function POST(request: Request) {
     }
 
     console.log('[sanity-webhook] revalidated %s path(s) for _type %s', String(paths.length), doc._type ?? 'unknown');
+    // The same pages, announced to the search engines that take IndexNow.
+    submitToIndexNow(paths);
     return NextResponse.json({ revalidated: true, paths });
   } catch (error) {
     console.error('[sanity-webhook] Handler error:', error);

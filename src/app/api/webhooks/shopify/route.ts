@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { revalidatePath } from 'next/cache';
 import { getCloudflareContext } from '@opennextjs/cloudflare';
 import { captureServerError } from '@/lib/server-error-capture';
+import { submitToIndexNow } from '@/lib/indexnow';
 import { countBottles } from '@/lib/product-formats';
 import { COUNTED_HANDLES } from '@/lib/batch-stock';
 import {
@@ -236,6 +237,8 @@ async function handleProductUpdated(product: ShopifyProduct, kv: KVNamespace) {
     console.error('[webhook] revalidate failed for product %s:', product.handle, err);
   }
 
+  // The product page is the URL that changed; the homepage carries its price.
+  submitToIndexNow([`/shop/product/${product.handle}/`, '/']);
   console.log(`[webhook] products/update "${product.handle}"`);
 }
 
