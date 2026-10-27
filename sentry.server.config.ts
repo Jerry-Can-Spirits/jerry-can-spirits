@@ -7,6 +7,26 @@ Sentry.init({
   environment: process.env.SENTRY_ENVIRONMENT,
   enabled: process.env.SENTRY_ENVIRONMENT !== "local",
 
+  // Sentry 11 collects cookies, request and response bodies, database query
+  // data and user IP addresses unless told otherwise (v10 collected none of
+  // these with sendDefaultPii unset). API routes receive trade applications,
+  // contact forms and webhook payloads, none of which belong in an error
+  // report, so this keeps the v10 baseline. The privacy policy lists Sentry
+  // for error monitoring only.
+  dataCollection: {
+    userInfo: false,
+    cookies: false,
+    httpHeaders: {
+      request: { deny: ["forwarded", "-ip", "remote-", "via", "-user"] },
+      response: { deny: ["forwarded", "-ip", "remote-", "via", "-user"] },
+    },
+    httpBodies: [],
+    urlQueryParams: { deny: ["forwarded", "-ip", "remote-", "via", "-user"] },
+    genAI: { inputs: false, outputs: false },
+    databaseQueryData: false,
+    graphQL: { document: false, variables: false },
+  },
+
   // Sample 20% of transactions in production to reduce overhead
   tracesSampleRate: 0.2,
 
