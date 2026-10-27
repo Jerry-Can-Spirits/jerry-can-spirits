@@ -9,6 +9,14 @@ Sentry.init({
   environment: process.env.SENTRY_ENVIRONMENT,
   enabled: process.env.SENTRY_ENVIRONMENT !== "local",
 
+  // Sentry 11 attaches the visitor IP and cookies to browser events by
+  // default; v10 did not, and the privacy policy lists Sentry for error
+  // monitoring only, so the v10 baseline is kept.
+  dataCollection: {
+    userInfo: false,
+    cookies: false,
+  },
+
   // Error reporting ONLY. Performance tracing is disabled: no tracesSampler is
   // set, and the BrowserTracing integration is filtered out of the defaults
   // below, so no traces are ever collected (this project uses Sentry for error
