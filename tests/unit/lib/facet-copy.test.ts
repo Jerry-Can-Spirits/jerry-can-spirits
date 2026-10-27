@@ -74,12 +74,13 @@ describe('the sub-type split', () => {
 
 describe('the copy store', () => {
   it('holds an entry for every indexable facet except the duplicate', () => {
-    // 25 indexable facets, 24 written. mocktails is deliberately absent: it
+    // 26 indexable facets, 25 written. mocktails is deliberately absent: it
     // describes the same ten drinks as non-alcoholic and canonicalises to it,
     // so a second introduction would be the duplication the canonical resolves.
-    // The floor dropped to 5 on 10 Oct 2026; these six cleared it then.
-    expect(Object.keys(FACET_COPY)).toHaveLength(24)
-    for (const style of ['iced-teas', 'spritz', 'toddies', 'shots-shooters', 'smashes', 'mules']) {
+    // The floor dropped to 5 on 10 Oct 2026; these six cleared it then, and
+    // signature was found at the floor with no entry on 27 Oct 2026.
+    expect(Object.keys(FACET_COPY)).toHaveLength(25)
+    for (const style of ['iced-teas', 'spritz', 'toddies', 'shots-shooters', 'smashes', 'mules', 'signature']) {
       expect(copyFor('style', style)).toBeDefined()
     }
     expect(copyFor('style', 'mocktails')).toBeUndefined()
@@ -259,7 +260,7 @@ describe('every facet inside the ceilings', () => {
   const FAMILY_COUNTS: Record<string, number> = {
     sours: 91, highballs: 52, martinis: 43, 'old-fashioneds': 26, punches: 20, manhattans: 20, tiki: 19,
     fizzes: 16, negronis: 12, spritz: 8, 'iced-teas': 7, toddies: 6, 'shots-shooters': 6, smashes: 5,
-    mules: 5, collins: 5,
+    mules: 5, collins: 5, signature: 5,
   }
   const BASE_COUNTS: Record<string, number> = {
     bourbon: 24, 'tennessee-whiskey': 3, 'rye-whiskey': 22, scotch: 16, 'irish-whiskey': 8, 'welsh-whisky': 3,
