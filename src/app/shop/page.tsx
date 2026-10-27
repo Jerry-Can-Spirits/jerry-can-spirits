@@ -80,11 +80,30 @@ export default function ShopPage() {
 
   const allItems = curatedItems
 
+  // The tiles are the page's content, so they are also its ItemList: one
+  // entry per collection, in the curated order shown.
+  const collectionListSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: 'Jerry Can Spirits shop collections',
+    numberOfItems: curatedItems.length,
+    itemListElement: curatedItems.map((item, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      name: item.title,
+      url: `https://jerrycanspirits.co.uk/shop/${item.handle}/`,
+    })),
+  }
+
   return (
     <main>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: safeJsonLd(breadcrumbSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: safeJsonLd(collectionListSchema) }}
       />
 
       {/* The page heading opens on dark; the collection tiles are navigation,

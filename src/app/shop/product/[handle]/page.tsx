@@ -401,7 +401,9 @@ export default async function ProductPage({
   // Gelato puts the size guide and care tables after the narrative in the
   // description. Split them out so the story section keeps the story and the
   // tables sit on the dark band below, where they read.
-  const descriptionHtml = product.descriptionHtml ?? ''
+  // The page's h1 is the title; a print-on-demand description arrives with
+  // its own h1 of the same title, which made two. Demoted, not dropped.
+  const descriptionHtml = (product.descriptionHtml ?? '').replace(/<(\/?)h1\b/gi, '<$1h2')
   const sizeGuideAt = isClothing ? descriptionHtml.search(/<p><strong>Size guide<\/strong><\/p>/i) : -1
   const storyHtml = sizeGuideAt > 0 ? descriptionHtml.slice(0, sizeGuideAt) : descriptionHtml
   // Gelato pads the tables apart with empty <p><br><br></p> paragraphs; drop them.
