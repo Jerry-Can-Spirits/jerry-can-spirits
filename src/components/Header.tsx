@@ -127,6 +127,7 @@ export default function Header() {
       href: '/shop/rum-gifts/',
       dropdown: [
         { name: 'Rum Gifts', href: '/shop/rum-gifts/', description: 'Gifts for people who drink properly' },
+        { name: 'Christmas Rum Gifts', href: '/shop/christmas-gifts/', description: 'The boxed bottle or the gift pack' },
         { name: 'Under £20', href: '/shop/gifts-under-20/', description: 'Barware and glassware' },
         { name: 'Under £50', href: '/shop/gifts-under-50/', description: 'The bottle, or the glasses' },
         { name: 'Under £100', href: '/shop/gifts-under-100/', description: 'The gift pack' },

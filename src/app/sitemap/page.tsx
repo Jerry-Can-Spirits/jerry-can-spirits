@@ -113,6 +113,7 @@ const shopPages = [
 
 const shopCategoryPages = [
   { label: 'Rum Gifts', href: '/shop/rum-gifts/' },
+  { label: 'Christmas Rum Gifts', href: '/shop/christmas-gifts/' },
   { label: 'British Spiced Rum', href: '/shop/spiced-rum/' },
   { label: 'Cocktail Making Kits', href: '/shop/cocktail-making-kits/' },
   { label: 'Bar Accessories', href: '/shop/bar-accessories/' },

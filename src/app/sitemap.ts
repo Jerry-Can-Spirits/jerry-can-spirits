@@ -139,6 +139,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     'gifts-under-20', 'gifts-under-50', 'gifts-under-100',
     'ice-chilling', 'cocktail-glasses-glassware', 'cocktail-shakers',
     'new-releases', 'bundles', 'gift-sets', 'gifts-and-experience',
+    'christmas-gifts',
   ])
   let dynamicCollectionUrls: MetadataRoute.Sitemap = []
   try {
@@ -487,6 +488,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     {
       url: `${baseUrl}/shop/rum-gifts/`,
       lastModified: STATIC_LAST_MODIFIED,
+      changeFrequency: 'weekly' as const,
+      priority: 0.9,
+    },
+    {
+      url: `${baseUrl}/shop/christmas-gifts/`,
+      lastModified: new Date('2026-10-27'),
       changeFrequency: 'weekly' as const,
       priority: 0.9,
     },
