@@ -300,6 +300,14 @@ export const FACET_COPY: Record<string, FacetCopy> = {
     intro:
       'This Field Manual holds {recipes} built on champagne or sparkling wine. The bubbles are an ingredient rather than a mixer, and that changes the order of work: everything else goes in first, the wine goes in last, and nothing gets stirred afterwards.\n\nDryness decides the drink. A brut keeps a sugar cube or a liqueur in check, where a demi-sec on top of either turns cloying. Temperature does the rest, because a warm bottle loses carbonation as it pours and the drink is flat before it reaches the table. Prosecco and cava work in most of these and cost less; the exception is anything where the wine is most of the glass, which is where the better bottle shows.',
   },
+  // The house serves. Without an entry the page fell back to a nine-character
+  // title and a 69-character description (Ahrefs, 26 Oct 2026).
+  'style:signature': {
+    h1: 'Signature Cocktails',
+    title: 'Signature Cocktails: {recipes} from the Field Manual',
+    description:
+      '{recipes}: the house serves of the Jerry Can Spirits Field Manual, each written with measures in ml and UK units and the glass to pour it in.',
+  },
 }
 
 export function copyFor(kind: string, value: string): FacetCopy | undefined {
