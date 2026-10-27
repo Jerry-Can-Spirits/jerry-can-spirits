@@ -11,14 +11,14 @@ export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'The Expedition Log',
-  description: 'Where every bottle of Batch 001 has gone, by postcode district.',
+  description: 'A map of where every bottle of Batch 001 has gone, by postcode district. No names and no addresses, only the districts the first batch has reached.',
   alternates: {
     canonical: 'https://jerrycanspirits.co.uk/expedition-log/',
   },
   openGraph: {
     ...baseOpenGraph,
     title: 'The Expedition Log | Jerry Can Spirits®',
-    description: 'Where every bottle of Batch 001 has gone, by postcode district.',
+    description: 'A map of where every bottle of Batch 001 has gone, by postcode district. No names and no addresses, only the districts the first batch has reached.',
     url: 'https://jerrycanspirits.co.uk/expedition-log/',
   },
 }

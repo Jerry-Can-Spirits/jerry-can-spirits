@@ -8,7 +8,7 @@ const webPageSchema = {
   '@context': 'https://schema.org',
   '@type': 'WebPage',
   name: 'Community Guidelines',
-  description: 'These guidelines cover what you share with us.',
+  description: 'What we ask of anything you share with us, on social, in the Expedition Log and in reviews: nothing under 18, nothing unsafe, nothing that is not yours.',
   url: 'https://jerrycanspirits.co.uk/community-guidelines/',
   publisher: ORG_REF,
   inLanguage: 'en-GB',
@@ -21,14 +21,14 @@ const webPageSchema = {
 
 export const metadata: Metadata = {
   title: 'Community Guidelines',
-  description: 'These guidelines cover what you share with us.',
+  description: 'What we ask of anything you share with us, on social, in the Expedition Log and in reviews: nothing under 18, nothing unsafe, nothing that is not yours.',
   alternates: {
     canonical: 'https://jerrycanspirits.co.uk/community-guidelines/',
   },
   openGraph: {
     ...baseOpenGraph,
     title: 'Community Guidelines | Jerry Can Spirits®',
-    description: 'These guidelines cover what you share with us.',
+    description: 'What we ask of anything you share with us, on social, in the Expedition Log and in reviews: nothing under 18, nothing unsafe, nothing that is not yours.',
     url: 'https://jerrycanspirits.co.uk/community-guidelines/',
   },
   robots: {
