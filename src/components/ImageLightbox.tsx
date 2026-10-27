@@ -1,6 +1,6 @@
 'use client'
 
-import { useLayoutEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import Image from 'next/image'
 import { Dialog, DialogPanel } from '@headlessui/react'
 
@@ -17,25 +17,54 @@ interface ImageLightboxProps {
   productTitle: string
 }
 
+// One tap zooms to this; a pinch goes anywhere between fit and MAX_ZOOM.
 const ZOOM = 2.5
+const MAX_ZOOM = 4
+// A press that moves less than this and ends within this is a tap.
+const TAP_SLOP = 10
+const TAP_MS = 350
+
+// Where the image sits: its scale, and its top-left corner relative to the
+// stage, in CSS pixels. Fit is scale 1 at the origin.
+type View = { scale: number; x: number; y: number }
+type Point = { x: number; y: number }
+const FIT: View = { scale: 1, x: 0, y: 0 }
+
+// Keep the image covering the stage: never smaller than fit, never dragged so
+// far that stage shows through at an edge.
+function clampView(v: View, w: number, h: number): View {
+  const scale = Math.min(MAX_ZOOM, Math.max(1, v.scale))
+  return {
+    scale,
+    x: Math.min(0, Math.max(w - w * scale, v.x)),
+    y: Math.min(0, Math.max(h - h * scale, v.y)),
+  }
+}
+
+// Rescale about a stage point so whatever is under it stays under it.
+function zoomAt(v: View, p: Point, scale: number, w: number, h: number): View {
+  const k = scale / v.scale
+  return clampView({ scale, x: p.x - (p.x - v.x) * k, y: p.y - (p.y - v.y) * k }, w, h)
+}
 
 // Full-screen view of a product image with a magnifier. One tap zooms in on
-// the point tapped; the enlarged image then scrolls natively under a finger
-// (or follows the mouse on a desktop); another tap zooms out. Built for
-// garments and labels, where the artwork carries text the gallery cannot
-// show. Headless UI's Dialog supplies the focus trap, Escape to close and
-// the scroll lock.
+// the point tapped and another tap zooms out; a pinch zooms by any amount; a
+// finger or a held mouse drags the enlarged image about, and a mouse also
+// pans it by position. Built for garments and labels, where the artwork
+// carries text the gallery cannot show. Headless UI's Dialog supplies the
+// focus trap, Escape to close and the scroll lock.
 //
-// touch-action matters here: two taps on an image are also the browser's
-// double-tap-to-zoom gesture, which on iOS scales the whole page and leaves
-// it that way after the dialog closes. "manipulation" keeps scrolling and
-// pinch but drops double-tap zoom; "pan-x pan-y" while zoomed leaves only
-// the scrolling of the enlarged image.
+// Every gesture is handled here, from pointer events, and the stage carries
+// touch-action: none. The earlier version let the browser scroll the
+// enlarged image natively, which meant leaving pinch to the browser too, and
+// a pinch on the image then zoomed the whole page (measured on an emulated
+// Pixel: visual viewport scale 1 to 2) and left it that way after the dialog
+// closed. The browser never sees a page gesture while this is open.
 export default function ImageLightbox({ images, startIndex, open, onClose, productTitle }: ImageLightboxProps) {
   return (
     <Dialog open={open} onClose={onClose} className="relative z-[100]">
       <div className="fixed inset-0 bg-jerry-green-900/95 backdrop-blur-sm" aria-hidden="true" />
-      <div className="fixed inset-0 flex items-center justify-center p-3 sm:p-6 [touch-action:manipulation]">
+      <div className="fixed inset-0 flex items-center justify-center p-3 sm:p-6 touch-none">
         {/* Keyed so the index and zoom reset every time the lightbox opens. */}
         <Viewer key={`${open}-${startIndex}`} images={images} startIndex={startIndex} onClose={onClose} productTitle={productTitle} />
       </div>
@@ -43,36 +72,123 @@ export default function ImageLightbox({ images, startIndex, open, onClose, produ
   )
 }
 
+interface Gesture {
+  // The view when the second finger landed, and the distance and midpoint
+  // between the fingers then; the pinch is computed against these.
+  view: View
+  dist: number
+  mid: Point
+}
+
+interface Press {
+  id: number
+  at: Point
+  time: number
+  // False once it moved past the slop or a second pointer joined.
+  tap: boolean
+}
+
 function Viewer({ images, startIndex, onClose, productTitle }: Omit<ImageLightboxProps, 'open'>) {
   const [index, setIndex] = useState(startIndex)
-  const [zoomed, setZoomed] = useState(false)
-  const scrollRef = useRef<HTMLDivElement>(null)
-  // Where the zoom was asked for, as fractions of the viewer, applied once
-  // the enlarged image is in the DOM.
-  const focusRef = useRef<{ x: number; y: number } | null>(null)
+  const [view, setView] = useState<View>(FIT)
+  const stageRef = useRef<HTMLDivElement>(null)
+  const pointers = useRef(new Map<number, Point>())
+  const pinch = useRef<Gesture | null>(null)
+  const press = useRef<Press | null>(null)
   const image = images[index]
   const many = images.length > 1
+  const zoomed = view.scale > 1
 
-  useLayoutEffect(() => {
-    const el = scrollRef.current
-    const focus = focusRef.current
-    if (!zoomed || !el || !focus) return
-    el.scrollLeft = focus.x * el.scrollWidth - el.clientWidth / 2
-    el.scrollTop = focus.y * el.scrollHeight - el.clientHeight / 2
-    focusRef.current = null
-  }, [zoomed])
+  const stageSize = () => {
+    const rect = stageRef.current?.getBoundingClientRect()
+    return { w: rect?.width ?? 1, h: rect?.height ?? 1 }
+  }
 
-  const fraction = (e: React.MouseEvent | React.PointerEvent) => {
+  // A pointer's position in stage coordinates.
+  const local = (e: React.PointerEvent): Point => {
     const rect = e.currentTarget.getBoundingClientRect()
-    return {
-      x: Math.min(1, Math.max(0, (e.clientX - rect.left) / rect.width)),
-      y: Math.min(1, Math.max(0, (e.clientY - rect.top) / rect.height)),
+    return { x: e.clientX - rect.left, y: e.clientY - rect.top }
+  }
+
+  const startPinch = () => {
+    const [a, b] = [...pointers.current.values()]
+    pinch.current = {
+      view,
+      dist: Math.hypot(b.x - a.x, b.y - a.y) || 1,
+      mid: { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 },
     }
   }
 
   const step = (delta: number) => {
-    setZoomed(false)
+    setView(FIT)
     setIndex(prev => (prev + delta + images.length) % images.length)
+  }
+
+  const onPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    // Keeps a mouse drag alive outside the stage and stops a mouse press
+    // selecting or dragging the image. Focus stays with the panel.
+    e.preventDefault()
+    e.currentTarget.setPointerCapture(e.pointerId)
+    const p = local(e)
+    pointers.current.set(e.pointerId, p)
+    if (pointers.current.size === 1) {
+      press.current = { id: e.pointerId, at: p, time: Date.now(), tap: true }
+    } else {
+      if (press.current) press.current.tap = false
+      if (pointers.current.size === 2) startPinch()
+    }
+  }
+
+  const onPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    const p = local(e)
+    const { w, h } = stageSize()
+    const last = pointers.current.get(e.pointerId)
+
+    if (!last) {
+      // A mouse passing over, nothing pressed: pan by position while zoomed.
+      if (e.pointerType !== 'mouse' || !zoomed) return
+      setView(v => clampView({ ...v, x: -(p.x / w) * (w * v.scale - w), y: -(p.y / h) * (h * v.scale - h) }, w, h))
+      return
+    }
+    pointers.current.set(e.pointerId, p)
+
+    const pr = press.current
+    if (pr && pr.id === e.pointerId && pr.tap && Math.hypot(p.x - pr.at.x, p.y - pr.at.y) > TAP_SLOP) {
+      pr.tap = false
+    }
+
+    if (pointers.current.size >= 2 && pinch.current) {
+      const [a, b] = [...pointers.current.values()]
+      const dist = Math.hypot(b.x - a.x, b.y - a.y)
+      const mid = { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 }
+      const start = pinch.current
+      const scaled = zoomAt(start.view, start.mid, start.view.scale * (dist / start.dist), w, h)
+      setView(clampView({ ...scaled, x: scaled.x + mid.x - start.mid.x, y: scaled.y + mid.y - start.mid.y }, w, h))
+      return
+    }
+
+    if (zoomed) {
+      const dx = p.x - last.x
+      const dy = p.y - last.y
+      setView(v => clampView({ ...v, x: v.x + dx, y: v.y + dy }, w, h))
+    }
+  }
+
+  const onPointerUp = (e: React.PointerEvent<HTMLDivElement>) => {
+    const p = local(e)
+    pointers.current.delete(e.pointerId)
+    pinch.current = null
+    // Two fingers down to one: the remaining finger drags from where it is.
+    if (pointers.current.size === 2) startPinch()
+
+    const pr = press.current
+    if (pr && pr.id === e.pointerId) {
+      press.current = null
+      if (pr.tap && Date.now() - pr.time < TAP_MS) {
+        const { w, h } = stageSize()
+        setView(v => (v.scale > 1 ? FIT : zoomAt(FIT, p, ZOOM, w, h)))
+      }
+    }
   }
 
   return (
@@ -96,34 +212,23 @@ function Viewer({ images, startIndex, onClose, productTitle }: Omit<ImageLightbo
       </button>
 
       <div
-        ref={scrollRef}
-        className={`absolute inset-0 rounded-xl overflow-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden ${zoomed ? 'cursor-zoom-out [touch-action:pan-x_pan-y]' : 'cursor-zoom-in [touch-action:manipulation]'}`}
-        onClick={(e) => {
-          if (zoomed) {
-            setZoomed(false)
-            return
-          }
-          focusRef.current = fraction(e)
-          setZoomed(true)
-        }}
-        onPointerMove={(e) => {
-          // A mouse pans by position; a finger scrolls the image natively.
-          if (!zoomed || e.pointerType !== 'mouse') return
-          const el = e.currentTarget
-          const { x, y } = fraction(e)
-          el.scrollLeft = x * (el.scrollWidth - el.clientWidth)
-          el.scrollTop = y * (el.scrollHeight - el.clientHeight)
-        }}
+        ref={stageRef}
+        data-stage=""
+        className={`absolute inset-0 rounded-xl overflow-hidden touch-none select-none ${zoomed ? 'cursor-zoom-out' : 'cursor-zoom-in'}`}
+        onPointerDown={onPointerDown}
+        onPointerMove={onPointerMove}
+        onPointerUp={onPointerUp}
+        onPointerCancel={onPointerUp}
       >
         <div
-          className="relative"
-          style={{ width: zoomed ? `${ZOOM * 100}%` : '100%', height: zoomed ? `${ZOOM * 100}%` : '100%' }}
+          className="absolute inset-0 origin-top-left"
+          style={{ transform: `translate(${view.x}px, ${view.y}px) scale(${view.scale})` }}
         >
           <Image
             src={image.url}
             alt={image.altText || productTitle}
             fill
-            className="object-contain select-none"
+            className="object-contain pointer-events-none"
             sizes="100vw"
             draggable={false}
           />
@@ -156,7 +261,7 @@ function Viewer({ images, startIndex, onClose, productTitle }: Omit<ImageLightbo
       )}
 
       <p className="absolute bottom-0 left-1/2 -translate-x-1/2 z-20 px-3 py-1 rounded-full bg-jerry-green-900/70 border border-gold-500/30 text-parchment-300 text-xs whitespace-nowrap">
-        {zoomed ? 'Drag to look around. Tap to zoom out.' : 'Tap to zoom in.'}
+        {zoomed ? 'Drag to look around. Tap to zoom out.' : 'Tap or pinch to zoom in.'}
         {many ? ` ${index + 1} of ${images.length}.` : ''}
       </p>
     </DialogPanel>
