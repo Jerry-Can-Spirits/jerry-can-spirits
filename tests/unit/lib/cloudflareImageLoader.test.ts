@@ -28,6 +28,30 @@ describe('cloudflareImageLoader — Shopify images', () => {
     })
     expect(new URL(out).searchParams.get('width')).toBe('640')
   })
+
+  // Shopify ignores `width` when the filename carries a size suffix, which is
+  // how the Storefront transform delivers maxWidth: every product photo came
+  // back at 1600px (Ahrefs crawl, 26 Oct 2026).
+  it('strips a filename size suffix so width is obeyed', () => {
+    const out = cloudflareImageLoader({
+      src: 'https://cdn.shopify.com/s/files/1/0001/files/Bottle_1_1600x.jpg?v=123',
+      width: 400,
+    })
+    const url = new URL(out)
+    expect(url.pathname).toBe('/s/files/1/0001/files/Bottle_1.jpg')
+    expect(url.searchParams.get('width')).toBe('400')
+    expect(url.searchParams.get('format')).toBeNull()
+  })
+
+  it('asks for WebP outright for PNG uploads', () => {
+    const out = cloudflareImageLoader({
+      src: 'https://cdn.shopify.com/s/files/1/0001/files/mockup_1600x.png?v=1',
+      width: 640,
+    })
+    const url = new URL(out)
+    expect(url.pathname).toBe('/s/files/1/0001/files/mockup.png')
+    expect(url.searchParams.get('format')).toBe('webp')
+  })
 })
 
 describe('cloudflareImageLoader — other hosts unchanged', () => {
@@ -41,6 +65,8 @@ describe('cloudflareImageLoader — other hosts unchanged', () => {
     expect(url.searchParams.get('w')).toBe('828')
     expect(url.searchParams.get('q')).toBe('70')
     expect(url.searchParams.get('auto')).toBe('format')
+    // The WebP floor for clients that do not negotiate a format.
+    expect(url.searchParams.get('fm')).toBe('webp')
   })
 
   it('leaves unknown external hosts untouched', () => {
