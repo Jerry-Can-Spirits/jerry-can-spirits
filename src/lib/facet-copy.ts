@@ -300,13 +300,17 @@ export const FACET_COPY: Record<string, FacetCopy> = {
     intro:
       'This Field Manual holds {recipes} built on champagne or sparkling wine. The bubbles are an ingredient rather than a mixer, and that changes the order of work: everything else goes in first, the wine goes in last, and nothing gets stirred afterwards.\n\nDryness decides the drink. A brut keeps a sugar cube or a liqueur in check, where a demi-sec on top of either turns cloying. Temperature does the rest, because a warm bottle loses carbonation as it pours and the drink is flat before it reaches the table. Prosecco and cava work in most of these and cost less; the exception is anything where the wine is most of the glass, which is where the better bottle shows.',
   },
-  // The house serves. Without an entry the page fell back to a nine-character
-  // title and a 69-character description (Ahrefs, 26 Oct 2026).
+  // The house serves. The family reached the indexable floor of five without
+  // an entry, so the page fell back to a nine-character title and a template
+  // description (Ahrefs, 26 Oct 2026). MEASURED 27 Oct 2026: all five are
+  // built on Expedition Spiced Rum.
   'style:signature': {
     h1: 'Signature Cocktails',
     title: 'Signature Cocktails: {recipes} from the Field Manual',
     description:
       '{recipes}: the house serves of the Jerry Can Spirits Field Manual, each written with measures in ml and UK units and the glass to pour it in.',
+    intro:
+      'This Field Manual holds {recipes} written for Expedition Spiced Rum. Every one is a classic build with the spiced rum in the base, so what the spirit adds is easy to taste against a drink you already know.\n\nThe spices are already in the bottle, so the rest of each recipe stays short: citrus, a sugar, bitters or a mixer, and nothing you would have to go out and find. Each page gives the measures in ml, the glass to pour it in and the UK units in the finished drink.',
   },
 }
 
