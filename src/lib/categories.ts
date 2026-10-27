@@ -43,6 +43,7 @@ export type CategoryConfig = {
 // tells it which pages belong together.
 const GIFT_CLUSTER_LINKS = [
   { label: 'Rum gifts', href: '/shop/rum-gifts/' },
+  { label: 'Christmas gifts', href: '/shop/christmas-gifts/' },
   ...GIFT_BANDS.map((max) => ({ label: `Under £${max}`, href: `/shop/${giftBandSlug(max)}/` })),
   { label: 'Gift sets', href: '/shop/gift-sets/' },
   { label: 'Gifts for him', href: '/shop/gifts-for-him/' },
@@ -85,6 +86,19 @@ const FAQ_RETURNS: CategoryFaq = {
 }
 
 const GIFT_FAQS: CategoryFaq[] = [FAQ_SEND_DIRECT, FAQ_DELIVERY_TIME, FAQ_GIFT_READY]
+
+// The Christmas page keeps one URL from year to year and carries the year in
+// its title and heading only, so the page's history and links accrue to the
+// same address while the title still answers the dated search. Bump this
+// number once the Christmas is over; nothing else about the page needs to
+// change with it. The last-order line is decided in lib/delivery.ts and
+// renders on the page by itself once that date is set.
+export const CHRISTMAS_GIFT_YEAR = 2026
+
+const FAQ_BEFORE_CHRISTMAS: CategoryFaq = {
+  question: 'Will it arrive before Christmas?',
+  answer: `${DELIVERY_PROMISE_SENTENCE} The last order date for delivery before Christmas is shown on the shipping page and in the basket once it is confirmed each year.`,
+}
 
 // The barware and glassware that sits inside the smallest band. Glass singles
 // are made to order and untracked in Shopify; they are in stock.
@@ -165,6 +179,39 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
       attribution: 'Customer review · Trustpilot',
     },
     faqs: GIFT_FAQS,
+    relatedLinks: GIFT_CLUSTER_LINKS,
+  },
+
+  'christmas-gifts': {
+    h1: `Christmas Rum Gifts ${CHRISTMAS_GIFT_YEAR}`,
+    metaTitle: `Christmas Rum Gifts ${CHRISTMAS_GIFT_YEAR}: Boxed Bottle or Gift Pack`,
+    metaDescription:
+      'Expedition Spiced Rum in its presentation box, or the gift pack with hiball, jigger and coaster. Veteran-owned British spirits, delivered age-verified.',
+    introBody: [
+      'Most Christmas rum gifts are picked from whatever the supermarket has put in a box. This one is picked on purpose.',
+      'Expedition Spiced Rum in its presentation box: a numbered bottle from a small British batch, Bronze at the IWSC 2026, sized to go under the tree as it arrives. Or the gift pack, which adds the Crystal ICE hiball, a 25ml and 50ml jigger and a slate coaster, in a branded box.',
+      'Either goes straight to the person if you want it to, age-verified at the door.',
+    ],
+    // The boxed bottle and the pack, as Dan set the page up on 27 Oct 2026.
+    // Christmas apparel joins the list once the designs are right.
+    productHandles: [
+      'expedition-spiced-rum-gift-boxed',
+      'jerry-can-spirits-premium-gift-pack',
+    ],
+    seoTitle: 'Which One to Give',
+    seoBody: [
+      'The boxed bottle suits someone who already has a glass they like and a shelf to put the bottle on. The box is sized for the 700ml bottle, so there is nothing to wrap, and the label and the batch number do the rest.',
+      'The gift pack is for someone starting from nothing. The hiball is the glass from the cola serve that took Silver at the IWSC 2026, the jigger pours the 25ml and 50ml every Field Manual recipe is written in, and the coaster is natural slate. It is the first pour, boxed.',
+      'Both start with the same rum. Caribbean rum base, seven real spices, two natural sweeteners and bourbon oak, macerated by our British partner distillery. 40% ABV, 700ml, built to be sipped slowly on a dark evening rather than lost in a mixer.',
+    ],
+    pillars: [
+      { title: 'Ready to Hand Over', body: 'The box and the pack arrive as they are meant to be given. Send them to yourself to put under the tree, or straight to the person.' },
+      { title: 'A Rum Worth Opening', body: 'Not a display bottle. Vanilla opens first, cinnamon and ginger follow, bourbon oak holds the finish. Built for a slow pour after the meal.' },
+      { title: 'Every Bottle Numbered', body: 'Batch number and bottle number on every label. Small British batches; when one is sold, that run is finished.' },
+    ],
+    // No testimonial: no review in the corpus is about a Christmas gift, and
+    // borrowing one would be decoration, not proof.
+    faqs: [FAQ_SEND_DIRECT, FAQ_BEFORE_CHRISTMAS, FAQ_GIFT_READY],
     relatedLinks: GIFT_CLUSTER_LINKS,
   },
 

@@ -19,6 +19,7 @@ import { displayProductTitle } from '@/lib/product-title'
 import { isGiftCardProductType } from '@/lib/gift-card'
 import { GIFT_BOXED_HANDLE } from '@/lib/batch-stock'
 import { OFFER_HEADLINE, offerLive } from '@/lib/october-offer'
+import ChristmasCutoffLine from '@/components/ChristmasCutoffLine'
 
 // ISR — pure Shopify catalogue data (no per-request state), so these SEO
 // collection pages edge-cache and revalidate hourly instead of a live Shopify
@@ -258,6 +259,8 @@ export default async function CollectionPage({
                 </Link>
               </p>
             )}
+            {/* December only, once the date is set in lib/delivery.ts. */}
+            <ChristmasCutoffLine surface="collection" className="text-lg leading-relaxed text-gold-300" />
           </div>
         )}
 

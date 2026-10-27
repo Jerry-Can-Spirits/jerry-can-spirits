@@ -10,7 +10,7 @@
  */
 import { describe, expect, it } from 'vitest'
 import { applyPriceBand, GIFT_BANDS, giftBandLabel, giftBandSlug, minPrice } from '@/lib/price-band'
-import { CATEGORIES } from '@/lib/categories'
+import { CATEGORIES, CHRISTMAS_GIFT_YEAR } from '@/lib/categories'
 import type { ShopifyProduct } from '@/lib/shopify'
 
 function product(handle: string, amount: string): ShopifyProduct {
@@ -39,6 +39,24 @@ describe('applyPriceBand', () => {
     const p = product('nan', '')
     expect(Number.isNaN(minPrice(p))).toBe(true)
     expect(applyPriceBand([p, product('ok', '5.00')], 20).map((x) => x.handle)).toEqual(['ok'])
+  })
+})
+
+describe('christmas gifts page', () => {
+  it('keeps one URL and carries the year only in the heading and title', () => {
+    const cfg = CATEGORIES['christmas-gifts']
+    expect(cfg).toBeDefined()
+    expect(cfg.h1).toBe(`Christmas Rum Gifts ${CHRISTMAS_GIFT_YEAR}`)
+    expect(cfg.metaTitle).toContain(String(CHRISTMAS_GIFT_YEAR))
+    expect(cfg.metaDescription).not.toContain(String(CHRISTMAS_GIFT_YEAR))
+    expect(cfg.relatedLinks?.some((l) => l.href === '/shop/christmas-gifts/')).toBe(true)
+    expect(cfg.faqs?.some((f) => f.question === 'Will it arrive before Christmas?')).toBe(true)
+  })
+
+  it('is in the gift cluster of every other gift page', () => {
+    for (const slug of ['rum-gifts', 'gift-sets', 'gifts-for-him', 'gifts-for-her']) {
+      expect(CATEGORIES[slug].relatedLinks?.some((l) => l.href === '/shop/christmas-gifts/'), slug).toBe(true)
+    }
   })
 })
 

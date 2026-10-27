@@ -12,7 +12,7 @@ import { trackSiteEvent } from '@/components/GoogleTag'
 // costs no layout where it does not apply.
 interface ChristmasCutoffLineProps {
   /** Which surface showed it, for the GA4 event. */
-  surface: 'product' | 'shipping' | 'cart'
+  surface: 'product' | 'shipping' | 'cart' | 'collection'
   className?: string
 }
 

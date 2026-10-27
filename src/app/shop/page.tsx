@@ -33,6 +33,7 @@ export const metadata: Metadata = {
 // explicitly since they have no CATEGORIES entry.
 const CURATED_HANDLES: Array<{ handle: string; title?: string; description?: string }> = [
   { handle: 'rum-gifts' },
+  { handle: 'christmas-gifts' },
   { handle: 'spiced-rum' },
   { handle: 'cocktail-making-kits' },
   { handle: 'bar-accessories' },

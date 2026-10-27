@@ -48,6 +48,7 @@ export default function Footer() {
       label: 'Gifts',
       links: [
         { name: 'Rum Gifts', href: '/shop/rum-gifts/' },
+        { name: 'Christmas Rum Gifts', href: '/shop/christmas-gifts/' },
         { name: 'Under £20', href: '/shop/gifts-under-20/' },
         { name: 'Under £50', href: '/shop/gifts-under-50/' },
         { name: 'Under £100', href: '/shop/gifts-under-100/' },
