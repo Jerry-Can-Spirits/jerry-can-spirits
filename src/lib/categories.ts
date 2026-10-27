@@ -365,7 +365,7 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
       'Expedition Spiced Rum sits in that category. A numbered bottle from a small British batch, Bronze at the IWSC within three months of launch. The kind of bottle you pick up, look at, and put somewhere visible.',
       'It is for the man who drinks properly. Who takes his time. Who notices the difference between something built with standards and something built to a margin.',
       'Veteran-owned. No hidden investors. 5% of profits to Combat Stress. Built by people who mean it.',
-      'If he already has the bottle: the Explorers Inventory T-shirt. An original design, printed to order.',
+      'If he already has the bottle: a T-shirt. Two original designs, printed to order.',
     ],
     seoTitle: 'Not a Generic Gift. A Bottle Worth Noticing.',
     seoBody: [
@@ -388,6 +388,7 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
       'crystal-ice-hiball-42cl',
       'jerry-can-spirits-gift-card',
       'explorers-inventory-t-shirt',
+      'rum-runner-t-shirt',
     ],
     testimonial: {
       quote: [
@@ -409,7 +410,7 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
       'Caribbean rum base: seven real spices, two natural sweeteners, and bourbon oak. 40% ABV. Vanilla opens first, cinnamon and ginger come through the middle, bourbon oak holds the finish.',
       'It is for the woman who drinks properly. Who takes her time. Who would rather have one good bottle than three forgettable ones.',
       'Veteran-owned and self-funded. 5% of profits goes to Combat Stress.',
-      'The same goes for the Explorers Inventory T-shirt: one design, printed to order, no softer version.',
+      'The same goes for the T-shirts: two original designs, printed to order, no softer version.',
     ],
     seoTitle: 'A Rum Gift for the Person Who Drinks Properly.',
     seoBody: [
@@ -436,6 +437,7 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
       'crystal-ice-hiball-42cl',
       'jerry-can-spirits-gift-card',
       'explorers-inventory-t-shirt',
+      'rum-runner-t-shirt',
     ],
   },
 
@@ -466,9 +468,9 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
       'This is the budget that buys the bottle. Expedition Spiced Rum: Caribbean rum, seven real spices, two natural sweeteners and bourbon oak, Bronze at the IWSC 2026 within three months of launch. Numbered, and built to be sipped.',
       'Or the glassware the serves were designed in. A pair of the Crystal ICE hiballs is the Silver-medal serve, ready to pour. A pair of Club ICE tumblers is the Old Standard.',
       'Or something smaller: the jigger, the spirit stones, a single glass. The kit the serves are built around.',
-      'Or the Explorers Inventory T-shirt: an original design, printed to order.',
+      'Or a T-shirt: two original designs, printed to order.',
     ],
-    productHandles: ['jerry-can-spirits-expedition-spiced-rum', 'expedition-spiced-rum-gift-boxed', ...UNDER_20_HANDLES, 'jerry-can-spirits-gift-card', 'explorers-inventory-t-shirt'],
+    productHandles: ['jerry-can-spirits-expedition-spiced-rum', 'expedition-spiced-rum-gift-boxed', ...UNDER_20_HANDLES, 'jerry-can-spirits-gift-card', 'explorers-inventory-t-shirt', 'rum-runner-t-shirt'],
   }),
   'gifts-under-100': giftBand(100, {
     metaTitle: 'Rum Gifts Under £100: The Gift Pack',
@@ -476,10 +478,10 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
       'The Premium Gift Pack: Expedition Spiced Rum with the hiball, jigger and coaster to serve it properly, boxed. Veteran-owned British spirits.',
     introBody: [
       'The Premium Gift Pack is the complete first pour: the bottle, the Crystal ICE hiball from the Silver-medal serve, the 25ml and 50ml jigger and a slate coaster, in a branded box. Nothing to add. Open it and pour.',
-      'Or build your own: the bottle, then the glasses and tools that suit the way they drink. The Explorers Inventory T-shirt goes alongside.',
+      'Or build your own: the bottle, then the glasses and tools that suit the way they drink. A T-shirt goes alongside.',
       'Every bottle is numbered and traceable to its batch. Veteran-owned, no hidden investors, 5% of profits to Combat Stress.',
     ],
-    productHandles: ['jerry-can-spirits-premium-gift-pack', 'jerry-can-spirits-expedition-spiced-rum', 'expedition-spiced-rum-gift-boxed', ...UNDER_20_HANDLES, 'jerry-can-spirits-gift-card', 'explorers-inventory-t-shirt'],
+    productHandles: ['jerry-can-spirits-premium-gift-pack', 'jerry-can-spirits-expedition-spiced-rum', 'expedition-spiced-rum-gift-boxed', ...UNDER_20_HANDLES, 'jerry-can-spirits-gift-card', 'explorers-inventory-t-shirt', 'rum-runner-t-shirt'],
   }),
 
   'rum-glasses': {
@@ -664,10 +666,10 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
     introBody: [
       'Every new expression starts from the same place. Real ingredients. No artificial flavourings. Macerated in small batches by our British partner distillery.',
       'Expedition Spiced Rum was the first. What comes next is built on the same principles. Nothing ships until it is right.',
-      'Not everything new is a bottle. The Explorers Inventory T-shirt is the first of the apparel: an original design, printed to order.',
+      'Not everything new is a bottle. The apparel started with the Explorers Inventory T-shirt; the Rum Runner T-shirt follows it. Original designs, printed to order.',
       'Sign up below to hear about new releases before they go public.',
     ],
-    productHandles: ['jerry-can-spirits-expedition-spiced-rum', 'explorers-inventory-t-shirt'],
+    productHandles: ['jerry-can-spirits-expedition-spiced-rum', 'rum-runner-t-shirt', 'explorers-inventory-t-shirt'],
   },
 }
 
