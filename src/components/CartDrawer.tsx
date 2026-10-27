@@ -9,6 +9,7 @@ import CarbonOffsetToggle from './CarbonOffsetToggle'
 import PresentationBoxUpsell from './PresentationBoxUpsell'
 import { appendUtmToCheckout, gatedCheckout } from '@/lib/utm'
 import { FREE_SHIPPING_THRESHOLD_GBP } from '@/lib/pricing'
+import { postageProgress } from '@/lib/postage'
 import { trackEventDual } from '@/lib/meta-capi'
 import { formatPrice } from '@/lib/format-price'
 import ChristmasCutoffLine from '@/components/ChristmasCutoffLine'
@@ -187,25 +188,33 @@ export default function CartDrawer() {
               it's the highest-value line). Copy is fixed; elevated bar + aria-live
               so the shortfall→unlocked change is seen and announced. */}
           {cart && cart.lines.length > 0 && (() => {
-            const subtotal = parseFloat(cart.cost.subtotalAmount.amount)
-            const shortfall = FREE_SHIPPING_THRESHOLD_GBP - subtotal
+            // Apparel posts free on its own profile and does not count towards
+            // the threshold for the rest (lib/postage.ts).
+            const { subtotal, shortfall, hasApparel, apparelOnly } = postageProgress(
+              cart.lines,
+              parseFloat(cart.cost.subtotalAmount.amount),
+            )
             const pct = Math.min(subtotal / FREE_SHIPPING_THRESHOLD_GBP, 1) * 100
             return (
               <div className="border-b border-gold-500/20 px-6 py-3 shrink-0">
                 <p className="text-sm text-parchment-200 mb-2" aria-live="polite">
-                  {shortfall > 0
-                    ? `${formatPrice(shortfall)} to go for free UK delivery`
-                    : 'Free UK delivery unlocked'}
+                  {apparelOnly
+                    ? 'Free UK delivery. Postage is included on apparel.'
+                    : shortfall > 0
+                      ? `${formatPrice(shortfall)} to go for free UK delivery.${hasApparel ? ' Apparel already posts free.' : ''}`
+                      : 'Free UK delivery unlocked'}
                 </p>
-                <div
-                  className="h-2 rounded-full bg-jerry-green-800 overflow-hidden"
-                  role="progressbar"
-                  aria-valuemin={0}
-                  aria-valuemax={FREE_SHIPPING_THRESHOLD_GBP}
-                  aria-valuenow={Math.min(subtotal, FREE_SHIPPING_THRESHOLD_GBP)}
-                >
-                  <div className="h-full bg-gold-500 transition-all duration-500" style={{ width: `${pct}%` }} />
-                </div>
+                {!apparelOnly && (
+                  <div
+                    className="h-2 rounded-full bg-jerry-green-800 overflow-hidden"
+                    role="progressbar"
+                    aria-valuemin={0}
+                    aria-valuemax={FREE_SHIPPING_THRESHOLD_GBP}
+                    aria-valuenow={Math.min(subtotal, FREE_SHIPPING_THRESHOLD_GBP)}
+                  >
+                    <div className="h-full bg-gold-500 transition-all duration-500" style={{ width: `${pct}%` }} />
+                  </div>
+                )}
                 {/* December only, once the date is set in lib/delivery.ts. */}
                 <ChristmasCutoffLine surface="cart" className="mt-2 text-xs font-semibold text-gold-300" />
               </div>

@@ -4,6 +4,7 @@ import { useState, useEffect, useMemo } from 'react'
 import Image from 'next/image'
 import { useCart } from '@/contexts/CartContext'
 import { FREE_SHIPPING_THRESHOLD_GBP } from '@/lib/pricing'
+import { postageProgress } from '@/lib/postage'
 import { resolveCategory, type ProductCategory } from '@/lib/shopify'
 import { formatPrice } from '@/lib/format-price'
 import { trackSiteEvent } from '@/components/GoogleTag'
@@ -69,7 +70,9 @@ export default function CartUpsell() {
       ),
     [cart?.lines],
   )
-  const subtotal = cart ? parseFloat(cart.cost.subtotalAmount.amount) : 0
+  // The same sum the drawer's progress line uses: apparel left out, because
+  // it posts free on its own profile and does not count towards the threshold.
+  const subtotal = cart ? postageProgress(cart.lines, parseFloat(cart.cost.subtotalAmount.amount)).subtotal : 0
 
   const { hero, alternates, belowThreshold, heroClears } = useMemo(() => {
     const eligible = pool.filter((p) => !cartHandles.has(p.handle))
