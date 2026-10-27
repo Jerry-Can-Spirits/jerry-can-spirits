@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useLayoutEffect, useRef, useState } from 'react'
 import Image from 'next/image'
 import { Dialog, DialogPanel } from '@headlessui/react'
 
@@ -19,16 +19,23 @@ interface ImageLightboxProps {
 
 const ZOOM = 2.5
 
-// Full-screen view of a product image with a magnifier. One tap zooms in at
-// the point tapped; moving the pointer (mouse or finger) pans; another tap
-// zooms out. Built for garments and labels, where the artwork carries text
-// the gallery thumbnail cannot show. Headless UI's Dialog supplies the focus
-// trap, Escape to close and the scroll lock.
+// Full-screen view of a product image with a magnifier. One tap zooms in on
+// the point tapped; the enlarged image then scrolls natively under a finger
+// (or follows the mouse on a desktop); another tap zooms out. Built for
+// garments and labels, where the artwork carries text the gallery cannot
+// show. Headless UI's Dialog supplies the focus trap, Escape to close and
+// the scroll lock.
+//
+// touch-action matters here: two taps on an image are also the browser's
+// double-tap-to-zoom gesture, which on iOS scales the whole page and leaves
+// it that way after the dialog closes. "manipulation" keeps scrolling and
+// pinch but drops double-tap zoom; "pan-x pan-y" while zoomed leaves only
+// the scrolling of the enlarged image.
 export default function ImageLightbox({ images, startIndex, open, onClose, productTitle }: ImageLightboxProps) {
   return (
     <Dialog open={open} onClose={onClose} className="relative z-[100]">
       <div className="fixed inset-0 bg-jerry-green-900/95 backdrop-blur-sm" aria-hidden="true" />
-      <div className="fixed inset-0 flex items-center justify-center p-3 sm:p-6">
+      <div className="fixed inset-0 flex items-center justify-center p-3 sm:p-6 [touch-action:manipulation]">
         {/* Keyed so the index and zoom reset every time the lightbox opens. */}
         <Viewer key={`${open}-${startIndex}`} images={images} startIndex={startIndex} onClose={onClose} productTitle={productTitle} />
       </div>
@@ -39,15 +46,28 @@ export default function ImageLightbox({ images, startIndex, open, onClose, produ
 function Viewer({ images, startIndex, onClose, productTitle }: Omit<ImageLightboxProps, 'open'>) {
   const [index, setIndex] = useState(startIndex)
   const [zoomed, setZoomed] = useState(false)
-  const [origin, setOrigin] = useState({ x: 50, y: 50 })
+  const scrollRef = useRef<HTMLDivElement>(null)
+  // Where the zoom was asked for, as fractions of the viewer, applied once
+  // the enlarged image is in the DOM.
+  const focusRef = useRef<{ x: number; y: number } | null>(null)
   const image = images[index]
   const many = images.length > 1
 
-  const pointToOrigin = (e: React.PointerEvent | React.MouseEvent) => {
+  useLayoutEffect(() => {
+    const el = scrollRef.current
+    const focus = focusRef.current
+    if (!zoomed || !el || !focus) return
+    el.scrollLeft = focus.x * el.scrollWidth - el.clientWidth / 2
+    el.scrollTop = focus.y * el.scrollHeight - el.clientHeight / 2
+    focusRef.current = null
+  }, [zoomed])
+
+  const fraction = (e: React.MouseEvent | React.PointerEvent) => {
     const rect = e.currentTarget.getBoundingClientRect()
-    const x = Math.min(100, Math.max(0, ((e.clientX - rect.left) / rect.width) * 100))
-    const y = Math.min(100, Math.max(0, ((e.clientY - rect.top) / rect.height) * 100))
-    setOrigin({ x, y })
+    return {
+      x: Math.min(1, Math.max(0, (e.clientX - rect.left) / rect.width)),
+      y: Math.min(1, Math.max(0, (e.clientY - rect.top) / rect.height)),
+    }
   }
 
   const step = (delta: number) => {
@@ -76,25 +96,38 @@ function Viewer({ images, startIndex, onClose, productTitle }: Omit<ImageLightbo
       </button>
 
       <div
-        className={`absolute inset-0 overflow-hidden rounded-xl ${zoomed ? 'cursor-zoom-out' : 'cursor-zoom-in'}`}
-        style={{ touchAction: zoomed ? 'none' : 'auto' }}
+        ref={scrollRef}
+        className={`absolute inset-0 rounded-xl overflow-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden ${zoomed ? 'cursor-zoom-out [touch-action:pan-x_pan-y]' : 'cursor-zoom-in [touch-action:manipulation]'}`}
         onClick={(e) => {
-          pointToOrigin(e)
-          setZoomed(z => !z)
+          if (zoomed) {
+            setZoomed(false)
+            return
+          }
+          focusRef.current = fraction(e)
+          setZoomed(true)
         }}
         onPointerMove={(e) => {
-          if (zoomed) pointToOrigin(e)
+          // A mouse pans by position; a finger scrolls the image natively.
+          if (!zoomed || e.pointerType !== 'mouse') return
+          const el = e.currentTarget
+          const { x, y } = fraction(e)
+          el.scrollLeft = x * (el.scrollWidth - el.clientWidth)
+          el.scrollTop = y * (el.scrollHeight - el.clientHeight)
         }}
       >
-        <Image
-          src={image.url}
-          alt={image.altText || productTitle}
-          fill
-          className="object-contain transition-transform duration-150 ease-out select-none"
-          style={{ transform: `scale(${zoomed ? ZOOM : 1})`, transformOrigin: `${origin.x}% ${origin.y}%` }}
-          sizes="100vw"
-          draggable={false}
-        />
+        <div
+          className="relative"
+          style={{ width: zoomed ? `${ZOOM * 100}%` : '100%', height: zoomed ? `${ZOOM * 100}%` : '100%' }}
+        >
+          <Image
+            src={image.url}
+            alt={image.altText || productTitle}
+            fill
+            className="object-contain select-none"
+            sizes="100vw"
+            draggable={false}
+          />
+        </div>
       </div>
 
       {many && (
@@ -122,8 +155,8 @@ function Viewer({ images, startIndex, onClose, productTitle }: Omit<ImageLightbo
         </>
       )}
 
-      <p className="absolute bottom-0 left-1/2 -translate-x-1/2 z-20 px-3 py-1 rounded-full bg-jerry-green-900/70 border border-gold-500/30 text-parchment-300 text-xs">
-        {zoomed ? 'Move to look around. Tap to zoom out.' : 'Tap to zoom in.'}
+      <p className="absolute bottom-0 left-1/2 -translate-x-1/2 z-20 px-3 py-1 rounded-full bg-jerry-green-900/70 border border-gold-500/30 text-parchment-300 text-xs whitespace-nowrap">
+        {zoomed ? 'Drag to look around. Tap to zoom out.' : 'Tap to zoom in.'}
         {many ? ` ${index + 1} of ${images.length}.` : ''}
       </p>
     </DialogPanel>
