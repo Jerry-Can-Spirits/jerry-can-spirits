@@ -57,6 +57,11 @@ export default function cloudflareImageLoader({
         const cappedWidth = Math.min(width, 1200)
         parsed.searchParams.set('w', cappedWidth.toString())
         parsed.searchParams.set('q', quality.toString())
+        // auto=format only serves WebP to a client whose Accept header asks
+        // for it; everyone else, crawlers included, got the PNG original at
+        // up to 2 MB. fm=webp is the floor (about 20 KB for the same frame)
+        // and auto=format still upgrades on top of it where supported.
+        parsed.searchParams.set('fm', 'webp')
         parsed.searchParams.set('auto', 'format')
         parsed.searchParams.set('fit', 'max')
         return parsed.toString()
@@ -82,7 +87,18 @@ export default function cloudflareImageLoader({
         // small slots) and the legacy format in one param. `set` overwrites any
         // width from a GraphQL `transform`, giving Next a real per-deviceSize
         // srcset. Capped to the 1600px source ceiling used in shopify.ts.
+        //
+        // The Storefront `transform: { maxWidth: 1600 }` is delivered as a
+        // `_1600x` filename suffix, and Shopify ignores `width` whenever the
+        // filename already carries a size: Bottle_1_1600x.jpg?width=400 came
+        // back at 1600px and 460 KB. Strip the suffix so `width` is obeyed
+        // (the same frame at 400px is 46 KB).
+        parsed.pathname = parsed.pathname.replace(/_\d+x\d*(?=\.[a-z0-9]+$)/i, '')
         parsed.searchParams.set('width', Math.min(width, 1600).toString())
+        // PNG uploads (print-on-demand mockups, gift cards) are the heaviest
+        // files on the site and only shrink when the client negotiates WebP.
+        // Ask for it outright so every client gets the small file.
+        if (/\.png$/i.test(parsed.pathname)) parsed.searchParams.set('format', 'webp')
         return parsed.toString()
       }
     } catch {
