@@ -39,7 +39,7 @@ export const metadata: Metadata = {
 }
 
 export default function PrivacyPolicy() {
-  const lastUpdated = new Date('2026-10-17').toLocaleDateString('en-GB', {
+  const lastUpdated = new Date('2026-10-29').toLocaleDateString('en-GB', {
     year: 'numeric',
     month: 'long',
     day: 'numeric'
@@ -244,6 +244,8 @@ export default function PrivacyPolicy() {
                   <li><strong className="text-gold-300">Cloudflare:</strong> Website hosting, CDN, R2 file storage, D1 database, Turnstile bot protection (United Kingdom and European Union edge regions for our services) &mdash; GDPR-compliant with Data Processing Addendum</li>
                   <li><strong className="text-gold-300">Trustpilot:</strong> Customer review platform (Denmark/USA) &mdash; Standard Contractual Clauses</li>
                   <li><strong className="text-gold-300">Sentry:</strong> Error monitoring and performance tracking (USA) &mdash; Standard Contractual Clauses</li>
+                  <li><strong className="text-gold-300">Custom Spirit Co:</strong> Our bottler and fulfilment partner, who receives delivery names, addresses and order lines to pick and dispatch orders (United Kingdom) &mdash; UK GDPR applies directly</li>
+                  <li><strong className="text-gold-300">Royal Mail (Click &amp; Drop):</strong> Dispatch labels and shipping confirmations for orders (United Kingdom) &mdash; UK GDPR applies directly</li>
                   <li><strong className="text-gold-300">Cookiebot (Cybot A/S):</strong> Consent management platform (Denmark) &mdash; GDPR-compliant, data processed within the EU</li>
                 </ul>
 
@@ -385,6 +387,7 @@ export default function PrivacyPolicy() {
                 <div className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20 mb-6">
                   <ul className="list-disc list-inside text-white space-y-2">
                     <li>Email: <a href="mailto:support@jerrycanspirits.co.uk" className="text-gold-300 hover:text-gold-200 underline">support@jerrycanspirits.co.uk</a></li>
+                    <li>Data protection contact: <a href="mailto:compliance@jerrycanspirits.co.uk" className="text-gold-300 hover:text-gold-200 underline">compliance@jerrycanspirits.co.uk</a></li>
                     <li>Contact Form: <a href="/contact/" className="text-gold-300 hover:text-gold-200 underline">jerrycanspirits.co.uk/contact</a></li>
                   </ul>
                 </div>
@@ -393,7 +396,7 @@ export default function PrivacyPolicy() {
                   13.2 Supervisory Authority
                 </h3>
                 <p className="text-white mb-4">
-                  You have the right to lodge a complaint with the UK Information Commissioner's Office (ICO):
+                  Jerry Can Spirits Ltd is registered with the UK Information Commissioner's Office (ICO) as a data controller, registration number ZC024800. You have the right to lodge a complaint with the ICO:
                 </p>
                 <ul className="list-disc list-inside text-white space-y-2">
                   <li>Website: <a href="https://ico.org.uk" target="_blank" rel="noopener noreferrer" className="text-gold-300 hover:text-gold-200 underline">ico.org.uk</a></li>
