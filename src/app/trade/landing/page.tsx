@@ -1,4 +1,3 @@
-import { getCloudflareContext } from '@opennextjs/cloudflare'
 import { requireTradeSession } from '@/lib/trade-portal/session-check'
 import { TradeTile } from '@/components/trade-portal/TradeTile'
 import { AnnouncementBanner } from '@/components/trade-portal/AnnouncementBanner'
@@ -7,26 +6,8 @@ import { TradePortalHeader } from '@/components/trade-portal/TradePortalHeader'
 
 export const dynamic = 'force-dynamic'
 
-async function hasActivePourIqLicence(db: D1Database, tradeAccountId: string): Promise<boolean> {
-  const row = await db
-    .prepare(`
-      SELECT id FROM pouriq_subscriptions
-      WHERE trade_account_id = ?1
-        AND datetime(valid_from) <= datetime('now')
-        AND datetime(valid_until) >= datetime('now')
-      LIMIT 1
-    `)
-    .bind(tradeAccountId)
-    .first<{ id: string }>()
-  return row !== null
-}
-
 export default async function TradeLandingPage() {
   const session = await requireTradeSession()
-  const { env } = await getCloudflareContext()
-  const db = env.DB as D1Database
-
-  const hasPourIq = await hasActivePourIqLicence(db, session.tradeAccountId)
 
   return (
     <section className="band-dark min-h-screen">
@@ -50,27 +31,6 @@ export default async function TradeLandingPage() {
             href="/trade/order/"
             ctaLabel="Go to orders"
           />
-          {/* Pour IQ is a separate company: tiles render only for venues with a
-              live licence (functional navigation). The greyed upsell tiles were
-              removed as part of the corporate separation. */}
-          {hasPourIq && (
-            <TradeTile
-              variant="active"
-              title="Pour IQ®"
-              description="Menu and cost engineering for independent UK bars."
-              href="https://app.pour-iq.co.uk/"
-              ctaLabel="Open Pour IQ"
-            />
-          )}
-          {hasPourIq && (
-            <TradeTile
-              variant="active"
-              title="Pour IQ help"
-              description="A working operations guide. How to scan invoices, read margin, fix gotchas."
-              href="https://app.pour-iq.co.uk/help"
-              ctaLabel="Open guide"
-            />
-          )}
           <TradeTile
             variant="active"
             title="Trade resources"
