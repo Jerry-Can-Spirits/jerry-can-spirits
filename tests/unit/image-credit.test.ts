@@ -170,12 +170,23 @@ describe('imageWithCredit', () => {
     expect(imageWithCredit(undefined, CREDIT)).toBeUndefined()
   })
 
-  it('returns an ImageObject with creditText when credited', () => {
+  it('returns an ImageObject with the credit and the licensing fields Google expects', () => {
     expect(imageWithCredit('https://example.com/a.jpg', CREDIT)).toEqual({
       '@type': 'ImageObject',
       url: 'https://example.com/a.jpg',
       contentUrl: 'https://example.com/a.jpg',
       creditText: CREDIT,
+      creator: { '@type': 'Organization', name: 'Angostura®' },
+      copyrightNotice: '© Angostura®',
+      license: 'https://jerrycanspirits.co.uk/terms-of-service/#intellectual-property',
+      acquireLicensePage: 'https://jerrycanspirits.co.uk/terms-of-service/#intellectual-property',
+    })
+  })
+
+  it('uses the whole credit as the owner when it is not written as a courtesy line', () => {
+    expect(imageWithCredit('https://example.com/a.jpg', 'Foursquare Rum Distillery')).toMatchObject({
+      creator: { name: 'Foursquare Rum Distillery' },
+      copyrightNotice: '© Foursquare Rum Distillery',
     })
   })
 })

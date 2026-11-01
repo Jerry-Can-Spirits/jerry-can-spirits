@@ -65,13 +65,44 @@ export function authorRefFor(name: string | null | undefined): { '@id': string }
 
 // A credited image becomes an ImageObject carrying the credit as creditText;
 // an uncredited one stays a plain URL, so pages without a credit are unchanged.
+//
+// Once an image is an ImageObject, Google's image-licensing metadata applies
+// and Search Console warns on every field it cannot find (license,
+// acquireLicensePage, creator, copyrightNotice; first seen on the Foursquare
+// guide, 1 Nov 2026). The owner is the producer named in the credit, which is
+// always written "Image courtesy of <owner>", and the licence terms are the
+// intellectual-property section of our Terms of Service: the image is the
+// producer's property and any further use needs their consent.
+export const IMAGE_LICENCE_URL = `${BASE_URL}/terms-of-service/#intellectual-property`
+
+export interface CreditedImage {
+  '@type': 'ImageObject'
+  url: string
+  contentUrl: string
+  creditText: string
+  creator: { '@type': 'Organization'; name: string }
+  copyrightNotice: string
+  license: string
+  acquireLicensePage: string
+}
+
 export function imageWithCredit<T extends string | undefined>(
   url: T,
   credit: string | null | undefined
-): T | { '@type': 'ImageObject'; url: string; contentUrl: string; creditText: string } {
+): T | CreditedImage {
   const text = credit?.trim()
   if (!url || !text) return url
-  return { '@type': 'ImageObject', url, contentUrl: url, creditText: text }
+  const owner = text.replace(/^image courtesy of\s+/i, '')
+  return {
+    '@type': 'ImageObject',
+    url,
+    contentUrl: url,
+    creditText: text,
+    creator: { '@type': 'Organization', name: owner },
+    copyrightNotice: `© ${owner}`,
+    license: IMAGE_LICENCE_URL,
+    acquireLicensePage: IMAGE_LICENCE_URL,
+  }
 }
 
 // Twelve months out, computed when the page builds or regenerates, so the
