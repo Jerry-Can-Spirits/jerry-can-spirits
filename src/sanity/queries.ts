@@ -3,6 +3,24 @@ import { categoryRank, parentFirstRank, INGREDIENT_CATEGORY_ORDER, EQUIPMENT_CAT
 // GROQ queries for fetching data from Sanity
 
 // Sitemap query - slug + last-modified for sitemap freshness
+// FAQ answers: `answerRich` (portable text with inline links) replaces `answer`
+// on the page and in the FAQPage schema when present; the internalLink
+// reference is dereferenced here the way guide section links are.
+const faqsProjection = `faqs[] {
+    question,
+    answer,
+    answerRich[] {
+      ...,
+      markDefs[] {
+        ...,
+        _type == "internalLink" => {
+          "docType": reference->_type,
+          "slug": reference->slug.current
+        }
+      }
+    }
+  }`
+
 export const cocktailsSitemapQuery = `*[_type == "cocktail" && defined(slug.current)] { slug, _updatedAt }`
 
 // Optimized listing query - only fetches fields needed for preview cards
@@ -125,7 +143,7 @@ export const cocktailBySlugQuery = `*[_type == "cocktail" && slug.current == $sl
   totalTime,
   author,
   updatedAt,
-  faqs,
+  ${faqsProjection},
   tags,
   featured,
   "image": image.asset->url,
@@ -211,7 +229,7 @@ export const ingredientBySlugQuery = `*[_type == "ingredient" && slug.current ==
   videoUrl,
   history,
   professionalTip,
-  faqs,
+  ${faqsProjection},
   sources[]{title, publisher, url, accessed, note},
   author,
   updatedAt,
@@ -295,7 +313,7 @@ export const equipmentBySlugQuery = `*[_type == "equipment" && slug.current == $
   ownProduct,
   history,
   professionalTip,
-  faqs,
+  ${faqsProjection},
   sources[]{title, publisher, url, accessed, note},
   author,
   updatedAt,
@@ -424,10 +442,7 @@ export const guideBySlugQuery = `*[_type == "guide" && slug.current == $slug][0]
       }
     }
   },
-  faqs[] {
-    question,
-    answer
-  },
+  ${faqsProjection},
   comparisonTables[] {
     caption,
     headers,

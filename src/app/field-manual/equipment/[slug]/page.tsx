@@ -18,7 +18,8 @@ import { extractHeadings } from '@/lib/sanity-text'
 import { OG_IMAGE_COCKTAIL } from '@/lib/og'
 import { ORG_REF, imageWithCredit } from '@/lib/jsonLd'
 import ImageCredit from '@/components/ImageCredit'
-import FAQAccordion from '@/components/FAQAccordion'
+import FAQAccordion, { faqItems } from '@/components/FAQAccordion'
+import { faqAnswerText, type SanityFaq } from '@/lib/faq'
 import ScrollRow from '@/components/ScrollRow'
 import SectionHeading from '@/components/SectionHeading'
 import Sources from '@/components/Sources'
@@ -67,7 +68,7 @@ interface Equipment {
   longDescription?: PortableTextBlock[]
   history?: string
   professionalTip?: string
-  faqs?: Array<{ question: string; answer: string }>
+  faqs?: SanityFaq[]
   sources?: Partial<Source>[] | null
   relatedGuides?: GuideLink[]
   videoUrl?: string
@@ -212,7 +213,7 @@ export default async function EquipmentDetailPage({ params }: { params: Promise<
         mainEntity: equipment.faqs.map((faq) => ({
           '@type': 'Question',
           name: faq.question,
-          acceptedAnswer: { '@type': 'Answer', text: faq.answer },
+          acceptedAnswer: { '@type': 'Answer', text: faqAnswerText(faq) },
         })),
       }
     : null
@@ -559,7 +560,7 @@ export default async function EquipmentDetailPage({ params }: { params: Promise<
             {equipment.faqs && equipment.faqs.length > 0 && (
               <div className="bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-6 border border-gold-500/20">
                 <h2 id="common-questions" className="text-2xl font-serif font-bold text-gold-300 mb-4 scroll-mt-24">Common Questions</h2>
-                <FAQAccordion items={equipment.faqs} />
+                <FAQAccordion items={faqItems(equipment.faqs)} />
               </div>
             )}
 

@@ -14,7 +14,8 @@ import ImageCredit from '@/components/ImageCredit'
 import { OG_IMAGE } from '@/lib/og'
 import { ORG_REF, authorRefFor, imageWithCredit } from '@/lib/jsonLd'
 import { GUIDE_CATEGORY_TITLES } from '@/lib/category-order'
-import FAQAccordion from '@/components/FAQAccordion'
+import FAQAccordion, { faqItems } from '@/components/FAQAccordion'
+import { faqAnswerText, type SanityFaq } from '@/lib/faq'
 import ScrollRow from '@/components/ScrollRow'
 import SectionHeading from '@/components/SectionHeading'
 import ComparisonTable, { type ComparisonTableData } from '@/components/ComparisonTable'
@@ -36,11 +37,6 @@ interface Section {
   content?: string
   contentRich?: PortableTextBlock[]
   subsections?: Subsection[]
-}
-
-interface FAQ {
-  question: string
-  answer: string
 }
 
 interface Distillery {
@@ -87,7 +83,7 @@ interface Guide {
   updatedAt?: string
   introduction: string
   sections: Section[]
-  faqs?: FAQ[]
+  faqs?: SanityFaq[]
   comparisonTables?: ComparisonTableData[]
   featuredDistilleries?: Distillery[]
   sources?: Partial<Source>[] | null
@@ -205,7 +201,7 @@ export default async function GuidePage({ params }: PageProps) {
       name: faq.question,
       acceptedAnswer: {
         '@type': 'Answer',
-        text: faq.answer
+        text: faqAnswerText(faq)
       }
     }))
   } : null
@@ -451,7 +447,7 @@ export default async function GuidePage({ params }: PageProps) {
           {guide.faqs && guide.faqs.length > 0 && (
             <div id="faqs" className="scroll-mt-24">
               <h2 className="text-3xl font-serif font-bold text-white mb-8">Frequently Asked Questions</h2>
-              <FAQAccordion items={guide.faqs} />
+              <FAQAccordion items={faqItems(guide.faqs)} />
             </div>
           )}
 

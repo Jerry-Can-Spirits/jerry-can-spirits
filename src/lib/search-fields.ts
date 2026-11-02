@@ -44,6 +44,7 @@ export const SEARCHABLE_PATHS: Record<string, string[]> = {
     'sections[].subsections[].contentRich[].rows[].cells[]',
     'faqs[].question',
     'faqs[].answer',
+    'faqs[].answerRich[].children[].text',
     'comparisonTables[].caption',
     'comparisonTables[].headers[]',
     'comparisonTables[].rows[].cells[]',
@@ -82,6 +83,7 @@ export const SEARCHABLE_PATHS: Record<string, string[]> = {
     'instructions[].tip',
     'faqs[].question',
     'faqs[].answer',
+    'faqs[].answerRich[].children[].text',
     'variants[].name',
     'variants[].description',
     'image.alt',
@@ -128,6 +130,7 @@ export const SEARCHABLE_PATHS: Record<string, string[]> = {
     'longDescription[].rows[].cells[]',
     'faqs[].question',
     'faqs[].answer',
+    'faqs[].answerRich[].children[].text',
     'image.alt',
   ],
   equipment: [
@@ -157,6 +160,7 @@ export const SEARCHABLE_PATHS: Record<string, string[]> = {
     'longDescription[].rows[].cells[]',
     'faqs[].question',
     'faqs[].answer',
+    'faqs[].answerRich[].children[].text',
     'image.alt',
   ],
 }
