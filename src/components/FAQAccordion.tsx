@@ -1,4 +1,6 @@
 import type { ReactNode } from 'react'
+import GuidePortableText from '@/components/GuidePortableText'
+import type { SanityFaq } from '@/lib/faq'
 
 export interface FAQAccordionItem {
   question: string
@@ -63,4 +65,18 @@ export default function FAQAccordion({
       ))}
     </div>
   )
+}
+
+/** Items for a Sanity FAQ array: a rich answer renders with its links, a plain one as text. */
+export function faqItems(faqs: SanityFaq[]): FAQAccordionItem[] {
+  return faqs.map((faq) => ({
+    question: faq.question,
+    answer: faq.answerRich?.length ? (
+      <div className="[&_p]:text-parchment-200">
+        <GuidePortableText value={faq.answerRich} />
+      </div>
+    ) : (
+      faq.answer
+    ),
+  }))
 }

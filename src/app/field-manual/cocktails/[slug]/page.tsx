@@ -21,7 +21,8 @@ import { sanityOgUrl } from '@/sanity/lib/image'
 import { OG_IMAGE_COCKTAIL } from '@/lib/og'
 import { ORG_REF, authorRefFor, imageWithCredit } from '@/lib/jsonLd'
 import { recipeCuisineField } from '@/lib/recipe-source'
-import FAQAccordion from '@/components/FAQAccordion'
+import FAQAccordion, { faqItems } from '@/components/FAQAccordion'
+import { faqAnswerText, type SanityFaq } from '@/lib/faq'
 import Sources from '@/components/Sources'
 import { listableSources, sourceCitations, type Source } from '@/lib/sources'
 import ScrollRow from '@/components/ScrollRow'
@@ -111,7 +112,7 @@ interface SanityCocktail {
   imageCredit?: string
   videoUrl?: string
   videoUploadDate?: string
-  faqs?: Array<{ question: string; answer: string }>
+  faqs?: SanityFaq[]
   sources?: (Partial<Source> | null)[]
   relatedGuides?: RelatedGuide[]
   longDescription?: PortableTextBlock[]
@@ -357,7 +358,7 @@ export default async function CocktailPage({ params }: PageProps) {
         mainEntity: cocktail.faqs.map((faq) => ({
           '@type': 'Question',
           name: faq.question,
-          acceptedAnswer: { '@type': 'Answer', text: faq.answer },
+          acceptedAnswer: { '@type': 'Answer', text: faqAnswerText(faq) },
         })),
       }
     : null
@@ -606,7 +607,7 @@ export default async function CocktailPage({ params }: PageProps) {
           {cocktail.faqs && cocktail.faqs.length > 0 && (
             <div className="mt-6 sm:mt-8 bg-linear-to-br from-parchment-200/10 to-parchment-400/5 backdrop-blur-sm rounded-xl p-4 sm:p-6 md:p-8 border border-gold-500/20">
               <h2 className="text-2xl font-serif font-bold text-white mb-6">Frequently Asked Questions</h2>
-              <FAQAccordion items={cocktail.faqs} />
+              <FAQAccordion items={faqItems(cocktail.faqs)} />
             </div>
           )}
 

@@ -1,4 +1,5 @@
 import {defineField, defineType} from 'sanity'
+import { faqAnswerRich } from './faqAnswerRich'
 import {AUTHORITY_OPTIONS, RECIPE_CUISINES, validateHouseVariation} from '../../lib/recipe-source'
 import {imageCreditField} from './imageCredit'
 
@@ -286,7 +287,8 @@ export default defineType({
               type: 'text',
               rows: 4,
               validation: Rule => Rule.required()
-            })
+            }),
+            faqAnswerRich
           ],
           preview: {
             select: {title: 'question'}

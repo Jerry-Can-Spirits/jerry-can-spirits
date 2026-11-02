@@ -1,4 +1,5 @@
 import {defineField, defineType} from 'sanity'
+import { faqAnswerRich } from './faqAnswerRich'
 import {GUIDE_CATEGORY_TITLES} from '../../lib/category-order'
 import {imageCreditField} from './imageCredit'
 
@@ -308,7 +309,8 @@ export default defineType({
               rows: 3,
               description: 'Clear, factual answer (2-3 sentences)',
               validation: Rule => Rule.required()
-            })
+            }),
+            faqAnswerRich
           ],
           preview: {
             select: {
