@@ -9,6 +9,7 @@ import { productOffer, priceValidUntil, PRICE_VALID_FROM, productGtin, MERCHANT_
 import { FREE_SHIPPING_THRESHOLD_GBP, STANDARD_SHIPPING_LABEL } from '@/lib/pricing'
 import ProductVariantSelector from '@/components/ProductVariantSelector'
 import GiftCardForm from '@/components/GiftCardForm'
+import BackInStockForm from '@/components/BackInStockForm'
 import { isGiftCardProductType } from '@/lib/gift-card'
 import ProductImageGallery from '@/components/ProductImageGallery'
 import StructuredData from '@/components/StructuredData'
@@ -705,7 +706,7 @@ export default async function ProductPage({
                     sellingPlanGroups={product.sellingPlanGroups}
                   />
                   )
-                ) : (
+                ) : isGiftCard ? (
                   <div className="space-y-4">
                     <button
                       disabled
@@ -717,6 +718,8 @@ export default async function ProductPage({
                       This product is not available for purchase at the moment.
                     </p>
                   </div>
+                ) : (
+                  <BackInStockForm variants={product.variants.map(v => ({ id: v.id, title: v.title }))} />
                 )
               ) : (
                 <div className="space-y-4">
@@ -1065,7 +1068,7 @@ export default async function ProductPage({
         const multiVariant =
           (product.variants?.length ?? 0) > 1 &&
           (product.variants?.some(v => v.title !== 'Default Title') ?? false)
-        return stickyVariant && !isGiftCard ? (
+        return stickyVariant && stickyVariant.availableForSale && !isGiftCard ? (
           <StickyAddToCart
             variantId={stickyVariant.id}
             productTitle={displayProductTitle(product.title)}
