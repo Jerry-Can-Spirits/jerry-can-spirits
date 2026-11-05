@@ -93,6 +93,8 @@ function pathsForDocument(doc: { _type?: string; slug?: unknown; shopifyHandle?:
       return [...(slug ? [`/field-manual/equipment/${slug}/`] : []), '/field-manual/equipment/'];
     case 'guide':
       return [...(slug ? [`/guides/${slug}/`] : []), '/guides/'];
+    case 'event':
+      return ['/events/'];
     // Empty dashboard Filter means any _type can arrive (including deletes).
     // Unknown types produce no paths and are acknowledged with a 200 below.
     default:
