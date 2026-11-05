@@ -11,7 +11,8 @@ import person from './schemaTypes/person'
 import review from './schemaTypes/review'
 import comparisonTable from './schemaTypes/comparisonTable'
 import source from './schemaTypes/source'
+import event from './schemaTypes/event'
 
 export const schema: { types: SchemaTypeDefinition[] } = {
-  types: [cocktail, ingredient, equipment, product, guide, tradeHelp, cartUpsell, person, review, comparisonTable, source],
+  types: [cocktail, ingredient, equipment, product, guide, tradeHelp, cartUpsell, person, review, comparisonTable, source, event],
 }
