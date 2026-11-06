@@ -22,6 +22,17 @@ interface AwardItem {
 
 const pressItems: PressItem[] = [
   {
+    // Packaging Scotland, Oct to Dec 2026 print issue, p28, "New rum bottle
+    // evokes the spirit of 'rugged' jerry can" (sent by Sarah at Croxsons,
+    // 5 Nov 2026). Same release as the BBIB piece, so the quote is a
+    // different line of Dan's, about the bottle. The article repeats the
+    // "pot-distilled" error and a per-batch bottle count; quote neither.
+    publication: 'Packaging Scotland',
+    quote: 'It carries a clean, utilitarian squared profile that fits our identity perfectly.',
+    url: 'https://edition.pagesuite-professional.co.uk/html5/reader/production/default.aspx?pubname=&edid=551c59a4-6a70-4e2a-a5d0-57fe02d1fca1',
+    date: '2026',
+  },
+  {
     // The Croxsons release ran in Brewing & Beverage Industries Business
     // (Showcase: Containers, p14) — the published coverage the placeholder
     // Croxsons card anticipated. The quote is Dan's own words from the
