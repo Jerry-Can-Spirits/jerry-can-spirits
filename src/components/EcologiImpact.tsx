@@ -2,7 +2,9 @@ import Link from 'next/link'
 
 interface EcologiStats {
   trees: number
-  carbonOffset: number
+  // Tonnes. Our Ecologi plan funds carbon removal, not offsets; carbonOffset
+  // reads 0 on our profile.
+  carbonRemoval: number
 }
 
 async function getImpact(): Promise<EcologiStats | null> {
@@ -39,26 +41,26 @@ export default async function EcologiImpact() {
 
       <div className="space-y-4 text-parchment-300 mb-6">
         <p>
-          Every Jerry Can Spirits order automatically plants a tree and removes 1kg of CO₂ through our Ecologi partnership. No opt-in required.
+          Every Jerry Can Spirits order funds one tree and 1kg of carbon removal through Ecologi. It happens automatically.
         </p>
         <p>
-          At checkout, customers can go further by adding £1 to fund a UK reforestation project specifically. Every contribution is tracked and publicly visible on our Ecologi profile.
+          At checkout, you can add £1 to fund a tree on a UK reforestation project. Every contribution shows on our public Ecologi profile.
         </p>
       </div>
 
-      {impact && (impact.trees > 0 || impact.carbonOffset > 0) && (
+      {impact && (impact.trees > 0 || impact.carbonRemoval > 0) && (
         <div className="grid grid-cols-2 gap-4 mb-6">
           <div className="bg-jerry-green-800/60 rounded-lg p-4 text-center">
             <p className="text-3xl font-serif font-bold text-gold-300">
               {impact.trees.toLocaleString('en-GB')}
             </p>
-            <p className="text-sm text-parchment-400 mt-1">trees planted</p>
+            <p className="text-sm text-parchment-400 mt-1">trees funded</p>
           </div>
           <div className="bg-jerry-green-800/60 rounded-lg p-4 text-center">
             <p className="text-3xl font-serif font-bold text-gold-300">
-              {impact.carbonOffset.toFixed(2)}t
+              {Math.round(impact.carbonRemoval * 1000).toLocaleString('en-GB')}kg
             </p>
-            <p className="text-sm text-parchment-400 mt-1">CO₂ offset</p>
+            <p className="text-sm text-parchment-400 mt-1">carbon removal funded</p>
           </div>
         </div>
       )}

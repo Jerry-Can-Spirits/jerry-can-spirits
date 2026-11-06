@@ -61,11 +61,11 @@ export default function CarbonOffsetToggle() {
         </span>
         <span>
           <span className="block text-sm text-parchment-300 group-hover:text-parchment-200 transition-colors">
-            Plant a UK tree{' '}
+            Fund a UK tree{' '}
             <span className="text-parchment-500 font-normal">(+£1, opt-in)</span>
           </span>
           <span className="block text-xs text-parchment-500 mt-0.5">
-            Every order already plants a tree and removes 1kg CO₂. This funds a UK reforestation project specifically, via Ecologi.
+            Every order already funds a tree and 1kg of carbon removal. This adds a tree on a UK reforestation project, through Ecologi.
           </span>
         </span>
       </button>

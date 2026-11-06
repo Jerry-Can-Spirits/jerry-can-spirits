@@ -135,11 +135,11 @@ const partners = [
   {
     name: "Ecologi",
     location: "Edinburgh, United Kingdom",
-    description: "Ecologi is a verified climate action platform. Every Jerry Can Spirits order automatically plants a tree and removes 1kg of CO₂. All impact is tracked, publicly auditable, and visible on our Ecologi profile.",
+    description: "Ecologi funds tree planting and carbon removal projects. Every Jerry Can Spirits order funds one tree and 1kg of carbon removal through them, and every contribution shows on our public Ecologi profile.",
     website: "https://ecologi.com/jerry-can-spirits",
     shopUrl: "/shop/product/uk-tree-fund/",
     shopUrlLabel: "Add UK Tree Planting",
-    speciality: "Carbon Offsetting & Reforestation",
+    speciality: "Tree Planting & Carbon Removal",
     logo: "https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/d477a1e2-da59-447e-bf4d-f44c43f64400/public",
     badge: "https://api.ecologi.com/badges/trees/69cf809ea3c16250680afe34?white=true&treeOnly=true",
     featured: true,

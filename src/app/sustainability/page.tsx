@@ -16,13 +16,13 @@ import { OG_IMAGE } from '@/lib/og'
 
 export const metadata: Metadata = {
   title: "Sustainability & Recycling",
-  description: "How Jerry Can Spirits approaches sustainability. Local sourcing, recycling guidance, and our commitment to reducing environmental impact.",
+  description: "How Jerry Can Spirits approaches sustainability: recycling your bottle, and the tree and carbon removal every order funds through Ecologi.",
   alternates: {
     canonical: 'https://jerrycanspirits.co.uk/sustainability/',
   },
   openGraph: {
     title: 'Sustainability & Recycling | Jerry Can Spirits®',
-    description: 'How Jerry Can Spirits approaches sustainability. Local sourcing, recycling guidance, and our commitment to reducing environmental impact.',
+    description: 'How Jerry Can Spirits approaches sustainability: recycling your bottle, and the tree and carbon removal every order funds through Ecologi.',
     url: 'https://jerrycanspirits.co.uk/sustainability/',
     siteName: 'Jerry Can Spirits®',
     locale: 'en_GB',
@@ -32,7 +32,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image' as const,
     title: 'Sustainability & Recycling | Jerry Can Spirits®',
-    description: 'How Jerry Can Spirits approaches sustainability. Local sourcing, recycling guidance, and our commitment to reducing environmental impact.',
+    description: 'How Jerry Can Spirits approaches sustainability: recycling your bottle, and the tree and carbon removal every order funds through Ecologi.',
     images: OG_IMAGE,
   },
   robots: {
@@ -129,9 +129,6 @@ export default function Sustainability() {
 
             <div className="space-y-4 text-parchment-300">
               <p>
-                Good ingredients, sourced to reduce waste.
-              </p>
-              <p>
                 It&apos;s not about slapping &quot;eco-friendly&quot; on the label. It&apos;s just how we think things should be done. Read more about <Link href="/about/story/" className="text-gold-300 hover:text-gold-400 underline">our story</Link> and the values that shape how we work.
               </p>
 
@@ -152,10 +149,10 @@ export default function Sustainability() {
             </div>
           </div>
 
-          {/* Carbon Offsetting — live Ecologi stats */}
+          {/* Tree planting and carbon removal: live Ecologi stats */}
           <EcologiImpact />
           <p className="mt-6 text-parchment-400 text-sm text-center">
-            Every order plants a tree automatically. You can also{' '}
+            Every order funds a tree automatically. You can also{' '}
             <Link href="/shop/product/uk-tree-fund/" className="text-gold-300 hover:text-gold-400 underline">
               add a UK reforestation contribution at checkout
             </Link>
