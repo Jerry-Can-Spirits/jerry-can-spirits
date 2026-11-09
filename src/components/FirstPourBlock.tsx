@@ -7,9 +7,10 @@ import FirstPourSignup, { FIRST_POUR_SIGNED_UP_KEY } from './FirstPourSignup'
 // The First Pour sign-up as a block above the footer on every page, alongside
 // the Klaviyo pop-up (Dan, 8 Oct 2026, after Contact Coffee Co's inline
 // "10% off" block). Same list, same form, and the pop-up's own live copy, so
-// there is one offer everywhere. Not on the First Pour page (already a form)
-// or the trade pages, and gone once this device has signed up.
-const HIDDEN_PREFIXES = ['/first-pour', '/trade']
+// there is one offer everywhere. Not on the First Pour or Advance Party pages
+// (each already a form) or the trade pages, and gone once this device has
+// signed up.
+const HIDDEN_PREFIXES = ['/first-pour', '/advance-party', '/trade']
 
 export default function FirstPourBlock() {
   const pathname = usePathname()

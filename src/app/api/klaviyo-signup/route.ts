@@ -4,6 +4,7 @@ import { getCloudflareContext } from '@opennextjs/cloudflare'
 import { isRateLimited, isAllowedOrigin } from '@/lib/kv'
 import { emailDomainAcceptsMail } from '@/lib/email-validation'
 import { hashEmail } from '@/lib/meta-capi'
+import { SIGNUP_LISTS, type SignupList } from '@/lib/signup-lists'
 
 export const dynamic = 'force-dynamic' // ensure no static optimization
 
@@ -14,6 +15,7 @@ const SIGNUP_RATE_LIMIT = 5 // requests per minute per IP
 interface SignupBody {
   firstName: string
   email: string
+  list?: SignupList
   interests?: string[]
   // Required consent flag — server enforces this even though the form
   // gates submission client-side, so a direct POST cannot subscribe a
@@ -61,15 +63,16 @@ export async function POST(request: Request) {
     const {
       firstName: rawFirstName,
       email: rawEmail,
+      list,
       interests = [],
       marketingConsent,
       website,
     } = body
 
     // The target list is server-controlled: a client must not be able to
-    // subscribe a validated, consented email to an arbitrary Klaviyo list. The
-    // First Pour newsletter is the only signup surface (Uu9vFn).
-    const listId = 'Uu9vFn'
+    // subscribe a validated, consented email to an arbitrary Klaviyo list. An
+    // unknown key falls back to First Pour rather than failing.
+    const { id: listId, source: signupSource } = SIGNUP_LISTS[list && list in SIGNUP_LISTS ? list : 'first-pour']
 
     const firstName = rawFirstName?.trim() ?? ''
     const email = rawEmail?.trim().toLowerCase() ?? ''
@@ -120,7 +123,7 @@ export async function POST(request: Request) {
           first_name: firstName,
           properties: {
             interests,
-            signup_source: 'website_newsletter',
+            signup_source: signupSource,
             signup_date: new Date().toISOString(),
           },
         },
@@ -237,7 +240,7 @@ export async function POST(request: Request) {
         attributes: {
           properties: {
             interests,
-            signup_source: 'website_newsletter',
+            signup_source: signupSource,
           },
           metric: {
             data: {

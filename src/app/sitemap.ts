@@ -458,6 +458,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'monthly',
       priority: 0.6,
     },
+    {
+      url: `${baseUrl}/advance-party/`,
+      lastModified: STATIC_LAST_MODIFIED,
+      changeFrequency: 'monthly',
+      priority: 0.6,
+    },
     // Batch pages
     {
       url: `${baseUrl}/batch/`,
