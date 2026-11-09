@@ -24,7 +24,8 @@ describe('Advance Party page', () => {
     expect(html).toMatch(/<h1[^>]*>[\s\S]*the Advance Party first\.[\s\S]*<\/h1>/)
     expect(html).toContain('First call')
     expect(html).toContain('The low numbers')
-    expect(html).toContain('The tasting')
+    expect(html).toContain('The tastings')
+    expect(html).toContain('When we hold a tasting, members are invited first')
   })
 
   it('carries the Advance Party form, not the First Pour one', () => {

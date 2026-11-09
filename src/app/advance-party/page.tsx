@@ -7,7 +7,7 @@ import SectionHeading from '@/components/SectionHeading'
 import { baseOpenGraph, OG_IMAGE } from '@/lib/og'
 
 const TITLE = 'The Advance Party | First Call on Every Batch'
-const DESCRIPTION = 'A free list from Jerry Can Spirits. Members hear when a new batch is ready, order before it goes on general sale, and are invited to taste it.'
+const DESCRIPTION = 'A free list from Jerry Can Spirits. Members hear when a new batch is ready, order before it goes on general sale, and are invited first to our tastings.'
 
 export const metadata: Metadata = {
   title: TITLE,
@@ -110,10 +110,10 @@ export default function AdvancePartyPage() {
                 </div>,
                 <div key="tasting" className="h-full text-center">
                   <div className="text-gold-300 text-sm font-semibold uppercase tracking-widest mb-3">
-                    The tasting
+                    The tastings
                   </div>
                   <p className="text-parchment-300">
-                    One members&apos; tasting for each batch, run by the founder, before the bottles ship.
+                    When we hold a tasting, members are invited first. Dates and places as we book them.
                   </p>
                 </div>,
               ]}
