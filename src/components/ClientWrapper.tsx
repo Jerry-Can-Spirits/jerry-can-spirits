@@ -38,6 +38,16 @@ export default function ClientWrapper({ children }: ClientWrapperProps) {
       // Storage may be blocked by browser tracking prevention
     }
 
+    // Preserve affiliate tracking parameters (dt_id for Shopify Collabs)
+    try {
+      const dtId = new URLSearchParams(window.location.search).get('dt_id');
+      if (dtId) {
+        sessionStorage.setItem('affiliate_dt_id', dtId);
+      }
+    } catch {
+      // Session storage may be blocked
+    }
+
     captureUtmParams();
   }, [pathname]);
 

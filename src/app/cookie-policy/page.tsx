@@ -148,6 +148,7 @@ export default function CookiePolicy() {
                     <li><code className="bg-jerry-green-700 px-2 py-1 rounded-sm text-gold-200">trade-application-draft</code> (session storage): a trade application you are part way through, so a refresh does not lose it</li>
                     <li><code className="bg-jerry-green-700 px-2 py-1 rounded-sm text-gold-200">jcs_referral_code</code> (local storage): a referral code from a link you followed, so it can be applied at checkout</li>
                     <li><code className="bg-jerry-green-700 px-2 py-1 rounded-sm text-gold-200">utm_params</code> (session storage): the campaign tags and Google Ads click ID on the link you arrived from, passed to checkout so we can see which campaign led to an order</li>
+                    <li><code className="bg-jerry-green-700 px-2 py-1 rounded-sm text-gold-200">affiliate_dt_id</code> (session storage): a Shopify Collabs referral ID from a creator&apos;s link you followed, passed to checkout so the referral is credited</li>
                 </ul>
                 <h3 className="text-xl font-serif font-semibold text-gold-300 mb-3">Remembering your choices</h3>
                 <ul className="list-disc list-inside text-white space-y-2">
