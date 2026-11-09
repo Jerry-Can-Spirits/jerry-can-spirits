@@ -99,6 +99,7 @@ export default function Footer() {
         { name: 'Friends & Partners', href: '/friends/' },
         { name: 'Press & Media', href: '/contact/media/' },
         { name: 'First Pour Book', href: '/first-pour/' },
+        { name: 'The Advance Party', href: '/advance-party/' },
       ]
     },
     {
