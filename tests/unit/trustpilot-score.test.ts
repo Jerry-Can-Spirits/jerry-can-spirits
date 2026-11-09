@@ -83,7 +83,6 @@ describe('one source for the Trustpilot score', () => {
     const surfaces = files.filter(({ text }) => /platform="trustpilot"|on Trustpilot from/.test(text))
     expect(surfaces.map(({ rel }) => rel).sort()).toEqual([
       'app/llms.txt/route.ts',
-      'app/offer/page.tsx',
       'app/reviews/page.tsx',
       'app/shop/product/[handle]/page.tsx',
       'components/PullQuoteStrip.tsx',

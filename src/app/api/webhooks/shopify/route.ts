@@ -226,12 +226,11 @@ async function handleProductUpdated(product: ShopifyProduct, kv: KVNamespace) {
     revalidatePath('/shop/[collection]', 'page');
     // The homepage grid shows every product's price (24 Sep 2026).
     revalidatePath('/');
-    // The bottle's stock count is shown on the bottle, on the gift-boxed
-    // bundle (whose stock is the bottle's) and on the offer landing page, so
-    // a change to either product refreshes all three.
+    // The bottle's stock count is shown on the bottle and on the gift-boxed
+    // bundle (whose stock is the bottle's), so a change to either product
+    // refreshes both.
     if (COUNTED_HANDLES.includes(product.handle)) {
       for (const h of COUNTED_HANDLES) revalidatePath(`/shop/product/${h}/`);
-      revalidatePath('/offer/');
     }
   } catch (err) {
     console.error('[webhook] revalidate failed for product %s:', product.handle, err);
