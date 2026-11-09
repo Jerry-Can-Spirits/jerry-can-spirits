@@ -49,6 +49,8 @@ export default function ClientWrapper({ children }: ClientWrapperProps) {
     }
 
     captureUtmParams();
+    window.addEventListener('CookiebotOnAccept', captureUtmParams);
+    return () => window.removeEventListener('CookiebotOnAccept', captureUtmParams);
   }, [pathname]);
 
   // No gate on legal pages (a minor may read them), the trade portal (its own
