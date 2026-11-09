@@ -97,7 +97,7 @@ export default function AdvancePartyPage() {
                     First call
                   </div>
                   <p className="text-parchment-300">
-                    Each batch opens to members before it goes on general sale. A private link, a stated closing date, one bottle each.
+                    Each batch opens to members before it goes on general sale. A private link and a stated closing date.
                   </p>
                 </div>,
                 <div key="numbers" className="h-full text-center">
