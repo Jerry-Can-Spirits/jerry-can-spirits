@@ -4,22 +4,13 @@ import { getCloudflareContext } from '@opennextjs/cloudflare'
 import { isRateLimited, isAllowedOrigin } from '@/lib/kv'
 import { emailDomainAcceptsMail } from '@/lib/email-validation'
 import { hashEmail } from '@/lib/meta-capi'
+import { SIGNUP_LISTS, type SignupList } from '@/lib/signup-lists'
 
 export const dynamic = 'force-dynamic' // ensure no static optimization
 
 const KLAVIYO_API_BASE = 'https://a.klaviyo.com/api'
 
 const SIGNUP_RATE_LIMIT = 5 // requests per minute per IP
-
-/**
- * The two consented lists a visitor can join from the site. The client names
- * one by key; the Klaviyo id never leaves the server.
- */
-export const SIGNUP_LISTS = {
-  'first-pour': { id: 'Uu9vFn', source: 'website_newsletter' },
-  'advance-party': { id: 'Vz29wp', source: 'website_advance_party' },
-} as const
-export type SignupList = keyof typeof SIGNUP_LISTS
 
 interface SignupBody {
   firstName: string

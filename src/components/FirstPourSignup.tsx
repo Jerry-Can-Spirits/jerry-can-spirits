@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { identifyKlaviyo } from '@/lib/klaviyo-onsite'
-import type { SignupList } from '@/app/api/klaviyo-signup/route'
+import type { SignupList } from '@/lib/signup-lists'
 
 export const FIRST_POUR_SIGNED_UP_KEY = 'jcs_first_pour_signed_up'
 
