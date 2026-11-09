@@ -45,7 +45,6 @@ export default function CartDrawer() {
   const [isApplyingDiscount, setIsApplyingDiscount] = useState(false)
   const [discountError, setDiscountError] = useState('')
   const [discountOpen, setDiscountOpen] = useState(false)
-  const [affiliateId, setAffiliateId] = useState<string | null>(null)
 
   const drawerRef = useRef<HTMLDivElement>(null)
   const closeButtonRef = useRef<HTMLButtonElement>(null)
@@ -91,21 +90,11 @@ export default function CartDrawer() {
     return () => document.removeEventListener('keydown', handleKeyDown)
   }, [isCartOpen, closeCart])
 
-  // Retrieve affiliate tracking ID from sessionStorage (set by ClientWrapper)
-  useEffect(() => {
-    const dtId = sessionStorage.getItem('affiliate_dt_id')
-    if (dtId) {
-      setAffiliateId(dtId)
-    }
-  }, [])
-
-  // Build checkout URL with affiliate tracking and UTM params
+  // Build checkout URL with UTM params
   const getCheckoutUrl = () => {
     if (!cart?.checkoutUrl) return '#'
     try {
-      const url = new URL(cart.checkoutUrl)
-      if (affiliateId) url.searchParams.set('dt_id', affiliateId)
-      return gatedCheckout(appendUtmToCheckout(url.toString()))
+      return gatedCheckout(appendUtmToCheckout(new URL(cart.checkoutUrl).toString()))
     } catch {
       return gatedCheckout(cart.checkoutUrl)
     }
