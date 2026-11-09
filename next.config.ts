@@ -344,6 +344,14 @@ const nextConfig: NextConfig = {
         permanent: true,
         basePath: false,
       },
+      // /offer/ was the landing page for the October 2026 gift-boxed offer,
+      // which ended on 31 October. Meta ads and shared links still point at
+      // it, so it lands on the gift-boxed bottle itself.
+      {
+        source: '/offer',
+        destination: '/shop/product/expedition-spiced-rum-gift-boxed/',
+        permanent: true,
+      },
       // /shop/gifts-and-experience/ was a byte-identical duplicate of
       // /shop/gift-sets/ (each self-canonical). One canonical URL now.
       {
