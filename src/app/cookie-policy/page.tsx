@@ -39,7 +39,7 @@ export const metadata: Metadata = {
 }
 
 export default function CookiePolicy() {
-  const lastUpdated = '17 October 2026'
+  const lastUpdated = '9 November 2026'
 
   return (
     <>
@@ -131,6 +131,36 @@ export default function CookiePolicy() {
                     <li><strong className="text-gold-300">Google Ads:</strong> Conversion tracking for advertising campaigns</li>
                   </ul>
                 </div>
+              </section>
+
+              <section className="bg-jerry-green-800/40 backdrop-blur-sm rounded-lg p-6 border border-gold-500/20">
+                <h2 className="text-2xl font-serif font-bold text-white mb-4 pb-2 border-b border-gold-500/20">
+                  What the Site Stores in Your Browser
+                </h2>
+                <p className="text-white mb-4 leading-relaxed">
+                  Besides cookies, the site keeps a few small items in your browser&apos;s own storage. None of them is sent to an advertiser. Local storage is kept until you clear it; session storage is cleared when you close the tab.
+                </p>
+                <h3 className="text-xl font-serif font-semibold text-gold-300 mb-3">Needed for the site to work</h3>
+                <ul className="list-disc list-inside text-white space-y-2 mb-6">
+                    <li><code className="bg-jerry-green-700 px-2 py-1 rounded-sm text-gold-200">ageVerified</code> (local storage): that you confirmed you are 18 or over, alongside the cookie of the same name</li>
+                    <li><code className="bg-jerry-green-700 px-2 py-1 rounded-sm text-gold-200">selectedRegion</code> (local storage): the country you chose at the age check</li>
+                    <li><code className="bg-jerry-green-700 px-2 py-1 rounded-sm text-gold-200">shopify_cart_id</code> (local storage): links your basket to Shopify so it survives a refresh</li>
+                    <li><code className="bg-jerry-green-700 px-2 py-1 rounded-sm text-gold-200">trade-application-draft</code> (session storage): a trade application you are part way through, so a refresh does not lose it</li>
+                    <li><code className="bg-jerry-green-700 px-2 py-1 rounded-sm text-gold-200">jcs_referral_code</code> (local storage): a referral code from a link you followed, so it can be applied at checkout</li>
+                    <li><code className="bg-jerry-green-700 px-2 py-1 rounded-sm text-gold-200">utm_params</code> (session storage): the campaign tags and Google Ads click ID on the link you arrived from, passed to checkout so we can see which campaign led to an order</li>
+                    <li><code className="bg-jerry-green-700 px-2 py-1 rounded-sm text-gold-200">affiliate_dt_id</code> (session storage): a Shopify Collabs referral ID from a creator&apos;s link you followed, passed to checkout so the referral is credited</li>
+                </ul>
+                <h3 className="text-xl font-serif font-semibold text-gold-300 mb-3">Remembering your choices</h3>
+                <ul className="list-disc list-inside text-white space-y-2">
+                    <li><code className="bg-jerry-green-700 px-2 py-1 rounded-sm text-gold-200">jcs:bar</code> (local storage): the bottles you tick in What&apos;s in my bar</li>
+                    <li><code className="bg-jerry-green-700 px-2 py-1 rounded-sm text-gold-200">jcs:bar:spotlight</code> (local storage): your spotlight setting in What&apos;s in my bar, saved only if you accept preference cookies</li>
+                    <li><code className="bg-jerry-green-700 px-2 py-1 rounded-sm text-gold-200">jcs_first_pour_signed_up</code> (local storage): that you have signed up, so we do not ask again</li>
+                    <li><code className="bg-jerry-green-700 px-2 py-1 rounded-sm text-gold-200">promoBannerDismissed</code> (local storage): that you closed the promotion banner</li>
+                    <li><code className="bg-jerry-green-700 px-2 py-1 rounded-sm text-gold-200">announcement-dismissed</code> (session storage): that you closed the announcement bar</li>
+                    <li><code className="bg-jerry-green-700 px-2 py-1 rounded-sm text-gold-200">shipping-banner-dismissed</code> (session storage): that you closed the delivery banner</li>
+                    <li><code className="bg-jerry-green-700 px-2 py-1 rounded-sm text-gold-200">social_proof_seen</code> (session storage): that the recent-order note has been shown once this visit</li>
+                    <li><code className="bg-jerry-green-700 px-2 py-1 rounded-sm text-gold-200">pwa-visit-count</code> (local storage): how many times you have visited, so the option to add the site to your home screen appears only after a few visits</li>
+                </ul>
               </section>
             </div>
           </div>
