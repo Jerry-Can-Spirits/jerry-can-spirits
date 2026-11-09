@@ -5,8 +5,13 @@ const UTM_KEYS = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'ut
 const CAPTURE_KEYS = [...UTM_KEYS, 'gclid'] as const
 const STORAGE_KEY = 'utm_params'
 
+// Campaign tags and the Google Ads click id identify the visit for marketing
+// attribution, so they are stored only under Cookiebot marketing consent, the
+// same gate as the Klaviyo and Meta scripts. ClientWrapper calls this again on
+// CookiebotOnAccept so a visitor who consents after landing is still captured.
 export function captureUtmParams(): void {
   if (typeof window === 'undefined') return
+  if (!window.Cookiebot?.consent?.marketing) return
   const params = new URLSearchParams(window.location.search)
   const captured: Record<string, string> = {}
   for (const key of CAPTURE_KEYS) {
