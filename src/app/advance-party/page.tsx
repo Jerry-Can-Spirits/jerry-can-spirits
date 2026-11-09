@@ -105,7 +105,7 @@ export default function AdvancePartyPage() {
                     The low numbers
                   </div>
                   <p className="text-parchment-300">
-                    Every bottle carries its number. The lowest numbers in each batch are held for members and recorded against your order.
+                    Every bottle carries its number. The lowest numbers in each batch go to members first.
                   </p>
                 </div>,
                 <div key="tasting" className="h-full text-center">
