@@ -40,7 +40,7 @@ export const metadata: Metadata = {
 }
 
 export default function TermsOfService() {
-  const lastUpdated = '17 October 2026'
+  const lastUpdated = '9 November 2026'
 
   return (
     <>
@@ -145,7 +145,7 @@ export default function TermsOfService() {
                   You may use our website for lawful purposes only. You agree not to use the site:
                 </p>
                 <ul className="list-disc list-inside text-white space-y-2 mb-6">
-                  <li>In any way that violates any applicable federal, state, local, or international law or regulation</li>
+                  <li>In any way that breaks any law or regulation that applies, in the United Kingdom or anywhere else</li>
                   <li>To attempt unauthorized access to our systems or networks</li>
                   <li>To introduce viruses, trojans, or other malicious or technologically harmful material</li>
                   <li>To attempt to interfere with the proper working of the website</li>
