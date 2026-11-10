@@ -22,9 +22,14 @@ export const DELIVERY_PROMISE_SENTENCE = `Orders placed before ${DISPATCH_CUTOFF
 // year. It is null until it is known; while null the line renders nowhere.
 // Set `lastOrderDate` to the day itself as an ISO date and the line appears
 // from `showFrom` and disappears on its own the day after the cut-off.
+// 2026: Royal Mail's last Tracked 48 posting date is Saturday 19 December;
+// our partner dispatches on working days before 3pm, so the last order is
+// Friday 18 December. Set 10 Nov from the Royal Mail date, ahead of the
+// partner confirming their own last dispatch day. If they close earlier,
+// bring it forward here and in the 11 Dec email.
 export const CHRISTMAS_CUTOFF = {
-  lastOrderDate: null as string | null, // e.g. '2026-12-19'
-  showFrom: '2026-12-01',
+  lastOrderDate: '2026-12-18' as string | null,
+  showFrom: '2026-11-16',
 }
 
 /** The line to show, or null outside the window or while the date is unset. */
