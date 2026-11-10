@@ -5,6 +5,7 @@ import { isRateLimited, isAllowedOrigin } from '@/lib/kv'
 import { emailDomainAcceptsMail } from '@/lib/email-validation'
 import { hashEmail } from '@/lib/meta-capi'
 import { SIGNUP_LISTS, type SignupList } from '@/lib/signup-lists'
+import { captureServerMessage } from '@/lib/server-error-capture'
 
 export const dynamic = 'force-dynamic' // ensure no static optimization
 
@@ -227,9 +228,15 @@ export async function POST(request: Request) {
       )
 
       if (!subscriptionResponse.ok) {
-        const errorData = await subscriptionResponse.text()
-        console.error('Klaviyo subscription failed:', errorData)
-        // non-blocking
+        // The person ticked the consent box, so a failure here leaves a
+        // profile Klaviyo shows as "Never Subscribed" with no record of the
+        // consent we were given. Fourteen sign-ups sat like that between Nov
+        // 2025 and May 2026 because this only went to the console (consent
+        // audit, 10 Nov 2026). Still non-blocking for the visitor.
+        await captureServerMessage(`Klaviyo signup subscription rejected: ${subscriptionResponse.status} ${await subscriptionResponse.text()}`, {
+          tags: { route: 'klaviyo-signup' },
+          extra: { listId, signupSource },
+        })
       }
     }
 
