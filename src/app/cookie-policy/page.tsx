@@ -213,6 +213,28 @@ export default function CookiePolicy() {
                   </div>
 
                   <div className="border-l-4 border-gold-500 pl-6 py-2">
+                    <h4 className="text-lg font-semibold text-gold-300 mb-2">Mapbox — Statistics</h4>
+                    <p className="text-white">
+                      Draws the map on the Expedition Log. It loads only if you accept statistics cookies, and its library keeps a small usage record in your browser (mapbox.eventData) to report map loads to Mapbox.{' '}
+                      <a href="https://www.mapbox.com/legal/privacy" target="_blank" rel="noopener noreferrer"
+                         className="text-gold-300 hover:text-gold-200 underline">
+                        View Mapbox's Privacy Policy
+                      </a>
+                    </p>
+                  </div>
+
+                  <div className="border-l-4 border-gold-500 pl-6 py-2">
+                    <h4 className="text-lg font-semibold text-gold-300 mb-2">Cloudflare Turnstile — Necessary</h4>
+                    <p className="text-white">
+                      Protects our forms from automated abuse. It sets a short-lived value (cf.turnstile.u) to tell a person from a bot, and needs no consent because the site cannot accept a form safely without it.{' '}
+                      <a href="https://www.cloudflare.com/privacypolicy/" target="_blank" rel="noopener noreferrer"
+                         className="text-gold-300 hover:text-gold-200 underline">
+                        View Cloudflare's Privacy Policy
+                      </a>
+                    </p>
+                  </div>
+
+                  <div className="border-l-4 border-gold-500 pl-6 py-2">
                     <h4 className="text-lg font-semibold text-gold-300 mb-2">Klaviyo — Marketing</h4>
                     <p className="text-white">
                       Email marketing platform used for newsletters and customer communications.{' '}
