@@ -168,7 +168,7 @@ const GUIDE: Draft = {
       heading: 'Sending it direct',
       paragraphs: [
         'You can send the bottle straight to the person. Enter their address at checkout and the parcel goes to them.',
-        'Two things worth knowing. Every delivery of alcohol is age-verified, so the person receiving it must be 18 or over and may be asked for photo ID by the courier. And once dispatched, orders typically arrive within three to five business days, so for a fixed date, order a week ahead.',
+        'Two things worth knowing. The person receiving it must be 18 or over. And once dispatched, orders typically arrive within three to five business days, so for a fixed date, order a week ahead.',
         'If the person is hard to pin down at home, send it to yourself and hand it over. The presentation box was made for that moment.',
       ],
     },
@@ -220,7 +220,7 @@ const GUIDE: Draft = {
     ],
     [
       'Can I send a rum gift straight to the recipient?',
-      'Yes. Enter their address at checkout. The person receiving it must be 18 or over and may be asked for photo ID by the courier.',
+      'Yes. Enter their address at checkout. The person receiving it must be 18 or over.',
     ],
     [
       'Does the bottle come gift-wrapped?',

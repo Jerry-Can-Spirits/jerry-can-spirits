@@ -60,7 +60,7 @@ const GIFT_CLUSTER_LINKS = [
 const FAQ_SEND_DIRECT: CategoryFaq = {
   question: 'Can I send it straight to the person?',
   answer:
-    'Yes. Enter their address at checkout. One thing worth knowing: every delivery is age-verified, so the person receiving it must be 18 or over and may be asked to show photo ID to the courier.',
+    'Yes. Enter their address at checkout. The person receiving it must be 18 or over.',
 }
 // No gift-message FAQ: nothing prints a message or puts it in the parcel
 // (Dan, 18 Sep 2026), and the cart stopped asking for one on 8 Oct 2026.
@@ -186,11 +186,11 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
     h1: `Christmas Rum Gifts ${CHRISTMAS_GIFT_YEAR}`,
     metaTitle: `Christmas Rum Gifts ${CHRISTMAS_GIFT_YEAR}: Boxed Bottle or Gift Pack`,
     metaDescription:
-      'Expedition Spiced Rum in its presentation box, or the gift pack with hiball, jigger and coaster. Veteran-owned British spirits, delivered age-verified.',
+      'Expedition Spiced Rum in its presentation box, or the gift pack with hiball, jigger and coaster. Veteran-owned British spirits.',
     introBody: [
       'Most Christmas rum gifts are picked from whatever the supermarket has put in a box. This one is picked on purpose.',
       'Expedition Spiced Rum in its presentation box: a numbered bottle from a small British batch, Bronze at the IWSC 2026, sized to go under the tree as it arrives. Or the gift pack, which adds the Crystal ICE hiball, a 25ml and 50ml jigger and a slate coaster, in a branded box.',
-      'Either goes straight to the person if you want it to, age-verified at the door.',
+      'Either goes straight to the person if you want it to.',
     ],
     // The boxed bottle and the pack, as Dan set the page up on 27 Oct 2026.
     // Christmas apparel joins the list once the designs are right.
@@ -456,7 +456,7 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
     introBody: [
       'A small gift for someone who drinks rum properly. Every piece here gets used at the pour: the jigger that measures every Field Manual build, the hiball for the cola serve, the bar blade that opens the ginger beer.',
       'Nothing here is a novelty. It is the kit the serves were built around, chosen because it does the job and keeps doing it.',
-      'Every delivery is age-verified at the door, so it can go straight to them.',
+      'Enter their address at checkout and it goes straight to them.',
     ],
     productHandles: UNDER_20_HANDLES,
   }),
