@@ -107,7 +107,7 @@ export default function CorporateGiftsPage() {
             {[
               'Tell us how many bottles, where they are going, and when you need them.',
               'We send an invoice. Pay by bank transfer or card.',
-              'Everything arrives together, at one address. Every delivery is age-verified at the door.',
+              'Everything arrives together, at one address.',
             ].map((step, i) => (
               <li key={step} className={cardClass}>
                 <span className="block text-3xl font-serif font-bold text-gold-400 mb-2">{i + 1}</span>

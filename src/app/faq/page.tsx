@@ -66,7 +66,7 @@ const faqs = [
   },
   {
     question: "How do you verify age for alcohol purchases?",
-    answer: "You must be 18+ to purchase. Our delivery partners verify age at the door - valid photo ID is required. If no one 18+ is available to receive the order, it will not be delivered."
+    answer: "You must be 18 or over to buy. You confirm your age before you reach the shop, and the person who receives the order must be 18 or over too. We may ask for proof of age at any time and cancel an order without it."
   },
 
   // Returns & Customer Service

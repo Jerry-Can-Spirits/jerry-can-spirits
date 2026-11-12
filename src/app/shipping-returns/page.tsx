@@ -56,14 +56,6 @@ export default function ShippingReturns() {
       },
       {
         "@type": "Question",
-        "name": "Why do I need to show ID for alcohol delivery?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "UK law requires age verification for all alcohol deliveries. The recipient must be 18 or older and present valid photo ID to the courier. If no one is available to verify age, the package will be returned."
-        }
-      },
-      {
-        "@type": "Question",
         "name": "Can I return alcohol products?",
         "acceptedAnswer": {
           "@type": "Answer",
@@ -155,12 +147,11 @@ export default function ShippingReturns() {
                     height={40}
                     className="w-10 h-10 shrink-0"
                   />
-                  <h3 className="text-lg font-semibold text-red-200">Important: Age Verification Required</h3>
+                  <h3 className="text-lg font-semibold text-red-200">Important: 18 or over only</h3>
                 </div>
                 <p className="text-red-100">
-                  All deliveries require age verification upon receipt. The recipient must be 18 years or 
-                  older and present valid ID to the courier. If no one is available to verify age, 
-                  the package will be returned and additional delivery charges may apply.
+                  You must be 18 or over to order alcohol from us, and so must the person who receives it.
+                  We may ask for proof of age at any time and cancel an order without it.
                 </p>
               </div>
             </section>
@@ -315,13 +306,6 @@ export default function ShippingReturns() {
                   <h3 className="text-lg font-semibold text-gold-300 mb-3">Do you ship internationally?</h3>
                   <p className="text-parchment-200 leading-relaxed">
                     We currently only ship within the United Kingdom. We&apos;re working on expanding our delivery network – <Link href="/first-pour/" className="text-gold-400 hover:text-gold-300 underline">join our mailing list</Link> to be notified when we ship to your country.
-                  </p>
-                </div>
-
-                <div className="border-b border-gold-500/10 pb-6">
-                  <h3 className="text-lg font-semibold text-gold-300 mb-3">Why do I need to show ID for alcohol delivery?</h3>
-                  <p className="text-parchment-200 leading-relaxed">
-                    UK law requires age verification for all alcohol deliveries. The recipient must be 18 or older and present valid photo ID to the courier. If no one is available to verify age, the package will be returned.
                   </p>
                 </div>
 
