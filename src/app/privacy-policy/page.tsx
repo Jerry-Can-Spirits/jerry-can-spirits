@@ -39,7 +39,7 @@ export const metadata: Metadata = {
 }
 
 export default function PrivacyPolicy() {
-  const lastUpdated = new Date('2026-10-29').toLocaleDateString('en-GB', {
+  const lastUpdated = new Date('2026-11-16').toLocaleDateString('en-GB', {
     year: 'numeric',
     month: 'long',
     day: 'numeric'
@@ -97,6 +97,8 @@ export default function PrivacyPolicy() {
                 <ul className="list-disc list-inside text-white space-y-2 mb-6">
                   <li><strong className="text-gold-300">Newsletter Signup:</strong> Email address, name (optional), marketing preferences</li>
                   <li><strong className="text-gold-300">Contact Forms:</strong> Name, email address, message content</li>
+                  <li><strong className="text-gold-300">Orders:</strong> Name, email address, delivery and billing address, phone number if you give one, and what you ordered. Payment is taken by Shopify; we never see or store card details</li>
+                  <li><strong className="text-gold-300">Back in Stock Alerts:</strong> Email address and the product you asked about, used once to tell you it has returned</li>
                   <li><strong className="text-gold-300">Age Verification:</strong> Confirmation that you are of legal drinking age in your region</li>
                 </ul>
 
@@ -178,7 +180,7 @@ export default function PrivacyPolicy() {
                   <li><strong className="text-gold-300">Consent:</strong> Marketing communications, analytics cookies, optional data collection</li>
                   <li><strong className="text-gold-300">Legitimate Interest:</strong> Website functionality, security, essential analytics</li>
                   <li><strong className="text-gold-300">Legal Obligation:</strong> Age verification for alcohol-related content</li>
-                  <li><strong className="text-gold-300">Contract Performance:</strong> Order processing, account management (future)</li>
+                  <li><strong className="text-gold-300">Contract Performance:</strong> Order processing, payment, delivery and customer service for orders you place</li>
                 </ul>
 
                 <h3 className="text-xl font-serif font-semibold text-white mt-6 mb-3">
@@ -192,6 +194,23 @@ export default function PrivacyPolicy() {
                   <li>Respond to your inquiries and provide customer support</li>
                   <li>Detect and prevent fraud and security threats</li>
                 </ul>
+
+                <h3 className="text-xl font-serif font-semibold text-white mt-6 mb-3">
+                  4.3 Where We Ask for Marketing Consent
+                </h3>
+                <p className="text-white mb-3 leading-relaxed">
+                  We send marketing email only to people who have asked for it. There are four places you can do that, and in each one the choice is yours to make:
+                </p>
+                <ul className="list-disc list-inside text-white space-y-2 mb-3">
+                  <li><strong className="text-gold-300">Email sign-up forms:</strong> you enter your email address and tick the consent box</li>
+                  <li><strong className="text-gold-300">The Advance Party form:</strong> you enter your email address and tick the consent box to join the first-call list</li>
+                  <li><strong className="text-gold-300">Checkout:</strong> a marketing box you can tick when you order. It is not ticked for you</li>
+                  <li><strong className="text-gold-300">Trade application:</strong> an optional box for trade news</li>
+                </ul>
+                <p className="text-white leading-relaxed">
+                  Placing an order, sending an enquiry or asking for a back in stock alert does not add you to marketing. Order confirmations, delivery updates and replies to your messages are service emails, sent because you ordered or asked. Every marketing email carries an unsubscribe link, and you can also email{' '}
+                  <a href="mailto:support@jerrycanspirits.co.uk" className="text-gold-300 hover:text-gold-200 underline">support@jerrycanspirits.co.uk</a> to be removed.
+                </p>
               </section>
             </div>
           </div>
