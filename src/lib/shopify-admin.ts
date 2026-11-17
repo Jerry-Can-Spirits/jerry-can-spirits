@@ -80,6 +80,31 @@ interface CreateDiscountResult {
   userErrors: DiscountUserError[];
 }
 
+// ── What a referral code discounts ──────────────────────────────────
+
+// The UK Tree Fund line is a donation, not a purchase. A code on the whole
+// order took 10% off it (found 17 Nov 2026, when ARRSE10 turned a £1 donation
+// into 90p). Shopify has no "all products except" setting, so a code is scoped
+// to every product bar the donation, read at mint time.
+const DONATION_HANDLE = 'uk-tree-fund';
+
+interface DiscountableProducts {
+  products: { nodes: { id: string; handle: string; isGiftCard: boolean }[] };
+}
+
+async function discountableProductIds(adminToken: string): Promise<string[]> {
+  const data = await adminGraphql<DiscountableProducts>(
+    adminToken,
+    `query DiscountableProducts { products(first: 250) { nodes { id handle isGiftCard } } }`,
+    {},
+  );
+  const ids = data.products.nodes
+    .filter((p) => p.handle !== DONATION_HANDLE && !p.isGiftCard)
+    .map((p) => p.id);
+  if (ids.length === 0) throw new Error('No products to scope the referral discount to');
+  return ids;
+}
+
 // ── Discount Code Creation ──────────────────────────────────────────
 
 /**
@@ -109,6 +134,8 @@ export async function createDiscountCode(
     }
   `;
 
+  const productIds = await discountableProductIds(adminToken);
+
   const variables = {
     input: {
       title: `Referral: ${code}`,
@@ -118,7 +145,7 @@ export async function createDiscountCode(
       endsAt: referralEndsAt(),
       customerGets: {
         value: { percentage: 0.10 },
-        items: { all: true },
+        items: { products: { productsToAdd: productIds } },
       },
       customerSelection: { all: true },
     },
@@ -183,6 +210,8 @@ export async function createReferrerRewardCode(
     }
   `;
 
+  const productIds = await discountableProductIds(adminToken);
+
   const variables = {
     input: {
       title: `Referral Reward: ${code}`,
@@ -193,7 +222,7 @@ export async function createReferrerRewardCode(
       endsAt: referralEndsAt(),
       customerGets: {
         value: { percentage: 0.10 },
-        items: { all: true },
+        items: { products: { productsToAdd: productIds } },
       },
       customerSelection: { all: true },
       combinesWith: {
