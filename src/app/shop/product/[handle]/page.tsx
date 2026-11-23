@@ -815,7 +815,9 @@ export default async function ProductPage({
                 ? 'Sent by email. Secure checkout, express payment available.'
                 : isClothing
                   ? 'Printed to order. Postage included. Secure checkout, express payment available.'
-                  : `Ships for ${STANDARD_SHIPPING_LABEL}. Free over £${FREE_SHIPPING_THRESHOLD_GBP}. Secure checkout, express payment available.`}
+                  : parseFloat(product.priceRange.minVariantPrice.amount) > FREE_SHIPPING_THRESHOLD_GBP
+                    ? `Free UK delivery on orders over £${FREE_SHIPPING_THRESHOLD_GBP}. Secure checkout, express payment available.`
+                    : `Ships for ${STANDARD_SHIPPING_LABEL}. Free over £${FREE_SHIPPING_THRESHOLD_GBP}. Secure checkout, express payment available.`}
               {awarded ? '' : ` ${CHARITY_STATEMENT_FULL}`}
             </p>
           </div>

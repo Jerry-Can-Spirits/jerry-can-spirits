@@ -60,7 +60,7 @@ const GIFT_CLUSTER_LINKS = [
 const FAQ_SEND_DIRECT: CategoryFaq = {
   question: 'Can I send it straight to the person?',
   answer:
-    'Yes. Enter their address at checkout. The person receiving it must be 18 or over.',
+    'Yes. Enter their address at checkout. No printed note goes in the parcel. The person receiving it must be 18 or over.',
 }
 // No gift-message FAQ: nothing prints a message or puts it in the parcel
 // (Dan, 18 Sep 2026), and the cart stopped asking for one on 8 Oct 2026.
