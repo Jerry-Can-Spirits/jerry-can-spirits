@@ -21,6 +21,7 @@ const READING: Record<string, typeof RUM_READING> = {
   'jerry-can-spirits-expedition-spiced-rum': RUM_READING,
   'jerry-can-spirits-expedition-pack-spiced-rum-6-bottles': RUM_READING,
   'jerry-can-spirits-premium-gift-pack': RUM_READING,
+  'expedition-spiced-rum-gift-boxed': RUM_READING,
 }
 
 function LinkRow({ lead, links }: { lead: string; links: Array<{ label: string; href: string }> }) {
