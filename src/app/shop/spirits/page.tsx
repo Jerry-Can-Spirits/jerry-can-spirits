@@ -52,6 +52,11 @@ const spiritsFaqs: Array<{ question: string; answer: string; rich?: ReactNode }>
   {
     question: 'What is spiced rum?',
     answer: 'Spiced rum is rum macerated with real spices. Our Expedition Spiced Rum uses seven: Madagascan vanilla, Ceylon cinnamon, Peruvian ginger, Spanish orange peel, Sri Lankan cloves, Guatemalan allspice and Indonesian cassia bark, macerated in Caribbean rum and sweetened naturally with Mexican agave. Unlike artificial-tasting rums, we use real ingredients to create depth and complexity.',
+    rich: (
+      <>
+        <Link href="/guides/complete-guide-spiced-rum/" className="text-gold-400 hover:text-gold-300 underline">Spiced rum</Link> is rum macerated with real spices. Our Expedition Spiced Rum uses seven: Madagascan vanilla, Ceylon cinnamon, Peruvian ginger, Spanish orange peel, Sri Lankan cloves, Guatemalan allspice and Indonesian cassia bark, macerated in Caribbean rum and sweetened naturally with Mexican agave. Unlike artificial-tasting rums, we use real ingredients to create depth and complexity.
+      </>
+    ),
   },
   {
     question: 'How should I drink spiced rum?',
