@@ -187,7 +187,7 @@ export const STOCKISTS: StockistRecord[] = [
     streetAddress: '33 Market Place',
     addressLocality: 'Poulton-le-Fylde',
     postalCode: 'FY6 7BS',
-    description: 'A late-night venue on Market Place in the centre of Poulton-le-Fylde, in the building that was the Truth club. Open since November 2026.',
+    description: 'A smart bar and club on Market Place in the centre of Poulton-le-Fylde, in the building that was the Truth club. Official opening: 5 December 2026.',
     website: 'https://www.facebook.com/p/Black-Rabbit-61593253659872/',
     websiteLabel: 'Visit Facebook page',
     logo: 'https://imagedelivery.net/T4IfqPfa6E-8YtW8Lo02gQ/b94ea79f-a828-436d-0b33-468431801000/public',
